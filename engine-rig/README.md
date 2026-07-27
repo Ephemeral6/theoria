@@ -45,7 +45,29 @@ cd engine-rig && python -m pytest
 Run every engine end to end and validate the candidate stream:
 
 ```bash
-cd engine-rig && python -m tools.run_all
+cd engine-rig && python -m tools.run_all --force
+```
+
+which prints:
+
+```
+engine-rig integration run
+------------------------------------------------------------------------
+  mdl_segmenter   1 object(s), 42 events, 826 vs 2888 bits (ratio 0.286)
+  cegis_miner     10 rules; push cov 41/41, teleport cov 1/1; guards exclusive=True, total=True
+  zero_space      null space dim 9; global law: (#R) mod 2 = 0
+  lp_potential    w=['-1', '1', '0', '1'] certifies 1110 unsolvable; conditions all true
+  fd_adapter      stub-bfs plan of length 5
+  probe_frontier  probe UP worth 1.000 bits
+------------------------------------------------------------------------
+  candidates: 24
+  SCHEMA    : OK -- every line satisfies CONTRACTS/candidates_schema.md
+```
+
+Validate any candidate stream on its own:
+
+```bash
+cd engine-rig && python -m tools.validate_candidates out/candidates.jsonl
 ```
 
 ## The three synthetic worlds
@@ -62,6 +84,22 @@ coverage 1/1, the thing a miner must flag rather than generalise from.
 `1101` reaches the goal `0100` in 2 moves; `1110` provably cannot. Feeds
 `lp_potential`. This is the minimal rehearsal of the A1 pagoda argument, with no
 DSL involved.
+
+## What each engine was held to
+
+| Engine | Acceptance result |
+|---|---|
+| `mdl_segmenter` | masks identical to ground truth on all 50 frames; script 826 bits vs 2888-bit pixel baseline |
+| `cegis_miner` | `push` at coverage 41/41, `teleport` at 1/1; guards mutually exclusive and total |
+| `zero_space` | recovered space == `(#Red) mod 2` plus the encoding's own laws, as a subspace identity |
+| `lp_potential` | all three certificate conditions exact over ℚ; no certificate for the solvable config; heuristic admissible everywhere |
+| `fd_adapter` | 5-action plan = hand-verified optimum, cross-checked by an independent validator and by exhaustive enumeration |
+| `probe_frontier` | picks `UP` at exactly 1 bit, matching the hand computation; 0 bits for every other action |
+
+Two results are worth reading as findings rather than checkmarks: `cegis_miner`
+returns a *frontier* where the evidence cannot separate guards (rather than
+guessing), and `lp_potential` is sound but incomplete — configuration `0111` is
+unsolvable and no linear pagoda proves it, which is asserted by a test.
 
 ## Contract compliance
 

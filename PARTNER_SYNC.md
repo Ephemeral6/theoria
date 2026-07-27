@@ -43,3 +43,9 @@
 测试：pass 116/116，skip 1。
 阻塞：无。
 下一步：M8 集成与 schema 校验。
+
+## [engine-rig] 2026-07-27T11:28:42Z engine-rig-m8-integration
+状态：M8 达成，六个引擎端到端各跑一遍，产出 24 条候选写入单一 append-only candidates.jsonl，全文通过 schema 校验器（tools/validate_candidates.py），无崩溃、无格式违规；六种 kind 全部覆盖。确定性模式下两次运行字节级相同；重复运行只追加、不改写已有行。
+测试：pass 148/148，skip 1（FD 专用）。
+阻塞：无（唯一偏差为 FD 未接通、按工单允许改用桩实现，已记入 STATUS.md）。
+下一步：本轨道工单范围内工作已完成。

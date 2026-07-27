@@ -14,11 +14,21 @@ appends a paragraph to `/PARTNER_SYNC.md`.
 | `engine-rig-m5-lp` | `lp_potential` | done |
 | `engine-rig-m6-fd` | `fd_adapter` | done (stub backend — see below) |
 | `engine-rig-m7-probe` | `probe_frontier` | done |
-| `engine-rig-m8-integration` | all six engines + schema validator | pending |
+| `engine-rig-m8-integration` | all six engines + schema validator | done |
+
+All eight milestones are reached. `python -m tools.run_all --force` runs the six
+engines end to end and emits 24 candidates, every line of which passes the frozen
+schema validator.
+
+## Test suite
+
+148 passed, 1 skipped (`test_fast_downward_agrees_with_the_stub`, which starts
+running the moment a Fast Downward executable is reachable).
 
 ## Blockers
 
-None.
+None. The one deviation from the ticket's ideal is the Fast Downward stub,
+covered below and sanctioned by the ticket.
 
 ## Fast Downward
 
