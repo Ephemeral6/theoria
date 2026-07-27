@@ -103,8 +103,48 @@ class Semantics:
         return lines
 
 
+def _from_upstream(text: str) -> Optional[Semantics]:
+    """Use the compiler track's own parser once it has one.
+
+    The `theory-compiler` track adopted this proposal mid-sprint: its parser now
+    has a `semantics:` section with the same three statements and the same
+    refusal to default. Same pattern as `mdl_segmenter`'s `split_by_color` — when
+    upstream grows the feature, delegate to it and keep the local implementation
+    as the fallback, so this directory still runs against the version tagged at
+    `theory-compiler`'s M8.
+
+    Returns `None` when upstream has no such section, so the local parser runs.
+    A rejection from upstream is **not** a reason to fall back — that is an
+    answer — but it is re-raised as this module's own `SemanticsError`, because
+    a caller should not have to know which of the two implementations replied.
+    """
+    try:
+        from theory_compiler.parser import theory_parser as _tp
+    except ImportError:
+        return None
+    upstream_error = getattr(_tp, "SemanticsError", None)
+    if upstream_error is None:
+        return None
+    try:
+        section = getattr(_tp.parse_theory(text), "semantics", None)
+    except upstream_error as exc:
+        raise SemanticsError(str(exc)) from exc
+    if section is None:
+        return None
+    return Semantics(
+        frame=getattr(section, "frame"),
+        conflict=getattr(section, "conflict"),
+        cascade=getattr(section, "cascade"),
+        priority=list(getattr(section, "priority", []) or []),
+    )
+
+
 def parse_semantics(text: str) -> Semantics:
     """Read the `semantics:` section out of a theory.dsl source."""
+    upstream = _from_upstream(text)
+    if upstream is not None:
+        return upstream
+
     lines = text.splitlines()
     start = None
     for i, line in enumerate(lines):
