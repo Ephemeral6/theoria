@@ -239,15 +239,103 @@ def _substitute(atom: Atom, binding: Dict[str, str]) -> Atom:
     return tuple(binding.get(part, part) for part in atom)
 
 
+def static_predicates(domain: Domain) -> Set[str]:
+    """Predicates no action ever adds or deletes.
+
+    A static atom's truth is fixed by the initial state, so a ground action that
+    needs one which is false there can never fire and is discarded during
+    grounding. Without this, a grid domain whose push action mentions four cells
+    grounds to |cells|^4 instances -- 5.7M on a 7x7 board -- almost all of them
+    referring to cells that are not even collinear.
+    """
+    touched = {
+        atom[0]
+        for schema in domain.actions
+        for atom in list(schema.add_effects) + list(schema.del_effects)
+    }
+    return {name for name in domain.predicates if name not in touched}
+
+
+def _binding_order(schema: ActionSchema, static: Set[str]) -> List[int]:
+    """Parameter order that lets static checks fire as early as possible.
+
+    Bind the variables of each static precondition together, in the order the
+    preconditions appear. Left in signature order, `push2`'s direction parameter
+    binds last and `adj ?p ?b ?d` cannot be checked until 49^4 partial bindings
+    have been built; walking the atoms instead makes it checkable at depth 3.
+    """
+    names = [var for var, _ in schema.parameters]
+    index_of = {var: i for i, var in enumerate(names)}
+    order: List[int] = []
+    for atom in list(schema.pre_positive) + list(schema.pre_negative):
+        if atom[0] not in static:
+            continue
+        for part in atom[1:]:
+            if part in index_of and index_of[part] not in order:
+                order.append(index_of[part])
+    for i in range(len(names)):
+        if i not in order:
+            order.append(i)
+    return order
+
+
+def _static_checks(schema: ActionSchema, static: Set[str], order: List[int]):
+    """Static preconditions, grouped by the last parameter each one needs.
+
+    Checking a static atom the moment its variables are all bound turns grounding
+    from a full cross product into a join. `push2` has four cell parameters, so
+    the product is |cells|^4 -- 23M combinations on a 7x7 board, essentially all
+    of them naming cells that are not even collinear. Pruning at depth 2 removes
+    them before they are ever built.
+    """
+    names = [var for var, _ in schema.parameters]
+    depth_of = {names[param]: depth for depth, param in enumerate(order)}
+    by_depth: Dict[int, List[Tuple[Atom, bool]]] = {}
+    for atom, positive in (
+        [(a, True) for a in schema.pre_positive if a[0] in static]
+        + [(a, False) for a in schema.pre_negative if a[0] in static]
+    ):
+        variables = [part for part in atom[1:] if part in depth_of]
+        depth = max((depth_of[v] for v in variables), default=-1)
+        by_depth.setdefault(depth, []).append((atom, positive))
+    return by_depth
+
+
 def ground_actions(domain: Domain, problem: Problem) -> List[GroundAction]:
-    """Every ground instance, in a deterministic order."""
+    """Every ground instance that could ever fire, in a deterministic order."""
+    static = static_predicates(domain)
+    initial = set(problem.init)
     out: List[GroundAction] = []
     for schema in sorted(domain.actions, key=lambda a: a.name):
         domains = [
             sorted(problem.objects_of(domain, type_name))
             for _, type_name in schema.parameters
         ]
-        for combination in itertools.product(*domains) if domains else [()]:
+        order = _binding_order(schema, static)
+        checks = _static_checks(schema, static, order)
+        combinations: List[Tuple[str, ...]] = []
+
+        def extend(index: int, partial: List[str], binding: Dict[str, str]) -> None:
+            for atom, positive in checks.get(index - 1, ()):
+                present = _substitute(atom, binding) in initial
+                if present != positive:
+                    return
+            if index == len(domains):
+                combinations.append(tuple(binding[v] for v, _ in schema.parameters))
+                return
+            param = order[index]
+            var = schema.parameters[param][0]
+            for value in domains[param]:
+                binding[var] = value
+                extend(index + 1, partial + [value], binding)
+            binding.pop(var, None)
+
+        if domains:
+            extend(0, [], {})
+        else:
+            combinations = [()]
+
+        for combination in combinations:
             binding = {
                 var: value
                 for (var, _), value in zip(schema.parameters, combination)

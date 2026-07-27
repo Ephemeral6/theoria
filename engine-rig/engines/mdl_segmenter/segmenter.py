@@ -110,13 +110,22 @@ class Segmentation:
 
 # ---------------------------------------------------------------- proposals
 
-def connected_components(frame: Frame, background: int = 0) -> List[Component]:
-    """4-connected blobs of non-background cells, colour-agnostic.
+def connected_components(frame: Frame, background: int = 0,
+                         split_by_color: bool = False) -> List[Component]:
+    """4-connected blobs of non-background cells.
 
-    Colour-agnostic on purpose: splitting by colour shatters multi-coloured
-    objects, which is the known failure mode of naive connectivity (Theoria
-    1.8).  Colour differences are carried inside the component and used by the
-    matcher instead.
+    Two operators, because neither is right everywhere -- this is the
+    "segmentation operator hypothesis space" of Theoria 1.8, and which one a
+    world needs is part of what the manual records.
+
+    * `split_by_color=False` (default): colour-agnostic, so a multi-coloured
+      object is not shattered by its own palette. Fails when unrelated objects
+      touch.
+    * `split_by_color=True`: connectivity may not cross a colour change, so
+      objects that merely touch stay apart. Fails on multi-coloured objects.
+
+    The A0 world needs the second: a player standing against a wall, or beside
+    the box, is one blob under the first and the trajectory becomes unreadable.
     """
     height = len(frame)
     width = len(frame[0]) if height else 0
@@ -134,14 +143,14 @@ def connected_components(frame: Frame, background: int = 0) -> List[Component]:
                 blob.append((r, c))
                 for dr, dc in ((-1, 0), (1, 0), (0, -1), (0, 1)):
                     nr, nc = r + dr, c + dc
-                    if (
-                        0 <= nr < height
-                        and 0 <= nc < width
-                        and not seen[nr][nc]
-                        and frame[nr][nc] != background
-                    ):
-                        seen[nr][nc] = True
-                        stack.append((nr, nc))
+                    if not (0 <= nr < height and 0 <= nc < width):
+                        continue
+                    if seen[nr][nc] or frame[nr][nc] == background:
+                        continue
+                    if split_by_color and frame[nr][nc] != frame[r][c]:
+                        continue
+                    seen[nr][nc] = True
+                    stack.append((nr, nc))
             cells = tuple(sorted(blob))
             out.append(Component(cells=cells, colors=tuple(frame[r][c] for r, c in cells)))
     return sorted(out, key=lambda comp: comp.cells)
@@ -203,8 +212,9 @@ def _assign(prev: List[Component], cur: List[Component], cost: CostModel):
 
 # ------------------------------------------------------------------- driver
 
-def segment_trajectory(frames: Sequence[Frame], background: int = 0) -> Segmentation:
-    per_frame = [connected_components(frame, background) for frame in frames]
+def segment_trajectory(frames: Sequence[Frame], background: int = 0,
+                       split_by_color: bool = False) -> Segmentation:
+    per_frame = [connected_components(frame, background, split_by_color) for frame in frames]
     height = len(frames[0])
     width = len(frames[0][0])
     max_objects = max((len(comps) for comps in per_frame), default=1)

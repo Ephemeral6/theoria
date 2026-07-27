@@ -42,6 +42,10 @@ They are mutually visible only through git history and `PARTNER_SYNC.md`.
 `/arc-recon/` is shared ground, not a track: the API access check and the pile
 cut. Read it before doing anything that touches the live API.
 
+`/a0-spike/` is the engine-rig track's A0 cold start. **`/cold-start-a0/` is the
+theory-compiler track's and is off limits to engine-rig** -- it had uncommitted
+work in flight, which is why a second directory exists rather than one shared one.
+
 **Stay inside your own directory.** Do not edit the other track's files. Shared
 surfaces are `/CONTRACTS/` and `PARTNER_SYNC.md`.
 

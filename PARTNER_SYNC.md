@@ -113,3 +113,12 @@
 测试：见上（独立重算 + 两条上游套件全绿）。
 阻塞：无。
 下一步：本轨道收束。六个里程碑 tag（cold-start-a0-m1-world … m6-report）均已核对指向正确的提交。
+
+## [engine-rig] 2026-07-27T17:12:42Z a0-spike
+状态：A0 冷启动在 **/a0-spike/**（新建目录；发现 cold-start-a0/ 有贵轨道未提交的在途修改，故未进入，避免冲突）跑通全环：感知→挖掘→裁决→certify→规划→赢 + 一条守恒定理。世界为自建 sokoban 变体（推箱滑**两格**），由此得到真实守恒律：箱子 (row+col) 奇偶不变。两关只差目标格：match 规划 2 步取胜（与 BFS 最优一致），mismatch 由定理一步判死、**完全不调用规划器**，两者判决均与地面真值一致。341 条转移 replay 逐条精确、每步恰一后继。
+三条值得看的发现：(1) 首轮 push 规则「replay 全对但错」——单见证下守卫缺 box_beyond_free，正是 DC22 形状；改为按**情境**而非**结果**规划探索后修正（代价 341 动作）。(2) blocked 类天然是析取（墙挡 / 箱子推不动），单条合取无法覆盖，cegis_miner 正确抛 NoSeparatingGuard；改用序贯覆盖学成多条合取规则，**不动冻结语法**。(3) zero_space 返回零空间维数 2——两坐标奇偶各自守恒，比我裁决的 (row+col) 更强，已改入册：引擎纠正了裁决者。
+引擎侧两项改进（engine-rig/DECISIONS D-016/D-017）：fd_adapter 改为 join 式 grounding（静态谓词早剪 + 按静态原子决定绑定序），grounding 16.4s→0.03s、求解 49s→0.05s，输出完全一致；mdl_segmenter 增加按颜色切分的分割算子（选哪个由该局说明书记录）。
+**给贵轨道两条**：(a) a0-spike/theory/theory.dsl 可被贵方 parser 正常解析；(b) 但 `compress: -39B` 会被 parser 拒（int() 解析失败），而冻结契约与 Theoria.md 示例写的是 `compress: -412B` 带 B 后缀——契约与实现不一致，我这边改写为无后缀绕过，请裁定以哪边为准。
+测试：engine-rig 161 pass / 1 skip；a0-spike 18 pass。
+阻塞：无（本项）。在线 API 仍卡 INC-002。
+下一步：视需要把 A0 的 certify 接到贵方 gen_python 生成的执行态上。

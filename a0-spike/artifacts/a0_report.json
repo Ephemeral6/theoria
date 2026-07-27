@@ -1,0 +1,906 @@
+{
+  "certify": {
+    "ambiguities": [],
+    "exactly_one_successor": true,
+    "replay_exact": true,
+    "replay_failures": [],
+    "transitions": 341
+  },
+  "explore": {
+    "actions_spent": 341,
+    "episodes": 60,
+    "transitions": 341,
+    "witnessed": {
+      "DOWN/blocked": 7,
+      "DOWN/move": 56,
+      "DOWN/push": 12,
+      "LEFT/blocked": 7,
+      "LEFT/move": 101,
+      "LEFT/push": 19,
+      "RIGHT/blocked": 7,
+      "RIGHT/move": 40,
+      "RIGHT/push": 8,
+      "UP/blocked": 7,
+      "UP/move": 65,
+      "UP/push": 12
+    }
+  },
+  "grading": {
+    "match": {
+      "actually_solvable": true,
+      "agrees": true,
+      "plan_optimal": true,
+      "predicted_solvable": true
+    },
+    "mismatch": {
+      "actually_solvable": false,
+      "agrees": true,
+      "plan_optimal": true,
+      "predicted_solvable": false
+    }
+  },
+  "levels": {
+    "match": {
+      "executed_box_at": [
+        3,
+        1
+      ],
+      "plan": [
+        "(walk c3_5 c3_4 left)",
+        "(push2 c3_4 c3_3 c3_2 c3_1 left)"
+      ],
+      "plan_length": 2,
+      "planner_consulted": true,
+      "theorem": {
+        "explanation": "目标格与箱子同奇偶，守恒律不排除它；可解性需由规划器回答",
+        "goal_breaks_invariant": false,
+        "goal_parity": 0,
+        "inv_closed": "every push slides the box two cells along one axis, so row+col changes by an even number",
+        "inv_init": 0,
+        "invariant": "(box.row + box.col) mod 2",
+        "level": "match",
+        "unsolvable": false
+      },
+      "verdict": "solved",
+      "won": true,
+      "world_actions": [
+        "LEFT",
+        "LEFT"
+      ]
+    },
+    "mismatch": {
+      "planner_consulted": false,
+      "theorem": {
+        "explanation": "箱子每次滑动两格，(row+col) 的奇偶不变；开局奇偶为 0，目标格奇偶为 1，所以目标永远到不了",
+        "goal_breaks_invariant": true,
+        "goal_parity": 1,
+        "inv_closed": "every push slides the box two cells along one axis, so row+col changes by an even number",
+        "inv_init": 0,
+        "invariant": "(box.row + box.col) mod 2",
+        "level": "mismatch",
+        "unsolvable": true
+      },
+      "verdict": "unsolvable, by the conservation law"
+    }
+  },
+  "mine": {
+    "n_rules": 17,
+    "rules": [
+      {
+        "action": "DOWN",
+        "coverage": "2/2",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            0,
+            0
+          ]
+        },
+        "frontier": [],
+        "guard": [
+          "!ahead_free(LEFT)",
+          "act==DOWN",
+          "ahead_on_board(RIGHT)",
+          "box_beyond_free(LEFT)"
+        ],
+        "name": "blocked_DOWN_1",
+        "support": [
+          15,
+          31
+        ]
+      },
+      {
+        "action": "DOWN",
+        "coverage": "4/4",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            0,
+            0
+          ]
+        },
+        "frontier": [],
+        "guard": [
+          "!ahead_free(DOWN)",
+          "!ahead_is_box(DOWN)",
+          "act==DOWN"
+        ],
+        "name": "blocked_DOWN_2",
+        "support": [
+          15,
+          31,
+          67,
+          86
+        ]
+      },
+      {
+        "action": "DOWN",
+        "coverage": "3/3",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            0,
+            0
+          ]
+        },
+        "frontier": [],
+        "guard": [
+          "!box_beyond_free(DOWN)",
+          "act==DOWN",
+          "ahead_is_box(DOWN)"
+        ],
+        "name": "blocked_DOWN_3",
+        "support": [
+          116,
+          154,
+          210
+        ]
+      },
+      {
+        "action": "LEFT",
+        "coverage": "4/4",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            0,
+            0
+          ]
+        },
+        "frontier": [],
+        "guard": [
+          "!ahead_free(LEFT)",
+          "!ahead_is_box(LEFT)",
+          "act==LEFT"
+        ],
+        "name": "blocked_LEFT_1",
+        "support": [
+          33,
+          55,
+          71,
+          122
+        ]
+      },
+      {
+        "action": "LEFT",
+        "coverage": "4/4",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            0,
+            0
+          ]
+        },
+        "frontier": [],
+        "guard": [
+          "!ahead_free(LEFT)",
+          "!box_beyond_free(LEFT)",
+          "act==LEFT"
+        ],
+        "name": "blocked_LEFT_2",
+        "support": [
+          63,
+          122,
+          190,
+          230
+        ]
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "4/4",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            0,
+            0
+          ]
+        },
+        "frontier": [],
+        "guard": [
+          "!ahead_free(RIGHT)",
+          "!ahead_is_box(RIGHT)",
+          "act==RIGHT"
+        ],
+        "name": "blocked_RIGHT_1",
+        "support": [
+          27,
+          44,
+          47,
+          51
+        ]
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "3/3",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            0,
+            0
+          ]
+        },
+        "frontier": [],
+        "guard": [
+          "!box_beyond_free(RIGHT)",
+          "act==RIGHT",
+          "ahead_is_box(RIGHT)"
+        ],
+        "name": "blocked_RIGHT_2",
+        "support": [
+          146,
+          170,
+          264
+        ]
+      },
+      {
+        "action": "UP",
+        "coverage": "4/4",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            0,
+            0
+          ]
+        },
+        "frontier": [],
+        "guard": [
+          "!ahead_free(UP)",
+          "!ahead_is_box(UP)",
+          "act==UP"
+        ],
+        "name": "blocked_UP_1",
+        "support": [
+          5,
+          76,
+          81,
+          92
+        ]
+      },
+      {
+        "action": "UP",
+        "coverage": "3/3",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            0,
+            0
+          ]
+        },
+        "frontier": [],
+        "guard": [
+          "!box_beyond_free(UP)",
+          "act==UP",
+          "ahead_is_box(UP)"
+        ],
+        "name": "blocked_UP_2",
+        "support": [
+          130,
+          200,
+          340
+        ]
+      },
+      {
+        "action": "DOWN",
+        "coverage": "12/12",
+        "effect": {
+          "box_delta": [
+            2,
+            0
+          ],
+          "player_delta": [
+            1,
+            0
+          ]
+        },
+        "frontier": [
+          [
+            "act==DOWN",
+            "ahead_is_box(DOWN)",
+            "box_beyond_free(DOWN)"
+          ],
+          [
+            "!act==LEFT",
+            "ahead_is_box(DOWN)",
+            "box_beyond_free(DOWN)"
+          ]
+        ],
+        "guard": [
+          "act==DOWN",
+          "ahead_is_box(DOWN)",
+          "box_beyond_free(DOWN)"
+        ],
+        "name": "push2_DOWN",
+        "support": [
+          59,
+          98,
+          114,
+          152,
+          166,
+          216,
+          226,
+          234,
+          252,
+          292,
+          306,
+          326
+        ]
+      },
+      {
+        "action": "LEFT",
+        "coverage": "19/19",
+        "effect": {
+          "box_delta": [
+            0,
+            -2
+          ],
+          "player_delta": [
+            0,
+            -1
+          ]
+        },
+        "frontier": [
+          [
+            "act==LEFT",
+            "ahead_is_box(LEFT)",
+            "box_beyond_free(LEFT)"
+          ]
+        ],
+        "guard": [
+          "act==LEFT",
+          "ahead_is_box(LEFT)",
+          "box_beyond_free(LEFT)"
+        ],
+        "name": "push2_LEFT",
+        "support": [
+          17,
+          61,
+          65,
+          88,
+          94,
+          106,
+          118,
+          124,
+          132,
+          148,
+          172,
+          182,
+          212,
+          222,
+          242,
+          276,
+          288,
+          300,
+          302
+        ]
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "8/8",
+        "effect": {
+          "box_delta": [
+            0,
+            2
+          ],
+          "player_delta": [
+            0,
+            1
+          ]
+        },
+        "frontier": [
+          [
+            "act==RIGHT",
+            "ahead_is_box(RIGHT)",
+            "box_beyond_free(RIGHT)"
+          ]
+        ],
+        "guard": [
+          "act==RIGHT",
+          "ahead_is_box(RIGHT)",
+          "box_beyond_free(RIGHT)"
+        ],
+        "name": "push2_RIGHT",
+        "support": [
+          104,
+          138,
+          144,
+          180,
+          206,
+          220,
+          282,
+          332
+        ]
+      },
+      {
+        "action": "UP",
+        "coverage": "12/12",
+        "effect": {
+          "box_delta": [
+            -2,
+            0
+          ],
+          "player_delta": [
+            -1,
+            0
+          ]
+        },
+        "frontier": [
+          [
+            "act==UP",
+            "ahead_is_box(UP)",
+            "box_beyond_free(UP)"
+          ],
+          [
+            "!act==RIGHT",
+            "ahead_is_box(UP)",
+            "box_beyond_free(UP)"
+          ]
+        ],
+        "guard": [
+          "act==UP",
+          "ahead_is_box(UP)",
+          "box_beyond_free(UP)"
+        ],
+        "name": "push2_UP",
+        "support": [
+          110,
+          128,
+          162,
+          176,
+          186,
+          198,
+          240,
+          246,
+          260,
+          272,
+          312,
+          320
+        ]
+      },
+      {
+        "action": "DOWN",
+        "coverage": "56/56",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            1,
+            0
+          ]
+        },
+        "frontier": [
+          [
+            "act==DOWN",
+            "ahead_free(DOWN)"
+          ]
+        ],
+        "guard": [
+          "act==DOWN",
+          "ahead_free(DOWN)"
+        ],
+        "name": "walk_DOWN",
+        "support": [
+          1,
+          7,
+          23,
+          28,
+          30,
+          32,
+          34,
+          38,
+          45,
+          68,
+          70,
+          82,
+          84,
+          85,
+          103,
+          107,
+          115,
+          121,
+          125,
+          137,
+          143,
+          153,
+          159,
+          160,
+          167,
+          169,
+          173,
+          183,
+          195,
+          196,
+          205,
+          217,
+          219,
+          227,
+          229,
+          235,
+          237,
+          238,
+          243,
+          257,
+          258,
+          269,
+          270,
+          281,
+          287,
+          293,
+          295,
+          296,
+          307,
+          309,
+          310,
+          317,
+          318,
+          331,
+          337,
+          338
+        ]
+      },
+      {
+        "action": "LEFT",
+        "coverage": "101/101",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            0,
+            -1
+          ]
+        },
+        "frontier": [
+          [
+            "act==LEFT",
+            "ahead_free(LEFT)"
+          ]
+        ],
+        "guard": [
+          "act==LEFT",
+          "ahead_free(LEFT)"
+        ],
+        "name": "walk_LEFT",
+        "support": [
+          2,
+          9,
+          12,
+          14,
+          16,
+          18,
+          25,
+          37,
+          40,
+          41,
+          49,
+          57,
+          58,
+          60,
+          62,
+          64,
+          73,
+          87,
+          93,
+          96,
+          97,
+          100,
+          101,
+          102,
+          105,
+          108,
+          109,
+          112,
+          113,
+          117,
+          123,
+          126,
+          127,
+          131,
+          134,
+          135,
+          136,
+          140,
+          141,
+          142,
+          147,
+          150,
+          151,
+          156,
+          157,
+          158,
+          164,
+          165,
+          168,
+          171,
+          174,
+          175,
+          178,
+          181,
+          184,
+          185,
+          192,
+          193,
+          194,
+          202,
+          203,
+          204,
+          211,
+          214,
+          215,
+          218,
+          221,
+          224,
+          225,
+          232,
+          233,
+          236,
+          241,
+          244,
+          245,
+          248,
+          254,
+          255,
+          256,
+          262,
+          266,
+          267,
+          268,
+          278,
+          279,
+          280,
+          290,
+          291,
+          294,
+          301,
+          304,
+          305,
+          308,
+          314,
+          315,
+          316,
+          322,
+          328,
+          329,
+          330,
+          339
+        ]
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "40/40",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            0,
+            1
+          ]
+        },
+        "frontier": [
+          [
+            "act==RIGHT",
+            "ahead_free(RIGHT)"
+          ]
+        ],
+        "guard": [
+          "act==RIGHT",
+          "ahead_free(RIGHT)"
+        ],
+        "name": "walk_RIGHT",
+        "support": [
+          3,
+          11,
+          19,
+          20,
+          22,
+          24,
+          26,
+          35,
+          43,
+          46,
+          53,
+          66,
+          69,
+          78,
+          83,
+          119,
+          120,
+          145,
+          161,
+          188,
+          197,
+          208,
+          209,
+          228,
+          239,
+          251,
+          259,
+          271,
+          274,
+          284,
+          285,
+          286,
+          297,
+          298,
+          311,
+          319,
+          325,
+          334,
+          335,
+          336
+        ]
+      },
+      {
+        "action": "UP",
+        "coverage": "65/65",
+        "effect": {
+          "box_delta": [
+            0,
+            0
+          ],
+          "player_delta": [
+            -1,
+            0
+          ]
+        },
+        "frontier": [
+          [
+            "act==UP",
+            "ahead_free(UP)"
+          ]
+        ],
+        "guard": [
+          "act==UP",
+          "ahead_free(UP)"
+        ],
+        "name": "walk_UP",
+        "support": [
+          0,
+          4,
+          6,
+          8,
+          10,
+          13,
+          21,
+          29,
+          36,
+          39,
+          42,
+          48,
+          50,
+          52,
+          54,
+          56,
+          72,
+          74,
+          75,
+          77,
+          79,
+          80,
+          89,
+          90,
+          91,
+          95,
+          99,
+          111,
+          129,
+          133,
+          139,
+          149,
+          155,
+          163,
+          177,
+          179,
+          187,
+          189,
+          191,
+          199,
+          201,
+          207,
+          213,
+          223,
+          231,
+          247,
+          249,
+          250,
+          253,
+          261,
+          263,
+          265,
+          273,
+          275,
+          277,
+          283,
+          289,
+          299,
+          303,
+          313,
+          321,
+          323,
+          324,
+          327,
+          333
+        ]
+      }
+    ]
+  },
+  "perceive": {
+    "baseline_bits": 412,
+    "board": 3,
+    "movers": 2,
+    "ratio": 0.9053,
+    "script_bits": 373,
+    "tracks": 5
+  },
+  "prove": {
+    "basis": [
+      [
+        1,
+        0
+      ],
+      [
+        0,
+        1
+      ]
+    ],
+    "difference_rank": 0,
+    "features": [
+      "box.row mod 2",
+      "box.col mod 2"
+    ],
+    "null_space_dimension": 2,
+    "rendering": "(box.row + box.col) mod 2 = 0",
+    "row_plus_col_is_conserved": true,
+    "value": 0
+  }
+}

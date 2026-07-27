@@ -272,3 +272,43 @@ output. Freezing the two non-substantive fields makes the file diff only when th
 engines actually propose something different, and the byte-equality test stops it
 going stale. The default emission path is untouched, so the contract is still
 honoured literally in normal operation.
+
+---
+
+## D-016 · fd_adapter grounds by join, not by cross product
+
+**Context.** The A0 sokoban domain's `push2` action mentions four cells. Grounding
+it as a full cross product is |cells|^4 -- 5.7M combinations on a 7x7 board, and
+23M with the direction parameter -- essentially all naming cells that are not
+collinear. Grounding took 16 s and the whole solve 49 s.
+
+**Decision.** Predicates that no action adds or deletes are *static*; their truth
+is fixed by the initial state. Grounding now (a) discards any instance whose
+static preconditions are false, (b) checks each static precondition the moment
+its variables are bound, and (c) binds parameters in an order taken from the
+static atoms themselves, so the check can fire early. Static atoms are also
+stripped from the search state.
+
+**Why.** Correct by construction -- a static atom false initially is false
+forever, so no reachable plan is lost -- and the effect is not marginal:
+grounding 16.4 s -> 0.03 s, solve 49 s -> 0.05 s, with identical output (254
+ground actions, the same 2-action plan, the same "no plan" on the unsolvable
+level). Ordering matters as much as the pruning: with the direction parameter
+bound last, `adj ?p ?b ?d` cannot be checked until 49^4 partial bindings exist.
+
+---
+
+## D-017 · A second segmentation operator, chosen per world
+
+**Context.** `mdl_segmenter`'s colour-agnostic connectivity fuses a player
+standing against a wall, or beside the box it is about to push, into one blob.
+The A0 trajectory is unreadable under it.
+
+**Decision.** `connected_components(..., split_by_color=True)` refuses to cross a
+colour change. Both operators stay; which one a world needs is recorded in that
+world's manual.
+
+**Why.** Neither is right everywhere -- colour-splitting shatters multi-coloured
+objects, colour-agnostic fuses touching ones. This is the "segmentation operator
+hypothesis space" of Theoria 1.8, and the honest form is a choice the manual
+records rather than a default hidden in the engine.

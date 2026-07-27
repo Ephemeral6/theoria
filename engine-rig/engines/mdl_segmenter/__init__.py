@@ -58,9 +58,10 @@ def candidates(seg: Segmentation, timestamp: Optional[str] = None) -> List[Dict[
 
 def run(frames: Sequence[Sequence[Sequence[int]]], background: int = 0,
         out_path: Optional[str] = None,
-        timestamp: Optional[str] = None) -> Segmentation:
+        timestamp: Optional[str] = None,
+        split_by_color: bool = False) -> Segmentation:
     """Segment `frames`; if `out_path` is given, append the proposals there."""
-    seg = segment_trajectory(frames, background=background)
+    seg = segment_trajectory(frames, background=background, split_by_color=split_by_color)
     if out_path:
         emit(out_path, candidates(seg, timestamp=timestamp))
     return seg
