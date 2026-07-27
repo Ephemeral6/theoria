@@ -281,9 +281,52 @@ def probe_conflicts():
     return {"status": "risk", "detail": " ⚠ ".join(findings)}
 
 
+def probe_provenance():
+    """留痕审计：每个领地的实验中间产物必须进 append-only 的 runs/ 档案。
+
+    v1 盘点两件事：各领地有没有 runs/ 档案（多少个 run、MANIFEST 覆盖率、
+    最新一次）；以及哪些领地存在明显的实验产物目录（artifacts/ out/ data/）
+    却完全没有 runs/ —— 这些是当前留痕规则的欠账。规则本身生效于分支制
+    第一批（提示词逐份携带），所以欠账在此如实计数、不定罪既往。"""
+    exp_dirs = ("artifacts", "out", "data")
+    rows, debt = [], []
+    for terr in TERRITORIES:
+        if terr == "monitor" or not exists(terr):
+            continue
+        has_products = any(
+            os.path.isdir(rel(terr, d)) or
+            any(os.path.isdir(os.path.join(base, d))
+                for base, dirs, _ in os.walk(rel(terr))
+                if not any(s in base for s in SKIP_DIRS)
+                for d in dirs if d in exp_dirs)
+            for d in exp_dirs)
+        runs_dir = rel(terr, "runs")
+        if os.path.isdir(runs_dir):
+            runs = [d for d in sorted(os.listdir(runs_dir))
+                    if os.path.isdir(os.path.join(runs_dir, d))]
+            with_manifest = sum(
+                1 for d in runs
+                if os.path.exists(os.path.join(runs_dir, d, "MANIFEST.json")))
+            rows.append("%s：%d 个 run，MANIFEST %d/%d，最新 %s"
+                        % (terr, len(runs), with_manifest, len(runs),
+                           runs[-1] if runs else "—"))
+        elif has_products:
+            debt.append(terr)
+    detail = ""
+    if rows:
+        detail += "已建档：" + "； ".join(rows) + "。"
+    if debt:
+        detail += ("尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批"
+                   "起逐个清偿）：" + ", ".join(debt) + "。")
+    if not rows and not debt:
+        return {"status": "green", "detail": "无实验产物领地。"}
+    return {"status": "green" if not debt else "partial", "detail": detail}
+
+
 PROBES = {
     "credential_hygiene": probe_credential_hygiene,
     "conflict_scan": probe_conflicts,
+    "provenance_scan": probe_provenance,
     "pile_integrity": probe_pile_integrity,
     "determinism_state": probe_determinism_state,
     "a0_state": probe_a0_state,
@@ -683,6 +726,17 @@ def render(state, refresh=None):
       % (cf["status"], cf["status"],
          "无冲突" if cf["status"] == "green" else "发现冲突",
          md_bold(esc(cf["detail"]))))
+    A('</section>')
+
+    # ---- provenance audit (live, every run)
+    pv = state["probes"]["provenance_scan"]
+    A('<section><h2>留痕审计 <span class="note">— 实验中间文件必须进各领地的 '
+      'append-only runs/ 档案（含 MANIFEST：命令、seed、代码 commit、逐文件哈希）；'
+      '重跑 = 新 run，永不覆盖</span></h2>')
+    A('<div class="conflict %s"><span class="pill %s">%s</span> %s</div>'
+      % (pv["status"], pv["status"],
+         "全部建档" if pv["status"] == "green" else "有欠账",
+         md_bold(esc(pv["detail"]))))
     A('</section>')
 
     # ---- findings first: this is the point of the monitor

@@ -109,7 +109,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 02:16:27",
+  "generated_at": "2026-07-28 02:21:51",
   "history": [
     {
       "findings": {
@@ -316,32 +316,43 @@
       "arc-recon/data/precheck.json",
       "arc-recon/data/recon_ledger.jsonl",
       "arc-recon/precheck.py",
-      "cold-start-a0/BLOCKER_FAST_DOWNWARD.md",
-      "cold-start-a0/artifacts/unsolvable_report.json",
-      "cold-start-a0/certify/fd_conformance.py",
-      "cold-start-a0/compile/gen_pddl_a0.py",
-      "cold-start-a0/pipeline/plan_stage.py",
-      "cold-start-a0/prime/artifacts/prime_report.json",
-      "cold-start-a0/prime/theory/generated/domain.pddl",
-      "cold-start-a0/prime/theory/generated_seeded/domain.pddl",
-      "cold-start-a0/tests/test_followups.py",
-      "cold-start-a0/theory/generated/domain.pddl",
-      "cold-start-a0/theory/generated_no_button/domain.pddl",
-      "monitor/index.html",
+      "baseline-arms/harness/ledger.py",
+      "baseline-arms/ledger.jsonl",
+      "baseline-arms/probe_log.jsonl",
+      "battery/adapters/a0.py",
+      "battery/adapters/ledger_jsonl.py",
+      "battery/model.py",
+      "cold-start-a0/artifacts/fd_conformance.json",
+      "cold-start-a0/compile/dialect.py",
+      "engine-rig/engines/fd_adapter/__init__.py",
+      "engine-rig/engines/fd_adapter/search.py",
       "monitor/scan.py",
-      "monitor/state.json",
       "theory-compiler/src/theory_compiler/parser/ast_nodes.py",
+      "theory-compiler/src/theory_compiler/parser/pretty_printer.py",
       "theory-compiler/src/theory_compiler/parser/theory_parser.py",
+      "theory-compiler/tests/fixtures/cart_theory.dsl",
+      "theory-compiler/tests/fixtures/peg_theory.dsl",
       "theory-compiler/tests/test_theory_parser.py",
+      "baseline-arms/harness/campaign.py",
+      "baseline-arms/harness/campaign_status.py",
+      "baseline-arms/harness/run_campaign.py",
+      "baseline-arms/out/campaign/",
+      "baseline-arms/out/campaign_gate.json",
+      "battery/audit/",
       "battery/metrics/",
-      "cold-start-a0/artifacts/fd_real.json",
-      "cold-start-a0/certify/fd_unsat.py",
+      "battery/run_battery.py",
       "cold-start-a2/",
-      "proxy/"
+      "engine-rig/engines/deadlock_carver/",
+      "engine-rig/fixtures/data/sokoban_domain.pddl",
+      "engine-rig/fixtures/data/sokoban_open4.pddl",
+      "engine-rig/fixtures/data/sokoban_ring.pddl",
+      "engine-rig/fixtures/sokoban.py",
+      "proxy/",
+      "theory-compiler/src/theory_compiler/parser/expand.py"
     ],
     "engine_candidates": 24,
     "git_branch": "master",
-    "git_head": "f18cf97 baseline-arms: check in the ledger, pilot outputs, and the HTTP probe log",
+    "git_head": "8075a6a cold-start-a0: Fast Downward connected, and it found two defects on contact",
     "incidents": 5,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -349,11 +360,22 @@
     "sync_last": "2026-07-28T02:10:00Z",
     "tests": {},
     "untracked": [
+      "baseline-arms/harness/campaign.py",
+      "baseline-arms/harness/campaign_status.py",
+      "baseline-arms/harness/run_campaign.py",
+      "baseline-arms/out/campaign/",
+      "baseline-arms/out/campaign_gate.json",
+      "battery/audit/",
       "battery/metrics/",
-      "cold-start-a0/artifacts/fd_real.json",
-      "cold-start-a0/certify/fd_unsat.py",
+      "battery/run_battery.py",
       "cold-start-a2/",
-      "proxy/"
+      "engine-rig/engines/deadlock_carver/",
+      "engine-rig/fixtures/data/sokoban_domain.pddl",
+      "engine-rig/fixtures/data/sokoban_open4.pddl",
+      "engine-rig/fixtures/data/sokoban_ring.pddl",
+      "engine-rig/fixtures/sokoban.py",
+      "proxy/",
+      "theory-compiler/src/theory_compiler/parser/expand.py"
     ]
   },
   "p1_green": 2,
@@ -425,7 +447,7 @@
           "status": "missing"
         },
         {
-          "_note": "arc-recon 记为 INCOMPLETE（INC-002：0/8 次动作成功）。但 baseline-arms/probe_log.jsonl 显示带退避重试后动作确实返回 200 —— INC-002 的结论已被新证据推翻，而预检尚未在新重试策略下重跑。  〔本次扫描：arc-recon 预检裁定：unknown。 但 baseline-arms 的重试实验里 ACTION 130/1081 次返回 200 —— INC-002『0 次成功』已不成立，预检需在重试策略下重跑。〕",
+          "_note": "arc-recon 记为 INCOMPLETE（INC-002：0/8 次动作成功）。但 baseline-arms/probe_log.jsonl 显示带退避重试后动作确实返回 200 —— INC-002 的结论已被新证据推翻，而预检尚未在新重试策略下重跑。  〔本次扫描：arc-recon 预检裁定：unknown。 但 baseline-arms 的重试实验里 ACTION 134/1121 次返回 200 —— INC-002『0 次成功』已不成立，预检需在重试策略下重跑。〕",
           "_status": "risk",
           "clause": "Phase 1 验收单",
           "id": "p1-determinism",
@@ -453,7 +475,7 @@
           "status": "partial"
         },
         {
-          "_note": "piles.json 哈希锁定，API 层封存堆零接触（本监视器每次复验请求体）。但 INC-BA-001 带来了 API 之外的口子：检索子代理读到了 9 局封存局的机制描述（ls20/ft09 实质），知识污染本检查构造上抓不到。F-11 已裁决（监控代行）：主张集缩至 19 局，ls20/ft09 隔离，轻微 7 局敏感性分析。  〔本次扫描：封存堆 21 局零接触（已核对 1697 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
+          "_note": "piles.json 哈希锁定，API 层封存堆零接触（本监视器每次复验请求体）。但 INC-BA-001 带来了 API 之外的口子：检索子代理读到了 9 局封存局的机制描述（ls20/ft09 实质），知识污染本检查构造上抓不到。F-11 已裁决（监控代行）：主张集缩至 19 局，ls20/ft09 隔离，轻微 7 局敏感性分析。  〔本次扫描：封存堆 21 局零接触（已核对 1878 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
           "_status": "risk",
           "clause": "Phase 1 · 一刀切堆",
           "id": "p1-cut",
@@ -712,12 +734,16 @@
       "status": "green"
     },
     "determinism_state": {
-      "detail": "arc-recon 预检裁定：unknown。 但 baseline-arms 的重试实验里 ACTION 130/1081 次返回 200 —— INC-002『0 次成功』已不成立，预检需在重试策略下重跑。",
+      "detail": "arc-recon 预检裁定：unknown。 但 baseline-arms 的重试实验里 ACTION 134/1121 次返回 200 —— INC-002『0 次成功』已不成立，预检需在重试策略下重跑。",
       "status": "risk"
     },
     "pile_integrity": {
-      "detail": "封存堆 21 局零接触（已核对 1697 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
+      "detail": "封存堆 21 局零接触（已核对 1878 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
       "status": "green"
+    },
+    "provenance_scan": {
+      "detail": "尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：engine-rig, cold-start-a0, cold-start-a2, a0-spike, baseline-arms, arc-recon。",
+      "status": "partial"
     }
   },
   "progress": {
