@@ -1,0 +1,11 @@
+{
+  "variant_id": "v004-swap-left-right",
+  "base_game": "ar25-0c556536",
+  "claim": "solvable",
+  "operators": [
+    {"op": "remap_action", "from": "ACTION3", "to": "ACTION4"},
+    {"op": "remap_action", "from": "ACTION4", "to": "ACTION3"}
+  ],
+  "justification": "Relabelling is a bijection on the action alphabet, so it cannot change what is achievable. The map that swaps ACTION3 and ACTION4 and fixes everything else is its own inverse; applying it to every command of a winning sequence in the base game yields a sequence that drives the wrapped game through exactly the same states, and conversely. The set of reachable states is therefore identical and the game remains solvable -- it is only harder to play, which is the point: it separates a policy that understands the world from one that has memorised a route.",
+  "notes": "A control for the unsolvable variants. An exam made only of unsolvable questions measures nothing, because 'I cannot solve it' scores the same as 'it cannot be solved'."
+}

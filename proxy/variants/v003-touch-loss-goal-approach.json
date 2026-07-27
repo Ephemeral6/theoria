@@ -1,0 +1,10 @@
+{
+  "variant_id": "v003-touch-loss-goal-approach",
+  "base_game": "ar25-0c556536",
+  "claim": "unsolvable",
+  "operators": [
+    {"op": "observation_loss", "cells": [[5, 6], [6, 5]], "value": 2}
+  ],
+  "justification": "The two declared cells are a cut set around the goal. On level 0 the goal at (6,6) has exactly two non-wall neighbours, (5,6) and (6,5) -- (7,6) and (6,7) are border wall. Any command that ends on the goal must therefore start from one of those two cells, so any successful run occupies one of them as the terminal position of an earlier command. Declaring a loss on either makes that impossible, and level 0 cannot be completed, so WIN cannot occur. Neither cell is reachable only in passing: a conveyor slide could carry the agent across a cell without ending on it, but the only conveyor on level 0 is at (5,3) and its slide lands on (5,4), so neither (5,6) nor (6,5) is ever a transient position.",
+  "notes": "value 2 is the agent marker in the frame encoding, so 'the cell holds a 2' means 'the agent is standing on it'. The predicate is evaluated against the last frame of a command's frame sequence -- the observation the arm actually acts on -- which is why the justification has to rule out transient entry explicitly."
+}

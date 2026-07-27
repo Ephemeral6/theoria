@@ -1,0 +1,10 @@
+{
+  "variant_id": "v001-step-limit-3",
+  "base_game": "ar25-0c556536",
+  "claim": "unsolvable",
+  "operators": [
+    {"op": "step_limit", "limit": 3}
+  ],
+  "justification": "Counting alone settles it, with no play required. On level 0 the agent starts at (1,1) and the goal is at (6,6), a Manhattan distance of 10. A single command moves the agent by one cell, plus at most one further cell if it lands on a conveyor -- so no command reduces the distance by more than 2, and at least 5 commands are needed to finish level 0. WIN additionally requires levels 1 and 2. A budget of 3 commands therefore cannot reach WIN under any policy whatsoever, which is what makes this an exam question with a known answer rather than a guess.",
+  "notes": "The bound is deliberately loose: it does not depend on the shortest route (9 commands for level 0), only on the per-command displacement ceiling, so it survives any relabelling of the action set."
+}

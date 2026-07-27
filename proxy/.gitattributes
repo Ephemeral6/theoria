@@ -1,0 +1,7 @@
+# Determinism is a requirement here: a ledger line's bytes are determined by
+# its content, and core.autocrlf must not be able to change them.
+* text=auto eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.py text eol=lf
+*.md text eol=lf

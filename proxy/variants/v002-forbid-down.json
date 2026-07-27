@@ -1,0 +1,10 @@
+{
+  "variant_id": "v002-forbid-down",
+  "base_game": "ar25-0c556536",
+  "claim": "unsolvable",
+  "operators": [
+    {"op": "forbid_action", "action": "ACTION2"}
+  ],
+  "justification": "A monotone invariant proves it. ACTION2 is the only command with a positive row component: ACTION1 decreases the row, ACTION3 and ACTION4 leave it unchanged, ACTION5 is a no-op, and a conveyor slide continues in the direction of the command that entered it, so it never introduces downward motion on its own. With ACTION2 removed from the reachable alphabet, the agent's row is non-increasing for the whole episode. On level 0 the agent starts at row 1 and the goal is at row 6, so the goal is unreachable and WIN -- which needs all three levels -- cannot occur.",
+  "notes": "The forbidden command is not forwarded upstream at all; the arm observes an unchanged frame, which is the wrapper-legal way to remove an action from a hosted environment."
+}

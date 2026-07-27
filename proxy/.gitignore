@@ -1,0 +1,5 @@
+# Runtime output: ledgers, run records, replay artefacts. The format is
+# tracked (LEDGER_FORMAT.md); the data a run produces is not.
+var/
+__pycache__/
+.pytest_cache/
