@@ -10,10 +10,15 @@ plan       -> SAT, and the world agrees  (M4)
 variant    -> UNSAT -> certificate       (M5)
 ```
 
-Only M3 is missing from this script, and its absence is the point: the theorize
-step is the one thing in the loop a script cannot do. `theory.dsl` and
-`theory_no_button.dsl` are checked in as hand-written artefacts and this driver
-consumes them.
+Two steps are missing from this script, for different reasons.
+
+**M3 is missing because a script cannot do it.** The theorize step is the one
+place a semantic decision is made; `theory.dsl` and `theory_no_button.dsl` are
+checked in as hand-written artefacts and this driver consumes them.
+
+**M6 scoring is missing because it reads the referee's copy of the truth.**
+`python -m certify.score_vs_truth` is a separate command on purpose, so that
+nothing in the default loop can see the answers.
 
 ```bash
 cd cold-start-a0 && python run_all.py
@@ -33,6 +38,7 @@ STEPS = [
     ("M2 engines (base)", [sys.executable, "-m", "pipeline.engines_stage"]),
     ("M2 engines (variant)", [sys.executable, "-m", "pipeline.engines_stage",
                               "_no_button"]),
+    ("M4 problem instances", [sys.executable, "-m", "compile.problem"]),
     ("M4 compile", [sys.executable, "-m", "compile.compile_a0"]),
     ("M4 certify cheap", [sys.executable, "-m", "certify.replay"]),
     ("M4 certify lean", [sys.executable, "-m", "certify.lean_check"]),
