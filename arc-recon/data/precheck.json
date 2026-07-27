@@ -1,10 +1,78 @@
 {
-  "excluded": [
-    {
-      "game_id": "g50t-5849a774",
-      "reason": "HTTP 400"
-    }
-  ],
+  "excluded": [],
   "note": "games in `excluded` are registered and must not be used: a non-deterministic environment invalidates the framework's reasoning",
-  "results": {}
+  "results": {
+    "g50t-5849a774": {
+      "available_actions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "game_id": "g50t-5849a774",
+      "run_a": [
+        {
+          "action": "RESET",
+          "hash": "801726dc499f3f52",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "score": null,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION1",
+          "error": "HTTP 400 on /api/cmd/ACTION1: {\"error\":\"SERVER_ERROR\",\"message\":\"game g50t-5849a774 not found\"}\n"
+        }
+      ],
+      "run_b": [
+        {
+          "action": "RESET",
+          "hash": "801726dc499f3f52",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "score": null,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION1",
+          "error": "HTTP 400 on /api/cmd/ACTION1: {\"error\":\"SERVER_ERROR\",\"message\":\"game g50t-5849a774 not found\"}\n"
+        }
+      ],
+      "sequence": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        1,
+        2,
+        3,
+        4,
+        5,
+        1,
+        2,
+        3,
+        4,
+        5,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "verdict": {
+        "actions_returning_multiple_frames": 0,
+        "cascade_semantics": "every response carried exactly 1 frame; the field is still a list",
+        "cross_session_residue": false,
+        "deterministic": true,
+        "first_divergence": null,
+        "length_match": true,
+        "max_frames_per_action": 1,
+        "mismatches": [],
+        "steps_compared": 2
+      },
+      "win_levels": 7
+    }
+  }
 }

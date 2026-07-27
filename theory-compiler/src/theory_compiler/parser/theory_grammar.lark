@@ -1,0 +1,108 @@
+// Theory DSL Grammar for Lark parser
+// Covers: word_table, events, rules, goal, laws
+
+start: section+
+
+section: word_table_section
+       | events_section
+       | rules_section
+       | goal_section
+       | laws_section
+
+// --- word_table ---
+word_table_section: "word_table:" _NL (_INDENT word_table_entry _NL)*
+word_table_entry: "board" -> board_decl
+                | object_decl
+                | concept_account
+
+object_decl: "object" NAME "{" field_list "}"
+field_list: field ("," field)*
+field: NAME ":" TYPE
+
+concept_account: NAME "[" concept_attrs "]"
+concept_attrs: concept_attr+
+concept_attr: "segment:" NAME
+            | "ev:" EVIDENCE_RANGE
+            | "compress:" NUMBER
+
+// --- events ---
+events_section: "events:" _NL (_INDENT event_decl _NL)*
+event_decl: "event" event_alt ("|" event_alt)*
+event_alt: NAME "(" param_list ")"
+param_list: param ("," param)*
+param: NAME
+
+// --- rules ---
+rules_section: "rules:" _NL (_INDENT rule_decl)*
+rule_decl: "rule" NAME rule_meta? _NL _INDENT "when" guard "then" event_ref _NL
+rule_meta: "[" rule_meta_attrs "]"
+rule_meta_attrs: rule_meta_attr+
+rule_meta_attr: "ev:" EVIDENCE_LIST
+              | "cov:" COVERAGE
+
+guard: guard_clause ("and" guard_clause)*
+guard_clause: action_match
+            | predicate_call
+            | comparison
+
+action_match: "act=" NAME "(" arg_list ")"
+predicate_call: NAME "(" arg_list ")"
+comparison: expr COMP_OP expr
+
+expr: NAME "." NAME -> field_access
+    | NAME "(" arg_list ")" -> func_call
+    | NAME -> name_ref
+    | NUMBER -> number_lit
+    | "(" expr "," expr ")" -> tuple_lit
+    | expr "+" expr -> add_expr
+    | expr "-" expr -> sub_expr
+
+arg_list: arg ("," arg)*
+arg: expr
+
+event_ref: NAME "(" arg_list ")"
+
+// --- goal ---
+goal_section: "goal:" _NL _INDENT "goal" goal_expr _NL
+goal_expr: comparison
+         | func_call_goal
+
+func_call_goal: NAME "(" arg_list_goal ")" COMP_OP expr
+arg_list_goal: arg_goal ("," arg_goal)*
+arg_goal: expr
+        | NAME "=" expr -> named_arg
+
+// --- laws ---
+laws_section: "laws:" _NL (_INDENT law_decl _NL)*
+law_decl: invariant_decl | theorem_decl
+
+invariant_decl: "invariant" NAME inv_expr COMP_OP inv_val inv_meta?
+inv_expr: /[^\[=><!\n]+(?=\s*[=><!])/
+inv_val: NUMBER | NAME
+inv_meta: "[" inv_meta_attrs "]"
+inv_meta_attrs: inv_meta_attr+
+inv_meta_attr: "status:" NAME
+
+theorem_decl: "theorem" NAME ESCAPED_STRING theorem_meta?
+theorem_meta: "[" theorem_meta_attrs "]"
+theorem_meta_attrs: theorem_meta_attr+
+theorem_meta_attr: "depends:" NAME_LIST
+                 | "probe:" NAME
+
+// --- Terminals ---
+NAME: /[A-Za-z_][A-Za-z_0-9]*/
+TYPE: /[A-Z][A-Za-z_0-9]*/
+NUMBER: /\d+/
+EVIDENCE_RANGE: /[A-Za-z0-9_,\-]+/
+EVIDENCE_LIST: /[A-Za-z0-9_,]+/
+COVERAGE: /\d+\/\d+/
+COMP_OP: "=" | ">=" | "<=" | ">" | "<" | "!="
+NAME_LIST: /[A-Za-z_][A-Za-z_0-9]*(\s*,\s*[A-Za-z_][A-Za-z_0-9]*)*/
+ESCAPED_STRING: "\"" /[^"]*/ "\""
+
+COMMENT: /#[^\n]*/
+_NL: /(\s*\n)+/
+_INDENT: /[ \t]+/
+
+%ignore COMMENT
+%ignore /[ \t]+(?![\S])/

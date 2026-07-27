@@ -1,0 +1,52 @@
+{
+  "a0-base": {
+    "button_press_transitions": [
+      99
+    ],
+    "coverage": "233/236",
+    "covered_pairs": 233,
+    "door_entry_transitions": [
+      157,
+      158,
+      200,
+      225,
+      226,
+      268
+    ],
+    "frames": 276,
+    "portal_transitions": [
+      11,
+      103
+    ],
+    "reachable_states": 59,
+    "state_action_pairs": 236,
+    "transitions": 275,
+    "uncovered_pairs": [
+      "cart=(2,2) pressed=0 act=DOWN",
+      "cart=(3,1) pressed=0 act=RIGHT",
+      "cart=(4,2) pressed=0 act=UP"
+    ],
+    "win_frames": [
+      247,
+      250,
+      257,
+      258,
+      265
+    ]
+  },
+  "a0-no-button": {
+    "button_press_transitions": [],
+    "coverage": "92/92",
+    "covered_pairs": 92,
+    "door_entry_transitions": [],
+    "frames": 112,
+    "portal_transitions": [
+      11
+    ],
+    "reachable_states": 23,
+    "state_action_pairs": 92,
+    "transitions": 111,
+    "uncovered_pairs": [],
+    "win_frames": []
+  }
+}

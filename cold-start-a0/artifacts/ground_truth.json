@@ -1,0 +1,323 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "board_cells": {
+    "portal_marker": [
+      7,
+      3
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        1,
+        8
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        3,
+        8
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        3
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        5
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        7
+      ],
+      [
+        8,
+        8
+      ]
+    ]
+  },
+  "delta": {
+    "DOWN": [
+      1,
+      0
+    ],
+    "LEFT": [
+      0,
+      -1
+    ],
+    "RIGHT": [
+      0,
+      1
+    ],
+    "UP": [
+      -1,
+      0
+    ]
+  },
+  "grid": [
+    9,
+    9
+  ],
+  "invariants": [
+    {
+      "name": "cart_unique",
+      "statement": "exactly one cell carries colour 6 at all times"
+    },
+    {
+      "name": "button_latched",
+      "statement": "once the Button is 8 it is never 7 again"
+    },
+    {
+      "name": "right_room_locked (variant a0-no-button only)",
+      "statement": "with no Button the Door never opens, so the Cart never occupies a cell of the right room; the parity of the Cart's occupancy over the right room is conserved at 0"
+    }
+  ],
+  "objects": {
+    "Button": {
+      "cell": [
+        3,
+        2
+      ],
+      "colors": [
+        7,
+        8
+      ],
+      "shape": [
+        1,
+        1
+      ]
+    },
+    "Cart": {
+      "colors": [
+        6
+      ],
+      "shape": [
+        1,
+        1
+      ]
+    },
+    "Door": {
+      "cell": [
+        4,
+        5
+      ],
+      "colors": [
+        5
+      ],
+      "shape": [
+        1,
+        1
+      ],
+      "vanishes_when": "Button pressed"
+    }
+  },
+  "palette": {
+    "button_pressed": 8,
+    "button_unpressed": 7,
+    "cart": 6,
+    "door_closed": 5,
+    "floor": 0,
+    "portal": 3,
+    "wall": 1
+  },
+  "reachable_states": 59,
+  "rules": [
+    {
+      "name": "push",
+      "then": "Cart moves one cell in direction D",
+      "when": "act=D and the target cell is floor (or the opened Door cell)"
+    },
+    {
+      "name": "blocked",
+      "then": "nothing moves",
+      "when": "act=D and the target cell is a wall, the closed Door, or the Button"
+    },
+    {
+      "name": "press",
+      "then": "Button recolours 7 -> 8 AND the Door vanishes, in the same transition; the Cart does not move",
+      "when": "act=D and the target cell is the Button and the Button is unpressed"
+    },
+    {
+      "name": "door_open",
+      "then": "Door vanishes; the Door cell becomes passable forever after",
+      "when": "(cascade of press, not an independent rule)"
+    },
+    {
+      "name": "teleport",
+      "then": "Cart moves to (1,1)",
+      "when": "act=D and the target cell is the Portal entry (7,3)"
+    }
+  ],
+  "spec": {
+    "button_cell": [
+      3,
+      2
+    ],
+    "cart_start": [
+      5,
+      1
+    ],
+    "door_cell": [
+      4,
+      5
+    ],
+    "goal_cell": [
+      2,
+      7
+    ],
+    "name": "a0-base",
+    "portal_cell": [
+      7,
+      3
+    ],
+    "portal_dest": [
+      1,
+      1
+    ]
+  }
+}

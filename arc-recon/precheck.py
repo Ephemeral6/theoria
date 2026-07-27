@@ -20,6 +20,7 @@ import hashlib
 import json
 import os
 import sys
+import time
 from typing import Any, Dict, List, Optional
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -65,14 +66,44 @@ def hash_frames(frames: Any) -> str:
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16]
 
 
+def reset_when_available(client: ArcClient, game_id: str, card_id: str,
+                         attempts: int = 30, delay: float = 10.0,
+                         label: str = "") -> Dict[str, Any]:
+    """RESET, retrying while the game is unavailable.
+
+    Availability is intermittent server-side (INC-001a): the same game_id answers
+    a RESET in one minute and returns `game <id> not found` the next, and the
+    error keys on the game rather than on our session -- ACTION with a live guid
+    fails the same way. So the precheck has to catch a window rather than assume
+    one.
+    """
+    assert_playable(game_id)
+    last = None
+    for attempt in range(attempts):
+        try:
+            _, opening = client.request(
+                "POST", "/api/cmd/RESET", body={"game_id": game_id, "card_id": card_id},
+                note="precheck RESET %s %s attempt %d" % (game_id, label, attempt),
+            )
+            if attempt:
+                print("      (available on attempt %d, after %.0fs)" % (attempt, attempt * delay))
+            return opening
+        except ArcApiError as exc:
+            last = exc
+            if attempt < attempts - 1:
+                time.sleep(delay)
+    raise RuntimeError(
+        "%s never became available in %d attempts over %.0fs (last: %s)"
+        % (game_id, attempts, attempts * delay, last)
+    )
+
+
 def play_once(client: ArcClient, game_id: str, card_id: str,
-              sequence: Optional[List[int]] = None) -> Dict[str, Any]:
+              sequence: Optional[List[int]] = None,
+              label: str = "") -> Dict[str, Any]:
     """RESET, then walk the fixed sequence, hashing every frame batch."""
     assert_playable(game_id)
-    _, opening = client.request(
-        "POST", "/api/cmd/RESET", body={"game_id": game_id, "card_id": card_id},
-        note="precheck RESET %s" % game_id,
-    )
+    opening = reset_when_available(client, game_id, card_id, label=label)
     guid = opening["guid"]
     steps = [
         {
@@ -112,19 +143,45 @@ def play_once(client: ArcClient, game_id: str, card_id: str,
             "available_actions": opening.get("available_actions")}
 
 
-def compare(first: Dict[str, Any], second: Dict[str, Any]) -> Dict[str, Any]:
+def compare(first: Dict[str, Any], second: Dict[str, Any],
+            expected_steps: Optional[int] = None) -> Dict[str, Any]:
+    """Compare two replays.
+
+    A step that errored carries no hash. Comparing two such steps would find
+    `None == None` and call it agreement, which is how the first version of this
+    function reported PASS for two runs that had both died on their first action.
+    Hashes are therefore only counted as agreeing when both are present, and the
+    verdict additionally requires that the full sequence actually ran.
+    """
     a, b = first["steps"], second["steps"]
-    mismatches = [
-        {"index": i, "action": a[i]["action"],
-         "hash_a": a[i].get("hash"), "hash_b": b[i].get("hash")}
-        for i in range(min(len(a), len(b)))
-        if a[i].get("hash") != b[i].get("hash")
-    ]
+    compared = min(len(a), len(b))
+    mismatches = []
+    unusable = []
+    for i in range(compared):
+        hash_a, hash_b = a[i].get("hash"), b[i].get("hash")
+        if hash_a is None or hash_b is None:
+            unusable.append({"index": i, "action": a[i].get("action"),
+                             "error_a": a[i].get("error"), "error_b": b[i].get("error")})
+        elif hash_a != hash_b:
+            mismatches.append({"index": i, "action": a[i]["action"],
+                               "hash_a": hash_a, "hash_b": hash_b})
+    expected = expected_steps if expected_steps is not None else compared
+    complete = len(a) == len(b) == expected and not unusable
     multi = [s for s in a if (s.get("n_frames") or 0) > 1]
     return {
-        "steps_compared": min(len(a), len(b)),
+        "steps_compared": compared,
+        "steps_with_a_usable_hash": compared - len(unusable),
+        "steps_expected": expected,
+        "complete": complete,
+        "unusable_steps": unusable[:10],
         "length_match": len(a) == len(b),
-        "deterministic": not mismatches and len(a) == len(b),
+        # PASS requires the whole sequence to have run and every compared step to
+        # carry a real hash on both sides. Anything less is INCOMPLETE, not PASS.
+        "deterministic": complete and not mismatches,
+        "verdict": (
+            "PASS" if (complete and not mismatches)
+            else ("FAIL" if mismatches else "INCOMPLETE")
+        ),
         "mismatches": mismatches[:10],
         "first_divergence": mismatches[0]["index"] if mismatches else None,
         "cross_session_residue": a[0].get("hash") != b[0].get("hash"),
@@ -142,10 +199,10 @@ def run(game_id: str, client: Optional[ArcClient] = None) -> Dict[str, Any]:
     assert_playable(game_id)
     client = client or ArcClient()
     card_a = client.open_scorecard(tags=["precheck", "run-a"])["card_id"]
-    first = play_once(client, game_id, card_a)
+    first = play_once(client, game_id, card_a, label="run-a")
     card_b = client.open_scorecard(tags=["precheck", "run-b"])["card_id"]
-    second = play_once(client, game_id, card_b, sequence=first["sequence"])
-    verdict = compare(first, second)
+    second = play_once(client, game_id, card_b, sequence=first["sequence"], label="run-b")
+    verdict = compare(first, second, expected_steps=len(first["sequence"]) + 1)
     return {
         "game_id": game_id,
         "sequence": first["sequence"],
@@ -173,14 +230,17 @@ def main(argv: List[str]) -> int:
             continue
         verdict = result["verdict"]
         results[game_id] = result
-        print("  %-18s determinism=%s  steps=%d  max_frames/action=%d  residue=%s"
-              % (game_id, "PASS" if verdict["deterministic"] else "FAIL",
-                 verdict["steps_compared"], verdict["max_frames_per_action"],
-                 verdict["cross_session_residue"]))
-        if not verdict["deterministic"]:
+        print("  %-18s %s  steps=%d/%d usable=%d  max_frames/action=%d  residue=%s"
+              % (game_id, verdict["verdict"], verdict["steps_compared"],
+                 verdict["steps_expected"], verdict["steps_with_a_usable_hash"],
+                 verdict["max_frames_per_action"], verdict["cross_session_residue"]))
+        if verdict["verdict"] == "FAIL":
             excluded.append({"game_id": game_id,
                              "reason": "non-deterministic at step %s"
                                        % verdict["first_divergence"]})
+        elif verdict["verdict"] == "INCOMPLETE":
+            excluded.append({"game_id": game_id,
+                             "reason": "precheck did not complete; determinism unestablished"})
 
     report = {"results": results, "excluded": excluded,
               "note": "games in `excluded` are registered and must not be used: a "
