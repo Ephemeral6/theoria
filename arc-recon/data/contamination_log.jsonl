@@ -1,0 +1,4 @@
+{"game_id": "g50t-5849a774", "level": "scores_only", "note": "one RESET; initial 64x64 frame of level 1 observed. Development pile, expected.", "pile": "dev", "t": "2026-07-27T16:12:41Z"}
+{"game_id": "ar25-0c556536", "level": "never_audited", "note": "RESET refused with 'game not found'; no frame returned, nothing observed.", "pile": "dev", "t": "2026-07-27T16:12:41Z"}
+{"game_id": "sk48-d8078629", "level": "never_audited", "note": "RESET refused with 'game not found'; no frame returned, nothing observed.", "pile": "dev", "t": "2026-07-27T16:12:41Z"}
+{"game_id": "tn36-ef4dde99", "level": "never_audited", "note": "RESET refused with 'game not found'; no frame returned, nothing observed.", "pile": "dev", "t": "2026-07-27T16:12:41Z"}

@@ -35,11 +35,40 @@ cd arc-recon && python cut_piles.py  # the pile cut; refuses to run twice
 | scorecard open | `POST /api/scorecard/open` returns a `card_id` |
 | scorecard retrieve/close | **404 on a card with no plays** — the card only materialises once a game is played against it |
 
-Everything else on Theoria.md's access-check list needs gameplay and is therefore
-gated on the cut: RESET semantics and cross-session residue, whether one action
-returns one frame or several (the cascade-semantics question that decides the
-shape of `step`), whether `level` is a response field or must be inferred from
-score jumps, rate limits and action quota, and the determinism precheck.
+## What one RESET on the development pile settled
+
+A single `POST /api/cmd/RESET {game_id, card_id}` on `g50t-5849a774` answered four
+open access-check questions:
+
+| Question | Answer |
+|---|---|
+| **cascade semantics** — one frame per action, or several? | `frame` is a **list of frames** (length 1 on RESET, each 64x64). The API models `action -> frame sequence`, so `step` must be shaped that way. Whether it ever exceeds 1 needs an action that triggers an internal tick. |
+| **is `level` a response field?** | **Yes** — `levels_completed` and `win_levels`. No need to infer it from score jumps. Cross-check: `win_levels` 7 == `len(baseline_actions)` 7 in the catalogue. |
+| session handle | RESET returns a `guid` |
+| action space | `available_actions: [1,2,3,4,5]` — no ACTION6 for this `keyboard`-tagged game, matching its tag |
+
+Other fields: `state` (`NOT_FINISHED`), `full_reset` (false — RESET did a level
+reset), `action_input`.
+
+## INC-001 — the key does not cover the whole public set
+
+`GET /api/games` lists 25 games, but RESET returns `400 game <id> not found` for
+**three of the four development-pile games**. Only `g50t-5849a774` started.
+
+The pile cut assumed the 25 listed games are playable. That premise is false, so
+the development pile is effectively **one** game. The playable subset of the
+sealed pile is unknown and was **deliberately not probed**: a successful RESET
+returns the first frame, so an accessibility sweep would burn exactly the sealed
+games that are accessible — the worst possible outcome.
+
+`data/piles.json` is hash-locked and was left untouched; the incident lives in
+`data/incidents.jsonl`, and `data/contamination_log.jsonl` supersedes the
+register inside the locked file. **No sealed game has been touched.**
+
+The remaining access-check items still need gameplay: cross-session residue (does RESET fully clear
+state?), rate limits and action quota, and the determinism precheck — a fixed
+action sequence replayed twice with frame hashes compared. All of these are now
+runnable on `g50t-5849a774` alone.
 
 ## The pile cut
 

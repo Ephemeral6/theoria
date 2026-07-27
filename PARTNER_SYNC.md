@@ -67,3 +67,8 @@
 测试：engine-rig 150 pass / 1 skip 不变。
 阻塞：无。等待切堆确认后方可开始烧动作配额（RESET 语义、单动作多帧、level 字段、确定性预检均需对局）。
 下一步：确定性预检 + 级联语义裁决（仅在开发堆上）。
+
+## [engine-rig] 2026-07-27T16:13:10Z phase1-INC-001
+状态：切堆经用户确认后开始接触开发堆，一次 RESET 即定下四项接入核查结论：frame 是**帧列表**（RESET 返回 1 帧，64x64）——级联语义在结构上已裁决，step 必须建模"动作→帧序列"；level 是响应字段（levels_completed / win_levels，且 win_levels 7 == baseline_actions 长度 7），无需由 score 跳变推导；RESET 返回 guid 会话句柄；available_actions=[1,2,3,4,5]（该 keyboard 局无 ACTION6，与标签一致）。
+阻塞：**INC-001（阻塞级）**——/api/games 列出 25 局，但开发堆 4 局中有 3 局 RESET 返回 400 "game not found"，仅 g50t-5849a774 可玩。切堆前提（25 局皆可玩）不成立，开发堆实际只有 1 局。封存堆可玩子集未知且**故意不探测**：成功的 RESET 会返回首帧，逐局探测等于把可玩的封存局全部烧掉。piles.json 保持哈希锁定未改，事件记于 incidents.jsonl，污染登记移至 contamination_log.jsonl。**封存堆零接触。**
+下一步：待密钥访问范围澄清；在此期间确定性预检可仅在 g50t 上先跑。

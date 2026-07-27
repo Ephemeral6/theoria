@@ -1,4 +1,16 @@
 {
+  "access_limitation": {
+    "incident": "INC-001",
+    "playable_of_dev_pile": [
+      "g50t-5849a774"
+    ],
+    "refused_of_dev_pile": [
+      "ar25-0c556536",
+      "sk48-d8078629",
+      "tn36-ef4dde99"
+    ],
+    "sealed_pile_playability": "unknown and deliberately untested"
+  },
   "api_calls_made": 3,
   "auth_header": "X-API-Key",
   "base_url": "https://three.arcprize.org",
@@ -56,6 +68,41 @@
     "rate limits and action quota",
     "determinism precheck (fixed sequence replayed twice, frame hashes equal)"
   ],
+  "play_semantics": {
+    "available_actions_note": "no ACTION6 for this 'keyboard'-tagged game; matches its tag",
+    "available_actions_observed": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "cascade_semantics": "RESOLVED structurally: `frame` is a LIST, so the API models action -> frame SEQUENCE, not action -> single frame. step must be shaped accordingly. Whether it ever exceeds length 1 needs an action that triggers an internal tick.",
+    "frame_dimensions": "64x64",
+    "frame_is_a_list_of_frames": true,
+    "frames_returned_by_reset": 1,
+    "full_reset_flag": false,
+    "level_cross_check": "win_levels 7 == len(baseline_actions) 7 in the catalogue",
+    "level_fields": {
+      "levels_completed": 0,
+      "win_levels": 7
+    },
+    "level_is_a_response_field": true,
+    "reset_endpoint": "POST /api/cmd/RESET {game_id, card_id}",
+    "response_fields": [
+      "action_input",
+      "available_actions",
+      "frame",
+      "full_reset",
+      "game_id",
+      "guid",
+      "levels_completed",
+      "state",
+      "win_levels"
+    ],
+    "session_handle": "guid returned by RESET",
+    "source": "single RESET on g50t-5849a774 (development pile)"
+  },
   "scorecard": {
     "error": "ArcApiError: HTTP 404 on /api/scorecard/f23c14c7-421f-4867-8a04-34e3b79fd155: {\"error\":\"SERVER_ERROR\",\"message\":\"card_id `f23c14c7-421f-4867-8a04-34e3b79fd155` not found\"}\n"
   }
