@@ -1,0 +1,6 @@
+# `lean/TheoriaLean.lean` is a byte-reproducible generated artefact, and a test
+# asserts it equals what the generator currently emits. A CRLF translation on
+# checkout would make that test machine-dependent on any clone with
+# core.autocrlf=true. Same reasoning as engine-rig/.gitattributes; everything
+# under theory-compiler/ stays LF in the working copy.
+* text eol=lf
