@@ -9,7 +9,7 @@ appends a paragraph to `/PARTNER_SYNC.md`.
 |---|---|---|
 | `engine-rig-m1-fixtures` | Fixtures A/B/C, deterministic generators | done |
 | `engine-rig-m2-mdl` | `mdl_segmenter` | done |
-| `engine-rig-m3-cegis` | `cegis_miner` | pending |
+| `engine-rig-m3-cegis` | `cegis_miner` | done |
 | `engine-rig-m4-zerospace` | `zero_space` | pending |
 | `engine-rig-m5-lp` | `lp_potential` | pending |
 | `engine-rig-m6-fd` | `fd_adapter` | pending |

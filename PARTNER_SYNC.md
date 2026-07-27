@@ -13,3 +13,9 @@
 测试：pass 31/31（fixtures 17 + mdl 14）。
 阻塞：无。
 下一步：cegis_miner（M3）。
+
+## [engine-rig] 2026-07-27T11:08:15Z engine-rig-m3-cegis
+状态：cegis_miner 完成——反例引导综合出 push（守卫 act==?dir ∧ free(strip(?dir))，cov 41/41，四方向提升为一条参数化规则）与 teleport（守卫 at(0,0)，效果 move to (8,8)，cov 1/1）；九条地面规则守卫互斥且覆盖全部 49 条转移（约束 9 的微缩演练）。不可分辨的守卫（free/in_bounds）作为前沿全部保留，不做点猜测。
+测试：pass 50/50（fixtures 17 + mdl 14 + cegis 19）。
+阻塞：无。
+下一步：zero_space（M4）。
