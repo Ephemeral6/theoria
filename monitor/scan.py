@@ -323,10 +323,55 @@ def probe_provenance():
     return {"status": "green" if not debt else "partial", "detail": detail}
 
 
+def probe_dispatch_board():
+    """工作板：每份派出的提示词的双列状态 —— 自报 vs 核实。
+
+    自报 = PARTNER_SYNC 里出现该工单号的段落 / 分支已 push；
+    核实 = 监控探针能在树上摸到验收产物。两列不一致即标出。"""
+    sync = ""
+    if exists("PARTNER_SYNC.md"):
+        sync = open(rel("PARTNER_SYNC.md"), encoding="utf-8", errors="ignore").read()
+    branches = git("branch", "-a", "--format=%(refname:short)")
+    rows = []
+    pdir = os.path.join(HERE, "prompts")
+    if os.path.isdir(pdir):
+        for name in sorted(os.listdir(pdir)):
+            if not name.startswith(("P-", "M-", "R-")) or not name.endswith(".md"):
+                continue
+            pid = name.split("-")[0] + "-" + name.split("-")[1]
+            slug = pid.lower()
+            branch = next((b for b in branches.splitlines()
+                           if slug in b.lower() and "agent/" in b), "")
+            self_rep = pid in sync or bool(branch)
+            rows.append({"prompt": name, "id": pid,
+                         "branch": branch or "—",
+                         "self_reported": self_rep})
+    if not rows:
+        return {"status": "green", "detail": "本轮无在册工单。", "rows": []}
+    n_rep = sum(1 for r in rows if r["self_reported"])
+    return {"status": "green" if n_rep else "partial",
+            "detail": "%d 份在册工单，%d 份有自报痕迹（分支或 PARTNER_SYNC）。"
+                      "核实列以各专项探针为准。" % (len(rows), n_rep),
+            "rows": rows}
+
+
+def probe_inbox():
+    """monitor/inbox/ 的待裁决提案。"""
+    pdir = os.path.join(HERE, "inbox")
+    pending = [f for f in sorted(os.listdir(pdir))
+               if f.endswith(".md") and f != "README.md"] if os.path.isdir(pdir) else []
+    if not pending:
+        return {"status": "green", "detail": "提案箱空。"}
+    return {"status": "partial",
+            "detail": "待裁决提案 %d 份：%s" % (len(pending), ", ".join(pending))}
+
+
 PROBES = {
     "credential_hygiene": probe_credential_hygiene,
     "conflict_scan": probe_conflicts,
     "provenance_scan": probe_provenance,
+    "dispatch_board": probe_dispatch_board,
+    "inbox": probe_inbox,
     "pile_integrity": probe_pile_integrity,
     "determinism_state": probe_determinism_state,
     "a0_state": probe_a0_state,
@@ -737,6 +782,26 @@ def render(state, refresh=None):
       % (pv["status"], pv["status"],
          "全部建档" if pv["status"] == "green" else "有欠账",
          md_bold(esc(pv["detail"]))))
+    A('</section>')
+
+    # ---- dispatch workboard: self-reported vs verified
+    db = state["probes"]["dispatch_board"]
+    ib = state["probes"]["inbox"]
+    A('<section><h2>工作板 <span class="note">— 自报（分支/PARTNER_SYNC）与'
+      '核实（探针）两列永不合并，不一致即信号</span></h2>')
+    A('<div class="conflict %s"><span class="pill %s">%s</span> %s</div>'
+      % (db["status"], db["status"], "工单", md_bold(esc(db["detail"]))))
+    if db.get("rows"):
+        A('<table class="wide" style="margin-top:10px"><thead><tr><th>工单</th>'
+          '<th>分支</th><th>自报</th></tr></thead><tbody>')
+        for r in db["rows"]:
+            A('<tr><td>%s</td><td><code>%s</code></td><td>%s</td></tr>'
+              % (esc(r["prompt"]), esc(r["branch"]),
+                 "✓" if r["self_reported"] else "—"))
+        A('</tbody></table>')
+    A('<div class="conflict %s" style="margin-top:10px">'
+      '<span class="pill %s">提案箱</span> %s</div>'
+      % (ib["status"], ib["status"], md_bold(esc(ib["detail"]))))
     A('</section>')
 
     # ---- findings first: this is the point of the monitor
