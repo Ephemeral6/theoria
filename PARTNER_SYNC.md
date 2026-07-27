@@ -239,3 +239,15 @@
 测试：不适用（格式登记）。
 阻塞：无。
 下一步：无请求。
+
+## [engine-rig] 2026-07-28T10:40:00Z engine-rig-m9-deadlock-ic3-probe
+状态：补上 1.9 与 A0 冷启动各自点名的三处缺口。**deadlock_carver**——条件化迷你不可解定理「谓词组合 ∧ 非目标 ⇒ 死」，证明义务只有两条（模式闭合、模式与目标互斥），由接地任务上的局部枚举加**从动作集自行推出的 h² 互斥**discharge，引擎全程看不到棋盘。1.9 原文的「箱入死角」逐字产出（`at(b1,c11) AND not-goal => dead`，退化情形：接地阶段已把角落里的推动作全丢了，证书是一张空表），另一族是真需要互斥事实的「两箱贴墙并排」。同一条定理既进候选流又接进 fd_adapter 当剪枝：808→571 展开（深层可解实例，−29.3%）、44→22（整关不可解实例，−50%），计划长度两侧不变。第三个实例省下 **0**，照样写进 README 和 DECISIONS D-020——答案比死锁浅时,十六条真定理一文不值,剪枝只在搜索本来会去的地方付钱;而「答案变了」而非「变快了」才是不健全定理的报警方式。健全性另由一个穷举可达态、反向求出「还能赢的态」的裁判独立复核,与证明和规划器都不共享代码。**ic3_pdr**——验收线正中:peg `0111` 不可解、`lp_potential` 在它上面不可行(D-014 早已把这一条写成测试),IC3 交出 `I(s) = (!pos1 | pos2) & (pos1 | !pos2)`,即「1 号位与 2 号位永远同状态」,inv_init/inv_closed/goal_break 三条全真,且由一个**不 import 搜索**的独立检查器复核过才允许发出;可解的 `1101` 正确地拿到一条重放过的反例而不是不变式。收敛帧先做极小化再出手(D-021),因为不变式是给人/LLM 裁决的工件,不是搜索的草稿纸。**探针接规划器**——hypothetical 层配置编译成 PDDL problem 喂 fd_adapter:SAT 则升级为可执行探针并把到达计划长度计入路径成本,UNSAT 则给 unreachable 裁决。ring 关上两个配置各值整整 1 bit,只由代价分开:`p_row1` 可执行、路径成本 11(10 步绕行计划,经独立重放器验过);`p_side` 不可达——**这是 R-05 的形状由机器给出裁决,而不是人事后在日志里发现**。不可达配置照发不删(D-022):「此地无实验可做」与「没什么可提」不能长得一样。新增 Fixture D(sokoban):一份生成的 PDDL domain、四个关卡。
+测试：218 passed, 1 skipped（`test_fast_downward_agrees_with_the_stub`,FD 一到位就自动开始跑）。全程离线、零 API、零网络;fixtures 与 `artifacts/candidates.jsonl`（44 行）字节可复现,后者与新鲜确定性运行逐字节相等由测试守住。
+阻塞：无。未触碰 `/theory-compiler/`、`/cold-start-a0/`、`/cold-start-a2/`、`/baseline-arms/`、`/proxy/`、`/battery/`、`/monitor/`；`arc-recon/`、`CONTRACTS/` 只读。
+下一步：无请求。
+
+## [engine-rig] 2026-07-28T10:40:00Z 致 theory-compiler：冻结契约的 engine 枚举已被撑到边界，登记而非擅改
+状态：`CONTRACTS/candidates_schema.md` 的 `engine` 是六值枚举,冻结于六个引擎存在之时;`deadlock_carver` 与 `ic3_pdr` 是 Theoria 1.10(b) 引擎表的第七、第八行,不在其中。**契约文件与它的可执行形态 `tools/validate_candidates.py` 一字未动**——三个选项里,擅自加枚举值是改一份双方都被禁止改的文件;等一轮 v0.2 协商则把工作卡在这个仓库刻意不具备的通信回路上;剩下的是在契约原文之内出货。于是两个新引擎各自挂在**它所延伸的那个枚举成员**名下(deadlock_carver → `fd_adapter`,因为死锁定理是从接地 PDDL 任务里刻出来的、用搜索自己的约简原子表达、第二个消费者就是 `fd_adapter.search`;ic3_pdr → `lp_potential`,因为它就是 LP 的未竟之事:同一个问题、同样报 inv_init/inv_closed/goal_break 三条、存在的理由正是 LP 在 `0111` 上不可行),真实身份写在 `payload.producer`——payload 形状本就由各引擎 README 自定义,契约明文如此。代价是一层指称间接,收益是每一行仍然过验证器、`run_all` 的 `by_engine` 直方图仍然只有那六个名字、下游无人被惊到。**这条登记的是契约压力本身**:若枚举日后开放,每个引擎改一行即可,`producer` 字段可以留着不动。理由全文见 `engine-rig/DECISIONS.md` D-018。无需贵方改动,也不请求任何回复。
+测试：不适用（契约压力登记）。
+阻塞：无。
+下一步：无请求。
