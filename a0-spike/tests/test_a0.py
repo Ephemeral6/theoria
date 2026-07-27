@@ -149,3 +149,61 @@ def test_mining_is_deterministic():
     first = [r.as_json() for r in stages.mine(transitions)]
     second = [r.as_json() for r in stages.mine(transitions)]
     assert first == second
+
+
+# ----------------------------- certify through the generated executable form
+
+def test_the_manual_compiles_to_an_executable_form(report):
+    assert report["certify_generated"]["source"].endswith("theory_exec.py")
+
+
+def test_history_replays_through_the_compiled_manual(report):
+    """The only predictor is the code compiled from theory.dsl."""
+    generated = report["certify_generated"]
+    assert generated["frames_checked"] >= 300
+    assert generated["replay_exact"] is True
+    assert generated["n_render_mismatches"] == 0
+    assert generated["errors"] == []
+
+
+def test_replay_compares_rendered_frames_not_internal_state():
+    """Full-frame responsibility: a wrong picture must fail even if state is right."""
+    from pipeline import gen_exec
+
+    module = _compiled_module()
+    state = module["State"](player=levels.MATCH.player, box=levels.MATCH.box)
+    frame = state.render()
+    assert sum(1 for row in frame for v in row if v) == len(levels.MATCH.walls) + 2
+
+
+def _compiled_module():
+    from pipeline import gen_exec
+
+    level = levels.MATCH
+    dsl = open(os.path.join(HERE, "theory", "theory.dsl"), encoding="utf-8").read()
+    return gen_exec.compile_module(dsl, level.height, level.width, level.walls)
+
+
+def test_the_compiled_manual_blocks_at_the_board_edge():
+    """The bug the manual had until certify caught it (THEORIZE_LOG T-8)."""
+    module = _compiled_module()
+    State, step = module["State"], module["step"]
+    assert step(State(player=(0, 0), box=(3, 3)), "UP").player == (0, 0)
+
+
+def test_the_compiled_manual_pushes_the_box_two_cells():
+    module = _compiled_module()
+    State, step = module["State"], module["step"]
+    result = step(State(player=(3, 4), box=(3, 3)), "LEFT")
+    assert result.box == (3, 1)
+    assert result.player == (3, 3)
+
+
+def test_the_generator_refuses_what_it_cannot_compile():
+    """Never `True`, never `pass` -- an uncompilable theory is a finding."""
+    from pipeline.gen_exec import UncompilableTheory, generate
+
+    broken = open(os.path.join(HERE, "theory", "theory.dsl"), encoding="utf-8").read()
+    broken = broken.replace("free(ahead(Player, dir))", "sparkles(Player, dir)")
+    with pytest.raises(UncompilableTheory):
+        generate(broken, 7, 7, levels.MATCH.walls)

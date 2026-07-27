@@ -126,3 +126,30 @@ winning requires breaking it.
 "no plan". The theorem answers in one arithmetic step and, unlike the planner,
 says *why*. That gap — a certificate against "I searched and found nothing" — is
 the whole thesis, and A0 shows it on a world small enough to check by hand.
+
+---
+
+## T-8 · Compiling the manual caught an error the mined rules had not
+
+**What happened** certify was rewired to replay history through the executable
+form compiled from `theory.dsl`, rather than through the miner's in-memory rule
+objects. The generated code immediately walked the player off the board.
+
+**Cause, in the manual, not the engine** I had adjudicated
+
+    rule blocked_wall  ... then moved(Player, dir)
+    rule blocked_box   ... then moved(Player, dir)
+
+The mined rules had the right effect all along — `(0,0), (0,0)`, nothing moves.
+The error was in my transcription of them into the manual, and the event
+vocabulary was complicit: `moved | slid` had no way to say "nothing happened", so
+the nearest available event was a movement one.
+
+**Adjudicated** `stayed(o)` added to the event vocabulary; both blocked rules now
+end `then stayed(Player)`.
+
+**Why this entry is the point of the exercise** Replaying through the mined rules
+would never have found this: those rules were correct. Only the compiled manual
+is accountable for what the manual actually says, which is exactly why the
+framework insists the sole predictor be generated from it. One rewiring, one real
+error caught, in a manual I had already reviewed and called done.

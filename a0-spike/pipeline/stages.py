@@ -318,6 +318,54 @@ def certify(rules: Sequence[MinedRule],
     }
 
 
+def certify_generated(module: Dict[str, Any],
+                      episodes: Sequence[Dict[str, Any]]) -> Dict[str, Any]:
+    """Replay every episode through the EXECUTABLE FORM compiled from theory.dsl.
+
+    This is the cheap layer of certify done properly. The mined rules are engine
+    output; the manual is what the agent is accountable for, and the only
+    prediction machine allowed is the one compiled from it ("预测无侧门").
+    Comparison is on rendered frames, not on internal state, so a theory that
+    tracks the right positions but draws the wrong picture still fails --
+    full-frame responsibility.
+    """
+    State, step = module["State"], module["step"]
+    frame_failures, errors = [], []
+    frames_checked = 0
+
+    for index, episode in enumerate(episodes):
+        percepts = percepts_from(episode["frames"])
+        state = State(player=percepts[0].player, box=percepts[0].box)
+        if state.render() != [list(row) for row in episode["frames"][0]]:
+            frame_failures.append({"episode": index, "t": 0, "reason": "initial render"})
+            continue
+        for t, action in enumerate(episode["actions"]):
+            try:
+                state = step(state, action)
+            except Exception as exc:
+                errors.append({"episode": index, "t": t, "error": str(exc)[:160]})
+                break
+            frames_checked += 1
+            observed = [list(row) for row in episode["frames"][t + 1]]
+            if state.render() != observed:
+                frame_failures.append(
+                    {"episode": index, "t": t, "action": action,
+                     "predicted_player": list(state.player),
+                     "predicted_box": list(state.box),
+                     "observed_player": list(percepts[t + 1].player),
+                     "observed_box": list(percepts[t + 1].box)}
+                )
+                break
+    return {
+        "episodes": len(episodes),
+        "frames_checked": frames_checked,
+        "render_mismatches": frame_failures[:10],
+        "n_render_mismatches": len(frame_failures),
+        "errors": errors[:10],
+        "replay_exact": not frame_failures and not errors,
+    }
+
+
 def predict(rules: Sequence[MinedRule], percept: Percept, action: str
             ) -> Optional[Tuple[Tuple[int, int], Tuple[int, int]]]:
     """The theory's prediction for one step, or None if it has nothing to say."""

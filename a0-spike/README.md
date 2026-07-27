@@ -40,6 +40,7 @@ explore   60 episodes, 341 actions, 341 transitions
 perceive  5 objects (2 move, 3 settle into the board); 373 vs 412 bits
 mine      17 rules
 certify   341 transitions replayed; exactly-one-successor=True, exact=True
+certify*  341 frames replayed through theory.dsl -> theory_exec.py; exact=True
 prove     (box.row + box.col) mod 2 = 0   (conserved)
 match     solved in 2 actions -> box on target: True
 mismatch  unsolvable: box parity 0, target parity 1 -- the box never leaves its colour
@@ -48,7 +49,21 @@ mismatch  unsolvable: box parity 0, target parity 1 -- the box never leaves its 
 Both verdicts agree with ground truth; the plan is optimal. On `mismatch` **the
 planner is never consulted** — the theorem answers first.
 
-## The three findings worth reading
+## certify runs through the compiled manual
+
+`certify*` above is the one that counts. The mined rules are engine output; the
+**manual** is what the agent is accountable for, so the only predictor allowed is
+the code compiled from `theory/theory.dsl` (预测无侧门). Comparison is on rendered
+frames, not internal state — a theory that tracks the right positions and draws
+the wrong picture still fails.
+
+`gen_python` from the theory-compiler track cannot compile the A0 manual yet, and
+fails *silently* (guards become `True`, effects become `pass`), so
+`pipeline/gen_exec.py` is a stopgap generator for the A0 subset that raises on
+anything it does not understand. Evidence and defect list:
+[GENERATOR_REPORT.md](GENERATOR_REPORT.md).
+
+## The four findings worth reading
 
 **1. The under-guarded push rule — DC22 in miniature.** The first pass, on a
 casual 28-step walk, mined `act==D and ahead_is_box(D) → box slides two`, with one
@@ -73,6 +88,14 @@ law. `zero_space` returned a null space of dimension **2** — `row mod 2` and
 true. The stronger pair went into the manual. This is the division of labour
 working in the direction it was designed to: the engine computes, the LLM
 decides, and the LLM was wrong.
+
+**4. Compiling the manual caught an error the mined rules had not.** I had
+adjudicated `blocked_wall ... then moved(Player, dir)`. The mined rules were
+right — nothing moves — but my transcription said "move", and the event
+vocabulary had no way to say "nothing happened". The generated code duly walked
+the player off the board. `stayed(o)` was added and the rules corrected. Replaying
+through the mined rules would never have found this, because those rules were
+correct; only the compiled manual is accountable for what the manual says.
 
 Full reasoning, decision by decision: [THEORIZE_LOG.md](THEORIZE_LOG.md).
 

@@ -6,6 +6,15 @@
     "replay_failures": [],
     "transitions": 341
   },
+  "certify_generated": {
+    "episodes": 60,
+    "errors": [],
+    "frames_checked": 341,
+    "n_render_mismatches": 0,
+    "render_mismatches": [],
+    "replay_exact": true,
+    "source": "theory/theory.dsl -> artifacts/theory_exec.py"
+  },
   "explore": {
     "actions_spent": 341,
     "episodes": 60,

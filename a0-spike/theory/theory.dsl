@@ -12,7 +12,9 @@ word_table:
   Box [segment: color-split-connected ev: t0-t340 compress: -39]
 
 events:
-  event moved(o, dir) | slid(o, dir)
+  # stayed(o) 是被 certify 逼出来的：blocked_* 原本写成 then moved(Player, dir)，
+  # 生成的执行态照此把玩家推出棋盘。事件语汇缺一个「什么都没发生」。
+  event moved(o, dir) | slid(o, dir) | stayed(o)
 
 rules:
   rule walk [ev: t0,t1,t2 cov: 262/262]
@@ -22,10 +24,10 @@ rules:
     when act=move(Player, dir) and Box.pos = ahead(Player, dir) and free(beyond(Box, dir)) then slid(Box, dir)
 
   rule blocked_wall [ev: t5,t11 cov: 16/16]
-    when act=move(Player, dir) and not free(ahead(Player, dir)) and not Box.pos = ahead(Player, dir) then moved(Player, dir)
+    when act=move(Player, dir) and not free(ahead(Player, dir)) and not Box.pos = ahead(Player, dir) then stayed(Player)
 
   rule blocked_box [ev: t7,t19 cov: 12/12]
-    when act=move(Player, dir) and Box.pos = ahead(Player, dir) and not free(beyond(Box, dir)) then moved(Player, dir)
+    when act=move(Player, dir) and Box.pos = ahead(Player, dir) and not free(beyond(Box, dir)) then stayed(Player)
 
 goal:
   goal Box.pos = target

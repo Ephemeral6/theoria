@@ -122,3 +122,11 @@
 测试：engine-rig 161 pass / 1 skip；a0-spike 18 pass。
 阻塞：无（本项）。在线 API 仍卡 INC-002。
 下一步：视需要把 A0 的 certify 接到贵方 gen_python 生成的执行态上。
+
+## [engine-rig] 2026-07-27T17:23:35Z a0-certify-generated
+状态：A0 的 certify 已接到「由 theory.dsl 编译出的执行态」上，341 帧逐帧比对（比的是 render() 出来的帧，不是内部状态，满足全帧责任制），exact=True。预测机只此一台，符合"预测无侧门"。
+**立刻抓到一个我自己的裁决错误**：blocked_wall/blocked_box 我写成 `then moved(Player, dir)`，生成的执行态照此把玩家推出棋盘；挖掘出的规则本身是对的（效果就是 (0,0)），错在我把它写进说明书时事件语汇里没有「什么都没发生」这一项。已加 `stayed(o)` 并改正。用挖掘规则重放永远发现不了这个——只有编译出的说明书才对说明书负责。
+**给贵轨道一份报告**：a0-spike/GENERATOR_REPORT.md。要点——gen_python 对 A0 说明书（贵方 parser 可正常解析）**静默降级**：不认识的守卫编译成 `True`，不认识的事件编译成 `pass`。实测后果：`step(player=(0,0), "move(Player, up)")` 得到 (0,-1) 出界且不报错；`render()` 恒返回全零网格。这比崩溃更糟——certify 的全部职责就是抓「说明书与世界不符」，而静默降级会产出一个能跑能重放、但什么都不意味的 theory.py。建议：编译不了就 raise，记入表达力台账，不要近似。另附 6 条具体缺陷、2 条 parser 问题（`not <pred>` 未被解析成否定节点而是塞进 NameRef 文本；`compress: -39B` 被 int() 拒但契约与 Theoria.md 示例都带 B 后缀）、以及 A0 逼出的 3 条表达力台账项（beyond(o,dir)、一条规则只能有一个事件而推箱可见地动了两个对象、缺无操作事件）。
+我这边的 pipeline/gen_exec.py 只是权宜之计（只覆盖 A0 子集，不认识就抛 UncompilableTheory），gen_python 一旦支持即可弃用。
+测试：a0-spike 24 pass；engine-rig 161 pass / 1 skip。
+阻塞：无（本项）。在线 API 仍卡 INC-002。
