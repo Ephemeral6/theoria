@@ -291,9 +291,22 @@ operator's fragmentation (90 → 6 on A0), which is why
 `test_uniform_colour_operator_wins_on_script_bits` now asserts fragmentation on
 the pre-merge count.
 
-## D-A0-018 · **BLOCKER** — Fast Downward could not be built; half of item 4 delivered
+## D-A0-018 · ~~BLOCKER~~ **RESOLVED** — Fast Downward is connected
 
-Three attempts at a C++ compiler, all failed:
+**Resolved on 2026-07-28**, after the user authorised installing it. Route:
+winlibs mingw-w64 gcc 16.1.0 (no installer, unpacked into the gitignored
+`.toolchain/`), then CMake + Ninja directly — **not** `build.py`, which
+hard-codes `NMake Makefiles` on Windows and therefore needs MSVC. 235/235
+targets, ~90 s, no patches. Full recipe and results:
+`BLOCKER_FAST_DOWNWARD.md`.
+
+Result: FD agrees with the bundled BFS on all three compiled instances —
+`a0-base` SAT/12, `a0p-base` SAT/10, and `a0-no-button` **proved UNSAT**, which
+is the row that matters because it puts the planner and M5's impossibility
+theorem in agreement instead of taking one on trust. Setting `FAST_DOWNWARD` was
+the entire integration; **no caller code changed.**
+
+The three attempts that had failed before, kept for the record:
 
 1. the Lean toolchain's bundled `clang` 15 — no C++ standard library headers
    (`fatal error: 'vector' file not found`);
@@ -319,12 +332,51 @@ compiled instances (`a0-base` SAT/12, `a0-no-button` UNSAT, `a0p-base` SAT/10),
 writing `artifacts/fd_real.json`. No caller changes — which is the claim under
 test.
 
-**What was delivered instead**, and its exact scope:
-`certify/fd_conformance.py` exercises `fd_adapter`'s Fast Downward *code path*
-end to end with a stand-in that speaks FD's CLI and plan-file protocol —
-discovery via `$FAST_DOWNWARD`, invocation, `sas_plan` parsing, independent
-validation, `Plan.backend` reporting — and confirms the adapter's claim that
-**callers need no change** (`solve()` picks FD with no `prefer=` hint and returns
-the same optimal 12-step plan). It establishes nothing about Fast Downward's own
-search, and says so in its own docstring, in the report it writes, and in the
-test that runs it.
+`certify/fd_conformance.py` now has two modes and picks between them itself:
+real Fast Downward when one is reachable, and the protocol stand-in otherwise, so
+the suite still runs on a machine without a planner.
+
+## D-A0-019 · Our PDDL was not standard-conformant; the stub was masking it
+
+**Found within minutes of connecting the real planner.** The generated domain
+declared `(:types buttoncell doorcell markedcell - cell)` and never introduced
+`cell` itself. `fd_adapter`'s parser is lenient and accepted it all sprint; Fast
+Downward's translator dies with `KeyError: 'cell'`.
+
+Fixed in `compile/gen_pddl_a0.py` — the domain now emits `cell - object` on its
+own line before the subtypes. Every PDDL this generator produced before today
+would have been rejected by any standards-conformant planner, and nothing in the
+pipeline could have told us. `test_generated_pddl_declares_every_type_it_uses`
+keeps it fixed by parsing the `(:types …)` block and checking that every
+supertype used is also declared.
+
+## D-A0-020 · **上游缺陷** — `fd_adapter` cannot express "proved unsolvable" on the FD path
+
+The bundled BFS reports unsolvability as
+`RuntimeError("no plan exists for <problem>")`. Fast Downward reports it by
+exiting **12** with no plan file, which `backends.run_fast_downward` turns into
+`RuntimeError("Fast Downward produced no plan file (exit 12): …")` — the *same*
+exception type it raises when FD genuinely crashes.
+
+So on the FD path a caller cannot tell *the planner proved there is no plan* —
+the branch that under constraint 6 triggers the certificate obligation and all of
+M5 — from *the planner fell over*, which is an incident. That is the single
+distinction the unsolvability work exists to make.
+
+Handled here, not upstream: `certify/fd_unsat.py` owns the predicate and both
+`plan_stage` and `fd_conformance` use it. Exit **13**
+(`SEARCH_UNSOLVED_INCOMPLETE`) is deliberately not treated as UNSAT — an
+incomplete search finding nothing is not a proof, and laundering it into one
+would be exactly the "裸 UNSAT" constraint 6 forbids.
+
+**Suggested upstream fix**, for `engine-rig` to take or leave: `solve()` returns
+`None`, or raises a distinguishable `NoPlanExists`, on exit 12 — matching what
+the stub already means.
+
+## D-A0-021 · The reproducible pipeline still prefers the stub
+
+`run_all.py` and `prime.run_prime` call `solve(..., prefer="stub")` even when a
+planner is installed, so their checked-in artefacts stay byte-identical on a
+machine with or without Fast Downward. The FD comparison is its own artefact,
+`artifacts/fd_real.json`. Determinism of the committed stream is worth more here
+than routing the default path through whichever planner happens to be present.

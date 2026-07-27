@@ -69,7 +69,7 @@
       "green": true
     },
     "compiled": {
-      "domain.pddl": 4032,
+      "domain.pddl": 4056,
       "problem.json": 2523,
       "problem.pddl": 3800,
       "theory.lean": 63270,

@@ -234,3 +234,64 @@ def test_fd_code_path_needs_no_caller_changes():
     assert result["backend_reported"], "solve() must pick FD with no prefer= hint"
     assert result["same_length"] and result["same_plan"]
     assert result["green"]
+
+
+# ----------------------------------------- 4b · the REAL Fast Downward path
+
+def test_fd_unsat_tells_a_proof_apart_from_a_crash():
+    """The distinction constraint 6 turns on, and the one fd_adapter loses."""
+    from certify.fd_unsat import classify, is_unsat
+    assert is_unsat(RuntimeError("no plan exists for gripper"))          # stub
+    assert is_unsat(RuntimeError(
+        "Fast Downward produced no plan file (exit 12): ..."))           # FD
+    # 13 is "my search was incomplete and found nothing" -- not a proof.
+    assert not is_unsat(RuntimeError(
+        "Fast Downward produced no plan file (exit 13): ..."))
+    assert not is_unsat(RuntimeError("Fast Downward produced no plan file (exit 1)"))
+    assert not is_unsat(RuntimeError("segmentation fault"))
+    assert classify(RuntimeError("no plan exists")) == "unsat"
+    assert classify(RuntimeError(
+        "produced no plan file (exit 13)")) == "error(exit 13)"
+
+
+def test_generated_pddl_declares_every_type_it_uses():
+    """FD's translator dies on a supertype that is never introduced (D-A0-019)."""
+    import re
+    for directory in (GENERATED,
+                      os.path.join(ROOT, "theory", "generated_no_button"),
+                      os.path.join(PRIME, "theory", "generated")):
+        path = os.path.join(directory, "domain.pddl")
+        if not os.path.exists(path):
+            continue
+        text = open(path, encoding="utf-8").read()
+        block = re.search(r"\(:types(.*?)\)", text, re.S).group(1)
+        declared, used = set(), set()
+        for line in block.splitlines():
+            if "-" not in line:
+                continue
+            names, _, parent = line.partition("-")
+            declared.update(names.split())
+            used.add(parent.strip())
+        assert used <= declared | {"object"}, (
+            "%s uses %r as a supertype without declaring it"
+            % (path, used - declared - {"object"}))
+
+
+@pytest.mark.skipif(
+    not os.path.exists(os.path.join(ROOT, "artifacts", "fd_real.json")),
+    reason="no real Fast Downward run recorded; see BLOCKER_FAST_DOWNWARD.md",
+)
+def test_real_fast_downward_agrees_with_the_stub():
+    report = json.load(open(os.path.join(ROOT, "artifacts", "fd_real.json"),
+                            encoding="utf-8"))
+    checked = [i for i in report["instances"] if "skipped" not in i]
+    assert len(checked) == 3
+    by_name = {i["instance"]: i for i in checked}
+    assert by_name["a0-base"]["fast_downward"]["length"] == 12
+    assert by_name["a0p-base"]["fast_downward"]["length"] == 10
+    # The one that matters: FD must PROVE the variant unsolvable, or the
+    # impossibility theorem is arguing with the planner.
+    assert by_name["a0-no-button"]["fast_downward"]["status"] == "UNSAT"
+    for instance in checked:
+        assert instance["same_status"] and instance["same_length"], instance
+        assert instance["green"], instance

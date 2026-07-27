@@ -2,26 +2,35 @@
 
 **What this does and does not establish, said first.**
 
-`A0_REPORT.md` §7.4 asked to connect Fast Downward and re-run M4, to confirm the
-adapter's claim that installing FD changes nothing for callers. Fast Downward
-could not be built here: it needs a C++17 compiler, and three attempts failed
-(`STATUS.md`, *the Fast Downward blocker*). So the claim is split in two and only
-one half is tested:
+`A0_REPORT.md` §7.4 asked to connect Fast Downward and re-run M4. **It is now
+connected** (`.toolchain/downward`, built with the winlibs mingw-w64 gcc 16.1.0
+also under `.toolchain/`; see `BLOCKER_FAST_DOWNWARD.md` for how). This module
+therefore has two modes and picks between them by itself:
 
-| claim | status |
-|---|---|
-| discovery via `$FAST_DOWNWARD`, invocation with FD's CLI, `sas_plan` parsing, independent validation, `Plan.backend` reporting — **no caller changes** | **tested here** |
-| Fast Downward's own search finds the same optimal plan on A0's instances | **not tested** — needs the real planner |
+**Real mode**, when `backends.find_fast_downward()` finds a planner: re-run M4
+through it on every compiled instance and compare status and optimal length
+against the bundled BFS. Writes `artifacts/fd_real.json`.
 
-The method is a **conformance stand-in**: an executable that speaks Fast
-Downward's command-line and plan-file protocol exactly (`--plan-file`, positional
-domain and problem, `--search`, one `(action args)` per line plus a cost comment)
-and answers by delegating to the bundled BFS. Every line of `backends.py` that a
-real FD would exercise is exercised, and the answer is then run through
-`fd_adapter`'s own independent validator, which re-grounds the actions itself.
+**Stand-in mode**, when it does not: an executable that speaks FD's command-line
+and plan-file protocol exactly and answers by delegating to the bundled BFS, so
+that every line of `backends.py` a real FD would touch is still exercised.
+A stand-in that agrees by construction proves nothing about search quality and
+this file has never claimed otherwise — it proves the wiring, and the wiring is
+the "no caller changes" claim.
 
-A stand-in that agrees by construction proves nothing about search quality, and
-this file does not claim otherwise. It proves the wiring.
+Connecting the real planner immediately earned its keep twice, and both are
+recorded rather than quietly fixed:
+
+* **our PDDL was not standard-conformant.** The domain declared
+  `(:types buttoncell doorcell markedcell - cell)` and never introduced `cell`
+  itself. The bundled parser is lenient and accepted it; FD's translator dies
+  with `KeyError: 'cell'`. Fixed in `gen_pddl_a0` (D-A0-019) — the stub had
+  been masking a portability bug for the whole sprint;
+* **`fd_adapter` cannot express "proved unsolvable" on the FD path.** The stub
+  raises `no plan exists`; FD exits 12 with no plan file and the adapter turns
+  that into a generic `RuntimeError`. Under constraint 6 that is exactly the
+  distinction that matters. Handled in `certify/fd_unsat.py` (D-A0-020);
+  upstream is not modified.
 """
 
 import json
@@ -37,6 +46,8 @@ import _bootstrap  # noqa: F401,E402
 
 from engines import fd_adapter  # noqa: E402
 from engines.fd_adapter import backends  # noqa: E402
+
+from certify.fd_unsat import is_unsat  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -152,13 +163,19 @@ def check_real(name: str, directory: str) -> Dict[str, object]:
             return {"status": "SAT", "backend": plan.backend,
                     "length": plan.length, "actions": list(plan.actions)}
         except RuntimeError as exc:
-            if "no plan exists" not in str(exc):
+            # The stub says "no plan exists"; Fast Downward says exit 12.  Same
+            # claim, two spellings -- see certify/fd_unsat.py.
+            if not is_unsat(exc):
                 raise
             return {"status": "UNSAT"}
 
     fd, stub = _solve(None), _solve("stub")
     agree = (fd["status"] == stub["status"]
              and fd.get("length") == stub.get("length"))
+    # On the UNSAT branch there is no Plan object and so no backend to report;
+    # requiring one there would fail the instance we most care about.
+    backend_ok = (fd.get("backend") == "fast-downward"
+                  if fd["status"] == "SAT" else True)
     return {
         "instance": name,
         "fast_downward": fd,
@@ -166,7 +183,8 @@ def check_real(name: str, directory: str) -> Dict[str, object]:
         "same_status": fd["status"] == stub["status"],
         "same_length": fd.get("length") == stub.get("length"),
         "identical_plan": fd.get("actions") == stub.get("actions"),
-        "green": bool(agree and fd.get("backend", "") == "fast-downward"),
+        "backend_reported": backend_ok,
+        "green": bool(agree and backend_ok),
     }
 
 

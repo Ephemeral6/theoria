@@ -9,11 +9,11 @@ Follow-ups from `A0_REPORT.md` §7, all four attempted:
 | 1 | a frame-axiom sentence form for the DSL | ✅ `semantics:` dialect + v0.2 proposal | `cold-start-a0-n1-semantics` |
 | 2 | A0′: reversible mechanics, probe-separable frontier, scored on revisions | ✅ 228/228 on 47 % coverage; seeded repair control passes | `cold-start-a0-n2-a0prime` |
 | 3 | responsibility-complete concept accounts | ✅ Button −17→−5, Door −13→−1, both `mandatory` | `cold-start-a0-n3-concept-account` |
-| 4 | connect Fast Downward, re-run M4 | ⚠️ **half** — the code path is verified, the planner could not be built | `cold-start-a0-n4-fd-path` |
+| 4 | connect Fast Downward, re-run M4 | ✅ **connected** — FD agrees on all three instances, incl. UNSAT on the variant | `cold-start-a0-n4-fd-path`, `-n5-fd-connected` |
 
 ```bash
 cd cold-start-a0 && python -m prime.run_prime   # A0-prime, both runs
-cd cold-start-a0 && python -m pytest            # 44 passed
+cd cold-start-a0 && python -m pytest            # 47 passed
 ```
 
 ### A0′ headline
@@ -28,28 +28,33 @@ cd cold-start-a0 && python -m pytest            # 44 passed
 exploration could establish; A0′'s toggle did not. Full diagnosis:
 `prime/A0P_REPORT.md`.
 
-### The Fast Downward blocker (stopping rule invoked)
+### Fast Downward — connected
 
-**A C++17 compiler is the whole blocker.** `cmake` 4.4.0, `ninja` 1.13.0, Python
-3.13 and the `aibasel/downward` clone are all in place; nothing else is needed.
+| instance | Fast Downward | bundled BFS |
+|---|---|---|
+| `a0-base` | SAT, length **12** | SAT, 12 — identical plan |
+| `a0-no-button` | **UNSAT**, "completely explored state space" | UNSAT |
+| `a0p-base` | SAT, length **10** | SAT, 10 — identical plan |
 
-Three attempts failed: Lean's bundled clang has no C++ standard library headers;
-`conda install m2w64-toolchain` into the base env dies on a `setuptools`
-RemoveError. The third — "winlibs URLs 404" — **was my mistake**: I guessed
-release tags rather than looking them up while the GitHub API was rate-limited.
-The correct URL is verified and reachable.
+Setting `FAST_DOWNWARD` was the whole integration; **no caller code changed** —
+which is the claim `A0_REPORT.md` §7.4 asked to test. The variant row matters
+most: FD independently *proves* it unsolvable, so M5's impossibility theorem and
+the planner agree rather than one being taken on trust.
 
-**→ `BLOCKER_FAST_DOWNWARD.md`** has three routes (MSVC Build Tools recommended,
-winlibs zip, WSL), the one-line `FAST_DOWNWARD=…` handover, and the expected
-results. Recorded per the ticket's stopping rule and left for human intervention
-(D-A0-018).
+Built from winlibs mingw-w64 gcc 16.1.0 into the gitignored `.toolchain/`, via
+CMake + Ninja directly (`build.py` hard-codes `NMake Makefiles` on Windows and
+needs MSVC). Recipe, results and caveats: **`BLOCKER_FAST_DOWNWARD.md`**.
 
-Delivered instead: `certify/fd_conformance.py` drives `fd_adapter`'s FD code path
-end to end against a stand-in that speaks FD's CLI and plan-file protocol —
-discovery, invocation, `sas_plan` parsing, independent validation — and confirms
-`solve()` picks FD with no `prefer=` hint and returns the same optimal 12-step
-plan. **It establishes nothing about Fast Downward's own search**, and says so
-everywhere it is reported.
+**It found two defects on contact**, both invisible while only the stub ran:
+
+* **D-A0-019, ours** — the generated PDDL used `cell` as a supertype without ever
+  declaring it. The stub's lenient parser accepted it; FD's translator dies with
+  `KeyError: 'cell'`. Every domain file this generator emitted before today would
+  have been rejected by any conformant planner.
+* **D-A0-020, 上游** — `fd_adapter` raises the same `RuntimeError` for "FD proved
+  there is no plan" (exit 12) and "FD crashed". Under constraint 6 that is the
+  distinction everything turns on. Handled in `certify/fd_unsat.py`; upstream
+  untouched; suggested fix filed in PARTNER_SYNC.
 
 ---
 
@@ -66,7 +71,7 @@ everywhere it is reported.
 
 ```bash
 cd cold-start-a0 && python run_all.py     # 8 steps, ~6 s, all green
-cd cold-start-a0 && python -m pytest      # 44 passed (26 at the m6 tag)
+cd cold-start-a0 && python -m pytest      # 47 passed (26 at the m6 tag)
 ```
 
 ## Headline numbers
@@ -111,9 +116,9 @@ two-rule toggle costs sixteen clauses.
 `available: false`; it never downgrades a missing proof to a passing one.
 D-A0-012 has the fetch command.
 
-**Fast Downward is still not connected** (inherited from `engine-rig`). The
-bundled BFS stub solved the 38-cell instance instantly, so nothing here is
-blocked, but the planner path is untested at scale.
+**Fast Downward is connected, but scale is still untested.** FD expands 53
+states and finishes in 2 ms on A0's instances; whether the planner path holds up
+on a real ARC-sized problem is a question these instances cannot answer.
 
 ## Upstream
 
@@ -136,7 +141,7 @@ defect were found and worked around inside this directory:
 
 ## Blocked
 
-Nothing.
+Nothing. The Fast Downward compiler blocker was resolved on 2026-07-28.
 
 ## Next
 

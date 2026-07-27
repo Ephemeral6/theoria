@@ -104,8 +104,14 @@ def _domain(ast: TheoryAST, subtypes, door, switch, portal_cells) -> str:
     L.append("; Auto-generated from theory.dsl by compile/gen_pddl_a0.py — DO NOT EDIT.")
     L.append("(define (domain a0)")
     L.append("  (:requirements :strips :typing :negative-preconditions)")
+    # `cell` itself must be declared, not just used as a supertype.  The bundled
+    # BFS parser is lenient about this and accepted `(:types doorcell - cell)`
+    # with `cell` never introduced; the real Fast Downward translator does not,
+    # and dies with `KeyError: 'cell'` while building its type dictionary.  The
+    # stub was masking a portability bug in this generator — see D-A0-019.
     if subtypes:
-        L.append("  (:types %s - cell)" % " ".join(subtypes))
+        L.append("  (:types cell - object")
+        L.append("          %s - cell)" % " ".join(subtypes))
     else:
         L.append("  (:types cell - object)")
     L.append("")

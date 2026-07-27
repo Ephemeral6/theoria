@@ -28,6 +28,7 @@ import _bootstrap  # noqa: F401,E402
 from common.candidates import emit, make_candidate  # noqa: E402
 from engines import fd_adapter  # noqa: E402
 
+from certify.fd_unsat import is_unsat  # noqa: E402
 from certify.replay import ACTION_NAMES, load_theory  # noqa: E402
 from world import a0_world  # noqa: E402
 
@@ -58,8 +59,9 @@ def run_plan(out_dir: str, spec, out_path: Optional[str] = None,
         plan = fd_adapter.solve(domain, instance, prefer="stub")
     except RuntimeError as exc:
         # The adapter raises rather than returning None when the search closes
-        # the space without reaching the goal.  That is UNSAT, not a crash.
-        if "no plan exists" not in str(exc):
+        # the space without reaching the goal.  That is UNSAT, not a crash --
+        # and the stub and Fast Downward spell it differently (certify/fd_unsat).
+        if not is_unsat(exc):
             raise
         plan = None
     report: Dict[str, object] = {

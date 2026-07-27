@@ -1,0 +1,107 @@
+{
+  "fast_downward": "C:/Users/user/Desktop/theoria/cold-start-a0/.toolchain/downward/fast-downward.py",
+  "instances": [
+    {
+      "backend_reported": true,
+      "fast_downward": {
+        "actions": [
+          "(push-right c5-1 c5-2)",
+          "(push-right c5-2 c5-3)",
+          "(push-up c5-3 c4-3)",
+          "(push-up c4-3 c3-3)",
+          "(press-left c3-3 c3-2 c4-5)",
+          "(push-down c3-3 c4-3)",
+          "(push-right c4-3 c4-4)",
+          "(push-right c4-4 c4-5)",
+          "(push-right c4-5 c4-6)",
+          "(push-right c4-6 c4-7)",
+          "(push-up c4-7 c3-7)",
+          "(push-up c3-7 c2-7)"
+        ],
+        "backend": "fast-downward",
+        "length": 12,
+        "status": "SAT"
+      },
+      "green": true,
+      "identical_plan": true,
+      "instance": "a0-base",
+      "same_length": true,
+      "same_status": true,
+      "stub": {
+        "actions": [
+          "(push-right c5-1 c5-2)",
+          "(push-right c5-2 c5-3)",
+          "(push-up c5-3 c4-3)",
+          "(push-up c4-3 c3-3)",
+          "(press-left c3-3 c3-2 c4-5)",
+          "(push-down c3-3 c4-3)",
+          "(push-right c4-3 c4-4)",
+          "(push-right c4-4 c4-5)",
+          "(push-right c4-5 c4-6)",
+          "(push-right c4-6 c4-7)",
+          "(push-up c4-7 c3-7)",
+          "(push-up c3-7 c2-7)"
+        ],
+        "backend": "stub-bfs",
+        "length": 12,
+        "status": "SAT"
+      }
+    },
+    {
+      "backend_reported": true,
+      "fast_downward": {
+        "status": "UNSAT"
+      },
+      "green": true,
+      "identical_plan": true,
+      "instance": "a0-no-button",
+      "same_length": true,
+      "same_status": true,
+      "stub": {
+        "status": "UNSAT"
+      }
+    },
+    {
+      "backend_reported": true,
+      "fast_downward": {
+        "actions": [
+          "(push-right c5-1 c5-2)",
+          "(push-up c5-2 c4-2)",
+          "(switch-on-up c4-2 c3-2 c4-5)",
+          "(push-right c4-2 c4-3)",
+          "(push-right c4-3 c4-4)",
+          "(push-right c4-4 c4-5)",
+          "(push-right c4-5 c4-6)",
+          "(push-right c4-6 c4-7)",
+          "(push-up c4-7 c3-7)",
+          "(push-up c3-7 c2-7)"
+        ],
+        "backend": "fast-downward",
+        "length": 10,
+        "status": "SAT"
+      },
+      "green": true,
+      "identical_plan": true,
+      "instance": "a0p-base",
+      "same_length": true,
+      "same_status": true,
+      "stub": {
+        "actions": [
+          "(push-right c5-1 c5-2)",
+          "(push-up c5-2 c4-2)",
+          "(switch-on-up c4-2 c3-2 c4-5)",
+          "(push-right c4-2 c4-3)",
+          "(push-right c4-3 c4-4)",
+          "(push-right c4-4 c4-5)",
+          "(push-right c4-5 c4-6)",
+          "(push-right c4-6 c4-7)",
+          "(push-up c4-7 c3-7)",
+          "(push-up c3-7 c2-7)"
+        ],
+        "backend": "stub-bfs",
+        "length": 10,
+        "status": "SAT"
+      }
+    }
+  ]
+}

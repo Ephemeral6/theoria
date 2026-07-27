@@ -1,7 +1,8 @@
 ; Auto-generated from theory.dsl by compile/gen_pddl_a0.py — DO NOT EDIT.
 (define (domain a0)
   (:requirements :strips :typing :negative-preconditions)
-  (:types doorcell markedcell switchcell - cell)
+  (:types cell - object
+          doorcell markedcell switchcell - cell)
 
   (:predicates
     (at ?c - cell)                ; where the Cart is

@@ -19,7 +19,7 @@
     "sorries": []
   },
   "compiled": {
-    "domain.pddl": 1486,
+    "domain.pddl": 1510,
     "problem.json": 2285,
     "problem.pddl": 3857,
     "theory.lean": 8727,
