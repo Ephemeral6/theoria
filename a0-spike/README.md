@@ -11,7 +11,7 @@ gets tested cheaply enough to fail cheaply.
 
 ```bash
 cd a0-spike && python -m pipeline.run_a0     # the whole loop
-cd a0-spike && python -m pytest              # 18 acceptance tests
+cd a0-spike && python -m pytest              # 24 acceptance tests
 ```
 
 ## The world
@@ -120,6 +120,8 @@ Full reasoning, decision by decision: [THEORIZE_LOG.md](THEORIZE_LOG.md).
 | `pipeline/stages.py` | perceive / mine / certify / prove, over engine-rig |
 | `pipeline/dnf.py` | sequential covering for disjunctive effect classes |
 | `pipeline/pddl_gen.py` | the planning form of the same rules |
+| `pipeline/gen_exec.py` | theory.dsl -> executable form; raises rather than approximating |
+| `GENERATOR_REPORT.md` | why gen_python could not be used, with reproductions |
 | `pipeline/run_a0.py` | the loop |
 | `theory/theory.dsl` | what was adjudicated — parses against the frozen grammar |
 | `THEORIZE_LOG.md` | why each thing was adjudicated |
