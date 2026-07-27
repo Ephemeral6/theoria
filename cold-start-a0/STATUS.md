@@ -30,12 +30,19 @@ exploration could establish; A0′'s toggle did not. Full diagnosis:
 
 ### The Fast Downward blocker (stopping rule invoked)
 
-Three attempts at a C++ compiler, all failed — Lean's bundled clang has no libc++
-headers; `conda install m2w64-toolchain` dies on a `setuptools` RemoveError;
-winlibs/mingw-builds direct URLs 404 and the GitHub API is rate-limited from this
-host. `cmake` and `ninja` are installed and `aibasel/downward` is cloned to
-`.toolchain/downward`; **only the compiler is missing.** Recorded per the
-ticket's stopping rule and left for human intervention (D-A0-018).
+**A C++17 compiler is the whole blocker.** `cmake` 4.4.0, `ninja` 1.13.0, Python
+3.13 and the `aibasel/downward` clone are all in place; nothing else is needed.
+
+Three attempts failed: Lean's bundled clang has no C++ standard library headers;
+`conda install m2w64-toolchain` into the base env dies on a `setuptools`
+RemoveError. The third — "winlibs URLs 404" — **was my mistake**: I guessed
+release tags rather than looking them up while the GitHub API was rate-limited.
+The correct URL is verified and reachable.
+
+**→ `BLOCKER_FAST_DOWNWARD.md`** has three routes (MSVC Build Tools recommended,
+winlibs zip, WSL), the one-line `FAST_DOWNWARD=…` handover, and the expected
+results. Recorded per the ticket's stopping rule and left for human intervention
+(D-A0-018).
 
 Delivered instead: `certify/fd_conformance.py` drives `fd_adapter`'s FD code path
 end to end against a stand-in that speaks FD's CLI and plan-file protocol —

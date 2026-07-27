@@ -127,10 +127,66 @@ def check(domain: str, problem: str) -> Dict[str, object]:
     }
 
 
+INSTANCES = [
+    ("a0-base", os.path.join(ROOT, "theory", "generated")),
+    ("a0-no-button", os.path.join(ROOT, "theory", "generated_no_button")),
+    ("a0p-base", os.path.join(ROOT, "prime", "theory", "generated")),
+]
+
+
+def check_real(name: str, directory: str) -> Dict[str, object]:
+    """The real thing, when it is installed: FD against the bundled BFS.
+
+    This is the half `check()` cannot do. Both backends are optimal for unit
+    costs, so the plans must have the same length; the actions may legitimately
+    differ, since more than one optimal plan can exist.
+    """
+    domain = os.path.join(directory, "domain.pddl")
+    problem = os.path.join(directory, "problem.pddl")
+    if not os.path.exists(domain):
+        return {"skipped": "not compiled — run the pipeline first"}
+
+    def _solve(prefer):
+        try:
+            plan = fd_adapter.solve(domain, problem, prefer=prefer)
+            return {"status": "SAT", "backend": plan.backend,
+                    "length": plan.length, "actions": list(plan.actions)}
+        except RuntimeError as exc:
+            if "no plan exists" not in str(exc):
+                raise
+            return {"status": "UNSAT"}
+
+    fd, stub = _solve(None), _solve("stub")
+    agree = (fd["status"] == stub["status"]
+             and fd.get("length") == stub.get("length"))
+    return {
+        "instance": name,
+        "fast_downward": fd,
+        "stub": stub,
+        "same_status": fd["status"] == stub["status"],
+        "same_length": fd.get("length") == stub.get("length"),
+        "identical_plan": fd.get("actions") == stub.get("actions"),
+        "green": bool(agree and fd.get("backend", "") == "fast-downward"),
+    }
+
+
 def main() -> int:
+    real = backends.find_fast_downward()
+    if real is not None and "--stand-in" not in sys.argv:
+        # A real Fast Downward is reachable: run M4 again through it, which is
+        # the half certify/fd_conformance could not previously reach.
+        report = {"fast_downward": real,
+                  "instances": [check_real(name, d) for name, d in INSTANCES]}
+        out = os.path.join(ROOT, "artifacts", "fd_real.json")
+        with open(out, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(json.dumps(report, indent=2, sort_keys=True) + "\n")
+        print(json.dumps(report, indent=2, sort_keys=True))
+        checked = [i for i in report["instances"] if "skipped" not in i]
+        return 0 if checked and all(i["green"] for i in checked) else 1
+
     generated = os.path.join(ROOT, "theory", "generated")
     report = {
-        "real_fast_downward_present": backends.find_fast_downward() is not None,
+        "real_fast_downward_present": False,
         "a0-base": check(os.path.join(generated, "domain.pddl"),
                          os.path.join(generated, "problem.pddl")),
     }

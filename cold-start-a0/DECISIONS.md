@@ -300,12 +300,24 @@ Three attempts at a C++ compiler, all failed:
 2. `conda install -c conda-forge m2w64-toolchain` — `RemoveError: 'setuptools'
    is a dependency of conda and cannot be removed from conda's operating
    environment`;
-3. direct winlibs / mingw-builds release URLs — 404, and the GitHub API is
-   rate-limited from this host so the asset list cannot be enumerated.
+3. direct winlibs / mingw-builds release URLs — 404. **This third record was
+   my error, and it is corrected here rather than left standing:** the URLs are
+   fine, I guessed release tags instead of looking them up, and the GitHub API
+   was rate-limited so I could not enumerate the real ones. The correct winlibs
+   URL is in `BLOCKER_FAST_DOWNWARD.md` and answers `HTTP 206`. Attempts 1 and 2
+   stand as recorded.
 
-`cmake` and `ninja` are installed (`pip`) and `aibasel/downward` is cloned to
-`.toolchain/downward`; only the compiler is missing. Per the ticket's stopping
-rule this is recorded and left for human intervention.
+`cmake` 4.4.0 and `ninja` 1.13.0 are installed and `aibasel/downward` is cloned
+to `.toolchain/downward` (commit `7120aa0`); **only the compiler is missing.**
+Per the ticket's stopping rule this is recorded and left for human intervention.
+Three routes, verification command, and expected results:
+**`BLOCKER_FAST_DOWNWARD.md`**.
+
+When a real Fast Downward becomes reachable, `certify/fd_conformance.py`
+switches out of stand-in mode on its own and re-runs M4 through it on all three
+compiled instances (`a0-base` SAT/12, `a0-no-button` UNSAT, `a0p-base` SAT/10),
+writing `artifacts/fd_real.json`. No caller changes — which is the claim under
+test.
 
 **What was delivered instead**, and its exact scope:
 `certify/fd_conformance.py` exercises `fd_adapter`'s Fast Downward *code path*
