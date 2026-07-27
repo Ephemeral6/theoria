@@ -25,6 +25,7 @@ call and restores it afterwards.  No file in `engine-rig` is touched.
 """
 
 import contextlib
+import inspect
 from typing import Callable, Dict, List, Sequence, Tuple
 
 from engines.mdl_segmenter import segmenter as _seg
@@ -34,6 +35,13 @@ Cell = Tuple[int, int]
 Frame = Sequence[Sequence[int]]
 
 _UPSTREAM = _seg.connected_components
+
+# `engine-rig` grew a `split_by_color` switch on `segment_trajectory` partway
+# through this sprint — the same gap, closed upstream.  When it is there we use
+# it and the rebinding below never happens; the local operator stays as the
+# fallback so this directory still runs against the version of `engine-rig` that
+# was tagged at `engine-rig-m8-integration`.
+_NATIVE_SPLIT = "split_by_color" in inspect.signature(_seg.segment_trajectory).parameters
 
 
 def components_connected(frame: Frame, background: int = 0) -> List[Component]:
@@ -100,6 +108,12 @@ def _operator(fn: Callable):
 
 def segment_with(name: str, frames: Sequence[Frame],
                  background: int = 0) -> Segmentation:
+    uniform = name.endswith("uniform_color")
+    if _NATIVE_SPLIT:
+        return _seg.segment_trajectory(frames, background=background,
+                                       split_by_color=uniform)
+    if not uniform:
+        return _seg.segment_trajectory(frames, background=background)
     with _operator(OPERATORS[name]):
         return _seg.segment_trajectory(frames, background=background)
 

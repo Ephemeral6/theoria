@@ -158,7 +158,7 @@ def run_stage(trace_path: str, out_path: str, report_path: str,
 
     # --- 4. probes wherever the frontier is still split -------------------
     probes = []
-    for rule in result.all_rules:
+    for rule in result.rules:            # ground rules only: `?dir` is not a probe
         if len(rule.frontier) < 2:
             continue
         probes.append(design_probe(rule, transitions, board, out_path, timestamp))
@@ -220,7 +220,15 @@ def run_stage(trace_path: str, out_path: str, report_path: str,
             "difference_rank": zs.difference_rank,
             "space_dimension": zs.dimension,
             "cell_local_laws": len(zs.cell_local_laws()),
-            "global_laws": [law.rendering() for law in globals_],
+            "global_laws": [
+                {
+                    "rendering": law.rendering(),
+                    "value": law.value,
+                    "support": ["%s@(%d,%d)" % (f.color, cells[f.cell][0], cells[f.cell][1])
+                                for f in law.support()],
+                }
+                for law in globals_
+            ],
         },
         "probes": probes,
     }
@@ -354,13 +362,15 @@ def main() -> int:
     os.environ.setdefault("THEORIA_DETERMINISTIC_IDS", "1")
     os.environ.setdefault("THEORIA_FIXED_TIME", "2026-07-28T00:00:00Z")
 
-    out = os.path.join(artifacts, "candidates.jsonl")
+    suffix = sys.argv[1] if len(sys.argv) > 1 else ""
+    trace = "raw_trace%s.jsonl" % suffix
+    out = os.path.join(artifacts, "candidates%s.jsonl" % suffix)
     if os.path.exists(out):
         os.remove(out)                       # append-only within a run, not across
     report = run_stage(
-        os.path.join(artifacts, "raw_trace.jsonl"),
+        os.path.join(artifacts, trace),
         out,
-        os.path.join(artifacts, "engines_report.json"),
+        os.path.join(artifacts, "engines_report%s.json" % suffix),
     )
     print(json.dumps({k: report[k] for k in ("frames", "transitions")}, sort_keys=True))
     print("tracks:", [t["id"] + "/" + str(t["color"]) for t in report["segmentation"]["tracks"]])
@@ -372,7 +382,9 @@ def main() -> int:
             rule["coverage"], rule["frontier_size"], " AND ".join(rule["guard"])))
     print("exclusive:", report["mining"]["mutually_exclusive"])
     print("total:", report["mining"]["explains_every_transition"])
-    print("global laws:", report["zero_space"]["global_laws"])
+    for law in report["zero_space"]["global_laws"]:
+        print("law: %s = %d   support=%s" % (law["rendering"], law["value"],
+                                             ",".join(law["support"])))
     for probe in report["probes"]:
         print("probe:", json.dumps(probe, sort_keys=True))
     return 0

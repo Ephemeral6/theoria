@@ -450,9 +450,247 @@
   },
   "probes": [
     {
-      "probe": null,
-      "reason": "no visited state separates the frontier",
-      "rule": "obj2_jump_DOWN"
+      "action": "DOWN",
+      "construction": {
+        "direction": "DOWN",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 3
+      },
+      "coverage": "2/2",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "act==DOWN",
+          "tcolor(DOWN)==3"
+        ],
+        [
+          "act==DOWN",
+          "at(6,3)"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj2_jump_DOWN_0"
+        ],
+        "silent": [
+          "obj2_jump_DOWN_1"
+        ]
+      },
+      "rule": "obj2_jump_DOWN",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "coverage": "62/62",
+      "frontier": [
+        [
+          "act==DOWN",
+          "free(strip(DOWN))"
+        ],
+        [
+          "act==DOWN",
+          "clear(strip(DOWN))"
+        ],
+        [
+          "act==DOWN",
+          "tcolor(DOWN)==0"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj2_step_DOWN",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "46/46",
+      "frontier": [
+        [
+          "act==LEFT",
+          "free(strip(LEFT))"
+        ],
+        [
+          "act==LEFT",
+          "clear(strip(LEFT))"
+        ],
+        [
+          "act==LEFT",
+          "tcolor(LEFT)==0"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj2_step_LEFT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "52/52",
+      "frontier": [
+        [
+          "act==RIGHT",
+          "free(strip(RIGHT))"
+        ],
+        [
+          "act==RIGHT",
+          "clear(strip(RIGHT))"
+        ],
+        [
+          "act==RIGHT",
+          "tcolor(RIGHT)==0"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj2_step_RIGHT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "52/52",
+      "frontier": [
+        [
+          "act==UP",
+          "free(strip(UP))"
+        ],
+        [
+          "act==UP",
+          "clear(strip(UP))"
+        ],
+        [
+          "act==UP",
+          "tcolor(UP)==0"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj2_step_UP",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "action": "DOWN",
+      "construction": {
+        "direction": "DOWN",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 3
+      },
+      "coverage": "10/10",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!clear(strip(DOWN))",
+          "!tcolor(DOWN)==3",
+          "act==DOWN"
+        ],
+        [
+          "!free(strip(DOWN))",
+          "!tcolor(DOWN)==3",
+          "act==DOWN"
+        ],
+        [
+          "!at(6,3)",
+          "!clear(strip(DOWN))",
+          "act==DOWN"
+        ],
+        [
+          "!at(6,3)",
+          "!free(strip(DOWN))",
+          "act==DOWN"
+        ],
+        [
+          "!tcolor(DOWN)==0",
+          "!tcolor(DOWN)==3",
+          "act==DOWN"
+        ],
+        [
+          "!at(6,3)",
+          "!tcolor(DOWN)==0",
+          "act==DOWN"
+        ]
+      ],
+      "n_hypotheses": 6,
+      "partition": {
+        "fires": [
+          "obj2_still_DOWN_2",
+          "obj2_still_DOWN_3",
+          "obj2_still_DOWN_5"
+        ],
+        "silent": [
+          "obj2_still_DOWN_0",
+          "obj2_still_DOWN_1",
+          "obj2_still_DOWN_4"
+        ]
+      },
+      "rule": "obj2_still_DOWN",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "coverage": "20/20",
+      "frontier": [
+        [
+          "!clear(strip(LEFT))",
+          "act==LEFT"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "act==LEFT"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "act==LEFT"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj2_still_LEFT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "19/19",
+      "frontier": [
+        [
+          "!clear(strip(RIGHT))",
+          "act==RIGHT"
+        ],
+        [
+          "!free(strip(RIGHT))",
+          "act==RIGHT"
+        ],
+        [
+          "!tcolor(RIGHT)==0",
+          "act==RIGHT"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj2_still_RIGHT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "12/12",
+      "frontier": [
+        [
+          "!clear(strip(UP))",
+          "act==UP"
+        ],
+        [
+          "!free(strip(UP))",
+          "act==UP"
+        ],
+        [
+          "!tcolor(UP)==0",
+          "act==UP"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj2_still_UP",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
     }
   ],
   "segmentation": {
@@ -533,8 +771,57 @@
     "difference_rank": 37,
     "features": 152,
     "global_laws": [
-      "(8@13 + 5@22) mod 2 = 1",
-      "(6@0 + 6@1 + 6@2 + 6@3 + 6@4 + 6@5 + 6@6 + 6@7 + 6@8 + 6@9 + 6@10 + 6@11 + 6@12 + 6@14 + 6@15 + 6@16 + 6@17 + 6@18 + 6@19 + 6@20 + 6@21 + 6@22 + 6@23 + 6@24 + 6@25 + 6@26 + 6@27 + 6@28 + 6@29 + 6@30 + 6@31 + 6@32 + 6@33 + 6@34 + 6@35 + 6@36 + 6@37) mod 2 = 1"
+      {
+        "rendering": "(8@13 + 5@22) mod 2 = 1",
+        "support": [
+          "8@(3,2)",
+          "5@(4,5)"
+        ],
+        "value": 1
+      },
+      {
+        "rendering": "(6@0 + 6@1 + 6@2 + 6@3 + 6@4 + 6@5 + 6@6 + 6@7 + 6@8 + 6@9 + 6@10 + 6@11 + 6@12 + 6@14 + 6@15 + 6@16 + 6@17 + 6@18 + 6@19 + 6@20 + 6@21 + 6@22 + 6@23 + 6@24 + 6@25 + 6@26 + 6@27 + 6@28 + 6@29 + 6@30 + 6@31 + 6@32 + 6@33 + 6@34 + 6@35 + 6@36 + 6@37) mod 2 = 1",
+        "support": [
+          "6@(1,1)",
+          "6@(1,2)",
+          "6@(1,3)",
+          "6@(1,4)",
+          "6@(1,6)",
+          "6@(1,7)",
+          "6@(2,1)",
+          "6@(2,2)",
+          "6@(2,3)",
+          "6@(2,4)",
+          "6@(2,6)",
+          "6@(2,7)",
+          "6@(3,1)",
+          "6@(3,3)",
+          "6@(3,4)",
+          "6@(3,6)",
+          "6@(3,7)",
+          "6@(4,1)",
+          "6@(4,2)",
+          "6@(4,3)",
+          "6@(4,4)",
+          "6@(4,5)",
+          "6@(4,6)",
+          "6@(4,7)",
+          "6@(5,1)",
+          "6@(5,2)",
+          "6@(5,3)",
+          "6@(5,4)",
+          "6@(5,6)",
+          "6@(5,7)",
+          "6@(6,1)",
+          "6@(6,2)",
+          "6@(6,3)",
+          "6@(6,6)",
+          "6@(6,7)",
+          "6@(7,6)",
+          "6@(7,7)"
+        ],
+        "value": 1
+      }
     ],
     "space_dimension": 115
   }
