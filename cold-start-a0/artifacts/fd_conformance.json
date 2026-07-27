@@ -3,7 +3,7 @@
     "backend_reported": true,
     "caveat": "a conformance stand-in, not Fast Downward: this tests discovery, invocation, sas_plan parsing and validation, and nothing about FD's search",
     "discovery": {
-      "found": "C:\\Users\\user\\AppData\\Local\\Temp\\tmp5vylkoiy\\fast-downward.py",
+      "found": "<tempdir>/fast-downward.py",
       "ok": true,
       "via": "FAST_DOWNWARD"
     },

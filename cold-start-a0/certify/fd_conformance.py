@@ -106,7 +106,12 @@ def check(domain: str, problem: str) -> Dict[str, object]:
                 os.environ["FAST_DOWNWARD"] = previous
 
     return {
-        "discovery": {"found": found, "via": "FAST_DOWNWARD", "ok": discovery_ok},
+        # The stand-in lives in a fresh temp directory each run, so the path is
+        # reported as a stable marker: an absolute temp path in a checked-in
+        # artefact would break byte-reproducibility for nothing.
+        "discovery": {"found": "<tempdir>/fast-downward.py" if discovery_ok
+                      else found,
+                      "via": "FAST_DOWNWARD", "ok": discovery_ok},
         "fd_path": {"backend": fd_plan.backend, "length": fd_plan.length,
                     "actions": list(fd_plan.actions)},
         "stub_path": {"backend": stub_plan.backend, "length": stub_plan.length},
