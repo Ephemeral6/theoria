@@ -307,6 +307,11 @@ def load_a0_runs(root: str = A0_ROOT, *,
             run_id=instance,
             arm="theoria_a0",
             source="cold-start-a0",
+            # A0's trace is a coverage walk over the reachable state space, not
+            # an attempt to win -- THEORIZE_LOG.md calls it "one exploration
+            # trace". Declaring that keeps the path-efficiency metrics from
+            # scoring it, which they would otherwise do at 22.9x optimal.
+            intent="explore",
             model=None,
             game_id=None,           # a self-built world belongs to no pile
             pile=piles.assert_playable(None),

@@ -1,0 +1,432 @@
+{
+  "control_runs": 24,
+  "gradient": "model ladder within bare_cc (substitute; see module docstring)",
+  "ladder": [
+    "claude-haiku-4-5-20251001",
+    "claude-sonnet-5",
+    "claude-opus-5"
+  ],
+  "metrics": {
+    "E1": {
+      "direction": "neutral",
+      "family": "economy",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "n_paired_games": 4,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "E2": {
+      "agrees_with_declared_direction": true,
+      "cliffs_delta": 1.0,
+      "direction": "higher",
+      "family": "economy",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "large",
+      "n_paired_games": 4,
+      "note": "4 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.1250). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 0,
+        "min_attainable_p": 0.125,
+        "n": 4,
+        "p_value": 0.125,
+        "ties": 0,
+        "wins": 4
+      },
+      "verdict": "underpowered"
+    },
+    "E3": {
+      "agrees_with_declared_direction": true,
+      "cliffs_delta": -0.5625,
+      "direction": "lower",
+      "family": "economy",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "large",
+      "n_paired_games": 4,
+      "note": "3 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.2500). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 2,
+        "min_attainable_p": 0.25,
+        "n": 3,
+        "p_value": 1.0,
+        "ties": 1,
+        "wins": 1
+      },
+      "verdict": "underpowered"
+    },
+    "E4": {
+      "agrees_with_declared_direction": false,
+      "cliffs_delta": 0.25,
+      "direction": "lower",
+      "family": "economy",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "small",
+      "n_paired_games": 4,
+      "note": "4 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.1250). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 1,
+        "min_attainable_p": 0.125,
+        "n": 4,
+        "p_value": 0.625,
+        "ties": 0,
+        "wins": 3
+      },
+      "verdict": "underpowered"
+    },
+    "E5": {
+      "agrees_with_declared_direction": false,
+      "cliffs_delta": 1.0,
+      "direction": "lower",
+      "family": "economy",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "large",
+      "n_paired_games": 4,
+      "note": "4 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.1250). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 0,
+        "min_attainable_p": 0.125,
+        "n": 4,
+        "p_value": 0.125,
+        "ties": 0,
+        "wins": 4
+      },
+      "verdict": "underpowered",
+      "warning": "separates the ladder strongly (|d| = 1.000) but in the opposite direction to the one declared. Either the definition is measuring something else, or the declared direction is wrong. Do not use until resolved."
+    },
+    "K1": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "K10": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "K11": {
+      "direction": "neutral",
+      "family": "epistemic",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "K2": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "K3": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "K4": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "K5": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "K6": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "K7": {
+      "direction": "neutral",
+      "family": "epistemic",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "K8": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "K9": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "M1": {
+      "direction": "lower",
+      "family": "mechanism",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "M2": {
+      "direction": "higher",
+      "family": "mechanism",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "M3": {
+      "direction": "lower",
+      "family": "mechanism",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "P1": {
+      "agrees_with_declared_direction": false,
+      "cliffs_delta": -1.0,
+      "direction": "higher",
+      "family": "planning",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "large",
+      "n_paired_games": 4,
+      "note": "4 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.1250). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 4,
+        "min_attainable_p": 0.125,
+        "n": 4,
+        "p_value": 0.125,
+        "ties": 0,
+        "wins": 0
+      },
+      "verdict": "underpowered",
+      "warning": "separates the ladder strongly (|d| = 1.000) but in the opposite direction to the one declared. Either the definition is measuring something else, or the declared direction is wrong. Do not use until resolved."
+    },
+    "P2": {
+      "agrees_with_declared_direction": true,
+      "cliffs_delta": 0.0625,
+      "direction": "higher",
+      "family": "planning",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "negligible",
+      "n_paired_games": 4,
+      "note": "3 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.2500). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 1,
+        "min_attainable_p": 0.25,
+        "n": 3,
+        "p_value": 1.0,
+        "ties": 1,
+        "wins": 2
+      },
+      "verdict": "underpowered"
+    },
+    "P3": {
+      "agrees_with_declared_direction": true,
+      "cliffs_delta": -0.111111111,
+      "direction": "lower",
+      "family": "planning",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629"
+      ],
+      "magnitude": "negligible",
+      "n_paired_games": 3,
+      "note": "1 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 1.0000). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 1,
+        "min_attainable_p": 1.0,
+        "n": 1,
+        "p_value": 1.0,
+        "ties": 2,
+        "wins": 0
+      },
+      "verdict": "underpowered"
+    },
+    "P4": {
+      "direction": "lower",
+      "family": "planning",
+      "games": [],
+      "n_paired_games": 0,
+      "note": "the ladder's top and bottom rungs share 0 game(s); nothing to pair",
+      "verdict": "no-data"
+    },
+    "P5": {
+      "direction": "neutral",
+      "family": "planning",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "n_paired_games": 4,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "X1": {
+      "agrees_with_declared_direction": false,
+      "cliffs_delta": 0.444444444,
+      "direction": "lower",
+      "family": "exploration",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629"
+      ],
+      "magnitude": "medium",
+      "n_paired_games": 3,
+      "note": "2 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.5000). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 0,
+        "min_attainable_p": 0.5,
+        "n": 2,
+        "p_value": 0.5,
+        "ties": 1,
+        "wins": 2
+      },
+      "verdict": "underpowered"
+    },
+    "X2": {
+      "agrees_with_declared_direction": false,
+      "cliffs_delta": -0.111111111,
+      "direction": "higher",
+      "family": "exploration",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629"
+      ],
+      "magnitude": "negligible",
+      "n_paired_games": 3,
+      "note": "2 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.5000). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 1,
+        "min_attainable_p": 0.5,
+        "n": 2,
+        "p_value": 1.0,
+        "ties": 1,
+        "wins": 1
+      },
+      "verdict": "underpowered"
+    },
+    "X3": {
+      "agrees_with_declared_direction": false,
+      "cliffs_delta": -0.333333333,
+      "direction": "higher",
+      "family": "exploration",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629"
+      ],
+      "magnitude": "medium",
+      "n_paired_games": 3,
+      "note": "1 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 1.0000). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 1,
+        "min_attainable_p": 1.0,
+        "n": 1,
+        "p_value": 1.0,
+        "ties": 2,
+        "wins": 0
+      },
+      "verdict": "underpowered"
+    },
+    "X4": {
+      "agrees_with_declared_direction": false,
+      "cliffs_delta": 0.111111111,
+      "direction": "lower",
+      "family": "exploration",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629"
+      ],
+      "magnitude": "negligible",
+      "n_paired_games": 3,
+      "note": "1 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 1.0000). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 0,
+        "min_attainable_p": 1.0,
+        "n": 1,
+        "p_value": 1.0,
+        "ties": 2,
+        "wins": 1
+      },
+      "verdict": "underpowered"
+    },
+    "X5": {
+      "direction": "neutral",
+      "family": "exploration",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "n_paired_games": 4,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    }
+  },
+  "power": "a two-sided sign test needs 6 non-tied paired games to be able to reach p<0.05 at all; the pilot has 4"
+}

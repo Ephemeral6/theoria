@@ -142,6 +142,8 @@ def parse_rows(rows: Iterable[Dict[str, Any]], *, source: str,
             run_id=run_id,
             arm=bucket["arm"] or default_arm,
             source=source,
+            intent="solve",     # every ledgered run is an attempt to win
+
             model=bucket["model_name"],
             game_id=game_id,
             pile=piles.assert_playable(game_id),

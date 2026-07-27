@@ -1,0 +1,378 @@
+{
+  "clusters": [
+    {
+      "coverage": {
+        "E1": 22
+      },
+      "families": [
+        "economy"
+      ],
+      "members": [
+        "E1"
+      ],
+      "representative": "E1"
+    },
+    {
+      "coverage": {
+        "E2": 13
+      },
+      "families": [
+        "economy"
+      ],
+      "members": [
+        "E2"
+      ],
+      "representative": "E2"
+    },
+    {
+      "coverage": {
+        "E3": 13
+      },
+      "families": [
+        "economy"
+      ],
+      "members": [
+        "E3"
+      ],
+      "representative": "E3"
+    },
+    {
+      "coverage": {
+        "E4": 14
+      },
+      "families": [
+        "economy"
+      ],
+      "members": [
+        "E4"
+      ],
+      "representative": "E4"
+    },
+    {
+      "coverage": {
+        "E5": 22
+      },
+      "families": [
+        "economy"
+      ],
+      "members": [
+        "E5"
+      ],
+      "representative": "E5"
+    },
+    {
+      "coverage": {
+        "K1": 2
+      },
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K1"
+      ],
+      "representative": "K1"
+    },
+    {
+      "coverage": {
+        "K10": 2
+      },
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K10"
+      ],
+      "representative": "K10"
+    },
+    {
+      "coverage": {
+        "K11": 2
+      },
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K11"
+      ],
+      "representative": "K11"
+    },
+    {
+      "coverage": {
+        "K2": 1
+      },
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K2"
+      ],
+      "representative": "K2"
+    },
+    {
+      "coverage": {
+        "K3": 2
+      },
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K3"
+      ],
+      "representative": "K3"
+    },
+    {
+      "coverage": {
+        "K4": 2
+      },
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K4"
+      ],
+      "representative": "K4"
+    },
+    {
+      "coverage": {
+        "K5": 2
+      },
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K5"
+      ],
+      "representative": "K5"
+    },
+    {
+      "coverage": {
+        "K6": 2
+      },
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K6"
+      ],
+      "representative": "K6"
+    },
+    {
+      "coverage": {
+        "K7": 2
+      },
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K7"
+      ],
+      "representative": "K7"
+    },
+    {
+      "coverage": {
+        "K8": 2
+      },
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K8"
+      ],
+      "representative": "K8"
+    },
+    {
+      "coverage": {
+        "K9": 2
+      },
+      "families": [
+        "epistemic"
+      ],
+      "members": [
+        "K9"
+      ],
+      "representative": "K9"
+    },
+    {
+      "coverage": {
+        "M1": 2
+      },
+      "families": [
+        "mechanism"
+      ],
+      "members": [
+        "M1"
+      ],
+      "representative": "M1"
+    },
+    {
+      "coverage": {
+        "M2": 2
+      },
+      "families": [
+        "mechanism"
+      ],
+      "members": [
+        "M2"
+      ],
+      "representative": "M2"
+    },
+    {
+      "coverage": {
+        "M3": 0
+      },
+      "families": [
+        "mechanism"
+      ],
+      "members": [
+        "M3"
+      ],
+      "representative": "M3"
+    },
+    {
+      "coverage": {
+        "P1": 22
+      },
+      "families": [
+        "planning"
+      ],
+      "members": [
+        "P1"
+      ],
+      "representative": "P1"
+    },
+    {
+      "coverage": {
+        "P2": 14
+      },
+      "families": [
+        "planning"
+      ],
+      "members": [
+        "P2"
+      ],
+      "representative": "P2"
+    },
+    {
+      "coverage": {
+        "P3": 17,
+        "X3": 12
+      },
+      "families": [
+        "exploration",
+        "planning"
+      ],
+      "members": [
+        "P3",
+        "X3"
+      ],
+      "representative": "P3"
+    },
+    {
+      "coverage": {
+        "P4": 0
+      },
+      "families": [
+        "planning"
+      ],
+      "members": [
+        "P4"
+      ],
+      "representative": "P4"
+    },
+    {
+      "coverage": {
+        "P5": 26
+      },
+      "families": [
+        "planning"
+      ],
+      "members": [
+        "P5"
+      ],
+      "representative": "P5"
+    },
+    {
+      "coverage": {
+        "X1": 19,
+        "X4": 19
+      },
+      "families": [
+        "exploration"
+      ],
+      "members": [
+        "X1",
+        "X4"
+      ],
+      "representative": "X1"
+    },
+    {
+      "coverage": {
+        "X2": 19
+      },
+      "families": [
+        "exploration"
+      ],
+      "members": [
+        "X2"
+      ],
+      "representative": "X2"
+    },
+    {
+      "coverage": {
+        "X5": 26
+      },
+      "families": [
+        "exploration"
+      ],
+      "members": [
+        "X5"
+      ],
+      "representative": "X5"
+    }
+  ],
+  "min_shared_runs": 4,
+  "n_clusters": 27,
+  "n_metrics": 29,
+  "representatives": [
+    "E1",
+    "E2",
+    "E3",
+    "E4",
+    "E5",
+    "K1",
+    "K10",
+    "K11",
+    "K2",
+    "K3",
+    "K4",
+    "K5",
+    "K6",
+    "K7",
+    "K8",
+    "K9",
+    "M1",
+    "M2",
+    "M3",
+    "P1",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "X1",
+    "X2",
+    "X5"
+  ],
+  "strong_pairs": [
+    {
+      "a": "P3",
+      "b": "X3",
+      "rho": 0.909319425
+    },
+    {
+      "a": "X1",
+      "b": "X4",
+      "rho": 0.916242578
+    }
+  ],
+  "threshold": 0.9
+}

@@ -139,6 +139,12 @@ class Run:
     run_id: str
     arm: str
     source: str                      # which adapter produced this
+    # What the run was *for*.  `explore` traces deliberately walk the state
+    # space and must never be scored for path efficiency: A0's 275-step
+    # coverage walk against a 12-step optimal plan reads as 22.9x redundant,
+    # which measures the trace's purpose, not the arm's planning.  Metrics that
+    # only make sense on a solve attempt declare it in `needs`.
+    intent: str = "unknown"          # solve | explore | unknown
     model: Optional[str] = None
     game_id: Optional[str] = None    # None for self-built worlds
     pile: str = "synthetic"          # dev | synthetic; never sealed
@@ -168,4 +174,5 @@ class Run:
             "truth": self.truth is not None,
             "optimal": bool(self.truth and self.truth.optimal_steps),
             "mechanisms": bool(self.truth and self.truth.mechanisms),
+            "solve_attempt": self.intent == "solve",
         }

@@ -1,0 +1,5446 @@
+{
+  "battery_version": "v0",
+  "cards": {
+    "E1": {
+      "definition": "Total model cost. Support for the shape metrics, not a ranking.",
+      "direction": "neutral",
+      "family": "economy",
+      "id": "E1",
+      "needs": [
+        "model_calls",
+        "cost"
+      ],
+      "unit": "usd"
+    },
+    "E2": {
+      "definition": "Share of total cost spent in the first 25% of turns. High means front-loaded: the arm paid to understand, then coasted.",
+      "direction": "higher",
+      "family": "economy",
+      "id": "E2",
+      "needs": [
+        "model_calls",
+        "cost"
+      ],
+      "unit": "share"
+    },
+    "E3": {
+      "definition": "Fraction of the run's turns needed to reach 90% of its total cost. Low means the bill settled early.",
+      "direction": "lower",
+      "family": "economy",
+      "id": "E3",
+      "needs": [
+        "model_calls",
+        "cost"
+      ],
+      "unit": "share"
+    },
+    "E4": {
+      "definition": "R^2 of a quadratic fit to context tokens per turn minus R^2 of a linear fit. Positive means context is accelerating.",
+      "direction": "lower",
+      "family": "economy",
+      "id": "E4",
+      "needs": [
+        "model_calls"
+      ],
+      "unit": ""
+    },
+    "E5": {
+      "definition": "Total cost divided by successful environment actions.",
+      "direction": "lower",
+      "family": "economy",
+      "id": "E5",
+      "needs": [
+        "steps",
+        "model_calls",
+        "cost"
+      ],
+      "unit": "usd/action"
+    },
+    "K1": {
+      "definition": "Full-history exact replay accuracy: the fraction of observed state-action pairs on which the manual agrees with the world.",
+      "direction": "higher",
+      "family": "epistemic",
+      "id": "K1",
+      "needs": [
+        "theory"
+      ],
+      "unit": "share"
+    },
+    "K10": {
+      "definition": "Deadlock theorems: machine-checked proofs that a region of the search space can never reach the goal.",
+      "direction": "higher",
+      "family": "epistemic",
+      "id": "K10",
+      "needs": [
+        "theory"
+      ],
+      "unit": "count"
+    },
+    "K11": {
+      "definition": "Manual revisions. The concept-birth timeline's coarse axis.",
+      "direction": "neutral",
+      "family": "epistemic",
+      "id": "K11",
+      "needs": [
+        "theory"
+      ],
+      "unit": "count"
+    },
+    "K2": {
+      "definition": "Accuracy on state-action pairs the trace never covered. The metric replay cannot see.",
+      "direction": "higher",
+      "family": "epistemic",
+      "id": "K2",
+      "needs": [
+        "theory"
+      ],
+      "unit": "share"
+    },
+    "K3": {
+      "definition": "Invariants and theorems in the manual.",
+      "direction": "higher",
+      "family": "epistemic",
+      "id": "K3",
+      "needs": [
+        "theory"
+      ],
+      "unit": "count"
+    },
+    "K4": {
+      "definition": "Mean coverage over clauses the manual annotates with one; the count of unannotated clauses is reported alongside, not folded in.",
+      "direction": "higher",
+      "family": "epistemic",
+      "id": "K4",
+      "needs": [
+        "theory"
+      ],
+      "unit": "share"
+    },
+    "K5": {
+      "definition": "Concepts admitted to the manual's word table.",
+      "direction": "higher",
+      "family": "epistemic",
+      "id": "K5",
+      "needs": [
+        "theory"
+      ],
+      "unit": "count"
+    },
+    "K6": {
+      "definition": "Mean compression gain per admitted concept, in bits. Positive means the concept paid for itself.",
+      "direction": "higher",
+      "family": "epistemic",
+      "id": "K6",
+      "needs": [
+        "theory"
+      ],
+      "unit": "bits"
+    },
+    "K7": {
+      "definition": "Concepts admitted despite a negative compression account. A diagnostic, not a score: it counts a live conflict between two of the framework's own admission criteria.",
+      "direction": "neutral",
+      "family": "epistemic",
+      "id": "K7",
+      "needs": [
+        "theory"
+      ],
+      "unit": "count"
+    },
+    "K8": {
+      "definition": "Executable probes as a fraction of probe designs. Low means the probe machinery proposed experiments it could not run.",
+      "direction": "higher",
+      "family": "epistemic",
+      "id": "K8",
+      "needs": [
+        "theory"
+      ],
+      "unit": "share"
+    },
+    "K9": {
+      "definition": "Entries in the playbook — ordering, pruning, heuristics, preferences.",
+      "direction": "higher",
+      "family": "epistemic",
+      "id": "K9",
+      "needs": [
+        "theory"
+      ],
+      "unit": "count"
+    },
+    "M1": {
+      "definition": "Mean steps between a mechanism becoming visible and the arm first using it, over annotated mechanisms it did use.",
+      "direction": "lower",
+      "family": "mechanism",
+      "id": "M1",
+      "needs": [
+        "truth",
+        "mechanisms"
+      ],
+      "unit": "steps"
+    },
+    "M2": {
+      "definition": "Fraction of annotated mechanisms the arm ever used.",
+      "direction": "higher",
+      "family": "mechanism",
+      "id": "M2",
+      "needs": [
+        "truth",
+        "mechanisms"
+      ],
+      "unit": "share"
+    },
+    "M3": {
+      "definition": "Mean first-use delay for mechanisms met again on a later level — does understanding travel? (Claim C3.)",
+      "direction": "lower",
+      "family": "mechanism",
+      "id": "M3",
+      "needs": [
+        "steps",
+        "truth",
+        "mechanisms"
+      ],
+      "unit": "steps"
+    },
+    "P1": {
+      "definition": "Successful environment actions per model call.",
+      "direction": "higher",
+      "family": "planning",
+      "id": "P1",
+      "needs": [
+        "steps",
+        "model_calls"
+      ],
+      "unit": "actions/call"
+    },
+    "P2": {
+      "definition": "Actions per model call in the run's second half minus the first half; is a decision buying more actions as the run goes on?",
+      "direction": "higher",
+      "family": "planning",
+      "id": "P2",
+      "needs": [
+        "steps",
+        "model_calls"
+      ],
+      "unit": "actions/call"
+    },
+    "P3": {
+      "definition": "Fraction of steps that returned to the state two steps earlier — an undo.",
+      "direction": "lower",
+      "family": "planning",
+      "id": "P3",
+      "needs": [
+        "steps",
+        "observations"
+      ],
+      "unit": ""
+    },
+    "P4": {
+      "definition": "Actual successful steps divided by the shortest known plan. 1.0 is optimal; needs ground truth, so development pile and A0 only, and needs the run to have been trying to win.",
+      "direction": "lower",
+      "family": "planning",
+      "id": "P4",
+      "needs": [
+        "steps",
+        "truth",
+        "optimal",
+        "solve_attempt"
+      ],
+      "unit": "ratio"
+    },
+    "P5": {
+      "definition": "Fraction of environment steps that failed outright. A diagnostic: it is the confound P1 and P2 are most exposed to.",
+      "direction": "neutral",
+      "family": "planning",
+      "id": "P5",
+      "needs": [
+        "steps"
+      ],
+      "unit": "share"
+    },
+    "X1": {
+      "definition": "Fraction of observed states that had been visited before.",
+      "direction": "lower",
+      "family": "exploration",
+      "id": "X1",
+      "needs": [
+        "steps",
+        "observations"
+      ],
+      "unit": ""
+    },
+    "X2": {
+      "definition": "Fraction of (state, action) transitions taken for the first time.",
+      "direction": "higher",
+      "family": "exploration",
+      "id": "X2",
+      "needs": [
+        "steps",
+        "observations"
+      ],
+      "unit": ""
+    },
+    "X3": {
+      "definition": "Novelty in the first quarter of a run minus novelty in the last quarter; the curve's shape as one number.",
+      "direction": "higher",
+      "family": "exploration",
+      "id": "X3",
+      "needs": [
+        "steps",
+        "observations"
+      ],
+      "unit": ""
+    },
+    "X4": {
+      "definition": "Longest run of consecutive steps discovering no new state, as a fraction of the run's length.",
+      "direction": "lower",
+      "family": "exploration",
+      "id": "X4",
+      "needs": [
+        "steps",
+        "observations"
+      ],
+      "unit": ""
+    },
+    "X5": {
+      "definition": "Distinct states observed. Support for X1/X4, not a ranking.",
+      "direction": "neutral",
+      "family": "exploration",
+      "id": "X5",
+      "needs": [
+        "steps",
+        "observations"
+      ],
+      "unit": ""
+    }
+  },
+  "coverage": {
+    "E1": {
+      "by_status": {
+        "not-applicable": 4,
+        "ok": 22
+      },
+      "direction": "neutral",
+      "family": "economy",
+      "tier": "main"
+    },
+    "E2": {
+      "by_status": {
+        "insufficient-data": 9,
+        "not-applicable": 4,
+        "ok": 13
+      },
+      "direction": "higher",
+      "family": "economy",
+      "tier": "main"
+    },
+    "E3": {
+      "by_status": {
+        "insufficient-data": 9,
+        "not-applicable": 4,
+        "ok": 13
+      },
+      "direction": "lower",
+      "family": "economy",
+      "tier": "main"
+    },
+    "E4": {
+      "by_status": {
+        "insufficient-data": 8,
+        "not-applicable": 4,
+        "ok": 14
+      },
+      "direction": "lower",
+      "family": "economy",
+      "tier": "reference"
+    },
+    "E5": {
+      "by_status": {
+        "not-applicable": 4,
+        "ok": 22
+      },
+      "direction": "lower",
+      "family": "economy",
+      "tier": "reference"
+    },
+    "K1": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "higher",
+      "family": "epistemic",
+      "tier": "reference"
+    },
+    "K10": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "higher",
+      "family": "epistemic",
+      "tier": "main"
+    },
+    "K11": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "neutral",
+      "family": "epistemic",
+      "tier": "main"
+    },
+    "K2": {
+      "by_status": {
+        "insufficient-data": 1,
+        "not-applicable": 24,
+        "ok": 1
+      },
+      "direction": "higher",
+      "family": "epistemic",
+      "tier": "main"
+    },
+    "K3": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "higher",
+      "family": "epistemic",
+      "tier": "reference"
+    },
+    "K4": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "higher",
+      "family": "epistemic",
+      "tier": "reference"
+    },
+    "K5": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "higher",
+      "family": "epistemic",
+      "tier": "reference"
+    },
+    "K6": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "higher",
+      "family": "epistemic",
+      "tier": "reference"
+    },
+    "K7": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "neutral",
+      "family": "epistemic",
+      "tier": "main"
+    },
+    "K8": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "higher",
+      "family": "epistemic",
+      "tier": "reference"
+    },
+    "K9": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "higher",
+      "family": "epistemic",
+      "tier": "reference"
+    },
+    "M1": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "lower",
+      "family": "mechanism",
+      "tier": "main"
+    },
+    "M2": {
+      "by_status": {
+        "not-applicable": 24,
+        "ok": 2
+      },
+      "direction": "higher",
+      "family": "mechanism",
+      "tier": "reference"
+    },
+    "M3": {
+      "by_status": {
+        "insufficient-data": 2,
+        "not-applicable": 24
+      },
+      "direction": "lower",
+      "family": "mechanism",
+      "tier": "main"
+    },
+    "P1": {
+      "by_status": {
+        "not-applicable": 4,
+        "ok": 22
+      },
+      "direction": "higher",
+      "family": "planning",
+      "tier": "reference"
+    },
+    "P2": {
+      "by_status": {
+        "insufficient-data": 8,
+        "not-applicable": 4,
+        "ok": 14
+      },
+      "direction": "higher",
+      "family": "planning",
+      "tier": "main"
+    },
+    "P3": {
+      "by_status": {
+        "insufficient-data": 9,
+        "ok": 17
+      },
+      "direction": "lower",
+      "family": "planning",
+      "tier": "main"
+    },
+    "P4": {
+      "by_status": {
+        "not-applicable": 26
+      },
+      "direction": "lower",
+      "family": "planning",
+      "tier": "main"
+    },
+    "P5": {
+      "by_status": {
+        "ok": 26
+      },
+      "direction": "neutral",
+      "family": "planning",
+      "tier": "main"
+    },
+    "X1": {
+      "by_status": {
+        "insufficient-data": 7,
+        "ok": 19
+      },
+      "direction": "lower",
+      "family": "exploration",
+      "tier": "reference"
+    },
+    "X2": {
+      "by_status": {
+        "insufficient-data": 7,
+        "ok": 19
+      },
+      "direction": "higher",
+      "family": "exploration",
+      "tier": "reference"
+    },
+    "X3": {
+      "by_status": {
+        "insufficient-data": 14,
+        "ok": 12
+      },
+      "direction": "higher",
+      "family": "exploration",
+      "tier": "main"
+    },
+    "X4": {
+      "by_status": {
+        "insufficient-data": 7,
+        "ok": 19
+      },
+      "direction": "lower",
+      "family": "exploration",
+      "tier": "reference"
+    },
+    "X5": {
+      "by_status": {
+        "ok": 26
+      },
+      "direction": "neutral",
+      "family": "exploration",
+      "tier": "main"
+    }
+  },
+  "provenance": {
+    "arms": [
+      "bare_cc",
+      "theoria_a0"
+    ],
+    "cut": {
+      "cut_version": "v1",
+      "dev_pile": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "n_sealed": 21,
+      "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a"
+    },
+    "input_digests": {
+      "a0 raw_trace.jsonl": "8597ef68d492ac208b3924e0a8e681a9de67fbe41d1857ced513194e6fbf885a",
+      "ledger.jsonl": "d0106cefa4660f4ecb86872749fb62a1e4b5a7b6392fd852a8753a6d92fa1553"
+    },
+    "n_games": 4,
+    "n_runs": 26
+  },
+  "runs": {
+    "a0-base": {
+      "arm": "theoria_a0",
+      "failed_steps": 0,
+      "game_id": null,
+      "intent": "explore",
+      "metrics": {
+        "E1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E4": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K1": {
+          "status": "ok",
+          "support": {
+            "agree": 233,
+            "pairs": 236
+          },
+          "value": 0.987288136
+        },
+        "K10": {
+          "status": "ok",
+          "value": 1.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 3.0
+        },
+        "K2": {
+          "status": "ok",
+          "support": {
+            "agree": 0,
+            "pairs": 3
+          },
+          "value": 0.0
+        },
+        "K3": {
+          "status": "ok",
+          "value": 3.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 7,
+            "min_witnesses": 1,
+            "unannotated": 3
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 3.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 2125,
+            "concepts": 3,
+            "worst": -5
+          },
+          "value": 706.333333333
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 3
+          },
+          "value": 2.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 9,
+            "executable": 0
+          },
+          "value": 0.0
+        },
+        "K9": {
+          "status": "ok",
+          "value": 3.0
+        },
+        "M1": {
+          "status": "ok",
+          "support": {
+            "annotated": 3,
+            "per_mechanism": {
+              "button": 99,
+              "door_passage": 58,
+              "portal": 11
+            },
+            "used": 3
+          },
+          "value": 56.0
+        },
+        "M2": {
+          "status": "ok",
+          "support": {
+            "annotated": 3,
+            "used": 3
+          },
+          "value": 1.0
+        },
+        "M3": {
+          "reason": "the run never reached a second level; transfer cannot be measured within one level",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 26,
+            "windows": 273
+          },
+          "value": 0.095238095
+        },
+        "P4": {
+          "reason": "this trace is a coverage walk, not an attempt to win; scoring it for path efficiency would measure the trace's purpose rather than the arm",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 0,
+            "steps": 275
+          },
+          "value": 0.0
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 59,
+            "observed": 275
+          },
+          "value": 0.785454545
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 233,
+            "transitions": 275
+          },
+          "value": 0.847272727
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 0.941176,
+            "last_quarter": 0.794118,
+            "transitions": 275
+          },
+          "value": 0.147058824
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 21,
+            "observed": 275
+          },
+          "value": 0.076363636
+        },
+        "X5": {
+          "status": "ok",
+          "value": 59.0
+        }
+      },
+      "model": null,
+      "model_calls": 0,
+      "pile": "synthetic",
+      "source": "cold-start-a0",
+      "steps": 275
+    },
+    "a0-no-button": {
+      "arm": "theoria_a0",
+      "failed_steps": 0,
+      "game_id": null,
+      "intent": "explore",
+      "metrics": {
+        "E1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E4": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K1": {
+          "status": "ok",
+          "support": {
+            "agree": 92,
+            "pairs": 92
+          },
+          "value": 1.0
+        },
+        "K10": {
+          "status": "ok",
+          "value": 2.0
+        },
+        "K11": {
+          "status": "ok",
+          "value": 1.0
+        },
+        "K2": {
+          "reason": "no held-out pairs; every reachable pair was covered",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "K3": {
+          "status": "ok",
+          "value": 2.0
+        },
+        "K4": {
+          "status": "ok",
+          "support": {
+            "annotated": 5,
+            "min_witnesses": 1,
+            "unannotated": 2
+          },
+          "value": 1.0
+        },
+        "K5": {
+          "status": "ok",
+          "value": 1.0
+        },
+        "K6": {
+          "status": "ok",
+          "support": {
+            "best": 1001,
+            "concepts": 1,
+            "worst": 1001
+          },
+          "value": 1001.0
+        },
+        "K7": {
+          "status": "ok",
+          "support": {
+            "of_concepts": 1
+          },
+          "value": 0.0
+        },
+        "K8": {
+          "status": "ok",
+          "support": {
+            "designed": 9,
+            "executable": 0
+          },
+          "value": 0.0
+        },
+        "K9": {
+          "status": "ok",
+          "value": 3.0
+        },
+        "M1": {
+          "status": "ok",
+          "support": {
+            "annotated": 1,
+            "per_mechanism": {
+              "portal": 11
+            },
+            "used": 1
+          },
+          "value": 11.0
+        },
+        "M2": {
+          "status": "ok",
+          "support": {
+            "annotated": 1,
+            "used": 1
+          },
+          "value": 1.0
+        },
+        "M3": {
+          "reason": "the run never reached a second level; transfer cannot be measured within one level",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 22,
+            "windows": 109
+          },
+          "value": 0.201834862
+        },
+        "P4": {
+          "reason": "no optimal plan length is known",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 0,
+            "steps": 111
+          },
+          "value": 0.0
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 23,
+            "observed": 111
+          },
+          "value": 0.792792793
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 92,
+            "transitions": 111
+          },
+          "value": 0.828828829
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 0.962963,
+            "last_quarter": 0.592593,
+            "transitions": 111
+          },
+          "value": 0.37037037
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 38,
+            "observed": 111
+          },
+          "value": 0.342342342
+        },
+        "X5": {
+          "status": "ok",
+          "value": 23.0
+        }
+      },
+      "model": null,
+      "model_calls": 0,
+      "pile": "synthetic",
+      "source": "cold-start-a0",
+      "steps": 111
+    },
+    "bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8": {
+      "arm": "bare_cc",
+      "failed_steps": 4,
+      "game_id": "ar25-0c556536",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 12
+          },
+          "value": 0.392006
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 3,
+            "turns": 12
+          },
+          "value": 0.22450039
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 11,
+            "turns": 12
+          },
+          "value": 0.916666667
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.988793,
+            "r2_quadratic": 0.989464,
+            "turns": 12
+          },
+          "value": 0.000671012
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 8,
+            "total_usd": 0.392006
+          },
+          "value": 0.04900075
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 8,
+            "calls": 12
+          },
+          "value": 0.666666667
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 0.666667,
+            "second_rate": 0.666667
+          },
+          "value": 0.0
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 6
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 4,
+            "steps": 12
+          },
+          "value": 0.333333333
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 8,
+            "observed": 8
+          },
+          "value": 0.0
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 8,
+            "transitions": 8
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 8
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 0,
+            "observed": 8
+          },
+          "value": 0.0
+        },
+        "X5": {
+          "status": "ok",
+          "value": 8.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 12,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 12
+    },
+    "bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b": {
+      "arm": "bare_cc",
+      "failed_steps": 5,
+      "game_id": "ar25-0c556536",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 12
+          },
+          "value": 0.37076
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 3,
+            "turns": 12
+          },
+          "value": 0.240054213
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 11,
+            "turns": 12
+          },
+          "value": 0.916666667
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.984715,
+            "r2_quadratic": 0.985314,
+            "turns": 12
+          },
+          "value": 0.000598694
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 7,
+            "total_usd": 0.37076
+          },
+          "value": 0.052965714
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 7,
+            "calls": 12
+          },
+          "value": 0.583333333
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 0.666667,
+            "second_rate": 0.5
+          },
+          "value": -0.166666667
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 5
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 5,
+            "steps": 12
+          },
+          "value": 0.416666667
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 7,
+            "observed": 7
+          },
+          "value": 0.0
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 7,
+            "transitions": 7
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 0,
+            "observed": 7
+          },
+          "value": 0.0
+        },
+        "X5": {
+          "status": "ok",
+          "value": 7.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 12,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 12
+    },
+    "bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd": {
+      "arm": "bare_cc",
+      "failed_steps": 4,
+      "game_id": "ar25-0c556536",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 11
+          },
+          "value": 0.3758965
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 3,
+            "turns": 11
+          },
+          "value": 0.227537367
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 11,
+            "turns": 11
+          },
+          "value": 1.0
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.986614,
+            "r2_quadratic": 0.986615,
+            "turns": 11
+          },
+          "value": 3.25e-07
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 8,
+            "total_usd": 0.375897
+          },
+          "value": 0.046987063
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 8,
+            "calls": 11
+          },
+          "value": 0.727272727
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 1.0,
+            "second_rate": 0.5
+          },
+          "value": -0.5
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 6
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 4,
+            "steps": 12
+          },
+          "value": 0.333333333
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 8,
+            "observed": 8
+          },
+          "value": 0.0
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 8,
+            "transitions": 8
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 8
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 0,
+            "observed": 8
+          },
+          "value": 0.0
+        },
+        "X5": {
+          "status": "ok",
+          "value": 8.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 11,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 12
+    },
+    "bare_cc-ar25-claude-haiku-4-5-20251001-42306405": {
+      "arm": "bare_cc",
+      "failed_steps": 5,
+      "game_id": "ar25-0c556536",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 20
+          },
+          "value": 0.4420823
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 5,
+            "turns": 20
+          },
+          "value": 0.21882758
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 18,
+            "turns": 20
+          },
+          "value": 0.9
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.859979,
+            "r2_quadratic": 0.981652,
+            "turns": 20
+          },
+          "value": 0.121673803
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 16,
+            "total_usd": 0.442082
+          },
+          "value": 0.027630144
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 16,
+            "calls": 20
+          },
+          "value": 0.8
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 1.0,
+            "second_rate": 0.6
+          },
+          "value": -0.4
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 14
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 5,
+            "steps": 21
+          },
+          "value": 0.238095238
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 16,
+            "observed": 16
+          },
+          "value": 0.0
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 16,
+            "transitions": 16
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 16
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 0,
+            "observed": 16
+          },
+          "value": 0.0
+        },
+        "X5": {
+          "status": "ok",
+          "value": 16.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 20,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 21
+    },
+    "bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593": {
+      "arm": "bare_cc",
+      "failed_steps": 0,
+      "game_id": "ar25-0c556536",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 1
+          },
+          "value": 0.0250082
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 2,
+            "total_usd": 0.025008
+          },
+          "value": 0.0125041
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 2,
+            "calls": 1
+          },
+          "value": 2.0
+        },
+        "P2": {
+          "reason": "fewer than four model calls; no trend to fit",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P3": {
+          "reason": "fewer than three successful steps",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 0,
+            "steps": 2
+          },
+          "value": 0.0
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 2,
+            "observed": 2
+          },
+          "value": 0.0
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 2,
+            "transitions": 2
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 0,
+            "observed": 2
+          },
+          "value": 0.0
+        },
+        "X5": {
+          "status": "ok",
+          "value": 2.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 1,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 2
+    },
+    "bare_cc-ar25-claude-opus-5-2f8b6919": {
+      "arm": "bare_cc",
+      "failed_steps": 10,
+      "game_id": "ar25-0c556536",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 17
+          },
+          "value": 1.300445
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 5,
+            "turns": 17
+          },
+          "value": 0.302747906
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 16,
+            "turns": 17
+          },
+          "value": 0.941176471
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.923614,
+            "r2_quadratic": 0.96835,
+            "turns": 17
+          },
+          "value": 0.044736261
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 8,
+            "total_usd": 1.300445
+          },
+          "value": 0.162555625
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 8,
+            "calls": 17
+          },
+          "value": 0.470588235
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 0.5,
+            "second_rate": 0.444444
+          },
+          "value": -0.055555556
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 6
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 10,
+            "steps": 18
+          },
+          "value": 0.555555556
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 8,
+            "observed": 8
+          },
+          "value": 0.0
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 8,
+            "transitions": 8
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 8
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 0,
+            "observed": 8
+          },
+          "value": 0.0
+        },
+        "X5": {
+          "status": "ok",
+          "value": 8.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 17,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 18
+    },
+    "bare_cc-ar25-claude-sonnet-5-fe359600": {
+      "arm": "bare_cc",
+      "failed_steps": 0,
+      "game_id": "ar25-0c556536",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 1
+          },
+          "value": 0.0822657
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 1,
+            "total_usd": 0.082266
+          },
+          "value": 0.0822657
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 1,
+            "calls": 1
+          },
+          "value": 1.0
+        },
+        "P2": {
+          "reason": "fewer than four model calls; no trend to fit",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P3": {
+          "reason": "fewer than three successful steps",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 0,
+            "steps": 1
+          },
+          "value": 0.0
+        },
+        "X1": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X2": {
+          "reason": "fewer than two transitions",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X5": {
+          "status": "ok",
+          "value": 1.0
+        }
+      },
+      "model": "claude-sonnet-5",
+      "model_calls": 1,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 1
+    },
+    "bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8": {
+      "arm": "bare_cc",
+      "failed_steps": 1,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 1
+          },
+          "value": 0.0249662
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 1,
+            "total_usd": 0.024966
+          },
+          "value": 0.0249662
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 1,
+            "calls": 1
+          },
+          "value": 1.0
+        },
+        "P2": {
+          "reason": "fewer than four model calls; no trend to fit",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P3": {
+          "reason": "fewer than three successful steps",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 1,
+            "steps": 2
+          },
+          "value": 0.5
+        },
+        "X1": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X2": {
+          "reason": "fewer than two transitions",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X5": {
+          "status": "ok",
+          "value": 1.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 1,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 2
+    },
+    "bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e": {
+      "arm": "bare_cc",
+      "failed_steps": 6,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 20
+          },
+          "value": 0.4507827
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 5,
+            "turns": 20
+          },
+          "value": 0.2056472
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 19,
+            "turns": 20
+          },
+          "value": 0.95
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.946539,
+            "r2_quadratic": 0.974872,
+            "turns": 20
+          },
+          "value": 0.028333093
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 15,
+            "total_usd": 0.450783
+          },
+          "value": 0.03005218
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 15,
+            "calls": 20
+          },
+          "value": 0.75
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 0.8,
+            "second_rate": 0.7
+          },
+          "value": -0.1
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 13
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 6,
+            "steps": 21
+          },
+          "value": 0.285714286
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 13,
+            "observed": 15
+          },
+          "value": 0.133333333
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 15,
+            "transitions": 15
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 15
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 15
+          },
+          "value": 0.066666667
+        },
+        "X5": {
+          "status": "ok",
+          "value": 13.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 20,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 21
+    },
+    "bare_cc-g50t-claude-opus-5-f60e48af": {
+      "arm": "bare_cc",
+      "failed_steps": 6,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 20
+          },
+          "value": 1.491754
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 5,
+            "turns": 20
+          },
+          "value": 0.257937301
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 18,
+            "turns": 20
+          },
+          "value": 0.9
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.91349,
+            "r2_quadratic": 0.983677,
+            "turns": 20
+          },
+          "value": 0.070186798
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 15,
+            "total_usd": 1.491754
+          },
+          "value": 0.099450267
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 15,
+            "calls": 20
+          },
+          "value": 0.75
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 0.8,
+            "second_rate": 0.7
+          },
+          "value": -0.1
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 13
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 6,
+            "steps": 21
+          },
+          "value": 0.285714286
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 10,
+            "observed": 15
+          },
+          "value": 0.333333333
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 13,
+            "transitions": 15
+          },
+          "value": 0.866666667
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 15
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 15
+          },
+          "value": 0.066666667
+        },
+        "X5": {
+          "status": "ok",
+          "value": 10.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 20,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 21
+    },
+    "bare_cc-g50t-claude-sonnet-5-3345f981": {
+      "arm": "bare_cc",
+      "failed_steps": 0,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 3
+          },
+          "value": 0.1825593
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 3,
+            "total_usd": 0.182559
+          },
+          "value": 0.0608531
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 3,
+            "calls": 3
+          },
+          "value": 1.0
+        },
+        "P2": {
+          "reason": "fewer than four model calls; no trend to fit",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 1
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 0,
+            "steps": 3
+          },
+          "value": 0.0
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 2,
+            "observed": 3
+          },
+          "value": 0.333333333
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 3,
+            "transitions": 3
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 3
+          },
+          "value": 0.333333333
+        },
+        "X5": {
+          "status": "ok",
+          "value": 2.0
+        }
+      },
+      "model": "claude-sonnet-5",
+      "model_calls": 3,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 3
+    },
+    "bare_cc-g50t-claude-sonnet-5-ddabe772": {
+      "arm": "bare_cc",
+      "failed_steps": 7,
+      "game_id": "g50t-5849a774",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 24
+          },
+          "value": 1.6357593
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 6,
+            "turns": 24
+          },
+          "value": 0.18894363
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 22,
+            "turns": 24
+          },
+          "value": 0.916666667
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.949881,
+            "r2_quadratic": 0.973345,
+            "turns": 24
+          },
+          "value": 0.023463279
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 14,
+            "total_usd": 1.635759
+          },
+          "value": 0.11683995
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 14,
+            "calls": 24
+          },
+          "value": 0.583333333
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 0.666667,
+            "second_rate": 0.5
+          },
+          "value": -0.166666667
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 12
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 7,
+            "steps": 21
+          },
+          "value": 0.333333333
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 12,
+            "observed": 14
+          },
+          "value": 0.142857143
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 14,
+            "transitions": 14
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 14
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 14
+          },
+          "value": 0.071428571
+        },
+        "X5": {
+          "status": "ok",
+          "value": 12.0
+        }
+      },
+      "model": "claude-sonnet-5",
+      "model_calls": 24,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 21
+    },
+    "bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1": {
+      "arm": "bare_cc",
+      "failed_steps": 0,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 2
+          },
+          "value": 0.0455717
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 3,
+            "total_usd": 0.045572
+          },
+          "value": 0.015190567
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 3,
+            "calls": 2
+          },
+          "value": 1.5
+        },
+        "P2": {
+          "reason": "fewer than four model calls; no trend to fit",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 0,
+            "windows": 1
+          },
+          "value": 0.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 0,
+            "steps": 3
+          },
+          "value": 0.0
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 3,
+            "observed": 3
+          },
+          "value": 0.0
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 3,
+            "transitions": 3
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 0,
+            "observed": 3
+          },
+          "value": 0.0
+        },
+        "X5": {
+          "status": "ok",
+          "value": 3.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 2,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 3
+    },
+    "bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb": {
+      "arm": "bare_cc",
+      "failed_steps": 0,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E4": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P3": {
+          "reason": "fewer than three successful steps",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 0,
+            "steps": 1
+          },
+          "value": 0.0
+        },
+        "X1": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X2": {
+          "reason": "fewer than two transitions",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X5": {
+          "status": "ok",
+          "value": 1.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 0,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 1
+    },
+    "bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e": {
+      "arm": "bare_cc",
+      "failed_steps": 5,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 20
+          },
+          "value": 0.5984183
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 5,
+            "turns": 20
+          },
+          "value": 0.161553883
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 19,
+            "turns": 20
+          },
+          "value": 0.95
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.491452,
+            "r2_quadratic": 0.891214,
+            "turns": 20
+          },
+          "value": 0.399762037
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 16,
+            "total_usd": 0.598418
+          },
+          "value": 0.037401144
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 16,
+            "calls": 20
+          },
+          "value": 0.8
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 0.7,
+            "second_rate": 0.9
+          },
+          "value": 0.2
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 4,
+            "windows": 14
+          },
+          "value": 0.285714286
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 5,
+            "steps": 21
+          },
+          "value": 0.238095238
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 11,
+            "observed": 16
+          },
+          "value": 0.3125
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 15,
+            "transitions": 16
+          },
+          "value": 0.9375
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 0.75,
+            "transitions": 16
+          },
+          "value": 0.25
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 3,
+            "observed": 16
+          },
+          "value": 0.1875
+        },
+        "X5": {
+          "status": "ok",
+          "value": 11.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 20,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 21
+    },
+    "bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0": {
+      "arm": "bare_cc",
+      "failed_steps": 0,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E3": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E4": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "E5": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P2": {
+          "reason": "the run records no model calls",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P3": {
+          "reason": "fewer than three successful steps",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 0,
+            "steps": 1
+          },
+          "value": 0.0
+        },
+        "X1": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X2": {
+          "reason": "fewer than two transitions",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X5": {
+          "status": "ok",
+          "value": 1.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 0,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 1
+    },
+    "bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758": {
+      "arm": "bare_cc",
+      "failed_steps": 1,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 5
+          },
+          "value": 0.153397
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.746616,
+            "r2_quadratic": 0.746899,
+            "turns": 5
+          },
+          "value": 0.000283459
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 5,
+            "total_usd": 0.153397
+          },
+          "value": 0.0306794
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 5,
+            "calls": 5
+          },
+          "value": 1.0
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 1.5,
+            "second_rate": 0.666667
+          },
+          "value": -0.833333333
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 1,
+            "windows": 3
+          },
+          "value": 0.333333333
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 1,
+            "steps": 6
+          },
+          "value": 0.166666667
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 4,
+            "observed": 5
+          },
+          "value": 0.2
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 5,
+            "transitions": 5
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 5
+          },
+          "value": 0.2
+        },
+        "X5": {
+          "status": "ok",
+          "value": 4.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 5,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 6
+    },
+    "bare_cc-sk48-claude-opus-5-42705d3c": {
+      "arm": "bare_cc",
+      "failed_steps": 6,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 20
+          },
+          "value": 1.562334
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 5,
+            "turns": 20
+          },
+          "value": 0.250771602
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 18,
+            "turns": 20
+          },
+          "value": 0.9
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.486096,
+            "r2_quadratic": 0.910434,
+            "turns": 20
+          },
+          "value": 0.424337659
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 15,
+            "total_usd": 1.562334
+          },
+          "value": 0.1041556
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 15,
+            "calls": 20
+          },
+          "value": 0.75
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 0.9,
+            "second_rate": 0.6
+          },
+          "value": -0.3
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 1,
+            "windows": 13
+          },
+          "value": 0.076923077
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 6,
+            "steps": 21
+          },
+          "value": 0.285714286
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 9,
+            "observed": 15
+          },
+          "value": 0.4
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 15,
+            "transitions": 15
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 1.0,
+            "transitions": 15
+          },
+          "value": 0.0
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 3,
+            "observed": 15
+          },
+          "value": 0.2
+        },
+        "X5": {
+          "status": "ok",
+          "value": 9.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 20,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 21
+    },
+    "bare_cc-sk48-claude-sonnet-5-9022a076": {
+      "arm": "bare_cc",
+      "failed_steps": 4,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 10
+          },
+          "value": 0.6080658
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 3,
+            "turns": 10
+          },
+          "value": 0.315218024
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 9,
+            "turns": 10
+          },
+          "value": 0.9
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.875781,
+            "r2_quadratic": 0.875848,
+            "turns": 10
+          },
+          "value": 6.7785e-05
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 3,
+            "total_usd": 0.608066
+          },
+          "value": 0.2026886
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 3,
+            "calls": 10
+          },
+          "value": 0.3
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 0.4,
+            "second_rate": 0.2
+          },
+          "value": -0.2
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 1,
+            "windows": 1
+          },
+          "value": 1.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 4,
+            "steps": 7
+          },
+          "value": 0.571428571
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 2,
+            "observed": 3
+          },
+          "value": 0.333333333
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 3,
+            "transitions": 3
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 3
+          },
+          "value": 0.333333333
+        },
+        "X5": {
+          "status": "ok",
+          "value": 2.0
+        }
+      },
+      "model": "claude-sonnet-5",
+      "model_calls": 10,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 7
+    },
+    "bare_cc-sk48-claude-sonnet-5-95c42cfd": {
+      "arm": "bare_cc",
+      "failed_steps": 0,
+      "game_id": "sk48-d8078629",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 1
+          },
+          "value": 0.1002987
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 1,
+            "total_usd": 0.100299
+          },
+          "value": 0.1002987
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 1,
+            "calls": 1
+          },
+          "value": 1.0
+        },
+        "P2": {
+          "reason": "fewer than four model calls; no trend to fit",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P3": {
+          "reason": "fewer than three successful steps",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 0,
+            "steps": 1
+          },
+          "value": 0.0
+        },
+        "X1": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X2": {
+          "reason": "fewer than two transitions",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X5": {
+          "status": "ok",
+          "value": 1.0
+        }
+      },
+      "model": "claude-sonnet-5",
+      "model_calls": 1,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 1
+    },
+    "bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309": {
+      "arm": "bare_cc",
+      "failed_steps": 1,
+      "game_id": "tn36-ef4dde99",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 2
+          },
+          "value": 0.0413915
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 2,
+            "total_usd": 0.041392
+          },
+          "value": 0.02069575
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 2,
+            "calls": 2
+          },
+          "value": 1.0
+        },
+        "P2": {
+          "reason": "fewer than four model calls; no trend to fit",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P3": {
+          "reason": "fewer than three successful steps",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 1,
+            "steps": 3
+          },
+          "value": 0.333333333
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 1,
+            "observed": 2
+          },
+          "value": 0.5
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 2,
+            "transitions": 2
+          },
+          "value": 1.0
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 1,
+            "observed": 2
+          },
+          "value": 0.5
+        },
+        "X5": {
+          "status": "ok",
+          "value": 1.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 2,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 3
+    },
+    "bare_cc-tn36-claude-haiku-4-5-20251001-3a033821": {
+      "arm": "bare_cc",
+      "failed_steps": 7,
+      "game_id": "tn36-ef4dde99",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 20
+          },
+          "value": 0.4557195
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 5,
+            "turns": 20
+          },
+          "value": 0.204272584
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 18,
+            "turns": 20
+          },
+          "value": 0.9
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.945852,
+            "r2_quadratic": 0.985344,
+            "turns": 20
+          },
+          "value": 0.039491476
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 14,
+            "total_usd": 0.455719
+          },
+          "value": 0.032551393
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 14,
+            "calls": 20
+          },
+          "value": 0.7
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 0.6,
+            "second_rate": 0.8
+          },
+          "value": 0.2
+        },
+        "P3": {
+          "status": "ok",
+          "support": {
+            "undos": 12,
+            "windows": 12
+          },
+          "value": 1.0
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 7,
+            "steps": 21
+          },
+          "value": 0.333333333
+        },
+        "X1": {
+          "status": "ok",
+          "support": {
+            "distinct": 1,
+            "observed": 14
+          },
+          "value": 0.928571429
+        },
+        "X2": {
+          "status": "ok",
+          "support": {
+            "novel": 13,
+            "transitions": 14
+          },
+          "value": 0.928571429
+        },
+        "X3": {
+          "status": "ok",
+          "support": {
+            "first_quarter": 1.0,
+            "last_quarter": 0.666667,
+            "transitions": 14
+          },
+          "value": 0.333333333
+        },
+        "X4": {
+          "status": "ok",
+          "support": {
+            "longest_streak": 13,
+            "observed": 14
+          },
+          "value": 0.928571429
+        },
+        "X5": {
+          "status": "ok",
+          "value": 1.0
+        }
+      },
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 20,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 21
+    },
+    "bare_cc-tn36-claude-opus-5-96d23ad9": {
+      "arm": "bare_cc",
+      "failed_steps": 10,
+      "game_id": "tn36-ef4dde99",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 10
+          },
+          "value": 0.750876
+        },
+        "E2": {
+          "status": "ok",
+          "support": {
+            "head_turns": 3,
+            "turns": 10
+          },
+          "value": 0.320533617
+        },
+        "E3": {
+          "status": "ok",
+          "support": {
+            "turn": 9,
+            "turns": 10
+          },
+          "value": 0.9
+        },
+        "E4": {
+          "status": "ok",
+          "support": {
+            "r2_linear": 0.999927,
+            "r2_quadratic": 0.999958,
+            "turns": 10
+          },
+          "value": 3.0296e-05
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 1,
+            "total_usd": 0.750876
+          },
+          "value": 0.750876
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 1,
+            "calls": 10
+          },
+          "value": 0.1
+        },
+        "P2": {
+          "status": "ok",
+          "support": {
+            "basis": "step_idx",
+            "first_rate": 0.2,
+            "second_rate": 0.0
+          },
+          "value": -0.2
+        },
+        "P3": {
+          "reason": "fewer than three successful steps",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 10,
+            "steps": 11
+          },
+          "value": 0.909090909
+        },
+        "X1": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X2": {
+          "reason": "fewer than two transitions",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X5": {
+          "status": "ok",
+          "value": 1.0
+        }
+      },
+      "model": "claude-opus-5",
+      "model_calls": 10,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 11
+    },
+    "bare_cc-tn36-claude-sonnet-5-3f3ac227": {
+      "arm": "bare_cc",
+      "failed_steps": 2,
+      "game_id": "tn36-ef4dde99",
+      "intent": "solve",
+      "metrics": {
+        "E1": {
+          "status": "ok",
+          "support": {
+            "calls": 3
+          },
+          "value": 0.1813323
+        },
+        "E2": {
+          "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E3": {
+          "reason": "fewer than 8 turns; the same early-exit confound as E2",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E4": {
+          "reason": "fewer than five turns; a quadratic needs room",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "E5": {
+          "status": "ok",
+          "support": {
+            "actions": 1,
+            "total_usd": 0.181332
+          },
+          "value": 0.1813323
+        },
+        "K1": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K10": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K11": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K2": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K3": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K4": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K5": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K6": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K7": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K8": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "K9": {
+          "reason": "this arm keeps no explicit theory",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M1": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M2": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "M3": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P1": {
+          "status": "ok",
+          "support": {
+            "actions": 1,
+            "calls": 3
+          },
+          "value": 0.333333333
+        },
+        "P2": {
+          "reason": "fewer than four model calls; no trend to fit",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P3": {
+          "reason": "fewer than three successful steps",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "P4": {
+          "reason": "no ground truth is available for this run",
+          "status": "not-applicable",
+          "value": null
+        },
+        "P5": {
+          "status": "ok",
+          "support": {
+            "failed": 2,
+            "steps": 3
+          },
+          "value": 0.666666667
+        },
+        "X1": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X2": {
+          "reason": "fewer than two transitions",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X3": {
+          "reason": "fewer than eight transitions; quartiles meaningless",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X4": {
+          "reason": "fewer than two observed states",
+          "status": "insufficient-data",
+          "value": null
+        },
+        "X5": {
+          "status": "ok",
+          "value": 1.0
+        }
+      },
+      "model": "claude-sonnet-5",
+      "model_calls": 3,
+      "pile": "dev",
+      "source": "ledger.jsonl",
+      "steps": 3
+    }
+  }
+}

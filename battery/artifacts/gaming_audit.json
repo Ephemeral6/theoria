@@ -1,0 +1,241 @@
+{
+  "main": [
+    "E1",
+    "E2",
+    "E3",
+    "K10",
+    "K11",
+    "K2",
+    "K7",
+    "M1",
+    "M3",
+    "P2",
+    "P3",
+    "P4",
+    "P5",
+    "X3",
+    "X5"
+  ],
+  "metrics": {
+    "E1": {
+      "accidental": false,
+      "defence": "Diagnostic.",
+      "defended": true,
+      "how_to_game": "Not a ranking.",
+      "tier": "main"
+    },
+    "E2": {
+      "accidental": true,
+      "defence": "Requires at least eight turns, and pairs by game so two arms are compared over the same problem.",
+      "defended": true,
+      "how_to_game": "Die early -- a run that ends on turn four spent 100% of its cost in its first quarter. Or dump one enormous prompt on turn one.",
+      "tier": "main"
+    },
+    "E3": {
+      "accidental": true,
+      "defence": "Same eight-turn floor and same pairing.",
+      "defended": true,
+      "how_to_game": "As E2, from the other end.",
+      "tier": "main"
+    },
+    "E4": {
+      "accidental": true,
+      "defence": "None implemented. Prompt caching and context compaction do exactly this, for reasons that have nothing to do with understanding, and the battery cannot currently tell a compaction policy from a theory that closed.",
+      "defended": false,
+      "how_to_game": "Truncate or compact the context on a schedule and the quadratic term vanishes.",
+      "tier": "reference"
+    },
+    "E5": {
+      "accidental": true,
+      "defence": "Would need pairing against P4. Not implemented.",
+      "defended": false,
+      "how_to_game": "Emit many cheap actions; the denominator grows faster than the numerator.",
+      "tier": "reference"
+    },
+    "K1": {
+      "accidental": true,
+      "defence": "None, and none is wanted. K1 is the battery's *control*: it is the number the field already optimises, and its job here is to be high for everyone so that K2 can be the thing that separates. Reporting K1 as an achievement is the error this whole phase exists to avoid.",
+      "defended": false,
+      "how_to_game": "Overfit. A model with enough parameters replays its own history perfectly and knows nothing.",
+      "tier": "reference"
+    },
+    "K10": {
+      "accidental": false,
+      "defence": "A deadlock theorem carries a Lean proof obligation with zero axioms; a false one does not compile. The battery counts rather than checks, so the defence is external to it -- but it is a real one, and it is why this metric stays in the main table.",
+      "defended": true,
+      "how_to_game": "Emit many trivial `prune ... => dead` entries.",
+      "tier": "main"
+    },
+    "K11": {
+      "accidental": false,
+      "defence": "Diagnostic; a low count is ambiguous between 'right first time' and 'never checked'.",
+      "defended": true,
+      "how_to_game": "Not a ranking.",
+      "tier": "main"
+    },
+    "K2": {
+      "accidental": false,
+      "defence": "Held-out by construction; the manual is frozen before the held-out pairs are scored, and A0's seal is stamped in THEORIZE_LOG.md.",
+      "defended": true,
+      "how_to_game": "Very little: the pairs are by construction the ones the trace never exercised.",
+      "tier": "main"
+    },
+    "K3": {
+      "accidental": true,
+      "defence": "An LLM asked for theorems will produce them in quantity. Needs a non-triviality filter that does not exist yet.",
+      "defended": false,
+      "how_to_game": "Write many trivial theorems. `0 = 0` is a theorem.",
+      "tier": "reference"
+    },
+    "K4": {
+      "accidental": true,
+      "defence": "None implemented -- and A0 demonstrates the failure rather than merely predicting it. A0's manual scores K4 = 1.000 *because* it rejected the one generalisation it lacked evidence for (THEORIZE_LOG R-05), and that same omission is why its K2 is 0.000. Evidence coverage rewards exactly the caution that held-out accuracy punishes. K4 must never be reported without K2 beside it.",
+      "defended": false,
+      "how_to_game": "Only write down clauses you have complete evidence for. Omitting every hard rule scores 1.0.",
+      "tier": "reference"
+    },
+    "K5": {
+      "accidental": true,
+      "defence": "K6 is meant to price each name, but see K6.",
+      "defended": false,
+      "how_to_game": "Name more things.",
+      "tier": "reference"
+    },
+    "K6": {
+      "accidental": true,
+      "defence": "The minimum would be the honest statistic; the mean is reported with min and max in its support fields, but the headline number is still a mean. Fix in v1.",
+      "defended": false,
+      "how_to_game": "Admit one enormous concept and reject every small one. A0's mean is +706 bits, carried entirely by the Cart at +2125 while two of the three concepts are negative.",
+      "tier": "reference"
+    },
+    "K7": {
+      "accidental": false,
+      "defence": "Diagnostic.",
+      "defended": true,
+      "how_to_game": "Not a ranking -- a count of a framework conflict.",
+      "tier": "main"
+    },
+    "K8": {
+      "accidental": true,
+      "defence": "None. And the denominator is tiny (9 on A0), so the ratio is noisy as well as gameable.",
+      "defended": false,
+      "how_to_game": "Design only probes you already know you can run.",
+      "tier": "reference"
+    },
+    "K9": {
+      "accidental": true,
+      "defence": "None implemented.",
+      "defended": false,
+      "how_to_game": "Write more playbook entries.",
+      "tier": "reference"
+    },
+    "M1": {
+      "accidental": true,
+      "defence": "Luck does not repeat across games, and the pairing is cross-game. Read beside M2.",
+      "defended": true,
+      "how_to_game": "Flail at random and hit the mechanism early by luck.",
+      "tier": "main"
+    },
+    "M2": {
+      "accidental": true,
+      "defence": "None beyond reading it with M1 -- a mechanism used late is still used.",
+      "defended": false,
+      "how_to_game": "Same flailing; uptake is a hit counter and random play eventually hits everything.",
+      "tier": "reference"
+    },
+    "M3": {
+      "accidental": false,
+      "defence": "n/a",
+      "defended": true,
+      "how_to_game": "Unimplemented.",
+      "tier": "main"
+    },
+    "P1": {
+      "accidental": true,
+      "defence": "Read against P4 (were those actions on the shortest path?) -- but P4 needs ground truth, so most runs have no check at all.",
+      "defended": false,
+      "how_to_game": "Emit ten actions per model call. Any actions. The metric cannot tell a plan from a burst.",
+      "tier": "reference"
+    },
+    "P2": {
+      "accidental": false,
+      "defence": "An *increasing* batch size is a deliberate schedule; a harness that batches does so at a constant rate, which cancels in the difference.",
+      "defended": true,
+      "how_to_game": "Batch more actions per call as the run goes on.",
+      "tier": "main"
+    },
+    "P3": {
+      "accidental": true,
+      "defence": "Compared only within a game, where every arm faces the same reversibility. The pairing is implemented.",
+      "defended": true,
+      "how_to_game": "Never undo -- easy in a game whose actions are irreversible, impossible in one where they are not.",
+      "tier": "main"
+    },
+    "P4": {
+      "accidental": false,
+      "defence": "Restricted to solve attempts with ground truth; coverage walks are refused outright.",
+      "defended": true,
+      "how_to_game": "Nothing cheap: the ratio needs a real optimal plan and a real attempt to reach the goal.",
+      "tier": "main"
+    },
+    "P5": {
+      "accidental": false,
+      "defence": "Diagnostic. Read it before believing P1 or P2.",
+      "defended": true,
+      "how_to_game": "Not a ranking -- it measures the infrastructure, which is the point.",
+      "tier": "main"
+    },
+    "X1": {
+      "accidental": true,
+      "defence": "Floor the run length and read it beside X5; a low revisit rate over 8 distinct states is not the same fact as a low revisit rate over 200.",
+      "defended": false,
+      "how_to_game": "Never revisit anything: flail through a large state space taking a fresh action every turn. A run that dies on turn three scores a perfect 0.",
+      "tier": "reference"
+    },
+    "X2": {
+      "accidental": true,
+      "defence": "Same floor as X1; X2 is really X3's input rather than a score of its own.",
+      "defended": false,
+      "how_to_game": "Take a never-before-tried action every turn. Short runs score 1.0 automatically -- three of the pilot's runs do exactly that.",
+      "tier": "reference"
+    },
+    "X3": {
+      "accidental": false,
+      "defence": "Gaming it requires deliberately wasting late turns, which costs score on every other metric at once.",
+      "defended": true,
+      "how_to_game": "Repeat yourself deliberately in the last quarter to widen the gap.",
+      "tier": "main"
+    },
+    "X4": {
+      "accidental": true,
+      "defence": "Normalised by run length, which removes the length effect but not the early-exit effect.",
+      "defended": false,
+      "how_to_game": "End the run before a streak can form.",
+      "tier": "reference"
+    },
+    "X5": {
+      "accidental": false,
+      "defence": "Diagnostic.",
+      "defended": true,
+      "how_to_game": "Not a ranking.",
+      "tier": "main"
+    }
+  },
+  "reference": [
+    "E4",
+    "E5",
+    "K1",
+    "K3",
+    "K4",
+    "K5",
+    "K6",
+    "K8",
+    "K9",
+    "M2",
+    "P1",
+    "X1",
+    "X2",
+    "X4"
+  ],
+  "rule": "accidental and not defended -> reference; else main"
+}
