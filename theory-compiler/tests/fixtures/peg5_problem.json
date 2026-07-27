@@ -1,0 +1,13 @@
+{
+  "name": "peg5-11011",
+  "n_pos": 5,
+  "background": 0,
+  "objects": [
+    {"name": "Peg_0", "type": "Peg", "pos": 0, "color": 1},
+    {"name": "Peg_1", "type": "Peg", "pos": 1, "color": 1},
+    {"name": "Peg_3", "type": "Peg", "pos": 3, "color": 1},
+    {"name": "Peg_4", "type": "Peg", "pos": 4, "color": 1}
+  ],
+  "weights": {"w": [-1, 1, 0, 1, -1]},
+  "goal_states": ["00010"]
+}

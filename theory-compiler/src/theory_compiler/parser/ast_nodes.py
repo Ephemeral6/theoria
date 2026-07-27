@@ -29,10 +29,58 @@ class ConceptAccount:
 
 
 @dataclass
+class LandmarkDecl:
+    """E-04. A cell the domain names but does not locate.
+
+    `portal_exit` is a fact about *this level*; that it exists at all is a fact
+    about the world. Declaring the name here is what lets a reader of
+    theory.dsl alone tell which free names are problem data.
+    """
+    name: str
+
+
+@dataclass
+class WeightsDecl:
+    """E-05. A weight function whose *values* live in the problem instance.
+
+    The domain declares that a pagoda potential is available over `over`; the
+    numbers arrive from the LP certificate. Without this the weight vector had
+    nowhere to be named and the invariant could not refer to it.
+    """
+    name: str
+    over: str
+
+
+@dataclass
+class DomainDecl:
+    """E-02. A finite value set a rule variable may range over."""
+    name: str
+    values: list[str]
+
+
+@dataclass
 class WordTable:
     has_board: bool = True
     objects: list[ObjectDecl] = field(default_factory=list)
     accounts: list[ConceptAccount] = field(default_factory=list)
+    landmarks: list[LandmarkDecl] = field(default_factory=list)
+    weights: list[WeightsDecl] = field(default_factory=list)
+    domains: list[DomainDecl] = field(default_factory=list)
+
+
+@dataclass
+class SemanticsSection:
+    """E-03 — the frame axiom and its two neighbours, in the manual at last.
+
+    Adopted from cold-start-a0's extension request essentially verbatim. It is
+    mandatory: the v0.1 parser skipped unknown lines, so a manual carrying this
+    section parsed there silently and to a *different world*. Defaulting it
+    would reproduce exactly the hazard it exists to close.
+    """
+    frame: str                                     # persist | reset
+    conflict: str                                  # exclusive | priority
+    cascade: str                                   # single_frame | multi_frame
+    priority: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -59,6 +107,12 @@ class Expr:
 
 @dataclass
 class NameRef(Expr):
+    name: str
+
+
+@dataclass
+class VarRef(Expr):
+    """E-02. `?d` — a rule variable, ground by expansion before any backend."""
     name: str
 
 
@@ -118,6 +172,7 @@ class GuardAction(GuardClause):
 @dataclass
 class GuardPredicate(GuardClause):
     expr: Expr  # FuncCall or Comparison
+    negated: bool = False  # E-01: `not free(above(Cart))`
 
 
 @dataclass
@@ -137,6 +192,10 @@ class RuleDecl:
     meta: Optional[RuleMeta]
     guard: Guard
     event: FuncCall
+    # E-02. Variable name -> declared domain name, e.g. {"d": "dir"}. A rule
+    # with bindings is a schema; `expand_rules` grounds it before the IR is
+    # built, so no backend ever sees a VarRef.
+    bindings: dict[str, str] = field(default_factory=dict)
 
 
 @dataclass
@@ -161,6 +220,10 @@ class InvariantDecl:
     op: str
     value: str
     status: Optional[str] = None
+    # E-05. Where the numbers came from. `pagoda(w)` with source `lp_potential`
+    # is the whole point of A1: the weights are the engine's, not the author's,
+    # and a reader can tell which by looking.
+    source: Optional[str] = None
 
 
 @dataclass
@@ -180,6 +243,7 @@ class LawsSection:
 @dataclass
 class TheoryAST:
     word_table: Optional[WordTable] = None
+    semantics: Optional[SemanticsSection] = None
     events: Optional[EventsSection] = None
     rules: Optional[RulesSection] = None
     goal: Optional[GoalSection] = None

@@ -1,167 +1,172 @@
+"""End-to-end: one source, four forms — and the A1 acceptance itself.
+
+This file used to end by printing "weights are hand-computed constants, not
+LP-derived" and "formal A1 acceptance requires LP engine + Lean integration".
+Both notes are now obsolete, and the tests that follow are what replaced them:
+the weights come from `engine-rig/interop/certificates/`, the Lean proof is a
+pagoda induction over them, and the acceptance is checked by running `lean` and
+reading `#print axioms`.
+
+The two litmus tests for de-specialising the generators run here too. Every
+generator is handed a `TheoryAST` it has never seen the shape of before:
+
+* the peg world (line geometry, four instances of one declared type, a pagoda
+  potential), and
+* `cold-start-a0/theory/theory.dsl` (grid geometry, three declared types, a
+  portal, a latch, no potential),
+
+and both must produce all four forms without either generator knowing which
+world it is compiling.
 """
-M8 — End-to-end A1 rehearsal.
 
-Takes the peg solitaire素材 B through ALL four generation paths:
-  1. theory.py  — executable simulation
-  2. theory.lean — formal proof (0 sorry)
-  3. theory.md  — natural language rendering (deterministic, no DSL keywords)
-  4. theory.pddl — syntactically valid PDDL
-
-Plus playbook.dsl parsing with negative test.
-
-This is a structural rehearsal of the compile chain, NOT the formal A1
-acceptance (which requires LP-derived weights and Lean↔engine integration).
-Here the pagoda weights are hand-computed constants.
-"""
+import shutil
 import subprocess
-import sys
 from pathlib import Path
 
 import pytest
 
-from theory_compiler.parser.theory_parser import parse_theory
-from theory_compiler.parser.playbook_parser import parse_playbook
-from theory_compiler.generators.gen_python import generate_python
+from theory_compiler.certificate import load_certificate
 from theory_compiler.generators.gen_lean import generate_lean
 from theory_compiler.generators.gen_markdown import generate_markdown
 from theory_compiler.generators.gen_pddl import generate_pddl
+from theory_compiler.generators.gen_python import generate_python
+from theory_compiler.parser.playbook_parser import parse_playbook
+from theory_compiler.parser.theory_parser import parse_theory
+from theory_compiler.problem import load_problem
 
 FIXTURES = Path(__file__).parent / "fixtures"
+REPO = Path(__file__).resolve().parents[2]
+A0_DSL = REPO / "cold-start-a0" / "theory" / "theory.dsl"
+A0_PROBLEM = REPO / "cold-start-a0" / "artifacts" / "problem_a0-base.json"
+CERT = REPO / "engine-rig" / "interop" / "certificates" / "pagoda_5_11011_to_00010.json"
+
+LEAN = shutil.which("lean")
 
 
 @pytest.fixture
-def peg_theory_ast():
-    text = (FIXTURES / "peg_theory.dsl").read_text(encoding="utf-8")
-    return parse_theory(text)
+def peg():
+    ast = parse_theory((FIXTURES / "peg_theory.dsl").read_text(encoding="utf-8"))
+    return ast, load_problem(str(FIXTURES / "peg5_problem.json"))
 
 
-@pytest.fixture
-def peg_playbook_text():
-    return (FIXTURES / "peg_playbook.dsl").read_text(encoding="utf-8")
+# ------------------------------------------------------ litmus 1: no regression
 
-
-# ---------- Path 1: Python generation ----------
-
-def test_e2e_python_simulation(peg_theory_ast):
-    """Generated Python code compiles and has expected structure."""
-    code = generate_python(peg_theory_ast, grid_width=5, grid_height=1)
+def test_peg_still_produces_all_four_forms(peg):
+    ast, problem = peg
+    code = generate_python(ast, problem)
     ns = {}
-    exec(compile(code, "<e2e_peg>", "exec"), ns)
+    exec(compile(code, "<peg>", "exec"), ns)
+    assert ns["occupancy"](ns["initial_state"]()) == "11011"
 
-    # Should define State and simulation functions
-    assert "State" in ns
-    assert "step" in ns or "simulate" in ns
+    lean = generate_lean(ast, problem, load_certificate(str(CERT)))
+    assert "theorem unsolvable" in lean and "sorry" not in lean
 
+    md = generate_markdown(ast)
+    assert generate_markdown(ast) == md          # deterministic, no model in path
+    for keyword in ("word_table:", "events:", "rules:", "goal:", "laws:",
+                    "object ", "rule ", "invariant "):
+        assert keyword not in md
 
-# ---------- Path 2: Lean generation ----------
-
-def test_e2e_lean_zero_sorry(peg_theory_ast):
-    """Generated Lean has 0 sorry and correct structure."""
-    # 1D peg solitaire: 5 cells, pegs at 0,1,3,4, center=2 empty
-    initial_config = [True, True, False, True, True]
-    pagoda_weights = [1, 2, 3, 2, 1]
-    lean_code = generate_lean(peg_theory_ast, board_size=5,
-                               initial_config=initial_config,
-                               pagoda_weights=pagoda_weights, goal_count=1)
-    assert "sorry" not in lean_code
-    assert "theorem unsolvable" in lean_code
-    assert "allReachable" in lean_code
-    assert "#print axioms unsolvable" in lean_code
-    # Actual compilation verified in test_gen_lean.py::test_lean_builds_no_sorry
+    domain, instance = generate_pddl(ast, problem_name="peg", grid_width=5,
+                                     grid_height=1)
+    for name, text in (("domain", domain), ("problem", instance)):
+        assert text.count("(") == text.count(")"), f"unbalanced parens in {name}"
+    assert ":action" in domain and ":goal" in instance
 
 
-# ---------- Path 3: Markdown generation ----------
+# ------------------------------------- litmus 2: a world the generators never saw
 
-def test_e2e_markdown_deterministic(peg_theory_ast):
-    """Markdown is deterministic and contains no DSL keywords."""
-    md1 = generate_markdown(peg_theory_ast)
-    md2 = generate_markdown(peg_theory_ast)
-    assert md1 == md2, "Non-deterministic markdown output"
-    assert len(md1) > 100
+@pytest.mark.skipif(not A0_DSL.exists(), reason="cold-start-a0 manual absent")
+class TestForeignManual:
+    """`cold-start-a0/theory/theory.dsl` is another track's manual, read here as
+    data. It was written against v0.1 plus a local `semantics:` dialect; v0.2
+    adopted that dialect, so it parses unchanged."""
 
-    # No DSL keywords
-    for kw in ["word_table:", "events:", "rules:", "goal:", "laws:",
-               "object ", "event ", "rule ", "invariant ", "theorem "]:
-        assert kw not in md1, f"DSL keyword '{kw}' leaked"
+    def setup_method(self):
+        self.ast = parse_theory(A0_DSL.read_text(encoding="utf-8"))
+        self.problem = load_problem(str(A0_PROBLEM))
 
+    def test_python_is_runnable(self):
+        ns = {}
+        exec(compile(generate_python(self.ast, self.problem), "<a0>", "exec"), ns)
+        assert [r[0] for r in ns["RULES"]] == [
+            "push_up", "push_down", "push_left", "push_right",
+            "teleport_down", "press_left", "door_opens_left"]
+        state = ns["initial_state"]()
+        moved = ns["step"](state, ("push", "Cart", "up"))
+        assert moved.Cart_pos != state.Cart_pos          # a rule actually fired
+        assert moved.Door_present is state.Door_present  # frame persist
 
-# ---------- Path 4: PDDL generation ----------
+    def test_lean_is_type_correct(self):
+        lean = generate_lean(self.ast, self.problem)
+        assert "sorry" not in lean
+        assert "native_decide" not in lean
+        assert "def step : St → Act → St" in lean
+        # This world is solvable, and the generator says so rather than
+        # manufacturing an unsolvability theorem for it.
+        assert "goal_is_reachable" in lean
 
-def test_e2e_pddl_syntax(peg_theory_ast):
-    """Generated PDDL is syntactically valid (balanced parens, required sections)."""
-    domain, problem = generate_pddl(peg_theory_ast, problem_name="peg-rehearsal",
-                                     grid_width=5, grid_height=1)
+    @pytest.mark.skipif(LEAN is None, reason="lean is not on PATH")
+    def test_lean_compiles(self, tmp_path):
+        target = tmp_path / "A0.lean"
+        target.write_text(generate_lean(self.ast, self.problem),
+                          encoding="utf-8", newline="\n")
+        shutil.copy(REPO / "theory-compiler" / "lean" / "lean-toolchain", tmp_path)
+        result = subprocess.run([LEAN, str(target)], cwd=str(tmp_path),
+                                stdout=subprocess.PIPE,
+                                stderr=subprocess.STDOUT, timeout=600)
+        output = result.stdout.decode("utf-8", errors="replace")
+        assert result.returncode == 0, output
+        assert "sorryAx" not in output
 
-    # Balanced parentheses
-    for name, text in [("domain", domain), ("problem", problem)]:
-        depth = 0
-        for ch in text:
-            if ch == '(':
-                depth += 1
-            elif ch == ')':
-                depth -= 1
-                assert depth >= 0, f"Unbalanced ')' in {name}"
-        assert depth == 0, f"Unclosed '(' in {name}"
-
-    # Required sections
-    assert "(define (domain" in domain
-    assert ":action" in domain
-    assert "(define (problem" in problem
-    assert ":init" in problem
-    assert ":goal" in problem
-    assert ":parameters" in domain  # actions are parameterized
-
-
-# ---------- Path 5: Playbook parsing ----------
-
-def test_e2e_playbook_positive(peg_playbook_text):
-    """Playbook parses successfully."""
-    ast = parse_playbook(peg_playbook_text)
-    assert ast is not None
-    # Should have at least one statement
-    assert len(ast.statements) >= 1
-
-
-def test_e2e_playbook_negative():
-    """Playbook with literal action sequence is rejected."""
-    bad_playbook = 'solution: JUMP_RIGHT, JUMP_LEFT, JUMP_RIGHT\n'
-    with pytest.raises(Exception) as exc_info:
-        parse_playbook(bad_playbook)
-    # Error should mention action sequence / anti-cheat
-    err_msg = str(exc_info.value).lower()
-    assert "action" in err_msg or "sequence" in err_msg or "solution" in err_msg or "cheat" in err_msg
+    def test_markdown_and_pddl(self):
+        md = generate_markdown(self.ast)
+        assert "Cart" in md and generate_markdown(self.ast) == md
+        domain, instance = generate_pddl(self.ast, problem_name="a0",
+                                         grid_width=9, grid_height=9)
+        assert domain.count("(") == domain.count(")")
+        assert instance.count("(") == instance.count(")")
 
 
-# ---------- Summary ----------
+# ------------------------------------------------------------- the acceptance
 
-def test_e2e_all_paths_summary(peg_theory_ast, peg_playbook_text, capsys):
-    """Summarize: all four generation paths + playbook produce valid output."""
-    # This test just confirms all paths run without error
-    code = generate_python(peg_theory_ast, grid_width=5, grid_height=1)
-    assert "def apply_event" in code or "class State" in code
+@pytest.mark.skipif(LEAN is None, reason="lean is not on PATH")
+def test_a1_acceptance_lp_weights_to_a_closed_lemma(peg, tmp_path):
+    """LP weights -> Lean closed lemma, no `sorry`, empty axiom set.
 
-    initial_config = [True, True, False, True, True]
-    pagoda_weights = [1, 2, 3, 2, 1]
-    lean = generate_lean(peg_theory_ast, board_size=5,
-                          initial_config=initial_config,
-                          pagoda_weights=pagoda_weights, goal_count=1)
-    assert "theorem unsolvable" in lean
+    Everything the proof rests on is traced: the weights are the certificate's
+    (re-derived here, not taken on the producer's word), the move geometry is
+    recovered from the generated predictor and cross-checked against them, and
+    the axiom set is whatever `lean` says it is.
+    """
+    ast, problem = peg
+    cert = load_certificate(str(CERT))
+    assert cert.weights == [-1, 1, 0, 1, -1]
+    assert cert.produced_by == "engine-rig/engines/lp_potential"
 
-    md = generate_markdown(peg_theory_ast)
-    assert "Peg" in md
+    source = generate_lean(ast, problem, cert, proof="computational")
+    assert "sorry" not in source
+    assert "native_decide" not in source
 
-    domain, problem = generate_pddl(peg_theory_ast, problem_name="peg-e2e",
-                                     grid_width=5, grid_height=1)
-    assert "(define" in domain
+    target = tmp_path / "Theory.lean"
+    target.write_text(source, encoding="utf-8", newline="\n")
+    shutil.copy(REPO / "theory-compiler" / "lean" / "lean-toolchain", tmp_path)
+    result = subprocess.run([LEAN, str(target)], cwd=str(tmp_path),
+                            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+                            timeout=600)
+    output = result.stdout.decode("utf-8", errors="replace")
+    assert result.returncode == 0, output
+    assert "sorryAx" not in output
+    for name in ("inv_init", "inv_closed", "inv_all", "unsolvable"):
+        assert f"'{name}' does not depend on any axioms" in output, output
 
-    pb_ast = parse_playbook(peg_playbook_text)
-    assert pb_ast is not None
 
-    print("\n=== A1 COMPILE CHAIN REHEARSAL: ALL PATHS PASS ===")
-    print(f"  Python generator: OK ({len(code)} chars)")
-    print(f"  Lean generator:   OK ({len(lean)} chars, 'sorry' absent)")
-    print(f"  Markdown:         OK ({len(md)} chars, deterministic)")
-    print(f"  PDDL:            OK (domain {len(domain)} + problem {len(problem)} chars)")
-    print(f"  Playbook parser:  OK (positive + negative)")
-    print("=== NOTE: weights are hand-computed constants, not LP-derived ===")
-    print("=== Formal A1 acceptance requires LP engine + Lean integration ===")
+# ------------------------------------------------------------------- playbook
+
+def test_playbook_positive_and_negative():
+    text = (FIXTURES / "peg_playbook.dsl").read_text(encoding="utf-8")
+    assert len(parse_playbook(text).statements) >= 1
+    with pytest.raises(Exception) as exc:
+        parse_playbook("solution: JUMP_RIGHT, JUMP_LEFT, JUMP_RIGHT\n")
+    message = str(exc.value).lower()
+    assert any(w in message for w in ("action", "sequence", "solution", "cheat"))

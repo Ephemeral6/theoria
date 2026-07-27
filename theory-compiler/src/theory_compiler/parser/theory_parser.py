@@ -8,19 +8,35 @@ from typing import Optional
 
 from .ast_nodes import (
     TheoryAST, WordTable, ObjectDecl, Field, ConceptAccount,
+    LandmarkDecl, WeightsDecl, DomainDecl, SemanticsSection,
     EventsSection, EventDecl, EventAlt,
     RulesSection, RuleDecl, RuleMeta, Guard, GuardClause,
     GuardAction, GuardPredicate, ActionMatch,
-    Expr, NameRef, NumberLit, FieldAccess, FuncCall, BinOp, TupleLit, Comparison,
+    Expr, NameRef, VarRef, NumberLit, FieldAccess, FuncCall, BinOp, TupleLit,
+    Comparison,
     GoalSection, GoalExpr,
     LawsSection, InvariantDecl, TheoremDecl,
 )
+
+FRAME_VALUES = ("persist", "reset")
+CASCADE_VALUES = ("single_frame", "multi_frame")
 
 
 class ParseError(Exception):
     def __init__(self, message: str, line: int = 0):
         self.line = line
         super().__init__(f"Line {line}: {message}" if line else message)
+
+
+class SemanticsError(ParseError):
+    """The `semantics:` section is missing, malformed, or claims something over
+    a value this grammar does not define.
+
+    Never defaulted. See CONTRACTS/dsl_grammar_v0.2.md and ledger entry E-03:
+    a manual whose frame axiom is a comment is not a manual, and one whose
+    frame axiom is a *parser default* is worse — it reads as if it said
+    something.
+    """
 
 
 class TheoryParser:
@@ -39,6 +55,8 @@ class TheoryParser:
                 continue
             if line.startswith("word_table:"):
                 ast.word_table = self._parse_word_table()
+            elif line.startswith("semantics:"):
+                ast.semantics = self._parse_semantics()
             elif line.startswith("events:"):
                 ast.events = self._parse_events()
             elif line.startswith("rules:"):
@@ -49,7 +67,67 @@ class TheoryParser:
                 ast.laws = self._parse_laws()
             else:
                 self.pos += 1  # skip unrecognized
+        if ast.semantics is None:
+            raise SemanticsError(
+                "theory.dsl has no `semantics:` section. The frame axiom, the "
+                "conflict policy and the cascade shape are facts about the "
+                "world, not constants of the framework, and this parser will "
+                "not assume them: a v0.1 manual read under an assumed default "
+                "compiles silently to a different world. Declare all three: "
+                "see CONTRACTS/dsl_grammar_v0.2.md."
+            )
         return ast
+
+    # ---- semantics (E-03) ----
+
+    def _parse_semantics(self) -> SemanticsSection:
+        self.pos += 1  # skip "semantics:"
+        frame = conflict = cascade = None
+        priority: list[str] = []
+        while self.pos < len(self.lines) and self._is_indented():
+            body = self._current_stripped().split("#", 1)[0].strip()
+            self.pos += 1
+            if not body:
+                continue
+            if body.startswith("frame "):
+                frame = body[len("frame "):].strip()
+                if frame not in FRAME_VALUES:
+                    raise SemanticsError(
+                        f"frame must be one of {list(FRAME_VALUES)}, got {frame!r}",
+                        self.pos)
+            elif body.startswith("conflict "):
+                rest = body[len("conflict "):].strip()
+                if rest == "exclusive":
+                    conflict = "exclusive"
+                elif rest.startswith("priority:"):
+                    conflict = "priority"
+                    priority = [p.strip() for p in
+                                rest[len("priority:"):].split(">") if p.strip()]
+                    if len(priority) < 2:
+                        raise SemanticsError(
+                            "conflict priority needs a total order over at "
+                            f"least two rules, got {priority!r}", self.pos)
+                else:
+                    raise SemanticsError(
+                        "conflict must be `exclusive` or `priority: r1 > r2 "
+                        f"...`, got {rest!r}", self.pos)
+            elif body.startswith("cascade "):
+                cascade = body[len("cascade "):].strip()
+                if cascade not in CASCADE_VALUES:
+                    raise SemanticsError(
+                        f"cascade must be one of {list(CASCADE_VALUES)}, "
+                        f"got {cascade!r}", self.pos)
+            else:
+                raise SemanticsError(
+                    f"unknown statement in `semantics:`: {body!r}", self.pos)
+
+        missing = [n for n, v in (("frame", frame), ("conflict", conflict),
+                                  ("cascade", cascade)) if v is None]
+        if missing:
+            raise SemanticsError(
+                "`semantics:` is missing " + ", ".join(missing), self.pos)
+        return SemanticsSection(frame=frame, conflict=conflict,
+                                cascade=cascade, priority=priority)
 
     # ---- helpers ----
 
@@ -100,6 +178,36 @@ class TheoryParser:
                 self.pos += 1
             elif line.startswith("object "):
                 wt.objects.append(self._parse_object_decl())
+            elif line.startswith("landmark "):
+                # E-04: `landmark portal_exit` — the domain names the cell, the
+                # problem instance says where it is.
+                name = line[len("landmark "):].split("#", 1)[0].strip()
+                if not re.fullmatch(r'\w+', name):
+                    raise ParseError(f"Invalid landmark name: {name}", self.pos + 1)
+                wt.landmarks.append(LandmarkDecl(name))
+                self.pos += 1
+            elif line.startswith("weights "):
+                # E-05: `weights w over Peg.pos`
+                m = re.match(r'weights\s+(\w+)\s+over\s+([\w.]+)\s*(?:#.*)?$', line)
+                if not m:
+                    raise ParseError(
+                        f"Invalid weights declaration (expected `weights <name> "
+                        f"over <field>`): {line}", self.pos + 1)
+                wt.weights.append(WeightsDecl(m.group(1), m.group(2)))
+                self.pos += 1
+            elif line.startswith("domain "):
+                # E-02: `domain dir { up, down, left, right }`
+                m = re.match(r'domain\s+(\w+)\s*\{([^}]*)\}', line)
+                if not m:
+                    raise ParseError(
+                        f"Invalid domain declaration (expected `domain <name> "
+                        f"{{ v1, v2, ... }}`): {line}", self.pos + 1)
+                values = [v.strip() for v in m.group(2).split(",") if v.strip()]
+                if not values:
+                    raise ParseError(
+                        f"domain {m.group(1)} has no values", self.pos + 1)
+                wt.domains.append(DomainDecl(m.group(1), values))
+                self.pos += 1
             else:
                 # might be concept account: Name [...]
                 m = re.match(r'(\w+)\s*\[', line)
@@ -193,14 +301,25 @@ class TheoryParser:
 
     def _parse_rule_decl(self) -> RuleDecl:
         line = self._current_stripped()
-        # rule name [ev: ... cov: .../...]
-        m = re.match(r'rule\s+(\w+)\s*(\[.*?\])?\s*$', line)
+        # rule name [forall ?v in domain]... [ev: ... cov: .../...]
+        m = re.match(
+            r'rule\s+(\w+)((?:\s+forall\s+\?\w+\s+in\s+\w+)*)\s*(\[.*?\])?\s*$',
+            line)
         if not m:
             raise ParseError(f"Invalid rule header: {line}", self.pos + 1)
         name = m.group(1)
+        # E-02. A rule with bindings is a schema over declared finite domains.
+        # A0 wrote the four pushes out by hand and the lifted 212/212 evidence
+        # split across four rules that each looked weaker than it was.
+        bindings: dict[str, str] = {}
+        for var, dom in re.findall(r'forall\s+\?(\w+)\s+in\s+(\w+)', m.group(2)):
+            if var in bindings:
+                raise ParseError(
+                    f"rule {name} binds ?{var} twice", self.pos + 1)
+            bindings[var] = dom
         meta = None
-        if m.group(2):
-            meta = self._parse_rule_meta(m.group(2))
+        if m.group(3):
+            meta = self._parse_rule_meta(m.group(3))
         self.pos += 1
 
         # next line: when ... then ...
@@ -220,7 +339,7 @@ class TheoryParser:
         guard = self._parse_guard(guard_text)
         event = self._parse_func_call(event_text)
         self.pos += 1
-        return RuleDecl(name, meta, guard, event)
+        return RuleDecl(name, meta, guard, event, bindings)
 
     def _parse_rule_meta(self, text: str) -> RuleMeta:
         # [ev: t1,t2,... cov: k/n]
@@ -239,10 +358,23 @@ class TheoryParser:
         parts = self._split_guard_and(text)
         for part in parts:
             part = part.strip()
+            # E-01: `not <predicate>`. The complement of a decidable spatial
+            # predicate is decidable, so this stays inside the v1 guard
+            # language; A0 had to invent a `blocked` predicate to say it.
+            negated = False
+            if part.startswith("not "):
+                negated = True
+                part = part[len("not "):].strip()
             if part.startswith("act="):
+                if negated:
+                    raise ParseError(
+                        "`not` may not negate an action match: a rule fires on "
+                        "one action, and `not act=...` would make it fire on "
+                        f"every other action instead. Got: not {part}",
+                        self.pos + 1)
                 clauses.append(self._parse_action_match(part))
             else:
-                clauses.append(GuardPredicate(self._parse_expr(part)))
+                clauses.append(GuardPredicate(self._parse_expr(part), negated))
         return Guard(clauses)
 
     def _split_guard_and(self, text: str) -> list[str]:
@@ -270,22 +402,47 @@ class TheoryParser:
             parts.append(''.join(current))
         return parts
 
+    def _split_call(self, text: str) -> Optional[tuple[str, str]]:
+        """Split ``name(args)`` into ``(name, args)``, scanning for the *matching*
+        close paren rather than the first one.
+
+        Returns ``None`` when ``text`` is not a single well-formed call, so
+        callers with a fallback path (``_parse_expr``) keep it. Unbalanced
+        parentheses raise: a nested call whose arguments run off the end of the
+        text used to parse as a truncated name, producing a wrong AST with no
+        error (D-A0-013).
+        """
+        m = re.match(r'\s*(\w+)\s*\(', text)
+        if not m:
+            return None
+        depth = 0
+        for i in range(m.end() - 1, len(text)):
+            if text[i] == '(':
+                depth += 1
+            elif text[i] == ')':
+                depth -= 1
+                if depth == 0:
+                    if text[i + 1:].strip():
+                        return None  # trailing content — not a bare call
+                    return m.group(1), text[m.end():i]
+        raise ParseError(f"Unbalanced parentheses in: {text}", self.pos + 1)
+
     def _parse_action_match(self, text: str) -> GuardAction:
         # act=name(args)
-        m = re.match(r'act=(\w+)\(([^)]*)\)', text)
-        if not m:
-            raise ParseError(f"Invalid action match: {text}")
-        name = m.group(1)
-        args = self._parse_arg_list(m.group(2))
-        return GuardAction(ActionMatch(name, args))
+        if not text.startswith("act="):
+            raise ParseError(f"Invalid action match: {text}", self.pos + 1)
+        call = self._split_call(text[len("act="):])
+        if call is None:
+            raise ParseError(f"Invalid action match: {text}", self.pos + 1)
+        name, arg_text = call
+        return GuardAction(ActionMatch(name, self._parse_arg_list(arg_text)))
 
     def _parse_func_call(self, text: str) -> FuncCall:
-        m = re.match(r'(\w+)\(([^)]*)\)', text)
-        if not m:
-            raise ParseError(f"Invalid function call: {text}")
-        name = m.group(1)
-        args = self._parse_arg_list(m.group(2))
-        return FuncCall(name, args)
+        call = self._split_call(text)
+        if call is None:
+            raise ParseError(f"Invalid function call: {text}", self.pos + 1)
+        name, arg_text = call
+        return FuncCall(name, self._parse_arg_list(arg_text))
 
     def _parse_arg_list(self, text: str) -> list[Expr]:
         if not text.strip():
@@ -305,6 +462,9 @@ class TheoryParser:
                 current = []
             else:
                 current.append(ch)
+        if depth != 0:
+            raise ParseError(f"Unbalanced parentheses in argument list: {text}",
+                             self.pos + 1)
         if current:
             args.append(self._parse_expr(''.join(current).strip()))
         return args
@@ -354,26 +514,36 @@ class TheoryParser:
             return self._parse_expr(inner)
 
         # Function call: name(...)
-        m = re.match(r'(\w+)\((.+)\)$', text, re.DOTALL)
-        if m:
-            name = m.group(1)
-            args = self._parse_arg_list(m.group(2))
-            return FuncCall(name, args)
+        call = self._split_call(text)
+        if call is not None:
+            name, arg_text = call
+            return FuncCall(name, self._parse_arg_list(arg_text))
 
-        # Field access: obj.field
-        if '.' in text and re.match(r'^\w+\.\w+$', text):
+        # Field access: obj.field, where obj may be a rule variable (`?a.pos`).
+        # The variable keeps its `?` here and is substituted during grounding.
+        if '.' in text and re.match(r'^\??\w+\.\w+$', text):
             parts = text.split('.', 1)
             return FieldAccess(parts[0], parts[1])
 
+        # Rule variable (E-02): `?d`
+        if re.fullmatch(r'\?\w+', text):
+            return VarRef(text[1:])
+
         # Number
-        if re.match(r'^\d+$', text):
+        if re.match(r'^-?\d+$', text):
             return NumberLit(int(text))
 
         # Name reference
         if re.match(r'^[\w]+$', text):
             return NameRef(text)
 
-        # Fallback: treat as name
+        # Fallback: treat as name. Anything still carrying a parenthesis is not
+        # a name — it is a call or tuple the branches above declined, which only
+        # happens when the parentheses do not balance. Raising here is the point
+        # of D-A0-013: the old code returned NameRef("(1, 1") and said nothing.
+        if '(' in text or ')' in text:
+            raise ParseError(f"Unbalanced parentheses in expression: {text}",
+                             self.pos + 1)
         return NameRef(text)
 
     def _find_comparison_op(self, text: str):
@@ -449,11 +619,18 @@ class TheoryParser:
         # Extract meta bracket first
         meta_m = re.search(r'\[([^\]]*)\]\s*$', line)
         status = None
+        source = None
         if meta_m:
             meta_str = meta_m.group(1)
             sm = re.search(r'status:\s*(\w+)', meta_str)
             if sm:
                 status = sm.group(1)
+            # E-05. Provenance. `source: lp_potential` is the difference between
+            # an invariant whose numbers an engine derived and one whose numbers
+            # the author picked; A1 turns on exactly that difference.
+            src_m = re.search(r'source:\s*([\w/.-]+)', meta_str)
+            if src_m:
+                source = src_m.group(1)
             line = line[:meta_m.start()].strip()
 
         # invariant name rest
@@ -469,7 +646,7 @@ class TheoryParser:
             if idx > 0:
                 expr_text = rest[:idx].strip()
                 value = rest[idx + len(op):].strip()
-                return InvariantDecl(name, expr_text, op, value, status)
+                return InvariantDecl(name, expr_text, op, value, status, source)
 
         raise ParseError(f"No comparison op in invariant: {rest}", self.pos + 1)
 

@@ -6,7 +6,9 @@ Verifies parsing + round-trip (parse → print → re-parse → structural equal
 import os
 from pathlib import Path
 
-from theory_compiler.parser.theory_parser import parse_theory
+import pytest
+
+from theory_compiler.parser.theory_parser import parse_theory, ParseError
 from theory_compiler.parser.pretty_printer import print_theory
 from theory_compiler.parser.ast_nodes import (
     TheoryAST, WordTable, ObjectDecl, Field,
@@ -55,27 +57,34 @@ class TestCartTheory:
     def test_rules_parsed(self):
         rs = self.ast.rules
         assert rs is not None
-        assert len(rs.rules) == 5  # push_up, down, left, right, teleport
+        # E-02: the four pushes are now one schema over `dir`, plus teleport.
+        assert len(rs.rules) == 2
+        assert rs.rules[0].name == "push"
+        assert rs.rules[0].bindings == {"d": "dir"}
 
-        # Check first rule
         r0 = rs.rules[0]
-        assert r0.name == "push_up"
-        assert r0.meta is not None
-        assert r0.meta.evidence == "t1,t2,t3"
-        assert r0.meta.coverage == "3/3"
-
-        # Guard should have: act=push(Cart, up) and free(above(Cart))
+        # The lifted rule carries the evidence the engine actually mined,
+        # instead of four rules each claiming a slice of it (E-02).
+        assert r0.meta.coverage == "10/10"
         assert len(r0.guard.clauses) == 2
         assert isinstance(r0.guard.clauses[0], GuardAction)
         assert r0.guard.clauses[0].action.action_name == "push"
-
-        # Event: moved(Cart, up)
         assert r0.event.name == "moved"
 
-        # Teleport rule
-        r4 = rs.rules[4]
-        assert r4.name == "teleport"
-        assert r4.meta.coverage == "1/1"
+        assert rs.rules[1].name == "teleport"
+        assert rs.rules[1].meta.coverage == "1/1"
+
+    def test_expansion_reproduces_the_hand_written_rules(self):
+        """E-02. The schema must be a drop-in replacement: same names, same
+        guards, same events as the four rules it replaces."""
+        from theory_compiler.parser.expand import expand_theory
+        ground = expand_theory(self.ast).rules.rules
+        assert [r.name for r in ground] == [
+            "push_up", "push_down", "push_left", "push_right", "teleport"]
+        up = ground[0]
+        assert up.bindings == {}
+        assert up.guard.clauses[0].action.args[1].name == "up"
+        assert up.event.args[1].name == "up"
 
     def test_goal_parsed(self):
         gs = self.ast.goal
@@ -156,9 +165,12 @@ class TestPegTheory:
         ls = self.ast.laws
         assert ls is not None
         assert len(ls.invariants) == 1
-        assert ls.invariants[0].name == "pagoda_weight"
-        assert ls.invariants[0].op == ">="
-        assert ls.invariants[0].value == "4"
+        assert ls.invariants[0].name == "pagoda_potential"
+        assert ls.invariants[0].expr_text == "pagoda(w)"
+        assert ls.invariants[0].op == "<="
+        assert ls.invariants[0].value == "0"
+        # E-05: provenance is what separates A1 from the M8 rehearsal.
+        assert ls.invariants[0].source == "lp_potential"
         assert len(ls.theorems) == 1
         assert ls.theorems[0].name == "unsolvable"
         assert ls.theorems[0].depends == ["jump_right", "jump_left"]
@@ -174,3 +186,70 @@ class TestPegTheory:
             assert r1.name == r2.name
         assert ast2.laws.invariants[0].name == self.ast.laws.invariants[0].name
         assert ast2.laws.theorems[0].name == self.ast.laws.theorems[0].name
+
+
+class TestNestedParensInEventArgs:
+    """D-A0-013 — the argument list used to be matched with `([^)]*)`, which
+    stops at the *first* close paren. A nested call or a tuple argument in a
+    rule's `then` clause parsed its second argument as a truncated name and
+    raised nothing, so the AST was silently wrong. These pin both halves: the
+    well-formed nesting now parses, and the malformed nesting now raises.
+    """
+
+    SEMANTICS = ("semantics:\n  frame persist\n  conflict exclusive\n"
+                 "  cascade single_frame\n\n")
+
+    def _rule(self, when_then: str):
+        return parse_theory(
+            self.SEMANTICS
+            + "rules:\n  rule r [ev: t1 cov: 1/1]\n    when %s\n" % when_then
+        )
+
+    def test_tuple_argument_survives(self):
+        ast = self._rule("act=push(Cart, down) then jumped(Cart, (1, 1))")
+        event = ast.rules.rules[0].event
+        assert event.name == "jumped"
+        assert len(event.args) == 2
+        assert isinstance(event.args[0], NameRef)
+        assert event.args[0].name == "Cart"
+        assert isinstance(event.args[1], TupleLit)
+        assert [e.value for e in event.args[1].elements] == [1, 1]
+
+    def test_nested_call_argument_survives(self):
+        ast = self._rule("act=push(Cart, left) then recolored(colorof(Button), 8)")
+        event = ast.rules.rules[0].event
+        assert len(event.args) == 2
+        assert isinstance(event.args[0], FuncCall)
+        assert event.args[0].name == "colorof"
+        assert event.args[0].args[0].name == "Button"
+        assert isinstance(event.args[1], NumberLit)
+
+    def test_nested_call_in_guard_still_parses(self):
+        """The greedy guard path already worked; keep it working."""
+        ast = self._rule("act=push(Cart, left) and colored(leftof(Cart), 7) "
+                         "then moved(Cart, left)")
+        pred = ast.rules.rules[0].guard.clauses[1]
+        assert isinstance(pred.expr, FuncCall)
+        assert pred.expr.name == "colored"
+        assert pred.expr.args[0].name == "leftof"
+
+    def test_unbalanced_event_raises(self):
+        with pytest.raises(ParseError) as exc:
+            self._rule("act=push(Cart, down) then jumped(Cart, (1, 1)")
+        assert "unbalanced" in str(exc.value).lower()
+
+    def test_unbalanced_nested_call_raises(self):
+        with pytest.raises(ParseError) as exc:
+            self._rule("act=push(Cart, down) then moved(leftof(Cart, down)")
+        assert "unbalanced" in str(exc.value).lower()
+
+    def test_unbalanced_action_match_raises(self):
+        with pytest.raises(ParseError) as exc:
+            self._rule("act=push(Cart, down then moved(Cart, down)")
+        assert "unbalanced" in str(exc.value).lower()
+
+    def test_unbalanced_guard_predicate_raises(self):
+        with pytest.raises(ParseError) as exc:
+            self._rule("act=push(Cart, up) and free(above(Cart) "
+                       "then moved(Cart, up)")
+        assert "unbalanced" in str(exc.value).lower()

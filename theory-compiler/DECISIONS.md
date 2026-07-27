@@ -35,3 +35,82 @@
 **决策**: 使用标准 `pyproject.toml` + `src/` layout，pytest 做测试。
 
 **理由**: 现代 Python 标准布局，保守选择。
+
+---
+
+# 汇合 sprint (P-5) — 真 A1
+
+## D-TC-006: 生成器消费 IR，而非 AST 直接进后端
+
+**决策**: 在 parser 与后端之间加一层 `ir.WorldIR` = `TheoryAST` + `ProblemSpec`，
+两趟 grounding（值域在 `expand.py`，对象实例在 `ir.py`）都在这里跑完。
+
+**理由**: D-A0-011 报告的缺陷不是"生成器写得不好"，而是生成器**根本没读 AST**。
+`gen_lean.generate_lean` 忽略它的 `ast` 参数，直接 BFS 一维孔明棋。修法不是把
+world 知识搬进生成器，而是把 world 知识搬出所有生成器：后端只认一套词汇表，
+词汇表外的子句抛 `UnsupportedClause`，绝不猜。这是 `fd_adapter` 的规矩——
+静默近似一个看不懂的子句，会产出一个与说明书不一致的预测器，下游每一层
+都会去认证一个错误的世界。
+
+**代价**: 多一层。换来的是同一份 `gen_python` 同时编译网格世界（A0，三种对象、
+传送门、门闩）和线性世界（孔明棋，一种类型四个实例），两者都没有为对方写过一行。
+
+## D-TC-007: Lean 证明有两种形态，由**说明书**挑，不由调用方挑
+
+**决策**: `generate_lean` 依据说明书是否声明 `pagoda(...)` 不变量，产出
+`pagoda` 或 `enumerative` 两种发展；`pagoda` 再分 `computational` / `algebraic`
+两种证法。
+
+**理由**: 证明策略是说明书的主张的函数，不是调用方的偏好。声明了势函数的世界
+应当拿到代数归纳；没声明的世界（A0 有门闩和传送门，没有线性势）应当拿到枚举
+证明。让调用方选，等于允许调用方为一个没有势函数的世界要一个势函数证明。
+
+## D-TC-008: 空公理集与线性证明规模不可兼得，原因在 Lean 而不在 pagoda
+
+**实测**（Lean 4.9.0，见 `tests/test_gen_lean.py`）:
+
+| 发展 | `#print axioms` | 证明规模 |
+|---|---|---|
+| pagoda, `computational` | **空** | `O(2^n)` |
+| pagoda, `algebraic` | `propext, Quot.sound` | `O(n)` |
+| enumerative | **空** | `O(可达集)` |
+
+代数证明拿不到空公理集，根源不是 pagoda 论证：Lean 4.9 core 里**每一条** `Int`
+引理——`Int.add_comm`、`Int.le_trans`、`Int.add_nonpos`——自身都是用 `propext`
+证的。任何"讲道理"而非"算出来"的证明都继承它。
+
+**决策**: `computational` 为默认，因为 A1 验收标准写的是依赖假设为空；
+`algebraic` 在棋盘大到枚举不动时使用。两者都不发 `native_decide`——它靠跑编译
+代码交差，会把 `Lean.ofReduceBool` 记进公理集，而验收看的就是 `#print axioms`。
+
+## D-TC-009: 证书不予采信，重新验算
+
+**决策**: `certificate.load_certificate` 忽略文档自带的 `verified: true`，
+从 `weights_integer` 出发重新推导全部三条义务，并且**自己重新枚举move几何**，
+再与文档列出的 witness 比对；文档漏列任何一个 move 即报错。
+
+**理由**: 上游 `verify()` 会重算算术，但不检查 witness 表是否完整——删掉几条
+witness 的文档照样通过。而漏掉的那一条恰恰可能是势函数上升的那一步。信任那个
+标志，等于让一个不成立的权重向量变成 Lean 定理。引擎提议，说明书裁决——裁决
+就发生在这里。
+
+## D-TC-010: 说明书的目标宽于证书时，拒绝生成
+
+**决策**: `CertificateGapError`。不静默收窄，不生成一个读起来比实际证明的更强的
+`unsolvable`。
+
+**理由**: `lp_potential` 可靠但不完备。5 格棋盘从 `11011` 出发的五个单子目标里，
+只有 `01000` 和 `00010` 有线性 pagoda 证书；`10000`/`00100`/`00001` 被 engine-rig
+自己的测试钉死为**此方法不可证**。所以说明书的 `count(Peg, alive) = 1` 是一个
+本 sprint **未能证明**的命题，这一条写进台账（E-06）而不是绕过去。一个会替引擎
+夸大结论的编译器，比一个不会证明的编译器坏得多。
+
+## D-TC-011: E-04 警告，E-03 报错
+
+**决策**: 缺 `semantics:` 是错误；problem 提供了而 manual 未声明的 landmark 是警告。
+
+**理由**: 两者的失败模式不同。缺 `semantics:` 会**静默编译出另一个世界**——这正是
+该段落存在的理由。未声明的 landmark 编译出的是同一个世界，代价只是可读性，也就是
+E-04 记的那笔账。把后者也做成错误，会拒绝掉每一份在 `landmark` 存在之前写成的
+v0.1 说明书，包括 `cold-start-a0/theory/theory.dsl`——那是一份正确的说明书，
+现在仍然是。

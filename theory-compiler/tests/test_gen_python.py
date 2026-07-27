@@ -1,144 +1,155 @@
-"""
-Test for theory.py generator — Cart world.
-Full-frame responsibility: 10-step trajectory with hand-computed expected positions.
+"""theory.py generator — the world's one predictor.
 
-Cart world: 3 wide × 2 tall grid (cols 0-2, rows 0-1).
-Cart starts at (1, 0), color=6. Board background=0.
+Two worlds, one generator. That is the point: the predecessor hard-coded the
+`moved` and `teleported` events and assumed one instance per declared type, so
+the peg world's two rules compiled to `pass` and the "generated simulation"
+simulated nothing (DECISIONS.md D-A0-011). These tests run both a grid world
+with a portal and a line world with four pegs on it, through the same code path.
 """
 
-import sys
 import types
 from pathlib import Path
 
+import pytest
+
+from theory_compiler.generators.gen_python import UnsupportedClause, generate_python
 from theory_compiler.parser.theory_parser import parse_theory
-from theory_compiler.generators.gen_python import generate_python
+from theory_compiler.problem import ProblemError, load_problem
 
 FIXTURES = Path(__file__).parent / "fixtures"
 
 
-def _load_generated_module(source: str) -> types.ModuleType:
-    """Compile generated Python source into a module."""
-    mod = types.ModuleType("gen_cart")
-    exec(compile(source, "<gen_cart>", "exec"), mod.__dict__)
+def build(dsl: str, problem: str) -> types.ModuleType:
+    ast = parse_theory((FIXTURES / dsl).read_text(encoding="utf-8"))
+    source = generate_python(ast, load_problem(str(FIXTURES / problem)))
+    mod = types.ModuleType("generated")
+    mod.__dict__["__source__"] = source
+    exec(compile(source, "<generated>", "exec"), mod.__dict__)
     return mod
 
 
-class TestCartSimulation:
-    """10-step Cart trajectory with full-frame verification."""
+# ------------------------------------------------------------------ grid world
 
+class TestCartWorld:
     def setup_method(self):
-        text = (FIXTURES / "cart_theory.dsl").read_text(encoding="utf-8")
-        ast = parse_theory(text)
-        source = generate_python(ast, grid_width=3, grid_height=2)
-        self.mod = _load_generated_module(source)
-        self.source = source
+        self.mod = build("cart_theory.dsl", "cart_problem.json")
 
-    def _make_initial(self):
-        """Cart at (1, 0), color 6."""
-        state = self.mod.State()
-        state.cart.pos = (1, 0)
-        state.cart.color = 6
-        return state
+    def test_declared_semantics_reach_the_generated_module(self):
+        """E-03. The frame axiom is a fact about the world, so it travels with
+        the world rather than being re-assumed by each backend."""
+        assert self.mod.SEMANTICS == {"frame": "persist",
+                                      "conflict": "exclusive",
+                                      "cascade": "single_frame"}
 
-    def test_generated_code_compiles(self):
-        """Generated code should compile and define expected symbols."""
-        assert hasattr(self.mod, "State")
-        assert hasattr(self.mod, "Cart")
-        assert hasattr(self.mod, "step")
-        assert hasattr(self.mod, "simulate")
+    def test_lifted_rule_expands_to_the_hand_written_names(self):
+        """E-02. `rule push forall ?d in dir` replaces four hand-written rules
+        and regenerates them under exactly the names they had."""
+        names = [r[0] for r in self.mod.RULES]
+        assert names == ["push_up", "push_down", "push_left", "push_right",
+                         "teleport"]
 
-    def test_initial_render(self):
-        """Initial state renders correctly."""
-        state = self._make_initial()
-        grid = state.render()
-        # 2 rows × 3 cols; Cart at (1,0) → row 0, col 1
-        assert grid == [
-            [0, 6, 0],
-            [0, 0, 0],
-        ]
+    def test_trajectory(self):
+        state = self.mod.initial_state()
+        assert state.Cart_pos == (1, 1)
+        for action, expected in [
+            (("push", "Cart", "up"), (0, 1)),
+            (("push", "Cart", "left"), (0, 0)),
+            (("push", "Cart", "left"), (0, 0)),   # blocked by the wall
+            (("push", "Cart", "down"), (1, 0)),
+            (("push", "Cart", "right"), (1, 1)),
+        ]:
+            state = self.mod.step(state, action)
+            assert state.Cart_pos == expected, action
+
+    def test_frame_persists_when_no_rule_fires(self):
+        state = self.mod.initial_state()
+        before = state.key()
+        after = self.mod.step(state, ("push", "Cart", "nowhere"))
+        assert after.key() == before
 
     def test_full_frame_every_cell_accounted(self):
-        """Every cell must be either 0 (board) or 6 (Cart). No undefined."""
-        state = self._make_initial()
-        grid = state.render()
-        for row in grid:
-            for cell in row:
-                assert cell in (0, 6), f"Unexpected cell value: {cell}"
+        grid = self.mod.render(self.mod.initial_state())
+        assert len(grid) == 2 and all(len(row) == 3 for row in grid)
+        assert grid[1][1] == 6
+        assert sum(v == 6 for row in grid for v in row) == 1
 
-    def test_10_step_trajectory(self):
-        """Hand-computed 10-step trajectory.
+    def test_teleport_fires_at_the_wall(self):
+        """The rule guarded by `above(Cart) = wall`; `origin` is a landmark."""
+        state = self.mod.initial_state()
+        state.Cart_pos = (0, 2)
+        assert "teleport" in self.mod.fired(state, ("push", "Cart", "up"))
+        assert self.mod.step(state, ("push", "Cart", "up")).Cart_pos == (0, 0)
 
-        Grid: 3×2 (cols 0-2, rows 0-1). Cart starts at (1,0).
-        Actions and expected positions:
-          0. initial: (1, 0)
-          1. push(Cart, right)  → (2, 0)
-          2. push(Cart, down)   → (2, 1)
-          3. push(Cart, left)   → (1, 1)
-          4. push(Cart, left)   → (0, 1)
-          5. push(Cart, up)     → (0, 0)
-          6. push(Cart, right)  → (1, 0)
-          7. push(Cart, right)  → (2, 0)
-          8. push(Cart, right)  → (2, 0)  # blocked! right is out of bounds
-          9. push(Cart, down)   → (2, 1)
-         10. push(Cart, up)     → (2, 0)
-        """
-        actions = [
-            "push(Cart, right)",
-            "push(Cart, down)",
-            "push(Cart, left)",
-            "push(Cart, left)",
-            "push(Cart, up)",
-            "push(Cart, right)",
-            "push(Cart, right)",
-            "push(Cart, right)",   # blocked
-            "push(Cart, down)",
-            "push(Cart, up)",
-        ]
 
-        expected_positions = [
-            (1, 0),  # initial
-            (2, 0),  # right
-            (2, 1),  # down
-            (1, 1),  # left
-            (0, 1),  # left
-            (0, 0),  # up
-            (1, 0),  # right
-            (2, 0),  # right
-            (2, 0),  # blocked (right edge)
-            (2, 1),  # down
-            (2, 0),  # up
-        ]
+# ------------------------------------------------------------------ line world
 
-        initial = self._make_initial()
-        states = self.mod.simulate(initial, actions)
+class TestPegWorld:
+    def setup_method(self):
+        self.mod = build("peg_theory.dsl", "peg5_problem.json")
 
-        assert len(states) == 11  # initial + 10 steps
+    def test_many_instances_of_one_declared_type(self):
+        """The restriction that made the peg world uncompilable."""
+        state = self.mod.initial_state()
+        positions = sorted(getattr(state, f"Peg_{i}_pos") for i in (0, 1, 3, 4))
+        assert positions == [0, 1, 3, 4]
 
-        for i, (state, expected_pos) in enumerate(zip(states, expected_positions)):
-            actual_pos = state.cart.pos
-            assert actual_pos == expected_pos, (
-                f"Step {i}: expected pos {expected_pos}, got {actual_pos}"
-            )
-            # Full-frame check: render and verify
-            grid = state.render()
-            ex, ey = expected_pos
-            for r in range(2):
-                for c in range(3):
-                    if (c, r) == expected_pos:
-                        assert grid[r][c] == 6, f"Step {i}: Cart not at ({c},{r})"
-                    else:
-                        assert grid[r][c] == 0, f"Step {i}: non-zero at ({c},{r})={grid[r][c]}"
+    def test_rules_ground_over_instance_pairs(self):
+        """E-02 over object types: two variables, four pegs, no self-jumps."""
+        names = [r[0] for r in self.mod.RULES]
+        assert len(names) == 24
+        assert not any(name.endswith(f"Peg_{i}_Peg_{i}")
+                       for name in names for i in (0, 1, 3, 4))
 
-    def test_teleport_rule(self):
-        """Cart at (1, 0) pushes up → hits wall → teleports to origin (0,0).
+    def test_the_jump_actually_happens(self):
+        """v0.1 emitted `pass  # Implemented in specific game code` here."""
+        state = self.mod.initial_state()
+        assert self.mod.occupancy(state) == "11011"
+        moved = {self.mod.occupancy(self.mod.step(state, a))
+                 for a in self.mod.ACTIONS}
+        moved.discard("11011")
+        assert moved == {"00111", "11100"}
 
-        In our 3x2 grid, row 0 is the top row.
-        push(Cart, up) when Cart is at row 0 → above is out of bounds (wall).
-        """
-        state = self._make_initial()  # (1, 0)
-        # Push up from top row — above is out of bounds → teleport
-        new_state = self.mod.step(state, "push(Cart, up)")
-        # The teleport rule fires when above(Cart) = wall
-        # In our implementation, free(above(Cart)) is False when at top row
-        # So push_up won't fire; teleport should fire
-        assert new_state.cart.pos == (0, 0), f"Expected teleport to (0,0), got {new_state.cart.pos}"
+    def test_goal_is_a_count_over_instances(self):
+        state = self.mod.initial_state()
+        assert not self.mod.is_goal(state)
+        for i in (1, 3, 4):
+            setattr(state, f"Peg_{i}_alive", False)
+        assert self.mod.is_goal(state)
+
+    def test_reachable_set_matches_the_engine(self):
+        """Independent of any certificate: BFS through the generated predictor
+        reproduces the four states engine-rig's own README records."""
+        seen, queue = {self.mod.occupancy(self.mod.initial_state())}, \
+            [self.mod.initial_state()]
+        while queue:
+            state = queue.pop()
+            for action in self.mod.ACTIONS:
+                nxt = self.mod.step(state, action)
+                if self.mod.occupancy(nxt) not in seen:
+                    seen.add(self.mod.occupancy(nxt))
+                    queue.append(nxt)
+        assert seen == {"11011", "00111", "11100", "01001", "10010"}
+        assert all(occ.count("1") >= 2 for occ in seen)
+
+
+# ---------------------------------------------------------------- refusals
+
+def test_unknown_event_is_refused_not_approximated():
+    src = (FIXTURES / "peg_theory.dsl").read_text(encoding="utf-8")
+    src = src.replace("then jumped(?a, ?b, right)", "then dissolved(?a, ?b, right)")
+    with pytest.raises(UnsupportedClause) as exc:
+        generate_python(parse_theory(src),
+                        load_problem(str(FIXTURES / "peg5_problem.json")))
+    assert "dissolved/3" in str(exc.value)
+
+
+def test_declared_weights_must_be_supplied_by_the_level():
+    """E-05. The manual names the potential; the level supplies the numbers."""
+    import json
+    doc = json.loads((FIXTURES / "peg5_problem.json").read_text(encoding="utf-8"))
+    del doc["weights"]
+    from theory_compiler.problem import from_json
+    ast = parse_theory((FIXTURES / "peg_theory.dsl").read_text(encoding="utf-8"))
+    with pytest.raises(ProblemError) as exc:
+        generate_python(ast, from_json(doc))
+    assert "supplies no vector" in str(exc.value)

@@ -6,22 +6,26 @@
 word_table:
   board
   object Cart { pos: Coord, color: Int }
+  # E-04. `origin` is where the teleport lands. It used to be a free name the
+  # backend guessed at; the domain names it, the problem instance locates it.
+  landmark origin
+  domain dir { up, down, left, right }
+
+semantics:
+  frame persist                 # an object no firing rule mentions is unchanged
+  conflict exclusive            # push_up and teleport are disjoint: a wall is not free
+  cascade single_frame          # one action -> one frame; guards read the pre-state
 
 events:
   event moved(o, dir) | teleported(o, dest)
 
 rules:
-  rule push_up [ev: t1,t2,t3 cov: 3/3]
-    when act=push(Cart, up) and free(above(Cart)) then moved(Cart, up)
-
-  rule push_down [ev: t1,t2,t3 cov: 3/3]
-    when act=push(Cart, down) and free(below(Cart)) then moved(Cart, down)
-
-  rule push_left [ev: t4,t5 cov: 2/2]
-    when act=push(Cart, left) and free(left(Cart)) then moved(Cart, left)
-
-  rule push_right [ev: t4,t5 cov: 2/2]
-    when act=push(Cart, right) and free(right(Cart)) then moved(Cart, right)
+  # E-02. One clause, four directions. Written out by hand this was four rules
+  # that each looked like a 3/3 or 2/2 claim; lifted, it is the one 10/10 claim
+  # the evidence actually supports. Expansion regenerates `push_up`,
+  # `push_down`, `push_left`, `push_right` under exactly those names.
+  rule push forall ?d in dir [ev: t1,t2,t3,t4,t5 cov: 10/10]
+    when act=push(Cart, ?d) and free(toward(Cart, ?d)) then moved(Cart, ?d)
 
   rule teleport [ev: t6 cov: 1/1]
     when act=push(Cart, up) and above(Cart) = wall then teleported(Cart, origin)
