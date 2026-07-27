@@ -1,0 +1,181 @@
+{
+  "base": {
+    "behavioural": {
+      "accuracy": 0.987288,
+      "agree": 233,
+      "disagree": 3,
+      "examples": [
+        {
+          "action": "DOWN",
+          "cart": [
+            2,
+            2
+          ],
+          "manual_cart": [
+            2,
+            2
+          ],
+          "pressed": false,
+          "world_cart": [
+            2,
+            2
+          ],
+          "world_pressed": true
+        },
+        {
+          "action": "RIGHT",
+          "cart": [
+            3,
+            1
+          ],
+          "manual_cart": [
+            3,
+            1
+          ],
+          "pressed": false,
+          "world_cart": [
+            3,
+            1
+          ],
+          "world_pressed": true
+        },
+        {
+          "action": "UP",
+          "cart": [
+            4,
+            2
+          ],
+          "manual_cart": [
+            4,
+            2
+          ],
+          "pressed": false,
+          "world_cart": [
+            4,
+            2
+          ],
+          "world_pressed": true
+        }
+      ],
+      "pairs": 236,
+      "reachable_states": 59
+    },
+    "held_out": {
+      "accuracy": 0.0,
+      "agree": 0,
+      "disagree": 3,
+      "examples": [
+        {
+          "action": "DOWN",
+          "cart": [
+            2,
+            2
+          ],
+          "manual_cart": [
+            2,
+            2
+          ],
+          "pressed": false,
+          "world_cart": [
+            2,
+            2
+          ],
+          "world_pressed": true
+        },
+        {
+          "action": "RIGHT",
+          "cart": [
+            3,
+            1
+          ],
+          "manual_cart": [
+            3,
+            1
+          ],
+          "pressed": false,
+          "world_cart": [
+            3,
+            1
+          ],
+          "world_pressed": true
+        },
+        {
+          "action": "UP",
+          "cart": [
+            4,
+            2
+          ],
+          "manual_cart": [
+            4,
+            2
+          ],
+          "pressed": false,
+          "world_cart": [
+            4,
+            2
+          ],
+          "world_pressed": true
+        }
+      ],
+      "held_out_pairs": 3
+    }
+  },
+  "seal": "ground truth first read at M6, after M4 and M5 were green",
+  "structural": [
+    {
+      "ground_rule": "push",
+      "manual_clause": "push_up",
+      "verdict": "exact"
+    },
+    {
+      "ground_rule": "push",
+      "manual_clause": "push_down",
+      "verdict": "exact"
+    },
+    {
+      "ground_rule": "push",
+      "manual_clause": "push_left",
+      "verdict": "exact"
+    },
+    {
+      "ground_rule": "push",
+      "manual_clause": "push_right",
+      "verdict": "exact"
+    },
+    {
+      "ground_rule": "teleport",
+      "manual_clause": "teleport_down",
+      "verdict": "exact"
+    },
+    {
+      "ground_rule": "press",
+      "manual_clause": "press_left",
+      "verdict": "partial: only the leftward push"
+    },
+    {
+      "ground_rule": "door_open",
+      "manual_clause": "door_opens_left",
+      "verdict": "partial: only the leftward push"
+    },
+    {
+      "ground_rule": "blocked",
+      "manual_clause": null,
+      "verdict": "entailed by the frame axiom, not a clause"
+    },
+    {
+      "ground_rule": "press (up/down/right)",
+      "manual_clause": "<missing>",
+      "verdict": "MISSING \u2014 rejected at THEORIZE_LOG R-05 for want of evidence"
+    }
+  ],
+  "variant": {
+    "behavioural": {
+      "accuracy": 1.0,
+      "agree": 92,
+      "disagree": 0,
+      "examples": [],
+      "pairs": 92,
+      "reachable_states": 23
+    }
+  }
+}
