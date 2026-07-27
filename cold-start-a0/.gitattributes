@@ -1,0 +1,4 @@
+# The fixtures are byte-reproducible artefacts: a CRLF translation on checkout
+# would break the "same seed, same bytes" test on any machine with
+# core.autocrlf=true. Everything under cold-start-a0/ stays LF in the working copy.
+* text eol=lf
