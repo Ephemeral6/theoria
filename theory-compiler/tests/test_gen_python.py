@@ -143,13 +143,14 @@ def test_unknown_event_is_refused_not_approximated():
     assert "dissolved/3" in str(exc.value)
 
 
-def test_declared_weights_must_be_supplied_by_the_level():
-    """E-05. The manual names the potential; the level supplies the numbers."""
-    import json
-    doc = json.loads((FIXTURES / "peg5_problem.json").read_text(encoding="utf-8"))
-    del doc["weights"]
-    from theory_compiler.problem import from_json
+def test_declared_weights_need_not_be_repeated_by_the_level():
+    """E-05. The manual names the potential; an engine certificate supplies the
+    numbers. Requiring the level to repeat them would put a hand-transcription
+    step back in the middle of the very data flow A1 exists to remove, so a
+    missing vector is a warning here and `gen_lean` is what insists on it."""
+    from theory_compiler.ir import build_ir
     ast = parse_theory((FIXTURES / "peg_theory.dsl").read_text(encoding="utf-8"))
-    with pytest.raises(ProblemError) as exc:
-        generate_python(ast, from_json(doc))
-    assert "supplies no vector" in str(exc.value)
+    problem = load_problem(str(FIXTURES / "peg5_problem.json"))
+    assert "w" not in problem.weights
+    generate_python(ast, problem)                      # compiles regardless
+    assert any("supplies no vector" in w for w in build_ir(ast, problem).warnings)

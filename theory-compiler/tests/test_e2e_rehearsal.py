@@ -34,6 +34,8 @@ from theory_compiler.parser.playbook_parser import parse_playbook
 from theory_compiler.parser.theory_parser import parse_theory
 from theory_compiler.problem import load_problem
 
+from .test_gen_markdown import assert_no_dsl_syntax
+
 FIXTURES = Path(__file__).parent / "fixtures"
 REPO = Path(__file__).resolve().parents[2]
 A0_DSL = REPO / "cold-start-a0" / "theory" / "theory.dsl"
@@ -63,9 +65,8 @@ def test_peg_still_produces_all_four_forms(peg):
 
     md = generate_markdown(ast)
     assert generate_markdown(ast) == md          # deterministic, no model in path
-    for keyword in ("word_table:", "events:", "rules:", "goal:", "laws:",
-                    "object ", "rule ", "invariant "):
-        assert keyword not in md
+    assert_no_dsl_syntax(md)
+    assert "How a Turn Works" in md              # E-03 reaches the human reader
 
     domain, instance = generate_pddl(ast, problem_name="peg", grid_width=5,
                                      grid_height=1)

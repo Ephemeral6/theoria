@@ -26,6 +26,13 @@ def generate_markdown(ast: TheoryAST) -> str:
     if ast.word_table:
         sections.append(_render_word_table(ast.word_table))
 
+    # How a turn works (E-03). The frame axiom is the most important semantic
+    # fact about `step`, and theory.md is the form a human actually reads —
+    # leaving it out here would put the axiom back in the same blind spot the
+    # `semantics:` section exists to close.
+    if ast.semantics:
+        sections.append(_render_semantics(ast.semantics))
+
     # Events
     if ast.events and ast.events.events:
         sections.append(_render_events(ast.events))
@@ -43,6 +50,35 @@ def generate_markdown(ast: TheoryAST) -> str:
         sections.append(_render_laws(ast.laws))
 
     return "\n".join(sections) + "\n"
+
+
+def _render_semantics(sem) -> str:
+    """Three closed value sets, three sentences. A lookup, not a paraphrase.
+
+    No model is in this path and none may be: Theoria 1.8's "不过 LLM，不许润色".
+    A generated rendering that varied run to run would stop being a rendering of
+    the manual and start being a second opinion about it.
+    """
+    lines = ["## How a Turn Works\n"]
+    lines.append(
+        "If no rule applies to something in a turn, it is exactly as it was.\n"
+        if sem.frame == "persist" else
+        "If no rule applies to something in a turn, it returns to how it "
+        "started.\n")
+    lines.append(
+        "At most one rule may apply to any one thing in any one turn; the "
+        "rules are written so that this cannot fail.\n"
+        if sem.conflict == "exclusive" else
+        "If several rules apply to one thing, the earlier one in this order "
+        "wins: " + " then ".join(sem.priority) + ".\n")
+    lines.append(
+        "One move produces one new situation. Every rule reads the situation "
+        "as it was before the move, and all of their effects happen "
+        "together.\n"
+        if sem.cascade == "single_frame" else
+        "One move may produce a run of situations, each rule reacting to the "
+        "one before it, until nothing more changes.\n")
+    return "\n".join(lines)
 
 
 def _render_word_table(wt: WordTable) -> str:

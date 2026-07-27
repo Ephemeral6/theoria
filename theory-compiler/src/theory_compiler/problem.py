@@ -177,12 +177,17 @@ def check_against_theory(problem: ProblemSpec, ast) -> List[str]:
             "manual alone can tell it is level data (E-04)."
             % (problem.name, sorted(supplied - declared)))
 
+    # A declared weight function with no vector here is *not* an error: the
+    # numbers may arrive from an engine certificate instead, and requiring the
+    # level to repeat them would mean hand-copying the engine's output into a
+    # file — which is exactly the transcription step A1 exists to remove. The
+    # backend that actually needs the numbers is the one that insists on them
+    # (`gen_lean`), and it also checks the two sources agree when both exist.
     for decl in wt.weights:
         if decl.name not in problem.weights:
-            raise ProblemError(
-                "theory.dsl declares `weights %s over %s`, but problem %r "
-                "supplies no vector for it. The manual names the potential; "
-                "the level supplies the numbers."
+            warnings.append(
+                "theory.dsl declares `weights %s over %s` and problem %r "
+                "supplies no vector; a certificate will have to."
                 % (decl.name, decl.over, problem.name))
 
     types = {o.name for o in wt.objects}

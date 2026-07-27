@@ -148,21 +148,20 @@ def _derive_moves(ns: dict, n: int) -> List[Tuple[int, int, int]]:
     `step` does is what the world does.
     """
     seen = set()
+    fired: Dict[str, set] = {}
     start = ns["initial_state"]()
     fields = [f for f in vars(start) if f.endswith("_pos")]
     order = [f[: -len("_pos")] for f in fields]
 
     for mask in range(1 << n):
         occ = "".join("1" if mask >> i & 1 else "0" for i in range(n))
-        if occ.count("1") != len(order):
+        occupied = [i for i in range(n) if occ[i] == "1"]
+        if len(occupied) > len(order):
+            continue                       # more pegs than the level has
+        state = _state_for(ns, start, order, occupied)
+        if state is None or ns["occupancy"](state) != occ:
             continue
-        state = start.copy()
-        for name, cell in zip(order, [i for i in range(n) if occ[i] == "1"]):
-            setattr(state, name + "_pos", cell)
-            if hasattr(state, name + "_alive"):
-                setattr(state, name + "_alive", True)
-        if ns["occupancy"](state) != occ:
-            continue
+        fired[occ] = set()
         for action in ns["ACTIONS"]:
             after = ns["occupancy"](ns["step"](state, action))
             if after == occ:
@@ -178,7 +177,64 @@ def _derive_moves(ns: dict, n: int) -> List[Tuple[int, int, int]]:
             src = gone[0] if abs(gone[0] - dst) == 2 else gone[1]
             over = gone[1] if src == gone[0] else gone[0]
             seen.add((src, over, dst))
+            fired[occ].add((src, over, dst))
+
+    _check_legality(sorted(seen), fired)
     return sorted(seen)
+
+
+def _state_for(ns: dict, start, order: Sequence[str], occupied: Sequence[int]):
+    """A predictor state whose occupancy is exactly `occupied`.
+
+    Instances beyond the occupied cells are marked not-alive, which is how a
+    board with fewer pegs than the level declares gets represented at all. The
+    earlier version only enumerated states with *every* peg alive, so five of
+    the thirty-two occupancies were reachable by the check and the rest were
+    silently skipped.
+    """
+    state = start.copy()
+    for i, name in enumerate(order):
+        if i < len(occupied):
+            setattr(state, name + "_pos", occupied[i])
+            alive = True
+        else:
+            alive = False
+        if hasattr(state, name + "_alive"):
+            setattr(state, name + "_alive", alive)
+        elif not alive:
+            return None                    # no way to remove a peg from the board
+    return state
+
+
+def _check_legality(moves: Sequence[Tuple[int, int, int]],
+                    fired: Dict[str, set]) -> None:
+    """The Lean file's `legal` is a template. This is what earns it.
+
+    `legal s m := s.src && s.over && !s.dst` is emitted as fixed text, so
+    nothing about it is derived from the manual. Checking only that transitions
+    *look like* jumps ("removes two cells, adds one") would leave the enabling
+    condition unverified: a world whose rules let a peg jump onto an occupied
+    cell would produce the same shape of transition and get a Lean file that
+    quietly models a different world.
+
+    So for every occupancy the predictor can represent, and every move, the
+    predictor's own behaviour is compared against what `legal` predicts.
+    """
+    for occ, actually in sorted(fired.items()):
+        predicted = {
+            m for m in moves
+            if occ[m[0]] == "1" and occ[m[1]] == "1" and occ[m[2]] == "0"
+        }
+        if predicted != actually:
+            missing = sorted(predicted - actually)
+            extra = sorted(actually - predicted)
+            raise LeanGenError(
+                "the Lean development's `legal` does not describe the manual's "
+                "rules. In state %s it predicts %s but the predictor fires %s "
+                "(predicted-only: %s; fired-only: %s). The emitted `legal` is a "
+                "fixed template, so a world with a different enabling condition "
+                "must be refused here rather than proved about."
+                % (occ, sorted(predicted), sorted(actually), missing, extra))
 
 
 def _pagoda_lean(ir: WorldIR, ns: dict, cert: PagodaCertificate,
@@ -517,6 +573,10 @@ def generate_lean(ast: TheoryAST, problem: ProblemSpec,
             "Add `weights %s over <field>` (E-05)."
             % (inv_name, weights_name, weights_name))
 
+    # The certificate is the source of truth for the numbers. The level may
+    # repeat them — a self-contained problem file is sometimes worth having —
+    # but then the two must agree, because a stale copy is how a proof ends up
+    # resting on weights nobody solved for.
     supplied = ir.weights.get(weights_name)
     if supplied is not None and list(supplied) != list(certificate.weights):
         raise LeanGenError(
