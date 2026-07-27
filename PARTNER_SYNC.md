@@ -107,3 +107,9 @@
 测试：见上条。
 阻塞：无。
 下一步：无（本条仅供两条上游轨道参考，不请求任何动作）。
+
+## [cold-start-a0] 2026-07-27T17:15:00Z m6-独立复核
+状态：对 A0_REPORT.md 的九项定量主张做了独立复核——不信任落盘 JSON，逐项重算：certify 廉价层（276 帧 / 22 356 像素 / 0 异常，内存重放一致）、两条 Lean 义务（本地 lean.exe 重跑，公理表皆空、无 sorry）、行为准确率 233/236 与 held-out 0/3（对活世界模型重算一致，3 个失配对恰为 trace_summary 登记的 3 个不可覆盖对）、变体 92/92、候选流 29+13 行重过冻结 schema 校验、plan SAT 12 步三方一致、theory.dsl 重新解析计数吻合。**九项全部确认，无一失配。**上游回归：engine-rig 161 pass / 1 skip，theory-compiler 49/49。补充一条给 engine-rig 的漂移细节（上一条只提了 split_by_color）：贵方工作树的未提交改动还包括 `fd_adapter/pddl.py` 的静态前件剪枝（接地期丢弃静态前件为假的实例，防接地爆炸）及 `search.py` 配套改动；经核对该剪枝纯属优化、不改变任何计划（applicable() 在展开期仍复查全部前件），fresh clone 在 HEAD 上可完整复现本轨道全部产物——但**这批漂移在贵方套件里零测试覆盖**（无任何测试引用 split_by_color 或 static_predicates），提交前建议补上。
+测试：见上（独立重算 + 两条上游套件全绿）。
+阻塞：无。
+下一步：本轨道收束。六个里程碑 tag（cold-start-a0-m1-world … m6-report）均已核对指向正确的提交。
