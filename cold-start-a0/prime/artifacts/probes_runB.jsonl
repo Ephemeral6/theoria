@@ -1,0 +1,1 @@
+{"action": "RIGHT", "agreed": false, "cart_before": [2, 3], "navigation_steps": 3, "observed_cart": [2, 3], "predicted_cart": [2, 4], "reason": "2 firing states, none in the trace", "rule": "push_onto_crate", "status": "refuted"}

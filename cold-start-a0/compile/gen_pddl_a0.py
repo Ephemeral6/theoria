@@ -88,16 +88,18 @@ def generate_pddl(ast: TheoryAST, problem: Problem) -> Tuple[str, str]:
     cart = next(o for o in problem.objects if o.name == "Cart")
 
     door = next((o for o in problem.objects if o.name == "Door"), None)
-    button = next((o for o in problem.objects if o.name == "Button"), None)
+    switch = next((o for o in problem.objects
+                   if o.name in ("Button", "Switch")), None)
     portal_cells = [c for c, t in special.items() if t == "markedcell"]
 
     subtypes = sorted({t for t in special.values()})
-    domain = _domain(ast, subtypes, door, button, portal_cells)
-    instance = _problem(ast, problem, arena, special, cart, door, button)
+    domain = _domain(ast, subtypes, door, switch, portal_cells)
+    instance = _problem(ast, problem, arena, special, cart, door, switch)
     return domain, instance
 
 
-def _domain(ast: TheoryAST, subtypes, door, button, portal_cells) -> str:
+def _domain(ast: TheoryAST, subtypes, door, switch, portal_cells) -> str:
+    switch_type = "%scell" % switch.name.lower() if switch is not None else "cell"
     L: List[str] = []
     L.append("; Auto-generated from theory.dsl by compile/gen_pddl_a0.py — DO NOT EDIT.")
     L.append("(define (domain a0)")
@@ -115,10 +117,16 @@ def _domain(ast: TheoryAST, subtypes, door, button, portal_cells) -> str:
     L.append("    (adj-left ?a - cell ?b - cell)")
     L.append("    (adj-right ?a - cell ?b - cell)")
     L.append("    (portal-exit ?c - cell)")
-    L.append("    (pressed)")
+    L.append("    (switched)                    ; the Switch/Button state")
     L.append("  )")
     L.append("")
 
+    # A rule that only ever fires together with another (same guard, same
+    # transition) is a *cascade*, not an action of its own.  The manual says so
+    # by giving them identical guards, so the encoding reads it off rather than
+    # being told: the recolour becomes the action and the Door event is folded
+    # into its effect.
+    cascade_of = _cascades(ast)
     for rule in ast.rules.rules:
         kind = _rule_kind(rule)
         direction = _direction_of(rule)
@@ -127,10 +135,11 @@ def _domain(ast: TheoryAST, subtypes, door, button, portal_cells) -> str:
         elif kind == "jumped":
             L.append(_action_jump(rule.name, direction))
         elif kind == "recolored":
-            L.append(_action_press(rule.name, direction, door, button))
-        elif kind == "vanished":
-            L.append(";; %s is a cascade of the press action above — its effect "
-                     "is folded into it" % rule.name)
+            L.append(_action_toggle(rule.name, direction,
+                                    cascade_of.get(rule.name), door, switch_type))
+        elif kind in ("vanished", "appeared"):
+            L.append(";; %s is a cascade of the toggle action with the same "
+                     "guard — its effect is folded in there" % rule.name)
             L.append("")
         else:
             raise UnsupportedClause("no PDDL encoding for event %r" % kind)
@@ -160,18 +169,66 @@ def _action_jump(name: str, direction: str) -> str:
     ])
 
 
-def _action_press(name: str, direction: str, door, button) -> str:
-    """The press, with the Door's opening folded in as its cascade (D-A0-004)."""
+def _guard_key(rule: RuleDecl):
+    """A guard as comparable text, so identical guards are recognisably identical."""
+    parts = []
+    for clause in rule.guard.clauses:
+        if isinstance(clause, GuardAction):
+            parts.append("act=%s(%s)" % (
+                clause.action.action_name,
+                ",".join(getattr(a, "name", str(a)) for a in clause.action.args)))
+        elif isinstance(clause, GuardPredicate) and isinstance(clause.expr, FuncCall):
+            expr = clause.expr
+            parts.append("%s(%s)" % (expr.name, ",".join(
+                str(getattr(a, "name", None) or getattr(a, "value", a))
+                for a in expr.args)))
+    return tuple(sorted(parts))
+
+
+def _cascades(ast: TheoryAST) -> Dict[str, str]:
+    """rule name -> the Door event ('vanished'/'appeared') sharing its guard.
+
+    Two rules with the *same guard* fire on the same transitions: the manual
+    itself says they are one event with two consequences (D-A0-004's cascade).
+    The encoding reads that off rather than being told, which is why it works
+    unchanged for A0's one-way Button and A0′'s two-way Switch.
+    """
+    by_guard: Dict[tuple, List[RuleDecl]] = {}
+    for rule in ast.rules.rules:
+        by_guard.setdefault(_guard_key(rule), []).append(rule)
+    out: Dict[str, str] = {}
+    for rules in by_guard.values():
+        kinds = {_rule_kind(r): r for r in rules}
+        if "recolored" not in kinds:
+            continue
+        for door_event in ("vanished", "appeared"):
+            if door_event in kinds:
+                out[kinds["recolored"].name] = door_event
+    return out
+
+
+def _action_toggle(name: str, direction: str, door_event, door,
+                   switch_type: str) -> str:
+    """A switch action, with the Door event that shares its guard folded in.
+
+    Which polarity a rule sets is read off the **Door event**, not off the colour
+    literal: `vanished` means the Door goes and its cell becomes passable,
+    `appeared` means it comes back.  So the encoding never has to be told that
+    colour 8 means "on", and A0's one-way Button and A0′'s two-way Switch compile
+    through the same function.
+    """
+    opens = door_event == "vanished"
+    has_door = door is not None and door_event is not None
     lines = [
         "  (:action %s" % name.replace("_", "-"),
-        "    :parameters (?from - cell ?b - buttoncell ?d - doorcell)"
-        if door is not None else
-        "    :parameters (?from - cell ?b - buttoncell)",
-        "    :precondition (and (at ?from) (adj-%s ?from ?b) (not (pressed)))" % direction,
+        "    :parameters (?from - cell ?s - %s%s)"
+        % (switch_type, " ?d - doorcell" if has_door else ""),
+        "    :precondition (and (at ?from) (adj-%s ?from ?s) %s)"
+        % (direction, "(not (switched))" if opens else "(switched)"),
     ]
-    effect = ["(pressed)"]
-    if door is not None:
-        effect.append("(passable ?d)")
+    effect = ["(switched)"] if opens else ["(not (switched))"]
+    if has_door:
+        effect.append("(passable ?d)" if opens else "(not (passable ?d))")
     lines.append("    :effect (and %s)" % " ".join(effect))
     lines.append("  )")
     lines.append("")
@@ -179,7 +236,7 @@ def _action_press(name: str, direction: str, door, button) -> str:
 
 
 def _problem(ast: TheoryAST, problem: Problem, arena, special, cart,
-             door, button) -> str:
+             door, switch) -> str:
     L: List[str] = []
     L.append("; Auto-generated from theory.dsl + the derived problem instance.")
     L.append("(define (problem %s)" % problem.name)

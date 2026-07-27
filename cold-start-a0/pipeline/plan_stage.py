@@ -46,9 +46,10 @@ def _direction_of(action_text: str) -> str:
     raise ValueError("cannot read a direction off %r" % action_text)
 
 
-def run_plan(out_dir: str, spec: a0_world.WorldSpec,
-             out_path: Optional[str] = None,
-             timestamp: Optional[str] = None) -> Dict[str, object]:
+def run_plan(out_dir: str, spec, out_path: Optional[str] = None,
+             timestamp: Optional[str] = None, world=None,
+             report_name: Optional[str] = None) -> Dict[str, object]:
+    """`world` defaults to the A0 world built from `spec`; A0′ passes its own."""
     domain = os.path.join(out_dir, "domain.pddl")
     instance = os.path.join(out_dir, "problem.pddl")
     theory = load_theory(os.path.join(out_dir, "theory.py"))
@@ -67,6 +68,7 @@ def run_plan(out_dir: str, spec: a0_world.WorldSpec,
         "backend": getattr(plan, "backend", None) if plan else None,
         "status": "UNSAT" if plan is None else "SAT",
     }
+    report["_name"] = report_name
     if plan is None:
         report["note"] = ("no plan exists under this manual — constraint 6 forbids "
                           "stopping here; a certificate is owed")
@@ -85,7 +87,7 @@ def run_plan(out_dir: str, spec: a0_world.WorldSpec,
     report["manual_reaches_goal"] = bool(theory.is_goal(state))
 
     # --- does the world agree? (commit) ---------------------------------
-    world = a0_world.A0World(spec)
+    world = world or a0_world.A0World(spec)
     wstate = world.initial()
     mismatches = []
     mstate = theory.initial_state()
@@ -123,7 +125,9 @@ def run_plan(out_dir: str, spec: a0_world.WorldSpec,
 
 
 def _write(report: Dict[str, object]) -> None:
-    name = os.path.basename(os.path.dirname(str(report["problem"]))) or "plan"
+    name = (report.get("_name")
+            or os.path.basename(os.path.dirname(str(report["problem"])))
+            or "plan")
     out = os.path.join(ROOT, "artifacts", "plan_%s.json" % name)
     with open(out, "w", encoding="utf-8", newline="\n") as handle:
         handle.write(json.dumps(report, indent=2, sort_keys=True) + "\n")

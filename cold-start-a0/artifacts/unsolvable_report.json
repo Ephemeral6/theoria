@@ -19,16 +19,17 @@
     "sorries": []
   },
   "compiled": {
-    "domain.pddl": 1440,
+    "domain.pddl": 1486,
     "problem.json": 2285,
     "problem.pddl": 3857,
-    "theory.lean": 8515,
-    "theory.md": 1599,
-    "theory.py": 6079
+    "theory.lean": 8727,
+    "theory.md": 1950,
+    "theory.py": 6594
   },
   "constructive_ground": "the Door is the only opening in the dividing wall, and the only rule that removes it (door_opens_left) tests for the Button's colour; with no Button in the instance that guard can never hold, so the goal room is unreachable by construction",
   "green": true,
   "plan": {
+    "_name": null,
     "backend": null,
     "domain": "theory\\generated_no_button\\domain.pddl",
     "note": "no plan exists under this manual \u2014 constraint 6 forbids stopping here; a certificate is owed",

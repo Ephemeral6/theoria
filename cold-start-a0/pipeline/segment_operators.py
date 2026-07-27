@@ -29,7 +29,10 @@ import inspect
 from typing import Callable, Dict, List, Sequence, Tuple
 
 from engines.mdl_segmenter import segmenter as _seg
+from engines.mdl_segmenter.costs import CostModel
 from engines.mdl_segmenter.segmenter import Component, Segmentation
+
+from pipeline.reidentify import reidentify
 
 Cell = Tuple[int, int]
 Frame = Sequence[Sequence[int]]
@@ -119,17 +122,34 @@ def segment_with(name: str, frames: Sequence[Frame],
 
 
 def choose_operator(frames: Sequence[Frame], background: int = 0):
-    """Run every operator; keep the one with the shortest script.
+    """Run every operator, then re-identify; keep the shortest script.
+
+    Two adjudications, both by script length and both reported:
+
+    1. which component proposer (colour-agnostic vs uniform-colour);
+    2. whether merging same-template, disjoint-lifetime tracks pays — an object
+       that vanishes and comes back is otherwise a fresh track every time, which
+       is how A0′'s single Door became five.
 
     Returns `(name, segmentation, report)`.  Ties break on the operator name so
     the choice is deterministic.
     """
+    height = len(frames[0])
+    width = len(frames[0][0])
+
     scored = []
+    reports = {}
     for name in sorted(OPERATORS):
         seg = segment_with(name, frames, background=background)
+        cost = CostModel(height, width, max_objects=max(len(seg.tracks), 1))
+        merged, merge_report = reidentify(seg, cost)
+        if merge_report.applied:
+            seg = merged
+        reports[name] = merge_report
         scored.append((seg.script_bits, name, seg))
     scored.sort(key=lambda row: (row[0], row[1]))
-    best_bits, best_name, best_seg = scored[0]
+    best_name = scored[0][1]
+    best_seg = scored[0][2]
     report = [
         {
             "operator": name,
@@ -138,6 +158,7 @@ def choose_operator(frames: Sequence[Frame], background: int = 0):
             "ratio": round(seg.compression_ratio, 4),
             "tracks": len(seg.tracks),
             "events": len(seg.events),
+            "reidentification": reports[name].as_json(),
             "chosen": name == best_name,
         }
         for bits, name, seg in scored

@@ -1,0 +1,179 @@
+{
+  "a0p-base": {
+    "actions": [
+      "UP",
+      "DOWN",
+      "LEFT",
+      "RIGHT"
+    ],
+    "grid": [
+      9,
+      9
+    ],
+    "invariants": [
+      {
+        "name": "cart_unique",
+        "statement": "exactly one cell shows colour 6"
+      },
+      {
+        "name": "door_mirrors_switch",
+        "statement": "the Door is present if and only if the Switch shows 7"
+      },
+      {
+        "name": "right_room_locked (a0p-no-switch only)",
+        "statement": "with no Switch the Door never opens, so the Cart never occupies a right-room cell"
+      }
+    ],
+    "palette": {
+      "cart": 6,
+      "crate": 4,
+      "door_closed": 5,
+      "floor": 0,
+      "portal": 3,
+      "switch_off": 7,
+      "switch_on": 8,
+      "wall": 1
+    },
+    "reachable_states": 57,
+    "rules": [
+      {
+        "name": "push",
+        "then": "the Cart moves one cell in direction D",
+        "when": "act=D and the target cell is floor or the open Door"
+      },
+      {
+        "name": "toggle",
+        "then": "the Switch flips 7<->8 and the Door mirrors it (present iff 7); the Cart does not move.  Works from all four directions, both ways.",
+        "when": "act=D and the target cell is the Switch"
+      },
+      {
+        "name": "teleport",
+        "then": "the Cart moves to (1,1)",
+        "when": "act=D and the target cell is the Portal marker"
+      },
+      {
+        "name": "blocked",
+        "then": "nothing happens",
+        "when": "act=D and the target is a wall, the Crate, or the closed Door"
+      }
+    ],
+    "spec": {
+      "cart_start": [
+        5,
+        1
+      ],
+      "crate_cell": [
+        2,
+        4
+      ],
+      "door_cell": [
+        4,
+        5
+      ],
+      "goal_cell": [
+        2,
+        7
+      ],
+      "name": "a0p-base",
+      "portal_cell": [
+        7,
+        3
+      ],
+      "portal_dest": [
+        1,
+        1
+      ],
+      "switch_cell": [
+        3,
+        2
+      ]
+    }
+  },
+  "a0p-no-switch": {
+    "actions": [
+      "UP",
+      "DOWN",
+      "LEFT",
+      "RIGHT"
+    ],
+    "grid": [
+      9,
+      9
+    ],
+    "invariants": [
+      {
+        "name": "cart_unique",
+        "statement": "exactly one cell shows colour 6"
+      },
+      {
+        "name": "door_mirrors_switch",
+        "statement": "the Door is present if and only if the Switch shows 7"
+      },
+      {
+        "name": "right_room_locked (a0p-no-switch only)",
+        "statement": "with no Switch the Door never opens, so the Cart never occupies a right-room cell"
+      }
+    ],
+    "palette": {
+      "cart": 6,
+      "crate": 4,
+      "door_closed": 5,
+      "floor": 0,
+      "portal": 3,
+      "switch_off": 7,
+      "switch_on": 8,
+      "wall": 1
+    },
+    "reachable_states": 22,
+    "rules": [
+      {
+        "name": "push",
+        "then": "the Cart moves one cell in direction D",
+        "when": "act=D and the target cell is floor or the open Door"
+      },
+      {
+        "name": "toggle",
+        "then": "the Switch flips 7<->8 and the Door mirrors it (present iff 7); the Cart does not move.  Works from all four directions, both ways.",
+        "when": "act=D and the target cell is the Switch"
+      },
+      {
+        "name": "teleport",
+        "then": "the Cart moves to (1,1)",
+        "when": "act=D and the target cell is the Portal marker"
+      },
+      {
+        "name": "blocked",
+        "then": "nothing happens",
+        "when": "act=D and the target is a wall, the Crate, or the closed Door"
+      }
+    ],
+    "spec": {
+      "cart_start": [
+        5,
+        1
+      ],
+      "crate_cell": [
+        2,
+        4
+      ],
+      "door_cell": [
+        4,
+        5
+      ],
+      "goal_cell": [
+        2,
+        7
+      ],
+      "name": "a0p-no-switch",
+      "portal_cell": [
+        7,
+        3
+      ],
+      "portal_dest": [
+        1,
+        1
+      ],
+      "switch_cell": null
+    }
+  }
+}

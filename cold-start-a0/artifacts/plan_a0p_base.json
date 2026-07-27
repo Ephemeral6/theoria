@@ -1,12 +1,10 @@
 {
-  "_name": null,
+  "_name": "a0p_base",
   "actions": [
     "(push-right c5-1 c5-2)",
-    "(push-right c5-2 c5-3)",
-    "(push-up c5-3 c4-3)",
-    "(push-up c4-3 c3-3)",
-    "(press-left c3-3 c3-2 c4-5)",
-    "(push-down c3-3 c4-3)",
+    "(push-up c5-2 c4-2)",
+    "(switch-on-up c4-2 c3-2 c4-5)",
+    "(push-right c4-2 c4-3)",
     "(push-right c4-3 c4-4)",
     "(push-right c4-4 c4-5)",
     "(push-right c4-5 c4-6)",
@@ -17,11 +15,9 @@
   "backend": "stub-bfs",
   "directions": [
     "right",
+    "up",
+    "up",
     "right",
-    "up",
-    "up",
-    "left",
-    "down",
     "right",
     "right",
     "right",
@@ -29,12 +25,12 @@
     "up",
     "up"
   ],
-  "domain": "theory\\generated\\domain.pddl",
+  "domain": "prime\\theory\\generated\\domain.pddl",
   "execution_mismatches": [],
   "green": true,
-  "length": 12,
+  "length": 10,
   "manual_reaches_goal": true,
-  "problem": "theory\\generated\\problem.pddl",
+  "problem": "prime\\theory\\generated\\problem.pddl",
   "status": "SAT",
   "world_reaches_goal": true
 }

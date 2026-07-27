@@ -709,6 +709,16 @@
         "events": 216,
         "operator": "connected_components(4)+uniform_color",
         "ratio": 0.601,
+        "reidentification": {
+          "applied": false,
+          "merged": [],
+          "operator": "template_match+disjoint_lifetime",
+          "saved_bits": 0,
+          "script_bits_after": 4423,
+          "script_bits_before": 4423,
+          "tracks_after": 3,
+          "tracks_before": 3
+        },
         "script_bits": 4423,
         "tracks": 3
       },
@@ -717,9 +727,356 @@
         "chosen": false,
         "events": 332,
         "operator": "connected_components(4)",
-        "ratio": 0.8846,
-        "script_bits": 6511,
-        "tracks": 90
+        "ratio": 0.775,
+        "reidentification": {
+          "applied": true,
+          "merged": [
+            {
+              "from": "obj4",
+              "into": "obj0"
+            },
+            {
+              "from": "obj7",
+              "into": "obj0"
+            },
+            {
+              "from": "obj11",
+              "into": "obj0"
+            },
+            {
+              "from": "obj14",
+              "into": "obj0"
+            },
+            {
+              "from": "obj17",
+              "into": "obj0"
+            },
+            {
+              "from": "obj19",
+              "into": "obj0"
+            },
+            {
+              "from": "obj22",
+              "into": "obj0"
+            },
+            {
+              "from": "obj25",
+              "into": "obj0"
+            },
+            {
+              "from": "obj28",
+              "into": "obj0"
+            },
+            {
+              "from": "obj37",
+              "into": "obj0"
+            },
+            {
+              "from": "obj44",
+              "into": "obj0"
+            },
+            {
+              "from": "obj47",
+              "into": "obj0"
+            },
+            {
+              "from": "obj31",
+              "into": "obj1"
+            },
+            {
+              "from": "obj35",
+              "into": "obj1"
+            },
+            {
+              "from": "obj41",
+              "into": "obj1"
+            },
+            {
+              "from": "obj49",
+              "into": "obj1"
+            },
+            {
+              "from": "obj5",
+              "into": "obj2"
+            },
+            {
+              "from": "obj8",
+              "into": "obj2"
+            },
+            {
+              "from": "obj10",
+              "into": "obj2"
+            },
+            {
+              "from": "obj13",
+              "into": "obj2"
+            },
+            {
+              "from": "obj16",
+              "into": "obj2"
+            },
+            {
+              "from": "obj20",
+              "into": "obj2"
+            },
+            {
+              "from": "obj23",
+              "into": "obj2"
+            },
+            {
+              "from": "obj26",
+              "into": "obj2"
+            },
+            {
+              "from": "obj29",
+              "into": "obj2"
+            },
+            {
+              "from": "obj32",
+              "into": "obj2"
+            },
+            {
+              "from": "obj34",
+              "into": "obj2"
+            },
+            {
+              "from": "obj38",
+              "into": "obj2"
+            },
+            {
+              "from": "obj40",
+              "into": "obj2"
+            },
+            {
+              "from": "obj43",
+              "into": "obj2"
+            },
+            {
+              "from": "obj46",
+              "into": "obj2"
+            },
+            {
+              "from": "obj50",
+              "into": "obj2"
+            },
+            {
+              "from": "obj53",
+              "into": "obj2"
+            },
+            {
+              "from": "obj56",
+              "into": "obj2"
+            },
+            {
+              "from": "obj59",
+              "into": "obj2"
+            },
+            {
+              "from": "obj62",
+              "into": "obj2"
+            },
+            {
+              "from": "obj64",
+              "into": "obj2"
+            },
+            {
+              "from": "obj67",
+              "into": "obj2"
+            },
+            {
+              "from": "obj70",
+              "into": "obj2"
+            },
+            {
+              "from": "obj74",
+              "into": "obj2"
+            },
+            {
+              "from": "obj77",
+              "into": "obj2"
+            },
+            {
+              "from": "obj79",
+              "into": "obj2"
+            },
+            {
+              "from": "obj82",
+              "into": "obj2"
+            },
+            {
+              "from": "obj86",
+              "into": "obj2"
+            },
+            {
+              "from": "obj89",
+              "into": "obj2"
+            },
+            {
+              "from": "obj9",
+              "into": "obj3"
+            },
+            {
+              "from": "obj18",
+              "into": "obj3"
+            },
+            {
+              "from": "obj30",
+              "into": "obj3"
+            },
+            {
+              "from": "obj33",
+              "into": "obj3"
+            },
+            {
+              "from": "obj36",
+              "into": "obj3"
+            },
+            {
+              "from": "obj39",
+              "into": "obj3"
+            },
+            {
+              "from": "obj42",
+              "into": "obj3"
+            },
+            {
+              "from": "obj48",
+              "into": "obj3"
+            },
+            {
+              "from": "obj51",
+              "into": "obj3"
+            },
+            {
+              "from": "obj54",
+              "into": "obj3"
+            },
+            {
+              "from": "obj63",
+              "into": "obj3"
+            },
+            {
+              "from": "obj72",
+              "into": "obj3"
+            },
+            {
+              "from": "obj78",
+              "into": "obj3"
+            },
+            {
+              "from": "obj84",
+              "into": "obj3"
+            },
+            {
+              "from": "obj12",
+              "into": "obj6"
+            },
+            {
+              "from": "obj15",
+              "into": "obj6"
+            },
+            {
+              "from": "obj21",
+              "into": "obj6"
+            },
+            {
+              "from": "obj24",
+              "into": "obj6"
+            },
+            {
+              "from": "obj27",
+              "into": "obj6"
+            },
+            {
+              "from": "obj45",
+              "into": "obj6"
+            },
+            {
+              "from": "obj57",
+              "into": "obj6"
+            },
+            {
+              "from": "obj60",
+              "into": "obj6"
+            },
+            {
+              "from": "obj66",
+              "into": "obj6"
+            },
+            {
+              "from": "obj69",
+              "into": "obj6"
+            },
+            {
+              "from": "obj75",
+              "into": "obj6"
+            },
+            {
+              "from": "obj81",
+              "into": "obj6"
+            },
+            {
+              "from": "obj87",
+              "into": "obj6"
+            },
+            {
+              "from": "obj55",
+              "into": "obj52"
+            },
+            {
+              "from": "obj58",
+              "into": "obj52"
+            },
+            {
+              "from": "obj61",
+              "into": "obj52"
+            },
+            {
+              "from": "obj65",
+              "into": "obj52"
+            },
+            {
+              "from": "obj68",
+              "into": "obj52"
+            },
+            {
+              "from": "obj71",
+              "into": "obj52"
+            },
+            {
+              "from": "obj73",
+              "into": "obj52"
+            },
+            {
+              "from": "obj76",
+              "into": "obj52"
+            },
+            {
+              "from": "obj80",
+              "into": "obj52"
+            },
+            {
+              "from": "obj83",
+              "into": "obj52"
+            },
+            {
+              "from": "obj85",
+              "into": "obj52"
+            },
+            {
+              "from": "obj88",
+              "into": "obj52"
+            }
+          ],
+          "operator": "template_match+disjoint_lifetime",
+          "saved_bits": 807,
+          "script_bits_after": 5704,
+          "script_bits_before": 6511,
+          "tracks_after": 6,
+          "tracks_before": 90
+        },
+        "script_bits": 5704,
+        "tracks": 6
       }
     ],
     "ratio": 0.601,

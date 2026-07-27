@@ -576,6 +576,16 @@
         "events": 92,
         "operator": "connected_components(4)",
         "ratio": 0.5623,
+        "reidentification": {
+          "applied": false,
+          "merged": [],
+          "operator": "template_match+disjoint_lifetime",
+          "saved_bits": 0,
+          "script_bits_after": 1741,
+          "script_bits_before": 1741,
+          "tracks_after": 1,
+          "tracks_before": 1
+        },
         "script_bits": 1741,
         "tracks": 1
       },
@@ -585,6 +595,16 @@
         "events": 92,
         "operator": "connected_components(4)+uniform_color",
         "ratio": 0.5623,
+        "reidentification": {
+          "applied": false,
+          "merged": [],
+          "operator": "template_match+disjoint_lifetime",
+          "saved_bits": 0,
+          "script_bits_after": 1741,
+          "script_bits_before": 1741,
+          "tracks_after": 1,
+          "tracks_before": 1
+        },
         "script_bits": 1741,
         "tracks": 1
       }

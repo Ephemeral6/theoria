@@ -1,0 +1,38 @@
+{
+  "a0-base": {
+    "backend_reported": true,
+    "caveat": "a conformance stand-in, not Fast Downward: this tests discovery, invocation, sas_plan parsing and validation, and nothing about FD's search",
+    "discovery": {
+      "found": "C:\\Users\\user\\AppData\\Local\\Temp\\tmp5vylkoiy\\fast-downward.py",
+      "ok": true,
+      "via": "FAST_DOWNWARD"
+    },
+    "fd_path": {
+      "actions": [
+        "(push-right c5-1 c5-2)",
+        "(push-right c5-2 c5-3)",
+        "(push-up c5-3 c4-3)",
+        "(push-up c4-3 c3-3)",
+        "(press-left c3-3 c3-2 c4-5)",
+        "(push-down c3-3 c4-3)",
+        "(push-right c4-3 c4-4)",
+        "(push-right c4-4 c4-5)",
+        "(push-right c4-5 c4-6)",
+        "(push-right c4-6 c4-7)",
+        "(push-up c4-7 c3-7)",
+        "(push-up c3-7 c2-7)"
+      ],
+      "backend": "fast-downward",
+      "length": 12
+    },
+    "green": true,
+    "same_length": true,
+    "same_plan": true,
+    "stub_path": {
+      "backend": "stub-bfs",
+      "length": 12
+    },
+    "validated": true
+  },
+  "real_fast_downward_present": false
+}

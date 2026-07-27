@@ -1,0 +1,52 @@
+{
+  "a0p-base": {
+    "budget": 110,
+    "coverage": "107/228",
+    "covered_pairs": 107,
+    "frames": 111,
+    "mechanisms_never_witnessed": {
+      "blocked_by_closed_door": 1,
+      "blocked_by_crate": 6,
+      "blocked_by_wall": 35,
+      "step": 79
+    },
+    "mechanisms_witnessed": {
+      "blocked_by_wall": 18,
+      "step": 82,
+      "teleport": 2,
+      "toggle_off_DOWN": 1,
+      "toggle_off_LEFT": 1,
+      "toggle_off_RIGHT": 1,
+      "toggle_off_UP": 1,
+      "toggle_on_DOWN": 1,
+      "toggle_on_LEFT": 1,
+      "toggle_on_RIGHT": 1,
+      "toggle_on_UP": 1
+    },
+    "reachable_states": 57,
+    "state_action_pairs": 228,
+    "transitions": 110,
+    "win_frames": []
+  },
+  "a0p-no-switch": {
+    "budget": 40,
+    "coverage": "36/88",
+    "covered_pairs": 36,
+    "frames": 41,
+    "mechanisms_never_witnessed": {
+      "blocked_by_closed_door": 1,
+      "blocked_by_crate": 3,
+      "blocked_by_wall": 9,
+      "step": 39
+    },
+    "mechanisms_witnessed": {
+      "blocked_by_wall": 8,
+      "step": 31,
+      "teleport": 1
+    },
+    "reachable_states": 22,
+    "state_action_pairs": 88,
+    "transitions": 40,
+    "win_frames": []
+  }
+}

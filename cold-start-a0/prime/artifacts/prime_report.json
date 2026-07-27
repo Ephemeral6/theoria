@@ -1,0 +1,212 @@
+{
+  "engines": {
+    "executable_probes": 13,
+    "global_laws": [
+      "(8@12 + 5@21) mod 2 = 1",
+      "(6@0 + 6@1 + 6@6 + 6@7 + 6@8 + 6@11 + 6@13 + 6@14 + 6@17 + 6"
+    ],
+    "operator": "connected_components(4)+uniform_color",
+    "reidentification": {
+      "applied": true,
+      "merged": [
+        {
+          "from": "obj3",
+          "into": "obj1"
+        },
+        {
+          "from": "obj4",
+          "into": "obj1"
+        },
+        {
+          "from": "obj5",
+          "into": "obj1"
+        },
+        {
+          "from": "obj6",
+          "into": "obj1"
+        }
+      ],
+      "operator": "template_match+disjoint_lifetime",
+      "saved_bits": 48,
+      "script_bits_after": 1923,
+      "script_bits_before": 1971,
+      "tracks_after": 3,
+      "tracks_before": 7
+    },
+    "rules": 35,
+    "total_probes": 27,
+    "tracks": [
+      [
+        "obj0",
+        7
+      ],
+      [
+        "obj1",
+        5
+      ],
+      [
+        "obj2",
+        6
+      ]
+    ]
+  },
+  "run_a": {
+    "certify_cheap": {
+      "anomaly_kinds": [],
+      "frames": 111,
+      "green": true,
+      "pixels_checked": 8991
+    },
+    "certify_lean": {
+      "available": true,
+      "axiom_reports": [
+        {
+          "axioms": [],
+          "name": "inv_all"
+        }
+      ],
+      "errors": [],
+      "green": true
+    },
+    "compiled": {
+      "domain.pddl": 4032,
+      "problem.json": 2523,
+      "problem.pddl": 3800,
+      "theory.lean": 63270,
+      "theory.md": 4509,
+      "theory.py": 14249
+    },
+    "coverage_probes": {
+      "confirmed": [],
+      "probes_run": 0,
+      "refuted": [],
+      "rules": 21,
+      "unreachable": [],
+      "untested_rules": [],
+      "vacuous": []
+    },
+    "plan": {
+      "green": true,
+      "length": 10,
+      "manual_reaches_goal": true,
+      "status": "SAT",
+      "world_reaches_goal": true
+    },
+    "revisions": 0,
+    "score_vs_truth": {
+      "accuracy": 1.0,
+      "agree": 228,
+      "disagree": 0,
+      "examples": [],
+      "pairs": 228
+    }
+  },
+  "run_b": {
+    "certify_cheap": true,
+    "certify_lean": "ArenaEscape: step sends the mover to (2, 4), which the board does not list as arena (from (2, 3) on right)",
+    "coverage_probes": {
+      "confirmed": [],
+      "probes_run": 1,
+      "refuted": [
+        "push_onto_crate"
+      ],
+      "rules": 22,
+      "unreachable": [],
+      "untested_rules": [
+        "push_onto_crate"
+      ],
+      "vacuous": []
+    },
+    "repair": {
+      "action": "delete rule push_onto_crate",
+      "driven_by": "coverage probe refutation (and, independently, the Lean form's ArenaEscape)",
+      "result": "theory_prime.dsl \u2014 identical to Run A's manual",
+      "revision": 1
+    },
+    "revisions": 1,
+    "score_vs_truth_after": {
+      "accuracy": 1.0,
+      "agree": 228,
+      "disagree": 0,
+      "examples": [],
+      "pairs": 228
+    },
+    "score_vs_truth_before": {
+      "accuracy": 0.991228,
+      "agree": 226,
+      "disagree": 2,
+      "examples": [
+        {
+          "action": "RIGHT",
+          "cart": [
+            2,
+            3
+          ],
+          "switch_on": false
+        },
+        {
+          "action": "RIGHT",
+          "cart": [
+            2,
+            3
+          ],
+          "switch_on": true
+        }
+      ],
+      "pairs": 228
+    },
+    "seed": "push_onto_crate \u2014 the Cart may walk onto colour 4; zero evidence, and the trajectory never pushes into the Crate, so replay cannot see it"
+  },
+  "trace": {
+    "a0p-base": {
+      "budget": 110,
+      "coverage": "107/228",
+      "covered_pairs": 107,
+      "frames": 111,
+      "mechanisms_never_witnessed": {
+        "blocked_by_closed_door": 1,
+        "blocked_by_crate": 6,
+        "blocked_by_wall": 35,
+        "step": 79
+      },
+      "mechanisms_witnessed": {
+        "blocked_by_wall": 18,
+        "step": 82,
+        "teleport": 2,
+        "toggle_off_DOWN": 1,
+        "toggle_off_LEFT": 1,
+        "toggle_off_RIGHT": 1,
+        "toggle_off_UP": 1,
+        "toggle_on_DOWN": 1,
+        "toggle_on_LEFT": 1,
+        "toggle_on_RIGHT": 1,
+        "toggle_on_UP": 1
+      },
+      "reachable_states": 57,
+      "state_action_pairs": 228,
+      "transitions": 110,
+      "win_frames": []
+    },
+    "a0p-no-switch": {
+      "budget": 40,
+      "coverage": "36/88",
+      "covered_pairs": 36,
+      "frames": 41,
+      "mechanisms_never_witnessed": {
+        "blocked_by_closed_door": 1,
+        "blocked_by_crate": 3,
+        "blocked_by_wall": 9,
+        "step": 39
+      },
+      "mechanisms_witnessed": {
+        "blocked_by_wall": 8,
+        "step": 31,
+        "teleport": 1
+      },
+      "reachable_states": 22,
+      "state_action_pairs": 88,
+      "transitions": 40,
+      "win_frames": []
+    }
+  }
+}

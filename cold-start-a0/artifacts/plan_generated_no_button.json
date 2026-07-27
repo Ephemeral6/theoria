@@ -1,4 +1,5 @@
 {
+  "_name": null,
   "backend": null,
   "domain": "theory\\generated_no_button\\domain.pddl",
   "note": "no plan exists under this manual \u2014 constraint 6 forbids stopping here; a certificate is owed",

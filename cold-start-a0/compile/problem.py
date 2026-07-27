@@ -76,7 +76,8 @@ class Problem:
 NAME_BY_COLOR = {7: "Button", 5: "Door", 6: "Cart"}
 
 
-def derive(trace_path: str, name: str) -> Problem:
+def derive(trace_path: str, name: str,
+           name_by_color: Optional[Dict[int, str]] = None) -> Problem:
     frames, actions, wins = read_trace(trace_path)
     board = extract_board(frames)
     background = background_color(board, frames)
@@ -93,7 +94,8 @@ def derive(trace_path: str, name: str) -> Problem:
         color = layer[0][mask[0][0]][mask[0][1]]
         objects.append(
             ObjectInstance(
-                name=NAME_BY_COLOR.get(color, "obj_%d" % color),
+                name=(name_by_color or NAME_BY_COLOR).get(
+                    color, "obj_%d" % color),
                 pos=tuple(track.anchors[0]),
                 color=color,
             )
