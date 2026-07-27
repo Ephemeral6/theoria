@@ -8,7 +8,7 @@ appends a paragraph to `/PARTNER_SYNC.md`.
 | Tag | Scope | State |
 |---|---|---|
 | `engine-rig-m1-fixtures` | Fixtures A/B/C, deterministic generators | done |
-| `engine-rig-m2-mdl` | `mdl_segmenter` | pending |
+| `engine-rig-m2-mdl` | `mdl_segmenter` | done |
 | `engine-rig-m3-cegis` | `cegis_miner` | pending |
 | `engine-rig-m4-zerospace` | `zero_space` | pending |
 | `engine-rig-m5-lp` | `lp_potential` | pending |

@@ -83,13 +83,14 @@ rigged by whoever picks the units.
 
 **Decision.** One bit-counting scheme (`engines/mdl_segmenter/README.md`) prices
 both the object/event script and the per-pixel baseline. Both pay the same
-per-transition header and the same cost for the initial frame; they differ only
-in how each transition's content is encoded. The acceptance threshold is a ratio
-(script <= 0.5 x baseline), not an absolute number.
+per-transition header and neither is charged for the initial frame; they differ
+only in how each transition's content is encoded. The acceptance threshold is a
+ratio (script <= 0.5 x baseline), not an absolute number. Measured on Fixture A:
+826 vs 2888 bits, ratio 0.286.
 
-**Why.** Sharing the header and the initial frame between the two models removes
-the easiest way to fake a win. Fixed-width fields (rather than an entropy coder)
-keep the count auditable by hand.
+**Why.** Sharing the header and skipping the initial frame on both sides removes
+the easiest way to fake a win. Fields are fixed-width, and hand-auditable, with
+one exception recorded as D-011.
 
 ---
 
@@ -171,3 +172,22 @@ goal — code that shares nothing with the search.
 
 **Why.** A search bug that returns a too-short plan is caught by the validator; a
 search bug that returns a too-long plan is caught by the literal.
+
+---
+
+## D-011 · Move displacement is Elias-gamma coded, not fixed-width
+
+**Context.** The first cut of the cost model charged a fixed-width field per
+displacement component. That makes every move cost the same number of bits.
+
+**Decision.** A displacement component costs `1 + gamma(|d|)` bits (sign plus
+Elias-gamma magnitude): 4 bits for a unit step, 8 for a jump of 8.
+
+**Why.** Not a refinement for its own sake — with a fixed-width offset the
+matcher is *indifferent* between "each block moved one cell" and "the two blocks
+swapped identities", both being two move events of equal cost, so tracking is
+ill-posed as soon as two look-alike objects share a board. Charging by magnitude
+also prices the teleport honestly: 19 bits against a unit move's 9, i.e. the
+rare long jump is the expensive thing to describe, which is exactly why it is
+the informative one. Caught by the two-identical-blocks test, not by the Cart
+fixture, which has only one object.
