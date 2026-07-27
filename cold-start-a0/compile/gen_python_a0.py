@@ -16,7 +16,7 @@ Supported subset, and it raises on anything else rather than guessing:
   guards   `act=push(<Obj>, <dir>)`, `free(<spatial>)`, `colored(<spatial>, k)`
   spatial  `above|below|leftof|rightof(<Obj>)`
   events   `moved(o, dir)`, `jumped(o, <landmark>)`, `recolored(o, k)`,
-           `vanished(o)`
+           `vanished(o)`, `appeared(o)`
 """
 
 from typing import Dict, List
@@ -26,6 +26,7 @@ from theory_compiler.parser.ast_nodes import (
     NameRef, NumberLit, RuleDecl, TheoryAST, TupleLit,
 )
 
+from compile.dialect import Semantics, check_backend_support
 from compile.problem import Problem
 
 DIRECTIONS = {"up": (-1, 0), "down": (1, 0), "left": (0, -1), "right": (0, 1)}
@@ -109,6 +110,8 @@ def _effect_code(rule: RuleDecl) -> (str, List[str]):
         return obj, ["state.%s_colour = %d" % (obj, args[1].value)]
     if event.name == "vanished":
         return obj, ["state.%s_present = False" % obj]
+    if event.name == "appeared":
+        return obj, ["state.%s_present = True" % obj]
     raise UnsupportedClause("unknown event %r" % event.name)
 
 
@@ -134,8 +137,10 @@ Constraint 4: generated forms are never hand-edited.  Change theory.dsl and
 recompile.
 
 This module is the only predictor in the system.  `step` implements the manual's
-rules plus the frame axiom the manual declares in its header: *if no rule fires
-for an object, that object is unchanged*.
+rules under the semantics the manual **declares** in its `semantics:` section --
+see SEMANTICS below.  Nothing about the frame axiom, the conflict policy or the
+cascade shape is assumed by this backend; a manual that does not say is rejected
+at compile time.
 """
 
 from dataclasses import dataclass, replace
@@ -150,11 +155,14 @@ ACTIONS = [("push", "%(mover)s", d) for d in ("up", "down", "left", "right")]
 '''
 
 
-def generate_python(ast: TheoryAST, problem: Problem, mover: str = "Cart") -> str:
+def generate_python(ast: TheoryAST, problem: Problem, semantics: Semantics,
+                    mover: str = "Cart") -> str:
+    check_backend_support(semantics)
     fields = _obj_fields(ast)
     names = sorted(fields)
 
     L: List[str] = [HEADER % {"mover": mover}]
+    L.append("SEMANTICS = %r" % (semantics.as_json(),))
     L.append("GRID = (%d, %d)" % (problem.height, problem.width))
     L.append("BACKGROUND = %d" % problem.background)
     L.append("LANDMARKS: Dict[str, Cell] = %r" % (
@@ -288,10 +296,15 @@ def generate_python(ast: TheoryAST, problem: Problem, mover: str = "Cart") -> st
     L.append("")
     L.append("")
     L.append("def step(state: State, action) -> State:")
-    L.append('    """One action, one successor.  Total: the frame axiom closes it.')
+    L.append('    """One action, one successor, per the manual\'s `semantics:`.')
     L.append("")
-    L.append("    Every guard is read against `state`, never against the partially")
-    L.append("    updated result: rules fire simultaneously, not in file order.")
+    L.append("    frame persist     -- an object no firing rule touches is unchanged,")
+    L.append("                         which is what makes this function total.")
+    L.append("    conflict exclusive -- two rules claiming one object is an error,")
+    L.append("                         not a precedence question.")
+    L.append("    cascade single_frame -- every guard reads `state`, never the")
+    L.append("                         partially updated result, and all effects")
+    L.append("                         apply together.")
     L.append('    """')
     L.append("    result = state.copy()")
     L.append("    claimed = {}")

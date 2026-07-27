@@ -50,6 +50,17 @@ from compile.problem import Problem
 DIRS = ("up", "down", "left", "right")
 
 
+class ArenaEscape(Exception):
+    """The manual's `step` leaves the state space the manual itself declares.
+
+    A proof obligation in its own right, and one the cheap layer cannot see: the
+    board says which cells are arena, and a rule that moves an object onto a cell
+    outside it makes the manual internally inconsistent before it is even wrong
+    about the world.  Surfacing this as a typed failure rather than a KeyError is
+    the difference between a diagnostic and a crash.
+    """
+
+
 @dataclass
 class Axis:
     """One component of the state, as a Lean inductive."""
@@ -146,8 +157,14 @@ def _states(module, arena, axes: Sequence[Axis]):
     return out
 
 
-def _term(state, cart_index, axes: Sequence[Axis]) -> str:
-    parts = ["Cell.c%d" % cart_index[tuple(state.Cart_pos)]]
+def _term(state, cart_index, axes: Sequence[Axis], context: str = "") -> str:
+    cell = tuple(state.Cart_pos)
+    if cell not in cart_index:
+        raise ArenaEscape(
+            "step sends the mover to %s, which the board does not list as arena%s"
+            % (cell, (" (" + context + ")") if context else "")
+        )
+    parts = ["Cell.c%d" % cart_index[cell]]
     parts += [axis.ctor(getattr(state, axis.field)) for axis in axes]
     return "⟨%s⟩" % ", ".join(parts)
 
@@ -196,7 +213,8 @@ def weight_invariant(safe_cells: Sequence[Tuple[int, int]], arena,
 def generate_lean(ast: TheoryAST, problem: Problem, theory_py_path: str,
                   invariant_builder: Optional[Callable] = None,
                   goal_cell: Optional[Tuple[int, int]] = None,
-                  unsolvable: bool = False) -> str:
+                  unsolvable: bool = False,
+                  semantics=None) -> str:
     module = _load(theory_py_path)
     arena, axes = build_axes(module, problem)
     cart_index = {cell: i for i, cell in enumerate(arena)}
@@ -220,6 +238,13 @@ def generate_lean(ast: TheoryAST, problem: Problem, theory_py_path: str,
              % (problem.name, len(arena),
                 ", ".join(a.field for a in axes) or "none", len(states)))
     L.append("  Proofs use `decide` only, so `#print axioms` must come back empty.")
+    if semantics is not None:
+        L.append("  Declared semantics: frame %s, conflict %s, cascade %s."
+                 % (semantics.frame, semantics.conflict, semantics.cascade))
+        L.append("  `step` below is total because the manual says `frame %s`; it is"
+                 % semantics.frame)
+        L.append("  single-valued because the manual says `conflict %s`."
+                 % semantics.conflict)
     L.append("-/")
     L.append("")
 
@@ -264,7 +289,9 @@ def generate_lean(ast: TheoryAST, problem: Problem, theory_py_path: str,
         term = _term(state, cart_index, axes)
         for d in DIRS:
             nxt = module.step(state, ("push", "Cart", d))
-            L.append("  | %s, .%s => %s" % (term, d, _term(nxt, cart_index, axes)))
+            L.append("  | %s, .%s => %s"
+                     % (term, d, _term(nxt, cart_index, axes,
+                                       "from %s on %s" % (tuple(state.Cart_pos), d))))
     L.append("")
 
     L.append("def Goal (s : St) : Bool := s.cart == Cell.c%d" % cart_index[goal])

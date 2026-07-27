@@ -2,6 +2,9 @@
   Auto-generated from theory.dsl by compile/gen_lean_a0.py — DO NOT EDIT.
   Problem: a0-base.  Arena: 38 cells.  Axes: Button_colour, Door_present.  States: 152.
   Proofs use `decide` only, so `#print axioms` must come back empty.
+  Declared semantics: frame persist, conflict exclusive, cascade single_frame.
+  `step` below is total because the manual says `frame persist`; it is
+  single-valued because the manual says `conflict exclusive`.
 -/
 
 /-- Arena cells, in row-major order:

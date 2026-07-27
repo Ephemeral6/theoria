@@ -36,3 +36,10 @@ The puzzle is solved when: the pos of Cart is (2, 7).
 
 - **unsolvable no button**: 赢不了：小车永远待在左屋——它开局在左屋，而每一条推动规则都只把它送到相邻的空格，传送门也只把它送回左屋 (1,1)；隔墙上唯一的缺口 (4,5) 在这一关始终是障碍，没有任何规则能让它变空；目标格 (2,7) 在右屋，所以到不了。 (verified by testing). This follows from: push up, push down, push left, push right, teleport down.
 
+
+## How a Turn Works
+
+If no rule applies to an object in a turn, that object is exactly as it was.
+At most one rule may apply to any one object in any one turn; the rules are written so that this cannot fail.
+One action produces one new situation. Every rule reads the situation as it was before the action, and all of their effects happen together.
+

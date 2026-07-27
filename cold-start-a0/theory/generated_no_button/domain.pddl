@@ -11,7 +11,7 @@
     (adj-left ?a - cell ?b - cell)
     (adj-right ?a - cell ?b - cell)
     (portal-exit ?c - cell)
-    (pressed)
+    (switched)                    ; the Switch/Button state
   )
 
   (:action push-up

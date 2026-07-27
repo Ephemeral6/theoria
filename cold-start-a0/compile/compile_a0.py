@@ -30,7 +30,8 @@ from theory_compiler.generators.gen_markdown import generate_markdown  # noqa: E
 from theory_compiler.parser.theory_parser import parse_theory  # noqa: E402
 
 from compile import problem as problem_mod  # noqa: E402
-from compile.gen_lean_a0 import generate_lean  # noqa: E402
+from compile.dialect import parse_semantics  # noqa: E402
+from compile.gen_lean_a0 import ArenaEscape, generate_lean  # noqa: E402
 from compile.gen_pddl_a0 import generate_pddl  # noqa: E402
 from compile.gen_python_a0 import generate_python  # noqa: E402
 
@@ -38,32 +39,55 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 def compile_theory(dsl_path: str, trace_path: str, problem_name: str,
-                   out_dir: str) -> dict:
+                   out_dir: str, name_by_color=None) -> dict:
     text = open(dsl_path, encoding="utf-8").read()
     ast = parse_theory(text)
-    prob = problem_mod.derive(trace_path, problem_name)
+    semantics = parse_semantics(text)        # raises if the manual does not say
+    prob = problem_mod.derive(trace_path, problem_name, name_by_color)
     os.makedirs(out_dir, exist_ok=True)
 
     written = {}
 
-    py = generate_python(ast, prob)
+    py = generate_python(ast, prob, semantics)
     written["theory.py"] = _write(os.path.join(out_dir, "theory.py"), py)
 
-    md = generate_markdown(ast)
+    md = render_markdown(ast, semantics)
     written["theory.md"] = _write(os.path.join(out_dir, "theory.md"), md)
 
     domain, instance = generate_pddl(ast, prob)
     written["domain.pddl"] = _write(os.path.join(out_dir, "domain.pddl"), domain)
     written["problem.pddl"] = _write(os.path.join(out_dir, "problem.pddl"), instance)
 
-    lean = generate_lean(ast, prob, os.path.join(out_dir, "theory.py"))
-    written["theory.lean"] = _write(os.path.join(out_dir, "theory.lean"), lean)
+    # The Lean form is the first thing that walks the manual's whole state space,
+    # so it is the first thing that can notice `step` leaving it.  That is a real
+    # certify failure and is reported, not raised past the caller.
+    try:
+        lean = generate_lean(ast, prob, os.path.join(out_dir, "theory.py"),
+                             semantics=semantics)
+        written["theory.lean"] = _write(os.path.join(out_dir, "theory.lean"), lean)
+    except ArenaEscape as exc:
+        written["theory.lean"] = 0
+        written["theory.lean.error"] = "ArenaEscape: %s" % exc
 
     written["problem.json"] = _write(
         os.path.join(out_dir, "problem.json"),
         json.dumps(prob.as_json(), indent=2, sort_keys=True) + "\n",
     )
     return written
+
+
+def render_markdown(ast, semantics) -> str:
+    """`gen_markdown` is reused verbatim; the declared semantics are appended.
+
+    Still a deterministic pretty-printer with no model in the path (constraint 1
+    and Theoria 1.8's "不过 LLM,不许润色"): `Semantics.rendering()` is a lookup on
+    three closed value sets.
+    """
+    body = generate_markdown(ast)
+    lines = ["", "## How a Turn Works", ""]
+    lines.extend(semantics.rendering())
+    lines.append("")
+    return body + "\n".join(lines) + "\n"
 
 
 def _write(path: str, text: str) -> int:

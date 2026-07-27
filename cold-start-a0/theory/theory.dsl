@@ -5,10 +5,6 @@
 # Every clause here was written by hand after reading a proposal; the
 # accept / reject / probe reasoning for each one is in ../THEORIZE_LOG.md.
 #
-# Frame axiom (declared here because the grammar has no place for it):
-#   if no rule fires for an object, that object is unchanged.
-#   The mined `*_still_*` rules are entailed by this and are therefore not
-#   entered — see THEORIZE_LOG R-07.
 # ============================================================================
 
 word_table:
@@ -16,9 +12,19 @@ word_table:
   object Cart { pos: Coord, color: Int }
   object Button { pos: Coord, color: Int }
   object Door { pos: Coord, color: Int, present: Bool }
-  Cart [segment: uniform_color ev: t0-t274 compress: 2967]
-  Button [segment: uniform_color ev: t99 compress: -17]
-  Door [segment: uniform_color ev: t99 compress: -13]
+  # compress: bits saved against a RESPONSIBILITY-COMPLETE alternative --
+  # the same pixels encoded raw, frame-0 declaration included.  Button and
+  # Door do not pay for themselves on the trace and are admitted anyway:
+  # `door_latch` names them and the invariant language has no pixel-level
+  # paraphrase.  See ../artifacts/concept_accounts.json, THEORIZE_LOG O-04.
+  Cart [segment: uniform_color ev: t0-t274 compress: 2125]
+  Button [segment: uniform_color ev: t99 compress: -5]
+  Door [segment: uniform_color ev: t99 compress: -1]
+
+semantics:
+  frame persist                 # an object no firing rule mentions is unchanged
+  conflict exclusive            # at most one rule per object per transition
+  cascade single_frame          # one action -> one frame; guards read the pre-state
 
 events:
   event moved(o, dir) | jumped(o, dest) | recolored(o, c) | vanished(o)

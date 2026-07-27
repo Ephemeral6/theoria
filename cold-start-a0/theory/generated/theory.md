@@ -41,3 +41,10 @@ The puzzle is solved when: the pos of Cart is (2, 7).
 
 - **press is direction free**: 推向未按下的按钮就会按下它，无论从哪个方向推——但这一条只有一个见证，本世界的闩锁不可逆，证据永远补不齐 (awaiting verification). This follows from: press left.
 
+
+## How a Turn Works
+
+If no rule applies to an object in a turn, that object is exactly as it was.
+At most one rule may apply to any one object in any one turn; the rules are written so that this cannot fail.
+One action produces one new situation. Every rule reads the situation as it was before the action, and all of their effects happen together.
+

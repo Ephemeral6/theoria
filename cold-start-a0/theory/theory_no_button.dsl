@@ -18,14 +18,17 @@
 # travelling and the problem not: the same four push rules and the same portal
 # rule describe both instances.
 #
-# Frame axiom, as in the base manual: if no rule fires for an object, that
-# object is unchanged.
 # ============================================================================
 
 word_table:
   board
   object Cart { pos: Coord, color: Int }
-  Cart [segment: uniform_color ev: t0-t110 compress: 991]
+  Cart [segment: uniform_color ev: t0-t110 compress: 1001]
+
+semantics:
+  frame persist                 # an object no firing rule mentions is unchanged
+  conflict exclusive            # at most one rule per object per transition
+  cascade single_frame          # one action -> one frame; guards read the pre-state
 
 events:
   event moved(o, dir) | jumped(o, dest)

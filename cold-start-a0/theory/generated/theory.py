@@ -4,8 +4,10 @@ Constraint 4: generated forms are never hand-edited.  Change theory.dsl and
 recompile.
 
 This module is the only predictor in the system.  `step` implements the manual's
-rules plus the frame axiom the manual declares in its header: *if no rule fires
-for an object, that object is unchanged*.
+rules under the semantics the manual **declares** in its `semantics:` section --
+see SEMANTICS below.  Nothing about the frame axiom, the conflict policy or the
+cascade shape is assumed by this backend; a manual that does not say is rejected
+at compile time.
 """
 
 from dataclasses import dataclass, replace
@@ -18,6 +20,7 @@ DIRECTIONS: Dict[str, Cell] = {
 }
 ACTIONS = [("push", "Cart", d) for d in ("up", "down", "left", "right")]
 
+SEMANTICS = {'frame': 'persist', 'conflict': 'exclusive', 'cascade': 'single_frame'}
 GRID = (9, 9)
 BACKGROUND = 0
 LANDMARKS: Dict[str, Cell] = {'portal_exit': (1, 1)}
@@ -206,10 +209,15 @@ class AmbiguousTransition(Exception):
 
 
 def step(state: State, action) -> State:
-    """One action, one successor.  Total: the frame axiom closes it.
+    """One action, one successor, per the manual's `semantics:`.
 
-    Every guard is read against `state`, never against the partially
-    updated result: rules fire simultaneously, not in file order.
+    frame persist     -- an object no firing rule touches is unchanged,
+                         which is what makes this function total.
+    conflict exclusive -- two rules claiming one object is an error,
+                         not a precedence question.
+    cascade single_frame -- every guard reads `state`, never the
+                         partially updated result, and all effects
+                         apply together.
     """
     result = state.copy()
     claimed = {}

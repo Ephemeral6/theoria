@@ -11,7 +11,7 @@
     (adj-left ?a - cell ?b - cell)
     (adj-right ?a - cell ?b - cell)
     (portal-exit ?c - cell)
-    (pressed)
+    (switched)                    ; the Switch/Button state
   )
 
   (:action push-up
@@ -45,11 +45,11 @@
   )
 
   (:action press-left
-    :parameters (?from - cell ?b - buttoncell ?d - doorcell)
-    :precondition (and (at ?from) (adj-left ?from ?b) (not (pressed)))
-    :effect (and (pressed) (passable ?d))
+    :parameters (?from - cell ?s - buttoncell ?d - doorcell)
+    :precondition (and (at ?from) (adj-left ?from ?s) (not (switched)))
+    :effect (and (switched) (passable ?d))
   )
 
-;; door_opens_left is a cascade of the press action above — its effect is folded into it
+;; door_opens_left is a cascade of the toggle action with the same guard — its effect is folded in there
 
 )
