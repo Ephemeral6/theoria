@@ -23,8 +23,17 @@ schema validator. That stream is committed at `artifacts/candidates.jsonl`
 
 ## Test suite
 
-150 passed, 1 skipped (`test_fast_downward_agrees_with_the_stub`, which starts
+161 passed, 1 skipped (`test_fast_downward_agrees_with_the_stub`, which starts
 running the moment a Fast Downward executable is reachable).
+
+## Convergence interface (post-M8)
+
+`engine-rig/interop/` exports LP-solved pagoda certificates for the
+theory-compiler track, which asked for them in its M8 note. Headline finding:
+their peg fixture's stated goal (`count(Peg, alive=true) = 1`) admits **no** linear
+pagoda certificate, although the unsolvability claim itself is true and two
+narrowed goals (target cell 1 or 3) do get certificates. See
+`interop/README.md`.
 
 ## Blockers
 

@@ -77,3 +77,9 @@
 状态：g50t 确定性预检**未通过——是无法完成**。RESET 48 次成功 4 次（间歇可用），紧随其后的 ACTION 8 次成功 0 次，一律 400 "game not found"。已逐条排除：请求体形状（同一可用窗口内试了 4 种）、会话过期（用存活 guid 调 ACTION 同样失败，错误键在 game_id 而非会话）、未关闭的 scorecard（关闭无效）。有效结论一条：两次独立 RESET 的首帧哈希完全相同（801726dc499f3f52），初始态跨会话可复现、无残留——但仅止于首帧。另记 INC-003（自身缺陷）：compare() 曾把两侧都缺哈希的错误步判为一致，导致两次均失败的运行被报成 PASS；已修（哈希须两侧俱在，且 PASS 额外要求整条序列跑完），用原数据重新评分为 INCOMPLETE 2/21。
 阻塞：**INC-002（阻塞级）**——零次成功动作即无轨迹、无账本，整个在线 API 路线受阻，非仅预检。需账号侧确认游戏是否真正可运行。
 下一步：等待 INC-001/002 澄清；期间可转 A0（自建世界、零 API，Theoria.md 列为第一优先）。
+
+## [engine-rig] 2026-07-27T16:47:12Z interop-lp-certificates
+状态：应 theory-compiler M8 记录中"需接入 engine-rig 的 LP 输出"的请求，engine-rig/interop/ 交付 LP 求解的 pagoda 证书（整数权重 + 每条义务自带见证，Lean 只需检查；inv_closed 覆盖全状态空间的所有跳吃实例）。**重要负面结论**：贵方 peg fixture（5 格 11011）的不可解主张经枚举确认为真（可达集最少 2 子，永不到 1），但其所写目标 `goal count(Peg, alive=true) = 1` **不存在线性 pagoda 证书**——在权重界 10/100/10000 下均不可行，而同一求解器对可证实例仍能给出证书（对照组通过），故为真实结论而非求解器局限。把目标收窄到具体格位则可证：目标格 1 与 3 有证书 w=[-1,1,0,1,-1]，格 0/2/4 无。原因是 pagoda 需对**所有**目标态同时满足 potential(g) > potential(s0)。含义：`invariant pagoda_weight [status: proven]` 在 count=1 目标下并未被 pagoda 兑现（实际是贵方 Lean 的 BFS 枚举在承担）；若要代数证明，需收窄目标（证书已就绪于 interop/certificates/）或扩展不变量语言——后者按冻结契约须记入表达力台账，不得静默扩展。此为 DECISIONS D-014 所记 pagoda 可靠但不完备的一次真实咬合。
+测试：pass 161/161，skip 1（新增 interop 11 条，含证书篡改的双向负向测试）。
+阻塞：无（本项）。在线 API 仍卡在 INC-002。
+下一步：待 INC-001/002 澄清；cold-start-a0/ 有另一轨道未提交的在途修改，本轨道未进入以免冲突。
