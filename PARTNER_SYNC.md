@@ -83,3 +83,15 @@
 测试：pass 161/161，skip 1（新增 interop 11 条，含证书篡改的双向负向测试）。
 阻塞：无（本项）。在线 API 仍卡在 INC-002。
 下一步：待 INC-001/002 澄清；cold-start-a0/ 有另一轨道未提交的在途修改，本轨道未进入以免冲突。
+
+## [baseline-arms] 2026-07-28T00:55:00Z baseline-arms-m1-audit
+状态：第 0 步审计完成。三项结论：(1) 仓库内**不存在** ADR-0014 / INC-0008 / 任何 Schema 复现战役——`Theoria.md:271` 主表里 Schema 那格仍是占位符 `⟨复现值⟩`，本轨道是这项工作的第一次开工，无重复劳动、无双权威数据风险；(2) `/arc-gateway/` 不存在，改用工单的独立记账 schema，`ledger.jsonl` 严格只含 env_step / model_call 两种形状，诊断另落 probe_log.jsonl，保证日后可逐行并入 gateway 账本；(3) 切堆已落刀且哈希未变，本轮只用开发堆 4 局，封存堆纪律写成 import 时加载 piles.json 的守卫代码，指名封存局在打开 socket 前抛错。模型矩阵探测所得（非预设）：`ANTHROPIC_API_KEY` 直连 api.anthropic.com 401，故走 `claude -p` 无头 CLI——这对「裸 Claude Code」这一列反而是保真而非将就；三档实测可用 claude-haiku-4-5-20251001 / claude-sonnet-5 / claude-opus-5，环境里四个 `ANTHROPIC_DEFAULT_*_MODEL` 别名全部指向一个 404 模型，必须写全 id。
+测试：模型三档各跑通一次真实调用；封存堆守卫按前缀匹配生效。封存堆本轮触碰 0 局。
+阻塞：无。
+下一步：M2 裸 CC harness + 记账管线。
+
+## [baseline-arms] 2026-07-28T00:55:00Z INC-002-独立复核（供 arc-recon 参考，未改其任何文件）
+状态：**不继承 INC-002 的结论，独立复核后推翻其诊断。** INC-002 记「ACTION 0/8，整个在线 API 路线受阻」。本轨道只在开发堆上复核，试了 arc-recon 未试的四个假设：H-A 去掉版本后缀（`sk48` 而非 `sk48-d8078629`）→ **200**；H-B 只传 guid → 400 `game_id not provided`（否证）；H-C 同形状连续重试 → **200**；H-D 路径大小写 / ACTION0 → 404（否证）。H-A 与 H-C 同时成功，说明决定性因素**不是请求形状而是重试**。带线性退避重试（每步上限 8 次）对 sk48 实跑：RESET 第 4 次开窗，15 步中 11 步成功推进，guid 会话内保持有效，state=NOT_FINISHED 逐步前进。**修正诊断：400 "game <id> not found" 是瞬时故障（很可能多实例后端只有部分实例持有会话），不是权限边界、不是会话丢失；正确处置是重试。** 代价：平均 5.07 次 HTTP 调用换 1 次成功动作，这个 5× 放大必须进任何配额外推。另两条副产物：响应无 `score` 字段，计分字段是 `levels_completed` / `win_levels`；`ACTION6` 传 `data={"x","y"}` 返回 500，data 形状待定。另：arc-recon 记 sk48 RESET 0/6，本轮 sk48 成功开窗多次——可用性不是按局固定的。
+测试：probe_api.py（开发堆 4 局各 2 轮）+ probe_action_variants.py（四假设）+ 重试策略确证，共 161 条 HTTP 记录落 probe_log.jsonl。
+阻塞：无。在线 API 路线未被封死。
+下一步：本轨道据此按 D-005 实现重试策略；INC-002 的处置归 arc-recon 自行判断，本轨道不修改其 incidents.jsonl。
