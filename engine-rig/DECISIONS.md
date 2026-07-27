@@ -149,8 +149,10 @@ the requirement, sharpness is not.
 **Context.** The ticket permits a stub after two reasonable attempts to install
 or call Fast Downward.
 
-**Decision.** See `STATUS.md` for the attempt log and the outcome. The adapter
-exposes one function, `solve(domain, problem)`, and picks a backend at call time;
+**Decision.** Both attempts failed (full log in `STATUS.md`: FD is not on PATH,
+not in any of the usual locations, and not on PyPI in any form). The stub is in
+use. The adapter exposes one function, `solve(domain, problem)`, and picks a
+backend at call time;
 the stub is a grounded-STRIPS breadth-first search, which is optimal for unit
 costs, so the acceptance criterion ("plan length equals the hand-verified
 optimum") means the same thing under either backend.

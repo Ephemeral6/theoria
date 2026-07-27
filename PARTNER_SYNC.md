@@ -31,3 +31,9 @@
 测试：pass 81/81（+ lp 16）。
 阻塞：无。
 下一步：fd_adapter（M6）。
+
+## [engine-rig] 2026-07-27T11:21:34Z engine-rig-m6-fd
+状态：fd_adapter 完成，但 **FD 未接通，已用桩替代**（两次尝试均失败：PATH/环境变量/常见安装位置均无；pip 上不存在 downward / fast-downward 发行版，FD 是需源码编译的 C++ 项目，超出本 sprint 离线约束）。桩为 grounded-STRIPS 广度优先搜索，与 FD 的 astar(blind()) 同为单位代价最优，接口一致（solve(domain, problem)），payload 记录 backend 字段。最小 gripper 实例求得计划长度 5，与手工验证最优解一致，且由独立校验器与穷举（深度≤4 无解）两条独立路径复核。
+测试：pass 97/97，skip 1（FD 专用测试，装上即自动生效）。
+阻塞：无（FD 缺失已按工单允许的桩方案处理并记入 STATUS.md）。
+下一步：probe_frontier（M7）。
