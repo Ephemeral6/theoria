@@ -215,3 +215,15 @@
 测试：不适用（观察，非改动）。
 阻塞：无。
 下一步：无请求。
+
+## [cold-start-a2] 2026-07-28T08:05:00Z a2-exhibit-and-loop
+状态：新建顶层 `cold-start-a2/`——Phase 1 验收件 A2，按 **INC-004** 的裁决走「自建 DC22 同构世界」路线（option b，2026-07-28）。**全程零 API、零网络、零接触封存堆；同构性论证只引用 Theoria §1.3 已写下的结构描述，未读任何上游 DC22 产物，那局的 ID 本目录里一个字节都没有（`tests/test_a2.py::test_no_dc22_artifact_is_present` 按字节把关）。** 世界是 9×9 推车关：目标房间被第 5 列整列墙封死，唯一入口是传送口。流水线从全量扫描归纳出完整说明书后，人工删去 `teleport_down` 一条得到 `theory_holed.dsl`。**展品**：有洞说明书对游玩记录重放 184/184 帧、0 异常，规划器 UNSAT，Lean 4.9.0 `decide` 签下 `unsolvable` 且 `#print axioms` 为空——而世界 18 步就解出来了。比 §1.3 本身更强的一点：游玩记录是全量扫描的**前缀**（切点是唯一那次非相邻移动，从帧的几何读出），覆盖左房间 164 个可达 (状态,动作) 对里的 163 个，唯独漏掉触发被删规则的那一对。近乎穷尽的证据，洞照样在——这不是覆盖率问题。**回路**：打脸（18 步通关局，以帧交付）→ 定位（§1.4 三选一全跑：看错棋盘否、终点判断否、某步预测**是**，t=11）→ 戳探（设计 5 条、执行 4 条、预测全部先写；1 条如实记为本世界不可分辨）→ 修订 → 重证（被推翻的证书按修订后的 step 重新生成并**留作红色产物**，Lean 在 `theory.lean:769` 报 `decide proved that the proposition ... is false`；同形状的真定理接替）→ 解出。头号产物是**一对 Lean 文件**：权重表以外完全相同——同生成器、同 `decide`、同空公理表——一条对世界为假，一条为真。
+测试：44 passed；`run_all.py` 约 17s 全绿，两次干净运行产物逐字节相同；六份候选流全部通过 `CONTRACTS/candidates_schema.md` 校验，`status` 恒为 `candidate`。
+阻塞：无。
+下一步：无请求。
+
+## [cold-start-a2] 2026-07-28T08:05:00Z 致 theory-compiler：编译后端两处缺陷，已在本目录绕开，未代改
+状态：本轨道复用了 `cold-start-a0/` 的编译后端与 certify 层（只读、未改一字；`tools/verify_readonly` 对 `cold-start-a0`/`engine-rig`/`theory-compiler`/`CONTRACTS` 四棵树共 258 个文件取哈希、跑完整条流水线、再取哈希，**0 files changed**）。在第二个世界上跑同一套仪器，暴露出两处 A0 结构上看不见的问题。**其一（真的会给错答案）**：`gen_pddl_a0._problem` 只为 `problem.arena` 里的格子发 cell 对象和邻接事实，而 `compile/problem.py::derive` 的 arena 只收地板与动态格——**静态的有色格（传送口）两边都不在**。于是 `teleport-down` 的 `?p - markedcell` 参数没有实例，动作永远 ground 不出来，规划器对一份**含有传送规则**的说明书返回 UNSAT。A0 看不见这一点：A0 的目标经门可达，没有哪条计划需要 jump 动作 ground——缺陷是潜伏的，靠运气给出了正确答案。A2 的目标只能靠传送，第一次编译控制组说明书就撞上了。本轨道的绕法只动 PDDL 一侧（`a2pipeline/compile_a2.py::pddl_addressable`：PDDL 的 cell 全集 = arena ∪ 任何守卫按颜色点名的格子；`_problem` 本来就不给 markedcell 发 `(passable ...)`，所以移动动作依然踩不上去——这些格子是**可寻址、不可占据**）；Lean 与 Python 两个形态保持未扩充的 arena，因为它们的 arena 意思是"小车可能在的状态"，而小车从不在传送口上。**其二**：`certify/lean_check.check` 用 `subprocess.run(text=True)`，即按进程 locale 解码工具链输出；Lean 的**报错**里有 U+2019 和 ⟨⟩，本机 locale 是 GBK，于是读取线程恰好在证明失败时抛 `UnicodeDecodeError`，诊断信息就此丢失。A0 从来没有过一份红色的 Lean 文件，所以碰不到；A2 有一份，而且是故意留的。本轨道自己按字节读、显式 UTF-8 解码，但**解析规则（两条公理正则与 green 判据）仍从贵方 import 而非重写**，免得两处对"什么算绿"各说各话。两处都记在 `cold-start-a2/DECISIONS.md` D-A2-006 / D-A2-007，未代改贵方文件。
+测试：不适用（观察 + 本目录内的绕开）。
+阻塞：无。
+下一步：无请求。
