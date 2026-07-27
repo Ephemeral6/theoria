@@ -183,3 +183,60 @@ def test_enumerative_route_compiles_axiom_free(tmp_path):
     output = run_lean(generate_lean(ast, problem), tmp_path)
     assert "sorryAx" not in output
     assert "does not depend on any axioms" in output
+
+
+# ------------------------------------------------- more than one goal state
+
+def _two_goal_certificate(cert):
+    """A certificate may carry several goal states — `goal_states` is a list and
+    the producer emits one `goal_break` witness per entry. None of the three
+    certificates on disk uses more than one, so the multi-goal path would
+    otherwise ship untested.
+
+    Both `01000` and `00010` have potential 1 under these weights, so a single
+    certificate excluding both is sound; this reconstructs it rather than
+    asserting it, and `recheck` is what says the reconstruction holds.
+    """
+    from theory_compiler.certificate import PagodaCertificate, recheck
+    two = PagodaCertificate(
+        claim="unsolvable_11011_to_01000_or_00010", n_pos=5,
+        initial_state="11011", goal_states=["01000", "00010"],
+        weights=list(cert.weights), initial_potential=0,
+        produced_by=cert.produced_by, path=cert.path)
+    two.declared_witnesses = two.moves()
+    recheck(two)
+    return two
+
+
+def _two_goal_problem(cert):
+    return from_json({
+        "name": "peg5-two-goals", "n_pos": 5, "background": 0,
+        "objects": [{"name": f"Peg_{i}", "type": "Peg", "pos": i, "color": 1}
+                    for i in (0, 1, 3, 4)],
+        "weights": {"w": list(cert.weights)},
+        "goal_states": ["01000", "00010"],
+    })
+
+
+@pytest.mark.parametrize("mode", ["computational", "algebraic"])
+def test_several_goal_states_in_one_theorem(peg, cert, mode):
+    ast, _ = peg
+    two = _two_goal_certificate(cert)
+    src = generate_lean(ast, _two_goal_problem(cert), two, proof=mode)
+    assert "sorry" not in src
+    assert _lean_bits("01000") in src and _lean_bits("00010") in src
+
+
+def _lean_bits(bits: str) -> str:
+    return "⟨%s⟩" % ", ".join("true" if b == "1" else "false" for b in bits)
+
+
+@needs_lean
+@pytest.mark.parametrize("mode", ["computational", "algebraic"])
+def test_several_goal_states_still_compile(peg, cert, tmp_path, mode):
+    ast, _ = peg
+    two = _two_goal_certificate(cert)
+    output = run_lean(generate_lean(ast, _two_goal_problem(cert), two,
+                                    proof=mode), tmp_path)
+    assert "sorryAx" not in output
+    assert "'unsolvable'" in output
