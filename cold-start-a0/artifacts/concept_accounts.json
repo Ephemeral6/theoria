@@ -1,0 +1,342 @@
+{
+  "a0-base": [
+    {
+      "colour": 7,
+      "laws_naming_it": [
+        "invariant door_latch"
+      ],
+      "load_bearing": true,
+      "manual_bytes_at_risk": 258,
+      "name": "Button",
+      "object_id": "obj0",
+      "reason": "a law names it (invariant door_latch) and the invariant language has no pixel-level paraphrase",
+      "responsibility_cells": [
+        [
+          3,
+          2
+        ]
+      ],
+      "rules_targeting_it": [
+        "press_left"
+      ],
+      "script_delta_bits": -5,
+      "script_with_bits": 25,
+      "script_without_bits": 20,
+      "verdict": "mandatory"
+    },
+    {
+      "colour": 5,
+      "laws_naming_it": [
+        "invariant door_latch"
+      ],
+      "load_bearing": true,
+      "manual_bytes_at_risk": 263,
+      "name": "Door",
+      "object_id": "obj1",
+      "reason": "a law names it (invariant door_latch) and the invariant language has no pixel-level paraphrase",
+      "responsibility_cells": [
+        [
+          4,
+          5
+        ]
+      ],
+      "rules_targeting_it": [
+        "door_opens_left"
+      ],
+      "script_delta_bits": -1,
+      "script_with_bits": 21,
+      "script_without_bits": 20,
+      "verdict": "mandatory"
+    },
+    {
+      "colour": 6,
+      "laws_naming_it": [
+        "invariant cart_unique"
+      ],
+      "load_bearing": true,
+      "manual_bytes_at_risk": 736,
+      "name": "Cart",
+      "object_id": "obj2",
+      "reason": "a law names it (invariant cart_unique) and the invariant language has no pixel-level paraphrase",
+      "responsibility_cells": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          2,
+          6
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          5,
+          6
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          6,
+          6
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          6
+        ],
+        [
+          7,
+          7
+        ]
+      ],
+      "rules_targeting_it": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_down"
+      ],
+      "script_delta_bits": 2125,
+      "script_with_bits": 2165,
+      "script_without_bits": 4290,
+      "verdict": "mandatory"
+    }
+  ],
+  "a0-no-button": [
+    {
+      "colour": 6,
+      "laws_naming_it": [
+        "invariant right_room_locked"
+      ],
+      "load_bearing": true,
+      "manual_bytes_at_risk": 579,
+      "name": "Cart",
+      "object_id": "obj0",
+      "reason": "a law names it (invariant right_room_locked) and the invariant language has no pixel-level paraphrase",
+      "responsibility_cells": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          6,
+          3
+        ]
+      ],
+      "rules_targeting_it": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_down"
+      ],
+      "script_delta_bits": 1001,
+      "script_with_bits": 849,
+      "script_without_bits": 1850,
+      "verdict": "mandatory"
+    }
+  ]
+}
