@@ -1,0 +1,9 @@
+# Credentials never enter the repository (Theoria.md Phase 1, sealing discipline).
+# The Phase 4 release manifest publishes everything tracked here.
+.env
+.env.*
+!.env.example
+
+__pycache__/
+*.pyc
+.pytest_cache/
