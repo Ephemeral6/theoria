@@ -1,0 +1,62 @@
+{
+  "api_calls_made": 3,
+  "auth_header": "X-API-Key",
+  "base_url": "https://three.arcprize.org",
+  "blocked_on": "the pile cut -- everything above touches a game's mechanics, and a touched game is burnt for the sealed pile",
+  "games": {
+    "all_ids_version_suffixed": true,
+    "fields_present": [
+      "baseline_actions",
+      "game_id",
+      "tags",
+      "title"
+    ],
+    "levels_per_game": {
+      "ar25-0c556536": 8,
+      "bp35-0a0ad940": 9,
+      "cd82-fb555c5d": 6,
+      "cn04-2fe56bfb": 6,
+      "dc22-fdcac232": 6,
+      "ft09-0d8bbf25": 6,
+      "g50t-5849a774": 7,
+      "ka59-38d34dbb": 7,
+      "lf52-271a04aa": 10,
+      "lp85-305b61c3": 8,
+      "ls20-9607627b": 7,
+      "m0r0-492f87ba": 6,
+      "r11l-495a7899": 6,
+      "re86-8af5384d": 8,
+      "s5i5-18d95033": 8,
+      "sb26-7fbdac44": 8,
+      "sc25-635fd71a": 6,
+      "sk48-d8078629": 8,
+      "sp80-589a99af": 6,
+      "su15-1944f8ab": 9,
+      "tn36-ef4dde99": 7,
+      "tr87-cd924810": 6,
+      "tu93-0768757b": 9,
+      "vc33-5430563c": 7,
+      "wa30-ee6fef47": 9
+    },
+    "n_games": 25,
+    "tag_histogram": {
+      "click": 7,
+      "keyboard": 4,
+      "keyboard_click": 13
+    },
+    "total_baseline_actions": 17135,
+    "untagged_games": [
+      "ft09-0d8bbf25"
+    ]
+  },
+  "not_yet_checked": [
+    "RESET semantics and cross-session residue",
+    "single action -> one frame or many (cascade semantics)",
+    "level as a response field vs inferred from score jumps",
+    "rate limits and action quota",
+    "determinism precheck (fixed sequence replayed twice, frame hashes equal)"
+  ],
+  "scorecard": {
+    "error": "ArcApiError: HTTP 404 on /api/scorecard/f23c14c7-421f-4867-8a04-34e3b79fd155: {\"error\":\"SERVER_ERROR\",\"message\":\"card_id `f23c14c7-421f-4867-8a04-34e3b79fd155` not found\"}\n"
+  }
+}

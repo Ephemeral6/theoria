@@ -61,3 +61,9 @@
 测试：pass 150/150，skip 1。
 阻塞：无。
 下一步：本轨道工单范围内工作已完成。
+
+## [engine-rig] 2026-07-27T16:08:52Z phase1-access-check
+状态：ARC API 已接通并完成只读接入核查（base https://three.arcprize.org，X-API-Key；公开集 25 局，标签族 keyboard_click 13 / click 7 / keyboard 4 / 无标签 1；game_id 均带版本后缀；baseline_actions 长度即关卡数，全集 17135 动作）。发现一条 scorecard 语义：open 返回 card_id，但零对局的卡 retrieve/close 均 404，卡在首次对局后才落地。**切堆已落刀**（arc-recon/data/piles.json，sha256 3feca53e…41bbc19a）：开发堆 4 局（ar25/g50t/sk48/tn36，跨三个标签族），封存堆 21 局（含唯一无标签局）。切堆依据仅为目录元数据，未观察任何机制，25 局全部登记 never_audited。凭据存于 gitignore 的 .env，全流程不入任何被跟踪文件，ledger 中一律 redacted。
+测试：engine-rig 150 pass / 1 skip 不变。
+阻塞：无。等待切堆确认后方可开始烧动作配额（RESET 语义、单动作多帧、level 字段、确定性预检均需对局）。
+下一步：确定性预检 + 级联语义裁决（仅在开发堆上）。

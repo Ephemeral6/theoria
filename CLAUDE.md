@@ -39,6 +39,9 @@ They are mutually visible only through git history and `PARTNER_SYNC.md`.
 | `theory-compiler` | `/theory-compiler/` | the DSL and its generators (two books → four forms) |
 | `engine-rig` | `/engine-rig/` | the six engines, validated offline against synthetic fixtures |
 
+`/arc-recon/` is shared ground, not a track: the API access check and the pile
+cut. Read it before doing anything that touches the live API.
+
 **Stay inside your own directory.** Do not edit the other track's files. Shared
 surfaces are `/CONTRACTS/` and `PARTNER_SYNC.md`.
 
@@ -95,6 +98,21 @@ Two standing caveats worth knowing before you build on it:
   adapter picks it up with no caller changes.
 * **`lp_potential` is sound but incomplete.** It never certifies a solvable
   configuration, but some genuinely unsolvable ones admit no linear pagoda.
+
+## The pile cut — binding on both tracks
+
+`arc-recon/data/piles.json` (sha256 `3feca53e…41bbc19a`) splits the 25 public
+games into a **development pile of 4** (`ar25-0c556536`, `g50t-5849a774`,
+`sk48-d8078629`, `tn36-ef4dde99`) and a **sealed pile of 21**.
+
+Do not play, inspect, or read about a sealed game — including upstream released
+artifacts belonging to it, since reading those teaches the mechanics just as well
+as playing. Phase 3 iterates until it gets results, which is only honest if the
+confirmation runs on unseen problems. Changing the cut after play has begun is an
+incident and must be recorded as one.
+
+As of this writing no game has been played: the cut was made from catalogue
+metadata alone and all 25 are registered `never_audited`.
 
 ## Conventions
 

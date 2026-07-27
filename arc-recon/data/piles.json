@@ -1,0 +1,111 @@
+{
+  "contamination_levels": [
+    "never_audited",
+    "scores_only",
+    "trajectories_reviewed"
+  ],
+  "contamination_register": {
+    "ar25-0c556536": "never_audited",
+    "bp35-0a0ad940": "never_audited",
+    "cd82-fb555c5d": "never_audited",
+    "cn04-2fe56bfb": "never_audited",
+    "dc22-fdcac232": "never_audited",
+    "ft09-0d8bbf25": "never_audited",
+    "g50t-5849a774": "never_audited",
+    "ka59-38d34dbb": "never_audited",
+    "lf52-271a04aa": "never_audited",
+    "lp85-305b61c3": "never_audited",
+    "ls20-9607627b": "never_audited",
+    "m0r0-492f87ba": "never_audited",
+    "r11l-495a7899": "never_audited",
+    "re86-8af5384d": "never_audited",
+    "s5i5-18d95033": "never_audited",
+    "sb26-7fbdac44": "never_audited",
+    "sc25-635fd71a": "never_audited",
+    "sk48-d8078629": "never_audited",
+    "sp80-589a99af": "never_audited",
+    "su15-1944f8ab": "never_audited",
+    "tn36-ef4dde99": "never_audited",
+    "tr87-cd924810": "never_audited",
+    "tu93-0768757b": "never_audited",
+    "vc33-5430563c": "never_audited",
+    "wa30-ee6fef47": "never_audited"
+  },
+  "cut_version": "v1",
+  "dev_pile": [
+    "ar25-0c556536",
+    "g50t-5849a774",
+    "sk48-d8078629",
+    "tn36-ef4dde99"
+  ],
+  "method": "stratified by tag family; quota {\"click\": 1, \"keyboard\": 1, \"keyboard_click\": 2}; the untagged singleton stays sealed; within a family, ids sorted lexicographically and drawn with splitmix64(seed)",
+  "n_public": 25,
+  "rules": [
+    "The sealed pile is not played, inspected, or read about until the development-pile work is frozen.",
+    "This includes upstream released artifacts belonging to sealed games -- reading those teaches the mechanics just as well as playing.",
+    "Any change to this file after a game has been played invalidates the cut and must be recorded as an incident."
+  ],
+  "sealed_only_families": [
+    "<untagged>"
+  ],
+  "sealed_pile": [
+    "bp35-0a0ad940",
+    "cd82-fb555c5d",
+    "cn04-2fe56bfb",
+    "dc22-fdcac232",
+    "ft09-0d8bbf25",
+    "ka59-38d34dbb",
+    "lf52-271a04aa",
+    "lp85-305b61c3",
+    "ls20-9607627b",
+    "m0r0-492f87ba",
+    "r11l-495a7899",
+    "re86-8af5384d",
+    "s5i5-18d95033",
+    "sb26-7fbdac44",
+    "sc25-635fd71a",
+    "sp80-589a99af",
+    "su15-1944f8ab",
+    "tr87-cd924810",
+    "tu93-0768757b",
+    "vc33-5430563c",
+    "wa30-ee6fef47"
+  ],
+  "seed": 8298874,
+  "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+  "strata": {
+    "<untagged>": [
+      "ft09-0d8bbf25"
+    ],
+    "click": [
+      "lf52-271a04aa",
+      "lp85-305b61c3",
+      "r11l-495a7899",
+      "s5i5-18d95033",
+      "su15-1944f8ab",
+      "tn36-ef4dde99",
+      "vc33-5430563c"
+    ],
+    "keyboard": [
+      "g50t-5849a774",
+      "ls20-9607627b",
+      "tr87-cd924810",
+      "wa30-ee6fef47"
+    ],
+    "keyboard_click": [
+      "ar25-0c556536",
+      "bp35-0a0ad940",
+      "cd82-fb555c5d",
+      "cn04-2fe56bfb",
+      "dc22-fdcac232",
+      "ka59-38d34dbb",
+      "m0r0-492f87ba",
+      "re86-8af5384d",
+      "sb26-7fbdac44",
+      "sc25-635fd71a",
+      "sk48-d8078629",
+      "sp80-589a99af",
+      "tu93-0768757b"
+    ]
+  }
+}
