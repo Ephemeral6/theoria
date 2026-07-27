@@ -18,6 +18,17 @@ gitignored and must stay that way.**
 set -a; . ./.env; set +a      # load into the environment
 ```
 
+```python
+import sys; sys.path.insert(0, "<repo>/arc-recon")
+from client import load_api_key, mask
+key = load_api_key()          # reads .env; raises if it is missing
+print(mask(key))              # "7171...05dd (len 36)" -- safe to log
+```
+
+`arc-recon/client.py` is the shared reader. Prefer it over parsing `.env`
+yourself: it also redacts the key in every ledger entry it writes, so an agent
+using it cannot leak the value into an artefact by accident.
+
 Never write the key's value into any tracked file — not source, not Markdown, not
 CLAUDE.md, not a commit message, not a test fixture. This is not general caution;
 it is [Theoria.md](Theoria.md) Phase 1's sealing discipline, verbatim: the credential is
