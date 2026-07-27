@@ -1,2 +1,12 @@
 out/*.log
+out/campaign/*.log
 __pycache__/
+.pytest_cache/
+
+# Upstream Schema trajectories (Path A). Third-party data with no declared
+# licence, and Phase 4 publishes every tracked file -- so this track records the
+# provenance and the hashes, and does not re-publish the payload itself.
+# MANIFEST.json carries the dataset revision and a sha256 per file, which is
+# what makes the material reproducible. See DECISIONS.md D-013.
+schema_traces/**
+!schema_traces/MANIFEST.json

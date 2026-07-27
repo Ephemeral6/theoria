@@ -1,0 +1,36 @@
+{
+  "caps": {
+    "action_success_floor": 0.35,
+    "campaign_usd": 50.0,
+    "cell_cost_multiple": 3.0,
+    "compute_seconds": 72000,
+    "consecutive_dead": 2,
+    "elapsed_seconds": 28800,
+    "http_per_action": 20.0,
+    "tier_usd": {
+      "claude-haiku-4-5-20251001": 20.0,
+      "claude-opus-5": 30.0,
+      "claude-sonnet-5": 30.0
+    }
+  },
+  "evaluated_at": "2026-07-27T18:49:49Z",
+  "state": "red",
+  "totals": {
+    "action_success_rate": 0.595,
+    "actions_failed": 30,
+    "actions_ok": 44,
+    "cells": 3,
+    "compute_seconds": 3524.3,
+    "cost_by_tier": {
+      "claude-haiku-4-5-20251001": 2.5275
+    },
+    "cost_usd": 2.5275,
+    "elapsed_seconds": 1701.5,
+    "http_calls": 425,
+    "http_per_action": 9.66,
+    "usd_per_action": 0.0574
+  },
+  "tripped": [
+    "G4 2 consecutive dead cells, last bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b (api_unusable)"
+  ]
+}

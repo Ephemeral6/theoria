@@ -147,9 +147,36 @@ class ArcClient:
         return self.request("POST", "/api/scorecard/open", body=dict(metadata) or {},
                             note="open scorecard")[1]
 
-    def close_scorecard(self, card_id: str):
-        return self.request("POST", "/api/scorecard/close", body={"card_id": card_id},
-                            note="close scorecard", raise_on_error=False)[1]
+    def close_scorecard(self, card_id: str, tries: int = 8):
+        """Close a scorecard, retrying the transient 404 the way D-005 retries
+        the transient 400 on gameplay.
+
+        This is the only moment the authoritative scores are obtainable. A
+        closed card cannot be re-fetched -- `GET /api/scorecard/<id>` and a
+        second close both return 404 permanently -- so a close that is allowed
+        to fail destroys that run's reconciliation data for good. In the M4
+        pilot 22 of 23 closes returned `404 scorecard <id> not found` and none
+        were retried, which is why only one of fourteen cells can be checked
+        against `Theoria.md` Phase 1's obligation that ledger-derived scores
+        equal API scorecard scores.
+
+        The 404 has the same shape and the same cause as the gameplay 400 (only
+        some backend instances hold the session), so it gets the same treatment.
+        """
+        status, body = -1, None
+        for k in range(tries):
+            status, body = self.request("POST", "/api/scorecard/close",
+                                        body={"card_id": card_id},
+                                        note="close scorecard", raise_on_error=False)
+            if status == 200:
+                return body
+            time.sleep(0.4 * (k + 1))
+        ledger.probe("scorecard_close_failed", {
+            "card_id": card_id, "tries": tries, "last_status": status,
+            "consequence": "no authoritative scores for this run; "
+                           "reconciliation impossible (a closed card cannot be re-fetched)",
+        })
+        return body
 
     # -- gameplay (guarded) ------------------------------------------------
     def reset(self, game_id: str, card_id: str, raise_on_error: bool = True):

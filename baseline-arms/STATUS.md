@@ -8,20 +8,99 @@
 | M1 既存状态审计 | `baseline-arms-m1-audit` | ✅ 达成 |
 | M2 裸 CC harness + 记账管线 | `baseline-arms-m2-harness` | ✅ 达成 |
 | M3 Schema 官方发布物定位 | `baseline-arms-m3-schema-locate` | ✅ 达成（判定为「找不到」支） |
-| M4 试点 + 预算闸门 | `baseline-arms-m4-pilot-gate` | 见下 |
+| M4 试点 + 预算闸门 | `baseline-arms-m4-pilot-gate` | ✅ 达成 |
+| M5 方差包络战役 | `baseline-arms-m5-variance` | ⚠️ **闸门红，停在 1/4 局** |
+| M6 Schema 路 A 材料 | `baseline-arms-m6-path-a` | ✅ 达成 |
 
 文档：[`AUDIT.md`](AUDIT.md)（第 0 步审计）·
 [`SCHEMA_LOCATE.md`](SCHEMA_LOCATE.md)（M3 结论）·
+[`SCHEMA_PATH_A.md`](SCHEMA_PATH_A.md)（M6 路 A 执行结果）·
 [`DECISIONS.md`](DECISIONS.md)（设计决策）·
 [`INCIDENTS.md`](INCIDENTS.md)（事件）·
 [`TOUCHED_GAMES.md`](TOUCHED_GAMES.md)（触碰登记）·
-[`BUDGET_REPORT.md`](BUDGET_REPORT.md)（闸门）
+[`BUDGET_REPORT.md`](BUDGET_REPORT.md)（闸门，§9 是可执行的止损条件）
+
+---
+
+## 本轮（P-7）结果摘要
+
+### M5 方差包络：**闸门 G4 触发，跑完第 1 局即停**
+
+`ar25-0c556536` × haiku × 3 次重复跑完，**三格全部 `api_unusable`**，
+闸门判红，`g50t` / `sk48` / `tn36` **未开跑**。花费 $2.5275（G1 上限 $50 的 5.1%）。
+
+停下的判断分两层，`BUDGET_REPORT.md` §11 详述：
+
+* **真实劣化**：与试点同档对比，动作成功率 0.713→0.595，HTTP/动作 7.11→9.66，
+  $/动作 +68%。三项同向，与 INC-BA-003（三套负载并发压同一 API）吻合。
+* **阈值假象**：三格失败动作数**全是 10，标准差 0**——那是
+  `actions_failed >= 10` 这个**不随预算缩放的绝对阈值**。成功率 0.6 时，
+  30 动作预算下期望失败约 12，撞上它几乎是注定的。§7 原写「连续 10 次」，
+  **该表述有误，实为累计**，已更正。
+
+**没有为了过闸门去调大那个阈值。** 修法与顺序写在 §11.5。
+
+拿到的仍是一个**真实但被截尾**的包络（`harness/summarise_campaign.py`）：
+
+| 量 | 均值 | 标准差 | CV |
+|---|---|---|---|
+| 成功动作 | 14.67 | 4.04 | 0.276 |
+| 成本 $ | 0.843 | 0.142 | 0.169 |
+| 缓存读 tokens | 601,990 | 98,632 | 0.164 |
+| HTTP 调用 | 141.7 | 13.5 | 0.095 |
+| 墙钟 s | 1174.8 | 150.1 | 0.128 |
+
+**顺带补上主表的一个空格**：`Theoria.md` 1.12 的裸 CC 行「单局缓存读」记作
+「—（基线口径）」，即从未测过。本轮测到了：**每局约 6.0×10⁵**，
+30 动作预算、被截尾在约 15 个成功动作。这是 claim C5（10⁸→10⁶）的分母侧原料。
+本轨道不改 `Theoria.md`，数字在此备查。
+
+### M6 Schema 路 A：**完成**
+
+上游轨迹**只取开发堆 4 局**：165 文件 / 87.7 MB 到手，
+**885 个属于 21 局封存游戏的文件一个都没请求过内容**，8 个跨局聚合文件默认拒绝。
+**落盘封存路径数：0**（主上下文独立复核，不采信子代理自报）。
+详见 [`SCHEMA_PATH_A.md`](SCHEMA_PATH_A.md)。
+
+守卫第一次执行就 `allow=0` 全拒——上游只写 4 字符前缀而白名单当时只测完整 id。
+**朝安全方向失败**，子代理照令停下未自行放宽。修正后补 `tests/test_whitelist.py`
+（19 例全过）。
+
+顺带**验证了切分未被改动**：`piles.json` 内 `sha256` 字段用的口径已反推出来并复算，
+与 `CLAUDE.md` 钉住的 `3feca53e…41bbc19a` 逐字相等，`cut_version: v1`。
+
+### 两个副产物，都比原计划的产出更有用
+
+1. **配额口径有实测答案了**（`BUDGET_REPORT.md` §4.1）：scorecard 的
+   `total_actions` **只计成功动作，失败的 400 不计**，3/3 一致，跨两个模型档、
+   两个游戏、两次战役。§4 悬了很久的 9.7 倍不确定性因此收窄到乐观那一端。
+2. **一个静默的记账缺陷被发现并修好**（`DECISIONS.md` D-015）：
+   scorecard 关闭此前不重试，试点 23 次关闭 22 次 404，
+   而**关掉的卡取不回来**——14 个试点格只剩 1 格可对账，
+   Phase 1 的对账义务此前实际无法履行。已补重试，并用「快照仍打开的卡」
+   抢救回本轮 3 格中的 2 格。
 
 ---
 
 ## 缺口与阻塞
 
+### GAP-3（新）：并发战役——本轨道当前有两套互不可见的闸门
+
+`INCIDENTS.md` INC-BA-003。另一个会话在同一目录并发跑 §3.4 的 S1 全量
+（$103 / 46 h），与本会话的包络共用同一份 ARC 配额与同一个账单，
+**两边的闸门各算各的总账，谁都看不见合计数**。这是 M5 停在 1/4 的远因。
+
+复跑包络之前必须先解决它——否则测到的是争用的方差，不是臂的方差。
+修法（共享闸门文件由所有战役进程共同累计）已记入 INC-BA-003，
+**归人工与对方会话，本会话不代决**。
+
 ### GAP-1（工作二整体）：Schema 复现**不可能**，`⟨复现值⟩` 合规留空
+
+**P-7 更新：这条依然成立，但它的下游影响被路 A 解掉了一半。**
+Phase 2 指标电池要的「已知能力梯度（CC vs Schema）」两侧材料现在都有了——
+Schema 侧是 M6 拉到的上游轨迹，CC 侧是本轨道的账本。
+但 `⟨复现值⟩` 那一格仍应**留空**：路 A 拿到的是**上游的账本**，不是**我们的复现**。
+见 [`SCHEMA_PATH_A.md`](SCHEMA_PATH_A.md) §6。
 
 官方 harness 代码**从未发布**——`schema-harness` 这个 GitHub 组织下只有项目主页
 仓库本身，主页也没有任何代码发布承诺。没有正式论文（只有一篇网页 + `@misc`
@@ -47,15 +126,20 @@ M3 的检索子代理在判断出页面不安全之前，已读到若干**封存
 **这一条不构成本轮停止**：它不影响开发堆上的裸 CC 试点，且相关调用（公网检索）
 已终止，本轨道不会再打开那些页面。
 
-### 已解除：`INC-002` 不成立，在线 API 可用
+### 已解除：`INC-002` 不成立，在线 API 可用（arc-recon 已正式改判）
 
 `arc-recon` 的 `INC-002` 结论是「零次成功动作……整个在线 API 路线受阻」。
 本轨道独立复核后推翻该诊断：`400 "game <id> not found"` 是**瞬时故障**，
 重试即可推进。详见 [`AUDIT.md`](AUDIT.md) §6 与 `DECISIONS.md` D-005。
 代价是每次成功动作平均约 5 次 HTTP 调用。
 
-`INC-002` 的正式处置归 `arc-recon`，本轨道不修改其 `incidents.jsonl`，
-只在 `PARTNER_SYNC.md` 通报。
+**2026-07-27 后续**：arc-recon 已据此正式改判（其 `incidents.jsonl` 的
+INC-001b / INC-002a），并把确定性预检在开发堆 4 局全部跑到 **PASS**。
+两条修正需要本轨道注意：(1) 故障是**约 1–3 分钟的波浪式不可用**，重试包络要
+能盖过整个波（其预检用 40 次尝试、退避上限 5s），HTTP 放大实测 2.5–10×，
+比本轨道的 5.07× 更悲观；(2) **H-A「短 ID 可用」被更正为伪响应**
+（见 [`INCIDENTS.md`](INCIDENTS.md) INC-BA-002），请求体一律用全 ID。
+另：tn36 的 `ACTION6` 服务端恒 500，click 族在 data 形状解决前无法真玩。
 
 ---
 
@@ -76,10 +160,20 @@ M3 的检索子代理在判断出页面不安全之前，已读到若干**封存
 
 ```bash
 cd baseline-arms
+python -m pytest tests/ -q                           # 白名单守卫的 19 个用例
 python -m harness.probe_api                          # API 可用性（仅开发堆）
 python -m harness.bare_cc --game <dev-pile-id> --model claude-sonnet-5 --budget 20
 python -m harness.run_pilot --only-game <id> --budget 20
-python -m harness.summarise_pilot                    # 汇总 + 单价
+python -m harness.summarise_pilot                    # 试点汇总 + 单价
+
+# M5 方差包络（逐局推进；闸门红则拒绝开跑，退出码 3）
+python -m harness.run_campaign --game <dev-pile-id>
+python -m harness.run_campaign --gate-only           # 只重新裁决，不花钱
+python -m harness.audit_cells --game <dev-pile-id>   # 逐格账本自洽 + 对账 + 封存检查
+python -m harness.summarise_campaign                 # 方差包络
+
+# M6 Schema 路 A（白名单先行；--dry-run 只列清单，不下载）
+python -m harness.fetch_schema_traces --dry-run
 ```
 
 封存堆纪律是代码，不是注意事项：`harness/arc_client.py` 在 import 时加载
