@@ -240,3 +240,21 @@ def test_several_goal_states_still_compile(peg, cert, tmp_path, mode):
                                     proof=mode), tmp_path)
     assert "sorryAx" not in output
     assert "'unsolvable'" in output
+
+
+def test_the_committed_lean_artifact_is_not_stale():
+    """`lean/TheoriaLean.lean` is tracked, generated, and nothing regenerates it
+    on its own — so it drifts silently. It did: it sat at the M8 rehearsal's BFS
+    enumeration long after the generator had moved to the pagoda argument, and
+    a reader of the repository would have found a superseded proof presented as
+    the current one. This test is the thing that would have caught it.
+    """
+    ast = parse_theory((FIXTURES / "peg_theory.dsl").read_text(encoding="utf-8"))
+    problem = load_problem(str(FIXTURES / "peg5_problem.json"))
+    expected = generate_lean(ast, problem, load_certificate(str(CERT_00010)),
+                             proof="computational")
+    committed = (REPO / "theory-compiler" / "lean" / "TheoriaLean.lean")
+    actual = committed.read_text(encoding="utf-8")
+    assert actual == expected, (
+        "lean/TheoriaLean.lean is out of date. Regenerate it — see README."
+    )

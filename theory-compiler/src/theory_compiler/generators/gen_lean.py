@@ -38,7 +38,7 @@ Three commitments, each with a reason:
   not a second implementation. A generator that re-derived the transition
   relation could prove a theorem about a world the Python never simulates.
 
-Axiom budgets, measured rather than hoped (see DECISIONS.md D-TC-004):
+Axiom budgets, measured rather than hoped (see DECISIONS.md D-TC-008):
 
 | development | `#print axioms` | proof size |
 |---|---|---|
@@ -225,7 +225,7 @@ def _pagoda_lean(ir: WorldIR, ns: dict, cert: PagodaCertificate,
     L.append("")
     L.append("  The invariant is the manual's `%s`, and its weights are NOT the" % inv_name)
     L.append("  author's. They come from")
-    L.append("      %s" % cert.path.replace("\\", "/"))
+    L.append("      %s" % _provenance(cert.path))
     L.append("  produced by %s, and were re-checked here" % cert.produced_by)
     L.append("  against the complete move set before this file was written.")
     L.append("")
@@ -387,6 +387,21 @@ def _pagoda_lean(ir: WorldIR, ns: dict, cert: PagodaCertificate,
 
 def _lean_state(bits: str) -> str:
     return "⟨%s⟩" % ", ".join("true" if b == "1" else "false" for b in bits)
+
+
+def _provenance(path: str) -> str:
+    """The certificate's path, as a repo-relative one.
+
+    The header names the file the weights came from, and that name has to be the
+    same on every machine: an absolute path would make the generated artifact
+    depend on where the repository happens to sit, which breaks byte-reproducible
+    output for a fixed input — a requirement here, not a nicety.
+    """
+    parts = path.replace("\\", "/").split("/")
+    for anchor in ("engine-rig", "interop", "certificates"):
+        if anchor in parts:
+            return "/".join(parts[parts.index(anchor):])
+    return parts[-1] if parts else path
 
 
 # -------------------------------------------------------------- enumerative

@@ -1,18 +1,29 @@
 /-
-  Auto-generated Lean 4 proof: 1D Peg Solitaire unsolvability
-  Board: 5 positions, pegs at [0, 1, 3, 4]
-  Reachable states: 5 (computed by BFS)
-  No state with exactly 1 peg(s) is reachable.
-  Strategy: enumerate reachable set, prove closure, check no goal member.
--/
+  Auto-generated from theory.dsl — DO NOT EDIT.
 
-structure PegState where
-  s0 : Bool
-  s1 : Bool
-  s2 : Bool
-  s3 : Bool
-  s4 : Bool
-  deriving DecidableEq, Repr
+  Claim: no state in {00010} is reachable from 11011.
+
+  The invariant is the manual's `pagoda_potential`, and its weights are NOT the
+  author's. They come from
+      engine-rig/interop/certificates/pagoda_5_11011_to_00010.json
+  produced by engine-rig/engines/lp_potential, and were re-checked here
+  against the complete move set before this file was written.
+
+  w = [-1, 1, 0, 1, -1]   potential(s) = sum of w[i] over occupied i
+
+  The 6 move geometries below were recovered from the generated
+  predictor, not re-derived, and agree with the certificate's.
+      jump(0,1,2)  delta = +0
+      jump(1,2,3)  delta = +0
+      jump(2,1,0)  delta = -2
+      jump(2,3,4)  delta = -2
+      jump(3,2,1)  delta = +0
+      jump(4,3,2)  delta = +0
+
+  Proof: computational. Every obligation is closed by `decide`, so
+  the kernel checks it and `#print axioms` comes back empty. Cost:
+  the state split is 2^5.
+-/
 
 inductive Pos where
   | p0
@@ -22,139 +33,125 @@ inductive Pos where
   | p4
   deriving DecidableEq, Repr
 
-def initState : PegState := ⟨true, true, false, true, true⟩
+/-- One `Bool` per cell: `true` is occupied. -/
+structure St where
+  p0 : Bool
+  p1 : Bool
+  p2 : Bool
+  p3 : Bool
+  p4 : Bool
+  deriving DecidableEq, Repr
 
-def pegCount (s : PegState) : Nat :=
-  (if s.s0 then 1 else 0) + (if s.s1 then 1 else 0) + (if s.s2 then 1 else 0) + (if s.s3 then 1 else 0) + (if s.s4 then 1 else 0)
+def St.get (s : St) : Pos → Bool
+  | .p0 => s.p0
+  | .p1 => s.p1
+  | .p2 => s.p2
+  | .p3 => s.p3
+  | .p4 => s.p4
 
-def isGoalB (s : PegState) : Bool := pegCount s == 1
+def St.set (s : St) : Pos → Bool → St
+  | .p0, v => { s with p0 := v }
+  | .p1, v => { s with p1 := v }
+  | .p2, v => { s with p2 := v }
+  | .p3, v => { s with p3 := v }
+  | .p4, v => { s with p4 := v }
 
-def PegState.get (s : PegState) : Pos → Bool
-  | .p0 => s.s0
-  | .p1 => s.s1
-  | .p2 => s.s2
-  | .p3 => s.s3
-  | .p4 => s.s4
+/-- One constructor per move geometry: 6 of them, where the reachable
+    set the enumerative route would need is exponential. -/
+inductive Move where
+  | m0
+  | m1
+  | m2
+  | m3
+  | m4
+  | m5
+  deriving DecidableEq, Repr
 
-def PegState.set (s : PegState) (p : Pos) (v : Bool) : PegState :=
-  match p with
-  | .p0 => { s with s0 := v }
-  | .p1 => { s with s1 := v }
-  | .p2 => { s with s2 := v }
-  | .p3 => { s with s3 := v }
-  | .p4 => { s with s4 := v }
+def Move.src : Move → Pos
+  | .m0 => .p0
+  | .m1 => .p1
+  | .m2 => .p2
+  | .m3 => .p2
+  | .m4 => .p3
+  | .m5 => .p4
 
-def applyJump (s : PegState) (a b c : Pos) : PegState :=
-  ((s.set a false).set b false).set c true
+def Move.over : Move → Pos
+  | .m0 => .p1
+  | .m1 => .p2
+  | .m2 => .p1
+  | .m3 => .p3
+  | .m4 => .p2
+  | .m5 => .p3
 
-def isValidGeom (a b c : Pos) : Bool :=
-  match a, b, c with
-  | .p0, .p1, .p2 => true
-  | .p2, .p1, .p0 => true
-  | .p1, .p2, .p3 => true
-  | .p3, .p2, .p1 => true
-  | .p2, .p3, .p4 => true
-  | .p4, .p3, .p2 => true
-  | _, _, _ => false
+def Move.dst : Move → Pos
+  | .m0 => .p2
+  | .m1 => .p3
+  | .m2 => .p0
+  | .m3 => .p4
+  | .m4 => .p1
+  | .m5 => .p2
 
-inductive Step : PegState → PegState → Prop where
-  | jump (s : PegState) (a b c : Pos)
-    (hg : isValidGeom a b c = true)
-    (ha : s.get a = true) (hb : s.get b = true) (hc : s.get c = false) :
-    Step s (applyJump s a b c)
+def legal (s : St) (m : Move) : Bool :=
+  s.get m.src && s.get m.over && !s.get m.dst
 
-inductive Reachable : PegState → PegState → Prop where
-  | refl : ∀ s, Reachable s s
-  | step : ∀ s t u, Step s t → Reachable t u → Reachable s u
+def applyMove (s : St) (m : Move) : St :=
+  ((s.set m.src false).set m.over false).set m.dst true
 
-def allReachable : List PegState := [
-  ⟨true, true, true, false, false⟩,
-  ⟨true, false, false, true, false⟩,
-  ⟨false, true, false, false, true⟩,
-  ⟨true, true, false, true, true⟩,
-  ⟨false, false, true, true, true⟩
-]
+/-- Pagoda weights, from the LP certificate. -/
+def w : Pos → Int
+  | .p0 => -1
+  | .p1 => 1
+  | .p2 => 0
+  | .p3 => 1
+  | .p4 => -1
 
-def allPos : List Pos := [.p0, .p1, .p2, .p3, .p4]
+def potential (s : St) : Int :=
+  (if s.p0 then w .p0 else 0)
+  + (if s.p1 then w .p1 else 0)
+  + (if s.p2 then w .p2 else 0)
+  + (if s.p3 then w .p3 else 0)
+  + (if s.p4 then w .p4 else 0)
 
-def checkNoGoal : Bool := allReachable.all (fun s => !isGoalB s)
-def checkInitMember : Bool := allReachable.contains initState
-def checkClosed : Bool :=
-  allReachable.all fun s =>
-    allPos.all fun a => allPos.all fun b => allPos.all fun c =>
-      !(isValidGeom a b c && s.get a && s.get b && !s.get c) ||
-      allReachable.contains (applyJump s a b c)
+def s0 : St := ⟨true, true, false, true, true⟩
 
-theorem checkNoGoal_true : checkNoGoal = true := by native_decide
-theorem checkInitMember_true : checkInitMember = true := by native_decide
-theorem checkClosed_true : checkClosed = true := by native_decide
+inductive Reachable : St → Prop where
+  | init : Reachable s0
+  | step : ∀ s m, Reachable s → legal s m = true → Reachable (applyMove s m)
 
-theorem init_in_reachable : initState ∈ allReachable := by decide
+def Inv (s : St) : Bool := decide (potential s ≤ 0)
 
-theorem no_goal_in_reachable (s : PegState) (h : s ∈ allReachable) :
-    isGoalB s = false := by
-  cases h with
-  | head => native_decide
-  | tail _ h1 =>
-    cases h1 with
-    | head => native_decide
-    | tail _ h2 =>
-      cases h2 with
-      | head => native_decide
-      | tail _ h3 =>
-        cases h3 with
-        | head => native_decide
-        | tail _ h4 =>
-          cases h4 with
-          | head => native_decide
-          | tail _ hlast => exact absurd hlast (List.not_mem_nil _)
+def Goal (s : St) : Bool := s == ⟨false, false, false, true, false⟩
 
-theorem closed_under_jump (s : PegState) (a b c : Pos)
-    (hs : s ∈ allReachable)
-    (hg : isValidGeom a b c = true)
-    (ha : s.get a = true) (hb : s.get b = true) (hc : s.get c = false) :
-    applyJump s a b c ∈ allReachable := by
-  cases hs with
-  | head =>
-    cases a <;> cases b <;> cases c <;> simp [isValidGeom] at hg <;>
-      simp_all [PegState.get, applyJump, PegState.set, allReachable] <;> decide
-  | tail _ h1 =>
-    cases h1 with
-    | head =>
-      cases a <;> cases b <;> cases c <;> simp [isValidGeom] at hg <;>
-      simp_all [PegState.get, applyJump, PegState.set, allReachable] <;> decide
-    | tail _ h2 =>
-      cases h2 with
-      | head =>
-        cases a <;> cases b <;> cases c <;> simp [isValidGeom] at hg <;>
-      simp_all [PegState.get, applyJump, PegState.set, allReachable] <;> decide
-      | tail _ h3 =>
-        cases h3 with
-        | head =>
-          cases a <;> cases b <;> cases c <;> simp [isValidGeom] at hg <;>
-      simp_all [PegState.get, applyJump, PegState.set, allReachable] <;> decide
-        | tail _ h4 =>
-          cases h4 with
-          | head =>
-            cases a <;> cases b <;> cases c <;> simp [isValidGeom] at hg <;>
-      simp_all [PegState.get, applyJump, PegState.set, allReachable] <;> decide
-          | tail _ hlast => exact absurd hlast (List.not_mem_nil _)
+theorem inv_init : Inv s0 = true := by decide
 
-theorem reachable_subset (s t : PegState) (hs : s ∈ allReachable)
-    (hr : Reachable s t) : t ∈ allReachable := by
-  induction hr with
-  | refl _ => exact hs
-  | step s₁ t₁ u₁ hstep _ ih =>
-    apply ih
-    cases hstep with
-    | jump a b c hg ha hb hc =>
-      exact closed_under_jump s₁ a b c hs hg ha hb hc
+/-- Splitting on `Move` first is not cosmetic: `Move` has no
+    decidable-∀ instance, so `decide` cannot quantify over it, while
+    it can quantify over `Bool`. -/
+theorem inv_closed : ∀ (m : Move) (p0 p1 p2 p3 p4 : Bool),
+    legal (St.mk p0 p1 p2 p3 p4) m = true → Inv (St.mk p0 p1 p2 p3 p4) = true →
+    Inv (applyMove (St.mk p0 p1 p2 p3 p4) m) = true := by
+  intro m; cases m <;> decide
 
-theorem unsolvable : ¬ ∃ t : PegState, Reachable initState t ∧ isGoalB t = true := by
-  intro ⟨t, hreach, hgoal⟩
-  have hmem : t ∈ allReachable := reachable_subset _ _ init_in_reachable hreach
-  have hno : isGoalB t = false := no_goal_in_reachable t hmem
-  rw [hno] at hgoal
-  exact absurd hgoal (by decide)
+theorem inv_all (s : St) (h : Reachable s) : Inv s = true := by
+  induction h with
+  | init => decide
+  | step s m _ hl ih =>
+      match s with
+      | St.mk p0 p1 p2 p3 p4 => exact inv_closed m p0 p1 p2 p3 p4 hl ih
 
+theorem goal_break : ∀ (p0 p1 p2 p3 p4 : Bool),
+    Goal (St.mk p0 p1 p2 p3 p4) = true → Inv (St.mk p0 p1 p2 p3 p4) = false := by decide
+
+theorem unsolvable : ¬ ∃ s : St, Reachable s ∧ Goal s = true := by
+  rintro ⟨s, hr, hg⟩
+  match s with
+  | St.mk p0 p1 p2 p3 p4 =>
+    have h1 := inv_all _ hr
+    have h2 := goal_break p0 p1 p2 p3 p4 hg
+    rw [h1] at h2
+    exact Bool.noConfusion h2
+
+#print axioms inv_init
+#print axioms inv_closed
+#print axioms inv_all
 #print axioms unsolvable
