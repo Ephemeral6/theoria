@@ -1,0 +1,523 @@
+{
+  "certify_cheap": {
+    "anomaly_kinds": [],
+    "frames": 196,
+    "green": true,
+    "pixels_checked": 15876,
+    "transitions": 195
+  },
+  "certify_lean": {
+    "available": true,
+    "axiom_reports": [
+      {
+        "axioms": [],
+        "name": "unsolvable"
+      }
+    ],
+    "errors": [],
+    "green": true,
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+    "returncode": 0,
+    "sorries": []
+  },
+  "certify_lean_latch": {
+    "available": true,
+    "axiom_reports": [
+      {
+        "axioms": [],
+        "name": "inv_all"
+      }
+    ],
+    "errors": [],
+    "green": true,
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+    "returncode": 0,
+    "sorries": []
+  },
+  "compiled": {
+    "domain.pddl": 1833,
+    "pddl_cells_added": [
+      [
+        7,
+        4
+      ]
+    ],
+    "problem.json": 2526,
+    "problem.pddl": 3768,
+    "theory.lean": 64655,
+    "theory.md": 2715,
+    "theory.py": 8283
+  },
+  "evidence": "probed_trace.jsonl",
+  "green": true,
+  "manual": "theory_repaired.dsl",
+  "plan": {
+    "actions": [
+      "(push-up c5-1 c4-1)",
+      "(push-up c4-1 c3-1)",
+      "(push-up c3-1 c2-1)",
+      "(press-up c2-1 c1-1 c6-4)",
+      "(push-down c2-1 c3-1)",
+      "(push-down c3-1 c4-1)",
+      "(push-down c4-1 c5-1)",
+      "(push-right c5-1 c5-2)",
+      "(push-down c5-2 c6-2)",
+      "(push-right c6-2 c6-3)",
+      "(push-right c6-3 c6-4)",
+      "(teleport-down c6-4 c7-4 c7-6)",
+      "(push-right c7-6 c7-7)",
+      "(push-up c7-7 c6-7)",
+      "(push-up c6-7 c5-7)",
+      "(push-up c5-7 c4-7)",
+      "(push-up c4-7 c3-7)",
+      "(push-up c3-7 c2-7)"
+    ],
+    "backend": "stub-bfs",
+    "directions": [
+      "up",
+      "up",
+      "up",
+      "up",
+      "down",
+      "down",
+      "down",
+      "right",
+      "down",
+      "right",
+      "right",
+      "down",
+      "right",
+      "up",
+      "up",
+      "up",
+      "up",
+      "up"
+    ],
+    "domain": "theory\\generated_repaired\\domain.pddl",
+    "execution_mismatches": [],
+    "green": true,
+    "length": 18,
+    "manual_reaches_goal": true,
+    "name": "repaired",
+    "problem": "theory\\generated_repaired\\problem.pddl",
+    "status": "SAT",
+    "world_reaches_goal": true
+  },
+  "region": {
+    "adopted": [
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "adopted_size": 35,
+    "manual_closure": [
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        1,
+        6
+      ],
+      [
+        1,
+        7
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        2,
+        6
+      ],
+      [
+        2,
+        7
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        7,
+        7
+      ]
+    ],
+    "manual_closure_size": 35,
+    "pocket_in_closure": false,
+    "why": "zero_space proposes the cells the Cart was OBSERVED on; the probe only ever put it on (7,6), so that law is not closed under the repaired step and would fail inv_closed one move into the right room.  The theorize step widens it to the manual's own reachability closure \u2014 computed by running theory.py, not by reading the world \u2014 and removes the pocket, which the closure does not contain anyway.",
+    "zero_space_proposed": [
+      [
+        1,
+        3
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        4,
+        2
+      ],
+      [
+        4,
+        3
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        5,
+        2
+      ],
+      [
+        5,
+        3
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
+        6
+      ]
+    ],
+    "zero_space_rendering": "(6@1 + 6@2 + 6@5 + 6@6 + 6@7 + 6@8 + 6@11 + 6@12 + 6@13 + 6@14 + 6@17 + 6@18 + 6@19 + 6@20 + 6@23 + 6@24 + 6@25 + 6@26 +",
+    "zero_space_size": 22
+  },
+  "scored_against_the_world": {
+    "contrast": "the exhibit's theorem had the same shape, the same tactic and the same empty axiom list, and was false of the world",
+    "theorem": "pocket_unreachable",
+    "true_of_the_world": true,
+    "world_states_with_cart_in_pocket": 0
+  },
+  "stale_certificate": {
+    "died": true,
+    "file": "theory\\generated_repaired_stale\\theory.lean",
+    "first_error": "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:769:71: error: tactic 'decide' proved that the proposition",
+    "lean": {
+      "available": true,
+      "axiom_reports": [
+        {
+          "axioms": [
+            "sorryAx"
+          ],
+          "name": "unsolvable"
+        }
+      ],
+      "errors": [
+        "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:769:71: error: tactic 'decide' proved that the proposition",
+        "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:769:71: error: tactic 'decide' proved that the proposition",
+        "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:769:71: error: tactic 'decide' proved that the proposition",
+        "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:769:71: error: tactic 'decide' proved that the proposition",
+        "C:\\Users\\user\\Desktop\\theoria\\cold-start-a2\\theory\\generated_repaired_stale\\theory.lean:767:76: error: unsolved goals"
+      ],
+      "green": false,
+      "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+      "returncode": 1,
+      "sorries": []
+    },
+    "reading": "the exhibit's invariant is no longer closed under the manual's step; the pagoda is broken by exactly the rule the probe added, and Lean says so",
+    "region_size": 21
+  }
+}

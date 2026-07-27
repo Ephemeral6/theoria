@@ -1,0 +1,27 @@
+{
+  "cheap": {
+    "anomalies": [],
+    "anomaly_kinds": [],
+    "frames": 248,
+    "green": true,
+    "pixels_checked": 20088,
+    "pixels_unexplained": 0,
+    "theory": "theory\\generated\\theory.py",
+    "trace": "raw_trace.jsonl",
+    "transitions": 247
+  },
+  "lean": {
+    "available": true,
+    "axiom_reports": [
+      {
+        "axioms": [],
+        "name": "inv_all"
+      }
+    ],
+    "errors": [],
+    "green": true,
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+    "returncode": 0,
+    "sorries": []
+  }
+}

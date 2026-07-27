@@ -1,0 +1,355 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "board_cells": {
+    "portal_marker": [
+      7,
+      4
+    ],
+    "walls": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        0,
+        7
+      ],
+      [
+        0,
+        8
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        1,
+        8
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        2,
+        8
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        3,
+        8
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        8,
+        3
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        8,
+        5
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        8,
+        7
+      ],
+      [
+        8,
+        8
+      ]
+    ]
+  },
+  "delta": {
+    "DOWN": [
+      1,
+      0
+    ],
+    "LEFT": [
+      0,
+      -1
+    ],
+    "RIGHT": [
+      0,
+      1
+    ],
+    "UP": [
+      -1,
+      0
+    ]
+  },
+  "goal_reachable": true,
+  "goal_reachable_without_teleport": false,
+  "grid": [
+    9,
+    9
+  ],
+  "invariants": [
+    {
+      "name": "cart_unique",
+      "statement": "exactly one cell carries colour 6 at all times"
+    },
+    {
+      "name": "button_latched",
+      "statement": "once the Button is 8 it is never 7 again"
+    },
+    {
+      "name": "pocket_unreachable",
+      "statement": "(7,1) is floor walled on all four sides; no state with the Cart there is reachable, with or without the teleport. TRUE of the world \u2014 this is what the repaired manual proves."
+    },
+    {
+      "name": "right_room_locked_WITHOUT_teleport",
+      "statement": "delete the teleport and the right room is unreachable, because column c5 is solid wall from r1 to r7. FALSE of the world \u2014 this is the exhibit."
+    }
+  ],
+  "objects": {
+    "Button": {
+      "cell": [
+        1,
+        1
+      ],
+      "colors": [
+        7,
+        8
+      ],
+      "shape": [
+        1,
+        1
+      ]
+    },
+    "Cart": {
+      "colors": [
+        6
+      ],
+      "shape": [
+        1,
+        1
+      ]
+    },
+    "Door": {
+      "cell": [
+        6,
+        4
+      ],
+      "colors": [
+        5
+      ],
+      "shape": [
+        1,
+        1
+      ],
+      "vanishes_when": "Button pressed"
+    }
+  },
+  "palette": {
+    "button_pressed": 8,
+    "button_unpressed": 7,
+    "cart": 6,
+    "door_closed": 5,
+    "floor": 0,
+    "portal": 3,
+    "wall": 1
+  },
+  "pocket_ever_occupied": false,
+  "reachable_states": 55,
+  "reachable_states_without_teleport": 41,
+  "rules": [
+    {
+      "name": "push",
+      "then": "Cart moves one cell in direction D",
+      "when": "act=D and the target cell is floor (or the opened Door cell)"
+    },
+    {
+      "name": "blocked",
+      "then": "nothing moves",
+      "when": "act=D and the target cell is a wall, the closed Door, or the Button"
+    },
+    {
+      "name": "press",
+      "then": "Button recolours 7 -> 8 AND the Door vanishes, in the same transition; the Cart does not move",
+      "when": "act=UP and the Cart is at (2,1), so the target is the Button, and the Button is unpressed"
+    },
+    {
+      "name": "teleport",
+      "then": "Cart moves to (7,6), inside the right room",
+      "when": "act=DOWN and the target cell is the Portal entry (7,4) \u2014 which is only ever true from the Door cell (6,4), and only after the Door has opened"
+    }
+  ],
+  "shortest_solution": [
+    "UP",
+    "UP",
+    "UP",
+    "UP",
+    "DOWN",
+    "DOWN",
+    "DOWN",
+    "RIGHT",
+    "DOWN",
+    "RIGHT",
+    "RIGHT",
+    "DOWN",
+    "UP",
+    "UP",
+    "UP",
+    "UP",
+    "UP",
+    "RIGHT"
+  ],
+  "shortest_solution_length": 18,
+  "spec": {
+    "button_cell": [
+      1,
+      1
+    ],
+    "cart_start": [
+      5,
+      1
+    ],
+    "door_cell": [
+      6,
+      4
+    ],
+    "goal_cell": [
+      2,
+      7
+    ],
+    "name": "a2-base",
+    "pocket_cell": [
+      7,
+      1
+    ],
+    "portal_cell": [
+      7,
+      4
+    ],
+    "portal_dest": [
+      7,
+      6
+    ]
+  }
+}

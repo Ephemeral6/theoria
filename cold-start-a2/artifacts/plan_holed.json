@@ -1,0 +1,8 @@
+{
+  "backend": null,
+  "domain": "theory\\generated_holed\\domain.pddl",
+  "name": "holed",
+  "note": "no plan exists under this manual \u2014 constraint 6 forbids stopping here; a certificate is owed",
+  "problem": "theory\\generated_holed\\problem.pddl",
+  "status": "UNSAT"
+}

@@ -1,0 +1,61 @@
+{
+  "cut_rule": "history_trace = raw_trace[0 .. portal_transition]; the cut index is the single non-adjacent Cart move, found from the frames' geometry",
+  "history_omits_exactly_one_pair": true,
+  "history_omitted_pairs": [
+    "cart=(6,4) pressed=1 act=DOWN"
+  ],
+  "history_trace": {
+    "button_press_transitions": [
+      90
+    ],
+    "coverage": "163/164",
+    "covered_pairs": 163,
+    "door_entry_transitions": [
+      111,
+      124,
+      125,
+      182
+    ],
+    "frames": 184,
+    "portal_transitions": [],
+    "reachable_states": 55,
+    "scope": "every reachable state with the Cart in the left room",
+    "state_action_pairs": 164,
+    "states_in_scope": 41,
+    "transitions": 183,
+    "uncovered_pairs": [
+      "cart=(6,4) pressed=1 act=DOWN"
+    ],
+    "win_frames": []
+  },
+  "portal_transition": 183,
+  "raw_trace": {
+    "button_press_transitions": [
+      90
+    ],
+    "coverage": "220/220",
+    "covered_pairs": 220,
+    "door_entry_transitions": [
+      111,
+      124,
+      125,
+      182
+    ],
+    "frames": 248,
+    "portal_transitions": [
+      183
+    ],
+    "reachable_states": 55,
+    "scope": "every reachable state",
+    "state_action_pairs": 220,
+    "states_in_scope": 55,
+    "transitions": 247,
+    "uncovered_pairs": [],
+    "win_frames": [
+      230,
+      233,
+      240,
+      241
+    ]
+  }
+}

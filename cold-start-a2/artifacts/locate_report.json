@@ -1,0 +1,71 @@
+{
+  "board_diffs": [],
+  "checks": {
+    "mispredicted_step": true,
+    "misread_board": false,
+    "wrong_goal_test": false
+  },
+  "culprits": [
+    "mispredicted_step"
+  ],
+  "episode": "artifacts\\solved_episode.jsonl",
+  "goal_diffs": [],
+  "located": {
+    "action": "DOWN",
+    "manual_predicts": [
+      6,
+      4
+    ],
+    "mover_at": [
+      6,
+      4
+    ],
+    "probe_target": {
+      "action": "DOWN",
+      "mover_cell": [
+        6,
+        4
+      ],
+      "question": "what makes this transition jump \u2014 the colour of the cell below, or the Cart's being on this particular cell?  Both fit the single witness; M8 designs an experiment that separates them."
+    },
+    "reading": "at t=11 the Cart is at (6, 4), the action is DOWN, the manual fires nothing and predicts the Cart stays at (6, 4), and the world puts it at (7, 6) \u2014 a jump of 3 cells.  No rule in this manual has an effect that moves the mover more than one cell, so the defect is a MISSING RULE, not a wrong one: nothing here can be corrected, something has to be added.",
+    "rules_that_fired": [],
+    "t": 11,
+    "world_shows": [
+      7,
+      6
+    ]
+  },
+  "manual": "theory\\generated_holed\\theory.py",
+  "n_step_diffs": 1,
+  "path_length": 18,
+  "step_diffs": [
+    {
+      "action": "DOWN",
+      "cells_differing": [
+        [
+          6,
+          4
+        ],
+        [
+          7,
+          6
+        ]
+      ],
+      "fired": [],
+      "mover_before": [
+        6,
+        4
+      ],
+      "mover_manual_predicts": [
+        6,
+        4
+      ],
+      "mover_world_shows": [
+        7,
+        6
+      ],
+      "t": 11
+    }
+  ]
+}

@@ -1,0 +1,166 @@
+{
+  "confirmed": 0,
+  "executable": 4,
+  "not_separable": 1,
+  "ordering_constraint": "the Portal is one-way, so every left-room probe had to run before P-01; an irreversible world constrains experiment order, not just experiment design",
+  "probed_trace": "artifacts\\probed_trace.jsonl",
+  "probes": [
+    {
+      "action": "DOWN",
+      "id": "P-02.1",
+      "manual_agreed": true,
+      "manual_predicted_mover": [
+        5,
+        1
+      ],
+      "mover_after": [
+        5,
+        1
+      ],
+      "mover_cell": [
+        5,
+        1
+      ],
+      "navigation_steps": 4,
+      "note": "the repaired manual is about to claim (7,1) is unreachable; the claim rests on this ring, so the ring is probed before the theorem is proved rather than after",
+      "observation": "stays",
+      "predictions": {
+        "ring_has_a_gap": "steps to (6,1)",
+        "ring_is_solid": "stays"
+      },
+      "question": "is the wall ring around the sealed pocket (7, 1) really solid at (6,1)?",
+      "refuted": [
+        "ring_has_a_gap"
+      ],
+      "status": "refuted",
+      "surviving": [
+        "ring_is_solid"
+      ],
+      "tier": "executable"
+    },
+    {
+      "action": "LEFT",
+      "id": "P-02.2",
+      "manual_agreed": true,
+      "manual_predicted_mover": [
+        6,
+        2
+      ],
+      "mover_after": [
+        6,
+        2
+      ],
+      "mover_cell": [
+        6,
+        2
+      ],
+      "navigation_steps": 2,
+      "note": "the repaired manual is about to claim (7,1) is unreachable; the claim rests on this ring, so the ring is probed before the theorem is proved rather than after",
+      "observation": "stays",
+      "predictions": {
+        "ring_has_a_gap": "steps to (6,1)",
+        "ring_is_solid": "stays"
+      },
+      "question": "is the wall ring around the sealed pocket (7, 1) really solid at (6,1)?",
+      "refuted": [
+        "ring_has_a_gap"
+      ],
+      "status": "refuted",
+      "surviving": [
+        "ring_is_solid"
+      ],
+      "tier": "executable"
+    },
+    {
+      "action": "DOWN",
+      "id": "P-02.3",
+      "manual_agreed": true,
+      "manual_predicted_mover": [
+        6,
+        2
+      ],
+      "mover_after": [
+        6,
+        2
+      ],
+      "mover_cell": [
+        6,
+        2
+      ],
+      "navigation_steps": 0,
+      "note": "the repaired manual is about to claim (7,1) is unreachable; the claim rests on this ring, so the ring is probed before the theorem is proved rather than after",
+      "observation": "stays",
+      "predictions": {
+        "ring_has_a_gap": "steps to (7,2)",
+        "ring_is_solid": "stays"
+      },
+      "question": "is the wall ring around the sealed pocket (7, 1) really solid at (7,2)?",
+      "refuted": [
+        "ring_has_a_gap"
+      ],
+      "status": "refuted",
+      "surviving": [
+        "ring_is_solid"
+      ],
+      "tier": "executable"
+    },
+    {
+      "action": "DOWN",
+      "id": "P-01",
+      "manual_agreed": false,
+      "manual_predicted_mover": [
+        6,
+        4
+      ],
+      "mover_after": [
+        7,
+        6
+      ],
+      "mover_cell": [
+        6,
+        4
+      ],
+      "navigation_steps": 2,
+      "note": "this is the probe the localisation asked for; the holed manual's prediction is one of the three hypotheses and it is on the record before the action is taken",
+      "observation": "jumps to (7,6)",
+      "predictions": {
+        "holed_manual__nothing_happens": "stays",
+        "missing_rule__one_step_down": "steps to (7,4)",
+        "missing_rule__teleport_to_7_6": "jumps to (7,6)"
+      },
+      "question": "M7 located the divergence here: at (6,4), DOWN.  What does the world actually do?",
+      "refuted": [
+        "holed_manual__nothing_happens",
+        "missing_rule__one_step_down"
+      ],
+      "status": "refuted",
+      "surviving": [
+        "missing_rule__teleport_to_7_6"
+      ],
+      "tier": "executable"
+    },
+    {
+      "frontier": [
+        [
+          "act==DOWN",
+          "tcolor(DOWN)==3"
+        ],
+        [
+          "act==DOWN",
+          "at(6,4)"
+        ]
+      ],
+      "id": "P-03",
+      "note": "`probe_frontier` ranks a separating experiment at 1.0 bits but classifies it hypothetical: it needs either a second colour-3 cell or a Cart on (6,4) with something else below, and this level has exactly one Portal, so neither configuration is reachable.  The two guards are extensionally identical here.  Decided on description length and carried into theory_repaired.dsl as an openly pending theorem \u2014 see THEORIZE_LOG R-05.",
+      "question": "is the jump triggered by the colour below the Cart (tcolor(DOWN)==3) or by the Cart's being on (6,4)?",
+      "source": "artifacts/engines_report.json probes[0]",
+      "status": "not_separable_in_this_world",
+      "tier": "hypothetical"
+    }
+  ],
+  "probes_designed": 5,
+  "refuted": 4,
+  "run": 4,
+  "trace_frames_after": 196,
+  "trace_frames_before": 184
+}

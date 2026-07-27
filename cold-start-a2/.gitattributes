@@ -1,0 +1,11 @@
+# Determinism is a requirement here, not a nicety: artifacts and generated forms
+# are byte-reproducible for a fixed seed, and `core.autocrlf` must not be able to
+# rewrite them on the way in or out.  Same pin as engine-rig's.
+* text=auto eol=lf
+*.jsonl text eol=lf
+*.json text eol=lf
+*.dsl text eol=lf
+*.lean text eol=lf
+*.pddl text eol=lf
+*.md text eol=lf
+*.py text eol=lf

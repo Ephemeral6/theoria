@@ -1,0 +1,70 @@
+{
+  "candidates_probed.jsonl": {
+    "explains_every_transition": {
+      "obj0": true,
+      "obj1": true,
+      "obj2": true
+    },
+    "frames": 196,
+    "mutually_exclusive": {
+      "obj0": true,
+      "obj1": true,
+      "obj2": true
+    },
+    "note": "the play record plus the probes",
+    "rules_proposed": [
+      "obj0_recolor8_UP",
+      "obj0_still_DOWN",
+      "obj0_still_LEFT",
+      "obj0_still_RIGHT",
+      "obj0_still_UP",
+      "obj1_jump_DOWN",
+      "obj1_step_DOWN",
+      "obj1_step_LEFT",
+      "obj1_step_RIGHT",
+      "obj1_step_UP",
+      "obj1_still_DOWN",
+      "obj1_still_LEFT",
+      "obj1_still_RIGHT",
+      "obj1_still_UP",
+      "obj2_still_DOWN",
+      "obj2_still_LEFT",
+      "obj2_still_RIGHT",
+      "obj2_still_UP",
+      "obj2_vanish_UP",
+      "obj0_still",
+      "obj1_still",
+      "obj1_step",
+      "obj2_still"
+    ],
+    "rules_with_a_jump_effect": [
+      {
+        "coverage": "1/1",
+        "effect": {
+          "dx": 2,
+          "dy": 1,
+          "type": "move"
+        },
+        "guard": [
+          "act==DOWN",
+          "tcolor(DOWN)==3"
+        ],
+        "name": "obj1_jump_DOWN",
+        "transitions": [
+          194
+        ]
+      }
+    ],
+    "trace": "probed_trace.jsonl",
+    "tracks": [
+      7,
+      6,
+      5
+    ],
+    "transitions": 195
+  },
+  "verdict": {
+    "probed_evidence_proposes_a_jump": true,
+    "reading": "the miner proposes the teleport again from the grown evidence, so theory_repaired.dsl is re-derivable from probed_trace.jsonl and is not a rule remembered from the control manual"
+  }
+}

@@ -1,0 +1,50 @@
+{
+  "claim": {
+    "lean_axioms": [
+      {
+        "axioms": [],
+        "name": "unsolvable"
+      }
+    ],
+    "lean_green": true,
+    "lean_target": "unsolvable",
+    "says": "no reachable state satisfies Goal, i.e. the Cart can never occupy the goal cell (2,7)",
+    "theorem": "right_room_locked"
+  },
+  "episode": {
+    "actions": [
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "RIGHT",
+      "DOWN",
+      "RIGHT",
+      "RIGHT",
+      "DOWN",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "UP",
+      "RIGHT"
+    ],
+    "final_win": true,
+    "frames": 19,
+    "length": 18,
+    "path": "artifacts\\solved_episode.jsonl",
+    "win_frames": [
+      18
+    ]
+  },
+  "refuted": true,
+  "search_space_per_1_4": [
+    "some transition on this path is mispredicted by the manual",
+    "the manual's goal test disagrees with the episode's win flag",
+    "the manual misread the board at frame 0"
+  ],
+  "verdict": "REFUTED \u2014 the episode ends on the goal cell with win=true, so the machine-checked, axiom-free theorem `unsolvable` is false of the world.  Nothing in the proof is broken: it is true relative to the manual, and the manual is missing a rule.  Theoria \u00a71.4 now bounds the search: the error is necessarily on this path \u2014 a mispredicted step, a wrong goal test, or a misread board.  Three places, and M7 checks all three."
+}
