@@ -1,0 +1,5 @@
+# ledger.jsonl is append-only and is meant to merge line-for-line with whatever
+# arc-gateway produces later. A CRLF translation on checkout would change every
+# line's bytes and break that merge, and any hash taken over the ledger with it.
+# Same reasoning as engine-rig/.gitattributes.
+* text eol=lf

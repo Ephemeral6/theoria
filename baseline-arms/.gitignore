@@ -1,4 +1,2 @@
-probe_log.jsonl
-ledger.jsonl
-out/
+out/*.log
 __pycache__/

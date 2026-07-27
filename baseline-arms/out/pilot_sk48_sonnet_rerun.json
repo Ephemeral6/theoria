@@ -1,0 +1,30 @@
+[
+  {
+    "actions_failed": 4,
+    "actions_ok": 2,
+    "arm": "bare_cc",
+    "budget": 20,
+    "cache_creation_tokens": 51181,
+    "cache_read_tokens": 308516,
+    "card_id": "2e99adb7-5130-4df5-8838-49e2f6c159f6",
+    "cost_usd": 0.6080658,
+    "ended": "2026-07-27T17:40:01Z",
+    "error": "None",
+    "final_state": "NOT_FINISHED",
+    "game_id": "sk48-d8078629",
+    "http_amplification": 20.0,
+    "http_calls_gameplay": 40,
+    "input_tokens": 20,
+    "levels_completed": 0,
+    "model": "claude-sonnet-5",
+    "model_call_retries": 4,
+    "model_calls": 10,
+    "outcome": "model_error",
+    "output_tokens": 13891,
+    "reset_attempts": 26,
+    "run_id": "bare_cc-sk48-claude-sonnet-5-9022a076",
+    "started": "2026-07-27T17:33:50Z",
+    "wall_seconds": 372.6,
+    "win_levels": 8
+  }
+]
