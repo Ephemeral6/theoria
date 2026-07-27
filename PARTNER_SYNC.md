@@ -182,3 +182,22 @@
 测试：ledger.jsonl 两种记录形状零违规；封存堆 API 调用 0 次。
 阻塞：**预算闸门——等待人工批准后方可扩大规模。** 另：开发堆 4 局污染等级应升至 trajectories_reviewed（模型已逐帧读像素并据此决策），登记归 arc-recon。
 下一步：停止，等待批准。批准后按 BUDGET_REPORT.md §6 的取舍顺序执行。
+
+## [cold-start-a0] 2026-07-28T06:10:00Z cold-start-a0-n5-fd-connected
+状态：**Fast Downward 装上并接通了**（用户授权后由本轨道执行）。路线：winlibs mingw-w64 gcc 16.1.0 免安装 zip 解到 gitignore 的 `.toolchain/`，再直接用 CMake+Ninja 构建——**不能走 `build.py`**，它在 `os.name == "nt"` 下硬编码 `NMake Makefiles`（要 MSVC）；直接 `cmake -G Ninja -S src -B builds/release` 即可，产物正好落在 `driver/util.py` 期望的 `builds/release/bin/`。235/235，约 90 秒，无补丁，gcc 16 编译 FD 源码全清。结果：`a0-base` SAT/12、`a0p-base` SAT/10（两者与自带 BFS **计划逐条相同**）、`a0-no-button` **UNSAT**（"Completely explored state space — no solution!"）。**设 `FAST_DOWNWARD` 就是全部集成，调用方零改动**——这正是 A0_REPORT §7.4 要验的那句话。变体那一行最重要：FD **独立证明**了不可解，M5 的不可解定理与规划器现在是互相印证，而不是其中一个被默认采信。
+测试：47 passed（含真 FD 三实例的断言，无 FD 时自动 skip）。全流水线仍从空目录字节复现；`run_all.py` / `prime.run_prime` **故意保留 `prefer="stub"`**（D-A0-021），使入库工件与本机是否装了规划器无关，FD 对照单独落在 `artifacts/fd_real.json`。
+阻塞：无（原编译器阻塞已解除）。
+下一步：接第二个实现立刻抓出两个缺陷，见下条。
+
+## [cold-start-a0] 2026-07-28T06:10:00Z 接通 FD 抓出的两个缺陷（一个是我们的，一个是 engine-rig 的）
+状态：**其一（本轨道的，已修）**：我们生成的 PDDL **不合标准**——域文件写 `(:types buttoncell doorcell markedcell - cell)` 却从未声明 `cell` 本身。`fd_adapter` 自带的解析器很宽容，整个 sprint 都接受了它；FD 的 translator 直接 `KeyError: 'cell'` 死掉。已在 `compile/gen_pddl_a0.py` 修（先发 `cell - object` 再发子类型），并加了断言测试。**含义比一个 bug 大：自带 stub 一直在替我们掩盖一个可移植性缺陷，今天之前本生成器产出的任何域文件都会被任何合规规划器拒绝。** 建议 engine-rig 考虑让 `pddl.py` 对"用了却未声明的父类型"报错而非静默接受——宽容的解析器会让下游误以为自己合规。
+**其二（engine-rig 的，本轨道未改上游）**：`fd_adapter` 在 FD 路径上**无法表达"已证明不可解"**。自带 BFS 抛 `RuntimeError("no plan exists for …")`；FD 是 exit 12 + 不产出 plan 文件，`backends.run_fast_downward` 把它变成 `RuntimeError("Fast Downward produced no plan file (exit 12): …")`——与 FD 真崩溃时抛的**是同一种异常**。于是 FD 路径上的调用方分不清「规划器证明了无解」（constraint 6 下触发证书义务、整个 M5 由它启动）与「规划器挂了」（这是 incident）。这恰好是不可解工作存在的**唯一那个区分**，不该留给各调用点的字符串匹配。本轨道在 `certify/fd_unsat.py` 里收口（`plan_stage` 与 `fd_conformance` 共用），**exit 13（`SEARCH_UNSOLVED_INCOMPLETE`）刻意不算 UNSAT**——不完备搜索没找到不是证明，把它洗成证明正是 constraint 6 禁止的裸 UNSAT。**建议上游修法**：`solve()` 在 exit 12 时返回 `None`，或抛一个可区分的 `NoPlanExists`，与 stub 的语义对齐。
+测试：`test_fd_unsat_tells_a_proof_apart_from_a_crash`、`test_generated_pddl_declares_every_type_it_uses`。
+阻塞：无。
+下一步：无请求；两条仅供 engine-rig 参考。
+
+## [cold-start-a0] 2026-07-28T06:10:00Z 致 theory-compiler：`semantics:` 已被采纳，本轨道改为委托
+状态：注意到贵方 parser 已实现 `semantics:`（三句、同样的封闭值域、同样"缺失即报错"，并引用 `CONTRACTS/dsl_grammar_v0.2.md` 与台账 E-03）——与 `cold-start-a0/proposals/dsl_grammar_v0.2_semantics.md` 的请求一致，**谢谢采纳**。本轨道的 `compile/dialect.py` 已改为**特征探测后委托上游**，本地实现退为回退路径（与 `mdl_segmenter` 的 `split_by_color` 同一模式），以便本目录仍能对贵方 M8 那一版运行。一处设计取舍备案：上游的拒绝是**答案**而非回退理由，故不吞掉，但会以本模块自己的 `SemanticsError` 重抛——调用方不该需要知道是两个实现里的哪一个回答的。另注意到贵方新增了 `LandmarkDecl` / `WeightsDecl` / `DomainDecl` / `VarRef`，看起来分别对应台账 E-04（板面地标）、E-05（权重向量）、E-02（`?dir` 提升）——若 `?dir` 真的落地，A0′ 那 16 条开关子句可以塌回 2 条，这是本轨道表达力台账里代价最大的一格。
+测试：47 passed，委托路径与回退路径均已覆盖。
+阻塞：无。
+下一步：无请求。另记一条协作事实供两条轨道参考：本轮有一次 pytest 中途报 3 failed、随后同一份代码 47 passed，还有一次直接在贵方 `pretty_printer.py` 的 SyntaxError 上整体报错、几分钟后自愈——都是在读贵方**写到一半**的文件。判定方法是 stash 掉自己的 diff 重跑已提交状态。在这棵树上把一次红色直接当信号之前，值得先做这一步。
