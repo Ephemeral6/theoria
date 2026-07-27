@@ -1,42 +1,168 @@
 {
   "excluded": [],
+  "id_map": {
+    "ar25": "ar25-0c556536",
+    "g50t": "g50t-5849a774",
+    "sk48": "sk48-d8078629",
+    "tn36": "tn36-ef4dde99"
+  },
   "note": "games in `excluded` are registered and must not be used: a non-deterministic environment invalidates the framework's reasoning",
   "results": {
-    "g50t-5849a774": {
-      "available_actions": [
-        1,
-        2,
-        3,
-        4,
-        5
-      ],
-      "game_id": "g50t-5849a774",
+    "ar25-0c556536": {
+      "actions_already_spent": 0,
+      "actions_executed": 16,
+      "budget_per_game": 20,
+      "game_id": "ar25-0c556536",
+      "id_map": {
+        "ar25": "ar25-0c556536"
+      },
+      "resumed_from_ledger": true,
       "run_a": [
         {
           "action": "RESET",
-          "hash": "801726dc499f3f52",
+          "hash": "5e5512627a123ab1",
           "levels_completed": 0,
           "n_frames": 1,
-          "score": null,
-          "state": "NOT_FINISHED"
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:10:26Z"
         },
         {
           "action": "ACTION1",
-          "error": "HTTP 400 on /api/cmd/ACTION1: {\"error\":\"SERVER_ERROR\",\"message\":\"game g50t-5849a774 not found\"}\n"
+          "hash": "d56a6266d1805d45",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:10:35Z"
+        },
+        {
+          "action": "ACTION2",
+          "hash": "0c4bc7da9f06191d",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:31:18Z"
+        },
+        {
+          "action": "ACTION3",
+          "hash": "f6c45396f553fefd",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:31:56Z"
+        },
+        {
+          "action": "ACTION4",
+          "hash": "34004670a1a3e3f5",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:33:06Z"
+        },
+        {
+          "action": "ACTION5",
+          "hash": "8a098614b7dd570c",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:33:07Z"
+        },
+        {
+          "action": "ACTION1",
+          "hash": "c687a181acb93dbf",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:33:12Z"
+        },
+        {
+          "action": "ACTION2",
+          "hash": "d9f4bb6e2da88145",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:34:18Z"
+        },
+        {
+          "action": "ACTION3",
+          "hash": "7946af991f404f44",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:35:03Z"
         }
       ],
       "run_b": [
         {
           "action": "RESET",
-          "hash": "801726dc499f3f52",
+          "hash": "5e5512627a123ab1",
           "levels_completed": 0,
           "n_frames": 1,
-          "score": null,
-          "state": "NOT_FINISHED"
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:12:14Z"
         },
         {
           "action": "ACTION1",
-          "error": "HTTP 400 on /api/cmd/ACTION1: {\"error\":\"SERVER_ERROR\",\"message\":\"game g50t-5849a774 not found\"}\n"
+          "hash": "d56a6266d1805d45",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:12:37Z"
+        },
+        {
+          "action": "ACTION2",
+          "hash": "0c4bc7da9f06191d",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:12:43Z"
+        },
+        {
+          "action": "ACTION3",
+          "hash": "f6c45396f553fefd",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:13:00Z"
+        },
+        {
+          "action": "ACTION4",
+          "hash": "34004670a1a3e3f5",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:13:29Z"
+        },
+        {
+          "action": "ACTION5",
+          "hash": "8a098614b7dd570c",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:14:01Z"
+        },
+        {
+          "action": "ACTION1",
+          "hash": "c687a181acb93dbf",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:14:12Z"
+        },
+        {
+          "action": "ACTION2",
+          "hash": "d9f4bb6e2da88145",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:14:17Z"
+        },
+        {
+          "action": "ACTION3",
+          "hash": "7946af991f404f44",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:14:59Z"
         }
       ],
       "sequence": [
@@ -47,32 +173,492 @@
         5,
         1,
         2,
-        3,
-        4,
-        5,
-        1,
-        2,
-        3,
-        4,
-        5,
-        1,
-        2,
-        3,
-        4,
-        5
+        3
       ],
       "verdict": {
         "actions_returning_multiple_frames": 0,
         "cascade_semantics": "every response carried exactly 1 frame; the field is still a list",
+        "complete": true,
         "cross_session_residue": false,
         "deterministic": true,
         "first_divergence": null,
         "length_match": true,
         "max_frames_per_action": 1,
         "mismatches": [],
-        "steps_compared": 2
+        "steps_compared": 9,
+        "steps_expected": 9,
+        "steps_with_a_usable_hash": 9,
+        "unusable_steps": [],
+        "verdict": "PASS"
+      }
+    },
+    "g50t-5849a774": {
+      "actions_already_spent": 16,
+      "actions_executed": 4,
+      "available_actions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "budget_per_game": 20,
+      "game_id": "g50t-5849a774",
+      "http_calls": 50,
+      "id_map": {
+        "g50t": "g50t-5849a774"
+      },
+      "run_a": [
+        {
+          "action": "RESET",
+          "attempts": 4,
+          "hash": "801726dc499f3f52",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION1",
+          "attempts": 10,
+          "hash": "801726dc499f3f52",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION2",
+          "attempts": 4,
+          "hash": "e665977d6ad439ff",
+          "levels_completed": 0,
+          "n_frames": 7,
+          "state": "NOT_FINISHED"
+        }
+      ],
+      "run_b": [
+        {
+          "action": "RESET",
+          "attempts": 12,
+          "hash": "801726dc499f3f52",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION1",
+          "attempts": 2,
+          "hash": "801726dc499f3f52",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION2",
+          "attempts": 18,
+          "hash": "e665977d6ad439ff",
+          "levels_completed": 0,
+          "n_frames": 7,
+          "state": "NOT_FINISHED"
+        }
+      ],
+      "sequence": [
+        1,
+        2
+      ],
+      "verdict": {
+        "actions_returning_multiple_frames": 1,
+        "cascade_semantics": "action -> frame SEQUENCE (observed >1 frame in one response)",
+        "complete": true,
+        "cross_session_residue": false,
+        "deterministic": true,
+        "first_divergence": null,
+        "length_match": true,
+        "max_frames_per_action": 7,
+        "mismatches": [],
+        "steps_compared": 3,
+        "steps_expected": 3,
+        "steps_with_a_usable_hash": 3,
+        "unusable_steps": [],
+        "verdict": "PASS"
+      },
+      "win_levels": 7
+    },
+    "sk48-d8078629": {
+      "actions_already_spent": 0,
+      "actions_executed": 16,
+      "budget_per_game": 20,
+      "game_id": "sk48-d8078629",
+      "id_map": {
+        "sk48": "sk48-d8078629"
+      },
+      "resumed_from_ledger": true,
+      "run_a": [
+        {
+          "action": "RESET",
+          "hash": "2af9d6ed05c69323",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:15:07Z"
+        },
+        {
+          "action": "ACTION1",
+          "hash": "ea1fb5279a3c939b",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:15:21Z"
+        },
+        {
+          "action": "ACTION2",
+          "hash": "36dda2ff33b15d95",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:15:28Z"
+        },
+        {
+          "action": "ACTION3",
+          "hash": "71a459368eabd05f",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:15:47Z"
+        },
+        {
+          "action": "ACTION4",
+          "hash": "11d20ed09d45f904",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:15:56Z"
+        },
+        {
+          "action": "ACTION1",
+          "hash": "ee828e7d744c1593",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:16:00Z"
+        },
+        {
+          "action": "ACTION2",
+          "hash": "3483976f33ee5e6a",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:30:10Z"
+        },
+        {
+          "action": "ACTION3",
+          "hash": "9111f8d22668f6ee",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:31:02Z"
+        },
+        {
+          "action": "ACTION4",
+          "hash": "33716c3da3bb20e4",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:31:04Z"
+        }
+      ],
+      "run_b": [
+        {
+          "action": "RESET",
+          "hash": "2af9d6ed05c69323",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:17:41Z"
+        },
+        {
+          "action": "ACTION1",
+          "hash": "ea1fb5279a3c939b",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:17:44Z"
+        },
+        {
+          "action": "ACTION2",
+          "hash": "36dda2ff33b15d95",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:17:53Z"
+        },
+        {
+          "action": "ACTION3",
+          "hash": "71a459368eabd05f",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:18:30Z"
+        },
+        {
+          "action": "ACTION4",
+          "hash": "11d20ed09d45f904",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:19:29Z"
+        },
+        {
+          "action": "ACTION1",
+          "hash": "ee828e7d744c1593",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:19:30Z"
+        },
+        {
+          "action": "ACTION2",
+          "hash": "3483976f33ee5e6a",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:19:36Z"
+        },
+        {
+          "action": "ACTION3",
+          "hash": "9111f8d22668f6ee",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:29:46Z"
+        },
+        {
+          "action": "ACTION4",
+          "hash": "33716c3da3bb20e4",
+          "levels_completed": 0,
+          "n_frames": 2,
+          "state": "NOT_FINISHED",
+          "t": "2026-07-27T18:29:54Z"
+        }
+      ],
+      "sequence": [
+        1,
+        2,
+        3,
+        4,
+        1,
+        2,
+        3,
+        4
+      ],
+      "verdict": {
+        "actions_returning_multiple_frames": 8,
+        "cascade_semantics": "action -> frame SEQUENCE (observed >1 frame in one response)",
+        "complete": true,
+        "cross_session_residue": false,
+        "deterministic": true,
+        "first_divergence": null,
+        "length_match": true,
+        "max_frames_per_action": 2,
+        "mismatches": [],
+        "steps_compared": 9,
+        "steps_expected": 9,
+        "steps_with_a_usable_hash": 9,
+        "unusable_steps": [],
+        "verdict": "PASS"
+      }
+    },
+    "tn36-ef4dde99": {
+      "actions_already_spent": 0,
+      "actions_executed": 16,
+      "available_actions": [
+        6
+      ],
+      "budget_per_game": 20,
+      "game_id": "tn36-ef4dde99",
+      "http_calls": 119,
+      "id_map": {
+        "tn36": "tn36-ef4dde99"
+      },
+      "run_a": [
+        {
+          "action": "RESET",
+          "attempts": 3,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION1",
+          "attempts": 2,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION2",
+          "attempts": 3,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION3",
+          "attempts": 1,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION4",
+          "attempts": 3,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION1",
+          "attempts": 3,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION2",
+          "attempts": 34,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION3",
+          "attempts": 7,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION4",
+          "attempts": 2,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        }
+      ],
+      "run_b": [
+        {
+          "action": "RESET",
+          "attempts": 5,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION1",
+          "attempts": 3,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION2",
+          "attempts": 9,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION3",
+          "attempts": 8,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION4",
+          "attempts": 7,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION1",
+          "attempts": 3,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION2",
+          "attempts": 1,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION3",
+          "attempts": 21,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        },
+        {
+          "action": "ACTION4",
+          "attempts": 4,
+          "hash": "1491b31f98da62d0",
+          "levels_completed": 0,
+          "n_frames": 1,
+          "state": "NOT_FINISHED"
+        }
+      ],
+      "sequence": [
+        1,
+        2,
+        3,
+        4,
+        1,
+        2,
+        3,
+        4
+      ],
+      "verdict": {
+        "actions_returning_multiple_frames": 0,
+        "cascade_semantics": "every response carried exactly 1 frame; the field is still a list",
+        "complete": true,
+        "cross_session_residue": false,
+        "deterministic": true,
+        "first_divergence": null,
+        "length_match": true,
+        "max_frames_per_action": 1,
+        "mismatches": [],
+        "steps_compared": 9,
+        "steps_expected": 9,
+        "steps_with_a_usable_hash": 9,
+        "unusable_steps": [],
+        "verdict": "PASS"
       },
       "win_levels": 7
     }
+  },
+  "retry_policy": {
+    "action": "up to 40 attempts",
+    "id_form": "full id only; short-id 200s are counterfeit (pristine initial frame regardless of session state) and are banned from requests",
+    "reset": "up to 40 attempts",
+    "retryable": "400 'not found' / 429 / transport only"
   }
 }

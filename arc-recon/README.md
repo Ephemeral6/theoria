@@ -20,6 +20,8 @@ never written to disk, and appears in no tracked file. See the root
 ```bash
 cd arc-recon && python recon.py      # read-only survey; burns no action quota
 cd arc-recon && python cut_piles.py  # the pile cut; refuses to run twice
+cd arc-recon && python precheck.py   # determinism precheck, dev pile only; SPENDS ACTIONS
+cd arc-recon && python precheck_resume.py reconstruct   # rebuild runs from the ledger, no API calls
 ```
 
 ## What the survey found
@@ -50,68 +52,90 @@ open access-check questions:
 Other fields: `state` (`NOT_FINISHED`), `full_reset` (false — RESET did a level
 reset), `action_input`.
 
-## INC-001 — the key does not cover the whole public set
+## INC-001 / INC-002 — REVERSED (INC-001b, INC-002a). The API works; retry is the key
 
-`GET /api/games` lists 25 games, but RESET returns `400 game <id> not found` for
-**three of the four development-pile games**. Only `g50t-5849a774` started.
+Both blocking incidents recorded below stand in the ledger as history, but their
+diagnoses are **overturned**. The baseline-arms track found the crack first
+(its independent re-verification, PARTNER_SYNC 2026-07-28): the same request
+that returns `400 game <id> not found` succeeds on retry. arc-recon re-ran the
+determinism precheck under that policy and **all four development-pile games
+now hold a verdict**:
 
-The pile cut assumed the 25 listed games are playable. That premise is false, so
-the development pile is effectively **one** game. The playable subset of the
-sealed pile is unknown and was **deliberately not probed**: a successful RESET
-returns the first frame, so an accessibility sweep would burn exactly the sealed
-games that are accessible — the worst possible outcome.
+| game | verdict | steps | notes |
+|---|---|---|---|
+| `ar25-0c556536` | **PASS** | 9/9 | 1 frame per action |
+| `g50t-5849a774` | **PASS** | 3/3 | ACTION2 returns **7 frames** — cascade semantics is real; shortened sequence, see INC-005 |
+| `sk48-d8078629` | **PASS** | 9/9 | **2 frames per action**, every action |
+| `tn36-ef4dde99` | **PASS** | 9/9 | shallow: see the caveat below |
 
-**Refined by INC-001a.** A 3-round retry sweep over the development pile gave
-`g50t` OK/400/400 and the other three 400 every time — so g50t succeeded 2 of 4
-attempts overall and the others 0 of 6. Three games look genuinely unavailable to
-this key, and a *second* effect refuses repeat RESETs on g50t (most likely a live
-session already open, or a start-rate limit). The API reports both with the same
-message, `game <id> not found`.
+Full data: `data/precheck.json`; every HTTP exchange: `data/recon_ledger.jsonl`.
 
-There is no non-destructive way to enumerate the playable set: `/api/account`,
-`/api/me`, `/api/key`, `/api/games/available` all 404, `/api/user` 401s (it exists
-but `X-API-Key` is not its auth), and `?playable=true` is ignored. Determining
-playability requires a RESET, which burns the game.
+**The corrected model of the fault.** `400 "game <id> not found"` is transient.
+Unavailability arrives in **waves of roughly 1–3 minutes** (most likely a
+multi-instance backend where only some replicas hold the game/session); a retry
+envelope has to outlast a wave, not just beat the per-attempt odds. The
+precheck now retries up to 40 attempts with backoff capped at 5 s, full id
+only, and treats only `400 … not found` / 429 / transport errors as retryable.
+Cost: **2.5–10× HTTP calls per executed action** (baseline-arms measured 5.07×
+with a smaller envelope). This amplification must enter every quota
+extrapolation.
 
-`data/piles.json` is hash-locked and was left untouched; the incident lives in
-`data/incidents.jsonl`, and `data/contamination_log.jsonl` supersedes the
-register inside the locked file. **No sealed game has been touched.**
+**Short ids are banned from requests (INC-005).** `ACTION` with a short id
+(`sk48` instead of `sk48-d8078629`) can return 200 — but every such 200 in our
+ledger carried the *pristine initial frame* regardless of session progress
+(6 of 6 on g50t; corroborated by a 200 for the nonexistent `ACTION7` in
+baseline-arms' log). A short-id 200 is served from something that is not the
+live session. The version suffix is the environment version fingerprint, so
+requests always carry the full id; the short↔full mapping the operators need is
+recorded in `data/precheck.json` (`id_map`) and in every ledger request body:
 
-The remaining access-check items still need gameplay: cross-session residue (does RESET fully clear
-state?), rate limits and action quota, and the determinism precheck — a fixed
-action sequence replayed twice with frame hashes compared. All of these are now
-runnable on `g50t-5849a774` alone.
+`ar25 ↔ ar25-0c556536 · g50t ↔ g50t-5849a774 · sk48 ↔ sk48-d8078629 · tn36 ↔ tn36-ef4dde99`
 
-## INC-002 — no action can be executed (blocking)
+**tn36 caveat.** Its advertised action space is `[6]` only, and `ACTION6`
+(with or without `{x,y}` data) returns **500 on every attempt** — the game's
+nominal action is broken server-side. The precheck ran on `ACTION1–4`, which
+the API accepts but which are visible no-ops (the frame never changed). So the
+PASS certifies RESET-state reproducibility and no-op consistency, and tn36
+remains **gameplay-blocked until the ACTION6 data shape is resolved**.
 
-The determinism precheck **did not pass. It could not complete.**
+**Access-check items settled by the precheck runs**: cascade semantics —
+`action → frame sequence` confirmed observationally (7-frame and 2-frame
+responses); cross-session residue — none on any of the four (identical RESET
+hashes, and g50t's re-check reproduced the *previous day's* hashes exactly);
+`levels_completed` / `win_levels` maintained throughout.
 
-| | attempts | succeeded |
-|---|---|---|
-| `RESET` on g50t | 48 | 4 |
-| `ACTION*` on g50t | 8 | **0** |
+**Budget.** ≤20 executed ACTIONs per game (RESETs logged, not counted), spent
+16 / 20 / 16 / 16 on ar25 / g50t / sk48 / tn36. A 10-minute harness timeout
+killed one run mid-flight; both live sessions were resumed from the ledger
+(`precheck_resume.py`) with zero lost state — the resumed steps' hashes match
+the partner run exactly, which is itself determinism evidence across a
+~20-minute gap.
 
-RESET succeeds intermittently; every ACTION issued immediately afterwards returns
-`400 game g50t-5849a774 not found`. The game becomes unavailable between the RESET
-and the very next call.
+The remaining open items for gameplay proper: ACTION6 `data` shape (blocks
+tn36 and every `click`-family game), and rate limits / whether failed HTTP
+attempts count against any server-side quota.
 
-Ruled out, each by direct test:
+<details>
+<summary>Original INC-001 / INC-002 text (diagnoses overturned, kept for the record)</summary>
 
-* **request shape** — four body variants tried inside one availability window
-  (`{game,card,guid}`, `{game,guid}`, `{game,guid,data}`,
-  `{game,card,guid,data,reasoning}`); all four failed identically;
-* **stale session** — ACTION with the live `guid` fails the same way, and the
-  error keys on `game_id`, not on the session;
-* **unclosed scorecards** — closing them changed nothing.
+`GET /api/games` lists 25 games, but RESET returned `400 game <id> not found`
+for three of the four development-pile games in early probing; only
+`g50t-5849a774` started, and a 3-round retry sweep left the other three at 0/6
+(INC-001, INC-001a). There is no non-destructive way to enumerate a playable
+set: `/api/account`, `/api/me`, `/api/key`, `/api/games/available` all 404,
+`/api/user` 401s, `?playable=true` is ignored. The sweep's retry envelopes
+(seconds, not minutes) never outlasted an unavailability wave, which is what
+produced the 'entitlement boundary' misdiagnosis.
 
-This blocks the whole live-API programme, not just the precheck: with zero
-successful actions there is no trajectory, no ledger, and nothing for the arms
-to run against.
+INC-002 then recorded RESET 4/48 and ACTION 0/8 on g50t inside single
+availability windows, having ruled out request shape (4 variants), stale
+sessions, and unclosed scorecards — all true observations, but the conclusion
+"this blocks the whole live-API programme" mistook wave-transient faults for a
+hard failure. What did hold up: two independent RESETs returned the identical
+initial-frame hash `801726dc499f3f52`, the first cross-session determinism
+data point, since confirmed by the full precheck.
 
-**What did work.** Two independent RESETs returned the *identical* initial-frame
-hash `801726dc499f3f52`. So the initial state is reproducible across sessions and
-there is no cross-session residue — one real determinism data point, at the level
-of the opening frame only.
+</details>
 
 ## INC-003 — the first precheck reported a false PASS
 
@@ -146,7 +170,17 @@ gets results; that is only honest if the confirmation runs on problems nobody ha
 seen. A game that has been played is burnt. So the knife falls before the first
 RESET, not after.
 
-**Nothing is contaminated yet.** The cut was made from catalogue metadata alone —
+**Contamination state (see `data/contamination_log.jsonl`, which supersedes the
+register inside the hash-locked file).** The four development-pile games are now
+`trajectories_reviewed` — played by the baseline-arms pilots and this precheck,
+which is what the development pile is for. On the sealed side, `dc22-fdcac232`
+is corrected to `design_document_disclosed` (Theoria.md itself prints its
+failure structure; INC-004), and baseline-arms' INC-BA-001 reports nine sealed
+games whose mechanics were partially disclosed to a search subagent's context
+(`ls20`, `ft09` materially; the register upgrade for those is pending an owner
+ruling). No sealed game has been touched via the API.
+
+**At cut time nothing was contaminated.** The cut was made from catalogue metadata alone —
 ids, titles, tags, action counts. No mechanics were observed, so
 `contamination_register` records all 25 games as `never_audited`.
 

@@ -11,9 +11,39 @@ The same two runs also settle three other access-check items for free:
   * **cross-session residue** -- do two fresh RESETs start from the same state?
   * **level reporting** -- are `levels_completed` / `win_levels` maintained?
 
+RETRY STRATEGY (supersedes the assumptions behind INC-002). The API's
+`400 "game <id> not found"` is a *transient* fault, not an entitlement boundary:
+the baseline-arms track showed the identical request succeeds on retry
+(probe_log.jsonl: storm [400x7, 200]; pilots drove 13-15 successful actions on
+every development-pile game). Policy here:
+
+  * Every command sends the FULL id, always. The version suffix is the
+    environment version fingerprint, and -- decisively -- SHORT-ID 200s ARE
+    COUNTERFEIT: every short-id ACTION that returned 200 in the 2026-07-27
+    g50t runs carried the pristine initial frame (hash 801726dc499f3f52,
+    n_frames=1, levels_completed=0, 6 of 6 in recon_ledger.jsonl), regardless
+    of the session's actual progress. A short-id 200 is served from something
+    that is not the live session, so treating it as an executed action
+    corrupts the trajectory. Short ids are banned from requests; the
+    short<->full mapping is still recorded in the report because operators
+    and other tracks use the short form as a handle.
+  * Only `400 ... not found` (and transport failures / 429) are retried.
+    Any other error is treated as permanent for that step: ACTION6 on
+    tn36-ef4dde99 returns 500 on every attempt (88/88 in baseline-arms'
+    probe log), and burning the retry budget on a deterministic error would
+    just be a slower way of failing.
+
+ACTION BUDGET: <=20 executed ACTIONs per game (RESETs are commands, not
+actions, and are logged but not counted), spent as
+2 runs x SEQUENCE_LENGTH actions = 16 for the standard length-8 sequence.
+Failed attempts do not advance the game state; the ~5x HTTP amplification the
+retries cost is recorded per step. A hard guard stops the run before action 21
+regardless.
+
 SAFETY: `assert_playable` refuses any game outside the development pile. A
 successful RESET returns the first frame, so running this on a sealed game would
-burn it. The guard is in the code path, not in the operator's memory.
+burn it. Short ids are additionally checked against sealed-pile prefixes. The
+guard is in the code path, not in the operator's memory.
 """
 
 import hashlib
@@ -21,43 +51,77 @@ import json
 import os
 import sys
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-from client import DATA_DIR, ArcApiError, ArcClient   # noqa: E402
+from client import DATA_DIR, ArcClient   # noqa: E402
 
 PILES_PATH = os.path.join(DATA_DIR, "piles.json")
 REPORT_PATH = os.path.join(DATA_DIR, "precheck.json")
 
 # Fixed, published sequence. Deliberately boring and deterministic: the point is
-# reproducibility, not progress through the game.
-SEQUENCE_LENGTH = 20
+# reproducibility, not progress through the game. Length 8 is set by the budget:
+# two replays of (RESET + 8 actions) = 18 executed commands, under the 20 cap.
+SEQUENCE_LENGTH = 8
+BUDGET_PER_GAME = 20
+
+# Retry envelope. Per-attempt success ran ~20-30% in baseline-arms' data, but
+# unavailability arrives in WAVES: ar25's run-a died when 24 attempts (~60s)
+# all landed inside one ~90s outage, and the very same action succeeded on
+# attempt 2 a minute later. The envelope therefore has to outlast a wave, not
+# just beat the per-attempt odds: 40 attempts with the backoff capped at 5s
+# rides out ~3 minutes.
+RESET_ATTEMPTS = 40
+ACTION_ATTEMPTS = 40
 
 
 class SealedGameError(Exception):
     """Refused: this game is not in the development pile."""
 
 
-def dev_pile() -> List[str]:
+class BudgetExceeded(Exception):
+    """The 20-executed-commands-per-game cap would be crossed."""
+
+
+def _piles() -> Dict[str, Any]:
     with open(PILES_PATH, encoding="utf-8") as fh:
-        return json.load(fh)["dev_pile"]
+        return json.load(fh)
+
+
+def dev_pile() -> List[str]:
+    return _piles()["dev_pile"]
 
 
 def assert_playable(game_id: str) -> None:
-    if game_id not in dev_pile():
+    piles = _piles()
+    if game_id not in piles["dev_pile"]:
         raise SealedGameError(
             "%s is not in the development pile. A successful RESET returns the "
             "first frame, so running this would burn a sealed game." % game_id
         )
+    # Defence in depth: the short form must not collide with a sealed game.
+    short = game_id.split("-")[0]
+    for sealed in piles["sealed_pile"]:
+        if sealed.split("-")[0] == short:
+            raise SealedGameError(
+                "short id %s collides with sealed game %s" % (short, sealed)
+            )
 
 
 def fixed_sequence(available: List[int], length: int = SEQUENCE_LENGTH) -> List[int]:
-    """Cycle the available simple actions -- same list every run, by construction."""
+    """Cycle the available simple actions -- same list every run, by construction.
+
+    Fallback: tn36-ef4dde99 advertises available_actions=[6] only, but ACTION6
+    fails 500 on every attempt server-side while ACTION1..5 are accepted
+    (baseline-arms probe log). The precheck needs *any* accepted deterministic
+    actions, not the game's nominal action space, so with no simple action
+    advertised it falls back to [1,2,3,4] and records that in the report.
+    """
     simple = [a for a in sorted(available) if a in (1, 2, 3, 4, 5)]
     if not simple:
-        raise RuntimeError("no simple actions available: %r" % available)
+        simple = [1, 2, 3, 4]
     return [simple[i % len(simple)] for i in range(length)]
 
 
@@ -66,45 +130,77 @@ def hash_frames(frames: Any) -> str:
     return hashlib.sha256(canonical.encode("utf-8")).hexdigest()[:16]
 
 
-def reset_when_available(client: ArcClient, game_id: str, card_id: str,
-                         attempts: int = 30, delay: float = 10.0,
-                         label: str = "") -> Dict[str, Any]:
-    """RESET, retrying while the game is unavailable.
+def _retryable(status: int, body: Any) -> bool:
+    """Only the known-transient failures are worth another attempt."""
+    if status < 0 or status == 429:
+        return True
+    if status == 400:
+        message = body.get("message", "") if isinstance(body, dict) else str(body)
+        return "not found" in message
+    return False
 
-    Availability is intermittent server-side (INC-001a): the same game_id answers
-    a RESET in one minute and returns `game <id> not found` the next, and the
-    error keys on the game rather than on our session -- ACTION with a live guid
-    fails the same way. So the precheck has to catch a window rather than assume
-    one.
+
+def send_command(client: ArcClient, path: str, body: Dict[str, Any],
+                 note: str, attempts: int,
+                 delay_base: float = 0.4, delay_cap: float = 3.0
+                 ) -> Tuple[int, Any, Dict[str, Any]]:
+    """One command with the retry policy. Returns (status, body, stats).
+
+    Full id only. Short-id 200s are counterfeit (see module docstring), so the
+    request body never varies across attempts: same body, same session, until
+    a live replica answers or the envelope is exhausted.
     """
-    assert_playable(game_id)
-    last = None
-    for attempt in range(attempts):
+    status, parsed = -1, None
+    for k in range(attempts):
         try:
-            _, opening = client.request(
-                "POST", "/api/cmd/RESET", body={"game_id": game_id, "card_id": card_id},
-                note="precheck RESET %s %s attempt %d" % (game_id, label, attempt),
-            )
-            if attempt:
-                print("      (available on attempt %d, after %.0fs)" % (attempt, attempt * delay))
-            return opening
-        except ArcApiError as exc:
-            last = exc
-            if attempt < attempts - 1:
-                time.sleep(delay)
-    raise RuntimeError(
-        "%s never became available in %d attempts over %.0fs (last: %s)"
-        % (game_id, attempts, attempts * delay, last)
-    )
+            status, parsed = client.request(
+                "POST", path, body=body, note="%s attempt %d" % (note, k))
+        except Exception as exc:                     # ArcApiError or transport
+            status = getattr(exc, "status", -1)
+            raw = getattr(exc, "body", str(exc))
+            try:
+                parsed = json.loads(raw)
+            except (TypeError, ValueError):
+                parsed = raw
+            if _retryable(status, parsed) and k < attempts - 1:
+                time.sleep(min(delay_base * (k + 1), delay_cap))
+                continue
+            return status, parsed, {"attempts": k + 1}
+        return status, parsed, {"attempts": k + 1}
+    return status, parsed, {"attempts": attempts}
 
 
 def play_once(client: ArcClient, game_id: str, card_id: str,
               sequence: Optional[List[int]] = None,
-              label: str = "") -> Dict[str, Any]:
+              label: str = "",
+              length: int = SEQUENCE_LENGTH,
+              actions_already_spent: int = 0) -> Dict[str, Any]:
     """RESET, then walk the fixed sequence, hashing every frame batch."""
     assert_playable(game_id)
-    opening = reset_when_available(client, game_id, card_id, label=label)
+    actions_executed = 0     # successful ACTIONs only; the hard budget guard
+
+    def spend() -> None:
+        nonlocal actions_executed
+        actions_executed += 1
+        if actions_already_spent + actions_executed > BUDGET_PER_GAME:
+            raise BudgetExceeded("%s: executed action %d > %d"
+                                 % (game_id,
+                                    actions_already_spent + actions_executed,
+                                    BUDGET_PER_GAME))
+
+    status, opening, reset_stats = send_command(
+        client, "/api/cmd/RESET", {"game_id": game_id, "card_id": card_id},
+        note="precheck RESET %s %s" % (game_id, label),
+        attempts=RESET_ATTEMPTS, delay_base=0.5, delay_cap=5.0)
+    if status != 200 or not isinstance(opening, dict):
+        return {"reset_failed": True, "reset_status": status,
+                "reset_attempts": reset_stats["attempts"],
+                "reset_error": str(opening)[:200], "steps": [],
+                "sequence": sequence or [], "actions_executed": 0,
+                "http_calls": reset_stats["attempts"],
+                "win_levels": None, "available_actions": None}
     guid = opening["guid"]
+    http_calls = reset_stats["attempts"]
     steps = [
         {
             "action": "RESET",
@@ -112,21 +208,25 @@ def play_once(client: ArcClient, game_id: str, card_id: str,
             "n_frames": len(opening["frame"]),
             "state": opening.get("state"),
             "levels_completed": opening.get("levels_completed"),
-            "score": opening.get("score"),
+            "attempts": reset_stats["attempts"],
         }
     ]
-    sequence = sequence or fixed_sequence(opening.get("available_actions", [1, 2, 3, 4, 5]))
+    sequence = sequence or fixed_sequence(opening.get("available_actions") or [],
+                                          length)
 
     for index, action in enumerate(sequence):
-        try:
-            _, response = client.request(
-                "POST", "/api/cmd/ACTION%d" % action,
-                body={"game_id": game_id, "card_id": card_id, "guid": guid},
-                note="precheck ACTION%d #%d %s" % (action, index, game_id),
-            )
-        except ArcApiError as exc:
-            steps.append({"action": "ACTION%d" % action, "error": str(exc)[:200]})
+        status, response, stats = send_command(
+            client, "/api/cmd/ACTION%d" % action,
+            {"game_id": game_id, "card_id": card_id, "guid": guid},
+            note="precheck ACTION%d #%d %s %s" % (action, index, game_id, label),
+            attempts=ACTION_ATTEMPTS, delay_cap=5.0)
+        http_calls += stats["attempts"]
+        if status != 200 or not isinstance(response, dict):
+            steps.append({"action": "ACTION%d" % action,
+                          "error": "HTTP %s after %d attempts: %s"
+                                   % (status, stats["attempts"], str(response)[:160])})
             break
+        spend()
         frames = response.get("frame", [])
         steps.append(
             {
@@ -135,10 +235,11 @@ def play_once(client: ArcClient, game_id: str, card_id: str,
                 "n_frames": len(frames) if isinstance(frames, list) else None,
                 "state": response.get("state"),
                 "levels_completed": response.get("levels_completed"),
-                "score": response.get("score"),
+                "attempts": stats["attempts"],
             }
         )
     return {"guid": guid, "sequence": sequence, "steps": steps,
+            "actions_executed": actions_executed, "http_calls": http_calls,
             "win_levels": opening.get("win_levels"),
             "available_actions": opening.get("available_actions")}
 
@@ -149,11 +250,16 @@ def compare(first: Dict[str, Any], second: Dict[str, Any],
 
     A step that errored carries no hash. Comparing two such steps would find
     `None == None` and call it agreement, which is how the first version of this
-    function reported PASS for two runs that had both died on their first action.
-    Hashes are therefore only counted as agreeing when both are present, and the
-    verdict additionally requires that the full sequence actually ran.
+    function reported PASS for two runs that had both died on their first action
+    (INC-003). Hashes are therefore only counted as agreeing when both are
+    present, and the verdict additionally requires that the full sequence ran.
+
+    Verdicts: PASS (complete, all hashes equal), FAIL (a real hash mismatch --
+    the environment is non-deterministic), UNPLAYABLE (the sequence could not
+    be completed even with the retry policy, so determinism is unestablished
+    and the game cannot host a campaign either way).
     """
-    a, b = first["steps"], second["steps"]
+    a, b = first.get("steps", []), second.get("steps", [])
     compared = min(len(a), len(b))
     mismatches = []
     unusable = []
@@ -176,16 +282,17 @@ def compare(first: Dict[str, Any], second: Dict[str, Any],
         "unusable_steps": unusable[:10],
         "length_match": len(a) == len(b),
         # PASS requires the whole sequence to have run and every compared step to
-        # carry a real hash on both sides. Anything less is INCOMPLETE, not PASS.
+        # carry a real hash on both sides. Anything less is not PASS.
         "deterministic": complete and not mismatches,
         "verdict": (
             "PASS" if (complete and not mismatches)
-            else ("FAIL" if mismatches else "INCOMPLETE")
+            else ("FAIL" if mismatches else "UNPLAYABLE")
         ),
         "mismatches": mismatches[:10],
         "first_divergence": mismatches[0]["index"] if mismatches else None,
-        "cross_session_residue": a[0].get("hash") != b[0].get("hash"),
-        "max_frames_per_action": max((s.get("n_frames") or 0) for s in a),
+        "cross_session_residue": (a[0].get("hash") != b[0].get("hash"))
+                                 if (a and b) else None,
+        "max_frames_per_action": max(((s.get("n_frames") or 0) for s in a), default=0),
         "actions_returning_multiple_frames": len(multi),
         "cascade_semantics": (
             "action -> frame SEQUENCE (observed >1 frame in one response)"
@@ -195,54 +302,110 @@ def compare(first: Dict[str, Any], second: Dict[str, Any],
     }
 
 
-def run(game_id: str, client: Optional[ArcClient] = None) -> Dict[str, Any]:
+def run(game_id: str, client: Optional[ArcClient] = None,
+        length: int = SEQUENCE_LENGTH,
+        actions_already_spent: int = 0) -> Dict[str, Any]:
+    """`actions_already_spent` charges prior spend on this game against the
+    budget (g50t's 16 actions from the invalidated 2026-07-27 runs are charged
+    this way; its re-check uses length=2, 16 + 2x2 = 20)."""
     assert_playable(game_id)
     client = client or ArcClient()
+    # Budget, computed before it is spent: 2 runs x `length` actions.
+    planned = actions_already_spent + 2 * length
+    assert planned <= BUDGET_PER_GAME, "planned %d > %d" % (planned, BUDGET_PER_GAME)
+
     card_a = client.open_scorecard(tags=["precheck", "run-a"])["card_id"]
-    first = play_once(client, game_id, card_a, label="run-a")
-    card_b = client.open_scorecard(tags=["precheck", "run-b"])["card_id"]
-    second = play_once(client, game_id, card_b, sequence=first["sequence"], label="run-b")
-    verdict = compare(first, second, expected_steps=len(first["sequence"]) + 1)
+    first = play_once(client, game_id, card_a, label="run-a", length=length,
+                      actions_already_spent=actions_already_spent)
+    if first.get("reset_failed"):
+        second: Dict[str, Any] = {"steps": [], "skipped": "run-a RESET never opened"}
+    else:
+        card_b = client.open_scorecard(tags=["precheck", "run-b"])["card_id"]
+        second = play_once(client, game_id, card_b,
+                           sequence=first["sequence"], label="run-b",
+                           actions_already_spent=(actions_already_spent
+                                                  + first["actions_executed"]))
+    verdict = compare(first, second,
+                      expected_steps=len(first.get("sequence") or []) + 1)
+    if first.get("reset_failed"):
+        verdict["verdict"] = "UNPLAYABLE"
+        verdict["reason"] = ("RESET never succeeded in %d attempts (last HTTP %s)"
+                             % (first["reset_attempts"], first["reset_status"]))
     return {
         "game_id": game_id,
-        "sequence": first["sequence"],
-        "win_levels": first["win_levels"],
-        "available_actions": first["available_actions"],
+        "id_map": {game_id.split("-")[0]: game_id},
+        "sequence": first.get("sequence"),
+        "win_levels": first.get("win_levels"),
+        "available_actions": first.get("available_actions"),
+        "actions_executed": (first.get("actions_executed", 0)
+                             + second.get("actions_executed", 0)),
+        "actions_already_spent": actions_already_spent,
+        "budget_per_game": BUDGET_PER_GAME,
+        "http_calls": (first.get("http_calls", 0) + second.get("http_calls", 0)),
         "verdict": verdict,
-        "run_a": first["steps"],
-        "run_b": second["steps"],
+        "run_a": first.get("steps"),
+        "run_b": second.get("steps"),
     }
 
 
 def main(argv: List[str]) -> int:
-    targets = argv or dev_pile()
+    """Targets are `game_id[:length[:actions_already_spent]]`. The report is
+    merged per game into any existing precheck.json, so partial reruns do not
+    clobber other games' results."""
+    tokens = argv or dev_pile()
     client = ArcClient()
-    results, excluded = {}, []
-    for game_id in targets:
+    results: Dict[str, Any] = {}
+    if os.path.exists(REPORT_PATH):
+        with open(REPORT_PATH, encoding="utf-8") as fh:
+            results = json.load(fh).get("results", {})
+    for token in tokens:
+        parts = token.split(":")
+        game_id = parts[0]
+        length = int(parts[1]) if len(parts) > 1 else SEQUENCE_LENGTH
+        spent = int(parts[2]) if len(parts) > 2 else 0
         try:
-            result = run(game_id, client=client)
+            result = run(game_id, client=client, length=length,
+                         actions_already_spent=spent)
         except SealedGameError as exc:
             print("  %-18s REFUSED: %s" % (game_id, exc))
             return 2
-        except ArcApiError as exc:
-            print("  %-18s unplayable: HTTP %s" % (game_id, exc.status))
-            excluded.append({"game_id": game_id, "reason": "HTTP %s" % exc.status})
-            continue
+        except BudgetExceeded as exc:
+            print("  %-18s BUDGET: %s" % (game_id, exc))
+            return 3
         verdict = result["verdict"]
         results[game_id] = result
-        print("  %-18s %s  steps=%d/%d usable=%d  max_frames/action=%d  residue=%s"
+        print("  %-18s %s  steps=%d/%d usable=%d  actions=%d+%d/%d http=%d  "
+              "max_frames/action=%d  residue=%s"
               % (game_id, verdict["verdict"], verdict["steps_compared"],
                  verdict["steps_expected"], verdict["steps_with_a_usable_hash"],
-                 verdict["max_frames_per_action"], verdict["cross_session_residue"]))
+                 result["actions_already_spent"], result["actions_executed"],
+                 BUDGET_PER_GAME, result["http_calls"],
+                 verdict["max_frames_per_action"],
+                 verdict["cross_session_residue"]))
+
+    excluded = []
+    for game_id, result in sorted(results.items()):
+        verdict = result["verdict"]
         if verdict["verdict"] == "FAIL":
             excluded.append({"game_id": game_id,
                              "reason": "non-deterministic at step %s"
                                        % verdict["first_divergence"]})
-        elif verdict["verdict"] == "INCOMPLETE":
+        elif verdict["verdict"] == "UNPLAYABLE":
             excluded.append({"game_id": game_id,
-                             "reason": "precheck did not complete; determinism unestablished"})
+                             "reason": verdict.get("reason",
+                                       "sequence could not be completed; "
+                                       "determinism unestablished")})
 
     report = {"results": results, "excluded": excluded,
+              "id_map": {g.split("-")[0]: g for g in sorted(results)},
+              "retry_policy": {
+                  "id_form": "full id only; short-id 200s are counterfeit "
+                             "(pristine initial frame regardless of session "
+                             "state) and are banned from requests",
+                  "reset": "up to %d attempts" % RESET_ATTEMPTS,
+                  "action": "up to %d attempts" % ACTION_ATTEMPTS,
+                  "retryable": "400 'not found' / 429 / transport only",
+              },
               "note": "games in `excluded` are registered and must not be used: a "
                       "non-deterministic environment invalidates the framework's reasoning"}
     with open(REPORT_PATH, "w", encoding="utf-8", newline="") as fh:
