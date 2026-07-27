@@ -42,7 +42,8 @@ from theory_compiler.parser.theory_parser import parse_theory  # noqa: E402
 
 from certify import lean_check, replay  # noqa: E402
 from compile import problem as problem_mod  # noqa: E402
-from compile.compile_a0 import _write  # noqa: E402
+from compile.compile_a0 import _write, render_markdown  # noqa: E402
+from compile.dialect import parse_semantics  # noqa: E402
 from compile.gen_lean_a0 import generate_lean, weight_invariant  # noqa: E402
 from compile.gen_pddl_a0 import generate_pddl  # noqa: E402
 from compile.gen_python_a0 import generate_python  # noqa: E402
@@ -114,15 +115,17 @@ def recovered_region(trace_path: str) -> Tuple[List[Tuple[int, int]], Dict]:
 
 
 def compile_variant(region: Sequence[Tuple[int, int]]) -> Dict[str, int]:
-    ast = parse_theory(open(DSL, encoding="utf-8").read())
+    text = open(DSL, encoding="utf-8").read()
+    ast = parse_theory(text)
+    semantics = parse_semantics(text)
     prob = problem_mod.derive(TRACE, "a0-no-button")
     os.makedirs(OUT, exist_ok=True)
 
     written = {}
     written["theory.py"] = _write(os.path.join(OUT, "theory.py"),
-                                  generate_python(ast, prob))
+                                  generate_python(ast, prob, semantics))
     written["theory.md"] = _write(os.path.join(OUT, "theory.md"),
-                                  generate_markdown(ast))
+                                  render_markdown(ast, semantics))
     domain, instance = generate_pddl(ast, prob)
     written["domain.pddl"] = _write(os.path.join(OUT, "domain.pddl"), domain)
     written["problem.pddl"] = _write(os.path.join(OUT, "problem.pddl"), instance)
@@ -142,6 +145,7 @@ def compile_variant(region: Sequence[Tuple[int, int]]) -> Dict[str, int]:
         invariant_builder=weight_invariant(region, [tuple(c) for c in prob.arena],
                                            comment),
         unsolvable=True,
+        semantics=semantics,
     )
     written["theory.lean"] = _write(os.path.join(OUT, "theory.lean"), lean)
     return written
