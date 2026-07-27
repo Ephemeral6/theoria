@@ -1,6 +1,6 @@
 # engine-rig
 
-Six engines from Theoria's workshop (§1.10b), built and proved correct against
+Eight engines from Theoria's workshop (§1.10b), built and proved correct against
 synthetic data only. No LLM calls, no game API, no network — this whole
 directory runs offline against fixtures it generates itself.
 
@@ -13,7 +13,7 @@ line in a `candidates.jsonl` shaped by the frozen contract at
 ```
 engine-rig/
   common/          canonical JSON, deterministic PRNG, candidate writer
-  fixtures/        the three synthetic worlds + their ground truth
+  fixtures/        the four synthetic worlds + their ground truth
     data/          generated artefacts (checked in; regenerable byte-for-byte)
   engines/
     mdl_segmenter/   diff -> objects and events, by minimum description length
@@ -21,7 +21,9 @@ engine-rig/
     zero_space/      GF(2) null space -> linear conservation laws
     lp_potential/    pagoda weights: unsolvability certificate + admissible heuristic
     fd_adapter/      PDDL -> planner -> plan
-    probe_frontier/  which action splits the hypothesis frontier hardest
+    probe_frontier/  which action splits the frontier hardest, and what it costs to run
+    deadlock_carver/ conditional mini unsolvability theorems: candidates *and* pruning
+    ic3_pdr/         inductive invariants the LP and the null space cannot reach
   tools/           schema validator, integration runner
   tests/           acceptance tests, one module per engine
   DECISIONS.md     design calls and their reasons
@@ -59,8 +61,11 @@ engine-rig integration run
   lp_potential    w=['-1', '1', '0', '1'] certifies 1110 unsolvable; conditions all true
   fd_adapter      stub-bfs plan of length 5
   probe_frontier  probe UP worth 1.000 bits
+  deadlock_carver 16 theorem(s) (8 corner, 8 wall-pair); 808 -> 571 expansions (29.3% fewer), plan length 11 either way
+  ic3_pdr         0111: LP infeasible, IC3 invariant I(s) = (!pos1 | pos2) & (pos1 | !pos2); conditions all true
+  probe_frontier+fd 1 executable (p_row1 left: 1.000 bits / cost 11), 1 unreachable (p_side)
 ------------------------------------------------------------------------
-  candidates: 24
+  candidates: 44
   SCHEMA    : OK -- every line satisfies CONTRACTS/candidates_schema.md
 ```
 
@@ -72,8 +77,8 @@ cd engine-rig && python -m tools.validate_candidates artifacts/candidates.jsonl
 
 ## The checked-in candidate stream
 
-[`artifacts/candidates.jsonl`](artifacts/candidates.jsonl) is the M8 output,
-committed: 24 proposals, all six engines, all six candidate kinds. It is produced
+[`artifacts/candidates.jsonl`](artifacts/candidates.jsonl) is the M9 output,
+committed: 44 proposals, all eight engines, all six candidate kinds. It is produced
 in deterministic mode (frozen timestamps, uuid5 over each candidate's content) so
 that it is byte-stable and regenerating it produces no diff:
 
@@ -85,7 +90,7 @@ A test asserts the committed file equals a fresh run byte-for-byte, so it cannot
 go stale silently. `out/` stays untracked scratch for ordinary runs, which use
 real uuids and wall-clock timestamps exactly as the contract reads.
 
-## The three synthetic worlds
+## The four synthetic worlds
 
 **A · Cart world** (`fixtures/cart_world.py`) — 12x12 grid, one 2x3 colour-6
 block, push dynamics, plus exactly one teleport event. Feeds `mdl_segmenter` and
@@ -98,7 +103,14 @@ coverage 1/1, the thing a miner must flag rather than generalise from.
 **C · 4-cell peg solitaire** (`fixtures/peg4.py`) — fully enumerated state graph.
 `1101` reaches the goal `0100` in 2 moves; `1110` provably cannot. Feeds
 `lp_potential`. This is the minimal rehearsal of the A1 pagoda argument, with no
-DSL involved.
+DSL involved. `0111` is the configuration no linear pagoda proves, and feeds
+`ic3_pdr`.
+
+**D · Sokoban** (`fixtures/sokoban.py`) — one generated PDDL domain, four
+levels: an open 4x4 interior with two boxes (`open4` shallow, `open4far` deep)
+and a 1-wide corridor ring (`ring`, `ringstuck`). Feeds `deadlock_carver` and the
+planner-backed probe layer. The PDDL is generated rather than hand-written so the
+levels cannot drift from the geometry the tests reason about.
 
 ## What each engine was held to
 
@@ -110,11 +122,19 @@ DSL involved.
 | `lp_potential` | all three certificate conditions exact over ℚ; no certificate for the solvable config; heuristic admissible everywhere |
 | `fd_adapter` | 5-action plan = hand-verified optimum, cross-checked by an independent validator and by exhaustive enumeration |
 | `probe_frontier` | picks `UP` at exactly 1 bit, matching the hand computation; 0 bits for every other action |
+| `deadlock_carver` | Theoria 1.9's "box in dead corner" produced literally; 808 -> 571 expansions with the plan unchanged; no theorem ever condemns a state that could still win |
+| `ic3_pdr` | certifies `0111`, where the LP is infeasible; the invariant is re-verified by an independent checker; the solvable config gets a counterexample instead |
+| probes + planner | `p_row1` executable at cost 11 with a validated 10-move reach plan; `p_side` a full bit ruled unreachable |
 
-Two results are worth reading as findings rather than checkmarks: `cegis_miner`
-returns a *frontier* where the evidence cannot separate guards (rather than
-guessing), and `lp_potential` is sound but incomplete — configuration `0111` is
-unsolvable and no linear pagoda proves it, which is asserted by a test.
+Four results are worth reading as findings rather than checkmarks. `cegis_miner`
+returns a *frontier* where the evidence cannot separate guards, rather than
+guessing. `lp_potential` is sound but incomplete — configuration `0111` is
+unsolvable and no linear pagoda proves it, which is asserted by a test, and is
+exactly what `ic3_pdr` was added to cover. `deadlock_carver` saves **zero**
+expansions on `open4`, because pruning pays only where the search would otherwise
+go. And one of the two probe sites is a full bit that cannot be bought, which is
+R-05's "the experiment cannot be performed on this instance" reproduced as
+machinery rather than noticed by a human afterwards.
 
 ## Contract compliance
 
@@ -123,3 +143,7 @@ unsolvable and no linear pagoda proves it, which is asserted by a test.
 * `tools/validate_candidates.py` checks every emitted line against the frozen
   schema; M8 requires the full stream to pass.
 * Each engine's `README.md` fixes its payload shape.
+* `deadlock_carver` and `ic3_pdr` postdate the frozen enum, so they emit under
+  the enum member whose work they extend and name themselves in
+  `payload.producer`. The contract file and its validator are untouched; see
+  DECISIONS D-018, and `/PARTNER_SYNC.md` for the v0.2 flag.

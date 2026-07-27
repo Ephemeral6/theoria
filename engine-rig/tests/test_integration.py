@@ -1,4 +1,9 @@
-"""M8 acceptance: all six engines run, and the whole candidate stream validates."""
+"""M8/M9 acceptance: every engine runs, and the whole candidate stream validates.
+
+M9 added three engines' worth of work behind the same six-name enum (D-018), so
+`by_engine` is still the frozen six and `payload.producer` is where the newer
+engines identify themselves.
+"""
 
 import json
 import os
@@ -101,8 +106,58 @@ def test_the_headline_results_survive_the_integration_path(full_run):
         "goal_break": True,
     }
 
-    assert by_engine["fd_adapter"][0]["payload"]["length"] == 5
+    plans = [r["payload"] for r in by_engine["fd_adapter"] if r["kind"] == "plan"]
+    gripper = [p for p in plans if p.get("form") != "pruning_account"][0]
+    assert gripper["length"] == 5
     assert by_engine["probe_frontier"][0]["payload"]["action"] == "UP"
+
+
+def test_the_new_engines_results_survive_the_integration_path(full_run):
+    """M9's three: the deadlock account, the IC3 invariant, the priced probes."""
+    _, out = full_run
+    rows = read_jsonl(out)
+    by_producer = {}
+    for row in rows:
+        by_producer.setdefault(row["payload"].get("producer"), []).append(row)
+
+    carved = by_producer["deadlock_carver"]
+    theorems = [r for r in carved if r["kind"] == "invariant"]
+    assert len(theorems) == 16
+    assert {t["payload"]["closure"] for t in theorems} == {
+        "no_deleting_action", "deleting_actions_blocked",
+    }
+    assert "at(b1,c11) AND not-goal => dead" in {
+        t["payload"]["rendering"] for t in theorems
+    }
+
+    account = [r for r in carved if r["kind"] == "plan"][0]["payload"]
+    assert (account["expansions_before"], account["expansions_after"]) == (808, 571)
+    assert account["plan_length_unchanged"] is True
+
+    invariant = by_producer["ic3_pdr"][0]["payload"]
+    assert invariant["initial"] == "0111"
+    assert invariant["cnf_text"] == "(!pos1 | pos2) & (pos1 | !pos2)"
+    assert invariant["conditions"] == {
+        "inv_init": True, "inv_closed": True, "goal_break": True,
+    }
+
+    probes = {
+        r["payload"]["configuration"]: r["payload"]
+        for r in rows
+        if r["kind"] == "probe_design" and "configuration" in r["payload"]
+    }
+    assert probes["p_row1"]["tier"] == "executable"
+    assert probes["p_row1"]["cost"] == 11.0
+    assert probes["p_side"]["verdict"] == "unreachable"
+
+
+def test_the_frozen_engine_enum_is_still_the_only_thing_on_the_wire(full_run):
+    """Two engines were added; the contract's enum was not touched. D-018."""
+    _, out = full_run
+    rows = read_jsonl(out)
+    assert {row["engine"] for row in rows} <= set(ENGINES)
+    producers = {row["payload"].get("producer") for row in rows}
+    assert {"deadlock_carver", "ic3_pdr"} <= producers
 
 
 # --------------------------------------------------------------- append-only
@@ -165,7 +220,7 @@ def test_the_checked_in_artifact_matches_a_fresh_deterministic_run(tmp_path):
 
 def test_the_checked_in_artifact_passes_the_schema_validator():
     assert validate_file(runner.ARTIFACT_PATH) == []
-    assert len(read_jsonl(runner.ARTIFACT_PATH)) == 24
+    assert len(read_jsonl(runner.ARTIFACT_PATH)) == 44
 
 
 def test_deterministic_ids_are_still_distinct(full_run):

@@ -312,3 +312,125 @@ world's manual.
 objects, colour-agnostic fuses touching ones. This is the "segmentation operator
 hypothesis space" of Theoria 1.8, and the honest form is a choice the manual
 records rather than a default hidden in the engine.
+
+---
+
+## D-018 · Two new engines emit under the frozen enum, and name themselves in the payload
+
+**Context.** `deadlock_carver` and `ic3_pdr` are rows seven and eight of Theoria
+1.10(b)'s engine table. `CONTRACTS/candidates_schema.md` is frozen at v0.1, its
+`engine` field is an enum of the six engines that existed when it was written,
+and the contract says outright that neither track may modify the file.
+
+**Decision.** The contract is not touched, and neither is
+`tools/validate_candidates.py`, which is its executable form. Each new engine
+emits under the enum member whose work it extends — `deadlock_carver` as
+`fd_adapter`, `ic3_pdr` as `lp_potential` — and records its real identity in
+`payload.producer`, a field the contract explicitly leaves to each engine's
+README.
+
+**Why.** Three options were on the table and two of them are worse. Adding enum
+members unilaterally edits a file both tracks are forbidden to edit. Holding the
+engines back until a v0.2 is negotiated blocks work on a coordination round-trip
+that this repo deliberately does not have — the two tracks do not communicate.
+What is left is to emit inside the contract as written, which costs one field of
+indirection and no honesty: every line still validates, `payload.producer` is
+never absent, and `run_all`'s `by_engine` histogram still shows exactly the six
+frozen names, so nothing downstream is surprised.
+
+The pairing is not arbitrary in either case. A deadlock theorem is a planner
+artefact: it is carved out of a grounded PDDL task, it is expressed in the
+search's own reduced atoms, and its second consumer is `fd_adapter.search`
+itself. An IC3 invariant is precisely `lp_potential`'s unfinished business — it
+answers the same question, reports the same three conditions
+(`inv_init`/`inv_closed`/`goal_break`), and exists because the LP is infeasible
+on `0111` (D-014).
+
+This is flagged in `PARTNER_SYNC.md` rather than solved there. If the enum ever
+opens, the change is one line per engine and the payload field can stay.
+
+---
+
+## D-019 · Deadlock patterns are capped at two atoms, matching the mutex width
+
+**Context.** A dead pattern could in principle be any conjunction of ground
+atoms, and wider patterns catch more deadlocks (the classic sokoban 2x2 block
+needs four).
+
+**Decision.** `MAX_PATTERN = 2`. The pattern enumeration stops at pairs.
+
+**Why.** The proofs rest on h² mutexes, which are facts about *pairs* of atoms.
+A three-atom pattern would be checked against evidence that cannot see it: h²
+can tell you that atoms a and b never co-occur, but not that {a,b,c} is jointly
+impossible while each pair is fine. The cap is therefore not a performance
+budget that could be raised by waiting longer — it is the width of the evidence,
+and widening it means implementing h^m, which is a different engine. Recording
+it as a constant with that reason attached beats discovering later that
+three-atom patterns were quietly being proved on two-atom grounds.
+
+---
+
+## D-020 · The pruning claim is reported as a node account, including where it is zero
+
+**Context.** "Every deadlock proved speeds the planner up" (Theoria 1.9) is an
+empirical claim, and the tempting way to support it is to pick the instance where
+it looks best.
+
+**Decision.** `pruning_report` solves the same instance twice, blind and pruned,
+and reports both expansion counts plus whether the answer changed. Three
+instances are measured and all three are in the engine README, including
+`open4`, where sixteen true theorems save **zero** expansions.
+
+**Why.** The zero row is the informative one: on `open4` the search finds its
+6-action plan before wandering into a single dead region, which says something
+true about when pruning pays — it pays where the search would otherwise go, and
+most where the search must exhaust (the unsolvable instance, 44 → 22). Reporting
+only `open4far`'s 808 → 571 would have made a conditional result look
+unconditional.
+
+The same mechanism doubles as the soundness alarm. An unsound theorem does not
+show up as a suspiciously large speed-up; it shows up as a *changed answer*, so
+`same_answer` is checked on every report and asserted in `run_all`.
+
+---
+
+## D-021 · IC3's converged frame is minimised before it is emitted, by a second implementation
+
+**Context.** IC3 terminates when two adjacent frames describe the same states.
+That frame is inductive but not minimal: clauses learned early survive
+propagation even after later ones subsume them. On Fixture C's `0111` it comes
+out as `(pos3) & (!pos1 | pos2) & (pos1 | !pos2)`, whose first clause is
+redundant.
+
+**Decision.** After convergence, drop clauses greedily while the set stays
+inductive, and record `clauses_dropped`. The inductiveness test used for this
+lives in `pdr.py` as its own function, deliberately duplicating what
+`check.py::verify` does.
+
+**Why.** The invariant is an artefact a human or an LLM adjudicates into a book,
+not an intermediate value — `(!pos1 | pos2) & (pos1 | !pos2)` reads as
+"positions 1 and 2 always hold the same thing", and the unminimised form does
+not read as anything. The duplication is the price of D-010's discipline: if the
+search called the checker, the checker would no longer be independent of the
+search, and its verdict on the final answer would be worth less than the
+duplication costs. A test asserts every surviving clause is load-bearing, so the
+minimisation cannot silently stop working.
+
+---
+
+## D-022 · An unreachable probe configuration is emitted, not dropped
+
+**Context.** Once probe configurations are handed to the planner, some come back
+UNSAT. The obvious behaviour is to filter them out and rank what is left.
+
+**Decision.** Unreachable configurations are emitted as `probe_design`
+candidates with `tier: "hypothetical"`, `verdict: "unreachable"` and a null
+cost, and they keep their entropy — `p_side` is a full bit that cannot be
+bought.
+
+**Why.** This is R-05's finding, reproduced by machinery instead of noticed by a
+human afterwards: *the experiment that would settle this manual cannot be
+performed on this instance.* Dropping it makes "no experiment settles this here"
+indistinguishable from "nothing to propose", which is the difference between a
+finding and a silence. It also keeps the engine from proposing impossible
+experiments forever, since the verdict is the thing that stops the loop.

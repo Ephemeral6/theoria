@@ -14,6 +14,18 @@ from engines.probe_frontier.frontier import (  # noqa: F401
     rank_probes,
     surviving,
 )
+from engines.probe_frontier.reach import (  # noqa: F401
+    EXECUTABLE,
+    HYPOTHETICAL,
+    REACHABLE,
+    UNREACHABLE,
+    Configuration,
+    ExecutableProbe,
+    Reachability,
+    design,
+    reach,
+    reachability_problem,
+)
 
 ENGINE = "probe_frontier"
 
@@ -84,6 +96,109 @@ def candidates(best: ProbeValue, ranked: Sequence[ProbeValue],
             timestamp=timestamp,
         )
     ]
+
+
+def executable_payload(probe: ExecutableProbe,
+                       hypotheses: Sequence[Hypothesis],
+                       state_rendering: Optional[List[str]] = None) -> Dict[str, Any]:
+    """The `probe_design` payload for a planner-backed probe.
+
+    A superset of the hypothetical-tier shape above: same keys, same meanings,
+    plus `tier`, `verdict` and `reach`.  A reader who only knows the old shape
+    still reads this one correctly, which is the point of extending rather than
+    replacing -- `cost` now carries the reaching plan's length instead of a
+    placeholder 1.
+    """
+    best = probe.best
+    payload: Dict[str, Any] = {
+        "action": best.action if best else None,
+        "entropy_bits": round(probe.entropy, 12),
+        "value_bits_per_cost": round(probe.value, 12),
+        "cost": None if probe.cost == float("inf") else probe.cost,
+        "n_hypotheses": len(hypotheses),
+        "hypotheses": [
+            {"id": h.id, "description": h.description, "weight": h.weight}
+            for h in hypotheses
+        ],
+        "partition": best.as_json()["partition"] if best else {},
+        "ranking": [value.as_json() for value in probe.ranked],
+        "state": state_rendering,
+    }
+    payload.update(probe.as_json())
+    payload["rendering"] = _executable_rendering(probe, hypotheses)
+    return payload
+
+
+def _executable_rendering(probe: ExecutableProbe, hypotheses: Sequence[Hypothesis]) -> str:
+    if probe.tier == HYPOTHETICAL and not probe.reach.reachable:
+        return (
+            "probe %s at %s would split %d hypotheses (%.3f bits), but the "
+            "configuration is unreachable -- this experiment cannot be performed "
+            "on this instance"
+        ) % (
+            probe.best.action if probe.best else "-",
+            probe.configuration.name, len(hypotheses), probe.entropy,
+        )
+    if probe.best is None:
+        return "no action at %s separates anything" % probe.configuration.name
+    return (
+        "probe %s at %s: %.3f bits for a path cost of %g (%d-action reach plan "
+        "plus the probe itself), %.4f bits per unit cost"
+    ) % (
+        probe.best.action, probe.configuration.name, probe.entropy, probe.cost,
+        probe.reach.length or 0, probe.value,
+    )
+
+
+def executable_candidates(probes: Sequence[ExecutableProbe],
+                          hypotheses: Sequence[Hypothesis],
+                          transitions: Sequence[int],
+                          coverage: Optional[str] = None,
+                          timestamp: Optional[str] = None) -> List[Dict[str, Any]]:
+    """One `probe_design` per configuration -- including the unreachable ones.
+
+    An unreachable configuration is emitted rather than dropped: "no experiment
+    settles this here" is the answer, and silently proposing nothing looks
+    identical to having nothing to propose.
+    """
+    rows = []
+    for probe in probes:
+        state = probe.configuration.state
+        rendering = state.render() if hasattr(state, "render") else None
+        rows.append(
+            make_candidate(
+                engine=ENGINE,
+                kind="probe_design",
+                payload=executable_payload(probe, hypotheses, rendering),
+                transitions=list(transitions),
+                coverage=coverage or "%d/%d" % (len(hypotheses), len(hypotheses)),
+                timestamp=timestamp,
+            )
+        )
+    return rows
+
+
+def run_with_planner(hypotheses: Sequence[Hypothesis],
+                     configurations: Sequence[Configuration],
+                     domain: Any, base_problem: Any,
+                     prune: Optional[Any] = None,
+                     transitions: Optional[Sequence[int]] = None,
+                     coverage: Optional[str] = None,
+                     out_path: Optional[str] = None,
+                     timestamp: Optional[str] = None) -> List[ExecutableProbe]:
+    """Design probes, ask the planner whether each site is reachable, emit both tiers."""
+    probes = design(hypotheses, configurations, domain, base_problem, prune=prune)
+    if out_path:
+        emit(
+            out_path,
+            executable_candidates(
+                probes, hypotheses,
+                transitions=list(transitions or []),
+                coverage=coverage,
+                timestamp=timestamp,
+            ),
+        )
+    return probes
 
 
 def run(hypotheses: Sequence[Hypothesis], state: Any, actions: Sequence[Any],

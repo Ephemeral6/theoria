@@ -15,15 +15,60 @@ appends a paragraph to `/PARTNER_SYNC.md`.
 | `engine-rig-m6-fd` | `fd_adapter` | done (stub backend — see below) |
 | `engine-rig-m7-probe` | `probe_frontier` | done |
 | `engine-rig-m8-integration` | all six engines + schema validator | done |
+| `engine-rig-m9-deadlock-ic3-probe` | `deadlock_carver`, `ic3_pdr`, probes on the planner | done |
 
-All eight milestones are reached. `python -m tools.run_all --force` runs the six
-engines end to end and emits 24 candidates, every line of which passes the frozen
+All nine milestones are reached. `python -m tools.run_all --force` runs the eight
+engines end to end and emits 44 candidates, every line of which passes the frozen
 schema validator. That stream is committed at `artifacts/candidates.jsonl`
 (deterministic mode, so it is byte-stable and cannot drift unnoticed).
 
+## M9 — the three gaps Theoria 1.9 and the A0 cold start named
+
+**`deadlock_carver`** — conditional mini unsolvability theorems, `pattern AND
+not-goal => dead`, proved by localised enumeration over the grounded task plus
+h² mutexes derived from the action set. Theoria 1.9's own example is produced
+literally (`at(b1,c11) AND not-goal => dead`, a box in a dead corner), alongside
+the wall-pair deadlocks that actually need the mutexes. The same theorem is a
+candidate and a planner pruner:
+
+| Instance | Theorems | Expansions before → after | Plan |
+|---|---|---|---|
+| `open4far` (solvable) | 16 | 808 → **571** (−29.3%) | 11 either way |
+| `ringstuck` (unsolvable) | 2 | 44 → **22** (−50.0%) | none either way |
+| `open4` (shallow) | 16 | 47 → 47 (−0%) | 6 either way |
+
+The zero row stays on the record (D-020): true theorems buy nothing when the
+answer lies shallower than any deadlock. Soundness is checked by a referee that
+exhausts the state space and shares nothing with the proof.
+
+**`ic3_pdr`** — the fallback inductive-invariant engine. Acceptance line met:
+Fixture C's `0111` is unsolvable, `lp_potential` is infeasible on it (D-014), and
+IC3 returns `I(s) = (!pos1 | pos2) & (pos1 | !pos2)` — "positions 1 and 2 always
+hold the same thing" — with `inv_init`/`inv_closed`/`goal_break` all true and
+re-verified by an independent checker that does not import the search. The
+solvable configuration `1101` correctly gets a replayed counterexample rather
+than an invariant.
+
+**Probes on the planner** — `probe_frontier` hypothetical configurations are
+compiled into PDDL problems and handed to `fd_adapter`. SAT promotes the probe to
+executable and charges the reach plan's length to its path cost; UNSAT returns an
+`unreachable` verdict. On the sokoban ring: `p_row1` executable at 1.000 bits for
+a path cost of 11 (a 10-move reach plan), `p_side` a full bit that cannot be
+bought. This answers A0's "zero executable probes" (THEORIZE_LOG P-01..P-03) and
+reproduces R-05's shape as machinery.
+
+Fixture D (`fixtures/sokoban.py`) was added for the first and third: one
+generated PDDL domain, four levels. All of it is offline and byte-reproducible.
+
+Two engines were added after `CONTRACTS/candidates_schema.md` was frozen. The
+contract and its validator are untouched; the new engines emit under the enum
+member whose work they extend and name themselves in `payload.producer`
+(D-018). **This is contract pressure worth a v0.2 conversation** and is flagged
+in `PARTNER_SYNC.md`.
+
 ## Test suite
 
-161 passed, 1 skipped (`test_fast_downward_agrees_with_the_stub`, which starts
+218 passed, 1 skipped (`test_fast_downward_agrees_with_the_stub`, which starts
 running the moment a Fast Downward executable is reachable).
 
 ## Convergence interface (post-M8)
@@ -37,8 +82,9 @@ narrowed goals (target cell 1 or 3) do get certificates. See
 
 ## Blockers
 
-None. The one deviation from the ticket's ideal is the Fast Downward stub,
-covered below and sanctioned by the ticket.
+None. Two standing deviations, both recorded rather than worked around: the Fast
+Downward stub (below, sanctioned by the M6 ticket) and the frozen `engine` enum
+(D-018), which the new engines emit inside rather than edit.
 
 ## Fast Downward
 

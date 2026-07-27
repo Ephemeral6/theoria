@@ -56,6 +56,55 @@ Reaching a divergent state is itself a planning problem, so probes are ranked by
 informative probes are separated by what it costs to get to them. Ordering is
 total and deterministic: value, then entropy, then cost, then the action's name.
 
+## Executable probes — the cost comes from the planner
+
+A0's cold start emitted **zero executable probes**
+(`cold-start-a0/THEORIZE_LOG.md` P-01..P-03): every design that separated
+anything stayed in the hypothetical tier, because nothing checked whether the
+divergent configuration was reachable and nothing could price the walk to it.
+`reach.py` is the missing half, and it is short because Theoria 1.9 already said
+what it is — reaching a divergent state is a planning problem, so hand it to the
+planner:
+
+* **SAT** → the probe is promoted to **executable** and carries its reaching
+  plan. The plan's length is charged to the path cost, which is what makes "bits
+  per unit cost" mean something.
+* **UNSAT** → the verdict is **unreachable**, and that is a finding. It is R-05's
+  shape exactly: an experiment that would settle the manual and cannot be
+  performed on this instance. A probe layer that could not say this would propose
+  impossible experiments forever, so unreachable configurations are emitted, not
+  dropped.
+
+The scenario is the sokoban ring level (`sokoban_probe.py`). Two guard
+hypotheses the ring's own history cannot separate — `h_free_push` ("a box moves
+whenever the cell beyond it is clear floor") and `h_no_corner_entry` ("… and not
+into a corner") — and two configurations that split them, both worth exactly one
+bit, separated only by cost:
+
+| Configuration | Action | Bits | Reach | Path cost | Tier |
+|---|---|---|---|---|---|
+| `p_row1` player c13, box c12 | `left` | 1.000 | 10-move plan | **11** | executable |
+| `p_side` player c21, box c31 | `down` | 1.000 | **no plan** | ∞ | unreachable |
+
+`p_row1`'s reach plan is 10 moves and all of them are `move`, not `push`: the
+player starts at c11 with the box to its right, cannot walk through it, and
+walking into it would be a push that moves the box out of the configuration the
+probe needs — so it goes the long way round the ring. `p_side` asks for the box
+in the side corridor, which a 1-wide corridor can never deliver: turning a box
+needs the player beside it, and there is no beside.
+
+`prune` passes through to the search, so a reachability query is answered with
+the same deadlock pruning the planner gets. One theorem, three consumers.
+
+```python
+probes = pf.run_with_planner(hypotheses, configurations, domain, base_problem,
+                             prune=deadlock_carver.pruner(theorems),
+                             out_path="candidates.jsonl")
+probes[0].tier          # 'executable'
+probes[0].cost          # 11.0  == setup 1 + reach 10
+probes[0].reach.plan    # ['(move c11 c21 down)', ...]
+```
+
 ## Fed by the miner
 
 `hypotheses_from_guards(frontier, evaluate)` turns a `cegis_miner` frontier
@@ -88,6 +137,30 @@ is on the board but occupied.
 (the ones that failed to separate the hypotheses); `evidence.coverage` is
 `<hypotheses consistent with that evidence>/<hypotheses in the frontier>`.
 
+### Extended shape for planner-backed probes
+
+`run_with_planner` emits the same keys with the same meanings and adds four.
+`cost` now carries the reaching plan's length instead of a placeholder 1, and is
+`null` when the configuration is unreachable, since infinity has no JSON.
+
+```json
+{
+  "configuration": "p_row1",
+  "tier": "executable",
+  "verdict": "reachable",
+  "cost": 11.0,
+  "setup_cost": 1.0,
+  "path_cost": 11.0,
+  "reach": {"status": "reachable", "problem": "reach-p_row1",
+            "goal": ["at-player c13", "at b1 c12"],
+            "plan": ["(move c11 c21 down)", "..."],
+            "length": 10, "expansions": 18, "backend": "stub-bfs"}
+}
+```
+
+A reader who only knows the M7 shape still reads this one correctly, which is why
+it was extended rather than replaced.
+
 ## API
 
 ```python
@@ -96,6 +169,10 @@ best, ranked = pf.run(hypotheses, state, actions, costs=None, out_path=...)
 best.action, best.entropy, best.partition
 pf.surviving(hypotheses, state, action, observation)   # after the probe returns
 pf.hypotheses_from_guards(rule.frontier, evaluate)     # from cegis_miner
+
+pf.run_with_planner(hypotheses, configurations, domain, problem, out_path=...)
+pf.reach(domain, problem, goal_atoms, name)            # one reachability question
+pf.reachability_problem(problem, goal_atoms, name)     # same instance, new goal
 ```
 
 `best` is `None` when no action separates anything — a real answer meaning this

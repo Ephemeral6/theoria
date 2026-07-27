@@ -7,7 +7,8 @@ it will not scale past toy instances, and it is not meant to.
 """
 
 from collections import deque
-from typing import Dict, FrozenSet, List, Optional, Sequence, Tuple
+from dataclasses import dataclass
+from typing import Callable, Dict, FrozenSet, List, Optional, Sequence, Tuple
 
 from engines.fd_adapter.pddl import (
     Atom,
@@ -19,6 +20,11 @@ from engines.fd_adapter.pddl import (
 )
 
 State = FrozenSet[Atom]
+
+# A pruner says "no goal state is reachable from here" about a search state. It
+# must be *sound* -- a wrong True silently deletes the answer -- which is why the
+# only pruner in this rig comes with a proof (see engines/deadlock_carver).
+Pruner = Callable[[State], bool]
 
 
 def initial_state(problem: Problem) -> State:
@@ -77,20 +83,62 @@ def strip_static(domain: Domain, problem: Problem, actions: List[GroundAction]):
     return reduced, start, static_goal_ok
 
 
-def breadth_first_plan(domain: Domain, problem: Problem,
-                       max_expansions: int = 500000) -> Optional[List[GroundAction]]:
-    """Shortest action sequence reaching the goal, or None if there is none."""
-    actions = ground_actions(domain, problem)
-    actions, start, static_goal_ok = strip_static(domain, problem, actions)
+@dataclass
+class SearchResult:
+    """A plan (or its absence) with the node account that produced it.
+
+    The counts are the whole point of a pruner: "the theorem is true" and "the
+    theorem pays" are different claims, and only the second one needs numbers.
+    """
+
+    plan: Optional[List[GroundAction]]
+    expansions: int
+    generated: int
+    pruned: int
+    ground_actions: int
+
+    @property
+    def solved(self) -> bool:
+        return self.plan is not None
+
+    @property
+    def length(self) -> Optional[int]:
+        return None if self.plan is None else len(self.plan)
+
+    def as_json(self) -> Dict[str, object]:
+        return {
+            "solved": self.solved,
+            "length": self.length,
+            "expansions": self.expansions,
+            "generated": self.generated,
+            "pruned": self.pruned,
+            "ground_actions": self.ground_actions,
+        }
+
+
+def search(domain: Domain, problem: Problem, prune: Optional[Pruner] = None,
+           max_expansions: int = 500000) -> SearchResult:
+    """Breadth-first search, optionally skipping states a pruner declares dead.
+
+    Goal-testing happens before pruning, so a pruner that is wrong about a goal
+    state cannot hide a solution -- it would have to be wrong about an interior
+    state, which is exactly what the carver's soundness argument covers.
+    """
+    grounded = ground_actions(domain, problem)
+    actions, start, static_goal_ok = strip_static(domain, problem, grounded)
     if not static_goal_ok:
-        return None
+        return SearchResult(None, 0, 0, 0, len(grounded))
     static = static_predicates(domain)
     if is_goal(problem, start, static):
-        return []
+        return SearchResult([], 0, 1, 0, len(grounded))
+    if prune is not None and prune(start):
+        return SearchResult(None, 0, 1, 1, len(grounded))
 
     seen = {start}
     queue: deque = deque([(start, [])])
     expansions = 0
+    generated = 1
+    pruned = 0
     while queue:
         state, plan = queue.popleft()
         expansions += 1
@@ -102,9 +150,20 @@ def breadth_first_plan(domain: Domain, problem: Problem,
             nxt = successor(action, state)
             if nxt in seen:
                 continue
+            generated += 1
             extended = plan + [action]
             if is_goal(problem, nxt, static):
-                return extended
+                return SearchResult(extended, expansions, generated, pruned, len(grounded))
             seen.add(nxt)
+            if prune is not None and prune(nxt):
+                pruned += 1
+                continue
             queue.append((nxt, extended))
-    return None
+    return SearchResult(None, expansions, generated, pruned, len(grounded))
+
+
+def breadth_first_plan(domain: Domain, problem: Problem,
+                       max_expansions: int = 500000,
+                       prune: Optional[Pruner] = None) -> Optional[List[GroundAction]]:
+    """Shortest action sequence reaching the goal, or None if there is none."""
+    return search(domain, problem, prune=prune, max_expansions=max_expansions).plan

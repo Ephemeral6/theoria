@@ -27,6 +27,32 @@ Both backends are **length-optimal** for unit costs — A*/blind and BFS alike �
 either. No plan is ever returned unvalidated: `solve()` runs the independent
 validator before handing it back.
 
+## Two callers who need more than `solve()`
+
+```python
+plan, result = fd_adapter.solve_parsed(domain, problem, prune=None)
+result.expansions, result.generated, result.pruned, result.ground_actions
+```
+
+`solve_parsed` takes an already-parsed instance, returns `None` for the plan
+instead of raising when there is none, and reports the node account. Both matter
+to the engines added after M8:
+
+* `probe_frontier` synthesises a problem in memory and asks "is this
+  configuration reachable?" — where **unsolvable is the answer**, not an error;
+* `deadlock_carver` needs the expansion counts to show that its theorems pay,
+  and passes a `prune` callable so the search skips states it has proved dead.
+
+A pruner is `State -> bool`, and it must be **sound**: a wrong `True` silently
+deletes the answer. The only pruner in this rig comes with a proof and with a
+test that the pruned and blind searches return the same plan. Goal-testing
+happens before pruning, so a pruner that is wrong about a goal state cannot hide
+a solution — it would have to be wrong about an interior one.
+
+Fast Downward reads files, so an instance with no `problem_path` on disk always
+takes the bundled search. That is the substitution `STATUS.md` already records,
+not a new one.
+
 ## The instance
 
 A minimal gripper: 2 rooms, 2 balls, 2 grippers; move both balls from `rooma` to
@@ -51,7 +77,7 @@ numeric fluents — raises `PddlError` rather than being silently mis-parsed.
 | File | Role |
 |---|---|
 | `pddl.py` | tokeniser, parser, typed grounding |
-| `search.py` | the stub: BFS over grounded STRIPS |
+| `search.py` | the stub: BFS over grounded STRIPS, with the node account and the pruning hook |
 | `validate.py` | independent replay validator — imports the parser, **not** the search |
 | `backends.py` | Fast Downward discovery, invocation, `sas_plan` parsing |
 

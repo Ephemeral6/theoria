@@ -21,6 +21,9 @@ from typing import Any, Dict, Iterable, List, Optional, Sequence
 
 from common.jsonio import append_jsonl, dumps
 
+# The frozen enum, verbatim. `deadlock_carver` and `ic3_pdr` postdate it and are
+# not added here: they emit under the member whose work they extend and name
+# themselves in `payload.producer`. See DECISIONS.md D-018.
 ENGINES = (
     "mdl_segmenter",
     "cegis_miner",

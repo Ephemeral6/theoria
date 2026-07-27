@@ -1,11 +1,17 @@
-"""Run all six engines end to end and validate the candidate stream they produce.
+"""Run all eight engines end to end and validate the candidate stream they produce.
 
-This is M8: every engine proposes into one append-only `candidates.jsonl`, and
-the whole file is then checked against the frozen contract.
+This was M8 (six engines); M9 adds the deadlock carver, IC3/PDR, and the
+planner-backed probe layer.  Every engine proposes into one append-only
+`candidates.jsonl`, and the whole file is then checked against the frozen
+contract.
 
     python -m tools.run_all                    # writes out/candidates.jsonl
     python -m tools.run_all --deterministic    # frozen ids and timestamps
     python -m tools.run_all --out somewhere.jsonl --force
+
+The two engines added after the contract was frozen emit under the enum member
+whose work they extend and name themselves in `payload.producer` -- so the
+`engine` histogram below still shows six names.  See DECISIONS.md D-018.
 """
 
 import argparse
@@ -16,14 +22,18 @@ from typing import Any, Dict, List, Optional
 from common.jsonio import read_json, read_jsonl
 from engines import (
     cegis_miner,
+    deadlock_carver,
     fd_adapter,
+    ic3_pdr,
     lp_potential,
     mdl_segmenter,
     probe_frontier,
     zero_space,
 )
+from engines.fd_adapter.pddl import parse_domain, parse_problem
 from engines.probe_frontier import scenario as probe_scenario
-from fixtures import cart_world, pair_flip, peg4
+from engines.probe_frontier import sokoban_probe
+from fixtures import cart_world, pair_flip, peg4, sokoban
 from tools.validate_candidates import validate_file
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -35,6 +45,9 @@ ARTIFACT_PATH = os.path.join(HERE, "artifacts", "candidates.jsonl")
 FIXED_TIME = "2026-07-27T00:00:00Z"
 
 UNSOLVABLE_CONFIG = "1110"
+
+# The configuration the LP is infeasible on (D-014) -- IC3's reason to exist.
+NO_PAGODA_CONFIG = "0111"
 
 
 def _deterministic_mode(enabled: bool) -> None:
@@ -130,6 +143,73 @@ def run_all(out_path: str = DEFAULT_OUT, deterministic: bool = False) -> Dict[st
     if best is None:
         raise RuntimeError("the probe scenario produced no discriminating action")
     note("probe_frontier", "probe %s worth %.3f bits" % (best.action, best.entropy))
+
+    # 7 -- Fixture D: conditional mini unsolvability theorems, and what they buy.
+    with open(sokoban.DOMAIN_PATH, "r", encoding="utf-8") as fh:
+        soko_domain = parse_domain(fh.read())
+    with open(sokoban.OPEN4FAR.path, "r", encoding="utf-8") as fh:
+        soko_problem = parse_problem(fh.read())
+    task, theorems, report = deadlock_carver.run(
+        soko_domain, soko_problem, out_path=out_path
+    )
+    if not theorems or report is None or not report.same_answer:
+        raise RuntimeError("the deadlock carver proved nothing, or changed the answer")
+    note(
+        "deadlock_carver",
+        "%d theorem(s) (%d corner, %d wall-pair); %d -> %d expansions (%.1f%% fewer), "
+        "plan length %s either way"
+        % (
+            len(theorems),
+            sum(1 for t in theorems if t.size == 1),
+            sum(1 for t in theorems if t.size == 2),
+            report.baseline.expansions, report.pruned.expansions,
+            100.0 * (1.0 - report.ratio), report.pruned.length,
+        ),
+    )
+
+    # 8 -- Fixture C again, on the configuration the LP cannot certify.
+    peg_system = ic3_pdr.peg_system(graph, NO_PAGODA_CONFIG)
+    verdict, checked = ic3_pdr.run(peg_system, out_path=out_path)
+    if not isinstance(verdict, ic3_pdr.Invariant):
+        raise RuntimeError("IC3 failed to certify %s" % NO_PAGODA_CONFIG)
+    note(
+        "ic3_pdr",
+        "%s: LP infeasible, IC3 invariant I(s) = %s; conditions %s"
+        % (
+            NO_PAGODA_CONFIG,
+            peg_system.render_cnf(verdict.clauses),
+            checked.conditions,
+        ),
+    )
+
+    # 9 -- probes priced by the planner, on the ring level.
+    with open(sokoban.RING.path, "r", encoding="utf-8") as fh:
+        ring_problem = parse_problem(fh.read())
+    bundle = sokoban_probe.build()
+    designed = probe_frontier.run_with_planner(
+        bundle["hypotheses"], bundle["configurations"], soko_domain, ring_problem,
+        prune=deadlock_carver.pruner(deadlock_carver.carve(
+            deadlock_carver.Task.build(soko_domain, ring_problem)
+        )),
+        transitions=list(range(len(bundle["evidence"]))),
+        out_path=out_path,
+    )
+    executable = [p for p in designed if p.tier == probe_frontier.EXECUTABLE]
+    unreachable = [p for p in designed if p.reach.status == probe_frontier.UNREACHABLE]
+    note(
+        "probe_frontier+fd",
+        "%d executable (%s), %d unreachable (%s)"
+        % (
+            len(executable),
+            ", ".join(
+                "%s %s: %.3f bits / cost %g"
+                % (p.configuration.name, p.best.action, p.entropy, p.cost)
+                for p in executable
+            ) or "-",
+            len(unreachable),
+            ", ".join(p.configuration.name for p in unreachable) or "-",
+        ),
+    )
 
     written = read_jsonl(out_path)
     errors = validate_file(out_path)
