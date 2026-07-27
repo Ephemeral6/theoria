@@ -61,6 +61,18 @@ sealed pile is unknown and was **deliberately not probed**: a successful RESET
 returns the first frame, so an accessibility sweep would burn exactly the sealed
 games that are accessible — the worst possible outcome.
 
+**Refined by INC-001a.** A 3-round retry sweep over the development pile gave
+`g50t` OK/400/400 and the other three 400 every time — so g50t succeeded 2 of 4
+attempts overall and the others 0 of 6. Three games look genuinely unavailable to
+this key, and a *second* effect refuses repeat RESETs on g50t (most likely a live
+session already open, or a start-rate limit). The API reports both with the same
+message, `game <id> not found`.
+
+There is no non-destructive way to enumerate the playable set: `/api/account`,
+`/api/me`, `/api/key`, `/api/games/available` all 404, `/api/user` 401s (it exists
+but `X-API-Key` is not its auth), and `?playable=true` is ignored. Determining
+playability requires a RESET, which burns the game.
+
 `data/piles.json` is hash-locked and was left untouched; the incident lives in
 `data/incidents.jsonl`, and `data/contamination_log.jsonl` supersedes the
 register inside the locked file. **No sealed game has been touched.**

@@ -1,0 +1,10 @@
+{
+  "excluded": [
+    {
+      "game_id": "g50t-5849a774",
+      "reason": "HTTP 400"
+    }
+  ],
+  "note": "games in `excluded` are registered and must not be used: a non-deterministic environment invalidates the framework's reasoning",
+  "results": {}
+}
