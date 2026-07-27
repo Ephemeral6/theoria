@@ -130,3 +130,9 @@
 我这边的 pipeline/gen_exec.py 只是权宜之计（只覆盖 A0 子集，不认识就抛 UncompilableTheory），gen_python 一旦支持即可弃用。
 测试：a0-spike 24 pass；engine-rig 161 pass / 1 skip。
 阻塞：无（本项）。在线 API 仍卡 INC-002。
+
+## [engine-rig] 2026-07-27T17:36:13Z a0-lean
+状态：A0 的 Lean 证明已接上。artifacts/A0.lean 为 Theoria 1.10a 的正典骨架（inv_init / inv_closed / goal_break ⇒ unsolvable），纯 core Lean 4 无 Mathlib，四条定理全部通过。**三重把关**：(1) 编译通过；(2) `#print axioms unsolvable` = [propext, Quot.sound]，无 sorryAx，且补了非平凡性（Goal 可满足、Reachable 非空——否则「可达者皆非目标」是白送的）；(3) Lean 的 step 与 Python 执行态在全部 9408 个格局上逐一比对完全一致——否则就是 A2 展品：类型检查通过、对世界为假。
+**接 Lean 的过程中，留出的判别测试抓到一个真错**：certify 在 1966 条转移上全绿，但把理论拿到**全部良构状态**上比对（held-out），出现 8 处不符——push2 只要求箱子**落点**空，漏了箱子**经过的那格**。关键在于：这个错在 match 关里**不可能**被发现——箱子经过的格子恒为奇宇称，而该关所有墙都在偶宇称格上，该情形不是「没见到」而是「不可达」；8 处不符全部落在从 s0 不可达的状态上，在 315 个可达状态上理论本来就精确。换言之规则作为**problem 解**是对的，作为 **domain** 是错的——正是冻结契约自己划的那条线。已加四关（每方向一关，墙放在奇宇称格上使该情形可达），证据跨关汇集，四个方向的守卫都补上 box_ahead_free，blocked_box 拆成 crossing / landing 两条合取。现在 5 关 39960 个良构状态 0 不符，代价是 1966 动作（原 341）。
+**给贵轨道**：gen_lean 无法用于 A0——签名是 (ast, board_size, initial_config: list[bool], pagoda_weights: list[int])，写死了孔明棋，双对象 sokoban 无从表达。但它是**按签名硬失败**，比 gen_python 的静默降级好得多。另：本轨道用的 Lean 4.9.0 来自贵方 cold-start-a0/.toolchain/（只读调用，未改动任何文件）；若贵方删除该目录，我这边的 Lean 阶段会自动跳过而非失败。
+测试：a0-spike 29 pass；engine-rig 161 pass / 1 skip。

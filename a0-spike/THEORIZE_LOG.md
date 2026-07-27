@@ -153,3 +153,41 @@ would never have found this: those rules were correct. Only the compiled manual
 is accountable for what the manual actually says, which is exactly why the
 framework insists the sole predictor be generated from it. One rewiring, one real
 error caught, in a manual I had already reviewed and called done.
+
+---
+
+## T-9 · Held-out testing found a wrong rule that replay could not
+
+**What happened** With certify green — 341 transitions replayed exactly through
+the compiled manual — the theory was checked against the world on *every*
+well-formed state of the board, not just the observed ones. **8 mismatches.**
+
+**The missing literal** `push2` required only `free(beyond(Box, dir))` — the cell
+the box lands on. The world also requires `free(ahead(Box, dir))` — the cell the
+box *crosses*. Example: player (1,3), box (1,4), RIGHT. The landing cell (1,6) is
+free, so the theory pushed; the crossed cell (1,5) is a wall, so the world did
+nothing.
+
+**Why no amount of exploring `match` could have found it** The box's crossed cell
+always has odd parity, and every wall in `match` sits on an even cell. "Blocked
+while crossing" is not merely unobserved there — it is **unreachable**. All 8
+mismatching states are unreachable from `s0`; on the 315 reachable states the
+theory was already exact.
+
+**So the rule was right as a *problem* solution and wrong as a *domain*.** That
+distinction is the frozen contract's own (`word_table + rules + laws` is domain,
+the layout is problem), and it has teeth: a manual meant to travel between levels
+cannot be pinned down by one level's evidence.
+
+**Adjudicated** four more evidence levels, one per direction, each with a wall on
+an odd-parity cell so that "blocked while crossing" becomes reachable in that
+direction. Evidence pooled across all five. The mined guard gained
+`box_ahead_free(dir)` in every direction, and `blocked_box` split into
+`blocked_box_crossing` and `blocked_box_landing` — two conjunctions, because the
+disjunction cannot be one.
+
+**Result** 39,960 well-formed states across five levels, **0 mismatches**.
+
+**What this cost and bought** 1,966 actions instead of 341. It bought the
+difference between a theory that is right about the level it was learned on and
+one that is right about the world. Replay said "exact" both times.

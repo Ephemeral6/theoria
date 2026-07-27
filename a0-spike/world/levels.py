@@ -61,7 +61,37 @@ MISMATCH = Level(
     target=MISMATCH_TARGET,
 )
 
+# A third level, for evidence only. Its wall at (3,4) sits on an ODD-parity cell,
+# which is the whole point: the box's crossed cell always has odd parity, every
+# wall in `match` has even parity, so "the box is blocked by the cell it would
+# cross" is unreachable there. The domain rule cannot be pinned down from `match`
+# alone -- the manual is meant to be domain-level and travel between levels, so
+# the evidence has to as well (THEORIZE_LOG T-9).
+# One per direction: a wall on the cell the box would CROSS when pushed that way,
+# and a player start from which that push is reachable. Four levels, because a
+# single one only makes the case reachable in one direction.
+_CROSSING_SPEC = {
+    "UP":    {"wall": (2, 3), "player": (5, 3)},
+    "DOWN":  {"wall": (4, 3), "player": (1, 3)},
+    "LEFT":  {"wall": (3, 2), "player": (3, 5)},
+    "RIGHT": {"wall": (3, 4), "player": (3, 1)},
+}
+
+CROSSING_LEVELS = tuple(
+    Level(
+        name="crossing_%s" % direction,
+        height=HEIGHT,
+        width=WIDTH,
+        walls=WALLS + (spec["wall"],),
+        player=spec["player"],
+        box=BOX_START,
+        target=BOX_START,
+    )
+    for direction, spec in sorted(_CROSSING_SPEC.items())
+)
+
 LEVELS = {"match": MATCH, "mismatch": MISMATCH}
+EVIDENCE_LEVELS = (MATCH,) + CROSSING_LEVELS
 
 
 # The observation trajectory. Deliberately explores rather than solves: the

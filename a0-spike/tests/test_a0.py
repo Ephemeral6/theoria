@@ -154,7 +154,8 @@ def test_mining_is_deterministic():
 # ----------------------------- certify through the generated executable form
 
 def test_the_manual_compiles_to_an_executable_form(report):
-    assert report["certify_generated"]["source"].endswith("theory_exec.py")
+    assert "theory_exec.py" in report["certify_generated"]["source"]
+    assert len(report["certify_generated"]["per_level"]) == 5
 
 
 def test_history_replays_through_the_compiled_manual(report):
@@ -207,3 +208,54 @@ def test_the_generator_refuses_what_it_cannot_compile():
     broken = broken.replace("free(ahead(Player, dir))", "sparkles(Player, dir)")
     with pytest.raises(UncompilableTheory):
         generate(broken, 7, 7, levels.MATCH.walls)
+
+
+# ----------------------------------------------- held-out and the proof form
+
+def test_the_theory_holds_on_states_it_never_observed(report):
+    """Replay-exactness does not imply this. That is the whole point of A0."""
+    held = report["held_out"]
+    assert held["total_cases"] > 30000
+    assert held["total_mismatches"] == 0
+    assert held["exact"] is True
+
+
+def test_push_needs_both_the_crossed_and_the_landing_cell(report):
+    """The bug held-out testing found, and replay never could (THEORIZE_LOG T-9)."""
+    for rule in report["mine"]["rules"]:
+        if not rule["name"].startswith("push2"):
+            continue
+        direction = rule["name"].split("_")[1]
+        assert "box_ahead_free(%s)" % direction in rule["guard"]
+        assert "box_beyond_free(%s)" % direction in rule["guard"]
+
+
+def test_evidence_is_pooled_across_levels(report):
+    """One level cannot force every domain rule."""
+    assert len(report["explore"]["levels"]) == 5
+    assert report["explore"]["transitions"] > 1500
+
+
+@pytest.mark.skipif(
+    __import__("pipeline.cross_form", fromlist=["find_lean"]).find_lean() is None,
+    reason="no lean toolchain available",
+)
+def test_the_lean_proof_checks_and_rests_on_nothing_exotic(report):
+    lean = report["lean"]
+    assert lean["compiles"] is True
+    assert lean["uses_sorry"] is False
+    assert lean["sorry_in_source"] is False
+    assert lean["non_vacuous"] is True
+    assert any("unsolvable" in line and "propext" in line for line in lean["axioms"])
+
+
+@pytest.mark.skipif(
+    __import__("pipeline.cross_form", fromlist=["find_lean"]).find_lean() is None,
+    reason="no lean toolchain available",
+)
+def test_the_lean_and_python_forms_are_the_same_world(report):
+    """Same theory, several forms -- checked, not asserted."""
+    cross = report["lean_cross_form"]
+    assert cross["forms_agree"] is True
+    assert cross["n_mismatches"] == 0
+    assert cross["cases"] > 9000

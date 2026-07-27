@@ -36,11 +36,14 @@ framework with the law answers the second in one arithmetic step, and says why.
 ## What the run does
 
 ```
-explore   60 episodes, 341 actions, 341 transitions
-perceive  5 objects (2 move, 3 settle into the board); 373 vs 412 bits
-mine      17 rules
-certify   341 transitions replayed; exactly-one-successor=True, exact=True
-certify*  341 frames replayed through theory.dsl -> theory_exec.py; exact=True
+explore   285 episodes, 1966 actions, 1966 transitions   (5 levels)
+perceive  5 objects (2 move, 3 settle into the board)
+mine      19 rules
+certify   1966 transitions replayed; exactly-one-successor=True, exact=True
+certify*  1966 frames replayed through theory.dsl -> theory_exec.py; exact=True
+held-out  39960 states across 5 levels; mismatches=0
+lean      compiles; sorry=False; axioms=[propext, Quot.sound]
+lean=py   9408/9408 cases agree
 prove     (box.row + box.col) mod 2 = 0   (conserved)
 match     solved in 2 actions -> box on target: True
 mismatch  unsolvable: box parity 0, target parity 1 -- the box never leaves its colour
@@ -63,7 +66,31 @@ fails *silently* (guards become `True`, effects become `pass`), so
 anything it does not understand. Evidence and defect list:
 [GENERATOR_REPORT.md](GENERATOR_REPORT.md).
 
-## The four findings worth reading
+## The proof form
+
+`artifacts/A0.lean` is the canonical skeleton of Theoria 1.10a — `inv_init`,
+`inv_closed`, `goal_break` ⇒ `unsolvable` — in core Lean 4, no Mathlib. Three
+things are checked, because a Lean file that compiles proves nothing on its own:
+
+* **it checks** — `lean A0.lean` is silent;
+* **it rests on nothing exotic** — `#print axioms unsolvable` gives
+  `[propext, Quot.sound]`, no `sorryAx`, and the statement is not vacuous
+  (`Goal` is satisfiable and `Reachable` is inhabited — otherwise "nothing
+  reachable is a goal" is free);
+* **it is about the same world as the executable form** — the Lean `step` and the
+  Python `step` are diffed over all 9,408 board configurations and agree on every
+  one. Without this the proof could be Theoria's A2 exhibit: type-checks, false of
+  the world.
+
+Their `gen_lean` could not be used: its signature is
+`(ast, board_size, initial_config: list[bool], pagoda_weights: list[int])` —
+specialised to peg solitaire, so a two-object sokoban cannot be expressed. Unlike
+`gen_python` it fails loudly, by signature, which is the better failure.
+
+Lean is optional: it is not on PATH here, and the only toolchain in the tree
+belongs to the other track, so these stages skip rather than fail when absent.
+
+## The five findings worth reading
 
 **1. The under-guarded push rule — DC22 in miniature.** The first pass, on a
 casual 28-step walk, mined `act==D and ahead_is_box(D) → box slides two`, with one
@@ -96,6 +123,17 @@ vocabulary had no way to say "nothing happened". The generated code duly walked
 the player off the board. `stayed(o)` was added and the rules corrected. Replaying
 through the mined rules would never have found this, because those rules were
 correct; only the compiled manual is accountable for what the manual says.
+
+**5. Held-out testing found a wrong rule that replay could not.** With certify
+green on 1,966 transitions, the theory was checked against the world on *every*
+well-formed board state — **8 mismatches**. `push2` required only the box's
+landing cell to be free, not the cell it *crosses*. No amount of exploring
+`match` could have found it: the crossed cell always has odd parity, every wall
+in that level has even parity, so the case is not merely unobserved but
+**unreachable** there. The rule was right as a *problem* solution and wrong as a
+*domain* — the contract's own distinction, with teeth. Four more evidence levels
+(one per direction, each with a wall on an odd cell) fixed it: 39,960 states, 0
+mismatches, at a cost of 1,966 actions instead of 341.
 
 Full reasoning, decision by decision: [THEORIZE_LOG.md](THEORIZE_LOG.md).
 

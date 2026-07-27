@@ -20,14 +20,22 @@ rules:
   rule walk [ev: t0,t1,t2 cov: 262/262]
     when act=move(Player, dir) and free(ahead(Player, dir)) then moved(Player, dir)
 
-  rule push2 [ev: t3,t9,t27 cov: 51/51]
-    when act=move(Player, dir) and Box.pos = ahead(Player, dir) and free(beyond(Box, dir)) then slid(Box, dir)
+  # box_ahead_free was forced by the held-out test, not by replay: the crossed
+  # cell always has odd parity and every wall in `match` has even parity, so no
+  # evidence from that level alone could pin it down (THEORIZE_LOG T-9).
+  rule push2 [ev: t3,t9,t27 cov: 267/267]
+    when act=move(Player, dir) and Box.pos = ahead(Player, dir) and free(ahead(Box, dir)) and free(beyond(Box, dir)) then slid(Box, dir)
 
   rule blocked_wall [ev: t5,t11 cov: 16/16]
     when act=move(Player, dir) and not free(ahead(Player, dir)) and not Box.pos = ahead(Player, dir) then stayed(Player)
 
-  rule blocked_box [ev: t7,t19 cov: 12/12]
-    when act=move(Player, dir) and Box.pos = ahead(Player, dir) and not free(beyond(Box, dir)) then stayed(Player)
+  # two rules, because guards are conjunctions and "the box cannot move" is a
+  # disjunction over which of the two cells is obstructed
+  rule blocked_box_crossing [ev: t7,t19 cov: 24/24]
+    when act=move(Player, dir) and Box.pos = ahead(Player, dir) and not free(ahead(Box, dir)) then stayed(Player)
+
+  rule blocked_box_landing [ev: t31,t44 cov: 28/28]
+    when act=move(Player, dir) and Box.pos = ahead(Player, dir) and free(ahead(Box, dir)) and not free(beyond(Box, dir)) then stayed(Player)
 
 goal:
   goal Box.pos = target

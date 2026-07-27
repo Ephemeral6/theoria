@@ -17,7 +17,7 @@ sys.path.insert(0, HERE)
 sys.path.insert(0, os.path.join(REPO, "engine-rig"))
 
 from engines import fd_adapter                                  # noqa: E402
-from pipeline import explore, gen_exec, pddl_gen, stages        # noqa: E402
+from pipeline import cross_form, explore, gen_exec, lean_stage, pddl_gen, stages  # noqa: E402
 from world import levels, sokoban2                              # noqa: E402
 
 ARTIFACTS = os.path.join(HERE, "artifacts")
@@ -33,13 +33,24 @@ def run() -> Dict[str, Any]:
     level = levels.MATCH
 
     # 1. explore -- prefix replay to reach discriminating situations
-    evidence = explore.evidence_set(level, per_class=4)
-    transitions = stages.transitions_from_episodes(evidence["episodes"])
+    # Evidence is pooled across levels: the manual is a DOMAIN, and one level
+    # cannot force every domain rule (THEORIZE_LOG T-9).
+    transitions = []
+    episodes = []
+    by_level = {}
+    actions_spent = 0
+    for evidence_level in levels.EVIDENCE_LEVELS:
+        evidence = explore.evidence_set(evidence_level, per_class=4)
+        by_level[evidence_level.name] = (evidence_level, evidence["episodes"])
+        episodes.extend(evidence["episodes"])
+        actions_spent += evidence["action_budget_spent"]
+        transitions.extend(stages.transitions_from_episodes(evidence["episodes"]))
+    evidence = {"episodes": episodes}
     report["explore"] = {
-        "episodes": evidence["n_episodes"],
-        "actions_spent": evidence["action_budget_spent"],
+        "levels": [lv.name for lv in levels.EVIDENCE_LEVELS],
+        "episodes": len(episodes),
+        "actions_spent": actions_spent,
         "transitions": len(transitions),
-        "witnessed": evidence["witnessed"],
     }
 
     # 2. perceive -- on the longest episode: a two-frame clip cannot show the
@@ -70,14 +81,64 @@ def run() -> Dict[str, Any]:
     # 4b. certify through the EXECUTABLE FORM compiled from theory.dsl.
     # The mined rules are engine output; the manual is what we are accountable
     # for, and the only predictor allowed is the one compiled from it.
+    # Walls are problem data, so the executable form is compiled per level and
+    # each level's episodes are replayed through its own module.
     dsl_path = os.path.join(HERE, "theory", "theory.dsl")
+    dsl_text = open(dsl_path, encoding="utf-8").read()
     module = gen_exec.compile_module(
-        open(dsl_path, encoding="utf-8").read(),
-        level.height, level.width, level.walls,
+        dsl_text, level.height, level.width, level.walls,
         out_path=os.path.join(ARTIFACTS, "theory_exec.py"),
     )
-    report["certify_generated"] = stages.certify_generated(module, evidence["episodes"])
-    report["certify_generated"]["source"] = "theory/theory.dsl -> artifacts/theory_exec.py"
+    generated = {"episodes": 0, "frames_checked": 0, "n_render_mismatches": 0,
+                 "errors": [], "per_level": {}}
+    for name, (lvl, level_episodes) in sorted(by_level.items()):
+        level_module = gen_exec.compile_module(
+            dsl_text, lvl.height, lvl.width, lvl.walls)
+        outcome = stages.certify_generated(level_module, level_episodes)
+        generated["per_level"][name] = {
+            "frames_checked": outcome["frames_checked"],
+            "replay_exact": outcome["replay_exact"],
+        }
+        generated["episodes"] += outcome["episodes"]
+        generated["frames_checked"] += outcome["frames_checked"]
+        generated["n_render_mismatches"] += outcome["n_render_mismatches"]
+        generated["errors"].extend(outcome["errors"])
+    generated["replay_exact"] = (
+        generated["n_render_mismatches"] == 0 and not generated["errors"]
+    )
+    generated["source"] = "theory/theory.dsl -> artifacts/theory_exec.py (per level)"
+    report["certify_generated"] = generated
+
+    # 4c. held-out: does the theory match the world on states never observed?
+    # Replay-exactness does not imply this, which is the entire point.
+    held_out = {}
+    for check_level in (level,) + levels.CROSSING_LEVELS:
+        checked = gen_exec.compile_module(
+            dsl_text, check_level.height, check_level.width, check_level.walls)
+        wall_set = set(check_level.walls)
+        cases = mismatches = 0
+        for pr, pc, br, bc, direction in cross_form.enumerate_cases(
+                check_level.height, check_level.width):
+            if (pr, pc) in wall_set or (br, bc) in wall_set:
+                continue                     # not a well-formed state
+            cases += 1
+            predicted = checked["step"](
+                checked["State"](player=(pr, pc), box=(br, bc)), direction)
+            actual, _ = sokoban2.step(
+                check_level, sokoban2.State(player=(pr, pc), box=(br, bc)), direction)
+            if (predicted.player, predicted.box) != (actual.player, actual.box):
+                mismatches += 1
+        held_out[check_level.name] = {"cases": cases, "mismatches": mismatches}
+    report["held_out"] = {
+        "per_level": held_out,
+        "total_cases": sum(v["cases"] for v in held_out.values()),
+        "total_mismatches": sum(v["mismatches"] for v in held_out.values()),
+        "exact": all(v["mismatches"] == 0 for v in held_out.values()),
+    }
+
+    # 4d. the proof form
+    report["lean"] = lean_stage.check()
+    report["lean_cross_form"] = lean_stage.cross_check(module, level.height, level.width)
 
     # 5. prove -- the conservation law, recovered from the trajectory
     percepts = [t[0] for t in transitions] + [transitions[-1][2]]
@@ -159,6 +220,19 @@ def main() -> int:
     g = report["certify_generated"]
     print("  certify*  %d frames replayed through theory.dsl -> theory_exec.py; exact=%s"
           % (g["frames_checked"], g["replay_exact"]))
+    h = report["held_out"]
+    print("  held-out  %d unobserved-inclusive states across %d levels; mismatches=%d"
+          % (h["total_cases"], len(h["per_level"]), h["total_mismatches"]))
+    lean = report["lean"]
+    if lean.get("available"):
+        print("  lean      %s; sorry=%s; axioms=%s"
+              % ("compiles" if lean["compiles"] else "FAILED",
+                 lean["uses_sorry"], lean["axioms"][0].split(": ")[-1] if lean["axioms"] else "?"))
+        print("  lean=py   %d/%d cases agree" % (
+            report["lean_cross_form"]["cases"] - report["lean_cross_form"]["n_mismatches"],
+            report["lean_cross_form"]["cases"]))
+    else:
+        print("  lean      skipped (%s)" % lean.get("skipped"))
     print("  prove     %s  (conserved: %s)"
           % (report["prove"]["rendering"], report["prove"]["row_plus_col_is_conserved"]))
     for name, entry in sorted(report["levels"].items()):
@@ -173,7 +247,11 @@ def main() -> int:
     grading = report["grading"]
     ok = (all(x["agrees"] for x in grading.values())
           and report["certify"]["replay_exact"]
-          and report["certify_generated"]["replay_exact"])
+          and report["certify_generated"]["replay_exact"]
+          and report["held_out"]["exact"]
+          and (not report["lean"].get("available")
+               or (report["lean"]["compiles"] and not report["lean"]["uses_sorry"]
+                   and report["lean_cross_form"]["forms_agree"])))
     for name, g in sorted(grading.items()):
         print("  grade %-9s solvable predicted=%s actual=%s  optimal_plan=%s"
               % (name, g["predicted_solvable"], g["actually_solvable"], g["plan_optimal"]))

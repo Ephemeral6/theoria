@@ -92,7 +92,15 @@ def _signature(level: Level, state: State, action: str) -> str:
 
     if free(over) and free(landing):
         return "box_slidable"
-    return "box_stuck"
+    if not free(over) and free(landing):
+        # The box is blocked by the cell it would CROSS, not the one it would
+        # land on. Lumping this in with "box_stuck" is what let the mined guard
+        # keep only box_beyond_free and still replay every observed transition
+        # (THEORIZE_LOG T-9).
+        return "box_stuck_crossing"
+    if free(over) and not free(landing):
+        return "box_stuck_landing"
+    return "box_stuck_both"
 
 
 def plan_episodes(level: Level, per_class: int = 4) -> List[Episode]:

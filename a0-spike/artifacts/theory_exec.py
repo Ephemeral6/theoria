@@ -53,7 +53,7 @@ def _rule_walk(state, direction):
 
 def _rule_push2(state, direction):
     """push2 -- compiled from theory.dsl"""
-    if not ((state.box == _step_from(state.player, direction, 1)) and _free(state, _step_from(state.box, direction, 2))):
+    if not ((state.box == _step_from(state.player, direction, 1)) and _free(state, _step_from(state.box, direction, 1)) and _free(state, _step_from(state.box, direction, 2))):
         return False
     pusher = state.player
     state.box = _step_from(state.box, direction, 2)
@@ -67,14 +67,21 @@ def _rule_blocked_wall(state, direction):
     pass  # nothing happens
     return True
 
-def _rule_blocked_box(state, direction):
-    """blocked_box -- compiled from theory.dsl"""
-    if not ((state.box == _step_from(state.player, direction, 1)) and (not _free(state, _step_from(state.box, direction, 2)))):
+def _rule_blocked_box_crossing(state, direction):
+    """blocked_box_crossing -- compiled from theory.dsl"""
+    if not ((state.box == _step_from(state.player, direction, 1)) and (not _free(state, _step_from(state.box, direction, 1)))):
         return False
     pass  # nothing happens
     return True
 
-RULES = [("walk", _rule_walk), ("push2", _rule_push2), ("blocked_wall", _rule_blocked_wall), ("blocked_box", _rule_blocked_box)]
+def _rule_blocked_box_landing(state, direction):
+    """blocked_box_landing -- compiled from theory.dsl"""
+    if not ((state.box == _step_from(state.player, direction, 1)) and _free(state, _step_from(state.box, direction, 1)) and (not _free(state, _step_from(state.box, direction, 2)))):
+        return False
+    pass  # nothing happens
+    return True
+
+RULES = [("walk", _rule_walk), ("push2", _rule_push2), ("blocked_wall", _rule_blocked_wall), ("blocked_box_crossing", _rule_blocked_box_crossing), ("blocked_box_landing", _rule_blocked_box_landing)]
 
 
 def step(state, direction):
