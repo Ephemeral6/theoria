@@ -1,0 +1,8 @@
+# Determinism is a requirement here, not a nicety: the battery's artefacts must
+# be byte-identical across two runs and across machines. core.autocrlf would
+# silently break that, so LF is pinned for everything this track writes.
+* text eol=lf
+*.json text eol=lf
+*.jsonl text eol=lf
+*.md text eol=lf
+*.py text eol=lf
