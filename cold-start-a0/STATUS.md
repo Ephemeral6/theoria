@@ -1,6 +1,52 @@
 # STATUS — cold-start-a0
 
-## All six milestones green (2026-07-28)
+## All six milestones green, plus the four follow-ups (2026-07-28)
+
+Follow-ups from `A0_REPORT.md` §7, all four attempted:
+
+| # | item | state | tag |
+|---|---|---|---|
+| 1 | a frame-axiom sentence form for the DSL | ✅ `semantics:` dialect + v0.2 proposal | `cold-start-a0-n1-semantics` |
+| 2 | A0′: reversible mechanics, probe-separable frontier, scored on revisions | ✅ 228/228 on 47 % coverage; seeded repair control passes | `cold-start-a0-n2-a0prime` |
+| 3 | responsibility-complete concept accounts | ✅ Button −17→−5, Door −13→−1, both `mandatory` | `cold-start-a0-n3-concept-account` |
+| 4 | connect Fast Downward, re-run M4 | ⚠️ **half** — the code path is verified, the planner could not be built | `cold-start-a0-n4-fd-path` |
+
+```bash
+cd cold-start-a0 && python -m prime.run_prime   # A0-prime, both runs
+cd cold-start-a0 && python -m pytest            # 44 passed
+```
+
+### A0′ headline
+
+| | A0 | A0′ |
+|---|---|---|
+| state-action coverage | 99 % | **47 %** |
+| accuracy vs ground truth | 98.73 % | **100 %** |
+| executable probes | 0 | **13** |
+
+**Reversibility beats coverage.** A0's latch capped what any amount of
+exploration could establish; A0′'s toggle did not. Full diagnosis:
+`prime/A0P_REPORT.md`.
+
+### The Fast Downward blocker (stopping rule invoked)
+
+Three attempts at a C++ compiler, all failed — Lean's bundled clang has no libc++
+headers; `conda install m2w64-toolchain` dies on a `setuptools` RemoveError;
+winlibs/mingw-builds direct URLs 404 and the GitHub API is rate-limited from this
+host. `cmake` and `ninja` are installed and `aibasel/downward` is cloned to
+`.toolchain/downward`; **only the compiler is missing.** Recorded per the
+ticket's stopping rule and left for human intervention (D-A0-018).
+
+Delivered instead: `certify/fd_conformance.py` drives `fd_adapter`'s FD code path
+end to end against a stand-in that speaks FD's CLI and plan-file protocol —
+discovery, invocation, `sas_plan` parsing, independent validation — and confirms
+`solve()` picks FD with no `prefer=` hint and returns the same optimal 12-step
+plan. **It establishes nothing about Fast Downward's own search**, and says so
+everywhere it is reported.
+
+---
+
+## The original six milestones (2026-07-28)
 
 | tag | milestone | state |
 |---|---|---|
@@ -13,7 +59,7 @@
 
 ```bash
 cd cold-start-a0 && python run_all.py     # 8 steps, ~6 s, all green
-cd cold-start-a0 && python -m pytest      # 26 passed
+cd cold-start-a0 && python -m pytest      # 44 passed (26 at the m6 tag)
 ```
 
 ## Headline numbers
@@ -46,11 +92,12 @@ therefore wrong about three (state, action) pairs, and full-history replay canno
 see it. This was predicted before it was measured; it is the DC22 shape at small
 scale and it is the most useful thing the spike produced.
 
-**The frame axiom is not in the DSL.** *If no rule fires for an object, that
-object is unchanged* has no sentence form in `dsl_grammar_v0.1`. It lives in a
-comment and in three backends. A second reader compiling `theory.dsl` alone would
-get a different world. Highest-priority expressivity gap; full ledger in
-`THEORIZE_LOG.md` §E.
+**~~The frame axiom is not in the DSL.~~ CLOSED by follow-up 1.** It is now a
+declared `semantics:` section that every manual here carries and that
+`compile_a0.py` refuses to default (D-A0-014); the extension request for the
+frozen grammar is `proposals/dsl_grammar_v0.2_semantics.md`. The rest of the
+expressivity ledger stands, and E-02 got *worse*: with no `?dir` lifting, A0′'s
+two-rule toggle costs sixteen clauses.
 
 **Lean toolchain is local and gitignored.** `.toolchain/lean-4.9.0-windows/`,
 278 MB, fetched during this sprint. `certify/lean_check.py` finds it or reports

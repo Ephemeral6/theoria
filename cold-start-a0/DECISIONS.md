@@ -221,3 +221,98 @@ anyway: the Portal's exit cell is *problem* data, not *domain* data, so the rule
 says `then jumped(Cart, portal_exit)` and the landmark's coordinates live in the
 problem instance. Logged here so the compiler track can see it; the defect is
 real and will bite any DSL that needs a tuple in an event.
+
+---
+
+# Follow-ups (A0_REPORT §7, items 1–4)
+
+## D-A0-014 · `semantics:` is a local dialect, not a contract edit
+
+`CONTRACTS/dsl_grammar_v0.1.md` is frozen and owned by the compiler track, so the
+frame axiom could not be added there. It is implemented in
+`compile/dialect.py`, used by all four backends, and written up as a formal
+extension request in `proposals/dsl_grammar_v0.2_semantics.md`.
+
+Three statements over closed value sets — `frame`, `conflict`, `cascade` — each
+closing a hole the A0 sprint fell into: the frame axiom (E-03), constraint 9's
+two discharge routes, and Theoria 1.8's deferred cascade question.
+
+**The section is mandatory here.** The v0.1 parser skips lines it does not
+recognise, so a manual carrying it still parses upstream — silently, and to a
+different world. That is the hazard the section exists to close, not graceful
+degradation, so `compile_a0.py` raises `SemanticsError` on a manual that does not
+declare its semantics rather than assuming a default. The proposal asks for the
+same rule in v0.2.
+
+## D-A0-015 · The concept account prices a responsibility-complete alternative
+
+A0's accounting compared "the object" against "its pixel edits", charged the
+object 21 bits of declaration and the alternative none. `pipeline/concept_account.py`
+replaces it with a three-term verdict:
+
+* **script** — the object's declaration plus its events, against a
+  responsibility-complete raw encoding of the same pixels *including their
+  frame-0 declaration*;
+* **expressibility** — is any law or rule *effect* stated over the object? The
+  invariant language is counts, parity and finite weights over objects, so there
+  is no pixel-level paraphrase of `count(Button, 8) + count(Door) = 1`;
+* **verdict** — `mandatory` (dropping it breaks responsibility or costs a law the
+  DSL cannot restate) · `pays` · `rejected`.
+
+Effect on A0: Button −17 → **−5**, Door −13 → **−1**. Both still fail to pay for
+themselves on the trace, and both are `mandatory`. The conflict reported in
+`A0_REPORT.md` §4 is therefore **narrowed but not dissolved**, which is the
+honest outcome: for an object with one event in 275 transitions the object
+framing is not a compression win on the *trace*, it is a win on the *manual* —
+which is what Theoria 1.8 actually says ("它让**说明书**变短").
+
+## D-A0-016 · A0′ changes three things and nothing else
+
+`prime/` — the second self-built world, built against A0's own post-mortem:
+toggle instead of latch, a Crate that is an obstacle but not a wall, and an
+explorer truncated at **40 % of the exhaustive walk, a fraction fixed once before
+looking at the gaps it produced**. Everything else is A0's geometry, so the
+comparison is clean. Result and diagnosis: `prime/A0P_REPORT.md`.
+
+## D-A0-017 · Track re-identification, priced
+
+**上游限制 (not a defect).** `mdl_segmenter` matches frame *t* against *t+1*, so
+an object that vanishes and returns is a fresh track every time. A0 never saw it
+— its Door opened once. A0′'s toggle produced **five Doors**.
+
+`pipeline/reidentify.py` merges same-template, disjoint-lifetime tracks and is
+applied only when the script gets shorter (7 → 3, 48 bits on A0′; 68 → 6 on the
+colour-agnostic operator). This is Theoria 1.8's template-matching operator, and
+it is the second capability gap the A0 family has found in the segmenter. Upstream
+is untouched; the pass consumes a `Segmentation` and returns a new one.
+
+Consequence worth noting: the pass also repairs part of the colour-agnostic
+operator's fragmentation (90 → 6 on A0), which is why
+`test_uniform_colour_operator_wins_on_script_bits` now asserts fragmentation on
+the pre-merge count.
+
+## D-A0-018 · **BLOCKER** — Fast Downward could not be built; half of item 4 delivered
+
+Three attempts at a C++ compiler, all failed:
+
+1. the Lean toolchain's bundled `clang` 15 — no C++ standard library headers
+   (`fatal error: 'vector' file not found`);
+2. `conda install -c conda-forge m2w64-toolchain` — `RemoveError: 'setuptools'
+   is a dependency of conda and cannot be removed from conda's operating
+   environment`;
+3. direct winlibs / mingw-builds release URLs — 404, and the GitHub API is
+   rate-limited from this host so the asset list cannot be enumerated.
+
+`cmake` and `ninja` are installed (`pip`) and `aibasel/downward` is cloned to
+`.toolchain/downward`; only the compiler is missing. Per the ticket's stopping
+rule this is recorded and left for human intervention.
+
+**What was delivered instead**, and its exact scope:
+`certify/fd_conformance.py` exercises `fd_adapter`'s Fast Downward *code path*
+end to end with a stand-in that speaks FD's CLI and plan-file protocol —
+discovery via `$FAST_DOWNWARD`, invocation, `sas_plan` parsing, independent
+validation, `Plan.backend` reporting — and confirms the adapter's claim that
+**callers need no change** (`solve()` picks FD with no `prefer=` hint and returns
+the same optimal 12-step plan). It establishes nothing about Fast Downward's own
+search, and says so in its own docstring, in the report it writes, and in the
+test that runs it.

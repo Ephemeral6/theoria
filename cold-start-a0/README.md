@@ -10,15 +10,20 @@ libraries and are never modified.
 
 ```bash
 cd cold-start-a0
-python run_all.py          # the whole loop, ~6 s
-python -m pytest           # 26 tests
-python -m certify.score_vs_truth   # M6 scoring against the referee's copy
+python run_all.py                  # A0, the whole loop, ~6 s
+python -m prime.run_prime          # A0-prime: cold start + seeded repair control
+python -m pytest                   # 44 tests
+python -m certify.score_vs_truth   # scoring against the referee's copy
+python -m pipeline.concept_account # concept accounts, responsibility-complete
+python -m certify.fd_conformance   # the Fast Downward code path
 ```
 
-**Read [A0_REPORT.md](A0_REPORT.md) first** — it is the deliverable. The loop
-closed; the manual is 233/236 correct and wrong in three places that full-history
-replay cannot see, exactly where [THEORIZE_LOG.md](THEORIZE_LOG.md) said it
-would be.
+**Read [A0_REPORT.md](A0_REPORT.md) first**, then
+[prime/A0P_REPORT.md](prime/A0P_REPORT.md). A0's loop closed and its manual came
+out 233/236 correct — wrong in three places that full-history replay cannot see,
+exactly where [THEORIZE_LOG.md](THEORIZE_LOG.md) said it would be. A0-prime then
+answers the two questions A0 left open, and finds that **reversibility beats
+coverage**: half the state-action coverage, and a perfect manual.
 
 ## Layout
 
@@ -30,6 +35,8 @@ would be.
 | `compile/` | the four backends and the derived problem instance |
 | `certify/` | cheap layer (replay ∧ responsibility), expensive layer (Lean), M6 scoring |
 | `artifacts/` | traces, `candidates.jsonl`, reports — all byte-reproducible |
+| `prime/` | **A0-prime** — the follow-up world, its probe machinery and the seeded repair control |
+| `proposals/` | the `semantics:` extension request for `dsl_grammar` v0.2 |
 | `THEORIZE_LOG.md` | every candidate, and why it was accepted, rejected or left to a probe |
 | `DECISIONS.md` | design calls, upstream gaps and the one upstream defect found |
 

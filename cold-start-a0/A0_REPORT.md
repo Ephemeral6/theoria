@@ -229,3 +229,45 @@ Recommended before the next spike, in order:
 3. change the concept-admission account to price against a
    responsibility-complete baseline (§4);
 4. connect Fast Downward, and re-run M4 to confirm the adapter is a no-op change.
+
+---
+
+## 8 · Addendum — all four were done, and one conclusion changed
+
+| # | outcome |
+|---|---|
+| 1 | **done.** `semantics:` — `frame` / `conflict` / `cascade`, mandatory, in every manual, rendered into `theory.md`, recorded in `theory.lean`'s header. Extension request filed at `proposals/dsl_grammar_v0.2_semantics.md`; the frozen contract was not touched. |
+| 2 | **done.** `prime/` — and it changed the conclusion below. |
+| 3 | **done.** Button −17 → **−5**, Door −13 → **−1** on a responsibility-complete baseline, all three objects `mandatory` on expressibility. The §4 conflict is **narrowed, not dissolved**: an object with one event in 275 transitions still does not pay for itself *on the trace*. It pays on the *manual*, which is what 1.8 actually says. |
+| 4 | **half.** The FD code path is verified end to end and needs no caller changes; Fast Downward itself could not be built (three failed compiler attempts, `STATUS.md`). |
+
+### The conclusion that changed
+
+§6.2 said the next world should be built so the probes could run. That was right,
+but it under-stated the finding. A0′ has **47 %** of the state-action coverage
+A0 had, and its manual is **228/228 = 100 %** correct against the truth, against
+A0's 98.73 % on 99 % coverage.
+
+The variable is not how much of the world was seen. It is whether what was seen
+could be seen **again**. A0's latch meant `press_left` had one witness and no
+route to a second, so constraint 5 forced the manual to ship a known hole. A0′'s
+toggle gives every direction-by-polarity combination its own witness, so the same
+generalisation is enumerated evidence and goes in.
+
+**Reversibility beats coverage.** That should govern how the next self-built
+world is designed and, more importantly, how ARC development levels are chosen:
+an irreversible mechanism caps what any amount of exploration can establish about
+it.
+
+### And §6.1 is answered
+
+*"When the theory is wrong, does the loop repair it?"* — yes, under a controlled
+test. One deliberately false, **replay-invisible** clause was seeded into A0′'s
+manual (`push_onto_crate`). Full-history replay stayed green, as predicted. Two
+independent mechanisms caught it: the coverage probe (navigate to a firing state,
+predict, execute, observe the disagreement) and — unplanned — the Lean form,
+which refused to transcribe a `step` that leaves the manual's own declared arena.
+One revision, accuracy 0.9912 → 1.0000. `prime/A0P_REPORT.md` §3.
+
+What is still untested: a *subtler* error — one that neither escapes the arena
+nor sits on an untested clause — and any repair needing more than one round.

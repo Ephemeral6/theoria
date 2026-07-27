@@ -136,7 +136,13 @@ def test_uniform_colour_operator_wins_on_script_bits():
     chosen = next(r for r in report if r["chosen"])
     other = next(r for r in report if not r["chosen"])
     assert chosen["script_bits"] < other["script_bits"]
-    assert other["tracks"] > 10, "the colour-agnostic operator should fragment"
+    # The colour-agnostic operator fragments badly when objects touch.  Since the
+    # re-identification pass was added it repairs some of that damage (90 -> 6
+    # here), so the fragmentation is asserted on the count *before* the merge —
+    # and the uniform-colour operator still wins on bits regardless.
+    assert other["reidentification"]["tracks_before"] > 10
+    assert chosen["reidentification"]["tracks_before"] == 3, (
+        "A0's Door opens once and never returns; nothing to re-identify")
 
 
 @needs_artifacts
