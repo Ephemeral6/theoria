@@ -2,7 +2,7 @@
 
 ## 汇合 sprint (P-5) 达成：真 A1 (2026-07-28)
 
-73/73 测试通过，其中 4 项真正调用 `lean` 编译生成物并读 `#print axioms`。
+83/83 测试通过，其中 8 项真正调用 `lean` 编译生成物并读 `#print axioms`。
 
 ### A1 验收：LP 权重 → Lean 封闭引理
 
@@ -71,6 +71,23 @@ v0.1 未改动一字。
 不静默收窄成一个读起来更强的定理。这是本 sprint 唯一的开放问题，也是下一轮
 该拿的东西——要么 engine-rig 扩不变量语言，要么这条命题保持 open。
 
+### 独立复核
+
+本轮结论经一次独立对抗式复核（只读，不许确认只许证伪），结论 CONFIRMED。
+关键在于它跑了**负对照**：把 `w .p1` 从 1 改成 7 之后，`lean` 报
+`decide proved ... is false`，四条定理全部变成 `depends on axioms: [sorryAx]`，
+退出码 1。空公理集这条检查因此不是摆设。复核另确认 `gen_lean.py` 里没有任何
+硬编码权重向量，move 集合确由预测器独立推出（交叉核对非循环）。
+
+复核提出的两处缺口已修，见 D-TC-012（使能条件未校验，且占位串只采样了 5/32）
+与 D-TC-013（权重需手抄进关卡文件）。
+
+一条仍然成立的限制，照录：**"空公理集"与"证明规模线性"不同时为真。**
+`computational` 空公理集但 `O(2^n)`，`algebraic` 线性但带 `propext, Quot.sound`。
+33 格英式棋盘上前者是 2^33，跑不完。两条都诚实（永不出现 `sorryAx` /
+`ofReduceBool`），取舍见 D-TC-008。另外，全部验证只跑在**一个** 5 格夹具上，
+管线的普适性不由本轮证据支持。
+
 ### 阻塞
 
 无。
@@ -78,7 +95,7 @@ v0.1 未改动一字。
 ### 跑法
 
 ```bash
-cd theory-compiler && python -m pytest        # 73 passed（含 4 项真 Lean 编译）
+cd theory-compiler && python -m pytest        # 83 passed（含 8 项真 Lean 编译）
 ```
 
-`lean` 不在 PATH 时，4 项 Lean 编译测试自动跳过，其余 69 项照常。
+`lean` 不在 PATH 时，8 项 Lean 编译测试自动跳过，其余 75 项照常。
