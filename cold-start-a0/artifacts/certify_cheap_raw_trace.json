@@ -1,0 +1,11 @@
+{
+  "anomalies": [],
+  "anomaly_kinds": [],
+  "frames": 276,
+  "green": true,
+  "pixels_checked": 22356,
+  "pixels_unexplained": 0,
+  "theory": "theory\\generated\\theory.py",
+  "trace": "raw_trace.jsonl",
+  "transitions": 275
+}

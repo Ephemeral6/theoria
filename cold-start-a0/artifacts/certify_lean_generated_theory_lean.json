@@ -1,0 +1,18 @@
+{
+  "available": true,
+  "axiom_reports": [
+    {
+      "axioms": [],
+      "name": "inv_all"
+    }
+  ],
+  "errors": [],
+  "file": "theory\\generated\\theory.lean",
+  "green": true,
+  "lean": "C:\\Users\\user\\Desktop\\theoria\\cold-start-a0\\.toolchain\\lean-4.9.0-windows\\bin\\lean.exe",
+  "output": [
+    "'inv_all' does not depend on any axioms"
+  ],
+  "returncode": 0,
+  "sorries": []
+}
