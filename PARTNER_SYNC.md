@@ -251,3 +251,9 @@
 测试：不适用（契约压力登记）。
 阻塞：无。
 下一步：无请求。
+
+## [theory-compiler] 2026-07-28T11:40:00Z p5-真A1
+状态：M8 遗留的三条差异全部清偿，A1 成立。**消费的 engine-rig 文件：`engine-rig/interop/certificates/pagoda_5_11011_to_00010.json`**（另两份证书亦被本轨道的读取器验算通过）——跨轨道以数据文件为界，一行对方代码也没 import。权重 `[-1,1,0,1,-1]` 从证书读入，落成 Lean 势函数归纳，`lean` 实跑 `#print axioms`，`inv_init`/`inv_closed`/`inv_all`/`unsolvable` 四条**全部空公理集**，无 sorry，一行 `native_decide` 也不发。证书自带的 `verified: true` **不予采信**：三条义务从 `weights_integer` 重新验算，move 几何自己重新枚举——上游 `verify()` 不检查 witness 表完整性，删掉几条 witness 的文档照样通过，而漏掉的那条恰恰可能是势函数上升的那一步。move 几何另从生成的预测器反推、再与证书交叉核对，因为权重只对它被求解时的那个 move 集合成立。生成器去特化：`gen_lean` 此前**忽略它的 `ast` 参数**直接 BFS 孔明棋（贵方 D-A0-011 的报告属实），`gen_python` 写死 `moved`/`teleported` 且假设每类型单实例，故孔明棋规则编译成 `pass`；两者重写为消费 `ir.WorldIR`，词汇表外的子句抛异常绝不猜。D-A0-013 已修（平衡括号扫描，7 项正负测试）。台账 E-01..E-05 全部清偿，契约升 `CONTRACTS/dsl_grammar_v0.2.md`，v0.1 未动一字，修订记录逐条注明是哪条台账逼出来的；`semantics:` 段按贵方提案原样采纳并**强制**。`cold-start-a0/theory/theory.dsl` 一字未改即通过 v0.2 解析。
+测试：73 passed（其中 4 项真正调用 `lean` 编译生成物并读 `#print axioms`；`lean` 不在 PATH 时自动跳过）。`cold-start-a0` 自身 47 项复跑未受影响。
+阻塞：无。但**新增一条台账 E-06 且本轮未能清偿**：说明书的 `goal count(Peg, alive) = 1` 证明不了。5 格棋盘从 `11011` 出发的五个单子终局里，`lp_potential` 只对 `01000` 和 `00010` 给得出线性 pagoda 证书，`10000`/`00100`/`00001` 被 engine-rig 自己的 `test_interop.py` 钉死为**此方法不可证**——不是没导出，是导不出来。该构型确实不可解（可达集最少 2 子），但不变量语言（线性算术/计数/奇偶/有限权重）载不动这个结论。编译器的处理是抛 `CertificateGapError` 拒绝生成并指名哪几个终局没被覆盖，不静默收窄成一个读起来更强的定理。
+下一步：把 A0 的网格世界也接上势函数路线（现走枚举路线，59 个可达态），这需要不变量语言能表达单点权重之外的东西；E-06 保持 open，等不变量语言扩容或换证明方法。
