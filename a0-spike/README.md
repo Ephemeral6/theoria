@@ -137,6 +137,42 @@ mismatches, at a cost of 1,966 actions instead of 341.
 
 Full reasoning, decision by decision: [THEORIZE_LOG.md](THEORIZE_LOG.md).
 
+## Variant injection — change one rule, measure the repair
+
+```bash
+cd a0-spike && python -m pipeline.adapt
+```
+
+| variant | one rule changed | detect on `match` | detect anywhere | theorems hit | old verdict |
+|---|---|---|---|---|---|
+| `ghost` | walls stop being solid | 6 acts | 6 acts | none | still correct |
+| `push1` | box slides 1, not 2 | 18 acts | 18 acts | `unsolvable_mismatch` | **flipped** |
+| `push3` | box slides 3, not 2 | 18 acts | 18 acts | `unsolvable_mismatch` | still correct |
+| `nocross` | box may cross a blocked cell | **never (341)** | 6 acts | `unsolvable_mismatch` | still correct |
+
+All four repair to a replay-exact theory with the injected effect.
+
+Three things this measures:
+
+**Latency tracks firing frequency, not the size of the change.** `ghost` weakens a
+guard on `walk`, which fires constantly — caught in 6 actions. `nocross` weakens a
+guard on `push2` in a way visible only when the box is blocked by the cell it
+crosses, and in `match` that is *unreachable* — the world changed and the theory
+replayed perfectly for 341 actions.
+
+**Where you look decides whether you notice.** The same change is caught in 6
+actions once the `crossing_*` levels are in play. Same parity argument as finding
+5, from the other side: there one level could not *pin down* a rule, here it
+cannot *refute* one.
+
+**`push1` is the one that matters.** It destroys the conservation law, and
+`mismatch` — the level the manual proves impossible — becomes solvable. The old
+theory goes on asserting a false impossibility. Detecting the prediction failure
+does not tell you a *theorem* died; what does is `[depends: push2]` on the
+theorem, which pulls it up for re-examination. That dependency edge is the only
+thing between the agent and a confident, well-supported, false claim of
+impossibility.
+
 ## Known warts
 
 * `blocked_DOWN_1` carries literals about LEFT and RIGHT that are accidental —

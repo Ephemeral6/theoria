@@ -191,3 +191,45 @@ disjunction cannot be one.
 **What this cost and bought** 1,966 actions instead of 341. It bought the
 difference between a theory that is right about the level it was learned on and
 one that is right about the world. Replay said "exact" both times.
+
+---
+
+## T-10 · Variant injection: one rule changed, four times
+
+Not an adjudication but a measurement, and the exam item it answers is
+"改一条规则,多快适应回来".
+
+| variant | one rule changed | detected on `match` | detected anywhere | theorems hit | old verdict |
+|---|---|---|---|---|---|
+| `ghost` | walls stop being solid (a `walk` guard) | 6 actions | 6 actions | none | still correct |
+| `push1` | box slides 1 instead of 2 (effect) | 18 actions | 18 actions | `unsolvable_mismatch` | **flipped** |
+| `push3` | box slides 3 instead of 2 (effect) | 18 actions | 18 actions | `unsolvable_mismatch` | still correct |
+| `nocross` | the box may pass through an obstructed cell (a guard) | **never, in 341 actions** | 6 actions | `unsolvable_mismatch` | still correct |
+
+Every variant repaired to a replay-exact theory with the effect the injection
+actually made.
+
+**Detection latency is about firing frequency, not about the size of the change.**
+`ghost` weakens a guard on `walk`, which fires on nearly every action, and it is
+caught in 6. `nocross` weakens a guard on `push2` in a way that only shows when
+the box is blocked by the cell it crosses — and in `match` that configuration is
+*unreachable*, so the changed world replays perfectly for 341 actions. The world
+changed and the theory noticed nothing.
+
+**Where you look decides whether you notice at all.** The same `nocross` change is
+caught in 6 actions once the `crossing_*` levels are in play. That is the same
+parity argument as T-9, arriving from the other direction: there, evidence from
+one level could not *pin down* a rule; here, it cannot *refute* one.
+
+**The one that matters is `push1`.** Sliding one cell instead of two destroys the
+conservation law, and `mismatch` — the level the manual proves impossible —
+becomes solvable. The old theory goes on asserting a false impossibility. Nothing
+in replay catches this; the surprise is detected 18 actions in, but detecting a
+prediction failure does not by itself tell you that a *theorem* is now false. What
+does is the declaration `theorem unsolvable_mismatch [depends: push2]`: the
+changed rule is named, so the theorem is pulled up for re-examination
+automatically.
+
+That is exactly the failure mode the whole architecture is built against — a
+confident, well-supported, false claim of impossibility — and here the dependency
+edge is the only thing standing between the agent and it.

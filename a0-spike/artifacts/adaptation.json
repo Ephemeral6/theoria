@@ -1,0 +1,327 @@
+{
+  "variants": [
+    {
+      "changed_rule": "push2",
+      "conservation_law_still_true": false,
+      "description": "a push slides the box ONE cell -- the effect changes, and the conservation law dies with it",
+      "detection": {
+        "action": "LEFT",
+        "actions_until_surprise": 18,
+        "detected": true,
+        "episode": 10,
+        "observed": [
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            2
+          ]
+        ],
+        "predicted": [
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            1
+          ]
+        ]
+      },
+      "detection_across_levels": {
+        "detected_anywhere": true,
+        "earliest": 18,
+        "levels_that_never_notice": [],
+        "per_level": {
+          "crossing_DOWN": 56,
+          "crossing_LEFT": 60,
+          "crossing_RIGHT": 50,
+          "crossing_UP": 50,
+          "match": 18
+        }
+      },
+      "invalidated_theorems": [
+        "unsolvable_mismatch"
+      ],
+      "mismatch_still_unsolvable": false,
+      "old_verdict_still_correct": false,
+      "repair": {
+        "evidence_actions": 3661,
+        "exactly_one_successor": true,
+        "n_rules": 16,
+        "push_effects": [
+          "(-1, 0)",
+          "(0, -1)",
+          "(0, 1)",
+          "(1, 0)"
+        ],
+        "push_guards": {
+          "push2_DOWN": [
+            "act==DOWN",
+            "ahead_is_box(DOWN)",
+            "box_ahead_free(DOWN)"
+          ],
+          "push2_LEFT": [
+            "act==LEFT",
+            "ahead_is_box(LEFT)",
+            "box_ahead_free(LEFT)"
+          ],
+          "push2_RIGHT": [
+            "act==RIGHT",
+            "ahead_is_box(RIGHT)",
+            "box_ahead_free(RIGHT)"
+          ],
+          "push2_UP": [
+            "act==UP",
+            "ahead_is_box(UP)",
+            "box_ahead_free(UP)"
+          ]
+        },
+        "replay_exact": true,
+        "transitions": 3661
+      },
+      "silently_wrong_without_dependency_tracking": true,
+      "variant": "push1"
+    },
+    {
+      "changed_rule": "push2",
+      "conservation_law_still_true": false,
+      "description": "a push slides the box THREE cells -- the effect changes and the parity flips on every push",
+      "detection": {
+        "action": "LEFT",
+        "actions_until_surprise": 18,
+        "detected": true,
+        "episode": 10,
+        "observed": [
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            0
+          ]
+        ],
+        "predicted": [
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            1
+          ]
+        ]
+      },
+      "detection_across_levels": {
+        "detected_anywhere": true,
+        "earliest": 18,
+        "levels_that_never_notice": [],
+        "per_level": {
+          "crossing_DOWN": 56,
+          "crossing_LEFT": 60,
+          "crossing_RIGHT": 50,
+          "crossing_UP": 50,
+          "match": 18
+        }
+      },
+      "invalidated_theorems": [
+        "unsolvable_mismatch"
+      ],
+      "mismatch_still_unsolvable": true,
+      "old_verdict_still_correct": true,
+      "repair": {
+        "evidence_actions": 1478,
+        "exactly_one_successor": true,
+        "n_rules": 17,
+        "push_effects": [
+          "(-3, 0)",
+          "(0, -3)",
+          "(0, 3)",
+          "(3, 0)"
+        ],
+        "push_guards": {
+          "push2_DOWN": [
+            "act==DOWN",
+            "ahead_is_box(DOWN)",
+            "box_ahead_free(DOWN)"
+          ],
+          "push2_LEFT": [
+            "act==LEFT",
+            "ahead_is_box(LEFT)",
+            "box_ahead_free(LEFT)"
+          ],
+          "push2_RIGHT": [
+            "act==RIGHT",
+            "ahead_is_box(RIGHT)",
+            "box_ahead_free(RIGHT)"
+          ],
+          "push2_UP": [
+            "act==UP",
+            "ahead_is_box(UP)",
+            "box_ahead_free(UP)"
+          ]
+        },
+        "replay_exact": true,
+        "transitions": 1478
+      },
+      "silently_wrong_without_dependency_tracking": false,
+      "variant": "push3"
+    },
+    {
+      "changed_rule": "push2",
+      "conservation_law_still_true": true,
+      "description": "the box may pass through an obstructed cell -- a guard is weakened, the effect is untouched",
+      "detection": {
+        "actions_examined": 341,
+        "detected": false,
+        "note": "the changed rule never fired differently in this evidence"
+      },
+      "detection_across_levels": {
+        "detected_anywhere": true,
+        "earliest": 6,
+        "levels_that_never_notice": [
+          "match"
+        ],
+        "per_level": {
+          "crossing_DOWN": 32,
+          "crossing_LEFT": 18,
+          "crossing_RIGHT": 28,
+          "crossing_UP": 6,
+          "match": null
+        }
+      },
+      "invalidated_theorems": [
+        "unsolvable_mismatch"
+      ],
+      "mismatch_still_unsolvable": true,
+      "old_verdict_still_correct": true,
+      "repair": {
+        "evidence_actions": 1753,
+        "exactly_one_successor": true,
+        "n_rules": 16,
+        "push_effects": [
+          "(-2, 0)",
+          "(0, -2)",
+          "(0, 2)",
+          "(2, 0)"
+        ],
+        "push_guards": {
+          "push2_DOWN": [
+            "act==DOWN",
+            "ahead_is_box(DOWN)",
+            "box_beyond_free(DOWN)"
+          ],
+          "push2_LEFT": [
+            "act==LEFT",
+            "ahead_is_box(LEFT)",
+            "box_beyond_free(LEFT)"
+          ],
+          "push2_RIGHT": [
+            "act==RIGHT",
+            "ahead_is_box(RIGHT)",
+            "box_beyond_free(RIGHT)"
+          ],
+          "push2_UP": [
+            "act==UP",
+            "ahead_is_box(UP)",
+            "box_beyond_free(UP)"
+          ]
+        },
+        "replay_exact": true,
+        "transitions": 1753
+      },
+      "silently_wrong_without_dependency_tracking": false,
+      "variant": "nocross"
+    },
+    {
+      "changed_rule": "walk",
+      "conservation_law_still_true": true,
+      "description": "walls no longer stop the player -- a guard on a very frequently fired rule",
+      "detection": {
+        "action": "UP",
+        "actions_until_surprise": 6,
+        "detected": true,
+        "episode": 4,
+        "observed": [
+          [
+            1,
+            5
+          ],
+          [
+            3,
+            3
+          ]
+        ],
+        "predicted": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            3
+          ]
+        ]
+      },
+      "detection_across_levels": {
+        "detected_anywhere": true,
+        "earliest": 6,
+        "levels_that_never_notice": [],
+        "per_level": {
+          "crossing_DOWN": 28,
+          "crossing_LEFT": 6,
+          "crossing_RIGHT": 58,
+          "crossing_UP": 12,
+          "match": 6
+        }
+      },
+      "invalidated_theorems": [],
+      "mismatch_still_unsolvable": true,
+      "old_verdict_still_correct": true,
+      "repair": {
+        "evidence_actions": 1721,
+        "exactly_one_successor": true,
+        "n_rules": 23,
+        "push_effects": [
+          "(-2, 0)",
+          "(0, -2)",
+          "(0, 2)",
+          "(2, 0)"
+        ],
+        "push_guards": {
+          "push2_DOWN": [
+            "act==DOWN",
+            "ahead_is_box(DOWN)",
+            "box_ahead_free(DOWN)",
+            "box_beyond_free(DOWN)"
+          ],
+          "push2_LEFT": [
+            "act==LEFT",
+            "ahead_is_box(LEFT)",
+            "box_ahead_free(LEFT)",
+            "box_beyond_free(LEFT)"
+          ],
+          "push2_RIGHT": [
+            "act==RIGHT",
+            "ahead_is_box(RIGHT)",
+            "box_ahead_free(RIGHT)",
+            "box_beyond_free(RIGHT)"
+          ],
+          "push2_UP": [
+            "act==UP",
+            "ahead_is_box(UP)",
+            "box_ahead_free(UP)",
+            "box_beyond_free(UP)"
+          ]
+        },
+        "replay_exact": true,
+        "transitions": 1721
+      },
+      "silently_wrong_without_dependency_tracking": false,
+      "variant": "ghost"
+    }
+  ]
+}

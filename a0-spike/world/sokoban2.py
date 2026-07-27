@@ -43,6 +43,31 @@ BLOCKED = "blocked"
 
 
 @dataclass(frozen=True)
+class Rules:
+    """The world's dynamics, as data -- so a variant can change exactly one thing.
+
+    Theoria.md Phase 1 layer 2: variants are produced by deterministic rewriting,
+    never by rewriting the game. Each field here is one rule of the world; a
+    variant flips one and leaves the rest identical, which is what makes
+    "how fast does it adapt to ONE changed rule" a meaningful question.
+    """
+
+    push_distance: int = 2          # how far a pushed box travels
+    require_crossing_free: bool = True   # must every cell the box crosses be free?
+    walls_block_player: bool = True      # do walls stop the player walking?
+
+    def label(self) -> str:
+        return "push%d%s%s" % (
+            self.push_distance,
+            "" if self.require_crossing_free else "+nocross",
+            "" if self.walls_block_player else "+ghost",
+        )
+
+
+BASE_RULES = Rules()
+
+
+@dataclass(frozen=True)
 class Level:
     name: str
     height: int
@@ -52,6 +77,7 @@ class Level:
     box: Cell
     target: Cell
     solvable: Optional[bool] = None      # ground truth, filled in by levels.py
+    rules: "Rules" = BASE_RULES
 
     def parity(self, cell: Cell) -> int:
         return (cell[0] + cell[1]) % 2
@@ -103,22 +129,28 @@ def step(level: Level, state: State, action: str) -> Tuple[State, str]:
     """Ground-truth transition. Returns (next state, event label).
 
     * target empty        -> the player walks one cell
-    * target is the box   -> the box slides TWO cells and the player takes one,
-                             provided both cells the box crosses are free
+    * target is the box   -> the box slides `push_distance` cells and the player
+                             takes one, provided the cells it crosses are free
     * anything else       -> nothing happens
     """
+    rules = level.rules
     delta = DELTA[action]
     target = _add(state.player, delta)
 
-    if not in_bounds(level, target) or is_wall(level, target):
+    if not in_bounds(level, target):
+        return state, BLOCKED
+    if is_wall(level, target) and rules.walls_block_player:
         return state, BLOCKED
 
     if target != state.box:
         return State(player=target, box=state.box), MOVE
 
-    over = _add(state.box, delta)          # the cell the box passes through
-    landing = _add(state.box, delta, 2)    # where the box comes to rest
-    for cell in (over, landing):
+    distance = rules.push_distance
+    landing = _add(state.box, delta, distance)
+    crossed = [_add(state.box, delta, k) for k in range(1, distance)]
+    to_check = ([landing] if not rules.require_crossing_free
+                else crossed + [landing])
+    for cell in to_check:
         if not in_bounds(level, cell) or is_wall(level, cell):
             return state, BLOCKED
     return State(player=target, box=landing), PUSH

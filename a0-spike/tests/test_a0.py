@@ -259,3 +259,76 @@ def test_the_lean_and_python_forms_are_the_same_world(report):
     assert cross["forms_agree"] is True
     assert cross["n_mismatches"] == 0
     assert cross["cases"] > 9000
+
+
+# ------------------------------------------- variant injection and adaptation
+
+@pytest.fixture(scope="module")
+def adaptation():
+    from pipeline import adapt
+    return {entry["variant"]: entry for entry in adapt.run_all()["variants"]}
+
+
+def test_every_variant_changes_exactly_one_rule():
+    from pipeline import adapt
+    from world.sokoban2 import BASE_RULES
+    for variant in adapt.VARIANTS:
+        differing = [
+            field for field in ("push_distance", "require_crossing_free",
+                                "walls_block_player")
+            if getattr(variant.rules, field) != getattr(BASE_RULES, field)
+        ]
+        assert len(differing) == 1, (variant.name, differing)
+
+
+def test_a_frequently_fired_rule_is_caught_almost_immediately(adaptation):
+    """`ghost` weakens walk, which fires constantly."""
+    assert adaptation["ghost"]["detection"]["actions_until_surprise"] <= 10
+
+
+def test_a_rare_guard_change_hides_completely_in_the_base_level(adaptation):
+    """`nocross` differs only where the crossed cell is blocked -- unreachable in `match`."""
+    assert adaptation["nocross"]["detection"]["detected"] is False
+
+
+def test_but_the_right_level_finds_it_quickly(adaptation):
+    """Detection latency is a property of where you look, not only of the change."""
+    across = adaptation["nocross"]["detection_across_levels"]
+    assert across["detected_anywhere"] is True
+    assert across["earliest"] <= 10
+    assert "match" in across["levels_that_never_notice"]
+
+
+def test_changing_the_push_rule_invalidates_the_theorem_that_depends_on_it(adaptation):
+    for name in ("push1", "push3", "nocross"):
+        assert adaptation[name]["invalidated_theorems"] == ["unsolvable_mismatch"]
+    assert adaptation["ghost"]["invalidated_theorems"] == []
+
+
+def test_one_variant_actually_flips_the_verdict(adaptation):
+    """push1 kills the conservation law and `mismatch` becomes solvable."""
+    entry = adaptation["push1"]
+    assert entry["conservation_law_still_true"] is False
+    assert entry["mismatch_still_unsolvable"] is False
+    assert entry["old_verdict_still_correct"] is False
+    assert entry["silently_wrong_without_dependency_tracking"] is True
+
+
+def test_dependency_tracking_is_what_catches_it(adaptation):
+    """Without [depends: push2] nothing would force the theorem to be re-examined."""
+    entry = adaptation["push1"]
+    assert entry["changed_rule"] == "push2"
+    assert "unsolvable_mismatch" in entry["invalidated_theorems"]
+
+
+def test_every_variant_repairs_to_an_exact_theory(adaptation):
+    for name, entry in adaptation.items():
+        assert entry["repair"]["replay_exact"] is True, name
+        assert entry["repair"]["exactly_one_successor"] is True, name
+
+
+def test_the_repaired_push_effect_matches_the_injected_change(adaptation):
+    assert set(adaptation["push1"]["repair"]["push_effects"]) == {
+        "(-1, 0)", "(1, 0)", "(0, -1)", "(0, 1)"}
+    assert set(adaptation["push3"]["repair"]["push_effects"]) == {
+        "(-3, 0)", "(3, 0)", "(0, -3)", "(0, 3)"}
