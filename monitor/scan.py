@@ -206,8 +206,84 @@ def probe_a1_state():
                       % ("已建" if bridge else "未建", "已接" if consumed else "**未接**")}
 
 
+TERRITORIES = ["engine-rig", "theory-compiler", "cold-start-a0", "cold-start-a2",
+               "a0-spike", "baseline-arms", "arc-recon", "proxy", "battery",
+               "monitor"]
+SHARED_OK = {"PARTNER_SYNC.md", "CONTRACTS", "README.md", "LICENSE",
+             ".gitignore", ".env.example", "CLAUDE.md", "Theoria.md"}
+
+
+def probe_conflicts():
+    """Multi-agent collaboration conflicts: markers, unmerged paths,
+    cross-territory commits. One shared working tree, many sessions."""
+    findings = []
+
+    # (a) conflict markers inside files
+    marker = re.compile(r"^(<{7} |={7}$|>{7} )", re.M)
+    marked = []
+    for base, dirs, files in os.walk(ROOT):
+        dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+        for name in files:
+            if not name.endswith((".py", ".md", ".json", ".jsonl", ".dsl",
+                                  ".lean", ".pddl", ".lark", ".toml", ".txt")):
+                continue
+            path = os.path.join(base, name)
+            try:
+                text = open(path, encoding="utf-8", errors="ignore").read()
+            except Exception:
+                continue
+            hits = marker.findall(text)
+            if len([h for h in hits if h.startswith("<")]) and \
+               len([h for h in hits if h.startswith(">")]):
+                marked.append(os.path.relpath(path, ROOT).replace("\\", "/"))
+    if marked:
+        findings.append("文件内有合并冲突标记：" + ", ".join(marked))
+
+    # (b) unmerged paths in the index
+    unmerged = git("ls-files", "-u")
+    if unmerged:
+        paths = sorted({line.split("\t")[-1] for line in unmerged.splitlines()})
+        findings.append("git 未合并路径：" + ", ".join(paths))
+
+    # (c) cross-territory commits: one commit spanning 2+ *owners*.
+    # a0-spike belongs to the engine-rig track and cold-start-a0 to the
+    # theory-compiler track (CLAUDE.md), so those pairs are one territory.
+    track_of = {"engine-rig": "engine-rig", "a0-spike": "engine-rig",
+                "theory-compiler": "theory-compiler",
+                "cold-start-a0": "theory-compiler"}
+    log = git("log", "--name-only", "--format=%h%x01%s", "-40")
+    cross = []
+    cur = None
+    touched = set()
+
+    def flush():
+        terrs = {track_of.get(t, t) for t in touched if t in TERRITORIES}
+        if cur and len(terrs) > 1:
+            cross.append("%s（%s）" % (cur, "+".join(sorted(terrs))))
+    for line in log.splitlines():
+        if "\x01" in line:
+            flush()
+            cur = line.replace("\x01", " ")[:64]
+            touched = set()
+        elif line.strip():
+            top = line.split("/")[0]
+            if top not in SHARED_OK:
+                touched.add(top)
+    flush()
+    if cross:
+        findings.append("跨领地提交（一个 commit 改了多个轨道 —— 领地纪律被破）：" +
+                        "； ".join(cross))
+
+    if not findings:
+        return {"status": "green",
+                "detail": "三类检查全空：无冲突标记、无未合并路径、"
+                          "近 40 个提交无跨领地改动。"}
+    return {"status": "risk", "detail": " ⚠ ".join(findings)}
+
+
 PROBES = {
     "credential_hygiene": probe_credential_hygiene,
+    "conflict_scan": probe_conflicts,
     "pile_integrity": probe_pile_integrity,
     "determinism_state": probe_determinism_state,
     "a0_state": probe_a0_state,
@@ -599,6 +675,16 @@ def render(state, refresh=None):
     A('<div class="trendbox">' + chart_trend(state["history"]) + '</div>')
     A('</section>')
 
+    # ---- multi-agent conflict scan (live, every run)
+    cf = state["probes"]["conflict_scan"]
+    A('<section><h2>多 agent 冲突扫描 <span class="note">— 每次运行重查：'
+      '冲突标记 / 未合并路径 / 跨领地提交</span></h2>')
+    A('<div class="conflict %s"><span class="pill %s">%s</span> %s</div>'
+      % (cf["status"], cf["status"],
+         "无冲突" if cf["status"] == "green" else "发现冲突",
+         md_bold(esc(cf["detail"]))))
+    A('</section>')
+
     # ---- findings first: this is the point of the monitor
     A('<section><h2>监视器发现 <span class="note">— 不在任何 incidents.jsonl 里，'
       '由本次对表产生</span></h2>')
@@ -900,6 +986,11 @@ td.num{width:38px;color:var(--mut);font-family:ui-monospace,monospace}
 :root[data-theme="dark"] .dot.t1{fill:#3987e5}
 :root[data-theme="dark"] .dot.t2{fill:#d95926}
 .dl{font:600 11.5px system-ui,sans-serif;fill:var(--fg)}
+
+.conflict{background:var(--card);border:1px solid var(--line);border-radius:8px;
+  padding:13px 16px;font-size:13.5px}
+.conflict.risk{border-left:4px solid var(--st-risk)}
+.conflict.green{border-left:4px solid var(--st-green);color:var(--mut)}
 
 .mainloop h2{border-bottom-width:2px;border-bottom-color:var(--fg)}
 .doctrine{background:var(--card);border-left:4px solid var(--fg);border-radius:6px;

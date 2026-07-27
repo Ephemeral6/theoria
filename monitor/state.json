@@ -109,7 +109,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 02:10:40",
+  "generated_at": "2026-07-28 02:16:27",
   "history": [
     {
       "findings": {
@@ -316,36 +316,44 @@
       "arc-recon/data/precheck.json",
       "arc-recon/data/recon_ledger.jsonl",
       "arc-recon/precheck.py",
-      "baseline-arms/DECISIONS.md",
-      "baseline-arms/INCIDENTS.md",
-      "baseline-arms/SCHEMA_LOCATE.md",
-      "baseline-arms/STATUS.md",
-      "baseline-arms/harness/bare_cc.py",
-      "baseline-arms/harness/run_pilot.py",
-      "baseline-arms/harness/summarise_pilot.py",
-      "battery/",
+      "cold-start-a0/BLOCKER_FAST_DOWNWARD.md",
+      "cold-start-a0/artifacts/unsolvable_report.json",
+      "cold-start-a0/certify/fd_conformance.py",
+      "cold-start-a0/compile/gen_pddl_a0.py",
+      "cold-start-a0/pipeline/plan_stage.py",
+      "cold-start-a0/prime/artifacts/prime_report.json",
+      "cold-start-a0/prime/theory/generated/domain.pddl",
+      "cold-start-a0/prime/theory/generated_seeded/domain.pddl",
+      "cold-start-a0/tests/test_followups.py",
+      "cold-start-a0/theory/generated/domain.pddl",
+      "cold-start-a0/theory/generated_no_button/domain.pddl",
+      "monitor/index.html",
+      "monitor/scan.py",
+      "monitor/state.json",
+      "theory-compiler/src/theory_compiler/parser/ast_nodes.py",
+      "theory-compiler/src/theory_compiler/parser/theory_parser.py",
+      "theory-compiler/tests/test_theory_parser.py",
+      "battery/metrics/",
+      "cold-start-a0/artifacts/fd_real.json",
+      "cold-start-a0/certify/fd_unsat.py",
       "cold-start-a2/",
-      "monitor/"
+      "proxy/"
     ],
     "engine_candidates": 24,
     "git_branch": "master",
-    "git_head": "27e0047 a0-spike: variant injection -- one rule changed, four times",
+    "git_head": "f18cf97 baseline-arms: check in the ledger, pilot outputs, and the HTTP probe log",
     "incidents": 5,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 25,
-    "sync_last": "2026-07-27T17:47:04Z",
+    "sync_entries": 29,
+    "sync_last": "2026-07-28T02:10:00Z",
     "tests": {},
     "untracked": [
-      "baseline-arms/INCIDENTS.md",
-      "baseline-arms/SCHEMA_LOCATE.md",
-      "baseline-arms/STATUS.md",
-      "baseline-arms/harness/bare_cc.py",
-      "baseline-arms/harness/run_pilot.py",
-      "baseline-arms/harness/summarise_pilot.py",
-      "battery/",
+      "battery/metrics/",
+      "cold-start-a0/artifacts/fd_real.json",
+      "cold-start-a0/certify/fd_unsat.py",
       "cold-start-a2/",
-      "monitor/"
+      "proxy/"
     ]
   },
   "p1_green": 2,
@@ -445,7 +453,7 @@
           "status": "partial"
         },
         {
-          "_note": "piles.json 哈希锁定，API 层封存堆零接触（本监视器每次复验请求体）。但 INC-BA-001 带来了 API 之外的口子：检索子代理读到了 9 局封存局的机制描述（ls20/ft09 实质），知识污染本检查构造上抓不到。F-11 已裁决（监控代行）：主张集缩至 19 局，ls20/ft09 隔离，轻微 7 局敏感性分析。  〔本次扫描：封存堆 21 局零接触（已核对 1570 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
+          "_note": "piles.json 哈希锁定，API 层封存堆零接触（本监视器每次复验请求体）。但 INC-BA-001 带来了 API 之外的口子：检索子代理读到了 9 局封存局的机制描述（ls20/ft09 实质），知识污染本检查构造上抓不到。F-11 已裁决（监控代行）：主张集缩至 19 局，ls20/ft09 隔离，轻微 7 局敏感性分析。  〔本次扫描：封存堆 21 局零接触（已核对 1697 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
           "_status": "risk",
           "clause": "Phase 1 · 一刀切堆",
           "id": "p1-cut",
@@ -465,7 +473,7 @@
           "status": "green"
         },
         {
-          "_note": "两半各自成立、尚未接通：engine-rig 的 LP 真解出了权重，theory-compiler 的 Lean 用的却是手算常量 + BFS 枚举。engine-rig/interop/certificate_export.py 正是那座桥，刚动工。  〔本次扫描：engine-rig 侧证书导出：已建；theory-compiler 侧消费：**未接**。两半接通前，A1 仍是彩排而非验收。〕",
+          "_note": "两半各自成立、尚未接通：engine-rig 的 LP 真解出了权重，theory-compiler 的 Lean 用的却是手算常量 + BFS 枚举。engine-rig/interop/certificate_export.py 正是那座桥，刚动工。  〔本次扫描：engine-rig 侧证书导出：已建；theory-compiler 侧消费：已接。两半接通前，A1 仍是彩排而非验收。〕",
           "_status": "partial",
           "clause": "Phase 1 · 三件离线验收",
           "id": "p1-a1",
@@ -692,8 +700,12 @@
       "status": "green"
     },
     "a1_state": {
-      "detail": "engine-rig 侧证书导出：已建；theory-compiler 侧消费：**未接**。两半接通前，A1 仍是彩排而非验收。",
+      "detail": "engine-rig 侧证书导出：已建；theory-compiler 侧消费：已接。两半接通前，A1 仍是彩排而非验收。",
       "status": "partial"
+    },
+    "conflict_scan": {
+      "detail": "跨领地提交（一个 commit 改了多个轨道 —— 领地纪律被破）：c5f93af Open-source the repository: add README and MIT LICENSE（arc-recon+theory-compiler）",
+      "status": "risk"
     },
     "credential_hygiene": {
       "detail": "密钥只出现在 .env（已 gitignore=True）；全仓 全部 个文件已扫描。",
@@ -704,7 +716,7 @@
       "status": "risk"
     },
     "pile_integrity": {
-      "detail": "封存堆 21 局零接触（已核对 1570 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
+      "detail": "封存堆 21 局零接触（已核对 1697 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
       "status": "green"
     }
   },
