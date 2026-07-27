@@ -37,3 +37,9 @@
 测试：pass 97/97，skip 1（FD 专用测试，装上即自动生效）。
 阻塞：无（FD 缺失已按工单允许的桩方案处理并记入 STATUS.md）。
 下一步：probe_frontier（M7）。
+
+## [engine-rig] 2026-07-27T11:26:01Z engine-rig-m7-probe
+状态：probe_frontier 完成——对手造场景（h_empty vs h_nonlethal，两者与既有证据全部一致，仅在"良性非空色"格局下分歧）计算各候选动作的划分熵，输出 UP / 1.000 bit，与手算一致，其余三个动作 0 bit。三假设情形给出 2-1 划分 0.918 bit，并可顺序戳探（观测 move 后剩两条，下一次探针再分 1 bit）。路径成本以 bits-per-cost 计入排序。probe 直接消费 cegis_miner 的前沿：D-002 里 free/in_bounds 的不可分辨，由一次进入"格内非空"格局的探针分开。
+测试：pass 116/116，skip 1。
+阻塞：无。
+下一步：M8 集成与 schema 校验。

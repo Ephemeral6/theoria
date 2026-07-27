@@ -13,7 +13,7 @@ appends a paragraph to `/PARTNER_SYNC.md`.
 | `engine-rig-m4-zerospace` | `zero_space` | done |
 | `engine-rig-m5-lp` | `lp_potential` | done |
 | `engine-rig-m6-fd` | `fd_adapter` | done (stub backend — see below) |
-| `engine-rig-m7-probe` | `probe_frontier` | pending |
+| `engine-rig-m7-probe` | `probe_frontier` | done |
 | `engine-rig-m8-integration` | all six engines + schema validator | pending |
 
 ## Blockers
