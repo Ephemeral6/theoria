@@ -82,6 +82,46 @@ state?), rate limits and action quota, and the determinism precheck — a fixed
 action sequence replayed twice with frame hashes compared. All of these are now
 runnable on `g50t-5849a774` alone.
 
+## INC-002 — no action can be executed (blocking)
+
+The determinism precheck **did not pass. It could not complete.**
+
+| | attempts | succeeded |
+|---|---|---|
+| `RESET` on g50t | 48 | 4 |
+| `ACTION*` on g50t | 8 | **0** |
+
+RESET succeeds intermittently; every ACTION issued immediately afterwards returns
+`400 game g50t-5849a774 not found`. The game becomes unavailable between the RESET
+and the very next call.
+
+Ruled out, each by direct test:
+
+* **request shape** — four body variants tried inside one availability window
+  (`{game,card,guid}`, `{game,guid}`, `{game,guid,data}`,
+  `{game,card,guid,data,reasoning}`); all four failed identically;
+* **stale session** — ACTION with the live `guid` fails the same way, and the
+  error keys on `game_id`, not on the session;
+* **unclosed scorecards** — closing them changed nothing.
+
+This blocks the whole live-API programme, not just the precheck: with zero
+successful actions there is no trajectory, no ledger, and nothing for the arms
+to run against.
+
+**What did work.** Two independent RESETs returned the *identical* initial-frame
+hash `801726dc499f3f52`. So the initial state is reproducible across sessions and
+there is no cross-session residue — one real determinism data point, at the level
+of the opening frame only.
+
+## INC-003 — the first precheck reported a false PASS
+
+Worth recording against my own work: `compare()` originally treated steps with no
+hash as agreeing, so two runs that had *both* died on ACTION1 compared as
+identical and the verdict read `deterministic: true`. A precheck that cannot fail
+is not a check. Fixed — a hash counts only when present on both sides, and PASS
+additionally requires the full sequence to have run. Re-scoring the same data
+(no new API calls) now yields `INCOMPLETE`, 2 of 21 steps, 1 usable hash.
+
 ## The pile cut
 
 `data/piles.json`, sha256 `3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a`.
