@@ -200,7 +200,13 @@ def reset_with_retry(client: arc_client.ArcClient, game_id: str, card_id: str,
 def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
          client: Optional[arc_client.ArcClient] = None,
          action_retries: int = 8, model_retries: int = 3,
+         cost_ceiling: Optional[float] = None, on_step=None,
          verbose: bool = True) -> Dict[str, Any]:
+    """`cost_ceiling` aborts mid-episode. This matters: the full run gives one
+    episode a budget of up to 1070 actions, so a ceiling checked only between
+    episodes would not be checked for eleven hours. `on_step(summary)` is
+    called after every step so the caller can checkpoint at the same cadence.
+    """
     """One episode: one game, one model. Returns the run summary."""
     client = client or arc_client.ArcClient()
     client.assert_playable(game_id)                     # fails closed on sealed
@@ -252,6 +258,9 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
 
     try:
         for step_idx in range(1, budget + 1):
+            if cost_ceiling is not None and summary["cost_usd"] >= cost_ceiling:
+                summary["outcome"] = "spend_ceiling_hit"
+                break
             prompt = build_prompt(frame, available, history,
                                   summary["levels_completed"],
                                   summary["win_levels"] or 0,
@@ -358,6 +367,9 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
                 print("  step %-3d ACTION %-2s tries=%d lv=%d/%s %s%s"
                       % (step_idx, action_id, tries, summary["levels_completed"],
                          summary["win_levels"], change[:60], gained))
+
+            if on_step is not None:
+                on_step(summary)
 
             if rb.get("state") in ("WIN", "GAME_OVER"):
                 summary["outcome"] = rb["state"].lower()

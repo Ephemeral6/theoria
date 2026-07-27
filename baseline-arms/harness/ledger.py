@@ -16,14 +16,15 @@ in this module, only `append`.
 
 import json
 import os
+import threading
 import time
 from typing import Any, Dict
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TRACK = os.path.dirname(HERE)
 
-LEDGER_PATH = os.path.join(TRACK, "ledger.jsonl")
-PROBE_PATH = os.path.join(TRACK, "probe_log.jsonl")
+SHARD_DIR = os.path.join(TRACK, "out", "shards")
+SHARD_ENV = "BASELINE_ARMS_SHARD"
 
 ARMS = ("bare_cc", "schema_repro")
 
@@ -32,11 +33,41 @@ def utcnow() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
 
 
+def _resolve(basename: str) -> str:
+    """Where this process writes.
+
+    The full run puts one *process* per game, all appending to one file. A
+    single env_step carrying a 64x64 frame is tens of kilobytes -- many times
+    what any OS appends atomically -- so concurrent writers will eventually
+    interleave mid-record, and an append-only ledger cannot be repaired
+    afterwards. A lock does not help: these are separate processes.
+
+    So each writer gets its own shard, and `merge_ledger.py` concatenates the
+    shards in timestamp order. Sharding preserves append-only (nothing is ever
+    rewritten) while making interleaving structurally impossible.
+    Unsharded callers -- single-process runs, tests -- keep the plain path.
+    """
+    shard = os.environ.get(SHARD_ENV)
+    if not shard:
+        return os.path.join(TRACK, basename)
+    stem, ext = os.path.splitext(basename)
+    return os.path.join(SHARD_DIR, "%s.%s%s" % (stem, shard, ext))
+
+
+LEDGER_PATH = _resolve("ledger.jsonl")
+PROBE_PATH = _resolve("probe_log.jsonl")
+
+_WRITE_LOCK = threading.Lock()
+
+
 def _append(path: str, entry: Dict[str, Any]) -> None:
+    # Serialise fully before opening, and hold the lock across the write, so a
+    # threaded caller inside one process cannot interleave either.
+    line = json.dumps(entry, sort_keys=True, ensure_ascii=True) + "\n"
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
-    with open(path, "a", encoding="utf-8", newline="") as fh:
-        fh.write(json.dumps(entry, sort_keys=True, ensure_ascii=True))
-        fh.write("\n")
+    with _WRITE_LOCK:
+        with open(path, "a", encoding="utf-8", newline="") as fh:
+            fh.write(line)
 
 
 def env_step(game_id: str, run_id: str, arm: str, model: str, action: Any,
