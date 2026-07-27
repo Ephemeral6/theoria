@@ -213,3 +213,39 @@ canonicalisation the world-level content of the space is a single law, and the
 acceptance criterion becomes a subspace identity: `span(recovered) ==
 span(cell-local laws + {target})` — satisfied by any equivalent linear
 expression, including `(#Blue) mod 2`, and refused for an unrelated vector.
+
+---
+
+## D-013 · The LP minimises weight magnitude; the margin-maximising variant is rejected
+
+**Context.** The certificate LP has many feasible vertices, and which one is
+returned changes how sharp the derived heuristic is. An obvious alternative is
+to normalise the largest single-move drop to 1 and maximise the certificate
+margin.
+
+**Decision.** Keep feasibility with a fixed margin >= 1 and an L1 objective on
+the weights.
+
+**Why.** The margin-maximising variant is feasible with the all-zero weight
+vector at margin zero, so it returns a "certificate" for solvable configurations
+too — it destroys the property that infeasibility means "no such proof exists".
+Soundness is worth more than sharpness here: with the chosen formulation, the
+only configurations that receive a certificate are the ones the enumeration
+independently confirms are unsolvable, and 1101 (solvable) correctly gets none.
+Tried empirically on Fixture C: the margin-maximising LP returns w = 0 for both
+1101 and 0111.
+
+---
+
+## D-014 · Pagoda incompleteness is asserted by a test, not hidden
+
+**Context.** Fixture C's configuration 0111 is unsolvable, and no linear
+potential function proves it.
+
+**Decision.** A test asserts exactly that: `0111` is unsolvable *and*
+`solve_certificate` returns None for it.
+
+**Why.** The method is sound but incomplete, and the incompleteness is a real
+property of linear pagodas, not a bug to be quietly tuned around. Writing it as
+a test means a future change that appears to "fix" it is forced to explain
+itself.
