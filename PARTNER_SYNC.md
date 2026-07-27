@@ -19,3 +19,9 @@
 测试：pass 50/50（fixtures 17 + mdl 14 + cegis 19）。
 阻塞：无。
 下一步：zero_space（M4）。
+
+## [engine-rig] 2026-07-27T11:12:26Z engine-rig-m4-zerospace
+状态：zero_space 完成——(cell,colour) 指示特征 16 位，对状态差分在 GF(2) 上求零空间（差分秩 7，零空间维 9），规范化后得 8 条编码律 + 唯一一条世界律 (#R) mod 2 = 0，与地面真值一致。等价性用子空间恒等式判定（(#Blue) mod 2 亦通过），非字符串匹配。
+测试：pass 65/65（+ zero_space 15）。
+阻塞：无。
+下一步：lp_potential（M5）。

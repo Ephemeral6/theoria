@@ -191,3 +191,25 @@ also prices the teleport honestly: 19 bits against a unit move's 9, i.e. the
 rare long jump is the expensive thing to describe, which is exactly why it is
 the informative one. Caught by the two-identical-blocks test, not by the Cart
 fixture, which has only one object.
+
+---
+
+## D-012 · zero_space encodes (cell, colour) indicators, and canonicalises the basis
+
+**Context.** The engine could be handed a "red count" feature directly, which
+would make recovering `(#Red) mod 2` nearly vacuous.
+
+**Decision.** The state is encoded as one indicator per (cell, colour) pair — 16
+anonymous bits for Fixture B — and the recovered null space is then split into
+*cell-local* laws (support inside one cell's feature group: "this cell holds
+exactly one colour", i.e. facts about the encoding) and *global* laws (what is
+left after quotienting those out).
+
+**Why.** Feeding the engine the abstraction it is supposed to discover would be
+testing nothing. The split is needed because the null space basis that falls out
+of the elimination depends on which columns happen to be free, and left alone it
+reports laws like `B@0+...+R@7` that are correct but unreadable. After
+canonicalisation the world-level content of the space is a single law, and the
+acceptance criterion becomes a subspace identity: `span(recovered) ==
+span(cell-local laws + {target})` — satisfied by any equivalent linear
+expression, including `(#Blue) mod 2`, and refused for an unrelated vector.
