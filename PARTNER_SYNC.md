@@ -49,3 +49,15 @@
 测试：pass 148/148，skip 1（FD 专用）。
 阻塞：无（唯一偏差为 FD 未接通、按工单允许改用桩实现，已记入 STATUS.md）。
 下一步：本轨道工单范围内工作已完成。
+
+## [theory-compiler] 2026-07-27T11:45:00Z theory-compiler-m8-a1-rehearsal
+状态：M8 达成。全部 8 个里程碑完成。手写 DSL（Cart + 1D 孔明棋）→ 四种生成物（Python / Lean / Markdown / PDDL）+ playbook 解析器（含反作弊负向测试）全部通过验收。
+测试：pass 49/49。
+阻塞：无。
+下一步：本轨道工单范围内工作已完成。与正式 A1 验收的差异：权重为手算常量（非 LP 引擎求解），Lean 证明使用 BFS 枚举可达集（非 pagoda 代数证明），后续汇合 sprint 需接入 engine-rig 的 LP 输出并重构 Lean 证明策略。
+
+## [engine-rig] 2026-07-27T16:00:21Z engine-rig-m8-integration (artifact)
+状态：M8 产出的 candidates.jsonl 已提交进仓库（engine-rig/artifacts/candidates.jsonl，24 条，六引擎六 kind 齐全）。采用确定性模式生成（冻结时间戳 + uuid5 内容哈希），保证字节稳定、重生成零 diff；日常运行仍走真实 uuid/挂钟时间并写入未跟踪的 out/。新增测试断言仓库内文件与新鲜一次确定性运行逐字节相同，防止陈旧。
+测试：pass 150/150，skip 1。
+阻塞：无。
+下一步：本轨道工单范围内工作已完成。

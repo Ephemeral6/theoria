@@ -28,6 +28,10 @@ from tools.validate_candidates import validate_file
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_OUT = os.path.join(HERE, "out", "candidates.jsonl")
+
+# The reference stream checked into the repository. Regenerate with:
+#   python -m tools.run_all --out artifacts/candidates.jsonl --deterministic --force
+ARTIFACT_PATH = os.path.join(HERE, "artifacts", "candidates.jsonl")
 FIXED_TIME = "2026-07-27T00:00:00Z"
 
 UNSOLVABLE_CONFIG = "1110"

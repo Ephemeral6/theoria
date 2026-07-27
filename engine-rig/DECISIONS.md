@@ -251,3 +251,24 @@ potential function proves it.
 property of linear pagodas, not a bug to be quietly tuned around. Writing it as
 a test means a future change that appears to "fix" it is forced to explain
 itself.
+
+---
+
+## D-015 · The committed candidates.jsonl is the deterministic-mode run
+
+**Context.** M8's candidate stream is checked into the repository at
+`engine-rig/artifacts/candidates.jsonl`. The contract mandates a uuid `id` and a
+wall-clock ISO8601 `timestamp` per candidate, both of which change on every run.
+
+**Decision.** The committed copy is generated with `--deterministic` (frozen
+timestamp, uuid5 over each candidate's content hash, per D-004). Ordinary runs
+still default to real uuids and wall-clock time and write to untracked `out/`.
+A test asserts the committed file is byte-identical to a fresh deterministic run.
+
+**Why.** A committed artefact regenerated with wall-clock timestamps produces a
+24-line diff every time anyone runs the engines, which makes it useless as a
+reference: nobody could tell an incidental re-run from a real change in engine
+output. Freezing the two non-substantive fields makes the file diff only when the
+engines actually propose something different, and the byte-equality test stops it
+going stale. The default emission path is untouched, so the contract is still
+honoured literally in normal operation.

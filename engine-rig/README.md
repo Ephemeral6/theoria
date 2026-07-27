@@ -67,8 +67,23 @@ engine-rig integration run
 Validate any candidate stream on its own:
 
 ```bash
-cd engine-rig && python -m tools.validate_candidates out/candidates.jsonl
+cd engine-rig && python -m tools.validate_candidates artifacts/candidates.jsonl
 ```
+
+## The checked-in candidate stream
+
+[`artifacts/candidates.jsonl`](artifacts/candidates.jsonl) is the M8 output,
+committed: 24 proposals, all six engines, all six candidate kinds. It is produced
+in deterministic mode (frozen timestamps, uuid5 over each candidate's content) so
+that it is byte-stable and regenerating it produces no diff:
+
+```bash
+cd engine-rig && python -m tools.run_all --out artifacts/candidates.jsonl --deterministic --force
+```
+
+A test asserts the committed file equals a fresh run byte-for-byte, so it cannot
+go stale silently. `out/` stays untracked scratch for ordinary runs, which use
+real uuids and wall-clock timestamps exactly as the contract reads.
 
 ## The three synthetic worlds
 

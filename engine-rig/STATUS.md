@@ -18,11 +18,12 @@ appends a paragraph to `/PARTNER_SYNC.md`.
 
 All eight milestones are reached. `python -m tools.run_all --force` runs the six
 engines end to end and emits 24 candidates, every line of which passes the frozen
-schema validator.
+schema validator. That stream is committed at `artifacts/candidates.jsonl`
+(deterministic mode, so it is byte-stable and cannot drift unnoticed).
 
 ## Test suite
 
-148 passed, 1 skipped (`test_fast_downward_agrees_with_the_stub`, which starts
+150 passed, 1 skipped (`test_fast_downward_agrees_with_the_stub`, which starts
 running the moment a Fast Downward executable is reachable).
 
 ## Blockers

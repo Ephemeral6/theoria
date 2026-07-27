@@ -151,6 +151,23 @@ def test_deterministic_runs_are_byte_identical(tmp_path):
         assert fh_a.read() == fh_b.read()
 
 
+def test_the_checked_in_artifact_matches_a_fresh_deterministic_run(tmp_path):
+    """The committed candidates.jsonl is exactly what the engines produce now."""
+    fresh = str(tmp_path / "fresh.jsonl")
+    runner.run_all(out_path=fresh, deterministic=True)
+    with open(runner.ARTIFACT_PATH, "rb") as committed, open(fresh, "rb") as regenerated:
+        assert committed.read() == regenerated.read(), (
+            "artifacts/candidates.jsonl is stale -- regenerate it with "
+            "python -m tools.run_all --out artifacts/candidates.jsonl "
+            "--deterministic --force"
+        )
+
+
+def test_the_checked_in_artifact_passes_the_schema_validator():
+    assert validate_file(runner.ARTIFACT_PATH) == []
+    assert len(read_jsonl(runner.ARTIFACT_PATH)) == 24
+
+
 def test_deterministic_ids_are_still_distinct(full_run):
     _, out = full_run
     ids = [row["id"] for row in read_jsonl(out)]
