@@ -1,0 +1,19 @@
+{
+  "name": "countlock-3",
+  "grid": [3, 5],
+  "background": 0,
+  "board": [
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0]
+  ],
+  "objects": [
+    {"name": "Agent", "type": "Agent", "pos": [0, 0], "color": 6},
+    {"name": "T1", "type": "Token", "pos": [0, 2], "color": 2, "present": true},
+    {"name": "T2", "type": "Token", "pos": [1, 2], "color": 2, "present": true},
+    {"name": "T3", "type": "Token", "pos": [2, 2], "color": 2, "present": true},
+    {"name": "Gate", "type": "Gate", "pos": [1, 3], "color": 3, "present": true}
+  ],
+  "landmarks": {"exit": [1, 4]},
+  "arena": [[0,0],[0,1],[0,2],[0,3],[0,4],[1,0],[1,1],[1,2],[1,3],[1,4],[2,0],[2,1],[2,2],[2,3],[2,4]]
+}

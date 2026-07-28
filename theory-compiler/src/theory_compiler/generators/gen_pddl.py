@@ -196,6 +196,41 @@ def _rule_to_action(rule: RuleDecl, obj_types: list) -> str:
     return "\n".join(lines)
 
 
+def _refuse_count(expr) -> None:
+    """A counting guard has no STRIPS encoding in this subset — say so.
+
+    E-08 added `count(<Type>, <field> = <value>) >= k` to the guard language.
+    `:strips :typing` has no numeric fluent and no aggregate, so the condition
+    can only be encoded by inventing a chain of `collected-1`/`collected-2`/…
+    predicates and threading them through every rule that consumes a token.
+    That encoding may be worth building; **silently dropping the clause is not
+    the same thing**, and dropping is what this backend did — it emitted a
+    domain whose gate opens unconditionally and reported success.
+
+    `_extract_pred_pddl` has no else-branch, so anything it does not recognise
+    falls out of the precondition without a word. That is a wider defect than
+    this one clause (D-TC-031 records two more instances of it); refusing here
+    fixes the case E-08 creates rather than pretending the rest is fine.
+    """
+    stack = [expr]
+    while stack:
+        node = stack.pop()
+        if isinstance(node, FuncCall) and node.name == "count":
+            raise UnsupportedClause(
+                "a counting guard (`count(...)`) has no encoding in this "
+                "STRIPS subset: `:strips :typing` has no numeric fluent, and "
+                "the condition would have to become a chain of threshold "
+                "predicates threaded through every rule that changes the "
+                "count. Refusing rather than dropping the precondition — a "
+                "dropped one yields a domain whose gate opens unconditionally "
+                "(expressivity ledger E-08).")
+        for attr in ("left", "right", "expr"):
+            child = getattr(node, attr, None)
+            if child is not None:
+                stack.append(child)
+        stack.extend(getattr(node, "args", []) or [])
+
+
 def _guard_to_pddl(guard, obj_types: list) -> tuple:
     """Convert guard to (params_dict, precondition_list)."""
     params = {}
@@ -218,6 +253,7 @@ def _guard_to_pddl(guard, obj_types: list) -> tuple:
                     params[pname] = ptype
         elif isinstance(clause, GuardPredicate):
             expr = clause.expr
+            _refuse_count(expr)
             _extract_pred_pddl(expr, params, preconds, obj_types)
 
     # If we found object params but no cell params, add position

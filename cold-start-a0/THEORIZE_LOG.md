@@ -361,9 +361,64 @@ Things the world said that `dsl_grammar_v0.1` cannot.
 | E-05 | a weight function over cells for a pagoda invariant | the vector lives in the problem instance (M5) | same as E-04 |
 | E-06 | a proof method for goals no linear pagoda covers | **discharged** — the certificate covers what it covers, exhaustion closes the rest, each goal attributed to its method | see below |
 | E-07 | saying that two live instances of one type never share a cell | **discharged** — `unique` on a field (`dsl_grammar_v0.2` revision item 12) | see below |
+| E-08 | a guard that counts (`count(Token, present = false) >= k`) — the count-lock gate | **discharged** — one rung, in the guard language; see below | the rung below it is a quantifier and it is deliberately not taken |
 
 E-03 is the one to fix first: a manual whose default behaviour is a comment is
 not a manual.
+
+### E-08, in full — the widening, and the world that did *not* force it
+
+**What was wanted.** `worldgen`'s `t2-lock-fragile` has a gate that becomes
+passable once three tokens have been picked up, and picking a token up only makes
+it stop being drawn. A manual for that world has to write
+
+    rule gate_opens
+      when act=open(Gate) and count(Token, present = false) >= 3 then vanished(Gate)
+
+and under v0.3 it could not. Not for the reason one would guess: `>=` was already
+legal in a guard, and so was the shape of the call. `count` was implemented
+**once, inline in the goal compiler, reachable only under `=`**, and a guard that
+mentioned it reached `unknown predicate 'count'`. The widening is therefore
+mostly a lifting: one `_count_expr`, shared by the goal and the guard, so that a
+manual cannot count one way when it predicts and another way when it decides it
+has won.
+
+**One rung, and the rung is named.** The condition is a single
+`<field> = <value>` test over the declared instances of one type. No quantifier,
+no nested count, no counting of cells. Each of those is refused with its own
+message and each refusal has a test. A `forall` is the next rung and it needs its
+own forcing world; C9's work order says so and this entry is the reason to hold
+to it.
+
+**A correction the lifting exposed.** `count(<Type>)` with no condition used to
+compile to a literal `1` per declared instance — a constant. So `count(Door)`
+stayed 1 after the Door vanished, and the A0 manual's own `door_latch` invariant
+(`count(Button, 8) + count(Door) = 1`) is false as written on any state where the
+Door is gone. Nothing caught it because invariants are never compiled and no
+shipped **goal** exercised a vanish. It now counts present instances.
+
+**The world that forced this is not the world it fixes, and that is the point of
+having a ledger.** The upstream report
+(`monitor/inbox/archive/20260728T093000Z-W-1610-…`) and the C9 work order both
+concluded that `t2-lock-fragile` fails to mine because the relational vocabulary
+cannot count. Measured before building on it: a counting atom separates **zero**
+of the 276 transition pairs the miner is stuck on, and the argument closes rather
+than merely failing — a colour-cardinality atom is a function of the frame's
+colour histogram, and all 276 stuck pairs have identical histograms. The real
+cause is that `multi_miner.mover_track` selects a *token* as the mover on any
+world with consumables, because the segmenter hands the agent's identity to a
+vanishing object; every positional atom is then anchored on something that never
+moves. Evidence and four standalone probes:
+`theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary/FINDING_premise.md`.
+
+So this entry's provenance is the **grammar**, not the miner: a hand-written
+manual for a count-lock world cannot state its own gate rule, which is true
+whatever any engine can propose, and is checked by
+`theory-compiler/tests/fixtures/countlock_theory.dsl` compiling and predicting
+the threshold correctly at 0, 1, 2 and 3 tokens. The miner's counting atom ships
+alongside it with its measured benefit recorded as **zero on the only world that
+asked for it** — see that run's `RUN_STATE.md`, which is where a widening that
+did not pay belongs rather than in a footnote.
 
 ### E-06, in full — one proposition, two methods
 
