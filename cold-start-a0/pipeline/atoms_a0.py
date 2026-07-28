@@ -87,9 +87,12 @@ _RANK = {
 #: Nine kinds need four bits.  The widening adds one bit to *every* atom, which
 #: is uniform and therefore leaves the ordering between equal-length guards
 #: alone, but does tilt the choice between a short guard and a long one very
-#: slightly further toward the short one.  That it changes nothing on the four
-#: manuals already in the tree is measured, not assumed — see
-#: `tests/test_atoms_count.py::test_existing_worlds_mine_identically`.
+#: slightly further toward the short one — so whether it moved anything was
+#: measured rather than argued.  Re-running `cold-start-a0/run_all.py` changes
+#: `artifacts/candidates.jsonl` in exactly one field: `guard_cost_bits`, 16 → 18
+#: on the 23 `rule_hypothesis` rows (two atoms per guard, one bit each).  Zero
+#: guards differ, no row is added or dropped, and `candidates_no_button.jsonl`
+#: moves the same way.  The diff is in this commit and is the evidence.
 _KIND_BITS = 4
 _NEG_BITS = 1
 _DIR_BITS = 2
