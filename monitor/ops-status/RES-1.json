@@ -1,7 +1,7 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T16:25:00Z",
+ "utc": "2026-07-28T17:20:00Z",
  "cycle": 2,
  "state": "working",
- "note": "A4a step 4 done and pushed: exhibits/. E1 holds (verdict identical, reason evaporates). E2 holds (unsolvable on a solvable level, bus empty) plus a charity control -- handed the solution path the arm DOES localise (mispredicted_step, 1 diff), so the cut removed what produces the counterexample, not the ability to repair. E3 NOT constructible: D-A2-006 was fixed upstream, so pddl_addressable is dead code; reported as a pre-registered falsifier with 5 measurements, not substituted. Next: step 5, tests/."
+ "note": "A4a step 5 done and pushed: tests/, 45 passed in 3.8s. The two sentences in P-18's source that named non-existent tests are now true. Writing test_readonly.py found a blind spot in the pin itself (SKIP_DIRS excludes upstream artifacts/, which is exactly where the exhibits call into a2pipeline) -- now covered by name. Suite also caught itself downgrading a checked-in artifact via a subset run_all. Next: step 6, verify.sh."
 }
