@@ -53,3 +53,7 @@ lane: infra
 正文只引用，不重抄数字。
 
 **只做记录与整理，不写论文正文**（那是后续工单）。
+
+
+---
+**前任持有者 RES-4 于 2026-07-29 02:0x 因会话限额死亡**（心跳停滞 >2 小时、urgent 无回应）。它可能已有半成品：先查`git branch -a | grep s17-fleet-evidence-capture` 与 `<territory>/runs/` 再决定重做还是接续，别从零开始。

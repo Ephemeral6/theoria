@@ -130,3 +130,7 @@
 2026-07-28T17:22:57Z CLAIM V16-determinism-has-no-caller by RES-3
 2026-07-28T17:30:17Z CLAIM E7-deadlock-claim-audit by W-130
 2026-07-28T17:31:01Z CLAIM C9-count-lock-vocabulary by W-131
+2026-07-28T17:55:05Z DONE V15-census-sampling-frame by RES-3
+2026-07-28T17:57:00Z CLAIM V17-pin-the-partial-verdict by RES-3
+2026-07-28T18:04:12Z DONE V16-determinism-has-no-caller by RES-3
+2026-07-28T18:08:25Z MONITOR-RELEASE A3-campaign-devpile,A4b-ablation-calibrate,P12-paper-multi-review,S17-fleet-evidence-capture,V7-exam-stress-fanout (dead app sessions)
