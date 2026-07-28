@@ -1,0 +1,28 @@
+A4: preserve P-18's orphaned ablation arm and record its true state
+
+P-18's `ablation-arm/` was uncommitted in `.worktrees/wt-p18/` and on no
+branch -- the second orphan found today, after P-21's `figures/`. Preserved
+here verbatim so it stops being at risk of silent loss. DESIGN.md, ablcore/
+and runs/ are P-18's work byte for byte; STATUS.md is the only new file.
+
+A4-ablation-online is being RELEASED back to the board unstarted. Its stated
+precondition -- "after P-18's ablation arm's offline calibration is complete"
+-- does not hold, and the board item records `deps: none`.
+
+Verified offline, zero cost: all eight ablcore modules import cleanly against
+upstream, so the library is wired correctly. It has simply never been driven.
+Missing: worlds/, exhibits/ (including the A2 false-theorem exhibit the ticket
+is about), theory/, tests/, verify.sh, artifacts/, and any driver composing
+the beats into a loop. Zero of the seven pre-registered predictions have been
+evaluated. By DESIGN.md section 12's own gate the arm is not finished.
+
+Three source files claim `tests/` exists; it does not. Left uncorrected --
+editing P-18's code would misrepresent what P-18 wrote -- and recorded in
+STATUS.md instead.
+
+One blocker belongs to the proxy track: `theoria_ablate` is not in
+proxy/ledger.py ARMS, so a ledger written under that name constructs without
+complaint and then fails validate_ledger.py on every line with `unknown_arm`.
+Silent at write time, loud later -- the worst ordering.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>
