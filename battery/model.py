@@ -49,6 +49,11 @@ class Step:
     n_frames: Optional[int] = None   # frames the environment returned
     level: Optional[int] = None
     won: bool = False
+    # HTTP attempts the harness burned to produce this one logged step.  The
+    # retry loop is collapsed into a single ledger row, so without this the
+    # infrastructure's real cost is invisible: a step with `http_tries=8` cost
+    # eight round trips and looks identical to one that cost one.
+    http_tries: Optional[int] = None
 
 
 @dataclass(frozen=True)
@@ -64,6 +69,26 @@ class Call:
     cost_usd: Optional[float] = None
     duration_ms: Optional[int] = None
     is_error: bool = False
+    # What the harness actually assembled and sent.  Kept because on a
+    # one-shot-CLI arm the *token* context is constant by construction -- a
+    # fresh process per turn re-reads the same fixed system prompt -- while the
+    # growing history rides in the prompt body and shows up nowhere else.  E4
+    # reads the token axis and finds nothing; E7 reads this one.
+    prompt_chars: Optional[int] = None
+    # Retry ordinal, and the decision this call belongs to.
+    #
+    # These are not the same axis and conflating them was a real defect in v0.
+    # `bare_cc` writes one row per *attempt*: step 7 of one pilot run carries
+    # three rows with three different token counts and three different prices,
+    # because the model was invoked three times and billed three times.  So
+    # summing cost over rows is correct -- nothing is double-counted, the money
+    # was really spent.  But the economy family's shape metrics are defined per
+    # *turn*, and three attempts at one step are one decision, not three.  v0
+    # had only the row axis, so a run that retried looked like a run that
+    # deliberated more.  `turn` is that second axis, and it is the battery's
+    # answer to `INPUT_FORMAT.md` gap 5 until the ledger carries one natively.
+    attempt: Optional[int] = None
+    turn: Optional[int] = None
 
     @property
     def context_tokens(self) -> int:
@@ -120,6 +145,96 @@ class Theory:
     replay_agree: Optional[int] = None
     held_out_pairs: Optional[int] = None
     held_out_agree: Optional[int] = None
+    # **How the held-out set was drawn.**  Two arms in this repository both
+    # report a "held-out accuracy" and they do not mean the same thing: A0's
+    # denominator is the 3 state-action pairs its trace happened never to
+    # cover, while a0-spike's is an exhaustive enumeration of all 39960
+    # well-formed (state, direction) pairs.  A ratio over 3 adversarially
+    # chosen gaps and a ratio over every case in the world are not comparable,
+    # and reporting both as `K2` without this field would invite exactly that
+    # comparison.  Free text, surfaced in K2's support and in the report.
+    held_out_frame: Optional[str] = None
+
+
+@dataclass(frozen=True)
+class Beat:
+    """One beat of the repair loop.
+
+    `Theoria.md` Phase 1's A2 acceptance names six, in order:
+    打脸 → 定位 → 戳探 → 修订 → 重证 → 解出 (refute, locate, probe, revise,
+    re-prove, solve).  A loop that stops at 修订 has not repaired anything it
+    can defend; the ordering is the content of the metric.
+
+    **`env_actions` is derived, not recorded.**  No producer in the repository
+    writes a per-beat cost, so the adapter computes it from the beat's own
+    evidence (an episode length, a trace that grew).  Beats that consume no
+    environment actions honestly report zero -- localisation and re-proof are
+    offline work -- and a zero here means "cost nothing in the environment",
+    not "did not happen"; `closed` carries that.
+    """
+
+    tag: str                    # L1..L6
+    name: str                   # "打脸 · refutation"
+    closed: bool
+    env_actions: int = 0        # environment actions this beat consumed
+    note: str = ""
+
+
+@dataclass
+class Repair:
+    """One 打脸→修复 episode: the world contradicted the manual, and then what.
+
+    This is U4's raw material — `Theoria.md` 1.11, *被打脸后修得好吗* — and U4
+    is explicitly 排座次, an ordering, and 不当证据, not evidence.  Nothing
+    computed from this structure may be cited in support of a claim.
+
+    Two shapes of repair exist in the repository and they are not comparable
+    without saying which is which, so `strategy` is mandatory in practice:
+
+    * `patch`   — locate the culprit clause, probe it, rewrite it (A2)
+    * `rebuild` — re-mine the whole world from fresh evidence (a0-spike)
+
+    A patch that costs a fifth of a rebuild has not proven the arm is better;
+    it has proven that patching is cheaper than rebuilding, which was never in
+    doubt.  `battery/PREDICTIONS.md` registers that confound rather than
+    letting the ratio be read as an arm ranking.
+    """
+
+    episode_id: str
+    trigger: str = ""                 # what refuted the manual
+    strategy: str = "unknown"         # patch | rebuild | unknown
+    changed_clause: Optional[str] = None
+    # Did the manual notice, and after how many actions?  `detected=False` with
+    # a non-None `actions_examined` is the interesting case: the change never
+    # fired differently in the evidence held, so a perfectly replaying manual
+    # was silently wrong.
+    detected: bool = False
+    detection_actions: Optional[int] = None
+    actions_examined: Optional[int] = None
+    beats: List[Beat] = field(default_factory=list)
+    beats_required: int = 6
+    # Environment actions spent repairing, against the actions the original
+    # theory cost.  The ratio is the metric; both halves are kept so a reader
+    # can see which one moved.
+    repair_actions: Optional[int] = None
+    baseline_actions: Optional[int] = None
+    # Downstream damage.  A repair that invalidates nothing is a theory whose
+    # theorems were not load-bearing, so this is a diagnostic, not a penalty.
+    invalidated_theorems: int = 0
+    theorems_before: int = 0
+    # Would this repair have left a theorem standing that is now false of the
+    # world, if nobody had tracked the dependency?  This is the number that
+    # says what dependency tracking is *for*.
+    silently_wrong_without_tracking: bool = False
+    notes: Dict[str, Any] = field(default_factory=dict)
+
+    @property
+    def beats_closed(self) -> int:
+        return sum(1 for b in self.beats if b.closed)
+
+    @property
+    def env_actions(self) -> int:
+        return sum(b.env_actions for b in self.beats)
 
 
 @dataclass
@@ -148,15 +263,42 @@ class Run:
     model: Optional[str] = None
     game_id: Optional[str] = None    # None for self-built worlds
     pile: str = "synthetic"          # dev | synthetic; never sealed
+    # Which campaign produced this run.  `baseline-arms/ledger.jsonl` holds
+    # several campaigns in one file with nothing on the row to tell them apart,
+    # and they are not interchangeable: the variance-envelope cells are
+    # right-censored at ten cumulative failures by a harness rule, which is a
+    # property of `bare_cc.py` and not of the arm.  Pooling them with the pilot
+    # is what v0 did, and `DECISIONS.md` D-B-013 records why it stopped.
+    campaign: Optional[str] = None
     steps: List[Step] = field(default_factory=list)
     calls: List[Call] = field(default_factory=list)
     theory: Optional[Theory] = None
     truth: Optional[Truth] = None
+    repairs: List[Repair] = field(default_factory=list)
     notes: Dict[str, Any] = field(default_factory=dict)
 
     @property
     def ok_steps(self) -> List[Step]:
         return [s for s in self.steps if not s.failed]
+
+    def turn_costs(self) -> List[float]:
+        """Cost per *decision*, in decision order.
+
+        The economy family's shape metrics -- front-load index, convergence
+        point -- are defined over turns, and a turn is a decision.  Retries of
+        one decision are summed into it rather than becoming turns of their
+        own, so an arm whose model call failed twice and succeeded once does
+        not read as an arm that thought three times.  Total cost is unaffected;
+        only its distribution over the axis is.
+
+        Falls back to one-call-per-turn when the source carries no turn index,
+        which is what every pre-`attempt` ledger row looks like.
+        """
+        buckets: Dict[int, float] = {}
+        for i, call in enumerate(sorted(self.calls, key=lambda c: c.idx)):
+            turn = call.turn if call.turn is not None else i
+            buckets[turn] = buckets.get(turn, 0.0) + (call.cost_usd or 0.0)
+        return [buckets[t] for t in sorted(buckets)]
 
     def capabilities(self) -> Dict[str, bool]:
         """What this run can and cannot be asked.
@@ -175,4 +317,8 @@ class Run:
             "optimal": bool(self.truth and self.truth.optimal_steps),
             "mechanisms": bool(self.truth and self.truth.mechanisms),
             "solve_attempt": self.intent == "solve",
+            "repairs": bool(self.repairs),
+            "prompt_chars": any(c.prompt_chars for c in self.calls),
+            "http_tries": any(s.http_tries is not None for s in self.steps),
+            "failed_steps": any(s.failed for s in self.steps),
         }

@@ -131,3 +131,130 @@ hash. The cut itself is intact and has never been modified since its first
 commit; only the description is misleading. Not fixed here, because
 `arc-recon/` is shared ground and this track does not own it; recorded so the
 next reader spends a minute rather than twenty.
+
+---
+
+## v1
+
+### D-B-012 · The arm contrast is a separate artefact from process 1, on purpose
+
+`Theoria.md` Phase 2 process 1 says validation uses the control arms only —
+验证只用对照两臂，与 Theoria 无关，防止电池被设计成给自己脸上贴金. v1 finally
+has Theoria-arm material, and the temptation is to fold it into
+`discrimination.json` as "more data".
+
+That would destroy the property the sentence exists to protect. A metric that
+separates `bare_cc` from a Theoria arm has demonstrated nothing about its own
+validity, and a battery that cited such a separation as validation would be
+using its results to license its instruments.
+
+So there are two files. `discrimination.json` is process 1 and stays
+control-only. `arm_contrast.json` is a result, carries
+`confounded_by_world: true` on every entry, and opens with a `status` field
+saying in one sentence that nothing in it licenses a metric. `METRICS.md`'s
+验证材料 column is fed from the first file and never the second.
+
+### D-B-013 · Campaign labels come from two sources and one of them is derived
+
+`baseline-arms/ledger.jsonl` holds the M4 pilot and the phase-3 variance
+envelope with nothing on a row to distinguish them, and v0 pooled them. They
+are not interchangeable: every envelope cell stops at exactly ten cumulative
+failures because `bare_cc.py` breaks there, so the envelope runs are
+right-censored by a harness rule rather than by the arm.
+
+`out/campaign_cells.jsonl` carries an explicit `campaign` field and is used
+verbatim. `out/pilot_*.json` carries no such field, so **membership in the file
+is the label** — recorded as `m4-pilot`. That is a weaker fact than a field and
+is flagged as derived rather than quietly equated with one. Seven runs appear in
+neither index and are reported as `unlabelled`, not guessed at.
+
+### D-B-014 · Calls and turns are different axes, and both are kept
+
+`bare_cc` writes one `model_call` row per retry *attempt*. One pilot run bills
+three attempts at a single step, with three different token counts and three
+different prices — so the rows are not duplicates and dropping them would
+understate real spend by a third on that step.
+
+But the economy family's shape metrics are defined per *turn*, and a turn is a
+decision. v0 had only the row axis, so a run whose model call failed twice
+looked like a run that deliberated three times.
+
+E1 therefore stays on the billing axis, because the money was really spent. E2
+and E3 move to `Run.turn_costs()`, which groups calls onto the step they were
+deciding. Total cost is identical under both; only its distribution changes.
+This is the battery's local answer to `INPUT_FORMAT.md` gap 5 and does not close
+it upstream.
+
+### D-B-015 · A2's L6 verification replay is billed, against our own interest
+
+A2's sixth beat (解出) re-executes the 18-action repaired plan against a freshly
+initialised world to fill `plan_repaired.json`'s `world_reaches_goal`. Whether
+that counts as a cost of the repair loop is genuinely arguable: the actions are
+really executed, but one can call it a verification replay of a plan L1 already
+paid for.
+
+It decides K13, a metric this project registered a directional prediction about.
+Unbilled the ratio is 30/183 = 0.164; billed it is 48/183 = 0.262. Both clear the
+registered "< 0.3", and **the unbilled reading is the one that flatters the
+prediction**.
+
+Billed, for two reasons. 解出 is a beat of the loop by `Theoria.md`'s own
+definition and K13 sums beat costs, so excluding the only beat that touches the
+world after 戳探 would make the sum something other than what it claims. And
+choosing between two defensible conventions by which one makes your own
+pre-registration look better is precisely the failure this battery exists to
+catch. The rejected reading stays in `Repair.notes` so the choice is arguable
+rather than invisible.
+
+### D-B-016 · a0-spike's concepts carry no compression account, and none is invented
+
+`a0-spike/theory/theory.dsl` annotates both `Player` and `Box` with
+`compress: -39`. Three separate reasons not to pass that through:
+
+* **It is one global number written twice.** −39 = 373 − 412 is the whole-script
+  delta quoted in that bundle's README; it is not a per-concept account, and a
+  mean over it is n=1 duplicated.
+* **The sign is inverted** relative to `Concept.compression_bits`, which
+  documents "+ = the manual got shorter". Passing −39 straight through would
+  report two concepts as *costing* 39 bits each and would manufacture the O-04
+  negative-gain finding out of a bookkeeping convention.
+* **It is stale.** `a0_report.json`'s `perceive` block says 602 vs 712 bits, a
+  delta of −110 over five levels.
+
+Negating fixes only the second; recomputing fixes only the third; neither splits
+the number between the two concepts. So `compression_bits` is `None` and K6, K7
+and K14 report `insufficient-data` on that arm with a stated reason. A fabricated
+per-concept account would have been indistinguishable from a real one in the
+artefacts.
+
+### D-B-017 · `parse_dsl` reads bracket continuation lines
+
+Every theorem in the repository writes its annotation on the line after the
+clause:
+
+    theorem unsolvable_mismatch "..."
+      [depends: push2  probe: passed]
+
+A line-by-line reader therefore reported `proven=False` and
+`probe_pending=False` for exactly the clauses carrying a proof or a pending
+probe, silently and on all three arms. A clause is now its own line plus any
+following bracket-only lines; anything else — a blank line, a `when` body, a
+section header — ends it, so an annotation further down cannot be misattributed.
+
+No metric currently reads either flag, so no published number moved. That is
+why it survived v0 undetected, and it is the argument for the machine-readable
+manifest `INPUT_FORMAT.md` has been asking the theory-compiler track for.
+
+### D-B-018 · The concurrent S1 campaign is read-excluded, and says so in the artefact
+
+`baseline-arms/out/shards/` holds a third campaign that another session was
+writing *during* this recompute — untracked, tens of megabytes, mtimes moving
+between one run and the next. It is the same game and model as the envelope and
+would roughly double the `bare_cc` sample.
+
+Not ingested. Untracked live input cannot be byte-reproduced by a reader, and
+folding an unmerged in-flight campaign into a published number is the kind of
+thing that is discovered later rather than declared now. `run_battery` carries
+an `EXCLUDED_SOURCES` list into `capability_spectrum.json`'s provenance, so
+"not ingested" is a recorded decision with a reason attached rather than an
+omission someone has to notice.

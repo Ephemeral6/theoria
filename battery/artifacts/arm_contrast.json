@@ -1,0 +1,537 @@
+{
+  "control_arm": "bare_cc",
+  "coverage_note": "7 of 38 metrics have data on both sides. The rest are structurally one-sided: an arm with no books cannot be scored on the epistemic family, and an arm with no model calls cannot be scored on the economy family. This is why Theoria.md specified CC vs Schema -- a replay-level model is the only arm that overlaps both.",
+  "design": "unpaired; no game is shared between the arms",
+  "metrics": {
+    "E1": {
+      "direction": "neutral",
+      "family": "economy",
+      "n_bare_cc": 22,
+      "n_theoria": 0,
+      "note": "scored on theoria only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "E2": {
+      "direction": "higher",
+      "family": "economy",
+      "n_bare_cc": 12,
+      "n_theoria": 0,
+      "note": "scored on theoria only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "E3": {
+      "direction": "lower",
+      "family": "economy",
+      "n_bare_cc": 12,
+      "n_theoria": 0,
+      "note": "scored on theoria only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "E4": {
+      "direction": "lower",
+      "family": "economy",
+      "n_bare_cc": 14,
+      "n_theoria": 0,
+      "note": "scored on theoria only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "E5": {
+      "direction": "lower",
+      "family": "economy",
+      "n_bare_cc": 22,
+      "n_theoria": 0,
+      "note": "scored on theoria only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "E6": {
+      "direction": "neutral",
+      "family": "economy",
+      "n_bare_cc": 20,
+      "n_theoria": 0,
+      "note": "scored on theoria only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "E7": {
+      "direction": "lower",
+      "family": "economy",
+      "n_bare_cc": 14,
+      "n_theoria": 0,
+      "note": "scored on theoria only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K1": {
+      "direction": "higher",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 6,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K10": {
+      "direction": "higher",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 6,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K11": {
+      "direction": "neutral",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 6,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K12": {
+      "direction": "higher",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 2,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K13": {
+      "direction": "lower",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 2,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K14": {
+      "direction": "higher",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 5,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K2": {
+      "direction": "higher",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 2,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K3": {
+      "direction": "higher",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 6,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K4": {
+      "direction": "higher",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 6,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K5": {
+      "direction": "higher",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 6,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K6": {
+      "direction": "higher",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 5,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K7": {
+      "direction": "neutral",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 5,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K8": {
+      "direction": "higher",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 5,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "K9": {
+      "direction": "higher",
+      "family": "epistemic",
+      "n_bare_cc": 0,
+      "n_theoria": 2,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "M1": {
+      "direction": "lower",
+      "family": "mechanism",
+      "n_bare_cc": 0,
+      "n_theoria": 6,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "M2": {
+      "direction": "higher",
+      "family": "mechanism",
+      "n_bare_cc": 0,
+      "n_theoria": 6,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "M3": {
+      "direction": "lower",
+      "family": "mechanism",
+      "n_bare_cc": 0,
+      "n_theoria": 0,
+      "note": "scored on neither only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "M4": {
+      "direction": "lower",
+      "family": "mechanism",
+      "n_bare_cc": 0,
+      "n_theoria": 2,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "M5": {
+      "direction": "higher",
+      "family": "mechanism",
+      "n_bare_cc": 0,
+      "n_theoria": 2,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "M6": {
+      "direction": "neutral",
+      "family": "mechanism",
+      "n_bare_cc": 0,
+      "n_theoria": 2,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "P1": {
+      "direction": "higher",
+      "family": "planning",
+      "n_bare_cc": 22,
+      "n_theoria": 0,
+      "note": "scored on theoria only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "P2": {
+      "direction": "higher",
+      "family": "planning",
+      "n_bare_cc": 14,
+      "n_theoria": 0,
+      "note": "scored on theoria only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "P3": {
+      "bare_cc_median": 0.0,
+      "cliffs_delta": 0.333333333,
+      "confounded_by_world": true,
+      "direction": "lower",
+      "family": "planning",
+      "magnitude": "medium",
+      "mann_whitney": {
+        "min_attainable_p": 3.6857e-05,
+        "n1": 6,
+        "n2": 15,
+        "p_value": 0.267212148,
+        "ties": 10,
+        "u": 60.0
+      },
+      "n_bare_cc": 15,
+      "n_theoria": 6,
+      "note": "the arms separate on this metric, against the declared direction. Arm and world are confounded: every Theoria run here is on a self-built world and every bare_cc run is on an ARC game, so this is not attributable to the arm.",
+      "overlap": true,
+      "theoria_median": 0.094580373,
+      "verdict": "separates-against",
+      "worlds_bare_cc": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "worlds_theoria": [
+        "a0-spike",
+        "cold-start-a0",
+        "cold-start-a2"
+      ]
+    },
+    "P4": {
+      "direction": "lower",
+      "family": "planning",
+      "n_bare_cc": 0,
+      "n_theoria": 1,
+      "note": "scored on bare_cc only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    },
+    "P5": {
+      "bare_cc_median": 0.285714286,
+      "cliffs_delta": -0.708333333,
+      "confounded_by_world": true,
+      "direction": "neutral",
+      "family": "planning",
+      "magnitude": "large",
+      "mann_whitney": {
+        "min_attainable_p": 3.368e-06,
+        "n1": 6,
+        "n2": 24,
+        "p_value": 0.006211107,
+        "ties": 42,
+        "u": 21.0
+      },
+      "n_bare_cc": 24,
+      "n_theoria": 6,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "overlap": true,
+      "theoria_median": 0.0,
+      "verdict": "not-ranked",
+      "worlds_bare_cc": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "worlds_theoria": [
+        "a0-spike",
+        "cold-start-a0",
+        "cold-start-a2"
+      ]
+    },
+    "X1": {
+      "bare_cc_median": 0.142857143,
+      "cliffs_delta": 0.637254902,
+      "confounded_by_world": true,
+      "direction": "lower",
+      "family": "exploration",
+      "magnitude": "large",
+      "mann_whitney": {
+        "min_attainable_p": 1.9812e-05,
+        "n1": 6,
+        "n2": 17,
+        "p_value": 0.019713315,
+        "ties": 7,
+        "u": 83.5
+      },
+      "n_bare_cc": 17,
+      "n_theoria": 6,
+      "note": "the arms separate on this metric, against the declared direction. Arm and world are confounded: every Theoria run here is on a self-built world and every bare_cc run is on an ARC game, so this is not attributable to the arm.",
+      "overlap": true,
+      "theoria_median": 0.78097166,
+      "verdict": "separates-against",
+      "worlds_bare_cc": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "worlds_theoria": [
+        "a0-spike",
+        "cold-start-a0",
+        "cold-start-a2"
+      ]
+    },
+    "X2": {
+      "bare_cc_median": 1.0,
+      "cliffs_delta": -0.764705882,
+      "confounded_by_world": true,
+      "direction": "higher",
+      "family": "exploration",
+      "magnitude": "large",
+      "mann_whitney": {
+        "min_attainable_p": 1.9812e-05,
+        "n1": 6,
+        "n2": 17,
+        "p_value": 0.00449741,
+        "ties": 14,
+        "u": 12.0
+      },
+      "n_bare_cc": 17,
+      "n_theoria": 6,
+      "note": "the arms separate on this metric, against the declared direction. Arm and world are confounded: every Theoria run here is on a self-built world and every bare_cc run is on an ARC game, so this is not attributable to the arm.",
+      "overlap": true,
+      "theoria_median": 0.868980493,
+      "verdict": "separates-against",
+      "worlds_bare_cc": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "worlds_theoria": [
+        "a0-spike",
+        "cold-start-a0",
+        "cold-start-a2"
+      ]
+    },
+    "X3": {
+      "bare_cc_median": 0.0,
+      "cliffs_delta": 0.621212121,
+      "confounded_by_world": true,
+      "direction": "higher",
+      "family": "exploration",
+      "magnitude": "large",
+      "mann_whitney": {
+        "min_attainable_p": 0.000161603,
+        "n1": 6,
+        "n2": 11,
+        "p_value": 0.036522301,
+        "ties": 9,
+        "u": 53.5
+      },
+      "n_bare_cc": 11,
+      "n_theoria": 6,
+      "note": "the arms separate on this metric, in the declared direction. Arm and world are confounded: every Theoria run here is on a self-built world and every bare_cc run is on an ARC game, so this is not attributable to the arm.",
+      "overlap": true,
+      "theoria_median": 0.140196078,
+      "verdict": "separates",
+      "worlds_bare_cc": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "worlds_theoria": [
+        "a0-spike",
+        "cold-start-a0",
+        "cold-start-a2"
+      ]
+    },
+    "X4": {
+      "bare_cc_median": 0.066666667,
+      "cliffs_delta": 0.068627451,
+      "confounded_by_world": true,
+      "direction": "lower",
+      "family": "exploration",
+      "magnitude": "negligible",
+      "mann_whitney": {
+        "min_attainable_p": 1.9812e-05,
+        "n1": 6,
+        "n2": 17,
+        "p_value": 0.811534766,
+        "ties": 7,
+        "u": 54.5
+      },
+      "n_bare_cc": 17,
+      "n_theoria": 6,
+      "note": "effect below the medium threshold (|d| < 0.33)",
+      "overlap": true,
+      "theoria_median": 0.073700944,
+      "verdict": "no-effect",
+      "worlds_bare_cc": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "worlds_theoria": [
+        "a0-spike",
+        "cold-start-a0",
+        "cold-start-a2"
+      ]
+    },
+    "X5": {
+      "bare_cc_median": 2.5,
+      "cliffs_delta": 0.986111111,
+      "confounded_by_world": true,
+      "direction": "neutral",
+      "family": "exploration",
+      "magnitude": "large",
+      "mann_whitney": {
+        "min_attainable_p": 3.368e-06,
+        "n1": 6,
+        "n2": 24,
+        "p_value": 6.737e-06,
+        "ties": 0,
+        "u": 143.0
+      },
+      "n_bare_cc": 24,
+      "n_theoria": 6,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "overlap": true,
+      "theoria_median": 41.5,
+      "verdict": "not-ranked",
+      "worlds_bare_cc": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "worlds_theoria": [
+        "a0-spike",
+        "cold-start-a0",
+        "cold-start-a2"
+      ]
+    },
+    "X6": {
+      "direction": "higher",
+      "family": "exploration",
+      "n_bare_cc": 15,
+      "n_theoria": 0,
+      "note": "scored on theoria only; the two arms are structurally complementary on this metric, so no contrast exists to compute",
+      "overlap": false,
+      "verdict": "no-contrast"
+    }
+  },
+  "metrics_with_overlap": [
+    "P3",
+    "P5",
+    "X1",
+    "X2",
+    "X3",
+    "X4",
+    "X5"
+  ],
+  "n_control_runs": 24,
+  "n_metrics": 38,
+  "n_metrics_with_overlap": 7,
+  "n_theoria_runs": 7,
+  "status": "Theoria.md Phase 2 process 1 validates metrics on the control arms only (CC vs Schema). This contrast includes Theoria arms and is therefore a result, not a validation. No entry here licenses a metric for use.",
+  "test": "exact two-sided Mann-Whitney (no normal approximation)",
+  "theoria_arms": [
+    "theoria_a0",
+    "theoria_a0_spike",
+    "theoria_a2"
+  ]
+}

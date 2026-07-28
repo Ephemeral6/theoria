@@ -32,6 +32,9 @@ a row with `frame` is an `env_step`, a row with `usage` is a `model_call`.
 | `state` | no | `WIN` detection |
 | `levels_completed` | no | level boundaries, cross-level mechanism delay |
 | `failed`, `reason`, `http_status` | no | failed steps are kept, not dropped |
+| `http_tries` | no | **new in v1.** HTTP attempts the harness burned for this one row. The retry loop is collapsed into a single ledger row, so without this a step costing eight round trips is indistinguishable from one costing a single one. Feeds E6 |
+| `available_actions` | no | read but not yet used; a per-state action-space size is the honest denominator the novelty metrics currently lack |
+| `win_levels` | no | read but not yet used; total levels in the game |
 
 ### `model_call`
 
@@ -45,30 +48,78 @@ a row with `frame` is an `env_step`, a row with `usage` is a `model_call`.
 | `usage.cache_creation_input_tokens` | no | context growth |
 | `total_cost_usd` | no | cost curve, front-load index, convergence point |
 | `duration_ms`, `is_error` | no | diagnostics |
+| `attempt` | no | **new in v1, and load-bearing.** Retry ordinal. One decision may be billed several times with different token counts and different prices; without this the shape metrics count a retry as deliberation |
+| `prompt_chars` | no | **new in v1.** Size of the assembled prompt. On a one-shot-CLI arm this is the only axis that grows — see gap 6 |
+| `usage.cache_creation.{ephemeral_1h,ephemeral_5m}_input_tokens` | no | read but not yet used; the two tiers are priced differently, so the scalar cost is not re-derivable without them |
+| `provider`, `usage.service_tier`, `usage.speed` | no | not used |
 
 ### Known gaps, to raise with `LEDGER_FORMAT.md`
 
-1. **`model_call` rows carry no `arm`.** The battery back-fills it from the
-   run's `env_step` rows. A run consisting only of model calls — an arm that
-   thought for a long time and never acted — currently lands with
-   `arm="unknown"`. Worth a field.
-2. **`game_id` is optional on `model_call`.** The guardrail therefore leans on
-   `env_step` for its screen. It should be mandatory on both, so a ledger can
-   be screened without being reassembled first.
-3. **Cost is a scalar (`total_cost_usd`), not a priced breakdown.** Phase 1
-   says the price list is versioned separately and cost is "a conversion, not a
-   record". The battery consumes the scalar today and will prefer a
-   `price_list_version` field so a recompute can be re-priced.
-4. **No level-boundary event.** `levels_completed` is a running counter on
-   `env_step`, so the battery infers boundaries from its jumps. Phase 1
-   anticipated this ("level 若非 API 字段则由 score 跳变推导"). An explicit
-   boundary record would remove the inference.
-5. **No turn index distinct from `step_idx`.** A turn with several actions and
-   one model call, or one action and several calls, is currently only
-   reconstructible through `step_idx`. The economy family is defined per
-   *turn*; it uses model-call order as its turn axis and says so.
+Status as of v1, after reading the variance-envelope cells.
+
+1. **`model_call` rows carry no `arm`.** *Still open.* 0 of 74 envelope rows
+   carry one. The battery back-fills from the run's `env_step` rows; a run
+   consisting only of model calls still lands as `arm="unknown"`.
+2. **`game_id` is optional on `model_call`.** *Closed in practice, still not
+   mandatory.* Every envelope `model_call` carries it. Worth making it
+   schema-required so a ledger can be screened without being reassembled.
+3. **Cost is a scalar (`total_cost_usd`), not a priced breakdown.** *Still
+   open, and slightly worse.* `usage.cache_creation` now reveals a 1h/5m
+   ephemeral split that is priced differently, and the scalar hides which
+   multiplier was applied. A `price_list_version` field would fix it.
+4. **No level-boundary event.** *Still open.* `levels_completed` is still a
+   running counter, and it is `0` on every envelope row that carries it.
+5. **No turn index distinct from `step_idx`.** *Still open upstream; worked
+   around locally.* The battery now derives a decision axis by grouping calls
+   onto the `step_idx` they were deciding (`Run.turn_costs()`, D-B-014), which
+   is what E2/E3 use. `attempt` and `usage.iterations[]` are the two candidate
+   native axes and both are degenerate in the material so far.
+6. **No campaign field.** *New, and the one request this track would make.*
+   `baseline-arms/ledger.jsonl` holds several campaigns in one file with
+   nothing on a row to tell them apart, and they are not interchangeable — the
+   variance-envelope cells are right-censored at ten cumulative failures by a
+   harness rule. The battery reconstructs the label by joining
+   `out/campaign_cells.jsonl` and `out/pilot_*.json` (D-B-013). A `campaign`
+   field on the row would make the join unnecessary and the label reliable.
+7. **Context growth is not observable on a one-shot-CLI arm.** *New.*
+   `input_tokens` is a constant 10 and `cache_read_input_tokens` a constant
+   24405 on every envelope call, because each turn is a fresh
+   `claude -p --max-turns 1` in a clean directory: those numbers describe the
+   CLI's own system prompt, not the arm. The history the arm re-reads lives in
+   the prompt body. Any consumer computing "context growth" from the token
+   fields alone will read approximately zero and will be measuring the harness.
 
 ---
+
+## 1b. The offline theory bundles — three of them, and they differ
+
+Each is a self-built world with a manual and no model calls, read by its own
+adapter. They are kept as separate arms rather than merged into one `theoria`
+because they differ in the only respect the repair metrics care about.
+
+| bundle | arm | runs | traces | repair material |
+|---|---|---|---|---|
+| `cold-start-a0/` | `theoria_a0` | 2 | 275 + 111 steps | none |
+| `a0-spike/` | `theoria_a0_spike` | 1 | **none persisted** | 4 injected rule changes, repaired by **rebuild** |
+| `cold-start-a2/` | `theoria_a2` | 4 | 247 / 183 / 195 / 18 steps | 1 refutation, repaired by **patch** |
+
+Three things a consumer of these must know:
+
+* **`a0-spike` persists no trace.** Its evidence set is regenerable in memory by
+  `pipeline/explore.py`, which the battery deliberately does not execute — a
+  passive instrument reads artefacts and does not run another track's pipeline.
+  So `steps=[]`, and the exploration family plus P1/P2/P3 are `not-applicable`
+  rather than zero.
+* **A2's four runs overlap by construction.** `history_trace[0..182]` is
+  byte-identical to `raw_trace[0..182]`, and `probed_trace` shares the same
+  prefix. They are one experiment and its variants, not four samples, and each
+  run says so in `Run.notes["overlaps"]` so the de-redundancy pass cannot read
+  four rows as four observations.
+* **"Held-out" means two different things.** A0's denominator is 3 pairs its
+  trace never covered; a0-spike's is an exhaustive enumeration of all 39960
+  well-formed (state, direction) pairs. `Theory.held_out_frame` carries a
+  one-line description of the sampling frame on every theory-bearing run, and
+  K2 must not be compared across arms without reading it.
 
 ## 2. The A0 bundle — `cold-start-a0/` (read-only)
 

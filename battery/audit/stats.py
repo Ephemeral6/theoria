@@ -80,6 +80,68 @@ def magnitude(delta: Optional[float]) -> str:
     return "large"
 
 
+def mann_whitney(a: Sequence[float], b: Sequence[float]) -> Dict[str, object]:
+    """Exact two-sided Mann-Whitney U over two *unpaired* groups.
+
+    The sign test cannot be used for the arm contrast: `bare_cc` plays ARC
+    games and the offline Theoria arms play self-built worlds, so there is no
+    game to pair on.  This is the unpaired substitute, and it is exact rather
+    than normal-approximated because the samples here are tiny (n=2 on the
+    Theoria side) and a normal approximation at n=2 is a decoration.
+
+    Exactness is by dynamic programming over the rank-sum distribution: the
+    number of ways to choose `len(a)` ranks out of `n` summing to each value.
+    Integer arithmetic throughout, so the p-value is byte-identical everywhere.
+
+    `min_attainable_p` is reported for the same reason `sign_test` reports it —
+    with 2 against 17 the smallest attainable two-sided p is 0.0117, and with
+    2 against 2 it is 0.667, which no amount of separation can improve on.
+
+    **Ties are counted, not corrected for.**  The exact null distribution below
+    assumes distinct values; with ties the p-value is conservative in an
+    unquantified direction, so `ties` is returned and a caller with ties should
+    read the effect size instead.
+    """
+    n1, n2 = len(a), len(b)
+    if n1 == 0 or n2 == 0:
+        return {"n1": n1, "n2": n2, "u": None, "p_value": None,
+                "min_attainable_p": None, "ties": 0}
+
+    greater = sum(1 for x in a for y in b if x > y)
+    lesser = sum(1 for x in a for y in b if x < y)
+    ties = n1 * n2 - greater - lesser
+    # U with the usual half-credit for ties, kept as a float only at the end.
+    u = greater + ties / 2.0
+
+    total = n1 + n2
+    # counts[k][s] = ways to pick k of the first i ranks summing to s.
+    # Rank sums for a group of n1 range over [n1(n1+1)/2, n1(2*total-n1+1)/2].
+    max_sum = n1 * (2 * total - n1 + 1) // 2
+    counts = [[0] * (max_sum + 1) for _ in range(n1 + 1)]
+    counts[0][0] = 1
+    for rank in range(1, total + 1):
+        for k in range(min(rank, n1), 0, -1):
+            row, prev = counts[k], counts[k - 1]
+            for s in range(max_sum, rank - 1, -1):
+                if prev[s - rank]:
+                    row[s] += prev[s - rank]
+
+    ways = comb(total, n1)
+    min_rank_sum = n1 * (n1 + 1) // 2
+    # U = rank_sum(a) - min_rank_sum, so the null over U is the null over
+    # rank sums, shifted.
+    dist = counts[n1]
+    at_or_below = sum(dist[min_rank_sum:min_rank_sum + int(u) + 1])
+    at_or_above = sum(dist[min_rank_sum + int(u + 0.999999):])
+    tail = min(at_or_below, at_or_above)
+    p = min(1.0, 2.0 * tail / ways)
+    return {
+        "n1": n1, "n2": n2, "u": round(u, 9), "ties": ties,
+        "p_value": round(p, 9),
+        "min_attainable_p": round(min(1.0, 2.0 / ways), 9),
+    }
+
+
 def sign_test(pairs: Sequence[Tuple[float, float]]) -> Dict[str, object]:
     """Exact two-sided sign test over (high, low) pairs.
 

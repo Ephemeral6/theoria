@@ -168,3 +168,106 @@ def manual_revisions(run: Run):
     genuine revision, this number ranks nothing.
     """
     return ok("K11", run.theory.revisions)
+
+
+@metric("K12", "epistemic",
+        "Share of the six repair beats — 打脸→定位→戳探→修订→重证→解出 — "
+        "that closed.",
+        needs=("repairs",), direction="higher", unit="share")
+def repair_loop_closure(run: Run):
+    """U4's yes-or-no half: 被打脸后修得好吗.
+
+    `Theoria.md` 1.11 makes U4 one of four **ordering** questions (排座次) and
+    says in the same breath that they are 不当证据 — not evidence. So this is
+    reported and never cited: no number computed here may support claim C1.
+
+    The six beats are an order, not a set. A loop that revises the manual but
+    never re-proves it has produced an unverified edit; a loop that re-proves
+    but never solves has not shown the repair was worth anything. Reporting the
+    fraction rather than a boolean is what makes a *partial* loop visible —
+    a0-spike detects a broken rule and re-mines the world, which is real work
+    and closes none of the six beats, and a boolean would score that identically
+    to having done nothing.
+    """
+    if not run.repairs:
+        return thin("K12", "no repair episodes")
+    closed = sum(r.beats_closed for r in run.repairs)
+    required = sum(r.beats_required for r in run.repairs)
+    if not required:
+        return thin("K12", "no repair episode declares a beat requirement")
+    return ok("K12", closed / required, closed=closed, required=required,
+              episodes=len(run.repairs),
+              per_episode={r.episode_id: "%d/%d" % (r.beats_closed,
+                                                    r.beats_required)
+                           for r in sorted(run.repairs,
+                                           key=lambda r: r.episode_id)})
+
+
+@metric("K13", "epistemic",
+        "Environment actions spent repairing, over the actions the original "
+        "theory cost. Low means the repair was localised.",
+        needs=("repairs",), direction="lower", unit="ratio")
+def repair_cost_ratio(run: Run):
+    """What repairing actually costs, in the only currency anyone recorded.
+
+    **This is a measurement of repair *strategy* at least as much as of the
+    arm, and the two cannot be separated on the material in hand.** A2 locates
+    the culprit clause, probes it and patches it. a0-spike re-mines the entire
+    world from fresh evidence. A patch coming in at a fraction of a rebuild is
+    not a discovery about which arm is better; it is arithmetic about patching.
+    `PREDICTIONS.md` registers the confound rather than letting the ratio be
+    read as a ranking, and the audit puts this in the reference tier for it.
+
+    The currency is environment actions because it is the only cost any
+    producer wrote down: neither A2 nor a0-spike records tokens, wall time, or
+    model calls for a repair. That is itself a finding — U4's measurement unit
+    is undefined in `Theoria.md`, and the battery has picked the one the
+    artefacts can support, not the one that would be most informative.
+    """
+    ratios = {}
+    for repair in sorted(run.repairs, key=lambda r: r.episode_id):
+        spent = (repair.repair_actions if repair.repair_actions is not None
+                 else repair.env_actions)
+        base = repair.baseline_actions
+        if not base or spent is None:
+            continue
+        ratios[repair.episode_id] = spent / base
+    if not ratios:
+        return thin("K13", "no repair episode records both its own cost and "
+                           "the cost of the theory it repaired")
+    values = [ratios[k] for k in sorted(ratios)]
+    strategies = sorted({r.strategy for r in run.repairs})
+    return ok("K13", sum(values) / len(values), episodes=len(values),
+              per_episode={k: round(v, 6) for k, v in sorted(ratios.items())},
+              strategy=strategies[0] if len(strategies) == 1 else strategies)
+
+
+@metric("K14", "epistemic",
+        "Minimum per-concept compression gain in bits. The statistic K6's "
+        "mean hides.",
+        needs=("theory",), direction="higher", unit="bits")
+def min_compression_gain(run: Run):
+    """The honest version of K6, and the fix REPORT_V0 asked for.
+
+    K6 reports A0's mean at +706 bits. That mean is carried entirely by one
+    concept at +2125 while two of the three are negative — so the headline
+    says the vocabulary paid for itself and the distribution says two thirds of
+    it did not. The minimum cannot be rescued by one large concept, which is
+    exactly the property wanted here.
+
+    K7 counts how many concepts were admitted against their compression
+    account; this prices the worst of them. Reading them together is the
+    intended use, and a negative minimum on every theory-bearing arm is the
+    prediction that the O-04 conflict is structural rather than an accident of
+    A0.
+    """
+    gains = [c.compression_bits for c in run.theory.concepts
+             if c.compression_bits is not None]
+    if not gains:
+        return thin("K14", "no concept carries a compression account")
+    worst = min(gains)
+    return ok("K14", worst, concepts=len(gains), best=max(gains),
+              mean=round(sum(gains) / len(gains), 6),
+              worst_concept=sorted(
+                  c.name for c in run.theory.concepts
+                  if c.compression_bits == worst)[0])

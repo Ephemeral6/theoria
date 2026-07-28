@@ -1,0 +1,47 @@
+{
+  "arms": [
+    "bare_cc",
+    "theoria_a0",
+    "theoria_a0_spike",
+    "theoria_a2"
+  ],
+  "artifact_digests": {
+    "arm_contrast.json": "520d2d6229710aac6295072d3cde5da1244984773fa895e5a7d24849136dff47",
+    "capability_spectrum.json": "b413f8f555b4d1d29f7577c44ad92aa737363a6ab4f930e5fac8f6183535309d",
+    "discrimination.json": "efb777ca31991da9fab03a5216f2052b017e58b0bf8b10b7646411c80f311a35",
+    "gaming_audit.json": "a2c20c552240c89e84dcc473de8f72f74f1cf3196ea3719f47d1a4ad79c49fee",
+    "redundancy.json": "2614cedfb309a84e9a14101f1512b1b2dcbc63676849c7e365d558a2d4b12b55",
+    "validation_material.json": "f68189bdc1fe3fc3bd0d955a1f77582b479853ec0a0cb5620b355da4d547e3f9"
+  },
+  "base_commit": "a2032b12662e029236b301b38ec565a80fc2e731",
+  "battery_version": "v1",
+  "branch": "agent/p14-battery-v1",
+  "command": "python -m battery.run_battery",
+  "computed_values": 417,
+  "excluded_inputs": [
+    {
+      "path": "baseline-arms/out/shards/",
+      "reason": "concurrent session S1 campaign: untracked, actively appended during this run, not the variance envelope. See DECISIONS.md D-B-018."
+    }
+  ],
+  "game_spend_usd": 0.0,
+  "head_commit_at_archive": "104908c51860487caa8c150ad2e1bc88fd67a476",
+  "inputs": {
+    "a0-spike/artifacts/a0_report.json": "791ec0aee6e33b59c0d38f6eaba3960699802441f182403b59c79f9bbefd25c3",
+    "a0-spike/artifacts/adaptation.json": "5c7d483809b3ac174ff7fbccc84450f50e5bc4f2255657cd3036b4535da8502f",
+    "baseline-arms/ledger.jsonl": "0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+    "baseline-arms/out/campaign_cells.jsonl": "6722537a1fe8e62e801cacf34a8b5a5b8416da67a14a6d91137c622f8621aa17",
+    "cold-start-a0/artifacts/raw_trace.jsonl": "8597ef68d492ac208b3924e0a8e681a9de67fbe41d1857ced513194e6fbf885a",
+    "cold-start-a2/artifacts/loop_ledger.json": "8d711fabcc40aae2e67838c5c91a11192c1c946fd9c89bf2149d1f0c1e878eb6",
+    "cold-start-a2/artifacts/raw_trace.jsonl": "2cc840908260978e46a9ab5028bba0ed7e8b1788aa668d738e173ac18ef52116"
+  },
+  "metrics_registered": 38,
+  "model_calls": 0,
+  "network_calls": 0,
+  "prompt_id": "P-14",
+  "runs": 31,
+  "sealed_pile_reads": 0,
+  "seed": null,
+  "seed_note": "no randomness anywhere in the battery; determinism is by construction, not by seed. Two recomputes over unchanged inputs are byte-identical and the suite asserts it.",
+  "tests": "python -m pytest battery/tests -q -> 117 passed"
+}

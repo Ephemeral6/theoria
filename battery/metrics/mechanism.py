@@ -75,3 +75,96 @@ def cross_level_first_use_delay(run: Run):
     # produced yet is how a metric ends up measuring its author's imagination.
     return thin("M3", "multi-level runs exist but the cross-level annotation "
                       "schema is not yet defined; see STATUS.md")
+
+
+@metric("M4", "mechanism",
+        "Mean environment actions until a changed rule first contradicts the "
+        "manual, over changes the manual noticed at all.",
+        needs=("repairs",), direction="lower", unit="actions")
+def change_detection_delay(run: Run):
+    """The other half of "seen it, then used it": *changed it, then noticed*.
+
+    M1 measures how long an arm takes to exploit a mechanism it can see. This
+    measures how long it takes to notice that a mechanism it thought it knew
+    has moved. A manual is a standing prediction about every transition, so a
+    changed rule contradicts it the first time it fires; an arm with no manual
+    has nothing to contradict and can only find out by losing.
+
+    Measured on `earliest` -- the first action on *any* evidence level that
+    surprises the manual -- because a change is detected once, not once per
+    level. The single-level figure is kept in the support field, and the two
+    differ in the case that matters: a0-spike's `nocross` variant is never
+    noticed on `match` at all and is noticed after 6 actions elsewhere.
+    """
+    delays = []
+    per_episode = {}
+    for repair in sorted(run.repairs, key=lambda r: r.episode_id):
+        earliest = repair.notes.get("earliest_detection")
+        if earliest is None and repair.detected:
+            earliest = repair.detection_actions
+        if earliest is None:
+            continue
+        delays.append(earliest)
+        per_episode[repair.episode_id] = earliest
+    if not delays:
+        return thin("M4", "no repair episode records a detection point")
+    undetected = sum(1 for r in run.repairs if not r.detected)
+    return ok("M4", sum(delays) / len(delays), episodes=len(delays),
+              per_episode=per_episode,
+              undetected_on_own_level=undetected)
+
+
+@metric("M5", "mechanism",
+        "Fraction of injected rule changes the manual notices on the evidence "
+        "it already holds.",
+        needs=("repairs",), direction="higher", unit="share")
+def change_detection_rate(run: Run):
+    """The ceiling is the interesting part, not the floor.
+
+    A rule can change in a way that the evidence you happen to hold never
+    exercises. The manual then keeps replaying its history perfectly while
+    being wrong about the world -- the same shape as the K1/K2 gap, arrived at
+    from the other direction. A rate below 1.0 is not a defective manual; it
+    is evidence that detection is a property of the *evidence set*, and that a
+    theory can be silently wrong without any of its own checks firing.
+    """
+    if not run.repairs:
+        return thin("M5", "no repair episodes")
+    detected = sum(1 for r in run.repairs if r.detected)
+    blind = sorted(r.episode_id for r in run.repairs if not r.detected)
+    return ok("M5", detected / len(run.repairs), detected=detected,
+              episodes=len(run.repairs), undetected=blind)
+
+
+@metric("M6", "mechanism",
+        "Mean share of the manual's theorems invalidated by one repair. A "
+        "diagnostic: a repair that invalidates nothing had nothing "
+        "load-bearing downstream.",
+        needs=("repairs",), direction="neutral", unit="share")
+def repair_collateral_share(run: Run):
+    """Counts what dependency tracking is *for*.
+
+    The number in the headline is deliberately not a score. High collateral is
+    a theory whose theorems rested on the rule that moved -- which is what a
+    theory is supposed to look like. Low collateral can mean a clean modular
+    manual or a manual whose theorems were decorative, and this metric cannot
+    tell those apart, which is why its direction is `neutral`.
+
+    The support field carries the number that is not ambiguous:
+    `silently_wrong_without_tracking` counts repairs after which a theorem
+    would still be standing, still compiling with an empty axiom set, and
+    false of the world -- if nobody had tracked the dependency. On a0-spike
+    that is 1 of 4. A framework that could not count it would ship it.
+    """
+    shares = []
+    for repair in sorted(run.repairs, key=lambda r: r.episode_id):
+        if not repair.theorems_before:
+            continue
+        shares.append(repair.invalidated_theorems / repair.theorems_before)
+    silent = sum(1 for r in run.repairs if r.silently_wrong_without_tracking)
+    if not shares:
+        return thin("M6", "no repair episode records how many theorems the "
+                          "manual had before it")
+    return ok("M6", sum(shares) / len(shares), episodes=len(shares),
+              silently_wrong_without_tracking=silent,
+              of_episodes=len(run.repairs))

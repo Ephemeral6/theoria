@@ -18,12 +18,69 @@ the first place a sealed `game_id` could enter the battery.
 
 from __future__ import annotations
 
+import glob
 import json
 import os
 from typing import Any, Dict, Iterable, List, Optional
 
 from battery.guard import Piles, load_piles
 from battery.model import Call, Run, Step, digest
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(os.path.dirname(HERE))
+CAMPAIGN_CELLS = os.path.join(REPO, "baseline-arms", "out",
+                              "campaign_cells.jsonl")
+
+
+def load_campaigns(cells: str = CAMPAIGN_CELLS,
+                   out_dir: Optional[str] = None) -> Dict[str, str]:
+    """`run_id` -> campaign name.
+
+    One ledger file holds several campaigns and **no row says which one**.
+    They are not interchangeable: the variance-envelope cells stop at ten
+    cumulative failures because `bare_cc.py` says so, which right-censors them
+    by a harness rule rather than by anything the arm did.  v0 pooled them with
+    the M4 pilot and had no way to know it was doing so.
+
+    Two sources, because the two campaigns label themselves differently:
+
+    * `out/campaign_cells.jsonl` carries an explicit `campaign` field, which is
+      used verbatim;
+    * `out/pilot_<game>.json` carries no such field, so membership in that file
+      *is* the label.  It is recorded as `m4-pilot` and flagged as derived --
+      `DECISIONS.md` D-B-013 -- because a label inferred from a filename is a
+      weaker fact than one read from a field, and the difference should not
+      disappear into the artefacts.
+
+    A run in neither index gets `None`, which is reported as `unlabelled`
+    rather than guessed at.  Missing files are not an error.
+    """
+    out: Dict[str, str] = {}
+    if out_dir is None:
+        out_dir = os.path.dirname(cells)
+
+    for path in sorted(glob.glob(os.path.join(out_dir, "pilot_*.json"))):
+        try:
+            with open(path, "r", encoding="utf-8") as fh:
+                doc = json.load(fh)
+        except (OSError, ValueError):
+            continue
+        for cell in doc if isinstance(doc, list) else []:
+            run_id = cell.get("run_id")
+            if run_id:
+                out[run_id] = "m4-pilot"
+
+    # The explicit field wins over the derived one wherever both exist.
+    if os.path.exists(cells):
+        with open(cells, "r", encoding="utf-8") as fh:
+            for line in fh:
+                if not line.strip():
+                    continue
+                row = json.loads(line)
+                run_id, campaign = row.get("run_id"), row.get("campaign")
+                if run_id and campaign:
+                    out[run_id] = campaign
+    return out
 
 
 def _canonical_action(action: Any) -> str:
@@ -75,8 +132,10 @@ def _usage_int(usage: Dict[str, Any], key: str) -> int:
 
 def parse_rows(rows: Iterable[Dict[str, Any]], *, source: str,
                piles: Optional[Piles] = None,
-               default_arm: str = "unknown") -> List[Run]:
+               default_arm: str = "unknown",
+               campaigns: Optional[Dict[str, str]] = None) -> List[Run]:
     piles = piles or load_piles()
+    campaigns = campaigns if campaigns is not None else load_campaigns()
     by_run: Dict[str, Dict[str, Any]] = {}
 
     for row in rows:
@@ -119,14 +178,29 @@ def parse_rows(rows: Iterable[Dict[str, Any]], *, source: str,
                 n_frames=_n_frames(row),
                 level=row.get("levels_completed"),
                 won=row.get("state") == "WIN",
+                # The harness collapses its whole retry loop into one row, so
+                # without this a step that burned eight round trips is
+                # indistinguishable from one that burned a single one.
+                http_tries=row.get("http_tries"),
             ))
+
+        # The turn axis.  A decision may be billed several times -- `bare_cc`
+        # writes one row per model retry, with genuinely different token counts
+        # and genuinely different prices each time -- so the rows are kept
+        # whole (the money was really spent) and grouped onto the step they
+        # were deciding.  Rows with no `step_idx` fall back to their own order,
+        # which is what every pre-`attempt` ledger row looks like.
+        distinct_steps = sorted({row["step_idx"] for row in call_rows
+                                 if row.get("step_idx") is not None})
+        turn_of = {step: n for n, step in enumerate(distinct_steps)}
 
         calls: List[Call] = []
         for i, row in enumerate(call_rows):
             usage = row.get("usage") or {}
+            step_idx = row.get("step_idx")
             calls.append(Call(
                 idx=i,
-                step_idx=row.get("step_idx"),
+                step_idx=step_idx,
                 input_tokens=_usage_int(usage, "input_tokens"),
                 output_tokens=_usage_int(usage, "output_tokens"),
                 cache_read_tokens=_usage_int(usage, "cache_read_input_tokens"),
@@ -135,6 +209,9 @@ def parse_rows(rows: Iterable[Dict[str, Any]], *, source: str,
                 cost_usd=row.get("total_cost_usd"),
                 duration_ms=row.get("duration_ms"),
                 is_error=bool(row.get("is_error")),
+                prompt_chars=row.get("prompt_chars"),
+                attempt=row.get("attempt"),
+                turn=turn_of.get(step_idx) if step_idx is not None else i,
             ))
 
         game_id = bucket["game_id"]
@@ -147,18 +224,28 @@ def parse_rows(rows: Iterable[Dict[str, Any]], *, source: str,
             model=bucket["model_name"],
             game_id=game_id,
             pile=piles.assert_playable(game_id),
+            campaign=campaigns.get(run_id),
             steps=steps,
             calls=calls,
-            notes={"env_rows": len(env_rows), "call_rows": len(call_rows)},
+            notes={
+                "env_rows": len(env_rows),
+                "call_rows": len(call_rows),
+                "turns": len(distinct_steps) or len(call_rows),
+                "retry_rows": sum(1 for r in call_rows
+                                  if (r.get("attempt") or 1) > 1),
+                "http_tries": sum(r.get("http_tries") or 0
+                                  for r in env_rows) or None,
+            },
         ))
     return runs
 
 
 def load_ledger_runs(path: str, *, piles: Optional[Piles] = None,
-                     source: Optional[str] = None) -> List[Run]:
+                     source: Optional[str] = None,
+                     campaigns: Optional[Dict[str, str]] = None) -> List[Run]:
     if not os.path.exists(path):
         return []
     with open(path, "r", encoding="utf-8") as fh:
         rows = [json.loads(line) for line in fh if line.strip()]
     return parse_rows(rows, source=source or os.path.basename(path),
-                      piles=piles)
+                      piles=piles, campaigns=campaigns)

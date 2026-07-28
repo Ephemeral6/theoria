@@ -1,12 +1,12 @@
-# METRICS — battery v0
+# METRICS — battery v1
 
 **Generated from the code by `python -m battery.docs`. Do not edit by hand;
 edit the metric and regenerate.** `tests/test_docs.py` fails if this file and
 the registry disagree.
 
-Five families and twenty-eight metrics, per `Theoria.md` Phase 2. Each carries
-a declared direction — whether higher or lower is the more capable reading —
-so that no ordering can be flipped after the numbers are in.
+Five families, per `Theoria.md` Phase 2. Each metric carries a declared
+direction — whether higher or lower is the more capable reading — so that no
+ordering can be flipped after the numbers are in.
 
 **Tier** is decided mechanically by the anti-gaming audit
 (`battery/audit/gaming.py`), not by opinion:
@@ -19,21 +19,35 @@ correlated; they are excluded from ordering claims and from the main table.
 `neutral`-direction metrics are diagnostics: they describe a run without
 ranking it, and are never used in an ordering at all.
 
-**Main table (15):** E1, E2, E3, K10, K11, K2, K7, M1, M3, P2, P3, P4, P5, X3, X5
+**验证材料 / validation material** is new in v1, and it is the column to read
+before believing any other. `Theoria.md` Phase 2 process 1 says validation uses
+the **control arms only** — 验证只用对照两臂，与 Theoria 无关 — so a metric
+computed on a Theoria arm is *computable*, not *validated*. This column reports
+control-arm runs and the process-1 verdict, and is generated from the recompute
+rather than asserted, so it cannot drift from what actually happened.
 
-**Reference (14):** E4, E5, K1, K3, K4, K5, K6, K8, K9, M2, P1, X1, X2, X4
+A metric reading `none — never computed on a control arm` has not been shown to
+separate anything. `Theoria.md` is blunt about what that means:
+分不开已知差异的指标，没资格测未知差异.
+
+**Main table (19):** E1, E2, E3, E6, K10, K11, K12, K2, K7, M1, M3, M4, M6, P2, P3, P4, P5, X3, X5
+
+**Reference (19):** E4, E5, E7, K1, K13, K14, K3, K4, K5, K6, K8, K9, M2, M5, P1, X1, X2, X4, X6
+
+**Never validated on a control arm (21):** K1, K10, K11, K12, K13, K14, K2, K3, K4, K5, K6, K7, K8, K9, M1, M2, M3, M4, M5, M6, P4
 
 ---
 
 ## 探索 · Exploration — systematic, or circling?
 
-| id | direction | tier | needs | definition |
-|---|---|---|---|---|
-| `X1` | lower | reference | steps, observations | Fraction of observed states that had been visited before. |
-| `X2` | higher | reference | steps, observations | Fraction of (state, action) transitions taken for the first time. |
-| `X3` | higher | main | steps, observations | Novelty in the first quarter of a run minus novelty in the last quarter; the curve's shape as one number. |
-| `X4` | lower | reference | steps, observations | Longest run of consecutive steps discovering no new state, as a fraction of the run's length. |
-| `X5` | neutral | main | steps, observations | Distinct states observed. Support for X1/X4, not a ranking. |
+| id | direction | tier | needs | 验证材料 | definition |
+|---|---|---|---|---|---|
+| `X1` | lower | reference | steps, observations | 17 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Fraction of observed states that had been visited before. |
+| `X2` | higher | reference | steps, observations | 17 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Fraction of (state, action) transitions taken for the first time. |
+| `X3` | higher | main | steps, observations | 11 control runs over 4 games (m4-pilot, phase3-variance-envelope); process 1: underpowered | Novelty in the first quarter of a run minus novelty in the last quarter; the curve's shape as one number. |
+| `X4` | lower | reference | steps, observations | 17 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Longest run of consecutive steps discovering no new state, as a fraction of the run's length. |
+| `X5` | neutral | main | steps, observations | 24 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Distinct states observed. Support for X1/X4, not a ranking. |
+| `X6` | higher | reference | steps, failed_steps | 15 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Fraction of failed steps after which the arm chose a different action. Does the arm read its own refusals? |
 
 **How each would be gamed.**
 
@@ -47,16 +61,18 @@ ranking it, and are never used in an ordering at all.
   *Accidental:* yes. *Defence:* Normalised by run length, which removes the length effect but not the early-exit effect. **(not implemented — demoted)**
 * **`X5`** — Not a ranking.
   *Accidental:* no. *Defence:* Diagnostic. (implemented)
+* **`X6`** — Vary the action after every failure on principle, without reading the failure. A harness that rotates its action list on retry scores 1.0 having modelled nothing at all.
+  *Accidental:* yes. *Defence:* Would need the arm's action to be attributable to a decision rather than to a retry policy. The ledger collapses the harness's retry loop into one row, so a repeat across logged steps *is* an arm decision -- but nothing checks that the arm was shown the failure before choosing, and on the pilot harness it demonstrably was not. **(not implemented — demoted)**
 
 ## 计划 · Planning — is a decision buying more actions?
 
-| id | direction | tier | needs | definition |
-|---|---|---|---|---|
-| `P1` | higher | reference | steps, model_calls | Successful environment actions per model call. |
-| `P2` | higher | main | steps, model_calls | Actions per model call in the run's second half minus the first half; is a decision buying more actions as the run goes on? |
-| `P3` | lower | main | steps, observations | Fraction of steps that returned to the state two steps earlier — an undo. |
-| `P4` | lower | main | steps, truth, optimal, solve_attempt | Actual successful steps divided by the shortest known plan. 1.0 is optimal; needs ground truth, so development pile and A0 only, and needs the run to have been trying to win. |
-| `P5` | neutral | main | steps | Fraction of environment steps that failed outright. A diagnostic: it is the confound P1 and P2 are most exposed to. |
+| id | direction | tier | needs | 验证材料 | definition |
+|---|---|---|---|---|---|
+| `P1` | higher | reference | steps, model_calls | 22 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Successful environment actions per model call. |
+| `P2` | higher | main | steps, model_calls | 14 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Actions per model call in the run's second half minus the first half; is a decision buying more actions as the run goes on? |
+| `P3` | lower | main | steps, observations | 15 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Fraction of steps that returned to the state two steps earlier — an undo. |
+| `P4` | lower | main | steps, truth, optimal, solve_attempt | none — never computed on a control arm | Actual successful steps divided by the shortest known plan. 1.0 is optimal; needs ground truth, so development pile and A0 only, and needs the run to have been trying to win. |
+| `P5` | neutral | main | steps | 24 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Fraction of environment steps that failed outright. A diagnostic: it is the confound P1 and P2 are most exposed to. |
 
 **How each would be gamed.**
 
@@ -73,13 +89,15 @@ ranking it, and are never used in an ordering at all.
 
 ## 经济 · Economy — the shape of the bill
 
-| id | direction | tier | needs | definition |
-|---|---|---|---|---|
-| `E1` | neutral | main | model_calls, cost | Total model cost. Support for the shape metrics, not a ranking. |
-| `E2` | higher | main | model_calls, cost | Share of total cost spent in the first 25% of turns. High means front-loaded: the arm paid to understand, then coasted. |
-| `E3` | lower | main | model_calls, cost | Fraction of the run's turns needed to reach 90% of its total cost. Low means the bill settled early. |
-| `E4` | lower | reference | model_calls | R^2 of a quadratic fit to context tokens per turn minus R^2 of a linear fit. Positive means context is accelerating. |
-| `E5` | lower | reference | steps, model_calls, cost | Total cost divided by successful environment actions. |
+| id | direction | tier | needs | 验证材料 | definition |
+|---|---|---|---|---|---|
+| `E1` | neutral | main | model_calls, cost | 22 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Total model cost. Support for the shape metrics, not a ranking. |
+| `E2` | higher | main | model_calls, cost | 12 control runs over 4 games (m4-pilot, phase3-variance-envelope); process 1: underpowered | Share of total cost spent in the first 25% of turns. High means front-loaded: the arm paid to understand, then coasted. |
+| `E3` | lower | main | model_calls, cost | 12 control runs over 4 games (m4-pilot, phase3-variance-envelope); process 1: underpowered | Fraction of the run's turns needed to reach 90% of its total cost. Low means the bill settled early. |
+| `E4` | lower | reference | model_calls | 14 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | R^2 of a quadratic fit to context tokens per turn minus R^2 of a linear fit. Positive means context is accelerating. |
+| `E5` | lower | reference | steps, model_calls, cost | 22 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Total cost divided by successful environment actions. |
+| `E6` | neutral | main | steps, http_tries | 20 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Mean HTTP attempts the harness burned per logged environment step. A diagnostic: it prices the infrastructure the other economy metrics charge silently to the arm. |
+| `E7` | lower | reference | model_calls, prompt_chars | 14 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | R^2 of a quadratic fit to prompt size per turn minus R^2 of a linear fit. Positive means what the arm re-reads is accelerating. |
 
 **How each would be gamed.**
 
@@ -93,14 +111,21 @@ ranking it, and are never used in an ordering at all.
   *Accidental:* yes. *Defence:* None implemented. Prompt caching and context compaction do exactly this, for reasons that have nothing to do with understanding, and the battery cannot currently tell a compaction policy from a theory that closed. **(not implemented — demoted)**
 * **`E5`** — Emit many cheap actions; the denominator grows faster than the numerator.
   *Accidental:* yes. *Defence:* Would need pairing against P4. Not implemented. **(not implemented — demoted)**
+* **`E6`** — Not a ranking -- it measures the API and the retry policy, which is the point.
+  *Accidental:* no. *Defence:* Diagnostic, and registered `neutral` so no ordering can use it. Read it before believing E1 or E5. (implemented)
+* **`E7`** — Truncate or summarise the assembled prompt on a schedule and the quadratic term vanishes -- exactly E4's defect, one layer further out.
+  *Accidental:* yes. *Defence:* None implemented. `prompt_chars` counts what the harness chose to assemble, so a compaction policy and a theory that closed produce the same flat curve. The improvement over E4 is only that the axis is no longer constant by construction, so the metric can now be wrong in an interesting way instead of silent. **(not implemented — demoted)**
 
 ## 机制 · Mechanism — seen it, then used it, how long between?
 
-| id | direction | tier | needs | definition |
-|---|---|---|---|---|
-| `M1` | lower | main | truth, mechanisms | Mean steps between a mechanism becoming visible and the arm first using it, over annotated mechanisms it did use. |
-| `M2` | higher | reference | truth, mechanisms | Fraction of annotated mechanisms the arm ever used. |
-| `M3` | lower | main | steps, truth, mechanisms | Mean first-use delay for mechanisms met again on a later level — does understanding travel? (Claim C3.) |
+| id | direction | tier | needs | 验证材料 | definition |
+|---|---|---|---|---|---|
+| `M1` | lower | main | truth, mechanisms | none — never computed on a control arm | Mean steps between a mechanism becoming visible and the arm first using it, over annotated mechanisms it did use. |
+| `M2` | higher | reference | truth, mechanisms | none — never computed on a control arm | Fraction of annotated mechanisms the arm ever used. |
+| `M3` | lower | main | steps, truth, mechanisms | none — never computed on a control arm | Mean first-use delay for mechanisms met again on a later level — does understanding travel? (Claim C3.) |
+| `M4` | lower | main | repairs | none — never computed on a control arm | Mean environment actions until a changed rule first contradicts the manual, over changes the manual noticed at all. |
+| `M5` | higher | reference | repairs | none — never computed on a control arm | Fraction of injected rule changes the manual notices on the evidence it already holds. |
+| `M6` | neutral | main | repairs | none — never computed on a control arm | Mean share of the manual's theorems invalidated by one repair. A diagnostic: a repair that invalidates nothing had nothing load-bearing downstream. |
 
 **How each would be gamed.**
 
@@ -110,22 +135,31 @@ ranking it, and are never used in an ordering at all.
   *Accidental:* yes. *Defence:* None beyond reading it with M1 -- a mechanism used late is still used. **(not implemented — demoted)**
 * **`M3`** — Unimplemented.
   *Accidental:* no. *Defence:* n/a (implemented)
+* **`M4`** — Inject only changes that fire on the first action. The delay is a property of which rule was broken at least as much as of the manual that noticed.
+  *Accidental:* no. *Defence:* The variants are authored before the metric reads them and are named in the artefact, so the choice of change is auditable rather than tunable after the fact. Gaming it requires choosing easy variants *and* publishing the list of variants chosen. (implemented)
+* **`M5`** — Inject only changes you already know the evidence exercises, and the rate is 1.0 by construction.
+  *Accidental:* yes. *Defence:* None implemented. Nothing in the battery checks that the injected variants were chosen independently of the evidence set, and the only producer in the repository authored both. **(not implemented — demoted)**
+* **`M6`** — Not a ranking -- and both directions have a bad reading, which is why it does not rank.
+  *Accidental:* no. *Defence:* Diagnostic. The unambiguous number is in the support field: how many repairs would have left a silently false theorem standing without dependency tracking. (implemented)
 
 ## 认识 · Epistemic — the quality of the books themselves
 
-| id | direction | tier | needs | definition |
-|---|---|---|---|---|
-| `K1` | higher | reference | theory | Full-history exact replay accuracy: the fraction of observed state-action pairs on which the manual agrees with the world. |
-| `K10` | higher | main | theory | Deadlock theorems: machine-checked proofs that a region of the search space can never reach the goal. |
-| `K11` | neutral | main | theory | Manual revisions. The concept-birth timeline's coarse axis. |
-| `K2` | higher | main | theory | Accuracy on state-action pairs the trace never covered. The metric replay cannot see. |
-| `K3` | higher | reference | theory | Invariants and theorems in the manual. |
-| `K4` | higher | reference | theory | Mean coverage over clauses the manual annotates with one; the count of unannotated clauses is reported alongside, not folded in. |
-| `K5` | higher | reference | theory | Concepts admitted to the manual's word table. |
-| `K6` | higher | reference | theory | Mean compression gain per admitted concept, in bits. Positive means the concept paid for itself. |
-| `K7` | neutral | main | theory | Concepts admitted despite a negative compression account. A diagnostic, not a score: it counts a live conflict between two of the framework's own admission criteria. |
-| `K8` | higher | reference | theory | Executable probes as a fraction of probe designs. Low means the probe machinery proposed experiments it could not run. |
-| `K9` | higher | reference | theory | Entries in the playbook — ordering, pruning, heuristics, preferences. |
+| id | direction | tier | needs | 验证材料 | definition |
+|---|---|---|---|---|---|
+| `K1` | higher | reference | theory | none — never computed on a control arm | Full-history exact replay accuracy: the fraction of observed state-action pairs on which the manual agrees with the world. |
+| `K10` | higher | main | theory | none — never computed on a control arm | Deadlock theorems: machine-checked proofs that a region of the search space can never reach the goal. |
+| `K11` | neutral | main | theory | none — never computed on a control arm | Manual revisions. The concept-birth timeline's coarse axis. |
+| `K12` | higher | main | repairs | none — never computed on a control arm | Share of the six repair beats — 打脸→定位→戳探→修订→重证→解出 — that closed. |
+| `K13` | lower | reference | repairs | none — never computed on a control arm | Environment actions spent repairing, over the actions the original theory cost. Low means the repair was localised. |
+| `K14` | higher | reference | theory | none — never computed on a control arm | Minimum per-concept compression gain in bits. The statistic K6's mean hides. |
+| `K2` | higher | main | theory | none — never computed on a control arm | Accuracy on state-action pairs the trace never covered. The metric replay cannot see. |
+| `K3` | higher | reference | theory | none — never computed on a control arm | Invariants and theorems in the manual. |
+| `K4` | higher | reference | theory | none — never computed on a control arm | Mean coverage over clauses the manual annotates with one; the count of unannotated clauses is reported alongside, not folded in. |
+| `K5` | higher | reference | theory | none — never computed on a control arm | Concepts admitted to the manual's word table. |
+| `K6` | higher | reference | theory | none — never computed on a control arm | Mean compression gain per admitted concept, in bits. Positive means the concept paid for itself. |
+| `K7` | neutral | main | theory | none — never computed on a control arm | Concepts admitted despite a negative compression account. A diagnostic, not a score: it counts a live conflict between two of the framework's own admission criteria. |
+| `K8` | higher | reference | theory | none — never computed on a control arm | Executable probes as a fraction of probe designs. Low means the probe machinery proposed experiments it could not run. |
+| `K9` | higher | reference | theory | none — never computed on a control arm | Entries in the playbook — ordering, pruning, heuristics, preferences. |
 
 **How each would be gamed.**
 
@@ -135,6 +169,12 @@ ranking it, and are never used in an ordering at all.
   *Accidental:* no. *Defence:* A deadlock theorem carries a Lean proof obligation with zero axioms; a false one does not compile. The battery counts rather than checks, so the defence is external to it -- but it is a real one, and it is why this metric stays in the main table. (implemented)
 * **`K11`** — Not a ranking.
   *Accidental:* no. *Defence:* Diagnostic; a low count is ambiguous between 'right first time' and 'never checked'. (implemented)
+* **`K12`** — Declare fewer beats. The denominator is the arm's own claim about what a repair loop consists of.
+  *Accidental:* no. *Defence:* `beats_required` is fixed at six by `Theoria.md`'s A2 acceptance, not by the arm, and the adapter sets it. An arm that closes four of six reports 0.67 and cannot redefine the six. (implemented)
+* **`K13`** — Report the patch and not the re-derivation. An incremental repair that quietly re-mines the world afterwards looks five times cheaper than one that says so.
+  *Accidental:* yes. *Defence:* None implemented, and the exposure is live rather than hypothetical: the two arms in hand used different repair strategies (`patch` vs `rebuild`) and the ratio cannot separate strategy from capability. `strategy` is carried into the support field so the confound is at least visible, which is not the same as defended. **(not implemented — demoted)**
+* **`K14`** — Admit no small concepts. A vocabulary of one large concept has a minimum equal to its maximum.
+  *Accidental:* yes. *Defence:* K5 counts the vocabulary and would show the shrinkage, but nothing pairs them automatically, and K5 is itself gameable in the opposite direction. The pair K7/K14 is the intended reading and it is a convention, not a mechanism. **(not implemented — demoted)**
 * **`K2`** — Very little: the pairs are by construction the ones the trace never exercised.
   *Accidental:* no. *Defence:* Held-out by construction; the manual is frozen before the held-out pairs are scored, and A0's seal is stamped in THEORIZE_LOG.md. (implemented)
 * **`K3`** — Write many trivial theorems. `0 = 0` is a theorem.
@@ -167,5 +207,19 @@ ranking it, and are never used in an ordering at all.
   front-loaded while having understood nothing. This matters more
   here than elsewhere: the front-load index is a Phase 4 primary
   endpoint.
-* **The turn axis is model-call order**, because the ledger carries no
-  turn index. `INPUT_FORMAT.md` gap 5.
+* **The turn axis is the decision, not the model call.** v0 used
+  model-call order because the ledger carries no turn index. That
+  counted a retried decision as several turns: one pilot run bills
+  three model calls at one step, with three different prices. v1
+  groups calls onto the step they were deciding for E2/E3, and leaves
+  E1 on the billing axis, because the money was really spent.
+  `INPUT_FORMAT.md` gap 5 is still open upstream.
+* **E7 duplicates E4 on a different axis** rather than replacing it.
+  E4 fits curvature to context *tokens*, which are constant by
+  construction on a one-shot-CLI arm and therefore measure the
+  harness. E7 fits the same curvature to prompt size, which is the
+  axis that grows. Both are kept so the discrepancy stays visible.
+* **K13's currency is environment actions**, because no producer in
+  the repository records tokens, wall time or model calls for a
+  repair. `Theoria.md` does not fix a unit for U4; this is the unit
+  the artefacts can support, not the most informative one.
