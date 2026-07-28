@@ -22,7 +22,7 @@ closed in the current sections (the Lean weight table, the anti-circularity cite
 
 | id | item | where | status |
 |---|---|---|---|
-| **A1** | **§7 is a report of battery v0 and the battery is now v2.** 26 runs / 2 arms / 29 metrics → 95 runs / 5 arms / 38 metrics; 24-of-29 → 31-of-38; 27 clusters → 32; and "there is no Schema arm and there may never be" is contradicted by a `schema_repro` arm that exists. Everything downstream — effect sizes, actions-per-call, ρ, P5, E5 — was computed over the v0 spectrum. **Cannot be patched number by number; §7 needs re-deriving against `battery_version: "v2"`.** | `sections/07_battery.md` | flagged in a standing note this pass; **re-derivation not done** |
+| **A1** | ~~**§7 is a report of battery v0 and the battery is now v2.**~~ **Closed at P7** — §7 re-derived against `battery_version: "v2"`, every number read from `battery/artifacts/*.json` rather than from report prose. A2 is unblocked as a result. Original text of the item follows. **§7 is a report of battery v0 and the battery is now v2.** 26 runs / 2 arms / 29 metrics → 95 runs / 5 arms / 38 metrics; 24-of-29 → 31-of-38; 27 clusters → 32; and "there is no Schema arm and there may never be" is contradicted by a `schema_repro` arm that exists. Everything downstream — effect sizes, actions-per-call, ρ, P5, E5 — was computed over the v0 spectrum. **Cannot be patched number by number; §7 needs re-deriving against `battery_version: "v2"`.** | `sections/07_battery.md` | flagged in a standing note this pass; **re-derivation not done** |
 | **A2** | Abstract asserts no benchmark game was played for any result, while §7 reports effect sizes over four played ARC games and §10 says so. The current wording qualifies it ("played *for* this paper"); confirm the qualification survives §7's re-derivation, since A1 changes what §7 claims. | `sections/00_abstract.md` | open, blocked on A1 |
 | **A3** | "The miss was named … with its three pairs" overstates `THEORIZE_LOG.md` R-05, which names three *directions* and one cell. The "three pairs" gloss was written at M6, after the score existed. This is the sentence that turns an anecdote into evidence for the seal. | `sections/00_abstract.md`, `sections/01_intro.md` | open |
 | **A4** | A third audit pass is owed: both existing audits predate §6, §8, §9 and the renumbering. | whole paper | open |
@@ -54,8 +54,21 @@ closed in the current sections (the Lean weight table, the anti-circularity cite
 
 ## D · Novelty and related work — the largest reviewer-facing gap
 
-REVIEW's issue 5, unaddressed. Five priors go uncited, and each maps onto a
-headline:
+**Status after P7: the citation half is closed, the claim-scoping half is not.**
+Four of the five bullets below now have real, twice-verified citations in §11 —
+Angluin and Chow for the reset assumption and conformance testing, Mitchell and
+Lau for the version space, De Millo–Lipton–Perlis with Dijkstra, Fetzer and Boehm
+for specification validity, and Ammons et al. for the mined-specification setting
+that is the exhibit's *actual* point. §11.3 states in the paper's own voice which
+of its framings the literature already owns. What is **not** closed is the
+consequence: the abstract still reads as "four results" where the honest scope is
+an instrument-and-artefact contribution, and the fifth bullet — "engineering, not
+a result" — is untouched. Two named priors remain deliberately uncited because
+they could not be confirmed twice: Vasilevskii, and information-gain experiment
+design, for which no specific anchor was verified.
+
+The original item, kept for the record. REVIEW's issue 5. Five priors go uncited,
+and each maps onto a headline:
 
 * "prediction perfect, understanding broken" restates the framework's own premise
   and is guaranteed by construction — setup, not finding;
@@ -75,7 +88,7 @@ headline:
 | id | item | measure |
 |---|---|---|
 | **E1** | Length against a workshop budget. Was 11,451 words against ~4,000 at review time; the draft has grown since and this pass adds three sections. | ~3× and rising |
-| **E2** | `[bib: TODO]` markers with no bibliography file. | 19 at last count |
+| **E2** | ~~`[bib: TODO]` markers with no bibliography file.~~ **Closed at P7.** `references.bib` holds 70 records, each cross-verified against two independent sources with traces in `runs/20260728T102014Z-P7/search-traces/`; 65 are cited and no marker remains in any section. Two priors REVIEW named are still uncited on purpose — Vasilevskii, and the 2016 Unsolvability IPC — because neither could be confirmed twice. | was 19 → **0** |
 | **E3** | Placeholder authorship, affiliation and venue. | by design, until submission |
 | **E4** | Typography: mixed `·` and `—` separators; Chinese terms glossed inconsistently (重证 as "re-proof" in §5.5 and "re-certify" in §1.3). | — |
 
