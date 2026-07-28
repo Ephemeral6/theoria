@@ -1,0 +1,8 @@
+{
+  "base_commit": "6f6b87a49fc3545269a35bedb49465fd50ac4c9b",
+  "branch": "agent/e7-deadlock-claim-audit",
+  "prompt_id": "E7-deadlock-claim-audit",
+  "status": "in-progress",
+  "utc": "20260728T150713Z",
+  "worker": "W-1411"
+}
