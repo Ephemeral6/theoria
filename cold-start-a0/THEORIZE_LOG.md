@@ -391,13 +391,30 @@ certificate, whereas *no linear pagoda exists* is a fact about the method that
 only `lp_potential` can report — the first draft of the header conflated the
 two and libelled `01000`, which has a certificate.
 
-**What is not discharged.** The method gap is unchanged: `lp_potential` is still
-sound and incomplete, and exhaustion is `O(reachable set)`. On the 33-cell
-English board the reachable set is astronomical and the same manual is refused —
-`MAX_ENUMERATED_STATES` bounds it, and crossing the bound produces a refusal
-rather than a file nobody can compile. So **the proposition is proved and the
-method gap stands**; a board where neither method reaches still has no proof,
-and D-TC-008's trade-off (empty axioms xor linear proof size) is untouched.
+**What exhaustion does not fix, and what does.** Exhaustion is
+`O(reachable set)`: it closes this configuration and does not survive a larger
+board. The structural answer is a **third** method, and the engine for it already
+exists — `ic3_pdr`, which is infeasible-LP's counterpart and reports the same
+three obligations. Its certificate is now consumed
+(`theory_compiler/ic3_certificate.py`, schema in
+`CONTRACTS/ic3_certificate_v0.1.md`, manual side `clauses`/`cnf(...)` at
+revision item 14), and the Lean it produces closes `inv_closed` by splitting on
+**moves** — so proof size tracks the invariant rather than the state space.
+Measured on the peg4 fixture: `computational` empty axiom set, `algebraic`
+`propext` only, which is one axiom cheaper than the algebraic pagoda route.
+
+**Still not discharged.** Three limits, stated rather than rounded off:
+
+* The **emitting** half of the ic3 interop is `engine-rig`'s file and is not
+  written. The consumer runs against a fixture transcribed from the candidate
+  row they have already published; the schema is a draft awaiting their
+  countersignature.
+* "Proof size tracks the invariant" is a **structural** claim that the fixture is
+  too small to demonstrate — 4 cells, 2 clauses, an inner split over 2 of 4
+  positions. It pays on a large board and there is no large board here.
+* `lp_potential` is still sound and incomplete, exhaustion is still
+  `O(reachable set)`, and a configuration all three methods miss still has no
+  proof. D-TC-008's trade-off is untouched.
 
 ### E-07, in full — an obligation the guard language cannot let a manual meet
 

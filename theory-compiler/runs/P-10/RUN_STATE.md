@@ -3,7 +3,7 @@
 Prompt: `monitor/prompts/P-10-contracts-v02.md` · branch `agent/p10-contracts-v02` ·
 base `edb3c37` · 2026-07-28.
 
-一次开窗，八项清偿。契约两份、缺陷两条、回归四份，外加 `conflict` 证明义务、它抓出的 E-07，以及 E-06 的证明那一半。
+一次开窗，九项清偿。契约两份、缺陷两条、回归四份，外加 `conflict` 证明义务、它抓出的 E-07，以及 E-06 的证明那一半。
 
 ---
 
@@ -141,6 +141,27 @@ D-TC-010 当初决定「说明书的目标宽于证书时拒绝生成」。那�
 讲的是关卡的 `goal_states`；两者不一致时会放行一个**假的** `unsolvable`。现在两个
 都查，负向测试写的时候是红的。
 
+### 9 · `ic3_pdr` 证书 — 消费端完成，发射端是别人的文件
+
+E-06 由穷举清偿，而穷举是 `O(可达集)`。结构上的答案是第三种方法，引擎已存在。
+
+**做完的（本轨道的一半）**：schema 草案 `CONTRACTS/ic3_certificate_v0.1.md`；
+读取器 `ic3_certificate.py`，三条义务对**全状态空间**重算、`inv_closed` 失败给
+见证；说明书侧 `clauses <name> over <field>` + `cnf(<name>)`（契约修订记录第 14
+条，`cnf` 是本语法里唯一不带比较运算符的不变式体）；Lean 发展**分动作**闭合，
+内层只在不变式点名的格子上分裂。
+
+**实测**（peg4，`lean` 4.9.0）：`computational` **空公理集**，`algebraic` 只带
+`propext`——比 pagoda 的代数形态便宜一条。永不出现 `sorryAx` / `ofReduceBool`。
+
+**没做的（对方的一半）**：`ic3_pdr` 把收敛的不变式写成 JSON 落到
+`engine-rig/interop/certificates/`。`engine-rig/` 是对方轨道的目录，本轨道一个字
+不写。夹具从对方**已经发布的候选行**逐字段转录，`provenance` 记着来源与 `id`，
+两项测试分别盯着「不许与那一行漂移」和「engine-rig 树里不许出现 ic3 文档」。
+
+**限制照录**：4 格、2 条子句、内层分裂 4 选 2——「规模跟着不变式走」在这个尺寸上
+**省不出钱**，是结构上成立、大棋盘上才付得出的说法。
+
 ---
 
 ## 复核抓到的东西（本轮的主要产出之一）
@@ -179,8 +200,9 @@ D-TC-010 当初决定「说明书的目标宽于证书时拒绝生成」。那�
 
 ## Not delivered / 仍然成立的限制
 
-* **会签未到手。** 契约是**草案**，engine-rig 回签前不生效。异轨道异步，本轨道
-  不等待。
+* **会签未到手。** **两份**契约都是草案（`candidates_schema_v0.2`、
+  `ic3_certificate_v0.1`），engine-rig 回签前不生效。异轨道异步，本轨道不等待。
+* **ic3 证书的发射端未实现**，且不由本轨道实现——见第 9 节。
 * ~~**E-06 的证明那一半。**~~ **已清偿**，见第 8 节。
 * **方法缺口本身仍然成立**：`lp_potential` 可靠而不完备，穷举是 O(可达集)。
   可达集大到两种方法都够不着的世界仍然没有证明，D-TC-008 的取舍一字未变。
@@ -203,8 +225,8 @@ D-TC-010 当初决定「说明书的目标宽于证书时拒绝生成」。那�
 ## Tests
 
 ```
-theory-compiler          200 passed          (THEORIA_REQUIRE_LEAN=1，含真 Lean 编译)
-theory-compiler          191 passed, 9 skipped   (无 lean 时的默认)
+theory-compiler          224 passed          (THEORIA_REQUIRE_LEAN=1，含真 Lean 编译)
+theory-compiler          212 passed, 12 skipped  (无 lean 时的默认)
 cold-start-a0             56 passed          (LEAN=… 时；无 lean 时 53 passed, 3 skipped)
 ```
 

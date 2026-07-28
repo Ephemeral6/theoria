@@ -1,0 +1,57 @@
+{
+  "claim": "unsolvable_0111_to_0100",
+  "cnf": [
+    [
+      [
+        "pos1",
+        false
+      ],
+      [
+        "pos2",
+        true
+      ]
+    ],
+    [
+      [
+        "pos1",
+        true
+      ],
+      [
+        "pos2",
+        false
+      ]
+    ]
+  ],
+  "conclusion": "no goal state is reachable from 0111",
+  "goal_states": [
+    "0100"
+  ],
+  "initial_state": "0111",
+  "invariant": "I(s) := (!pos1 | pos2) & (pos1 | !pos2)",
+  "n_pos": 4,
+  "obligations": {
+    "goal_break": {
+      "statement": "every goal state falsifies the invariant"
+    },
+    "inv_closed": {
+      "checked_over": "all move instances on the full state space",
+      "statement": "no legal move leaves the invariant"
+    },
+    "inv_init": {
+      "statement": "the invariant holds at the initial state"
+    }
+  },
+  "produced_by": "engine-rig/engines/ic3_pdr",
+  "provenance": {
+    "candidate_id": "1a13babc-17e1-5675-a280-59bb656e50ba",
+    "derived_from": "engine-rig/artifacts/candidates.jsonl",
+    "note": "Transcribed by the theory-compiler track from the candidate row engine-rig has already published. It is NOT an engine-rig artefact: the emitting half of this interop belongs to that track and this track does not write into its tree. Every field above is copied from the row; none is invented. All three obligations are re-derived by the consumer before use."
+  },
+  "schema": "ic3_pdr/inductive_invariant_certificate@1",
+  "variables": [
+    "pos0",
+    "pos1",
+    "pos2",
+    "pos3"
+  ]
+}

@@ -13,7 +13,7 @@ produced this file: **a change needs a ledger entry or a defect that forced it**
 named in the revision record. "It would read better" is not a reason to touch a
 contract two tracks compile against.
 
-Revision items 11 to 13 landed **before** that tag, in the same unmerged branch
+Revision items 11 to 14 landed **before** that tag, in the same unmerged branch
 as the rest of this file, and are recorded here rather than in a v0.3 for that
 reason. After the tag the identical change would have needed a new file; the
 policy is about the tag, not about the calendar, and this note exists so the
@@ -48,7 +48,14 @@ word_table:
   domain   <name> { <v1>, <v2>, ... }     # NEW — a finite value set        (E-02)
   landmark <name>                         # NEW — a cell the level locates  (E-04)
   weights  <name> over <field>            # NEW — a potential the level fills (E-05)
+  clauses  <name> over <field>            # NEW — a separating invariant     (E-06)
 ```
+
+**`clauses <name> over <field>`** is `weights` one level of expressivity over:
+the domain declares that a propositional separating invariant is available, and
+an `ic3_pdr` certificate supplies the clauses. Declared for the same reason the
+weights are — a reader of `theory.dsl` alone should be able to see that the
+manual rests on an engine-derived object, and on **which** engine.
 
 **`unique` on a field** (E-07) says: no two *live* instances of this type ever
 share a value of it. `pos: Int unique` is "pegs cannot stack". It is a fact
@@ -205,9 +212,14 @@ laws:
 
 * **Guard language:** spatial predicates, object comparisons, integer arithmetic,
   and negation. Proof goes through a decidable procedure (`decide`/`omega`).
-* **Invariant language:** linear arithmetic, object counts, mod-2 parity, and
-  finite weight functions of pagoda type. **Connectivity-class invariants remain
-  unsupported** — record them in the ledger; do not extend this contract by hand.
+* **Invariant language:** linear arithmetic, object counts, mod-2 parity, finite
+  weight functions of pagoda type, and **propositional CNF over cell occupancy**
+  (`cnf(<name>)`, E-06). The last of those is the only invariant body that takes
+  **no comparison operator** — a predicate is already true or false of a state
+  and there is nothing to compare it to. Every other body still needs its
+  operator, so a bare arithmetic body missing `<=` is the typo it always was.
+  **Connectivity-class invariants remain unsupported** — record them in the
+  ledger; do not extend this contract by hand.
 * **domain/problem split:** `word_table` + `semantics` + `rules` + `laws` are the
   domain and travel across levels. Grid layout, initial state and landmark
   coordinates are the problem, and are supplied per level.
@@ -273,6 +285,7 @@ silently.
 | 11 | `conflict` must be discharged, not merely declared | **E-07**, and this contract's own §semantics, which said "`certify` must prove it" while nothing did | for one revision the manual named which of constraint 9's two routes it claimed and no tool checked either. A declaration nobody verifies reads exactly like a verified one — strictly worse than not asking, because it looks like evidence |
 | 12 | `unique` on an object field | **E-07** | the peg manual declared `conflict exclusive` and could not entail it: its jump schema quantifies over a second peg and pins it only by position, so two groundings both claim the jumping peg whenever two pegs share a cell. The fact that pegs cannot stack was true of the world and had nowhere to be written down |
 | 13 | a generator may close a goal by a second method, with attribution | **E-06** | `goal count(Peg, alive) = 1` went one revision unproven. The certificate could not license it and the compiler refused — right while the pagoda route was the only route, and a withheld proof once exhaustion was also available |
+| 14 | `clauses <name> over <field>` and `cnf(<name>)` | **E-06** | exhaustion closed E-06 at `O(reachable set)`, which does not survive a larger board. `ic3_pdr` reaches configurations no linear pagoda covers, and its invariant had no form in this language — so a manual could not name the object its proof rested on. Schema: `CONTRACTS/ic3_certificate_v0.1.md` |
 
 Ledger entries E-01 through E-05 are **discharged** by this revision. E-03 was
 the one named as "the one to fix first"; it is item 1.

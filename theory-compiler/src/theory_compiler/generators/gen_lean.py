@@ -23,6 +23,15 @@ picks:
     laws are proved by `cases` and `decide`. This is A0's route, generalised off
     the AST, and it is what a world with latches and portals gets.
 
+`ic3`
+    The manual declares `clauses sep over ...` and an invariant `cnf(sep)`
+    (ledger entry E-06). The clauses come from an `ic3_pdr` certificate — the
+    engine that exists precisely because `lp_potential` is infeasible on some
+    unsolvable configurations. Closure splits on moves and, inside each move,
+    only on the cells the *invariant* mentions, so the proof grows with the
+    invariant rather than with the board. It reaches configurations no linear
+    pagoda covers.
+
 Three commitments, each with a reason:
 
 * **`native_decide` is never emitted.** It discharges a goal by running compiled
@@ -45,6 +54,9 @@ Axiom budgets, measured rather than hoped (see DECISIONS.md D-TC-008):
 | pagoda, `proof="computational"` | *empty* | `O(2^n)` |
 | pagoda, `proof="algebraic"` | `propext, Quot.sound` | `O(n)` |
 | enumerative | *empty* | `O(|reachable|)` |
+| hybrid (E-06) | *empty* | `O(|reachable|)` |
+| ic3, `proof="computational"` | *empty* | `O(2^n)` |
+| ic3, `proof="algebraic"` | `propext` | `O(moves x 2^|invariant vars|)` |
 
 The algebraic proof cannot reach an empty axiom set, and the reason is not the
 pagoda argument: in Lean 4.9 every core `Int` lemma — `Int.add_comm`,
@@ -474,6 +486,193 @@ def _provenance(path: str) -> str:
 
 # -------------------------------------------------------------- enumerative
 
+def _cnf_request(ir: WorldIR) -> Optional[Tuple[str, str]]:
+    """(invariant name, clauses name) if the manual asks for a CNF invariant."""
+    if ir.ast.laws is None:
+        return None
+    for inv in ir.ast.laws.invariants:
+        text = inv.expr_text.replace(" ", "")
+        if text.startswith("cnf(") and text.endswith(")"):
+            return inv.name, text[len("cnf("):-1]
+    return None
+
+
+def _ic3_lean(ir: WorldIR, ns: dict, cert, inv_name: str,
+              goal_states: Sequence[str], proof: str = "algebraic") -> str:
+    """A Lean development from an `ic3_pdr` separating invariant.
+
+    The point of consuming this at all is proof *size*. Exhaustion closed E-06
+    for a five-state world and is `O(reachable set)`; a CNF invariant is closed
+    by splitting on **moves**, so the development scales with the invariant and
+    the board rather than with the state space. That is the same trade the
+    pagoda route buys, extended to configurations no linear pagoda reaches.
+
+    Where the case split does happen it is over the variables the *invariant*
+    mentions plus the three cells the move touches — not over the whole board.
+    On this fixture that is 3 of 4 positions, which saves little; on a board
+    where the invariant names two cells out of thirty-three it is the whole
+    difference, and it is why the split is computed rather than hardcoded to
+    "all of them".
+
+    Three obligations, and each one is the certificate's own claim re-proved in
+    Lean rather than restated: `inv_init` at the start state, `inv_closed` over
+    every move, `goal_break` at each goal. `unsolvable` follows by induction on
+    `Reachable`.
+    """
+    n = cert.n_pos
+    fields = ["p%d" % i for i in range(n)]
+    derived = _derive_moves(ns, n)
+    if set(derived) != set(cert.moves()):
+        raise LeanGenError(
+            "the manual's rules and the certificate describe different move "
+            "sets. Moves the rules allow and the certificate never weighed: %s. "
+            "Moves the certificate weighed and the rules do not allow: %s. An "
+            "invariant is inductive only with respect to a transition relation, "
+            "so the two have to be the same relation."
+            % (sorted(set(derived) - set(cert.moves())),
+               sorted(set(cert.moves()) - set(derived))))
+
+    start = ns["occupancy"](ns["initial_state"]())
+    if start != cert.initial_state:
+        raise LeanGenError(
+            "the level starts at %s and the certificate is about %s"
+            % (start, cert.initial_state))
+
+    # The positions the invariant actually reads. Everything else stays abstract.
+    mentioned = sorted({cert.index_of(v) for clause in cert.cnf for v, _ in clause})
+
+    L: List[str] = []
+    L.append("/-")
+    L.append("  Auto-generated from theory.dsl — DO NOT EDIT.")
+    L.append("")
+    L.append("  Unsolvability of %s from %s, by a **separating invariant**."
+             % ("{" + ", ".join(goal_states) + "}", cert.initial_state))
+    L.append("")
+    L.append("  The invariant is the manual's `%s`, and its clauses are NOT" % inv_name)
+    L.append("  written here by hand. They come from")
+    L.append("      %s" % _provenance(cert.path))
+    L.append("  produced by %s, and were re-checked here" % cert.produced_by)
+    L.append("  before emission: all three obligations recomputed over the full")
+    L.append("  state space, the producer's own `conditions` block not believed.")
+    L.append("")
+    L.append("      I(s) = %s" % cert.clause_text())
+    L.append("")
+    if proof == "algebraic":
+        L.append("  Why this route and not exhaustion: `inv_closed` below splits on")
+        L.append("  **moves** (%d of them), and within each move only on the %d"
+                 % (len(derived), len(mentioned)))
+        L.append("  position(s) the invariant mentions — not on the board. The")
+        L.append("  reachable set is never enumerated, so the proof does not grow")
+        L.append("  with it. Cost: `simp` rewrites propositions, so the axiom set")
+        L.append("  is `propext`. Never `sorryAx`, never `Lean.ofReduceBool`.")
+    else:
+        L.append("  `proof=\"computational\"`: `inv_closed` is closed by `decide`")
+        L.append("  over every state, which keeps the axiom set **empty** and")
+        L.append("  costs a 2^%d split. The same trade D-TC-008 records for the" % n)
+        L.append("  pagoda route: empty axioms xor a proof that does not grow")
+        L.append("  with the board. Both are honest; neither is both.")
+    L.append("-/")
+    L.append("")
+    L.append("inductive Pos where")
+    for i in range(n):
+        L.append("  | p%d" % i)
+    L.append("  deriving DecidableEq, Repr")
+    L.append("")
+    L.append("/-- One `Bool` per cell: `true` is occupied. -/")
+    L.append("structure St where")
+    for f in fields:
+        L.append("  %s : Bool" % f)
+    L.append("  deriving DecidableEq, Repr")
+    L.append("")
+    L.append("def St.get (s : St) : Pos → Bool")
+    for i, f in enumerate(fields):
+        L.append("  | .p%d => s.%s" % (i, f))
+    L.append("")
+    L.append("def St.set (s : St) : Pos → Bool → St")
+    for i, f in enumerate(fields):
+        L.append("  | .p%d, v => { s with %s := v }" % (i, f))
+    L.append("")
+    L.append("inductive Move where")
+    for i, m in enumerate(derived):
+        L.append("  | m%d   -- jump(%d,%d,%d)" % (i, m[0], m[1], m[2]))
+    L.append("  deriving DecidableEq, Repr")
+    L.append("")
+    for role, idx in (("src", 0), ("over", 1), ("dst", 2)):
+        L.append("def Move.%s : Move → Pos" % role)
+        for i, m in enumerate(derived):
+            L.append("  | .m%d => .p%d" % (i, m[idx]))
+        L.append("")
+    L.append("def legal (s : St) (m : Move) : Bool :=")
+    L.append("  s.get m.src && s.get m.over && !s.get m.dst")
+    L.append("")
+    L.append("def applyMove (s : St) (m : Move) : St :=")
+    L.append("  ((s.set m.src false).set m.over false).set m.dst true")
+    L.append("")
+    L.append("/-- The engine's separating invariant, clause by clause. -/")
+    L.append("def Inv (s : St) : Bool :=")
+    L.append("  " + " && ".join(
+        "(" + " || ".join(
+            ("s.p%d" if value else "!s.p%d") % cert.index_of(v)
+            for v, value in clause) + ")"
+        for clause in cert.cnf))
+    L.append("")
+    L.append("def s0 : St := %s" % _lean_state(cert.initial_state))
+    L.append("")
+    L.append("inductive Reachable : St → Prop where")
+    L.append("  | init : Reachable s0")
+    L.append("  | step : ∀ s m, Reachable s → legal s m = true → "
+             "Reachable (applyMove s m)")
+    L.append("")
+    L.append("theorem inv_init : Inv s0 = true := by decide")
+    L.append("")
+    if proof == "algebraic":
+        L.append("/-- Splitting on `Move` first keeps the state abstract; the inner")
+        L.append("    split is only over the cells the invariant reads. -/")
+        L.append("theorem inv_closed (s : St) (m : Move) (hl : legal s m = true)")
+        L.append("    (hi : Inv s = true) : Inv (applyMove s m) = true := by")
+        L.append("  cases m <;>")
+        for i in mentioned:
+            L.append("    cases h%d : s.p%d <;>" % (i, i))
+        L.append("    simp_all [legal, applyMove, Inv, St.get, St.set,")
+        L.append("              Move.src, Move.over, Move.dst]")
+    else:
+        L.append("/-- Every state, every move, by `decide`: empty axiom set, 2^%d." % n)
+        L.append("    The algebraic form of this proof is the same statement with")
+        L.append("    the board left abstract. -/")
+        L.append("theorem inv_closed (s : St) (m : Move) (hl : legal s m = true)")
+        L.append("    (hi : Inv s = true) : Inv (applyMove s m) = true := by")
+        L.append("  revert hl hi")
+        L.append("  cases s with")
+        L.append("  | mk %s =>" % " ".join(fields))
+        L.append("    " + " <;> ".join("cases %s" % f for f in fields)
+                 + " <;> cases m <;> decide")
+    L.append("")
+    L.append("theorem inv_all (s : St) (h : Reachable s) : Inv s = true := by")
+    L.append("  induction h with")
+    L.append("  | init => exact inv_init")
+    L.append("  | step s m _ hl ih => exact inv_closed s m hl ih")
+    L.append("")
+    for i, goal in enumerate(goal_states):
+        L.append("theorem goal_break_%d : Inv %s = false := by decide"
+                 % (i, _lean_state(goal)))
+    L.append("")
+    L.append("theorem unsolvable : ¬ ∃ s : St, Reachable s ∧ (%s) := by"
+             % " ∨ ".join("s = %s" % _lean_state(g) for g in goal_states))
+    L.append("  rintro ⟨s, hr, hg⟩")
+    L.append("  have hi := inv_all s hr")
+    L.append("  rcases hg with %s" % " | ".join(
+        "rfl" for _ in goal_states))
+    for i in range(len(goal_states)):
+        L.append("  · rw [goal_break_%d] at hi; exact Bool.noConfusion hi" % i)
+    L.append("")
+    L.append("#print axioms inv_init")
+    L.append("#print axioms inv_closed")
+    L.append("#print axioms inv_all")
+    L.append("#print axioms unsolvable")
+    L.append("")
+    return "\n".join(L)
+
+
 #: Above this, transcribing the reachable set into Lean stops being a proof and
 #: starts being a build problem. The number is a policy, not a discovery: what
 #: matters is that the limit is *stated* and that crossing it produces a refusal
@@ -740,6 +939,37 @@ def generate_lean(ast: TheoryAST, problem: ProblemSpec,
     # certificate and never see one — not an oversight: neither form's output
     # depends on the weights, so there is nothing in them that could go stale.
     # The predictor is a `step` function; a pagoda potential is not part of it.
+    # An `ic3_pdr` certificate carries a CNF rather than a weight vector, so it
+    # takes its own route and must not be handed to `_resolve_weights`.
+    from ..ic3_certificate import InductiveInvariantCertificate
+    if isinstance(certificate, InductiveInvariantCertificate):
+        ir = build_ir(ast, problem)
+        ns = _load_predictor(ast, problem)
+        cnf_request = _cnf_request(ir)
+        if cnf_request is None:
+            raise LeanGenError(
+                "an ic3_pdr certificate was supplied but the manual declares no "
+                "`cnf(...)` invariant, so nothing in it would be used. Declare "
+                "the invariant (E-06) or drop the certificate.")
+        inv_name, clauses_name = cnf_request
+        declared = {d.name for d in ir.ast.word_table.clauses}
+        if clauses_name not in declared:
+            raise LeanGenError(
+                "invariant %r refers to clauses %r, which word_table never "
+                "declares. Add `clauses %s over <field>` (E-06)."
+                % (inv_name, clauses_name, clauses_name))
+        goal_states = _goal_states(ns, ir)
+        from ..ic3_certificate import covers as ic3_covers
+        uncovered = ic3_covers(certificate, goal_states)
+        if uncovered:
+            raise CertificateGapError(
+                "the manual's goal picks out %s on this board and certificate "
+                "%r excludes only %s; %s is left unproven. `ic3_pdr` is a "
+                "different method from `lp_potential`, not an omniscient one."
+                % (goal_states, certificate.claim, certificate.goal_states,
+                   uncovered))
+        return _ic3_lean(ir, ns, certificate, inv_name, goal_states, proof)
+
     ir = build_ir(ast, problem, certificate)
     ns = _load_predictor(ast, problem)
 

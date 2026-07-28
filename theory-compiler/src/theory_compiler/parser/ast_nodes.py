@@ -60,6 +60,20 @@ class WeightsDecl:
 
 
 @dataclass
+class ClausesDecl:
+    """E-06. A named propositional invariant whose *clauses* live in a certificate.
+
+    The exact shape of `WeightsDecl`, one level of expressivity over: the domain
+    declares that a separating invariant over `over` is available, and `ic3_pdr`
+    supplies the clauses. Declared for the same reason the weights are — so a
+    reader of `theory.dsl` alone can tell that the manual rests on an
+    engine-derived object, and which engine derived it.
+    """
+    name: str
+    over: str
+
+
+@dataclass
 class DomainDecl:
     """E-02. A finite value set a rule variable may range over."""
     name: str
@@ -73,6 +87,7 @@ class WordTable:
     accounts: list[ConceptAccount] = field(default_factory=list)
     landmarks: list[LandmarkDecl] = field(default_factory=list)
     weights: list[WeightsDecl] = field(default_factory=list)
+    clauses: list[ClausesDecl] = field(default_factory=list)
     domains: list[DomainDecl] = field(default_factory=list)
 
 
