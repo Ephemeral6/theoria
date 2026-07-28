@@ -199,7 +199,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--root", default=REPO)
     ap.add_argument("--json", action="store_true")
+    ap.add_argument("--sensitivity", action="store_true",
+                    help="the same gold standard under four membership rules")
     args = ap.parse_args(argv)
+    if args.sensitivity:
+        for name, m in sensitivity(args.root):
+            print(_fmt(name, m))
+        return 0
     rep = run(args.root)
     if args.json:
         print(json.dumps(rep, ensure_ascii=False, indent=2, sort_keys=True))
@@ -215,6 +221,37 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(_fmt("V11 gold, probe-enumerated", blob["pinned_v11_only"]))
         print(_fmt("V11+V15 gold, enumerated", blob["pinned"]))
     return 0
+
+
+def sensitivity(root: str = REPO) -> List[Tuple[str, Dict[str, object]]]:
+    """The same gold standard under four membership rules, strictest last.
+
+    "Did you draw the frame to make the numbers look good" is the right question
+    to ask of this item, so it is answered with a measurement rather than a
+    paragraph. Swapping membership for progressively stricter rules -- including
+    V14's own (`can_refuse` required) -- moves FNR between 0.369 and 0.507 and
+    never below V14's published 0.318. The conclusion does not rest on where
+    V15 drew the line; it rests on the gold standard going from 43% of the
+    population to 90%.
+
+    FPR *does* move with the denominator, and in the direction that flatters
+    V15's frame, so the false-positive number to quote is the strictest row.
+    """
+    units = frame.build(root)
+    fpaths = {u["path"] for u in units}
+    can_red = {u["path"] for u in units if u["can_refuse"]}
+    stratum_a = {u["path"] for u in units if u["stratum"] == frame.STRATUM_A}
+    meas, enumerated = measured(root)
+    g11 = gold_v11(root)
+    seen = {p for p, _ in g11}
+    merged = g11 + [(p, v) for p, v in gold_v15(fpaths) if p not in seen]
+    return [
+        ("full frame (V15's definition)", confusion(merged, meas)),
+        ("can_refuse only (V14's own rule)", confusion(merged, meas, can_red)),
+        ("stratum A only", confusion(merged, meas, stratum_a)),
+        ("stratum A and can_refuse", confusion(merged, meas, stratum_a & can_red)),
+        ("what probe.py enumerates", confusion(merged, meas, enumerated)),
+    ]
 
 
 if __name__ == "__main__":
