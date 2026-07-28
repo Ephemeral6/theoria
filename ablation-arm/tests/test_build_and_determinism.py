@@ -126,3 +126,29 @@ def test_the_ledger_differs_only_in_its_wall_clock():
               if l.strip()]
     assert all(stamps), "every record must carry a stamp, or `ts` is not the "\
                         "field that differs"
+
+
+def test_a_subset_run_declines_to_overwrite_the_full_record():
+    """The footgun that fired twice, closed at the source.
+
+    Two different test files ran `run_all` on a subset and silently replaced the
+    checked-in five-world record with a partial one. A rule every caller has to
+    remember is a rule that gets forgotten, so the subset case declines on its
+    own -- and this is the test that says so, since the default is invisible at
+    every call site that relies on it.
+    """
+    import json
+
+    path = os.path.join(ARM, "artifacts", "run_all.json")
+    with open(path, encoding="utf-8") as handle:
+        before = json.load(handle)
+    assert before["is_full_run"] is True
+    assert len(before["worlds"]) == 5
+
+    partial = run_arm.run_all(["a0-base"])
+    assert partial["is_full_run"] is False
+    assert len(partial["worlds"]) == 1
+
+    with open(path, encoding="utf-8") as handle:
+        after = json.load(handle)
+    assert after == before, "a subset run overwrote the full record"

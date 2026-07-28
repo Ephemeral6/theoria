@@ -140,8 +140,7 @@ def test_a_true_impossibility_and_a_false_one_are_indistinguishable(run_all_repo
 
 def test_the_comparison_would_report_a_difference_if_there_were_one():
     """A comparator that always says `same` is not a comparator."""
-    report = run_arm.run_all(["a0-base", "a0-no-button", "a2-holed"],
-                             write=False)
+    report = run_arm.run_all(["a0-base", "a0-no-button", "a2-holed"])
     doctored = json.loads(json.dumps(report["worlds"]))
     doctored["a2-holed"]["verdict"] = "solvable"
     result = run_arm._exhibit_comparison(doctored)
