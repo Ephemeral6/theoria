@@ -1,4 +1,4 @@
-"""The 20 rows re-judged in V17, and why each one is in.
+"""The 22 rows re-judged in V17, and why each one is in.
 
 Re-judging only the `部分` rows would answer the wrong question. If a criterion
 is allowed to move rows *out* of `部分` and nothing is ever allowed to move *in*,
@@ -8,7 +8,7 @@ is trivially perfect. The V17 work order names that failure mode explicitly:
 
 So the sample is stratified, and the two control strata are the point:
 
-  ``partial``   12 rows the V15 judges graded `部分`. Ten of them are the ten
+  ``partial``   14 rows the V15 judges graded `部分`. Ten of them are the ten
                 `部分` rows that carry a pinned false negative -- the rows the
                 whole V15 headline rests on. All ten are in.
   ``present``   4 rows graded `是`. If the criterion is sound these should
@@ -19,9 +19,11 @@ So the sample is stratified, and the two control strata are the point:
 
 Every row `PARTIAL_CRITERION.md` uses as a worked example is held out. A judge
 who has read the criterion has been told those answers, and scoring a judge on an
-example is scoring a lookup. Five of the six examples are V11 rows, which the
-sample never draws from; the sixth (`figures/fig02_bill_shape.py`) is the one
-`部分` row excluded here.
+example is scoring a lookup. The criterion works through **seven** rows: four are
+V11 rows, which this sample never draws from, and three are V15 rows -- of which
+`figures/fig02_bill_shape.py` is the one `部分` row excluded here, and
+`cold-start-a3/a3pipeline/transfer.py` (是) and `cold-start-a2/a2pipeline/
+ledger.py` (否) are barred from the control strata below.
 
     python verify-lab/irr/sample.py --json <out>
 """
@@ -44,7 +46,7 @@ EXAMPLES = ("figures/fig02_bill_shape.py",)
 
 #: Also worked through in the criterion, and so barred from the control strata:
 #: `cold-start-a3/a3pipeline/transfer.py` (是) and
-#: `cold-start-a2/a2pipeline/ledger.py` (否). The other three examples are V11
+#: `cold-start-a2/a2pipeline/ledger.py` (否). The remaining four examples are V11
 #: rows, which this sample never draws from.
 PRESENT = (
     "monitor/quota.py",

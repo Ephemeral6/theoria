@@ -1,5 +1,47 @@
 {
   "incomplete_judges": {},
+  "joint_label": {
+    "all": {
+      "new_verdict_only": {
+        "kappa": 0.882,
+        "n": 22,
+        "po": 0.939,
+        "unanimous": 20
+      },
+      "new_verdict_plus_reason": {
+        "kappa": 0.718,
+        "n": 22,
+        "po": 0.773,
+        "unanimous": 15
+      },
+      "old_verdict_only": {
+        "kappa": 0.764,
+        "n": 22,
+        "po": 0.848,
+        "unanimous": 17
+      }
+    },
+    "partial_stratum": {
+      "new_verdict_only": {
+        "kappa": 0.77,
+        "n": 14,
+        "po": 0.905,
+        "unanimous": 12
+      },
+      "new_verdict_plus_reason": {
+        "kappa": 0.669,
+        "n": 14,
+        "po": 0.738,
+        "unanimous": 9
+      },
+      "old_verdict_only": {
+        "kappa": 0.689,
+        "n": 14,
+        "po": 0.81,
+        "unanimous": 10
+      }
+    }
+  },
   "kappa_delta_bootstrap": {
     "can_red_PLACEBO": {
       "ci95": [
@@ -409,7 +451,14 @@
       ]
     },
     "po": 0.773,
-    "unanimous": 15
+    "unanimous": 15,
+    "unanimous_verdict_split_reason": [
+      "ablation-arm/exhibits/e2_a2.py",
+      "monitor/ci_merge.py",
+      "monitor/reflex.py",
+      "monitor/scan.py",
+      "papers/phase1-workshop/figures/fig2_coverage_accuracy.py"
+    ]
   },
   "reason_codes_new_arm": {
     "C": 11,
@@ -621,5 +670,26 @@
       }
     }
   },
-  "sample_n": 22
+  "sample_n": 22,
+  "undecided": {
+    "flags": {
+      "N1": [
+        "cold-start-a2/a2pipeline/certify_a2.py",
+        "cold-start-a2/a2pipeline/exhibit.py",
+        "cold-start-a2/a2pipeline/repair.py",
+        "cold-start-a3/a3pipeline/certify_a3.py"
+      ],
+      "N2": [],
+      "N3": [
+        "engine-rig/recheck/verify_all.py"
+      ]
+    },
+    "rows_flagged_by_anyone": [
+      "cold-start-a2/a2pipeline/certify_a2.py",
+      "cold-start-a2/a2pipeline/exhibit.py",
+      "cold-start-a2/a2pipeline/repair.py",
+      "cold-start-a3/a3pipeline/certify_a3.py",
+      "engine-rig/recheck/verify_all.py"
+    ]
+  }
 }

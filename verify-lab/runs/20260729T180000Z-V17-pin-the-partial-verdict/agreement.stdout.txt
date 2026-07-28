@@ -38,3 +38,12 @@
       SPLIT monitor/reflex.py                                    D1/D0/D1
       SPLIT monitor/scan.py                                      D3/D0/D2
       SPLIT papers/phase1-workshop/figures/fig2_coverage_accuracy.py D1/D0/D1
+-- joint label (verdict + reason) vs the undefined question
+   all              old_verdict_only           n=22  po=0.848  kappa=0.764  unanimous 17
+   all              new_verdict_only           n=22  po=0.939  kappa=0.882  unanimous 20
+   all              new_verdict_plus_reason    n=22  po=0.773  kappa=0.718  unanimous 15
+   partial_stratum  old_verdict_only           n=14  po=0.810  kappa=0.689  unanimous 10
+   partial_stratum  new_verdict_only           n=14  po=0.905  kappa=0.770  unanimous 12
+   partial_stratum  new_verdict_plus_reason    n=14  po=0.738  kappa=0.669  unanimous 9
+-- 判据不决 (criterion could not decide), new arm
+   rows flagged by at least one judge: 5/22  cold-start-a2/a2pipeline/certify_a2.py, cold-start-a2/a2pipeline/exhibit.py, cold-start-a2/a2pipeline/repair.py, cold-start-a3/a3pipeline/certify_a3.py, engine-rig/recheck/verify_all.py

@@ -56,8 +56,16 @@ def read_table(path: str) -> Dict[str, Dict[str, str]]:
         if red not in CATS or neg not in CATS:
             continue
         reason = cells[3].strip() if len(cells) > 4 else ""
-        out[rel] = {"can_red": red, "has_negctl": neg,
-                    "reason": reason if re.match(r"^(D[0-3]|C|—|-)$", reason) else ""}
+        out[rel] = {
+            "can_red": red, "has_negctl": neg,
+            "reason": reason if re.match(r"^(D[0-3]|C|—|-)$", reason) else "",
+            # A judge that wrote 判据不决 answered anyway, because the task
+            # required a cell. Recording the flag is what stops `po` from being
+            # quoted as if every row had been decidable: it is a forced-choice
+            # statistic, and the adversarial pass was right that no artefact said
+            # so (owed item 5).
+            "undecided": "判据不决" in line,
+        }
     return out
 
 
@@ -265,6 +273,58 @@ def run(dirpath: str, sample: str) -> Dict[str, object]:
         "n": len(all_paths),
         "per_row": {p: [codes[i][k] for i in range(3)]
                     for k, p in enumerate(all_paths)},
+        "unanimous_verdict_split_reason": sorted(
+            p for k, p in enumerate(all_paths)
+            if len({tables[j][p]["has_negctl"] for j in ARMS["new"]}) == 1
+            and len({codes[i][k] for i in range(3)}) > 1),
+    }
+
+    # The comparison that actually decides the commissioned charge (a). The
+    # question is not whether the reason code is noisier than its own verdict
+    # column -- that was the first version of this measurement, and the
+    # adversarial pass was right that it is the wrong baseline. The question is
+    # whether the criterion's *whole output* beats the undefined question it
+    # replaced. Scored on the joint label (verdict, reason) for the new arm
+    # against the old arm's bare verdict, which is all the old arm emits.
+    def _joint(judges: Sequence[str], scope: Sequence[str],
+               with_reason: bool) -> Dict[str, object]:
+        cols = [[tables[j][p]["has_negctl"]
+                 + ("|" + (tables[j][p].get("reason") or "?") if with_reason else "")
+                 for p in scope] for j in judges]
+        labels = sorted({v for col in cols for v in col})
+        # `_fleiss` is hardcoded to the three verdict categories, so the joint
+        # label needs its own marginals; same formula, wider alphabet.
+        n = len(cols)
+        counts = [[sum(1 for c in cols if c[k] == lab) for lab in labels]
+                  for k in range(len(scope))]
+        p_j = [sum(r[c] for r in counts) / (len(scope) * n) for c in range(len(labels))]
+        p_i = [(sum(v * v for v in r) - n) / (n * (n - 1)) for r in counts]
+        p_e = sum(p * p for p in p_j)
+        kappa = None if abs(1 - p_e) < 1e-12 else (sum(p_i) / len(scope) - p_e) / (1 - p_e)
+        return {
+            "po": round(_pairwise(cols), 3),
+            "kappa": None if kappa is None else round(kappa, 3),
+            "unanimous": sum(1 for k in range(len(scope))
+                             if len({c[k] for c in cols}) == 1),
+            "n": len(scope),
+        }
+
+    rep["joint_label"] = {
+        scope_name: {
+            "old_verdict_only": _joint(ARMS["old"], scope, False),
+            "new_verdict_only": _joint(ARMS["new"], scope, False),
+            "new_verdict_plus_reason": _joint(ARMS["new"], scope, True),
+        }
+        for scope_name, scope in (("all", all_paths),
+                                  ("partial_stratum", partial_paths))
+    }
+
+    rep["undecided"] = {
+        "flags": {j: sorted(p for p in all_paths if tables[j][p].get("undecided"))
+                  for j in ARMS["new"]},
+        "rows_flagged_by_anyone": sorted(
+            p for p in all_paths
+            if any(tables[j][p].get("undecided") for j in ARMS["new"])),
     }
     rep["per_row"] = {
         p: {j: tables[j][p]["has_negctl"] for j in list(ARMS["old"]) + list(ARMS["new"])}
@@ -326,6 +386,20 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     for path, trio in sorted(rc["per_row"].items()):          # type: ignore[index]
         if len(set(trio)) > 1:
             print("      SPLIT %-52s %s" % (path, "/".join(trio)))
+    print("-- joint label (verdict + reason) vs the undefined question")
+    for scope in ("all", "partial_stratum"):
+        blob = rep["joint_label"][scope]  # type: ignore[index]
+        for tag in ("old_verdict_only", "new_verdict_only", "new_verdict_plus_reason"):
+            m = blob[tag]
+            print("   %-16s %-26s n=%-3d po=%.3f  kappa=%s  unanimous %d"
+                  % (scope, tag, m["n"], m["po"],
+                     "n/a" if m["kappa"] is None else "%.3f" % m["kappa"],
+                     m["unanimous"]))
+    und = rep["undecided"]
+    print("-- 判据不决 (criterion could not decide), new arm")
+    print("   rows flagged by at least one judge: %d/%d  %s"
+          % (len(und["rows_flagged_by_anyone"]), rep["sample_n"],  # type: ignore[index]
+             ", ".join(und["rows_flagged_by_anyone"])))            # type: ignore[index]
     if args.json:
         with open(args.json, "w", encoding="utf-8", newline="\n") as handle:
             json.dump(rep, handle, ensure_ascii=False, indent=2, sort_keys=True)

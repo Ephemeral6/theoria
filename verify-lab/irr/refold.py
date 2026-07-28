@@ -37,10 +37,22 @@ import frame     # noqa: E402
 RUN = os.path.join(LAB, "runs", "20260729T180000Z-V17-pin-the-partial-verdict")
 
 
-def substitutions(agreement: Dict[str, object]) -> Dict[str, str]:
-    """path -> the new arm's majority 有负控 cell."""
+def substitutions(agreement: Dict[str, object],
+                  drop_d0: bool = False) -> Dict[str, str]:
+    """path -> the new arm's majority 有负控 cell.
+
+    ``drop_d0`` holds back every row any judge diagnosed `D0` -- "E has no
+    refusal path at all". The criterion calls that test 「故意保守的…只会**压低**
+    测出来的假阴率」, so the movement it produces is the movement least entitled
+    to be reported as a finding: it is the author's own thumb, declared in
+    advance, and the adversarial pass was right to demand it be separated out.
+    On two of the three rows it moves, the panel does not even agree `D0` fires.
+    """
     out: Dict[str, str] = {}
+    codes = agreement["reason_code_agreement"]["per_row"]  # type: ignore[index]
     for path, votes in agreement["per_row"].items():  # type: ignore[union-attr]
+        if drop_d0 and "D0" in codes.get(path, []):
+            continue
         trio = [votes[j] for j in agree.ARMS["new"]]
         out[path] = max(agree.CATS,
                         key=lambda c: (trio.count(c), -agree.CATS.index(c)))
@@ -77,8 +89,10 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--agreement", default=os.path.join(RUN, "agreement.json"))
     ap.add_argument("--json", metavar="OUT")
     args = ap.parse_args(argv)
-    subs = substitutions(json.load(open(args.agreement, encoding="utf-8")))
+    blob = json.load(open(args.agreement, encoding="utf-8"))
+    subs = substitutions(blob)
     rep = run(args.root, subs)
+    rep["without_d0_rows"] = run(args.root, substitutions(blob, drop_d0=True))
     print("substituted %d re-judged rows into the gold standard" % rep["substituted"])
     for tag in ("strict", "harsh"):
         for when in ("before", "after"):
@@ -86,6 +100,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             print("  %-6s %-6s n=%-4d TP %-3d FN %-3d FP %-3d TN %-3d FNR %s FPR %s"
                   % (tag, when, m["n"], m["TP"], m["FN"], m["FP"], m["TN"],
                      m["FNR"], m["FPR"]))
+    m = rep["without_d0_rows"]["strict"]["after"]  # type: ignore[index]
+    print("  strict after, holding every D0-diagnosed row at V15's cell "
+          "(%d substituted): n=%d TP %d FN %d FP %d TN %d FNR %s"
+          % (rep["without_d0_rows"]["substituted"],  # type: ignore[index]
+             m["n"], m["TP"], m["FN"], m["FP"], m["TN"], m["FNR"]))
+    print("  new FP introduced: %s"
+          % ", ".join(sorted(set(rep["strict"]["after"]["FP_paths"])       # type: ignore[index]
+                             - set(rep["strict"]["before"]["FP_paths"]))))  # type: ignore[index]
     if args.json:
         with open(args.json, "w", encoding="utf-8", newline="\n") as handle:
             json.dump(rep, handle, ensure_ascii=False, indent=2, sort_keys=True)
