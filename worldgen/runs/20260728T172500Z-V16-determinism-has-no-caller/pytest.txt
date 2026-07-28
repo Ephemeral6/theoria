@@ -1,0 +1,31 @@
+$ git rev-parse HEAD
+91d3a866122379ff9a1519fd0c669f905c8b4e15
+
+$ git status --short worldgen/ monitor/inbox/   # BEFORE
+ M worldgen/RUN_STATE.md
+?? monitor/inbox/20260728T175900Z-V16-determinism-definition-gap.md
+?? worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/
+?? worldgen/tests/determinism_sandbox.py
+?? worldgen/tests/test_determinism_gate.py
+
+$ python -m pytest worldgen/ -q
+........................................................................ [ 16%]
+........................................................................ [ 32%]
+......................................................s................. [ 48%]
+........................................................................ [ 64%]
+..................................sssss.sssss.s.s....................... [ 80%]
+........................................................................ [ 97%]
+.............                                                            [100%]
+432 passed, 13 skipped in 23.04s
+exit=0
+
+$ git status --short worldgen/ monitor/inbox/   # AFTER
+ M worldgen/RUN_STATE.md
+?? monitor/inbox/20260728T175900Z-V16-determinism-definition-gap.md
+?? worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/
+?? worldgen/tests/determinism_sandbox.py
+?? worldgen/tests/test_determinism_gate.py
+
+$ git diff --stat worldgen/RUN_STATE.md   (append-only check)
+ worldgen/RUN_STATE.md | 147 ++++++++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 147 insertions(+)
