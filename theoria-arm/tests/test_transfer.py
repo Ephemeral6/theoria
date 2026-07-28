@@ -436,6 +436,112 @@ def test_every_engine_dispatch_leaves_a_row_even_with_no_desk_call(tmp_path):
     assert online["per_engine"]["mdl_segmenter"]["dispatches"] == len(rows)
 
 
+def _bare_arm(tmp_path, store):
+    """A `TheoriaArm` with just enough wired up to dispatch engines.
+
+    Built without `__init__` on purpose: a real one opens a proxy and a ledger,
+    and what is under test here is one method's decision about whether to run
+    the engines at all.
+    """
+    from inner.loop import TheoriaArm                    # noqa: PLC0415
+
+    arm = TheoriaArm.__new__(TheoriaArm)
+    arm.run = type("R", (), {"run_id": "r-test"})()
+    arm.store = store
+    arm.dir = str(tmp_path)
+    arm.candidates_path = os.path.join(str(tmp_path), "candidates.jsonl")
+    arm.engine_log_path = os.path.join(str(tmp_path), "engines_online.jsonl")
+    arm.engine_rounds = []
+    arm._last_dispatch = None
+    arm._last_dispatch_transitions = -1
+    arm._last_dispatch_idx = -1
+    return arm
+
+
+def test_identical_evidence_is_not_re_swept(tmp_path):
+    """The engines are deterministic given the same frames, so a sweep over a
+    store that has not grown returns exactly what the last one returned. The
+    first live E3 run dispatched twice over the same five transitions, took
+    348 seconds each time, and appended 680 candidate rows each time -- and the
+    second 680 were a copy of the first, on a stream whose contract says sweeps
+    differ because each sees more transitions than the last. The reuse is
+    recorded as its own row, not hidden."""
+    grids = [[[9, 0, 0, 0], [0, 0, 0, 0]],
+             [[0, 9, 0, 0], [0, 0, 0, 0]],
+             [[0, 0, 9, 0], [0, 0, 0, 0]]]
+    store = _store(grids, ["ACTION1", "ACTION2"])
+    arm = _bare_arm(tmp_path, store)
+
+    first = arm._dispatch_engines(label="cold")
+    rows_after_first = sum(1 for line in open(arm.candidates_path,
+                                              encoding="utf-8") if line.strip())
+    second = arm._dispatch_engines(label="theorize")
+    rows_after_second = sum(1 for line in open(arm.candidates_path,
+                                               encoding="utf-8") if line.strip())
+
+    assert second is first, "the second dispatch re-ran the engines"
+    assert rows_after_second == rows_after_first, (
+        "the second dispatch appended %d duplicate candidate rows"
+        % (rows_after_second - rows_after_first))
+
+    entries = arm.engine_rounds
+    assert len(entries) == 2, "the reuse was not recorded as its own row"
+    assert "reused_from_dispatch_idx" not in entries[0]
+    assert entries[1]["reused_from_dispatch_idx"] == 0
+    assert entries[1]["elapsed_ms"] == 0
+    assert entries[1]["candidate_rows_added"] == 0
+    assert "deterministic" in entries[1]["reused_because"]
+    # A reused row still reports what the engines delivered.
+    assert entries[1]["engines"]["mdl_segmenter"]["delivered"] is True
+
+
+def test_new_evidence_does_re_sweep(tmp_path):
+    """The cache must key on the evidence, not merely on having run once. A
+    sweep that never re-runs is a worse defect than one that always does."""
+    grids = [[[9, 0, 0, 0], [0, 0, 0, 0]],
+             [[0, 9, 0, 0], [0, 0, 0, 0]]]
+    store = _store(grids, ["ACTION1"])
+    arm = _bare_arm(tmp_path, store)
+
+    first = arm._dispatch_engines(label="cold")
+    store.add(Step(2, "ACTION2", [[[0, 0, 9, 0], [0, 0, 0, 0]]]))
+    second = arm._dispatch_engines(label="theorize")
+
+    assert second is not first, "a new transition did not trigger a re-sweep"
+    assert "reused_from_dispatch_idx" not in arm.engine_rounds[1]
+    assert arm.engine_rounds[1]["transitions_seen"] == 2
+    assert arm.engine_rounds[0]["transitions_seen"] == 1
+
+
+def test_the_cold_beat_flushes_the_surprises_it_fired(tmp_path):
+    """The cold certify fires the surprises that bring the desk in on turn 1.
+    A run killed between the cold beat and the first theorize -- a window that
+    was a quarter of an hour on the live run -- must not lose the record of why
+    it was about to spend money."""
+    from inner import loop as loop_mod                   # noqa: PLC0415
+
+    flushed = {}
+    original = loop_mod.TheoriaArm._write_run_state
+
+    def spy(self):
+        original(self)
+        path = os.path.join(self.dir, "surprises.jsonl")
+        if self.transfer_report is not None and "cold" not in flushed:
+            flushed["cold"] = sum(1 for line in open(path, encoding="utf-8")
+                                  if line.strip())
+
+    loop_mod.TheoriaArm._write_run_state = spy
+    try:
+        _carried_run(tmp_path, "flush")
+    finally:
+        loop_mod.TheoriaArm._write_run_state = original
+
+    assert "cold" in flushed, "run state was never written after the cold beat"
+    assert flushed["cold"] > 0, (
+        "the cold certify's surprises were still in memory when the cold beat "
+        "returned")
+
+
 def test_a_refusal_counts_as_a_delivery_and_not_as_an_error(tmp_path):
     """`cegis_miner`'s precondition -- exactly one move event per transition --
     is a real claim about a world. A game that does not satisfy it makes the

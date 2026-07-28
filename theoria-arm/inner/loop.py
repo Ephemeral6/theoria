@@ -140,6 +140,9 @@ class TheoriaArm:
         #: record with a row per dispatch and not a total at the end.
         self.engine_log_path = os.path.join(self.dir, "engines_online.jsonl")
         self.engine_rounds: List[Dict[str, Any]] = []
+        self._last_dispatch: Optional[Dict[str, Any]] = None
+        self._last_dispatch_transitions: int = -1
+        self._last_dispatch_idx: int = -1
 
         pricing = None
         try:
@@ -315,6 +318,13 @@ class TheoriaArm:
             actions_spent=self.budget.actions_ok)
         _dump(report_path, self.transfer_report)
         self.books.snapshot("after-cold-certify")
+        # The cold certify fires the surprises that will bring the desk in on
+        # turn 1, and `_write_run_state` is the only thing that flushes the
+        # register to `surprises.jsonl`. Without this the first live E3 run sat
+        # for a quarter of an hour with two surprises in memory and an empty
+        # file on disk -- and a run killed in that window would have lost the
+        # record of why it was about to spend a dollar.
+        self._write_run_state()
         self.turns.append({
             "turn": 0, "beat": "transfer",
             "detail": "carried manual from %s certified cold on %s"
@@ -328,7 +338,48 @@ class TheoriaArm:
         `theorize` would do this itself; it is lifted out here so that every
         dispatch gets a row whether or not a desk call follows it -- the cold
         stage makes none, and a desk that fails still had its engines run.
+
+        **Identical evidence is not re-swept.** The engines are deterministic
+        given the same frames, so a sweep over a store that has not grown
+        returns exactly what the last one returned. The first live E3 run paid
+        for that lesson in the record: the cold beat and the first theorize both
+        dispatched over the same five transitions, took 348 seconds each, and
+        appended 680 candidate rows each -- and the second 680 were byte-for-byte
+        the first 680, on a stream whose contract says sweeps differ because
+        each sees more transitions than the last. Here they saw the same ones,
+        so they were copies, and the claim in `README.md` did not hold for them.
+
+        The reuse is recorded as its own row rather than hidden: a dispatch that
+        did not run is a fact about the run, and `engines_online.jsonl` is the
+        record of what the supply chain actually did.
         """
+        transitions = max(0, len(self.store.grids) - 1)
+        if (self._last_dispatch is not None
+                and self._last_dispatch_transitions == transitions):
+            entry = {
+                "run_id": self.run.run_id,
+                "label": label,
+                "dispatch_idx": len(self.engine_rounds),
+                "step_idx": len(self.store.steps),
+                "transitions_seen": transitions,
+                "elapsed_ms": 0,
+                "reused_from_dispatch_idx": self._last_dispatch_idx,
+                "reused_because": (
+                    "no new transition since dispatch %d; the engines are "
+                    "deterministic given the same frames, so a re-sweep would "
+                    "append an exact copy of its rows"
+                    % self._last_dispatch_idx),
+                "candidate_rows_total": _count_lines(self.candidates_path),
+                "candidate_rows_added": 0,
+                "error": None,
+                "engines": _engine_delivery(self._last_dispatch),
+            }
+            self.engine_rounds.append(entry)
+            with open(self.engine_log_path, "a", encoding="utf-8",
+                      newline="\n") as fh:
+                fh.write(json.dumps(entry, sort_keys=True, default=str) + "\n")
+            return self._last_dispatch
+
         started = time.time()
         rows_before = _count_lines(self.candidates_path)
         error = None
@@ -359,6 +410,10 @@ class TheoriaArm:
         with open(self.engine_log_path, "a", encoding="utf-8",
                   newline="\n") as fh:
             fh.write(json.dumps(entry, sort_keys=True, default=str) + "\n")
+        if error is None:
+            self._last_dispatch = engines
+            self._last_dispatch_transitions = entry["transitions_seen"]
+            self._last_dispatch_idx = entry["dispatch_idx"]
         return engines
 
     def _main_loop(self) -> None:
