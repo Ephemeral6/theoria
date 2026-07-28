@@ -134,6 +134,36 @@ as playing. Phase 3 iterates until it gets results, which is only honest if the
 confirmation runs on unseen problems. Changing the cut after play has begun is an
 incident and must be recorded as one.
 
+**The local engine defaults to all 25 games — filter first, or it is refused.**
+`arc-recon/ACCESS_CHECK.md` §8a concluded that caching ARC data locally is
+permitted and needs no permission. That is about licensing, and **permission is
+not containment**: upstream's first run downloads *the game source* for all 25
+games into `environment_files/`, and `make play-local`, `make verify-local` and
+the swarm runner's `--game` flag all default to every game in the dataset
+(`browser-ops/TERMS.md` §4.2). Source is worse than trajectories — it hands over
+the finished answer to the mechanics. So:
+
+* Any path that pulls `environment_files/`, or runs `make list-games` /
+  `make play-local` / `make verify-local` / the swarm runner, **must name the
+  four development-pile games explicitly**. Unfiltered means all 25.
+* This is enforced in code, not by memory — `arc-recon/local_engine_guard.py`
+  is a positive whitelist that defaults to deny. Put it in front of the call:
+
+  ```bash
+  cd arc-recon
+  python local_engine_guard.py check -- <command...>   # 0 allowed, 2 REFUSED
+  python local_engine_guard.py run   -- <command...>   # vets, then execs if allowed
+  python local_engine_guard.py scan  environment_files # names-only cache sweep
+  ```
+
+* A local run makes **no API call**, so it leaves no trace in
+  `data/recon_ledger.jsonl` and `contamination.py`'s audit stays green right
+  through it. Do not read a green audit as evidence that this path was not
+  taken; the guard is the only instrument that sees it.
+* `environment_files/` is gitignored. Downloading is not reading — but nothing
+  under it may be opened, summarised, or fed to a model except the four
+  development-pile games.
+
 **Status (2026-07-28):** the development pile has been played — all four
 games are registered `trajectories_reviewed` in
 `arc-recon/data/contamination_log.jsonl`. The sealed pile has had zero API

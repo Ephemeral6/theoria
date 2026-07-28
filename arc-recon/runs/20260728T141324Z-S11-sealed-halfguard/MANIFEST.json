@@ -1,0 +1,59 @@
+{
+  "prompt_id": "S11-sealed-halfguard",
+  "branch": "agent/s11-sealed-halfguard",
+  "base_commit": "6beb2e68683abb3e685573f61f62dcc9790630b4",
+  "utc": "2026-07-28T14:13:24Z",
+  "worker": "W-1410",
+  "territory": "arc-recon",
+  "network": "none -- the whole item is offline; no API call, no action spent",
+  "spend_usd": 0.0,
+  "sealed_contact": 0,
+  "goal": [
+    "1. ACCESS_CHECK.md item 8: put the containment half next to conclusion 1",
+    "2. an executable fail-closed guard over environment_files/ and the local runners",
+    "3. carry the rule into CLAUDE.md's sealed-pile discipline"
+  ],
+  "tests": {
+    "arc-recon pytest": "187 passed (82 inherited + 105 new)",
+    "local_engine_guard.py selftest": "green",
+    "bash verify.sh": "VERIFY: green, including the two new steps"
+  },
+  "out_of_territory_edits": [
+    "CLAUDE.md -- authorised explicitly by the board item's goal (3)",
+    ".gitignore -- one line, environment_files/, so a pull cannot be committed"
+  ],
+  "not_committed": [
+    "arc-recon/data/claim_set.json -- verify.sh regenerates it; the only delta was ledger_lines 1945->1953, counting baseline-arms' untracked probe log. Reverted, not landed."
+  ],
+  "files": [
+    {
+      "path": "arc-recon/local_engine_guard.py",
+      "sha256": "ffa04b2ed578c848048e9672239db4ebd74be75803f234f832b3df3379b3035b"
+    },
+    {
+      "path": "arc-recon/test_local_engine_guard.py",
+      "sha256": "d02c5c1162891b94272cea1521b9bbd86801409678fd815e40566daa0c1b95db"
+    },
+    {
+      "path": "arc-recon/ACCESS_CHECK.md",
+      "sha256": "89d4dbd020a1e48492742357a3e891cc6530b14adb0657cbffa43bb9d30eb88e"
+    },
+    {
+      "path": "arc-recon/README.md",
+      "sha256": "017058f0fa28464fbcf10c8a0e497a8bee14eb17a78599b021b807bb377f4bef"
+    },
+    {
+      "path": "arc-recon/verify.sh",
+      "sha256": "add2b543f6fbe98f16397d6a6d7bb7cb6a0a2ab90f97acb0f7d229eac96ddedc"
+    },
+    {
+      "path": "CLAUDE.md",
+      "sha256": "8964d2d1630c7a70e7d252ffeac488d0bff73013a700223e5923b94b5a2961df"
+    },
+    {
+      "path": ".gitignore",
+      "sha256": "9c727d9e4daca7e10401eabf816e7daf412912b85847f52b31ec68f317e78f28"
+    }
+  ],
+  "note": "sha256 values above are the pre-adversarial-review state; if the review lands fixes, RUN_STATE.md records them and a superseding manifest entry is appended in the same directory."
+}

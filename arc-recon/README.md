@@ -405,6 +405,33 @@ that is now checked over the whole ledger rather than asserted.
 ids, titles, tags, action counts. No mechanics were observed, so
 `contamination_register` records all 25 games as `never_audited`.
 
+### The local engine is the one path the ledger cannot see
+
+`assert_playable` guards every API path, and the ledger audit above proves no
+sealed game was ever *requested*. Neither covers the local engine: it makes no
+API call at all, so a local run over all 25 games leaves the audit green while
+every sealed game's **source** sits on disk. Upstream's defaults make that the
+easy mistake, not an exotic one — first run downloads the source for all 25 into
+`environment_files/`, and `make play-local`, `make verify-local` and the swarm
+runner's `--game` all default to every game in the dataset
+(`browser-ops/TERMS.md` §4.2, with URLs).
+
+[`local_engine_guard.py`](local_engine_guard.py) is the fail-closed guard for
+that path, and `ACCESS_CHECK.md` §8b is its reasoning. Positive whitelist,
+default deny, boundary-anchored prefixes, sealed tested before allow:
+
+```bash
+python local_engine_guard.py check -- make play-local            # exit 2 — unfiltered is all 25
+python local_engine_guard.py check -- make play-local GAME=ar25  # exit 0
+python local_engine_guard.py run   -- <argv...>    # vets, then execs only if allowed
+python local_engine_guard.py scan  environment_files   # names-only sweep; opens nothing
+python local_engine_guard.py selftest              # asserts its own claims, offline
+```
+
+`selftest` and `scan` both run in `verify.sh`. `environment_files/` is
+gitignored, and nothing under it may be read except the four development games —
+downloading is not reading, and that distinction is the whole of the discipline.
+
 ## Ledger
 
 `data/recon_ledger.jsonl` is append-only: one line per API call with method, URL,

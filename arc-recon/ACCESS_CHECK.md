@@ -15,7 +15,7 @@ measurement where the docs contradict it — both are recorded when they disagre
 | 5 | Is `level` a response field | **answered** — yes | precheck |
 | 6 | Rate limits and quota | **answered** — see below; the binding constraint is not what we assumed | official docs + baseline-arms measurement + this track's probe |
 | 7 | Canary replay | **standing** — built, baselined, and now on a daily schedule | [`canary.py`](canary.py), [`canary_schedule.py`](canary_schedule.py), [`data/canary.json`](data/canary.json) |
-| 8 | Frame caching and release licensing | **closed, and less restrictive than we first read it** — caching is designed behaviour, our own numbers are explicitly publishable, ARC's raw content is not | official terms + [`browser-ops/TERMS.md`](../browser-ops/TERMS.md) cross-check |
+| 8 | Frame caching and release licensing | **closed, and less restrictive than we first read it** — caching is designed behaviour, our own numbers are explicitly publishable, ARC's raw content is not. **Permitted ≠ safe**: the cache upstream fills holds all 25 games' source, so §8b is the fail-closed guard over it | official terms + [`browser-ops/TERMS.md`](../browser-ops/TERMS.md) cross-check + [`local_engine_guard.py`](local_engine_guard.py) |
 
 ---
 
@@ -399,6 +399,17 @@ the absence of a statement; the statement exists and is permissive.
 **One line: caching ARC data locally for our own analysis is permitted, and no
 permission needs to be sought for it.**
 
+**And one line immediately after it, because that sentence is about permission
+and says nothing about contents: the cache is permitted; what upstream puts in
+it is not.** First run downloads *the game source* for all 25 games, and both
+`make play-local` and the swarm runner's `--game` default to every game in the
+dataset (`browser-ops/TERMS.md` §4.2). By INC-BA-001's own yardstick source
+ranks a notch *worse* than trajectories — it hands over the finished answer to
+the mechanics rather than an example of it. So the licensing conclusion above is
+correct and must not be read as a green light to enable local mode: **permission
+is not containment**, and the containment half is [§8b](#8b--the-containment-half-permitted-is-not-safe), which is
+executable rather than advisory.
+
 **2. Our own measurements are explicitly publishable; ARC's content is not.**
 The decisive document is not the site terms at all — it is the *ARC Prize
 Verified Official Testing Policy* (`arcprize.org/policy`), which §8 could not
@@ -447,9 +458,79 @@ document, and that document turned out to *grant* the thing this repository
 actually needs to publish. Both are kept: the caution was correct given what §8
 had read, and it was more caution than the full record requires.
 
----
+### 8b · The containment half — "permitted" is not "safe"
 
-## What this ticket did not do
+§8a settled the *licensing* question and settled it correctly. This subsection
+exists because the finding it came from had two directions and only one of them
+had a box to be filed in: item 8's title is "licensing", so the sealed-pile half
+had nowhere to go and, for a while, went nowhere. **A finding cut along a
+document's section headings loses the half that does not match a heading.**
+
+What upstream does by default, quoted in `browser-ops/TERMS.md` §4.2 with URLs:
+
+| documented behaviour | what it means for the cut |
+|---|---|
+| first run will "download the game source", cached in `environment_files/` | all 25 games' **source** lands on disk, 21 of them sealed |
+| `make list-games` — "Print every game id available" | enumerates all 25; takes no filter |
+| `make play-local` — "Runs your agent against every game in the dataset" | plays all 25 |
+| `make verify-local` — "30-second smoke test on two games" | the docs do not say which two |
+| swarm `--game` — "If not specified, the agent plays all available games" | silence means all 25 |
+
+So the first thing done on the strength of "permitted, no permission needed"
+pulls every sealed game's source down and, by default, plays every one of them.
+That is not a licensing risk; it is the whole confirmation set, and it is not
+recoverable. Note also that **none of it produces an API call**: a local run
+never enters `data/recon_ledger.jsonl`, so `contamination.py`'s audit — which
+audits every call we have ever made — stays green through the entire event. The
+existing instruments are structurally blind here, which is why the guard had to
+be new code rather than another assertion in an existing one.
+
+**The rule.** Any path that pulls `environment_files/`, or invokes
+`make list-games` / `make play-local` / `make verify-local` / the swarm runner,
+must first filter to the four development-pile games named in
+`data/piles.json`. **An unfiltered invocation is refused, with an error, in
+code** — not warned about in a document.
+
+**The guard.** [`local_engine_guard.py`](local_engine_guard.py), tested by
+[`test_local_engine_guard.py`](test_local_engine_guard.py) and wired into
+`verify.sh`. It is a positive whitelist that defaults to deny, in the shape
+`baseline-arms/SCHEMA_PATH_A.md` §3 settled on and for the reason it gives: a
+negative list meets an unforeseen path shape and fails *open*, and failing open
+here cannot be undone.
+
+```bash
+python local_engine_guard.py check -- make play-local            # exit 2, DENY_DEFAULT_ALL
+python local_engine_guard.py check -- make play-local GAME=ar25  # exit 0
+python local_engine_guard.py run   -- <argv...>   # vets, then execs only if allowed
+python local_engine_guard.py scan  environment_files/   # names-only sweep of a cache
+```
+
+Five refusals, one permission:
+
+1. `deny_default_all` — a game-playing or game-pulling command with no `--game`
+   selector. Silence is the dangerous case upstream, so it is the refused case here.
+2. `deny_sealed` — any of the 21 named anywhere on the line, by full id or by
+   4-character prefix, tested *before* the allow branch so a line naming both
+   piles reads as sealed.
+3. `deny_unknown` — a selector token that is not exactly a development-pile id
+   or its exact prefix. Upstream treats the value as an ID *prefix*, so
+   `--game=s` would widen to `sk48` **and** five sealed games; only the two
+   exact forms pass.
+4. `deny_unfiltered` — `make list-games` and `make verify-local`, which take no
+   filter at all. We already hold the 25 ids in `piles.json`; there is nothing
+   `list-games` can tell us that is worth running it for.
+5. Refuse-everything if `data/piles.json` is absent, malformed, or no longer
+   hashes to the value `CLAUDE.md` pins. A guard that cannot read the cut does
+   not know what it is guarding.
+
+Two properties worth stating because they are what the tests are about. The
+prefix match is **boundary-anchored on both sides**, so `blobs/9ar25f0e/` does
+not read as `ar25` — the exact failure `SCHEMA_PATH_A.md` §3.1 found the hard
+way. And `scan` **opens nothing**: it is a sieve over filenames, and there is a
+test that fails if any file under the swept directory is opened. Downloading is
+not reading; a guard that quoted the file it was refusing would be the leak.
+
+
 
 * **The cookie fix ~~is not applied~~ is applied, with the re-measurement
   attached** — see §6c. INC-007 recorded it as deferred and gave reasons; those
