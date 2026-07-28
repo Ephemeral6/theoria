@@ -125,17 +125,30 @@ def _mine(world: Any):
     """
     background = world.spec_json().get("background", 0)
     errors = []
+    fallback = None
     for split in (False, True):
         seg = mdl_segmenter.segment_trajectory(world.frames, background=background,
                                                split_by_color=split)
+        track = _mover_track(world, seg)
         try:
             transitions = engine.transitions_from_segmentation(
                 world.frames, world.action_list, seg, background=background,
-                track=_mover_track(world, seg))
+                track=track)
         except ValueError as exc:
             errors.append("split_by_color=%s: %s" % (split, exc))
             continue
-        return engine.mine(transitions), transitions, split
+        if track is not None:
+            return engine.mine(transitions), transitions, split
+        # It mines, but off some other object. Keep it and try the other
+        # operator first: committing to the first segmentation that *mines*
+        # rather than the first that mines *the mover* was costing 42 of 500
+        # worlds their subject, because the colour-agnostic operator often
+        # narrates a rock cleanly on a world where only `split_by_color=True`
+        # keeps the mover in one piece.
+        if fallback is None:
+            fallback = (engine.mine(transitions), transitions, split)
+    if fallback is not None:
+        return fallback
     raise Unminable("; ".join(errors))
 
 
@@ -212,6 +225,10 @@ def frontier_guards_are_consistent(world: Any) -> List[finding.Finding]:
     except (NoSeparatingGuard, Unminable) as exc:
         return _skip_no_guard(world, "frontier_guards_are_consistent", exc)
 
+    subject = _mined_subject(world, transitions, "frontier_guards_are_consistent")
+    if subject is not None:
+        return [subject]
+
     out: List[finding.Finding] = []
     for rule in result.rules:
         support = set(rule.support)
@@ -244,6 +261,10 @@ def frontier_is_complete_to_size(world: Any) -> List[finding.Finding]:
         result, transitions, _split = _mine(world)
     except (NoSeparatingGuard, Unminable) as exc:
         return _skip_no_guard(world, "frontier_is_complete_to_size", exc)
+
+    subject = _mined_subject(world, transitions, "frontier_is_complete_to_size")
+    if subject is not None:
+        return [subject]
 
     vocabulary = atom_mod.build_vocabulary([t.state for t in transitions])
     out: List[finding.Finding] = []
@@ -302,6 +323,10 @@ def applicable_equals_support(world: Any) -> List[finding.Finding]:
     except (NoSeparatingGuard, Unminable) as exc:
         return _skip_no_guard(world, "applicable_equals_support", exc)
 
+    subject = _mined_subject(world, _transitions, "applicable_equals_support")
+    if subject is not None:
+        return [subject]
+
     out: List[finding.Finding] = []
     for rule in result.all_rules:
         if set(rule.applicable) != set(rule.support):
@@ -327,6 +352,10 @@ def guards_partition_the_evidence(world: Any) -> List[finding.Finding]:
         result, transitions, _split = _mine(world)
     except (NoSeparatingGuard, Unminable) as exc:
         return _skip_no_guard(world, "guards_partition_the_evidence", exc)
+
+    subject = _mined_subject(world, transitions, "guards_partition_the_evidence")
+    if subject is not None:
+        return [subject]
 
     claimed: Dict[int, str] = {}
     out: List[finding.Finding] = []
@@ -359,65 +388,93 @@ def guards_partition_the_evidence(world: Any) -> List[finding.Finding]:
 UNRESOLVED = object()
 
 
-def _mined_subject(world: Any, transitions: Sequence[Any]) -> Optional[finding.Finding]:
+def _mined_subject(world: Any, transitions: Sequence[Any],
+                   invariant: str) -> Optional[finding.Finding]:
     """`None` if the mined object is the world's mover; a `skipped` if it is not.
 
     **This check is the difference between an invariant and a false accusation,
-    and it was found by making the accusation.** `transitions_from_segmentation`
-    is called with `track=None`, so it mines `seg.tracks[0]` — whichever track
-    the segmenter happened to list first. Measured on the campaign seed's first
-    60 gridworlds: of the 57 that mine at all, **21 mine a static obstacle
-    rather than the mover**. Those worlds produce a rule set of `blocked_*`
-    rules with `effect: none`, which is a *true* description of a rock, and the
-    first version of `effects_agree_with_the_evidence` reported all 21 as
-    violations because it compared them against the mover's motion.
+    and it was found by making the accusation.** The first version of
+    `effects_agree_with_the_evidence` reported 21 violations across 60 worlds.
+    The oracle was right; the *subject* was wrong. `_mine` was taking
+    `transitions_from_segmentation`'s `seg.tracks[0]` fallback, which in 21 of
+    the 57 minable worlds is a **static obstacle** — and `blocked_<D>` rules
+    with `effect: none` are a true description of a rock.
 
-    That is also a finding about this battery rather than about the engine, and
-    it is filed as one in `BUGS.md`: in those 21 worlds the four guard
-    invariants are auditing a rule set that says nothing ever happens.
+    `_mine` now selects the mover (see `_mover_track`), so that cause is gone.
+    **What remains has a different cause, and the first version of this
+    docstring named the wrong one** — it said the segmenter "did not list the
+    mover first", and that sentence was copied into the `skipped` message below,
+    where it would have sent whoever triaged the finding to the wrong place.
+    Measured on the standing 500-world campaign, the truth is: **15 of 500**
+    worlds, and in **14 of those 15** the segmenter *does* produce a track with
+    the mover's exact bounding box — its `anchors` list simply contains `None`
+    on some frames, so the track is discontinuous and cannot be matched against
+    a trajectory. World 12 loses the mover on 2 of 23 frames; world 19 on 15 of
+    16. That is a `mdl_segmenter` track-continuity defect and it is written up
+    as one in `BUGS.md` § S5; it is another engine's territory, so it is
+    reported and not touched.
+
+    **All six invariants are gated on this, not just the two that read effects.**
+    That is a V-13 correction made after review, and it costs the four guard
+    invariants their reported coverage (480 → 465, uniform across all six). The
+    reason is a measurement rather than a principle argued in the abstract: on
+    every one of those worlds **every rule's effect is `none` and there are no
+    lifted rules at all** — the rule set is two to four `blocked_<D>` rules whose
+    guards are `act==D`, mutually exclusive and covering by construction on any
+    world whatsoever. Reporting those as evaluated is the same confusion this
+    round spent a whole section removing from `props/lp_potential.py`: "I could
+    not check this world" and "I checked it and found nothing" must not be the
+    same answer. Applying the rule in one module and not the other would have
+    been the harder thing to explain.
 
     Identity is settled by comparing two independently derived trajectories —
-    the anchors the segmenter put in `state.anchor` (which is *input* to the
-    miner, and the same input its guards are evaluated against) against the
+    the anchors the segmenter put in `state.anchor`, which is *input* to the
+    miner and the same input its guards are evaluated against, against the
     anchors `oracles/motion.py` chains out of the pixels. Nothing the miner
     computed is consulted.
     """
     if not transitions:
         return finding.skipped(
-            ENGINE, "effects_agree_with_the_evidence", world,
-            "no transitions were mined from this world")
+            ENGINE, invariant, world,
+            "no transitions were mined from this world",
+            cause="no_transitions")
     shape, _colour, _background = motion.mover_spec(world)
     anchors = motion.mover_anchors(world)
     if anchors is None:
         return finding.skipped(
-            ENGINE, "effects_agree_with_the_evidence", world,
+            ENGINE, invariant, world,
             "the pixels do not fix the mover's trajectory — either it never "
             "moves in this world, or a frame pair is not one rigid mover "
             "translation — so which object was mined cannot be established "
-            "without asking the segmenter")
+            "without taking the segmenter's word for it",
+            cause="mover_path_not_fixed_by_pixels")
     mined = tuple(transitions[0].state.shape)
-    if mined != shape:
-        return finding.skipped(
-            ENGINE, "effects_agree_with_the_evidence", world,
-            "the mined track has bounding box %s and the world's mover is %s, "
-            "so this rule set describes some other object; "
-            "transitions_from_segmentation mines seg.tracks[0] and the "
-            "segmenter did not list the mover first"
-            % (list(mined), list(shape)),
-            mined_shape=list(mined), mover_shape=list(shape),
-            cause="mined_track_is_not_the_mover")
-    off = [t.index for t in transitions
-           if t.index >= len(anchors) or tuple(anchors[t.index]) != tuple(t.state.anchor)]
-    if off:
-        return finding.skipped(
-            ENGINE, "effects_agree_with_the_evidence", world,
-            "the mined track's anchors diverge from the mover's pixel-derived "
-            "trajectory at %d of %d transitions (first: %d), so this rule set "
-            "describes some other object of the same bounding box"
-            % (len(off), len(transitions), off[0]),
-            first_divergence=off[0],
-            cause="mined_track_is_not_the_mover")
-    return None
+    reason = ("its bounding box is %s and the mover's is %s"
+              % (list(mined), list(shape)))
+    if mined == shape:
+        off = [t.index for t in transitions
+               if t.index >= len(anchors)
+               or tuple(anchors[t.index]) != tuple(t.state.anchor)]
+        if not off:
+            return None
+        reason = ("its anchors diverge from the mover's pixel-derived "
+                  "trajectory at %d of %d transitions, first at %d"
+                  % (len(off), len(transitions), off[0]))
+    return finding.skipped(
+        ENGINE, invariant, world,
+        "the mined track is not the world's mover: %s. Neither segmentation "
+        "operator produced a track matching the mover, so _mine fell back to "
+        "seg.tracks[0] and this rule set describes some other object — measured "
+        "across the corpus, always a static one, yielding only `blocked_<D>` "
+        "rules with `effect: none`, which are true of it. **Triage starts at "
+        "mdl_segmenter, not here**: in 14 of the 15 worlds this fires on, a "
+        "track with the mover's exact bounding box does exist and its `anchors` "
+        "list carries `None` on some frames, i.e. the segmenter drops the mover "
+        "mid-trajectory. See BUGS.md section S5. Not a cegis_miner defect "
+        "and not a fuzzlab oracle defect; this world did not test the miner."
+        % reason,
+        mined_shape=list(mined), mover_shape=list(shape),
+        cause="mined_track_is_not_the_mover")
 
 
 def _claimed_delta(rule: Any, action: str) -> Optional[Tuple[int, int]]:
@@ -495,7 +552,7 @@ def effects_agree_with_the_evidence(world: Any) -> List[finding.Finding]:
             "frame pair, so the oracle cannot line its evidence up with the "
             "engine's" % stray[:6], stray=stray[:6])]
 
-    subject = _mined_subject(world, transitions)
+    subject = _mined_subject(world, transitions, invariant)
     if subject is not None:
         return [subject]
 
@@ -578,6 +635,10 @@ def rules_fire_on_the_action_they_name(world: Any) -> List[finding.Finding]:
         result, _transitions, _split = _mine(world)
     except (NoSeparatingGuard, Unminable) as exc:
         return _skip_no_guard(world, invariant, exc)
+
+    subject = _mined_subject(world, _transitions, invariant)
+    if subject is not None:
+        return [subject]
 
     actions = world.action_list
     out: List[finding.Finding] = []

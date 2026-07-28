@@ -49,10 +49,14 @@ The invariant is two comparisons against `world.cost_map()`, which is the world'
 own declaration and the same object the property hands the engine — so the
 oracle is a lookup, not a recomputation, and there is nothing here for the engine
 to be asked. `ProbeValue.value` is a *property* (`entropy / cost`) and therefore
-unfalsifiable by construction, so it is checked only for the divide-by-zero
-convention the engine documents.
+unfalsifiable by construction **except at cost zero**, where the engine returns
+a constant `inf` instead of dividing. That branch is asserted. It was not in the
+version of this invariant that first shipped — an `if expected > 0` guard
+excluded precisely the case the sentence claimed to cover, on the 27.6% of
+worlds `hypset` deliberately gives a zero-cost action.
 """
 
+import math
 from typing import Any, Dict, List, Sequence
 
 from fuzzlab import rig  # noqa: F401  (path bootstrap)
@@ -210,8 +214,22 @@ def costs_are_the_world_s(world: Any) -> List[finding.Finding]:
     computed from uniformly wrong costs is still an order.
 
     `value` is a Python property (`entropy / cost`) and so cannot be made to
-    disagree with its own definition; the only part of it worth asserting is the
-    zero-cost convention the engine documents, which is checked below.
+    disagree with its own definition **except at cost zero**, where the engine
+    stops dividing and returns a constant: `frontier.py:42-44` is
+    `self.entropy / self.cost if self.cost else float("inf")`. That branch is
+    the one part of `value` that is a real, falsifiable claim, and it is
+    asserted below.
+
+    **This invariant shipped with that branch excluded and the docstring saying
+    it was checked.** The guard was `if expected > 0`, which is exactly the
+    complement of the zero-cost case, so an engine returning `0.0` instead of
+    `inf` at zero cost passed silently — on the 27.6% of `hypset` worlds that
+    carry a zero-cost action, and `worlds/hypset.py:21` generates them
+    deliberately: "Zero is not a hypothetical -- the ranking divides by it".
+    Caught by an adversarial review, not by the battery. It is recorded here
+    rather than quietly corrected because leaving a "checked" that is not
+    checked inside the invariant written to separate "not checked" from "checked
+    and clean" is the same defect this round exists to remove, one level up.
     """
     hypotheses = world.hypotheses()
     costs = world.cost_map()
@@ -225,7 +243,21 @@ def costs_are_the_world_s(world: Any) -> List[finding.Finding]:
                 % (value.action, value.cost, expected),
                 action=value.action, reported=value.cost, expected=expected))
             continue
-        if expected > 0 and abs(value.value - value.entropy / expected) > EPS:
+        if expected == 0:
+            # The documented convention, and the only falsifiable part of
+            # `value`: a free probe is worth unbounded bits per unit cost. An
+            # engine answering 0.0 here would rank every free action last.
+            if value.value != math.inf:
+                out.append(finding.violated(
+                    ENGINE, "costs_are_the_world's", world,
+                    "action %r costs nothing, so value_bits_per_cost must be "
+                    "inf (frontier.py: `entropy / cost if cost else inf`), but "
+                    "the engine reports %r"
+                    % (value.action, value.value),
+                    action=value.action, reported=value.value,
+                    entropy=value.entropy, cost=expected))
+            continue
+        if abs(value.value - value.entropy / expected) > EPS:
             out.append(finding.violated(
                 ENGINE, "costs_are_the_world's", world,
                 "action %r reports %r bits per unit cost, but %r bits over cost "

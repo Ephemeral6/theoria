@@ -262,6 +262,44 @@ def test_motion_refuses_a_recolour():
         motion.read_motion(a, b, (1, 1), 2, 0)
 
 
+#: The end-to-end sweep's width. `MUTATION.md` quotes a transition count taken
+#: from this constant, and an adversarial review caught the previous version of
+#: that sentence citing "4455 transitions over 200 worlds" when the shipped test
+#: swept five. The measurement had really been made -- but only in a scratch
+#: script, so the repository could not reproduce the number it published. The
+#: sweep is the test now, and the number is whatever this constant produces.
+SWEEP_WORLDS = 200
+
+
+def test_motion_agrees_with_the_generator_across_the_corpus():
+    """The oracle against the world's own transition function, in bulk.
+
+    The per-world case below is the readable one; this is the one whose number
+    is quotable. It is the check that would have caught a silently wrong oracle
+    before it filed 21 false accusations, so it sweeps a corpus rather than a
+    handful of indices, and it reports the transition count so a report citing
+    it can be checked against a run.
+    """
+    checked = 0
+    for index in range(SWEEP_WORLDS):
+        world = gridworld.generate(
+            prng.derive(campaign.DEFAULT_SEED, "gridworld", index))
+        read = motion.motions(world)
+        assert not motion.unreadable_reasons(world), index
+        for t in range(len(world.action_list)):
+            want = (world.anchors[t + 1][0] - world.anchors[t][0],
+                    world.anchors[t + 1][1] - world.anchors[t][1])
+            got = read[t]
+            if want == (0, 0):
+                assert got.type == "none", (index, t, got)
+            else:
+                assert (got.type, got.delta, got.to) ==                     ("move", want, tuple(world.anchors[t + 1])), (index, t, got)
+            checked += 1
+    # Pinned so the figure quoted in MUTATION.md cannot drift away from the
+    # code that produces it without a test failing.
+    assert checked == 4455, checked
+
+
 @pytest.mark.parametrize("index", [0, 3, 11, 29, 57])
 def test_motion_agrees_with_the_generator_on_whole_gridworlds(index):
     """The oracle against the world's own transition function, end to end.

@@ -12,10 +12,10 @@
         "splits_flag_is_honest"
       ],
       "invariants_no_mutant_kills": [],
-      "mutants": 19
+      "mutants": 20
     }
   },
-  "engine_rig_head": "eb61aa9",
+  "engine_rig_head": "3c60acb",
   "mutants": [
     {
       "claim": "partition_for groups the hypotheses by the observation each predicts and places every hypothesis in exactly one class -- engines/probe_frontier/frontier.py:partition_for is a single loop doing `partition.setdefault(h.predict(state, action), []).append(h.id)` over every hypothesis; README.md 'the action partitions the frontier into classes that agree with each other'.",
@@ -700,6 +700,49 @@
       "worlds_confounded": 0,
       "worlds_evaluated": 35,
       "worlds_inert": 5,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "costs_are_the_world's": 1,
+        "entropy_matches_bruteforce": null,
+        "partition_matches_truth": null,
+        "ranking_is_sound": null,
+        "splits_flag_is_honest": null
+      }
+    },
+    {
+      "claim": "at zero cost `value` is inf, not a number -- frontier.py:42-44 is `self.entropy / self.cost if self.cost else float('inf')`, published as `value_bits_per_cost`, and worlds/hypset.py:21 generates zero costs on purpose because 'Zero is not a hypothetical -- the ranking divides by it'. An engine answering 0.0 ranks every free probe last, which inverts the recommendation this engine exists to make.",
+      "description": "return 0.0 bits per unit cost for every free action, then re-sort under the engine's own key so the order is internally consistent and only the cost invariant can see it. Written after an adversarial review found that `costs_are_the_world's` shipped with an `if expected > 0` guard excluding exactly this branch while its docstring said the branch was checked -- so this mutant is the evidence that the repair is real and not another sentence.",
+      "determined": true,
+      "elapsed_s": 0.01,
+      "engine": "probe_frontier",
+      "expect_kill": [
+        "costs_are_the_world's"
+      ],
+      "id": "pf-zero-cost-value-is-zero",
+      "killed": {
+        "costs_are_the_world's": 11,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "costs_are_the_world's": 0,
+        "entropy_matches_bruteforce": 0,
+        "partition_matches_truth": 0,
+        "ranking_is_sound": 0,
+        "splits_flag_is_honest": 0
+      },
+      "seam": "_call_rank_probes",
+      "survived": false,
+      "survived_all_detection": false,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 11,
+      "worlds_inert": 29,
       "worlds_offered": 40,
       "worlds_to_first_kill": {
         "costs_are_the_world's": 1,

@@ -36,18 +36,26 @@ not edited.
 | | before | after |
 |---|---|---|
 | invariants | 23 | **26** |
-| campaign | 3000 worlds, 0 violated, 80 skipped | 3000 worlds, **0 violated, 1106 skipped** |
 | `lp_potential`, each of 4 | 500 / 500 evaluated | **267 / 500** |
-| `cegis_miner.effects_agree_with_the_evidence` | — | **426 / 500** |
-| `cegis_miner.rules_fire_on_the_action_they_name` | — | **480 / 500** |
+| `cegis_miner`, each of 6 | 480 / 500 (four of them) | **465 / 500**, uniform |
 | `probe_frontier.costs_are_the_world's` | — | **500 / 500** |
-| cegis mutants | 8 | **14** |
-| probe mutants | 18 | **19** |
+| cegis mutants | 8 | **15** |
+| probe mutants | 18 | **20** |
+
+`cegis_miner`'s coverage went **down**, and that is the result rather than a
+regression: the old 480 counted worlds whose whole rule set was `blocked_<D>`
+rules saying nothing ever happens.
 
 Every new invariant is killed by at least one mutant, measured, and one mutant
 (`cm-drop-effect-destination`) was pre-registered as a survivor and survived.
 Two V-10 survivors are refuted: `cm-shrink-lifted-support` and
 `pf-flatten-reported-costs` now die.
+
+**An adversarial reviewer found five things and all five were real.** They are
+logged individually in `BUGS.md` § S7, including the one that matters most: this
+round's own `costs_are_the_world's` shipped a guard excluding the exact branch
+its docstring twice claimed to check. Nothing was fixed silently. Two findings
+belonging to other engines are in § S5 and § S6.
 
 ## The two things that went differently than planned
 

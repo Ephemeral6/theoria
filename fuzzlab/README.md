@@ -77,8 +77,10 @@ filed a `skipped` on, so an invariant that declines is visible as a smaller
 number rather than as a silent pass. Two of them decline often and for stated
 reasons: `lp_potential`'s four evaluate 267 of 500, because the engine issues no
 certificate on 46.6% of `jumpgraph` worlds and every claim there is conditional
-on one; `cegis_miner`'s `effects_agree_with_the_evidence` evaluates 426 of 500.
-Those numbers used to read 500 and 500. See `BUGS.md` § V-13 supersede.
+on one; all six `cegis_miner` invariants evaluate 465 of 500, declining the
+worlds where the object that was mined cannot be established as the mover.
+Those numbers used to read 500 and 500 — and the second one used to read 480
+while 54 of those 480 were auditing a rock. See `BUGS.md` § V-13 supersede.
 
 `BUGS.md` lists what was **deliberately not** asserted and why. Writing an
 invariant against a guarantee nobody made produces a confident, wrong bug report,

@@ -1,4 +1,4 @@
-"""`cegis_miner` mutants — fourteen defects, aimed one at a time.
+"""`cegis_miner` mutants — fifteen defects, aimed one at a time.
 
 The seam is `props/cegis_miner.py:_mine`, and it is the *only* engine call the
 property module makes: all six invariants open with `result, transitions, _split
@@ -289,6 +289,42 @@ def _freeze_lifted_direction(result: Any, args: Tuple[Any, ...],
                     "not be a false statement")
 
 
+def _lift_admits_a_wrong_direction(result: Any, args: Tuple[Any, ...],
+                                   kwargs: Dict[str, Any]) -> Any:
+    """Widen a lifted rule's support to a transition that did not move that way.
+
+    **This is the mutant that tests what `?dir` actually means.** An adversarial
+    review established that `cm-freeze-lifted-direction` does not: the engine
+    never emits a concrete `effect.direction` (a census of 357 rules found only
+    `{None, "?dir"}`), so that mutant only reaches
+    `_claimed_delta`'s `if direction in DELTA` branch, which nothing else can
+    reach. Deleting those two lines leaves it at eval=32, killed=0 — it measures
+    the invariant's tolerance of a malformed field, not the semantics of the
+    variable.
+
+    The real path is `direction == "?dir"` → `DELTA[action of this witness]`, and
+    it is exercised by making `lift()` collapse a member it is forbidden to
+    collapse: `miner.py:_normalise` returns None unless
+    `(dy, dx) == DELTA[rule.action]`, so a lifted rule's support may not contain
+    a transition that stayed put. The index is taken from the first ground rule
+    whose effect is `none` — a structural choice, made without consulting the
+    oracle — and added to `applicable` as well, so `applicable_equals_support`
+    stays quiet and the attribution is clean.
+    """
+    mining, _transitions = _unpack(result)
+    blocked = [r for r in mining.rules if r.effect.type == "none" and r.support]
+    if not blocked or not mining.lifted:
+        raise mut.inert("this world has no lifted rule, or no `none` rule whose "
+                        "transitions could be smuggled into one")
+    index = sorted(blocked[0].support)[0]
+    rule = mining.lifted[0]
+    if index in rule.support:
+        raise mut.inert("the lifted rule already claims that transition")
+    rule.support = sorted(set(rule.support) | {index})
+    rule.applicable = sorted(set(rule.applicable) | {index})
+    return result
+
+
 def _relabel_rule_action(result: Any, args: Tuple[Any, ...],
                          kwargs: Dict[str, Any]) -> Any:
     mining, _transitions = _unpack(result)
@@ -520,10 +556,37 @@ mut.register(
                     "one of its transitions moved that way, which is true of "
                     "that witness and false of the members from the other "
                     "directions -- the generalisation that made the rule worth "
-                    "lifting is exactly what it now gets wrong. Aimed at the "
-                    "class of candidate that, before V-13, no invariant looked "
-                    "at at all: 35 of a measured 224 published rules.",
+                    "lifting is exactly what it now gets wrong. NOTE, after "
+                    "review: the engine never emits a concrete direction (357 "
+                    "rules censused, `effect.direction` only ever None or "
+                    "'?dir'), so this mutant reaches a branch of "
+                    "_claimed_delta that nothing else reaches, and what it "
+                    "measures is the invariant's handling of a malformed field "
+                    "rather than the semantics of the variable. "
+                    "cm-lift-admits-a-wrong-direction is the one that tests "
+                    "`?dir` as the engine actually produces it.",
         corrupt=_freeze_lifted_direction,
+        expect_kill=("effects_agree_with_the_evidence",),
+    ),
+    mut.Mutant(
+        id="cm-lift-admits-a-wrong-direction",
+        engine=ENGINE, seam=SEAM, kind=mut.UNSOUND,
+        claim="every member a lifted rule collapses moved in the direction of "
+              "its own action -- miner.py:_normalise returns None unless "
+              "`rule.effect.type == 'move' and (dy, dx) == "
+              "DELTA.get(rule.action)`, and lift() groups only on shapes that "
+              "survive that filter, building support as the union over members. "
+              "So `move(?dir)` means `the mover advances by DELTA[the action "
+              "taken]`, and a support index where nothing moved falsifies it.",
+        description="add to the first lifted rule's support (and applicable, so "
+                    "the attribution stays with the effect invariant) the lowest "
+                    "transition index of a `blocked_<D>` rule -- a transition "
+                    "where the mover did not move at all. Unlike "
+                    "cm-freeze-lifted-direction this exercises the branch the "
+                    "engine actually produces: `?dir` resolved per witness "
+                    "against DELTA[action]. Added because a review showed the "
+                    "other mutant does not reach it.",
+        corrupt=_lift_admits_a_wrong_direction,
         expect_kill=("effects_agree_with_the_evidence",),
     ),
     mut.Mutant(

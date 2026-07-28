@@ -1,9 +1,9 @@
 {
   "campaign_seed": "0x00005eedc1e4f002",
-  "engine_rig_head": "e27e0c0",
+  "engine_rig_head": "3c60acb",
   "engines": [
     {
-      "elapsed_s": 1.71,
+      "elapsed_s": 1.72,
       "engine": "mdl_segmenter",
       "family": "gridworld",
       "generator_errors": [],
@@ -28,17 +28,17 @@
       "worlds_requested": 500
     },
     {
-      "elapsed_s": 91.15,
+      "elapsed_s": 102.28,
       "engine": "cegis_miner",
       "family": "gridworld",
       "generator_errors": [],
       "invariant_worlds_evaluated": {
-        "applicable_equals_support": 480,
-        "effects_agree_with_the_evidence": 426,
-        "frontier_guards_are_consistent": 480,
-        "frontier_is_complete_to_size": 480,
-        "guards_partition_the_evidence": 480,
-        "rules_fire_on_the_action_they_name": 480
+        "applicable_equals_support": 465,
+        "effects_agree_with_the_evidence": 465,
+        "frontier_guards_are_consistent": 465,
+        "frontier_is_complete_to_size": 465,
+        "guards_partition_the_evidence": 465,
+        "rules_fire_on_the_action_they_name": 465
       },
       "invariants": [
         "applicable_equals_support",
@@ -50,14 +50,14 @@
       ],
       "n_invariants": 6,
       "raised": 0,
-      "skipped": 174,
+      "skipped": 210,
       "violated": 0,
       "worlds_checked": 500,
       "worlds_generated": 500,
       "worlds_requested": 500
     },
     {
-      "elapsed_s": 1.37,
+      "elapsed_s": 1.4,
       "engine": "zero_space",
       "family": "parityworld",
       "generator_errors": [],
@@ -82,7 +82,7 @@
       "worlds_requested": 500
     },
     {
-      "elapsed_s": 42.83,
+      "elapsed_s": 43.3,
       "engine": "lp_potential",
       "family": "jumpgraph",
       "generator_errors": [],
@@ -107,7 +107,7 @@
       "worlds_requested": 500
     },
     {
-      "elapsed_s": 5.82,
+      "elapsed_s": 5.93,
       "engine": "fd_adapter",
       "family": "blockworld",
       "generator_errors": [],
@@ -163,7 +163,7 @@
     "generator_errors": 0,
     "invariants": 26,
     "raised": 0,
-    "skipped": 1106,
+    "skipped": 1142,
     "violated": 0,
     "worlds_checked": 3000
   },

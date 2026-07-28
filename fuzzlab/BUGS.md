@@ -169,7 +169,7 @@ all" were the same empty list, and the report credited the full 500.
 | `heuristic_is_admissible` | 500 / 500 | **267 / 500** |
 | `infinite_means_unreachable` | 500 / 500 | **267 / 500** |
 | `lp_potential` skipped findings | 0 | **932** (233 worlds × 4) |
-| campaign-wide skipped | 80 | **1106** |
+| campaign-wide skipped | 80 | **1142** |
 
 **Why the two numbers differ:** on 233 of 500 `jumpgraph` worlds (46.6%) the
 engine issues no certificate. Every invariant in that module is conditional on
@@ -219,9 +219,11 @@ tested. This is the same failure `worlds/gridworld.py:_place_obstacles` records
 campaign that certified neither engine.
 
 `_mine` now picks the track whose anchors match the pixel-derived mover
-trajectory from `oracles/motion.py`. Measured over the same 60 worlds: unminable
-**unchanged at 3**, "not the mover" skips **21 → 6**, and the new effect
-invariant covers **51 of 60**.
+trajectory from `oracles/motion.py`, **and prefers the operator that keeps the
+mover in one piece** rather than the first that mines anything at all — the
+second half of the same defect, found while acting on the review. Over the
+standing 500-world campaign: subject-unknown **54 → 15**, unminable **unchanged
+at 20**, all six invariants at a uniform **465/500**. The residue is § S5.
 
 Two checks that this is a repair and not fuzzlab flattering the engine:
 
@@ -253,11 +255,11 @@ its own caller chose.
 
 | engine | invariants | evaluated / 500 |
 |---|---|---|
-| `cegis_miner` | 4 → **6** | 480 (guards, unchanged) · **426** (`effects_agree_with_the_evidence`) · 480 (`rules_fire_on_the_action_they_name`) |
+| `cegis_miner` | 4 → **6** | 480 → **465**, uniform across all six (see § S7) |
 | `probe_frontier` | 4 → **5** | **500** (`costs_are_the_world's`) |
 | `lp_potential` | 4 (unchanged) | 500 → **267**, as above |
 
-Campaign totals: **26 invariants, 3000 worlds, 0 violated, 0 raised, 1106
+Campaign totals: **26 invariants, 3000 worlds, 0 violated, 0 raised, 1142
 skipped**, `generator_errors: 0`. The green is the same green; the skipped
 column is the part that is new, and it is the honest part.
 
@@ -308,3 +310,145 @@ reasons are recorded rather than the omission being silent:
 * **`admissibility_report` is unaudited but not broken** — E-11 checked 505312
   rows exhaustively with no disagreement. Recorded as a blank rather than a
   defect, and ranked below everything above for that reason.
+
+## S5 · `mdl_segmenter` loses the mover mid-trajectory: `Track.anchors` carries `None`
+
+**Another engine's territory. Observation with numbers, not an adjudicated
+defect.** Found by the adversarial review of V-13 asking why `_mover_track`
+still falls back, and re-measured independently before being written down.
+
+**The first explanation was wrong, and it had leaked into a user-visible
+message.** `props/cegis_miner.py:_mined_subject`'s docstring said the fallback
+happened because "the segmenter did not list the mover first" — a raster-order
+accident — and that sentence had been copied verbatim into the `skipped`
+finding, so whoever triaged it would have been sent to the wrong engine. Both
+are corrected; the message now points at `mdl_segmenter` and at this section.
+
+Measured over 500 `gridworld` worlds, seed `0x00005eedc1e4f002`, shipped code:
+
+| | worlds |
+|---|---|
+| mined track **is** the mover | 465 |
+| unminable (documented touching-objects refusal) | 20 |
+| **fallback: no track matches the mover** | **15** |
+
+Of those 15:
+
+| | worlds |
+|---|---|
+| a track with the mover's **exact bounding box exists**, but its `anchors` contain `None` | **14** |
+| right bounding box, anchors simply wrong, no `None` | 1 |
+
+So in 14 of 15 the segmenter **found** the object and then **lost track of it on
+some frames**. The track is not missing and its shape is not wrong; its
+trajectory has holes.
+
+```
+world 12   mover shape (1,3), moves 19 times over 23 frames
+           pixel anchors[:8]  [(3,3),(3,3),(2,3),(1,3),(1,4),(1,3),(0,3),(1,3)]
+           track anchors[:8]  [None, None, (2,3),(1,3),(1,4),(1,3),(0,3),(1,3)]
+           -> None on 2 of 23 frames
+world 19   mover shape (3,1), 16 frames
+           -> None on 15 of 16 frames: the track exists and is nearly empty of positions
+world 55   mover shape (1,1), 34 frames
+           -> no None at all; the anchors are just not the mover's (the 1 of 15)
+```
+
+The pixel anchors come from `oracles/motion.py`, which reads rendered frames and
+imports nothing from `engines`, and are cross-checked against
+`gridworld.Rules.step` over 4455 transitions in
+`tests/test_oracles.py:test_motion_agrees_with_the_generator_across_the_corpus`.
+"The mover was at (3,3) on frame 0" is therefore not this battery's opinion.
+
+**Why it reaches further than fuzzlab.** `Track.anchors` is what
+`cegis_miner.transitions_from_segmentation` reads to build `State.anchor`, which
+is what every guard atom (`at(r,c)`, `free(strip(D))`) is evaluated against. A
+`None` anchor makes the engine raise `ValueError("object absent at frame %d")` —
+an honest refusal, but it means a world that is segmentable in principle yields
+nothing minable in practice. `first_frame` and `events[].at` in the
+`mdl_segmenter` payload come off the same anchors.
+
+**Not claimed:** a parallel lane reports a separate `mdl_segmenter` issue about
+object-id bit-width computed per-frame while tracks span frames. **Whether these
+are two symptoms of one defect is unverified and is not asserted here.** They
+are plausibly related — both sit on the frame/track boundary — but nothing in
+this run tested it, and a guess filed next to measurements gets quoted as one.
+
+Reproduce:
+
+```bash
+python - <<'EOF'
+from fuzzlab import prng
+from fuzzlab.worlds.gridworld import generate
+from fuzzlab.oracles import motion
+from engines import mdl_segmenter
+w = generate(prng.derive(0x5EED_C1_E4_F0_02, "gridworld", 12))
+seg = mdl_segmenter.segment_trajectory(w.frames, background=0, split_by_color=True)
+shape, colour, bg = motion.mover_spec(w)
+print("pixel:", motion.mover_anchors(w)[:8])
+for t in seg.tracks:
+    if tuple(t.shape) == shape:
+        print("track:", t.anchors[:8])
+EOF
+```
+
+## S6 · `Rule.as_json()` names no subject — the contract gap behind the "1209 false rows" dispute
+
+E-11 counted 1209 published `rule_hypothesis` rows as **false** because they
+carry `effect: none` while the world's mover demonstrably moved. This round read
+the same fact differently. The coordinator has adjudicated it; recorded here is
+the reasoning, and the third argument is the reviewer's and the strongest:
+
+1. **The rules are true of their subject.** Mined off a static obstacle,
+   "nothing happens when you press DOWN" describes a rock correctly. Measured:
+   on every world where the mined track could not be established as the mover,
+   *all* rules had `effect: none` and there were *no* lifted rules.
+2. **The caller chose the subject.** `transitions_from_segmentation` takes
+   `track` as a parameter, and `theoria-arm/world/adapt.py:mine` loops every
+   track passing it explicitly, keeping `track_id` beside each result. `fuzzlab`
+   was taking the `seg.tracks[0]` default — a caller defect, repaired here.
+3. **Nothing was published.** `props/cegis_miner.py:_mine` calls
+   `engine.mine(transitions)` and **never passes `out_path=`**, the only
+   argument that makes `cegis_miner.run()` emit candidates; `fuzzlab` has no
+   writer to `candidates.jsonl` anywhere. So "1209 **published** rows" has no
+   referent in this battery's output — those rows live in memory inside a
+   property run and nowhere else. This holds regardless of how one reads 1 and 2.
+
+**The contract defect the episode exposes stands, and it is the part worth
+keeping:** `miner.py:Rule.as_json()` emits `name, action, guard,
+guard_cost_bits, effect, frontier, …` and **no object identifier**. A
+`rule_hypothesis` in `candidates.jsonl` cannot say which object it describes.
+Harmless on a one-object fixture; on any board with two movable things it makes
+two contradictory rules indistinguishable from one wrong one.
+`CONTRACTS/candidates_schema.md` is frozen and says nothing about payload
+internals, so this is `cegis_miner`'s README to change, not a schema question.
+
+## S7 · corrections this round made to itself, after review
+
+An adversarial reviewer was run against V-13 before delivery. It found five
+things. All are fixed; none is silently fixed, because a report that reads as
+though it was right the first time is worth less than one that shows where it
+was not.
+
+| # | what the reviewer found | disposition |
+|---|---|---|
+| R1 | `costs_are_the_world's` shipped an `if expected > 0` guard that **excluded the zero-cost branch its own docstring twice claimed to check** (`props/probe_frontier.py:52`, `:214` "which is checked below"). `hypset` gives 27.6% of worlds a zero-cost action **on purpose** (`worlds/hypset.py:21`, "Zero is not a hypothetical"). An engine returning `0.0` instead of `inf` passed silently. | **Guard fixed**, not the docstring — leaving a false "checked" inside the invariant written to separate *not checked* from *checked and clean* is this round's own defect one level up. New mutant `pf-zero-cost-value-is-zero`: **survives** the old guard, **killed 11/11** by the new one (11 of 40 worlds carry a free action; 29 inert). |
+| R2 | `_mined_subject`'s docstring was present-tense and false (said 21, actual 15) and named the wrong cause — and the wrong cause had been **copied into the user-visible `skipped` message**. | Docstring and message rewritten with the true cause, which is § S5 above. Triage now starts at `mdl_segmenter`. |
+| R3 | `MUTATION.md` cited "4455 transitions over 200 worlds"; the shipped test swept **five worlds, 93 transitions**. The measurement was real but lived only in a scratch script, so the repository could not reproduce the number it published. | The sweep **is** the test now: `test_motion_agrees_with_the_generator_across_the_corpus` runs 200 worlds and asserts `checked == 4455`, so the published figure cannot drift from the code without a failure. |
+| R4 | `cm-freeze-lifted-direction` was described as closing the lifted-rule gap. The engine **never emits a concrete `effect.direction`** — a census of 357 rules found only `{None, "?dir"}` — so the mutant only reaches `_claimed_delta`'s `if direction in DELTA` branch, which nothing else reaches. It measures tolerance of a malformed field, not `?dir` semantics. | Claim struck from the mutant's own description. Reproduced the reviewer's decisive experiment: **delete those two lines and `cm-freeze-lifted-direction` survives at eval=34, killed=0.** New mutant `cm-lift-admits-a-wrong-direction` tests the real path (`?dir` → `DELTA[witness action]`) by widening a lifted rule's support to a transition where nothing moved: **killed 32/32**, and it still dies with the branch deleted. |
+| R5 | `RUN_STATE.md` and `MANIFEST.json` referenced an `ADVERSARIAL-1.md` that did not exist. | Archived; the references are live. |
+
+**A sixth correction is this round's own**, not the reviewer's, and it is the
+one that changes a published number. `_mine` committed to the **first
+segmentation operator that mined at all**, rather than the first that mined *the
+mover* — so a world where only `split_by_color=True` keeps the mover in one
+piece was silently mined off a rock under the default operator. Fixed:
+subject-unknown worlds fall **54 → 15** of 500, and all six `cegis_miner`
+invariants now report a uniform **465/500**.
+
+That number is *lower* than the 480/500 the four guard invariants claimed before
+V-13, and the drop is the point: those 480 included worlds whose entire rule set
+was `blocked_<D>` rules saying nothing ever happens. Reporting them as evaluated
+was the same confusion this round removed from `props/lp_potential.py`, and
+applying the rule to one module and not the other would have been the harder
+thing to explain.

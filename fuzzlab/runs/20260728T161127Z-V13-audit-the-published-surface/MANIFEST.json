@@ -12,7 +12,9 @@
     "input": "fuzzlab/runs/20260728T152000Z-V10-fuzz-mutation-power/PUBLISHED_VS_AUDITED.md"
   },
   "scope": {
-    "written": ["fuzzlab/"],
+    "written": [
+      "fuzzlab/"
+    ],
     "engine_rig_bytes_changed": 0,
     "contracts_bytes_changed": 0,
     "network": "none",
@@ -37,22 +39,33 @@
       "name": "effects_agree_with_the_evidence",
       "oracle": "fuzzlab/oracles/motion.py",
       "oracle_imports_engines": false,
-      "killed_by": ["cm-flip-effect-delta", "cm-effect-none-becomes-move",
-                    "cm-drift-effect-destination", "cm-freeze-lifted-direction"]
+      "killed_by": [
+        "cm-flip-effect-delta",
+        "cm-effect-none-becomes-move",
+        "cm-drift-effect-destination",
+        "cm-lift-admits-a-wrong-direction",
+        "cm-freeze-lifted-direction"
+      ]
     },
     {
       "engine": "cegis_miner",
       "name": "rules_fire_on_the_action_they_name",
       "oracle": "world.action_list",
       "oracle_imports_engines": false,
-      "killed_by": ["cm-relabel-rule-action"]
+      "killed_by": [
+        "cm-relabel-rule-action"
+      ]
     },
     {
       "engine": "probe_frontier",
       "name": "costs_are_the_world's",
       "oracle": "world.cost_map()",
       "oracle_imports_engines": false,
-      "killed_by": ["pf-flatten-reported-costs", "pf-scale-reported-costs"]
+      "killed_by": [
+        "pf-flatten-reported-costs",
+        "pf-scale-reported-costs",
+        "pf-zero-cost-value-is-zero"
+      ]
     }
   ],
   "new_mutants": [
@@ -61,8 +74,19 @@
     "cm-drift-effect-destination",
     "cm-drop-effect-destination",
     "cm-freeze-lifted-direction",
+    "cm-lift-admits-a-wrong-direction",
     "cm-relabel-rule-action",
-    "pf-scale-reported-costs"
+    "pf-scale-reported-costs",
+    "pf-zero-cost-value-is-zero"
   ],
-  "adversarial_review": "ADVERSARIAL-1.md"
+  "adversarial_review": {
+    "report": "ADVERSARIAL-1.md",
+    "findings_accepted": 5,
+    "findings_rejected": 0,
+    "corrections_logged": "BUGS.md section S7"
+  },
+  "findings_for_other_territories": [
+    "BUGS.md section S5 (mdl_segmenter track continuity)",
+    "BUGS.md section S6 (Rule.as_json names no subject)"
+  ]
 }

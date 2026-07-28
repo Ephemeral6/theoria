@@ -1,4 +1,4 @@
-"""`probe_frontier` mutants — eighteen defects, and the seam had to be built.
+"""`probe_frontier` mutants — twenty defects, and the seam had to be built.
 
 ## The seam, and why this module installs one
 
@@ -139,6 +139,27 @@ _install_seam()
 
 
 # --------------------------------------------------------------- small tools
+
+def _ZeroValue(original: Any) -> Any:
+    """A copy of `original` whose `value` is 0.0 rather than `inf`.
+
+    Built by subclassing the real `ProbeValue` at call time rather than at import
+    time, so this module still does not need to name the engine class in its own
+    namespace.
+    """
+    base = type(original)
+    cls = _ZERO_CACHE.get(base)
+    if cls is None:
+        cls = type("ZeroValued" + base.__name__, (base,),
+                   {"value": property(lambda self: 0.0)})
+        _ZERO_CACHE[base] = cls
+    clone = cls.__new__(cls)
+    clone.__dict__.update(original.__dict__)
+    return clone
+
+
+_ZERO_CACHE: Dict[Any, Any] = {}
+
 
 #: The engine's own ordering key, quoted from `frontier.py:rank_probes`.
 def _key(value: Any) -> Tuple[Any, ...]:
@@ -306,6 +327,36 @@ def _scale_costs(result: Any, args: Tuple[Any, ...],
     for value in result:
         value.cost = value.cost * 2.0
     return result
+
+
+def _zero_cost_value_is_zero(result: Any, args: Tuple[Any, ...],
+                             kwargs: Dict[str, Any]) -> Any:
+    """At cost zero, answer 0.0 bits per unit cost instead of inf.
+
+    `ProbeValue.value` is a property, so this is the one cost defect that cannot
+    be injected by assigning a field; the substitution is a subclass overriding
+    `value`, the same device `mutants/lp_potential.py:_PatchedHeuristic` uses and
+    for the same reason. A dataclass `repr` renders `__class__.__qualname__`, so
+    the swap is visible to the framework's `repr(before) != repr(after)` inert
+    check without needing `mut.touched`.
+
+    The list is re-sorted under the engine's own key afterwards, so the returned
+    order is the one a genuinely 0.0-valued engine would give and
+    `ranking_is_sound` has nothing to complain about.
+    """
+    hit = [v for v in result if v.cost == 0]
+    if not hit:
+        raise mut.inert("no action in this world is free, so there is no "
+                        "zero-cost branch to lie about")
+    patched = []
+    for value in result:
+        if value.cost != 0:
+            patched.append(value)
+            continue
+        clone = _ZeroValue(value)
+        patched.append(clone)
+    patched.sort(key=_key)
+    return patched
 
 
 def _probevalue_partition_relabel(result: Any, args: Tuple[Any, ...],
@@ -579,6 +630,27 @@ mut.register(
                     "the mutant is a real prediction again rather than a "
                     "recorded blind spot.",
         corrupt=_flatten_costs,
+        expect_kill=("costs_are_the_world's",),
+    ),
+    mut.Mutant(
+        id="pf-zero-cost-value-is-zero",
+        engine=ENGINE, seam=RANK_SEAM, kind=mut.UNSOUND,
+        claim="at zero cost `value` is inf, not a number -- "
+              "frontier.py:42-44 is `self.entropy / self.cost if self.cost else "
+              "float('inf')`, published as `value_bits_per_cost`, and "
+              "worlds/hypset.py:21 generates zero costs on purpose because "
+              "'Zero is not a hypothetical -- the ranking divides by it'. An "
+              "engine answering 0.0 ranks every free probe last, which inverts "
+              "the recommendation this engine exists to make.",
+        description="return 0.0 bits per unit cost for every free action, then "
+                    "re-sort under the engine's own key so the order is "
+                    "internally consistent and only the cost invariant can see "
+                    "it. Written after an adversarial review found that "
+                    "`costs_are_the_world's` shipped with an `if expected > 0` "
+                    "guard excluding exactly this branch while its docstring "
+                    "said the branch was checked -- so this mutant is the "
+                    "evidence that the repair is real and not another sentence.",
+        corrupt=_zero_cost_value_is_zero,
         expect_kill=("costs_are_the_world's",),
     ),
     mut.Mutant(
