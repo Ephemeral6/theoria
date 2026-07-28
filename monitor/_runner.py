@@ -33,8 +33,39 @@ def record_exit(pid_str, info):
         pass  # observability must never take the session down with it
 
 
+def resolve(pid_str):
+    """One-arg form: derive prompt file, log path and model from the id, so the
+    scheduled task command stays well under schtasks' 261-char /TR limit."""
+    import datetime
+    import re
+    prompts = os.path.join(HERE, "prompts")
+    match = None
+    for name in sorted(os.listdir(prompts)):
+        if not name.endswith(".md"):
+            continue
+        m = re.match(r"([A-Z]\d+-[a-z0-9][a-z0-9-]*|[PRMBA]-\d+)", name)
+        if m and m.group(1) == pid_str:
+            match = name
+            break
+    if not match:
+        raise SystemExit("no prompt file for %s" % pid_str)
+    prompt_path = os.path.join(prompts, match)
+    head = open(prompt_path, encoding="utf-8").read(600)
+    mt = re.search(r"<!--\s*model:\s*(opus|sonnet|haiku)\s*-->", head)
+    model = mt.group(1) if mt else "opus"
+    stamp = datetime.datetime.now(datetime.timezone.utc).strftime(
+        "%Y%m%dT%H%M%SZ")
+    log_path = os.path.join(HERE, "dispatch-logs",
+                            "%s-%s.log" % (pid_str, stamp))
+    return prompt_path, log_path, model
+
+
 def main():
-    pid_str, prompt_path, log_path, model = sys.argv[1:5]
+    if len(sys.argv) == 2:
+        pid_str = sys.argv[1]
+        prompt_path, log_path, model = resolve(pid_str)
+    else:
+        pid_str, prompt_path, log_path, model = sys.argv[1:5]
     text = open(prompt_path, encoding="utf-8").read()
     claude = shutil.which("claude")
     t0 = time.time()
@@ -43,10 +74,14 @@ def main():
     log.write("=== runner start %s model=%s ===\n" % (pid_str, model))
     log.flush()
     try:
+        # The prompt goes in on STDIN, never as an argv string: under Task
+        # Scheduler the `claude` .cmd shim mangles multi-line UTF-8 arguments
+        # and the session receives an empty prompt (observed 2026-07-28).
         proc = subprocess.run(
-            [claude, "-p", text, "--model", model,
+            [claude, "-p", "--model", model,
              "--dangerously-skip-permissions"],
-            cwd=ROOT, stdout=log, stderr=err, stdin=subprocess.DEVNULL)
+            cwd=ROOT, stdout=log, stderr=err,
+            input=text.encode("utf-8"))
         code = proc.returncode
     except Exception as exc:
         err.write("runner exception: %r\n" % (exc,))

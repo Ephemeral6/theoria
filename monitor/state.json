@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 11:16:22",
+  "generated_at": "2026-07-28 11:49:11",
   "history": [
     {
       "findings": {
@@ -469,24 +469,32 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/loop_state.json",
+      "old-start-a0/certify/fd_conformance.py",
+      "monitor/_runner.py",
+      "monitor/ci/merge.log",
+      "monitor/dispatch.py",
+      "monitor/index.html",
+      "monitor/loop_state.json",
+      "monitor/reflex.lock",
+      "monitor/reflex.log",
+      "monitor/state.json",
+      "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/",
-      "monitor/reflex.lock"
+      "baseline-arms/out/shards/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "1a76087 monitor: upgrades 1+3+2 wired -- reflex layer on a 5-min scheduled task, cost tiering, merge-on-delivery",
-    "incidents": 8,
+    "git_head": "dc9fad1 Merge remote-tracking branch 'origin/agent/p9-shell-harden' into HEAD",
+    "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 48,
-    "sync_last": "2026-07-28T09:50:00Z",
+    "sync_entries": 80,
+    "sync_last": "2026-07-28T21:30:00Z",
     "tests": {},
     "untracked": [
+      "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/",
-      "monitor/reflex.lock"
+      "baseline-arms/out/shards/"
     ]
   },
   "p1_green": 6,
@@ -585,7 +593,7 @@
           "status": "partial"
         },
         {
-          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判，切堆前提恢复（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——contamination_log 还没有那 9 局的登记 → P-11。  〔本次扫描：封存堆 21 局零接触（已核对 2735 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
+          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判，切堆前提恢复（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——contamination_log 还没有那 9 局的登记 → P-11。  〔本次扫描：封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
           "_status": "risk",
           "clause": "Phase 1 · 一刀切堆",
           "id": "p1-cut",
@@ -848,13 +856,13 @@
       "status": "green"
     },
     "dispatch_board": {
-      "detail": "19 份在册工单，1 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",
+      "detail": "19 份在册工单，6 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",
       "rows": [
         {
           "branch": "—",
           "id": "M-0",
           "prompt": "M-0-merge.md",
-          "self_reported": false
+          "self_reported": true
         },
         {
           "branch": "—",
@@ -866,13 +874,13 @@
           "branch": "—",
           "id": "P-11",
           "prompt": "P-11-arc-hygiene.md",
-          "self_reported": false
+          "self_reported": true
         },
         {
           "branch": "—",
           "id": "P-12",
           "prompt": "P-12-envelope-finish.md",
-          "self_reported": false
+          "self_reported": true
         },
         {
           "branch": "—",
@@ -884,7 +892,7 @@
           "branch": "—",
           "id": "P-14",
           "prompt": "P-14-battery-v1.md",
-          "self_reported": false
+          "self_reported": true
         },
         {
           "branch": "—",
@@ -956,7 +964,7 @@
           "branch": "—",
           "id": "P-9",
           "prompt": "P-9-shell-harden.md",
-          "self_reported": false
+          "self_reported": true
         },
         {
           "branch": "—",
@@ -968,15 +976,15 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "提案箱空。",
-      "status": "green"
+      "detail": "待裁决提案 1 份：20260728T2200Z-proxy-ledger-hash-chain.md",
+      "status": "partial"
     },
     "pile_integrity": {
-      "detail": "封存堆 21 局零接触（已核对 2735 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
+      "detail": "封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
       "status": "green"
     },
     "provenance_scan": {
-      "detail": "尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：engine-rig, cold-start-a0, cold-start-a2, a0-spike, baseline-arms, arc-recon, battery。",
+      "detail": "已建档：engine-rig：1 个 run，MANIFEST 0/1，最新 p13-fd-real； theory-compiler：1 个 run，MANIFEST 0/1，最新 P-10； arc-recon：1 个 run，MANIFEST 1/1，最新 P-11； proxy：1 个 run，MANIFEST 1/1，最新 p9-shell-harden； battery：1 个 run，MANIFEST 1/1，最新 P-14。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, a0-spike, baseline-arms。",
       "status": "partial"
     }
   },

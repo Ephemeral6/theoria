@@ -277,3 +277,46 @@ def main():
 
 if __name__ == "__main__":
     raise SystemExit(main())
+
+
+# ---------------------------------------------------------------- via-task
+# Every detached-spawn strategy died: tool-shell children get cleaned up, and
+# a reflex tick's children die with the tick's job. Task Scheduler solves it
+# properly — one ONE-SHOT task per work item, whose action runs the session
+# SYNCHRONOUSLY, so the task stays Running for the session's lifetime and the
+# process belongs to the scheduler, not to us. /Z self-deletes when done.
+
+def via_task(pid_str, prompt_file):
+    model = model_for(os.path.join(PROMPTS, prompt_file))
+    stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    log_path = os.path.join(LOGS, "%s-%s.log" % (pid_str, stamp))
+    with open(log_path, "a", encoding="utf-8") as log:
+        log.write("=== via-task %s at %s model=%s ===\n" % (pid_str, stamp, model))
+    task = "TheoriaAgent-%s" % pid_str
+    # schtasks caps /TR at 261 chars, so the task passes only the id and
+    # _runner.py derives prompt/log/model itself.
+    cmd = '"%s" "%s" %s' % (sys.executable,
+                            os.path.join(HERE, "_runner.py"), pid_str)
+    subprocess.run(["schtasks", "/Create", "/TN", task, "/TR", cmd,
+                    "/SC", "ONCE", "/ST", "23:59", "/F"],
+                   capture_output=True, text=True)
+    r = subprocess.run(["schtasks", "/Run", "/TN", task],
+                       capture_output=True, text=True)
+    ok = r.returncode == 0
+    reg = load_registry()
+    reg[pid_str] = {"pid": 0, "task": task, "log": os.path.basename(log_path),
+                    "started": stamp, "reaped": None, "via": "task"}
+    save_registry(reg)
+    print("%-20s %s task=%s" % (pid_str, "started" if ok else "FAILED", task))
+    return ok
+
+
+def task_state(task):
+    r = subprocess.run(["schtasks", "/Query", "/TN", task, "/FO", "LIST"],
+                       capture_output=True, text=True)
+    if r.returncode != 0:
+        return "gone"
+    for line in r.stdout.splitlines():
+        if line.lower().startswith(("status", "状态")):
+            return line.split(":", 1)[1].strip()
+    return "unknown"

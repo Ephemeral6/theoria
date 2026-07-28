@@ -1,0 +1,436 @@
+<title>Theoria · 进度</title>
+<style>
+:root{
+  --bg:#fbfaf8; --fg:#1c1a17; --mut:#6b655c; --line:#e2ddd4; --card:#fff;
+  --green:#1a7f4e; --partial:#a86a12; --risk:#b3341f; --blocked:#6d5ca8; --missing:#8a8378;
+  --greenbg:#e8f4ed; --partialbg:#fbf1de; --riskbg:#fbe9e5; --blockedbg:#efecf8; --missingbg:#f1efec;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#14130f; --fg:#eae5dc; --mut:#9a9287; --line:#2e2b25; --card:#1c1a16;
+  --green:#5cc98d; --partial:#e0a94a; --risk:#f0796a; --blocked:#a99ae0; --missing:#8a8378;
+  --greenbg:#16281f; --partialbg:#2b2214; --riskbg:#2e1a16; --blockedbg:#211d2e; --missingbg:#1f1d19;
+}}
+:root[data-theme="dark"]{
+  --bg:#14130f; --fg:#eae5dc; --mut:#9a9287; --line:#2e2b25; --card:#1c1a16;
+  --green:#5cc98d; --partial:#e0a94a; --risk:#f0796a; --blocked:#a99ae0; --missing:#8a8378;
+  --greenbg:#16281f; --partialbg:#2b2214; --riskbg:#2e1a16; --blockedbg:#211d2e; --missingbg:#1f1d19;
+}
+:root[data-theme="light"]{
+  --bg:#fbfaf8; --fg:#1c1a17; --mut:#6b655c; --line:#e2ddd4; --card:#fff;
+  --green:#1a7f4e; --partial:#a86a12; --risk:#b3341f; --blocked:#6d5ca8; --missing:#8a8378;
+  --greenbg:#e8f4ed; --partialbg:#fbf1de; --riskbg:#fbe9e5; --blockedbg:#efecf8; --missingbg:#f1efec;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+  font:15px/1.65 "Noto Serif SC",Georgia,"Songti SC",serif;-webkit-font-smoothing:antialiased}
+header{padding:44px 28px 0;max-width:1180px;margin:0 auto}
+h1{font-size:30px;margin:0 0 6px;letter-spacing:-.01em}
+.sub{color:var(--mut);margin:0 0 26px;font-size:14px}
+.stamp{display:block;margin-top:6px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px}
+main{max-width:1180px;margin:0 auto;padding:0 28px 80px}
+section{margin:46px 0}
+h2{font-size:19px;margin:0 0 16px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+h3{font-size:16px;margin:0}
+.note{color:var(--mut);font-weight:400;font-size:13px}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+  background:var(--missingbg);padding:1px 5px;border-radius:3px}
+
+.hero{display:flex;gap:26px;align-items:center;background:var(--card);
+  border:1px solid var(--line);border-radius:12px;padding:22px 26px;margin-bottom:14px}
+.hnum{font:700 54px/1 system-ui,sans-serif;letter-spacing:-.02em;white-space:nowrap}
+.hnum small{font-size:26px;font-weight:600;color:var(--mut)}
+.hbody{flex:1;min-width:0}
+.htitle{font-size:14.5px;font-weight:700;margin-bottom:8px}
+.htitle .note{display:block;font-weight:400;margin-top:2px}
+.hbar{display:flex;height:14px;border-radius:99px;overflow:hidden;gap:0;
+  border:1px solid var(--line)}
+.hseg{display:block;height:100%}
+.hseg.fill{background:var(--st-green)}
+.hseg.rest{background:var(--missingbg);border-left:1px solid var(--line)}
+.hrows{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+  gap:4px 22px;margin-top:10px}
+.hrow{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--mut)}
+.hn{flex:0 0 auto}
+.hb{flex:1;height:5px;border-radius:99px;background:var(--missingbg);overflow:hidden}
+.hb i{display:block;height:100%;background:var(--st-green)}
+.hv{font-family:ui-monospace,Menlo,Consolas,monospace;white-space:nowrap}
+.hv em{font-style:normal;opacity:.65}
+@media(max-width:720px){.hero{flex-direction:column;align-items:flex-start;gap:12px}}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:12px;
+  margin-bottom:8px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:9px;padding:14px 16px}
+.tv{font-size:20px;font-weight:700;letter-spacing:-.01em}
+.tl{font-size:13px;margin-top:2px}
+.ts{font-size:12px;color:var(--mut);margin-top:3px}
+
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:12px;
+  font-weight:600;white-space:nowrap;font-family:system-ui,sans-serif}
+.pill.green{background:var(--greenbg);color:var(--green)}
+.pill.partial{background:var(--partialbg);color:var(--partial)}
+.pill.risk{background:var(--riskbg);color:var(--risk)}
+.pill.blocked{background:var(--blockedbg);color:var(--blocked)}
+.pill.missing{background:var(--missingbg);color:var(--missing)}
+
+.finding{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--missing);
+  border-radius:8px;padding:16px 20px;margin-bottom:14px}
+.finding.blocking{border-left-color:var(--risk)}
+.finding.high{border-left-color:var(--partial)}
+.finding.medium{border-left-color:var(--blocked)}
+.finding.low,.finding.info{border-left-color:var(--green)}
+.fhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.fid{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;color:var(--mut)}
+.sev{font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:99px;
+  font-family:system-ui,sans-serif}
+.sev.blocking{background:var(--riskbg);color:var(--risk)}
+.sev.high{background:var(--partialbg);color:var(--partial)}
+.sev.medium{background:var(--blockedbg);color:var(--blocked)}
+.sev.low,.sev.info{background:var(--greenbg);color:var(--green)}
+.finding p{margin:0 0 8px;font-size:14px}
+.action{color:var(--mut);font-size:13.5px;border-top:1px dashed var(--line);padding-top:8px}
+
+.phase{background:var(--card);border:1px solid var(--line);border-radius:8px;
+  margin-bottom:16px;overflow:hidden}
+.phead{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:13px 18px;
+  border-bottom:1px solid var(--line)}
+.gate{font-size:12.5px;color:var(--mut)}
+.bar{display:flex;flex:1;min-width:120px;height:6px;border-radius:99px;overflow:hidden;
+  background:var(--missingbg)}
+.bar i{display:block}
+.bar i.green{background:var(--green)}.bar i.partial{background:var(--partial)}
+.bar i.risk{background:var(--risk)}.bar i.blocked{background:var(--blocked)}
+.bar i.missing{background:var(--missing)}
+
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+.wide{background:var(--card);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+th{text-align:left;font-size:12px;color:var(--mut);font-weight:600;padding:10px 14px;
+  border-bottom:1px solid var(--line);font-family:system-ui,sans-serif}
+td{padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:last-child td{border-bottom:none}
+td.st{width:74px}
+td.num{width:38px;color:var(--mut);font-family:ui-monospace,monospace}
+.lb{width:30%}
+.nt{color:var(--mut);font-size:13px}
+.clause{display:block;font-size:11.5px;color:var(--mut);font-weight:400;margin-top:2px;
+  font-family:ui-monospace,Menlo,Consolas,monospace}
+
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:9px}
+.fact{background:var(--card);border:1px solid var(--line);border-radius:7px;padding:10px 13px}
+.fk{display:block;font-size:11.5px;color:var(--mut);font-family:system-ui,sans-serif}
+.fv{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;word-break:break-word}
+
+/* ---- charts: status palette (state colors, both modes validated steps) */
+:root{--st-green:#0ca30c;--st-partial:#fab219;--st-blocked:#ec835a;
+  --st-risk:#d03b3b;--st-missing:#c3c2b7;--chart-grid:#e1e0d9;--chart-axis:#c3c2b7}
+@media (prefers-color-scheme:dark){:root{--st-missing:#4a4a46;
+  --chart-grid:#2c2c2a;--chart-axis:#383835}}
+:root[data-theme="dark"]{--st-missing:#4a4a46;--chart-grid:#2c2c2a;--chart-axis:#383835}
+
+.legend{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:12px;
+  font-size:12.5px;color:var(--mut);font-family:system-ui,sans-serif}
+.lg{display:inline-flex;align-items:center;gap:6px}
+.sw{display:inline-block;width:11px;height:11px;border-radius:3px}
+.sw.green{background:var(--st-green)}.sw.partial{background:var(--st-partial)}
+.sw.blocked{background:var(--st-blocked)}.sw.risk{background:var(--st-risk)}
+.sw.missing{background:var(--st-missing)}
+
+.stack{display:flex;flex-direction:column;gap:9px;background:var(--card);
+  border:1px solid var(--line);border-radius:9px;padding:16px 18px}
+.srow{display:flex;align-items:center;gap:12px}
+.sname{flex:0 0 168px;font-size:13px;text-align:right;color:var(--fg)}
+.sbar{flex:1;display:flex;gap:2px;height:22px;border-radius:5px;overflow:hidden}
+.seg{display:flex;align-items:center;justify-content:center;height:100%;
+  font:600 11px/1 system-ui,sans-serif;color:#fff;min-width:3px}
+.seg.green{background:var(--st-green)}.seg.partial{background:var(--st-partial);color:#4a3500}
+.seg.blocked{background:var(--st-blocked);color:#3d1b0c}
+.seg.risk{background:var(--st-risk)}.seg.missing{background:var(--st-missing);color:#3d3c38}
+.stot{flex:0 0 84px;font-size:12px;color:var(--mut);
+  font-family:ui-monospace,Menlo,Consolas,monospace}
+
+.arch{display:flex;flex-wrap:wrap;gap:10px;align-items:stretch}
+.agroup{background:var(--card);border:1px solid var(--line);border-radius:9px;
+  padding:12px 14px;flex:1 1 200px;min-width:190px}
+.ahead{font-size:13.5px;font-weight:700;margin-bottom:9px}
+.achips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;
+  border-radius:7px;font:500 12.5px/1.3 system-ui,sans-serif;cursor:default;
+  border:1px solid var(--line)}
+.chip.green{background:var(--greenbg)}.chip.partial{background:var(--partialbg)}
+.chip.risk{background:var(--riskbg)}.chip.blocked{background:var(--blockedbg)}
+.chip.missing{background:var(--missingbg);color:var(--mut)}
+.flow{align-self:center;color:var(--mut);font-size:17px;padding:0 1px}
+
+.trendbox{background:var(--card);border:1px solid var(--line);border-radius:9px;
+  padding:16px 12px 6px;overflow-x:auto}
+.grid{stroke:var(--chart-grid);stroke-width:1}
+.tick{fill:var(--mut);font:11px system-ui,sans-serif}
+.line{fill:none;stroke-width:2}
+.line.t1{stroke:#2a78d6}.line.t2{stroke:#eb6834}
+@media (prefers-color-scheme:dark){.line.t1{stroke:#3987e5}.line.t2{stroke:#d95926}}
+:root[data-theme="dark"] .line.t1{stroke:#3987e5}
+:root[data-theme="dark"] .line.t2{stroke:#d95926}
+.dot{stroke:var(--card);stroke-width:2}
+.dot.t1{fill:#2a78d6}.dot.t2{fill:#eb6834}
+@media (prefers-color-scheme:dark){.dot.t1{fill:#3987e5}.dot.t2{fill:#d95926}}
+:root[data-theme="dark"] .dot.t1{fill:#3987e5}
+:root[data-theme="dark"] .dot.t2{fill:#d95926}
+.dl{font:600 11.5px system-ui,sans-serif;fill:var(--fg)}
+
+.conflict{background:var(--card);border:1px solid var(--line);border-radius:8px;
+  padding:13px 16px;font-size:13.5px}
+.conflict.risk{border-left:4px solid var(--st-risk)}
+.conflict.green{border-left:4px solid var(--st-green);color:var(--mut)}
+
+.mainloop h2{border-bottom-width:2px;border-bottom-color:var(--fg)}
+.doctrine{background:var(--card);border-left:4px solid var(--fg);border-radius:6px;
+  padding:12px 16px;font-size:14px;margin:0 0 14px}
+.loopstats{display:flex;gap:26px;flex-wrap:wrap;margin-bottom:12px;
+  font:13px system-ui,sans-serif;color:var(--mut)}
+.loopstats b{font-size:19px;color:var(--fg);margin-right:4px}
+.exp{background:var(--card);border:1px solid var(--line);border-radius:9px;
+  margin-bottom:14px;overflow:hidden}
+.exhead{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  padding:12px 16px;border-bottom:1px solid var(--line)}
+.exhead b{font-size:14.5px}
+.exsum{font-size:12.5px;color:var(--mut)}
+.looptab th:first-child{width:34%}
+.looptab td.cls{white-space:nowrap;color:var(--mut);font-size:12.5px}
+.via{margin-top:5px;font-size:12px;color:var(--mut);max-width:340px}
+
+.ticket{background:var(--card);border:1px solid var(--line);border-radius:8px;
+  margin-bottom:10px;overflow:hidden}
+.ticket summary{display:flex;align-items:center;gap:10px;padding:12px 16px;
+  cursor:pointer;font-size:14px;font-weight:600;list-style:none}
+.ticket summary::-webkit-details-marker{display:none}
+.tfile{font:11.5px ui-monospace,Menlo,Consolas,monospace;color:var(--mut);
+  background:var(--missingbg);padding:2px 7px;border-radius:4px;font-weight:400}
+.copy{margin-left:auto;border:1px solid var(--line);background:var(--bg);
+  color:var(--fg);border-radius:6px;padding:5px 12px;font:12.5px system-ui,sans-serif;
+  cursor:pointer}
+.copy:hover{border-color:var(--mut)}
+.ticket textarea{display:block;width:100%;border:none;border-top:1px solid var(--line);
+  background:var(--bg);color:var(--fg);padding:14px 16px;resize:vertical;
+  font:12.5px/1.6 ui-monospace,Menlo,Consolas,monospace;box-sizing:border-box}
+
+/* ---- 2D project map ---- */
+.mapwrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:14px}
+.gridmap{border-collapse:separate;border-spacing:5px;width:100%;min-width:640px}
+.gridmap thead th{font:600 12px system-ui,sans-serif;color:var(--mut);
+  padding:4px 6px;text-align:center;border:none}
+.rowh{text-align:right;padding:0 10px 0 2px;border:none;white-space:nowrap}
+.rowh b{font:700 13px system-ui,sans-serif;display:block}
+.rowh span{font-size:11px;color:var(--mut)}
+.mc{position:relative;height:56px;min-width:96px;border-radius:9px;
+  text-align:center;vertical-align:middle;cursor:default;
+  background:color-mix(in oklab, var(--st-green) calc(var(--f)*100%), var(--missingbg));
+  border:1px solid var(--line)}
+.mpct{font:700 15px system-ui,sans-serif;
+  color:color-mix(in oklab, #fff calc(var(--f)*90%), var(--fg))}
+.mdots{position:absolute;right:7px;bottom:6px;display:flex;gap:3px}
+.mdot{width:8px;height:8px;border-radius:99px;background:var(--st-partial);
+  animation:pulse 1.6s infinite;display:block;border:1.5px solid var(--card)}
+
+/* ---- plain progress-first layout ---- */
+.top{display:flex;gap:30px;align-items:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:26px 30px}
+.ring{width:150px;height:150px;flex:0 0 auto}
+.rbg{fill:none;stroke:var(--missingbg);stroke-width:11}
+.rfg{fill:none;stroke:var(--st-green);stroke-width:11;stroke-linecap:round}
+.rnum{font:700 27px system-ui,sans-serif;fill:var(--fg);text-anchor:middle}
+.rlab{font:12px system-ui,sans-serif;fill:var(--mut);text-anchor:middle}
+.topmid{flex:1;min-width:240px}
+.topmid h1{font-size:24px;margin:0 0 6px}
+.one{margin:0 0 10px;font-size:14.5px;color:var(--mut)}
+.one b{color:var(--fg)}
+.delta{margin-left:8px;font:700 13px system-ui,sans-serif;padding:1px 8px;
+  border-radius:99px}
+.delta.up{background:var(--greenbg);color:var(--green)}
+.delta.down{background:var(--riskbg);color:var(--risk)}
+.sparkrow{display:flex;align-items:center;gap:10px}
+.spark{width:220px;height:44px}
+.spark path{fill:none;stroke:var(--st-green);stroke-width:2.5}
+.spark circle{fill:var(--st-green)}
+.sparklab{font-size:11.5px;color:var(--mut)}
+.topstats{display:grid;grid-template-columns:1fr 1fr;gap:10px 26px}
+.ts2 b{display:block;font-size:21px;font-family:system-ui,sans-serif}
+.ts2 span{font-size:12px;color:var(--mut)}
+
+.journey{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.leg{background:var(--card);border:1px solid var(--line);border-radius:11px;
+  padding:16px 18px;border-top:4px solid var(--missing)}
+.leg.done{border-top-color:var(--st-green)}
+.leg.now{border-top-color:var(--st-partial)}
+.leg.soon{border-top-color:var(--st-blocked)}
+.legpct{font:700 30px system-ui,sans-serif;letter-spacing:-.02em}
+.legbar{height:7px;border-radius:99px;background:var(--missingbg);overflow:hidden;
+  margin:8px 0 10px}
+.legbar i{display:block;height:100%;background:var(--st-green)}
+.leg.now .legbar i{background:var(--st-partial)}
+.legname{font-weight:700;font-size:14.5px}
+.legsub{font-size:12px;color:var(--mut);margin-top:2px}
+
+.wpgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.wpcard{background:var(--card);border:1px solid var(--line);border-radius:11px;
+  padding:15px 17px}
+.wphead{display:flex;justify-content:space-between;align-items:baseline;font-size:14.5px}
+.wppct{font:700 19px system-ui,sans-serif}
+.wpbar{height:7px;border-radius:99px;background:var(--missingbg);overflow:hidden;
+  margin:8px 0}
+.wpbar i{display:block;height:100%;background:var(--st-green)}
+.wpsub{margin:0 0 7px;font-size:12.5px;color:var(--mut)}
+.wpnext{margin:0;font-size:12px;color:var(--mut);border-top:1px dashed var(--line);
+  padding-top:7px}
+
+.fleet{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:9px}
+.crew{display:flex;align-items:center;gap:11px;background:var(--card);
+  border:1px solid var(--line);border-radius:9px;padding:10px 13px;font-size:13.5px}
+.crew.lost{border-color:var(--st-risk);border-left-width:4px}
+.cellbadge{flex:0 0 auto;min-width:34px;text-align:center;padding:5px 7px;
+  border-radius:7px;font:700 12.5px system-ui,sans-serif;
+  background:var(--greenbg);color:var(--green)}
+.cellbadge.ops{background:var(--blockedbg);color:var(--blocked)}
+.crewbody{flex:1;min-width:0}
+.crewbody b{font-weight:600;display:block;line-height:1.35}
+.crewbody em{font-style:normal;font-size:11px;color:var(--mut);
+  font-family:ui-monospace,Menlo,Consolas,monospace}
+.crewst{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;
+  font-size:11.5px;color:var(--mut)}
+.dot{width:9px;height:9px;border-radius:99px;flex:0 0 auto}
+.crew.run .dot{background:var(--st-partial);animation:pulse 1.6s infinite}
+.crew.done .dot{background:var(--st-green)}
+.crew.lost .dot{background:var(--st-risk)}
+@keyframes pulse{50%{opacity:.35}}
+
+.needs{background:var(--card);border:1px solid var(--line);
+  border-left:4px solid var(--st-risk);border-radius:9px;padding:14px 18px;
+  margin-bottom:10px}
+.needs p{margin:6px 0 0;font-size:13.5px;color:var(--mut)}
+.allclear{background:var(--greenbg);color:var(--green);border-radius:9px;
+  padding:13px 18px;font-size:14px}
+.wins{margin:0;padding-left:22px}
+.wins li{margin-bottom:7px;font-size:14px}
+
+.fold{background:var(--card);border:1px solid var(--line);border-radius:9px;
+  margin-bottom:9px;overflow:hidden}
+.fold>summary{padding:12px 16px;cursor:pointer;font-weight:600;font-size:13.5px;
+  list-style:none}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary::before{content:"▸ ";color:var(--mut)}
+.fold[open]>summary::before{content:"▾ "}
+.fold>*:not(summary){margin:0 16px 14px}
+
+footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
+  color:var(--mut);font-size:12.5px}
+@media(max-width:720px){
+  header{padding:26px 16px 0}main{padding:0 16px 50px}
+  .lb{width:auto}table{font-size:13px}td{padding:9px 10px}
+}
+</style>
+<header><div class="top">
+<svg viewBox="0 0 150 150" class="ring" role="img" aria-label="论文完成度 30.8%"><circle cx="75" cy="75" r="62" class="rbg"/><circle cx="75" cy="75" r="62" class="rfg" stroke-dasharray="120.0 269.6" transform="rotate(-90 75 75)"/><text x="75" y="72" class="rnum">30.8%</text><text x="75" y="94" class="rlab">论文完成度</text></svg>
+<div class="topmid"><h1>Theoria 研究进度</h1><p class="one">目标：一篇实验规模对标 Schema 的可发表论文。眼下 <b>12 个 AI 会话</b>在并行干活<span class="delta up">+4.0%</span></p><div class="sparkrow"><svg viewBox="0 0 220 44" class="spark"><path d="M0.0 13.8 L220.0 13.8"/><circle cx="220.0" cy="13.8" r="3.5"/></svg><span class="sparklab">进度曲线</span></div></div>
+<div class="topstats">
+<div class="ts2"><b>12</b><span>会话在飞</span></div>
+<div class="ts2"><b>7/20</b><span>实验问题已回灌</span></div>
+<div class="ts2"><b>0</b><span>需要你处理</span></div>
+<div class="ts2"><b>07-28 11:49</b><span>上次扫描</span></div>
+</div></div></header>
+<main>
+<section><h2>项目地图 <span class="note">— 横轴：工作从左往右推进；纵轴：六个子系统。格子越绿越完成，呼吸点 = 该格有会话在跑；悬停看格子的实况。新工单编号即坐标（如 A3-xxx）。</span></h2>
+<div class="mapwrap"><table class="gridmap"><thead><tr><th></th>
+<th>1 造仪器</th>
+<th>2 离线验证</th>
+<th>3 在线练习</th>
+<th>4 正式战役</th>
+<th>5 论文与释出</th>
+</tr></thead><tbody>
+<tr><th class="rowh"><b>E</b><span>引擎车间</span></th>
+<td class="mc" style="--f:0.95" title="E1（95%）：六引擎全绿（MDL/CEGIS/零空间/LP/FD桩/前沿）　在跑：E1-property-fuzz"><span class="mpct">95%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.85" title="E2（85%）：M9 三件落地；FD 真后端在跑　在跑：P-13"><span class="mpct">85%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.05" title="E3（5%）：引擎在线供货（经 theoria-arm 调用）"><span class="mpct">5%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.00" title="E4（0%）：封存战役中的引擎供给"><span class="mpct">0%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.20" title="E5（20%）：引擎代码随释出包公开"><span class="mpct">20%</span><span class="mdots"></span></td>
+</tr>
+<tr><th class="rowh"><b>C</b><span>编译与证明</span></th>
+<td class="mc" style="--f:0.90" title="C1（90%）：DSL 语法 + 四形态生成器；契约 v0.2 交付待合并　在跑：C1-worldgen"><span class="mpct">90%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.95" title="C2（95%）：真 A1（空公理集）+ A2 假定理展品 + A0/A0′ 全环"><span class="mpct">95%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.05" title="C3（5%）：在线两本书：首局的 theory.dsl 尚在 P-8 分支里"><span class="mpct">5%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.00" title="C4（0%）：封存局的证书生产线"><span class="mpct">0%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.30" title="C5（30%）：Lean 证明随释出包公开；复跑说明在做　在跑：P-19"><span class="mpct">30%</span><span class="mdots"><i class="mdot"></i></span></td>
+</tr>
+<tr><th class="rowh"><b>S</b><span>外壳与账本</span></th>
+<td class="mc" style="--f:0.80" title="S1（80%）：双代理 + 账本 + 护栏落地；打分器本体待合并核实"><span class="mpct">80%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.75" title="S2（75%）：预检 4/4 PASS；金丝雀交付待合并；级联探针在跑　在跑：P-20"><span class="mpct">75%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.30" title="S3（30%）：在线对账与复放抽检；F-11 落账待核"><span class="mpct">30%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.10" title="S4（10%）：冻结外壳（清单起草中）　在跑：P-22"><span class="mpct">10%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.20" title="S5（20%）：账本与 incident 台账随释出公开"><span class="mpct">20%</span><span class="mdots"></span></td>
+</tr>
+<tr><th class="rowh"><b>A</b><span>三臂对局</span></th>
+<td class="mc" style="--f:0.70" title="A1（70%）：裸 CC 臂全套 + 消融臂在建；Theoria 臂离线件齐　在跑：P-18"><span class="mpct">70%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.60" title="A2（60%）：离线标定：A0/A0′/A2/A3 四世界 + 消融对照在跑　在跑：A2-crosscheck,P-17"><span class="mpct">60%</span><span class="mdots"><i class="mdot"></i><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.12" title="A3（12%）：开发堆在线：P-8 首局交付；包络 1/4+续跑中　在跑：P-12"><span class="mpct">12%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.00" title="A4（0%）：封存战役（门槛：Phase1 全绿 + 冻结提交）"><span class="mpct">0%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.00" title="A5（0%）：主表三列 + 消融列"><span class="mpct">0%</span><span class="mdots"></span></td>
+</tr>
+<tr><th class="rowh"><b>V</b><span>评测两器</span></th>
+<td class="mc" style="--f:0.90" title="V1（90%）：电池 v0 + 预注册纪律"><span class="mpct">90%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.60" title="V2（60%）：battery v1 + exam 四题型交付待合并"><span class="mpct">60%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.35" title="V3（35%）：区分力首跑（CC vs Theoria 离线）；方向预注册续"><span class="mpct">35%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.00" title="V4（0%）：封存回算 + 判决题实考"><span class="mpct">0%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.15" title="V5（15%）：能力谱与考卷的发表版图表　在跑：P-21"><span class="mpct">15%</span><span class="mdots"><i class="mdot"></i></span></td>
+</tr>
+<tr><th class="rowh"><b>P</b><span>论文产出</span></th>
+<td class="mc" style="--f:0.70" title="P1（70%）：方法论与骨架（Theoria.md 三部曲自带）"><span class="mpct">70%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.60" title="P2（60%）：workshop 文初稿交付待合并；相关工作在建　在跑：P-23"><span class="mpct">60%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.10" title="P3（10%）：开发堆案例研究（概念时间线素材已够）　在跑：P3-case-study"><span class="mpct">10%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.15" title="P4（15%）：预注册包：冻结清单/统计规则/双结局起草中"><span class="mpct">15%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.15" title="P5（15%）：主文 + Schema 地板释出　在跑：P-19"><span class="mpct">15%</span><span class="mdots"><i class="mdot"></i></span></td>
+</tr>
+</tbody></table></div>
+<p class="note">地图外的运维会话：沉淀舰队通用技能，加速后续会话（P-24）</p>
+</section>
+<section><h2>正在进行 <span class="note">— 12 在跑，徽章 = 它点亮地图上的哪一格</span></h2><div class="fleet">
+<div class="crew run"><span class="cellbadge ">A1</span><div class="crewbody"><b>造对照版 AI（去掉证明能力的消融臂）</b><em>P-18 · 4 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">A2</span><div class="crewbody"><b>两套独立 AI 实现互考对方的世界</b><em>A2-crosscheck · 2 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">A3</span><div class="crewbody"><b>补齐对照组的成绩数据</b><em>P-12</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">C1</span><div class="crewbody"><b>批量造 20 个练习世界（弹药库）</b><em>C1-worldgen · 1 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">E1</span><div class="crewbody"><b>用 500 个随机世界轰炸六引擎找 bug</b><em>E1-property-fuzz · 1 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">P2</span><div class="crewbody"><b>整理相关文献与引用</b><em>P-23 · 3 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">P3</span><div class="crewbody"><b>写三个深度案例（概念诞生/可逆性/假定理）</b><em>P3-case-study · 1 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">P5</span><div class="crewbody"><b>打包公开：陌生人一条命令复跑全部</b><em>P-19 · 4 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">S2</span><div class="crewbody"><b>实测游戏一步会不会动好几帧</b><em>P-20 · 4 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">S4</span><div class="crewbody"><b>起草大考前要封存的规则包</b><em>P-22 · 3 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">V5</span><div class="crewbody"><b>把数据画成论文用的图</b><em>P-21 · 3 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ops">运维</span><div class="crewbody"><b>沉淀舰队通用技能，加速后续会话</b><em>P-24 · 2 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+</div></section>
+<section><h2>需要你的事</h2>
+<p class="allclear">✓ 目前没有任何需要你出手的事——决策已代行，执行在跑，出问题会在这里出现。</p>
+</section>
+<section><h2>最近拿下</h2><ul class="wins">
+<li>死锁定理、IC3 不变量、探针规划器定价全部落地；peg 0111 拿到非线性证书。</li>
+<li>假定理展品造出、六拍修复回路走完——A2 的两句验收兑现。</li>
+<li>LP 证书过数据边界落成空公理集 Lean 证明；复核 CONFIRMED 但揪出两处说得比证据满。</li>
+<li>开发堆 4 局全 PASS；根因 = 1–3 分钟波浪式瞬时故障（多实例后端）。</li>
+<li>独立闭环 + Lean 接通；held-out 测试当场抓住一条错规则。</li>
+</ul></section>
+<section><h2>审计明细 <span class="note">— 专业视图，逐条引 Theoria.md 条款；日常不用看</span></h2>
+<details class="fold"><summary>分区进度（四段 / 工序 / 约束 / Claim）</summary><div class="legend"><span class="lg"><i class="sw green"></i>达成</span><span class="lg"><i class="sw partial"></i>部分</span><span class="lg"><i class="sw risk"></i>有风险</span><span class="lg"><i class="sw blocked"></i>受阻</span><span class="lg"><i class="sw missing"></i>缺失</span></div><div class="stack"><div class="srow"><span class="sname">Phase 1 · 封闭系统</span><span class="sbar"><i class="seg green" style="width:37.50%" title="Phase 1 · 封闭系统：达成 6/16">6</i><i class="seg partial" style="width:50.00%" title="Phase 1 · 封闭系统：部分 8/16">8</i><i class="seg risk" style="width:12.50%" title="Phase 1 · 封闭系统：有风险 2/16">2</i></span><span class="stot">6/16 达成</span></div><div class="srow"><span class="sname">Phase 2 · 指标电池</span><span class="sbar"><i class="seg green" style="width:33.33%" title="Phase 2 · 指标电池：达成 1/3">1</i><i class="seg partial" style="width:66.67%" title="Phase 2 · 指标电池：部分 2/3">2</i></span><span class="stot">1/3 达成</span></div><div class="srow"><span class="sname">Phase 3 · 框架迭代（开发堆）</span><span class="sbar"><i class="seg partial" style="width:60.00%" title="Phase 3 · 框架迭代（开发堆）：部分 3/5">3</i><i class="seg missing" style="width:40.00%" title="Phase 3 · 框架迭代（开发堆）：缺失 2/5">2</i></span><span class="stot">0/5 达成</span></div><div class="srow"><span class="sname">Phase 4 · 确证（封存堆）</span><span class="sbar"><i class="seg partial" style="width:16.67%" title="Phase 4 · 确证（封存堆）：部分 1/6">1</i><i class="seg missing" style="width:83.33%" title="Phase 4 · 确证（封存堆）：缺失 5/6">5</i></span><span class="stot">0/6 达成</span></div><div class="srow"><span class="sname">车间八工序</span><span class="sbar"><i class="seg green" style="width:77.78%" title="车间八工序：达成 7/9">7</i><i class="seg partial" style="width:22.22%" title="车间八工序：部分 2/9">2</i></span><span class="stot">7/9 达成</span></div><div class="srow"><span class="sname">十条强制约束</span><span class="sbar"><i class="seg green" style="width:10.00%" title="十条强制约束：达成 1/10">1</i><i class="seg partial" style="width:50.00%" title="十条强制约束：部分 5/10">5</i><i class="seg risk" style="width:20.00%" title="十条强制约束：有风险 2/10">2</i><i class="seg missing" style="width:20.00%" title="十条强制约束：缺失 2/10">2</i></span><span class="stot">1/10 达成</span></div><div class="srow"><span class="sname">Claim 菜单</span><span class="sbar"><i class="seg partial" style="width:20.00%" title="Claim 菜单：部分 1/5">1</i><i class="seg blocked" style="width:40.00%" title="Claim 菜单：受阻 2/5">2</i><i class="seg missing" style="width:40.00%" title="Claim 菜单：缺失 2/5">2</i></span><span class="stot">0/5 达成</span></div></div></details>
+<details class="fold"><summary>实验 → 框架迭代回路（研究主环全记录）</summary><div class="loopstats"><span><b>10</b> 个实验</span><span><b>20</b> 个被暴露的问题</span><span><b>7</b> 已回灌框架</span><span><b>13</b> 修复中/待派工</span></div><p class="doctrine">研究的主环不是把组件清单建完，而是：实验暴露问题 → 问题定位到框架的某一层 → 修框架 → 复跑验证。Theoria.md Phase 3 的『一次迭代的形状』与失败分类学就是这条环的条款化（只改一件事、变更日志、最小验证单元复跑、对照记分板留或滚）。下表是到目前为止每一次真实的回灌记账——组件进度只是它的脚手架。</p><div class="exp green"><div class="exhead"><span class="pill green">实验·达成</span><b>A0 冷启动（cold-start-a0）</b><span class="exsum">全环跑通：certify 双层绿、plan SAT、赢、不可解证书；对真值 233/236。</span></div><table class="looptab"><thead><tr><th>实验暴露的问题</th><th>失败类</th><th>修在框架哪里</th><th>回灌状态</th></tr></thead><tbody><tr><td>O-04：Button/Door 压缩账为负仍必须入册——约束 5 与约束 2 正面冲突</td><td class="cls">概念不成形</td><td>基准文件 1.8（压缩账的对照基准）</td><td><span class="pill green">已回灌</span><div class="via">commit 7cc02a9『price the concept account against a legal alternative』：账目改为对照『合法替代方案』计价，冲突消解</div></td></tr><tr><td>E-03：帧公理只能写在注释里，step 最重要的语义事实不在 DSL</td><td class="cls">表达力不够</td><td>DSL 语法（CONTRACTS，theory-compiler 辖）</td><td><span class="pill partial">修复中·已派工</span><div class="via">v0.2 <code>semantics:</code> 正式提案已提交（proposals/）+ A0 侧句型已落地（commit 440e633）；裁决派 P-5</div></td></tr><tr><td>R-05 + 零可执行探针：不可逆闩锁使漏写规则永不可证——DC22 盲区实名复现</td><td class="cls">戳探设计差</td><td>世界/选局设计准则 + 探针机器</td><td><span class="pill green">已回灌</span><div class="via">触发了 A0′ 对照实验，问题变成了答案（见下）</div></td></tr><tr><td>D-A0-011/013：上游生成器特化到 peg、解析器嵌套括号静默错 AST</td><td class="cls">调度失误（工具侧）</td><td>theory-compiler 生成器与解析器</td><td><span class="pill partial">修复中·已派工</span><div class="via">P-5（AST 通用化 + 负向测试）</div></td></tr></tbody></table></div><div class="exp green"><div class="exhead"><span class="pill green">实验·达成</span><b>A0′ 可逆性对照（cold-start-a0/prime）</b><span class="exsum">47% 覆盖做到 100% 准确 + 13 条可执行探针；A0 99% 覆盖仍带三处错。</span></div><table class="looptab"><thead><tr><th>实验暴露的问题</th><th>失败类</th><th>修在框架哪里</th><th>回灌状态</th></tr></thead><tbody><tr><td>可逆性 &gt; 覆盖率：不可逆机关封顶任何探索量的证据力</td><td class="cls">框架级发现</td><td>基准文件（开发堆选局准则、变体设计、1.8 探索表述）</td><td><span class="pill blocked">已裁决·待派工</span><div class="via">【已裁决·监控代行】采纳：可逆性准则写入 Theoria.md 的选局与出题准则（F-12）。下一批派工执行</div></td></tr></tbody></table></div><div class="exp green"><div class="exhead"><span class="pill green">实验·达成</span><b>a0-spike 独立 A0（engine-rig）</b><span class="exsum">独立闭环 + Lean 接通；held-out 测试当场抓住一条错规则。</span></div><table class="looptab"><thead><tr><th>实验暴露的问题</th><th>失败类</th><th>修在框架哪里</th><th>回灌状态</th></tr></thead><tbody><tr><td>gen_python 把编译不了的守卫静默替换成 True——废掉它喂的 certify</td><td class="cls">调度失误（工具侧）</td><td>theory-compiler：refuse 语义</td><td><span class="pill partial">修复中·已派工</span><div class="via">GENERATOR_REPORT.md → P-5 最高优先项</div></td></tr><tr><td>held-out 抓错证明『重放全对≠规则对』——考卷 held-out 题的效度实证</td><td class="cls">框架级发现（正面）</td><td>评测协议（无需修，记入证据）</td><td><span class="pill green">已回灌</span><div class="via">commit a479e92</div></td></tr></tbody></table></div><div class="exp partial"><div class="exhead"><span class="pill partial">实验·部分</span><b>API 接入与预检（arc-recon + baseline-arms 复核）</b><span class="exsum">INC-001/002 两次误诊被复核推翻：400 是瞬时故障，短 ID 可用。</span></div><table class="looptab"><thead><tr><th>实验暴露的问题</th><th>失败类</th><th>修在框架哪里</th><th>回灌状态</th></tr></thead><tbody><tr><td>INC-003：predicated compare 把双侧失败判成 PASS——预检自身不可证伪</td><td class="cls">仪器缺陷</td><td>arc-recon 预检判据</td><td><span class="pill green">已回灌</span><div class="via">已修：哈希须两侧俱在 + 全序列跑完</div></td></tr><tr><td>INC-002 误诊 + 短 ID 根因：官方 incident 还停在『全线受阻』</td><td class="cls">仪器缺陷</td><td>arc-recon 官方账 + 重试策略</td><td><span class="pill partial">修复中·已派工</span><div class="via">P-1（正式改判 + 预检重跑）</div></td></tr><tr><td>短 ID 绕过全 ID 护栏的风险 + 版本指纹丢失</td><td class="cls">密封漏洞</td><td>代理层护栏与账本格式</td><td><span class="pill partial">修复中·已派工</span><div class="via">P-2 已吸收（护栏须匹配短 ID；账本存映射）</div></td></tr></tbody></table></div><div class="exp partial"><div class="exhead"><span class="pill partial">实验·部分</span><b>裸 CC 试点 + Schema 定位（baseline-arms）</b><span class="exsum">裸 CC harness 试点已跑（sk48/g50t）；Schema 官方代码确认从未发布。</span></div><table class="looptab"><thead><tr><th>实验暴露的问题</th><th>失败类</th><th>修在框架哪里</th><th>回灌状态</th></tr></thead><tbody><tr><td>INC-BA-001：检索子代理读到 9 局封存局机制（ls20/ft09 实质）</td><td class="cls">密封漏洞</td><td>检索/下载纪律 + Phase 4 主张集口径</td><td><span class="pill blocked">已裁决·待派工</span><div class="via">【已裁决·监控代行】9 局全登记入 contamination_log；ls20/ft09 隔离出封存主张集（21→19），预注册说明 + 对轻微 7 局做敏感性分析（F-11）。白名单先行纪律已进 P-7。下一批派工落账</div></td></tr><tr><td>GAP-1：Schema 复现不可能，主表『复现口径』一格失去依托</td><td class="cls">外部依赖破产</td><td>基准文件 1.12 主表口径</td><td><span class="pill blocked">已裁决·待派工</span><div class="via">【已裁决·监控代行】采纳路 A：Schema 行改『上游轨迹直读（开发堆 4 局）』，复现值合规留空，消融臂地位升为必需中的必需（F-13）。下一批派工执行</div></td></tr></tbody></table></div><div class="exp green"><div class="exhead"><span class="pill green">实验·达成</span><b>确定性预检 v2（arc-recon，P-1）</b><span class="exsum">开发堆 4 局全 PASS；根因 = 1–3 分钟波浪式瞬时故障（多实例后端）。</span></div><table class="looptab"><thead><tr><th>实验暴露的问题</th><th>失败类</th><th>修在框架哪里</th><th>回灌状态</th></tr></thead><tbody><tr><td>H-A『短 ID 即解』的初判是错的——短 ID 曾把预检带偏，后经订正</td><td class="cls">仪器缺陷</td><td>arc-recon 预检重试包络 + baseline AUDIT 订正</td><td><span class="pill green">已回灌</span><div class="via">INC-005 + commit 9824892；真正的解是重试包络</div></td></tr><tr><td>失败 400 是否计费悬置了两轮，乐观悲观口径差 9.7 倍</td><td class="cls">度量空洞</td><td>预算模型（BUDGET_REPORT §4）</td><td><span class="pill green">已回灌</span><div class="via">scorecard×账本 4 样本恒等：失败 400 不计费</div></td></tr></tbody></table></div><div class="exp green"><div class="exhead"><span class="pill green">实验·达成</span><b>真 A1 + 对抗式复核（theory-compiler，P-5）</b><span class="exsum">LP 证书过数据边界落成空公理集 Lean 证明；复核 CONFIRMED 但揪出两处说得比证据满。</span></div><table class="looptab"><thead><tr><th>实验暴露的问题</th><th>失败类</th><th>修在框架哪里</th><th>回灌状态</th></tr></thead><tbody><tr><td>move 推导只校验转移形状不校验使能条件——形状同构的另一个世界会拿到同一份 Lean</td><td class="cls">机制归纳错</td><td>gen_lean 使能条件逐状态比对</td><td><span class="pill green">已回灌</span><div class="via">commit 494a427/1cf95d1：已加校验 + 负对照</div></td></tr><tr><td>E-06：证书权重仍需人手抄进调用侧</td><td class="cls">表达力不够</td><td>compiler 证书自动注入</td><td><span class="pill partial">修复中·已派工</span><div class="via">P-10</div></td></tr></tbody></table></div><div class="exp green"><div class="exhead"><span class="pill green">实验·达成</span><b>A2 同构世界（cold-start-a2，P-6）</b><span class="exsum">假定理展品造出、六拍修复回路走完——A2 的两句验收兑现。</span></div><table class="looptab"><thead><tr><th>实验暴露的问题</th><th>失败类</th><th>修在框架哪里</th><th>回灌状态</th></tr></thead><tbody><tr><td>过程中撞出两条编译器缺陷（已按通道上报 theory-compiler）</td><td class="cls">调度失误（工具侧）</td><td>theory-compiler</td><td><span class="pill partial">修复中·已派工</span><div class="via">PARTNER_SYNC 94a8202 → P-10</div></td></tr></tbody></table></div><div class="exp partial"><div class="exhead"><span class="pill partial">实验·部分</span><b>方差包络首跑（baseline-arms，P-7/P-12）</b><span class="exsum">ar25×haiku×3 被 G4 拦停（真实劣化）；配额口径拿到实测答案。</span></div><table class="looptab"><thead><tr><th>实验暴露的问题</th><th>失败类</th><th>修在框架哪里</th><th>回灌状态</th></tr></thead><tbody><tr><td>裸 CC（haiku 档）在 ar25 上连续死格——包络协议没预设『模型真的不行』这一支</td><td class="cls">框架级发现</td><td>包络协议（degraded 标注 + 敏感性说明）</td><td><span class="pill blocked">已裁决·待派工</span><div class="via">F-15 裁决：ar25 记 degraded 不追，其余 3 局续跑</div></td></tr><tr><td>proxy 与 baseline 账本字段拼写分歧</td><td class="cls">同壳纪律裂缝</td><td>账本正典化（proxy 为正典）</td><td><span class="pill blocked">已裁决·待派工</span><div class="via">F-16 裁决 → P-9/P-12</div></td></tr></tbody></table></div><div class="exp green"><div class="exhead"><span class="pill green">实验·达成</span><b>M9 三引擎（engine-rig，P-4）</b><span class="exsum">死锁定理、IC3 不变量、探针规划器定价全部落地；peg 0111 拿到非线性证书。</span></div><table class="looptab"><thead><tr><th>实验暴露的问题</th><th>失败类</th><th>修在框架哪里</th><th>回灌状态</th></tr></thead><tbody><tr><td>冻结的 kind 枚举装不下新引擎的候选类型</td><td class="cls">表达力不够（契约层）</td><td>CONTRACTS candidates_schema v0.2</td><td><span class="pill blocked">已裁决·待派工</span><div class="via">F-14 裁决：加法式升版，两轨道会签 → P-10</div></td></tr></tbody></table></div></details>
+<details class="fold"><summary>装置地图（Theoria.md 1.10 逐件对表）</summary><div class="arch"><div class="agroup"><div class="ahead">外壳（三臂同壳）<span class="clause">1.10(c) / Phase 1 五层</span></div><div class="achips"><span class="chip green" title="proxy/ 落地：注入、护栏、全量入账"><i class="sw green"></i>环境代理</span><span class="chip green" title="model_proxy + 版本化价目表；C2 仪表就位"><i class="sw green"></i>模型代理</span><span class="chip partial" title="variants.py 起架；构造性依据登记未接"><i class="sw partial"></i>变体注入层</span><span class="chip green" title="runner + LEDGER_FORMAT + replay；拼写正典化中"><i class="sw green"></i>runner + 账本</span><span class="chip partial" title="reconcile.py 对账器已实测配额口径；打分器本体 → P-9"><i class="sw partial"></i>冻结打分器</span></div></div><span class="flow" aria-hidden="true">→</span><div class="agroup"><div class="ahead">内环五拍<span class="clause">1.10(d)</span></div><div class="achips"><span class="chip partial" title="A0 上真跑通：28 候选逐条裁决入册，全程留痕"><i class="sw partial"></i>theorize</span><span class="chip green" title="A0/A0′/A2 双层全绿；Lean 空公理集"><i class="sw green"></i>certify</span><span class="chip green" title="A0′ 13 条可执行探针 + M9 规划器定价"><i class="sw green"></i>probe</span><span class="chip partial" title="A0/A2 均 plan 达成；FD 本体仍是 BFS 桩"><i class="sw partial"></i>plan</span><span class="chip partial" title="离线世界已走通整段执行+批改；在线 commit 等 Theoria 臂"><i class="sw partial"></i>commit</span></div></div><span class="flow" aria-hidden="true">→</span><div class="agroup"><div class="ahead">两本手写物<span class="clause">1.10(a)</span></div><div class="achips"><span class="chip partial" title="A0 的 rev 3 在树上：7 规则 2 不变量 1 待戳探定理"><i class="sw partial"></i>theory.dsl 说明书</span><span class="chip partial" title="语法+解析器+反作弊负向测试就位；尚无真实内容"><i class="sw partial"></i>playbook.dsl 玩法书</span></div></div><span class="flow" aria-hidden="true">→</span><div class="agroup"><div class="ahead">四种生成物<span class="clause">约束 1 同源多形态</span></div><div class="achips"><span class="chip partial" title="A0 后端已写；theory-compiler 版特化于 peg"><i class="sw partial"></i>theory.py 执行</span><span class="chip partial" title="两套生成器分叉（F-06）→ T-06"><i class="sw partial"></i>theory.lean 证明</span><span class="chip partial" title="A0 与 compiler 各有一套"><i class="sw partial"></i>theory.pddl 规划</span><span class="chip green" title="gen_markdown 是唯一 AST 通用的后端，被 A0 原样复用"><i class="sw green"></i>theory.md 渲染</span></div></div><span class="flow" aria-hidden="true">→</span><div class="agroup"><div class="ahead">车间八工序<span class="clause">1.10(b)</span></div><div class="achips"><span class="chip green" title="A0 上算子空间二选一，由脚本比特裁决"><i class="sw green"></i>MDL 分割</span><span class="chip green" title="前沿完整交出，A0 逐守卫裁决"><i class="sw green"></i>CEGIS 挖掘</span><span class="chip green" title="door_latch：匿名比特里挖出按钮-门守恒律"><i class="sw green"></i>零空间</span><span class="chip green" title="pagoda 证书 + 可采纳启发，同源"><i class="sw green"></i>LP 势函数</span><span class="chip missing" title="整道缺席 → T-05"><i class="sw missing"></i>IC3/PDR</span><span class="chip partial" title="BFS 桩替位；FD 未装"><i class="sw partial"></i>规划 FD</span><span class="chip missing" title="整道缺席；C1 的供给 → T-05"><i class="sw missing"></i>死锁刻画</span><span class="chip partial" title="A0′ 已产 13 条可执行探针；到达规划连线仍缺 → P-4"><i class="sw partial"></i>前沿戳探</span><span class="chip partial" title="工具链就位；生成器分叉"><i class="sw partial"></i>Lean 证明</span></div></div><span class="flow" aria-hidden="true">→</span><div class="agroup"><div class="ahead">三臂<span class="clause">1.12 主表</span></div><div class="achips"><span class="chip partial" title="harness+记账+试点已跑（sk48/g50t）；战役未开 → P-7"><i class="sw partial"></i>裸 Claude Code</span><span class="chip risk" title="GAP-1：复现不可能，改路 A 上游轨迹直读；主表口径待所有者定（F-13）"><i class="sw risk"></i>Schema（上游轨迹）</span><span class="chip missing" title="离线件全部证活（A0/A0′/A1/A2）；在线臂 = 当前关键路径 → P-8"><i class="sw missing"></i>Theoria 臂</span></div></div><span class="flow" aria-hidden="true">→</span><div class="agroup"><div class="ahead">三件离线验收<span class="clause">Phase 1</span></div><div class="achips"><span class="chip green" title="全环跑通并提交：certify 双层绿、plan SAT、赢、不可解证书"><i class="sw green"></i>A0 冷启动</span><span class="chip green" title="真 A1：证书过数据边界，空公理集，对抗复核 CONFIRMED"><i class="sw green"></i>A1 孔明棋</span><span class="chip green" title="cold-start-a2：假定理展品 + 修复回路完整"><i class="sw green"></i>A2 DC22</span></div></div></div></details>
+<details class="fold"><summary>进度历史曲线</summary><div class="trendbox"><svg viewBox="0 0 860 240" role="img" aria-label="研究总进度趋势" style="width:100%;height:auto"><line x1="46" y1="206.0" x2="844" y2="206.0" class="grid"/><text x="38" y="210.0" class="tick" text-anchor="end">0%</text><line x1="46" y1="160.8" x2="844" y2="160.8" class="grid"/><text x="38" y="164.8" class="tick" text-anchor="end">15%</text><line x1="46" y1="115.6" x2="844" y2="115.6" class="grid"/><text x="38" y="119.6" class="tick" text-anchor="end">30%</text><line x1="46" y1="70.4" x2="844" y2="70.4" class="grid"/><text x="38" y="74.4" class="tick" text-anchor="end">45%</text><line x1="46" y1="25.2" x2="844" y2="25.2" class="grid"/><text x="38" y="29.2" class="tick" text-anchor="end">60%</text><path d="M46.0 151.8 L245.5 143.0 L445.0 88.5 L644.5 125.3 L844.0 125.3" class="line t1"/><circle cx="46.0" cy="151.8" r="4" class="dot t1"><title>2026-07-28 01:30:00
+研究总进度 18.0%</title></circle><circle cx="245.5" cy="143.0" r="4" class="dot t1"><title>2026-07-28 01:42:45
+研究总进度 20.9%</title></circle><circle cx="445.0" cy="88.5" r="4" class="dot t1"><title>2026-07-28 08:14:22
+研究总进度 39.0%</title></circle><circle cx="644.5" cy="125.3" r="4" class="dot t1"><title>2026-07-28 08:32:36
+研究总进度 26.8%</title></circle><circle cx="844.0" cy="125.3" r="4" class="dot t1"><title>2026-07-28 08:33:20
+研究总进度 26.8%</title></circle><text x="844" y="115.3" class="dl t1" text-anchor="end">总进度 26.8%</text><text x="46" y="230" class="tick">2026-07-28 01:30</text><text x="844" y="230" class="tick" text-anchor="end">2026-07-28 08:33</text></svg></div></details>
+<details class="fold"><summary>论文工作量地图（正式口径）</summary><table class="wide"><thead><tr><th>工作包</th><th>论文槽位</th><th>规模（Schema 对标）</th><th>完成度</th><th>证据</th></tr></thead><tbody><tr><td><b>WP1</b> 框架本体与离线验收</td><td class="nt">§3 框架 · 图5 DC22案例 · 图6 概念时间线</td><td class="nt">对标：Schema 的 world_model.py 方法论一节。我们：DSL+四形态+六/八引擎+A0/A0′/A1/A2 四件离线验收</td><td>92%</td><td class="nt">四件验收全绿、M9 补齐八工序、真 A1 空公理集；余：FD 真接入（P-13）、契约 v0.2（P-10）</td></tr><tr><td><b>WP2</b> 封闭系统与外壳可信度</td><td class="nt">§2 方法可信度（密封/复放/对账）</td><td class="nt">Schema 无此层（其复现失败正是教训）。我们：双代理+护栏+对账+复放抽检</td><td>78%</td><td class="nt">proxy 落地、预检 4/4 PASS；余：冻结打分器、密封红队复测（P-9）</td></tr><tr><td><b>WP3</b> Theoria 臂在线迭代战役（开发堆）</td><td class="nt">§5 实验主体 · 图2 账单形状（Theoria 列）</td><td class="nt">对标：Schema 25 局全集单臂全跑。我们：4 局 × 迭代至退出条件（U3≥k 局 + Δ 内 + 账单形状可见）</td><td>10%</td><td class="nt">P-8 首局在跑；离线内环四度证活是它的全部准备</td></tr><tr><td><b>WP4</b> 对照臂数据（CC 包络 + Schema 路A + 消融臂）</td><td class="nt">表1 主表另两列 · §6 消融</td><td class="nt">CC：4 局×3 重复；Schema：上游 artifacts 开发堆子集直读（F-13 口径）；消融臂：−定理义务</td><td>15%</td><td class="nt">CC 1/4 局（ar25 记 degraded）；路 A 守卫已建材料未拉；消融臂未实现</td></tr><tr><td><b>WP5</b> 评测两器：电池冻结 + 考卷构造器</td><td class="nt">§4 评测协议 · 图3 能力谱与考卷</td><td class="nt">电池五族过四道工序后冻结 v1；考卷四题型出题机+判卷机在自建族闭环</td><td>55%</td><td class="nt">battery v0 + 预注册在树；区分力/去冗余首跑与 exam/ 在 P-14/P-15</td></tr><tr><td><b>WP6</b> 封存战役（主表确证）</td><td class="nt">表1 主表 · 图2/图3 确证版 · C1/C2 裁决</td><td class="nt">对标 Schema 25 局：我们 19 封存局 × (Theoria + CC + 消融) × n，逐局入库禁止回看</td><td>0%</td><td class="nt">门槛 = Phase 1 全绿 + 冻结清单提交。当前零接触（这是纪律不是欠账）</td></tr><tr><td><b>WP7</b> 考卷封存子集（判决题 m 局 + 移交 + 改规则）</td><td class="nt">图3 考卷行 · C4 裁决</td><td class="nt">m 局在主表跑完后构造变体（时序死结的解）；分层移交可随主表同跑</td><td>0%</td><td class="nt">依赖 WP6；出题流程由 P-15 预演</td></tr><tr><td><b>WP8</b> 预注册与统计裁决（冻结清单 13 项）</td><td class="nt">§5 统计口径 · 双结局文本</td><td class="nt">三主终点（U3 达成率/判决题准确率/前载指数）+ Wilcoxon 配对 + n 由包络方差定</td><td>15%</td><td class="nt">PREDICTIONS.md 起步、包络 1/4；模型版本串/预算/Δkmn 全未定 —— 冻结前待定五项是硬闸</td></tr><tr><td><b>WP9</b> 论文写作（workshop 文 → 主文）</td><td class="nt">全文（3.2 的八节骨架）</td><td class="nt">Phase 1 结 workshop 文（P-16 在跑）→ Phase 3 结案例研究 → 主文</td><td>12%</td><td class="nt">骨架与五句门面在 Theoria.md；素材四报告在树</td></tr><tr><td><b>WP10</b> 释出包（Schema 地板对齐）</td><td class="nt">§8 开放性声明</td><td class="nt">对标 Schema：全公开集 artifacts。我们：全账本+两本书四形态+Lean+候选箱+探针日志+电池代码+incident 台账+复跑说明</td><td>25%</td><td class="nt">仓库已开源、账本纪律在；runs/ 留痕与复跑说明未齐</td></tr></tbody></table></details>
+<details class="fold"><summary>监视器发现（全部 18 条）</summary><article class="finding blocking"><div class="fhead"><span class="fid">F-11</span><span class="sev blocking">阻塞</span><h3>INC-BA-001：9 局封存局知识污染【已裁决·监控代行】</h3></div><p>baseline-arms 的 M3（定位 Schema 官方发布物）把公网检索派给了子代理并预先立了封存堆约束。子代理守住了『不向主上下文转述机制』，但它自己在止读之前已读到若干封存局的机制描述：<code>ls20-9607627b</code> 与 <code>ft09-0d8bbf25</code> <b>实质泄露</b>（含具体转移规则），另 7 局轻微（含 dc22）。本监视器的封存堆检查只看 API 请求体，<b>这类知识污染它构造上抓不到</b>。<br><br>污染目前被隔离在那个子代理的已终止上下文里，主上下文只有清单。但 Phase 4 的封存主张以『没见过』为前提，这两局的『没见过』已经打了折。</p><p class="action"><b>下一步</b> · 【已裁决·监控代行 2026-07-28】取两案合并的保守解：9 局全部如实登记入 contamination_log；ls20/ft09 隔离出封存主张集（21→19），预注册说明；轻微 7 局保留在主张集但统计裁决时做敏感性分析。依据：Phase 4 封存主张以未见为前提，实质泄露不可修复，轻微泄露（动作数级）可用敏感性分析兜住而不牺牲样本量。落账派下一批提示词执行。</p></article><article class="finding high"><div class="fhead"><span class="fid">F-12</span><span class="sev high">高</span><h3>A0′：可逆性 &gt; 覆盖率【已裁决·监控代行：写入基准文件】</h3></div><p>A0′（cold-start-a0/prime）的对照实验：A0 看到 99% 的状态-动作对，说明书仍带三处错；A0′ 只看 47%，说明书 100% 准确、13 条可执行探针、零未测规则。变量不是看了多少，是<b>看到的东西能否再看一次</b>——不可逆机关（闩锁）把任何探索量都封了顶。<br><br>这直接影响 Theoria.md 的三处：开发堆选局准则（优先可逆机制多的局）、变体设计（『改规则适应题』应含可逆性维度）、以及 1.8 对探索目的的表述。</p><p class="action"><b>下一步</b> · 【已裁决·监控代行 2026-07-28】采纳。Theoria.md 三处增补：开发堆选局优先可逆机制、变体/改规则考题含可逆性维度、1.8 探索目的补一句『看什么能再看一次』。依据：A0 与 A0′ 的对照是本仓库目前证据力最强的受控实验。修订派下一批提示词执行（基准文件条款级增补，留 diff 审查）。</p></article><article class="finding high"><div class="fhead"><span class="fid">F-13</span><span class="sev high">高</span><h3>GAP-1：Schema 复现不可能【已裁决·监控代行：采纳路 A】</h3></div><p>官方 harness 代码从未发布（组织下只有主页仓库），无正式论文、无 arXiv。baseline-arms 按停止条件处置：不用替代实现冒充复现，主表 ⟨复现值⟩ 合规留空。可行的替代是路 A：只取上游释出的<b>开发堆 4 局</b>轨迹直读（Theoria.md:311 明确许可）——能喂电池和对照，但『复现口径』这个词得从主表里改掉。顺带：规范署名是 Zeng et al. 而非 Feng et al.。</p><p class="action"><b>下一步</b> · 【已裁决·监控代行 2026-07-28】采纳路 A：主表 Schema 行改『上游开发堆轨迹直读』口径、复现值合规留空、署名订正为 Zeng et al.；消融臂升为不可裁减。依据：Theoria.md:311 已预授权上游 artifacts 的开发堆子集；用替代实现冒充复现违背同壳纪律。修订派下一批提示词执行。</p></article><article class="finding high"><div class="fhead"><span class="fid">F-14</span><span class="sev high">高</span><h3>CONTRACTS 的 kind 枚举被冻结条款卡住 M9 新引擎【已裁决·监控代行：升 v0.2】</h3></div><p>candidates_schema.md v0.1 冻结时列死了六种 kind；M9 的 deadlock_carver 与 ic3_pdr 产出新类型候选，写不进合法流。engine-rig 已在 PARTNER_SYNC 挂出『frozen engine enum flagged for v0.2』。冻结条款的本意是防单边篡改，不是防两轨道共识演化。<br><br>【裁决】升 candidates_schema v0.2：仅做<b>加法</b>（新增 kind 枚举值 + 可选字段），既有六 kind 的字段一个不动；v0.1 校验器保留，v0.2 校验器新增；两轨道各自在 PARTNER_SYNC 签认后生效。dsl_grammar 的 v0.2（semantics: 等）同窗口一并定稿。</p><p class="action"><b>下一步</b> · P-10 执行：theory-compiler 起草，engine-rig 以 PARTNER_SYNC 段落会签。</p></article><article class="finding high"><div class="fhead"><span class="fid">F-04</span><span class="sev high">高</span><h3>约束 5 与约束 2 在第一次冷启动上就互相矛盾</h3></div><p>A0 的 O-04：Button 与 Door 的压缩账目是负的（−17 / −13 bit）。约束 5『无收益不入册』要求拒绝；约束 2『全帧责任制』要求接受（否则两个像素永远没人认领，廉价层在 frame 0 就失败）。<br><br>A0 的处理是对的 —— 照收，并把负数如实写进 theory.dsl，不粉饰。但这是把矛盾<b>记录</b>下来，不是<b>解决</b>它。THEORIZE_LOG 的诊断我认为是准确的：压缩账目在比较错误的替代方案 —— 『把像素编辑编码进去』不是真正的替代，『永远不解释这个格子』才是，而后者在这套记账法里根本没有价格。</p><p class="action"><b>下一步</b> · Theoria.md 1.8『概念是一次压缩动作』需要补一句：概念的压缩账目以『不解释该像素』为基准，而不解释是无限代价。这是基准文件的修订，不是代码的。</p></article><article class="finding high"><div class="fhead"><span class="fid">F-06</span><span class="sev high">高</span><h3>生成器分叉升级：gen_python 会把编译不了的守卫静默替换成 True</h3></div><p>a0-spike/GENERATOR_REPORT.md（engine-rig 轨道写给 theory-compiler 的缺陷报告）：<code>generate_python</code> 对不认识的谓词/事件静默产出 <code>True</code>（守卫）或 <code>pass</code>（效果）——生成的 theory.py 能跑、能重放、<b>毫无意义</b>，而 certify 会照常给它打绿。这比崩溃糟：它废掉的正是它喂的那道检查。报告建议的规则：<b>拒绝而不是近似</b>——超出支持子集就 raise，编译不了的理论是表达力台账的一条发现，不是可以糊弄过去的东西。<br><br>加上 D-A0-011（gen_lean 无视 AST）与新到的 dsl v0.2 <code>semantics:</code> 提案（cold-start-a0/proposals/，E-03 帧公理的正式句型），theory-compiler 的汇合 sprint 输入已经齐了。</p><p class="action"><b>下一步</b> · 全部并入 P-5：refuse 语义、AST 通用化、消费 LP 证书、裁决 v0.2 提案。</p></article><article class="finding medium"><div class="fhead"><span class="fid">F-15</span><span class="sev medium">中</span><h3>方差包络在 ar25×haiku 上被 G4 拦停：真实劣化【已裁决·监控代行】</h3></div><p>动作成功率 0.713→0.595、HTTP/动作 7.11 起跳——不是预算噪声，是模型在该局上真实退化（连续死格）。闸门按设计开火，这本身是 harness 的胜利。<br><br>【裁决】ar25 记 degraded（含证据引用），不追跑不换模型硬磨；其余 3 局（g50t/sk48/tn36）按原协议续跑；包络冻结时 ar25 一行标注 degraded 并给敏感性说明。若 3 局中再有 G4，升级回监控重裁。</p><p class="action"><b>下一步</b> · P-12 执行。</p></article><article class="finding medium"><div class="fhead"><span class="fid">F-16</span><span class="sev medium">中</span><h3>两套账本拼写分歧（proxy vs baseline-arms）【已裁决·监控代行：proxy 为正典】</h3></div><p>proxy 落地 LEDGER_FORMAT.md 时发现 baseline-arms 既有账本的字段拼写与其有差异（PARTNER_SYNC 已互相登记）。三臂同账本格式是 Phase 1 总纪律，分歧不能留到电池回算时爆。<br><br>【裁决】proxy/LEDGER_FORMAT.md 为正典；baseline-arms 出迁移器把存量账本转正典格式（原始文件保留不动，转换产物入 runs/ 归档）；battery 的 INPUT_FORMAT 对齐正典。</p><p class="action"><b>下一步</b> · P-12（迁移器）+ P-9（正典守卫：proxy 拒收非正典字段）。</p></article><article class="finding low"><div class="fhead"><span class="fid">F-05</span><span class="sev low">低</span><h3>【大半解决】约束 7 的落点：A0′ 已产出 13 条可执行探针</h3></div><p>A0 首跑零可执行探针，约束 7 空转（原文见下段存档）。A0′ 在可逆世界上产出 13 条可执行探针、清空全部未测规则 —— probe 机器得到了真实锻炼，根因确认是 A0 世界的不可逆性而非机器本身（并入 F-12）。仍值得做的残件：engine-rig 侧把 hypothetical 探针接上规划器（『到达分歧态 = 一个规划问题』），P-4 覆盖。</p><p class="action"><b>下一步</b> · P-4 第三件。</p></article><article class="finding low"><div class="fhead"><span class="fid">F-05-archive</span><span class="sev low">低</span><h3>（F-05 原文存档）A0 首跑产出零条可执行探针</h3></div><p>probe_frontier 算法本身是对的，A0 上它诚实地报告了『本世界无实验可分』（P-02）和『可分但只在假设层』（P-01/P-03）。问题在于第二类：能分开假设的配置，世界从未到达过，而说明书也没说能开到那里去。<br><br>后果是 <code>press_is_direction_free</code> 永远停在 probe: pending，而这正是 Theoria.md 1.3 描述的 DC22 形状 —— 一条<b>漏写</b>而非写错的规则，重放永远抓不到，且让模型里的世界变小。<b>框架预言的失败模式在第一次冷启动上就精确复现了，但抓它的工具没能开火。</b></p><p class="action"><b>下一步</b> · 把假设层探针接上规划器：『把世界开到那个配置』本身就是一个规划问题（Theoria.md 1.10b 探索一行原话：『到达分歧态 = 一个规划问题』）。目前 probe_frontier 与 fd_adapter 之间没有这条连线。</p></article><article class="finding low"><div class="fhead"><span class="fid">F-06-archive</span><span class="sev low">低</span><h3>（F-06 原文存档）两套 Lean 生成器，约束 1『同源』出现分叉</h3></div><p>theory_compiler.generators.gen_lean.generate_lean 完全忽略它的 TheoryAST 参数，直接 BFS 一维孔明棋并输出 PegState（A0 的 D-A0-011 记录）。它对 A1 彩排是正确的，对任何别的世界结构上不适用。A0 因此另写了 cold-start-a0/compile/gen_lean_a0.py。<br><br>现在有两个 Lean 源。约束 1 说『证明者、执行器、规划器、人，读的是同一本书』。</p><p class="action"><b>下一步</b> · 汇合 sprint：把 A0 的 AST 通用后端回灌 theory-compiler，或明确宣布 A0 的那套是正典。注意这跨轨道，需要 PARTNER_SYNC 协调而不是直接改别人的目录。</p></article><article class="finding info"><div class="fhead"><span class="fid">F-01</span><span class="sev info">信息</span><h3>【已裁决 2026-07-28：出路 (b)】A2 与切堆纪律的冲突</h3></div><p>Phase 1 验收单要求 A2：把上游那个漏了传送规则的 DC22 模型移植进 DSL。但 <code>dc22-fdcac232</code> 在封存堆的 21 局里，而 CLAUDE.md 与 Theoria.md 都明写禁止读封存局的上游释出 artifacts —— A2 的<b>全部内容</b>就是读它。<br><br>更要命的是：Theoria.md §1.3 自己就把 DC22 的机制写了出来（『漏了一条传送规则』），§3.2 还把它列为图 5 的案例。<b>这局在切堆之前就已经被基准文件烧掉了</b>，而 piles.json 仍把它登记为 never_audited。<br><br>这不是执行失误，是基准文件内部的矛盾，必须由文件作者裁决。三个出路：(a) 把 dc22 移出封存堆并在污染登记里如实记为『设计文档已披露机制』；(b) A2 改用一个自建的 DC22 同构世界（A0 已经证明自建世界这条路走得通）；(c) 承认 A2 无法在保持封存的前提下完成，删掉它并说明理由。</p><p class="action"><b>下一步</b> · 已裁决：出路 (b)。授权与红线见 arc-recon/data/incidents.jsonl 的 INC-004，dc22 污染级已更正为 design_document_disclosed。提示词 P-6 可派工，落地目录 cold-start-a2/。</p></article><article class="finding info"><div class="fhead"><span class="fid">F-02</span><span class="sev info">信息</span><h3>【已解决】INC-001/002 正式改判，确定性预检开发堆 4 局全 PASS</h3></div><p>【2026-07-28 更新：原为阻塞级，现降为高。】baseline-arms 的假设排查找到了 arc-recon 未试的变量：<b>去掉版本后缀的短 ID</b>（<code>sk48</code> 而非 <code>sk48-d8078629</code>）返回 200；同形状请求重试也间歇 200。结论已上 PARTNER_SYNC，工作已提交。<br><br>仍未清偿的两件：(1) <code>arc-recon/data/incidents.jsonl</code> 与 README 还停在『全线受阻』，INC-001/INC-002 需要带证据的 superseded 条目；(2) 确定性预检还没在新策略下重跑过 —— Phase 1 验收单那一行仍是空的。<br><br>一个要留神的张力：Theoria.md 把 game_id 的版本后缀当<b>环境版本指纹</b>。如果全面改用短 ID 通信，指纹就丢了 —— 预检与账本需要同时记录短 ID 请求与目录里的全 ID 映射，否则金丝雀重放失去锚点。</p><p class="action"><b>下一步</b> · 已完成：INC-001b/002a/005 落账；根因是 1–3 分钟波浪式瞬时故障（多实例后端）；短 ID 的 H-A 结论后来也被订正——重试包络才是真正的解。留此条作记录。</p></article><article class="finding info"><div class="fhead"><span class="fid">F-03</span><span class="sev info">信息</span><h3>【已解决】battery v0 落地，Phase 2 从零到首份能力谱</h3></div><p>Theoria.md 明写 Phase 2『只依赖账本同格式与切堆已提交两项，可与 A1/A2 并行』，且『全程用既有轨迹，零新增游戏开销』。所有人都在等 API，而这一段不需要 API。<br><br>但它的前提有一个没被检查过的洞：Phase 2 的<b>材料</b>（CC 基线轨迹、Schema 复现桶、上游 artifacts）一条都不在手。所以它并不像基准文件说的那样免费 —— 得先有轨迹。这个依赖 Theoria.md 没有显式写出。</p><p class="action"><b>下一步</b> · 先做能做的：指标定义 + 计算代码 + 逐指标方向预注册，可以用 A0 轨迹当夹具先跑通。轨迹采集另立一件。</p></article><article class="finding info"><div class="fhead"><span class="fid">F-07</span><span class="sev info">信息</span><h3>【已解决】PARTNER_SYNC 停摆 —— 已补齐并提交</h3></div><p>本监视器首次扫描时（2026-07-28 00:4x）同步板停在 16:35Z 的 INC-002，此后的整个 A0 sprint、A1 桥、API 重试实验全部未上板未提交。首次报告后数小时内：A0 的 M4/M5/M6 逐里程碑提交、PARTNER_SYNC 补到 19 段（含 INC-002 推翻与 A0 收官）。通道恢复。</p><p class="action"><b>下一步</b> · 无。保留此条作记录：监视器的 sync 时效检查继续每次运行。</p></article><article class="finding info"><div class="fhead"><span class="fid">F-08</span><span class="sev info">信息</span><h3>【已解决】M9 补齐八道工序：死锁刻画 + IC3/PDR + 探针定价</h3></div><p>engine-rig 的六个引擎对应 Theoria.md 1.10(b) 表格的六行，但那张表有八行。缺的两道不是边角：<br><br>IC3/PDR 是『LP/零空间够不着的形状』的唯一兜底，而 lp_potential 的不完备性是已知且已在 fixture 上实测到的（peg 0111）。<br><br>死锁刻画是 Theoria.md 1.9 让试金石机器『从周日考试变成日常上班』的全部机制，也是 C1 的主要证据来源 —— 整关不可解在野外罕见，死角天天有。</p><p class="action"><b>下一步</b> · 两道都是 Phase 1『引擎架就位』的一部分。死锁刻画优先级更高（它供给 C1）。</p></article><article class="finding info"><div class="fhead"><span class="fid">F-09</span><span class="sev info">信息</span><h3>【已解决】A0 收官落盘 —— 全环冷启动跑通，这是赌注的第一次兑付</h3></div><p>首次扫描时 THEORIZE_LOG 记载超前于磁盘；数小时后全部落盘并提交：certify 双层绿（276 帧重放 0 异常、Lean 编译无 sorry、公理表干净）、plan SAT 12 步、执行赢、no-button 变体 UNSAT→Lean 证书、A0_REPORT 对真值 233/236。Theoria.md 说 A0『一周内证活或证死』——<b>证活了</b>，且它留下的洞（press 方向泛化永不可证）恰是框架预言的 DC22 盲区的微缩复现，是论文素材而非缺陷。</p><p class="action"><b>下一步</b> · 无。A0 剩余价值在报告里，等 Phase 1 结的 workshop 单元收割。</p></article><article class="finding info"><div class="fhead"><span class="fid">F-10</span><span class="sev info">信息</span><h3>凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了</h3></div><p>全仓扫描（跳过 .git / 工具链）确认 ARC_API_KEY 的值只出现在 .env，且 .env 被 gitignore。所有账本里的 X-API-Key 都是 &lt;redacted&gt;。<br><br>封存堆 21 局中，没有任何一局的 game_id 出现在 baseline-arms/probe_log.jsonl 的请求体里；recon_ledger 里出现的封存 ID 全部来自 /api/games 目录列表，属于元数据，不是对局。<b>INC-001 当时拒绝逐局探测可玩性的那个判断是对的</b>，它保住了封存堆。</p><p class="action"><b>下一步</b> · 无。本监视器每次运行都会重跑这两项检查。</p></article></details>
+<details class="fold"><summary>四段验收单逐条</summary><div class="phase"><div class="phead"><h3>Phase 1 · 封闭系统</h3><span class="gate">门槛：全绿才准烧游戏钱</span></div><table><tbody><tr class="green"><td class="st"><span class="pill green">达成</span></td><td class="lb"><b>环境代理（透明 HTTP 代理，三臂只改 base URL）</b><span class="clause">Phase 1 · 自下而上五层 (1)</span></td><td class="nt">proxy/ 已落地（env_proxy + guard + ledger + runner + replay + mock 测试），密钥只在代理内注入，封存护栏在代理层拒绝（含短 ID）。监控下轮独立复跑其密封测试。</td></tr><tr class="green"><td class="st"><span class="pill green">达成</span></td><td class="lb"><b>模型代理（provider usage 逐字入账）</b><span class="clause">Phase 1 · 自下而上五层 (3)</span></td><td class="nt">proxy/model_proxy.py + pricing/ 版本化价目表落地；baseline 的 usage 已逐字入账。C2 的仪表存在了；约束 8 从此可测。</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>变体注入层（包裹合法集 + 构造性依据）</b><span class="clause">Phase 1 · 自下而上五层 (2)</span></td><td class="nt">proxy/variants.py 起架（包裹合法集）。构造性依据登记与考卷出题流程未接。</td></tr><tr class="green"><td class="st"><span class="pill green">达成</span></td><td class="lb"><b>runner 与账本（env_step / model_call 两类事件）</b><span class="clause">Phase 1 · 自下而上五层 (4)</span></td><td class="nt">proxy/runner.py + LEDGER_FORMAT.md + replay.py 落地。F-16 拼写分歧已裁决以 proxy 为正典，baseline 账本待迁移。</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>冻结打分器接入 + 账本分数与 scorecard 对账</b><span class="clause">Phase 1 · 自下而上五层 (5)、验收单</span></td><td class="nt">proxy/reconcile.py 对账器落地，baseline 用它实测出配额口径（失败 400 不计费，4 样本恒等）。冻结打分器本体未接 → P-9。</td></tr><tr class="green"><td class="st"><span class="pill green">达成</span></td><td class="lb"><b>确定性预检全绿</b><span class="clause">Phase 1 验收单</span></td><td class="nt">开发堆 4 局全部 PASS（重试包络盖过 1–3 分钟的波浪式瞬时故障；每局 ≤20 动作）。INC-001/002 正式改判（INC-001b/002a/005）。  〔本次扫描：逐局判决：ar25=PASS； g50t=PASS； sk48=PASS； tn36=PASS。全 PASS。〕</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>接入核查各项已入账</b><span class="clause">Phase 1 · 一件接入核查</span></td><td class="nt">已结：级联语义（frame 是帧列表）、level 为响应字段、guid、动作空间、首帧跨会话可复现。未结：全量跨会话残留、速率与配额、金丝雀重放、帧缓存与释出许可条款。</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>级联语义已裁决</b><span class="clause">Phase 1 · 一件轨迹作业</span></td><td class="nt">结构上已裁决：API 返回帧列表，step 必须建模『动作→帧序列』。但『它是否真的会超过 1 帧』仍未观测；而 A0 的 D-A0-004 反向选了『一动作一帧』，两者需要合流。</td></tr><tr class="risk"><td class="st"><span class="pill risk">有风险</span></td><td class="lb"><b>切堆清单已提交并哈希</b><span class="clause">Phase 1 · 一刀切堆</span></td><td class="nt">piles.json 哈希锁定，API 层零接触；INC-001 已改判，切堆前提恢复（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）<b>尚未落账</b>——contamination_log 还没有那 9 局的登记 → P-11。  〔本次扫描：封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕</td></tr><tr class="green"><td class="st"><span class="pill green">达成</span></td><td class="lb"><b>A0 冷启动 spike（自建世界，第一优先）</b><span class="clause">Phase 1 · 三件离线验收</span></td><td class="nt">全环冷启动跑通：感知→挖掘→裁决→四形态→certify 双层→plan→赢，外加 no-button 变体的 Lean 不可解证书。A0『证活』。留下的洞（press 方向泛化不可证、零可执行探针）见 F-05/F-09。  〔本次扫描：A0 阶段件 10/10 落盘；候选 invariant×2, object_hypothesis×3, plan×1, rule_hypothesis×23。缺：无〕</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>A1 孔明棋：LP 解出 pagoda → Lean 验封闭引理</b><span class="clause">Phase 1 · 三件离线验收</span></td><td class="nt">真 A1 达成并经对抗式复核 CONFIRMED：LP 权重经证书文件过数据边界，Lean 势函数归纳、空公理集。复核揪出的使能条件缺口已修；权重手抄限制登记 E-06 → P-10。  〔本次扫描：engine-rig 侧证书导出：已建；theory-compiler 侧消费：已接。两半接通前，A1 仍是彩排而非验收。〕</td></tr><tr class="green"><td class="st"><span class="pill green">达成</span></td><td class="lb"><b>A2 DC22 重放：造出『类型检查通过、对世界为假』的定理</b><span class="clause">Phase 1 · 三件离线验收；INC-004</span></td><td class="nt">cold-start-a2 完成：假定理展品 + 打脸→修订→重证全回路，A2_REPORT 在树上；顺带报出两条编译器缺陷 → P-10。</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>引擎架冒烟（LP / CEGIS / FD 各过一例）</b><span class="clause">Phase 1 验收单</span></td><td class="nt">LP 与 CEGIS 真过；FD 是 grounded-STRIPS BFS 桩，接口同形但『白捡二十五年规划工程』这句话目前不成立。</td></tr><tr class="risk"><td class="st"><span class="pill risk">有风险</span></td><td class="lb"><b>密封测试（臂内无凭据；绕开双代理的出网必须失败）</b><span class="clause">Phase 1 验收单</span></td><td class="nt">proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：密钥泄漏进：.claude/worktrees/p11-arc-hygiene/.env〕</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>复放抽检 2 局，环境侧逐比特一致</b><span class="clause">Phase 1 验收单</span></td><td class="nt">proxy/replay.py 就位；对真在线局账本的 2 局抽检待包络数据迁入正典格式后执行 → P-9。</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>三臂经双代理落同一账本、打分器通吃</b><span class="clause">Phase 1 验收单、第二部分总纪律</span></td><td class="nt">同壳的物理载体（双代理）已在：裸 CC 臂真跑过（试点+包络首局）。Schema 臂 = 路 A 上游轨迹直读（F-13 裁决）。<b>Theoria 臂是三臂中唯一还不存在的</b> → P-8，当前关键路径。</td></tr></tbody></table></div><div class="phase"><div class="phead"><h3>Phase 2 · 指标电池</h3><span class="gate">门槛：只依赖『账本同格式』与『切堆已提交』，可与 A1/A2 并行</span></div><table><tbody><tr class="green"><td class="st"><span class="pill green">达成</span></td><td class="lb"><b>候选指标族五族（探索/计划/经济/机制/认识）</b><span class="clause">Phase 2 · 候选指标族</span></td><td class="nt">battery v0 落地：五族指标 + METRICS.md + 首份 REPORT_V0，夹具 = A0 / A0′ / 裸 CC 试点账本。</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>电池四道工序（区分力 / 方向预注册 / 去冗余 / 抗游戏审计）</b><span class="clause">Phase 2 · 电池自身要先受审</span></td><td class="nt">PREDICTIONS.md（预注册）与 audit/ 在树上；区分力工序仍等 Schema 路 A 材料与更多 CC 轨迹。</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>材料：CC 基线轨迹 / Schema 复现桶 / 上游 artifacts（限开发堆）</b><span class="clause">Phase 2 · 材料</span></td><td class="nt">裸 CC 开发堆轨迹开始产生（sk48 大量、g50t 少量，见 baseline-arms/TOUCHED_GAMES.md）；Theoria 侧有 A0/A0′ 离线轨迹。Schema 复现桶不可能（GAP-1），替代是路 A：上游释出的开发堆 4 局轨迹直读（Theoria.md:311 许可），尚未拉取。</td></tr></tbody></table></div><div class="phase"><div class="phead"><h3>Phase 3 · 框架迭代（开发堆）</h3><span class="gate">门槛：Phase 1 全绿才准进</span></div><table><tbody><tr class="missing"><td class="st"><span class="pill missing">缺失</span></td><td class="lb"><b>记分板 = 电池 v0 + 七种意外计数 + 证明义务通过率 + theorize 轮数</b><span class="clause">Phase 3 · 记分板</span></td><td class="nt">七种意外目前在任何代码里都没有被计数。A0 的 THEORIZE_LOG 手写记录了 2 次廉价层迭代 —— 这是『重放失配』计数的雏形，但没有机器读得出的形态。</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>提示词只在自建世界族迭代；游戏 ID 永不进模型上下文</b><span class="clause">Phase 3 · 过拟合四条通道</span></td><td class="nt">A0 自建世界这条防线已经立起来了（且被真用了）。但『提示词 diff 审查』与『游戏 ID 匿名化』没有机制，只有意图。</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>表达力台账（哪局哪条规则逼 DSL 扩一格）</b><span class="clause">Phase 3 失败分类学 · 表达力不够；1.8 诚实条款</span></td><td class="nt">A0 已产出五条真实条目（E-01..E-05），但它们埋在 THEORIZE_LOG.md 里。Theoria.md 要求这是一份公开台账 —— 应提升为独立的被跟踪文件。</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>对照两臂在开发堆各跑 2–3 局，方差包络冻结</b><span class="clause">Phase 3 · 经济</span></td><td class="nt">ar25×haiku×3 已跑并被预算闸门 G4（连续死格，真实劣化）拦停，1/4 局，$2.53。F-15 裁决：ar25 记 degraded 不追，其余 3 局继续 → P-12。</td></tr><tr class="missing"><td class="st"><span class="pill missing">缺失</span></td><td class="lb"><b>迭代战役：Theoria 臂在开发堆迭代至退出条件</b><span class="clause">Phase 3 · 一次迭代的形状 / 退出条件</span></td><td class="nt">整个 Phase 3 的主体。退出条件（U3 达成 ≥k 局 + 分数落 Δ 内 + 账单形状可见，或预算 B 顶到）里的 k/Δ/B 也还没定。</td></tr></tbody></table></div><div class="phase"><div class="phead"><h3>Phase 4 · 确证（封存堆）</h3><span class="gate">门槛：冻结清单首局开跑前提交，全部哈希</span></div><table><tbody><tr class="missing"><td class="st"><span class="pill missing">缺失</span></td><td class="lb"><b>冻结清单（内环代码/DSL/生成器/提示词/引擎/戳探/规划器/电池/变体库/统计规则/claim/预算/n）</b><span class="clause">Phase 4 · 冻结清单</span></td><td class="nt">十三项里目前只有『引擎清单与版本』接近可冻结。</td></tr><tr class="missing"><td class="st"><span class="pill missing">缺失</span></td><td class="lb"><b>必设消融臂：Theoria − 定理义务</b><span class="clause">Phase 4 · 必设消融臂</span></td><td class="nt">Theoria.md 称它是『活命臂』—— 把谁都能抄的工程省从 claim 里切出去。没有它，主表的每一个数字都会被『你只是发了 diff』一拳打回。</td></tr><tr class="partial"><td class="st"><span class="pill partial">部分</span></td><td class="lb"><b>冻结前待定五项</b><span class="clause">Phase 4 · 冻结前待定五项</span></td><td class="nt">已定：公开集 N=25、开发堆 4 局。未定：模型配对版本串、预算 B 与 Δ/k/m/n、目标会议与死线。</td></tr><tr class="missing"><td class="st"><span class="pill missing">缺失</span></td><td class="lb"><b>封存战役：三臂 + 消融臂在封存堆跑完主表</b><span class="clause">Phase 4 · 封存战役怎么跑</span></td><td class="nt">全项目的确证主体。逐局单元 = 三臂各 n 局 + 消融臂，逐局跑完即打分入库。前提是 Phase 1 全绿与冻结清单提交。</td></tr><tr class="missing"><td class="st"><span class="pill missing">缺失</span></td><td class="lb"><b>考卷子集：不可解变体 + 改规则适应 + 分层移交</b><span class="clause">Phase 4 · 考卷的时序死结</span></td><td class="nt">m 局在主表跑完之后才允许研究并构造变体；分层移交可随主表同跑。</td></tr><tr class="missing"><td class="st"><span class="pill missing">缺失</span></td><td class="lb"><b>裁决与释出：电池全量回算、预注册对照裁决、释出清单、主论文</b><span class="clause">Phase 4 · 裁决与释出 / 阶段交付物</span></td><td class="nt">含三级止损交付：Phase 1 结 workshop 文、Phase 3 结案例研究、Phase 4 结主论文。</td></tr></tbody></table></div></details>
+<details class="fold"><summary>车间八工序</summary><table class="wide"><tbody><tr class="green"><td><b>分割·追踪·事件叙述</b></td><td>最小编辑脚本搜索 (MDL)</td><td><span class="pill green">达成</span></td><td class="nt">A0 上真跑了：算子空间扩到两个，由脚本比特自己选出 uniform_color（4423 vs 6511 bit）。</td></tr><tr class="green"><td><b>规则挖掘</b></td><td>CEGIS / 版本空间</td><td><span class="pill green">达成</span></td><td class="nt">前沿真的被交出来并被逐个裁决（A0 的 R-01/R-02 各留下一条『证据无法决定』的记录）。</td></tr><tr class="green"><td><b>守恒律 / 奇偶</b></td><td>零空间计算 (ℚ / GF(2))</td><td><span class="pill green">达成</span></td><td class="nt">A0 上交出了本项目至今最漂亮的一条结果：door_latch —— 引擎在 152 个匿名指示位上把『门存在 iff 按钮未按』当作守恒律算了出来，275 条转移全支持。</td></tr><tr class="green"><td><b>势函数 + 启发</b></td><td>线性规划</td><td><span class="pill green">达成</span></td><td class="nt">pagoda 权重解得出、证书三条件精确有理数复核通过；不完备性写成了测试而非藏起来。</td></tr><tr class="green"><td><b>兜底归纳不变量</b></td><td>IC3 / PDR</td><td><span class="pill green">达成</span></td><td class="nt">M9 落地：归纳不变量三件套 + 独立检查器复核；peg 0111（LP 不完备例）拿到非线性证书 —— 这道工序存在的全部理由已兑现。</td></tr><tr class="partial"><td><b>规划</b></td><td>Fast Downward（不自研）</td><td><span class="pill partial">部分</span></td><td class="nt">接口就位，后端是 BFS 桩。单位代价下长度最优，所以 A0 这种小世界够用；但三档阶梯的后两档（A*+可采纳启发、地标分段）都还不存在。</td></tr><tr class="green"><td><b>死锁刻画</b></td><td>定理机器局部化 + trap 学习</td><td><span class="pill green">达成</span></td><td class="nt">M9 落地：条件化迷你不可解定理带证书，同一定理接进规划器作剪枝，节点数下降有前后对比。C1 的日常供给线通了。</td></tr><tr class="green"><td><b>探索 / 戳探</b></td><td>前沿主动学习</td><td><span class="pill green">达成</span></td><td class="nt">M9 起探针经规划器定价（到达计划计入成本，unreachable 有裁决）；A0′ 实证 13 条可执行探针。约束 7 的落点齐了。</td></tr><tr class="partial"><td><b>证明</b></td><td>Lean 4 + 决策程序</td><td><span class="pill partial">部分</span></td><td class="nt">工具链已钉版本并本地就位。但生成器分叉了：theory-compiler 的 gen_lean 完全忽略自己的 AST 参数（D-A0-011），A0 只好另写一套。约束 1『同源多形态』目前有两个源。</td></tr></tbody></table></details>
+<details class="fold"><summary>十条强制约束</summary><table class="wide"><tbody><tr class="partial"><td class="num">1</td><td>理论必须可执行——同源多形态（Lean + Python + PDDL + 渲染）</td><td><span class="pill partial">部分</span></td><td class="nt">四形态都有代码，但有两套生成器（A0 一套、theory-compiler 一套），且只有 gen_markdown 是真正 AST 通用的。同源二字目前打折。</td></tr><tr class="partial"><td class="num">2</td><td>规划前全史重放——双重对账（转移重放 + 渲染一致性，全帧责任制）</td><td><span class="pill partial">部分</span></td><td class="nt">A0 上真的生效过，而且是<b>它把 Button 和 Door 逼进词汇表的</b>：两个像素没人认领 → 廉价层在 frame 0 就失败。这是约束 2 在野外的第一次真实咬合。但 certify 目录尚未落盘。</td></tr><tr class="missing"><td class="num">3</td><td>行动唯一通道；预测失误即弃计划</td><td><span class="pill missing">缺失</span></td><td class="nt">无 runner、无执行环，尚未成为可检查的事实。</td></tr><tr class="partial"><td class="num">4</td><td>唯一写入点：LLM 只许改两本书；引擎只进候选箱；生成物禁止手改</td><td><span class="pill partial">部分</span></td><td class="nt">候选箱纪律良好（append-only，status 恒为 candidate，有校验器）。但 A0 的表达力条目 E-03 记录：帧公理写在 theory.dsl 的注释里、硬编码在各后端中 —— <b>step 最重要的语义事实不在唯一写入点管辖内</b>。</td></tr><tr class="risk"><td class="num">5</td><td>无证据/无收益不入册</td><td><span class="pill risk">有风险</span></td><td class="nt">A0 第一次冷启动就撞出框架自身的内部冲突（O-04）：Button 与 Door 的压缩账目是<b>负的</b>（−17 / −13 bit），按约束 5 应当拒绝；按约束 2 全帧责任制又必须接受。两条准入准则互相矛盾，目前的处理是『照收并把负数如实写进说明书』。<b>Theoria.md 需要为此裁决。</b></td></tr><tr class="partial"><td class="num">6</td><td>全称断言必须带证明；裸 UNSAT 禁止</td><td><span class="pill partial">部分</span></td><td class="nt">机制在（LP 证书 + Lean），但尚未在任何一局上端到端跑完。</td></tr><tr class="risk"><td class="num">7</td><td>定理未经戳探不得定案</td><td><span class="pill risk">有风险</span></td><td class="nt">A0 上零条可执行探针，press_is_direction_free 就此永远停在 probe: pending —— 而这恰恰是 DC22 型『漏写规则』的实名复现。约束 7 在设计上正确，在第一次实战中<b>没有可执行的落点</b>。</td></tr><tr class="missing"><td class="num">8</td><td>无意外则无模型调用；执行、校验与引擎全程零调用</td><td><span class="pill missing">缺失</span></td><td class="nt">模型代理不存在 = 没有任何东西在数模型调用。这条约束目前不可证伪。</td></tr><tr class="partial"><td class="num">9</td><td>转移无歧义是定理：每个(状态,动作)恰一后继</td><td><span class="pill partial">部分</span></td><td class="nt">engine-rig 在 fixture 上、A0 在三个 track 上都报告了 mutually_exclusive=true；但这是引擎的运行时检查，不是 Lean 的证明义务。</td></tr><tr class="green"><td class="num">10</td><td>玩法书禁存字面解：句型仅 排序/剪枝/启发/分解</td><td><span class="pill green">达成</span></td><td class="nt">playbook 解析器带负向测试（playbook_violation.dsl），反作弊是语法级的 —— 这条是十条里落实得最干净的。</td></tr></tbody></table></details>
+<details class="fold"><summary>冲突 / 留痕 / 提案箱（每轮实测）</summary><div class="conflict green"><b>冲突扫描</b> 三类检查全空：无冲突标记、无未合并路径、近 40 个提交无跨领地改动。</div><div class="conflict partial"><b>留痕审计</b> 已建档：engine-rig：1 个 run，MANIFEST 0/1，最新 p13-fd-real； theory-compiler：1 个 run，MANIFEST 0/1，最新 P-10； arc-recon：1 个 run，MANIFEST 1/1，最新 P-11； proxy：1 个 run，MANIFEST 1/1，最新 p9-shell-harden； battery：1 个 run，MANIFEST 1/1，最新 P-14。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, a0-spike, baseline-arms。</div><div class="conflict partial"><b>提案箱</b> 待裁决提案 1 份：20260728T2200Z-proxy-ledger-hash-chain.md</div></details>
+</section>
+<footer><p>由 <code>monitor/scan.py</code> 生成；判断依据与出处在 <code>monitor/spec.py</code>。人话层只是翻译，数据与审计口径不变。重跑即刷新；<code>--watch 120</code> 自动刷新。</p></footer>
+</main>

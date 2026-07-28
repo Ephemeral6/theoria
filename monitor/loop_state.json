@@ -45,12 +45,14 @@
     "frontend_policy": "light refresh (scan.py only, cheap, no spec rewrite): every heartbeat where any event occurred (completion, DRIFT report, quota flip) -- probes re-derive live facts, history dedup keeps it quiet; full update (spec judgments + findings + PAPER_PLAN + push + deliver page to user): (a) after each M-0 merge lands on master, (b) on any critical event (DRIFT-CRITICAL, quota hold enter/exit, new needs_human), (c) at every ~3h rebirth as part of re-derivation, (d) hard floor one full update per 3h even if quiet; SendUserFile only on full updates, never on light refreshes",
     "stagger": "batch dispatch sleeps 45s between launches; storms kill",
     "auto_revive": "heartbeat auto-relaunches lost sessions (guard prevents doubles); a prompt lost >=3 times is a suspected prompt-level defect: stop relaunching, escalate as a finding, rewrite or split the prompt before the next attempt",
-    "launch_path": "monitor NEVER spawns sessions from its tool shell (they get silently killed regardless of flags -- proven at runner level). It appends ids to monitor/dispatch_queue.json; reflex (Task Scheduler lineage) performs staggered launches next tick",
+    "launch_path": "one-shot Windows scheduled task per work item (TheoriaAgent-<id>), action = _runner.py <id> (short form; schtasks caps /TR at 261 chars), prompt fed on STDIN (the claude .cmd shim mangles multi-line UTF-8 argv under Task Scheduler -> empty prompt). Detached spawns from the monitor tool shell or from a reflex tick both die; this path survives.",
     "ops_in_app": "standing/judgment ops (auditor, browser, merger-judge, retro) run as user app sessions from monitor/prompts/ops/*; dispatch batch refuses A-/B-/M-/R- classes; ci_merge.py stays deterministic-scripted"
   },
   "heartbeat_count": 0,
   "notes": {
-    "permission-wall-root-cause": "ALL headless dispatch failures were a permission wall: bypassPermissionsModeAccepted was never set, sessions ran read-only, wrote to scratchpad, exited 0. Fixed: consent flag + settings.local defaultMode + launch via Task Scheduler queue. Death counts reset -- the prompts were innocent. Salvage sweep of dead sessions' scratchpads pending."
+    "permission-wall-root-cause": "ALL headless dispatch failures were a permission wall: bypassPermissionsModeAccepted was never set, sessions ran read-only, wrote to scratchpad, exited 0. Fixed: consent flag + settings.local defaultMode + launch via Task Scheduler queue. Death counts reset -- the prompts were innocent. Salvage sweep of dead sessions' scratchpads pending.",
+    "permission-verified": "synchronous headless probe wrote to the repo at ~1140 local: consent flag + settings.local defaultMode fixed the wall. All prior deaths were the wall, not prompt defects. Full research fleet (11) queued for Task Scheduler launch.",
+    "launch-root-causes": "three stacked bugs, all fixed 2026-07-28: (1) permission wall (bypassPermissionsModeAccepted never set) -> sessions ran read-only, wrote to scratchpad, exit 0; (2) job-object cleanup killed detached children of the monitor shell and of reflex ticks; (3) UTF-8 argv mangling under Task Scheduler delivered an empty prompt. Verified end-to-end by Z0-permprobe writing to the repo."
   },
   "death_counts": {},
   "ops_in_app": {

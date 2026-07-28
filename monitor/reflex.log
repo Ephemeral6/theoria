@@ -1,1 +1,7 @@
 2026-07-28T03:16:26Z revive:A-1(#2) | revive:A2-crosscheck(#1) | revive:B-1(#3) | revive:C1-worldgen(#1) | revive:E1-property-fuzz(#1) | revive:M-0(#2) | revive:P-19(#2) | revive:P-20(#1) | revive:P-21(#2) | revive:P-22(#1) | revive:P-23(#1) | revive:R-1(#2)
+2026-07-28T03:26:15Z queue-skip:Z0-permprobe | three-strikes:P-18 | MERGED origin/agent/p10-contracts-v02 (dirs: CONTRACTS,PARTNER_SYNC.md,cold-start-a0,theory-compiler) | MERGED origin/agent/p11-arc-hygiene (dirs: PARTNER_SYNC.md,arc-recon,baseline-arms)
+2026-07-28T03:27:43Z MERGED origin/agent/p13-fd-real (dirs: PARTNER_SYNC.md,engine-rig) | MERGED origin/agent/p14-battery-v1 (dirs: PARTNER_SYNC.md,battery)
+2026-07-28T03:33:45Z queue-skip:P-18 | queue-skip:P-19 | queue-skip:P-20 | queue-skip:P-21 | queue-skip:P-22 | queue-skip:P-23 | queue-skip:P-24 | queue-skip:E1-property-fuzz | queue-skip:A2-crosscheck | queue-skip:C1-worldgen | queue-skip:P3-case-study | MERGED origin/agent/p15-exam-builder (dirs: exam) | MERGED origin/agent/p16-workshop-paper (dirs: PARTNER_SYNC.md,papers)
+2026-07-28T03:37:31Z MERGED origin/agent/p17-a3-transfer (dirs: PARTNER_SYNC.md,cold-start-a3) | MERGED origin/agent/p8-theoria-arm (dirs: PARTNER_SYNC.md,theoria-arm)
+2026-07-28T03:43:18Z MERGED origin/agent/p9-shell-harden (dirs: PARTNER_SYNC.md,monitor,proxy)
+2026-07-28T03:47:21Z quiet
