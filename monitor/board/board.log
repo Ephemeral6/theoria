@@ -102,3 +102,19 @@
 2026-07-28T15:27:00Z CLAIM V12-worldgen-gate-deaf by RES-3
 2026-07-28T15:27:57Z CLAIM S17-fleet-evidence-capture by RES-4
 2026-07-28T15:33:00Z CLAIM A4b-ablation-calibrate by RES-1
+2026-07-28T15:38:52Z DONE P11-battery-section-refresh by RES-2
+2026-07-28T15:38:53Z CLAIM P12-paper-multi-review by RES-2
+2026-07-28T15:42:02Z SWEEP E7-deadlock-claim-audit released (worker W-1411 gone)
+2026-07-28T15:59:09Z CLAIM E7-deadlock-claim-audit by W-1253
+2026-07-28T15:59:09Z CLAIM E7-deadlock-claim-audit by W-1250
+2026-07-28T15:59:10Z CLAIM C9-count-lock-vocabulary by W-1520
+2026-07-28T16:01:38Z DONE V10-fuzz-mutation-power by RES-3
+2026-07-28T16:01:38Z DONE V11-negative-control-census by RES-3
+2026-07-28T16:01:38Z DONE V12-worldgen-gate-deaf by RES-3
+2026-07-28T16:02:01Z SWEEP C9-count-lock-vocabulary released (worker W-1520 gone)
+2026-07-28T16:02:01Z SWEEP E7-deadlock-claim-audit released (worker W-1250 gone)
+2026-07-28T16:03:00Z CLAIM E11-engine-crosscheck-deep by RES-3
+2026-07-28T16:03:00Z CLAIM V13-audit-the-published-surface by RES-3
+2026-07-28T16:03:07Z CLAIM V14-standing-negative-control-probe by RES-3
+2026-07-28T16:05:16Z DONE S14-gates-for-all by RES-4
+2026-07-28T16:05:16Z DONE S15-ledger-hashchain by RES-4
