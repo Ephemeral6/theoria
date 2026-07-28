@@ -1,0 +1,17 @@
+{
+  "prompt_id": "S17-fleet-evidence-capture",
+  "branch": "agent/s17-fleet-evidence-capture",
+  "base_commit": "20105fe070b1e2bd34494a1f737911c25b315981",
+  "utc": "2026-07-28T23:38:50Z",
+  "worker": "W-1641",
+  "territory": "fleet-study",
+  "predecessor": {
+    "worker": "RES-4",
+    "outcome": "died on session quota at ~2026-07-29T02:0x local; left census.py, verify.py, four datasets, no EVIDENCE.md",
+    "resumed_from": "817c35f (rebased onto master bac8282 as 20105fe)"
+  },
+  "goal": "Close the two gaps RES-4 named (human_actions.jsonl absent, assembly.jsonl at 3 rows), add bus.jsonl, append the day-2 delta, and write fleet-study/EVIDENCE.md. Records and organisation only -- no paper prose.",
+  "method": "Five parallel read-only harvest subagents writing into runs/<id>/harvest/, then synthesis here, then an adversarial subagent tasked with refuting the result.",
+  "note_on_utc": "The run directory is stamped with real UTC (2026-07-28T23:38Z), not local date. Commit bac8282 -- 'audit: cycle 24: six runs are dated in the future' -- is the reason this is stated explicitly.",
+  "files": []
+}
