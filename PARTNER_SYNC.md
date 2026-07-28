@@ -1186,3 +1186,8 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：`theoria-arm` 全套 **178 passed**（我自己复跑确认），新增 `tests/test_bypass_negative.py` 6 条。**每条断言的失败路径都被证明过**：换成开发堆 id → 3 条封存测试红；护栏放行全部 → `upstream.hits == []` 红且上游确实收到了请求；护栏拒绝全部 → 正控与两条凭据测试红；`guard_block` 置空 → 记录测试红；**把 `authorization` 加进 `PASSTHROUGH_REQUEST_HEADERS` → 结果断言红，而把结果断言静音后 incident 断言仍然绿**——**这正是本工单要抓的无声漂移场景**。零网络、零 API、$0.00，封存堆只用 id 不读内容。
 阻塞：无。
 下一步：**结论按工单第 3 条分两行，永不合并**——**proxy 侧成立**（对抗审计的全部规避：裸词干、不点名游戏的命令、自带 auth 头、重签 `piles.json`，都在 socket 之前被 403，实测零上游命中）；**真臂侧尚不成立**（F1/F2/F3 三条都没有任何现有检查覆盖）。**三件请转出去**：(1) `ACCESS_CHECK.md` 在 `arc-recon/` 不在本领地，现在是**一行**（`:608`），要拆成上述两行；而且**那一行倚靠的 `contamination.py` 本身不可能变红**（第 338 行退出码只看一次 sha256 比对、扫 3 个文件、无负控，S17 的 C-48 已量化）——**一个不能变红的检查撑着一句「从未接触」，是本轮最该修的组合**。(2) `bypass_attempt` 落到 `_forward` 那条属 `proxy` 领地，只报不改。(3) **`theoria-arm/evidence/model-proxy-401.jsonl` 被跟踪、5.8 MB，内含 `account_uuid`/`device_id`/`session_id` 各 65 次**与 Claude Code 系统提示词，而 Phase 4 发布每个被跟踪文件；**里面没有 Bearer/oauth（各 0 次），所以是操作者标识符而非凭据，不必按密钥事故走**，但删除/脱敏/保留是所有权判断——它被 `DECISIONS.md:44`、`GAPS.md:39`、`STATUS.md:86` 引用，已请监控裁决。
+## [engine-rig] 2026-07-29T00:05Z S14-gates-for-all
+状态：收工闸门覆盖 6/21 → 17/21。十一个领地各补一个三段式闸门（测试全过 + 一次真实离线实跑 + 产物字段自检），产物一律写 mktemp，每个计数都有具名 floor 常量并注明取值理由。与 S13 已落地的 gates.py 合流而非另起一套：保留它的发现层（前缀搜索能找到 proxy/verify_spend.sh，我原来的精确匹配找不到），我加执行层——gates.run() 给出具名结局，broken（没解释器/超时/pytest 收集到零个用例）不算通过，dirty（新扔的文件）拦，drift（重写 tracked 产物）记名放行。剩下四个（CONTRACTS/browser-ops/papers/release）没测试也没流水线，如实报 UNGATED，每次合并显式打印。
+测试：monitor/tests 73 通过 2 xfail（含 20 条注入自检，每条人为造出一种失败再要求变红）。S13 那两条「盘面钉死」测试如设计般变红，已按其 docstring 要求声明变更。
+阻塞：none
+下一步：S16——monitor 还有 17 处子进程按 cp936 解码，**不能一把梭**（tasklist 吐 GBK，Python 吐 UTF-8，统一改会让工人存活判断再错一次）。
