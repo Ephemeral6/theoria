@@ -385,6 +385,13 @@ def observe(action: Callable[[], None], root: str = REPO,
     run_seconds = time.time() - t1
     observed = diff(second, third)
 
+    # The make-up window is a second *empty* leg, so its diff is background on
+    # the same terms as the first. That is only true because `action` is
+    # synchronous: if it ever left a process writing behind it, this window
+    # would file the arm's own trailing writes as ambient noise and subtract
+    # them. `run_arm` is synchronous, offline and single-threaded
+    # (`ledger_abl.py`: zero API calls, zero network), so the premise holds
+    # today; it is written down because it is a premise and not a fact.
     makeup_seconds = 0.0
     shortfall = run_seconds - idle_seconds
     if shortfall > 0:
