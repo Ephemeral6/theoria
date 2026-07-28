@@ -185,11 +185,22 @@ def main(argv=None) -> int:
         gid = r.get("game_id")
         if gid and gid not in dev:
             sealed_hits.append(gid)
+    # The run_id check is anchored, not a substring scan. A run_id is
+    # `bare_cc-<game stem>-<model>-<8 hex>`, and a bare substring test against
+    # the 4-character sealed prefixes matches that hex tail by accident: two of
+    # the sealed prefixes are all-hex, five offsets in eight characters, so the
+    # false-positive rate is roughly 1.5% per hundred run ids. That false alarm
+    # prints as "sealed ids present" and is indistinguishable from the incident
+    # this check exists to catch -- an alarm that cries wolf at 1.5% is worse
+    # than no alarm, because the real one gets read as another collision.
+    # Anchoring loses nothing: the stem always sits in the second field, and
+    # the game_id scan above is the authoritative check anyway.
+    sealed_stems = {s.split("-")[0].lower() for s in sealed}
     for r in records:
         rid = str(r.get("run_id") or "")
-        for s in sealed:
-            if s.split("-")[0] in rid.lower():
-                sealed_hits.append(rid)
+        fields = rid.lower().split("-")
+        if len(fields) >= 2 and fields[1] in sealed_stems:
+            sealed_hits.append(rid)
 
     reports = [audit_run(c, records, probes) for c in
                sorted(cells, key=lambda c: (c["game_id"], c.get("repeat", 0)))]

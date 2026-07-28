@@ -97,7 +97,19 @@ def validate(record: Dict[str, Any]) -> Dict[str, Any]:
     return record
 
 
-def append(record: Dict[str, Any], path: str = ADJUDICATIONS_PATH) -> Dict[str, Any]:
+def _path(path: Optional[str]) -> str:
+    """Resolve at call time, not at def time.
+
+    A default argument binds the module constant once, at import, so a test (or
+    a caller with its own file) that reassigns `ADJUDICATIONS_PATH` would still
+    be writing to the original -- which for an adjudication file means a test
+    quietly editing the live ruling.
+    """
+    return ADJUDICATIONS_PATH if path is None else path
+
+
+def append(record: Dict[str, Any], path: Optional[str] = None) -> Dict[str, Any]:
+    path = _path(path)
     validate(record)
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "a", encoding="utf-8", newline="") as fh:
@@ -105,7 +117,8 @@ def append(record: Dict[str, Any], path: str = ADJUDICATIONS_PATH) -> Dict[str, 
     return record
 
 
-def load(path: str = ADJUDICATIONS_PATH) -> List[Dict[str, Any]]:
+def load(path: Optional[str] = None) -> List[Dict[str, Any]]:
+    path = _path(path)
     if not os.path.exists(path):
         return []
     out: List[Dict[str, Any]] = []
@@ -118,7 +131,7 @@ def load(path: str = ADJUDICATIONS_PATH) -> List[Dict[str, Any]]:
 
 def suspended(clause: str,
               records: Optional[Iterable[Dict[str, Any]]] = None,
-              path: str = ADJUDICATIONS_PATH) -> Dict[str, Dict[str, Any]]:
+              path: Optional[str] = None) -> Dict[str, Dict[str, Any]]:
     """`run_id` -> the adjudication that removes it from `clause`'s input.
 
     A later `revoked` record naming the same run_id and clause puts the cell

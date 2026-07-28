@@ -27,7 +27,7 @@ import statistics
 import sys
 from typing import Any, Dict, List, Optional
 
-from . import run_campaign
+from . import adjudications, run_campaign
 
 # The quantities worth asking for a spread on. levels_completed is here even
 # though the pilot saw nothing but zeros: if it is still all zeros, that is
@@ -76,18 +76,61 @@ def spread(values: List[float]) -> Dict[str, Any]:
     return row
 
 
+def degraded_games(cells: List[Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:
+    """`game_id` -> the ruling that took its cells out of the aggregate.
+
+    Read from the same append-only adjudication file the gate reads, so a game
+    is degraded in the envelope for exactly the reason it is degraded in the
+    gate, and never because this module decided so on its own. A game counts as
+    degraded when *every* one of its recorded cells is named in a ruling: a
+    partially-adjudicated game still has cells that are evidence, and dropping
+    it whole would discard them.
+    """
+    suspended = adjudications.suspended("G4")
+    by_game_ids: Dict[str, List[str]] = collections.defaultdict(list)
+    for c in cells:
+        by_game_ids[c["game_id"]].append(c.get("run_id") or "?")
+    out: Dict[str, Dict[str, Any]] = {}
+    for game_id, run_ids in by_game_ids.items():
+        rulings = [suspended[r] for r in run_ids if r in suspended]
+        if rulings and len(rulings) == len(run_ids):
+            first = rulings[0]
+            out[game_id] = {
+                "finding": first["finding"],
+                "authority": first["authority"],
+                "reason": first["reason"],
+                "evidence": first["evidence"],
+                "cells": sorted(run_ids),
+            }
+    return out
+
+
 def by_game(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
     grouped: Dict[Any, List[Dict[str, Any]]] = collections.defaultdict(list)
     for c in cells:
         grouped[(c["game_id"], c["model"])].append(c)
 
+    degraded = degraded_games(cells)
     out: Dict[str, Any] = {}
     for (game_id, model), group in sorted(grouped.items()):
+        if game_id in out:
+            # Grouping is per (game, model) but the result is keyed per game, so
+            # a second tier for the same game would silently overwrite the
+            # first and its cells would vanish from every table below. The
+            # envelope is haiku-only by construction (D-011) and --model is a
+            # plain flag with no guard, so this is reachable by a typo. Refuse
+            # rather than lose cells.
+            raise ValueError(
+                "game %s has cells at two model tiers (%s and %s). The envelope "
+                "is one tier by construction (DECISIONS.md D-011); reporting it "
+                "per game would drop one of them silently."
+                % (game_id, out[game_id]["model"], model))
         entry: Dict[str, Any] = {
             "model": model,
             "repeats": len(group),
             "outcomes": sorted(c.get("outcome") for c in group),
             "run_ids": sorted(c.get("run_id") or "?" for c in group),
+            "degraded": degraded.get(game_id),
             "metrics": {},
         }
         for key, _label in METRICS:
@@ -101,17 +144,33 @@ def by_game(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
 
 
 def envelope(per_game: Dict[str, Any]) -> Dict[str, Any]:
-    """The pooled answer: across the four games, how variable is a cell?"""
-    out: Dict[str, Any] = {}
+    """The pooled answer: across the games, how variable is a cell?
+
+    A game an outside reviewer ruled degraded is excluded from the pooled cv and
+    named in `excluded_games` instead. It keeps its own row in the per-game
+    table -- the measurements happened and the money was spent -- but folding a
+    cv measured under known-bad conditions into the number Phase 4 freezes `n`
+    from would put the contention into the arm's variance. Which is the thing
+    the envelope exists to measure and INC-BA-003 is the reason it could not be.
+    """
+    excluded = sorted(gid for gid, g in per_game.items() if g.get("degraded"))
+    kept = {gid: g for gid, g in per_game.items() if not g.get("degraded")}
+    out: Dict[str, Any] = {"_excluded_games": excluded}
     for key, label in METRICS:
-        cvs = [g["metrics"][key]["cv"] for g in per_game.values()
+        cvs = [g["metrics"][key]["cv"] for g in kept.values()
                if g["metrics"][key].get("cv") is not None]
+        all_cvs = [g["metrics"][key]["cv"] for g in per_game.values()
+                   if g["metrics"][key].get("cv") is not None]
         out[key] = {
             "label": label,
             "games_with_estimate": len(cvs),
             "cv_median": round(statistics.median(cvs), 4) if cvs else None,
             "cv_min": round(min(cvs), 4) if cvs else None,
             "cv_max": round(max(cvs), 4) if cvs else None,
+            # The same statistic with the degraded games folded back in, so the
+            # cost of excluding them is visible rather than asserted.
+            "cv_median_including_degraded":
+                round(statistics.median(all_cvs), 4) if all_cvs else None,
         }
     return out
 
@@ -150,9 +209,16 @@ def main(argv=None) -> int:
 
     print("\n=== per game: spread across repeats ===")
     for game_id, entry in sorted(per_game.items()):
-        print("\n%s  (%s, %d repeats)  action success %s"
+        mark = "  ** DEGRADED **" if entry.get("degraded") else ""
+        print("\n%s  (%s, %d repeats)  action success %s%s"
               % (game_id, entry["model"], entry["repeats"],
-                 entry["pooled_action_success_rate"]))
+                 entry["pooled_action_success_rate"], mark))
+        if entry.get("degraded"):
+            d = entry["degraded"]
+            print("    ruled degraded by %s (%s) -- kept on its own row, "
+                  "excluded from the envelope below" % (d["authority"], d["finding"]))
+            for line in d["evidence"]:
+                print("      evidence: %s" % line)
         print("    %-20s %9s %9s %9s %9s %7s" %
               ("metric", "mean", "sd", "min", "max", "cv"))
         for key, label in METRICS:
@@ -161,13 +227,21 @@ def main(argv=None) -> int:
                 label, fmt(row["mean"]), fmt(row["sd"]), fmt(row["min"]),
                 fmt(row["max"]), fmt(row["cv"], 7, 3)))
 
-    print("\n=== the envelope: coefficient of variation across the 4 games ===")
-    print("%-20s %6s %10s %10s %10s" % ("metric", "games", "cv median", "cv min", "cv max"))
+    kept = [g for g in per_game.values() if not g.get("degraded")]
+    print("\n=== the envelope: coefficient of variation across %d game(s) ==="
+          % len(kept))
+    if env["_excluded_games"]:
+        print("excluded as degraded: %s  (their rows are above; the last column "
+              "shows what folding them back in would do)"
+              % ", ".join(env["_excluded_games"]))
+    print("%-20s %6s %10s %10s %10s %12s"
+          % ("metric", "games", "cv median", "cv min", "cv max", "cv med +deg"))
     for key, label in METRICS:
         row = env[key]
-        print("%-20s %6s %s %s %s" % (
+        print("%-20s %6s %s %s %s %s" % (
             label, row["games_with_estimate"], fmt(row["cv_median"], 10, 4),
-            fmt(row["cv_min"], 10, 4), fmt(row["cv_max"], 10, 4)))
+            fmt(row["cv_min"], 10, 4), fmt(row["cv_max"], 10, 4),
+            fmt(row["cv_median_including_degraded"], 12, 4)))
 
     print("\n=== standard error of a cell mean, by repeat count n ===")
     print("(Theoria.md Phase 4 freezes n from this. Lower is tighter.)")
@@ -175,6 +249,9 @@ def main(argv=None) -> int:
         row = entry["metrics"]["actions_ok"]
         sem = row.get("sem_at_n")
         if not sem:
+            continue
+        if entry.get("degraded"):
+            print("  %-18s (degraded -- not an input to the n decision)" % game_id)
             continue
         print("  %-18s successful actions: mean %.2f, sd %.2f -> sem n=1 %.2f  "
               "n=2 %.2f  n=3 %.2f"

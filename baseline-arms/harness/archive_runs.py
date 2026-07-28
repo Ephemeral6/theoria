@@ -294,7 +294,13 @@ def in_flight_note() -> List[Dict[str, Any]]:
     checkpoints = interlock.scan_checkpoints()      # across every worktree
     if not checkpoints:
         return []
-    games = sorted("%s (%s)" % (c.get("game_id"), c.get("status"))
+    # Game ids only, not their live status. The status of a running campaign
+    # changes minute to minute, and putting it here made the archive's digest a
+    # function of what another session happened to be doing -- so two builds
+    # minutes apart disagreed and the determinism check could not tell that from
+    # a real change. What is stable and worth recording is *which* campaigns
+    # exist and that they were excluded.
+    games = sorted(c.get("game_id") or os.path.basename(c["path"])
                    for c in checkpoints)
     return [{
         "id": "s1-full-run-not-archived",

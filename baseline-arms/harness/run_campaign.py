@@ -183,7 +183,7 @@ def total_span_seconds(cells: List[Dict[str, Any]],
 
 
 def evaluate_gate(cells: List[Dict[str, Any]],
-                  adjudications_path: str = adjudications.ADJUDICATIONS_PATH) -> Dict[str, Any]:
+                  adjudications_path: Optional[str] = None) -> Dict[str, Any]:
     """Returns {"state": "green"|"red", "tripped": [...], "totals": {...}}.
 
     Deliberately computed from the persisted cell records rather than from

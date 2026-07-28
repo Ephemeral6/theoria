@@ -1,10 +1,10 @@
 {
   "campaigns_seen": 4,
   "checkpoints": [
-    "ar25-0c556536 (episode_limit_hit)",
-    "g50t-5849a774 (running)",
-    "sk48-d8078629 (running)",
-    "tn36-ef4dde99 (episode_limit_hit)"
+    "ar25-0c556536",
+    "g50t-5849a774",
+    "sk48-d8078629",
+    "tn36-ef4dde99"
   ],
   "id": "s1-full-run-not-archived",
   "kind": "excluded",
