@@ -443,7 +443,7 @@ matrix. The blinding method and its declared breaches are in
 `runs/20260729T120000Z-V15-census-sampling-frame/BLINDING.md`.
 
 ```bash
-python verify-lab/frame/frame.py        # 244 units, three strata
+python verify-lab/frame/frame.py        # 241 units at the pinned baseline rev
 python verify-lab/frame/reconcile.py    # what V11 and negctl each reached
 python verify-lab/frame/matrix.py       # the matrix, V14's protocol, V15's gold
 ```
@@ -456,8 +456,15 @@ verdict stopped reaching an exit code — is structurally invisible to it. V11
 answered `否` to "can it go red" fifteen times. `can_refuse` is a column here,
 never a filter.
 
-**2. Coverage, measured.** Of 244 units, V11's census reaches **43.9%** and
-negctl's pin reaches **57.4%**. The difference set is **137**, not 74. Its shape
+**2. Coverage, measured.** Of 241 units, V11's census reaches **44.4%** and
+negctl's pin reaches **58.1%** — but that second number must never travel alone.
+Measured against **V14's own membership rule** (invocable, can fail, not frozen,
+`.py` only: 136 units) the probe covers **99.3%**, and the adversarial pass's
+slightly wider reading of the same rule gives **93.1%**. The probe covers
+93–99% of what it claims to enumerate; 58% is it measured against a frame drawn
+deliberately wider, and quoting only 58% is the move this item exists to
+criticise. V11 covers **50.7%** even under V14's own rule, which is the claim
+that actually carries the argument. The difference set is **134**, not 74. Its shape
 is not random: `monitor/` — the rig that grades everyone else's gates — had
 **none** of its 14 entry points surveyed; every pipeline's intermediate steps
 are missing while its `run_all.py` is present; `figures/` has its aggregator
@@ -473,12 +480,36 @@ the reproduction of V14's published numbers is exact on TP/FN/FP.
 | V11 + V15 gold | 219 | 70 | **41** | **6** | 102 | 0.369 |
 | V11 + V15, restricted to what `probe.py` enumerates | 145 | 35 | **36** | **1** | 73 | **0.507** |
 
+**Half that move is not the supplement.** Decomposed: `0.317` (V11 gold,
+unrestricted) → `0.396` (**restriction to probe-enumerated files alone**, +7.9pp,
+42% of the move) → `0.507` (**the 126 judgements**, +11.1pp, 58%). The
+restriction step needed none of V15's work — V14 could have computed it on the
+day it shipped, from its own enumerator. The supplement is worth ~11pp, not
+~19pp; the other ~8pp is V14 having measured its headline over the rows its
+criterion could be *asked* about rather than the files its probe would *report*
+on.
+
 **Both error counts doubled, and they moved for opposite reasons.** All five new
 false `present` are on files the probe does **not** enumerate — the criterion is
 wrong about them and the probe never asks. On the population the probe actually
 reports on, the false-positive count is **1**, and it is `worldgen/build.py`, the
 granularity conflict V14 already named. What got worse is the false alarms:
 **FNR 39.6% → 50.7%** on the enumerated population.
+
+**The single largest fragility, stated here and not in an appendix: under the
+`harsh` folding the *unrestricted* matrix reverses.** FNR 0.261 → 0.253 (down)
+and FP 12 → 17, i.e. supplementing the gold makes the false-alarm rate slightly
+*better* and makes false positives the growing problem. That folding is printed
+in the same JSON and defended in the same docstring as the one used here. It does
+**not** reverse under the pinned restriction (harsh pinned: 0.344 → 0.409, same
+direction as strict), which is the restriction the conclusion rests on — but
+anyone quoting the unrestricted table gets the opposite story, and they are not
+misreading it.
+
+Relatedly: of the 36 pinned FN, 19 are V11-origin and 17 are V15-origin, and
+**10 of those 17 are `部分` rows** — the grade `strict` folds into "has a
+negative control", and the grade the nine judges used most inconsistently
+(b4 0/12, b1 3/14, b5 3/13, b8 3/17).
 
 > **This supersedes the figure in the V14 table above, row 4.** The number that
 > decides CI admission is not 32%; on the population the probe reports on, and
@@ -499,6 +530,20 @@ correct, and its own calibration set was unable to say so.**
 
 ## What V15 did not do
 
+* **The blinding was breached, and by this repository's own delivery
+  discipline.** `PARTNER_SYNC.md` is tracked, sits at the root, was in all nine
+  judges' trees, and carries V11's aggregate (`有负控「否」35`), V14's `FNR 32%`,
+  and a per-file probe verdict on `worldgen/build.py` — the single false positive
+  in the pinned matrix. 29 of 126 judged paths (23%) are named in a tracked file
+  that also discusses negative controls; exposed-vs-unexposed present rate 0.55
+  vs 0.34, one-sided p = 0.055. The direction is *toward* `present`, which
+  inflates FN and therefore flatters this item's conclusion, so it cannot be
+  leaned on. **Deleting every exposed row moves pinned FNR 0.507 → 0.484**, still
+  far above V14's 0.318, so the leak cannot account for the finding. Measured by
+  `verify-lab/frame/leakage.py`; full record in `BLINDING.md`. A future blind
+  pass in this repository must `git rm PARTNER_SYNC.md monitor/` from the judges'
+  tree — deleting one directory is not enough when findings are published to the
+  root.
 * **Zero `实测`.** All 126 supplement rows are `读码`. V11 had 24 observed rows
   and discovered, in doing so, that six auditors sharing one worktree confound
   every artefact-drift finding. This batch buys that confound off and pays in

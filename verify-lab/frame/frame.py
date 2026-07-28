@@ -173,10 +173,40 @@ _GENERATED_MARKERS = ("/generated", "/artifacts/", "/handover_packages/",
 # tracked files
 # --------------------------------------------------------------------------
 
-def tracked_files(root: str) -> List[str]:
-    out = subprocess.run(["git", "-C", root, "ls-files"],
-                         capture_output=True, text=True, check=True).stdout
+#: The tree as V11 and V14 left it -- the merge of both prior branches, before
+#: V15 committed a single instrument of its own.
+#:
+#: Without a pin the population is measured on the working tree, and V15's own
+#: `frame.py` / `reconcile.py` / `matrix.py` / `leakage.py` are members of it: a
+#: frame that exempted its own tooling would be the disease it is looking for.
+#: The consequence is that every commit V15 makes enlarges the denominator and
+#: therefore *lowers* V11's measured coverage -- 241 -> 243 -> 244 across one run
+#: directory, always in the direction that flatters V15's argument. The
+#: adversarial pass found three mutually inconsistent totals in the artefacts.
+#:
+#: So every published number is taken at this revision. Pass `--rev HEAD` to see
+#: the live tree, and expect it to differ.
+BASELINE_REV = "3fa7170"
+
+
+def tracked_files(root: str, rev: Optional[str] = None) -> List[str]:
+    if rev:
+        out = subprocess.run(["git", "-C", root, "ls-tree", "-r",
+                              "--name-only", rev],
+                             capture_output=True, text=True, check=True).stdout
+    else:
+        out = subprocess.run(["git", "-C", root, "ls-files"],
+                             capture_output=True, text=True, check=True).stdout
     return [line for line in out.replace("\\", "/").split("\n") if line]
+
+
+def read_file(root: str, rel: str, rev: Optional[str] = None) -> str:
+    if rev:
+        proc = subprocess.run(["git", "-C", root, "show", "%s:%s" % (rev, rel)],
+                              capture_output=True, check=True)
+        return proc.stdout.decode("utf-8")
+    with open(os.path.join(root, rel), "r", encoding="utf-8") as handle:
+        return handle.read()
 
 
 def is_test_file(rel: str) -> bool:
@@ -348,16 +378,17 @@ def caught_names(tree: ast.Module) -> Set[str]:
 # the frame
 # --------------------------------------------------------------------------
 
-def build(root: str = REPO) -> List[Dict[str, object]]:
-    rels = tracked_files(root)
+def build(root: str = REPO,
+          rev: Optional[str] = BASELINE_REV) -> List[Dict[str, object]]:
+    rels = tracked_files(root, rev)
     trees: Dict[str, ast.Module] = {}
     unparseable: List[Tuple[str, str]] = []
     for rel in rels:
         if not rel.endswith(".py"):
             continue
         try:
-            src = open(os.path.join(root, rel), "r", encoding="utf-8").read()
-        except OSError:
+            src = read_file(root, rel, rev)
+        except (OSError, subprocess.CalledProcessError, UnicodeDecodeError):
             continue
         try:
             trees[rel] = ast.parse(src, filename=rel)
@@ -375,8 +406,8 @@ def build(root: str = REPO) -> List[Dict[str, object]]:
         if is_test_file(rel):
             continue
         try:
-            src = open(os.path.join(root, rel), "r", encoding="utf-8").read()
-        except OSError:
+            src = read_file(root, rel, rev)
+        except (OSError, subprocess.CalledProcessError, UnicodeDecodeError):
             continue
         if "__main__" not in src:
             continue
@@ -413,8 +444,8 @@ def build(root: str = REPO) -> List[Dict[str, object]]:
         if not rel.endswith(".sh") or is_test_file(rel):
             continue
         try:
-            text = open(os.path.join(root, rel), "r", encoding="utf-8").read()
-        except OSError:
+            text = read_file(root, rel, rev)
+        except (OSError, subprocess.CalledProcessError, UnicodeDecodeError):
             continue
         units.append({"path": rel, "stratum": STRATUM_A, "kind": "shell",
                       "frozen": is_frozen(rel), "generated": is_generated(rel),
@@ -502,13 +533,17 @@ def counts(units: Sequence[Dict[str, object]]) -> Dict[str, int]:
 def main(argv: Optional[Sequence[str]] = None) -> int:
     ap = argparse.ArgumentParser(description="the V15 acceptance-entry-point frame")
     ap.add_argument("--root", default=REPO)
+    ap.add_argument("--rev", default=BASELINE_REV,
+                    help="enumerate the tree at this revision (default: the "
+                         "pinned baseline, the merge of V11 and V14). Pass HEAD "
+                         "for the live tree.")
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--list", action="store_true",
                     help="paths only -- no verdicts, safe for a blind judge")
     ap.add_argument("--stratum", choices=[STRATUM_A, STRATUM_B, STRATUM_C])
     args = ap.parse_args(argv)
 
-    units = build(args.root)
+    units = build(args.root, args.rev)
     if args.stratum:
         units = [u for u in units if u["stratum"] == args.stratum]
 
@@ -522,7 +557,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
 
     c = counts(units)
-    print("frame: %d acceptance entry points" % c["total"])
+    print("frame: %d acceptance entry points   (rev %s)"
+          % (c["total"], args.rev or "working tree"))
     print("  stratum A (invocable)          %3d   (%d python, %d shell)"
           % (c["A"], c["A_python"], c["A_shell"]))
     print("  stratum B (terminal refusal)   %3d" % c["B"])

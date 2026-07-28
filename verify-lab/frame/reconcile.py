@@ -130,7 +130,28 @@ def report(root: str = REPO) -> Dict[str, object]:
 
     by_path = {u["path"]: u for u in units}
     missing = sorted(fpaths - v11_hit)
+
+    # Coverage measured against V14's OWN membership rule, not V15's.
+    #
+    # "negctl covers 58% of the population" is true and rhetorically loaded: the
+    # V15 frame is drawn deliberately wider than the rule negctl enumerates by,
+    # so measuring the probe against it charges the probe for a population it
+    # never claimed. Under V14's rule -- invocable, can fail, not frozen, no
+    # stratum B, no stratum C -- the probe covers most of what it claims. Both
+    # numbers are published; quoting only the first is the move this item exists
+    # to criticise.
+    v14_rule = {u["path"] for u in units
+                if u["stratum"] == frame.STRATUM_A and u["can_refuse"]
+                and not u["frozen"] and u["kind"] == "python"}
+    pin_v14 = {p for p in pinned if p in v14_rule}
+    v11_v14 = v11_hit & v14_rule
+
     return {
+        "v14_rule_population": len(v14_rule),
+        "negctl_coverage_of_v14_rule_pct":
+            round(100.0 * len(pin_v14) / len(v14_rule), 1) if v14_rule else None,
+        "v11_coverage_of_v14_rule_pct":
+            round(100.0 * len(v11_v14) / len(v14_rule), 1) if v14_rule else None,
         "frame_total": len(units),
         "frame_counts": frame.counts(units),
         "v11_rows": len(rows),
@@ -181,6 +202,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     print("negctl pin                  %3d paths -> %d in frame (%.1f%%), %d outside"
           % (rep["negctl_pinned"], rep["negctl_in_frame"],
              rep["negctl_coverage_pct"], rep["negctl_outside_frame"]))
+    print("  -- and against V14's OWN membership rule (%d units) --"
+          % rep["v14_rule_population"])
+    print("  negctl covers             %.1f%%   V11 covers %.1f%%"
+          % (rep["negctl_coverage_of_v14_rule_pct"],
+             rep["v11_coverage_of_v14_rule_pct"]))
     print("difference set (frame minus V11) %3d   (stratum A %d, stratum B %d)"
           % (rep["difference_set"], rep["difference_by_stratum"]["A"],
              rep["difference_by_stratum"]["B"]))

@@ -10,9 +10,17 @@ hand-judges the difference set, and reports the two side by side.
 Three restrictions are printed, because "the confusion matrix" is not one object:
 
   ``v14``   V11 gold only, rows naming a single existing ``.py``. This is the
-            reproduction of V14's published numbers; if it does not land on
-            FP 3 / FN 20 then this module disagrees with V14 about the protocol
-            and every other number here is suspect.
+            **closest approach** to V14's published numbers, not a reproduction:
+            it agrees on TP 43 / FN 20 / FP 3 and disagrees on n (95 vs 97),
+            TN (29 vs 31) and therefore FPR (0.094 vs 0.088).
+
+            **The first version of this docstring set a tripwire — "if it does
+            not land on FP 3 / FN 20 then every other number here is suspect" —
+            over exactly the cells that agree.** A self-check written across the
+            matching half of a result is not a self-check. The adversarial pass
+            ran V14's own ``calibrate.py`` at this HEAD and found the gap. The
+            tripwire now covers all four cells and is expected to *fail*, which
+            is the honest state: see ``reproduction_gap()``.
   ``v15``   V11 gold + V15 supplement, same rule.
   ``pinned`` V11 gold + V15 supplement, restricted to files ``probe.py``
             actually enumerates -- the population the standing probe reports on.
@@ -84,12 +92,21 @@ def gold_v11(root: str, harsh: bool = False) -> List[Tuple[str, str]]:
         if len(py) != 1:
             continue
         if frame.is_test_file(py[0]):
-            # V14's scope rule, transcribed: 4 census rows name a test file as
-            # the entry point (`fuzzlab/tests/test_battery.py::...`). Keeping
-            # them puts FN at 22; dropping them puts it at 20, which is V14's
-            # published number, with TP/FP/TN already matching exactly. The
-            # difference is entirely this rule, and it is written here rather
-            # than discovered later.
+            # V14's scope rule, transcribed. `CALIBRATION.md` line 29 declares
+            # it independently and before V15 existed: out of scope = "4 shell
+            # entry points ... and 4 rows whose 'entry point' is itself a test
+            # file". Those 4 rows are exactly `fuzzlab/tests/test_battery.py`
+            # (x2), `fuzzlab/tests/test_oracles.py`, `theory-compiler/
+            # conftest.py`.
+            #
+            # An earlier version of this comment justified the rule by the
+            # number it produced ("dropping them puts FN at 20, which is V14's
+            # published number"). That reads as fitting even though it is not,
+            # and the adversarial pass had to go and check the citation to clear
+            # it. Justify a rule by its source, never by its result: keeping the
+            # rows gives n=99, TP 43 / FN 22 / FP 3 / TN 31 -- which recovers
+            # V14's TN and loses its FN, so no setting of this switch reproduces
+            # V14 cell-for-cell either way.
             continue
         out.append((py[0], verdict))
     return out
@@ -201,7 +218,14 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap.add_argument("--json", action="store_true")
     ap.add_argument("--sensitivity", action="store_true",
                     help="the same gold standard under four membership rules")
+    ap.add_argument("--reproduction", action="store_true",
+                    help="every cell of the v14 row against V14's published "
+                         "numbers, including the cells that do not match")
     args = ap.parse_args(argv)
+    if args.reproduction:
+        print(json.dumps(reproduction_gap(args.root), ensure_ascii=False,
+                         indent=2, sort_keys=True))
+        return 0
     if args.sensitivity:
         for name, m in sensitivity(args.root):
             print(_fmt(name, m))
@@ -221,6 +245,43 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(_fmt("V11 gold, probe-enumerated", blob["pinned_v11_only"]))
         print(_fmt("V11+V15 gold, enumerated", blob["pinned"]))
     return 0
+
+
+#: V14's published A-B strict/harsh cells, from CALIBRATION.md section 2.
+V14_PUBLISHED = {"strict": {"n": 97, "TP": 43, "FN": 20, "FP": 3, "TN": 31},
+                 "harsh": {"n": 97, "TP": 34, "FN": 12, "FP": 12, "TN": 39}}
+
+#: The two census rows V15 drops and V14 kept: each names two existing .py files,
+#: and `gold_v11` requires exactly one. Named here so the gap is attributable
+#: rather than mysterious.
+V14_ROWS_DROPPED = (
+    ("theoria-arm/armtools/salvage.py", "theoria-arm/armtools/timeline.py",
+     "gold 否, both measured absent -- these are the 2 missing TN"),
+    ("proxy/canon.py", "proxy/ledger.py",
+     "gold 是(实测), both measured present"),
+)
+
+
+def reproduction_gap(root: str = REPO) -> Dict[str, Dict[str, object]]:
+    """Every cell of the `v14` row against V14's published numbers.
+
+    Deliberately reports a gap rather than asserting agreement. Three cells
+    match and two do not, and no setting of this module's two protocol switches
+    reproduces V14 cell-for-cell: keeping the 4 test-file rows recovers TN 31
+    and loses FN 20 (n=99, FN 22). The FP 3 / FN 20 landing is two protocol
+    differences partially cancelling.
+    """
+    out: Dict[str, Dict[str, object]] = {}
+    for tag, harsh in (("strict", False), ("harsh", True)):
+        mine = confusion(gold_v11(root, harsh), measured(root)[0])
+        want = V14_PUBLISHED[tag]
+        out[tag] = {
+            "cells_agreeing": sorted(k for k in want if mine[k] == want[k]),
+            "cells_differing": {k: {"v15": mine[k], "v14": want[k]}
+                                for k in want if mine[k] != want[k]},
+            "rows_v15_drops": [list(r) for r in V14_ROWS_DROPPED],
+        }
+    return out
 
 
 def sensitivity(root: str = REPO) -> List[Tuple[str, Dict[str, object]]]:
