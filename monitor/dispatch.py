@@ -37,6 +37,7 @@ import re
 import shutil
 import subprocess
 import sys
+import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -241,6 +242,7 @@ def main():
             continue
         plan.append((pid, name, "LAUNCH"))
 
+    launched = 0
     for pid, name, action in plan:
         if action != "LAUNCH":
             print("%-6s %-28s %s" % (pid, name, action))
@@ -248,6 +250,10 @@ def main():
         if args.dry_run:
             print("%-6s %-28s would launch" % (pid, name))
             continue
+        if launched:
+            # simultaneous storms killed half a fleet once; stagger is law now
+            time.sleep(45)
+        launched += 1
         pidnum, log_path = launch(pid, os.path.join(PROMPTS, name), LOGS)
         print("%-6s %-28s launched pid=%s log=%s"
               % (pid, name, pidnum, os.path.relpath(log_path, ROOT)))
