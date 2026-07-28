@@ -172,22 +172,25 @@
       "V5-battery-freeze"
     ],
     "in_progress_plain": [
-      "V19-unverified-is-not-true"
+      "开发堆在线战役：把 Theoria 臂推到退出条件",
+      "V19-unverified-is-not-true",
+      "S17-fleet-evidence-capture",
+      "S23-unreadable-is-not-clean"
     ],
     "ops": [
       {
-        "age_min": 14,
-        "cycle": 23,
+        "age_min": 19,
+        "cycle": 24,
         "id": "OPS-A",
         "kind": "ops",
         "name": "漂移审计员",
-        "note": "cycle 23: gates.py is committed and the verify.sh class went 3 to 0; 61 merges tonight. The blockage changed shape rather than shrinking -- 9 merge conflicts and 6 branches waiting on OPS-M, silent 339 minutes, for a territory ruling that needs no code. Corrected my own speculation that monitor/verify.sh was hanging.",
-        "outputs": 31,
+        "note": "cycle 24: verify-lab landed so the census is checkable and the territory class went 6 to 0; blockage 19 to 13, nine of them merge conflicts. New finding: six run directories carry UTC stamps in the future, up to 18.7 hours, and two copy the false value into MANIFEST.utc -- a wrong anchor is worse than a missing one because it looks usable.",
+        "outputs": 32,
         "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
         "state": "idle"
       },
       {
-        "age_min": 135,
+        "age_min": 173,
         "cycle": 10,
         "id": "OPS-B",
         "kind": "ops",
@@ -198,18 +201,18 @@
         "state": "idle"
       },
       {
-        "age_min": 355,
+        "age_min": 393,
         "cycle": 8,
         "id": "OPS-M",
         "kind": "ops",
         "name": "合并裁判",
         "note": "根因找到并实测：verify.sh 闸门一直由 WSL 的 Linux bash 执行（非 Git Bash），一行可修且已验证 rc=0；订正 cycle 7 的归因，我自己提的三个修法均被实测证伪。队列仍全堵 14 flag/14 分支，三个 agent 独立确认而无人有权修。已归档陈旧 flag a7。见 inbox 20260728T170640Z",
-        "outputs": 7,
+        "outputs": 6,
         "role": "脚本合不动的冲突由它裁决；顺利合并早已自动化",
         "state": "blocked"
       },
       {
-        "age_min": 446,
+        "age_min": 484,
         "cycle": 2,
         "id": "OPS-R",
         "kind": "ops",
@@ -222,7 +225,7 @@
     ],
     "standing": [
       {
-        "age_min": 445,
+        "age_min": 483,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
@@ -233,7 +236,7 @@
         "state": "working"
       },
       {
-        "age_min": 442,
+        "age_min": 480,
         "cycle": 4,
         "id": "RES-2",
         "kind": "standing",
@@ -244,18 +247,18 @@
         "state": "working"
       },
       {
-        "age_min": 1,
-        "cycle": 34,
+        "age_min": 7,
+        "cycle": 35,
         "id": "RES-3",
         "kind": "standing",
         "name": "验证与考卷研究员",
-        "note": "C11 交付 push（11 处逐处清偿；对账结论未变、方法已修，且这句是复核员独立复算的；常设检查判为不该进门禁——分级由变量名决定，ERROR 精确率从 75% 改判 50%）。本轮共交付 15 件。新领 V19-unverified-is-not-true（p1，我在 V16 里发现但没顺手改的那条）已派工，提示词里带上 C11 的教训：变异体数量必须多于测试数量。手上 C10（仍等领地裁决）/ V19。",
-        "outputs": 7,
+        "note": "V19 实现完成、等它自己的对抗复核。做法值得记：三态之下 13/35 份从 true 翻成 false，随后把三条散文不变量真正验起来（edge_check 走可达图，84-10616 条转移），13 份回到 true——**回到的是实测不是默认**；最终翻转数 0，但它把 stage-1 的红留在 evidence/01-02，因为'最终 0 翻转'单独拿出来什么都不证明。第 4 件扫到 8 处判 4 处缺陷，最值钱的一处不在 truth.py：build.py 的 gate_failures 读 totals.get(key, ()) ，清单少一个键就静默放行整道闸。手上 C10（仍等裁决）/ V19。",
+        "outputs": 6,
         "role": "常驻推进：凭什么相信这些数字——考卷、电池、引擎交叉验证",
         "state": "working"
       },
       {
-        "age_min": 414,
+        "age_min": 452,
         "cycle": 6,
         "id": "RES-4",
         "kind": "standing",
@@ -562,6 +565,36 @@
         "running": false
       },
       {
+        "finished": [],
+        "id": "W-1640",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "开发堆在线战役：把 Theoria 臂推到退出条件",
+        "orphan": false,
+        "outputs": 0,
+        "running": true
+      },
+      {
+        "finished": [],
+        "id": "W-1641",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "S17-fleet-evidence-capture",
+        "orphan": false,
+        "outputs": 0,
+        "running": true
+      },
+      {
+        "finished": [],
+        "id": "W-1642",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "S23-unreadable-is-not-clean",
+        "orphan": false,
+        "outputs": 0,
+        "running": true
+      },
+      {
         "finished": [
           "V5-battery-freeze"
         ],
@@ -577,11 +610,11 @@
   },
   "blocking_findings": 1,
   "board": {
-    "available": 29,
-    "blocked": 2,
-    "claimed": 2,
+    "available": 24,
+    "blocked": 3,
+    "claimed": 5,
     "done": 55,
-    "listing": "=== available (ͨ�ù��˿��� 20) ===\n  p1  A3-campaign-devpile          cell=A3  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p1  A3-campaign-level2           cell=A3  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p1  S17-fleet-evidence-capture   cell=S17 territory=fleet-study    lane:infra������ͣ�ڣ��ѽ�⣩\n  p1  S23-unreadable-is-not-clean  cell=S23 territory=release        lane:infra������ͣ�ڣ��ѽ�⣩\n  p1  S24-merge-conflict-drain     cell=S24 territory=merge          lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  A8-campaign-ledger-pipeline  cell=A8  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p2  P12-paper-multi-review       cell=P12 territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  P13-paper-intro-abstract     cell=P13 territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  P14-honesty-section          cell=P14 territory=paper          lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  S16-silent-failure-hunt      cell=S16 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S19-session-liveness         cell=S19 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S20-gate-negative-sample     cell=S20 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S21-app-session-death        cell=S21 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  A4b-ablation-calibrate       cell=A2  territory=ablation-arm   lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  A6-transfer-protocol         cell=A3  territory=cold-start-a3  lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  E3-engines-online            cell=E3  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  S22-access-check-close       cell=S22 territory=arc-recon      lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  S7-ledger-hashchain          cell=S3  territory=proxy          lane:infra������ͣ�ڣ��ѽ�⣩\n  p4  S4-freeze                    cell=S4  territory=freeze         lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  E8-ic3-scale                 cell=E2  territory=engine-rig     unlaned\n=== reserved�����������������о�Ա���� 9�� ===\n  p2  E12-adopt-the-unsolvable-canon lane=verify   owner=RES-3(1����ǰ) territory=engine-rig\n  p2  E15-solver-status-bit        lane=verify   owner=RES-3(1����ǰ) territory=engine-rig\n  p2  V5-verdict-three-types       lane=verify   owner=RES-3(1����ǰ) territory=exam\n  p2  V7-exam-stress-fanout        lane=verify   owner=RES-3(1����ǰ) territory=exam\n  p2  V8-judge-trust-audit         lane=verify   owner=RES-3(1����ǰ) territory=exam\n  p2  V9-battery-gaming-audit      lane=verify   owner=RES-3(1����ǰ) territory=battery\n  p3  E13-engine-section-numbers   lane=verify   owner=RES-3(1����ǰ) territory=engine-rig\n  p3  V18-battery-prereg-check     lane=verify   owner=RES-3(1����ǰ) territory=battery\n  p3  V6-exam-on-sealed-dryrun     lane=verify   owner=RES-3(1����ǰ) territory=exam\n=== blocked ===\n  S18-fleetkit-extract         waits on S17-fleet-evidence-capture\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  C10-unsolvable-proof-canon   by RES-3\n  V19-unverified-is-not-true   by RES-3\n=== done (55) ===\n  A4-ablation-online.superseded-by-A4a\n  A4a-ablation-build.RES-1\n  A7-envelope-finish.APP-A7\n  A9-readonly-baseline.RES-3\n  C1-worldgen.W-1610\n  C11-tool-failure-as-truth.RES-3\n  C4-deadlock-lean.W-1541\n  C6-worldgen-mutate.W-1251\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  C9-count-lock-vocabulary.W-131\n  E10-engine-crosscheck.RES-3\n  E11-engine-crosscheck-deep.RES-3\n  E14-crash-is-not-a-finding.RES-3\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  E5-cert-recheck.W-1411\n  E6-engine-dividend.W-130\n  E7-deadlock-claim-audit.W-130\n  E9-engine-paper-table.RES-3\n  P10-figures-into-paper.W-1253\n  P11-battery-section-refresh.RES-2\n  P4-figures.W-1611\n  P5-release.RES-2\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  R2-release-licence.W-1412\n  S1-quota-auto-exit.W-1250\n  S10-invariant-on-resource.W-1251\n  S11-sealed-halfguard.W-1410\n  S12-quota-hold-tests.W-1412\n  S13-verify-gate-enforced.RES-1\n  S14-gates-for-all.RES-4\n  S15-ledger-hashchain.RES-4\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S5-phase1-close.W-1250\n  S6-merge-gate-509.superseded-by-derived-gate\n  S8-provenance-backfill.W-1412\n  S9-contract-change-protocol.W-1250\n  V10-fuzz-mutation-power.RES-3\n  V11-handover-auto.RES-3\n  V11-negative-control-census.RES-3\n  V12-worldgen-gate-deaf.RES-3\n  V13-audit-the-published-surface.RES-3\n  V14-standing-negative-control-probe.RES-3\n  V15-census-sampling-frame.RES-3\n  V16-determinism-has-no-caller.RES-3\n  V17-pin-the-partial-verdict.RES-3\n  V2-exam-on-worldgen.W-1540\n  V3-battery-discrimination.APP-V3\n  V4-exam-selftest.RES-1\n  V5-battery-freeze.W-252"
+    "listing": "=== available (ͨ�ù��˿��� 14) ===\n  p1  S24-merge-conflict-drain     cell=S24 territory=merge          lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  P12-paper-multi-review       cell=P12 territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  P13-paper-intro-abstract     cell=P13 territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  P14-honesty-section          cell=P14 territory=paper          lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  S16-silent-failure-hunt      cell=S16 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S19-session-liveness         cell=S19 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S20-gate-negative-sample     cell=S20 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S21-app-session-death        cell=S21 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  A4b-ablation-calibrate       cell=A2  territory=ablation-arm   lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  A6-transfer-protocol         cell=A3  territory=cold-start-a3  lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  S22-access-check-close       cell=S22 territory=arc-recon      lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  S7-ledger-hashchain          cell=S3  territory=proxy          lane:infra������ͣ�ڣ��ѽ�⣩\n  p4  S4-freeze                    cell=S4  territory=freeze         lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  E8-ic3-scale                 cell=E2  territory=engine-rig     unlaned\n=== reserved�����������������о�Ա���� 10�� ===\n  p1  E16-verdict-must-gate        lane=verify   owner=RES-3(7����ǰ) territory=engine-rig\n  p2  E12-adopt-the-unsolvable-canon lane=verify   owner=RES-3(7����ǰ) territory=engine-rig\n  p2  E15-solver-status-bit        lane=verify   owner=RES-3(7����ǰ) territory=engine-rig\n  p2  V5-verdict-three-types       lane=verify   owner=RES-3(7����ǰ) territory=exam\n  p2  V7-exam-stress-fanout        lane=verify   owner=RES-3(7����ǰ) territory=exam\n  p2  V8-judge-trust-audit         lane=verify   owner=RES-3(7����ǰ) territory=exam\n  p2  V9-battery-gaming-audit      lane=verify   owner=RES-3(7����ǰ) territory=battery\n  p3  E13-engine-section-numbers   lane=verify   owner=RES-3(7����ǰ) territory=engine-rig\n  p3  V18-battery-prereg-check     lane=verify   owner=RES-3(7����ǰ) territory=battery\n  p3  V6-exam-on-sealed-dryrun     lane=verify   owner=RES-3(7����ǰ) territory=exam\n=== blocked ===\n  E17-held-out-validation      waits on E16-verdict-must-gate\n  S18-fleetkit-extract         waits on S17-fleet-evidence-capture\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A3-campaign-devpile          by W-1640\n  C10-unsolvable-proof-canon   by RES-3\n  S17-fleet-evidence-capture   by W-1641\n  S23-unreadable-is-not-clean  by W-1642\n  V19-unverified-is-not-true   by RES-3\n=== done (55) ===\n  A4-ablation-online.superseded-by-A4a\n  A4a-ablation-build.RES-1\n  A7-envelope-finish.APP-A7\n  A9-readonly-baseline.RES-3\n  C1-worldgen.W-1610\n  C11-tool-failure-as-truth.RES-3\n  C4-deadlock-lean.W-1541\n  C6-worldgen-mutate.W-1251\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  C9-count-lock-vocabulary.W-131\n  E10-engine-crosscheck.RES-3\n  E11-engine-crosscheck-deep.RES-3\n  E14-crash-is-not-a-finding.RES-3\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  E5-cert-recheck.W-1411\n  E6-engine-dividend.W-130\n  E7-deadlock-claim-audit.W-130\n  E9-engine-paper-table.RES-3\n  P10-figures-into-paper.W-1253\n  P11-battery-section-refresh.RES-2\n  P4-figures.W-1611\n  P5-release.RES-2\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  R2-release-licence.W-1412\n  S1-quota-auto-exit.W-1250\n  S10-invariant-on-resource.W-1251\n  S11-sealed-halfguard.W-1410\n  S12-quota-hold-tests.W-1412\n  S13-verify-gate-enforced.RES-1\n  S14-gates-for-all.RES-4\n  S15-ledger-hashchain.RES-4\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S5-phase1-close.W-1250\n  S6-merge-gate-509.superseded-by-derived-gate\n  S8-provenance-backfill.W-1412\n  S9-contract-change-protocol.W-1250\n  V10-fuzz-mutation-power.RES-3\n  V11-handover-auto.RES-3\n  V11-negative-control-census.RES-3\n  V12-worldgen-gate-deaf.RES-3\n  V13-audit-the-published-surface.RES-3\n  V14-standing-negative-control-probe.RES-3\n  V15-census-sampling-frame.RES-3\n  V16-determinism-has-no-caller.RES-3\n  V17-pin-the-partial-verdict.RES-3\n  V2-exam-on-worldgen.W-1540\n  V3-battery-discrimination.APP-V3\n  V4-exam-selftest.RES-1\n  V5-battery-freeze.W-252"
   },
   "con_green": 1,
   "constraints": [
@@ -749,6 +782,13 @@
       "title": "工具的失败状态被当成世界的性质：340 处判据点扫出 48 处不安全【已裁决·监控代行：五件上板】"
     },
     {
+      "action": "【已裁决·监控代行 2026-07-29】(1) 论文改词：在 E17 交付之前，正文凡写「已验证」处一律改为「在观测证据上自洽」——不是措辞保守，是那些格子当前的真实含义；已写进 P14-honesty-section。(2) 两件上板且**不许合并**（验收线一个是接线、一个是新数字）：E16-verdict-must-gate（两处判决接到头条字段 + 负样本）、E17-held-out-validation（ENGINE_TABLE 边界列先写实话，再给 zero_space/lp_potential 各补一次真留出验证）。依据：RES-3 自己提出的切法，与 A9/V16 同一条——把验收线切到能被复核的大小。",
+      "body": "对偶普查（RES-3 第四路，约 105 处判据点，判不安全 8 处）的最重一条：`grep -ril \"held_out|held-out\" engine-rig/engines engine-rig/tools` **零命中**，而 `zero_space.verify` 是在**拟合它的同一条轨迹上**复验的——按 GF(2) 的构造那近乎恒真，那句 AssertionError 几乎不可能触发。\n\n三条独立发现指向同一件事：DECISIONS 的 D-003 明写 zero_space 只承诺在观测证据上守恒（边界，不是缺陷）；E9 把 g50t 放在该边界的**已测**一侧，而那一侧从来没有东西检查过正确性；本轮发现整个 rig 没有留出验证。\n\n**同一路的正面结果同等重要，不许只报病例**：「求解器返回计划就认定可解」在本仓库**没有发生**——`fd_adapter` 三档全部无条件 validate_plan()，且 `validate.py` **刻意不 import `search`**：验证器不认识搜索器，这是结构保证而非承诺。这是「引擎提议、LLM 裁决」少有的硬证据。\n\n对偶的真实形状不是「没验」，是**「验了、写进产物、然后不拿它把关」**：`lp_potential/potential.py:255` 的 `\"admissible\": True` 是字面量，而真检查躺在同一份 payload 的 `admissibility_check` 里；`deadlock_carver.run()` 是 carve→report→emit 中间没有一个 if，于是一条定理和一份证伪它的报告并排发布，谁也不压过谁。",
+      "id": "F-18",
+      "severity": "high",
+      "title": "engine-rig 全仓没有留出验证——「已验证」在很多格里的意思是「在拟合它的数据上自洽」【已裁决·监控代行：论文改词 + 两件上板】"
+    },
+    {
       "action": "Theoria.md 1.8『概念是一次压缩动作』需要补一句：概念的压缩账目以『不解释该像素』为基准，而不解释是无限代价。这是基准文件的修订，不是代码的。",
       "body": "A0 的 O-04：Button 与 Door 的压缩账目是负的（−17 / −13 bit）。约束 5『无收益不入册』要求拒绝；约束 2『全帧责任制』要求接受（否则两个像素永远没人认领，廉价层在 frame 0 就失败）。\n\nA0 的处理是对的 —— 照收，并把负数如实写进 theory.dsl，不粉饰。但这是把矛盾**记录**下来，不是**解决**它。THEORIZE_LOG 的诊断我认为是准确的：压缩账目在比较错误的替代方案 —— 『把像素编辑编码进去』不是真正的替代，『永远不解释这个格子』才是，而后者在这套记账法里根本没有价格。",
       "id": "F-04",
@@ -847,7 +887,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-29 07:03:11",
+  "generated_at": "2026-07-29 07:41:20",
   "grid": {
     "A1": {
       "active": [
@@ -1538,6 +1578,52 @@
         }
       },
       "ts": "2026-07-29 04:36:41"
+    },
+    {
+      "findings": {
+        "blocking": 1,
+        "high": 7,
+        "info": 7,
+        "low": 3,
+        "medium": 2
+      },
+      "paper_progress": 50.0,
+      "progress": 42.5,
+      "sections": {
+        "Claim 菜单": {
+          "blocked": 2,
+          "missing": 2,
+          "partial": 1
+        },
+        "Phase 1 · 封闭系统": {
+          "green": 9,
+          "partial": 7
+        },
+        "Phase 2 · 指标电池": {
+          "green": 1,
+          "partial": 2
+        },
+        "Phase 3 · 框架迭代（开发堆）": {
+          "missing": 2,
+          "partial": 3,
+          "risk": 1
+        },
+        "Phase 4 · 确证（封存堆）": {
+          "missing": 5,
+          "partial": 1
+        },
+        "十条强制约束": {
+          "green": 1,
+          "missing": 2,
+          "partial": 5,
+          "risk": 2
+        },
+        "车间八工序": {
+          "green": 7,
+          "partial": 2
+        }
+      },
+      "ts": "2026-07-29 07:41:12"
     }
   ],
   "iteration_loop": [
@@ -1778,27 +1864,21 @@
       "ablation-arm/artifacts/run_all.json",
       "ablation-arm/artifacts/verify.json",
       "monitor/board/board.log",
-      "monitor/board/claimed/C11-tool-failure-as-truth.RES-3.md",
-      "monitor/board/items/V19-unverified-is-not-true.md",
-      "monitor/bus/RES-3/cursor.json",
-      "monitor/bus/RES-3/out.jsonl",
-      "monitor/ci/CONFLICT-origin_agent_s14-gates-for-all.md",
-      "monitor/ci/CONFLICT-origin_agent_s17-fleet-evidence-capture.md",
-      "monitor/ci/CONFLICT-origin_agent_v11-negative-control-census.md",
-      "monitor/ci/CONFLICT-origin_agent_v12-worldgen-gate-deaf.md",
-      "monitor/ci/CONFLICT-origin_agent_v13-audit-the-published-surface.md",
-      "monitor/ci/CONFLICT-origin_agent_v14-standing-negative-control-probe.md",
-      "monitor/ci/CONFLICT-origin_agent_v15-census-sampling-frame.md",
-      "monitor/ci/CONFLICT-origin_agent_v17-pin-the-partial-verdict.md",
+      "monitor/board/items/A3-campaign-devpile.md",
+      "monitor/board/items/P14-honesty-section.md",
+      "monitor/board/items/S17-fleet-evidence-capture.md",
+      "monitor/board/items/S23-unreadable-is-not-clean.md",
+      "monitor/bus/RES-3/in.jsonl",
+      "monitor/ci/CONFLICT-origin_agent_e9-engine-paper-table.md",
       "monitor/ci/CONFLICT-origin_agent_v5-battery-freeze.md",
       "monitor/ci/merge.log",
-      "monitor/ci_merge.py",
+      "monitor/inbox/20260729T104500Z-RES-3-the-dual-exists-and-it-has-a-different-shape.md -> monitor/inbox/archive/20260729T104500Z-RES-3-the-dual-exists-and-it-has-a-different-shape.md",
       "monitor/index.html",
       "monitor/ops-status/RES-3.json",
-      "monitor/quota_state.json",
+      "monitor/reflex.lock",
       "monitor/reflex.log",
+      "monitor/spec.py",
       "monitor/state.json",
-      "monitor/tests/test_gates.py",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
@@ -1810,21 +1890,22 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/V19-unverified-is-not-true.RES-3.md",
-      "monitor/board/done/C11-tool-failure-as-truth.RES-3.md",
-      "monitor/board/items/S24-merge-conflict-drain.md",
-      "monitor/inbox/20260729T104500Z-RES-3-the-dual-exists-and-it-has-a-different-shape.md",
-      "monitor/reflex.lock",
+      "monitor/board/claimed/A3-campaign-devpile.W-1640.md",
+      "monitor/board/claimed/S17-fleet-evidence-capture.W-1641.md",
+      "monitor/board/claimed/S23-unreadable-is-not-clean.W-1642.md",
+      "monitor/board/items/E16-verdict-must-gate.md",
+      "monitor/board/items/E17-held-out-validation.md",
+      "monitor/ci/merge.lock",
       "theoria-arm/.pytest-runs/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "9348fa4 Merge remote-tracking branch 'origin/agent/v17-pin-the-partial-verdict' into HEAD",
+    "git_head": "bac8282 audit: cycle 24 -- six runs are dated in the future",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 135,
-    "sync_last": "2026-07-29T08:30:00Z",
+    "sync_entries": 136,
+    "sync_last": "2026-07-29T11:25:00Z",
     "tests": {},
     "untracked": [
       ".claude/",
@@ -1838,11 +1919,12 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/V19-unverified-is-not-true.RES-3.md",
-      "monitor/board/done/C11-tool-failure-as-truth.RES-3.md",
-      "monitor/board/items/S24-merge-conflict-drain.md",
-      "monitor/inbox/20260729T104500Z-RES-3-the-dual-exists-and-it-has-a-different-shape.md",
-      "monitor/reflex.lock",
+      "monitor/board/claimed/A3-campaign-devpile.W-1640.md",
+      "monitor/board/claimed/S17-fleet-evidence-capture.W-1641.md",
+      "monitor/board/claimed/S23-unreadable-is-not-clean.W-1642.md",
+      "monitor/board/items/E16-verdict-must-gate.md",
+      "monitor/board/items/E17-held-out-validation.md",
+      "monitor/ci/merge.lock",
       "theoria-arm/.pytest-runs/"
     ]
   },
@@ -2302,7 +2384,7 @@
       "status": "partial"
     },
     "conflict_scan": {
-      "detail": "跨领地提交（一个 commit 改了多个轨道 —— 领地纪律被破）：70ee419 E14: every crash made the health certificate look cleane（engine-rig+theoria-arm）； eb73e4a OPS-B cycle 9: 条款巡检第二次 —— 四页 NO-DRIFT（browser-ops+monitor）",
+      "detail": "跨领地提交（一个 commit 改了多个轨道 —— 领地纪律被破）：70ee419 E14: every crash made the health certificate look cleane（engine-rig+theoria-arm）",
       "status": "risk"
     },
     "credential_hygiene": {
@@ -2320,35 +2402,35 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 43 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md, 20260728T142000Z-W-1251-open-spec-json-carries-the-verdict-and-most-of-the-rule-set.md, 20260728T142100Z-W-1251-t2-switch-push-also-breaks-the-miner-and-a-forbidden-action-is-unlearnable.md, 20260728T143000Z-W-1253-p10-territory-and-a-latent-render-defect.md, 20260728T143836Z-opsm-reflex-stalls-are-invisible.md, 20260728T145500Z-W-1252-handover-package-found-four-generator-defects.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md, 20260728T1500Z-W-1412-s12-audit-two-doors-without-exits.md, 20260728T150200Z-W-1411-cert-recheck-findings.md, 20260728T151000Z-W-1250-board-done-is-not-idempotent-on-windows-and-it-locks-territories.md, 20260728T151500Z-W-1251-the-concurrency-gate-is-blind-right-now-24-agents-and-6gb-free.md, 20260728T151500Z-W-1252-count-lock-is-a-tracking-bug-not-a-vocabulary-gap.md, 20260728T151500Z-W-1253-v6-released-with-design.md, 20260728T1520Z-W-1412-self-report-master-push.md, 20260728T152500Z-W-1250-two-phase1-items-can-go-green-and-their-notes-are-stale.md, 20260728T153030Z-RES-3-worldgen-qc-gate-pinned.md, 20260728T153500Z-RES-3-figures-verify-is-red-on-master.md, 20260728T154500Z-RES-3-sealed-contact-audit-cannot-fail.md, 20260728T154800Z-RES-4-two-live-silent-failures.md, 20260728T160000Z-RES-2-p5-done-and-two-findings-for-other-territories.md, 20260728T161500Z-opsm-adjudication-14-flags-gate-runner-broken.md, 20260728T164500Z-RES-2-upstream-defects-battery-and-exam.md, 20260728T170640Z-opsm-the-verify-gate-runs-under-wsl.md, 20260728T171500Z-RES-3-correction-sealed-audit-and-the-bigger-hole.md, 20260728T175900Z-V16-determinism-definition-gap.md, 20260728T180000Z-W-131-the-segmenter-prefers-teleporting-identity-to-moving-a-body.md, 20260728T183000Z-W-131-board-empty-for-a-generic-worker-with-28-items-on-it.md, 20260728T191500Z-W-250-app-v3-was-alive-a-liveness-verdict-refuted-five-minutes-later.md, 20260728T192000Z-W-252-freeze-list-cannot-cover-two-of-three-primary-endpoints.md, 20260728T194500Z-RES-1-four-territories-still-ungated.md, 20260728T194500Z-W-252-addendum-board-state-moved-while-i-worked.md, 20260728T204349Z-W-1622-supply-low-zero-is-the-guard-measuring-itself.md, 20260728T204718Z-W-1620-the-jam-is-not-the-lane-guard-eight-branches-die-on-a-backslash.md, 20260728T205239Z-W-1621-the-board-reads-empty-for-a-different-reason-than-you-wrote-down.md, 20260728T212000Z-RES-1-relpath-determinism.md, 20260728T213500Z-W-1630-fleet-study-cannot-merge.md, 20260729T014500Z-RES-3-e11-crosscheck-findings-for-engine-rig.md, 20260729T021500Z-RES-3-cegis-lifted-rules-and-the-missing-object-binding.md, 20260729T024500Z-W-130-deadlock-claim-wording-for-1.9.md, 20260729T041500Z-W-130-e6-engine-dividend-done.md, 20260729T104500Z-RES-3-the-dual-exists-and-it-has-a-different-shape.md",
+      "detail": "待裁决提案 42 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md, 20260728T142000Z-W-1251-open-spec-json-carries-the-verdict-and-most-of-the-rule-set.md, 20260728T142100Z-W-1251-t2-switch-push-also-breaks-the-miner-and-a-forbidden-action-is-unlearnable.md, 20260728T143000Z-W-1253-p10-territory-and-a-latent-render-defect.md, 20260728T143836Z-opsm-reflex-stalls-are-invisible.md, 20260728T145500Z-W-1252-handover-package-found-four-generator-defects.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md, 20260728T1500Z-W-1412-s12-audit-two-doors-without-exits.md, 20260728T150200Z-W-1411-cert-recheck-findings.md, 20260728T151000Z-W-1250-board-done-is-not-idempotent-on-windows-and-it-locks-territories.md, 20260728T151500Z-W-1251-the-concurrency-gate-is-blind-right-now-24-agents-and-6gb-free.md, 20260728T151500Z-W-1252-count-lock-is-a-tracking-bug-not-a-vocabulary-gap.md, 20260728T151500Z-W-1253-v6-released-with-design.md, 20260728T1520Z-W-1412-self-report-master-push.md, 20260728T152500Z-W-1250-two-phase1-items-can-go-green-and-their-notes-are-stale.md, 20260728T153030Z-RES-3-worldgen-qc-gate-pinned.md, 20260728T153500Z-RES-3-figures-verify-is-red-on-master.md, 20260728T154500Z-RES-3-sealed-contact-audit-cannot-fail.md, 20260728T154800Z-RES-4-two-live-silent-failures.md, 20260728T160000Z-RES-2-p5-done-and-two-findings-for-other-territories.md, 20260728T161500Z-opsm-adjudication-14-flags-gate-runner-broken.md, 20260728T164500Z-RES-2-upstream-defects-battery-and-exam.md, 20260728T170640Z-opsm-the-verify-gate-runs-under-wsl.md, 20260728T171500Z-RES-3-correction-sealed-audit-and-the-bigger-hole.md, 20260728T175900Z-V16-determinism-definition-gap.md, 20260728T180000Z-W-131-the-segmenter-prefers-teleporting-identity-to-moving-a-body.md, 20260728T183000Z-W-131-board-empty-for-a-generic-worker-with-28-items-on-it.md, 20260728T191500Z-W-250-app-v3-was-alive-a-liveness-verdict-refuted-five-minutes-later.md, 20260728T192000Z-W-252-freeze-list-cannot-cover-two-of-three-primary-endpoints.md, 20260728T194500Z-RES-1-four-territories-still-ungated.md, 20260728T194500Z-W-252-addendum-board-state-moved-while-i-worked.md, 20260728T204349Z-W-1622-supply-low-zero-is-the-guard-measuring-itself.md, 20260728T204718Z-W-1620-the-jam-is-not-the-lane-guard-eight-branches-die-on-a-backslash.md, 20260728T205239Z-W-1621-the-board-reads-empty-for-a-different-reason-than-you-wrote-down.md, 20260728T212000Z-RES-1-relpath-determinism.md, 20260728T213500Z-W-1630-fleet-study-cannot-merge.md, 20260729T014500Z-RES-3-e11-crosscheck-findings-for-engine-rig.md, 20260729T021500Z-RES-3-cegis-lifted-rules-and-the-missing-object-binding.md, 20260729T024500Z-W-130-deadlock-claim-wording-for-1.9.md, 20260729T041500Z-W-130-e6-engine-dividend-done.md",
       "status": "partial"
     },
     "needs_human": {
-      "detail": "需要你重开的会话：OPS-M 合并裁判（354 分钟没心跳）； RES-1 在线战役研究员（445 分钟没心跳）； RES-2 论文与释出研究员（441 分钟没心跳）； RES-4 基础设施研究员（413 分钟没心跳）",
+      "detail": "需要你重开的会话：OPS-M 合并裁判（392 分钟没心跳）； RES-1 在线战役研究员（483 分钟没心跳）； RES-2 论文与释出研究员（479 分钟没心跳）； RES-4 基础设施研究员（451 分钟没心跳）",
       "rows": [
         {
           "id": "OPS-M",
           "name": "合并裁判",
           "prompt": "monitor/prompts/ops/OPS-M.md",
-          "why": "354 分钟没心跳"
+          "why": "392 分钟没心跳"
         },
         {
           "id": "RES-1",
           "name": "在线战役研究员",
           "prompt": "monitor/prompts/ops/RES-1.md",
-          "why": "445 分钟没心跳"
+          "why": "483 分钟没心跳"
         },
         {
           "id": "RES-2",
           "name": "论文与释出研究员",
           "prompt": "monitor/prompts/ops/RES-2.md",
-          "why": "441 分钟没心跳"
+          "why": "479 分钟没心跳"
         },
         {
           "id": "RES-4",
           "name": "基础设施研究员",
           "prompt": "monitor/prompts/ops/RES-4.md",
-          "why": "413 分钟没心跳"
+          "why": "451 分钟没心跳"
         }
       ],
       "status": "risk"
@@ -2358,19 +2440,19 @@
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第23轮 idle（13 分钟前）； OPS-B 第10轮 idle（134 分钟前）； OPS-M 第8轮 blocked（354 分钟前）； OPS-R 第2轮 working（445 分钟前）",
+      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第24轮 idle（18 分钟前）； OPS-B 第10轮 idle（172 分钟前）； OPS-M 第8轮 blocked（392 分钟前）； OPS-R 第2轮 working（483 分钟前）",
       "rows": [
         {
-          "age_min": 13,
-          "cycle": 23,
+          "age_min": 18,
+          "cycle": 24,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "cycle 23: gates.py is committed and the verify.sh class went 3 to 0; 61 merges tonight. The blockage changed shape rather than shrinking -- 9 merge conflicts and 6 branches waiting on OPS-M, silent 339 minutes, for a territory ruling that needs no code. Corrected my own speculation that monitor/verify.sh was hanging.",
+          "note": "cycle 24: verify-lab landed so the census is checkable and the territory class went 6 to 0; blockage 19 to 13, nine of them merge conflicts. New finding: six run directories carry UTC stamps in the future, up to 18.7 hours, and two copy the false value into MANIFEST.utc -- a wrong anchor is worse than a missing one because it looks usable.",
           "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 134,
+          "age_min": 172,
           "cycle": 10,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -2379,7 +2461,7 @@
           "status": "green"
         },
         {
-          "age_min": 354,
+          "age_min": 392,
           "cycle": 8,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2388,7 +2470,7 @@
           "status": "risk"
         },
         {
-          "age_min": 445,
+          "age_min": 483,
           "cycle": 2,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2405,7 +2487,7 @@
       "status": "green"
     },
     "provenance_scan": {
-      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：3 个 run（正典 2，**无留痕 1**），最新 20260728T191437Z-A9-readonly-baseline； arc-recon：3 个 run（正典 3），最新 P-11； baseline-arms：1 个 run（正典 1），最新 20260728T103135Z-a7； battery：2 个 run（正典 2），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：1 个 run（正典 1），最新 p-17； engine-rig：5 个 run（正典 4，非正典 1(md)），最新 p13-fd-real； exam：5 个 run（正典 5），最新 p15-rehearsal-01； figures：3 个 run（正典 2，**无留痕 1**），最新 20260728T110000Z-P8-billshape-pipeline； fleet-study：1 个 run（正典 1），最新 20260728T151500Z-S17； fuzzlab：3 个 run（正典 3），最新 20260728T161127Z-V13-audit-the-published-surface； proxy：3 个 run（正典 3），最新 p9-shell-harden； release：1 个 run（正典 1），最新 20260728T140000Z-P5； theoria-arm：12 个 run（正典 5，**无留痕 7**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：6 个 run（正典 5，**无留痕 1**），最新 P-10； verify-lab：4 个 run（正典 4），最新 20260729T180000Z-V17-pin-the-partial-verdict； worldgen：3 个 run（正典 3），最新 20260728T172500Z-V16-determinism-has-no-caller。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, papers。",
+      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：3 个 run（正典 2，**无留痕 1**），最新 20260728T191437Z-A9-readonly-baseline； arc-recon：3 个 run（正典 3），最新 P-11； baseline-arms：1 个 run（正典 1），最新 20260728T103135Z-a7； battery：2 个 run（正典 2），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：1 个 run（正典 1），最新 p-17； engine-rig：6 个 run（正典 5，非正典 1(md)），最新 p13-fd-real； exam：5 个 run（正典 5），最新 p15-rehearsal-01； figures：3 个 run（正典 2，**无留痕 1**），最新 20260728T110000Z-P8-billshape-pipeline； fleet-study：1 个 run（正典 1），最新 20260728T151500Z-S17； fuzzlab：3 个 run（正典 3），最新 20260728T161127Z-V13-audit-the-published-surface； proxy：3 个 run（正典 3），最新 p9-shell-harden； release：1 个 run（正典 1），最新 20260728T140000Z-P5； theoria-arm：12 个 run（正典 5，**无留痕 7**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：6 个 run（正典 5，**无留痕 1**），最新 P-10； verify-lab：4 个 run（正典 4），最新 20260729T180000Z-V17-pin-the-partial-verdict； worldgen：3 个 run（正典 3），最新 20260728T172500Z-V16-determinism-has-no-caller。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, papers。",
       "status": "partial"
     },
     "scheduled_tasks": {
@@ -2413,19 +2495,19 @@
       "status": "risk"
     },
     "self_driving": {
-      "detail": "RES-1 第2轮 working（445 分钟前）**疑似停下等人**； RES-2 第4轮 working（441 分钟前）**疑似停下等人**； RES-3 第34轮 working（1 分钟前）； RES-4 第6轮 working（413 分钟前）**疑似停下等人**　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。",
+      "detail": "RES-1 第2轮 working（483 分钟前）**疑似停下等人**； RES-2 第4轮 working（479 分钟前）**疑似停下等人**； RES-3 第35轮 working（7 分钟前）； RES-4 第6轮 working（451 分钟前）**疑似停下等人**　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。",
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 93 个提交 / 18 次合并（判断陈旧到 risk 就该重扫）。",
+      "detail": "spec.py 落后 103 个提交 / 19 次合并（判断陈旧到 risk 就该重扫）。",
       "status": "risk"
     },
     "spend": {
-      "detail": "开发堆战役包 $200，已花 **$31.75**，剩 $168.25（5503 条记账）；分战役：arc-recon-canary-quick $0.00、mock_arm:r-45bad196843c4e7c $0.00、phase3-unit-price-recheck $1.36、phase3-unit-price-remeasure $19.83",
+      "detail": "开发堆战役包 $200，已花 **$31.75**，剩 $168.25（5687 条记账）；分战役：arc-recon-canary-quick $0.00、mock_arm:r-45bad196843c4e7c $0.00、phase3-unit-price-recheck $1.36、phase3-unit-price-remeasure $19.83",
       "status": "green"
     },
     "supply": {
-      "detail": "板上 29 件可领、2 件在做，供货充足。",
+      "detail": "板上 24 件可领、5 件在做，供货充足。",
       "status": "green"
     },
     "verify_gates": {

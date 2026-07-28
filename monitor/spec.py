@@ -542,6 +542,37 @@ FINDINGS = [
                   "cold-start-a0/ 的同族缺陷只登记进 PARTNER_SYNC，不动手（非本轨道领地）。",
     },
     {
+        "id": "F-18",
+        "severity": "high",
+        "title": "engine-rig 全仓没有留出验证——「已验证」在很多格里的意思是"
+                 "「在拟合它的数据上自洽」【已裁决·监控代行：论文改词 + 两件上板】",
+        "body": "对偶普查（RES-3 第四路，约 105 处判据点，判不安全 8 处）的最重一条："
+                "`grep -ril \"held_out|held-out\" engine-rig/engines engine-rig/tools` "
+                "**零命中**，而 `zero_space.verify` 是在**拟合它的同一条轨迹上**复验的——"
+                "按 GF(2) 的构造那近乎恒真，那句 AssertionError 几乎不可能触发。\n\n"
+                "三条独立发现指向同一件事：DECISIONS 的 D-003 明写 zero_space 只承诺"
+                "在观测证据上守恒（边界，不是缺陷）；E9 把 g50t 放在该边界的**已测**一侧，"
+                "而那一侧从来没有东西检查过正确性；本轮发现整个 rig 没有留出验证。\n\n"
+                "**同一路的正面结果同等重要，不许只报病例**：「求解器返回计划就认定可解」"
+                "在本仓库**没有发生**——`fd_adapter` 三档全部无条件 validate_plan()，"
+                "且 `validate.py` **刻意不 import `search`**：验证器不认识搜索器，"
+                "这是结构保证而非承诺。这是「引擎提议、LLM 裁决」少有的硬证据。\n\n"
+                "对偶的真实形状不是「没验」，是**「验了、写进产物、然后不拿它把关」**："
+                "`lp_potential/potential.py:255` 的 `\"admissible\": True` 是字面量，"
+                "而真检查躺在同一份 payload 的 `admissibility_check` 里；"
+                "`deadlock_carver.run()` 是 carve→report→emit 中间没有一个 if，"
+                "于是一条定理和一份证伪它的报告并排发布，谁也不压过谁。",
+        "action": "【已裁决·监控代行 2026-07-29】(1) 论文改词：在 E17 交付之前，"
+                  "正文凡写「已验证」处一律改为「在观测证据上自洽」——不是措辞保守，"
+                  "是那些格子当前的真实含义；已写进 P14-honesty-section。"
+                  "(2) 两件上板且**不许合并**（验收线一个是接线、一个是新数字）："
+                  "E16-verdict-must-gate（两处判决接到头条字段 + 负样本）、"
+                  "E17-held-out-validation（ENGINE_TABLE 边界列先写实话，再给 "
+                  "zero_space/lp_potential 各补一次真留出验证）。"
+                  "依据：RES-3 自己提出的切法，与 A9/V16 同一条——"
+                  "把验收线切到能被复核的大小。",
+    },
+    {
         "id": "F-01",
         "severity": "info",
         "title": "【已裁决 2026-07-28：出路 (b)】A2 与切堆纪律的冲突",
