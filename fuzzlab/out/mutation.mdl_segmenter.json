@@ -1,0 +1,449 @@
+{
+  "campaign_seed": 104375253266434,
+  "campaign_seed_hex": "0x00005eedc1e4f002",
+  "coverage": {
+    "mdl_segmenter": {
+      "baseline_dirty_worlds": 0,
+      "invariants": [
+        "events_agree_with_tracks",
+        "masks_follow_anchors",
+        "masks_partition_the_foreground",
+        "script_bits_identity"
+      ],
+      "invariants_no_mutant_kills": [],
+      "mutants": 11
+    }
+  },
+  "engine_rig_head": "baf1671",
+  "mutants": [
+    {
+      "claim": "a track's mask at frame t is the cells of the connected component actually found in that frame -- segmenter.py:segment_trajectory sets `track.masks[t+1] = cur[j].cells` where `cur` is `connected_components(frame)`, whose `seen` grid makes the components a partition of the non-background cells.",
+      "description": "move one track's anchors *and* masks by (0,+1) on every frame it is present. rel_cells is left alone, so the shape is still rigid and the frame-to-frame displacements are unchanged: the object is simply reported one column from where it is.",
+      "elapsed_s": 0.2,
+      "engine": "mdl_segmenter",
+      "expect_kill": [
+        "masks_partition_the_foreground"
+      ],
+      "id": "mdl-shift-track-rigidly",
+      "killed": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 40,
+        "script_bits_identity": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "seam": "_segment",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "events_agree_with_tracks": null,
+        "masks_follow_anchors": null,
+        "masks_partition_the_foreground": 1,
+        "script_bits_identity": null
+      }
+    },
+    {
+      "claim": "the tracks' masks are pairwise disjoint -- components come from one `seen` grid (segmenter.py:connected_components) and each surviving component is claimed by exactly one track through the bipartite assignment, so no cell is under two objects.",
+      "description": "list one track twice (the shape a bug in the `order` list of segment_trajectory would take, since tracks are read back as `[tracks[tid] for tid in order]`). track_id is kept, so the narration still matches and only disjointness breaks.",
+      "elapsed_s": 0.21,
+      "engine": "mdl_segmenter",
+      "expect_kill": [
+        "masks_partition_the_foreground"
+      ],
+      "id": "mdl-duplicate-track",
+      "killed": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 40,
+        "script_bits_identity": 0
+      },
+      "kind": "inconsistent",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "seam": "_segment",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "events_agree_with_tracks": null,
+        "masks_follow_anchors": null,
+        "masks_partition_the_foreground": 1,
+        "script_bits_identity": null
+      }
+    },
+    {
+      "claim": "`Track.rel_cells` is the object's translation-invariant shape -- segment_trajectory sets `rel_cells=comp.shape_key[0]`, documented at Component.shape_key as 'Translation-invariant identity: relative cells plus their colours', so mask == rel_cells at anchor is the engine's own identity.",
+      "description": "shift rel_cells by (+1,0), leaving anchors and masks untouched: the declared shape no longer reconstructs the mask, which is what a manual compiled from `to_payload`'s `cells` field would replay.",
+      "elapsed_s": 0.2,
+      "engine": "mdl_segmenter",
+      "expect_kill": [
+        "masks_follow_anchors"
+      ],
+      "id": "mdl-perturb-rel-cells",
+      "killed": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 40,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "kind": "inconsistent",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "seam": "_segment",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "events_agree_with_tracks": null,
+        "masks_follow_anchors": 1,
+        "masks_partition_the_foreground": null,
+        "script_bits_identity": null
+      }
+    },
+    {
+      "claim": "anchors[t] and masks[t] are set together and mean the same presence -- segment_trajectory writes the pair on every branch (`track.anchors[t+1] = cur[j].anchor; track.masks[t+1] = cur[j].cells`), and `__init__.py:candidates` reports coverage from masks while `to_payload` publishes anchors.",
+      "description": "drop one anchor while keeping its mask, at a frame whose predecessor is also present: the object's pixels are still reported and its position is not, and the transition into that frame now reads as an unnarrated vanish.",
+      "elapsed_s": 0.2,
+      "engine": "mdl_segmenter",
+      "expect_kill": [
+        "masks_follow_anchors",
+        "events_agree_with_tracks"
+      ],
+      "id": "mdl-forget-anchor",
+      "killed": {
+        "events_agree_with_tracks": 40,
+        "masks_follow_anchors": 40,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "kind": "inconsistent",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "seam": "_segment",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "events_agree_with_tracks": 1,
+        "masks_follow_anchors": 1,
+        "masks_partition_the_foreground": null,
+        "script_bits_identity": null
+      }
+    },
+    {
+      "claim": "a move event's (dy,dx) is the displacement the anchor actually took -- segmenter.py:_match_cost computes `dy, dx = br - ar, bc - ac` from the two components' anchors and hands exactly those params to the Event.",
+      "description": "add 1 to the first move event's dy. The script now narrates a displacement the object did not make, while its price and the masks stay as they were.",
+      "elapsed_s": 0.2,
+      "engine": "mdl_segmenter",
+      "expect_kill": [
+        "events_agree_with_tracks"
+      ],
+      "id": "mdl-flip-move-delta",
+      "killed": {
+        "events_agree_with_tracks": 39,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "seam": "_segment",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 39,
+      "worlds_inert": 1,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "events_agree_with_tracks": 1,
+        "masks_follow_anchors": null,
+        "masks_partition_the_foreground": null,
+        "script_bits_identity": null
+      }
+    },
+    {
+      "claim": "every anchor change is narrated, and the script's price is the sum of what it narrates -- segment_trajectory appends an Event and adds its bits to `transition_bits` in the same breath, on all three branches (pairs / gone / born).",
+      "description": "delete the first move/appear/vanish event. A state change the caller is never told about, and -- because the bits went with it -- a script that no longer adds up to its own declared cost.",
+      "elapsed_s": 0.2,
+      "engine": "mdl_segmenter",
+      "expect_kill": [
+        "events_agree_with_tracks",
+        "script_bits_identity"
+      ],
+      "id": "mdl-drop-narration",
+      "killed": {
+        "events_agree_with_tracks": 40,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 40
+      },
+      "kind": "incomplete",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "seam": "_segment",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "events_agree_with_tracks": 1,
+        "masks_follow_anchors": null,
+        "masks_partition_the_foreground": null,
+        "script_bits_identity": 1
+      }
+    },
+    {
+      "claim": "every transition pays `cost.b_header` in the script exactly as it does in the baseline -- costs.py: 'the two models share their per-transition header'; segment_trajectory opens each transition with `transition_bits = cost.b_header`.",
+      "description": "report script_bits 8 lower than the engine computed it: one transition header never charged. The narration is untouched, so only the accounting identity can see it -- and the understated script is the number D-005's acceptance ratio is read off.",
+      "elapsed_s": 0.2,
+      "engine": "mdl_segmenter",
+      "expect_kill": [
+        "script_bits_identity"
+      ],
+      "id": "mdl-skip-transition-header",
+      "killed": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 40
+      },
+      "kind": "degraded",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "seam": "_segment",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "events_agree_with_tracks": null,
+        "masks_follow_anchors": null,
+        "masks_partition_the_foreground": null,
+        "script_bits_identity": 1
+      }
+    },
+    {
+      "claim": "the engine narrates a move only when something moved, and never for free -- _match_cost returns `kind=None` when `a.cells == b.cells and a.colors == b.colors`, and costs.py:move_bits is b_evtype + b_objid + two offsets, so it is never below 6 bits.",
+      "description": "PREDICTED SURVIVOR: add a `move` event with (dy,dx)=(0,0) and bits=0 to a track at a transition where it did not move. events_agree_with_tracks checks each move event against the anchors, but a zero displacement is trivially consistent with a still anchor, and zero bits leave the identity intact -- so the script gains a sentence stating something that did not happen. Registered against events_agree_with_tracks because its docstring claims both directions ('an event describing a motion that did not happen is a false statement in the script').",
+      "elapsed_s": 0.2,
+      "engine": "mdl_segmenter",
+      "expect_kill": [
+        "events_agree_with_tracks"
+      ],
+      "id": "mdl-spurious-free-move",
+      "killed": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [
+        "events_agree_with_tracks"
+      ],
+      "raised_only": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "seam": "_segment",
+      "survived": true,
+      "survived_all_detection": true,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 39,
+      "worlds_inert": 1,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "events_agree_with_tracks": null,
+        "masks_follow_anchors": null,
+        "masks_partition_the_foreground": null,
+        "script_bits_identity": null
+      }
+    },
+    {
+      "claim": "an event's `bits` is its length under the published cost model -- costs.py move_bits / recolor_bits / vanish_bits / appear_bits, 'One scheme, published (see this engine's README.md), simple enough to re-derive by hand'; segment_trajectory stores that number on the Event and adds the same number to script_bits.",
+      "description": "PREDICTED SURVIVOR: halve one event's bits and take the same amount off script_bits. The accounting identity is closed under any change that moves both sides, so the engine can misprice an event by any amount as long as it misprices the total to match. Registered against script_bits_identity because it is the only invariant that reads bits at all.",
+      "elapsed_s": 0.2,
+      "engine": "mdl_segmenter",
+      "expect_kill": [
+        "script_bits_identity"
+      ],
+      "id": "mdl-misprice-event",
+      "killed": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "kind": "degraded",
+      "predicted_but_missed": [
+        "script_bits_identity"
+      ],
+      "raised_only": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "seam": "_segment",
+      "survived": true,
+      "survived_all_detection": true,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "events_agree_with_tracks": null,
+        "masks_follow_anchors": null,
+        "masks_partition_the_foreground": null,
+        "script_bits_identity": null
+      }
+    },
+    {
+      "claim": "`Track.color` is the object's uniform colour -- segment_trajectory sets `color=comp.uniform_color`, defined at Component.uniform_color as `colors[0] if len(set(colors)) == 1 else None`, and `__init__.py:to_payload` publishes it as the object_hypothesis payload's `color`.",
+      "description": "PREDICTED SURVIVOR: report a different palette colour for the first uniformly coloured track. The masks, the narration and the bits are all untouched, and no invariant reads `color` -- the manual would inherit a false fact of exactly the right shape. Registered against masks_partition_the_foreground as the only invariant that looks at a track's per-frame content at all.",
+      "elapsed_s": 0.2,
+      "engine": "mdl_segmenter",
+      "expect_kill": [
+        "masks_partition_the_foreground"
+      ],
+      "id": "mdl-flip-track-color",
+      "killed": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [
+        "masks_partition_the_foreground"
+      ],
+      "raised_only": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "seam": "_segment",
+      "survived": true,
+      "survived_all_detection": true,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "events_agree_with_tracks": null,
+        "masks_follow_anchors": null,
+        "masks_partition_the_foreground": null,
+        "script_bits_identity": null
+      }
+    },
+    {
+      "claim": "`baseline_bits` is the pixel model's price of the same trajectory -- segment_trajectory accumulates `cost.baseline_transition_bits(len(changed_pixels(frames[t], frames[t+1])))`, and costs.py names the failure it guards: 'Rigging the comparison by choosing units is the obvious failure mode here'.",
+      "description": "PREDICTED SURVIVOR: double baseline_bits, so gain_bits and compression_ratio -- the numbers D-005's acceptance threshold is stated in -- overstate the engine's advantage by a factor of two. props declines to assert that the script *beats* the baseline, which is right; this is the different claim that the baseline is the price of these frames. Registered against script_bits_identity as the only invariant that reads a bit count.",
+      "elapsed_s": 0.22,
+      "engine": "mdl_segmenter",
+      "expect_kill": [
+        "script_bits_identity"
+      ],
+      "id": "mdl-inflate-baseline-bits",
+      "killed": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [
+        "script_bits_identity"
+      ],
+      "raised_only": {
+        "events_agree_with_tracks": 0,
+        "masks_follow_anchors": 0,
+        "masks_partition_the_foreground": 0,
+        "script_bits_identity": 0
+      },
+      "seam": "_segment",
+      "survived": true,
+      "survived_all_detection": true,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 40,
+      "worlds_inert": 0,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "events_agree_with_tracks": null,
+        "masks_follow_anchors": null,
+        "masks_partition_the_foreground": null,
+        "script_bits_identity": null
+      }
+    }
+  ],
+  "worlds_per_engine": 40
+}

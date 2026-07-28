@@ -24,6 +24,34 @@ the question. So `oracles/gf2.py` is a separate bitset Gaussian elimination and
 `fuzzlab` **never modifies `engine-rig`** — `rig.py` puts it on `sys.path` and
 that is the entire interaction. Defects go here and to `PARTNER_SYNC.md`.
 
+## The other half: can these invariants fire at all?
+
+A green campaign says something about the engines only to the extent that the
+battery could have contradicted them, and an invariant that can *never* fire
+produces the same line in `campaign.json` as one that is satisfied. So there is
+a second battery whose subject is this one:
+
+```bash
+python -m fuzzlab.mutation                       # inject known defects, see who notices
+python -m fuzzlab.mutation --engine zero_space
+python -m pytest fuzzlab/tests/test_mutation.py  # the harness's own negative control
+```
+
+Method and results: [`MUTATION.md`](MUTATION.md). Catalogues: `mutants/<engine>.py`.
+
+Injection happens at **fuzzlab's own seam** — the private helper each property
+calls the engine through — so the house rule above is kept in fact and not only
+in intent: the engine runs untouched and returns its true answer, and the lie is
+told between the engine and the property. That is the right place regardless,
+because what is under test is the property.
+
+It found, on its first run, that `partition_matches_truth` had never been able
+to report a violation: its only reporting call passed `engine=` to
+`finding.violated()`, which already binds that name, so detection raised
+`TypeError` instead of returning a finding. The line only runs when the engine
+partitions wrongly, and the engine never did — so a dead invariant sat inside a
+green campaign for as long as it existed.
+
 ## What is checked
 
 | engine | family | invariants |
