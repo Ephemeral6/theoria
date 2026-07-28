@@ -75,11 +75,18 @@ def build(slug: str) -> str:
 
     out.append("## The surprises, in the order they fired")
     out.append("")
-    if not surprises:
-        out.append("None. With no surprise the loop never reaches a model "
-                   "(constraint 8), so a run with zero surprises and zero "
-                   "model calls is the constraint holding, not the loop "
-                   "failing to start.")
+    if not surprises and not desk_log:
+        out.append("None, and no model call either. With no surprise the loop "
+                   "never reaches a model (constraint 8), so this is the "
+                   "constraint holding rather than the loop failing to start.")
+    elif not surprises:
+        out.append("None. There were %d model call(s), which is consistent: "
+                   "the first theorize of a run answers no surprise, because "
+                   "no manual exists yet for the world to contradict. Any "
+                   "call beyond the first with no surprise behind it is a "
+                   "constraint-8 violation and `MANIFEST.json` says so under "
+                   "`constraint_8.calls_not_covered_by_a_surprise`."
+                   % len(desk_log))
     else:
         out.append("| # | kind | family | book | step | detail |")
         out.append("|---|---|---|---|---|---|")
@@ -105,6 +112,20 @@ def build(slug: str) -> str:
                 usage.get("input_tokens"), usage.get("output_tokens"),
                 entry.get("step_idx")))
     out.append("")
+
+    failures = _load(os.path.join(run_dir, "desk_failures.json"), []) or []
+    if failures:
+        out.append("## Calls that produced nothing")
+        out.append("")
+        out.append("A desk that times out or returns no usable text is recorded "
+                   "and the loop goes back for evidence; the manual stands and "
+                   "the surprises stay pending. The call is still paid for and "
+                   "still counted.")
+        out.append("")
+        for entry in failures:
+            out.append("- step %s: `%s`" % (entry.get("step_idx"),
+                                            entry.get("error")))
+        out.append("")
 
     out.append("## Revisions")
     out.append("")
