@@ -110,7 +110,21 @@ def candidates(lane=None):
                                             # not strip a lane bare (monitor,
                                             # 2026-07-28: the guard was one-sided)
         out.append((m["priority"], iid, f, m))
-    out.sort(key=lambda r: (r[0], r[1]))
+    try:
+        sys.path.insert(0, HERE)
+        import spec as _spec
+        focus = list(getattr(_spec, "PHASE_FOCUS", []))
+        boost = int(getattr(_spec, "FOCUS_BOOST", 0))
+    except Exception:
+        focus, boost = [], 0
+
+    def rank(row):
+        pri, iid, _f, m = row
+        if boost and m.get("lane") in focus:
+            pri -= boost + (len(focus) - focus.index(m["lane"]) - 1) * 0.1
+        return (pri, iid)
+
+    out.sort(key=rank)
     return out
 
 

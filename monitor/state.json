@@ -68,18 +68,18 @@
     ],
     "ops": [
       {
-        "age_min": 64,
-        "cycle": 7,
+        "age_min": 10,
+        "cycle": 8,
         "id": "OPS-A",
         "kind": "ops",
         "name": "漂移审计员",
-        "note": "cycle 7: two consecutive work orders whose premise the tree had already overtaken -- board-level staleness now costs a researcher session each time. Separately verified for S11 that no ARC game source has ever been downloaded: it is prevention, not incident response",
-        "outputs": 9,
+        "note": "cycle 8: first full sweep on the new one-way-door dimension -- APP-*/RES-* board claims have no exit but their own session, and V3 has held its territory for six hours since its branch merged",
+        "outputs": 10,
         "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
         "state": "idle"
       },
       {
-        "age_min": 85,
+        "age_min": 97,
         "cycle": 4,
         "id": "OPS-B",
         "kind": "ops",
@@ -90,18 +90,18 @@
         "state": "idle"
       },
       {
-        "age_min": 62,
+        "age_min": 0,
         "cycle": 5,
         "id": "OPS-M",
         "kind": "ops",
         "name": "合并裁判",
-        "note": "自动路径本轮自己合完四个分支、我零插手、零 flag、全量门 14/14 绿；新发现配额 hold 是单向闩（无任何路径可解，已过期 33 分钟），会让下一次扩员静默失败，已报 inbox 20260728T125352Z",
-        "outputs": 7,
+        "note": "用户派活：quota.py 的 hold 现在会自己过期（reset_hint 解析成绝对时刻，check 到点自动解锁），板上 S12 可销；已推 4eb2057，六种解析场景与 check 三分支全测",
+        "outputs": 8,
         "role": "脚本合不动的冲突由它裁决；顺利合并早已自动化",
-        "state": "idle"
+        "state": "working"
       },
       {
-        "age_min": 444,
+        "age_min": 456,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -114,18 +114,18 @@
     ],
     "standing": [
       {
-        "age_min": 16,
+        "age_min": 11,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
         "name": "在线战役研究员",
-        "note": "A4a step 2 done and pushed (agent/a4a-ablation-build): theory/ cut from upstream by build_theory.py, 4 manuals + 1 playbook, 7 invariants demoted / 4 theorems deleted / 1 soundness-bearing prune. Cut asserted in the AST not a grep; both failure modes watched refusing; byte-reproducible. Next: step 3, the driver -- its first decision is where the trace comes from.",
+        "note": "A4a step 3 done and pushed: run_arm.py, the arm runs end to end for the first time. E1 (true impossibility) vs E2 (false one) come back identical on 10/10 decision fields -- P-6 demonstrated. First run was wrong (fed a2-holed the sweep trace instead of its evidence); caught, recorded, and P-1's pre-registered pixel counts now assert at run time. --twice deterministic; both ledgers PASS validate_ledger, retiring the theoria_ablate blocker. Next: step 4, exhibits (E3 has the real work).",
         "outputs": 0,
         "role": "常驻推进：Theoria 臂在真 API 上跑出结果（论文最大缺口）",
         "state": "working"
       },
       {
-        "age_min": 8,
+        "age_min": 20,
         "cycle": 3,
         "id": "RES-2",
         "kind": "standing",
@@ -579,7 +579,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 21:58:04",
+  "generated_at": "2026-07-28 22:09:35",
   "grid": {
     "A1": {
       "active": [
@@ -1453,15 +1453,19 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/agents.py",
-      "monitor/app.html",
-      "monitor/ci/merge.log",
+      "onitor/app.html",
+      "monitor/assign.py",
+      "monitor/board.py",
       "monitor/index.html",
-      "monitor/mailbox/RES-2.md",
-      "monitor/ops-status/RES-2.json",
-      "monitor/reflex.log",
-      "monitor/reflex.py",
-      "monitor/scan.py",
+      "monitor/mailbox/ALL.md",
+      "monitor/ops-status/RES-1.json",
+      "monitor/ops/OPS-A.md",
+      "monitor/ops/OPS-B.md",
+      "monitor/ops/OPS-M.md",
+      "monitor/ops/OPS-R.md",
+      "monitor/res/RES-1.md",
+      "monitor/res/RES-2.md",
+      "monitor/spec.py",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
@@ -1474,12 +1478,11 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/audit/DRIFT-20260728T1356Z-app-and-res-claims-are-a-one-way-door.md",
-      "monitor/reflex.lock"
+      "monitor/CHARTER.md"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "a7afa60 Merge remote-tracking branch 'origin/agent/p7-paper-section7' into HEAD",
+    "git_head": "4eb2057 quota: give the hold a deadline exit, so it cannot outlive the outage",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1498,8 +1501,7 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/audit/DRIFT-20260728T1356Z-app-and-res-claims-are-a-one-way-door.md",
-      "monitor/reflex.lock"
+      "monitor/CHARTER.md"
     ]
   },
   "p1_green": 9,
@@ -1980,19 +1982,19 @@
       "status": "green"
     },
     "ops_duty": {
-      "detail": "**20 条 TO-MONITOR 待监控回复**。 OPS-A 第7轮 idle（63 分钟前）； OPS-B 第4轮 idle（85 分钟前）； OPS-M 第5轮 idle（61 分钟前）； OPS-R 第1轮 idle（444 分钟前）",
+      "detail": "**21 条 TO-MONITOR 待监控回复**。 OPS-A 第8轮 idle（10 分钟前）； OPS-B 第4轮 idle（97 分钟前）； OPS-M 第5轮 idle（73 分钟前）； OPS-R 第1轮 idle（456 分钟前）",
       "rows": [
         {
-          "age_min": 63,
-          "cycle": 7,
+          "age_min": 10,
+          "cycle": 8,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "cycle 7: two consecutive work orders whose premise the tree had already overtaken -- board-level staleness now costs a researcher session each time. Separately verified for S11 that no ARC game source has ever been downloaded: it is prevention, not incident response",
+          "note": "cycle 8: first full sweep on the new one-way-door dimension -- APP-*/RES-* board claims have no exit but their own session, and V3 has held its territory for six hours since its branch merged",
           "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 85,
+          "age_min": 97,
           "cycle": 4,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -2001,7 +2003,7 @@
           "status": "green"
         },
         {
-          "age_min": 61,
+          "age_min": 73,
           "cycle": 5,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2010,7 +2012,7 @@
           "status": "green"
         },
         {
-          "age_min": 444,
+          "age_min": 456,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2020,7 +2022,7 @@
         }
       ],
       "status": "green",
-      "to_monitor": 20
+      "to_monitor": 21
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3184 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
@@ -2035,7 +2037,7 @@
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 58 个提交 / 12 次合并（判断陈旧到 risk 就该重扫）。",
+      "detail": "spec.py 落后 61 个提交 / 12 次合并（判断陈旧到 risk 就该重扫）。",
       "status": "risk"
     },
     "supply": {

@@ -1,7 +1,7 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T14:15:00Z",
+ "utc": "2026-07-28T15:10:00Z",
  "cycle": 2,
  "state": "working",
- "note": "A4a step 2 done and pushed (agent/a4a-ablation-build): theory/ cut from upstream by build_theory.py, 4 manuals + 1 playbook, 7 invariants demoted / 4 theorems deleted / 1 soundness-bearing prune. Cut asserted in the AST not a grep; both failure modes watched refusing; byte-reproducible. Next: step 3, the driver -- its first decision is where the trace comes from."
+ "note": "A4a step 3 done and pushed: run_arm.py, the arm runs end to end for the first time. E1 (true impossibility) vs E2 (false one) come back identical on 10/10 decision fields -- P-6 demonstrated. First run was wrong (fed a2-holed the sweep trace instead of its evidence); caught, recorded, and P-1's pre-registered pixel counts now assert at run time. --twice deterministic; both ledgers PASS validate_ledger, retiring the theoria_ablate blocker. Next: step 4, exhibits (E3 has the real work)."
 }

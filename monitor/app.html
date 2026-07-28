@@ -173,8 +173,7 @@ function render(s){
       const fresh = o.age_min != null && o.age_min < 180;
       return `<div class="crew ${fresh ? "" : "risk"}">
         <span class="badge ops">${esc(o.id.replace("OPS-",""))}</span>
-        <div class="cbody"><b>${esc(o.name)}</b><em>${esc(o.role)}</em>
-          <div class="agnote">${esc(o.note || "")}</div></div>
+        <div class="cbody"><b>${esc(o.name)}</b><em>${esc(o.role)}</em></div>
         <span class="cst">${o.age_min==null ? "未启动"
           : "第 "+o.cycle+" 轮 · "+o.outputs+" 份产出<br>"+o.age_min+" 分钟前"}</span>
       </div>`;
@@ -187,8 +186,7 @@ function render(s){
         const fresh = r.age_min != null && r.age_min < 120;
         return `<div class="crew ${fresh ? "" : "risk"}">
           <span class="badge">${esc(r.id.replace("RES-","R"))}</span>
-          <div class="cbody"><b>${esc(r.name)}</b><em>${esc(r.role)}</em>
-            <div class="agnote">${esc(r.note || "")}</div></div>
+          <div class="cbody"><b>${esc(r.name)}</b><em>${esc(r.role)}</em></div>
           <span class="cst">${r.age_min==null ? "未启动"
             : "第 "+r.cycle+" 轮<br>"+r.age_min+" 分钟前"}</span></div>`;
       }).join("") + "</div>";
