@@ -857,6 +857,80 @@ def submission(examinee_id: str, tier: str, answers: Dict[str, Any],
                       meta={"tier": tier, **(meta or {})})
 
 
+#: Content words too common to carry meaning when two sentences are compared.
+_STOP = frozenset("""a an and are as at be been by can cell cells does every
+for from has have if in into is it its no not of on one or player that the
+their then there this to when where which will with would""".split())
+
+#: The DSL's own scaffolding.  Every playbook entry contains some of it, so
+#: leaving it in would let any sentence match any entry a little, and the
+#: threshold would have to rise until it caught nothing.
+_SCAFFOLD = frozenset("""prune order heuristic prefer proof lean admissible
+pos none""".split())
+
+
+def _content_words(text: str, drop: frozenset = frozenset()) -> set:
+    """Words that carry meaning, with `_` treated as a space.
+
+    Splitting on the underscore is the whole reason this catches anything: the
+    playbook writes `no_direction_admits_a_push(Box.pos)` as one identifier and
+    the sheet writes "no direction admits a push" as five words. A comparison
+    that kept the identifier whole would report no overlap between a sentence
+    and its own restatement.
+    """
+    import re as _re
+    return {w for w in _re.findall(r"[a-z]+", text.lower())
+            if len(w) > 2 and w not in _STOP and w not in drop}
+
+
+def cross_item_leak_report(paper: Paper, key_doc: Dict[str, Any], *,
+                           threshold: float = 0.65) -> List[Dict[str, Any]]:
+    """Does the sheet state, as a true claim, something only tier 2 is given?
+
+    The check that did not exist when this paper was built, and whose absence
+    the adversarial review called the run's decisive fault.  `leakage.py`
+    compares an item's *metadata* with its own answer; nothing compared one
+    item's **prose** with the content of the tier-2-only bundle.  Two
+    `rule_justification` claims turned out to restate the playbook's two
+    `prune` entries in English, on the tier-1 paper -- so the control arm was
+    handed the treatment for the only family where a difference was predicted.
+
+    The measure is *containment of the playbook entry*, |claim ∩ entry| over
+    |entry|, and not Jaccard.  A playbook entry is six words and a sheet claim
+    is thirty; Jaccard divides by the union and so scores a perfect restatement
+    at 0.2, which is why the first version of this function found nothing.
+    Containment asks the question that matters: has this entry been said again,
+    somewhere the reader who was not given it can read?
+
+    Returns findings rather than raising.  The two known offenders are on a
+    shipped sheet that six readers have already sat; pinning them in a test is
+    honest, deleting them retroactively is not.
+    """
+    playbook_only = [line.strip() for line in H.PLAYBOOK_DSL.splitlines()
+                     if line.strip() and not line.strip().startswith("#")]
+    findings: List[Dict[str, Any]] = []
+    for item in paper.items:
+        text = " ".join(str(v) for k, v in item.paper.items()
+                        if k in ("claim", "prompt", "quoted"))
+        words = _content_words(text)
+        if not words:
+            continue
+        for entry in playbook_only:
+            other = _content_words(entry, drop=_SCAFFOLD)
+            if not other:
+                continue
+            overlap = len(words & other) / float(len(other))
+            if overlap >= threshold:
+                findings.append({
+                    "item_id": item.item_id,
+                    "playbook_entry": entry,
+                    "containment": round(overlap, 4),
+                    "shared": sorted(words & other),
+                })
+    findings.sort(key=lambda f: (f["item_id"], f["playbook_entry"]))
+    return findings
+
+
 def answer_labels(paper: Paper, key_doc: Dict[str, Any]) -> Dict[str, str]:
     """Short answer labels, so the leak checker's metadata test actually runs."""
     out: Dict[str, str] = {}

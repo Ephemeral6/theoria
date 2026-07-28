@@ -114,7 +114,18 @@ def build(run_dir: str) -> Dict[str, Any]:
         "prediction": HA.PREDICTION,
         "prompts": prompt_digests,
         "bundle_sha256": {t: sha256_text(HA.bundle_text(t)) for t in HA.TIERS},
-        "leakage": leak,
+        # Counts and hit totals only.  The full report carries
+        # `positional.example_ids_by_answer` and `label_counts`, which together
+        # are a literal answer-label -> item-id map: the adversarial review of
+        # this run marked a submission built from nothing but that block and
+        # scored 0.603 on a paper it had never seen, on a file sitting in the
+        # examinees' own run directory. The build's job is to record that the
+        # check ran and passed, not to publish what it found.
+        "leakage": {k: v for k, v in leak.items()
+                    if k not in ("positional", "positional_derived")},
+        "leakage_note": ("the positional block is deliberately not persisted; "
+                         "it is an answer key in a different spelling. Re-run "
+                         "`leakage.check_paper` to see it."),
         "bootstrap": {"n": BOOTSTRAP_N, "seed": BOOTSTRAP_SEED},
     }
     write_json(os.path.join(run_dir, "PREREGISTRATION.json"), prereg)

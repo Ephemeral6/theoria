@@ -1,9 +1,12 @@
 # Blinding — what was blocked, and what was not
 
-> **This is the second cohort. The first one was voided by a leak of exactly the
-> kind this file exists to catch, and the account of it is at the bottom under
-> "The first cohort, and why it was thrown away". Read that first if you are
-> auditing the result.**
+> **Two corrections were made to this file after the adversarial review; both
+> are marked CORRECTION below and neither is a rewrite of history — the
+> superseded wording is quoted where it stood. This is also the second cohort:
+> the first was voided by a leak of exactly the kind this file exists to catch,
+> and the account is at the bottom under "The first cohort, and why it was
+> thrown away". A third leak, worse than either, was found by the review and is
+> under "CORRECTION 3".**
 
 Written **before** the first examinee was spawned, and committed in the same
 commit as the sheet and the marking rules. The whole value of a handover test is
@@ -17,9 +20,37 @@ One string. Nothing else.
     exam/runs/20260728T202540Z-V11-handover-auto-r2/prompts/tier1_manual.prompt.md
     exam/runs/20260728T202540Z-V11-handover-auto-r2/prompts/tier2_manual_playbook.prompt.md
 
-It is **pasted into the subagent's prompt**, not pointed at. No path, no
-directory, no repository name, no branch, no run id, no mention of what is being
-measured. The two prompts are byte-identical from `# The question sheet`
+**CORRECTION 1 — this paragraph was false when written.** It said:
+
+> It is **pasted into the subagent's prompt**, not pointed at. No path, no
+> directory, no repository name, no branch, no run id, no mention of what is
+> being measured.
+
+The plan was to paste. What was actually done was the work order's other
+sanctioned option: each reader was given the absolute path of a temporary
+directory containing exactly one file, `TASK.md`, holding the prompt below and
+nothing else, and told to read that file and nothing else. The reason was
+context budget — six prompts of 43–51 KB pasted into six tool calls is 90 000
+tokens of the orchestrator's window — and that reason is not good enough to
+excuse leaving the note describing a mechanism that was not used. The
+adversarial review caught it from the readers' own `TOOLS:` lines.
+
+Three consequences, all real:
+
+* a reader given a path has a working directory and therefore somewhere to look
+  around from, which weakens the "the key file does not exist yet" argument
+  below;
+* the per-reader directories were named `A1 A2 A3 B1 B2 B3`, and `B3` is an arm
+  label. The prompt passes the test forbidding `tier 1`/`tier 2`; the directory
+  name reintroduced the signal outside the tested surface;
+* **the artifact that was tested was not the artifact that was delivered.** The
+  three blinding tests run against `prompts/*.prompt.md`; each reader received a
+  short wrapper message naming `TASK.md` plus that file. The wrapper is now
+  written down and hashed as `prompts/DELIVERY_WRAPPER.md`, which it should have
+  been from the start.
+
+No path, no repository name, no branch, no run id and no statement of what is
+being measured appear *inside* the prompt; those parts stand and are tested. The two prompts are byte-identical from `# The question sheet`
 onwards; they differ only by the playbook and by the one sentence naming which
 documents are in the bundle.
 
@@ -47,7 +78,30 @@ run exists to measure, and the manufactured part is indistinguishable from the
 real part afterwards. Both tier lines were rewritten to say only which documents
 are in the bundle.
 
-## The answer key was never on disk while the examinees ran
+## The answer key was never on disk while the examinees ran — but a re-encoding of it was
+
+**CORRECTION 2.** The heading above is true of the key *file* and false of the
+key's *content*. `build()` wrote its whole leakage report into
+`PREREGISTRATION.json`, and that report contains
+`positional.example_ids_by_answer`, a literal map from answer label to item
+ids — including `"none": ["v11-opt-01", "v11-opt-04"]`, which is precisely the
+fact the first cohort was voided for. The adversarial review marked a submission
+built from that file alone, against the real rubric and the real key, and scored
+**0.569**; adding the `label_counts` block takes it to **0.603**. That is above
+this paper's own memoriser calibration arm, from a reader that never saw the
+manual.
+
+It was on disk, in the examinees' own run directory, for the whole run.
+`test_the_driver_freezes_the_key_without_writing_it` walked that directory and
+reported 61 declared probes and 0 hits, because the probes look for
+`"v11-opt-01 => none"` and the leak was spelled `"none": ["v11-opt-01"]`. Same
+failure as D-EX-018, one commit later: a checker matching a spelling.
+
+`build()` now persists counts and hit totals only, and says in the file that the
+positional block is withheld and why. That change was made after this run and
+does not retroactively clean it.
+
+### The original claim, which stands only as far as the key file goes
 
 `build` writes the sheet and the prompts, and writes the key's sha256 —
 `f21ee3d66ebc` — into
@@ -173,3 +227,41 @@ leak came in through the one channel none of them watched. That is the pattern
 the work order named: 泄漏面会跟着证据走，堵一处它换一处. It is recorded here
 rather than quietly fixed because a blinding note that only lists the leaks it
 prevented is worth nothing.
+
+
+## CORRECTION 3 — the leak that took the result, found by the adversarial review
+
+The sheet handed the control arm the treatment.
+
+Two `rule_justification` items state, in English and as claims whose truth the
+question presupposes, exactly the playbook's two `prune` entries:
+
+* `v11-why-02` restates `prune parity(Box.pos) != parity(target) => dead`
+* `v11-why-05` restates `prune no_direction_admits_a_push(Box.pos) => dead`,
+  with the off-board case — the part that decides `cairn` — spelled out.
+
+The playbook is tier 2 only. The tier-1 paper therefore contained both prunes.
+The review showed the two printed criteria are jointly a complete and sound
+classifier for all eight optimal-action items: dead on exactly the two dead
+boards, no false positives, with no manual, no playbook and no search.
+
+`PREREGISTRATION.json` pre-registered `optimal_action`, and `cairn` inside it, as
+the only place a difference should appear. That is exactly where the
+contamination landed. **The manipulation did not happen**, and no reading of this
+run can recover the tier comparison.
+
+`exam.papers.handover_auto.cross_item_leak_report` is the check that would have
+caught it, added afterwards; `test_no_new_sheet_claim_restates_a_playbook_entry`
+pins these two so a third fails the suite. The items themselves are left on the
+sheet: six readers answered this paper, and editing it now would leave a run
+whose artefacts describe a paper that never existed.
+
+## What the residue list got wrong
+
+Residue 1 below says the two dead levels are the only ones appearing once in the
+optimal family. True, and secondary. The review found a worse one that was not
+listed: the counterexample item `v11-why-ce-01` prints five boards *with their
+start positions drawn*, and three of those five draw the Box on an even row —
+which is what the item asks the reader to find. Four of the six readers answered
+with the `cairn` start state copied verbatim out of the picture. Only two
+constructed a position of their own.

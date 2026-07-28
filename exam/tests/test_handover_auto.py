@@ -373,6 +373,46 @@ def test_no_single_tag_token_predicts_an_answer():
         "a tag token printed on the sheet is an answer key: %s" % offenders)
 
 
+#: The two cross-item leaks that shipped on the sheet six readers sat, pinned so
+#: that a *third* one fails the suite instead of being discovered by an
+#: adversarial reviewer after the fact.  They are not deleted: the sheet is the
+#: sheet those readers answered, and editing it now would leave a run whose
+#: artefacts describe a paper that no longer exists.
+KNOWN_CROSS_LEAKS = {
+    ("v11-why-02",
+     "prune parity(Box.pos) != parity(target) => dead [proof: lean]"),
+    ("v11-why-05",
+     "prune no_direction_admits_a_push(Box.pos) => dead [proof: none]"),
+}
+
+
+def test_no_new_sheet_claim_restates_a_playbook_entry():
+    """The check whose absence cost this run its result.
+
+    The adversarial review found that two `rule_justification` claims restate,
+    in English and as presupposed-true, the playbook's two `prune` entries --
+    and the playbook is the *treatment*.  Tier 1 was therefore handed the thing
+    tier 2 was supposed to have exclusively, on exactly the family where a
+    difference had been pre-registered.  Nothing in `exam/leakage.py` looks for
+    this: it compares an item's metadata against its own answer, never one
+    item's prose against the other tier's bundle.
+
+    `cross_item_leak_report` measures containment of the playbook entry rather
+    than Jaccard, because an entry is six words and a claim is thirty and
+    Jaccard scores a perfect restatement at 0.2. The first version of the check
+    used Jaccard and found nothing, which is worth remembering: a check that
+    reports clean is not evidence of clean.
+    """
+    found = {(f["item_id"], f["playbook_entry"])
+             for f in HA.cross_item_leak_report(PAPER, KEY)}
+    new = found - KNOWN_CROSS_LEAKS
+    assert not new, "a sheet claim restates a tier-2-only playbook entry: %s" % (
+        sorted(new),)
+    assert KNOWN_CROSS_LEAKS <= found, (
+        "the known leaks stopped being detected -- either the sheet changed or "
+        "the detector did, and both need saying out loud: %s" % sorted(found))
+
+
 @pytest.mark.parametrize("tier", HA.TIERS)
 def test_the_prompt_carries_no_answer(tier):
     """Every probe the paper declared, run against the prompt and not just the
