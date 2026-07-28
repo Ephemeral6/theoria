@@ -54,3 +54,4 @@ detector AB
   strict (partial=has)   : TP=45 FN=18 FP=4 TN=30  FPR=0.1176 FNR=0.2857 prec=0.9184 acc=0.7732
   harsh  (partial=lacks) : TP=35 FN=11 FP=14 TN=37  FPR=0.2745 FNR=0.2391 prec=0.7143 acc=0.7423
   strict, no file shared : TP=36 FN=16 FP=1 TN=28  FPR=0.0345 FNR=0.3077 prec=0.973 acc=0.7901
+exit=0

@@ -1674,24 +1674,24 @@
     {
       "evidence": [
         {
-          "lineno": 203,
+          "lineno": 323,
           "target": "worldgen/generate.py",
-          "test_file": "a0-spike/tests/test_a0.py",
-          "test_func": "test_the_generator_refuses_what_it_cannot_compile",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_with_a_stale_from_is_refused",
           "why": "pytest.raises"
         },
         {
-          "lineno": 240,
+          "lineno": 331,
           "target": "worldgen/generate.py",
-          "test_file": "a0-spike/tests/test_a0.py",
-          "test_func": "test_the_generator_refuses_a_semantics_value_it_does_not_implement",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_on_an_undeclared_prop_is_refused",
           "why": "pytest.raises"
         },
         {
-          "lineno": 261,
+          "lineno": 338,
           "target": "worldgen/generate.py",
-          "test_file": "a0-spike/tests/test_a0.py",
-          "test_func": "test_the_stayed_rules_are_load_bearing_not_entailed_by_persist",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_on_a_missing_entity_is_refused",
           "why": "pytest.raises"
         }
       ],

@@ -284,6 +284,50 @@ def test_the_containment_rule_can_be_switched_off():
     assert criterion._failure_assertion(fn, absence=False) is None
 
 
+@pytest.mark.parametrize("candidate,importer,ok", [
+    # An ancestor directory of the importer -- what `sys.path.insert(0, <root>)` buys.
+    ("newgate.py", "tests/test_newgate.py", True),
+    ("engine-rig/tools/run_all.py", "engine-rig/tests/test_x.py", True),
+    ("monitor/gates.py", "monitor/tests/test_gates.py", True),
+    # Another track's file that happens to share a filename. Both halves of the
+    # defect the adversarial pass confirmed: the ambiguous one (four run_all.py)
+    # and the single-candidate one (one worldgen/generate.py, one
+    # fuzzlab/props/fd_adapter.py) that the first guard never reached.
+    ("cold-start-a0/run_all.py", "ablation-arm/tests/test_exhibits.py", False),
+    ("worldgen/generate.py", "a0-spike/tests/test_a0.py", False),
+    ("fuzzlab/props/fd_adapter.py", "engine-rig/tests/test_fd_adapter.py", False),
+    ("engine-rig/engines/fd_adapter/validate.py", "worldgen/tests/test_mutate.py", False),
+    ("cold-start-a2/a2pipeline/engines.py", "engine-rig/tests/test_bench.py", False),
+])
+def test_a_binding_never_reaches_into_another_territory(candidate, importer, ok):
+    """A wrongly resolved import is a false `present`, and a false `present` is
+    the error direction that makes this probe *silent* about a real gap while
+    handing one track's negative control to another. An unresolved one is only
+    noise. The asymmetry is why this refuses rather than guesses."""
+    assert criterion.Index.reachable(candidate, importer) is ok
+
+
+def test_no_binding_in_this_repository_crosses_a_territory():
+    """The live check, on the real tree rather than on examples. The adversarial
+    pass counted 54 cross-territory bindings at commit b6d8643, of which 14 were
+    engine-rig tests being credited to fuzzlab."""
+    import ast
+    index = criterion.Index.build(probe.REPO)
+    crossings = []
+    for rel in index.files:
+        if not criterion.is_test_file(rel):
+            continue
+        try:
+            tree = ast.parse(open(os.path.join(index.root, rel),
+                                  encoding="utf-8").read())
+        except (OSError, SyntaxError, UnicodeDecodeError):
+            continue
+        for name, target in criterion.bindings(tree, rel, index).items():
+            if target.split("/")[0] != rel.split("/")[0]:
+                crossings.append("%s: %s -> %s" % (rel, name, target))
+    assert crossings == [], crossings[:10]
+
+
 def test_the_probe_is_subject_to_its_own_rule():
     """`verify-lab/negctl/probe.py` is an acceptance entry point by its own
     enumerator, and it is in its own pin. An exemption here would be the whole

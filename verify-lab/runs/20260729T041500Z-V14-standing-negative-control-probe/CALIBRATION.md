@@ -119,7 +119,66 @@ All three false `present` are the granularity conflicts of §1:
 `worldgen/build.py`, `proxy/spend_gate.py`, `arc-recon/client.py` — each a file the
 census judged twice, once 是 and once 否.
 
-## 4. Four rounds of tuning, and what each one cost
+## 3b. The limitation that matters most: a file is not a gate
+
+**A file-level `present` does not imply that every gate in the file has a negative
+control.** The criterion is file-granular; a gate is function-granular. `present`
+means *some* test constructs a bad input for *something* in that file, and the
+probe will then stay silent about every other gate living beside it.
+
+The worked example, found by the adversarial pass and the most valuable single
+finding it returned:
+
+> `worldgen/build.py` is pinned `present`. The evidence is real —
+> `worldgen/tests/test_build_gate.py:49/:57` synthesises a manifest violating each
+> gate in turn and asserts each is reported. That is a proper negative control for
+> `gate_failures()`.
+>
+> The same file also contains `check_determinism()` (`build.py:231`, called at
+> `:344`, `NOT DETERMINISTIC → return 1` at `:347`) — the strongest determinism
+> claim in this repository: a subprocess under a different `PYTHONHASHSEED`,
+> rebuilding 35 worlds × 6 artefacts and diffing them byte for byte. The name
+> `check_determinism` appears **three times in every `.py` file in the tree**: the
+> definition, the call, and one docstring mention in
+> `worldgen/tests/test_determinism.py:10`. **No test calls it.** Its own docstring
+> says *a gate that cannot fail is not a gate*.
+>
+> The probe is, and will remain, silent about it.
+
+Same shape, also confirmed and also pinned `present`: `engine-rig/tools/run_all.py`
+(sole evidence is `test_integration.py:317`, a CLI-usage `exit 2`; the
+schema-failure red path at `:260-264` is undemonstrated, which is what V11 said),
+`arc-recon/contamination.py`, `arc-recon/precheck.py`, `proxy/spend_gate.py`,
+`ablation-arm/run_arm.py`.
+
+**This is worse than a missing verdict.** A gate with no verdict prompts someone to
+look; a gate carrying a `present` it did not earn is read as covered. So the
+caveat is written into `KNOWN_GAPS.json`'s header as well, where a reader
+consulting the inventory will meet it before the entries.
+
+It also means §2's `strict, no file shared` row — FP 0, FPR 0.000 — must not be
+read as "no false positives". All three false `present` are granularity conflicts,
+and that row reports 0 by **deleting them from the denominator**. Function-level
+masking is a real detection failure, not statistical noise. FP 0 on that row is a
+definition, not a measurement. Making the criterion function-granular is a separate
+item; V14 did not do it.
+
+## 3c. What the calibration is structurally unable to see
+
+The matrix runs on 103 census rows. The probe runs on 141 entry points, **74 of
+which V11 never surveyed**. A false `present` among those 74 cannot appear in any
+cell of any matrix here. The adversarial pass found one:
+`cold-start-a2/a2pipeline/engines.py` was being credited with
+`engine-rig/tests/test_bench.py` — and V11's §3 says of that territory, in as many
+words, that A2 has neither a mutant suite nor a `negctl.py` while both its
+neighbours do. The gap was real and the probe was covering it up.
+
+The demonstration that this blindness is not hypothetical is §4's round 5: closing
+the resolver hole **changed no number in any matrix and flipped no verdict on the
+tree**, while removing every one of the 54 cross-territory bindings. A defect class
+can be entirely real and entirely invisible to this calibration at the same time.
+
+## 4. Five rounds of tuning, and what each one cost
 
 Recorded because a criterion tuned on its own calibration set reports optimistic
 numbers, and the size of the tuning is the size of the optimism.
@@ -136,6 +195,17 @@ each other. Counts, not rates, and the caveat is stated rather than smoothed ove
 | 3 | follow one hop through helpers defined in the same test file | `proxy/tests/test_redteam.py` never writes `EnvProxy` inside a test; it writes `with env_proxy_over(...)`. Without the hop, the repository's best negative-control suite targets nothing. | A−B: FP 3, FN 19 |
 
 | 4 | refuse an ambiguous import that shares no path prefix with the importer | `ablation-arm/tests/test_exhibits.py` imports `exhibits.run_all`; four files here are named `run_all.py`, and the tie-break handed the binding to `cold-start-a0`. Two entry points in another track were being credited with `ablation-arm`'s tests. | A−B: FP 3, FN 20 |
+
+| 5 | a binding must resolve into an **ancestor directory of the importer or the same top-level territory**; otherwise refuse | Round 4's guard ran only after `len(cands) > 1`, so the single-candidate path returned before it. Confirmed live by the adversarial pass: `a0-spike/tests/test_a0.py` binding `generate` to `worldgen/generate.py`; 14 bindings in `engine-rig/tests` resolving to `fuzzlab/props/*.py`; `worldgen/tests/test_mutate.py` binding `validate` to `engine-rig/engines/.../validate.py`. The real targets are **package directories** the index cannot see. | A−B: FP 3, FN 20 — **unchanged** |
+
+Round 5 is the one to read carefully. It removed all 54 cross-territory bindings in
+the tree (770 → 721 bindings, 54 → 0 crossings) and **moved nothing**: not one cell
+of the confusion matrix, not one verdict among the 141 entry points. One entry's
+cited evidence changed (`worldgen/generate.py` had 3 of its 11 citations pointing
+at `a0-spike`'s tests). A reader who judged the fix by the calibration would
+conclude it was unnecessary. That is §3c's point, demonstrated by the fix's own
+null result, and it is the strongest available argument that these numbers are a
+floor rather than an estimate.
 
 Round 4 traded a true positive for a false negative on purpose, and it is the
 trade this probe should always make: a wrongly resolved import is a false

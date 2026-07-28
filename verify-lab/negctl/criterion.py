@@ -330,6 +330,46 @@ class Index:
             v.sort()
         return idx
 
+    @staticmethod
+    def reachable(candidate: str, importer: str) -> bool:
+        """Could ``importer``'s interpreter plausibly have imported ``candidate``?
+
+        Every test file in this repository reaches its subject by
+        ``sys.path.insert(0, <its own territory root>)``, so the candidate must
+        sit under a directory that is an **ancestor of the importer**, or at
+        least inside the **same top-level territory**. Anything else is a
+        different track's file that happens to share a filename.
+
+        Two defects made this necessary, and they are the same defect twice:
+
+        * The ambiguous half. ``ablation-arm/tests/test_exhibits.py`` imports
+          ``exhibits.run_all``; four files here are named ``run_all.py``; the
+          tie-break handed the binding to ``cold-start-a0/run_all.py``, in
+          another track. Closed by the ``shared(best) == 0`` guard below.
+        * **The unambiguous half, which that guard never reached**, because
+          ``len(cands) == 1`` returned before it. Confirmed live by the
+          adversarial pass: ``a0-spike/tests/test_a0.py`` binding ``generate``
+          to ``worldgen/generate.py``; fourteen bindings in ``engine-rig/tests``
+          resolving ``fd_adapter`` / ``cegis_miner`` / ``mdl_segmenter`` /
+          ``lp_potential`` / ``probe_frontier`` / ``zero_space`` to
+          ``fuzzlab/props/*.py``; ``worldgen/tests/test_mutate.py`` binding
+          ``validate`` to ``engine-rig/engines/fd_adapter/validate.py``. In every
+          case the real target is a **package directory** the index cannot see,
+          and a single same-named module elsewhere in the repository absorbed the
+          binding.
+
+        The error directions are not symmetric and the choice is deliberate: an
+        unresolved binding is a false ``absent``, which makes the probe noisy; a
+        wrongly resolved one is a false ``present``, which makes it **silent
+        about a real gap** and hands one track's negative control to another.
+        Prefer the noise.
+        """
+        cand_dir = candidate.split("/")[:-1]
+        imp_dir = importer.split("/")[:-1]
+        if cand_dir == imp_dir[:len(cand_dir)]:
+            return True                      # an ancestor directory, or the same one
+        return bool(cand_dir) and bool(imp_dir) and cand_dir[0] == imp_dir[0]
+
     def resolve(self, dotted: str, importer: str) -> Optional[str]:
         """Resolve a dotted module name as seen from ``importer`` (a rel path)."""
         parts = dotted.split(".")
@@ -346,6 +386,9 @@ class Index:
                 narrowed = [c for c in cands if parts[-2] in c.split("/")]
                 if narrowed:
                     cands = narrowed
+        cands = [c for c in cands if self.reachable(c, importer)]
+        if not cands:
+            return None
         if len(cands) == 1:
             return cands[0]
         imp = importer.split("/")[:-1]
@@ -359,19 +402,7 @@ class Index:
                 n += 1
             return n
 
-        best = max(cands, key=lambda c: (shared(c), -len(c.split("/"))))
-        if shared(best) == 0:
-            # Several files could be this import and none of them is anywhere
-            # near the importer. Guessing here attributes a negative control to a
-            # file in another territory: `ablation-arm/tests/test_exhibits.py`
-            # imports `exhibits.run_all` and the four `run_all.py` in this
-            # repository are in cold-start-a0, cold-start-a2, cold-start-a3 and
-            # engine-rig/tools -- the old tie-break handed it to cold-start-a0.
-            # An unresolved binding is a false `absent`, which makes the probe
-            # noisy; a wrongly resolved one is a false `present`, which makes it
-            # silent about a real gap. Prefer the noise.
-            return None
-        return best
+        return max(cands, key=lambda c: (shared(c), -len(c.split("/"))))
 
 
 def bindings(tree: ast.Module, importer: str, index: Index) -> Dict[str, str]:
