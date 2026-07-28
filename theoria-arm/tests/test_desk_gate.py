@@ -570,3 +570,80 @@ def test_a_desk_call_heartbeats_before_it_spends(binding, pool):
     d.call("p", beat="theorize")
     kinds = [r["kind"] for r in records(pool)]
     assert kinds.index("renew") < kinds.index("spend")
+
+
+# ------------------------------------- 10. the record the desk writes is canon
+#
+# Every test above this line drives the desk against `FakeRun`, whose
+# `model_call` appends the keyword arguments to a list and validates nothing.
+# That is a reasonable fake for testing the *gate*, and it is exactly why a
+# defect in the *record* survived: `RunLedger.model_call` forwards `**extra`
+# into `Ledger.append`, which runs `canon.check`, and `canon.MODEL_CALL_FIELDS`
+# is a closed set of ten names. The desk was sending five that are not in it.
+#
+# The failure could not appear in a `--mock` run either, because `--mock` sets
+# `offline=True` and skips theorize, so no test in this repo had ever driven a
+# *completed* model call as far as a real ledger write.
+#
+# These two tests do that, against a real `Ledger` in a temp dir.
+
+def _real_run_ledger(tmp_path, name="l.jsonl"):
+    from proxy.ledger import Ledger, RunLedger        # noqa: PLC0415
+    rl = RunLedger(Ledger(str(tmp_path / name)), "r-canon", "theoria",
+                   game_id="g50t-5849a774")
+    rl.run_start(game_id="g50t-5849a774")
+    return rl
+
+
+def test_a_completed_desk_call_writes_a_canonical_model_call(tmp_path, binding):
+    """The regression. This is the whole of blocker A.
+
+    On the code as it stood, this raised `NonCanonicalField` -- and it raised
+    *after* `cli_cost_usd` had been incremented and after the charge had been
+    settled against the shared pool. So a live run paid for the call, booked the
+    money, and then died writing it down; on the first theorize call, and on
+    every one after it.
+    """
+    rl = _real_run_ledger(tmp_path)
+    d = desk(rl, spend=binding,
+             envelope={"result": "a manual", "total_cost_usd": 0.25,
+                       "subtype": "success",
+                       "usage": {"input_tokens": 11, "output_tokens": 22}})
+
+    out = d.call("prompt", beat="theorize", step_idx=3, label="round1")
+
+    assert out == "a manual"
+    assert d.calls == 1
+    assert d.cli_cost_usd == 0.25
+
+
+def test_the_desks_own_vocabulary_survives_inside_request(tmp_path, binding):
+    """Moving the five fields must not lose them.
+
+    `request` is passed verbatim by the ledger and is the one place this arm may
+    add its own words, so beat/label/transport and the sealing provenance live
+    there. A fix that made the record canonical by simply dropping the fields
+    would pass the test above and quietly destroy the evidence that D-P8-002
+    requires every call to carry.
+    """
+    from proxy.ledger import read_ledger              # noqa: PLC0415
+
+    rl = _real_run_ledger(tmp_path, "l2.jsonl")
+    d = desk(rl, spend=binding,
+             envelope={"result": "x", "total_cost_usd": 0.1,
+                       "subtype": "success",
+                       "usage": {"input_tokens": 1, "output_tokens": 1}})
+    d.call("prompt", beat="theorize", step_idx=7, label="round2")
+
+    calls = [r for r in read_ledger(str(tmp_path / "l2.jsonl"))
+             if r["event"] == "model_call"]
+    assert len(calls) == 1
+    request = calls[0]["request"]
+    assert request["beat"] == "theorize"
+    assert request["label"] == "round2"
+    assert request["transport"] == "claude-code-cli"
+    assert request["proxied"] is False
+    assert "ANTHROPIC_API_KEY" in request["proxy_gap"]
+    # step_idx stays top-level: it IS in the canonical set, and the cost curve
+    # joins on it.
+    assert calls[0]["step_idx"] == 7

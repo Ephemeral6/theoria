@@ -323,8 +323,43 @@ class ModelDesk:
         request = {"transport": "claude-code-cli", "model": model,
                    "max_turns": max_turns, "prompt": prompt,
                    "beat": beat, "label": label,
-                   "invocation_idx": self.calls}
+                   "invocation_idx": self.calls,
+                   # Sealing provenance, per call. These were top-level kwargs
+                   # until A3; see the block comment below for why they moved
+                   # here and what it cost.
+                   "proxied": False,
+                   "proxy_gap":
+                       "model_proxy strips Authorization and no "
+                       "ANTHROPIC_API_KEY exists; see harness/modelcall.py and "
+                       "DECISIONS D-P8-002. The gap is transport-only: this "
+                       "call was checked and recorded against the shared pool "
+                       "(spend_gate campaign %s, reservation %s), so the "
+                       "dollars are visible to every other session even though "
+                       "the bytes did not cross the proxy."
+                       % (binding.reservation.campaign,
+                          binding.reservation.reservation_id)}
 
+        # These five -- beat, label, transport, proxied, proxy_gap -- used to be
+        # passed as top-level keyword arguments here, and `RunLedger.model_call`
+        # forwards `**extra` straight into `Ledger.append`, which runs
+        # `canon.check`. `canon.MODEL_CALL_FIELDS` is a closed set of ten names
+        # and contains none of them, so this call raised `NonCanonicalField` on
+        # every invocation that got as far as writing.
+        #
+        # It never showed up because `--mock` runs set `offline=True` and skip
+        # theorize entirely, so no test in this repo ever reached a completed
+        # model call. The archived P-8 ledgers do carry the five fields, because
+        # those runs predate `proxy/canon.py` landing; `modelcall.py` was edited
+        # afterwards without adapting.
+        #
+        # What made it expensive rather than merely wrong: the raise lands
+        # *after* `self.cli_cost_usd` is incremented and after
+        # `binding.record_model_call` has settled the charge against the shared
+        # pool. A live run therefore paid for the call, booked the money, and
+        # then died writing the record down -- for every model call, starting
+        # with the first. The comment forty lines above already said the field
+        # set was closed and that `request` is the one place this arm may add
+        # its own vocabulary. The code did the opposite of its own comment.
         self.run.model_call(
             provider=PROVIDER,
             model=model,
@@ -337,19 +372,6 @@ class ModelDesk:
                   "status": 200 if envelope.get("subtype") == "success" else 500,
                   "elapsed_ms": elapsed_ms, "attempts": 1,
                   "forwarded": False, "stream": False},
-            beat=beat,
-            label=label,
-            transport="claude-code-cli",
-            proxied=False,
-            proxy_gap="model_proxy strips Authorization and no ANTHROPIC_API_KEY "
-                      "exists; see harness/modelcall.py and DECISIONS D-P8-002. "
-                      "The gap is now transport-only: this call was checked and "
-                      "recorded against the shared pool "
-                      "(spend_gate campaign %s, reservation %s), so the dollars "
-                      "are visible to every other session even though the bytes "
-                      "did not cross the proxy."
-                      % (binding.reservation.campaign,
-                         binding.reservation.reservation_id),
         )
 
         entry = {"call": self.calls, "beat": beat, "label": label,

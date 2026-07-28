@@ -227,18 +227,27 @@ def play(game_id: str, slug: str, arm_factory: Callable[[str, "Run"], Any], *,
          campaign: Optional[str] = None,
          spend_gate=None,
          expect_pool: Optional[Dict[str, Any]] = None,
+         ledger_path: Optional[str] = None,
          start_extra: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Drive one run to completion, and write `run_end` whatever happens.
 
     The `with` is what brackets the claim on the shared pool: `Run.__exit__`
     releases it in a `finally`, so the unspent hold comes back even when
     `arm.play()` raises. What was actually spent stays counted forever.
+
+    `ledger_path` defaults to the run's own directory. `Run` has accepted it
+    since it was written; `play` did not forward it, which meant a caller could
+    not put the ledger anywhere else even though the plumbing existed. That
+    omission is why the mock tests wrote into a fixed path under `runs/` and
+    kept appending to one file across every invocation on the machine -- see
+    `tests/test_arm.py`, and the note in this run's RUN_STATE about how that
+    file was forked by two overlapping writers.
     """
     outcome: Dict[str, Any] = {"outcome": "not_started"}
     with Run(game_id, slug, run_id=run_id, env_upstream=env_upstream,
              env_key=env_key, require_key=require_key, caps=caps,
              campaign=campaign, spend_gate=spend_gate,
-             expect_pool=expect_pool) as run:
+             expect_pool=expect_pool, ledger_path=ledger_path) as run:
         run.start_record(**(start_extra or {}))
         arm = arm_factory(run.env_base, run)
         try:

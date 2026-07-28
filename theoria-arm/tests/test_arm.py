@@ -693,6 +693,33 @@ def test_the_shell_turns_end_to_end_against_the_mock(tmp_path):
 
     game = "g50t-5849a774"
     slug = "pytest-" + os.path.basename(str(tmp_path))
+    # The ledger goes in `tmp_path`, which this test owns, rather than in the
+    # run directory, which it does not.
+    #
+    # It used to land in `runs/<slug>/ledger.jsonl`, and because `tmp_path`'s
+    # basename is stable across pytest invocations, every run of this test on
+    # this machine appended to one file forever. That was deliberate -- the old
+    # comment here called cross-run accumulation "the property being relied on"
+    # -- and it made the assertion below a claim about an artefact with no
+    # owner, unbounded lifetime, and no exclusivity.
+    #
+    # It broke exactly as that description predicts. On 2026-07-28T23:39:49Z two
+    # pytest processes ran this test concurrently on one checkout; `Ledger`
+    # seeds `seq` once in `__init__` under an in-process lock only, so the
+    # second writer resumed from a tail the first had already moved past. Seven
+    # `seq` values were issued twice and the `prev` chain forked. No record was
+    # lost, but `verify_chain` and `validate_ledger` both go FAIL, and the file
+    # is gitignored and append-only -- so the failure was permanent and no code
+    # change could clear it. The suite was green exactly once per clean checkout
+    # and red on this machine forever after.
+    #
+    # Giving the test its own file makes the whole-file assertion true by
+    # construction and removes the poison pill. It does NOT fix the writer:
+    # `Ledger` still cannot be shared by two processes, which is a `proxy/`
+    # defect and is filed there. Cross-run continuation on a shared file is a
+    # ledger property and is tested in `proxy/tests/test_ledger.py`, over a file
+    # that test owns.
+    ledger_path = str(tmp_path / "ledger.jsonl")
 
     def factory(env_base, run):
         return TheoriaArm(env_base=env_base, run=run, game_id=game,
@@ -700,17 +727,16 @@ def test_the_shell_turns_end_to_end_against_the_mock(tmp_path):
 
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
         summary = play(game, slug, factory, env_upstream=mock.base_url,
-                       env_key=DEFAULT_KEY, require_key=False)
+                       env_key=DEFAULT_KEY, require_key=False,
+                       ledger_path=ledger_path)
 
     assert summary["budget"]["actions_ok"] == 6
     assert summary["model_calls"] == 0                 # offline: zero calls
     assert summary["scorecard"]["total_actions"] == 6
 
-    run_dir = os.path.join(ARM, "runs", slug)
-    everything = read_ledger(os.path.join(run_dir, "ledger.jsonl"))
+    everything = read_ledger(ledger_path)
     # LEDGER_FORMAT.md §1: one file holds many runs, `run_id` partitions it and
-    # `seq` orders it. The file is append-only, so re-running this test adds a
-    # run rather than replacing one -- which is the property being relied on.
+    # `seq` orders it.
     records = [r for r in everything if r["run_id"] == summary["run_id"]]
     events = [r["event"] for r in records]
     assert events[0] == "run_start" and events[-1] == "run_end"
@@ -742,7 +768,8 @@ def test_the_scorecard_action_count_matches_the_ledgers_successes(tmp_path):
 
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
         summary = play(game, slug, factory, env_upstream=mock.base_url,
-                       env_key=DEFAULT_KEY, require_key=False)
+                       env_key=DEFAULT_KEY, require_key=False,
+                       ledger_path=str(tmp_path / "ledger.jsonl"))
     assert summary["scorecard"]["total_actions"] == summary["budget"]["actions_ok"]
 
 

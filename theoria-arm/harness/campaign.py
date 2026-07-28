@@ -150,12 +150,64 @@ def assert_dev_pile(game_ids) -> None:
                 % game_id, {"game_id": game_id})
 
 
+def _leg_cost(summary: Dict[str, Any]) -> tuple:
+    """What one leg cost, and both of the numbers that answer it.
+
+    `D-P8-015` keeps two cost figures on purpose -- the CLI's own report and the
+    price table's -- because that disagreement is the only reason INC-TA-003
+    (1-hour cache writes under-billed by 6.8%) was ever findable. This function
+    keeps that discipline and adds the one that actually governs.
+
+    Three numbers are in play:
+
+    * `desk.cli_cost_usd` -- what `claude -p` said it charged.
+    * `desk.spend_gate.usd_charged` -- what the shared pool actually booked.
+      This one charges `MODEL_CALL_CEILING_USD` for a call it cannot price
+      (`price_of`, never $0), so it **cannot under-count**.
+    * the larger of the two, which is what the ceilings are checked against.
+
+    The ceiling takes the max rather than picking a favourite. A budget ceiling
+    that trusts the smaller of two disagreeing figures is a ceiling that can be
+    walked past by whichever accounting happens to be broken -- and one of them
+    is known to be, by 6.8%, in the direction that under-reports.
+
+    This replaces a read of `desk["cost_usd"]`, a key `ModelDesk.summary()` has
+    never emitted. It returned `None` every time, so `usd` was always 0.0, the
+    per-game and per-campaign totals never moved, and the $60/$200 ceilings
+    could not trip. No test caught it because every test in `test_campaign.py`
+    replaces `run_leg` wholesale.
+    """
+    desk = summary.get("desk") or {}
+    cli = desk.get("cli_cost_usd")
+    gate = ((desk.get("spend_gate") or {}) or {}).get("usd_charged")
+
+    cli_usd = float(cli) if cli is not None else None
+    gate_usd = float(gate) if gate is not None else None
+
+    known = [v for v in (cli_usd, gate_usd) if v is not None]
+    governing = max(known) if known else 0.0
+
+    return governing, {
+        "cli_cost_usd": cli_usd,
+        "gate_usd_charged": gate_usd,
+        "governing_usd": governing,
+        "governing_source": (
+            "no-cost-reported" if not known
+            else "gate" if gate_usd is not None and governing == gate_usd
+            else "cli"),
+        # An absent gate figure on a leg that spent anything means the desk ran
+        # without a claim on the pool, which `ModelDesk.binding()` is supposed
+        # to make impossible. Recorded rather than asserted: this is the
+        # accounting, not the enforcement.
+        "gate_absent": gate_usd is None,
+    }
+
+
 class Campaign:
     """Legs, in order, with the books carried between them."""
 
     def __init__(self, *, prompt_id: str, out_dir: str,
                  games=DEV_PILE,
-                 levels_per_game: int = 7,
                  campaign_usd: float = CAMPAIGN_USD,
                  game_usd: float = GAME_USD,
                  actions_per_level: int = ACTIONS_PER_LEVEL,
@@ -163,11 +215,20 @@ class Campaign:
                  offline: bool = False,
                  env_upstream: Optional[str] = None,
                  env_key: Optional[str] = None,
-                 require_key: bool = True):
+                 require_key: bool = True,
+                 spend_gate=None,
+                 expect_pool: Optional[Dict[str, Any]] = None):
+        # `spend_gate`/`expect_pool` exist so a whole multi-leg campaign can be
+        # rehearsed against a scratch pool in a temp directory. Without them
+        # `Campaign` could only ever draw on `proxy/var/spend_gate.jsonl`, so
+        # the only way to exercise `run_leg` was to write fictional reservations
+        # into the pool the fleet actually shares -- which is precisely what
+        # `harness/run.py --pool` was added to prevent. A campaign is the one
+        # caller that most needs a dry run and was the one that could not have
+        # one.
         assert_dev_pile(games)
         self.prompt_id = prompt_id
         self.games = list(games)
-        self.levels_per_game = levels_per_game
         self.campaign_usd = campaign_usd
         self.game_usd = game_usd
         self.actions_per_level = actions_per_level
@@ -176,6 +237,8 @@ class Campaign:
         self.env_upstream = env_upstream
         self.env_key = env_key
         self.require_key = require_key
+        self.spend_gate = spend_gate
+        self.expect_pool = expect_pool
 
         self.out_dir = out_dir
         os.makedirs(self.out_dir, exist_ok=True)
@@ -251,7 +314,8 @@ class Campaign:
         caps = spend_mod.plan_caps(
             actions=self.actions_per_level,
             commands=2000,
-            cost_ceiling_usd=ceiling)
+            cost_ceiling_usd=ceiling,
+            gate=self.spend_gate)
         campaign_name = spend_mod.campaign_name(
             prompt_id=self.prompt_id, game_id=game_id, slug=slug)
 
@@ -268,10 +332,14 @@ class Campaign:
         if self.env_key is not None:
             kwargs["env_key"] = self.env_key
         kwargs["require_key"] = self.require_key
+        if self.spend_gate is not None:
+            kwargs["spend_gate"] = self.spend_gate
+        if self.expect_pool is not None:
+            kwargs["expect_pool"] = self.expect_pool
 
         summary = play(game_id, slug, factory, **kwargs)
 
-        usd = float(((summary.get("desk") or {}).get("cost_usd")) or 0.0)
+        usd, accounting = _leg_cost(summary)
         leg = {
             "index": index,
             "game_id": game_id,
@@ -280,6 +348,7 @@ class Campaign:
             "seed_books": seed_books,
             "carried": summary.get("carried_books"),
             "usd": usd,
+            "cost_accounting": accounting,
             "levels": summary.get("levels"),
             "surprises": summary.get("surprises"),
             "theorize_rounds": summary.get("theorize_rounds"),
