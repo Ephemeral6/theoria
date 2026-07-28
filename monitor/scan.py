@@ -500,8 +500,53 @@ def probe_scheduled_tasks():
                       ("　→ 自动化有缺口：" + ", ".join(bad) if bad else "")}
 
 
+def probe_spec_freshness():
+    """手写判断 vs 树的漂移速度：spec.py 最后一次改动之后进了多少提交与合并。
+    DRIFT dashboard-lags-the-merge-queue 说的正是这个——头条数字建立在手写值上，
+    而树在跑。让陈旧本身变成盘面上的一个数，而不是靠审计员发现。"""
+    last = git("log", "-1", "--format=%H", "--", "monitor/spec.py").strip()
+    if not last:
+        return {"status": "partial", "detail": "spec.py 无提交历史。"}
+    commits = git("rev-list", "--count", "%s..HEAD" % last).strip() or "0"
+    merges = git("rev-list", "--count", "--merges", "%s..HEAD" % last).strip() or "0"
+    n, m = int(commits), int(merges)
+    status = "green" if n < 15 else ("partial" if n < 40 else "risk")
+    return {"status": status,
+            "detail": "spec.py 落后 %d 个提交 / %d 次合并（判断陈旧到 %s 就该重扫）。"
+                      % (n, m, "risk" if n >= 40 else "partial 档")}
+
+
+def probe_verify_gates():
+    """工单声称的 verify 脚本是否真的存在。DRIFT stop-hook-verify-gates-are-decoration:
+    C2 已合并，它自己命名的 a0-spike/verify.sh 从未被造出来，合并时无人发现。"""
+    import glob
+    named, missing = [], []
+    for d in ("monitor/board/items", "monitor/board/claimed", "monitor/board/done"):
+        for f in glob.glob(os.path.join(rel(d), "*.md")):
+            try:
+                text = open(f, encoding="utf-8", errors="ignore").read()
+            except Exception:
+                continue
+            for m in re.finditer(r"([\w./-]+/verify[\w.-]*\.sh)", text):
+                path = m.group(1)
+                named.append(path)
+                if not exists(path):
+                    missing.append("%s（%s 声称）"
+                                   % (path, os.path.basename(f).split(".")[0]))
+    missing = sorted(set(missing))
+    if missing:
+        return {"status": "risk",
+                "detail": "**声称存在却没有的收工闸门 %d 处**：%s。"
+                          "闸门不是被绕过，是根本没造出来。"
+                          % (len(missing), "； ".join(missing[:4]))}
+    return {"status": "green",
+            "detail": "工单声称的 %d 个 verify 脚本全部在树上。" % len(set(named))}
+
+
 PROBES = {
     "credential_hygiene": probe_credential_hygiene,
+    "spec_freshness": probe_spec_freshness,
+    "verify_gates": probe_verify_gates,
     "scheduled_tasks": probe_scheduled_tasks,
     "append_only": probe_append_only,
     "ops_duty": probe_ops_duty,

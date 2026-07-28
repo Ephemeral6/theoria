@@ -38,7 +38,7 @@
     ],
     "ops": [
       {
-        "age_min": 57,
+        "age_min": 60,
         "cycle": 4,
         "id": "OPS-A",
         "kind": "ops",
@@ -49,7 +49,7 @@
         "state": "idle"
       },
       {
-        "age_min": 10,
+        "age_min": 12,
         "cycle": 3,
         "id": "OPS-B",
         "kind": "ops",
@@ -60,7 +60,7 @@
         "state": "idle"
       },
       {
-        "age_min": 3,
+        "age_min": 6,
         "cycle": 3,
         "id": "OPS-M",
         "kind": "ops",
@@ -71,7 +71,7 @@
         "state": "working"
       },
       {
-        "age_min": 244,
+        "age_min": 247,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -472,7 +472,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 18:37:41",
+  "generated_at": "2026-07-28 18:40:35",
   "grid": {
     "A1": {
       "active": [
@@ -1346,23 +1346,18 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/agents.py",
-      "monitor/index.html",
+      "onitor/index.html",
+      "monitor/reflex.lock",
       "monitor/reflex.log",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/",
-      "monitor/board/items/E5-cert-recheck.md",
-      "monitor/board/items/P8-billshape-pipeline.md",
-      "monitor/board/items/S4-freeze-complete.md",
-      "monitor/board/items/V4-exam-selftest.md",
-      "monitor/reflex.lock"
+      "baseline-arms/out/shards/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "bd8baf5 OPS-M: report the gate change, and an incident where a commit took my half-done edit",
+    "git_head": "3822815 monitor: five items authored for the three new app agents, aimed at this week's real targets",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1373,12 +1368,7 @@
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/",
-      "monitor/board/items/E5-cert-recheck.md",
-      "monitor/board/items/P8-billshape-pipeline.md",
-      "monitor/board/items/S4-freeze-complete.md",
-      "monitor/board/items/V4-exam-selftest.md",
-      "monitor/reflex.lock"
+      "baseline-arms/out/shards/"
     ]
   },
   "p1_green": 9,
@@ -1854,10 +1844,10 @@
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**14 条 TO-MONITOR 待监控回复**。 OPS-A 第4轮 idle（57 分钟前）； OPS-B 第3轮 idle（9 分钟前）； OPS-M 第3轮 working（3 分钟前）； OPS-R 第1轮 idle（244 分钟前）",
+      "detail": "**14 条 TO-MONITOR 待监控回复**。 OPS-A 第4轮 idle（59 分钟前）； OPS-B 第3轮 idle（12 分钟前）； OPS-M 第3轮 working（6 分钟前）； OPS-R 第1轮 idle（247 分钟前）",
       "rows": [
         {
-          "age_min": 57,
+          "age_min": 59,
           "cycle": 4,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -1866,7 +1856,7 @@
           "status": "green"
         },
         {
-          "age_min": 9,
+          "age_min": 12,
           "cycle": 3,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1875,7 +1865,7 @@
           "status": "green"
         },
         {
-          "age_min": 3,
+          "age_min": 6,
           "cycle": 3,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -1884,7 +1874,7 @@
           "status": "green"
         },
         {
-          "age_min": 244,
+          "age_min": 247,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
