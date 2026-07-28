@@ -14,6 +14,8 @@
       "P7-paper-section7",
       "P8-billshape-pipeline",
       "P9-paper-to-submittable",
+      "S1-quota-auto-exit",
+      "S11-sealed-halfguard",
       "S2-canary-schedule",
       "S3-spend-gate",
       "S6-merge-gate-509",
@@ -35,6 +37,8 @@
       "论文第 7 节：相关工作",
       "把论文「账单形状」图接上真数据管线",
       "把论文推进到可投稿",
+      "让配额熔断器学会自己开闩",
+      "S11-sealed-halfguard",
       "把「金丝雀重放」做成每天自动跑的体检",
       "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
       "补上合并门的漏洞（六个目录 509 个测试从未跑过）",
@@ -56,6 +60,8 @@
       "论文第 7 节：相关工作",
       "把论文「账单形状」图接上真数据管线",
       "把论文推进到可投稿",
+      "让配额熔断器学会自己开闩",
+      "S11-sealed-halfguard",
       "把「金丝雀重放」做成每天自动跑的体检",
       "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
       "补上合并门的漏洞（六个目录 509 个测试从未跑过）",
@@ -70,14 +76,13 @@
       "证书独立复核器（不靠 Lean 一条路）",
       "把图正式接进论文正文",
       "释出包：陌生人一条命令复跑全部结果",
-      "让配额熔断器学会自己开闩",
-      "S11-sealed-halfguard",
+      "Phase 1 收口：把地基验收单清干净",
       "S8-provenance-backfill",
       "指标体系首次区分两组 AI 的能力差"
     ],
     "ops": [
       {
-        "age_min": 34,
+        "age_min": 42,
         "cycle": 8,
         "id": "OPS-A",
         "kind": "ops",
@@ -88,29 +93,29 @@
         "state": "idle"
       },
       {
-        "age_min": 121,
-        "cycle": 4,
+        "age_min": 5,
+        "cycle": 5,
         "id": "OPS-B",
         "kind": "ops",
         "name": "浏览器专员",
-        "note": "条款漂移基线已建（terms_canary.json，四页 + 14 个语义锚点）；本轮复核结果无漂移；两份提案仍待裁决",
-        "outputs": 4,
+        "note": "总线已入循环第0步（#1 已回执）；A 条已成 S11 由 W-1410 认领，B 条（公开 replay 红线）仍无归宿，已 bus.say 提请搭 S11 的 CLAUDE.md 编辑窗口，拟插入原文备在 browser-ops/REDLINE-replay-proposed-text.md；条款漂移下次按天巡",
+        "outputs": 5,
         "role": "需要真浏览器和登录态的活：官方条款、账户核查",
         "state": "idle"
       },
       {
-        "age_min": 24,
-        "cycle": 5,
+        "age_min": 0,
+        "cycle": 6,
         "id": "OPS-M",
         "kind": "ops",
         "name": "合并裁判",
-        "note": "用户派活：quota.py 的 hold 现在会自己过期（reset_hint 解析成绝对时刻，check 到点自动解锁），板上 S12 可销；已推 4eb2057，六种解析场景与 check 三分支全测",
-        "outputs": 8,
+        "note": "零 flag、零手动合并（反射层自己合了四个分支）、全量门 15/15 绿（ablation-arm 首次入列）；报一条：反射层卡死 34 分钟而退出码与日志末行都正常，锁的早退分支不写日志，见 inbox 20260728T143836Z",
+        "outputs": 9,
         "role": "脚本合不动的冲突由它裁决；顺利合并早已自动化",
-        "state": "working"
+        "state": "idle"
       },
       {
-        "age_min": 480,
+        "age_min": 487,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -123,7 +128,7 @@
     ],
     "standing": [
       {
-        "age_min": 0,
+        "age_min": 2,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
@@ -134,7 +139,7 @@
         "state": "working"
       },
       {
-        "age_min": 3,
+        "age_min": 10,
         "cycle": 3,
         "id": "RES-2",
         "kind": "standing",
@@ -219,14 +224,15 @@
       },
       {
         "finished": [
+          "让配额熔断器学会自己开闩",
           "契约变更协议：改契约要走什么流程"
         ],
         "id": "W-1250",
         "kind": "worker",
         "name": "研究工人",
-        "now": "让配额熔断器学会自己开闩",
+        "now": "Phase 1 收口：把地基验收单清干净",
         "orphan": false,
-        "outputs": 1,
+        "outputs": 2,
         "running": true
       },
       {
@@ -262,14 +268,16 @@
         "running": true
       },
       {
-        "finished": [],
+        "finished": [
+          "S11-sealed-halfguard"
+        ],
         "id": "W-1410",
         "kind": "worker",
         "name": "研究工人",
-        "now": "S11-sealed-halfguard",
+        "now": null,
         "orphan": false,
-        "outputs": 0,
-        "running": true
+        "outputs": 1,
+        "running": false
       },
       {
         "finished": [],
@@ -362,8 +370,8 @@
     "available": 1,
     "blocked": 3,
     "claimed": 10,
-    "done": 19,
-    "listing": "=== available ===\n  p3  V6-exam-on-sealed-dryrun     cell=V4  territory=exam           \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A4a-ablation-build           by RES-1\n  C6-worldgen-mutate           by W-1251\n  C9-count-lock-vocabulary     by W-1252\n  E5-cert-recheck              by W-1411\n  P10-figures-into-paper       by W-1253\n  P5-release                   by RES-2\n  S1-quota-auto-exit           by W-1250\n  S11-sealed-halfguard         by W-1410\n  S8-provenance-backfill       by W-1412\n  V3-battery-discrimination    by APP-V3\n=== done (19) ===\n  A4-ablation-online.superseded-by-A4a\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S6-merge-gate-509.superseded-by-derived-gate\n  S9-contract-change-protocol.W-1250\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
+    "done": 21,
+    "listing": "=== available ===\n  p3  V6-exam-on-sealed-dryrun     cell=V4  territory=exam           \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A4a-ablation-build           by RES-1\n  C6-worldgen-mutate           by W-1251\n  C9-count-lock-vocabulary     by W-1252\n  E5-cert-recheck              by W-1411\n  P10-figures-into-paper       by W-1253\n  P5-release                   by RES-2\n  S1-quota-auto-exit           by W-1250\n  S5-phase1-close              by W-1250\n  S8-provenance-backfill       by W-1412\n  V3-battery-discrimination    by APP-V3\n=== done (21) ===\n  A4-ablation-online.superseded-by-A4a\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  S1-quota-auto-exit.W-1250\n  S11-sealed-halfguard.W-1410\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S6-merge-gate-509.superseded-by-derived-gate\n  S9-contract-change-protocol.W-1250\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
   },
   "con_green": 1,
   "constraints": [
@@ -622,7 +630,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 22:33:35",
+  "generated_at": "2026-07-28 22:40:39",
   "grid": {
     "A1": {
       "active": [
@@ -1496,13 +1504,7 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/board/board.log",
-      "monitor/board/claimed/S9-contract-change-protocol.W-1250.md",
-      "monitor/board/items/S1-quota-auto-exit.md",
-      "monitor/ci/merge.log",
-      "monitor/inbox/20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md",
-      "monitor/index.html",
-      "monitor/state.json",
+      "onitor/bus/OPS-M/out.jsonl",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
@@ -1514,14 +1516,13 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/S1-quota-auto-exit.W-1250.md",
-      "monitor/board/done/S9-contract-change-protocol.W-1250.md",
-      "monitor/inbox/20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md",
-      "monitor/reflex.lock"
+      "monitor/board/claimed/S5-phase1-close.W-1250.md",
+      "monitor/board/done/S1-quota-auto-exit.W-1250.md",
+      "monitor/inbox/20260728T143836Z-opsm-reflex-stalls-are-invisible.md"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "5defae7 Merge remote-tracking branch 'origin/agent/p5-release' into HEAD",
+    "git_head": "8f45b41 merge: take the fleet's ablation gate and artifacts; keep the concurrency fix",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1540,10 +1541,9 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/S1-quota-auto-exit.W-1250.md",
-      "monitor/board/done/S9-contract-change-protocol.W-1250.md",
-      "monitor/inbox/20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md",
-      "monitor/reflex.lock"
+      "monitor/board/claimed/S5-phase1-close.W-1250.md",
+      "monitor/board/done/S1-quota-auto-exit.W-1250.md",
+      "monitor/inbox/20260728T143836Z-opsm-reflex-stalls-are-invisible.md"
     ]
   },
   "p1_green": 9,
@@ -2002,8 +2002,8 @@
       "status": "partial"
     },
     "conflict_scan": {
-      "detail": "跨领地提交（一个 commit 改了多个轨道 —— 领地纪律被破）：aeee50e C8: two fresh readers, 53 items, zero wrong -- and seven（monitor+theory-compiler）",
-      "status": "risk"
+      "detail": "三类检查全空：无冲突标记、无未合并路径、近 40 个提交无跨领地改动。",
+      "status": "green"
     },
     "credential_hygiene": {
       "detail": "无泄漏。密钥另有 2 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env, .worktrees/wt-p8/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。",
@@ -2020,7 +2020,7 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 5 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md, 20260728T145500Z-W-1252-handover-package-found-four-generator-defects.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md",
+      "detail": "待裁决提案 7 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md, 20260728T143000Z-W-1253-p10-territory-and-a-latent-render-defect.md, 20260728T143836Z-opsm-reflex-stalls-are-invisible.md, 20260728T145500Z-W-1252-handover-package-found-four-generator-defects.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md",
       "status": "partial"
     },
     "needs_human": {
@@ -2029,10 +2029,10 @@
       "status": "green"
     },
     "ops_duty": {
-      "detail": "OPS-A 第8轮 idle（34 分钟前）； OPS-B 第4轮 idle（120 分钟前）； OPS-M 第5轮 working（23 分钟前）； OPS-R 第1轮 idle（479 分钟前）",
+      "detail": "OPS-A 第8轮 idle（41 分钟前）； OPS-B 第5轮 idle（4 分钟前）； OPS-M 第5轮 working（30 分钟前）； OPS-R 第1轮 idle（487 分钟前）",
       "rows": [
         {
-          "age_min": 34,
+          "age_min": 41,
           "cycle": 8,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -2041,16 +2041,16 @@
           "status": "green"
         },
         {
-          "age_min": 120,
-          "cycle": 4,
+          "age_min": 4,
+          "cycle": 5,
           "id": "OPS-B",
           "name": "浏览器专员",
-          "note": "条款漂移基线已建（terms_canary.json，四页 + 14 个语义锚点）；本轮复核结果无漂移；两份提案仍待裁决",
+          "note": "总线已入循环第0步（#1 已回执）；A 条已成 S11 由 W-1410 认领，B 条（公开 replay 红线）仍无归宿，已 bus.say 提请搭 S11 的 CLAUDE.md 编辑窗口，拟插入原文备在 browser-ops/REDLINE-replay-proposed-text.md；条款漂移下次按天巡",
           "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 23,
+          "age_min": 30,
           "cycle": 5,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2059,7 +2059,7 @@
           "status": "green"
         },
         {
-          "age_min": 479,
+          "age_min": 487,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2084,7 +2084,7 @@
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 22 个提交 / 5 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 29 个提交 / 8 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "partial"
     },
     "supply": {
@@ -2092,8 +2092,8 @@
       "status": "partial"
     },
     "verify_gates": {
-      "detail": "**声称存在却没有的收工闸门 1 处**：ablation-arm/verify.sh（A4a-ablation-build 声称）。闸门不是被绕过，是根本没造出来。",
-      "status": "risk"
+      "detail": "工单声称的 1 个 verify 脚本全部在树上。",
+      "status": "green"
     }
   },
   "progress": {

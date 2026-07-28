@@ -115,7 +115,7 @@
       "claim": "a full run leaves every upstream tree byte-identical",
       "evidence": {
         "changed": [],
-        "files_hashed": 386
+        "files_hashed": 512
       },
       "holds": true,
       "name": "read-only"
@@ -133,8 +133,10 @@
     }
   ],
   "failed_assertions": [],
-  "failed_stages": [],
-  "green": true,
+  "failed_stages": [
+    "pytest"
+  ],
+  "green": false,
   "recorded_for_a4b": {
     "E3": {
       "numbers": {
@@ -202,6 +204,27 @@
     }
   },
   "scope": "implementation only. Four of the seven pre-registered predictions are comparisons against an arm that has not been run; they are recorded, never asserted, and cannot turn this gate red.",
-  "stages": [],
+  "stages": [
+    {
+      "returncode": 0,
+      "stage": "build_theory --check"
+    },
+    {
+      "returncode": 1,
+      "stage": "pytest"
+    },
+    {
+      "returncode": 0,
+      "stage": "run_arm"
+    },
+    {
+      "returncode": 0,
+      "stage": "run_arm --twice"
+    },
+    {
+      "returncode": 0,
+      "stage": "run_exhibits"
+    }
+  ],
   "what": "ablation-arm completion gate (A4a)"
 }
