@@ -1,0 +1,150 @@
+{
+  "arms": [
+    "bare_cc",
+    "schema_repro",
+    "theoria_a0",
+    "theoria_a0_spike",
+    "theoria_a2"
+  ],
+  "base_commit": "32059928f7bb1c075d25553346c487837d961d64",
+  "branch": "agent/v3-battery-discrimination",
+  "cut": {
+    "cut_version": "v1",
+    "dev_pile": [
+      "ar25-0c556536",
+      "g50t-5849a774",
+      "sk48-d8078629",
+      "tn36-ef4dde99"
+    ],
+    "n_sealed": 21,
+    "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a"
+  },
+  "determinism": {
+    "artefacts_compared": 7,
+    "byte_identical": true,
+    "method": "two consecutive recomputes to separate output dirs, sha256 per artefact"
+  },
+  "files": [
+    {
+      "path": "battery/artifacts/arm_contrast.json",
+      "sha256": "c851d749426b4a6f9a45c55a94ee39bb0f6e7002d05902b4c7baf38552f92ae0"
+    },
+    {
+      "path": "battery/artifacts/capability_spectrum.json",
+      "sha256": "61aa3eaca3a341a0e7d17dbf31255edd54b151562878df199fe799393889c301"
+    },
+    {
+      "path": "battery/artifacts/discrimination.json",
+      "sha256": "1e7ff0cec2021b296244e85d9c360decf2e30c9e9e1aae71cb169ebf6c930ebb"
+    },
+    {
+      "path": "battery/artifacts/discrimination_arms.json",
+      "sha256": "1e4f5f88e7db52a4d4bb0a2d1b92470594418ac0371ff3b40b540c3323548dbe"
+    },
+    {
+      "path": "battery/artifacts/gaming_audit.json",
+      "sha256": "c90e390202a6693a5362eadc38712760a2a8b9d8f0d4281a84266c4cfd77423f"
+    },
+    {
+      "path": "battery/artifacts/redundancy.json",
+      "sha256": "e6a86b997c1a60608b2bdedd80af7878eebb7652f798ad454ce63dbe389ab2b7"
+    },
+    {
+      "path": "battery/artifacts/validation_material.json",
+      "sha256": "06313f87c8d6ebbee8dff2398ef48a625f378234f4aa71c19da1e79138822c38"
+    },
+    {
+      "path": "battery/REPORT_V2.md",
+      "sha256": "01ca58e2a9ae41ceb1176d809d86f48d9e98ade04b08651d4cf32dd2c0fa05a0"
+    },
+    {
+      "path": "battery/PREDICTIONS.md",
+      "sha256": "9cb5f60fa198b68f3e7d4668d4c95bebc3cee11714c2ad30d9913378ea8c3927"
+    },
+    {
+      "path": "battery/METRICS.md",
+      "sha256": "034caa5ed064ff74cab95edd42517a5dfc8faf5599c42cf1c7017cf1e0d0f041"
+    },
+    {
+      "path": "battery/audit/REDUNDANCY.md",
+      "sha256": "36d73928f589eecdbb4bae63e4cd11dc7d7c869f664e10f2cba40f9c9340bc8d"
+    },
+    {
+      "path": "battery/DECISIONS.md",
+      "sha256": "9d81a62896dd17ccb1ddf6d01ac98a8e30c7fabdf170b54a8318ac66d9963a82"
+    },
+    {
+      "path": "battery/STATUS.md",
+      "sha256": "34bcca70fd35489a642b2f8fb5808757d89f5ffef53df1419ca7b5ee521ba3f7"
+    },
+    {
+      "path": "battery/adapters/schema_traces.py",
+      "sha256": "540cb3979b32210f63b57e4c144d4c7ac40cda255a474b1d4c4bb07b523284cb"
+    },
+    {
+      "path": "battery/audit/discriminate.py",
+      "sha256": "6ce5592cc5add65bcbc28e994ad4201d3afac3455a0dd67812dbc21ac045e46d"
+    },
+    {
+      "path": "battery/audit/redundancy.py",
+      "sha256": "35b43770c4d72b7da6ec72220c0a73cdddd05ad4e101e9da9a642f72e39cd6fd"
+    },
+    {
+      "path": "battery/audit/gaming.py",
+      "sha256": "23954c110a3ecf9492dfca82e27b14e89a95436b0d9f4998e1fccccbb59b934a"
+    },
+    {
+      "path": "battery/audit/exploits/__init__.py",
+      "sha256": "28219daa1bc05cca816570bd692513791b3ec3084dab5e42d77cc4a06caf05b5"
+    },
+    {
+      "path": "battery/audit/exploits/exploration_planning.py",
+      "sha256": "dd5cfc8b72201d3bd4b4cedf133ea8780873b80a0fb81ef9c424fad559f1b71e"
+    },
+    {
+      "path": "battery/audit/exploits/economy.py",
+      "sha256": "ef5773de3593c6a85630c8cd7d5622d961369bf86c69aa98dd5c356bf848c427"
+    },
+    {
+      "path": "battery/audit/exploits/mechanism_epistemic.py",
+      "sha256": "40229f57e639c011c8f1a3d65858ab2aeebfeabe56d08eeda446dec6a036a9fc"
+    }
+  ],
+  "head_commit": "45169a677e55330c8c58d34dbe334bb7af4cdb94",
+  "input_digests": {
+    "arc-recon/data/piles.json": "d3140eff4889095f64aff6360697eeff0a1b159a53d80a1ef6407b2c4dd5b8c9",
+    "baseline-arms/ledger.jsonl": "0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+    "baseline-arms/out/campaign/campaign_ar25.json": "2d1d5140cdc3f6639addc98d45ef620b25bc07da8bb735c714bff240df4c183d",
+    "baseline-arms/out/campaign/campaign_g50t.json": "d83ba976d9c2c79429e009af48c5923d5cd14061a9cff1f6739db9ce7fe2d469",
+    "baseline-arms/out/campaign/campaign_sk48.json": "6683f5d72e80206b58fbcd384e32067189d49174dd13ffcec9a2dc12e6b57ab2",
+    "baseline-arms/out/campaign/campaign_tn36.json": "35a8c66fb97432aa0d499d3256a8d2b37ab15e0c878f2cb62cd1b411a85e47ec",
+    "baseline-arms/out/shards/ledger.ar25.jsonl": "a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9",
+    "baseline-arms/out/shards/ledger.g50t.jsonl": "7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5",
+    "baseline-arms/out/shards/ledger.sk48.jsonl": "4ba20da9819d450b4f0ab489e0611b74a569ba3190d202926792a4dca5199ba0",
+    "baseline-arms/out/shards/ledger.tn36.jsonl": "bacb484ae81ce815e67bb7eae6372cd97a85e50793dccb8268c75a8d5b2b642b",
+    "baseline-arms/schema_traces/MANIFEST.json": "b71b7f64e09afe6703fc3f8770834d1075d82306df6b9b7bc7353b05e11c14ba"
+  },
+  "n_games": 4,
+  "n_runs": 95,
+  "passive": {
+    "api_calls": 0,
+    "game_spend_usd": 0.0,
+    "model_calls": 0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "V3-battery-discrimination",
+  "schema_traces": {
+    "manifest_sha256": "b71b7f64e09afe6703fc3f8770834d1075d82306df6b9b7bc7353b05e11c14ba",
+    "note": "payload is gitignored (no upstream licence); only aggregate statistics derived from it appear in any artefact -- D-B-020",
+    "present": true,
+    "root": "C:/Users/user/Desktop/theoria/baseline-arms/schema_traces"
+  },
+  "tests": {
+    "failed": 0,
+    "passed": 210,
+    "suite": "python -m pytest battery/tests -q"
+  },
+  "utc": "2026-07-28T06:11:47Z",
+  "what": "Phase 2 process 1 on the gradient Theoria.md specifies (CC vs Schema, paired by game), process 3 with per-family representatives, and process 4 made executable."
+}
