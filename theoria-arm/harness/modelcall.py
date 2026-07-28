@@ -131,6 +131,10 @@ class ModelDesk:
         self.cli_cost_usd = 0.0
         self.usage_total: Dict[str, int] = {}
         self.log: List[Dict[str, Any]] = []
+        #: Ledger writes that were refused after the provider had been paid.
+        #: Empty is the expected state; non-empty means the run's ledger is
+        #: incomplete and says exactly where.
+        self.ledger_failures: List[Dict[str, Any]] = []
 
     # -- the account -------------------------------------------------------
     def _absorb_usage(self, usage: Dict[str, Any]) -> None:
@@ -143,7 +147,11 @@ class ModelDesk:
                 "cli_cost_usd": round(self.cli_cost_usd, 6),
                 "usage_total": dict(self.usage_total),
                 "cost_ceiling_usd": self.cost_ceiling_usd,
-                "beats": sorted({entry["beat"] for entry in self.log})}
+                "beats": sorted({entry["beat"] for entry in self.log}),
+                "ledger_failures": list(self.ledger_failures),
+                "calls_missing_from_ledger": sum(
+                    1 for f in self.ledger_failures
+                    if f.get("stage") == "model_call")}
 
     # -- the call ----------------------------------------------------------
     def call(self, prompt: str, *, beat: str, step_idx: Optional[int] = None,
@@ -175,30 +183,26 @@ class ModelDesk:
         # The request as *this arm* sent it. Named `prompt` rather than
         # `messages` so nobody mistakes it for the /v1/messages body: the CLI
         # wraps it in a system prompt this arm never sees.
+        #
+        # `proxied` and `proxy_gap` live here rather than at the top of the
+        # record because `LEDGER_FORMAT.md` §4 closed the `model_call` field
+        # set after P-8 landed. `request` is caller-owned and already carried
+        # `beat`, `label` and `transport`, so nothing was lost by moving them
+        # in beside them -- see `_record_to_ledger`.
         request = {"transport": "claude-code-cli", "model": model,
                    "max_turns": max_turns, "prompt": prompt,
-                   "beat": beat, "label": label}
+                   "beat": beat, "label": label, "proxied": False,
+                   "proxy_gap": "model_proxy strips Authorization and no "
+                                "ANTHROPIC_API_KEY exists; see "
+                                "harness/modelcall.py and DECISIONS D-P8-002"}
 
-        self.run.model_call(
-            provider=PROVIDER,
-            model=model,
-            request=request,
-            response=envelope,
-            usage=usage,
-            pricing_ref=self.pricing_ref,
-            step_idx=step_idx,
-            http={"method": "CLI", "path": "claude -p --output-format json",
-                  "status": 200 if envelope.get("subtype") == "success" else 500,
-                  "elapsed_ms": elapsed_ms, "attempts": 1,
-                  "forwarded": False, "stream": False},
-            beat=beat,
-            label=label,
-            transport="claude-code-cli",
-            proxied=False,
-            proxy_gap="model_proxy strips Authorization and no ANTHROPIC_API_KEY "
-                      "exists; see harness/modelcall.py and DECISIONS D-P8-002",
-        )
-
+        # The money is already gone. Everything below is bookkeeping, and no
+        # bookkeeping failure may be allowed to discard a reply that has been
+        # paid for -- so the arm's own record is written FIRST and the ledger
+        # write is wrapped. E3's first live desk call cost $2.695 and was thrown
+        # away because the ledger raised between the payment and the append:
+        # `desk.calls` said 1, `desk_log.json` was `[]`, and no transcript
+        # existed. Order is the fix; see DECISIONS D-E3-010.
         entry = {"call": self.calls, "beat": beat, "label": label,
                  "model": model, "elapsed_ms": elapsed_ms,
                  "cli_cost_usd": cli_cost, "usage": usage,
@@ -211,6 +215,9 @@ class ModelDesk:
                 entry["context_error"] = "%s: %s" % (type(exc).__name__, exc)
         self.log.append(entry)
         self._write_transcript(entry, prompt, text, stderr)
+
+        self._record_to_ledger(entry, request, envelope, usage, step_idx,
+                               elapsed_ms, beat, label)
 
         if not text.strip():
             # An empty reply is not silence: the envelope says why. Naming the
@@ -225,6 +232,48 @@ class ModelDesk:
                    len(envelope.get("permission_denials") or []),
                    (stderr or "")[:200]))
         return text
+
+    # -- the ledger ---------------------------------------------------------
+    def _record_to_ledger(self, entry, request, envelope, usage, step_idx,
+                          elapsed_ms, beat, label) -> None:
+        """The canonical `model_call`, and nothing beside it.
+
+        P-8 wrote `beat`, `label`, `transport`, `proxied` and `proxy_gap`
+        straight onto the record. `LEDGER_FORMAT.md` §4 closed that field set
+        after P-8 landed and `canon.py` now refuses all five, which is what
+        killed E3's first live desk call.
+
+        They are not dropped -- they are nested inside `request`, which is a
+        caller-owned object on the canonical record and already carried `beat`,
+        `label` and `transport` before this change. So nothing is lost and no
+        new event is invented: `EVENTS` in `proxy/ledger.py` is closed to seven
+        names, none of which fits a model call's metadata, and adding one would
+        mean editing another track's directory. `beat` therefore remains on the
+        ledger, one level deeper, and constraint 8 stays checkable from the file
+        rather than from prose. `armtools/archive.py` reads both depths.
+
+        A refusal here is recorded and survived, never raised. By the time this
+        runs the provider has been paid and the reply is already in `self.log`
+        and on disk as a transcript; turning a bookkeeping problem into a lost
+        call is strictly worse than an incomplete ledger plus a loud entry
+        saying so. `ledger_failures` rides in `summary()` so it cannot be missed.
+        """
+        http = {"method": "CLI", "path": "claude -p --output-format json",
+                "status": 200 if envelope.get("subtype") == "success" else 500,
+                "elapsed_ms": elapsed_ms, "attempts": 1,
+                "forwarded": False, "stream": False}
+        try:
+            record = self.run.model_call(
+                provider=PROVIDER, model=entry["model"], request=request,
+                response=envelope, usage=usage, pricing_ref=self.pricing_ref,
+                step_idx=step_idx, http=http)
+        except Exception as exc:                       # noqa: BLE001
+            self.ledger_failures.append(
+                {"call": entry["call"], "stage": "model_call",
+                 "error": "%s: %s" % (type(exc).__name__, exc)})
+            entry["ledger_error"] = "%s: %s" % (type(exc).__name__, exc)
+            return
+        entry["call_idx"] = record.get("call_idx")
 
     # -- plumbing ----------------------------------------------------------
     def _invoke(self, prompt: str, model: str):

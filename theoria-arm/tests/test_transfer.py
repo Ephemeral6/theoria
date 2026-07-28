@@ -74,7 +74,12 @@ def test_only_the_two_hand_written_books_travel(tmp_path):
     provenance = transfer.carry(target, source.root,
                                 source_game_id="g50t-5849a774")
 
-    assert target.theory.strip() == CARRIED_THEORY.strip()
+    # The manual travels whole apart from the landmark coordinates, which are
+    # level data and are stripped (see the dedicated test below).
+    assert target.theory.strip() == transfer.strip_level_data(
+        CARRIED_THEORY)[0].strip()
+    assert "object Marker" in target.theory
+    assert "rule key5_moves" in target.theory
     assert target.playbook.strip() == "# the playbook"
     assert not os.path.exists(target.problem_path)
     assert "problem.json" in provenance["not_carried"]
@@ -104,6 +109,68 @@ def test_carrying_snapshots_the_manual_before_the_new_game_touches_it(tmp_path):
     assert snapshots == ["rev01-carried"]
     kept = os.listdir(os.path.join(target.snapshots, "rev01-carried"))
     assert sorted(kept) == ["playbook.dsl", "theory.dsl"]
+
+
+def test_landmark_coordinates_do_not_travel_between_games(tmp_path):
+    """Excluding `problem.json` is not enough on its own.
+
+    On the first live carry, seven of g50t's landmark coordinates arrived in
+    sk48's computed `problem.json` verbatim -- `start_cell (10,16)`,
+    `gate_cell (40,16)`, `goal_cell (52,46)` and four more -- because
+    `_landmarks_from_theory` reads them out of comments in the manual. A
+    landmark's cell is level data by the arm's own domain/problem split, so a
+    route that carries it across games defeats the exclusion beside it.
+    """
+    source = _books(tmp_path)
+    target = Books(str(tmp_path / "target"))
+    provenance = transfer.carry(target, source.root)
+
+    assert provenance["landmarks_stripped"] == ["hud_slot_a"]
+    assert "arc-cell: (0, 0)" not in target.theory
+    # The landmark itself is still declared -- only its coordinates went.
+    assert "landmark hud_slot_a" in target.theory
+    assert theorize._landmarks_from_theory(target.theory) == {"hud_slot_a": None}
+    # And the source run's books are untouched.
+    assert "arc-cell: (0, 0)" in source.theory
+    # The stripped revision is the one snapshotted, so the diff is visible.
+    snapshot = os.path.join(target.snapshots, "rev01-carried", "theory.dsl")
+    assert "arc-cell: (0, 0)" not in open(snapshot, encoding="utf-8").read()
+
+
+def test_a_stripped_landmark_lands_at_the_origin_and_is_listed(tmp_path):
+    """The existing, visible failure mode for a coordinate the level cannot
+    supply -- not a new silent one."""
+    from inner.books import problem_from_frames           # noqa: PLC0415
+
+    grids = [[[9, 1, 0, 7], [0, 0, 0, 0]],
+             [[1, 9, 0, 7], [0, 0, 0, 0]]]
+    store = _store(grids, ["ACTION1"])
+    stripped, removed = transfer.strip_level_data(CARRIED_THEORY)
+    assert removed == ["hud_slot_a"]
+
+    problem = problem_from_frames(
+        store, theorize._objects_from_theory(stripped),
+        landmarks=theorize._landmarks_from_theory(stripped))
+    assert problem["landmarks"]["hud_slot_a"] == [0, 0]
+    assert problem["landmarks_defaulted"] == ["hud_slot_a"]
+
+
+def test_stripping_is_recorded_on_both_sides_of_the_hash(tmp_path):
+    """The carried manual is no longer byte-identical to its source, so both
+    hashes are kept: a provenance record that showed only one would make the
+    stripping invisible to anyone checking what was carried."""
+    source = _books(tmp_path)
+    target = Books(str(tmp_path / "target"))
+    provenance = transfer.carry(target, source.root)
+    entry = provenance["carried"]["theory.dsl"]
+    assert entry["sha256"] != entry["sha256_before_stripping"]
+    assert entry["sha256"] == _sha256_of(target.theory_path)
+
+
+def _sha256_of(path):
+    import hashlib
+    with open(path, "rb") as fh:
+        return hashlib.sha256(fh.read()).hexdigest()
 
 
 def test_declared_names_are_read_out_by_kind():
@@ -331,6 +398,120 @@ def test_a_plan_cannot_be_built_without_a_measured_basis(tmp_path):
         basis, action_cap=120, usd_ceiling=18.0, wall_clock_s=3600,
         legal_actions=4, frames_per_theorize=4, max_theorize_per_turn=2)
     assert projection["available"] is False
+
+
+# ------------------------------------------------- the ledger, actually written
+def _desk_on_a_real_ledger(tmp_path, envelope):
+    """A `ModelDesk` wired to the real frozen writer, with the CLI stubbed out.
+
+    The point is that the *ledger* is real. P-8's tests exercised constraint 8
+    and the record's shape against hand-built dicts, and every one of them
+    passed while the live writer refused the record outright -- because nothing
+    offline ever asked `proxy.ledger.RunLedger` to accept what this arm
+    actually sends it.
+    """
+    from harness.modelcall import ModelDesk               # noqa: PLC0415
+    from proxy.ledger import Ledger, RunLedger            # noqa: PLC0415
+
+    ledger = Ledger(os.path.join(str(tmp_path), "ledger.jsonl"))
+    run = RunLedger(ledger, "r-test-ledger", "theoria")
+    run.run_start(game_id="sk48-d8078629", env_base="http://x", model_base=None,
+                  env_upstream="https://three.arcprize.org", guard={},
+                  variant=None, arm_version={}, upstream_pin={})
+
+    desk = ModelDesk(run, model="claude-opus-5", cost_ceiling_usd=None,
+                     transcript_dir=os.path.join(str(tmp_path), "desk"))
+    desk._invoke = lambda prompt, model: (envelope, 1234, "")
+    return desk, ledger
+
+
+SUCCESS_ENVELOPE = {
+    "type": "result", "subtype": "success", "result": "the reply",
+    "total_cost_usd": 2.694961, "num_turns": 1,
+    "usage": {"input_tokens": 2, "output_tokens": 100,
+              "cache_creation_input_tokens": 5000, "cache_read_input_tokens": 0},
+}
+
+
+def test_a_desk_call_is_actually_accepted_by_the_frozen_writer(tmp_path):
+    """The regression that cost $2.695 live.
+
+    `LEDGER_FORMAT.md` §4 closed the `model_call` field set after P-8 landed,
+    and P-8 wrote `beat`, `label`, `transport`, `proxied` and `proxy_gap`
+    straight onto that record. `canon.py` refused all five, the write raised
+    after the provider had been paid, and the reply was discarded: `desk.calls`
+    said 1, `desk_log.json` was `[]`, and no transcript existed.
+    """
+    desk, ledger = _desk_on_a_real_ledger(tmp_path, SUCCESS_ENVELOPE)
+    text = desk.call("prompt", beat="theorize", step_idx=7, label="round1")
+
+    assert text == "the reply"
+    assert desk.ledger_failures == [], desk.ledger_failures
+    assert desk.summary()["calls_missing_from_ledger"] == 0
+
+    records = ledger.read()
+    calls = [r for r in records if r["event"] == "model_call"]
+    assert len(calls) == 1, "the model_call never reached the ledger"
+    # The closed shape carries none of the five at the top level...
+    for banned in ("beat", "label", "transport", "proxied", "proxy_gap"):
+        assert banned not in calls[0], banned
+    # ...and `request`, which the caller owns, carries all of them, so `beat`
+    # is still on the ledger and constraint 8 is still checkable from the file.
+    request = calls[0]["request"]
+    assert request["beat"] == "theorize"
+    assert request["label"] == "round1"
+    assert request["proxied"] is False
+    assert request["transport"] == "claude-code-cli"
+    assert "proxy_gap" in request
+
+
+def test_constraint_8_still_reads_the_beat_after_the_migration(tmp_path):
+    """`beat` on the ledger is what makes constraint 8 checkable rather than
+    asserted. Moving it to an auxiliary must not quietly turn every call into
+    `unknown`, which would report a violation that is really a migration."""
+    from armtools.archive import constraint_8             # noqa: PLC0415
+
+    desk, ledger = _desk_on_a_real_ledger(tmp_path, SUCCESS_ENVELOPE)
+    desk.call("prompt", beat="theorize", step_idx=7, label="round1")
+
+    report = constraint_8(ledger.read(), str(tmp_path))
+    assert report["calls_by_beat"] == {"theorize": 1}
+    assert report["calls_at_forbidden_beats"] == {}
+    assert report["holds"] is True
+
+
+def test_a_p8_era_ledger_with_the_beat_inline_still_reads(tmp_path):
+    """The rejoin reads both sources. An older run's records carry `beat` on
+    the call itself and must not be re-read as `unknown`."""
+    from armtools.archive import constraint_8             # noqa: PLC0415
+
+    records = [{"event": "model_call", "call_idx": 0, "beat": "theorize"}]
+    report = constraint_8(records, str(tmp_path))
+    assert report["calls_by_beat"] == {"theorize": 1}
+
+
+def test_a_paid_reply_survives_a_ledger_that_refuses_it(tmp_path):
+    """By the time the ledger is written the provider has been paid. Turning a
+    bookkeeping refusal into a lost call is strictly worse than an incomplete
+    ledger plus a loud entry saying so."""
+    desk, ledger = _desk_on_a_real_ledger(tmp_path, SUCCESS_ENVELOPE)
+
+    def refuse(**kwargs):
+        raise ValueError("canon says no")
+
+    desk.run.model_call = refuse
+
+    text = desk.call("prompt", beat="theorize", step_idx=7, label="round1")
+    assert text == "the reply"                    # the reply is NOT discarded
+    assert len(desk.log) == 1                     # the arm's own record exists
+    assert desk.log[0]["cli_cost_usd"] == 2.694961
+    assert "canon says no" in desk.log[0]["ledger_error"]
+    # ...and the incompleteness is impossible to miss in the summary.
+    assert desk.summary()["calls_missing_from_ledger"] == 1
+    assert desk.ledger_failures[0]["stage"] == "model_call"
+    # The transcript is on disk too, so the money bought something readable.
+    transcripts = os.listdir(os.path.join(str(tmp_path), "desk"))
+    assert transcripts, "no transcript was written for a paid call"
 
 
 # ------------------------------------------------------- the whole thing, mock

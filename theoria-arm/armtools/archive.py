@@ -263,10 +263,20 @@ def sealing(records: List[Dict[str, Any]], key_len: int = 36) -> Dict[str, Any]:
 
 def constraint_8(records: List[Dict[str, Any]], run_dir: str) -> Dict[str, Any]:
     calls = [r for r in records if r.get("event") == "model_call"]
+
+    # `beat` used to sit on the `model_call` record itself. `LEDGER_FORMAT.md`
+    # §4 closed that shape after P-8 landed, so it now rides inside `request`,
+    # which the caller owns. Both depths are read: a P-8-era ledger carries it
+    # at the top level, and a constraint-8 check that silently read `unknown`
+    # off every record of an older run would report a violation that is really
+    # a schema migration.
     beats: Dict[str, int] = {}
     for record in calls:
-        beats[record.get("beat") or "unknown"] = \
-            beats.get(record.get("beat") or "unknown", 0) + 1
+        request = record.get("request")
+        beat = (record.get("beat")
+                or (request.get("beat") if isinstance(request, dict) else None)
+                or "unknown")
+        beats[beat] = beats.get(beat, 0) + 1
     illegal = {b: n for b, n in beats.items()
                if b not in ("theorize", "probe_design")}
 
@@ -309,16 +319,20 @@ def constraint_8(records: List[Dict[str, Any]], run_dir: str) -> Dict[str, Any]:
 
 def cost_curve(records: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """Cost per turn, on the step axis the battery will want."""
+    # Same §4 migration as `constraint_8`: `beat` and `label` now ride inside
+    # `request`. Both depths are read.
     out = []
     for record in records:
         if record.get("event") != "model_call":
             continue
         response = record.get("response") or {}
+        side = record.get("request")
+        side = side if isinstance(side, dict) else {}
         out.append({
             "call_idx": record.get("call_idx"),
             "step_idx": record.get("step_idx"),
-            "beat": record.get("beat"),
-            "label": record.get("label"),
+            "beat": record.get("beat") or side.get("beat"),
+            "label": record.get("label") or side.get("label"),
             "model": record.get("model"),
             "usd": (response.get("total_cost_usd")
                     if isinstance(response, dict) else None),

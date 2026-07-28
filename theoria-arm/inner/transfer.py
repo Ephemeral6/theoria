@@ -52,6 +52,25 @@ from typing import Any, Dict, List, Optional, Tuple
 CARRIED = ("theory.dsl", "playbook.dsl")
 NEVER_CARRIED = ("problem.json",)
 
+#: `# arc-cell: (r, c)` on a landmark declaration.
+#:
+#: Excluding `problem.json` is not enough on its own, and the first live E3 run
+#: proved it: seven of g50t's landmark coordinates -- `start_cell (10,16)`,
+#: `gate_cell (40,16)`, `goal_cell (52,46)` and four more -- arrived in sk48's
+#: computed `problem.json` verbatim, because `theorize._landmarks_from_theory`
+#: reads them out of comments in the manual and `problem_from_frames` writes
+#: them into the level. The manual is the domain and the coordinates are level
+#: data (`inner/books.py`'s own domain/problem split says so), so a route that
+#: carries them across games defeats the exclusion it sits next to.
+#:
+#: They are stripped on carry, not on write, so the *source* run's books are
+#: untouched and the stripping is visible as a diff in `rev01-carried`. A
+#: landmark whose hint is gone still declares itself; `problem_from_frames`
+#: places it at the origin and lists it under `landmarks_defaulted`, which is
+#: the existing, visible failure mode for a coordinate the level cannot supply.
+CELL_HINT_LINE = re.compile(r"(^\s*landmark\s+\w+.*?)#\s*arc-cell\s*[:=]\s*"
+                            r"\(?\s*\d+\s*,\s*\d+\s*\)?", re.M)
+
 #: Declared names, by kind, as the grammar card writes them.
 DECL = {
     "object": re.compile(r"^\s*object\s+(\w+)", re.M),
@@ -77,8 +96,22 @@ def declared_names(text: str) -> Dict[str, List[str]]:
 
 
 # ------------------------------------------------------------------- carrying
+def strip_level_data(theory: str) -> Tuple[str, List[str]]:
+    """Remove the landmark cell hints, and say which ones went.
+
+    Returns the stripped text and the names whose coordinates were removed.
+    """
+    removed: List[str] = []
+    for match in re.finditer(r"^\s*landmark\s+(\w+)(.*)$", theory or "", re.M):
+        if re.search(r"arc-cell\s*[:=]", match.group(2) or ""):
+            removed.append(match.group(1))
+    return CELL_HINT_LINE.sub(r"\1# arc-cell: carried, coordinates stripped -- ",
+                              theory or ""), removed
+
+
 def carry(books, source_books_dir: str, *,
-          source_game_id: Optional[str] = None) -> Dict[str, Any]:
+          source_game_id: Optional[str] = None,
+          strip_landmarks: bool = True) -> Dict[str, Any]:
     """Seed a fresh run's books from a finished run's, and say exactly what moved.
 
     Raises if the source has no `theory.dsl`: a carry that silently degrades to
@@ -104,8 +137,29 @@ def carry(books, source_books_dir: str, *,
                          "bytes": os.path.getsize(dst),
                          "lines": sum(1 for _ in open(dst, encoding="utf-8"))}
 
+    landmarks_stripped: List[str] = []
+    if strip_landmarks:
+        stripped, landmarks_stripped = strip_level_data(books.theory)
+        if landmarks_stripped:
+            books.write(theory=stripped)
+            carried["theory.dsl"] = {
+                "sha256": _sha256(books.theory_path),
+                "bytes": os.path.getsize(books.theory_path),
+                "lines": sum(1 for _ in open(books.theory_path,
+                                             encoding="utf-8")),
+                "sha256_before_stripping": carried["theory.dsl"]["sha256"],
+            }
+
     theory_text = books.theory
     provenance = {
+        "landmarks_stripped": landmarks_stripped,
+        "landmarks_stripped_why": (
+            "a landmark's `# arc-cell: (r, c)` is level data, not domain: the "
+            "manual names the landmark and the level places it. Carrying the "
+            "coordinates would move one game's geometry into another game's "
+            "computed level, which is the same defect excluding problem.json "
+            "exists to prevent -- and it happened on the first live carry "
+            "before this was added."),
         "source_books_dir": os.path.abspath(source_books_dir),
         "source_run": os.path.basename(
             os.path.dirname(os.path.abspath(source_books_dir))),
