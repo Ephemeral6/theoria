@@ -25,6 +25,29 @@
 %     searching the system name returns nothing and invites invention.
 %   * The Dijkstra sentence is EWD249's own wording. The shorter form usually
 %     quoted is not what EWD249 says — see dijkstra1970notes.
+%
+% AUTHOR-NAME CONVENTION. Where sources disagree on the form of a personal name,
+% this file follows the PROCEEDINGS OF RECORD — the venue whose volume, pages and
+% DOI the entry cites. Aggregators are not authoritative for name spelling:
+% Crossref ASCII-folds some diacritics (Bodík -> Bodik) and abbreviates some
+% given names, and DBLP ASCII-folds too (Dumančić -> Dumancic). Two entries were
+% changed under this rule after the adversarial pass: hao2023rap (the entry cites
+% the EMNLP proceedings, so the ACL Anthology's "Joshua Hong" / "Daisy Wang"
+% replace arXiv's longer forms) and bruce2024genie (PMLR's "Sarah Maria
+% Elisabeth Bechtle" and "De Freitas" replace the shorter arXiv/DBLP forms).
+%
+% DO NOT "CORRECT" THESE. Both look like errors and are not:
+%   * trinh2024alphageometry's DOI reads 10.1038/s41586-*023*-06747-5 on a 2024
+%     paper. Nature DOIs carry the submission-year stamp. It resolves.
+%   * muggleton1994ilptheory's volume is *19--20*. That is a genuine combined
+%     double volume, not a mistyped page range.
+%
+% ONE RECORD IS CONFIRMED TO SECONDARY-SOURCE STANDARD ONLY. openai.com returns
+% 403 to automated fetching, so brooks2024sora's 13-name contributor list was
+% confirmed from independent scholarly bibliographies rather than from the page
+% itself. Whoever finalises this file should open it in a browser once. Its
+% publication date (15 Feb 2024) is single-source and is therefore not asserted
+% in the entry.
 
 % =====================================================================
 % Wave I — world models in weights
@@ -101,7 +124,7 @@
 
 @inproceedings{bruce2024genie,
   title     = {Genie: Generative Interactive Environments},
-  author    = {Bruce, Jake and Dennis, Michael D. and Edwards, Ashley and Parker-Holder, Jack and Shi, Yuge and Hughes, Edward and Lai, Matthew and Mavalankar, Aditi and Steigerwald, Richie and Apps, Chris and Aytar, Yusuf and Bechtle, Sarah and Behbahani, Feryal and Chan, Stephanie C. Y. and Heess, Nicolas and Gonzalez, Lucy and Osindero, Simon and Ozair, Sherjil and Reed, Scott and Zhang, Jingwei and Zolna, Konrad and Clune, Jeff and de Freitas, Nando and Singh, Satinder and Rockt{\"a}schel, Tim},
+  author    = {Bruce, Jake and Dennis, Michael D. and Edwards, Ashley and Parker-Holder, Jack and Shi, Yuge and Hughes, Edward and Lai, Matthew and Mavalankar, Aditi and Steigerwald, Richie and Apps, Chris and Aytar, Yusuf and Bechtle, Sarah Maria Elisabeth and Behbahani, Feryal and Chan, Stephanie C. Y. and Heess, Nicolas and Gonzalez, Lucy and Osindero, Simon and Ozair, Sherjil and Reed, Scott and Zhang, Jingwei and Zolna, Konrad and Clune, Jeff and De Freitas, Nando and Singh, Satinder and Rockt{\"a}schel, Tim},
   booktitle = {Proceedings of the 41st International Conference on Machine Learning (ICML 2024)},
   series    = {PMLR},
   volume    = {235},
@@ -153,7 +176,7 @@
 
 @inproceedings{hao2023rap,
   title     = {Reasoning with Language Model is Planning with World Model},
-  author    = {Hao, Shibo and Gu, Yi and Ma, Haodi and Hong, Joshua Jiahua and Wang, Zhen and Wang, Daisy Zhe and Hu, Zhiting},
+  author    = {Hao, Shibo and Gu, Yi and Ma, Haodi and Hong, Joshua and Wang, Zhen and Wang, Daisy and Hu, Zhiting},
   booktitle = {Proceedings of the 2023 Conference on Empirical Methods in Natural Language Processing (EMNLP 2023)},
   pages     = {8154--8173},
   year      = {2023},
@@ -594,16 +617,16 @@
   note      = {arXiv:2205.12615}
 }
 
-@article{hubert2025alphaproof,
+@article{hubert2026alphaproof,
   title   = {Olympiad-level formal mathematical reasoning with reinforcement learning},
   author  = {Hubert, Thomas and Mehta, Rishi and Sartran, Laurent and others},
   journal = {Nature},
   volume  = {651},
   number  = {8106},
   pages   = {607--613},
-  year    = {2025},
+  year    = {2026},
   doi     = {10.1038/s41586-025-09833-y},
-  note    = {Describes AlphaProof. Published online 12 November 2025; print issue March 2026 --- pick a year deliberately. ``AlphaProof'' does not appear in the title, which is why searching the system name returns nothing}
+  note    = {Describes AlphaProof; ``AlphaProof'' does not appear in the title, which is why searching the system name returns nothing. Year deliberately set to the print issue (2026, PubMed indexes it 2026;651(8106):607-613) because volume, number and pages are the print issue's coordinates; advance online publication was 12 November 2025. 39 authors --- expand `others` if house style requires}
 }
 
 @article{trinh2024alphageometry,
