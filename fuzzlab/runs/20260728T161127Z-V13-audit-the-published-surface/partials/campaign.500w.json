@@ -1,9 +1,9 @@
 {
   "campaign_seed": "0x00005eedc1e4f002",
-  "engine_rig_head": "68a8365",
+  "engine_rig_head": "e27e0c0",
   "engines": [
     {
-      "elapsed_s": 1.7,
+      "elapsed_s": 1.71,
       "engine": "mdl_segmenter",
       "family": "gridworld",
       "generator_errors": [],
@@ -28,7 +28,7 @@
       "worlds_requested": 500
     },
     {
-      "elapsed_s": 91.18,
+      "elapsed_s": 91.15,
       "engine": "cegis_miner",
       "family": "gridworld",
       "generator_errors": [],
@@ -82,7 +82,7 @@
       "worlds_requested": 500
     },
     {
-      "elapsed_s": 43.08,
+      "elapsed_s": 42.83,
       "engine": "lp_potential",
       "family": "jumpgraph",
       "generator_errors": [],

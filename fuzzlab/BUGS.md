@@ -192,7 +192,7 @@ was confirmed to **fail** against the pre-V-13 code
 engine disabled`) and to pass after — a regression test nobody has watched fail
 is a regression test nobody has tested.
 
-**Two numbers that must not be mixed.** ~267/500 is a fact about *this battery*:
+**Two numbers that must not be mixed.** 267/500 is a fact about *this battery*:
 the worlds on which these invariants evaluate anything. It is **not** the
 engine's incompleteness rate. Most certificate-less worlds are worlds where a
 goal is genuinely reachable, and declining to certify there is the engine being

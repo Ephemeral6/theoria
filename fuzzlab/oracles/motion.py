@@ -286,8 +286,9 @@ def mover_anchors(world: Any) -> Optional[List[Cell]]:
         anchors[index + 1] = here.to
     for index in range(first - 1, -1, -1):
         anchors[index] = anchors[index + 1]      # every earlier motion is NONE
-    return [a for a in anchors if a is not None] if all(
-        a is not None for a in anchors) else None
+    if any(a is None for a in anchors):          # cannot happen; refuse anyway
+        return None
+    return [a for a in anchors if a is not None]
 
 
 def unreadable_reasons(world: Any) -> Dict[int, str]:
