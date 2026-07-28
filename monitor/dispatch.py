@@ -149,7 +149,14 @@ def launch(pid, path, log_dir):
     log.flush()
     flags = 0
     if os.name == "nt":
-        flags = subprocess.CREATE_NEW_PROCESS_GROUP | 0x00000008  # DETACHED
+        # DETACHED + NEW_PROCESS_GROUP alone was not enough: all seven
+        # sessions of the first fleet died silently mid-run (empty logs, no
+        # branches) while the user's own app sessions survived — consistent
+        # with a Job-Object cleanup killing our children between monitor
+        # turns. BREAKAWAY_FROM_JOB detaches them from any inherited job.
+        flags = (subprocess.CREATE_NEW_PROCESS_GROUP
+                 | 0x00000008     # DETACHED_PROCESS
+                 | 0x01000000)    # CREATE_BREAKAWAY_FROM_JOB
     proc = subprocess.Popen(
         [claude, "-p", text, "--model", "opus", "--dangerously-skip-permissions"],
         cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,

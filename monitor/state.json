@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 09:06:54",
+  "generated_at": "2026-07-28 10:24:18",
   "history": [
     {
       "findings": {
@@ -469,27 +469,39 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/scan.py",
+      "onitor/dispatch.py",
+      "monitor/loop_state.json",
+      "monitor/spec.py",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/"
+      "baseline-arms/out/shards/",
+      "monitor/prompts/P-21-figures.md",
+      "monitor/prompts/P-22-freeze-kit.md",
+      "monitor/prompts/P-23-related-work.md",
+      "monitor/prompts/P-24-fleet-skills.md",
+      "monitor/quota_state.json"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "a2032b1 monitor: reap on completion -- a headless session whose branch reaches origin is killed at once",
+    "git_head": "b32ae81 monitor: event-driven dispatch and frontend policies replace the fixed counters",
     "incidents": 8,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 45,
-    "sync_last": "2026-07-28T12:30:00Z",
+    "sync_entries": 48,
+    "sync_last": "2026-07-28T09:50:00Z",
     "tests": {},
     "untracked": [
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/"
+      "baseline-arms/out/shards/",
+      "monitor/prompts/P-21-figures.md",
+      "monitor/prompts/P-22-freeze-kit.md",
+      "monitor/prompts/P-23-related-work.md",
+      "monitor/prompts/P-24-fleet-skills.md",
+      "monitor/quota_state.json"
     ]
   },
   "p1_green": 6,
   "p1_total": 16,
-  "paper_progress": 26.8,
+  "paper_progress": 30.8,
   "phases": [
     {
       "_counts": {
@@ -846,7 +858,7 @@
       "status": "green"
     },
     "dispatch_board": {
-      "detail": "12 份在册工单，0 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",
+      "detail": "19 份在册工单，1 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",
       "rows": [
         {
           "branch": "—",
@@ -888,7 +900,7 @@
           "branch": "—",
           "id": "P-15",
           "prompt": "P-15-exam-builder.md",
-          "self_reported": false
+          "self_reported": true
         },
         {
           "branch": "—",
@@ -900,6 +912,48 @@
           "branch": "—",
           "id": "P-17",
           "prompt": "P-17-a3-transfer.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-18",
+          "prompt": "P-18-ablation-arm.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-19",
+          "prompt": "P-19-release-kit.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-20",
+          "prompt": "P-20-cascade-probe.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-21",
+          "prompt": "P-21-figures.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-22",
+          "prompt": "P-22-freeze-kit.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-23",
+          "prompt": "P-23-related-work.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-24",
+          "prompt": "P-24-fleet-skills.md",
           "self_reported": false
         },
         {
@@ -921,7 +975,7 @@
           "self_reported": false
         }
       ],
-      "status": "partial"
+      "status": "green"
     },
     "inbox": {
       "detail": "提案箱空。",

@@ -1,29 +1,33 @@
 {
   "mode": "fleet-loop",
   "started": "2026-07-28T08:55:00Z",
-  "pool_target": 10,
+  "pool_target": 14,
   "in_flight": [
-    "P-8",
-    "P-9",
     "P-12",
-    "P-13",
-    "P-15",
-    "P-17",
-    "R-1",
+    "M-0",
+    "A-1",
     "B-1",
     "P-18",
     "P-19",
     "P-20",
-    "M-0",
-    "A-1"
+    "P-21",
+    "P-22",
+    "P-23",
+    "P-24",
+    "R-1"
   ],
   "completed": [
     "P-10",
     "P-11",
     "P-14",
-    "P-16"
+    "P-16",
+    "P-8",
+    "P-9",
+    "P-13",
+    "P-15",
+    "P-17"
   ],
-  "total_completed": 4,
+  "total_completed": 9,
   "completions_since_refill": 0,
   "completions_since_monitor_update": 4,
   "m0_dispatched": true,
@@ -40,5 +44,8 @@
     "dispatch_policy": "event-driven: (1) per-completion -- a branch merged by M-0 frees its territory, author+dispatch follow-up work consuming the merged outputs at once, freshness beats batching; (2) critical-path preemption -- if WP3 critical path (theoria-arm) is idle or dead, relaunch immediately, jumps every queue; (3) M-0 fires when >=3 delivered-unmerged branches accumulate OR a pending dispatch depends on one; (4) caps: <=10 monitor-dispatched sessions, 2 slots reserved for services (A-1/B-*/M-0); (5) all launches gated by quota mode; recovering = priority list at half pool; (6) backpressure: no new prompt on a territory with a delivered-but-unmerged branch, unless the new work is additive-only in a fresh subdir; (7) staleness: a prompt authored >24h ago re-validates against the tree before launch",
     "frontend_policy": "light refresh (scan.py only, cheap, no spec rewrite): every heartbeat where any event occurred (completion, DRIFT report, quota flip) -- probes re-derive live facts, history dedup keeps it quiet; full update (spec judgments + findings + PAPER_PLAN + push + deliver page to user): (a) after each M-0 merge lands on master, (b) on any critical event (DRIFT-CRITICAL, quota hold enter/exit, new needs_human), (c) at every ~3h rebirth as part of re-derivation, (d) hard floor one full update per 3h even if quiet; SendUserFile only on full updates, never on light refreshes"
   },
-  "heartbeat_count": 0
+  "heartbeat_count": 0,
+  "notes": {
+    "headless-mass-death": "first fleet of 7 dispatched sessions all died silently mid-run (empty logs); fixed with CREATE_BREAKAWAY_FROM_JOB at 022343Z relaunch; survival to be confirmed next heartbeat"
+  }
 }
