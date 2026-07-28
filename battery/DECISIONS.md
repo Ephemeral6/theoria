@@ -258,3 +258,52 @@ thing that is discovered later rather than declared now. `run_battery` carries
 an `EXCLUDED_SOURCES` list into `capability_spectrum.json`'s provenance, so
 "not ingested" is a recorded decision with a reason attached rather than an
 omission someone has to notice.
+
+### D-B-019 · "No Schema arm" was two different facts, and v1 reported the wrong one
+
+`REPORT_V1.md` leads with *the Schema arm does not exist*, and lists the
+missing CC vs Schema gradient as gap number one. That was already false when it
+was written. `baseline-arms/SCHEMA_PATH_A.md` landed at commit `63ef0bf`
+(2026-07-28T02:53Z) and battery v1 at `e82558b` (09:04Z) — six hours later, on
+the same day, in the same tree.
+
+The conflation is worth naming precisely, because both halves are real and only
+one of them was a gap:
+
+| question | status |
+|---|---|
+| can we *run* Schema and get our own reproduction score? | **no**, and probably never — the harness was never released |
+| do we have Schema-side *trajectories* on the development pile? | **yes**, since 02:53Z that day |
+
+`SCHEMA_PATH_A.md` §6 draws exactly this line and says of the second row:
+*Phase 2 指标电池要的 Schema 侧材料 ✅ 本轮解决*. Process 1 needs trajectories,
+not a reproduction score — it asks whether a metric separates two arms, and for
+that the upstream ledger is sufficient material. v1 read "no Schema arm" off
+`SCHEMA_LOCATE.md`, which is about the harness, and never revisited it.
+
+So `discriminate_arms()` is the primary pass from v2 on, and the model ladder
+drops to secondary. The ladder is not deleted: it holds the harness fixed,
+which the cross-arm pass cannot, so the two passes fail in different directions
+and disagreement between them is information.
+
+`⟨复现值⟩` in `Theoria.md:271` stays empty. Nothing here fills it, and this
+decision does not license anyone to.
+
+### D-B-020 · Only derived statistics from the upstream payload, never the payload
+
+Upstream declares no licence (`SCHEMA_LOCATE.md` §2.3), which is why
+`baseline-arms/.gitignore` excludes the 87.7 MB payload and tracks only
+`MANIFEST.json`. `Theoria.md` Phase 4 publishes every tracked file, so anything
+the battery commits about this material is effectively republished.
+
+The rule this track adopts: **the battery commits effect sizes, correlations
+and per-metric verdicts; it never commits a frame, an action sequence, a
+transcript, a prompt, or any per-step record derived from one.** A Cliff's
+delta over four games is a statistic about our instrument, not a redistribution
+of somebody's dataset; a state-key digest column would be closer to the line
+and is not written to any artefact.
+
+`SCHEMA_PATH_A.md` §7.1 flags that citing specific numbers may still need a
+licence judgement. That judgement is not this track's to make and is not made
+here — it is escalated in `PARTNER_SYNC.md`, and until it comes back the
+artefacts stay at the aggregate-statistic level described above.
