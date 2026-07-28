@@ -1,0 +1,154 @@
+{
+  "prompt_id": "V14-standing-negative-control-probe",
+  "branch": "agent/v14-standing-negative-control-probe",
+  "base_commit": "b6d8643d0d860765c1bef75c1e5f499112379c80",
+  "utc": "2026-07-29T04:15:00Z",
+  "lane": "verify (RES-3)",
+  "inputs": {
+    "gold_standard": "verify-lab/runs/20260728T152000Z-V11-negative-control-census/CENSUS_TABLE.md",
+    "merged_from": "origin/agent/v11-negative-control-census",
+    "shape_copied_from": [
+      "worldgen/qc/KNOWN_MISS.json (agent/v12-worldgen-gate-deaf)",
+      "figures/check_coverage.py --self-test",
+      "figures/verify.sh gate 7 (ast, not regex)"
+    ],
+    "not_merged": "origin/master advanced during this item and was deliberately NOT merged. The instruction to merge upstream was to obtain commit a65ba9e, which is this item's own round-4 commit and was never upstream. Merging master would move the tree the pin was measured against, and re-pinning against a tree this item has not audited would defeat the pin."
+  },
+  "adversarial_review": {
+    "report": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/ADVERSARIAL.md",
+    "sampled": "all 33 (then 31) present entries, 21 test functions read in full, 770 import bindings, 464 failure-assertion hits, enumerator against V11's 90 locatable gates",
+    "overturned": [
+      "the 'no file shared' FP=0 row deletes the failure mode from the denominator rather than measuring its absence",
+      "the false-positive rate is a floor: 74 of 141 entry points are outside the calibration frame, and a confirmed false present (cold-start-a2/a2pipeline/engines.py) lives there",
+      "the round-4 resolver fix closed only the multi-candidate half; the single-candidate path was still live",
+      "criterion.py's claim that ancestry resolution is 'what the interpreter does at run time' is false"
+    ],
+    "acted_on": "round 5 (single-candidate path + territory reachability); the granularity caveat in CALIBRATION.md and KNOWN_GAPS.json; the merge-gate recommendation rewritten from its numbers",
+    "confirmed_not_fixed": [
+      "_looks_like_exit_code matches _EXIT_WORDS as substrings on dict keys",
+      "detector B matches function names, never file names, so cold-start-a3/a3pipeline/negctl.py reads absent",
+      "scan_selftests satisfies its own detector",
+      "monitor/tests/mutants.py is registered as lacking the thing it is",
+      "--detector AB remains on the CLI as a known false-positive source",
+      "all 7 shell gates are out of scope"
+    ]
+  },
+  "measured": {
+    "census_rows": 127,
+    "in_scope": 103,
+    "out_of_scope": 8,
+    "unresolvable": 16,
+    "detector": "A-B",
+    "confusion_strict": {
+      "TP": 43,
+      "FN": 20,
+      "FP": 3,
+      "TN": 31,
+      "false_positive_rate": 0.0882,
+      "false_negative_rate": 0.3175,
+      "precision": 0.9348,
+      "accuracy": 0.7629
+    },
+    "confusion_strict_excluding_granularity_conflicts": {
+      "TP": 34,
+      "FN": 18,
+      "FP": 0,
+      "TN": 29,
+      "false_positive_rate": 0.0,
+      "false_negative_rate": 0.3462,
+      "caveat": "FP=0 here is a definition, not a measurement: it removes the 8 files the census judged twice, which is exactly where function-level masking lives."
+    },
+    "confusion_harsh": {
+      "TP": 34,
+      "FN": 12,
+      "FP": 12,
+      "TN": 39,
+      "false_positive_rate": 0.2353,
+      "false_negative_rate": 0.2609
+    },
+    "round_5_effect": {
+      "cross_territory_bindings": "54 -> 0",
+      "total_bindings": "770 -> 721",
+      "confusion_matrix_cells_changed": 0,
+      "entry_point_verdicts_flipped": 0,
+      "entries_whose_cited_evidence_changed": 1,
+      "reading": "a real defect class that this calibration is structurally unable to score"
+    },
+    "enumerator_uncalibrated": {
+      "entry_points": 141,
+      "v11_gates_locatable_to_a_py_file": 90,
+      "found_by_enumerator": 67,
+      "missed": 23,
+      "miss_rate": 0.256,
+      "non_gates_over_collected_at_least": 17
+    },
+    "pinned_absent": 110,
+    "pinned_present": 31,
+    "probe_on_this_tree": {
+      "verdict": "green",
+      "exit_code": 0
+    },
+    "probe_own_tests": {
+      "passed": 33,
+      "failed": 0,
+      "exit_code": 0
+    }
+  },
+  "recommendation": "standing, report-only. Not in branch protection. If ever gated, REGRESSION blocks and NEW_GAP only reports.",
+  "network": "none. No API call, no .env read, no sealed-pile contact. Pure ast over the working tree.",
+  "wrote_outside_verify_lab": "nothing",
+  "files": [
+    {
+      "path": "verify-lab/negctl/criterion.py",
+      "sha256": "3a31f3907a5fd38a4db608e905a612e3da4d36a6f8254c9f2fb90c2db503b839"
+    },
+    {
+      "path": "verify-lab/negctl/probe.py",
+      "sha256": "16b69a03ae17081b4c326960c60da5b9abedc436517f73ca0f4b2c9e736b18b1"
+    },
+    {
+      "path": "verify-lab/negctl/calibrate.py",
+      "sha256": "f771fce0a19c798647a37739a62851867418a4829259af3c803e8d745f0fb791"
+    },
+    {
+      "path": "verify-lab/negctl/KNOWN_GAPS.json",
+      "sha256": "4da233e7710388c25d466be0547f8a87aedb1b056972f7c2d0558e29014e5a56"
+    },
+    {
+      "path": "verify-lab/negctl/tests/test_probe.py",
+      "sha256": "f92ea30b8ffbe8d16eaa20a92a0583e79ea327dd71cabc80b32085d7806494c6"
+    },
+    {
+      "path": "verify-lab/NEGATIVE_CONTROL.md",
+      "sha256": "870b469169b3f27362af5a27f7ca197a5b8babdcf6d4d52ad22e075e33c05c7e"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/CALIBRATION.md",
+      "sha256": "d88277115e3ca9d8d6470dd7fae371dcd728ce44ecf6a3cd184727d9a497684f"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/NOT_IDLE.md",
+      "sha256": "ece31dd2af20f4b640ec38545e004bdf0cca387b1d9c670d33b3bddd64fab2b0"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/RUN_STATE.md",
+      "sha256": "e6600b14bb6f11c69c5b8d99ab252e1c90604a71ebd0d2ad8fa58928f8db141f"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/ADVERSARIAL.md",
+      "sha256": "6d3878af76ba8530fa65318721d506c00dbe0b5ca3554b672251cb413aaeae3a"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/calibration.json",
+      "sha256": "9869cdb92bf44046e13f4f8902f96a708091e46861a3fb49a5c5a01e2edca79b"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/probe.json",
+      "sha256": "f64bad11e7a309cf90fbc5b538f54ceb3b6a3d84c1a23dc556b4876d2599650f"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/make_pin.py",
+      "sha256": "310bee004045e35dea06456f0df0278255a4c971d20ae90826b08d3f786daac0"
+    }
+  ]
+}
