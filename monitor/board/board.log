@@ -61,3 +61,10 @@
 2026-07-28T14:13:23Z CLAIM S8-provenance-backfill by W-1412
 2026-07-28T14:22:15Z DONE C8-handover-package by W-1252
 2026-07-28T14:22:15Z CLAIM C9-count-lock-vocabulary by W-1252
+2026-07-28T14:30:26Z DONE S9-contract-change-protocol by W-1250
+2026-07-28T14:30:29Z CLAIM S1-quota-auto-exit by W-1250
+2026-07-28T14:32:30Z RELEASE S1-quota-auto-exit by W-1250 (前两件已由 0d28e99 做完、第三件是 S12 的；唯一未做的是 hold 期间 ping 不得高于每 20 分钟（现为每 5 分钟真实 haiku 调用），且工单 territory 写 proxy 而全部代码在 monitor/，越界才能改 — 详见 inbox 20260728T142000Z-W-1250)
+2026-07-28T14:32:33Z CLAIM S1-quota-auto-exit by W-1250
+2026-07-28T14:34:17Z DONE S11-sealed-halfguard by W-1410
+2026-07-28T14:34:25Z CLAIM S5-phase1-close by W-1410
+2026-07-28T14:37:02Z SWEEP S5-phase1-close released (worker W-1410 gone)

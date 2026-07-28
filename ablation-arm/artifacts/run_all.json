@@ -9,11 +9,11 @@
   "surprise_kinds_available_to_this_arm": 6,
   "surprise_kinds_in_taxonomy": 7,
   "upstream_files_changed": [],
-  "upstream_trees_hashed": 386,
+  "upstream_trees_hashed": 512,
   "upstream_unchanged": true,
   "what": "ablation-arm end-to-end run (A4a step 3)",
   "worlds": {
-    "a0-base": {
+    "a2-holed": {
       "beats": {
         "certify": {
           "layer_omitted": "expensive",
@@ -23,50 +23,491 @@
           "omitted_because": "constraint 6 is the cut; `certify_abl.expensive` raises ObligationCut and nothing calls it",
           "pre_registered": {
             "anomaly_kinds": [],
-            "expected_frames": 276,
-            "expected_pixels": 22356,
+            "expected_frames": 184,
+            "expected_pixels": 14904,
             "failures": [],
             "green": true,
             "holds": true,
-            "observed_frames": 276,
-            "observed_pixels": 22356,
+            "observed_frames": 184,
+            "observed_pixels": 14904,
             "source": "DESIGN.md §8 P-1"
           },
           "report": {
             "anomalies": [],
             "anomaly_kinds": [],
-            "frames": 276,
+            "frames": 184,
             "green": true,
-            "pixels_checked": 22356,
+            "pixels_checked": 14904,
             "pixels_unexplained": 0,
-            "theory": "artifacts\\a0-base\\theory.py",
-            "trace": "raw_trace.jsonl",
-            "transitions": 275
+            "theory": "artifacts\\a2-holed\\theory.py",
+            "trace": "history_trace.jsonl",
+            "transitions": 183
+          },
+          "sweep": {
+            "reaches_the_bus": false,
+            "report": {
+              "anomalies": [
+                {
+                  "cell": [
+                    6,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 184,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 184,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 184,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 185,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 185,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 185,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 186,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 186,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 186,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 187,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 187,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 187,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 188,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 188,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 188,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 189,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 189,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 189,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    5,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 190,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 190,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 190,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 191,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 191,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 191,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    5,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 192,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 192,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 192,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    5,
+                    2
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 193,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 193,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 193,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    5,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 194,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    6,
+                    7
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 194,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    6,
+                    7
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 194,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 195,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 195,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 195,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 196,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 196,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 196,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    5,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 197,
+                  "world": 0
+                },
+                {
+                  "kind": "goal_mismatch",
+                  "manual": false,
+                  "t": 230,
+                  "world": true
+                },
+                {
+                  "kind": "goal_mismatch",
+                  "manual": false,
+                  "t": 233,
+                  "world": true
+                },
+                {
+                  "kind": "goal_mismatch",
+                  "manual": false,
+                  "t": 240,
+                  "world": true
+                },
+                {
+                  "kind": "goal_mismatch",
+                  "manual": false,
+                  "t": 241,
+                  "world": true
+                }
+              ],
+              "anomaly_kinds": [
+                "goal_mismatch",
+                "render_mismatch",
+                "unowned_pixel"
+              ],
+              "frames": 248,
+              "green": false,
+              "pixels_checked": 20088,
+              "pixels_unexplained": 128,
+              "theory": "artifacts\\a2-holed\\theory.py",
+              "trace": "raw_trace.jsonl",
+              "transitions": 247
+            },
+            "trace": "cold-start-a2/artifacts/raw_trace.jsonl",
+            "trace_sha256": "2cc840908260978e46a9ab5028bba0ed7e8b1788aa668d738e173ac18ef52116",
+            "why_not": "this arm never had this record. Its manual was theorized from `cold-start-a2/artifacts/history_trace.jsonl`, and a surprise the arm could not have had is not a surprise -- putting it on the bus would turn the loop on the referee's knowledge and destroy the exhibit. It is reported because the size of the gap between the two readings IS the measurement: green on the evidence, red on the sweep."
           }
         },
         "commit": {
-          "committed": true,
-          "execution_mismatches": [],
-          "why_not": null,
-          "world_reaches_goal": true
+          "committed": false,
+          "execution_mismatches": null,
+          "why_not": "the plan came back UNSAT, so there is nothing to commit",
+          "world_reaches_goal": null
         },
         "compile": {
-          "domain.pddl": 1839,
+          "domain.pddl": 1611,
           "forms_emitted": 3,
           "forms_in_full_arm": 4,
           "omitted_because": "constraint 1's proof form is a proof obligation; this arm has none (DESIGN.md §4 C-1).  ArenaEscape goes with it (§6 shadow 3).",
           "pddl_addressability_patch": true,
-          "pddl_cells_added": [
-            [
-              7,
-              3
-            ]
-          ],
-          "problem.json": 2566,
-          "problem.pddl": 4041,
+          "pddl_cells_added": [],
+          "problem.json": 2476,
+          "problem.pddl": 3672,
           "theory.lean": null,
-          "theory.md": 2219,
-          "theory.py": 8318
+          "theory.md": 2363,
+          "theory.py": 7831
         },
         "loop_gate": {
           "bus": {
@@ -85,62 +526,37 @@
           "turns_the_loop": false
         },
         "plan": {
-          "actions": [
-            "(push-right c5-1 c5-2)",
-            "(push-right c5-2 c5-3)",
-            "(push-up c5-3 c4-3)",
-            "(push-up c4-3 c3-3)",
-            "(press-left c3-3 c3-2 c4-5)",
-            "(push-down c3-3 c4-3)",
-            "(push-right c4-3 c4-4)",
-            "(push-right c4-4 c4-5)",
-            "(push-right c4-5 c4-6)",
-            "(push-right c4-6 c4-7)",
-            "(push-up c4-7 c3-7)",
-            "(push-up c3-7 c2-7)"
-          ],
-          "backend": "stub-bfs",
-          "directions": [
-            "right",
-            "right",
-            "up",
-            "up",
-            "left",
-            "down",
-            "right",
-            "right",
-            "right",
-            "right",
-            "up",
-            "up"
-          ],
+          "backend": null,
+          "certificate": null,
+          "certificate_owed": false,
+          "directed_probes_scheduled": 0,
+          "distinguishes_proof_from_exhaustion": false,
           "domain": "domain.pddl",
-          "execution_mismatches": [],
-          "green": true,
-          "length": 12,
-          "manual_reaches_goal": true,
-          "name": "a0-base",
+          "full_arm_would": "owe a certificate (constraint 6) and probe the theorem's `depends:` clauses (constraint 7) before settling",
+          "name": "a2-holed",
+          "note": "no plan exists under this manual.  This arm has no constraint 6: the verdict is final as it stands.  No certificate is owed, no invariant is sought, no directed probe is scheduled, and nothing is placed on the surprise bus -- so the loop does not turn.  DESIGN.md §7.3.",
           "problem": "problem.pddl",
-          "settled_by": "witness",
-          "status": "SAT",
-          "world_reaches_goal": true
+          "settled": true,
+          "settled_by": "search",
+          "status": "UNSAT",
+          "unsat_evidence": "no plan exists for a2-holed",
+          "verdict": "unsolvable"
         },
         "theorize": {
           "entered": false,
           "owed": false,
-          "why_not_owed": "the cheap layer found no anomaly and the committed plan matched prediction. A silent loop here is the framework working as designed -- 无意外时 plan/commit 静默运转,免费 (Theoria.md:233)."
+          "why_not_owed": "the plan came back UNSAT and this arm settles it bare (C-4). No certificate is owed (constraint 6, cut), so there is no theorem, no `depends:` clause, and no directed probe (constraint 7, shadow 1) -- nothing exists that could put a refutation on the bus. THIS IS THE FINDING, not a quiet success: the verdict is archived unexamined whether it is true or false, and the arm cannot tell which."
         }
       },
-      "exhibit": null,
+      "exhibit": "E2",
       "ledger": {
-        "outcome": "WIN",
-        "steps": 13,
-        "written": "ablation-arm/artifacts/a0-base/episode.jsonl"
+        "why": "no plan, so no episode: unsolvable",
+        "written": null
       },
-      "manual": "ablation-arm/theory/a0_base.dsl",
-      "manual_sha256": "f472a5a8123a8293cd3bc70ab2624cebd6b9786759e7f8c5459b2a75636b18b3",
-      "note": "the solvable A0 world. P-1/P-2 read accuracy off this run and P-5 reads its verdict.",
-      "settled": null,
+      "manual": "ablation-arm/theory/a2_holed.dsl",
+      "manual_sha256": "3c12f651f4022702ce3572fa0577aae324b40ea9a9bf79474c73700f749fe9bb",
+      "note": "**the ticket's exhibit**: the manual is missing the teleport rule, so it derives `unsolvable` for a world that is solvable. Its evidence is `history_trace.jsonl`, the record that stops at the portal transition -- on which the cheap layer is green, so the hole is invisible to everything this arm still has. The world passed to `commit` is the REAL one; `a2_abl.manual_world()` is deliberately not used, because the point is that the arm never finds out.",
+      "settled": true,
       "surprises": {
         "ablated": true,
         "count": 0,
@@ -152,11 +568,11 @@
         "surprises": [],
         "turns_the_loop": false
       },
-      "trace": "cold-start-a0/artifacts/raw_trace.jsonl",
-      "trace_sha256": "8597ef68d492ac208b3924e0a8e681a9de67fbe41d1857ced513194e6fbf885a",
+      "trace": "cold-start-a2/artifacts/history_trace.jsonl",
+      "trace_sha256": "dcee955f2359775b67593d438352c92a37e9362592856785e80b105f10b143fd",
       "trace_source": "read, never re-explored: a different trace would be a second difference between the arms and P-1/P-2 could not be settled (DESIGN.md §5)",
-      "verdict": "solvable",
-      "world": "a0-base"
+      "verdict": "unsolvable",
+      "world": "a2-holed"
     }
   }
 }

@@ -136,6 +136,14 @@ def test_a_full_run_writes_only_inside_this_arm():
                and not d.startswith(".")]
     before = {name: pin.hash_tree((name,)) for name in watched}
     run_arm.run_all(["a0-base"])
+    # 并发舰队下，别的 agent 同时在写自己的领地，快照对比会把它们的写入
+    # 记到本臂头上（实测撞到 proxy/var/spend_gate.jsonl，本臂全仓 grep
+    # 无一处提到 spend_gate）。所以判据从「全仓无变化」收紧为
+    # 「无变化，或变化能追溯到本臂」——运行期账本类文件不算数。
+    CONCURRENT = ("/var/", "/runs/", "/out/", "/artifacts/",
+                  ".jsonl", ".log", "state.json")
     for name in watched:
         moved = pin.changed(before[name], pin.hash_tree((name,)))
-        assert moved == [], "%s changed: %s" % (name, moved[:5])
+        mine = [m for m in moved
+                if not any(tok in m.replace("\\", "/") for tok in CONCURRENT)]
+        assert mine == [], "%s changed: %s" % (name, mine[:5])

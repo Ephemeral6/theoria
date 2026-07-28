@@ -1,7 +1,7 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T17:20:00Z",
+ "utc": "2026-07-28T18:15:00Z",
  "cycle": 2,
  "state": "working",
- "note": "A4a step 5 done and pushed: tests/, 45 passed in 3.8s. The two sentences in P-18's source that named non-existent tests are now true. Writing test_readonly.py found a blind spot in the pin itself (SKIP_DIRS excludes upstream artifacts/, which is exactly where the exhibits call into a2pipeline) -- now covered by name. Suite also caught itself downgrading a checked-in artifact via a subset run_all. Next: step 6, verify.sh."
+ "note": "A4a step 6 done and pushed: verify.sh GREEN -- 5 stages, 10 assertions, 5 recorded-for-A4b, 56 tests. P-7 became a measurement (U1/U2 attained, U3 blocked by construction, U4 by consequence). Gate watched refusing; two real defects found doing it (missing field read as failure; crash while building evidence for a red claim). Corrected my own plan: 3.5 of 7 assertable, not 4. theoria_ablate blocker does not apply to the code as written. Next: step 7, docs + STATUS corrections."
 }
