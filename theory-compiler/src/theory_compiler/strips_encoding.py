@@ -74,6 +74,11 @@ class Effect:
 class PositionalEncoding:
     """Cells, slots, and the reading of each ground action in tuple terms."""
 
+    #: Set by `verify`. `gen_lean_deadlock` refuses to emit while it is None, so
+    #: the "encoding agrees with the task" link cannot be skipped by a caller who
+    #: forgot it.
+    verified_stats: Optional[Dict[str, int]] = None
+
     def __init__(self, task: StripsTask):
         self.task = task
         signature = {p: None for p in task.fluent_predicates}
@@ -245,10 +250,23 @@ def shortest_plan(encoding: PositionalEncoding
 def verify(encoding: PositionalEncoding, reachability_limit: int = 200000) -> Dict[str, int]:
     """Faithfulness and adequacy, both by exhaustion. Raises on either failure.
 
-    This is the same discipline `gen_lean._check_legality` applies on the peg
-    path: the emitted transition relation is not trusted to be the one the task
-    describes, it is checked against it, state by state and action by action.
+    **Scope, stated exactly, because an earlier version of this docstring
+    overstated it.** What is checked here is the *encoding* against the *task* —
+    guard against precondition, effect against add/delete, state by state and
+    action by action. It says nothing about what any generator later writes into
+    a file. The step from this checked encoding to emitted Lean text is a
+    separate link with its own check, `gen_lean_deadlock.reread`, and the
+    generator refuses to run until `verify` has set `verified_stats` here.
+
+    The peg path's `gen_lean._check_legality` is the analogue of *that* check,
+    not of this one: there `legal` is a fixed template whose meaning is known, so
+    checking the predictor against it does pin the emitted text.
+
+    Memoised on the encoding: the result is the same every time and the sweep is
+    hundreds of thousands of pairs.
     """
+    if getattr(encoding, "verified_stats", None) is not None:
+        return encoding.verified_stats
     task = encoding.task
     checked = 0
     for state in encoding.states():
@@ -287,6 +305,7 @@ def verify(encoding: PositionalEncoding, reachability_limit: int = 200000) -> Di
                 "a reachable state is not a well-formed positional state; the "
                 "well-formedness hypothesis in the emitted theorem would leave "
                 "reachable states uncovered")
-    return {"encodable_states": len(encoding.states()),
-            "pairs_checked": checked,
-            "reachable_states": len(states)}
+    encoding.verified_stats = {"encodable_states": len(encoding.states()),
+                               "pairs_checked": checked,
+                               "reachable_states": len(states)}
+    return encoding.verified_stats
