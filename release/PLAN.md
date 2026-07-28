@@ -98,12 +98,18 @@ only one of those two is recoverable.
 
 ## Status
 
-**Steps 1-3 done.** `LICENCE_POSTURE.md` and `check_redlines.py` (both red lines
+**Steps 1-4 done.** `LICENCE_POSTURE.md` and `check_redlines.py` (both red lines
 measured clear); `enumerate.py` and `MANIFEST.jsonl` (1,940 rows, byte-identical
 across two runs, red lines gating generation); `checklist.py` and `CHECKLIST.md`
 (6 present, 3 withheld, 1 absent, plus two items that matched and still were not
-what the list asks for). Steps 4-6 open: `reproduce.py`, `REPRODUCING.md`, the
-stranger subagent.
+what the list asks for). `reproduce.py` and `REPRODUCTION_REPORT.md`
+(3 of 9 declared targets reproduced; the rest graded, not hidden). Steps 5-6
+open: `REPRODUCING.md` and the stranger subagent.
+
+**Order matters and is enforced:** `enumerate.py` -> `checklist.py` ->
+`reproduce.py`. Running reproduce against a manifest written before the tree
+moved grades every target `manifest-stale`, which is the script refusing to
+measure the baseline instead of the build.
 
 Previously: **plan only.** No enumerator, no manifest, no reproduce script yet. The next
 session starts at step 1 — and should read `browser-ops/TERMS.md` §2 and

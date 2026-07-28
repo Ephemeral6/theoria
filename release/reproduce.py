@@ -196,6 +196,24 @@ def run_target(target: Target, hashes: dict[str, str]) -> dict:
         result["detail"] = "not regenerable in this environment"
         return result
 
+    # Is the manifest even current for this tree? If an artefact already differs
+    # from its recorded hash BEFORE the generator runs, then the comparison
+    # afterwards cannot mean what it looks like it means. Reporting that as
+    # `drifted` would blame the generator for the manifest being out of date --
+    # two different facts, and only one of them is about reproducibility.
+    stale = [p for p in paths if _sha256(os.path.join(REPO_ROOT, *p.split("/"))) != hashes[p]]
+    if stale:
+        result["grade"] = "manifest-stale"
+        result["detail"] = (
+            f"{len(stale)} artefact(s) already differ from the manifest before regenerating "
+            f"({', '.join(stale[:4])}"
+            + (f" and {len(stale) - 4} more" if len(stale) > 4 else "")
+            + "). The tree moved after MANIFEST.jsonl was written; re-run "
+            "`release/enumerate.py`, then this. Nothing was regenerated for this target, "
+            "because a comparison against a stale baseline measures the baseline."
+        )
+        return result
+
     # encoding pinned, errors replaced. `text=True` alone decodes with the
     # locale codec, which on a zh-CN Windows box is GBK; the first run of this
     # script died in subprocess's reader thread on a UnicodeDecodeError while
@@ -297,6 +315,10 @@ def main(argv: list[str] | None = None) -> int:
     for g in sorted(tally):
         lines.append(f"| `{g}` | {tally[g]} |")
     lines += [
+        "",
+        "`manifest-stale` means the tree moved after `MANIFEST.jsonl` was written, so that",
+        "target was not regenerated at all: comparing a fresh build against a stale",
+        "baseline measures the baseline. Re-run `release/enumerate.py` first.",
         "",
         "`declared-not-run`, `needs-api` and `needs-ground-truth` are **not** partial",
         "credit. They mean a reader cannot regenerate that material from this release:",
