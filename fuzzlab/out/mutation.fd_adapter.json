@@ -1,0 +1,238 @@
+{
+  "campaign_seed": 104375253266434,
+  "campaign_seed_hex": "0x00005eedc1e4f002",
+  "coverage": {
+    "fd_adapter": {
+      "baseline_dirty_worlds": 0,
+      "invariants": [
+        "no_plan_means_unsolvable",
+        "optimal_rungs_are_optimal",
+        "plan_replays_to_the_goal"
+      ],
+      "invariants_no_mutant_kills": [],
+      "mutants": 6
+    }
+  },
+  "engine_rig_head": "6756145",
+  "mutants": [
+    {
+      "claim": "`Plan.actions` is a plan that reaches the goal -- engines/fd_adapter/__init__.py:140 runs validate.validate_plan on it before returning ('never emit an unchecked plan'), and props/fd_adapter.py names plan_replays_to_the_goal as the check of exactly that.",
+      "description": "drop the last action of the returned plan. THIS MUTANT IS A SEAM PROBE, and the pre-registered prediction is not the kill: props/fd_adapter.py:84 defines `_solve` and never calls it (the invariants call engine.solve_parsed directly at lines 104/131/165), so the prediction written before the run is `worlds_evaluated == 0` and `worlds_inert == worlds_offered`. expect_kill records what it *would* kill if the seam were live, because the field cannot be empty.",
+      "elapsed_s": 0.62,
+      "engine": "fd_adapter",
+      "expect_kill": [
+        "plan_replays_to_the_goal"
+      ],
+      "id": "fd-solve-seam-is-dead",
+      "killed": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [
+        "plan_replays_to_the_goal"
+      ],
+      "raised_only": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
+      "seam": "_solve",
+      "survived": true,
+      "survived_all_detection": true,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 0,
+      "worlds_inert": 30,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "no_plan_means_unsolvable": null,
+        "optimal_rungs_are_optimal": null,
+        "plan_replays_to_the_goal": null
+      }
+    },
+    {
+      "claim": "the returned plan reaches the goal *of the problem it was given* -- engines/fd_adapter/search.py:is_goal tests every atom of problem.goal_positive, and __init__.py:140 validates the plan against that same problem before returning it.",
+      "description": "the engine sees a problem with one positive goal atom removed; the oracle sees the real one. The engine's answer is a genuine plan for a strictly weaker goal -- often shorter, and on an instance that is only unsolvable because of the dropped atom, a plan where the truth admits none.",
+      "elapsed_s": 0.39,
+      "engine": "fd_adapter",
+      "expect_kill": [
+        "plan_replays_to_the_goal",
+        "optimal_rungs_are_optimal"
+      ],
+      "id": "fd-engine-plans-for-a-weaker-goal",
+      "killed": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 17,
+        "plan_replays_to_the_goal": 17
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
+      "seam": "_parsed",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 30,
+      "worlds_inert": 0,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "no_plan_means_unsolvable": null,
+        "optimal_rungs_are_optimal": 1,
+        "plan_replays_to_the_goal": 1
+      }
+    },
+    {
+      "claim": "stub-bfs is length-optimal for unit costs -- backends.py:9 rules it `length-optimal: yes`, search.py:4 says 'BFS is optimal for unit costs', and __init__.py:135 sets Plan.optimal True on every rung but fd-satisficing. On this campaign the rung is always stub-bfs (choose_tier clause 3, in-memory instance), so the promise is live on every world here.",
+      "description": "one static initial atom is hidden from the engine, deleting the ground actions whose static preconditions needed it. The engine returns a plan built from a subset of the real operators: still executable, still reaching the real goal, but no longer the shortest -- and it still says optimal. This is the DEGRADED case: if optimal_rungs_are_optimal cannot kill it, that invariant is decoration. Where the hidden operators were the only route, the engine reports unsolvable instead, which is the second prediction.",
+      "elapsed_s": 0.77,
+      "engine": "fd_adapter",
+      "expect_kill": [
+        "optimal_rungs_are_optimal",
+        "no_plan_means_unsolvable"
+      ],
+      "id": "fd-engine-loses-operators",
+      "killed": {
+        "no_plan_means_unsolvable": 1,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
+      "kind": "degraded",
+      "predicted_but_missed": [
+        "optimal_rungs_are_optimal"
+      ],
+      "raised_only": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
+      "seam": "_parsed",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 17,
+      "worlds_inert": 13,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "no_plan_means_unsolvable": 3,
+        "optimal_rungs_are_optimal": null,
+        "plan_replays_to_the_goal": null
+      }
+    },
+    {
+      "claim": "same promise as fd-engine-loses-operators: stub-bfs is length-optimal for unit costs (backends.py:9, search.py:4) and Plan.optimal is True on it (__init__.py:135). This campaign never leaves that rung, so 'the plan is longer than the optimum' is a broken promise here and would not be on fd-satisficing.",
+      "description": "the engine's goal gains one non-static initial atom, so it returns a plan that also puts that atom back. The plan is VALID -- real operators, real initial state, and it achieves the real goal on the way -- so plan_replays_to_the_goal should stay silent; it is only longer than the optimum while still flagged optimal. Written after fd-engine-loses-operators turned out never to produce a longer plan on any world (it either disconnected the instance or changed nothing), which left the DEGRADED shape unmeasured; expect_kill below was fixed before this mutant was run. A no_plan_means_unsolvable kill would be an unpredicted side effect (the strengthened goal turning out unreachable), not the target.",
+      "elapsed_s": 0.73,
+      "engine": "fd_adapter",
+      "expect_kill": [
+        "optimal_rungs_are_optimal"
+      ],
+      "id": "fd-engine-overshoots-the-goal",
+      "killed": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 2,
+        "plan_replays_to_the_goal": 0
+      },
+      "kind": "degraded",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
+      "seam": "_parsed",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 23,
+      "worlds_inert": 7,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "no_plan_means_unsolvable": null,
+        "optimal_rungs_are_optimal": 5,
+        "plan_replays_to_the_goal": null
+      }
+    },
+    {
+      "claim": "`None` from solve_parsed is a *proof* that no plan exists, not a give-up -- engines/fd_adapter/__init__.py:86-102 ('Unsolvable is a result here, not an exception ... a run that only failed to find a plan stays a hard error on purpose'), and search.py's BFS is exhaustive, so an empty queue is the proof.",
+      "description": "the engine grounds no actions at all (its view of the domain has an empty action list) and so reports every instance whose goal is not already true as unsolvable. On a world the oracle's BFS solves, that is an unsolvability claim about a solvable instance.",
+      "elapsed_s": 0.15,
+      "engine": "fd_adapter",
+      "expect_kill": [
+        "no_plan_means_unsolvable"
+      ],
+      "id": "fd-false-unsolvable",
+      "killed": {
+        "no_plan_means_unsolvable": 6,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
+      "seam": "_parsed",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 30,
+      "worlds_inert": 0,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "no_plan_means_unsolvable": 5,
+        "optimal_rungs_are_optimal": null,
+        "plan_replays_to_the_goal": null
+      }
+    },
+    {
+      "claim": "pddl.ground_actions returns 'every ground instance that could ever fire' (engines/fd_adapter/pddl.py:305). A grounder that returns fewer makes solve_parsed's `None` a false proof of unsolvability, contradicting __init__.py:86-102.",
+      "description": "the same defect as fd-false-unsolvable, one layer lower: the action schemas vanish for BOTH the engine and the oracle, because props/fd_adapter.py builds its ground truth with the engine's own ground_actions (line 66) rather than from world.problem_text. THE PRE-REGISTERED PREDICTION IS THAT THIS KILLS NOTHING -- it is the negative control that shows why the other mutants fork the parse, and it turns the residual risk stated in props/fd_adapter.py:7-10 into a measured blind spot. expect_kill names what it would kill if the oracle's model were independent of the grounder, because the field cannot be empty.",
+      "elapsed_s": 0.02,
+      "engine": "fd_adapter",
+      "expect_kill": [
+        "no_plan_means_unsolvable"
+      ],
+      "id": "fd-shared-grounder-blind-spot",
+      "killed": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
+      "kind": "incomplete",
+      "predicted_but_missed": [
+        "no_plan_means_unsolvable"
+      ],
+      "raised_only": {
+        "no_plan_means_unsolvable": 0,
+        "optimal_rungs_are_optimal": 0,
+        "plan_replays_to_the_goal": 0
+      },
+      "seam": "_parsed",
+      "survived": true,
+      "survived_all_detection": true,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 30,
+      "worlds_inert": 0,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "no_plan_means_unsolvable": null,
+        "optimal_rungs_are_optimal": null,
+        "plan_replays_to_the_goal": null
+      }
+    }
+  ],
+  "worlds_per_engine": 30
+}

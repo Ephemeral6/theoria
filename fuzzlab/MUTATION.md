@@ -255,4 +255,126 @@ fine: its other two branches are killed by two different mutants. This is worth
 recording because it is the shape the census in `V11` found across six other
 territories — a verdict computed correctly and wired to nothing.
 
-*(Sections for the remaining five engines follow as their catalogues land.)*
+### All six engines
+
+54 mutants over six engines, one catalogue per engine, run at 25–40 worlds each.
+Baseline clean everywhere. Per-engine detail is in `runs/…/partials/`.
+
+| engine | invariants | mutants | survivors | invariants no mutant could kill |
+|---|---|---|---|---|
+| `mdl_segmenter` | 4 | 11 | 4 | none |
+| `cegis_miner` | 4 | 8 | 3 | none |
+| `zero_space` | 4 | 5 | 0 | none |
+| `lp_potential` | 4 | 6 | 1 | none |
+| `fd_adapter` | 3 | 6 | 2 | none |
+| `probe_frontier` | 4 | 18 | 5 | none — **after the fix below** |
+| **total** | **23** | **54** | **15** | |
+
+**Every one of the 23 invariants is killed by at least one mutant — now.** One
+of them was not, before this run changed it, and that is the single most useful
+thing the exercise produced.
+
+#### `partition_matches_truth` could never have reported a violation
+
+`props/probe_frontier.py:91` built its finding as
+
+```python
+finding.violated(ENGINE, "partition_matches_truth", world, detail,
+                 action=action, engine=normalised, truth=expected)
+```
+
+and `finding.violated(engine, invariant, world, detail, **data)` has already
+bound `engine` positionally. The call raises `TypeError: violated() got multiple
+values for argument 'engine'`. **The only path that could report this invariant
+could not report it**, for as long as the invariant has existed.
+
+Nothing caught it, and the reasons are the whole point:
+
+* the line runs only when the engine partitions *wrongly*, and it never did — so
+  the defect was never executed;
+* had it executed, `run_invariants` would have caught the `TypeError` and filed
+  a `raised`. The battery would have reported a crash where it meant to report a
+  violation, and **`BUGS.md`'s headline "0 violations" would have remained
+  literally true** while a real engine defect went past;
+* the campaign counted this invariant as checked on 500 worlds. It ran on 500
+  worlds. It could not have said no on any of them.
+
+Measured, before and after the one-word fix:
+
+| | partition mutants killed | outcome |
+|---|---|---|
+| before | **0 / 4** | all four `raised` |
+| after | **4 / 4** | first world, 100 % |
+
+Fixed here — `fuzzlab` is this item's territory and the defect is `fuzzlab`'s,
+not an engine's. A guard now refuses the shape by parsing the property modules
+(`tests/test_finding_contract.py`), and the guard has its own negative control:
+it reconstructs the pre-fix line and is required to see it.
+
+#### The 15 survivors sort into six kinds of blindness
+
+Each survivor was adjudicated by its analyst as either *the invariant is
+insufficient* or *the mutant was not a real defect*, against the engine's
+documented promises. Grouped by what they have in common:
+
+**1. The battery audits less than the engine publishes.** Found independently on
+three engines: `mdl_segmenter`'s `Track.color` and `Segmentation.baseline_bits`,
+`cegis_miner`'s lifted `all_rules` (four invariants iterate `result.rules`, while
+`candidates()` publishes `all_rules`), `probe_frontier`'s `ProbeValue.partition`
+and reported `cost`. **These fields reach `candidates.jsonl`, and from there the
+manual, and from there the LLM's beliefs about the world** — carrying no evidence
+at all, seated next to fields that carry some. This is the most consequential
+group and it was nobody's hypothesis going in; three analysts who could not see
+each other's work each hit one face of it.
+
+**2. The oracle shares machinery with the engine it judges.** `fd_adapter`'s
+`_model` builds the oracle's truth table with the engine's own
+`ground_actions()`. A deliberately-designed negative-control mutant
+(`fd-shared-grounder-blind-spot`, 30 worlds evaluated, 0 kills) demonstrates the
+consequence rather than asserting it: **detection power against any parse or
+grounding defect is exactly zero**, because the oracle inherits the same
+mistake. The house rule — an oracle may not call the engine it judges — is kept
+at the *search* layer and not at the *grounding* layer. That is a defensible
+trade (there is no independent grounder to hand) but it is currently unstated,
+and `README.md`'s statement of the rule reads as though it were absolute.
+
+**3. Same-source comparison.** `lp_potential`'s `three_conditions_hold` checks
+`cert.weights` against `cert.moves` — both the engine's own report. A certificate
+that omits a move which would raise the potential is invisible.
+
+**4. A tolerance floor, now measured.** `probe_frontier`'s entropy invariant
+uses an absolute `EPS = 1e-9`. Injected shifts of 1e-3, 1e-6 and 2e-9 are caught
+100 %; 1e-9 is on the boundary and caught about two thirds of the time; 1e-12
+and 1e-16 survive. The observed float noise floor is ~2.2e-16, so **the
+threshold discards roughly seven orders of magnitude of available resolution**.
+Whether that matters depends on what an entropy error of 1e-12 would mean for a
+probe ranking — probably nothing — but the number was previously unknown and is
+now on the record.
+
+**5. Self-exempting clauses.** `cegis_miner` skips consistency checking when
+`frontier_truncated` is set, and the flag is never itself verified: two mutants
+injecting the *same* defect differ only in setting the flag, and go 16/16 → 0/16.
+
+**6. One instrument artefact, not a blindness.** `fd-solve-seam-is-dead`
+evaluated 0 worlds — `props/fd_adapter.py:_solve` is dead code, the three
+invariants call the engine directly at lines 104/131/165. The mutant proves the
+seam is unused; it says nothing about the battery. Reported as a survivor and
+excluded from any count of blind spots, because conflating the two is how a
+mutation score gets inflated.
+
+#### `fd_adapter` has never been fuzzed on Fast Downward
+
+Not a mutation result, but found while choosing the seam, and it limits every
+`fd_adapter` row above. `props/fd_adapter.py` calls `engine.solve_parsed(domain,
+problem)` with in-memory parsed objects, and `choose_tier`'s third clause
+(`backends.py:152-154`) forces `stub-bfs` for exactly that case — *"Fast
+Downward reads files and has no pruning hook, so this is a fact about the
+backend rather than a choice."*
+
+So the fall-back is **structural, not environmental**: it is not that this
+machine lacks an FD build, it is that this call shape can never reach one.
+Everything the campaign reports about `fd_adapter` is about the BFS stub. One
+consequence runs the other way and is worth stating in the engine's favour: a
+"returns a valid but non-optimal plan" mutant is a *real* defect here rather
+than a false positive, because `stub-bfs` does promise optimality where
+`fd-satisficing` would not.
