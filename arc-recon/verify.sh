@@ -6,9 +6,10 @@
 #
 # Exit 0 means: the offline suite passes, the shipped canary schedule is
 # internally consistent with the shipped canary spec, the pile cut still hashes
-# to its published value, and no sealed game appears in any request we have ever
-# made. It does NOT mean the environment has not drifted -- only a replay can
-# say that, and only `canary_schedule.py run` buys one.
+# to its published value, no sealed game appears in any request we have ever
+# made, and the planned campaign fits inside the documented rate limit. It does
+# NOT mean the environment has not drifted -- only a replay can say that, and
+# only `canary_schedule.py run` buys one.
 set -u
 
 HERE="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -52,6 +53,12 @@ fi
 
 step "pile cut, claim set and the sealed-contact audit" \
     python contamination.py --json
+
+# Phase 1's rate obligation (Theoria.md:299), in the unit that exists. Runs
+# with --measure so a declared input that has drifted from the data file it
+# was taken from is a verify failure, not a stale number nobody rechecks.
+step "campaign rate budget fits inside the documented limit" \
+    python rate_budget.py --measure
 
 step "no credential or cookie value reached the ledger" python redact_ledger.py
 
