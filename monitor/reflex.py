@@ -26,7 +26,8 @@ LOCK = os.path.join(HERE, "reflex.lock")
 RLOG = os.path.join(HERE, "reflex.log")
 LOOP = os.path.join(HERE, "loop_state.json")
 MAX_DEATHS = 3
-WORKER_MAX = 2      # HARD cap: the machine died at ~20 concurrent sessions
+WORKER_MAX = 0      # spawning is OFF: the monitor ramps workers by hand after the
+                    # 2026-07-28 crash. Reflex keeps reap / quota / ci_merge only.
 MIN_FREE_GB = 8     # admission control: no spawn below this much free RAM
 
 

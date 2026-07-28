@@ -463,8 +463,33 @@ def probe_ops_duty():
     return {"status": st, "detail": detail, "rows": rows, "to_monitor": tm}
 
 
+def probe_scheduled_tasks():
+    """The automation itself needs a watchdog: OPS-M and OPS-R both reported
+    TheoriaReflex sitting Disabled with nothing on the board saying so."""
+    want = {"TheoriaReflex": "reap / quota / 自动合并",
+            "TheoriaDashboard": "每 10 分钟重算 state.json",
+            "TheoriaServe": "本地服务 :8787（前端拉数据）"}
+    rows, bad = [], []
+    for name, role in want.items():
+        out = subprocess.run(["schtasks", "/Query", "/TN", name, "/FO", "LIST"],
+                             capture_output=True, text=True)
+        if out.returncode != 0:
+            rows.append("%s **未注册**（%s）" % (name, role))
+            bad.append(name)
+            continue
+        txt = out.stdout
+        disabled = ("Disabled" in txt) or ("已禁用" in txt)
+        rows.append("%s %s（%s）" % (name, "**已禁用**" if disabled else "运行中", role))
+        if disabled:
+            bad.append(name)
+    return {"status": "risk" if bad else "green",
+            "detail": "； ".join(rows) +
+                      ("　→ 自动化有缺口：" + ", ".join(bad) if bad else "")}
+
+
 PROBES = {
     "credential_hygiene": probe_credential_hygiene,
+    "scheduled_tasks": probe_scheduled_tasks,
     "append_only": probe_append_only,
     "ops_duty": probe_ops_duty,
     "conflict_scan": probe_conflicts,
