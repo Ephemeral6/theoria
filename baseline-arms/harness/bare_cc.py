@@ -431,8 +431,16 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
                 history.append("step %d: %s -> stopping" % (step_idx, note))
                 summary["outcome"] = "gave_up" if note == "gave up" else "unparseable_reply"
                 summary["stop_note"] = note
+                # `failed=True` because the step produced no frame (D-006), and
+                # `reached_api=False` because it produced no request either. The
+                # two were indistinguishable in the record until an audit of the
+                # first `gave_up` cells read one as the other and reported a
+                # discrepancy that was not there. Older records are still read
+                # correctly -- `audit_cells.reached_api` infers it from the
+                # absence of an http_status -- but a reader should not have to.
                 ledger.env_step(game_id, run_id, "bare_cc", model, note, None,
-                                step_idx, failed=True, reason=note)
+                                step_idx, failed=True, reason=note,
+                                reached_api=False)
                 break
 
             request_body: Dict[str, Any] = {"game_id": game_id, "card_id": card_id,

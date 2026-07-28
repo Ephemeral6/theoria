@@ -1948,3 +1948,6 @@
 {"cells": 3, "clean": 3, "corrupt_lines": 0, "game": null, "kind": "cell_audit", "sealed_hits": [], "timestamp": "2026-07-28T10:39:05Z"}
 {"cells": 3, "clean": 3, "corrupt_lines": 0, "game": "g50t-5849a774", "kind": "cell_audit", "sealed_hits": [], "timestamp": "2026-07-28T12:40:12Z"}
 {"cells": 3, "clean": 3, "corrupt_lines": 0, "game": "sk48-d8078629", "kind": "cell_audit", "sealed_hits": [], "timestamp": "2026-07-28T13:13:20Z"}
+{"cells": 3, "clean": 1, "corrupt_lines": 0, "game": "tn36-ef4dde99", "kind": "cell_audit", "sealed_hits": [], "timestamp": "2026-07-28T13:33:39Z"}
+{"cells": 3, "clean": 3, "corrupt_lines": 0, "game": "tn36-ef4dde99", "kind": "cell_audit", "sealed_hits": [], "timestamp": "2026-07-28T13:35:48Z"}
+{"kind": "campaign_gate", "state": "green", "timestamp": "2026-07-28T13:36:11Z", "totals": {"action_success_rate": 0.839, "actions_failed": 55, "actions_ok": 286, "cells": 12, "compute_seconds": 13857.4, "cost_by_tier": {"claude-haiku-4-5-20251001": 13.0639}, "cost_usd": 13.0639, "elapsed_seconds": 4418.7, "elapsed_seconds_all_cells": 69283.7, "http_calls": 902, "http_per_action": 3.15, "usd_per_action": 0.0457}, "tripped": []}

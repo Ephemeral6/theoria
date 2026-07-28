@@ -211,3 +211,41 @@ def test_a_cell_naming_a_reservation_the_pool_never_saw_is_a_problem(scratch_gat
     report = audit_pool.audit([_cell("res-neverexisted")], CAMPAIGN, scratch_gate)
     assert not report["clean"]
     assert any("absent from the pool" in p for p in report["cells"][0]["problems"])
+
+
+# -- the refused / stopped distinction (audit_cells) -------------------------
+
+def test_a_give_up_step_is_not_counted_as_a_refused_action():
+    """Two tn36 cells ended `gave_up`, and the audit reported 'summary 5,
+    ledger 6' on both. The summary was right: a GIVE UP writes failed=True and
+    a null frame because it produced no frame, but it never reached the server,
+    so it is not something `actions_failed` counts and it says nothing about
+    the API."""
+    from harness import audit_cells
+
+    refusal = {"failed": True, "http_status": 500, "action": {"id": 6}}
+    giveup = {"failed": True, "action": "gave up", "reason": "gave up"}
+    success = {"failed": False, "action": {"id": 1}}
+
+    assert audit_cells.reached_api(refusal) is True
+    assert audit_cells.reached_api(giveup) is False
+    assert audit_cells.reached_api(success) is True
+    # An explicit field wins over the inference, so newer writers can state it.
+    assert audit_cells.reached_api(dict(giveup, reached_api=True)) is True
+    assert audit_cells.reached_api(dict(refusal, reached_api=False)) is False
+
+
+def test_the_real_tn36_cells_now_reconcile():
+    """The regression, against the actual records rather than a fixture."""
+    from harness import audit_cells, run_campaign
+
+    cells = [c for c in run_campaign.load_cells()
+             if (c.get("game_id") or "").startswith("tn36")]
+    if not cells:
+        import pytest
+        pytest.skip("tn36 has not been run in this checkout")
+    records = [r for r, _, _ in audit_cells.read_jsonl(audit_cells.ledger_paths())]
+    probes = [r for r, _, _ in audit_cells.read_jsonl(audit_cells.probe_paths())]
+    for cell in cells:
+        report = audit_cells.audit_run(cell, records, probes)
+        assert not report["findings"], (cell["run_id"], report["findings"])
