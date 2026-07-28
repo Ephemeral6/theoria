@@ -40,13 +40,21 @@ ARM = "theoria"                                       # registered in ledger.ARM
 
 RUNS_DIR = _bootstrap.path("runs")
 
+#: Where a test's throwaway run goes. `runs/` is the archive -- the thing Phase
+#: 4 reads back to account for every action this arm ever spent -- and a fixture
+#: that lands in it is indistinguishable, by directory listing, from an
+#: experiment that cost money. Two of them did land there, and the archive audit
+#: had to tell them apart by hand. They go somewhere else now, and
+#: `armtools.verify_provenance` fails if one reappears under `runs/`.
+FIXTURE_RUNS_DIR = _bootstrap.path(".pytest-runs")
+
 
 def new_run_id() -> str:
     return "r-" + uuid.uuid4().hex[:16]
 
 
-def run_dir(slug: str) -> str:
-    path = os.path.join(RUNS_DIR, slug)
+def run_dir(slug: str, root: Optional[str] = None) -> str:
+    path = os.path.join(root or RUNS_DIR, slug)
     os.makedirs(path, exist_ok=True)
     return path
 
@@ -60,11 +68,12 @@ class Run:
                  env_key: Optional[str] = None,
                  require_key: bool = True,
                  env_max_attempts: int = 3,
-                 ledger_path: Optional[str] = None):
+                 ledger_path: Optional[str] = None,
+                 runs_root: Optional[str] = None):
         self.game_id = game_id
         self.slug = slug
         self.run_id = run_id or new_run_id()
-        self.dir = run_dir(slug)
+        self.dir = run_dir(slug, runs_root)
         self.ledger_path = ledger_path or os.path.join(self.dir, "ledger.jsonl")
 
         self.ledger = Ledger(self.ledger_path)
@@ -139,11 +148,17 @@ class Run:
 def play(game_id: str, slug: str, arm_factory: Callable[[str, "Run"], Any], *,
          env_upstream: str = UPSTREAM_ARC, env_key: Optional[str] = None,
          require_key: bool = True, run_id: Optional[str] = None,
-         start_extra: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
-    """Drive one run to completion, and write `run_end` whatever happens."""
+         start_extra: Optional[Dict[str, Any]] = None,
+         runs_root: Optional[str] = None) -> Dict[str, Any]:
+    """Drive one run to completion, and write `run_end` whatever happens.
+
+    `runs_root` defaults to the archive. A caller whose run is not archive
+    material -- a test, a smoke -- passes `FIXTURE_RUNS_DIR` and keeps it out.
+    """
     outcome: Dict[str, Any] = {"outcome": "not_started"}
     with Run(game_id, slug, run_id=run_id, env_upstream=env_upstream,
-             env_key=env_key, require_key=require_key) as run:
+             env_key=env_key, require_key=require_key,
+             runs_root=runs_root) as run:
         run.start_record(**(start_extra or {}))
         arm = arm_factory(run.env_base, run)
         try:
