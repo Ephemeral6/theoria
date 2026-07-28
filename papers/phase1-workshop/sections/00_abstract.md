@@ -6,19 +6,29 @@
 **⟨AUTHOR PLACEHOLDER⟩**
 ⟨AFFILIATION PLACEHOLDER⟩ · ⟨CONTACT PLACEHOLDER⟩
 
-> **Draft status — v0.2.** This is a working draft assembled from the acceptance
-> reports already in the repository. Authorship, affiliation, venue and
-> bibliography are unfilled placeholders, and at ~19 500 words it is roughly five
-> times a workshop budget — the cut is a separate pass, and no material has been
-> dropped yet in order to make it.
+> **Draft status — v0.3.** This is a working draft assembled from the acceptance
+> reports already in the repository. Authorship, affiliation and venue are
+> unfilled placeholders, and at ~22 600 words it is roughly five times a workshop
+> budget — the cut is a separate pass, and no material has been dropped yet in
+> order to make it.
 >
-> v0.2 adds three sections — §6 (A3, transfer), §8 (the exam) and §9 (the
-> preflight) — and renumbers the two that follow them; the map from v0.1 is
-> `papers/phase1-workshop/runs/20260728T092517Z-P6/SECTION_RENUMBER.md`.
-> **§7 is known stale**: the battery was rebuilt from v0 to v2 after that section
-> was written, and it carries a standing note saying so rather than a repair.
+> v0.2 added three sections — §6 (A3, transfer), §8 (the exam) and §9 (the
+> preflight) — and renumbered the two that follow them; the map from v0.1 is
+> `papers/phase1-workshop/runs/20260728T092517Z-P6/SECTION_RENUMBER.md`. v0.3
+> closes the two gaps that renumbering left. **§7 has been re-derived against
+> battery v2** — it reported v0 behind a standing note admitting the battery had
+> moved, and every figure in it is now read from `battery/artifacts/*.json`
+> rather than from a report's prose. **§11 has a bibliography**:
+> `papers/phase1-workshop/references.bib`, 70 records each cross-verified against
+> two independent sources, with the traces in
+> `papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/`; no
+> `[bib: TODO]` marker survives anywhere in the draft, and the records that could
+> not be confirmed twice are named as uncited rather than hedged.
+>
 > `papers/phase1-workshop/OPEN_ITEMS.md` is the derived checklist of everything
-> the two audits left open, including that one.
+> the two audits left open. `papers/phase1-workshop/REVIEW_TRIAGE.md` sorts the
+> referee pass by what each fix costs — writing, re-derivation, or an experiment
+> that has not been run.
 >
 > **The binding rule.** Every quantitative claim in the body carries the
 > repo-relative path of the artefact it came from;
