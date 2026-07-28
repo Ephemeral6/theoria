@@ -57,7 +57,7 @@ def existing_branches():
 
 
 def prompt_id(name):
-    m = re.match(r"([PRM]-\d+)", name)
+    m = re.match(r"([PRMB]-\d+)", name)
     return m.group(1) if m else None
 
 

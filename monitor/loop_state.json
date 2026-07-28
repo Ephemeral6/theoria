@@ -1,0 +1,33 @@
+{
+  "mode": "fleet-loop",
+  "started": "2026-07-28T08:55:00Z",
+  "pool_target": 10,
+  "in_flight": [
+    "P-8",
+    "P-9",
+    "P-10",
+    "P-11",
+    "P-12",
+    "P-13",
+    "P-14",
+    "P-15",
+    "P-16",
+    "P-17",
+    "R-1",
+    "B-1"
+  ],
+  "completed": [],
+  "total_completed": 0,
+  "completions_since_refill": 0,
+  "completions_since_monitor_update": 0,
+  "m0_dispatched": false,
+  "rules": {
+    "complete_when": "agent branch pushed to origin, or merged into master",
+    "refill": "every >=5 completions, author 5 fresh prompts from current repo state and dispatch",
+    "monitor_update": "every >=10 completions, full monitor cycle (scan -> spec -> scan.py -> push)",
+    "m0": "dispatch M-0 via --only once P-8..P-12 have all pushed",
+    "isolation": "content-free checks only; audit via git-visible artifacts",
+    "escalation": "CLI-unsolvable -> B-* browser-operator session (claude-in-chrome, whitelist, fail-closed) -> needs_human list for the user",
+    "provenance": "write-as-you-go: run dir created at start, incremental writes per step; context-only info counts as nonexistent"
+  }
+}
