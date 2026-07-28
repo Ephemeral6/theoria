@@ -258,6 +258,31 @@ def test_the_generator_refuses_a_semantics_value_it_does_not_implement(
     assert value in str(caught.value), "the refusal must name the value it refused"
 
 
+def test_the_stayed_rules_are_load_bearing_not_entailed_by_persist():
+    """`frame persist` does not retire this manual's no-op rules. T-11a.
+
+    The tempting reading of the frame axiom is "no-op rules are unnecessary" --
+    it is what let `cold-start-a0` drop eleven `*_still_*` clauses. It does not
+    transfer. The axiom says what happens to an object *no firing rule mentions*,
+    which presupposes some rule fires; a0-spike's three `blocked_*` rules are the
+    only ones covering their guard region, so they are what makes the rule set
+    total. Strip them and the manual determines no successor at all.
+    """
+    import re
+
+    from pipeline.gen_exec import generate
+
+    stripped = re.sub(r"  rule blocked_\w+ \[[^\]]*\]\n    when [^\n]*\n", "",
+                      _manual())
+    assert "rule blocked_" not in stripped, "the strip did not apply"
+
+    module = {}
+    exec(compile(generate(stripped, levels.MATCH.height, levels.MATCH.width,
+                          levels.MATCH.walls), "<stripped>", "exec"), module)
+    with pytest.raises(RuntimeError, match="no rule fired"):
+        module["step"](module["State"](player=(0, 0), box=(3, 3)), "UP")
+
+
 def test_the_compiled_step_enforces_exclusive_even_when_rules_agree():
     """Two rules firing is a violation whether or not they agree on the answer.
 

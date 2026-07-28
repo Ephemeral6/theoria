@@ -79,6 +79,18 @@ def main() -> int:
         "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
         "base_commit": git("rev-parse", "HEAD"),
         "utc": args.utc,
+        "measured_on": {
+            "commit": "3205992",
+            "note": (
+                "Every number in `evidence` was first measured with a0-spike at "
+                "3205992. `base_commit` above is later: master gained ten "
+                "monitor/ops commits mid-run and was merged in, and `git diff "
+                "3205992 e182c95 -- a0-spike/ theory-compiler/ CONTRACTS/` is "
+                "empty, so none of them can touch these numbers. All three gates "
+                "(pytest, run_a0, semantics_probe) were re-run green on the "
+                "merged tree rather than argued about."
+            ),
+        },
         "run_id": "20260728T040057Z-c2",
         "track": "engine-rig",
         "territory": "a0-spike/ only; PARTNER_SYNC.md appended",
@@ -108,7 +120,7 @@ def main() -> int:
                 "statement; not filtered out, reported"
             ),
         },
-        "tests": "python -m pytest -q -> 43 passed, 0 failed, 0 error "
+        "tests": "python -m pytest -q -> 44 passed, 0 failed, 0 error "
                  "(baseline at base_commit: 32 FAILED/ERROR, 6 passed)",
         "pipeline": "python -m pipeline.run_a0 -> exit 0; certify exact, "
                     "held-out 39960 states 0 mismatches, lean=py 9408/9408",

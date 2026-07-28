@@ -296,9 +296,35 @@ of the rule set and vacuity of the frame axiom are different properties, and A0
 has the first without the second.
 
 **Adjudicated** `persist`. Cost: nothing — it is what all four forms already
-encoded. Bought: the eleven `*_still_*` no-op rules that R-07 rejected are now
-rejected *on paper*, by an axiom the manual contains, rather than by an appeal to
-something written only in a comment.
+encoded.
+
+**What it does *not* buy here, corrected.** An earlier draft of this entry said
+`persist` now rejects "the eleven `*_still_*` no-op rules R-07 rejected" on paper
+rather than by appeal to a comment. **That is `cold-start-a0`'s R-07, not this
+directory's** — a0-spike's log runs T-1…T-11 and has no R-series at all. The
+claim was imported from `cold-start-a0/proposals/dsl_grammar_v0.2_semantics.md`
+without checking that it transfers, which is the exact failure this whole section
+exists to prevent, committed inside the section. Recorded rather than quietly
+deleted.
+
+The truth for a0-spike is the opposite and is worth more than the error was:
+**this manual keeps its no-op rules, and it must.** The three `blocked_*` rules
+emit `stayed(Player)` and are the only rules covering their guard region, so they
+are what makes the rule set *total*. Measured — strip them and compile:
+
+```
+RuntimeError: no rule fired for UP in State(player=(0,0), box=(3,3))
+              -- the rule set is not total, so the manual determines no successor
+```
+
+So the frame axiom removes a clause only when **some other rule already fires**
+and simply fails to mention the object in question. It says what happens to
+objects no firing rule mentions; it cannot say what happens when *no rule fires
+at all*. cold-start-a0's eleven were redundant in the first sense. a0-spike's
+three are load-bearing in the second, which is also why `stayed(o)` had to be
+invented as an event at all (see the note at the head of `events:`). Two
+directories, one axiom, opposite consequences — and the distinction is invisible
+if you read the axiom as "no-op rules are unnecessary".
 
 ### T-11b · `conflict exclusive`
 
@@ -417,6 +443,6 @@ Prefix `X-` so as not to collide with `cold-start-a0`'s `E-` series.
 |---|---|---|---|
 | **X-1** | **A rule may carry exactly one event, and a push does two things.** `when <guard> then <event>` is the frozen shape, so `push2`'s `slid(Box, dir)` is **compound** — its compiled effect moves the Box two cells *and* the Player one. The Player's motion is real, load-bearing, and named nowhere in the manual's own vocabulary. **v0.2 also never defines what `frame persist`'s "mentions" ranges over**, and the three available readings do not agree: *the rule's text* leaves the successor undetermined (`blocked_wall`'s guard mentions `Box.pos`, so the Box would be pinned by a rule that does not move it); *the event signature* — `slid` writes `{Box}` — freezes the Player across a push and **mispredicts 376 pairs**, measured; only *the compiled effect* — `{Box, Player}` — matches the world. | A reader of `theory.dsl` alone cannot see that a push moves the player, and `frame persist` is true only relative to an effect dictionary that lives in `gen_exec._compile_effect`, not in the manual and not in the contract. It also makes `conflict`'s per-object obligation depend on that same private knowledge: read `slid` by its name and the sweep ranges over too few pairs. T-11b compensates by hand. | **open** — reported to `theory-compiler` via PARTNER_SYNC, as two requests: an event signature that names every object it writes (or multiple events per rule), **and** a definition of "mentions" in v0.3. The 376 is the cost of guessing the second one wrong. Found by the adversarial review, Attack 1. |
 | **X-2** | **Only one of a0-spike's forms is derived from the manual.** `gen_exec` parses `theory.dsl`; `pddl_gen` builds the domain from *level data* and never reads the manual; `artifacts/A0.lean` is checked in and only *checked* by `lean_stage`. | The `semantics:` guard T-11 added can only be enforced where the manual is read. A manual declaring `cascade multi_frame` is refused by the Python form and silently ignored by the PDDL and Lean forms — precisely the `gen_pddl` defect v0.2 revision item 10 records. a0-spike's version is worse: those backends cannot be guarded at all, because they never read the manual. | **open** — the honest scope of "四形态同源" here is one form derived, one hand-written, one level-derived. Not fixed: rebuilding Lean and PDDL as real generators is a sprint, not a migration. |
-| **X-3** | **`frame persist` is declared, but nothing re-derives the eleven no-op rules it entails.** R-07 rejected eleven mined `*_still_*` rules as entailed by the frame axiom. The axiom is now in the manual, so the entailment is stateable — but no tool checks that the eleven really are entailed rather than merely unwanted. | Shortening the manual by eleven clauses still rests on an adjudication rather than a proof. | **open** — smaller than X-1/X-2; wants a `certify` obligation, not a grammar change. |
+| **X-3** | **Nothing checks that a no-op rule is redundant before it is dropped, or load-bearing before it is kept.** `frame persist` makes the question stateable — a rule whose event writes nothing is redundant exactly when some *other* rule fires on the same guard region — but no tool decides it. This directory keeps three such rules and needs them (T-11a, measured); `cold-start-a0` dropped eleven and was right to. Both calls are adjudications; neither is checked. | The manual's length rests on a judgement about entailment that no artefact re-derives. Getting it wrong in the dropping direction makes the rule set non-total and `step` raises — loud. Getting it wrong in the keeping direction is silent, and leaves clauses that carry no predictive content while each adding a mutual-exclusion obligation to discharge. | **open** — smaller than X-1/X-2 and now *sharper* than when first filed: the obligation is "for each rule whose event writes nothing, is its guard region covered by another rule?", which `certify` already has the machinery for. Wants a `certify` obligation, not a grammar change. **The first draft of this entry mis-cited `cold-start-a0`'s R-07 as this directory's; see T-11a.** |
 | **X-5** | **"the Box is not standing on a wall" is inexpressible in the v1 guard language**, and the manual is wrong about 52 states because of it. The world checks `is_wall(target)` *before* `target != state.box` (`world/sokoban2.py:142-145`), so a box parked on a wall blocks the player at the wall and no push is considered; `push2` has no clause that can see this. It cannot get one: `free(Box.pos)` compiles to `_free(state, state.box)`, which is unconditionally false because `_free` excludes the box's own cell. | 52 mispredictions across the five levels, every one firing `push2`. They are **not** evidence about `frame` or `cascade` — both readings of each mispredict them identically — but they are a real defect, and by v0.2 §"Discharging `conflict`" the honest name for the situation is a **discharge conditional on an undeclared well-formedness condition** ("no object stands on a wall"), which that section says is simultaneously a defect report. | **open**. Not reachable in play, which is exactly why T-9 says that is not a defence. Wants either a guard predicate over level-static data (the compiled module already holds `WALLS`), or a `unique`-style declaration that objects and walls do not share cells. Found by the adversarial review, Attack 4 — my own justification for excluding these states was factually wrong, and is corrected in FINDING-2. |
 | **X-4** | **`a0_report.json` embeds an absolute path to the Lean binary**, so the artefact is not byte-reproducible across machines. | CLAUDE.md makes determinism a requirement and the Phase 4 manifest publishes tracked files; this field varies by developer, and on this machine it also leaks a home directory. Pre-existing — T-11 only changed *which* absolute path it holds. | **open**, recorded not fixed: changing the field is a schema decision, and provenance genuinely wants to know which Lean ran. Candidate fix is the version string plus a repo-relative or basename form. |

@@ -5,7 +5,7 @@
     "frame": "persist"
   },
   "adversarial_review": "One pass, commissioned to refute and told its report would be filed unedited. Confirmed all three values SOUND against world/sokoban2.py; landed four hits on the evidence, all accepted: the on-wall exclusion was a reachability argument in disguise (render is injective -- 2352 states, 2352 frames, 0 collisions), the 52 are a push2 guard defect (X-5), the generated step() declared `exclusive` without enforcing it, and `frame persist` holds only under the wide reading of the compound `slid` event (the narrow reading costs 376 mismatches, X-1). runs/20260728T040057Z-c2/ADVERSARIAL_REVIEW.md",
-  "base_commit": "32059928f7bb1c075d25553346c487837d961d64",
+  "base_commit": "d55f0721500d5e1d98ac1d869a8ce4b965697f7b",
   "branch": "agent/c2-semantics-migrate",
   "contract": "CONTRACTS/dsl_grammar_v0.2.md revision item 1 (ledger E-03)",
   "determinism": "The probe and all four forms are deterministic: no seed, no clock, no network. One field is not byte-reproducible across machines -- a0_report.json records the absolute path of the Lean binary that ran; ledger X-4, recorded not fixed.",
@@ -27,8 +27,8 @@
       "sha256": "5defe8a376f97e42819179f920c89f361b92612d7aef47a668fbef254f20f2c5"
     },
     "a0-spike/THEORIZE_LOG.md": {
-      "bytes": 26264,
-      "sha256": "1f955f292a9571f909a872e3055871583155bdb4b2db7e47ff1ccafbad933735"
+      "bytes": 28453,
+      "sha256": "a061a13ea3b986d32b5fe6c7061110f1aa004f7bd296b43db031349b8c708c3c"
     },
     "a0-spike/artifacts/A0.lean": {
       "bytes": 3434,
@@ -79,25 +79,29 @@
       "sha256": "cfdff3d74953d27cae40386a3bd0bda2b356d6358f60a38fbd7ad2856c95baf5"
     },
     "a0-spike/runs/20260728T040057Z-c2/RUN_STATE.md": {
-      "bytes": 12520,
-      "sha256": "a825cd7985a24d0c27a9ad78b1981e042bfa49e641a277e5aa18a4140f612d85"
+      "bytes": 15682,
+      "sha256": "8f894d6c1ac1f8e47fdd9d126c76437da371fa7b33d5f3a1251b397eae18f16f"
     },
     "a0-spike/runs/20260728T040057Z-c2/make_manifest.py": {
-      "bytes": 6086,
-      "sha256": "95d9301b484e0b962e4ae51f4d521a495802c32bb959850a7a203cb717d6d338"
+      "bytes": 6727,
+      "sha256": "285cec11a95c49703b98098d4910738749e95a02172342e034d7f701a5abf23a"
     },
     "a0-spike/runs/20260728T040057Z-c2/semantics_probe.json": {
       "bytes": 17359,
       "sha256": "4abe36964202cbb4b69be1a25cd79d55d16dba021d128050c386947c31112cf4"
     },
     "a0-spike/tests/test_a0.py": {
-      "bytes": 16720,
-      "sha256": "b25f197b5f1d37967ce0776a92d784b9e46f26bf7990bb321ebc909cac7b9ad9"
+      "bytes": 17918,
+      "sha256": "c7ec7d22ffc104a4195cba132808d72697c294d350550f1ac53de53d85c0b76d"
     },
     "a0-spike/theory/theory.dsl": {
       "bytes": 4471,
       "sha256": "0f563753beeae186656dfc29bf0ee27b17e512a5d0b3dcc3a641ff71cea7aee7"
     }
+  },
+  "measured_on": {
+    "commit": "3205992",
+    "note": "Every number in `evidence` was first measured with a0-spike at 3205992. `base_commit` above is later: master gained ten monitor/ops commits mid-run and was merged in, and `git diff 3205992 e182c95 -- a0-spike/ theory-compiler/ CONTRACTS/` is empty, so none of them can touch these numbers. All three gates (pytest, run_a0, semantics_probe) were re-run green on the merged tree rather than argued about."
   },
   "network": "none. No API calls, no sealed-pile contact.",
   "open_ledger_entries": [
@@ -111,8 +115,8 @@
   "prompt_id": "C2-semantics-migrate",
   "run_id": "20260728T040057Z-c2",
   "territory": "a0-spike/ only; PARTNER_SYNC.md appended",
-  "tests": "python -m pytest -q -> 43 passed, 0 failed, 0 error (baseline at base_commit: 32 FAILED/ERROR, 6 passed)",
+  "tests": "python -m pytest -q -> 44 passed, 0 failed, 0 error (baseline at base_commit: 32 FAILED/ERROR, 6 passed)",
   "track": "engine-rig",
-  "utc": "2026-07-28T06:32:25Z",
+  "utc": "2026-07-28T06:56:49Z",
   "what": "Migrate a0-spike's manual from dsl_grammar v0.1 to v0.2 by adjudicating the three `semantics:` statements as facts about the A0 world, each by refuting its alternative against ground truth."
 }

@@ -1,17 +1,25 @@
 # C2 · a0-spike, dsl_grammar v0.1 → v0.2 — run state
 
 **Run** `20260728T040057Z-c2` · **prompt** `C2-semantics-migrate` ·
-**branch** `agent/c2-semantics-migrate` · **base_commit** `3205992`
-(the run id keeps its opening timestamp; the branch was fast-forwarded from
-`c47366c` to `3205992` mid-run, and `3205992` is what the manifest records,
-because that is the tree everything below was measured on).
+**branch** `agent/c2-semantics-migrate` · **measured on** `3205992` ·
+**base_commit** `d55f072`
+
+The run id keeps its opening timestamp. The branch was fast-forwarded from
+`c47366c` to `3205992` early, and every number below was measured there. Master
+then gained ten monitor/ops commits while this ran and was merged in, which is
+why `base_commit` is a merge and not `3205992`. `git diff 3205992 e182c95 --
+a0-spike/ theory-compiler/ CONTRACTS/` is **empty**, so none of those commits can
+touch these numbers — but all three gates were re-run green on the merged tree
+anyway rather than argued about, which is the cross-track integration check both
+OPS-M and FINDING-6 say nothing else performs.
 
 The plan this executed is `PLAN.md`, written at the opening of the run. It was
-followed, with one change of method recorded as FINDING-2.
+followed, with one change of method recorded as FINDING-2 and one self-caught
+error recorded as FINDING-3b.
 
 ## Outcome
 
-**Green.** `python -m pytest` → **43 passed, 0 failed, 0 error** (was 32
+**Green.** `python -m pytest` → **44 passed, 0 failed, 0 error** (was 32
 FAILED/ERROR, 6 passed). `python -m pipeline.run_a0` → exit 0, all four forms
 regenerated, certify and the held-out check clean:
 
@@ -163,6 +171,30 @@ domain from level data and `artifacts/A0.lean` is checked in rather than
 generated, so neither reads the manual and neither can be guarded. That is the
 honest scope of "四形态同源" in this directory and it is recorded, not papered over.
 
+### FINDING-3b · I cited another directory's ledger as this one's, and it was wrong
+
+Caught after the first commit, while trying to *close* X-3. T-11a and X-3 both
+said `frame persist` lets a0-spike drop "the eleven `*_still_*` no-op rules R-07
+rejected". **a0-spike has no R-07** — its log runs T-1…T-11 with no R-series. The
+claim came from `cold-start-a0/proposals/dsl_grammar_v0.2_semantics.md`, which
+describes *`cold-start-a0`'s* ledger, and I carried it across without checking it
+transfers. A migration entry about not assuming another manual's facts, resting
+on another manual's fact.
+
+The correction is worth more than the error. In a0-spike the three `blocked_*`
+rules emit `stayed(Player)` and are the **only** rules covering their guard
+region, so they are what makes the rule set total. Measured — strip them, compile,
+and `step` raises `no rule fired for UP ... the rule set is not total`. The frame
+axiom retires a clause only when *some other rule already fires* and merely fails
+to mention the object; it has nothing to say when no rule fires at all.
+cold-start-a0's eleven were redundant in the first sense; a0-spike's three are
+load-bearing in the second. Same axiom, opposite consequence.
+
+X-3 is rewritten around the real obligation — "for each rule whose event writes
+nothing, is its guard region covered by another rule?" — which is sharper than
+what it replaced and is something `certify` already has the machinery for. Both
+the error and the correction are left visible in T-11a rather than edited out.
+
 ### FINDING-4 · `find_lean` reported a hard failure where a working Lean was one directory away
 
 `elan` installs a shim named `lean` on PATH which dispatches to the configured
@@ -186,6 +218,24 @@ With it in place the four forms regenerate byte-identically. The **only** conten
 change across the whole regeneration is one field of `a0_report.json`: the
 absolute path of the Lean binary that ran. That field is machine-dependent and is
 ledger **X-4** — recorded, not fixed, because changing it is a schema decision.
+
+### FINDING-6 · The gate that would have caught this does not exist, confirmed a second time
+
+OPS-M's conflict note ends with an instrument observation for monitoring:
+`monitor/ci_merge.py` runs the tests for *the directories a branch touched*, no
+branch had touched `a0-spike`, so nine branches merged green onto a tree with two
+red directories. This run is the second data point and it is the same shape from
+the other side: **a0-spike was red on master for an unknown number of commits and
+nothing reported it**, because nothing runs the whole suite on the merged tree.
+
+Worth adding to the record because the two data points differ in an informative
+way. OPS-M found it by hand-running after a merge wave. I found it because a
+dispatch pointed me at it. Neither is a gate. The cheap version is not a new
+harness: it is `python -m pytest` in each track directory, on master, on a timer —
+this run's entire root cause would have surfaced the first time it fired, and
+FINDING-1 says the tree would have stayed red under the obvious three-line fix,
+so a *periodic* gate would also have caught the naive repair that a per-branch
+gate waves through.
 
 ## Reproducing
 
