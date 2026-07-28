@@ -208,7 +208,7 @@ def test_a_stream_with_no_prev_is_unchained_not_verified(tmp_path):
     _rewrite(path, [json.dumps(rec, sort_keys=True, separators=(",", ":")).encode()])
     report = verify_chain.verify(path)
     assert report["verdict"] == "UNCHAINED", report
-    assert verify_chain.main([path]) == 2
+    assert verify_chain.main([path]) == 3
 
 
 def test_an_empty_file_is_not_a_pass(tmp_path):
@@ -311,3 +311,106 @@ def test_the_runners_default_head_location_is_gitignored(tmp_path):
         "proxy/var/runs is NO LONGER gitignored -- if run records are now "
         "tracked the head really is published there, and runner.py's comment "
         "plus D-029 need updating to say so")
+
+
+# ---------------------------------------------- the holes the adversary found
+
+def test_truncating_the_tail_is_caught_by_a_published_head(tmp_path):
+    """Nothing chains to the last line, so the walk alone cannot see this.
+
+    It is also the tamper with the clearest motive: delete the end of the run
+    that went badly.  An adversarial pass found it verifying as PASS, which is
+    why the head is compared against a prefix and not just present.
+    """
+    path = _ledger(tmp_path, n=6)
+    head_file = str(tmp_path / "head.json")
+    assert verify_chain.main([path, "--emit-head", head_file]) == 0
+
+    lines = _lines(path)
+    _rewrite(path, lines[:3])                      # drop the last three records
+
+    assert verify_chain.verify(path)["verdict"] == "PASS", \
+        "the chain walk alone still cannot see a truncated tail -- that is why " \
+        "the published head is not optional"
+    assert verify_chain.main([path, "--expect-head-file", head_file]) == 1
+    report = verify_chain.verify(path, expect_seq=6)
+    assert report["breaks"][0]["kind"] == "truncated_tail", report
+
+
+def test_a_later_honest_append_does_not_invalidate_an_older_head(tmp_path):
+    """The alarm must not fire on honest files.
+
+    The ledger is one shared append-only file, so whole-file comparison would
+    report FAIL on every truthful ledger the moment the next run started -- and
+    an alarm that fires on honest files is one nobody reads.
+    """
+    path = _ledger(tmp_path, n=4)
+    head_file = str(tmp_path / "head.json")
+    assert verify_chain.main([path, "--emit-head", head_file]) == 0
+
+    led = Ledger(path)                              # a second, honest run
+    for i in range(4):
+        led.append("env_meta", "r2", "probe", http={"later": i})
+
+    assert verify_chain.main([path, "--expect-head-file", head_file]) == 0, \
+        "the published prefix is intact; appending to an append-only file is " \
+        "not tampering"
+
+
+def test_stripping_prev_wholesale_gets_its_own_exit_code(tmp_path):
+    """The downgrade attack must not read as a benign missing file."""
+    path = _ledger(tmp_path, n=4)
+    lines = []
+    for raw in _lines(path):
+        rec = json.loads(raw.decode("utf-8"))
+        rec.pop("prev")
+        rec["http"] = {"step": "FORGED"}
+        lines.append(json.dumps(rec, sort_keys=True, ensure_ascii=True,
+                                separators=(",", ":")).encode("utf-8"))
+    _rewrite(path, lines)
+
+    assert verify_chain.verify(path)["verdict"] == "UNCHAINED"
+    assert verify_chain.main([path]) == 3, "must differ from MISSING/EMPTY's 2"
+    assert verify_chain.EXIT["MISSING"] != verify_chain.EXIT["UNCHAINED"]
+
+
+def test_inserting_blank_lines_is_caught(tmp_path):
+    """No payload can hide in a blank line, but the claim has to mean what it says."""
+    path = _ledger(tmp_path, n=4)
+    lines = _lines(path)
+    lines.insert(2, b"")
+    lines.insert(4, b"   \t  ")
+    _rewrite(path, lines)
+    report = verify_chain.verify(path)
+    assert report["verdict"] == "FAIL", report
+    assert any(b["kind"] == "blank_line" for b in report["breaks"])
+
+
+def test_line_endings_do_not_break_the_chain(tmp_path):
+    """Documented behaviour, pinned so the docs and the code cannot drift apart.
+
+    The hash covers each line's bytes modulo the terminator, so an editor that
+    rewrites LF to CRLF does not raise a false alarm.  A canonical record ends
+    in `}`, so nothing can hide in the terminator.
+    """
+    path = _ledger(tmp_path, n=4)
+    before = verify_chain.verify(path)["head"]
+    with open(path, "rb") as fh:
+        body = fh.read()
+    with open(path, "wb") as fh:
+        fh.write(body.replace(b"\n", b"\r\n"))
+    after = verify_chain.verify(path)
+    assert after["verdict"] == "PASS"
+    assert after["head"] == before
+
+
+def test_first_break_is_set_when_only_the_head_mismatches(tmp_path):
+    """A FAIL with breaks must never report first_break as null."""
+    path = _ledger(tmp_path, n=4)
+    other = str(tmp_path / "other.jsonl")
+    led = Ledger(other)
+    for i in range(4):
+        led.append("env_meta", "r9", "probe", http={"x": i})
+    foreign = verify_chain.verify(other)["head"]
+
+    assert verify_chain.main([path, "--expect-head", foreign]) == 1

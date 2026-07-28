@@ -86,15 +86,57 @@ Four properties of the design, each deliberate:
 * **It is assigned under the same lock as `seq`**, so the two can never
   disagree about the order records were written in.
 
-**What this does and does not prove.** It makes tampering *evident* after the
-head is published; it does not authenticate the recording. A forger who
-rewrites the whole file and recomputes every link produces a stream that
-verifies. What catches that is the head published outside the file —
-`runs/<run_id>.json` carries `ledger_head` `{last_seq, sha256, verdict}`, which
-is committed to git (itself a hash chain) and pushed to a remote, so the witness
-lives on another machine. Note the two mechanisms cover different attacks: an
-interior edit does not move the head, and a wholesale rewrite passes the chain
-walk. Both are required. See `DECISIONS.md` D-024 and `REDTEAM.md` RED-40.
+**What this does and does not prove.** It makes tampering *evident* once a head
+has been published; it does not authenticate the recording.
+
+Three holes the chain walk alone cannot close, all of them closed only by a
+published head:
+
+* **A wholesale rewrite verifies.** Recompute every link and the file is
+  internally perfect.
+* **Truncating the tail verifies.** Nothing chains to the last line, so deleting
+  records from the *end* — the most attractive tamper, since it is the end of a
+  run that went badly — breaks no link at all. Deleting from the middle or the
+  front does break links.
+* **Duplicate `seq` from two processes.** `Ledger`'s lock is in-process, so two
+  processes appending to one file fork the chain. That shows up as FAIL, which
+  is right, but it is a durability failure rather than a forgery.
+
+**Publishing the head is therefore not optional, and writing it is not
+publishing it.** `runner.play()` returns the record carrying `ledger_head`
+`{last_seq, sha256, lines, verdict}`, but it *writes* it under `proxy/var/`,
+which is gitignored — a witness the forger can rewrite as easily as the ledger
+is no witness. Publication means putting it somewhere tracked:
+
+```bash
+python -m proxy.tools.verify_chain <ledger> --emit-head runs/<id>/ledger_head.json
+git add runs/<id>/ledger_head.json      # the publication is the commit
+```
+
+or an arm lifting `ledger_head` into its own tracked `runs/<slug>/MANIFEST.json`.
+`--emit-head` refuses to write a head for any stream that does not verify: a
+head witnessing an unverified file is worse than none, because it looks like one.
+
+**Checking against a published head:**
+
+```bash
+python -m proxy.tools.verify_chain <ledger> --expect-head-file runs/<id>/ledger_head.json
+```
+
+This verifies the file's **prefix up to the published `last_seq`**, not the whole
+file. That matters because the ledger is one shared append-only file: later runs
+append to it, so a whole-file comparison would report FAIL on every honest
+ledger as soon as the next run started, and an alarm that fires on honest files
+is an alarm nobody reads. Prefix checking is also what catches tail truncation —
+a file that ends before the published `last_seq` is missing records that were
+witnessed.
+
+**Bytes, modulo the line terminator.** The hash covers each line's bytes with
+any trailing `\r\n` stripped, so converting the file's line endings does not
+break the chain. Everything inside the line is covered exactly; a canonical
+record ends in `}`, so no record content can hide in the terminator.
+
+See `DECISIONS.md` D-024 / D-029 and `REDTEAM.md` RED-40.
 
 ## 3. `env_step`
 
