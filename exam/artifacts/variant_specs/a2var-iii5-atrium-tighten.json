@@ -1,0 +1,17 @@
+{
+  "base_game": "a2",
+  "base_level": "atrium",
+  "claim": "solvable",
+  "justification": "The level awards one point on victory and the tightened win test asks for at least one, so the test is satisfied by exactly the frames that satisfied it before. A tightened victory condition that a winning frame already meets changes nothing about which sequences win; it is the boundary case of the operator, and it is on the paper so that an examinee cannot read 'win_tighten' as a synonym for 'unsolvable'.",
+  "notes": "The fifth wrapper operator, exercised at its no-op boundary. There is no unsolvable win_tighten item because an A2-family level has a single binary victory test, so any threshold above one would be unsolvable for a reason no certificate in the grammar states.",
+  "operators": [
+    {
+      "op": "win_tighten",
+      "require": {
+        "kind": "score_at_least",
+        "value": 1
+      }
+    }
+  ],
+  "variant_id": "a2var-iii5-atrium-tighten"
+}

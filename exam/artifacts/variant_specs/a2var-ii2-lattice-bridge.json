@@ -1,0 +1,20 @@
+{
+  "base_game": "a2",
+  "base_level": "lattice",
+  "claim": "unsolvable",
+  "justification": "The lattice board's separator row is solid except at (4,2), so that single cell is the only join between the corridor half and the goal room. There is no teleport on this board, so the cell cannot be crossed without being occupied at the end of a command. Declaring a loss on (4,2) severs the only join; the goal room becomes unreachable however the 120 switches are set, since no switch alters the geometry.",
+  "notes": "A cut set of size one over a state space of at least 2^120: the class (i) argument, on a board where the class (i) method cannot run.",
+  "operators": [
+    {
+      "cells": [
+        [
+          4,
+          2
+        ]
+      ],
+      "op": "observation_loss",
+      "value": 6
+    }
+  ],
+  "variant_id": "a2var-ii2-lattice-bridge"
+}

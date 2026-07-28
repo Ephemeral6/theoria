@@ -1,0 +1,28 @@
+{
+  "base_game": "a2",
+  "base_level": "lattice",
+  "claim": "solvable",
+  "justification": "The three declared hazards all sit in row 6, the goal room's back row, while the bridge at (4,2), the goal at (5,60) and the whole of row 5 are untouched. Deleting the three cells leaves the corridor, the switch rows, the bridge and row 5 connected, so a plan exists that dips into all 120 switches from the corridor, crosses the bridge and walks row 5 to the goal without ever standing on a hazard. The plan is long, which is the difficulty, not the verdict.",
+  "notes": "The near-twin of the severed lattice: same board, same operator, cells that are not the bridge.",
+  "operators": [
+    {
+      "cells": [
+        [
+          6,
+          10
+        ],
+        [
+          6,
+          20
+        ],
+        [
+          6,
+          30
+        ]
+      ],
+      "op": "observation_loss",
+      "value": 6
+    }
+  ],
+  "variant_id": "a2var-iii6-lattice-safe"
+}

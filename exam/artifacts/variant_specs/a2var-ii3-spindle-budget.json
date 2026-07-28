@@ -1,0 +1,14 @@
+{
+  "base_game": "a2",
+  "base_level": "spindle",
+  "claim": "unsolvable",
+  "justification": "The spindle's corridor is 200 cells long, the cart starts at (2,1) and the goal is at (2,200). One command moves the cart at most one edge, and the board has no teleport, so at least 199 commands are needed. The budget is 150. The 400 switches do not enter the argument at all, which is the point: they put the reachable set past 10^18 states, so the verdict cannot come from enumeration, while the counting argument needs only the corridor's length.",
+  "notes": "The budget also caps how much of the switch space is reachable, so the recorded bound is computed against the budget rather than against the switch count.",
+  "operators": [
+    {
+      "limit": 150,
+      "op": "step_limit"
+    }
+  ],
+  "variant_id": "a2var-ii3-spindle-budget"
+}

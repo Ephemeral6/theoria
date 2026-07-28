@@ -1,0 +1,14 @@
+{
+  "base_game": "a2",
+  "base_level": "atrium",
+  "claim": "solvable",
+  "justification": "The atrium's route never moves the cart leftwards: it goes up column 1 to the button, back down column 1, rightwards along the lower rows to the door, down through the teleport into (7,6), and up column 6 to the goal at (2,7) by a final rightward step. Forbidding LEFT therefore removes a command the winning sequence does not contain, and the sequence still wins.",
+  "notes": "The near-twin of the forbidden-DOWN item on the same board: the same operator, an action the solution does not need.",
+  "operators": [
+    {
+      "action": "LEFT",
+      "op": "forbid_action"
+    }
+  ],
+  "variant_id": "a2var-iii4-atrium-noleft"
+}

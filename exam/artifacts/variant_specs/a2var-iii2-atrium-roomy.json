@@ -1,0 +1,14 @@
+{
+  "base_game": "a2",
+  "base_level": "atrium",
+  "claim": "solvable",
+  "justification": "A step limit is only an obstacle when it falls below what the level needs. The atrium's shortest winning sequence is eighteen commands -- up to the button, back down, across to the door, down through the teleport, up the right room and onto the goal -- and the budget here is 60. The wrapper therefore removes nothing: every winning sequence of the base game is still a winning sequence.",
+  "notes": "The near-twin of the budgeted unsolvable item on the same board. The operator is identical in kind; only the arithmetic differs.",
+  "operators": [
+    {
+      "limit": 60,
+      "op": "step_limit"
+    }
+  ],
+  "variant_id": "a2var-iii2-atrium-roomy"
+}

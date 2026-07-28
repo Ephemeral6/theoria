@@ -1,0 +1,299 @@
+{
+  "artifact_digests": {
+    "artifacts/answers/p15-handover-a0.reader-tier1.answers.json": "9cbdc6668f172abc5eb7b8c3849177b841e5535cb214ca0551c056b72f9a0de0",
+    "artifacts/answers/p15-handover-a0.reader-tier2.answers.json": "bec7fcd3e16b11e7511b8972dfe17bf8fb8fcf0beb6b360fc2fcda8088e9d0f3",
+    "artifacts/answers/raw_tier1.json": "addf5c3e333dec165e57dde85739d9aa6d5eec5b7a329a6d01b4de83a3d239d4",
+    "artifacts/answers/raw_tier2.json": "5b887c0d66efcc90c7af9f1c3efaa400bc6a011d60693a7498ab1326d5d347a6",
+    "artifacts/build_manifest.json": "d30c37c7207b319c127dba0140411b6bef19b943827ace46c7f53459154f1eb2",
+    "artifacts/calibration.json": "2fea44eaed203cacd5f1dc737ee0bd69abf2007fd6706ae33e5b1ee9fad268f3",
+    "artifacts/cheater/p15-adaptation-a0.brief.txt": "7340bfca9b7c0788ef62dae20c9be2894a1ceafb470ca2f8e75cc0eed086d8c8",
+    "artifacts/cheater/p15-adaptation-a0.skeleton.brief.txt": "aafbadd01c89aa7a00769564c74ab0d08a04740f883b7bcf83c5fe46a8507165",
+    "artifacts/cheater/p15-handover-a0.brief.txt": "a9a08fabfd4d16013651aa0df9a83195c82e9573f7d33b2fe8435c3dd4205df3",
+    "artifacts/cheater/p15-handover-a0.skeleton.brief.txt": "905649979ae1b317a4df817044bf88d808379cceed10ae1871930d53e043064b",
+    "artifacts/cheater/p15-heldout-a0.brief.txt": "4632c0f4221b1974c1b1bd22d17170cc79ba6607b43538ad67199ed3b43694e5",
+    "artifacts/cheater/p15-heldout-a0.skeleton.brief.txt": "48260428927b6536b9f3716df95e97b92558a27c1e5cd46316be723b7a59eba7",
+    "artifacts/cheater/p15-verdict-a2.brief.txt": "c20e4028318960f0c4c2b6a2989634f156d62b5c12433e72a66284cd4b3d12c0",
+    "artifacts/cheater/p15-verdict-a2.skeleton.brief.txt": "f1c8daedde9a7f768e8fc0c3c970998fd24b38eb70eda84c24e3ef03dc47fbf1",
+    "artifacts/exam_summary.json": "f38e1868440f565834edcc626f28e41363c987f6e0b29c396656a2a331cd6dbb",
+    "artifacts/leakage.json": "fe33cc0a2ef1b964251b52d6e9cd41c1ef8d97765a65ce05f375fd421271caf7",
+    "artifacts/papers/p15-adaptation-a0.paper.json": "23386fc92c2520117c822671cf36c0522ace2b35673a9ff68ca34a8ba4213a08",
+    "artifacts/papers/p15-handover-a0.paper.json": "f0aa3a142aa393775f56a29049036c8bb578d4b9deee1171789f269245de387e",
+    "artifacts/papers/p15-heldout-a0.paper.json": "041d54be7be14eff4fa5e3de20871a943ec316371866406a4049ef30f9d9b67c",
+    "artifacts/papers/p15-verdict-a2.paper.json": "d5c7f9695747ead37d41001772c8a6b484a410dd1d54ca9c10096ba763b0f297",
+    "artifacts/reports/p15-handover-a0.reader-tier1.report.json": "602f672965606bab30c3dc6350606079a0446a4ed8a5e3445657e5cda292517c",
+    "artifacts/reports/p15-handover-a0.reader-tier2.report.json": "cb386a901d58dc61e692aceb927c43361a7e76c13fb321bef0a4d5967afd550c",
+    "artifacts/truth/p15-adaptation-a0.truth.json": "81494e3600640d03455d2f0b0ee4e15d5011cee97131199dd704b118d5a0dacb",
+    "artifacts/truth/p15-handover-a0.truth.json": "5985d1a7d700e1a2996827c6ab90bea686f7eb633d815acbfe14dfefb40b6b36",
+    "artifacts/truth/p15-heldout-a0.truth.json": "ac75c87a2fd42eba584e6e5a6c5b6ee5f7fb8df5cfac17b22aaa458268c0e068",
+    "artifacts/truth/p15-verdict-a2.truth.json": "8b28c53b5308bb5e3719a86aeb63d37ebe9cabc56e7f70e4eb511c92be94b1ee",
+    "artifacts/variant_specs/a2var-i1-atrium-nodown.json": "beddb7b0d257ab68b95b52cbf8b1564dc007d354fe9d34dfa0f5c6cec1b48039",
+    "artifacts/variant_specs/a2var-i2-updraft-noup.json": "ab46e1a43040adf8d6183cb51895e60a1225a6b33fb6dbe9abf78cae453daa06",
+    "artifacts/variant_specs/a2var-i3-cistern-cut.json": "bc003113cee3336c6da9a3eee64a491a92268d95b990829b7a0726ff6ae0691c",
+    "artifacts/variant_specs/a2var-i4-atrium-budget.json": "a2dcf5f1ee6a76a7b8aba953c1145d037b6bcbf58c5b71598fa8049d9ca46e7c",
+    "artifacts/variant_specs/a2var-i5-quarry-swap.json": "1d7aa31cf1264ef98273f1b18d0d9ec8418e8c96c253be5d8bc7d847ffb0505e",
+    "artifacts/variant_specs/a2var-ii1-gantry-sealed.json": "9eb625a826b02232153f2cec7e4019c75b9d24db4da82149d122418b67cb56ac",
+    "artifacts/variant_specs/a2var-ii2-lattice-bridge.json": "65e71c4d90fec5f83be98f617d8aa11d04a472f685a13c01049b4899108e5024",
+    "artifacts/variant_specs/a2var-ii3-spindle-budget.json": "342e4be3534fdcdc269d9612b97da363137766cb1e9cd7fe346c7217c046a5cd",
+    "artifacts/variant_specs/a2var-ii4-orchard-noleft.json": "38574559d39fcf802f7b05ed6bbe0802e0b4b9d126523a94a6e1f9433f3424aa",
+    "artifacts/variant_specs/a2var-iii1-meander-swap.json": "3d1c94f175f7f1541f74ea73e1a37c563e92d27335c35e611cc1b829f231beea",
+    "artifacts/variant_specs/a2var-iii2-atrium-roomy.json": "9ecc49cd8fae8dd3c64f5be581c5a50a4b0b60b05036f38b0a97e66049ec3cd7",
+    "artifacts/variant_specs/a2var-iii3-atrium-offpath.json": "17ae239f1449b434fb8a478698920a061698a5aab1f196a5102b2248274ecd2d",
+    "artifacts/variant_specs/a2var-iii4-atrium-noleft.json": "b26acb370cb0572a42d57a818325dd318c2851324c712a652f01c4b227867f30",
+    "artifacts/variant_specs/a2var-iii5-atrium-tighten.json": "b63b935993b37928b4d43c625471a509bbb40eca18401ab9134e6cb35e45252c",
+    "artifacts/variant_specs/a2var-iii6-lattice-safe.json": "f1e19e9bbe6a6e1fa597ebbd121d5045a9df2f3caa22ec62a2bcc6415e2febd2",
+    "artifacts/variant_specs/a2var-iii7-lattice-roomy.json": "95eda41d5480fb25409c4510b2768b07ada47268bd9fd9fc821c89b3c0118c1f",
+    "artifacts/variant_specs/a2var-iii8-lattice-swap.json": "3e93efc36a6fde5f4b5967d82f9eb0998807d7cc355c3358768e6ac9568ad13c"
+  },
+  "base_commit": "df9f7486bd6866064c416aa0bf8a307c5c416e46",
+  "branch": "agent/p15-exam-builder",
+  "calibration": {
+    "calibrated": true,
+    "failures": [],
+    "per_type": {
+      "adaptation": {
+        "calibrated": true,
+        "paper_id": "p15-adaptation-a0",
+        "scores": {
+          "bluffer": 0.170833,
+          "memoriser": 0.170833,
+          "null": 0.0,
+          "oracle": 1.0
+        },
+        "structural": {
+          "memoriser_silently_wrong": 2
+        }
+      },
+      "handover": {
+        "calibrated": true,
+        "paper_id": "p15-handover-a0",
+        "scores": {
+          "bluffer": 0.326087,
+          "memoriser": 0.717391,
+          "null": 0.0,
+          "oracle": 1.0
+        },
+        "structural": {}
+      },
+      "heldout": {
+        "calibrated": true,
+        "paper_id": "p15-heldout-a0",
+        "scores": {
+          "bluffer": 0.45,
+          "memoriser": 0.575,
+          "null": 0.0,
+          "oracle": 1.0
+        },
+        "structural": {
+          "bluffer_fraction": 0.45,
+          "min_replay_gap": 0.4,
+          "oracle_minus_bluffer": 0.55,
+          "published_bluffer_ceiling": 0.45,
+          "replay_gap": 0.85
+        }
+      },
+      "verdict": {
+        "calibrated": true,
+        "paper_id": "p15-verdict-a2",
+        "scores": {
+          "bluffer": 0.264706,
+          "memoriser": 0.588235,
+          "null": 0.0,
+          "oracle": 1.0
+        },
+        "structural": {
+          "bluffer_sensitivity": 1.0,
+          "bluffer_specificity": 0.0
+        }
+      }
+    }
+  },
+  "marked": [
+    {
+      "awarded": 46.0,
+      "axes": {
+        "answers_submitted": 29,
+        "author_baseline_form": "checked-in",
+        "author_baseline_fraction": 1.0,
+        "by_tag": {
+          "level:corridor": {
+            "awarded": 18.0,
+            "fraction": 1.0,
+            "n": 9,
+            "possible": 18.0
+          },
+          "level:pinch": {
+            "awarded": 10.0,
+            "fraction": 1.0,
+            "n": 5,
+            "possible": 10.0
+          },
+          "level:yard": {
+            "awarded": 6.0,
+            "fraction": 1.0,
+            "n": 3,
+            "possible": 6.0
+          },
+          "level_data_vs_world_law": {
+            "awarded": 12.0,
+            "fraction": 1.0,
+            "n": 12,
+            "possible": 12.0
+          },
+          "optimal_action": {
+            "awarded": 12.0,
+            "fraction": 1.0,
+            "n": 6,
+            "possible": 12.0
+          },
+          "step_semantics": {
+            "awarded": 22.0,
+            "fraction": 1.0,
+            "n": 11,
+            "possible": 22.0
+          }
+        },
+        "capability_unclaimed": "29 answers were submitted by an examinee that declares no 'handover_bundle' capability. The mark stands on the answers, but the examinee cannot be reported as a handover arm until it says what it handed over.",
+        "fraction": 1.0,
+        "no_deliverable": false,
+        "reader_minus_author": 0.0,
+        "tier": "tier1_manual",
+        "tier2_minus_tier1": null,
+        "tier2_minus_tier1_note": "a tier difference needs both tiers. Mark the sibling tier and pass its fraction as submission.meta['paired_tier_fraction'], or use exam.papers.handover.tier_delta(report_tier1, report_tier2)."
+      },
+      "examinee_id": "reader-tier1",
+      "fraction": 1.0,
+      "paper_id": "p15-handover-a0",
+      "possible": 46.0,
+      "question_type": "handover",
+      "report_path": "C:\\Users\\user\\AppData\\Local\\Temp\\claude\\C--Users-user-Desktop-theoria\\5f618d4e-f54d-4556-80d2-c519beda92d6\\scratchpad\\p15-wt\\exam\\artifacts\\reports\\p15-handover-a0.reader-tier1.report.json"
+    },
+    {
+      "awarded": 46.0,
+      "axes": {
+        "answers_submitted": 29,
+        "author_baseline_form": "checked-in",
+        "author_baseline_fraction": 1.0,
+        "by_tag": {
+          "level:corridor": {
+            "awarded": 18.0,
+            "fraction": 1.0,
+            "n": 9,
+            "possible": 18.0
+          },
+          "level:pinch": {
+            "awarded": 10.0,
+            "fraction": 1.0,
+            "n": 5,
+            "possible": 10.0
+          },
+          "level:yard": {
+            "awarded": 6.0,
+            "fraction": 1.0,
+            "n": 3,
+            "possible": 6.0
+          },
+          "level_data_vs_world_law": {
+            "awarded": 12.0,
+            "fraction": 1.0,
+            "n": 12,
+            "possible": 12.0
+          },
+          "optimal_action": {
+            "awarded": 12.0,
+            "fraction": 1.0,
+            "n": 6,
+            "possible": 12.0
+          },
+          "step_semantics": {
+            "awarded": 22.0,
+            "fraction": 1.0,
+            "n": 11,
+            "possible": 22.0
+          }
+        },
+        "capability_unclaimed": "29 answers were submitted by an examinee that declares no 'handover_bundle' capability. The mark stands on the answers, but the examinee cannot be reported as a handover arm until it says what it handed over.",
+        "fraction": 1.0,
+        "no_deliverable": false,
+        "reader_minus_author": 0.0,
+        "tier": "tier2_manual_playbook",
+        "tier2_minus_tier1": null,
+        "tier2_minus_tier1_note": "a tier difference needs both tiers. Mark the sibling tier and pass its fraction as submission.meta['paired_tier_fraction'], or use exam.papers.handover.tier_delta(report_tier1, report_tier2)."
+      },
+      "examinee_id": "reader-tier2",
+      "fraction": 1.0,
+      "paper_id": "p15-handover-a0",
+      "possible": 46.0,
+      "question_type": "handover",
+      "report_path": "C:\\Users\\user\\AppData\\Local\\Temp\\claude\\C--Users-user-Desktop-theoria\\5f618d4e-f54d-4556-80d2-c519beda92d6\\scratchpad\\p15-wt\\exam\\artifacts\\reports\\p15-handover-a0.reader-tier2.report.json"
+    }
+  ],
+  "note": "Answer keys are digested here, never copied. An archive that ships the keys beside the sheets rebuilds the leak the exam exists to avoid.",
+  "papers": {
+    "p15-adaptation-a0": {
+      "key_sha256": "f3b5722ec2ec5f1df6ef4830e2ea57f391e7c35ae5dd616ca97833b5ee6dfeb3",
+      "n_items": 60,
+      "question_type": "adaptation",
+      "sheet_sha256": "f77595a5157acfaf4dd5c24db2c6d1d03bad9f0996559ce3385087dd04a19db7"
+    },
+    "p15-handover-a0": {
+      "key_sha256": "f69bdb22e60f03892e9eb01bd1afe06ea03187d7f3d5952f6325b31ecfc07cea",
+      "n_items": 29,
+      "question_type": "handover",
+      "sheet_sha256": "d04bc67b2e66570a0d36548b0191ea0b45c714802ab30161abb665540af06f06"
+    },
+    "p15-heldout-a0": {
+      "key_sha256": "247891383893ec363e9b89826b92af57b56b514c697fdb6ac4701bb50ff9eaef",
+      "n_items": 80,
+      "question_type": "heldout",
+      "sheet_sha256": "29bf17f9aadbbdeda98214f1f567435ef7faa060cdb2b52883ddb043f9228b53"
+    },
+    "p15-verdict-a2": {
+      "key_sha256": "b6442d6cd98edbc6c8a5ceb54d91fd7aa1748cd04dc5fa3de5ca845afe096ff8",
+      "n_items": 17,
+      "question_type": "verdict",
+      "sheet_sha256": "a4dc5159707c2e3ce58afe7c998bb7e1a929a298e1cd79efc6e968e075d7678d"
+    }
+  },
+  "prompt_id": "P-15",
+  "provenance": {
+    "cut_version": "v1",
+    "dev_pile": [
+      "ar25-0c556536",
+      "g50t-5849a774",
+      "sk48-d8078629",
+      "tn36-ef4dde99"
+    ],
+    "n_sealed": 21,
+    "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+    "synthetic_worlds": [
+      "a0",
+      "a0-prime",
+      "a2"
+    ]
+  },
+  "python": "3.13.13",
+  "rubric": {
+    "modules": {
+      "exam.grading.rubrics_adaptation": "3cf6b2ad1b4dbbca94bc1ba2bc7088fb4ea9be72e23f8d1d5066ea04e7d94cda",
+      "exam.grading.rubrics_handover": "fc35ef2bd43941ca83956fb8a50ae4851fa59630387993856c29974cc06f2c5b",
+      "exam.grading.rubrics_heldout": "ec31348a206a318452d332325730eaec7e092acc24be06abd1c6926661c38a72",
+      "exam.grading.rubrics_verdict": "6961340614174a3fc41d32dbc7145239106846d5321b83df8adbca0529ce102a"
+    },
+    "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697",
+    "rubrics": {
+      "adapt.collateral.v1": "falsified manual rules, claims to re-examine, claims now false, and the standing verdict on `mismatch`; raises silently_wrong when the old verdict is kept on a variant where it flipped",
+      "adapt.describe.v1": "the minimal set of rule-change labels consistent with the observations; set equality against CHANGE_LABELS",
+      "adapt.detect.v1": "first observation at which the old theory mispredicts on one level; graded with episode-sized tolerance bands, no credit for a false alarm on a level where the change is undetectable",
+      "adapt.detect_cross.v1": "the per-level map of first divergences for one variant; mean of the per-level bands, so a uniform guess cannot ride the majority answer",
+      "adapt.repair.v1": "the action budget a stated re-mining protocol spends and whether the re-mined theory is exact on a held-out board",
+      "handover.name_class": "Is this name something the level supplies (level_data) or something the world fixes across every level (world_law)?",
+      "handover.optimal_action": "An action lying on some shortest solution from the given state; the whole optimal set is accepted, not one tie-break.",
+      "handover.step_semantics": "One transition of the A0 manual: the next Player cell, the next Box cell and the rule that fired, all three or nothing.",
+      "heldout.frame_exact": "held-out prediction: the predicted frame must equal the true frame cell for cell. No partial credit -- a cells-correct score on a 7x7 board is ~96% for returning the input unchanged, so it would measure board size rather than theory. Abstention is recorded and scores zero.",
+      "verdict.a2.claim_and_certificate": "Half the points for the verdict, half for the reason. On an unsolvable level the reason is a certificate this rubric verifies against the board (full) or a credible exhaustive search (partial); on a solvable one it is a witness plan this rubric replays."
+    }
+  },
+  "run_id": "p15-rehearsal-01",
+  "seed": 20260728,
+  "worktree_dirty": true
+}

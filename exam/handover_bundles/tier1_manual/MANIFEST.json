@@ -1,0 +1,34 @@
+{
+  "bundle": "tier1_manual",
+  "bundle_digest": "a713c67a77abcd445fd7637cdd99e4c4eec69885ad0b6d1beaf4b3a87fcfcdb4",
+  "files": {
+    "MANUAL.dsl": "7884ffadaecd09b1da7ab1628db0665a0741b243085856eb3ae17e2350780f26",
+    "MANUAL.md": "3046d6ee44f2f0055bca0b9c0b740d8864a40faa2964e95166b2286d1420e263",
+    "READER_BRIEF.md": "d82e582839367ac3b7fcf32f392d2ef40156b4af8b5a94b32b3f277edde44949"
+  },
+  "paper_id": "p15-handover-a0",
+  "provenance": {
+    "MANUAL.dsl": {
+      "copied_from": "a0-spike/theory/theory.dsl",
+      "edits": "line endings normalised to LF; nothing else",
+      "source_sha256": "7884ffadaecd09b1da7ab1628db0665a0741b243085856eb3ae17e2350780f26"
+    },
+    "MANUAL.md": {
+      "generated_by": "exam.papers.handover.render_manual",
+      "model_calls": 0,
+      "of": "MANUAL.dsl"
+    },
+    "PLAYBOOK.dsl": {
+      "why": "a0-spike ships no playbook file; the strategic tier is assembled from its recorded findings",
+      "written_for": "this exam"
+    },
+    "PLAYBOOK.md": {
+      "why": "see PLAYBOOK.dsl",
+      "written_for": "this exam"
+    },
+    "READER_BRIEF.md": {
+      "generated_by": "exam.papers.handover._reader_brief"
+    }
+  },
+  "world_id": "a0"
+}

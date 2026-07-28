@@ -1,0 +1,410 @@
+{
+  "awarded": 46.0,
+  "axes": {
+    "answers_submitted": 29,
+    "author_baseline_form": "checked-in",
+    "author_baseline_fraction": 1.0,
+    "by_tag": {
+      "level:corridor": {
+        "awarded": 18.0,
+        "fraction": 1.0,
+        "n": 9,
+        "possible": 18.0
+      },
+      "level:pinch": {
+        "awarded": 10.0,
+        "fraction": 1.0,
+        "n": 5,
+        "possible": 10.0
+      },
+      "level:yard": {
+        "awarded": 6.0,
+        "fraction": 1.0,
+        "n": 3,
+        "possible": 6.0
+      },
+      "level_data_vs_world_law": {
+        "awarded": 12.0,
+        "fraction": 1.0,
+        "n": 12,
+        "possible": 12.0
+      },
+      "optimal_action": {
+        "awarded": 12.0,
+        "fraction": 1.0,
+        "n": 6,
+        "possible": 12.0
+      },
+      "step_semantics": {
+        "awarded": 22.0,
+        "fraction": 1.0,
+        "n": 11,
+        "possible": 22.0
+      }
+    },
+    "capability_unclaimed": "29 answers were submitted by an examinee that declares no 'handover_bundle' capability. The mark stands on the answers, but the examinee cannot be reported as a handover arm until it says what it handed over.",
+    "fraction": 1.0,
+    "no_deliverable": false,
+    "reader_minus_author": 0.0,
+    "tier": "tier1_manual",
+    "tier2_minus_tier1": null,
+    "tier2_minus_tier1_note": "a tier difference needs both tiers. Mark the sibling tier and pass its fraction as submission.meta['paired_tier_fraction'], or use exam.papers.handover.tier_delta(report_tier1, report_tier2)."
+  },
+  "counts": {
+    "abstained": 0,
+    "correct": 29,
+    "unanswered": 0,
+    "wrong": 0
+  },
+  "examinee_id": "reader-tier1",
+  "fraction": 1.0,
+  "meta": {
+    "capabilities": [
+      "manual"
+    ],
+    "rubric_digest_at_build": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697",
+    "rubric_digest_at_marking": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697",
+    "rubric_digest_matches": true,
+    "submission_meta": {
+      "contamination": "none reported; bundle dir + sheet only",
+      "reader": "fresh subagent, no history, bundle+sheet only",
+      "tier": "tier1_manual"
+    }
+  },
+  "paper_id": "p15-handover-a0",
+  "possible": 46.0,
+  "question_type": "handover",
+  "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697",
+  "schema": "exam/v0.1",
+  "scores": [
+    {
+      "awarded": 2.0,
+      "detail": {
+        "box_ok": true,
+        "player_ok": true,
+        "rule_ok": true,
+        "said": "player=(0,2); box=(4,4); rule=blocked_wall"
+      },
+      "item_id": "hv-step-01",
+      "possible": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "box_ok": true,
+        "player_ok": true,
+        "rule_ok": true,
+        "said": "player=(1,0); box=(3,3); rule=walk"
+      },
+      "item_id": "hv-step-02",
+      "possible": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "box_ok": true,
+        "player_ok": true,
+        "rule_ok": true,
+        "said": "player=(1,1); box=(3,1); rule=push2"
+      },
+      "item_id": "hv-step-03",
+      "possible": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "box_ok": true,
+        "player_ok": true,
+        "rule_ok": true,
+        "said": "player=(2,3); box=(2,1); rule=push2"
+      },
+      "item_id": "hv-step-04",
+      "possible": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "box_ok": true,
+        "player_ok": true,
+        "rule_ok": true,
+        "said": "player=(1,4); box=(2,2); rule=walk"
+      },
+      "item_id": "hv-step-05",
+      "possible": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "box_ok": true,
+        "player_ok": true,
+        "rule_ok": true,
+        "said": "player=(3,3); box=(2,3); rule=blocked_box_landing"
+      },
+      "item_id": "hv-step-06",
+      "possible": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "box_ok": true,
+        "player_ok": true,
+        "rule_ok": true,
+        "said": "player=(2,4); box=(2,3); rule=blocked_box_crossing"
+      },
+      "item_id": "hv-step-07",
+      "possible": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "box_ok": true,
+        "player_ok": true,
+        "rule_ok": true,
+        "said": "player=(2,2); box=(2,1); rule=blocked_box_landing"
+      },
+      "item_id": "hv-step-08",
+      "possible": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "box_ok": true,
+        "player_ok": true,
+        "rule_ok": true,
+        "said": "player=(3,4); box=(3,3); rule=blocked_box_landing"
+      },
+      "item_id": "hv-step-09",
+      "possible": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "box_ok": true,
+        "player_ok": true,
+        "rule_ok": true,
+        "said": "player=(2,5); box=(0,0); rule=blocked_wall"
+      },
+      "item_id": "hv-step-10",
+      "possible": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "box_ok": true,
+        "player_ok": true,
+        "rule_ok": true,
+        "said": "player=(1,3); box=(1,2); rule=blocked_box_crossing"
+      },
+      "item_id": "hv-step-11",
+      "possible": 2.0,
+      "rubric_id": "handover.step_semantics",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "level_data"
+      },
+      "item_id": "hv-name-01",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "world_law"
+      },
+      "item_id": "hv-name-02",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "level_data"
+      },
+      "item_id": "hv-name-03",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "level_data"
+      },
+      "item_id": "hv-name-04",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "level_data"
+      },
+      "item_id": "hv-name-05",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "world_law"
+      },
+      "item_id": "hv-name-06",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "level_data"
+      },
+      "item_id": "hv-name-07",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "world_law"
+      },
+      "item_id": "hv-name-08",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "world_law"
+      },
+      "item_id": "hv-name-09",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "world_law"
+      },
+      "item_id": "hv-name-10",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "level_data"
+      },
+      "item_id": "hv-name-11",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 1.0,
+      "detail": {
+        "said": "level_data"
+      },
+      "item_id": "hv-name-12",
+      "possible": 1.0,
+      "rubric_id": "handover.name_class",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "n_accepted": 2,
+        "said": "UP"
+      },
+      "item_id": "hv-opt-01",
+      "possible": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "n_accepted": 1,
+        "said": "LEFT"
+      },
+      "item_id": "hv-opt-02",
+      "possible": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "n_accepted": 2,
+        "said": "UP"
+      },
+      "item_id": "hv-opt-03",
+      "possible": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "n_accepted": 2,
+        "said": "DOWN"
+      },
+      "item_id": "hv-opt-04",
+      "possible": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "n_accepted": 1,
+        "said": "LEFT"
+      },
+      "item_id": "hv-opt-05",
+      "possible": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "verdict": "correct"
+    },
+    {
+      "awarded": 2.0,
+      "detail": {
+        "n_accepted": 1,
+        "said": "DOWN"
+      },
+      "item_id": "hv-opt-06",
+      "possible": 2.0,
+      "rubric_id": "handover.optimal_action",
+      "verdict": "correct"
+    }
+  ]
+}

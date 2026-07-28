@@ -1,0 +1,14 @@
+{
+  "base_game": "a2",
+  "base_level": "updraft",
+  "claim": "unsolvable",
+  "justification": "The updraft board carries no teleport, so every command displaces the cart by one of the four unit vectors or by nothing at all. With UP forbidden the surviving displacements have row components 0, +1 and 0, so the cart's row never decreases. It starts at row 5 and the goal is at row 1. The argument is four subtractions over the action alphabet and does not look at the state space at all.",
+  "notes": "A monotone potential is the cheapest closed invariant this operator library can construct, and it is the one that scales.",
+  "operators": [
+    {
+      "action": "UP",
+      "op": "forbid_action"
+    }
+  ],
+  "variant_id": "a2var-i2-updraft-noup"
+}

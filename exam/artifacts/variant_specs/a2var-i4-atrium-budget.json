@@ -1,0 +1,14 @@
+{
+  "base_game": "a2",
+  "base_level": "atrium",
+  "claim": "unsolvable",
+  "justification": "Counting settles it. One command displaces the cart by at most one edge of the board's adjacency graph -- a blocked move and a button press displace it by none, and the teleport is a single edge from (6,4) to (7,6). In that graph the goal (2,7) is 11 edges from the start (5,1), so at least 11 commands are needed under any policy whatsoever. The budget is 7. The bound is deliberately loose: it ignores the door, the button and the order of anything, so it survives every relabelling.",
+  "notes": "The real shortest solution is longer still (the button detour), which is why a loose bound is the honest one to state.",
+  "operators": [
+    {
+      "limit": 7,
+      "op": "step_limit"
+    }
+  ],
+  "variant_id": "a2var-i4-atrium-budget"
+}
