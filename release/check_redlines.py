@@ -176,18 +176,49 @@ JSON_SUFFIXES = (".json", ".jsonl")
 
 
 def json_shaped(rel: str, blob: bytes) -> tuple[bool, bool]:
-    """``(is_json_shaped, treat_as_jsonl)`` from the name *and* the bytes."""
+    """``(is_json_shaped, treat_as_jsonl)`` from the name *and* the bytes.
+
+    The name alone was the old test, and it let the check assert innocence from
+    a filename: a JSONL of frames named `.log`, `.ndjson` or nothing at all took
+    the "source or prose" branch without a parse ever being attempted.
+
+    Sniffing the first byte alone is not enough either, in the other direction.
+    A Markdown file may open with a link reference -- `[spec]: ./spec.md` -- and
+    handing that to the JSON reader produces a parse failure, which is now
+    `needs_human`, which is a **false red on a prose file**. A gate that reddens
+    on ordinary documents is one somebody switches off, and then the true reds go
+    with it. So a file that merely *opens* like JSON has to show more evidence
+    than its first character before it is judged as JSON.
+    """
     if rel.endswith(JSON_SUFFIXES):
         return True, rel.endswith(".jsonl")
-    head = blob.lstrip()[:1]
-    if head not in (b"{", b"["):
+    if blob.lstrip()[:1] not in (b"{", b"["):
         return False, False
-    # Named something else but opens like JSON. One document or a stream of
-    # them? Ask the bytes: more than one line that starts a fresh object is a
-    # stream. Getting this wrong is not dangerous -- the wrong reader raises,
-    # and a raise is now `needs_human` rather than silence.
-    starts = sum(1 for ln in blob.splitlines() if ln[:1] in (b"{", b"["))
-    return True, starts > 1
+    try:
+        text = blob.decode("utf-8")
+    except UnicodeDecodeError:
+        # Opens like JSON and is not even text, in a file that names a sealed
+        # game. Whatever it is, nothing has read it: undetermined, not prose.
+        return True, True
+    # A stream of JSON documents: two or more whole lines that parse. One is not
+    # enough -- a fenced `{}` inside a Markdown code block would qualify.
+    parsed = 0
+    for line in text.splitlines():
+        if not line.strip():
+            continue
+        try:
+            json.loads(line)
+        except ValueError:
+            continue
+        parsed += 1
+        if parsed >= 2:
+            return True, True
+    try:
+        json.loads(text)
+    except ValueError:
+        # Opens like JSON, is valid text, and is not JSON. That is prose.
+        return False, False
+    return True, False
 
 
 def _tracked() -> list[str]:

@@ -231,6 +231,37 @@ def test_a_frame_bearing_stream_is_judged_by_its_bytes_not_its_name(repo):
     assert "episode.log" in violations[0]
 
 
+def test_prose_that_merely_opens_like_json_is_not_reported_unreadable(repo):
+    """The other direction, and the one that gets a gate switched off.
+
+    A Markdown file may open with a link reference. Sniffing the first byte
+    alone would hand it to the JSON reader, the parse would fail, and a prose
+    document would be reported as a file nobody could read -- a false red.
+    """
+    _add(repo, "NOTES.md",
+         f"[spec]: ./spec.md\n\nThe cut keeps {_sealed_id()} sealed, so it is\n"
+         "named here in order to be kept out.\n")
+
+    violations, needs_human, notes = redlines.check_sealed(redlines._tracked())
+
+    assert violations == []
+    assert needs_human == [], needs_human
+    assert any("NOTES.md" in n and "source or prose" in n for n in notes), notes
+
+
+def test_a_binary_stream_opening_like_json_is_still_undetermined(repo):
+    """The conservative half of the same rule: sniffed as JSON, not even text,
+    and it names a sealed game. Nothing has read it."""
+    _add(repo, "dump.bin",
+         b"{" + json.dumps({"game_id": _sealed_id()}).encode()[1:] + b"\n" + UNDECODABLE)
+
+    violations, needs_human, _notes = redlines.check_sealed(redlines._tracked())
+
+    assert violations == []
+    assert len(needs_human) == 1, needs_human
+    assert "dump.bin" in needs_human[0]
+
+
 # ------------------------------------------------------------- the exit codes
 # `verify.sh`-style callers read nothing but these.
 
