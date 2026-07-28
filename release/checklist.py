@@ -33,6 +33,19 @@ import argparse
 import fnmatch
 import json
 import os
+import sys
+
+# Item labels are Chinese, quoted from the design document because it is the
+# authority. A Windows console falls back to the locale codec -- GBK here -- and
+# rendered seven of ten item names as mojibake for a reader following
+# REPRODUCING.md, making the run output unreadable. Pinned, as build_all.py
+# already does for the same reason.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", newline="
+")
+    except (AttributeError, OSError):  # pragma: no cover
+        pass
 
 _HERE = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(_HERE)
