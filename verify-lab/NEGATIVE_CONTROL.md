@@ -264,3 +264,158 @@ with the negative control as the acceptance line — a fix without one would be,
 in evidence, indistinguishable from the current state. A census that produced
 only accusations and no demonstration of the remedy would be easy to file and
 easy to ignore.
+
+---
+
+# The standing probe (V14)
+
+The census above is a photograph. 35 of 127 entry points had no executable
+demonstration that they can fail, and nothing in this repository asks the 36th
+for one. `verify-lab/negctl/` is the part that asks.
+
+```bash
+python verify-lab/negctl/probe.py             # the probe; exit 1 on a finding
+python verify-lab/negctl/probe.py --verbose   # every entry point and its verdict
+python verify-lab/negctl/calibrate.py         # the criterion against V11's 127 rows
+python -m pytest verify-lab/negctl/tests -q   # the probe's own negative control
+```
+
+On this tree, today: **141 entry points, 141 pinned, PROBE: green, exit 0.**
+
+## What had to be decided before any of it could be written
+
+**"Has a negative control" was a human judgement.** Six auditors read code and
+decided. To make it standing it has to become decidable, and the proxy is:
+
+> some `test_*` function in some `test_*.py` **targets this file** — an import
+> binding in its module resolves here, and the function, or a helper defined
+> beside it, uses that name — **and contains a failure assertion**:
+> `pytest.raises`, `assert <exit code> == <nonzero>`, `assert not <verdict>`,
+> `assert <findings> != []`, `assert any(... for ... in <findings>)`, and the
+> short pinned list in `criterion.py`.
+
+Parsed with `ast`, never grepped, for the reason `figures/verify.sh` gate 7
+records: its first version was a regex and its first finding was a phrase inside a
+docstring. A docstring that says "this is the negative control" is invisible to
+this criterion on purpose.
+
+**The proxy is not the judgement, and the gap is measured, not guessed.**
+`runs/20260729T041500Z-V14-standing-negative-control-probe/CALIBRATION.md`, on the
+103 census rows that name a single Python file:
+
+| | count | rate |
+|---|---|---|
+| false `present` — a real gap the probe stays quiet about | 3 of 34 | 8.8% (**0.0%** excluding the 8 files the census itself judged twice) |
+| false `absent` — a red on a gate that *does* have a negative control | **20 of 63** | **31.8%** |
+
+The naive criterion — judge by whether the test function's *name* sounds negative
+— is strictly worse at the same false-positive rate (FNR 44%), and is kept in the
+code only as the weakened probe in the not-idling proof.
+
+**Only deviation gates.** Somebody else's 35 gaps are not this item's to close, so
+`negctl/KNOWN_GAPS.json` pins all 141 entry points with the territory that owns
+each — the shape and the reasoning are `worldgen/qc/KNOWN_MISS.json`'s. A pinned
+gap is quiet. A **new** entry point with no negative control, or a pinned
+`present` that has become `absent`, is red. Two of V12's rules are deliberately
+softened and the reasons are in `probe.py`'s docstring: a *closed* gap reports
+rather than gates (141 files across nine territories, and a probe that turns every
+repair into a red gets switched off), and so does a gate that has lost its
+non-zero exit path (the enumerator that decides what counts as a gate has never
+been calibrated against anything, and gating on an uncalibrated enumerator is the
+mistake this lab exists to name).
+
+**The probe has its own negative control, and it is not idling.**
+`negctl/tests/test_probe.py`, 24 tests: a synthetic tree with a new gate and no
+negative control must exit non-zero; the same tree with one must exit 0; tests
+that only exercise the happy path must not count. Then each planted red is replayed
+against a deliberately weakened probe and the test asserts the weak version *lets
+it through* — `NOT_IDLE.md` has the table. It earned its keep immediately: the
+first run failed 9 of 24 because the enumerator only recognised `return 1` and not
+`return 1 if problems else 0`, which is how most of this repository spells it. The
+probe was reporting green on a tree containing a planted, undemonstrated gate.
+
+## Should this be a merge gate
+
+**No. Not today, and not on `NEW_GAP`.** Run it standing and report-only. The
+argument is six numbers, not an impression of how noisy it felt; an adversarial
+pass (`runs/20260729T041500Z-V14-.../ADVERSARIAL.md`) went looking for reasons to
+trust it more and returned reasons to trust it less.
+
+| # | the number | why it blocks admission |
+|---|---|---|
+| 1 | **the enumerator has never been calibrated, and `NEW_GAP` is 100% its output** | 141 entry points; of the 90 gates V11 located to a `.py` file, it finds **67 — it misses 23, or 26%.** Every miss is a class: 13 are library gates that refuse by raising and have no `__main__` at all (`proxy/guard.py`, `exam/leakage.py`, `theoria-arm/armtools/archive.py` — *the file V11's sharpest finding is about*). `probe.py` already exempts `NOT_A_GATE` from gating on the grounds that gating on an uncalibrated enumerator is the mistake this lab exists to name. That exemption covers one error direction and `NEW_GAP` rides the other. |
+| 2 | **≥17 of the 141 are not acceptance entry points** | 4 world definitions (`*/ground_truth.py`), 3 report scripts, a package `__init__`, 3 exhibits, and **5 one-off scripts inside frozen `runs/<id>/` directories**. |
+| 3 | **`runs/<id>/` grows on every experiment** | `MANIFEST.json` provenance is canonical here, and dropping a `main() -> return 0 if ok else 1` script beside it is routine. Under a blocking gate, **every new run directory is a red**. |
+| 4 | **FNR 32%** | 20 of 63 gates that V11 says have a negative control are scored `absent`. Each is a red on somebody who did the thing right. The live example is the worst one available: `monitor/tests/mutants.py` — a full mutation testbed that reinstates each fixed defect in a scratch copy and fails if the suite stays green — is enumerated as a gate and registered in `KNOWN_GAPS.json` as *lacking* a negative control. Exactly backwards. First red is a discussion, third is a line in the pin, tenth is the probe switched off. |
+| 5 | **the criterion is tree-global; a merge gate is PR-local** | Resolution is over the whole tree, so **one track's import decides another track's verdict**. Before round 5 that was literal: `ablation-arm/tests/test_exhibits.py` determined the verdict of `cold-start-a0/run_all.py`. In a repository whose first rule is that the two tracks do not communicate and commit only their own paths, a gate that lets track A redden track B manufactures ownership disputes. |
+| 6 | **a file-level `present` is not a promise about every gate in the file** | See `CALIBRATION.md` §3b. `worldgen/build.py` is `present` on a real negative control for `gate_failures()`, while `check_determinism()` beside it — the strongest determinism claim in the repository — is called by no test anywhere. The probe is silent about it. A verdict that claims coverage it has not got is more dangerous than no verdict. |
+
+### The most aggressive form that is defensible today
+
+Standing, report-only. **If it is ever put in the gate, let `REGRESSION` block and
+`NEW_GAP` only report.** The reason is structural rather than a matter of taste:
+`REGRESSION` requires the file to have been scored `present` at pin time, which
+means it has **already passed the resolver and the enumerator** — the two
+uncalibrated layers. It fires only on a *change against a definite prior state*, so
+its false-positive mechanism is far narrower than `NEW_GAP`'s, which inherits every
+error in an enumerator with 26% miss and ≥17 spurious entries. `NEW_GAP` is the
+high-value finding and the low-confidence one; that combination belongs on a review
+checklist, not in branch protection.
+
+### What would have to be true first
+
+1. **Calibrate the enumerator** against V11's 90 locatable gates and print its
+   confusion matrix beside the criterion's, as prominently. Exclude `runs/**` and
+   `**/ground_truth.py`, or require an entry point to be tracked and outside
+   `runs/`.
+2. **Index package directories** and read the `sys.path.insert` arguments in test
+   files. Round 5 closed the cross-territory leak by refusing to resolve, which
+   buys silence at the cost of recall; the real fix is to resolve correctly.
+3. **Make the criterion function-granular**, or stop reporting `present` at file
+   level at all.
+
+Until those three, the honest claim for this probe is: high precision on `NEW_GAP`
+when it fires, no useful recall, and two uncalibrated layers underneath. That is a
+good reviewer's assistant and a bad merge gate.
+
+## Confirmed by the adversarial pass and deliberately not fixed here
+
+Recorded rather than repaired, so the next person inherits findings instead of
+rediscovering them. Each is real and each was reproduced.
+
+* **`_looks_like_exit_code` matches `_EXIT_WORDS` as bare substrings on dict
+  keys.** `x["search_timeout"]`, `x["source"]`, `x["arc_calls"]`, `x["n_forced"]`
+  all contain `rc`, so `assert register.counts()["search_timeout"] == 1`
+  (`theoria-arm/tests/test_arm.py:471`) reads as a non-zero exit assertion. It is a
+  counter. This is the same bug the function's own docstring claims to have fixed,
+  surviving on the `ast.Subscript` branch, which uses substring matching while the
+  `ast.Name` branch uses equality. No entry point flips on it today. It is loaded.
+* **Detector B matches function names, never file names.**
+  `cold-start-a3/a3pipeline/negctl.py` — a module that is nothing but a negative
+  control, and which V11 calls the best one in the repository — is scored `absent`,
+  while `"negctl"` sits in `_SELFTEST_NAMES` being compared against `run_all` and
+  `main`.
+* **`scan_selftests` issues itself a certificate.** Its own name contains
+  `selftest` and its body calls `.append`, which is all `_shape_of_selftest`
+  requires.
+* **The thin-CLI-over-a-tested-library pattern is a systematic false-negative
+  generator.** `exam/tools/run_selftest.py` reads `absent` because its negative
+  controls import `exam/grading/selftest.py`, which is not itself an entry point.
+  63 of the 110 `absent` entry points sit in territories carrying at least one
+  failure-assertion edge.
+* **`--detector AB` should be withdrawn.** 118 test functions in the tree qualify
+  *only* through `assert <bad> not in <output>`, and 104 of them are outside
+  `proxy/`, where the rule was justified — sampling finds format checks, invariant
+  checks and hygiene assertions at the end of successful runs. The one extra false
+  positive it buys is `theoria-arm/harness/run.py`, whose `assert DEFAULT_KEY not in
+  json.dumps(everything)` closes a green end-to-end run into which nobody planted a
+  key. Shipping `A-B` was right; leaving `AB` on the CLI leaves a known
+  false-positive source within reach.
+* **All 7 shell gates are out of scope, and all 7 are gates.** `figures/verify.sh`,
+  `arc-recon/verify.sh`, `ablation-arm/verify.sh`, `proxy/verify_spend.sh`,
+  `monitor/verify.sh`, `monitor/verify_quota_exit.sh`, and the c7 run's own
+  `verify.sh`. `monitor/gates.py` defines this repository's canonical gate name as
+  `verify.sh` **or** `verify.py`, so shell is a first-class citizen of the
+  repository's own definition and the probe excises it entirely. One of the best
+  negative controls in the tree — `probe_mentions`'s pre-registered expectations —
+  runs from a heredoc inside one of them.
