@@ -268,3 +268,46 @@ def test_the_cli_runs_as_a_module(tmp_path):
                        encoding="utf-8", errors="replace")
     assert r.returncode == 0, r.stdout + r.stderr
     assert json.loads(r.stdout)["verdict"] == "PASS"
+
+
+# ------------------------------------------------- publication is not writing
+
+def test_emit_head_refuses_a_stream_that_does_not_verify(tmp_path):
+    """A head for a broken file would look exactly like a head for a good one."""
+    path = _ledger(tmp_path)
+    lines = _lines(path)
+    del lines[2]
+    _rewrite(path, lines)
+    out = str(tmp_path / "head.json")
+    assert verify_chain.main([path, "--emit-head", out]) != 0
+    assert not os.path.exists(out), "no head may be written for a FAIL stream"
+
+
+def test_emit_head_writes_a_committable_head(tmp_path):
+    path = _ledger(tmp_path)
+    out = str(tmp_path / "sub" / "head.json")
+    assert verify_chain.main([path, "--emit-head", out]) == 0
+    head = json.load(open(out, encoding="utf-8"))
+    assert head["sha256"] == verify_chain.verify(path)["head"]
+    assert head["verdict"] == "PASS"
+    assert verify_chain.main([path, "--expect-head", head["sha256"]]) == 0
+
+
+def test_the_runners_default_head_location_is_gitignored(tmp_path):
+    """The trap, pinned: writing a head into var/ publishes nothing.
+
+    `runner.play()` writes `ledger_head` into `runs_dir`, which defaults under
+    `proxy/var/` -- and `proxy/.gitignore` ignores `var/`.  The head is a
+    witness only once it is somewhere a forger cannot also rewrite, so the
+    publication is the arm lifting it into its tracked MANIFEST, not this
+    write.  If someone ever untracks or relocates var/, this test should be the
+    thing that makes them think about it.
+    """
+    from proxy import paths
+    repo = os.path.dirname(os.path.dirname(os.path.abspath(paths.__file__)))
+    probe = os.path.join(paths.RUNS_DIR, "probe.json")
+    r = subprocess.run(["git", "check-ignore", "-q", probe], cwd=repo)
+    assert r.returncode == 0, (
+        "proxy/var/runs is NO LONGER gitignored -- if run records are now "
+        "tracked the head really is published there, and runner.py's comment "
+        "plus D-029 need updating to say so")

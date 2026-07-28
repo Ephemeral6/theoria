@@ -175,6 +175,20 @@ def _run_game(game_id: str, *,
     # The verdict is recorded alongside the hash on purpose.  A head published
     # for a stream that does not actually verify would be a witness to nothing,
     # and "unchained" must never be read later as "chain verified".
+    #
+    # !! THE DEFAULT PATH PUBLISHES NOTHING.  `runs_dir` defaults to
+    # `proxy/var/runs/`, and `proxy/.gitignore` ignores `var/` -- correctly, it
+    # is runtime output.  So writing the head here does not put it anywhere a
+    # forger cannot reach, and on its own this block buys exactly zero
+    # tamper-evidence.  It is still written because `play()` RETURNS this
+    # record: the arm lifts `ledger_head` into its own tracked
+    # `runs/<slug>/MANIFEST.json`, and *that* is the publication.  An operator
+    # working outside an arm publishes with
+    # `python -m proxy.tools.verify_chain <ledger> --emit-head <tracked path>`.
+    #
+    # Recording the trap in the code rather than only in the design note,
+    # because "the head is published" was believed here for as long as it took
+    # to run `git check-ignore` on the file this line writes.
     chain = verify_chain.verify(ledger_path)
     record["ledger_head"] = {"path": os.path.abspath(ledger_path),
                              "last_seq": chain["last_seq"],

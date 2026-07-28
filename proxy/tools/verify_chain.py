@@ -151,6 +151,12 @@ def main(argv=None):
                          "runs/<id>/MANIFEST.json ledger_head.sha256.  This is "
                          "the argument that turns tamper-evidence into "
                          "something an outside reader can check.")
+    ap.add_argument("--emit-head", metavar="PATH",
+                    help="write the head to PATH as JSON, for committing.  "
+                         "PATH must be somewhere git actually tracks: writing "
+                         "a head into an ignored directory publishes nothing, "
+                         "and an unpublished head is not a witness to anything."
+                         "  Refused if the chain does not verify.")
     args = ap.parse_args(argv)
 
     report = verify(args.path)
@@ -162,6 +168,23 @@ def main(argv=None):
                 "detail": "published head is %r; this file ends at %r"
                           % (args.expect_head, report["head"])})
             report["verdict"] = "FAIL"
+
+    if args.emit_head:
+        if report["verdict"] != "PASS":
+            print("refusing to publish a head for a %s stream: a head that "
+                  "witnesses an unverified file is worse than no head, because "
+                  "it looks like one." % report["verdict"], file=sys.stderr)
+            return EXIT[report["verdict"]] or 1
+        head = {"path": os.path.abspath(args.path), "last_seq": report["last_seq"],
+                "sha256": report["head"], "lines": report["lines"],
+                "verdict": report["verdict"]}
+        os.makedirs(os.path.dirname(os.path.abspath(args.emit_head)) or ".",
+                    exist_ok=True)
+        with open(args.emit_head, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump(head, fh, indent=2, sort_keys=True)
+            fh.write("\n")
+        print("head written to %s -- it is only published once that file is "
+              "committed and pushed" % args.emit_head)
 
     if args.json:
         print(json.dumps(report, indent=2, sort_keys=True))
