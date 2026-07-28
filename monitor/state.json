@@ -96,7 +96,7 @@
     ],
     "ops": [
       {
-        "age_min": 56,
+        "age_min": 58,
         "cycle": 8,
         "id": "OPS-A",
         "kind": "ops",
@@ -107,7 +107,7 @@
         "state": "idle"
       },
       {
-        "age_min": 19,
+        "age_min": 21,
         "cycle": 5,
         "id": "OPS-B",
         "kind": "ops",
@@ -118,7 +118,7 @@
         "state": "idle"
       },
       {
-        "age_min": 14,
+        "age_min": 16,
         "cycle": 6,
         "id": "OPS-M",
         "kind": "ops",
@@ -129,7 +129,7 @@
         "state": "idle"
       },
       {
-        "age_min": 501,
+        "age_min": 504,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -142,7 +142,7 @@
     ],
     "standing": [
       {
-        "age_min": 13,
+        "age_min": 15,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
@@ -153,7 +153,7 @@
         "state": "idle"
       },
       {
-        "age_min": 0,
+        "age_min": 2,
         "cycle": 3,
         "id": "RES-2",
         "kind": "standing",
@@ -653,7 +653,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 22:54:43",
+  "generated_at": "2026-07-28 22:57:15",
   "grid": {
     "A1": {
       "active": [
@@ -1527,30 +1527,11 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/board.py",
-      "monitor/board/board.log",
-      "monitor/board/claimed/C6-worldgen-mutate.W-1251.md",
-      "monitor/board/claimed/C9-count-lock-vocabulary.W-1252.md",
-      "monitor/board/claimed/P10-figures-into-paper.W-1253.md",
-      "monitor/board/claimed/S1-quota-auto-exit.W-1250.md",
-      "monitor/board/claimed/S5-phase1-close.W-1250.md",
-      "monitor/board/claimed/S8-provenance-backfill.W-1412.md",
-      "monitor/board/items/S10-invariant-on-resource.md",
-      "monitor/board/items/S12-quota-hold-tests.md",
-      "monitor/board/items/S13-verify-gate-enforced.md",
-      "monitor/board/items/S5-phase1-close.md",
-      "monitor/bus/RES-1/in.jsonl",
+      "onitor/bus/RES-1/in.jsonl",
       "monitor/bus/RES-2/in.jsonl",
-      "monitor/index.html",
-      "monitor/ops-status/RES-1.json",
-      "monitor/ops/OPS-A.md",
-      "monitor/ops/OPS-B.md",
-      "monitor/ops/OPS-M.md",
-      "monitor/ops/OPS-R.md",
-      "monitor/prompts/W-worker.md",
       "monitor/res/RES-1.md",
       "monitor/res/RES-2.md",
-      "monitor/state.json",
+      "monitor/scan.py",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
@@ -1562,25 +1543,13 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/S10-invariant-on-resource.W-1251.md",
-      "monitor/board/claimed/S12-quota-hold-tests.W-1412.md",
-      "monitor/board/claimed/S13-verify-gate-enforced.RES-1.md",
-      "monitor/board/done/C6-worldgen-mutate.W-1251.md",
-      "monitor/board/done/P10-figures-into-paper.W-1253.md",
-      "monitor/board/done/S5-phase1-close.W-1250.md",
-      "monitor/board/done/S8-provenance-backfill.W-1412.md",
-      "monitor/board/items/C9-count-lock-vocabulary.md",
-      "monitor/board/items/E10-engine-crosscheck.md",
-      "monitor/board/items/P12-paper-multi-review.md",
-      "monitor/board/items/V7-exam-stress-fanout.md",
-      "monitor/inbox/20260728T151000Z-W-1250-board-done-is-not-idempotent-on-windows-and-it-locks-territories.md",
-      "monitor/inbox/20260728T151500Z-W-1253-v6-released-with-design.md",
-      "monitor/inbox/20260728T152500Z-W-1250-two-phase1-items-can-go-green-and-their-notes-are-stale.md",
+      "monitor/bus/RES-1/URGENT",
+      "monitor/bus/RES-2/URGENT",
       "theoria-arm/.pytest-runs/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "d751ccd OPS-M: bus note on the repeat add-A sweep",
+    "git_head": "fb813ce monitor: standing researchers go parallel, and fan-out stops being optional",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1599,20 +1568,8 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/S10-invariant-on-resource.W-1251.md",
-      "monitor/board/claimed/S12-quota-hold-tests.W-1412.md",
-      "monitor/board/claimed/S13-verify-gate-enforced.RES-1.md",
-      "monitor/board/done/C6-worldgen-mutate.W-1251.md",
-      "monitor/board/done/P10-figures-into-paper.W-1253.md",
-      "monitor/board/done/S5-phase1-close.W-1250.md",
-      "monitor/board/done/S8-provenance-backfill.W-1412.md",
-      "monitor/board/items/C9-count-lock-vocabulary.md",
-      "monitor/board/items/E10-engine-crosscheck.md",
-      "monitor/board/items/P12-paper-multi-review.md",
-      "monitor/board/items/V7-exam-stress-fanout.md",
-      "monitor/inbox/20260728T151000Z-W-1250-board-done-is-not-idempotent-on-windows-and-it-locks-territories.md",
-      "monitor/inbox/20260728T151500Z-W-1253-v6-released-with-design.md",
-      "monitor/inbox/20260728T152500Z-W-1250-two-phase1-items-can-go-green-and-their-notes-are-stale.md",
+      "monitor/bus/RES-1/URGENT",
+      "monitor/bus/RES-2/URGENT",
       "theoria-arm/.pytest-runs/"
     ]
   },
@@ -2099,10 +2056,10 @@
       "status": "green"
     },
     "ops_duty": {
-      "detail": "**1 条 TO-MONITOR 待监控回复**。 OPS-A 第8轮 idle（55 分钟前）； OPS-B 第5轮 idle（18 分钟前）； OPS-M 第6轮 idle（13 分钟前）； OPS-R 第1轮 idle（501 分钟前）",
+      "detail": "**1 条 TO-MONITOR 待监控回复**。 OPS-A 第8轮 idle（58 分钟前）； OPS-B 第5轮 idle（21 分钟前）； OPS-M 第6轮 idle（16 分钟前）； OPS-R 第1轮 idle（503 分钟前）",
       "rows": [
         {
-          "age_min": 55,
+          "age_min": 58,
           "cycle": 8,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -2111,7 +2068,7 @@
           "status": "green"
         },
         {
-          "age_min": 18,
+          "age_min": 21,
           "cycle": 5,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -2120,7 +2077,7 @@
           "status": "green"
         },
         {
-          "age_min": 13,
+          "age_min": 16,
           "cycle": 6,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2129,7 +2086,7 @@
           "status": "green"
         },
         {
-          "age_min": 501,
+          "age_min": 503,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2153,13 +2110,17 @@
       "detail": "TheoriaReflex 运行中（reap / quota / 自动合并）； TheoriaDashboard 运行中（每 10 分钟重算 state.json）； TheoriaServe **未注册**（本地服务 :8787（前端拉数据））　→ 自动化有缺口：TheoriaServe",
       "status": "risk"
     },
+    "self_driving": {
+      "detail": "RES-1 第2轮 idle（15 分钟前）； RES-2 第3轮 idle（2 分钟前）",
+      "status": "green"
+    },
     "spec_freshness": {
-      "detail": "spec.py 落后 32 个提交 / 8 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 34 个提交 / 8 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "partial"
     },
     "supply": {
-      "detail": "板上仅剩 2 件可领（6 件在做），供货需要跟上。",
-      "status": "partial"
+      "detail": "板上 3 件可领、5 件在做，供货充足。",
+      "status": "green"
     },
     "verify_gates": {
       "detail": "工单声称的 1 个 verify 脚本全部在树上。",

@@ -638,6 +638,31 @@ def _bus_probe():
             "detail": "%d 个会话在线，指令全部已读并回执。" % seen_ok}
 
 
+def _self_driving():
+    """常驻研究员是否在自转 —— 用户不该需要触发它们。
+
+    判据是心跳的推进：cycle 在涨、note 在变、age 不超过一个循环周期。
+    停在那里等人的会话，心跳会定格——这正是用户今天观察到的现象。"""
+    import time as _t
+    rows = []
+    for rid in ("RES-1", "RES-2"):
+        path = "monitor/ops-status/%s.json" % rid
+        if not exists(path):
+            rows.append("%s 未启动" % rid)
+            continue
+        d = read_json(path, {}) or {}
+        age = int((_t.time() - os.path.getmtime(rel(path))) / 60)
+        stalled = age > 45          # 一轮活再长也该在 45 分钟内写一次心跳
+        rows.append("%s 第%s轮 %s（%d 分钟前）%s"
+                    % (rid, d.get("cycle"), d.get("state"), age,
+                       "**疑似停下等人**" if stalled else ""))
+    stalled_any = any("疑似停下" in r for r in rows)
+    return {"status": "risk" if stalled_any else "green",
+            "detail": "； ".join(rows) +
+                      ("　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。"
+                       if stalled_any else "")}
+
+
 def probe_needs_human():
     """全系统唯一需要人出手的事：App 会话死了（上下文满或被关）。
 
@@ -671,6 +696,7 @@ def probe_needs_human():
 PROBES = {
     "credential_hygiene": probe_credential_hygiene,
     "needs_human": probe_needs_human,
+    "self_driving": lambda: _self_driving(),
     "bus": lambda: _bus_probe(),
     "supply": lambda: _supply(),
     "spec_freshness": probe_spec_freshness,
