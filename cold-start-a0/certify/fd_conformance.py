@@ -51,6 +51,14 @@ from certify.fd_unsat import is_unsat  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# A Plan reports the *rung* that answered, not a backend name. engine-rig's
+# three-rung ladder replaced the old `"fast-downward"`/`"stub"` pair with the
+# tier ids `stub-bfs` / `fd-optimal` / `fd-satisficing`, so "did the adapter
+# pick Fast Downward on its own?" is now "is the rung one of the FD ones".
+# Asked through `backends` rather than by literal, so that a fourth rung cannot
+# quietly fall out of this check the way the rename did.
+FD_TIERS = (backends.FD_OPTIMAL, backends.FD_SATISFICING)
+
 STANDIN = '''#!/usr/bin/env python
 """A Fast Downward conformance stand-in.
 
@@ -126,11 +134,11 @@ def check(domain: str, problem: str) -> Dict[str, object]:
         "fd_path": {"backend": fd_plan.backend, "length": fd_plan.length,
                     "actions": list(fd_plan.actions)},
         "stub_path": {"backend": stub_plan.backend, "length": stub_plan.length},
-        "backend_reported": fd_plan.backend == "fast-downward",
+        "backend_reported": fd_plan.backend in FD_TIERS,
         "same_length": fd_plan.length == stub_plan.length,
         "same_plan": list(fd_plan.actions) == list(stub_plan.actions),
         "validated": True,     # solve() refuses to return an unvalidated plan
-        "green": bool(discovery_ok and fd_plan.backend == "fast-downward"
+        "green": bool(discovery_ok and fd_plan.backend in FD_TIERS
                       and fd_plan.length == stub_plan.length),
         "caveat": "a conformance stand-in, not Fast Downward: this tests "
                   "discovery, invocation, sas_plan parsing and validation, and "
@@ -174,7 +182,7 @@ def check_real(name: str, directory: str) -> Dict[str, object]:
              and fd.get("length") == stub.get("length"))
     # On the UNSAT branch there is no Plan object and so no backend to report;
     # requiring one there would fail the instance we most care about.
-    backend_ok = (fd.get("backend") == "fast-downward"
+    backend_ok = (fd.get("backend") in FD_TIERS
                   if fd["status"] == "SAT" else True)
     return {
         "instance": name,

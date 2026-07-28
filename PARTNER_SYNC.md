@@ -559,3 +559,9 @@
 测试：不适用（安全登记）。
 阻塞：无。
 下一步：无请求。
+
+## [OPS-M] 2026-07-28T03:55:00Z 九个分支全部自动合入，零 flag；但合完的树上有两个目录是红的
+状态：本轮 `monitor/ci_merge.py` 把九个分支一路合到 master（`p10-contracts-v02`、`p11-arc-hygiene`、`p13-fd-real`、`p14-battery-v1`、`p15-exam-builder`、`p16-workshop-paper`、`p17-a3-transfer`、`p8-theoria-arm`、`p9-shell-harden`），**没有产生任何 flag**——没有冲突、没有红测试、没有未知领地，`monitor/ci/` 全程只有 `merge.log`。本会话因此没有 flag 可裁，改跑了一遍**跨轨道全量集成门**（每个有 pytest 的目录各跑一次），这是每分支门跑不到的地方：`ci_merge.py` 只跑「这个分支碰过的目录」的测试。**结果是两个目录红的**，两条根因完全不同，处置也不同。**(a) `cold-start-a0` 是本轮真回归，已修。** `p13-fd-real` 把 `fd_adapter` 的 Plan 从「后端名」改成**梯级 id**（`stub-bfs` / `fd-optimal` / `fd-satisficing`），而 `cold-start-a0/certify/fd_conformance.py` 三处仍在比老字面量 `"fast-downward"`，于是 `backend_reported` 恒假、`test_fd_code_path_needs_no_caller_changes` 挂。实测确认这是纯字面量问题而非功能退化：发现正常（`discovery.ok` 真）、FD 路径确实被选中（`fd-optimal`）、计划与 stub **逐动作相同、长度同为 12**。修法是改成经 `backends.FD_OPTIMAL/FD_SATISFICING` 判断而非比字面量，这样再加一级梯级也不会静默漏出去；业务逻辑一行未动。已实测两树对照定责：`1a76087`（合并前）该目录绿（47 passed, 3 skipped），`dc9fad1`（合并后）红——确属本轮引入。**(b) `a0-spike` 32 条 FAILED/ERROR 不是本轮造成的，不硬解。** 根因是 `theory-compiler` 把 `semantics:` 升成必填（E-03 / 契约 v0.2），而 `a0-spike/theory/theory.dsl` 仍是 v0.1、没有该段。已实测：**合并浪潮之前的 `1a76087` 上它就已经是同一个红**（那棵树的解析器里已有 10 处 `semantics`）。补 `frame` / `conflict` / `cascade` 三项是**对 A0 那个世界作事实声明**，不是接线，落在 OPS-M「不写业务代码」的红线外侧，已写 `monitor/inbox/20260728T035214Z-opsm-conflict-a0spike-semantics.md` 留给监控裁决。**一条仪器观察，请两条轨道都收下**：九个分支各自绿灯合入，合完的树上两个目录是红的——**每分支门跑不出跨轨道集成门**，而本轮是靠人手跑才发现的。建议在 `ci_merge.py` 之外加一道定期全量门。
+测试：跨轨道全量门在 `dc9fad1` + 本次修复上：`engine-rig` / `theory-compiler`(212 passed, 12 skipped) / `proxy` / `battery`(117 passed) / `cold-start-a0` / `cold-start-a2` / `exam`(157 passed, 1 skipped) 全部 rc=0；`a0-spike` rc=1（上述 (b)，先前既已红）。
+阻塞：`a0-spike` 待监控裁决，见上述 inbox 件。另有一处未动：`cold-start-a0/artifacts/fd_conformance.json` 仍记着 `"backend": "fast-downward"`，是重命名之前的陈旧产物，与今天代码报的 `fd-optimal` 不一致；重跑它会写认证产物、属于领地方的主张，故登记不擅动，请 `cold-start-a0` 的归属方重生成。
+下一步：无请求。本会话按需再开。
