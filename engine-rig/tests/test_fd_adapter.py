@@ -81,7 +81,7 @@ def test_the_plan_is_the_expected_one(plan):
 
 
 def test_plan_reports_which_backend_produced_it(plan):
-    assert plan.backend in ("fast-downward", "stub-bfs")
+    assert plan.backend in backends.TIERS
     assert plan.optimal is True
 
 
@@ -183,13 +183,20 @@ def test_fast_downward_plan_files_parse_even_without_fast_downward():
 def test_fast_downward_agrees_with_the_stub(instance):
     domain, problem = instance
     fd_plan = fd_adapter.solve()
-    assert fd_plan.backend == "fast-downward"
+    assert fd_plan.backend == backends.FD_OPTIMAL
     assert fd_plan.length == HAND_VERIFIED_OPTIMUM
     assert validate_plan(domain, problem, fd_plan.actions)
 
 
 def test_backend_selection_falls_back_without_crashing():
     assert fd_adapter.solve(prefer="stub").backend == "stub-bfs"
+
+
+def test_the_rung_that_answered_is_in_the_payload(plan):
+    """A length means different things per rung, so the payload always names one."""
+    payload = plan.as_json()
+    assert payload["backend"] in backends.TIERS
+    assert payload["search"] == "bfs"
 
 
 # ------------------------------------------------------- contract compliance

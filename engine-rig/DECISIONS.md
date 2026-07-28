@@ -434,3 +434,88 @@ performed on this instance.* Dropping it makes "no experiment settles this here"
 indistinguishable from "nothing to propose", which is the difference between a
 finding and a silence. It also keeps the engine from proposing impossible
 experiments forever, since the verdict is the thing that stops the loop.
+
+---
+
+## D-023 · The planner is a three-rung ladder, and the Plan names its rung
+
+**Context.** Theoria 1.10b asks for a ladder — exact object-state search, then
+A* with an admissible heuristic, then landmark-based satisficing — not a switch
+between "the stub" and "FD". With Fast Downward actually installed there are now
+three real options, and callers must not have to know which one answered.
+
+**Decision.** `stub-bfs` / `fd-optimal` / `fd-satisficing`, picked by
+`backends.choose_tier` under a four-clause rule written in its docstring and
+tested clause by clause with an injected discovery function. `solve(domain,
+problem)` is unchanged. `Plan.backend` is the tier id and `Plan.search` carries
+the configuration verbatim, both built by the same function that builds the
+command line. Naming a rung that is unreachable raises `FastDownwardMissing`
+rather than dropping to another one. A bare `downward` binary, which has no
+driver and so no `--alias`, gets an explicit greedy-FF configuration and the
+payload says so instead of claiming LAMA.
+
+**Why.** A benchmark that quietly answers on a different engine than the one it
+was asked for is a benchmark that lies. Every acceptance criterion in this rig
+is a plan *length*, and a length only means the same thing on every machine if
+the artifact records which rung produced it and whether that rung was optimal.
+The satisficing rung reports `optimal: false` for exactly this reason: its
+length is an upper bound and must never be read as an optimum.
+
+---
+
+## D-024 · A proof of unsolvability is decided on what the planner said, not on how it exited
+
+**Context.** The cold-start-a0 track reported a real defect: on the FD path this
+adapter could not tell "the planner proved there is no plan" — which starts the
+certificate obligation and the whole unsolvability track — from "the planner
+fell over", which is an incident. Both arrived as the same `RuntimeError`. The
+obvious fix is to read the exit code, and both tracks assumed that would work.
+
+**Decision.** It does not, and the rule is now `backends.proves_unsolvable`,
+which reads FD's log as well as its exit code. Exit 10 (`TRANSLATE_UNSOLVABLE`)
+and 11 (`SEARCH_UNSOLVABLE`) are proofs. Exit 12 is a proof **only** on the
+optimal rung and **only** when FD reports `Completely explored state space`.
+Everything else raises. On success the adapter returns the plan; on a proof it
+returns `None`, exactly as the bundled search does, and `solve()` raises
+`NoPlanExists(RuntimeError)` — a subclass, so callers written against the old
+behaviour keep working.
+
+**Why, and what the measurement showed.** Fast Downward's own
+`driver/returncodes.py` reads `TRANSLATE_UNSOLVABLE = 10`, `SEARCH_UNSOLVABLE =
+11`, `SEARCH_UNSOLVED_INCOMPLETE = 12`. But `SEARCH_UNSOLVABLE` is emitted only
+by algorithms that detect unsolvability structurally (EHC, the PDB CEGAR loop).
+A complete `astar(blind())` that exhausts the reachable state space of
+`sokoban_ringstuck` — an instance `deadlock_carver` independently proves
+unsolvable — exits **12**, printing `Completely explored state space -- no
+solution!`. `--alias lama-first` exits 12 on the same instance. So the one code
+covers both "I explored everything and there is nothing" and "I gave up", and no
+reading of the exit code alone can separate them.
+
+The refusal on the satisficing rung is deliberate and costs us something: LAMA is
+a portfolio whose later iterations search under a cost bound, and "exhausted
+under a bound" proves only that no cheaper plan exists. Telling those apart would
+mean reasoning about which iteration wrote that line. Refusing costs a caller one
+re-ask on the optimal rung; getting it wrong would mean this rig publishing an
+unsolvability claim no planner actually made — the bare-UNSAT failure the
+Theoria constraint exists to prevent.
+
+---
+
+## D-025 · The artifact path stays on the bundled rung
+
+**Context.** `solve()` now climbs to Fast Downward whenever one is reachable.
+`run()` is the path that writes `artifacts/candidates.jsonl`, which is committed
+and must be byte-reproducible.
+
+**Decision.** `run()` resolves an unspecified backend to `ARTIFACT_TIER =
+"stub-bfs"`. Fast Downward on the artifact path is opt-in via
+`prefer="fd-optimal"`. Verified: `tools/run_all --force` reproduces the committed
+stream byte for byte both with `FAST_DOWNWARD` set and unset.
+
+**Why.** Determinism here is a requirement, not a nicety. If `run()` discovered
+the planner, the committed candidate stream would depend on whether the machine
+that produced it happened to have one installed, and a diff would silently mean
+"different laptop" instead of "different answer". The same discipline the
+cold-start-a0 track adopted as D-A0-021, for the same reason. FD's independent
+answers are recorded, but in their own artifact under `runs/`, where they cannot
+contaminate the committed stream.

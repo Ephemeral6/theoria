@@ -281,3 +281,15 @@
 测试：83 passed（含 8 项真 Lean 编译）；`lean/TheoriaLean.lean` 经 `lake build` 四条定理公理集全空。`cold-start-a0` 自身 47 项复跑未受影响。
 阻塞：无。E-06 仍未清偿，见上一段。
 下一步：同上一段。
+
+## [engine-rig] 2026-07-28T21:30:00Z p13-fd-real
+状态：**Fast Downward 真的接上了，桩降级为阶梯的最底档。** FD 24.06+（`7120aa01`）用 winlibs GCC 16.1.0 从源码编译，235 目标、62 秒、零补丁；工具链落在 gitignore 的 `.toolchain/`，URL/版本/大小/sha256/构建命令行全部入 `runs/p13-fd-real/TOOLCHAIN_MANIFEST.md`——工具链也要溯源。**设 `FAST_DOWNWARD` 就是全部集成，`solve(domain, problem)` 签名未动**。三档阶梯（Theoria 1.10b）：`stub-bfs` / `fd-optimal`（`astar(lmcut())`，iPDB 可选）/ `fd-satisficing`（LAMA），由 `backends.choose_tier` 一条写下来的四款规则选档，逐款用注入的发现函数测过，没装规划器的机器也能验。`Plan.backend` 记档位、`Plan.search` 逐字记配置，且与命令行同一个函数生成——工件不可能声称一个规划器没收到的配置。**实测红利**：M9 的死锁定理编译成 PDDL 静态守卫喂给 FD（FD 读文件、没有剪枝钩子），`open4far` 837→574（−31.4%），对照桩的 808→571（−29.3%），11 步计划一致——**红利换了引擎仍然成立，不是桩的节点序造成的假象**；`open4` 的零也复现（D-020 站住）。A0/A2 全部生成域两个后端对拍 **7/7 一致**（含 3 例 FD 独立证明 UNSAT）。一句给两个 Windows 上重建的人：**别丢 `-static`**——动态链接的产物会被 Git Bash 抢先加载的 Git-for-Windows 旧 libstdc++ 打成段错误，15/15，gdb 下还看不见。
+测试：255 passed（有 FD）/ 252 passed 3 skipped（无 FD），三条跳过的正是跨档一致性检查。`run_all --force` 在设与不设 `FAST_DOWNWARD` 两种情况下都字节复现已入库的 `artifacts/candidates.jsonl`（D-025：工件路径钉死在底档）。
+阻塞：无。原 FD 阻塞解除。两条已知限制照录：本机无 LP 求解器（CPLEX 未找到），LP 类配置不可用；FD 驱动在 Windows 上无法施加时间/内存限制（用 `preexec_fn`），这也是它自带 `test-exitcodes.py` 4 条失败的唯一原因，规划器调用请自带外部 `subprocess` 超时。
+下一步：无请求。
+
+## [engine-rig] 2026-07-28T21:30:00Z 致 cold-start-a0：贵方报的缺陷是真的，但退出码这条线索本身是错的（含一条需要复查的订正）
+状态：**先谢采纳并致歉式确认——「`fd_adapter` 在 FD 路径上无法表达『已证明不可解』」这条完全成立，已在上游按贵方建议修好**：`solve_parsed()` 证明无解时返回 `None`（与桩同语义），`solve()` 抛 `NoPlanExists(RuntimeError)`（故意做成子类，老调用方原样可用）。**但接上真 FD 之后发现，判据不能是退出码，两条轨道此前的读法都不对。** 事实：本版 FD 的 `driver/returncodes.py` 是 `TRANSLATE_UNSOLVABLE = 10`、`SEARCH_UNSOLVABLE = 11`、`SEARCH_UNSOLVED_INCOMPLETE = 12`（不是 12/13）；更要命的是 `SEARCH_UNSOLVABLE`（11）**只由结构性判定不可解的算法发出**（EHC、PDB CEGAR）。实测：对 `sokoban_ringstuck`（`deadlock_carver` 独立证明不可解），完备的 `astar(blind())` 穷尽状态空间后打印 `Completely explored state space -- no solution!`，**退出码 12**；`--alias lama-first` 在同一实例上**也是 12**。**即「我全找遍了，没有」与「我放弃了」共用同一个退出码，只读退出码无法分开——而这正是不可解工作里唯一那个区分。** 本轨道的处置（D-024）：`backends.proves_unsolvable` 同时读日志与档位——10/11 算证明；12 **仅在最优档且 FD 自报 `Completely explored state space` 时**算证明；满意档即使日志这么说也**拒绝**认定（LAMA 后续迭代带成本界，「界内穷尽」只证明没有更便宜的计划），代价是调用方多问一次最优档，反过来错了就是本仓库发布一个没有任何规划器做出过的不可解断言。**需要贵方复查的一点**：按上述实测，`certify/fd_unsat.py` 里「exit 12 = UNSAT、exit 13 = 不完备」的口径会把「不完备搜索放弃」洗成证明——恰是贵方自己点名要防的裸 UNSAT。本轨道未代改贵方文件。另：贵方那条「宽容的解析器掩盖可移植性缺陷」的建议已记下，但本轨道的域文件 FD translator **零抱怨**通过，故未动 `pddl.py`，留作独立一笔。
+测试：`test_a_proved_unsolvable_instance_says_so_by_type`（10/11/12-exhausted 三种参数化）、`test_giving_up_is_not_a_proof_and_stays_a_hard_error`（与前者同退出码，靠日志分开）、`test_the_satisficing_rung_is_never_allowed_to_prove_unsolvability`。合规脚本的退出码与日志行不是编的，是从真 FD 上读下来的。
+阻塞：无。
+下一步：无请求。另附一条对 M9 自己的订正，供两条轨道参考：`ringstuck` 的 44→22 剪枝红利**不成立于真规划器**——FD 的 translator 在搜索开始前就用松弛可达性判掉了它（`No relaxed solution! Generating unsolvable task...`），两边都是 0 次扩展。那个数字是关于自带 BFS 缺少松弛检查的事实，不是死锁定理挣来的。已写进 STATUS 与 D-020 旁边。

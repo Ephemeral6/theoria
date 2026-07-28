@@ -12,7 +12,7 @@ appends a paragraph to `/PARTNER_SYNC.md`.
 | `engine-rig-m3-cegis` | `cegis_miner` | done |
 | `engine-rig-m4-zerospace` | `zero_space` | done |
 | `engine-rig-m5-lp` | `lp_potential` | done |
-| `engine-rig-m6-fd` | `fd_adapter` | done (stub backend — see below) |
+| `engine-rig-m6-fd` | `fd_adapter` | done (real Fast Downward — see below) |
 | `engine-rig-m7-probe` | `probe_frontier` | done |
 | `engine-rig-m8-integration` | all six engines + schema validator | done |
 | `engine-rig-m9-deadlock-ic3-probe` | `deadlock_carver`, `ic3_pdr`, probes on the planner | done |
@@ -68,8 +68,43 @@ in `PARTNER_SYNC.md`.
 
 ## Test suite
 
-218 passed, 1 skipped (`test_fast_downward_agrees_with_the_stub`, which starts
-running the moment a Fast Downward executable is reachable).
+255 passed with Fast Downward reachable; 252 passed, 3 skipped without. The
+three that skip are the cross-rung agreement checks, which need a real planner
+by definition; everything else — including the whole driver protocol — runs on
+any machine.
+
+## The dividend, re-measured on a planner that knows nothing about this rig
+
+M9's deadlock numbers were taken with the theorems as a Python pruner inside the
+bundled BFS, so they only ever said something about the stub. `tools/p13_fd_dividend.py`
+compiles the same theorems into PDDL as static guards on `push` (FD reads files
+and has no pruning hook) and lets Fast Downward take the node account. All 16
+`open4far` theorems and both `ringstuck` ones encode, none skipped.
+
+| Instance | FD before → after | FD saved | Stub before → after (M9) | Same answer |
+|---|---|---|---|---|
+| `open4` | 49 → 49 | 0 | 47 → 47 | yes |
+| `open4far` | 837 → **574** | −31.4% | 808 → 571 (−29.3%) | yes, 11 steps |
+| `ringstuck` | 0 → 0 | n/a | 44 → 22 | yes, UNSAT |
+
+Three readings, and the third is the one that costs us something:
+
+* **`open4far`: the dividend survives the change of engine** — 31.4% against the
+  stub's 29.3%, same 11-step plan. The saving was not an artefact of the stub's
+  node ordering.
+* **`open4`: the zero replicates.** D-020's negative result holds on FD too.
+* **`ringstuck`: the theorems buy nothing a real planner needed.** FD's
+  translator settles the instance by relaxed reachability before search begins
+  (`No relaxed solution! Generating unsolvable task...`) and expands 0 states
+  either way. M9's 44 → 22 is a fact about the bundled search, which has no such
+  check — not a dividend a real planner would ever have collected. It stays on
+  the record next to D-020's zero.
+
+Second half of the same tool: every generated cold-start domain solved by both
+backends. `a0-spike` (match / mismatch), `cold-start-a0` (base / no-button),
+`cold-start-a2` (base / holed / repaired) — **7 of 7 agree**, on plan length and
+on unsolvability, including three instances where FD independently proves the
+UNSAT the bundled search found. `runs/p13-fd-real/DIVIDEND.md`.
 
 ## Convergence interface (post-M8)
 
@@ -82,35 +117,71 @@ narrowed goals (target cell 1 or 3) do get certificates. See
 
 ## Blockers
 
-None. Two standing deviations, both recorded rather than worked around: the Fast
-Downward stub (below, sanctioned by the M6 ticket) and the frozen `engine` enum
-(D-018), which the new engines emit inside rather than edit.
+None. **The Fast Downward stub is no longer one of them** — FD is built and
+connected (below), and the stub is now the ladder's bottom rung by design rather
+than a substitute for a missing one. One standing deviation remains, recorded
+rather than worked around: the frozen `engine` enum (D-018), which the newer
+engines emit inside rather than edit.
 
-## Fast Downward
+## Fast Downward — connected (P-13)
 
-**FD is not connected; the stub is in use.** This is the outcome the ticket
-allows after two reasonable attempts. Both attempts, verbatim:
+**FD is built from source and connected.** The blocker recorded above is
+cleared. Fast Downward 24.06+ (`7120aa01`), compiled with winlibs GCC 16.1.0,
+235 targets, no patches. Provenance for every fetched artifact — URL, version,
+size, sha256, build command, tool versions — is in
+`runs/p13-fd-real/TOOLCHAIN_MANIFEST.md`; the toolchain itself lives in the
+gitignored `.toolchain/` and is not committed.
 
-1. **Discovery.** Searched PATH for `fast-downward`, `fast-downward.py`,
-   `downward`, `fd`, `planner`; checked `FAST_DOWNWARD`, `FAST_DOWNWARD_HOME`,
-   `DOWNWARD_ROOT` and any `*downward*` environment variable; checked
-   `C:\Program Files\fast-downward`, `C:\fast-downward`, `~/fast-downward`,
-   `~/downward`, `/opt/fast-downward`, `/usr/local/lib/fast-downward`; checked
-   for importable `downward`, `fast_downward`, `pyperplan`, `unified_planning`
-   packages. Nothing found.
-2. **Install.** `pip install downward` and `pip download fast-downward` both
-   fail with "No matching distribution found" — Fast Downward is a C++ project
-   distributed as source, not on PyPI. Building it from source would need a
-   repository clone plus a C++ toolchain and CMake, which is outside both "two
-   reasonable attempts" and this sprint's offline constraint.
+```bash
+export FAST_DOWNWARD="<repo>/engine-rig/.toolchain/downward/fast-downward.py"
+```
 
-**Substitute.** `engines/fd_adapter/search.py` is a breadth-first search over
-grounded STRIPS behind the same `solve(domain, problem)` interface. BFS is
-length-optimal for unit costs, exactly like the `astar(blind())` configuration
-the FD path would use, so the acceptance criterion ("plan length equals the
-hand-verified optimum") means the same thing under either backend. Each plan
-records which backend produced it in `payload.backend`.
+Point it at the **driver**, not `downward.exe`: only the driver understands
+`--alias`, which is how the satisficing rung asks for LAMA.
 
-The Fast Downward code path (discovery, invocation, `sas_plan` parsing) is
-implemented and **unexercised**. `test_fast_downward_agrees_with_the_stub` is
-skipped here and starts running the moment an FD executable is reachable.
+Setting that variable is the whole integration — no caller changes. With it set
+the suite is **255 passed**; without it, **252 passed, 3 skipped**.
+
+### The three-rung ladder (Theoria 1.10b)
+
+| tier | who answers | length-optimal |
+|---|---|---|
+| `stub-bfs` | the bundled grounded-STRIPS BFS | yes |
+| `fd-optimal` | Fast Downward, `astar(lmcut())`, `astar(ipdb())` selectable | yes |
+| `fd-satisficing` | Fast Downward, LAMA's first pass | no |
+
+`backends.choose_tier` picks the rung by a written rule, tested clause by clause
+with an injected discovery function so it is verifiable on a machine with no
+planner. `prefer="stub"` still wins unconditionally, and `run()` is pinned to
+the bundled rung (D-025) so `artifacts/candidates.jsonl` is byte-identical
+whether or not this machine has a planner. All three rungs return the same
+optimal length on the rig's own instance, and the same plan.
+
+### The one thing that will bite a rebuild
+
+The plain build produced a binary that segfaulted while writing the plan file,
+15/15, invisible under gdb. Cause: the dynamic binary imports `libstdc++-6.dll`
+and Git Bash puts Git-for-Windows' own older GCC runtime first on `PATH`; the
+ABI-incompatible library survived inlined code and died on the first
+out-of-line call. Fixed with `-DCMAKE_EXE_LINKER_FLAGS="-static"`. **Do not drop
+`-static`.** Two further limits: no LP solver is present (CPLEX not found), so
+LP-based configurations are unavailable; and FD's driver cannot enforce
+time/memory limits on Windows (it uses `preexec_fn`), which is the sole cause of
+4 failures in FD's own `test-exitcodes.py` — budget planner runs with an
+external `subprocess` timeout instead.
+
+### What a real planner corrected in this rig
+
+**Exit codes do not tell a proof from a shrug.** The adapter used to read a
+missing plan file as a crash, which the cold-start-a0 track reported as a defect
+(it cannot tell "proved unsolvable" — which triggers the certificate obligation
+— from "the planner fell over", which is an incident). Fixing it turned up that
+the obvious fix is wrong. FD's `driver/returncodes.py` has `TRANSLATE_UNSOLVABLE
+= 10`, `SEARCH_UNSOLVABLE = 11`, `SEARCH_UNSOLVED_INCOMPLETE = 12` — and
+measurement shows `SEARCH_UNSOLVABLE` is reserved for algorithms that detect
+unsolvability structurally. **A complete `astar(blind())` that exhausts the
+state space of a provably unsolvable instance exits 12**, the same code an
+incomplete search that gave up returns. `backends.proves_unsolvable` therefore
+decides on FD's own log line plus the completeness of the configuration we
+chose, and refuses the claim on the satisficing rung even when the log says the
+space was exhausted (D-024).
