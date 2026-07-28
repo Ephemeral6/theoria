@@ -402,13 +402,23 @@ list**, and a SAT plan of **12 steps** that the world agrees with frame-for-fram
 machine-checked `unsolvable`, again with 0 axioms. The whole run takes about six seconds
 (`cold-start-a0/A0_REPORT.md`, preamble and §7).
 
-**Figure 1** is that adjudication record as a timeline — every decision with its
-verdict, the manual's two revisions with their triggers, the three compiler
-defects, and the expressivity ledger. It is parsed out of
-`cold-start-a0/THEORIZE_LOG.md`'s own headings by
-`papers/phase1-workshop/figures/fig1_concept_timeline.py` rather than retyped,
-and the shape it shows is unflattering: the manual was revised **zero** times by
-certify, and every iteration that did happen was in the compiler.
+**Figure 1** is that adjudication record as a timeline — seventeen decisions
+with their verdicts, one probe designed and never ruled on, the manual's two
+revisions with their triggers, the three compiler defects, and the expressivity
+ledger. It is parsed out of `cold-start-a0/THEORIZE_LOG.md`'s own headings by
+`figures/fig06_concept_timeline.py` rather than retyped; the plate is
+`figures/out/light/fig06_concept_timeline.svg` (and `out/dark/`), and every
+number in it is in `figures/csv/fig06_concept_timeline.csv`. The shape it shows
+is unflattering: the manual was revised **zero** times by certify, and every
+iteration that did happen was in the compiler.
+
+The eighteenth entry is worth a sentence, because an earlier draft of this
+figure counted it. `THEORIZE_LOG.md` records **no verdict** for probe P-03; the
+figure marks it `verdict-absent` and does not count it as adjudicated, where the
+paper's own earlier figure script had filled the gap with the placeholder string
+`"see body"` and counted it eighteen. The count is seventeen. The disagreement,
+the ruling and the eleven other quantities the two implementations were checked
+against are in `papers/phase1-workshop/figures/PARITY.md`.
 
 ### 3.2 What the engines produced that a hand-filled candidate box would not
 
@@ -468,9 +478,14 @@ Switch in the other (`cold-start-a0/theory/theory.dsl`,
 `cold-start-a0/prime/theory/theory_prime.dsl`). "Identical except" would be a
 false description and is not used here.
 
-**Figure 2** (`papers/phase1-workshop/figures/fig2_coverage_accuracy.py`) plots
-the two runs' coverage against their accuracy, read straight from the two score
-artefacts. `cold-start-a0/prime/A0P_REPORT.md` §1 tabulates the same comparison:
+**Figure 2** (`figures/fig07_a0_vs_a0prime.py`; plate
+`figures/out/light/fig07_a0_vs_a0prime.svg`, numbers
+`figures/csv/fig07_a0_vs_a0prime.csv`) plots the two runs' coverage against
+their accuracy, read straight from the two score artefacts. One cell of that
+figure is deliberately empty: A0's executable-probe count exists only in prose
+that the figure pipeline's source registry does not declare and therefore does
+not hash, so the plate marks it absent rather than printing the 0 an earlier
+draft printed. `cold-start-a0/prime/A0P_REPORT.md` §1 tabulates the same comparison:
 
 | | A0 | A0′ |
 |---|---|---|
@@ -904,9 +919,13 @@ exactly §1.3's claim and exactly its limit. The artefact says so in its own
 
 ### 5.5 The loop, six beats
 
-**Figure 3** (`papers/phase1-workshop/figures/fig3_loop_ledger.py`) renders the
-ledger as a flow, each beat carrying the artefact paths that settle it, so a
-reader who doubts a box can open exactly the files that box was decided by.
+**Figure 3** (`figures/fig05_a2_repair_loop.py`; plate
+`figures/out/light/fig05_a2_repair_loop.svg`, numbers
+`figures/csv/fig05_a2_repair_loop.csv`) renders the ledger as a flow, each beat
+carrying the artefact paths that settle it, so a reader who doubts a box can
+open exactly the files that box was decided by. The ledger holds **eight**
+beats and the loop proper is **six**: M0 and M5 are prelude, drawn as prelude,
+and the plate never shows the ledger's own 8/8 summary.
 
 Truth is the referee throughout and reaches the manual only as frames: `cold-start-a2/a2pipeline/refute.py`
 writes the world's solved episode out as a four-field trace, and the world is
