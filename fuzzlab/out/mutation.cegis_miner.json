@@ -1,0 +1,331 @@
+{
+  "campaign_seed": 104375253266434,
+  "campaign_seed_hex": "0x00005eedc1e4f002",
+  "coverage": {
+    "cegis_miner": {
+      "baseline_dirty_worlds": 0,
+      "invariants": [
+        "applicable_equals_support",
+        "frontier_guards_are_consistent",
+        "frontier_is_complete_to_size",
+        "guards_partition_the_evidence"
+      ],
+      "invariants_no_mutant_kills": [],
+      "mutants": 8
+    }
+  },
+  "engine_rig_head": "baf1671",
+  "mutants": [
+    {
+      "claim": "every guard in the frontier fires on exactly the rule's support -- miner.py:enumerate_frontier admits a combo only if each literal is true on every positive (`positives & ~masks[a] == 0`) and the conjunction admits no negative (`_mask_of(combo) & negatives == 0`), which together force mask == positives; the module docstring calls the frontier 'every minimal guard consistent with the evidence'.",
+      "description": "append a one-literal guard, chosen from the vocabulary by direct evaluation to fire on something other than the support, to the first rule's frontier. The engine now offers a guard that is false of the evidence -- and the frontier is what probe_frontier consumes.",
+      "elapsed_s": 2.45,
+      "engine": "cegis_miner",
+      "expect_kill": [
+        "frontier_guards_are_consistent"
+      ],
+      "id": "cm-frontier-guard-inconsistent",
+      "killed": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 29,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "seam": "_mine",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 29,
+      "worlds_inert": 1,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "applicable_equals_support": null,
+        "frontier_guards_are_consistent": 1,
+        "frontier_is_complete_to_size": null,
+        "guards_partition_the_evidence": null
+      }
+    },
+    {
+      "claim": "the frontier is exhaustive up to the rule's own size bound -- miner.py:enumerate_frontier is documented as 'every minimal-by-inclusion guard of at most max_size literals', and a rule that stopped short is required to say so via frontier_truncated.",
+      "description": "drop the last (least preferred by guard_order_key) guard from the first untruncated rule with two of them. Every remaining guard is still true; one true alternative explanation has been withheld, which is exactly the ambiguity a probe is supposed to be aimed at.",
+      "elapsed_s": 0.97,
+      "engine": "cegis_miner",
+      "expect_kill": [
+        "frontier_is_complete_to_size"
+      ],
+      "id": "cm-drop-frontier-guard",
+      "killed": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 16,
+        "guards_partition_the_evidence": 0
+      },
+      "kind": "incomplete",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "seam": "_mine",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 16,
+      "worlds_inert": 14,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "applicable_equals_support": null,
+        "frontier_guards_are_consistent": null,
+        "frontier_is_complete_to_size": 1,
+        "guards_partition_the_evidence": null
+      }
+    },
+    {
+      "claim": "a non-truncated rule always has a non-empty frontier -- miner.py:mine sets size = min(max(len(cegis_guard), 1), max_frontier_size), and cegis_guard is itself a consistent guard of that size, so enumerate_frontier cannot come back empty; `best = frontier[0] if frontier else guard` is the fallback for a case the engine does not otherwise expect.",
+      "description": "erase the first rule's frontier entirely. The engine now reports that no guard at all explains a rule it nevertheless emitted a guard for.",
+      "elapsed_s": 1.94,
+      "engine": "cegis_miner",
+      "expect_kill": [
+        "frontier_is_complete_to_size"
+      ],
+      "id": "cm-empty-frontier",
+      "killed": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "kind": "incomplete",
+      "predicted_but_missed": [
+        "frontier_is_complete_to_size"
+      ],
+      "raised_only": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "seam": "_mine",
+      "survived": true,
+      "survived_all_detection": true,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 29,
+      "worlds_inert": 1,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "applicable_equals_support": null,
+        "frontier_guards_are_consistent": null,
+        "frontier_is_complete_to_size": null,
+        "guards_partition_the_evidence": null
+      }
+    },
+    {
+      "claim": "frontier_truncated is an objective fact about the rule, `len(guard) > max_frontier_size` (miner.py:mine), and not a licence to omit guards from inside the bound. rule.cegis_guard is carried on the rule, so the flag is checkable against the condition that defines it.",
+      "description": "the same withheld guard as cm-drop-frontier-guard, plus frontier_truncated=True: an engine that hides its own incompleteness behind its own truncation flag. Paired with cm-drop-frontier-guard so the difference between the two results isolates the flag as the exculpating mechanism.",
+      "elapsed_s": 1.94,
+      "engine": "cegis_miner",
+      "expect_kill": [
+        "frontier_is_complete_to_size"
+      ],
+      "id": "cm-truncation-alibi",
+      "killed": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "kind": "incomplete",
+      "predicted_but_missed": [
+        "frontier_is_complete_to_size"
+      ],
+      "raised_only": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "seam": "_mine",
+      "survived": true,
+      "survived_all_detection": true,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 16,
+      "worlds_inert": 14,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "applicable_equals_support": null,
+        "frontier_guards_are_consistent": null,
+        "frontier_is_complete_to_size": null,
+        "guards_partition_the_evidence": null
+      }
+    },
+    {
+      "claim": "applicable is exactly the set the chosen guard admits -- miner.py:mine computes it as `_mask_of(best, masks, universe)` with best drawn from the frontier, hence consistent, hence equal to the support; Rule.coverage publishes len(support)/len(applicable) and cegis_miner/__init__.py:candidates() writes that string into candidates.jsonl.",
+      "description": "add one transition index the rule does not apply to. The rule now claims to fire somewhere it does not, and its published coverage drops from n/n to n/(n+1) -- a candidate that looks partially confirmed when it is not.",
+      "elapsed_s": 2.39,
+      "engine": "cegis_miner",
+      "expect_kill": [
+        "applicable_equals_support"
+      ],
+      "id": "cm-inflate-applicable",
+      "killed": {
+        "applicable_equals_support": 29,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "seam": "_mine",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 29,
+      "worlds_inert": 1,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "applicable_equals_support": 1,
+        "frontier_guards_are_consistent": null,
+        "frontier_is_complete_to_size": null,
+        "guards_partition_the_evidence": null
+      }
+    },
+    {
+      "claim": "ground rules are mutually exclusive -- MiningResult.guards_are_mutually_exclusive is documented as the 'Constraint 9 rehearsal', and rule.guard is frontier[0], a guard consistent with the evidence, so it fires on its own support and nowhere else.",
+      "description": "drop one literal from a ground rule's guard, choosing a literal whose removal provably widens the fire set (checked by direct evaluation, so the mutant goes inert rather than counting a no-op as a survival). The weakened rule now reaches into another rule's transitions.",
+      "elapsed_s": 2.37,
+      "engine": "cegis_miner",
+      "expect_kill": [
+        "guards_partition_the_evidence"
+      ],
+      "id": "cm-weaken-ground-guard",
+      "killed": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 29
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "seam": "_mine",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 29,
+      "worlds_inert": 1,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "applicable_equals_support": null,
+        "frontier_guards_are_consistent": null,
+        "frontier_is_complete_to_size": null,
+        "guards_partition_the_evidence": 1
+      }
+    },
+    {
+      "claim": "the ground rules explain every transition -- miner.py:mine groups all transitions by (action, effect.key()) and emits one rule per group, so every transition is in exactly one support; MiningResult.explains_every_transition states it.",
+      "description": "withhold the first ground rule. Its transitions are now explained by nothing, which is the coverage half of guards_partition_the_evidence -- the other branch from the one cm-weaken-ground-guard aims at.",
+      "elapsed_s": 1.98,
+      "engine": "cegis_miner",
+      "expect_kill": [
+        "guards_partition_the_evidence"
+      ],
+      "id": "cm-drop-rule",
+      "killed": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 29
+      },
+      "kind": "incomplete",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "seam": "_mine",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 29,
+      "worlds_inert": 1,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "applicable_equals_support": null,
+        "frontier_guards_are_consistent": null,
+        "frontier_is_complete_to_size": null,
+        "guards_partition_the_evidence": 1
+      }
+    },
+    {
+      "claim": "a lifted rule's applicable set is its support too -- miner.py:lift builds both as the union over the members it collapses, and every member has applicable == support; cegis_miner/__init__.py:candidates() emits result.all_rules, so the lifted rule and its coverage string are published exactly like a ground rule's.",
+      "description": "drop the lowest index from a lifted rule's support, so its published coverage becomes (n-1)/n on a rule that in fact covers all n. Deliberately the same *kind* of defect as cm-inflate-applicable, moved from result.rules to result.lifted, so a difference in outcome is a difference in scope and not in defect shape.",
+      "elapsed_s": 2.34,
+      "engine": "cegis_miner",
+      "expect_kill": [
+        "applicable_equals_support"
+      ],
+      "id": "cm-shrink-lifted-support",
+      "killed": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "kind": "incomplete",
+      "predicted_but_missed": [
+        "applicable_equals_support"
+      ],
+      "raised_only": {
+        "applicable_equals_support": 0,
+        "frontier_guards_are_consistent": 0,
+        "frontier_is_complete_to_size": 0,
+        "guards_partition_the_evidence": 0
+      },
+      "seam": "_mine",
+      "survived": true,
+      "survived_all_detection": true,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 16,
+      "worlds_inert": 14,
+      "worlds_offered": 30,
+      "worlds_to_first_kill": {
+        "applicable_equals_support": null,
+        "frontier_guards_are_consistent": null,
+        "frontier_is_complete_to_size": null,
+        "guards_partition_the_evidence": null
+      }
+    }
+  ],
+  "worlds_per_engine": 30
+}

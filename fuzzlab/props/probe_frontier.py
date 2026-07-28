@@ -92,7 +92,13 @@ def partition_matches_truth(world: Any) -> List[finding.Finding]:
                 ENGINE, "partition_matches_truth", world,
                 "action %r partitions as %s, the observation table says %s"
                 % (action, normalised, expected),
-                action=action, engine=normalised, truth=expected))
+                # `engine=` here collided with `finding.violated`'s own first
+                # parameter, so the only path that reports this invariant raised
+                # TypeError instead of returning a finding -- for as long as the
+                # invariant has existed. It never showed up because the engine
+                # never partitioned wrongly, so the line never ran. Renamed, and
+                # `test_battery.py` now refuses the collision by parsing.
+                action=action, engine_partition=normalised, truth=expected))
     return out
 
 
