@@ -53,9 +53,48 @@ Every record, whatever its type, carries:
 | `ts` | string | ISO-8601 UTC, millisecond precision, `Z` suffix |
 | `run_id` | string | one run = one arm playing one game once |
 | `arm` | string | which arm produced it (`bare_cc`, `schema_repro`, `theoria`, `probe`, `replay`) |
+| `prev` | string or null | **optional.** sha256 of the previous line's bytes as written, including that line's own `prev`. `null` on the first record of a file. |
 
 `ts` is wall-clock and therefore **not** part of any hash or comparison. Replay
 compares `frame_hash`, never timestamps.
+
+### The `prev` chain
+
+`prev` links each record to the bytes of the one before it, so editing a field,
+deleting a line, inserting one, or swapping two records breaks every link after
+the change. Verify with:
+
+```bash
+python -m proxy.tools.verify_chain proxy/var/ledger.jsonl
+python -m proxy.tools.verify_chain <path> --expect-head sha256:9a4e…
+```
+
+Four properties of the design, each deliberate:
+
+* **The hash is over the bytes on disk, never over a re-serialised record.** A
+  verifier that re-canonicalises is really checking that today's `canonical()`
+  agrees with the one that wrote the file — so the day that function's
+  behaviour changes, every ledger ever written goes red at once and the alarm
+  stops meaning anything. Hashing the bytes asks the only question worth
+  asking: are these the bytes that were written?
+* **`prev` is optional, so `v` stays `1.0`.** §8 bumps the version when a
+  field's meaning changes or a *required* field is added; an optional field is
+  neither. A stream without `prev` is **unchained**, not invalid — and the
+  verifier reports that as its own verdict rather than as a pass.
+* **The writer owns it** (§2, `canon.ENVELOPE`): a caller that supplies `prev`
+  is refused. A chain a caller could set is a chain a caller could forge.
+* **It is assigned under the same lock as `seq`**, so the two can never
+  disagree about the order records were written in.
+
+**What this does and does not prove.** It makes tampering *evident* after the
+head is published; it does not authenticate the recording. A forger who
+rewrites the whole file and recomputes every link produces a stream that
+verifies. What catches that is the head published outside the file —
+`runs/<run_id>.json` carries `ledger_head` `{last_seq, sha256, verdict}`, which
+is committed to git (itself a hash chain) and pushed to a remote, so the witness
+lives on another machine. Note the two mechanisms cover different attacks: an
+interior edit does not move the head, and a wholesale rewrite passes the chain
+walk. Both are required. See `DECISIONS.md` D-024 and `REDTEAM.md` RED-40.
 
 ## 3. `env_step`
 
