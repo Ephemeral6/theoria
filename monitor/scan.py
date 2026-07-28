@@ -584,21 +584,52 @@ def _supply():
 
 
 def _bus_probe():
-    """托管是否真的成立：指令送达了吗、回执欠着吗、谁多久没露面。"""
-    out = subprocess.run([sys.executable, os.path.join(HERE, "bus.py"), "status"],
-                         cwd=ROOT, capture_output=True)
-    text = out.stdout.decode("utf-8", "replace")
-    lines = [l for l in text.splitlines() if l.strip()]
-    never = [l.split()[0] for l in lines if "从未读取" in l]
-    owed = [l.split()[0] for l in lines if "欠回执 [" in l]
+    """托管是否真的成立：指令送达了吗、回执欠着吗、谁多久没露面。
+
+    直接读总线文件，不经子进程——今天已经两次被 GBK/UTF-8 的解码差异咬到
+    （一次把八个活着的工人报成已停，一次把未读报成已回执）。判据只信文件。"""
+    agents_ids = ["OPS-A", "OPS-B", "OPS-M", "OPS-R", "RES-1", "RES-2"]
+    never, owed, seen_ok = [], [], 0
+    for a in agents_ids:
+        d = rel("monitor", "bus", a)
+        inbox = os.path.join(d, "in.jsonl")
+        cur = os.path.join(d, "cursor.json")
+        out = os.path.join(d, "out.jsonl")
+        if not os.path.exists(inbox):
+            continue
+        sent = [json.loads(l) for l in open(inbox, encoding="utf-8")
+                if l.strip()]
+        last = 0
+        if os.path.exists(cur):
+            try:
+                last = json.load(open(cur, encoding="utf-8")).get("last_seq", 0)
+                seen_ok += 1
+            except Exception:
+                pass
+        else:
+            never.append(a)
+            continue
+        acked = set()
+        if os.path.exists(out):
+            for l in open(out, encoding="utf-8"):
+                if l.strip():
+                    r = json.loads(l)
+                    if r.get("kind") == "ack":
+                        acked.add(r.get("ref"))
+        pend = [m["seq"] for m in sent
+                if m["kind"] in ("order", "question") and m["seq"] not in acked]
+        if pend:
+            owed.append("%s(%d)" % (a, len(pend)))
     if never:
         return {"status": "partial",
-                "detail": "总线已上线；%d 个会话尚未读取过（%s）——"
-                          "它们下个循环读到后即接管。" % (len(never), ", ".join(never))}
+                "detail": "总线已上线；**%d 个会话还没读过**（%s）——"
+                          "它们下个循环读到指令后即被托管。"
+                          % (len(never), ", ".join(never))}
     if owed:
         return {"status": "partial",
-                "detail": "有会话欠回执：" + ", ".join(owed)}
-    return {"status": "green", "detail": "六个会话全部在线、指令全部已回执。"}
+                "detail": "已送达，欠回执：" + ", ".join(owed)}
+    return {"status": "green",
+            "detail": "%d 个会话在线，指令全部已读并回执。" % seen_ok}
 
 
 def probe_needs_human():

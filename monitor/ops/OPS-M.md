@@ -4,7 +4,13 @@
 
 ## 每个周期做什么（按序）
 
-1. **邮箱先行**：读 `monitor/mailbox/OPS-M.md` 与 `monitor/mailbox/ALL.md`，
+0. **总线先行**（本轮起，先于一切）：`python monitor/bus.py read OPS-M`。
+   有指令就照做，做完 `python monitor/bus.py ack OPS-M <seq> "结果一句话"`；
+   输出 `NO-NEW-MESSAGES` 就继续本职。长任务的**每个子步骤间隙**看一眼
+   `monitor/bus/OPS-M/URGENT` 在不在——在就立刻回到本步（代价只是一次 stat）。
+   有话对监控说：`python monitor/bus.py say OPS-M "..."`。
+   协议全文 `monitor/bus/HOSTED.md`。
+1. **邮箱**（旧通道，仍读一眼，但新指令只走总线）：读 `monitor/mailbox/OPS-M.md` 与 `monitor/mailbox/ALL.md`，
    执行其中 `status: OPEN` 的条目，把状态改成 `ACK-<结果一句话>` 并在条目下追加
    `> reply: <答复或产出路径>`。协议见 `monitor/mailbox/PROTOCOL.md`。
 2. **本职工作**（见下方「本职」）。

@@ -6,7 +6,13 @@
 
 ## 每个周期做什么（按序）
 
-1. **邮箱先行**：读 `monitor/mailbox/RES-2.md` 与 `monitor/mailbox/ALL.md`，
+0. **总线先行**（本轮起，先于一切）：`python monitor/bus.py read RES-2`。
+   有指令就照做，做完 `python monitor/bus.py ack RES-2 <seq> "结果一句话"`；
+   输出 `NO-NEW-MESSAGES` 就继续本职。长任务的**每个子步骤间隙**看一眼
+   `monitor/bus/RES-2/URGENT` 在不在——在就立刻回到本步（代价只是一次 stat）。
+   有话对监控说：`python monitor/bus.py say RES-2 "..."`。
+   协议全文 `monitor/bus/HOSTED.md`。
+1. **邮箱**（旧通道，仍读一眼，但新指令只走总线）：读 `monitor/mailbox/RES-2.md` 与 `monitor/mailbox/ALL.md`，
    执行 `status: OPEN` 条目，改成 `ACK-<结果>` 并追加 `> reply: ...`。
 2. **领活**：`python monitor/board.py claim RES-2 --lane paper`
    —— 只领你赛道的活。输出 `BOARD-EMPTY` 说明本赛道暂时没货：

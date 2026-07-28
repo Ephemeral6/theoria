@@ -6,6 +6,7 @@
       "C1-worldgen",
       "C4-deadlock-lean",
       "C7-dsl-v03-mentions",
+      "C8-handover-package",
       "E2-fd-ladder-bench",
       "E4-property-fuzz",
       "P4-figures",
@@ -25,6 +26,7 @@
       "世界工厂：7 类机制、20 个带标准答案的练习世界",
       "把死锁定理和不变量送进 Lean 做机器验证",
       "语法 v0.3：把散落的提法收进契约",
+      "移交测试包：让陌生 agent 只读两本书就能接手",
       "给专业规划器的三档性能定价",
       "用 500 个随机世界轰炸六个引擎找 bug",
       "论文figures：把数据变成可复现的图",
@@ -44,6 +46,7 @@
       "世界工厂：7 类机制、20 个带标准答案的练习世界",
       "把死锁定理和不变量送进 Lean 做机器验证",
       "语法 v0.3：把散落的提法收进契约",
+      "移交测试包：让陌生 agent 只读两本书就能接手",
       "给专业规划器的三档性能定价",
       "用 500 个随机世界轰炸六个引擎找 bug",
       "论文figures：把数据变成可复现的图",
@@ -60,7 +63,7 @@
     "in_progress_plain": [
       "把对照版 AI 真正建起来",
       "给世界工厂加「改一条规则」的变体生成",
-      "移交测试包：让陌生 agent 只读两本书就能接手",
+      "语法补计数锁词汇",
       "证书独立复核器（不靠 Lean 一条路）",
       "把图正式接进论文正文",
       "释出包：陌生人一条命令复跑全部结果",
@@ -71,7 +74,7 @@
     ],
     "ops": [
       {
-        "age_min": 21,
+        "age_min": 24,
         "cycle": 8,
         "id": "OPS-A",
         "kind": "ops",
@@ -82,7 +85,7 @@
         "state": "idle"
       },
       {
-        "age_min": 108,
+        "age_min": 110,
         "cycle": 4,
         "id": "OPS-B",
         "kind": "ops",
@@ -93,7 +96,7 @@
         "state": "idle"
       },
       {
-        "age_min": 11,
+        "age_min": 13,
         "cycle": 5,
         "id": "OPS-M",
         "kind": "ops",
@@ -104,7 +107,7 @@
         "state": "working"
       },
       {
-        "age_min": 467,
+        "age_min": 469,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -117,7 +120,7 @@
     ],
     "standing": [
       {
-        "age_min": 4,
+        "age_min": 7,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
@@ -128,7 +131,7 @@
         "state": "working"
       },
       {
-        "age_min": 30,
+        "age_min": 33,
         "cycle": 3,
         "id": "RES-2",
         "kind": "standing",
@@ -232,13 +235,15 @@
         "running": true
       },
       {
-        "finished": [],
+        "finished": [
+          "移交测试包：让陌生 agent 只读两本书就能接手"
+        ],
         "id": "W-1252",
         "kind": "worker",
         "name": "研究工人",
-        "now": "移交测试包：让陌生 agent 只读两本书就能接手",
+        "now": "语法补计数锁词汇",
         "orphan": false,
-        "outputs": 0,
+        "outputs": 1,
         "running": true
       },
       {
@@ -352,8 +357,8 @@
     "available": 1,
     "blocked": 3,
     "claimed": 10,
-    "done": 17,
-    "listing": "=== available ===\n  p3  V6-exam-on-sealed-dryrun     cell=V4  territory=exam           \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A4a-ablation-build           by RES-1\n  C6-worldgen-mutate           by W-1251\n  C8-handover-package          by W-1252\n  E5-cert-recheck              by W-1411\n  P10-figures-into-paper       by W-1253\n  P5-release                   by RES-2\n  S11-sealed-halfguard         by W-1410\n  S8-provenance-backfill       by W-1412\n  S9-contract-change-protocol  by W-1250\n  V3-battery-discrimination    by APP-V3\n=== done (17) ===\n  A4-ablation-online.superseded-by-A4a\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C7-dsl-v03-mentions.APP-C7\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S6-merge-gate-509.superseded-by-derived-gate\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
+    "done": 18,
+    "listing": "=== available ===\n  p3  V6-exam-on-sealed-dryrun     cell=V4  territory=exam           \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A4a-ablation-build           by RES-1\n  C6-worldgen-mutate           by W-1251\n  C9-count-lock-vocabulary     by W-1252\n  E5-cert-recheck              by W-1411\n  P10-figures-into-paper       by W-1253\n  P5-release                   by RES-2\n  S11-sealed-halfguard         by W-1410\n  S8-provenance-backfill       by W-1412\n  S9-contract-change-protocol  by W-1250\n  V3-battery-discrimination    by APP-V3\n=== done (18) ===\n  A4-ablation-online.superseded-by-A4a\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S6-merge-gate-509.superseded-by-derived-gate\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
   },
   "con_green": 1,
   "constraints": [
@@ -612,7 +617,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 22:20:15",
+  "generated_at": "2026-07-28 22:22:40",
   "grid": {
     "A1": {
       "active": [
@@ -1486,8 +1491,15 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/ops-status/RES-1.json",
+      "onitor/index.html",
+      "monitor/ops/OPS-A.md",
+      "monitor/ops/OPS-B.md",
+      "monitor/ops/OPS-M.md",
+      "monitor/ops/OPS-R.md",
+      "monitor/res/RES-1.md",
+      "monitor/res/RES-2.md",
       "monitor/scan.py",
+      "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
@@ -1498,13 +1510,11 @@
       "baseline-arms/out/shards/probe_log.ar25.jsonl",
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
-      "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/bus.py",
-      "monitor/bus/"
+      "baseline-arms/out/shards/probe_log.tn36.jsonl"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "bd7e9e7 monitor: full dispatch authority, and supply-driven scaling to match",
+    "git_head": "15ecf80 monitor: a real message bus, so an app session can be hosted end to end",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1522,9 +1532,7 @@
       "baseline-arms/out/shards/probe_log.ar25.jsonl",
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
-      "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/bus.py",
-      "monitor/bus/"
+      "baseline-arms/out/shards/probe_log.tn36.jsonl"
     ]
   },
   "p1_green": 9,
@@ -1979,8 +1987,8 @@
       "status": "green"
     },
     "bus": {
-      "detail": "六个会话全部在线、指令全部已回执。",
-      "status": "green"
+      "detail": "总线已上线；**6 个会话还没读过**（OPS-A, OPS-B, OPS-M, OPS-R, RES-1, RES-2）——它们下个循环读到指令后即被托管。",
+      "status": "partial"
     },
     "conflict_scan": {
       "detail": "三类检查全空：无冲突标记、无未合并路径、近 40 个提交无跨领地改动。",
@@ -2009,10 +2017,10 @@
       "status": "green"
     },
     "ops_duty": {
-      "detail": "**22 条 TO-MONITOR 待监控回复**。 OPS-A 第8轮 idle（21 分钟前）； OPS-B 第4轮 idle（107 分钟前）； OPS-M 第5轮 working（10 分钟前）； OPS-R 第1轮 idle（466 分钟前）",
+      "detail": "**22 条 TO-MONITOR 待监控回复**。 OPS-A 第8轮 idle（23 分钟前）； OPS-B 第4轮 idle（110 分钟前）； OPS-M 第5轮 working（12 分钟前）； OPS-R 第1轮 idle（469 分钟前）",
       "rows": [
         {
-          "age_min": 21,
+          "age_min": 23,
           "cycle": 8,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -2021,7 +2029,7 @@
           "status": "green"
         },
         {
-          "age_min": 107,
+          "age_min": 110,
           "cycle": 4,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -2030,7 +2038,7 @@
           "status": "green"
         },
         {
-          "age_min": 10,
+          "age_min": 12,
           "cycle": 5,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2039,7 +2047,7 @@
           "status": "green"
         },
         {
-          "age_min": 466,
+          "age_min": 469,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2064,7 +2072,7 @@
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 1 个提交 / 0 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 2 个提交 / 0 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "green"
     },
     "supply": {

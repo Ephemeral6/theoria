@@ -59,3 +59,5 @@
 2026-07-28T14:11:54Z CLAIM S11-sealed-halfguard by W-1410
 2026-07-28T14:12:39Z CLAIM E5-cert-recheck by W-1411
 2026-07-28T14:13:23Z CLAIM S8-provenance-backfill by W-1412
+2026-07-28T14:22:15Z DONE C8-handover-package by W-1252
+2026-07-28T14:22:15Z CLAIM C9-count-lock-vocabulary by W-1252
