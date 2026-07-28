@@ -1,8 +1,7 @@
 # assembly_new.jsonl — method note
 
 Rows **A-04 … A-19** (16), continuing `fleet-study/data/assembly.jsonl` (A-01…A-03).
-Read-only harvest; nothing outside this `harvest/` directory was written.
-
+Read-only harvest; nothing outside `harvest/` was written.
 ## Method
 
 * Contract commits enumerated with `git log --all --format='%H|%ad|%s' --date=iso-strict --

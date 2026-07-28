@@ -194,6 +194,17 @@ def check_schema(name: str, rows: list[dict], rep: Report) -> None:
         if row.get("confidence") == "low" and not row.get("caveat"):
             rep.warn(where, "confidence=low with no caveat explaining why")
 
+        # C-45: `recurred` carries no corroborating column -- timeline.jsonl has
+        # `recurrence_evidence`, failures.jsonl has nothing -- so the field ended
+        # up conflating "recurred after its fix" with "was never fixed at all".
+        # A row cannot have recurred after a fix that does not exist.  Warned,
+        # not errored: the existing rows are first-hand records and rewriting
+        # them to satisfy a checker written afterwards would be the same
+        # backwards reasoning this dataset catalogues.
+        if name == "failures" and row.get("recurred") and not row.get("fix"):
+            rep.warn(where, "recurred=true with no fix -- nothing could recur "
+                            "from a fix that never landed (see C-45)")
+
 
 def resolve_evidence(rows_by_ds: dict[str, list[dict]], rep: Report) -> dict:
     """Resolve every git: sha and file: path exactly once."""
@@ -300,6 +311,28 @@ _DEFECTS = [
     ("CRLF", [_GOOD], "CRLF"),
 ]
 
+#: Same shape, but asserted against `rep.warnings` instead of `rep.errors`.
+#: A warning path with no self-test is the same hole as a check with no failing
+#: path -- it just fails quieter.
+_WARN_DEFECTS = [
+    ("recurred=true with no fix", [{**_GOOD, "recurred": True, "fix": None}],
+     "nothing could recur"),
+    ("confidence=low with no caveat",
+     [{**_GOOD, "confidence": "low", "caveat": ""}], "no caveat"),
+]
+
+
+def _write(d: Path, payload, crlf: bool = False, name: str = "failures") -> Path:
+    path = d / f"{name}.jsonl"
+    if isinstance(payload, str):
+        body = payload
+    else:
+        body = "\n".join(json.dumps({k: v for k, v in r.items() if k != "__line"},
+                                    ensure_ascii=False) for r in payload)
+    nl = "\r\n" if crlf else "\n"
+    path.write_bytes((body + "\n").replace("\n", nl).encode("utf-8"))
+    return path
+
 
 def selftest() -> int:
     failures = []
@@ -331,6 +364,24 @@ def selftest() -> int:
         mark = "FAIL" if failures and failures[-1].startswith(repr(label)) else "ok"
         print(f"  [{mark:>4}] {label}")
 
+    for label, payload, expect in _WARN_DEFECTS:
+        with tempfile.TemporaryDirectory() as td:
+            d = Path(td)
+            _write(d, payload)
+            rep = Report()
+            run(d, fast=False, rep=rep)
+            joined = " | ".join(rep.warnings)
+            if rep.errors:
+                failures.append(f"{label!r}: expected a warning, got error(s): "
+                                f"{' | '.join(rep.errors)}")
+            elif not rep.warnings:
+                failures.append(f"{label!r}: expected a warning, checker stayed silent")
+            elif expect not in joined:
+                failures.append(f"{label!r}: wrong warning; wanted {expect!r}, "
+                                f"got: {joined}")
+        mark = "FAIL" if failures and failures[-1].startswith(repr(label)) else "ok"
+        print(f"  [{mark:>4}] {label}  (warning path)")
+
     print()
     if failures:
         print("SELFTEST RED -- this checker does not fail where it should:")
@@ -338,7 +389,8 @@ def selftest() -> int:
             print(f"  - {f}")
         return 1
     print(f"SELFTEST GREEN -- {len(_DEFECTS)} injected defects, "
-          f"{len(_DEFECTS) - 1} rejected, 1 baseline accepted.")
+          f"{len(_DEFECTS) - 1} rejected, 1 baseline accepted; "
+          f"{len(_WARN_DEFECTS)} warning paths exercised.")
     print("This checker has a failing path.  It is not a green light with no red.")
     return 0
 
