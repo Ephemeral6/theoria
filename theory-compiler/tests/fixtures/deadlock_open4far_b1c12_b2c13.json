@@ -1,0 +1,62 @@
+{
+  "blocked_actions": [
+    {
+      "action": "(push c11 c12 c13 b1 right)",
+      "action_atom": "clear(c13)",
+      "pattern_atom": "at(b2,c13)",
+      "reason": "mutex_with_pattern"
+    },
+    {
+      "action": "(push c12 c13 c14 b2 right)",
+      "action_atom": "at-player(c12)",
+      "pattern_atom": "at(b1,c12)",
+      "reason": "mutex_with_pattern"
+    },
+    {
+      "action": "(push c13 c12 c11 b1 left)",
+      "action_atom": "at-player(c13)",
+      "pattern_atom": "at(b2,c13)",
+      "reason": "mutex_with_pattern"
+    },
+    {
+      "action": "(push c14 c13 c12 b2 left)",
+      "action_atom": "clear(c12)",
+      "pattern_atom": "at(b1,c12)",
+      "reason": "mutex_with_pattern"
+    }
+  ],
+  "claim": "every reachable state containing at(b1,c12) AND at(b2,c13) is dead",
+  "closure": "deleting_actions_blocked",
+  "conclusion": "at(b1,c12) AND at(b2,c13) AND not-goal => dead",
+  "coverage": "112/112",
+  "domain": "sokoban",
+  "goal_conflict": {
+    "goal_atom": "at(b1,c42)",
+    "pattern_atom": "at(b1,c12)",
+    "why": "mutex: the two can never hold in the same reachable state"
+  },
+  "n_deleting_actions": 4,
+  "pattern": [
+    [
+      "at",
+      "b1",
+      "c12"
+    ],
+    [
+      "at",
+      "b2",
+      "c13"
+    ]
+  ],
+  "pattern_text": "at(b1,c12) AND at(b2,c13)",
+  "problem": "sokoban-open4far",
+  "produced_by": "engine-rig/engines/deadlock_carver",
+  "provenance": {
+    "note": "A transcription, not an engine-rig artefact. The emitting half of this schema belongs to engine-rig and is not written by this track; until it exists the consumer is tested against this copy, and a test re-runs the transcription to keep the two identical.",
+    "row_id": "dc3258b5-7b00-5e13-ba5e-6f8aa7043309",
+    "row_timestamp": "2026-07-27T00:00:00Z",
+    "source": "engine-rig/artifacts/candidates.jsonl",
+    "transcribed_by": "theory-compiler/tools/transcribe_deadlock_certificates.py"
+  },
+  "schema": "deadlock_carver/conditional_unsolvability_certificate@1"
+}

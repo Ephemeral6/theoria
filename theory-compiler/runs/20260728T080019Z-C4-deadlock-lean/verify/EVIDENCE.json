@@ -1,0 +1,104 @@
+{
+  "all_ok": true,
+  "cases": [
+    {
+      "axioms_not_empty": [],
+      "bite": {
+        "goal_reachable": 1,
+        "reachable_states": 3352,
+        "reachable_states_covered": 14,
+        "well_formed_states_covered": 14
+      },
+      "case": "pair",
+      "closure": "deleting_actions_blocked",
+      "coverage_claimed": "112/112",
+      "deleting_actions": 4,
+      "encoding": {
+        "encodable_states": 3360,
+        "pairs_checked": 376320,
+        "reachable_states": 3352
+      },
+      "ground_actions": 112,
+      "lean": {
+        "returncode": 0,
+        "seconds": 3.7
+      },
+      "negative_control": {
+        "rejected": true,
+        "returncode": 1,
+        "seconds": 3.8
+      },
+      "ok": true,
+      "pattern": "at(b1,c12) AND at(b2,c13)",
+      "plan_length": 11,
+      "sorry_in_output": false
+    },
+    {
+      "axioms_not_empty": [],
+      "bite": {
+        "goal_reachable": 1,
+        "reachable_states": 3352,
+        "reachable_states_covered": 210,
+        "well_formed_states_covered": 210
+      },
+      "case": "corner",
+      "closure": "no_deleting_action",
+      "coverage_claimed": "112/112",
+      "deleting_actions": 0,
+      "encoding": {
+        "encodable_states": 3360,
+        "pairs_checked": 376320,
+        "reachable_states": 3352
+      },
+      "ground_actions": 112,
+      "lean": {
+        "returncode": 0,
+        "seconds": 57.4
+      },
+      "negative_control": {
+        "rejected": true,
+        "returncode": 1,
+        "seconds": 57.2
+      },
+      "ok": true,
+      "pattern": "at(b1,c11)",
+      "plan_length": 11,
+      "sorry_in_output": false
+    },
+    {
+      "axioms_not_empty": [],
+      "case": "ic3-computational",
+      "goal_states": [
+        "0100"
+      ],
+      "initial_state": "0111",
+      "invariant": "(!pos1 | pos2) & (pos1 | !pos2)",
+      "lean": {
+        "returncode": 0,
+        "seconds": 0.3
+      },
+      "ok": true,
+      "sorry_in_output": false
+    },
+    {
+      "axioms_not_empty": [
+        "inv_closed",
+        "inv_all",
+        "unsolvable"
+      ],
+      "case": "ic3-algebraic",
+      "expected_axioms": "propext",
+      "goal_states": [
+        "0100"
+      ],
+      "initial_state": "0111",
+      "invariant": "(!pos1 | pos2) & (pos1 | !pos2)",
+      "lean": {
+        "returncode": 0,
+        "seconds": 0.3
+      },
+      "ok": true,
+      "sorry_in_output": false
+    }
+  ]
+}
