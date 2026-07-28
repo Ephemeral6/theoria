@@ -45,12 +45,35 @@ RUBRIC_ID = "heldout.frame_exact"
 #: Every value the A0 renderer can emit.  An answer containing anything else is
 #: not a frame; refusing it here is cheaper than letting it compare unequal and
 #: be reported as a near miss.
+#:
+#: It is the **default**, not the law, and the difference arrived with the world
+#: factory.  A generated world's palette is its own -- `{floor:0, wall:1,
+#: block:2, agent:6}` plus whatever its mechanisms add -- so a rubric that
+#: hardcodes A0's four values rejects every frame from every generated world as
+#: "not a frame", which reads on the report as an examinee that cannot format an
+#: answer.  A paper therefore publishes its own alphabet on the truth side, and
+#: this constant is what a paper that does not gets.
 _LEGAL_CELLS = frozenset({0, 2, 4, 8})
+
+
+def _legal_cells(truth: Dict[str, Any]) -> frozenset:
+    """The palette this item's world can emit.
+
+    On the truth side rather than the paper side on purpose: it is derivable
+    from the expected frame anyway, so publishing it to the examinee would give
+    away nothing, but the rubric's contract is that it is a pure function of
+    (answer, truth, item) and the palette is a fact about the answer key.
+    """
+    declared = truth.get("legal_cells")
+    if not declared:
+        return _LEGAL_CELLS
+    return frozenset(int(value) for value in declared)
 
 _ABSTAIN = "__abstain__"
 
 
-def _as_frame(value: Any) -> Optional[List[List[int]]]:
+def _as_frame(value: Any,
+              legal: Optional[frozenset] = None) -> Optional[List[List[int]]]:
     """Coerce an answer to a grid, or return None if it is not one.
 
     Two shapes are accepted, both promised in the paper's instructions: a bare
@@ -64,7 +87,7 @@ def _as_frame(value: Any) -> Optional[List[List[int]]]:
             return None
         for field in ("frame_after", "frame", "after"):
             if field in value:
-                return _as_frame(value[field])
+                return _as_frame(value[field], legal)
         return None
     if isinstance(value, str):
         return None
@@ -80,7 +103,7 @@ def _as_frame(value: Any) -> Optional[List[List[int]]]:
             # a frame of booleans is a malformed answer, not a frame of zeros.
             if isinstance(cell, bool) or not isinstance(cell, int):
                 return None
-            if cell not in _LEGAL_CELLS:
+            if cell not in (legal if legal is not None else _LEGAL_CELLS):
                 return None
             cells.append(cell)
         rows.append(cells)
@@ -123,7 +146,7 @@ def grade_frame_exact(answer: Any, truth: Dict[str, Any], item: Item) -> ItemSco
                          "abstained",
                          {"why": "the examinee declined to predict this frame"})
 
-    frame = _as_frame(answer)
+    frame = _as_frame(answer, _legal_cells(truth))
     if frame is None:
         return ItemScore(item.item_id, item.rubric_id, 0.0, item.points, "wrong",
                          {"why": "answer is not a well-formed frame",

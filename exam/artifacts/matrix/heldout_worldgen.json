@@ -1,0 +1,6215 @@
+{
+  "calibration": [
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 8,
+            "replay": 0.0,
+            "unanswered": 8
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.5,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.75,
+          "fraction": 0.75,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 0.5,
+            "unanswered": 0
+          },
+          "expected": 0.5,
+          "fraction": 0.5,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t1-walk-maze"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "push": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "push": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 12,
+            "replay": 0.0,
+            "unanswered": 12
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "push": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.666667,
+            "heldout": 0.333333,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.666667,
+          "fraction": 0.666667,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "push": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.333333,
+            "items": 12,
+            "replay": 0.333333,
+            "unanswered": 0
+          },
+          "expected": 0.333333,
+          "fraction": 0.333333,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t1-push-open"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 8,
+            "replay": 0.0,
+            "unanswered": 8
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.5,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.75,
+          "fraction": 0.75,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 0.5,
+            "unanswered": 0
+          },
+          "expected": 0.5,
+          "fraction": 0.5,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t1-push-corridor"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 8,
+            "replay": 0.0,
+            "unanswered": 8
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.5,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.75,
+          "fraction": 0.75,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 0.5,
+            "unanswered": 0
+          },
+          "expected": 0.5,
+          "fraction": 0.5,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t1-switch-toggle"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk_through_door": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk_through_door": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 12,
+            "replay": 0.0,
+            "unanswered": 12
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "walk_through_door": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.666667,
+            "heldout": 0.333333,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.666667,
+          "fraction": 0.666667,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk_through_door": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.333333,
+            "items": 12,
+            "replay": 0.333333,
+            "unanswered": 0
+          },
+          "expected": 0.333333,
+          "fraction": 0.333333,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t1-switch-latch"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 8,
+            "replay": 0.0,
+            "unanswered": 8
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.5,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.75,
+          "fraction": 0.75,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 0.5,
+            "unanswered": 0
+          },
+          "expected": 0.5,
+          "fraction": 0.5,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t1-portal-oneway"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 8,
+            "replay": 0.0,
+            "unanswered": 8
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.5,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.75,
+          "fraction": 0.75,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 0.5,
+            "unanswered": 0
+          },
+          "expected": 0.5,
+          "fraction": 0.5,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t1-cycler-gate"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "collect_token": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "collect_token": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 12,
+            "replay": 0.0,
+            "unanswered": 12
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "collect_token": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.666667,
+            "heldout": 0.333333,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.666667,
+          "fraction": 0.666667,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "collect_token": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.333333,
+            "items": 12,
+            "replay": 0.333333,
+            "unanswered": 0
+          },
+          "expected": 0.333333,
+          "fraction": 0.333333,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t1-tokens-lock"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 8,
+            "replay": 0.0,
+            "unanswered": 8
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.5,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.75,
+          "fraction": 0.75,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 0.5,
+            "unanswered": 0
+          },
+          "expected": 0.5,
+          "fraction": 0.5,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t1-fragile-bridge"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_block": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "push": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "toggle_switch": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk_through_door": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 12.0,
+                "fraction": 1.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "replay": {
+                "awarded": 12.0,
+                "fraction": 1.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "rule:blocked_by_block": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:toggle_switch": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 24,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_block": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "push": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "toggle_switch": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk_through_door": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "rule:blocked_by_block": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:toggle_switch": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 24,
+            "replay": 0.0,
+            "unanswered": 24
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_block": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "push": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "toggle_switch": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "walk_through_door": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 0.333333,
+                "n": 12,
+                "possible": 12.0
+              },
+              "replay": {
+                "awarded": 12.0,
+                "fraction": 1.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "rule:blocked_by_block": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:toggle_switch": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.666667,
+            "heldout": 0.333333,
+            "items": 24,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.666667,
+          "fraction": 0.666667,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_block": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "push": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "toggle_switch": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk_through_door": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 0.333333,
+                "n": 12,
+                "possible": 12.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 0.333333,
+                "n": 12,
+                "possible": 12.0
+              },
+              "rule:blocked_by_block": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:toggle_switch": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.333333,
+            "items": 24,
+            "replay": 0.333333,
+            "unanswered": 0
+          },
+          "expected": 0.333333,
+          "fraction": 0.333333,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t2-switch-push"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 8,
+            "replay": 0.0,
+            "unanswered": 8
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.5,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.75,
+          "fraction": 0.75,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 0.5,
+            "unanswered": 0
+          },
+          "expected": 0.5,
+          "fraction": 0.5,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t2-portal-pair"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 8,
+            "replay": 0.0,
+            "unanswered": 8
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.5,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.75,
+          "fraction": 0.75,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 0.5,
+            "unanswered": 0
+          },
+          "expected": 0.5,
+          "fraction": 0.5,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t2-portal-paired"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 8,
+            "replay": 0.0,
+            "unanswered": 8
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.5,
+                "heldout": 0.5,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 3.0,
+                "fraction": 0.75,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 3.0,
+                "fraction": 0.75,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.25,
+            "heldout": 0.75,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.875,
+          "fraction": 0.875,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": -0.5,
+                "heldout": 0.5,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 3.0,
+                "fraction": 0.75,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 1.0,
+                "fraction": 0.25,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": -0.25,
+            "heldout": 0.75,
+            "items": 8,
+            "replay": 0.5,
+            "unanswered": 0
+          },
+          "expected": 0.625,
+          "fraction": 0.625,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t2-gravity-push"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "collect_token": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "collect_token": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 12,
+            "replay": 0.0,
+            "unanswered": 12
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "collect_token": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.666667,
+            "heldout": 0.333333,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.666667,
+          "fraction": 0.666667,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "collect_token": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.333333,
+            "items": 12,
+            "replay": 0.333333,
+            "unanswered": 0
+          },
+          "expected": 0.333333,
+          "fraction": 0.333333,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t2-lock-fragile"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk_through_cycler": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_cycler": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk_through_cycler": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_cycler": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 12,
+            "replay": 0.0,
+            "unanswered": 12
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "walk_through_cycler": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_cycler": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.666667,
+            "heldout": 0.333333,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.666667,
+          "fraction": 0.666667,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk_through_cycler": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_cycler": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.333333,
+            "items": 12,
+            "replay": 0.333333,
+            "unanswered": 0
+          },
+          "expected": 0.333333,
+          "fraction": 0.333333,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t2-cycler-lock"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_door": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_door": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_door": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_door": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 12,
+            "replay": 0.0,
+            "unanswered": 12
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_door": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 0.666667,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_door": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.333333,
+            "heldout": 0.666667,
+            "items": 12,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.833333,
+          "fraction": 0.833333,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_door": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 0.666667,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 0.666667,
+                "n": 6,
+                "possible": 6.0
+              },
+              "rule:blocked_by_door": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.666667,
+            "items": 12,
+            "replay": 0.666667,
+            "unanswered": 0
+          },
+          "expected": 0.666667,
+          "fraction": 0.666667,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t2-unsolvable-nodoor"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_block": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "push": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "teleport_twoway": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "toggle_switch": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 12.0,
+                "fraction": 1.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "replay": {
+                "awarded": 12.0,
+                "fraction": 1.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "rule:blocked_by_block": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:teleport_twoway": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:toggle_switch": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 24,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_block": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "push": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "teleport_twoway": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "toggle_switch": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "rule:blocked_by_block": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:teleport_twoway": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:toggle_switch": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 24,
+            "replay": 0.0,
+            "unanswered": 24
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_block": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "push": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "teleport_twoway": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "toggle_switch": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 0.333333,
+                "n": 12,
+                "possible": 12.0
+              },
+              "replay": {
+                "awarded": 12.0,
+                "fraction": 1.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "rule:blocked_by_block": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:teleport_twoway": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:toggle_switch": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.666667,
+            "heldout": 0.333333,
+            "items": 24,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.666667,
+          "fraction": 0.666667,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_block": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "push": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "teleport_twoway": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "toggle_switch": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 0.333333,
+                "n": 12,
+                "possible": 12.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 0.333333,
+                "n": 12,
+                "possible": 12.0
+              },
+              "rule:blocked_by_block": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:teleport_twoway": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:toggle_switch": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.333333,
+            "items": 24,
+            "replay": 0.333333,
+            "unanswered": 0
+          },
+          "expected": 0.333333,
+          "fraction": 0.333333,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t3-full-house"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 8,
+            "replay": 0.0,
+            "unanswered": 8
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.5,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.75,
+          "fraction": 0.75,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.5,
+            "items": 8,
+            "replay": 0.5,
+            "unanswered": 0
+          },
+          "expected": 0.5,
+          "fraction": 0.5,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t3-gravity-fragile"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "teleport_twoway": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk_through_cycler": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 8.0,
+                "fraction": 1.0,
+                "n": 8,
+                "possible": 8.0
+              },
+              "replay": {
+                "awarded": 8.0,
+                "fraction": 1.0,
+                "n": 8,
+                "possible": 8.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:teleport_twoway": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_cycler": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 16,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "teleport_twoway": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk_through_cycler": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 8,
+                "possible": 8.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 8,
+                "possible": 8.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:teleport_twoway": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_cycler": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 16,
+            "replay": 0.0,
+            "unanswered": 16
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "teleport_twoway": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "walk_through_cycler": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.25,
+                "n": 8,
+                "possible": 8.0
+              },
+              "replay": {
+                "awarded": 8.0,
+                "fraction": 1.0,
+                "n": 8,
+                "possible": 8.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:teleport_twoway": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_cycler": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.75,
+            "heldout": 0.25,
+            "items": 16,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.625,
+          "fraction": 0.625,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "teleport_twoway": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk_through_cycler": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 2.0,
+                "fraction": 0.25,
+                "n": 8,
+                "possible": 8.0
+              },
+              "replay": {
+                "awarded": 2.0,
+                "fraction": 0.25,
+                "n": 8,
+                "possible": 8.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:teleport_twoway": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_cycler": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.25,
+            "items": 16,
+            "replay": 0.25,
+            "unanswered": 0
+          },
+          "expected": 0.25,
+          "fraction": 0.25,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t3-cycler-portal-lock"
+    },
+    {
+      "calibrated": true,
+      "failures": [],
+      "modes": [
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "collect_token": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "latch_already_set": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk_through_door": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 10.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 10.0
+              },
+              "replay": {
+                "awarded": 10.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 10.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:latch_already_set": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 1.0,
+            "items": 20,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 1.0,
+          "fraction": 1.0,
+          "mode": "oracle",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "collect_token": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "latch_already_set": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk_through_door": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 10,
+                "possible": 10.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 10,
+                "possible": 10.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:latch_already_set": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.0,
+            "items": 20,
+            "replay": 0.0,
+            "unanswered": 20
+          },
+          "expected": 0.0,
+          "fraction": 0.0,
+          "mode": "null",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "collect_token": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "latch_already_set": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              },
+              "walk_through_door": {
+                "gap": 1.0,
+                "heldout": 0.0,
+                "replay": 1.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 0.4,
+                "n": 10,
+                "possible": 10.0
+              },
+              "replay": {
+                "awarded": 10.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 10.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:latch_already_set": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 2.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.6,
+            "heldout": 0.4,
+            "items": 20,
+            "replay": 1.0,
+            "unanswered": 0
+          },
+          "expected": 0.7,
+          "fraction": 0.7,
+          "mode": "memoriser",
+          "ok": true
+        },
+        {
+          "axes": {
+            "abstained": 0,
+            "by_rule": {
+              "blocked_by_wall": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "collect_token": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "latch_already_set": {
+                "gap": 0.0,
+                "heldout": 1.0,
+                "replay": 1.0
+              },
+              "walk": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              },
+              "walk_through_door": {
+                "gap": 0.0,
+                "heldout": 0.0,
+                "replay": 0.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 4.0,
+                "fraction": 0.4,
+                "n": 10,
+                "possible": 10.0
+              },
+              "replay": {
+                "awarded": 4.0,
+                "fraction": 0.4,
+                "n": 10,
+                "possible": 10.0
+              },
+              "rule:blocked_by_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:collect_token": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:latch_already_set": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "rule:walk_through_door": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              }
+            },
+            "gap_replay_minus_heldout": 0.0,
+            "heldout": 0.4,
+            "items": 20,
+            "replay": 0.4,
+            "unanswered": 0
+          },
+          "expected": 0.4,
+          "fraction": 0.4,
+          "mode": "bluffer",
+          "ok": true
+        }
+      ],
+      "world_id": "t3-latch-maze"
+    }
+  ],
+  "difficulty": [
+    {
+      "bluffer_floor": 0.5,
+      "coverage_fraction": 0.3958,
+      "families": [],
+      "headroom": 0.5,
+      "items": 8,
+      "reachable_states": 24,
+      "rules_blocked": 0,
+      "rules_examinable": 2,
+      "rules_total": 2,
+      "tier": 1,
+      "unchanged_frame_share": 0.5,
+      "world_id": "t1-walk-maze"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "coverage_fraction": 0.2041,
+      "families": [
+        "push"
+      ],
+      "headroom": 0.666667,
+      "items": 12,
+      "reachable_states": 49,
+      "rules_blocked": 1,
+      "rules_examinable": 3,
+      "rules_total": 4,
+      "tier": 1,
+      "unchanged_frame_share": 0.333333,
+      "world_id": "t1-push-open"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "coverage_fraction": 0.3167,
+      "families": [
+        "push"
+      ],
+      "headroom": 0.5,
+      "items": 8,
+      "reachable_states": 15,
+      "rules_blocked": 2,
+      "rules_examinable": 2,
+      "rules_total": 4,
+      "tier": 1,
+      "unchanged_frame_share": 0.5,
+      "world_id": "t1-push-corridor"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "coverage_fraction": 0.375,
+      "families": [
+        "switch_door"
+      ],
+      "headroom": 0.5,
+      "items": 8,
+      "reachable_states": 26,
+      "rules_blocked": 4,
+      "rules_examinable": 2,
+      "rules_total": 6,
+      "tier": 1,
+      "unchanged_frame_share": 0.5,
+      "world_id": "t1-switch-toggle"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "coverage_fraction": 0.2788,
+      "families": [
+        "switch_door"
+      ],
+      "headroom": 0.666667,
+      "items": 12,
+      "reachable_states": 26,
+      "rules_blocked": 3,
+      "rules_examinable": 3,
+      "rules_total": 6,
+      "tier": 1,
+      "unchanged_frame_share": 0.333333,
+      "world_id": "t1-switch-latch"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "coverage_fraction": 0.0962,
+      "families": [
+        "portal"
+      ],
+      "headroom": 0.5,
+      "items": 8,
+      "reachable_states": 26,
+      "rules_blocked": 1,
+      "rules_examinable": 2,
+      "rules_total": 3,
+      "tier": 1,
+      "unchanged_frame_share": 0.5,
+      "world_id": "t1-portal-oneway"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "coverage_fraction": 0.2974,
+      "families": [
+        "color_cycle"
+      ],
+      "headroom": 0.5,
+      "items": 8,
+      "reachable_states": 58,
+      "rules_blocked": 2,
+      "rules_examinable": 2,
+      "rules_total": 4,
+      "tier": 1,
+      "unchanged_frame_share": 0.5,
+      "world_id": "t1-cycler-gate"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "coverage_fraction": 0.215,
+      "families": [
+        "count_lock"
+      ],
+      "headroom": 0.666667,
+      "items": 12,
+      "reachable_states": 50,
+      "rules_blocked": 2,
+      "rules_examinable": 3,
+      "rules_total": 5,
+      "tier": 1,
+      "unchanged_frame_share": 0.333333,
+      "world_id": "t1-tokens-lock"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "coverage_fraction": 0.0595,
+      "families": [
+        "consumable"
+      ],
+      "headroom": 0.5,
+      "items": 8,
+      "reachable_states": 42,
+      "rules_blocked": 2,
+      "rules_examinable": 2,
+      "rules_total": 4,
+      "tier": 1,
+      "unchanged_frame_share": 0.5,
+      "world_id": "t1-fragile-bridge"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "coverage_fraction": 0.2229,
+      "families": [
+        "push",
+        "switch_door"
+      ],
+      "headroom": 0.666667,
+      "items": 24,
+      "reachable_states": 175,
+      "rules_blocked": 1,
+      "rules_examinable": 6,
+      "rules_total": 7,
+      "tier": 2,
+      "unchanged_frame_share": 0.333333,
+      "world_id": "t2-switch-push"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "coverage_fraction": 0.4167,
+      "families": [
+        "portal"
+      ],
+      "headroom": 0.5,
+      "items": 8,
+      "reachable_states": 24,
+      "rules_blocked": 1,
+      "rules_examinable": 2,
+      "rules_total": 3,
+      "tier": 2,
+      "unchanged_frame_share": 0.5,
+      "world_id": "t2-portal-pair"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "coverage_fraction": 0.4167,
+      "families": [
+        "portal"
+      ],
+      "headroom": 0.5,
+      "items": 8,
+      "reachable_states": 6,
+      "rules_blocked": 1,
+      "rules_examinable": 2,
+      "rules_total": 3,
+      "tier": 2,
+      "unchanged_frame_share": 0.5,
+      "world_id": "t2-portal-paired"
+    },
+    {
+      "bluffer_floor": 0.625,
+      "coverage_fraction": 0.0643,
+      "families": [
+        "gravity",
+        "push"
+      ],
+      "headroom": 0.375,
+      "items": 8,
+      "reachable_states": 35,
+      "rules_blocked": 2,
+      "rules_examinable": 2,
+      "rules_total": 4,
+      "tier": 2,
+      "unchanged_frame_share": 0.625,
+      "world_id": "t2-gravity-push"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "coverage_fraction": 0.2931,
+      "families": [
+        "consumable",
+        "count_lock"
+      ],
+      "headroom": 0.666667,
+      "items": 12,
+      "reachable_states": 87,
+      "rules_blocked": 4,
+      "rules_examinable": 3,
+      "rules_total": 7,
+      "tier": 2,
+      "unchanged_frame_share": 0.333333,
+      "world_id": "t2-lock-fragile"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "coverage_fraction": 0.2172,
+      "families": [
+        "color_cycle",
+        "count_lock"
+      ],
+      "headroom": 0.666667,
+      "items": 12,
+      "reachable_states": 61,
+      "rules_blocked": 4,
+      "rules_examinable": 3,
+      "rules_total": 7,
+      "tier": 2,
+      "unchanged_frame_share": 0.333333,
+      "world_id": "t2-cycler-lock"
+    },
+    {
+      "bluffer_floor": 0.666667,
+      "coverage_fraction": 0.2273,
+      "families": [
+        "switch_door"
+      ],
+      "headroom": 0.333333,
+      "items": 12,
+      "reachable_states": 11,
+      "rules_blocked": 0,
+      "rules_examinable": 3,
+      "rules_total": 3,
+      "tier": 2,
+      "unchanged_frame_share": 0.666667,
+      "world_id": "t2-unsolvable-nodoor"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "coverage_fraction": 0.0204,
+      "families": [
+        "portal",
+        "push",
+        "switch_door"
+      ],
+      "headroom": 0.666667,
+      "items": 24,
+      "reachable_states": 2654,
+      "rules_blocked": 2,
+      "rules_examinable": 6,
+      "rules_total": 8,
+      "tier": 3,
+      "unchanged_frame_share": 0.333333,
+      "world_id": "t3-full-house"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "coverage_fraction": 0.1218,
+      "families": [
+        "consumable",
+        "gravity",
+        "push"
+      ],
+      "headroom": 0.5,
+      "items": 8,
+      "reachable_states": 39,
+      "rules_blocked": 4,
+      "rules_examinable": 2,
+      "rules_total": 6,
+      "tier": 3,
+      "unchanged_frame_share": 0.5,
+      "world_id": "t3-gravity-fragile"
+    },
+    {
+      "bluffer_floor": 0.25,
+      "coverage_fraction": 0.1489,
+      "families": [
+        "color_cycle",
+        "count_lock",
+        "portal"
+      ],
+      "headroom": 0.75,
+      "items": 16,
+      "reachable_states": 262,
+      "rules_blocked": 4,
+      "rules_examinable": 4,
+      "rules_total": 8,
+      "tier": 3,
+      "unchanged_frame_share": 0.25,
+      "world_id": "t3-cycler-portal-lock"
+    },
+    {
+      "bluffer_floor": 0.4,
+      "coverage_fraction": 0.0734,
+      "families": [
+        "consumable",
+        "count_lock",
+        "switch_door"
+      ],
+      "headroom": 0.6,
+      "items": 20,
+      "reachable_states": 436,
+      "rules_blocked": 6,
+      "rules_examinable": 5,
+      "rules_total": 11,
+      "tier": 3,
+      "unchanged_frame_share": 0.4,
+      "world_id": "t3-latch-maze"
+    }
+  ],
+  "feasibility": [
+    {
+      "blocked_rules": {},
+      "feasible": true,
+      "items": 8,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "world_id": "t1-walk-maze"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_block": {
+          "held_out": 5,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 12,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "push",
+        "walk"
+      ],
+      "world_id": "t1-push-open"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_block": {
+          "held_out": 1,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "push": {
+          "held_out": 0,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 8,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "world_id": "t1-push-corridor"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_door": {
+          "held_out": 0,
+          "in_trace": 3,
+          "why": "every reachable transition of this rule is already in the trace"
+        },
+        "blocked_toggle_would_shut_door": {
+          "held_out": 1,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "toggle_switch": {
+          "held_out": 0,
+          "in_trace": 2,
+          "why": "every reachable transition of this rule is already in the trace"
+        },
+        "walk_through_door": {
+          "held_out": 4,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 8,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "world_id": "t1-switch-toggle"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_door": {
+          "held_out": 2,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "latch_already_set": {
+          "held_out": 0,
+          "in_trace": 2,
+          "why": "every reachable transition of this rule is already in the trace"
+        },
+        "press_latch": {
+          "held_out": 0,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 12,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk",
+        "walk_through_door"
+      ],
+      "world_id": "t1-switch-latch"
+    },
+    {
+      "blocked_rules": {
+        "teleport_oneway": {
+          "held_out": 1,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 8,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "world_id": "t1-portal-oneway"
+    },
+    {
+      "blocked_rules": {
+        "advance_cycler": {
+          "held_out": 7,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "walk_through_cycler": {
+          "held_out": 4,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 8,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "world_id": "t1-cycler-gate"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_lock": {
+          "held_out": 3,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "walk_through_lock": {
+          "held_out": 2,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 12,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "collect_token",
+        "walk"
+      ],
+      "world_id": "t1-tokens-lock"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_collapsed": {
+          "held_out": 12,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "cross_fragile": {
+          "held_out": 8,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 8,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "world_id": "t1-fragile-bridge"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_door": {
+          "held_out": 4,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 24,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_block",
+        "blocked_by_wall",
+        "push",
+        "toggle_switch",
+        "walk",
+        "walk_through_door"
+      ],
+      "world_id": "t2-switch-push"
+    },
+    {
+      "blocked_rules": {
+        "teleport_twoway": {
+          "held_out": 1,
+          "in_trace": 5,
+          "why": "every reachable transition of this rule is already in the trace"
+        }
+      },
+      "feasible": true,
+      "items": 8,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "world_id": "t2-portal-pair"
+    },
+    {
+      "blocked_rules": {
+        "teleport_paired": {
+          "held_out": 0,
+          "in_trace": 2,
+          "why": "every reachable transition of this rule is already in the trace"
+        }
+      },
+      "feasible": true,
+      "items": 8,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "world_id": "t2-portal-paired"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_block": {
+          "held_out": 1,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "push": {
+          "held_out": 2,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 8,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "world_id": "t2-gravity-push"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_collapsed": {
+          "held_out": 2,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "blocked_by_lock": {
+          "held_out": 1,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "cross_fragile": {
+          "held_out": 1,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "walk_through_lock": {
+          "held_out": 3,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 12,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "collect_token",
+        "walk"
+      ],
+      "world_id": "t2-lock-fragile"
+    },
+    {
+      "blocked_rules": {
+        "advance_cycler": {
+          "held_out": 3,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "blocked_by_lock": {
+          "held_out": 2,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "collect_token": {
+          "held_out": 3,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "walk_through_lock": {
+          "held_out": 4,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 12,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk",
+        "walk_through_cycler"
+      ],
+      "world_id": "t2-cycler-lock"
+    },
+    {
+      "blocked_rules": {},
+      "feasible": true,
+      "items": 12,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_door",
+        "blocked_by_wall",
+        "walk"
+      ],
+      "world_id": "t2-unsolvable-nodoor"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_door": {
+          "held_out": 62,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "walk_through_door": {
+          "held_out": 62,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 24,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_block",
+        "blocked_by_wall",
+        "push",
+        "teleport_twoway",
+        "toggle_switch",
+        "walk"
+      ],
+      "world_id": "t3-full-house"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_block": {
+          "held_out": 1,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "blocked_by_collapsed": {
+          "held_out": 6,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "cross_fragile": {
+          "held_out": 2,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "push": {
+          "held_out": 2,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 8,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "walk"
+      ],
+      "world_id": "t3-gravity-fragile"
+    },
+    {
+      "blocked_rules": {
+        "advance_cycler": {
+          "held_out": 5,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "blocked_by_lock": {
+          "held_out": 15,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "collect_token": {
+          "held_out": 13,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "walk_through_lock": {
+          "held_out": 6,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 16,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "teleport_twoway",
+        "walk",
+        "walk_through_cycler"
+      ],
+      "world_id": "t3-cycler-portal-lock"
+    },
+    {
+      "blocked_rules": {
+        "blocked_by_collapsed": {
+          "held_out": 10,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "blocked_by_door": {
+          "held_out": 9,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "blocked_by_lock": {
+          "held_out": 25,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "cross_fragile": {
+          "held_out": 7,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "press_latch": {
+          "held_out": 11,
+          "in_trace": 1,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        },
+        "walk_through_lock": {
+          "held_out": 12,
+          "in_trace": 0,
+          "why": "the trace witnessed it fewer than 2 times -- the A0' failure mode: no second witness to hold out"
+        }
+      },
+      "feasible": true,
+      "items": 20,
+      "per_class": 2,
+      "usable_rules": [
+        "blocked_by_wall",
+        "collect_token",
+        "latch_already_set",
+        "walk",
+        "walk_through_door"
+      ],
+      "world_id": "t3-latch-maze"
+    }
+  ],
+  "matrix": [
+    {
+      "bluffer": 0.5,
+      "gap": 0.5,
+      "items": 8,
+      "memoriser": 0.75,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 1,
+      "world_id": "t1-walk-maze"
+    },
+    {
+      "bluffer": 0.333333,
+      "gap": 0.666667,
+      "items": 12,
+      "memoriser": 0.666667,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 1,
+      "world_id": "t1-push-open"
+    },
+    {
+      "bluffer": 0.5,
+      "gap": 0.5,
+      "items": 8,
+      "memoriser": 0.75,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 1,
+      "world_id": "t1-push-corridor"
+    },
+    {
+      "bluffer": 0.5,
+      "gap": 0.5,
+      "items": 8,
+      "memoriser": 0.75,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 1,
+      "world_id": "t1-switch-toggle"
+    },
+    {
+      "bluffer": 0.333333,
+      "gap": 0.666667,
+      "items": 12,
+      "memoriser": 0.666667,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 1,
+      "world_id": "t1-switch-latch"
+    },
+    {
+      "bluffer": 0.5,
+      "gap": 0.5,
+      "items": 8,
+      "memoriser": 0.75,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 1,
+      "world_id": "t1-portal-oneway"
+    },
+    {
+      "bluffer": 0.5,
+      "gap": 0.5,
+      "items": 8,
+      "memoriser": 0.75,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 1,
+      "world_id": "t1-cycler-gate"
+    },
+    {
+      "bluffer": 0.333333,
+      "gap": 0.666667,
+      "items": 12,
+      "memoriser": 0.666667,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 1,
+      "world_id": "t1-tokens-lock"
+    },
+    {
+      "bluffer": 0.5,
+      "gap": 0.5,
+      "items": 8,
+      "memoriser": 0.75,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 1,
+      "world_id": "t1-fragile-bridge"
+    },
+    {
+      "bluffer": 0.333333,
+      "gap": 0.666667,
+      "items": 24,
+      "memoriser": 0.666667,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 2,
+      "world_id": "t2-switch-push"
+    },
+    {
+      "bluffer": 0.5,
+      "gap": 0.5,
+      "items": 8,
+      "memoriser": 0.75,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 2,
+      "world_id": "t2-portal-pair"
+    },
+    {
+      "bluffer": 0.5,
+      "gap": 0.5,
+      "items": 8,
+      "memoriser": 0.75,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 2,
+      "world_id": "t2-portal-paired"
+    },
+    {
+      "bluffer": 0.625,
+      "gap": 0.25,
+      "items": 8,
+      "memoriser": 0.875,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.25,
+      "tier": 2,
+      "world_id": "t2-gravity-push"
+    },
+    {
+      "bluffer": 0.333333,
+      "gap": 0.666667,
+      "items": 12,
+      "memoriser": 0.666667,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 2,
+      "world_id": "t2-lock-fragile"
+    },
+    {
+      "bluffer": 0.333333,
+      "gap": 0.666667,
+      "items": 12,
+      "memoriser": 0.666667,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 2,
+      "world_id": "t2-cycler-lock"
+    },
+    {
+      "bluffer": 0.666667,
+      "gap": 0.333333,
+      "items": 12,
+      "memoriser": 0.833333,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 2,
+      "world_id": "t2-unsolvable-nodoor"
+    },
+    {
+      "bluffer": 0.333333,
+      "gap": 0.666667,
+      "items": 24,
+      "memoriser": 0.666667,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 3,
+      "world_id": "t3-full-house"
+    },
+    {
+      "bluffer": 0.5,
+      "gap": 0.5,
+      "items": 8,
+      "memoriser": 0.75,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 3,
+      "world_id": "t3-gravity-fragile"
+    },
+    {
+      "bluffer": 0.25,
+      "gap": 0.75,
+      "items": 16,
+      "memoriser": 0.625,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 3,
+      "world_id": "t3-cycler-portal-lock"
+    },
+    {
+      "bluffer": 0.4,
+      "gap": 0.6,
+      "items": 20,
+      "memoriser": 0.7,
+      "null": 0.0,
+      "oracle": 1.0,
+      "tag_bias": 0.0,
+      "tier": 3,
+      "world_id": "t3-latch-maze"
+    }
+  ],
+  "per_class": 2,
+  "question_type": "heldout",
+  "refused": [],
+  "rubric_digest": "4afe3d1714c594557ba9e6d1166b36fec59be6a4d73e95da79c595cef881b951",
+  "totals": {
+    "bluffer_floor_by_tier": {
+      "1": 0.444444,
+      "2": 0.470238,
+      "3": 0.370833
+    },
+    "bluffer_floor_range": [
+      0.25,
+      0.666667
+    ],
+    "comparability_note": "raw fractions are NOT comparable across worlds. The floor a theory-free examinee gets for predicting stasis ranges from 0.250 to 0.667 across the catalogue, because worlds differ in how much of their rule set is a `blocked_by_*` rule that changes nothing. Compare (score - bluffer_floor) / headroom, or compare within a world.",
+    "gap_by_tier": {
+      "1": 0.555556,
+      "2": 0.511905,
+      "3": 0.629167
+    },
+    "items_total": 236,
+    "max_tag_bias": 0.25,
+    "mean_bluffer_floor": 0.43875,
+    "mean_gap_replay_minus_heldout": 0.555,
+    "rules_blocked_total": 46,
+    "rules_examinable_total": 59,
+    "worlds_with_tag_bias": [
+      "t2-gravity-push"
+    ]
+  },
+  "worlds_in_matrix": 20,
+  "worlds_offered": 20
+}
