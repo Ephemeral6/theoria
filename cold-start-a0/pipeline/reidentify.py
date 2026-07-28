@@ -80,6 +80,16 @@ def reidentify(seg: Segmentation, cost: CostModel) -> Tuple[Segmentation, MergeR
     tracks = list(seg.tracks)
     lifetimes = {t.track_id: _lifetime(t) for t in tracks}
 
+    # A track that `identity_swap` recorded as eaten did not come back -- it was
+    # consumed, and its short lifetime is the *output* of that repair rather than
+    # evidence of a return.  Without this, the repair manufactures exactly the
+    # disjoint-lifetime pair this pass gets wrong: truncating the consumed token
+    # makes it disjoint from any later same-template look-alike, and the merge
+    # then declares a consumed object to have reappeared.  Found by an
+    # adversarial review of `identity_swap`; see D-A0-022.
+    consumed = {event.track for event in seg.events
+                if event.type == "vanish" and "consumed_by" in event.params}
+
     # Greedy left-to-right: each track joins the earliest compatible chain.
     owner: Dict[str, str] = {}
     chains: Dict[str, List[str]] = {}
@@ -87,8 +97,14 @@ def reidentify(seg: Segmentation, cost: CostModel) -> Tuple[Segmentation, MergeR
         start, _end = lifetimes[track.track_id]
         if start is None:
             continue
+        if track.track_id in consumed:
+            chains[track.track_id] = [track.track_id]
+            owner[track.track_id] = track.track_id
+            continue
         target = None
         for head in chains:
+            if head in consumed:
+                continue
             if _template(next(t for t in tracks if t.track_id == head)) != _template(track):
                 continue
             last_end = max(lifetimes[m][1] for m in chains[head])
