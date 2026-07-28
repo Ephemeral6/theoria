@@ -273,9 +273,16 @@ def main(argv=None) -> int:
     ap.add_argument("--json", default=None)
     args = ap.parse_args(argv)
 
-    # Every cell, always. `--game` is a `focus`, not a filter on the record --
-    # see `audit()` for why that distinction is load-bearing.
-    report = audit(run_campaign.load_cells(), args.campaign, focus=args.game)
+    # Every cell **of this campaign**, which is exactly the scope `audit()`
+    # documents and this function used to get wrong in both directions. First
+    # `--game` narrowed below the campaign and invented orphans; then the fix
+    # over-corrected to every cell in the file, so auditing one campaign
+    # compared another campaign's cells against a pool filtered to this one and
+    # reported nine phantom "reservation absent from the pool" problems.
+    # Attribution is per campaign: that is the unit a reservation is named for.
+    # `--game` focuses the printout within it and filters nothing.
+    report = audit(run_campaign.load_cells(args.campaign), args.campaign,
+                   focus=args.game)
     print_report(report)
     if args.json:
         os.makedirs(os.path.dirname(os.path.abspath(args.json)), exist_ok=True)
