@@ -236,6 +236,28 @@ def _extract_pred_pddl(expr, params: dict, preconds: list, obj_types: list):
     if isinstance(expr, FuncCall):
         if expr.name == "free":
             inner = expr.args[0] if expr.args else None
+            # v0.3, ledger X-5. `free(<obj>.pos)` excludes the object from its
+            # own occupancy test, and this encoding keeps `free` as a predicate
+            # *of a cell* — `(free ?c)`, withheld from every cell an object
+            # holds. A per-occurrence exclusion has no image there: the clause
+            # would be permanently false in PDDL and satisfiable in Python, so
+            # two of the four co-derived forms would encode different worlds.
+            # Refuse, per v0.2 revision item 10 — this backend's silent
+            # approximations are what that item exists to stop.
+            through_object, spelling = None, None
+            if isinstance(inner, FieldAccess) and inner.field_name == "pos":
+                through_object = inner.obj
+                spelling = "%s.pos" % inner.obj
+            elif isinstance(inner, NameRef) and inner.name in obj_types:
+                through_object = spelling = inner.name
+            if through_object is not None:
+                raise UnsupportedClause(
+                    "free(%s) names its cell through an object, which excludes "
+                    "that object from its own occupancy test (v0.3, X-5). This "
+                    "STRIPS encoding holds `free` as a property of a cell and "
+                    "has no way to say `free except for %s`. Refusing rather "
+                    "than dropping the precondition."
+                    % (spelling, through_object))
             if isinstance(inner, FuncCall) and inner.name in ("above", "below", "left", "right"):
                 # free(above(Cart)) -> need a dest cell that is adjacent and free
                 direction = inner.name
