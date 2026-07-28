@@ -12,10 +12,31 @@ through the figure scripts:
    clean checkout, which defeats the whole determinism requirement. Untracked
    inputs are declared here too -- with ``tracked=False`` -- so that they are
    *named* as known-absent rather than silently missing.
+
+**Declared by rule, not only by list** (P8). Three of the inputs arrive as
+*families* that grow: the theoria arm writes a new directory under
+``theoria-arm/runs/`` every run, the baseline writes a new ``pilot_*.json``
+roll-up, and the envelope campaign writes a new shard. Naming each file by hand
+meant that a run which landed on disk did not reach the figure until somebody
+edited two files, and P8 found two live cases where nobody had -- see
+``figures/runs/20260728T110000Z-P8-billshape-pipeline/FINDINGS.md``.
+
+A ``Rule`` is therefore a declaration too: it declares *the directory, the
+filename pattern, and the floor*. Every file it finds becomes a real ``Source``
+and lands in ``SOURCES.sha256`` exactly like a hand-written one, so nothing is
+read unhashed. What changes is only who enumerates the family -- the filesystem
+rather than a tuple that ages.
+
+The floor is the part that makes this safe rather than merely convenient. A
+glob that finds nothing is indistinguishable from a family that is empty, and
+"the figure quietly lost an arm" would then look exactly like "the figure is
+fine". Each rule records how many members were on disk when it was written; find
+fewer and the build stops. An optional check is a check that does not run.
 """
 
 from __future__ import annotations
 
+import fnmatch
 import hashlib
 import json
 import os
@@ -52,109 +73,13 @@ SOURCES: tuple[Source, ...] = (
         figures=("fig02_bill_shape",),
         what="pilot ledger; model-call records carry total_cost_usd, usage and step_idx",
     ),
-    Source(
-        key="pilot_ar25",
-        path="baseline-arms/out/pilot_ar25-0c556536.json",
-        figures=("fig02_bill_shape",),
-        what="per-run roll-up, cross-checks the curve endpoint against the ledger total",
-    ),
-    Source(
-        key="pilot_g50t",
-        path="baseline-arms/out/pilot_g50t-5849a774.json",
-        figures=("fig02_bill_shape",),
-        what="per-run roll-up",
-    ),
-    Source(
-        key="pilot_sk48",
-        path="baseline-arms/out/pilot_sk48-d8078629.json",
-        figures=("fig02_bill_shape",),
-        what="per-run roll-up",
-    ),
-    Source(
-        key="pilot_tn36",
-        path="baseline-arms/out/pilot_tn36-ef4dde99.json",
-        figures=("fig02_bill_shape",),
-        what="per-run roll-up",
-    ),
-    # Declared, absent, and named as such. See PLAN.md section 3.
-    Source(
-        key="envelope_ledger_ar25",
-        path="baseline-arms/out/shards/ledger.ar25.jsonl",
-        figures=("fig02_bill_shape",),
-        what="envelope campaign ledger",
-        tracked=False,
-        optional=True,
-        note="untracked in master; a figure built on it cannot be rebuilt from a "
-        "clean checkout. Drop it in and it is picked up automatically.",
-    ),
-    Source(
-        key="envelope_ledger_g50t",
-        path="baseline-arms/out/shards/ledger.g50t.jsonl",
-        figures=("fig02_bill_shape",),
-        what="envelope campaign ledger",
-        tracked=False,
-        optional=True,
-        note="untracked in master.",
-    ),
-    Source(
-        key="envelope_ledger_sk48",
-        path="baseline-arms/out/shards/ledger.sk48.jsonl",
-        figures=("fig02_bill_shape",),
-        what="envelope campaign ledger",
-        tracked=False,
-        optional=True,
-        note="untracked in master.",
-    ),
-    Source(
-        key="envelope_ledger_tn36",
-        path="baseline-arms/out/shards/ledger.tn36.jsonl",
-        figures=("fig02_bill_shape",),
-        what="envelope campaign ledger",
-        tracked=False,
-        optional=True,
-        note="untracked in master.",
-    ),
-    # The theoria arm's cost ledger. P-21 declared this absent and left the
-    # interface open; it exists, and P4 wires it in. The per-call costs live in
-    # cost_curve.json rather than in ledger.jsonl -- the ledger's model_call
-    # records carry the dollars only nested under `response`, and cost_curve is
-    # the artefact the arm publishes for exactly this purpose.
-    Source(
-        key="theoria_cost_curve_first_contact",
-        path="theoria-arm/runs/20260728T015354Z-g50t-first-contact/cost_curve.json",
-        figures=("fig02_bill_shape",),
-        what="per-desk-call cost for the one theoria run that got past first contact",
-    ),
-    Source(
-        key="theoria_manifest_first_contact",
-        path="theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json",
-        figures=("fig02_bill_shape",),
-        what="run totals: cli_reported_usd vs the price table's recompute, and why they differ",
-    ),
-    Source(
-        key="theoria_cost_curve_aborted_1",
-        path="theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/cost_curve.json",
-        figures=("fig02_bill_shape",),
-        what="the first aborted attempt -- a compiler defect, billed",
-    ),
-    Source(
-        key="theoria_manifest_aborted_1",
-        path="theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/MANIFEST.json",
-        figures=("fig02_bill_shape",),
-        what="its totals; game_id/outcome/run_id are all null -- the arm never closed this attempt out",
-    ),
-    Source(
-        key="theoria_cost_curve_aborted_2",
-        path="theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/cost_curve.json",
-        figures=("fig02_bill_shape",),
-        what="the second aborted attempt -- error_max_turns, billed, output discarded",
-    ),
-    Source(
-        key="theoria_manifest_aborted_2",
-        path="theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/MANIFEST.json",
-        figures=("fig02_bill_shape",),
-        what="its totals; game_id/outcome/run_id are all null",
-    ),
+    # The per-run roll-ups, the envelope shards and the theoria arm's runs are
+    # not listed here any more. They are families that grow, and they are
+    # declared by rule in DISCOVERY below -- each member still becomes a Source
+    # and still lands in SOURCES.sha256.
+    #
+    # fig02's shape metrics come from the battery's own capability_spectrum,
+    # declared once below for every figure that reads it.
     # ---- fig03: capability spectrum ---------------------------------------
     Source(
         key="validation_material",
@@ -166,8 +91,14 @@ SOURCES: tuple[Source, ...] = (
     Source(
         key="capability_spectrum",
         path="battery/artifacts/capability_spectrum.json",
-        figures=("fig03_capability_spectrum", "fig05_a2_repair_loop", "fig07_a0_vs_a0prime"),
-        what="cards (id/family/direction/unit), runs.*.metrics.* with value+status+support, coverage",
+        figures=(
+            "fig02_bill_shape",
+            "fig03_capability_spectrum",
+            "fig05_a2_repair_loop",
+            "fig07_a0_vs_a0prime",
+        ),
+        what="cards (id/family/direction/unit), runs.*.metrics.* with value+status+support, coverage. "
+        "fig02 takes E2/E3/E4 from here rather than recomputing three Phase 4 endpoints",
     ),
     Source(
         key="arm_contrast",
@@ -346,7 +277,263 @@ SOURCES: tuple[Source, ...] = (
     ),
 )
 
+# --------------------------------------------------------------------------
+# Declared by rule
+# --------------------------------------------------------------------------
+
+
+@dataclass(frozen=True)
+class Rule:
+    """A family of sources, declared by where it lives instead of by name.
+
+    ``root`` is scanned (one level, sorted) for entries matching ``pattern``.
+    ``members`` are the filenames taken from each matching directory, or -- when
+    ``pattern`` matches files directly -- the single matched file.
+
+    ``floor`` is how many members were on disk when this rule was written and
+    checked. Finding fewer stops the build. Finding *more* is the point.
+    """
+
+    name: str
+    root: str  # repo-relative, forward slashes
+    pattern: str  # fnmatch, against the entry name inside root
+    kind: str  # "dir" -- entries are run directories; "file" -- entries are files
+    members: tuple[str, ...]  # for kind="dir": filenames required inside it
+    figures: tuple[str, ...]
+    what: str
+    floor: int
+    floor_note: str
+    tracked: bool = True
+    optional: bool = False
+    #: Paths declared whether or not they exist. A known-absent input has to be
+    #: *named* in SOURCES.sha256; a rule that simply finds nothing would erase
+    #: the fact that the input was ever expected.
+    expected: tuple[str, ...] = ()
+    expected_note: str = ""
+
+    @property
+    def abs_root(self) -> str:
+        return os.path.join(REPO_ROOT, *self.root.split("/"))
+
+
+#: The three families fig02 reads. Each replaces a hand-maintained tuple that
+#: had already gone stale by the time P8 read it.
+DISCOVERY: tuple[Rule, ...] = (
+    Rule(
+        name="theoria_run",
+        root="theoria-arm/runs",
+        pattern="*",
+        kind="dir",
+        members=("cost_curve.json", "MANIFEST.json"),
+        figures=("fig02_bill_shape",),
+        what="a theoria-arm run: per-desk-call cost, and the manifest carrying "
+        "arm/game_id/outcome and the arm's own cost reconciliation",
+        floor=4,
+        floor_note="4 of the 9 directories under theoria-arm/runs/ carried both a "
+        "cost_curve.json and a MANIFEST.json on 2026-07-28. The other five are "
+        "salvage and preflight directories with neither; they are skipped by the "
+        "members rule, not by being absent from a list. Fewer than 4 means the arm "
+        "lost a run and the bill would silently understate what it cost.",
+    ),
+    Rule(
+        name="pilot_rollup",
+        root="baseline-arms/out",
+        pattern="pilot_*.json",
+        kind="file",
+        members=(),
+        figures=("fig02_bill_shape",),
+        what="per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. "
+        "outcome is what draws a curve solid, dashed or dotted",
+        floor=6,
+        floor_note="6 pilot_*.json roll-ups are tracked in baseline-arms/out/. Four were "
+        "named in the old ROLLUP_KEYS tuple; pilot_g50t_sonnet_rerun.json and "
+        "pilot_sk48_sonnet_rerun.json were not, so two runs with committed outcomes were "
+        "drawn as outcome-unknown -- one of them a model_error the plate exists to warn about.",
+    ),
+    Rule(
+        name="envelope_ledger",
+        root="baseline-arms/out/shards",
+        pattern="ledger.*.jsonl",
+        kind="file",
+        members=(),
+        figures=("fig02_bill_shape",),
+        what="envelope campaign ledger shard, same two dialects as the pilot ledger",
+        floor=0,
+        floor_note="untracked in master by design, so the floor is zero: absent is the "
+        "expected state, and a build that required them could not run from a clean "
+        "checkout. The four known shard paths are declared below regardless, so the "
+        "manifest names them as absent rather than forgetting them.",
+        tracked=False,
+        optional=True,
+        expected=(
+            "baseline-arms/out/shards/ledger.ar25.jsonl",
+            "baseline-arms/out/shards/ledger.g50t.jsonl",
+            "baseline-arms/out/shards/ledger.sk48.jsonl",
+            "baseline-arms/out/shards/ledger.tn36.jsonl",
+        ),
+        expected_note="untracked in master; a figure built on it cannot be rebuilt from a "
+        "clean checkout. Drop it in and it is picked up automatically -- and now so is any "
+        "shard whose name nobody wrote down here.",
+    ),
+)
+
+
+def _rule_key(rule: Rule, entry: str, member: str = "") -> str:
+    """Stable key for a discovered source. Derived from the path, never counted.
+
+    Positional keys (``theoria_run_1``) would renumber the moment a directory
+    landed out of alphabetical order, silently repointing whatever referenced
+    them.
+    """
+    stem = entry
+    if member:
+        stem = f"{entry}/{member}"
+    return f"{rule.name}:{stem}"
+
+
+def _scan(rule: Rule) -> list[str]:
+    """Entry names under ``rule.root`` matching ``rule.pattern``, sorted.
+
+    Sorted because directory iteration order is not something to trust in a
+    pipeline whose whole promise is byte-identical output. Returns ``[]`` when
+    the root does not exist -- that is what the floor is for.
+    """
+    try:
+        entries = os.listdir(rule.abs_root)
+    except OSError:
+        return []
+    return sorted(e for e in entries if fnmatch.fnmatch(e, rule.pattern))
+
+
+def _discover(rule: Rule) -> tuple[Source, ...]:
+    found: list[Source] = []
+    seen_paths: set[str] = set()
+
+    for entry in _scan(rule):
+        abs_entry = os.path.join(rule.abs_root, entry)
+        if rule.kind == "dir":
+            if not os.path.isdir(abs_entry):
+                continue
+            # Every member must be present. A run directory with a manifest and
+            # no cost curve is not half a run; it is a directory this rule does
+            # not describe, and guessing which half to use is how a cost column
+            # silently becomes wrong.
+            if not all(os.path.exists(os.path.join(abs_entry, m)) for m in rule.members):
+                continue
+            for member in rule.members:
+                rel = f"{rule.root}/{entry}/{member}"
+                seen_paths.add(rel)
+                found.append(
+                    Source(
+                        key=_rule_key(rule, entry, member),
+                        path=rel,
+                        figures=rule.figures,
+                        what=f"{rule.what} [{member}]",
+                        tracked=rule.tracked,
+                        optional=rule.optional,
+                        note=f"discovered by rule {rule.name!r}",
+                    )
+                )
+        else:
+            if not os.path.isfile(abs_entry):
+                continue
+            rel = f"{rule.root}/{entry}"
+            seen_paths.add(rel)
+            found.append(
+                Source(
+                    key=_rule_key(rule, entry),
+                    path=rel,
+                    figures=rule.figures,
+                    what=rule.what,
+                    tracked=rule.tracked,
+                    optional=rule.optional,
+                    note=f"discovered by rule {rule.name!r}",
+                )
+            )
+
+    # Expected-but-absent paths stay declared, so the manifest still names them.
+    for rel in rule.expected:
+        if rel in seen_paths:
+            continue
+        found.append(
+            Source(
+                key=_rule_key(rule, rel.rsplit("/", 1)[-1]),
+                path=rel,
+                figures=rule.figures,
+                what=rule.what,
+                tracked=rule.tracked,
+                optional=True,
+                note=rule.expected_note or f"expected by rule {rule.name!r}",
+            )
+        )
+    return tuple(found)
+
+
+#: Discovered sources, per rule, in rule order then path order.
+DISCOVERED: dict[str, tuple[Source, ...]] = {r.name: _discover(r) for r in DISCOVERY}
+
+SOURCES = SOURCES + tuple(s for r in DISCOVERY for s in DISCOVERED[r.name])
+
 BY_KEY = {s.key: s for s in SOURCES}
+
+if len(BY_KEY) != len(SOURCES):
+    raise RuntimeError("two sources share a key; discovery keys must be path-derived")
+
+# A path declared twice would be hashed twice in SOURCES.sha256, and the second
+# line would look like drift the first time one of the two entries was edited.
+_seen_paths: dict[str, str] = {}
+for _s in SOURCES:
+    if _s.path in _seen_paths:
+        raise RuntimeError(
+            f"{_s.path} is declared twice ({_seen_paths[_s.path]!r} and {_s.key!r}); "
+            "a discovery rule and a hand-written Source are covering the same file"
+        )
+    _seen_paths[_s.path] = _s.key
+
+
+def rule(name: str) -> Rule:
+    for r in DISCOVERY:
+        if r.name == name:
+            return r
+    raise KeyError(f"{name!r} is not a declared discovery rule")
+
+
+def discovered(name: str) -> tuple[Source, ...]:
+    """Sources a rule found, in sorted path order. Empty is a legal answer."""
+    rule(name)  # raises on a typo rather than returning nothing
+    return DISCOVERED[name]
+
+
+def discovered_groups(name: str) -> list[tuple[str, dict[str, Source]]]:
+    """For ``kind='dir'`` rules: ``[(entry_name, {member: Source}), ...]``, sorted.
+
+    The caller gets a run at a time instead of a flat file list, so it cannot
+    accidentally pair one run's manifest with another's cost curve.
+    """
+    r = rule(name)
+    if r.kind != "dir":
+        raise ValueError(f"rule {name!r} is kind={r.kind!r}; it has no groups")
+    groups: dict[str, dict[str, Source]] = {}
+    for src in DISCOVERED[name]:
+        entry, member = src.path[len(r.root) + 1 :].split("/", 1)
+        groups.setdefault(entry, {})[member] = src
+    return sorted(groups.items())
+
+
+def floor_violations() -> list[str]:
+    """Rules that found fewer members than were on disk when they were written."""
+    out = []
+    for r in DISCOVERY:
+        if r.kind == "dir":
+            n = len(discovered_groups(r.name))
+        else:
+            n = sum(1 for s in DISCOVERED[r.name] if s.exists())
+        if n < r.floor:
+            out.append(
+                f"rule {r.name!r} found {n} member(s) under {r.root}/{r.pattern}, "
+                f"floor is {r.floor}. {r.floor_note}"
+            )
+    return out
 
 #: The commit the figures were built from, for the git-timestamp axis in
 #: fig06. Resolved through the registry so the subprocess call has one home.
@@ -478,5 +665,13 @@ def write_manifest(target: str | None = None) -> str:
 
 
 def check_required() -> list[str]:
-    """Paths of required sources that are missing. Empty list means green."""
-    return [s.path for s in SOURCES if not s.optional and not s.exists()]
+    """Everything that must be on disk and is not. Empty list means green.
+
+    Two kinds of failure, deliberately reported through one door so that
+    ``verify.sh`` gate 0 catches both: a *named* source that is missing, and a
+    *rule* that came back under its floor. The second is the one that matters
+    for a discovery registry -- a family that silently emptied out reads exactly
+    like a family that is fine.
+    """
+    missing = [s.path for s in SOURCES if not s.optional and not s.exists()]
+    return missing + floor_violations()
