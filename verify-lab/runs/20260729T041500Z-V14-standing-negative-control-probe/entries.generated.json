@@ -248,8 +248,9 @@
   },
   "cold-start-a0/run_all.py": {
     "census_v11": "yes",
+    "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
     "owner": "track: theory-compiler (off limits to engine-rig)",
-    "verdict": "present"
+    "verdict": "absent"
   },
   "cold-start-a0/world/ground_truth.py": {
     "note": "not surveyed by V11; the criterion finds no negative control.",
@@ -272,8 +273,9 @@
     "verdict": "absent"
   },
   "cold-start-a2/a2pipeline/engines.py": {
+    "note": "not surveyed by V11; the criterion finds no negative control.",
     "owner": "track: theory-compiler (A2 cold start)",
-    "verdict": "present"
+    "verdict": "absent"
   },
   "cold-start-a2/a2pipeline/exhibit.py": {
     "note": "not surveyed by V11; the criterion finds no negative control.",

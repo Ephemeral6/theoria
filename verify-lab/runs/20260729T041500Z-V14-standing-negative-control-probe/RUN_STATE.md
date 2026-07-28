@@ -39,13 +39,13 @@ wrapped in something that exits non-zero. Had it gone the other way the probe
 would have shipped with an uncalibrated predicate and a confident docstring, which
 is the exact shape of `arc-recon/verify.sh:53`.
 
-**Three tuning rounds, each on a structural class, each recorded.** First draft:
+**Four tuning rounds, each on a structural class, each recorded.** First draft:
 FP 5, FN 26. The two false positives that fell out first are the interesting ones,
 because both look right until you read the code: `assert len(rows) == 6` scored
 `theoria-arm/harness/run.py` as having a negative control (a count, not an exit
 code), and `assert not violations` scored `fuzzlab/campaign.py` (that assertion is
 a *positive* control — it says the run found nothing wrong). The fixes are
-`_looks_like_exit_code` and `_is_verdict`. `CALIBRATION.md` §4 has all three
+`_looks_like_exit_code` and `_is_verdict`. `CALIBRATION.md` §4 has all four
 rounds and states the consequence: the reported rates are lower bounds, because
 the criterion was tuned against the set it is scored on.
 
@@ -65,6 +65,24 @@ The entry-point count went from 128 to 141 after the fix. Without the negative
 control this item would have delivered a probe that reads a fraction of the tree
 and says green — which is the defect V11 was written to count, committed by the
 thing written to stop it.
+
+## A second defect the calibration found: the resolver was guessing
+
+`Index.resolve` picked the candidate sharing the longest path prefix with the
+importer — which is what the interpreter does — but when *no* candidate shared any
+prefix it still returned one. `ablation-arm/tests/test_exhibits.py` imports
+`exhibits.run_all`; four files in this repository are named `run_all.py`; the
+tie-break handed the binding to `cold-start-a0/run_all.py`, in another track.
+Two entry points were being credited with a negative control belonging to a
+different lane.
+
+It now refuses. The trade is deliberate and stated in the code: a wrongly resolved
+import is a false `present`, which makes the probe **silent** about a real gap; an
+unresolved one is a false `absent`, which makes it **noisy**. Prefer the noise.
+The pin was re-measured and the two entries transcribed back to `absent` with the
+reason recorded in the entry itself, which is the procedure `KNOWN_GAPS.json.
+_how_to_change_it` prescribes. Nothing changed in either territory; what changed
+is that the probe stopped crediting them with another lane's test.
 
 ## Where I deliberately diverged from V12
 
@@ -90,7 +108,7 @@ softened here and the reasons are in `probe.py`'s docstring:
   attributable only because five auditors reported the same anomaly.
 * **Zero network, zero `.env`, zero sealed-pile contact.** The whole item is `ast`
   over the working tree.
-* **The 108 pinned gaps were not closed.** They belong to nine territories and
+* **The 110 pinned gaps were not closed.** They belong to nine territories and
   closing them is not this item's work; the pin names the owner of each so the
   question can be asked of the right lane.
 * **Shell entry points are out of scope** — `figures/verify.sh`,
@@ -101,7 +119,7 @@ softened here and the reasons are in `probe.py`'s docstring:
 ## The recommendation, in one line
 
 Advisory in CI and on the review checklist; **not** in branch protection, because
-30% of gates that do have a negative control would be flagged as if they did not,
+32% of gates that do have a negative control would be flagged as if they did not,
 and that number concentrates on the six best non-pytest negative controls in the
 repository. The full argument is `verify-lab/NEGATIVE_CONTROL.md` §"Should this be
 a merge gate", and it is written from `CALIBRATION.md`'s numbers rather than from

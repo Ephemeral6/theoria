@@ -1,4 +1,4 @@
 negative-control probe: 141 entry points, 141 pinned, detector A-B
   PINNED_OK=141
 PROBE: green
-probe exit=0
+exit=0

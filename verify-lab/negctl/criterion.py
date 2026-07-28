@@ -360,6 +360,17 @@ class Index:
             return n
 
         best = max(cands, key=lambda c: (shared(c), -len(c.split("/"))))
+        if shared(best) == 0:
+            # Several files could be this import and none of them is anywhere
+            # near the importer. Guessing here attributes a negative control to a
+            # file in another territory: `ablation-arm/tests/test_exhibits.py`
+            # imports `exhibits.run_all` and the four `run_all.py` in this
+            # repository are in cold-start-a0, cold-start-a2, cold-start-a3 and
+            # engine-rig/tools -- the old tie-break handed it to cold-start-a0.
+            # An unresolved binding is a false `absent`, which makes the probe
+            # noisy; a wrongly resolved one is a false `present`, which makes it
+            # silent about a real gap. Prefer the noise.
+            return None
         return best
 
 

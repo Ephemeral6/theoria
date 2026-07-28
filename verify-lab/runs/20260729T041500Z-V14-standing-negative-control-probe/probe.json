@@ -655,28 +655,13 @@
       "pinned": "absent"
     },
     {
-      "evidence": [
-        {
-          "lineno": 87,
-          "target": "cold-start-a0/run_all.py",
-          "test_file": "ablation-arm/tests/test_exhibits.py",
-          "test_func": "test_e2_sweep_is_reported_and_disarmed",
-          "why": "assert <verdict> is False"
-        },
-        {
-          "lineno": 96,
-          "target": "cold-start-a0/run_all.py",
-          "test_file": "ablation-arm/tests/test_exhibits.py",
-          "test_func": "test_e3_is_not_constructible_and_says_why",
-          "why": "assert <verdict> is False"
-        }
-      ],
+      "evidence": [],
       "kind": "PINNED_OK",
-      "measured": "present",
-      "note": null,
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory. | Re-pinned 2026-07-29 from `present` to `absent`. The earlier `present` was a resolver defect, not a negative control: `ablation-arm/tests/test_exhibits.py` imports `exhibits.run_all`, four files in this repository are named `run_all.py`, and the tie-break handed the binding to cold-start-a0. Index.resolve now refuses an ambiguous import that shares no path prefix with the importer. Nothing changed in this territory; what changed is that the probe stopped crediting it with another lane's test.",
       "owner": "track: theory-compiler (off limits to engine-rig)",
       "path": "cold-start-a0/run_all.py",
-      "pinned": "present"
+      "pinned": "absent"
     },
     {
       "evidence": [],
@@ -715,35 +700,13 @@
       "pinned": "absent"
     },
     {
-      "evidence": [
-        {
-          "lineno": 165,
-          "target": "cold-start-a2/a2pipeline/engines.py",
-          "test_file": "engine-rig/tests/test_bench.py",
-          "test_func": "test_a_theorem_about_another_predicate_is_refused_not_skipped",
-          "why": "pytest.raises"
-        },
-        {
-          "lineno": 213,
-          "target": "cold-start-a2/a2pipeline/engines.py",
-          "test_file": "engine-rig/tests/test_bench.py",
-          "test_func": "test_a_pair_theorem_naming_one_box_twice_is_refused",
-          "why": "pytest.raises"
-        },
-        {
-          "lineno": 74,
-          "target": "cold-start-a2/a2pipeline/engines.py",
-          "test_file": "engine-rig/tests/test_ic3_pdr.py",
-          "test_func": "test_every_clause_that_survives_minimisation_is_load_bearing",
-          "why": "assert not <verdict>"
-        }
-      ],
+      "evidence": [],
       "kind": "PINNED_OK",
-      "measured": "present",
-      "note": null,
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control. | Re-pinned 2026-07-29 from `present` to `absent`. The earlier `present` was a resolver defect, not a negative control: `ablation-arm/tests/test_exhibits.py` imports `exhibits.run_all`, four files in this repository are named `run_all.py`, and the tie-break handed the binding to cold-start-a0. Index.resolve now refuses an ambiguous import that shares no path prefix with the importer. Nothing changed in this territory; what changed is that the probe stopped crediting it with another lane's test.",
       "owner": "track: theory-compiler (A2 cold start)",
       "path": "cold-start-a2/a2pipeline/engines.py",
-      "pinned": "present"
+      "pinned": "absent"
     },
     {
       "evidence": [],
@@ -1648,7 +1611,7 @@
       "evidence": [],
       "kind": "PINNED_OK",
       "measured": "absent",
-      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "note": "Hand-annotated. A measurement tool, not a gate: `main()` always returns 0 and only prints. The enumerator counts it because it ends in `raise SystemExit(main())`, and by V11's own taxonomy that makes it a dead gate -- the figures/manifest.py shape. Pinned absent and left absent.",
       "owner": "lane: verify (RES-3) -- this probe's own territory",
       "path": "verify-lab/negctl/calibrate.py",
       "pinned": "absent"
@@ -1679,7 +1642,7 @@
       ],
       "kind": "PINNED_OK",
       "measured": "present",
-      "note": null,
+      "note": "Hand-annotated. `present` via verify-lab/negctl/tests/test_probe.py, which plants a gate with no negative control and requires exit 1. A probe exempt from its own rule would be the 142nd case of the disease it looks for, so test_the_probe_is_subject_to_its_own_rule asserts this key exists.",
       "owner": "lane: verify (RES-3) -- this probe's own territory",
       "path": "verify-lab/negctl/probe.py",
       "pinned": "present"

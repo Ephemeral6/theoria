@@ -259,8 +259,9 @@
     },
     "cold-start-a0/run_all.py": {
       "census_v11": "yes",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory. | Re-pinned 2026-07-29 from `present` to `absent`. The earlier `present` was a resolver defect, not a negative control: `ablation-arm/tests/test_exhibits.py` imports `exhibits.run_all`, four files in this repository are named `run_all.py`, and the tie-break handed the binding to cold-start-a0. Index.resolve now refuses an ambiguous import that shares no path prefix with the importer. Nothing changed in this territory; what changed is that the probe stopped crediting it with another lane's test.",
       "owner": "track: theory-compiler (off limits to engine-rig)",
-      "verdict": "present"
+      "verdict": "absent"
     },
     "cold-start-a0/world/ground_truth.py": {
       "note": "not surveyed by V11; the criterion finds no negative control.",
@@ -283,8 +284,9 @@
       "verdict": "absent"
     },
     "cold-start-a2/a2pipeline/engines.py": {
+      "note": "not surveyed by V11; the criterion finds no negative control. | Re-pinned 2026-07-29 from `present` to `absent`. The earlier `present` was a resolver defect, not a negative control: `ablation-arm/tests/test_exhibits.py` imports `exhibits.run_all`, four files in this repository are named `run_all.py`, and the tie-break handed the binding to cold-start-a0. Index.resolve now refuses an ambiguous import that shares no path prefix with the importer. Nothing changed in this territory; what changed is that the probe stopped crediting it with another lane's test.",
       "owner": "track: theory-compiler (A2 cold start)",
-      "verdict": "present"
+      "verdict": "absent"
     },
     "cold-start-a2/a2pipeline/exhibit.py": {
       "note": "not surveyed by V11; the criterion finds no negative control.",
@@ -709,7 +711,7 @@
       "verdict": "absent"
     },
     "verify-lab/negctl/calibrate.py": {
-      "note": "Hand-annotated. This is a measurement tool, not a gate: `main()` always returns 0 and only ever prints. The enumerator counts it because it ends in `raise SystemExit(main())`, and by V11's own taxonomy that makes it a dead gate -- exactly the `figures/manifest.py` / `release/checklist.py` shape the census names. Pinned absent and left absent: the honest fix is for the calibration to have no `__main__` exit path at all, or to fail when the criterion degrades below a pinned rate, and neither is this item's work.",
+      "note": "Hand-annotated. A measurement tool, not a gate: `main()` always returns 0 and only prints. The enumerator counts it because it ends in `raise SystemExit(main())`, and by V11's own taxonomy that makes it a dead gate -- the figures/manifest.py shape. Pinned absent and left absent.",
       "owner": "lane: verify (RES-3) -- this probe's own territory",
       "verdict": "absent"
     },

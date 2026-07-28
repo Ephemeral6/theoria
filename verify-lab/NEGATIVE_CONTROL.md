@@ -306,7 +306,7 @@ this criterion on purpose.
 | | count | rate |
 |---|---|---|
 | false `present` — a real gap the probe stays quiet about | 3 of 34 | 8.8% (**0.0%** excluding the 8 files the census itself judged twice) |
-| false `absent` — a red on a gate that *does* have a negative control | **19 of 63** | **30.2%** |
+| false `absent` — a red on a gate that *does* have a negative control | **20 of 63** | **31.8%** |
 
 The naive criterion — judge by whether the test function's *name* sounds negative
 — is strictly worse at the same false-positive rate (FNR 44%), and is kept in the
@@ -341,16 +341,16 @@ the feeling:
 
 A blocking gate's cost is its false alarms, and for this probe a false alarm is a
 criterion false *negative* — a red on a gate whose negative control the criterion
-cannot see. That is **30%**. Roughly one in three properly-negative-controlled
+cannot see. That is **32%**. Roughly one in three properly-negative-controlled
 gates added to this repository would be blocked by a probe that is wrong about it.
 The only ways through are to weaken the criterion, or to register the file in
 `KNOWN_GAPS.json` — which is an exemption list by another name. A gate that makes
 people write exemptions gets turned off wholesale, and that is worse than no gate,
 because a disabled gate still looks like coverage in a list of checks.
 
-The 30% is also not evenly spread, which makes it worse rather than better. It
+The 32% is also not evenly spread, which makes it worse rather than better. It
 concentrates in two classes named in `CALIBRATION.md` §3: orchestrators whose
-demonstration lives one level down (9 rows), and negative controls that are not
+demonstration lives one level down (10 rows), and negative controls that are not
 pytest at all (6 rows) — `--self-test`, `--calibrate`, a pre-registered
 expectations table, `negctl.py`. Those six are among the **best** negative-control
 work in the repository. A merge gate whose false alarms land hardest on the people
@@ -373,8 +373,8 @@ What the numbers *do* support:
    92%), or adopt a convention that a gate declares its own negative control so
    the criterion stops having to infer one.
 
-One caveat the reader is owed: the criterion was tuned in three rounds against
-this same 127-row census, so **8.8% and 30% are lower bounds**. There is no
+One caveat the reader is owed: the criterion was tuned in four rounds against
+this same 127-row census, so **8.8% and 32% are lower bounds**. There is no
 held-out set — one census is not two. `ADVERSARIAL.md` in the run directory is an
 independent attempt to break the criterion from outside the calibration rows, and
 its findings, including where they overturn the above, are recorded there.
