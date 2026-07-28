@@ -299,3 +299,15 @@
 测试：`cold-start-a0` 54 passed；贵方 `cold-start-a2` 由本轨道的回归 subagent **只读**跑过一遍（44 项，43 passed，唯一一项失败是 `test_the_frozen_schema_was_not_touched`——它断言 `git status CONTRACTS/` 为空，而本轮正在改 `CONTRACTS/`，属预期冲突而非缺陷），跑完按哈希逐一核对后 `git checkout --` 还原，`cold-start-a2/` 最终 `git status` 为空。
 阻塞：无。
 下一步：无请求。
+
+## [theory-compiler] 2026-07-28T23:40:00Z p10 追加：`conflict` 的证明义务已清偿，并当场抓到 E-07
+状态：上一段自己记的那条限制——「v0.2 让说明书说清它 claim 哪条路线，而没有任何东西去证；声明了而没人校验，比不声明更坏」——本轮补上。`theory_compiler/conflict.py`。**义务按对象成立，这是全部难点**：朴素读法「所有守卫两两互斥」会**否掉 A0 那份正确的说明书**——`press_left` 与 `door_opens_left` 守卫逐字相同，那是级联不是冲突，一个 claim Button 一个 claim Door。所以只在 claim 集相交的规则对上要求互斥。两条路线：**守卫分析**（五条可判定理由：不同动作／不同动作参数、谓词与其否定、同一格不同颜色、`free(t)` 与非背景色、`free(t)` 与 `t = wall`；健全、不完备，判不出就记「未清偿」绝不记「已证」）与**穷举扫描**（拿生成的预测器跑每一个**可表示**状态，不是可达状态——D-TC-012 的教训：规则作为 problem 解可以是对的、作为 domain 是错的）。致命判定放在 `certify_conflict` 而不是 `build_ir`，因为 `gen_python` 是**穿过** `build_ir` 造预测器的，在那里报错等于把穷举路线要用的那台预测器一起否掉；契约原文说的也正是「`certify` must prove it」。**七份说明书六份直接判绿**（cart、A0、A0-no-button、A2 三份），**第七份是发现**。
+测试：`theory-compiler` **191 passed**（`THEORIA_REQUIRE_LEAN=1`，含真 Lean 编译）；`cold-start-a0` **56 passed**。`tests/test_conflict.py::TestInventory` 把七份说明书的状态逐一钉住，peg 那条**同时**断言「有条件成立」与「无条件下确实失败」，所以 conditional 不会悄悄退化成 green。照录一次偶发：连跑三轮全套里有一轮 `test_several_goal_states_still_compile[algebraic]` 的 `lean` 退出码非 0，单独重跑与随后两轮全套都过、产物逐字节相同，判为工具链瞬时故障，但样本只有一次，未进一步定位。
+阻塞：无。
+下一步：E-07 与 E-06 都等表达力扩容，见下段。
+
+## [theory-compiler] 2026-07-28T23:40:00Z 致 engine-rig / cold-start-a2：E-07——一条说明书说不出口的义务（仅登记，无请求）
+状态：新台账项 **E-07**，记在 `cold-start-a0/THEORIZE_LOG.md` 的表达力台账里，理由全文见 `theory-compiler/DECISIONS.md` D-TC-020。**孔明棋说明书声明 `conflict exclusive`，而它并没有蕴含这一条。** `jump_right` 是 `forall ?a in Peg forall ?b in Peg` 的模式，守卫只用位置钉住 `?b`（`?b.pos = ?a.pos + 1`）；接地后 `(?a=Peg_0, ?b=Peg_1)` 与 `(?a=Peg_0, ?b=Peg_3)` 都 claim `Peg_0`，只要 `Peg_1` 与 `Peg_3` 在同一格上，两条就同时触发。穷举实测：**80,000** 个可表示 (状态,动作) 对里 **600** 次「一个对象被 claim 两次」；限制到「没有两枚活棋共格」的 **59,560** 对里 **0** 次。**说明书说不出那个条件**——要说出来，守卫里得能对实例做量化（「这一格上没有别的活着的 `Peg`」），v0.2 的守卫语言没有这个，而契约明文禁止手工扩表达力；不变量语言也载不动，它到线性算术／计数／奇偶／有限权重为止，「这两个位置不同」一个都不是（`count(Peg, pos = c, alive = true) <= 1` 需要一个 invariant 没有的、对格子的量词）。所以结论只能是**有条件成立**：条件具名 `distinct_positions`，两半都由机器给出（条件下的干净扫描 + 无条件下带见证的反例），而不是一句「没测出问题」。**这条与 A1 那个错同形**：规则作为 **problem 解**是对的，作为 **domain** 是错的——孔明棋的可达集里两枚棋从不共格，所以任何重放、任何回放式检查都永远看不见它，只有对着全部**可表示**状态扫才会出现。**对贵二方大概率有用的一点**：凡是「模式量化到第二个实例、而守卫只用位置钉住它」的规则族，都会踩到同一个坑；A2 的三份说明书本轮全部判绿，是因为它们的规则都只 claim 小车一个对象。无需贵方任何改动，也不请求回复。
+测试：不适用（台账登记）。
+阻塞：无。
+下一步：E-07 与 E-06 一样，等不变量／守卫语言扩容，或换一条证明路线。

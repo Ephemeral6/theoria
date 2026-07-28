@@ -3,7 +3,7 @@
 Prompt: `monitor/prompts/P-10-contracts-v02.md` · branch `agent/p10-contracts-v02` ·
 base `edb3c37` · 2026-07-28.
 
-一次开窗，四项清偿。契约两份、缺陷两条、回归四份。
+一次开窗，五项清偿。契约两份、缺陷两条、回归四份，外加 `conflict` 证明义务。
 
 ---
 
@@ -34,11 +34,11 @@ base `edb3c37` · 2026-07-28.
 补版本号、生效日、冻结政策、v0.1→v0.2 迁移说明（含「v0.2 说明书在 v0.1 解析器下
 **静默**编译成另一个世界」这条双向危害）。`semantics:` 提案在
 `cold-start-a0/proposals/` 里挂上 ADOPTED 裁决，连同**两条没给的**：`conflict` 的
-证明义务只声明未 discharge，`frame reset` / `conflict priority:` /
-`cascade multi_frame` 三个取值无后端。
+证明义务只声明未 discharge（**本轮稍后补上，见第 6 节**），`frame reset` /
+`conflict priority:` / `cascade multi_frame` 三个取值无后端。
 
-修订记录新增两条：#9 权重可来自证书（E-06 的转录那一半），#10 后端遇到不实现的
-`semantics:` 取值必须报错。
+修订记录新增三条：#9 权重可来自证书（E-06 的转录那一半），#10 后端遇到不实现的
+`semantics:` 取值必须报错，#11 `conflict` 必须被清偿而不只是被声明。
 
 ### 3 · E-06 的转录那一半 — 清偿；证明那一半 — 仍然 open
 
@@ -71,6 +71,30 @@ base `edb3c37` · 2026-07-28.
 | cold-start-a0 | **PASS** | 九步全绿；`teleport-down` 从 ground 不出来变成 118 个接地动作里的 1 个并**真的触发**；计划**不变**，原因经几何核实（传送出口在起始那一侧，走它是绕路）；BFS 穷举确认传送口**永不被占据** |
 | a0-spike | **PASS-WITH-EXPECTED-REJECTION** | 因缺 `semantics:` 被拒——契约自己的规矩（E-03）；HEAD 链上**同样报错**，本轮改动零影响 |
 | cold-start-a2 | **PASS** | 展品**完好**：有洞说明书仍是 UNSAT + 空公理集的 `unsolvable`；A2 的本地绕法与上游修复算出**同一个** cell 集，绕法变成可证的 no-op |
+
+### 6 · `conflict` 的证明义务（追加清偿）
+
+上面「未清偿」里原本记着一条：v0.2 让说明书说清它 claim 哪条路线，而没有任何东西
+去证。已补上 `theory_compiler/conflict.py`。
+
+义务**按对象**成立，这是全部难点：朴素读法「所有守卫两两互斥」会**否掉 A0 那份正确
+的说明书**——`press_left` 与 `door_opens_left` 守卫逐字相同，是级联，一个 claim
+Button 一个 claim Door。所以只在 claim 集相交的规则对上要求互斥。
+
+两条路线，报告说明是哪条付的账：**守卫分析**（五条可判定理由，健全不完备）与
+**穷举扫描**（预测器跑每一个**可表示**状态，不是可达状态）。`build_ir` 只警告不报错
+——`gen_python` 是穿过 `build_ir` 造预测器的，在那里报错等于把穷举路线要用的预测器
+一起否掉；致命判定在 `certify_conflict`，也正是契约原文说的位置。
+
+**七份说明书六份判绿，第七份是本轮第二个真发现：E-07。** 孔明棋说明书声明
+`conflict exclusive` 而没有蕴含它——`jump_right` 是双实例模式，接地出的两条规则都
+claim 同一枚跳棋，只要另外两枚共格就同时触发。80,000 个可表示 (状态,动作) 对里
+**600** 次冲突；限制到「没有两枚活棋共格」的 59,560 对里 **0** 次。说明书说不出那个
+条件（要在守卫里对实例做量化，v0.2 没有，契约禁止手工扩），所以结论是**有条件
+成立**：条件具名、两半都由机器给（干净扫描 + 带见证的反例）。
+
+**与 A1 那个错同形**：规则作为 problem 解是对的，作为 domain 是错的。可达集里两枚棋
+从不共格，所以任何重放都永远看不见它。
 
 ---
 
@@ -113,10 +137,9 @@ base `edb3c37` · 2026-07-28.
 * **会签未到手。** 契约是**草案**，engine-rig 回签前不生效。异轨道异步，本轨道
   不等待。
 * **E-06 的证明那一半仍然 open。** 见上。
-* **`conflict` 的证明义务无人校验。** v0.2 让说明书说清它claim 哪条路线，但没有
-  哪个后端去证守卫两两不交或优先序全序。**声明了而没人校验，比不声明更坏，因为它
-  读起来像已经被检查过了**——这条以 D-TC-017 的形式记着，但只对 `semantics:` 取值
-  做了守卫，`conflict` 的义务本身还没有。
+* ~~**`conflict` 的证明义务无人校验。**~~ **本轮追加清偿**，见上面第 6 节。
+* **E-07（新）**：守卫语言无法表达「两个同类实例不共格」，所以孔明棋说明书的
+  `conflict exclusive` 只能**有条件**成立。不是检查器的不完备，是说明书说不出来。
 * **`frame reset` / `conflict priority:` / `cascade multi_frame` 三个取值无后端。**
   全部报错，不近似。
 * **共享 `gen_pddl` 不消费 `ProblemSpec`。** 它的签名是
@@ -134,10 +157,14 @@ base `edb3c37` · 2026-07-28.
 ## Tests
 
 ```
-theory-compiler          163 passed          (THEORIA_REQUIRE_LEAN=1，含真 Lean 编译)
-theory-compiler          155 passed, 8 skipped   (无 lean 时的默认)
-cold-start-a0             54 passed          (LEAN=… 时；无 lean 时 51 passed, 3 skipped)
+theory-compiler          191 passed          (THEORIA_REQUIRE_LEAN=1，含真 Lean 编译)
+theory-compiler          183 passed, 8 skipped   (无 lean 时的默认)
+cold-start-a0             56 passed          (LEAN=… 时；无 lean 时 53 passed, 3 skipped)
 ```
+
+一次**偶发**失败要照录：连跑三轮全套里有一轮 `test_several_goal_states_still_compile
+[algebraic]` 的 `lean` 退出码非 0，单独重跑与随后两轮全套都通过，产物逐字节相同。
+判断是工具链瞬时故障而非回归，但样本只有一次，未进一步定位。
 
 跨轨道只读核对：`engine-rig/` 与 `a0-spike/` `git status` 全程为空；
 `cold-start-a2/` 被回归 subagent 跑 `run_all.py` 时写脏 8 个文件，已逐一核对内容

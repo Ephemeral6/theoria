@@ -270,9 +270,18 @@ def _provenance(path: str) -> str:
     return parts[-1]
 
 
-def build_ir(ast: TheoryAST, problem: ProblemSpec, certificate=None) -> WorldIR:
+def build_ir(ast: TheoryAST, problem: ProblemSpec, certificate=None,
+             check_conflicts: bool = True) -> WorldIR:
     """`certificate` is optional and is the **only** way weights enter without
-    being written down twice. See `_resolve_weights`."""
+    being written down twice. See `_resolve_weights`.
+
+    `check_conflicts` discharges the `conflict` policy the manual declares
+    (`conflict.check_conflict`) and **raises** if it cannot. It defaults to on
+    because the alternative is what v0.2 shipped with: a manual that states
+    which of constraint 9's two routes it claims, and nothing anywhere that
+    checks either. Pass `False` only with a written reason — the one manual in
+    this repo that needs it is the peg fixture, for ledger entry **E-07**.
+    """
     if ast.semantics is None:
         raise IRError("theory.dsl has no `semantics:` section (E-03)")
     if ast.word_table is None:
@@ -323,6 +332,12 @@ def build_ir(ast: TheoryAST, problem: ProblemSpec, certificate=None) -> WorldIR:
         warnings = [w for w in warnings
                     if not (w.startswith("theory.dsl declares `weights ")
                             and any("`weights %s " % n in w for n in filled))]
+
+    if check_conflicts:
+        from .conflict import check_conflict
+        report = check_conflict(rules, ast.semantics, problem.background,
+                                strict=False)
+        warnings.extend(report.warnings())
 
     return WorldIR(
         warnings=warnings,

@@ -11,11 +11,16 @@ D-TC-011 — same status as a missing `goal:`).
 Two things this proposal asked for and did **not** get, recorded so the gap is
 visible rather than assumed away:
 
-* **The `conflict` proof obligation is declared, not discharged.** v0.2 makes a
-  manual say which of constraint 9's two routes it claims. No backend yet
-  *proves* pairwise guard disjointness for `exclusive`, or totality of the order
-  for `priority:`. The declaration tells `certify` what to prove; nobody has
-  written that check.
+* ~~**The `conflict` proof obligation is declared, not discharged.**~~
+  **Settled 2026-07-28** — `theory_compiler/conflict.py` discharges both routes:
+  pairwise guard disjointness for `exclusive`, totality over colliding rules for
+  `priority:`. Six of the seven manuals in the repository discharge outright by
+  guard analysis. **The seventh is a finding**: the peg manual declares
+  `exclusive` and does not entail it — two groundings of one schema both claim
+  the jumping peg whenever two pegs share a cell (600 collisions across the
+  80,000 representable state-action pairs; 0 across the 59,560 where no two live
+  pegs coincide). The manual cannot state the missing condition, because it
+  needs quantification inside a guard. Ledger **E-07**.
 * **`frame reset`, `conflict priority:` and `cascade multi_frame` parse but have
   no backend.** Every manual in the repo declares `persist` / `exclusive` /
   `single_frame`, so the other branch of each has never been compiled. This

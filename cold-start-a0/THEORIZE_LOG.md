@@ -359,9 +359,44 @@ Things the world said that `dsl_grammar_v0.1` cannot.
 | E-03 | a frame axiom / default clause | a comment at the top of `theory.dsl` and a hard-coded rule in the backends | **the most important semantic fact about `step` is not in the DSL at all** |
 | E-04 | declaring a board landmark (`portal_exit`, the goal cell) | free-floating names resolved by the problem instance | the domain/problem boundary is real but unwritten; a reader of `theory.dsl` alone cannot tell which names are level data |
 | E-05 | a weight function over cells for a pagoda invariant | the vector lives in the problem instance (M5) | same as E-04 |
+| E-06 | a proof method for goals no linear pagoda covers | nothing — `CertificateGapError` refuses to generate | `goal count(Peg, alive) = 1` stays unproven: three of the five single-peg terminals admit no linear pagoda at all |
+| E-07 | saying that two live instances of one type never share a cell | nothing — the peg manual's `conflict exclusive` is discharged only *conditionally* | see below |
 
 E-03 is the one to fix first: a manual whose default behaviour is a comment is
 not a manual.
+
+### E-07, in full — an obligation the guard language cannot let a manual meet
+
+Found 2026-07-28 while making the `conflict` obligation checkable
+(`theory_compiler/conflict.py`). The peg manual declares `conflict exclusive`
+and **does not entail it**.
+
+`jump_right` is a schema quantified over two instances, `forall ?a in Peg forall
+?b in Peg`, and its guard pins `?b` only by position: `?b.pos = ?a.pos + 1`.
+Grounding produces one rule per pair, and two of them — `(?a=Peg_0, ?b=Peg_1)`
+and `(?a=Peg_0, ?b=Peg_3)` — both claim `Peg_0` and both fire whenever `Peg_1`
+and `Peg_3` occupy the same cell. Measured by exhaustive sweep of the predictor:
+
+| swept | (state, action) pairs | rules claiming one object twice |
+|---|---|---|
+| every representable state | 80,000 | **600** |
+| …restricted to no two live pegs sharing a cell | 59,560 | **0** |
+
+So the declaration is true of the world and unstated in the manual. To state it,
+a guard would need to quantify over instances *inside itself* — "there is no
+other live `Peg` at this cell" — which the v0.2 guard language does not have,
+and which `dsl_grammar_v0.2.md` forbids adding by hand. The invariant language
+cannot carry it either: it reaches linear arithmetic, counts, parity and finite
+weights, and "these two positions differ" is none of those. `count(Peg, pos = c,
+alive = true) <= 1` would need a quantifier over cells that invariants lack.
+
+**Cost of not having it.** The strongest thing any tool can say about the peg
+manual is *conditional*: `exclusive` holds under a named condition
+(`distinct_positions`), fails without it, and both halves are machine-checked
+with a witness. That is a real result and it is weaker than the manual's own
+claim. It is the same shape as the finding behind D-TC-012 — a rule can be
+right as a *problem* solution and wrong as a *domain* — and it is the reason
+the check sweeps every representable state rather than the reachable ones.
 
 ---
 

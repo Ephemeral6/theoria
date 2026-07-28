@@ -90,6 +90,36 @@ supporting only part of the value set raises, names the value, and stops;
 repository implements `frame reset`, `conflict priority:`, or `cascade
 multi_frame`; all three parse, and all three are refused at generation.
 
+#### Discharging `conflict`
+
+The obligation is **per object**, and reading it as "all guards pairwise
+disjoint" is wrong: two rules with identical guards that claim *different*
+objects are a cascade, not a conflict, and A0's `press_left` / `door_opens_left`
+are exactly that. So the obligation ranges over pairs of rules whose claimed
+objects intersect, and only those. Pairs are settled by two routes:
+
+1. **Guard analysis** — sound, incomplete, syntactic. Two guards are disjoint if
+   they match different actions or differ in an action argument; if one requires
+   a predicate the other negates; if they demand different colours of one cell;
+   if one requires `free(t)` and the other a non-background colour of `t`; or if
+   one requires `free(t)` and the other `t = wall`. Anything else is
+   **undischarged**, never "assumed fine".
+2. **Exhaustive sweep** — the predictor, run over every state the level can
+   represent, **not** the reachable ones. Reachability is a property of one
+   starting configuration and `conflict` is a claim about the domain; D-TC-012
+   is the standing lesson that a rule can be right as a problem solution and
+   wrong as a domain.
+
+A sweep may also discharge the obligation **conditionally**, relative to a
+*named* well-formedness condition, and this is a result rather than a shrug only
+because the machine produces both halves: a clean sweep under the condition and
+a concrete witness without it. A conditional discharge is simultaneously a
+defect report — the manual claims something it does not entail — and belongs in
+the ledger. **E-07** is the standing instance: `conflict exclusive` on a manual
+whose schema quantifies over a second instance cannot be entailed, because
+saying "no other live instance of this type is on this cell" needs quantification
+inside a guard, which this contract does not have and must not gain by hand.
+
 ### events
 
 Unchanged in syntax. Newly load-bearing: a backend dispatches on **name and
@@ -200,6 +230,7 @@ silently.
 
 | 9 | weight vectors may come from a certificate | **E-06**, D-TC-013 | `gen_lean` read the numbers from the certificate and the other three backends read them only from the level, so a manual either hand-copied the engine's vector into a checked-in file or rendered a `theory.md` that named a potential it could not show |
 | 10 | a backend must refuse an unimplemented `semantics:` value | the `semantics:` proposal's own closing paragraph, and a defect found while finalising this version | `gen_pddl` reads only the AST — never the IR, never the predictor — so no guard reached it, and a manual declaring `frame reset` + `cascade multi_frame` compiled to a STRIPS encoding of `persist` + `single_frame` without a word of complaint |
+| 11 | `conflict` must be discharged, not merely declared | **E-07**, and this contract's own §semantics, which said "`certify` must prove it" while nothing did | for one revision the manual named which of constraint 9's two routes it claimed and no tool checked either. A declaration nobody verifies reads exactly like a verified one — strictly worse than not asking, because it looks like evidence |
 
 Ledger entries E-01 through E-05 are **discharged** by this revision. E-03 was
 the one named as "the one to fix first"; it is item 1.

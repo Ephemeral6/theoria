@@ -6,8 +6,8 @@
 [`runs/P-10/RUN_STATE.md`](runs/P-10/RUN_STATE.md)。
 
 ```
-theory-compiler   163 passed   (THEORIA_REQUIRE_LEAN=1，含真 Lean 编译)
-cold-start-a0      54 passed   (LEAN=… 时)
+theory-compiler   191 passed   (THEORIA_REQUIRE_LEAN=1，含真 Lean 编译)
+cold-start-a0      56 passed   (LEAN=… 时)
 ```
 
 四项清偿：
@@ -19,6 +19,7 @@ cold-start-a0      54 passed   (LEAN=… 时)
 | 3 | E-06 的转录那一半（证书权重注入编译链） | 清偿；**证明那一半仍 open** |
 | 4 | cold-start-a2 上报的两条缺陷 | 修复 + 8 项负向测试 |
 | 5 | 四份 DSL 回归 | 四个 subagent 全部 PASS |
+| 6 | `conflict` 证明义务（追加） | 清偿，两条路线；当场抓到 **E-07** |
 
 ### 本轮最该记住的三件事
 
@@ -40,13 +41,37 @@ cold-start-a0      54 passed   (LEAN=… 时)
 `cascade multi_frame` 的说明书，`gen_python` 拒绝、`gen_lean` 拒绝、`gen_pddl`
 照发不误——它只读 AST。这是 `semantics:` 段自己要关的洞在低一层重演。已补守卫。
 
+### 追加：`conflict` 的证明义务已清偿，并当场抓到 E-07
+
+`theory_compiler/conflict.py`，两条路线：**守卫分析**（五条可判定理由，健全不完备）
+与**穷举扫描**（拿预测器跑每一个**可表示**状态，不是可达状态——D-TC-012 的教训）。
+义务**按对象**成立，所以 A0 那对守卫完全相同的级联规则（`press_left` /
+`door_opens_left`，一个 claim Button 一个 claim Door）正确地不算冲突。
+
+七份说明书里六份直接判绿。**第七份是发现**：孔明棋说明书声明 `conflict exclusive`
+而**没有蕴含它**。`jump_right` 是双实例模式，接地出的
+`(?a=Peg_0, ?b=Peg_1)` 与 `(?a=Peg_0, ?b=Peg_3)` 都 claim `Peg_0`，只要两枚棋共格
+就同时触发。穷举实测：
+
+| 扫描范围 | (状态,动作) 对 | 一个对象被 claim 两次 |
+|---|---|---|
+| 全部可表示状态 | 80,000 | **600** |
+| 限制到「没有两枚活棋共格」 | 59,560 | **0** |
+
+说明书说不出那个条件——要说得能在守卫里对实例做量化，v0.2 没有，且契约禁止手工扩。
+所以状态是 **conditional**：条件具名 `distinct_positions`，两半都由机器给（条件下
+干净 + 无条件下带见证的反例），记 **E-07**。**与 A1 那个错同形：规则作为 problem
+解是对的，作为 domain 是错的**；可达集里两枚棋从不共格，所以重放永远看不见它。
+
+`tests/test_conflict.py::TestInventory` 把七份说明书的状态逐一钉住，peg 那条同时
+断言「有条件成立」与「无条件下确实失败」，所以 conditional 不会悄悄退化成 green。
+
 ### 未清偿
 
 * **会签未到手**——契约是草案。
 * **E-06 的证明那一半**：`goal count(Peg, alive) = 1` 仍证不出来。五个单子终局里
   三个没有线性 pagoda 函数。下一步是 `ic3_pdr` 的证书导出，在 engine-rig 那一侧。
-* **`conflict` 的证明义务无人校验**：v0.2 让说明书说清它 claim 哪条路线，没有后端
-  去证。声明了而没人校验，比不声明更坏。
+* **E-07**：守卫语言无法表达实例互斥，孔明棋的 `exclusive` 只能有条件成立。
 * 三个 `semantics:` 取值无后端（全部报错，不近似）；共享 `gen_pddl` 仍不消费
   `ProblemSpec`；`theory_grammar.lark` 是死文件（已钉警告）。
 

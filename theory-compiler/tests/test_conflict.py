@@ -1,0 +1,302 @@
+"""The `conflict` obligation, and the inventory of what it currently proves.
+
+v0.2 made a manual declare which of constraint 9's two routes it claims and
+checked neither. `theory_compiler.conflict` discharges the declaration; this
+module pins what it can prove, what it refuses, and — in `TestInventory` — the
+exact status of every manual in the repository, so that a new undischarged pair
+anywhere turns this file red rather than passing unnoticed.
+"""
+
+import json
+from pathlib import Path
+
+import pytest
+
+from theory_compiler.conflict import (
+    CLAIMED_ARGS, CONDITIONS, DISTINCT_POSITIONS, ConflictError,
+    cell_universe, certify_conflict, check_conflict, claimed_objects,
+    disjointness_reason,
+)
+from theory_compiler.generators.gen_python import generate_python
+from theory_compiler.ir import build_ir
+from theory_compiler.parser.ast_nodes import SemanticsSection
+from theory_compiler.parser.theory_parser import parse_theory
+from theory_compiler.problem import load_problem
+
+FIXTURES = Path(__file__).parent / "fixtures"
+REPO = Path(__file__).resolve().parents[2]
+
+EXCLUSIVE = SemanticsSection(frame="persist", conflict="exclusive",
+                             cascade="single_frame")
+
+
+def rules_of(source: str):
+    return parse_theory(source).rules.rules
+
+
+def one_rule(guard: str, event: str, name: str = "r"):
+    source = (
+        "word_table:\n  board\n  object Cart { pos: Coord, color: Int }\n"
+        "  object Door { pos: Coord, color: Int, present: Bool }\n"
+        "  landmark origin\n"
+        "semantics:\n  frame persist\n  conflict exclusive\n"
+        "  cascade single_frame\n"
+        "events:\n  event moved(o, dir) | teleported(o, dest) | vanished(o)\n"
+        "rules:\n  rule %s\n    when %s then %s\n"
+        "goal:\n  goal Cart.pos = (1, 1)\n" % (name, guard, event))
+    return rules_of(source)[0]
+
+
+# ------------------------------------------------------- what "claims" means
+
+class TestClaimedObjects:
+    def test_a_single_object_event_claims_its_subject(self):
+        rule = one_rule("act=push(Cart, up)", "moved(Cart, up)")
+        assert claimed_objects(rule) == {"Cart"}
+
+    def test_a_peg_jump_claims_both_the_mover_and_the_jumped(self):
+        source = (FIXTURES / "peg_theory.dsl").read_text(encoding="utf-8")
+        ast = parse_theory(source)
+        ir = build_ir(ast, load_problem(str(FIXTURES / "peg5_problem.json")))
+        jump = next(r for r in ir.rules if r.name.startswith("jump_right"))
+        assert len(claimed_objects(jump)) == 2, (
+            "jumped/3 kills the peg it jumps over; a claim set of one would "
+            "skip every pair that event creates")
+
+    def test_an_unknown_event_fails_closed(self):
+        rule = one_rule("act=push(Cart, up)", "dissolved(Cart, Door, up)")
+        with pytest.raises(ConflictError) as exc:
+            claimed_objects(rule)
+        assert "no claim table" in str(exc.value)
+
+    def test_the_claim_table_covers_every_event_the_predictor_implements(self):
+        """Drift pin. `gen_python._effect` decides what actually gets mutated;
+        this table decides what gets *checked*. If the first grows and the
+        second does not, a two-object event silently stops being examined."""
+        source = (Path(generate_python.__globals__["__file__"])).read_text(
+            encoding="utf-8")
+        implemented = set()
+        for line in source.splitlines():
+            line = line.strip()
+            for prefix in ('if key == ("', 'if key in (("'):
+                if line.startswith(prefix):
+                    for chunk in line.split('("')[1:]:
+                        name, _, rest = chunk.partition('"')
+                        arity = rest.strip(" ,)").split(")")[0].strip(", ")
+                        if arity.isdigit():
+                            implemented.add((name, int(arity)))
+        assert implemented, "could not read the backend's event table"
+        missing = sorted(implemented - set(CLAIMED_ARGS))
+        assert not missing, (
+            "gen_python mutates state for %s, and the conflict checker has no "
+            "claim table for them, so pairs involving them are skipped" % (missing,))
+
+
+# --------------------------------------------------- the five decidable rules
+
+class TestDisjointness:
+    def test_different_action_names(self):
+        a = one_rule("act=push(Cart, up)", "moved(Cart, up)", "a")
+        b = one_rule("act=pull(Cart, up)", "moved(Cart, up)", "b")
+        assert "different actions" in (disjointness_reason(a, b) or "")
+
+    def test_same_action_different_direction(self):
+        """The common case: one schema grounded over four directions."""
+        a = one_rule("act=push(Cart, up)", "moved(Cart, up)", "a")
+        b = one_rule("act=push(Cart, down)", "moved(Cart, down)", "b")
+        reason = disjointness_reason(a, b) or ""
+        assert "action arguments differ at position 1" in reason
+        assert "up" in reason and "down" in reason
+
+    def test_same_action_same_arguments_is_not_a_reason(self):
+        a = one_rule("act=push(Cart, up)", "moved(Cart, up)", "a")
+        b = one_rule("act=push(Cart, up)", "teleported(Cart, origin)", "b")
+        assert disjointness_reason(a, b) is None
+
+    def test_a_predicate_against_its_negation(self):
+        a = one_rule("act=push(Cart, up) and free(above(Cart))",
+                     "moved(Cart, up)", "a")
+        b = one_rule("act=push(Cart, up) and not free(above(Cart))",
+                     "teleported(Cart, origin)", "b")
+        assert "negation" in (disjointness_reason(a, b) or "")
+
+    def test_two_colours_of_one_cell(self):
+        a = one_rule("act=push(Cart, up) and colored(above(Cart), 3)",
+                     "moved(Cart, up)", "a")
+        b = one_rule("act=push(Cart, up) and colored(above(Cart), 7)",
+                     "teleported(Cart, origin)", "b")
+        assert "different colours" in (disjointness_reason(a, b) or "")
+
+    def test_free_against_a_non_background_colour(self):
+        a = one_rule("act=push(Cart, up) and free(above(Cart))",
+                     "moved(Cart, up)", "a")
+        b = one_rule("act=push(Cart, up) and colored(above(Cart), 3)",
+                     "teleported(Cart, origin)", "b")
+        assert "free" in (disjointness_reason(a, b, background=0) or "")
+
+    def test_free_against_the_background_colour_is_not_a_reason(self):
+        """The soundness edge: `colored(t, 0)` and `free(t)` agree."""
+        a = one_rule("act=push(Cart, up) and free(above(Cart))",
+                     "moved(Cart, up)", "a")
+        b = one_rule("act=push(Cart, up) and colored(above(Cart), 0)",
+                     "teleported(Cart, origin)", "b")
+        assert disjointness_reason(a, b, background=0) is None
+
+    def test_free_against_wall(self):
+        a = one_rule("act=push(Cart, up) and free(toward(Cart, up))",
+                     "moved(Cart, up)", "a")
+        b = one_rule("act=push(Cart, up) and above(Cart) = wall",
+                     "teleported(Cart, origin)", "b")
+        assert "off the board" in (disjointness_reason(a, b) or "")
+
+    def test_above_and_toward_up_name_one_cell(self):
+        """Without normalisation the two spellings never meet and every pair
+        written in mixed style is reported undischarged."""
+        a = one_rule("act=push(Cart, up) and free(above(Cart))",
+                     "moved(Cart, up)", "a")
+        b = one_rule("act=push(Cart, up) and colored(toward(Cart, up), 3)",
+                     "teleported(Cart, origin)", "b")
+        assert disjointness_reason(a, b, background=0) is not None
+
+
+# ----------------------------------------------------------- the policy check
+
+class TestExclusive:
+    def test_rules_claiming_different_objects_never_conflict(self):
+        """A0's cascade: identical guards, one Button and one Door.
+
+        The naive reading of `exclusive` — all guards pairwise disjoint —
+        rejects this correct manual.
+        """
+        a = one_rule("act=push(Cart, left) and colored(leftof(Cart), 7)",
+                     "moved(Cart, left)", "press")
+        b = one_rule("act=push(Cart, left) and colored(leftof(Cart), 7)",
+                     "vanished(Door)", "opens")
+        report = check_conflict([a, b], EXCLUSIVE)
+        assert report.green and report.overlapping == []
+
+    def test_an_undischarged_pair_raises_in_strict_mode(self):
+        a = one_rule("act=push(Cart, up)", "moved(Cart, up)", "a")
+        b = one_rule("act=push(Cart, up)", "teleported(Cart, origin)", "b")
+        with pytest.raises(ConflictError) as exc:
+            check_conflict([a, b], EXCLUSIVE)
+        assert "a and b both claim Cart" in str(exc.value)
+        assert "sound and incomplete" in str(exc.value)
+
+    def test_non_strict_mode_reports_instead_of_raising(self):
+        a = one_rule("act=push(Cart, up)", "moved(Cart, up)", "a")
+        b = one_rule("act=push(Cart, up)", "teleported(Cart, origin)", "b")
+        report = check_conflict([a, b], EXCLUSIVE, strict=False)
+        assert not report.green
+        assert any("not discharged" in w for w in report.warnings())
+
+
+class TestPriority:
+    def _pair(self):
+        return (one_rule("act=push(Cart, up)", "moved(Cart, up)", "a"),
+                one_rule("act=push(Cart, up)", "teleported(Cart, origin)", "b"))
+
+    def test_a_ranked_collision_is_discharged(self):
+        a, b = self._pair()
+        sem = SemanticsSection(frame="persist", conflict="priority",
+                               cascade="single_frame", priority=["a", "b"])
+        report = check_conflict([a, b], sem)
+        assert report.green and report.ordered == [("a", "b")]
+
+    def test_an_unranked_collision_is_not(self):
+        """`priority` claims the order is *total over colliding rules*."""
+        a, b = self._pair()
+        sem = SemanticsSection(frame="persist", conflict="priority",
+                               cascade="single_frame", priority=["a", "other"])
+        with pytest.raises(ConflictError) as exc:
+            check_conflict([a, b], sem)
+        assert "no ground rule for" in str(exc.value)
+
+    def test_the_order_must_name_ground_rules(self):
+        """After `forall` expansion a schema is one rule per value, so an order
+        naming the schema ranks nothing that exists."""
+        a, b = self._pair()
+        sem = SemanticsSection(frame="persist", conflict="priority",
+                               cascade="single_frame", priority=["a", "schema"])
+        with pytest.raises(ConflictError) as exc:
+            check_conflict([a, b], sem)
+        assert "schema" in str(exc.value)
+
+
+# ------------------------------------------------- the whole repo, pinned
+
+def _manuals():
+    return [
+        ("peg", FIXTURES / "peg_theory.dsl", FIXTURES / "peg5_problem.json"),
+        ("cart", FIXTURES / "cart_theory.dsl", FIXTURES / "cart_problem.json"),
+        ("a0", REPO / "cold-start-a0/theory/theory.dsl",
+         REPO / "cold-start-a0/artifacts/problem_a0-base.json"),
+        ("a0-no-button", REPO / "cold-start-a0/theory/theory_no_button.dsl",
+         REPO / "cold-start-a0/artifacts/problem_a0-no-button.json"),
+        ("a2", REPO / "cold-start-a2/theory/theory.dsl",
+         REPO / "cold-start-a2/theory/generated/problem.json"),
+        ("a2-holed", REPO / "cold-start-a2/theory/theory_holed.dsl",
+         REPO / "cold-start-a2/theory/generated_holed/problem.json"),
+        ("a2-repaired", REPO / "cold-start-a2/theory/theory_repaired.dsl",
+         REPO / "cold-start-a2/theory/generated_repaired/problem.json"),
+    ]
+
+
+def _status(dsl: Path, problem: Path) -> dict:
+    ast = parse_theory(dsl.read_text(encoding="utf-8"))
+    ir = build_ir(ast, load_problem(str(problem)))
+    report = check_conflict(ir.rules, ir.semantics, ir.problem.background,
+                            strict=False)
+    if report.green:
+        return {"status": "green", "route": "guard analysis"}
+    ns: dict = {}
+    exec(generate_python(ast, ir.problem), ns)
+    report = certify_conflict(report, ns, ir.semantics, cell_universe(ir.problem))
+    return report.swept
+
+
+class TestInventory:
+    """Every manual in the repo, with its status pinned.
+
+    This is what stops the obligation from quietly becoming decorative again: a
+    manual that stops discharging, or a *new* manual that never did, turns this
+    red. The peg entry is a recorded gap (E-07), not an exemption — it asserts
+    the exact condition, and it asserts that the unconditional sweep really does
+    fail, so "conditional" can never silently decay into "green".
+    """
+
+    @pytest.mark.parametrize("name,dsl,problem", _manuals(),
+                             ids=[m[0] for m in _manuals()])
+    def test_every_manual_has_a_known_conflict_status(self, name, dsl, problem):
+        if not dsl.exists() or not problem.exists():
+            pytest.skip("%s is not generated" % dsl)
+        swept = _status(dsl, problem)
+        if name == "peg":
+            assert swept["status"] == "conditional", swept
+            assert swept["condition"] == DISTINCT_POSITIONS
+            assert swept["ledger"] == "E-07"
+        else:
+            assert swept["status"] == "green", (
+                "%s no longer discharges its declared conflict policy: %s"
+                % (name, json.dumps(swept, ensure_ascii=False)))
+
+    def test_the_peg_gap_is_real_and_stays_measured(self):
+        """Both halves, so neither can rot.
+
+        If the unconditional sweep ever came back clean the entry would be
+        stale and should be promoted to green; if the restricted one ever came
+        back dirty the manual would be wrong outright.
+        """
+        swept = _status(FIXTURES / "peg_theory.dsl",
+                        FIXTURES / "peg5_problem.json")
+        assert swept["pairs_examined_unrestricted"] == 80000
+        assert swept["pairs_examined_restricted"] == 59560
+        state, action, message = swept["witness_without_the_condition"]
+        assert "both fire on" in message and "Peg_0" in message
+        assert CONDITIONS[swept["condition"]].startswith("no two live instances")
+
+    def test_the_condition_is_named_rather_than_anonymous(self):
+        """A conditional discharge is only a result if the reader can see what
+        it rests on."""
+        assert DISTINCT_POSITIONS in CONDITIONS
+        assert CONDITIONS[DISTINCT_POSITIONS]
