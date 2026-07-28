@@ -63,8 +63,15 @@ unsolvable = proves_unsolvable(rung, rc, log)  ← 不报（交给谓词裁决�
 
 | 级别 | 全仓命中 | 我判真 | 我判假 | 精确率 |
 |---|---|---|---|---|
-| **ERROR** | 4 | **3** | 1 | **75%** |
+| **ERROR** | 4 | ~~3~~ **2** | ~~1~~ **2** | ~~75%~~ **50%** |
 | NOTE | 22 | 1 | 21 | 5% |
+
+> **[OVERTURNED] 上一版报的是 ERROR 精确率 75%（3 真 1 假）。按这条检查自己的分级判据
+> 只有 50%。** 对抗复核的依据是我自己写下的那句话：`monitor/reflex.py:147` 的 `hold`
+> 是「暂停舰队」，**关于进程**，按分级判据属 NOTE 栏；我在旁边写了「命中理由是词形巧合」，
+> 却仍然把它记进真阳。底层代码确实有缺陷（`quota.py` 崩溃退出 1 → `hold` False →
+> 继续花钱），**但那使它成为「一个假阴被同音字碰对了」，不是这条判据的召回。**
+> 这条我接受：把靠同音字碰对的命中算进精确率，就是在用运气冒充判据。
 
 `engine-rig` 领地：**ERROR 0、NOTE 0**（修复后）。修复前对同一文件重放，
 ERROR 1（`p13_fd_dividend.py:129`），假阳 0。
@@ -74,9 +81,25 @@ ERROR 1（`p13_fd_dividend.py:129`），假阳 0。
 | 位置 | 代码 | 我的判定 |
 |---|---|---|
 | `cold-start-a0/certify/fd_unsat.py:46` | `return bool(match) and int(match.group(1)) == FD_UNSOLVABLE_EXIT` | **真阳。** 就是 SURVEY 的 U-3，独立命中，不是我喂进去的。 |
-| `monitor/reflex.py:147` | `hold = q.returncode == 2` | **真阳**，但**命中理由是词形巧合，我要说清楚**：`hold` 进词表是因为「不变量 holds」，这里它是「暂停舰队」。语义上仍然对——熔断器崩溃退出 1 被读成「预算正常」——但如果检查是靠这种同音字吃饭的，它的召回不可信。 |
+| `monitor/reflex.py:147` | `hold = q.returncode == 2` | **[OVERTURNED] ~~真阳~~ → 按分级判据是假阳。** `hold` 进词表是因为「不变量 holds」，这里它是「暂停舰队」＝关于**进程**，该判 NOTE。底层缺陷是真的（熔断器崩溃 → 继续花钱），已写进 inbox，**但它是一个被同音字碰对的假阴，不算这条判据的战果。** |
 | `release/checklist.py:0` | 文件**根本不解析** | **真阳，而且是本次最意外的发现**：`git show HEAD:release/checklist.py` 的第 45 行里 `newline="\n"` 的 `\n` 被写成了**真正的换行**，`ast.parse` 与 `python release/checklist.py` 都会 `SyntaxError`。这是**已提交**的语法错误，不是检出产物。它之所以被报出来，是因为这个检查把「读不了的文件」当成「没检查过」而不是「干净」——那正是本工单在防的同一条错误，一层之上。**不是我的领地，写 inbox。** |
 | `worldgen/qc/run_qc.py:118` | `result["schema_valid"] = validate.returncode == 0` | **假阳。** 形状确实是「校验器的退出码 = 产物的性质」，但方向是安全的那一侧：校验器崩了 → 非零 → `schema_valid: False` → 报警。按判据（失败→**肯定**断言才算不安全）不成立。**这是这条检查唯一的、真实的假阳性。** |
+
+#### 分级由**变量名**决定，不由代码做了什么决定 —— **[OVERTURNED]**
+
+> **[OVERTURNED] 上一版把 ERROR / NOTE 的划分说成「关于世界 vs 关于进程」的语义区分。
+> 它不是语义区分，它是命名约定。** 对抗复核用实测把这条钉死了：同一份代码，
+> 仓库自己认可、SURVEY 明确表扬过的五合取 Lean 判据，一个字不改，只换绑定名：
+
+| 片段 | 判定 |
+|---|---|
+| `"green": (proc.returncode == 0 and not errors and not sorries and bool(axiom_reports) and all_axiom_free)` | `note:green` |
+| `"verified": (…完全相同的表达式…)` | **`error:verified`** |
+
+**后果是两个数字都有前提**：NOTE 级 21/22 判假阳、ERROR 级精确率（现在是 50%）
+——**两个都建立在「名字选对了」之上**。词表分级检验的是命名纪律，
+而这个仓库的命名纪律恰好很好，所以它今天有用；**这不等于它检验了代码。**
+这一条直接改变了我对「进不进全仓 CI」的理由（见第四节）。
 
 #### NOTE 级 22 处：为什么它们只配当注解
 
@@ -98,6 +121,22 @@ ERROR 1（`p13_fd_dividend.py:129`），假阳 0。
 ## 三、假阴（诚实的那一半）
 
 **这条检查的召回很低，而且低得系统性。**
+
+> **[补充，来自对抗复核]** 我第一版写的是「别的**形态**抓不到」。复核补的是更难看的一半：
+> **同一个形态换五种写法就全抓不到。** 它构造了 12 个假阴，12 个全逃——中间变量、
+> `if/else` 代替比较表达式、`dict.get` 默认值、断言名函数返回裸 `True`/`False`、
+> `match` 语句、循环累加、元组解包、`except` 里折进断言、弱状态词配命名常量，
+> 以及**两个最难堪的**：
+>
+> * `unsolvable = bool(done.returncode == 12)` —— 裹一层 `bool()` 就静音；
+> * `def _decide(rc): return rc == 12` / `unsolvable = _decide(done.returncode)`
+>   —— 委派给一个**什么都不裁决的**谓词也静音。
+>
+> **后两个恰好是这条检查自己给出的修法建议的形状。**
+> 前一个已修（`TRANSPARENT_CALLS`，`bool`/`any`/`all`/`int`/… 不算委派，
+> 有负样本 `test_wrapping_a_comparison_in_bool_is_not_delegating_it`）。
+> **后一个没修，也修不了**：从语法分不出「裁决了」和「长得像裁决」。
+> 已写进模块 docstring 作为已知限制，**不藏。**
 
 以本工单在 engine-rig 订正的 10 处站点为分母：**它只覆盖 1 处**（`p13:129`）。
 另外 9 处它一处也抓不到，而且不是调参能解决的：
@@ -125,15 +164,31 @@ ERROR 1（`p13_fd_dividend.py:129`），假阳 0。
 
 ## 四、我的建议：进不进 CI
 
-**进 engine-rig 的 gate — 是。**
+**进 engine-rig 的 gate — 是（对抗复核同意，但当时它几乎没有力量）。**
+
+> **[OVERTURNED] 上一版的成绩单「命中 0、假阳 0」是对的，但对抗复核证明这条测试当时
+> 几乎不值钱**：把 `check_paths` 改成 `return []`，
+> `test_the_standing_check_is_green_on_this_territory` 照样绿——它断言的是
+> `not findings`，而恒空同样满足。**整个文件遍历层（`python_files`、skip 表、
+> `SyntaxError → <unparsed>` 那条「读不了的不算干净」的分支）当时没有任何测试。**
+> 这正是工单点名的 tautological assertion，出现在我为反对它而写的那条检查里。
+> 已按复核给的方子补两条正向扫描层测试（种一个含裸比较的文件断言恰好 1 处 ERROR；
+> 种一个语法坏掉的文件断言产出 `<unparsed>` 而非被跳成干净），加上
+> 「`runs` 不在 skip 表里」与「`bool()` 不算委派」两条，四个变异体现在全红。
 `monitor/gates.py` 把 engine-rig 解析成 `pytest`（这个目录没有 `verify.sh`），
 所以我把它写成了一条测试（`test_the_standing_check_is_green_on_this_territory`）
 而不是一个只在人想起来时才跑的脚本。**不是测试的检查等于不跑的检查。**
 在本领地上它今天的成绩是：命中 0、假阳 0、对已知缺陷（修复前的 `p13:129`）命中 1。
 维护成本约等于零，噪声为零。
 
-**进全仓 CI — 现在不该。** 不是因为它不准（ERROR 级 75% 精确率是可以看的），
-而是因为它今天会红，而红的三处里有两处不在任何人的当前工单里
+**进全仓 CI — 现在不该，而且理由比我第一版写的更强。**
+
+**第一条（对抗复核加的，我第一版没说）：分级不稳。** 见上——重命名一个变量就跨级。
+把它当门禁意味着「改一个名字」会改变门禁结果：既可以被无意中绕过，也可以被无意中触发。
+在词表分级从「看名字叫什么」换成「看代码做了什么」之前，它**不该**是门禁。
+作为报告（`--notes` 定期跑、由监控读）是合适的。
+
+**第二条（我第一版的理由，仍然成立）：** 它今天会红，而红的三处里有两处不在任何人的当前工单里
 （`cold-start-a0/certify/fd_unsat.py`、`release/checklist.py`），
 一处在 monitor 自己家里（`reflex.py:147`）。
 **一条从第一天起就红着的门禁，会在第二天被加进忽略列表。**

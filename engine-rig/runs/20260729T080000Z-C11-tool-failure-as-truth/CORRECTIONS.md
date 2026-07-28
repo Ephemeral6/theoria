@@ -15,7 +15,12 @@
 
 SURVEY 在 engine-rig 领地内点名 **10 个站点 + 一族编码问题**。复核后：
 
-| # | 位置（当前树） | SURVEY 怎么说 | 我复核后 | 处置 |
+> **[OVERTURNED] 表头「位置（当前树）」是标签错**：这一列给的是**修改前**的位置。
+> 对抗复核在基线 `4d523e6` 上逐个验过，数据是对的，标签不对。
+> 另：本表原写「10 个站点 + 一族」，**漏计了第 12 行**（`deadlock_carver`），
+> 且第 11 行的编码一族**实修 5 处而自报 4 处**。两处均已在下方订正。
+
+| # | 位置（**修改前**的树） | SURVEY 怎么说 | 我复核后 | 处置 |
 |---|---|---|---|---|
 | 1 | `tools/p13_fd_dividend.py:129`（原） | 裸 `returncode == 12` → `unsolvable` | **成立**，且最刺眼 | 已修：调用 `backends.proves_unsolvable` |
 | 2 | 同文件 `same_answer` | 两次 FD 都崩 → `same_answer: True` | **成立** | 已修：三值，`None` 表示无人回答 |
@@ -24,13 +29,18 @@ SURVEY 在 engine-rig 领地内点名 **10 个站点 + 一族编码问题**。�
 | 5 | `engines/lp_potential/potential.py:170` | `if not result.success: return None` 合并了迭代上限与不可行 | **成立** | 已修：非 infeasible 一律 `raise LpUnavailable` |
 | 6 | `engines/zero_space/zerospace.py:141-143` | >8 色截断 → law 被标 `scope: global` | **成立，且在放电**（10 色 ARC 调色板即触发） | 已修：`truncated_cells` / `scope_exhaustive`（**未进 payload**，见下） |
 | 7 | `engines/mdl_segmenter/segmenter.py:177` | IMPOSSIBLE 哨兵 → `kind=None`，与「没变化」同形 | **成立但潜伏**（见下方论证） | 已修：选中即 `raise SegmentationError` |
-| 8 | `engines/probe_frontier/reach.py:94-99` | `UNREACHABLE` 产物不带预算，读者无法自证 | **成立（机制安全、产物不足）** | 部分修：`basis` / `budget` 上对象，**未进 payload** |
-| 9 | `bench/dividend.py:499` + `bench/report.py:352` | 超时被印成 `*refused*`（关于 guard 的陈述） | **成立但最轻**，JSON 保留原文 | **未改**，见「我没有改的」 |
+| 8 | `engines/probe_frontier/reach.py:94-99` | `UNREACHABLE` 产物不带预算，读者无法自证 | **成立** | ~~部分修：`basis`/`budget` 上对象~~ **[OVERTURNED — 第一版是惰性的]** 现改为在下判断处 `raise UnprovenUnreachability`，并补负样本 |
+| 9 | `bench/dividend.py:499/874` + `bench/report.py:352` | 超时被印成 `*refused*` | ~~成立但最轻~~ **[OVERTURNED] 成立，且在判定层** | **未改**，见「我没有改的」——**定性已改** |
 | 10 | `recheck/verify.py:339,347,388` | 展示预算决定证书义务 | **成立，且比 SURVEY 说的更宽**（三条义务，不是两条） | 已修：判定读计数器，列表只管展示 |
-| 11 | `text=True` 无 `encoding=`（4 处） | 诊断信息在最需要时被销毁 | **成立，方向保守** | 已修：4 处全部 pin `encoding="utf-8", errors="replace"` |
+| 11 | `text=True` 无 `encoding=`（~~4 处~~ **5 处**） | 诊断信息在最需要时被销毁 | **成立，方向保守** | 已修 **5** 处（`backends.py` / `fdrun.py` / `toolchain.py` / `bench/__main__.py` / `p13`）；领地内另有 **1 处未改**，见下 |
+| **12** | `engines/deadlock_carver/__init__.py:66-71` | `PruningReport.as_json` 不写 `max_expansions` | **成立，而且比 SURVEY 说的重**：`same_answer` 与 p13 那处**同形** | **[新增 — 我第一版漏了]** 已修：不完整的比较 `raise UnfinishedComparison` |
 
-**实际成立：10 处 + 一族（4 个调用点）。零处被我判为「SURVEY 判错了」。**
-其中 **9 处已订正**，1 处（#9）经权衡不改并写下理由。
+**实际成立：11 处 + 一族（5 个调用点）。零处被我判为「SURVEY 判错了方向」。**
+其中 **10 处已订正**，1 处（#9）未改并写下理由。
+
+> **[OVERTURNED] 上一版这里写的是「10 处 + 一族（4 个调用点）……9 处已订正」。**
+> 两个数都错：漏了 #12，编码一族把自己的成绩报少了一处。
+> 对抗复核的原话值得留着——「它把自己的成绩报少了一处，说明这一族没有单独核过一遍」。
 
 ### 我要更正 SURVEY 的一处细节（#4）
 
@@ -105,15 +115,92 @@ E11 交叉复核测到的「深度 3 上 125 处遗漏」是**对 frontier 承�
 
 ## 三、我没有改的，和为什么
 
-### (a) `bench/dividend.py:499` 的 `guard_refused`（#9）
+### (a) `bench/dividend.py` 的 `guard_refused`（#9）—— **定性被推翻，已改**
 
-字段存的是 `guarded.error`，而 `fdrun.py` 会把墙钟超时写成
-`error="timeout after %ds"`；`report.py:352` 把这样的行渲染成 `*refused*`，读起来像
-「guard 拒绝了这次编译」。**成立**，但：JSON 里原文完整保留；同一行的
-`dividend_is_honest` 已经正确地是 `None` 而不是 `False`（`dividend.py:501-505`
-的注释就是为这件事写的）；`bench/report.py:52` 已经把 `over budget` 与 `ERROR` 分列。
-所以这是**渲染层的措辞问题**，不是判定层的不健全。改它要动 `bench/report.py` 六处表格
-格式，会改变 E2 已发布报告的形状，收益与风险不成比例。**登记，不改。**
+> **[OVERTURNED] 上一版的原文，保留：**
+>
+> > 字段存的是 `guarded.error`，而 `fdrun.py` 会把墙钟超时写成
+> > `error="timeout after %ds"`；`report.py:352` 把这样的行渲染成 `*refused*`，读起来像
+> > 「guard 拒绝了这次编译」。**成立**，但：JSON 里原文完整保留；同一行的
+> > `dividend_is_honest` 已经正确地是 `None` 而不是 `False`；`bench/report.py:52`
+> > 已经把 `over budget` 与 `ERROR` 分列。
+> > **所以这是渲染层的措辞问题，不是判定层的不健全。登记，不改。**
+>
+> **这条判错了，而且错在最关键的地方。** 我只跟了 `guard_refused` 的**渲染**用户，
+> 没跟它的**判定**用户。对抗复核跟到了：
+
+`guard_refused` 也被健全性判据读，**而那个判据决定 bench 的退出码**：
+
+```python
+# bench/dividend.py:855  def failures(report) -> List[str]:   """Soundness violations only."""
+# bench/dividend.py:874
+            if row["guard_refused"]:
+                continue          # a refusal is a finding; see RUN_STATE.md
+```
+
+`continue` 跳过的正是 `failures()` 存在的两条义务——「最优档 plan 长度在 guard 下移动了
+= unsound compilation」（`:882-888`）与「guarded plan 没在原始 domain 上重放」（`:889-893`）。
+`failures()` 的返回值经 `bench/__main__.py:148` 汇进 `problems`，决定退出码；
+**这不是推论，是 `tests/test_bench.py:622` 自己写的原话**
+（「It reaches `failures()`, which is what sets the run's exit code」）。
+
+完整链条：**FD 墙钟超时 / 崩溃 → `guard_refused` 为真 → 该行整个退出健全性判据 →
+bench 仍可退出 0。** 一个工具的失败状态，决定了一条关于世界的肯定结论
+（「这次编译没有健全性问题」）。这**就是**本工单的判据。
+更刺眼的是：`fdrun.py` 把 `not_entitled` 专门做成与 `error` 分立的第四值，正是为了不让
+「没资格下结论」和「跑挂了」同形，而 `:874` 把这层区分又合了回去。
+
+我举的两条减轻理由（`dividend_is_honest` 已三值、`report.py:52` 已分列）**都为真，
+但都不涉及 `failures()`**，所以都不支持我当时的结论。
+
+**处置不变，登记词改了。** 仍然不改，理由仍然是：修它要动 `bench/report.py` 六处表格
+格式并改变 E2 已发布报告的形状，而这条链路在本机无法实跑验证（无 FD 构建）。
+**但正确的登记是：判定层的一处不健全，因牵动已发布报告格式而暂缓** ——
+不是「渲染层的措辞问题」。已写进 inbox 提案，建议单开工单。
+
+### (a2) 编码一族里领地内剩下的一处（#11）
+
+`engine-rig/runs/20260728T141724Z-E5-cert-recheck/manifest.py:57-59`：
+`text=True` 无 `encoding=`、无 `timeout`、无异常处理。`git` 不在 PATH 或
+`index.lock` 被另一条赛道占着时，`head_commit` 会静默写成 `""`。
+
+**不改，理由不是取舍是纪律**：它在 `runs/` 下，是一次**已完成运行的冻结记录**。
+改它会让那份 provenance 记录与当时真正跑过的字节不符——按仓库
+「provenance is canonical」的约定，这比留着缺陷更坏。登记在此，并已写进 inbox。
+
+它此前没被扫到，是因为我的常设检查把 `runs` 放进了 skip 表，**排除了 7 个 `.py`
+而没有报告**。那正是 `SURVEY-empty-as-negative` 贯穿性建议针对的形状，
+**在我自己写的检查里**。已修：`runs` 移出 skip 表（扫描面 88 → 95 个文件，
+新增的 7 个确实零 ERROR），且 `main()` 现在把扫描面与排除项一并打印。
+
+### (a3) `probe_frontier` 的第一版修复是惰性的（#8）—— **被推翻，已重修**
+
+> **[OVERTURNED] 第一版做的是**：给 `Reachability` 加 `basis`/`budget`，
+> `basis` 写成 `"exhausted" if result.exhaustive else "proved-by-planner"`。
+> 对抗复核指出三件事，三件都对：
+>
+> 1. **零负样本**——把这两行整块删掉，目标文件 68 条全绿、全套 452 条全绿；
+> 2. **`else` 分支不可达**——`reach()` 调 `solve_parsed` 不传路径 → `on_disk=False`
+>    → `choose_tier` 强制 STUB → 桩每条 return 都 `exhaustive=True`。
+>    我的注释却写着「记录了是两者中的哪一个」，**记录的是一个不可能发生的二选一**；
+> 3. 字段不进 payload，而 SURVEY 的原始抱怨**就是**产物不足。
+>
+> 它的结论是「这一处等于只改了注释」。**我接受，这条说得对。**
+
+重修的形状变了：不再假装记录一个二选一，而是**在下判断的地方检查资格**。
+
+```python
+if not result.exhaustive:
+    raise UnprovenUnreachability(...)
+return Reachability(..., basis="exhausted", budget=result.max_expansions)
+```
+
+理由与 #12 相同：「`solve_parsed` 保证了」是**三个模块以外**的性质，
+而这正是我在 p13 那一处拒绝接受的理由。资格现在在做出主张的那一行被检查。
+负样本三条：真跑一次 `p_side` 断言 `basis == "exhausted"` 且 `budget > 0`；
+monkeypatch 一个 `exhaustive=False` 的空结果断言抛错；`SearchResult` 真跑一次
+断言它带回了 `max_expansions == 12345`（旧测试名字叫 budget、断言的却是
+`exhaustive`，所以「不再记录 `max_expansions`」那个变异体逃了）。
 
 ### (b) 三处新字段没有进 candidate payload
 

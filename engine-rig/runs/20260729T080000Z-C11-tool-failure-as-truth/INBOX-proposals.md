@@ -79,6 +79,44 @@ ERROR monitor/reflex.py:147: `hold` is decided by a tool's status
 
 ---
 
+## 提案 5 —— engine-rig 自己：`bench` 的 `guard_refused` 让 FD 超时逃过健全性判据
+
+**建议单开工单。** C11 在自己领地内发现但**未修**，因为修它要改 `bench/report.py`
+六处表格格式、改变 E2 已发布报告的形状，而本机无 FD 构建、无法实跑验证。
+
+```python
+# bench/dividend.py:855  def failures(report):  """Soundness violations only."""
+# bench/dividend.py:874
+            if row["guard_refused"]:
+                continue
+```
+
+`guard_refused = guarded.error`，而 `error` 由 `fdrun.py` 的墙钟超时
+（`"timeout after %ds"`）和崩溃兜底分支写入。`continue` 跳过 `failures()` 的两条义务
+（最优档 plan 长度移动 = unsound compilation；guarded plan 未在原始 domain 上重放）。
+`failures()` 经 `bench/__main__.py:148` 决定退出码——**这是 `tests/test_bench.py:622`
+自己写的原话。**
+
+链条：**FD 墙钟超时 / 崩溃 → `guard_refused` 为真 → 该行整个退出健全性判据 → bench 退出 0。**
+`fdrun.py` 把 `not_entitled` 专门做成与 `error` 分立的第四值就是为了不让
+「没资格下结论」和「跑挂了」同形，`:874` 把这层区分合了回去。
+
+修法方向（仅记）：`failures()` 区分 `not_entitled` 与 `error`；
+一次 `error` 应当**自己成为一条 finding**（「这一行没有被检查」），而不是 `continue`。
+
+**未量化**：E2 已发布的 `dividend.json` 里有几行 `guard_refused` 非空、
+那几行是否本来就会被判据放过——没算。论证的是机制，不是已放电。
+
+## 提案 6 —— engine-rig（登记，不动手）：E5 运行记录里的 `text=True`
+
+`engine-rig/runs/20260728T141724Z-E5-cert-recheck/manifest.py:57-59`：
+`text=True` 无 `encoding=`、无 `timeout`、无异常处理，`git` 失败时 `head_commit`
+静默写成 `""`。**在本领地内，但在 `runs/` 下**——那是一次已完成运行的冻结记录，
+改它会让 provenance 与当时真正跑过的字节不符。按「provenance is canonical」登记不改。
+
+（它此前逃过扫描，是因为常设检查的 skip 表里有 `runs`。**那条已修**：
+`runs` 移出 skip 表，扫描面 88 → 95，且 `main()` 现在把扫描面与排除项一并打印。）
+
 ## 提案 4 —— `release/` + engine-rig：三个新字段进不了 candidate payload
 
 C11 在 engine-rig 内加了三组「凭什么这么说」的字段，**都停在对象上没进产物**：
