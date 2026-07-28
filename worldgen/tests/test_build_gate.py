@@ -62,6 +62,26 @@ def test_every_gate_fails_together():
         assert any(key in line for line in failures), key
 
 
+@pytest.mark.parametrize("key", GATE_KEYS)
+def test_a_missing_gate_key_is_a_failure_not_a_pass(key):
+    """V19's shape, one function away from V19.
+
+    `gate_failures` read `totals.get(key, ())`, so a manifest that simply did
+    not carry a gate's key cleared that gate silently — a default pointing at
+    the good news, which is the same defect as `.get("holds", True)` and would
+    have been just as invisible. Nothing produces such a manifest today. That is
+    the argument for the check, not against it: the gate that has never been
+    reachable is the one nobody notices going quiet.
+    """
+    totals = _manifest()["totals"]
+    del totals[key]
+    failures = build.gate_failures({"prompt_id": "test", "worlds": [],
+                                    "totals": totals})
+    assert len(failures) == 1, failures
+    assert key in failures[0], failures
+    assert "could not be evaluated" in failures[0], failures
+
+
 def test_a_gate_reports_every_offending_world():
     failures = build.gate_failures(_manifest(invariant_failures=["w-a", "w-b", "w-c"]))
     assert len(failures) == 3, failures

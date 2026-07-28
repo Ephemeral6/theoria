@@ -15,12 +15,23 @@
     5,
     7
   ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "block_count",
+      "blocks_disjoint"
+    ],
+    "unverified": [],
+    "violated": []
+  },
   "invariants": [
     {
       "holds": true,
       "name": "agent_unique",
       "statement": "exactly one cell shows colour 6 at all times",
       "states_checked": 49,
+      "status": "holds",
       "verified": true
     },
     {
@@ -28,6 +39,7 @@
       "name": "grid_shape",
       "statement": "every frame is 5 x 7",
       "states_checked": 49,
+      "status": "holds",
       "verified": true
     },
     {
@@ -35,6 +47,7 @@
       "name": "block_count",
       "statement": "exactly 1 cell(s) show colour 2 at all times",
       "states_checked": 49,
+      "status": "holds",
       "verified": true
     },
     {
@@ -42,6 +55,7 @@
       "name": "blocks_disjoint",
       "statement": "no two blocks ever occupy the same cell",
       "states_checked": 49,
+      "status": "holds",
       "verified": true
     }
   ],

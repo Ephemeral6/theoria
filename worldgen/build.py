@@ -101,7 +101,13 @@ def build_world(spec: WorldSpec, root: str,
         # accurate one because the old one reads as a defect report and is not.
         "rules_never_witnessed": sorted(coverage["rules_never_witnessed"]),
         "rules_with_uncovered_pairs": sorted(coverage["rules_never_witnessed"]),
+        # Three fields, not one boolean.  `invariants_all_hold` is the honest
+        # conjunction (nothing violated *and* nothing unverified); the two lists
+        # keep the classes apart so the gate below can refuse both without
+        # calling them the same thing.
         "invariants_all_hold": truth_blob["invariants_all_hold"],
+        "invariants_violated": list(truth_blob["invariant_status"]["violated"]),
+        "invariants_unverified": list(truth_blob["invariant_status"]["unverified"]),
         "solvable": solve["solvable"],
         "optimal_length": solve.get("optimal_length"),
         "win_in_trace": bool(coverage["win_frames"]),
@@ -163,8 +169,16 @@ def build_all(root: str = OUT, ids: Optional[Sequence[str]] = None,
             "unsolvable": sorted(r["world_id"] for r in rows if not r["solvable"]),
             "mean_reversibility": round(
                 sum(r["reversibility_score"] for r in rows) / max(1, len(rows)), 4),
+            # `invariant_failures` keeps its old meaning — a *violated*
+            # invariant — rather than being widened to "not all_hold".  Widening
+            # it would have been the one-character fix and would have merged two
+            # different defects under one name: a violated invariant is a broken
+            # world, an unverified one is an unexercised claim, and the repair
+            # for each is different.  They gate separately, below.
             "invariant_failures": sorted(r["world_id"] for r in rows
-                                         if not r["invariants_all_hold"]),
+                                         if r["invariants_violated"]),
+            "invariant_unverified": sorted(r["world_id"] for r in rows
+                                           if r["invariants_unverified"]),
             "claim_disagreements": sorted(r["world_id"] for r in rows
                                           if r["claim_disagreements"]),
             "rule_correspondence_failures": sorted(
@@ -206,6 +220,10 @@ GATES = (
     ("rule_correspondence_failures",
      "a declared primary rule never fires, or a fired tag is undeclared"),
     ("invariant_failures", "a declared invariant is violated on a reachable state"),
+    ("invariant_unverified",
+     "a declared invariant ships unverified — no callable check ran, so the world "
+     "cannot claim it holds; give it a `check` or an `edge_check`, or stop "
+     "declaring it"),
     ("claim_disagreements",
      "a mechanism's `reversible` claim contradicts the measured stamp"),
 )
@@ -219,11 +237,26 @@ def gate_failures(manifest: Dict[str, Any]) -> List[str]:
     `claim_disagreements` and one with a violated invariant, and because the
     noise was constant nobody could have told a real disagreement from it. A
     measurement nothing can fail is a decoration.
+
+    **A missing key is a failure, not a pass.** This loop used to read
+    `totals.get(key, ())`, so a manifest that simply did not carry a gate's key
+    cleared that gate in silence — the same shape as V19's
+    `.get("holds", True)`, one function away from it, and with the same
+    direction: the default pointed at the good news. Nothing in this repository
+    currently produces such a manifest, which is exactly why it would have gone
+    unnoticed if something started to; `test_build_gate.py` already checks that
+    the *shipped* manifest carries every key, and that check cannot see a
+    manifest produced anywhere else.
     """
     out: List[str] = []
     totals = manifest["totals"]
     for key, why in GATES:
-        for world_id in totals.get(key, ()):
+        if key not in totals:
+            out.append("%-24s gate could not be evaluated: the manifest carries "
+                       "no `%s` key, and an unevaluated gate is not a passed one"
+                       % ("<manifest>", key))
+            continue
+        for world_id in totals[key]:
             out.append("%-24s %s (%s)" % (world_id, why, key))
     return out
 

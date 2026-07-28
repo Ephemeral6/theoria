@@ -15,12 +15,28 @@
     8,
     10
   ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "door_presence_tracks_net",
+      "latch_monotone",
+      "token_count",
+      "collection_is_monotone",
+      "single_armed_tile",
+      "armed_tile_under_agent",
+      "tile_state_is_monotone"
+    ],
+    "unverified": [],
+    "violated": []
+  },
   "invariants": [
     {
       "holds": true,
       "name": "agent_unique",
       "statement": "exactly one cell shows colour 6 at all times",
       "states_checked": 436,
+      "status": "holds",
       "verified": true
     },
     {
@@ -28,6 +44,7 @@
       "name": "grid_shape",
       "statement": "every frame is 8 x 10",
       "states_checked": 436,
+      "status": "holds",
       "verified": true
     },
     {
@@ -35,32 +52,39 @@
       "name": "door_presence_tracks_net",
       "statement": "a door shows colour 4 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise",
       "states_checked": 436,
+      "status": "holds",
       "verified": true
     },
     {
+      "holds": true,
       "name": "latch_monotone",
-      "note": "prose only \u2014 not checkable on a single state",
       "statement": "every latch switch's bit is monotone non-decreasing along every trajectory, and so is the aggregate bit of a net whose switches are all latches: once 1, never 0 again",
-      "verified": false
+      "status": "holds",
+      "transitions_checked": 1744,
+      "verified": true
     },
     {
       "holds": true,
       "name": "token_count",
       "statement": "the number of cells showing colour 5 equals the number of tokens not yet collected",
       "states_checked": 436,
+      "status": "holds",
       "verified": true
     },
     {
+      "holds": true,
       "name": "collection_is_monotone",
-      "note": "prose only \u2014 not checkable on a single state",
       "statement": "the number of collected tokens never decreases, so a lock that has opened never closes again",
-      "verified": false
+      "status": "holds",
+      "transitions_checked": 1744,
+      "verified": true
     },
     {
       "holds": true,
       "name": "single_armed_tile",
       "statement": "at most one fragile tile is armed at any instant",
       "states_checked": 436,
+      "status": "holds",
       "verified": true
     },
     {
@@ -68,13 +92,16 @@
       "name": "armed_tile_under_agent",
       "statement": "an armed fragile tile's cell is the agent's cell",
       "states_checked": 436,
+      "status": "holds",
       "verified": true
     },
     {
+      "holds": true,
       "name": "tile_state_is_monotone",
-      "note": "prose only \u2014 not checkable on a single state",
       "statement": "a fragile tile's state only ever rises, 0 -> 1 -> 2, so a collapsed tile is never crossed again",
-      "verified": false
+      "status": "holds",
+      "transitions_checked": 1744,
+      "verified": true
     }
   ],
   "invariants_all_hold": true,
