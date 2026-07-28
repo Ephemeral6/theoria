@@ -400,6 +400,62 @@ def test_probe_hypotheses_include_one_ablation_per_rule(tmp_path):
 
 
 # ----------------------------------------------------------------- the reply
+def test_the_cost_cross_check_prices_a_real_usage_block():
+    """Two independent cost figures per run: the CLI's own `total_cost_usd` and
+    `proxy/cost.py` over the recorded usage. A cross-check that can only fail in
+    one direction is not a cross-check -- an earlier version of this coerced
+    `PriceTable.cost`'s dict return to a float, put every call in the exception
+    path, and announced that the table could not price `claude-opus-5`."""
+    from armtools.archive import costs                    # noqa: PLC0415
+    usage = {"input_tokens": 2, "output_tokens": 43066,
+             "cache_read_input_tokens": 24264,
+             "cache_creation_input_tokens": 20736,
+             "cache_creation": {"ephemeral_1h_input_tokens": 20736,
+                                "ephemeral_5m_input_tokens": 0}}
+    records = [{"event": "model_call", "model": "claude-opus-5", "usage": usage,
+                "response": {"total_cost_usd": 1.307727}}]
+    report = costs(records)
+    assert report["from_price_table"]["unpriced_models"] is None
+    assert report["from_price_table"]["usd_total"] > 1.0
+    assert report["cli_reported_usd"] == 1.307727
+    assert "verdict" in report
+
+
+def test_the_cache_ttl_gap_is_diagnosed_rather_than_left_as_a_delta():
+    """`pricing_v1.json` carries a 2.0x multiplier for 1-hour cache writes and
+    `proxy/cost.py` never applies it, because the TTL is in a nested usage
+    object it does not read. The report must name that, not just print a delta."""
+    from armtools.archive import _cache_ttl_diagnosis     # noqa: PLC0415
+    calls = [{"model": "claude-opus-5",
+              "usage": {"cache_creation_input_tokens": 20736,
+                        "cache_creation": {"ephemeral_1h_input_tokens": 20736,
+                                           "ephemeral_5m_input_tokens": 0}}}]
+    report = _cache_ttl_diagnosis(calls, None)
+    assert report["cache_creation_1h_tokens"] == 20736
+    assert report["under_billed_usd"] > 0
+    assert "cache_creation_input_tokens_1h" in report["verdict"]
+
+    none = _cache_ttl_diagnosis([{"model": "claude-opus-5", "usage": {}}], None)
+    assert "not a source of disagreement" in none["verdict"]
+
+
+def test_the_bootstrap_theorize_is_named_not_smuggled(tmp_path):
+    """The first theorize answers no surprise because no manual exists yet.
+    Exactly one such call is allowed; a second uncovered call is a violation."""
+    from armtools.archive import constraint_8             # noqa: PLC0415
+    run_dir = str(tmp_path)
+    call = {"event": "model_call", "run_id": "r", "beat": "theorize"}
+    one = constraint_8([call], run_dir)
+    assert one["holds"] and one["bootstrap_calls_allowed"] == 1
+    two = constraint_8([call, dict(call)], run_dir)
+    assert not two["holds"]
+    assert two["calls_not_covered_by_a_surprise"] == 1
+
+    with open(os.path.join(run_dir, "surprises.jsonl"), "w", encoding="utf-8") as fh:
+        fh.write(json.dumps({"kind": "replay_mismatch"}) + "\n")
+    assert constraint_8([call, dict(call)], run_dir)["holds"]
+
+
 def test_the_desks_reply_is_parsed_into_two_books_and_a_log():
     reply = ("noise\n=== THEORY ===\n```\nsemantics:\n  frame persist\n```\n"
              "=== PLAYBOOK ===\n```\n# none\n```\n"

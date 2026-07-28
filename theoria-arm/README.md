@@ -21,9 +21,9 @@ this arm is.
 | `harness/` | the shared shell: the keyless ARC client, the action budget, the model desk, the runner |
 | `world/` | the frame store and the adapters that turn 64×64 ARC frames into each engine's input shape |
 | `inner/` | the five beats, the two books, the seven surprises, and the grammar card the desk is held to |
-| `tools/` | `preflight` (prove the live chain for zero quota), `archive` (reconcile, audit, manifest) |
+| `armtools/` | `preflight` (prove the live chain for zero quota), `archive` (reconcile, audit, manifest) |
 | `runs/` | one directory per run: ledger, trace, books and their snapshots, probes, surprises, desk transcripts, manifest |
-| `tests/` | 38 offline tests. No key, no network, no model call, no quota. |
+| `tests/` | 44 offline tests. No key, no network, no model call, no quota. |
 
 ## Run it
 
@@ -47,7 +47,7 @@ Live. `preflight` costs **zero** billed actions and proves the key, the guard,
 the proxy and the retry envelope all work before anything is spent:
 
 ```bash
-cd theoria-arm && python -m tools.preflight --game g50t-5849a774
+cd theoria-arm && python -m armtools.preflight --game g50t-5849a774
 ```
 
 ```bash
@@ -55,7 +55,7 @@ cd theoria-arm && python -m harness.run --game g50t-5849a774 --budget 120 --mode
 ```
 
 ```bash
-cd theoria-arm && python -m tools.archive --slug <the slug>
+cd theoria-arm && python -m armtools.archive --slug <the slug>
 ```
 
 ## The four things to know before building on this
@@ -74,7 +74,7 @@ ledger**. Full reasoning and the archived 401 evidence: `DECISIONS.md` D-P8-002.
 `LEDGER_FORMAT.md` §3 requires the ledger-derived score to equal the
 scorecard's. Live ARC command responses contain no `score` field at all — the
 key set is `action_input, available_actions, frame, full_reset, game_id, guid,
-levels_completed, state, win_levels`. `tools/archive.py` reports the score
+levels_completed, state, win_levels`. `armtools/archive.py` reports the score
 reconciliation as `unavailable` with that reason, and reconciles
 `levels_completed` and the action count instead, both of which the API does
 return. This is a finding about a Phase 1 obligation, not a passed check.

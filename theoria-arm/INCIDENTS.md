@@ -81,7 +81,7 @@ Score exists only inside a successful `POST /api/scorecard/close` response.
 `score: null` into every `env_step`, and `proxy/reconcile.py` compares that to
 the scorecard's number.
 
-**Recorded as an incident rather than waived.** `tools/archive.py` reports
+**Recorded as an incident rather than waived.** `armtools/archive.py` reports
 `score_reconciliation: "unavailable"` with this reason, and reconciles the two
 quantities the API *does* return — `levels_completed` and the successful action
 count — in its place. The obligation as written in `LEDGER_FORMAT.md` needs

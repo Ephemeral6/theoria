@@ -23,7 +23,7 @@ counted for real, and a per-turn cost curve measured rather than predicted.
 ## The suite
 
 ```bash
-cd theoria-arm && python -m pytest          # 38 passed
+cd theoria-arm && python -m pytest          # 44 passed
 ```
 
 No key, no network, no model call, no quota. Every property the live run
@@ -38,7 +38,7 @@ writes satisfies `LEDGER_FORMAT.md` §1–§3.
 
 ## Pre-flight, live, zero quota
 
-`python -m tools.preflight --game g50t-5849a774` opens a scorecard, sends one
+`python -m armtools.preflight --game g50t-5849a774` opens a scorecard, sends one
 RESET and closes. RESET is not billed, so this exercises the entire live chain
 for nothing:
 
@@ -64,7 +64,7 @@ See `DECISIONS.md` D-P8-003.
 equalling the scorecard's a *hard obligation*, and it is not dischargeable
 against this API: the response key set is `action_input, available_actions,
 frame, full_reset, game_id, guid, levels_completed, state, win_levels`.
-`tools/archive.py` reports it as `unavailable` with that reason and reconciles
+`armtools/archive.py` reports it as `unavailable` with that reason and reconciles
 `levels_completed` and the action count instead. Reported, not waived.
 
 ## The declared gap: the model side is not proxied

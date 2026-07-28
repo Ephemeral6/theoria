@@ -13,7 +13,7 @@ does the guard let the dev-pile game through, does the 400 wave need the long
 envelope today, what shape is the frame really, and what does the scorecard say
 about an action count of zero.
 
-    python -m tools.preflight --game g50t-5849a774
+    python -m armtools.preflight --game g50t-5849a774
 """
 
 import argparse

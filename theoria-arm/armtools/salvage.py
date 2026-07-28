@@ -12,8 +12,8 @@ close response, a closed card can never be re-fetched, and close 404s
 transiently often enough that `baseline-arms` lost 22 of 23 pilot scores to it.
 An unclosed card yields no score at all.
 
-    python -m tools.salvage --slug <slug>            # report only
-    python -m tools.salvage --slug <slug> --close    # also close the scorecard
+    python -m armtools.salvage --slug <slug>            # report only
+    python -m armtools.salvage --slug <slug> --close    # also close the scorecard
 """
 
 import argparse

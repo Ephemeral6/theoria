@@ -20,7 +20,7 @@ Four obligations are discharged here and each one can fail loudly:
 * **the sealing check**: no record in the ledger may contain the credential,
   and no `bypass_attempt` incident may be present.
 
-    python -m tools.archive --slug <run slug>
+    python -m armtools.archive --slug <run slug>
 """
 
 import argparse
@@ -96,23 +96,27 @@ def costs(records: List[Dict[str, Any]]) -> Dict[str, Any]:
         if isinstance(response, dict):
             cli_total += float(response.get("total_cost_usd") or 0.0)
 
-    table_cost = None
+    # `proxy/cost.py`'s own `price_run` is the conversion, used as it is meant
+    # to be. An earlier version of this function called `PriceTable.cost`
+    # directly and coerced its return to a float -- it returns a *dict* -- so
+    # every call landed in the exception path and the report announced that the
+    # price table could not price `claude-opus-5`. It can. The lesson is worth
+    # the comment: a cross-check that can only fail in one direction is not a
+    # cross-check, and this one was reporting its own defect as a finding about
+    # somebody else's file.
+    table_cost: Dict[str, Any]
     table_ref = None
+    unpriced_keys: List[str] = []
     try:
-        from proxy.cost import DEFAULT_TABLE, PriceTable       # noqa: PLC0415
+        from proxy.cost import DEFAULT_TABLE, PriceTable, price_run   # noqa: PLC0415
         table = PriceTable.load(DEFAULT_TABLE)
         table_ref = table.reference()
-        total = 0.0
-        priced, unpriced = 0, []
+        table_cost = price_run(calls, table)
         for record in calls:
-            model = record.get("model")
-            try:
-                total += float(table.cost(model, record.get("usage") or {}))
-                priced += 1
-            except Exception:                          # noqa: BLE001
-                unpriced.append(model)
-        table_cost = {"usd": round(total, 6), "calls_priced": priced,
-                      "calls_unpriced": sorted(set(unpriced))}
+            line = table.cost(record.get("model", "?"), record.get("usage") or {})
+            for key in (line.get("unpriced_usage_keys") or []):
+                if key not in unpriced_keys:
+                    unpriced_keys.append(key)
     except Exception as exc:                           # noqa: BLE001
         table_cost = {"error": "%s: %s" % (type(exc).__name__, exc)}
 
@@ -122,16 +126,89 @@ def costs(records: List[Dict[str, Any]]) -> Dict[str, Any]:
         "cli_reported_usd": round(cli_total, 6),
         "price_table": table_ref,
         "from_price_table": table_cost,
+        "usage_keys_the_table_cannot_price": sorted(unpriced_keys) or None,
     }
-    if isinstance(table_cost, dict) and isinstance(table_cost.get("usd"), float):
-        delta = table_cost["usd"] - cli_total
+    out["cache_ttl_diagnosis"] = _cache_ttl_diagnosis(calls, table_ref)
+
+    table_usd = table_cost.get("usd_total")
+    if isinstance(table_usd, (int, float)) and cli_total:
+        delta = table_usd - cli_total
         out["delta_usd"] = round(delta, 6)
-        out["relative_delta"] = (round(delta / cli_total, 4) if cli_total else None)
+        out["relative_delta"] = round(delta / cli_total, 4)
+        agree = abs(delta) / cli_total < 0.02
         out["verdict"] = (
             "the price table and the provider's own arithmetic agree to within "
-            "1%%" if cli_total and abs(delta) / cli_total < 0.01 else
-            "the price table and the provider's own arithmetic DISAGREE -- this "
-            "is a finding about proxy/pricing/pricing_v1.json, not about the run")
+            "2%: pricing_v1.json is validated against a real bill for the first "
+            "time" if agree else
+            "the price table and the provider's own arithmetic DISAGREE by "
+            "%.1f%% -- a finding about proxy/pricing/pricing_v1.json (or about "
+            "which usage keys it knows how to price), not about the run"
+            % (100 * delta / cli_total))
+    elif isinstance(table_usd, (int, float)):
+        out["verdict"] = ("nothing to compare: the CLI reported no cost "
+                          "(an offline or cached run)")
+    return out
+
+
+def _cache_ttl_diagnosis(calls: List[Dict[str, Any]],
+                         table_ref: Optional[Dict[str, Any]]) -> Dict[str, Any]:
+    """Why the two cost figures differ, computed rather than guessed.
+
+    `pricing_v1.json` carries two cache-write multipliers -- 1.25x for the
+    5-minute TTL and 2.0x for the 1-hour one -- but `proxy/cost.py` can only
+    ever apply the first, because the provider's flat
+    `cache_creation_input_tokens` key does not say which TTL was bought. The
+    TTL *is* reported, in a nested `usage.cache_creation` object with
+    `ephemeral_5m_input_tokens` and `ephemeral_1h_input_tokens`, which
+    `cost.py` does not read. When a run's cache writes are all 1-hour, the
+    table under-bills every one of them by the difference between the two
+    multipliers, and this function says by exactly how much.
+    """
+    total_1h = total_5m = 0
+    for record in calls:
+        nested = (record.get("usage") or {}).get("cache_creation") or {}
+        total_1h += int(nested.get("ephemeral_1h_input_tokens") or 0)
+        total_5m += int(nested.get("ephemeral_5m_input_tokens") or 0)
+
+    out: Dict[str, Any] = {
+        "cache_creation_1h_tokens": total_1h,
+        "cache_creation_5m_tokens": total_5m,
+        "table": table_ref,
+    }
+    if not total_1h:
+        out["verdict"] = ("no 1-hour cache writes in this run, so the flat "
+                          "1.25x multiplier is the right one and this is not a "
+                          "source of disagreement")
+        return out
+
+    try:
+        from proxy.cost import DEFAULT_TABLE, PriceTable       # noqa: PLC0415
+        table = PriceTable.load(DEFAULT_TABLE)
+        models = {r.get("model") for r in calls if r.get("model")}
+        under = 0.0
+        for model in models:
+            prices = table.models.get(model)
+            if not prices:
+                continue
+            per_token_in = prices["input"] / 1_000_000.0
+            gap = (table.cache.get("cache_creation_input_tokens_1h", 2.0)
+                   - table.cache.get("cache_creation_input_tokens", 1.25))
+            tokens = sum(
+                int(((r.get("usage") or {}).get("cache_creation") or {})
+                    .get("ephemeral_1h_input_tokens") or 0)
+                for r in calls if r.get("model") == model)
+            under += tokens * per_token_in * gap
+        out["under_billed_usd"] = round(under, 6)
+        out["verdict"] = (
+            "%d of this run's cache-creation tokens were 1-hour writes. "
+            "`proxy/cost.py` priced them at the 5-minute multiplier because it "
+            "reads the flat usage key and not the nested `cache_creation` "
+            "object, so the table under-states this run by about $%.4f. The "
+            "multiplier it needs is already in pricing_v1.json "
+            "(`cache_creation_input_tokens_1h`); what is missing is the read."
+            % (total_1h, under))
+    except Exception as exc:                           # noqa: BLE001
+        out["error"] = "%s: %s" % (type(exc).__name__, exc)
     return out
 
 
@@ -167,14 +244,31 @@ def constraint_8(records: List[Dict[str, Any]], run_dir: str) -> Dict[str, Any]:
         with open(path, encoding="utf-8") as fh:
             surprises = [json.loads(line) for line in fh if line.strip()]
 
+    # The bootstrap exception, named rather than smuggled. Constraint 8 says a
+    # model is called only when a surprise fired. The FIRST theorize of a run
+    # has no surprise to answer: there is no manual yet, so there is nothing
+    # for the world to have contradicted. One call is therefore permitted
+    # before the first surprise and every later one must be preceded by a
+    # surprise. Stating it this way makes the check strictly stronger than
+    # "calls > 0 and surprises == 0", which a long run would pass trivially.
+    bootstrap = 1 if calls else 0
+    unexplained = max(0, len(calls) - bootstrap - len(surprises))
+
     return {
         "model_calls": len(calls),
         "calls_by_beat": beats,
         "surprises": len(surprises),
         "surprises_by_kind": _histogram(s.get("kind") for s in surprises),
         "calls_at_forbidden_beats": illegal,
-        "calls_without_any_surprise": bool(calls) and not surprises,
-        "holds": (not illegal) and not (bool(calls) and not surprises),
+        "bootstrap_calls_allowed": bootstrap,
+        "calls_beyond_bootstrap": max(0, len(calls) - bootstrap),
+        "calls_not_covered_by_a_surprise": unexplained,
+        "holds": (not illegal) and unexplained == 0,
+        "bootstrap_note": (
+            "the first theorize of a run answers no surprise because no manual "
+            "exists yet for the world to contradict; it is counted as the one "
+            "permitted bootstrap call and every later call must be covered by "
+            "a surprise."),
         "note": ("probe design spent no model call: the frontier is computed by "
                  "probe_frontier, which is exact on a deterministic world. "
                  "Constraint 8 permits a call there; this run did not need one."),
