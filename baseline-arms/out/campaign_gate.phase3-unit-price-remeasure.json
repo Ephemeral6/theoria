@@ -25,25 +25,25 @@
       "claude-sonnet-5": 30.0
     }
   },
-  "evaluated_at": "2026-07-28T14:30:52Z",
-  "g4_judges_cells": 4,
+  "evaluated_at": "2026-07-28T15:11:10Z",
+  "g4_judges_cells": 6,
   "state": "green",
   "totals": {
-    "action_success_rate": 0.86,
-    "actions_failed": 14,
-    "actions_ok": 86,
-    "cells": 4,
-    "compute_seconds": 2286.1,
+    "action_success_rate": 0.756,
+    "actions_failed": 39,
+    "actions_ok": 121,
+    "cells": 6,
+    "compute_seconds": 4703.6,
     "cost_by_tier": {
       "claude-opus-5": 8.176,
-      "claude-sonnet-5": 3.9982
+      "claude-sonnet-5": 11.6572
     },
-    "cost_usd": 12.1742,
-    "elapsed_seconds": 2323.7,
-    "elapsed_seconds_all_cells": 2323.7,
-    "http_calls": 204,
-    "http_per_action": 2.37,
-    "usd_per_action": 0.1416
+    "cost_usd": 19.8332,
+    "elapsed_seconds": 4741.6,
+    "elapsed_seconds_all_cells": 4741.6,
+    "http_calls": 464,
+    "http_per_action": 3.83,
+    "usd_per_action": 0.1639
   },
   "tripped": []
 }
