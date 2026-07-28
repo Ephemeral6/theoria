@@ -38,11 +38,24 @@ recorded the consequence:
 > full-history replay will never catch that.
 > — `cold-start-a0/THEORIZE_LOG.md` R-05
 
-The three pairs were named there, before any score existed. The ground truth was
-first opened at M6, after both certify layers and the plan were green, and only
-by the scoring script; no clause was written or revised afterwards
+Be precise about what was named, because the precision is the whole argument.
+R-05 names three **directions** — `press_up`, `press_down`, `press_right` — and
+one concrete configuration, "drive the Cart to (2,2) and push DOWN into an
+unpressed Button". It does not enumerate the coordinate pairs; the phrase "the
+three pairs R-05 named" appears in `THEORIZE_LOG.md`'s seal section and
+`A0_REPORT.md` §2, both written at M6 *after* the score existed, and this paper
+does not inherit that gloss as if it were the pre-registration. The claim that
+survives is still the one that matters: R-05 named the three directions,
+predicted the manual would be wrong on them, and predicted that replay would not
+notice. All three held.
+
+The ground truth was first opened at M6, after M4 and M5 were green — M5 being
+the unsolvable-variant milestone, not a planning stage — and only by the scoring
+script; no clause was written or revised afterwards
 (`cold-start-a0/THEORIZE_LOG.md`, "Ground-truth seal"; the same stamp is carried
-in `cold-start-a0/artifacts/score_vs_truth.json` as `seal`).
+in `cold-start-a0/artifacts/score_vs_truth.json` as `seal`). That stamp is a
+declaration written by the authors' own script, not a control: the only thing
+that could make it auditable is git history, which this paper does not appeal to.
 
 The seal has a hole, and the log names it rather than hiding it: **the same
 instance both built the A0 world at M1 and adjudicated it at M3**
@@ -55,12 +68,17 @@ than a footnote, and this paper carries it the same way.
 
 The second exhibit makes the failure mode inspectable. A2 built a manual with one
 rule deleted — a teleport — and ran the ordinary machinery on it. The result is a
-pair of Lean files with the same theorem name `unsolvable`, the same generator,
-the same tactic (`decide`), no Mathlib in either, the same dependency surface,
-and `#print axioms` returning `[]` in both. They differ in their weight table and
-in nothing else. One is true of its world — 0 of 55 reachable states satisfy the
-goal — and the other is false of its world, refuted by an 18-action episode that
-ends in a win (`cold-start-a2/A2_REPORT.md` §4, §2).
+pair of Lean files carrying the same theorem name `unsolvable`, produced by the
+same generator, closed by the same tactic (`decide`), with no Mathlib in either,
+the same dependency surface, and `#print axioms` returning `[]` for both. One is
+true of its world; the other is false of its world, refuted by an 18-action
+episode that ends in a win (`cold-start-a2/A2_REPORT.md` §4, §2). The instrument
+returns the same verdict either way.
+
+The two files are *not* a minimal pair — §5.6 corrects the source report on that
+point and says what the correction costs — but they do not need to be. Identical
+provenance and an identical empty axiom list, on one theorem that holds of the
+world and one that does not, is the whole demonstration.
 
 > The instrument cannot tell them apart, and it is not supposed to be able to.
 > — `cold-start-a2/A2_REPORT.md` §4

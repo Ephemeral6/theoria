@@ -1,16 +1,20 @@
 """Figure 2 — A0 vs A0-prime: coverage against accuracy.
 
-The paper's one controlled contrast. Two cold starts, one variable deliberately
-changed (an irreversible latch becomes a reversible toggle), and the trajectory
-budget cut on purpose in the second run.
+The paper's headline contrast. Two cold starts: an irreversible latch becomes a
+reversible toggle, and the trajectory budget is cut on purpose in the second run.
+Two changed variables, not one -- and the worlds differ in more besides (rule
+count, state count, mechanism object), which §3.3 states rather than glosses.
 
-Read straight out of the two runs' own artefacts:
+Read straight out of the runs' own artefacts:
 
-* ``cold-start-a0/artifacts/score_vs_truth.json``    — A0's score, sealed until M6
-* ``cold-start-a0/prime/artifacts/prime_report.json`` — A0-prime's two runs
+* ``cold-start-a0/artifacts/score_vs_truth.json``    -- A0's score, sealed until M6
+* ``cold-start-a0/artifacts/engines_report.json``    -- A0's probe tiers
+* ``cold-start-a0/prime/artifacts/prime_report.json`` -- A0-prime's two runs
 
-Nothing here is retyped from the prose reports; if the numbers in the paper and
-the numbers here disagree, the artefacts win.
+Nothing is retyped from the prose reports; if the numbers in the paper and the
+numbers here disagree, the artefacts win. Where a figure exists only as prose
+upstream, it is *derived* here and the derivation is recorded in the payload's
+``derivations`` block rather than pasted in as a constant.
 """
 
 from __future__ import annotations
@@ -19,6 +23,7 @@ from common import emit, repo_json, rule
 
 A0 = "cold-start-a0/artifacts/score_vs_truth.json"
 A0P = "cold-start-a0/prime/artifacts/prime_report.json"
+A0_ENGINES = "cold-start-a0/artifacts/engines_report.json"
 
 
 def _bar(frac: float, width: int = 40) -> str:
@@ -29,6 +34,12 @@ def _bar(frac: float, width: int = 40) -> str:
 def main() -> None:
     a0 = repo_json(A0)
     a0p = repo_json(A0P)
+
+    # A0's report states "zero executable probes" in prose; the artefact records
+    # a tier per designed probe instead of a count, so derive it. Anything not
+    # tiered `executable` could not be run.
+    a0_probes = repo_json(A0_ENGINES)["probes"]
+    a0_executable = sum(1 for p in a0_probes if p.get("tier") == "executable")
 
     base = a0["base"]["behavioural"]
     run_a = a0p["run_a"]
@@ -53,9 +64,10 @@ def main() -> None:
             "disagree": base["disagree"],
             "held_out_pairs": a0["base"]["held_out"]["held_out_pairs"],
             "held_out_accuracy": a0["base"]["held_out"]["accuracy"],
-            "executable_probes": 0,
+            "executable_probes": a0_executable,
+            "probes_designed": len(a0_probes),
             "revisions": 0,
-            "source": A0,
+            "source": [A0, A0_ENGINES],
         },
         {
             "arm": "A0-prime run A",
@@ -98,13 +110,16 @@ def main() -> None:
             "is not how much was seen but whether what was seen could be seen again."
         ),
         "caveat": (
-            "Two runs, one variable changed, both worlds self-built and adjudicated "
-            "by the same instance. A controlled comparison at n=1 per arm, not a "
-            "statistical result."
+            "n=1 per arm, both worlds self-built and adjudicated by the same "
+            "instance -- but the objection that bites is analytic, not statistical: "
+            "A0-prime's toggle was designed so every direction-by-polarity case "
+            "would have a witness, so the adjudication rule mechanically admits "
+            "what it mechanically rejected in A0. This demonstrates the mechanism; "
+            "it does not test it."
         ),
         "arms": arms,
         "seeded_error_experiment": seeded,
-        "sources": [A0, A0P],
+        "sources": [A0, A0P, A0_ENGINES],
         "derivations": {
             "A0.pairs_covered": (
                 "pairs - held_out.held_out_pairs = "
@@ -120,6 +135,12 @@ def main() -> None:
             ),
             "A0-prime.pairs_covered": (
                 "trace['a0p-base'].covered_pairs, the truncated explorer's own count."
+            ),
+            "A0.executable_probes": (
+                f"probes in {A0_ENGINES} whose tier is 'executable' = {a0_executable}, "
+                f"of {len(a0_probes)} designed entries. A0's artefact records a tier per "
+                "probe rather than a count; the report's prose figure is 0 of 22 designed, "
+                "counting frontier members rather than probe rows."
             ),
         },
     }

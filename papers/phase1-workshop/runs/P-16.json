@@ -44,7 +44,7 @@
     "no_experiment_no_we_show": "the paper claims no play result, no baseline comparison and no Phase 3 claim-menu item",
     "no_report_was_edited": "where a report and a later artefact disagree the paper cites both and says which is later (Fast Downward, §7.3)",
     "authorship": "placeholder; bibliography unbuilt, every citation marked [bib: TODO]",
-    "sealed_pile": "untouched; the only sealed-pile statements are the existing contamination records INC-004 and INC-BA-001"
+    "sealed_pile": "No sealed-pile game was played or read for any result in this paper, and no API call or network access happened during it. The pile itself is NOT clean, and the paper says so: INC-004 downgrades one game to design_document_disclosed, and INC-BA-001 records nine sealed games whose mechanics leaked to a search subagent. Both predate this run and are disclosed in section 7.1."
   },
   "findings_recorded_by_this_run": [
     "CLAUDE.md's statement that no game has been played and all 25 are `never_audited` is stale: baseline-arms/TOUCHED_GAMES.md records all four development-pile games at `trajectories_reviewed`. Corrected in §7.2 of the paper rather than in CLAUDE.md, which is not this track's file.",
@@ -53,7 +53,7 @@
     "engine-rig now ships eight engines, not the six CLAUDE.md lists; `deadlock_carver` and `ic3_pdr` arrived at M9 and are exercised by no result in this paper."
   ],
   "verification": {
-    "figure_determinism": "each extractor run twice, md5 of all six outputs identical",
+    "figure_determinism": "each extractor run twice before and after the review edits; md5 of all six outputs identical both times",
     "assembly": "python assemble.py -> 9 sections",
     "no_network": "no API call, no model call outside the drafting subagents, no game spend",
     "citecheck": "see CITECHECK.md",
@@ -63,6 +63,57 @@
     "Bibliography. Every reference is a [bib: TODO] marker; none was invented.",
     "Styled figures. The extractors emit data and a plain-text rendering only.",
     "Venue targeting, page limit, and any format conversion.",
-    "Author identity and affiliation."
-  ]
+    "Author identity and affiliation.",
+    "The length cut. The draft is ~13,700 words against a workshop budget of roughly 4,000; the reviewer's shortening recommendation is accepted but not executed, because cutting is a separate editorial pass and no material should be dropped silently.",
+    "The five literatures the reviewer named as uncited (active automata learning, FSM conformance testing, version spaces, optimal experiment design, specification validity) are now acknowledged in prose and carry [bib: TODO] markers, but no bibliography entry exists for any of them."
+  ],
+  "review": {
+    "reviewer_verdict": "reject as submitted; explicitly a reject of the draft, not of the work",
+    "blocking_issues": 6,
+    "all_six_verified_independently_before_fixing": true,
+    "blocking_findings_and_fixes": [
+      "The headline claim that the two A2 Lean files 'differ in their weight table and in nothing else' is FALSE: diff shows 52 changed lines including `def Goal` (c10 vs c34) and four `step` entries (c31 vs c35, the teleport itself). The claim is in the source report and D-A2-005 too. Fixed by correcting it in the paper, stating what the correction costs the exhibit, and leaving the report unedited.",
+      "The abstract's 'no benchmark game was played for any result here' is false -- section 6 reports effect sizes over four played development-pile games. Rewritten to 'no game was played FOR this paper'.",
+      "'`locate.py` and `probe.py` import no world module at all' is falsified by one grep (probe.py:59). D-A2-010 says it; the paper no longer repeats it, and states the discipline that actually holds.",
+      "'the miss was named, with its three pairs' overstates R-05, which names three DIRECTIONS and one cell; the three-pairs gloss was written at M6 after the score existed. Corrected in the abstract and section 1.1.",
+      "Section 3.4 cited `run_b.certify_cheap` for frame and pixel counts; that field is the bare boolean true, and the counts are Run A's. Corrected and the split stated explicitly.",
+      "'every discriminative verdict came back underpowered or no-data' is false: discrimination.json has 5 `not-ranked` alongside 11 and 13. Corrected to 24 of 29 ranked metrics, in both places."
+    ],
+    "should_fix_applied": [
+      "the A0/A0-prime contrast is two variables not one, and the outcome is analytically entailed by the construction -- now stated, and the contrast demoted from test to demonstration",
+      "the reset assumption in active automata learning named as the nearest prior work",
+      "zero_space described consistently as reading data rather than rules, in both section 3.2 and section 8.2",
+      "'two independently developed tracks' and 'independent adversarial review' de-escalated to defence-in-depth and same-project",
+      "specification validity acknowledged as the oldest caveat in formal methods, not a novel point",
+      "every planning number in the paper came from the BFS stub -- the pipeline calls prefer='stub' on purpose; Fast Downward is a separate conformance artefact",
+      "A1's 83/83 depends on a Lean toolchain; without it the run is 75 passed / 8 skipped and the empty-axiom claim evaporates into skips",
+      "E5 flagged as entailed by its own definition rather than discovered by the pass",
+      "the section 6.6 front-load confound no longer draws a Phase 4 conclusion",
+      "'diff the files and the deletion is the whole diff' qualified to the substantive diff",
+      "all three figures are now referenced from the text",
+      "two hard-coded figure fields replaced by derivations from the artefacts"
+    ]
+  },
+  "citecheck": {
+    "paths_cited": 83,
+    "paths_missing": 0,
+    "paths_not_repo_relative": 31,
+    "numbers_checked": "~160",
+    "numbers_wrong_or_miscited": 10,
+    "numbers_uncited": 7,
+    "quotes_checked": 31,
+    "quotes_inexact": 8,
+    "fixes_applied": [
+      "section 5's citations made repo-relative throughout (the bulk of the 31)",
+      "haiku actions-per-call corrected 0.97 -> 0.96 and the step-failure floor 27% -> 28%, against the artefact rather than REPORT_V0.md",
+      "rho = -0.83 flagged as the one battery number no artefact carries",
+      "the 258-file read-only check re-cited to A2_REPORT section 7; upstream_pin.json pins 22",
+      "lp_potential's 'sound but incomplete' re-cited to engine-rig/DECISIONS.md D-014",
+      "A2 has no recorded revision count anywhere in the tree; the paper now says so",
+      "Theoria.md quotations restored to the source's half-width punctuation",
+      "two compressed fragments in the section 5.2 isomorphism table marked as compressions rather than quotations",
+      "the malformed 'Theoria.md Phase 2 section Phase 1' anchor corrected to Part 2, Phase 1",
+      "the abstract's citation exemption stated rather than left implicit"
+    ]
+  }
 }

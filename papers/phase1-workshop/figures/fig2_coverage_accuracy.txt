@@ -28,4 +28,4 @@ SEEDED-ERROR EXPERIMENT (A0-prime run B) - controlled, not a discovery
 ------------------------------------------------------------------------------
 Reversibility beats coverage. A0 saw nearly every reachable (state, action) pair and shipped a manual wrong in three places; A0-prime saw under half and shipped one with no errors. The variable is not how much was seen but whether what was seen could be seen again.
 
-CAVEAT: Two runs, one variable changed, both worlds self-built and adjudicated by the same instance. A controlled comparison at n=1 per arm, not a statistical result.
+CAVEAT: n=1 per arm, both worlds self-built and adjudicated by the same instance -- but the objection that bites is analytic, not statistical: A0-prime's toggle was designed so every direction-by-polarity case would have a witness, so the adjudication rule mechanically admits what it mechanically rejected in A0. This demonstrates the mechanism; it does not test it.

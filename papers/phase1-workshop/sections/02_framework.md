@@ -9,11 +9,11 @@ neighbours.
 The world model is not a network and not a simulator. It is two hand-maintained
 documents (`Theoria.md` §1.7–§1.9):
 
-* the **manual** (`theory.dsl`) says what the world *is* — a vocabulary of
+* the **manual** (`cold-start-a0/theory/theory.dsl` for A0) says what the world *is* — a vocabulary of
   objects and properties, rules that fire events, a goal clause, and **laws**:
   universal assertions written in the manual's own vocabulary, where writing one
   down *is* incurring a proof obligation;
-* the **playbook** (`playbook.dsl`) says how to *win* — entries at theorem level
+* the **playbook** (`playbook.dsl`, per `CONTRACTS/dsl_grammar_v0.1.md`) says how to *win* — entries at theorem level
   and at experience level, with the certificate and the heuristic derived from
   the same object.
 
@@ -102,7 +102,7 @@ spends most of its space on.
 ### 2.5 What Phase 1 was allowed to be
 
 Phase 1 is the closed system: build it, and pass three offline acceptances
-before any money is spent on play (`Theoria.md` Phase 2 §Phase 1). The three are
+before any money is spent on play (`Theoria.md`, Part 2, Phase 1). The three are
 **A0** (cold-start on a self-built world with known ground truth), **A1** (peg
 solitaire spec → DSL → LP weights → Lean closure lemma with an empty dependency
 set), and **A2** (port a model with a missing rule, produce the theorem that
@@ -112,7 +112,7 @@ game spend.
 
 `Theoria.md`'s Phase 4 deliverables clause is why this document exists:
 
-> 每个阶段边界定义一个最小可发表单元——Phase 1 结：A0–A2 + 电池对既有轨迹的回算，
+> 每个阶段边界定义一个最小可发表单元——Phase 1 结:A0–A2 + 电池对既有轨迹的回算,
 > 独立可成 workshop 文
 
 This paper is that unit and nothing more. It reports the three acceptances and

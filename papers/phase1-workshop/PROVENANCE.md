@@ -25,7 +25,7 @@ written, the paper cites both and says which is later; no report was edited.
 | ground-truth seal | first read at M6 | `cold-start-a0/THEORIZE_LOG.md` §Ground-truth seal; `score_vs_truth.json` → `seal` |
 | the seal's hole | same instance built and adjudicated | `cold-start-a0/THEORIZE_LOG.md` preamble; `cold-start-a0/A0_REPORT.md` §6.3 |
 | K4 = 1.000, K2 = 0.000 | same manual, same recompute | `battery/REPORT_V0.md`; `battery/artifacts/capability_spectrum.json` |
-| A2's two Lean files | identical but for the weight table | `cold-start-a2/A2_REPORT.md` §4 |
+| A2's two Lean files | identical in generator, tactic, dependency surface and axiom list — **not** identical but for the weight table; see the disagreements table | `cold-start-a2/theory/generated_holed/theory.lean`, `…/generated_repaired/theory.lean` |
 | the refuting episode | 18 actions, win on frame 18 | `cold-start-a2/artifacts/refutation.json`, `solved_episode.jsonl` |
 
 ## §3 — A0 and A0′
@@ -38,7 +38,7 @@ written, the paper cites both and says which is later; no report was edited.
 | Lean obligations | 2/2, axiom lists empty | `cold-start-a0/A0_REPORT.md` §2; `cold-start-a0/artifacts/certify_lean_generated_theory_lean.json` |
 | plan | SAT, 12 steps | `cold-start-a0/artifacts/plan_generated.json` |
 | the conservation law | 275 transitions of support, 152 indicator bits | `cold-start-a0/THEORIZE_LOG.md` L-02; `cold-start-a0/artifacts/engines_report.json` |
-| segmentation, script bits | 6511 vs 4423; 90 tracks vs 3 | `cold-start-a0/THEORIZE_LOG.md` O-03 §Segmentation operator |
+| segmentation, script bits | 6511 vs 4423; 90 tracks vs 3 | `cold-start-a0/THEORIZE_LOG.md` O-01 §Segmentation operator |
 | per-object accounts | Cart +2967, Button −17, Door −13 | `cold-start-a0/artifacts/concept_accounts.json`; `THEORIZE_LOG.md` O-04 |
 | accounts, responsibility-complete | Button −5, Door −1 | `cold-start-a0/A0_REPORT.md` §8 |
 | A0′ coverage | 107/228 = 47 % | `cold-start-a0/prime/artifacts/prime_report.json` → `trace["a0p-base"]` |
@@ -57,7 +57,7 @@ written, the paper cites both and says which is later; no report was edited.
 |---|---|---|
 | the solved weight vector | `[-1,1,0,1,-1]` | `engine-rig/interop/certificates/pagoda_5_11011_to_00010.json`; `theory-compiler/STATUS.md` |
 | the rehearsal's hand weights | `[1,2,3,2,1]` | `theory-compiler/STATUS.md` §M8 差异 |
-| obligations re-verified, not trusted | — | `theory-compiler/src/certificate.py` |
+| obligations re-verified, not trusted | — | `theory-compiler/src/theory_compiler/certificate.py` |
 | `inv_closed` | 6 move instances, all delta ≤ 0 | the certificate JSON → `obligations.inv_closed` |
 | `goal_break` | goal potential 1 > initial 0 | ibid. → `obligations.goal_break` |
 | four theorems, empty axiom lists | `inv_init`, `inv_closed`, `inv_all`, `unsolvable` | `theory-compiler/STATUS.md` |
@@ -83,7 +83,7 @@ written, the paper cites both and says which is later; no report was edited.
 | probes | 5 designed, 4 executed, 1 unrunnable; 184 → 196 frames | `cold-start-a2/artifacts/probes.jsonl`, `probe_report.json` |
 | the ledger | 8 beats, 8 pass, 0 fail, 0 absent | `cold-start-a2/artifacts/loop_ledger.json` |
 | the stale certificate's corpse | Lean fails at line 769 | `cold-start-a2/theory/generated_repaired_stale/` |
-| read-only verification | 258 files hashed, 0 changed | `cold-start-a2/A2_REPORT.md` §7 (`python -m tools.verify_readonly`) |
+| read-only verification | 258 files hashed, 0 changed | `cold-start-a2/A2_REPORT.md` §7 only — `upstream_pin.json` pins 22 files and does not carry this figure |
 | upstream pinning | every imported file hashed | `cold-start-a2/artifacts/upstream_pin.json` |
 
 ## §6 — the battery
@@ -92,7 +92,8 @@ written, the paper cites both and says which is later; no report was edited.
 |---|---|---|
 | scope of the recompute | 26 runs, 4 games, 2 arms | `battery/REPORT_V0.md`; `battery/artifacts/capability_spectrum.json` |
 | smallest attainable p | 0.125 at 4 paired games; floor is 6 | `battery/artifacts/discrimination.json` |
-| P1 confound | δ = −1.000; haiku 0.97 vs opus 0.52 actions/call; 27–45 % step failure; ρ = −0.83 | `battery/REPORT_V0.md`; `battery/artifacts/discrimination.json`, `redundancy.json` |
+| P1 confound | δ = −1.000; haiku 0.96 vs opus 0.52 actions/call; 28–45 % step failure | `battery/artifacts/capability_spectrum.json`, `discrimination.json` — the paper uses the artefact's aggregates, not `REPORT_V0.md`'s 0.97 / 27 % |
+| P1 ↔ failure-rate correlation | ρ = −0.83 | `battery/REPORT_V0.md`; `battery/STATUS.md` W-4. **No artefact carries it** — the one battery number in the paper that cannot be re-derived from `battery/artifacts/` |
 | E5 as a price list | δ = +1.000; $0.031 / $0.124 / $0.279 per action | `battery/REPORT_V0.md`; `battery/artifacts/capability_spectrum.json` |
 | E2 front-load confound | haiku 0.20, sonnet 0.25, opus 0.28; δ = +1.000 | ibid. |
 | de-redundancy | 2 clusters at \|ρ\| ≥ 0.9; 27 clusters from 29 metrics; ρ = 0.916, 0.909 | `battery/artifacts/redundancy.json` |
@@ -119,6 +120,11 @@ written, the paper cites both and says which is later; no report was edited.
 
 | topic | the two sources | what the paper does |
 |---|---|---|
+| the two A2 Lean files | `cold-start-a2/A2_REPORT.md` §4 and `DECISIONS.md` D-A2-005 say they "differ in their weight table and in nothing else"; `diff` of the two files shows 52 changed lines, including `def Goal` (`c10` vs `c34`) and four `step` entries (`c31` vs `c35`) | **follows the files.** §5.6 corrects the report explicitly and states what the correction costs the exhibit. The report is not edited |
+| the discriminative verdicts | `battery/REPORT_V0.md` says "every discriminative verdict"; `battery/artifacts/discrimination.json` has three verdict values — 11 `underpowered`, 13 `no-data`, 5 `not-ranked` | **follows the artefact.** §6.4 and §7.4 say "every ranked metric", 24 of 29 |
+| A0's segmentation figures | `A0_REPORT.md` §3 and `THEORIZE_LOG.md` O-01 give 6511 bits / 90 tracks; `cold-start-a0/artifacts/engines_report.json` now gives 5704 / 6, with the older pair under `reidentification.*_before` | **follows the report**, because that is the account the adjudication was made from; §3.2 states the disagreement |
+| A2's revision count | no file in the tree states one; `loop_ledger.json`'s L4 beat records `re_derivable_from_grown_evidence: true` and no number | §7.3 says so, and marks "one revision" for A2 as the paper's reading of the ledger rather than a citable figure |
+| A0's candidate count | `THEORIZE_LOG.md` Round 0 says 28; `cold-start-a0/artifacts/candidates.jsonl` has 29 rows | **follows the artefact** (29), and §3.1 explains the gap: the 29th row is a `plan` the log did not adjudicate |
 | Fast Downward connectivity | `cold-start-a0/A0_REPORT.md` §5/§6.5 says "still not connected"; `cold-start-a0/BLOCKER_FAST_DOWNWARD.md` and `STATUS.md` record it as connected on 2026-07-28 | cites both, states which is later, and does not edit the report (§7.3) |
 | whether any game has been played | `CLAUDE.md` says no game has been played and all 25 are `never_audited`; `baseline-arms/TOUCHED_GAMES.md` records all four development-pile games at `trajectories_reviewed` | follows the ledger and corrects `CLAUDE.md` explicitly (§7.2) |
 | the exhibit theorem's name | `cold-start-a2/artifacts/refutation.json` names it `right_room_locked` with `lean_target: "unsolvable"`; `A2_REPORT.md` §2/§4 uses `unsolvable` throughout | follows the report's Lean-level name and records the discrepancy here |

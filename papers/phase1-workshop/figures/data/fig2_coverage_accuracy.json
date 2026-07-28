@@ -13,9 +13,13 @@
       "mechanism": "Button, latch - pressable once",
       "pairs_covered": 233,
       "pairs_total": 236,
+      "probes_designed": 9,
       "replay_green": true,
       "revisions": 0,
-      "source": "cold-start-a0/artifacts/score_vs_truth.json"
+      "source": [
+        "cold-start-a0/artifacts/score_vs_truth.json",
+        "cold-start-a0/artifacts/engines_report.json"
+      ]
     },
     {
       "accuracy_vs_truth": 1.0,
@@ -35,11 +39,12 @@
       "source": "cold-start-a0/prime/artifacts/prime_report.json"
     }
   ],
-  "caveat": "Two runs, one variable changed, both worlds self-built and adjudicated by the same instance. A controlled comparison at n=1 per arm, not a statistical result.",
+  "caveat": "n=1 per arm, both worlds self-built and adjudicated by the same instance -- but the objection that bites is analytic, not statistical: A0-prime's toggle was designed so every direction-by-polarity case would have a witness, so the adjudication rule mechanically admits what it mechanically rejected in A0. This demonstrates the mechanism; it does not test it.",
   "claim": "Reversibility beats coverage. A0 saw nearly every reachable (state, action) pair and shipped a manual wrong in three places; A0-prime saw under half and shipped one with no errors. The variable is not how much was seen but whether what was seen could be seen again.",
   "derivations": {
     "A0-prime.pairs_covered": "trace['a0p-base'].covered_pairs, the truncated explorer's own count.",
     "A0.covered_equals_agreed": "A0's covered count and its agreement count are both 233. That is not a coincidence: the three uncovered pairs are exactly the three the manual gets wrong (cold-start-a0/THEORIZE_LOG.md R-05).",
+    "A0.executable_probes": "probes in cold-start-a0/artifacts/engines_report.json whose tier is 'executable' = 0, of 9 designed entries. A0's artefact records a tier per probe rather than a count; the report's prose figure is 0 of 22 designed, counting frontier members rather than probe rows.",
     "A0.pairs_covered": "pairs - held_out.held_out_pairs = 236 - 3 = 233. The held-out set is defined as the pairs the trajectory could never contain, so its complement is the covered set. Agrees with the 233/236 coverage figure in cold-start-a0/prime/A0P_REPORT.md §1."
   },
   "seeded_error_experiment": {
@@ -59,6 +64,7 @@
   },
   "sources": [
     "cold-start-a0/artifacts/score_vs_truth.json",
-    "cold-start-a0/prime/artifacts/prime_report.json"
+    "cold-start-a0/prime/artifacts/prime_report.json",
+    "cold-start-a0/artifacts/engines_report.json"
   ]
 }

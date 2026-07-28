@@ -9,8 +9,20 @@
 
 > **Draft status.** This is a working draft assembled from the acceptance
 > reports already in the repository. Authorship, affiliation, venue and
-> bibliography are unfilled placeholders. Every quantitative claim carries the
-> repo-relative path of the artefact it came from; `PROVENANCE.md` is the index.
+> bibliography are unfilled placeholders, and at ~11 500 words it is roughly
+> three times a workshop budget — the cut is a separate pass, and no material has
+> been dropped yet in order to make it.
+>
+> **The binding rule.** Every quantitative claim in the body carries the
+> repo-relative path of the artefact it came from;
+> `papers/phase1-workshop/PROVENANCE.md` is the index. The abstract is the one
+> exemption, by convention — each figure in it is cited where it recurs in the
+> body. The rule is tested mechanically rather than asserted:
+> `papers/phase1-workshop/CITECHECK.md` is a path/number/quote audit of this
+> draft and `papers/phase1-workshop/REVIEW.md` an adversarial referee pass, both
+> run against the first assembled version. Their findings were applied, and both
+> files are kept unedited — including the parts that are unflattering — so a
+> reader can see what the rule caught.
 
 ---
 
@@ -28,27 +40,29 @@ Phase 1 is offline: three acceptances on self-built deterministic worlds, plus a
 metrics battery recomputed over trajectories that already existed. Four results.
 **(1)** On a 9×9 self-built world, the induced manual replays 276/276 frames and
 22 356/22 356 pixels with zero anomalies and is nonetheless wrong on 3 of 236
-reachable (state, action) pairs — accuracy 0.000 on the three the trajectory
-could never contain. The miss was named, with its three pairs, in the
-adjudication log *before* the ground truth was opened. **(2)** A second world,
-identical except that an irreversible latch becomes a reversible toggle and the
-explorer is truncated to under half the state-action coverage, yields a manual
-that is 228/228 correct. Reversibility of a mechanism mattered more than breadth
-of trajectory; in the same world, a deliberately seeded replay-invisible clause
-was caught independently by a coverage probe and by the Lean transcription, and
-repaired in one revision. **(3)** A pagoda-style impossibility certificate
+reachable (state, action) pairs — accuracy 0.000, over the three pairs (n = 3)
+the trajectory could never contain. The miss was named in the adjudication log,
+by direction, *before* the ground truth was opened. **(2)** A second world, in
+which an irreversible latch is replaced by a reversible toggle and the explorer
+is truncated to under half the state-action coverage, yields a manual that is
+228/228 correct. Reversibility of a mechanism mattered more than breadth of
+trajectory — a design lesson demonstrated by construction rather than a
+hypothesis tested. In the same world, a deliberately seeded replay-invisible
+clause was caught by a coverage probe and, unplanned, by the Lean transcription,
+and repaired in one revision. **(3)** A pagoda-style impossibility certificate
 computed by a linear program in one track crosses a JSON data boundary into a
-second, independently developed track, which re-verifies every obligation rather
+second track developed alongside it, which re-verifies every obligation rather
 than trusting the producer, and emits a Lean proof with an empty axiom list — a
-check shown to be non-decorative by a negative control that makes it fail.
-Where the invariant language cannot carry a conclusion, the compiler refuses to
+check shown to be non-decorative by a negative control that makes it fail. Where
+the invariant language cannot carry a conclusion, the compiler refuses to
 generate rather than narrowing the theorem. **(4)** An exhibit: a manual with one
 rule deleted passes replay at 100 %, its planner returns UNSAT, and Lean signs an
 axiom-free impossibility theorem that an 18-action episode refutes. The
 refutation loop then closes in six recorded beats. The headline artefact is a
 *pair* of Lean files, identical in generator, tactic, dependency surface and
-axiom list, differing only in a weight table — one true of its world, one not.
-The instrument cannot tell them apart, and is not supposed to.
+axiom list — the instrument returns `[]` for both — where one is true of its
+world and the other is not. The instrument cannot tell them apart, and is not
+supposed to.
 
 The battery, run over 26 existing trajectories at zero new spend, immediately
 found three of its own metrics measuring something other than what they claim,
@@ -56,11 +70,14 @@ and reports that no metric on this pilot can reach significance — a two-sided
 sign test over four paired games has a smallest attainable *p* of 0.125.
 
 We claim none of the framework's comparative results. No arm was run against a
-baseline; no benchmark game was played for any result here; the theorize step is
-a checked-in artefact rather than a measured language-model step; every world is
-small enough for `decide` to enumerate. What Phase 1 establishes is that the
-instrument exists, that it produces the failure mode on demand, and that the loop
-closes on it.
+baseline. No game was played *for* this paper: the battery recomputes over
+trajectories that already existed, and the comparative effect sizes it reports
+are across a model ladder within one control arm, not across the framework's
+arms. The theorize step is a checked-in artefact rather than a measured
+language-model step, and every world is small enough for `decide` to enumerate.
+The contribution is an instrument and a demonstration artefact — Phase 1
+establishes that the instrument exists, that it produces the failure mode on
+demand, and that the loop closes on it — not a result about world models.
 
 **Keywords** — world models · program synthesis · unsolvability certificates ·
 interactive theorem proving · agent evaluation
@@ -107,11 +124,24 @@ recorded the consequence:
 > full-history replay will never catch that.
 > — `cold-start-a0/THEORIZE_LOG.md` R-05
 
-The three pairs were named there, before any score existed. The ground truth was
-first opened at M6, after both certify layers and the plan were green, and only
-by the scoring script; no clause was written or revised afterwards
+Be precise about what was named, because the precision is the whole argument.
+R-05 names three **directions** — `press_up`, `press_down`, `press_right` — and
+one concrete configuration, "drive the Cart to (2,2) and push DOWN into an
+unpressed Button". It does not enumerate the coordinate pairs; the phrase "the
+three pairs R-05 named" appears in `THEORIZE_LOG.md`'s seal section and
+`A0_REPORT.md` §2, both written at M6 *after* the score existed, and this paper
+does not inherit that gloss as if it were the pre-registration. The claim that
+survives is still the one that matters: R-05 named the three directions,
+predicted the manual would be wrong on them, and predicted that replay would not
+notice. All three held.
+
+The ground truth was first opened at M6, after M4 and M5 were green — M5 being
+the unsolvable-variant milestone, not a planning stage — and only by the scoring
+script; no clause was written or revised afterwards
 (`cold-start-a0/THEORIZE_LOG.md`, "Ground-truth seal"; the same stamp is carried
-in `cold-start-a0/artifacts/score_vs_truth.json` as `seal`).
+in `cold-start-a0/artifacts/score_vs_truth.json` as `seal`). That stamp is a
+declaration written by the authors' own script, not a control: the only thing
+that could make it auditable is git history, which this paper does not appeal to.
 
 The seal has a hole, and the log names it rather than hiding it: **the same
 instance both built the A0 world at M1 and adjudicated it at M3**
@@ -124,12 +154,17 @@ than a footnote, and this paper carries it the same way.
 
 The second exhibit makes the failure mode inspectable. A2 built a manual with one
 rule deleted — a teleport — and ran the ordinary machinery on it. The result is a
-pair of Lean files with the same theorem name `unsolvable`, the same generator,
-the same tactic (`decide`), no Mathlib in either, the same dependency surface,
-and `#print axioms` returning `[]` in both. They differ in their weight table and
-in nothing else. One is true of its world — 0 of 55 reachable states satisfy the
-goal — and the other is false of its world, refuted by an 18-action episode that
-ends in a win (`cold-start-a2/A2_REPORT.md` §4, §2).
+pair of Lean files carrying the same theorem name `unsolvable`, produced by the
+same generator, closed by the same tactic (`decide`), with no Mathlib in either,
+the same dependency surface, and `#print axioms` returning `[]` for both. One is
+true of its world; the other is false of its world, refuted by an 18-action
+episode that ends in a win (`cold-start-a2/A2_REPORT.md` §4, §2). The instrument
+returns the same verdict either way.
+
+The two files are *not* a minimal pair — §5.6 corrects the source report on that
+point and says what the correction costs — but they do not need to be. Identical
+provenance and an identical empty axiom list, on one theorem that holds of the
+world and one that does not, is the whole demonstration.
 
 > The instrument cannot tell them apart, and it is not supposed to be able to.
 > — `cold-start-a2/A2_REPORT.md` §4
@@ -193,11 +228,11 @@ neighbours.
 The world model is not a network and not a simulator. It is two hand-maintained
 documents (`Theoria.md` §1.7–§1.9):
 
-* the **manual** (`theory.dsl`) says what the world *is* — a vocabulary of
+* the **manual** (`cold-start-a0/theory/theory.dsl` for A0) says what the world *is* — a vocabulary of
   objects and properties, rules that fire events, a goal clause, and **laws**:
   universal assertions written in the manual's own vocabulary, where writing one
   down *is* incurring a proof obligation;
-* the **playbook** (`playbook.dsl`) says how to *win* — entries at theorem level
+* the **playbook** (`playbook.dsl`, per `CONTRACTS/dsl_grammar_v0.1.md`) says how to *win* — entries at theorem level
   and at experience level, with the certificate and the heuristic derived from
   the same object.
 
@@ -286,7 +321,7 @@ spends most of its space on.
 ### 2.5 What Phase 1 was allowed to be
 
 Phase 1 is the closed system: build it, and pass three offline acceptances
-before any money is spent on play (`Theoria.md` Phase 2 §Phase 1). The three are
+before any money is spent on play (`Theoria.md`, Part 2, Phase 1). The three are
 **A0** (cold-start on a self-built world with known ground truth), **A1** (peg
 solitaire spec → DSL → LP weights → Lean closure lemma with an empty dependency
 set), and **A2** (port a model with a missing rule, produce the theorem that
@@ -296,7 +331,7 @@ game spend.
 
 `Theoria.md`'s Phase 4 deliverables clause is why this document exists:
 
-> 每个阶段边界定义一个最小可发表单元——Phase 1 结：A0–A2 + 电池对既有轨迹的回算，
+> 每个阶段边界定义一个最小可发表单元——Phase 1 结:A0–A2 + 电池对既有轨迹的回算,
 > 独立可成 workshop 文
 
 This paper is that unit and nothing more. It reports the three acceptances and
@@ -314,20 +349,30 @@ records what was built at each milestone: a 9×9 arena containing a Cart, a
 Button, a Door and a Portal, **59 reachable states**, walked by a deterministic
 explorer into a **276-frame** `raw_trace.jsonl` (M1). The world's ground truth
 exists as a file and was sealed — `cold-start-a0/THEORIZE_LOG.md` stamps the
-first read at M6, after both certify layers and the planning stage were already
-green.
+first read at M6, after M4 and M5 were green — M5 being the unsolvable-variant
+milestone, not a planning stage.
 
 The pipeline over that trace is the framework's, run end to end: board
 extraction, then `mdl_segmenter`, multi-track CEGIS, `zero_space` and
-`probe_frontier`, producing **29 schema-valid candidates** (M2); then LLM
+`probe_frontier`, producing **29 schema-valid candidates** (M2;
+`cold-start-a0/artifacts/candidates.jsonl`. `THEORIZE_LOG.md`'s Round 0 opens on
+28 — it counts the 28 it adjudicated, the 29th row being a `plan`); then LLM
 adjudication of every candidate into `theory/theory.dsl` — **3 objects, 7 rules,
 2 invariants, 1 pending theorem**, reasoning recorded in
 `cold-start-a0/THEORIZE_LOG.md` (M3); then the four co-derived forms, cheap
 certify at **22 356/22 356 pixels**, a Lean `inv_all` with an **empty axiom
 list**, and a SAT plan of **12 steps** that the world agrees with frame-for-frame
 (M4). M5 carried the same manual to a Button-less variant and got UNSAT plus a
-machine-checked `unsolvable`, again with 0 axioms. The whole run takes about six
-seconds.
+machine-checked `unsolvable`, again with 0 axioms. The whole run takes about six seconds
+(`cold-start-a0/A0_REPORT.md`, preamble and §7).
+
+**Figure 1** is that adjudication record as a timeline — every decision with its
+verdict, the manual's two revisions with their triggers, the three compiler
+defects, and the expressivity ledger. It is parsed out of
+`cold-start-a0/THEORIZE_LOG.md`'s own headings by
+`papers/phase1-workshop/figures/fig1_concept_timeline.py` rather than retyped,
+and the shape it shows is unflattering: the manual was revised **zero** times by
+certify, and every iteration that did happen was in the compiler.
 
 ### 3.2 What the engines produced that a hand-filled candidate box would not
 
@@ -350,7 +395,12 @@ in the manual's own words:
 > 8"* and *"the Door exists"* holds. In manual vocabulary: **the Door is present
 > if and only if the Button is unpressed.**
 
-The rule says *when* it happens; the law says *that it always holds*.
+The rule says *when* it happens; the law says *that it held on every one of the
+275 transitions*. The distinction matters and §8.1's own table forbids
+overstating it: `zero_space` reads data, not rules, so what it returns is an
+empirical regularity — "true of everything already experienced", which is exactly
+what that table assigns to the second wave. Upgrading it to "true of everything"
+is the Lean closure proof's job, and even then only relative to the manual (§2.3).
 
 **CEGIS pinned a semantically right guard on one witness.** `act==LEFT ∧
 tcolor(LEFT)==7` — push into a cell showing colour 7 — arrived with a **frontier
@@ -364,14 +414,27 @@ connected-components operator fragmented the trace into **90 tracks** with 88
 vanishes and 87 appears, because the Cart stands constantly adjacent to the
 Button; the uniform-colour operator gave **3 tracks**. Script bits: **6511 vs
 4423**. The framework's own criterion picked the right operator with no thumb on
-the scale.
+the scale. (Those are the figures in `cold-start-a0/A0_REPORT.md` §3 and
+`THEORIZE_LOG.md` O-01. `cold-start-a0/artifacts/engines_report.json` has since
+moved on — it now reports 5704 bits over 6 tracks, with 6511/90 demoted to
+`reidentification.*_before` — so the artefact and the report disagree, and the
+paper quotes the report the adjudication was actually made from.)
 
 ### 3.3 The controlled contrast
 
-A0′ is the same instance's second self-built world, differing in one deliberate
-respect: the Button's irreversible latch is replaced by a re-witnessable toggle.
-The explorer was then *weakened* on purpose. `cold-start-a0/prime/A0P_REPORT.md`
-§1:
+A0′ is the same instance's second self-built world. The advertised change is that
+the Button's irreversible latch is replaced by a re-witnessable toggle, and the
+explorer is then *weakened* on purpose — two variables, not one. It is worth
+being blunt that they are not the only two: A0's manual has 3 objects and 7
+rules, A0′'s has 3 objects and 21, the worlds have 59 and 57 reachable states and
+236 and 228 state-action pairs, and the mechanism object is a Button in one and a
+Switch in the other (`cold-start-a0/theory/theory.dsl`,
+`cold-start-a0/prime/theory/theory_prime.dsl`). "Identical except" would be a
+false description and is not used here.
+
+**Figure 2** (`papers/phase1-workshop/figures/fig2_coverage_accuracy.py`) plots
+the two runs' coverage against their accuracy, read straight from the two score
+artefacts. `cold-start-a0/prime/A0P_REPORT.md` §1 tabulates the same comparison:
 
 | | A0 | A0′ |
 |---|---|---|
@@ -405,9 +468,31 @@ combination witnessed. The design consequence, stated in
 `cold-start-a0/A0_REPORT.md` §8: *an irreversible mechanism caps what any amount
 of exploration can establish about it.*
 
-What kind of experiment this is should be stated plainly. Two runs, one variable
-deliberately changed, on worlds built by the same instance that theorized them —
-a controlled comparison with **n = 1 per arm**, not a statistical result.
+What kind of experiment this is should be stated plainly, and the usual
+disclaimer is not the one that bites. "**n = 1 per arm**, on worlds built by the
+same instance that theorized them" covers sampling error. The sharper objection is
+**analytic entailment**: A0′'s toggle was *designed* so that every
+direction-by-polarity combination would have its own witness
+(`cold-start-a0/prime/THEORIZE_LOG.md` R-03, sixteen clauses each at coverage
+1/1). The adjudication rule — admit a generalisation iff every case is witnessed —
+then mechanically admits what it mechanically rejected in A0. The outcome follows
+from the construction; nothing was learned that was not built in.
+
+So this contrast **demonstrates the mechanism rather than tests it**, and it is
+offered the way `cold-start-a0/A0_REPORT.md` §8 offers it: as a design lesson for
+choosing the next world and the next development level, not as evidence that the
+lesson generalises. The lesson itself survives that demotion intact — an
+irreversible mechanism caps what any amount of exploration can establish about
+it — because it is an argument about observability, and the two runs are its
+worked illustration.
+
+The nearest neighbour in the literature should be named rather than left for a
+reviewer: this is the **reset assumption** of active automata learning. L\* and
+the membership/equivalence-query line assume the learner can return to a known
+state precisely because a transition that cannot be re-witnessed cannot be
+pinned down [bib: TODO]. A0's latch removes the reset for the Button mechanism
+and A0′'s toggle restores it. The finding here is the standard reason that
+assumption is made, arrived at from the other direction.
 
 ### 3.4 Does the loop repair?
 
@@ -425,10 +510,17 @@ rule push_onto_crate [ev: none cov: 0/0]
 so the rule never fires in the whole 110-transition history
 (`cold-start-a0/prime/A0P_REPORT.md` §3).
 
-Full-history replay stayed **GREEN** — 111 frames, 8991 pixels, 0 anomalies
-(`cold-start-a0/prime/artifacts/prime_report.json`, `run_b.certify_cheap`). Two
-other mechanisms caught it. The Lean transcription refused it as an internal
-inconsistency, before the world was consulted:
+Full-history replay stayed **GREEN** on the seeded manual
+(`cold-start-a0/prime/A0P_REPORT.md` §3). A note on where that number lives, since
+it is the one place a reader could suspect a thumb on the scale: the artefact
+records Run B's replay as the bare boolean `run_b.certify_cheap: true`, and the
+frame and pixel shape of the check — 111 frames, 8991 pixels, 0 anomalies — is
+recorded under `run_a.certify_cheap`, the run on the *unseeded* manual
+(`cold-start-a0/prime/artifacts/prime_report.json`). Both runs replay the same
+111-frame trace; only Run A's counts were serialised.
+
+Two other mechanisms caught the seeded clause. The Lean transcription refused it
+as an internal inconsistency, before the world was consulted:
 
 > `ArenaEscape: step sends the mover to (2, 4), which the board does not list as
 > arena (from (2, 3) on right)`
@@ -474,7 +566,8 @@ changes.
 
 Concept-admission by compression and full-frame responsibility disagreed on the
 first cold start. Per-object accounts from the engine's cost model give Cart
-**+2967**, Button **−17**, Door **−13** (`cold-start-a0/A0_REPORT.md` §4;
+**+2967**, Button **−17**, Door **−13**, on the pixel baseline in force at
+adjudication time (`cold-start-a0/A0_REPORT.md` §4;
 `cold-start-a0/THEORIZE_LOG.md` O-04). By the compression ticket of admission
 both the Button and the Door should be rejected — one event each in 275
 transitions against a 21-bit declaration. They were admitted on responsibility:
@@ -482,8 +575,8 @@ cells (3,2) and (4,5) change, so they are not board, and if they are not objects
 either then two pixels of every frame are unexplained and cheap certify fails at
 frame 0.
 
-The §8 addendum corrects the accounting rather than the verdict: on a
-responsibility-complete baseline the accounts move to **−5** and **−1**, and the
+`cold-start-a0/A0_REPORT.md` §8 corrects the accounting rather than the verdict:
+on a responsibility-complete baseline the accounts move to **−5** and **−1**, and the
 conflict is **narrowed, not dissolved** — an object with one event in 275
 transitions still does not pay for itself on the trace.
 
@@ -518,8 +611,8 @@ same instance built the world and adjudicated it
 A1 is the framework's own acceptance item, and `Theoria.md` states it as a test of
 plumbing rather than of insight:
 
-> **A1 孔明棋**：孔明棋规格 → DSL → **LP 按钮式解出 pagoda 权重** → Lean 验封闭
-> 引理，依赖假设为空。判死赌的是管线接通，不是 LLM 灵感；找不回，直接判死。
+> **A1 孔明棋**:孔明棋规格 → DSL → **LP 按钮式解出 pagoda 权重** → Lean 验封闭
+> 引理,依赖假设为空。判死赌的是管线接通,不是 LLM 灵感;找不回,直接判死。
 >
 > — `Theoria.md`, Phase 1, 三件离线验收
 
@@ -532,7 +625,7 @@ An impossibility claim is the interesting case for a reason set out in
 `Theoria.md` §1.5: it cannot be checked by exhaustion, because the paths are
 exponentially many. The old method is to find a quantity that holds at the start,
 that no legal move can break, and that winning would require breaking — "三个小
-检查代替无穷穷举，检查量与状态空间大小无关" (three small checks in place of an
+检查代替无穷穷举,检查量与状态空间大小无关" (three small checks in place of an
 infinite enumeration, with a checking cost independent of the size of the state
 space). Writing it in Lean replaces human checking of the three conditions with
 machine checking of them, and forbids the proof from quietly leaning on an
@@ -555,6 +648,14 @@ lean →  'inv_init' / 'inv_closed' / 'inv_all' / 'unsolvable'
         does not depend on any axioms
 ```
 
+**What "two tracks" does and does not mean.** They are two agent sessions working
+one repository under one operator, sharing `CLAUDE.md`, `Theoria.md` and
+`CONTRACTS/`, mutually visible through git history and `PARTNER_SYNC.md` (repo
+`CLAUDE.md`, "Two independent tracks"). A reader should not picture two teams.
+What crosses the boundary is therefore a *defence-in-depth* result, not an
+independent replication — and it is still worth having, because the failure it
+defends against is a producer whose own verifier is incomplete.
+
 The two tracks do not import each other's code. A JSON data file is the entire
 interface, and the consuming side does not trust the producing side's verdict:
 the certificate carries `"verified": true`, and
@@ -574,14 +675,20 @@ The weight vector that crossed the boundary is `[-1, 1, 0, 1, -1]`, solved by
 `[1, 2, 3, 2, 1]`, hand-computed and typed in as literal constants (D4,
 `theory-compiler/DECISIONS.md`); that is the transcription step A1 was meant to
 delete, and the vector is different because a solver, not a person, chose it.
-No `sorry`, no `native_decide`, and 83/83 tests pass, eight of which invoke `lean`
-on the generated artefacts and read `#print axioms`.
+No `sorry` and no `native_decide`. The suite is 83 tests and 83 pass — **but only
+with a Lean toolchain on PATH**. Eight are gated behind
+`pytest.mark.skipif(shutil.which("lean") is None, …)`
+(`theory-compiler/tests/test_gen_lean.py`), so without Lean the run is 75 passed,
+8 skipped and the empty-axiom-list claim evaporates into skips rather than
+failing loudly (`theory-compiler/STATUS.md`). Reproducing §4 therefore requires
+Lean 4.9.0, which is a dependency this paper has, and a reader may not.
 
 ### 4.3 The negative control
 
 An empty axiom list is only evidence if it is a check that can fail. An
-independent adversarial review — read-only, permitted to falsify but not to
-confirm — ran that control. Changing `w .p1` from `1` to `7` made `lean` report
+adversarial read-only pass — permitted to falsify but not to confirm, and run
+inside the same project rather than by a third party — ran that control.
+Changing `w .p1` from `1` to `7` made `lean` report
 `decide proved ... is false`; all four theorems became
 `depends on axioms: [sorryAx]`, and the exit code was 1
 (`theory-compiler/STATUS.md`, 独立复核). The same review confirmed that
@@ -694,17 +801,23 @@ world can strengthen it three ways (`cold-start-a2/A2_REPORT.md` §1):
 
 | `Theoria.md` §1.3 | A2's check | result |
 |---|---|---|
-| "漏了一条传送规则" | `engines_diff.json` — the only proposal with \|dy\|+\|dx\| > 1 | `obj1_jump_DOWN`, 1/1 |
-| "那条规则从未触发" | `trace_summary.json` — the history's one omitted pair | `cart=(6,4) pressed=1 act=DOWN` |
+| "漏了一条传送规则" | `cold-start-a2/artifacts/engines_diff.json` — the only proposal with \|dy\|+\|dx\| > 1 | `obj1_jump_DOWN`, 1/1 |
+| 缺的那条传送规则从未触发 (compressed) | `cold-start-a2/artifacts/trace_summary.json` — the history's one omitted pair | `cart=(6,4) pressed=1 act=DOWN` |
 | "不欠任何一帧" | `certify_cheap` on the play record | 184/184, 0 anomalies |
-| "重放全对" | the miner on the history proposes **no** jump | `history_proposes_a_jump: false` |
+| 模型重放 175/175 全对 (compressed) | the miner on the history proposes **no** jump | `history_proposes_a_jump: false` |
 | "完备搜索'正确地'证明了目标不可达" | plan UNSAT + Lean `unsolvable`, axioms `[]` | green |
 | "而这一关人类可解" | an 18-action episode ends with `win: true` | refuted |
 
 ### 5.3 The exhibit
 
-`cold-start-a2/theory/theory_holed.dsl` is `theory/theory.dsl` minus exactly one
-rule; `diff` the files and the deletion is the whole diff:
+`cold-start-a2/theory/theory_holed.dsl` is `cold-start-a2/theory/theory.dsl` minus exactly one
+rule — the deletion is the whole *substantive* diff, and the qualifier is needed
+because `diff` also shows the header block rewritten, every coverage annotation
+rescored to the shorter history (`push_up 56/56 → 38/38`, and so on for the other
+three directions), `events:` losing `jumped`, and `laws:` swapping
+`teleport_is_colour_triggered` for `right_room_locked`. Every one of those is
+either annotation or a consequence of the deletion, but a reader who runs the
+literal instruction should not be surprised by them. The rule that was removed:
 
 ```
 rule teleport_down [ev: t183 cov: 1/1]
@@ -717,15 +830,15 @@ unaltered and unassisted (`cold-start-a2/artifacts/exhibit_report.json`):
 | gate | result |
 |---|---|
 | certify, cheap | **GREEN** — 184 frames, 14 904 pixels, **0 anomalies** |
-| plan (`fd_adapter`) | **UNSAT** (`artifacts/plan_holed.json`) |
+| plan (`fd_adapter`) | **UNSAT** (`cold-start-a2/artifacts/plan_holed.json`) |
 | certificate | `zero_space` → 21-cell occupancy law → 0/1 pagoda weight |
 | certify, expensive | **GREEN** — Lean 4.9.0, `decide` only, no `sorry` |
-| `#print axioms unsolvable` | **`[]`** (`theory/generated_holed/theory.lean`) |
+| `#print axioms unsolvable` | **`[]`** (`cold-start-a2/theory/generated_holed/theory.lean`) |
 
 `theorem unsolvable : ¬ ∃ s : St, Reachable s ∧ Goal s = true` — **148 states**,
 all decided by the kernel, no Mathlib, no `native_decide`. And the world reaches
 the goal in **18 actions** (`cold-start-a2/artifacts/refutation.json`,
-`solved_episode.jsonl`). `A2_REPORT.md` §2 makes the point this exhibit exists
+`cold-start-a2/artifacts/solved_episode.jsonl`). `cold-start-a2/A2_REPORT.md` §2 makes the point this exhibit exists
 for:
 
 > Nothing in that column is broken. The planner is right: no plan exists *under
@@ -755,18 +868,33 @@ exactly §1.3's claim and exactly its limit. The artefact says so in its own
 
 ### 5.5 The loop, six beats
 
-Truth is the referee throughout and reaches the manual only as frames: `refute.py`
-writes the world's solved episode out as a four-field trace, and `locate.py` and
-`probe.py` import no world module at all (`cold-start-a2/DECISIONS.md` D-A2-010).
+**Figure 3** (`papers/phase1-workshop/figures/fig3_loop_ledger.py`) renders the
+ledger as a flow, each beat carrying the artefact paths that settle it, so a
+reader who doubts a box can open exactly the files that box was decided by.
+
+Truth is the referee throughout and reaches the manual only as frames: `cold-start-a2/a2pipeline/refute.py`
+writes the world's solved episode out as a four-field trace, and the world is
+reached only through `probe.py`'s `Environment` — actions in, frames out. No
+theorizing step reads `cold-start-a2/artifacts/ground_truth.json`, and nothing reads
+`env._state`.
+
+That is the defensible form of the discipline, and it is weaker than the form
+`cold-start-a2/DECISIONS.md` D-A2-010 states. D-A2-010 says `locate.py` and
+`probe.py` "import no world module at all"; they do —
+`cold-start-a2/a2pipeline/probe.py:59` is `from a2world import a2_world`, used to
+construct the `Environment` at line 108, and `locate.py:36` imports
+`a2world.ground_truth`, which pulls the world transitively. The isolation is
+enforced by what those modules are *allowed to call*, not by the import graph,
+and the paper states it that way.
 
 | beat | claim | evidence | result |
 |---|---|---|---|
-| **打脸** (refutation) | the theorem is false | `artifacts/refutation.json` | 18 actions, `win` on frame 18 |
-| **定位** (localisation) | §1.4's three-way narrows it | `artifacts/locate_report.json` | board ✗, goal test ✗, **step ✓ at t=11** |
-| **戳探** (probe) | predictions first, then execute | `artifacts/probes.jsonl` | 5 designed, 4 run, 1 recorded unrunnable; trace 184 → 196 frames |
-| **修订** (revision) | rewritten from the probe record | `theory/theory_repaired.dsl` | re-derivable from grown evidence |
-| **重证** (re-proof) | the old certificate dies, a true one replaces it | `artifacts/repair_report.json` | Lean RED then GREEN |
-| **解出** (solved) | plan, and the world agrees | `artifacts/plan_repaired.json` | SAT in 18, 0 mismatches |
+| **打脸** (refutation) | the theorem is false | `cold-start-a2/artifacts/refutation.json` | 18 actions, `win` on frame 18 |
+| **定位** (localisation) | §1.4's three-way narrows it | `cold-start-a2/artifacts/locate_report.json` | board ✗, goal test ✗, **step ✓ at t=11** |
+| **戳探** (probe) | predictions first, then execute | `cold-start-a2/artifacts/probes.jsonl` | 5 designed, 4 run, 1 recorded unrunnable; trace 184 → 196 frames |
+| **修订** (revision) | rewritten from the probe record | `cold-start-a2/theory/theory_repaired.dsl` | re-derivable from grown evidence |
+| **重证** (re-proof) | the old certificate dies, a true one replaces it | `cold-start-a2/artifacts/repair_report.json` | Lean RED then GREEN |
+| **解出** (solved) | plan, and the world agrees | `cold-start-a2/artifacts/plan_repaired.json` | SAT in 18, 0 mismatches |
 
 `cold-start-a2/artifacts/loop_ledger.json` records **8 beats — 8 pass, 0 fail, 0
 absent**: M0, the complete manual, and M5, the exhibit, precede the six loop
@@ -778,20 +906,22 @@ board and goal test were fine" has narrowed nothing. At t=11 the Cart is at
 **(6,4)**, the action is **DOWN**, the manual fires nothing and predicts it stays,
 and the world puts it at (7,6). Since no rule in the manual moves the mover more
 than one cell, the diagnosis is **"missing rule, not wrong rule"** — nothing can
-be corrected, something has to be added (`artifacts/locate_report.json`).
+be corrected, something has to be added (`cold-start-a2/artifacts/locate_report.json`).
 
 **One probe could not be run, and that is in the record.** R-05's guard frontier
 never closed: `tcolor(DOWN)==3` and `at(6,4)` both fit the single witness, and
 separating them needs a configuration this level cannot reach. `probe_frontier`
 prices the experiment at **1.0 bits** and classifies it hypothetical; P-03 records
-that with its reason (`artifacts/probe_report.json`), and the manual carries
+that with its reason (`cold-start-a2/artifacts/probe_report.json`), and the manual carries
 `teleport_is_colour_triggered [probe: pending]` rather than claiming the question
-settled (`theory/theory_repaired.dsl`).
+settled (`cold-start-a2/theory/theory_repaired.dsl`).
 
-**The refuted certificate has a corpse.** `theory/generated_repaired_stale/` holds
+**The refuted certificate has a corpse.** `cold-start-a2/theory/generated_repaired_stale/` holds
 the exhibit's invariant regenerated against the repaired `step`, and Lean fails it
-at line 769 — `tactic 'decide' proved that the proposition ... is false`
-(`artifacts/repair_report.json`, `stale_certificate`). A repaired manual that
+at line 769 (`cold-start-a2/artifacts/repair_report.json`, `stale_certificate`,
+whose `first_error` string is truncated at "…proved that the proposition"; the
+full phrase `tactic 'decide' proved that the proposition ... is false` is in
+`cold-start-a2/A2_REPORT.md` §3). A repaired manual that
 simply stopped mentioning its refuted theorem would have been edited, not
 corrected.
 
@@ -799,7 +929,7 @@ corrected.
 
 The headline artefact is a pair, not a file (`cold-start-a2/A2_REPORT.md` §4):
 
-| | `generated_holed/theory.lean` | `generated_repaired/theory.lean` |
+| | `cold-start-a2/theory/generated_holed/theory.lean` | `cold-start-a2/theory/generated_repaired/theory.lean` |
 |---|---|---|
 | theorem | `unsolvable` | `unsolvable` |
 | goal | the goal cell (2,7) | the sealed pocket (7,1) |
@@ -810,21 +940,51 @@ The headline artefact is a pair, not a file (`cold-start-a2/A2_REPORT.md` §4):
 | status | **GREEN** | **GREEN** |
 | **true of the world** | **NO** — 18-action witness | **YES** — 0 of 55 reachable states |
 
-They differ in their weight table and in nothing else. **The instrument cannot
-tell them apart, and it is not supposed to be able to.** Lean guarantees *true
-relative to the manual*; whether the manual matches the world is settled by
-§1.4's refutation loop and nowhere else.
+**A correction to the source report, and it matters.**
+`cold-start-a2/A2_REPORT.md` §4 says the two files "differ in their weight table
+and in nothing else", and `cold-start-a2/DECISIONS.md` D-A2-005 repeats it. That
+is not true, and this paper cannot repeat it, because a rule of this draft is
+that any check it invites must survive being run. `diff` the two files and 52
+lines change across 7 hunks. Fourteen are the weight table. The rest are:
+
+* **`def Goal`** — `s.cart == Cell.c10`, the goal cell (2,7), against
+  `s.cart == Cell.c34`, the sealed pocket (7,1). The two theorems are about
+  different goals;
+* **four entries of the `step` table** — `⟨Cell.c31, …⟩, .down` mapping to
+  `Cell.c31` against `Cell.c35`, one per colour × door stratum. That is the
+  teleport rule itself: the two files encode different transition functions;
+* a header comment, and a comment above `def I`.
+
+The report's own table two rows up already lists the goal difference, so the
+sentence contradicts the table beside it. Under this draft's rule that no source
+report is edited, the correction lives here instead.
+
+**What survives the correction, and it is still the point.** The two files are
+identical in *generator, tactic, dependency surface and axiom list*: same
+`decide`, no Mathlib either side, `#print axioms` returning `[]` for both, both
+GREEN. **The instrument returns the same verdict for a theorem that is true of
+its world and one that is not, and it is not supposed to do anything else.** Lean
+guarantees *true relative to the manual*; whether the manual matches the world is
+settled by §1.4's refutation loop and nowhere else.
+
+What is lost with the false version is a rhetorical minimal pair, and it should
+be named rather than glossed: because the goals differ, the repaired file does
+not prove the *world's* real goal unreachable — §5.5's 解出 beat reaches that goal
+in 18 actions. It proves a separately chosen, genuinely unreachable pocket
+unreachable. A true minimal pair — the repaired invariant regenerated against the
+same goal `c10`, and failing — is nearly what `cold-start-a2/theory/generated_repaired_stale/`
+already is, and is the exhibit a future version should ship.
 
 ### 5.7 Was the repair remembered or re-derived?
 
 The fair objection to any self-built A2 is that the repairer already knows the
-answer, since the control manual sits in the same directory. `A2_REPORT.md` §5
+answer, since the control manual sits in the same directory. `cold-start-a2/A2_REPORT.md` §5
 gives three checks, none of them "trust us". The repair was written from
-`artifacts/probes.jsonl`, whose **P-01** record holds the holed manual's own
+`cold-start-a2/artifacts/probes.jsonl`, whose **P-01** record holds the holed manual's own
 prediction — `stays` — written before the action was taken and refuted by the
 outcome, `jumps to (7,6)`. The grown evidence re-proposes the rule: the miner on
-`probed_trace.jsonl` proposes a jump effect again
-(`artifacts/engines_diff_probed.json`). And agreement with the control is asserted
+`cold-start-a2/artifacts/probed_trace.jsonl` proposes a jump effect again
+(`cold-start-a2/artifacts/engines_diff_probed.json`). And agreement with the control is asserted
 by a test — `test_the_repair_agrees_with_the_control_on_that_rule`, byte-identical
 `when` clauses — so passing it is a result, not an assumption: the same frontier
 survived the same description-length adjudication twice. What is *not* claimed is
@@ -856,14 +1016,14 @@ instrument elsewhere buys.
 
 ### 6.1 A passive instrument, and what it cost
 
-`Theoria.md` Phase 2 asks for a second reader of the same ledger: 同一本账，两次
+`Theoria.md` Phase 2 asks for a second reader of the same ledger: 同一本账,两次
 使用 — the scorer reads it for a score, the battery reads it for a capability
 spectrum.
 
 v0 was recomputed over every trajectory already in the repository: **26 runs, 4
 development-pile games, 2 arms** (`battery/artifacts/capability_spectrum.json`),
 at zero new game spend, zero model calls and zero network
-(`battery/REPORT_V0.md`). Artefacts regenerate with `python -m battery.run_battery`
+(`battery/REPORT_V0.md`). Artefacts regenerate with `python -m battery.run_battery` (`battery/run_battery.py`)
 and are byte-identical on a re-run; each carries the verified pile digest and the
 sha256 of both inputs, so a changed number traces to a changed input
 (`battery/DECISIONS.md` D-B-001). Twenty-nine metrics over five families, split
@@ -923,8 +1083,12 @@ field already optimises.
 
 ### 6.4 The pilot ledger cannot certify any metric, and says so
 
-Every discriminative verdict came back `underpowered` or `no-data`
-(`battery/artifacts/discrimination.json`). This is arithmetic, not softness:
+Every *ranked* metric's verdict came back `underpowered` or `no-data` — 11 and 13
+of 29, with the remaining 5 (E1, K7, K11, P5, X5) returning `not-ranked` because
+they declare no direction (`battery/artifacts/discrimination.json`).
+`battery/REPORT_V0.md` says "every discriminative verdict"; the artefact has three
+verdict values, not two, and 24 of 29 is the accurate figure. This is arithmetic,
+not softness:
 
 > A two-sided sign test over 4 paired games has a smallest attainable p of
 > **0.125**. No metric can reach p < 0.05 on this data however cleanly it
@@ -939,15 +1103,27 @@ design needs repeats per game or a larger pile.
 
 ### 6.5 Three metrics found to be measuring something else
 
-Found by running the instrument, not by inspecting it.
+Two of the three were found by running the instrument; one was not, and the
+distinction should not be blurred. **E5 is entailed by its own definition** — it
+is cost per action, the arms are three models at different token prices, and "E5
+is a price list" follows without any data at all. It is reported because the
+audit acted on it, not because the pass discovered it. **P1** is a genuine
+finding: the correlation with step-failure rate is not deducible from the
+definition. So is **K4 vs K2** in §6.3.
 
 **P1 (actions per model call) is largely an API failure-rate readout.** It
-separates the model ladder at Cliff's δ = −1.000 and *backwards* — haiku 0.97
-actions per call, opus 0.52. Between 27 % and 45 % of pilot steps failed outright
+separates the model ladder at Cliff's δ = −1.000 and *backwards* — haiku 0.96
+actions per call, opus 0.52 (run-level means over
+`battery/artifacts/capability_spectrum.json`; `battery/REPORT_V0.md` rounds the
+haiku figure to 0.97, which no aggregation of the artefact reproduces). Between 28 % and 45 % of pilot steps failed outright (`battery/REPORT_V0.md`
+says 27 %; the artefact's pooled P5 gives haiku 28.3 %, sonnet 36.1 %, opus
+45.1 %)
 on HTTP 500s and "game not found", and P1 divides *successful* actions by *all*
 calls, so a run whose infrastructure failed more looks like one that planned less;
-P1 correlates with the failure rate at **ρ = −0.83** (`battery/REPORT_V0.md`;
-`battery/STATUS.md` W-4). v0's response is in the code: **P5 `step_failure_rate`**
+P1 correlates with the failure rate at **ρ = −0.83** — stated in
+`battery/REPORT_V0.md` and `battery/STATUS.md` W-4, and the one battery number in
+this paper that **no artefact carries**, so it cannot currently be re-derived from
+`battery/artifacts/`. v0's response is in the code: **P5 `step_failure_rate`**
 is added as a diagnostic, so the confound reaches a reader before P1 does.
 
 **E5 (cost per action) is a price list.** δ = +1.000, haiku $0.031/action, sonnet
@@ -965,8 +1141,11 @@ late (`battery/PREDICTIONS.md`). Within `bare_cc`, **the more capable model
 front-loads more** — haiku 0.20, sonnet 0.25, opus 0.28, δ = +1.000 in the
 declared direction, 4 wins of 4 paired games
 (`battery/artifacts/discrimination.json`). No arm here has a theory. If capability
-alone produces front-loading, front-loading is not specific to *having a theory*,
-and C2's evidence weakens by however much of the effect capability explains.
+alone produces front-loading, then front-loading is not specific to *having a
+theory* — which would bear on claim C2. This paper does not draw that conclusion:
+it is a four-game pilot that §6.4 has just said can certify nothing, and updating
+a Phase 4 claim from it would be exactly the move §7.5 promises not to make. It
+is registered as a confound to separate, not as evidence.
 
 Underpowered at n = 4 and possibly an artefact — but a confound the ablation arm
 is well placed to separate, and one to check before Phase 4 freezes rather than
@@ -1139,12 +1318,18 @@ instance built the world and adjudicated it (`cold-start-a0/A0_REPORT.md` §6.3;
 M6 and every verdict is written to be re-derivable from the candidate stream
 alone, but that is weaker than a genuine blind and the reports count it as a
 threat to the result rather than a footnote. A2 mitigates differently rather than
-better: it reuses an unmodified upstream compiler, hashes every imported file
-(`cold-start-a2/artifacts/upstream_pin.json`), and verifies read-only-ness by
-hashing 258 files before and after a full run.
+better: it reuses an unmodified upstream compiler, hashes every imported file — 22 of them in
+`cold-start-a2/artifacts/upstream_pin.json` — and verifies read-only-ness by
+hashing 258 files before and after a full run (`cold-start-a2/A2_REPORT.md` §7,
+which is where the 258 figure lives; the pin file does not carry it).
 
 **No multi-round repair, anywhere.** Revision counts across the whole paper are
-0 (A0), 0 (A0′ Run A), 1 (A0′ Run B), 1 (A2). The failure class 修订抖动 is
+0 (A0), 0 (A0′ Run A) and 1 (A0′ Run B), each recorded as a `revisions` field in
+`cold-start-a0/prime/artifacts/prime_report.json`. A2's loop ran its 修订 beat
+once, but **no file in the tree states a revision count for A2** — the ledger's L4
+beat records `re_derivable_from_grown_evidence: true` and no number — so "one
+revision" for A2 is this paper's reading of the ledger, not a figure it can cite.
+The failure class 修订抖动 is
 unmeasured, and `cold-start-a0/prime/A0P_REPORT.md` §5.1 says so: nothing here
 exercises a manual that must be revised, re-probed and revised again.
 
@@ -1167,19 +1352,32 @@ by this evidence.
 
 **`lp_potential` is sound but incomplete.** It never certifies a solvable
 configuration, but some genuinely unsolvable ones admit no linear pagoda
-(`engine-rig/STATUS.md`). E-06 is that caveat arriving in practice.
+(`engine-rig/DECISIONS.md` D-014, `engine-rig/interop/README.md`; the phrasing is
+`CLAUDE.md`'s). E-06 is that caveat arriving in practice.
 
-**Planner provenance differs between acceptances.** Fast Downward was built and
-wired into A0/A0′, agreeing with the bundled BFS stub on all three instances
-including the UNSAT variant, with no caller code changed
-(`cold-start-a0/BLOCKER_FAST_DOWNWARD.md`, `cold-start-a0/artifacts/fd_real.json`,
-`cold-start-a0/STATUS.md`). A2 ran on the bundled stub, which is length-optimal
-for unit costs so its SAT/UNSAT verdicts and plan lengths are sound there
-(`cold-start-a2/A2_REPORT.md` §8), and `engine-rig`'s shipped default is still
-the stub. Note that `cold-start-a0/A0_REPORT.md` §5 and §6.5 still read "Fast
-Downward is still not connected": the report was written before the install and
-is left unedited, as every report in this repository is. Where a report and a
-later artefact disagree, this paper cites both and says which is later.
+**Every planning number in this paper came from the bundled BFS stub, not from
+Fast Downward.** Fast Downward *was* built and wired into A0/A0′ and agrees with
+the stub on all three instances including the UNSAT variant, with no caller code
+changed (`cold-start-a0/BLOCKER_FAST_DOWNWARD.md`,
+`cold-start-a0/artifacts/fd_real.json`, `cold-start-a0/STATUS.md`) — but that is
+a separate conformance artefact. The reproducible pipeline (`run_all.py`,
+`prime.run_prime`) calls `solve(..., prefer="stub")` **on purpose**, so its
+checked-in artefacts stay byte-identical whether or not a planner is installed.
+§3.1's 12-step plan and every other planning figure in §3 are the stub's. The
+stub is length-optimal for unit costs, so SAT/UNSAT verdicts and plan lengths are
+sound at these sizes; nothing about search at scale is evidenced. A2 likewise ran
+on the stub (`cold-start-a2/A2_REPORT.md` §8), and `engine-rig`'s shipped default
+is still the stub.
+
+Reproducing `fd_real.json` needs Fast Downward built locally: the artefact records
+an absolute path into a `.toolchain/` directory that is gitignored and not in the
+tree. Three of the repository's own statements about this disagree —
+`cold-start-a0/A0_REPORT.md` §5 and §6.5 say "still not connected", its §8 item 4
+says FD "could not be built (three failed compiler attempts)", and
+`BLOCKER_FAST_DOWNWARD.md` and `STATUS.md` record the successful install dated
+2026-07-28. The install is the latest. None of the three was edited, as no report
+in this repository is; where they disagree the paper cites all of them and says
+which is later.
 
 **A2's goal was supplied, not induced,** as was A0′'s: the truncated trace never
 wins, and the goal is confirmed empirically afterwards rather than derived
@@ -1195,8 +1393,10 @@ to make that drift visible; here it took a human reading the plan output.
 ### 7.4 What the battery cannot yet certify
 
 Restated from §6 so that the limitations section is complete on its own. Every
-discriminative verdict in `battery/artifacts/discrimination.json` is
-`underpowered` or `no-data`, and that is arithmetic rather than softness: a
+ranked metric's verdict in `battery/artifacts/discrimination.json` is
+`underpowered` or `no-data` — 24 of 29, the other 5 being direction-less
+diagnostics returned as `not-ranked` — and that is arithmetic rather than
+softness: a
 two-sided sign test over four paired games has a smallest attainable p of
 **0.125**, so no metric can clear p < 0.05 on this data however cleanly it
 separates, and six non-tied paired games is the floor for the test to be able to
@@ -1248,7 +1448,7 @@ searched inside a self-learned implicit model; the recent generative branch —
 Genie [bib: TODO], the video-models-as-world-simulators argument, JEPA's
 predictive route [bib: TODO] — made frame-by-frame prediction increasingly
 convincing. `Theoria.md` §3.1 grants the point in its strongest form: "若预测本身
-就是理解，第一波已经赢了" (if prediction itself were understanding, the first wave
+就是理解,第一波已经赢了" (if prediction itself were understanding, the first wave
 has already won). What these predictions never pass through is a checkable
 concept; the model is weights, with nowhere inside it to audit.
 
@@ -1295,12 +1495,28 @@ runs the counterexample-guided loop for rule mining with the transition ledger a
 verifier; what differs is the return value — the frontier of all consistent
 hypotheses, kept as probe material, rather than one point guess.
 
-**Petri invariants and model checking / IC3** [bib: TODO]. Linear conservation laws
-are computed symbolically from the rules as Petri invariants
-(`engine-rig/engines/zero_space`), and `engine-rig/engines/ic3_pdr` supplies
-inductive invariants of shapes the LP cannot reach. We consume these as *sources
-of theorem obligations*, not as the final verdict: the proof obligation is
-re-discharged in Lean.
+**Petri invariants and model checking / IC3** [bib: TODO]. The kinship is with
+place invariants — linear quantities preserved by every transition — but the
+mechanism here is not the Petri one and should not be described as if it were:
+`engine-rig/engines/zero_space` encodes each `(cell, colour)` as an indicator,
+differences consecutive observed states, and takes the null space of the
+difference matrix. It reads **data, not rules**, so what it returns is an
+empirical regularity over the trajectory, not a symbolically derived invariant.
+`engine-rig/engines/ic3_pdr` supplies inductive invariants of shapes the LP
+cannot reach; `engine-rig/engines/deadlock_carver` supplies conditional mini
+unsolvability theorems. Neither is exercised by any result in this paper. All of
+these are consumed as *sources of theorem obligations* rather than as verdicts —
+the obligation is re-discharged in Lean, which is where "holds on the trajectory"
+is upgraded to "holds under the manual's own `step`".
+
+**Specification validity — the oldest caveat in the field, and the one §5.6
+dramatises.** That a machine-checked proof is only as good as the specification
+it is about is not news to formal methods; the validation-versus-verification
+distinction and the arguments around it long predate this work [bib: TODO]. §5.6
+does not claim the point as novel. What the exhibit contributes is a *concrete
+pair of artefacts* in which the specification was induced from data rather than
+written by hand, so the specification error is a mining error, and in which the
+refutation feeds a mechanical repair loop rather than a human rewrite.
 
 **Proof-carrying code** [bib: TODO] is the ancestry of the name. An artefact
 travels with the evidence for its own correctness, and the consumer re-checks

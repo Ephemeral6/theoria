@@ -2,14 +2,14 @@
 
 ### 6.1 A passive instrument, and what it cost
 
-`Theoria.md` Phase 2 asks for a second reader of the same ledger: 同一本账，两次
+`Theoria.md` Phase 2 asks for a second reader of the same ledger: 同一本账,两次
 使用 — the scorer reads it for a score, the battery reads it for a capability
 spectrum.
 
 v0 was recomputed over every trajectory already in the repository: **26 runs, 4
 development-pile games, 2 arms** (`battery/artifacts/capability_spectrum.json`),
 at zero new game spend, zero model calls and zero network
-(`battery/REPORT_V0.md`). Artefacts regenerate with `python -m battery.run_battery`
+(`battery/REPORT_V0.md`). Artefacts regenerate with `python -m battery.run_battery` (`battery/run_battery.py`)
 and are byte-identical on a re-run; each carries the verified pile digest and the
 sha256 of both inputs, so a changed number traces to a changed input
 (`battery/DECISIONS.md` D-B-001). Twenty-nine metrics over five families, split
@@ -69,8 +69,12 @@ field already optimises.
 
 ### 6.4 The pilot ledger cannot certify any metric, and says so
 
-Every discriminative verdict came back `underpowered` or `no-data`
-(`battery/artifacts/discrimination.json`). This is arithmetic, not softness:
+Every *ranked* metric's verdict came back `underpowered` or `no-data` — 11 and 13
+of 29, with the remaining 5 (E1, K7, K11, P5, X5) returning `not-ranked` because
+they declare no direction (`battery/artifacts/discrimination.json`).
+`battery/REPORT_V0.md` says "every discriminative verdict"; the artefact has three
+verdict values, not two, and 24 of 29 is the accurate figure. This is arithmetic,
+not softness:
 
 > A two-sided sign test over 4 paired games has a smallest attainable p of
 > **0.125**. No metric can reach p < 0.05 on this data however cleanly it
@@ -85,15 +89,27 @@ design needs repeats per game or a larger pile.
 
 ### 6.5 Three metrics found to be measuring something else
 
-Found by running the instrument, not by inspecting it.
+Two of the three were found by running the instrument; one was not, and the
+distinction should not be blurred. **E5 is entailed by its own definition** — it
+is cost per action, the arms are three models at different token prices, and "E5
+is a price list" follows without any data at all. It is reported because the
+audit acted on it, not because the pass discovered it. **P1** is a genuine
+finding: the correlation with step-failure rate is not deducible from the
+definition. So is **K4 vs K2** in §6.3.
 
 **P1 (actions per model call) is largely an API failure-rate readout.** It
-separates the model ladder at Cliff's δ = −1.000 and *backwards* — haiku 0.97
-actions per call, opus 0.52. Between 27 % and 45 % of pilot steps failed outright
+separates the model ladder at Cliff's δ = −1.000 and *backwards* — haiku 0.96
+actions per call, opus 0.52 (run-level means over
+`battery/artifacts/capability_spectrum.json`; `battery/REPORT_V0.md` rounds the
+haiku figure to 0.97, which no aggregation of the artefact reproduces). Between 28 % and 45 % of pilot steps failed outright (`battery/REPORT_V0.md`
+says 27 %; the artefact's pooled P5 gives haiku 28.3 %, sonnet 36.1 %, opus
+45.1 %)
 on HTTP 500s and "game not found", and P1 divides *successful* actions by *all*
 calls, so a run whose infrastructure failed more looks like one that planned less;
-P1 correlates with the failure rate at **ρ = −0.83** (`battery/REPORT_V0.md`;
-`battery/STATUS.md` W-4). v0's response is in the code: **P5 `step_failure_rate`**
+P1 correlates with the failure rate at **ρ = −0.83** — stated in
+`battery/REPORT_V0.md` and `battery/STATUS.md` W-4, and the one battery number in
+this paper that **no artefact carries**, so it cannot currently be re-derived from
+`battery/artifacts/`. v0's response is in the code: **P5 `step_failure_rate`**
 is added as a diagnostic, so the confound reaches a reader before P1 does.
 
 **E5 (cost per action) is a price list.** δ = +1.000, haiku $0.031/action, sonnet
@@ -111,8 +127,11 @@ late (`battery/PREDICTIONS.md`). Within `bare_cc`, **the more capable model
 front-loads more** — haiku 0.20, sonnet 0.25, opus 0.28, δ = +1.000 in the
 declared direction, 4 wins of 4 paired games
 (`battery/artifacts/discrimination.json`). No arm here has a theory. If capability
-alone produces front-loading, front-loading is not specific to *having a theory*,
-and C2's evidence weakens by however much of the effect capability explains.
+alone produces front-loading, then front-loading is not specific to *having a
+theory* — which would bear on claim C2. This paper does not draw that conclusion:
+it is a four-game pilot that §6.4 has just said can certify nothing, and updating
+a Phase 4 claim from it would be exactly the move §7.5 promises not to make. It
+is registered as a confound to separate, not as evidence.
 
 Underpowered at n = 4 and possibly an artefact — but a confound the ablation arm
 is well placed to separate, and one to check before Phase 4 freezes rather than

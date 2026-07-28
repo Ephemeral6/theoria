@@ -108,7 +108,14 @@ def main() -> None:
             for v in sorted({e["verdict"] for e in entries})
         },
         "revisions": revisions,
-        "revisions_driven_by_certify": 0,
+        # Counted, not asserted: a revision is certify-driven only if its
+        # trigger says so. The log's two revisions are M3 (the first pass over
+        # the candidate stream) and M5 (a planner UNSAT), so this comes out 0 --
+        # which is the figure's point, and it has to be derived or it is just a
+        # claim with a number attached.
+        "revisions_driven_by_certify": sum(
+            1 for r in revisions if "certify" in r["trigger"].lower()
+        ),
         "compiler_defects": defects,
         "expressivity_ledger": ledger,
     }

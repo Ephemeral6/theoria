@@ -15,7 +15,7 @@ searched inside a self-learned implicit model; the recent generative branch —
 Genie [bib: TODO], the video-models-as-world-simulators argument, JEPA's
 predictive route [bib: TODO] — made frame-by-frame prediction increasingly
 convincing. `Theoria.md` §3.1 grants the point in its strongest form: "若预测本身
-就是理解，第一波已经赢了" (if prediction itself were understanding, the first wave
+就是理解,第一波已经赢了" (if prediction itself were understanding, the first wave
 has already won). What these predictions never pass through is a checkable
 concept; the model is weights, with nowhere inside it to audit.
 
@@ -62,12 +62,28 @@ runs the counterexample-guided loop for rule mining with the transition ledger a
 verifier; what differs is the return value — the frontier of all consistent
 hypotheses, kept as probe material, rather than one point guess.
 
-**Petri invariants and model checking / IC3** [bib: TODO]. Linear conservation laws
-are computed symbolically from the rules as Petri invariants
-(`engine-rig/engines/zero_space`), and `engine-rig/engines/ic3_pdr` supplies
-inductive invariants of shapes the LP cannot reach. We consume these as *sources
-of theorem obligations*, not as the final verdict: the proof obligation is
-re-discharged in Lean.
+**Petri invariants and model checking / IC3** [bib: TODO]. The kinship is with
+place invariants — linear quantities preserved by every transition — but the
+mechanism here is not the Petri one and should not be described as if it were:
+`engine-rig/engines/zero_space` encodes each `(cell, colour)` as an indicator,
+differences consecutive observed states, and takes the null space of the
+difference matrix. It reads **data, not rules**, so what it returns is an
+empirical regularity over the trajectory, not a symbolically derived invariant.
+`engine-rig/engines/ic3_pdr` supplies inductive invariants of shapes the LP
+cannot reach; `engine-rig/engines/deadlock_carver` supplies conditional mini
+unsolvability theorems. Neither is exercised by any result in this paper. All of
+these are consumed as *sources of theorem obligations* rather than as verdicts —
+the obligation is re-discharged in Lean, which is where "holds on the trajectory"
+is upgraded to "holds under the manual's own `step`".
+
+**Specification validity — the oldest caveat in the field, and the one §5.6
+dramatises.** That a machine-checked proof is only as good as the specification
+it is about is not news to formal methods; the validation-versus-verification
+distinction and the arguments around it long predate this work [bib: TODO]. §5.6
+does not claim the point as novel. What the exhibit contributes is a *concrete
+pair of artefacts* in which the specification was induced from data rather than
+written by hand, so the specification error is a mining error, and in which the
+refutation feeds a mechanical repair loop rather than a human rewrite.
 
 **Proof-carrying code** [bib: TODO] is the ancestry of the name. An artefact
 travels with the evidence for its own correctness, and the consumer re-checks

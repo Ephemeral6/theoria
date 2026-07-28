@@ -124,12 +124,18 @@ instance built the world and adjudicated it (`cold-start-a0/A0_REPORT.md` §6.3;
 M6 and every verdict is written to be re-derivable from the candidate stream
 alone, but that is weaker than a genuine blind and the reports count it as a
 threat to the result rather than a footnote. A2 mitigates differently rather than
-better: it reuses an unmodified upstream compiler, hashes every imported file
-(`cold-start-a2/artifacts/upstream_pin.json`), and verifies read-only-ness by
-hashing 258 files before and after a full run.
+better: it reuses an unmodified upstream compiler, hashes every imported file — 22 of them in
+`cold-start-a2/artifacts/upstream_pin.json` — and verifies read-only-ness by
+hashing 258 files before and after a full run (`cold-start-a2/A2_REPORT.md` §7,
+which is where the 258 figure lives; the pin file does not carry it).
 
 **No multi-round repair, anywhere.** Revision counts across the whole paper are
-0 (A0), 0 (A0′ Run A), 1 (A0′ Run B), 1 (A2). The failure class 修订抖动 is
+0 (A0), 0 (A0′ Run A) and 1 (A0′ Run B), each recorded as a `revisions` field in
+`cold-start-a0/prime/artifacts/prime_report.json`. A2's loop ran its 修订 beat
+once, but **no file in the tree states a revision count for A2** — the ledger's L4
+beat records `re_derivable_from_grown_evidence: true` and no number — so "one
+revision" for A2 is this paper's reading of the ledger, not a figure it can cite.
+The failure class 修订抖动 is
 unmeasured, and `cold-start-a0/prime/A0P_REPORT.md` §5.1 says so: nothing here
 exercises a manual that must be revised, re-probed and revised again.
 
@@ -152,19 +158,32 @@ by this evidence.
 
 **`lp_potential` is sound but incomplete.** It never certifies a solvable
 configuration, but some genuinely unsolvable ones admit no linear pagoda
-(`engine-rig/STATUS.md`). E-06 is that caveat arriving in practice.
+(`engine-rig/DECISIONS.md` D-014, `engine-rig/interop/README.md`; the phrasing is
+`CLAUDE.md`'s). E-06 is that caveat arriving in practice.
 
-**Planner provenance differs between acceptances.** Fast Downward was built and
-wired into A0/A0′, agreeing with the bundled BFS stub on all three instances
-including the UNSAT variant, with no caller code changed
-(`cold-start-a0/BLOCKER_FAST_DOWNWARD.md`, `cold-start-a0/artifacts/fd_real.json`,
-`cold-start-a0/STATUS.md`). A2 ran on the bundled stub, which is length-optimal
-for unit costs so its SAT/UNSAT verdicts and plan lengths are sound there
-(`cold-start-a2/A2_REPORT.md` §8), and `engine-rig`'s shipped default is still
-the stub. Note that `cold-start-a0/A0_REPORT.md` §5 and §6.5 still read "Fast
-Downward is still not connected": the report was written before the install and
-is left unedited, as every report in this repository is. Where a report and a
-later artefact disagree, this paper cites both and says which is later.
+**Every planning number in this paper came from the bundled BFS stub, not from
+Fast Downward.** Fast Downward *was* built and wired into A0/A0′ and agrees with
+the stub on all three instances including the UNSAT variant, with no caller code
+changed (`cold-start-a0/BLOCKER_FAST_DOWNWARD.md`,
+`cold-start-a0/artifacts/fd_real.json`, `cold-start-a0/STATUS.md`) — but that is
+a separate conformance artefact. The reproducible pipeline (`run_all.py`,
+`prime.run_prime`) calls `solve(..., prefer="stub")` **on purpose**, so its
+checked-in artefacts stay byte-identical whether or not a planner is installed.
+§3.1's 12-step plan and every other planning figure in §3 are the stub's. The
+stub is length-optimal for unit costs, so SAT/UNSAT verdicts and plan lengths are
+sound at these sizes; nothing about search at scale is evidenced. A2 likewise ran
+on the stub (`cold-start-a2/A2_REPORT.md` §8), and `engine-rig`'s shipped default
+is still the stub.
+
+Reproducing `fd_real.json` needs Fast Downward built locally: the artefact records
+an absolute path into a `.toolchain/` directory that is gitignored and not in the
+tree. Three of the repository's own statements about this disagree —
+`cold-start-a0/A0_REPORT.md` §5 and §6.5 say "still not connected", its §8 item 4
+says FD "could not be built (three failed compiler attempts)", and
+`BLOCKER_FAST_DOWNWARD.md` and `STATUS.md` record the successful install dated
+2026-07-28. The install is the latest. None of the three was edited, as no report
+in this repository is; where they disagree the paper cites all of them and says
+which is later.
 
 **A2's goal was supplied, not induced,** as was A0′'s: the truncated trace never
 wins, and the goal is confirmed empirically afterwards rather than derived
@@ -180,8 +199,10 @@ to make that drift visible; here it took a human reading the plan output.
 ### 7.4 What the battery cannot yet certify
 
 Restated from §6 so that the limitations section is complete on its own. Every
-discriminative verdict in `battery/artifacts/discrimination.json` is
-`underpowered` or `no-data`, and that is arithmetic rather than softness: a
+ranked metric's verdict in `battery/artifacts/discrimination.json` is
+`underpowered` or `no-data` — 24 of 29, the other 5 being direction-less
+diagnostics returned as `not-ranked` — and that is arithmetic rather than
+softness: a
 two-sided sign test over four paired games has a smallest attainable p of
 **0.125**, so no metric can clear p < 0.05 on this data however cleanly it
 separates, and six non-tied paired games is the floor for the test to be able to
