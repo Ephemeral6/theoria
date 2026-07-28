@@ -1,36 +1,36 @@
 {
-  "cycle": 5,
-  "utc": "2026-07-28T09:40Z",
-  "last_audited_commit": "5590f29",
-  "range_this_cycle": "4d3f993..5590f29 (21 commits, 429 files)",
+  "cycle": 6,
+  "utc": "2026-07-28T10:45Z",
+  "last_audited_commit": "3822815",
+  "range_this_cycle": "5590f29..3822815 (14 commits, 76 files)",
   "mode": "incremental",
   "covered": {
-    "纪律漂移": "封存 ID 命中 4 文件全为污染登记与本邮箱文本；密钥零命中；append-only 主线零删除",
+    "纪律漂移": "封存 ID 命中 5 文件全为污染登记与本邮箱文本；密钥零命中；主线 append-only 零新增删除（全历史 --first-parent 仍只有 63ef0bf 1 行）",
     "基准漂移": "无新增",
-    "证据漂移": "PAPER_PLAN 的 evidence 逐条对树（WP1/4/5 陈旧，WP9/WP4-165 逐字对得上，WP8 偏薄不算假）→ 并入本轮报告",
-    "目标漂移": "WP 抽查一轮走完（WP3/WP5 上轮，WP1/2/4/6-9 本轮）；无新增目标漂移",
+    "证据漂移": "ALL.md 10:14Z 全员通告援引的事实经三条 git 判据证伪 → 本轮报告",
+    "目标漂移": "无新增；释出许可仍未接线（欠 3 周期，已在 TO-MONITOR 顶上去）",
     "流程漂移": "无新增",
-    "要求引用了不存在的东西": "复扫：proxy/spend_gate.py + SPEND_GATE.md + verify_spend.sh 已交付，AUDITOR.md:38 的范例已不成立；a0-spike/verify.sh 仍缺",
-    "监控自身漂移": "spec.py 自 5fd1831 未动而其后 45 提交/14 分支落地 → DRIFT-dashboard-lags-the-merge-queue"
+    "要求引用了不存在的东西": "a0-spike/verify.sh 仍缺（欠 2 周期）",
+    "监控自身漂移": "按 10:28Z 指令逐条复核宣布过的『已修』：p3 例外实到、append_only 实到（判据只采纳一半）、盘面大幅追平；GRID active 未机械化"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T0937Z-dashboard-lags-the-merge-queue.md"
+    "DRIFT-20260728T1042Z-all-md-ruling-cites-a-wrong-fact.md"
   ],
   "pending_on_monitor": [
-    "p3 跨门例外 finding + p3 段注记（06:27Z 承诺，欠 3 周期）",
-    "append_only 判据改 --first-parent（06:27Z 承诺，欠 3 周期）",
-    "释出许可接进 p1-access 与 WP10（07:49Z 承诺，欠 2 周期）",
-    "a0-spike/verify.sh 补上或删掉工单那行（欠 1 周期）",
-    "本轮新增：盘面追平 8 条 + AUDITOR.md:38 的第 6 维范例换成 a0-spike/verify.sh"
+    "释出许可接进 p1-access 与 WP10 + 发申请的工单（07:49Z 承诺，欠 3 周期，唯一一条 high，关键路径在仓库外）",
+    "a0-spike/verify.sh 补上或删掉工单那行（欠 2 周期）",
+    "append_only 判据改 --first-parent，BASELINE 降为 1（本轮报告）",
+    "ALL.md 补新段落订正 6dec6f7 的定性（本轮报告）",
+    "GRID active 合并即自动摘牌（量小，未单开报告）"
   ],
   "method_notes": [
-    "红线扫描 scratchpad/redline.py <base> <head>，每轮直接跑",
-    "第 6 维扫描 scratchpad/dim6.py 假阳性高：契约用轨道内相对路径，先对 engine-rig/theory-compiler 根解析再判",
-    "判盘面陈旧的最快判据：git log --oneline <spec.py 最后一次提交>..HEAD | wc -l，再对 GRID 的 active 逐个查分支是否已合并"
+    "红线扫描 scratchpad/redline.py <base> <head>",
+    "第 6 维扫描 scratchpad/dim6.py，假阳性高：契约用轨道内相对路径，先对各轨道根解析再判",
+    "判『某段是否已发布到主线』的三条判据：git rev-list --first-parent master | grep <sha>；git merge-base --is-ancestor <sha> <merge>^1；git branch -a --contains <sha>"
   ],
   "next_cycle_focus": [
-    "复核本轮一条 + 监控欠的四件",
-    "新交付的六个目录（fuzzlab / figures / worldgen / ablation-arm / exam artifacts / proxy spend_gate）的留痕与红线巡检",
-    "增量起点 5590f29"
+    "复核本轮一条 + 释出许可 + a0-spike/verify.sh",
+    "巡新交付的六个目录（fuzzlab / figures / worldgen / ablation-arm / exam artifacts / proxy spend_gate）的留痕与红线——已连欠两轮",
+    "增量起点 3822815"
   ]
 }
