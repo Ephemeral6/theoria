@@ -6,7 +6,7 @@
 
 1. `python monitor/board.py claim <你的工人号>` —— 原子领取一件；输出 `BOARD-EMPTY` 就收尾退出。
 2. 认真读领到的条目（它带 cell / territory / 目标）。**territory 就是你唯一可写的目录**（外加 PARTNER_SYNC 追加自己的段落）。
-3. 开工仪式：读 `CLAUDE.md`、`Theoria.md` 中与该条目相关的条款、PARTNER_SYNC 尾十段、本领地 STATUS/DECISIONS；从最新 master 建分支 `agent/<条目id小写>` + 独立 worktree；跑本领地测试，绿了再动手。
+3. 开工仪式：读 `CLAUDE.md`、`Theoria.md` 中与该条目相关的条款、PARTNER_SYNC 尾十段、本领地 STATUS/DECISIONS；从最新 master 建分支 `agent/<条目id小写>`，worktree **必须建在仓库内的 `.worktrees/<条目id小写>/`**（已 gitignore；桌面上不许再长出 theoria-* 目录）；跑本领地测试，绿了再动手。
 4. **干完整**：条目的目标全部达成，做不到的部分如实写成 gap（不许降低验收线）。用得上的前沿手段就用：先出计划、最难的裁决用最深思考、并行 subagent 分工、对抗性 subagent 复核自己的结论、机械校验可用低配模型、测试挂后台循环。
 5. 留痕**边跑边落盘**：开工即建 `<territory>/runs/<UTC>-<条目id>/`，每完成一小步立即增量写入；`MANIFEST.json` 必填 `prompt_id`(=条目id) / `branch` / `base_commit` / `utc`。只存在于你上下文里的信息视同不存在。
 6. 收工：verify 脚本绿（没有就写一个）→ RUN_STATE.md → PARTNER_SYNC 追加一段 → push 分支（**不碰 master**，合并由 ci_merge 自动做）。

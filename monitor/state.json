@@ -1,7 +1,141 @@
 {
   "blocking_findings": 1,
+  "board": {
+    "available": 5,
+    "blocked": 1,
+    "claimed": 1,
+    "done": 0,
+    "listing": "=== available ===\n  p3  E2-fd-ladder-bench           cell=E2  territory=engine-rig\n  p3  E3-engines-online            cell=E3  territory=theoria-arm\n  p3  S2-canary-schedule           cell=S2  territory=arc-recon\n  p4  C4-deadlock-lean             cell=C4  territory=theory-compiler\n  p5  A4-ablation-online           cell=A4  territory=ablation-arm\n=== blocked ===\n  V2-exam-on-worldgen          waits on C1-worldgen\n=== claimed ===\n  V3-battery-discrimination    by APP-V3"
+  },
   "con_green": 1,
+  "constraints": [
+    {
+      "n": 1,
+      "note": "四形态都有代码，但有两套生成器（A0 一套、theory-compiler 一套），且只有 gen_markdown 是真正 AST 通用的。同源二字目前打折。",
+      "status": "partial",
+      "text": "理论必须可执行——同源多形态（Lean + Python + PDDL + 渲染）"
+    },
+    {
+      "n": 2,
+      "note": "A0 上真的生效过，而且是**它把 Button 和 Door 逼进词汇表的**：两个像素没人认领 → 廉价层在 frame 0 就失败。这是约束 2 在野外的第一次真实咬合。但 certify 目录尚未落盘。",
+      "status": "partial",
+      "text": "规划前全史重放——双重对账（转移重放 + 渲染一致性，全帧责任制）"
+    },
+    {
+      "n": 3,
+      "note": "无 runner、无执行环，尚未成为可检查的事实。",
+      "status": "missing",
+      "text": "行动唯一通道；预测失误即弃计划"
+    },
+    {
+      "n": 4,
+      "note": "候选箱纪律良好（append-only，status 恒为 candidate，有校验器）。但 A0 的表达力条目 E-03 记录：帧公理写在 theory.dsl 的注释里、硬编码在各后端中 —— **step 最重要的语义事实不在唯一写入点管辖内**。",
+      "status": "partial",
+      "text": "唯一写入点：LLM 只许改两本书；引擎只进候选箱；生成物禁止手改"
+    },
+    {
+      "n": 5,
+      "note": "A0 第一次冷启动就撞出框架自身的内部冲突（O-04）：Button 与 Door 的压缩账目是**负的**（−17 / −13 bit），按约束 5 应当拒绝；按约束 2 全帧责任制又必须接受。两条准入准则互相矛盾，目前的处理是『照收并把负数如实写进说明书』。**Theoria.md 需要为此裁决。**",
+      "status": "risk",
+      "text": "无证据/无收益不入册"
+    },
+    {
+      "n": 6,
+      "note": "机制在（LP 证书 + Lean），但尚未在任何一局上端到端跑完。",
+      "status": "partial",
+      "text": "全称断言必须带证明；裸 UNSAT 禁止"
+    },
+    {
+      "n": 7,
+      "note": "A0 上零条可执行探针，press_is_direction_free 就此永远停在 probe: pending —— 而这恰恰是 DC22 型『漏写规则』的实名复现。约束 7 在设计上正确，在第一次实战中**没有可执行的落点**。",
+      "status": "risk",
+      "text": "定理未经戳探不得定案"
+    },
+    {
+      "n": 8,
+      "note": "模型代理不存在 = 没有任何东西在数模型调用。这条约束目前不可证伪。",
+      "status": "missing",
+      "text": "无意外则无模型调用；执行、校验与引擎全程零调用"
+    },
+    {
+      "n": 9,
+      "note": "engine-rig 在 fixture 上、A0 在三个 track 上都报告了 mutually_exclusive=true；但这是引擎的运行时检查，不是 Lean 的证明义务。",
+      "status": "partial",
+      "text": "转移无歧义是定理：每个(状态,动作)恰一后继"
+    },
+    {
+      "n": 10,
+      "note": "playbook 解析器带负向测试（playbook_violation.dsl），反作弊是语法级的 —— 这条是十条里落实得最干净的。",
+      "status": "green",
+      "text": "玩法书禁存字面解：句型仅 排序/剪枝/启发/分解"
+    }
+  ],
   "eng_green": 7,
+  "engines": [
+    {
+      "engine": "最小编辑脚本搜索 (MDL)",
+      "module": "engine-rig/engines/mdl_segmenter",
+      "note": "A0 上真跑了：算子空间扩到两个，由脚本比特自己选出 uniform_color（4423 vs 6511 bit）。",
+      "status": "green",
+      "step": "分割·追踪·事件叙述"
+    },
+    {
+      "engine": "CEGIS / 版本空间",
+      "module": "engine-rig/engines/cegis_miner",
+      "note": "前沿真的被交出来并被逐个裁决（A0 的 R-01/R-02 各留下一条『证据无法决定』的记录）。",
+      "status": "green",
+      "step": "规则挖掘"
+    },
+    {
+      "engine": "零空间计算 (ℚ / GF(2))",
+      "module": "engine-rig/engines/zero_space",
+      "note": "A0 上交出了本项目至今最漂亮的一条结果：door_latch —— 引擎在 152 个匿名指示位上把『门存在 iff 按钮未按』当作守恒律算了出来，275 条转移全支持。",
+      "status": "green",
+      "step": "守恒律 / 奇偶"
+    },
+    {
+      "engine": "线性规划",
+      "module": "engine-rig/engines/lp_potential",
+      "note": "pagoda 权重解得出、证书三条件精确有理数复核通过；不完备性写成了测试而非藏起来。",
+      "status": "green",
+      "step": "势函数 + 启发"
+    },
+    {
+      "engine": "IC3 / PDR",
+      "module": "engine-rig (M9)",
+      "note": "M9 落地：归纳不变量三件套 + 独立检查器复核；peg 0111（LP 不完备例）拿到非线性证书 —— 这道工序存在的全部理由已兑现。",
+      "status": "green",
+      "step": "兜底归纳不变量"
+    },
+    {
+      "engine": "Fast Downward（不自研）",
+      "module": "engine-rig/engines/fd_adapter",
+      "note": "接口就位，后端是 BFS 桩。单位代价下长度最优，所以 A0 这种小世界够用；但三档阶梯的后两档（A*+可采纳启发、地标分段）都还不存在。",
+      "status": "partial",
+      "step": "规划"
+    },
+    {
+      "engine": "定理机器局部化 + trap 学习",
+      "module": "engine-rig (M9)",
+      "note": "M9 落地：条件化迷你不可解定理带证书，同一定理接进规划器作剪枝，节点数下降有前后对比。C1 的日常供给线通了。",
+      "status": "green",
+      "step": "死锁刻画"
+    },
+    {
+      "engine": "前沿主动学习",
+      "module": "engine-rig/engines/probe_frontier",
+      "note": "M9 起探针经规划器定价（到达计划计入成本，unreachable 有裁决）；A0′ 实证 13 条可执行探针。约束 7 的落点齐了。",
+      "status": "green",
+      "step": "探索 / 戳探"
+    },
+    {
+      "engine": "Lean 4 + 决策程序",
+      "module": "theory-compiler/lean, cold-start-a0/compile",
+      "note": "工具链已钉版本并本地就位。但生成器分叉了：theory-compiler 的 gen_lean 完全忽略自己的 AST 参数（D-A0-011），A0 只好另写一套。约束 1『同源多形态』目前有两个源。",
+      "status": "partial",
+      "step": "证明"
+    }
+  ],
   "findings": [
     {
       "action": "【已裁决·监控代行 2026-07-28】取两案合并的保守解：9 局全部如实登记入 contamination_log；ls20/ft09 隔离出封存主张集（21→19），预注册说明；轻微 7 局保留在主张集但统计裁决时做敏感性分析。依据：Phase 4 封存主张以未见为前提，实质泄露不可修复，轻微泄露（动作数级）可用敏感性分析兜住而不牺牲样本量。落账派下一批提示词执行。",
@@ -130,7 +264,193 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 14:00:40",
+  "generated_at": "2026-07-28 14:28:08",
+  "grid": {
+    "A1": {
+      "active": [
+        "P-18"
+      ],
+      "note": "裸 CC 全套 + 消融臂离线；Theoria 臂离线件齐",
+      "pct": 75
+    },
+    "A2": {
+      "active": [
+        "A2-crosscheck",
+        "P-17"
+      ],
+      "note": "A0/A0′/A2/A3 四世界 + 双 A0 互考",
+      "pct": 85
+    },
+    "A3": {
+      "active": [
+        "P-12"
+      ],
+      "note": "开发堆在线：preflight PASS，包络 1/4，关卡推进待开",
+      "pct": 18
+    },
+    "A4": {
+      "active": [],
+      "note": "封存战役（门槛：Phase1 全绿 + 冻结提交）",
+      "pct": 0
+    },
+    "A5": {
+      "active": [],
+      "note": "主表三列 + 消融列",
+      "pct": 0
+    },
+    "C1": {
+      "active": [
+        "C1-worldgen"
+      ],
+      "note": "DSL v0.2 + 四形态生成器 + refuse 语义",
+      "pct": 95
+    },
+    "C2": {
+      "active": [],
+      "note": "A0/A0′/A1/A2/A3 五件离线验收；a0-spike 迁移在修",
+      "pct": 92
+    },
+    "C3": {
+      "active": [],
+      "note": "在线两本书：首局的 theory.dsl 尚在 P-8 分支里",
+      "pct": 5
+    },
+    "C4": {
+      "active": [],
+      "note": "封存局的证书生产线",
+      "pct": 0
+    },
+    "C5": {
+      "active": [
+        "P-19"
+      ],
+      "note": "Lean 证明与四形态随释出；复跑脚本待建",
+      "pct": 35
+    },
+    "E1": {
+      "active": [
+        "E1-property-fuzz"
+      ],
+      "note": "六引擎 + M9 三件全绿，性质测试战役待跑",
+      "pct": 98
+    },
+    "E2": {
+      "active": [
+        "P-13"
+      ],
+      "note": "FD 24.06 真接入，三级梯子；基准对比待做 → E2 板项",
+      "pct": 95
+    },
+    "E3": {
+      "active": [],
+      "note": "引擎在线供货（经 theoria-arm 调用）",
+      "pct": 5
+    },
+    "E4": {
+      "active": [],
+      "note": "封存战役中的引擎供给",
+      "pct": 0
+    },
+    "E5": {
+      "active": [],
+      "note": "引擎代码随释出包公开",
+      "pct": 20
+    },
+    "P1": {
+      "active": [],
+      "note": "方法论与骨架",
+      "pct": 75
+    },
+    "P2": {
+      "active": [
+        "P-23"
+      ],
+      "note": "PAPER.md + sections + 引文核查 + 自审",
+      "pct": 70
+    },
+    "P3": {
+      "active": [
+        "P3-case-study"
+      ],
+      "note": "案例素材齐（A0′ 对照、A2 展品、A3 迁移裁决）",
+      "pct": 35
+    },
+    "P4": {
+      "active": [],
+      "note": "预注册包起草中",
+      "pct": 20
+    },
+    "P5": {
+      "active": [
+        "P-19"
+      ],
+      "note": "释出包脚手架待建",
+      "pct": 20
+    },
+    "S1": {
+      "active": [],
+      "note": "双代理 + 护栏 + 账本 + 对账 + 变体层全落地",
+      "pct": 92
+    },
+    "S2": {
+      "active": [
+        "P-20"
+      ],
+      "note": "预检 4/4 PASS + 金丝雀基线；级联探针交付",
+      "pct": 85
+    },
+    "S3": {
+      "active": [],
+      "note": "在线对账实证（0 计费动作核对）；花费闸门在建",
+      "pct": 45
+    },
+    "S4": {
+      "active": [
+        "P-22"
+      ],
+      "note": "冻结包起草中",
+      "pct": 25
+    },
+    "S5": {
+      "active": [],
+      "note": "账本与 incident 台账随释出公开",
+      "pct": 20
+    },
+    "V1": {
+      "active": [],
+      "note": "电池五族 + 预注册纪律",
+      "pct": 95
+    },
+    "V2": {
+      "active": [],
+      "note": "exam 四题型 + 泄漏防护 + battery v1",
+      "pct": 80
+    },
+    "V3": {
+      "active": [],
+      "note": "区分力首跑在跑（App 会话）",
+      "pct": 40
+    },
+    "V4": {
+      "active": [],
+      "note": "封存回算 + 判决题实考",
+      "pct": 0
+    },
+    "V5": {
+      "active": [
+        "P-21"
+      ],
+      "note": "能力谱与考卷的发表版图表",
+      "pct": 15
+    }
+  },
+  "grid_cols": [
+    "1 造仪器",
+    "2 离线验证",
+    "3 在线练习",
+    "4 正式战役",
+    "5 论文与释出"
+  ],
   "history": [
     {
       "findings": {
@@ -498,6 +818,263 @@
         }
       },
       "ts": "2026-07-28 11:57:18"
+    },
+    {
+      "findings": {
+        "blocking": 1,
+        "high": 5,
+        "info": 7,
+        "low": 3,
+        "medium": 2
+      },
+      "paper_progress": 39.0,
+      "progress": 42.8,
+      "sections": {
+        "Claim 菜单": {
+          "blocked": 2,
+          "missing": 2,
+          "partial": 1
+        },
+        "Phase 1 · 封闭系统": {
+          "green": 9,
+          "partial": 7
+        },
+        "Phase 2 · 指标电池": {
+          "green": 1,
+          "partial": 2
+        },
+        "Phase 3 · 框架迭代（开发堆）": {
+          "missing": 2,
+          "partial": 3
+        },
+        "Phase 4 · 确证（封存堆）": {
+          "missing": 5,
+          "partial": 1
+        },
+        "十条强制约束": {
+          "green": 1,
+          "missing": 2,
+          "partial": 5,
+          "risk": 2
+        },
+        "车间八工序": {
+          "green": 7,
+          "partial": 2
+        }
+      },
+      "ts": "2026-07-28 14:24:22"
+    }
+  ],
+  "iteration_loop": [
+    {
+      "experiment": "A0 冷启动（cold-start-a0）",
+      "problems": [
+        {
+          "cls": "概念不成形",
+          "fix_in": "基准文件 1.8（压缩账的对照基准）",
+          "problem": "O-04：Button/Door 压缩账为负仍必须入册——约束 5 与约束 2 正面冲突",
+          "status": "landed",
+          "via": "commit 7cc02a9『price the concept account against a legal alternative』：账目改为对照『合法替代方案』计价，冲突消解"
+        },
+        {
+          "cls": "表达力不够",
+          "fix_in": "DSL 语法（CONTRACTS，theory-compiler 辖）",
+          "problem": "E-03：帧公理只能写在注释里，step 最重要的语义事实不在 DSL",
+          "status": "dispatched",
+          "via": "v0.2 `semantics:` 正式提案已提交（proposals/）+ A0 侧句型已落地（commit 440e633）；裁决派 P-5"
+        },
+        {
+          "cls": "戳探设计差",
+          "fix_in": "世界/选局设计准则 + 探针机器",
+          "problem": "R-05 + 零可执行探针：不可逆闩锁使漏写规则永不可证——DC22 盲区实名复现",
+          "status": "landed",
+          "via": "触发了 A0′ 对照实验，问题变成了答案（见下）"
+        },
+        {
+          "cls": "调度失误（工具侧）",
+          "fix_in": "theory-compiler 生成器与解析器",
+          "problem": "D-A0-011/013：上游生成器特化到 peg、解析器嵌套括号静默错 AST",
+          "status": "dispatched",
+          "via": "P-5（AST 通用化 + 负向测试）"
+        }
+      ],
+      "status": "green",
+      "summary": "全环跑通：certify 双层绿、plan SAT、赢、不可解证书；对真值 233/236。"
+    },
+    {
+      "experiment": "A0′ 可逆性对照（cold-start-a0/prime）",
+      "problems": [
+        {
+          "cls": "框架级发现",
+          "fix_in": "基准文件（开发堆选局准则、变体设计、1.8 探索表述）",
+          "problem": "可逆性 > 覆盖率：不可逆机关封顶任何探索量的证据力",
+          "status": "ruled",
+          "via": "【已裁决·监控代行】采纳：可逆性准则写入 Theoria.md 的选局与出题准则（F-12）。下一批派工执行"
+        }
+      ],
+      "status": "green",
+      "summary": "47% 覆盖做到 100% 准确 + 13 条可执行探针；A0 99% 覆盖仍带三处错。"
+    },
+    {
+      "experiment": "a0-spike 独立 A0（engine-rig）",
+      "problems": [
+        {
+          "cls": "调度失误（工具侧）",
+          "fix_in": "theory-compiler：refuse 语义",
+          "problem": "gen_python 把编译不了的守卫静默替换成 True——废掉它喂的 certify",
+          "status": "dispatched",
+          "via": "GENERATOR_REPORT.md → P-5 最高优先项"
+        },
+        {
+          "cls": "框架级发现（正面）",
+          "fix_in": "评测协议（无需修，记入证据）",
+          "problem": "held-out 抓错证明『重放全对≠规则对』——考卷 held-out 题的效度实证",
+          "status": "landed",
+          "via": "commit a479e92"
+        }
+      ],
+      "status": "green",
+      "summary": "独立闭环 + Lean 接通；held-out 测试当场抓住一条错规则。"
+    },
+    {
+      "experiment": "API 接入与预检（arc-recon + baseline-arms 复核）",
+      "problems": [
+        {
+          "cls": "仪器缺陷",
+          "fix_in": "arc-recon 预检判据",
+          "problem": "INC-003：predicated compare 把双侧失败判成 PASS——预检自身不可证伪",
+          "status": "landed",
+          "via": "已修：哈希须两侧俱在 + 全序列跑完"
+        },
+        {
+          "cls": "仪器缺陷",
+          "fix_in": "arc-recon 官方账 + 重试策略",
+          "problem": "INC-002 误诊 + 短 ID 根因：官方 incident 还停在『全线受阻』",
+          "status": "dispatched",
+          "via": "P-1（正式改判 + 预检重跑）"
+        },
+        {
+          "cls": "密封漏洞",
+          "fix_in": "代理层护栏与账本格式",
+          "problem": "短 ID 绕过全 ID 护栏的风险 + 版本指纹丢失",
+          "status": "dispatched",
+          "via": "P-2 已吸收（护栏须匹配短 ID；账本存映射）"
+        }
+      ],
+      "status": "partial",
+      "summary": "INC-001/002 两次误诊被复核推翻：400 是瞬时故障，短 ID 可用。"
+    },
+    {
+      "experiment": "裸 CC 试点 + Schema 定位（baseline-arms）",
+      "problems": [
+        {
+          "cls": "密封漏洞",
+          "fix_in": "检索/下载纪律 + Phase 4 主张集口径",
+          "problem": "INC-BA-001：检索子代理读到 9 局封存局机制（ls20/ft09 实质）",
+          "status": "ruled",
+          "via": "【已裁决·监控代行】9 局全登记入 contamination_log；ls20/ft09 隔离出封存主张集（21→19），预注册说明 + 对轻微 7 局做敏感性分析（F-11）。白名单先行纪律已进 P-7。下一批派工落账"
+        },
+        {
+          "cls": "外部依赖破产",
+          "fix_in": "基准文件 1.12 主表口径",
+          "problem": "GAP-1：Schema 复现不可能，主表『复现口径』一格失去依托",
+          "status": "ruled",
+          "via": "【已裁决·监控代行】采纳路 A：Schema 行改『上游轨迹直读（开发堆 4 局）』，复现值合规留空，消融臂地位升为必需中的必需（F-13）。下一批派工执行"
+        }
+      ],
+      "status": "partial",
+      "summary": "裸 CC harness 试点已跑（sk48/g50t）；Schema 官方代码确认从未发布。"
+    },
+    {
+      "experiment": "确定性预检 v2（arc-recon，P-1）",
+      "problems": [
+        {
+          "cls": "仪器缺陷",
+          "fix_in": "arc-recon 预检重试包络 + baseline AUDIT 订正",
+          "problem": "H-A『短 ID 即解』的初判是错的——短 ID 曾把预检带偏，后经订正",
+          "status": "landed",
+          "via": "INC-005 + commit 9824892；真正的解是重试包络"
+        },
+        {
+          "cls": "度量空洞",
+          "fix_in": "预算模型（BUDGET_REPORT §4）",
+          "problem": "失败 400 是否计费悬置了两轮，乐观悲观口径差 9.7 倍",
+          "status": "landed",
+          "via": "scorecard×账本 4 样本恒等：失败 400 不计费"
+        }
+      ],
+      "status": "green",
+      "summary": "开发堆 4 局全 PASS；根因 = 1–3 分钟波浪式瞬时故障（多实例后端）。"
+    },
+    {
+      "experiment": "真 A1 + 对抗式复核（theory-compiler，P-5）",
+      "problems": [
+        {
+          "cls": "机制归纳错",
+          "fix_in": "gen_lean 使能条件逐状态比对",
+          "problem": "move 推导只校验转移形状不校验使能条件——形状同构的另一个世界会拿到同一份 Lean",
+          "status": "landed",
+          "via": "commit 494a427/1cf95d1：已加校验 + 负对照"
+        },
+        {
+          "cls": "表达力不够",
+          "fix_in": "compiler 证书自动注入",
+          "problem": "E-06：证书权重仍需人手抄进调用侧",
+          "status": "dispatched",
+          "via": "P-10"
+        }
+      ],
+      "status": "green",
+      "summary": "LP 证书过数据边界落成空公理集 Lean 证明；复核 CONFIRMED 但揪出两处说得比证据满。"
+    },
+    {
+      "experiment": "A2 同构世界（cold-start-a2，P-6）",
+      "problems": [
+        {
+          "cls": "调度失误（工具侧）",
+          "fix_in": "theory-compiler",
+          "problem": "过程中撞出两条编译器缺陷（已按通道上报 theory-compiler）",
+          "status": "dispatched",
+          "via": "PARTNER_SYNC 94a8202 → P-10"
+        }
+      ],
+      "status": "green",
+      "summary": "假定理展品造出、六拍修复回路走完——A2 的两句验收兑现。"
+    },
+    {
+      "experiment": "方差包络首跑（baseline-arms，P-7/P-12）",
+      "problems": [
+        {
+          "cls": "框架级发现",
+          "fix_in": "包络协议（degraded 标注 + 敏感性说明）",
+          "problem": "裸 CC（haiku 档）在 ar25 上连续死格——包络协议没预设『模型真的不行』这一支",
+          "status": "ruled",
+          "via": "F-15 裁决：ar25 记 degraded 不追，其余 3 局续跑"
+        },
+        {
+          "cls": "同壳纪律裂缝",
+          "fix_in": "账本正典化（proxy 为正典）",
+          "problem": "proxy 与 baseline 账本字段拼写分歧",
+          "status": "ruled",
+          "via": "F-16 裁决 → P-9/P-12"
+        }
+      ],
+      "status": "partial",
+      "summary": "ar25×haiku×3 被 G4 拦停（真实劣化）；配额口径拿到实测答案。"
+    },
+    {
+      "experiment": "M9 三引擎（engine-rig，P-4）",
+      "problems": [
+        {
+          "cls": "表达力不够（契约层）",
+          "fix_in": "CONTRACTS candidates_schema v0.2",
+          "problem": "冻结的 kind 枚举装不下新引擎的候选类型",
+          "status": "ruled",
+          "via": "F-14 裁决：加法式升版，两轨道会签 → P-10"
+        }
+      ],
+      "status": "green",
+      "summary": "死锁定理、IC3 不变量、探针规划器定价全部落地；peg 0111 拿到非线性证书。"
     }
   ],
   "loop_stats": [
@@ -515,38 +1092,23 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "LAUDE.md",
-      "monitor/AUDITOR.md",
-      "monitor/_c1w_probe.txt",
-      "monitor/_runner.py",
-      "monitor/dispatch.py",
-      "monitor/history.jsonl",
+      "onitor/history.jsonl",
       "monitor/index.html",
       "monitor/loop_state.json",
-      "monitor/prompts/ops/OPS-A-auditor.md",
-      "monitor/prompts/ops/OPS-B-browser.md",
-      "monitor/prompts/ops/OPS-M-merger.md",
-      "monitor/prompts/ops/OPS-R-retro.md",
-      "monitor/reflex.log",
-      "monitor/reflex.py",
+      "monitor/mailbox/OPS-A.md",
       "monitor/scan.py",
+      "monitor/spec.py",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/_worker_run.cmd",
-      "monitor/board.py",
-      "monitor/board/",
-      "monitor/mailbox/",
-      "monitor/prompts/C2-semantics-migrate.md",
-      "monitor/prompts/S3-spend-gate.md",
-      "monitor/prompts/W-worker.md",
-      "monitor/worker.cmd"
+      "monitor/app.html",
+      "monitor/serve.cmd"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "",
+    "git_head": "a16d792 OPS-M boots, and cycle 1 finds the reflex layer dead",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -558,25 +1120,110 @@
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/_worker_run.cmd",
-      "monitor/board.py",
-      "monitor/board/",
-      "monitor/mailbox/",
-      "monitor/prompts/C2-semantics-migrate.md",
-      "monitor/prompts/S3-spend-gate.md",
-      "monitor/prompts/W-worker.md",
-      "monitor/worker.cmd"
+      "monitor/app.html",
+      "monitor/serve.cmd"
     ]
   },
-  "p1_green": 7,
+  "p1_green": 9,
   "p1_total": 16,
-  "paper_progress": 30.8,
+  "paper_plan": [
+    {
+      "evidence": "四件离线验收全绿 + M9 八工序齐 + FD 真接入；余：a0-spike 的 v0.2 迁移在跑（C2）",
+      "id": "WP1",
+      "name": "框架本体与离线验收",
+      "pct": 95,
+      "scale": "对标：Schema 的 world_model.py 方法论一节。我们：DSL+四形态+六/八引擎+A0/A0′/A1/A2 四件离线验收",
+      "slot": "§3 框架 · 图5 DC22案例 · 图6 概念时间线",
+      "weight": 0.15
+    },
+    {
+      "evidence": "proxy 全链路实证：preflight PASS，密钥从不出代理，护栏零绕过，0 计费动作",
+      "id": "WP2",
+      "name": "封闭系统与外壳可信度",
+      "pct": 88,
+      "scale": "Schema 无此层（其复现失败正是教训）。我们：双代理+护栏+对账+复放抽检",
+      "slot": "§2 方法可信度（密封/复放/对账）",
+      "weight": 0.08
+    },
+    {
+      "evidence": "首次真 API 接触成功（g50t，18 次重试拿到 RESET）；关卡推进尚未开始 → E3",
+      "id": "WP3",
+      "name": "Theoria 臂在线迭代战役（开发堆）",
+      "pct": 22,
+      "scale": "对标：Schema 25 局全集单臂全跑。我们：4 局 × 迭代至退出条件（U3≥k 局 + Δ 内 + 账单形状可见）",
+      "slot": "§5 实验主体 · 图2 账单形状（Theoria 列）",
+      "weight": 0.2
+    },
+    {
+      "evidence": "裸 CC 包络 + 上游路 A 165 文件已落盘；消融臂离线件待接",
+      "id": "WP4",
+      "name": "对照臂数据（CC 包络 + Schema 路A + 消融臂）",
+      "pct": 30,
+      "scale": "CC：4 局×3 重复；Schema：上游 artifacts 开发堆子集直读（F-13 口径）；消融臂：−定理义务",
+      "slot": "表1 主表另两列 · §6 消融",
+      "weight": 0.08
+    },
+    {
+      "evidence": "exam 四题型 + 泄漏防护建成；battery v1 在跑（V3 区分力首跑）",
+      "id": "WP5",
+      "name": "评测两器：电池冻结 + 考卷构造器",
+      "pct": 70,
+      "scale": "电池五族过四道工序后冻结 v1；考卷四题型出题机+判卷机在自建族闭环",
+      "slot": "§4 评测协议 · 图3 能力谱与考卷",
+      "weight": 0.1
+    },
+    {
+      "evidence": "门槛 = Phase 1 全绿 + 冻结清单提交。当前零接触（这是纪律不是欠账）",
+      "id": "WP6",
+      "name": "封存战役（主表确证）",
+      "pct": 0,
+      "scale": "对标 Schema 25 局：我们 19 封存局 × (Theoria + CC + 消融) × n，逐局入库禁止回看",
+      "slot": "表1 主表 · 图2/图3 确证版 · C1/C2 裁决",
+      "weight": 0.2
+    },
+    {
+      "evidence": "依赖 WP6；出题流程由 P-15 预演",
+      "id": "WP7",
+      "name": "考卷封存子集（判决题 m 局 + 移交 + 改规则）",
+      "pct": 0,
+      "scale": "m 局在主表跑完后构造变体（时序死结的解）；分层移交可随主表同跑",
+      "slot": "图3 考卷行 · C4 裁决",
+      "weight": 0.06
+    },
+    {
+      "evidence": "冻结包起草中；n 由包络方差定的机制已有实测原料",
+      "id": "WP8",
+      "name": "预注册与统计裁决（冻结清单 13 项）",
+      "pct": 25,
+      "scale": "三主终点（U3 达成率/判决题准确率/前载指数）+ Wilcoxon 配对 + n 由包络方差定",
+      "slot": "§5 统计口径 · 双结局文本",
+      "weight": 0.05
+    },
+    {
+      "evidence": "papers/ 已有 PAPER.md + sections + 图数据 + 引文核查 + 自审",
+      "id": "WP9",
+      "name": "论文写作（workshop 文 → 主文）",
+      "pct": 35,
+      "scale": "Phase 1 结 workshop 文（P-16 在跑）→ Phase 3 结案例研究 → 主文",
+      "slot": "全文（3.2 的八节骨架）",
+      "weight": 0.05
+    },
+    {
+      "evidence": "runs/ 留痕正典化；释出清单脚本待建",
+      "id": "WP10",
+      "name": "释出包（Schema 地板对齐）",
+      "pct": 30,
+      "scale": "对标 Schema：全公开集 artifacts。我们：全账本+两本书四形态+Lean+候选箱+探针日志+电池代码+incident 台账+复跑说明",
+      "slot": "§8 开放性声明",
+      "weight": 0.03
+    }
+  ],
+  "paper_progress": 39.0,
   "phases": [
     {
       "_counts": {
-        "green": 7,
-        "partial": 8,
-        "risk": 1
+        "green": 9,
+        "partial": 7
       },
       "clause": "Theoria.md §2 Phase 1",
       "gate": "全绿才准烧游戏钱",
@@ -664,14 +1311,14 @@
           "status": "partial"
         },
         {
-          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判，切堆前提恢复（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——contamination_log 还没有那 9 局的登记 → P-11。  〔本次扫描：封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
-          "_status": "risk",
+          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判；F-11 已落账（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——contamination_log 还没有那 9 局的登记 → P-11。  〔本次扫描：封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
+          "_status": "green",
           "clause": "Phase 1 · 一刀切堆",
           "id": "p1-cut",
           "label": "切堆清单已提交并哈希",
-          "note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判，切堆前提恢复（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——contamination_log 还没有那 9 局的登记 → P-11。",
+          "note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判；F-11 已落账（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——contamination_log 还没有那 9 局的登记 → P-11。",
           "probe": "pile_integrity",
-          "status": "risk"
+          "status": "green"
         },
         {
           "_note": "全环冷启动跑通：感知→挖掘→裁决→四形态→certify 双层→plan→赢，外加 no-button 变体的 Lean 不可解证书。A0『证活』。留下的洞（press 方向泛化不可证、零可执行探针）见 F-05/F-09。  〔本次扫描：A0 阶段件 10/10 落盘；候选 invariant×2, object_hypothesis×3, plan×1, rule_hypothesis×23。缺：无〕",
@@ -703,16 +1350,16 @@
           "status": "green"
         },
         {
-          "_note": "LP 与 CEGIS 真过；FD 是 grounded-STRIPS BFS 桩，接口同形但『白捡二十五年规划工程』这句话目前不成立。",
-          "_status": "partial",
+          "_note": "LP / CEGIS / FD 三例俱过。FD 24.06+ 已真接入（P-13），三级梯子stub-bfs / fd-optimal / fd-satisficing；`.toolchain/` 按设计不入库，未装机器上退回 BFS 桩并跳过 3 个测试，属预期而非缺陷。",
+          "_status": "green",
           "clause": "Phase 1 验收单",
           "id": "p1-engines",
           "label": "引擎架冒烟（LP / CEGIS / FD 各过一例）",
-          "note": "LP 与 CEGIS 真过；FD 是 grounded-STRIPS BFS 桩，接口同形但『白捡二十五年规划工程』这句话目前不成立。",
-          "status": "partial"
+          "note": "LP / CEGIS / FD 三例俱过。FD 24.06+ 已真接入（P-13），三级梯子stub-bfs / fd-optimal / fd-satisficing；`.toolchain/` 按设计不入库，未装机器上退回 BFS 桩并跳过 3 个测试，属预期而非缺陷。",
+          "status": "green"
         },
         {
-          "_note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：无泄漏。密钥另有 1 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。〕",
+          "_note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：无泄漏。密钥另有 2 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env, .worktrees/wt-p8/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。〕",
           "_status": "green",
           "clause": "Phase 1 验收单",
           "id": "p1-seal-test",
@@ -923,7 +1570,7 @@
       "status": "green"
     },
     "credential_hygiene": {
-      "detail": "无泄漏。密钥另有 1 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。",
+      "detail": "无泄漏。密钥另有 2 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env, .worktrees/wt-p8/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。",
       "status": "green"
     },
     "determinism_state": {
@@ -1051,46 +1698,51 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 7 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 9 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**超时未见：OPS-A** —— App 会话可能已满上下文或被关闭，需用户重开并重贴工单。 OPS-A 漂移审计员（产出 3，142 分钟前）； OPS-R 回顾员（产出 5，124 分钟前）； OPS-M 合并裁判（产出 1，127 分钟前）； OPS-B 浏览器专员（产出 1，124 分钟前）",
+      "detail": "**6 条 TO-MONITOR 待监控回复**。 OPS-A 第1轮 idle（6 分钟前）； OPS-B 第1轮 idle（6 分钟前）； OPS-M 第1轮 working（5 分钟前）； OPS-R 第0轮 idle（12 分钟前）",
       "rows": [
         {
-          "age_min": 142,
+          "age_min": 6,
+          "cycle": 1,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "沉默即健康：心跳新鲜 + 零报告 = 正常",
-          "products": 3,
-          "status": "risk"
-        },
-        {
-          "age_min": 124,
-          "id": "OPS-R",
-          "name": "回顾员",
-          "note": "隔日一跑，产出 = inbox 提案",
-          "products": 5,
+          "note": "cycle 1 done: 7c55c09..b23c110, 3 drifts (spec.py fixes announced but not landed / append_only probe born red / Phase 3 gate crossed unrecorded); sealed pile and key hygiene both clean",
+          "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 127,
-          "id": "OPS-M",
-          "name": "合并裁判",
-          "note": "按需：只在 ci/ 有 flag 或语义冲突时上工",
-          "products": 1,
-          "status": "green"
-        },
-        {
-          "age_min": 124,
+          "age_min": 6,
+          "cycle": 1,
           "id": "OPS-B",
           "name": "浏览器专员",
-          "note": "按需：需要真 Chrome 与登录态的活",
-          "products": 1,
+          "note": "邮箱 03:57Z 条目三项全部 ACK；对照提案已投 inbox（20260728T061513Z）；账户面板已登录实查完毕，工单三条了结，无在手活",
+          "state": "idle",
+          "status": "green"
+        },
+        {
+          "age_min": 5,
+          "cycle": 1,
+          "id": "OPS-M",
+          "name": "合并裁判",
+          "note": "无 flag、无待合分支；但探针发现 TheoriaReflex 计划任务 Disabled/exit1，ci_merge 失去驱动，本周期已代跑，详情见 inbox 与 TO-MONITOR",
+          "state": "working",
+          "status": "green"
+        },
+        {
+          "age_min": 12,
+          "cycle": 0,
+          "id": "OPS-R",
+          "name": "回顾员",
+          "note": "booted",
+          "state": "idle",
           "status": "green"
         }
       ],
-      "status": "risk"
+      "status": "green",
+      "to_monitor": 6
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
@@ -1104,10 +1756,10 @@
   "progress": {
     "by_phase": [
       {
-        "contrib": 21.09,
+        "contrib": 23.44,
         "id": "p1",
         "name": "Phase 1 · 封闭系统",
-        "pct": 70.3,
+        "pct": 78.1,
         "weight": 0.3
       },
       {
@@ -1132,14 +1784,13 @@
         "weight": 0.28
       }
     ],
-    "total": 40.4
+    "total": 42.8
   },
   "sections": [
     {
       "counts": {
-        "green": 7,
-        "partial": 8,
-        "risk": 1
+        "green": 9,
+        "partial": 7
       },
       "name": "Phase 1 · 封闭系统"
     },

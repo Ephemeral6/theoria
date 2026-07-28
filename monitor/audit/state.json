@@ -1,25 +1,27 @@
 {
-  "cycle": 1,
-  "utc": "2026-07-28T03:36Z",
-  "last_audited_commit": "7c55c090149c469c0607a120e2a7c24f70c9ab7c",
-  "last_audited_short": "7c55c09",
-  "mode": "cold-start (无前序游标，本轮全量；下轮起增量)",
+  "cycle": 2,
+  "utc": "2026-07-28T06:20Z",
+  "last_audited_commit": "b23c110",
+  "range_this_cycle": "7c55c09..b23c110 (29 commits, 423 files, +127434/-306)",
+  "head_at_writing": "d426b92",
+  "mode": "incremental",
   "covered": {
-    "纪律漂移": "封存堆 21 局全 ID 扫全部已跟踪文件（命中 25 文件，逐一判为登记/护栏/否决清单，无对局接触）；密钥值全树扫描 + git check-ignore 复核；append-only 三文件全历史删除行统计",
-    "基准漂移": "未系统巡（本轮时间给了前一项）",
-    "证据漂移": "抽查 P-13 FD 接入声明 → 产物在树上，STATUS 自陈诚实；schema_traces 路 A 取材 → allowlist 仅开发堆 4 局，885 个封存文件被拒，провenance 完整",
-    "目标漂移": "未巡（PAPER_PLAN 对位留待下轮）",
-    "流程漂移": "runs/ 与 MANIFEST 全领地盘点 → DRIFT-manifest-has-no-canonical-form",
-    "监控自身漂移": "spec.py 手写 note × 2 + scan.py 探针 × 2 复核 → DRIFT-monitor-verdicts-stale"
+    "纪律漂移": "封存堆 21 局全 ID + 短 ID 词根扫全部已跟踪文件；本轮新增命中 7 文件逐条判读，全为护栏夹具/否决清单/外部条款笔记，零对局。browser-ops 外部接触逐条留痕、未点封存局链接。密钥值扫描 + check-ignore 复核：无被跟踪泄漏。append-only 三文件删除行 1（已裁决豁免的 63ef0bf）",
+    "基准漂移": "Theoria.md:305 的 Phase 3 门 vs p1 未全绿 → DRIFT-phase3-gate-crossed-unrecorded",
+    "证据漂移": "03:57Z 裁决书宣布的 6 件修复逐件对树复核 → 4 实到 2 未到 → DRIFT-spec-notes-announced-fixed-but-not",
+    "目标漂移": "仍未巡（连欠两轮，下轮第一优先）",
+    "流程漂移": "上轮 MANIFEST 正典建议已落地（CLAUDE.md:141 + scan.py 双计数），本轮无新增",
+    "监控自身漂移": "probe_append_only 恒红 → DRIFT-append-only-probe-born-red；probe_credential_hygiene 与 MANIFEST 双计数复核正确"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T0336Z-partner-sync-in-place-rewrite.md",
-    "DRIFT-20260728T0336Z-monitor-verdicts-stale.md",
-    "DRIFT-20260728T0336Z-manifest-has-no-canonical-form.md"
+    "DRIFT-20260728T0618Z-spec-notes-announced-fixed-but-not.md",
+    "DRIFT-20260728T0618Z-append-only-probe-born-red.md",
+    "DRIFT-20260728T0618Z-phase3-gate-crossed-unrecorded.md"
   ],
   "next_cycle_focus": [
-    "基准漂移与目标漂移：本轮未巡，下轮优先",
-    "增量起点 7c55c09 之后的提交；合并队列正在每分钟落一笔，下轮增量会不小",
-    "复看三条报告是否被监控处置（处置后由监控移入 archive/，我不动 archive）"
+    "目标漂移：PAPER_PLAN 槽位对位（已连欠两轮，第一优先）",
+    "复核本轮三条的处置；spec.py 两条 note 是否真落地",
+    "probe_gates 若已实现则复验；probe_append_only 的豁免表若已加则复验",
+    "增量起点 b23c110（实跑从 d426b92 之后）"
   ]
 }

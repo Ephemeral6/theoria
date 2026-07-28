@@ -413,59 +413,54 @@ def probe_append_only():
 
 
 OPS_DUTY = [
-    {"id": "OPS-A", "name": "漂移审计员", "cadence_min": 120,
-     "signal": "monitor/audit/HEARTBEAT",
-     "product_glob": ("monitor/audit", "DRIFT-"),
-     "note": "沉默即健康：心跳新鲜 + 零报告 = 正常"},
-    {"id": "OPS-R", "name": "回顾员", "cadence_min": 2880,
-     "signal": None, "product_glob": ("monitor/inbox", "OPS-R"),
-     "note": "隔日一跑，产出 = inbox 提案"},
-    {"id": "OPS-M", "name": "合并裁判", "cadence_min": None,
-     "signal": None, "product_glob": ("monitor/inbox", "opsm"),
-     "note": "按需：只在 ci/ 有 flag 或语义冲突时上工"},
-    {"id": "OPS-B", "name": "浏览器专员", "cadence_min": None,
-     "signal": "browser-ops/RUN_STATE.md",
-     "product_glob": ("browser-ops", "RUN_STATE"),
-     "note": "按需：需要真 Chrome 与登录态的活"},
+    ("OPS-A", "漂移审计员", 90),      # (id, name, stale-after minutes)
+    ("OPS-B", "浏览器专员", 180),
+    ("OPS-M", "合并裁判", 150),
+    ("OPS-R", "回顾员", 900),
 ]
 
 
 def probe_ops_duty():
-    """运维值班：四个 App 常驻会话只能通过产物通道监控（隔离契约）。
-    信号 = 约定落盘文件的新鲜度 + 产出计数。"""
-    rows, stale = [], []
-    for duty in OPS_DUTY:
-        age_min, products = None, 0
-        if duty["signal"] and exists(duty["signal"]):
-            age_min = (time.time() - os.path.getmtime(rel(duty["signal"]))) / 60
-        pdir, prefix = duty["product_glob"]
-        if os.path.isdir(rel(pdir)):
-            names = [f for f in os.listdir(rel(pdir)) if prefix in f]
-            products = len(names)
-            newest = max((os.path.getmtime(os.path.join(rel(pdir), f))
-                          for f in names), default=None)
-            if newest and (age_min is None or
-                           (time.time() - newest) / 60 < age_min):
-                age_min = (time.time() - newest) / 60
-        status = "green"
-        if duty["cadence_min"] and (age_min is None
-                                    or age_min > duty["cadence_min"]):
-            status = "risk"
-            stale.append(duty["id"])
-        elif age_min is None:
-            status = "partial"
-        rows.append({"id": duty["id"], "name": duty["name"], "status": status,
-                     "age_min": None if age_min is None else int(age_min),
-                     "products": products, "note": duty["note"]})
+    """运维值班：四个 App 常驻会话通过统一心跳文件监控（隔离契约：不读对话）。
+    monitor/ops-status/<ID>.json 每周期由它们自己写；缺失=未启动，陈旧=可能掉线。"""
+    rows, stale, missing = [], [], []
+    for oid, name, stale_min in OPS_DUTY:
+        path = "monitor/ops-status/%s.json" % oid
+        data = read_json(path, None)
+        if not data:
+            rows.append({"id": oid, "name": name, "status": "missing",
+                         "age_min": None, "cycle": None, "state": "未启动",
+                         "note": "等待启动握手"})
+            missing.append(oid)
+            continue
+        age = (time.time() - os.path.getmtime(rel(path))) / 60
+        status = "risk" if age > stale_min else "green"
+        if status == "risk":
+            stale.append(oid)
+        rows.append({"id": oid, "name": name, "status": status,
+                     "age_min": int(age), "cycle": data.get("cycle"),
+                     "state": data.get("state", "?"),
+                     "note": data.get("note", "")})
+    # unread messages from the ops agents
+    tm = 0
+    mb = rel("monitor", "mailbox")
+    if os.path.isdir(mb):
+        for f in os.listdir(mb):
+            if not f.startswith("OPS-") or not f.endswith(".md"):
+                continue          # PROTOCOL.md describes the format; not a message
+            for line in open(os.path.join(mb, f), encoding="utf-8",
+                             errors="ignore"):
+                if line.startswith("## TO-MONITOR"):
+                    tm += 1
     detail = "； ".join(
-        "%s %s（产出 %d%s）" % (r["id"], r["name"], r["products"],
-                              "，%d 分钟前" % r["age_min"]
-                              if r["age_min"] is not None else "，无信号")
+        "%s %s" % (r["id"], "未启动" if r["status"] == "missing"
+                   else "第%s轮 %s（%d 分钟前）" % (r["cycle"], r["state"],
+                                                   r["age_min"]))
         for r in rows)
-    if stale:
-        detail = "**超时未见：%s** —— App 会话可能已满上下文或被关闭，"                  "需用户重开并重贴工单。 " % ", ".join(stale) + detail
-    return {"status": "risk" if stale else "green", "detail": detail,
-            "rows": rows}
+    if tm:
+        detail = "**%d 条 TO-MONITOR 待监控回复**。 " % tm + detail
+    st = "risk" if stale else ("partial" if missing else "green")
+    return {"status": st, "detail": detail, "rows": rows, "to_monitor": tm}
 
 
 PROBES = {
@@ -1549,6 +1544,25 @@ def build(with_tests=False):
 
     with open(os.path.join(HERE, "index.html"), "w", encoding="utf-8", newline="\n") as fh:
         fh.write(render(state, refresh=build.refresh))
+    # --- data for the live frontend (app.html renders this; no HTML here) ---
+    import subprocess as _sp
+    bl = _sp.run([sys.executable, os.path.join(HERE, "board.py"), "list"],
+                 cwd=ROOT, capture_output=True, text=True).stdout
+    dd = os.path.join(HERE, "board", "done")
+    cd = os.path.join(HERE, "board", "claimed")
+    state["board"] = {
+        "available": len([l for l in bl.splitlines() if l.startswith("  p")]),
+        "claimed": len(os.listdir(cd)) if os.path.isdir(cd) else 0,
+        "done": len(os.listdir(dd)) if os.path.isdir(dd) else 0,
+        "blocked": bl.count("waits on"),
+        "listing": bl.strip(),
+    }
+    state["grid"] = spec.GRID
+    state["grid_cols"] = spec.GRID_COLS
+    state["paper_plan"] = spec.PAPER_PLAN
+    state["iteration_loop"] = spec.ITERATION_LOOP
+    state["engines"] = spec.ENGINES
+    state["constraints"] = spec.CONSTRAINTS
     slim = {k: v for k, v in state.items() if k != "tickets"}
     with open(os.path.join(HERE, "state.json"), "w", encoding="utf-8", newline="\n") as fh:
         json.dump(slim, fh, ensure_ascii=False, indent=2, sort_keys=True)

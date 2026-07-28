@@ -1,0 +1,32 @@
+{
+  "api_calls_made": 0,
+  "base_commit": "d426b926dade412dc22146462fbfd4aa34a6a19b",
+  "billable_actions": 0,
+  "branch": "master",
+  "credentials_entered": "none -- the user completed OAuth themselves",
+  "files": [
+    {
+      "path": "browser-ops/TERMS.md",
+      "sha256": "0cfbef44ad097c4849c452469d5981c8bf5e4623d5599895e5f4ccfeb39fd45f"
+    },
+    {
+      "path": "browser-ops/RUN_STATE.md",
+      "sha256": "ab06f342154eabfd84ad31b01bd037f80e772b86370d61eb7d006918d48c5969"
+    },
+    {
+      "path": "browser-ops/runs/2026-07-28-visits.md",
+      "sha256": "8ad8b594ae3b4ff7c0c9d9a5f3e0f98b39a95b76caf60deb2dac2fa8a81a2525"
+    },
+    {
+      "path": "monitor/inbox/20260728T061513Z-OPS-B-terms-vs-arcrecon.md",
+      "sha256": "bda3a47713731df725c449a8cb9574c7157598ac722fd257bdb389e7b1483d73"
+    }
+  ],
+  "pages_declined": 10,
+  "pages_visited": 20,
+  "prompt_id": "OPS-B-browser",
+  "run": "browser-ops terms & account recon, three passes",
+  "screenshots_committed": 0,
+  "sealed_pile_contact": 0,
+  "utc": "2026-07-28T06:15Z"
+}

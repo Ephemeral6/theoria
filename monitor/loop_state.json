@@ -2,7 +2,10 @@
   "mode": "fleet-loop",
   "started": "2026-07-28T08:55:00Z",
   "pool_target": 16,
-  "in_flight": [],
+  "in_flight": [
+    "C2-semantics-migrate(app)",
+    "V3-battery-discrimination(app)"
+  ],
   "completed": [
     "P-10",
     "P-11",
@@ -29,13 +32,14 @@
     "quota": "quota.py check every heartbeat; limit-signature deaths -> hold (no dispatch, minimal heartbeats); ping (1 haiku call) gates resume; staggered priority relaunch at half pool, runs/ provenance makes restarts lossless",
     "monitor_rebirth": "HANDOFF.md rewritten every heartbeat; deep rebirth (re-derive from disk+git, not context) every ~6 heartbeats (~3h); quota death = pause not amnesia, wakeup resumes after ~5h window refresh; a fresh session reading HANDOFF + memory IS the monitor",
     "dispatch_policy": "event-driven: (1) per-completion -- a branch merged by M-0 frees its territory, author+dispatch follow-up work consuming the merged outputs at once, freshness beats batching; (2) critical-path preemption -- if WP3 critical path (theoria-arm) is idle or dead, relaunch immediately, jumps every queue; (3) M-0 fires when >=3 delivered-unmerged branches accumulate OR a pending dispatch depends on one; (4) caps: <=10 monitor-dispatched sessions, 2 slots reserved for services (A-1/B-*/M-0); (5) all launches gated by quota mode; recovering = priority list at half pool; (6) backpressure: no new prompt on a territory with a delivered-but-unmerged branch, unless the new work is additive-only in a fresh subdir; (7) staleness: a prompt authored >24h ago re-validates against the tree before launch",
-    "frontend_policy": "light refresh (scan.py only, cheap, no spec rewrite): every heartbeat where any event occurred (completion, DRIFT report, quota flip) -- probes re-derive live facts, history dedup keeps it quiet; full update (spec judgments + findings + PAPER_PLAN + push + deliver page to user): (a) after each M-0 merge lands on master, (b) on any critical event (DRIFT-CRITICAL, quota hold enter/exit, new needs_human), (c) at every ~3h rebirth as part of re-derivation, (d) hard floor one full update per 3h even if quiet; SendUserFile only on full updates, never on light refreshes",
+    "frontend_policy": "AUTOMATED: TheoriaDashboard scheduled task runs monitor/scan.py every 10 min (pure python, spawns nothing, crash-safe) -- live probes, board, ops heartbeats and the grid refresh themselves. The monitor session only does the judgment layer: spec.py verdicts, PAPER_PLAN percentages, findings, and delivering the page to the user on material change.",
     "stagger": "batch dispatch sleeps 45s between launches; storms kill",
     "auto_revive": "heartbeat auto-relaunches lost sessions (guard prevents doubles); a prompt lost >=3 times is a suspected prompt-level defect: stop relaunching, escalate as a finding, rewrite or split the prompt before the next attempt",
     "launch_path": "one-shot Windows scheduled task per work item (TheoriaAgent-<id>), action = _runner.py <id> (short form; schtasks caps /TR at 261 chars), prompt fed on STDIN (the claude .cmd shim mangles multi-line UTF-8 argv under Task Scheduler -> empty prompt). Detached spawns from the monitor tool shell or from a reflex tick both die; this path survives.",
     "ops_in_app": "standing/judgment ops (auditor, browser, merger-judge, retro) run as user app sessions from monitor/prompts/ops/*; dispatch batch refuses A-/B-/M-/R- classes; ci_merge.py stays deterministic-scripted",
     "concurrency": "HARD cap after the 2026-07-28 machine crash: reflex keeps at most 2 headless workers alive and refuses to spawn below 8GB free RAM. Ops (4) live in the user app; the monitor itself is an app session. Extra research capacity is added BY THE USER opening monitor/worker.cmd windows -- visible, closable, self-serving from the board.",
-    "worker_model": "long-lived board workers: claim -> deliver -> claim next; the monitor authors board items and controls headcount only, never per-item dispatch"
+    "worker_model": "long-lived board workers: claim -> deliver -> claim next; the monitor authors board items and controls headcount only, never per-item dispatch",
+    "architecture": "SPLIT 2026-07-28: backend = spec.py (judgments) + scan.py (probes) -> state.json, recomputed every 10 min by the TheoriaDashboard task; frontend = monitor/app.html, a pure renderer that fetches state.json every 20s from a local server (monitor/serve.cmd on :8787, TheoriaServe task at logon). The monitor edits backend files locally and the page follows by itself -- no re-delivery, no manual sync. app.html contains zero judgments; scan.py renders zero HTML."
   },
   "heartbeat_count": 0,
   "notes": {
@@ -50,5 +54,11 @@
     "OPS-B": "浏览器专员（原 B-1）",
     "OPS-M": "合并裁判（原 M-0，按需）",
     "OPS-R": "回顾员（原 R-1，隔日）"
+  },
+  "ops_live": {
+    "OPS-A": "booted 06:15Z",
+    "OPS-B": "booted 06:15Z",
+    "OPS-M": "booted 06:15Z",
+    "OPS-R": "booted 06:15Z"
   }
 }

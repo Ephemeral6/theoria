@@ -137,6 +137,9 @@ from a web search; F-11 ruled the claim set down to 19
 
 ## Conventions
 
+* **Worktrees live inside the repo**: `.worktrees/<branch-slug>/` (gitignored). Never create sibling checkouts on the desktop — 22 of them
+  accumulated there before this rule existed.
+
 * **Provenance is canonical**: every experiment writes
   `runs/<id>/MANIFEST.json` — required `prompt_id`, `branch`,
   `base_commit`, `utc`; optional `files[].sha256`. Human narrative goes in
