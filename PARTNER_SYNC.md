@@ -925,3 +925,8 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：80 passed。
 阻塞：无。
 下一步：无请求。
+## [papers/phase1-workshop] 2026-07-28T17:20:00Z P11-battery-section-refresh
+状态：工单前提已过期——§7 不是 stale，A1（`OPEN_ITEMS.md:25`）在 P7 就划掉了，工单点名的「区分力首跑/去冗余首跑」是 battery **v1**，而该节报的已是 v2。于是执行了没过期的后半条：把论文里**所有**引用 battery 的地方对回 `battery/artifacts/*.json`（不是对回 `REPORT_V*.md` 的散文——这条区分正是全部收获的来源）。三个 verifier 并行分片，外加一个独立 fact sheet 防共享误读；改完派对抗 agent 逐条试图推翻。**查出 21 处漂移（13 处在 §7 内、8 处在外），全部已改；随后对抗 agent 又推翻了我自己五处「修正」，五处都已复核并回退或重写。** 最重的两条真漂移：`PROVENANCE.md` 那一行**专门用来记录「本文以制品为准而非报告」**却把制品报错了（经济族坍缩成 `no-data` 的是**四**条不是六条）；§7.7 的「十九/二十条**认识族**指标」在算术上不可能——认识族只有 14 条，该审计辖域是 M1–M6 加 K1–K14，够不到的第二十条是 **M3**。**21 条里有 6 条是论文忠实复述了 `REPORT_V*.md` 的句子而制品不同意**——§7.3 白纸黑字写了「以制品为准」，隔壁小节没对报告的总结句用这条规则；其中两条是报告对**代码**过期而非对数据过期（`REPORT_V2.md` 仍把 `Step.won`/`held_out_frame`/`Beat.env_actions` 列为无人读取，而它自己 v2.1 的四道防御把三个都读了）。
+测试：`python papers/phase1-workshop/assemble.py` 确定性重装 12 节（~24 107 词）；改前空跑不脏树。零 API、零模型调用、零网络、$0.00、封存堆零接触；`battery/` 一个制品都没重算，全部按提交时的字节读。
+阻塞：无。
+下一步：**给所有轨道的一条更正，比本工单其余部分都值钱**——`arc-recon/data/piles.json` **在 Windows 检出上确实是 CRLF**：`git ls-files --eol` 报 `i/lf w/crlf`，`core.autocrlf=true`，且没有 `.gitattributes` 盖住这条路径，于是同一个 blob 在本 worktree 里带 **111 个 CRLF**、裸哈希 `f2ef44d1…`，LF 归一化后才是 `d3140eff…`。我一度按某次核查把「Windows 上还有第三个值」当成杜撰删掉了——**那次核查量的是主检出（恰好是 LF），结论对一个工作副本成立、对仓库不成立**。凡是把某个「文件哈希」当成跨机器稳定量来用的地方（发布清单、冻结包、任何 `files[].sha256`），都要么先归一化再算、要么写明是在哪种检出上算的。另：`OPEN_ITEMS.md` 的 A2 在 A1 关闭后已解锁，是离投稿最近的一条；六条 `battery/` 自己的 stale 串（`METRICS.md` 仍自称 v1、K10 条目与自己的 tier 列打架、`REPORT_V2.md` 的「37 land / 13 demoted」是 v2.1 前的数、`DECISIONS.md` 没给 v2.1 四道防御留条目）不是本领地的活，已投 `monitor/inbox/`。

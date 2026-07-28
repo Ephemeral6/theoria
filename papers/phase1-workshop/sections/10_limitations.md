@@ -219,8 +219,9 @@ for that gradient but a second, differently-confounded pass beside it, which is
 why §7.6 reports P1 separating the two in opposite directions.
 
 What does not change is the part that matters here: the battery's author also
-wrote the metric definitions, which is structurally impossible to blind; four
-metrics on A0 are marked `[seen]` post-dictions in `battery/PREDICTIONS.md` rather
+wrote the metric definitions, which is structurally impossible to blind; five
+metrics on A0 are marked `[seen]` post-dictions in `battery/PREDICTIONS.md` — K1,
+K2, K7 and K8 in the v0 seal, K14 added in the v1 table — rather
 than being passed off as predictions; and **21 of 38 metrics have never been
 checked against any known gradient at all** — the entire epistemic family, the
 entire mechanism family, and P4 — a count that adding a whole second control arm
@@ -243,9 +244,10 @@ weights crossed a data boundary between two independently developed tracks and
 whose empty axiom list is a check that has been made to fail on purpose; that the
 refutation loop closed on a false theorem in six recorded beats; and that a
 passive metrics battery over existing trajectories, once its anti-gaming register
-was made executable rather than written, contradicted 17 of its own defence claims
-by demonstration and found the exploration family's declared signature separating
-the specified gradient backwards.
+was made executable rather than written, contradicted 17 of its own register
+entries by demonstration — 14 of them defence claims
+(`battery/artifacts/gaming_audit.json`) — and found the exploration family's
+declared signature separating the specified gradient backwards.
 
 Everything else in `Theoria.md` — the ordering claim, the bill shape, transfer,
 the exam, the cost magnitude — is unevidenced here and is not claimed.
