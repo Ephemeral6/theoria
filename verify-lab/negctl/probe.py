@@ -258,7 +258,11 @@ def render(report: Dict[str, object], verbose: bool = False) -> List[str]:
             out.append("note %s: pinned, still present, but no longer has a non-zero "
                        "exit path" % finding["path"])
         elif verbose:
-            out.append("ok   %s (%s)" % (finding["path"], finding["measured"]))
+            # Not "ok". `absent, as pinned` is a gap this repository ships and
+            # somebody owns; the probe is quiet about it, which is not the same
+            # as it being fine.
+            out.append("pin  %-62s %s, as pinned   owner=%s"
+                       % (finding["path"], finding["measured"], finding["owner"]))
     out.append("PROBE: %s" % ("RED" if report["red"] else "green"))
     return out
 
