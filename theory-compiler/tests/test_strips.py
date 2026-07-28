@@ -43,10 +43,13 @@ class TestProvenance:
                     "%s no longer matches %s" % (entry["path"], entry["source"]))
 
     def test_nothing_here_imports_engine_rig(self):
+        """Data crosses the boundary, code does not."""
         source = (Path(__file__).parents[1] / "src" / "theory_compiler"
                   / "strips.py").read_text(encoding="utf-8")
-        assert "engine" not in source.replace("engine-rig's", "").replace(
-            "engine-rig", "").replace("engines", ""), "unexpected engine reference"
+        for line in source.splitlines():
+            stripped = line.strip()
+            assert not stripped.startswith(("import engine", "from engine")), line
+            assert "sys.path" not in stripped, line
 
 
 class TestGrounding:

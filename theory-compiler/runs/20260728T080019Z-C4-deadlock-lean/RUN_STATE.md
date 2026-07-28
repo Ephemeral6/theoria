@@ -27,6 +27,12 @@
 `python -m tools.verify_c4` 把上表跑一遍并额外跑一次负对照，全绿才退出 0。
 测试：`THEORIA_REQUIRE_LEAN=1 python -m pytest` → **283 passed**（本轮前 224）。
 
+**关于条目里点名的 `goal_break`**：P-10 的 `_ic3_lean` 每个目标态发一条
+`goal_break_{i}`，但 `#print axioms` 只对 `inv_init`/`inv_closed`/`inv_all`/`unsolvable`
+四条打印。`goal_break_0` 被 `unsolvable` 依赖，而 `#print axioms` 报的是**传递**依赖，
+所以 `unsolvable` 那条空集已经蕴含 `goal_break_0` 也是空的。本轮没有为了让它单独露面
+去改上一轮已经完工的发射器——那是改别人做完的东西，换不来新的事实。
+
 ## 一开始就发现两半并不对称
 
 读 STATUS 与 `CONTRACTS/ic3_certificate_v0.1.md` 后确认：**IC3 消费端在 P-10 就做完了**
