@@ -219,6 +219,12 @@ def main():
         if branch_taken(pid, branches) and not args.force:
             plan.append((pid, name, "skip: agent branch exists (already picked up)"))
             continue
+        entry = load_registry().get(pid)
+        if entry and not entry.get("reaped") and pid_alive(entry["pid"]) \
+                and not args.force:
+            plan.append((pid, name, "skip: dispatched session still running (pid %s)"
+                         % entry["pid"]))
+            continue
         plan.append((pid, name, "LAUNCH"))
 
     for pid, name, action in plan:
