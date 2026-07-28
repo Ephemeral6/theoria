@@ -80,8 +80,10 @@ v0. **The effect sizes are the only thing here anyone should read.**
 > **P3 is the only metric in the battery that is both in the main table and
 > validated on the specified gradient.**
 
-Main table after this round: E3, K11, K7, M3, M6, P3. Of those, five have no
-process-1 verdict at all. Of the eight metrics that finally have a real
+Main table at this point in the round: E3, K11, K7, M3, M6, P3. (The v2.1
+section below takes it to nine — and the sentence above survives that, because
+the three metrics that return still have no control-arm run between them.) Of
+those six, five have no process-1 verdict at all. Of the eight metrics that finally have a real
 cross-arm effect size, seven were demoted to `reference` by process 4 in the
 same recompute. The battery's validated metrics and its main-table metrics are
 very nearly disjoint sets, and nobody had a way to see that before this round
@@ -310,3 +312,108 @@ been made**; it is escalated in `PARTNER_SYNC.md`.
 4. **Retire X3 or redefine it.** It separates the specified gradient backwards.
 5. **Six paired games.** Unchanged from v0 and v1, and still upstream of
    everything else.
+
+
+---
+
+# v2.1 — four defences, and two predictions that failed
+
+`PREDICTIONS.md`'s v2.1 section was written and committed (`58e5f6b`) **before
+any of the four defences existed**, because changing a metric after seeing its
+numbers is the move processes 1 and 4 exist to catch. Here is what happened.
+
+## The four
+
+| id | defence | field it reads | outcome |
+|---|---|---|---|
+| P4 | refuse to score a run that never reached the goal | `Step.won` | **closed** |
+| K12 | a closed beat requires the episode to show evidence | `Repair` cost / `changed_clause` | **closed** |
+| E2 | interpolate the cost at the 25% mark instead of `ceil` | — | **length hole closed, concentration hole open** |
+| K2 | refuse a held-out set whose sampling frame is undeclared | `Theory.held_out_frame` | **failed — defence theatre** |
+
+## Scored against the pre-registration
+
+| prediction | result |
+|---|---|
+| main table 6 → 9 | **count hit, membership missed** — P4, K12 and **E2** returned; K2 did not |
+| only E2's published values move | **hit** — P4 keeps 1.000, K2 keeps 0.000/1.000, K12 keeps 1.000/0.000 |
+| no process-1 verdict changes | **hit** — 0 of 38 entries moved, on either gradient |
+| unvalidated stays 21 | **hit** |
+| the four exploits flip | **3 of 4** — K2's did not |
+
+### K2: the defence failed, in the manner the seal named in advance
+
+The v2.1 seal registered the honest failure mode as **defence theatre** — "each
+change makes a metric harder to game *in the exact way that was demonstrated*".
+K2 is the case. Requiring a declared sampling frame does not stop the attack,
+because a frame is free text and the adversary writes one: the exploit now
+declares *"the single pair we withheld after checking that the manual already
+got it right"* and scores 1.000 exactly as before. **K2 stays in the reference
+tier.**
+
+The change was still worth making, for a different reason than the one
+predicted. `REPORT_V1.md` claimed `held_out_frame` was carried "on every
+theory-bearing run"; that was false — `a0-base` carried none. It does now, so
+A0's K2 = 0.000 and a0-spike's K2 = 1.000 finally travel with the one fact that
+makes them non-comparable (3 adversarial gaps against 39960 exhaustive cases).
+Comparability was bought. Safety was not.
+
+A denominator floor was explicitly rejected as the alternative and still is: any
+floor above 3 deletes A0's K2 = 0.000, which is the DC22 result.
+
+### E2: it came back to the main table, and that deserves an argument
+
+The prediction was that E2 would **not** return, on the grounds that
+interpolation fixes the length artefact and does nothing about concentration.
+The first half held — a flat-cost run now scores exactly **0.250 at every
+length**, where before it scored 0.333 at nine turns and 0.250 at twelve — and
+every real E2 value moved, with the observed maximum falling from 0.321 to
+0.297 as the short runs came down.
+
+E2 returned to the main table anyway, and the reason is worth stating rather
+than patching over: **the mechanical rule only demotes for *accidental*
+gaming.** The length artefact was the accidental route and it is closed. The
+concentration attack — dump the bill on turn one, score 0.993 over twenty turns
+— survives untouched, but the audit judged it non-accidental, so the rule
+promotes E2. That is the rule working as designed and it was not overridden by
+hand, because hand-overriding a mechanical tier on a metric this round already
+touched is exactly the tuning the process forbids.
+
+It should nonetheless be read as a warning, not a clearance. **A Phase 4
+primary endpoint that is reachable at 0.993 without understanding anything is
+not safe merely because reaching it takes intent**, and claim C2's signature
+rests on it. The concentration hole needs a real fix — a within-run permutation
+null, or a per-turn share cap — before Phase 4 freezes.
+
+## Two defects found in the audit machinery itself
+
+**A metric may carry more than one exploit, and the collector kept only the
+last.** E2 has two. Keying a flat dict by `metric_id` silently discarded the
+concentration attack, and the moment v2.1 fixed the length attack that dict
+would have promoted a primary endpoint into the main table on the strength of
+the attack that was never the dangerous one. `collect_all()` now groups by
+metric and `collect()` returns the worst surviving case.
+
+**One of the three audits hard-coded `succeeded`.** The package contract says
+it is read from `evaluate()` and never asserted; two modules honoured it and
+one passed a literal `True` for all eleven of its exploits. Nothing caught it,
+because `succeeded` is precisely the field no test can check without re-running
+the metric. It mattered immediately: P4's run correctly went `not-applicable`
+under the new gate while the hard-coded flag went on reporting the attack as
+live, which would have kept a metric demoted for a hole already shut.
+`Exploit.__post_init__` now ANDs the stored flag with whether the metric still
+answers, so a defence flips it in every module however it was written.
+
+## Where this leaves the battery
+
+Main table **9 of 38**: E2, E3, K11, K12, K7, M3, M6, P3, P4. Still only **P3**
+is both in the main table and validated on the specified gradient — P4 and K12
+returned to `main` but neither has ever been computed on a control arm, and
+E2's process-1 verdict is still `no-data` because the Schema corpus records no
+cost.
+
+The unvalidated count is **unchanged at 21** for the third time this round.
+Defences do not create material.
+
+213 tests pass. All 7 artefacts byte-identical across two consecutive
+recomputes.

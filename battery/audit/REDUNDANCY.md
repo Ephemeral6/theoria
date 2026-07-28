@@ -16,57 +16,83 @@
 | | |
 |---|---|
 | metric pairs | 703 |
-| pairs with enough shared runs to correlate | **91** |
-| pairs that share too few runs | 612 |
-| clusters | 34 of 38 metrics |
-| metrics retired into a representative | **3** |
+| pairs with enough shared runs to correlate | **257** |
+| pairs that share too few runs | 446 |
+| clusters | 32 of 38 metrics |
+| metrics retired into a representative | **5** |
 
-91 of 703 metric pairs share enough runs to correlate at all. A cluster count near the metric count reflects thin data, not twenty independent findings.
+257 of 703 metric pairs share enough runs to correlate at all. A cluster count near the metric count reflects thin data, not twenty independent findings.
 
 ## The pairs that did the clustering (|rho| >= 0.9)
 
 | a | b | rho |
 |---|---|---|
-| E1 | E2 | -1.000 |
-| E1 | X1 | -0.918 |
-| E2 | X1 | +0.918 |
-| P1 | P5 | -1.000 |
-| X1 | X5 | -0.951 |
+| E4 | E7 | +0.985 |
+| K10 | K8 | -0.968 |
+| K14 | K5 | -1.000 |
+| K14 | K7 | -1.000 |
+| K5 | K7 | +1.000 |
+| K6 | X1 | +0.900 |
+| X1 | X4 | +0.903 |
 
 ## Clusters
 
-### E1 ~ E2 ~ X1 ~ X5
+### E4 ~ E7
 
-- families: economy, exploration
-- representatives: **E1** (economy), **X1** (exploration)
-- coverage: E1=12, E2=12, X1=12, X5=12
+- families: economy
+- representative: **E4** (economy)
+- coverage: E4=74, E7=70
 
-> **Cross-family.** this cluster spans 2 families (economy, exploration). A correlation across a family boundary is evidence about the sample, not about the metrics -- these families are answering different questions and Theoria.md organises the battery by family for that reason. No metric here is absorbed across the boundary: each family keeps its own representative.
+### K10 ~ K8
 
-### P1 ~ P5
+- families: epistemic
+- representative: **K10** (epistemic)
+- coverage: K10=6, K8=5
 
-- families: planning
-- representative: **P1** (planning)
-- coverage: P1=12, P5=12
+### K14 ~ K5 ~ K7
+
+- families: epistemic
+- representative: **K5** (epistemic)
+- coverage: K14=5, K5=6, K7=5
+
+### K6 ~ X1 ~ X4
+
+- families: epistemic, exploration
+- representatives: **K6** (epistemic), **X1** (exploration)
+- coverage: K6=5, X1=87, X4=87
+
+> **Cross-family.** this cluster spans 2 families (epistemic, exploration). A correlation across a family boundary is evidence about the sample, not about the metrics -- these families are answering different questions and Theoria.md organises the battery by family for that reason. No metric here is absorbed across the boundary: each family keeps its own representative.
 
 ## Retired metrics, and why
 
 Retired is **not deleted**. Every metric below is still computed, still reported, and still correlated; it is excluded from being counted as an independent finding.
 
-### E2 (economy) → represented by E1
+### E7 (economy) → represented by E4
 
-- rho with representative: -1.000 over 12 shared runs
-- coverage: 12 against the representative's 12
-- clusters with E1 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); E1 carries 12 usable values against this metric's 12, so it represents the group for the economy family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.
+- rho with representative: +0.985 over 70 shared runs
+- coverage: 70 against the representative's 74
+- clusters with E4 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); E4 carries 74 usable values against this metric's 70, so it represents the group for the economy family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.
 
-### P5 (planning) → represented by P1
+### K14 (epistemic) → represented by K5
 
-- rho with representative: -1.000 over 12 shared runs
-- coverage: 12 against the representative's 12
-- clusters with P1 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); P1 carries 12 usable values against this metric's 12, so it represents the group for the planning family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.
+- rho with representative: -1.000 over 5 shared runs
+- coverage: 5 against the representative's 6
+- clusters with K5 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); K5 carries 6 usable values against this metric's 5, so it represents the group for the epistemic family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.
 
-### X5 (exploration) → represented by X1
+### K7 (epistemic) → represented by K5
 
-- rho with representative: -0.951 over 12 shared runs
-- coverage: 12 against the representative's 12
-- clusters with X1 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); X1 carries 12 usable values against this metric's 12, so it represents the group for the exploration family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.
+- rho with representative: +1.000 over 5 shared runs
+- coverage: 5 against the representative's 6
+- clusters with K5 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); K5 carries 6 usable values against this metric's 5, so it represents the group for the epistemic family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.
+
+### K8 (epistemic) → represented by K10
+
+- rho with representative: -0.968 over 5 shared runs
+- coverage: 5 against the representative's 6
+- clusters with K10 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); K10 carries 6 usable values against this metric's 5, so it represents the group for the epistemic family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.
+
+### X4 (exploration) → represented by X1
+
+- rho with representative: +0.903 over 87 shared runs
+- coverage: 87 against the representative's 87
+- clusters with X1 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); X1 carries 87 usable values against this metric's 87, so it represents the group for the exploration family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.

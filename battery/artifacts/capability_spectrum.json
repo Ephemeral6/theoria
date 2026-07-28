@@ -316,7 +316,7 @@
       "unit": ""
     },
     "P4": {
-      "definition": "Actual successful steps divided by the shortest known plan. 1.0 is optimal; needs ground truth, so development pile and A0 only, and needs the run to have been trying to win.",
+      "definition": "Actual successful steps divided by the shortest known plan, over runs that reached the goal. 1.0 is optimal; needs ground truth, so development pile and A0 only.",
       "direction": "lower",
       "family": "planning",
       "id": "P4",
@@ -324,7 +324,8 @@
         "steps",
         "truth",
         "optimal",
-        "solve_attempt"
+        "solve_attempt",
+        "won"
       ],
       "unit": "ratio"
     },
@@ -423,7 +424,7 @@
       },
       "direction": "higher",
       "family": "economy",
-      "tier": "reference"
+      "tier": "main"
     },
     "E3": {
       "by_status": {
@@ -507,7 +508,7 @@
       },
       "direction": "higher",
       "family": "epistemic",
-      "tier": "reference"
+      "tier": "main"
     },
     "K13": {
       "by_status": {
@@ -695,7 +696,7 @@
       },
       "direction": "lower",
       "family": "planning",
-      "tier": "reference"
+      "tier": "main"
     },
     "P5": {
       "by_status": {
@@ -903,6 +904,7 @@
           "status": "ok",
           "support": {
             "agree": 0,
+            "frame": "3 state-action pair(s) the full-history trace never covered out of 236 replayed pairs over 59 reachable states. Adversarial gaps left by the trace, not a sample drawn from the world -- not comparable with an exhaustive enumeration.",
             "pairs": 3
           },
           "value": 0.0
@@ -1420,6 +1422,7 @@
           "status": "ok",
           "support": {
             "agree": 39960,
+            "frame": "exhaustive enumeration: every well-formed (state, direction) pair on all 5 evidence levels (39960 cases), most of them unreachable from the start state. NOT a withheld sample, and not comparable with cold-start-a0's held-out denominator of 3 adversarially chosen uncovered pairs.",
             "pairs": 39960
           },
           "value": 1.0
@@ -2279,7 +2282,8 @@
           "status": "ok",
           "support": {
             "actions": 18,
-            "optimal": 18
+            "optimal": 18,
+            "won": true
           },
           "value": 1.0
         },
@@ -2612,10 +2616,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 41,
-            "head_turns": 11,
+            "head_turns": 10.25,
             "turns": 41
           },
-          "value": 0.234000373
+          "value": 0.21295373
         },
         "E3": {
           "status": "ok",
@@ -2872,10 +2876,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 49,
-            "head_turns": 13,
+            "head_turns": 12.25,
             "turns": 49
           },
-          "value": 0.254812335
+          "value": 0.240891943
         },
         "E3": {
           "status": "ok",
@@ -3132,10 +3136,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 29,
-            "head_turns": 8,
+            "head_turns": 7.25,
             "turns": 29
           },
-          "value": 0.263419093
+          "value": 0.220719848
         },
         "E3": {
           "status": "ok",
@@ -3392,7 +3396,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 24,
-            "head_turns": 6,
+            "head_turns": 6.0,
             "turns": 24
           },
           "value": 0.222989407
@@ -3652,10 +3656,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 35,
-            "head_turns": 9,
+            "head_turns": 8.75,
             "turns": 35
           },
-          "value": 0.255751518
+          "value": 0.247434553
         },
         "E3": {
           "status": "ok",
@@ -3912,10 +3916,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 13,
-            "head_turns": 4,
+            "head_turns": 3.25,
             "turns": 13
           },
-          "value": 0.276555078
+          "value": 0.232572585
         },
         "E3": {
           "status": "ok",
@@ -4172,10 +4176,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 21,
-            "head_turns": 6,
+            "head_turns": 5.25,
             "turns": 21
           },
-          "value": 0.246871553
+          "value": 0.216960312
         },
         "E3": {
           "status": "ok",
@@ -4432,7 +4436,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 20,
-            "head_turns": 5,
+            "head_turns": 5.0,
             "turns": 20
           },
           "value": 0.21882758
@@ -4692,10 +4696,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 43,
-            "head_turns": 11,
+            "head_turns": 10.75,
             "turns": 43
           },
-          "value": 0.227375067
+          "value": 0.222366864
         },
         "E3": {
           "status": "ok",
@@ -4952,7 +4956,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 12,
-            "head_turns": 3,
+            "head_turns": 3.0,
             "turns": 12
           },
           "value": 0.253819065
@@ -5441,7 +5445,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 40,
-            "head_turns": 10,
+            "head_turns": 10.0,
             "turns": 40
           },
           "value": 0.256560832
@@ -5701,10 +5705,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 75,
-            "head_turns": 19,
+            "head_turns": 18.75,
             "turns": 75
           },
-          "value": 0.257372705
+          "value": 0.252915755
         },
         "E3": {
           "status": "ok",
@@ -5961,10 +5965,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 55,
-            "head_turns": 14,
+            "head_turns": 13.75,
             "turns": 55
           },
-          "value": 0.23783273
+          "value": 0.233305263
         },
         "E3": {
           "status": "ok",
@@ -6221,7 +6225,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 44,
-            "head_turns": 11,
+            "head_turns": 11.0,
             "turns": 44
           },
           "value": 0.218424762
@@ -6481,10 +6485,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 38,
-            "head_turns": 10,
+            "head_turns": 9.5,
             "turns": 38
           },
-          "value": 0.222861246
+          "value": 0.211745623
         },
         "E3": {
           "status": "ok",
@@ -6741,7 +6745,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 44,
-            "head_turns": 11,
+            "head_turns": 11.0,
             "turns": 44
           },
           "value": 0.239752605
@@ -7001,7 +7005,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 32,
-            "head_turns": 8,
+            "head_turns": 8.0,
             "turns": 32
           },
           "value": 0.24318545
@@ -7261,10 +7265,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 35,
-            "head_turns": 9,
+            "head_turns": 8.75,
             "turns": 35
           },
-          "value": 0.234692348
+          "value": 0.226409465
         },
         "E3": {
           "status": "ok",
@@ -7521,10 +7525,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 17,
-            "head_turns": 5,
+            "head_turns": 4.25,
             "turns": 17
           },
-          "value": 0.302747906
+          "value": 0.259969856
         },
         "E3": {
           "status": "ok",
@@ -7997,10 +8001,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 35,
-            "head_turns": 9,
+            "head_turns": 8.75,
             "turns": 35
           },
-          "value": 0.193910115
+          "value": 0.18858132
         },
         "E3": {
           "status": "ok",
@@ -8257,10 +8261,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 50,
-            "head_turns": 13,
+            "head_turns": 12.5,
             "turns": 50
           },
-          "value": 0.245186669
+          "value": 0.23755882
         },
         "E3": {
           "status": "ok",
@@ -8737,10 +8741,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 11,
-            "head_turns": 3,
+            "head_turns": 2.75,
             "turns": 11
           },
-          "value": 0.211786097
+          "value": 0.195440351
         },
         "E3": {
           "status": "ok",
@@ -8997,10 +9001,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 58,
-            "head_turns": 15,
+            "head_turns": 14.5,
             "turns": 58
           },
-          "value": 0.266609754
+          "value": 0.259730489
         },
         "E3": {
           "status": "ok",
@@ -9257,7 +9261,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 52,
-            "head_turns": 13,
+            "head_turns": 13.0,
             "turns": 52
           },
           "value": 0.221790175
@@ -9517,10 +9521,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 83,
-            "head_turns": 21,
+            "head_turns": 20.75,
             "turns": 83
           },
-          "value": 0.269999013
+          "value": 0.267156352
         },
         "E3": {
           "status": "ok",
@@ -9777,7 +9781,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 32,
-            "head_turns": 8,
+            "head_turns": 8.0,
             "turns": 32
           },
           "value": 0.234607999
@@ -10037,10 +10041,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 11,
-            "head_turns": 3,
+            "head_turns": 2.75,
             "turns": 11
           },
-          "value": 0.256965438
+          "value": 0.239467291
         },
         "E3": {
           "status": "ok",
@@ -10297,10 +10301,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 61,
-            "head_turns": 16,
+            "head_turns": 15.25,
             "turns": 61
           },
-          "value": 0.261414844
+          "value": 0.240604652
         },
         "E3": {
           "status": "ok",
@@ -10557,10 +10561,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 27,
-            "head_turns": 7,
+            "head_turns": 6.75,
             "turns": 27
           },
-          "value": 0.235710982
+          "value": 0.224647834
         },
         "E3": {
           "status": "ok",
@@ -10817,10 +10821,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 66,
-            "head_turns": 17,
+            "head_turns": 16.5,
             "turns": 66
           },
-          "value": 0.254958695
+          "value": 0.249490075
         },
         "E3": {
           "status": "ok",
@@ -11077,10 +11081,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 51,
-            "head_turns": 13,
+            "head_turns": 12.75,
             "turns": 51
           },
-          "value": 0.233677026
+          "value": 0.229019685
         },
         "E3": {
           "status": "ok",
@@ -11337,7 +11341,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 68,
-            "head_turns": 17,
+            "head_turns": 17.0,
             "turns": 68
           },
           "value": 0.219776529
@@ -11597,10 +11601,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 62,
-            "head_turns": 16,
+            "head_turns": 15.5,
             "turns": 62
           },
-          "value": 0.270116686
+          "value": 0.260885111
         },
         "E3": {
           "status": "ok",
@@ -11857,7 +11861,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 20,
-            "head_turns": 5,
+            "head_turns": 5.0,
             "turns": 20
           },
           "value": 0.2056472
@@ -12117,7 +12121,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 20,
-            "head_turns": 5,
+            "head_turns": 5.0,
             "turns": 20
           },
           "value": 0.257937301
@@ -12609,7 +12613,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 24,
-            "head_turns": 5,
+            "head_turns": 5.0,
             "turns": 20
           },
           "value": 0.200466719
@@ -13118,10 +13122,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 37,
-            "head_turns": 10,
+            "head_turns": 9.25,
             "turns": 37
           },
-          "value": 0.221613602
+          "value": 0.207413082
         },
         "E3": {
           "status": "ok",
@@ -13378,10 +13382,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 22,
-            "head_turns": 6,
+            "head_turns": 5.5,
             "turns": 22
           },
-          "value": 0.238263354
+          "value": 0.198438098
         },
         "E3": {
           "status": "ok",
@@ -13870,10 +13874,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 9,
-            "head_turns": 3,
+            "head_turns": 2.25,
             "turns": 9
           },
-          "value": 0.311081506
+          "value": 0.247868618
         },
         "E3": {
           "status": "ok",
@@ -14334,7 +14338,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 32,
-            "head_turns": 8,
+            "head_turns": 8.0,
             "turns": 32
           },
           "value": 0.242270596
@@ -14594,10 +14598,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 37,
-            "head_turns": 10,
+            "head_turns": 9.25,
             "turns": 37
           },
-          "value": 0.229065125
+          "value": 0.208079097
         },
         "E3": {
           "status": "ok",
@@ -14854,10 +14858,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 33,
-            "head_turns": 9,
+            "head_turns": 8.25,
             "turns": 33
           },
-          "value": 0.300948074
+          "value": 0.265614493
         },
         "E3": {
           "status": "ok",
@@ -15114,10 +15118,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 39,
-            "head_turns": 10,
+            "head_turns": 9.75,
             "turns": 39
           },
-          "value": 0.23084084
+          "value": 0.226072907
         },
         "E3": {
           "status": "ok",
@@ -15374,10 +15378,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 19,
-            "head_turns": 5,
+            "head_turns": 4.75,
             "turns": 19
           },
-          "value": 0.242067163
+          "value": 0.227890877
         },
         "E3": {
           "status": "ok",
@@ -15634,7 +15638,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 20,
-            "head_turns": 5,
+            "head_turns": 5.0,
             "turns": 20
           },
           "value": 0.161553883
@@ -15894,10 +15898,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 43,
-            "head_turns": 11,
+            "head_turns": 10.75,
             "turns": 43
           },
-          "value": 0.270817301
+          "value": 0.265459974
         },
         "E3": {
           "status": "ok",
@@ -16154,10 +16158,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 25,
-            "head_turns": 7,
+            "head_turns": 6.25,
             "turns": 25
           },
-          "value": 0.282522556
+          "value": 0.235886696
         },
         "E3": {
           "status": "ok",
@@ -16414,7 +16418,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 48,
-            "head_turns": 12,
+            "head_turns": 12.0,
             "turns": 48
           },
           "value": 0.24229474
@@ -17128,10 +17132,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 37,
-            "head_turns": 10,
+            "head_turns": 9.25,
             "turns": 37
           },
-          "value": 0.31029122
+          "value": 0.297300947
         },
         "E3": {
           "status": "ok",
@@ -17388,10 +17392,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 35,
-            "head_turns": 9,
+            "head_turns": 8.75,
             "turns": 35
           },
-          "value": 0.254442013
+          "value": 0.246263468
         },
         "E3": {
           "status": "ok",
@@ -17648,7 +17652,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 20,
-            "head_turns": 5,
+            "head_turns": 5.0,
             "turns": 20
           },
           "value": 0.250771602
@@ -18373,10 +18377,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 22,
-            "head_turns": 6,
+            "head_turns": 5.5,
             "turns": 22
           },
-          "value": 0.221690918
+          "value": 0.204351606
         },
         "E3": {
           "status": "ok",
@@ -18633,10 +18637,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 25,
-            "head_turns": 7,
+            "head_turns": 6.25,
             "turns": 25
           },
-          "value": 0.264838417
+          "value": 0.219970244
         },
         "E3": {
           "status": "ok",
@@ -19125,10 +19129,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 9,
-            "head_turns": 3,
+            "head_turns": 2.25,
             "turns": 9
           },
-          "value": 0.285778479
+          "value": 0.227099954
         },
         "E3": {
           "status": "ok",
@@ -19385,7 +19389,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 24,
-            "head_turns": 6,
+            "head_turns": 6.0,
             "turns": 24
           },
           "value": 0.205293653
@@ -19645,7 +19649,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 20,
-            "head_turns": 5,
+            "head_turns": 5.0,
             "turns": 20
           },
           "value": 0.204272584
@@ -19905,10 +19909,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 22,
-            "head_turns": 6,
+            "head_turns": 5.5,
             "turns": 22
           },
-          "value": 0.225811321
+          "value": 0.2078798
         },
         "E3": {
           "status": "ok",
@@ -20165,7 +20169,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 28,
-            "head_turns": 7,
+            "head_turns": 7.0,
             "turns": 28
           },
           "value": 0.257864034
@@ -20425,10 +20429,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 27,
-            "head_turns": 7,
+            "head_turns": 6.75,
             "turns": 27
           },
-          "value": 0.231866757
+          "value": 0.214981157
         },
         "E3": {
           "status": "ok",
@@ -20685,7 +20689,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 32,
-            "head_turns": 8,
+            "head_turns": 8.0,
             "turns": 32
           },
           "value": 0.20903581
@@ -20945,10 +20949,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 13,
-            "head_turns": 4,
+            "head_turns": 3.25,
             "turns": 13
           },
-          "value": 0.278970562
+          "value": 0.229269892
         },
         "E3": {
           "status": "ok",
@@ -21205,10 +21209,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 42,
-            "head_turns": 11,
+            "head_turns": 10.5,
             "turns": 42
           },
-          "value": 0.238047833
+          "value": 0.229276953
         },
         "E3": {
           "status": "ok",
@@ -21465,10 +21469,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 22,
-            "head_turns": 6,
+            "head_turns": 5.5,
             "turns": 22
           },
-          "value": 0.21901055
+          "value": 0.203056843
         },
         "E3": {
           "status": "ok",
@@ -21725,10 +21729,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 42,
-            "head_turns": 11,
+            "head_turns": 10.5,
             "turns": 42
           },
-          "value": 0.237638081
+          "value": 0.225260606
         },
         "E3": {
           "status": "ok",
@@ -21985,10 +21989,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 22,
-            "head_turns": 6,
+            "head_turns": 5.5,
             "turns": 22
           },
-          "value": 0.216889875
+          "value": 0.200743884
         },
         "E3": {
           "status": "ok",
@@ -22245,7 +22249,7 @@
           "status": "ok",
           "support": {
             "billed_calls": 40,
-            "head_turns": 10,
+            "head_turns": 10.0,
             "turns": 40
           },
           "value": 0.237019064
@@ -22505,10 +22509,10 @@
           "status": "ok",
           "support": {
             "billed_calls": 10,
-            "head_turns": 3,
+            "head_turns": 2.5,
             "turns": 10
           },
-          "value": 0.320533617
+          "value": 0.27255965
         },
         "E3": {
           "status": "ok",

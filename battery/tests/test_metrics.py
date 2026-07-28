@@ -81,8 +81,35 @@ def test_redundancy_refuses_a_coverage_walk():
     walk = make_run(["a"] * 20, intent="explore",
                     truth=Truth(optimal_steps=4))
     assert evaluate(walk)["P4"].status == "not-applicable"
-    solve = make_run(["a"] * 20, intent="solve", truth=Truth(optimal_steps=4))
+    solve = won_run(["a"] * 20, truth=Truth(optimal_steps=4))
     assert evaluate(solve)["P4"].value == pytest.approx(5.0)
+
+
+def won_run(state_keys, **kw):
+    """A solve attempt that actually arrived.  P4 needs both."""
+    run = make_run(state_keys, intent="solve", **kw)
+    steps = list(run.steps)
+    steps[-1] = Step(idx=steps[-1].idx, action=steps[-1].action,
+                     state_key=steps[-1].state_key, won=True)
+    run.steps = steps
+    return run
+
+
+def test_redundancy_refuses_a_run_that_never_reached_the_goal():
+    """P4 has no floor, so a run that gives up outscores every solve.
+
+    One action against a twelve-step plan is 0.083; an optimal solve is 1.000
+    and `lower` is the declared direction. Until v2.1 nothing checked the goal
+    was reached and `intent="solve"` is set for every ledgered run whatever
+    happened, so the leaderboard was ordered by how early an arm died.
+    """
+    quit_early = make_run(["a"], intent="solve", truth=Truth(optimal_steps=12))
+    value = evaluate(quit_early)["P4"]
+    assert value.status == "not-applicable"
+    assert "never reached the goal" in value.reason
+
+    arrived = won_run(["a"], truth=Truth(optimal_steps=12))
+    assert evaluate(arrived)["P4"].value == pytest.approx(1 / 12)
 
 
 # -------------------------------------------------------------------- economy
@@ -155,10 +182,30 @@ def test_epistemic_metrics_are_not_applicable_without_books():
 
 def test_replay_and_held_out_are_separate_questions():
     theory = _theory(replay_pairs=236, replay_agree=233,
-                     held_out_pairs=3, held_out_agree=0)
+                     held_out_pairs=3, held_out_agree=0,
+                     held_out_frame="3 pairs the trace never covered")
     values = evaluate(make_run(["a"], theory=theory))
     assert values["K1"].value == pytest.approx(233 / 236)
     assert values["K2"].value == 0.0
+
+
+def test_a_held_out_set_without_a_declared_frame_is_refused():
+    """A0's denominator is 3 adversarial gaps; a0-spike's is 39960 exhaustive
+    cases. Both are `K2`. Without the frame the ratio cannot be compared with
+    anything, and a held-out set of one pair scores a perfect 1.000."""
+    theory = _theory(held_out_pairs=1, held_out_agree=1)
+    value = evaluate(make_run(["a"], theory=theory))["K2"]
+    assert value.status == "insufficient-data"
+    assert "sampling frame" in value.reason
+
+    declared = _theory(held_out_pairs=1, held_out_agree=1,
+                       held_out_frame="one pair, withheld after the fact")
+    scored = evaluate(make_run(["a"], theory=declared))["K2"]
+    # The frame requirement buys comparability, not safety: an adversary
+    # simply writes a frame. K2 stays in the reference tier for this reason,
+    # and `PREDICTIONS.md` v2.1 registered the failure of this defence.
+    assert scored.value == 1.0
+    assert scored.support["frame"]
 
 
 def test_evidence_coverage_reports_unannotated_clauses_separately():

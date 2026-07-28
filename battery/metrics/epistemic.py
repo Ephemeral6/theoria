@@ -40,10 +40,34 @@ def replay_accuracy(run: Run):
         "replay cannot see.",
         needs=("theory",), direction="higher", unit="share")
 def held_out_accuracy(run: Run):
+    """The metric replay cannot see — and the one that must say what it saw.
+
+    **A held-out accuracy is meaningless without its sampling frame.** This
+    battery holds two runs reporting a `K2`, and they do not mean the same
+    thing: A0's denominator is the 3 state-action pairs its trace happened
+    never to cover, a0-spike's is an exhaustive enumeration of all 39960
+    well-formed pairs. `model.py` carries `held_out_frame` and says at length
+    that it exists to stop those two being compared — and until v2.1 no metric
+    read it, so a held-out set of **one** pair scored 1.000 and looked
+    identical to the exhaustive one. `battery/audit/exploits/` demonstrates it.
+
+    The guard is a *declared frame*, not a denominator floor. A floor is the
+    obvious fix and it is the wrong one: any floor above 3 destroys A0's
+    K2 = 0.000, which is the DC22 result — a manual replaying at 98.7% and
+    scoring zero off-trace — and that is a real finding, not an artefact of a
+    thin denominator.
+    """
     pairs, agree = run.theory.held_out_pairs, run.theory.held_out_agree
     if not pairs:
         return thin("K2", "no held-out pairs; every reachable pair was covered")
-    return ok("K2", agree / pairs, agree=agree, pairs=pairs)
+    if not run.theory.held_out_frame:
+        return thin("K2", "the held-out set declares no sampling frame, so "
+                          "this ratio cannot be compared with any other K2 -- "
+                          "a denominator of 3 adversarial gaps and one of "
+                          "39960 exhaustive cases are different quantities "
+                          "sharing a name")
+    return ok("K2", agree / pairs, agree=agree, pairs=pairs,
+              frame=run.theory.held_out_frame)
 
 
 @metric("K3", "epistemic",
@@ -191,6 +215,29 @@ def repair_loop_closure(run: Run):
     """
     if not run.repairs:
         return thin("K12", "no repair episodes")
+
+    # A closed beat has to be a beat that happened.  Until v2.1 this read six
+    # self-reported booleans out of a file the producer wrote, so an episode
+    # declaring all six closed while spending nothing and changing nothing
+    # scored 1.000 -- identical to A2, which spent 48 environment actions and
+    # rewrote `teleport_down`.  `battery/audit/exploits/` demonstrates it.
+    #
+    # The requirement is deliberately at the *episode* level and not per beat.
+    # `model.py` is explicit that localisation and re-proof are offline work
+    # and honestly cost zero environment actions, so demanding a cost per beat
+    # would refuse the real loops along with the invented one.  What an episode
+    # may not do is claim closed beats while showing neither a cost nor an edit.
+    unevidenced = [r.episode_id for r in sorted(run.repairs,
+                                                key=lambda r: r.episode_id)
+                   if r.beats_closed
+                   and not (r.repair_actions or r.env_actions
+                            or r.changed_clause)]
+    if unevidenced:
+        return thin("K12", "episode(s) %s report closed beats while showing "
+                           "neither environment cost nor a changed clause; a "
+                           "loop that left no trace of having run is a claim, "
+                           "not a repair" % ", ".join(unevidenced))
+
     closed = sum(r.beats_closed for r in run.repairs)
     required = sum(r.beats_required for r in run.repairs)
     if not required:

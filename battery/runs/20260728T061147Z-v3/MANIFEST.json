@@ -26,16 +26,44 @@
   },
   "files": [
     {
+      "path": "battery/DECISIONS.md",
+      "sha256": "9d81a62896dd17ccb1ddf6d01ac98a8e30c7fabdf170b54a8318ac66d9963a82"
+    },
+    {
+      "path": "battery/METRICS.md",
+      "sha256": "b04a3467a7586f513c931fdf4aeeb49992974677e86007160a72f5ab73a49d73"
+    },
+    {
+      "path": "battery/PREDICTIONS.md",
+      "sha256": "9614abf2054bccb0e57ff590df21946ebca53924b0d58311b10cf68975882453"
+    },
+    {
+      "path": "battery/REPORT_V2.md",
+      "sha256": "72a49ce436588e7a30fcfed7b0d78d4f870f68bf6cc9620f9f38f3ebc2fcda1c"
+    },
+    {
+      "path": "battery/STATUS.md",
+      "sha256": "8d20a69aaa226a4f1d362ff7d6deee40ea95161e1b5bc24184581a758370c1dc"
+    },
+    {
+      "path": "battery/adapters/a0.py",
+      "sha256": "f8b9acf2236f70b1637ca58fa7a8a3aa4f59b078410c6e2d7612c54a8eb374d3"
+    },
+    {
+      "path": "battery/adapters/schema_traces.py",
+      "sha256": "540cb3979b32210f63b57e4c144d4c7ac40cda255a474b1d4c4bb07b523284cb"
+    },
+    {
       "path": "battery/artifacts/arm_contrast.json",
       "sha256": "c851d749426b4a6f9a45c55a94ee39bb0f6e7002d05902b4c7baf38552f92ae0"
     },
     {
       "path": "battery/artifacts/capability_spectrum.json",
-      "sha256": "61aa3eaca3a341a0e7d17dbf31255edd54b151562878df199fe799393889c301"
+      "sha256": "205d2a6cb9e8f0601d495bfc8a715048d35f5ac0d67c6f18d593d1c9d5123af6"
     },
     {
       "path": "battery/artifacts/discrimination.json",
-      "sha256": "1e7ff0cec2021b296244e85d9c360decf2e30c9e9e1aae71cb169ebf6c930ebb"
+      "sha256": "8d8c7896a375239b701d323c7e312890caffaab03c1805a761300196b0cff8d3"
     },
     {
       "path": "battery/artifacts/discrimination_arms.json",
@@ -43,74 +71,66 @@
     },
     {
       "path": "battery/artifacts/gaming_audit.json",
-      "sha256": "c90e390202a6693a5362eadc38712760a2a8b9d8f0d4281a84266c4cfd77423f"
+      "sha256": "191c0ee8cf2c796a8f739f506dee52840bf2be02394be40a16a17e6ce0a07cce"
     },
     {
       "path": "battery/artifacts/redundancy.json",
-      "sha256": "e6a86b997c1a60608b2bdedd80af7878eebb7652f798ad454ce63dbe389ab2b7"
+      "sha256": "5518fe8a13e9c04ff0a84140a8ccfa1e799a3254410062640933fd9f11b612a6"
     },
     {
       "path": "battery/artifacts/validation_material.json",
       "sha256": "06313f87c8d6ebbee8dff2398ef48a625f378234f4aa71c19da1e79138822c38"
     },
     {
-      "path": "battery/REPORT_V2.md",
-      "sha256": "01ca58e2a9ae41ceb1176d809d86f48d9e98ade04b08651d4cf32dd2c0fa05a0"
-    },
-    {
-      "path": "battery/PREDICTIONS.md",
-      "sha256": "9cb5f60fa198b68f3e7d4668d4c95bebc3cee11714c2ad30d9913378ea8c3927"
-    },
-    {
-      "path": "battery/METRICS.md",
-      "sha256": "034caa5ed064ff74cab95edd42517a5dfc8faf5599c42cf1c7017cf1e0d0f041"
-    },
-    {
       "path": "battery/audit/REDUNDANCY.md",
-      "sha256": "36d73928f589eecdbb4bae63e4cd11dc7d7c869f664e10f2cba40f9c9340bc8d"
-    },
-    {
-      "path": "battery/DECISIONS.md",
-      "sha256": "9d81a62896dd17ccb1ddf6d01ac98a8e30c7fabdf170b54a8318ac66d9963a82"
-    },
-    {
-      "path": "battery/STATUS.md",
-      "sha256": "34bcca70fd35489a642b2f8fb5808757d89f5ffef53df1419ca7b5ee521ba3f7"
-    },
-    {
-      "path": "battery/adapters/schema_traces.py",
-      "sha256": "540cb3979b32210f63b57e4c144d4c7ac40cda255a474b1d4c4bb07b523284cb"
+      "sha256": "cb090a6344194c406d18189073a766f5d04fc39865cbac74d3030ccdc2de0d0d"
     },
     {
       "path": "battery/audit/discriminate.py",
       "sha256": "6ce5592cc5add65bcbc28e994ad4201d3afac3455a0dd67812dbc21ac045e46d"
     },
     {
-      "path": "battery/audit/redundancy.py",
-      "sha256": "35b43770c4d72b7da6ec72220c0a73cdddd05ad4e101e9da9a642f72e39cd6fd"
-    },
-    {
-      "path": "battery/audit/gaming.py",
-      "sha256": "23954c110a3ecf9492dfca82e27b14e89a95436b0d9f4998e1fccccbb59b934a"
-    },
-    {
       "path": "battery/audit/exploits/__init__.py",
-      "sha256": "28219daa1bc05cca816570bd692513791b3ec3084dab5e42d77cc4a06caf05b5"
-    },
-    {
-      "path": "battery/audit/exploits/exploration_planning.py",
-      "sha256": "dd5cfc8b72201d3bd4b4cedf133ea8780873b80a0fb81ef9c424fad559f1b71e"
+      "sha256": "84452e9030d47bb0dfacdd0abb64130b392938e1c041468aba5bb07e0d7c144c"
     },
     {
       "path": "battery/audit/exploits/economy.py",
       "sha256": "ef5773de3593c6a85630c8cd7d5622d961369bf86c69aa98dd5c356bf848c427"
     },
     {
+      "path": "battery/audit/exploits/exploration_planning.py",
+      "sha256": "dd5cfc8b72201d3bd4b4cedf133ea8780873b80a0fb81ef9c424fad559f1b71e"
+    },
+    {
       "path": "battery/audit/exploits/mechanism_epistemic.py",
-      "sha256": "40229f57e639c011c8f1a3d65858ab2aeebfeabe56d08eeda446dec6a036a9fc"
+      "sha256": "08e39aaa524bf6c617ba8f1fe4dfd6c7e9de8fbe833f4ed393adea65d111111e"
+    },
+    {
+      "path": "battery/audit/gaming.py",
+      "sha256": "23954c110a3ecf9492dfca82e27b14e89a95436b0d9f4998e1fccccbb59b934a"
+    },
+    {
+      "path": "battery/audit/redundancy.py",
+      "sha256": "35b43770c4d72b7da6ec72220c0a73cdddd05ad4e101e9da9a642f72e39cd6fd"
+    },
+    {
+      "path": "battery/metrics/economy.py",
+      "sha256": "be3c44d3303b917bac87fdfd104650b0cd88d3bd0b6ee04f2dc7ad532674c084"
+    },
+    {
+      "path": "battery/metrics/epistemic.py",
+      "sha256": "0042786cc0a48530ea82b7667bcbdc57b56cfd0837abbbfe27848b6bd0c4620c"
+    },
+    {
+      "path": "battery/metrics/planning.py",
+      "sha256": "5af3b1284a08bdbb9e8e13adaf47fad89553b1411171e67047d63b85d35b597a"
+    },
+    {
+      "path": "battery/model.py",
+      "sha256": "bce2866f73f2d2035e25b77e61b6b092f49088ed49e6a8bc2c93ee658fa60453"
     }
   ],
-  "head_commit": "45169a677e55330c8c58d34dbe334bb7af4cdb94",
+  "head_commit": "58e5f6b0859b96f364294c1927a75456c3ba689c",
   "input_digests": {
     "arc-recon/data/piles.json": "d3140eff4889095f64aff6360697eeff0a1b159a53d80a1ef6407b2c4dd5b8c9",
     "baseline-arms/ledger.jsonl": "0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
@@ -133,6 +153,16 @@
     "network": 0,
     "sealed_pile_reads": 0
   },
+  "phases": [
+    {
+      "id": "v2",
+      "what": "process 1 on the specified gradient, process 3 per-family, process 4 executable"
+    },
+    {
+      "id": "v2.1",
+      "what": "four defences, pre-registered first; P4 and K12 closed, E2 half, K2 failed"
+    }
+  ],
   "prompt_id": "V3-battery-discrimination",
   "schema_traces": {
     "manifest_sha256": "b71b7f64e09afe6703fc3f8770834d1075d82306df6b9b7bc7353b05e11c14ba",
@@ -142,7 +172,7 @@
   },
   "tests": {
     "failed": 0,
-    "passed": 210,
+    "passed": 213,
     "suite": "python -m pytest battery/tests -q"
   },
   "utc": "2026-07-28T06:11:47Z",

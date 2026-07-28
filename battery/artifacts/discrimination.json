@@ -22,7 +22,7 @@
     },
     "E2": {
       "agrees_with_declared_direction": true,
-      "cliffs_delta": 0.875,
+      "cliffs_delta": 1.0,
       "direction": "higher",
       "family": "economy",
       "games": [
@@ -35,12 +35,12 @@
       "n_paired_games": 4,
       "note": "4 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.1250). The effect size stands; the test does not.",
       "sign_test": {
-        "losses": 1,
+        "losses": 0,
         "min_attainable_p": 0.125,
         "n": 4,
-        "p_value": 0.625,
+        "p_value": 0.125,
         "ties": 0,
-        "wins": 3
+        "wins": 4
       },
       "verdict": "underpowered"
     },

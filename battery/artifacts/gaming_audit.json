@@ -1,15 +1,12 @@
 {
   "demoted_by_demonstration": [
     "E1",
-    "E2",
     "E6",
     "K10",
-    "K12",
     "K2",
     "M1",
     "M4",
     "P2",
-    "P4",
     "P5",
     "X3",
     "X5"
@@ -26,13 +23,13 @@
       "tier": "reference"
     },
     {
-      "claim": "E2 = 0.333 at 9 turns vs 0.250 at 12 for the identical flat-cost arm: a 33% lift bought by `ceil(n/4)` and by nothing else, on a metric whose whole observed range is 0.162-0.321",
+      "claim": "E2 = 0.250 at 9 turns vs 0.250 at 12 for the identical flat-cost arm: a 0% lift bought by `ceil(n/4)` and by nothing else, on a metric whose whole observed range is 0.162-0.321",
       "fields_contradicted": [
         "defended"
       ],
       "metric": "E2",
       "register_tier": "main",
-      "tier": "reference"
+      "tier": "main"
     },
     {
       "claim": "E3 = 0.025, the exact floor 1/40, on a run of 40 refused repetitions of one action -- the bill settled on turn one because it was all spent on turn one, not because anything converged",
@@ -81,7 +78,7 @@
       ],
       "metric": "K12",
       "register_tier": "main",
-      "tier": "reference"
+      "tier": "main"
     },
     {
       "claim": "K2 = 1.000, the battery's flagship off-trace score, over a held-out set of one pair chosen by the manual's own author.",
@@ -148,7 +145,7 @@
       ],
       "metric": "P4",
       "register_tier": "main",
-      "tier": "reference"
+      "tier": "main"
     },
     {
       "claim": "P5 = 0.000 — 'the infrastructure never failed' — on a run in which the API refused 140 of its 160 HTTP requests.",
@@ -182,12 +179,15 @@
     }
   ],
   "main": [
+    "E2",
     "E3",
     "K11",
+    "K12",
     "K7",
     "M3",
     "M6",
-    "P3"
+    "P3",
+    "P4"
   ],
   "metrics": {
     "E1": {
@@ -215,16 +215,16 @@
       "defended": true,
       "demonstrated": {
         "accidental": true,
-        "claim": "E2 = 0.333 at 9 turns vs 0.250 at 12 for the identical flat-cost arm: a 33% lift bought by `ceil(n/4)` and by nothing else, on a metric whose whole observed range is 0.162-0.321",
+        "claim": "E2 = 0.250 at 9 turns vs 0.250 at 12 for the identical flat-cost arm: a 0% lift bought by `ceil(n/4)` and by nothing else, on a metric whose whole observed range is 0.162-0.321",
         "defence": "Use a fractional head instead of a ceiling -- interpolate the cost at the 25% mark rather than rounding up to a whole turn -- so a flat run scores 0.25 at every length. One line, and it removes the whole effect. Nothing implements it.",
         "defended": false,
-        "succeeded": true
+        "succeeded": false
       },
       "direction": "higher",
       "how_to_game": "Die early -- a run that ends on turn four spent 100% of its cost in its first quarter. Or dump one enormous prompt on turn one.",
       "register_tier": "main",
       "status": "register contradicted on defended",
-      "tier": "reference"
+      "tier": "main"
     },
     "E3": {
       "accidental": true,
@@ -375,13 +375,13 @@
         "claim": "K12 = 1.000, a fully closed repair loop, from six booleans set to True with zero environment actions behind them.",
         "defence": "The denominator is genuinely fixed by the adapter, which is the defence `gaming.py` names and it is implemented. The numerator is not defended at all: nothing requires a closed beat to have cost anything, changed anything or solved anything. `Beat.env_actions` is already carried and unread.",
         "defended": false,
-        "succeeded": true
+        "succeeded": false
       },
       "direction": "higher",
       "how_to_game": "Declare fewer beats. The denominator is the arm's own claim about what a repair loop consists of.",
       "register_tier": "main",
       "status": "register contradicted on accidental, defended",
-      "tier": "reference"
+      "tier": "main"
     },
     "K13": {
       "accidental": true,
@@ -719,13 +719,13 @@
         "claim": "P4 = 0.083 — an eighth of optimal, better than any solved run can score — on an arm that took one action, gave up, and won nothing.",
         "defence": "Refuse P4 unless the run reached the goal. `Step.won` is already on the model and already populated by the adapter; gating on it turns every one of these runs into `not-applicable` instead of a leaderboard entry.",
         "defended": false,
-        "succeeded": true
+        "succeeded": false
       },
       "direction": "lower",
       "how_to_game": "Nothing cheap: the ratio needs a real optimal plan and a real attempt to reach the goal.",
       "register_tier": "main",
       "status": "register contradicted on accidental, defended",
-      "tier": "reference"
+      "tier": "main"
     },
     "P5": {
       "accidental": false,
@@ -856,14 +856,12 @@
   "n_prose_only": 0,
   "reference": [
     "E1",
-    "E2",
     "E4",
     "E5",
     "E6",
     "E7",
     "K1",
     "K10",
-    "K12",
     "K13",
     "K14",
     "K2",
@@ -879,7 +877,6 @@
     "M5",
     "P1",
     "P2",
-    "P4",
     "P5",
     "X1",
     "X2",
