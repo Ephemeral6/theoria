@@ -1,0 +1,2190 @@
+{
+  "baseline_rev": "3fa7170",
+  "counts": {
+    "A": 190,
+    "A_python": 183,
+    "A_shell": 7,
+    "B": 34,
+    "C": 17,
+    "can_refuse": 199,
+    "cannot_refuse": 42,
+    "frozen": 15,
+    "generated": 0,
+    "live": 226,
+    "live_A": 175,
+    "live_B": 34,
+    "total": 241
+  },
+  "units": [
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "a0-spike/pipeline/run_a0.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "a0-spike/probes/semantics_probe.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "a0-spike/runs/20260728T040057Z-c2/make_manifest.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "ablation-arm/build_theory.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "ablation-arm/exhibits/e1_a0.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "ablation-arm/exhibits/e2_a2.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "ablation-arm/exhibits/e3_charitable.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "ablation-arm/run_arm.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "ablation-arm/run_exhibits.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "ablation-arm/verify.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "shell",
+      "path": "ablation-arm/verify.sh",
+      "stratum": "A",
+      "why": "tracked shell script"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/canary.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/canary_schedule.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/contamination.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/cut_piles.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/precheck.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/precheck_resume.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/probe_stickiness.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/recon.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/redact_ledger.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/runs/20260728T150228Z-S10-invariant-on-resource/append_sync.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/runs/20260728T150228Z-S10-invariant-on-resource/proposed/board_log_invariants.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/runs/20260728T150228Z-S10-invariant-on-resource/proposed/concurrency_invariants.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/tools/ledger_invariants.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "shell",
+      "path": "arc-recon/verify.sh",
+      "stratum": "A",
+      "why": "tracked shell script"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/audit_cells.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/audit_pool.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/bare_cc.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/campaign.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/campaign_status.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/fetch_schema_traces.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/ledger.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/merge_ledger.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/probe_action_variants.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/probe_api.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/run_campaign.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/run_pilot.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/summarise_campaign.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/summarise_envelope.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/summarise_pilot.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/transport_ab.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/unit_prices.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/runs/20260728T103135Z-a7/await_quota.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "battery/docs.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "battery/run_battery.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/certify/fd_conformance.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/certify/lean_check.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/certify/replay.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/certify/score_vs_truth.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/compile/compile_a0.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/compile/problem.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/pipeline/concept_account.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/pipeline/engines_stage.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/pipeline/plan_stage.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/pipeline/unsolvable_variant.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/prime/run_prime.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/prime/world/ground_truth.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/run_all.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/world/ground_truth.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2pipeline/certify_a2.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2pipeline/compile_a2.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2pipeline/concepts.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2pipeline/engines.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2pipeline/exhibit.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2pipeline/ledger.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2pipeline/locate.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2pipeline/plan.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2pipeline/probe.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2pipeline/refute.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2pipeline/repair.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/a2world/ground_truth.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/run_all.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a2/tools/verify_readonly.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3pipeline/agreement.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3pipeline/bill.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3pipeline/certify_a3.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3pipeline/coldstart.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3pipeline/concepts.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3pipeline/engines.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3pipeline/negctl.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3pipeline/plan.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3pipeline/run_l1.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3pipeline/transfer.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3world/ground_truth.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/a3world/score.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/run_all.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/tools/archive_run.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a3/tools/verify_readonly.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/bench/__main__.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/bench/verify.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/fixtures/cart_world.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/fixtures/generate_all.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/fixtures/pair_flip.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/fixtures/peg4.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/fixtures/sokoban.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/recheck/__main__.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/recheck/build_cases.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/recheck/verify_all.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/runs/20260728T141724Z-E5-cert-recheck/attacks/fuzz_ruleset.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/runs/20260728T141724Z-E5-cert-recheck/manifest.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/tools/p13_fd_dividend.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/tools/run_all.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/tools/validate_candidates.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/tools/archive_run.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/tools/build_papers.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/tools/run_exam.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/tools/run_matrix.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/tools/run_selftest.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/verify.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "figures/build_all.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "figures/check_coverage.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "figures/fig02_bill_shape.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "figures/fig03_capability_spectrum.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "figures/fig04_a3_transfer.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "figures/fig05_a2_repair_loop.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "figures/fig06_concept_timeline.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "figures/fig07_a0_vs_a0prime.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "figures/manifest.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "shell",
+      "path": "figures/verify.sh",
+      "stratum": "A",
+      "why": "tracked shell script"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "fuzzlab/campaign.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "fuzzlab/minimize.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "fuzzlab/mutation.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "fuzzlab/verify.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/_runner.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/agents.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/assign.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/board.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/bus.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/ci_merge.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/dispatch.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/gates.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/quota.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/reflex.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/scan.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "monitor/verify.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "shell",
+      "path": "monitor/verify.sh",
+      "stratum": "A",
+      "why": "tracked shell script"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "shell",
+      "path": "monitor/verify_quota_exit.sh",
+      "stratum": "A",
+      "why": "tracked shell script"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "papers/phase1-workshop/assemble.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "papers/phase1-workshop/figures/check_figure_parity.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "papers/phase1-workshop/figures/fig1_concept_timeline.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "papers/phase1-workshop/figures/fig2_coverage_accuracy.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "papers/phase1-workshop/figures/fig3_loop_ledger.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/cost.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/env_proxy.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/model_proxy.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/reconcile.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/replay.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/runner.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/scoring/__init__.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/scoring/__main__.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/spend_gate.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/tools/replay_spotcheck.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/tools/upgrade_ledger.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/tools/validate_ledger.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "shell",
+      "path": "proxy/verify_spend.sh",
+      "stratum": "A",
+      "why": "tracked shell script"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "release/check_redlines.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "release/checklist.py",
+      "stratum": "A",
+      "unparseable": "SyntaxError: unterminated string literal (detected at line 45) (release/checklist.py, line 45)",
+      "why": "textual `__main__`; DOES NOT PARSE (SyntaxError: unterminated string literal (detected at line 45) (release/checklist.py, line 45))"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "release/enumerate.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "release/reproduce.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theoria-arm/armtools/archive.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theoria-arm/armtools/preflight.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theoria-arm/armtools/salvage.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theoria-arm/armtools/timeline.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theoria-arm/harness/run.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/spike_encoding.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/runs/20260728T102343Z-c7/compat/probe.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/runs/20260728T102343Z-c7/make_sokoban2_problems.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": true,
+      "generated": false,
+      "kind": "shell",
+      "path": "theory-compiler/runs/20260728T102343Z-c7/verify.sh",
+      "stratum": "A",
+      "why": "tracked shell script"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/src/theory_compiler/handover.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/tools/build_deadlock_lean.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/tools/build_handover_packages.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/tools/handover_exam.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/tools/probe_mentions.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/tools/refresh_manifest.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/tools/transcribe_deadlock_certificates.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/tools/validate_candidates_v02.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/tools/verify_c4.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/tools/verify_c8.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "verify-lab/negctl/calibrate.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "verify-lab/negctl/probe.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "worldgen/build.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "worldgen/generate.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "worldgen/mutate.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "worldgen/qc/diagnose_miner.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "worldgen/qc/run_qc.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "worldgen/runs/20260728T134933Z-C6-worldgen-mutate/append_sync.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "worldgen/runs/20260728T134933Z-C6-worldgen-mutate/lint_unused.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "worldgen/runs/20260728T134933Z-C6-worldgen-mutate/manifest_files.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": false,
+      "frozen": true,
+      "generated": false,
+      "kind": "python",
+      "path": "worldgen/runs/20260728T134933Z-C6-worldgen-mutate/summarise.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "worldgen/verify.py",
+      "stratum": "A",
+      "why": "tracked, non-test, has an `if __name__` block"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "a0-spike/pipeline/gen_exec.py",
+      "stratum": "B",
+      "why": "raises UncompilableTheory, terminal, reached from 2 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "ablation-arm/ablcore/certify_abl.py",
+      "stratum": "B",
+      "why": "raises ObligationCut, terminal, reached from 2 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "ablation-arm/ablcore/surprise.py",
+      "stratum": "B",
+      "why": "raises ImpossibleSurprise, terminal, reached from 1 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "arc-recon/client.py",
+      "stratum": "B",
+      "why": "raises ArcApiError, terminal, reached from 10 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "baseline-arms/harness/arc_client.py",
+      "stratum": "B",
+      "why": "raises ArcApiError/NoSpendBinding, terminal, reached from 11 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "battery/guard.py",
+      "stratum": "B",
+      "why": "raises CutIntegrityError/SealedPileError/UnknownGameError, terminal, reached from 12 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "cold-start-a0/compile/dialect.py",
+      "stratum": "B",
+      "why": "raises SemanticsError, terminal, reached from 5 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/engines/fd_adapter/backends.py",
+      "stratum": "B",
+      "why": "raises FastDownwardMissing, terminal, reached from 4 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "engine-rig/engines/fd_adapter/validate.py",
+      "stratum": "B",
+      "why": "raises InvalidPlan, terminal, reached from 2 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/grading/calibration.py",
+      "stratum": "B",
+      "why": "raises ExamError, terminal, reached from 1 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/grading/mark.py",
+      "stratum": "B",
+      "why": "raises ExamError, terminal, reached from 2 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/grading/registry.py",
+      "stratum": "B",
+      "why": "raises ExamError, terminal, reached from 5 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/guard.py",
+      "stratum": "B",
+      "why": "raises NetworkForbidden/SealedPileError/UnknownGameError, terminal, reached from 12 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/leakage.py",
+      "stratum": "B",
+      "why": "raises LeakageError, terminal, reached from 1 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/model.py",
+      "stratum": "B",
+      "why": "raises ExamError, terminal, reached from 6 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/papers/handover.py",
+      "stratum": "B",
+      "why": "raises HandoverError/UnrenderableManual, terminal, reached from 2 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/papers/heldout_worldgen.py",
+      "stratum": "B",
+      "why": "raises ExamError, terminal, reached from 1 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "exam/papers/worldgen_port.py",
+      "stratum": "B",
+      "why": "raises WorldNotBuilt, terminal, reached from 1 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "fuzzlab/props/cegis_miner.py",
+      "stratum": "B",
+      "why": "raises Unminable, terminal, reached from 1 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/guard.py",
+      "stratum": "B",
+      "why": "raises PilesIntegrityError, terminal, reached from 14 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/mock/arm_mock.py",
+      "stratum": "B",
+      "why": "raises NotSealedError, terminal, reached from 1 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "proxy/variants.py",
+      "stratum": "B",
+      "why": "raises VariantSpecError, terminal, reached from 3 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theoria-arm/harness/arc.py",
+      "stratum": "B",
+      "why": "raises ArcError/ShortIdRefused, terminal, reached from 2 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theoria-arm/inner/loop.py",
+      "stratum": "B",
+      "why": "raises BudgetExhausted, terminal, reached from 1 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/src/theory_compiler/conflict.py",
+      "stratum": "B",
+      "why": "raises ConflictError, terminal, reached from 1 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/src/theory_compiler/generators/gen_lean.py",
+      "stratum": "B",
+      "why": "raises CertificateGapError/LeanGenError, terminal, reached from 3 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/src/theory_compiler/generators/gen_lean_deadlock.py",
+      "stratum": "B",
+      "why": "raises DeadlockLeanError, terminal, reached from 2 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/src/theory_compiler/generators/gen_python.py",
+      "stratum": "B",
+      "why": "raises UnsupportedClause, terminal, reached from 3 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/src/theory_compiler/ir.py",
+      "stratum": "B",
+      "why": "raises IRError, terminal, reached from 2 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/src/theory_compiler/parser/playbook_parser.py",
+      "stratum": "B",
+      "why": "raises PlaybookParseError, terminal, reached from 1 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/src/theory_compiler/parser/theory_parser.py",
+      "stratum": "B",
+      "why": "raises ParseError/SemanticsError, terminal, reached from 14 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/src/theory_compiler/problem.py",
+      "stratum": "B",
+      "why": "raises ProblemError, terminal, reached from 8 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/src/theory_compiler/strips.py",
+      "stratum": "B",
+      "why": "raises StripsError, terminal, reached from 4 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "python",
+      "path": "theory-compiler/src/theory_compiler/strips_encoding.py",
+      "stratum": "B",
+      "why": "raises EncodingError, terminal, reached from 2 invocable file(s)"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "a0-spike/tests",
+      "stratum": "C",
+      "why": "1 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "ablation-arm/tests",
+      "stratum": "C",
+      "why": "6 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "arc-recon",
+      "stratum": "C",
+      "why": "3 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "baseline-arms/tests",
+      "stratum": "C",
+      "why": "5 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "battery/tests",
+      "stratum": "C",
+      "why": "12 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "cold-start-a0/tests",
+      "stratum": "C",
+      "why": "3 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "cold-start-a2/tests",
+      "stratum": "C",
+      "why": "1 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "cold-start-a3/tests",
+      "stratum": "C",
+      "why": "4 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "engine-rig/tests",
+      "stratum": "C",
+      "why": "16 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "exam/tests",
+      "stratum": "C",
+      "why": "7 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "fuzzlab/tests",
+      "stratum": "C",
+      "why": "4 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "monitor/tests",
+      "stratum": "C",
+      "why": "5 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "proxy/tests",
+      "stratum": "C",
+      "why": "12 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "theoria-arm/tests",
+      "stratum": "C",
+      "why": "1 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "theory-compiler/tests",
+      "stratum": "C",
+      "why": "18 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "verify-lab/negctl/tests",
+      "stratum": "C",
+      "why": "1 test_*.py; pytest exits non-zero on failure"
+    },
+    {
+      "can_refuse": true,
+      "frozen": false,
+      "generated": false,
+      "kind": "suite",
+      "path": "worldgen/tests",
+      "stratum": "C",
+      "why": "10 test_*.py; pytest exits non-zero on failure"
+    }
+  ]
+}
