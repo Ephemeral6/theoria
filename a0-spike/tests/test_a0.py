@@ -210,6 +210,104 @@ def test_the_generator_refuses_what_it_cannot_compile():
         generate(broken, 7, 7, levels.MATCH.walls)
 
 
+# ------------------------------------------------------------------ semantics
+
+def _manual() -> str:
+    return open(os.path.join(HERE, "theory", "theory.dsl"), encoding="utf-8").read()
+
+
+def test_the_manual_declares_all_three_semantic_facts():
+    """dsl_grammar v0.2 §semantics: mandatory, and these are the adjudicated values.
+
+    Pinned as literals on purpose. They are claims about *this world*, measured in
+    `probes/semantics_probe.py` over 47040 representable state-action pairs, and a
+    silent edit to any of them compiles a different world. See THEORIZE_LOG T-11.
+    """
+    from theory_compiler.parser.theory_parser import parse_theory
+
+    semantics = parse_theory(_manual()).semantics
+    assert semantics is not None
+    assert semantics.frame == "persist"
+    assert semantics.conflict == "exclusive"
+    assert semantics.cascade == "single_frame"
+
+
+@pytest.mark.parametrize("statement, unimplemented", [
+    ("frame     persist", "frame     reset"),
+    ("conflict  exclusive", "conflict  priority: walk > push2"),
+    ("cascade   single_frame", "cascade   multi_frame"),
+])
+def test_the_generator_refuses_a_semantics_value_it_does_not_implement(
+        statement, unimplemented):
+    """v0.2 revision item 10, which `gen_pddl` learned the hard way.
+
+    Declaring the fact buys nothing if the backend reads it and encodes a
+    different world anyway. Each of these three parses; none is implemented here;
+    all three must stop the build rather than compile to `persist` / `exclusive`
+    / `single_frame` by default.
+    """
+    from pipeline.gen_exec import UncompilableTheory, generate
+
+    mutated = _manual().replace(statement, unimplemented)
+    assert mutated != _manual(), "the mutation did not apply -- test is vacuous"
+    with pytest.raises(UncompilableTheory) as caught:
+        generate(mutated, 7, 7, levels.MATCH.walls)
+    # `priority: r1 > r2` is normalised to the bare value `priority` by the
+    # parser, so the order is not part of what the message has to name.
+    value = unimplemented.split()[1].rstrip(":")
+    assert value in str(caught.value), "the refusal must name the value it refused"
+
+
+def test_the_stayed_rules_are_load_bearing_not_entailed_by_persist():
+    """`frame persist` does not retire this manual's no-op rules. T-11a.
+
+    The tempting reading of the frame axiom is "no-op rules are unnecessary" --
+    it is what let `cold-start-a0` drop eleven `*_still_*` clauses. It does not
+    transfer. The axiom says what happens to an object *no firing rule mentions*,
+    which presupposes some rule fires; a0-spike's three `blocked_*` rules are the
+    only ones covering their guard region, so they are what makes the rule set
+    total. Strip them and the manual determines no successor at all.
+    """
+    import re
+
+    from pipeline.gen_exec import generate
+
+    stripped = re.sub(r"  rule blocked_\w+ \[[^\]]*\]\n    when [^\n]*\n", "",
+                      _manual())
+    assert "rule blocked_" not in stripped, "the strip did not apply"
+
+    module = {}
+    exec(compile(generate(stripped, levels.MATCH.height, levels.MATCH.width,
+                          levels.MATCH.walls), "<stripped>", "exec"), module)
+    with pytest.raises(RuntimeError, match="no rule fired"):
+        module["step"](module["State"](player=(0, 0), box=(3, 3)), "UP")
+
+
+def test_the_compiled_step_enforces_exclusive_even_when_rules_agree():
+    """Two rules firing is a violation whether or not they agree on the answer.
+
+    The earlier `step` compared *successors* and let duplicates through when they
+    matched. That passes every test while the guards really are disjoint, which
+    is exactly what makes it worth pinning: it reads like enforcement and is not.
+    """
+    from pipeline import gen_exec
+
+    module = gen_exec.compile_module(
+        _manual(), levels.MATCH.height, levels.MATCH.width, levels.MATCH.walls)
+    State, step = module["State"], module["step"]
+    start = State(player=levels.MATCH.player, box=levels.MATCH.box)
+
+    duplicated = module["RULES"] + [module["RULES"][0]]
+    original = list(module["RULES"])
+    module["RULES"][:] = duplicated
+    try:
+        with pytest.raises(RuntimeError, match="conflict exclusive violated"):
+            for direction in ("UP", "DOWN", "LEFT", "RIGHT"):
+                step(start, direction)
+    finally:
+        module["RULES"][:] = original
+
+
 # ----------------------------------------------- held-out and the proof form
 
 def test_the_theory_holds_on_states_it_never_observed(report):

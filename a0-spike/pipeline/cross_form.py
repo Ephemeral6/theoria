@@ -29,15 +29,77 @@ FALLBACK_LEAN = os.path.join(
 )
 
 
+def _lean_runs(path: str) -> bool:
+    """Does this binary actually elaborate, or does it only exist?
+
+    `elan` installs a **shim** named `lean` on PATH which dispatches to whichever
+    toolchain is configured as default. With toolchains installed but no default
+    set, the shim is on PATH, is executable, and fails every invocation with
+    `no default toolchain configured`. `shutil.which` cannot tell the two apart,
+    so presence was never the right question -- this asks the binary.
+    """
+    try:
+        completed = subprocess.run(
+            [path, "--version"], capture_output=True, text=True, timeout=60)
+    except (OSError, subprocess.SubprocessError):
+        return False
+    return completed.returncode == 0
+
+
+def _elan_toolchain_leans() -> List[str]:
+    """Concrete per-toolchain binaries, bypassing the shim and its default."""
+    root = os.path.join(os.path.expanduser("~"), ".elan", "toolchains")
+    if not os.path.isdir(root):
+        return []
+    out = []
+    for entry in sorted(os.listdir(root)):
+        for name in ("lean.exe", "lean"):
+            candidate = os.path.join(root, entry, "bin", name)
+            if os.path.isfile(candidate):
+                out.append(candidate)
+                break
+    return out
+
+
 def find_lean() -> Optional[str]:
+    """The first Lean on this machine that actually runs, or None.
+
+    Absent means skip, never fail -- the standing rule for this dependency. But
+    "absent" has to mean *unusable*, not *unlisted*: an earlier revision returned
+    the first name `shutil.which` found, which on a machine with `elan` installed
+    and no default toolchain is a shim that errors on every call. The Lean stage
+    then reported a hard `RuntimeError` where the honest answers were either a
+    working Lean (there was one, one directory over) or a clean skip.
+
+    An explicit `LEAN` is tried first and **verified like every other candidate**.
+    A path a human set deliberately still gets to be wrong, and finding that out
+    here beats finding it out 900 seconds into an elaboration.
+    """
+    candidates: List[str] = []
+
+    env = os.environ.get("LEAN")
+    if env and os.path.isfile(env):
+        candidates.append(env)
+
     for name in ("lean", "lean.exe"):
         found = shutil.which(name)
         if found:
-            return found
-    env = os.environ.get("LEAN")
-    if env and os.path.isfile(env):
-        return env
-    return FALLBACK_LEAN if os.path.isfile(FALLBACK_LEAN) else None
+            candidates.append(found)
+
+    candidates.extend(_elan_toolchain_leans())
+
+    if os.path.isfile(FALLBACK_LEAN):
+        candidates.append(FALLBACK_LEAN)
+
+    seen = set()
+    for candidate in candidates:
+        key = os.path.normcase(os.path.abspath(candidate))
+        if key in seen:
+            continue
+        seen.add(key)
+        if _lean_runs(candidate):
+            return candidate
+    return None
 
 
 def enumerate_cases(height: int, width: int) -> List[Tuple[int, int, int, int, str]]:
