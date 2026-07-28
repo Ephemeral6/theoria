@@ -112,7 +112,7 @@
     ],
     "ops": [
       {
-        "age_min": 13,
+        "age_min": 15,
         "cycle": 9,
         "id": "OPS-A",
         "kind": "ops",
@@ -123,7 +123,7 @@
         "state": "idle"
       },
       {
-        "age_min": 43,
+        "age_min": 45,
         "cycle": 5,
         "id": "OPS-B",
         "kind": "ops",
@@ -134,7 +134,7 @@
         "state": "idle"
       },
       {
-        "age_min": 38,
+        "age_min": 40,
         "cycle": 6,
         "id": "OPS-M",
         "kind": "ops",
@@ -145,7 +145,7 @@
         "state": "idle"
       },
       {
-        "age_min": 526,
+        "age_min": 528,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -158,7 +158,7 @@
     ],
     "standing": [
       {
-        "age_min": 17,
+        "age_min": 19,
         "cycle": 0,
         "id": "RES-1",
         "kind": "standing",
@@ -169,7 +169,7 @@
         "state": "idle"
       },
       {
-        "age_min": 11,
+        "age_min": 14,
         "cycle": 4,
         "id": "RES-2",
         "kind": "standing",
@@ -180,7 +180,7 @@
         "state": "working"
       },
       {
-        "age_min": 7,
+        "age_min": 9,
         "cycle": 1,
         "id": "RES-3",
         "kind": "standing",
@@ -191,7 +191,7 @@
         "state": "working"
       },
       {
-        "age_min": 4,
+        "age_min": 6,
         "cycle": 1,
         "id": "RES-4",
         "kind": "standing",
@@ -717,7 +717,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 23:19:14",
+  "generated_at": "2026-07-28 23:21:18",
   "grid": {
     "A1": {
       "active": [
@@ -1596,15 +1596,9 @@
       "ablation-arm/artifacts/a2-charitable/episode.jsonl",
       "ablation-arm/artifacts/run_all.json",
       "ablation-arm/artifacts/verify.json",
-      "monitor/board/board.log",
-      "monitor/bus/RES-1/in.jsonl",
-      "monitor/ci/merge.log",
       "monitor/index.html",
-      "monitor/loop_state.json",
-      "monitor/ops-status/RES-3.json",
-      "monitor/ops-status/RES-4.json",
+      "monitor/reflex.lock",
       "monitor/reflex.log",
-      "monitor/scan.py",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
@@ -1617,23 +1611,16 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/V11-negative-control-census.RES-3.md",
-      "monitor/board/items/S17-fleet-evidence-capture.md",
-      "monitor/board/items/S18-fleetkit-extract.md",
-      "monitor/bus/RES-4/in.jsonl",
-      "monitor/ci/CONFLICT-origin_agent_p10-figures-into-paper.md",
-      "monitor/ci/merge.lock",
-      "monitor/reflex.lock",
       "theoria-arm/.pytest-runs/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "0c66110 Merge remote-tracking branch 'origin/agent/p5-release' into HEAD",
+    "git_head": "2e96b47 monitor: capture the fleet's own record before it rots, then extract the kit",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 114,
-    "sync_last": "2026-07-28T14:55:00Z",
+    "sync_entries": 116,
+    "sync_last": "2026-07-28T14:32:55Z",
     "tests": {},
     "untracked": [
       ".claude/",
@@ -1647,13 +1634,6 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/V11-negative-control-census.RES-3.md",
-      "monitor/board/items/S17-fleet-evidence-capture.md",
-      "monitor/board/items/S18-fleetkit-extract.md",
-      "monitor/bus/RES-4/in.jsonl",
-      "monitor/ci/CONFLICT-origin_agent_p10-figures-into-paper.md",
-      "monitor/ci/merge.lock",
-      "monitor/reflex.lock",
       "theoria-arm/.pytest-runs/"
     ]
   },
@@ -2144,10 +2124,10 @@
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第9轮 idle（13 分钟前）； OPS-B 第5轮 idle（43 分钟前）； OPS-M 第6轮 idle（38 分钟前）； OPS-R 第1轮 idle（525 分钟前）",
+      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第9轮 idle（14 分钟前）； OPS-B 第5轮 idle（44 分钟前）； OPS-M 第6轮 idle（39 分钟前）； OPS-R 第1轮 idle（527 分钟前）",
       "rows": [
         {
-          "age_min": 13,
+          "age_min": 14,
           "cycle": 9,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -2156,7 +2136,7 @@
           "status": "green"
         },
         {
-          "age_min": 43,
+          "age_min": 44,
           "cycle": 5,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -2165,7 +2145,7 @@
           "status": "green"
         },
         {
-          "age_min": 38,
+          "age_min": 39,
           "cycle": 6,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2174,7 +2154,7 @@
           "status": "green"
         },
         {
-          "age_min": 525,
+          "age_min": 527,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2199,11 +2179,11 @@
       "status": "risk"
     },
     "self_driving": {
-      "detail": "RES-1 第0轮 idle（16 分钟前）； RES-2 第4轮 working（11 分钟前）； RES-3 第1轮 working（7 分钟前）； RES-4 第1轮 working（4 分钟前）",
+      "detail": "RES-1 第0轮 idle（18 分钟前）； RES-2 第4轮 working（13 分钟前）； RES-3 第1轮 working（8 分钟前）； RES-4 第1轮 working（5 分钟前）",
       "status": "green"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 13 个提交 / 4 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 14 个提交 / 4 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "green"
     },
     "spend": {
