@@ -1,0 +1,159 @@
+{
+  "budget": 20,
+  "cells": [
+    {
+      "actions_failed": 6,
+      "actions_ok": 14,
+      "arm": "bare_cc",
+      "budget": 20,
+      "cache_creation_tokens": 208781,
+      "cache_read_tokens": 488100,
+      "card_id": "98f4f58d-7bd5-4c36-ba5c-5b952492325a",
+      "client_calls_total": 121,
+      "cookies": false,
+      "cookies_held_at_end": [],
+      "cost_per_successful_action": 0.0463,
+      "cost_usd": 0.6479690000000001,
+      "ended": "2026-07-28T02:40:46Z",
+      "executed_commands": 20,
+      "final_state": "NOT_FINISHED",
+      "game_id": "ar25-0c556536",
+      "http_amplification": 7.21,
+      "http_calls_gameplay": 101,
+      "http_per_command": 5.05,
+      "input_tokens": 200,
+      "levels_completed": 0,
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 20,
+      "outcome": "budget_exhausted",
+      "output_tokens": 25916,
+      "reset_attempts": 11,
+      "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-22455536",
+      "started": "2026-07-28T02:28:55Z",
+      "transport": {
+        "cookies": false,
+        "description": "bare urllib, no cookie jar -- the transport every figure in BUDGET_REPORT.md was measured on"
+      },
+      "wall_seconds": 712.4,
+      "win_levels": 8
+    },
+    {
+      "actions_failed": 2,
+      "actions_ok": 18,
+      "arm": "bare_cc",
+      "budget": 20,
+      "cache_creation_tokens": 209233,
+      "cache_read_tokens": 488100,
+      "card_id": "247c20d4-1375-4871-a4f9-806ed8c6f934",
+      "client_calls_total": 38,
+      "cookies": true,
+      "cookies_held_at_end": [
+        "AWSALBAPP-0",
+        "AWSALBAPP-1",
+        "AWSALBAPP-2",
+        "AWSALBAPP-3",
+        "GAMESESSION"
+      ],
+      "cost_per_successful_action": 0.0392,
+      "cost_usd": 0.7064140000000001,
+      "ended": "2026-07-28T02:52:03Z",
+      "executed_commands": 20,
+      "final_state": "NOT_FINISHED",
+      "game_id": "ar25-0c556536",
+      "http_amplification": 1.94,
+      "http_calls_gameplay": 35,
+      "http_per_command": 1.75,
+      "input_tokens": 200,
+      "levels_completed": 0,
+      "model": "claude-haiku-4-5-20251001",
+      "model_calls": 20,
+      "outcome": "budget_exhausted",
+      "output_tokens": 37845,
+      "reset_attempts": 1,
+      "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-833db563",
+      "started": "2026-07-28T02:40:47Z",
+      "transport": {
+        "cookies": true,
+        "description": "cookie jar shared across games (arc-recon INC-007)"
+      },
+      "wall_seconds": 676.8,
+      "win_levels": 8
+    }
+  ],
+  "comparison": {
+    "confounds": [
+      "One cell per arm. This is a demonstration in this track's units, not an estimate with an error bar.",
+      "Run back to back, not interleaved -- a whole cell cannot be interleaved. API conditions vary over minutes, and arc-recon measured 9.19 vs 11.88 http/action on two cookie-less canary sweeps 35 minutes apart, so treat single-cell differences under about 30% as noise.",
+      "Other processes were sharing the API and the account while this ran (INC-BA-003's standing hazard)."
+    ],
+    "failure_decomposition": {
+      "available": true,
+      "cookies_False": {
+        "gameplay_calls": 112,
+        "routing_400_not_found": 89,
+        "routing_retries_per_success": 5.93,
+        "server_500": 8,
+        "server_500_per_success": 0.53,
+        "succeeded": 15
+      },
+      "cookies_True": {
+        "gameplay_calls": 36,
+        "routing_400_not_found": 1,
+        "routing_retries_per_success": 0.05,
+        "server_500": 16,
+        "server_500_per_success": 0.84,
+        "succeeded": 19
+      },
+      "gameplay_calls_only": true,
+      "the_next_bottleneck": "`bare_cc.resilient` retries EVERY non-200 up to eight times, including 500s. On the old transport that was invisible: routing misses dominated. On the fixed transport 500s are most of what is left, and each one costs eight attempts to learn what the first attempt already said. arc-recon's precheck deliberately retries only `400 ... not found` / 429 / transport errors, on the grounds that burning a retry budget on a deterministic error is just a slower way of failing. Recommended next change for this track -- NOT made here, because it would alter the very retry accounting this A/B just measured, and it deserves its own before/after.",
+      "verdict": "Routing retries per successful gameplay call: 5.93 -> 0.05. That is the transport effect, isolated. The headline http_per_command ratio is SMALLER than this because the fixed arm's remaining traffic is almost entirely 500s being retried eight times each -- a different defect, described below."
+    },
+    "http_per_command": {
+      "cookies_false": 5.05,
+      "cookies_true": 1.75,
+      "improvement_x": 2.89
+    },
+    "indicative_only": {
+      "actions_failed": {
+        "cookies_false": 6,
+        "cookies_true": 2
+      },
+      "actions_ok": {
+        "cookies_false": 14,
+        "cookies_true": 18
+      },
+      "cost_per_successful_action": {
+        "cookies_false": 0.0463,
+        "cookies_true": 0.0392
+      },
+      "cost_usd": {
+        "cookies_false": 0.6479690000000001,
+        "cookies_true": 0.7064140000000001
+      },
+      "note": "a bare-CC cell is model-driven, so the two runs take different trajectories; these differ for reasons beyond the transport",
+      "outcome": {
+        "cookies_false": "budget_exhausted",
+        "cookies_true": "budget_exhausted"
+      },
+      "reset_attempts": {
+        "cookies_false": 11,
+        "cookies_true": 1
+      },
+      "wall_seconds": {
+        "cookies_false": 712.4,
+        "cookies_true": 676.8
+      }
+    },
+    "primary_metric": "http_calls_gameplay / executed_commands",
+    "read_the_dollars_carefully": "A cell aborts at actions_failed >= 10. On the old transport an action fails when all eight retries miss, so cells died early with their money spent on retries instead of gameplay. A fixed transport lets the cell survive to spend its whole budget, so $/cell can RISE while $/successful-action falls. $/cell is not the figure that improves; $ per unit of actual gameplay is.",
+    "why": "the only figure the two cells can be compared on without reservation: it is a property of the transport, and the trajectory length cancels out of the ratio"
+  },
+  "game_id": "ar25-0c556536",
+  "model": "claude-haiku-4-5-20251001",
+  "order": [
+    "cookies=False",
+    "cookies=True"
+  ],
+  "provenance": "arc-recon INC-007 / INC-007a; ported to this track's client 2026-07-28, INC-010",
+  "t": "2026-07-28T02:52:03Z"
+}
