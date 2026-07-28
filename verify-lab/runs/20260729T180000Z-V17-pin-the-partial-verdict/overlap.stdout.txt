@@ -1,0 +1,20 @@
+corpus            253 rows, 15 judges, 233 distinct .py/.sh paths
+inter-judge overlap  0 paths
+intra-judge repeat   12 paths
+   ablation-arm/run_arm.py                                      arms  是/部分
+   arc-recon/canary.py                                          proxy-arcrecon  是/是/是
+   arc-recon/client.py                                          proxy-arcrecon  否/是
+   arc-recon/contamination.py                                   proxy-arcrecon  部分/是/是
+   arc-recon/precheck.py                                        proxy-arcrecon  是/不适用
+   exam/verify.py                                               exam-battery  部分/否
+   figures/check_coverage.py                                    figures-release  是/是
+   fuzzlab/tests/test_battery.py                                worldgen-fuzzlab  否/是
+   proxy/guard.py                                               proxy-arcrecon  是/是
+   proxy/spend_gate.py                                          proxy-arcrecon  是/否
+   worldgen/build.py                                            worldgen-fuzzlab  是/否
+   worldgen/qc/run_qc.py                                        worldgen-fuzzlab  否/部分
+
+NO INTER-JUDGE OVERLAP.  Neither census ever put two judges on one
+entry point, so no reliability coefficient can be computed from the
+253 published rows. That is a property of the design, not a bug in
+this reader: V11 partitioned by territory, V15 took the complement.
