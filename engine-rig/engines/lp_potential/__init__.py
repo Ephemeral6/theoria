@@ -7,6 +7,7 @@ from engines.lp_potential.potential import (  # noqa: F401
     Certificate,
     CertificateError,
     Heuristic,
+    LpUnavailable,
     Move,
     admissibility_report,
     check_exactly,
@@ -57,7 +58,9 @@ def run(graph: Dict[str, Any], initial: str,
     """Solve for a certificate on `initial`; return (certificate, heuristic).
 
     Returns (None, None) when no certificate exists -- which is the correct
-    answer for a solvable configuration, not a failure.
+    answer for a solvable configuration, not a failure.  A solver that stopped
+    without deciding raises `LpUnavailable` instead of arriving here, so
+    `(None, None)` cannot be manufactured by a resource limit.
     """
     certificate = solve_certificate(graph, initial, goal_states=goal_states)
     if certificate is None:

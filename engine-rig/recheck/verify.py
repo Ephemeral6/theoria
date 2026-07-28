@@ -343,8 +343,17 @@ def recheck(ruleset: RuleSet, certificate: Certificate,
                            ruleset.render_state(states[target]) if target >= 0
                            else "<off-domain>"))
 
-    goal_bad = [ruleset.render_state(states[i]) for i in range(len(states))
-                if is_goal[i] and satisfies[i]][:max_witnesses]
+    # Counted before it is sliced.  Three of this function's obligations used to
+    # be `not <a list truncated to max_witnesses>`, which makes a *display*
+    # budget decide a certificate: at `max_witnesses=0` the lists are empty
+    # whatever the states do, and `inv_closed`, `goal_break` and
+    # `potential_nonincreasing` all report True on a certificate nobody checked.
+    # The verdict now reads the counters, which no budget touches, and the lists
+    # are only ever shown.
+    goal_bad_all = [ruleset.render_state(states[i]) for i in range(len(states))
+                    if is_goal[i] and satisfies[i]]
+    n_goal_bad = len(goal_bad_all)
+    goal_bad = goal_bad_all[:max_witnesses]
 
     extra_stats: Dict[str, object] = {}
 
@@ -352,8 +361,8 @@ def recheck(ruleset: RuleSet, certificate: Certificate,
         init_bad = [ruleset.render_state(state) for state in ruleset.init
                     if not satisfies[index_of[state]]]
         verdict.conditions["inv_init"] = not init_bad
-        verdict.conditions["inv_closed"] = not closed_bad
-        verdict.conditions["goal_break"] = not goal_bad
+        verdict.conditions["inv_closed"] = n_escaping == 0
+        verdict.conditions["goal_break"] = n_goal_bad == 0
         if init_bad:
             verdict.witnesses["inv_init"] = init_bad[:max_witnesses]
         if closed_bad:
@@ -396,14 +405,16 @@ def recheck(ruleset: RuleSet, certificate: Certificate,
             % (ruleset.render_state(state), values[index_of[state]], certificate.bound)
             for state in ruleset.init if not satisfies[index_of[state]]
         ]
-        goal_bad = [
+        goal_bad_all = [
             "%s is a goal state with potential %d, which does not exceed the "
             "bound %d" % (ruleset.render_state(states[i]), values[i], certificate.bound)
             for i in range(len(states)) if is_goal[i] and satisfies[i]
-        ][:max_witnesses]
+        ]
+        n_goal_bad = len(goal_bad_all)
+        goal_bad = goal_bad_all[:max_witnesses]
         verdict.conditions["potential_init"] = not init_bad
-        verdict.conditions["potential_nonincreasing"] = not raising
-        verdict.conditions["goal_break"] = not goal_bad
+        verdict.conditions["potential_nonincreasing"] = n_raising == 0
+        verdict.conditions["goal_break"] = n_goal_bad == 0
         if init_bad:
             verdict.witnesses["potential_init"] = init_bad[:max_witnesses]
         if raising:
@@ -419,8 +430,8 @@ def recheck(ruleset: RuleSet, certificate: Certificate,
         sources = [index_of[state] for state in ruleset.init]
     else:
         verdict.conditions["region_nonempty"] = bool(region)
-        verdict.conditions["region_closed"] = not closed_bad
-        verdict.conditions["goal_break"] = not goal_bad
+        verdict.conditions["region_closed"] = n_escaping == 0
+        verdict.conditions["goal_break"] = n_goal_bad == 0
         if not region:
             verdict.witnesses["region_nonempty"] = [
                 "no state in the declared space satisfies the pattern; a region "

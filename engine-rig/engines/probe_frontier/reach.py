@@ -34,6 +34,15 @@ from engines.probe_frontier.frontier import Hypothesis, ProbeValue, rank_probes
 REACHABLE = "reachable"
 UNREACHABLE = "unreachable"
 
+
+class UnprovenUnreachability(RuntimeError):
+    """A search came back without a plan and without having looked everywhere.
+
+    Raised instead of returning `status: "unreachable"`, because that status is
+    read downstream as a fact about the instance ("this experiment cannot be
+    performed here").  A search that merely stopped has not earned it.
+    """
+
 EXECUTABLE = "executable"
 HYPOTHETICAL = "hypothetical"
 
@@ -48,6 +57,20 @@ class Reachability:
     plan: Optional[List[str]] = None
     expansions: int = 0
     backend: str = "stub-bfs"
+    # What entitles `status == UNREACHABLE` to be read as a fact about the
+    # world: `basis` is always `"exhausted"` here, and `budget` is the limit the
+    # search that emptied its queue was running under.
+    #
+    # An earlier draft of this wrote `"exhausted" if result.exhaustive else
+    # "proved-by-planner"`.  An adversarial review showed the else branch is
+    # **unreachable**: `reach()` calls `solve_parsed` without file paths, so
+    # `choose_tier` forces the bundled stub, whose every return carries
+    # `exhaustive=True`.  A two-way record of a one-way fact is worse than no
+    # record -- it reads as a distinction being tracked when nothing is being
+    # tracked -- so the branch is gone and the entitlement is asserted instead
+    # (`reach()` below).
+    basis: Optional[str] = None
+    budget: Optional[int] = None
 
     @property
     def length(self) -> Optional[int]:
@@ -58,6 +81,11 @@ class Reachability:
         return self.status == REACHABLE
 
     def as_json(self) -> Dict[str, Any]:
+        # `basis` / `budget` are recorded on the object and withheld from this
+        # payload: the dict is published into `artifacts/candidates.jsonl`,
+        # whose sha256 is pinned in `release/MANIFEST.jsonl`.  The gap it leaves
+        # -- an `unreachable` verdict a reader cannot re-derive -- is C11's
+        # filed proposal to the release track, not an oversight.
         return {
             "status": self.status,
             "problem": self.problem,
@@ -93,9 +121,25 @@ def reach(domain: Domain, base: Problem, goal_atoms: Sequence[Atom],
     problem = reachability_problem(base, goal_atoms, name)
     plan, result = fd_adapter.solve_parsed(domain, problem, prune=prune)
     if plan is None:
+        # This is where a *search result* becomes a *claim about the world*, so
+        # the entitlement is checked here rather than assumed from the routing.
+        # `solve_parsed` reaches the bundled stub on this path (no file paths are
+        # passed, so `choose_tier` cannot pick Fast Downward) and the stub raises
+        # on its budget instead of returning -- which is exactly why a returned
+        # `plan is None` may be read as "no plan exists".  That chain is three
+        # modules long; if any link changes, this refuses rather than publishes.
+        if not result.exhaustive:
+            raise UnprovenUnreachability(
+                "%s: the search returned no plan without establishing that it "
+                "looked everywhere (expansions=%d, budget=%r).  'Unreachable' "
+                "would be a fact about the search, not about the instance."
+                % (name, result.expansions, result.max_expansions)
+            )
         return Reachability(
             status=UNREACHABLE, problem=name, goal_atoms=tuple(goal_atoms),
             expansions=result.expansions,
+            basis="exhausted",
+            budget=result.max_expansions,
         )
     return Reachability(
         status=REACHABLE, problem=name, goal_atoms=tuple(goal_atoms),
