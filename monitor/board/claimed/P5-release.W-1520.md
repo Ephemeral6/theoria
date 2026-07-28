@@ -2,6 +2,7 @@ priority: 3
 cell: P5
 territory: release
 deps: none
+lane: paper
 
 # P5 · 释出包：陌生人一条命令复跑（Schema 地板对齐）
 

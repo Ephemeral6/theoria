@@ -2,6 +2,7 @@ priority: 2
 cell: P2
 territory: papers
 deps: none
+lane: paper
 
 # P7 · 论文第 7 节 + 把过时的电池章节改对
 

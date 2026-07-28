@@ -2,6 +2,7 @@ priority: 2
 cell: P8
 territory: papers-figs
 deps: none
+lane: paper
 
 # P8-billshape-pipeline · 把账单形状图接上真数据管线
 

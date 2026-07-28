@@ -2,6 +2,7 @@ priority: 2
 cell: A3
 territory: baseline-arms
 deps: none
+lane: campaign
 
 # A7 · 方差包络续跑：闸门已就位，把 1/4 补成 4/4
 

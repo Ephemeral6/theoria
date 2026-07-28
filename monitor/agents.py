@@ -45,6 +45,8 @@ PLAIN_ITEM = {
     "A7-envelope-finish": "补齐对照组的成绩数据",
     "C7-dsl-v03-mentions": "语法 v0.3：把散落的提法收进契约",
     "P7-paper-section7": "论文第 7 节：相关工作",
+    "A3-campaign-devpile": "开发堆在线战役：把 Theoria 臂推到退出条件",
+    "P9-paper-to-submittable": "把论文推进到可投稿",
     "V4-exam-selftest": "考卷自检 + 出三类判决题（验判卷的人对不对）",
     "E5-cert-recheck": "证书独立复核器（不靠 Lean 一条路）",
     "P8-billshape-pipeline": "把论文「账单形状」图接上真数据管线",
@@ -53,6 +55,11 @@ PLAIN_ITEM = {
 }
 
 # 提交信息前缀 → 归属哪个 agent（人话名）
+RES_META = {
+    "RES-1": ("在线战役研究员", "常驻推进：Theoria 臂在真 API 上跑出结果（论文最大缺口）"),
+    "RES-2": ("论文与释出研究员", "常驻推进：把已有结果写成能投出去的论文与释出包"),
+}
+
 OPS_META = {
     "OPS-A": ("漂移审计员", "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」"),
     "OPS-B": ("浏览器专员", "需要真浏览器和登录态的活：官方条款、账户核查"),
@@ -89,9 +96,9 @@ def task_running(name):
     return "Running" in out or "正在运行" in out
 
 
-def ops_cards():
+def ops_cards(meta=None, kind="ops"):
     cards = []
-    for oid, (name, role) in OPS_META.items():
+    for oid, (name, role) in (meta or OPS_META).items():
         path = os.path.join(HERE, "ops-status", "%s.json" % oid)
         beat, age = None, None
         if os.path.exists(path):
@@ -113,7 +120,7 @@ def ops_cards():
                        if l.lower().startswith(oid.lower())
                        or (oid == "OPS-A" and l.startswith("audit:"))])
         cards.append({
-            "id": oid, "name": name, "role": role, "kind": "ops",
+            "id": oid, "name": name, "role": role, "kind": kind,
             "cycle": (beat or {}).get("cycle"),
             "state": (beat or {}).get("state", "未启动"),
             "age_min": age, "outputs": reports + commits,
@@ -149,6 +156,7 @@ def collect():
     delivered = sorted({i for v in done.values() for i in v})
     return {
         "ops": ops_cards(),
+        "standing": ops_cards(RES_META, "standing"),
         "workers": worker_cards(),
         "delivered_plain": [PLAIN_ITEM.get(i, i) for i in delivered],
         "delivered_ids": delivered,

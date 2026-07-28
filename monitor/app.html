@@ -180,6 +180,20 @@ function render(s){
       </div>`;
     }).join("") + "</div>";
 
+  const standing = ag.standing || [];
+  if (standing.length) {
+    h += `<h2>常驻研究员 <span class="note">— 各守一条赛道持续推进，只领自己方向的活</span></h2>
+      <div class="fleet">` + standing.map(r => {
+        const fresh = r.age_min != null && r.age_min < 120;
+        return `<div class="crew ${fresh ? "" : "risk"}">
+          <span class="badge">${esc(r.id.replace("RES-","R"))}</span>
+          <div class="cbody"><b>${esc(r.name)}</b><em>${esc(r.role)}</em>
+            <div class="agnote">${esc(r.note || "")}</div></div>
+          <span class="cst">${r.age_min==null ? "未启动"
+            : "第 "+r.cycle+" 轮<br>"+r.age_min+" 分钟前"}</span></div>`;
+      }).join("") + "</div>";
+  }
+
   const busy = workers.filter(w => w.now), idle = workers.filter(w => !w.now);
   h += `<h2>研究员正在做的事 <span class="note">— 自己从任务板领活，做完接着领；
     额度停机时暂停，复工后从磁盘接着干</span></h2>

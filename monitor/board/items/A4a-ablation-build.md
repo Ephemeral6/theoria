@@ -2,6 +2,7 @@ priority: 2
 cell: A1
 territory: ablation-arm
 deps: none
+lane: campaign
 
 # A4a · 消融臂：只做实现（两个工人先后在整件 A4 上撞上下文墙，故拆半）
 

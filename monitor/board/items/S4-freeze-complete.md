@@ -2,6 +2,7 @@ priority: 1
 cell: S4
 territory: freeze
 deps: S4-freeze
+lane: campaign
 
 # S4-freeze-complete · 冻结清单 13 项补齐到可提交
 

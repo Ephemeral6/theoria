@@ -38,18 +38,18 @@
     ],
     "ops": [
       {
-        "age_min": 63,
-        "cycle": 4,
+        "age_min": 0,
+        "cycle": 5,
         "id": "OPS-A",
         "kind": "ops",
         "name": "漂移审计员",
-        "note": "cycle 4: spec.py untouched across 45 commits / 14 merged branches -- PAPER_PLAN pct and GRID active are hand-written constants and the headline paper-progress number is computed from them; staleness is all in the under-reporting direction",
-        "outputs": 7,
+        "note": "cycle 5: the ALL.md discipline broadcast is right but its cited example is wrong -- 6dec6f7 never reached master, so the rule as written would punish fixing your own error before merge; release-licence plumbing now 3 cycles overdue and its critical path is outside the repo",
+        "outputs": 8,
         "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
         "state": "idle"
       },
       {
-        "age_min": 15,
+        "age_min": 17,
         "cycle": 3,
         "id": "OPS-B",
         "kind": "ops",
@@ -60,7 +60,7 @@
         "state": "idle"
       },
       {
-        "age_min": 9,
+        "age_min": 11,
         "cycle": 3,
         "id": "OPS-M",
         "kind": "ops",
@@ -71,7 +71,7 @@
         "state": "working"
       },
       {
-        "age_min": 250,
+        "age_min": 251,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -80,6 +80,30 @@
         "outputs": 7,
         "role": "从所有痕迹里挖跨轨道重复出现的失败模式",
         "state": "idle"
+      }
+    ],
+    "standing": [
+      {
+        "age_min": null,
+        "cycle": null,
+        "id": "RES-1",
+        "kind": "standing",
+        "name": "在线战役研究员",
+        "note": "",
+        "outputs": 0,
+        "role": "常驻推进：Theoria 臂在真 API 上跑出结果（论文最大缺口）",
+        "state": "未启动"
+      },
+      {
+        "age_min": null,
+        "cycle": null,
+        "id": "RES-2",
+        "kind": "standing",
+        "name": "论文与释出研究员",
+        "note": "",
+        "outputs": 0,
+        "role": "常驻推进：把已有结果写成能投出去的论文与释出包",
+        "state": "未启动"
       }
     ],
     "workers": [
@@ -213,7 +237,7 @@
     "blocked": 3,
     "claimed": 10,
     "done": 10,
-    "listing": "=== available ===\n  p1  V4-exam-selftest             cell=V4  territory=exam           \n  p2  A4a-ablation-build           cell=A1  territory=ablation-arm   \n  p2  C6-worldgen-mutate           cell=V2  territory=worldgen       \n  p2  P8-billshape-pipeline        cell=P8  territory=papers-figs    \n  p2  S6-merge-gate-509            cell=S6  territory=monitor        \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A6-transfer-protocol         by W-5201\n  A7-envelope-finish           by APP-A7\n  C7-dsl-v03-mentions          by APP-C7\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P7-paper-section7            by APP-P7\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n=== done (10) ===\n  A4-ablation-online.superseded-by-A4a\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  V2-exam-on-worldgen.W-1540"
+    "listing": "=== available ===\n  p1  V4-exam-selftest             cell=V4  territory=exam           lane:campaign\n  p2  A4a-ablation-build           cell=A1  territory=ablation-arm   lane:campaign\n  p2  C6-worldgen-mutate           cell=V2  territory=worldgen       \n  p2  P8-billshape-pipeline        cell=P8  territory=papers-figs    lane:paper\n  p2  S6-merge-gate-509            cell=S6  territory=monitor        \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A6-transfer-protocol         by W-5201\n  A7-envelope-finish           by APP-A7\n  C7-dsl-v03-mentions          by APP-C7\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P7-paper-section7            by APP-P7\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n=== done (10) ===\n  A4-ablation-online.superseded-by-A4a\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  V2-exam-on-worldgen.W-1540"
   },
   "con_green": 1,
   "constraints": [
@@ -472,7 +496,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 18:43:29",
+  "generated_at": "2026-07-28 18:45:00",
   "grid": {
     "A1": {
       "active": [
@@ -1346,27 +1370,30 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/audit/DRIFT-20260728T0725Z-release-licence-answered-but-unplumbed.md",
-      "monitor/audit/DRIFT-20260728T0831Z-two-verdicts-still-unlanded.md",
-      "monitor/audit/DRIFT-20260728T0937Z-dashboard-lags-the-merge-queue.md",
-      "monitor/index.html",
-      "monitor/reflex.lock",
-      "monitor/reflex.log",
-      "monitor/spec.py",
-      "monitor/state.json",
+      "LAUDE.md",
+      "monitor/board/claimed/A6-transfer-protocol.W-5201.md",
+      "monitor/board/claimed/A7-envelope-finish.APP-A7.md",
+      "monitor/board/claimed/E3-engines-online.W-1521.md",
+      "monitor/board/claimed/P5-release.W-1520.md",
+      "monitor/board/claimed/P7-paper-section7.APP-P7.md",
+      "monitor/board/claimed/S4-freeze.W-1541.md",
+      "monitor/board/items/A4a-ablation-build.md",
+      "monitor/board/items/A4b-ablation-calibrate.md",
+      "monitor/board/items/P8-billshape-pipeline.md",
+      "monitor/board/items/S4-freeze-complete.md",
+      "monitor/board/items/V4-exam-selftest.md",
+      "monitor/mailbox/ALL.md",
+      "monitor/scan.py",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/audit/DRIFT-20260728T1042Z-all-md-ruling-cites-a-wrong-fact.md",
-      "monitor/audit/archive/DRIFT-20260728T0725Z-release-licence-answered-but-unplumbed.md",
-      "monitor/audit/archive/DRIFT-20260728T0831Z-two-verdicts-still-unlanded.md",
-      "monitor/audit/archive/DRIFT-20260728T0937Z-dashboard-lags-the-merge-queue.md",
-      "monitor/board/items/R2-release-licence.md"
+      "monitor/board/items/A3-campaign-devpile.md",
+      "monitor/board/items/P9-paper-to-submittable.md"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "c30a4a8 ROBUSTNESS.md: the direction is confirmed, and every fragility gets a real failure attached",
+    "git_head": "e12a2ba audit: cycle 5 -- the rule is right, the example under it never happened",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1378,11 +1405,8 @@
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/audit/DRIFT-20260728T1042Z-all-md-ruling-cites-a-wrong-fact.md",
-      "monitor/audit/archive/DRIFT-20260728T0725Z-release-licence-answered-but-unplumbed.md",
-      "monitor/audit/archive/DRIFT-20260728T0831Z-two-verdicts-still-unlanded.md",
-      "monitor/audit/archive/DRIFT-20260728T0937Z-dashboard-lags-the-merge-queue.md",
-      "monitor/board/items/R2-release-licence.md"
+      "monitor/board/items/A3-campaign-devpile.md",
+      "monitor/board/items/P9-paper-to-submittable.md"
     ]
   },
   "p1_green": 9,
@@ -1833,7 +1857,7 @@
       "status": "partial"
     },
     "append_only": {
-      "detail": "4 个追加式文件无新增删除（2 行历史删除已裁决豁免：同窗口自我订正）。",
+      "detail": "4 个追加式文件无新增删除（1 行历史删除已裁决豁免：同窗口自我订正）。",
       "status": "green"
     },
     "conflict_scan": {
@@ -1858,19 +1882,19 @@
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**14 条 TO-MONITOR 待监控回复**。 OPS-A 第4轮 idle（62 分钟前）； OPS-B 第3轮 idle（15 分钟前）； OPS-M 第3轮 working（9 分钟前）； OPS-R 第1轮 idle（250 分钟前）",
+      "detail": "**15 条 TO-MONITOR 待监控回复**。 OPS-A 第5轮 idle（0 分钟前）； OPS-B 第3轮 idle（17 分钟前）； OPS-M 第3轮 working（10 分钟前）； OPS-R 第1轮 idle（251 分钟前）",
       "rows": [
         {
-          "age_min": 62,
-          "cycle": 4,
+          "age_min": 0,
+          "cycle": 5,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "cycle 4: spec.py untouched across 45 commits / 14 merged branches -- PAPER_PLAN pct and GRID active are hand-written constants and the headline paper-progress number is computed from them; staleness is all in the under-reporting direction",
+          "note": "cycle 5: the ALL.md discipline broadcast is right but its cited example is wrong -- 6dec6f7 never reached master, so the rule as written would punish fixing your own error before merge; release-licence plumbing now 3 cycles overdue and its critical path is outside the repo",
           "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 15,
+          "age_min": 17,
           "cycle": 3,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1879,7 +1903,7 @@
           "status": "green"
         },
         {
-          "age_min": 9,
+          "age_min": 10,
           "cycle": 3,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -1888,7 +1912,7 @@
           "status": "green"
         },
         {
-          "age_min": 250,
+          "age_min": 251,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -1898,7 +1922,7 @@
         }
       ],
       "status": "green",
-      "to_monitor": 14
+      "to_monitor": 15
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3176 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
@@ -1913,7 +1937,7 @@
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 7 个提交 / 0 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 1 个提交 / 0 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "green"
     },
     "verify_gates": {

@@ -2,6 +2,7 @@ priority: 1
 cell: V4
 territory: exam
 deps: none
+lane: campaign
 
 # V4-exam-selftest · 考卷判卷器自检 + 三类判决题出题
 

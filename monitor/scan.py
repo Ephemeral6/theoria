@@ -393,17 +393,20 @@ def probe_append_only():
     # Deletions already adjudicated (same-window self-correction, ruled
     # 2026-07-28: no incident). Counted as baseline so the probe measures
     # NEW violations instead of being born red and never able to go green.
-    # Two adjudicated deletions, both honest self-corrections by their own
-    # author: 63ef0bf (same-window, 3->4 samples) and 6dec6f7 (cross-window,
-    # a0-spike retracting a claim it had wrongly carried from another manual).
-    # Grandfathered, not licensed: cross-window corrections supersede with a
-    # NEW paragraph from here on.
-    BASELINE = {"PARTNER_SYNC.md": 2}
+    # One adjudicated deletion on the mainline: 63ef0bf, a same-window
+    # self-correction (3->4 samples). 6dec6f7 is NOT counted -- it edited a
+    # paragraph that had never reached master, which publishes nothing.
+    # The line the rule actually draws: once it is on the mainline it is
+    # frozen; on a branch, fix it until it is right.
+    BASELINE = {"PARTNER_SYNC.md": 1}
     offenders = []
     for path in watched:
         if not exists(path):
             continue
-        out = git("log", "--numstat", "--format=%h", "--", path)
+        # --first-parent: only what actually appeared on the mainline counts.
+        # A branch-local fix before merge never published anything, so it is
+        # not a violation (OPS-A, 2026-07-28: my earlier ruling cited it wrongly).
+        out = git("log", "--first-parent", "--numstat", "--format=%h", "--", path)
         dels, cur = 0, ""
         for line in out.splitlines():
             parts = line.split("	")

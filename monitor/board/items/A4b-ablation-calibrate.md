@@ -2,6 +2,7 @@ priority: 3
 cell: A2
 territory: ablation-arm
 deps: A4a-ablation-build
+lane: campaign
 
 # A4b · 消融臂标定：跑 A0 与 A2 两个世界，出对照表
 
