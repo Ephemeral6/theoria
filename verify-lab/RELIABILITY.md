@@ -12,7 +12,7 @@ python verify-lab/irr/rows.py        # 253 行，逐行带上判定员
 python verify-lab/irr/overlap.py     # 有没有两个判定员判过同一行
 python verify-lab/irr/sample.py      # 重判的 22 行，分层
 python verify-lab/irr/blindtree.py --out <dir> --rev f09555c --sample <sample.json>
-python verify-lab/irr/agree.py --dir <run>/judgements --sample <run>/sample.json
+python verify-lab/irr/agree.py --dir <run>/judgements --sample <run>/sample.json        --preregistration <run>/PREREGISTRATION.md
 python verify-lab/irr/refold.py      # 重判后 pinned 矩阵动多少
 python verify-lab/irr/shapes.py      # 同形状不同格的几对，人工配的
 ```
@@ -277,6 +277,8 @@ strict pinned  after (扣掉 D0 触及的行)  n=145  TP 34  FN 31  FP 2  TN 78 
   （`部分` 层 13/14），与 `old` 臂只对上 9/22（3/14）。同一个模型、同一棵树、
   同一批文件，**+54 个百分点**。这不是查表：判据里的七个实例全部不在这 22 行里，
   而且我自己漏掉理由码的次数比判定员之间对不上的次数还多。
+  （这个数是对抗复核先算出来的，我复算了一遍，一致；现在
+  `agree.py --preregistration` 会打出来，落在 `agreement.json` 的 `vs_preregistration`。）
 * **共识的紧度**没有显著变化 —— Δκ +0.078，CI [−0.533, +0.415]。
 * **移动的方向**把被测探针的假阴率降了 5.5pp，其中 45% 来自 `D0`。
 

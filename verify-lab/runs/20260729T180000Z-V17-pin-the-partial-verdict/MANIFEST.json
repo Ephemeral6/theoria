@@ -9,11 +9,11 @@
     },
     {
       "path": "verify-lab/RELIABILITY.md",
-      "sha256": "11b3a4b07f66d0250e28c6b8696e416b4979d5319795f48d23bb457bd6d3b999"
+      "sha256": "b0940a5b29dfdc6ced866778ac0f4dd5bfe8b4e66a7982059e1ceacbc8643c1a"
     },
     {
       "path": "verify-lab/irr/agree.py",
-      "sha256": "73c578d972f998171babd0c069a874eb9fb163dff4b2749941d75e4f1e722b14"
+      "sha256": "c8e309b411ad7436fa98dd2d6044ba4cf151d7018705acf94a93b83890a343cc"
     },
     {
       "path": "verify-lab/irr/blindtree.py",
@@ -57,11 +57,11 @@
     },
     {
       "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/agreement.json",
-      "sha256": "54a40fd5f47f83b125dd1f1e76977505cc7912af151b151f1442c04ed3566922"
+      "sha256": "c5ba5ce086b7148efd579d940745ad587f988dbdd482351a52ae01cf983ca9a1"
     },
     {
       "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/agreement.stdout.txt",
-      "sha256": "29dabcf1511b478f6330b160fd64de6d9180ae7e6cc94986aa79ad87eb16514f"
+      "sha256": "6e9e58c5d11502e01a32911fe6bc9e951297d6f9e27751dd6a826ab47806f4df"
     },
     {
       "path": "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/blindtree.json",
@@ -124,7 +124,7 @@
       "sha256": "54cc0052af3906f76a64907b8936d89b5e34bc06b2efc7554417323afcbaa958"
     }
   ],
-  "head_commit": "139f70b8c1ada35d828c52ac1591e6591087f691",
+  "head_commit": "5711d9a23fe7c552c0ad718916640c984eab01c1",
   "judges": {
     "blinding": "git ls-files minus 290 answer-key files; see BLINDING.md for what was not blocked",
     "model": "one model, six independent instances -- not six people; cross-model reliability was not measured",

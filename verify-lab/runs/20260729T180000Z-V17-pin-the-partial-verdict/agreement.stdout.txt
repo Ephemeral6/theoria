@@ -45,5 +45,8 @@
    partial_stratum  old_verdict_only           n=14  po=0.810  kappa=0.689  unanimous 10
    partial_stratum  new_verdict_only           n=14  po=0.905  kappa=0.770  unanimous 12
    partial_stratum  new_verdict_plus_reason    n=14  po=0.738  kappa=0.669  unanimous 9
+-- each arm's majority against the preregistered dry read
+   all              old  9/22    new 21/22 
+   partial_stratum  old  3/14    new 13/14 
 -- 判据不决 (criterion could not decide), new arm
    rows flagged by at least one judge: 5/22  cold-start-a2/a2pipeline/certify_a2.py, cold-start-a2/a2pipeline/exhibit.py, cold-start-a2/a2pipeline/repair.py, cold-start-a3/a3pipeline/certify_a3.py, engine-rig/recheck/verify_all.py

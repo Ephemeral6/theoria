@@ -691,5 +691,28 @@
       "cold-start-a3/a3pipeline/certify_a3.py",
       "engine-rig/recheck/verify_all.py"
     ]
+  },
+  "vs_preregistration": {
+    "all": {
+      "new": {
+        "matches": 21,
+        "n": 22
+      },
+      "old": {
+        "matches": 9,
+        "n": 22
+      }
+    },
+    "partial_stratum": {
+      "new": {
+        "matches": 13,
+        "n": 14
+      },
+      "old": {
+        "matches": 3,
+        "n": 14
+      }
+    },
+    "unmatched_rows": []
   }
 }

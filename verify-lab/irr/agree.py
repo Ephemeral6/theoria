@@ -7,14 +7,17 @@ definition of `部分` (arm ``old``); three had `PARTIAL_CRITERION.md` (arm
 
     python verify-lab/irr/agree.py --dir <judgements> --sample <sample.json>
 
-**能红 is the placebo and the whole design rests on it.** If the `new` arm agrees
-more on 有负控 *and* on 能红, the extra agreement is not the criterion: it is six
-agents converging because three of them read the same document, and a document
-that makes judges agree about a question it never addresses has not defined
-anything. If agreement rises on 有负控 and not on 能红, the criterion did the
-work. The criterion does couple the two columns slightly -- test D0 asks whether
-E can refuse at all -- so a small placebo rise is expected and is reported rather
-than argued away.
+**能红 was meant to be the placebo, and the placebo failed.** The design was: if
+the `new` arm agrees more on 有负控 *and* on 能红, the extra agreement is not the
+criterion but three agents converging on one document. **That test could not
+fire.** The `old` arm scored `po = κ = 1.000` on 能红 — no headroom, so "the new
+arm agrees more" had probability zero, and its failure to happen proves nothing.
+Worse, the placebo moved on 2 of 22 rows and on one of them (`monitor/gates.py`)
+all three new judges wrote reason code `D0`, which is the criterion's own "can E
+refuse at all" test writing straight into the placebo column: half the signal is
+coupling. The commissioned charge (b) is therefore **not measured** by this run.
+Left in place, and left failing, because a placebo quietly dropped from a report
+is worse than one that is published broken.
 
 Two coefficients, because they answer different questions:
 
@@ -163,7 +166,32 @@ def bootstrap_delta(tables: Dict[str, Dict[str, Dict[str, str]]],
     }
 
 
-def run(dirpath: str, sample: str) -> Dict[str, object]:
+def preregistration(path: str) -> Dict[str, str]:
+    """The author's dry read, parsed from `PREREGISTRATION.md`'s two tables.
+
+    Committed at `4a47472`, before any judge reported. Scoring each arm's
+    majority against it separates two things that look alike: whether the
+    criterion *determines* an answer (does it move readers to where it points)
+    and whether it makes readers *agree with each other* (κ). This run found the
+    first and not the second, and the distinction is the honest description of
+    what happened -- the adversarial pass computed it first and it is folded in
+    here so the number is regenerable.
+    """
+    out: Dict[str, str] = {}
+    for line in open(path, encoding="utf-8"):
+        if not line.startswith("| "):
+            continue
+        cells = [c.strip() for c in line.strip().strip("|").split("|")]
+        if len(cells) != 4 or cells[0] == "入口" or set(cells[0]) <= set("-"):
+            continue
+        rel = cells[0].replace("theory-compiler/…/",
+                               "theory-compiler/src/theory_compiler/")
+        out[rel] = cells[2].replace("*", "").strip()
+    return out
+
+
+def run(dirpath: str, sample: str,
+        prereg: Optional[str] = None) -> Dict[str, object]:
     blob = json.load(open(sample, encoding="utf-8"))
     rows = blob["rows"]
     stratum = {r["path"]: r["stratum"] for r in rows}
@@ -319,6 +347,24 @@ def run(dirpath: str, sample: str) -> Dict[str, object]:
                                   ("partial_stratum", partial_paths))
     }
 
+    if prereg and os.path.exists(prereg):
+        pre = preregistration(prereg)
+        missing = sorted(p for p in all_paths if p not in pre)
+        scored: Dict[str, object] = {"unmatched_rows": missing}
+        for scope_name, scope in (("all", all_paths),
+                                  ("partial_stratum", partial_paths)):
+            scored[scope_name] = {
+                arm: {
+                    "n": len(scope),
+                    "matches": sum(
+                        1 for p in scope
+                        if pre.get(p) == _majority(
+                            [tables[j][p]["has_negctl"] for j in judges])),
+                }
+                for arm, judges in ARMS.items()
+            }
+        rep["vs_preregistration"] = scored
+
     rep["undecided"] = {
         "flags": {j: sorted(p for p in all_paths if tables[j][p].get("undecided"))
                   for j in ARMS["new"]},
@@ -343,9 +389,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--dir", required=True)
     ap.add_argument("--sample", required=True)
+    ap.add_argument("--preregistration",
+                    help="PREREGISTRATION.md, to score each arm against the "
+                         "author's dry read")
     ap.add_argument("--json", metavar="OUT")
     args = ap.parse_args(argv)
-    rep = run(args.dir, args.sample)
+    rep = run(args.dir, args.sample, args.preregistration)
     if "missing_judges" in rep:
         print("missing judge files: %s" % ", ".join(rep["missing_judges"]))  # type: ignore[arg-type]
         return 1
@@ -395,6 +444,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                   % (scope, tag, m["n"], m["po"],
                      "n/a" if m["kappa"] is None else "%.3f" % m["kappa"],
                      m["unanimous"]))
+    if "vs_preregistration" in rep:
+        print("-- each arm's majority against the preregistered dry read")
+        for scope in ("all", "partial_stratum"):
+            blob = rep["vs_preregistration"][scope]  # type: ignore[index]
+            print("   %-16s old %2d/%-3d   new %2d/%-3d"
+                  % (scope, blob["old"]["matches"], blob["old"]["n"],
+                     blob["new"]["matches"], blob["new"]["n"]))
     und = rep["undecided"]
     print("-- 判据不决 (criterion could not decide), new arm")
     print("   rows flagged by at least one judge: %d/%d  %s"
