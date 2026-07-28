@@ -1,0 +1,61 @@
+{
+  "found": true,
+  "method": "minimisation by search over a pool of 500 seeds \u2014 the smallest world that reproduces this signature, NOT a proven minimum; worlds are pure functions of a seed so there is no parameter to shrink",
+  "rate": 0.04,
+  "replay": "python -m fuzzlab.minimize --replay 0xc07869a9337745f7 --family gridworld --engine cegis_miner --invariant frontier_guards_are_consistent",
+  "reproducers": 20,
+  "scanned": 500,
+  "signature": "cegis_miner.frontier_guards_are_consistent.skipped",
+  "smallest": {
+    "family": "gridworld",
+    "finding": {
+      "data": {
+        "cause": "unminable",
+        "error": "split_by_color=False: transition 2 narrates ['vanish']; only move/none are mined on this fixture; split_by_color=True: transition 2 narrates ['vanish']; only move/none are mined on this fixture"
+      },
+      "detail": "neither segmentation operator narrates this world as move/none \u2014 the mover's component merges with an obstacle it touches. Documented refusal by transitions_from_segmentation, and an instance of the touching-objects segmentation gap, not a mining defect.",
+      "engine": "cegis_miner",
+      "family": "gridworld",
+      "invariant": "frontier_guards_are_consistent",
+      "kind": "skipped",
+      "seed": 13868951227921286647,
+      "seed_hex": "0xc07869a9337745f7"
+    },
+    "fingerprint": "b98336b1701e1f4c3ba1dd1c1de0fdff477f8c48ec3f9c6a0a62d4ffd974bffb",
+    "index": 235,
+    "seed": "0xc07869a9337745f7",
+    "seed_int": 13868951227921286647,
+    "size": 56,
+    "size_metric": "fuzzlab.minimize.size_of, family gridworld",
+    "spec": {
+      "height": 6,
+      "mover_color": 2,
+      "mover_shape": [
+        1,
+        2
+      ],
+      "n_frames": 8,
+      "obstacles": [
+        {
+          "cells": [
+            [
+              3,
+              3
+            ]
+          ],
+          "colors": [
+            2
+          ]
+        }
+      ],
+      "obstacles_dropped": false,
+      "portal": null,
+      "seed": 13868951227921286647,
+      "start_anchor": [
+        4,
+        3
+      ],
+      "width": 6
+    }
+  }
+}
