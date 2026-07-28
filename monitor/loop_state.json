@@ -29,8 +29,6 @@
   "m0_dispatched": true,
   "rules": {
     "complete_when": "agent branch pushed to origin, or merged into master",
-    "refill": "every >=5 completions, author 5 fresh prompts from current repo state and dispatch",
-    "monitor_update": "every >=10 completions, full monitor cycle (scan -> spec -> scan.py -> push)",
     "m0": "dispatch M-0 via --only once P-8..P-12 have all pushed",
     "isolation": "content-free checks only; audit via git-visible artifacts",
     "escalation": "CLI-unsolvable -> B-* browser-operator session (claude-in-chrome, whitelist, fail-closed) -> needs_human list for the user",
@@ -38,7 +36,9 @@
     "reap": "dispatch.py --reap every heartbeat: branch on origin => taskkill the process tree at once; self-exited sessions marked",
     "auditor": "A-1 standing drift auditor: reads monitor/AUDITOR.md each cycle, hourly cadence, 6 cycles then exit; heartbeat relaunches if dead; reports in monitor/audit/, silence = healthy; monitor reads reports every heartbeat and adjudicates",
     "quota": "quota.py check every heartbeat; limit-signature deaths -> hold (no dispatch, minimal heartbeats); ping (1 haiku call) gates resume; staggered priority relaunch at half pool, runs/ provenance makes restarts lossless",
-    "monitor_rebirth": "HANDOFF.md rewritten every heartbeat; deep rebirth (re-derive from disk+git, not context) every ~6 heartbeats (~3h); quota death = pause not amnesia, wakeup resumes after ~5h window refresh; a fresh session reading HANDOFF + memory IS the monitor"
+    "monitor_rebirth": "HANDOFF.md rewritten every heartbeat; deep rebirth (re-derive from disk+git, not context) every ~6 heartbeats (~3h); quota death = pause not amnesia, wakeup resumes after ~5h window refresh; a fresh session reading HANDOFF + memory IS the monitor",
+    "dispatch_policy": "event-driven: (1) per-completion -- a branch merged by M-0 frees its territory, author+dispatch follow-up work consuming the merged outputs at once, freshness beats batching; (2) critical-path preemption -- if WP3 critical path (theoria-arm) is idle or dead, relaunch immediately, jumps every queue; (3) M-0 fires when >=3 delivered-unmerged branches accumulate OR a pending dispatch depends on one; (4) caps: <=10 monitor-dispatched sessions, 2 slots reserved for services (A-1/B-*/M-0); (5) all launches gated by quota mode; recovering = priority list at half pool; (6) backpressure: no new prompt on a territory with a delivered-but-unmerged branch, unless the new work is additive-only in a fresh subdir; (7) staleness: a prompt authored >24h ago re-validates against the tree before launch",
+    "frontend_policy": "light refresh (scan.py only, cheap, no spec rewrite): every heartbeat where any event occurred (completion, DRIFT report, quota flip) -- probes re-derive live facts, history dedup keeps it quiet; full update (spec judgments + findings + PAPER_PLAN + push + deliver page to user): (a) after each M-0 merge lands on master, (b) on any critical event (DRIFT-CRITICAL, quota hold enter/exit, new needs_human), (c) at every ~3h rebirth as part of re-derivation, (d) hard floor one full update per 3h even if quiet; SendUserFile only on full updates, never on light refreshes"
   },
   "heartbeat_count": 0
 }

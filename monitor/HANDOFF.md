@@ -11,18 +11,22 @@
   跑完即杀、配额熔断、审计员、前沿工具提示词、GitHub 同步、决定代行）。
 - 完成目标：可发表论文（spec.py 的 PAPER_PLAN，Schema 规模对标）。
 
-## 每次心跳的固定动作（顺序执行）
+## 每次心跳的固定动作（顺序执行；发射与前端更新均为事件驱动，见
+## loop_state.rules 的 dispatch_policy / frontend_policy）
 
 1. `python monitor/dispatch.py --reap`（跑完即杀）
 2. `python monitor/quota.py check`——返回 2 = hold：跳过 4-6，只做 ping/resume
-3. 读 `monitor/audit/` 新的 DRIFT-*.md → 裁决 → 移 archive/；A-1 死了就
-   `dispatch.py --only A-1` 重拉
-4. `git fetch` 对照 `monitor/loop_state.json` 记完成（分支到 origin）
-5. 完成≥5 → 按仓库实况写 5 份新工单（模板见 prompts/README + 记忆 7b）并
-   `dispatch.py` 发射；完成≥10 → 完整监控循环（spec 更新 + scan.py + push）
-6. 读 B-* 的 needs_human 与 M-0 的 CONFLICT 报告 → 该转用户的转用户
-7. 更新 loop_state.json 与本文件；`git add monitor/ && commit && push`
-8. `ScheduleWakeup`（正常 1800s；hold 期 3600s）
+3. 读 `monitor/audit/` 新 DRIFT → 裁决 → 归档；A-1 死了重拉
+4. `git fetch`，记完成、记 M-0 合并落地情况
+5. **发射判定（事件驱动）**：逐条过 dispatch_policy——已合并即时补位（新工单
+   消费刚合并的产物）、关键路径（theoria-arm/WP3）闲置立即抢发、
+   交付未合并 ≥3 就发 M-0、领地背压、≤10 池 + 2 服务位、配额门
+6. 读 needs_human 与 CONFLICT 报告 → 该转用户的转用户
+7. **前端判定（事件驱动）**：有任何事件 → 轻刷（只跑 scan.py）；
+   M-0 落地 / 关键事件 / 转世点 / 3h 硬底 → 全量更新（spec+页面+push+发给
+   用户）。无事件不动前端。
+8. 更新 loop_state 与本文件；commit + push；`ScheduleWakeup`
+   （正常 1800s；hold 3600s；刚发射一批 2700s）
 
 ## 当前态势快照（2026-07-28T09:35Z 心跳外手动更新）
 
