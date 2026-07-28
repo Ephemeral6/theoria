@@ -14,6 +14,12 @@ upstream".  That would be a claim about the code as read.  The claim is that a
 **full run** of everything this arm can do leaves the four upstream trees
 byte-identical -- which covers the code as read, the code it imports, and
 anything either of them calls.
+
+The second half of the file -- "nothing moved *outside* this arm" -- was
+falsified once and rebuilt.  Its criterion, its hard list and the reasons for
+both live in `ablcore/outside.py`; these are its callers, plus the negative
+controls that prove it still fires.  `runs/20260728T191437Z-A9-readonly-baseline/`
+holds the measured evidence.
 """
 
 from __future__ import annotations
