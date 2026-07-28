@@ -47,22 +47,36 @@ STEPS = [
 ]
 
 
+def _text(raw) -> str:
+    """Child output is UTF-8 by construction — see `PYTHONIOENCODING` below.
+
+    The same hazard `cold-start-a2` reported against `certify/lean_check.py`
+    (D-A2-007) lives here in a quieter form: `text=True` decodes with the
+    process locale, so on a GBK console a step whose failure message is not
+    GBK-decodable takes down the runner instead of printing its tail — the
+    diagnostic is lost exactly when there is one. Pinning the children's output
+    encoding and decoding it explicitly makes the answer the same on every
+    machine, which is also what determinism asks for.
+    """
+    return raw.decode("utf-8", errors="replace") if isinstance(raw, bytes) else (raw or "")
+
+
 def main() -> int:
     env = dict(os.environ)
     env.setdefault("THEORIA_DETERMINISTIC_IDS", "1")
     env.setdefault("THEORIA_FIXED_TIME", "2026-07-28T00:00:00Z")
+    env.setdefault("PYTHONIOENCODING", "utf-8")
 
     failures = []
     for label, command in STEPS:
         start = time.time()
-        proc = subprocess.run(command, cwd=ROOT, env=env,
-                              capture_output=True, text=True)
+        proc = subprocess.run(command, cwd=ROOT, env=env, capture_output=True)
         elapsed = time.time() - start
         status = "ok " if proc.returncode == 0 else "FAIL"
         print("[%s] %-24s %6.1fs" % (status, label, elapsed))
         if proc.returncode != 0:
             failures.append(label)
-            tail = (proc.stdout + proc.stderr).strip().splitlines()[-12:]
+            tail = (_text(proc.stdout) + _text(proc.stderr)).strip().splitlines()[-12:]
             for line in tail:
                 print("        " + line)
 
@@ -71,10 +85,10 @@ def main() -> int:
          os.path.join(ROOT, "artifacts", "candidates.jsonl"),
          os.path.join(ROOT, "artifacts", "candidates_no_button.jsonl")],
         cwd=os.path.join(os.path.dirname(ROOT), "engine-rig"),
-        capture_output=True, text=True, env=env,
+        capture_output=True, env=env,
     )
     print("[%s] %-24s %s" % ("ok " if validate.returncode == 0 else "FAIL",
-                             "schema validation", validate.stdout.strip()))
+                             "schema validation", _text(validate.stdout).strip()))
     if validate.returncode != 0:
         failures.append("schema validation")
 

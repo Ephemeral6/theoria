@@ -12,6 +12,34 @@ from ..parser.ast_nodes import (
     FuncCall, NameRef, NumberLit, TupleLit, FieldAccess,
     Comparison, BinOp, GoalSection, GoalExpr,
 )
+from .gen_python import UnsupportedClause
+
+# The subset of `semantics:` this encoding implements. Outside it, raise —
+# never approximate. `gen_python` has had this guard since the section landed
+# and `gen_lean` inherits it by building the predictor first; this backend
+# reads only the AST, so it had none, and would emit a STRIPS encoding that
+# assumes `persist` / `exclusive` / `single_frame` for a manual declaring
+# something else. That is the `semantics:` hazard reproduced one layer down:
+# the manual states the fact, and the compiler ignores it silently.
+SUPPORTED_SEMANTICS = {
+    "frame": ("persist",),
+    "conflict": ("exclusive",),
+    "cascade": ("single_frame",),
+}
+
+
+def _check_semantics(ast: TheoryAST) -> None:
+    sem = ast.semantics
+    if sem is None:
+        return                      # `build_ir` is where a missing section is an error
+    for field_name, allowed in sorted(SUPPORTED_SEMANTICS.items()):
+        value = getattr(sem, field_name)
+        if value not in allowed:
+            raise UnsupportedClause(
+                "the PDDL backend implements `%s %s` only; this manual declares "
+                "`%s %s`, and a STRIPS encoding of it would be a different "
+                "world, not an approximation of this one"
+                % (field_name, allowed[0], field_name, value))
 
 
 def generate_pddl(ast: TheoryAST, problem_name: str = "instance-1",
@@ -21,6 +49,7 @@ def generate_pddl(ast: TheoryAST, problem_name: str = "instance-1",
     Returns:
         Tuple of (domain_str, problem_str)
     """
+    _check_semantics(ast)
     domain_name = "theoria-domain"
     domain = _gen_domain(ast, domain_name, grid_width, grid_height)
     problem = _gen_problem(ast, domain_name, problem_name, grid_width, grid_height)

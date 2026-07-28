@@ -77,17 +77,26 @@ def compile_theory(dsl_path: str, trace_path: str, problem_name: str,
 
 
 def render_markdown(ast, semantics) -> str:
-    """`gen_markdown` is reused verbatim; the declared semantics are appended.
+    """`gen_markdown` is reused verbatim. It now renders the semantics itself.
+
+    This used to append a second "How a Turn Works" section from
+    `Semantics.rendering()`, because the shared generator had none. It has had
+    one since the `semantics:` section was adopted into
+    `CONTRACTS/dsl_grammar_v0.2.md`, and appending anyway put **the same three
+    facts in the same document twice**, in two different wordings — "if no rule
+    applies to something" and "if no rule applies to an object" — with the
+    second copy stranded at the end, after the laws. Found by `cold-start-a2`,
+    which runs these backends on a second world and read the output.
+
+    `semantics` stays in the signature and `Semantics.rendering()` stays as a
+    function: the A0 dialect still validates the section, and the reports still
+    render it. What is gone is the duplicate.
 
     Still a deterministic pretty-printer with no model in the path (constraint 1
-    and Theoria 1.8's "不过 LLM,不许润色"): `Semantics.rendering()` is a lookup on
-    three closed value sets.
+    and Theoria 1.8's "不过 LLM,不许润色").
     """
-    body = generate_markdown(ast)
-    lines = ["", "## How a Turn Works", ""]
-    lines.extend(semantics.rendering())
-    lines.append("")
-    return body + "\n".join(lines) + "\n"
+    del semantics                    # validated upstream; rendered by gen_markdown
+    return generate_markdown(ast)
 
 
 def _write(path: str, text: str) -> int:

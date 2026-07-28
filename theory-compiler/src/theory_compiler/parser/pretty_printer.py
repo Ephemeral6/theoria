@@ -42,7 +42,12 @@ def _print_word_table(wt: WordTable) -> str:
     if wt.has_board:
         lines.append("  board")
     for obj in wt.objects:
-        fields = ", ".join(f"{f.name}: {f.type}" for f in obj.fields)
+        # `unique` must survive the round trip (E-07). Dropping it turns a
+        # manual that entails its own `conflict exclusive` into one that does
+        # not, and prints something that still looks right.
+        fields = ", ".join(
+            f"{f.name}: {f.type}" + (" unique" if f.unique else "")
+            for f in obj.fields)
         lines.append(f"  object {obj.name} {{ {fields} }}")
     for dom in wt.domains:
         lines.append(f"  domain {dom.name} {{ {', '.join(dom.values)} }}")

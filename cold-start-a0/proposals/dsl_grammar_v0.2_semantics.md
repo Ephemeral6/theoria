@@ -2,8 +2,47 @@
 
 **To:** the `theory-compiler` track (owner of `CONTRACTS/dsl_grammar_v0.1.md`)
 **From:** `cold-start-a0`
-**Status:** implemented as a local dialect here, requesting adoption upstream.
-`CONTRACTS/dsl_grammar_v0.1.md` is frozen and **has not been touched**.
+**Status:** **ADOPTED — 2026-07-28, `CONTRACTS/dsl_grammar_v0.2.md` §semantics,
+revision record item 1.** Taken essentially verbatim, including the request that
+mattered most: the section is **mandatory**, and a manual without it is
+*rejected* rather than defaulted (`theory_compiler.ir.build_ir` raises, per
+D-TC-011 — same status as a missing `goal:`).
+
+Two things this proposal asked for and did **not** get, recorded so the gap is
+visible rather than assumed away:
+
+* ~~**The `conflict` proof obligation is declared, not discharged.**~~
+  **Settled 2026-07-28** — `theory_compiler/conflict.py` discharges both routes:
+  pairwise guard disjointness for `exclusive`, totality over colliding rules for
+  `priority:`. Six of the seven manuals in the repository discharge outright by
+  guard analysis. **The seventh is a finding**: the peg manual declares
+  `exclusive` and does not entail it — two groundings of one schema both claim
+  the jumping peg whenever two pegs share a cell (600 collisions across the
+  80,000 representable state-action pairs; 0 across the 59,560 where no two live
+  pegs coincide). **Also settled**: the manual gained `unique` on a field
+  (revision item 12), which says the missing fact, and all seven manuals in the
+  repository now discharge by guard analysis alone. Ledger **E-07** closed.
+* **`frame reset`, `conflict priority:` and `cascade multi_frame` parse but have
+  no backend.** Every manual in the repo declares `persist` / `exclusive` /
+  `single_frame`, so the other branch of each has never been compiled. This
+  proposal asked that a backend meeting a value it does not implement *raise*
+  rather than approximate, following `fd_adapter`'s rule. Measured, one manual
+  mutated to `frame reset` + `cascade multi_frame` put through all three
+  generators:
+
+  | backend | before | now |
+  |---|---|---|
+  | `gen_python` | refuses (`UnsupportedClause`) | unchanged |
+  | `gen_lean` | refuses — it builds the predictor first, so it inherits the guard rather than having one | unchanged |
+  | `gen_pddl` | **emitted a domain and problem**, silently, encoding `persist`/`single_frame` | refuses |
+
+  `gen_pddl` reads only the AST, never the IR or the predictor, so nothing
+  carried the guard to it. That is this proposal's own hazard one layer down:
+  the manual states the semantic fact and the compiler ignores it. Fixed
+  2026-07-28 (`gen_pddl._check_semantics`, with a negative test).
+
+`CONTRACTS/dsl_grammar_v0.1.md` is frozen and **was never touched**; v0.2 is a
+new file. The text below is the original request, unedited.
 
 ---
 

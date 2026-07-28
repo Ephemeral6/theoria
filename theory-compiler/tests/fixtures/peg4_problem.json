@@ -1,0 +1,11 @@
+{
+  "name": "peg4-0111",
+  "n_pos": 4,
+  "background": 0,
+  "objects": [
+    {"name": "Peg_1", "type": "Peg", "pos": 1, "color": 1},
+    {"name": "Peg_2", "type": "Peg", "pos": 2, "color": 1},
+    {"name": "Peg_3", "type": "Peg", "pos": 3, "color": 1}
+  ],
+  "goal_states": ["0100"]
+}

@@ -1,3 +1,24 @@
+// ============================================================================
+// NOT THE PARSER IN USE. STALE. DO NOT READ THIS TO LEARN THE GRAMMAR.
+//
+// `parse_theory` is a hand-rolled recursive-descent parser in
+// `theory_parser.py`; nothing in this package imports lark or loads this file
+// (`grep -rn "\.lark" src/ tests/` returns nothing). D1 in ../../../DECISIONS.md
+// chose lark and the implementation went another way; this file is what the
+// choice left behind.
+//
+// It is stale in a way that misleads rather than merely lags: it has **no
+// `semantics:` production**, so a reader consulting it concludes that a manual
+// without that section is well-formed. It is not — v0.2 makes the section
+// mandatory and `parse_theory` rejects a manual lacking it. That is the exact
+// mistake this file will cause, and it has already caused it once during
+// review.
+//
+// The grammar of record is `CONTRACTS/dsl_grammar_v0.2.md`; the executable form
+// is `theory_parser.py`. Where those two disagree, the parser is the defect.
+// This file is neither and binds nothing.
+// ============================================================================
+
 // Theory DSL Grammar for Lark parser
 // Covers: word_table, events, rules, goal, laws
 

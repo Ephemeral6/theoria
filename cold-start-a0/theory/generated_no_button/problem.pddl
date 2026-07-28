@@ -4,6 +4,7 @@
 
   (:objects
     c1-1 c1-2 c1-3 c1-4 c1-6 c1-7 c2-1 c2-2 c2-3 c2-4 c2-6 c2-7 c3-1 c3-2 c3-3 c3-4 c3-6 c3-7 c4-1 c4-2 c4-3 c4-4 c4-6 c4-7 c5-1 c5-2 c5-3 c5-4 c5-6 c5-7 c6-1 c6-2 c6-3 c6-6 c6-7 c7-6 c7-7 - cell
+    c7-3 - markedcell
   )
 
   (:init
@@ -105,6 +106,7 @@
     (adj-left c6-2 c6-1)
     (adj-right c6-2 c6-3)
     (adj-up c6-2 c5-2)
+    (adj-down c6-3 c7-3)
     (adj-left c6-3 c6-2)
     (adj-up c6-3 c5-3)
     (adj-down c6-6 c7-6)
@@ -113,6 +115,7 @@
     (adj-down c6-7 c7-7)
     (adj-left c6-7 c6-6)
     (adj-up c6-7 c5-7)
+    (adj-up c7-3 c6-3)
     (adj-right c7-6 c7-7)
     (adj-up c7-6 c6-6)
     (adj-left c7-7 c7-6)

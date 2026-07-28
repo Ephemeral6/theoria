@@ -40,6 +40,15 @@ def find_lean() -> Optional[str]:
     return found
 
 
+def _decode(raw) -> str:
+    """Toolchain output is UTF-8, whatever this console's codepage claims."""
+    if raw is None:
+        return ""
+    if isinstance(raw, bytes):
+        return raw.decode("utf-8", errors="replace")
+    return raw
+
+
 def check(lean_file: str, timeout: int = 1800) -> Dict[str, object]:
     binary = find_lean()
     if binary is None:
@@ -51,12 +60,20 @@ def check(lean_file: str, timeout: int = 1800) -> Dict[str, object]:
                       "see DECISIONS.md D-A0-012",
         }
 
+    # Bytes, then an explicit UTF-8 decode. `text=True` would decode with the
+    # process locale — GBK on the machine this was found on — and Lean's *error*
+    # prose carries U+2019 and ⟨⟩, so subprocess's reader thread raises
+    # `UnicodeDecodeError` and the diagnostic is destroyed precisely when there
+    # is a diagnostic. Reported by `cold-start-a2` (D-A2-007); A0 never had a red
+    # Lean file, which is why it could not see this from the inside.
+    # `errors="replace"` and not `errors="strict"`: one mangled byte is not a
+    # reason to lose the whole report.
     proc = subprocess.run(
         [binary, lean_file],
-        capture_output=True, text=True, timeout=timeout,
+        capture_output=True, timeout=timeout,
         cwd=os.path.dirname(lean_file) or ".",
     )
-    out = (proc.stdout or "") + (proc.stderr or "")
+    out = _decode(proc.stdout) + _decode(proc.stderr)
     lines = [line.rstrip() for line in out.splitlines() if line.strip()]
 
     axiom_reports: List[Dict[str, object]] = []

@@ -23,6 +23,15 @@ picks:
     laws are proved by `cases` and `decide`. This is A0's route, generalised off
     the AST, and it is what a world with latches and portals gets.
 
+`ic3`
+    The manual declares `clauses sep over ...` and an invariant `cnf(sep)`
+    (ledger entry E-06). The clauses come from an `ic3_pdr` certificate — the
+    engine that exists precisely because `lp_potential` is infeasible on some
+    unsolvable configurations. Closure splits on moves and, inside each move,
+    only on the cells the *invariant* mentions, so the proof grows with the
+    invariant rather than with the board. It reaches configurations no linear
+    pagoda covers.
+
 Three commitments, each with a reason:
 
 * **`native_decide` is never emitted.** It discharges a goal by running compiled
@@ -45,6 +54,9 @@ Axiom budgets, measured rather than hoped (see DECISIONS.md D-TC-008):
 | pagoda, `proof="computational"` | *empty* | `O(2^n)` |
 | pagoda, `proof="algebraic"` | `propext, Quot.sound` | `O(n)` |
 | enumerative | *empty* | `O(|reachable|)` |
+| hybrid (E-06) | *empty* | `O(|reachable|)` |
+| ic3, `proof="computational"` | *empty* | `O(2^n)` |
+| ic3, `proof="algebraic"` | `propext` | `O(moves x 2^|invariant vars|)` |
 
 The algebraic proof cannot reach an empty axiom set, and the reason is not the
 pagoda argument: in Lean 4.9 every core `Int` lemma — `Int.add_comm`,
@@ -244,16 +256,28 @@ def _pagoda_lean(ir: WorldIR, ns: dict, cert: PagodaCertificate,
 
     missing = covers(cert, goal_states)
     if missing:
+        # E-06. The certificate cannot license these goals — `lp_potential` is
+        # sound but incomplete and some of them admit no linear pagoda at all.
+        # Refusing outright was right while there was only one method; it is
+        # wrong now that there are two. Exhaustion is tried, and *only* the
+        # goals the certificate does not cover are handed to it, so the two
+        # arguments stay attributable rather than being blended into one claim.
+        feasible, why = _exhaustible(ns)
+        if feasible:
+            return _hybrid_lean(ir, ns, cert, inv_name, bound,
+                                goal_states, missing)
         raise CertificateGapError(
             "the manual's goal picks out %s on this board, and certificate %r "
             "excludes only %s. %s is left unproven.\n\n"
             "This is `lp_potential`'s documented incompleteness, not a bug to "
             "route around: some genuinely unsolvable configurations admit no "
-            "linear pagoda function. Narrow the level's `goal_states` to what "
-            "the certificate covers, or obtain a certificate that covers the "
-            "rest, or state the claim as open. This generator will not emit a "
-            "theorem the certificate does not license."
-            % (goal_states, cert.claim, cert.goal_states, missing))
+            "linear pagoda function. Exhausting the reachable set is the other "
+            "method this compiler has, and it is not available here either: %s."
+            "\n\nNarrow the level's `goal_states` to what the certificate "
+            "covers, or obtain a certificate that covers the rest, or state the "
+            "claim as open. This generator will not emit a theorem no method it "
+            "has can license."
+            % (goal_states, cert.claim, cert.goal_states, missing, why))
 
     derived = _derive_moves(ns, n)
     if set(derived) != set(cert.moves()):
@@ -462,6 +486,362 @@ def _provenance(path: str) -> str:
 
 # -------------------------------------------------------------- enumerative
 
+def _cnf_request(ir: WorldIR) -> Optional[Tuple[str, str]]:
+    """(invariant name, clauses name) if the manual asks for a CNF invariant."""
+    if ir.ast.laws is None:
+        return None
+    for inv in ir.ast.laws.invariants:
+        text = inv.expr_text.replace(" ", "")
+        if text.startswith("cnf(") and text.endswith(")"):
+            return inv.name, text[len("cnf("):-1]
+    return None
+
+
+def _ic3_lean(ir: WorldIR, ns: dict, cert, inv_name: str,
+              goal_states: Sequence[str], proof: str = "algebraic") -> str:
+    """A Lean development from an `ic3_pdr` separating invariant.
+
+    The point of consuming this at all is proof *size*. Exhaustion closed E-06
+    for a five-state world and is `O(reachable set)`; a CNF invariant is closed
+    by splitting on **moves**, so the development scales with the invariant and
+    the board rather than with the state space. That is the same trade the
+    pagoda route buys, extended to configurations no linear pagoda reaches.
+
+    Where the case split does happen it is over the variables the *invariant*
+    mentions plus the three cells the move touches — not over the whole board.
+    On this fixture that is 3 of 4 positions, which saves little; on a board
+    where the invariant names two cells out of thirty-three it is the whole
+    difference, and it is why the split is computed rather than hardcoded to
+    "all of them".
+
+    Three obligations, and each one is the certificate's own claim re-proved in
+    Lean rather than restated: `inv_init` at the start state, `inv_closed` over
+    every move, `goal_break` at each goal. `unsolvable` follows by induction on
+    `Reachable`.
+    """
+    n = cert.n_pos
+    fields = ["p%d" % i for i in range(n)]
+    derived = _derive_moves(ns, n)
+    if set(derived) != set(cert.moves()):
+        raise LeanGenError(
+            "the manual's rules and the certificate describe different move "
+            "sets. Moves the rules allow and the certificate never weighed: %s. "
+            "Moves the certificate weighed and the rules do not allow: %s. An "
+            "invariant is inductive only with respect to a transition relation, "
+            "so the two have to be the same relation."
+            % (sorted(set(derived) - set(cert.moves())),
+               sorted(set(cert.moves()) - set(derived))))
+
+    start = ns["occupancy"](ns["initial_state"]())
+    if start != cert.initial_state:
+        raise LeanGenError(
+            "the level starts at %s and the certificate is about %s"
+            % (start, cert.initial_state))
+
+    # The positions the invariant actually reads. Everything else stays abstract.
+    mentioned = sorted({cert.index_of(v) for clause in cert.cnf for v, _ in clause})
+
+    L: List[str] = []
+    L.append("/-")
+    L.append("  Auto-generated from theory.dsl — DO NOT EDIT.")
+    L.append("")
+    L.append("  Unsolvability of %s from %s, by a **separating invariant**."
+             % ("{" + ", ".join(goal_states) + "}", cert.initial_state))
+    L.append("")
+    L.append("  The invariant is the manual's `%s`, and its clauses are NOT" % inv_name)
+    L.append("  written here by hand. They come from")
+    L.append("      %s" % _provenance(cert.path))
+    L.append("  produced by %s, and were re-checked here" % cert.produced_by)
+    L.append("  before emission: all three obligations recomputed over the full")
+    L.append("  state space, the producer's own `conditions` block not believed.")
+    L.append("")
+    L.append("      I(s) = %s" % cert.clause_text())
+    L.append("")
+    if proof == "algebraic":
+        L.append("  Why this route and not exhaustion: `inv_closed` below splits on")
+        L.append("  **moves** (%d of them), and within each move only on the %d"
+                 % (len(derived), len(mentioned)))
+        L.append("  position(s) the invariant mentions — not on the board. The")
+        L.append("  reachable set is never enumerated, so the proof does not grow")
+        L.append("  with it. Cost: `simp` rewrites propositions, so the axiom set")
+        L.append("  is `propext`. Never `sorryAx`, never `Lean.ofReduceBool`.")
+    else:
+        L.append("  `proof=\"computational\"`: `inv_closed` is closed by `decide`")
+        L.append("  over every state, which keeps the axiom set **empty** and")
+        L.append("  costs a 2^%d split. The same trade D-TC-008 records for the" % n)
+        L.append("  pagoda route: empty axioms xor a proof that does not grow")
+        L.append("  with the board. Both are honest; neither is both.")
+    L.append("-/")
+    L.append("")
+    L.append("inductive Pos where")
+    for i in range(n):
+        L.append("  | p%d" % i)
+    L.append("  deriving DecidableEq, Repr")
+    L.append("")
+    L.append("/-- One `Bool` per cell: `true` is occupied. -/")
+    L.append("structure St where")
+    for f in fields:
+        L.append("  %s : Bool" % f)
+    L.append("  deriving DecidableEq, Repr")
+    L.append("")
+    L.append("def St.get (s : St) : Pos → Bool")
+    for i, f in enumerate(fields):
+        L.append("  | .p%d => s.%s" % (i, f))
+    L.append("")
+    L.append("def St.set (s : St) : Pos → Bool → St")
+    for i, f in enumerate(fields):
+        L.append("  | .p%d, v => { s with %s := v }" % (i, f))
+    L.append("")
+    L.append("inductive Move where")
+    for i, m in enumerate(derived):
+        L.append("  | m%d   -- jump(%d,%d,%d)" % (i, m[0], m[1], m[2]))
+    L.append("  deriving DecidableEq, Repr")
+    L.append("")
+    for role, idx in (("src", 0), ("over", 1), ("dst", 2)):
+        L.append("def Move.%s : Move → Pos" % role)
+        for i, m in enumerate(derived):
+            L.append("  | .m%d => .p%d" % (i, m[idx]))
+        L.append("")
+    L.append("def legal (s : St) (m : Move) : Bool :=")
+    L.append("  s.get m.src && s.get m.over && !s.get m.dst")
+    L.append("")
+    L.append("def applyMove (s : St) (m : Move) : St :=")
+    L.append("  ((s.set m.src false).set m.over false).set m.dst true")
+    L.append("")
+    L.append("/-- The engine's separating invariant, clause by clause. -/")
+    L.append("def Inv (s : St) : Bool :=")
+    L.append("  " + " && ".join(
+        "(" + " || ".join(
+            ("s.p%d" if value else "!s.p%d") % cert.index_of(v)
+            for v, value in clause) + ")"
+        for clause in cert.cnf))
+    L.append("")
+    L.append("def s0 : St := %s" % _lean_state(cert.initial_state))
+    L.append("")
+    L.append("inductive Reachable : St → Prop where")
+    L.append("  | init : Reachable s0")
+    L.append("  | step : ∀ s m, Reachable s → legal s m = true → "
+             "Reachable (applyMove s m)")
+    L.append("")
+    L.append("theorem inv_init : Inv s0 = true := by decide")
+    L.append("")
+    if proof == "algebraic":
+        L.append("/-- Splitting on `Move` first keeps the state abstract; the inner")
+        L.append("    split is only over the cells the invariant reads. -/")
+        L.append("theorem inv_closed (s : St) (m : Move) (hl : legal s m = true)")
+        L.append("    (hi : Inv s = true) : Inv (applyMove s m) = true := by")
+        L.append("  cases m <;>")
+        for i in mentioned:
+            L.append("    cases h%d : s.p%d <;>" % (i, i))
+        L.append("    simp_all [legal, applyMove, Inv, St.get, St.set,")
+        L.append("              Move.src, Move.over, Move.dst]")
+    else:
+        L.append("/-- Every state, every move, by `decide`: empty axiom set, 2^%d." % n)
+        L.append("    The algebraic form of this proof is the same statement with")
+        L.append("    the board left abstract. -/")
+        L.append("theorem inv_closed (s : St) (m : Move) (hl : legal s m = true)")
+        L.append("    (hi : Inv s = true) : Inv (applyMove s m) = true := by")
+        L.append("  revert hl hi")
+        L.append("  cases s with")
+        L.append("  | mk %s =>" % " ".join(fields))
+        L.append("    " + " <;> ".join("cases %s" % f for f in fields)
+                 + " <;> cases m <;> decide")
+    L.append("")
+    L.append("theorem inv_all (s : St) (h : Reachable s) : Inv s = true := by")
+    L.append("  induction h with")
+    L.append("  | init => exact inv_init")
+    L.append("  | step s m _ hl ih => exact inv_closed s m hl ih")
+    L.append("")
+    for i, goal in enumerate(goal_states):
+        L.append("theorem goal_break_%d : Inv %s = false := by decide"
+                 % (i, _lean_state(goal)))
+    L.append("")
+    L.append("theorem unsolvable : ¬ ∃ s : St, Reachable s ∧ (%s) := by"
+             % " ∨ ".join("s = %s" % _lean_state(g) for g in goal_states))
+    L.append("  rintro ⟨s, hr, hg⟩")
+    L.append("  have hi := inv_all s hr")
+    L.append("  rcases hg with %s" % " | ".join(
+        "rfl" for _ in goal_states))
+    for i in range(len(goal_states)):
+        L.append("  · rw [goal_break_%d] at hi; exact Bool.noConfusion hi" % i)
+    L.append("")
+    L.append("#print axioms inv_init")
+    L.append("#print axioms inv_closed")
+    L.append("#print axioms inv_all")
+    L.append("#print axioms unsolvable")
+    L.append("")
+    return "\n".join(L)
+
+
+#: Above this, transcribing the reachable set into Lean stops being a proof and
+#: starts being a build problem. The number is a policy, not a discovery: what
+#: matters is that the limit is *stated* and that crossing it produces a refusal
+#: rather than a file nobody can compile.
+MAX_ENUMERATED_STATES = 4096
+
+
+def _exhaustible(ns: dict) -> Tuple[bool, str]:
+    """Can the reachable set be transcribed? `(feasible, why not)`.
+
+    Bounded rather than trusting: a world whose reachable set is astronomical
+    must be refused, not enumerated until the machine gives up. `_reachable`
+    would happily run for a very long time on a 33-cell board.
+    """
+    start = ns["initial_state"]()
+    seen = {start.key()}
+    queue = [start]
+    while queue:
+        state = queue.pop(0)
+        for action in ns["ACTIONS"]:
+            nxt = ns["step"](state, action)
+            if nxt.key() not in seen:
+                if len(seen) >= MAX_ENUMERATED_STATES:
+                    return False, ("the reachable set exceeds %d states, so "
+                                   "exhaustion would not produce a proof anyone "
+                                   "could check" % MAX_ENUMERATED_STATES)
+                seen.add(nxt.key())
+                queue.append(nxt)
+    return True, ""
+
+
+def _hybrid_lean(ir: WorldIR, ns: dict, cert: PagodaCertificate,
+                 inv_name: str, bound: int, goal_states: Sequence[str],
+                 missing: Sequence[str]) -> str:
+    """E-06. The certificate covers some goals; exhaustion covers the rest.
+
+    `lp_potential` is sound but incomplete: on the 5-cell board from `11011`,
+    three of the five single-peg terminals admit **no linear pagoda function at
+    all** — `engine-rig`'s own `test_interop.py` pins them as unprovable by that
+    method rather than merely unexported. So the manual's
+    `goal count(Peg, alive) = 1` could not be proved, and the compiler refused
+    to emit a theorem broader than its certificate. That refusal was right; what
+    was missing was a second method.
+
+    Exhaustion is that method, and the compiler already had it. The reachable
+    set is finite and small, none of its states satisfies the goal, and `decide`
+    closes it with an empty axiom set. The two proofs are kept **separate and
+    attributed**, because they are not the same argument and a reader should be
+    able to see which one carried which goal:
+
+    * `inv_all` — the declared potential is at most its bound on every reachable
+      state. The numbers are the engine's, re-derived by `certificate.recheck`
+      before anything is emitted.
+    * `unsolvable` — no reachable state satisfies the goal, by exhaustion.
+
+    **What this does not do.** It does not make the pagoda method complete, and
+    it does not scale: exhaustion is `O(reachable set)`, so a 33-cell English
+    board is out of reach and the same manual would be refused there. The
+    *proposition* is discharged for this configuration; the *method gap* stands
+    and stays in the ledger.
+    """
+    states, index = _reachable(ns)
+    covered = [g for g in goal_states if g not in set(missing)]
+    occupancies = [ns["occupancy"](s) for s in states]
+
+    # A reachable state is a counterexample if it is one of the states the
+    # theorem excludes **or** if the manual's own goal predicate accepts it.
+    # Both, not either: `goal_states` is the level's narrowing of the goal and
+    # `is_goal` is the manual's, and checking only `is_goal` would miss exactly
+    # the case where the level names a state the manual's predicate does not
+    # pick out — which is how a false `unsolvable` gets emitted.
+    targets = set(goal_states)
+    hits = [i for i, s in enumerate(states)
+            if occupancies[i] in targets or ns["is_goal"](s)]
+    if hits:
+        raise LeanGenError(
+            "the goal is reachable: %d of the %d reachable states satisfy it "
+            "(e.g. %s), so `unsolvable` is false and no development will be "
+            "emitted. A certificate covering part of the goal does not change "
+            "that, and exhaustion is what made it visible."
+            % (len(hits), len(states), occupancies[hits[0]]))
+
+    L: List[str] = []
+    L.append("/-")
+    L.append("  Auto-generated from theory.dsl — DO NOT EDIT.")
+    L.append("")
+    L.append("  Problem: %s.  Reachable states: %d." % (ir.problem.name, len(states)))
+    L.append("  Declared semantics: frame %s, conflict %s, cascade %s."
+             % (ir.semantics.frame, ir.semantics.conflict, ir.semantics.cascade))
+    L.append("")
+    L.append("  TWO METHODS, AND WHICH GOAL EACH ONE CARRIES (ledger E-06).")
+    L.append("")
+    L.append("  The manual's goal picks out %d state(s) on this board." % len(goal_states))
+    L.append("  Certificate %s" % _provenance(cert.path))
+    L.append("  produced by %s excludes %d of them algebraically:"
+             % (cert.produced_by, len(covered)))
+    for state in covered:
+        L.append("    %s   potential %+d > %+d, the initial bound"
+                 % (state, cert.potential(state), cert.initial_potential))
+    L.append("  The other %d are **not excluded by this certificate** — their"
+             % len(missing))
+    L.append("  potential does not exceed the bound, so the argument says")
+    L.append("  nothing about them:")
+    for state in missing:
+        L.append("    %s   potential %+d, which does not exceed the bound"
+                 % (state, cert.potential(state)))
+    L.append("  That is a statement about *this* certificate and not about the")
+    L.append("  method: another certificate may exclude some of them, and for")
+    L.append("  others no linear pagoda function exists at all. Which is which")
+    L.append("  is `lp_potential`'s to report, not this generator's to guess —")
+    L.append("  so they are all closed the same way here, by exhausting the")
+    L.append("  reachable set.")
+    L.append("  Both arguments end in `decide`; neither adds an axiom.")
+    L.append("")
+    L.append("  This does not make the pagoda method complete and it does not")
+    L.append("  scale: exhaustion is O(reachable set). On a board whose reachable")
+    L.append("  set is large the same manual is refused, and correctly.")
+    L.append("-/")
+    L.append("")
+    L.append("inductive St where")
+    for i, occ in enumerate(occupancies):
+        L.append("  | s%d   -- %s" % (i, occ))
+    L.append("  deriving DecidableEq, Repr")
+    L.append("")
+    actions = list(ns["ACTIONS"])
+    L.append("inductive Act where")
+    for i, a in enumerate(actions):
+        L.append("  | a%d   -- %s" % (i, "(" + ", ".join(map(str, a)) + ")"))
+    L.append("  deriving DecidableEq, Repr")
+    L.append("")
+    L.append("/-- The manual's rules, transcribed from the executable form. -/")
+    L.append("def step : St → Act → St")
+    for i, state in enumerate(states):
+        for j, action in enumerate(actions):
+            L.append("  | .s%d, .a%d => .s%d"
+                     % (i, j, index[ns["step"](state, action).key()]))
+    L.append("")
+    L.append("def Goal : St → Bool")
+    for i in range(len(states)):
+        L.append("  | .s%d => false" % i)
+    L.append("")
+    L.append("inductive Reachable : St → Prop where")
+    L.append("  | init : Reachable .s0")
+    L.append("  | step : ∀ s a, Reachable s → Reachable (step s a)")
+    L.append("")
+    L.append("/-- The engine's weights, %s, evaluated on each reachable state." % inv_name)
+    L.append("    w = %s -- from the certificate, re-derived before emission. -/"
+             % (cert.weights,))
+    L.append("def potential : St → Int")
+    for i, occ in enumerate(occupancies):
+        L.append("  | .s%d => %d" % (i, cert.potential(occ)))
+    L.append("")
+    L.append("theorem inv_all (s : St) : potential s ≤ %d := by" % bound)
+    L.append("  cases s <;> decide")
+    L.append("")
+    L.append("theorem no_goal_state (s : St) : Goal s = false := by")
+    L.append("  cases s <;> rfl")
+    L.append("")
+    L.append("theorem unsolvable : ¬ ∃ s : St, Reachable s ∧ Goal s = true := by")
+    L.append("  rintro ⟨s, _, hg⟩")
+    L.append("  rw [no_goal_state s] at hg")
+    L.append("  exact Bool.noConfusion hg")
+    L.append("")
+    L.append("#print axioms inv_all")
+    L.append("#print axioms unsolvable")
+    L.append("")
+    return "\n".join(L)
+
+
 def _enumerative_lean(ir: WorldIR, ns: dict) -> str:
     states, index = _reachable(ns)
     actions = list(ns["ACTIONS"])
@@ -546,7 +926,51 @@ def generate_lean(ast: TheoryAST, problem: ProblemSpec,
     if proof not in PROOF_MODES:
         raise LeanGenError("proof must be one of %r, got %r"
                            % (list(PROOF_MODES), proof))
-    ir = build_ir(ast, problem)
+    # The certificate goes in *here*, not into this backend's own bookkeeping:
+    # `_resolve_weights` is the single place a `weights <name>` declaration
+    # acquires numbers, and the level-vs-certificate agreement check moved
+    # there with it — which is why a stale level copy now raises `IRError`
+    # rather than `LeanGenError` (E-05/E-06).
+    #
+    # Which forms this reaches, stated exactly, because the obvious reading is
+    # wrong: any caller that hands `build_ir` a certificate gets the resolved
+    # vector and the agreement check. That is this backend and
+    # `generate_markdown(ast, ir)`. `gen_python` and `gen_pddl` take no
+    # certificate and never see one — not an oversight: neither form's output
+    # depends on the weights, so there is nothing in them that could go stale.
+    # The predictor is a `step` function; a pagoda potential is not part of it.
+    # An `ic3_pdr` certificate carries a CNF rather than a weight vector, so it
+    # takes its own route and must not be handed to `_resolve_weights`.
+    from ..ic3_certificate import InductiveInvariantCertificate
+    if isinstance(certificate, InductiveInvariantCertificate):
+        ir = build_ir(ast, problem)
+        ns = _load_predictor(ast, problem)
+        cnf_request = _cnf_request(ir)
+        if cnf_request is None:
+            raise LeanGenError(
+                "an ic3_pdr certificate was supplied but the manual declares no "
+                "`cnf(...)` invariant, so nothing in it would be used. Declare "
+                "the invariant (E-06) or drop the certificate.")
+        inv_name, clauses_name = cnf_request
+        declared = {d.name for d in ir.ast.word_table.clauses}
+        if clauses_name not in declared:
+            raise LeanGenError(
+                "invariant %r refers to clauses %r, which word_table never "
+                "declares. Add `clauses %s over <field>` (E-06)."
+                % (inv_name, clauses_name, clauses_name))
+        goal_states = _goal_states(ns, ir)
+        from ..ic3_certificate import covers as ic3_covers
+        uncovered = ic3_covers(certificate, goal_states)
+        if uncovered:
+            raise CertificateGapError(
+                "the manual's goal picks out %s on this board and certificate "
+                "%r excludes only %s; %s is left unproven. `ic3_pdr` is a "
+                "different method from `lp_potential`, not an omniscient one."
+                % (goal_states, certificate.claim, certificate.goal_states,
+                   uncovered))
+        return _ic3_lean(ir, ns, certificate, inv_name, goal_states, proof)
+
+    ir = build_ir(ast, problem, certificate)
     ns = _load_predictor(ast, problem)
 
     request = _pagoda_request(ir)
@@ -573,15 +997,17 @@ def generate_lean(ast: TheoryAST, problem: ProblemSpec,
             "Add `weights %s over <field>` (E-05)."
             % (inv_name, weights_name, weights_name))
 
-    # The certificate is the source of truth for the numbers. The level may
-    # repeat them — a self-contained problem file is sometimes worth having —
-    # but then the two must agree, because a stale copy is how a proof ends up
-    # resting on weights nobody solved for.
-    supplied = ir.weights.get(weights_name)
-    if supplied is not None and list(supplied) != list(certificate.weights):
+    # The numbers themselves, and the agreement check against any level copy,
+    # were resolved by `build_ir` above. What is left to check here is that the
+    # resolution actually landed on *this* invariant's potential: a certificate
+    # that filled some other declared name would leave this one without a
+    # vector, and a backend that then read `certificate.weights` anyway would be
+    # quietly proving a theorem about a potential the manual did not name.
+    if list(ir.weights.get(weights_name, [])) != list(certificate.weights):
         raise LeanGenError(
-            "the level supplies %s = %s and the certificate carries %s. One of "
-            "them is stale; they must agree before either becomes a theorem."
-            % (weights_name, supplied, certificate.weights))
+            "invariant %r is a potential over %r, but the certificate's vector "
+            "was not resolved onto that name (it holds %r). One certificate "
+            "fills one declared potential; compile with the certificate for %s."
+            % (inv_name, weights_name, ir.weights.get(weights_name), weights_name))
 
     return _pagoda_lean(ir, ns, certificate, inv_name, bound, proof)

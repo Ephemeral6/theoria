@@ -1,8 +1,31 @@
 # dsl_grammar_v0.2.md
 
+**Version:** 0.2 · **Status:** 定稿（`theory-compiler` 单方所有，不需要会签）·
+**Effective:** 2026-07-28
+
 **Owner:** the `theory-compiler` track. **Supersedes:** `dsl_grammar_v0.1.md`,
 which stays frozen and unedited — v0.1 is what the M8 rehearsal was built and
 tagged against, and rewriting it would rewrite that history.
+
+**Freeze policy.** v0.2 is frozen **at the tag that carries this line**.
+Anything after that tag goes into a `dsl_grammar_v0.3.md`, by the same rule that
+produced this file: **a change needs a ledger entry or a defect that forced it**,
+named in the revision record. "It would read better" is not a reason to touch a
+contract two tracks compile against.
+
+Revision items 11 to 14 landed **before** that tag, in the same unmerged branch
+as the rest of this file, and are recorded here rather than in a v0.3 for that
+reason. After the tag the identical change would have needed a new file; the
+policy is about the tag, not about the calendar, and this note exists so the
+distinction cannot be quietly reinterpreted later.
+
+**Why this one needs no countersignature and `candidates_schema_v0.2.md` does.**
+`CONTRACTS/` holds contracts of two different kinds. This grammar is *owned* by
+this track — `engine-rig` neither writes nor reads `theory.dsl` — so adopting a
+ledger-forced extension is this track's call alone. `candidates_schema.md` is
+the other kind: `engine-rig` is the writer and this track only reads, so its
+revision is a draft until the writer signs. Ownership, not politeness, decides
+which is which.
 
 Every change below was forced by a specific entry in the expressivity ledger
 (`cold-start-a0/THEORIZE_LOG.md` §表达力台账) or by a specific defect found while
@@ -20,12 +43,35 @@ document and that parser disagree, the parser is the defect.
 ```
 word_table:
   board                                   # never co-varies; implicit
-  object <Name> { <field>: <Type>, ... }  # observations only
+  object <Name> { <field>: <Type> [unique], ... }   # observations only
   <ObjName> [segment: <method> ev: <range> compress: <bytes>]
   domain   <name> { <v1>, <v2>, ... }     # NEW — a finite value set        (E-02)
   landmark <name>                         # NEW — a cell the level locates  (E-04)
   weights  <name> over <field>            # NEW — a potential the level fills (E-05)
+  clauses  <name> over <field>            # NEW — a separating invariant     (E-06)
 ```
+
+**`clauses <name> over <field>`** is `weights` one level of expressivity over:
+the domain declares that a propositional separating invariant is available, and
+an `ic3_pdr` certificate supplies the clauses. Declared for the same reason the
+weights are — a reader of `theory.dsl` alone should be able to see that the
+manual rests on an engine-derived object, and on **which** engine.
+
+**`unique` on a field** (E-07) says: no two *live* instances of this type ever
+share a value of it. `pos: Int unique` is "pegs cannot stack". It is a fact
+about the world — pegs cannot, two ghosts in a corridor might — so it is
+per-world content in world-independent syntax, and it belongs to the manual
+rather than to any backend.
+
+It is a **claim, not a hint**, and carries its own proof obligation: the level's
+initial state satisfies it, and `step` preserves it. The second half is the one
+that matters, because a property that holds at the start and rots one move later
+would void every proof resting on it. A backend that uses the declaration
+without discharging it is doing the thing `semantics:` exists to prevent.
+
+An unrecognised field modifier is an **error**. The parser must not skip it: a
+dropped `unique` leaves a manual that reads as though it entails `conflict
+exclusive` and does not.
 
 `domain`, `landmark` and `weights` all declare a **name** whose **value** lives
 in the problem instance. That is the domain/problem split made writable: v0.1
@@ -64,6 +110,51 @@ The parenthetical under `single_frame` is not decoration. Applying rules in file
 order instead cost the A0 sprint a real bug: `press_left` recoloured a button,
 and `door_opens_left` then re-read its guard against the updated state, found
 the new colour and silently did not fire.
+
+**Every backend must refuse a value it does not implement.** Declaring the fact
+buys nothing if a generator reads the declaration and encodes a different world
+anyway — that is this section's own hazard, one layer down. So a backend
+supporting only part of the value set raises, names the value, and stops;
+`fd_adapter`'s rule, applied to the compiler. As of v0.2 no backend in this
+repository implements `frame reset`, `conflict priority:`, or `cascade
+multi_frame`; all three parse, and all three are refused at generation.
+
+#### Discharging `conflict`
+
+The obligation is **per object**, and reading it as "all guards pairwise
+disjoint" is wrong: two rules with identical guards that claim *different*
+objects are a cascade, not a conflict, and A0's `press_left` / `door_opens_left`
+are exactly that. So the obligation ranges over pairs of rules whose claimed
+objects intersect, and only those. Pairs are settled by two routes:
+
+1. **Guard analysis** — sound, incomplete, syntactic. Two guards are disjoint if
+   they match different actions or differ in an action argument; if one requires
+   a predicate the other negates; if they demand different colours of one cell;
+   if one requires `free(t)` and the other a non-background colour of `t`; if
+   one requires `free(t)` and the other `t = wall`; or if they pin two
+   *different* live instances to one value of a `unique` field. Anything else is
+   **undischarged**, never "assumed fine".
+2. **Exhaustive sweep** — the predictor, run over every state the level can
+   represent, **not** the reachable ones. Reachability is a property of one
+   starting configuration and `conflict` is a claim about the domain; D-TC-012
+   is the standing lesson that a rule can be right as a problem solution and
+   wrong as a domain.
+
+A sweep may also discharge the obligation **conditionally**, relative to a
+*named* well-formedness condition, and this is a result rather than a shrug only
+because the machine produces both halves: a clean sweep under the condition and
+a concrete witness without it. A conditional discharge is simultaneously a
+defect report — the manual claims something it does not entail — and belongs in
+the ledger.
+
+**E-07 was the instance, and it is closed.** `conflict exclusive` on a manual
+whose schema quantifies over a second instance could not be entailed: saying
+"no other live instance of this type is on this cell" is not expressible in a
+guard. The fix was not to weaken the check but to give the manual somewhere to
+put the fact — `unique` on a field, revision item 12 — which is why the
+expressivity ledger is the prescribed response to a gap rather than a place
+things go to be forgotten. The conditional route remains for manuals that need
+the condition and do not declare it.
 
 ### events
 
@@ -121,21 +212,50 @@ laws:
 
 * **Guard language:** spatial predicates, object comparisons, integer arithmetic,
   and negation. Proof goes through a decidable procedure (`decide`/`omega`).
-* **Invariant language:** linear arithmetic, object counts, mod-2 parity, and
-  finite weight functions of pagoda type. **Connectivity-class invariants remain
-  unsupported** — record them in the ledger; do not extend this contract by hand.
+* **Invariant language:** linear arithmetic, object counts, mod-2 parity, finite
+  weight functions of pagoda type, and **propositional CNF over cell occupancy**
+  (`cnf(<name>)`, E-06). The last of those is the only invariant body that takes
+  **no comparison operator** — a predicate is already true or false of a state
+  and there is nothing to compare it to. Every other body still needs its
+  operator, so a bare arithmetic body missing `<=` is the typo it always was.
+  **Connectivity-class invariants remain unsupported** — record them in the
+  ledger; do not extend this contract by hand.
 * **domain/problem split:** `word_table` + `semantics` + `rules` + `laws` are the
-  domain and travel across levels. Grid layout, initial state, landmark
-  coordinates and weight vectors are the problem, and are supplied per level.
+  domain and travel across levels. Grid layout, initial state and landmark
+  coordinates are the problem, and are supplied per level.
+
+* **Weight vectors are the one thing the split does not settle.** A `weights w`
+  declaration names a free vector, and its numbers may arrive from the level
+  *or* from an engine certificate. **A compiler must accept the certificate as a
+  source** — requiring the level to repeat the numbers means hand-copying an
+  engine's output into a checked-in file, and a hand-copy is how a proof comes
+  to rest on weights nobody re-solved. If both sources supply the vector they
+  must be **equal**, and a disagreement is an error, not a precedence question.
+  One certificate fills one declared name; a compiler holding one certificate
+  and two unfilled declarations must **refuse** rather than pick.
+  Whichever source won must be recorded in every form that prints the numbers —
+  `source: lp_potential` says an engine solved for them, and a reader who cannot
+  see which file they came from cannot check that.
 
 ### A standing limit worth stating in the contract
 
 `pagoda(...)` is **sound but incomplete**: some genuinely unsolvable
 configurations admit no linear pagoda function at all. On the 5-cell peg board
 from `11011`, exactly two of the five single-peg goals are certifiable this way.
-A generator must therefore **refuse** to emit a proof whose theorem is broader
-than the certificate it was given, rather than narrowing the claim silently. An
-uncoverable goal is an open question, and belongs in the ledger.
+
+A generator must **never** emit a proof whose theorem is broader than what it
+has actually established. It does not follow that it must refuse: if it holds a
+*second* method that closes the residue, using it is not a weakening but the
+whole point of having more than one. The rule is therefore about attribution
+rather than abstention — **every goal must be carried by a named method, and the
+artefact must say which**. Blending two arguments into one claim is the failure
+mode; so is withholding a proof the compiler can produce.
+
+When no method it has can license a goal, it refuses, and the goal is an open
+question that belongs in the ledger. E-06 was that case and is now discharged
+this way: certificate where the certificate reaches, exhaustion of the reachable
+set where it does not, each named in the emitted file. The method gap itself is
+unchanged — exhaustion is `O(reachable set)` and refuses above a stated bound.
 
 ---
 
@@ -160,8 +280,93 @@ silently.
 | 7 | `source:` on an invariant | **E-05** | nothing distinguished an engine-derived invariant from an author-derived one |
 | 8 | balanced-paren argument parsing | **D-A0-013** | `then jumped(Cart, (1, 1))` parsed its second argument as the name `(1, 1` and raised nothing — a silently wrong AST |
 
+| 9 | weight vectors may come from a certificate | **E-06**, D-TC-013 | `gen_lean` read the numbers from the certificate and the other three backends read them only from the level, so a manual either hand-copied the engine's vector into a checked-in file or rendered a `theory.md` that named a potential it could not show |
+| 10 | a backend must refuse an unimplemented `semantics:` value | the `semantics:` proposal's own closing paragraph, and a defect found while finalising this version | `gen_pddl` reads only the AST — never the IR, never the predictor — so no guard reached it, and a manual declaring `frame reset` + `cascade multi_frame` compiled to a STRIPS encoding of `persist` + `single_frame` without a word of complaint |
+| 11 | `conflict` must be discharged, not merely declared | **E-07**, and this contract's own §semantics, which said "`certify` must prove it" while nothing did | for one revision the manual named which of constraint 9's two routes it claimed and no tool checked either. A declaration nobody verifies reads exactly like a verified one — strictly worse than not asking, because it looks like evidence |
+| 12 | `unique` on an object field | **E-07** | the peg manual declared `conflict exclusive` and could not entail it: its jump schema quantifies over a second peg and pins it only by position, so two groundings both claim the jumping peg whenever two pegs share a cell. The fact that pegs cannot stack was true of the world and had nowhere to be written down |
+| 13 | a generator may close a goal by a second method, with attribution | **E-06** | `goal count(Peg, alive) = 1` went one revision unproven. The certificate could not license it and the compiler refused — right while the pagoda route was the only route, and a withheld proof once exhaustion was also available |
+| 14 | `clauses <name> over <field>` and `cnf(<name>)` | **E-06** | exhaustion closed E-06 at `O(reachable set)`, which does not survive a larger board. `ic3_pdr` reaches configurations no linear pagoda covers, and its invariant had no form in this language — so a manual could not name the object its proof rested on. Schema: `CONTRACTS/ic3_certificate_v0.1.md` |
+
 Ledger entries E-01 through E-05 are **discharged** by this revision. E-03 was
 the one named as "the one to fix first"; it is item 1.
+
+**E-06 is not discharged, and item 9 is not it.** E-06 is the ledger entry for
+`goal count(Peg, alive) = 1` being *unprovable*: on the 5-cell board from
+`11011`, three of the five single-peg goals admit no linear pagoda function at
+all — `engine-rig`'s own `test_interop.py` pins them as unprovable by this
+method, not merely unexported. The configuration really is unsolvable; the
+invariant language cannot carry the conclusion. Item 9 discharges the
+*transcription* half that E-06 dragged along with it. The proof half stays open
+and needs one of two things, neither of which is a grammar change:
+
+* the invariant language grows past linear arithmetic / counts / parity / finite
+  weights — which this contract explicitly forbids doing by hand; or
+* a different proof method supplies the certificate. `ic3_pdr` is the live
+  candidate: it is the engine that exists *because* `lp_potential` is infeasible
+  on exactly this kind of configuration, and it reports the same three
+  obligations (`inv_init` / `inv_closed` / `goal_break`) that this compiler
+  already knows how to re-derive. What is missing is a certificate export for
+  it — `engine-rig/interop/certificates/` holds pagoda documents only. That is
+  the shape of the next round, and it is `engine-rig`'s side of the boundary.
+
+Until then a compiler must keep **refusing** to emit a theorem broader than its
+certificate. That refusal is the contract's own rule (see the standing limit
+above), and it is the entire reason E-06 is a recorded open question rather than
+a slightly-overclaiming `unsolvable`.
+
+---
+
+## Migrating a v0.1 manual to v0.2
+
+Mechanical, and short. A v0.1 manual is a v0.2 manual **plus one required
+section**; everything else v0.2 added is opt-in.
+
+1. **Add `semantics:`** — the only mandatory step, and the only one that can
+   change what the manual means. Place it after `word_table:`, before `events:`,
+   and state all three:
+
+   ```
+   semantics:
+     frame     persist        # or reset
+     conflict  exclusive      # or priority: r1 > r2 > ...
+     cascade   single_frame   # or multi_frame
+   ```
+
+   **Do not copy these three values from another manual.** They are per-world
+   facts. `persist` / `exclusive` / `single_frame` is what A0 and A2 both
+   declared, but a decaying world does not persist, and a world with a
+   self-triggering tick is not `single_frame`. If you do not know which is true,
+   that is a finding to probe, not a default to accept — the whole reason the
+   section is mandatory is that guessing it silently produces a different world.
+
+2. Everything else is optional and changes nothing until used: `domain`,
+   `landmark`, `weights` / `pagoda(...)` / `source:`, `forall ?v in ...`,
+   `not <predicate>`. A v0.1 manual that uses none of them compiles under v0.2
+   to the same four forms.
+
+3. `playbook.dsl` needs no migration at all.
+
+### The one hazard, stated plainly
+
+**A v0.2 manual parses under a v0.1 parser — silently, and to a different
+world.** The v0.1 parser skips lines it does not recognise, so `semantics:` and
+its three statements vanish and the manual compiles under whatever default the
+backend happens to hard-code. That is not graceful degradation; it is the exact
+failure the section was added to close.
+
+Consequences, in both directions:
+
+* **v0.1 manual under a v0.2 parser** → **rejected**, loudly, for a missing
+  `semantics:` section. This is deliberate (D-TC-011): the same status as a
+  missing `goal:`. Migration is adding three lines, and being told to add them
+  beats compiling a world nobody declared.
+* **v0.2 manual under a v0.1 parser** → **accepted, wrongly**. Nothing warns.
+  If you must feed a manual to a v0.1 parser, delete the `semantics:` section
+  first and accept that you no longer know which world you compiled.
+
+By contrast, a missing `landmark` declaration is a **warning**, not an error —
+it compiles to exactly the same world and costs only legibility. E-03 is
+mandatory because it changes the world; E-04 is not because it does not.
 
 ### Deliberately not changed
 

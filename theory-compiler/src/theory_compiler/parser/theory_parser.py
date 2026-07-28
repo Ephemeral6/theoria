@@ -8,7 +8,7 @@ from typing import Optional
 
 from .ast_nodes import (
     TheoryAST, WordTable, ObjectDecl, Field, ConceptAccount,
-    LandmarkDecl, WeightsDecl, DomainDecl, SemanticsSection,
+    LandmarkDecl, WeightsDecl, ClausesDecl, DomainDecl, SemanticsSection,
     EventsSection, EventDecl, EventAlt,
     RulesSection, RuleDecl, RuleMeta, Guard, GuardClause,
     GuardAction, GuardPredicate, ActionMatch,
@@ -195,6 +195,17 @@ class TheoryParser:
                         f"over <field>`): {line}", self.pos + 1)
                 wt.weights.append(WeightsDecl(m.group(1), m.group(2)))
                 self.pos += 1
+            elif line.startswith("clauses "):
+                # E-06: `clauses sep over Peg.pos` — a separating invariant
+                # whose clauses arrive from an `ic3_pdr` certificate, declared
+                # here for the same reason the weights are.
+                m = re.match(r'clauses\s+(\w+)\s+over\s+([\w.]+)\s*(?:#.*)?$', line)
+                if not m:
+                    raise ParseError(
+                        f"Invalid clauses declaration (expected `clauses <name> "
+                        f"over <field>`): {line}", self.pos + 1)
+                wt.clauses.append(ClausesDecl(m.group(1), m.group(2)))
+                self.pos += 1
             elif line.startswith("domain "):
                 # E-02: `domain dir { up, down, left, right }`
                 m = re.match(r'domain\s+(\w+)\s*\{([^}]*)\}', line)
@@ -230,9 +241,21 @@ class TheoryParser:
         if fields_str:
             for part in fields_str.split(","):
                 part = part.strip()
-                fm = re.match(r'(\w+)\s*:\s*(\w+)', part)
-                if fm:
-                    fields.append(Field(fm.group(1), fm.group(2)))
+                # Anchored, and trailing text is an error rather than debris.
+                # The previous pattern was `re.match(r'(\w+)\s*:\s*(\w+)')` with
+                # no `$`, so `pos: Int unique` parsed as a plain `pos: Int` and
+                # the modifier vanished without a word — the v0.1-parser hazard
+                # (skip what you do not recognise, compile a different world)
+                # reproduced inside one line.
+                fm = re.match(r'(\w+)\s*:\s*(\w+)(?:\s+(unique))?\s*$', part)
+                if not fm:
+                    raise ParseError(
+                        f"cannot parse field {part!r} in object {name}. The "
+                        f"form is `<name>: <Type>` with an optional `unique` "
+                        f"modifier (E-07); anything else is refused rather "
+                        f"than skipped.", self.pos + 1)
+                fields.append(Field(fm.group(1), fm.group(2),
+                                    unique=bool(fm.group(3))))
         self.pos += 1
         return ObjectDecl(name, fields)
 
@@ -648,7 +671,19 @@ class TheoryParser:
                 value = rest[idx + len(op):].strip()
                 return InvariantDecl(name, expr_text, op, value, status, source)
 
-        raise ParseError(f"No comparison op in invariant: {rest}", self.pos + 1)
+        # E-06. A propositional invariant is a *predicate*, not a comparison:
+        # `cnf(sep)` is already either true or false of a state and there is
+        # nothing to compare it to. Only this one form is admitted without an
+        # operator — a bare arithmetic body with a missing `<=` is still the
+        # typo it always was, and still an error.
+        if re.fullmatch(r'cnf\(\s*\w+\s*\)', rest.replace(" ", "")):
+            return InvariantDecl(name, rest.replace(" ", ""), "", "",
+                                 status, source)
+
+        raise ParseError(
+            f"No comparison op in invariant: {rest}. An invariant body is "
+            f"`<expr> <op> <const>`; the one exception is `cnf(<name>)`, which "
+            f"is a predicate and takes no operator (E-06).", self.pos + 1)
 
     def _parse_theorem(self) -> TheoremDecl:
         line = self._current_stripped()

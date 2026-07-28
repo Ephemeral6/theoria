@@ -359,9 +359,112 @@ Things the world said that `dsl_grammar_v0.1` cannot.
 | E-03 | a frame axiom / default clause | a comment at the top of `theory.dsl` and a hard-coded rule in the backends | **the most important semantic fact about `step` is not in the DSL at all** |
 | E-04 | declaring a board landmark (`portal_exit`, the goal cell) | free-floating names resolved by the problem instance | the domain/problem boundary is real but unwritten; a reader of `theory.dsl` alone cannot tell which names are level data |
 | E-05 | a weight function over cells for a pagoda invariant | the vector lives in the problem instance (M5) | same as E-04 |
+| E-06 | a proof method for goals no linear pagoda covers | **discharged** — the certificate covers what it covers, exhaustion closes the rest, each goal attributed to its method | see below |
+| E-07 | saying that two live instances of one type never share a cell | **discharged** — `unique` on a field (`dsl_grammar_v0.2` revision item 12) | see below |
 
 E-03 is the one to fix first: a manual whose default behaviour is a comment is
 not a manual.
+
+### E-06, in full — one proposition, two methods
+
+`goal count(Peg, alive) = 1` was unproven for one revision. The certificate
+excludes `00010` algebraically; `10000`, `00100` and `00001` admit **no linear
+pagoda function at all** (`engine-rig/tests/test_interop.py` pins them as
+unprovable by that method, not merely unexported), and `01000` has a certificate
+of its own that the compilation was not given. So the pagoda route could not
+license the manual's theorem, and the compiler refused — correctly, while that
+was the only route.
+
+**Discharged 2026-07-28 by using the other method the compiler already had.**
+The reachable set from `11011` is five states — `11011`, `00111`, `11100`,
+`01001`, `10010` — and none of them has one peg. Exhausting it closes every goal
+the certificate does not, and `decide` keeps the axiom set empty. Measured, not
+asserted: `lean` 4.9.0 exits 0 on the generated file and reports
+`'inv_all' does not depend on any axioms` and
+`'unsolvable' does not depend on any axioms`.
+
+**The two arguments stay separate and attributed.** The file's header names
+which goal each one carried, because they are not the same argument and a
+blended claim would be worse than either half. It also says only what is known:
+that a goal is *not excluded by this certificate* is a fact about the
+certificate, whereas *no linear pagoda exists* is a fact about the method that
+only `lp_potential` can report — the first draft of the header conflated the
+two and libelled `01000`, which has a certificate.
+
+**What exhaustion does not fix, and what does.** Exhaustion is
+`O(reachable set)`: it closes this configuration and does not survive a larger
+board. The structural answer is a **third** method, and the engine for it already
+exists — `ic3_pdr`, which is infeasible-LP's counterpart and reports the same
+three obligations. Its certificate is now consumed
+(`theory_compiler/ic3_certificate.py`, schema in
+`CONTRACTS/ic3_certificate_v0.1.md`, manual side `clauses`/`cnf(...)` at
+revision item 14), and the Lean it produces closes `inv_closed` by splitting on
+**moves** — so proof size tracks the invariant rather than the state space.
+Measured on the peg4 fixture: `computational` empty axiom set, `algebraic`
+`propext` only, which is one axiom cheaper than the algebraic pagoda route.
+
+**Still not discharged.** Three limits, stated rather than rounded off:
+
+* The **emitting** half of the ic3 interop is `engine-rig`'s file and is not
+  written. The consumer runs against a fixture transcribed from the candidate
+  row they have already published; the schema is a draft awaiting their
+  countersignature.
+* "Proof size tracks the invariant" is a **structural** claim that the fixture is
+  too small to demonstrate — 4 cells, 2 clauses, an inner split over 2 of 4
+  positions. It pays on a large board and there is no large board here.
+* `lp_potential` is still sound and incomplete, exhaustion is still
+  `O(reachable set)`, and a configuration all three methods miss still has no
+  proof. D-TC-008's trade-off is untouched.
+
+### E-07, in full — an obligation the guard language cannot let a manual meet
+
+Found 2026-07-28 while making the `conflict` obligation checkable
+(`theory_compiler/conflict.py`). The peg manual declares `conflict exclusive`
+and **does not entail it**.
+
+`jump_right` is a schema quantified over two instances, `forall ?a in Peg forall
+?b in Peg`, and its guard pins `?b` only by position: `?b.pos = ?a.pos + 1`.
+Grounding produces one rule per pair, and two of them — `(?a=Peg_0, ?b=Peg_1)`
+and `(?a=Peg_0, ?b=Peg_3)` — both claim `Peg_0` and both fire whenever `Peg_1`
+and `Peg_3` occupy the same cell. Measured by exhaustive sweep of the predictor:
+
+| swept | (state, action) pairs | rules claiming one object twice |
+|---|---|---|
+| every representable state | 80,000 | **600** |
+| …restricted to no two live pegs sharing a cell | 59,560 | **0** |
+
+So the declaration is true of the world and unstated in the manual. To state it,
+a guard would need to quantify over instances *inside itself* — "there is no
+other live `Peg` at this cell" — which the v0.2 guard language does not have,
+and which `dsl_grammar_v0.2.md` forbids adding by hand. The invariant language
+cannot carry it either: it reaches linear arithmetic, counts, parity and finite
+weights, and "these two positions differ" is none of those. `count(Peg, pos = c,
+alive = true) <= 1` would need a quantifier over cells that invariants lack.
+
+**Cost of not having it, while it lasted.** The strongest thing any tool could
+say about the peg manual was *conditional*: `exclusive` holds under a named
+condition (`distinct_positions`), fails without it, both halves machine-checked
+with a witness. A real result, and weaker than the manual's own claim. Same
+shape as the finding behind D-TC-012 — a rule can be right as a *problem*
+solution and wrong as a *domain* — and the reason the check sweeps every
+representable state rather than the reachable ones.
+
+**Discharged, 2026-07-28.** Not by weakening the check: by giving the manual
+somewhere to put the fact. `object Peg { pos: Int unique, alive: Bool }` says
+what was always true of the world, and with it guard analysis discharges all
+228 overlapping pairs directly — the conditional route is no longer reached.
+`unique` is itself an obligation rather than an assertion (`certify_uniqueness`:
+true initially, preserved by `step` across all 59,560 well-formed transitions),
+because a restriction nobody checks is how a manual comes to describe a world it
+does not have.
+
+Two hazards found and closed while adding it, both the same shape as the one
+`semantics:` exists to close: the field regex was unanchored, so `pos: Int
+unique` parsed as plain `pos: Int` and the modifier **vanished silently**; and
+the pretty-printer omitted it, so a parse→print→parse round trip produced a
+manual that no longer entailed its own `conflict exclusive` and looked entirely
+normal. An unrecognised field modifier is now an error, and the round-trip test
+compares fields rather than names.
 
 ---
 

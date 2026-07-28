@@ -55,6 +55,11 @@ class WorldIR:
     actions: List[tuple]                    # (name, arity) seen in guards
     landmarks: Dict[str, tuple] = field(default_factory=dict)
     weights: Dict[str, List[int]] = field(default_factory=dict)
+    # Where each vector in `weights` came from, by declared name: `"problem
+    # <name>"` or `"certificate <repo-relative path>"`. Every form that prints
+    # a weight prints this beside it, so "who solved for these numbers" is a
+    # property of the artefact and not of the reader's memory (E-05).
+    weight_sources: Dict[str, str] = field(default_factory=dict)
     # Legibility complaints, not errors. See `problem.check_against_theory`.
     warnings: List[str] = field(default_factory=list)
 
@@ -187,7 +192,96 @@ def _collect_actions(rules: Sequence[RuleDecl]) -> List[tuple]:
 VARYING = ("pos", "alive", "present", "color", "colour")
 
 
-def build_ir(ast: TheoryAST, problem: ProblemSpec) -> WorldIR:
+def _resolve_weights(ast: TheoryAST, problem: ProblemSpec, certificate):
+    """One place where a `weights <name>` declaration acquires its numbers.
+
+    Ledger entry E-05 gave the potential a name; this is the other half — the
+    numbers arrive from whoever solved for them, and **never** by being copied
+    by hand into a level file. Before this, `gen_lean` read the certificate and
+    the other three backends read only the problem, so a manual whose weights
+    lived in a certificate rendered a `theory.md` that named a potential it
+    could not show, and `check_against_theory` warned about a hole that was in
+    fact filled.
+
+    Precedence and the checks, in order:
+
+    * the level may supply a vector; a certificate may supply one; **if both do
+      they must be equal.** A stale copy is exactly how a proof comes to rest on
+      weights nobody solved for, so disagreement is an error and not a
+      preference.
+    * a certificate whose vector has no declaration to land on is an error: the
+      backend would have to guess which potential the manual meant.
+    * more than one *unfilled* declaration and one certificate is an error too.
+      One vector cannot fill two names, and picking the alphabetically-first is
+      the kind of silent guess this compiler exists not to make.
+
+    Returns `(weights, sources)`. Neither dict is ever partially written.
+    """
+    weights = dict(problem.weights)
+    sources = {name: "problem %s" % problem.name for name in weights}
+    declared = [d.name for d in ast.word_table.weights]
+
+    if certificate is None:
+        return weights, sources
+
+    if not declared:
+        raise IRError(
+            "a certificate was supplied (%s) but theory.dsl declares no "
+            "`weights <name> over <field>`, so its vector has no name to land "
+            "on. Declare the potential (E-05) or drop the certificate."
+            % (certificate.path or certificate.produced_by,))
+
+    provenance = "certificate %s" % _provenance(certificate.path)
+    vector = list(certificate.weights)
+
+    for name in declared:
+        if name in weights and list(weights[name]) != vector:
+            raise IRError(
+                "the level supplies %s = %s and %s carries %s. One of them is "
+                "stale; they must agree before either becomes a theorem."
+                % (name, list(weights[name]), provenance, vector))
+
+    unfilled = [name for name in declared if name not in weights]
+    if len(unfilled) > 1:
+        raise IRError(
+            "theory.dsl declares %d weight functions with no level vector (%s) "
+            "and one certificate was supplied. One vector cannot fill two "
+            "names; supply the others in the problem instance, or compile with "
+            "one certificate per potential." % (len(unfilled), sorted(unfilled)))
+    if unfilled:
+        weights[unfilled[0]] = vector
+        sources[unfilled[0]] = provenance
+    else:
+        # Every declaration already had a vector and all of them matched. Record
+        # the certificate as the corroborating source, not as a second one.
+        for name in declared:
+            sources[name] = "%s (agrees with %s)" % (sources[name], provenance)
+    return weights, sources
+
+
+def _provenance(path: str) -> str:
+    """A certificate path as a repo-relative one, so the record travels."""
+    if not path:
+        return "<in-memory certificate>"
+    parts = path.replace("\\", "/").split("/")
+    for anchor in ("engine-rig", "interop", "certificates"):
+        if anchor in parts:
+            return "/".join(parts[parts.index(anchor):])
+    return parts[-1]
+
+
+def build_ir(ast: TheoryAST, problem: ProblemSpec, certificate=None,
+             check_conflicts: bool = True) -> WorldIR:
+    """`certificate` is optional and is the **only** way weights enter without
+    being written down twice. See `_resolve_weights`.
+
+    `check_conflicts` discharges the `conflict` policy the manual declares
+    (`conflict.check_conflict`) and **raises** if it cannot. It defaults to on
+    because the alternative is what v0.2 shipped with: a manual that states
+    which of constraint 9's two routes it claims, and nothing anywhere that
+    checks either. Pass `False` only with a written reason — the one manual in
+    this repo that needs it is the peg fixture, for ledger entry **E-07**.
+    """
     if ast.semantics is None:
         raise IRError("theory.dsl has no `semantics:` section (E-03)")
     if ast.word_table is None:
@@ -226,6 +320,26 @@ def build_ir(ast: TheoryAST, problem: ProblemSpec) -> WorldIR:
                 axes.append(Axis(instance=inst.name, observation=obs,
                                  field=f"{inst.name}_{obs}", type_name=inst.type))
 
+    weights, weight_sources = _resolve_weights(ast, problem, certificate)
+
+    # `check_against_theory` runs before the certificate is in hand, so it warns
+    # about every declaration the level does not fill. Once one of them has been
+    # filled from a certificate the warning is describing a hole that is not
+    # there, and a warning that is not true is how a log stops being read.
+    filled = [name for name, src in weight_sources.items()
+              if src.startswith("certificate")]
+    if filled:
+        warnings = [w for w in warnings
+                    if not (w.startswith("theory.dsl declares `weights ")
+                            and any("`weights %s " % n in w for n in filled))]
+
+    if check_conflicts:
+        from .conflict import Uniqueness, check_conflict
+        report = check_conflict(rules, ast.semantics, problem.background,
+                                strict=False,
+                                uniq=Uniqueness(ast, problem))
+        warnings.extend(report.warnings())
+
     return WorldIR(
         warnings=warnings,
         ast=ast,
@@ -235,5 +349,6 @@ def build_ir(ast: TheoryAST, problem: ProblemSpec) -> WorldIR:
         fields_by_type=fields_by_type,
         actions=_collect_actions(rules),
         landmarks=dict(problem.landmarks),
-        weights=dict(problem.weights),
+        weights=weights,
+        weight_sources=weight_sources,
     )
