@@ -71,12 +71,78 @@ def branch_taken(pid, branches):
     return any(pat.search(b) for b in branches)
 
 
+REGISTRY = os.path.join(LOGS, "registry.json")
+
+
+def load_registry():
+    import json
+    if os.path.exists(REGISTRY):
+        return json.load(open(REGISTRY, encoding="utf-8"))
+    return {}
+
+
+def save_registry(reg):
+    import json
+    json.dump(reg, open(REGISTRY, "w", encoding="utf-8"), indent=2)
+
+
+def pid_alive(pidnum):
+    if os.name == "nt":
+        out = subprocess.run(["tasklist", "/FI", "PID eq %d" % pidnum, "/FO", "CSV"],
+                             capture_output=True, text=True).stdout
+        return str(pidnum) in out
+    try:
+        os.kill(pidnum, 0)
+        return True
+    except OSError:
+        return False
+
+
+def kill_tree(pidnum):
+    if os.name == "nt":
+        subprocess.run(["taskkill", "/PID", str(pidnum), "/T", "/F"],
+                       capture_output=True)
+    else:
+        subprocess.run(["kill", "-9", str(pidnum)], capture_output=True)
+
+
+def reap():
+    """跑完即杀：a dispatched session whose branch reached origin is done —
+    kill its process tree immediately. Sessions that exited on their own are
+    marked reaped. Content-free throughout."""
+    reg = load_registry()
+    remote = set(git("branch", "-r", "--format=%(refname:short)").splitlines())
+    changed = False
+    for pid, entry in sorted(reg.items()):
+        if entry.get("reaped"):
+            continue
+        pidnum = entry["pid"]
+        done = any(entry_branch in b for b in remote
+                   for entry_branch in [("agent/%s" % pid.lower().replace("-", ""))])
+        alive = pid_alive(pidnum)
+        if done and alive:
+            kill_tree(pidnum)
+            entry["reaped"] = "killed-on-completion"
+            print("%-6s pid=%s branch pushed -> killed" % (pid, pidnum))
+            changed = True
+        elif not alive:
+            entry["reaped"] = "exited"
+            print("%-6s pid=%s exited on its own" % (pid, pidnum))
+            changed = True
+        else:
+            print("%-6s pid=%s still running" % (pid, pidnum))
+    if changed:
+        save_registry(reg)
+    if not reg:
+        print("registry empty.")
+
+
 def launch(pid, path, log_dir):
     text = open(path, encoding="utf-8").read()
     claude = shutil.which("claude")
     if not claude:
         sys.exit("claude CLI not on PATH")
-    stamp = datetime.datetime.utcnow().strftime("%Y%m%dT%H%M%SZ")
+    stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     log_path = os.path.join(log_dir, "%s-%s.log" % (pid, stamp))
     log = open(log_path, "a", encoding="utf-8")
     log.write("=== dispatch %s at %s ===\n" % (pid, stamp))
@@ -88,6 +154,10 @@ def launch(pid, path, log_dir):
         [claude, "-p", text, "--model", "opus", "--dangerously-skip-permissions"],
         cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
         stdin=subprocess.DEVNULL, creationflags=flags)
+    reg = load_registry()
+    reg[pid] = {"pid": proc.pid, "log": os.path.basename(log_path),
+                "started": stamp, "reaped": None}
+    save_registry(reg)
     return proc.pid, log_path
 
 
@@ -124,9 +194,14 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--health", action="store_true",
                     help="content-free liveness report of dispatched sessions")
+    ap.add_argument("--reap", action="store_true",
+                    help="kill sessions whose branch reached origin (跑完即杀)")
     args = ap.parse_args()
     if args.health:
         health()
+        return 0
+    if args.reap:
+        reap()
         return 0
 
     os.makedirs(LOGS, exist_ok=True)

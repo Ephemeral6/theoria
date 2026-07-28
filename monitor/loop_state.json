@@ -28,6 +28,7 @@
     "m0": "dispatch M-0 via --only once P-8..P-12 have all pushed",
     "isolation": "content-free checks only; audit via git-visible artifacts",
     "escalation": "CLI-unsolvable -> B-* browser-operator session (claude-in-chrome, whitelist, fail-closed) -> needs_human list for the user",
-    "provenance": "write-as-you-go: run dir created at start, incremental writes per step; context-only info counts as nonexistent"
+    "provenance": "write-as-you-go: run dir created at start, incremental writes per step; context-only info counts as nonexistent",
+    "reap": "dispatch.py --reap every heartbeat: branch on origin => taskkill the process tree at once; self-exited sessions marked"
   }
 }
