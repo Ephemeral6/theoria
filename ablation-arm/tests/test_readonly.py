@@ -18,7 +18,9 @@ anything either of them calls.
 
 from __future__ import annotations
 
+import json
 import os
+import sys
 
 import pytest
 
@@ -121,29 +123,201 @@ def test_a_full_run_leaves_every_upstream_tree_byte_identical():
             "it, so nothing else would have noticed." % (relative, moved[:5]))
 
 
+#: The child that runs the arm under an audit hook and reports what *it* wrote.
+#:
+#: A subprocess rather than an in-process hook because `sys.addaudithook` is
+#: deliberately irremovable: installing one here would leave it running for
+#: every later test in the session, which is a side effect a test is not
+#: entitled to have.  The child is launched with `-B` so CPython does not write
+#: `__pycache__` into the upstream trees it imports -- those are the
+#: interpreter's caches rather than the arm's output, and `pin.SKIP_DIRS` takes
+#: the same position; `__pycache__` is filtered again below so the exclusion is
+#: visible rather than implied by a flag.
+_ATTRIBUTION_CHILD = r'''
+import json
+import os
+import sys
+
+ARM = sys.argv[1]
+REPO = os.path.dirname(ARM)
+for _p in (ARM, REPO):
+    if _p not in sys.path:
+        sys.path.insert(0, _p)
+
+import run_arm
+
+_WRITE_FLAGS = (os.O_WRONLY | os.O_RDWR | os.O_CREAT | os.O_APPEND
+                | os.O_TRUNC | getattr(os, "O_EXCL", 0))
+
+#: event name -> the positional indices of its path arguments.  Every one of
+#: these mutates the filesystem without ever going through `open`.
+_PATH_EVENTS = {
+    "os.remove": (0,), "os.unlink": (0,), "os.rmdir": (0,),
+    "os.mkdir": (0,), "os.makedirs": (0,), "os.truncate": (0,),
+    "os.rename": (0, 1), "os.replace": (0, 1),
+    "os.link": (1,), "os.symlink": (1,),
+    "shutil.copyfile": (0, 1), "shutil.copymode": (1,),
+    "shutil.copystat": (1,), "shutil.copytree": (0, 1),
+    "shutil.move": (0, 1), "shutil.rmtree": (0,),
+}
+
+writes = set()
+spawned = []
+recording = True
+
+
+def _hook(event, args):
+    if not recording:
+        return
+    if event == "subprocess.Popen":
+        # A child process escapes the hook entirely, so it is reported rather
+        # than silently trusted.
+        spawned.append(str(args[1])[:200])
+        return
+    if event == "open":
+        path, mode, flags = args[0], args[1], args[2]
+        if path is None or isinstance(path, int):
+            return              # a file descriptor, not a path
+        if (isinstance(mode, str) and any(c in mode for c in "wxa+")) or (
+                mode is None and isinstance(flags, int)
+                and (flags & _WRITE_FLAGS)):
+            # `mode is None` is the `os.open` form of the same event; its intent
+            # is in the flags.
+            try:
+                writes.add(os.fspath(path))
+            except TypeError:
+                writes.add(str(path))
+        return
+    for index in _PATH_EVENTS.get(event, ()):
+        if index < len(args) and args[index] is not None:
+            try:
+                writes.add(os.fspath(args[index]))
+            except TypeError:
+                pass
+
+
+sys.addaudithook(_hook)
+try:
+    run_arm.run_all(["a0-base"])
+finally:
+    recording = False
+
+sys.stdout.write("@@WRITESET@@" + json.dumps(
+    {"writes": sorted(str(w) for w in writes), "spawned": spawned}) + "\n")
+'''
+
+
+def _attributed_write_set():
+    """Run one world in a child and return every path *that process* wrote."""
+    import subprocess
+    import tempfile
+
+    handle, script = tempfile.mkstemp(suffix="-attribution.py")
+    os.close(handle)
+    try:
+        with open(script, "w", encoding="utf-8", newline="\n") as out:
+            out.write(_ATTRIBUTION_CHILD)
+        done = subprocess.run([sys.executable, "-B", script, ARM],
+                              cwd=ARM, capture_output=True, text=True)
+    finally:
+        os.remove(script)
+
+    assert done.returncode == 0, (
+        "the attribution child failed (%d); the arm could not be run under an "
+        "audit hook.\nstdout:\n%s\nstderr:\n%s"
+        % (done.returncode, done.stdout[-2000:], done.stderr[-2000:]))
+    marker = done.stdout.rfind("@@WRITESET@@")
+    assert marker >= 0, (
+        "the attribution child printed no write set.\nstdout:\n%s\nstderr:\n%s"
+        % (done.stdout[-2000:], done.stderr[-2000:]))
+    return json.loads(done.stdout[marker + len("@@WRITESET@@"):])
+
+
 @pytest.mark.slow
 def test_a_full_run_writes_only_inside_this_arm():
-    """The other half: not just *unchanged upstream*, but *nothing outside*.
+    """The other half: not just *unchanged upstream*, but *nothing elsewhere in
+    the repo*.
 
     A run that left upstream alone and dropped files in the repo root would pass
     the test above and still be wrong.
+
+    **What is checked, exactly.** No path *under this repository and outside
+    `ablation-arm/`* is written or deleted. Paths outside the repository are
+    allowed and are not a loophole left open by accident: `exhibits/e2_a2.py`
+    and `exhibits/e3_charitable.py` both call `tempfile.mkdtemp`, and the system
+    temp directory is where a scratch directory belongs. The earlier docstring
+    here claimed "nothing outside", which was never what any version of this
+    test measured.
+
+    **Why attribution rather than a denylist.** The predicate is "which paths
+    did *this interpreter* write", not "which paths look like they might be
+    something else's". A concurrent fleet session's writes never pass through
+    this process, so concurrency cannot produce a false positive by
+    construction -- which is what the previous fix here got wrong. It had
+    grown a `CONCURRENT` pattern list (`/var/`, `/runs/`, `/out/`,
+    `/artifacts/`, `.jsonl`, `.log`, `state.json`) described in its own comment
+    as a tightening. Measured against the live repo that list masked 650 of
+    1973 files under the watched directories, 201 of them git-tracked --
+    `worldgen/out/**/GROUND_TRUTH.md`, `figures/out/{light,dark}/*`, and
+    `arc-recon/data/contamination_log.jsonl`, the pile-cut discipline record --
+    and it masked deletions too. It applied the same amnesty to this arm's
+    writes as to everybody else's, which is a loosening.
+
+    Attribution also catches two things a snapshot diff structurally cannot:
+    write-then-restore, and delete-and-recreate with identical bytes.
     """
+    seen = _attributed_write_set()
+
+    assert seen["spawned"] == [], (
+        "the run spawned %d child process(es), which escape the audit hook and "
+        "so are unattributed: %s. If the arm has come to legitimately need a "
+        "subprocess, this assertion is the place to say so and name it."
+        % (len(seen["spawned"]), seen["spawned"][:3]))
+
+    repo = os.path.realpath(REPO) + os.sep
+    arm = os.path.realpath(ARM) + os.sep
+    trespass = []
+    for path in seen["writes"]:
+        full = os.path.realpath(os.path.join(ARM, path))
+        if not (full + os.sep).startswith(repo):
+            continue                        # outside the repo -- see docstring
+        if (full + os.sep).startswith(arm):
+            continue                        # this arm's own territory
+        if "__pycache__" in full.replace(os.sep, "/").split("/"):
+            continue                        # CPython's cache, not the arm's
+        trespass.append(os.path.relpath(full, REPO).replace(os.sep, "/"))
+    assert sorted(trespass) == [], (
+        "a run wrote or deleted %d path(s) inside the repo but outside this "
+        "arm: %s" % (len(trespass), sorted(trespass)[:5]))
+    assert seen["writes"], (
+        "the hook recorded no writes at all -- a run that writes nothing means "
+        "the hook is not installed, and every assertion above is vacuous")
+
+    # -- the backstop -------------------------------------------------------
+    # The hook cannot see a write made by a C extension that bypasses the audit
+    # events, nor one made by a child process. A snapshot diff can, so it stays
+    # -- as a second, independent check rather than as the primary one.
+    #
+    # Its exclusions are a short list of *named* prefixes, not a pattern class.
+    # `proxy/var/` is the fleet's shared runtime spend ledger and `monitor/` is
+    # the fleet monitor's own state; a different concurrent session rewrites
+    # both while this test runs, which is what made this gate intermittently
+    # red on `proxy/var/spend_gate.jsonl` (`grep -rn spend_gate ablation-arm/`
+    # is empty -- this arm has nothing to do with that file). After the fix in
+    # `pin.SKIP_PATHS` the `proxy/var/` half is already handled inside `pin`
+    # itself; it is named here anyway so that the two places do not disagree
+    # silently.
     import run_arm
 
+    CONCURRENT_PREFIXES = ("proxy/var/", "monitor/")
     watched = [d for d in os.listdir(REPO)
                if os.path.isdir(os.path.join(REPO, d))
                and d not in {".git", ".worktrees", "ablation-arm"}
                and not d.startswith(".")]
     before = {name: pin.hash_tree((name,)) for name in watched}
     run_arm.run_all(["a0-base"])
-    # 并发舰队下，别的 agent 同时在写自己的领地，快照对比会把它们的写入
-    # 记到本臂头上（实测撞到 proxy/var/spend_gate.jsonl，本臂全仓 grep
-    # 无一处提到 spend_gate）。所以判据从「全仓无变化」收紧为
-    # 「无变化，或变化能追溯到本臂」——运行期账本类文件不算数。
-    CONCURRENT = ("/var/", "/runs/", "/out/", "/artifacts/",
-                  ".jsonl", ".log", "state.json")
     for name in watched:
         moved = pin.changed(before[name], pin.hash_tree((name,)))
         mine = [m for m in moved
-                if not any(tok in m.replace("\\", "/") for tok in CONCURRENT)]
+                if not m.replace("\\", "/").startswith(CONCURRENT_PREFIXES)]
         assert mine == [], "%s changed: %s" % (name, mine[:5])

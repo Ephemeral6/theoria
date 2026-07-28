@@ -28,6 +28,19 @@ from _bootstrap import REPO  # noqa: E402
 SKIP_DIRS = {".toolchain", "__pycache__", ".pytest_cache", ".git", ".claude",
              "artifacts", "runs", ".lake"}
 
+#: Repo-relative directories pruned by path, not by name.  `proxy/var/` is the
+#: fleet's shared runtime spend ledger: a *different* concurrent session's proxy
+#: appends to it every few seconds, so hashing it charges this arm for writes it
+#: did not make.  This arm references nothing under it (`grep -rn spend_gate
+#: ablation-arm/` is empty).  Nothing there is tracked by git.
+#:
+#: It is a path prefix rather than a `SKIP_DIRS` entry on purpose: `SKIP_DIRS`
+#: is a bare directory *name* set, so adding `"var"` there would blanket-skip
+#: any directory called `var` anywhere in any upstream tree, which is a much
+#: larger hole than the one being closed.  Matching is on the repo-relative
+#: posix path, so exactly `proxy/var/` and its subtree are dropped.
+SKIP_PATHS = ("proxy/var",)
+
 #: The trees this arm imports from and must not touch.  `artifacts/` and `runs/`
 #: are skipped: they are the upstream tracks' own outputs, they are regenerated
 #: by their own drivers, and this arm reads a handful of committed files out of
@@ -53,7 +66,17 @@ def hash_tree(trees: Iterable[str] = UPSTREAM_TREES,
         if not os.path.isdir(base):
             continue
         for dirpath, dirnames, filenames in os.walk(base):
-            dirnames[:] = sorted(d for d in dirnames if d not in SKIP_DIRS)
+            kept = []
+            for name in sorted(dirnames):
+                if name in SKIP_DIRS:
+                    continue
+                rel_dir = os.path.relpath(os.path.join(dirpath, name),
+                                          root).replace(os.sep, "/")
+                if any(rel_dir == p or rel_dir.startswith(p + "/")
+                       for p in SKIP_PATHS):
+                    continue
+                kept.append(name)
+            dirnames[:] = kept
             for name in sorted(filenames):
                 full = os.path.join(dirpath, name)
                 rel = os.path.relpath(full, root).replace(os.sep, "/")
