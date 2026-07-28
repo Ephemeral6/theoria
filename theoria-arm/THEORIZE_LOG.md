@@ -110,8 +110,75 @@ it is logged as `E-` rather than hidden.
 
 ## R — rules
 
-*(Filled from `runs/<slug>/TIMELINE.md` when the run closes — see the
-adjudication tables there, which carry the desk's own reasoning per proposal.)*
+The per-round tables are in `runs/<slug>/TIMELINE.md`. Four adjudications are
+worth reading out here because of what they show about the *discipline*, not
+about `g50t`.
+
+### R-01 · The desk wrote two ground rules where it wanted one schema, and said so
+
+`step_down_from_home` and `key5_sends_ring_home` name the only two maze cells
+ever witnessed. The desk's own note on why:
+
+> maze cell (r,c) spans rows 8+6r..12+6r and cols 14+6c..18+6c … The ring moved
+> 6 pixels at t2 and 6 pixels back at t5. `moved(o,dir)` steps one cell, so I
+> could not write a general step rule and wrote two `jumped()` rules naming the
+> only two positions ever witnessed. **This manual therefore predicts NOTHING
+> about any maze cell other than (0,0) and (1,0).**
+
+That last sentence is the whole point of constraint 5 working. The desk had the
+generalisation — it had *derived the grid pitch* — and it declined to write it,
+because the event vocabulary cannot express a six-pixel step and inventing one
+would have made the manual look stronger than its evidence. The pitch is
+carried as `theorem grid_pitch_six [probe: pending]` instead.
+
+Compare A0's R-05, which met the same shape from the other side: there the
+generalisation was expressible and unwitnessed, and was rejected for lack of
+evidence. Here it is witnessed and inexpressible. **Two different walls, same
+answer: it goes in `laws:` as a theorem, not in `rules:` as a rule.**
+
+### R-02 · A direction mapping held as a theorem because every observation is also consistent with nothing
+
+> I believe key(1)=up, key(2)=down, key(3)=left, key(4)=right. Evidence: key(2)
+> moved the ring from cell (0,0) to (1,0) (t2); key(1) fired from the top row
+> and key(3) from the leftmost column and both changed nothing (t1,t3); key(4)
+> fired from (1,0) whose right neighbour … is colour 0, i.e. not floor, and the
+> ring did not move (t4). **Every one of these is also consistent with the key
+> being unbound, which is why this is a theorem and not a rule.**
+
+Three of the four keys have exactly the evidence profile of a key that does
+nothing. The desk noticed and refused to bank it. This is the single cleanest
+instance in the run of the loop's central discipline: *the evidence is
+compatible with two readings, so nothing enters the manual until an experiment
+separates them* — and it is precisely the case `probe` exists to settle, since
+firing key(1) from a cell that is *not* on the top row is a one-action
+experiment.
+
+### R-03 · The desk found this arm's own defect from the inside
+
+> colour 9 paints four different things: the player ring, HUD token A … the
+> selection underline, the bracket around maze cell (7,5), and the row-63 bar.
+> **One colour binds one object**, so Player takes 9 and the 11 dynamic
+> colour-9 HUD pixels of frames 0-4 plus the 6 underline pixels have no object
+> and will be reported unexplained. I believe there are at least three distinct
+> colour-9 entities; **the arm cannot tell them apart, so I said so here
+> instead of pretending.**
+
+"One colour binds one object" is `E-03` — a limitation of *this arm's* level
+generator, not of the DSL and not of the world. The desk was told about it in
+the grammar card, worked out what it would cost in unexplained pixels, and
+predicted the exact responsibility failure certify would report before certify
+ran. A manual that predicts its own certify failure is a better artefact than
+one that passes quietly.
+
+### R-04 · An event the vocabulary does not have
+
+> row 63 is a bar of colour 9 that fills with colour 1 from the right edge …
+> **I cannot express one further pixel turning 1 — there is no event for
+> growing an object** — so the manual leaves (63,62) and (63,63) unexplained in
+> the frames where they are still 9.
+
+A counter that fills one pixel at a time has no event form: `recolored(o, c)`
+recolours a whole object, and there is no `grew`. Logged as `E-05`.
 
 ### R-00 · `cegis_miner` proposed nothing, and the refusal is the finding
 
@@ -189,6 +256,9 @@ Things the world said that the DSL, the compiler, or this arm could not.
 | E-02 | a landmark's coordinates | the DSL has nowhere to write them (correctly — they are level data), but the arm supplied no `landmarks` either, so every manual declaring one failed to compile | one aborted run and $1.31; fixed by `# arc-cell: (r, c)` on the declaration line |
 | E-03 | a literal colour in the word table | `object Cart { color: Int }` names the field, never the value, so the arm cannot find the object in the frame | `# arc-colour: <n>` on the declaration line, read by the arm, invisible to the compiler |
 | E-04 | a click action with coordinates | the guard language has no way to say "act on cell (r, c)" | not needed on `g50t` (`available_actions` is `[1..5]`), but it shuts the click family out of this arm entirely; the card tells the desk to raise it as a `theorem`, never to invent syntax |
+| E-05 | one pixel of an object turning a new colour | `recolored(o, c)` recolours a whole object and there is no `grew(o)`; a counter that fills a pixel at a time cannot be written | the manual leaves the row-63 tally bar unexplained in the frames where it has partly filled, and says so |
+| E-06 | a rule schema over cells at a fixed pitch (`moved` by six) | `moved(o, dir)` is one cell and `jumped(o, landmark)` needs a named destination, so a regular grid of cells needs one landmark and one rule *per cell* | the manual covers the two cells witnessed and explicitly predicts nothing about the other 46; the pitch is carried as a theorem |
+| E-07 | prose in an `invariant` | `invariant` bodies must contain a comparison operator; only `theorem` takes a sentence. The desk conflated them and the parse failed with "No comparison op in invariant" | one repair round, $1.33. The card now states the rule in the imperative and a test pins both halves — this one was a prompt bug, not a language limit |
 
 E-02 and E-03 are the same shape and worth naming as one: **the domain/problem
 split is real and the DSL enforces it, but the arm has to carry the problem
