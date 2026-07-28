@@ -1,0 +1,118 @@
+{
+  "action_budget": {
+    "cap_for_this_ticket": 30,
+    "detail": "16 executed ACTIONs, all canary baseline on the development pile. The stickiness probe spent 0: RESET is a command, not an action, and the scorecard counts only successful ACTIONs.",
+    "sealed_pile_api_calls": 0,
+    "spent": 16
+  },
+  "adversarial_review": "The F-11 ledger text was reviewed by an independent adversarial pass (read-only, brief: find registration/ruling mismatches). It reproduced a fail-open bug in claim_set() and found four overclaims. All corrected; INC-006a records them. The ruling, the levels, the quarantine set and 21 -> 19 are unchanged.",
+  "artifacts": {
+    "arc-recon/ACCESS_CHECK.md": {
+      "bytes": 14567,
+      "sha256": "d0fa76a01017e1ba07460f9899f72a61112b01c08bf812cd977fb1d8b9995f1a"
+    },
+    "arc-recon/README.md": {
+      "bytes": 17678,
+      "sha256": "9e08866fd910b914b0afe80495e87eedc63fb3dcb12d13374a8fcb4b35a29357"
+    },
+    "arc-recon/canary.py": {
+      "bytes": 26379,
+      "sha256": "4e019dccadf078b9ea063651918651aacd84446ccecbf0339dceb61f45c0d6e2"
+    },
+    "arc-recon/contamination.py": {
+      "bytes": 16101,
+      "sha256": "367434440888125c7db996bb6aeb6bdc1559af027777dbfe5fc916c8e9fd0375"
+    },
+    "arc-recon/data/canary.json": {
+      "bytes": 5576,
+      "sha256": "9df6df5b1025b16ffac375238e0152fe00b5b77c4e3a0568a322da592f97cbdb"
+    },
+    "arc-recon/data/canary_runs.jsonl": {
+      "bytes": 3908,
+      "sha256": "901e29abca069652545a4febffa5a00497910e5d3e7961e5e409f33d6265ca1a"
+    },
+    "arc-recon/data/claim_set.json": {
+      "bytes": 5712,
+      "sha256": "b7e02ec22e9ac6b977717e147f0bb2d59f471a200a5236473428d3b8ff146753"
+    },
+    "arc-recon/data/contamination_log.jsonl": {
+      "bytes": 24783,
+      "sha256": "daf61fc369261cf23d599f25f135f5574d6cb6d1db5e0f8424d694dec9e99570"
+    },
+    "arc-recon/data/incidents.jsonl": {
+      "bytes": 27286,
+      "sha256": "b09c1d336b10134a22731283a2bf87f57295120d228348e0f7c70c60b969601e"
+    },
+    "arc-recon/data/piles.json": {
+      "bytes": 3248,
+      "sha256": "f2ef44d100caee9075b9c52b6c2694d9bb47d628702e0c1911655eb9f9790826"
+    },
+    "arc-recon/data/recon_ledger.jsonl": {
+      "bytes": 2814546,
+      "sha256": "5663552a2cb20480f04c375d473d29452b3d4d35be8a770ec58b492c3fb2031d"
+    },
+    "arc-recon/data/stickiness_probe.json": {
+      "bytes": 16135,
+      "sha256": "65cda5ba183080f47d840f1739b9623c0c21daf4bb3bd8b21381dfc6f483260d"
+    },
+    "arc-recon/precheck.py": {
+      "bytes": 21111,
+      "sha256": "d758bc1d8de5d5654989f59f13c889742006890c6bf66dd515e18e4a528f20e6"
+    },
+    "arc-recon/probe_stickiness.py": {
+      "bytes": 13050,
+      "sha256": "4f64be4142457c2ad9847eda41013d45c3c874193db7d202a446f96120470e21"
+    },
+    "arc-recon/test_hygiene.py": {
+      "bytes": 13883,
+      "sha256": "38d5d681e50e6a9d07d0f74e4fd83cc2872438734513b7f5b4ba713760e39b0e"
+    }
+  },
+  "artifacts_note": "These sha256 values are over the working-copy bytes on a machine with core.autocrlf=true and no .gitattributes under arc-recon/. The committed blobs carry CRLF while appends made by client.py carry LF, so recon_ledger.jsonl currently has mixed line endings (790 CRLF, 194 LF) and these file-level hashes will NOT reproduce on a checkout with different eol settings. Content-level hashes are unaffected: piles.json's published sha256 is over a canonical re-serialisation, and the canary's hashes are over API response payloads. Pinning eol=lf for arc-recon/ the way engine-rig/.gitattributes does would fix it, but it normalises every file in the directory including the 2 MB append-only ledger -- left as an open item rather than done from a side branch during a merge round.",
+  "base_commit": "df9f7486bd6866064c416aa0bf8a307c5c416e46",
+  "base_commit_note": "the commit this branch forked from; master advanced during the ticket (another session), so `git rev-parse master` no longer names it",
+  "branch": "agent/p11-arc-hygiene",
+  "determinism": "No stochastic step. The canary sequences are fixed and published in data/canary.json; its expectations were derived offline from precheck.json rather than sampled. The only non-reproducible inputs are live API responses, and every one of them is in data/recon_ledger.jsonl.",
+  "prompt": "monitor/prompts/P-11-arc-hygiene.md",
+  "prompt_id": "P-11",
+  "results": {
+    "canary_baseline": {
+      "actions": 16,
+      "amplification": 9.19,
+      "http_calls": 147,
+      "verdicts": {
+        "ar25-0c556536": "PASS",
+        "g50t-5849a774": "PASS",
+        "sk48-d8078629": "PASS",
+        "tn36-ef4dde99": "PASS"
+      }
+    },
+    "claim_set": {
+      "claim_set": 19,
+      "needs_adjudication": [],
+      "quarantined": [
+        "ft09-0d8bbf25",
+        "ls20-9607627b"
+      ],
+      "sealed_pile": 21
+    },
+    "cross_track_ledger_audit": {
+      "all_clean": true,
+      "ledgers_scanned": 3
+    },
+    "incidents_filed": [
+      "INC-006",
+      "INC-006a",
+      "INC-007"
+    ],
+    "stickiness_probe": {
+      "cookie_jar": "20/20",
+      "no_cookies": "0/20",
+      "runs": 3
+    },
+    "tests": "28 passed (test_hygiene.py, offline)"
+  },
+  "seed": null,
+  "t": "2026-07-28T00:43:24Z",
+  "title": "arc-recon hygiene: F-11 ledger, canary replay, access-check closure"
+}

@@ -348,10 +348,36 @@ def run(game_id: str, client: Optional[ArcClient] = None,
     }
 
 
+# ASCII only: this is the smoke gate, and a GBK console turns a CJK print into a
+# UnicodeEncodeError on some machines (cold-start-a2 D-A2-007, same root cause).
+USAGE = """precheck.py -- determinism precheck: replay a fixed action sequence
+twice and compare frame hashes. SPENDS ACTIONS. Development pile only.
+
+    python precheck.py                       every development-pile game
+    python precheck.py <game_id>             one game
+    python precheck.py <game_id>:<length>    shorten the sequence
+    python precheck.py <game_id>:<length>:<already_spent>
+
+Targets are `game_id[:length[:actions_already_spent]]`; `already_spent` charges
+prior spend on that game against its %d-action cap. The report is merged per
+game into data/precheck.json, so a partial rerun does not clobber other games.
+
+Anything that is not a development-pile game is REFUSED (exit 2) -- a
+successful RESET returns the first frame, so a precheck pointed at a sealed
+game would burn it.
+
+Related: `canary.py` (cheap periodic drift check built from this report),
+`contamination.py` (the register and the sealed claim set).
+""" % BUDGET_PER_GAME
+
+
 def main(argv: List[str]) -> int:
     """Targets are `game_id[:length[:actions_already_spent]]`. The report is
     merged per game into any existing precheck.json, so partial reruns do not
     clobber other games' results."""
+    if argv and argv[0] in ("-h", "--help", "help"):
+        print(USAGE)
+        return 0
     tokens = argv or dev_pile()
     client = ArcClient()
     results: Dict[str, Any] = {}

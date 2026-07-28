@@ -1,0 +1,610 @@
+{
+  "probes": [
+    {
+      "caveat": "RESET availability is not identical to mid-session ACTION availability: a RESET can be served by any replica that can start the game, while an ACTION needs the one holding the guid. If anything that makes this probe CONSERVATIVE -- stickiness should matter more for ACTIONs, not less.",
+      "control": {
+        "attempts": 8,
+        "cookies_at_end": [],
+        "ever_got_set_cookie": true,
+        "not_found": 8,
+        "ok": 0,
+        "success_rate": 0.0
+      },
+      "design": "interleaved A/B, one RESET per arm per round, arm order alternating; RESET is a command not an action, so this costs zero action quota",
+      "game_id": "g50t-5849a774",
+      "hypotheses": {
+        "stickiness": "unavailability is a property of routing; the arm echoing AWSALB cookies keeps hitting the replica that holds the session",
+        "wave": "unavailability is a property of time; arms fail together"
+      },
+      "rounds": 8,
+      "rounds_where_arms_disagreed": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "rounds_where_only_the_cookie_arm_succeeded": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "rows": [
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 0,
+          "status": 400
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 0,
+          "status": 200
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 1,
+          "status": 200
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 1,
+          "status": 400
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 2,
+          "status": 400
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 2,
+          "status": 200
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 3,
+          "status": 200
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 3,
+          "status": 400
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 4,
+          "status": 400
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 4,
+          "status": 200
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 5,
+          "status": 200
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 5,
+          "status": 400
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 6,
+          "status": 400
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 6,
+          "status": 200
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 7,
+          "status": 200
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 7,
+          "status": 400
+        }
+      ],
+      "sticky": {
+        "attempts": 8,
+        "cookies_at_end": [
+          "AWSALBAPP-0",
+          "AWSALBAPP-1",
+          "AWSALBAPP-2",
+          "AWSALBAPP-3",
+          "GAMESESSION"
+        ],
+        "ever_got_set_cookie": true,
+        "not_found": 0,
+        "ok": 8,
+        "success_rate": 1.0
+      },
+      "t": "2026-07-28T00:37:32Z",
+      "verdict": "STICKINESS IMPLICATED -- the cookie-carrying arm succeeded in rounds where the cookie-less arm failed, 8 times"
+    },
+    {
+      "arms_share_a_game": false,
+      "caveat": "RESET availability is not identical to mid-session ACTION availability: a RESET can be served by any replica that can start the game, while an ACTION needs the one holding the guid. If anything that makes this probe CONSERVATIVE -- stickiness should matter more for ACTIONs, not less.",
+      "control": {
+        "attempts": 6,
+        "cookies_at_end": [],
+        "ever_got_set_cookie": true,
+        "not_found": 6,
+        "ok": 0,
+        "success_rate": 0.0
+      },
+      "control_game": "ar25-0c556536",
+      "design": "interleaved A/B, one RESET per arm per round, arm order alternating; RESET is a command not an action, so this costs zero action quota; arms on different games, so neither can starve the other of a live session",
+      "game_id": "g50t-5849a774",
+      "hypotheses": {
+        "stickiness": "unavailability is a property of routing; the arm echoing AWSALB cookies keeps hitting the replica that holds the session",
+        "wave": "unavailability is a property of time; arms fail together"
+      },
+      "rounds": 6,
+      "rounds_where_arms_disagreed": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "rounds_where_only_the_cookie_arm_succeeded": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "rows": [
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 0,
+          "status": 400
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 0,
+          "status": 200
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 1,
+          "status": 200
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 1,
+          "status": 400
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 2,
+          "status": 400
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 2,
+          "status": 200
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 3,
+          "status": 200
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 3,
+          "status": 400
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 4,
+          "status": 400
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 4,
+          "status": 200
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 5,
+          "status": 200
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 5,
+          "status": 400
+        }
+      ],
+      "sticky": {
+        "attempts": 6,
+        "cookies_at_end": [
+          "AWSALBAPP-0",
+          "AWSALBAPP-1",
+          "AWSALBAPP-2",
+          "AWSALBAPP-3",
+          "GAMESESSION"
+        ],
+        "ever_got_set_cookie": true,
+        "not_found": 0,
+        "ok": 6,
+        "success_rate": 1.0
+      },
+      "sticky_game": "sk48-d8078629",
+      "t": "2026-07-28T00:39:04Z",
+      "verdict": "STICKINESS IMPLICATED -- the cookie-carrying arm succeeded in rounds where the cookie-less arm failed, 6 times"
+    },
+    {
+      "arms_share_a_game": false,
+      "caveat": "RESET availability is not identical to mid-session ACTION availability: a RESET can be served by any replica that can start the game, while an ACTION needs the one holding the guid. If anything that makes this probe CONSERVATIVE -- stickiness should matter more for ACTIONs, not less.",
+      "control": {
+        "attempts": 6,
+        "cookies_at_end": [],
+        "ever_got_set_cookie": true,
+        "not_found": 6,
+        "ok": 0,
+        "success_rate": 0.0
+      },
+      "control_game": "sk48-d8078629",
+      "design": "interleaved A/B, one RESET per arm per round, arm order alternating; RESET is a command not an action, so this costs zero action quota; arms on different games, so neither can starve the other of a live session",
+      "game_id": "g50t-5849a774",
+      "hypotheses": {
+        "stickiness": "unavailability is a property of routing; the arm echoing AWSALB cookies keeps hitting the replica that holds the session",
+        "wave": "unavailability is a property of time; arms fail together"
+      },
+      "rounds": 6,
+      "rounds_where_arms_disagreed": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "rounds_where_only_the_cookie_arm_succeeded": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "rows": [
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 0,
+          "status": 400
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 0,
+          "status": 200
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 1,
+          "status": 200
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 1,
+          "status": 400
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 2,
+          "status": 400
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 2,
+          "status": 200
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 3,
+          "status": 200
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 3,
+          "status": 400
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 4,
+          "status": 400
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 4,
+          "status": 200
+        },
+        {
+          "arm": "cookie-jar",
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "got_set_cookie": true,
+          "not_found": false,
+          "round": 5,
+          "status": 200
+        },
+        {
+          "arm": "no-cookies",
+          "cookies_held": [],
+          "got_set_cookie": true,
+          "not_found": true,
+          "round": 5,
+          "status": 400
+        }
+      ],
+      "sticky": {
+        "attempts": 6,
+        "cookies_at_end": [
+          "AWSALBAPP-0",
+          "AWSALBAPP-1",
+          "AWSALBAPP-2",
+          "AWSALBAPP-3",
+          "GAMESESSION"
+        ],
+        "ever_got_set_cookie": true,
+        "not_found": 0,
+        "ok": 6,
+        "success_rate": 1.0
+      },
+      "sticky_game": "ar25-0c556536",
+      "t": "2026-07-28T00:39:20Z",
+      "verdict": "STICKINESS IMPLICATED -- the cookie-carrying arm succeeded in rounds where the cookie-less arm failed, 6 times"
+    }
+  ]
+}
