@@ -1,0 +1,129 @@
+{
+  "all_aligned": true,
+  "every_path_ever_reported": [],
+  "rows": [
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.547,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.885,
+      "trial": 0
+    },
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.606,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.485,
+      "trial": 1
+    },
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.634,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.433,
+      "trial": 2
+    },
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.553,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.428,
+      "trial": 3
+    },
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.574,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.509,
+      "trial": 4
+    },
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.615,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.47,
+      "trial": 5
+    },
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.583,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.462,
+      "trial": 6
+    },
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.675,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.441,
+      "trial": 7
+    },
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.621,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.478,
+      "trial": 8
+    },
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.616,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.511,
+      "trial": 9
+    },
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.59,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.438,
+      "trial": 10
+    },
+    {
+      "aligned": true,
+      "background": 0,
+      "idle_seconds": 2.558,
+      "makeup_seconds": 0.0,
+      "observed": 0,
+      "reported": [],
+      "run_seconds": 0.452,
+      "trial": 11
+    }
+  ],
+  "trials": 12,
+  "trials_red": 0,
+  "what": "N controlled observations of the same offline run, to put a number on the criterion's flake rate instead of inferring it from one green"
+}

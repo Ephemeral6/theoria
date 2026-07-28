@@ -5,11 +5,15 @@
   "files": [
     {
       "path": "ablation-arm/ablcore/outside.py",
-      "sha256": "4fb3c57cd2a2db50a3b90740270bf011e83e393c5d0c4147156ecb65cb7acdc8"
+      "sha256": "acfa1f0b0095fd80c28f1ab3489c6799e58b8565621d04324453bd146c5ef71c"
     },
     {
       "path": "ablation-arm/tests/test_readonly.py",
-      "sha256": "be44332cda78b76dcf6b2d5584f248471c32a8421e80fedebb5b4c1463e93c1e"
+      "sha256": "e22a58c85429f3a48734113c8675a7d7e704b1bbcf0bfeae162d38d16da2cc86"
+    },
+    {
+      "path": "ablation-arm/RUN_STATE.md",
+      "sha256": "a3ce12baf5cf2ce2a2b936b0901cee5439d61efbdcf86818f36c7f141cda2f79"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/01-empty-run-control.json",
@@ -40,6 +44,10 @@
       "sha256": "5e9b7af5694d78c3b8fcfee6a096efcc9c6285a9a04f7bc18951af561ff4b1d7"
     },
     {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/07-repeat-trials.json",
+      "sha256": "67f6cb2466b4ce5d100072793265b77e92facc1737a20f2efaa2d68025745cb0"
+    },
+    {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture.py",
       "sha256": "9dfd76aa06601a0a935fd20a70415984dfc3e6bdf19e67e4c9b88c0b9b1f829b"
     },
@@ -62,6 +70,14 @@
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_periodic_writer.stdout.txt",
       "sha256": "ab4dd387772853f190a6213aaf06e5b0170588d3c1e647c26f724b313c7ff193"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_repeat.py",
+      "sha256": "38b54c33207b670b8154e34ee7035bad10c10160a326b5e528c9fbe41aed2878"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_repeat.stdout.txt",
+      "sha256": "aa55225f8ef00ca793ec73d56d82afc355ba1f237ce76bf61b3e6da54710792d"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/pytest-readonly.stdout.txt",
