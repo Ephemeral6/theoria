@@ -1,0 +1,65 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "block": 2,
+    "collapsed": 4,
+    "fragile": 3
+  },
+  "entities": [
+    {
+      "cell": [
+        2,
+        3
+      ],
+      "kind": "fragile",
+      "props": {}
+    },
+    {
+      "cell": [
+        3,
+        4
+      ],
+      "kind": "block",
+      "props": {}
+    },
+    {
+      "cell": [
+        4,
+        5
+      ],
+      "kind": "fragile",
+      "props": {}
+    }
+  ],
+  "families": [
+    "consumable",
+    "gravity",
+    "push"
+  ],
+  "flags": {
+    "gravity": true
+  },
+  "goal": [
+    5,
+    7
+  ],
+  "intended_solvable": true,
+  "layout": [
+    "#########",
+    "#.......#",
+    "###.#####",
+    "#.......#",
+    "#####.###",
+    "#.......#",
+    "#########"
+  ],
+  "notes": "Gravity, a shovable block and two one-shot floors. Every descent is one-way and every crossing is one-shot, so the reachable graph is close to a DAG \u2014 the extreme opposite of `t1-cycler-gate`.",
+  "seed": 302,
+  "tier": 3,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t3-gravity-fragile"
+}

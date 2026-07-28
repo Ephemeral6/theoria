@@ -1,0 +1,37 @@
+{
+  "prompt_id": "C1-worldgen",
+  "branch": "agent/c1-worldgen",
+  "base_commit": "1e7002d40a9d3f8f63b7537a793198964efe4052",
+  "utc": "2026-07-28T08:17:13Z",
+  "worker": "W-1610",
+  "territory": "worldgen",
+  "status": "complete",
+  "artifacts": {
+    "catalogue": "worldgen/out/worlds/ (20 worlds, INDEX.json)",
+    "qc": "worldgen/out/qc/QC.json",
+    "audit": "AUDIT.md",
+    "miner_diagnosis": "diagnose_t2-lock-fragile.txt",
+    "file_hashes": "files.json"
+  },
+  "gates": {
+    "frame_determines_state": "0 collisions / 20 worlds",
+    "solvability_intent": "20/20 match spec.intended_solvable",
+    "rule_correspondence": "20/20 agree",
+    "invariants": "0 failures",
+    "claim_disagreements": 0,
+    "determinism": "byte-identical across two builds in separate interpreters at different PYTHONHASHSEED"
+  },
+  "qc": {
+    "bar": "worldgen/qc/PREREGISTERED.md, fixed before the harness ran, not edited after",
+    "held_out_bar": 0.9,
+    "result": "MISSED",
+    "t1-switch-toggle": {"L1": true, "L2": true, "L3a_replay": 1.0, "L3b_held_out": 0.773333},
+    "t1-switch-latch": {"L1": true, "L2": true, "L3a_replay": 1.0, "L3b_held_out": 0.895833},
+    "t2-lock-fragile": {"L1": false, "error": "NoSeparatingGuard — a0_relational_v1 cannot separate two transitions whose frames differ; world verified learnable (87/87 distinct frames)"}
+  },
+  "provenance_notes": [
+    "The predecessor's untracked worldgen/ on the old agent/c1-worldgen worktree was salvaged and audited rather than rewritten. The architecture was adopted; the artefacts were rebuilt. Fourteen defects are catalogued in AUDIT.md and their repairs in worldgen/RUN_STATE.md.",
+    "The shipped out/ in the remnant was stale — built from an older code state — so its recorded numbers described a catalogue that no longer existed.",
+    "No file outside worldgen/ was modified except monitor/inbox/ (a note to the monitor) and PARTNER_SYNC.md (own paragraph, appended). cold-start-a0 and engine-rig are imported read-only."
+  ]
+}

@@ -1,0 +1,108 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "collapsed": 9,
+    "door": 4,
+    "fragile": 8,
+    "lock": 7,
+    "switch": 2,
+    "switch_on": 3,
+    "token": 5
+  },
+  "entities": [
+    {
+      "cell": [
+        1,
+        4
+      ],
+      "kind": "token",
+      "props": {}
+    },
+    {
+      "cell": [
+        1,
+        8
+      ],
+      "kind": "fragile",
+      "props": {}
+    },
+    {
+      "cell": [
+        3,
+        3
+      ],
+      "kind": "switch",
+      "props": {
+        "mode": "latch",
+        "net": "a"
+      }
+    },
+    {
+      "cell": [
+        5,
+        1
+      ],
+      "kind": "token",
+      "props": {}
+    },
+    {
+      "cell": [
+        5,
+        4
+      ],
+      "kind": "door",
+      "props": {
+        "net": "a",
+        "polarity": "open_when_on"
+      }
+    },
+    {
+      "cell": [
+        5,
+        6
+      ],
+      "kind": "token",
+      "props": {}
+    },
+    {
+      "cell": [
+        5,
+        8
+      ],
+      "kind": "lock",
+      "props": {
+        "k": 3
+      }
+    }
+  ],
+  "families": [
+    "consumable",
+    "count_lock",
+    "switch_door"
+  ],
+  "flags": {},
+  "goal": [
+    6,
+    8
+  ],
+  "intended_solvable": true,
+  "layout": [
+    "##########",
+    "#....#...#",
+    "#.##.#.#.#",
+    "#....#.#.#",
+    "#.##.#.#.#",
+    "#..#.#...#",
+    "#........#",
+    "##########"
+  ],
+  "notes": "The hardest world in the catalogue for an inductive pipeline: a latch, three tokens, a lock and a one-shot floor, so almost nothing can be seen twice. Built as the standing counter-example to any claim that coverage is what a manual needs.",
+  "seed": 304,
+  "tier": 3,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t3-latch-maze"
+}

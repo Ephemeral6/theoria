@@ -1,0 +1,451 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 262,
+    "injective": true,
+    "states": 262
+  },
+  "grid": [
+    8,
+    10
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 262,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 8 x 10",
+      "states_checked": 262,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "phase_in_range",
+      "statement": "every cycler's phase stays in range(k)",
+      "states_checked": 262,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "color_reads_phase",
+      "statement": "the colour of a cycler cell determines its phase, except where the agent covers it",
+      "states_checked": 262,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "agent_conserved",
+      "statement": "exactly one cell shows the agent at all times \u2014 a portal moves the agent, it never copies or deletes it",
+      "states_checked": 262,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "mouths_static",
+      "statement": "each of the 2 portal mouth(s) shows colour 2 unless the agent is standing on it",
+      "states_checked": 262,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "token_count",
+      "statement": "the number of cells showing colour 3 equals the number of tokens not yet collected",
+      "states_checked": 262,
+      "verified": true
+    },
+    {
+      "name": "collection_is_monotone",
+      "note": "prose only \u2014 not checkable on a single state",
+      "statement": "the number of collected tokens never decreases, so a lock that has opened never closes again",
+      "verified": false
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "cycler": 5,
+    "cycler_1": 7,
+    "cycler_2": 8,
+    "floor": 0,
+    "lock": 4,
+    "portal": 2,
+    "token": 3,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "walk_through_cycler",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "re_witnessable",
+        "claimed": "conditional \u2014 the advance fires only from a shut phase, so a second witness needs a route that returns the agent to one; measured per world",
+        "measured": 1,
+        "re_witnessable": false,
+        "reversible": true,
+        "rule": "advance_cycler",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "teleport_twoway",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "blocked_portal_exit",
+        "verdict": "unreachable"
+      },
+      {
+        "axis": "re_witnessable",
+        "claimed": true,
+        "measured": 2,
+        "re_witnessable": true,
+        "reversible": false,
+        "rule": "collect_token",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "walk_through_lock",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_lock",
+        "verdict": "agrees"
+      }
+    ],
+    "components": 8,
+    "reachable_states": 262,
+    "reversibility_score": 0.875,
+    "rules": {
+      "advance_cycler": {
+        "firing_states": 6,
+        "firing_transitions": 6,
+        "max_witnesses": 1,
+        "re_witnessable": false,
+        "single_witness": true
+      },
+      "blocked_by_lock": {
+        "firing_states": 16,
+        "firing_transitions": 16,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 262,
+        "firing_transitions": 420,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "collect_token": {
+        "firing_states": 14,
+        "firing_transitions": 14,
+        "max_witnesses": 2,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "teleport_twoway": {
+        "firing_states": 48,
+        "firing_transitions": 48,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 262,
+        "firing_transitions": 530,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_cycler": {
+        "firing_states": 8,
+        "firing_transitions": 8,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_lock": {
+        "firing_states": 6,
+        "firing_transitions": 6,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 7,
+    "rules_single_witness": [
+      "advance_cycler"
+    ],
+    "rules_total": 8
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [],
+    "declared": [
+      "advance_cycler",
+      "blocked_by_lock",
+      "blocked_by_wall",
+      "blocked_portal_exit",
+      "collect_token",
+      "teleport_twoway",
+      "walk",
+      "walk_through_cycler",
+      "walk_through_lock"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [
+      "blocked_portal_exit"
+    ],
+    "fired": [
+      "advance_cycler",
+      "blocked_by_lock",
+      "blocked_by_wall",
+      "collect_token",
+      "teleport_twoway",
+      "walk",
+      "walk_through_cycler",
+      "walk_through_lock"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "walk_through_cycler",
+      "reversible": true,
+      "then": "the agent enters the cell and the phase does not change",
+      "when": "act=D and the target cell holds a cycler whose phase equals its open phase"
+    },
+    {
+      "name": "advance_cycler",
+      "re_witnessable": "conditional \u2014 the advance fires only from a shut phase, so a second witness needs a route that returns the agent to one; measured per world",
+      "reversible": true,
+      "then": "the agent does not move and the cycler's phase becomes (phase + 1) mod k",
+      "when": "act=D and the target cell holds a cycler whose phase is not its open phase"
+    },
+    {
+      "name": "teleport_twoway",
+      "reversible": true,
+      "then": "the agent is placed on the other mouth, independently of D",
+      "when": "act=D and the target cell holds one mouth of a two-way pair and the other mouth is free"
+    },
+    {
+      "clause": true,
+      "name": "blocked_portal_exit",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a portal whose landing cell is a wall, out of bounds, or occupied"
+    },
+    {
+      "name": "collect_token",
+      "re_witnessable": true,
+      "reversible": false,
+      "then": "that token becomes collected \u2014 it stops being drawn and the global collected count rises by one \u2014 and the agent takes its cell",
+      "when": "act=D and the target cell holds an uncollected token",
+      "why": "one witness per token, so the count is the number of tokens \u2014 2 here"
+    },
+    {
+      "name": "walk_through_lock",
+      "reversible": true,
+      "then": "the agent moves onto the lock's cell",
+      "when": "act=D and the target cell holds a lock whose k is at most the global number of tokens collected so far \u2014 the count is shared by every lock, not kept per lock"
+    },
+    {
+      "name": "blocked_by_lock",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a lock whose k exceeds the global number of tokens collected so far"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 36,
+    "goal": [
+      6,
+      8
+    ],
+    "optimal_length": 5,
+    "optimal_plan": [
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN"
+    ],
+    "reachable_states": 262,
+    "solvable": true,
+    "world_id": "t3-cycler-portal-lock"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "cycler": 5,
+      "cycler_1": 7,
+      "cycler_2": 8,
+      "lock": 4,
+      "portal": 2,
+      "token": 3
+    },
+    "entities": [
+      {
+        "cell": [
+          1,
+          4
+        ],
+        "kind": "token",
+        "props": {}
+      },
+      {
+        "cell": [
+          1,
+          8
+        ],
+        "kind": "token",
+        "props": {}
+      },
+      {
+        "cell": [
+          3,
+          2
+        ],
+        "kind": "cycler",
+        "props": {
+          "k": 3,
+          "open_phase": 1
+        }
+      },
+      {
+        "cell": [
+          5,
+          1
+        ],
+        "kind": "portal",
+        "props": {
+          "mode": "twoway",
+          "pair": "p"
+        }
+      },
+      {
+        "cell": [
+          5,
+          4
+        ],
+        "kind": "lock",
+        "props": {
+          "k": 2
+        }
+      },
+      {
+        "cell": [
+          5,
+          8
+        ],
+        "kind": "portal",
+        "props": {
+          "mode": "twoway",
+          "pair": "p"
+        }
+      }
+    ],
+    "families": [
+      "color_cycle",
+      "count_lock",
+      "portal"
+    ],
+    "flags": {},
+    "goal": [
+      6,
+      8
+    ],
+    "intended_solvable": true,
+    "layout": [
+      "##########",
+      "#....#...#",
+      "#.##.#.#.#",
+      "#....#.#.#",
+      "#.##.#.#.#",
+      "#....#...#",
+      "#........#",
+      "##########"
+    ],
+    "notes": "A reversible gate, a monotone lock and a teleport, so that a single world contains one rule of each reversibility class.",
+    "seed": 303,
+    "tier": 3,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "t3-cycler-portal-lock"
+  },
+  "world_id": "t3-cycler-portal-lock"
+}

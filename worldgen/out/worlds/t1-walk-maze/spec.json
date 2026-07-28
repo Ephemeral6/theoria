@@ -1,0 +1,30 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {},
+  "entities": [],
+  "families": [],
+  "flags": {},
+  "goal": [
+    5,
+    7
+  ],
+  "intended_solvable": true,
+  "layout": [
+    "#########",
+    "#...#...#",
+    "#.#.#.#.#",
+    "#.#...#.#",
+    "#.#####.#",
+    "#.......#",
+    "#########"
+  ],
+  "notes": "No mechanism at all: `walk` and `blocked_by_wall` only. The floor of the catalogue, and the control every other world is read against.",
+  "seed": 101,
+  "tier": 1,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t1-walk-maze"
+}

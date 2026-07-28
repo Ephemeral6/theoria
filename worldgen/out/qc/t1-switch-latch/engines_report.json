@@ -1,0 +1,1484 @@
+{
+  "board": {
+    "background": 0,
+    "dynamic_cells": 11,
+    "map": [
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    ],
+    "static_cells": 31
+  },
+  "frames": 31,
+  "mining": {
+    "explains_every_transition": {
+      "obj0": true,
+      "obj1": true,
+      "obj2": true,
+      "obj3": true
+    },
+    "mutually_exclusive": {
+      "obj0": true,
+      "obj1": true,
+      "obj2": true,
+      "obj3": true
+    },
+    "rules": [
+      {
+        "action": "DOWN",
+        "coverage": "6/6",
+        "effect": {
+          "dx": 0,
+          "dy": 1,
+          "type": "move"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "act==DOWN",
+          "free(strip(DOWN))"
+        ],
+        "name": "obj0_step_DOWN",
+        "track": "obj0"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "5/5",
+        "effect": {
+          "dx": -1,
+          "dy": 0,
+          "type": "move"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "act==LEFT",
+          "free(strip(LEFT))"
+        ],
+        "name": "obj0_step_LEFT",
+        "track": "obj0"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "4/4",
+        "effect": {
+          "dx": 1,
+          "dy": 0,
+          "type": "move"
+        },
+        "frontier_size": 5,
+        "guard": [
+          "act==RIGHT",
+          "free(strip(RIGHT))"
+        ],
+        "name": "obj0_step_RIGHT",
+        "track": "obj0"
+      },
+      {
+        "action": "UP",
+        "coverage": "6/6",
+        "effect": {
+          "dx": 0,
+          "dy": -1,
+          "type": "move"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==UP"
+        ],
+        "name": "obj0_step_UP",
+        "track": "obj0"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "5/5",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "!clear(strip(DOWN))",
+          "act==DOWN"
+        ],
+        "name": "obj0_still_DOWN",
+        "track": "obj0"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "3/3",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "!clear(strip(LEFT))",
+          "act==LEFT"
+        ],
+        "name": "obj0_still_LEFT",
+        "track": "obj0"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "1/1",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 22,
+        "guard": [
+          "!clear(strip(RIGHT))",
+          "act==RIGHT"
+        ],
+        "name": "obj0_still_RIGHT",
+        "track": "obj0"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "10/10",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
+        ],
+        "name": "obj1_still_DOWN",
+        "track": "obj1"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "8/8",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==LEFT"
+        ],
+        "name": "obj1_still_LEFT",
+        "track": "obj1"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "5/5",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==RIGHT"
+        ],
+        "name": "obj1_still_RIGHT",
+        "track": "obj1"
+      },
+      {
+        "action": "UP",
+        "coverage": "6/6",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==UP"
+        ],
+        "name": "obj1_still_UP",
+        "track": "obj1"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "1/1",
+        "effect": {
+          "type": "vanish"
+        },
+        "frontier_size": 32,
+        "guard": [
+          "tcolor(DOWN)==2"
+        ],
+        "name": "obj1_vanish_DOWN",
+        "track": "obj1"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "1/1",
+        "effect": {
+          "to": 3,
+          "type": "recolor"
+        },
+        "frontier_size": 32,
+        "guard": [
+          "tcolor(DOWN)==2"
+        ],
+        "name": "obj2_recolor3_DOWN",
+        "track": "obj2"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "10/10",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
+        ],
+        "name": "obj2_still_DOWN",
+        "track": "obj2"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "8/8",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==LEFT"
+        ],
+        "name": "obj2_still_LEFT",
+        "track": "obj2"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "5/5",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==RIGHT"
+        ],
+        "name": "obj2_still_RIGHT",
+        "track": "obj2"
+      },
+      {
+        "action": "UP",
+        "coverage": "6/6",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==UP"
+        ],
+        "name": "obj2_still_UP",
+        "track": "obj2"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "10/10",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "!tcolor(DOWN)==2",
+          "act==DOWN"
+        ],
+        "name": "obj3_still_DOWN",
+        "track": "obj3"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "8/8",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==LEFT"
+        ],
+        "name": "obj3_still_LEFT",
+        "track": "obj3"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "5/5",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==RIGHT"
+        ],
+        "name": "obj3_still_RIGHT",
+        "track": "obj3"
+      },
+      {
+        "action": "UP",
+        "coverage": "6/6",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==UP"
+        ],
+        "name": "obj3_still_UP",
+        "track": "obj3"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "1/1",
+        "effect": {
+          "type": "vanish"
+        },
+        "frontier_size": 32,
+        "guard": [
+          "tcolor(DOWN)==2"
+        ],
+        "name": "obj3_vanish_DOWN",
+        "track": "obj3"
+      },
+      {
+        "action": "?dir",
+        "coverage": "9/9",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "!clear(strip(?dir))",
+          "act==?dir"
+        ],
+        "name": "obj0_still",
+        "track": "obj0"
+      },
+      {
+        "action": "?dir",
+        "coverage": "15/15",
+        "effect": {
+          "direction": "?dir",
+          "type": "move"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "act==?dir",
+          "free(strip(?dir))"
+        ],
+        "name": "obj0_step",
+        "track": "obj0"
+      },
+      {
+        "action": "?dir",
+        "coverage": "19/19",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==?dir"
+        ],
+        "name": "obj1_still",
+        "track": "obj1"
+      },
+      {
+        "action": "?dir",
+        "coverage": "19/19",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==?dir"
+        ],
+        "name": "obj2_still",
+        "track": "obj2"
+      },
+      {
+        "action": "?dir",
+        "coverage": "19/19",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==?dir"
+        ],
+        "name": "obj3_still",
+        "track": "obj3"
+      }
+    ],
+    "vocabulary_size": 90
+  },
+  "probes": [
+    {
+      "coverage": "6/6",
+      "frontier": [
+        [
+          "act==DOWN",
+          "free(strip(DOWN))"
+        ],
+        [
+          "act==DOWN",
+          "clear(strip(DOWN))"
+        ],
+        [
+          "act==DOWN",
+          "tcolor(DOWN)==0"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj0_step_DOWN",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "5/5",
+      "frontier": [
+        [
+          "act==LEFT",
+          "free(strip(LEFT))"
+        ],
+        [
+          "act==LEFT",
+          "clear(strip(LEFT))"
+        ],
+        [
+          "act==LEFT",
+          "tcolor(LEFT)==0"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj0_step_LEFT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "action": "RIGHT",
+      "construction": {
+        "direction": "RIGHT",
+        "mover_anchor": [
+          1,
+          2
+        ],
+        "painted_color": 2
+      },
+      "coverage": "4/4",
+      "entropy_bits": 0.970951,
+      "frontier": [
+        [
+          "act==RIGHT",
+          "free(strip(RIGHT))"
+        ],
+        [
+          "act==RIGHT",
+          "clear(strip(RIGHT))"
+        ],
+        [
+          "act==RIGHT",
+          "tcolor(RIGHT)==0"
+        ],
+        [
+          "!tcolor(RIGHT)==1",
+          "act==RIGHT"
+        ],
+        [
+          "!at(4,3)",
+          "act==RIGHT"
+        ]
+      ],
+      "n_hypotheses": 5,
+      "partition": {
+        "fires": [
+          "obj0_step_RIGHT_3",
+          "obj0_step_RIGHT_4"
+        ],
+        "silent": [
+          "obj0_step_RIGHT_0",
+          "obj0_step_RIGHT_1",
+          "obj0_step_RIGHT_2"
+        ]
+      },
+      "rule": "obj0_step_RIGHT",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "coverage": "5/5",
+      "frontier": [
+        [
+          "!clear(strip(DOWN))",
+          "act==DOWN"
+        ],
+        [
+          "!free(strip(DOWN))",
+          "act==DOWN"
+        ],
+        [
+          "!tcolor(DOWN)==0",
+          "act==DOWN"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj0_still_DOWN",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "3/3",
+      "frontier": [
+        [
+          "!clear(strip(LEFT))",
+          "act==LEFT"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "act==LEFT"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "act==LEFT"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj0_still_LEFT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "action": "RIGHT",
+      "at_transition": 2,
+      "coverage": "1/1",
+      "entropy_bits": 0.976021,
+      "frontier": [
+        [
+          "!clear(strip(RIGHT))",
+          "act==RIGHT"
+        ],
+        [
+          "!free(strip(RIGHT))",
+          "act==RIGHT"
+        ],
+        [
+          "act==RIGHT",
+          "tcolor(RIGHT)==1"
+        ],
+        [
+          "!tcolor(RIGHT)==0",
+          "act==RIGHT"
+        ],
+        [
+          "act==RIGHT",
+          "at(4,3)"
+        ],
+        [
+          "!clear(strip(DOWN))",
+          "act==RIGHT",
+          "free(strip(LEFT))"
+        ],
+        [
+          "!clear(strip(DOWN))",
+          "act==RIGHT",
+          "clear(strip(LEFT))"
+        ],
+        [
+          "!free(strip(DOWN))",
+          "act==RIGHT",
+          "free(strip(LEFT))"
+        ],
+        [
+          "!free(strip(DOWN))",
+          "act==RIGHT",
+          "clear(strip(LEFT))"
+        ],
+        [
+          "act==RIGHT",
+          "free(strip(LEFT))",
+          "tcolor(DOWN)==1"
+        ],
+        [
+          "act==RIGHT",
+          "clear(strip(LEFT))",
+          "tcolor(DOWN)==1"
+        ],
+        [
+          "!tcolor(DOWN)==0",
+          "act==RIGHT",
+          "free(strip(LEFT))"
+        ],
+        [
+          "!clear(strip(DOWN))",
+          "act==RIGHT",
+          "tcolor(LEFT)==0"
+        ],
+        [
+          "!tcolor(DOWN)==0",
+          "act==RIGHT",
+          "clear(strip(LEFT))"
+        ],
+        [
+          "!free(strip(DOWN))",
+          "act==RIGHT",
+          "tcolor(LEFT)==0"
+        ],
+        [
+          "!at(3,2)",
+          "act==RIGHT",
+          "free(strip(LEFT))"
+        ],
+        [
+          "!at(3,2)",
+          "act==RIGHT",
+          "clear(strip(LEFT))"
+        ],
+        [
+          "act==RIGHT",
+          "tcolor(DOWN)==1",
+          "tcolor(LEFT)==0"
+        ],
+        [
+          "!tcolor(DOWN)==0",
+          "act==RIGHT",
+          "tcolor(LEFT)==0"
+        ],
+        [
+          "!tcolor(LEFT)==3",
+          "act==RIGHT",
+          "tcolor(DOWN)==1"
+        ],
+        [
+          "!at(3,2)",
+          "act==RIGHT",
+          "tcolor(LEFT)==0"
+        ],
+        [
+          "!at(4,2)",
+          "act==RIGHT",
+          "tcolor(DOWN)==1"
+        ]
+      ],
+      "mover_anchor": [
+        3,
+        2
+      ],
+      "n_hypotheses": 22,
+      "partition": {
+        "fires": [
+          "obj0_still_RIGHT_11",
+          "obj0_still_RIGHT_12",
+          "obj0_still_RIGHT_13",
+          "obj0_still_RIGHT_14",
+          "obj0_still_RIGHT_18",
+          "obj0_still_RIGHT_5",
+          "obj0_still_RIGHT_6",
+          "obj0_still_RIGHT_7",
+          "obj0_still_RIGHT_8"
+        ],
+        "silent": [
+          "obj0_still_RIGHT_0",
+          "obj0_still_RIGHT_1",
+          "obj0_still_RIGHT_10",
+          "obj0_still_RIGHT_15",
+          "obj0_still_RIGHT_16",
+          "obj0_still_RIGHT_17",
+          "obj0_still_RIGHT_19",
+          "obj0_still_RIGHT_2",
+          "obj0_still_RIGHT_20",
+          "obj0_still_RIGHT_21",
+          "obj0_still_RIGHT_3",
+          "obj0_still_RIGHT_4",
+          "obj0_still_RIGHT_9"
+        ]
+      },
+      "rule": "obj0_still_RIGHT",
+      "tier": "executable"
+    },
+    {
+      "action": "DOWN",
+      "construction": {
+        "direction": "LEFT",
+        "mover_anchor": [
+          1,
+          2
+        ],
+        "painted_color": 2
+      },
+      "coverage": "1/1",
+      "entropy_bits": 0.988699,
+      "frontier": [
+        [
+          "tcolor(DOWN)==2"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "present(obj1)"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "present(obj3)"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "present(obj1)"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "present(obj3)"
+        ],
+        [
+          "present(obj1)",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "present(obj3)",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "color(obj1)==4"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "color(obj2)==2"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "color(obj3)==4"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "present(obj1)"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "present(obj3)"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "color(obj1)==4"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "color(obj2)==2"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "color(obj3)==4"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "!color(obj2)==3"
+        ],
+        [
+          "!color(obj2)==3",
+          "!free(strip(LEFT))"
+        ],
+        [
+          "at(3,1)",
+          "present(obj1)"
+        ],
+        [
+          "at(3,1)",
+          "present(obj3)"
+        ],
+        [
+          "color(obj1)==4",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "color(obj2)==2",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "color(obj3)==4",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!color(obj2)==3",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "color(obj1)==4"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "color(obj2)==2"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "color(obj3)==4"
+        ],
+        [
+          "!color(obj2)==3",
+          "!tcolor(LEFT)==0"
+        ],
+        [
+          "at(3,1)",
+          "color(obj1)==4"
+        ],
+        [
+          "at(3,1)",
+          "color(obj2)==2"
+        ],
+        [
+          "at(3,1)",
+          "color(obj3)==4"
+        ],
+        [
+          "!color(obj2)==3",
+          "at(3,1)"
+        ],
+        [
+          "!tcolor(DOWN)==3",
+          "at(3,1)"
+        ]
+      ],
+      "n_hypotheses": 32,
+      "partition": {
+        "fires": [
+          "obj1_vanish_DOWN_1",
+          "obj1_vanish_DOWN_10",
+          "obj1_vanish_DOWN_11",
+          "obj1_vanish_DOWN_12",
+          "obj1_vanish_DOWN_13",
+          "obj1_vanish_DOWN_14",
+          "obj1_vanish_DOWN_15",
+          "obj1_vanish_DOWN_16",
+          "obj1_vanish_DOWN_2",
+          "obj1_vanish_DOWN_23",
+          "obj1_vanish_DOWN_24",
+          "obj1_vanish_DOWN_25",
+          "obj1_vanish_DOWN_26",
+          "obj1_vanish_DOWN_3",
+          "obj1_vanish_DOWN_4",
+          "obj1_vanish_DOWN_7",
+          "obj1_vanish_DOWN_8",
+          "obj1_vanish_DOWN_9"
+        ],
+        "silent": [
+          "obj1_vanish_DOWN_0",
+          "obj1_vanish_DOWN_17",
+          "obj1_vanish_DOWN_18",
+          "obj1_vanish_DOWN_19",
+          "obj1_vanish_DOWN_20",
+          "obj1_vanish_DOWN_21",
+          "obj1_vanish_DOWN_22",
+          "obj1_vanish_DOWN_27",
+          "obj1_vanish_DOWN_28",
+          "obj1_vanish_DOWN_29",
+          "obj1_vanish_DOWN_30",
+          "obj1_vanish_DOWN_31",
+          "obj1_vanish_DOWN_5",
+          "obj1_vanish_DOWN_6"
+        ]
+      },
+      "rule": "obj1_vanish_DOWN",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "DOWN",
+      "construction": {
+        "direction": "LEFT",
+        "mover_anchor": [
+          1,
+          2
+        ],
+        "painted_color": 2
+      },
+      "coverage": "1/1",
+      "entropy_bits": 0.988699,
+      "frontier": [
+        [
+          "tcolor(DOWN)==2"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "present(obj1)"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "present(obj3)"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "present(obj1)"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "present(obj3)"
+        ],
+        [
+          "present(obj1)",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "present(obj3)",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "color(obj1)==4"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "color(obj2)==2"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "color(obj3)==4"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "present(obj1)"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "present(obj3)"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "color(obj1)==4"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "color(obj2)==2"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "color(obj3)==4"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "!color(obj2)==3"
+        ],
+        [
+          "!color(obj2)==3",
+          "!free(strip(LEFT))"
+        ],
+        [
+          "at(3,1)",
+          "present(obj1)"
+        ],
+        [
+          "at(3,1)",
+          "present(obj3)"
+        ],
+        [
+          "color(obj1)==4",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "color(obj2)==2",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "color(obj3)==4",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!color(obj2)==3",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "color(obj1)==4"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "color(obj2)==2"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "color(obj3)==4"
+        ],
+        [
+          "!color(obj2)==3",
+          "!tcolor(LEFT)==0"
+        ],
+        [
+          "at(3,1)",
+          "color(obj1)==4"
+        ],
+        [
+          "at(3,1)",
+          "color(obj2)==2"
+        ],
+        [
+          "at(3,1)",
+          "color(obj3)==4"
+        ],
+        [
+          "!color(obj2)==3",
+          "at(3,1)"
+        ],
+        [
+          "!tcolor(DOWN)==3",
+          "at(3,1)"
+        ]
+      ],
+      "n_hypotheses": 32,
+      "partition": {
+        "fires": [
+          "obj2_recolor3_DOWN_1",
+          "obj2_recolor3_DOWN_10",
+          "obj2_recolor3_DOWN_11",
+          "obj2_recolor3_DOWN_12",
+          "obj2_recolor3_DOWN_13",
+          "obj2_recolor3_DOWN_14",
+          "obj2_recolor3_DOWN_15",
+          "obj2_recolor3_DOWN_16",
+          "obj2_recolor3_DOWN_2",
+          "obj2_recolor3_DOWN_23",
+          "obj2_recolor3_DOWN_24",
+          "obj2_recolor3_DOWN_25",
+          "obj2_recolor3_DOWN_26",
+          "obj2_recolor3_DOWN_3",
+          "obj2_recolor3_DOWN_4",
+          "obj2_recolor3_DOWN_7",
+          "obj2_recolor3_DOWN_8",
+          "obj2_recolor3_DOWN_9"
+        ],
+        "silent": [
+          "obj2_recolor3_DOWN_0",
+          "obj2_recolor3_DOWN_17",
+          "obj2_recolor3_DOWN_18",
+          "obj2_recolor3_DOWN_19",
+          "obj2_recolor3_DOWN_20",
+          "obj2_recolor3_DOWN_21",
+          "obj2_recolor3_DOWN_22",
+          "obj2_recolor3_DOWN_27",
+          "obj2_recolor3_DOWN_28",
+          "obj2_recolor3_DOWN_29",
+          "obj2_recolor3_DOWN_30",
+          "obj2_recolor3_DOWN_31",
+          "obj2_recolor3_DOWN_5",
+          "obj2_recolor3_DOWN_6"
+        ]
+      },
+      "rule": "obj2_recolor3_DOWN",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "DOWN",
+      "construction": {
+        "direction": "LEFT",
+        "mover_anchor": [
+          1,
+          2
+        ],
+        "painted_color": 2
+      },
+      "coverage": "1/1",
+      "entropy_bits": 0.988699,
+      "frontier": [
+        [
+          "tcolor(DOWN)==2"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "present(obj1)"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "present(obj3)"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "present(obj1)"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "present(obj3)"
+        ],
+        [
+          "present(obj1)",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "present(obj3)",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "color(obj1)==4"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "color(obj2)==2"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "color(obj3)==4"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "present(obj1)"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "present(obj3)"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "color(obj1)==4"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "color(obj2)==2"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "color(obj3)==4"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "!color(obj2)==3"
+        ],
+        [
+          "!color(obj2)==3",
+          "!free(strip(LEFT))"
+        ],
+        [
+          "at(3,1)",
+          "present(obj1)"
+        ],
+        [
+          "at(3,1)",
+          "present(obj3)"
+        ],
+        [
+          "color(obj1)==4",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "color(obj2)==2",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "color(obj3)==4",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!color(obj2)==3",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "color(obj1)==4"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "color(obj2)==2"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "color(obj3)==4"
+        ],
+        [
+          "!color(obj2)==3",
+          "!tcolor(LEFT)==0"
+        ],
+        [
+          "at(3,1)",
+          "color(obj1)==4"
+        ],
+        [
+          "at(3,1)",
+          "color(obj2)==2"
+        ],
+        [
+          "at(3,1)",
+          "color(obj3)==4"
+        ],
+        [
+          "!color(obj2)==3",
+          "at(3,1)"
+        ],
+        [
+          "!tcolor(DOWN)==3",
+          "at(3,1)"
+        ]
+      ],
+      "n_hypotheses": 32,
+      "partition": {
+        "fires": [
+          "obj3_vanish_DOWN_1",
+          "obj3_vanish_DOWN_10",
+          "obj3_vanish_DOWN_11",
+          "obj3_vanish_DOWN_12",
+          "obj3_vanish_DOWN_13",
+          "obj3_vanish_DOWN_14",
+          "obj3_vanish_DOWN_15",
+          "obj3_vanish_DOWN_16",
+          "obj3_vanish_DOWN_2",
+          "obj3_vanish_DOWN_23",
+          "obj3_vanish_DOWN_24",
+          "obj3_vanish_DOWN_25",
+          "obj3_vanish_DOWN_26",
+          "obj3_vanish_DOWN_3",
+          "obj3_vanish_DOWN_4",
+          "obj3_vanish_DOWN_7",
+          "obj3_vanish_DOWN_8",
+          "obj3_vanish_DOWN_9"
+        ],
+        "silent": [
+          "obj3_vanish_DOWN_0",
+          "obj3_vanish_DOWN_17",
+          "obj3_vanish_DOWN_18",
+          "obj3_vanish_DOWN_19",
+          "obj3_vanish_DOWN_20",
+          "obj3_vanish_DOWN_21",
+          "obj3_vanish_DOWN_22",
+          "obj3_vanish_DOWN_27",
+          "obj3_vanish_DOWN_28",
+          "obj3_vanish_DOWN_29",
+          "obj3_vanish_DOWN_30",
+          "obj3_vanish_DOWN_31",
+          "obj3_vanish_DOWN_5",
+          "obj3_vanish_DOWN_6"
+        ]
+      },
+      "rule": "obj3_vanish_DOWN",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    }
+  ],
+  "segmentation": {
+    "baseline_bits": 690,
+    "event_types": {
+      "move": 21,
+      "recolor": 1,
+      "vanish": 2
+    },
+    "mover": "obj0",
+    "operator": "connected_components(4)+uniform_color",
+    "operator_comparison": [
+      {
+        "baseline_bits": 690,
+        "chosen": true,
+        "events": 24,
+        "operator": "connected_components(4)+uniform_color",
+        "ratio": 0.7739,
+        "reidentification": {
+          "applied": false,
+          "merged": [],
+          "operator": "template_match+disjoint_lifetime",
+          "saved_bits": 0,
+          "script_bits_after": 534,
+          "script_bits_before": 534,
+          "tracks_after": 4,
+          "tracks_before": 4
+        },
+        "script_bits": 534,
+        "tracks": 4
+      },
+      {
+        "baseline_bits": 690,
+        "chosen": false,
+        "events": 45,
+        "operator": "connected_components(4)",
+        "ratio": 1.0841,
+        "reidentification": {
+          "applied": true,
+          "merged": [
+            {
+              "from": "obj6",
+              "into": "obj0"
+            },
+            {
+              "from": "obj10",
+              "into": "obj0"
+            },
+            {
+              "from": "obj12",
+              "into": "obj0"
+            },
+            {
+              "from": "obj15",
+              "into": "obj0"
+            },
+            {
+              "from": "obj18",
+              "into": "obj0"
+            },
+            {
+              "from": "obj8",
+              "into": "obj2"
+            },
+            {
+              "from": "obj11",
+              "into": "obj2"
+            },
+            {
+              "from": "obj14",
+              "into": "obj5"
+            },
+            {
+              "from": "obj17",
+              "into": "obj5"
+            },
+            {
+              "from": "obj9",
+              "into": "obj7"
+            },
+            {
+              "from": "obj13",
+              "into": "obj7"
+            },
+            {
+              "from": "obj16",
+              "into": "obj7"
+            },
+            {
+              "from": "obj19",
+              "into": "obj7"
+            }
+          ],
+          "operator": "template_match+disjoint_lifetime",
+          "saved_bits": 124,
+          "script_bits_after": 748,
+          "script_bits_before": 872,
+          "tracks_after": 7,
+          "tracks_before": 20
+        },
+        "script_bits": 748,
+        "tracks": 7
+      }
+    ],
+    "ratio": 0.7739,
+    "script_bits": 534,
+    "tracks": [
+      {
+        "color": 6,
+        "first_frame": 0,
+        "frames_present": 31,
+        "id": "obj0",
+        "shape": [
+          1,
+          1
+        ]
+      },
+      {
+        "color": 4,
+        "first_frame": 0,
+        "frames_present": 5,
+        "id": "obj1",
+        "shape": [
+          1,
+          1
+        ]
+      },
+      {
+        "color": 2,
+        "first_frame": 0,
+        "frames_present": 31,
+        "id": "obj2",
+        "shape": [
+          1,
+          1
+        ]
+      },
+      {
+        "color": 4,
+        "first_frame": 0,
+        "frames_present": 5,
+        "id": "obj3",
+        "shape": [
+          1,
+          1
+        ]
+      }
+    ]
+  },
+  "trace": "raw_trace.jsonl",
+  "transitions": 30,
+  "zero_space": {
+    "cell_local_laws": 56,
+    "cells": 17,
+    "colors": [
+      "2",
+      "3",
+      "4",
+      "6"
+    ],
+    "difference_rank": 9,
+    "features": 68,
+    "global_laws": [
+      {
+        "rendering": "(4@11 + 3@13) mod 2 = 1",
+        "support": [
+          "4@(3,4)",
+          "3@(4,1)"
+        ],
+        "value": 1
+      },
+      {
+        "rendering": "(4@11 + 4@14) mod 2 = 0",
+        "support": [
+          "4@(3,4)",
+          "4@(4,2)"
+        ],
+        "value": 0
+      },
+      {
+        "rendering": "(6@0 + 6@1 + 6@4 + 6@5 + 6@8 + 6@9 + 6@10 + 6@14 + 6@15) mod 2 = 1",
+        "support": [
+          "6@(1,1)",
+          "6@(1,2)",
+          "6@(2,1)",
+          "6@(2,2)",
+          "6@(3,1)",
+          "6@(3,2)",
+          "6@(3,3)",
+          "6@(4,2)",
+          "6@(4,3)"
+        ],
+        "value": 1
+      }
+    ],
+    "space_dimension": 59
+  }
+}

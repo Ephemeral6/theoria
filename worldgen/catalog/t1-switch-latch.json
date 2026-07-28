@@ -1,0 +1,69 @@
+{
+  "agent_start": [
+    1,
+    2
+  ],
+  "colors": {
+    "door": 4,
+    "switch": 2,
+    "switch_on": 3
+  },
+  "entities": [
+    {
+      "cell": [
+        3,
+        4
+      ],
+      "kind": "door",
+      "props": {
+        "net": "a",
+        "polarity": "open_when_on"
+      }
+    },
+    {
+      "cell": [
+        4,
+        1
+      ],
+      "kind": "switch",
+      "props": {
+        "mode": "latch",
+        "net": "a"
+      }
+    },
+    {
+      "cell": [
+        4,
+        2
+      ],
+      "kind": "door",
+      "props": {
+        "net": "a",
+        "polarity": "open_when_on"
+      }
+    }
+  ],
+  "families": [
+    "switch_door"
+  ],
+  "flags": {},
+  "goal": [
+    4,
+    5
+  ],
+  "intended_solvable": true,
+  "layout": [
+    "#######",
+    "#...#.#",
+    "#...#.#",
+    "#.....#",
+    "#...#.#",
+    "#######"
+  ],
+  "notes": "Byte-identical geometry to `t1-switch-toggle`; only `mode` differs. This is A0's Button against A0\u2032's Switch, isolated.",
+  "seed": 105,
+  "tier": 1,
+  "variant_delta": "the switch is a latch: it sets once and never clears",
+  "variant_of": "t1-switch-toggle",
+  "world_id": "t1-switch-latch"
+}

@@ -1,0 +1,246 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 6,
+    "injective": true,
+    "states": 6
+  },
+  "grid": [
+    7,
+    9
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 6,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 7 x 9",
+      "states_checked": 6,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "agent_conserved",
+      "statement": "exactly one cell shows the agent at all times \u2014 a portal moves the agent, it never copies or deletes it",
+      "states_checked": 6,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "mouths_static",
+      "statement": "each of the 2 portal mouth(s) shows colour 2 unless the agent is standing on it",
+      "states_checked": 6,
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "floor": 0,
+    "portal": 2,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "teleport_paired",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "blocked_portal_exit",
+        "verdict": "unreachable"
+      }
+    ],
+    "components": 1,
+    "reachable_states": 6,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_wall": {
+        "firing_states": 6,
+        "firing_transitions": 14,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "teleport_paired": {
+        "firing_states": 2,
+        "firing_transitions": 2,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 5,
+        "firing_transitions": 8,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 3,
+    "rules_single_witness": [],
+    "rules_total": 3
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [],
+    "declared": [
+      "blocked_by_wall",
+      "blocked_portal_exit",
+      "teleport_paired",
+      "walk"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [
+      "blocked_portal_exit"
+    ],
+    "fired": [
+      "blocked_by_wall",
+      "teleport_paired",
+      "walk"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "teleport_paired",
+      "reversible": true,
+      "then": "the agent is placed on that cell \u2014 the agent keeps travelling in direction D through the pair",
+      "when": "act=D and the target cell holds one mouth of a linked pair and the cell one step in direction D beyond the other mouth is free"
+    },
+    {
+      "clause": true,
+      "name": "blocked_portal_exit",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a portal whose landing cell is a wall, out of bounds, or occupied"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 6,
+    "goal": [
+      5,
+      7
+    ],
+    "optimal_length": 2,
+    "optimal_plan": [
+      "DOWN",
+      "DOWN"
+    ],
+    "reachable_states": 6,
+    "solvable": true,
+    "world_id": "t2-portal-paired"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "portal": 2
+    },
+    "entities": [
+      {
+        "cell": [
+          3,
+          1
+        ],
+        "kind": "portal",
+        "props": {
+          "mode": "paired",
+          "pair": "p"
+        }
+      },
+      {
+        "cell": [
+          4,
+          7
+        ],
+        "kind": "portal",
+        "props": {
+          "mode": "paired",
+          "pair": "p"
+        }
+      }
+    ],
+    "families": [
+      "portal"
+    ],
+    "flags": {},
+    "goal": [
+      5,
+      7
+    ],
+    "intended_solvable": true,
+    "layout": [
+      "#########",
+      "#....#..#",
+      "#.####..#",
+      "#...##..#",
+      "#.###...#",
+      "#.....#.#",
+      "#########"
+    ],
+    "notes": "The variant that makes direction observable. A miner that has not lifted `?dir` cannot state this rule in fewer than four clauses.",
+    "seed": 203,
+    "tier": 2,
+    "variant_delta": "`paired` instead of `twoway`: the agent exits *through* the partner, so the landing cell depends on the direction of travel",
+    "variant_of": "t2-portal-pair",
+    "world_id": "t2-portal-paired"
+  },
+  "world_id": "t2-portal-paired"
+}

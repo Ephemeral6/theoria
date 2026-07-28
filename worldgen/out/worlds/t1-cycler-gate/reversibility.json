@@ -1,0 +1,77 @@
+{
+  "claim_disagreements": [],
+  "claims": [
+    {
+      "axis": "reversible",
+      "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "rule": "walk",
+      "verdict": "deferred"
+    },
+    {
+      "axis": "reversible",
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": true,
+      "rule": "blocked_by_wall",
+      "verdict": "agrees"
+    },
+    {
+      "axis": "reversible",
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": true,
+      "rule": "walk_through_cycler",
+      "verdict": "agrees"
+    },
+    {
+      "axis": "re_witnessable",
+      "claimed": "conditional \u2014 the advance fires only from a shut phase, so a second witness needs a route that returns the agent to one; measured per world",
+      "measured": 2,
+      "re_witnessable": true,
+      "reversible": true,
+      "rule": "advance_cycler",
+      "verdict": "deferred"
+    }
+  ],
+  "components": 3,
+  "reachable_states": 58,
+  "reversibility_score": 1.0,
+  "rules": {
+    "advance_cycler": {
+      "firing_states": 8,
+      "firing_transitions": 8,
+      "max_witnesses": 2,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "blocked_by_wall": {
+      "firing_states": 42,
+      "firing_transitions": 54,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk": {
+      "firing_states": 58,
+      "firing_transitions": 166,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk_through_cycler": {
+      "firing_states": 4,
+      "firing_transitions": 4,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    }
+  },
+  "rules_re_witnessable": 4,
+  "rules_single_witness": [],
+  "rules_total": 4
+}
