@@ -1,0 +1,65 @@
+{
+  "claim": "unsolvable",
+  "comment": "(!pos1 | pos2) & (pos1 | !pos2) -- positions 1 and 2 always hold the same thing.",
+  "kind": "inductive_invariant",
+  "name": "peg4-0111-ic3-invariant",
+  "predicate": [
+    "and",
+    [
+      "or",
+      [
+        "=",
+        [
+          "var",
+          "pos1"
+        ],
+        [
+          "lit",
+          0
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "pos2"
+        ],
+        [
+          "lit",
+          1
+        ]
+      ]
+    ],
+    [
+      "or",
+      [
+        "=",
+        [
+          "var",
+          "pos1"
+        ],
+        [
+          "lit",
+          1
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "pos2"
+        ],
+        [
+          "lit",
+          0
+        ]
+      ]
+    ]
+  ],
+  "produced_by": "engines/ic3_pdr (M9)",
+  "ruleset": {
+    "name": "peg4-0111",
+    "sha256": "1603d7eea0bdca9a3d667506e31eaf98069ff7fd87cd4fe3056fffc5b6c25950"
+  },
+  "schema": "engine-rig/recheck/certificate-v1"
+}
