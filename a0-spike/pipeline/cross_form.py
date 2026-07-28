@@ -13,6 +13,7 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
 from typing import Dict, List, Optional, Sequence, Tuple
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -29,15 +30,47 @@ FALLBACK_LEAN = os.path.join(
 )
 
 
+def _lean_runs(candidate: str) -> bool:
+    """Can this binary actually compile an empty file?
+
+    An `elan` shim with no default toolchain sits on PATH, answers `which`, and
+    then fails every invocation with "no default toolchain configured". Taking it
+    at its word turned "Lean is optional, absent means skip" into a hard error in
+    a fresh worktree. A candidate that cannot compile `-- empty` is absent.
+    """
+    with tempfile.TemporaryDirectory() as workdir:
+        path = os.path.join(workdir, "Probe.lean")
+        with open(path, "w", encoding="utf-8", newline="") as fh:
+            fh.write("-- empty\n")
+        try:
+            done = subprocess.run([candidate, path], capture_output=True,
+                                  text=True, timeout=120)
+        except Exception:
+            return False
+        return done.returncode == 0
+
+
 def find_lean() -> Optional[str]:
+    """$LEAN, then the in-tree toolchain, then PATH -- and each must actually run.
+
+    Explicit configuration outranks whatever happens to be on PATH; that order is
+    the one `cold-start-a0/README.md` documents, and the reverse order let a
+    broken shim shadow a working toolchain.
+    """
+    candidates = []
+    env = os.environ.get("LEAN")
+    if env and os.path.isfile(env):
+        candidates.append(env)
+    if os.path.isfile(FALLBACK_LEAN):
+        candidates.append(FALLBACK_LEAN)
     for name in ("lean", "lean.exe"):
         found = shutil.which(name)
         if found:
-            return found
-    env = os.environ.get("LEAN")
-    if env and os.path.isfile(env):
-        return env
-    return FALLBACK_LEAN if os.path.isfile(FALLBACK_LEAN) else None
+            candidates.append(found)
+    for candidate in candidates:
+        if _lean_runs(candidate):
+            return candidate
+    return None
 
 
 def enumerate_cases(height: int, width: int) -> List[Tuple[int, int, int, int, str]]:

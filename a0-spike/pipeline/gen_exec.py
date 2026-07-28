@@ -255,7 +255,18 @@ def generate(dsl_text: str, height: int, width: int, walls: Sequence[Tuple[int, 
             if _node("GuardAction", clause):
                 continue                    # every A0 action is a directional move
             if _node("GuardPredicate", clause):
-                conditions.append(_compile_predicate(clause.expr))
+                # v0.2 moved negation out of the expression and onto the clause
+                # (`GuardPredicate.negated`). A generator that reads only `.expr`
+                # compiles `not free(x)` as `free(x)` -- silently, to a different
+                # world. That is the very failure GENERATOR_REPORT.md indicts
+                # gen_python for, and it happened here the moment the parser
+                # changed under us. Unknown *attributes* are as dangerous as
+                # unknown nodes, so the flag is read explicitly and its absence
+                # (v0.1 parsers) falls back to the old in-expression form.
+                compiled = _compile_predicate(clause.expr)
+                if getattr(clause, "negated", False):
+                    compiled = "(not %s)" % compiled
+                conditions.append(compiled)
             else:
                 raise UncompilableTheory("unsupported clause %r" % (clause,))
         guard = " and ".join(conditions) if conditions else "True"

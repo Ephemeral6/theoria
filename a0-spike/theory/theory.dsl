@@ -11,6 +11,17 @@ word_table:
   Player [segment: color-split-connected ev: t0-t340 compress: -39]
   Box [segment: color-split-connected ev: t0-t340 compress: -39]
 
+semantics:
+  # v0.2 强制三项。这里不是框架常数，是 sokoban-2 这个世界的事实：
+  #   frame persist    —— 没有规则提到的对象保持原样（箱子不会自己衰减）
+  #   conflict exclusive —— 一次转移里每个对象至多一条规则；walk / push2 /
+  #                        blocked_* 的 guard 两两互斥，certify 的
+  #                        exactly_one_successor 就是这条义务的兑现
+  #   cascade single_frame —— 一动作一后继；所有 guard 读前态，效果一起生效
+  frame     persist
+  conflict  exclusive
+  cascade   single_frame
+
 events:
   # stayed(o) 是被 certify 逼出来的：blocked_* 原本写成 then moved(Player, dir)，
   # 生成的执行态照此把玩家推出棋盘。事件语汇缺一个「什么都没发生」。
