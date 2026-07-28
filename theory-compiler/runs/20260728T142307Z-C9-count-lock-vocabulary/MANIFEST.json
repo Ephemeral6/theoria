@@ -1,0 +1,13 @@
+{
+  "base_commit": "79ef2a987c0bd6db52c8d57308f7c15017e9df5f",
+  "branch": "agent/c9-count-lock-vocabulary",
+  "cell": "C1",
+  "files": [],
+  "goal": "add a counting predicate `count(Type, pred) >= k` to the guard language; register the widening in the expressiveness ledger with its provenance; no regression on the four existing DSLs; worldgen's count-lock world through the cold-start-a0 pipeline as acceptance",
+  "prompt_id": "C9-count-lock-vocabulary",
+  "provenance": "monitor/inbox/archive/20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md",
+  "status": "in-progress",
+  "territory": "theory-compiler",
+  "utc": "2026-07-28T14:23:07Z",
+  "worker": "W-1252"
+}
