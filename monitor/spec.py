@@ -32,52 +32,52 @@ PHASES = [
                 "id": "p1-proxy-env",
                 "label": "环境代理（透明 HTTP 代理，三臂只改 base URL）",
                 "clause": "Phase 1 · 自下而上五层 (1)",
-                "status": "missing",
-                "note": "arc-recon/README.md 第 6–9 行明确声明自己不是这个代理。"
-                        "仓库内没有任何监听端口的进程。密封性目前靠自觉，"
-                        "不是 Theoria.md 要求的『由构造成立』。",
+                "status": "green",
+                "note": "proxy/ 已落地（env_proxy + guard + ledger + runner + replay + "
+                        "mock 测试），密钥只在代理内注入，封存护栏在代理层拒绝（含短 ID）。"
+                        "监控下轮独立复跑其密封测试。",
                 "blocks": ["p1-seal-test", "p1-same-shell", "p1-replay-audit"],
             },
             {
                 "id": "p1-proxy-model",
                 "label": "模型代理（provider usage 逐字入账）",
                 "clause": "Phase 1 · 自下而上五层 (3)",
-                "status": "missing",
-                "note": "没有模型流量记录面。C2『账单形状』是主轴签名证据，"
-                        "而度量它的仪表尚未存在 —— 约束 8 目前无法被验证，只能被相信。",
+                "status": "green",
+                "note": "proxy/model_proxy.py + pricing/ 版本化价目表落地；baseline 的 "
+                        "usage 已逐字入账。C2 的仪表存在了；约束 8 从此可测。",
                 "blocks": ["c2"],
             },
             {
                 "id": "p1-variant",
                 "label": "变体注入层（包裹合法集 + 构造性依据）",
                 "clause": "Phase 1 · 自下而上五层 (2)",
-                "status": "missing",
-                "note": "判决题的真值来自构造。没有这一层，考卷第 (i)(ii)(iii) 类"
-                        "变体都出不了题。",
+                "status": "partial",
+                "note": "proxy/variants.py 起架（包裹合法集）。构造性依据登记与"
+                        "考卷出题流程未接。",
             },
             {
                 "id": "p1-runner",
                 "label": "runner 与账本（env_step / model_call 两类事件）",
                 "clause": "Phase 1 · 自下而上五层 (4)",
-                "status": "partial",
-                "note": "baseline-arms/harness/ledger.py 已起草；但没有 scorecard 对账，"
-                        "没有 probe 专用 scorecard，没有 run.json。",
+                "status": "green",
+                "note": "proxy/runner.py + LEDGER_FORMAT.md + replay.py 落地。"
+                        "F-16 拼写分歧已裁决以 proxy 为正典，baseline 账本待迁移。",
             },
             {
                 "id": "p1-scorer",
                 "label": "冻结打分器接入 + 账本分数与 scorecard 对账",
                 "clause": "Phase 1 · 自下而上五层 (5)、验收单",
-                "status": "missing",
-                "note": "全仓 grep『scorer』零命中。对账义务（不等 = incident）无实现。",
+                "status": "partial",
+                "note": "proxy/reconcile.py 对账器落地，baseline 用它实测出配额口径"
+                        "（失败 400 不计费，4 样本恒等）。冻结打分器本体未接 → P-9。",
             },
             {
                 "id": "p1-determinism",
                 "label": "确定性预检全绿",
                 "clause": "Phase 1 验收单",
-                "status": "risk",
-                "note": "arc-recon 记为 INCOMPLETE（INC-002：0/8 次动作成功）。"
-                        "但 baseline-arms/probe_log.jsonl 显示带退避重试后动作确实返回 200 —— "
-                        "INC-002 的结论已被新证据推翻，而预检尚未在新重试策略下重跑。",
+                "status": "green",
+                "note": "开发堆 4 局全部 PASS（重试包络盖过 1–3 分钟的波浪式瞬时故障；"
+                        "每局 ≤20 动作）。INC-001/002 正式改判（INC-001b/002a/005）。",
                 "probe": "determinism_state",
             },
             {
@@ -103,10 +103,9 @@ PHASES = [
                 "label": "切堆清单已提交并哈希",
                 "clause": "Phase 1 · 一刀切堆",
                 "status": "risk",
-                "note": "piles.json 哈希锁定，API 层封存堆零接触（本监视器每次复验请求体）。"
-                        "但 INC-BA-001 带来了 API 之外的口子：检索子代理读到了 9 局封存局的"
-                        "机制描述（ls20/ft09 实质），知识污染本检查构造上抓不到。F-11 已裁决"
-                        "（监控代行）：主张集缩至 19 局，ls20/ft09 隔离，轻微 7 局敏感性分析。",
+                "note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判，切堆前提恢复"
+                        "（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——"
+                        "contamination_log 还没有那 9 局的登记 → P-11。",
                 "probe": "pile_integrity",
             },
             {
@@ -123,19 +122,19 @@ PHASES = [
                 "id": "p1-a1",
                 "label": "A1 孔明棋：LP 解出 pagoda → Lean 验封闭引理",
                 "clause": "Phase 1 · 三件离线验收",
-                "status": "partial",
-                "note": "两半各自成立、尚未接通：engine-rig 的 LP 真解出了权重，"
-                        "theory-compiler 的 Lean 用的却是手算常量 + BFS 枚举。"
-                        "engine-rig/interop/certificate_export.py 正是那座桥，刚动工。",
+                "status": "green",
+                "note": "真 A1 达成并经对抗式复核 CONFIRMED：LP 权重经证书文件过数据边界，"
+                        "Lean 势函数归纳、空公理集。复核揪出的使能条件缺口已修；"
+                        "权重手抄限制登记 E-06 → P-10。",
                 "probe": "a1_state",
             },
             {
                 "id": "p1-a2",
                 "label": "A2 DC22 重放：造出『类型检查通过、对世界为假』的定理",
                 "clause": "Phase 1 · 三件离线验收；INC-004",
-                "status": "missing",
-                "note": "F-01 冲突已裁决（INC-004）：改为自建 DC22 同构世界，"
-                        "在 cold-start-a2/ 完成。已解除封锁，提示词 P-6 可派工。",
+                "status": "green",
+                "note": "cold-start-a2 完成：假定理展品 + 打脸→修订→重证全回路，"
+                        "A2_REPORT 在树上；顺带报出两条编译器缺陷 → P-10。",
             },
             {
                 "id": "p1-engines",
@@ -149,27 +148,28 @@ PHASES = [
                 "id": "p1-seal-test",
                 "label": "密封测试（臂内无凭据；绕开双代理的出网必须失败）",
                 "clause": "Phase 1 验收单",
-                "status": "blocked",
-                "note": "双代理不存在，故无从测起。凭据卫生本身是干净的："
-                        "本监视器全仓扫描确认密钥只出现在 .env。",
+                "status": "partial",
+                "note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，"
+                        "红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。"
+                        "凭据卫生干净：密钥只在 .env（本监视器每轮复验）。",
                 "probe": "credential_hygiene",
             },
             {
                 "id": "p1-replay-audit",
                 "label": "复放抽检 2 局，环境侧逐比特一致",
                 "clause": "Phase 1 验收单",
-                "status": "blocked",
-                "note": "需要账本，账本需要 runner 与代理。",
+                "status": "partial",
+                "note": "proxy/replay.py 就位；对真在线局账本的 2 局抽检待包络数据"
+                        "迁入正典格式后执行 → P-9。",
             },
             {
                 "id": "p1-same-shell",
                 "label": "三臂经双代理落同一账本、打分器通吃",
                 "clause": "Phase 1 验收单、第二部分总纪律",
                 "status": "partial",
-                "note": "裸 CC 臂已立：harness + 记账管线（baseline-arms M2）+ sk48/g50t "
-                        "真动作试点，封存护栏在 client 层强制。Schema 臂被 GAP-1 判死"
-                        "（官方代码从未发布，复现值合规留空，见 F-13）。Theoria 臂未搭。"
-                        "『同壳』的物理载体（双代理）仍缺 → P-2。",
+                "note": "同壳的物理载体（双代理）已在：裸 CC 臂真跑过（试点+包络首局）。"
+                        "Schema 臂 = 路 A 上游轨迹直读（F-13 裁决）。"
+                        "**Theoria 臂是三臂中唯一还不存在的** → P-8，当前关键路径。",
             },
         ],
     },
@@ -183,16 +183,17 @@ PHASES = [
                 "id": "p2-battery",
                 "label": "候选指标族五族（探索/计划/经济/机制/认识）",
                 "clause": "Phase 2 · 候选指标族",
-                "status": "missing",
-                "note": "零代码。这是全项目**唯一一件既不烧游戏钱、又不被 INC-002 阻塞、"
-                        "却完全没开始**的工作 —— 而 Theoria.md 明写它可以并行。",
+                "status": "green",
+                "note": "battery v0 落地：五族指标 + METRICS.md + 首份 REPORT_V0，"
+                        "夹具 = A0 / A0′ / 裸 CC 试点账本。",
             },
             {
                 "id": "p2-audit",
                 "label": "电池四道工序（区分力 / 方向预注册 / 去冗余 / 抗游戏审计）",
                 "clause": "Phase 2 · 电池自身要先受审",
-                "status": "missing",
-                "note": "区分力验证只准用 CC vs Schema 两臂 —— 而这两臂的轨迹一条都没有。",
+                "status": "partial",
+                "note": "PREDICTIONS.md（预注册）与 audit/ 在树上；区分力工序仍等 "
+                        "Schema 路 A 材料与更多 CC 轨迹。",
             },
             {
                 "id": "p2-material",
@@ -242,10 +243,10 @@ PHASES = [
                 "id": "p3-envelope",
                 "label": "对照两臂在开发堆各跑 2–3 局，方差包络冻结",
                 "clause": "Phase 3 · 经济",
-                "status": "missing",
-                "note": "裸 CC 臂与 Schema 复现桶的开发堆轨迹，一局都没有。"
-                        "这既是 Phase 3 的方差包络，也是 Phase 2 电池区分力验证的"
-                        "唯一合法材料。",
+                "status": "partial",
+                "note": "ar25×haiku×3 已跑并被预算闸门 G4（连续死格，真实劣化）拦停，"
+                        "1/4 局，$2.53。F-15 裁决：ar25 记 degraded 不追，"
+                        "其余 3 局继续 → P-12。",
             },
             {
                 "id": "p3-campaign",
@@ -341,24 +342,21 @@ ENGINES = [
      "module": "engine-rig/engines/lp_potential", "status": "green",
      "note": "pagoda 权重解得出、证书三条件精确有理数复核通过；不完备性写成了测试而非藏起来。"},
     {"step": "兜底归纳不变量", "engine": "IC3 / PDR",
-     "module": "—", "status": "missing",
-     "note": "**八道工序里唯一整道缺席的**。全仓 grep『ic3』『pdr』只命中 Theoria.md 自己。"
-             "LP 与零空间够不着的形状目前无人兜底 —— 而 lp_potential 的不完备性是已知的、"
-             "并且已经在 A0 的 peg fixture 上真实发生过（0111 不可解但无线性证书）。"},
+     "module": "engine-rig (M9)", "status": "green",
+     "note": "M9 落地：归纳不变量三件套 + 独立检查器复核；peg 0111（LP 不完备例）"
+             "拿到非线性证书 —— 这道工序存在的全部理由已兑现。"},
     {"step": "规划", "engine": "Fast Downward（不自研）",
      "module": "engine-rig/engines/fd_adapter", "status": "partial",
      "note": "接口就位，后端是 BFS 桩。单位代价下长度最优，所以 A0 这种小世界够用；"
              "但三档阶梯的后两档（A*+可采纳启发、地标分段）都还不存在。"},
     {"step": "死锁刻画", "engine": "定理机器局部化 + trap 学习",
-     "module": "—", "status": "missing",
-     "note": "Theoria.md 1.9 把死锁称作『野外的日常无解』，是试金石机器从周日考试变成日常上班的"
-             "唯一途径，也是 C1 的主要供给。没有它，不可解性主张只能靠构造变体，"
-             "而构造变体在封存堆上有时序死结。"},
+     "module": "engine-rig (M9)", "status": "green",
+     "note": "M9 落地：条件化迷你不可解定理带证书，同一定理接进规划器作剪枝，"
+             "节点数下降有前后对比。C1 的日常供给线通了。"},
     {"step": "探索 / 戳探", "engine": "前沿主动学习",
-     "module": "engine-rig/engines/probe_frontier", "status": "partial",
-     "note": "算法正确（A0 上算出 1.000 bit 的划分并给出『本世界无实验可分』的裁决）。"
-             "但 A0 产出**零条可执行探针** —— 约束 7『定理未经戳探不得定案』"
-             "在第一次冷启动上就没能真正生效。"},
+     "module": "engine-rig/engines/probe_frontier", "status": "green",
+     "note": "M9 起探针经规划器定价（到达计划计入成本，unreachable 有裁决）；"
+             "A0′ 实证 13 条可执行探针。约束 7 的落点齐了。"},
     {"step": "证明", "engine": "Lean 4 + 决策程序",
      "module": "theory-compiler/lean, cold-start-a0/compile", "status": "partial",
      "note": "工具链已钉版本并本地就位。但生成器分叉了：theory-compiler 的 gen_lean 完全忽略"
@@ -465,6 +463,43 @@ FINDINGS = [
                   "用替代实现冒充复现违背同壳纪律。修订派下一批提示词执行。",
     },
     {
+        "id": "F-14",
+        "severity": "high",
+        "title": "CONTRACTS 的 kind 枚举被冻结条款卡住 M9 新引擎【已裁决·监控代行：升 v0.2】",
+        "body": "candidates_schema.md v0.1 冻结时列死了六种 kind；M9 的 deadlock_carver 与 "
+                "ic3_pdr 产出新类型候选，写不进合法流。engine-rig 已在 PARTNER_SYNC 挂出"
+                "『frozen engine enum flagged for v0.2』。冻结条款的本意是防单边篡改，"
+                "不是防两轨道共识演化。\n\n"
+                "【裁决】升 candidates_schema v0.2：仅做**加法**（新增 kind 枚举值 + 可选"
+                "字段），既有六 kind 的字段一个不动；v0.1 校验器保留，v0.2 校验器新增；"
+                "两轨道各自在 PARTNER_SYNC 签认后生效。dsl_grammar 的 v0.2（semantics: 等）"
+                "同窗口一并定稿。",
+        "action": "P-10 执行：theory-compiler 起草，engine-rig 以 PARTNER_SYNC 段落会签。",
+    },
+    {
+        "id": "F-15",
+        "severity": "medium",
+        "title": "方差包络在 ar25×haiku 上被 G4 拦停：真实劣化【已裁决·监控代行】",
+        "body": "动作成功率 0.713→0.595、HTTP/动作 7.11 起跳——不是预算噪声，是模型在该局"
+                "上真实退化（连续死格）。闸门按设计开火，这本身是 harness 的胜利。\n\n"
+                "【裁决】ar25 记 degraded（含证据引用），不追跑不换模型硬磨；其余 3 局"
+                "（g50t/sk48/tn36）按原协议续跑；包络冻结时 ar25 一行标注 degraded 并给"
+                "敏感性说明。若 3 局中再有 G4，升级回监控重裁。",
+        "action": "P-12 执行。",
+    },
+    {
+        "id": "F-16",
+        "severity": "medium",
+        "title": "两套账本拼写分歧（proxy vs baseline-arms）【已裁决·监控代行：proxy 为正典】",
+        "body": "proxy 落地 LEDGER_FORMAT.md 时发现 baseline-arms 既有账本的字段拼写与其"
+                "有差异（PARTNER_SYNC 已互相登记）。三臂同账本格式是 Phase 1 总纪律，"
+                "分歧不能留到电池回算时爆。\n\n"
+                "【裁决】proxy/LEDGER_FORMAT.md 为正典；baseline-arms 出迁移器把存量账本"
+                "转正典格式（原始文件保留不动，转换产物入 runs/ 归档）；battery 的 "
+                "INPUT_FORMAT 对齐正典。",
+        "action": "P-12（迁移器）+ P-9（正典守卫：proxy 拒收非正典字段）。",
+    },
+    {
         "id": "F-01",
         "severity": "info",
         "title": "【已裁决 2026-07-28：出路 (b)】A2 与切堆纪律的冲突",
@@ -484,8 +519,8 @@ FINDINGS = [
     },
     {
         "id": "F-02",
-        "severity": "high",
-        "title": "INC-002 已被 baseline-arms 推翻并找到根因；官方 incident 记录仍待改判",
+        "severity": "info",
+        "title": "【已解决】INC-001/002 正式改判，确定性预检开发堆 4 局全 PASS",
         "body": "【2026-07-28 更新：原为阻塞级，现降为高。】baseline-arms 的假设排查"
                 "找到了 arc-recon 未试的变量：**去掉版本后缀的短 ID**（`sk48` 而非 "
                 "`sk48-d8078629`）返回 200；同形状请求重试也间歇 200。结论已上 "
@@ -496,13 +531,14 @@ FINDINGS = [
                 "一个要留神的张力：Theoria.md 把 game_id 的版本后缀当**环境版本指纹**。"
                 "如果全面改用短 ID 通信，指纹就丢了 —— 预检与账本需要同时记录短 ID 请求"
                 "与目录里的全 ID 映射，否则金丝雀重放失去锚点。",
-        "action": "T-01 收尾：带短 ID + 退避策略重跑预检，追加 incident 改判，"
-                  "并在账本格式里保留全 ID 映射。",
+        "action": "已完成：INC-001b/002a/005 落账；根因是 1–3 分钟波浪式瞬时故障"
+                  "（多实例后端）；短 ID 的 H-A 结论后来也被订正——重试包络才是"
+                  "真正的解。留此条作记录。",
     },
     {
         "id": "F-03",
-        "severity": "high",
-        "title": "Phase 2 完全没开始，而它是唯一不被阻塞的整段工作",
+        "severity": "info",
+        "title": "【已解决】battery v0 落地，Phase 2 从零到首份能力谱",
         "body": "Theoria.md 明写 Phase 2『只依赖账本同格式与切堆已提交两项，可与 A1/A2 并行』，"
                 "且『全程用既有轨迹，零新增游戏开销』。所有人都在等 API，而这一段不需要 API。\n\n"
                 "但它的前提有一个没被检查过的洞：Phase 2 的**材料**（CC 基线轨迹、Schema 复现桶、"
@@ -590,8 +626,8 @@ FINDINGS = [
     },
     {
         "id": "F-08",
-        "severity": "medium",
-        "title": "八道工序缺两道：IC3/PDR 与死锁刻画",
+        "severity": "info",
+        "title": "【已解决】M9 补齐八道工序：死锁刻画 + IC3/PDR + 探针定价",
         "body": "engine-rig 的六个引擎对应 Theoria.md 1.10(b) 表格的六行，"
                 "但那张表有八行。缺的两道不是边角：\n\n"
                 "IC3/PDR 是『LP/零空间够不着的形状』的唯一兜底，而 lp_potential 的不完备性"
@@ -651,19 +687,19 @@ CLAIMS = [
 ARCHITECTURE = [
     {"group": "外壳（三臂同壳）", "clause": "1.10(c) / Phase 1 五层",
      "items": [
-         {"label": "环境代理", "status": "missing", "tip": "透明 HTTP 代理；密封由构造成立。未建 → T-03"},
-         {"label": "模型代理", "status": "missing", "tip": "usage 逐字入账；C2 账单形状的仪表。未建 → T-03"},
-         {"label": "变体注入层", "status": "missing", "tip": "判决题真值来自构造。未建"},
-         {"label": "runner + 账本", "status": "partial", "tip": "baseline-arms/harness 有雏形；无对账、无 run.json"},
-         {"label": "冻结打分器", "status": "missing", "tip": "全仓无 scorer；对账义务无实现"},
+         {"label": "环境代理", "status": "green", "tip": "proxy/ 落地：注入、护栏、全量入账"},
+         {"label": "模型代理", "status": "green", "tip": "model_proxy + 版本化价目表；C2 仪表就位"},
+         {"label": "变体注入层", "status": "partial", "tip": "variants.py 起架；构造性依据登记未接"},
+         {"label": "runner + 账本", "status": "green", "tip": "runner + LEDGER_FORMAT + replay；拼写正典化中"},
+         {"label": "冻结打分器", "status": "partial", "tip": "reconcile.py 对账器已实测配额口径；打分器本体 → P-9"},
      ]},
     {"group": "内环五拍", "clause": "1.10(d)",
      "items": [
          {"label": "theorize", "status": "partial", "tip": "A0 上真跑通：28 候选逐条裁决入册，全程留痕"},
-         {"label": "certify", "status": "partial", "tip": "廉价层在 A0 咬合过两次（逼出 Button/Door）；目录未落盘，Lean 义务未清"},
-         {"label": "probe", "status": "risk", "tip": "A0 零可执行探针；约束 7 空转 → T-07"},
-         {"label": "plan", "status": "partial", "tip": "fd_adapter 是 BFS 桩；A0 的 plan 阶段进行中"},
-         {"label": "commit", "status": "missing", "tip": "脚本整段执行 + 逐帧批改，尚无实现"},
+         {"label": "certify", "status": "green", "tip": "A0/A0′/A2 双层全绿；Lean 空公理集"},
+         {"label": "probe", "status": "green", "tip": "A0′ 13 条可执行探针 + M9 规划器定价"},
+         {"label": "plan", "status": "partial", "tip": "A0/A2 均 plan 达成；FD 本体仍是 BFS 桩"},
+         {"label": "commit", "status": "partial", "tip": "离线世界已走通整段执行+批改；在线 commit 等 Theoria 臂"},
      ]},
     {"group": "两本手写物", "clause": "1.10(a)",
      "items": [
@@ -693,13 +729,13 @@ ARCHITECTURE = [
      "items": [
          {"label": "裸 Claude Code", "status": "partial", "tip": "harness+记账+试点已跑（sk48/g50t）；战役未开 → P-7"},
          {"label": "Schema（上游轨迹）", "status": "risk", "tip": "GAP-1：复现不可能，改路 A 上游轨迹直读；主表口径待所有者定（F-13）"},
-         {"label": "Theoria 臂", "status": "missing", "tip": "离线件已证活（A0/A0′）；在线臂等双代理"},
+         {"label": "Theoria 臂", "status": "missing", "tip": "离线件全部证活（A0/A0′/A1/A2）；在线臂 = 当前关键路径 → P-8"},
      ]},
     {"group": "三件离线验收", "clause": "Phase 1",
      "items": [
          {"label": "A0 冷启动", "status": "green", "tip": "全环跑通并提交：certify 双层绿、plan SAT、赢、不可解证书"},
-         {"label": "A1 孔明棋", "status": "partial", "tip": "两半未接通 → T-06"},
-         {"label": "A2 DC22", "status": "missing", "tip": "冲突已裁决（INC-004）：自建同构世界 → P-6"},
+         {"label": "A1 孔明棋", "status": "green", "tip": "真 A1：证书过数据边界，空公理集，对抗复核 CONFIRMED"},
+         {"label": "A2 DC22", "status": "green", "tip": "cold-start-a2：假定理展品 + 修复回路完整"},
      ]},
 ]
 
@@ -801,6 +837,65 @@ ITERATION_LOOP = [
              "status": "ruled",
              "via": "【已裁决·监控代行】采纳路 A：Schema 行改『上游轨迹直读（开发堆 4 局）』，"
                     "复现值合规留空，消融臂地位升为必需中的必需（F-13）。下一批派工执行"},
+        ],
+    },
+    {
+        "experiment": "确定性预检 v2（arc-recon，P-1）",
+        "status": "green",
+        "summary": "开发堆 4 局全 PASS；根因 = 1–3 分钟波浪式瞬时故障（多实例后端）。",
+        "problems": [
+            {"problem": "H-A『短 ID 即解』的初判是错的——短 ID 曾把预检带偏，后经订正",
+             "cls": "仪器缺陷", "fix_in": "arc-recon 预检重试包络 + baseline AUDIT 订正",
+             "status": "landed", "via": "INC-005 + commit 9824892；真正的解是重试包络"},
+            {"problem": "失败 400 是否计费悬置了两轮，乐观悲观口径差 9.7 倍",
+             "cls": "度量空洞", "fix_in": "预算模型（BUDGET_REPORT §4）",
+             "status": "landed", "via": "scorecard×账本 4 样本恒等：失败 400 不计费"},
+        ],
+    },
+    {
+        "experiment": "真 A1 + 对抗式复核（theory-compiler，P-5）",
+        "status": "green",
+        "summary": "LP 证书过数据边界落成空公理集 Lean 证明；复核 CONFIRMED 但揪出两处说得比证据满。",
+        "problems": [
+            {"problem": "move 推导只校验转移形状不校验使能条件——形状同构的另一个世界会拿到同一份 Lean",
+             "cls": "机制归纳错", "fix_in": "gen_lean 使能条件逐状态比对",
+             "status": "landed", "via": "commit 494a427/1cf95d1：已加校验 + 负对照"},
+            {"problem": "E-06：证书权重仍需人手抄进调用侧",
+             "cls": "表达力不够", "fix_in": "compiler 证书自动注入",
+             "status": "dispatched", "via": "P-10"},
+        ],
+    },
+    {
+        "experiment": "A2 同构世界（cold-start-a2，P-6）",
+        "status": "green",
+        "summary": "假定理展品造出、六拍修复回路走完——A2 的两句验收兑现。",
+        "problems": [
+            {"problem": "过程中撞出两条编译器缺陷（已按通道上报 theory-compiler）",
+             "cls": "调度失误（工具侧）", "fix_in": "theory-compiler",
+             "status": "dispatched", "via": "PARTNER_SYNC 94a8202 → P-10"},
+        ],
+    },
+    {
+        "experiment": "方差包络首跑（baseline-arms，P-7/P-12）",
+        "status": "partial",
+        "summary": "ar25×haiku×3 被 G4 拦停（真实劣化）；配额口径拿到实测答案。",
+        "problems": [
+            {"problem": "裸 CC（haiku 档）在 ar25 上连续死格——包络协议没预设『模型真的不行』这一支",
+             "cls": "框架级发现", "fix_in": "包络协议（degraded 标注 + 敏感性说明）",
+             "status": "ruled", "via": "F-15 裁决：ar25 记 degraded 不追，其余 3 局续跑"},
+            {"problem": "proxy 与 baseline 账本字段拼写分歧",
+             "cls": "同壳纪律裂缝", "fix_in": "账本正典化（proxy 为正典）",
+             "status": "ruled", "via": "F-16 裁决 → P-9/P-12"},
+        ],
+    },
+    {
+        "experiment": "M9 三引擎（engine-rig，P-4）",
+        "status": "green",
+        "summary": "死锁定理、IC3 不变量、探针规划器定价全部落地；peg 0111 拿到非线性证书。",
+        "problems": [
+            {"problem": "冻结的 kind 枚举装不下新引擎的候选类型",
+             "cls": "表达力不够（契约层）", "fix_in": "CONTRACTS candidates_schema v0.2",
+             "status": "ruled", "via": "F-14 裁决：加法式升版，两轨道会签 → P-10"},
         ],
     },
 ]

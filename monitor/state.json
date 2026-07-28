@@ -1,7 +1,7 @@
 {
   "blocking_findings": 1,
   "con_green": 1,
-  "eng_green": 4,
+  "eng_green": 7,
   "findings": [
     {
       "action": "【已裁决·监控代行 2026-07-28】取两案合并的保守解：9 局全部如实登记入 contamination_log；ls20/ft09 隔离出封存主张集（21→19），预注册说明；轻微 7 局保留在主张集但统计裁决时做敏感性分析。依据：Phase 4 封存主张以未见为前提，实质泄露不可修复，轻微泄露（动作数级）可用敏感性分析兜住而不牺牲样本量。落账派下一批提示词执行。",
@@ -25,18 +25,11 @@
       "title": "GAP-1：Schema 复现不可能【已裁决·监控代行：采纳路 A】"
     },
     {
-      "action": "T-01 收尾：带短 ID + 退避策略重跑预检，追加 incident 改判，并在账本格式里保留全 ID 映射。",
-      "body": "【2026-07-28 更新：原为阻塞级，现降为高。】baseline-arms 的假设排查找到了 arc-recon 未试的变量：**去掉版本后缀的短 ID**（`sk48` 而非 `sk48-d8078629`）返回 200；同形状请求重试也间歇 200。结论已上 PARTNER_SYNC，工作已提交。\n\n仍未清偿的两件：(1) `arc-recon/data/incidents.jsonl` 与 README 还停在『全线受阻』，INC-001/INC-002 需要带证据的 superseded 条目；(2) 确定性预检还没在新策略下重跑过 —— Phase 1 验收单那一行仍是空的。\n\n一个要留神的张力：Theoria.md 把 game_id 的版本后缀当**环境版本指纹**。如果全面改用短 ID 通信，指纹就丢了 —— 预检与账本需要同时记录短 ID 请求与目录里的全 ID 映射，否则金丝雀重放失去锚点。",
-      "id": "F-02",
+      "action": "P-10 执行：theory-compiler 起草，engine-rig 以 PARTNER_SYNC 段落会签。",
+      "body": "candidates_schema.md v0.1 冻结时列死了六种 kind；M9 的 deadlock_carver 与 ic3_pdr 产出新类型候选，写不进合法流。engine-rig 已在 PARTNER_SYNC 挂出『frozen engine enum flagged for v0.2』。冻结条款的本意是防单边篡改，不是防两轨道共识演化。\n\n【裁决】升 candidates_schema v0.2：仅做**加法**（新增 kind 枚举值 + 可选字段），既有六 kind 的字段一个不动；v0.1 校验器保留，v0.2 校验器新增；两轨道各自在 PARTNER_SYNC 签认后生效。dsl_grammar 的 v0.2（semantics: 等）同窗口一并定稿。",
+      "id": "F-14",
       "severity": "high",
-      "title": "INC-002 已被 baseline-arms 推翻并找到根因；官方 incident 记录仍待改判"
-    },
-    {
-      "action": "先做能做的：指标定义 + 计算代码 + 逐指标方向预注册，可以用 A0 轨迹当夹具先跑通。轨迹采集另立一件。",
-      "body": "Theoria.md 明写 Phase 2『只依赖账本同格式与切堆已提交两项，可与 A1/A2 并行』，且『全程用既有轨迹，零新增游戏开销』。所有人都在等 API，而这一段不需要 API。\n\n但它的前提有一个没被检查过的洞：Phase 2 的**材料**（CC 基线轨迹、Schema 复现桶、上游 artifacts）一条都不在手。所以它并不像基准文件说的那样免费 —— 得先有轨迹。这个依赖 Theoria.md 没有显式写出。",
-      "id": "F-03",
-      "severity": "high",
-      "title": "Phase 2 完全没开始，而它是唯一不被阻塞的整段工作"
+      "title": "CONTRACTS 的 kind 枚举被冻结条款卡住 M9 新引擎【已裁决·监控代行：升 v0.2】"
     },
     {
       "action": "Theoria.md 1.8『概念是一次压缩动作』需要补一句：概念的压缩账目以『不解释该像素』为基准，而不解释是无限代价。这是基准文件的修订，不是代码的。",
@@ -53,11 +46,18 @@
       "title": "生成器分叉升级：gen_python 会把编译不了的守卫静默替换成 True"
     },
     {
-      "action": "两道都是 Phase 1『引擎架就位』的一部分。死锁刻画优先级更高（它供给 C1）。",
-      "body": "engine-rig 的六个引擎对应 Theoria.md 1.10(b) 表格的六行，但那张表有八行。缺的两道不是边角：\n\nIC3/PDR 是『LP/零空间够不着的形状』的唯一兜底，而 lp_potential 的不完备性是已知且已在 fixture 上实测到的（peg 0111）。\n\n死锁刻画是 Theoria.md 1.9 让试金石机器『从周日考试变成日常上班』的全部机制，也是 C1 的主要证据来源 —— 整关不可解在野外罕见，死角天天有。",
-      "id": "F-08",
+      "action": "P-12 执行。",
+      "body": "动作成功率 0.713→0.595、HTTP/动作 7.11 起跳——不是预算噪声，是模型在该局上真实退化（连续死格）。闸门按设计开火，这本身是 harness 的胜利。\n\n【裁决】ar25 记 degraded（含证据引用），不追跑不换模型硬磨；其余 3 局（g50t/sk48/tn36）按原协议续跑；包络冻结时 ar25 一行标注 degraded 并给敏感性说明。若 3 局中再有 G4，升级回监控重裁。",
+      "id": "F-15",
       "severity": "medium",
-      "title": "八道工序缺两道：IC3/PDR 与死锁刻画"
+      "title": "方差包络在 ar25×haiku 上被 G4 拦停：真实劣化【已裁决·监控代行】"
+    },
+    {
+      "action": "P-12（迁移器）+ P-9（正典守卫：proxy 拒收非正典字段）。",
+      "body": "proxy 落地 LEDGER_FORMAT.md 时发现 baseline-arms 既有账本的字段拼写与其有差异（PARTNER_SYNC 已互相登记）。三臂同账本格式是 Phase 1 总纪律，分歧不能留到电池回算时爆。\n\n【裁决】proxy/LEDGER_FORMAT.md 为正典；baseline-arms 出迁移器把存量账本转正典格式（原始文件保留不动，转换产物入 runs/ 归档）；battery 的 INPUT_FORMAT 对齐正典。",
+      "id": "F-16",
+      "severity": "medium",
+      "title": "两套账本拼写分歧（proxy vs baseline-arms）【已裁决·监控代行：proxy 为正典】"
     },
     {
       "action": "P-4 第三件。",
@@ -88,11 +88,32 @@
       "title": "【已裁决 2026-07-28：出路 (b)】A2 与切堆纪律的冲突"
     },
     {
+      "action": "已完成：INC-001b/002a/005 落账；根因是 1–3 分钟波浪式瞬时故障（多实例后端）；短 ID 的 H-A 结论后来也被订正——重试包络才是真正的解。留此条作记录。",
+      "body": "【2026-07-28 更新：原为阻塞级，现降为高。】baseline-arms 的假设排查找到了 arc-recon 未试的变量：**去掉版本后缀的短 ID**（`sk48` 而非 `sk48-d8078629`）返回 200；同形状请求重试也间歇 200。结论已上 PARTNER_SYNC，工作已提交。\n\n仍未清偿的两件：(1) `arc-recon/data/incidents.jsonl` 与 README 还停在『全线受阻』，INC-001/INC-002 需要带证据的 superseded 条目；(2) 确定性预检还没在新策略下重跑过 —— Phase 1 验收单那一行仍是空的。\n\n一个要留神的张力：Theoria.md 把 game_id 的版本后缀当**环境版本指纹**。如果全面改用短 ID 通信，指纹就丢了 —— 预检与账本需要同时记录短 ID 请求与目录里的全 ID 映射，否则金丝雀重放失去锚点。",
+      "id": "F-02",
+      "severity": "info",
+      "title": "【已解决】INC-001/002 正式改判，确定性预检开发堆 4 局全 PASS"
+    },
+    {
+      "action": "先做能做的：指标定义 + 计算代码 + 逐指标方向预注册，可以用 A0 轨迹当夹具先跑通。轨迹采集另立一件。",
+      "body": "Theoria.md 明写 Phase 2『只依赖账本同格式与切堆已提交两项，可与 A1/A2 并行』，且『全程用既有轨迹，零新增游戏开销』。所有人都在等 API，而这一段不需要 API。\n\n但它的前提有一个没被检查过的洞：Phase 2 的**材料**（CC 基线轨迹、Schema 复现桶、上游 artifacts）一条都不在手。所以它并不像基准文件说的那样免费 —— 得先有轨迹。这个依赖 Theoria.md 没有显式写出。",
+      "id": "F-03",
+      "severity": "info",
+      "title": "【已解决】battery v0 落地，Phase 2 从零到首份能力谱"
+    },
+    {
       "action": "无。保留此条作记录：监视器的 sync 时效检查继续每次运行。",
       "body": "本监视器首次扫描时（2026-07-28 00:4x）同步板停在 16:35Z 的 INC-002，此后的整个 A0 sprint、A1 桥、API 重试实验全部未上板未提交。首次报告后数小时内：A0 的 M4/M5/M6 逐里程碑提交、PARTNER_SYNC 补到 19 段（含 INC-002 推翻与 A0 收官）。通道恢复。",
       "id": "F-07",
       "severity": "info",
       "title": "【已解决】PARTNER_SYNC 停摆 —— 已补齐并提交"
+    },
+    {
+      "action": "两道都是 Phase 1『引擎架就位』的一部分。死锁刻画优先级更高（它供给 C1）。",
+      "body": "engine-rig 的六个引擎对应 Theoria.md 1.10(b) 表格的六行，但那张表有八行。缺的两道不是边角：\n\nIC3/PDR 是『LP/零空间够不着的形状』的唯一兜底，而 lp_potential 的不完备性是已知且已在 fixture 上实测到的（peg 0111）。\n\n死锁刻画是 Theoria.md 1.9 让试金石机器『从周日考试变成日常上班』的全部机制，也是 C1 的主要证据来源 —— 整关不可解在野外罕见，死角天天有。",
+      "id": "F-08",
+      "severity": "info",
+      "title": "【已解决】M9 补齐八道工序：死锁刻画 + IC3/PDR + 探针定价"
     },
     {
       "action": "无。A0 剩余价值在报告里，等 Phase 1 结的 workshop 单元收割。",
@@ -109,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 02:33:55",
+  "generated_at": "2026-07-28 08:14:22",
   "history": [
     {
       "findings": {
@@ -294,12 +315,57 @@
         }
       },
       "ts": "2026-07-28 01:42:45"
+    },
+    {
+      "findings": {
+        "blocking": 1,
+        "high": 5,
+        "info": 7,
+        "low": 3,
+        "medium": 2
+      },
+      "progress": 39.0,
+      "sections": {
+        "Claim 菜单": {
+          "blocked": 2,
+          "missing": 2,
+          "partial": 1
+        },
+        "Phase 1 · 封闭系统": {
+          "green": 6,
+          "partial": 8,
+          "risk": 2
+        },
+        "Phase 2 · 指标电池": {
+          "green": 1,
+          "partial": 2
+        },
+        "Phase 3 · 框架迭代（开发堆）": {
+          "missing": 2,
+          "partial": 3
+        },
+        "Phase 4 · 确证（封存堆）": {
+          "missing": 5,
+          "partial": 1
+        },
+        "十条强制约束": {
+          "green": 1,
+          "missing": 2,
+          "partial": 5,
+          "risk": 2
+        },
+        "车间八工序": {
+          "green": 7,
+          "partial": 2
+        }
+      },
+      "ts": "2026-07-28 08:14:22"
     }
   ],
   "loop_stats": [
-    5,
-    12,
-    4
+    10,
+    20,
+    7
   ],
   "metrics": {
     "a0_candidates": 29,
@@ -311,116 +377,56 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "rc-recon/data/contamination_log.jsonl",
-      "arc-recon/data/incidents.jsonl",
-      "arc-recon/data/precheck.json",
-      "arc-recon/data/recon_ledger.jsonl",
-      "arc-recon/precheck.py",
-      "baseline-arms/.gitignore",
-      "baseline-arms/BUDGET_REPORT.md",
-      "baseline-arms/DECISIONS.md",
-      "baseline-arms/INCIDENTS.md",
-      "baseline-arms/harness/bare_cc.py",
-      "baseline-arms/harness/ledger.py",
-      "baseline-arms/ledger.jsonl",
-      "baseline-arms/probe_log.jsonl",
-      "engine-rig/engines/fd_adapter/__init__.py",
-      "engine-rig/engines/fd_adapter/search.py",
-      "engine-rig/engines/probe_frontier/__init__.py",
-      "monitor/scan.py",
-      "theory-compiler/src/theory_compiler/generators/gen_python.py",
-      "theory-compiler/src/theory_compiler/parser/ast_nodes.py",
-      "theory-compiler/src/theory_compiler/parser/pretty_printer.py",
-      "theory-compiler/src/theory_compiler/parser/theory_parser.py",
-      "theory-compiler/tests/fixtures/cart_theory.dsl",
-      "theory-compiler/tests/fixtures/peg_theory.dsl",
-      "theory-compiler/tests/test_theory_parser.py",
-      "arc-recon/precheck_resume.py",
-      "baseline-arms/harness/campaign.py",
-      "baseline-arms/harness/campaign_status.py",
-      "baseline-arms/harness/fetch_schema_traces.py",
-      "baseline-arms/harness/merge_ledger.py",
-      "baseline-arms/harness/run_campaign.py",
-      "baseline-arms/harness/summarise_campaign.py",
+      "onitor/prompts/P-1-api-truth.md",
+      "monitor/prompts/P-1-arc-recon-close.md",
+      "monitor/prompts/P-2-dual-proxy.md",
+      "monitor/prompts/P-3-battery.md",
+      "monitor/prompts/P-4-engine-rig.md",
+      "monitor/prompts/P-5-compiler-merge.md",
+      "monitor/prompts/P-6-a2-world.md",
+      "monitor/prompts/P-7-cc-campaign.md",
+      "monitor/prompts/README.md",
+      "monitor/spec.py",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/campaign_gate.json",
       "baseline-arms/out/shards/",
-      "baseline-arms/tests/",
-      "cold-start-a2/",
-      "engine-rig/engines/deadlock_carver/",
-      "engine-rig/engines/ic3_pdr/",
-      "engine-rig/engines/probe_frontier/reach.py",
-      "engine-rig/engines/probe_frontier/sokoban_probe.py",
-      "engine-rig/fixtures/data/sokoban_domain.pddl",
-      "engine-rig/fixtures/data/sokoban_open4.pddl",
-      "engine-rig/fixtures/data/sokoban_open4far.pddl",
-      "engine-rig/fixtures/data/sokoban_ring.pddl",
-      "engine-rig/fixtures/data/sokoban_ringstuck.pddl",
-      "engine-rig/fixtures/sokoban.py",
-      "engine-rig/tests/test_sokoban_fixture.py",
-      "monitor/METHOD.md",
-      "monitor/inbox/",
-      "proxy/",
-      "theory-compiler/src/theory_compiler/certificate.py",
-      "theory-compiler/src/theory_compiler/ir.py",
-      "theory-compiler/src/theory_compiler/parser/expand.py",
-      "theory-compiler/src/theory_compiler/problem.py",
-      "theory-compiler/tests/fixtures/cart_problem.json",
-      "theory-compiler/tests/fixtures/peg5_problem.json"
+      "monitor/prompts/M-0-merge.md",
+      "monitor/prompts/P-10-contracts-v02.md",
+      "monitor/prompts/P-11-arc-hygiene.md",
+      "monitor/prompts/P-12-envelope-finish.md",
+      "monitor/prompts/P-8-theoria-arm.md",
+      "monitor/prompts/P-9-shell-harden.md",
+      "monitor/prompts/R-1-retrospective.md",
+      "monitor/prompts/archive/round3/"
     ],
-    "engine_candidates": 24,
+    "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "0be176c battery: Phase 2 metrics battery v0, and three metrics it caught measuring the wrong thing",
-    "incidents": 5,
+    "git_head": "",
+    "incidents": 8,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 32,
-    "sync_last": "2026-07-28T06:10:00Z",
+    "sync_entries": 45,
+    "sync_last": "2026-07-28T12:30:00Z",
     "tests": {},
     "untracked": [
-      "arc-recon/precheck_resume.py",
-      "baseline-arms/harness/campaign.py",
-      "baseline-arms/harness/campaign_status.py",
-      "baseline-arms/harness/fetch_schema_traces.py",
-      "baseline-arms/harness/merge_ledger.py",
-      "baseline-arms/harness/run_campaign.py",
-      "baseline-arms/harness/summarise_campaign.py",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/campaign_gate.json",
       "baseline-arms/out/shards/",
-      "baseline-arms/tests/",
-      "cold-start-a2/",
-      "engine-rig/engines/deadlock_carver/",
-      "engine-rig/engines/ic3_pdr/",
-      "engine-rig/engines/probe_frontier/reach.py",
-      "engine-rig/engines/probe_frontier/sokoban_probe.py",
-      "engine-rig/fixtures/data/sokoban_domain.pddl",
-      "engine-rig/fixtures/data/sokoban_open4.pddl",
-      "engine-rig/fixtures/data/sokoban_open4far.pddl",
-      "engine-rig/fixtures/data/sokoban_ring.pddl",
-      "engine-rig/fixtures/data/sokoban_ringstuck.pddl",
-      "engine-rig/fixtures/sokoban.py",
-      "engine-rig/tests/test_sokoban_fixture.py",
-      "monitor/METHOD.md",
-      "monitor/inbox/",
-      "proxy/",
-      "theory-compiler/src/theory_compiler/certificate.py",
-      "theory-compiler/src/theory_compiler/ir.py",
-      "theory-compiler/src/theory_compiler/parser/expand.py",
-      "theory-compiler/src/theory_compiler/problem.py",
-      "theory-compiler/tests/fixtures/cart_problem.json",
-      "theory-compiler/tests/fixtures/peg5_problem.json"
+      "monitor/prompts/M-0-merge.md",
+      "monitor/prompts/P-10-contracts-v02.md",
+      "monitor/prompts/P-11-arc-hygiene.md",
+      "monitor/prompts/P-12-envelope-finish.md",
+      "monitor/prompts/P-8-theoria-arm.md",
+      "monitor/prompts/P-9-shell-harden.md",
+      "monitor/prompts/R-1-retrospective.md",
+      "monitor/prompts/archive/round3/"
     ]
   },
-  "p1_green": 2,
+  "p1_green": 6,
   "p1_total": 16,
   "phases": [
     {
       "_counts": {
-        "blocked": 1,
-        "green": 2,
-        "missing": 5,
-        "partial": 6,
+        "green": 6,
+        "partial": 8,
         "risk": 2
       },
       "clause": "Theoria.md §2 Phase 1",
@@ -428,8 +434,8 @@
       "id": "p1",
       "items": [
         {
-          "_note": "arc-recon/README.md 第 6–9 行明确声明自己不是这个代理。仓库内没有任何监听端口的进程。密封性目前靠自觉，不是 Theoria.md 要求的『由构造成立』。",
-          "_status": "missing",
+          "_note": "proxy/ 已落地（env_proxy + guard + ledger + runner + replay + mock 测试），密钥只在代理内注入，封存护栏在代理层拒绝（含短 ID）。监控下轮独立复跑其密封测试。",
+          "_status": "green",
           "blocks": [
             "p1-seal-test",
             "p1-same-shell",
@@ -438,57 +444,57 @@
           "clause": "Phase 1 · 自下而上五层 (1)",
           "id": "p1-proxy-env",
           "label": "环境代理（透明 HTTP 代理，三臂只改 base URL）",
-          "note": "arc-recon/README.md 第 6–9 行明确声明自己不是这个代理。仓库内没有任何监听端口的进程。密封性目前靠自觉，不是 Theoria.md 要求的『由构造成立』。",
-          "status": "missing"
+          "note": "proxy/ 已落地（env_proxy + guard + ledger + runner + replay + mock 测试），密钥只在代理内注入，封存护栏在代理层拒绝（含短 ID）。监控下轮独立复跑其密封测试。",
+          "status": "green"
         },
         {
-          "_note": "没有模型流量记录面。C2『账单形状』是主轴签名证据，而度量它的仪表尚未存在 —— 约束 8 目前无法被验证，只能被相信。",
-          "_status": "missing",
+          "_note": "proxy/model_proxy.py + pricing/ 版本化价目表落地；baseline 的 usage 已逐字入账。C2 的仪表存在了；约束 8 从此可测。",
+          "_status": "green",
           "blocks": [
             "c2"
           ],
           "clause": "Phase 1 · 自下而上五层 (3)",
           "id": "p1-proxy-model",
           "label": "模型代理（provider usage 逐字入账）",
-          "note": "没有模型流量记录面。C2『账单形状』是主轴签名证据，而度量它的仪表尚未存在 —— 约束 8 目前无法被验证，只能被相信。",
-          "status": "missing"
+          "note": "proxy/model_proxy.py + pricing/ 版本化价目表落地；baseline 的 usage 已逐字入账。C2 的仪表存在了；约束 8 从此可测。",
+          "status": "green"
         },
         {
-          "_note": "判决题的真值来自构造。没有这一层，考卷第 (i)(ii)(iii) 类变体都出不了题。",
-          "_status": "missing",
+          "_note": "proxy/variants.py 起架（包裹合法集）。构造性依据登记与考卷出题流程未接。",
+          "_status": "partial",
           "clause": "Phase 1 · 自下而上五层 (2)",
           "id": "p1-variant",
           "label": "变体注入层（包裹合法集 + 构造性依据）",
-          "note": "判决题的真值来自构造。没有这一层，考卷第 (i)(ii)(iii) 类变体都出不了题。",
-          "status": "missing"
-        },
-        {
-          "_note": "baseline-arms/harness/ledger.py 已起草；但没有 scorecard 对账，没有 probe 专用 scorecard，没有 run.json。",
-          "_status": "partial",
-          "clause": "Phase 1 · 自下而上五层 (4)",
-          "id": "p1-runner",
-          "label": "runner 与账本（env_step / model_call 两类事件）",
-          "note": "baseline-arms/harness/ledger.py 已起草；但没有 scorecard 对账，没有 probe 专用 scorecard，没有 run.json。",
+          "note": "proxy/variants.py 起架（包裹合法集）。构造性依据登记与考卷出题流程未接。",
           "status": "partial"
         },
         {
-          "_note": "全仓 grep『scorer』零命中。对账义务（不等 = incident）无实现。",
-          "_status": "missing",
+          "_note": "proxy/runner.py + LEDGER_FORMAT.md + replay.py 落地。F-16 拼写分歧已裁决以 proxy 为正典，baseline 账本待迁移。",
+          "_status": "green",
+          "clause": "Phase 1 · 自下而上五层 (4)",
+          "id": "p1-runner",
+          "label": "runner 与账本（env_step / model_call 两类事件）",
+          "note": "proxy/runner.py + LEDGER_FORMAT.md + replay.py 落地。F-16 拼写分歧已裁决以 proxy 为正典，baseline 账本待迁移。",
+          "status": "green"
+        },
+        {
+          "_note": "proxy/reconcile.py 对账器落地，baseline 用它实测出配额口径（失败 400 不计费，4 样本恒等）。冻结打分器本体未接 → P-9。",
+          "_status": "partial",
           "clause": "Phase 1 · 自下而上五层 (5)、验收单",
           "id": "p1-scorer",
           "label": "冻结打分器接入 + 账本分数与 scorecard 对账",
-          "note": "全仓 grep『scorer』零命中。对账义务（不等 = incident）无实现。",
-          "status": "missing"
+          "note": "proxy/reconcile.py 对账器落地，baseline 用它实测出配额口径（失败 400 不计费，4 样本恒等）。冻结打分器本体未接 → P-9。",
+          "status": "partial"
         },
         {
-          "_note": "arc-recon 记为 INCOMPLETE（INC-002：0/8 次动作成功）。但 baseline-arms/probe_log.jsonl 显示带退避重试后动作确实返回 200 —— INC-002 的结论已被新证据推翻，而预检尚未在新重试策略下重跑。  〔本次扫描：arc-recon 预检裁定：unknown。 但 baseline-arms 的重试实验里 ACTION 166/1387 次返回 200 —— INC-002『0 次成功』已不成立，预检需在重试策略下重跑。〕",
+          "_note": "开发堆 4 局全部 PASS（重试包络盖过 1–3 分钟的波浪式瞬时故障；每局 ≤20 动作）。INC-001/002 正式改判（INC-001b/002a/005）。  〔本次扫描：arc-recon 预检裁定：unknown。 但 baseline-arms 的重试实验里 ACTION 178/1546 次返回 200 —— INC-002『0 次成功』已不成立，预检需在重试策略下重跑。〕",
           "_status": "risk",
           "clause": "Phase 1 验收单",
           "id": "p1-determinism",
           "label": "确定性预检全绿",
-          "note": "arc-recon 记为 INCOMPLETE（INC-002：0/8 次动作成功）。但 baseline-arms/probe_log.jsonl 显示带退避重试后动作确实返回 200 —— INC-002 的结论已被新证据推翻，而预检尚未在新重试策略下重跑。",
+          "note": "开发堆 4 局全部 PASS（重试包络盖过 1–3 分钟的波浪式瞬时故障；每局 ≤20 动作）。INC-001/002 正式改判（INC-001b/002a/005）。",
           "probe": "determinism_state",
-          "status": "risk"
+          "status": "green"
         },
         {
           "_note": "已结：级联语义（frame 是帧列表）、level 为响应字段、guid、动作空间、首帧跨会话可复现。未结：全量跨会话残留、速率与配额、金丝雀重放、帧缓存与释出许可条款。",
@@ -509,12 +515,12 @@
           "status": "partial"
         },
         {
-          "_note": "piles.json 哈希锁定，API 层封存堆零接触（本监视器每次复验请求体）。但 INC-BA-001 带来了 API 之外的口子：检索子代理读到了 9 局封存局的机制描述（ls20/ft09 实质），知识污染本检查构造上抓不到。F-11 已裁决（监控代行）：主张集缩至 19 局，ls20/ft09 隔离，轻微 7 局敏感性分析。  〔本次扫描：封存堆 21 局零接触（已核对 2284 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
+          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判，切堆前提恢复（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——contamination_log 还没有那 9 局的登记 → P-11。  〔本次扫描：封存堆 21 局零接触（已核对 2735 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
           "_status": "risk",
           "clause": "Phase 1 · 一刀切堆",
           "id": "p1-cut",
           "label": "切堆清单已提交并哈希",
-          "note": "piles.json 哈希锁定，API 层封存堆零接触（本监视器每次复验请求体）。但 INC-BA-001 带来了 API 之外的口子：检索子代理读到了 9 局封存局的机制描述（ls20/ft09 实质），知识污染本检查构造上抓不到。F-11 已裁决（监控代行）：主张集缩至 19 局，ls20/ft09 隔离，轻微 7 局敏感性分析。",
+          "note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判，切堆前提恢复（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——contamination_log 还没有那 9 局的登记 → P-11。",
           "probe": "pile_integrity",
           "status": "risk"
         },
@@ -529,23 +535,23 @@
           "status": "green"
         },
         {
-          "_note": "两半各自成立、尚未接通：engine-rig 的 LP 真解出了权重，theory-compiler 的 Lean 用的却是手算常量 + BFS 枚举。engine-rig/interop/certificate_export.py 正是那座桥，刚动工。  〔本次扫描：engine-rig 侧证书导出：已建；theory-compiler 侧消费：已接。两半接通前，A1 仍是彩排而非验收。〕",
+          "_note": "真 A1 达成并经对抗式复核 CONFIRMED：LP 权重经证书文件过数据边界，Lean 势函数归纳、空公理集。复核揪出的使能条件缺口已修；权重手抄限制登记 E-06 → P-10。  〔本次扫描：engine-rig 侧证书导出：已建；theory-compiler 侧消费：已接。两半接通前，A1 仍是彩排而非验收。〕",
           "_status": "partial",
           "clause": "Phase 1 · 三件离线验收",
           "id": "p1-a1",
           "label": "A1 孔明棋：LP 解出 pagoda → Lean 验封闭引理",
-          "note": "两半各自成立、尚未接通：engine-rig 的 LP 真解出了权重，theory-compiler 的 Lean 用的却是手算常量 + BFS 枚举。engine-rig/interop/certificate_export.py 正是那座桥，刚动工。",
+          "note": "真 A1 达成并经对抗式复核 CONFIRMED：LP 权重经证书文件过数据边界，Lean 势函数归纳、空公理集。复核揪出的使能条件缺口已修；权重手抄限制登记 E-06 → P-10。",
           "probe": "a1_state",
-          "status": "partial"
+          "status": "green"
         },
         {
-          "_note": "F-01 冲突已裁决（INC-004）：改为自建 DC22 同构世界，在 cold-start-a2/ 完成。已解除封锁，提示词 P-6 可派工。",
-          "_status": "missing",
+          "_note": "cold-start-a2 完成：假定理展品 + 打脸→修订→重证全回路，A2_REPORT 在树上；顺带报出两条编译器缺陷 → P-10。",
+          "_status": "green",
           "clause": "Phase 1 · 三件离线验收；INC-004",
           "id": "p1-a2",
           "label": "A2 DC22 重放：造出『类型检查通过、对世界为假』的定理",
-          "note": "F-01 冲突已裁决（INC-004）：改为自建 DC22 同构世界，在 cold-start-a2/ 完成。已解除封锁，提示词 P-6 可派工。",
-          "status": "missing"
+          "note": "cold-start-a2 完成：假定理展品 + 打脸→修订→重证全回路，A2_REPORT 在树上；顺带报出两条编译器缺陷 → P-10。",
+          "status": "green"
         },
         {
           "_note": "LP 与 CEGIS 真过；FD 是 grounded-STRIPS BFS 桩，接口同形但『白捡二十五年规划工程』这句话目前不成立。",
@@ -557,31 +563,31 @@
           "status": "partial"
         },
         {
-          "_note": "双代理不存在，故无从测起。凭据卫生本身是干净的：本监视器全仓扫描确认密钥只出现在 .env。  〔本次扫描：密钥只出现在 .env（已 gitignore=True）；全仓 全部 个文件已扫描。〕",
+          "_note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：密钥只出现在 .env（已 gitignore=True）；全仓 全部 个文件已扫描。〕",
           "_status": "green",
           "clause": "Phase 1 验收单",
           "id": "p1-seal-test",
           "label": "密封测试（臂内无凭据；绕开双代理的出网必须失败）",
-          "note": "双代理不存在，故无从测起。凭据卫生本身是干净的：本监视器全仓扫描确认密钥只出现在 .env。",
+          "note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。",
           "probe": "credential_hygiene",
-          "status": "blocked"
+          "status": "partial"
         },
         {
-          "_note": "需要账本，账本需要 runner 与代理。",
-          "_status": "blocked",
+          "_note": "proxy/replay.py 就位；对真在线局账本的 2 局抽检待包络数据迁入正典格式后执行 → P-9。",
+          "_status": "partial",
           "clause": "Phase 1 验收单",
           "id": "p1-replay-audit",
           "label": "复放抽检 2 局，环境侧逐比特一致",
-          "note": "需要账本，账本需要 runner 与代理。",
-          "status": "blocked"
+          "note": "proxy/replay.py 就位；对真在线局账本的 2 局抽检待包络数据迁入正典格式后执行 → P-9。",
+          "status": "partial"
         },
         {
-          "_note": "裸 CC 臂已立：harness + 记账管线（baseline-arms M2）+ sk48/g50t 真动作试点，封存护栏在 client 层强制。Schema 臂被 GAP-1 判死（官方代码从未发布，复现值合规留空，见 F-13）。Theoria 臂未搭。『同壳』的物理载体（双代理）仍缺 → P-2。",
+          "_note": "同壳的物理载体（双代理）已在：裸 CC 臂真跑过（试点+包络首局）。Schema 臂 = 路 A 上游轨迹直读（F-13 裁决）。**Theoria 臂是三臂中唯一还不存在的** → P-8，当前关键路径。",
           "_status": "partial",
           "clause": "Phase 1 验收单、第二部分总纪律",
           "id": "p1-same-shell",
           "label": "三臂经双代理落同一账本、打分器通吃",
-          "note": "裸 CC 臂已立：harness + 记账管线（baseline-arms M2）+ sk48/g50t 真动作试点，封存护栏在 client 层强制。Schema 臂被 GAP-1 判死（官方代码从未发布，复现值合规留空，见 F-13）。Theoria 臂未搭。『同壳』的物理载体（双代理）仍缺 → P-2。",
+          "note": "同壳的物理载体（双代理）已在：裸 CC 臂真跑过（试点+包络首局）。Schema 臂 = 路 A 上游轨迹直读（F-13 裁决）。**Theoria 臂是三臂中唯一还不存在的** → P-8，当前关键路径。",
           "status": "partial"
         }
       ],
@@ -589,30 +595,30 @@
     },
     {
       "_counts": {
-        "missing": 2,
-        "partial": 1
+        "green": 1,
+        "partial": 2
       },
       "clause": "Theoria.md §2 Phase 2",
       "gate": "只依赖『账本同格式』与『切堆已提交』，可与 A1/A2 并行",
       "id": "p2",
       "items": [
         {
-          "_note": "零代码。这是全项目**唯一一件既不烧游戏钱、又不被 INC-002 阻塞、却完全没开始**的工作 —— 而 Theoria.md 明写它可以并行。",
-          "_status": "missing",
+          "_note": "battery v0 落地：五族指标 + METRICS.md + 首份 REPORT_V0，夹具 = A0 / A0′ / 裸 CC 试点账本。",
+          "_status": "green",
           "clause": "Phase 2 · 候选指标族",
           "id": "p2-battery",
           "label": "候选指标族五族（探索/计划/经济/机制/认识）",
-          "note": "零代码。这是全项目**唯一一件既不烧游戏钱、又不被 INC-002 阻塞、却完全没开始**的工作 —— 而 Theoria.md 明写它可以并行。",
-          "status": "missing"
+          "note": "battery v0 落地：五族指标 + METRICS.md + 首份 REPORT_V0，夹具 = A0 / A0′ / 裸 CC 试点账本。",
+          "status": "green"
         },
         {
-          "_note": "区分力验证只准用 CC vs Schema 两臂 —— 而这两臂的轨迹一条都没有。",
-          "_status": "missing",
+          "_note": "PREDICTIONS.md（预注册）与 audit/ 在树上；区分力工序仍等 Schema 路 A 材料与更多 CC 轨迹。",
+          "_status": "partial",
           "clause": "Phase 2 · 电池自身要先受审",
           "id": "p2-audit",
           "label": "电池四道工序（区分力 / 方向预注册 / 去冗余 / 抗游戏审计）",
-          "note": "区分力验证只准用 CC vs Schema 两臂 —— 而这两臂的轨迹一条都没有。",
-          "status": "missing"
+          "note": "PREDICTIONS.md（预注册）与 audit/ 在树上；区分力工序仍等 Schema 路 A 材料与更多 CC 轨迹。",
+          "status": "partial"
         },
         {
           "_note": "裸 CC 开发堆轨迹开始产生（sk48 大量、g50t 少量，见 baseline-arms/TOUCHED_GAMES.md）；Theoria 侧有 A0/A0′ 离线轨迹。Schema 复现桶不可能（GAP-1），替代是路 A：上游释出的开发堆 4 局轨迹直读（Theoria.md:311 许可），尚未拉取。",
@@ -628,8 +634,8 @@
     },
     {
       "_counts": {
-        "missing": 3,
-        "partial": 2
+        "missing": 2,
+        "partial": 3
       },
       "clause": "Theoria.md §2 Phase 3",
       "gate": "Phase 1 全绿才准进",
@@ -663,13 +669,13 @@
           "status": "partial"
         },
         {
-          "_note": "裸 CC 臂与 Schema 复现桶的开发堆轨迹，一局都没有。这既是 Phase 3 的方差包络，也是 Phase 2 电池区分力验证的唯一合法材料。",
-          "_status": "missing",
+          "_note": "ar25×haiku×3 已跑并被预算闸门 G4（连续死格，真实劣化）拦停，1/4 局，$2.53。F-15 裁决：ar25 记 degraded 不追，其余 3 局继续 → P-12。",
+          "_status": "partial",
           "clause": "Phase 3 · 经济",
           "id": "p3-envelope",
           "label": "对照两臂在开发堆各跑 2–3 局，方差包络冻结",
-          "note": "裸 CC 臂与 Schema 复现桶的开发堆轨迹，一局都没有。这既是 Phase 3 的方差包络，也是 Phase 2 电池区分力验证的唯一合法材料。",
-          "status": "missing"
+          "note": "ar25×haiku×3 已跑并被预算闸门 G4（连续死格，真实劣化）拦停，1/4 局，$2.53。F-15 裁决：ar25 记 degraded 不追，其余 3 局继续 → P-12。",
+          "status": "partial"
         },
         {
           "_note": "整个 Phase 3 的主体。退出条件（U3 达成 ≥k 局 + 分数落 Δ 内 + 账单形状可见，或预算 B 顶到）里的 k/Δ/B 也还没定。",
@@ -760,66 +766,60 @@
       "status": "partial"
     },
     "conflict_scan": {
-      "detail": "跨领地提交（一个 commit 改了多个轨道 —— 领地纪律被破）：c5f93af Open-source the repository: add README and MIT LICENSE（arc-recon+theory-compiler）",
-      "status": "risk"
+      "detail": "三类检查全空：无冲突标记、无未合并路径、近 40 个提交无跨领地改动。",
+      "status": "green"
     },
     "credential_hygiene": {
       "detail": "密钥只出现在 .env（已 gitignore=True）；全仓 全部 个文件已扫描。",
       "status": "green"
     },
     "determinism_state": {
-      "detail": "arc-recon 预检裁定：unknown。 但 baseline-arms 的重试实验里 ACTION 166/1387 次返回 200 —— INC-002『0 次成功』已不成立，预检需在重试策略下重跑。",
+      "detail": "arc-recon 预检裁定：unknown。 但 baseline-arms 的重试实验里 ACTION 178/1546 次返回 200 —— INC-002『0 次成功』已不成立，预检需在重试策略下重跑。",
       "status": "risk"
     },
     "dispatch_board": {
-      "detail": "8 份在册工单，0 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",
+      "detail": "7 份在册工单，0 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",
       "rows": [
         {
           "branch": "—",
-          "id": "P-1",
-          "prompt": "P-1-api-truth.md",
+          "id": "M-0",
+          "prompt": "M-0-merge.md",
           "self_reported": false
         },
         {
           "branch": "—",
-          "id": "P-1",
-          "prompt": "P-1-arc-recon-close.md",
+          "id": "P-10",
+          "prompt": "P-10-contracts-v02.md",
           "self_reported": false
         },
         {
           "branch": "—",
-          "id": "P-2",
-          "prompt": "P-2-dual-proxy.md",
+          "id": "P-11",
+          "prompt": "P-11-arc-hygiene.md",
           "self_reported": false
         },
         {
           "branch": "—",
-          "id": "P-3",
-          "prompt": "P-3-battery.md",
+          "id": "P-12",
+          "prompt": "P-12-envelope-finish.md",
           "self_reported": false
         },
         {
           "branch": "—",
-          "id": "P-4",
-          "prompt": "P-4-engine-rig.md",
+          "id": "P-8",
+          "prompt": "P-8-theoria-arm.md",
           "self_reported": false
         },
         {
           "branch": "—",
-          "id": "P-5",
-          "prompt": "P-5-compiler-merge.md",
+          "id": "P-9",
+          "prompt": "P-9-shell-harden.md",
           "self_reported": false
         },
         {
           "branch": "—",
-          "id": "P-6",
-          "prompt": "P-6-a2-world.md",
-          "self_reported": false
-        },
-        {
-          "branch": "—",
-          "id": "P-7",
-          "prompt": "P-7-cc-campaign.md",
+          "id": "R-1",
+          "prompt": "R-1-retrospective.md",
           "self_reported": false
         }
       ],
@@ -830,7 +830,7 @@
       "status": "green"
     },
     "pile_integrity": {
-      "detail": "封存堆 21 局零接触（已核对 2284 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
+      "detail": "封存堆 21 局零接触（已核对 2735 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
       "status": "green"
     },
     "provenance_scan": {
@@ -841,24 +841,24 @@
   "progress": {
     "by_phase": [
       {
-        "contrib": 10.59,
+        "contrib": 19.69,
         "id": "p1",
         "name": "Phase 1 · 封闭系统",
-        "pct": 35.3,
+        "pct": 65.6,
         "weight": 0.3
       },
       {
-        "contrib": 2.0,
+        "contrib": 8.0,
         "id": "p2",
         "name": "Phase 2 · 指标电池",
-        "pct": 16.7,
+        "pct": 66.7,
         "weight": 0.12
       },
       {
-        "contrib": 6.0,
+        "contrib": 9.0,
         "id": "p3",
         "name": "Phase 3 · 框架迭代（开发堆）",
-        "pct": 20.0,
+        "pct": 30.0,
         "weight": 0.3
       },
       {
@@ -869,30 +869,28 @@
         "weight": 0.28
       }
     ],
-    "total": 20.9
+    "total": 39.0
   },
   "sections": [
     {
       "counts": {
-        "blocked": 1,
-        "green": 2,
-        "missing": 5,
-        "partial": 6,
+        "green": 6,
+        "partial": 8,
         "risk": 2
       },
       "name": "Phase 1 · 封闭系统"
     },
     {
       "counts": {
-        "missing": 2,
-        "partial": 1
+        "green": 1,
+        "partial": 2
       },
       "name": "Phase 2 · 指标电池"
     },
     {
       "counts": {
-        "missing": 3,
-        "partial": 2
+        "missing": 2,
+        "partial": 3
       },
       "name": "Phase 3 · 框架迭代（开发堆）"
     },
@@ -905,9 +903,8 @@
     },
     {
       "counts": {
-        "green": 4,
-        "missing": 2,
-        "partial": 3
+        "green": 7,
+        "partial": 2
       },
       "name": "车间八工序"
     },
