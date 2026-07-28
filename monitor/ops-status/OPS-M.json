@@ -1,7 +1,7 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-28T16:16:45Z",
- "cycle": 7,
+ "utc": "2026-07-28T17:08:05Z",
+ "cycle": 8,
  "state": "blocked",
- "note": "队列堵死：13 分支未合、14 个 flag，已全部裁决。其中 6 个是新 verify 闸门自身跑不起来（bash 吃掉反斜杠 + verify.py 无 sys.path 契约），非分支之错；修法须两步否则只是把红换个位置。gates.py 属监控领地，我只报不改。见 inbox 20260728T161500Z"
+ "note": "根因找到并实测：verify.sh 闸门一直由 WSL 的 Linux bash 执行（非 Git Bash），一行可修且已验证 rc=0；订正 cycle 7 的归因，我自己提的三个修法均被实测证伪。队列仍全堵 14 flag/14 分支，三个 agent 独立确认而无人有权修。已归档陈旧 flag a7。见 inbox 20260728T170640Z"
 }
