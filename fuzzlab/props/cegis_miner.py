@@ -112,7 +112,9 @@ def _mine(world: Any):
     touching-objects gap the A0 family has reported upstream twice. Once
     `gridworld` started producing reachable obstacles at all (see
     `worlds/gridworld.py:_place_obstacles`), that stopped being rare: it fired on
-    179 of 500 worlds in the first full campaign.
+    179 of 500 worlds in the first full campaign, and on **159 of 500** after
+    V-13 made the track selection pick the mover (321 mine under the default
+    operator, 159 need `split_by_color=True`, 20 are unminable under either).
 
     `split_by_color=True` is the operator that exists for exactly this, so it is
     tried second and the one that worked is recorded. Where neither can produce a

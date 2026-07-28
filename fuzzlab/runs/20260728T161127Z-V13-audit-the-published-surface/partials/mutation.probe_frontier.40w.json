@@ -15,7 +15,7 @@
       "mutants": 19
     }
   },
-  "engine_rig_head": "68a8365",
+  "engine_rig_head": "eb61aa9",
   "mutants": [
     {
       "claim": "partition_for groups the hypotheses by the observation each predicts and places every hypothesis in exactly one class -- engines/probe_frontier/frontier.py:partition_for is a single loop doing `partition.setdefault(h.predict(state, action), []).append(h.id)` over every hypothesis; README.md 'the action partitions the frontier into classes that agree with each other'.",

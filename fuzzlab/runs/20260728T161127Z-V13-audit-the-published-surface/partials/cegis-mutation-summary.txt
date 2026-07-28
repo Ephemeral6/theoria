@@ -1,14 +1,14 @@
-cm-frontier-guard-inconsistent   eval=39   inert=1    killed={'frontier_guards_are_consistent': 39} first={'frontier_guards_are_consistent': 1}
-cm-drop-frontier-guard           eval=24   inert=16   killed={'frontier_is_complete_to_size': 24} first={'frontier_is_complete_to_size': 1}
-cm-empty-frontier                eval=39   inert=1    killed={} first={}
-cm-truncation-alibi              eval=24   inert=16   killed={} first={}
-cm-inflate-applicable            eval=39   inert=1    killed={'applicable_equals_support': 39} first={'applicable_equals_support': 1}
-cm-weaken-ground-guard           eval=39   inert=1    killed={'guards_partition_the_evidence': 39} first={'guards_partition_the_evidence': 1}
-cm-drop-rule                     eval=39   inert=1    killed={'guards_partition_the_evidence': 39} first={'guards_partition_the_evidence': 1}
-cm-shrink-lifted-support         eval=23   inert=17   killed={'applicable_equals_support': 23} first={'applicable_equals_support': 1}
-cm-flip-effect-delta             eval=25   inert=15   killed={'effects_agree_with_the_evidence': 25} first={'effects_agree_with_the_evidence': 1}
-cm-effect-none-becomes-move      eval=37   inert=3    killed={'effects_agree_with_the_evidence': 23} first={'effects_agree_with_the_evidence': 1}
-cm-drift-effect-destination      eval=14   inert=26   killed={'effects_agree_with_the_evidence': 14} first={'effects_agree_with_the_evidence': 1}
-cm-drop-effect-destination       eval=14   inert=26   killed={} first={}
-cm-freeze-lifted-direction       eval=23   inert=17   killed={'effects_agree_with_the_evidence': 23} first={'effects_agree_with_the_evidence': 1}
-cm-relabel-rule-action           eval=39   inert=1    killed={'rules_fire_on_the_action_they_name': 39} first={'rules_fire_on_the_action_they_name': 1}
+cm-frontier-guard-inconsistent   eval=39   inert=1    {'frontier_guards_are_consistent': 39}
+cm-drop-frontier-guard           eval=33   inert=7    {'frontier_is_complete_to_size': 33}
+cm-empty-frontier                eval=39   inert=1    SURVIVED
+cm-truncation-alibi              eval=33   inert=7    SURVIVED
+cm-inflate-applicable            eval=39   inert=1    {'applicable_equals_support': 39}
+cm-weaken-ground-guard           eval=39   inert=1    {'guards_partition_the_evidence': 39}
+cm-drop-rule                     eval=39   inert=1    {'guards_partition_the_evidence': 39}
+cm-shrink-lifted-support         eval=32   inert=8    {'applicable_equals_support': 32}
+cm-flip-effect-delta             eval=34   inert=6    {'effects_agree_with_the_evidence': 34}
+cm-effect-none-becomes-move      eval=37   inert=3    {'effects_agree_with_the_evidence': 32}
+cm-drift-effect-destination      eval=17   inert=23   {'effects_agree_with_the_evidence': 17}
+cm-drop-effect-destination       eval=17   inert=23   SURVIVED
+cm-freeze-lifted-direction       eval=32   inert=8    {'effects_agree_with_the_evidence': 32}
+cm-relabel-rule-action           eval=39   inert=1    {'rules_fire_on_the_action_they_name': 39}

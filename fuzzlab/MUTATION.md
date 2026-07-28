@@ -502,19 +502,28 @@ oracle is checked against `gridworld.Rules.step` end to end in
 `tests/test_oracles.py` — 4455 transitions over 200 worlds, zero disagreement,
 zero unreadable — which is a check the campaign itself cannot perform.
 
+40 worlds, campaign seed `0x00005eedc1e4f002`, measured after the corpus repair
+described at the end of this section (`out/mutation.cegis_miner.json`):
+
 | mutant | kind | eval | inert | result |
 |---|---|---|---|---|
-| `cm-flip-effect-delta` | unsound | 25 | 15 | **killed 25/25**, first world 1 |
-| `cm-effect-none-becomes-move` | unsound | 37 | 3 | **killed 23/37**, first world 1 |
-| `cm-drift-effect-destination` | unsound | 14 | 26 | **killed 14/14**, first world 1 |
-| `cm-freeze-lifted-direction` | unsound | 23 | 17 | **killed 23/23**, first world 1 |
-| `cm-drop-effect-destination` | incomplete | 14 | 26 | **SURVIVED — predicted** |
+| `cm-flip-effect-delta` | unsound | 34 | 6 | **killed 34/34**, first world 1 |
+| `cm-effect-none-becomes-move` | unsound | 37 | 3 | **killed 32/37**, first world 1 |
+| `cm-drift-effect-destination` | unsound | 17 | 23 | **killed 17/17**, first world 1 |
+| `cm-freeze-lifted-direction` | unsound | 32 | 8 | **killed 32/32**, first world 1 |
+| `cm-drop-effect-destination` | incomplete | 17 | 23 | **SURVIVED — predicted** |
 
-`cm-effect-none-becomes-move` killing 23 of 37 rather than 37 of 37 is not a
-weakness and is worth reading: the missing worlds are ones where the invariant
+`cm-effect-none-becomes-move` killing 32 of 37 rather than 37 of 37 is not a
+weakness and is worth reading: the missing five are worlds where the invariant
 records a `skipped` because the mined track could not be established as the
 mover (see the corpus section below), so the mutant ran on a world the invariant
 had declined to judge. That is the accounting working rather than failing.
+
+`cm-drift-effect-destination` and `cm-drop-effect-destination` are inert on 23
+of 40 because `effect.to` is populated only where every witness agrees on a
+landing cell, which most multi-witness rules do not. The two share an inert set
+exactly, so the difference between their outcomes is the difference between the
+defects and not between the worlds they met.
 
 `cm-freeze-lifted-direction` is the one that closes V-10's largest single hole:
 before V-13 no invariant iterated `result.all_rules`, so the **35 lifted rules
@@ -590,7 +599,7 @@ caught it on any input. A kill there is the cost comparison and nothing else.
    `applicable_equals_support` to `all_rules` — `lift()` builds both sets as
    unions over members whose own two sets are equal, so the claim is exactly as
    true of a lifted rule and is published in the same `coverage` string — and
-   the mutant now dies **23/23**. V-10's prediction was correct about the
+   the mutant now dies **32/32**. V-10's prediction was correct about the
    battery as it stood and is no longer true of it.
 
    Scope did **not** move uniformly, and each exception is a decision rather
@@ -633,6 +642,15 @@ count is **unchanged at 3**, the "not the mover" skips fall from 21 to 6, and
 zero violations. Over the standing 500-world campaign it evaluates **426 of
 500**: 20 unminable, 54 where the pixels do not fix the mover's path at all
 (chiefly a mover that never moves, so no pixel names its position).
+
+The repair also moved the *older* mutants' denominators, which is the clearest
+statement of what mining a rock was costing. Against `tracks[0]`,
+`cm-drop-frontier-guard` and `cm-truncation-alibi` were inert on 16 of 40
+worlds; against the mover they are inert on 7, because a rock's rule set rarely
+has a rule with two frontier guards to drop. `cm-shrink-lifted-support` went
+from 23 evaluated to 32 — a rock generates almost no lifted rules, having
+nothing to generalise. Those nine or sixteen worlds were not measuring the
+battery either, and no column said so.
 
 **This is why a mutant is not a substitute for a real defect, and vice versa.**
 A mutant proves an invariant *can* fire; only a real defect proves it fires *in

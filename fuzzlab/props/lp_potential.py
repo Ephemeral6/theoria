@@ -36,8 +36,8 @@ All four invariants used to open with `if cert is None: return []` (or
 and "I could not check this world at all" the *same empty list*, and
 `campaign.json` counts a world as evaluated by an invariant unless that
 invariant filed a `skipped`. So the standing campaign reported 500 of 500
-worlds evaluated for each of the four while the real figure is about 270 —
-`lp_potential` issues no certificate on roughly 46% of `jumpgraph` worlds, and
+worlds evaluated for each of the four while the measured figure is **267** —
+`lp_potential` issues no certificate on 233 of 500 `jumpgraph` worlds (46.6%), and
 on those worlds every invariant here costs a `linprog` call and reports
 nothing.
 
@@ -57,7 +57,7 @@ overstating itself by ~46%.
 
 Two numbers that must not be mixed, because they answer different questions:
 
-* **~270/500 is about this battery** — the worlds on which these invariants
+* **267/500 is about this battery** — the worlds on which these invariants
   actually evaluate anything;
 * **the engine's incompleteness is ~21% of worlds** (E-11, exhaustive:
   639/2189 = 29.2% of certificate-less *cases*, 21.3% of the whole). Most
