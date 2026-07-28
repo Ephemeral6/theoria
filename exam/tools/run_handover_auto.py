@@ -251,11 +251,12 @@ def bootstrap_over_items(per_item: Dict[str, Dict[str, List[float]]], *,
         can = sum(per_item[i]["possible"][0] for i in ids)
         return got / can if can else 0.0
 
-    point = _frac(item_ids, "tier2") - _frac(item_ids, "tier1")
+    one, two = HA.TIER1, HA.TIER2
+    point = _frac(item_ids, two) - _frac(item_ids, one)
     draws = []
     for _ in range(n):
         sample = [rng.choice(item_ids) for _ in item_ids]
-        draws.append(_frac(sample, "tier2") - _frac(sample, "tier1"))
+        draws.append(_frac(sample, two) - _frac(sample, one))
     draws.sort()
     low, high = _pct(draws, 0.025), _pct(draws, 0.975)
     return {"point": round(point, 6), "ci95": [round(low, 6), round(high, 6)],
