@@ -1,0 +1,36 @@
+{
+  "prompt_id": "S23-unreadable-is-not-clean",
+  "branch": "agent/s23-unreadable-is-not-clean",
+  "base_commit": "bac8282",
+  "utc": "2026-07-28T23:49:23Z",
+  "worker": "W-1642",
+  "predecessor": {
+    "worker": "W-1631",
+    "checkpoint_commit": "c516409",
+    "note": "A partial pass was found uncommitted in this worktree and preserved as commit c516409 before being finished. It did not run: check_credential/check_sealed had been widened to a three-value return while main() and the check_sealed body still expected two, and arc-recon/contamination.py had received a docstring describing a gate() function that was never written."
+  },
+  "territory": "release",
+  "cross_territory_note": "arc-recon/contamination.py and arc-recon/test_contamination_gate.py are outside the release territory. The work order names contamination.py:338 explicitly as one of the two sites to fix, so the board item is the authorisation; arc-recon is shared ground rather than another track's directory. No other track's files were touched.",
+  "api_calls": 0,
+  "sealed_pile_contact": "none. Sealed game ids are read from arc-recon/data/piles.json at runtime rather than written into any new file; no sealed game was played, inspected or read about.",
+  "gates": {
+    "release": "bash release/verify.sh -> VERIFY: green (new; the territory was UNGATED before this run)",
+    "arc-recon": "cd arc-recon && python -m pytest -q -> 127 passed"
+  },
+  "files": [
+    {"path": "release/check_redlines.py", "sha256": "ba2adddfd680e29b81a2e8d2d282976ffb597140a3022b03eb7d5ff63bb8ef52"},
+    {"path": "release/enumerate.py", "sha256": "f7e4392affbcfc60f9d9085c3b5e6f21afda5ee405d53c479ffe57a448df3b02"},
+    {"path": "release/checklist.py", "sha256": "ef597cdec79cc07452c4a68d204a70bafc9cedf30ef4fb103b99776e2c8bf118"},
+    {"path": "release/verify.sh", "sha256": "5398453e18f44e22c7fa85a0503aaaf305647fe55d9bfeeaebd5299b9aaf3890"},
+    {"path": "release/tests/test_unreadable_is_not_clean.py", "sha256": "6009bf4350989993e49543bf0f6489ac8ddbc42e770a939364e5ebc17518939d"},
+    {"path": "arc-recon/contamination.py", "sha256": "8af2737d12d39088c8e9e46757d76401812e4a1a53c1a20995fbbfd4dcdebbd7"},
+    {"path": "arc-recon/test_contamination_gate.py", "sha256": "aa45fd71c745ced2d830370d3195026a38f91b260bc8929e217364d017bca2db"},
+    {"path": "release/runs/20260728T234923Z-S23/replicate.py", "sha256": "aef4df8d998c46ecb11c82a3ed91d19ba04a2ab6db93a4e9ae5907d2e378b043"}
+  ],
+  "before_after": {
+    "generator": "release/runs/20260728T234923Z-S23/replicate.py",
+    "method": "The same planted inputs are run through `git show master:<path>` of each module and through the working-tree version. The old copy is imported beside its real sibling because both modules resolve REPO_ROOT/DATA_DIR from __file__.",
+    "check_redlines": {"before": 0, "after": 2},
+    "contamination": {"before": 0, "after": 1}
+  }
+}

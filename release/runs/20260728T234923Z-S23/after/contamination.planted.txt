@@ -1,0 +1,34 @@
+# after: arc-recon/contamination.py at this working tree
+# input: the real contamination log plus one planted record
+#   bp35-0a0ad940 registered with claims='quarantined' (a typo:
+#   not one of CLAIM_STATES, so it is in no settled bucket)
+# and a DATA_DIR with no recon_ledger.jsonl in it at all.
+
+  piles.json sha256 MATCHES (cut unmodified)
+  ar25-0c556536      dev      trajectories_reviewed      n/a
+  g50t-5849a774      dev      trajectories_reviewed      n/a
+  sk48-d8078629      dev      trajectories_reviewed      n/a
+  tn36-ef4dde99      dev      trajectories_reviewed      n/a
+  ft09-0d8bbf25      sealed   mechanics_disclosed        quarantined_from_claims
+  ls20-9607627b      sealed   mechanics_disclosed        quarantined_from_claims
+  dc22-fdcac232      sealed   design_document_disclosed  retained_with_sensitivity_analysis
+  ka59-38d34dbb      sealed   blurb_glimpsed             retained_with_sensitivity_analysis
+  lf52-271a04aa      sealed   blurb_glimpsed             retained_with_sensitivity_analysis
+  m0r0-492f87ba      sealed   blurb_glimpsed             retained_with_sensitivity_analysis
+  re86-8af5384d      sealed   blurb_glimpsed             retained_with_sensitivity_analysis
+  sb26-7fbdac44      sealed   blurb_glimpsed             retained_with_sensitivity_analysis
+  bp35-0a0ad940      sealed   filename_only              quarantined
+  12 games still never_audited
+  ledger audit: arc-recon/data/recon_ledger.jsonl        NOT AUDITED (absent)
+  ledger audit: baseline-arms/ledger.jsonl                 560 calls, sealed ADDRESSED: NONE
+  ledger audit: baseline-arms/probe_log.jsonl             1955 calls, sealed ADDRESSED: NONE
+  sealed pile 21 -> claim set 19  (quarantined: ft09-0d8bbf25, ls20-9607627b)
+  of which 6 carry a sensitivity caveat: dc22-fdcac232, ka59-38d34dbb, lf52-271a04aa, m0r0-492f87ba, re86-8af5384d, sb26-7fbdac44
+  NEEDS ADJUDICATION (excluded from `clean`): bp35-0a0ad940
+    bp35-0a0ad940      unrecognised claim state 'quarantined'
+
+  GATE: RED -- 2 condition(s) below must be ruled on:
+    * 1 game(s) NEED ADJUDICATION and are in no settled bucket: bp35-0a0ad940. They were printed before this change and excluded from the exit code, so the only reader that gates anything was told the reassuring answer.
+    * arc-recon/data/recon_ledger.jsonl could not be audited (absent): a ledger that is absent or unreadable is not a ledger with no sealed contact in it.
+
+exit code: 1

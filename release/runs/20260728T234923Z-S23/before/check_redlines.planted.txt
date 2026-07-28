@@ -1,0 +1,17 @@
+# before: release/check_redlines.py at master
+# input: a throwaway git repo containing
+#   corrupt.jsonl  -- names a sealed game, invalid UTF-8
+#   vanished.md    -- tracked by git, deleted from the tree
+
+  note      credential loaded for comparison only: 7171...05dd (len 36)
+  note      3 tracked file(s) scanned for the literal key
+  note      sealed pile: 21 game(s), read from arc-recon/data/piles.json
+  note      4 tracked file(s) scanned for sealed game ids
+  note      2 file(s) mention a sealed id without carrying payload -- guards, tests, audit documents and the cut itself. Naming a sealed game in order to keep it out is not contact with it, and a release that stripped these would be hiding the very ledger that proves the seal held. Listed, not failed:
+  note          arc-recon/data/piles.json names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+  note          corrupt.jsonl names bp35-0a0ad940, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
+
+red lines: 0 credential violation(s), 0 sealed-pile violation(s) over 4 tracked files.
+Both red lines clear. A release manifest may be generated from this tree.
+
+exit code: 0

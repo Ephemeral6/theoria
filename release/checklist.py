@@ -42,8 +42,7 @@ import sys
 # already does for the same reason.
 for _stream in (sys.stdout, sys.stderr):
     try:
-        _stream.reconfigure(encoding="utf-8", newline="
-")
+        _stream.reconfigure(encoding="utf-8", newline="\n")
     except (AttributeError, OSError):  # pragma: no cover
         pass
 
@@ -137,6 +136,21 @@ def status_of(hits: list[dict]) -> tuple[str, str]:
     if not hits:
         return "ABSENT", "nothing in the manifest satisfies this item"
     classes = sorted({h["class"] for h in hits})
+    # Class `?` is `undetermined` / `needs_human`: the enumerator refused to rule
+    # on the file. It used to fall through to PRESENT, because only B and D were
+    # tested and `?` is neither -- an item satisfied by files nobody has
+    # classified rendered as a tick. That was latent while the enumerator could
+    # not emit `?` for an unreadable file (it wrote class A instead, or dropped
+    # the row); closing that hole is what makes this branch reachable, so it is
+    # closed in the same change rather than left as a live one.
+    undetermined = [h for h in hits if h["class"] == "?"]
+    if undetermined:
+        return (
+            "UNDETERMINED",
+            f"{len(hits)} file(s), class {'/'.join(classes)}; {len(undetermined)} of them "
+            "the enumerator could not classify. This item is not satisfied and not "
+            "refused -- it is unruled, and a human must rule on it before release.",
+        )
     blocked = [h for h in hits if h["class"] in ("B", "D")]
     if not blocked:
         return "PRESENT", f"{len(hits)} file(s), class {'/'.join(classes)}"
@@ -196,7 +210,7 @@ def completeness(zh: str, hits: list[dict]) -> list[str]:
 
 def report(rows: list[dict]) -> tuple[list[str], dict[str, int]]:
     lines: list[str] = []
-    tally = {"PRESENT": 0, "WITHHELD": 0, "ABSENT": 0}
+    tally = {"PRESENT": 0, "WITHHELD": 0, "ABSENT": 0, "UNDETERMINED": 0}
     for zh, gloss, patterns in CHECKLIST:
         hits = match(rows, patterns)
         status, detail = status_of(hits)
@@ -250,7 +264,8 @@ def main(argv: list[str] | None = None) -> int:
         "`Theoria.md`:379's, quoted item by item; the last entry is added by the P5 work",
         "order rather than by `Theoria.md`.",
         "",
-        f"**{tally['PRESENT']} present · {tally['WITHHELD']} withheld · {tally['ABSENT']} absent.**",
+        f"**{tally['PRESENT']} present · {tally['WITHHELD']} withheld · "
+        f"{tally['ABSENT']} absent · {tally['UNDETERMINED']} undetermined.**",
         "",
         "*Withheld* does not mean missing. It means the material exists and complete and",
         "cannot be handed over as itself: class B ships as a sha256 plus the script that",
@@ -260,16 +275,25 @@ def main(argv: list[str] | None = None) -> int:
         "",
     ]
     body = "\n".join(header + lines)
-    print(f"{tally['PRESENT']} present, {tally['WITHHELD']} withheld, {tally['ABSENT']} absent")
+    print(f"{tally['PRESENT']} present, {tally['WITHHELD']} withheld, "
+          f"{tally['ABSENT']} absent, {tally['UNDETERMINED']} undetermined")
     for zh, _, patterns in CHECKLIST:
         hits = match(rows, patterns)
         st, _d = status_of(hits)
-        print(f"  {st:9s} {zh}  ({len(hits)} file(s))")
-    if args.dry_run:
-        return 0
-    with open(OUT, "w", encoding="utf-8", newline="\n") as fh:
-        fh.write(body)
-    print(f"\nwrote {os.path.relpath(OUT, REPO_ROOT)}")
+        print(f"  {st:12s} {zh}  ({len(hits)} file(s))")
+    if not args.dry_run:
+        with open(OUT, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(body)
+        print(f"\nwrote {os.path.relpath(OUT, REPO_ROOT)}")
+    # ABSENT keeps exit 0: this is a report, and a knowingly-absent item with a
+    # recorded reason is a finding it is designed to state, not an error.
+    # UNDETERMINED does not, and the difference is the whole point -- ABSENT is
+    # "looked, not there", UNDETERMINED is "could not look". Only the second one
+    # is a claim this program has no basis to make.
+    if tally["UNDETERMINED"]:
+        print(f"\n{tally['UNDETERMINED']} item(s) rest on files the enumerator could not "
+              "classify. Rule on them before this checklist is quoted as a release state.")
+        return 1
     return 0
 
 

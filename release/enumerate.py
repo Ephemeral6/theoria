@@ -255,15 +255,33 @@ def build(paths: list[str]) -> list[dict]:
     rows: list[dict] = []
     for rel in paths:
         p = _abs(rel)
-        try:
-            digest, size = _sha256(p)
-        except OSError:
+        blob, why = redlines.read_bytes(p)
+        if blob is None:
+            # Neither `continue` nor `b""`. Both were here, and both answered an
+            # unreadable file with a sentence about its contents: `continue`
+            # dropped the row so the file left the manifest entirely -- a manifest
+            # whose job is to enumerate *every* tracked file, quietly one short --
+            # and `b""` classified it A/releasable on the evidence "no ARC game id
+            # appears in this file", a positive claim about bytes nobody read.
+            rows.append(
+                {
+                    "path": rel,
+                    "sha256": None,
+                    "size": None,
+                    "class": "?",
+                    "class_name": CLASSES["?"][0],
+                    "verdict": CLASSES["?"][1],
+                    "evidence": f"tracked, but this enumerator could not read it ({why}); "
+                    "its licence class is undetermined. It is listed rather than dropped "
+                    "because a file missing from the manifest is a file nobody rules on.",
+                }
+            )
             continue
         try:
-            with open(p, "rb") as fh:
-                blob = fh.read()
-        except OSError:
-            blob = b""
+            digest, size = _sha256(p)
+        except OSError as exc:  # pragma: no cover -- read_bytes already succeeded
+            digest, size = None, None
+            del exc
         verdict = classify(rel, blob, game_ids)
         name, disposition = CLASSES[verdict["class"]]
         row = {
@@ -302,14 +320,21 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     paths = _tracked()
-    cred_v, cred_n = redlines.check_credential(paths, mode=args.mode)
+    cred_v, cred_h, cred_n = redlines.check_credential(paths, mode=args.mode)
     for _n in cred_n:
         print(f"  note {_n}")
-    seal_v, _ = redlines.check_sealed(paths)
-    if cred_v or seal_v:
+    seal_v, seal_h, _ = redlines.check_sealed(paths)
+    # `needs_human` aborts the manifest exactly as a violation does. This
+    # enumerator is the one caller that MUST NOT be lenient about it: it is about
+    # to write a document asserting a licence class for every tracked file, and a
+    # file the red-line check could not read is a file it has no basis to assert
+    # anything about.
+    if cred_v or seal_v or cred_h or seal_h:
         print("ABORT: the red lines are not clear; no manifest generated.", file=sys.stderr)
         for v in cred_v + seal_v:
             print(f"  {v}", file=sys.stderr)
+        for h in cred_h + seal_h:
+            print(f"  NEEDS HUMAN {h}", file=sys.stderr)
         # Non-zero even under --dry-run. It used to print ABORT and exit 0, so
         # anything scripting it read a clean pass off a refusal.
         return 2

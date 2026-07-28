@@ -374,9 +374,17 @@ def check_sealed(paths: list[str]) -> tuple[list[str], list[str], list[str]]:
         #
         # What the pile cut actually forbids is *material from* a sealed game:
         # a record that is both about that game and carries its content.
-        if rel.endswith((".json", ".jsonl")):
-            bad = _records_pairing_sealed_with_payload(p, hit, rel.endswith(".jsonl"))
-            if bad:
+        structured, jsonl = json_shaped(rel, blob)
+        if structured:
+            bad, why = _records_pairing_sealed_with_payload(_abs(rel), hit, jsonl)
+            if bad is None:
+                needs_human.append(
+                    f"{rel} names {', '.join(hit)} and could NOT be parsed ({why}), so no "
+                    "record in it has been judged. An unparseable file that names a sealed "
+                    "game is the one case where 'no finding' and 'did not look' are easiest "
+                    "to confuse and most expensive to get wrong."
+                )
+            elif bad:
                 violations.append(
                     f"{rel}: {len(bad)} record(s) pair a sealed game id with payload "
                     f"({'; '.join(bad[:3])}). This is material from a sealed game, not a "
@@ -393,7 +401,13 @@ def check_sealed(paths: list[str]) -> tuple[list[str], list[str], list[str]]:
                 "constants and guards, not content)"
             )
 
-    notes.append(f"{len(paths)} tracked file(s) scanned for sealed game ids")
+    # `scanned`, not `len(paths)`. The old note counted the files this check was
+    # *handed* while the loop had silently skipped some of them, so the coverage
+    # figure was guaranteed to be right only when nothing had gone wrong.
+    notes.append(
+        f"{scanned} of {len(paths)} tracked file(s) scanned for sealed game ids"
+        + (f"; {len(needs_human)} could not be read or parsed" if needs_human else "")
+    )
     notes.append(
         f"{len(mentions)} file(s) mention a sealed id without carrying payload -- guards, "
         "tests, audit documents and the cut itself. Naming a sealed game in order to keep "
@@ -401,7 +415,7 @@ def check_sealed(paths: list[str]) -> tuple[list[str], list[str], list[str]]:
         "the very ledger that proves the seal held. Listed, not failed:"
     )
     notes.extend(f"    {m}" for m in mentions)
-    return violations, notes
+    return violations, needs_human, notes
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -416,8 +430,8 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
 
     paths = _tracked()
-    cred_v, cred_n = check_credential(paths, mode=args.mode)
-    seal_v, seal_n = check_sealed(paths)
+    cred_v, cred_h, cred_n = check_credential(paths, mode=args.mode)
+    seal_v, seal_h, seal_n = check_sealed(paths)
 
     for n in cred_n + seal_n:
         print(f"  note      {n}")
@@ -425,15 +439,34 @@ def main(argv: list[str] | None = None) -> int:
         print(f"  CREDENTIAL {v}")
     for v in seal_v:
         print(f"  SEALED     {v}")
+    for h in cred_h:
+        print(f"  NEEDS HUMAN (credential) {h}")
+    for h in seal_h:
+        print(f"  NEEDS HUMAN (sealed)     {h}")
 
-    total = len(cred_v) + len(seal_v)
+    violations = len(cred_v) + len(seal_v)
+    unread = len(cred_h) + len(seal_h)
     print(
         f"\nred lines: {len(cred_v)} credential violation(s), "
-        f"{len(seal_v)} sealed-pile violation(s) over {len(paths)} tracked files."
+        f"{len(seal_v)} sealed-pile violation(s), "
+        f"{unread} file(s) this check could not read over {len(paths)} tracked files."
     )
-    if total:
+    if violations:
         print("\nDo not generate a release manifest until these are resolved.")
         return 1
+    # A separate exit code, and deliberately not a separate severity. `needs_human`
+    # blocks the release exactly as hard as a violation, because the question it
+    # leaves open is the one the gate exists to close. It gets its own code only so
+    # that a caller can tell "we found something" from "we could not look" without
+    # parsing prose -- the distinction the old `return []` erased.
+    if unread:
+        print(
+            "\nNo violation was found, but this check DID NOT COVER every tracked file, "
+            "and a release manifest publishes the files it could not read along with the "
+            "ones it could. Resolve or explicitly waive each NEEDS HUMAN line above; "
+            "unreadable is not clean."
+        )
+        return 2
     print("Both red lines clear. A release manifest may be generated from this tree.")
     return 0
 
