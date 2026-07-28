@@ -1,4 +1,4 @@
-"""Render `METRICS.md` from the registry.
+"""Render the committed documents: `METRICS.md` and `audit/REDUNDANCY.md`.
 
 The metric reference is generated rather than written, so a definition and its
 documentation cannot drift apart: `tests/test_docs.py` fails if the committed
@@ -11,14 +11,17 @@ from __future__ import annotations
 
 import json
 import os
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from battery.audit.gaming import GAMING_REGISTER, tier_of
+from battery.audit.redundancy import as_markdown
 from battery.metrics import FAMILIES, REGISTRY, cards_by_family
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TARGET = os.path.join(HERE, "METRICS.md")
 VALIDATION = os.path.join(HERE, "artifacts", "validation_material.json")
+REDUNDANCY_TARGET = os.path.join(HERE, "audit", "REDUNDANCY.md")
+REDUNDANCY = os.path.join(HERE, "artifacts", "redundancy.json")
 
 
 def _validation(path: str = VALIDATION) -> Dict[str, str]:
@@ -160,5 +163,28 @@ def write(path: str = TARGET) -> str:
     return path
 
 
+def write_redundancy(path: str = REDUNDANCY_TARGET,
+                     source: str = REDUNDANCY) -> Optional[str]:
+    """Process 3's basis, rendered from the last recompute's artefact.
+
+    Generated here rather than by `run_battery` because this is a *committed
+    document*, and a recompute may legitimately be pointed elsewhere with
+    `--out`. While `run_battery` wrote it to a fixed path,
+    `tests/test_determinism.py` — which runs the real pipeline over a small
+    fixture — silently replaced the real audit document with a three-cluster
+    version computed from six runs, every time the suite ran.
+    """
+    if not os.path.exists(source):
+        return None
+    with open(source, "r", encoding="utf-8") as fh:
+        result = json.load(fh)
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(as_markdown(result))
+    return path
+
+
 if __name__ == "__main__":
     print(write())
+    written = write_redundancy()
+    if written:
+        print(written)

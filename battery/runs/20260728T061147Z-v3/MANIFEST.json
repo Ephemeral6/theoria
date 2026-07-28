@@ -114,6 +114,10 @@
       "sha256": "35b43770c4d72b7da6ec72220c0a73cdddd05ad4e101e9da9a642f72e39cd6fd"
     },
     {
+      "path": "battery/docs.py",
+      "sha256": "aec344d7e4811fb43195947ee4ba5942c2c78038051b7f10def55f3649414f79"
+    },
+    {
       "path": "battery/metrics/economy.py",
       "sha256": "be3c44d3303b917bac87fdfd104650b0cd88d3bd0b6ee04f2dc7ad532674c084"
     },
@@ -128,9 +132,13 @@
     {
       "path": "battery/model.py",
       "sha256": "bce2866f73f2d2035e25b77e61b6b092f49088ed49e6a8bc2c93ee658fa60453"
+    },
+    {
+      "path": "battery/run_battery.py",
+      "sha256": "42ecdd0c8e6eafc8e997524ad4a309dff553569e2b206d807cd63b3d28af2244"
     }
   ],
-  "head_commit": "58e5f6b0859b96f364294c1927a75456c3ba689c",
+  "head_commit": "47c22cb6b29a6f4e54dde16a19ed4246c23b39dd",
   "input_digests": {
     "arc-recon/data/piles.json": "d3140eff4889095f64aff6360697eeff0a1b159a53d80a1ef6407b2c4dd5b8c9",
     "baseline-arms/ledger.jsonl": "0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
@@ -172,7 +180,7 @@
   },
   "tests": {
     "failed": 0,
-    "passed": 213,
+    "passed": 214,
     "suite": "python -m pytest battery/tests -q"
   },
   "utc": "2026-07-28T06:11:47Z",

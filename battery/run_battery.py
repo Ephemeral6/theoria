@@ -34,7 +34,7 @@ from battery.audit.contrast import contrast
 from battery.audit.discriminate import discriminate_arms, power_note
 from battery.audit.gaming import audit as gaming_audit
 from battery.audit.gaming import tier_of
-from battery.audit.redundancy import as_markdown, cluster
+from battery.audit.redundancy import cluster
 from battery.audit.validation import material
 from battery.guard import Piles, load_piles
 from battery.metrics import REGISTRY, Value, evaluate
@@ -335,13 +335,13 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     # by the ladder alone cannot read as licensed by the specified gradient.
     write_json(os.path.join(args.out, "validation_material.json"),
                material(runs, values, arms_pass))
-    redundancy = cluster(values)
-    write_json(os.path.join(args.out, "redundancy.json"), redundancy)
-    # The basis, not just the verdict, and it lands beside the code that
-    # produced it because `Theoria.md` process 3 is an audit rather than a
-    # summary statistic.
-    write_text(os.path.join(HERE, "audit", "REDUNDANCY.md"),
-               as_markdown(redundancy))
+    # The basis, not just the verdict -- but written by `battery.docs`, not
+    # here. `REDUNDANCY.md` is a *committed document*, and a recompute pointed
+    # at `--out` must not touch the tree: `tests/test_determinism.py` runs this
+    # pipeline over a small fixture, and while this function wrote to a fixed
+    # path that test silently overwrote the real audit document with a
+    # three-cluster version computed from six runs.
+    write_json(os.path.join(args.out, "redundancy.json"), cluster(values))
     write_json(os.path.join(args.out, "gaming_audit.json"), gaming_audit())
 
     ok_counts = sum(1 for r in values for v in values[r].values() if v.ok)
