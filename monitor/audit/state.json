@@ -41,7 +41,8 @@
     "调 bus.py 不要 print 它的 stdout，只打印 returncode",
     "**正则判『有没有失败路径』假阳性高，判完必须读全文**",
     "**报别人已报过的事之前先读它的 commit**：本轮 OPS-M/OPS-B 已报队列停摆，我改为只补量化与拓扑，避免重复",
-    "常用脚本：redline.py、manifests.py、probe_red.py、negsample.py、flags.py（merge.log 阻塞时长与重报次数）、dim6.py"
+    "常用脚本：redline.py、manifests.py、probe_red.py、negsample.py、flags.py（merge.log 阻塞时长与重报次数）、dim6.py",
+    "推送被拒（behind N）时用 git pull --rebase --autostash origin master 再 push：工作树里 ablation-arm/artifacts/a0-base/episode.jsonl 常年是脏的（跑测试的产物），普通 rebase 会因未暂存改动失败。"
   ],
   "next_cycle_focus": [
     "按四路分别跟进：verify.sh / verify.py / OPS-M 是否醒 / 人工冲突",
