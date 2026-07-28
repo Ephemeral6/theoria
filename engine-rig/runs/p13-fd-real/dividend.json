@@ -1,0 +1,138 @@
+{
+  "cross_check": [
+    {
+      "agree": true,
+      "fd_exit_code": 0,
+      "fd_expansions": 4,
+      "fd_plan_length": 2,
+      "fd_unsolvable": false,
+      "instance": "a0-spike/match",
+      "status": "ran",
+      "stub_expansions": 3,
+      "stub_plan_length": 2,
+      "stub_unsolvable": false
+    },
+    {
+      "agree": true,
+      "fd_exit_code": 12,
+      "fd_expansions": 0,
+      "fd_plan_length": null,
+      "fd_unsolvable": true,
+      "instance": "a0-spike/mismatch",
+      "status": "ran",
+      "stub_expansions": 315,
+      "stub_plan_length": null,
+      "stub_unsolvable": true
+    },
+    {
+      "agree": true,
+      "fd_exit_code": 0,
+      "fd_expansions": 53,
+      "fd_plan_length": 12,
+      "fd_unsolvable": false,
+      "instance": "cold-start-a0",
+      "status": "ran",
+      "stub_expansions": 52,
+      "stub_plan_length": 12,
+      "stub_unsolvable": false
+    },
+    {
+      "agree": true,
+      "fd_exit_code": 12,
+      "fd_expansions": 0,
+      "fd_plan_length": null,
+      "fd_unsolvable": true,
+      "instance": "cold-start-a0/no-button",
+      "status": "ran",
+      "stub_expansions": 23,
+      "stub_plan_length": null,
+      "stub_unsolvable": true
+    },
+    {
+      "agree": true,
+      "fd_exit_code": 0,
+      "fd_expansions": 52,
+      "fd_plan_length": 18,
+      "fd_unsolvable": false,
+      "instance": "cold-start-a2",
+      "status": "ran",
+      "stub_expansions": 51,
+      "stub_plan_length": 18,
+      "stub_unsolvable": false
+    },
+    {
+      "agree": true,
+      "fd_exit_code": 12,
+      "fd_expansions": 0,
+      "fd_plan_length": null,
+      "fd_unsolvable": true,
+      "instance": "cold-start-a2/holed",
+      "status": "ran",
+      "stub_expansions": 41,
+      "stub_plan_length": null,
+      "stub_unsolvable": true
+    },
+    {
+      "agree": true,
+      "fd_exit_code": 0,
+      "fd_expansions": 52,
+      "fd_plan_length": 18,
+      "fd_unsolvable": false,
+      "instance": "cold-start-a2/repaired",
+      "status": "ran",
+      "stub_expansions": 51,
+      "stub_plan_length": 18,
+      "stub_unsolvable": false
+    }
+  ],
+  "deadlock_dividend": [
+    {
+      "fd_expansions_after": 49,
+      "fd_expansions_before": 49,
+      "fd_plan_after": 6,
+      "fd_plan_before": 6,
+      "fd_unsolvable_after": false,
+      "fd_unsolvable_before": false,
+      "instance": "open4",
+      "same_answer": true,
+      "stub_expansions_after": 47,
+      "stub_expansions_before": 47,
+      "theorems": 16,
+      "theorems_encoded": 16,
+      "theorems_skipped": []
+    },
+    {
+      "fd_expansions_after": 574,
+      "fd_expansions_before": 837,
+      "fd_plan_after": 11,
+      "fd_plan_before": 11,
+      "fd_unsolvable_after": false,
+      "fd_unsolvable_before": false,
+      "instance": "open4far",
+      "same_answer": true,
+      "stub_expansions_after": 571,
+      "stub_expansions_before": 808,
+      "theorems": 16,
+      "theorems_encoded": 16,
+      "theorems_skipped": []
+    },
+    {
+      "fd_expansions_after": 0,
+      "fd_expansions_before": 0,
+      "fd_plan_after": null,
+      "fd_plan_before": null,
+      "fd_unsolvable_after": true,
+      "fd_unsolvable_before": true,
+      "instance": "ringstuck",
+      "same_answer": true,
+      "stub_expansions_after": 22,
+      "stub_expansions_before": 44,
+      "theorems": 2,
+      "theorems_encoded": 2,
+      "theorems_skipped": []
+    }
+  ],
+  "executable": "C:/Users/user/Desktop/theoria-p13/engine-rig/.toolchain/downward/fast-downward.py",
+  "prompt_id": "P-13",
+  "search": "astar(blind())"
+}

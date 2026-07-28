@@ -2,3 +2,6 @@ __pycache__/
 *.pyc
 .pytest_cache/
 out/
+
+# Local toolchain (Fast Downward + mingw-w64). Large, machine-specific, never committed.
+.toolchain/
