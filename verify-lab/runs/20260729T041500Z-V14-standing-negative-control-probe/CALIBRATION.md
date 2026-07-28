@@ -120,12 +120,21 @@ repository and the criterion is close to blind to them.
 Recorded because a criterion tuned on its own calibration set reports optimistic
 numbers, and the size of the tuning is the size of the optimism.
 
-| round | change | why | effect (A−B strict) |
+The row count changed at round 1 (that edit also introduced the scope exclusions
+in §1, from 111 rows to 103), so rounds 0 and 1 are not directly comparable to
+each other. Counts, not rates, and the caveat is stated rather than smoothed over.
+
+| round | change | why | effect |
 |---|---|---|---|
-| 0 | first draft | — | FP 5, FN 26 |
-| 1 | `assert X == <nonzero>` only when X looks like an exit code; `assert not X` only when X is a verdict | `assert len(rows) == 6` in `theoria-arm/tests/test_arm.py:687` scored `theoria-arm/harness/run.py` (gold: no negative control) as present. `assert not violations` in `fuzzlab/tests/test_battery.py:37` did the same for `fuzzlab/campaign.py` — that assertion is a *positive* control. | FP 5 → 2 |
-| 2 | `assert <complaint> in <findings>`, `assert any(... for ... in <findings>)`, bare `assert <findings>` | `engine-rig/tests/test_integration.py:286` — 14 parametrised mutant rows, each `assert any(fragment in error for error in errors)`. Nothing else in the criterion could see them. | FN 26 → 21 |
-| 3 | follow one hop through helpers defined in the same test file | `proxy/tests/test_redteam.py` never writes `EnvProxy` inside a test; it writes `with env_proxy_over(...)`. Without the hop, the repository's best negative-control suite targets nothing. | FN 21 → 19 |
+| 0 | first draft, 111 rows, detector AB | — | FP 5, FN 26 |
+| 1 | `assert X == <nonzero>` only when X looks like an exit code; `assert not X` only when X is a verdict. Scope exclusions added in the same edit → 103 rows. | `assert len(rows) == 6` in `theoria-arm/tests/test_arm.py:687` scored `theoria-arm/harness/run.py` (gold: no negative control) as present. `assert not violations` in `fuzzlab/tests/test_battery.py:37` did the same for `fuzzlab/campaign.py` — that assertion is a *positive* control, it says the run found nothing wrong. | A−B: FP 2, FN 24 |
+| 2 | `assert <complaint> in <findings>`, `assert any(... for ... in <findings>)`, bare `assert <findings>` | `engine-rig/tests/test_integration.py:286` — 14 parametrised mutant rows, each `assert any(fragment in error for error in errors)`. Nothing else in the criterion could see them. | A−B: FP 3, FN 21 |
+| 3 | follow one hop through helpers defined in the same test file | `proxy/tests/test_redteam.py` never writes `EnvProxy` inside a test; it writes `with env_proxy_over(...)`. Without the hop, the repository's best negative-control suite targets nothing. | A−B: FP 3, FN 19 |
+
+Round 2 cost one false positive to buy three false negatives — `worldgen/build.py`,
+which the census judged twice (是 for `--check`, 否 for `check_determinism`) and
+which no file-granular criterion can be right about. That is the only trade in the
+three rounds where an error was knowingly added.
 
 All three are structural classes, not row-specific patches, and each is pinned by
 a parametrised test in `verify-lab/negctl/tests/test_probe.py` so a future
