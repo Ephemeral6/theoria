@@ -30,6 +30,7 @@ LOCK = os.path.join(CI_DIR, "merge.lock")
 LOG = os.path.join(CI_DIR, "merge.log")
 
 PYTEST = [sys.executable, "-m", "pytest", "-q", "-x"]
+NO_TESTS_COLLECTED = 5      # pytest's exit code for "found nothing to run"
 
 # Whether a directory is gated is read off the merged tree, not off a list.
 #
@@ -175,19 +176,39 @@ def try_merge(branch):
             sh(["git", "merge", "--abort"], cwd=wt)
             flag(branch, "merge conflict", r.stdout + r.stderr)
             return False
-        for d in sorted(dirs & set(TEST_CMDS)):
-            r = sh(TEST_CMDS[d], cwd=os.path.join(wt, d), timeout=1800)
+        gates = []
+        for d in sorted(dirs):
+            cmd = gate_for(wt, d)
+            if cmd is None:
+                continue
+            r = sh(cmd, cwd=os.path.join(wt, d), timeout=1800)
+            if r.returncode == NO_TESTS_COLLECTED:
+                # The directory holds test_*.py and pytest still found nothing
+                # to run, so its configuration is pointed somewhere else.  That
+                # is a broken gate, not a passing one, and it is reported as
+                # its own thing: read as "green" it would be the fourth time
+                # this repo mistook a check that cannot run for a check that
+                # passed.
+                flag(branch, "test suite in %s collects nothing "
+                             "(gate misconfigured, not a red suite)" % d,
+                     r.stdout + r.stderr)
+                return False
             if r.returncode != 0:
                 flag(branch, "tests red in %s" % d,
                      (r.stdout + r.stderr))
                 return False
+            gates.append(d)
         r = sh(["git", "push", "origin", "HEAD:master"], cwd=wt)
         if r.returncode != 0:
             flag(branch, "push rejected (race?)", r.stderr)
             return False
         sh(["git", "push", "origin", "--delete",
             branch.replace("origin/", "")])
-        log_line("MERGED %s (dirs: %s)" % (branch, ",".join(sorted(dirs))))
+        # Which gates ran is part of the record.  Without it "tested and passed"
+        # and "never tested" are the same line, which is exactly how 509 tests
+        # stayed skipped without anyone noticing.
+        log_line("MERGED %s (dirs: %s; gates: %s)"
+                 % (branch, ",".join(sorted(dirs)), ",".join(gates) or "none"))
         return True
     finally:
         sh(["git", "worktree", "remove", "--force", wt])
