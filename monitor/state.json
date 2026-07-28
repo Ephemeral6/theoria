@@ -38,7 +38,7 @@
     ],
     "ops": [
       {
-        "age_min": 40,
+        "age_min": 42,
         "cycle": 4,
         "id": "OPS-A",
         "kind": "ops",
@@ -49,7 +49,7 @@
         "state": "idle"
       },
       {
-        "age_min": 115,
+        "age_min": 117,
         "cycle": 2,
         "id": "OPS-B",
         "kind": "ops",
@@ -60,7 +60,7 @@
         "state": "idle"
       },
       {
-        "age_min": 40,
+        "age_min": 42,
         "cycle": 3,
         "id": "OPS-M",
         "kind": "ops",
@@ -71,7 +71,7 @@
         "state": "idle"
       },
       {
-        "age_min": 227,
+        "age_min": 229,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -472,7 +472,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 18:20:53",
+  "generated_at": "2026-07-28 18:23:01",
   "grid": {
     "A1": {
       "active": [
@@ -1347,24 +1347,15 @@
     ],
     "dirty": [
       "onitor/app.html",
-      "monitor/board/board.log",
-      "monitor/index.html",
-      "monitor/reflex.log",
-      "monitor/scan.py",
-      "monitor/spec.py",
-      "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/agents.py",
-      "monitor/board/claimed/A7-envelope-finish.APP-A7.md",
-      "monitor/board/claimed/C7-dsl-v03-mentions.APP-C7.md",
-      "monitor/board/claimed/P7-paper-section7.APP-P7.md"
+      "monitor/reflex.lock"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "f1346fb monitor: land the two fixes I had only announced, and the probe catches its first live violation",
+    "git_head": "979e0bc monitor: the dashboard now answers 'what did my agents do', and the stale headline is corrected",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1376,10 +1367,7 @@
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/agents.py",
-      "monitor/board/claimed/A7-envelope-finish.APP-A7.md",
-      "monitor/board/claimed/C7-dsl-v03-mentions.APP-C7.md",
-      "monitor/board/claimed/P7-paper-section7.APP-P7.md"
+      "monitor/reflex.lock"
     ]
   },
   "p1_green": 9,
@@ -1855,10 +1843,10 @@
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**12 条 TO-MONITOR 待监控回复**。 OPS-A 第4轮 idle（40 分钟前）； OPS-B 第2轮 idle（115 分钟前）； OPS-M 第3轮 idle（39 分钟前）； OPS-R 第1轮 idle（227 分钟前）",
+      "detail": "**12 条 TO-MONITOR 待监控回复**。 OPS-A 第4轮 idle（42 分钟前）； OPS-B 第2轮 idle（117 分钟前）； OPS-M 第3轮 idle（41 分钟前）； OPS-R 第1轮 idle（229 分钟前）",
       "rows": [
         {
-          "age_min": 40,
+          "age_min": 42,
           "cycle": 4,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -1867,7 +1855,7 @@
           "status": "green"
         },
         {
-          "age_min": 115,
+          "age_min": 117,
           "cycle": 2,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1876,7 +1864,7 @@
           "status": "green"
         },
         {
-          "age_min": 39,
+          "age_min": 41,
           "cycle": 3,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -1885,7 +1873,7 @@
           "status": "green"
         },
         {
-          "age_min": 227,
+          "age_min": 229,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
