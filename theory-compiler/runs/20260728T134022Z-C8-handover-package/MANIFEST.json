@@ -1,0 +1,12 @@
+{
+  "base_commit": "9c65d6a8f24819457ae4fb24e0a51c43fc121fd6",
+  "branch": "agent/c8-handover-package",
+  "cell": "C3",
+  "files": [],
+  "goal": "theory_compiler.handover: theory.dsl (+playbook.dsl) -> self-contained handover package (four forms + deterministic NL render + glossary index + zero session context); two packages built and read by a fresh subagent",
+  "prompt_id": "C8-handover-package",
+  "status": "in-progress",
+  "territory": "theory-compiler",
+  "utc": "2026-07-28T13:40:22Z",
+  "worker": "W-1252"
+}

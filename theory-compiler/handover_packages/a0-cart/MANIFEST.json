@@ -1,0 +1,100 @@
+{
+  "bundle_digest": "0cce2b5918f6c2c724d20eafbf4678e80f9fc693711d4a553deb6161023f047e",
+  "compile_warnings": [
+    "base: problem 'a0-base' locates ['portal_exit'], which theory.dsl never declares as a landmark. Add `landmark <name>` to word_table so a reader of the manual alone can tell it is level data (E-04).",
+    "no-button: problem 'a0-no-button' locates ['portal_exit'], which theory.dsl never declares as a landmark. Add `landmark <name>` to word_table so a reader of the manual alone can tell it is level data (E-04)."
+  ],
+  "context_scan": {
+    "blocking": 0,
+    "by_category": {
+      "citation/artefact_not_here": 5,
+      "citation/path_out_of_bundle": 5
+    },
+    "citations": 10,
+    "excluded": [
+      "MANIFEST.json",
+      "SEAL.md"
+    ]
+  },
+  "files": {
+    "GLOSSARY.md": "1f4ad6eaa1574f7dcbf6e9c87bf6c4d533136955ad5d9ee456e49384753b6236",
+    "README.md": "a748c2d035b81f8c450773265e3fbddc6ec34203daa5b319d0fbcbffac2a2fda",
+    "SEAL.md": "9eefdbfee09d1c9a8c1851f4aba022dfcd1b275403d9b6006abca306473de234",
+    "levels/base/BOARD.md": "5b953596fb05e88af5dc7c04a1fa57c33dfc28d463b0733c0123254dfdca8d11",
+    "levels/base/LEVEL.json": "6e602b0c81fe6aef5dca9dcfee0c83c4b2ada1d2717b2bde4b2f48710a2d6a0b",
+    "levels/base/Level.lean": "4c23d58a60f6782aa8f0fca2bd29929712e41b00199db4e66557c9ea46ac6445",
+    "levels/base/predictor.py": "ebcddc904d99f2d1b7a16be41e651104dc2d47b5f813ac0b6cae74659ad15da6",
+    "levels/base/problem.pddl": "a1e0120240dcd88c4cc154ca905518ca04ed912216740841448022d0eec8f163",
+    "levels/no-button/BOARD.md": "cd189ef99181e5de4cb7c2326166dbb48226dce1d7d100f1a76865c254f162ef",
+    "levels/no-button/LEVEL.json": "be02792e1929483c282a23a0bc76c70ff0b7e8996ed08c4ac672168bff0367a0",
+    "levels/no-button/Level.lean": "caa94b5da6248a5a6dea8f42a498c2945cb40c531e6f6a03a665973d4c217502",
+    "levels/no-button/predictor.py": "5ebe58a991994f018025e09c9ba7b8facf857d1b529920eb5e95b72ad126315f",
+    "levels/no-button/problem.pddl": "a1df013eb8b2946baf5f0e3060cb45cf460c4f27fc4bf3cd901f40c0ce1a120d",
+    "manual/DOMAIN.pddl": "6548e97636a2454297cf8523a171badaf2b855ee95832f3efab512ee12f9cd59",
+    "manual/MANUAL.dsl": "79f4bad84adb1eca40d2ac6a87905ec3dcc006d702b25b457bbb3013df8cdf0d",
+    "manual/MANUAL.md": "5b10020625782619436a375df1d99fa3ac8c241bc4509bf3654b808e14dc9c21",
+    "manual/PRIMITIVES.md": "14ef723950e4f6efff2819fd53d54c8ca91d944481f3a76f2d24676d4ee37173",
+    "playbook/PLAYBOOK.dsl": "c84a655f180c231d90d168f36d41802a79cbe3578c80d2e3de826b056047ca4f",
+    "playbook/PLAYBOOK.md": "43ae04a167369da2358eb369d24ec04274b2dcc51ca59dcd3ec00a8e5c0563dc"
+  },
+  "forms": {
+    "english": {
+      "status": "generated"
+    },
+    "executable": {
+      "status": "generated"
+    },
+    "planning_domain": {
+      "status": "generated"
+    },
+    "planning_problem": {
+      "status": "generated"
+    },
+    "proof": {
+      "status": "generated"
+    }
+  },
+  "forms_by_level": {
+    "base": {
+      "executable": {
+        "status": "generated"
+      },
+      "planning_problem": {
+        "status": "generated"
+      },
+      "proof": {
+        "status": "generated"
+      }
+    },
+    "no-button": {
+      "executable": {
+        "status": "generated"
+      },
+      "planning_problem": {
+        "status": "generated"
+      },
+      "proof": {
+        "status": "generated"
+      }
+    }
+  },
+  "levels": [
+    "base",
+    "no-button"
+  ],
+  "package_format": "theoria-handover/1",
+  "provenance": {
+    "manual": {
+      "copied_from": "cold-start-a0/theory/theory.dsl",
+      "edits": "line endings normalised to LF; nothing else"
+    },
+    "note": "Both boards are the ones this manual was adjudicated against. They are not fresh instances: a handover *test* needs boards the author never saw, and choosing those is the exam's job, not the package builder's. What this package demonstrates is the domain/problem split, for which two boards of any provenance suffice.",
+    "playbook": {
+      "copied_from": "cold-start-a0/theory/playbook.dsl",
+      "edits": "line endings normalised to LF; nothing else"
+    }
+  },
+  "tier": "manual+playbook",
+  "title": "The cart world — handover package (manual and playbook)",
+  "world_id": "a0-cart"
+}

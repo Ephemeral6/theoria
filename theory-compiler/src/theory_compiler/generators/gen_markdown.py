@@ -127,6 +127,23 @@ def _render_word_table(wt: WordTable) -> str:
             )
             lines.append(f"- **{obj.name}**: characterized by {fields_desc}.")
         lines.append("")
+    # A rule that binds `?d in direction` is unreadable without the domain it
+    # binds over, and a landmark is the manual's own flag that a name in its
+    # clauses is supplied from outside. Neither was rendered, so the human form
+    # named things the human form never introduced.
+    if getattr(wt, "domains", None):
+        lines.append("These names each stand for a fixed set of values:\n")
+        for dom in wt.domains:
+            members = ", ".join(f"`{m}`" for m in dom.values)
+            lines.append(f"- **{dom.name}**: one of {members}.")
+        lines.append("")
+    if getattr(wt, "landmarks", None):
+        lines.append("These names appear in the rules and are **not** fixed by "
+                     "this description — each individual level says which cell "
+                     "each one is:\n")
+        for lm in wt.landmarks:
+            lines.append(f"- **{lm.name}**")
+        lines.append("")
     return "\n".join(lines)
 
 
@@ -163,7 +180,18 @@ def _render_rules(rs: RulesSection) -> str:
         guard_text = _guard_to_natural(rule.guard)
         event_text = _expr_to_natural(rule.event)
 
-        lines.append(f"- **{_name_to_natural(rule.name)}**{confidence}: "
+        # A schema rule stands for one rule per member of the domain it binds
+        # over. Without this the reader meets `?d` with nothing saying what it
+        # ranges over, and the rule looks like it mentions a name nobody
+        # declared.
+        binding = ""
+        bindings = getattr(rule, "bindings", None) or {}
+        if bindings:
+            binding = " — for every %s" % " and every ".join(
+                "?%s in %s" % (var, domain)
+                for var, domain in sorted(bindings.items()))
+
+        lines.append(f"- **{_name_to_natural(rule.name)}**{confidence}{binding}: "
                      f"When {guard_text}, then {event_text}.")
     lines.append("")
     return "\n".join(lines)
@@ -242,7 +270,17 @@ def _guard_to_natural(guard) -> str:
 
 def _guard_clause_to_natural(clause) -> str:
     if isinstance(clause, GuardPredicate):
-        return _expr_to_natural(clause.expr)
+        text = _expr_to_natural(clause.expr)
+        # `negated` used to be read by nobody here, and a guard written
+        # `not free(ahead(Player, ?d))` rendered as "ahead is free" — the
+        # opposite of the manual, in the form a human reader is handed. The
+        # wording is deliberately blunt rather than idiomatic: negating each
+        # phrasing in place ("is free" -> "is not free", "the pos of Box is X"
+        # -> "the pos of Box is not X") needs a rule per phrasing, and the one
+        # that gets missed reads as an assertion of what it denies.
+        if getattr(clause, "negated", False):
+            return "it is **not** the case that %s" % text
+        return text
     elif isinstance(clause, GuardAction):
         am = clause.action
         args_text = ", ".join(_expr_to_natural(a) for a in am.args)
@@ -260,6 +298,12 @@ def _expr_to_natural(expr) -> str:
         if name == "empty":
             return "empty"
         return name
+    elif type(expr).__name__ == "VarRef":
+        # A `forall ?d in direction` variable. With no branch here it fell to
+        # `str(expr)` and the human form of every schema rule read
+        # "moved(Player, VarRef(name='d'))" — a repr, in the document whose
+        # entire job is to be readable.
+        return "?%s" % expr.name
     elif isinstance(expr, NumberLit):
         return str(expr.value)
     elif isinstance(expr, TupleLit):
