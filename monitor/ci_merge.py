@@ -29,29 +29,51 @@ CI_DIR = os.path.join(HERE, "ci")
 LOCK = os.path.join(CI_DIR, "merge.lock")
 LOG = os.path.join(CI_DIR, "merge.log")
 
-# top-level dir -> test command (run from that dir inside the merge worktree)
-TEST_CMDS = {
-    "engine-rig": [sys.executable, "-m", "pytest", "-q", "-x"],
-    "theory-compiler": [sys.executable, "-m", "pytest", "-q", "-x"],
-    "proxy": [sys.executable, "-m", "pytest", "-q", "-x"],
-    "battery": [sys.executable, "-m", "pytest", "-q", "-x"],
-    "cold-start-a0": [sys.executable, "-m", "pytest", "-q", "-x"],
-    "cold-start-a2": [sys.executable, "-m", "pytest", "-q", "-x"],
-    "a0-spike": [sys.executable, "-m", "pytest", "-q", "-x"],
-    "exam": [sys.executable, "-m", "pytest", "-q", "-x"],
-    # OPS-M cycle 3: these five were declared docs-only and their 509 tests
-    # never ran at the merge gate. They have suites; they get gated.
-    "worldgen": [sys.executable, "-m", "pytest", "-q", "-x"],
-    "fuzzlab": [sys.executable, "-m", "pytest", "-q", "-x"],
-    "theoria-arm": [sys.executable, "-m", "pytest", "-q", "-x"],
-    "cold-start-a3": [sys.executable, "-m", "pytest", "-q", "-x"],
-    "ablation-arm": [sys.executable, "-m", "pytest", "-q", "-x"],
-}
-# dirs that are docs/data only — merge without a test run
-NO_TEST_OK = {"papers", "figures", "freeze", "release",
-              "crosscheck", "browser-ops", "monitor", "arc-recon",
-              "baseline-arms",
-              "CONTRACTS", ".claude"}
+PYTEST = [sys.executable, "-m", "pytest", "-q", "-x"]
+
+# Whether a directory is gated is read off the merged tree, not off a list.
+#
+# It was a list, and the list went stale the way lists do: six directories
+# holding 509 tests between them sat in a "docs/data only" set while their
+# branches merged with no gate at all, and because a skipped suite and a passing
+# suite are the same single MERGED line in the log, nothing ever said so.  The
+# hand-written repair then got four of its seven entries wrong in the same
+# commit -- `ablation-arm` has no tests and `fuzzlab`'s pytest.ini pointed at a
+# directory containing none, so both would have failed every branch that touched
+# them with "tests red"; `arc-recon` (82) and `baseline-arms` (32) were left
+# ungated.  A table maintained by hand is a claim about the tree that nothing
+# checks against the tree.  So: ask the tree.
+#
+# TEST_CMDS is now only for directories whose gate is *not* plain pytest.
+TEST_CMDS = {}
+
+# Territory this rig recognises.  This set no longer decides whether tests run;
+# it only answers "has anyone declared this directory?", so a branch touching
+# somewhere nobody has heard of still stops for M-0's judgment.
+KNOWN_DIRS = {"engine-rig", "theory-compiler", "proxy", "battery",
+              "cold-start-a0", "cold-start-a2", "cold-start-a3", "a0-spike",
+              "exam", "worldgen", "fuzzlab", "theoria-arm", "ablation-arm",
+              "arc-recon", "baseline-arms", "papers", "figures", "freeze",
+              "release", "crosscheck", "browser-ops", "monitor", "CONTRACTS",
+              ".claude"}
+
+
+def gate_for(worktree, directory):
+    """The test command for `directory`, or None when it carries no tests.
+
+    Asked of the merged tree, so a directory that grows a suite is gated from
+    its very first merge and nobody has to remember to come back here.
+    """
+    if directory in TEST_CMDS:
+        return TEST_CMDS[directory]
+    root = os.path.join(worktree, directory)
+    if not os.path.isdir(root):
+        return None
+    for _, _, files in os.walk(root):
+        for name in files:
+            if name.startswith("test_") and name.endswith(".py"):
+                return PYTEST
+    return None
 
 
 def sh(args, cwd=ROOT, timeout=1800):
@@ -128,7 +150,7 @@ def touched_dirs(branch):
 def try_merge(branch):
     dirs = touched_dirs(branch)
     unknown = {d for d in dirs
-               if d not in TEST_CMDS and d not in NO_TEST_OK
+               if d not in KNOWN_DIRS
                and "." not in d and d != "PARTNER_SYNC.md"}
     root_files = {d for d in dirs if "." in d}
     bad_root = root_files - {"PARTNER_SYNC.md", "README.md", ".gitignore",

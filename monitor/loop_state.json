@@ -48,7 +48,8 @@
     "worker_model": "long-lived board workers: claim -> deliver -> claim next; the monitor authors board items and controls headcount only, never per-item dispatch",
     "architecture": "SPLIT 2026-07-28: backend = spec.py (judgments) + scan.py (probes) -> state.json, recomputed every 10 min by the TheoriaDashboard task; frontend = monitor/app.html, a pure renderer that fetches state.json every 20s from a local server (monitor/serve.cmd on :8787, TheoriaServe task at logon). The monitor edits backend files locally and the page follows by itself -- no re-delivery, no manual sync. app.html contains zero judgments; scan.py renders zero HTML.",
     "rampup": "gradual: first wave 2 headless board workers at 15:20 (after a quota ping); then +2 every ~20 min while free RAM > 8GB, no session deaths, and the board still has claimable items -- ceiling 6 headless (plus 4 ops + monitor in the app). Any death or memory dip freezes the ramp at the current level and reports.",
-    "ramp_gate": "never add workers while available board items < new workers; supply gates headcount"
+    "ramp_gate": "never add workers while available board items < new workers; supply gates headcount",
+    "user_task_routing": "用户交给监控的任务一律下发，不自己做：研究类 → `python monitor/assign.py research <cell> <territory> \"<标题>\" --id <短名> --body \"...\"` 落工作板，研究员自助领取；运维类（审计/合并/浏览器/回顾）→ `python monitor/assign.py ops OPS-X \"<指令>\"` 落邮箱，对应运维下周期读到并回执。监控自己只做三件不可下发的事：判断（spec 裁决/论文口径）、下发本身、以及对 agent 报告的裁决。紧急用 --urgent 置顶。领地冲突在下发时即被工作板挡住。"
   },
   "heartbeat_count": 0,
   "notes": {

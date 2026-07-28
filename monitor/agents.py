@@ -38,6 +38,13 @@ PLAIN_ITEM = {
     "A6-transfer-protocol": "跨关迁移协议：把学到的知识带去下一关",
     "V3-battery-discrimination": "指标体系首次区分两组 AI 的能力差",
     "E3-engines-online": "让引擎在真游戏里供货（第二关）",
+    "S6-merge-gate-509": "补上合并门的漏洞（六个目录 509 个测试从未跑过）",
+    "A4a-ablation-build": "把对照版 AI 真正建起来",
+    "A4b-ablation-calibrate": "对照版 AI 的离线标定",
+    "C6-worldgen-mutate": "给世界工厂加「改一条规则」的变体生成",
+    "A7-envelope-finish": "补齐对照组的成绩数据",
+    "C7-dsl-v03-mentions": "语法 v0.3：把散落的提法收进契约",
+    "P7-paper-section7": "论文第 7 节：相关工作",
 }
 
 # 提交信息前缀 → 归属哪个 agent（人话名）
