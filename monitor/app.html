@@ -1,0 +1,245 @@
+<meta charset="utf-8">
+<title>Theoria · 进度</title>
+<style>
+:root{--bg:#fbfaf8;--fg:#1c1a17;--mut:#6b655c;--line:#e2ddd4;--card:#fff;
+ --green:#1a7f4e;--partial:#a86a12;--risk:#b3341f;--blocked:#6d5ca8;--missing:#8a8378;
+ --greenbg:#e8f4ed;--partialbg:#fbf1de;--riskbg:#fbe9e5;--blockedbg:#efecf8;--missingbg:#f1efec;
+ --st-green:#0ca30c;--st-partial:#fab219;--st-blocked:#ec835a;--st-risk:#d03b3b;--st-missing:#c3c2b7}
+@media(prefers-color-scheme:dark){:root{--bg:#14130f;--fg:#eae5dc;--mut:#9a9287;--line:#2e2b25;
+ --card:#1c1a16;--green:#5cc98d;--partial:#e0a94a;--risk:#f0796a;--blocked:#a99ae0;--missing:#8a8378;
+ --greenbg:#16281f;--partialbg:#2b2214;--riskbg:#2e1a16;--blockedbg:#211d2e;--missingbg:#1f1d19;
+ --st-missing:#4a4a46}}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);
+ font:15px/1.65 "Noto Serif SC",Georgia,"Songti SC",serif;-webkit-font-smoothing:antialiased}
+main{max-width:1180px;margin:0 auto;padding:26px 28px 70px}
+h1{font-size:24px;margin:0 0 6px}
+h2{font-size:19px;margin:38px 0 14px;padding-bottom:9px;border-bottom:1px solid var(--line)}
+.note{color:var(--mut);font-weight:400;font-size:13px}
+code{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12.5px;
+ background:var(--missingbg);padding:1px 5px;border-radius:3px}
+.top{display:flex;gap:28px;align-items:center;flex-wrap:wrap;background:var(--card);
+ border:1px solid var(--line);border-radius:14px;padding:22px 26px}
+.ring{width:140px;height:140px;flex:0 0 auto}
+.rbg{fill:none;stroke:var(--missingbg);stroke-width:11}
+.rfg{fill:none;stroke:var(--st-green);stroke-width:11;stroke-linecap:round;
+ transition:stroke-dasharray .6s ease}
+.rnum{font:700 26px system-ui,sans-serif;fill:var(--fg);text-anchor:middle}
+.rlab{font:12px system-ui,sans-serif;fill:var(--mut);text-anchor:middle}
+.topmid{flex:1;min-width:250px}
+.one{margin:0;font-size:14.5px;color:var(--mut)}
+.one b{color:var(--fg)}
+.live{display:inline-flex;align-items:center;gap:6px;font:12px system-ui,sans-serif;
+ color:var(--mut);margin-top:8px}
+.live i{width:8px;height:8px;border-radius:99px;background:var(--st-green);
+ animation:pulse 1.8s infinite}
+@keyframes pulse{50%{opacity:.3}}
+.topstats{display:grid;grid-template-columns:1fr 1fr;gap:10px 24px}
+.ts2 b{display:block;font-size:20px;font-family:system-ui,sans-serif}
+.ts2 span{font-size:12px;color:var(--mut)}
+.mapwrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);
+ border-radius:12px;padding:14px}
+table.gridmap{border-collapse:separate;border-spacing:5px;width:100%;min-width:640px}
+.gridmap thead th{font:600 12px system-ui,sans-serif;color:var(--mut);padding:4px 6px;
+ text-align:center;border:none}
+.rowh{text-align:right;padding:0 10px 0 2px;border:none;white-space:nowrap}
+.rowh b{font:700 13px system-ui,sans-serif;display:block}
+.rowh span{font-size:11px;color:var(--mut)}
+.mc{position:relative;height:56px;min-width:96px;border-radius:9px;text-align:center;
+ vertical-align:middle;border:1px solid var(--line)}
+.mpct{font:700 15px system-ui,sans-serif}
+.mdots{position:absolute;right:7px;bottom:6px;display:flex;gap:3px}
+.mdot{width:8px;height:8px;border-radius:99px;background:var(--st-partial);
+ animation:pulse 1.6s infinite;border:1.5px solid var(--card)}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:11px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:13px 15px}
+.tv{font-size:20px;font-weight:700}
+.tl{font-size:13px;margin-top:2px}
+.ts{font-size:11.5px;color:var(--mut);margin-top:3px}
+.fleet{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:9px}
+.crew{display:flex;align-items:center;gap:11px;background:var(--card);border:1px solid var(--line);
+ border-radius:9px;padding:10px 13px;font-size:13.5px}
+.crew.risk,.crew.missing{border-left:4px solid var(--st-risk)}
+.badge{flex:0 0 auto;min-width:36px;text-align:center;padding:5px 7px;border-radius:7px;
+ font:700 12px system-ui,sans-serif;background:var(--greenbg);color:var(--green)}
+.badge.ops{background:var(--blockedbg);color:var(--blocked)}
+.cbody{flex:1;min-width:0}
+.cbody b{font-weight:600;display:block;line-height:1.35}
+.cbody em{font-style:normal;font-size:11px;color:var(--mut);
+ font-family:ui-monospace,Menlo,Consolas,monospace}
+.cst{flex:0 0 auto;font-size:11.5px;color:var(--mut)}
+.needs{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--st-risk);
+ border-radius:9px;padding:13px 17px;margin-bottom:9px}
+.needs p{margin:6px 0 0;font-size:13.5px;color:var(--mut)}
+.allclear{background:var(--greenbg);color:var(--green);border-radius:9px;padding:12px 17px;font-size:14px}
+.wins{margin:0;padding-left:22px}.wins li{margin-bottom:6px;font-size:14px}
+.fold{background:var(--card);border:1px solid var(--line);border-radius:9px;margin-bottom:9px;
+ overflow:hidden}
+.fold>summary{padding:11px 15px;cursor:pointer;font-weight:600;font-size:13.5px;list-style:none}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary::before{content:"▸ ";color:var(--mut)}
+.fold[open]>summary::before{content:"▾ "}
+.fold>div{padding:0 15px 14px}
+table.wide{width:100%;border-collapse:collapse;font-size:13px}
+.wide th{text-align:left;font-size:12px;color:var(--mut);padding:8px 10px;
+ border-bottom:1px solid var(--line);font-family:system-ui,sans-serif}
+.wide td{padding:9px 10px;border-bottom:1px solid var(--line);vertical-align:top}
+.pill{display:inline-block;padding:2px 8px;border-radius:99px;font:600 11.5px system-ui,sans-serif}
+.pill.green{background:var(--greenbg);color:var(--green)}
+.pill.partial{background:var(--partialbg);color:var(--partial)}
+.pill.risk{background:var(--riskbg);color:var(--risk)}
+.pill.blocked{background:var(--blockedbg);color:var(--blocked)}
+.pill.missing{background:var(--missingbg);color:var(--missing)}
+.nt{color:var(--mut);font-size:12.5px}
+pre.boardpre{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:11px 13px;
+ font:12px/1.6 ui-monospace,Menlo,Consolas,monospace;overflow-x:auto;color:var(--mut)}
+footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:var(--mut);font-size:12.5px}
+</style>
+<main id="root"><p class="note">载入中…</p></main>
+<script>
+const PLAIN_CELL_ROWS = [["E","引擎车间"],["C","编译与证明"],["S","外壳与账本"],
+  ["A","三臂对局"],["V","评测两器"],["P","论文产出"]];
+const esc = s => String(s==null?"":s).replace(/[&<>"]/g, c =>
+  ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const md = s => esc(s).replace(/\*\*(.+?)\*\*/g,"<b>$1</b>")
+  .replace(/`([^`]+)`/g,"<code>$1</code>");
+
+function ring(pct){
+  const r=58, c=2*Math.PI*r, f=c*pct/100;
+  return `<svg viewBox="0 0 140 140" class="ring" role="img" aria-label="论文完成度 ${pct}%">
+    <circle cx="70" cy="70" r="${r}" class="rbg"/>
+    <circle cx="70" cy="70" r="${r}" class="rfg" stroke-dasharray="${f} ${c-f}"
+      transform="rotate(-90 70 70)"/>
+    <text x="70" y="68" class="rnum">${pct}%</text>
+    <text x="70" y="88" class="rlab">论文完成度</text></svg>`;
+}
+
+function gridMap(s){
+  const cols = s.grid_cols || [], grid = s.grid || {};
+  let h = '<div class="mapwrap"><table class="gridmap"><thead><tr><th></th>';
+  cols.forEach(c => h += `<th>${esc(c)}</th>`);
+  h += "</tr></thead><tbody>";
+  for (const [key,name] of PLAIN_CELL_ROWS){
+    h += `<tr><th class="rowh"><b>${key}</b><span>${esc(name)}</span></th>`;
+    for (let i=1;i<=cols.length;i++){
+      const cell = grid[key+i] || {pct:0,note:"",active:[]};
+      const f = cell.pct/100;
+      const bg = `color-mix(in oklab, var(--st-green) ${cell.pct}%, var(--missingbg))`;
+      const ink = f > .55 ? "#fff" : "var(--fg)";
+      const dots = (cell.active||[]).map(()=>'<i class="mdot"></i>').join("");
+      const tip = `${key}${i}（${cell.pct}%）：${cell.note}` +
+        ((cell.active||[]).length ? "　在跑：" + cell.active.join(",") : "");
+      h += `<td class="mc" style="background:${bg}" title="${esc(tip)}">
+        <span class="mpct" style="color:${ink}">${cell.pct}%</span>
+        <span class="mdots">${dots}</span></td>`;
+    }
+    h += "</tr>";
+  }
+  return h + "</tbody></table></div>";
+}
+
+function render(s){
+  const p = s.paper_progress ?? 0;
+  const ops = (s.probes?.ops_duty?.rows) || [];
+  const opsLive = ops.filter(o => o.status === "green").length;
+  const board = s.board || {};
+  const needs = (s.findings||[]).filter(f => f.severity === "blocking"
+    && !/已裁决|已解决/.test(f.title));
+  const wins = (s.iteration_loop||[]).filter(e => e.status === "green")
+    .slice(-5).reverse().map(e => e.summary);
+
+  let h = `<div class="top">${ring(p)}
+    <div class="topmid"><h1>Theoria 研究进度</h1>
+      <p class="one">目标：一篇实验规模对标 Schema 的可发表论文。
+        眼下 <b>${opsLive} 个运维</b> + <b>${board.claimed ?? 0} 个研究</b>会话在岗。</p>
+      <div class="live"><i></i>后端每 10 分钟自动重算，本页每 20 秒自动拉取
+        · 数据时间 ${esc((s.generated_at||"").slice(5,16))}</div>
+    </div>
+    <div class="topstats">
+      <div class="ts2"><b>${board.available ?? 0}</b><span>板上待领</span></div>
+      <div class="ts2"><b>${board.done ?? 0}</b><span>板上已交付</span></div>
+      <div class="ts2"><b>${s.probes?.ops_duty?.to_monitor ?? 0}</b><span>运维待回复</span></div>
+      <div class="ts2"><b>${needs.length}</b><span>需要你处理</span></div>
+    </div></div>`;
+
+  h += `<h2>项目地图 <span class="note">— 横轴推进方向，纵轴六个子系统；
+    呼吸点=有会话在跑，悬停看实况</span></h2>` + gridMap(s);
+
+  h += `<h2>运维值班 <span class="note">— 四个 App 常驻会话，靠心跳文件监控</span></h2>
+    <div class="fleet">` +
+    ops.map(o => `<div class="crew ${o.status}"><span class="badge ops">${esc(o.id)}</span>
+      <div class="cbody"><b>${esc(o.name)}</b><em>${esc(o.note||"")}</em></div>
+      <span class="cst">${o.age_min==null ? "未启动"
+        : "第"+o.cycle+"轮 "+esc(o.state)+" · "+o.age_min+" 分钟前"}</span></div>`).join("")
+    + "</div>";
+
+  h += `<h2>工作板 <span class="note">— 工人自助领活，做完接着领</span></h2>
+    <div class="tiles">
+      <div class="tile"><div class="tv">${board.available ?? 0}</div>
+        <div class="tl">待领</div><div class="ts">依赖与领地都通</div></div>
+      <div class="tile"><div class="tv">${board.claimed ?? 0}</div>
+        <div class="tl">在做</div><div class="ts">已被领走</div></div>
+      <div class="tile"><div class="tv">${board.blocked ?? 0}</div>
+        <div class="tl">等依赖</div><div class="ts">前置未完成</div></div>
+      <div class="tile"><div class="tv">${board.done ?? 0}</div>
+        <div class="tl">已交付</div><div class="ts">板上完成计数</div></div>
+    </div>` + (board.listing ? `<pre class="boardpre">${esc(board.listing)}</pre>` : "");
+
+  h += "<h2>需要你的事</h2>";
+  h += needs.length
+    ? needs.map(f => `<div class="needs"><b>${esc(f.title)}</b>
+        <p>${md(f.action)}</p></div>`).join("")
+    : `<p class="allclear">✓ 目前没有需要你出手的事——决策已代行，执行在跑。</p>`;
+
+  h += "<h2>最近拿下</h2><ul class=\"wins\">" +
+    wins.map(w => `<li>${esc(w)}</li>`).join("") + "</ul>";
+
+  h += `<h2>审计明细 <span class="note">— 专业视图，日常不用看</span></h2>`;
+  const probeRows = Object.entries(s.probes||{}).map(([k,v]) =>
+    `<tr><td><b>${esc(k)}</b></td><td><span class="pill ${v.status}">${esc(v.status)}</span></td>
+     <td class="nt">${md(v.detail||"")}</td></tr>`).join("");
+  h += `<details class="fold"><summary>实况探针（每次扫描重算）</summary><div>
+    <table class="wide"><tbody>${probeRows}</tbody></table></div></details>`;
+
+  const wp = (s.paper_plan||[]).map(w =>
+    `<tr><td><b>${esc(w.id)}</b> ${esc(w.name)}</td><td>${w.pct}%</td>
+     <td class="nt">${esc(w.slot)}</td><td class="nt">${md(w.evidence)}</td></tr>`).join("");
+  h += `<details class="fold"><summary>论文工作量地图（正式口径）</summary><div>
+    <table class="wide"><thead><tr><th>工作包</th><th>完成度</th><th>论文槽位</th>
+    <th>证据</th></tr></thead><tbody>${wp}</tbody></table></div></details>`;
+
+  const fnd = (s.findings||[]).map(f =>
+    `<tr><td><b>${esc(f.id)}</b></td><td><span class="pill ${
+      f.severity==="blocking"?"risk":f.severity==="high"?"partial":"missing"
+    }">${esc(f.severity)}</span></td><td>${esc(f.title)}</td>
+    <td class="nt">${md(f.action)}</td></tr>`).join("");
+  h += `<details class="fold"><summary>监视器发现（${(s.findings||[]).length} 条）</summary>
+    <div><table class="wide"><tbody>${fnd}</tbody></table></div></details>`;
+
+  const phases = (s.phases||[]).map(ph =>
+    `<tr><td><b>${esc(ph.name)}</b></td><td class="nt">${
+      Object.entries(ph._counts||{}).map(([k,v])=>k+":"+v).join(" ")
+    }</td><td class="nt">${esc(ph.gate)}</td></tr>`).join("");
+  h += `<details class="fold"><summary>四段验收单</summary><div>
+    <table class="wide"><tbody>${phases}</tbody></table></div></details>`;
+
+  h += `<footer><p>后端 <code>monitor/scan.py</code> 每 10 分钟由计划任务重算
+    <code>state.json</code>；本页只渲染，不含判断。改 <code>monitor/spec.py</code>
+    即改判断，下一次刷新自动生效。</p></footer>`;
+  document.getElementById("root").innerHTML = h;
+}
+
+async function tick(){
+  try{
+    const s = window.__STATE__ || await (await fetch("state.json?t="+Date.now())).json();
+    render(s);
+  }catch(e){
+    document.getElementById("root").innerHTML =
+      `<p class="note">读不到 state.json：${esc(e.message)}<br>
+       请用 <code>monitor\\serve.cmd</code> 启动本地服务后访问
+       <code>http://localhost:8787/app.html</code>。</p>`;
+  }
+}
+tick();
+if(!window.__STATE__) setInterval(tick, 20000);
+</script>

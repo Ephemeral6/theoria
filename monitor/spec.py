@@ -102,8 +102,8 @@ PHASES = [
                 "id": "p1-cut",
                 "label": "切堆清单已提交并哈希",
                 "clause": "Phase 1 · 一刀切堆",
-                "status": "risk",
-                "note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判，切堆前提恢复"
+                "status": "green",
+                "note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判；F-11 已落账"
                         "（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——"
                         "contamination_log 还没有那 9 局的登记 → P-11。",
                 "probe": "pile_integrity",
@@ -140,9 +140,10 @@ PHASES = [
                 "id": "p1-engines",
                 "label": "引擎架冒烟（LP / CEGIS / FD 各过一例）",
                 "clause": "Phase 1 验收单",
-                "status": "partial",
-                "note": "LP 与 CEGIS 真过；FD 是 grounded-STRIPS BFS 桩，"
-                        "接口同形但『白捡二十五年规划工程』这句话目前不成立。",
+                "status": "green",
+                "note": "LP / CEGIS / FD 三例俱过。FD 24.06+ 已真接入（P-13），三级梯子"
+                        "stub-bfs / fd-optimal / fd-satisficing；`.toolchain/` 按设计不入库，"
+                        "未装机器上退回 BFS 桩并跳过 3 个测试，属预期而非缺陷。",
             },
             {
                 "id": "p1-seal-test",

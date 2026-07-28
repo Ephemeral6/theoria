@@ -1544,6 +1544,25 @@ def build(with_tests=False):
 
     with open(os.path.join(HERE, "index.html"), "w", encoding="utf-8", newline="\n") as fh:
         fh.write(render(state, refresh=build.refresh))
+    # --- data for the live frontend (app.html renders this; no HTML here) ---
+    import subprocess as _sp
+    bl = _sp.run([sys.executable, os.path.join(HERE, "board.py"), "list"],
+                 cwd=ROOT, capture_output=True, text=True).stdout
+    dd = os.path.join(HERE, "board", "done")
+    cd = os.path.join(HERE, "board", "claimed")
+    state["board"] = {
+        "available": len([l for l in bl.splitlines() if l.startswith("  p")]),
+        "claimed": len(os.listdir(cd)) if os.path.isdir(cd) else 0,
+        "done": len(os.listdir(dd)) if os.path.isdir(dd) else 0,
+        "blocked": bl.count("waits on"),
+        "listing": bl.strip(),
+    }
+    state["grid"] = spec.GRID
+    state["grid_cols"] = spec.GRID_COLS
+    state["paper_plan"] = spec.PAPER_PLAN
+    state["iteration_loop"] = spec.ITERATION_LOOP
+    state["engines"] = spec.ENGINES
+    state["constraints"] = spec.CONSTRAINTS
     slim = {k: v for k, v in state.items() if k != "tickets"}
     with open(os.path.join(HERE, "state.json"), "w", encoding="utf-8", newline="\n") as fh:
         json.dump(slim, fh, ensure_ascii=False, indent=2, sort_keys=True)
