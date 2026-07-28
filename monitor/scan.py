@@ -76,8 +76,9 @@ def iter_jsonl(path):
 
 def git(*args):
     try:
-        out = subprocess.run(["git"] + list(args), cwd=ROOT, capture_output=True,
-                             text=True, timeout=30)
+        out = subprocess.run(["git"] + list(args), cwd=ROOT,
+                             capture_output=True, text=True, timeout=30,
+                             encoding="utf-8", errors="replace")
         return out.stdout.strip()
     except Exception:
         return ""
@@ -513,7 +514,8 @@ def probe_scheduled_tasks():
     rows, bad = [], []
     for name, role in want.items():
         out = subprocess.run(["schtasks", "/Query", "/TN", name, "/FO", "LIST"],
-                             capture_output=True, text=True)
+                             capture_output=True, text=True,
+                 encoding="utf-8", errors="replace")
         if out.returncode != 0:
             rows.append("%s **未注册**（%s）" % (name, role))
             bad.append(name)
@@ -545,36 +547,76 @@ def probe_spec_freshness():
 
 
 def probe_verify_gates():
-    """工单声称的 verify 脚本是否真的存在。DRIFT stop-hook-verify-gates-are-decoration:
-    C2 已合并，它自己命名的 a0-spike/verify.sh 从未被造出来，合并时无人发现。"""
+    """收工闸门：**「声称有却没有」与「本来就没有」是两回事**，分开报。
+
+    DRIFT stop-hook-verify-gates-are-decoration：C2 已合并，它自己命名的
+    a0-spike/verify.sh 从未被造出来，合并时无人发现。那是第一种。
+
+    第二种是 S13 的根因：工单里「写一个 verify 脚本」是自觉条款，于是有些领地
+    压根没有闸门——而这不是任何人食言，是从来没人要求过。把两者混成一个数字，
+    结果就是要么冤枉了老实人，要么放过了漏洞。所以：第一种是 risk（有人声称了
+    不存在的东西），第二种是 amber 的一句实话（合并时无人检查），**并且现在
+    ci_merge 每次都会把它打进 merge.log**。
+
+    另修一处：旧正则只认 `.sh`，工单若写 `worldgen/verify.py` 会**静默漏检**。
+    """
     import glob
+
+    import gates as gates_mod
+
+    # 只认第一段是**真实领地目录**的路径。否则散文里一句
+    # 「若该领地存在 verify.sh/verify.py 就必须跑它」会被读成
+    # 「有人声称存在 `verify.sh/verify.py` 这个文件」——S13 自己的工单文本
+    # 第一次跑这条探针时就是这样误报的。会喊狼的检查会被关掉，而一条被关掉的
+    # 检查和一条不存在的检查是同一回事。
+    known = set(gates_mod.territories(ROOT))
     named, missing = [], []
+    pattern = re.compile(r"([\w./-]+/verify[\w.-]*\.(?:sh|py))")
     for d in ("monitor/board/items", "monitor/board/claimed", "monitor/board/done"):
         for f in glob.glob(os.path.join(rel(d), "*.md")):
             try:
                 text = open(f, encoding="utf-8", errors="ignore").read()
             except Exception:
                 continue
-            for m in re.finditer(r"([\w./-]+/verify[\w.-]*\.sh)", text):
+            for m in pattern.finditer(text):
                 path = m.group(1)
+                if path.split("/")[0] not in known:
+                    continue
                 named.append(path)
                 if not exists(path):
                     missing.append("%s（%s 声称）"
                                    % (path, os.path.basename(f).split(".")[0]))
     missing = sorted(set(missing))
+
+    survey = gates_mod.survey(ROOT)
+    ungated = survey["ungated"]
+    coverage = "领地 %d：自带闸门 %d、仅测试套件 %d、**无闸门 %d**" % (
+        survey["n_territories"], len(survey["gated"]),
+        len(survey["tests_only"]), len(ungated))
+
     if missing:
         return {"status": "risk",
                 "detail": "**声称存在却没有的收工闸门 %d 处**：%s。"
-                          "闸门不是被绕过，是根本没造出来。"
-                          % (len(missing), "； ".join(missing[:4]))}
+                          "闸门不是被绕过，是根本没造出来。（另：%s）"
+                          % (len(missing), "； ".join(missing[:4]), coverage)}
+    if ungated:
+        return {"status": "amber",
+                "detail": "工单声称的 %d 个 verify 脚本全部在树上；"
+                          "但**%d 个领地合并时无人检查**：%s。%s。"
+                          "这不是有人食言——是从来没人要求过，"
+                          "ci_merge 现在每次把它打进 merge.log。"
+                          % (len(set(named)), len(ungated),
+                             "、".join(ungated), coverage)}
     return {"status": "green",
-            "detail": "工单声称的 %d 个 verify 脚本全部在树上。" % len(set(named))}
+            "detail": "工单声称的 %d 个 verify 脚本全部在树上，且每个领地都有闸门。%s"
+                      % (len(set(named)), coverage)}
 
 
 def _supply():
     """板上还剩几件可领 —— 供货是监控的单点，见底就是全员空转。"""
     out = subprocess.run([sys.executable, os.path.join(HERE, "board.py"), "list"],
-                         cwd=ROOT, capture_output=True, text=True).stdout
+                         cwd=ROOT, capture_output=True, text=True,
+                 encoding="utf-8", errors="replace").stdout
     avail = len([l for l in out.splitlines() if l.startswith("  p")])
     claimed = out.count(" by ")
     if avail == 0:
@@ -779,6 +821,7 @@ def run_tests():
         try:
             proc = subprocess.run([sys.executable, "-m", "pytest", "-q"],
                                   cwd=rel(track), capture_output=True, text=True,
+                                  encoding="utf-8", errors="replace",
                                   timeout=900)
             tail = [l for l in proc.stdout.strip().splitlines() if l.strip()][-1:]
             out[track] = tail[0] if tail else "no output"
@@ -857,7 +900,7 @@ def compute_paper_progress():
     return round(total, 1)
 
 
-def append_history(state):
+def append_history(state, out_dir=None):
     """One JSONL row per scan — the raw material of the trend chart."""
     row = {
         "ts": state["generated_at"],
@@ -868,7 +911,7 @@ def append_history(state):
     }
     for f in state["findings"]:
         row["findings"][f["severity"]] = row["findings"].get(f["severity"], 0) + 1
-    hist_path = os.path.join(HERE, "history.jsonl")
+    hist_path = os.path.join(out_dir or HERE, "history.jsonl")
     last = None
     if os.path.exists(hist_path):
         with open(hist_path, encoding="utf-8") as fh:
@@ -1774,7 +1817,7 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
 
 # ---------------------------------------------------------------- main
 
-def build(with_tests=False):
+def build(with_tests=False, out_dir=None):
     metrics = collect_metrics(with_tests)
 
     probe_results = {name: fn() for name, fn in PROBES.items()}
@@ -1832,15 +1875,17 @@ def build(with_tests=False):
     n_landed = sum(1 for ex in spec.ITERATION_LOOP
                    for p in ex["problems"] if p["status"] == "landed")
     state["loop_stats"] = (len(spec.ITERATION_LOOP), n_prob, n_landed)
-    append_history(state)
+    append_history(state, out_dir)
     state["history"] = load_history()
 
-    with open(os.path.join(HERE, "index.html"), "w", encoding="utf-8", newline="\n") as fh:
+    with open(os.path.join(out_dir or HERE, "index.html"), "w",
+              encoding="utf-8", newline="\n") as fh:
         fh.write(render(state, refresh=build.refresh))
     # --- data for the live frontend (app.html renders this; no HTML here) ---
     import subprocess as _sp
     bl = _sp.run([sys.executable, os.path.join(HERE, "board.py"), "list"],
-                 cwd=ROOT, capture_output=True, text=True).stdout
+                 cwd=ROOT, capture_output=True, text=True,
+                 encoding="utf-8", errors="replace").stdout
     dd = os.path.join(HERE, "board", "done")
     cd = os.path.join(HERE, "board", "claimed")
     state["board"] = {
@@ -1862,7 +1907,12 @@ def build(with_tests=False):
     state["engines"] = spec.ENGINES
     state["constraints"] = spec.CONSTRAINTS
     slim = {k: v for k, v in state.items() if k != "tickets"}
-    with open(os.path.join(HERE, "state.json"), "w", encoding="utf-8", newline="\n") as fh:
+    # `out_dir` exists so a completion gate can run a real scan without dirtying
+    # the workspace it is gating. A gate that writes into the tree can turn
+    # itself red, and can turn the *next* territory's gate red for a reason that
+    # has nothing to do with the branch being merged (S13).
+    with open(os.path.join(out_dir or HERE, "state.json"), "w",
+              encoding="utf-8", newline="\n") as fh:
         json.dump(slim, fh, ensure_ascii=False, indent=2, sort_keys=True)
     return state
 

@@ -25,6 +25,10 @@ import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
+if HERE not in sys.path:
+    sys.path.insert(0, HERE)
+
+import gates                                                        # noqa: E402
 CI_DIR = os.path.join(HERE, "ci")
 LOCK = os.path.join(CI_DIR, "merge.lock")
 LOG = os.path.join(CI_DIR, "merge.log")
@@ -60,25 +64,26 @@ KNOWN_DIRS = {"engine-rig", "theory-compiler", "proxy", "battery",
 
 
 def gate_for(worktree, directory):
-    """The test command for `directory`, or None when it carries no tests.
+    """What to run for `directory`, as `{kind, cmd, name, why}`.
 
-    Asked of the merged tree, so a directory that grows a suite is gated from
-    its very first merge and nobody has to remember to come back here.
+    Asked of the merged tree, so a directory that grows a suite -- or a gate --
+    is gated from its very first merge and nobody has to remember to come back
+    here.  The answer comes from `gates.py`, which `scan.probe_verify_gates`
+    also reads: two implementations of "what is this territory's gate" would
+    drift, and the comment above records what that cost the last time.
+
+    `TEST_CMDS` still wins when a directory is listed there, which is how an
+    override survives.  It is empty today.
     """
     if directory in TEST_CMDS:
-        return TEST_CMDS[directory]
-    root = os.path.join(worktree, directory)
-    if not os.path.isdir(root):
-        return None
-    for _, _, files in os.walk(root):
-        for name in files:
-            if name.startswith("test_") and name.endswith(".py"):
-                return PYTEST
-    return None
+        return {"kind": "pytest", "cmd": TEST_CMDS[directory],
+                "name": None, "canonical": None, "why": "TEST_CMDS override"}
+    return gates.gate_for(worktree, directory)
 
 
 def sh(args, cwd=ROOT, timeout=1800):
     return subprocess.run(args, cwd=cwd, capture_output=True, text=True,
+                          encoding="utf-8", errors="replace",
                           timeout=timeout)
 
 
@@ -176,12 +181,25 @@ def try_merge(branch):
             sh(["git", "merge", "--abort"], cwd=wt)
             flag(branch, "merge conflict", r.stdout + r.stderr)
             return False
-        gates = []
+        ran, ungated = [], []
         for d in sorted(dirs):
-            cmd = gate_for(wt, d)
-            if cmd is None:
+            row = gate_for(wt, d)
+            if row["kind"] == "none":
+                # S13: an ungated merge is now *said out loud*. It used to be
+                # indistinguishable from a gated one -- both were the same
+                # single MERGED line -- which is how ten territories went
+                # without a gate and nobody could see it. This does not block
+                # the merge: making the openness visible is the fix, refusing
+                # to merge anything ungated would stop the repository dead.
+                if os.path.isdir(os.path.join(wt, d)):
+                    ungated.append(d)
                 continue
+            cmd = row["cmd"]
             r = sh(cmd, cwd=os.path.join(wt, d), timeout=1800)
+            if row["kind"] == "verify" and r.returncode != 0:
+                flag(branch, "verify gate red in %s (%s)" % (d, row["name"]),
+                     r.stdout + r.stderr)
+                return False
             if r.returncode == NO_TESTS_COLLECTED:
                 # The directory holds test_*.py and pytest still found nothing
                 # to run, so its configuration is pointed somewhere else.  That
@@ -197,7 +215,17 @@ def try_merge(branch):
                 flag(branch, "tests red in %s" % d,
                      (r.stdout + r.stderr))
                 return False
-            gates.append(d)
+            ran.append(gates.describe(row, d))
+
+        # A gate that writes into the tree it is gating can turn itself red, and
+        # worse, can turn the *next* directory's gate red for a reason that has
+        # nothing to do with the branch. Reported rather than blocked: several
+        # gates regenerate artefacts on purpose (`exam/verify.py` rebuilds its
+        # papers), so failing here would block every merge that touches them.
+        # Naming the files is what lets a reader tell the two apart.
+        dirty = sh(["git", "status", "--porcelain"], cwd=wt).stdout.split()
+        dirtied = sorted({p for p in dirty if "/" in p})[:6]
+
         r = sh(["git", "push", "origin", "HEAD:master"], cwd=wt)
         if r.returncode != 0:
             flag(branch, "push rejected (race?)", r.stderr)
@@ -206,9 +234,17 @@ def try_merge(branch):
             branch.replace("origin/", "")])
         # Which gates ran is part of the record.  Without it "tested and passed"
         # and "never tested" are the same line, which is exactly how 509 tests
-        # stayed skipped without anyone noticing.
-        log_line("MERGED %s (dirs: %s; gates: %s)"
-                 % (branch, ",".join(sorted(dirs)), ",".join(gates) or "none"))
+        # stayed skipped without anyone noticing.  S13 adds the other half: a
+        # territory with no gate at all is now named, every time, rather than
+        # being absent from a list of what ran.
+        parts = ["MERGED %s (dirs: %s; gates: %s"
+                 % (branch, ",".join(sorted(dirs)), ",".join(ran) or "none")]
+        if ungated:
+            parts.append("; NO GATE, MERGED UNCHECKED: %s" % ",".join(ungated))
+        if dirtied:
+            parts.append("; a gate dirtied the worktree: %s" % ",".join(dirtied))
+        parts.append(")")
+        log_line("".join(parts))
         return True
     finally:
         sh(["git", "worktree", "remove", "--force", wt])
