@@ -55,19 +55,29 @@ arms, and an upstream ledger is sufficient material for that.
 **Ten of 38 metrics pair on at least two games; eight are rankable.** Effect sizes
 and medians below are read from `battery/artifacts/discrimination_arms.json`:
 
-| id | family | Cliff's δ (CC → Schema) | median CC / Schema | direction held? | tier |
-|---|---|---|---|---|---|
-| P1 | planning | +1.000 | 0.794 / 1.015 | yes | reference |
-| P2 | planning | +1.000 | −0.155 / 0.008 | yes | reference |
-| E4 | economy | −0.875 | 0.249 / 0.054 | yes | reference |
-| X1 | exploration | −0.625 | 0.278 / 0.085 | yes | reference |
-| X4 | exploration | −0.625 | 0.093 / 0.011 | yes | reference |
-| **X3** | exploration | **−0.562** | 0.015 / **−0.007** | **no** | reference |
-| P3 | planning | −0.375 | 0.130 / 0.001 | yes | **main** |
-| X2 | exploration | −0.188 | 0.975 / 0.941 | **no** | reference |
+| id | family | Cliff's δ (CC → Schema) | median CC / Schema | direction held? | tier | Schema-side runs |
+|---|---|---|---|---|---|---|
+| P1 | planning | +1.000 | 0.794 / 1.015 | yes | reference | **4 of 8** |
+| P2 | planning | +1.000 | −0.155 / 0.008 | yes | reference | **4 of 8** |
+| E4 | economy | −0.875 | 0.249 / 0.054 | yes | reference | **4 of 8** |
+| X1 | exploration | −0.625 | 0.278 / 0.085 | yes | reference | 8 of 8 |
+| X4 | exploration | −0.625 | 0.093 / 0.011 | yes | reference | 8 of 8 |
+| **X3** | exploration | **−0.562** | 0.015 / **−0.007** | **no** | reference | 8 of 8 |
+| P3 | planning | −0.375 | 0.130 / 0.001 | yes | **main** | 8 of 8 |
+| X2 | exploration | −0.188 | 0.975 / 0.941 | **no** | reference | 8 of 8 |
 
 **Every verdict in that table reads `underpowered`**, for the reason §7.5 gives;
-the effect sizes are the only thing in it anyone should read. One sentence
+the effect sizes are the only thing in it anyone should read.
+
+The last column is not decoration, and it is a caveat this paper adds rather than
+one the source report draws out. The Schema arm is two upstream collections of
+four games each, and **only one of them records model calls at all** — the
+Claude-side collection carries 197–564 per run, the Codex-side carries zero
+(`battery/artifacts/capability_spectrum.json`, `model_calls` per run). P1, P2 and
+E4 all divide by model calls, so their Schema side rests entirely on the
+Claude-side collection. Their effect sizes therefore compare bare Claude Code
+against *one vendor's* upstream agent, which is a narrower comparison than the
+other five rows and a confound beyond the arm-and-harness bundle already declared. One sentence
 describes the battery's state better than the table does:
 
 > **P3 is the only metric in the battery that is both in the main table and
@@ -115,6 +125,18 @@ that if upstream logged no usage the whole family resolves to `no-data`, "a
 finding, not a failure of the prediction". Both numbers are in
 `battery/REPORT_V2.md`, because picking the flattering one is the failure the file
 exists to prevent.
+
+One qualification, because the artefacts and the report disagree and this paper's
+precedence rule follows the artefacts. `battery/REPORT_V2.md` states flatly that
+"the economy family collapsed to `no-data`". Six of the seven economy metrics did;
+**E4 did not**, and it appears in §7.2's table with a real cross-arm effect size.
+The reason is that E4 is a curvature fit over *context tokens* rather than over
+cost — its `needs` field asks for `model_calls`, not for a price — so it survives
+a corpus that carries no cost field under any spelling
+(`battery/artifacts/capability_spectrum.json`, card `E4`). The report's sentence
+is right about the family's cost-bearing members and wrong as stated; the
+conditional it invokes was registered about *usage*, and one collection logged
+some.
 
 The structural prediction held and the behavioural ones did not, and that
 asymmetry is the interesting part. v1 blamed its 21 unvalidated metrics on the

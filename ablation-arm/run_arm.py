@@ -609,14 +609,18 @@ def _exhibit_comparison(reports: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def run_all(keys: Optional[List[str]] = None, *,
-            write: bool = True) -> Dict[str, Any]:
+            write: Optional[bool] = None) -> Dict[str, Any]:
     """Every world, with the upstream trees hashed on both sides of the run.
 
-    `write=False` is for callers running a **subset**. `artifacts/run_all.json`
-    is a deliverable, and a partial run that overwrote it would quietly
-    replace a five-world record with a three-world one -- which is exactly
-    the kind of downgrade nobody notices until a later step reads it and finds
-    a world missing. Tests take this path.
+    `write` defaults to **"only when every world ran"**, and that default is
+    the point rather than a convenience. `artifacts/run_all.json` is a
+    deliverable; a subset run that overwrote it would quietly replace a
+    five-world record with a three-world one, which nobody notices until a
+    later step reads it and finds a world missing. That happened twice while
+    the test suite was being written -- twice, in two different files, which is
+    what settled it: a rule every caller has to remember is a rule that gets
+    forgotten, so the subset case now declines to write on its own. Pass
+    `write=True` to override deliberately.
     """
     before = pin.hash_tree()
     reports = {}
@@ -645,6 +649,10 @@ def run_all(keys: Optional[List[str]] = None, *,
         "surprise_kinds_available_to_this_arm": len(
             SurpriseBus(ablated=True).kinds_available()),
     }
+    is_full_run = keys is None or set(keys) == set(WORLD_BY_KEY)
+    payload["is_full_run"] = is_full_run
+    if write is None:
+        write = is_full_run
     if write:
         _write(os.path.join(ARTIFACTS, "run_all.json"), payload)
     return payload

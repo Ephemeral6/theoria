@@ -535,3 +535,96 @@ Next: **step 6, `verify.sh`** — the arm's own completion gate, and the place
 the 7 pre-registered predictions plus all four shadows plus the read-only pin,
 and must *record* P-1/P-2/P-4 as numbers without comparing them, because the
 comparison needs a second arm and that is A4b.
+
+* `2026-07-28T18:10Z` — **step 6 done: `verify.sh`. GREEN.** 56 tests, five
+  stages, ten assertions, five recorded numbers.
+
+  ```
+  == the gate: what A4a asserts
+    P-3  ok   P-5(correct)  ok   P-6  ok   P-7  ok
+    shadow-1 ok  shadow-2 ok  shadow-3 ok  shadow-4 ok
+    read-only ok   P-1(counts) ok
+  == recorded for A4b -- NOT asserted, and cannot turn this red
+    P-1  P-2  P-4  P-5(identical)  E3
+  == stages
+    build_theory --check | pytest | run_arm | run_arm --twice | run_exhibits
+  ```
+
+  ### A correction to this plan's own acceptance table
+
+  The table above under *The acceptance surface, mapped* says A4a's gate can be
+  green on **4 of 7** predictions. That count was loose. P-5 is one prediction
+  with two halves — *identical to the full arm* **and** *correct* — and only the
+  correctness half is settleable without a second arm. The gate therefore
+  asserts **three and a half of seven**, and it names the halves separately
+  (`P-5(correct)` asserted, `P-5(identical)` recorded) rather than rounding.
+  Corrected here by appending rather than by editing the earlier table, so a
+  reader who saw the first version can see what changed.
+
+  ### P-7 stopped being a claim and became a measurement
+
+  The U ladder is assembled from numbers the run already produced:
+
+  | rung | state | evidence |
+  |---|---|---|
+  | U1 对上过去了吗 | **attained** | cheap replay green on all five worlds |
+  | U2 说得清吗 | **attained** | every manual parses; 3 of 4 forms emitted |
+  | U3 证得动吗 | **unreachable by construction** | 0 certificates owed, expensive layer omitted and raising, 0 theorems survive the cut |
+  | U4 修得好吗 | **unreachable by consequence** | 0 loops turned, 0 directed probes scheduled |
+
+  U4's row is the one worth reading twice. It is out of reach **not because
+  repair is broken** — E2's charity control localises correctly when handed a
+  counterexample — but because the refutation never arrives. That distinction is
+  the whole of E2, and P-7 now carries it.
+
+  ### The gate was watched refusing, and it had two defects when it did
+
+  A gate nobody has seen refuse is a gate nobody has tested, so `run_all.json`
+  was doctored — `available` kinds back to 7, a certificate marked owed — and
+  the gate went red on exactly `P-3`, `P-7`, `shadow-1`, `shadow-4`, exit 1.
+  Two real defects surfaced on the way:
+
+  1. **The first version read a missing field as a failure.** `plan_abl` writes
+     `certificate_owed` and `directed_probes_scheduled` only on the UNSAT
+     branch, because a SAT plan has no impossibility claim to certify — the
+     witness *is* the answer. The fields are **absent** on a SAT world, not
+     zero. The repair was deliberately *not* to default them to 0: a gate that
+     defaults a missing field to the value it wants would pass a run in which
+     the field had silently vanished. It now asks the question only of the
+     worlds where it arises, and treats absence on an UNSAT world as a failure.
+  2. **The gate crashed while building the evidence for a red claim** —
+     `KeyError` on the same missing field — which would have lost the report and
+     every other claim in it. A gate that cannot explain why it refused is
+     barely better than one that never does.
+
+  ### The footgun that fired twice, closed at the source
+
+  Step 5 recorded one test overwriting the checked-in five-world
+  `run_all.json` with a three-world subset. Running the full suite turned up a
+  **second** one, in a different file, which broke `test_verify` outright.
+  Two occurrences in two files settles it: a rule every caller has to remember
+  is a rule that gets forgotten. `run_all` now writes **only when every world
+  ran**, decided by itself, with `write=True` available to override
+  deliberately, `is_full_run` recorded in the payload, and a test that pins the
+  behaviour because the default is invisible at every call site relying on it.
+
+  ### The cross-track blocker, retired with evidence
+
+  `STATUS.md` records `theoria_ablate` as needing the proxy track. Re-checked
+  here as this plan said it would be:
+
+  ```
+  proxy.ledger.ARMS      = [bare_cc, mock_arm, probe, replay, schema_repro, theoria]
+  ledger_abl.ARM         = 'theoria'          -> in ARMS: True
+  requested_arm_name     = 'theoria_ablate'   -> in ARMS: False, and nothing uses it
+                                                 as the arm field; it is metadata
+                                                 inside the ablation block
+  three episodes         -> PASS (0 problems) each
+  ```
+
+  The blocker is real about the *name* and does not apply to the *code as
+  written*. STATUS.md says otherwise and is corrected in step 7.
+
+Next: **step 7, the documents** — `README.md`, `DECISIONS.md`, `RUN_STATE.md`,
+and the STATUS.md corrections this run has accumulated: three source claims that
+are now true, one blocker that does not apply, and one exhibit that expired.
