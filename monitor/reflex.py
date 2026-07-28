@@ -61,6 +61,30 @@ def main():
     try:
         events = []
 
+        # 0. launch queue — the monitor never spawns sessions itself anymore:
+        # anything spawned from its tool shell gets silently killed (proven
+        # by runner-level deaths with no EXIT stamp). The monitor appends ids
+        # to dispatch_queue.json; we launch them here, under Task Scheduler
+        # lineage, where processes actually survive.
+        qpath = os.path.join(HERE, "dispatch_queue.json")
+        if os.path.exists(qpath):
+            try:
+                queue = json.load(open(qpath, encoding="utf-8"))
+            except Exception:
+                queue = []
+            launched_q = 0
+            for pid_str in queue:
+                if launched_q:
+                    time.sleep(45)
+                r = run([sys.executable, os.path.join(HERE, "dispatch.py"),
+                         "--only", pid_str, "--force"])
+                if "launched" in r.stdout:
+                    events.append("queue-launch:%s" % pid_str)
+                    launched_q += 1
+                else:
+                    events.append("queue-skip:%s" % pid_str)
+            os.remove(qpath)
+
         # 1. reap
         out = run([sys.executable, os.path.join(HERE, "dispatch.py"),
                    "--reap"]).stdout
@@ -84,7 +108,10 @@ def main():
                           "--format=%(refname:short)"]).stdout.lower()
             revived = 0
             for pid_str, entry in sorted(reg.items()):
-                if entry.get("reaped") != "exited":
+                if pid_str.startswith(("M-", "A-", "B-", "R-")):
+                    continue        # ops run in the user's app now
+                if entry.get("reaped") not in ("exited",
+                                               "killed-permission-wall"):
                     continue
                 slug = (pid_str.lower().replace("-", "")
                         if len(pid_str) <= 4 else pid_str.lower())

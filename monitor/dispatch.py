@@ -239,8 +239,10 @@ def main():
             continue
         if args.only and pid != args.only:
             continue
-        if pid.startswith("M-") and not args.only:
-            plan.append((pid, name, "skip: merge prompts launch only via --only"))
+        if pid.startswith(("M-", "A-", "B-", "R-")) and not args.only:
+            plan.append((pid, name,
+                         "skip: ops class -- runs in the user's app "
+                         "(prompts/ops/), headless only via --only"))
             continue
         if branch_taken(pid, branches) and not args.force:
             plan.append((pid, name, "skip: agent branch exists (already picked up)"))

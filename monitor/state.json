@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 10:51:55",
+  "generated_at": "2026-07-28 11:16:22",
   "history": [
     {
       "findings": {
@@ -470,18 +470,13 @@
     ],
     "dirty": [
       "onitor/loop_state.json",
-      "monitor/scan.py",
-      "monitor/spec.py",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/prompts/A2-crosscheck.md",
-      "monitor/prompts/C1-worldgen.md",
-      "monitor/prompts/E1-property-fuzz.md",
-      "monitor/prompts/P3-case-study.md"
+      "monitor/reflex.lock"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "b341795 monitor: P-24 relaunched after solo death; board back to zero lost",
+    "git_head": "1a76087 monitor: upgrades 1+3+2 wired -- reflex layer on a 5-min scheduled task, cost tiering, merge-on-delivery",
     "incidents": 8,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -491,10 +486,7 @@
     "untracked": [
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/prompts/A2-crosscheck.md",
-      "monitor/prompts/C1-worldgen.md",
-      "monitor/prompts/E1-property-fuzz.md",
-      "monitor/prompts/P3-case-study.md"
+      "monitor/reflex.lock"
     ]
   },
   "p1_green": 6,

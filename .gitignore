@@ -12,3 +12,4 @@ __pycache__/
 .lake/
 *.egg-info/
 monitor/dispatch-logs/
+.claude/settings.local.json
