@@ -152,3 +152,90 @@ end to end.
 
 Nothing in this run has made an API call, opened a socket, or touched the
 sealed pile, and no byte has been written into any upstream tree.
+
+* `2026-07-28T14:10Z` — **step 2 done: `theory/`, cut rather than copied.**
+
+  `build_theory.py` produces five files — four manuals and a playbook — from
+  upstream sources through `ablcore.downgrade` / `ablcore.playbook` and nothing
+  else. A builder rather than five hand-edited copies, because a hand-edited
+  copy is a *claim* that only the laws section moved, and `Theoria.md:280`'s
+  attributability requirement is exactly the thing this arm may not take on
+  trust. `downgrade_text` asserts the byte-identity of everything outside
+  `laws:` on every run, so routing every file through it turns the claim into a
+  check; `--check` rebuilds in memory and diffs, so a hand-edited generated file
+  is a red build.
+
+  ```
+  a0_base.dsl        <- cold-start-a0/theory/theory.dsl            2 invariants demoted, 1 theorem deleted
+  a0_no_button.dsl   <- cold-start-a0/theory/theory_no_button.dsl  1 invariant  demoted, 1 theorem deleted
+  a2_base.dsl        <- cold-start-a2/theory/theory.dsl            2 invariants demoted, 1 theorem deleted
+  a2_holed.dsl       <- cold-start-a2/theory/theory_holed.dsl      2 invariants demoted, 1 theorem deleted
+  a0_playbook.dsl    <- cold-start-a0/theory/playbook.dsl          2 entries demoted (1 soundness-bearing)
+  ```
+
+  **The cut is checked in the parser, not in a grep.** A grep says the text no
+  longer contains `[status: proven]`; the file the arm actually runs on is the
+  AST. `verify_ast()` reads all four manuals back through the real
+  `parse_theory` + `parse_semantics` and asserts **0 theorems** and every
+  invariant `empirical`:
+
+  ```
+  a0_base.dsl        invariants=2 ['empirical']  theorems=0
+  a0_no_button.dsl   invariants=1 ['empirical']  theorems=0
+  a2_base.dsl        invariants=2 ['empirical']  theorems=0
+  a2_holed.dsl       invariants=2 ['empirical']  theorems=0
+  ```
+
+  It also settles, at the earliest possible point, something step 3 depends on
+  absolutely: `compile_ablated` calls `parse_semantics`, which **raises if the
+  manual does not declare semantics**, and all four of these do. That failure is
+  not hypothetical — the V4 run found `a0-spike`'s v0.1 manual refused by the
+  v0.2 grammar for precisely that reason. Had one of these been v0.1, it would
+  have blown up inside the driver in step 3, three steps from its cause.
+
+  **Both failure modes were watched refusing**, because a check nobody has seen
+  fail is a check nobody has tested: appending one comment line to a generated
+  file turns `--check` red on the byte diff, and putting a single
+  `[status: proven]` back turns it red on **both** the byte diff *and* the
+  parser independently. The AST check is not decoration over the grep.
+
+  Byte-reproducible: rebuilt under `PYTHONHASHSEED` 7 and 99, zero files
+  changed. `ablation-arm/.gitattributes` pins LF, because `core.autocrlf` on a
+  fresh clone would otherwise make `--check` fail *and report the failure as a
+  hand-edit* — the one thing it exists to catch, for the one reason that is not
+  it.
+
+  ### What the four deleted theorems are, and why the list is the exhibit
+
+  | manual | theorem deleted |
+  |---|---|
+  | `a0_base` | `press_is_direction_free` |
+  | `a0_no_button` | **`unsolvable_no_button`** |
+  | `a2_base` | `teleport_is_colour_triggered` |
+  | `a2_holed` | **`right_room_locked`** |
+
+  The two in bold are E1 and E2, and losing them together is the whole point.
+  `unsolvable_no_button` is a **true** impossibility claim about a world that
+  really is unsolvable; `right_room_locked` is a **false** one, true of a manual
+  missing the teleport rule and false of the world. After the cut the arm cannot
+  state either, and what is left in both cases is the same sentence: *the
+  planner returned UNSAT and nobody owes a certificate.* An arm that cannot tell
+  those two apart is precisely what P-6 predicts, and the prediction now has its
+  material standing ready rather than being an argument on paper.
+
+  One observation recorded without interpretation, for A4b: the name
+  `right_room_locked` appears as a demoted **invariant** in `a0_no_button` and
+  as a deleted **theorem** in `a2_holed`. Whether the two are the same claim at
+  different grades is a question for whoever calibrates, not for the builder.
+
+  The soundness-bearing demotion is the one `ablcore/playbook.py` warned about:
+  `prune w_room(Cart) > 0 and no_button => dead`, whose proof was what licensed
+  the planner to discard those nodes. Demoted, it can prune a branch holding a
+  real solution and nothing in this arm would notice.
+
+Next: **step 3, the driver.** `compile_ablated(dsl_path, trace_path,
+problem_name, out_dir)` needs a **trace**, which is the first thing in this
+build that is not already sitting upstream in finished form — the explorers
+(`cold-start-a0/world/explorer.py`, `cold-start-a2/a2world/explorer.py`) produce
+them, and whether to re-explore or read an existing artefact is step 3's first
+decision. Everything else the driver needs now exists.

@@ -1,0 +1,65 @@
+# ============================================================================
+# A0 说明书 — variant `a0-no-button`
+#
+# Derived from theory/theory.dsl by deleting every clause whose objects this
+# instance does not contain.  Theoria 1.9 says dependency tracking should do
+# this automatically ("说明书改一条规则,依赖它的玩法条目自动作废重审"); here it
+# was done by hand and the deletions are listed, which is the honest version of
+# the same discipline.
+#
+#   deleted   object Button        — no colour 7 anywhere in the trace
+#   deleted   object Door          — cell (4,5) never changes, so it is board
+#   deleted   rule press_left      — depends on Button
+#   deleted   rule door_opens_left — depends on Door
+#   deleted   invariant cart_unique, door_latch — door_latch depends on both
+#   deleted   theorem press_is_direction_free   — depends on press_left
+#
+# Everything kept is unchanged, character for character.  That is the domain
+# travelling and the problem not: the same four push rules and the same portal
+# rule describe both instances.
+#
+# ============================================================================
+
+word_table:
+  board
+  object Cart { pos: Coord, color: Int }
+  Cart [segment: uniform_color ev: t0-t110 compress: 1001]
+
+semantics:
+  frame persist                 # an object no firing rule mentions is unchanged
+  conflict exclusive            # at most one rule per object per transition
+  cascade single_frame          # one action -> one frame; guards read the pre-state
+
+events:
+  event moved(o, dir) | jumped(o, dest)
+
+rules:
+  rule push_up [ev: t2,t8,t15 cov: 23/23]
+    when act=push(Cart, up) and free(above(Cart)) then moved(Cart, up)
+
+  rule push_down [ev: t0,t5,t9 cov: 28/28]
+    when act=push(Cart, down) and free(below(Cart)) then moved(Cart, down)
+
+  rule push_left [ev: t3,t12,t19 cov: 18/18]
+    when act=push(Cart, left) and free(leftof(Cart)) then moved(Cart, left)
+
+  rule push_right [ev: t1,t6,t10 cov: 22/22]
+    when act=push(Cart, right) and free(rightof(Cart)) then moved(Cart, right)
+
+  rule teleport_down [ev: t11 cov: 1/1]
+    when act=push(Cart, down) and colored(below(Cart), 3) then jumped(Cart, portal_exit)
+
+goal:
+  goal Cart.pos = (2, 7)
+
+laws:
+  # --- ABLATION (P-18) ------------------------------------------------
+  # This arm has no expensive certify layer, so nothing here is proven.
+  # `proven` -> `empirical`: the regularity was observed on the evidence
+  # below and carries no guarantee.  Theorem declarations are deleted
+  # rather than demoted: a theorem IS a proof obligation, and an
+  # undischarged one on the page would be a lie, not a demotion.
+  # Everything outside this section is byte-identical to the upstream
+  # manual -- see ablcore/downgrade.py and DESIGN.md §4.
+  # ---------------------------------------------------------------------
+  invariant right_room_locked w_room(Cart) = 0 [status: empirical]

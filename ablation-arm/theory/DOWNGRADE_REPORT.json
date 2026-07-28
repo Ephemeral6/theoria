@@ -1,0 +1,233 @@
+{
+  "ast_check": {
+    "clean": true,
+    "failures": [],
+    "per_manual": {
+      "a0_base.dsl": {
+        "invariant_statuses": [
+          "empirical"
+        ],
+        "invariants": 2,
+        "semantics": "Semantics(frame='persist', conflict='exclusive', cascade='single_frame', priority=[])",
+        "theorems": 0
+      },
+      "a0_no_button.dsl": {
+        "invariant_statuses": [
+          "empirical"
+        ],
+        "invariants": 1,
+        "semantics": "Semantics(frame='persist', conflict='exclusive', cascade='single_frame', priority=[])",
+        "theorems": 0
+      },
+      "a2_base.dsl": {
+        "invariant_statuses": [
+          "empirical"
+        ],
+        "invariants": 2,
+        "semantics": "Semantics(frame='persist', conflict='exclusive', cascade='single_frame', priority=[])",
+        "theorems": 0
+      },
+      "a2_holed.dsl": {
+        "invariant_statuses": [
+          "empirical"
+        ],
+        "invariants": 2,
+        "semantics": "Semantics(frame='persist', conflict='exclusive', cascade='single_frame', priority=[])",
+        "theorems": 0
+      }
+    }
+  },
+  "builder": "ablation-arm/build_theory.py",
+  "files": [
+    {
+      "bytes": 3107,
+      "kind": "manual",
+      "name": "a0_base.dsl",
+      "purpose": "the solvable A0 world. P-1/P-2 read replay and held-out accuracy off it, P-5 reads the verdict.",
+      "report": {
+        "has_laws_section": true,
+        "invariants_demoted": [
+          "cart_unique",
+          "door_latch"
+        ],
+        "theorems_deleted": [
+          {
+            "lines": 2,
+            "name": "press_is_direction_free",
+            "source": "  theorem press_is_direction_free \"推向未按下的按钮就会按下它，无论从哪个方向推——但这一条只有一个见证，本世界的闩锁不可逆，证据永远补不齐\"\n    [depends: press_left probe: pending]"
+          }
+        ]
+      },
+      "result_sha256": "f472a5a8123a8293cd3bc70ab2624cebd6b9786759e7f8c5459b2a75636b18b3",
+      "source": "cold-start-a0/theory/theory.dsl",
+      "source_sha256": "79f4bad84adb1eca40d2ac6a87905ec3dcc006d702b25b457bbb3013df8cdf0d"
+    },
+    {
+      "bytes": 2941,
+      "kind": "manual",
+      "name": "a0_no_button.dsl",
+      "purpose": "A0 with no Button, so the Door never opens. Constructively unsolvable and the manual says so truthfully -- exhibit E1, a TRUE impossibility, where the full arm owes a certificate and this arm settles on bare search.",
+      "report": {
+        "has_laws_section": true,
+        "invariants_demoted": [
+          "right_room_locked"
+        ],
+        "theorems_deleted": [
+          {
+            "lines": 2,
+            "name": "unsolvable_no_button",
+            "source": "  theorem unsolvable_no_button \"赢不了：小车永远待在左屋——它开局在左屋，而每一条推动规则都只把它送到相邻的空格，传送门也只把它送回左屋 (1,1)；隔墙上唯一的缺口 (4,5) 在这一关始终是障碍，没有任何规则能让它变空；目标格 (2,7) 在右屋，所以到不了。\"\n    [depends: push_up, push_down, push_left, push_right, teleport_down probe: passed]"
+          }
+        ]
+      },
+      "result_sha256": "00a23468c56a7eddab65ef1e2df74990a5ff460875abc7ed5c1df7705d8425b7",
+      "source": "cold-start-a0/theory/theory_no_button.dsl",
+      "source_sha256": "332fe804961ce08a8dd6f31f1dda7a008b274d8617d1439ea160b7a7b33538a5"
+    },
+    {
+      "bytes": 3500,
+      "kind": "manual",
+      "name": "a2_base.dsl",
+      "purpose": "the A2 world, teleport rule present and correct.",
+      "report": {
+        "has_laws_section": true,
+        "invariants_demoted": [
+          "cart_unique",
+          "door_latch"
+        ],
+        "theorems_deleted": [
+          {
+            "lines": 2,
+            "name": "teleport_is_colour_triggered",
+            "source": "  theorem teleport_is_colour_triggered \"推向颜色 3 的格子就会被传送，而不是因为站在 (6,4) 这一格——两条守卫在扫描轨迹上不可分辨，本关的传送口只有一个，证据永远补不齐\"\n    [depends: teleport_down probe: pending]"
+          }
+        ]
+      },
+      "result_sha256": "09e2ce1fc8d06eadc89a9ce8dad61488d90470186cabd9aad3d6074de458f80a",
+      "source": "cold-start-a2/theory/theory.dsl",
+      "source_sha256": "9bcf15debd26b9a2a82b2ff9fa7813b0de51b6939a59a5fcb1f9142a7f784345"
+    },
+    {
+      "bytes": 4408,
+      "kind": "manual",
+      "name": "a2_holed.dsl",
+      "purpose": "**deliberately wrong**: the teleport rule is missing, so this manual derives `unsolvable` for a world that is solvable. Exhibit E2, the false theorem the A4 ticket is about. DO NOT REPAIR -- repairing it deletes the experiment.",
+      "report": {
+        "has_laws_section": true,
+        "invariants_demoted": [
+          "cart_unique",
+          "door_latch"
+        ],
+        "theorems_deleted": [
+          {
+            "lines": 2,
+            "name": "right_room_locked",
+            "source": "  theorem right_room_locked \"小车永远到不了右边那个房间：第 5 列从第 1 行到第 7 行是完整的墙，而说明书里的每一条规则都只让小车走到相邻格，所以目标格 (2,7) 不可达\"\n    [depends: push_up, push_down, push_left, push_right probe: pending]"
+          }
+        ]
+      },
+      "result_sha256": "3c12f651f4022702ce3572fa0577aae324b40ea9a9bf79474c73700f749fe9bb",
+      "source": "cold-start-a2/theory/theory_holed.dsl",
+      "source_sha256": "77eeb16ebe4c4785ebd23d73a59a32fe5508fd7765ba284015ac38d87368e036"
+    },
+    {
+      "bytes": 2521,
+      "kind": "playbook",
+      "name": "a0_playbook.dsl",
+      "purpose": "the A0 playbook. Its `prune` entry is the demotion that costs soundness rather than only standing -- see ablcore/playbook.py.",
+      "report": {
+        "count": 2,
+        "entries_demoted": [
+          {
+            "costs": "standing only",
+            "entry": "order press_before_door [proof: lean]",
+            "form": "order",
+            "was": "[proof: lean]"
+          },
+          {
+            "costs": "search soundness: an unproved deadlock rule may prune a branch containing a real solution",
+            "entry": "prune w_room(Cart) > 0 and no_button => dead [proof: lean]",
+            "form": "prune",
+            "was": "[proof: lean]"
+          }
+        ],
+        "soundness_bearing": [
+          "prune w_room(Cart) > 0 and no_button => dead [proof: lean]"
+        ],
+        "theorem_tier_entries_remaining": 0
+      },
+      "result_sha256": "7eb19483da2391b7181e6d48a9d08f62a1788e95b682e4d0210634470151b625",
+      "source": "cold-start-a0/theory/playbook.dsl",
+      "source_sha256": "c84a655f180c231d90d168f36d41802a79cbe3578c80d2e3de826b056047ca4f"
+    }
+  ],
+  "forbidden_after_the_cut": {
+    "[admissible: lean]": "with no admissibility proof this arm's plans are plans, never optimal plans (ablcore/playbook.py)",
+    "[proof: lean]": "the playbook's theorem tier is gone (C-5)",
+    "[status: proven]": "an invariant may still be observed, never guaranteed (C-5)"
+  },
+  "summary": {
+    "invariants_demoted": [
+      "a0_base.dsl::cart_unique",
+      "a0_base.dsl::door_latch",
+      "a0_no_button.dsl::right_room_locked",
+      "a2_base.dsl::cart_unique",
+      "a2_base.dsl::door_latch",
+      "a2_holed.dsl::cart_unique",
+      "a2_holed.dsl::door_latch"
+    ],
+    "manuals_cut": 4,
+    "n_invariants_demoted": 7,
+    "n_playbook_entries_demoted": 2,
+    "n_soundness_bearing": 1,
+    "n_theorems_deleted": 4,
+    "note": "A deleted theorem is simultaneously one directed-probe target that no longer has a subject (DESIGN.md §6 shadow 1) and one entry that dependency-driven re-proof can no longer invalidate (shadow 2). They are the same count because they are the same cut, which is the argument §6 makes: four shadows, one blade.",
+    "playbook_entries_demoted": [
+      {
+        "costs": "standing only",
+        "entry": "order press_before_door [proof: lean]",
+        "file": "a0_playbook.dsl",
+        "form": "order",
+        "was": "[proof: lean]"
+      },
+      {
+        "costs": "search soundness: an unproved deadlock rule may prune a branch containing a real solution",
+        "entry": "prune w_room(Cart) > 0 and no_button => dead [proof: lean]",
+        "file": "a0_playbook.dsl",
+        "form": "prune",
+        "was": "[proof: lean]"
+      }
+    ],
+    "playbooks_cut": 1,
+    "shadow_1_directed_probe_targets_removed": 4,
+    "shadow_2_entries_no_longer_re_provable": 4,
+    "soundness_bearing_demotions": [
+      {
+        "costs": "search soundness: an unproved deadlock rule may prune a branch containing a real solution",
+        "entry": "prune w_room(Cart) > 0 and no_button => dead [proof: lean]",
+        "file": "a0_playbook.dsl",
+        "form": "prune",
+        "was": "[proof: lean]"
+      }
+    ],
+    "theorems_deleted": [
+      {
+        "file": "a0_base.dsl",
+        "theorem": "press_is_direction_free"
+      },
+      {
+        "file": "a0_no_button.dsl",
+        "theorem": "unsolvable_no_button"
+      },
+      {
+        "file": "a2_base.dsl",
+        "theorem": "teleport_is_colour_triggered"
+      },
+      {
+        "file": "a2_holed.dsl",
+        "theorem": "right_room_locked"
+      }
+    ]
+  },
+  "what": "ablation-arm/theory/ -- upstream manuals with the laws section cut, produced by ablcore.downgrade and ablcore.playbook"
+}
