@@ -577,3 +577,161 @@ python -m worldgen.mutate --knobs            # the declared semantic knobs
 python -m worldgen.mutate --list             # the edit corpus
 python -m worldgen.qc.run_qc --mutants       # the mutants against their bases
 ```
+
+---
+
+# RUN_STATE — V12-worldgen-gate-deaf
+
+2026-07-28. Branch `agent/v12-worldgen-gate-deaf`, base commit `77e9216`.
+Provenance: `worldgen/runs/20260728T153030Z-V12-worldgen-gate-deaf/`.
+Nothing above this line was edited; C1's and C6's records stand as written.
+
+## The complaint, and the part of it that survived checking
+
+A repository-wide negative-control census measured this: `python -m
+worldgen.verify` printed the bare token **`green`** and exited **0**, while
+`out/qc/QC.json` and `out/qc/QC_MUTANTS.json` both said `pass: false`. The item
+asked whether `gating=False` on the two QC stages was deliberate before asking
+anyone to change it. **It was deliberate, and the evidence is not ambiguous:**
+
+* `verify.py`'s own docstring said so in words — "Both QC stages are reported and
+  neither gates, and that is deliberate rather than convenient" — with the
+  reason: a missed pre-registered bar gets published, not lowered;
+* it was there in the first commit. `git show 66493f6:worldgen/verify.py` carries
+  the same paragraph in the singular; C6 (`9a37d8a`) added the mutants stage and
+  deliberately rewrote it into the plural. Two sessions, same call, on purpose;
+* `PREREGISTERED.md` fixes the disposition of a miss in advance: "recorded as a
+  miss, not re-scored against a lower one";
+* **and the red is not this territory's.** `t2-lock-fragile` and `t2-switch-push`
+  both make the upstream miner raise `NoSeparatingGuard`; `qc/diagnose_miner.py`
+  localised it to `a0_relational_v1`'s vocabulary — the frames differ and all 98
+  atoms agree on both. The fix is an atom in `cold-start-a0/`, the other track's
+  file. §gaps item 2 already said so and it is still true.
+
+So gating on `pass` was refused. It would leave the world factory permanently red
+for a file it is forbidden to edit, and a permanently red gate is one everybody
+learns to route around — the census's own pathology, one level up. It would also
+promote `PREREGISTERED_MUTANTS.md`'s rule 1 into a hard gate, a rule whose own
+postscript says it was mis-specified and should have read "a pipeline **its base
+survives**".
+
+**Three things were nevertheless defective**, and they are where the complaint's
+shape actually lives:
+
+1. **the word `green`.** The docstring's honesty never reached the surface a
+   reader or a CI log sees;
+2. **a crash and a measured miss were the same signal.** Both stages were judged
+   by `proc.returncode` alone, and `run_qc` returns 1 for an honest miss
+   (`run_qc.py:371`, `:435`) exactly as Python returns 1 for an uncaught
+   `ImportError`. **The entire QC layer could have stopped executing and this
+   command would not have changed a character.** Non-gating was a decision about
+   a *measured verdict*; it was never a decision to accept a stage that did not
+   run;
+3. **nothing pinned the miss**, so "neither stage gates" was implemented as "any
+   QC outcome exits 0". A third world could start raising, replay could slide
+   from 1.000 to 0.4, a passing mutant could start failing — all green.
+
+## What was built
+
+`worldgen/qc/KNOWN_MISS.json` — hand-written, checked in — transcribes the exact
+verdict each QC stage produces today, per stage and per row, with `owner`,
+`what_is_red` and `whose_work_it_is` beside each red. `worldgen/qc/gate.py`
+compares a stage's artifact against it. `verify.py`'s QC stages now gate on
+**deviation from the pin**, in either direction, and on a stage that failed to
+rewrite its artifact during the run (mtime stamped before launch — `run_qc`
+writes unconditionally on every completed run, so a stale mtime is a death).
+
+Nothing was loosened. `PREREGISTERED.md` and `PREREGISTERED_MUTANTS.md` are
+byte-untouched, the 0.90 threshold is still 0.90, both artifacts still say
+`pass: false`. Before: every QC outcome exited 0. After: exactly one does, and it
+is the one already published. An **improvement** gates too — it means the pin has
+become a lie about what ships, and the repair is to re-run QC and transcribe,
+never to widen the pin.
+
+Two things are pinned and two are deliberately not. Pinned: the verdict dicts and
+the per-world / per-pair L1 / L2 / L3a booleans, because those are what the bars
+read. Not pinned: the L3b floats (0.773333, 0.895833, and the mutant/base pairs).
+They are the upstream miner's score, this territory can act on neither direction,
+and `PREREGISTERED_MUTANTS.md` rule 3 fixed in advance that mutant L3b carries
+**no** threshold — pinning it would install the very threshold that file refused.
+They are transcribed into `recorded_but_not_pinned` so a human diffing the file
+against `QC.json` still sees a drift.
+
+## Where it is red, and whose work that is
+
+**`verify` exits 0 today** — the pin matches, which is what a correct pin does on
+the run that produced it. The reds it pins are unchanged and belong upstream:
+
+| stage | red | owner |
+|---|---|---|
+| `qc_family` | `t2-lock-fragile` raises `NoSeparatingGuard`, sinking all_L1/L2/L3a; no world reaches the pre-registered 0.90 held-out (0.773, 0.896), so `L3b_passed` is 0 of 2 | `cold-start-a0` — an atom in `pipeline/atoms_a0.py`. Filed, §gaps item 2 |
+| `qc_mutants` | `v-efe43df1` fails rule 1: the pipeline raises on it | `cold-start-a0`, **not the mutation layer** |
+
+The second row's attribution is the one that will be misread, so it is spelled
+out here as well as in the pin: the pipeline **also raises on `t2-switch-push`,
+`v-efe43df1`'s base**, measured in the same process by the same harness and
+recorded in the artifact as `base_runs_the_pipeline: false`. Same vocabulary
+shortfall as `t2-lock-fragile`'s
+(`runs/…-C6-worldgen-mutate/diagnose_t2-switch-push.txt`). The mutant did not
+break anything. Anyone reading that red as "the variant layer is broken" has read
+it backwards. The real consequence is the one §gaps already carries: the
+`reversible_to_irreversible` family has no end-to-end pipeline measurement,
+because the base drawn for it does not run.
+
+## The negative control, and the proof it is not vacuous
+
+`worldgen/tests/test_verify_qc_gate.py`, modelled on
+`figures/check_coverage.py --self-test`. It spawns `python -m worldgen.verify`
+and asserts on **the process's exit code**, through the shipped `main()`, the
+shipped mtime stamping and the shipped aggregation; only the stage table and the
+pin file are substituted, via `--selftest-spec`. Six implanted reds — a world
+that starts raising, a stage that reports success while writing a different
+verdict, a red that quietly went green, a sample with the failing world deleted,
+a stage that dies before writing, and a stage that dies while a *correct* stale
+artifact sits on disk — each required to exit non-zero. Plus a **positive
+control** requiring the pinned verdict (with the stub exiting 1, as `run_qc`
+does) to exit 0, without which "it exits non-zero" would be evidence of nothing.
+Plus three tests on the shipped table itself, so a future edit that sets
+`stage_key=None` cannot restore the defect and stay green.
+
+The control was then **mutation-tested**: `verify.py` was temporarily reverted to
+the pre-V12 semantics and the same seven cases re-run.
+`runs/…-V12-…/mutation_check.txt`: **1 of 7 behaved, 6 did not** — every
+implanted red exited 0, and six tests failed. Restored, 13 pass. That transcript
+is the evidence that the gate can fail, which is the only reason to trust it when
+it does not.
+
+The control never invokes the real QC stages and writes only into a temp
+directory; `test_out_tree_untouched` hashes `QC.json` and `QC_MUTANTS.json`
+before and after and asserts they are byte-identical.
+
+## Measured
+
+```
+python -m pytest worldgen/ -q     412 passed, 13 skipped  ->  425 passed, 13 skipped   exit 0
+python -m worldgen.verify         exit 0, last line no longer the bare token `green`
+```
+
+Full transcripts in `runs/20260728T153030Z-V12-worldgen-gate-deaf/`:
+`verify_before.txt`, `verify_after.txt`, `pytest_before.txt`, `pytest_after.txt`,
+`negative_control.txt`, `mutation_check.txt`, and the judgment in `JUDGMENT.md`.
+
+## Gaps — what this item did not do
+
+1. **`python -m worldgen.verify` dirties ten committed artifacts** under
+   `out/qc/*/` (`candidates.jsonl`, `engines_report.json` — `frontier_size`
+   32 → 57 and similar), identically on every run, so it is drift between the
+   `cold-start-a0` code state that produced the committed copies and the one on
+   disk now, not nondeterminism. `QC.json` and `QC_MUTANTS.json` are byte-stable,
+   which is why the pin holds. Diff kept as
+   `runs/…-V12-…/out_dirtied_by_verify.diff`; the tree was restored with `git
+   checkout`. Not this territory's to fix, and it is *why* the negative control
+   must never invoke the real QC stages.
+2. **`exam/verify.py:25` says it is "Same shape as `worldgen/verify.py`, and for
+   the same reason stated there"**, so defects (1)–(3) above very likely
+   replicate in `exam/`. Outside this item's boundary; raised in
+   `monitor/inbox/20260728T153030Z-RES-3-worldgen-qc-gate-pinned.md`.
+3. **The pin is a transcription made by the same session that wrote the gate.**
+   `test_pin_matches_what_the_committed_artifacts_say` keeps it honest against
+   the artifacts on disk, which is a consistency check and not independence —
+   A0's hole again, one level down.

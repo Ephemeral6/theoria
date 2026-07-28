@@ -6,7 +6,7 @@ not a family. This is a parameterised mechanism library and twenty worlds
 generated from it, each shipping its own ground truth.
 
 ```bash
-python -m worldgen.verify                     # everything: build, tests, QC
+python -m worldgen.verify                     # build + tests gate; QC reports and is pinned (read §Honest state)
 python -m worldgen.build --check              # the twenty + fifteen, byte-reproducible
 python -m worldgen.build t1-switch-toggle     # one
 python -m worldgen.mutate --list              # the mutation corpus
@@ -138,9 +138,40 @@ printed, and then exited 0 on.
 | ablation-arm calibration | tier 1/2/3 with measured reachable-state counts, and one world (`t2-lock-fragile`) known to sit **outside** the current engine vocabulary — a fixed capability-boundary fixture |
 | upstream engine work | `worldgen/qc/diagnose_miner.py` localises a mining refusal to one transition pair and says whether the world or the vocabulary is at fault |
 
-## Honest state
+## Honest state — **`verify` exiting 0 does not mean QC is green**
+
+Read this before quoting a green run of `python -m worldgen.verify`.
 
 `worldgen/qc/PREREGISTERED.md` fixed the acceptance bar before the harness ran.
-The family **missed** it — see `worldgen/qc/QC_REPORT.md` for the numbers and the
-per-transition causes. The bar was not moved. What the miss is made of is the
-useful part, and it is written down.
+The family **missed** it, and so did the mutants' bar in
+`PREREGISTERED_MUTANTS.md`. Both `out/qc/QC.json` and `out/qc/QC_MUTANTS.json`
+record `pass: false` today. See `worldgen/qc/QC_REPORT.md` for the numbers and
+the per-transition causes. Neither bar was moved.
+
+**Neither QC stage's `pass` is an input to `verify`'s exit code**, deliberately —
+both reds are upstream. `a0_relational_v1`'s vocabulary raises
+`NoSeparatingGuard` on `t2-lock-fragile` and on `t2-switch-push`, and the fix is
+an atom in `cold-start-a0/`, a file the other track owns and this one may not
+edit. A gate that is permanently red for a defect its territory is forbidden to
+repair is a gate everyone learns to route around.
+
+What the QC stages **do** gate on is **deviation from the pinned miss**.
+`worldgen/qc/KNOWN_MISS.json` transcribes, by hand, the exact verdict each stage
+currently produces, with each red's `owner` and blocker next to it; `verify`
+requires every stage to reproduce it to the field *and* to have rewritten its
+artifact during the run. Any other verdict fails — worse, better, or absent. Two
+consequences worth stating plainly:
+
+* **an improvement fails too.** It means the pin is now a lie about what ships.
+  The repair is to re-run QC and transcribe, never to widen the pin;
+* **a QC stage that crashes fails.** Until `V12-worldgen-gate-deaf` it did not:
+  the stages were judged by `proc.returncode` alone, and `run_qc` returns 1 for
+  an honest miss, so a QC layer that had stopped executing altogether was
+  indistinguishable from one that measured a miss — and `verify` printed the bare
+  token `green` and exited 0 over both.
+
+The negative control for all of this is `worldgen/tests/test_verify_qc_gate.py`,
+which implants each of those reds and requires `verify` to exit non-zero, and
+implants the pinned verdict and requires it to exit 0.
+
+What the miss is made of is the useful part, and it is written down.

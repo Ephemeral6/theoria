@@ -1,0 +1,134 @@
+{
+  "_what_this_is": "The pinned record of every QC red this territory currently ships, hand-written and checked in. `worldgen/verify.py` compares each QC stage's verdict against the pin: an exact match is the published miss and does not gate; ANY deviation, in either direction, gates. Nothing here is a bar. The bars live in PREREGISTERED.md and PREREGISTERED_MUTANTS.md, they are unchanged, and both stages still record `pass: false` against them.",
+  "_why_it_exists": "Before this file, `neither QC stage gates` meant `every QC outcome exits 0` -- a third world could start raising, replay accuracy could slide from 1.000 to 0.4, or the QC layer could stop executing altogether, and `verify` would still print green. The deliberate decision recorded in verify.py's docstring was to publish THIS measured miss without lowering the bar. It was never a decision to accept any QC result whatsoever.",
+  "_how_to_change_it": "Only ever by re-running `python -m worldgen.qc.run_qc` / `--mutants` and transcribing what it measured, with the reason in RUN_STATE.md. Editing a number here to make `verify` quiet is the move this file exists to make visible. Editing PREREGISTERED*.md is forbidden outright -- pre-registration that is edited afterwards is worth nothing.",
+  "_negative_control": "worldgen/tests/test_verify_qc_gate.py implants a deviating verdict and requires `verify` to exit non-zero, and implants the pinned verdict and requires it to exit 0. A gate nobody has watched fail is a gate nobody has any reason to trust.",
+  "pinned_at": "2026-07-28",
+  "pinned_by": "V12-worldgen-gate-deaf",
+  "stages": {
+    "qc_family": {
+      "artifact": "out/qc/QC.json",
+      "bar": "worldgen/qc/PREREGISTERED.md",
+      "status": "MISS",
+      "owner": "upstream -- cold-start-a0, another track",
+      "what_is_red": "t2-lock-fragile makes the miner raise NoSeparatingGuard, which sinks all_L1/all_L2/all_L3a; and no world reaches the pre-registered 0.90 held-out threshold (0.773 and 0.896), so L3b_passed is 0 of the 2 required.",
+      "whose_work_it_is": "The raise is `a0_relational_v1`'s expressiveness, localised by `worldgen/qc/diagnose_miner.py`: the two transitions have different frames and all 98 atoms agree on both. The fix is an atom in `cold-start-a0/pipeline/atoms_a0.py` -- another track's file, which worldgen may not edit. Filed; see RUN_STATE.md §gaps item 2. The held-out shortfall is the same miner measured against a threshold PREREGISTERED.md chose on purpose and did not move; RUN_STATE.md §the miss traces it to individual transitions.",
+      "not_worldgen": "Nothing in this red is a defect in worldgen/. That is why the stage does not gate on `pass` -- gating on it would make the world factory permanently red for a file it is forbidden to touch.",
+      "verdict": {
+        "path": ["family_verdict"],
+        "expected": {
+          "L3b_passed": 0,
+          "L3b_required": 2,
+          "all_L1": false,
+          "all_L2": false,
+          "all_L3a": false,
+          "pass": false
+        }
+      },
+      "rows": {
+        "path": ["worlds"],
+        "subkey": "verdict",
+        "fields": ["L1_liveness", "L2_structure", "L3a_replay", "L3b_held_out"],
+        "expected": {
+          "t1-switch-latch": {
+            "L1_liveness": true,
+            "L2_structure": true,
+            "L3a_replay": true,
+            "L3b_held_out": false
+          },
+          "t1-switch-toggle": {
+            "L1_liveness": true,
+            "L2_structure": true,
+            "L3a_replay": true,
+            "L3b_held_out": false
+          },
+          "t2-lock-fragile": {
+            "L1_liveness": false,
+            "L2_structure": false,
+            "L3a_replay": false,
+            "L3b_held_out": false
+          }
+        }
+      },
+      "recorded_but_not_pinned": {
+        "L3b_value": {
+          "t1-switch-latch": 0.895833,
+          "t1-switch-toggle": 0.773333,
+          "t2-lock-fragile": null
+        },
+        "why_not_pinned": "These floats are the upstream miner's score, not worldgen's. Pinning them to six places would turn every legitimate improvement or refactor in another track into a red here, and this territory cannot act on either direction. The booleans above are pinned because they are what the bar reads; the floats are transcribed so a drift is still visible to a human diffing this file against QC.json."
+      }
+    },
+    "qc_mutants": {
+      "artifact": "out/qc/QC_MUTANTS.json",
+      "bar": "worldgen/qc/PREREGISTERED_MUTANTS.md",
+      "status": "MISS",
+      "owner": "upstream -- cold-start-a0, another track; NOT the mutation layer",
+      "what_is_red": "One of four sampled mutants, v-efe43df1, fails rule 1: the pipeline raises NoSeparatingGuard on it. The other three pass.",
+      "whose_work_it_is": "The pipeline raises on `t2-switch-push`, v-efe43df1's BASE, as well -- measured in the same process by the same harness and recorded as `base_runs_the_pipeline: false` / `base_also_fails: true` in the artifact, so a reader does not have to take anyone's word for it. Cause localised to the same `a0_relational_v1` vocabulary shortfall as t2-lock-fragile's (`runs/20260728T134933Z-C6-worldgen-mutate/diagnose_t2-switch-push.txt`).",
+      "not_the_mutation_layer": "This distinction is the whole point and it is easy to lose: the mutant did not break anything. PREREGISTERED_MUTANTS.md's own postscript says so -- rule 1 as written is absolute (`the pipeline runs or the mutant is not shippable`) while the paragraph above it defines the defect as `a mutant that crashes a pipeline ITS BASE SURVIVES`, and the second is the one that means anything. The bar was left as written rather than rewritten after the fact, and `pass` stays false. Anyone reading this red as `the mutation layer is broken` has read it backwards.",
+      "consequence": "The reversible_to_irreversible family has no end-to-end pipeline measurement, because the base drawn for it does not run. RUN_STATE.md §gaps.",
+      "verdict": {
+        "path": ["mutant_verdict"],
+        "expected": {
+          "failed": ["v-efe43df1"],
+          "pass": false,
+          "passed": ["v-707a64ad", "v-a3446614", "v-ce732813"],
+          "sampled": 4
+        }
+      },
+      "rows": {
+        "path": ["pairs"],
+        "subkey": null,
+        "fields": ["base", "L1_liveness", "L2_structure", "L3a_replay", "base_runs_the_pipeline", "base_also_fails", "pass"],
+        "expected": {
+          "v-707a64ad": {
+            "base": "t1-switch-toggle",
+            "L1_liveness": true,
+            "L2_structure": true,
+            "L3a_replay": true,
+            "base_runs_the_pipeline": true,
+            "base_also_fails": false,
+            "pass": true
+          },
+          "v-a3446614": {
+            "base": "t1-portal-oneway",
+            "L1_liveness": true,
+            "L2_structure": true,
+            "L3a_replay": true,
+            "base_runs_the_pipeline": true,
+            "base_also_fails": false,
+            "pass": true
+          },
+          "v-ce732813": {
+            "base": "t1-walk-maze",
+            "L1_liveness": true,
+            "L2_structure": true,
+            "L3a_replay": true,
+            "base_runs_the_pipeline": true,
+            "base_also_fails": false,
+            "pass": true
+          },
+          "v-efe43df1": {
+            "base": "t2-switch-push",
+            "L1_liveness": false,
+            "L2_structure": false,
+            "L3a_replay": false,
+            "base_runs_the_pipeline": false,
+            "base_also_fails": true,
+            "pass": false
+          }
+        }
+      },
+      "recorded_but_not_pinned": {
+        "L3b_held_out_value_vs_base": {
+          "v-707a64ad": [0.737705, 0.773333],
+          "v-a3446614": [0.586207, 0.548387],
+          "v-ce732813": [0.666667, 1.0],
+          "v-efe43df1": [null, null]
+        },
+        "why_not_pinned": "PREREGISTERED_MUTANTS.md rule 3 fixed in advance that L3b is recorded and compared to its base with NO threshold, because any threshold here would be a claim about the upstream miner's expressiveness rather than about mutation. Pinning these would install exactly the threshold that file refused."
+      }
+    }
+  }
+}
