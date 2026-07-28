@@ -47,6 +47,39 @@ a violation: a file may legitimately *name* a sealed game (the pile file itself
 does, and so does the contamination log). So hits are reported with their file,
 and an allow-list of files whose job is to name the cut is declared here, with
 the reason each is allowed.
+
+## Unreadable is not clean
+
+There are three answers this check can give about a file, and the third one is
+the one it kept losing: **violation**, **no finding**, and **could not decide**.
+Every path that could not read, could not parse, or could not recognise a file
+used to collapse into "no finding" -- `except OSError: continue`, `return []` --
+and a green light came out the other end.
+
+`enumerate.py` had already written the right answer next door: `_records_pairing`
+returns `None` for a file it cannot parse, and the caller turns that into class
+`?` / `needs_human`. One package, two behaviours, and the correct one was never
+referenced by the other. So the judgement now lives in exactly one place --
+`read_bytes`, `read_json_records`, `json_shaped` below -- and both files call it.
+Two implementations of the same rule always drift; this repository has paid that
+bill more than once.
+
+Three consequences worth naming, because each was a way through the gate:
+
+* **A file that will not open is reported, not skipped.** It also no longer
+  inflates the coverage note: that note used to print `len(paths)`, the number of
+  files the check was *handed*, while the loop had quietly skipped some of them.
+* **A partial finding is never discarded into silence.** A `.jsonl` whose line 1
+  pairs a sealed id with a frame and whose line 5000 is malformed used to return
+  `[]` -- the accrued violation thrown away along with the parse error.
+* **A file is judged by its bytes, not by its name.** The old code concluded
+  "source or prose; ids named here are constants and guards" from the suffix
+  alone, so a frame-bearing JSONL named `.log` was asserted innocent without a
+  parse ever being attempted. `json_shaped` sniffs the content instead.
+
+`needs_human` is not a softer violation. It fails the gate exactly as hard --
+main() exits non-zero on either -- because the whole point is that a check which
+could not run must not be reported as a check that passed.
 """
 
 from __future__ import annotations
@@ -91,6 +124,72 @@ PAYLOAD_MARKERS: tuple[bytes, ...] = (
 )
 
 
+def read_bytes(path: str) -> tuple[bytes | None, str | None]:
+    """``(blob, None)`` or ``(None, reason)``. Never ``(b"", reason)``.
+
+    The empty-bytes fallback is the specific mistake being designed out:
+    `enumerate.build` used to answer an `OSError` with `blob = b""`, and an empty
+    blob names no game, carries no marker and classifies as **A / releasable**
+    with the evidence string "no ARC game id appears in this file" -- a positive
+    claim about bytes nobody read.
+    """
+    try:
+        with open(path, "rb") as fh:
+            return fh.read(), None
+    except OSError as exc:
+        return None, f"{type(exc).__name__}: {exc}"
+
+
+def read_json_records(path: str, jsonl: bool) -> tuple[list | None, str | None]:
+    """``(records, None)`` or ``(None, reason)``. Never ``([], reason)``.
+
+    THE decision this package shares. `[]` means "read it, found nothing";
+    `None` means "did not read it", and the two must never be spelled the same
+    way. `UnicodeDecodeError` is a `ValueError` subclass, so a non-UTF-8 file
+    lands here too -- which is the case `check_redlines` used to swallow.
+
+    Records are materialised eagerly on purpose. The old code parsed lazily
+    inside a generator, so a malformed line thousands of records in unwound the
+    loop and discarded every finding already made.
+    """
+    try:
+        with open(path, encoding="utf-8") as fh:
+            if not jsonl:
+                return [json.load(fh)], None
+            records = []
+            for i, line in enumerate(fh, 1):
+                if line.strip():
+                    try:
+                        records.append(json.loads(line))
+                    except ValueError as exc:
+                        return None, f"line {i}: {type(exc).__name__}: {exc}"
+            return records, None
+    except (OSError, ValueError) as exc:
+        return None, f"{type(exc).__name__}: {exc}"
+
+
+#: A file is JSON-shaped if it is *named* like JSON or *reads* like it. The
+#: suffix alone was the old test, and it let the check assert innocence from a
+#: filename: a JSONL of frames named `.log`, `.ndjson` or nothing at all took the
+#: "source or prose" branch without a parse ever being attempted.
+JSON_SUFFIXES = (".json", ".jsonl")
+
+
+def json_shaped(rel: str, blob: bytes) -> tuple[bool, bool]:
+    """``(is_json_shaped, treat_as_jsonl)`` from the name *and* the bytes."""
+    if rel.endswith(JSON_SUFFIXES):
+        return True, rel.endswith(".jsonl")
+    head = blob.lstrip()[:1]
+    if head not in (b"{", b"["):
+        return False, False
+    # Named something else but opens like JSON. One document or a stream of
+    # them? Ask the bytes: more than one line that starts a fresh object is a
+    # stream. Getting this wrong is not dangerous -- the wrong reader raises,
+    # and a raise is now `needs_human` rather than silence.
+    starts = sum(1 for ln in blob.splitlines() if ln[:1] in (b"{", b"["))
+    return True, starts > 1
+
+
 def _tracked() -> list[str]:
     out = subprocess.run(
         ["git", "-C", REPO_ROOT, "ls-files"], capture_output=True, text=True, check=True
@@ -102,8 +201,10 @@ def _abs(rel: str) -> str:
     return os.path.join(REPO_ROOT, *rel.split("/"))
 
 
-def check_credential(paths: list[str], mode: str = "generate") -> tuple[list[str], list[str]]:
-    """``(violations, notes)``. The key never leaves memory.
+def check_credential(
+    paths: list[str], mode: str = "generate"
+) -> tuple[list[str], list[str], list[str]]:
+    """``(violations, needs_human, notes)``. The key never leaves memory.
 
     Two modes, because two different people run this and the honest answer
     differs:
@@ -129,12 +230,14 @@ def check_credential(paths: list[str], mode: str = "generate") -> tuple[list[str
             [f"cannot import arc-recon/client.py to load the key: {exc!r}. "
              "This check did not run, which is not the same as passing."],
             [],
+            [],
         )
     try:
         key = load_api_key()
     except Exception as exc:
         if mode == "verify":
             return (
+                [],
                 [],
                 ["credential check NOT APPLICABLE: no ARC_API_KEY is reachable from this "
                  "checkout, which is expected when verifying a release rather than "
@@ -147,17 +250,21 @@ def check_credential(paths: list[str], mode: str = "generate") -> tuple[list[str
              "restore .env and re-run, or pass --mode verify if you are checking a release "
              "you were handed rather than producing one."],
             [],
+            [],
         )
     needle = key.encode()
     notes = [f"credential loaded for comparison only: {mask(key)}"]
     violations: list[str] = []
+    needs_human: list[str] = []
     scanned = 0
     for rel in paths:
-        p = _abs(rel)
-        try:
-            with open(p, "rb") as fh:
-                blob = fh.read()
-        except OSError:
+        blob, why = read_bytes(_abs(rel))
+        if blob is None:
+            needs_human.append(
+                f"{rel} could not be opened ({why}), so it has NOT been searched for the "
+                "literal key. This is a tracked file: it ships in the manifest whether or "
+                "not this check could read it."
+            )
             continue
         scanned += 1
         if needle in blob:
@@ -166,8 +273,11 @@ def check_credential(paths: list[str], mode: str = "generate") -> tuple[list[str
                 "This file is tracked, so the value is already in git history and the "
                 "remedy is a credential rotation, not a deletion commit."
             )
-    notes.append(f"{scanned} tracked file(s) scanned for the literal key")
-    return violations, notes
+    notes.append(
+        f"{scanned} of {len(paths)} tracked file(s) scanned for the literal key"
+        + (f"; {len(needs_human)} could not be opened" if needs_human else "")
+    )
+    return violations, needs_human, notes
 
 
 def _walk(obj):
@@ -180,36 +290,38 @@ def _walk(obj):
             yield from _walk(v)
 
 
-def _records_pairing_sealed_with_payload(path: str, sealed_hits: list[str], jsonl: bool) -> list[str]:
+def _records_pairing_sealed_with_payload(
+    path: str, sealed_hits: list[str], jsonl: bool
+) -> tuple[list[str] | None, str | None]:
     """Records that are BOTH about a sealed game AND carry its content.
+
+    ``(bad, None)``, or ``(None, reason)`` when the file could not be read --
+    never ``([], reason)``. The old signature had no way to say the third thing,
+    so it said the second, and the caller printed "NO record pairs a sealed id
+    with payload -- checked record by record" about a file it had never parsed.
 
     ``frame`` must be non-empty: a schema with a null ``frame`` field is a shape,
     not a picture of a sealed board.
     """
+    records, why = read_json_records(path, jsonl)
+    if records is None:
+        return None, why
     bad: list[str] = []
-    try:
-        with open(path, encoding="utf-8") as fh:
-            records = (
-                (json.loads(ln) for ln in fh if ln.strip())
-                if jsonl
-                else iter([json.load(fh)])
-            )
-            for i, rec in enumerate(records):
-                blob = json.dumps(rec)
-                ids = [g for g in sealed_hits if g in blob]
-                if not ids:
-                    continue
-                carries = any(
-                    d.get(k) for d in _walk(rec) for k in ("frame", "frames", "action_input")
-                )
-                if carries:
-                    bad.append(f"record {i} -> {ids[0]}")
-    except (OSError, ValueError):
-        return []
-    return bad
+    for i, rec in enumerate(records):
+        blob = json.dumps(rec)
+        ids = [g for g in sealed_hits if g in blob]
+        if not ids:
+            continue
+        carries = any(
+            d.get(k) for d in _walk(rec) for k in ("frame", "frames", "action_input")
+        )
+        if carries:
+            bad.append(f"record {i} -> {ids[0]}")
+    return bad, None
 
 
-def check_sealed(paths: list[str]) -> tuple[list[str], list[str]]:
+def check_sealed(paths: list[str]) -> tuple[list[str], list[str], list[str]]:
+    """``(violations, needs_human, notes)``."""
     with open(_abs(PILES), encoding="utf-8") as fh:
         piles = json.load(fh)
     sealed = [g for g in piles.get("sealed", piles.get("sealed_pile", []))]
@@ -218,20 +330,38 @@ def check_sealed(paths: list[str]) -> tuple[list[str], list[str]]:
             ["could not read the sealed pile out of arc-recon/data/piles.json; "
              "this check did not run"],
             [],
+            [],
         )
     sealed_ids = [g if isinstance(g, str) else g.get("game_id", "") for g in sealed]
     sealed_ids = [s for s in sealed_ids if s]
+    # A non-empty pile that yields no usable ids means the cut file changed shape
+    # under this reader. The guard above only catches an *empty* pile, so this
+    # case used to sail through and scan every tracked file for an empty list of
+    # ids -- 2817 files, zero hits, "Both red lines clear."
+    if len(sealed_ids) != len(sealed):
+        return (
+            [f"arc-recon/data/piles.json lists {len(sealed)} sealed entries but only "
+             f"{len(sealed_ids)} yielded a game id; the cut file is not the shape this "
+             "reader expects and the sealed check DID NOT RUN over the whole pile"],
+            [],
+            [],
+        )
     notes = [f"sealed pile: {len(sealed_ids)} game(s), read from {PILES}"]
 
     violations: list[str] = []
+    needs_human: list[str] = []
     mentions: list[str] = []
+    scanned = 0
     for rel in paths:
-        p = _abs(rel)
-        try:
-            with open(p, "rb") as fh:
-                blob = fh.read()
-        except OSError:
+        blob, why = read_bytes(_abs(rel))
+        if blob is None:
+            needs_human.append(
+                f"{rel} could not be opened ({why}), so it has NOT been checked for sealed "
+                "material. A tracked file this check could not read is not a tracked file "
+                "with nothing in it."
+            )
             continue
+        scanned += 1
         hit = sorted(g for g in sealed_ids if g.encode() in blob)
         if not hit:
             continue

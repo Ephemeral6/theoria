@@ -16,6 +16,34 @@ so they are subtracted here, by machine, from a file that records why.
 
     python contamination.py            # the table
     python contamination.py --json     # also write data/claim_set.json
+
+## The exit code carries the whole verdict, not one third of it
+
+`main()` used to end `return 0 if check["matches"] else 1` -- only the
+`piles.json` hash. Sealed games ADDRESSED in a ledger, and games in NEEDS
+ADJUDICATION, were **printed and dropped**. `verify.sh:53` looks at nothing but
+the exit code, so the human reading the table was told the truth and the machine
+holding the gate was told "clean" -- and only the machine's answer gates
+anything.
+
+Everything that can turn this red now goes through `gate()`, one function, so
+the printed table and the exit code cannot disagree. Three of the four
+conditions are about *not having looked*:
+
+* an unparseable line in the contamination log -- a game whose registration
+  nothing could read is not a game with no registration;
+* a declared ledger that is absent or unreadable -- deleting a dirty ledger must
+  not be a way through this gate;
+* an empty scan set -- `all([])` is `True`, so the old `all_clean` would have
+  reported a clean verdict having read nothing at all.
+
+**A known gap, stated rather than hidden.** `OTHER_LEDGERS` is a hand-written
+list of three files, and the repository holds far more ledger-shaped files than
+that (see `monitor/inbox/20260728T171500Z-RES-3-...`). This module now reports
+`scan_surface_self_discovered: False` so that the incompleteness is a boolean a
+later check can gate on, instead of the prose caveat that no consumer reads.
+Making the surface self-discovering is a separate work order; this one only
+stops the gate from lying about what it *did* read.
 """
 
 import argparse
