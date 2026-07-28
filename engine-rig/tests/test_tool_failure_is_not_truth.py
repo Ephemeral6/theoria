@@ -29,6 +29,7 @@ that the file cannot pass by a predicate that simply always says no: the canon i
 meant to cost something and to still answer.
 """
 
+import importlib
 import os
 import sys
 
@@ -37,6 +38,7 @@ import pytest
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from engines.fd_adapter import backends
+from engines.fd_adapter import pddl
 from engines.lp_potential import LpUnavailable, potential
 from engines.mdl_segmenter import segmenter
 from engines.zero_space import zerospace
@@ -71,6 +73,17 @@ def fake_fd(tmp_path, log, exit_code):
     path = tmp_path / "fake_fd.py"
     path.write_text(FAKE_FD % (log, exit_code), encoding="utf-8")
     return str(path)
+
+
+def _ring_world():
+    """The `ringstuck` sokoban fixture, parsed -- shared by the reach tests."""
+    from fixtures import sokoban
+
+    with open(sokoban.DOMAIN_PATH, "r", encoding="utf-8") as fh:
+        domain = pddl.parse_domain(fh.read())
+    with open(sokoban.RING.path, "r", encoding="utf-8") as fh:
+        problem = pddl.parse_problem(fh.read())
+    return domain, problem
 
 
 def _instance(tmp_path):
@@ -412,7 +425,13 @@ def test_an_inexplicable_transition_is_raised_not_billed_as_nothing():
 # ------------------------------------------------------ the budget is published
 
 def test_a_search_result_carries_the_budget_it_ran_under():
-    """`plan is None` from the stub is a proof; the artefact has to show why."""
+    """`plan is None` from the stub is a proof; the artefact has to show why.
+
+    The first draft of this test asserted only `exhaustive` and was named after
+    `budget`, so a mutant that stopped recording `max_expansions` altogether went
+    green.  It now asserts both halves, on a real search rather than on a
+    hand-built object.
+    """
     from engines.fd_adapter import search as stub
 
     empty = stub.SearchResult(None, 0, 0, 0, 0)
@@ -420,6 +439,86 @@ def test_a_search_result_carries_the_budget_it_ran_under():
         "the placeholder the Fast Downward path builds must not inherit a claim "
         "about a bundled search that never ran"
     )
+    assert empty.max_expansions is None
+
+    domain, problem = _ring_world()
+    result = stub.search(domain, problem, max_expansions=12345)
+    assert result.max_expansions == 12345, (
+        "a search that ran has to publish the budget it ran under, or a reader "
+        "cannot tell an exhausted queue from a truncated one"
+    )
+    assert result.exhaustive is True
+
+
+def test_an_unreachable_verdict_records_what_entitles_it():
+    """`status: unreachable` is a claim about the instance; `basis` is its ground.
+
+    An adversarial review deleted `basis`/`budget` outright and the whole suite
+    stayed green -- that fix had no negative control at all.  This is it.
+    """
+    # `engines.probe_frontier.__init__` re-exports the *function* `reach`, so
+    # `from ... import reach` and `import ... as` both hand back the function.
+    reach_mod = importlib.import_module("engines.probe_frontier.reach")
+    from engines.probe_frontier import sokoban_probe as sp
+
+    domain, problem = _ring_world()
+    unreachable = [c for c in sp.build()["configurations"]
+                   if c.name == "p_side"][0]
+
+    answer = reach_mod.reach(domain, problem, unreachable.goal_atoms,
+                             unreachable.name)
+    assert answer.status == reach_mod.UNREACHABLE
+    assert answer.basis == "exhausted", (
+        "an unreachable verdict with no recorded basis is a search result "
+        "wearing a fact's clothes"
+    )
+    assert answer.budget is not None and answer.budget > 0
+
+
+def test_an_unexhausted_search_may_not_be_published_as_unreachable(monkeypatch):
+    """The entitlement is checked where the claim is made, not upstream.
+
+    Today `solve_parsed` cannot hand `reach()` an unexhausted empty result --
+    the stub raises on its budget.  That is a property of three modules away,
+    and it is precisely the "an upstream mechanism makes it safe" argument this
+    work item refused elsewhere.  So the guard is local, and this is its
+    negative sample.
+    """
+    # `engines.probe_frontier.__init__` re-exports the *function* `reach`, so
+    # `from ... import reach` and `import ... as` both hand back the function.
+    reach_mod = importlib.import_module("engines.probe_frontier.reach")
+    from engines.fd_adapter import search as stub
+    from engines.probe_frontier import sokoban_probe as sp
+
+    domain, problem = _ring_world()
+    configuration = sp.build()["configurations"][0]
+
+    gave_up = stub.SearchResult(None, 99, 99, 0, 7, 99, False)
+    monkeypatch.setattr(reach_mod.fd_adapter, "solve_parsed",
+                        lambda *a, **k: (None, gave_up))
+    with pytest.raises(reach_mod.UnprovenUnreachability):
+        reach_mod.reach(domain, problem, configuration.goal_atoms, "probe")
+
+
+def test_two_unfinished_searches_are_not_evidence_about_a_theorem():
+    """`deadlock_carver`'s `same_answer`, the same shape as p13's.
+
+    Both sides unsolved gives `solved == solved` and `length(None) ==
+    length(None)`, so the plain conjunction publishes agreement between two runs
+    that answered nothing -- and `bench/dividend.py` reads the resulting
+    `plan_length_unchanged` as a soundness verdict on the theorem.
+    """
+    from engines import deadlock_carver as dc
+    from engines.fd_adapter import search as stub
+
+    finished = stub.SearchResult(None, 10, 10, 0, 3, 500000, True)
+    stopped = stub.SearchResult(None, 10, 10, 0, 3, 500000, False)
+
+    assert dc.PruningReport("p", 1, finished, finished).same_answer is True
+    for baseline, pruned in ((stopped, finished), (finished, stopped),
+                             (stopped, stopped)):
+        with pytest.raises(dc.UnfinishedComparison):
+            _ = dc.PruningReport("p", 1, baseline, pruned).same_answer
 
 
 # ------------------------------------------- the standing check, and its own
@@ -479,3 +578,74 @@ def test_the_standing_check_does_not_fire_on_correct_code(source):
 
     assert [f for f in check.check_source(source, "<synthetic>")
             if f.level == check.ERROR] == []
+
+
+def test_the_standing_check_actually_walks_the_tree(tmp_path):
+    """`check_paths` must find a planted defect, not merely return nothing.
+
+    `test_the_standing_check_is_green_on_this_territory` asserts an empty list,
+    and an adversarial review pointed out that `check_paths` returning `[]`
+    unconditionally satisfies it -- the whole file-walking layer had no test and
+    could be deleted in silence.  A green check that never opened a file is this
+    work item's own defect, one level up.
+    """
+    from tools import check_solver_status as check
+
+    (tmp_path / "clean.py").write_text(
+        "if proc.returncode != 0:\n    raise RuntimeError('boom')\n",
+        encoding="utf-8")
+    (tmp_path / "defect.py").write_text(
+        "unsolvable = done.returncode == 12\n", encoding="utf-8")
+
+    errors = [f for f in check.check_paths([str(tmp_path)])
+              if f.level == check.ERROR]
+    assert len(errors) == 1, [f.render(str(tmp_path)) for f in errors]
+    assert errors[0].target == "unsolvable"
+    assert os.path.basename(errors[0].path) == "defect.py"
+
+
+def test_a_file_that_cannot_be_parsed_is_not_a_file_that_is_clean(tmp_path):
+    """The scan surface has to report what it could not read.
+
+    `release/checklist.py` is committed with a real newline inside a string
+    literal, so it does not parse; this check reports it rather than walking
+    past it. "Found 0 defects in the files I could open" is the shape
+    `SURVEY-empty-as-negative` is about.
+    """
+    from tools import check_solver_status as check
+
+    (tmp_path / "broken.py").write_text('x = "\n', encoding="utf-8")
+    findings = check.check_paths([str(tmp_path)])
+    assert len(findings) == 1
+    assert findings[0].target == "<unparsed>"
+    assert findings[0].level == check.ERROR, (
+        "an unreadable file must fail the check, not be skipped into silence"
+    )
+
+
+def test_wrapping_a_comparison_in_bool_is_not_delegating_it():
+    """`bool(...)` and `any([...])` decide nothing and must not silence the check.
+
+    Found by adversarial review: `_adjudicated` asks whether the status is read
+    inside *a* call, and every builtin wrapper satisfied that for free.
+    """
+    from tools import check_solver_status as check
+
+    for source in ("unsolvable = bool(done.returncode == 12)\n",
+                   "unsolvable = any([done.returncode == 12])\n",
+                   "unsolvable = all([done.returncode == 12])\n"):
+        errors = [f for f in check.check_source(source, "<synthetic>")
+                  if f.level == check.ERROR]
+        assert errors, "%r silenced the check" % source
+
+
+def test_the_scan_surface_does_not_quietly_exclude_our_own_code():
+    """`runs/` was in the skip list and hid a live `text=True` call from every sweep."""
+    from tools import check_solver_status as check
+
+    assert "runs" not in check.SKIP_DIRS
+    scanned = list(check.python_files([check.HERE]))
+    assert any(os.sep + "runs" + os.sep in path for path in scanned), (
+        "engine-rig/runs/ holds committed .py files; a sweep that skips them "
+        "reports a coverage it does not have"
+    )

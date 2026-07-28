@@ -194,15 +194,39 @@ def _mentions_tool_status(node: ast.AST) -> bool:
     return False
 
 
+#: Calls that decide nothing.  Wrapping a comparison in one of these is not
+#: handing it to a predicate, and an adversarial review found `bool(...)` and
+#: `any([...])` silencing the check for free.
+TRANSPARENT_CALLS: Set[str] = {
+    "bool", "int", "float", "str", "any", "all", "len", "list", "tuple", "set",
+    "sorted", "reversed", "print", "repr", "format",
+}
+
+
 def _adjudicated(node: ast.AST) -> bool:
     """Is the status read inside a call -- i.e. handed to a predicate?
 
     `proves_unsolvable(rung, done.returncode, log)` is the shape the fix takes,
     and it is not a finding: the question is being decided somewhere a reader
     can find it, by something that can also see the rung and the log.
+
+    **Known limit, measured rather than assumed.**  This tests the *shape* of a
+    delegation, not that the callee decides anything.  A helper that does
+    nothing but `return rc == 12` satisfies it, and that helper is itself
+    invisible because its name is not in the verdict vocabulary.  So the
+    recommended fix can be faked -- deliberately not hidden: see
+    `runs/*-C11-tool-failure-as-truth/CALIBRATION.md`.  Builtins that only
+    re-wrap a value are excluded here because that much *is* decidable from
+    syntax; the general case is not, and this check does not pretend otherwise.
     """
-    return any(isinstance(child, ast.Call) and _mentions_tool_status(child)
-               for child in ast.walk(node))
+    for child in ast.walk(node):
+        if not isinstance(child, ast.Call) or not _mentions_tool_status(child):
+            continue
+        name = _trailing_name(child.func)
+        if name in TRANSPARENT_CALLS:
+            continue
+        return True
+    return False
 
 
 def _status_comparisons(node: ast.AST) -> bool:
@@ -230,7 +254,10 @@ class Finding:
     line: int
     target: str
     source: str
-    level: str = ERROR
+    #: No default.  Both construction sites pass it explicitly, so a default was
+    #: dead code that read like a conservative convention; an adversarial review
+    #: flipped it to NOTE and nothing went red.
+    level: str
 
     def render(self, root: str = HERE) -> str:
         rel = os.path.relpath(self.path, root).replace(os.sep, "/")
@@ -298,9 +325,17 @@ def check_source(text: str, path: str) -> List[Finding]:
     return visitor.findings
 
 
+#: Directories with no source of ours in them.  `runs/` is deliberately **not**
+#: here: it was, and it hid `runs/20260728T141724Z-E5-cert-recheck/manifest.py`
+#: from every sweep.  A scan surface that is a hard-coded list nobody compares
+#: against the tree is the shape `SURVEY-empty-as-negative` is about, so what is
+#: excluded is now both minimal and reported (`main` prints it).
+SKIP_DIRS: Set[str] = {"__pycache__", ".git", ".worktrees", ".toolchain",
+                       ".pytest_cache", "node_modules", ".venv"}
+
+
 def python_files(roots: Sequence[str]) -> Iterable[str]:
-    skip = {"__pycache__", ".git", ".worktrees", ".toolchain", ".pytest_cache",
-            "node_modules", ".venv", "runs"}
+    skip = SKIP_DIRS
     for root in roots:
         if os.path.isfile(root):
             yield root
@@ -354,9 +389,20 @@ def main(argv: Sequence[str]) -> int:
             print("(%d further note-level hit(s); pass --notes to list them)"
                   % len(notes))
         return 1
-    print("no claim about the world is decided by a bare tool status "
-          "(%d files scanned, %d note-level hit(s))"
-          % (sum(1 for _ in python_files(roots)), len(notes)))
+    # The scan surface, stated with the verdict.  "Found 0 in N" is only worth
+    # anything if N is on the page next to it, and if what was left out of N is
+    # named -- otherwise a shrinking scan surface reads exactly like a clean
+    # tree.  (`SURVEY-empty-as-negative`'s standing rule, applied to this
+    # check's own output.)
+    print("no claim about the world is decided by a bare tool status")
+    print("  scanned      %d .py file(s) under %s"
+          % (sum(1 for _ in python_files(roots)),
+             ", ".join(os.path.relpath(r, HERE).replace(os.sep, "/")
+                       for r in roots)))
+    print("  not scanned  directories named: %s"
+          % ", ".join(sorted(SKIP_DIRS)))
+    print("  note level   %d hit(s)%s"
+          % (len(notes), "" if show_notes or not notes else " (--notes to list)"))
     return 0
 
 
