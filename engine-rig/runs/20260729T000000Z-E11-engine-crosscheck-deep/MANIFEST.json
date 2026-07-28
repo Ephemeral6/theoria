@@ -1,0 +1,17 @@
+{
+  "prompt_id": "E11-engine-crosscheck-deep",
+  "branch": "agent/e11-engine-crosscheck-deep",
+  "base_commit": "77e9216",
+  "utc": "2026-07-29T00:00:00Z",
+  "author": "RES-3",
+  "lane": "verify",
+  "territory": "engine-rig",
+  "method": "six independent cross-checks, one per engine, each judging another engine's output by a different engine's method; two adversarial reviews on the two heaviest claims",
+  "engine_rig_code_bytes_changed": 0,
+  "claims_adjudicated": 50,
+  "claims_overturned": 0,
+  "api_calls": 0,
+  "network": false,
+  "cost_usd": 0.0,
+  "sealed_pile_contact": "none"
+}
