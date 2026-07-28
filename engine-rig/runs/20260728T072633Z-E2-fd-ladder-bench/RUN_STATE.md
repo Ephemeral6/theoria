@@ -96,10 +96,21 @@ the carver proved, so the only fair FD comparator is the guard that also carries
 every one. §3b holds the guard fixed instead, for a different question.
 
 The `far4` / blind row is **837 → 574**, which is exactly what
-`tools/p13_fd_dividend.py` recorded for `open4far` and STATUS.md quotes. That
-tool and `bench/compile_theorems.py` were written independently and encode the
-theorems differently; they agree to the state. The dividend is not an artefact of
-the bundled search's node ordering.
+`tools/p13_fd_dividend.py` recorded for `open4far` and STATUS.md quotes. Two
+things that agreement does and does not establish, since an earlier draft of this
+document overstated it:
+
+* It **does** show the dividend is not an artefact of the bundled search's node
+  ordering — a Python BFS over frozensets and Fast Downward over SAS+ variables
+  are genuinely different searches, and they cut the same fraction.
+* It does **not** show two independent encodings agreeing. P-13's guard is
+  `(safe1 ?b ?to)` plus a `forall`-`or` over `safe2`; this module's is
+  `(not (dead1 ?b ?to))` plus a `forall`-`or` over `not deadpair`. Same shape,
+  same schema, opposite polarity — a De Morgan dual of one encoding, not two.
+  Agreement to the state is close to forced and was quoted as though it were
+  corroboration. The `indexed` guard in §3c *is* a structurally different
+  encoding, and its agreement with the `:adl` one (574 either way on `far4`
+  blind) is the corroboration this paragraph originally claimed.
 
 Two things the ladder of sizes adds that a single board could not:
 
@@ -155,24 +166,54 @@ their *frequency*, not on their speed-up. What it does is remove the speed-up
 half of the claim wherever a real planner is reachable, and this rig can now
 say by how much rather than in principle.
 
-### 3c. Pair deadlocks cannot reach the admissible rungs at all
+### 3c. Pair deadlocks *can* reach the admissible rungs — and make them worse
 
 Fast Downward has no pruning hook (`choose_tier` clause 3), so the theorems are
 compiled into the task. Corner deadlocks compile to a negative precondition and
-stay in STRIPS. Pair deadlocks need a universally quantified negated conjunction,
-hence `:adl` — and FD's translator turns that into an **axiom**:
+stay in STRIPS. The obvious pair encoding needs a universally quantified negated
+conjunction, hence `:adl` — and FD's `normalize.py` turns *any* `forall`
+precondition into an **axiom**:
 
 ```
 This configuration does not support axioms!
 Terminating. Tried to use unsupported feature.        (driver exit 34)
 ```
 
-`astar(lmcut())` and `astar(ipdb())` both refuse. `astar(blind())` accepts it and
-runs. So the encoding is sound and usable, and it is closed off on exactly the two
-rungs whose numbers anyone would want — which, given 3b, costs nothing measurable,
-but is a real limit and is pinned by a test
-(`test_the_full_guard_is_refused_by_the_optimal_rung_for_the_reason_recorded`) so
-that a later FD build lifting it fails the suite rather than passing unnoticed.
+`astar(lmcut())` and `astar(ipdb())` both refuse; `astar(blind())` accepts it.
+
+**An earlier version of this document concluded from that that pair deadlocks
+"cannot reach" the admissible rungs. That was wrong, and an adversarial review of
+this run refuted it by building the encoding that does.** Nothing about a pair
+deadlock needs quantification — only the schema's ignorance of how many dead
+partners a position has. Number them: a static `npair<k> ?b ?to` gives the count,
+static `deadpair<i> ?b ?to ?ob ?oc` names the i-th, and one `push-pair<k>` schema
+per arity binds them and adds one ground `(not (at ?ob_i ?oc_i))` each. Pure
+`:strips :typing :negative-preconditions`. It is the `indexed` guard in
+`compile_theorems.py`, and it agrees with the `:adl` guard to the state on the one
+configuration that accepts both (`far4` blind: 574 either way).
+
+The optimal rungs take it. What they do with it is the finding:
+
+| instance | rung | unguarded | + pair theorems (`indexed`) | task size |
+|---|---|---|---|---|
+| `far4` | `astar(lmcut())` | 23 | **34** | 1029 → 4101 |
+| `far4` | `astar(ipdb())` | 12 | 12 | 1029 → 4101 |
+| `far6` | `astar(lmcut())` | 47 | **66** | 2813 → 26253 |
+| `far6` | `astar(ipdb())` | 18 | 18 | 2813 → 26253 |
+
+Optimal length is unchanged on every row (soundness holds) and every plan was
+mapped back to the original vocabulary and replayed. But `lmcut` expands **more**
+states with the pair theorems than without them, and the task grows by roughly an
+order of magnitude: FD compiles a negative precondition on a fluent into one
+operator copy per other value of that variable, so the guard that was supposed to
+cost only grounding costs the search a much larger operator set.
+
+So the honest statement is not "cannot reach" but: **the theorems reach the
+admissible rungs, and giving them to those rungs is a net loss.** That is a
+stronger result than the one it replaces, and it only exists because the claim
+was attacked. Both halves are pinned by tests
+(`test_the_full_guard_is_refused_by_the_optimal_rung_for_the_reason_recorded`,
+`test_the_indexed_guard_gets_the_pair_deadlocks_through_the_optimal_rung`).
 
 ### 3d. On unsolvable instances the translator settles it before any search
 
@@ -183,10 +224,29 @@ about the bundled rung, which has no such check. STATUS.md already recorded this
 for the single `ringstuck` fixture; it now holds across a five-size ladder.
 
 **Soundness held everywhere.** Plan length is unchanged on every optimal
-comparison, on both engines, under both guards, across all nine instances — and
-every plan produced from a theorem-compiled task was replayed against the
+comparison, on both engines, under all three guards, across all nine instances —
+and every plan produced from a theorem-compiled task was replayed against the
 *original* domain by the rig's own validator. `MANIFEST.json`'s
 `soundness_problems` is empty.
+
+### 3e. A latent unsoundness the review found in the compiler itself
+
+No number above is affected, but the compiler had a hole and it is worth the
+record. The pair guard reads `at(?ob,?oc)` in the **pre-state**, where the pushed
+box still holds its *old* position. For a pattern naming one box twice, the guard
+therefore blocks transitions that *leave* the pattern rather than enter it —
+strictly stronger than the theorem, and stronger is the direction that destroys
+optimality. Measured with a deliberately vacuous same-box pattern, `far4`'s
+optimal length went **11 → 25** and `guardable()` raised nothing.
+
+Why no reported number moved: `carve()` cannot emit such a pattern, because two
+positions of one box are mutex and `prove()` rejects patterns no reachable state
+satisfies. Verified — 0 same-box pairs across all four `far` instances. But that
+is a property of a *different module*, and `compile_theorems.py`'s own docstring
+claimed its assumptions were "checked rather than assumed" while contemplating
+only the direction that costs a dividend, never the one that costs correctness.
+`tools/p13_fd_dividend.py` had this check and said why; this module had dropped
+it. `guardable()` clause 3 restores it, with a test.
 
 ## 4. The reproducibility gap `.toolchain/` leaves
 
@@ -233,10 +293,16 @@ compared for equality; wall clock is a function of this machine on this afternoo
 and is not. On a machine without `.toolchain/`, checks 4 and the FD half of 5 skip
 with a stated reason and the rest still runs.
 
-`tests/test_bench.py` — 26 tests, all offline-safe. The FD log parser, the one
-part that depends on Fast Downward's exact wording, is tested against **committed**
-FD output (`runs/p13-fd-real/work/lmcut/run.log`): the assertion is the "A* expands
-8 states" that P-13's manifest quotes, recovered from the log it quoted it from.
+`tests/test_bench.py` — 34 tests, offline-safe apart from six that need a
+planner. The FD log parser, the one part that depends on Fast Downward's exact
+wording, is tested against **committed** FD output
+(`runs/p13-fd-real/work/lmcut/run.log`): the assertion is the "A* expands 8
+states" that P-13's manifest quotes, recovered from the log it quoted it from.
+
+Four of those tests exist because an adversarial review of this run put them
+there: the same-box guard hole (§3e), the hand-copied domain text nothing else
+pinned, the indexed encoding reaching the optimal rungs (§3c), and the two pair
+encodings agreeing on the one configuration that accepts both.
 
 ## 6. Gaps — what this run does not establish
 
@@ -245,10 +311,22 @@ FD output (`runs/p13-fd-real/work/lmcut/run.log`): the assertion is the "A* expa
   deadlock is worth in a domain whose dead regions are not positional.
 * **G2 — One planner build.** FD 24.06+ rev `7120aa0`, one machine, one compiler.
   The axiom refusal in 3c is a property of *these* heuristic implementations.
-* **G3 — Pair deadlocks are unmeasured on the admissible rungs**, and cannot be
-  measured without either a different encoding that avoids axioms or a
-  heuristic that accepts them. Given 3b the expected value is zero, but that is a
-  prediction, not a measurement, and it is not recorded as one.
+* **G3 — closed, and the prediction it contained was wrong.** This gap used to
+  read "pair deadlocks are unmeasured on the admissible rungs and cannot be
+  measured without a different encoding … given 3b the expected value is zero."
+  The adversarial review built that encoding (§3c). The measured value is not
+  zero but *negative*: `lmcut` 23 → 34 on `far4`, 47 → 66 on `far6`. Recorded
+  here rather than deleted, because a gap that turned out to be hiding a wrong
+  guess is worth more on the record than a gap that quietly vanished.
+* **G7 — absolute blind-search expansion counts carry an unstated tie-break
+  dependence.** `astar(blind())` has a huge g-layer and its expansion count moves
+  with FD's operator ordering: under a different f-tie-break the `far5` baseline
+  goes 958 → 1479, a swing of +54%. The **ratios** are stable (−9%/−12% became
+  −13%/−15%), and shuffling `:objects` / `:init` does not perturb anything since
+  FD canonicalises — so the run is still deterministic and the dividend
+  percentages hold. But the absolute blind numbers in `DIVIDEND.md` should be
+  read as one tie-break's, not as a property of the instance. Found by the
+  adversarial review; not currently measured by the bench itself.
 * **G4 — Timings are not reproducible**, by nature. Every wall-clock figure here
   is one machine's afternoon. The orderings and the crossover point are robust;
   the individual milliseconds are not.

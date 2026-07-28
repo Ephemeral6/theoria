@@ -14,7 +14,7 @@ Instantiating...
 Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
 Normalizing Datalog program...
 Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
-Preparing model... [0.000s CPU, 0.000s wall-clock]
+Preparing model... [0.000s CPU, 0.001s wall-clock]
 Generated 26 rules.
 Computing model... [0.016s CPU, 0.006s wall-clock]
 839 relevant atoms
@@ -44,14 +44,14 @@ Processing axioms...
 Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
 Translator axioms removed by simplifying: 0
 Processing axioms: [0.000s CPU, 0.001s wall-clock]
-Translating task: [0.016s CPU, 0.006s wall-clock]
+Translating task: [0.000s CPU, 0.006s wall-clock]
 472 effect conditions simplified
 0 implied preconditions added
 Detecting unreachable propositions...
 0 operators removed
 0 axioms removed
 11 propositions removed
-Detecting unreachable propositions: [0.000s CPU, 0.003s wall-clock]
+Detecting unreachable propositions: [0.016s CPU, 0.003s wall-clock]
 Reordering and filtering variables...
 71 of 71 variables necessary.
 36 of 39 mutex groups necessary.
@@ -76,10 +76,10 @@ INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmp1kz6gg90\sas_plan' < output.sas
-[t=0.000147s, 1960 KB] Search code revision: 7120aa0
-[t=0.000243s, 1960 KB] reading input...
-[t=0.003451s, 2540 KB] done reading input!
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmp6zci_jbj\sas_plan' < output.sas
+[t=0.000144s, 1964 KB] Search code revision: 7120aa0
+[t=0.000242s, 1964 KB] reading input...
+[t=0.003489s, 2532 KB] done reading input!
 Remove intermediate file output.sas
 search exit code: 34
 

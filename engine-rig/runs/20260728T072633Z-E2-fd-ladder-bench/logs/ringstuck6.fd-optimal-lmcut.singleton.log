@@ -8,7 +8,7 @@ INFO     translator memory limit: None
 INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e2-fd-ladder-bench\engine-rig\runs\20260728T072633Z-E2-fd-ladder-bench\guarded\sokoban_guarded_singleton_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e2-fd-ladder-bench\engine-rig\runs\20260728T072633Z-E2-fd-ladder-bench\guarded\ringstuck6_guarded_singleton.pddl' --sas-file output.sas
 Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
 Parsing...
-Parsing: [0.016s CPU, 0.001s wall-clock]
+Parsing: [0.000s CPU, 0.001s wall-clock]
 Normalizing task... [0.000s CPU, 0.000s wall-clock]
 Instantiating...
 Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
@@ -35,41 +35,41 @@ Translator axioms: 0
 Translator task size: 4
 warning: could not determine peak memory
 Writing output... [0.000s CPU, 0.005s wall-clock]
-Done! [0.016s CPU, 0.009s wall-clock]
+Done! [0.000s CPU, 0.009s wall-clock]
 translate exit code: 0
 
 INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpufj_fbol\sas_plan' < output.sas
-[t=0.000150s, 1952 KB] Search code revision: 7120aa0
-[t=0.000243s, 1952 KB] reading input...
-[t=0.000337s, 1964 KB] done reading input!
-[t=0.001575s, 2528 KB] Initializing landmark cut heuristic...
-[t=0.001605s, 2536 KB] Building successor generator... done!
-[t=0.001615s, 2536 KB] peak memory difference for successor generator creation: 0 KB
-[t=0.001618s, 2536 KB] time for successor generation creation: 0.000004s
-[t=0.001623s, 2536 KB] Variables: 1
-[t=0.001625s, 2536 KB] FactPairs: 2
-[t=0.001628s, 2536 KB] Bytes per state: 4
-[t=0.001638s, 2540 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
-[t=0.001660s, 2588 KB] Initial state is a dead end.
-[t=0.001665s, 2588 KB] Initial heuristic value for lmcut: infinity
-[t=0.001667s, 2588 KB] pruning method: none
-[t=0.001671s, 2588 KB] Completely explored state space -- no solution!
-[t=0.001673s, 2588 KB] Actual search time: 0.000005s
-[t=0.001677s, 2588 KB] Expanded 0 state(s).
-[t=0.001677s, 2588 KB] Reopened 0 state(s).
-[t=0.001677s, 2588 KB] Evaluated 1 state(s).
-[t=0.001677s, 2588 KB] Evaluations: 1
-[t=0.001677s, 2588 KB] Generated 0 state(s).
-[t=0.001677s, 2588 KB] Dead ends: 0 state(s).
-[t=0.001677s, 2588 KB] Number of registered states: 1
-[t=0.001677s, 2588 KB] Int hash set load factor: 1/1 = 1.000000
-[t=0.001677s, 2588 KB] Int hash set resizes: 0
-[t=0.001677s, 2588 KB] Search time: 0.000040s
-[t=0.001677s, 2588 KB] Total time: 0.001677s
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpqm0np50x\sas_plan' < output.sas
+[t=0.000160s, 1956 KB] Search code revision: 7120aa0
+[t=0.000249s, 1968 KB] reading input...
+[t=0.000341s, 1980 KB] done reading input!
+[t=0.001598s, 2520 KB] Initializing landmark cut heuristic...
+[t=0.001629s, 2528 KB] Building successor generator... done!
+[t=0.001639s, 2532 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.001642s, 2532 KB] time for successor generation creation: 0.000004s
+[t=0.001647s, 2532 KB] Variables: 1
+[t=0.001649s, 2532 KB] FactPairs: 2
+[t=0.001652s, 2532 KB] Bytes per state: 4
+[t=0.001662s, 2532 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.001682s, 2548 KB] Initial state is a dead end.
+[t=0.001687s, 2548 KB] Initial heuristic value for lmcut: infinity
+[t=0.001691s, 2548 KB] pruning method: none
+[t=0.001697s, 2548 KB] Completely explored state space -- no solution!
+[t=0.001699s, 2584 KB] Actual search time: 0.000006s
+[t=0.001702s, 2584 KB] Expanded 0 state(s).
+[t=0.001702s, 2584 KB] Reopened 0 state(s).
+[t=0.001702s, 2584 KB] Evaluated 1 state(s).
+[t=0.001702s, 2584 KB] Evaluations: 1
+[t=0.001702s, 2584 KB] Generated 0 state(s).
+[t=0.001702s, 2584 KB] Dead ends: 0 state(s).
+[t=0.001702s, 2584 KB] Number of registered states: 1
+[t=0.001702s, 2584 KB] Int hash set load factor: 1/1 = 1.000000
+[t=0.001702s, 2584 KB] Int hash set resizes: 0
+[t=0.001702s, 2584 KB] Search time: 0.000041s
+[t=0.001702s, 2584 KB] Total time: 0.001702s
 Search stopped without finding a solution.
 Remove intermediate file output.sas
 search exit code: 12

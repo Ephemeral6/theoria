@@ -42,50 +42,50 @@ INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'let(hlm,eval_modify_costs(landmark_sum(lm_factory=lm_reasonable_orders_hps(lm_rhw()),pref=false),cost_type=one),let(hff,eval_modify_costs(ff(),cost_type=one),lazy_greedy([hff,hlm],preferred=[hff,hlm],cost_type=one,reopen_closed=false)))' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpdcfwgfqz\sas_plan' < output.sas
-[t=0.000143s, 1964 KB] Search code revision: 7120aa0
-[t=0.000240s, 1964 KB] reading input...
-[t=0.000340s, 2072 KB] done reading input!
-[t=0.001868s, 2632 KB] Simplifying 0 unary operators... done! [0 unary operators]
-[t=0.001881s, 2632 KB] time to simplify: 0.000018s
-[t=0.001887s, 2632 KB] Initializing additive heuristic...
-[t=0.001890s, 2632 KB] Initializing FF heuristic...
-[t=0.001911s, 2632 KB] Initializing landmark sum heuristic...
-[t=0.001918s, 2632 KB] Generating landmark graph...
-[t=0.001924s, 2632 KB] Building a landmark graph with reasonable orders.
-[t=0.001929s, 2632 KB] Initializing Exploration...
-[t=0.001935s, 2632 KB] Generating landmarks using the RPG/SAS+ approach
-[t=0.001963s, 2656 KB] Landmarks generation time: 0.000038s
-[t=0.001969s, 2656 KB] Discovered 2 landmarks, of which 0 are disjunctive and 0 are conjunctive.
-[t=0.001971s, 2656 KB] There are 1 landmark orderings.
-[t=0.001975s, 2656 KB] approx. reasonable orders
-[t=0.001978s, 2656 KB] Landmarks generation time: 0.000059s
-[t=0.001981s, 2656 KB] Discovered 2 landmarks, of which 0 are disjunctive and 0 are conjunctive.
-[t=0.001983s, 2656 KB] There are 1 landmark orderings.
-[t=0.001986s, 2656 KB] Landmark graph generation time: 0.000070s
-[t=0.001990s, 2656 KB] Landmark graph contains 2 landmarks, of which 0 are disjunctive and 0 are conjunctive.
-[t=0.001993s, 2656 KB] Landmark graph contains 1 orderings.
-[t=0.002019s, 2656 KB] Building successor generator... done!
-[t=0.002031s, 2656 KB] peak memory difference for successor generator creation: 0 KB
-[t=0.002033s, 2684 KB] time for successor generation creation: 0.000004s
-[t=0.002038s, 2684 KB] Variables: 1
-[t=0.002040s, 2684 KB] FactPairs: 2
-[t=0.002042s, 2684 KB] Bytes per state: 4
-[t=0.002059s, 2684 KB] Conducting lazy best first search, (real) bound = 2147483647
-[t=0.002102s, 2732 KB] Initial heuristic value for ff: infinity
-[t=0.002110s, 2756 KB] Completely explored state space -- no solution!
-[t=0.002112s, 2756 KB] Actual search time: 0.000030s
-[t=0.002117s, 2756 KB] Expanded 0 state(s).
-[t=0.002117s, 2756 KB] Reopened 0 state(s).
-[t=0.002117s, 2756 KB] Evaluated 1 state(s).
-[t=0.002117s, 2764 KB] Evaluations: 1
-[t=0.002117s, 2764 KB] Generated 0 state(s).
-[t=0.002117s, 2764 KB] Dead ends: 1 state(s).
-[t=0.002117s, 2764 KB] Number of registered states: 1
-[t=0.002117s, 2764 KB] Int hash set load factor: 1/1 = 1.000000
-[t=0.002117s, 2764 KB] Int hash set resizes: 0
-[t=0.002117s, 2764 KB] Search time: 0.000060s
-[t=0.002117s, 2764 KB] Total time: 0.002117s
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'let(hlm,eval_modify_costs(landmark_sum(lm_factory=lm_reasonable_orders_hps(lm_rhw()),pref=false),cost_type=one),let(hff,eval_modify_costs(ff(),cost_type=one),lazy_greedy([hff,hlm],preferred=[hff,hlm],cost_type=one,reopen_closed=false)))' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmp1wahzmoq\sas_plan' < output.sas
+[t=0.000142s, 1976 KB] Search code revision: 7120aa0
+[t=0.000237s, 1976 KB] reading input...
+[t=0.000325s, 2016 KB] done reading input!
+[t=0.001923s, 2628 KB] Simplifying 0 unary operators... done! [0 unary operators]
+[t=0.001937s, 2628 KB] time to simplify: 0.000017s
+[t=0.001941s, 2628 KB] Initializing additive heuristic...
+[t=0.001943s, 2628 KB] Initializing FF heuristic...
+[t=0.001963s, 2628 KB] Initializing landmark sum heuristic...
+[t=0.001968s, 2628 KB] Generating landmark graph...
+[t=0.001974s, 2628 KB] Building a landmark graph with reasonable orders.
+[t=0.001979s, 2628 KB] Initializing Exploration...
+[t=0.001985s, 2628 KB] Generating landmarks using the RPG/SAS+ approach
+[t=0.002007s, 2628 KB] Landmarks generation time: 0.000032s
+[t=0.002012s, 2628 KB] Discovered 2 landmarks, of which 0 are disjunctive and 0 are conjunctive.
+[t=0.002015s, 2628 KB] There are 1 landmark orderings.
+[t=0.002018s, 2628 KB] approx. reasonable orders
+[t=0.002022s, 2628 KB] Landmarks generation time: 0.000052s
+[t=0.002026s, 2628 KB] Discovered 2 landmarks, of which 0 are disjunctive and 0 are conjunctive.
+[t=0.002028s, 2628 KB] There are 1 landmark orderings.
+[t=0.002031s, 2628 KB] Landmark graph generation time: 0.000064s
+[t=0.002034s, 2628 KB] Landmark graph contains 2 landmarks, of which 0 are disjunctive and 0 are conjunctive.
+[t=0.002037s, 2628 KB] Landmark graph contains 1 orderings.
+[t=0.002063s, 2628 KB] Building successor generator... done!
+[t=0.002076s, 2656 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.002081s, 2656 KB] time for successor generation creation: 0.000004s
+[t=0.002086s, 2656 KB] Variables: 1
+[t=0.002090s, 2656 KB] FactPairs: 2
+[t=0.002094s, 2656 KB] Bytes per state: 4
+[t=0.002123s, 2680 KB] Conducting lazy best first search, (real) bound = 2147483647
+[t=0.002160s, 2740 KB] Initial heuristic value for ff: infinity
+[t=0.002168s, 2740 KB] Completely explored state space -- no solution!
+[t=0.002172s, 2740 KB] Actual search time: 0.000034s
+[t=0.002180s, 2748 KB] Expanded 0 state(s).
+[t=0.002180s, 2748 KB] Reopened 0 state(s).
+[t=0.002180s, 2748 KB] Evaluated 1 state(s).
+[t=0.002180s, 2748 KB] Evaluations: 1
+[t=0.002180s, 2748 KB] Generated 0 state(s).
+[t=0.002180s, 2748 KB] Dead ends: 1 state(s).
+[t=0.002180s, 2748 KB] Number of registered states: 1
+[t=0.002180s, 2748 KB] Int hash set load factor: 1/1 = 1.000000
+[t=0.002180s, 2748 KB] Int hash set resizes: 0
+[t=0.002180s, 2748 KB] Search time: 0.000060s
+[t=0.002180s, 2748 KB] Total time: 0.002180s
 Search stopped without finding a solution.
 Remove intermediate file output.sas
 search exit code: 12

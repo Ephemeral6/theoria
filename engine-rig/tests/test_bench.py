@@ -210,6 +210,102 @@ def test_the_original_init_reaches_the_planner_byte_for_byte(tmp_path):
     assert "(:domain sokoban)" not in guarded
 
 
+def test_a_pair_theorem_naming_one_box_twice_is_refused(tmp_path):
+    """The regression an adversarial review of this run found.
+
+    The pair guard reads `at(?ob,?oc)` in the **pre-state**, where the pushed
+    box still holds its old position. For a pattern naming one box twice that
+    blocks transitions which *leave* the pattern rather than enter it -- stronger
+    than the theorem, and stronger is the unsound direction. Measured on the real
+    planner before this check existed, a vacuous same-box pattern took `far4`'s
+    optimal length from 11 to 25.
+
+    `carve()` cannot emit one (two positions of a box are mutex), but that is a
+    property of another module and `guardable()` exists not to take such things
+    on trust. `tools/p13_fd_dividend.py` had this check; this module had dropped it.
+    """
+    domain, _, _, _, theorems = sokoban_theorems(tmp_path)
+    same_box = dc.Theorem(
+        pattern=(("at", "b1", "c22"), ("at", "b1", "c32")),
+        blocked=(), goal_conflict=(("at", "b1", "c22"), ("at", "b1", "c42")),
+        n_deleting_actions=0,
+    )
+    with pytest.raises(compile_theorems.NotGuardable) as caught:
+        compile_theorems.guardable(domain, list(theorems) + [same_box])
+    assert "twice" in str(caught.value)
+
+
+def test_the_guarded_domain_still_matches_the_fixture_it_copies(tmp_path):
+    """`_MOVE` and `_EFFECT` are hand-copied from the committed sokoban domain.
+
+    Nothing else pins them, so a fixture edit would silently change the task
+    every dividend number is measured on. Compared on tokens rather than text
+    because the guarded copy is re-indented.
+    """
+    with open(sokoban.DOMAIN_PATH, encoding="utf-8") as fh:
+        fixture = fh.read()
+
+    def tokens(text, start):
+        chunk = text[text.index(start):]
+        depth, out = 0, []
+        for index, char in enumerate(chunk):
+            depth += (char == "(") - (char == ")")
+            if depth == 0:
+                out = chunk[:index + 1].split()
+                break
+        return [t for t in out if t]
+
+    assert tokens(compile_theorems._MOVE, "(:action move") == \
+        tokens(fixture, "(:action move")
+    # push's effect, which the guards leave untouched -- only its precondition moves.
+    assert tokens(compile_theorems._EFFECT.strip()[: -2], ":effect")[:6] == \
+        tokens(fixture[fixture.index("(:action push"):], ":effect")[:6]
+
+
+def test_the_indexed_guard_carries_every_pair_theorem(tmp_path):
+    _, problem, _, _, theorems = sokoban_theorems(tmp_path, side=5)
+    partners = compile_theorems.indexed_partners(theorems)
+    for theorem in theorems:
+        if theorem.size != 2:
+            continue
+        (_, b1, c1), (_, b2, c2) = theorem.pattern
+        assert (b2, c2) in partners[(b1, c1)]
+        assert (b1, c1) in partners[(b2, c2)]
+
+
+def test_every_box_cell_gets_exactly_one_npair_fact(tmp_path):
+    """Omitting `npair0` does not weaken the guard, it blocks the push entirely:
+    no schema would apply to a (box, cell) with no dead partners."""
+    _, problem, _, _, theorems = sokoban_theorems(tmp_path, side=5)
+    boxes = [n for n, k in problem.objects if k == "box"]
+    cells = [n for n, k in problem.objects if k == "cell"]
+    facts = compile_theorems.indexed_facts(theorems, boxes, cells)
+    for box in boxes:
+        for cell in cells:
+            matching = [f for f in facts
+                        if f.startswith("(npair") and f.endswith(" %s %s)" % (box, cell))]
+            assert len(matching) == 1, (box, cell, matching)
+
+
+def test_the_indexed_guard_needs_no_adl(tmp_path):
+    _, problem, _, _, theorems = sokoban_theorems(tmp_path, side=5)
+    text = compile_theorems.indexed_domain(compile_theorems.indexed_arity(theorems))
+    assert ":adl" not in text and "forall" not in text
+    assert ":negative-preconditions" in text
+
+
+def test_indexed_plan_steps_map_back_to_the_original_vocabulary():
+    """`push-pair<k>` is not an action the original domain has."""
+    mapped = compile_theorems.to_original_plan(
+        ["(move c11 c12 right)", "(push-pair2 c43 c33 c23 b2 up b1 c11 b1 c12)"],
+        "indexed",
+    )
+    assert mapped == ["(move c11 c12 right)", "(push c43 c33 c23 b2 up)"]
+    # Identity for the guards that do not rename anything.
+    assert compile_theorems.to_original_plan(["(push a b c d e)"], "singleton") == \
+        ["(push a b c d e)"]
+
+
 def test_every_carved_theorem_reaches_the_full_guard(tmp_path):
     _, _, _, _, theorems = sokoban_theorems(tmp_path)
     size = compile_theorems.guard_size(theorems, "full")
@@ -311,3 +407,50 @@ def test_the_full_guard_is_refused_by_the_optimal_rung_for_the_reason_recorded(t
     assert record.plan is None
     assert record.error is not None
     assert "axiom" in record.error.lower()
+
+
+@needs_fd
+def test_the_indexed_guard_gets_the_pair_deadlocks_through_the_optimal_rung(tmp_path):
+    """The refutation of this run's first framing, pinned.
+
+    The `:adl` guard is refused for axioms (test above), and this run originally
+    concluded pair deadlocks "cannot reach" the admissible rungs. They can: drop
+    the `forall` for indexed static selectors and `astar(lmcut())` accepts the
+    task, returns the same optimal length -- and expands *more* states than
+    without it. That last part is why the encoding had to be built rather than
+    predicted.
+    """
+    domain, problem, level, path, theorems = sokoban_theorems(tmp_path, side=5)
+    guard_domain, guard_problem = compile_theorems.write_guarded(
+        str(tmp_path), level.name, level.problem_text(), theorems,
+        guard="indexed", problem=problem)
+
+    base = fdrun.measure(FD, sokoban.DOMAIN_PATH, path, backends.FD_OPTIMAL, "lmcut")
+    guarded = fdrun.measure(FD, guard_domain, guard_problem,
+                            backends.FD_OPTIMAL, "lmcut")
+
+    assert guarded.error is None, guarded.error
+    assert guarded.plan_length == base.plan_length          # optimality preserved
+    fd_adapter.validate_plan(
+        domain, problem, compile_theorems.to_original_plan(guarded.plan, "indexed"))
+    assert guarded.translator["task_size"] > base.translator["task_size"]
+
+
+@needs_fd
+def test_indexed_and_adl_guards_agree_on_a_blind_search(tmp_path):
+    """Two encodings of the same theorems must remove the same transitions.
+
+    Blind A* because it is the one configuration that accepts both, so the
+    comparison is possible at all.
+    """
+    _, problem, level, _, theorems = sokoban_theorems(tmp_path, side=4)
+    results = {}
+    for guard in ("full", "indexed"):
+        guard_domain, guard_problem = compile_theorems.write_guarded(
+            str(tmp_path), level.name, level.problem_text(), theorems,
+            guard=guard, problem=problem)
+        record = fdrun.measure(FD, guard_domain, guard_problem,
+                               backends.FD_OPTIMAL, "blind")
+        assert record.error is None, (guard, record.error)
+        results[guard] = (record.nodes["expanded"], record.plan_length)
+    assert results["full"] == results["indexed"], results

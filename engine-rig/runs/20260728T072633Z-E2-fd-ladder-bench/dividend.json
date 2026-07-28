@@ -12,7 +12,7 @@
       "n_theorems": 16,
       "n_singleton_theorems": 8,
       "n_pair_theorems": 8,
-      "carve_seconds": 0.072688,
+      "carve_seconds": 0.076422,
       "stub": {
         "problem": "sokoban-far4",
         "n_theorems": 16,
@@ -41,9 +41,9 @@
         "plan_length_unchanged": true,
         "rendering": "16 deadlock theorem(s) cut sokoban-far4 from 808 expansions to 571 (29.3% fewer), plan length 11 either way",
         "timing": {
-          "blind_seconds": 0.026353,
-          "pruned_seconds": 0.020409,
-          "seconds_ratio": 0.7745
+          "blind_seconds": 0.026527,
+          "pruned_seconds": 0.020324,
+          "seconds_ratio": 0.7662
         },
         "dividend_is_honest": true
       },
@@ -57,6 +57,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 16,
             "theorems_expressed": 8
           },
@@ -124,15 +125,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.001171,
-              "fd_total_seconds": 0.003879,
-              "wall_seconds": 0.165162,
+              "search_seconds": 0.001161,
+              "fd_total_seconds": 0.00388,
+              "wall_seconds": 0.169422,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.000871,
-              "fd_total_seconds": 0.003377,
-              "wall_seconds": 0.16197,
+              "search_seconds": 0.000963,
+              "fd_total_seconds": 0.003585,
+              "wall_seconds": 0.167436,
               "peak_memory_kb": null
             }
           }
@@ -146,6 +147,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 16,
             "theorems_expressed": 8
           },
@@ -213,15 +215,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000844,
-              "fd_total_seconds": 0.003615,
-              "wall_seconds": 0.163251,
+              "search_seconds": 0.000793,
+              "fd_total_seconds": 0.003674,
+              "wall_seconds": 0.169066,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.000679,
-              "fd_total_seconds": 0.003221,
-              "wall_seconds": 0.162242,
+              "search_seconds": 0.000666,
+              "fd_total_seconds": 0.003283,
+              "wall_seconds": 0.168834,
               "peak_memory_kb": null
             }
           }
@@ -235,6 +237,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 16,
             "theorems_expressed": 8
           },
@@ -302,15 +305,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000154,
-              "fd_total_seconds": 0.364173,
-              "wall_seconds": 0.526297,
+              "search_seconds": 0.000142,
+              "fd_total_seconds": 0.371235,
+              "wall_seconds": 0.535085,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.00014,
-              "fd_total_seconds": 0.26331,
-              "wall_seconds": 0.426711,
+              "search_seconds": 0.000149,
+              "fd_total_seconds": 0.256014,
+              "wall_seconds": 0.420878,
               "peak_memory_kb": null
             }
           }
@@ -324,6 +327,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 16,
             "theorems_expressed": 8
           },
@@ -391,15 +395,15 @@
           "dividend_is_honest": false,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000873,
-              "fd_total_seconds": 0.004699,
-              "wall_seconds": 0.165273,
+              "search_seconds": 0.000695,
+              "fd_total_seconds": 0.004428,
+              "wall_seconds": 0.169625,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.000724,
-              "fd_total_seconds": 0.004206,
-              "wall_seconds": 0.165311,
+              "search_seconds": 0.000735,
+              "fd_total_seconds": 0.004304,
+              "wall_seconds": 0.167828,
               "peak_memory_kb": null
             }
           }
@@ -413,6 +417,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 16,
             "guard_facts_total": 24,
+            "max_pair_arity": null,
             "theorems_total": 16,
             "theorems_expressed": 16
           },
@@ -480,15 +485,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.001171,
-              "fd_total_seconds": 0.003879,
-              "wall_seconds": 0.165162,
+              "search_seconds": 0.001161,
+              "fd_total_seconds": 0.00388,
+              "wall_seconds": 0.169422,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.001125,
-              "fd_total_seconds": 0.003936,
-              "wall_seconds": 0.168775,
+              "search_seconds": 0.001128,
+              "fd_total_seconds": 0.003918,
+              "wall_seconds": 0.171964,
               "peak_memory_kb": null
             }
           }
@@ -502,6 +507,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 16,
             "guard_facts_total": 24,
+            "max_pair_arity": null,
             "theorems_total": 16,
             "theorems_expressed": 16
           },
@@ -557,7 +563,7 @@
               "task_size": 981
             },
             "initial_h": null,
-            "error": "no plan file and no proof (exit 34, rung fd-optimal): 1964 KB] Search code revision: 7120aa0\n[t=0.000235s, 1968 KB] reading input...\n[t=0.001442s, 2216 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): 1960 KB] Search code revision: 7120aa0\n[t=0.000242s, 1972 KB] reading input...\n[t=0.001496s, 2200 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
           },
           "expansions_before": 23,
           "expansions_after": null,
@@ -565,19 +571,19 @@
           "task_size_after": 981,
           "plan_length_delta": null,
           "replayed_on_original_domain": null,
-          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): 1964 KB] Search code revision: 7120aa0\n[t=0.000235s, 1968 KB] reading input...\n[t=0.001442s, 2216 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): 1960 KB] Search code revision: 7120aa0\n[t=0.000242s, 1972 KB] reading input...\n[t=0.001496s, 2200 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000844,
-              "fd_total_seconds": 0.003615,
-              "wall_seconds": 0.163251,
+              "search_seconds": 0.000793,
+              "fd_total_seconds": 0.003674,
+              "wall_seconds": 0.169066,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": null,
               "fd_total_seconds": null,
-              "wall_seconds": 0.16484,
+              "wall_seconds": 0.167164,
               "peak_memory_kb": null
             }
           }
@@ -591,6 +597,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 16,
             "guard_facts_total": 24,
+            "max_pair_arity": null,
             "theorems_total": 16,
             "theorems_expressed": 16
           },
@@ -646,7 +653,7 @@
               "task_size": 981
             },
             "initial_h": null,
-            "error": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.002903s, 2864 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.002887s, 2796 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
           },
           "expansions_before": 12,
           "expansions_after": null,
@@ -654,19 +661,19 @@
           "task_size_after": 981,
           "plan_length_delta": null,
           "replayed_on_original_domain": null,
-          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.002903s, 2864 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.002887s, 2796 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000154,
-              "fd_total_seconds": 0.364173,
-              "wall_seconds": 0.526297,
+              "search_seconds": 0.000142,
+              "fd_total_seconds": 0.371235,
+              "wall_seconds": 0.535085,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": null,
               "fd_total_seconds": null,
-              "wall_seconds": 0.159405,
+              "wall_seconds": 0.164492,
               "peak_memory_kb": null
             }
           }
@@ -680,6 +687,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 16,
             "guard_facts_total": 24,
+            "max_pair_arity": null,
             "theorems_total": 16,
             "theorems_expressed": 16
           },
@@ -747,15 +755,375 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000873,
-              "fd_total_seconds": 0.004699,
-              "wall_seconds": 0.165273,
+              "search_seconds": 0.000695,
+              "fd_total_seconds": 0.004428,
+              "wall_seconds": 0.169625,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.000351,
-              "fd_total_seconds": 0.004384,
-              "wall_seconds": 0.163652,
+              "search_seconds": 0.000359,
+              "fd_total_seconds": 0.004401,
+              "wall_seconds": 0.173068,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far4",
+          "guard": "indexed",
+          "rung": "fd-optimal/blind",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 48,
+            "guard_facts_total": 56,
+            "max_pair_arity": 1,
+            "theorems_total": 16,
+            "theorems_expressed": 16
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(blind())",
+            "heuristic": "blind",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 11,
+            "plan_cost": 11,
+            "nodes": {
+              "expanded": 837,
+              "generated": 2453,
+              "evaluated": 1167,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 19,
+              "facts": 80,
+              "operators": 112,
+              "mutex_groups": 16,
+              "task_size": 1029
+            },
+            "initial_h": "blind=1",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(blind())",
+            "heuristic": "blind",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 11,
+            "plan_cost": 11,
+            "nodes": {
+              "expanded": 574,
+              "generated": 1627,
+              "evaluated": 743,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 19,
+              "facts": 72,
+              "operators": 416,
+              "mutex_groups": 16,
+              "task_size": 4101
+            },
+            "initial_h": "blind=1",
+            "error": null
+          },
+          "expansions_before": 837,
+          "expansions_after": 574,
+          "task_size_before": 1029,
+          "task_size_after": 4101,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.001161,
+              "fd_total_seconds": 0.00388,
+              "wall_seconds": 0.169422,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.000785,
+              "fd_total_seconds": 0.006343,
+              "wall_seconds": 0.191821,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far4",
+          "guard": "indexed",
+          "rung": "fd-optimal/lmcut",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 48,
+            "guard_facts_total": 56,
+            "max_pair_arity": 1,
+            "theorems_total": 16,
+            "theorems_expressed": 16
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(lmcut())",
+            "heuristic": "lmcut",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 11,
+            "plan_cost": 11,
+            "nodes": {
+              "expanded": 23,
+              "generated": 68,
+              "evaluated": 49,
+              "reopened": 0,
+              "dead_ends": 7
+            },
+            "translator": {
+              "variables": 19,
+              "facts": 80,
+              "operators": 112,
+              "mutex_groups": 16,
+              "task_size": 1029
+            },
+            "initial_h": "lmcut=7",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(lmcut())",
+            "heuristic": "lmcut",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 11,
+            "plan_cost": 11,
+            "nodes": {
+              "expanded": 34,
+              "generated": 101,
+              "evaluated": 62,
+              "reopened": 0,
+              "dead_ends": 9
+            },
+            "translator": {
+              "variables": 19,
+              "facts": 72,
+              "operators": 416,
+              "mutex_groups": 16,
+              "task_size": 4101
+            },
+            "initial_h": "lmcut=7",
+            "error": null
+          },
+          "expansions_before": 23,
+          "expansions_after": 34,
+          "task_size_before": 1029,
+          "task_size_after": 4101,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.000793,
+              "fd_total_seconds": 0.003674,
+              "wall_seconds": 0.169066,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.002105,
+              "fd_total_seconds": 0.008375,
+              "wall_seconds": 0.191639,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far4",
+          "guard": "indexed",
+          "rung": "fd-optimal/ipdb",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 48,
+            "guard_facts_total": 56,
+            "max_pair_arity": 1,
+            "theorems_total": 16,
+            "theorems_expressed": 16
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(ipdb())",
+            "heuristic": "ipdb",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 11,
+            "plan_cost": 11,
+            "nodes": {
+              "expanded": 12,
+              "generated": 35,
+              "evaluated": 29,
+              "reopened": 0,
+              "dead_ends": 3
+            },
+            "translator": {
+              "variables": 19,
+              "facts": 80,
+              "operators": 112,
+              "mutex_groups": 16,
+              "task_size": 1029
+            },
+            "initial_h": "cpdbs=11",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(ipdb())",
+            "heuristic": "ipdb",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 11,
+            "plan_cost": 11,
+            "nodes": {
+              "expanded": 12,
+              "generated": 33,
+              "evaluated": 27,
+              "reopened": 0,
+              "dead_ends": 1
+            },
+            "translator": {
+              "variables": 19,
+              "facts": 72,
+              "operators": 416,
+              "mutex_groups": 16,
+              "task_size": 4101
+            },
+            "initial_h": "cpdbs=11",
+            "error": null
+          },
+          "expansions_before": 12,
+          "expansions_after": 12,
+          "task_size_before": 1029,
+          "task_size_after": 4101,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.000142,
+              "fd_total_seconds": 0.371235,
+              "wall_seconds": 0.535085,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.000148,
+              "fd_total_seconds": 0.288944,
+              "wall_seconds": 0.474871,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far4",
+          "guard": "indexed",
+          "rung": "fd-satisficing",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 48,
+            "guard_facts_total": 56,
+            "max_pair_arity": 1,
+            "theorems_total": 16,
+            "theorems_expressed": 16
+          },
+          "baseline": {
+            "tier": "fd-satisficing",
+            "config": "--alias lama-first",
+            "heuristic": null,
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 37,
+            "plan_cost": 37,
+            "nodes": {
+              "expanded": 95,
+              "generated": 291,
+              "evaluated": 124,
+              "reopened": 0,
+              "dead_ends": 28
+            },
+            "translator": {
+              "variables": 19,
+              "facts": 80,
+              "operators": 112,
+              "mutex_groups": 16,
+              "task_size": 1029
+            },
+            "initial_h": "ff=10",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-satisficing",
+            "config": "--alias lama-first",
+            "heuristic": null,
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 37,
+            "plan_cost": 37,
+            "nodes": {
+              "expanded": 111,
+              "generated": 339,
+              "evaluated": 138,
+              "reopened": 0,
+              "dead_ends": 26
+            },
+            "translator": {
+              "variables": 19,
+              "facts": 72,
+              "operators": 416,
+              "mutex_groups": 16,
+              "task_size": 4101
+            },
+            "initial_h": "ff=10",
+            "error": null
+          },
+          "expansions_before": 95,
+          "expansions_after": 111,
+          "task_size_before": 1029,
+          "task_size_after": 4101,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.000695,
+              "fd_total_seconds": 0.004428,
+              "wall_seconds": 0.169625,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.001279,
+              "fd_total_seconds": 0.008883,
+              "wall_seconds": 0.192539,
               "peak_memory_kb": null
             }
           }
@@ -770,7 +1138,7 @@
       "n_theorems": 24,
       "n_singleton_theorems": 8,
       "n_pair_theorems": 16,
-      "carve_seconds": 0.257665,
+      "carve_seconds": 0.248687,
       "stub": {
         "problem": "sokoban-far5",
         "n_theorems": 24,
@@ -799,9 +1167,9 @@
         "plan_length_unchanged": true,
         "rendering": "24 deadlock theorem(s) cut sokoban-far5 from 988 expansions to 869 (12.0% fewer), plan length 13 either way",
         "timing": {
-          "blind_seconds": 0.054655,
-          "pruned_seconds": 0.05078,
-          "seconds_ratio": 0.9291
+          "blind_seconds": 0.054159,
+          "pruned_seconds": 0.051584,
+          "seconds_ratio": 0.9524
         },
         "dividend_is_honest": true
       },
@@ -815,6 +1183,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 24,
             "theorems_expressed": 8
           },
@@ -882,15 +1251,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.001418,
-              "fd_total_seconds": 0.004985,
-              "wall_seconds": 0.174022,
+              "search_seconds": 0.001516,
+              "fd_total_seconds": 0.005419,
+              "wall_seconds": 0.177204,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.001308,
-              "fd_total_seconds": 0.004612,
-              "wall_seconds": 0.17009,
+              "search_seconds": 0.001363,
+              "fd_total_seconds": 0.005269,
+              "wall_seconds": 0.171281,
               "peak_memory_kb": null
             }
           }
@@ -904,6 +1273,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 24,
             "theorems_expressed": 8
           },
@@ -971,15 +1341,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.001897,
-              "fd_total_seconds": 0.005421,
-              "wall_seconds": 0.173136,
+              "search_seconds": 0.001919,
+              "fd_total_seconds": 0.005605,
+              "wall_seconds": 0.176912,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.001886,
-              "fd_total_seconds": 0.005481,
-              "wall_seconds": 0.170158,
+              "search_seconds": 0.001873,
+              "fd_total_seconds": 0.005894,
+              "wall_seconds": 0.173986,
               "peak_memory_kb": null
             }
           }
@@ -993,6 +1363,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 24,
             "theorems_expressed": 8
           },
@@ -1060,15 +1431,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000182,
-              "fd_total_seconds": 0.807022,
-              "wall_seconds": 0.973656,
+              "search_seconds": 0.000166,
+              "fd_total_seconds": 0.804932,
+              "wall_seconds": 0.976906,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.000164,
-              "fd_total_seconds": 0.762548,
-              "wall_seconds": 0.929595,
+              "search_seconds": 0.000172,
+              "fd_total_seconds": 0.763976,
+              "wall_seconds": 0.933012,
               "peak_memory_kb": null
             }
           }
@@ -1082,6 +1453,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 24,
             "theorems_expressed": 8
           },
@@ -1149,15 +1521,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.00065,
-              "fd_total_seconds": 0.005557,
-              "wall_seconds": 0.174663,
+              "search_seconds": 0.000671,
+              "fd_total_seconds": 0.006068,
+              "wall_seconds": 0.17327,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.00033,
-              "fd_total_seconds": 0.004931,
-              "wall_seconds": 0.174018,
+              "search_seconds": 0.000375,
+              "fd_total_seconds": 0.005067,
+              "wall_seconds": 0.172213,
               "peak_memory_kb": null
             }
           }
@@ -1171,6 +1543,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 32,
             "guard_facts_total": 40,
+            "max_pair_arity": null,
             "theorems_total": 24,
             "theorems_expressed": 24
           },
@@ -1238,15 +1611,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.001418,
-              "fd_total_seconds": 0.004985,
-              "wall_seconds": 0.174022,
+              "search_seconds": 0.001516,
+              "fd_total_seconds": 0.005419,
+              "wall_seconds": 0.177204,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.002111,
-              "fd_total_seconds": 0.005901,
-              "wall_seconds": 0.171408,
+              "search_seconds": 0.002021,
+              "fd_total_seconds": 0.005667,
+              "wall_seconds": 0.175154,
               "peak_memory_kb": null
             }
           }
@@ -1260,6 +1633,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 32,
             "guard_facts_total": 40,
+            "max_pair_arity": null,
             "theorems_total": 24,
             "theorems_expressed": 24
           },
@@ -1315,7 +1689,7 @@
               "task_size": 1847
             },
             "initial_h": null,
-            "error": "no plan file and no proof (exit 34, rung fd-optimal): 1916 KB] Search code revision: 7120aa0\n[t=0.000222s, 1916 KB] reading input...\n[t=0.002305s, 2380 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): 1972 KB] Search code revision: 7120aa0\n[t=0.000245s, 1984 KB] reading input...\n[t=0.002345s, 2432 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
           },
           "expansions_before": 30,
           "expansions_after": null,
@@ -1323,19 +1697,19 @@
           "task_size_after": 1847,
           "plan_length_delta": null,
           "replayed_on_original_domain": null,
-          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): 1916 KB] Search code revision: 7120aa0\n[t=0.000222s, 1916 KB] reading input...\n[t=0.002305s, 2380 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): 1972 KB] Search code revision: 7120aa0\n[t=0.000245s, 1984 KB] reading input...\n[t=0.002345s, 2432 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 0.001897,
-              "fd_total_seconds": 0.005421,
-              "wall_seconds": 0.173136,
+              "search_seconds": 0.001919,
+              "fd_total_seconds": 0.005605,
+              "wall_seconds": 0.176912,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": null,
               "fd_total_seconds": null,
-              "wall_seconds": 0.167411,
+              "wall_seconds": 0.169042,
               "peak_memory_kb": null
             }
           }
@@ -1349,6 +1723,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 32,
             "guard_facts_total": 40,
+            "max_pair_arity": null,
             "theorems_total": 24,
             "theorems_expressed": 24
           },
@@ -1404,7 +1779,7 @@
               "task_size": 1847
             },
             "initial_h": null,
-            "error": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.003702s, 2876 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.003728s, 2864 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
           },
           "expansions_before": 14,
           "expansions_after": null,
@@ -1412,19 +1787,19 @@
           "task_size_after": 1847,
           "plan_length_delta": null,
           "replayed_on_original_domain": null,
-          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.003702s, 2876 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.003728s, 2864 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000182,
-              "fd_total_seconds": 0.807022,
-              "wall_seconds": 0.973656,
+              "search_seconds": 0.000166,
+              "fd_total_seconds": 0.804932,
+              "wall_seconds": 0.976906,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": null,
               "fd_total_seconds": null,
-              "wall_seconds": 0.16899,
+              "wall_seconds": 0.17035,
               "peak_memory_kb": null
             }
           }
@@ -1438,6 +1813,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 32,
             "guard_facts_total": 40,
+            "max_pair_arity": null,
             "theorems_total": 24,
             "theorems_expressed": 24
           },
@@ -1505,15 +1881,375 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.00065,
-              "fd_total_seconds": 0.005557,
-              "wall_seconds": 0.174663,
+              "search_seconds": 0.000671,
+              "fd_total_seconds": 0.006068,
+              "wall_seconds": 0.17327,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.000858,
-              "fd_total_seconds": 0.006623,
-              "wall_seconds": 0.174521,
+              "search_seconds": 0.000857,
+              "fd_total_seconds": 0.006559,
+              "wall_seconds": 0.178147,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far5",
+          "guard": "indexed",
+          "rung": "fd-optimal/blind",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 82,
+            "guard_facts_total": 90,
+            "max_pair_arity": 2,
+            "theorems_total": 24,
+            "theorems_expressed": 24
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(blind())",
+            "heuristic": "blind",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 13,
+            "plan_cost": 13,
+            "nodes": {
+              "expanded": 958,
+              "generated": 3104,
+              "evaluated": 1490,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 28,
+              "facts": 125,
+              "operators": 200,
+              "mutex_groups": 25,
+              "task_size": 1815
+            },
+            "initial_h": "blind=1",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(blind())",
+            "heuristic": "blind",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 13,
+            "plan_cost": 13,
+            "nodes": {
+              "expanded": 1159,
+              "generated": 3697,
+              "evaluated": 1666,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 28,
+              "facts": 117,
+              "operators": 1224,
+              "mutex_groups": 25,
+              "task_size": 12111
+            },
+            "initial_h": "blind=1",
+            "error": null
+          },
+          "expansions_before": 958,
+          "expansions_after": 1159,
+          "task_size_before": 1815,
+          "task_size_after": 12111,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.001516,
+              "fd_total_seconds": 0.005419,
+              "wall_seconds": 0.177204,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.001751,
+              "fd_total_seconds": 0.015024,
+              "wall_seconds": 0.244549,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far5",
+          "guard": "indexed",
+          "rung": "fd-optimal/lmcut",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 82,
+            "guard_facts_total": 90,
+            "max_pair_arity": 2,
+            "theorems_total": 24,
+            "theorems_expressed": 24
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(lmcut())",
+            "heuristic": "lmcut",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 13,
+            "plan_cost": 13,
+            "nodes": {
+              "expanded": 30,
+              "generated": 103,
+              "evaluated": 69,
+              "reopened": 0,
+              "dead_ends": 4
+            },
+            "translator": {
+              "variables": 28,
+              "facts": 125,
+              "operators": 200,
+              "mutex_groups": 25,
+              "task_size": 1815
+            },
+            "initial_h": "lmcut=10",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(lmcut())",
+            "heuristic": "lmcut",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 13,
+            "plan_cost": 13,
+            "nodes": {
+              "expanded": 37,
+              "generated": 124,
+              "evaluated": 77,
+              "reopened": 0,
+              "dead_ends": 6
+            },
+            "translator": {
+              "variables": 28,
+              "facts": 117,
+              "operators": 1224,
+              "mutex_groups": 25,
+              "task_size": 12111
+            },
+            "initial_h": "lmcut=10",
+            "error": null
+          },
+          "expansions_before": 30,
+          "expansions_after": 37,
+          "task_size_before": 1815,
+          "task_size_after": 12111,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.001919,
+              "fd_total_seconds": 0.005605,
+              "wall_seconds": 0.176912,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.007586,
+              "fd_total_seconds": 0.021373,
+              "wall_seconds": 0.249294,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far5",
+          "guard": "indexed",
+          "rung": "fd-optimal/ipdb",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 82,
+            "guard_facts_total": 90,
+            "max_pair_arity": 2,
+            "theorems_total": 24,
+            "theorems_expressed": 24
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(ipdb())",
+            "heuristic": "ipdb",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 13,
+            "plan_cost": 13,
+            "nodes": {
+              "expanded": 14,
+              "generated": 41,
+              "evaluated": 33,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 28,
+              "facts": 125,
+              "operators": 200,
+              "mutex_groups": 25,
+              "task_size": 1815
+            },
+            "initial_h": "cpdbs=13",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(ipdb())",
+            "heuristic": "ipdb",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 13,
+            "plan_cost": 13,
+            "nodes": {
+              "expanded": 14,
+              "generated": 46,
+              "evaluated": 36,
+              "reopened": 0,
+              "dead_ends": 1
+            },
+            "translator": {
+              "variables": 28,
+              "facts": 117,
+              "operators": 1224,
+              "mutex_groups": 25,
+              "task_size": 12111
+            },
+            "initial_h": "cpdbs=13",
+            "error": null
+          },
+          "expansions_before": 14,
+          "expansions_after": 14,
+          "task_size_before": 1815,
+          "task_size_after": 12111,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.000166,
+              "fd_total_seconds": 0.804932,
+              "wall_seconds": 0.976906,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.000171,
+              "fd_total_seconds": 0.88122,
+              "wall_seconds": 1.103693,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far5",
+          "guard": "indexed",
+          "rung": "fd-satisficing",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 82,
+            "guard_facts_total": 90,
+            "max_pair_arity": 2,
+            "theorems_total": 24,
+            "theorems_expressed": 24
+          },
+          "baseline": {
+            "tier": "fd-satisficing",
+            "config": "--alias lama-first",
+            "heuristic": null,
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 21,
+            "plan_cost": 21,
+            "nodes": {
+              "expanded": 59,
+              "generated": 216,
+              "evaluated": 76,
+              "reopened": 0,
+              "dead_ends": 16
+            },
+            "translator": {
+              "variables": 28,
+              "facts": 125,
+              "operators": 200,
+              "mutex_groups": 25,
+              "task_size": 1815
+            },
+            "initial_h": "ff=18",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-satisficing",
+            "config": "--alias lama-first",
+            "heuristic": null,
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 15,
+            "plan_cost": 15,
+            "nodes": {
+              "expanded": 29,
+              "generated": 103,
+              "evaluated": 35,
+              "reopened": 0,
+              "dead_ends": 5
+            },
+            "translator": {
+              "variables": 28,
+              "facts": 117,
+              "operators": 1224,
+              "mutex_groups": 25,
+              "task_size": 12111
+            },
+            "initial_h": "ff=18",
+            "error": null
+          },
+          "expansions_before": 59,
+          "expansions_after": 29,
+          "task_size_before": 1815,
+          "task_size_after": 12111,
+          "plan_length_delta": -6,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.000671,
+              "fd_total_seconds": 0.006068,
+              "wall_seconds": 0.17327,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.000841,
+              "fd_total_seconds": 0.019209,
+              "wall_seconds": 0.241241,
               "peak_memory_kb": null
             }
           }
@@ -1528,7 +2264,7 @@
       "n_theorems": 32,
       "n_singleton_theorems": 8,
       "n_pair_theorems": 24,
-      "carve_seconds": 0.6257,
+      "carve_seconds": 0.665082,
       "stub": {
         "problem": "sokoban-far6",
         "n_theorems": 32,
@@ -1557,9 +2293,9 @@
         "plan_length_unchanged": true,
         "rendering": "32 deadlock theorem(s) cut sokoban-far6 from 3152 expansions to 2788 (11.5% fewer), plan length 17 either way",
         "timing": {
-          "blind_seconds": 0.245926,
-          "pruned_seconds": 0.225186,
-          "seconds_ratio": 0.9157
+          "blind_seconds": 0.252686,
+          "pruned_seconds": 0.229429,
+          "seconds_ratio": 0.908
         },
         "dividend_is_honest": true
       },
@@ -1573,6 +2309,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 32,
             "theorems_expressed": 8
           },
@@ -1640,15 +2377,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.004701,
-              "fd_total_seconds": 0.009175,
-              "wall_seconds": 0.184654,
+              "search_seconds": 0.004625,
+              "fd_total_seconds": 0.008922,
+              "wall_seconds": 0.17945,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.004356,
-              "fd_total_seconds": 0.008772,
-              "wall_seconds": 0.181496,
+              "search_seconds": 0.004266,
+              "fd_total_seconds": 0.008617,
+              "wall_seconds": 0.188101,
               "peak_memory_kb": null
             }
           }
@@ -1662,6 +2399,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 32,
             "theorems_expressed": 8
           },
@@ -1729,15 +2467,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.004325,
-              "fd_total_seconds": 0.008934,
-              "wall_seconds": 0.181458,
+              "search_seconds": 0.004216,
+              "fd_total_seconds": 0.008888,
+              "wall_seconds": 0.181725,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.003922,
-              "fd_total_seconds": 0.00863,
-              "wall_seconds": 0.180546,
+              "search_seconds": 0.003989,
+              "fd_total_seconds": 0.008395,
+              "wall_seconds": 0.188429,
               "peak_memory_kb": null
             }
           }
@@ -1751,6 +2489,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 32,
             "theorems_expressed": 8
           },
@@ -1818,15 +2557,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000237,
-              "fd_total_seconds": 1.585067,
-              "wall_seconds": 1.765415,
+              "search_seconds": 0.000196,
+              "fd_total_seconds": 1.598227,
+              "wall_seconds": 1.772799,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.000231,
-              "fd_total_seconds": 1.513575,
-              "wall_seconds": 1.689941,
+              "search_seconds": 0.000206,
+              "fd_total_seconds": 1.565535,
+              "wall_seconds": 1.747672,
               "peak_memory_kb": null
             }
           }
@@ -1840,6 +2579,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 32,
             "theorems_expressed": 8
           },
@@ -1907,15 +2647,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.00126,
-              "fd_total_seconds": 0.007455,
-              "wall_seconds": 0.179136,
+              "search_seconds": 0.001244,
+              "fd_total_seconds": 0.007411,
+              "wall_seconds": 0.18554,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.001202,
-              "fd_total_seconds": 0.007118,
-              "wall_seconds": 0.180477,
+              "search_seconds": 0.001186,
+              "fd_total_seconds": 0.006941,
+              "wall_seconds": 0.184739,
               "peak_memory_kb": null
             }
           }
@@ -1929,6 +2669,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 48,
             "guard_facts_total": 56,
+            "max_pair_arity": null,
             "theorems_total": 32,
             "theorems_expressed": 32
           },
@@ -1996,15 +2737,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.004701,
-              "fd_total_seconds": 0.009175,
-              "wall_seconds": 0.184654,
+              "search_seconds": 0.004625,
+              "fd_total_seconds": 0.008922,
+              "wall_seconds": 0.17945,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.006986,
-              "fd_total_seconds": 0.011669,
-              "wall_seconds": 0.187708,
+              "search_seconds": 0.007215,
+              "fd_total_seconds": 0.011848,
+              "wall_seconds": 0.191444,
               "peak_memory_kb": null
             }
           }
@@ -2018,6 +2759,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 48,
             "guard_facts_total": 56,
+            "max_pair_arity": null,
             "theorems_total": 32,
             "theorems_expressed": 32
           },
@@ -2073,7 +2815,7 @@
               "task_size": 2925
             },
             "initial_h": null,
-            "error": "no plan file and no proof (exit 34, rung fd-optimal): 1960 KB] Search code revision: 7120aa0\n[t=0.000243s, 1960 KB] reading input...\n[t=0.003451s, 2540 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): 1964 KB] Search code revision: 7120aa0\n[t=0.000242s, 1964 KB] reading input...\n[t=0.003489s, 2532 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
           },
           "expansions_before": 47,
           "expansions_after": null,
@@ -2081,19 +2823,19 @@
           "task_size_after": 2925,
           "plan_length_delta": null,
           "replayed_on_original_domain": null,
-          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): 1960 KB] Search code revision: 7120aa0\n[t=0.000243s, 1960 KB] reading input...\n[t=0.003451s, 2540 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): 1964 KB] Search code revision: 7120aa0\n[t=0.000242s, 1964 KB] reading input...\n[t=0.003489s, 2532 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 0.004325,
-              "fd_total_seconds": 0.008934,
-              "wall_seconds": 0.181458,
+              "search_seconds": 0.004216,
+              "fd_total_seconds": 0.008888,
+              "wall_seconds": 0.181725,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": null,
               "fd_total_seconds": null,
-              "wall_seconds": 0.174317,
+              "wall_seconds": 0.179498,
               "peak_memory_kb": null
             }
           }
@@ -2107,6 +2849,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 48,
             "guard_facts_total": 56,
+            "max_pair_arity": null,
             "theorems_total": 32,
             "theorems_expressed": 32
           },
@@ -2162,7 +2905,7 @@
               "task_size": 2925
             },
             "initial_h": null,
-            "error": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.004586s, 2940 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.004800s, 2944 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
           },
           "expansions_before": 18,
           "expansions_after": null,
@@ -2170,19 +2913,19 @@
           "task_size_after": 2925,
           "plan_length_delta": null,
           "replayed_on_original_domain": null,
-          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.004586s, 2940 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.004800s, 2944 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000237,
-              "fd_total_seconds": 1.585067,
-              "wall_seconds": 1.765415,
+              "search_seconds": 0.000196,
+              "fd_total_seconds": 1.598227,
+              "wall_seconds": 1.772799,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": null,
               "fd_total_seconds": null,
-              "wall_seconds": 0.177378,
+              "wall_seconds": 0.177755,
               "peak_memory_kb": null
             }
           }
@@ -2196,6 +2939,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 48,
             "guard_facts_total": 56,
+            "max_pair_arity": null,
             "theorems_total": 32,
             "theorems_expressed": 32
           },
@@ -2263,15 +3007,375 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.00126,
-              "fd_total_seconds": 0.007455,
-              "wall_seconds": 0.179136,
+              "search_seconds": 0.001244,
+              "fd_total_seconds": 0.007411,
+              "wall_seconds": 0.18554,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.000764,
-              "fd_total_seconds": 0.00885,
-              "wall_seconds": 0.1899,
+              "search_seconds": 0.000657,
+              "fd_total_seconds": 0.008671,
+              "wall_seconds": 0.186705,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far6",
+          "guard": "indexed",
+          "rung": "fd-optimal/blind",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 120,
+            "guard_facts_total": 128,
+            "max_pair_arity": 2,
+            "theorems_total": 32,
+            "theorems_expressed": 32
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(blind())",
+            "heuristic": "blind",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 17,
+            "plan_cost": 17,
+            "nodes": {
+              "expanded": 3070,
+              "generated": 10488,
+              "evaluated": 4652,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 39,
+              "facts": 180,
+              "operators": 312,
+              "mutex_groups": 36,
+              "task_size": 2813
+            },
+            "initial_h": "blind=1",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(blind())",
+            "heuristic": "blind",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 17,
+            "plan_cost": 17,
+            "nodes": {
+              "expanded": 3034,
+              "generated": 10327,
+              "evaluated": 4431,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 39,
+              "facts": 172,
+              "operators": 2648,
+              "mutex_groups": 36,
+              "task_size": 26253
+            },
+            "initial_h": "blind=1",
+            "error": null
+          },
+          "expansions_before": 3070,
+          "expansions_after": 3034,
+          "task_size_before": 2813,
+          "task_size_after": 26253,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.004625,
+              "fd_total_seconds": 0.008922,
+              "wall_seconds": 0.17945,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.004591,
+              "fd_total_seconds": 0.031416,
+              "wall_seconds": 0.32697,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far6",
+          "guard": "indexed",
+          "rung": "fd-optimal/lmcut",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 120,
+            "guard_facts_total": 128,
+            "max_pair_arity": 2,
+            "theorems_total": 32,
+            "theorems_expressed": 32
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(lmcut())",
+            "heuristic": "lmcut",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 17,
+            "plan_cost": 17,
+            "nodes": {
+              "expanded": 47,
+              "generated": 164,
+              "evaluated": 92,
+              "reopened": 0,
+              "dead_ends": 6
+            },
+            "translator": {
+              "variables": 39,
+              "facts": 180,
+              "operators": 312,
+              "mutex_groups": 36,
+              "task_size": 2813
+            },
+            "initial_h": "lmcut=13",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(lmcut())",
+            "heuristic": "lmcut",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 17,
+            "plan_cost": 17,
+            "nodes": {
+              "expanded": 66,
+              "generated": 226,
+              "evaluated": 124,
+              "reopened": 0,
+              "dead_ends": 6
+            },
+            "translator": {
+              "variables": 39,
+              "facts": 172,
+              "operators": 2648,
+              "mutex_groups": 36,
+              "task_size": 26253
+            },
+            "initial_h": "lmcut=13",
+            "error": null
+          },
+          "expansions_before": 47,
+          "expansions_after": 66,
+          "task_size_before": 2813,
+          "task_size_after": 26253,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.004216,
+              "fd_total_seconds": 0.008888,
+              "wall_seconds": 0.181725,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.029172,
+              "fd_total_seconds": 0.057181,
+              "wall_seconds": 0.353266,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far6",
+          "guard": "indexed",
+          "rung": "fd-optimal/ipdb",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 120,
+            "guard_facts_total": 128,
+            "max_pair_arity": 2,
+            "theorems_total": 32,
+            "theorems_expressed": 32
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(ipdb())",
+            "heuristic": "ipdb",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 17,
+            "plan_cost": 17,
+            "nodes": {
+              "expanded": 18,
+              "generated": 55,
+              "evaluated": 43,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 39,
+              "facts": 180,
+              "operators": 312,
+              "mutex_groups": 36,
+              "task_size": 2813
+            },
+            "initial_h": "cpdbs=17",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(ipdb())",
+            "heuristic": "ipdb",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 17,
+            "plan_cost": 17,
+            "nodes": {
+              "expanded": 18,
+              "generated": 62,
+              "evaluated": 47,
+              "reopened": 0,
+              "dead_ends": 1
+            },
+            "translator": {
+              "variables": 39,
+              "facts": 172,
+              "operators": 2648,
+              "mutex_groups": 36,
+              "task_size": 26253
+            },
+            "initial_h": "cpdbs=17",
+            "error": null
+          },
+          "expansions_before": 18,
+          "expansions_after": 18,
+          "task_size_before": 2813,
+          "task_size_after": 26253,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.000196,
+              "fd_total_seconds": 1.598227,
+              "wall_seconds": 1.772799,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.0002,
+              "fd_total_seconds": 1.870922,
+              "wall_seconds": 2.167414,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far6",
+          "guard": "indexed",
+          "rung": "fd-satisficing",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 120,
+            "guard_facts_total": 128,
+            "max_pair_arity": 2,
+            "theorems_total": 32,
+            "theorems_expressed": 32
+          },
+          "baseline": {
+            "tier": "fd-satisficing",
+            "config": "--alias lama-first",
+            "heuristic": null,
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 27,
+            "plan_cost": 27,
+            "nodes": {
+              "expanded": 111,
+              "generated": 410,
+              "evaluated": 133,
+              "reopened": 0,
+              "dead_ends": 21
+            },
+            "translator": {
+              "variables": 39,
+              "facts": 180,
+              "operators": 312,
+              "mutex_groups": 36,
+              "task_size": 2813
+            },
+            "initial_h": "ff=22",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-satisficing",
+            "config": "--alias lama-first",
+            "heuristic": null,
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 17,
+            "plan_cost": 17,
+            "nodes": {
+              "expanded": 40,
+              "generated": 144,
+              "evaluated": 45,
+              "reopened": 0,
+              "dead_ends": 4
+            },
+            "translator": {
+              "variables": 39,
+              "facts": 172,
+              "operators": 2648,
+              "mutex_groups": 36,
+              "task_size": 26253
+            },
+            "initial_h": "ff=22",
+            "error": null
+          },
+          "expansions_before": 111,
+          "expansions_after": 40,
+          "task_size_before": 2813,
+          "task_size_after": 26253,
+          "plan_length_delta": -10,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.001244,
+              "fd_total_seconds": 0.007411,
+              "wall_seconds": 0.18554,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.001982,
+              "fd_total_seconds": 0.039191,
+              "wall_seconds": 0.336386,
               "peak_memory_kb": null
             }
           }
@@ -2286,7 +3390,7 @@
       "n_theorems": 40,
       "n_singleton_theorems": 8,
       "n_pair_theorems": 32,
-      "carve_seconds": 1.437892,
+      "carve_seconds": 1.586286,
       "stub": {
         "problem": "sokoban-far7",
         "n_theorems": 40,
@@ -2315,9 +3419,9 @@
         "plan_length_unchanged": true,
         "rendering": "40 deadlock theorem(s) cut sokoban-far7 from 8003 expansions to 7041 (12.0% fewer), plan length 20 either way",
         "timing": {
-          "blind_seconds": 0.878316,
-          "pruned_seconds": 0.797323,
-          "seconds_ratio": 0.9078
+          "blind_seconds": 0.865805,
+          "pruned_seconds": 0.801244,
+          "seconds_ratio": 0.9254
         },
         "dividend_is_honest": true
       },
@@ -2331,6 +3435,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 40,
             "theorems_expressed": 8
           },
@@ -2398,15 +3503,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.011714,
-              "fd_total_seconds": 0.017312,
-              "wall_seconds": 0.202675,
+              "search_seconds": 0.011645,
+              "fd_total_seconds": 0.017224,
+              "wall_seconds": 0.202982,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.010265,
-              "fd_total_seconds": 0.015754,
-              "wall_seconds": 0.198303,
+              "search_seconds": 0.01032,
+              "fd_total_seconds": 0.015714,
+              "wall_seconds": 0.198816,
               "peak_memory_kb": null
             }
           }
@@ -2420,6 +3525,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 40,
             "theorems_expressed": 8
           },
@@ -2487,15 +3593,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.008786,
-              "fd_total_seconds": 0.01462,
-              "wall_seconds": 0.201185,
+              "search_seconds": 0.009109,
+              "fd_total_seconds": 0.015087,
+              "wall_seconds": 0.199972,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.008148,
-              "fd_total_seconds": 0.013842,
-              "wall_seconds": 0.196952,
+              "search_seconds": 0.008105,
+              "fd_total_seconds": 0.013741,
+              "wall_seconds": 0.200746,
               "peak_memory_kb": null
             }
           }
@@ -2509,6 +3615,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 40,
             "theorems_expressed": 8
           },
@@ -2576,15 +3683,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000237,
-              "fd_total_seconds": 6.054016,
-              "wall_seconds": 6.239803,
+              "search_seconds": 0.000328,
+              "fd_total_seconds": 5.995418,
+              "wall_seconds": 6.182006,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.000227,
-              "fd_total_seconds": 5.841372,
-              "wall_seconds": 6.030833,
+              "search_seconds": 0.000232,
+              "fd_total_seconds": 5.908737,
+              "wall_seconds": 6.097343,
               "peak_memory_kb": null
             }
           }
@@ -2598,6 +3705,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 0,
             "guard_facts_total": 8,
+            "max_pair_arity": null,
             "theorems_total": 40,
             "theorems_expressed": 8
           },
@@ -2665,15 +3773,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.001772,
-              "fd_total_seconds": 0.009606,
-              "wall_seconds": 0.193502,
+              "search_seconds": 0.001815,
+              "fd_total_seconds": 0.009715,
+              "wall_seconds": 0.191872,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.00178,
-              "fd_total_seconds": 0.009529,
-              "wall_seconds": 0.19569,
+              "search_seconds": 0.001751,
+              "fd_total_seconds": 0.009553,
+              "wall_seconds": 0.199811,
               "peak_memory_kb": null
             }
           }
@@ -2687,6 +3795,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 64,
             "guard_facts_total": 72,
+            "max_pair_arity": null,
             "theorems_total": 40,
             "theorems_expressed": 40
           },
@@ -2754,15 +3863,15 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.011714,
-              "fd_total_seconds": 0.017312,
-              "wall_seconds": 0.202675,
+              "search_seconds": 0.011645,
+              "fd_total_seconds": 0.017224,
+              "wall_seconds": 0.202982,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.018934,
-              "fd_total_seconds": 0.024993,
-              "wall_seconds": 0.213615,
+              "search_seconds": 0.019536,
+              "fd_total_seconds": 0.025395,
+              "wall_seconds": 0.218969,
               "peak_memory_kb": null
             }
           }
@@ -2776,6 +3885,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 64,
             "guard_facts_total": 72,
+            "max_pair_arity": null,
             "theorems_total": 40,
             "theorems_expressed": 40
           },
@@ -2831,7 +3941,7 @@
               "task_size": 4215
             },
             "initial_h": null,
-            "error": "no plan file and no proof (exit 34, rung fd-optimal): 1924 KB] Search code revision: 7120aa0\n[t=0.000242s, 1924 KB] reading input...\n[t=0.004649s, 2640 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): 1968 KB] Search code revision: 7120aa0\n[t=0.000246s, 1968 KB] reading input...\n[t=0.004808s, 2604 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
           },
           "expansions_before": 69,
           "expansions_after": null,
@@ -2839,19 +3949,19 @@
           "task_size_after": 4215,
           "plan_length_delta": null,
           "replayed_on_original_domain": null,
-          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): 1924 KB] Search code revision: 7120aa0\n[t=0.000242s, 1924 KB] reading input...\n[t=0.004649s, 2640 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): 1968 KB] Search code revision: 7120aa0\n[t=0.000246s, 1968 KB] reading input...\n[t=0.004808s, 2604 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 0.008786,
-              "fd_total_seconds": 0.01462,
-              "wall_seconds": 0.201185,
+              "search_seconds": 0.009109,
+              "fd_total_seconds": 0.015087,
+              "wall_seconds": 0.199972,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": null,
               "fd_total_seconds": null,
-              "wall_seconds": 0.190317,
+              "wall_seconds": 0.197888,
               "peak_memory_kb": null
             }
           }
@@ -2865,6 +3975,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 64,
             "guard_facts_total": 72,
+            "max_pair_arity": null,
             "theorems_total": 40,
             "theorems_expressed": 40
           },
@@ -2920,7 +4031,7 @@
               "task_size": 4215
             },
             "initial_h": null,
-            "error": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.005820s, 3032 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.005974s, 2988 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n"
           },
           "expansions_before": 21,
           "expansions_after": null,
@@ -2928,19 +4039,19 @@
           "task_size_after": 4215,
           "plan_length_delta": null,
           "replayed_on_original_domain": null,
-          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.005820s, 3032 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+          "guard_refused": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.005974s, 2988 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 0.000237,
-              "fd_total_seconds": 6.054016,
-              "wall_seconds": 6.239803,
+              "search_seconds": 0.000328,
+              "fd_total_seconds": 5.995418,
+              "wall_seconds": 6.182006,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": null,
               "fd_total_seconds": null,
-              "wall_seconds": 0.185864,
+              "wall_seconds": 0.196361,
               "peak_memory_kb": null
             }
           }
@@ -2954,6 +4065,7 @@
             "dead1_facts": 8,
             "deadpair_facts": 64,
             "guard_facts_total": 72,
+            "max_pair_arity": null,
             "theorems_total": 40,
             "theorems_expressed": 40
           },
@@ -3021,15 +4133,375 @@
           "dividend_is_honest": true,
           "timing": {
             "baseline": {
-              "search_seconds": 0.001772,
-              "fd_total_seconds": 0.009606,
-              "wall_seconds": 0.193502,
+              "search_seconds": 0.001815,
+              "fd_total_seconds": 0.009715,
+              "wall_seconds": 0.191872,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.001156,
-              "fd_total_seconds": 0.012366,
-              "wall_seconds": 0.208215,
+              "search_seconds": 0.001168,
+              "fd_total_seconds": 0.012301,
+              "wall_seconds": 0.209352,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far7",
+          "guard": "indexed",
+          "rung": "fd-optimal/blind",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 162,
+            "guard_facts_total": 170,
+            "max_pair_arity": 2,
+            "theorems_total": 40,
+            "theorems_expressed": 40
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(blind())",
+            "heuristic": "blind",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 20,
+            "plan_cost": 20,
+            "nodes": {
+              "expanded": 7196,
+              "generated": 25420,
+              "evaluated": 10595,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 52,
+              "facts": 245,
+              "operators": 448,
+              "mutex_groups": 49,
+              "task_size": 4023
+            },
+            "initial_h": "blind=1",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(blind())",
+            "heuristic": "blind",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 20,
+            "plan_cost": 20,
+            "nodes": {
+              "expanded": 7033,
+              "generated": 24874,
+              "evaluated": 10197,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 52,
+              "facts": 237,
+              "operators": 4832,
+              "mutex_groups": 49,
+              "task_size": 47967
+            },
+            "initial_h": "blind=1",
+            "error": null
+          },
+          "expansions_before": 7196,
+          "expansions_after": 7033,
+          "task_size_before": 4023,
+          "task_size_after": 47967,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.011645,
+              "fd_total_seconds": 0.017224,
+              "wall_seconds": 0.202982,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.011387,
+              "fd_total_seconds": 0.058905,
+              "wall_seconds": 0.461759,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far7",
+          "guard": "indexed",
+          "rung": "fd-optimal/lmcut",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 162,
+            "guard_facts_total": 170,
+            "max_pair_arity": 2,
+            "theorems_total": 40,
+            "theorems_expressed": 40
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(lmcut())",
+            "heuristic": "lmcut",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 20,
+            "plan_cost": 20,
+            "nodes": {
+              "expanded": 69,
+              "generated": 241,
+              "evaluated": 130,
+              "reopened": 0,
+              "dead_ends": 7
+            },
+            "translator": {
+              "variables": 52,
+              "facts": 245,
+              "operators": 448,
+              "mutex_groups": 49,
+              "task_size": 4023
+            },
+            "initial_h": "lmcut=16",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(lmcut())",
+            "heuristic": "lmcut",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 20,
+            "plan_cost": 20,
+            "nodes": {
+              "expanded": 111,
+              "generated": 387,
+              "evaluated": 216,
+              "reopened": 0,
+              "dead_ends": 12
+            },
+            "translator": {
+              "variables": 52,
+              "facts": 237,
+              "operators": 4832,
+              "mutex_groups": 49,
+              "task_size": 47967
+            },
+            "initial_h": "lmcut=16",
+            "error": null
+          },
+          "expansions_before": 69,
+          "expansions_after": 111,
+          "task_size_before": 4023,
+          "task_size_after": 47967,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.009109,
+              "fd_total_seconds": 0.015087,
+              "wall_seconds": 0.199972,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.093561,
+              "fd_total_seconds": 0.144314,
+              "wall_seconds": 0.550987,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far7",
+          "guard": "indexed",
+          "rung": "fd-optimal/ipdb",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 162,
+            "guard_facts_total": 170,
+            "max_pair_arity": 2,
+            "theorems_total": 40,
+            "theorems_expressed": 40
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(ipdb())",
+            "heuristic": "ipdb",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 20,
+            "plan_cost": 20,
+            "nodes": {
+              "expanded": 21,
+              "generated": 69,
+              "evaluated": 56,
+              "reopened": 0,
+              "dead_ends": 2
+            },
+            "translator": {
+              "variables": 52,
+              "facts": 245,
+              "operators": 448,
+              "mutex_groups": 49,
+              "task_size": 4023
+            },
+            "initial_h": "cpdbs=20",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(ipdb())",
+            "heuristic": "ipdb",
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 20,
+            "plan_cost": 20,
+            "nodes": {
+              "expanded": 21,
+              "generated": 70,
+              "evaluated": 55,
+              "reopened": 0,
+              "dead_ends": 1
+            },
+            "translator": {
+              "variables": 52,
+              "facts": 237,
+              "operators": 4832,
+              "mutex_groups": 49,
+              "task_size": 47967
+            },
+            "initial_h": "cpdbs=20",
+            "error": null
+          },
+          "expansions_before": 21,
+          "expansions_after": 21,
+          "task_size_before": 4023,
+          "task_size_after": 47967,
+          "plan_length_delta": 0,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.000328,
+              "fd_total_seconds": 5.995418,
+              "wall_seconds": 6.182006,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.000228,
+              "fd_total_seconds": 6.954636,
+              "wall_seconds": 7.363563,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "far7",
+          "guard": "indexed",
+          "rung": "fd-satisficing",
+          "guard_size": {
+            "guard": "indexed",
+            "dead1_facts": 8,
+            "deadpair_facts": 162,
+            "guard_facts_total": 170,
+            "max_pair_arity": 2,
+            "theorems_total": 40,
+            "theorems_expressed": 40
+          },
+          "baseline": {
+            "tier": "fd-satisficing",
+            "config": "--alias lama-first",
+            "heuristic": null,
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 30,
+            "plan_cost": 30,
+            "nodes": {
+              "expanded": 134,
+              "generated": 509,
+              "evaluated": 154,
+              "reopened": 0,
+              "dead_ends": 19
+            },
+            "translator": {
+              "variables": 52,
+              "facts": 245,
+              "operators": 448,
+              "mutex_groups": 49,
+              "task_size": 4023
+            },
+            "initial_h": "ff=31",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-satisficing",
+            "config": "--alias lama-first",
+            "heuristic": null,
+            "returncode": 0,
+            "solved": true,
+            "proved_unsolvable": false,
+            "not_entitled": false,
+            "plan_length": 20,
+            "plan_cost": 20,
+            "nodes": {
+              "expanded": 43,
+              "generated": 154,
+              "evaluated": 46,
+              "reopened": 0,
+              "dead_ends": 2
+            },
+            "translator": {
+              "variables": 52,
+              "facts": 237,
+              "operators": 4832,
+              "mutex_groups": 49,
+              "task_size": 47967
+            },
+            "initial_h": "ff=31",
+            "error": null
+          },
+          "expansions_before": 134,
+          "expansions_after": 43,
+          "task_size_before": 4023,
+          "task_size_after": 47967,
+          "plan_length_delta": -10,
+          "replayed_on_original_domain": true,
+          "guard_refused": null,
+          "dividend_is_honest": true,
+          "timing": {
+            "baseline": {
+              "search_seconds": 0.001815,
+              "fd_total_seconds": 0.009715,
+              "wall_seconds": 0.191872,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 0.004064,
+              "fd_total_seconds": 0.073167,
+              "wall_seconds": 0.475479,
               "peak_memory_kb": null
             }
           }
@@ -3044,7 +4516,7 @@
       "n_theorems": 2,
       "n_singleton_theorems": 2,
       "n_pair_theorems": 0,
-      "carve_seconds": 0.010249,
+      "carve_seconds": 0.011823,
       "stub": {
         "problem": "sokoban-ringstuck4",
         "n_theorems": 2,
@@ -3073,9 +4545,9 @@
         "plan_length_unchanged": true,
         "rendering": "2 deadlock theorem(s) cut sokoban-ringstuck4 from 44 expansions to 22 (50.0% fewer), plan length None either way",
         "timing": {
-          "blind_seconds": 0.00178,
-          "pruned_seconds": 0.001567,
-          "seconds_ratio": 0.8805
+          "blind_seconds": 0.001776,
+          "pruned_seconds": 0.001564,
+          "seconds_ratio": 0.8807
         },
         "dividend_is_honest": true
       },
@@ -3089,6 +4561,7 @@
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -3156,15 +4629,15 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 3.8e-05,
-              "fd_total_seconds": 0.001706,
-              "wall_seconds": 0.1449,
+              "search_seconds": 3.9e-05,
+              "fd_total_seconds": 0.00177,
+              "wall_seconds": 0.144615,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 3.8e-05,
-              "fd_total_seconds": 0.00162,
-              "wall_seconds": 0.140675,
+              "search_seconds": 3.6e-05,
+              "fd_total_seconds": 0.001655,
+              "wall_seconds": 0.146069,
               "peak_memory_kb": null
             }
           }
@@ -3178,6 +4651,7 @@
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -3245,15 +4719,15 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 4.3e-05,
-              "fd_total_seconds": 0.001683,
-              "wall_seconds": 0.142946,
+              "search_seconds": 4e-05,
+              "fd_total_seconds": 0.001621,
+              "wall_seconds": 0.145156,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 4e-05,
-              "fd_total_seconds": 0.001614,
-              "wall_seconds": 0.143395,
+              "search_seconds": 5.5e-05,
+              "fd_total_seconds": 0.001768,
+              "wall_seconds": 0.145801,
               "peak_memory_kb": null
             }
           }
@@ -3267,6 +4741,7 @@
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -3334,384 +4809,29 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 3.8e-05,
-              "fd_total_seconds": 0.001856,
-              "wall_seconds": 0.139925,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 3.9e-05,
-              "fd_total_seconds": 0.001898,
-              "wall_seconds": 0.140699,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck4",
-          "guard": "singleton",
-          "rung": "fd-satisficing",
-          "guard_size": {
-            "guard": "singleton",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-satisficing",
-            "config": "--alias lama-first",
-            "heuristic": null,
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": false,
-            "not_entitled": true,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 1
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "ff=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-satisficing",
-            "config": "--alias lama-first",
-            "heuristic": null,
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": false,
-            "not_entitled": true,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 1
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "ff=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 5.5e-05,
-              "fd_total_seconds": 0.00212,
-              "wall_seconds": 0.140722,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 5.8e-05,
-              "fd_total_seconds": 0.002079,
-              "wall_seconds": 0.14052,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck4",
-          "guard": "full",
-          "rung": "fd-optimal/blind",
-          "guard_size": {
-            "guard": "full",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(blind())",
-            "heuristic": "blind",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "blind=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(blind())",
-            "heuristic": "blind",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "blind=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 3.8e-05,
-              "fd_total_seconds": 0.001706,
-              "wall_seconds": 0.1449,
+              "search_seconds": 3.6e-05,
+              "fd_total_seconds": 0.001874,
+              "wall_seconds": 0.144774,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": 3.7e-05,
-              "fd_total_seconds": 0.00166,
-              "wall_seconds": 0.140231,
+              "fd_total_seconds": 0.002004,
+              "wall_seconds": 0.145336,
               "peak_memory_kb": null
             }
           }
         },
         {
           "instance": "ringstuck4",
-          "guard": "full",
-          "rung": "fd-optimal/lmcut",
-          "guard_size": {
-            "guard": "full",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 4.3e-05,
-              "fd_total_seconds": 0.001683,
-              "wall_seconds": 0.142946,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 4.3e-05,
-              "fd_total_seconds": 0.001664,
-              "wall_seconds": 0.14038,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck4",
-          "guard": "full",
-          "rung": "fd-optimal/ipdb",
-          "guard_size": {
-            "guard": "full",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 3.8e-05,
-              "fd_total_seconds": 0.001856,
-              "wall_seconds": 0.139925,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 3.4e-05,
-              "fd_total_seconds": 0.001852,
-              "wall_seconds": 0.14111,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck4",
-          "guard": "full",
+          "guard": "singleton",
           "rung": "fd-satisficing",
           "guard_size": {
-            "guard": "full",
+            "guard": "singleton",
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -3779,15 +4899,15 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 5.5e-05,
-              "fd_total_seconds": 0.00212,
-              "wall_seconds": 0.140722,
+              "search_seconds": 4.3e-05,
+              "fd_total_seconds": 0.002206,
+              "wall_seconds": 0.143209,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 0.000174,
-              "fd_total_seconds": 0.002259,
-              "wall_seconds": 0.143319,
+              "search_seconds": 4e-05,
+              "fd_total_seconds": 0.002153,
+              "wall_seconds": 0.142503,
               "peak_memory_kb": null
             }
           }
@@ -3802,7 +4922,7 @@
       "n_theorems": 2,
       "n_singleton_theorems": 2,
       "n_pair_theorems": 0,
-      "carve_seconds": 0.021651,
+      "carve_seconds": 0.022799,
       "stub": {
         "problem": "sokoban-ringstuck5",
         "n_theorems": 2,
@@ -3831,9 +4951,9 @@
         "plan_length_unchanged": true,
         "rendering": "2 deadlock theorem(s) cut sokoban-ringstuck5 from 75 expansions to 45 (40.0% fewer), plan length None either way",
         "timing": {
-          "blind_seconds": 0.003285,
-          "pruned_seconds": 0.002868,
-          "seconds_ratio": 0.8732
+          "blind_seconds": 0.00335,
+          "pruned_seconds": 0.002922,
+          "seconds_ratio": 0.8721
         },
         "dividend_is_honest": true
       },
@@ -3847,6 +4967,7 @@
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -3915,383 +5036,28 @@
           "timing": {
             "baseline": {
               "search_seconds": 3.6e-05,
-              "fd_total_seconds": 0.001773,
-              "wall_seconds": 0.144884,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 3.9e-05,
-              "fd_total_seconds": 0.001701,
-              "wall_seconds": 0.13986,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck5",
-          "guard": "singleton",
-          "rung": "fd-optimal/lmcut",
-          "guard_size": {
-            "guard": "singleton",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 4.2e-05,
-              "fd_total_seconds": 0.001596,
-              "wall_seconds": 0.141028,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 4.1e-05,
-              "fd_total_seconds": 0.001729,
-              "wall_seconds": 0.141791,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck5",
-          "guard": "singleton",
-          "rung": "fd-optimal/ipdb",
-          "guard_size": {
-            "guard": "singleton",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 3.4e-05,
-              "fd_total_seconds": 0.001842,
-              "wall_seconds": 0.140123,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 4e-05,
-              "fd_total_seconds": 0.001862,
-              "wall_seconds": 0.14216,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck5",
-          "guard": "singleton",
-          "rung": "fd-satisficing",
-          "guard_size": {
-            "guard": "singleton",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-satisficing",
-            "config": "--alias lama-first",
-            "heuristic": null,
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": false,
-            "not_entitled": true,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 1
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "ff=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-satisficing",
-            "config": "--alias lama-first",
-            "heuristic": null,
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": false,
-            "not_entitled": true,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 1
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "ff=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 6e-05,
-              "fd_total_seconds": 0.00221,
-              "wall_seconds": 0.143849,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 5e-05,
-              "fd_total_seconds": 0.002156,
-              "wall_seconds": 0.142603,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck5",
-          "guard": "full",
-          "rung": "fd-optimal/blind",
-          "guard_size": {
-            "guard": "full",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(blind())",
-            "heuristic": "blind",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "blind=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(blind())",
-            "heuristic": "blind",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "blind=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 3.6e-05,
-              "fd_total_seconds": 0.001773,
-              "wall_seconds": 0.144884,
+              "fd_total_seconds": 0.00162,
+              "wall_seconds": 0.144132,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": 3.7e-05,
-              "fd_total_seconds": 0.00165,
-              "wall_seconds": 0.142789,
+              "fd_total_seconds": 0.001722,
+              "wall_seconds": 0.150454,
               "peak_memory_kb": null
             }
           }
         },
         {
           "instance": "ringstuck5",
-          "guard": "full",
+          "guard": "singleton",
           "rung": "fd-optimal/lmcut",
           "guard_size": {
-            "guard": "full",
+            "guard": "singleton",
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -4359,117 +5125,119 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 4.2e-05,
-              "fd_total_seconds": 0.001596,
-              "wall_seconds": 0.141028,
+              "search_seconds": 4.6e-05,
+              "fd_total_seconds": 0.001673,
+              "wall_seconds": 0.146921,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 4.3e-05,
+              "fd_total_seconds": 0.001632,
+              "wall_seconds": 0.144651,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "ringstuck5",
+          "guard": "singleton",
+          "rung": "fd-optimal/ipdb",
+          "guard_size": {
+            "guard": "singleton",
+            "dead1_facts": 2,
+            "deadpair_facts": 0,
+            "guard_facts_total": 2,
+            "max_pair_arity": null,
+            "theorems_total": 2,
+            "theorems_expressed": 2
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(ipdb())",
+            "heuristic": "ipdb",
+            "returncode": 12,
+            "solved": false,
+            "proved_unsolvable": true,
+            "not_entitled": false,
+            "plan_length": null,
+            "plan_cost": null,
+            "nodes": {
+              "expanded": 0,
+              "generated": 0,
+              "evaluated": 1,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 1,
+              "facts": 2,
+              "operators": 0,
+              "mutex_groups": 0,
+              "task_size": 4
+            },
+            "initial_h": "cpdbs=infinity",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(ipdb())",
+            "heuristic": "ipdb",
+            "returncode": 12,
+            "solved": false,
+            "proved_unsolvable": true,
+            "not_entitled": false,
+            "plan_length": null,
+            "plan_cost": null,
+            "nodes": {
+              "expanded": 0,
+              "generated": 0,
+              "evaluated": 1,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 1,
+              "facts": 2,
+              "operators": 0,
+              "mutex_groups": 0,
+              "task_size": 4
+            },
+            "initial_h": "cpdbs=infinity",
+            "error": null
+          },
+          "expansions_before": 0,
+          "expansions_after": 0,
+          "task_size_before": 4,
+          "task_size_after": 4,
+          "plan_length_delta": null,
+          "replayed_on_original_domain": null,
+          "guard_refused": null,
+          "dividend_is_honest": null,
+          "timing": {
+            "baseline": {
+              "search_seconds": 4.4e-05,
+              "fd_total_seconds": 0.001881,
+              "wall_seconds": 0.145264,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": 3.8e-05,
-              "fd_total_seconds": 0.001763,
-              "wall_seconds": 0.141531,
+              "fd_total_seconds": 0.00183,
+              "wall_seconds": 0.14307,
               "peak_memory_kb": null
             }
           }
         },
         {
           "instance": "ringstuck5",
-          "guard": "full",
-          "rung": "fd-optimal/ipdb",
-          "guard_size": {
-            "guard": "full",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 3.4e-05,
-              "fd_total_seconds": 0.001842,
-              "wall_seconds": 0.140123,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 4e-05,
-              "fd_total_seconds": 0.001821,
-              "wall_seconds": 0.141449,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck5",
-          "guard": "full",
+          "guard": "singleton",
           "rung": "fd-satisficing",
           "guard_size": {
-            "guard": "full",
+            "guard": "singleton",
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -4538,14 +5306,14 @@
           "timing": {
             "baseline": {
               "search_seconds": 6e-05,
-              "fd_total_seconds": 0.00221,
-              "wall_seconds": 0.143849,
+              "fd_total_seconds": 0.00218,
+              "wall_seconds": 0.145339,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 4.5e-05,
-              "fd_total_seconds": 0.00206,
-              "wall_seconds": 0.140335,
+              "search_seconds": 5.4e-05,
+              "fd_total_seconds": 0.002077,
+              "wall_seconds": 0.144727,
               "peak_memory_kb": null
             }
           }
@@ -4560,7 +5328,7 @@
       "n_theorems": 2,
       "n_singleton_theorems": 2,
       "n_pair_theorems": 0,
-      "carve_seconds": 0.044113,
+      "carve_seconds": 0.047043,
       "stub": {
         "problem": "sokoban-ringstuck6",
         "n_theorems": 2,
@@ -4589,9 +5357,9 @@
         "plan_length_unchanged": true,
         "rendering": "2 deadlock theorem(s) cut sokoban-ringstuck6 from 114 expansions to 76 (33.3% fewer), plan length None either way",
         "timing": {
-          "blind_seconds": 0.005351,
-          "pruned_seconds": 0.004725,
-          "seconds_ratio": 0.8832
+          "blind_seconds": 0.005307,
+          "pruned_seconds": 0.004727,
+          "seconds_ratio": 0.8907
         },
         "dividend_is_honest": true
       },
@@ -4605,6 +5373,7 @@
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -4672,193 +5441,15 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 3.7e-05,
-              "fd_total_seconds": 0.001793,
-              "wall_seconds": 0.143584,
-              "peak_memory_kb": null
-            },
-            "guarded": {
               "search_seconds": 3.4e-05,
-              "fd_total_seconds": 0.001646,
-              "wall_seconds": 0.142705,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck6",
-          "guard": "singleton",
-          "rung": "fd-optimal/lmcut",
-          "guard_size": {
-            "guard": "singleton",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 4.6e-05,
-              "fd_total_seconds": 0.001682,
-              "wall_seconds": 0.142246,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 4.1e-05,
-              "fd_total_seconds": 0.001631,
-              "wall_seconds": 0.142372,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck6",
-          "guard": "singleton",
-          "rung": "fd-optimal/ipdb",
-          "guard_size": {
-            "guard": "singleton",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 4e-05,
-              "fd_total_seconds": 0.001835,
-              "wall_seconds": 0.139499,
+              "fd_total_seconds": 0.001621,
+              "wall_seconds": 0.140661,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": 3.9e-05,
-              "fd_total_seconds": 0.001867,
-              "wall_seconds": 0.140897,
+              "fd_total_seconds": 0.002227,
+              "wall_seconds": 0.146502,
               "peak_memory_kb": null
             }
           }
@@ -4866,190 +5457,13 @@
         {
           "instance": "ringstuck6",
           "guard": "singleton",
-          "rung": "fd-satisficing",
+          "rung": "fd-optimal/lmcut",
           "guard_size": {
             "guard": "singleton",
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-satisficing",
-            "config": "--alias lama-first",
-            "heuristic": null,
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": false,
-            "not_entitled": true,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 1
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "ff=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-satisficing",
-            "config": "--alias lama-first",
-            "heuristic": null,
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": false,
-            "not_entitled": true,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 1
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "ff=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 4.3e-05,
-              "fd_total_seconds": 0.002044,
-              "wall_seconds": 0.142841,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 5.4e-05,
-              "fd_total_seconds": 0.002032,
-              "wall_seconds": 0.14132,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck6",
-          "guard": "full",
-          "rung": "fd-optimal/blind",
-          "guard_size": {
-            "guard": "full",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(blind())",
-            "heuristic": "blind",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "blind=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(blind())",
-            "heuristic": "blind",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "blind=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 3.7e-05,
-              "fd_total_seconds": 0.001793,
-              "wall_seconds": 0.143584,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 3.8e-05,
-              "fd_total_seconds": 0.001623,
-              "wall_seconds": 0.143183,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck6",
-          "guard": "full",
-          "rung": "fd-optimal/lmcut",
-          "guard_size": {
-            "guard": "full",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -5117,28 +5531,29 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 4.6e-05,
-              "fd_total_seconds": 0.001682,
-              "wall_seconds": 0.142246,
+              "search_seconds": 6.1e-05,
+              "fd_total_seconds": 0.001739,
+              "wall_seconds": 0.140323,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 4.3e-05,
-              "fd_total_seconds": 0.001677,
-              "wall_seconds": 0.142318,
+              "search_seconds": 4.5e-05,
+              "fd_total_seconds": 0.001656,
+              "wall_seconds": 0.142688,
               "peak_memory_kb": null
             }
           }
         },
         {
           "instance": "ringstuck6",
-          "guard": "full",
+          "guard": "singleton",
           "rung": "fd-optimal/ipdb",
           "guard_size": {
-            "guard": "full",
+            "guard": "singleton",
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -5207,27 +5622,28 @@
           "timing": {
             "baseline": {
               "search_seconds": 4e-05,
-              "fd_total_seconds": 0.001835,
-              "wall_seconds": 0.139499,
+              "fd_total_seconds": 0.001963,
+              "wall_seconds": 0.143842,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 3.1e-05,
-              "fd_total_seconds": 0.001839,
-              "wall_seconds": 0.141624,
+              "search_seconds": 3.8e-05,
+              "fd_total_seconds": 0.001848,
+              "wall_seconds": 0.144082,
               "peak_memory_kb": null
             }
           }
         },
         {
           "instance": "ringstuck6",
-          "guard": "full",
+          "guard": "singleton",
           "rung": "fd-satisficing",
           "guard_size": {
-            "guard": "full",
+            "guard": "singleton",
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -5295,15 +5711,15 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 4.3e-05,
-              "fd_total_seconds": 0.002044,
-              "wall_seconds": 0.142841,
+              "search_seconds": 4.5e-05,
+              "fd_total_seconds": 0.002106,
+              "wall_seconds": 0.144113,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 5.3e-05,
-              "fd_total_seconds": 0.002111,
-              "wall_seconds": 0.144354,
+              "search_seconds": 3.8e-05,
+              "fd_total_seconds": 0.002095,
+              "wall_seconds": 0.144868,
               "peak_memory_kb": null
             }
           }
@@ -5318,7 +5734,7 @@
       "n_theorems": 2,
       "n_singleton_theorems": 2,
       "n_pair_theorems": 0,
-      "carve_seconds": 0.080526,
+      "carve_seconds": 0.080275,
       "stub": {
         "problem": "sokoban-ringstuck7",
         "n_theorems": 2,
@@ -5347,9 +5763,9 @@
         "plan_length_unchanged": true,
         "rendering": "2 deadlock theorem(s) cut sokoban-ringstuck7 from 161 expansions to 115 (28.6% fewer), plan length None either way",
         "timing": {
-          "blind_seconds": 0.008085,
-          "pruned_seconds": 0.007462,
-          "seconds_ratio": 0.9229
+          "blind_seconds": 0.008566,
+          "pruned_seconds": 0.007356,
+          "seconds_ratio": 0.8587
         },
         "dividend_is_honest": true
       },
@@ -5363,6 +5779,7 @@
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -5430,15 +5847,15 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 3.9e-05,
-              "fd_total_seconds": 0.001635,
-              "wall_seconds": 0.144955,
+              "search_seconds": 3.6e-05,
+              "fd_total_seconds": 0.001676,
+              "wall_seconds": 0.141576,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 6.2e-05,
-              "fd_total_seconds": 0.001729,
-              "wall_seconds": 0.14399,
+              "search_seconds": 4.1e-05,
+              "fd_total_seconds": 0.001732,
+              "wall_seconds": 0.152076,
               "peak_memory_kb": null
             }
           }
@@ -5452,6 +5869,7 @@
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -5519,384 +5937,29 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 3.7e-05,
-              "fd_total_seconds": 0.001632,
-              "wall_seconds": 0.14243,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 3.4e-05,
-              "fd_total_seconds": 0.001639,
-              "wall_seconds": 0.142435,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck7",
-          "guard": "singleton",
-          "rung": "fd-optimal/ipdb",
-          "guard_size": {
-            "guard": "singleton",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 3.9e-05,
-              "fd_total_seconds": 0.001862,
-              "wall_seconds": 0.143577,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 3.8e-05,
-              "fd_total_seconds": 0.001851,
-              "wall_seconds": 0.142214,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck7",
-          "guard": "singleton",
-          "rung": "fd-satisficing",
-          "guard_size": {
-            "guard": "singleton",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-satisficing",
-            "config": "--alias lama-first",
-            "heuristic": null,
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": false,
-            "not_entitled": true,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 1
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "ff=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-satisficing",
-            "config": "--alias lama-first",
-            "heuristic": null,
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": false,
-            "not_entitled": true,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 1
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "ff=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 4.3e-05,
-              "fd_total_seconds": 0.002083,
-              "wall_seconds": 0.142835,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 4.6e-05,
-              "fd_total_seconds": 0.002262,
-              "wall_seconds": 0.143122,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck7",
-          "guard": "full",
-          "rung": "fd-optimal/blind",
-          "guard_size": {
-            "guard": "full",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(blind())",
-            "heuristic": "blind",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "blind=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(blind())",
-            "heuristic": "blind",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "blind=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 3.9e-05,
-              "fd_total_seconds": 0.001635,
-              "wall_seconds": 0.144955,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 3.7e-05,
-              "fd_total_seconds": 0.001685,
-              "wall_seconds": 0.142206,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck7",
-          "guard": "full",
-          "rung": "fd-optimal/lmcut",
-          "guard_size": {
-            "guard": "full",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 3.7e-05,
-              "fd_total_seconds": 0.001632,
-              "wall_seconds": 0.14243,
-              "peak_memory_kb": null
-            },
-            "guarded": {
               "search_seconds": 4e-05,
-              "fd_total_seconds": 0.001669,
-              "wall_seconds": 0.147575,
+              "fd_total_seconds": 0.001757,
+              "wall_seconds": 0.143321,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 5e-05,
+              "fd_total_seconds": 0.001711,
+              "wall_seconds": 0.148475,
               "peak_memory_kb": null
             }
           }
         },
         {
           "instance": "ringstuck7",
-          "guard": "full",
+          "guard": "singleton",
           "rung": "fd-optimal/ipdb",
           "guard_size": {
-            "guard": "full",
+            "guard": "singleton",
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -5964,28 +6027,29 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 3.9e-05,
-              "fd_total_seconds": 0.001862,
-              "wall_seconds": 0.143577,
+              "search_seconds": 3.7e-05,
+              "fd_total_seconds": 0.001942,
+              "wall_seconds": 0.147313,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 3.3e-05,
-              "fd_total_seconds": 0.001993,
-              "wall_seconds": 0.143784,
+              "search_seconds": 3.9e-05,
+              "fd_total_seconds": 0.001975,
+              "wall_seconds": 0.147406,
               "peak_memory_kb": null
             }
           }
         },
         {
           "instance": "ringstuck7",
-          "guard": "full",
+          "guard": "singleton",
           "rung": "fd-satisficing",
           "guard_size": {
-            "guard": "full",
+            "guard": "singleton",
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -6053,15 +6117,15 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 4.3e-05,
-              "fd_total_seconds": 0.002083,
-              "wall_seconds": 0.142835,
+              "search_seconds": 4.5e-05,
+              "fd_total_seconds": 0.00208,
+              "wall_seconds": 0.145996,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 3.8e-05,
-              "fd_total_seconds": 0.002031,
-              "wall_seconds": 0.142767,
+              "search_seconds": 5.8e-05,
+              "fd_total_seconds": 0.002165,
+              "wall_seconds": 0.144765,
               "peak_memory_kb": null
             }
           }
@@ -6076,7 +6140,7 @@
       "n_theorems": 2,
       "n_singleton_theorems": 2,
       "n_pair_theorems": 0,
-      "carve_seconds": 0.125555,
+      "carve_seconds": 0.126351,
       "stub": {
         "problem": "sokoban-ringstuck8",
         "n_theorems": 2,
@@ -6105,9 +6169,9 @@
         "plan_length_unchanged": true,
         "rendering": "2 deadlock theorem(s) cut sokoban-ringstuck8 from 216 expansions to 162 (25.0% fewer), plan length None either way",
         "timing": {
-          "blind_seconds": 0.011403,
-          "pruned_seconds": 0.010256,
-          "seconds_ratio": 0.8994
+          "blind_seconds": 0.011696,
+          "pruned_seconds": 0.010358,
+          "seconds_ratio": 0.8856
         },
         "dividend_is_honest": true
       },
@@ -6121,6 +6185,7 @@
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -6188,473 +6253,119 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 3.4e-05,
-              "fd_total_seconds": 0.00162,
-              "wall_seconds": 0.146332,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 3.4e-05,
-              "fd_total_seconds": 0.001628,
-              "wall_seconds": 0.146657,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck8",
-          "guard": "singleton",
-          "rung": "fd-optimal/lmcut",
-          "guard_size": {
-            "guard": "singleton",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 4.7e-05,
-              "fd_total_seconds": 0.001676,
-              "wall_seconds": 0.142106,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 3.8e-05,
-              "fd_total_seconds": 0.001623,
-              "wall_seconds": 0.144502,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck8",
-          "guard": "singleton",
-          "rung": "fd-optimal/ipdb",
-          "guard_size": {
-            "guard": "singleton",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(ipdb())",
-            "heuristic": "ipdb",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "cpdbs=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 3.4e-05,
-              "fd_total_seconds": 0.001861,
-              "wall_seconds": 0.141985,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 3.1e-05,
-              "fd_total_seconds": 0.001952,
-              "wall_seconds": 0.143118,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck8",
-          "guard": "singleton",
-          "rung": "fd-satisficing",
-          "guard_size": {
-            "guard": "singleton",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-satisficing",
-            "config": "--alias lama-first",
-            "heuristic": null,
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": false,
-            "not_entitled": true,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 1
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "ff=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-satisficing",
-            "config": "--alias lama-first",
-            "heuristic": null,
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": false,
-            "not_entitled": true,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 1
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "ff=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 6.1e-05,
-              "fd_total_seconds": 0.002129,
-              "wall_seconds": 0.145984,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 5.6e-05,
-              "fd_total_seconds": 0.002181,
-              "wall_seconds": 0.141592,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck8",
-          "guard": "full",
-          "rung": "fd-optimal/blind",
-          "guard_size": {
-            "guard": "full",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(blind())",
-            "heuristic": "blind",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "blind=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(blind())",
-            "heuristic": "blind",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "blind=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 3.4e-05,
-              "fd_total_seconds": 0.00162,
-              "wall_seconds": 0.146332,
-              "peak_memory_kb": null
-            },
-            "guarded": {
-              "search_seconds": 3.8e-05,
-              "fd_total_seconds": 0.001646,
-              "wall_seconds": 0.142599,
-              "peak_memory_kb": null
-            }
-          }
-        },
-        {
-          "instance": "ringstuck8",
-          "guard": "full",
-          "rung": "fd-optimal/lmcut",
-          "guard_size": {
-            "guard": "full",
-            "dead1_facts": 2,
-            "deadpair_facts": 0,
-            "guard_facts_total": 2,
-            "theorems_total": 2,
-            "theorems_expressed": 2
-          },
-          "baseline": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "guarded": {
-            "tier": "fd-optimal",
-            "config": "astar(lmcut())",
-            "heuristic": "lmcut",
-            "returncode": 12,
-            "solved": false,
-            "proved_unsolvable": true,
-            "not_entitled": false,
-            "plan_length": null,
-            "plan_cost": null,
-            "nodes": {
-              "expanded": 0,
-              "generated": 0,
-              "evaluated": 1,
-              "reopened": 0,
-              "dead_ends": 0
-            },
-            "translator": {
-              "variables": 1,
-              "facts": 2,
-              "operators": 0,
-              "mutex_groups": 0,
-              "task_size": 4
-            },
-            "initial_h": "lmcut=infinity",
-            "error": null
-          },
-          "expansions_before": 0,
-          "expansions_after": 0,
-          "task_size_before": 4,
-          "task_size_after": 4,
-          "plan_length_delta": null,
-          "replayed_on_original_domain": null,
-          "guard_refused": null,
-          "dividend_is_honest": null,
-          "timing": {
-            "baseline": {
-              "search_seconds": 4.7e-05,
-              "fd_total_seconds": 0.001676,
-              "wall_seconds": 0.142106,
+              "search_seconds": 3.5e-05,
+              "fd_total_seconds": 0.001659,
+              "wall_seconds": 0.14828,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": 4.4e-05,
-              "fd_total_seconds": 0.001625,
-              "wall_seconds": 0.145375,
+              "fd_total_seconds": 0.00167,
+              "wall_seconds": 0.146728,
               "peak_memory_kb": null
             }
           }
         },
         {
           "instance": "ringstuck8",
-          "guard": "full",
-          "rung": "fd-optimal/ipdb",
+          "guard": "singleton",
+          "rung": "fd-optimal/lmcut",
           "guard_size": {
-            "guard": "full",
+            "guard": "singleton",
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
+            "theorems_total": 2,
+            "theorems_expressed": 2
+          },
+          "baseline": {
+            "tier": "fd-optimal",
+            "config": "astar(lmcut())",
+            "heuristic": "lmcut",
+            "returncode": 12,
+            "solved": false,
+            "proved_unsolvable": true,
+            "not_entitled": false,
+            "plan_length": null,
+            "plan_cost": null,
+            "nodes": {
+              "expanded": 0,
+              "generated": 0,
+              "evaluated": 1,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 1,
+              "facts": 2,
+              "operators": 0,
+              "mutex_groups": 0,
+              "task_size": 4
+            },
+            "initial_h": "lmcut=infinity",
+            "error": null
+          },
+          "guarded": {
+            "tier": "fd-optimal",
+            "config": "astar(lmcut())",
+            "heuristic": "lmcut",
+            "returncode": 12,
+            "solved": false,
+            "proved_unsolvable": true,
+            "not_entitled": false,
+            "plan_length": null,
+            "plan_cost": null,
+            "nodes": {
+              "expanded": 0,
+              "generated": 0,
+              "evaluated": 1,
+              "reopened": 0,
+              "dead_ends": 0
+            },
+            "translator": {
+              "variables": 1,
+              "facts": 2,
+              "operators": 0,
+              "mutex_groups": 0,
+              "task_size": 4
+            },
+            "initial_h": "lmcut=infinity",
+            "error": null
+          },
+          "expansions_before": 0,
+          "expansions_after": 0,
+          "task_size_before": 4,
+          "task_size_after": 4,
+          "plan_length_delta": null,
+          "replayed_on_original_domain": null,
+          "guard_refused": null,
+          "dividend_is_honest": null,
+          "timing": {
+            "baseline": {
+              "search_seconds": 3.7e-05,
+              "fd_total_seconds": 0.00164,
+              "wall_seconds": 0.150186,
+              "peak_memory_kb": null
+            },
+            "guarded": {
+              "search_seconds": 4.1e-05,
+              "fd_total_seconds": 0.001648,
+              "wall_seconds": 0.146041,
+              "peak_memory_kb": null
+            }
+          }
+        },
+        {
+          "instance": "ringstuck8",
+          "guard": "singleton",
+          "rung": "fd-optimal/ipdb",
+          "guard_size": {
+            "guard": "singleton",
+            "dead1_facts": 2,
+            "deadpair_facts": 0,
+            "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -6722,28 +6433,29 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 3.4e-05,
-              "fd_total_seconds": 0.001861,
-              "wall_seconds": 0.141985,
+              "search_seconds": 3.6e-05,
+              "fd_total_seconds": 0.00192,
+              "wall_seconds": 0.153984,
               "peak_memory_kb": null
             },
             "guarded": {
               "search_seconds": 3.7e-05,
-              "fd_total_seconds": 0.001834,
-              "wall_seconds": 0.14385,
+              "fd_total_seconds": 0.001897,
+              "wall_seconds": 0.147317,
               "peak_memory_kb": null
             }
           }
         },
         {
           "instance": "ringstuck8",
-          "guard": "full",
+          "guard": "singleton",
           "rung": "fd-satisficing",
           "guard_size": {
-            "guard": "full",
+            "guard": "singleton",
             "dead1_facts": 2,
             "deadpair_facts": 0,
             "guard_facts_total": 2,
+            "max_pair_arity": null,
             "theorems_total": 2,
             "theorems_expressed": 2
           },
@@ -6811,15 +6523,15 @@
           "dividend_is_honest": null,
           "timing": {
             "baseline": {
-              "search_seconds": 6.1e-05,
-              "fd_total_seconds": 0.002129,
-              "wall_seconds": 0.145984,
+              "search_seconds": 5.3e-05,
+              "fd_total_seconds": 0.002512,
+              "wall_seconds": 0.155989,
               "peak_memory_kb": null
             },
             "guarded": {
-              "search_seconds": 5.3e-05,
-              "fd_total_seconds": 0.002056,
-              "wall_seconds": 0.14396,
+              "search_seconds": 5.7e-05,
+              "fd_total_seconds": 0.002055,
+              "wall_seconds": 0.142512,
               "peak_memory_kb": null
             }
           }

@@ -573,7 +573,28 @@ search.
 **What it cost, and the limit found.** FD's translator compiles the `full`
 guard's universal precondition into an **axiom**, and `astar(lmcut())` and
 `astar(ipdb())` both refuse a task with axioms (driver exit 34, `This
-configuration does not support axioms!`). So the optimal rungs can be given the
-corner deadlocks and cannot be given the pair deadlocks. That limit is measured
-rather than asserted, and pinned by a test, so a later FD build that lifts it
-fails the suite instead of going unnoticed.
+configuration does not support axioms!`).
+
+This decision first concluded from that that the optimal rungs simply cannot be
+given the pair deadlocks. An adversarial review refuted it by writing the
+encoding that can: nothing about a pair deadlock needs quantification, only the
+schema's ignorance of how many dead partners a position has, so numbering them
+through static selectors (`indexed`) removes the `forall` and stays in STRIPS.
+The optimal rungs accept it.
+
+The measurement that replaced the claim is worth more than the claim was:
+`lmcut` expands **more** with the pair theorems than without (`far4` 23 -> 34,
+`far6` 47 -> 66), because FD compiles a negative precondition on a fluent into
+one operator copy per other value of that variable and the task grows about an
+order of magnitude. Optimal length is unchanged throughout. Both the axiom
+refusal and the indexed encoding's acceptance are pinned by tests, so a later FD
+build that changes either fails the suite instead of going unnoticed.
+
+**A third clause `guardable()` needed.** The pair guard is evaluated against the
+pre-state, in which the pushed box still holds its old position. A pattern naming
+one box twice therefore blocks the transitions that *leave* it -- stronger than
+the theorem, and stronger is the unsound direction (measured: `far4`'s optimal
+length 11 -> 25). `carve()` cannot emit one, but that is another module's
+property and this one is supposed to check rather than assume.
+`tools/p13_fd_dividend.py` had the check and documented it; `bench/` had dropped
+it and has it back.

@@ -157,9 +157,21 @@ def dividend_markdown(report: Dict[str, object]) -> str:
     lines.append(
         "No pruning hook, so the theorems are compiled into the task instead "
         "(`bench/compile_theorems.py`). `singleton` expresses the corner "
-        "deadlocks and stays inside STRIPS; `full` adds the pair deadlocks and "
-        "needs `:adl`. Every guarded plan below was replayed against the "
-        "**original** domain by the rig's own validator."
+        "deadlocks and stays inside STRIPS. `full` adds the pair deadlocks as a "
+        "`forall`, which FD turns into an axiom -- the two admissible heuristics "
+        "refuse it. `indexed` is the same pair guard with the quantifier removed "
+        "for static selectors: pure STRIPS, and they accept it. Every guarded "
+        "plan below was replayed against the **original** domain by the rig's "
+        "own validator."
+    )
+    lines.append("")
+    lines.append(
+        "Read `indexed` against `singleton` on the two admissible rows: that is "
+        "what the pair theorems cost once they can be delivered at all. FD "
+        "compiles a negative precondition on a fluent into one operator copy per "
+        "other value of that variable, which is the task-size column blowing up "
+        "and the reason `lmcut` expands *more* with the pair theorems than "
+        "without them."
     )
     lines.append("")
     lines.append(

@@ -16,13 +16,13 @@ Normalizing Datalog program...
 Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
 Preparing model... [0.000s CPU, 0.000s wall-clock]
 Generated 20 rules.
-Computing model... [0.016s CPU, 0.003s wall-clock]
+Computing model... [0.000s CPU, 0.003s wall-clock]
 289 relevant atoms
 456 auxiliary atoms
 745 final queue length
 857 total queue pushes
 Completing instantiation... [0.000s CPU, 0.001s wall-clock]
-Instantiating: [0.016s CPU, 0.005s wall-clock]
+Instantiating: [0.000s CPU, 0.005s wall-clock]
 No relaxed solution! Generating unsolvable task...
 Translator variables: 1
 Translator derived variables: 0
@@ -35,41 +35,41 @@ Translator axioms: 0
 Translator task size: 4
 warning: could not determine peak memory
 Writing output... [0.000s CPU, 0.005s wall-clock]
-Done! [0.016s CPU, 0.011s wall-clock]
+Done! [0.000s CPU, 0.012s wall-clock]
 translate exit code: 0
 
 INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(blind())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpjiqfmgmc\sas_plan' < output.sas
-[t=0.000144s, 1968 KB] Search code revision: 7120aa0
-[t=0.000233s, 1968 KB] reading input...
-[t=0.000324s, 1988 KB] done reading input!
-[t=0.001576s, 2528 KB] Initializing blind search heuristic...
-[t=0.001603s, 2528 KB] Building successor generator... done!
-[t=0.001612s, 2528 KB] peak memory difference for successor generator creation: 0 KB
-[t=0.001614s, 2528 KB] time for successor generation creation: 0.000004s
-[t=0.001619s, 2528 KB] Variables: 1
-[t=0.001621s, 2532 KB] FactPairs: 2
-[t=0.001624s, 2532 KB] Bytes per state: 4
-[t=0.001636s, 2532 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
-[t=0.001654s, 2580 KB] Initial state is a dead end.
-[t=0.001658s, 2584 KB] Initial heuristic value for blind: infinity
-[t=0.001661s, 2584 KB] pruning method: none
-[t=0.001665s, 2584 KB] Completely explored state space -- no solution!
-[t=0.001667s, 2584 KB] Actual search time: 0.000005s
-[t=0.001672s, 2584 KB] Expanded 0 state(s).
-[t=0.001672s, 2584 KB] Reopened 0 state(s).
-[t=0.001672s, 2584 KB] Evaluated 1 state(s).
-[t=0.001672s, 2584 KB] Evaluations: 1
-[t=0.001672s, 2584 KB] Generated 0 state(s).
-[t=0.001672s, 2584 KB] Dead ends: 0 state(s).
-[t=0.001672s, 2584 KB] Number of registered states: 1
-[t=0.001672s, 2584 KB] Int hash set load factor: 1/1 = 1.000000
-[t=0.001672s, 2584 KB] Int hash set resizes: 0
-[t=0.001672s, 2584 KB] Search time: 0.000038s
-[t=0.001672s, 2584 KB] Total time: 0.001672s
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(blind())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpl_6rmlvr\sas_plan' < output.sas
+[t=0.000157s, 1932 KB] Search code revision: 7120aa0
+[t=0.000243s, 1932 KB] reading input...
+[t=0.000340s, 1968 KB] done reading input!
+[t=0.001535s, 2516 KB] Initializing blind search heuristic...
+[t=0.001563s, 2516 KB] Building successor generator... done!
+[t=0.001573s, 2516 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.001575s, 2516 KB] time for successor generation creation: 0.000004s
+[t=0.001580s, 2516 KB] Variables: 1
+[t=0.001582s, 2516 KB] FactPairs: 2
+[t=0.001584s, 2516 KB] Bytes per state: 4
+[t=0.001594s, 2516 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.001610s, 2528 KB] Initial state is a dead end.
+[t=0.001614s, 2528 KB] Initial heuristic value for blind: infinity
+[t=0.001616s, 2528 KB] pruning method: none
+[t=0.001620s, 2532 KB] Completely explored state space -- no solution!
+[t=0.001623s, 2532 KB] Actual search time: 0.000006s
+[t=0.001626s, 2532 KB] Expanded 0 state(s).
+[t=0.001626s, 2532 KB] Reopened 0 state(s).
+[t=0.001626s, 2532 KB] Evaluated 1 state(s).
+[t=0.001626s, 2532 KB] Evaluations: 1
+[t=0.001626s, 2532 KB] Generated 0 state(s).
+[t=0.001626s, 2532 KB] Dead ends: 0 state(s).
+[t=0.001626s, 2532 KB] Number of registered states: 1
+[t=0.001626s, 2532 KB] Int hash set load factor: 1/1 = 1.000000
+[t=0.001626s, 2532 KB] Int hash set resizes: 0
+[t=0.001626s, 2532 KB] Search time: 0.000034s
+[t=0.001626s, 2532 KB] Total time: 0.001626s
 Search stopped without finding a solution.
 Remove intermediate file output.sas
 search exit code: 12

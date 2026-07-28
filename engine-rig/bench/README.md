@@ -65,17 +65,39 @@ uses. It can be tested by putting the theorem *in the task*: forbid exactly the
 transitions that enter a proved-dead pattern. Since every such state is dead,
 removing them preserves plan existence and optimal length.
 
-Two guards, because one of them does not fit through the optimal rungs:
+Three guards:
 
 * `singleton` — corner deadlocks, as a negative precondition. Stays in STRIPS,
   every rung accepts it.
-* `full` — adds pair deadlocks, which need a universally quantified negated
-  conjunction, hence `:adl`. FD's translator turns that into an **axiom** and
-  `astar(lmcut())` / `astar(ipdb())` refuse a task with axioms (driver exit 34).
+* `full` — adds pair deadlocks as a universally quantified negated conjunction,
+  hence `:adl`. FD's `normalize.py` turns any `forall` precondition into an
+  **axiom**, and `astar(lmcut())` / `astar(ipdb())` refuse a task with axioms
+  (driver exit 34). `astar(blind())` accepts it.
+* `indexed` — the same pair guard with the quantifier removed: static `npair<k>`
+  gives a position's dead-partner count, `deadpair<i>` names the i-th, and one
+  `push-pair<k>` schema per arity binds them. Pure STRIPS; the optimal rungs
+  accept it.
 
-That refusal is a finding of the run, pinned by
-`tests/test_bench.py::test_the_full_guard_is_refused_by_the_optimal_rung_for_the_reason_recorded`
-so it cannot quietly stop being true.
+`indexed` exists because an adversarial review refuted the run's first
+conclusion, that pair deadlocks could not reach the admissible rungs at all. They
+can — and doing so makes those rungs *worse* (`lmcut` on `far6`: 47 expansions
+without the pair theorems, 66 with, task size 2813 → 26253). FD compiles a
+negative precondition on a fluent into one operator copy per other value of that
+variable, so a guard meant to cost only grounding costs the search a much larger
+operator set. Both halves are pinned by tests.
+
+Its plans need `to_original_plan()` before replay: `indexed` renames `push` to
+`push-pair<k>`, so its steps are not in the original domain's vocabulary. The
+validator refused them outright the first time, which is what it is for — the
+mapping is applied at the call site rather than by relaxing the validator.
+
+**One trap worth knowing if you extend the guard.** The pair guard reads the
+**pre-state**, where the pushed box still holds its old position. So a pattern
+naming the same box twice blocks transitions that *leave* the pattern instead of
+entering it — strictly stronger than the theorem, and stronger is the direction
+that breaks optimality (measured: `far4` 11 → 25). `guardable()` clause 3 refuses
+such patterns. `carve()` cannot currently produce one, but that is a property of
+another module and this one is not supposed to lean on it.
 
 ## Tests
 

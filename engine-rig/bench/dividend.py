@@ -158,11 +158,11 @@ def fd_dividend(problem_text: str, problem_path: str, domain, problem,
             tier=tier, heuristic=heuristic, repeats=repeats, keep_log=keep,
         )
 
-    for guard in ("singleton", "full"):
+    for guard in compile_theorems.guardable_guards(theorems):
         guard_domain, guard_problem = compile_theorems.write_guarded(
-            work_dir, name, problem_text, theorems, guard=guard
+            work_dir, name, problem_text, theorems, guard=guard, problem=problem
         )
-        size = compile_theorems.guard_size(theorems, guard)
+        size = compile_theorems.guard_size(theorems, guard, problem)
         for rung, tier, heuristic in rungs:
             keep = os.path.join(
                 log_dir, "%s.%s.%s.log" % (name, rung.replace("/", "-"), guard)
@@ -179,7 +179,17 @@ def fd_dividend(problem_text: str, problem_path: str, domain, problem,
                 # from the guarded task, replayed against the ORIGINAL domain by
                 # the rig's own validator.  A guard that removed a transition it
                 # had no right to remove cannot survive this.
-                fd_adapter.validate_plan(domain, problem, guarded.plan)
+                #
+                # `to_original_plan` is a rename, not a repair: the `indexed`
+                # guard splits `push` into `push-pair<k>` schemas, so its steps
+                # are not in the original domain's vocabulary.  The validator
+                # refused them outright the first time, which is the outcome it
+                # exists for -- the mapping is applied here rather than by
+                # relaxing what the validator will accept.
+                fd_adapter.validate_plan(
+                    domain, problem,
+                    compile_theorems.to_original_plan(guarded.plan, guard),
+                )
                 replayed = True
 
             length_delta = None

@@ -35,53 +35,53 @@ Translator axioms: 0
 Translator task size: 4
 warning: could not determine peak memory
 Writing output... [0.000s CPU, 0.005s wall-clock]
-Done! [0.000s CPU, 0.009s wall-clock]
+Done! [0.000s CPU, 0.008s wall-clock]
 translate exit code: 0
 
 INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(ipdb())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpjqta7s4r\sas_plan' < output.sas
-[t=0.000149s, 1928 KB] Search code revision: 7120aa0
-[t=0.000238s, 1956 KB] reading input...
-[t=0.000333s, 1972 KB] done reading input!
-[t=0.001997s, 2636 KB] Initializing canonical PDB heuristic...
-[t=0.002007s, 2636 KB] Generating patterns using: hill climbing pattern collection generator
-[t=0.002033s, 2636 KB] Done calculating initial pattern collection: 0.000023s
-[t=0.002047s, 2664 KB] hill climbing pattern collection generator number of patterns: 1
-[t=0.002050s, 2664 KB] hill climbing pattern collection generator total PDB size: 2
-[t=0.002052s, 2664 KB] hill climbing pattern collection generator computation time: 0.000036s
-[t=0.002058s, 2664 KB] Running dominance pruning...
-[t=0.002064s, 2664 KB] Pruned 0 of 1 pattern cliques
-[t=0.002068s, 2664 KB] Pruned 0 of 1 PDBs
-[t=0.002074s, 2664 KB] Dominance pruning took 0.000013s
-[t=0.002081s, 2664 KB] Canonical PDB heuristic number of patterns: 1
-[t=0.002084s, 2664 KB] Canonical PDB heuristic total PDB size: 2
-[t=0.002086s, 2664 KB] Canonical PDB heuristic computation time: 0.000084s
-[t=0.002117s, 2676 KB] Building successor generator... done!
-[t=0.002127s, 2700 KB] peak memory difference for successor generator creation: 0 KB
-[t=0.002129s, 2700 KB] time for successor generation creation: 0.000004s
-[t=0.002133s, 2700 KB] Variables: 1
-[t=0.002136s, 2700 KB] FactPairs: 2
-[t=0.002138s, 2700 KB] Bytes per state: 4
-[t=0.002154s, 2700 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
-[t=0.002178s, 2732 KB] Initial state is a dead end.
-[t=0.002183s, 2732 KB] Initial heuristic value for cpdbs: infinity
-[t=0.002185s, 2732 KB] pruning method: none
-[t=0.002189s, 2732 KB] Completely explored state space -- no solution!
-[t=0.002191s, 2732 KB] Actual search time: 0.000005s
-[t=0.002194s, 2732 KB] Expanded 0 state(s).
-[t=0.002194s, 2732 KB] Reopened 0 state(s).
-[t=0.002194s, 2732 KB] Evaluated 1 state(s).
-[t=0.002194s, 2732 KB] Evaluations: 1
-[t=0.002194s, 2732 KB] Generated 0 state(s).
-[t=0.002194s, 2732 KB] Dead ends: 0 state(s).
-[t=0.002194s, 2732 KB] Number of registered states: 1
-[t=0.002194s, 2732 KB] Int hash set load factor: 1/1 = 1.000000
-[t=0.002194s, 2732 KB] Int hash set resizes: 0
-[t=0.002194s, 2732 KB] Search time: 0.000043s
-[t=0.002194s, 2732 KB] Total time: 0.002194s
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(ipdb())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpo6jszv1_\sas_plan' < output.sas
+[t=0.000138s, 1972 KB] Search code revision: 7120aa0
+[t=0.000235s, 1972 KB] reading input...
+[t=0.000322s, 2008 KB] done reading input!
+[t=0.001668s, 2588 KB] Initializing canonical PDB heuristic...
+[t=0.001702s, 2588 KB] Generating patterns using: hill climbing pattern collection generator
+[t=0.001731s, 2588 KB] Done calculating initial pattern collection: 0.000026s
+[t=0.001747s, 2588 KB] hill climbing pattern collection generator number of patterns: 1
+[t=0.001750s, 2588 KB] hill climbing pattern collection generator total PDB size: 2
+[t=0.001752s, 2588 KB] hill climbing pattern collection generator computation time: 0.000040s
+[t=0.001757s, 2588 KB] Running dominance pruning...
+[t=0.001762s, 2588 KB] Pruned 0 of 1 pattern cliques
+[t=0.001764s, 2588 KB] Pruned 0 of 1 PDBs
+[t=0.001766s, 2588 KB] Dominance pruning took 0.000008s
+[t=0.001769s, 2588 KB] Canonical PDB heuristic number of patterns: 1
+[t=0.001771s, 2588 KB] Canonical PDB heuristic total PDB size: 2
+[t=0.001773s, 2588 KB] Canonical PDB heuristic computation time: 0.000102s
+[t=0.001804s, 2592 KB] Building successor generator... done!
+[t=0.001813s, 2592 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.001815s, 2592 KB] time for successor generation creation: 0.000005s
+[t=0.001820s, 2592 KB] Variables: 1
+[t=0.001825s, 2592 KB] FactPairs: 2
+[t=0.001829s, 2592 KB] Bytes per state: 4
+[t=0.001840s, 2592 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.001857s, 2616 KB] Initial state is a dead end.
+[t=0.001862s, 2616 KB] Initial heuristic value for cpdbs: infinity
+[t=0.001864s, 2616 KB] pruning method: none
+[t=0.001868s, 2616 KB] Completely explored state space -- no solution!
+[t=0.001870s, 2616 KB] Actual search time: 0.000005s
+[t=0.001874s, 2616 KB] Expanded 0 state(s).
+[t=0.001874s, 2616 KB] Reopened 0 state(s).
+[t=0.001874s, 2616 KB] Evaluated 1 state(s).
+[t=0.001874s, 2616 KB] Evaluations: 1
+[t=0.001874s, 2616 KB] Generated 0 state(s).
+[t=0.001874s, 2616 KB] Dead ends: 0 state(s).
+[t=0.001874s, 2616 KB] Number of registered states: 1
+[t=0.001874s, 2616 KB] Int hash set load factor: 1/1 = 1.000000
+[t=0.001874s, 2616 KB] Int hash set resizes: 0
+[t=0.001874s, 2616 KB] Search time: 0.000036s
+[t=0.001874s, 2616 KB] Total time: 0.001874s
 Search stopped without finding a solution.
 Remove intermediate file output.sas
 search exit code: 12
