@@ -83,7 +83,9 @@
     "report": "ADVERSARIAL-1.md",
     "findings_accepted": 5,
     "findings_rejected": 0,
-    "corrections_logged": "BUGS.md section S7"
+    "corrections_logged": "BUGS.md section S7",
+    "verbatim_text_archived": false,
+    "note": "the reviewer reported to the coordinator, not to this session; two requests for the verbatim text went unanswered before delivery. ADVERSARIAL-1.md is this author's disposition record with independent re-measurements, NOT the reviewer's words. Authoritative copy: the reviewer's transcript."
   },
   "findings_for_other_territories": [
     "BUGS.md section S5 (mdl_segmenter track continuity)",
