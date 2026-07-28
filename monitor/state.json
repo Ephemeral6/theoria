@@ -1,11 +1,11 @@
 {
   "blocking_findings": 1,
   "board": {
-    "available": 1,
+    "available": 0,
     "blocked": 0,
     "claimed": 9,
-    "done": 7,
-    "listing": "=== available ===\n  p5  A4-ablation-online           cell=A4  territory=ablation-arm\n=== claimed ===\n  A6-transfer-protocol         by W-5201\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P6-paper-assembly            by W-1610\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V2-exam-on-worldgen          by W-1540\n  V3-battery-discrimination    by APP-V3\n=== done (7) ===\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540"
+    "done": 8,
+    "listing": "=== available ===\n=== claimed ===\n  A4-ablation-online           by W-1540\n  A6-transfer-protocol         by W-5201\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P6-paper-assembly            by W-1610\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n=== done (8) ===\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  V2-exam-on-worldgen.W-1540"
   },
   "con_green": 1,
   "constraints": [
@@ -264,7 +264,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 17:26:59",
+  "generated_at": "2026-07-28 17:28:56",
   "grid": {
     "A1": {
       "active": [
@@ -1093,78 +1093,67 @@
     ],
     "dirty": [
       "onitor/board/board.log",
-      "monitor/board/claimed/C1-worldgen.W-1610.md",
-      "monitor/board/claimed/C4-deadlock-lean.W-1541.md",
-      "monitor/board/claimed/E2-fd-ladder-bench.W-1520.md",
-      "monitor/board/claimed/P4-figures.W-1611.md",
-      "monitor/board/claimed/S3-spend-gate.W-1540.md",
-      "monitor/board/items/E4-property-fuzz.md",
-      "monitor/board/items/P5-release.md",
-      "monitor/board/items/S4-freeze.md",
-      "monitor/board/items/V2-exam-on-worldgen.md",
+      "monitor/board/claimed/V2-exam-on-worldgen.W-1540.md",
+      "monitor/board/items/A4-ablation-online.md",
       "monitor/ci/merge.log",
-      "monitor/inbox/20260728T0800Z-W-1520-19-deadlock-speedup-half-does-not-hold.md",
       "monitor/index.html",
       "monitor/loop_state.json",
+      "monitor/prompts/A-1-drift-auditor.md",
+      "monitor/prompts/A2-crosscheck.md",
+      "monitor/prompts/B-1-browser-ops.md",
+      "monitor/prompts/C1-worldgen.md",
+      "monitor/prompts/C2-semantics-migrate.md",
+      "monitor/prompts/E1-property-fuzz.md",
+      "monitor/prompts/M-0-merge.md",
+      "monitor/prompts/P-10-contracts-v02.md",
+      "monitor/prompts/P-11-arc-hygiene.md",
+      "monitor/prompts/P-12-envelope-finish.md",
+      "monitor/prompts/P-13-fd-real.md",
+      "monitor/prompts/P-14-battery-v1.md",
+      "monitor/prompts/P-15-exam-builder.md",
+      "monitor/prompts/P-16-workshop-paper.md",
+      "monitor/prompts/P-17-a3-transfer.md",
+      "monitor/prompts/P-18-ablation-arm.md",
+      "monitor/prompts/P-19-release-kit.md",
+      "monitor/prompts/P-20-cascade-probe.md",
+      "monitor/prompts/P-21-figures.md",
+      "monitor/prompts/P-22-freeze-kit.md",
+      "monitor/prompts/P-23-related-work.md",
+      "monitor/prompts/P-24-fleet-skills.md",
+      "monitor/prompts/P-8-theoria-arm.md",
+      "monitor/prompts/P-9-shell-harden.md",
+      "monitor/prompts/P3-case-study.md",
+      "monitor/prompts/R-1-retrospective.md",
+      "monitor/prompts/S3-spend-gate.md",
       "monitor/reflex.log",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/claimed/A6-transfer-protocol.W-5201.md",
-      "monitor/board/claimed/P5-release.W-1520.md",
-      "monitor/board/claimed/P6-paper-assembly.W-1610.md",
-      "monitor/board/claimed/S4-freeze.W-1541.md",
-      "monitor/board/claimed/S5-phase1-close.W-5200.md",
-      "monitor/board/claimed/V2-exam-on-worldgen.W-1540.md",
-      "monitor/board/done/C1-worldgen.W-1610.md",
-      "monitor/board/done/C4-deadlock-lean.W-1541.md",
-      "monitor/board/done/E2-fd-ladder-bench.W-1520.md",
-      "monitor/board/done/E4-property-fuzz.W-1610.md",
-      "monitor/board/done/P4-figures.W-1611.md",
-      "monitor/board/done/S3-spend-gate.W-1540.md",
-      "monitor/board/items/E6-engine-dividend.md",
-      "monitor/inbox/20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md",
-      "monitor/inbox/20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md",
-      "monitor/inbox/20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md",
-      "monitor/inbox/20260728T091200Z-W-1541-s4-and-p22-are-the-same-deliverable-drafted-twice.md",
-      "monitor/inbox/20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md",
-      "monitor/inbox/20260728T094500Z-W-1611-a4-precondition-unmet-and-p18-is-a-second-orphan.md"
+      "monitor/board/claimed/A4-ablation-online.W-1540.md",
+      "monitor/board/done/V2-exam-on-worldgen.W-1540.md",
+      "monitor/inbox/20260728T094500Z-W-1540-v2-shipped-one-of-four-and-the-unlock-is-worldgen-mutate.md",
+      "monitor/prompts/archive/superseded-by-board/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "7724f60 Merge remote-tracking branch 'origin/agent/p4-figures' into HEAD",
+    "git_head": "7768517 Merge remote-tracking branch 'origin/agent/e4-property-fuzz' into HEAD",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 95,
-    "sync_last": "2026-07-28T09:05:00Z",
+    "sync_entries": 96,
+    "sync_last": "2026-07-28T10:20:00Z",
     "tests": {},
     "untracked": [
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/claimed/A6-transfer-protocol.W-5201.md",
-      "monitor/board/claimed/P5-release.W-1520.md",
-      "monitor/board/claimed/P6-paper-assembly.W-1610.md",
-      "monitor/board/claimed/S4-freeze.W-1541.md",
-      "monitor/board/claimed/S5-phase1-close.W-5200.md",
-      "monitor/board/claimed/V2-exam-on-worldgen.W-1540.md",
-      "monitor/board/done/C1-worldgen.W-1610.md",
-      "monitor/board/done/C4-deadlock-lean.W-1541.md",
-      "monitor/board/done/E2-fd-ladder-bench.W-1520.md",
-      "monitor/board/done/E4-property-fuzz.W-1610.md",
-      "monitor/board/done/P4-figures.W-1611.md",
-      "monitor/board/done/S3-spend-gate.W-1540.md",
-      "monitor/board/items/E6-engine-dividend.md",
-      "monitor/inbox/20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md",
-      "monitor/inbox/20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md",
-      "monitor/inbox/20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md",
-      "monitor/inbox/20260728T091200Z-W-1541-s4-and-p22-are-the-same-deliverable-drafted-twice.md",
-      "monitor/inbox/20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md",
-      "monitor/inbox/20260728T094500Z-W-1611-a4-precondition-unmet-and-p18-is-a-second-orphan.md"
+      "monitor/board/claimed/A4-ablation-online.W-1540.md",
+      "monitor/board/done/V2-exam-on-worldgen.W-1540.md",
+      "monitor/inbox/20260728T094500Z-W-1540-v2-shipped-one-of-four-and-the-unlock-is-worldgen-mutate.md",
+      "monitor/prompts/archive/superseded-by-board/"
     ]
   },
   "p1_green": 9,
@@ -1621,134 +1610,19 @@
       "status": "green"
     },
     "dispatch_board": {
-      "detail": "19 份在册工单，11 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",
-      "rows": [
-        {
-          "branch": "—",
-          "id": "M-0",
-          "prompt": "M-0-merge.md",
-          "self_reported": true
-        },
-        {
-          "branch": "—",
-          "id": "P-10",
-          "prompt": "P-10-contracts-v02.md",
-          "self_reported": true
-        },
-        {
-          "branch": "—",
-          "id": "P-11",
-          "prompt": "P-11-arc-hygiene.md",
-          "self_reported": true
-        },
-        {
-          "branch": "—",
-          "id": "P-12",
-          "prompt": "P-12-envelope-finish.md",
-          "self_reported": true
-        },
-        {
-          "branch": "—",
-          "id": "P-13",
-          "prompt": "P-13-fd-real.md",
-          "self_reported": true
-        },
-        {
-          "branch": "—",
-          "id": "P-14",
-          "prompt": "P-14-battery-v1.md",
-          "self_reported": true
-        },
-        {
-          "branch": "—",
-          "id": "P-15",
-          "prompt": "P-15-exam-builder.md",
-          "self_reported": true
-        },
-        {
-          "branch": "—",
-          "id": "P-16",
-          "prompt": "P-16-workshop-paper.md",
-          "self_reported": false
-        },
-        {
-          "branch": "—",
-          "id": "P-17",
-          "prompt": "P-17-a3-transfer.md",
-          "self_reported": true
-        },
-        {
-          "branch": "—",
-          "id": "P-18",
-          "prompt": "P-18-ablation-arm.md",
-          "self_reported": false
-        },
-        {
-          "branch": "—",
-          "id": "P-19",
-          "prompt": "P-19-release-kit.md",
-          "self_reported": false
-        },
-        {
-          "branch": "—",
-          "id": "P-20",
-          "prompt": "P-20-cascade-probe.md",
-          "self_reported": true
-        },
-        {
-          "branch": "—",
-          "id": "P-21",
-          "prompt": "P-21-figures.md",
-          "self_reported": true
-        },
-        {
-          "branch": "—",
-          "id": "P-22",
-          "prompt": "P-22-freeze-kit.md",
-          "self_reported": false
-        },
-        {
-          "branch": "—",
-          "id": "P-23",
-          "prompt": "P-23-related-work.md",
-          "self_reported": false
-        },
-        {
-          "branch": "—",
-          "id": "P-24",
-          "prompt": "P-24-fleet-skills.md",
-          "self_reported": false
-        },
-        {
-          "branch": "—",
-          "id": "P-8",
-          "prompt": "P-8-theoria-arm.md",
-          "self_reported": false
-        },
-        {
-          "branch": "—",
-          "id": "P-9",
-          "prompt": "P-9-shell-harden.md",
-          "self_reported": true
-        },
-        {
-          "branch": "—",
-          "id": "R-1",
-          "prompt": "R-1-retrospective.md",
-          "self_reported": false
-        }
-      ],
+      "detail": "本轮无在册工单。",
+      "rows": [],
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 22 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md, 20260728T075952Z-opsm-reflex-still-dead-unboundlocal.md, 20260728T0800Z-W-1520-19-deadlock-speedup-half-does-not-hold.md, 20260728T081500Z-W-1540-reflex-is-dead-and-the-canary-wants-a-daily-slot.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md, 20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T091200Z-W-1541-s4-and-p22-are-the-same-deliverable-drafted-twice.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T094500Z-W-1611-a4-precondition-unmet-and-p18-is-a-second-orphan.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 23 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md, 20260728T075952Z-opsm-reflex-still-dead-unboundlocal.md, 20260728T0800Z-W-1520-19-deadlock-speedup-half-does-not-hold.md, 20260728T081500Z-W-1540-reflex-is-dead-and-the-canary-wants-a-daily-slot.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md, 20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T091200Z-W-1541-s4-and-p22-are-the-same-deliverable-drafted-twice.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T094500Z-W-1540-v2-shipped-one-of-four-and-the-unlock-is-worldgen-mutate.md, 20260728T094500Z-W-1611-a4-precondition-unmet-and-p18-is-a-second-orphan.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**10 条 TO-MONITOR 待监控回复**。 OPS-A 第3轮 idle（50 分钟前）； OPS-B 第2轮 idle（61 分钟前）； OPS-M 第2轮 working（84 分钟前）； OPS-R 第1轮 idle（173 分钟前）",
+      "detail": "**10 条 TO-MONITOR 待监控回复**。 OPS-A 第3轮 idle（52 分钟前）； OPS-B 第2轮 idle（63 分钟前）； OPS-M 第2轮 working（86 分钟前）； OPS-R 第1轮 idle（175 分钟前）",
       "rows": [
         {
-          "age_min": 50,
+          "age_min": 52,
           "cycle": 3,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -1757,7 +1631,7 @@
           "status": "green"
         },
         {
-          "age_min": 61,
+          "age_min": 63,
           "cycle": 2,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1766,7 +1640,7 @@
           "status": "green"
         },
         {
-          "age_min": 84,
+          "age_min": 86,
           "cycle": 2,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -1775,7 +1649,7 @@
           "status": "green"
         },
         {
-          "age_min": 173,
+          "age_min": 175,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",

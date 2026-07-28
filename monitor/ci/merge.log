@@ -17,3 +17,5 @@
 2026-07-28T09:02:51Z MERGED origin/agent/c4-deadlock-lean (dirs: CONTRACTS,PARTNER_SYNC.md,theory-compiler)
 2026-07-28T09:08:18Z MERGED origin/agent/s3-spend-gate-v2 (dirs: PARTNER_SYNC.md,baseline-arms,proxy)
 2026-07-28T09:12:20Z MERGED origin/agent/p4-figures (dirs: PARTNER_SYNC.md,figures)
+2026-07-28T09:27:22Z MERGED origin/agent/a4-ablation-online (dirs: ablation-arm)
+2026-07-28T09:27:29Z MERGED origin/agent/e4-property-fuzz (dirs: PARTNER_SYNC.md,fuzzlab)

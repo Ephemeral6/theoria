@@ -26,3 +26,5 @@
 2026-07-28T09:25:19Z CLAIM A6-transfer-protocol by W-5201
 2026-07-28T09:26:25Z RELEASE A4-ablation-online by W-1611 (precondition unmet: P-18 offline calibration never ran (no worlds/exhibits/tests/verify.sh/artifacts, 0 of 7 pre-registered predictions evaluated); P-18 work was orphaned and is preserved on agent/a4-ablation-online with STATUS.md; see monitor/inbox/20260728T094500Z-W-1611-*)
 2026-07-28T09:26:35Z CLAIM E6-engine-dividend by W-1611
+2026-07-28T09:28:23Z DONE V2-exam-on-worldgen by W-1540
+2026-07-28T09:28:23Z CLAIM A4-ablation-online by W-1540
