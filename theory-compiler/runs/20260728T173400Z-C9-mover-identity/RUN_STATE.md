@@ -218,6 +218,35 @@ is a fact about the grammar and not about any miner.
 | `worldgen` `t1-switch-latch` | 27 `rule_hypothesis` rows, guards **byte-identical** |
 | A0's own identity repair | **0 swaps**, one refusal at t=99 (the Button press — the Switch recolours while the Door vanishes, and the recolour is not into the vanishing track's colour). Pinned by a test. |
 
+**The work order's "四份既有 DSL 不回归" clause, checked against the base commit
+rather than against itself.** A subagent ran the four cross-track manuals through
+all four forms in *this* tree and in a throwaway worktree at `86d79c6`, and
+sha256'd every generated form:
+
+| manual | Lean | Python | PDDL | Markdown | vs `86d79c6` |
+|---|---|---|---|---|---|
+| `theory-compiler/tests/fixtures/peg_theory.dsl` | refused¹ | ok | refused² | ok | **byte-identical** |
+| `cold-start-a0/theory/theory.dsl` | ok | ok | ok | ok | **byte-identical** |
+| `a0-spike/theory/theory.dsl` | refused³ | refused³ | ok | ok | **byte-identical** |
+| `cold-start-a2/theory/theory.dsl` | ok | ok | ok | ok | **byte-identical** |
+
+¹ no certificate supplied for the pagoda potential; ² the peg problem is a line
+world, not a grid; ³ E-02's free name `dir`. Every refusal is pre-existing and
+its message is byte-identical too. `theory-compiler/runs/20260728T102343Z-c7/verify.sh`
+is green (all eleven manuals in the tree, the two ledger numbers), and
+`tests/test_count_guard.py` is 15 passed — the in-suite four still compile.
+
+Worth correcting for anyone reading the older survey: `a0-spike`'s manual *does*
+have a `semantics:` section, and its refusal is form-specific — it parses, builds
+IR, and still generates PDDL and Markdown.
+
+**Determinism.** Three consecutive runs of the acceptance produce a
+byte-identical `engines_report.json`, and a byte-identical `candidates.jsonl`
+under the documented switch (`THEORIA_DETERMINISTIC_IDS=1`,
+`THEORIA_FIXED_TIME`). Without it the `id` field is `uuid4` by design and every
+row differs — that is `engine-rig/common/candidates.py`'s stated contract
+(D-004), not drift, and it is why `run_all.py` sets it.
+
 What *does* move, and why: the three `object_hypothesis` rows carry the
 segmentation report, which now has an `identity_repair` section, so those rows
 and their content-derived ids change; `vocabulary_size` moves 162 → 172 for the
@@ -228,9 +257,11 @@ move, and that one is **not** this change. `compile_a0.py` reads the
 hand-written `theory.dsl` and never touches `candidates.jsonl`, so it cannot see
 any of this. Those files were last regenerated at commit `eaa0075` (08:57) and
 `gen_markdown.py` moved at `aeee50e` (22:22) with C8 — they have been stale on
-master for thirteen hours and re-running the chain surfaced it. Committed
-regenerated, since a generated file that does not match its generator is worse
-than the diff.
+master for thirteen hours and re-running the chain surfaced it. Confirmed rather
+than argued: regenerating that file **in a clean worktree at `86d79c6`, with the
+baseline chain**, produces `22ac738f…` — which is exactly what this branch
+commits, while `86d79c6` had `5b100206…` checked in. Committed regenerated,
+since a generated file that does not match its generator is worse than the diff.
 
 ## Discipline
 

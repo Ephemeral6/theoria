@@ -204,7 +204,9 @@ def repair_identity_swaps(seg: Segmentation,
                 r_event.bits = cost.vanish_bits()
                 bits_after = v_event.bits + r_event.bits
 
-                for i in range(t + 1, len(mover.masks)):
+                horizon_i = min(len(mover.masks), len(eaten.masks),
+                                len(mover.anchors), len(eaten.anchors))
+                for i in range(t + 1, horizon_i):
                     mover.masks[i] = eaten.masks[i]
                     mover.anchors[i] = eaten.anchors[i]
                     eaten.masks[i] = None
