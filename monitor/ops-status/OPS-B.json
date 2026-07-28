@@ -1,1 +1,1 @@
-{"id": "OPS-B", "utc": "2026-07-28T12:28Z", "cycle": 4, "state": "idle", "note": "条款漂移基线已建（terms_canary.json，四页 + 14 个语义锚点）；本轮复核结果无漂移；两份提案仍待裁决"}
+{"id": "OPS-B", "utc": "2026-07-28T14:32Z", "cycle": 5, "state": "idle", "note": "总线已入循环第0步（#1 已回执）；A 条已成 S11 由 W-1410 认领，B 条（公开 replay 红线）仍无归宿，已 bus.say 提请搭 S11 的 CLAUDE.md 编辑窗口，拟插入原文备在 browser-ops/REDLINE-replay-proposed-text.md；条款漂移下次按天巡"}
