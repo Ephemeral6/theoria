@@ -32,7 +32,7 @@ cd arc-recon && python contamination.py --json   # register, sealed claim set, l
 cd arc-recon && python probe_stickiness.py       # cookie A/B; zero actions
 cd arc-recon && python probe_stickiness.py --cross-game   # one jar, all 4 games
 cd arc-recon && python redact_ledger.py          # INC-008 check; --apply to redact
-cd arc-recon && python -m pytest test_hygiene.py # 33 offline tests
+cd arc-recon && python -m pytest test_hygiene.py # 40 offline tests
 ```
 
 The access check itself — every Phase 1 item, what settled it, what is still
@@ -255,6 +255,12 @@ possibility than slowness: that the cookie-less client had been talking to
 something other than the live session all along — the exact shape of INC-005's
 counterfeit short-id 200s. It was not. It was reaching the right session after
 paying for nine wrong replicas first.
+
+With one correction from INC-009: **11 of the 16** expected ACTION hashes
+actually discriminate. tn36's four are accepted no-ops and g50t's ACTION1 expects
+the pristine initial frame, so on those five a counterfeit would match too. The
+claim rests on the 11 (ar25 5/5, sk48 5/5, g50t 1/2, tn36 0/4) plus the four
+RESET hashes.
 
 One jar per client, shared across games — settled by a cross-game probe (all four
 games, out and back, 8/8 first-attempt) rather than assumed. `cookies=False` is

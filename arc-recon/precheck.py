@@ -75,6 +75,9 @@ BUDGET_PER_GAME = 20
 # rides out ~3 minutes.
 RESET_ATTEMPTS = 40
 ACTION_ATTEMPTS = 40
+# After this many consecutive failures, drop the ALB routing cookies so the
+# next attempt is a fresh replica draw. See send_command's REDRAW note.
+REDRAW_EVERY = 5
 
 
 class SealedGameError(Exception):
@@ -149,6 +152,16 @@ def send_command(client: ArcClient, path: str, body: Dict[str, Any],
     Full id only. Short-id 200s are counterfeit (see module docstring), so the
     request body never varies across attempts: same body, same session, until
     a live replica answers or the envelope is exhausted.
+
+    REDRAW (INC-007a). This envelope was designed against a transport that was
+    re-routed on every attempt -- 40 identical retries worked precisely because
+    each was a fresh draw at a replica that might hold the session. The cookie
+    jar removes that: once pinned, all 40 attempts go to the same replica, so if
+    THAT replica is the broken one, retrying is only waiting. Every
+    `REDRAW_EVERY` failures the routing cookies are dropped (the session cookie
+    is kept) to force a new draw. In practice this almost never fires -- the
+    measured amplification after the fix is 1.00 attempt per command -- but the
+    envelope must not have become weaker than the thing it replaced.
     """
     status, parsed = -1, None
     for k in range(attempts):
@@ -163,6 +176,10 @@ def send_command(client: ArcClient, path: str, body: Dict[str, Any],
             except (TypeError, ValueError):
                 parsed = raw
             if _retryable(status, parsed) and k < attempts - 1:
+                if (k + 1) % REDRAW_EVERY == 0:
+                    redraw = getattr(client, "clear_routing_cookies", None)
+                    if callable(redraw):
+                        redraw()
                 time.sleep(min(delay_base * (k + 1), delay_cap))
                 continue
             return status, parsed, {"attempts": k + 1}

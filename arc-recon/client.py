@@ -20,6 +20,7 @@ the read-only instrument used to survey the API before that is designed.
 import http.cookiejar
 import json
 import os
+import re
 import time
 import urllib.error
 import urllib.request
@@ -64,26 +65,34 @@ def mask(key: str) -> str:
     return "%s...%s (len %d)" % (key[:4], key[-4:], len(key)) if key else "<unset>"
 
 
+# RFC 6265 cookie-name is a token: no separators, no whitespace.
+_COOKIE_TOKEN = re.compile(r"^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$")
+
+
 def cookie_names(set_cookie_header: str) -> List[str]:
-    """Cookie names out of a Set-Cookie header, values deliberately dropped.
+    """The name at the head of ONE Set-Cookie header. At most one, by design.
 
     A cookie value is a credential. `GAMESESSION` is a bearer token for a live
-    game session, and the ALB pins identify a backend. The ledger is tracked and
-    Phase 4 publishes every tracked file, so the rule that keeps `X-API-Key` out
-    of it applies to these too -- see INC-008, which exists because a probe wrote
-    the raw header for 55 calls before anyone noticed.
+    game session and the ALB pins identify a backend, so the rule that keeps
+    `X-API-Key` out of the tracked ledger applies to these too (INC-008).
 
-    Names are all the forensics needs: which cookies the server issued, and
-    whether we echoed them back.
+    This deliberately does NOT split on commas, and that is the whole point. The
+    first version did, on the theory that one header can carry several cookies --
+    and a value containing a comma then produced a *fragment of the value* as if
+    it were a name: `GAMESESSION=v1,eyJndWlkIjoi...` yielded
+    `['GAMESESSION', 'eyJndWlkIjoi...']`. The redaction leaked through the
+    redactor. A response carries one `Set-Cookie` header per cookie anyway, so
+    reading only the head of each header is both correct and safe; where a caller
+    has already collapsed several headers into one string, this under-reports
+    rather than over-reports, which is the direction a redactor must fail in.
+
+    Returns a list (0 or 1 entries) because callers concatenate across headers.
     """
-    names = []
-    for part in (set_cookie_header or "").split(","):
-        head = part.strip().split(";", 1)[0]
-        if "=" in head:
-            name = head.split("=", 1)[0].strip()
-            if name and " " not in name:
-                names.append(name)
-    return names
+    head = (set_cookie_header or "").split(";", 1)[0].strip()
+    if "=" not in head:
+        return []
+    name = head.split("=", 1)[0].strip()
+    return [name] if _COOKIE_TOKEN.match(name) else []
 
 
 def _issued_cookie_names(headers: Any) -> List[str]:
@@ -94,12 +103,18 @@ def _issued_cookie_names(headers: Any) -> List[str]:
     `dict(headers)` keeps only the last -- either way the log would under-report
     what the server issued while the jar (which reads them all) quietly held
     more. The jar is unaffected by this; only the record was at risk.
+
+    `get_all` is also case-insensitive on an `email.message.Message`, which
+    matters because HTTP header names are.
     """
-    try:
-        raw = headers.get_all("Set-Cookie") or []
-    except AttributeError:                       # a plain mapping
-        value = headers.get("Set-Cookie", "")
-        raw = [value] if value else []
+    raw: List[str] = []
+    getter = getattr(headers, "get_all", None)
+    if callable(getter):
+        raw = list(getter("Set-Cookie") or [])
+    else:                                        # a plain mapping
+        for key, value in getattr(headers, "items", lambda: [])():
+            if str(key).lower() == "set-cookie" and value:
+                raw.append(value)
     names: List[str] = []
     for header in raw:
         names.extend(cookie_names(header))
@@ -154,12 +169,33 @@ class ArcClient:
     def clear_cookies(self) -> None:
         self.jar.clear()
 
+    def clear_routing_cookies(self) -> None:
+        """Drop the ALB pins, keep the session identity.
+
+        The retry envelope was designed against a transport that was re-routed
+        on every attempt: 40 identical retries worked because each was an
+        independent draw at a replica that might hold the session. A pinned jar
+        removes that -- all 40 now go to the same replica, so if THAT replica is
+        the broken one, retrying is just waiting. Dropping `AWSALB*` between
+        attempts restores the draw; `GAMESESSION` stays, because the session
+        identity is the thing we are trying to reach, not the thing that is
+        wrong.
+        """
+        for cookie in list(self.jar):
+            if cookie.name.upper().startswith("AWSALB"):
+                self.jar.clear(cookie.domain, cookie.path, cookie.name)
+
     # -- ledger ------------------------------------------------------------
     def _record(self, entry: Dict[str, Any]) -> None:
         os.makedirs(os.path.dirname(os.path.abspath(self.ledger_path)), exist_ok=True)
+        # ONE write call, newline included. Two writes on a buffered stream can
+        # be flushed as separate chunks, and this file has a second appender
+        # (probe_stickiness.py) plus, at times, a second process -- a record
+        # split across flushes is a corrupted append-only ledger, and 148 of the
+        # current records are larger than the default 8 KiB buffer.
+        line = json.dumps(entry, sort_keys=True, ensure_ascii=True) + "\n"
         with open(self.ledger_path, "a", encoding="utf-8", newline="") as fh:
-            fh.write(json.dumps(entry, sort_keys=True, ensure_ascii=True))
-            fh.write("\n")
+            fh.write(line)
 
     # -- transport ---------------------------------------------------------
     def request(self, method: str, path: str, body: Optional[Dict[str, Any]] = None,
@@ -176,20 +212,45 @@ class ArcClient:
 
         started = time.time()
         request = urllib.request.Request(url, data=payload, headers=headers, method=method)
+        # Snapshot the jar BEFORE the call. HTTPCookieProcessor absorbs the
+        # response's Set-Cookie during `open()`, so a snapshot taken afterwards
+        # describes the jar the call produced, not the jar that produced the
+        # call -- and the first request of every session, which provably sent no
+        # Cookie header, would be logged as though it had. "Which cookies did we
+        # echo" is the INC-007 discriminator; it has to be recorded in the right
+        # tense.
+        sent = self.cookies_held()
+        transport_error = None
+        final_url = url
         try:
             with self._opener.open(request, timeout=self.timeout) as response:
                 status = response.status
-                text = response.read().decode("utf-8")
+                text = response.read().decode("utf-8", "replace")
                 issued = _issued_cookie_names(response.headers)
+                # build_opener follows redirects. The ledger recorded only the
+                # URL we aimed at, so a call that landed elsewhere looked
+                # identical to one that did not.
+                final_url = response.geturl() or url
         except urllib.error.HTTPError as exc:
             status = exc.code
             text = exc.read().decode("utf-8", "replace")
             issued = _issued_cookie_names(exc.headers)
+            final_url = exc.geturl() or url
+        except Exception as exc:
+            # A timeout, a reset connection, a DNS failure, a body that dies
+            # mid-read: the request LEFT THIS PROCESS, so it must leave a row.
+            # Previously it escaped before `calls += 1` and before `_record`,
+            # which broke the module's own promise that the ledger is complete
+            # by construction -- and, worse, made contamination.py's
+            # "zero sealed-pile contact" audit blind to exactly those calls,
+            # since it can only see what the ledger holds.
+            status, text, issued = -1, str(exc), []
+            transport_error = "%s: %s" % (type(exc).__name__, exc)
         self.calls += 1
 
         try:
             parsed: Any = json.loads(text)
-        except json.JSONDecodeError:
+        except (json.JSONDecodeError, TypeError):
             parsed = None
 
         self._record(
@@ -199,6 +260,10 @@ class ArcClient:
                 "note": note,
                 "method": method,
                 "url": url,
+                # Where it actually landed. Equal to `url` unless a redirect was
+                # followed, which the ledger previously could not show at all.
+                "final_url": final_url,
+                "redirected": final_url != url,
                 # the key is never written, in any form
                 "request_headers": {k: (REDACTED if k == "X-API-Key" else v)
                                     for k, v in headers.items()},
@@ -208,12 +273,25 @@ class ArcClient:
                 # Cookie NAMES only -- never values (INC-008). Recording these
                 # makes "the cookie jar was actually on for this call" an
                 # auditable fact rather than a claim about which build ran.
+                # Two tenses, because they answer different questions:
+                # `cookies_sent` is what this request carried (the INC-007
+                # discriminator), `cookies_held_after` is the jar the response
+                # left behind. Note the Cookie header itself is attached by
+                # HTTPCookieProcessor inside `open()`, so it never appears in
+                # `request_headers` -- `cookies_sent` is the record of it.
                 "cookies_enabled": self.cookies,
                 "set_cookie_names": sorted(set(issued)),
-                "cookies_held": self.cookies_held(),
+                "cookies_sent": sent,
+                "cookies_held_after": self.cookies_held(),
+                "transport_error": transport_error,
             }
         )
 
+        if transport_error is not None:
+            # Recorded first, then re-raised: callers (precheck.send_command)
+            # already treat this as retryable, and the retry accounting stays
+            # exactly as it was.
+            raise urllib.error.URLError(transport_error)
         if status >= 400:
             raise ArcApiError(status, text, path)
         return status, parsed if parsed is not None else text

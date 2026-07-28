@@ -453,6 +453,12 @@ def record_baseline_confirmation(run: Dict[str, Any]) -> None:
         "verdicts": run["verdicts"],
         "actions_executed": run["actions_executed"],
         "http_calls": run["http_calls"],
+        # The transport belongs here for the same reason it belongs on the run:
+        # http_calls is only comparable between confirmations taken on the same
+        # one, and a confirmation that does not say which is a number without a
+        # unit.
+        "transport": run.get("transport"),
+        "note": run.get("note", ""),
     })
     spec["confirmations"] = confirmations
     _write_json(CANARY_PATH, spec)

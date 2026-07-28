@@ -5,27 +5,27 @@
     "sealed_pile_api_calls": 0,
     "spent": 48
   },
-  "adversarial_review": "The F-11 ledger text was reviewed by an independent adversarial pass (read-only, brief: find registration/ruling mismatches). It reproduced a fail-open bug in claim_set() and found four overclaims. All corrected; INC-006a records them. The ruling, the levels, the quarantine set and 21 -> 19 are unchanged.",
+  "adversarial_review": "Two passes. (1) The F-11 ledger text: reproduced a fail-open bug in claim_set() plus four overclaims; INC-006a. (2) The cookie patch, run before the after-run's actions were spent: 30 findings, 17 survived refutation, 13 died; four real defects (a leak in the redactor itself, failed requests leaving no ledger row, the cookie record in the wrong tense, a value-detector test that could not fail) plus a weakened retry envelope; INC-009. No published number changed; one claim was narrowed from 16 to 11 discriminating hashes.",
   "artifacts": {
     "arc-recon/.gitignore": {
       "bytes": 241,
       "sha256": "7963f8505596f11feba348a69adc6ea76a8df53a3708b0b7b2ffe1d231ad8ef4"
     },
     "arc-recon/ACCESS_CHECK.md": {
-      "bytes": 17393,
-      "sha256": "d594ebdc8918ba81062fab161ffcbdd59b4a0dd3e2988e5f70e2e8eaf02da76d"
+      "bytes": 18030,
+      "sha256": "9936b029df11105954c4bf6031e6b2dc1a308cdb3547077ffcc9acd987f2dc09"
     },
     "arc-recon/README.md": {
-      "bytes": 20321,
-      "sha256": "88b0126ec2d951fd6c3b49acce26f0d983e842fd982f83b959943f473b8fb3ac"
+      "bytes": 20649,
+      "sha256": "a2b7c02c4481239cfc36c8dee6c556bc687f3367bcbf45acd436f5c3aa9f569f"
     },
     "arc-recon/canary.py": {
-      "bytes": 27100,
-      "sha256": "a464cda4ecb6f6601b8cdbfdab46c3f110fa493cd552c2ec92979d29eb9c529f"
+      "bytes": 27436,
+      "sha256": "b7a48f1bfa6bcd718f1acb5a5e23d7fc97452ea7f564434c2851138694bed40d"
     },
     "arc-recon/client.py": {
-      "bytes": 10471,
-      "sha256": "dd1d4f445ff583672fd65a2aedd6058e049a0c86c3e0615b4eafba4df3a89798"
+      "bytes": 14976,
+      "sha256": "ed8f06dd583f42db35e33e9c6b1137262b1a7bab77813e8e10b65e073e504394"
     },
     "arc-recon/contamination.py": {
       "bytes": 16101,
@@ -48,36 +48,36 @@
       "sha256": "daf61fc369261cf23d599f25f135f5574d6cb6d1db5e0f8424d694dec9e99570"
     },
     "arc-recon/data/incidents.jsonl": {
-      "bytes": 34807,
-      "sha256": "080fe2d8707493de03e2041020a4d13006c3bb775bfdc438498d069c1bcf0709"
+      "bytes": 42935,
+      "sha256": "268ef5abebb5665c2acad1a20d5f5bb7da81a319c4d96279c76d680c82221631"
     },
     "arc-recon/data/piles.json": {
       "bytes": 3248,
       "sha256": "f2ef44d100caee9075b9c52b6c2694d9bb47d628702e0c1911655eb9f9790826"
     },
     "arc-recon/data/recon_ledger.jsonl": {
-      "bytes": 3820733,
-      "sha256": "e536b63d20e0097d5c432c34ba51bebc3634ce186ed2b876009e972de964498c"
+      "bytes": 3931022,
+      "sha256": "6718b3953d99830b9a4abb0eda7a30b67a178d4b0410d1a2b447c0f2de80c443"
     },
     "arc-recon/data/stickiness_probe.json": {
-      "bytes": 20062,
-      "sha256": "c216950ef5f0ff3179c0193cf551b88385e459c6893f2864ef79857de90cbbb2"
+      "bytes": 23539,
+      "sha256": "075bb0f496bd49fde59872fbb80cbebaaa742526b3403e1af3d5c6bcfcc905cc"
     },
     "arc-recon/precheck.py": {
-      "bytes": 21111,
-      "sha256": "d758bc1d8de5d5654989f59f13c889742006890c6bf66dd515e18e4a528f20e6"
+      "bytes": 21723,
+      "sha256": "8ff8e6e476877ce1bb38219009259b10506cefad00e9bcf25893a3e62ed8c355"
     },
     "arc-recon/probe_stickiness.py": {
-      "bytes": 17753,
-      "sha256": "625503d45a89ce87b9b152aaaad6cd166675f778aea47f67850ea194d78330bf"
+      "bytes": 21407,
+      "sha256": "849e1dee0ec3d163f804056b7797cfcbdb7bdad3eee32f145f4b2ff9c0a049d4"
     },
     "arc-recon/redact_ledger.py": {
-      "bytes": 6396,
-      "sha256": "47c6749faf3a4cdb6d122b660ccf13c7baf65799c40d57c0cd0bd3fdc09efd83"
+      "bytes": 6524,
+      "sha256": "a85d08ad36ad2392918332160e138ee281e0e9f0361c7343b2a82f4d56094556"
     },
     "arc-recon/test_hygiene.py": {
-      "bytes": 17578,
-      "sha256": "45d289e9b6fd99fa8b620b24c0fc840a41483e28cd08fa993dba617a3ce085d1"
+      "bytes": 25405,
+      "sha256": "6b8ff0a28a43108b8511600ed51e6433de7a5fb8261e24da262a95850dab7af2"
     }
   },
   "artifacts_note": "These sha256 values are over the working-copy bytes on a machine with core.autocrlf=true and no .gitattributes under arc-recon/. The committed blobs carry CRLF while appends made by client.py carry LF, so recon_ledger.jsonl currently has mixed line endings (790 CRLF, 194 LF) and these file-level hashes will NOT reproduce on a checkout with different eol settings. Content-level hashes are unaffected: piles.json's published sha256 is over a canonical re-serialisation, and the canary's hashes are over API response payloads. Pinning eol=lf for arc-recon/ the way engine-rig/.gitattributes does would fix it, but it normalises every file in the directory including the 2 MB append-only ledger -- left as an open item rather than done from a side branch during a merge round.",
@@ -158,7 +158,10 @@
       "before_http": 190,
       "behaviour_preserving": true,
       "commands_issued": 20,
+      "current_build_verified": "probe_stickiness.py --client-check: 4/4 first-attempt RESETs through the real ArcClient, zero actions, after the INC-009 changes",
+      "discriminating_action_hashes": "11 of 16 (INC-009)",
       "incident": "INC-007a",
+      "measured_on_commit": "7951615",
       "retries_after": 0,
       "retries_before": 170
     },
@@ -171,14 +174,15 @@
       "INC-006a",
       "INC-007",
       "INC-007a",
-      "INC-008"
+      "INC-008",
+      "INC-009"
     ],
     "stickiness_probe": {
       "cookie_jar": "20/20",
       "no_cookies": "0/20",
       "runs": 3
     },
-    "tests": "33 passed (test_hygiene.py, offline)"
+    "tests": "40 passed (test_hygiene.py, offline)"
   },
   "seed": null,
   "t": "2026-07-28T00:43:24Z",

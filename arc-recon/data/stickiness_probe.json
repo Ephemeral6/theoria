@@ -750,6 +750,127 @@
         "g50t-5849a774",
         "ar25-0c556536"
       ]
+    },
+    {
+      "action_cost": 0,
+      "calls": 4,
+      "cookies_enabled_on_every_call": true,
+      "first_attempt_successes": "4/4",
+      "first_call_sent_no_cookies": false,
+      "later_calls_all_sent_cookies": true,
+      "no_cookie_values_recorded": true,
+      "note": "RESET is a command, not an action; the scorecard counts only successful ACTIONs.",
+      "probe": "client_check",
+      "question": "does the CURRENT ArcClient build still reach every development game on the first attempt, and is the cookie record in the right tense?",
+      "rows": [
+        {
+          "cookies_held_after": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "game_id": "ar25-0c556536",
+          "status": 200
+        },
+        {
+          "cookies_held_after": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "game_id": "g50t-5849a774",
+          "status": 200
+        },
+        {
+          "cookies_held_after": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "game_id": "sk48-d8078629",
+          "status": 200
+        },
+        {
+          "cookies_held_after": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "game_id": "tn36-ef4dde99",
+          "status": 200
+        }
+      ],
+      "t": "2026-07-28T01:34:37Z",
+      "verdict": "CURRENT BUILD PROBLEM -- see rows"
+    },
+    {
+      "action_cost": 0,
+      "calls": 5,
+      "cookies_enabled_on_every_call": true,
+      "first_attempt_successes": "4/4",
+      "first_call_of_the_session": "open scorecard",
+      "first_call_sent_no_cookies": true,
+      "later_calls_all_sent_cookies": true,
+      "no_cookie_values_recorded": true,
+      "note": "RESET is a command, not an action; the scorecard counts only successful ACTIONs.",
+      "probe": "client_check",
+      "question": "does the CURRENT ArcClient build still reach every development game on the first attempt, and is the cookie record in the right tense?",
+      "rows": [
+        {
+          "cookies_held_after": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "game_id": "ar25-0c556536",
+          "status": 200
+        },
+        {
+          "cookies_held_after": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "game_id": "g50t-5849a774",
+          "status": 200
+        },
+        {
+          "cookies_held_after": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "game_id": "sk48-d8078629",
+          "status": 200
+        },
+        {
+          "cookies_held_after": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "game_id": "tn36-ef4dde99",
+          "status": 200
+        }
+      ],
+      "t": "2026-07-28T01:35:00Z",
+      "verdict": "CURRENT BUILD OK"
     }
   ]
 }

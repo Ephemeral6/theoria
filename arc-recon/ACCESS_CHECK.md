@@ -212,6 +212,16 @@ been talking to something other than the live session all along, which is exactl
 the shape of INC-005's counterfeit short-id 200s. It was not. It was reaching the
 right session, after paying for nine wrong replicas first.
 
+**How much of that is load-bearing (INC-009).** Only **11 of the 16** expected
+ACTION hashes differ from their game's RESET hash. `tn36`'s four actions are
+accepted no-ops whose frame never changes, and `g50t`'s ACTION1 expects
+`801726dc499f3f52` — the exact hash `precheck.py` names as the counterfeit
+fingerprint. On those five steps a counterfeit response would match as well as a
+genuine one, so they discriminate nothing. The claim rests on the 11 that do
+(plus the four RESET hashes, which are real state): ar25 5/5, sk48 5/5, g50t 1/2,
+tn36 0/4. Still solid — three games, both frame-cascade shapes — but it is 11,
+not 16.
+
 **Why it works inside the existing retry envelope**, which is not obvious: the
 first call of a retry loop is usually the 400, so the jar has to learn the
 routing cookie *from an error response*. It does, because urllib sorts response

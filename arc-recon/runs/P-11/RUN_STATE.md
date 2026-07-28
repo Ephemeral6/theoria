@@ -89,9 +89,12 @@ first-attempt on all four games. Per game: ar25 72→6, g50t 41→3, sk48 35→6
 tn36 42→5.
 
 **The verdicts are the result, not the speed.** Identical hashes across a
-transport change prove the fix is behaviour-preserving, and retire a worse
+transport change show the fix is behaviour-preserving, and retire a worse
 possibility than slowness — that the cookie-less client had been talking to
 something other than the live session, the exact shape of INC-005. It had not.
+Scoped by INC-009: **11 of the 16** action hashes discriminate (tn36's four are
+no-ops, g50t's ACTION1 expects the pristine frame), so the claim rests on those
+11 plus the four RESET hashes — not on 16.
 
 Two design points settled by measurement rather than argument: one jar per client
 shared across games is correct (cross-game probe, all four games out and back,
@@ -164,6 +167,49 @@ collided.
 | probes | **0 actions** — A/B and cross-game are RESETs, which the scorecard does not count |
 | sealed-pile API calls | **0**, audited over 2489 calls in three ledgers, two tracks |
 | `piles.json` | unmodified, sha256 re-verified |
-| tests | 33 passed, offline |
+| tests | 40 passed, offline |
 
 Touched `arc-recon/` only. `PARTNER_SYNC.md` appended, never edited.
+
+## 6 · The patch was reviewed before the after-run's actions were spent (INC-009)
+
+A five-lens adversarial review (transport, secret hygiene, regression blast
+radius, experiment soundness, record/code consistency) ran while the before-run
+was in flight. 30 findings raised, 17 survived independent refutation, 13 died.
+No published number changed — but four defects were real:
+
+* **The redactor leaked through itself.** `cookie_names` split on `,`, so a value
+  containing a comma emitted a fragment of the *value* as a name. The one
+  function whose job was to drop values could emit one. Now no comma splitting at
+  all, plus RFC 6265 token validation, and it under-reports rather than
+  over-reports when a caller has already collapsed headers.
+* **A failed request left no ledger row** — timeout, reset, or a body dying
+  mid-read escaped before the record was written. That breaks the module's own
+  completeness promise, and it put a hole in the project's most load-bearing
+  check: `contamination.py`'s sealed-pile audit can only see what the ledger
+  holds, so a call carrying a sealed id that then timed out would have been
+  invisible to it *and* to the test asserting it was clean. Every request that
+  leaves the process now records exactly one row and re-raises.
+* **The cookie record was in the wrong tense** — snapshotted after the response
+  was absorbed, so the first call of every session was logged as holding cookies
+  it provably had not sent. Now `cookies_sent` / `cookies_held_after`.
+* **The value-detector test could not fail** for two of its three fields, because
+  it looked for `=` in lists that cannot contain one. The INC-003 shape, inside
+  the test written to prevent an INC-008 repeat. Now a token-charset check with a
+  positive control.
+
+Plus: the pinned jar had made the retry envelope weaker than the transport it
+replaced (40 retries to one replica instead of 40 draws) — `send_command` now
+drops the routing pins every 5 failures and keeps the session cookie. And the
+smaller ones: two-call ledger appends, unrecorded redirects, the probe collapsing
+five `Set-Cookie` headers to one, a documented `--check` flag that did not exist,
+and the baseline confirmation dropping the transport covariate.
+
+**Two of the 17 were stale** — the review snapshotted before INC-007a and INC-008
+were filed, so its "code cites INC-008 but none exists" pair was already false.
+Checked against the file rather than taken on trust.
+
+The lesson is uncomfortable and worth keeping: all of it was in code written in
+the same session that was congratulating itself for catching INC-008. The
+instrument you just built to check something is the instrument nobody has
+checked.

@@ -254,17 +254,37 @@ def test_cookies_can_be_turned_off_to_reproduce_the_old_transport():
     assert "HTTPCookieProcessor" not in names
 
 
+def test_a_comma_inside_a_cookie_value_does_not_become_a_name():
+    """The regression that made the redactor leak through itself.
+
+    The first version split the header on "," on the theory that one header can
+    carry several cookies. A value containing a comma then produced a fragment
+    of the VALUE dressed up as a name -- so the function whose whole job was to
+    drop values emitted one.
+    """
+    leaky = "GAMESESSION=v1,eyJndWlkIjoiOTk3ZDYzZmYifQ==; Path=/; HttpOnly"
+    assert client.cookie_names(leaky) == ["GAMESESSION"]
+    # The classic Set-Cookie trap: Expires carries a comma of its own.
+    assert client.cookie_names(
+        "AWSALBAPP-0=SECRET; Expires=Tue, 04 Aug 2026 00:00:00 GMT; Path=/"
+    ) == ["AWSALBAPP-0"]
+    # Nothing that is not a cookie token gets through.
+    assert client.cookie_names("no-equals-sign; Path=/") == []
+    assert client.cookie_names("") == []
+
+
 def test_cookie_values_never_survive_name_extraction():
-    """Negative control for INC-008: the values must not come back out."""
-    header = ("AWSALBAPP-0=SECRETVALUE; Expires=Tue, 04 Aug 2026 00:00:00 GMT; "
-              "Path=/, GAMESESSION=TOKENVALUE; Path=/; HttpOnly")
-    names = client.cookie_names(header)
-    assert "AWSALBAPP-0" in names and "GAMESESSION" in names
+    """Negative control for INC-008: no value fragment, from any header shape."""
+    import email.message
+    message = email.message.Message()
+    for raw in ("AWSALBAPP-0=SECRETVALUE; Expires=Tue, 04 Aug 2026 00:00:00 GMT",
+                "GAMESESSION=TOKEN,WITH,COMMAS; Path=/; HttpOnly"):
+        message.add_header("Set-Cookie", raw)
+    names = client._issued_cookie_names(message)
+    assert names == ["AWSALBAPP-0", "GAMESESSION"]
     blob = json.dumps(names)
-    assert "SECRETVALUE" not in blob and "TOKENVALUE" not in blob
-    # The Expires attribute contains a comma, which is what makes naive
-    # Set-Cookie splitting leak: the fragment after it must not become a name.
-    assert not any("00:00:00" in n or "GMT" in n for n in names)
+    for secret in ("SECRETVALUE", "TOKEN", "WITH", "COMMAS", "GMT", "00:00:00"):
+        assert secret not in blob, secret
 
 
 def test_every_set_cookie_header_is_counted_not_just_the_first():
@@ -275,29 +295,49 @@ def test_every_set_cookie_header_is_counted_not_just_the_first():
         message.add_header("Set-Cookie", raw)
     assert client._issued_cookie_names(message) == \
         ["AWSALBAPP-0", "AWSALBAPP-1", "GAMESESSION"]
-    # A plain mapping (which collapses duplicates) must still not crash.
-    assert client._issued_cookie_names({"Set-Cookie": "GAMESESSION=C"}) \
+    # A plain mapping with lowercase keys must still be read (headers are
+    # case-insensitive; the previous version missed this).
+    assert client._issued_cookie_names({"set-cookie": "GAMESESSION=C"}) \
         == ["GAMESESSION"]
 
 
-def test_the_ledger_never_holds_a_cookie_value():
-    """Over the real, committed ledger -- the INC-008 redaction must hold."""
-    path = os.path.join(contamination.DATA_DIR, "recon_ledger.jsonl")
+def _cookie_value_offenders(rows):
+    """Anything in a cookie field that is not a bare cookie token is suspect."""
     offenders = []
+    for number, entry in rows:
+        for field in ("set_cookie_names", "cookies_held", "cookies_sent",
+                      "cookies_held_after"):
+            for name in entry.get(field) or []:
+                if not client._COOKIE_TOKEN.match(str(name)):
+                    offenders.append((number, field, "not-a-token"))
+        raw = entry.get("set_cookie")
+        if isinstance(raw, str) and raw and not raw.startswith("<redacted"):
+            offenders.append((number, "set_cookie", "raw header retained"))
+    return offenders
+
+
+def test_the_cookie_value_detector_can_actually_fail():
+    """Positive control. The first version tested `"=" in text`, which the name
+    fields can never contain -- so for two of the three fields it checked, the
+    assertion was incapable of failing and proved nothing."""
+    planted = [(1, {"set_cookie_names": ["GAMESESSION=TOKENVALUE"]}),
+               (2, {"cookies_sent": ["AWSALBAPP-0=SECRET"]}),
+               (3, {"set_cookie": "GAMESESSION=raw; Path=/"})]
+    found = _cookie_value_offenders(planted)
+    assert len(found) == 3, found
+    assert _cookie_value_offenders([(4, {"set_cookie_names": ["GAMESESSION"],
+                                         "set_cookie": "<redacted INC-008>"})]) == []
+
+
+def test_the_ledger_never_holds_a_cookie_value():
+    """Over the real ledger -- the INC-008 redaction must hold."""
+    path = os.path.join(contamination.DATA_DIR, "recon_ledger.jsonl")
+    rows = []
     for number, line in enumerate(open(path, encoding="utf-8"), 1):
         line = line.strip()
-        if not line:
-            continue
-        entry = json.loads(line)
-        for field in ("set_cookie", "set_cookie_names", "cookies_held"):
-            value = entry.get(field)
-            if value is None:
-                continue
-            text = value if isinstance(value, str) else " ".join(map(str, value))
-            # A name list is names. Anything carrying "=" is carrying a value.
-            if "=" in text:
-                offenders.append((number, field))
-    assert offenders == [], offenders[:5]
+        if line:
+            rows.append((number, json.loads(line)))
+    assert _cookie_value_offenders(rows) == [], _cookie_value_offenders(rows)[:5]
 
 
 def _log_with(tmp_path, monkeypatch, *rows):
@@ -401,3 +441,143 @@ def test_a_short_sealed_id_in_a_request_is_also_a_touch(tmp_path):
 
 def test_the_real_ledger_has_addressed_no_sealed_game():
     assert contamination.sealed_api_contacts()["clean"] is True
+
+
+def test_a_transport_failure_still_leaves_exactly_one_ledger_row(tmp_path):
+    """The module promises the ledger is complete by construction, and
+    contamination.py's sealed-pile audit can only see what the ledger holds. A
+    request that left the process and then timed out used to leave no row at
+    all -- so a call carrying a sealed game_id could have been made and the
+    audit would still report clean."""
+    import urllib.error
+    ledger = tmp_path / "ledger.jsonl"
+    api = client.ArcClient(api_key="x", ledger_path=str(ledger))
+
+    class Exploding:
+        def open(self, *args, **kwargs):
+            raise OSError("simulated connection reset")
+
+    api._opener = Exploding()
+    with pytest.raises(urllib.error.URLError):
+        api.request("POST", "/api/cmd/RESET",
+                    body={"game_id": "ar25-0c556536", "card_id": "c"}, note="t")
+
+    rows = [json.loads(line) for line in open(ledger, encoding="utf-8")]
+    assert len(rows) == 1 and api.calls == 1
+    assert rows[0]["status"] == -1
+    assert "simulated connection reset" in rows[0]["transport_error"]
+    # The whole point: the audit can see what we sent.
+    assert rows[0]["request_body"]["game_id"] == "ar25-0c556536"
+    assert contamination.sealed_api_contacts(str(ledger))["clean"] is True
+
+
+def test_the_sealed_audit_sees_a_failed_call_too(tmp_path):
+    """Negative control for the test above: a sealed id in a failed request is
+    still a contact."""
+    import urllib.error
+    ledger = tmp_path / "ledger.jsonl"
+    api = client.ArcClient(api_key="x", ledger_path=str(ledger))
+
+    class Exploding:
+        def open(self, *args, **kwargs):
+            raise OSError("boom")
+
+    api._opener = Exploding()
+    with pytest.raises(urllib.error.URLError):
+        api.request("POST", "/api/cmd/RESET",
+                    body={"game_id": "ls20-9607627b"}, note="t")
+    audit = contamination.sealed_api_contacts(str(ledger))
+    assert audit["clean"] is False
+    assert audit["sealed_games_contacted"] == ["ls20-9607627b"]
+
+
+def test_cookies_sent_is_the_jar_before_the_call_not_after(tmp_path):
+    """`cookies_held` was snapshotted inside _record, which runs after the
+    response was absorbed -- so the first call of a session, which provably
+    sent nothing, was logged as though it held the server's cookies."""
+    import http.cookiejar
+    ledger = tmp_path / "ledger.jsonl"
+    api = client.ArcClient(api_key="x", ledger_path=str(ledger))
+
+    class Seeding:
+        """Stands in for HTTPCookieProcessor: fills the jar during open()."""
+
+        def open(self, request, timeout=None):
+            cookie = http.cookiejar.Cookie(
+                0, "GAMESESSION", "TOKEN", None, False,
+                "three.arcprize.org", False, False, "/", True,
+                False, None, False, None, None, {})
+            api.jar.set_cookie(cookie)
+            return _FakeResponse()
+
+    class _FakeResponse:
+        status = 200
+        headers = {"set-cookie": "GAMESESSION=TOKEN; Path=/"}
+
+        def read(self):
+            return b'{"ok": true}'
+
+        def geturl(self):
+            return client.BASE_URL + "/api/cmd/RESET"
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *a):
+            return False
+
+    api._opener = Seeding()
+    api.request("POST", "/api/cmd/RESET", body={"game_id": "ar25-0c556536"},
+                note="first call of the session")
+    row = json.loads(open(ledger, encoding="utf-8").read().strip())
+    assert row["cookies_sent"] == []                  # nothing was echoed
+    assert row["cookies_held_after"] == ["GAMESESSION"]
+
+
+def test_clearing_routing_cookies_keeps_the_session_identity():
+    """The retry envelope assumed each attempt was an independent routing draw.
+    A pinned jar removes that, so there has to be a way to redraw without
+    discarding the session we are trying to reach."""
+    import http.cookiejar
+    api = client.ArcClient(api_key="x", dry_run=True)
+    for name in ("AWSALBAPP-0", "AWSALBAPP-1", "GAMESESSION"):
+        api.jar.set_cookie(http.cookiejar.Cookie(
+            0, name, "v", None, False, "three.arcprize.org", False, False,
+            "/", True, False, None, False, None, None, {}))
+    assert api.cookies_held() == ["AWSALBAPP-0", "AWSALBAPP-1", "GAMESESSION"]
+    api.clear_routing_cookies()
+    assert api.cookies_held() == ["GAMESESSION"]
+
+
+def test_the_retry_envelope_redraws_a_replica_when_pinned(monkeypatch):
+    """INC-007a's regression guard. Forty identical retries used to work because
+    each was a fresh routing draw; a pinned jar makes them all the same draw, so
+    the envelope has to be able to let go of the pin."""
+    import http.cookiejar
+    import precheck
+
+    api = client.ArcClient(api_key="x", dry_run=True)
+    for name in ("AWSALBAPP-0", "GAMESESSION"):
+        api.jar.set_cookie(http.cookiejar.Cookie(
+            0, name, "v", None, False, "three.arcprize.org", False, False,
+            "/", True, False, None, False, None, None, {}))
+
+    calls = {"n": 0}
+    held_at_each_attempt = []
+
+    def always_not_found(method, path, body=None, note=""):
+        calls["n"] += 1
+        held_at_each_attempt.append(api.cookies_held())
+        raise client.ArcApiError(400, '{"message": "game x not found"}', path)
+
+    monkeypatch.setattr(api, "request", always_not_found)
+    monkeypatch.setattr(precheck.time, "sleep", lambda *_: None)
+    status, _, stats = precheck.send_command(
+        api, "/api/cmd/RESET", {"game_id": "ar25-0c556536"}, "t", attempts=12)
+
+    assert stats["attempts"] == 12 and status == 400
+    # Pin present at the start, dropped once the redraw fires, session kept.
+    assert held_at_each_attempt[0] == ["AWSALBAPP-0", "GAMESESSION"]
+    assert api.cookies_held() == ["GAMESESSION"]
+    assert any(h == ["GAMESESSION"] for h in held_at_each_attempt), \
+        "the redraw never took effect within the envelope"

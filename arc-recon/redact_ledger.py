@@ -120,6 +120,8 @@ def apply(path: str = LEDGER_PATH) -> Dict[str, Any]:
 def main(argv: List[str]) -> int:
     parser = argparse.ArgumentParser(prog="redact_ledger.py",
                                      description=__doc__.splitlines()[0])
+    parser.add_argument("--check", action="store_true",
+                        help="report and change nothing (the default)")
     parser.add_argument("--apply", action="store_true")
     args = parser.parse_args(argv)
 

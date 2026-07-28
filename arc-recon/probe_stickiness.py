@@ -44,29 +44,12 @@ from typing import Any, Dict, List
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
-from client import BASE_URL, DATA_DIR, load_api_key   # noqa: E402
+from client import (BASE_URL, DATA_DIR, _issued_cookie_names,  # noqa: E402
+                    load_api_key)
 from precheck import assert_playable, dev_pile         # noqa: E402
 
 REPORT_PATH = os.path.join(DATA_DIR, "stickiness_probe.json")
 LEDGER_PATH = os.path.join(DATA_DIR, "recon_ledger.jsonl")
-
-
-def _cookie_names(set_cookie_header: str) -> List[str]:
-    """Cookie names out of a Set-Cookie header, values left behind.
-
-    Never return, log or store the values. `GAMESESSION` is a session bearer
-    token; the routing pins identify a backend. What any analysis of this probe
-    needs is *which* cookies appeared and whether we echoed them, and that is
-    entirely carried by the names.
-    """
-    names = []
-    for part in set_cookie_header.split(","):
-        head = part.strip().split(";", 1)[0]
-        if "=" in head:
-            name = head.split("=", 1)[0].strip()
-            if name and " " not in name:
-                names.append(name)
-    return names
 
 
 class Arm:
@@ -89,15 +72,19 @@ class Arm:
             headers={"X-API-Key": self._key, "Accept": "application/json",
                      "Content-Type": "application/json"})
         started = time.time()
+        sent = sorted(c.name for c in self.jar)
         try:
             with self.opener.open(request, timeout=30) as response:
-                status, text = response.status, response.read().decode("utf-8")
-                headers = dict(response.headers)
+                status, text = response.status, response.read().decode("utf-8", "replace")
+                # NOT dict(response.headers): that collapses the five duplicate
+                # Set-Cookie headers to one, so the log would record a single
+                # name however many the server issued.
+                issued = _issued_cookie_names(response.headers)
         except urllib.error.HTTPError as exc:
             status, text = exc.code, exc.read().decode("utf-8", "replace")
-            headers = dict(exc.headers)
+            issued = _issued_cookie_names(exc.headers)
         except Exception as exc:                       # transport
-            status, text, headers = -1, str(exc), {}
+            status, text, issued = -1, str(exc), []
         self.attempts += 1
         try:
             parsed = json.loads(text)
@@ -118,10 +105,12 @@ class Arm:
             # carries the values, and GAMESESSION is a session bearer token.
             # The ledger is tracked and Phase 4 publishes every tracked file, so
             # the same rule that redacts X-API-Key applies here (INC-008).
-            "set_cookie_names": sorted(set(_cookie_names(
-                headers.get("Set-Cookie", "")))),
-            "got_set_cookie": bool(headers.get("Set-Cookie")),
-            "cookies_held": sorted(c.name for c in self.jar),
+            "set_cookie_names": sorted(set(issued)),
+            "got_set_cookie": bool(issued),
+            # Snapshotted BEFORE the call below; the post-call jar is a
+            # different question (see client.request).
+            "cookies_sent": sent,
+            "cookies_held_after": sorted(c.name for c in self.jar),
         }
         with open(LEDGER_PATH, "a", encoding="utf-8", newline="") as fh:
             fh.write(json.dumps(record, sort_keys=True, ensure_ascii=True))
@@ -129,7 +118,7 @@ class Arm:
         return {"status": status, "body": parsed,
                 "set_cookie_names": record["set_cookie_names"],
                 "got_set_cookie": record["got_set_cookie"],
-                "cookies_held": record["cookies_held"]}
+                "cookies_held": record["cookies_held_after"]}
 
 
 def open_scorecard(arm: Arm) -> str:
@@ -326,9 +315,69 @@ def cross_game(games: List[str], key: str) -> Dict[str, Any]:
     }
 
 
+def client_check(games: List[str]) -> Dict[str, Any]:
+    """Exercise the REAL ArcClient against the live API. Zero actions.
+
+    The A/B arms above are standalone HTTP clients, so they prove things about
+    cookies without proving anything about `client.ArcClient`. After INC-009
+    changed the client's record and failure paths, the paired canary measurement
+    on the previous build stopped being a statement about the current one. One
+    RESET per development game costs no action quota and settles it: does the
+    shipped client still reach every game first try, and are the new
+    `cookies_sent` / `cookies_held_after` fields populated in the right tense?
+    """
+    from client import ArcClient
+
+    # Mark where this client's very first call lands. The first RESET is NOT the
+    # first call -- opening the scorecard comes first and already primes the jar,
+    # which is exactly the distinction `cookies_sent` exists to make visible.
+    before = sum(1 for _ in open(LEDGER_PATH, encoding="utf-8"))
+    api = ArcClient()
+    card = api.open_scorecard(tags=["client-check"])["card_id"]
+    rows = []
+    for game_id in games:
+        assert_playable(game_id)
+        status, response = api.request(
+            "POST", "/api/cmd/RESET", body={"game_id": game_id, "card_id": card},
+            note="client-check RESET %s" % game_id)
+        rows.append({"game_id": game_id, "status": status,
+                     "cookies_held_after": api.cookies_held()})
+        print("    %-18s HTTP %-4s held=%s"
+              % (game_id, status, ",".join(api.cookies_held()) or "-"))
+        time.sleep(0.3)
+
+    ledger = [json.loads(line) for line in
+              open(LEDGER_PATH, encoding="utf-8")][before:]
+    first, later = ledger[0], ledger[1:]
+    return {
+        "t": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "probe": "client_check",
+        "question": ("does the CURRENT ArcClient build still reach every "
+                     "development game on the first attempt, and is the cookie "
+                     "record in the right tense?"),
+        "calls": len(ledger),
+        "first_attempt_successes": "%d/%d" % (
+            sum(1 for r in rows if r["status"] == 200), len(rows)),
+        "first_call_of_the_session": first.get("note"),
+        "first_call_sent_no_cookies": first.get("cookies_sent") == [],
+        "later_calls_all_sent_cookies": all(r.get("cookies_sent") for r in later),
+        "cookies_enabled_on_every_call": all(e.get("cookies_enabled")
+                                             for e in ledger),
+        "no_cookie_values_recorded": all(
+            "=" not in "".join(e.get("cookies_sent") or []) for e in ledger),
+        "rows": rows,
+        "action_cost": 0,
+        "note": ("RESET is a command, not an action; the scorecard counts only "
+                 "successful ACTIONs."),
+    }
+
+
 def main(argv: List[str]) -> int:
     parser = argparse.ArgumentParser(prog="probe_stickiness.py",
                                      description=__doc__.splitlines()[0])
+    parser.add_argument("--client-check", action="store_true",
+                        help="exercise the real ArcClient against the live API; "
+                             "zero actions")
     parser.add_argument("--cross-game", action="store_true",
                         help="one jar, several games, out and back; decides "
                              "whether the fix needs a jar per game")
@@ -340,7 +389,21 @@ def main(argv: List[str]) -> int:
     parser.add_argument("--rounds", type=int, default=8)
     args = parser.parse_args(argv)
 
-    if args.cross_game:
+    if args.client_check:
+        report = client_check(dev_pile())
+        print("  first attempts %s | first call sent nothing: %s | "
+              "later calls all sent cookies: %s"
+              % (report["first_attempt_successes"],
+                 report["first_call_sent_no_cookies"],
+                 report["later_calls_all_sent_cookies"]))
+        report["verdict"] = (
+            "CURRENT BUILD OK" if (report["first_attempt_successes"].split("/")[0]
+                                   == report["first_attempt_successes"].split("/")[1]
+                                   and report["first_call_sent_no_cookies"]
+                                   and report["later_calls_all_sent_cookies"]
+                                   and report["no_cookie_values_recorded"])
+            else "CURRENT BUILD PROBLEM -- see rows")
+    elif args.cross_game:
         report = cross_game(dev_pile(), load_api_key())
         print("  first attempts %s, revisits %s"
               % (report["first_attempt_successes"], report["revisit_successes"]))
