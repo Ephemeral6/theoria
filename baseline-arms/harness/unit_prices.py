@@ -19,6 +19,31 @@ for exactly that reason.
 
     python -m harness.unit_prices                 # the table, both transports
     python -m harness.unit_prices --all-games     # unrestricted, for contrast
+
+**Not every column in this table is caused by the transport, and reading it as
+if they were would be wrong in a way that matters.** The rows are labelled by
+transport because that is what cleanly separates the two populations in time,
+not because the jar explains every difference between them:
+
+  * `http_per_action`, `action_success_rate` -- **caused by the transport**, with
+    a mechanism: cookies pin the ALB replica that holds the session, so the
+    `400 game not found` storm stops. arc-recon measured 20/20 against 0/20.
+  * `usd_per_model_call` -- **cannot be caused by the transport.** The jar routes
+    HTTP to `three.arcprize.org`; model calls go to Anthropic and never touch
+    it. Yet this rose ~55% on both measured tiers. Whatever did that is a
+    coincident change, not this one, and the table must not be read as claiming
+    otherwise.
+  * `usd_per_action`, `wall_s_per_action` -- mixtures of the two, so no clean
+    attribution is available for them either.
+
+Two candidate mechanisms for the `$/call` rise were tested against the record
+and both failed. Episode length: within-episode drift is +5% from step 1 to 30
+across 269 jar-on calls, so the 20-vs-30 budget difference cannot produce 55%.
+Prompt-cache busting from a game that actually progresses: cache-creation per
+call is uncorrelated with success rate, r = 0.11 across nine jar-on cells and
+r = -0.06 across twelve jar-off cells spanning the full 0.000-1.000 range.
+The cause is **unestablished**, and is recorded that way rather than filled in
+with the most plausible-sounding story.
 """
 
 import argparse
