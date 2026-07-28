@@ -527,9 +527,17 @@ PLAIN_TASK = {
     "P-15": "出考卷的机器（四种题型）",
     "P-16": "写第一篇阶段论文草稿",
     "P-17": "验证『学会的知识能带去下一关』",
+    "P-18": "造对照版 AI（去掉证明能力的消融臂）",
+    "P-19": "打包公开：陌生人一条命令复跑全部",
+    "P-20": "实测游戏一步会不会动好几帧",
+    "P-21": "把数据画成论文用的图",
+    "P-22": "起草大考前要封存的规则包",
+    "P-23": "整理相关文献与引用",
+    "P-24": "沉淀舰队通用技能，加速后续会话",
     "R-1": "复盘：从过去的失败里找规律",
     "B-1": "浏览器专员：处理需要真人网页的事",
     "M-0": "合并员：把所有人的成果安全合到主线",
+    "A-1": "常驻审计员：低频巡查项目漂移",
 }
 STAGES = [
     ("① 造仪器", ["WP1", "WP2", "WP5"], "工具、外壳、打分体系"),
@@ -838,32 +846,35 @@ def render(state, refresh=None):
 
     A('<main>')
 
-    # ---------- the journey ----------
-    A('<section><h2>四步走到论文</h2><div class="journey">')
-    for i, (name, wps, sub) in enumerate(STAGES):
-        pct = stage_pct(wps)
-        cls = "done" if pct >= 95 else ("now" if pct >= 15 else
-                                        ("soon" if i and stage_pct(STAGES[i-1][1]) >= 50 else "later"))
-        if i == 0 or pct > 0:
-            cls = "now" if 15 <= pct < 95 else cls
-        A('<div class="leg %s"><div class="legpct">%.0f%%</div>'
-          '<div class="legbar"><i style="width:%.0f%%"></i></div>'
-          '<div class="legname">%s</div><div class="legsub">%s</div></div>'
-          % (cls, pct, pct, esc(name), esc(sub)))
-    A('</div></section>')
-
-    # ---------- work packages, plain ----------
-    A('<section><h2>十块拼图</h2><div class="wpgrid">')
-    for wp in spec.PAPER_PLAN:
-        plain, sub = PLAIN_WP.get(wp["id"], (wp["name"], ""))
-        A('<div class="wpcard"><div class="wphead"><b>%s</b>'
-          '<span class="wppct">%d%%</span></div>'
-          '<div class="wpbar"><i style="width:%d%%"></i></div>'
-          '<p class="wpsub">%s</p>'
-          '<p class="wpnext" title="%s">%s</p></div>'
-          % (esc(plain), wp["pct"], wp["pct"], esc(sub),
-             esc(wp["scale"]), md_bold(esc(wp["evidence"]))))
-    A('</div></section>')
+    # ---------- the 2D project map: THE primary view ----------
+    A('<section><h2>项目地图 <span class="note">— 横轴：工作从左往右推进；'
+      '纵轴：六个子系统。格子越绿越完成，呼吸点 = 该格有会话在跑；'
+      '悬停看格子的实况。新工单编号即坐标（如 A3-xxx）。</span></h2>')
+    A('<div class="mapwrap"><table class="gridmap"><thead><tr><th></th>')
+    for col in spec.GRID_COLS:
+        A('<th>%s</th>' % esc(col))
+    A('</tr></thead><tbody>')
+    for rkey, rname in spec.GRID_ROWS:
+        A('<tr><th class="rowh"><b>%s</b><span>%s</span></th>' % (rkey, esc(rname)))
+        for ci in range(1, len(spec.GRID_COLS) + 1):
+            cid = "%s%d" % (rkey, ci)
+            cell_d = spec.GRID.get(cid, {"pct": 0, "note": "", "active": []})
+            pct = cell_d["pct"]
+            dots = "".join('<i class="mdot"></i>' for _ in cell_d["active"])
+            A('<td class="mc" style="--f:%.2f" '
+              'title="%s（%d%%）：%s%s">'
+              '<span class="mpct">%d%%</span><span class="mdots">%s</span></td>'
+              % (pct / 100.0, cid, pct, esc(cell_d["note"]),
+                 ("　在跑：" + ",".join(cell_d["active"])) if cell_d["active"] else "",
+                 pct, dots))
+        A('</tr>')
+    A('</tbody></table></div>')
+    ops = [(pid, task) for pid, task, done in fleet
+           if not done and pid in ("R-1", "B-1", "A-1", "M-0", "P-24")]
+    if ops:
+        A('<p class="note">地图外的运维会话：%s</p>'
+          % "；".join("%s（%s）" % (esc(t), esc(p)) for p, t in ops))
+    A('</section>')
 
     # ---------- fleet ----------
     A('<section><h2>正在进行</h2><div class="fleet">')
@@ -1219,6 +1230,25 @@ td.num{width:38px;color:var(--mut);font-family:ui-monospace,monospace}
 .ticket textarea{display:block;width:100%;border:none;border-top:1px solid var(--line);
   background:var(--bg);color:var(--fg);padding:14px 16px;resize:vertical;
   font:12.5px/1.6 ui-monospace,Menlo,Consolas,monospace;box-sizing:border-box}
+
+/* ---- 2D project map ---- */
+.mapwrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:14px}
+.gridmap{border-collapse:separate;border-spacing:5px;width:100%;min-width:640px}
+.gridmap thead th{font:600 12px system-ui,sans-serif;color:var(--mut);
+  padding:4px 6px;text-align:center;border:none}
+.rowh{text-align:right;padding:0 10px 0 2px;border:none;white-space:nowrap}
+.rowh b{font:700 13px system-ui,sans-serif;display:block}
+.rowh span{font-size:11px;color:var(--mut)}
+.mc{position:relative;height:56px;min-width:96px;border-radius:9px;
+  text-align:center;vertical-align:middle;cursor:default;
+  background:color-mix(in oklab, var(--st-green) calc(var(--f)*100%), var(--missingbg));
+  border:1px solid var(--line)}
+.mpct{font:700 15px system-ui,sans-serif;
+  color:color-mix(in oklab, #fff calc(var(--f)*90%), var(--fg))}
+.mdots{position:absolute;right:7px;bottom:6px;display:flex;gap:3px}
+.mdot{width:8px;height:8px;border-radius:99px;background:var(--st-partial);
+  animation:pulse 1.6s infinite;display:block;border:1.5px solid var(--card)}
 
 /* ---- plain progress-first layout ---- */
 .top{display:flex;gap:30px;align-items:center;flex-wrap:wrap;

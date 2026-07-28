@@ -212,6 +212,25 @@ td.num{width:38px;color:var(--mut);font-family:ui-monospace,monospace}
   background:var(--bg);color:var(--fg);padding:14px 16px;resize:vertical;
   font:12.5px/1.6 ui-monospace,Menlo,Consolas,monospace;box-sizing:border-box}
 
+/* ---- 2D project map ---- */
+.mapwrap{overflow-x:auto;background:var(--card);border:1px solid var(--line);
+  border-radius:12px;padding:14px}
+.gridmap{border-collapse:separate;border-spacing:5px;width:100%;min-width:640px}
+.gridmap thead th{font:600 12px system-ui,sans-serif;color:var(--mut);
+  padding:4px 6px;text-align:center;border:none}
+.rowh{text-align:right;padding:0 10px 0 2px;border:none;white-space:nowrap}
+.rowh b{font:700 13px system-ui,sans-serif;display:block}
+.rowh span{font-size:11px;color:var(--mut)}
+.mc{position:relative;height:56px;min-width:96px;border-radius:9px;
+  text-align:center;vertical-align:middle;cursor:default;
+  background:color-mix(in oklab, var(--st-green) calc(var(--f)*100%), var(--missingbg));
+  border:1px solid var(--line)}
+.mpct{font:700 15px system-ui,sans-serif;
+  color:color-mix(in oklab, #fff calc(var(--f)*90%), var(--fg))}
+.mdots{position:absolute;right:7px;bottom:6px;display:flex;gap:3px}
+.mdot{width:8px;height:8px;border-radius:99px;background:var(--st-partial);
+  animation:pulse 1.6s infinite;display:block;border:1.5px solid var(--card)}
+
 /* ---- plain progress-first layout ---- */
 .top{display:flex;gap:30px;align-items:center;flex-wrap:wrap;
   background:var(--card);border:1px solid var(--line);border-radius:14px;
@@ -306,39 +325,74 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
 <div class="ts2"><b>12</b><span>会话在飞</span></div>
 <div class="ts2"><b>7/20</b><span>实验问题已回灌</span></div>
 <div class="ts2"><b>0</b><span>需要你处理</span></div>
-<div class="ts2"><b>07-28 10:24</b><span>上次扫描</span></div>
+<div class="ts2"><b>07-28 10:35</b><span>上次扫描</span></div>
 </div></div></header>
 <main>
-<section><h2>四步走到论文</h2><div class="journey">
-<div class="leg now"><div class="legpct">77%</div><div class="legbar"><i style="width:77%"></i></div><div class="legname">① 造仪器</div><div class="legsub">工具、外壳、打分体系</div></div>
-<div class="leg soon"><div class="legpct">11%</div><div class="legbar"><i style="width:11%"></i></div><div class="legname">② 上线练习</div><div class="legsub">练习关实战 + 对照组</div></div>
-<div class="leg later"><div class="legpct">2%</div><div class="legbar"><i style="width:2%"></i></div><div class="legname">③ 正式大考</div><div class="legsub">封存关卡上的确证实验</div></div>
-<div class="leg now"><div class="legpct">17%</div><div class="legbar"><i style="width:17%"></i></div><div class="legname">④ 论文与公开</div><div class="legsub">写作与全量释出</div></div>
-</div></section>
-<section><h2>十块拼图</h2><div class="wpgrid">
-<div class="wpcard"><div class="wphead"><b>造仪器</b><span class="wppct">92%</span></div><div class="wpbar"><i style="width:92%"></i></div><p class="wpsub">引擎、编译器、离线彩排——AI 理解世界要用的全套工具</p><p class="wpnext" title="对标：Schema 的 world_model.py 方法论一节。我们：DSL+四形态+六/八引擎+A0/A0′/A1/A2 四件离线验收">四件验收全绿、M9 补齐八工序、真 A1 空公理集；余：FD 真接入（P-13）、契约 v0.2（P-10）</p></div>
-<div class="wpcard"><div class="wphead"><b>防作弊外壳</b><span class="wppct">78%</span></div><div class="wpbar"><i style="width:78%"></i></div><p class="wpsub">所有实验经代理留痕，考题保密由程序保证</p><p class="wpnext" title="Schema 无此层（其复现失败正是教训）。我们：双代理+护栏+对账+复放抽检">proxy 落地、预检 4/4 PASS；余：冻结打分器、密封红队复测（P-9）</p></div>
-<div class="wpcard"><div class="wphead"><b>AI 上线练习</b><span class="wppct">10%</span></div><div class="wpbar"><i style="width:10%"></i></div><p class="wpsub">让 AI 第一次在真游戏里学规则、做证明（练习关）</p><p class="wpnext" title="对标：Schema 25 局全集单臂全跑。我们：4 局 × 迭代至退出条件（U3≥k 局 + Δ 内 + 账单形状可见）">P-8 首局在跑；离线内环四度证活是它的全部准备</p></div>
-<div class="wpcard"><div class="wphead"><b>对照组数据</b><span class="wppct">15%</span></div><div class="wpbar"><i style="width:15%"></i></div><p class="wpsub">普通 AI 和前人方法在同样关卡上的成绩</p><p class="wpnext" title="CC：4 局×3 重复；Schema：上游 artifacts 开发堆子集直读（F-13 口径）；消融臂：−定理义务">CC 1/4 局（ar25 记 degraded）；路 A 守卫已建材料未拉；消融臂未实现</p></div>
-<div class="wpcard"><div class="wphead"><b>打分体系</b><span class="wppct">55%</span></div><div class="wpbar"><i style="width:55%"></i></div><p class="wpsub">怎么衡量『真的理解了』：指标电池 + 考卷</p><p class="wpnext" title="电池五族过四道工序后冻结 v1；考卷四题型出题机+判卷机在自建族闭环">battery v0 + 预注册在树；区分力/去冗余首跑与 exam/ 在 P-14/P-15</p></div>
-<div class="wpcard"><div class="wphead"><b>正式大考</b><span class="wppct">0%</span></div><div class="wpbar"><i style="width:0%"></i></div><p class="wpsub">在从未见过的 19 个关卡上跑完全部对比实验</p><p class="wpnext" title="对标 Schema 25 局：我们 19 封存局 × (Theoria + CC + 消融) × n，逐局入库禁止回看">门槛 = Phase 1 全绿 + 冻结清单提交。当前零接触（这是纪律不是欠账）</p></div>
-<div class="wpcard"><div class="wphead"><b>附加考题</b><span class="wppct">0%</span></div><div class="wpbar"><i style="width:0%"></i></div><p class="wpsub">不可解判定、换规则适应、移交测试</p><p class="wpnext" title="m 局在主表跑完后构造变体（时序死结的解）；分层移交可随主表同跑">依赖 WP6；出题流程由 P-15 预演</p></div>
-<div class="wpcard"><div class="wphead"><b>统计与预注册</b><span class="wppct">15%</span></div><div class="wpbar"><i style="width:15%"></i></div><p class="wpsub">先写下预测再看结果，防止事后编故事</p><p class="wpnext" title="三主终点（U3 达成率/判决题准确率/前载指数）+ Wilcoxon 配对 + n 由包络方差定">PREDICTIONS.md 起步、包络 1/4；模型版本串/预算/Δkmn 全未定 —— 冻结前待定五项是硬闸</p></div>
-<div class="wpcard"><div class="wphead"><b>写论文</b><span class="wppct">12%</span></div><div class="wpbar"><i style="width:12%"></i></div><p class="wpsub">从车间报告到可投稿的正文</p><p class="wpnext" title="Phase 1 结 workshop 文（P-16 在跑）→ Phase 3 结案例研究 → 主文">骨架与五句门面在 Theoria.md；素材四报告在树</p></div>
-<div class="wpcard"><div class="wphead"><b>公开一切</b><span class="wppct">25%</span></div><div class="wpbar"><i style="width:25%"></i></div><p class="wpsub">代码、数据、证明全量释出，任何人可复跑</p><p class="wpnext" title="对标 Schema：全公开集 artifacts。我们：全账本+两本书四形态+Lean+候选箱+探针日志+电池代码+incident 台账+复跑说明">仓库已开源、账本纪律在；runs/ 留痕与复跑说明未齐</p></div>
-</div></section>
+<section><h2>项目地图 <span class="note">— 横轴：工作从左往右推进；纵轴：六个子系统。格子越绿越完成，呼吸点 = 该格有会话在跑；悬停看格子的实况。新工单编号即坐标（如 A3-xxx）。</span></h2>
+<div class="mapwrap"><table class="gridmap"><thead><tr><th></th>
+<th>1 造仪器</th>
+<th>2 离线验证</th>
+<th>3 在线练习</th>
+<th>4 正式战役</th>
+<th>5 论文与释出</th>
+</tr></thead><tbody>
+<tr><th class="rowh"><b>E</b><span>引擎车间</span></th>
+<td class="mc" style="--f:0.95" title="E1（95%）：六引擎全绿（MDL/CEGIS/零空间/LP/FD桩/前沿）"><span class="mpct">95%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.85" title="E2（85%）：M9 三件落地；FD 真后端在跑　在跑：P-13"><span class="mpct">85%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.05" title="E3（5%）：引擎在线供货（经 theoria-arm 调用）"><span class="mpct">5%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.00" title="E4（0%）：封存战役中的引擎供给"><span class="mpct">0%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.20" title="E5（20%）：引擎代码随释出包公开"><span class="mpct">20%</span><span class="mdots"></span></td>
+</tr>
+<tr><th class="rowh"><b>C</b><span>编译与证明</span></th>
+<td class="mc" style="--f:0.90" title="C1（90%）：DSL 语法 + 四形态生成器；契约 v0.2 交付待合并"><span class="mpct">90%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.95" title="C2（95%）：真 A1（空公理集）+ A2 假定理展品 + A0/A0′ 全环"><span class="mpct">95%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.05" title="C3（5%）：在线两本书：首局的 theory.dsl 尚在 P-8 分支里"><span class="mpct">5%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.00" title="C4（0%）：封存局的证书生产线"><span class="mpct">0%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.30" title="C5（30%）：Lean 证明随释出包公开；复跑说明在做　在跑：P-19"><span class="mpct">30%</span><span class="mdots"><i class="mdot"></i></span></td>
+</tr>
+<tr><th class="rowh"><b>S</b><span>外壳与账本</span></th>
+<td class="mc" style="--f:0.80" title="S1（80%）：双代理 + 账本 + 护栏落地；打分器本体待合并核实"><span class="mpct">80%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.75" title="S2（75%）：预检 4/4 PASS；金丝雀交付待合并；级联探针在跑　在跑：P-20"><span class="mpct">75%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.30" title="S3（30%）：在线对账与复放抽检；F-11 落账待核"><span class="mpct">30%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.10" title="S4（10%）：冻结外壳（清单起草中）　在跑：P-22"><span class="mpct">10%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.20" title="S5（20%）：账本与 incident 台账随释出公开"><span class="mpct">20%</span><span class="mdots"></span></td>
+</tr>
+<tr><th class="rowh"><b>A</b><span>三臂对局</span></th>
+<td class="mc" style="--f:0.70" title="A1（70%）：裸 CC 臂全套 + 消融臂在建；Theoria 臂离线件齐　在跑：P-18"><span class="mpct">70%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.60" title="A2（60%）：离线标定：A0/A0′/A2/A3 四世界 + 消融对照在跑　在跑：P-17"><span class="mpct">60%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.12" title="A3（12%）：开发堆在线：P-8 首局交付；包络 1/4+续跑中　在跑：P-12"><span class="mpct">12%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.00" title="A4（0%）：封存战役（门槛：Phase1 全绿 + 冻结提交）"><span class="mpct">0%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.00" title="A5（0%）：主表三列 + 消融列"><span class="mpct">0%</span><span class="mdots"></span></td>
+</tr>
+<tr><th class="rowh"><b>V</b><span>评测两器</span></th>
+<td class="mc" style="--f:0.90" title="V1（90%）：电池 v0 + 预注册纪律"><span class="mpct">90%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.60" title="V2（60%）：battery v1 + exam 四题型交付待合并"><span class="mpct">60%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.35" title="V3（35%）：区分力首跑（CC vs Theoria 离线）；方向预注册续"><span class="mpct">35%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.00" title="V4（0%）：封存回算 + 判决题实考"><span class="mpct">0%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.15" title="V5（15%）：能力谱与考卷的发表版图表　在跑：P-21"><span class="mpct">15%</span><span class="mdots"><i class="mdot"></i></span></td>
+</tr>
+<tr><th class="rowh"><b>P</b><span>论文产出</span></th>
+<td class="mc" style="--f:0.70" title="P1（70%）：方法论与骨架（Theoria.md 三部曲自带）"><span class="mpct">70%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.60" title="P2（60%）：workshop 文初稿交付待合并；相关工作在建　在跑：P-23"><span class="mpct">60%</span><span class="mdots"><i class="mdot"></i></span></td>
+<td class="mc" style="--f:0.10" title="P3（10%）：开发堆案例研究（概念时间线素材已够）"><span class="mpct">10%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.15" title="P4（15%）：预注册包：冻结清单/统计规则/双结局起草中"><span class="mpct">15%</span><span class="mdots"></span></td>
+<td class="mc" style="--f:0.15" title="P5（15%）：主文 + Schema 地板释出　在跑：P-19"><span class="mpct">15%</span><span class="mdots"><i class="mdot"></i></span></td>
+</tr>
+</tbody></table></div>
+<p class="note">地图外的运维会话：合并员：把所有人的成果安全合到主线（M-0）；常驻审计员：低频巡查项目漂移（A-1）；浏览器专员：处理需要真人网页的事（B-1）；沉淀舰队通用技能，加速后续会话（P-24）；复盘：从过去的失败里找规律（R-1）</p>
+</section>
 <section><h2>正在进行</h2><div class="fleet">
 <div class="crew run"><i class="dot"></i><b>补齐对照组的成绩数据</b><span>进行中</span></div>
 <div class="crew run"><i class="dot"></i><b>合并员：把所有人的成果安全合到主线</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>A-1</b><span>进行中</span></div>
+<div class="crew run"><i class="dot"></i><b>常驻审计员：低频巡查项目漂移</b><span>进行中</span></div>
 <div class="crew run"><i class="dot"></i><b>浏览器专员：处理需要真人网页的事</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>P-18</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>P-19</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>P-20</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>P-21</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>P-22</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>P-23</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>P-24</b><span>进行中</span></div>
+<div class="crew run"><i class="dot"></i><b>造对照版 AI（去掉证明能力的消融臂）</b><span>进行中</span></div>
+<div class="crew run"><i class="dot"></i><b>打包公开：陌生人一条命令复跑全部</b><span>进行中</span></div>
+<div class="crew run"><i class="dot"></i><b>实测游戏一步会不会动好几帧</b><span>进行中</span></div>
+<div class="crew run"><i class="dot"></i><b>把数据画成论文用的图</b><span>进行中</span></div>
+<div class="crew run"><i class="dot"></i><b>起草大考前要封存的规则包</b><span>进行中</span></div>
+<div class="crew run"><i class="dot"></i><b>整理相关文献与引用</b><span>进行中</span></div>
+<div class="crew run"><i class="dot"></i><b>沉淀舰队通用技能，加速后续会话</b><span>进行中</span></div>
 <div class="crew run"><i class="dot"></i><b>复盘：从过去的失败里找规律</b><span>进行中</span></div>
 </div></section>
 <section><h2>需要你的事</h2>

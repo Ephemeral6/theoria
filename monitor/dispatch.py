@@ -56,8 +56,12 @@ def existing_branches():
                if line.strip())
 
 
+LEGACY_ID = re.compile(r"^[PRMBA]-\d+$")
+
+
 def prompt_id(name):
-    m = re.match(r"([PRMBA]-\d+)", name)
+    # coordinate ids (A3-second-level) preferred; legacy serials (P-8) accepted
+    m = re.match(r"([A-Z]\d+-[a-z0-9][a-z0-9-]*|[PRMBA]-\d+)", name)
     return m.group(1) if m else None
 
 
@@ -66,8 +70,11 @@ def branch_for(pid):
 
 
 def branch_taken(pid, branches):
-    slug = pid.lower().replace("-", "")          # p8 / r1 / m0
-    pat = re.compile(r"agent/%s\b|agent/%s-" % (slug, slug))
+    if LEGACY_ID.match(pid):
+        slug = pid.lower().replace("-", "")      # p8 / r1 / m0
+        pat = re.compile(r"agent/%s\b|agent/%s-" % (slug, slug))
+    else:
+        pat = re.compile(r"agent/%s\b" % re.escape(pid.lower()))  # a3-second-level
     return any(pat.search(b) for b in branches)
 
 
