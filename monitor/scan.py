@@ -215,9 +215,28 @@ def probe_a1_state():
                       % ("已建" if bridge else "未建", "已接" if consumed else "**未接**")}
 
 
-TERRITORIES = ["engine-rig", "theory-compiler", "cold-start-a0", "cold-start-a2",
-               "a0-spike", "baseline-arms", "arc-recon", "proxy", "battery",
-               "monitor"]
+def _discover_territories():
+    """Derive the territory list from the tree instead of hardcoding it.
+
+    The hardcoded list stopped at nine directories while the repo grew to
+    nineteen, so provenance and conflict checks were blind to ten of them —
+    including theoria-arm, the arm that actually spends API money (OPS-A,
+    2026-07-28). A top-level directory counts as a territory if it is tracked
+    by git and is not tooling.
+    """
+    skip = {".git", ".claude", ".worktrees", ".pytest_cache", "__pycache__",
+            "CONTRACTS", ".toolchain"}
+    out = []
+    for name in sorted(os.listdir(ROOT)):
+        if name.startswith(".") or name in skip:
+            continue
+        if not os.path.isdir(os.path.join(ROOT, name)):
+            continue
+        out.append(name)
+    return out
+
+
+TERRITORIES = _discover_territories()
 SHARED_OK = {"PARTNER_SYNC.md", "CONTRACTS", "README.md", "LICENSE",
              ".gitignore", ".env.example", "CLAUDE.md", "Theoria.md"}
 

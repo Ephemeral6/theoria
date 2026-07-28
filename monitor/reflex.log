@@ -52,3 +52,9 @@
 2026-07-28T11:32:43Z quota:HOLD
 2026-07-28T11:37:48Z quota:HOLD
 2026-07-28T11:44:20Z quota:HOLD | MERGED origin/agent/a4a-ablation-build (dirs: ablation-arm; gates: none) | MERGED origin/agent/p8-billshape-pipeline (dirs: PARTNER_SYNC.md,figures,monitor; gates: none)
+2026-07-28T11:49:29Z quota:HOLD | MERGED origin/agent/p9-paper-to-submittable (dirs: papers; gates: none) | MERGED origin/agent/v4-exam-selftest (dirs: PARTNER_SYNC.md,exam; gates: exam)
+2026-07-28T11:52:43Z quota:HOLD
+2026-07-28T11:57:43Z quota:HOLD
+2026-07-28T12:02:43Z quota:HOLD
+2026-07-28T12:07:44Z quota:HOLD
+2026-07-28T12:12:59Z quota:HOLD

@@ -48,18 +48,18 @@
     ],
     "ops": [
       {
-        "age_min": 60,
-        "cycle": 5,
+        "age_min": 23,
+        "cycle": 6,
         "id": "OPS-A",
         "kind": "ops",
         "name": "漂移审计员",
-        "note": "cycle 5: the ALL.md discipline broadcast is right but its cited example is wrong -- 6dec6f7 never reached master, so the rule as written would punish fixing your own error before merge; release-licence plumbing now 3 cycles overdue and its critical path is outside the repo",
-        "outputs": 6,
+        "note": "cycle 6: three probes share hardcoded scope lists that stopped growing -- nine newer directories including theoria-arm are invisible to provenance and conflict checks, and the new verify_gates probe cannot see the case it was built for",
+        "outputs": 7,
         "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
         "state": "idle"
       },
       {
-        "age_min": 76,
+        "age_min": 105,
         "cycle": 3,
         "id": "OPS-B",
         "kind": "ops",
@@ -70,7 +70,7 @@
         "state": "idle"
       },
       {
-        "age_min": 26,
+        "age_min": 55,
         "cycle": 4,
         "id": "OPS-M",
         "kind": "ops",
@@ -81,20 +81,20 @@
         "state": "working"
       },
       {
-        "age_min": 311,
+        "age_min": 339,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
         "name": "回顾员",
         "note": "cycle 1 done: 1 OPEN acked (4 self-reports verified true), 2 proposals in inbox after adversarial review, 3 live faults raised to TO-MONITOR (reflex task Disabled / pid_alive(0)==True / quota missed a real session-limit death). Sleeping 43200s.",
-        "outputs": 1,
+        "outputs": 0,
         "role": "从所有痕迹里挖跨轨道重复出现的失败模式",
         "state": "idle"
       }
     ],
     "standing": [
       {
-        "age_min": 6,
+        "age_min": 35,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
@@ -105,7 +105,7 @@
         "state": "working"
       },
       {
-        "age_min": 4,
+        "age_min": 33,
         "cycle": 2,
         "id": "RES-2",
         "kind": "standing",
@@ -269,11 +269,11 @@
   },
   "blocking_findings": 1,
   "board": {
-    "available": 4,
+    "available": 5,
     "blocked": 3,
     "claimed": 10,
     "done": 15,
-    "listing": "=== available ===\n  p2  C6-worldgen-mutate           cell=V2  territory=worldgen       \n  p2  C8-handover-package          cell=C3  territory=theory-compiler \n  p3  C9-count-lock-vocabulary     cell=C1  territory=theory-compiler \n  p3  S7-ledger-hashchain          cell=S3  territory=proxy          \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A4a-ablation-build           by RES-1\n  A6-transfer-protocol         by W-5201\n  A7-envelope-finish           by APP-A7\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P9-paper-to-submittable      by RES-2\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n=== done (15) ===\n  A4-ablation-online.superseded-by-A4a\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C7-dsl-v03-mentions.APP-C7\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S6-merge-gate-509.superseded-by-derived-gate\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
+    "listing": "=== available ===\n  p1  S9-contract-change-protocol  cell=S1  territory=proxy          \n  p2  C6-worldgen-mutate           cell=V2  territory=worldgen       \n  p2  C8-handover-package          cell=C3  territory=theory-compiler \n  p3  C9-count-lock-vocabulary     cell=C1  territory=theory-compiler \n  p3  S7-ledger-hashchain          cell=S3  territory=proxy          \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A4a-ablation-build           by RES-1\n  A6-transfer-protocol         by W-5201\n  A7-envelope-finish           by APP-A7\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P9-paper-to-submittable      by RES-2\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n=== done (15) ===\n  A4-ablation-online.superseded-by-A4a\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C7-dsl-v03-mentions.APP-C7\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S6-merge-gate-509.superseded-by-derived-gate\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
   },
   "con_green": 1,
   "constraints": [
@@ -532,7 +532,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 19:44:18",
+  "generated_at": "2026-07-28 20:12:59",
   "grid": {
     "A1": {
       "active": [
@@ -1406,87 +1406,46 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/HANDOFF.md",
-      "monitor/board/board.log",
-      "monitor/board/claimed/P8-billshape-pipeline.RES-2.md",
-      "monitor/board/claimed/V4-exam-selftest.RES-1.md",
-      "monitor/board/items/A4a-ablation-build.md",
-      "monitor/board/items/P9-paper-to-submittable.md",
+      "onitor/audit/DRIFT-20260728T1147Z-probes-have-hardcoded-scope-that-stopped-growing.md",
       "monitor/ci/merge.log",
-      "monitor/dispatch.py",
-      "monitor/inbox/20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md",
-      "monitor/inbox/20260728T034833Z-OPS-R-optional-checks-fail-open.md",
-      "monitor/inbox/20260728T034833Z-OPS-R-shared-spend-gate.md",
-      "monitor/inbox/20260728T034833Z-OPS-R-stale-self-description.md",
-      "monitor/inbox/20260728T034833Z-OPS-R-three-strikes-common-cause.md",
-      "monitor/inbox/20260728T035214Z-opsm-conflict-a0spike-semantics.md",
-      "monitor/inbox/20260728T062038Z-opsm-reflex-task-dead.md",
-      "monitor/inbox/20260728T062959Z-OPS-R-liveness-stored-not-derived.md",
-      "monitor/inbox/20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md",
-      "monitor/inbox/20260728T110000Z-W-1610-paper-section-7-is-stale-because-battery-went-v0-to-v2.md",
-      "monitor/inbox/20260728T111635Z-opsm-merge-blocked-by-a-quota-it-cannot-spend.md",
+      "monitor/inbox/20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md",
+      "monitor/inbox/20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md",
       "monitor/index.html",
-      "monitor/mailbox/RES-1.md",
-      "monitor/mailbox/RES-2.md",
-      "monitor/ops-status/RES-1.json",
-      "monitor/ops-status/RES-2.json",
       "monitor/reflex.log",
-      "monitor/reflex.py",
+      "monitor/scan.py",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/claimed/A4a-ablation-build.RES-1.md",
-      "monitor/board/claimed/P9-paper-to-submittable.RES-2.md",
-      "monitor/board/done/P8-billshape-pipeline.RES-2.md",
-      "monitor/board/done/V4-exam-selftest.RES-1.md",
-      "monitor/board/items/C9-count-lock-vocabulary.md",
-      "monitor/board/items/S7-ledger-hashchain.md",
-      "monitor/inbox/archive/20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md",
-      "monitor/inbox/archive/20260728T034833Z-OPS-R-optional-checks-fail-open.md",
-      "monitor/inbox/archive/20260728T034833Z-OPS-R-shared-spend-gate.md",
-      "monitor/inbox/archive/20260728T034833Z-OPS-R-stale-self-description.md",
-      "monitor/inbox/archive/20260728T034833Z-OPS-R-three-strikes-common-cause.md",
-      "monitor/inbox/archive/20260728T035214Z-opsm-conflict-a0spike-semantics.md",
-      "monitor/inbox/archive/20260728T062038Z-opsm-reflex-task-dead.md",
-      "monitor/inbox/archive/20260728T062959Z-OPS-R-liveness-stored-not-derived.md",
-      "monitor/inbox/archive/20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md",
-      "monitor/inbox/archive/20260728T110000Z-W-1610-paper-section-7-is-stale-because-battery-went-v0-to-v2.md",
-      "monitor/inbox/archive/20260728T111635Z-opsm-merge-blocked-by-a-quota-it-cannot-spend.md",
+      "monitor/audit/archive/DRIFT-20260728T1147Z-probes-have-hardcoded-scope-that-stopped-growing.md",
+      "monitor/board/items/S10-invariant-on-resource.md",
+      "monitor/board/items/S8-provenance-backfill.md",
+      "monitor/board/items/S9-contract-change-protocol.md",
+      "monitor/inbox/archive/20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md",
+      "monitor/inbox/archive/20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md",
       "monitor/reflex.lock"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "2925fed Merge remote-tracking branch 'origin/agent/p8-billshape-pipeline' into HEAD",
+    "git_head": "b7fa0ca audit: cycle 6 -- the probes stopped growing with the tree",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 104,
-    "sync_last": "2026-07-28T11:20:00Z",
+    "sync_entries": 105,
+    "sync_last": "2026-07-28T12:55:00Z",
     "tests": {},
     "untracked": [
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/claimed/A4a-ablation-build.RES-1.md",
-      "monitor/board/claimed/P9-paper-to-submittable.RES-2.md",
-      "monitor/board/done/P8-billshape-pipeline.RES-2.md",
-      "monitor/board/done/V4-exam-selftest.RES-1.md",
-      "monitor/board/items/C9-count-lock-vocabulary.md",
-      "monitor/board/items/S7-ledger-hashchain.md",
-      "monitor/inbox/archive/20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md",
-      "monitor/inbox/archive/20260728T034833Z-OPS-R-optional-checks-fail-open.md",
-      "monitor/inbox/archive/20260728T034833Z-OPS-R-shared-spend-gate.md",
-      "monitor/inbox/archive/20260728T034833Z-OPS-R-stale-self-description.md",
-      "monitor/inbox/archive/20260728T034833Z-OPS-R-three-strikes-common-cause.md",
-      "monitor/inbox/archive/20260728T035214Z-opsm-conflict-a0spike-semantics.md",
-      "monitor/inbox/archive/20260728T062038Z-opsm-reflex-task-dead.md",
-      "monitor/inbox/archive/20260728T062959Z-OPS-R-liveness-stored-not-derived.md",
-      "monitor/inbox/archive/20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md",
-      "monitor/inbox/archive/20260728T110000Z-W-1610-paper-section-7-is-stale-because-battery-went-v0-to-v2.md",
-      "monitor/inbox/archive/20260728T111635Z-opsm-merge-blocked-by-a-quota-it-cannot-spend.md",
+      "monitor/audit/archive/DRIFT-20260728T1147Z-probes-have-hardcoded-scope-that-stopped-growing.md",
+      "monitor/board/items/S10-invariant-on-resource.md",
+      "monitor/board/items/S8-provenance-backfill.md",
+      "monitor/board/items/S9-contract-change-protocol.md",
+      "monitor/inbox/archive/20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md",
+      "monitor/inbox/archive/20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md",
       "monitor/reflex.lock"
     ]
   },
@@ -1959,23 +1918,23 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 9 份：20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T103219Z-opsm-gate-fixed-and-a-commit-swept-my-edit.md, 20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 7 份：20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T103219Z-opsm-gate-fixed-and-a-commit-swept-my-edit.md, 20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**16 条 TO-MONITOR 待监控回复**。 OPS-A 第5轮 idle（59 分钟前）； OPS-B 第3轮 idle（76 分钟前）； OPS-M 第4轮 working（26 分钟前）； OPS-R 第1轮 idle（310 分钟前）",
+      "detail": "**17 条 TO-MONITOR 待监控回复**。 OPS-A 第6轮 idle（23 分钟前）； OPS-B 第3轮 idle（105 分钟前）； OPS-M 第4轮 working（54 分钟前）； OPS-R 第1轮 idle（339 分钟前）",
       "rows": [
         {
-          "age_min": 59,
-          "cycle": 5,
+          "age_min": 23,
+          "cycle": 6,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "cycle 5: the ALL.md discipline broadcast is right but its cited example is wrong -- 6dec6f7 never reached master, so the rule as written would punish fixing your own error before merge; release-licence plumbing now 3 cycles overdue and its critical path is outside the repo",
+          "note": "cycle 6: three probes share hardcoded scope lists that stopped growing -- nine newer directories including theoria-arm are invisible to provenance and conflict checks, and the new verify_gates probe cannot see the case it was built for",
           "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 76,
+          "age_min": 105,
           "cycle": 3,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1984,7 +1943,7 @@
           "status": "green"
         },
         {
-          "age_min": 26,
+          "age_min": 54,
           "cycle": 4,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -1993,7 +1952,7 @@
           "status": "green"
         },
         {
-          "age_min": 310,
+          "age_min": 339,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2003,14 +1962,14 @@
         }
       ],
       "status": "green",
-      "to_monitor": 16
+      "to_monitor": 17
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3176 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
       "status": "green"
     },
     "provenance_scan": {
-      "detail": "已建档：engine-rig：2 个 run（正典 1，非正典 1(md)），最新 p13-fd-real； theory-compiler：3 个 run（正典 2，**无留痕 1**），最新 P-10； a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； arc-recon：2 个 run（正典 2），最新 P-11； proxy：2 个 run（正典 2），最新 p9-shell-harden； battery：2 个 run（正典 2），最新 P-14。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, baseline-arms。",
+      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：2 个 run（正典 1，**无留痕 1**），最新 20260728T130500Z-A4a-ablation-build； arc-recon：2 个 run（正典 2），最新 P-11； battery：2 个 run（正典 2），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：1 个 run（正典 1），最新 p-17； engine-rig：2 个 run（正典 1，非正典 1(md)），最新 p13-fd-real； exam：3 个 run（正典 3），最新 p15-rehearsal-01； figures：3 个 run（正典 2，**无留痕 1**），最新 20260728T110000Z-P8-billshape-pipeline； fuzzlab：1 个 run（正典 1），最新 20260728T085448Z-E4-property-fuzz； proxy：2 个 run（正典 2），最新 p9-shell-harden； theoria-arm：11 个 run（正典 4，**无留痕 7**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：3 个 run（正典 2，**无留痕 1**），最新 P-10； worldgen：1 个 run（正典 1），最新 20260728T081713Z-C1-worldgen。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：baseline-arms, cold-start-a0, cold-start-a2, papers。",
       "status": "partial"
     },
     "scheduled_tasks": {
@@ -2018,7 +1977,7 @@
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 23 个提交 / 4 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 30 个提交 / 6 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "partial"
     },
     "verify_gates": {
