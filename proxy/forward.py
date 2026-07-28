@@ -89,13 +89,34 @@ class Response:
 def forward(url: str, method: str, headers: Dict[str, str],
             body: Optional[bytes] = None, timeout: float = 60.0,
             max_attempts: int = 5, backoff: float = 0.25,
-            sleep=time.sleep) -> Response:
+            sleep=time.sleep, *, permit) -> Response:
+    """Open a socket to `url`. Requires a live spend permit.
+
+    `permit` is keyword-only and has **no default**, so a caller that forgot the
+    gate gets a `TypeError` here rather than a line in the next incident report.
+    That is the whole difference between a gate and a convention: INC-BA-003's
+    second session obeyed every rule it knew about, and the rule it needed did
+    not exist to be known.
+
+    The permit is checked before **every attempt**, not once per call. One
+    `forward()` can open up to `max_attempts` sockets, the pool's action unit is
+    one outbound request (`spend_policy.json`), and a retry storm is precisely
+    the shape that reaches the 600 rpm limit -- so a gate that charged a retry
+    loop as one request would be blind to the case it was built for.
+
+    `permit.check()` raises to refuse; it is not caught here. A refusal must
+    reach the caller as an exception, because the alternative -- returning a
+    Response that looks like an upstream error -- would let a budget breach be
+    retried as though it were weather.
+    """
     attempt_log: List[Dict[str, Any]] = []
     started = time.time()
     status, response_headers, raw = TRANSPORT_STATUS, {}, b""
     final_url: Optional[str] = None
 
     for attempt in range(1, max_attempts + 1):
+        permit.check()                     # every socket, not once per call
+        permit.attempts_made += 1          # counted before, so a throw is counted
         request = urllib.request.Request(url, data=body, headers=headers, method=method)
         attempt_started = time.time()
         try:

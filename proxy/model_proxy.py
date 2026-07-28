@@ -32,6 +32,8 @@ from .ledger import Ledger, RunLedger, sha256
 from .paths import LEDGER_PATH, UPSTREAM_MODEL
 from .guard import SealedPileGuard
 from .redact import VAULT, read_secret, scrub_outbound
+from .spend_gate import (Reservation, SpendGate, SpendGateError,
+                         attach_reservation, default_campaign, default_gate)
 
 ANTHROPIC_VERSION = "2023-06-01"
 
@@ -54,6 +56,9 @@ class ModelProxyConfig:
                  pricing_table: str = DEFAULT_TABLE,
                  game_id: Optional[str] = None,
                  guard: Optional[SealedPileGuard] = None,
+                 campaign: Optional[str] = None,
+                 spend_gate: Optional[SpendGate] = None,
+                 spend_reservation: Optional[Reservation] = None,
                  host: str = "127.0.0.1", port: int = 0,
                  timeout: float = 300.0,
                  max_attempts: int = 3):
@@ -86,6 +91,18 @@ class ModelProxyConfig:
             self.pricing = PriceTable.load(pricing_table)
         except KeyError:
             self.pricing = None
+
+        # Same footing as the guard: constructed here if not handed in, never
+        # a flag, never absent. This is the proxy that spends dollars, so it is
+        # the one whose `record` carries a price -- and an unpriced call is
+        # recorded as unpriced rather than as zero, which is what stops the
+        # pool's dollar total from silently becoming a lower bound.
+        self.campaign = campaign or default_campaign(arm, run_id)
+        self.spend_gate = spend_gate if spend_gate is not None else default_gate()
+        self.spend_reservation_owned = spend_reservation is None
+        self.spend_reservation = attach_reservation(
+            self.spend_gate, self.campaign, spend_reservation,
+            holder={"proxy": "model", "run_id": run_id, "arm": arm})
 
 
 class _State:
@@ -192,7 +209,37 @@ class _Handler(BaseHTTPRequestHandler):
             except ValueError:
                 step_idx = None
 
-        response = self._forward(method, path, query, raw)
+        # What this call could cost, BEFORE the socket opens. `cost()` prices a
+        # call after the fact, which is the only way to know what it really
+        # cost and therefore useless as a gate -- an adversarial pass put $600
+        # through a $10 ceiling in one call for exactly that reason. A call
+        # with no computable ceiling is refused rather than sent: it is
+        # unbounded, and the pool has no way to notice it going by.
+        ceiling = (self.cfg.pricing.ceiling_for(body) if self.cfg.pricing
+                   else {"usd": None, "why": "no pricing table is loaded"})
+        if ceiling.get("usd") is None:
+            self.cfg.run.incident(
+                "spend_gate_refused",
+                "this request has no computable cost ceiling, so it was not "
+                "sent: %s" % ceiling.get("why"),
+                path=path, campaign=self.cfg.campaign)
+            return self._respond(402, json.dumps({
+                "error": "refused by the shared spend gate",
+                "rule": "NO_COST_CEILING",
+                "detail": ceiling.get("why")}).encode())
+
+        try:
+            response = self._forward(method, path, query, raw,
+                                     usd=ceiling["usd"])
+        except BaseException:
+            # The request may or may not have reached the provider. It is
+            # charged at its ceiling either way and flagged unpriced, because
+            # the alternative -- assume it cost nothing -- is the assumption
+            # that lets a provider decide whether it gets billed.
+            self._charge(ceiling["usd"], unpriced=True, path=path,
+                         why="the call raised before a price could be computed",
+                         swallow=True)
+            raise
         parsed = response.json()
         streamed = "text/event-stream" in (
             response.headers.get("Content-Type", "").lower())
@@ -218,6 +265,48 @@ class _Handler(BaseHTTPRequestHandler):
         if response.attempts > 1:
             http["attempt_log"] = response.attempt_log
 
+        # The real price, or the ceiling if the real price cannot be had.
+        #
+        # Three ways the naive version under-recorded, all found adversarially
+        # and all resolved the same way -- **charge the ceiling and flag it**:
+        #   * cost() raises on a usage value json.loads accepts but int() does
+        #     not (1e999, "1e5"), and five real calls produced no record at all;
+        #   * a missing or empty usage block priced to $0.00 with the unpriced
+        #     flag OFF, so the pool did not even know it was blind;
+        #   * an SSE stream cut before message_delta loses output_tokens, which
+        #     is the expensive half of the bill at 5x the input rate.
+        # In every one of those, the provider's response decided whether the
+        # call was billed. It does not any more.
+        model_name = (body or {}).get("model") if isinstance(body, dict) else None
+        try:
+            priced = self.cfg.pricing.cost(model_name or "?", usage or {})
+        except Exception as exc:                            # noqa: BLE001
+            priced = {"usd": None,
+                      "unpriced": "pricing raised on the response: %s: %s"
+                                  % (type(exc).__name__, exc)}
+        # A price is usable only if the usage block carries **both** halves of
+        # the bill. Not `usd > 0`: a model legitimately priced at $0.00 with a
+        # complete usage block is *priced*, not blind, and flagging it would
+        # jam the pool on nothing. What this does catch is the case a stream
+        # produces -- `input_tokens` arrives in `message_start` and
+        # `output_tokens` only in `message_delta`, so an SSE response cut short
+        # yields a plausible, positive, and badly wrong figure that misses the
+        # expensive half at 5x the input rate.
+        required = ("input_tokens", "output_tokens")
+        usable = (priced.get("usd") is not None
+                  and isinstance(usage, dict)
+                  and all(key in usage for key in required))
+        if usable:
+            self._charge(priced["usd"], unpriced=False, path=path, why=None,
+                         model=model_name, status=response.status)
+        else:
+            self._charge(ceiling["usd"], unpriced=True, path=path,
+                         why=(priced.get("unpriced")
+                              or "the response carried no usable usage block, "
+                                 "so the call is charged at its pre-flight "
+                                 "ceiling"),
+                         model=model_name, status=response.status)
+
         self.cfg.run.model_call(
             provider=self.cfg.provider,
             model=(body or {}).get("model") if isinstance(body, dict) else None,
@@ -231,7 +320,28 @@ class _Handler(BaseHTTPRequestHandler):
         self._respond(response.status if response.status > 0 else 502,
                       response.body, response.passthrough_headers())
 
-    def _forward(self, method: str, path: str, query: str, raw: bytes) -> fwd.Response:
+    def _charge(self, usd: float, *, unpriced: bool, path: str,
+                why, model=None, status=None, swallow: bool = False) -> None:
+        """Put the money on disk, and make a refusal visible to more than the arm."""
+        try:
+            self.cfg.spend_gate.record(
+                self.cfg.spend_reservation, usd=float(usd), actions=0,
+                unpriced=unpriced,
+                detail={"proxy": "model", "run_id": self.cfg.run_id,
+                        "model": model, "status": status, "path": path,
+                        "unpriced": why})
+        except SpendGateError as exc:
+            self.cfg.run.incident(
+                "spend_gate_refused",
+                "the shared spend pool refused after a model call on %s: %s"
+                % (path, exc),
+                path=path, rule=getattr(exc, "rule", None),
+                campaign=self.cfg.campaign)
+            if not swallow:
+                raise
+
+    def _forward(self, method: str, path: str, query: str, raw: bytes,
+                 usd: float = 0.0) -> fwd.Response:
         headers = {"Accept": "application/json",
                    "anthropic-version": ANTHROPIC_VERSION}
         for name in PASSTHROUGH_REQUEST_HEADERS:
@@ -241,8 +351,14 @@ class _Handler(BaseHTTPRequestHandler):
         if self.cfg.api_key:
             headers["x-api-key"] = self.cfg.api_key
         url = self.cfg.upstream + path + (("?" + query) if query else "")
+        # The dollar cost is not knowable until the response's `usage` comes
+        # back, so the pre-flight can only assert that *some* headroom exists.
+        # `_handle` records the real price the moment it can compute it.
+        permit = self.cfg.spend_gate.permit(self.cfg.spend_reservation,
+                                            usd=usd, actions=0)
         return fwd.forward(url, method, headers, raw or None,
-                           timeout=self.cfg.timeout, max_attempts=self.cfg.max_attempts)
+                           timeout=self.cfg.timeout,
+                           max_attempts=self.cfg.max_attempts, permit=permit)
 
 
 def _parse_sse(text: str) -> Tuple[Dict[str, Any], List[Dict[str, Any]], Dict[str, Any]]:
@@ -326,6 +442,14 @@ class ModelProxy:
         self.httpd.server_close()
         if self._thread:
             self._thread.join(timeout=5)
+        # Give the unspent remainder back, but only if this proxy is the thing
+        # that claimed it. A reservation the caller handed in belongs to the
+        # caller's run, which may outlive this proxy; releasing it here would
+        # hand back headroom the run still needs. Spend already recorded is
+        # untouched either way -- release returns the hold, never the money.
+        if self.cfg.spend_reservation_owned:
+            self.cfg.spend_gate.release(self.cfg.spend_reservation,
+                                        reason="model proxy stopped")
 
     def __enter__(self) -> "ModelProxy":
         return self.start()
@@ -360,6 +484,13 @@ def main(argv=None) -> int:
         pass
     finally:
         proxy.httpd.server_close()
+        # The claim goes back on the way out. Without this, a Ctrl-C'd
+        # standalone proxy holds its share of the shared pool for the full TTL
+        # with nothing spent -- 40 of them take the pool offline for an hour
+        # and the only recovery is to wait.
+        if cfg.spend_reservation_owned:
+            cfg.spend_gate.release(cfg.spend_reservation,
+                                   reason="standalone proxy exited")
     return 0
 
 

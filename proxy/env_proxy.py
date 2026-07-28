@@ -35,6 +35,8 @@ from .guard import SealedPileGuard
 from .ledger import Ledger, RunLedger, canonical, sha256
 from .paths import LEDGER_PATH, UPSTREAM_ARC
 from .redact import VAULT, looks_like_credential, read_secret, scrub_outbound
+from .spend_gate import (Reservation, SpendGate, SpendGateError,
+                         attach_reservation, default_campaign, default_gate)
 from .variants import Refusal, Variant, VariantRuntime, _Remap
 
 COMMAND = re.compile(r"^/api/cmd/(RESET|ACTION([1-9][0-9]?))/?$")
@@ -57,6 +59,9 @@ class EnvProxyConfig:
                  run: Optional[RunLedger] = None,
                  guard: Optional[SealedPileGuard] = None,
                  variant: Optional[Variant] = None,
+                 campaign: Optional[str] = None,
+                 spend_gate: Optional[SpendGate] = None,
+                 spend_reservation: Optional[Reservation] = None,
                  host: str = "127.0.0.1", port: int = 0,
                  timeout: float = 60.0,
                  max_attempts: int = 5):
@@ -79,6 +84,18 @@ class EnvProxyConfig:
         # counters for a run come from a single source.
         self.run = run or RunLedger(self.ledger, run_id, arm)
         self.guard = guard if guard is not None else SealedPileGuard()
+
+        # The spend gate, on the same footing as the sealed-pile guard: not a
+        # flag, not optional, and constructed here if the caller did not hand
+        # one in. `spend_reservation=None` means "I did not declare a budget",
+        # which is answered with the policy's small default caps rather than
+        # with a shrug -- see `attach_reservation`.
+        self.campaign = campaign or default_campaign(arm, run_id)
+        self.spend_gate = spend_gate if spend_gate is not None else default_gate()
+        self.spend_reservation_owned = spend_reservation is None
+        self.spend_reservation = attach_reservation(
+            self.spend_gate, self.campaign, spend_reservation,
+            holder={"proxy": "env", "run_id": run_id, "arm": arm})
 
 
 class _State:
@@ -277,12 +294,67 @@ class _Handler(BaseHTTPRequestHandler):
         return headers
 
     def _forward(self, method: str, path: str, query: str, raw: bytes) -> fwd.Response:
+        """The only route to a socket in this proxy, and so the only place the
+        spend gate has to sit.
+
+        The pool's action unit is one outbound ARC HTTP request
+        (`spend_policy.json`), which is what `forward` counts as an attempt, so
+        the permit is minted for one action and `forward` re-checks it before
+        every retry. The *record* is written afterwards, against the attempts
+        that actually happened -- check prevents, record accounts, and a retry
+        storm is charged for the requests it really made.
+        """
         url = self.cfg.upstream + path + (("?" + query) if query else "")
-        response = fwd.forward(url, method, self._upstream_headers(),
-                               raw or None, timeout=self.cfg.timeout,
-                               max_attempts=self.cfg.max_attempts)
+        permit = self.cfg.spend_gate.permit(self.cfg.spend_reservation,
+                                            usd=0.0, actions=1)
+        try:
+            response = fwd.forward(url, method, self._upstream_headers(),
+                                   raw or None, timeout=self.cfg.timeout,
+                                   max_attempts=self.cfg.max_attempts,
+                                   permit=permit)
+        except BaseException as exc:
+            # The requests that DID happen are recorded even though the call
+            # failed. Two ways the naive version under-counts: a permit refused
+            # on attempt 3 raises, so there is no Response to read `attempts`
+            # from -- while attempts 1 and 2 opened real sockets against the
+            # real rate limit; and any exception between the socket and the
+            # return would drop the whole request from the pool.
+            self._charge(permit, path, original=exc)
+            raise
+        self._charge(permit, path)
         self._note_redirect(url, response)
         return response
+
+    def _charge(self, permit, path: str, original=None) -> None:
+        """Record the sockets this permit actually opened.
+
+        `record` appends first and raises afterwards if the append breached a
+        cap, so the money is on disk either way. What this adds is that a
+        breach becomes a *ledger incident* rather than only a 500 the arm sees:
+        INC-BA-003's whole complaint was that a budget stop left no trace anyone
+        else could read.
+
+        When an exception is already in flight, a breach raised from here is
+        swallowed -- the refusal that stopped the request is the more
+        informative one, and replacing it would hide why the call died.
+        """
+        if not permit.attempts_made:
+            return
+        try:
+            self.cfg.spend_gate.record(
+                self.cfg.spend_reservation, usd=0.0,
+                actions=permit.attempts_made,
+                detail={"proxy": "env", "run_id": self.cfg.run_id, "path": path})
+        except SpendGateError as exc:
+            self.state.incidents += 1
+            self.cfg.run.incident(
+                "spend_gate_refused",
+                "the shared spend pool refused after %d request(s) on %s: %s"
+                % (permit.attempts_made, path, exc),
+                path=path, rule=getattr(exc, "rule", None),
+                campaign=self.cfg.campaign)
+            if original is None:
+                raise
 
     def _note_redirect(self, url: str, response: fwd.Response) -> None:
         """A refused redirect is a record, for the same reason a refused
@@ -463,6 +535,14 @@ class EnvProxy:
         self.httpd.server_close()
         if self._thread:
             self._thread.join(timeout=5)
+        # Give the unspent remainder back, but only if this proxy is the thing
+        # that claimed it. A reservation the caller handed in belongs to the
+        # caller's run, which may outlive this proxy; releasing it here would
+        # hand back headroom the run still needs. Spend already recorded is
+        # untouched either way -- release returns the hold, never the money.
+        if self.cfg.spend_reservation_owned:
+            self.cfg.spend_gate.release(self.cfg.spend_reservation,
+                                        reason="env proxy stopped")
 
     def __enter__(self) -> "EnvProxy":
         return self.start()
@@ -497,6 +577,13 @@ def main(argv=None) -> int:
         pass
     finally:
         proxy.httpd.server_close()
+        # The claim goes back on the way out. Without this, a Ctrl-C'd
+        # standalone proxy holds its share of the shared pool for the full TTL
+        # with nothing spent -- 40 of them take the pool offline for an hour
+        # and the only recovery is to wait.
+        if cfg.spend_reservation_owned:
+            cfg.spend_gate.release(cfg.spend_reservation,
+                                   reason="standalone proxy exited")
     return 0
 
 
