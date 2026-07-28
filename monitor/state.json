@@ -38,6 +38,25 @@
       "让考卷跑在新造的 20 个练习世界上",
       "考卷自检 + 出三类判决题（验判卷的人对不对）"
     ],
+    "delivered_today": [
+      "对照版 AI（去掉证明能力）上线",
+      "补齐对照组的成绩数据",
+      "世界工厂：7 类机制、20 个带标准答案的练习世界",
+      "把死锁定理和不变量送进 Lean 做机器验证",
+      "语法 v0.3：把散落的提法收进契约",
+      "给专业规划器的三档性能定价",
+      "用 500 个随机世界轰炸六个引擎找 bug",
+      "论文figures：把数据变成可复现的图",
+      "把各处结果组装成论文正文",
+      "论文第 7 节：相关工作",
+      "把论文「账单形状」图接上真数据管线",
+      "把论文推进到可投稿",
+      "把「金丝雀重放」做成每天自动跑的体检",
+      "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
+      "补上合并门的漏洞（六个目录 509 个测试从未跑过）",
+      "让考卷跑在新造的 20 个练习世界上",
+      "考卷自检 + 出三类判决题（验判卷的人对不对）"
+    ],
     "in_progress_plain": [
       "把对照版 AI 真正建起来",
       "给世界工厂加「改一条规则」的变体生成",
@@ -49,18 +68,18 @@
     ],
     "ops": [
       {
-        "age_min": 54,
+        "age_min": 64,
         "cycle": 7,
         "id": "OPS-A",
         "kind": "ops",
         "name": "漂移审计员",
         "note": "cycle 7: two consecutive work orders whose premise the tree had already overtaken -- board-level staleness now costs a researcher session each time. Separately verified for S11 that no ARC game source has ever been downloaded: it is prevention, not incident response",
-        "outputs": 8,
+        "outputs": 9,
         "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
         "state": "idle"
       },
       {
-        "age_min": 76,
+        "age_min": 85,
         "cycle": 4,
         "id": "OPS-B",
         "kind": "ops",
@@ -71,7 +90,7 @@
         "state": "idle"
       },
       {
-        "age_min": 53,
+        "age_min": 62,
         "cycle": 5,
         "id": "OPS-M",
         "kind": "ops",
@@ -82,7 +101,7 @@
         "state": "idle"
       },
       {
-        "age_min": 435,
+        "age_min": 444,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -95,7 +114,7 @@
     ],
     "standing": [
       {
-        "age_min": 7,
+        "age_min": 16,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
@@ -106,15 +125,15 @@
         "state": "working"
       },
       {
-        "age_min": 3,
-        "cycle": 2,
+        "age_min": 8,
+        "cycle": 3,
         "id": "RES-2",
         "kind": "standing",
         "name": "论文与释出研究员",
-        "note": "P9 figure clause delivered (scoped by human ruling): paper figures now cite the deterministic pipeline, the paper second implementation kept as witness via check_figure_parity.py -- 12 agree, 1 one-sided, 1 adjudicated (paper miscounted adjudications 18 vs 17, P-03 has no verdict). Pushed, board done.",
+        "note": "P5-release claimed; release/ was greenfield so release/PLAN.md is written and pushed (branch agent/p5-release), with the R2 licence filter recorded as a precondition on the manifest rather than a follow-up. Enumerator not started -- context exhausted, handing off.",
         "outputs": 1,
         "role": "常驻推进：把已有结果写成能投出去的论文与释出包",
-        "state": "idle"
+        "state": "working"
       }
     ],
     "workers": [
@@ -560,7 +579,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 21:48:40",
+  "generated_at": "2026-07-28 21:58:04",
   "grid": {
     "A1": {
       "active": [
@@ -1436,22 +1455,13 @@
     "dirty": [
       "onitor/agents.py",
       "monitor/app.html",
-      "monitor/board.py",
-      "monitor/board/board.log",
-      "monitor/board/claimed/A6-transfer-protocol.W-5201.md",
-      "monitor/board/claimed/E3-engines-online.W-1521.md",
-      "monitor/board/claimed/E6-engine-dividend.W-1611.md",
-      "monitor/board/claimed/P5-release.W-1520.md",
-      "monitor/board/claimed/P9-paper-to-submittable.RES-2.md",
-      "monitor/board/claimed/S4-freeze.W-1541.md",
-      "monitor/board/claimed/S5-phase1-close.W-5200.md",
       "monitor/ci/merge.log",
       "monitor/index.html",
       "monitor/mailbox/RES-2.md",
-      "monitor/ops-status/RES-1.json",
       "monitor/ops-status/RES-2.json",
       "monitor/reflex.log",
       "monitor/reflex.py",
+      "monitor/scan.py",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
@@ -1464,18 +1474,12 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/P5-release.RES-2.md",
-      "monitor/board/done/P9-paper-to-submittable.RES-2.md",
-      "monitor/board/items/A6-transfer-protocol.md",
-      "monitor/board/items/E3-engines-online.md",
-      "monitor/board/items/E6-engine-dividend.md",
-      "monitor/board/items/S4-freeze.md",
-      "monitor/board/items/S5-phase1-close.md",
+      "monitor/audit/DRIFT-20260728T1356Z-app-and-res-claims-are-a-one-way-door.md",
       "monitor/reflex.lock"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "398144e Merge remote-tracking branch 'origin/agent/p9-paper-to-submittable' into HEAD",
+    "git_head": "a7afa60 Merge remote-tracking branch 'origin/agent/p7-paper-section7' into HEAD",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1494,13 +1498,7 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/P5-release.RES-2.md",
-      "monitor/board/done/P9-paper-to-submittable.RES-2.md",
-      "monitor/board/items/A6-transfer-protocol.md",
-      "monitor/board/items/E3-engines-online.md",
-      "monitor/board/items/E6-engine-dividend.md",
-      "monitor/board/items/S4-freeze.md",
-      "monitor/board/items/S5-phase1-close.md",
+      "monitor/audit/DRIFT-20260728T1356Z-app-and-res-claims-are-a-one-way-door.md",
       "monitor/reflex.lock"
     ]
   },
@@ -1976,11 +1974,16 @@
       "detail": "待裁决提案 1 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md",
       "status": "partial"
     },
+    "needs_human": {
+      "detail": "六个 App 会话全部在岗，无需你出手。",
+      "rows": [],
+      "status": "green"
+    },
     "ops_duty": {
-      "detail": "**20 条 TO-MONITOR 待监控回复**。 OPS-A 第7轮 idle（54 分钟前）； OPS-B 第4轮 idle（76 分钟前）； OPS-M 第5轮 idle（52 分钟前）； OPS-R 第1轮 idle（435 分钟前）",
+      "detail": "**20 条 TO-MONITOR 待监控回复**。 OPS-A 第7轮 idle（63 分钟前）； OPS-B 第4轮 idle（85 分钟前）； OPS-M 第5轮 idle（61 分钟前）； OPS-R 第1轮 idle（444 分钟前）",
       "rows": [
         {
-          "age_min": 54,
+          "age_min": 63,
           "cycle": 7,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -1989,7 +1992,7 @@
           "status": "green"
         },
         {
-          "age_min": 76,
+          "age_min": 85,
           "cycle": 4,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1998,7 +2001,7 @@
           "status": "green"
         },
         {
-          "age_min": 52,
+          "age_min": 61,
           "cycle": 5,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2007,7 +2010,7 @@
           "status": "green"
         },
         {
-          "age_min": 435,
+          "age_min": 444,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2024,7 +2027,7 @@
       "status": "green"
     },
     "provenance_scan": {
-      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：2 个 run（正典 1，**无留痕 1**），最新 20260728T130500Z-A4a-ablation-build； arc-recon：2 个 run（正典 2），最新 P-11； baseline-arms：1 个 run（正典 1），最新 20260728T103135Z-a7； battery：2 个 run（正典 2），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：1 个 run（正典 1），最新 p-17； engine-rig：2 个 run（正典 1，非正典 1(md)），最新 p13-fd-real； exam：3 个 run（正典 3），最新 p15-rehearsal-01； figures：3 个 run（正典 2，**无留痕 1**），最新 20260728T110000Z-P8-billshape-pipeline； fuzzlab：1 个 run（正典 1），最新 20260728T085448Z-E4-property-fuzz； proxy：2 个 run（正典 2），最新 p9-shell-harden； theoria-arm：11 个 run（正典 4，**无留痕 7**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：3 个 run（正典 2，**无留痕 1**），最新 P-10； worldgen：1 个 run（正典 1），最新 20260728T081713Z-C1-worldgen。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, papers。",
+      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：2 个 run（正典 1，**无留痕 1**），最新 20260728T130500Z-A4a-ablation-build； arc-recon：2 个 run（正典 2），最新 P-11； baseline-arms：1 个 run（正典 1），最新 20260728T103135Z-a7； battery：2 个 run（正典 2），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：1 个 run（正典 1），最新 p-17； engine-rig：2 个 run（正典 1，非正典 1(md)），最新 p13-fd-real； exam：3 个 run（正典 3），最新 p15-rehearsal-01； figures：3 个 run（正典 2，**无留痕 1**），最新 20260728T110000Z-P8-billshape-pipeline； fuzzlab：1 个 run（正典 1），最新 20260728T085448Z-E4-property-fuzz； proxy：2 个 run（正典 2），最新 p9-shell-harden； release：1 个 run（正典 1），最新 20260728T140000Z-P5； theoria-arm：11 个 run（正典 4，**无留痕 7**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：3 个 run（正典 2，**无留痕 1**），最新 P-10； worldgen：1 个 run（正典 1），最新 20260728T081713Z-C1-worldgen。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, papers。",
       "status": "partial"
     },
     "scheduled_tasks": {
@@ -2032,8 +2035,12 @@
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 53 个提交 / 10 次合并（判断陈旧到 risk 就该重扫）。",
+      "detail": "spec.py 落后 58 个提交 / 12 次合并（判断陈旧到 risk 就该重扫）。",
       "status": "risk"
+    },
+    "supply": {
+      "detail": "板上 10 件可领、7 件在做，供货充足。",
+      "status": "green"
     },
     "verify_gates": {
       "detail": "**声称存在却没有的收工闸门 1 处**：ablation-arm/verify.sh（A4a-ablation-build 声称）。闸门不是被绕过，是根本没造出来。",

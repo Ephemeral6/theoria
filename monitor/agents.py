@@ -191,11 +191,16 @@ def worker_cards():
 def collect():
     done, claimed = board_state()
     delivered = sorted({i for v in done.values() for i in v})
+    cutoff = time.time() - 86400
+    ddir = os.path.join(HERE, "board", "done")
+    today = sorted({f.split(".")[0] for f in os.listdir(ddir)
+                    if os.path.getmtime(os.path.join(ddir, f)) > cutoff})         if os.path.isdir(ddir) else []
     return {
         "ops": ops_cards(),
         "standing": ops_cards(RES_META, "standing"),
         "workers": worker_cards(),
         "delivered_plain": [PLAIN_ITEM.get(i, i) for i in delivered],
+        "delivered_today": [PLAIN_ITEM.get(i, i) for i in today],
         "delivered_ids": delivered,
         "in_progress_plain": [PLAIN_ITEM.get(v, v) for v in claimed.values()],
     }

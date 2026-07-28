@@ -213,13 +213,30 @@ function render(s){
       past.length ? "（他们此前交付了 " + past.length + " 件）" : ""}。</p>`;
   }
 
-  h += `<h2>已经做完的事 <span class="note">— 全部合进主线并通过测试</span></h2>
+  const today = ag.delivered_today || [];
+  if (today.length) {
+    h += `<h2>今天交付的 <span class="note">— 最近 24 小时合进主线的</span></h2>
+      <ul class="wins">` + today.map(d => `<li>${esc(d)}</li>`).join("") + "</ul>";
+  }
+  h += `<h2>累计做完的事 <span class="note">— 全部合进主线并通过测试</span></h2>
     <ul class="wins">` + delivered.map(d => `<li>${esc(d)}</li>`).join("") + "</ul>";
 
-  h += "<h2>需要你决定</h2>";
-  h += needs.length
-    ? needs.map(f => `<div class="needs"><b>${esc(f.title)}</b><p>${md(f.action)}</p></div>`).join("")
-    : `<p class="allclear">✓ 没有需要你出手的事——该决定的我已经代你决定了，出问题会出现在这里。</p>`;
+  const nh = s.probes?.needs_human || {};
+  const restarts = nh.rows || [];
+  h += "<h2>今天需要你做的事</h2>";
+  if (restarts.length) {
+    h += restarts.map(r => `<div class="needs"><b>重开 ${esc(r.id)} · ${esc(r.name)}</b>
+      <p>${esc(r.why)}。在 Claude App 开一个新会话，粘贴
+      <code>${esc(r.prompt)}</code> 的内容即可；它会自己接上进度。</p></div>`).join("");
+  }
+  if (needs.length) {
+    h += needs.map(f => `<div class="needs"><b>${esc(f.title)}</b>
+      <p>${md(f.action)}</p></div>`).join("");
+  }
+  if (!restarts.length && !needs.length) {
+    h += `<p class="allclear">✓ 今天什么都不用做。会话自愈、额度自恢复、合并自动跑、
+      供货由我补——出问题才会出现在这里。</p>`;
+  }
 
   h += `<h2>细节 <span class="note">— 专业视图，日常不用看</span></h2>`;
   h += `<details class="fold"><summary>研究地图（六个方向 × 五个阶段）</summary>

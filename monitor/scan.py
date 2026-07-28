@@ -565,8 +565,58 @@ def probe_verify_gates():
             "detail": "工单声称的 %d 个 verify 脚本全部在树上。" % len(set(named))}
 
 
+def _supply():
+    """板上还剩几件可领 —— 供货是监控的单点，见底就是全员空转。"""
+    out = subprocess.run([sys.executable, os.path.join(HERE, "board.py"), "list"],
+                         cwd=ROOT, capture_output=True, text=True).stdout
+    avail = len([l for l in out.splitlines() if l.startswith("  p")])
+    claimed = out.count(" by ")
+    if avail == 0:
+        return {"status": "risk",
+                "detail": "**板已见底**：%d 件在做，0 件可领——有人交付即空转，"
+                          "监控必须补货。" % claimed}
+    if avail <= 2:
+        return {"status": "partial",
+                "detail": "板上仅剩 %d 件可领（%d 件在做），供货需要跟上。"
+                          % (avail, claimed)}
+    return {"status": "green",
+            "detail": "板上 %d 件可领、%d 件在做，供货充足。" % (avail, claimed)}
+
+
+def probe_needs_human():
+    """全系统唯一需要人出手的事：App 会话死了（上下文满或被关）。
+
+    无头工人由反射层补员，配额由熔断器自愈，合并由脚本做，供货由监控写——
+    只有 App 里的会话没有任何 API 能重启它。所以它必须是页面上最显眼的
+    行动项，而且要精确到"重开哪一个、粘哪份启动词"。"""
+    import time as _t
+    roster = [("OPS-A", "漂移审计员", 120), ("OPS-B", "浏览器专员", 240),
+              ("OPS-M", "合并裁判", 180), ("OPS-R", "回顾员", 900),
+              ("RES-1", "在线战役研究员", 90), ("RES-2", "论文与释出研究员", 90)]
+    dead = []
+    for rid, name, stale_min in roster:
+        path = "monitor/ops-status/%s.json" % rid
+        if not exists(path):
+            dead.append((rid, name, "从未启动"))
+            continue
+        age = (_t.time() - os.path.getmtime(rel(path))) / 60
+        if age > stale_min:
+            dead.append((rid, name, "%d 分钟没心跳" % age))
+    if not dead:
+        return {"status": "green", "detail": "六个 App 会话全部在岗，无需你出手。",
+                "rows": []}
+    return {"status": "risk",
+            "detail": "需要你重开的会话：" + "； ".join(
+                "%s %s（%s）" % (r, n, w) for r, n, w in dead),
+            "rows": [{"id": r, "name": n, "why": w,
+                      "prompt": "monitor/prompts/ops/%s.md" % r}
+                     for r, n, w in dead]}
+
+
 PROBES = {
     "credential_hygiene": probe_credential_hygiene,
+    "needs_human": probe_needs_human,
+    "supply": lambda: _supply(),
     "spec_freshness": probe_spec_freshness,
     "verify_gates": probe_verify_gates,
     "scheduled_tasks": probe_scheduled_tasks,

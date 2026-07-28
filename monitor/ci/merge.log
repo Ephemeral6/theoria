@@ -31,3 +31,5 @@
 2026-07-28T13:42:35Z MERGED origin/agent/a7-envelope-finish (dirs: PARTNER_SYNC.md,baseline-arms; gates: baseline-arms)
 2026-07-28T13:47:30Z MERGED origin/agent/p7-paper-section7 (dirs: papers; gates: none)
 2026-07-28T13:47:38Z MERGED origin/agent/p9-paper-to-submittable (dirs: PARTNER_SYNC.md,papers; gates: none)
+2026-07-28T13:52:26Z MERGED origin/agent/p5-release (dirs: release; gates: none)
+2026-07-28T13:52:34Z MERGED origin/agent/p7-paper-section7 (dirs: papers; gates: none)
