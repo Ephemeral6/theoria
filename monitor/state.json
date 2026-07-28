@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 14:00:40",
+  "generated_at": "2026-07-28 14:12:30",
   "history": [
     {
       "findings": {
@@ -515,38 +515,26 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "LAUDE.md",
-      "monitor/AUDITOR.md",
-      "monitor/_c1w_probe.txt",
-      "monitor/_runner.py",
-      "monitor/dispatch.py",
-      "monitor/history.jsonl",
-      "monitor/index.html",
-      "monitor/loop_state.json",
+      "onitor/index.html",
       "monitor/prompts/ops/OPS-A-auditor.md",
       "monitor/prompts/ops/OPS-B-browser.md",
       "monitor/prompts/ops/OPS-M-merger.md",
       "monitor/prompts/ops/OPS-R-retro.md",
-      "monitor/reflex.log",
-      "monitor/reflex.py",
       "monitor/scan.py",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/_worker_run.cmd",
-      "monitor/board.py",
-      "monitor/board/",
-      "monitor/mailbox/",
-      "monitor/prompts/C2-semantics-migrate.md",
-      "monitor/prompts/S3-spend-gate.md",
-      "monitor/prompts/W-worker.md",
-      "monitor/worker.cmd"
+      "monitor/ops/",
+      "monitor/prompts/ops/OPS-A.md",
+      "monitor/prompts/ops/OPS-B.md",
+      "monitor/prompts/ops/OPS-M.md",
+      "monitor/prompts/ops/OPS-R.md"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "",
+    "git_head": "3205992 monitor: crash recovery -- hard concurrency cap, self-serve board, terminal workers, ops mailbox",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -558,14 +546,11 @@
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/_worker_run.cmd",
-      "monitor/board.py",
-      "monitor/board/",
-      "monitor/mailbox/",
-      "monitor/prompts/C2-semantics-migrate.md",
-      "monitor/prompts/S3-spend-gate.md",
-      "monitor/prompts/W-worker.md",
-      "monitor/worker.cmd"
+      "monitor/ops/",
+      "monitor/prompts/ops/OPS-A.md",
+      "monitor/prompts/ops/OPS-B.md",
+      "monitor/prompts/ops/OPS-M.md",
+      "monitor/prompts/ops/OPS-R.md"
     ]
   },
   "p1_green": 7,
@@ -1055,42 +1040,47 @@
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**超时未见：OPS-A** —— App 会话可能已满上下文或被关闭，需用户重开并重贴工单。 OPS-A 漂移审计员（产出 3，142 分钟前）； OPS-R 回顾员（产出 5，124 分钟前）； OPS-M 合并裁判（产出 1，127 分钟前）； OPS-B 浏览器专员（产出 1，124 分钟前）",
+      "detail": "OPS-A 未启动； OPS-B 未启动； OPS-M 未启动； OPS-R 未启动",
       "rows": [
         {
-          "age_min": 142,
+          "age_min": null,
+          "cycle": null,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "沉默即健康：心跳新鲜 + 零报告 = 正常",
-          "products": 3,
-          "status": "risk"
+          "note": "等待启动握手",
+          "state": "未启动",
+          "status": "missing"
         },
         {
-          "age_min": 124,
-          "id": "OPS-R",
-          "name": "回顾员",
-          "note": "隔日一跑，产出 = inbox 提案",
-          "products": 5,
-          "status": "green"
-        },
-        {
-          "age_min": 127,
-          "id": "OPS-M",
-          "name": "合并裁判",
-          "note": "按需：只在 ci/ 有 flag 或语义冲突时上工",
-          "products": 1,
-          "status": "green"
-        },
-        {
-          "age_min": 124,
+          "age_min": null,
+          "cycle": null,
           "id": "OPS-B",
           "name": "浏览器专员",
-          "note": "按需：需要真 Chrome 与登录态的活",
-          "products": 1,
-          "status": "green"
+          "note": "等待启动握手",
+          "state": "未启动",
+          "status": "missing"
+        },
+        {
+          "age_min": null,
+          "cycle": null,
+          "id": "OPS-M",
+          "name": "合并裁判",
+          "note": "等待启动握手",
+          "state": "未启动",
+          "status": "missing"
+        },
+        {
+          "age_min": null,
+          "cycle": null,
+          "id": "OPS-R",
+          "name": "回顾员",
+          "note": "等待启动握手",
+          "state": "未启动",
+          "status": "missing"
         }
       ],
-      "status": "risk"
+      "status": "partial",
+      "to_monitor": 0
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
