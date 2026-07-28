@@ -744,3 +744,246 @@ def test_the_scorecard_action_count_matches_the_ledgers_successes(tmp_path):
         summary = play(game, slug, factory, env_upstream=mock.base_url,
                        env_key=DEFAULT_KEY, require_key=False)
     assert summary["scorecard"]["total_actions"] == summary["budget"]["actions_ok"]
+
+
+# ------------------------------------------- E14: a crash is not a finding
+#
+# The negative sample. A `step` that is *constructed* to raise is driven
+# through both sites, and the report must go RED rather than clean. Then the
+# same crash is driven through with the counting removed, which is the only way
+# to show these assertions are not passing for free.
+
+class _CrashingStep:
+    """A predictor that raises on demand, and counts how often it was asked.
+
+    Construction guarantees the crash: `raise_on` is checked before anything
+    else happens, and the exception type is one neither site declares, so it can
+    only reach the bare `except Exception` handlers this ticket is about.
+    """
+
+    class Boom(RuntimeError):
+        pass
+
+    def __init__(self, inner, raise_on=lambda state, action: True):
+        self.inner = inner
+        self.raise_on = raise_on
+        self.calls = 0
+        self.raised = 0
+
+    def __call__(self, state, action):
+        self.calls += 1
+        if self.raise_on(state, action):
+            self.raised += 1
+            raise self.Boom("injected: the compiled manual fell over on %r"
+                            % (action,))
+        return self.inner(state, action)
+
+
+def _worked_example_books(tmp_path, goal="goal Cart.pos = (2, 2)"):
+    theory = WORKED_EXAMPLE.replace("goal count(Cart) = 1", goal)
+    books = Books(str(tmp_path))
+    books.write(theory=theory, playbook="# none\n")
+    books.write_problem({"name": "l", "grid": [3, 3], "background": 0,
+                         "board": [[0] * 3 for _ in range(3)],
+                         "objects": [{"name": "Cart", "type": "Cart",
+                                      "pos": [2, 1], "color": 6}]})
+    compiled = books.compile_all()
+    namespace, error = books.load_predictor()
+    assert namespace is not None, error
+    return books, namespace, compiled
+
+
+def _worked_example_namespace(tmp_path, goal="goal Cart.pos = (2, 2)"):
+    return _worked_example_books(tmp_path, goal)[1]
+
+
+def test_the_unpoisoned_planner_still_says_unsat_and_says_why(tmp_path):
+    """The control. Without an injected crash the same instance must stay green,
+    or the negative sample below would prove nothing about crashes."""
+    namespace = _worked_example_namespace(tmp_path)
+    report = plan_beat._tier_bfs(namespace, node_cap=plan_beat.BFS_NODE_CAP)
+    assert report["status"] == "unsat"
+    assert report["exhaustive"] is True
+    assert report["step_crashes"]["count"] == 0
+    assert report["reachable_states"] == 3
+    # The ceiling is in the artifact, positively, the way ladder.py:226 puts it
+    # there -- a reader can check 3 < cap without trusting this sentence.
+    assert report["search_ceiling"]["node_cap"] == plan_beat.BFS_NODE_CAP
+
+
+def test_a_crashing_step_turns_the_planner_red_not_clean(tmp_path):
+    """E14, the whole ticket in one assertion: the exhaustiveness claim must
+    NOT survive a crash. Before the fix this returned `unsat` with "the whole
+    reachable set (N states) was enumerated" -- and the fewer successors
+    survived, the sooner it said so."""
+    namespace = _worked_example_namespace(tmp_path)
+    crashing = _CrashingStep(namespace["step"])
+    namespace = dict(namespace, step=crashing)
+
+    report = plan_beat._tier_bfs(namespace, node_cap=plan_beat.BFS_NODE_CAP)
+
+    assert crashing.raised > 0, "the injected step never actually raised"
+    assert report["status"] == "unsat_unsound"
+    assert report["exhaustive"] is False
+    assert report["step_crashes"]["count"] == crashing.raised
+    assert report["step_crashes"]["successors_pruned"] == crashing.raised
+    assert report["step_crashes"]["by_type"] == {"Boom": crashing.raised}
+    assert "over budget" not in (report.get("error") or "")
+    assert report["error"] and "raised" in report["error"]
+    # And the sentence that was the defect is gone from the artifact.
+    assert "the whole reachable set" not in report["detail"]
+    assert "not entitled" in report["detail"]
+
+
+def test_without_the_crash_count_that_same_crash_is_waved_through(
+        tmp_path, monkeypatch):
+    """Non-vacuity. Remove the counting and nothing else, re-run the identical
+    injected crash, and watch the report come back clean and exhaustive. This
+    is what the code did before E14, and it is why the assertions above are
+    load-bearing rather than decorative."""
+    namespace = _worked_example_namespace(tmp_path)
+    crashing = _CrashingStep(namespace["step"])
+    namespace = dict(namespace, step=crashing)
+
+    monkeypatch.setattr(plan_beat.StepCrashLog, "record",
+                        lambda self, exc, **kw: None)
+    report = plan_beat._tier_bfs(namespace, node_cap=plan_beat.BFS_NODE_CAP)
+
+    assert crashing.raised > 0, "the injected step never actually raised"
+    assert report["step_crashes"]["count"] == 0        # the crash left no trace
+    assert report["status"] == "unsat"                 # ... and the claim stands
+    assert report["exhaustive"] is True
+    assert "the whole reachable set" in report["detail"]
+    # 3 states without the crash (see the control above), 1 with it: the health
+    # certificate got *cleaner* as the predictor got worse.
+    assert report["reachable_states"] < 3
+
+
+def test_a_crashing_step_cannot_certify_constraint_9(tmp_path):
+    """The certify half. `ok: true` with "no (state, action) among N x M
+    admitted two rules" must not be reachable while pairs are going
+    unadjudicated -- the N x M was always the nominal product."""
+    namespace = _worked_example_namespace(tmp_path, goal="goal count(Cart) = 1")
+    store = _store([[[0, 0, 0], [0, 0, 0], [0, 6, 0]]], [])
+
+    clean = certify._ambiguity(namespace, store, commit.action_to_manual)
+    assert clean["ok"] is True
+    assert clean["step_crashes"]["count"] == 0
+    assert clean["pairs_checked"] == clean["pairs_nominal"]
+    assert clean["sample_cap"] == certify.AMBIGUITY_SAMPLE_CAP
+
+    crashing = _CrashingStep(namespace["step"])
+    poisoned = dict(namespace, step=crashing)
+    report = certify._ambiguity(poisoned, store, commit.action_to_manual)
+
+    assert crashing.raised > 0
+    assert report["ok"] is False
+    assert report["step_crashes"]["count"] == crashing.raised
+    assert report["pairs_checked"] < report["pairs_nominal"]
+    assert "admitted two rules" not in report["detail"]
+    assert "NOT certified" in report["detail"]
+
+
+def test_without_the_crash_count_constraint_9_certifies_a_broken_manual(
+        tmp_path, monkeypatch):
+    """Non-vacuity, certify half."""
+    namespace = _worked_example_namespace(tmp_path, goal="goal count(Cart) = 1")
+    store = _store([[[0, 0, 0], [0, 0, 0], [0, 6, 0]]], [])
+    crashing = _CrashingStep(namespace["step"])
+    poisoned = dict(namespace, step=crashing)
+
+    monkeypatch.setattr(certify.StepCrashLog, "record",
+                        lambda self, exc, **kw: None)
+    report = certify._ambiguity(poisoned, store, commit.action_to_manual)
+
+    assert crashing.raised > 0
+    assert report["step_crashes"]["count"] == 0
+    assert report["ok"] is True                        # constraint 9 "passes"
+    assert "admitted two rules" in report["detail"]
+
+
+# ------------------- E14, second pass: what the adversarial review refuted
+
+def test_a_plan_found_after_a_crash_reports_the_crash_and_drops_optimality(
+        tmp_path):
+    """Adversarial review, correction 1 and 2. The first version of this change
+    snapshotted the crash account at four of five exits and missed the `ok:
+    True` one, so a search that crashed and then found the goal published
+    `count: 0` -- a false printed zero, which is worse than an absent one -- and
+    `optimal: True`, which is an exhaustiveness claim: BFS is length-optimal
+    only if no successor was dropped."""
+    books, namespace, compiled = _worked_example_books(
+        tmp_path, goal="goal Cart.pos = (0, 1)")
+    real = namespace["step"]
+
+    def crashing(state, action):
+        if tuple(action) == ("key", 9):
+            raise _CrashingStep.Boom("injected on the bogus action")
+        return real(state, action)
+
+    # An extra declared action that always raises, so the good route still
+    # reaches the goal and the search exits via `ok: True` rather than draining.
+    poisoned = dict(namespace, step=crashing,
+                    ACTIONS=list(namespace["ACTIONS"]) + [("key", 9)])
+
+    entry = plan_beat._tier_bfs(poisoned, node_cap=plan_beat.BFS_NODE_CAP)
+    assert entry["ok"] is True
+    assert entry["actions"] == [["key", 1], ["key", 1]]
+    assert entry["step_crashes"]["count"] > 0, (
+        "the sat exit published a crash count of zero on a search that crashed")
+    assert entry["error"] and "raised" in entry["error"]
+    assert "NOT known to be shortest" in entry["detail"]
+
+    # Through the real entry point, not just the tier -- the adversarial review
+    # showed the aggregation layer was where the false zero survived, and that
+    # skipping it was how the first pass missed this.
+    report = plan_beat.plan(books, poisoned, dict(compiled, forms={}))
+    assert report["status"] == "sat"
+    assert report["optimal"] is False
+    assert report["step_crashes"]["count"] == entry["step_crashes"]["count"]
+
+
+def test_every_exit_of_the_bfs_tier_carries_the_final_crash_account(tmp_path):
+    """The structural half of correction 1: the account is stamped once, after
+    the search returns, so no exit can be added later that forgets it. Checked
+    by walking every exit rather than by reading the code."""
+    namespace = _worked_example_namespace(tmp_path)
+
+    exits = {
+        "no_actions": dict(namespace, ACTIONS=[]),
+        "already_at_goal": _worked_example_namespace(
+            tmp_path / "goal", goal="goal Cart.pos = (2, 1)"),
+        "unsat": namespace,
+    }
+    for name, ns in exits.items():
+        entry = plan_beat._tier_bfs(ns, node_cap=plan_beat.BFS_NODE_CAP)
+        assert "step_crashes" in entry, name
+        assert entry["step_crashes"]["count"] == 0, name
+        assert "search_ceiling" in entry, name
+
+    timed_out = plan_beat._tier_bfs(namespace, node_cap=10 ** 9, deadline_s=0.0)
+    assert timed_out["status"] == "search_timeout"
+    assert "step_crashes" in timed_out and "search_ceiling" in timed_out
+
+
+def test_a_manual_without_a_declared_ambiguity_type_files_crashes_as_crashes(
+        tmp_path):
+    """Adversarial review, correction 10. The default for a missing
+    `AmbiguousTransition` was `Exception`, so `except ambiguous` swallowed every
+    crash and filed it as a constraint-9 CLASH -- a positive finding about the
+    world manufactured from a bug -- leaving `pairs_checked` above
+    `pairs_nominal` with a crash count of zero."""
+    namespace = _worked_example_namespace(tmp_path, goal="goal count(Cart) = 1")
+    store = _store([[[0, 0, 0], [0, 0, 0], [0, 6, 0]]], [])
+    crashing = _CrashingStep(namespace["step"])
+    stripped = {k: v for k, v in namespace.items() if k != "AmbiguousTransition"}
+    stripped["step"] = crashing
+
+    report = certify._ambiguity(stripped, store, commit.action_to_manual)
+
+    assert crashing.raised > 0
+    assert report["step_crashes"]["count"] == crashing.raised
+    assert report["n_clashes"] == 0, (
+        "a crash was filed as an ambiguity -- a finding about the world")
+    assert report["pairs_checked"] <= report["pairs_nominal"]
+    assert report["ok"] is False
