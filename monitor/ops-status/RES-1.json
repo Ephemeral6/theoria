@@ -1,7 +1,7 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T18:15:00Z",
+ "utc": "2026-07-28T19:20:00Z",
  "cycle": 2,
- "state": "working",
- "note": "A4a step 6 done and pushed: verify.sh GREEN -- 5 stages, 10 assertions, 5 recorded-for-A4b, 56 tests. P-7 became a measurement (U1/U2 attained, U3 blocked by construction, U4 by consequence). Gate watched refusing; two real defects found doing it (missing field read as failure; crash while building evidence for a red claim). Corrected my own plan: 3.5 of 7 assertable, not 4. theoria_ablate blocker does not apply to the code as written. Next: step 7, docs + STATUS corrections."
+ "state": "idle",
+ "note": "A4a-ablation-build DELIVERED (board done; agent/a4a-ablation-build pushed). verify.sh GREEN, 56 tests. P-6 demonstrated: a true impossibility and a false one agree on 10/10 decision fields. The arm CAN localise when handed a counterexample -- the cut removed what produces one. E3 reported as a pre-registered falsifier. Claiming next campaign item."
 }
