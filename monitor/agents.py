@@ -45,6 +45,11 @@ PLAIN_ITEM = {
     "A7-envelope-finish": "补齐对照组的成绩数据",
     "C7-dsl-v03-mentions": "语法 v0.3：把散落的提法收进契约",
     "P7-paper-section7": "论文第 7 节：相关工作",
+    "V4-exam-selftest": "考卷自检 + 出三类判决题（验判卷的人对不对）",
+    "E5-cert-recheck": "证书独立复核器（不靠 Lean 一条路）",
+    "P8-billshape-pipeline": "把论文「账单形状」图接上真数据管线",
+    "S4-freeze-complete": "冻结清单 13 项补齐到可提交",
+    "A6-transfer-protocol": "跨关迁移协议：把学到的知识带去下一关",
 }
 
 # 提交信息前缀 → 归属哪个 agent（人话名）
