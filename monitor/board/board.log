@@ -136,3 +136,14 @@
 2026-07-28T18:08:25Z MONITOR-RELEASE A3-campaign-devpile,A4b-ablation-calibrate,P12-paper-multi-review,S17-fleet-evidence-capture,V7-exam-stress-fanout (dead app sessions)
 2026-07-28T18:30:43Z DONE C9-count-lock-vocabulary by W-131
 2026-07-28T18:52:20Z MONITOR-RELEASE C10-unsolvable-proof-canon,V17-pin-the-partial-verdict (standing sessions stopped, quota OK)
+2026-07-28T19:00:28Z DONE V3-battery-discrimination by APP-V3
+2026-07-28T19:00:28Z CLAIM V5-battery-freeze by W-252
+2026-07-28T19:05:22Z CLAIM A9-readonly-baseline by RES-3
+2026-07-28T19:05:33Z CLAIM C10-unsolvable-proof-canon by RES-3
+2026-07-28T19:05:33Z CLAIM V11-handover-auto by RES-3
+2026-07-28T19:05:45Z RELEASE V11-handover-auto by RES-3 (刚领即交回：先把 V17 的账做平（工作已完成并 push，但监控误判我停摆把它放回了板上）)
+2026-07-28T19:05:45Z CLAIM V11-handover-auto by RES-3
+2026-07-28T19:06:00Z RELEASE C10-unsolvable-proof-canon by RES-3 (领地边界未裁决：territory=cold-start-a0，而 CLAUDE.md 说该目录对 engine-rig off limits，我这个会话是 engine-rig。已在总线问了两次没回，占着不干活不如交回。实质进展未停：全仓 grep 已做完（两份 SURVEY 报告），且正典其实已存在（backends.proves_unsolvable），engine-rig 那一半我另开了 E12 去做。)
+2026-07-28T19:06:00Z CLAIM C10-unsolvable-proof-canon by RES-3
+2026-07-28T19:08:51Z DONE E7-deadlock-claim-audit by W-130
+2026-07-28T19:08:54Z CLAIM E6-engine-dividend by W-130
