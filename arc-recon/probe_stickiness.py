@@ -45,10 +45,28 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 
 from client import BASE_URL, DATA_DIR, load_api_key   # noqa: E402
-from precheck import assert_playable                  # noqa: E402
+from precheck import assert_playable, dev_pile         # noqa: E402
 
 REPORT_PATH = os.path.join(DATA_DIR, "stickiness_probe.json")
 LEDGER_PATH = os.path.join(DATA_DIR, "recon_ledger.jsonl")
+
+
+def _cookie_names(set_cookie_header: str) -> List[str]:
+    """Cookie names out of a Set-Cookie header, values left behind.
+
+    Never return, log or store the values. `GAMESESSION` is a session bearer
+    token; the routing pins identify a backend. What any analysis of this probe
+    needs is *which* cookies appeared and whether we echoed them, and that is
+    entirely carried by the names.
+    """
+    names = []
+    for part in set_cookie_header.split(","):
+        head = part.strip().split(";", 1)[0]
+        if "=" in head:
+            name = head.split("=", 1)[0].strip()
+            if name and " " not in name:
+                names.append(name)
+    return names
 
 
 class Arm:
@@ -96,15 +114,21 @@ class Arm:
             "request_body": body, "status": status,
             "response_body": parsed,
             # The point of the probe: did the server hand us a routing cookie,
-            # and did this arm send one back?
-            "set_cookie": headers.get("Set-Cookie", ""),
+            # and did this arm send one back? NAMES ONLY -- a Set-Cookie header
+            # carries the values, and GAMESESSION is a session bearer token.
+            # The ledger is tracked and Phase 4 publishes every tracked file, so
+            # the same rule that redacts X-API-Key applies here (INC-008).
+            "set_cookie_names": sorted(set(_cookie_names(
+                headers.get("Set-Cookie", "")))),
+            "got_set_cookie": bool(headers.get("Set-Cookie")),
             "cookies_held": sorted(c.name for c in self.jar),
         }
         with open(LEDGER_PATH, "a", encoding="utf-8", newline="") as fh:
             fh.write(json.dumps(record, sort_keys=True, ensure_ascii=True))
             fh.write("\n")
         return {"status": status, "body": parsed,
-                "set_cookie": record["set_cookie"],
+                "set_cookie_names": record["set_cookie_names"],
+                "got_set_cookie": record["got_set_cookie"],
                 "cookies_held": record["cookies_held"]}
 
 
@@ -158,12 +182,12 @@ def run(game_id: str, rounds: int, key: str,
             rows.append({
                 "round": index, "arm": arm.name, "status": result["status"],
                 "not_found": result["status"] == 400 and "not found" in message,
-                "got_set_cookie": bool(result["set_cookie"]),
+                "got_set_cookie": result["got_set_cookie"],
                 "cookies_held": result["cookies_held"],
             })
             print("    round %-2d %-11s HTTP %-4s set-cookie=%-5s held=%s"
                   % (index, arm.name, result["status"],
-                     bool(result["set_cookie"]),
+                     result["got_set_cookie"],
                      ",".join(result["cookies_held"]) or "-"))
             time.sleep(0.4)
 
@@ -235,9 +259,79 @@ def run(game_id: str, rounds: int, key: str,
     }
 
 
+def cross_game(games: List[str], key: str) -> Dict[str, Any]:
+    """Can ONE cookie jar serve several games in sequence?
+
+    This decides the shape of the fix. The server issues two kinds of cookie:
+    `AWSALBAPP-*`, which pin a backend replica, and `GAMESESSION`, which looks
+    like a session identity. Sharing one jar across games keeps the replica pin
+    (good -- that is the whole point) but also carries game A's `GAMESESSION`
+    into game B's RESET. If the server minds, a per-client jar is wrong and each
+    game needs its own; if it does not, the simple design is also the correct
+    one.
+
+    Interleaving the games and returning to an earlier one matters: a jar that
+    works for A, then B, but breaks when we come back to A would be invisible in
+    a straight A-then-B walk. Zero actions -- RESETs only.
+    """
+    order = []
+    for index, game_id in enumerate(games):
+        assert_playable(game_id)
+        order.append(game_id)
+    order = order + list(reversed(order))      # walk out and back
+
+    arm = Arm("one-jar", key, sticky=True)
+    card = open_scorecard(arm)
+    rows = []
+    for step, game_id in enumerate(order):
+        result = arm.post("/api/cmd/RESET", {"game_id": game_id, "card_id": card},
+                          "cross-game step %d %s" % (step, game_id))
+        body = result["body"]
+        rows.append({
+            "step": step, "game_id": game_id, "status": result["status"],
+            "first_attempt_ok": result["status"] == 200,
+            "cookies_held": result["cookies_held"],
+            "guid": body.get("guid") if isinstance(body, dict) else None,
+        })
+        print("    step %-2d %-18s HTTP %-4s held=%s"
+              % (step, game_id, result["status"],
+                 ",".join(result["cookies_held"]) or "-"))
+        time.sleep(0.4)
+
+    ok = [r for r in rows if r["first_attempt_ok"]]
+    revisits = [r for r in rows[len(games):] if r["game_id"] in games]
+    guids = {r["game_id"]: set() for r in rows}
+    for r in rows:
+        if r["guid"]:
+            guids[r["game_id"]].add(r["guid"])
+    verdict = ("ONE JAR IS ENOUGH -- every RESET across %d games succeeded on "
+               "its first attempt, including the revisits"
+               % len(games)) if len(ok) == len(rows) else (
+        "ONE JAR IS NOT ENOUGH -- %d of %d RESETs failed first attempt; the fix "
+        "needs a jar per game" % (len(rows) - len(ok), len(rows)))
+    return {
+        "t": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "probe": "cross_game",
+        "question": ("does one cookie jar serve several games in sequence, or "
+                     "does game A's GAMESESSION poison game B?"),
+        "games": games, "walk": order,
+        "first_attempt_successes": "%d/%d" % (len(ok), len(rows)),
+        "revisit_successes": "%d/%d" % (sum(1 for r in revisits
+                                            if r["first_attempt_ok"]),
+                                        len(revisits)),
+        "distinct_guids_per_game": {g: len(v) for g, v in guids.items()},
+        "verdict": verdict,
+        "rows": rows,
+        "action_cost": 0,
+    }
+
+
 def main(argv: List[str]) -> int:
     parser = argparse.ArgumentParser(prog="probe_stickiness.py",
                                      description=__doc__.splitlines()[0])
+    parser.add_argument("--cross-game", action="store_true",
+                        help="one jar, several games, out and back; decides "
+                             "whether the fix needs a jar per game")
     parser.add_argument("--game", default="g50t-5849a774")
     parser.add_argument("--control-game", default=None,
                         help="run the cookie-less arm on a different game, so "
@@ -246,10 +340,15 @@ def main(argv: List[str]) -> int:
     parser.add_argument("--rounds", type=int, default=8)
     args = parser.parse_args(argv)
 
-    report = run(args.game, args.rounds, load_api_key(),
-                 control_game=args.control_game, sticky_game=args.sticky_game)
-    print("  control  %s" % json.dumps(report["control"], sort_keys=True))
-    print("  sticky   %s" % json.dumps(report["sticky"], sort_keys=True))
+    if args.cross_game:
+        report = cross_game(dev_pile(), load_api_key())
+        print("  first attempts %s, revisits %s"
+              % (report["first_attempt_successes"], report["revisit_successes"]))
+    else:
+        report = run(args.game, args.rounds, load_api_key(),
+                     control_game=args.control_game, sticky_game=args.sticky_game)
+        print("  control  %s" % json.dumps(report["control"], sort_keys=True))
+        print("  sticky   %s" % json.dumps(report["sticky"], sort_keys=True))
     print("  %s" % report["verdict"])
     existing = []
     if os.path.exists(REPORT_PATH):

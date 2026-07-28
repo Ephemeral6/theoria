@@ -30,7 +30,9 @@ cd arc-recon && python canary.py replay          # the drift check; 16 actions f
 cd arc-recon && python canary.py check-freeze    # exit 1 if campaigns are frozen
 cd arc-recon && python contamination.py --json   # register, sealed claim set, ledger audit
 cd arc-recon && python probe_stickiness.py       # cookie A/B; zero actions
-cd arc-recon && python -m pytest test_hygiene.py # 28 offline tests
+cd arc-recon && python probe_stickiness.py --cross-game   # one jar, all 4 games
+cd arc-recon && python redact_ledger.py          # INC-008 check; --apply to redact
+cd arc-recon && python -m pytest test_hygiene.py # 33 offline tests
 ```
 
 The access check itself — every Phase 1 item, what settled it, what is still
@@ -92,10 +94,11 @@ Cost: **2.5–10× HTTP calls per executed action** (baseline-arms measured 5.07
 with a smaller envelope). This amplification must enter every quota
 extrapolation.
 
-> **This model is itself superseded — see INC-007 below.** The retry policy
+> **This model is superseded — see INC-007 / INC-007a below.** The retry policy
 > works and the verdicts above stand, but "waves of unavailability" is not what
-> is happening: our client keeps no cookie jar, so it is routed to a different
-> replica on every call. The amplification is ours, not the server's.
+> was happening: the client kept no cookie jar, so it was routed to a different
+> replica on every call. With a jar, the same 20-command sweep costs 20 HTTP
+> calls instead of 190 and never retries once. The amplification was ours.
 
 **Short ids are banned from requests (INC-005).** `ACTION` with a short id
 (`sk48` instead of `sk48-d8078629`) can return 200 — but every such 200 in our
@@ -231,12 +234,58 @@ is us. The 40-attempt envelopes, the 2.5–10× amplification (this ticket's can
 measured **9.2×** — 147 HTTP calls for 16 actions) and a large share of both
 tracks' wall-clock and dollar estimates are the price of that omission.
 
-**The fix is not applied here.** Changing the transport is changing the
-instrument: every determinism verdict, the canary baseline, and both tracks' cost
-figures were measured on the current one. It deserves its own change with a
-before/after re-measurement attached. The probe is reproducible
-([`probe_stickiness.py`](probe_stickiness.py), zero action cost) and the finding
-is filed.
+### INC-007a — applied, with the before/after the change deserved
+
+Changing the transport is changing the instrument, so the fix landed with a
+paired measurement rather than on its own: the same canary sweep, same sequences,
+same stored hashes, run once on each transport ~80 seconds apart.
+
+| | before (no jar) | after (jar) |
+|---|---|---|
+| verdicts | 4/4 PASS | 4/4 PASS |
+| **HTTP calls for 16 actions** | **190** | **20** |
+| retries | 170 wasted | **0** |
+
+The sweep issues 20 commands (4 RESET + 16 ACTION). After the fix it cost 20 HTTP
+calls — every step first-attempt, on all four games.
+
+**The verdicts matter more than the speed.** Identical frame hashes across a
+transport change means the fix is behaviour-preserving, and it retires a worse
+possibility than slowness: that the cookie-less client had been talking to
+something other than the live session all along — the exact shape of INC-005's
+counterfeit short-id 200s. It was not. It was reaching the right session after
+paying for nine wrong replicas first.
+
+One jar per client, shared across games — settled by a cross-game probe (all four
+games, out and back, 8/8 first-attempt) rather than assumed. `cookies=False` is
+kept so the old transport can be reproduced, because every figure this project
+has measured was taken on it.
+
+## INC-008 — the probe put session tokens in the ledger
+
+Found while writing the fix above. `probe_stickiness.py` logged raw `Set-Cookie`
+headers for 55 calls, and that header carries **values** — the ALB pins and
+`GAMESESSION`, a bearer token for a live session. It bypassed `client._record`,
+which has always written `X-API-Key` as `<redacted>` precisely so no credential
+reaches disk; the ledger is tracked and Phase 4 publishes every tracked file.
+
+Both directions fixed: the probe and the client now log cookie **names** only,
+and [`redact_ledger.py`](redact_ledger.py) replaced the 55 values while keeping
+the names, marking each entry `redacted: "INC-008"`. It edits at byte level, so
+untouched entries are byte-identical and the diff is exactly those 55 lines. A
+test asserts no ledger entry carries a cookie value — and was watched failing on
+all 55 before the redaction ran.
+
+Editing an append-only ledger was deliberate: its stated invariant is *also* that
+credentials never enter it, and the two collided. What is **not** fixed is git
+history — the values are in the pushed commit `29c631e`, and removing them means
+rewriting a published branch. Exposure is bounded (development-pile sessions,
+all abandoned, no sealed game, API key never involved) and the call is the
+owner's.
+
+The lesson generalises past cookies: the redaction discipline lived inside
+`_record`, so every instrument that wrote its own ledger line went around the
+discipline too.
 
 <details>
 <summary>Original INC-001 / INC-002 text (diagnoses overturned, kept for the record)</summary>

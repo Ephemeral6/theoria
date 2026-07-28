@@ -181,10 +181,56 @@ outage waves are what a geometric distribution looks like when you plot it. The
 2.5–10× amplification, the 40-attempt envelopes, and a large part of both tracks'
 wall clock and dollar estimates are the price of that omission.
 
-The fix is a few lines in one place and changes no caller:
-`urllib.request.build_opener(urllib.request.HTTPCookieProcessor(jar))`, one jar
-per session. It is **not applied in this ticket** — see "What this ticket did not
-do" below.
+### 6c · Applied, and re-measured before and after (INC-007a)
+
+The fix is `urllib.request.build_opener(HTTPCookieProcessor(jar))`, one jar per
+client, `cookies=True` by default and `cookies=False` kept so the old transport
+can be reproduced — every figure this project has measured was taken on it.
+
+The same canary sweep — same spec, same sequences, same stored hashes — was run
+once on each transport, ~80 seconds apart:
+
+| | before (no jar) | after (jar) |
+|---|---|---|
+| verdicts | 4/4 PASS | 4/4 PASS |
+| actions executed | 16 | 16 |
+| **HTTP calls** | **190** | **20** |
+| HTTP per action | 11.88 | 1.25 |
+| **retries** | **170 wasted** | **0** |
+
+Per game, HTTP calls: ar25 72→6, g50t 41→3, sk48 35→6, tn36 42→5.
+
+The cleanest way to state it: the sweep issues **20 commands** (4 RESET + 16
+ACTION). After the fix it cost **20 HTTP calls** — 1.00 attempt per command,
+every step first-attempt on all four games. Before, the same 20 commands cost
+190.
+
+**The verdicts are the real result, not the speed.** The frame hashes are
+identical across the transport change, so the fix is behaviour-preserving — and
+that retires a worse possibility than slowness: that the cookie-less client had
+been talking to something other than the live session all along, which is exactly
+the shape of INC-005's counterfeit short-id 200s. It was not. It was reaching the
+right session, after paying for nine wrong replicas first.
+
+**Why it works inside the existing retry envelope**, which is not obvious: the
+first call of a retry loop is usually the 400, so the jar has to learn the
+routing cookie *from an error response*. It does, because urllib sorts response
+processors by `handler_order` and `HTTPCookieProcessor` (500) runs before
+`HTTPErrorProcessor` (1000), the handler that turns a 400 into an exception. A
+future reordering would degrade the fix silently with nothing failing, so
+`test_hygiene.py` pins it.
+
+**A third data point on the variance.** The 00:35Z baseline, also cookie-less,
+measured 9.19 HTTP/action against the before-run's 11.88 — same transport, same
+sequences, 35 minutes apart, 29% apart in cost. The cookie-less regime was not
+just expensive, it was high-variance, which is what made it look like weather.
+
+**What this does not claim.** One paired sweep per transport. The amplification
+effect rests on the zero-cost probes (20/20 vs 0/20 first-attempt RESETs, plus
+8/8 cross-game); the paired canary's job was the behaviour-preservation gate and
+that is what it should be cited for. Nothing here says how the API behaves under
+concurrency, or whether the documented 600 rpm limit binds once retries stop
+dominating traffic.
 
 ## 7 · Canary replay — built
 
@@ -249,15 +295,20 @@ terms document is doing work it was not written for.
 
 ## What this ticket did not do
 
-* **The cookie fix is not applied.** `client.ArcClient` still keeps no cookie jar.
-  Changing the transport under a live campaign is not a change to make from a
-  side branch: baseline-arms had processes in flight, every measured figure in
-  both tracks' budget reports was taken on the current transport, and the
-  precheck's PASS verdicts are the determinism evidence the whole programme rests
-  on. The finding is filed (`INC-007`) with a reproducible probe; applying it is a
-  scheduled change with a re-measurement attached, not a drive-by.
+* **The cookie fix ~~is not applied~~ is applied, with the re-measurement
+  attached** — see §6c. INC-007 recorded it as deferred and gave reasons; those
+  reasons were satisfied rather than waived, because what they asked for was a
+  before/after measurement on the instrument being changed, and that is what §6c
+  is. INC-007a supersedes.
+* **Other tracks' clients are untouched.** baseline-arms keeps its own HTTP
+  client; the same cause and the same cure apply there, and it is notified via
+  PARTNER_SYNC, but this track does not edit another track's code.
 * **The ledger's raw frames are not redacted.** Flagged above as a release
-  obligation.
+  obligation. Cookie *values* were a second instance of the same class and have
+  been redacted (INC-008) — that one was self-inflicted: the stickiness probe
+  wrote raw `Set-Cookie` headers, including `GAMESESSION` bearer tokens, into
+  the tracked ledger for 55 calls. Values replaced, names kept, git history
+  still holds them at the pushed commit `29c631e`, which is an owner call.
 * **`available_actions` reporting was not re-examined.** `data/precheck.json`
   records `null` for ar25 and sk48 because those runs were reconstructed from the
   ledger by `precheck_resume.py`, which does not carry the field. Cosmetic, but

@@ -14,6 +14,7 @@ import os
 import pytest
 
 import canary
+import client
 import contamination
 from precheck import SealedGameError, assert_playable
 
@@ -219,6 +220,84 @@ def test_the_last_log_entry_per_game_wins():
     # INC-004 established.
     assert register["dc22-fdcac232"]["level"] == "design_document_disclosed"
     assert register["ar25-0c556536"]["level"] == "trajectories_reviewed"
+
+
+# -- the INC-007 transport ---------------------------------------------------
+
+def test_the_jar_learns_cookies_from_error_responses_too():
+    """The load-bearing detail of the fix, and it is not obvious.
+
+    The first call of a retry loop is usually the 400. If the jar only learned
+    routing cookies from 2xx, the retry would be routed as blindly as the first
+    attempt and the fix would buy nothing inside the envelope where it matters
+    most. It works because urllib sorts response processors by handler_order and
+    HTTPCookieProcessor (500) runs before HTTPErrorProcessor (1000), which is the
+    handler that turns a 400 into an exception. Pin it: a future reordering would
+    degrade the fix silently, with no test failing and no error raised.
+    """
+    import urllib.request
+    processors = [type(h).__name__ for h in
+                  client.ArcClient(api_key="x", dry_run=True)
+                  ._opener.process_response["https"]]
+    assert processors.index("HTTPCookieProcessor") \
+        < processors.index("HTTPErrorProcessor")
+    assert urllib.request.HTTPCookieProcessor.handler_order \
+        < urllib.request.HTTPErrorProcessor.handler_order
+
+
+def test_cookies_can_be_turned_off_to_reproduce_the_old_transport():
+    on = client.ArcClient(api_key="x", dry_run=True)
+    off = client.ArcClient(api_key="x", dry_run=True, cookies=False)
+    assert on.transport["cookies"] is True
+    assert off.transport["cookies"] is False
+    names = [type(h).__name__ for h in off._opener.process_response["https"]]
+    assert "HTTPCookieProcessor" not in names
+
+
+def test_cookie_values_never_survive_name_extraction():
+    """Negative control for INC-008: the values must not come back out."""
+    header = ("AWSALBAPP-0=SECRETVALUE; Expires=Tue, 04 Aug 2026 00:00:00 GMT; "
+              "Path=/, GAMESESSION=TOKENVALUE; Path=/; HttpOnly")
+    names = client.cookie_names(header)
+    assert "AWSALBAPP-0" in names and "GAMESESSION" in names
+    blob = json.dumps(names)
+    assert "SECRETVALUE" not in blob and "TOKENVALUE" not in blob
+    # The Expires attribute contains a comma, which is what makes naive
+    # Set-Cookie splitting leak: the fragment after it must not become a name.
+    assert not any("00:00:00" in n or "GMT" in n for n in names)
+
+
+def test_every_set_cookie_header_is_counted_not_just_the_first():
+    import email.message
+    message = email.message.Message()
+    for raw in ("AWSALBAPP-0=A; Path=/", "AWSALBAPP-1=B; Path=/",
+                "GAMESESSION=C; HttpOnly"):
+        message.add_header("Set-Cookie", raw)
+    assert client._issued_cookie_names(message) == \
+        ["AWSALBAPP-0", "AWSALBAPP-1", "GAMESESSION"]
+    # A plain mapping (which collapses duplicates) must still not crash.
+    assert client._issued_cookie_names({"Set-Cookie": "GAMESESSION=C"}) \
+        == ["GAMESESSION"]
+
+
+def test_the_ledger_never_holds_a_cookie_value():
+    """Over the real, committed ledger -- the INC-008 redaction must hold."""
+    path = os.path.join(contamination.DATA_DIR, "recon_ledger.jsonl")
+    offenders = []
+    for number, line in enumerate(open(path, encoding="utf-8"), 1):
+        line = line.strip()
+        if not line:
+            continue
+        entry = json.loads(line)
+        for field in ("set_cookie", "set_cookie_names", "cookies_held"):
+            value = entry.get(field)
+            if value is None:
+                continue
+            text = value if isinstance(value, str) else " ".join(map(str, value))
+            # A name list is names. Anything carrying "=" is carrying a value.
+            if "=" in text:
+                offenders.append((number, field))
+    assert offenders == [], offenders[:5]
 
 
 def _log_with(tmp_path, monkeypatch, *rows):

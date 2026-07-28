@@ -605,6 +605,151 @@
       "sticky_game": "ar25-0c556536",
       "t": "2026-07-28T00:39:20Z",
       "verdict": "STICKINESS IMPLICATED -- the cookie-carrying arm succeeded in rounds where the cookie-less arm failed, 6 times"
+    },
+    {
+      "action_cost": 0,
+      "distinct_guids_per_game": {
+        "ar25-0c556536": 2,
+        "g50t-5849a774": 2,
+        "sk48-d8078629": 2,
+        "tn36-ef4dde99": 2
+      },
+      "first_attempt_successes": "8/8",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "probe": "cross_game",
+      "question": "does one cookie jar serve several games in sequence, or does game A's GAMESESSION poison game B?",
+      "revisit_successes": "4/4",
+      "rows": [
+        {
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "first_attempt_ok": true,
+          "game_id": "ar25-0c556536",
+          "guid": "997d63ff-fcab-449e-9ddc-d80d5e2bf885",
+          "status": 200,
+          "step": 0
+        },
+        {
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "first_attempt_ok": true,
+          "game_id": "g50t-5849a774",
+          "guid": "4f3ba586-ab4f-40ff-908d-9c02c3481900",
+          "status": 200,
+          "step": 1
+        },
+        {
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "first_attempt_ok": true,
+          "game_id": "sk48-d8078629",
+          "guid": "862b1af2-2517-473f-af89-eef19ada0e5c",
+          "status": 200,
+          "step": 2
+        },
+        {
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "first_attempt_ok": true,
+          "game_id": "tn36-ef4dde99",
+          "guid": "6847ddf0-ab36-4cd6-9d14-8aeae04233ff",
+          "status": 200,
+          "step": 3
+        },
+        {
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "first_attempt_ok": true,
+          "game_id": "tn36-ef4dde99",
+          "guid": "05b5df8f-eab0-4ba2-a57f-f0c6a08ae6ad",
+          "status": 200,
+          "step": 4
+        },
+        {
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "first_attempt_ok": true,
+          "game_id": "sk48-d8078629",
+          "guid": "642a3da6-d3db-4d60-976f-60a03eeed1c1",
+          "status": 200,
+          "step": 5
+        },
+        {
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "first_attempt_ok": true,
+          "game_id": "g50t-5849a774",
+          "guid": "f2a3368b-5f47-42a1-8b7d-e21344507676",
+          "status": 200,
+          "step": 6
+        },
+        {
+          "cookies_held": [
+            "AWSALBAPP-0",
+            "AWSALBAPP-1",
+            "AWSALBAPP-2",
+            "AWSALBAPP-3",
+            "GAMESESSION"
+          ],
+          "first_attempt_ok": true,
+          "game_id": "ar25-0c556536",
+          "guid": "704af215-2433-4ef2-91f6-a8330f61e9cc",
+          "status": 200,
+          "step": 7
+        }
+      ],
+      "t": "2026-07-28T00:58:52Z",
+      "verdict": "ONE JAR IS ENOUGH -- every RESET across 4 games succeeded on its first attempt, including the revisits",
+      "walk": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99",
+        "tn36-ef4dde99",
+        "sk48-d8078629",
+        "g50t-5849a774",
+        "ar25-0c556536"
+      ]
     }
   ]
 }

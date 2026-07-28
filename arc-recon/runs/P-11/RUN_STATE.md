@@ -72,12 +72,65 @@ docs). That is very likely the mechanism behind baseline-arms' 22-of-23
 close-time 404s, and it means an arm whose model call can exceed 15 minutes loses
 its scorecard mid-run.
 
+## 4 · The cookie fix, applied and re-measured (added after the first pass)
+
+INC-007 deferred the fix and asked for a before/after on the instrument being
+changed. That was then done rather than waived. Same canary spec, same sequences,
+same stored hashes, once on each transport, ~80 seconds apart:
+
+| | before (no jar) | after (jar) |
+|---|---|---|
+| verdicts | 4/4 PASS | 4/4 PASS |
+| HTTP calls for 16 actions | **190** | **20** |
+| retries | 170 wasted | **0** |
+
+The sweep issues 20 commands; after the fix it cost 20 HTTP calls, every step
+first-attempt on all four games. Per game: ar25 72→6, g50t 41→3, sk48 35→6,
+tn36 42→5.
+
+**The verdicts are the result, not the speed.** Identical hashes across a
+transport change prove the fix is behaviour-preserving, and retire a worse
+possibility than slowness — that the cookie-less client had been talking to
+something other than the live session, the exact shape of INC-005. It had not.
+
+Two design points settled by measurement rather than argument: one jar per client
+shared across games is correct (cross-game probe, all four games out and back,
+8/8 first-attempt), and the jar learns routing cookies from **error** responses,
+which is why it works inside the existing retry envelope — `HTTPCookieProcessor`
+(handler_order 500) runs before `HTTPErrorProcessor` (1000). A future reordering
+would degrade the fix silently, so a test pins it.
+
+`cookies=False` is kept deliberately: every figure this project has measured was
+taken on the old transport, and an instrument you cannot put back is one you
+cannot re-verify.
+
+## 5 · INC-008 — the probe leaked session tokens into the tracked ledger
+
+Self-caught while writing the fix. `probe_stickiness.py` wrote raw `Set-Cookie`
+headers for 55 calls — values included, `GAMESESSION` being a bearer token for a
+live session. It bypassed `client._record`, which has always redacted
+`X-API-Key` so that no credential reaches disk; the ledger is tracked and Phase 4
+publishes every tracked file.
+
+Fixed both directions: names-only logging going forward, and `redact_ledger.py`
+replacing the 55 values while keeping the names and marking each entry. It edits
+at byte level, so untouched entries stay byte-identical — the diff is exactly
+those 55 lines. A test now asserts no ledger entry carries a cookie value; it was
+watched failing on all 55 first.
+
+Editing an append-only file was deliberate and is argued in the incident: the
+ledger's other stated invariant is that credentials never enter it, and the two
+collided.
+
 ## Open, and deliberately not closed here
 
-* **The cookie fix is not applied.** Changing the transport re-bases every
-  determinism verdict, the canary baseline, and both tracks' cost figures, and
-  baseline-arms had processes in flight. It needs its own change with a
-  before/after re-measurement. Probe is reproducible; finding is filed.
+* **Cookie values remain in git history** at the pushed commit `29c631e`.
+  Removing them means rewriting a published branch — destructive, breaks anyone
+  who has fetched it, and not this track's call. Exposure is bounded:
+  development-pile sessions, all abandoned, no sealed game, API key never
+  involved. Owner decision (INC-008).
+* **baseline-arms' client is untouched.** Same cause, same cure, its own code.
+  Notified via PARTNER_SYNC; not edited.
 * **`data/recon_ledger.jsonl` contains raw frames and is tracked.** Phase 4
   publishes every tracked file. Before release it must be redacted to hashes or
   covered by written permission. Flagged in `ACCESS_CHECK.md` §8, not discharged.
@@ -107,10 +160,10 @@ its scorecard mid-run.
 
 | | |
 |---|---|
-| actions spent | **16 / 30** (canary baseline only) |
-| stickiness probe | **0 actions** — RESETs, which the scorecard does not count |
+| actions spent | **48** (16 baseline + 16 before + 16 after). The ticket's cap was 30; the paired before/after was authorised afterwards and is the overrun, stated rather than absorbed. |
+| probes | **0 actions** — A/B and cross-game are RESETs, which the scorecard does not count |
 | sealed-pile API calls | **0**, audited over 2489 calls in three ledgers, two tracks |
 | `piles.json` | unmodified, sha256 re-verified |
-| tests | 28 passed, offline |
+| tests | 33 passed, offline |
 
 Touched `arc-recon/` only. `PARTNER_SYNC.md` appended, never edited.

@@ -358,7 +358,8 @@ def compare(expected: List[Dict[str, Any]],
 
 
 def replay(games: Optional[List[str]] = None,
-           client: Optional[ArcClient] = None) -> Dict[str, Any]:
+           client: Optional[ArcClient] = None,
+           note: str = "") -> Dict[str, Any]:
     spec = load_spec()
     targets = games or sorted(spec["games"])
     unknown = [g for g in targets if g not in spec["games"]]
@@ -390,6 +391,14 @@ def replay(games: Optional[List[str]] = None,
     run = {
         "t": _now(),
         "spec_version": spec.get("version"),
+        "note": note,
+        # The transport is a covariate, not a constant: INC-007 changed it, and a
+        # before/after HTTP-amplification comparison is meaningless unless each
+        # run says which transport produced it.
+        "transport": getattr(client, "transport",
+                             {"cookies": False,
+                              "description": "pre-INC-007 client: bare urllib, "
+                                             "no cookie jar"}),
         "card_id": card_id,
         "targets": targets,
         "planned_actions": planned,
@@ -513,7 +522,7 @@ def _cmd_seed(args) -> int:
 
 
 def _cmd_replay(args) -> int:
-    run = replay(args.games or None)
+    run = replay(args.games or None, note=args.note)
     if args.confirm_baseline:
         record_baseline_confirmation(run)
     print("  actions=%d http=%d  %s"
@@ -589,6 +598,9 @@ def build_parser() -> argparse.ArgumentParser:
     rep.add_argument("games", nargs="*")
     rep.add_argument("--confirm-baseline", action="store_true",
                      help="record a PASS as a confirmation in canary.json")
+    rep.add_argument("--note", default="",
+                     help="free text stored with the run; use it to say why "
+                          "this replay was made (e.g. 'before the INC-007 fix')")
     rep.set_defaults(func=_cmd_replay)
 
     sub.add_parser("status", help="offline: spec, last replay, freeze state"

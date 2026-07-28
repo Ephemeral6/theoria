@@ -17,12 +17,13 @@ credential" a physical fact rather than a promise) is a separate build; this is
 the read-only instrument used to survey the API before that is designed.
 """
 
+import http.cookiejar
 import json
 import os
 import time
 import urllib.error
 import urllib.request
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
@@ -63,18 +64,95 @@ def mask(key: str) -> str:
     return "%s...%s (len %d)" % (key[:4], key[-4:], len(key)) if key else "<unset>"
 
 
+def cookie_names(set_cookie_header: str) -> List[str]:
+    """Cookie names out of a Set-Cookie header, values deliberately dropped.
+
+    A cookie value is a credential. `GAMESESSION` is a bearer token for a live
+    game session, and the ALB pins identify a backend. The ledger is tracked and
+    Phase 4 publishes every tracked file, so the rule that keeps `X-API-Key` out
+    of it applies to these too -- see INC-008, which exists because a probe wrote
+    the raw header for 55 calls before anyone noticed.
+
+    Names are all the forensics needs: which cookies the server issued, and
+    whether we echoed them back.
+    """
+    names = []
+    for part in (set_cookie_header or "").split(","):
+        head = part.strip().split(";", 1)[0]
+        if "=" in head:
+            name = head.split("=", 1)[0].strip()
+            if name and " " not in name:
+                names.append(name)
+    return names
+
+
+def _issued_cookie_names(headers: Any) -> List[str]:
+    """Names from EVERY Set-Cookie header, not just the first.
+
+    A response carries one `Set-Cookie` header per cookie, and this server sends
+    five. `headers.get("Set-Cookie")` returns only the first of them, and
+    `dict(headers)` keeps only the last -- either way the log would under-report
+    what the server issued while the jar (which reads them all) quietly held
+    more. The jar is unaffected by this; only the record was at risk.
+    """
+    try:
+        raw = headers.get_all("Set-Cookie") or []
+    except AttributeError:                       # a plain mapping
+        value = headers.get("Set-Cookie", "")
+        raw = [value] if value else []
+    names: List[str] = []
+    for header in raw:
+        names.extend(cookie_names(header))
+    return names
+
+
 class ArcClient:
     """Every call goes through `request`, so every call lands in the ledger."""
 
     def __init__(self, api_key: Optional[str] = None, base_url: str = BASE_URL,
                  ledger_path: str = LEDGER_PATH, timeout: int = 30,
-                 dry_run: bool = False):
+                 dry_run: bool = False, cookies: bool = True):
         self._key = api_key or load_api_key()
         self.base_url = base_url.rstrip("/")
         self.ledger_path = ledger_path
         self.timeout = timeout
         self.dry_run = dry_run
         self.calls = 0
+
+        # INC-007. The server sits behind an AWS ALB and issues AWSALBAPP-*
+        # routing cookies plus a GAMESESSION cookie. Without a jar every request
+        # is load-balanced afresh, lands on a replica that does not hold the
+        # session, and comes back `400 game <id> not found` -- which this
+        # directory spent two incidents reading as an intermittent server fault.
+        # Measured: 20/20 first-attempt RESETs with a jar, 0/20 without.
+        #
+        # ONE jar per client, shared across games. That is not an assumption: the
+        # cross-game probe walked all four development games out and back on a
+        # single jar and every RESET succeeded first try, so game A's
+        # GAMESESSION does not poison game B's.
+        #
+        # `cookies=False` is kept deliberately. Every figure measured before this
+        # change -- the determinism verdicts, the canary baseline, both tracks'
+        # cost models -- was taken on a cookie-less transport, and an instrument
+        # you cannot put back the way it was is one you cannot re-verify.
+        self.cookies = cookies
+        self.jar = http.cookiejar.CookieJar()
+        self._opener = urllib.request.build_opener(
+            *([urllib.request.HTTPCookieProcessor(self.jar)] if cookies else []))
+        self.transport = {
+            "cookies": cookies,
+            "description": ("cookie jar shared across games (INC-007 fix)"
+                            if cookies else
+                            "bare urllib, no cookie jar (pre-INC-007 behaviour, "
+                            "kept for reproducing old measurements)"),
+        }
+
+    def cookies_held(self) -> List[str]:
+        """Names only. Values are credentials and never leave this object."""
+        return sorted(c.name for c in self.jar)
+
+    def clear_cookies(self) -> None:
+        self.jar.clear()
 
     # -- ledger ------------------------------------------------------------
     def _record(self, entry: Dict[str, Any]) -> None:
@@ -99,12 +177,14 @@ class ArcClient:
         started = time.time()
         request = urllib.request.Request(url, data=payload, headers=headers, method=method)
         try:
-            with urllib.request.urlopen(request, timeout=self.timeout) as response:
+            with self._opener.open(request, timeout=self.timeout) as response:
                 status = response.status
                 text = response.read().decode("utf-8")
+                issued = _issued_cookie_names(response.headers)
         except urllib.error.HTTPError as exc:
             status = exc.code
             text = exc.read().decode("utf-8", "replace")
+            issued = _issued_cookie_names(exc.headers)
         self.calls += 1
 
         try:
@@ -125,6 +205,12 @@ class ArcClient:
                 "request_body": body,
                 "status": status,
                 "response_body": parsed if parsed is not None else text,
+                # Cookie NAMES only -- never values (INC-008). Recording these
+                # makes "the cookie jar was actually on for this call" an
+                # auditable fact rather than a claim about which build ran.
+                "cookies_enabled": self.cookies,
+                "set_cookie_names": sorted(set(issued)),
+                "cookies_held": self.cookies_held(),
             }
         )
 
