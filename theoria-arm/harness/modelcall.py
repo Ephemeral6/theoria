@@ -139,7 +139,7 @@ class ModelDesk:
     # -- the call ----------------------------------------------------------
     def call(self, prompt: str, *, beat: str, step_idx: Optional[int] = None,
              model: Optional[str] = None, label: str = "",
-             max_turns: int = 1) -> str:
+             max_turns: int = 2) -> str:
         if beat not in self.ALLOWED_BEATS:
             raise ModelError(
                 "beat %r may not spend a model call. Theoria.md constraint 8: "
@@ -199,14 +199,36 @@ class ModelDesk:
         self._write_transcript(entry, prompt, text, stderr)
 
         if not text.strip():
-            raise ModelError("the desk returned nothing (subtype=%r, stderr=%r)"
-                             % (envelope.get("subtype"), (stderr or "")[:300]))
+            # An empty reply is not silence: the envelope says why. Naming the
+            # subtype and any permission denial turns "the desk returned
+            # nothing" into a diagnosis -- `error_max_turns` with
+            # `stop_reason: tool_use` means the model spent its turn on a tool.
+            raise ModelError(
+                "the desk returned no text (subtype=%r, stop_reason=%r, "
+                "num_turns=%r, denials=%d, stderr=%r)"
+                % (envelope.get("subtype"), envelope.get("stop_reason"),
+                   envelope.get("num_turns"),
+                   len(envelope.get("permission_denials") or []),
+                   (stderr or "")[:200]))
         return text
 
     # -- plumbing ----------------------------------------------------------
     def _invoke(self, prompt: str, model: str):
+        # `--tools ""` disables every built-in tool, and it is load-bearing.
+        # Without it the desk has Bash and Write available and *uses* them: the
+        # first live theorize call spent $0.73 and 251 seconds, then returned
+        # `subtype: "error_max_turns"`, `stop_reason: "tool_use"`, and an empty
+        # result -- the model had tried to `mkdir -p .../scratchpad && cat >`
+        # its answer to a file instead of printing it, the tool call consumed
+        # the single turn, and no text was ever produced. The permission denial
+        # is in that record's `permission_denials`.
+        #
+        # `bare_cc` never met this because its reply is one line; a desk asked
+        # for three large blocks reaches for a file. `--max-turns 2` is the
+        # belt to this brace: if a tool call still happens, the model gets a
+        # turn afterwards in which to answer.
         cmd = [claude_bin(), "-p", "--model", model,
-               "--output-format", "json", "--max-turns", "1"]
+               "--output-format", "json", "--tools", "", "--max-turns", "2"]
         env = dict(os.environ)
         # The desk must not be able to reach the game credential, and must not
         # inherit a base URL that would send it somewhere unrecorded.

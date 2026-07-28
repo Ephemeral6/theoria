@@ -1,0 +1,98 @@
+{
+ "card_ids": [
+  "4e3041e8-6469-42b5-b5c5-4ca5ca310624"
+ ],
+ "env_steps": 44,
+ "env_steps_ok": 7,
+ "records": 47,
+ "run_end_present": false,
+ "scorecard_on_close": {
+  "card_id": "4e3041e8-6469-42b5-b5c5-4ca5ca310624",
+  "environments": [
+   {
+    "actions": 6,
+    "completed": false,
+    "id": "g50t-5849a774",
+    "level_count": 7,
+    "levels_completed": 0,
+    "resets": 0,
+    "runs": [
+     {
+      "actions": 6,
+      "completed": false,
+      "guid": "ace12ba9-9d64-42a6-b71a-ba3be132a634",
+      "level_actions": [
+       6,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "level_baseline_actions": [
+       78,
+       175,
+       179,
+       230,
+       96,
+       54,
+       67
+      ],
+      "level_scores": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "levels_completed": 0,
+      "resets": 0,
+      "score": 0.0,
+      "state": "NOT_FINISHED"
+     }
+    ],
+    "score": 0.0
+   }
+  ],
+  "opaque": {
+   "prompt_id": "P-8",
+   "run_id": "r-57ff22542e514b83"
+  },
+  "score": 0.0,
+  "tags": [
+   "theoria",
+   "p8",
+   "first-contact",
+   "agent"
+  ],
+  "tags_scores": [
+   {
+    "actions": 6,
+    "id": "keyboard",
+    "levels_completed": 0,
+    "number_of_environments": 1,
+    "number_of_levels": 7,
+    "score": 0.0
+   }
+  ],
+  "total_actions": 6,
+  "total_environments": 1,
+  "total_environments_completed": 0,
+  "total_levels": 7,
+  "total_levels_completed": 0
+ },
+ "slug": "20260728T014402Z-g50t-first-contact",
+ "successful_actions": 6,
+ "trace": {
+  "cascade_lengths": [
+   1,
+   7,
+   9
+  ],
+  "path": "C:\\Users\\user\\Desktop\\theoria-wt-p8\\theoria-arm\\runs\\20260728T014402Z-g50t-first-contact\\trace.jsonl",
+  "states": 7
+ }
+}
