@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 10:45:40",
+  "generated_at": "2026-07-28 10:47:53",
   "history": [
     {
       "findings": {
@@ -469,14 +469,12 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/dispatch.py",
-      "monitor/loop_state.json",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "aa4f2bb monitor: fleet board rework -- cell badges, runtimes, and a status that cannot hide a silent death",
+    "git_head": "88ae1e4 monitor: staggered launches become law -- the storm that killed six is codified out",
     "incidents": 8,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
