@@ -1,21 +1,23 @@
 {
-  "cycle": 14,
-  "utc": "2026-07-28T17:20Z",
-  "last_audited_commit": "d19981e",
-  "range_this_cycle": "1fba043..d19981e (3 commits)",
+  "cycle": 15,
+  "utc": "2026-07-28T17:53Z",
+  "last_audited_commit": "49f9f7a",
+  "range_this_cycle": "d19981e..49f9f7a",
   "mode": "incremental",
   "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "单向门": "升级件：40 分钟零合并（末次 MERGED 16:37:52Z），16 分支阻塞、FLAG 245、a4a 卡 130 分钟重报 25 次。OPS-M cycle 8 推翻自己 cycle 7 的根因（真因是 WSL 的 bash 赢了 PATH 搜索），并给出实跑验证的一行修复，因 CHARTER 无权应用。监控在我上一条之后跑过一轮未碰 gates.py → critical 升级件",
-    "纪律漂移": "区间小，封存/密钥/append-only 均无异常",
-    "其余维度": "本轮让位于升级件，未新巡"
+    "监控自身漂移": "盘面 20 个探针无一读 merge.log —— 队列停摆在监控视野之外，这解释了两轮未处理并非判断失误 → 本轮报告",
+    "单向门": "队列续恶化：75 分钟零交付（末次 MERGED 16:37:52Z）、17 分支、FLAG 350、a4a 卡 165 分钟重报 31 次",
+    "纪律漂移": "封存/密钥/append-only 主线均无异常",
+    "其余维度": "让位于队列，未新巡"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T1718Z-zero-merges-for-forty-minutes-with-a-tested-fix-in-hand.md"
+    "DRIFT-20260728T1752Z-twenty-probes-and-none-of-them-watches-the-queue.md"
   ],
   "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
   "pending_on_monitor": [
     "**最急（已升 critical）**：应用 OPS-M cycle 8 的一行——gates.py 显式解析 Git Bash 的绝对路径（Program Files 下的 Git/bin/bash.exe），不要让 CreateProcess 的 PATH 搜索选到 System32 里 WSL 的 bash；若监控仍未动，按 CHARTER 阶梯交给用户",
+    "加 probe_merge_queue（十几行，判据在 scratchpad/flags.py；它现在就是红的，天然满足 S20 负样本要求）",
     "flag() 加 first_seen/count、同因三次停重试并派活、重试退避",
     "probe_a1_state 改一行让它能变绿 + 补样本",
     "把 ast 判据搬进 monitor 作 meta 探针",
@@ -28,7 +30,8 @@
   ],
   "false_positives_i_caught_myself": [
     "proxy/verify_spend.sh『无失败路径』——实为 fail=1 累积 + 末行 exit $fail。别再报。",
-    "总线消息『损坏』——实为 Bash stdout 的 GBK 渲染，文件是好的 UTF-8。"
+    "总线消息『损坏』——实为 Bash stdout 的 GBK 渲染，文件是好的 UTF-8。",
+    "ops-status 心跳的 utc 字段有本地时间/未来时刻（RES-1 21:25Z、RES-3 07-29 07:30Z），我疑心判活被骗；读了 scan.py:471/:697/:775 与 agents.py:145 —— 全部用 os.path.getmtime，不读 JSON 的 utc。只影响显示，不是漂移。"
   ],
   "method_notes": [
     "**读中文文件一律用文件读取工具**；Bash stdout 按 GBK 渲染",
@@ -39,9 +42,9 @@
     "常用脚本：redline.py、manifests.py、probe_red.py、negsample.py、flags.py（merge.log 阻塞时长与重报次数）、dim6.py"
   ],
   "next_cycle_focus": [
-    "第一件事就是看 merge.log 的 MERGED 是否恢复增长；未恢复则继续升级",
-    "复核 probe_a1_state 与 A9/S20",
-    "增量起点 d19981e"
+    "先看 MERGED 是否恢复增长",
+    "复核 probe_merge_queue 与 probe_a1_state",
+    "增量起点 49f9f7a"
   ],
   "superseded": [
     "我 cycle 12 报告里引用的 OPS-M cycle-7 根因（Git Bash 吃反斜杠）已被 OPS-M 自己在 cycle 8 实跑证伪，以 WSL bash 为准。跨会话引用别人的诊断时要留意它可能被其作者推翻。"
