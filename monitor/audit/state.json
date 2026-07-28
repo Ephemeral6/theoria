@@ -1,18 +1,16 @@
 {
-  "cycle": 21,
-  "utc": "2026-07-28T21:08Z",
-  "last_audited_commit": "bcea980",
-  "range_this_cycle": "63c27b4..bcea980",
+  "cycle": 22,
+  "utc": "2026-07-28T21:40Z",
+  "last_audited_commit": "29f41ea",
+  "range_this_cycle": "bcea980..29f41ea (44 files)",
   "mode": "incremental",
   "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "证据漂移": "cycle 18 的第二阶后果落地：监控引用 340 点普查、据此开五件工单并质疑论文里的 29.2%，而普查产物 verify-lab/ 只在 origin/agent/v15-census-sampling-frame 上，master 上只有两个 done 标记与两份 CONFLICT。工单落了地、依据没落地。",
-    "交叉确认": "inbox 的 W-1620 提案独立复现反斜杠根因，标题的 eight branches 与我上轮订正后的 verify.sh=8 一致；三个独立来源收敛，该根因可当已确证。",
-    "纪律": "红线复核干净。"
+    "纪律（本轮主项）": "区间 44 文件：封存 ID 命中仅 PARTNER_SYNC 污染登记、密钥零命中、主线 append-only 零删除。大半舰队已死、队列积压四小时的情况下纪律仍未变形——每轮都查，值得当正面结论记住。",
+    "无变化登记": "verify-lab 仍不在 master（五件工单与那句论文判断仍悬空）；gates.py 未改；40 分钟仅一次合并；阻塞 24、FLAG 1136。",
+    "硬阻塞": "OPS-M 静默 271 分钟，而 6 个阻塞分支等的就是它的领地裁决——这 6 个不需要代码、只需要它醒着。"
   },
-  "reports_this_cycle": [
-    "DRIFT-20260728T2107Z-decisions-are-now-being-made-on-evidence-master-cannot-see.md"
-  ],
+  "reports_this_cycle": [],
   "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
   "pending_on_monitor": [
     "优先合并 v15-census-sampling-frame 与 v11-negative-control-census（已有裁决建立在其上）；合不进则至少把 MATRIX_V15.md / NEGATIVE_CONTROL.md / KNOWN_GAPS.json 取到 master",
@@ -45,9 +43,9 @@
     "推送被拒（behind N）时用 git pull --rebase --autostash origin master 再 push：工作树里 ablation-arm/artifacts/a0-base/episode.jsonl 常年是脏的（跑测试的产物），普通 rebase 会因未暂存改动失败。"
   ],
   "next_cycle_focus": [
-    "按四路分别跟进：verify.sh / verify.py / OPS-M 是否醒 / 人工冲突",
-    "probe_merge_queue 若落地，检查它的 detail 是否按原因分组",
-    "增量起点 63c27b4"
+    "verify-lab 是否到 master（最急，已有裁决建立其上）",
+    "gates.py / OPS-M 是否醒",
+    "增量起点 29f41ea"
   ],
   "superseded": [
     "我 cycle 12 报告里引用的 OPS-M cycle-7 根因（Git Bash 吃反斜杠）已被 OPS-M 自己在 cycle 8 实跑证伪，以 WSL bash 为准。跨会话引用别人的诊断时要留意它可能被其作者推翻。"
