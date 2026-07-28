@@ -1,0 +1,8 @@
+# `theory/` is generated: `build_theory.py --check` rebuilds every file in
+# memory and compares it to disk byte for byte. A CRLF translation on checkout
+# would make that comparison fail on any machine with core.autocrlf=true, and
+# the failure would read as "somebody hand-edited a generated file" -- the one
+# thing the check exists to catch, reported for the one reason that is not it.
+#
+# Same reasoning as engine-rig/.gitattributes, one arm along.
+* text eol=lf
