@@ -17,6 +17,16 @@ the deterministic artefacts per territory and compares hashes into
 document, with the document fixed rather than the stranger. Red lines: no `.env`
 value and no sealed-pile frame data anywhere in the release set.
 
+> **Corrected at step 1.** The section below frames the constraint as being about
+> **frame data**. That is too narrow, and too narrow in the dangerous direction —
+> it came from reading `R2`'s summary rather than `browser-ops/TERMS.md` itself.
+> ToS §4's first prohibited activity names *"a collection, compilation, database"*,
+> and a ledger of API interactions is literally that. The constrained class is
+> everything systematically retrieved and compiled — frames, actions, scores,
+> scorecards and the ledgers holding them. `release/LICENCE_POSTURE.md` carries
+> the corrected classification; this section is left as written, because a plan
+> whose wrong turns are quietly deleted teaches nobody.
+
 ## The constraint the item does not mention, and it changes the shape
 
 **`R2-release-licence` is not an optional follow-up; it is a precondition on the
@@ -88,7 +98,11 @@ only one of those two is recoverable.
 
 ## Status
 
-**Plan only.** No enumerator, no manifest, no reproduce script yet. The next
+**Step 1 done** (`LICENCE_POSTURE.md`, `check_redlines.py` — both red lines
+measured clear over 1,938 tracked files). Steps 2-6 open: the enumerator, the
+checklist cross-walk, `reproduce.py`, `REPRODUCING.md`, the stranger subagent.
+
+Previously: **plan only.** No enumerator, no manifest, no reproduce script yet. The next
 session starts at step 1 — and should read `browser-ops/TERMS.md` §2 and
 `browser-ops/runs/2026-07-28-visits.md` before writing a line of it, because
 that is where the licence verdict actually comes from.
