@@ -1,0 +1,36 @@
+{
+  "bundle": "tier2_manual_playbook",
+  "bundle_digest": "8a38468d48fad0bc020174328ee3f6a325ef89ac59eb564ab098bd097015a1ae",
+  "files": {
+    "MANUAL.dsl": "7884ffadaecd09b1da7ab1628db0665a0741b243085856eb3ae17e2350780f26",
+    "MANUAL.md": "3046d6ee44f2f0055bca0b9c0b740d8864a40faa2964e95166b2286d1420e263",
+    "PLAYBOOK.dsl": "a0598dfafc1e64fab700f27d2eba0b040263bdf6a5583c75b8f1ff37165217d5",
+    "PLAYBOOK.md": "56d4f287a2f572f958ff53b34c429964080a95748c86555af26df1aabb5717b5",
+    "READER_BRIEF.md": "735f6ad636a18758b37d53e8aacbe5ac785f45e598f0ca3dd79c4f1fc0e28b97"
+  },
+  "paper_id": "p15-handover-a0",
+  "provenance": {
+    "MANUAL.dsl": {
+      "copied_from": "a0-spike/theory/theory.dsl",
+      "edits": "line endings normalised to LF; nothing else",
+      "source_sha256": "7884ffadaecd09b1da7ab1628db0665a0741b243085856eb3ae17e2350780f26"
+    },
+    "MANUAL.md": {
+      "generated_by": "exam.papers.handover.render_manual",
+      "model_calls": 0,
+      "of": "MANUAL.dsl"
+    },
+    "PLAYBOOK.dsl": {
+      "why": "a0-spike ships no playbook file; the strategic tier is assembled from its recorded findings",
+      "written_for": "this exam"
+    },
+    "PLAYBOOK.md": {
+      "why": "see PLAYBOOK.dsl",
+      "written_for": "this exam"
+    },
+    "READER_BRIEF.md": {
+      "generated_by": "exam.papers.handover._reader_brief"
+    }
+  },
+  "world_id": "a0"
+}

@@ -1,0 +1,14 @@
+{
+  "base_game": "a2",
+  "base_level": "lattice",
+  "claim": "solvable",
+  "justification": "A plan that visits every switch and then the goal is constructed directly from the board's shape: sweep the corridor left to right, at each column step up to the switch above and down to the switch below, then cross the bridge at (4,2) and walk row 5 to the goal. That costs 416 commands and the budget is 456. The budget is therefore not an obstacle, and the level's 2^120 states are irrelevant to saying so.",
+  "notes": "The near-twin of the spindle's budget item: the same operator, arithmetic that goes the other way.",
+  "operators": [
+    {
+      "limit": 456,
+      "op": "step_limit"
+    }
+  ],
+  "variant_id": "a2var-iii7-lattice-roomy"
+}

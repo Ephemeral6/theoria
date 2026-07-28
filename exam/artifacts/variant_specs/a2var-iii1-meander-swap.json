@@ -1,0 +1,20 @@
+{
+  "base_game": "a2",
+  "base_level": "meander",
+  "claim": "solvable",
+  "justification": "Relabelling is a bijection on the action alphabet, so it cannot change what is achievable: apply the swap to every command of a winning sequence in the base game and the wrapped game runs through exactly the same states. The meander's single serpentine route is about a hundred commands long, which is the whole difficulty -- a searcher that gives up at a shallow depth reports failure here, and failure to find is not a proof of absence.",
+  "notes": "A long solution is the cheapest false-positive trap the operator library can build.",
+  "operators": [
+    {
+      "from": "LEFT",
+      "op": "remap_action",
+      "to": "RIGHT"
+    },
+    {
+      "from": "RIGHT",
+      "op": "remap_action",
+      "to": "LEFT"
+    }
+  ],
+  "variant_id": "a2var-iii1-meander-swap"
+}

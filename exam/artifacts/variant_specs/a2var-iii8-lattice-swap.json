@@ -1,0 +1,20 @@
+{
+  "base_game": "a2",
+  "base_level": "lattice",
+  "claim": "solvable",
+  "justification": "Relabelling LEFT and RIGHT is a bijection on the alphabet and its own inverse, so it maps winning sequences to winning sequences one for one. The lattice's bridge at (4,2) is open and the goal room is reachable through it, so the base level is solvable and the wrapped one is too. The board is the same board as the sealed gantry item, which is the trap: the separator row is what decides these, not the size of the state space.",
+  "notes": "Same operator as the sealed gantry item, opposite answer.",
+  "operators": [
+    {
+      "from": "LEFT",
+      "op": "remap_action",
+      "to": "RIGHT"
+    },
+    {
+      "from": "RIGHT",
+      "op": "remap_action",
+      "to": "LEFT"
+    }
+  ],
+  "variant_id": "a2var-iii8-lattice-swap"
+}

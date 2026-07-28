@@ -1,0 +1,20 @@
+{
+  "base_game": "a2",
+  "base_level": "cistern",
+  "claim": "unsolvable",
+  "justification": "The cistern board's two halves are joined by exactly one floor cell, (3,5): column 5 is wall at every other row. Every path from the start (3,1) to the goal (3,9) therefore occupies (3,5) at the end of some command -- there is no teleport and no slide on this board, so a cell cannot be crossed without being stood on. Declaring a loss there makes every such path terminate before it arrives.",
+  "notes": "Value 6 is the cart's colour in A2's palette, so the predicate reads 'the cart is standing on this cell' in the frame the arm acts on.",
+  "operators": [
+    {
+      "cells": [
+        [
+          3,
+          5
+        ]
+      ],
+      "op": "observation_loss",
+      "value": 6
+    }
+  ],
+  "variant_id": "a2var-i3-cistern-cut"
+}

@@ -1,0 +1,45 @@
+{
+  "answers": {
+    "hv-name-01": "level_data",
+    "hv-name-02": "world_law",
+    "hv-name-03": "level_data",
+    "hv-name-04": "level_data",
+    "hv-name-05": "level_data",
+    "hv-name-06": "world_law",
+    "hv-name-07": "level_data",
+    "hv-name-08": "world_law",
+    "hv-name-09": "world_law",
+    "hv-name-10": "world_law",
+    "hv-name-11": "level_data",
+    "hv-name-12": "level_data",
+    "hv-opt-01": "RIGHT",
+    "hv-opt-02": "LEFT",
+    "hv-opt-03": "UP",
+    "hv-opt-04": "DOWN",
+    "hv-opt-05": "LEFT",
+    "hv-opt-06": "DOWN",
+    "hv-step-01": "player=(0,2); box=(4,4); rule=blocked_wall",
+    "hv-step-02": "player=(1,0); box=(3,3); rule=walk",
+    "hv-step-03": "player=(1,1); box=(3,1); rule=push2",
+    "hv-step-04": "player=(2,3); box=(2,1); rule=push2",
+    "hv-step-05": "player=(1,4); box=(2,2); rule=walk",
+    "hv-step-06": "player=(3,3); box=(2,3); rule=blocked_box_landing",
+    "hv-step-07": "player=(2,4); box=(2,3); rule=blocked_box_crossing",
+    "hv-step-08": "player=(2,2); box=(2,1); rule=blocked_box_landing",
+    "hv-step-09": "player=(3,4); box=(3,3); rule=blocked_box_landing",
+    "hv-step-10": "player=(2,5); box=(0,0); rule=blocked_wall",
+    "hv-step-11": "player=(1,3); box=(1,2); rule=blocked_box_crossing"
+  },
+  "capabilities": [
+    "manual",
+    "playbook"
+  ],
+  "examinee_id": "reader-tier2",
+  "meta": {
+    "contamination": "none reported; bundle dir + sheet only",
+    "reader": "fresh subagent, no history, bundle+sheet only",
+    "tier": "tier2_manual_playbook"
+  },
+  "paper_id": "p15-handover-a0",
+  "schema": "exam/v0.1"
+}

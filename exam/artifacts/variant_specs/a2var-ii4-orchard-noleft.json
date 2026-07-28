@@ -1,0 +1,14 @@
+{
+  "base_game": "a2",
+  "base_level": "orchard",
+  "claim": "unsolvable",
+  "justification": "The orchard board has no teleport, so every command displaces the cart by a unit vector or by nothing. With LEFT forbidden the surviving displacements have column components 0, 0 and +1, so the cart's column never decreases. It starts at column 2 and the goal is at column 1. The 118 switches reachable to the right of the start keep the state space past 10^35, so this verdict is not available to enumeration; the monotone column costs three subtractions.",
+  "notes": "The large-space twin of the updraft item, on the other axis.",
+  "operators": [
+    {
+      "action": "LEFT",
+      "op": "forbid_action"
+    }
+  ],
+  "variant_id": "a2var-ii4-orchard-noleft"
+}

@@ -1,0 +1,5 @@
+# Papers, keys and reports are byte-reproducible artefacts: a CRLF translation
+# on checkout would break "same build, same bytes" on any machine with
+# core.autocrlf=true, and a sheet digest that depends on the checkout is not a
+# digest. Everything under exam/ stays LF in the working copy.
+* text eol=lf

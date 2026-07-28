@@ -1,0 +1,2017 @@
+{
+  "calibrated": true,
+  "failures": [],
+  "min_replay_gap": 0.4,
+  "per_type": {
+    "adaptation": {
+      "calibrated": true,
+      "failures": [],
+      "modes": {
+        "bluffer": {
+          "awarded": 24.6,
+          "axes": {
+            "by_tag": {
+              "across_levels": {
+                "awarded": 0.6,
+                "fraction": 0.033333,
+                "n": 6,
+                "possible": 18.0
+              },
+              "budget_narrow": {
+                "awarded": 1.8,
+                "fraction": 0.2,
+                "n": 6,
+                "possible": 9.0
+              },
+              "budget_wide": {
+                "awarded": 2.7,
+                "fraction": 0.3,
+                "n": 6,
+                "possible": 9.0
+              },
+              "collateral": {
+                "awarded": 18.5,
+                "fraction": 0.308333,
+                "n": 6,
+                "possible": 60.0
+              },
+              "describe": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 18.0
+              },
+              "detect": {
+                "awarded": 1.6,
+                "fraction": 0.033333,
+                "n": 36,
+                "possible": 48.0
+              },
+              "repair": {
+                "awarded": 4.5,
+                "fraction": 0.25,
+                "n": 12,
+                "possible": 18.0
+              },
+              "single_level": {
+                "awarded": 1.0,
+                "fraction": 0.033333,
+                "n": 30,
+                "possible": 30.0
+              },
+              "v-a0-01": {
+                "awarded": 1.9,
+                "fraction": 0.079167,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-02": {
+                "awarded": 8.8,
+                "fraction": 0.366667,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-03": {
+                "awarded": 2.8,
+                "fraction": 0.116667,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-04": {
+                "awarded": 1.5,
+                "fraction": 0.0625,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-05": {
+                "awarded": 8.8,
+                "fraction": 0.366667,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-06": {
+                "awarded": 0.8,
+                "fraction": 0.033333,
+                "n": 10,
+                "possible": 24.0
+              }
+            },
+            "collateral_parts_correct": {
+              "false": 2,
+              "reexamine": 5,
+              "rules": 0,
+              "verdict": 2
+            },
+            "describe": {
+              "exact": 0,
+              "n": 6
+            },
+            "detect": {
+              "exact": 0,
+              "false_alarm": 1,
+              "missed": 0,
+              "n": 30,
+              "partial": 4,
+              "undetectable_correct": 0,
+              "undetectable_items": 1
+            },
+            "mismatch_verdict": {
+              "abstained_on_negative": 0,
+              "abstained_on_positive": 0,
+              "fn": 0,
+              "fp": 4,
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "positive_class": "solvable",
+              "sensitivity": 1.0,
+              "specificity": 0.0,
+              "tn": 0,
+              "tp": 2
+            },
+            "repair": {
+              "budget_exact": 0,
+              "exactness_correct": 5,
+              "n": 12
+            },
+            "silently_wrong": 0,
+            "silently_wrong_items": [],
+            "silently_wrong_note": "variants whose verdict on `mismatch` flipped and on which the examinee kept the old one. Counted, never averaged: this is the failure the dependency annotation exists to prevent, and a percentage hides it.",
+            "verdict_flipped_items": [
+              "v-a0-02.collateral",
+              "v-a0-05.collateral"
+            ]
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 0,
+            "unanswered": 0,
+            "wrong": 60
+          },
+          "expected": "in [0, 0.45]",
+          "fraction": 0.170833,
+          "holds": true,
+          "possible": 144.0,
+          "why": "claiming everything is invalidated must not pay: recall without precision is the failure mode this item type exists to price"
+        },
+        "memoriser": {
+          "awarded": 24.6,
+          "axes": {
+            "by_tag": {
+              "across_levels": {
+                "awarded": 0.6,
+                "fraction": 0.033333,
+                "n": 6,
+                "possible": 18.0
+              },
+              "budget_narrow": {
+                "awarded": 1.8,
+                "fraction": 0.2,
+                "n": 6,
+                "possible": 9.0
+              },
+              "budget_wide": {
+                "awarded": 2.7,
+                "fraction": 0.3,
+                "n": 6,
+                "possible": 9.0
+              },
+              "collateral": {
+                "awarded": 18.5,
+                "fraction": 0.308333,
+                "n": 6,
+                "possible": 60.0
+              },
+              "describe": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 18.0
+              },
+              "detect": {
+                "awarded": 1.6,
+                "fraction": 0.033333,
+                "n": 36,
+                "possible": 48.0
+              },
+              "repair": {
+                "awarded": 4.5,
+                "fraction": 0.25,
+                "n": 12,
+                "possible": 18.0
+              },
+              "single_level": {
+                "awarded": 1.0,
+                "fraction": 0.033333,
+                "n": 30,
+                "possible": 30.0
+              },
+              "v-a0-01": {
+                "awarded": 3.0,
+                "fraction": 0.125,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-02": {
+                "awarded": 1.8,
+                "fraction": 0.075,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-03": {
+                "awarded": 8.0,
+                "fraction": 0.333333,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-04": {
+                "awarded": 3.0,
+                "fraction": 0.125,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-05": {
+                "awarded": 1.8,
+                "fraction": 0.075,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-06": {
+                "awarded": 7.0,
+                "fraction": 0.291667,
+                "n": 10,
+                "possible": 24.0
+              }
+            },
+            "collateral_parts_correct": {
+              "false": 2,
+              "reexamine": 1,
+              "rules": 0,
+              "verdict": 4
+            },
+            "describe": {
+              "exact": 0,
+              "n": 6
+            },
+            "detect": {
+              "exact": 1,
+              "false_alarm": 0,
+              "missed": 29,
+              "n": 30,
+              "partial": 0,
+              "undetectable_correct": 1,
+              "undetectable_items": 1
+            },
+            "mismatch_verdict": {
+              "abstained_on_negative": 0,
+              "abstained_on_positive": 0,
+              "fn": 2,
+              "fp": 0,
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "positive_class": "solvable",
+              "sensitivity": 0.0,
+              "specificity": 1.0,
+              "tn": 4,
+              "tp": 0
+            },
+            "repair": {
+              "budget_exact": 0,
+              "exactness_correct": 5,
+              "n": 12
+            },
+            "silently_wrong": 2,
+            "silently_wrong_items": [
+              "v-a0-02.collateral",
+              "v-a0-05.collateral"
+            ],
+            "silently_wrong_note": "variants whose verdict on `mismatch` flipped and on which the examinee kept the old one. Counted, never averaged: this is the failure the dependency annotation exists to prevent, and a percentage hides it.",
+            "verdict_flipped_items": [
+              "v-a0-02.collateral",
+              "v-a0-05.collateral"
+            ]
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 1,
+            "unanswered": 0,
+            "wrong": 59
+          },
+          "expected": "in [0, 0.4]",
+          "fraction": 0.170833,
+          "holds": true,
+          "possible": 144.0,
+          "why": "it answers as though nothing changed, which is the whole failure"
+        },
+        "null": {
+          "awarded": 0.0,
+          "axes": {
+            "by_tag": {
+              "across_levels": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 18.0
+              },
+              "budget_narrow": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 9.0
+              },
+              "budget_wide": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 9.0
+              },
+              "collateral": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 60.0
+              },
+              "describe": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 18.0
+              },
+              "detect": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 36,
+                "possible": 48.0
+              },
+              "repair": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 12,
+                "possible": 18.0
+              },
+              "single_level": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 30,
+                "possible": 30.0
+              },
+              "v-a0-01": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-02": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-03": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-04": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-05": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-06": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 10,
+                "possible": 24.0
+              }
+            },
+            "collateral_parts_correct": {
+              "false": 0,
+              "reexamine": 0,
+              "rules": 0,
+              "verdict": 0
+            },
+            "describe": {
+              "exact": 0,
+              "n": 6
+            },
+            "detect": {
+              "exact": 0,
+              "false_alarm": 0,
+              "missed": 0,
+              "n": 30,
+              "partial": 0,
+              "undetectable_correct": 0,
+              "undetectable_items": 1
+            },
+            "mismatch_verdict": {
+              "abstained_on_negative": 4,
+              "abstained_on_positive": 2,
+              "fn": 0,
+              "fp": 0,
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "positive_class": "solvable",
+              "sensitivity": null,
+              "specificity": null,
+              "tn": 0,
+              "tp": 0
+            },
+            "repair": {
+              "budget_exact": 0,
+              "exactness_correct": 0,
+              "n": 12
+            },
+            "silently_wrong": 0,
+            "silently_wrong_items": [],
+            "silently_wrong_note": "variants whose verdict on `mismatch` flipped and on which the examinee kept the old one. Counted, never averaged: this is the failure the dependency annotation exists to prevent, and a percentage hides it.",
+            "verdict_flipped_items": [
+              "v-a0-02.collateral",
+              "v-a0-05.collateral"
+            ]
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 0,
+            "unanswered": 60,
+            "wrong": 0
+          },
+          "expected": "== 0",
+          "fraction": 0.0,
+          "holds": true,
+          "possible": 144.0,
+          "why": "silence must pay nothing"
+        },
+        "oracle": {
+          "awarded": 144.0,
+          "axes": {
+            "by_tag": {
+              "across_levels": {
+                "awarded": 18.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 18.0
+              },
+              "budget_narrow": {
+                "awarded": 9.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 9.0
+              },
+              "budget_wide": {
+                "awarded": 9.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 9.0
+              },
+              "collateral": {
+                "awarded": 60.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 60.0
+              },
+              "describe": {
+                "awarded": 18.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 18.0
+              },
+              "detect": {
+                "awarded": 48.0,
+                "fraction": 1.0,
+                "n": 36,
+                "possible": 48.0
+              },
+              "repair": {
+                "awarded": 18.0,
+                "fraction": 1.0,
+                "n": 12,
+                "possible": 18.0
+              },
+              "single_level": {
+                "awarded": 30.0,
+                "fraction": 1.0,
+                "n": 30,
+                "possible": 30.0
+              },
+              "v-a0-01": {
+                "awarded": 24.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-02": {
+                "awarded": 24.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-03": {
+                "awarded": 24.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-04": {
+                "awarded": 24.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-05": {
+                "awarded": 24.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 24.0
+              },
+              "v-a0-06": {
+                "awarded": 24.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 24.0
+              }
+            },
+            "collateral_parts_correct": {
+              "false": 6,
+              "reexamine": 6,
+              "rules": 6,
+              "verdict": 6
+            },
+            "describe": {
+              "exact": 6,
+              "n": 6
+            },
+            "detect": {
+              "exact": 30,
+              "false_alarm": 0,
+              "missed": 0,
+              "n": 30,
+              "partial": 0,
+              "undetectable_correct": 1,
+              "undetectable_items": 1
+            },
+            "mismatch_verdict": {
+              "abstained_on_negative": 0,
+              "abstained_on_positive": 0,
+              "fn": 0,
+              "fp": 0,
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "positive_class": "solvable",
+              "sensitivity": 1.0,
+              "specificity": 1.0,
+              "tn": 4,
+              "tp": 2
+            },
+            "repair": {
+              "budget_exact": 12,
+              "exactness_correct": 12,
+              "n": 12
+            },
+            "silently_wrong": 0,
+            "silently_wrong_items": [],
+            "silently_wrong_note": "variants whose verdict on `mismatch` flipped and on which the examinee kept the old one. Counted, never averaged: this is the failure the dependency annotation exists to prevent, and a percentage hides it.",
+            "verdict_flipped_items": [
+              "v-a0-02.collateral",
+              "v-a0-05.collateral"
+            ]
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 60,
+            "unanswered": 0,
+            "wrong": 0
+          },
+          "expected": "== 1",
+          "fraction": 1.0,
+          "holds": true,
+          "possible": 144.0,
+          "why": "ground truth must be accepted in full"
+        },
+        "structural": {
+          "memoriser_silently_wrong": 2
+        }
+      },
+      "n_items": 60,
+      "paper_id": "p15-adaptation-a0",
+      "question_type": "adaptation",
+      "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697"
+    },
+    "handover": {
+      "calibrated": true,
+      "failures": [],
+      "modes": {
+        "bluffer": {
+          "awarded": 15.0,
+          "axes": {
+            "answers_submitted": 29,
+            "author_baseline_form": "checked-in",
+            "author_baseline_fraction": 1.0,
+            "by_tag": {
+              "level:corridor": {
+                "awarded": 4.0,
+                "fraction": 0.222222,
+                "n": 9,
+                "possible": 18.0
+              },
+              "level:pinch": {
+                "awarded": 2.0,
+                "fraction": 0.2,
+                "n": 5,
+                "possible": 10.0
+              },
+              "level:yard": {
+                "awarded": 2.0,
+                "fraction": 0.333333,
+                "n": 3,
+                "possible": 6.0
+              },
+              "level_data_vs_world_law": {
+                "awarded": 7.0,
+                "fraction": 0.583333,
+                "n": 12,
+                "possible": 12.0
+              },
+              "optimal_action": {
+                "awarded": 6.0,
+                "fraction": 0.5,
+                "n": 6,
+                "possible": 12.0
+              },
+              "step_semantics": {
+                "awarded": 2.0,
+                "fraction": 0.090909,
+                "n": 11,
+                "possible": 22.0
+              }
+            },
+            "capability_unclaimed": "29 answers were submitted by an examinee that declares no 'handover_bundle' capability. The mark stands on the answers, but the examinee cannot be reported as a handover arm until it says what it handed over.",
+            "fraction": 0.326087,
+            "no_deliverable": false,
+            "reader_minus_author": -0.673913,
+            "tier": null,
+            "tier2_minus_tier1": null,
+            "tier2_minus_tier1_note": "a tier difference needs both tiers. Mark the sibling tier and pass its fraction as submission.meta['paired_tier_fraction'], or use exam.papers.handover.tier_delta(report_tier1, report_tier2)."
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 11,
+            "unanswered": 0,
+            "wrong": 18
+          },
+          "expected": "in [0, 0.55]",
+          "fraction": 0.326087,
+          "holds": true,
+          "possible": 46.0,
+          "why": "answering the modal label in each family beats zero and should not approach a reader who understood the document"
+        },
+        "memoriser": {
+          "awarded": 33.0,
+          "axes": {
+            "answers_submitted": 29,
+            "author_baseline_form": "checked-in",
+            "author_baseline_fraction": 1.0,
+            "by_tag": {
+              "level:corridor": {
+                "awarded": 16.0,
+                "fraction": 0.888889,
+                "n": 9,
+                "possible": 18.0
+              },
+              "level:pinch": {
+                "awarded": 6.0,
+                "fraction": 0.6,
+                "n": 5,
+                "possible": 10.0
+              },
+              "level:yard": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 3,
+                "possible": 6.0
+              },
+              "level_data_vs_world_law": {
+                "awarded": 5.0,
+                "fraction": 0.416667,
+                "n": 12,
+                "possible": 12.0
+              },
+              "optimal_action": {
+                "awarded": 6.0,
+                "fraction": 0.5,
+                "n": 6,
+                "possible": 12.0
+              },
+              "step_semantics": {
+                "awarded": 22.0,
+                "fraction": 1.0,
+                "n": 11,
+                "possible": 22.0
+              }
+            },
+            "capability_unclaimed": "29 answers were submitted by an examinee that declares no 'handover_bundle' capability. The mark stands on the answers, but the examinee cannot be reported as a handover arm until it says what it handed over.",
+            "fraction": 0.717391,
+            "no_deliverable": false,
+            "reader_minus_author": -0.282609,
+            "tier": null,
+            "tier2_minus_tier1": null,
+            "tier2_minus_tier1_note": "a tier difference needs both tiers. Mark the sibling tier and pass its fraction as submission.meta['paired_tier_fraction'], or use exam.papers.handover.tier_delta(report_tier1, report_tier2)."
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 19,
+            "unanswered": 0,
+            "wrong": 10
+          },
+          "expected": "in [0, 0.8]",
+          "fraction": 0.717391,
+          "holds": true,
+          "possible": 46.0,
+          "why": "the manual drills step semantics, so it can pass that family while failing to tell level data from world law"
+        },
+        "null": {
+          "awarded": 0.0,
+          "axes": {
+            "answers_submitted": 0,
+            "author_baseline_form": "checked-in",
+            "author_baseline_fraction": 1.0,
+            "by_tag": {
+              "level:corridor": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 9,
+                "possible": 18.0
+              },
+              "level:pinch": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 5,
+                "possible": 10.0
+              },
+              "level:yard": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 3,
+                "possible": 6.0
+              },
+              "level_data_vs_world_law": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "optimal_action": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 12.0
+              },
+              "step_semantics": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 11,
+                "possible": 22.0
+              }
+            },
+            "fraction": 0.0,
+            "no_deliverable": true,
+            "no_deliverable_reason": "the submission declares no 'handover_bundle' capability and carries no answers, so there was no bundle to hand a fresh reader. The zero is by construction, not by failure to answer: Theoria.md 1.11, CC 无物可交记零.",
+            "reader_minus_author": -1.0,
+            "tier": null,
+            "tier2_minus_tier1": null,
+            "tier2_minus_tier1_note": "a tier difference needs both tiers. Mark the sibling tier and pass its fraction as submission.meta['paired_tier_fraction'], or use exam.papers.handover.tier_delta(report_tier1, report_tier2)."
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 0,
+            "unanswered": 29,
+            "wrong": 0
+          },
+          "expected": "== 0",
+          "fraction": 0.0,
+          "holds": true,
+          "possible": 46.0,
+          "why": "an arm with no deliverable scores zero"
+        },
+        "oracle": {
+          "awarded": 46.0,
+          "axes": {
+            "answers_submitted": 29,
+            "author_baseline_form": "checked-in",
+            "author_baseline_fraction": 1.0,
+            "by_tag": {
+              "level:corridor": {
+                "awarded": 18.0,
+                "fraction": 1.0,
+                "n": 9,
+                "possible": 18.0
+              },
+              "level:pinch": {
+                "awarded": 10.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 10.0
+              },
+              "level:yard": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 3,
+                "possible": 6.0
+              },
+              "level_data_vs_world_law": {
+                "awarded": 12.0,
+                "fraction": 1.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "optimal_action": {
+                "awarded": 12.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 12.0
+              },
+              "step_semantics": {
+                "awarded": 22.0,
+                "fraction": 1.0,
+                "n": 11,
+                "possible": 22.0
+              }
+            },
+            "capability_unclaimed": "29 answers were submitted by an examinee that declares no 'handover_bundle' capability. The mark stands on the answers, but the examinee cannot be reported as a handover arm until it says what it handed over.",
+            "fraction": 1.0,
+            "no_deliverable": false,
+            "reader_minus_author": 0.0,
+            "tier": null,
+            "tier2_minus_tier1": null,
+            "tier2_minus_tier1_note": "a tier difference needs both tiers. Mark the sibling tier and pass its fraction as submission.meta['paired_tier_fraction'], or use exam.papers.handover.tier_delta(report_tier1, report_tier2)."
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 29,
+            "unanswered": 0,
+            "wrong": 0
+          },
+          "expected": "== 1",
+          "fraction": 1.0,
+          "holds": true,
+          "possible": 46.0,
+          "why": "ground truth must be accepted in full"
+        },
+        "structural": {}
+      },
+      "n_items": 29,
+      "paper_id": "p15-handover-a0",
+      "question_type": "handover",
+      "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697"
+    },
+    "heldout": {
+      "calibrated": true,
+      "failures": [],
+      "modes": {
+        "bluffer": {
+          "awarded": 36.0,
+          "axes": {
+            "abstained": 0,
+            "by_event": {
+              "blocked_crossing": {
+                "awarded": 10.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 10.0
+              },
+              "blocked_edge": {
+                "awarded": 8.0,
+                "fraction": 1.0,
+                "n": 8,
+                "possible": 8.0
+              },
+              "blocked_landing": {
+                "awarded": 10.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 10.0
+              },
+              "blocked_wall": {
+                "awarded": 8.0,
+                "fraction": 1.0,
+                "n": 8,
+                "possible": 8.0
+              },
+              "move": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 32,
+                "possible": 32.0
+              }
+            },
+            "by_split": {
+              "heldout": {
+                "awarded": 18.0,
+                "fraction": 0.45,
+                "n": 40,
+                "possible": 40.0
+              },
+              "replay": {
+                "awarded": 18.0,
+                "fraction": 0.45,
+                "n": 40,
+                "possible": 40.0
+              }
+            },
+            "by_split_event": {
+              "heldout/blocked_crossing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "heldout/blocked_edge": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "heldout/blocked_landing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "heldout/blocked_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "heldout/move": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "heldout/push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 16,
+                "possible": 16.0
+              },
+              "replay/blocked_crossing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_edge": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay/blocked_landing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay/move": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay/push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 16,
+                "possible": 16.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 18.0,
+                "fraction": 0.45,
+                "n": 40,
+                "possible": 40.0
+              },
+              "replay": {
+                "awarded": 18.0,
+                "fraction": 0.45,
+                "n": 40,
+                "possible": 40.0
+              }
+            },
+            "gap_note": "replay minus held-out. A rule-learner is near zero; a memoriser is near its own replay score. Read it beside by_split.heldout.fraction, never instead of it.",
+            "gap_replay_minus_heldout": 0.0,
+            "rare_class": "blocked_crossing",
+            "rare_class_scores": {
+              "heldout/blocked_crossing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_crossing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              }
+            },
+            "unanswered": 0,
+            "unchanged_frame_note": "what an examinee scores by always returning the input frame -- the bluffer's ceiling on this paper, published rather than assumed small.",
+            "unchanged_frame_share": 0.45
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 36,
+            "unanswered": 0,
+            "wrong": 44
+          },
+          "expected": "in [0, 0.5]",
+          "fraction": 0.45,
+          "holds": true,
+          "possible": 80.0,
+          "why": "an absolute band here encodes an assumption about item mix that the paper is entitled to refute. The real checks are `bluffer_hits_ceiling` and `oracle_minus_bluffer`; this is a backstop, not the measurement."
+        },
+        "memoriser": {
+          "awarded": 46.0,
+          "axes": {
+            "abstained": 4,
+            "by_event": {
+              "blocked_crossing": {
+                "awarded": 5.0,
+                "fraction": 0.5,
+                "n": 10,
+                "possible": 10.0
+              },
+              "blocked_edge": {
+                "awarded": 4.0,
+                "fraction": 0.5,
+                "n": 8,
+                "possible": 8.0
+              },
+              "blocked_landing": {
+                "awarded": 5.0,
+                "fraction": 0.5,
+                "n": 10,
+                "possible": 10.0
+              },
+              "blocked_wall": {
+                "awarded": 4.0,
+                "fraction": 0.5,
+                "n": 8,
+                "possible": 8.0
+              },
+              "move": {
+                "awarded": 12.0,
+                "fraction": 1.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "push": {
+                "awarded": 16.0,
+                "fraction": 0.5,
+                "n": 32,
+                "possible": 32.0
+              }
+            },
+            "by_split": {
+              "heldout": {
+                "awarded": 6.0,
+                "fraction": 0.15,
+                "n": 40,
+                "possible": 40.0
+              },
+              "replay": {
+                "awarded": 40.0,
+                "fraction": 1.0,
+                "n": 40,
+                "possible": 40.0
+              }
+            },
+            "by_split_event": {
+              "heldout/blocked_crossing": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "heldout/blocked_edge": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "heldout/blocked_landing": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "heldout/blocked_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "heldout/move": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "heldout/push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 16,
+                "possible": 16.0
+              },
+              "replay/blocked_crossing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_edge": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay/blocked_landing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay/move": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay/push": {
+                "awarded": 16.0,
+                "fraction": 1.0,
+                "n": 16,
+                "possible": 16.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 6.0,
+                "fraction": 0.15,
+                "n": 40,
+                "possible": 40.0
+              },
+              "replay": {
+                "awarded": 40.0,
+                "fraction": 1.0,
+                "n": 40,
+                "possible": 40.0
+              }
+            },
+            "gap_note": "replay minus held-out. A rule-learner is near zero; a memoriser is near its own replay score. Read it beside by_split.heldout.fraction, never instead of it.",
+            "gap_replay_minus_heldout": 0.85,
+            "rare_class": "blocked_crossing",
+            "rare_class_scores": {
+              "heldout/blocked_crossing": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_crossing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              }
+            },
+            "unanswered": 0,
+            "unchanged_frame_note": "what an examinee scores by always returning the input frame -- the bluffer's ceiling on this paper, published rather than assumed small.",
+            "unchanged_frame_share": 0.45
+          },
+          "counts": {
+            "abstained": 4,
+            "correct": 46,
+            "unanswered": 0,
+            "wrong": 30
+          },
+          "expected": "in [0, 0.75]",
+          "fraction": 0.575,
+          "holds": true,
+          "possible": 80.0,
+          "why": "it replays what it saw, so its total is dragged up by the replay control and down by held-out. The number that matters is the gap, checked separately by `replay_gap`."
+        },
+        "null": {
+          "awarded": 0.0,
+          "axes": {
+            "abstained": 0,
+            "by_event": {
+              "blocked_crossing": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 10,
+                "possible": 10.0
+              },
+              "blocked_edge": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 8,
+                "possible": 8.0
+              },
+              "blocked_landing": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 10,
+                "possible": 10.0
+              },
+              "blocked_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 8,
+                "possible": 8.0
+              },
+              "move": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 32,
+                "possible": 32.0
+              }
+            },
+            "by_split": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 40,
+                "possible": 40.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 40,
+                "possible": 40.0
+              }
+            },
+            "by_split_event": {
+              "heldout/blocked_crossing": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "heldout/blocked_edge": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "heldout/blocked_landing": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "heldout/blocked_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "heldout/move": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "heldout/push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 16,
+                "possible": 16.0
+              },
+              "replay/blocked_crossing": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_edge": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay/blocked_landing": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_wall": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay/move": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay/push": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 16,
+                "possible": 16.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 40,
+                "possible": 40.0
+              },
+              "replay": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 40,
+                "possible": 40.0
+              }
+            },
+            "gap_note": "replay minus held-out. A rule-learner is near zero; a memoriser is near its own replay score. Read it beside by_split.heldout.fraction, never instead of it.",
+            "gap_replay_minus_heldout": 0.0,
+            "rare_class": "blocked_crossing",
+            "rare_class_scores": {
+              "heldout/blocked_crossing": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_crossing": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 5,
+                "possible": 5.0
+              }
+            },
+            "unanswered": 80,
+            "unchanged_frame_note": "what an examinee scores by always returning the input frame -- the bluffer's ceiling on this paper, published rather than assumed small.",
+            "unchanged_frame_share": 0.45
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 0,
+            "unanswered": 80,
+            "wrong": 0
+          },
+          "expected": "== 0",
+          "fraction": 0.0,
+          "holds": true,
+          "possible": 80.0,
+          "why": "silence must pay nothing"
+        },
+        "oracle": {
+          "awarded": 80.0,
+          "axes": {
+            "abstained": 0,
+            "by_event": {
+              "blocked_crossing": {
+                "awarded": 10.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 10.0
+              },
+              "blocked_edge": {
+                "awarded": 8.0,
+                "fraction": 1.0,
+                "n": 8,
+                "possible": 8.0
+              },
+              "blocked_landing": {
+                "awarded": 10.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 10.0
+              },
+              "blocked_wall": {
+                "awarded": 8.0,
+                "fraction": 1.0,
+                "n": 8,
+                "possible": 8.0
+              },
+              "move": {
+                "awarded": 12.0,
+                "fraction": 1.0,
+                "n": 12,
+                "possible": 12.0
+              },
+              "push": {
+                "awarded": 32.0,
+                "fraction": 1.0,
+                "n": 32,
+                "possible": 32.0
+              }
+            },
+            "by_split": {
+              "heldout": {
+                "awarded": 40.0,
+                "fraction": 1.0,
+                "n": 40,
+                "possible": 40.0
+              },
+              "replay": {
+                "awarded": 40.0,
+                "fraction": 1.0,
+                "n": 40,
+                "possible": 40.0
+              }
+            },
+            "by_split_event": {
+              "heldout/blocked_crossing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "heldout/blocked_edge": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "heldout/blocked_landing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "heldout/blocked_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "heldout/move": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "heldout/push": {
+                "awarded": 16.0,
+                "fraction": 1.0,
+                "n": 16,
+                "possible": 16.0
+              },
+              "replay/blocked_crossing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_edge": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay/blocked_landing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_wall": {
+                "awarded": 4.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 4.0
+              },
+              "replay/move": {
+                "awarded": 6.0,
+                "fraction": 1.0,
+                "n": 6,
+                "possible": 6.0
+              },
+              "replay/push": {
+                "awarded": 16.0,
+                "fraction": 1.0,
+                "n": 16,
+                "possible": 16.0
+              }
+            },
+            "by_tag": {
+              "heldout": {
+                "awarded": 40.0,
+                "fraction": 1.0,
+                "n": 40,
+                "possible": 40.0
+              },
+              "replay": {
+                "awarded": 40.0,
+                "fraction": 1.0,
+                "n": 40,
+                "possible": 40.0
+              }
+            },
+            "gap_note": "replay minus held-out. A rule-learner is near zero; a memoriser is near its own replay score. Read it beside by_split.heldout.fraction, never instead of it.",
+            "gap_replay_minus_heldout": 0.0,
+            "rare_class": "blocked_crossing",
+            "rare_class_scores": {
+              "heldout/blocked_crossing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              },
+              "replay/blocked_crossing": {
+                "awarded": 5.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 5.0
+              }
+            },
+            "unanswered": 0,
+            "unchanged_frame_note": "what an examinee scores by always returning the input frame -- the bluffer's ceiling on this paper, published rather than assumed small.",
+            "unchanged_frame_share": 0.45
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 80,
+            "unanswered": 0,
+            "wrong": 0
+          },
+          "expected": "== 1",
+          "fraction": 1.0,
+          "holds": true,
+          "possible": 80.0,
+          "why": "ground truth must be accepted in full"
+        },
+        "structural": {
+          "bluffer_fraction": 0.45,
+          "min_replay_gap": 0.4,
+          "oracle_minus_bluffer": 0.55,
+          "published_bluffer_ceiling": 0.45,
+          "replay_gap": 0.85
+        }
+      },
+      "n_items": 80,
+      "paper_id": "p15-heldout-a0",
+      "question_type": "heldout",
+      "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697"
+    },
+    "verdict": {
+      "calibrated": true,
+      "failures": [],
+      "modes": {
+        "bluffer": {
+          "awarded": 9.0,
+          "axes": {
+            "by_board_size": {
+              "large": {
+                "awarded": 4.0,
+                "fraction": 0.285714,
+                "n": 7,
+                "possible": 14.0
+              },
+              "small": {
+                "awarded": 5.0,
+                "fraction": 0.25,
+                "n": 10,
+                "possible": 20.0
+              }
+            },
+            "by_class": {
+              "large_unsolvable": {
+                "awarded": 4.0,
+                "fraction": 0.5,
+                "n": 4,
+                "possible": 8.0
+              },
+              "small_unsolvable": {
+                "awarded": 5.0,
+                "fraction": 0.5,
+                "n": 5,
+                "possible": 10.0
+              },
+              "solvable_hard": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 8,
+                "possible": 16.0
+              }
+            },
+            "by_tag": {
+              "a2-family": {
+                "awarded": 9.0,
+                "fraction": 0.264706,
+                "n": 17,
+                "possible": 34.0
+              },
+              "verdict": {
+                "awarded": 9.0,
+                "fraction": 0.264706,
+                "n": 17,
+                "possible": 34.0
+              }
+            },
+            "confusion": {
+              "abstained_on_negative": 0,
+              "abstained_on_positive": 0,
+              "fn": 0,
+              "fp": 8,
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "positive_class": "unsolvable",
+              "sensitivity": 1.0,
+              "specificity": 0.0,
+              "tn": 0,
+              "tp": 9
+            },
+            "reason_quality": {
+              "certified_share_of_correct_unsolvable": 0.0,
+              "counts": {
+                "none": 17
+              },
+              "note": "A right 'unsolvable' backed by a certificate and a right 'unsolvable' backed by 'I searched everything' are the same verdict and not the same answer. Theoria.md 1.11 class (i) is about precisely this gap."
+            }
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 9,
+            "unanswered": 0,
+            "wrong": 8
+          },
+          "expected": "in [0, 0.5]",
+          "fraction": 0.264706,
+          "holds": true,
+          "possible": 34.0,
+          "why": "always answering `unsolvable` buys perfect sensitivity and zero specificity; the score must reflect the pair, not the sensitivity"
+        },
+        "memoriser": {
+          "awarded": 20.0,
+          "axes": {
+            "by_board_size": {
+              "large": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 7,
+                "possible": 14.0
+              },
+              "small": {
+                "awarded": 20.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 20.0
+              }
+            },
+            "by_class": {
+              "large_unsolvable": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 8.0
+              },
+              "small_unsolvable": {
+                "awarded": 10.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 10.0
+              },
+              "solvable_hard": {
+                "awarded": 10.0,
+                "fraction": 0.625,
+                "n": 8,
+                "possible": 16.0
+              }
+            },
+            "by_tag": {
+              "a2-family": {
+                "awarded": 20.0,
+                "fraction": 0.588235,
+                "n": 17,
+                "possible": 34.0
+              },
+              "verdict": {
+                "awarded": 20.0,
+                "fraction": 0.588235,
+                "n": 17,
+                "possible": 34.0
+              }
+            },
+            "confusion": {
+              "abstained_on_negative": 3,
+              "abstained_on_positive": 4,
+              "fn": 0,
+              "fp": 0,
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "positive_class": "unsolvable",
+              "sensitivity": 1.0,
+              "specificity": 1.0,
+              "tn": 5,
+              "tp": 5
+            },
+            "reason_quality": {
+              "certified_share_of_correct_unsolvable": 1.0,
+              "counts": {
+                "certificate": 5,
+                "unanswered": 7,
+                "witness": 5
+              },
+              "note": "A right 'unsolvable' backed by a certificate and a right 'unsolvable' backed by 'I searched everything' are the same verdict and not the same answer. Theoria.md 1.11 class (i) is about precisely this gap."
+            }
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 10,
+            "unanswered": 7,
+            "wrong": 0
+          },
+          "expected": "in [0, 0.7]",
+          "fraction": 0.588235,
+          "holds": true,
+          "possible": 34.0,
+          "why": "competent on the small-space family it has seen, collapsing on the large-space one it cannot enumerate"
+        },
+        "null": {
+          "awarded": 0.0,
+          "axes": {
+            "by_board_size": {
+              "large": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 7,
+                "possible": 14.0
+              },
+              "small": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 10,
+                "possible": 20.0
+              }
+            },
+            "by_class": {
+              "large_unsolvable": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 4,
+                "possible": 8.0
+              },
+              "small_unsolvable": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 5,
+                "possible": 10.0
+              },
+              "solvable_hard": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 8,
+                "possible": 16.0
+              }
+            },
+            "by_tag": {
+              "a2-family": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 17,
+                "possible": 34.0
+              },
+              "verdict": {
+                "awarded": 0.0,
+                "fraction": 0.0,
+                "n": 17,
+                "possible": 34.0
+              }
+            },
+            "confusion": {
+              "abstained_on_negative": 8,
+              "abstained_on_positive": 9,
+              "fn": 0,
+              "fp": 0,
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "positive_class": "unsolvable",
+              "sensitivity": null,
+              "specificity": null,
+              "tn": 0,
+              "tp": 0
+            },
+            "reason_quality": {
+              "certified_share_of_correct_unsolvable": null,
+              "counts": {
+                "unanswered": 17
+              },
+              "note": "A right 'unsolvable' backed by a certificate and a right 'unsolvable' backed by 'I searched everything' are the same verdict and not the same answer. Theoria.md 1.11 class (i) is about precisely this gap."
+            }
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 0,
+            "unanswered": 17,
+            "wrong": 0
+          },
+          "expected": "== 0",
+          "fraction": 0.0,
+          "holds": true,
+          "possible": 34.0,
+          "why": "silence must pay nothing"
+        },
+        "oracle": {
+          "awarded": 34.0,
+          "axes": {
+            "by_board_size": {
+              "large": {
+                "awarded": 14.0,
+                "fraction": 1.0,
+                "n": 7,
+                "possible": 14.0
+              },
+              "small": {
+                "awarded": 20.0,
+                "fraction": 1.0,
+                "n": 10,
+                "possible": 20.0
+              }
+            },
+            "by_class": {
+              "large_unsolvable": {
+                "awarded": 8.0,
+                "fraction": 1.0,
+                "n": 4,
+                "possible": 8.0
+              },
+              "small_unsolvable": {
+                "awarded": 10.0,
+                "fraction": 1.0,
+                "n": 5,
+                "possible": 10.0
+              },
+              "solvable_hard": {
+                "awarded": 16.0,
+                "fraction": 1.0,
+                "n": 8,
+                "possible": 16.0
+              }
+            },
+            "by_tag": {
+              "a2-family": {
+                "awarded": 34.0,
+                "fraction": 1.0,
+                "n": 17,
+                "possible": 34.0
+              },
+              "verdict": {
+                "awarded": 34.0,
+                "fraction": 1.0,
+                "n": 17,
+                "possible": 34.0
+              }
+            },
+            "confusion": {
+              "abstained_on_negative": 0,
+              "abstained_on_positive": 0,
+              "fn": 0,
+              "fp": 0,
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "positive_class": "unsolvable",
+              "sensitivity": 1.0,
+              "specificity": 1.0,
+              "tn": 8,
+              "tp": 9
+            },
+            "reason_quality": {
+              "certified_share_of_correct_unsolvable": 1.0,
+              "counts": {
+                "certificate": 9,
+                "witness": 8
+              },
+              "note": "A right 'unsolvable' backed by a certificate and a right 'unsolvable' backed by 'I searched everything' are the same verdict and not the same answer. Theoria.md 1.11 class (i) is about precisely this gap."
+            }
+          },
+          "counts": {
+            "abstained": 0,
+            "correct": 17,
+            "unanswered": 0,
+            "wrong": 0
+          },
+          "expected": "== 1",
+          "fraction": 1.0,
+          "holds": true,
+          "possible": 34.0,
+          "why": "ground truth must be accepted in full"
+        },
+        "structural": {
+          "bluffer_sensitivity": 1.0,
+          "bluffer_specificity": 0.0
+        }
+      },
+      "n_items": 17,
+      "paper_id": "p15-verdict-a2",
+      "question_type": "verdict",
+      "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697"
+    }
+  },
+  "pre_registered": {
+    "adaptation/bluffer": {
+      "band": "in [0, 0.45]",
+      "why": "claiming everything is invalidated must not pay: recall without precision is the failure mode this item type exists to price"
+    },
+    "adaptation/memoriser": {
+      "band": "in [0, 0.4]",
+      "why": "it answers as though nothing changed, which is the whole failure"
+    },
+    "adaptation/null": {
+      "band": "== 0",
+      "why": "silence must pay nothing"
+    },
+    "adaptation/oracle": {
+      "band": "== 1",
+      "why": "ground truth must be accepted in full"
+    },
+    "handover/bluffer": {
+      "band": "in [0, 0.55]",
+      "why": "answering the modal label in each family beats zero and should not approach a reader who understood the document"
+    },
+    "handover/memoriser": {
+      "band": "in [0, 0.8]",
+      "why": "the manual drills step semantics, so it can pass that family while failing to tell level data from world law"
+    },
+    "handover/null": {
+      "band": "== 0",
+      "why": "an arm with no deliverable scores zero"
+    },
+    "handover/oracle": {
+      "band": "== 1",
+      "why": "ground truth must be accepted in full"
+    },
+    "heldout/bluffer": {
+      "band": "in [0, 0.5]",
+      "why": "an absolute band here encodes an assumption about item mix that the paper is entitled to refute. The real checks are `bluffer_hits_ceiling` and `oracle_minus_bluffer`; this is a backstop, not the measurement."
+    },
+    "heldout/memoriser": {
+      "band": "in [0, 0.75]",
+      "why": "it replays what it saw, so its total is dragged up by the replay control and down by held-out. The number that matters is the gap, checked separately by `replay_gap`."
+    },
+    "heldout/null": {
+      "band": "== 0",
+      "why": "silence must pay nothing"
+    },
+    "heldout/oracle": {
+      "band": "== 1",
+      "why": "ground truth must be accepted in full"
+    },
+    "verdict/bluffer": {
+      "band": "in [0, 0.5]",
+      "why": "always answering `unsolvable` buys perfect sensitivity and zero specificity; the score must reflect the pair, not the sensitivity"
+    },
+    "verdict/memoriser": {
+      "band": "in [0, 0.7]",
+      "why": "competent on the small-space family it has seen, collapsing on the large-space one it cannot enumerate"
+    },
+    "verdict/null": {
+      "band": "== 0",
+      "why": "silence must pay nothing"
+    },
+    "verdict/oracle": {
+      "band": "== 1",
+      "why": "ground truth must be accepted in full"
+    }
+  },
+  "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697",
+  "structural_expectations": {
+    "heldout_replay_gap": "the memoriser's replay score must exceed its held-out score by a wide margin, or the paper is not testing rules",
+    "null_all_unanswered": "every item of a null submission is `unanswered`",
+    "oracle_no_wrong": "an oracle submission contains no `wrong` verdict",
+    "verdict_bluffer_pair": "the bluffer must show sensitivity 1.0 and specificity 0.0"
+  }
+}

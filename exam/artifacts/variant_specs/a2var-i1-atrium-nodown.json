@@ -1,0 +1,14 @@
+{
+  "base_game": "a2",
+  "base_level": "atrium",
+  "claim": "unsolvable",
+  "justification": "Column 5 of the atrium board is solid wall from r1 to r7, so the right room touches the left room nowhere; its only entrance is the teleport at (7,4), and (7,4) is enterable only from the door cell (6,4) by a DOWN command -- its other three neighbours are wall. Forbidding DOWN therefore deletes the single edge joining the two rooms, and the cart's connected component is closed under every surviving command. The goal (2,7) lies in the other component. This follows from the board and the operator; no play is required to know it.",
+  "notes": "The forbidden command is never forwarded, so the arm observes an unchanged frame -- the wrapper-legal way to remove an action.",
+  "operators": [
+    {
+      "action": "DOWN",
+      "op": "forbid_action"
+    }
+  ],
+  "variant_id": "a2var-i1-atrium-nodown"
+}

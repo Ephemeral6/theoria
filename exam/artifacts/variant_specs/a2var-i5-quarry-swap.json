@@ -1,0 +1,20 @@
+{
+  "base_game": "a2",
+  "base_level": "quarry",
+  "claim": "unsolvable",
+  "justification": "The quarry board's goal room is enclosed by static wall on all four sides: row 3 is solid, row 6 is solid, and columns 0 and 8 are the border. No wrapper operator can open a wall, and relabelling LEFT and RIGHT is a bijection on the alphabet, so the set of reachable cells is exactly the base game's. The start (1,1) and the goal (4,7) lie in different connected components of the board, and did before the operator was applied.",
+  "notes": "An item whose operator is irrelevant is a control: it catches an examinee that reasons about the wrapper instead of the board.",
+  "operators": [
+    {
+      "from": "LEFT",
+      "op": "remap_action",
+      "to": "RIGHT"
+    },
+    {
+      "from": "RIGHT",
+      "op": "remap_action",
+      "to": "LEFT"
+    }
+  ],
+  "variant_id": "a2var-i5-quarry-swap"
+}

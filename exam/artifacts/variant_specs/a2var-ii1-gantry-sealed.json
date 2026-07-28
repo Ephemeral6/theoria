@@ -1,0 +1,20 @@
+{
+  "base_game": "a2",
+  "base_level": "gantry",
+  "claim": "unsolvable",
+  "justification": "The gantry board's goal room (rows 5-6) sits under a separator row that is solid wall across its whole width, and is bounded by the border everywhere else, so it is a connected component of the board on its own. Relabelling LEFT and RIGHT is a bijection on the alphabet and cannot add an edge. The 120 latching switches make the state space astronomically large, which is exactly why the answer has to come from the partition rather than from a search: nothing about the switches touches the separator.",
+  "notes": "The large-space twin of the quarry item: same argument, a state space no enumeration will reach.",
+  "operators": [
+    {
+      "from": "LEFT",
+      "op": "remap_action",
+      "to": "RIGHT"
+    },
+    {
+      "from": "RIGHT",
+      "op": "remap_action",
+      "to": "LEFT"
+    }
+  ],
+  "variant_id": "a2var-ii1-gantry-sealed"
+}
