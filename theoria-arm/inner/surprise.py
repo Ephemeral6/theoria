@@ -91,6 +91,24 @@ class Register:
             item.handled_by = by
         return taken
 
+    def retire_pending(self, reason: str) -> Dict[str, Any]:
+        """Close pending surprises without theorizing, and say why.
+
+        The one caller is the level boundary (`inner/levels.py`). A surprise is
+        the only thing that calls the desk, so a surprise still pending when
+        the world is replaced would buy an adjudication of evidence the arm can
+        no longer show. Retiring is not deleting: the items stay in the
+        register, so `counts()` is unchanged and `constraint 8` still adds up.
+        What changes is `handled_by`, which now records that the boundary
+        closed them rather than a theorize call.
+        """
+        taken = self.pending
+        for item in taken:
+            item.handled_by = "retired: %s" % reason
+        return {"retired": len(taken),
+                "kinds": sorted({item.kind for item in taken}),
+                "reason": reason}
+
     def counts(self) -> Dict[str, int]:
         """All seven kinds, always -- a zero is a measurement, not an absence."""
         out = {kind: 0 for kind in KINDS}

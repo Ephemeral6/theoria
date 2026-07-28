@@ -42,6 +42,7 @@ from world.frames import FrameStore, Step, grid_hash
 
 from . import certify, commit, plan as plan_beat, probe as probe_beat, theorize
 from .books import Books
+from .levels import LevelLog
 from .surprise import Register
 
 #: A first manual needs more than one frame. The sweep tries each legal action
@@ -77,6 +78,32 @@ DEFAULT_WALL_CLOCK_S = 3 * 3600
 #: delays a call, it never cancels one.
 MIN_NEW_FRAMES_BETWEEN_THEORIZE = 4
 
+#: **This repo has never observed a level completion.** Across every recorded
+#: live response — ~2,600 envelopes spanning all four development-pile games,
+#: both baseline arms and this one — `levels_completed` is `0` and `state` is
+#: `NOT_FINISHED` (once `GAME_OVER`). Nobody has cleared a level, so nobody has
+#: seen which of the two plausible signals ARC actually sends: the counter
+#: incrementing in-band, or `state: "WIN"` with levels still to play.
+#:
+#: Guessing one would be cheap and wrong half the time, and the failure is
+#: silent in the expensive direction: if the signal is `WIN`, an arm that reads
+#: `WIN` as terminal stops at the end of level 1 and every line of level
+#: handling below it is dead code that nobody notices, because a run that ends
+#: at a WIN looks like a success.
+#:
+#: So both are handled. The counter drives `LevelLog.observe`; a `WIN` with
+#: levels remaining drives `_try_advance_level`, which sends RESET and then
+#: *checks whether the world moved* rather than assuming it did. If it did not
+#: move, the run stops with `outcome: "level_advance_unknown"` — which turns
+#: the first real level completion into a measurement of the API's semantics
+#: instead of a hang or an infinite loop.
+LEVEL_SIGNAL_UNKNOWN = True
+
+#: How many RESETs may be spent probing for the next level before the arm
+#: admits it does not know how to advance. Two: one to try, one to rule out a
+#: transient.
+MAX_LEVEL_ADVANCE_ATTEMPTS = 2
+
 
 class TheoriaArm:
     def __init__(self, *, env_base: str, run, game_id: str,
@@ -87,7 +114,8 @@ class TheoriaArm:
                  model: str = "claude-opus-5",
                  cost_ceiling_usd: Optional[float] = 20.0,
                  wall_clock_s: float = DEFAULT_WALL_CLOCK_S,
-                 resume_state: Optional[Dict[str, Any]] = None):
+                 resume_state: Optional[Dict[str, Any]] = None,
+                 seed_books: Optional[str] = None):
         self.game_id = game_id
         self.offline = offline
         self.run = run
@@ -107,7 +135,8 @@ class TheoriaArm:
         self.arc = ArcThroughProxy(env_base, game_id, self.budget,
                                    on_command=self._on_command)
         self.store = FrameStore()
-        self.books = Books(os.path.join(self.dir, "books"))
+        self.books = Books(os.path.join(self.dir, "books"), seed_from=seed_books)
+        self.levels = LevelLog()
         self.register = Register()
         self.probes = probe_beat.ProbeLog(os.path.join(self.dir, "probes.jsonl"))
         self.candidates_path = os.path.join(self.dir, "candidates.jsonl")
@@ -127,6 +156,10 @@ class TheoriaArm:
         #: How many commands had been recorded when the desk was last called.
         #: The evidence gate in `_theorize_and_certify` turns on it.
         self._frames_at_last_theorize = -1
+
+        #: The turn being played, so a level boundary observed inside a commit
+        #: script can say which turn it happened on.
+        self.current_turn = 0
 
         self.desk_failures: List[Dict[str, Any]] = []
         self.turns: List[Dict[str, Any]] = []
@@ -163,7 +196,69 @@ class TheoriaArm:
                     probe=probe, note=note)
         if isinstance(envelope, dict):
             self.last_envelope = envelope
-        return self.store.add(step)
+        added = self.store.add(step)
+        event = self.levels.observe(
+            levels_completed=step.levels_completed,
+            step_idx=step.step_idx, action=action,
+            turn=self.current_turn, actions_spent=self.budget.actions_ok)
+        if event is not None:
+            self._on_level_boundary(event)
+        return added
+
+    # -- the level boundary ------------------------------------------------
+    def _frames_this_level(self) -> int:
+        """Steps recorded since the current level began.
+
+        The evidence gate counts in this unit, not in absolute steps: a fresh
+        level has seen nothing, whatever the run's total.
+        """
+        return len(self.store.steps) - self.levels.start
+
+    def _level_store(self):
+        """The current level's trajectory -- see `inner/levels.py` for why.
+
+        The beats that replay, segment or roll forward take this; `trace.jsonl`
+        still gets the whole run.
+        """
+        return self.store.since(self.levels.start)
+
+    def _on_level_boundary(self, event: Dict[str, Any]) -> None:
+        """The domain travels; the problem, the trajectory and the pending
+        surprises do not.
+
+        Four things happen, and the third is the one that matters:
+
+        1. The pair is snapshotted under the level it just finished, so the
+           concept-birth timeline has a mark at the boundary. Transfer is a
+           claim about *these two files* being unchanged across it.
+        2. `problem.json` is dropped. It described level N's board and would
+           otherwise be handed to the planner as level N+1's.
+        3. **Empirical surprises pending at the boundary are retired.** They
+           were fired against a trajectory that no longer exists, and a
+           surprise is the only thing that calls the desk -- carrying them
+           across would spend opus money adjudicating evidence the arm can no
+           longer show. They are retired with a reason rather than dropped
+           silently, so the seven counts still add up (`constraint 8`).
+        4. The evidence gate is re-armed: the new level has zero frames, so
+           the desk is not called until the quota of new transitions arrives.
+        """
+        self.books.snapshot("level%d-complete" % event["from_level"])
+        try:
+            if os.path.exists(self.books.problem_path):
+                os.remove(self.books.problem_path)
+        except OSError:                                # noqa: BLE001
+            pass
+        retired = self.register.retire_pending(
+            "level boundary: level %d -> %d; the trajectory these were fired "
+            "against is not this level's" % (event["from_level"],
+                                             event["to_level"]))
+        event["retired_surprises"] = retired
+        self._frames_at_last_theorize = -1
+        self.turns.append({"turn": self.current_turn, "beat": "level",
+                           "detail": "level %d complete" % event["from_level"],
+                           "level_boundary": event,
+                           "actions_spent": self.budget.actions_ok})
+        self._write_run_state()
 
     def _send(self, action_id: int, *, probe: bool = False, note: str = ""):
         status, envelope = self.arc.act(action_id, probe=probe)
@@ -174,7 +269,78 @@ class TheoriaArm:
 
     def _terminal(self) -> Optional[str]:
         state = (self.last_envelope or {}).get("state")
+        if state == "WIN" and self._levels_remain():
+            # A WIN with levels still to play is a *level* win, not the run's
+            # end. See `LEVEL_SIGNAL_UNKNOWN`.
+            return None
         return state if state in ("WIN", "GAME_OVER") else None
+
+    def _levels_remain(self) -> bool:
+        """Does the game say there are levels after this one?
+
+        `win_levels` comes from the envelope (7 for g50t, 8 for ar25). Unknown
+        means unknown: with no roster the arm cannot claim a WIN is partial,
+        so it treats it as the end -- the conservative direction, since
+        stopping loses a run and mis-continuing spends money on a finished
+        game.
+        """
+        total = self.arc.win_levels
+        if total is None:
+            return False
+        return self.levels.completed + 1 < total
+
+    def _try_advance_level(self) -> bool:
+        """The world says WIN and the roster says there are more levels.
+
+        This is the branch nobody has been able to write from evidence, and
+        saying so is more useful than guessing: see `LEVEL_SIGNAL_UNKNOWN`. The
+        arm sends RESET -- the only command that could plausibly start the next
+        level -- and then *checks whether the world actually moved* instead of
+        assuming it did. If it did not, the run stops with a reason that names
+        the unknown, so the first real level completion becomes a measurement
+        of the API's semantics rather than an infinite loop or a silent hang.
+        """
+        self.levels.advance_attempts += 1
+        if self.levels.advance_attempts > MAX_LEVEL_ADVANCE_ATTEMPTS:
+            self.stopped_because = (
+                "the world reported WIN with levels remaining, and %d RESET(s) "
+                "did not start another level"
+                % MAX_LEVEL_ADVANCE_ATTEMPTS)
+            self.outcome = "level_advance_unknown"
+            return False
+
+        before_completed = self.levels.completed
+        status, envelope = self.arc.reset()
+        self._record("RESET", status, envelope, note="advance level")
+        if status != 200:
+            self.stopped_because = ("RESET after a level WIN returned %s"
+                                    % status)
+            self.outcome = "level_advance_failed"
+            return False
+
+        state = (self.last_envelope or {}).get("state")
+        if self.levels.completed > before_completed:
+            # `_record` already saw the counter move and fired the boundary.
+            return True
+        if state and state != "WIN":
+            # The world moved on without moving the counter: the WIN *was* the
+            # signal. Record the boundary through the same door so `starts`
+            # stays authoritative.
+            event = self.levels.force(
+                signal="win_then_reset",
+                step_idx=len(self.store.steps) - 1,
+                note="state went WIN -> %s after RESET; the counter did not "
+                     "move, so WIN was the level signal" % state,
+                turn=self.current_turn,
+                actions_spent=self.budget.actions_ok)
+            self._on_level_boundary(event)
+            return True
+
+        self.stopped_because = (
+            "the world still reports WIN after RESET; this arm cannot tell "
+            "how ARC advances a level and will not guess")
+        self.outcome = "level_advance_unknown"
+        return False
 
     def _legal_actions(self) -> List[int]:
         actions = list(self.arc.available_actions or [])
@@ -226,6 +392,17 @@ class TheoriaArm:
         turn = 0
         while True:
             turn += 1
+            self.current_turn = turn
+
+            # A WIN with levels remaining is a level boundary, not the end of
+            # the run -- but which signal ARC sends has never been observed, so
+            # this branch probes rather than assumes (`LEVEL_SIGNAL_UNKNOWN`).
+            if ((self.last_envelope or {}).get("state") == "WIN"
+                    and self._levels_remain()):
+                if not self._try_advance_level():
+                    return
+                continue
+
             if self._terminal():
                 self.stopped_because = "the world reported %s" % self._terminal()
                 return
@@ -275,7 +452,7 @@ class TheoriaArm:
         # differently-worded manual against identical data at full price. What
         # the loop needs then is more world. So the turn falls through to probe
         # and the manual stays red until evidence arrives that could change it.
-        new_frames = len(self.store.steps) - self._frames_at_last_theorize
+        new_frames = self._frames_this_level() - self._frames_at_last_theorize
         if (self.books.theory.strip()
                 and new_frames < MIN_NEW_FRAMES_BETWEEN_THEORIZE
                 and self.budget.actions_left > MIN_NEW_FRAMES_BETWEEN_THEORIZE):
@@ -302,7 +479,8 @@ class TheoriaArm:
             pending = self.register.pending
             try:
                 report = theorize.run(
-                    self.desk, self.books, self.store, self.candidates_path,
+                    self.desk, self.books, self._level_store(),
+                    self.candidates_path,
                     surprises=pending,
                     certify_report=(self.certify_reports[-1]
                                     if self.certify_reports else None),
@@ -320,7 +498,7 @@ class TheoriaArm:
                 self.desk_failures.append(
                     {"step_idx": len(self.store.steps),
                      "error": "%s: %s" % (type(exc).__name__, exc)})
-                self._frames_at_last_theorize = len(self.store.steps)
+                self._frames_at_last_theorize = self._frames_this_level()
                 self._write_run_state()
                 break
             self.register.handled("theorize")
@@ -343,15 +521,15 @@ class TheoriaArm:
                                   "back for evidence" % MAX_THEORIZE_PER_TURN)
 
         if rounds:
-            self._frames_at_last_theorize = len(self.store.steps)
+            self._frames_at_last_theorize = self._frames_this_level()
         if not self.certify_reports and self.books.theory.strip():
             record["certify"] = _certify_line(self._certify())
 
     def _certify(self) -> Dict[str, Any]:
         compiled = (self.theorize_reports[-1].get("_compiled")
                     if self.theorize_reports else None) or {}
-        report = certify.run(self.books, self.store, commit.action_to_manual,
-                             compiled)
+        report = certify.run(self.books, self._level_store(),
+                             commit.action_to_manual, compiled)
         self.certify_reports.append(report)
         certify.surprises_from(report, self.register)
         return report
@@ -362,7 +540,7 @@ class TheoriaArm:
             return status, envelope, frames
 
         report = commit.execute(namespace, plan_report["plan"], send=send,
-                                store=self.store,
+                                store=self._level_store(),
                                 action_to_arc=commit.action_to_arc)
         self.commit_reports.append(report)
         commit.surprises_from(report, self.register)
@@ -379,7 +557,12 @@ class TheoriaArm:
         predictions: Dict[str, str] = {}
 
         if namespace is not None:
-            state = _roll_forward(namespace, self.store)
+            # This level's trajectory, not the run's: `_roll_forward` replays
+            # the manual's `step` over every recorded action, and across a
+            # boundary that replays level N's actions into level N+1's opening
+            # board. `inner/levels.py` names this as the third of the three
+            # beats that read the trace as one continuous trajectory.
+            state = _roll_forward(namespace, self._level_store())
             manual_actions = [("key", a) for a in legal]
             try:
                 design = probe_beat.design(
@@ -452,6 +635,12 @@ class TheoriaArm:
             "steps": len(self.store.steps),
             "model_calls": self.desk.calls,
             "levels_completed": (self.last_envelope or {}).get("levels_completed"),
+            # The envelope's counter is whatever the last command happened to
+            # carry, and it is absent on a failed one. `levels` is the run's
+            # own record of the transitions, which is what a campaign and
+            # `battery/INPUT_FORMAT.md`'s gap 4 both actually want.
+            "levels": self.levels.summary(),
+            "carried_books": self.books.carried,
             "win_levels": self.arc.win_levels,
             "score": None,          # ARC gameplay responses carry no score field
             "scorecard": self.scorecard,
@@ -473,6 +662,7 @@ class TheoriaArm:
                  "desk": self.desk.summary(),
                  "surprises": self.register.summary(),
                  "steps": len(self.store.steps),
+                 "levels": self.levels.summary(),
                  "elapsed_s": round(self._elapsed(), 1),
                  "outcome": self.outcome,
                  "stopped_because": self.stopped_because}
@@ -491,6 +681,11 @@ class TheoriaArm:
         out = self.dir
         self.store.to_jsonl(os.path.join(out, "trace.jsonl"))
         self.register.to_jsonl(os.path.join(out, "surprises.jsonl"))
+        with open(os.path.join(out, "levels.jsonl"), "w", encoding="utf-8",
+                  newline="\n") as fh:
+            for event in self.levels.events:
+                fh.write(json.dumps(event, sort_keys=True))
+                fh.write("\n")
         _dump(os.path.join(out, "turns.json"), self.turns)
         _dump(os.path.join(out, "theorize.json"),
               [adapt.strip_internals(r) for r in self.theorize_reports])

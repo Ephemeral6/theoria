@@ -1,0 +1,35 @@
+{
+ "all_turns": {
+  "frontload_index_25": 0.0,
+  "head_turns": 0.75,
+  "head_usd": 0.0,
+  "reason": "fewer than 8 turns; a short run is trivially front-loaded. The ratio is reported anyway because suppressing it hides the run's shape, but battery/metrics/economy.py will refuse it and that refusal is the operative reading.",
+  "status": "insufficient-data",
+  "turns": 3,
+  "usd_total": 6.317658
+ },
+ "billed_calls": 5,
+ "billed_turns_only": {
+  "frontload_index_25": 0.287021551,
+  "head_turns": 0.5,
+  "head_usd": 1.813304,
+  "reason": "fewer than 8 turns; a short run is trivially front-loaded. The ratio is reported anyway because suppressing it hides the run's shape, but battery/metrics/economy.py will refuse it and that refusal is the operative reading.",
+  "status": "insufficient-data",
+  "turns": 2,
+  "usd_total": 6.317658
+ },
+ "frontload_k": 0.25,
+ "min_turns_for_shape": 8,
+ "run_id": "r-b526769a14ef47e0",
+ "slug": "20260728T015354Z-g50t-first-contact",
+ "turn_costs": [
+  0,
+  3.626608,
+  2.69105
+ ],
+ "turn_costs_billed_only": [
+  3.626608,
+  2.69105
+ ],
+ "usd_total": 6.317658
+}

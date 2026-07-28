@@ -250,3 +250,64 @@ finding about the table. No dollar figure is written into the ledger itself
 (`RunLedger.model_call` refuses `cost`/`cost_usd`, D-004) — the CLI's number
 rides inside the recorded response envelope, which is recorded whole because
 that is what the format says to do.
+
+## D-A3-001 · A level boundary segments the trajectory; it is not a transition
+
+The beats that reason over the trace — `certify`'s replay, `commit`'s and
+`probe`'s roll-forward, `theorize`'s evidence brief, `books.problem_from_frames`
+— now take `store.since(levels.start)` rather than the whole store
+(`inner/loop.py:_level_store`). The whole store is still what `trace.jsonl`
+records: the boundary is a fact about the run and is kept.
+
+The reason is arithmetic, not taste. ARC advances a level in-band: no action
+causes it, the envelope's `levels_completed` increments and the next frame is a
+different board. `certify.cheap` replays the manual's `step` over every recorded
+action and compares grids, so across such a jump it predicts level N's next
+state and observes level N+1's opening board. That is a `replay_mismatch`; a
+`replay_mismatch` is a surprise; and a surprise is the only thing that calls the
+desk. Left alone, the arm would pay opus prices, twice per level, to repair a
+manual that was never wrong. `problem_from_frames` has the matching defect:
+pooled across a boundary, "the cells that never varied" is the intersection of
+two unrelated boards, which describes neither.
+
+**The alternative that was not taken.** A level advance could be modelled
+*inside* the manual, as an event with a precondition and an effect. That is a
+stronger claim and a more interesting one — it would let the playbook plan
+*through* a boundary. Segmenting is the conservative reading: it says the domain
+is silent about level advance rather than saying something no evidence supports.
+If a later run produces evidence about what completing a level requires, that
+evidence belongs in the playbook and this decision should be revisited.
+
+**What this costs.** Restricting `theorize`'s evidence to the current level
+means the frames of level 1 are not re-shown on level 2. The knowledge is meant
+to survive in the books rather than in the frames — which is Theoria's thesis,
+not a workaround — but it is a real narrowing and the engines see a shorter
+trace at the start of every level. It is recorded here so that a run where the
+manual visibly forgets something is read as evidence about this decision.
+
+## D-A3-002 · Two files travel between levels, and their hashes say so
+
+`Books(root, seed_from=...)` copies exactly `theory.dsl` and `playbook.dsl`, and
+records the sha256 of each in `CARRIED.json`. `problem.json` deliberately does
+not travel: it is computed from the frames of the level being played, so
+carrying it would carry an answer to a question the new level has not asked.
+`generated/` does not travel because the four forms are re-derived from the
+domain, which is what co-derivation means; `snapshots/` does not travel because
+a revision history belongs to the run that made it.
+
+The discipline is `cold-start-a3/a3pipeline/transfer.py`'s, which asserts
+byte-identity by sha256 rather than by inspection. "The manual that played level
+2 is the manual level 1 wrote" is then a checkable claim about artefacts rather
+than a sentence in a report — which is the only form in which C3's transfer
+claim can appear in the paper.
+
+## D-A3-003 · Surprises pending at a boundary are retired, not carried
+
+`Register.retire_pending` marks them `handled_by = "retired: <reason>"`. They
+were fired against a trajectory the arm can no longer show, and carrying them
+would spend a model call adjudicating evidence that no longer exists. Retiring
+is not deleting: the items stay in the register, so `counts()` is unchanged, all
+seven kinds still report (a zero is a measurement), and the constraint-8 audit
+still adds up. What changes is only who closed them — which is itself a datum,
+since "how many surprises died at a boundary rather than being theorized" is a
+number the bill-shape figure can use.

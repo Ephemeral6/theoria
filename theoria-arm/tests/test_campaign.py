@@ -1,0 +1,247 @@
+"""The campaign's accounts and its stop conditions, without spending anything.
+
+Every test here drives `harness/campaign.py` with `run_leg` replaced, because
+the thing under test is the loop *above* a run: the money arithmetic, the
+carry-over rule, the four stop conditions and the checkpoint. Whether a leg
+plays well is `tests/test_arm.py`'s question; whether a campaign stops when it
+should is this file's, and it is the one that is answered in dollars.
+
+The dev-pile guard is tested against the real `piles.json`, not a fixture. A
+fixture would prove the code reads a file; the point is that it reads *that*
+file, because the sealed pile's guarantee is the one claim in this repo that
+cannot be repaired after it is broken.
+"""
+
+from __future__ import annotations
+
+import json
+import os
+
+import pytest
+
+from harness import campaign as camp
+
+
+def _summary(*, boundaries=0, kinds=(), usd=0.0, outcome="budget_exhausted"):
+    by_kind = {k: 0 for k in (
+        "replay_mismatch", "render_mismatch", "proof_failure",
+        "probe_refutation", "execution_mismatch", "search_timeout",
+        "heuristic_miss")}
+    for kind in kinds:
+        by_kind[kind] += 1
+    return {"levels": {"boundaries": boundaries, "levels_completed": boundaries},
+            "surprises": {"by_kind": by_kind, "total": sum(by_kind.values())},
+            "usd": usd, "outcome": outcome}
+
+
+class _Fake(camp.Campaign):
+    """A campaign whose legs are scripted instead of played."""
+
+    def __init__(self, script, **kwargs):
+        kwargs.setdefault("prompt_id", "A3-campaign-devpile")
+        super().__init__(**kwargs)
+        self.script = list(script)
+        self.calls = []
+
+    def run_leg(self, game_id, index, seed_books):
+        self._check_budget(game_id)
+        self.calls.append({"game_id": game_id, "index": index,
+                           "seed_books": seed_books})
+        spec = self.script.pop(0) if self.script else _summary()
+        usd = float(spec.get("usd", 0.0))
+        self.spent_usd += usd
+        self.by_game[game_id] = self.by_game.get(game_id, 0.0) + usd
+        slug = "%s-leg%02d" % (game_id.split("-")[0], index)
+        return {"index": index, "game_id": game_id, "slug": slug,
+                "usd": usd, "levels": spec["levels"],
+                "surprises": spec["surprises"],
+                "outcome": spec.get("outcome", "budget_exhausted"),
+                "books_dir": "/runs/%s/books" % slug,
+                "carried": None, "stopped_because": ""}
+
+
+# -- the pile guard ---------------------------------------------------------
+
+def test_a_sealed_game_is_refused_by_name():
+    """The one failure this repo cannot repair after the fact."""
+    piles = json.load(open(
+        os.path.join(camp.REPO, "arc-recon", "data", "piles.json"), encoding="utf-8"))
+    sealed = piles["sealed_pile"][0]
+    with pytest.raises(camp.CampaignStopped) as caught:
+        camp.assert_dev_pile([sealed])
+    assert "sealed" in str(caught.value)
+    assert sealed in str(caught.value)
+
+
+def test_a_game_in_neither_pile_is_refused():
+    with pytest.raises(camp.CampaignStopped):
+        camp.assert_dev_pile(["not-a-real-game"])
+
+
+def test_the_default_roster_is_exactly_the_development_pile():
+    """`DEV_PILE` is a convenience; `piles.json` is the authority. If they ever
+    disagree, this test says so before a run does."""
+    piles = json.load(open(
+        os.path.join(camp.REPO, "arc-recon", "data", "piles.json"), encoding="utf-8"))
+    assert set(camp.DEV_PILE) == set(piles["dev_pile"])
+    camp.assert_dev_pile(camp.DEV_PILE)          # must not raise
+
+
+# -- the money --------------------------------------------------------------
+
+def test_the_leg_reservation_cannot_exceed_the_authorised_cap():
+    """$25 per reservation, and `plan_caps` adds a model-call ceiling on top of
+    the cost ceiling -- so the cost ceiling has to be the smaller number."""
+    from harness import spend as spend_mod
+    assert (camp.LEG_COST_CEILING_USD + spend_mod.MODEL_CALL_CEILING_USD
+            <= camp.LEG_USD_CAP)
+
+
+def test_a_game_stops_at_its_own_ceiling_without_ending_the_campaign(tmp_path):
+    camp_run = _Fake([_summary(usd=30.0, kinds=["replay_mismatch"]),
+                      _summary(usd=31.0, kinds=["render_mismatch"]),
+                      _summary(usd=5.0, kinds=["proof_failure"])],
+                     out_dir=str(tmp_path), games=["g50t-5849a774",
+                                                   "sk48-d8078629"],
+                     offline=True)
+    report = camp_run.run(max_legs_per_game=5)
+    played = [c["game_id"] for c in camp_run.calls]
+    assert played.count("g50t-5849a774") == 2, played
+    # The game ran out of money; the campaign moved to the next game rather
+    # than ending.
+    assert "sk48-d8078629" in played
+    assert report["by_game"]["g50t-5849a774"] == pytest.approx(61.0)
+
+
+def test_the_campaign_ceiling_ends_everything(tmp_path):
+    camp_run = _Fake([_summary(usd=59.0, kinds=["replay_mismatch"]),
+                      _summary(usd=59.0, kinds=["render_mismatch"]),
+                      _summary(usd=59.0, kinds=["proof_failure"]),
+                      _summary(usd=59.0, kinds=["probe_refutation"])],
+                     out_dir=str(tmp_path), games=list(camp.DEV_PILE),
+                     offline=True)
+    report = camp_run.run(max_legs_per_game=1)
+    assert report["spent_usd"] <= camp.CAMPAIGN_USD + 59.0
+    assert report["stopped"] is not None
+    assert "campaign budget" in report["stopped"]["reason"]
+
+
+# -- progress ---------------------------------------------------------------
+
+def test_three_dead_legs_end_the_campaign(tmp_path):
+    """No level, no new kind of surprise, three times."""
+    dead = _summary(usd=1.0, kinds=["replay_mismatch"])
+    camp_run = _Fake([_summary(usd=1.0, kinds=["replay_mismatch"]),
+                      dead, dead, dead, dead],
+                     out_dir=str(tmp_path), games=["g50t-5849a774"],
+                     offline=True)
+    report = camp_run.run(max_legs_per_game=9)
+    assert report["stopped"] is not None
+    assert "no new kind of surprise" in report["stopped"]["reason"]
+    # First leg was progress (the kind was fresh), then three dead ones.
+    assert len(camp_run.calls) == 4, camp_run.calls
+
+
+def test_a_new_kind_of_surprise_counts_as_progress(tmp_path):
+    """On a game nobody has ever cleared a level of, insisting on level
+    completions would end the campaign before it measured anything."""
+    camp_run = _Fake([_summary(usd=1.0, kinds=["replay_mismatch"]),
+                      _summary(usd=1.0, kinds=["render_mismatch"]),
+                      _summary(usd=1.0, kinds=["proof_failure"]),
+                      _summary(usd=1.0, kinds=["search_timeout"])],
+                     out_dir=str(tmp_path), games=["g50t-5849a774"],
+                     offline=True)
+    report = camp_run.run(max_legs_per_game=4)
+    assert report["stopped"] is None, report["stopped"]
+    assert report["zero_progress_streak"] == 0
+
+
+def test_a_completed_level_counts_as_progress_even_with_no_new_surprise(tmp_path):
+    repeat = ["replay_mismatch"]
+    camp_run = _Fake([_summary(usd=1.0, kinds=repeat),
+                      _summary(usd=1.0, kinds=repeat, boundaries=1),
+                      _summary(usd=1.0, kinds=repeat, boundaries=1)],
+                     out_dir=str(tmp_path), games=["g50t-5849a774"],
+                     offline=True)
+    report = camp_run.run(max_legs_per_game=3)
+    assert report["stopped"] is None
+    assert report["levels_completed"] == 2
+
+
+# -- what travels -----------------------------------------------------------
+
+def test_books_travel_between_legs_of_one_game_and_not_between_games(tmp_path):
+    """C3's claim is level-to-level. Two ARC games are two different worlds."""
+    camp_run = _Fake([_summary(usd=1.0, kinds=["replay_mismatch"]),
+                      _summary(usd=1.0, kinds=["render_mismatch"]),
+                      _summary(usd=1.0, kinds=["proof_failure"]),
+                      _summary(usd=1.0, kinds=["search_timeout"])],
+                     out_dir=str(tmp_path),
+                     games=["g50t-5849a774", "sk48-d8078629"],
+                     offline=True)
+    camp_run.run(max_legs_per_game=2)
+    calls = camp_run.calls
+    assert calls[0]["seed_books"] is None, "first leg has nothing to carry"
+    assert calls[1]["seed_books"] == "/runs/g50t-leg01/books"
+    # New game: the chain restarts.
+    assert calls[2]["game_id"] == "sk48-d8078629"
+    assert calls[2]["seed_books"] is None, "books must not cross games"
+    assert calls[3]["seed_books"] == "/runs/sk48-leg01/books"
+
+
+def test_a_leg_that_died_before_writing_does_not_seed_the_next(tmp_path):
+    """Seeding from a half-written manual would launder a broken book into a
+    transfer claim."""
+    broken = _summary(usd=1.0, kinds=["replay_mismatch"], outcome="reset_failed")
+    camp_run = _Fake([broken,
+                      _summary(usd=1.0, kinds=["render_mismatch"])],
+                     out_dir=str(tmp_path), games=["g50t-5849a774"],
+                     offline=True)
+    camp_run.run(max_legs_per_game=2)
+    assert camp_run.calls[1]["seed_books"] is None
+
+
+# -- the checkpoint ---------------------------------------------------------
+
+def test_every_leg_is_on_disk_before_the_next_one_starts(tmp_path):
+    """A campaign is hours long and the session running it will be
+    interrupted. Only what is on disk exists."""
+    seen = []
+
+    class Watching(_Fake):
+        def run_leg(self, game_id, index, seed_books):
+            if os.path.exists(self.state_path):
+                with open(self.state_path, encoding="utf-8") as fh:
+                    seen.append(len(json.load(fh)["legs"]))
+            else:
+                seen.append(0)
+            return super().run_leg(game_id, index, seed_books)
+
+    run = Watching([_summary(usd=1.0, kinds=["replay_mismatch"]),
+                    _summary(usd=1.0, kinds=["render_mismatch"]),
+                    _summary(usd=1.0, kinds=["proof_failure"])],
+                   out_dir=str(tmp_path), games=["g50t-5849a774"],
+                   offline=True)
+    run.run(max_legs_per_game=3)
+    assert seen == [0, 1, 2], seen
+    on_disk = json.load(open(run.state_path, encoding="utf-8"))
+    assert len(on_disk["legs"]) == 3
+    assert on_disk["prompt_id"] == "A3-campaign-devpile"
+
+
+def test_the_checkpoint_is_replaced_atomically(tmp_path):
+    run = _Fake([_summary(usd=1.0, kinds=["replay_mismatch"])],
+                out_dir=str(tmp_path), games=["g50t-5849a774"], offline=True)
+    run.run(max_legs_per_game=1)
+    assert not os.path.exists(run.state_path + ".tmp"), (
+        "a leftover .tmp means the replace did not happen and a reader could "
+        "see a half-written campaign")
+
+
+def test_the_report_carries_the_authorised_package(tmp_path):
+    """The run and its authorisation must not be able to drift apart."""
+    run = _Fake([], out_dir=str(tmp_path), games=["g50t-5849a774"],
+                offline=True)
+    report = run.run(max_legs_per_game=0)
+    assert report["budget"] == {"campaign_usd": 200.0, "game_usd": 60.0,
+                                "leg_usd_cap": 25.0, "actions_per_level": 40}
