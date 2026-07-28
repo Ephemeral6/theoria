@@ -280,15 +280,16 @@ def validate_file(path: str, strict: bool = False) -> Dict[str, Any]:
 
 def _check_level_carry(rec: Dict[str, Any], line_no: int,
                        state: Dict[str, Optional[int]]) -> List[str]:
-    """The rule proxy/reconcile.py re-checks: walk a run's env_steps carrying
-    the previous level forward when this record has no levels_completed, and
-    the recorded level and level_boundary must come out the same."""
+    """The rule proxy/reconcile.py re-checks, verbatim: `level` is the count the
+    step *started from*, not the count after it, and a record reporting no
+    levels_completed carries the previous value. The counter starts at 0."""
     rid = rec.get("run_id")
     raw = rec.get("levels_completed")
-    before = state.get(rid)
-    expect = raw if isinstance(raw, int) else before
-    boundary = bool(isinstance(raw, int) and before is not None and raw > before)
-    state[rid] = expect
+    before = state.get(rid, 0)
+    after = before if not isinstance(raw, int) else raw
+    expect = before
+    boundary = after > before
+    state[rid] = after
     out = []
     if rec.get("level") != expect:
         out.append("line %d: level %r does not follow from the run's "

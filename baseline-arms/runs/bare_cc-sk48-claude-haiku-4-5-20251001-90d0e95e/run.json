@@ -10,24 +10,28 @@
       "bytes": 2295,
       "path": "baseline-arms/out/pilot_sk48-d8078629.json",
       "sha256": "sha256:e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5",
+      "stability": "fixed",
       "tracked": true
     },
     {
       "bytes": 5217897,
       "path": "baseline-arms/ledger.jsonl",
       "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+      "stability": "append_only",
       "tracked": true
     },
     {
-      "bytes": 1179982,
+      "bytes": 1184451,
       "path": "baseline-arms/probe_log.jsonl",
-      "sha256": "sha256:b211075fbc9a856f04a94c51182bba2b0e867e63d19e32e2667d0fa8636c9b11",
+      "sha256": "sha256:e69b5c9ab591ca101653876a53291730a3d3d5b28d4c6593ccb8a7acb9d5d149",
+      "stability": "append_only",
       "tracked": true
     },
     {
       "bytes": 5191,
       "path": "baseline-arms/out/pilot_sk48.log",
       "sha256": "sha256:60ec67d227d1eddc4169d75a3835d2e33a2612df960c2be74d133d67485e72e3",
+      "stability": "fixed",
       "tracked": false
     }
   ],

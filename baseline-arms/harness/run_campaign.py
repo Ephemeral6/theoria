@@ -95,14 +95,22 @@ COMPUTE_SECONDS_CAP = 20 * 3600
 # precondition would itself have tripped the clause. Two cells separated by more
 # than SESSION_GAP are in different sittings.
 #
-# **The cap is not touched, and this is not a relaxation of what G6a was for.**
-# A campaign that genuinely runs for eight hours without a break still trips it,
-# identically. What changes is that eight hours of *not running* no longer
-# counts as running -- the same class of correction as the G6a/G6b split
-# recorded in BUDGET_REPORT.md section 9, which was also a unit error in this
-# clause. The residue that calendar-elapsed did legitimately catch -- a campaign
-# dragging on indefinitely across many sittings -- moves to G6c, a clause that
-# did not exist before, so the net change to the gate adds a constraint.
+# **The cap is not touched**, and a campaign that genuinely runs for eight hours
+# without a break still trips G6a identically. What changes is that eight hours
+# of *not running* no longer counts as running -- the same class of correction
+# as the G6a/G6b split recorded in BUDGET_REPORT.md section 9, which was also a
+# unit error in this clause.
+#
+# **But be exact about the direction: this is a loosening.** The old metric was
+# `now - min(started)`; the new sitting metric is <= it for every possible cell
+# list, and `total_span_seconds` is the old metric moved under G6c at 72 h
+# instead of 8. So the set of states the time clauses stop is a strict *subset*
+# of what it was: any campaign with 8 h < span <= 72 h and no long sitting was
+# red before and is green now. An earlier version of this comment called the
+# change "net one more constraint" because it counted clauses instead of red
+# states. It is one more clause and strictly fewer stops, and the reason to
+# accept it is that the old clause was measuring the wrong quantity, not that
+# nothing was given up.
 SESSION_GAP_SECONDS = 2 * 3600
 TOTAL_SPAN_SECONDS_CAP = 72 * 3600
 MIN_ACTIONS_FOR_RATIOS = 20     # ratios are noise below this
@@ -192,7 +200,8 @@ def total_span_seconds(cells: List[Dict[str, Any]],
 
 
 def evaluate_gate(cells: List[Dict[str, Any]],
-                  adjudications_path: Optional[str] = None) -> Dict[str, Any]:
+                  adjudications_path: Optional[str] = None,
+                  now: Optional[float] = None) -> Dict[str, Any]:
     """Returns {"state": "green"|"red", "tripped": [...], "totals": {...}}.
 
     Deliberately computed from the persisted cell records rather than from
@@ -252,14 +261,19 @@ def evaluate_gate(cells: List[Dict[str, Any]],
                            % (streak, c.get("run_id"), c.get("outcome")))
             break
 
-    elapsed = elapsed_seconds(cells)
+    # `now` is injectable so the clock clauses can be asserted at a fixed
+    # instant. Without it no test could make G6a or G6c fire, and the claim
+    # that an eight-hour sitting still trips G6a rested on a helper call rather
+    # than on the clause -- deleting both clauses from this function left the
+    # whole suite green.
+    elapsed = elapsed_seconds(cells, now=now)
     if elapsed is not None and elapsed > ELAPSED_SECONDS_CAP:
         tripped.append("G6a sitting elapsed %.1f h > cap %.1f h"
                        % (elapsed / 3600, ELAPSED_SECONDS_CAP / 3600))
     if total_wall > COMPUTE_SECONDS_CAP:
         tripped.append("G6b compute %.1f h > cap %.1f h"
                        % (total_wall / 3600, COMPUTE_SECONDS_CAP / 3600))
-    span = total_span_seconds(cells)
+    span = total_span_seconds(cells, now=now)
     if span is not None and span > TOTAL_SPAN_SECONDS_CAP:
         tripped.append("G6c campaign span %.1f h > cap %.1f h"
                        % (span / 3600, TOTAL_SPAN_SECONDS_CAP / 3600))

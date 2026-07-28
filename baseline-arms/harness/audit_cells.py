@@ -87,6 +87,21 @@ def audit_run(cell: Dict[str, Any], records, probes) -> Dict[str, Any]:
     calls = [r for r in records if r.get("run_id") == run_id and "usage" in r]
 
     findings: List[str] = []
+
+    # A cell whose episode raised is synthesised by run_campaign.run_repeat with
+    # run_id None and cost_usd 0.0 -- but bare_cc had already written a
+    # model_call to the ledger for every call it made before the exception, so
+    # real money is on the books that the cell record says was never spent. G1
+    # and the runs/ archive both total the cell records, so that spend is
+    # invisible to both. Name it here rather than let it read as "no ledger
+    # records found", which is what the RESET check below would say.
+    if run_id is None:
+        findings.append(
+            "cell has no run_id (a harness_error cell), so its ledger records "
+            "cannot be found and its spend cannot be reconciled. Anything "
+            "bare_cc paid for before the exception is in ledger.jsonl but not "
+            "in this cell's cost_usd, and therefore not in G1's total.")
+
     resets = [s for s in steps if s.get("action") == "RESET"]
     actions = [s for s in steps if s.get("action") != "RESET"]
     ok = [s for s in actions if not s.get("failed")]

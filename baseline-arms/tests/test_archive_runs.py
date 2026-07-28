@@ -53,15 +53,52 @@ def test_every_envelope_cell_is_archived(entries):
 
 def test_failed_runs_are_archived_on_the_same_terms(entries):
     """METHOD.md row 9. A dead run must carry the same fields as a live one."""
-    dead = [e for e in entries if e["kind"] == "run"
-            and e["outcome"] in ("api_unusable", "model_error",
-                                 "no_reset_window", "harness_error")]
+    summarised = [e for e in entries if e["kind"] == "run"
+                  and not e.get("reconstructed_from_ledger")]
+    dead = [e for e in summarised
+            if e["outcome"] in ("api_unusable", "model_error",
+                                "no_reset_window", "harness_error")]
     assert dead, "no dead runs archived, but the pilot and envelope both had some"
-    live = [e for e in entries if e["kind"] == "run" and e not in dead]
+    live = [e for e in summarised if e not in dead]
     for e in dead:
         assert set(e) >= set(live[0]) - {"error", "repeat", "superseded_by_rerun"}
         assert e["evidence"]
         assert e["spend"]["cost_usd"] is not None
+
+
+def test_runs_the_ledger_knows_but_no_summary_names_are_archived(entries):
+    """The census the archive was built from came from summary files, so a run
+    whose summary was never written was invisible to an index that claims to
+    hold every run this track has paid for."""
+    from harness import archive_runs as ar
+    index = ar.ledger_run_index()
+    archived = {e["id"] for e in entries if e["kind"] == "run"}
+    assert set(index) <= archived, sorted(set(index) - archived)
+    reconstructed = [e for e in entries if e.get("reconstructed_from_ledger")]
+    assert reconstructed, "the ledger has run_ids with no summary; none archived"
+    for e in reconstructed:
+        assert e["outcome"] == "no_summary"
+        assert e["ledger_records"]["env_step"] or e["ledger_records"]["model_call"]
+
+
+def test_a_mutable_snapshot_carries_no_hash(entries):
+    """campaign_gate.json is rewritten on every gate evaluation. A hash on it
+    would be a promise nobody can keep, and it would put a mutable file into
+    the archive's digest."""
+    snaps = [ev for e in entries for ev in e.get("evidence") or []
+             if ev.get("stability") == "snapshot"]
+    assert snaps
+    for ev in snaps:
+        assert "sha256" not in ev and "bytes" not in ev
+
+
+def test_verify_survives_a_gate_evaluation():
+    """--verify used to go red the moment anyone asked the gate a question,
+    and it said so in the words it would use for tampering."""
+    from harness import archive_runs as ar, run_campaign as rc
+    rc.write_gate(rc.attach_exposure(rc.evaluate_gate(rc.load_cells())))
+    result = ar.verify()
+    assert result["ok"], result["problems"]
 
 
 def test_superseded_cells_are_archived_not_dropped(entries):
@@ -118,9 +155,11 @@ def test_every_run_points_at_evidence_that_exists(entries):
         assert e["evidence"], e["id"]
         for ev in e["evidence"]:
             assert not ev.get("missing"), (e["id"], ev)
-            assert ev["sha256"].startswith("sha256:")
             assert os.path.exists(os.path.join(archive_runs.REPO,
                                                ev["path"].replace("/", os.sep)))
+            if ev["stability"] == "snapshot":
+                continue                       # deliberately unhashed
+            assert ev["sha256"].startswith("sha256:")
 
 
 def test_evidence_says_whether_git_carries_it(entries):
@@ -164,6 +203,23 @@ def test_no_sealed_game_appears_anywhere_in_the_archive(entries):
 
 
 # ---------------------------------------------------------------- determinism
-def test_rebuilding_produces_the_same_digest(manifest):
-    again = archive_runs.build(manifest["prompt_id"])
-    assert again["entries_sha256"] == manifest["entries_sha256"]
+def test_rebuilding_produces_the_same_digest():
+    """Two builds with nothing written in between agree byte for byte.
+
+    Deliberately not "the digest on disk never changes": ledger.jsonl and
+    probe_log.jsonl are append-only evidence and every gate evaluation grows
+    one of them, so a changed digest after a real append is the index doing its
+    job. What must not vary is the build itself -- generated_at and the
+    provenance block are outside the digest for exactly that reason."""
+    a = archive_runs.build("P-12")
+    b = archive_runs.build("P-12")
+    assert a["entries_sha256"] == b["entries_sha256"]
+    assert a["entries"] == b["entries"]
+
+
+def test_the_digest_ignores_the_build_timestamp():
+    a = archive_runs.build("P-12")
+    b = archive_runs.build("P-12")
+    assert a["entries_sha256"] == b["entries_sha256"]
+    # ...and generated_at is present, so the manifest still says when it ran.
+    assert a["generated_at"] and b["generated_at"]

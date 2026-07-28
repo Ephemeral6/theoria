@@ -27,7 +27,7 @@ import sys
 import time
 from typing import Any, Dict, List
 
-from . import arc_client, bare_cc, ledger
+from . import arc_client, bare_cc, interlock, ledger
 
 TRACK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DIR = os.path.join(TRACK, "out")
@@ -210,6 +210,18 @@ def main(argv=None) -> int:
               "mid-record, and an append-only ledger cannot be repaired."
               % ledger.SHARD_ENV)
         return 2
+
+    # INC-BA-003 / DECISIONS.md D-017: no campaign in this track starts while
+    # another one is spending. This check is in every spending entry point, not
+    # only the envelope's -- serialisation that holds in one direction only is
+    # not serialisation, it just decides which campaign loses the race.
+    lock = interlock.check()
+    if not lock["clear"]:
+        print("interlock: BLOCKED -- another campaign is live in this track")
+        for reason in lock["blockers"]:
+            print("  %s" % reason)
+        print("`python -m harness.interlock` reports the current state.")
+        return 4
 
     budget = args.budget or BASELINE_ACTIONS[game_id]
     ceiling = args.ceiling or round(budget * USD_PER_ACTION * CEILING_FACTOR, 2)

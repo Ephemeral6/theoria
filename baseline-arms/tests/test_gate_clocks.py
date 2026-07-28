@@ -95,14 +95,44 @@ def test_a_long_pause_between_games_does_not_burn_the_elapsed_budget():
     assert elapsed <= rc.ELAPSED_SECONDS_CAP
 
 
-def test_a_genuinely_long_sitting_still_trips_g6a():
-    """The clause is not weakened for the thing it was written to catch."""
+def test_a_genuinely_long_sitting_still_trips_g6a(tmp_path):
+    """The clause is not weakened for the thing it was written to catch.
+
+    Asserted on the gate, not on the helper. An earlier version of this test
+    computed the gate, deleted it, and checked only `elapsed_seconds` -- so
+    deleting the G6a clause from evaluate_gate entirely would have left the
+    suite green, and the non-weakening claim rested on nothing."""
     cells = [cell(i) for i in range(10)]
-    now = BASE + 9.5 * H
-    gate = rc.evaluate_gate(cells)
-    assert rc.elapsed_seconds(cells, now=now) > rc.ELAPSED_SECONDS_CAP
-    del gate            # evaluate_gate uses the real clock; the assertion above
-                        # is the one that matters, and it is deterministic.
+    gate = rc.evaluate_gate(cells, adjudications_path=str(tmp_path / "none"),
+                            now=BASE + 9.5 * H)
+    assert any(t.startswith("G6a") for t in gate["tripped"]), gate["tripped"]
+    assert gate["state"] == "red"
+
+
+def test_a_short_sitting_does_not_trip_g6a(tmp_path):
+    cells = [cell(0), cell(0.5)]
+    gate = rc.evaluate_gate(cells, adjudications_path=str(tmp_path / "none"),
+                            now=BASE + 1.0 * H)
+    assert not any(t.startswith("G6a") for t in gate["tripped"]), gate["tripped"]
+
+
+def test_g6c_trips_on_the_gate_not_just_in_the_helper(tmp_path):
+    cells = [cell(0), cell(24), cell(48), cell(96)]
+    gate = rc.evaluate_gate(cells, adjudications_path=str(tmp_path / "none"),
+                            now=BASE + 100 * H)
+    assert any(t.startswith("G6c") for t in gate["tripped"]), gate["tripped"]
+
+
+def test_deleting_either_clock_clause_would_be_caught(tmp_path):
+    """A mutation check in test form: one fixed instant at which G6a fires and
+    another at which G6c does, both read off gate['tripped']."""
+    trips = set()
+    for cells, now in (([cell(i) for i in range(10)], BASE + 9.5 * H),
+                       ([cell(0), cell(96)], BASE + 100 * H)):
+        gate = rc.evaluate_gate(cells, adjudications_path=str(tmp_path / "none"),
+                                now=now)
+        trips.update(t.split()[0] for t in gate["tripped"])
+    assert {"G6a", "G6c"} <= trips, trips
 
 
 def test_no_cells_means_no_elapsed():

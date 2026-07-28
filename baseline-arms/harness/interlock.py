@@ -46,24 +46,36 @@ from typing import Any, Callable, Dict, List, Optional, Tuple
 TRACK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.dirname(TRACK)
 
-# A campaign checkpoint older than this is treated as abandoned. Episodes in the
-# S1 run take 30-40 minutes and the in-episode checkpoint fires every fifth step
-# (a few minutes), so 30 minutes is many checkpoint periods -- long enough that a
-# live campaign is never mistaken for a dead one.
+# A campaign checkpoint older than this is treated as abandoned, so a campaign
+# whose process was killed stops blocking instead of wedging the track forever.
+#
+# The window is not as generous as it looks. `campaign.py`'s in-episode callback
+# runs from `bare_cc`'s `on_step`, which sits *after* the `continue` that handles
+# a refused action -- so the checkpoint advances on successful actions only, and
+# under the API degradation this interlock exists to protect against it can go
+# quiet for a long time while the episode is very much alive. That is tolerable
+# because the checkpoint scan is the *secondary* signal: the process table sees a
+# live campaign regardless of whether it is making progress, and a process-table
+# failure blocks outright rather than falling through to this one.
 STALE_AFTER_SECONDS = 30 * 60
 
 # Module invocations that spend money in this track.
 CAMPAIGN_MODULES = ("harness.campaign", "harness.run_campaign",
                     "harness.run_pilot", "harness.bare_cc")
 
-# ...except with these flags, which make the invocation read-only. `--gate-only`
-# re-adjudicates the recorded cells and buys nothing; `--dry-run` lists and
-# fetches nothing. Treating them as live spend is not a harmless over-count: the
-# obvious way to ask "is it safe to start?" is to evaluate the gate, and an
-# interlock that blocks on its own diagnostic is one nobody can clear. Observed
-# for real -- three concurrent `--gate-only` readers showed up as three live
-# campaigns.
-READ_ONLY_FLAGS = ("--gate-only", "--dry-run", "--report-only", "--verify")
+# ...except with this flag, which makes the invocation read-only. `--gate-only`
+# re-adjudicates the recorded cells and buys nothing. Treating it as live spend
+# is not a harmless over-count: the obvious way to ask "is it safe to start?" is
+# to evaluate the gate, and an interlock that blocks on its own diagnostic is one
+# nobody can clear. Observed for real -- three concurrent `--gate-only` readers
+# showed up as three live campaigns.
+#
+# One flag, matched as a whole argument, and only against the modules that can
+# spend. An earlier version listed four and tested them as substrings of the
+# whole command line: three named no option any spending module has, and a
+# substring test would have been silenced by a path or a prompt that happened to
+# contain the text. A too-eager exclusion here is the failure that costs money.
+READ_ONLY_FLAGS = ("--gate-only",)
 
 _TS = "%Y-%m-%dT%H:%M:%SZ"
 
@@ -123,16 +135,35 @@ def live_processes(lister: Callable[[], Tuple[List[Tuple[int, str]], Optional[st
     for pid, cmdline in rows:
         if pid == own_pid:
             continue
-        if any(flag in cmdline for flag in READ_ONLY_FLAGS):
-            continue
         for module in CAMPAIGN_MODULES:
             # `-m harness.campaign`, and not `harness.campaign_status`, which is
-            # a read-only status printer and spends nothing.
-            if re.search(r"-m\s+%s(\s|$)" % re.escape(module), cmdline):
-                found.append({"pid": pid, "module": module,
-                              "cmdline": cmdline[:300]})
+            # a read-only status printer and spends nothing. `-m` with or
+            # without a space, since `python -mharness.campaign` is legal.
+            if not re.search(r"-m\s*%s(\s|$)" % re.escape(module), cmdline):
+                continue
+            if _is_read_only(module, cmdline):
                 break
+            found.append({"pid": pid, "module": module,
+                          "cmdline": cmdline[:300]})
+            break
     return found, None
+
+
+def _is_read_only(module: str, cmdline: str) -> bool:
+    """Is this invocation of `module` one that cannot spend?
+
+    Narrow on purpose. `--gate-only` belongs to `run_campaign` and nowhere else,
+    and `run_campaign` refuses to run without `--game`, so an invocation with
+    `--gate-only` and no `--game` provably buys nothing. Requiring both
+    conditions matters because a process table gives one flat string, not an
+    argv: a `--gate-only` token can appear inside somebody's quoted argument,
+    and a bare token test would let that excuse a live campaign. The failure
+    that costs money is the over-eager exclusion, so it gets the tight rule.
+    """
+    if module != "harness.run_campaign":
+        return False
+    args = cmdline.split()
+    return any(f in args for f in READ_ONLY_FLAGS) and "--game" not in args
 
 
 # -------------------------------------------------------------- checkpoints
@@ -196,6 +227,7 @@ def scan_checkpoints(roots: Optional[List[str]] = None,
                 "cost_usd": state.get("cost_usd"),
                 "http_calls": state.get("http_calls"),
                 "actions_ok": state.get("actions_ok"),
+                "live_episode": state.get("live_episode"),
                 "age_seconds": None if age is None else round(age, 1),
                 "live": bool(running and age is not None and age <= stale_after),
                 "stale_running": bool(running and (age is None or age > stale_after)),
@@ -220,12 +252,30 @@ def check(lister: Callable[[], Tuple[List[Tuple[int, str]], Optional[str]]] = li
         if c.get("live"):
             blockers.append("checkpoint %s is status=running, last written %.0f s ago"
                             % (os.path.basename(c["path"]), c["age_seconds"]))
+        if "unreadable" in c:
+            # A file that could not be parsed is an unknown state, not an
+            # answered one. Counting it as "the checkpoint signal replied" would
+            # turn a corrupt file into a clearance.
+            blockers.append("checkpoint %s could not be read (%s); its campaign's "
+                            "state is unknown" % (os.path.basename(c["path"]),
+                                                  c["unreadable"]))
 
-    if proc_error is not None and not checkpoints:
-        # Neither signal available. Fail closed: unknown is not the same as clear.
-        blockers.append("cannot determine whether another campaign is running "
-                        "(process table unavailable: %s; no campaign checkpoints "
-                        "found to fall back on)" % proc_error)
+    if proc_error is not None:
+        # Fail closed, without exception. An earlier version cleared this when
+        # *any* checkpoint file existed, on the theory that the checkpoint scan
+        # had answered instead -- but only `harness/campaign.py` writes a
+        # checkpoint at all. `run_campaign`, `bare_cc` and `run_pilot` write
+        # none, so for three of the four modules that can spend, the checkpoint
+        # signal can never say yes, and four permanently-finished checkpoints
+        # were already sitting on disk. The fallback therefore silenced the
+        # fail-closed branch in every real situation while looking like a
+        # second opinion. The process table is the only signal that sees an
+        # envelope run; if it is unavailable, we do not know.
+        blockers.append("cannot determine whether another campaign is running: "
+                        "the process table is unavailable (%s), and it is the "
+                        "only signal that can see a run_campaign / bare_cc / "
+                        "run_pilot process -- those write no checkpoint"
+                        % proc_error)
 
     return {
         "clear": not blockers,
@@ -247,12 +297,19 @@ def combined_exposure(checkpoints: List[Dict[str, Any]],
     separately and this session does not get to re-set another campaign's caps
     by folding them into its own. What was missing was visibility, not a cap.
     """
-    other_usd = sum(float(c.get("cost_usd") or 0.0) for c in checkpoints)
+    # `cost_usd` on the checkpoint is what completed episodes cost. An episode
+    # in flight has spent money that is only in `live_episode`, and leaving it
+    # out understates the other campaign by exactly the episode running right
+    # now -- which is the moment anyone reads this number.
+    other_usd = sum(float(c.get("cost_usd") or 0.0)
+                    + float((c.get("live_episode") or {}).get("cost_usd") or 0.0)
+                    for c in checkpoints)
     other_http = sum(int(c.get("http_calls") or 0) for c in checkpoints)
     return {
         "other_campaigns_usd": round(other_usd, 4),
         "other_campaigns_http": other_http,
         "other_campaign_count": len(checkpoints),
+        "other_campaigns_live": sum(1 for c in checkpoints if c.get("live")),
         "envelope_usd": round(envelope_usd, 4),
         "envelope_http": envelope_http,
         "combined_usd": round(other_usd + envelope_usd, 4),

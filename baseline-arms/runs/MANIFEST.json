@@ -4,15 +4,16 @@
       "excluded": 1,
       "fetch": 1,
       "migration": 1,
-      "run": 17
+      "run": 24
     },
     "by_outcome": {
       "api_unusable": 5,
       "budget_exhausted": 7,
-      "model_error": 5
+      "model_error": 5,
+      "no_summary": 7
     },
     "dead_runs": 10,
-    "total": 20
+    "total": 27
   },
   "entries": [
     {
@@ -44,6 +45,76 @@
       "outcome": "complete",
       "path": "runs/migration-ledger-v0-to-v1.0/run.json",
       "prompt_id": "P-12"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758/run.json",
+      "prompt_id": "retro:P-7"
+    },
+    {
+      "cost_usd": null,
+      "game_id": null,
+      "id": "bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309",
+      "kind": "run",
+      "model": null,
+      "outcome": "no_summary",
+      "path": "runs/bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309/run.json",
+      "prompt_id": "retro:P-7"
     },
     {
       "cost_usd": 0.5984182999999998,
@@ -216,11 +287,18 @@
       "prompt_id": "retro:P-7"
     }
   ],
-  "entries_sha256": "sha256:438e9f8edd6b050b93ac0e984577f797350f5a910ff5156c276120129f029c47",
+  "entries_sha256": "sha256:194aafd533bca5d2d5df34ad286eb06a17901e81e4d07969e7b2e5512de6dff3",
   "files": [
     "runs/s1-full-run-not-archived/run.json",
     "runs/fetch-schema-traces-path-a/run.json",
     "runs/migration-ledger-v0-to-v1.0/run.json",
+    "runs/bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593/run.json",
+    "runs/bare_cc-g50t-claude-haiku-4-5-20251001-069d86f8/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-36c386d1/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-4f5d7ddb/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-b1ae92a0/run.json",
+    "runs/bare_cc-sk48-claude-haiku-4-5-20251001-b3e5c758/run.json",
+    "runs/bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309/run.json",
     "runs/bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e/run.json",
     "runs/bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e/run.json",
     "runs/bare_cc-tn36-claude-haiku-4-5-20251001-3a033821/run.json",
@@ -239,10 +317,10 @@
     "runs/bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b/run.json",
     "runs/bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd/run.json"
   ],
-  "generated_at": "2026-07-28T01:12:05Z",
+  "generated_at": "2026-07-28T01:34:29Z",
   "prompt_id": "P-12",
   "provenance": {
-    "base_commit": "14c3abf497453762aeea1e8841dced501e9af11f",
+    "base_commit": "46334d39cd283dc74129a30d86c39d1dccaa92af",
     "branch": "agent/p12-envelope-finish",
     "tree_dirty": true,
     "worktree": "C:\\Users\\user\\Desktop\\theoria-wt-p12"

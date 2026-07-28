@@ -7,35 +7,82 @@
   },
   "evidence": [
     {
-      "bytes": 5467,
+      "bytes": 6596,
       "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/report.json",
-      "sha256": "sha256:a622e6f41c754cbe6c78d1fd50cb1b9251f11d3d7f5e9ebb4d2f61d2ddb2bda5",
+      "sha256": "sha256:c6df6457a479b2c0d8189c4846ca001661a2d07a7e26e11b781fe5ea7b68d7b3",
+      "stability": "fixed",
       "tracked": true
     },
     {
-      "bytes": 4594003,
+      "bytes": 4614023,
       "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/ledger.canon.jsonl",
-      "sha256": "sha256:574a654b07586544d54007c8ae3f32b0f075d691f9b75cbdd2a65b0b9098b1fa",
+      "sha256": "sha256:db1e8b8c3fc78873f7098d111765282fd50a8d617962b865d20a71f90fe4a58b",
+      "stability": "fixed",
       "tracked": true
     },
     {
       "bytes": 45677,
       "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/costs.sidecar.jsonl",
       "sha256": "sha256:a19752287435c1ae99082454900698abeed650d955aadbdbdba22e6b22e31679",
+      "stability": "fixed",
       "tracked": true
     }
   ],
   "finding": "F-16",
   "id": "migration-ledger-v0-to-v1.0",
+  "joins": {
+    "probe_log": {
+      "bytes": 1183013,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:82771b4560ae99522be6308842a65eddf98b2e5544ec878846d403818d892a29"
+    },
+    "run_summaries": [
+      {
+        "bytes": 2191,
+        "path": "baseline-arms/out/campaign_cells.jsonl",
+        "sha256": "sha256:6722537a1fe8e62e801cacf34a8b5a5b8416da67a14a6d91137c622f8621aa17"
+      },
+      {
+        "bytes": 2273,
+        "path": "baseline-arms/out/pilot_ar25-0c556536.json",
+        "sha256": "sha256:810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a"
+      },
+      {
+        "bytes": 2302,
+        "path": "baseline-arms/out/pilot_g50t-5849a774.json",
+        "sha256": "sha256:079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8"
+      },
+      {
+        "bytes": 783,
+        "path": "baseline-arms/out/pilot_g50t_sonnet_rerun.json",
+        "sha256": "sha256:45ea8a961fbfac01c9eca0350cb0c1b13bcf565137e30b3d99a5b623f24eeb30"
+      },
+      {
+        "bytes": 2295,
+        "path": "baseline-arms/out/pilot_sk48-d8078629.json",
+        "sha256": "sha256:e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5"
+      },
+      {
+        "bytes": 796,
+        "path": "baseline-arms/out/pilot_sk48_sonnet_rerun.json",
+        "sha256": "sha256:3c6a81e246ef79552e952adfe94eb3b71e1e777c69c65227c7ed34b12eda2faf"
+      },
+      {
+        "bytes": 2259,
+        "path": "baseline-arms/out/pilot_tn36-ef4dde99.json",
+        "sha256": "sha256:130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e"
+      }
+    ]
+  },
   "kind": "migration",
   "migrator": "baseline-arms/migrate_ledger/1.1.0",
   "outcome": "complete",
   "produced": [
     {
-      "bytes": 4594003,
+      "bytes": 4614023,
       "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/ledger.canon.jsonl",
       "records": 560,
-      "sha256": "sha256:574a654b07586544d54007c8ae3f32b0f075d691f9b75cbdd2a65b0b9098b1fa"
+      "sha256": "sha256:db1e8b8c3fc78873f7098d111765282fd50a8d617962b865d20a71f90fe4a58b"
     },
     {
       "bytes": 45677,
@@ -47,7 +94,7 @@
   "prompt_id": "P-12",
   "records": 560,
   "seed": null,
-  "seed_note": "a migration has no seed; it is a pure function of its inputs, and the input hash in `source` pins it",
+  "seed_note": "a migration has no seed; it is a pure function of its inputs. `source` pins the ledger it read and `joins` pins the probe log and run summaries it joined against -- all three, because the output is a function of all three and an earlier version of this note claimed the first one pinned the whole thing",
   "source": {
     "bytes": 5217897,
     "path": "baseline-arms/ledger.jsonl",

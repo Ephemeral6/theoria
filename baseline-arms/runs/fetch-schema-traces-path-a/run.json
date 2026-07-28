@@ -6,12 +6,14 @@
       "bytes": 44390,
       "path": "baseline-arms/schema_traces/MANIFEST.json",
       "sha256": "sha256:817545a1cf382175f3e0537743f5dcc5d0817844f7555a41e5792abe8a0844c3",
+      "stability": "fixed",
       "tracked": true
     },
     {
       "bytes": 9462,
       "path": "baseline-arms/SCHEMA_PATH_A.md",
       "sha256": "sha256:9821239d815be2d7d03176ea6b7a5f987887c18bea730e1046b3006d613091f5",
+      "stability": "fixed",
       "tracked": true
     }
   ],

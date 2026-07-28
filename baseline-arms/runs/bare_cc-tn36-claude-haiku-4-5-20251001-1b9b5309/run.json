@@ -1,0 +1,42 @@
+{
+  "arm": "bare_cc",
+  "campaign": "unattributed",
+  "evidence": [
+    {
+      "bytes": 5217897,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+      "stability": "append_only",
+      "tracked": true
+    },
+    {
+      "bytes": 1184451,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:e69b5c9ab591ca101653876a53291730a3d3d5b28d4c6593ccb8a7acb9d5d149",
+      "stability": "append_only",
+      "tracked": true
+    }
+  ],
+  "game_id": null,
+  "id": "bare_cc-tn36-claude-haiku-4-5-20251001-1b9b5309",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 3,
+    "model_call": 2,
+    "other": 0
+  },
+  "model": null,
+  "note": "this run_id appears in ledger.jsonl but in no summary file, so its outcome and spend were never written down. The record of what it did is the ledger itself; runs/_migrations/.../costs.sidecar.jsonl carries its per-call dollars. Recorded rather than dropped: an archive that silently held only the runs somebody remembered to summarise would misstate the spend.",
+  "outcome": "no_summary",
+  "prompt_id": "retro:P-7",
+  "reconstructed_from_ledger": true,
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": null,
+    "actions_ok": null,
+    "cost_usd": null,
+    "http_calls_gameplay": null,
+    "model_calls": 2
+  }
+}

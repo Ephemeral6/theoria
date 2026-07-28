@@ -147,10 +147,22 @@ def test_a_suspended_cell_still_counts_in_g2(tmp_path):
 
 
 # ------------------------------------------------------- the live gate record
-def test_the_live_gate_is_green_and_says_why(tmp_path):
-    """The actual campaign_cells.jsonl and the actual ruling, end to end."""
+def test_the_live_gate_has_no_non_clock_trip_and_says_why(tmp_path):
+    """The actual campaign_cells.jsonl and the actual ruling, end to end.
+
+    Asserts on the non-clock clauses only. A blanket `state == "green"` here
+    would pin a property of the wall clock at the moment pytest runs: G6c fires
+    72 h after the first recorded cell -- 2026-07-30T18:21:28Z for this file --
+    and from that instant the suite would fail for reasons unrelated to
+    whatever a future session changed, with the single number that turns both
+    the test and the gate green again being TOTAL_SPAN_SECONDS_CAP. That is a
+    red test acting as a forcing function toward exactly the move
+    BUDGET_REPORT.md 11.3 refuses. The clocks are covered deterministically in
+    test_gate_clocks.py at a fixed `now`, and enforced in production by
+    --gate-only and by run_campaign's pre-flight."""
     gate = rc.evaluate_gate(rc.load_cells())
-    assert gate["state"] == "green", gate["tripped"]
+    non_clock = [t for t in gate["tripped"] if not t.startswith("G6")]
+    assert non_clock == [], non_clock
     assert len(gate["adjudicated"]) == 3
     assert all(s["finding"] == "F-15" for s in gate["adjudicated"])
     assert gate["totals"]["cost_usd"] > 2.5      # the spend is still on the books

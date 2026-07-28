@@ -218,11 +218,26 @@ def test_the_level_carry_rule_is_enforced(tmp_path):
     a = good_env_step(seq=1, levels_completed=0, level=0)
     b = good_env_step(seq=2, levels_completed=1, level=1, level_boundary=False)
     path = write(tmp_path, [a, b])
-    assert any("level_boundary" in p for p in vc.validate_file(path)["problems"])
+    problems = vc.validate_file(path)["problems"]
+    assert any("level_boundary" in p for p in problems)
+    assert any("level 1 does not follow" in p for p in problems)
+
+
+def test_level_must_be_the_count_entering_the_step(tmp_path):
+    """`proxy/ledger.py` writes `level=before`. A stream recording the count
+    after the step is off by one on every level-completing step, which is
+    exactly the defect the P-12 review found in the migrator."""
+    after_style = good_env_step(seq=1, levels_completed=1, level=1,
+                                level_boundary=True)
+    assert any("does not follow" in p
+               for p in vc.validate_file(write(tmp_path, [after_style]))["problems"])
+    before_style = good_env_step(seq=1, levels_completed=1, level=0,
+                                 level_boundary=True)
+    assert vc.validate_file(write(tmp_path, [before_style], "b.jsonl"))["ok"]
 
 
 def test_a_carried_level_across_a_failed_step_is_accepted(tmp_path):
-    a = good_env_step(seq=1, levels_completed=2, level=2)
+    a = good_env_step(seq=1, levels_completed=2, level=0, level_boundary=True)
     b = good_env_step(seq=2, levels_completed=None, level=2, frames=None,
                       n_frames=0, frame_hash=None)
     c = good_env_step(seq=3, levels_completed=2, level=2)

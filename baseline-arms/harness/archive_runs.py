@@ -17,10 +17,13 @@ Three rules it follows:
     evidence with a sha256 and a byte count; it does not copy it. The archive is
     an index over an append-only record, so anything that mutated the record to
     build the index would defeat the record.
-  * **Failed runs are archived identically.** Fourteen pilot cells, four of them
-    dead; three envelope cells, all three dead. All seventeen get an entry. A
-    provenance archive that quietly held only the successes would misrepresent
-    the spend, which is most of what there is to learn here.
+  * **Failed runs are archived identically.** Fourteen pilot cells and three
+    envelope cells, ten of the seventeen dead by the gate's own definition
+    (`api_unusable` or `model_error`), plus the runs that appear in the ledger
+    with no summary at all. A provenance archive that quietly held only the
+    successes would misrepresent the spend, which is most of what there is to
+    learn here. The MANIFEST's `counts.dead_runs` is the number to trust; this
+    paragraph is prose and can drift.
   * **`seed` is null, and says why.** This arm has no seed to record: the model
     call is nondeterministic and the run id is a uuid4. Writing a number there
     to satisfy the field would be worse than the gap. `LEDGER_FORMAT.md` section
@@ -116,8 +119,24 @@ def evidence(path: str) -> Dict[str, Any]:
     rel = os.path.relpath(path, REPO).replace(os.sep, "/")
     if not os.path.exists(path):
         return {"path": rel, "missing": True}
-    return {"path": rel, "bytes": os.path.getsize(path),
-            "sha256": sha256_file(path), "tracked": rel in tracked_paths()}
+    kind = ("append_only" if rel in APPEND_ONLY else
+            "snapshot" if rel in MUTABLE_SNAPSHOTS else "fixed")
+    out = {"path": rel, "tracked": rel in tracked_paths(),
+           # What the pointer promises. "fixed": these bytes, forever.
+           # "append_only": these bytes are still the file's prefix.
+           # "snapshot": nothing -- the file is rewritten in place.
+           "stability": kind}
+    if kind == "snapshot":
+        # No hash and no size. Recording them would put a mutable file's
+        # content into the archive's digest, so two builds either side of a
+        # gate evaluation would disagree and the determinism check could not
+        # tell that from a real change -- and a hash nobody can verify reads
+        # like a promise.
+        out["note"] = "current-state snapshot, rewritten in place; no hash recorded"
+        return out
+    out["bytes"] = os.path.getsize(path)
+    out["sha256"] = sha256_file(path)
+    return out
 
 
 # ------------------------------------------------------------- run sources
@@ -261,6 +280,7 @@ def migration_entries() -> List[Dict[str, Any]]:
         with open(report_path, encoding="utf-8") as fh:
             report = json.load(fh)
         produced = [p for p in (report.get("output"), report.get("sidecar")) if p]
+        joins = report.get("joins") or {}
         out.append({
             "id": "migration-%s" % name,
             "kind": "migration",
@@ -271,12 +291,17 @@ def migration_entries() -> List[Dict[str, Any]]:
             "target_format": report.get("target_format"),
             "outcome": "complete" if not report.get("warnings") else "complete-with-warnings",
             "seed": None,
-            "seed_note": "a migration has no seed; it is a pure function of its "
-                         "inputs, and the input hash in `source` pins it",
+            "seed_note": "a migration has no seed; it is a pure function of "
+                         "its inputs. `source` pins the ledger it read and "
+                         "`joins` pins the probe log and run summaries it "
+                         "joined against -- all three, because the output is a "
+                         "function of all three and an earlier version of this "
+                         "note claimed the first one pinned the whole thing",
             "spend": {"cost_usd": 0.0, "actions_ok": 0, "actions_failed": 0},
             "records": report.get("records"),
             "counts": report.get("counts"),
             "source": report.get("source"),
+            "joins": joins,
             "produced": produced,
             "unfillable_fields": report.get("unfillable_fields"),
             "warnings": report.get("warnings"),
@@ -287,19 +312,65 @@ def migration_entries() -> List[Dict[str, Any]]:
     return out
 
 
+def ledger_only_entries(index: Dict[str, Dict[str, int]],
+                        known: set) -> List[Dict[str, Any]]:
+    """Runs the ledger records but no summary file names.
+
+    The census was built from `out/pilot_*.json` and `out/campaign_cells.jsonl`,
+    so a run whose summary was never written -- an interrupted invocation, a
+    probe episode, anything killed before it returned -- was invisible to an
+    archive whose docstring claims it holds every run this track has paid for.
+    Seven such run_ids exist, costing $0.29 between them. They are archived from
+    what the ledger itself carries, and marked so nobody mistakes a
+    reconstruction for a summary.
+    """
+    out = []
+    for run_id in sorted(set(index) - known):
+        counts = index[run_id]
+        out.append({
+            "id": run_id,
+            "kind": "run",
+            "prompt_id": RETRO_PROMPT,
+            "campaign": "unattributed",
+            "arm": "bare_cc" if run_id.startswith("bare_cc-") else None,
+            "game_id": None,
+            "model": None,
+            "outcome": "no_summary",
+            "seed": None,
+            "seed_note": SEED_NOTE,
+            "spend": {"actions_ok": None, "actions_failed": None,
+                      "model_calls": counts.get("model_call"),
+                      "cost_usd": None, "http_calls_gameplay": None},
+            "reconstructed_from_ledger": True,
+            "note": "this run_id appears in ledger.jsonl but in no summary "
+                    "file, so its outcome and spend were never written down. "
+                    "The record of what it did is the ledger itself; "
+                    "runs/_migrations/.../costs.sidecar.jsonl carries its "
+                    "per-call dollars. Recorded rather than dropped: an "
+                    "archive that silently held only the runs somebody "
+                    "remembered to summarise would misstate the spend.",
+            "ledger_records": counts,
+            "evidence": [evidence(os.path.join(TRACK, "ledger.jsonl")),
+                         evidence(os.path.join(TRACK, "probe_log.jsonl"))],
+        })
+    return out
+
+
 def in_flight_note() -> List[Dict[str, Any]]:
     """The S1 full run is another session's and was still writing when this
     archive was built. Recording that it exists and was deliberately not
     archived is the honest move; archiving a file mid-write is not."""
-    checkpoints = interlock.scan_checkpoints()      # across every worktree
-    if not checkpoints:
-        return []
-    # Game ids only, not their live status. The status of a running campaign
+    # Unconditional. An earlier version returned [] when no checkpoint was
+    # visible, which made the one entry recording a deliberate omission a live
+    # reading of another session's untracked directory -- it would have
+    # evaporated on the next rebuild, and the archive would then have claimed
+    # completeness it never had. A statement about what was left out has to
+    # outlive the thing it was left out of.
+    #
+    # Game ids only, not their live status: the status of a running campaign
     # changes minute to minute, and putting it here made the archive's digest a
-    # function of what another session happened to be doing -- so two builds
-    # minutes apart disagreed and the determinism check could not tell that from
-    # a real change. What is stable and worth recording is *which* campaigns
-    # exist and that they were excluded.
+    # function of what another session happened to be doing.
+    checkpoints = interlock.scan_checkpoints()      # across every worktree
     games = sorted(c.get("game_id") or os.path.basename(c["path"])
                    for c in checkpoints)
     return [{
@@ -363,6 +434,7 @@ def build(prompt_id: str = "P-12") -> Dict[str, Any]:
         if entry["kind"] == "run":
             entry["ledger_records"] = index.get(entry["id"], {
                 "env_step": 0, "model_call": 0, "other": 0})
+    entries.extend(ledger_only_entries(index, {e["id"] for e in entries}))
 
     entries.sort(key=lambda e: (e["kind"], e.get("started") or "", e["id"]))
 
@@ -434,8 +506,61 @@ def _tally(entries: List[Dict[str, Any]], key: str) -> Dict[str, int]:
 
 
 # ----------------------------------------------------------------- verify
+APPEND_ONLY = ("baseline-arms/ledger.jsonl", "baseline-arms/probe_log.jsonl",
+               "baseline-arms/out/campaign_cells.jsonl",
+               "baseline-arms/out/campaign_adjudications.jsonl")
+
+# Rewritten in place every time the gate is evaluated: a current-state snapshot,
+# not a record. Its hash in an entry is a point-in-time note, not a promise, and
+# verifying it would make --verify fail every time anyone asked the gate a
+# question. Existence is checked; content is not.
+MUTABLE_SNAPSHOTS = ("baseline-arms/out/campaign_gate.json",)
+
+
+def sha256_prefix(path: str, length: int) -> str:
+    """Hash of the first `length` bytes."""
+    h = hashlib.sha256()
+    remaining = length
+    with open(path, "rb") as fh:
+        while remaining > 0:
+            block = fh.read(min(1 << 20, remaining))
+            if not block:
+                break
+            h.update(block)
+            remaining -= len(block)
+    return "sha256:" + h.hexdigest()
+
+
+def check_evidence(ev: Dict[str, Any]) -> Optional[str]:
+    """None if the pointer still holds, else what changed.
+
+    An append-only file is verified over the prefix that existed when the
+    archive was built, not over the whole file. Growth is what these files do:
+    every gate evaluation appends a `campaign_gate` probe, so a whole-file hash
+    made `--verify` fail on normal operation -- and it reported that with the
+    same words it would use for real tampering, which is the way an integrity
+    check stops being read. The prefix hash still catches the thing that
+    matters: history rewritten under an append-only record.
+    """
+    path = os.path.join(REPO, ev["path"].replace("/", os.sep))
+    if not os.path.exists(path):
+        return "has since disappeared"
+    if ev["path"] in MUTABLE_SNAPSHOTS:
+        return None
+    if ev["path"] not in APPEND_ONLY:
+        return None if sha256_file(path) == ev["sha256"] else "content changed"
+    size = os.path.getsize(path)
+    if size < ev["bytes"]:
+        return ("shrank from %d to %d bytes -- an append-only file cannot lose "
+                "content" % (ev["bytes"], size))
+    if sha256_prefix(path, ev["bytes"]) != ev["sha256"]:
+        return ("its first %d bytes changed -- an append-only file's history "
+                "must not be rewritten" % ev["bytes"])
+    return None
+
+
 def verify() -> Dict[str, Any]:
-    """Re-hash every referenced artifact and report what moved."""
+    """Re-check every referenced artifact and report what moved."""
     if not os.path.exists(MANIFEST_PATH):
         return {"ok": False, "problems": ["runs/MANIFEST.json does not exist"]}
     with open(MANIFEST_PATH, encoding="utf-8") as fh:
@@ -455,18 +580,10 @@ def verify() -> Dict[str, Any]:
                 problems.append("%s: evidence recorded as missing: %s"
                                 % (entry["id"], ev["path"]))
                 continue
-            source = os.path.join(REPO, ev["path"].replace("/", os.sep))
-            if not os.path.exists(source):
-                problems.append("%s: evidence has since disappeared: %s"
-                                % (entry["id"], ev["path"]))
-                continue
             checked += 1
-            actual = sha256_file(source)
-            if actual != ev["sha256"]:
-                problems.append(
-                    "%s: %s changed since archiving (append-only files grow, so "
-                    "this is expected for ledger.jsonl after a new run and is a "
-                    "problem for anything else)" % (entry["id"], ev["path"]))
+            trouble = check_evidence(ev)
+            if trouble:
+                problems.append("%s: %s %s" % (entry["id"], ev["path"], trouble))
     return {"ok": not problems, "problems": problems, "evidence_checked": checked}
 
 

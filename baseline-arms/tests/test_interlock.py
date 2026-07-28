@@ -130,13 +130,31 @@ def test_no_signal_at_all_blocks():
     assert "cannot determine" in state["blockers"][0]
 
 
-def test_checkpoints_carry_the_scan_when_the_process_table_is_gone(tmp_path):
+def test_a_finished_checkpoint_does_not_rescue_a_failed_process_scan(tmp_path):
+    """The hole the P-12 review found. The fail-closed branch used to clear when
+    any checkpoint file existed -- but only harness/campaign.py writes one, so
+    for run_campaign / bare_cc / run_pilot the checkpoint signal can never say
+    yes, and four terminal checkpoints were already on disk. The fallback
+    silenced fail-closed in every real situation while looking like a second
+    opinion."""
     root = checkpoint(tmp_path, "campaign_tn36.json", game_id="tn36-ef4dde99",
                       status="episode_limit_hit", ended=iso(NOW - 60))
     state = interlock.check(lister=lister([], error="ps: not found"),
                             roots=[root], now=NOW, own_pid=1)
-    assert state["clear"], state["blockers"]
+    assert not state["clear"]
+    assert any("process table is unavailable" in b for b in state["blockers"])
     assert state["process_scan_error"] == "ps: not found"
+
+
+def test_an_unreadable_checkpoint_blocks(tmp_path):
+    """An unknown state is not an answered one."""
+    directory = tmp_path / "baseline-arms" / "out" / "campaign"
+    directory.mkdir(parents=True)
+    (directory / "campaign_x.json").write_text("{ truncated", encoding="utf-8")
+    state = interlock.check(lister=lister([]), roots=[str(tmp_path)], now=NOW,
+                            own_pid=1)
+    assert not state["clear"]
+    assert any("could not be read" in b for b in state["blockers"])
 
 
 def test_a_clear_scan_with_both_signals_present(tmp_path):
@@ -216,3 +234,59 @@ def test_a_nohup_wrapper_and_its_child_are_both_reported():
                        (1001, "python.exe -u -m harness.campaign --game g50t")]),
         roots=[], now=NOW, own_pid=1)
     assert len(state["processes"]) == 2
+
+
+
+# ------------------------------------------- what the review found (P-12)
+def test_a_read_only_flag_inside_an_argument_value_does_not_excuse_a_campaign():
+    """The exclusion is a whole-argument match, not a substring of the command
+    line. A prompt or a path containing the text must not silence it."""
+    state = interlock.check(
+        lister=lister([(13, "python -m harness.run_campaign --game g50t "
+                            "--note 'see --gate-only for the read-only path'")]),
+        roots=[], now=NOW, own_pid=1)
+    assert not state["clear"]
+
+
+def test_gate_only_only_excuses_run_campaign():
+    """It is run_campaign's flag. A `--gate-only` token on any other module is
+    somebody's quoted text, not a read-only invocation."""
+    state = interlock.check(
+        lister=lister([(15, "python -m harness.campaign --gate-only")]),
+        roots=[], now=NOW, own_pid=1)
+    assert not state["clear"]
+
+
+def test_m_without_a_space_is_still_a_campaign():
+    state = interlock.check(
+        lister=lister([(14, "python -mharness.campaign --game g50t-5849a774")]),
+        roots=[], now=NOW, own_pid=1)
+    assert not state["clear"]
+
+
+def test_combined_exposure_counts_the_episode_in_flight():
+    """Leaving live_episode out understates the other campaign by exactly the
+    episode running right now -- which is when anyone reads the number."""
+    checkpoints = [{"cost_usd": 12.55, "http_calls": 2803, "live": True,
+                    "live_episode": {"cost_usd": 0.32}}]
+    ex = interlock.combined_exposure(checkpoints, envelope_usd=2.5275)
+    assert ex["other_campaigns_usd"] == 12.87
+    assert ex["other_campaigns_live"] == 1
+
+
+def test_combined_exposure_separates_live_campaigns_from_finished_ones():
+    checkpoints = [{"cost_usd": 8.28, "live": False},
+                   {"cost_usd": 12.55, "live": True}]
+    ex = interlock.combined_exposure(checkpoints)
+    assert ex["other_campaign_count"] == 2
+    assert ex["other_campaigns_live"] == 1
+
+
+def test_every_spending_entry_point_consults_the_interlock():
+    """D-017 claims the two campaigns are serialised. Serialisation that holds
+    in one direction only just decides which campaign loses the race."""
+    import inspect
+    from harness import bare_cc, campaign, run_campaign, run_pilot
+    for module in (campaign, run_campaign, run_pilot, bare_cc):
+        source = inspect.getsource(module.main)
+        assert "interlock.check()" in source, module.__name__

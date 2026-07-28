@@ -69,9 +69,10 @@ CANON = {"sort_keys": True, "ensure_ascii": True, "separators": (",", ":")}
 CANON_EVENTS = ("env_step", "model_call", "run_start", "run_end", "env_meta",
                 "guard_block", "incident")
 
-# The command path the canonical guard recognises. ACTION0 is outside it; 46 v0
-# records have action.id == 0 because the arm's regex accepts any integer and
-# the model occasionally emitted one. They are kept and flagged -- the record is
+# The command path the canonical guard recognises. ACTION0 is outside it, and
+# v0 has such records -- 4 in ledger.jsonl, 46 across every ledger file
+# including the S1 shards -- because the arm's regex accepts any integer and
+# the model occasionally emitted one. They are kept and flagged: the record is
 # of what crossed the wire, not of what should have.
 CANON_ACTION_PATH = re.compile(r"^/api/cmd/(RESET|ACTION([1-9][0-9]?))$")
 
@@ -271,14 +272,19 @@ def lift_env_step(rec: Dict[str, Any], seq: int, src: Dict[str, Any],
     failed = bool(rec.get("failed"))
     is_reset = action["name"] == "RESET"
 
-    # `level` follows the reconciliation rule proxy/reconcile.py re-checks:
-    # carry the previous value when this record has no levels_completed (failed
-    # steps have none), and mark a boundary only where it actually increased.
+    # `level` is the count *entering* the step, not the count after it.
+    # `proxy/ledger.py:194-215` records `level=before` and `reconcile.py:73-81`
+    # recomputes `expected_level = completed` -- the value the step started
+    # from -- and calls a disagreement an incident. Lifting the after-count
+    # instead puts every level-completing step one too high, which is what this
+    # code did until the review caught it. The counter starts at 0, as
+    # RunLedger's does, and a record with no levels_completed carries it.
     raw_levels = rec.get("levels_completed")
-    levels = raw_levels if isinstance(raw_levels, int) else state.get("level")
-    boundary = (isinstance(raw_levels, int) and state.get("level") is not None
-                and raw_levels > state["level"])
-    state["level"] = levels
+    before = state.get("level", 0)
+    after = before if not isinstance(raw_levels, int) else raw_levels
+    boundary = after > before
+    level = before
+    state["level"] = after
 
     # bare_cc writes a non-failed env_step only after the response was 200, and a
     # failed one only after recording the status it got, so the status here is
@@ -324,7 +330,7 @@ def lift_env_step(rec: Dict[str, Any], seq: int, src: Dict[str, Any],
         "state": rec.get("state"),
         "score": None,
         "levels_completed": raw_levels if isinstance(raw_levels, int) else None,
-        "level": levels,
+        "level": level,
         "level_boundary": bool(boundary),
         "variant": None,
         "guard": {"decision": "allow"},
@@ -351,8 +357,9 @@ def lift_env_step(rec: Dict[str, Any], seq: int, src: Dict[str, Any],
             "http_status": "carried" if failed else
                            "entailed: written only after a 200",
             "http_attempts": attempts_grade,
-            "level": "derived: carry-forward over the run's levels_completed "
-                     "sequence, matching proxy/reconcile.py",
+            "level": "derived: the levels_completed the step started from, "
+                     "carried forward across records that report none -- the "
+                     "rule proxy/ledger.py writes and reconcile.py re-checks",
             "unfillable": _gap_list(gaps),
         },
         "lift_unmapped": {},
@@ -652,10 +659,16 @@ def run(source: str = DEFAULT_SOURCE, out_dir: Optional[str] = None,
                                                           "costs.sidecar.jsonl"))
     report["source"] = {"path": label, "bytes": os.path.getsize(source),
                         "sha256": before, "records": len(records)}
+    # Hashed, not just named. The output digest is a function of three inputs --
+    # the ledger, the probe log (guid) and the run summaries (card_id, arm,
+    # reset_attempts) -- and recording a hash for only the first while the
+    # archive entry says "the input hash pins it" is a claim the data does not
+    # support. Two of the three are mutable.
+    join_paths = sorted({v["source"] for v in run_side_table().values()})
     report["joins"] = {
-        "run_summaries": sorted({v["source"] for v in run_side_table().values()}),
-        "probe_log": os.path.relpath(probe_path, REPO).replace(os.sep, "/")
-                     if os.path.exists(probe_path) else None,
+        "run_summaries": [_pin(os.path.join(REPO, p.replace("/", os.sep)))
+                          for p in join_paths],
+        "probe_log": _pin(probe_path) if os.path.exists(probe_path) else None,
     }
     report["generated_at"] = ledger.utcnow()
     with open(os.path.join(out_dir, "report.json"), "w", encoding="utf-8",
@@ -663,6 +676,12 @@ def run(source: str = DEFAULT_SOURCE, out_dir: Optional[str] = None,
         fh.write(json.dumps(report, indent=2, sort_keys=True,
                             ensure_ascii=True) + "\n")
     return report
+
+
+def _pin(path: str) -> Dict[str, Any]:
+    """A join input, recorded the way the primary source is."""
+    return {"path": os.path.relpath(path, REPO).replace(os.sep, "/"),
+            "bytes": os.path.getsize(path), "sha256": sha256_file(path)}
 
 
 def main(argv=None) -> int:

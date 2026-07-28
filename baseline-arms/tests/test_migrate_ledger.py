@@ -253,14 +253,16 @@ def test_fuzz_one_stream(seed):
             prev = per_run_step.get(out["run_id"])
             assert prev is None or out["step_idx"] >= prev
             per_run_step[out["run_id"]] = out["step_idx"]
-            # level: carry-forward, exactly as proxy/reconcile.py recomputes it.
-            before = per_run_level.get(out["run_id"])
+            # level is the count the step STARTED from -- proxy/ledger.py writes
+            # `level=before` and reconcile.py recomputes `expected_level =
+            # completed`. The counter starts at 0 and a record reporting no
+            # levels_completed carries it.
+            before = per_run_level.get(out["run_id"], 0)
             raw = v0.get("levels_completed")
-            expect = raw if isinstance(raw, int) else before
-            assert out["level"] == expect
-            assert out["level_boundary"] == bool(
-                isinstance(raw, int) and before is not None and raw > before)
-            per_run_level[out["run_id"]] = expect
+            after = before if not isinstance(raw, int) else raw
+            assert out["level"] == before
+            assert out["level_boundary"] == (after > before)
+            per_run_level[out["run_id"]] = after
 
         elif out["event"] == "model_call":
             check_no_cost(out)
@@ -393,14 +395,30 @@ def test_an_empty_frame_list_hashes_but_counts_zero():
 
 
 def test_a_non_int_levels_completed_carries_the_previous_value():
+    """The failed step in the middle reports no levels_completed, so it carries
+    the level in force. Only the first step, which took the count 0 -> 2, is a
+    boundary; it is recorded at level 0, the level it happened on."""
     rng = random.Random(23)
     rid = "bare_cc-ar25-m-1"
     a = v0_ok_action(rng, rid, DEV[0], MODELS[0], "2026-07-27T10:00:00Z", 1, 2)
     b = v0_failed_action(rng, rid, DEV[0], MODELS[0], "2026-07-27T10:00:01Z", 2)
     c = v0_ok_action(rng, rid, DEV[0], MODELS[0], "2026-07-27T10:00:02Z", 3, 2)
     out, _, _ = lift([a, b, c])
-    assert [r["level"] for r in out] == [2, 2, 2]
-    assert [r["level_boundary"] for r in out] == [False, False, False]
+    assert [r["level"] for r in out] == [0, 2, 2]
+    assert [r["level_boundary"] for r in out] == [True, False, False]
+
+
+def test_level_is_the_count_entering_the_step_not_leaving_it():
+    """The bug the P-12 review caught: lifting the after-count put every
+    level-completing step one too high, while claiming to match reconcile.py."""
+    rng = random.Random(29)
+    rid = "bare_cc-ar25-m-1"
+    steps = [v0_ok_action(rng, rid, DEV[0], MODELS[0],
+                          "2026-07-27T10:00:0%dZ" % i, i + 1, lvl)
+             for i, lvl in enumerate((0, 0, 1, 1, 2))]
+    out, _, _ = lift(steps)
+    assert [r["level"] for r in out] == [0, 0, 0, 1, 1]
+    assert [r["level_boundary"] for r in out] == [False, False, True, False, True]
 
 
 def test_ts_of_a_malformed_stamp_is_passed_through_not_padded():
