@@ -86,7 +86,32 @@ written, the paper cites both and says which is later; no report was edited.
 | read-only verification | 258 files hashed, 0 changed | `cold-start-a2/A2_REPORT.md` §7 only — `upstream_pin.json` pins 22 files and does not carry this figure |
 | upstream pinning | every imported file hashed | `cold-start-a2/artifacts/upstream_pin.json` |
 
-## §6 — the battery
+## §6 — A3, the second level
+
+| claim | value | source |
+|---|---|---|
+| like-for-like bill, actions | 346 -> 10 = 0.029 | `cold-start-a3/artifacts/bill_table.md` (same level, books vs no books) |
+| like-for-like bill, frames | 347 -> 11 | ibid. |
+| the four zeros | engine stages, candidates, theorize rounds, clauses all 0 | ibid.; `cold-start-a3/artifacts/bill_l2_transfer.json` |
+| verification unchanged | compile 1, certify 3, plan 1 in both columns | ibid. |
+| cost to first plan | 1 frame, 0 actions (cold start: 333 / 332) | `cold-start-a3/artifacts/bill_l2_transfer.json` -> `cost_to_first_plan` |
+| problem fields | 6 derived from the frame, 3 supplied | `cold-start-a3/artifacts/provenance_l2_transfer.json` |
+| plan and outcome | SAT, length 10, win, 10 actions spent | `cold-start-a3/artifacts/arm_l2_transfer.json` |
+| referee's shortest for L2 | 10 | `cold-start-a3/artifacts/ground_truth.json` |
+| carried manual vs truth | 252/252 = 1.0, all reachable pairs (no held-out set exists) | `cold-start-a3/artifacts/score_vs_truth.json` |
+| reachable states | L1 62, L2 63 | `cold-start-a3/artifacts/ground_truth.json` |
+| generated-theory diff | 35 lines, confined to LANDMARKS/BOARD/is_goal/initial_state | `cold-start-a3/tests/test_transfer.py` |
+| negative controls, both caught | `all_caught: true`, `none_claimed_a_win: true` | `cold-start-a3/artifacts/negative_controls.json` |
+| ... replay is the layer that caught them | 13 anomalies, 8 of 891 pixels unexplained; static and Lean both green | ibid. |
+| ... `l2-oneway` reachable states | 63 -> 34, unsolvable | ibid.; `ground_truth.json` |
+| ... `l2-rewired` shortest | 15 | `ground_truth.json` (`DECISIONS.md` D-A3-010 says 14 and is stale) |
+| blind control agreement | 0 % as written; all 20 of L1's clauses canonically, plus 8 the blind arm added | `cold-start-a3/artifacts/domain_agreement.json` -> `as_written` |
+| blind control theorize rounds | 5, of which 2 went to toolchain conformance | `cold-start-a3/A3_REPORT.md` §4 |
+| planner backend | `stub-bfs`, not Fast Downward | every artefact's `plan.backend` |
+| incident A3-I1 | blind partially broken in round 3; verdicts fixed in round 1 | `cold-start-a3/DECISIONS.md`; `A3_REPORT.md` |
+| the playbook's transfer | **asserted, not measured** — no code path reads `theory/playbook.dsl`, and the byte-identity test its docstring cites does not exist | grep of `cold-start-a3/tests/` and `a3pipeline/` |
+
+## §7 — the battery
 
 | claim | value | source |
 |---|---|---|
@@ -100,7 +125,35 @@ written, the paper cites both and says which is later; no report was edited.
 | the pre-registration's seal | K1, K2, K7, K8 on A0 marked `[seen]` | `battery/PREDICTIONS.md` |
 | X5 cross-check | 59 distinct states, agreeing with a differently-computed count | `battery/artifacts/capability_spectrum.json`; `cold-start-a0/artifacts/trace_summary.json` |
 
-## §7 — limitations
+## §9 — the preflight
+
+| claim | value | source |
+|---|---|---|
+| the run of record | `preflight-20260728T012057Z` (an earlier attempt 26 s before aborted at 2 records) | `theoria-arm/runs/` |
+| ledger records | 23 | `.../preflight-20260728T012057Z/ledger.jsonl` |
+| RESET attempts | 18 (17 x 400, 1 x 200) | ibid. |
+| scored actions | **0** — `total_actions: 0`, `level_actions: [0]x7`, `score: 0.0` | ibid. seq 22, the API's own close response |
+| reconciliation | `successful_actions: 0` over 18 env steps | `.../MANIFEST.json` -> `reconciliation` |
+| cost | `model_calls: 0`, `usd: 0.0` | `.../MANIFEST.json` -> `cost` |
+| sealing counters | `bypass_attempts: 0`, `guard_blocks: 0`, `credential_in_body: 0`, `incidents: 0` | `.../MANIFEST.json` -> `sealing` |
+| guard fingerprint | cut v1, 4 development, 21 sealed, `unknown_policy: "deny"` | `.../ledger.jsonl` seq 1 |
+| RESET is not billed | 4 scorecards originally, extended to 32 | `baseline-arms/BUDGET_REPORT.md`; `proxy/scoring/arc_v1.py` (its fixture header still says 31 and is stale) |
+| ... and its stated limit | a *refused* request is unbilled; a semantically wasted one returns 200 and is billed | `proxy/scoring/arc_v1.py` |
+| sealed pile byte scan | `sealed_game_ids_found: []`, `sealed_pile_untouched: true`, `cut_integrity: true` | `theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json` (the preflight manifest predates this scan) |
+| the bypass counter does fire | 66 `bypass_attempt` incidents, 65 consecutive 401s | `theoria-arm/evidence/model-proxy-401.jsonl` |
+| red-team pass | 46 attacks, 29 landed on first contact, all 46 now blocked | `proxy/REDTEAM.md`; `proxy/STATUS.md` |
+| model side not proxied | `proxied: false` on every model call | `theoria-arm/GAPS.md` GAP 1; `theoria-arm/harness/modelcall.py` |
+| spend gate postdates the run | gate wired 08:42 Z, preflight ran 01:20 Z; `env_proxy.py` hashes differ | `proxy/runs/20260728T083000Z-s3/MANIFEST.json` vs the preflight's `upstream_pin` |
+| ... and never ran live | "offline throughout; the gate was never pointed at a live upstream" | `proxy/runs/20260728T083000Z-s3/MANIFEST.json` -> `money_spent` |
+| replay spot-check | 16 sessions, 9 positions, **372 pairwise comparisons**, 0 disagreements, one game | `proxy/runs/p9-shell-harden/replay_spotcheck_ar25.json` |
+| ... what it measures | the environment's determinism, not that the proxies reproduce a run | `proxy/STATUS.md` |
+| ledger authenticity | self-consistent, not authenticated; hash chain registered, not built | `proxy/STATUS.md` D-024; `proxy/REDTEAM.md` RED-40 |
+| no credential byte scan of the live ledger | the arm's archiver advertises it and accepts an unused `key_len` parameter | `theoria-arm/armtools/archive.py` |
+| first contact, for contrast | 7 actions, 5 model calls, score 0.0, 0 of 7 levels | `theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json` |
+| wall-clock confounded | two arms on one quota concurrently | `theoria-arm/INCIDENTS.md` INC-TA-001 |
+| cache reads structurally zero | fresh process per call, by design | ibid. INC-TA-005 |
+
+## §10 — limitations
 
 | claim | value | source |
 |---|---|---|

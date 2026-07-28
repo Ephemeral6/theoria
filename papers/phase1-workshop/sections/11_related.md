@@ -1,4 +1,4 @@
-## 8 · Related work
+## 11 · Related work
 
 ### 8.1 Three waves, and the thing they kept upgrading
 

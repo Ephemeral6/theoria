@@ -1,6 +1,36 @@
-## 6 · The metrics battery, recomputed over existing trajectories
+## 7 · The metrics battery, recomputed over existing trajectories
 
-### 6.1 A passive instrument, and what it cost
+> **Standing note, v0.2 — this section reports battery v0 and the battery has
+> moved.** It was rebuilt to v2 after this section was written, and the artefacts
+> it cites now hold different numbers: **95 runs across 5 arms** where the text
+> says 26 runs across 2, **38 metrics split 9 main / 29 reference** where the text
+> says 29 split 15/14, **31 of 38** non-discriminating where the text says 24 of
+> 29, and 32 redundancy clusters where the text says 27
+> (`battery/artifacts/capability_spectrum.json` now self-reports
+> `battery_version: "v2"`; `battery/METRICS.md`;
+> `battery/artifacts/discrimination.json`; `battery/artifacts/redundancy.json`).
+> One structural claim has been overtaken rather than merely rescaled: the
+> section says there is no Schema arm and there may never be, and a
+> `schema_repro` arm now exists.
+>
+> Everything downstream of the spectrum — §7.5's effect sizes, the actions-per-call
+> figures, the correlation, the P5 and E5 numbers — was computed over the 26-run
+> v0 spectrum and cannot be patched number by number; it has to be re-derived.
+> Until it is, **read this section as a report of v0**, which is what it
+> accurately is. It is left standing rather than deleted because the four Phase 2
+> processes and the finding that three metrics measured something other than what
+> they claimed are properties of the instrument, not of the run; and because
+> silently restating v2's numbers under v0's prose would be the exact failure the
+> paper's binding rule exists to prevent.
+>
+> Two citations in this section are also known-wrong and are not repaired here:
+> the determinism claim cites `battery/DECISIONS.md` D-B-001, which is about the
+> pile guardrail — the determinism decision is D-B-008, and it records that the
+> test runs against a synthetic fixture rather than against the published
+> artefacts. The X5 cross-check is described as independent; both counts descend
+> from the same explorer.
+
+### 7.1 A passive instrument, and what it cost
 
 `Theoria.md` Phase 2 asks for a second reader of the same ledger: 同一本账,两次
 使用 — the scorer reads it for a score, the battery reads it for a capability
@@ -18,7 +48,7 @@ sha256 of both inputs, so a changed number traces to a changed input
 power), 方向预注册 (directional pre-registration), 去冗余 (de-redundancy), 抗游戏
 审计 (anti-gaming audit) — ran; the rest of this section is what they returned.
 
-### 6.2 The pre-registration discipline, including its holes
+### 7.2 The pre-registration discipline, including its holes
 
 `battery/PREDICTIONS.md` fixes a directional ordering over the three arms for
 every registered metric. It is append-only from the commit that introduced it —
@@ -43,7 +73,7 @@ and a definition can be tuned toward a hoped-for result without ever seeing data
 Processes 1 and 4 exist to catch that and neither substitutes for a second pair
 of eyes; `battery/STATUS.md` records this as W-1, v0's most severe open weakness.
 
-### 6.3 A metric can be perfect and still be measuring the wrong thing
+### 7.3 A metric can be perfect and still be measuring the wrong thing
 
 A0's manual scores **K4 evidence coverage = 1.000** and **K2 held-out accuracy =
 0.000**, on the same manual, from the same recompute
@@ -67,7 +97,7 @@ with the instruction that "K4 must never be reported without K2 beside it"
 hook — replay accuracy 0.987 against held-out accuracy 0.000 — on the metric the
 field already optimises.
 
-### 6.4 The pilot ledger cannot certify any metric, and says so
+### 7.4 The pilot ledger cannot certify any metric, and says so
 
 Every *ranked* metric's verdict came back `underpowered` or `no-data` — 11 and 13
 of 29, with the remaining 5 (E1, K7, K11, P5, X5) returning `not-ranked` because
@@ -87,7 +117,7 @@ top-level `power` string, so nobody reads 0.125 as a near miss — and it is a
 Phase-3 planning input, since a four-game development pile means the confirmatory
 design needs repeats per game or a larger pile.
 
-### 6.5 Three metrics found to be measuring something else
+### 7.5 Three metrics found to be measuring something else
 
 Two of the three were found by running the instrument; one was not, and the
 distinction should not be blurred. **E5 is entailed by its own definition** — it
@@ -119,7 +149,7 @@ from the power verdict, as a `warning` field on P1 and E5
 (`battery/artifacts/discrimination.json`): burying "this metric is backwards"
 under "not enough data" wastes the most informative thing the pass can find.
 
-### 6.6 A confound on a pre-registered primary endpoint
+### 7.6 A confound on a pre-registered primary endpoint
 
 E2, the front-load index, is one of Phase 4's three pre-registered primary
 endpoints and the signature of claim C2: understanding is bought early and spent
@@ -139,7 +169,7 @@ after. Two defences went into the code: E2 and E3 now refuse runs shorter than
 eight turns, since a run that ends on turn four looks maximally front-loaded
 while having understood nothing (`battery/artifacts/gaming_audit.json`).
 
-### 6.7 What the battery still cannot see
+### 7.7 What the battery still cannot see
 
 Reproduced from `battery/REPORT_V0.md`:
 
