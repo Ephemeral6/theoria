@@ -1,0 +1,135 @@
+{
+  "base_commit": "f1346fb97b5b739f9e03355cb335e8bd302a54ca",
+  "branch": "agent/c7-dsl-v03-mentions",
+  "claims": {
+    "conflict_exclusive_undischarged_pairs": 0,
+    "repaired_manual_max_rules_fired": 1,
+    "repaired_manual_mismatches": {
+      "of": 47040,
+      "stratum": "all",
+      "value": 0
+    },
+    "repaired_manual_states_with_no_rule": 0,
+    "suite": "319 passed, 1 skipped",
+    "x1_376_reproduced": {
+      "of": 39960,
+      "stratum": "off_wall",
+      "value": 376
+    },
+    "x5_52_reproduced": {
+      "of": 7080,
+      "stratum": "on_wall",
+      "value": 52
+    }
+  },
+  "contract": "CONTRACTS/dsl_grammar_v0.3.md",
+  "files": [
+    {
+      "path": "CONTRACTS/dsl_grammar_v0.3.md",
+      "sha256": "1254c3f900aa1b9491e44fc7f74dcdd7ec3291accb4d6823802cbf136e367877"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/writes.py",
+      "sha256": "7982fa9b084f005c5d34be1a28530e45580b8c8df59a7b85a62b439b97a763d6"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/conflict.py",
+      "sha256": "222e9d8e6691db04dad00a8615ef321c39241c34e63bbb95cfb5769ea6268483"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/ir.py",
+      "sha256": "8bb8c281ab08a8fe76f797f17c537a8889424058265b90fed4fe91089d2f7732"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/parser/ast_nodes.py",
+      "sha256": "32e97c999bbf6fd3a4353496e9d399326c642fe9b6c72f236b78fbe2b83d11ca"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/parser/theory_parser.py",
+      "sha256": "5b8a18795ea95df481636ef54561db93c5f529d221f7d31969268547f71528c8"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/generators/gen_python.py",
+      "sha256": "d4cb9bda241fd2b596c1f6c832d5b3962191fd4dc35cf251e9256b1e85738111"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/generators/gen_pddl.py",
+      "sha256": "90c876a99cc7871c96863af4d2f8708314b045b948d46a2491f8f9c3c7e38c81"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/generators/gen_markdown.py",
+      "sha256": "47c1b1518d34009bfca61cf396c98cb1969125a66a013414da0c587c1950d50a"
+    },
+    {
+      "path": "theory-compiler/tools/probe_mentions.py",
+      "sha256": "1ce09386e6e3bfa6367c3f7a3b902b7d1b63c4660b84d05bef247c20570e85b5"
+    },
+    {
+      "path": "theory-compiler/tests/test_writes.py",
+      "sha256": "01ae193c5918d8d52c28ea0e40305b257242cdf4c770f5ee44aecea1e423342a"
+    },
+    {
+      "path": "theory-compiler/tests/test_conflict.py",
+      "sha256": "b1974cecb4d301a7ecf145a6bc48201e16488599fc675d59a6c02abd112c4949"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/sokoban2_theory.dsl",
+      "sha256": "b7c06b49c3cddd121e9a74ccb05ec8f776307eca146a2f9ee045e7a4fe883112"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/sokoban2_x5_theory.dsl",
+      "sha256": "b21c93deeaba4f16894f71c7dd325d7dc8347a026cfadfa3b19d8b6dc61f563e"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/sokoban2_match_problem.json",
+      "sha256": "56c75dd29fd604b93c34610a6fa3c4b0bfe1098f83b18d570cad8b579e3397fc"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/sokoban2_crossing_UP_problem.json",
+      "sha256": "3b9d5acf94c044845736570ea793574d4f07fe7dd07b88fb73cbf89d0763b6ef"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/sokoban2_crossing_DOWN_problem.json",
+      "sha256": "3fc8279e5494c7d16446e0f201084aa2276d5264b53bf5a2dfce0e53cf45f622"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/sokoban2_crossing_LEFT_problem.json",
+      "sha256": "5297f91e76bb47b25f798f327a2eda2d5887588908b505445e7fc3e0bbc64c99"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/sokoban2_crossing_RIGHT_problem.json",
+      "sha256": "dfec8297ca1ef4333296dbed37e30366d89e30ee8ff1ba6107de673f8eb92db6"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T102343Z-c7/DESIGN.md",
+      "sha256": "4138e1f19b47c53c029672100cf84fbf33d6021552b4fc264104d336de7ef275"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T102343Z-c7/RUN_STATE.md",
+      "sha256": "9d5cd6f0242c316aaa56b3e7572c08c648d56a7db095c1f8e4e344bbadb34f8b"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T102343Z-c7/mentions_probe.json",
+      "sha256": "588cd45200c2ab1e4146b34204dd23a577a4dbb05802126214ac7103c5e78075"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T102343Z-c7/verify.sh",
+      "sha256": "b6ade4afbdb5f52d4148ab43c76b836ff7eb4437097c33fca0620c607b6ae6fc"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T102343Z-c7/make_sokoban2_problems.py",
+      "sha256": "bb878641444351d9bed0a9ec6afae2be34a0a99951ec04f53c91fd868f373167"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T102343Z-c7/compat/README.md",
+      "sha256": "6c5ddcfcbca0ca6ba13632e64e24f78bae96bd0f1a12c6c88f7657236c08efee"
+    }
+  ],
+  "forced_by": [
+    "a0-spike/THEORIZE_LOG.md X-1",
+    "a0-spike/THEORIZE_LOG.md X-5"
+  ],
+  "ground_truth": "a0-spike/world/sokoban2.py (read only; grades, never predicts)",
+  "prompt_id": "C7-dsl-v03-mentions",
+  "utc": "2026-07-28T10:23:43Z"
+}

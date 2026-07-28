@@ -110,6 +110,16 @@ class SemanticsSection:
 class EventAlt:
     name: str
     params: list[str]
+    # X-1, v0.3. The objects this event *writes*, by parameter name. `None`
+    # means the declaration is silent and the write set comes from v0.3's
+    # published default table; an event in neither is an error, never a guess.
+    #
+    # Members must be parameters of this event, which is how one addition
+    # answers both halves of X-1: defining `mentions` needs the set, and "an
+    # event signature that names every object it writes" needs the members to
+    # be nameable in the signature. `slid(o, p, dir) writes {o, p}` is the A0
+    # push, with the player it moves finally visible in the manual.
+    writes: Optional[list[str]] = None
 
 
 @dataclass

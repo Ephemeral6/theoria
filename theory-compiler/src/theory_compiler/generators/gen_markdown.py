@@ -288,6 +288,22 @@ def _func_to_natural(fc: FuncCall) -> str:
     name = fc.name
     args = [_expr_to_natural(a) for a in fc.args]
 
+    # v0.3, ledger X-5. `free(<obj>.pos)` excludes the object from its own
+    # occupancy test, so the plain wording — "Box.pos is free (unoccupied)" —
+    # would tell a human reader the opposite of what the clause means, about a
+    # cell the Box is standing on. The human form is one of the four
+    # co-derived forms; it is allowed to be prose and not allowed to be wrong.
+    if name == "free" and len(fc.args) == 1:
+        inner = fc.args[0]
+        holder = None
+        if isinstance(inner, FieldAccess) and inner.field_name == "pos":
+            holder = _name_to_natural(inner.obj)
+        elif isinstance(inner, NameRef):
+            holder = _name_to_natural(inner.name)
+        if holder is not None:
+            return ("the cell %s stands on is a legal empty one (on the board, "
+                    "not a wall, nothing but %s there)" % (holder, holder))
+
     spatial_map = {
         "above": "the cell above {}",
         "below": "the cell below {}",
