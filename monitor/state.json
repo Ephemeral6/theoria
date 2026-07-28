@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 11:49:11",
+  "generated_at": "2026-07-28 14:00:40",
   "history": [
     {
       "findings": {
@@ -452,6 +452,52 @@
         }
       },
       "ts": "2026-07-28 08:33:20"
+    },
+    {
+      "findings": {
+        "blocking": 1,
+        "high": 5,
+        "info": 7,
+        "low": 3,
+        "medium": 2
+      },
+      "paper_progress": 30.8,
+      "progress": 40.4,
+      "sections": {
+        "Claim 菜单": {
+          "blocked": 2,
+          "missing": 2,
+          "partial": 1
+        },
+        "Phase 1 · 封闭系统": {
+          "green": 7,
+          "partial": 8,
+          "risk": 1
+        },
+        "Phase 2 · 指标电池": {
+          "green": 1,
+          "partial": 2
+        },
+        "Phase 3 · 框架迭代（开发堆）": {
+          "missing": 2,
+          "partial": 3
+        },
+        "Phase 4 · 确证（封存堆）": {
+          "missing": 5,
+          "partial": 1
+        },
+        "十条强制约束": {
+          "green": 1,
+          "missing": 2,
+          "partial": 5,
+          "risk": 2
+        },
+        "车间八工序": {
+          "green": 7,
+          "partial": 2
+        }
+      },
+      "ts": "2026-07-28 11:57:18"
     }
   ],
   "loop_stats": [
@@ -469,43 +515,68 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "old-start-a0/certify/fd_conformance.py",
+      "LAUDE.md",
+      "monitor/AUDITOR.md",
+      "monitor/_c1w_probe.txt",
       "monitor/_runner.py",
-      "monitor/ci/merge.log",
       "monitor/dispatch.py",
+      "monitor/history.jsonl",
       "monitor/index.html",
       "monitor/loop_state.json",
-      "monitor/reflex.lock",
+      "monitor/prompts/ops/OPS-A-auditor.md",
+      "monitor/prompts/ops/OPS-B-browser.md",
+      "monitor/prompts/ops/OPS-M-merger.md",
+      "monitor/prompts/ops/OPS-R-retro.md",
       "monitor/reflex.log",
+      "monitor/reflex.py",
+      "monitor/scan.py",
       "monitor/state.json",
+      ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/"
+      "baseline-arms/out/shards/",
+      "monitor/_worker_run.cmd",
+      "monitor/board.py",
+      "monitor/board/",
+      "monitor/mailbox/",
+      "monitor/prompts/C2-semantics-migrate.md",
+      "monitor/prompts/S3-spend-gate.md",
+      "monitor/prompts/W-worker.md",
+      "monitor/worker.cmd"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "dc9fad1 Merge remote-tracking branch 'origin/agent/p9-shell-harden' into HEAD",
+    "git_head": "",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 80,
-    "sync_last": "2026-07-28T21:30:00Z",
+    "sync_entries": 83,
+    "sync_last": "2026-07-28",
     "tests": {},
     "untracked": [
+      ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/"
+      "baseline-arms/out/shards/",
+      "monitor/_worker_run.cmd",
+      "monitor/board.py",
+      "monitor/board/",
+      "monitor/mailbox/",
+      "monitor/prompts/C2-semantics-migrate.md",
+      "monitor/prompts/S3-spend-gate.md",
+      "monitor/prompts/W-worker.md",
+      "monitor/worker.cmd"
     ]
   },
-  "p1_green": 6,
+  "p1_green": 7,
   "p1_total": 16,
   "paper_progress": 30.8,
   "phases": [
     {
       "_counts": {
-        "green": 6,
+        "green": 7,
         "partial": 8,
-        "risk": 2
+        "risk": 1
       },
       "clause": "Theoria.md §2 Phase 1",
       "gate": "全绿才准烧游戏钱",
@@ -641,8 +712,8 @@
           "status": "partial"
         },
         {
-          "_note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：密钥泄漏进：.claude/worktrees/p11-arc-hygiene/.env〕",
-          "_status": "risk",
+          "_note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：无泄漏。密钥另有 1 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。〕",
+          "_status": "green",
           "clause": "Phase 1 验收单",
           "id": "p1-seal-test",
           "label": "密封测试（臂内无凭据；绕开双代理的出网必须失败）",
@@ -843,20 +914,24 @@
       "detail": "engine-rig 侧证书导出：已建；theory-compiler 侧消费：已接。两半接通前，A1 仍是彩排而非验收。",
       "status": "partial"
     },
+    "append_only": {
+      "detail": "追加式文件出现删除：PARTNER_SYNC.md（累计删除 1 行）。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。",
+      "status": "risk"
+    },
     "conflict_scan": {
       "detail": "三类检查全空：无冲突标记、无未合并路径、近 40 个提交无跨领地改动。",
       "status": "green"
     },
     "credential_hygiene": {
-      "detail": "密钥泄漏进：.claude/worktrees/p11-arc-hygiene/.env",
-      "status": "risk"
+      "detail": "无泄漏。密钥另有 1 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。",
+      "status": "green"
     },
     "determinism_state": {
       "detail": "逐局判决：ar25=PASS； g50t=PASS； sk48=PASS； tn36=PASS。全 PASS。",
       "status": "green"
     },
     "dispatch_board": {
-      "detail": "19 份在册工单，6 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",
+      "detail": "19 份在册工单，9 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",
       "rows": [
         {
           "branch": "—",
@@ -868,7 +943,7 @@
           "branch": "—",
           "id": "P-10",
           "prompt": "P-10-contracts-v02.md",
-          "self_reported": false
+          "self_reported": true
         },
         {
           "branch": "—",
@@ -886,7 +961,7 @@
           "branch": "—",
           "id": "P-13",
           "prompt": "P-13-fd-real.md",
-          "self_reported": false
+          "self_reported": true
         },
         {
           "branch": "—",
@@ -928,7 +1003,7 @@
           "branch": "—",
           "id": "P-20",
           "prompt": "P-20-cascade-probe.md",
-          "self_reported": false
+          "self_reported": true
         },
         {
           "branch": "—",
@@ -976,25 +1051,63 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 1 份：20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 7 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
       "status": "partial"
+    },
+    "ops_duty": {
+      "detail": "**超时未见：OPS-A** —— App 会话可能已满上下文或被关闭，需用户重开并重贴工单。 OPS-A 漂移审计员（产出 3，142 分钟前）； OPS-R 回顾员（产出 5，124 分钟前）； OPS-M 合并裁判（产出 1，127 分钟前）； OPS-B 浏览器专员（产出 1，124 分钟前）",
+      "rows": [
+        {
+          "age_min": 142,
+          "id": "OPS-A",
+          "name": "漂移审计员",
+          "note": "沉默即健康：心跳新鲜 + 零报告 = 正常",
+          "products": 3,
+          "status": "risk"
+        },
+        {
+          "age_min": 124,
+          "id": "OPS-R",
+          "name": "回顾员",
+          "note": "隔日一跑，产出 = inbox 提案",
+          "products": 5,
+          "status": "green"
+        },
+        {
+          "age_min": 127,
+          "id": "OPS-M",
+          "name": "合并裁判",
+          "note": "按需：只在 ci/ 有 flag 或语义冲突时上工",
+          "products": 1,
+          "status": "green"
+        },
+        {
+          "age_min": 124,
+          "id": "OPS-B",
+          "name": "浏览器专员",
+          "note": "按需：需要真 Chrome 与登录态的活",
+          "products": 1,
+          "status": "green"
+        }
+      ],
+      "status": "risk"
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
       "status": "green"
     },
     "provenance_scan": {
-      "detail": "已建档：engine-rig：1 个 run，MANIFEST 0/1，最新 p13-fd-real； theory-compiler：1 个 run，MANIFEST 0/1，最新 P-10； arc-recon：1 个 run，MANIFEST 1/1，最新 P-11； proxy：1 个 run，MANIFEST 1/1，最新 p9-shell-harden； battery：1 个 run，MANIFEST 1/1，最新 P-14。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, a0-spike, baseline-arms。",
+      "detail": "已建档：engine-rig：1 个 run（正典 0，非正典 1(md)），最新 p13-fd-real； theory-compiler：1 个 run（正典 0，**无留痕 1**），最新 P-10； arc-recon：1 个 run（正典 1），最新 P-11； proxy：1 个 run（正典 1），最新 p9-shell-harden； battery：1 个 run（正典 1），最新 P-14。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, a0-spike, baseline-arms。",
       "status": "partial"
     }
   },
   "progress": {
     "by_phase": [
       {
-        "contrib": 19.69,
+        "contrib": 21.09,
         "id": "p1",
         "name": "Phase 1 · 封闭系统",
-        "pct": 65.6,
+        "pct": 70.3,
         "weight": 0.3
       },
       {
@@ -1019,14 +1132,14 @@
         "weight": 0.28
       }
     ],
-    "total": 39.0
+    "total": 40.4
   },
   "sections": [
     {
       "counts": {
-        "green": 6,
+        "green": 7,
         "partial": 8,
-        "risk": 2
+        "risk": 1
       },
       "name": "Phase 1 · 封闭系统"
     },

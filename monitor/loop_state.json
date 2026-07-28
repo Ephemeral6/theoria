@@ -2,20 +2,7 @@
   "mode": "fleet-loop",
   "started": "2026-07-28T08:55:00Z",
   "pool_target": 16,
-  "in_flight": [
-    "P-12",
-    "P-18",
-    "P-19",
-    "P-20",
-    "P-21",
-    "P-22",
-    "P-23",
-    "P-24",
-    "E1-property-fuzz",
-    "A2-crosscheck",
-    "C1-worldgen",
-    "P3-case-study"
-  ],
+  "in_flight": [],
   "completed": [
     "P-10",
     "P-11",
@@ -46,13 +33,16 @@
     "stagger": "batch dispatch sleeps 45s between launches; storms kill",
     "auto_revive": "heartbeat auto-relaunches lost sessions (guard prevents doubles); a prompt lost >=3 times is a suspected prompt-level defect: stop relaunching, escalate as a finding, rewrite or split the prompt before the next attempt",
     "launch_path": "one-shot Windows scheduled task per work item (TheoriaAgent-<id>), action = _runner.py <id> (short form; schtasks caps /TR at 261 chars), prompt fed on STDIN (the claude .cmd shim mangles multi-line UTF-8 argv under Task Scheduler -> empty prompt). Detached spawns from the monitor tool shell or from a reflex tick both die; this path survives.",
-    "ops_in_app": "standing/judgment ops (auditor, browser, merger-judge, retro) run as user app sessions from monitor/prompts/ops/*; dispatch batch refuses A-/B-/M-/R- classes; ci_merge.py stays deterministic-scripted"
+    "ops_in_app": "standing/judgment ops (auditor, browser, merger-judge, retro) run as user app sessions from monitor/prompts/ops/*; dispatch batch refuses A-/B-/M-/R- classes; ci_merge.py stays deterministic-scripted",
+    "concurrency": "HARD cap after the 2026-07-28 machine crash: reflex keeps at most 2 headless workers alive and refuses to spawn below 8GB free RAM. Ops (4) live in the user app; the monitor itself is an app session. Extra research capacity is added BY THE USER opening monitor/worker.cmd windows -- visible, closable, self-serving from the board.",
+    "worker_model": "long-lived board workers: claim -> deliver -> claim next; the monitor authors board items and controls headcount only, never per-item dispatch"
   },
   "heartbeat_count": 0,
   "notes": {
     "permission-wall-root-cause": "ALL headless dispatch failures were a permission wall: bypassPermissionsModeAccepted was never set, sessions ran read-only, wrote to scratchpad, exited 0. Fixed: consent flag + settings.local defaultMode + launch via Task Scheduler queue. Death counts reset -- the prompts were innocent. Salvage sweep of dead sessions' scratchpads pending.",
     "permission-verified": "synchronous headless probe wrote to the repo at ~1140 local: consent flag + settings.local defaultMode fixed the wall. All prior deaths were the wall, not prompt defects. Full research fleet (11) queued for Task Scheduler launch.",
-    "launch-root-causes": "three stacked bugs, all fixed 2026-07-28: (1) permission wall (bypassPermissionsModeAccepted never set) -> sessions ran read-only, wrote to scratchpad, exit 0; (2) job-object cleanup killed detached children of the monitor shell and of reflex ticks; (3) UTF-8 argv mangling under Task Scheduler delivered an empty prompt. Verified end-to-end by Z0-permprobe writing to the repo."
+    "launch-root-causes": "three stacked bugs, all fixed 2026-07-28: (1) permission wall (bypassPermissionsModeAccepted never set) -> sessions ran read-only, wrote to scratchpad, exit 0; (2) job-object cleanup killed detached children of the monitor shell and of reflex ticks; (3) UTF-8 argv mangling under Task Scheduler delivered an empty prompt. Verified end-to-end by Z0-permprobe writing to the repo.",
+    "machine-crash": "2026-07-28: ~20 concurrent sessions (each running test suites, Lean, FD) exhausted the machine. All TheoriaAgent-* tasks killed, reflex disabled pending the capped rewrite. Peak measured afterwards: 13 claude processes = 2.5GB, so the killer was the work they spawned, not the sessions."
   },
   "death_counts": {},
   "ops_in_app": {

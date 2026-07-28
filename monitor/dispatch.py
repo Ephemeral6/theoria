@@ -220,6 +220,8 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--health", action="store_true",
                     help="content-free liveness report of dispatched sessions")
+    ap.add_argument("--worker", metavar="ID",
+                    help="spawn a long-lived board worker with this id")
     ap.add_argument("--reap", action="store_true",
                     help="kill sessions whose branch reached origin (跑完即杀)")
     args = ap.parse_args()
@@ -228,6 +230,9 @@ def main():
         return 0
     if args.reap:
         reap()
+        return 0
+    if args.worker:
+        via_task(args.worker, "W-worker.md")
         return 0
 
     os.makedirs(LOGS, exist_ok=True)

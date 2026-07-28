@@ -39,6 +39,14 @@ def resolve(pid_str):
     import datetime
     import re
     prompts = os.path.join(HERE, "prompts")
+    if pid_str.startswith("W-"):
+        return (os.path.join(prompts, "W-worker.md"),
+                os.path.join(HERE, "dispatch-logs", "%s-%s.log" % (
+                    pid_str,
+                    __import__("datetime").datetime.now(
+                        __import__("datetime").timezone.utc
+                    ).strftime("%Y%m%dT%H%M%SZ"))),
+                "opus")
     match = None
     for name in sorted(os.listdir(prompts)):
         if not name.endswith(".md"):
@@ -67,6 +75,9 @@ def main():
     else:
         pid_str, prompt_path, log_path, model = sys.argv[1:5]
     text = open(prompt_path, encoding="utf-8").read()
+    if pid_str.startswith("W-"):
+        header = "你的工人号是 `%s`（board.py 的所有命令都用它）。\n\n" % pid_str
+        text = header + text
     claude = shutil.which("claude")
     t0 = time.time()
     log = open(log_path, "a", encoding="utf-8")

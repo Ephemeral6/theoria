@@ -108,7 +108,18 @@ def probe_credential_hygiene():
             except Exception:
                 continue
     if leaks:
-        return {"status": "risk", "detail": "密钥泄漏进：" + ", ".join(leaks)}
+        tracked, ignored = [], []
+        for rel_path in leaks:
+            r = subprocess.run(["git", "check-ignore", "-q", rel_path],
+                               cwd=ROOT, capture_output=True)
+            (ignored if r.returncode == 0 else tracked).append(rel_path)
+        if tracked:
+            return {"status": "risk",
+                    "detail": "**密钥泄漏进被跟踪文件**：" + ", ".join(tracked)}
+        return {"status": "green",
+                "detail": "无泄漏。密钥另有 %d 处工作副本，均在 gitignore 内（%s）——"
+                          "副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。"
+                          % (len(ignored), ", ".join(ignored[:3]))}
     ignored = ".env" in open(rel(".gitignore"), encoding="utf-8").read() if exists(".gitignore") else False
     return {"status": "green",
             "detail": "密钥只出现在 .env（已 gitignore=%s）；全仓 %s 个文件已扫描。"
@@ -302,11 +313,20 @@ def probe_provenance():
         if os.path.isdir(runs_dir):
             runs = [d for d in sorted(os.listdir(runs_dir))
                     if os.path.isdir(os.path.join(runs_dir, d))]
-            with_manifest = sum(
-                1 for d in runs
-                if os.path.exists(os.path.join(runs_dir, d, "MANIFEST.json")))
-            rows.append("%s：%d 个 run，MANIFEST %d/%d，最新 %s"
-                        % (terr, len(runs), with_manifest, len(runs),
+            canon = sum(1 for d in runs
+                        if os.path.exists(os.path.join(runs_dir, d,
+                                                       "MANIFEST.json")))
+            noncanon = sum(1 for d in runs
+                           if not os.path.exists(
+                               os.path.join(runs_dir, d, "MANIFEST.json"))
+                           and any(f.startswith("MANIFEST")
+                                   for f in os.listdir(
+                                       os.path.join(runs_dir, d))))
+            none_at_all = len(runs) - canon - noncanon
+            rows.append("%s：%d 个 run（正典 %d%s%s），最新 %s"
+                        % (terr, len(runs), canon,
+                           "，非正典 %d(md)" % noncanon if noncanon else "",
+                           "，**无留痕 %d**" % none_at_all if none_at_all else "",
                            runs[-1] if runs else "—"))
         elif has_products:
             debt.append(terr)
@@ -364,8 +384,94 @@ def probe_inbox():
             "detail": "待裁决提案 %d 份：%s" % (len(pending), ", ".join(pending))}
 
 
+def probe_append_only():
+    """Append-only files must never lose a line (DRIFT-3 suggestion 2).
+    Judged mechanically: total deletions across each file's whole history."""
+    watched = ["PARTNER_SYNC.md", "arc-recon/data/incidents.jsonl",
+               "arc-recon/data/contamination_log.jsonl",
+               "battery/PREDICTIONS.md"]
+    offenders = []
+    for path in watched:
+        if not exists(path):
+            continue
+        out = git("log", "--numstat", "--format=%h", "--", path)
+        dels, cur = 0, ""
+        for line in out.splitlines():
+            parts = line.split("	")
+            if len(parts) == 3 and parts[1].isdigit():
+                dels += int(parts[1])
+            elif line.strip():
+                cur = line.strip()
+        if dels:
+            offenders.append("%s（累计删除 %d 行）" % (path, dels))
+    if offenders:
+        return {"status": "risk",
+                "detail": "追加式文件出现删除：" + "； ".join(offenders) +
+                          "。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。"}
+    return {"status": "green",
+            "detail": "%d 个追加式文件全历史零删除行。" % len(watched)}
+
+
+OPS_DUTY = [
+    {"id": "OPS-A", "name": "漂移审计员", "cadence_min": 120,
+     "signal": "monitor/audit/HEARTBEAT",
+     "product_glob": ("monitor/audit", "DRIFT-"),
+     "note": "沉默即健康：心跳新鲜 + 零报告 = 正常"},
+    {"id": "OPS-R", "name": "回顾员", "cadence_min": 2880,
+     "signal": None, "product_glob": ("monitor/inbox", "OPS-R"),
+     "note": "隔日一跑，产出 = inbox 提案"},
+    {"id": "OPS-M", "name": "合并裁判", "cadence_min": None,
+     "signal": None, "product_glob": ("monitor/inbox", "opsm"),
+     "note": "按需：只在 ci/ 有 flag 或语义冲突时上工"},
+    {"id": "OPS-B", "name": "浏览器专员", "cadence_min": None,
+     "signal": "browser-ops/RUN_STATE.md",
+     "product_glob": ("browser-ops", "RUN_STATE"),
+     "note": "按需：需要真 Chrome 与登录态的活"},
+]
+
+
+def probe_ops_duty():
+    """运维值班：四个 App 常驻会话只能通过产物通道监控（隔离契约）。
+    信号 = 约定落盘文件的新鲜度 + 产出计数。"""
+    rows, stale = [], []
+    for duty in OPS_DUTY:
+        age_min, products = None, 0
+        if duty["signal"] and exists(duty["signal"]):
+            age_min = (time.time() - os.path.getmtime(rel(duty["signal"]))) / 60
+        pdir, prefix = duty["product_glob"]
+        if os.path.isdir(rel(pdir)):
+            names = [f for f in os.listdir(rel(pdir)) if prefix in f]
+            products = len(names)
+            newest = max((os.path.getmtime(os.path.join(rel(pdir), f))
+                          for f in names), default=None)
+            if newest and (age_min is None or
+                           (time.time() - newest) / 60 < age_min):
+                age_min = (time.time() - newest) / 60
+        status = "green"
+        if duty["cadence_min"] and (age_min is None
+                                    or age_min > duty["cadence_min"]):
+            status = "risk"
+            stale.append(duty["id"])
+        elif age_min is None:
+            status = "partial"
+        rows.append({"id": duty["id"], "name": duty["name"], "status": status,
+                     "age_min": None if age_min is None else int(age_min),
+                     "products": products, "note": duty["note"]})
+    detail = "； ".join(
+        "%s %s（产出 %d%s）" % (r["id"], r["name"], r["products"],
+                              "，%d 分钟前" % r["age_min"]
+                              if r["age_min"] is not None else "，无信号")
+        for r in rows)
+    if stale:
+        detail = "**超时未见：%s** —— App 会话可能已满上下文或被关闭，"                  "需用户重开并重贴工单。 " % ", ".join(stale) + detail
+    return {"status": "risk" if stale else "green", "detail": detail,
+            "rows": rows}
+
+
 PROBES = {
     "credential_hygiene": probe_credential_hygiene,
+    "append_only": probe_append_only,
+    "ops_duty": probe_ops_duty,
     "conflict_scan": probe_conflicts,
     "provenance_scan": probe_provenance,
     "dispatch_board": probe_dispatch_board,

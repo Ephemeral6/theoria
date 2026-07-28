@@ -1,0 +1,187 @@
+"""The work board: agents claim their own work, no per-item dispatch.
+
+    python monitor/board.py list                  # what is available / claimed
+    python monitor/board.py claim <worker-id>     # atomically take the top item
+    python monitor/board.py done <id> <worker>    # mark delivered
+    python monitor/board.py release <id> <worker> # give it back (with reason)
+
+Why a board: one-shot sessions cost a launch per item and go stale between
+items. A long-lived worker claims an item, delivers it, and claims the next —
+so the monitor authors work and controls headcount, and nobody has to trigger
+anything in real time.
+
+Claiming is atomic by os.rename (single volume, Windows-safe): whoever renames
+`items/<id>.md` to `claimed/<id>.<worker>.md` first owns it; everyone else
+gets FileNotFoundError and tries the next candidate. No lock files, no races.
+
+Item front matter (first lines of each item file):
+    priority: 1..9      (1 = highest; ties broken by id)
+    cell: A3            (map coordinate — the grid cell it lights up)
+    territory: proxy    (the only dir it may write; conflict guard)
+    deps: C1-worldgen   (comma-separated ids that must be done first)
+"""
+
+import os
+import re
+import sys
+import time
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+BOARD = os.path.join(HERE, "board")
+ITEMS = os.path.join(BOARD, "items")
+CLAIMED = os.path.join(BOARD, "claimed")
+DONE = os.path.join(BOARD, "done")
+LOG = os.path.join(BOARD, "board.log")
+
+for d in (ITEMS, CLAIMED, DONE):
+    os.makedirs(d, exist_ok=True)
+
+
+def utc():
+    return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+
+def note(msg):
+    with open(LOG, "a", encoding="utf-8", newline="\n") as fh:
+        fh.write("%s %s\n" % (utc(), msg))
+    print(msg)
+
+
+def meta(path):
+    head = open(path, encoding="utf-8").read(800)
+    out = {"priority": 5, "cell": "?", "territory": "?", "deps": []}
+    for key in ("priority", "cell", "territory"):
+        m = re.search(r"^%s:\s*(\S+)" % key, head, re.M)
+        if m:
+            out[key] = int(m.group(1)) if key == "priority" else m.group(1)
+    m = re.search(r"^deps:\s*(.+)$", head, re.M)
+    if m:
+        out["deps"] = [d.strip() for d in m.group(1).split(",")
+                       if d.strip() and d.strip().lower() != "none"]
+    return out
+
+
+def item_id(fname):
+    return fname[:-3] if fname.endswith(".md") else fname
+
+
+def done_ids():
+    return {f.split(".")[0] for f in os.listdir(DONE)}
+
+
+def claimed_map():
+    out = {}
+    for f in os.listdir(CLAIMED):
+        parts = f[:-3].split(".")
+        if len(parts) >= 2:
+            out[parts[0]] = parts[1]
+    return out
+
+
+def territories_busy():
+    busy = {}
+    for f in os.listdir(CLAIMED):
+        m = meta(os.path.join(CLAIMED, f))
+        busy[m["territory"]] = f[:-3].split(".")[0]
+    return busy
+
+
+def candidates():
+    ready = done_ids()
+    busy = territories_busy()
+    out = []
+    for f in sorted(os.listdir(ITEMS)):
+        if not f.endswith(".md"):
+            continue
+        m = meta(os.path.join(ITEMS, f))
+        iid = item_id(f)
+        blocked = [d for d in m["deps"] if d not in ready]
+        if blocked:
+            continue
+        if m["territory"] in busy:          # territory exclusivity
+            continue
+        out.append((m["priority"], iid, f, m))
+    out.sort(key=lambda r: (r[0], r[1]))
+    return out
+
+
+def cmd_list():
+    print("=== available ===")
+    for pri, iid, _f, m in candidates():
+        print("  p%d  %-28s cell=%-3s territory=%s" % (pri, iid, m["cell"],
+                                                       m["territory"]))
+    blocked = []
+    for f in sorted(os.listdir(ITEMS)):
+        if not f.endswith(".md"):
+            continue
+        m = meta(os.path.join(ITEMS, f))
+        pend = [d for d in m["deps"] if d not in done_ids()]
+        if pend:
+            blocked.append((item_id(f), pend))
+    if blocked:
+        print("=== blocked ===")
+        for iid, pend in blocked:
+            print("  %-28s waits on %s" % (iid, ",".join(pend)))
+    cm = claimed_map()
+    if cm:
+        print("=== claimed ===")
+        for iid, worker in sorted(cm.items()):
+            print("  %-28s by %s" % (iid, worker))
+    if os.listdir(DONE):
+        print("=== done (%d) ===" % len(os.listdir(DONE)))
+        for f in sorted(os.listdir(DONE)):
+            print("  " + f[:-3])
+
+
+def cmd_claim(worker):
+    for _pri, iid, fname, _m in candidates():
+        src = os.path.join(ITEMS, fname)
+        dst = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))
+        try:
+            os.rename(src, dst)                # atomic: first one wins
+        except OSError:
+            continue
+        note("CLAIM %s by %s" % (iid, worker))
+        print("---8<--- item %s ---8<---" % iid)
+        sys.stdout.write(open(dst, encoding="utf-8").read())
+        return 0
+    print("BOARD-EMPTY")
+    return 3
+
+
+def cmd_done(iid, worker):
+    src = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))
+    if not os.path.exists(src):
+        print("not claimed by you")
+        return 1
+    os.rename(src, os.path.join(DONE, "%s.%s.md" % (iid, worker)))
+    note("DONE %s by %s" % (iid, worker))
+    return 0
+
+
+def cmd_release(iid, worker, reason="unstated"):
+    src = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))
+    if not os.path.exists(src):
+        print("not claimed by you")
+        return 1
+    os.rename(src, os.path.join(ITEMS, "%s.md" % iid))
+    note("RELEASE %s by %s (%s)" % (iid, worker, reason))
+    return 0
+
+
+def main():
+    a = sys.argv[1:]
+    if not a or a[0] == "list":
+        cmd_list(); return 0
+    if a[0] == "claim":
+        return cmd_claim(a[1])
+    if a[0] == "done":
+        return cmd_done(a[1], a[2])
+    if a[0] == "release":
+        return cmd_release(a[1], a[2], " ".join(a[3:]) or "unstated")
+    print(__doc__)
+    return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

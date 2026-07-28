@@ -26,6 +26,8 @@ LOCK = os.path.join(HERE, "reflex.lock")
 RLOG = os.path.join(HERE, "reflex.log")
 LOOP = os.path.join(HERE, "loop_state.json")
 MAX_DEATHS = 3
+WORKER_MAX = 2      # HARD cap: the machine died at ~20 concurrent sessions
+MIN_FREE_GB = 8     # admission control: no spawn below this much free RAM
 
 
 def rlog(msg):
@@ -84,6 +86,50 @@ def main():
                 else:
                     events.append("queue-skip:%s" % pid_str)
             os.remove(qpath)
+
+        # 0b. worker headcount — long-lived workers claim their own items from
+        # the board, so the monitor controls only the population, never the
+        # per-item dispatch. Target scales with what the board still holds.
+        try:
+            import board as board_mod
+            avail = len(board_mod.candidates())
+            claimed = len(board_mod.claimed_map())
+        except Exception:
+            avail, claimed = 0, 0
+        if not hold and avail:
+            reg_path = os.path.join(HERE, "dispatch-logs", "registry.json")
+            reg = (json.load(open(reg_path, encoding="utf-8"))
+                   if os.path.exists(reg_path) else {})
+            live_workers = 0
+            for wid, entry in reg.items():
+                if not wid.startswith("W-") or entry.get("reaped"):
+                    continue
+                st = run(["schtasks", "/Query", "/TN",
+                          "TheoriaAgent-%s" % wid, "/FO", "LIST"])
+                if st.returncode == 0 and "Running" in st.stdout:
+                    live_workers += 1
+            free_gb = 99
+            try:
+                out = run(["powershell", "-NoProfile", "-Command",
+                           "(Get-CimInstance Win32_OperatingSystem)."
+                           "FreePhysicalMemory"]).stdout.strip()
+                free_gb = int(out) / 1048576.0
+            except Exception:
+                pass
+            if free_gb < MIN_FREE_GB:
+                events.append("worker-hold:low-memory(%.1fGB)" % free_gb)
+                target = live_workers          # spawn nothing
+            else:
+                target = min(WORKER_MAX, max(1, avail))
+            for i in range(target - live_workers):
+                wid = "W-%d" % (int(time.time()) % 100000 + i)
+                if i:
+                    time.sleep(20)
+                r = run([sys.executable, os.path.join(HERE, "dispatch.py"),
+                         "--worker", wid])
+                events.append("worker-spawn:%s" % wid
+                              if "started" in r.stdout else
+                              "worker-fail:%s" % wid)
 
         # 1. reap
         out = run([sys.executable, os.path.join(HERE, "dispatch.py"),

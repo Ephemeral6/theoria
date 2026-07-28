@@ -107,10 +107,12 @@ the Fast Downward attempt log: `engine-rig/STATUS.md`.
 
 Two standing caveats worth knowing before you build on it:
 
-* **Fast Downward is not connected.** `fd_adapter` runs a grounded-STRIPS BFS
-  stub behind the same `solve(domain, problem)` interface (length-optimal for
-  unit costs). Install FD and put it on PATH, or set `FAST_DOWNWARD`, and the
-  adapter picks it up with no caller changes.
+* **Fast Downward is connected** (P-13, 2026-07-28): a real FD 24.06+ build
+  behind the same `solve(domain, problem)` interface, with a three-rung ladder
+  (`stub-bfs` / `fd-optimal` / `fd-satisficing`); provenance in
+  `engine-rig/runs/p13-fd-real/TOOLCHAIN_MANIFEST.md`. `.toolchain/` is
+  gitignored by design, so on a machine without the build the adapter falls
+  back to the BFS stub and 3 tests skip — that is expected, not a defect.
 * **`lp_potential` is sound but incomplete.** It never certifies a solvable
   configuration, but some genuinely unsolvable ones admit no linear pagoda.
 
@@ -126,10 +128,20 @@ as playing. Phase 3 iterates until it gets results, which is only honest if the
 confirmation runs on unseen problems. Changing the cut after play has begun is an
 incident and must be recorded as one.
 
-As of this writing no game has been played: the cut was made from catalogue
-metadata alone and all 25 are registered `never_audited`.
+**Status (2026-07-28):** the development pile has been played — all four
+games are registered `trajectories_reviewed` in
+`arc-recon/data/contamination_log.jsonl`. The sealed pile has had zero API
+contact, but INC-BA-001 recorded knowledge contamination of 9 sealed games
+from a web search; F-11 ruled the claim set down to 19
+(`arc-recon/data/claim_set.json`, ls20/ft09 quarantined).
 
 ## Conventions
+
+* **Provenance is canonical**: every experiment writes
+  `runs/<id>/MANIFEST.json` — required `prompt_id`, `branch`,
+  `base_commit`, `utc`; optional `files[].sha256`. Human narrative goes in
+  `RUN_STATE.md`, never in place of the manifest. Write as you go: a
+  session's context evaporates, the disk is the memory.
 
 * Python 3.13; numpy / scipy / pytest available.
 * Determinism is a requirement, not a nicety: fixtures and artifacts are

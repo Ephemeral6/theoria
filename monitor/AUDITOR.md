@@ -12,6 +12,15 @@
 - 每周期结束把 `{last_audited_commit, cycle, utc}` 写进 `monitor/audit/state.json`，
   下个周期（或下个转世）从那个 commit 之后增量看起——**不要每次重读全仓**。
 
+
+## 邮箱（双向通道，2026-07-28 加）
+
+**每个周期的第一件事**，先于巡检：读 `monitor/mailbox/OPS-A.md` 与
+`monitor/mailbox/ALL.md`，执行其中 `status: OPEN` 的条目，把状态改成
+`ACK-<结果>` 并在条目下追加 `> reply: ...`。有话对监控说（提问、请求授权、
+报告阻塞）在自己邮箱末尾追加 `## TO-MONITOR <UTC>` 段。协议见
+`monitor/mailbox/PROTOCOL.md`。
+
 ## 巡检什么（漂移的六个维度，按严重度排）
 
 1. **纪律漂移**（最重）：封存堆 21 局的 game_id 出现在新的请求体/代码/文档里；
