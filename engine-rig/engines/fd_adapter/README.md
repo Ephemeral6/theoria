@@ -2,10 +2,15 @@
 
 PDDL in, plan out. One interface, three rungs.
 
-> **Fast Downward is not connected in this sandbox.** Two discovery/install
-> attempts failed (log in `../../STATUS.md`), so the bundled BFS stub is what
-> runs. The two FD rungs are implemented and exercised only against a
-> conformance script that speaks the driver's protocol.
+> **Fast Downward is connected** (P-13, 2026-07-28): a real FD 24.06+ build, with
+> provenance in `../../runs/p13-fd-real/TOOLCHAIN_MANIFEST.md`. `.toolchain/` is
+> gitignored by design, so on a machine without that build the adapter falls back
+> to the bundled BFS stub and three tests skip — expected, not a defect. This note
+> used to say the opposite; it was left behind when the planner landed.
+>
+> What the ladder is worth, in numbers, is `../../bench/` — and the headline is
+> that on the instances this rig produces, the bundled rung is still the fastest
+> one end to end. See `../../STATUS.md`, "What the ladder is worth (E2)".
 
 ## Interface
 

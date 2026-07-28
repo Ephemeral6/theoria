@@ -519,3 +519,61 @@ that produced it happened to have one installed, and a diff would silently mean
 cold-start-a0 track adopted as D-A0-021, for the same reason. FD's independent
 answers are recorded, but in their own artifact under `runs/`, where they cannot
 contaminate the committed stream.
+
+---
+
+## D-026 · The bench never divides a STRIPS node count by a SAS+ one
+
+**Context.** E2 asks for a nodes / wall-clock / optimality table across the three
+rungs. The obvious table has a "nodes expanded" column per rung and a speed-up
+ratio beside it.
+
+**Decision.** `bench/` reports node counts per rung and **no cross-rung ratio**.
+Cross-rung comparison is restricted to plan length and wall clock. The
+prohibition is written into the artifacts themselves, as a field in `ladder.json`
+and a line above the table in `LADDER.md`.
+
+**Why.** `stub-bfs` expands grounded STRIPS states — frozensets of atoms, one
+node per distinct set. Fast Downward expands SAS+ states, assignments to the
+finite-domain variables its translator invents after merging mutually exclusive
+atoms and discarding unreachable ones. On this rig's own gripper fixture that is
+14 STRIPS facts against 5 SAS+ variables. "Fast Downward expanded 8 where the
+stub expanded 18" therefore compares two different objects, and the ratio is
+the single most quotable number the run could produce. Plan length survives the
+translation (both rungs are length-optimal for unit costs) and a second is a
+second on every rung, so those two are compared and the node counts are not.
+
+---
+
+## D-027 · Deadlock theorems reach Fast Downward as a task edit, not as a pruner
+
+**Context.** Theoria 1.9 promises that every proved deadlock speeds up *the
+planner*. `fd_adapter.search` takes a `prune` callable; Fast Downward does not,
+and `choose_tier` clause 3 records that as a fact about the backend. So the
+promise could not be tested on the rungs that actually plan.
+
+**Decision.** `bench/compile_theorems.py` compiles the theorems into the PDDL
+instead: an action is forbidden when its effect would produce a state containing
+a proved-dead pattern. Two guards are emitted — `singleton` (corner deadlocks, a
+negative precondition, still STRIPS) and `full` (adds pair deadlocks, needs a
+universally quantified negated conjunction, hence `:adl`).
+
+The compilation is **not** trusted. Every plan it produces is replayed against
+the *original* domain by the rig's own validator, and on the optimal rungs any
+change in plan length is reported as a soundness failure of the run.
+
+**Why this preserves the answer.** A theorem says its pattern is closed and
+excludes the goal, so every state containing it is dead. Forbidding the
+transitions that enter the pattern removes only states from which no goal is
+reachable: every original plan survives, and every plan of the compiled task is a
+plan of the original. Plan existence and optimal length are therefore unchanged —
+the same guarantee the pruner gives, obtained by editing the task instead of the
+search.
+
+**What it cost, and the limit found.** FD's translator compiles the `full`
+guard's universal precondition into an **axiom**, and `astar(lmcut())` and
+`astar(ipdb())` both refuse a task with axioms (driver exit 34, `This
+configuration does not support axioms!`). So the optimal rungs can be given the
+corner deadlocks and cannot be given the pair deadlocks. That limit is measured
+rather than asserted, and pinned by a test, so a later FD build that lifts it
+fails the suite instead of going unnoticed.
