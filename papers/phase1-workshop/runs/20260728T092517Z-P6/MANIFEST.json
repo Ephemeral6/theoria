@@ -1,0 +1,57 @@
+{
+  "prompt_id": "P6-paper-assembly",
+  "branch": "agent/p6-paper-assembly",
+  "base_commit": "7724f60a5127b2d7ae75b184bab8178ad9ccc947",
+  "utc": "2026-07-28T09:25:17Z",
+  "worker": "W-1610",
+  "territory": "papers",
+  "status": "complete",
+  "goal": "PAPER.md v0.2 \u2014 three landed results into the body: A3's C3 transfer adjudication, theoria-arm's preflight, and the exam's four question types plus leak protection. Plus a CITECHECK pass and REVIEW's open items as a checklist.",
+  "plan": {
+    "new_sections": [
+      "sections/05b_a3_transfer.md",
+      "sections/06b_exam.md",
+      "sections/06c_preflight.md"
+    ],
+    "edited_sections": [
+      "sections/00_abstract.md",
+      "sections/07_limitations.md"
+    ],
+    "regenerated": "PAPER.md via assemble.py (generated; sections are the source)",
+    "also": [
+      "PROVENANCE.md rows for the new numbers",
+      "REVIEW open-items checklist"
+    ]
+  },
+  "binding_rules_from_OUTLINE": [
+    "every number points at a repo-relative path; a number with no path does not go in",
+    "no experiment, no 'we show' \u2014 anything not actually run is a limitation or is absent",
+    "the acceptance reports are read-only sources; quote, never revise",
+    "authorship stays a placeholder; the sealed pile is not touched"
+  ],
+  "result": {
+    "sections_added": [
+      "06_a3_transfer.md",
+      "08_exam.md",
+      "09_preflight.md"
+    ],
+    "sections_renumbered": {
+      "06_battery.md": "07_battery.md",
+      "07_limitations.md": "10_limitations.md",
+      "08_related.md": "11_related.md"
+    },
+    "paper_words": 19525,
+    "paper_sections": 11,
+    "citecheck": {
+      "method": "CITECHECK.md is a hand-written audit, not a script; the check was re-run mechanically",
+      "citations": 304,
+      "distinct_paths": 126,
+      "broken": 0,
+      "repo_relative_rule_violations": 22,
+      "violations_introduced_by_this_run_and_fixed_here": 4,
+      "note": "the only unresolvable path is .toolchain/, gitignored by design"
+    },
+    "headline_finding": "battery rebuilt v0 -> v2 six hours after the paper's last commit; section 7 disagrees with every artefact it cites (26->95 runs, 2->5 arms, 29->38 metrics, 24/29 -> 31/38, 27->32 clusters, and a schema_repro arm now exists). Flagged with a standing note; re-derivation deliberately not attempted from a fact sheet.",
+    "open_items": "papers/phase1-workshop/OPEN_ITEMS.md"
+  }
+}

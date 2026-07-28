@@ -2,16 +2,25 @@
 
 # Certifying a world theory against something other than its own past
 
-### Phase 1 of Theoria: three offline acceptances and a passive metrics battery
+### Phase 1 of Theoria: four offline acceptances, a passive metrics battery,
+### an examination instrument, and a live run that spent nothing
 
 **⟨AUTHOR PLACEHOLDER⟩**
 ⟨AFFILIATION PLACEHOLDER⟩ · ⟨CONTACT PLACEHOLDER⟩
 
-> **Draft status.** This is a working draft assembled from the acceptance
+> **Draft status — v0.2.** This is a working draft assembled from the acceptance
 > reports already in the repository. Authorship, affiliation, venue and
-> bibliography are unfilled placeholders, and at ~11 500 words it is roughly
-> three times a workshop budget — the cut is a separate pass, and no material has
-> been dropped yet in order to make it.
+> bibliography are unfilled placeholders, and at ~19 500 words it is roughly five
+> times a workshop budget — the cut is a separate pass, and no material has been
+> dropped yet in order to make it.
+>
+> v0.2 adds three sections — §6 (A3, transfer), §8 (the exam) and §9 (the
+> preflight) — and renumbers the two that follow them; the map from v0.1 is
+> `papers/phase1-workshop/runs/20260728T092517Z-P6/SECTION_RENUMBER.md`.
+> **§7 is known stale**: the battery was rebuilt from v0 to v2 after that section
+> was written, and it carries a standing note saying so rather than a repair.
+> `papers/phase1-workshop/OPEN_ITEMS.md` is the derived checklist of everything
+> the two audits left open, including that one.
 >
 > **The binding rule.** Every quantitative claim in the body carries the
 > repo-relative path of the artefact it came from;
@@ -36,8 +45,9 @@ playbook saying how to win — compiled to four co-derived forms and certified i
 two layers: full-history replay at the pixel, and declared laws discharged in
 Lean with the axiom list inspected.
 
-Phase 1 is offline: three acceptances on self-built deterministic worlds, plus a
-metrics battery recomputed over trajectories that already existed. Four results.
+Phase 1 is offline: four acceptances on self-built deterministic worlds, a
+metrics battery recomputed over trajectories that already existed, an examination
+instrument, and one live run that spent nothing. Seven results.
 **(1)** On a 9×9 self-built world, the induced manual replays 276/276 frames and
 22 356/22 356 pixels with zero anomalies and is nonetheless wrong on 3 of 236
 reachable (state, action) pairs — accuracy 0.000, over the three pairs (n = 3)
@@ -64,10 +74,24 @@ axiom list — the instrument returns `[]` for both — where one is true of its
 world and the other is not. The instrument cannot tell them apart, and is not
 supposed to.
 
-The battery, run over 26 existing trajectories at zero new spend, immediately
-found three of its own metrics measuring something other than what they claim,
-and reports that no metric on this pilot can reach significance — a two-sided
-sign test over four paired games has a smallest attainable *p* of 0.125.
+The battery, run over existing trajectories at zero new spend, immediately found
+three of its own metrics measuring something other than what they claim, and
+reports that no metric on this pilot can reach significance — a two-sided sign
+test over four paired games has a smallest attainable *p* of 0.125. **(5)** A
+theory carried unchanged to a second level of the same game re-fits from a single
+frame and wins with zero engine stages, zero adjudicated candidates and zero
+theorize rounds, at 252/252 against the referee — while the verification work is
+paid in full and at the same rate. Two perturbed levels, each breaking a
+mechanism the carried theory does not know about, were both caught, and both were
+caught only *after* acting: the free static layer passed them and returned the
+same plan. **(6)** An examination instrument with four question types, a marker
+calibrated on four synthetic subjects with pre-registered bands, and a leak
+checker that reports 1 790 probes with no hits — and which nonetheless missed two
+real leaks that an adversarial reader found, because the hook the checker needed
+was optional and no paper implemented it. Three of its four papers have never
+been sat. **(7)** A live run against the real API that exercised the whole
+credential path — key injected in one place, sealed pile untouched by a check on
+the bytes — for zero billable actions.
 
 We claim none of the framework's comparative results. No arm was run against a
 baseline. No game was played *for* this paper: the battery recomputes over
@@ -1012,9 +1036,239 @@ instrument elsewhere buys.
 
 ---
 
-## 6 · The metrics battery, recomputed over existing trajectories
+## 6 · A3 — the second level costs one frame, and the free check is blind
 
-### 6.1 A passive instrument, and what it cost
+A0 and A2 both induce a theory and then grade it on the world it came from. The
+question this section reports is the next one: **does a theory carried to a
+world it has never seen still work, and what does the second world cost?** In
+the claim menu of `Theoria.md` §3.2 this is C3 — *携两本书跨关，第二关边际成本
+⟨≪⟩* — and it is listed there as conditional, because whether it holds depends
+on how much mechanism the two levels share.
+
+A3 answers it for two levels of one game, which is the weakest interesting
+reading of C3 and the one the framework's own wording licenses. Anything
+stronger needs a different experiment, and `cold-start-a3/A3_REPORT.md` §6 says
+so before we do.
+
+### 6.1 The setup
+
+Two 9×9 levels of the same four mechanisms — push, a toggle Switch that drives a
+Door in the same transition, a two-way portal pair, and a goal cell
+(`cold-start-a3/a3world/a3_world.py`). The layouts share no level constant:
+every one of the eight placed cells moves between L1 and L2
+(`cold-start-a3/artifacts/ground_truth.json`). L1 has 62 reachable states, L2 has
+63.
+
+Three arms were run against L2, which is what makes the comparison a measurement
+rather than an anecdote:
+
+| arm | what it was given | artefact |
+|---|---|---|
+| **cold start** | nothing; induce L1 from scratch | `cold-start-a3/artifacts/arm_l1_cold_start.json` |
+| **transfer** | L1's two books, unchanged | `cold-start-a3/artifacts/arm_l2_transfer.json` |
+| **blind control** | nothing; induce L2 from its own sweep, by an author held blind to L1 | `cold-start-a3/artifacts/domain_agreement.json` |
+
+The transfer arm carried `cold-start-a3/theory/domain.dsl` and `cold-start-a3/theory/playbook.dsl` unchanged
+and re-derived exactly one thing: the problem instance. Both levels' executable
+theories are generated from the *same* domain source, and the diff between them
+is 35 lines confined to `LANDMARKS`, `BOARD`, `is_goal` and `initial_state` — the
+guard and effect functions are byte-identical, which
+`cold-start-a3/tests/test_transfer.py` asserts rather than eyeballs.
+
+### 6.2 The bill
+
+The number C3 is about is the **like-for-like** one: the same level, with books
+against without (`cold-start-a3/artifacts/bill_table.md`).
+
+| line | L2 from scratch | L2 with books | ratio |
+|---|---|---|---|
+| world frames | 347 | **11** | 0.032 |
+| world actions | 346 | **10** | **0.029** |
+| engine stages | 1 | **0** | 0 |
+| candidates adjudicated | 35 | **0** | 0 |
+| theorize rounds | 5 | **0** | 0 |
+| DSL clauses written | 33 | **0** | 0 |
+| compile / certify / plan runs | 1 / 3 / 1 | 1 / 3 / 1 | 1 |
+
+The zeros are the interesting column, and the last row is why. Carrying the
+books removed the *inductive* work entirely — no engine stage ran, no candidate
+was adjudicated, no theorize round happened, no clause was written — while the
+*verification* work was paid in full and at exactly the same rate. Nothing was
+saved by trusting the carried theory.
+
+Sharper still is the cost to the **first plan**. The transfer arm read one frame
+(`cold-start-a3/artifacts/l2_frame0.json`) and took zero actions before it had a
+plan; the cold start needed 333 frames and 332 actions to reach the same point
+(`cold-start-a3/artifacts/bill_table.md`). Of the nine fields the problem instance needs, six were
+derived from that single frame and three were supplied
+(`cold-start-a3/artifacts/provenance_l2_transfer.json`) — see §6.5.
+
+The plan was SAT at length 10, equal to the referee's shortest solution for L2,
+and executing it won: `outcome: "win"`, `actions_spent: 10`
+(`cold-start-a3/artifacts/arm_l2_transfer.json`). Replay certify is green over
+11 frames and 891 pixels with zero anomalies, and Lean discharges `inv_all` with
+an empty axiom list.
+
+Scored against the referee's copy, the **carried** manual is right on 252 of 252
+reachable (state, action) pairs of a level it never explored
+(`cold-start-a3/artifacts/score_vs_truth.json`). This is every reachable pair,
+not a held-out split — A3 has no held-out set, and the file's own framing is the
+honest one:
+
+> Replay against a trajectory answers "is the manual consistent with what I
+> saw". This answers "is the manual right".
+
+### 6.3 Two negative controls, and which layer caught them
+
+A cheap plan is worthless if it is also cheap to be wrong. So two perturbed
+levels were pushed through the **unmodified** transfer arm
+(`cold-start-a3/a3pipeline/negctl.py`), each breaking the portal in a way the
+carried domain does not know about:
+
+* `a3-l2-oneway` — the portal's B→exit_b leg is deleted. The level becomes
+  unsolvable; reachable states drop from 63 to 34.
+* `a3-l2-rewired` — the B leg still fires but lands the Cart on a different
+  cell. The level stays solvable, in 15 steps.
+
+Both were caught, and neither claimed a win
+(`cold-start-a3/artifacts/negative_controls.json`: `all_caught: true`,
+`none_claimed_a_win: true`). **Which layer caught them is the result.**
+
+| layer | `a3-l2-oneway` | `a3-l2-rewired` |
+|---|---|---|
+| first frame vs honest L2 | byte-identical | byte-identical |
+| static certify (frame 0, 0 actions) | **green**, 0 anomalies | **green**, 0 anomalies |
+| plan | SAT, length 10 — the same plan | SAT, length 10 — the same plan |
+| execute | 10 actions, no win | 10 actions, no win |
+| replay certify | **red**: 13 anomalies, 8 of 891 pixels unexplained | **red**: same figures |
+| Lean | green | green |
+
+The free half of the valve saw nothing. The static check reads the board, and
+neither control touches the board; Lean re-proved a domain that was still
+internally consistent. Only replay — which costs plan-length actions and arrives
+only *after* acting — could see that the transition function had changed. The
+report states the consequence plainly:
+
+> Carrying a domain to a new level buys a plan for zero actions and buys **no
+> free assurance that the plan is valid**; the assurance costs plan-length
+> actions and arrives only after the fact.
+
+That is the honest shape of the C3 saving. The induction is free; the
+verification is not, and it cannot be moved earlier.
+
+What a caught control produced here is a theorize *trigger*, not a repair.
+`cold-start-a3/artifacts/negative_controls.json` records `theorize_triggered: true` for both, and A3 did
+not run the resulting round — the report is explicit that it does not imply
+otherwise.
+
+### 6.4 What the blind control measured instead
+
+The blind arm's manual and L1's agree on **0 %** of clauses as written, and on
+all 20 of L1's clauses once canonicalised — plus 8 the blind arm added, which
+neither level's geometry can witness and which its author flagged as his most
+extrapolated clause before being asked
+(`cold-start-a3/artifacts/domain_agreement.json`; `cold-start-a3/A3_REPORT.md` §4). The gap is
+not noise:
+
+> The gap between 0 % and full agreement is not noise — it is a measurement of
+> **how much of a manual is convention rather than content**, and it is most of
+> the surface.
+
+The blind arm also spent 5 theorize rounds to the cold start's 1, and the report
+records that two of those five — 40 % of its adjudication budget — went to
+toolchain conformance rather than to the world.
+
+### 6.5 What A3 does not show
+
+Six items, from `cold-start-a3/A3_REPORT.md` §6, and they bound the claim
+tightly:
+
+1. **Levels, not games.** A3 says nothing about carrying a domain between games
+   with different mechanics. Outside the containment condition — every guard
+   context L2 needs was witnessed in L1 — the carried domain is *missing a
+   clause*, and the failure mode is the negative controls', not graceful
+   degradation.
+2. **Three level constants were supplied, not derived** — the goal cell and the
+   two portal exits, handed to all three arms alike. Six of nine fields came from
+   the frame; three did not.
+3. **100 % sweep coverage is not realistic**, so the cold-start column is an
+   upper bound on evidence rather than a forecast. A cheaper cold start would
+   make the transfer ratio larger, not smaller.
+4. **The bill is structural, not economic.** It counts frames, actions, engine
+   stages, candidates, rounds and clauses. It does not count wall-clock or
+   tokens, and the model calls behind the theorize step are the single largest
+   term in a real C3 bill. The zeros are real and the right shape; converting
+   them to money is not something this experiment did.
+5. **Scale** — 62 and 63 reachable states, with `decide` enumerating the whole
+   space.
+6. **The theorize step is a person**, here as in A0 and A2. The blind control
+   addresses the specific risk that the same person remembered L1's answer; it
+   does not turn theorize into a measured component.
+
+Two further caveats belong beside the numbers. The planner was the bundled BFS
+stub rather than Fast Downward (`plan.backend: "stub-bfs"` in every artefact),
+which is optimal for unit costs and so leaves `SAT`/`UNSAT` and plan length
+sound. And **the playbook's transfer is a design claim, not a measurement**: the
+manual's carry is mechanised and asserted by tests, but no code path in A3 reads
+or compiles `cold-start-a3/theory/playbook.dsl`, and the byte-identity test its docstring cites
+does not exist in the tree. We report the manual as carried and the playbook as
+declared.
+
+### 6.6 An incident, and four defects the run found in its own instrument
+
+The blind was **partially broken, by us**, and is recorded as an incident
+(A3-I1, `cold-start-a3/DECISIONS.md`). In round 3, while diagnosing a Lean
+failure, the blind arm's holder read the docstring of a module the arm was
+required to call, and that docstring names the Switch, the Door and the latch
+law. The arm disclosed it unprompted and proposed the remedy. The recorded scope:
+object and law *names* are contaminated, so no naming agreement is claimed; every
+verdict was fixed in round 1, two rounds earlier, and rounds 2–4 changed none;
+and the convergence result quotes only the preserved `as_written` snapshot.
+
+The run also found four defects in the toolchain it was using, of which two are
+worth the reader's attention because they are unsoundness rather than
+incompleteness: the PDDL backend cannot encode more than one portal and returns
+a confident **UNSAT for a correct manual**; and a Lean invariant helper keyed on
+object *name* silently degrades to `I := true`, at which point every theorem
+passes with an empty axiom list and the artefact proves nothing. The vacuous
+Lean output is kept in the tree, at `cold-start-a3/theory/generated_l1_vacuous/`,
+precisely so that an empty axiom list is not read as a guarantee on its own.
+
+---
+
+## 7 · The metrics battery, recomputed over existing trajectories
+
+> **Standing note, v0.2 — this section reports battery v0 and the battery has
+> moved.** It was rebuilt to v2 after this section was written, and the artefacts
+> it cites now hold different numbers: **95 runs across 5 arms** where the text
+> says 26 runs across 2, **38 metrics split 9 main / 29 reference** where the text
+> says 29 split 15/14, **31 of 38** non-discriminating where the text says 24 of
+> 29, and 32 redundancy clusters where the text says 27
+> (`battery/artifacts/capability_spectrum.json` now self-reports
+> `battery_version: "v2"`; `battery/METRICS.md`;
+> `battery/artifacts/discrimination.json`; `battery/artifacts/redundancy.json`).
+> One structural claim has been overtaken rather than merely rescaled: the
+> section says there is no Schema arm and there may never be, and a
+> `schema_repro` arm now exists.
+>
+> Everything downstream of the spectrum — §7.5's effect sizes, the actions-per-call
+> figures, the correlation, the P5 and E5 numbers — was computed over the 26-run
+> v0 spectrum and cannot be patched number by number; it has to be re-derived.
+> Until it is, **read this section as a report of v0**, which is what it
+> accurately is. It is left standing rather than deleted because the four Phase 2
+> processes and the finding that three metrics measured something other than what
+> they claimed are properties of the instrument, not of the run; and because
+> silently restating v2's numbers under v0's prose would be the exact failure the
+> paper's binding rule exists to prevent.
+>
+> Two citations in this section are also known-wrong and are not repaired here:
+> the determinism claim cites `battery/DECISIONS.md` D-B-001, which is about the
+> pile guardrail — the determinism decision is D-B-008, and it records that the
+> test runs against a synthetic fixture rather than against the published
+> artefacts. The X5 cross-check is described as independent; both counts descend
+> from the same explorer.
+
+### 7.1 A passive instrument, and what it cost
 
 `Theoria.md` Phase 2 asks for a second reader of the same ledger: 同一本账,两次
 使用 — the scorer reads it for a score, the battery reads it for a capability
@@ -1032,7 +1286,7 @@ sha256 of both inputs, so a changed number traces to a changed input
 power), 方向预注册 (directional pre-registration), 去冗余 (de-redundancy), 抗游戏
 审计 (anti-gaming audit) — ran; the rest of this section is what they returned.
 
-### 6.2 The pre-registration discipline, including its holes
+### 7.2 The pre-registration discipline, including its holes
 
 `battery/PREDICTIONS.md` fixes a directional ordering over the three arms for
 every registered metric. It is append-only from the commit that introduced it —
@@ -1057,7 +1311,7 @@ and a definition can be tuned toward a hoped-for result without ever seeing data
 Processes 1 and 4 exist to catch that and neither substitutes for a second pair
 of eyes; `battery/STATUS.md` records this as W-1, v0's most severe open weakness.
 
-### 6.3 A metric can be perfect and still be measuring the wrong thing
+### 7.3 A metric can be perfect and still be measuring the wrong thing
 
 A0's manual scores **K4 evidence coverage = 1.000** and **K2 held-out accuracy =
 0.000**, on the same manual, from the same recompute
@@ -1081,7 +1335,7 @@ with the instruction that "K4 must never be reported without K2 beside it"
 hook — replay accuracy 0.987 against held-out accuracy 0.000 — on the metric the
 field already optimises.
 
-### 6.4 The pilot ledger cannot certify any metric, and says so
+### 7.4 The pilot ledger cannot certify any metric, and says so
 
 Every *ranked* metric's verdict came back `underpowered` or `no-data` — 11 and 13
 of 29, with the remaining 5 (E1, K7, K11, P5, X5) returning `not-ranked` because
@@ -1101,7 +1355,7 @@ top-level `power` string, so nobody reads 0.125 as a near miss — and it is a
 Phase-3 planning input, since a four-game development pile means the confirmatory
 design needs repeats per game or a larger pile.
 
-### 6.5 Three metrics found to be measuring something else
+### 7.5 Three metrics found to be measuring something else
 
 Two of the three were found by running the instrument; one was not, and the
 distinction should not be blurred. **E5 is entailed by its own definition** — it
@@ -1133,7 +1387,7 @@ from the power verdict, as a `warning` field on P1 and E5
 (`battery/artifacts/discrimination.json`): burying "this metric is backwards"
 under "not enough data" wastes the most informative thing the pass can find.
 
-### 6.6 A confound on a pre-registered primary endpoint
+### 7.6 A confound on a pre-registered primary endpoint
 
 E2, the front-load index, is one of Phase 4's three pre-registered primary
 endpoints and the signature of claim C2: understanding is bought early and spent
@@ -1153,7 +1407,7 @@ after. Two defences went into the code: E2 and E3 now refuse runs shorter than
 eight turns, since a run that ends on turn four looks maximally front-loaded
 while having understood nothing (`battery/artifacts/gaming_audit.json`).
 
-### 6.7 What the battery still cannot see
+### 7.7 What the battery still cannot see
 
 Reproduced from `battery/REPORT_V0.md`:
 
@@ -1192,7 +1446,376 @@ misleads (`battery/DECISIONS.md` D-B-011).
 
 ---
 
-## 7 · Limitations and honesty clauses
+## 8 · The exam — four papers, one sat, and a check that did nothing
+
+The battery of §7 reads capability off trajectories that already exist. The exam
+asks the complementary question: hand a subject a sheet and mark it. This section
+reports the instrument, the one paper that has actually been sat, and — at
+greater length, because it is the more useful result — the ways the instrument
+was caught not working.
+
+### 8.1 Four papers
+
+`exam/model.py` freezes four question types. They are not four framings of one
+question; each asks something a different failure would break.
+
+| type | asks | items | points | implementation |
+|---|---|---|---|---|
+| **held-out** | given a (state, action) the evidence never contained, produce the exact next frame | 80 | 80 | `exam/papers/heldout.py` |
+| **handover** | read a manual (and, at tier 2, a playbook) and answer about a world you have not seen | 29 | 46 | `exam/papers/handover.py` |
+| **adaptation** | one rule has changed; detect it, describe it, bound the collateral, repair the manual | 60 | 144 | `exam/papers/adaptation.py` |
+| **verdict** | is this configuration solvable, and why | 17 | 34 | `exam/papers/verdict.py` |
+
+Two design choices are load-bearing. The held-out paper carries a **replay
+control** drawn from the evidence set with identical class quotas, so the
+`replay`/`heldout` tag itself carries no answer information. And the verdict
+paper is one type spanning three item classes — 5 small unsolvable, 4 large
+unsolvable, 8 solvable-hard (`exam/artifacts/leakage.json`) — not three separate
+papers.
+
+Marking is deliberately dumb. `exam/grading/mark.py` looks each item's rubric up
+by id and hands it exactly `(answer, truth, item)`; a rubric never learns who it
+is marking, because "a rubric that can see who it is marking is a rubric that can
+flatter". Partial credit differs by type and is stated rather than assumed:
+held-out and handover are all-or-nothing, adaptation is the only type with graded
+fractions, and verdict splits each item half for the answer and half for the
+reason — where a machine-checked certificate earns the full reason half, a
+credible exhaustive search earns 40 % of it, and an *invalid* certificate
+short-circuits to zero with no fallback.
+
+The held-out rubric's refusal of per-cell credit is worth quoting, because it is
+the kind of scoring choice that silently manufactures a result:
+
+> on a 7x7 A0 board a typical transition changes two cells, so an examinee that
+> returns the input frame unchanged already scores 47/49 = 96 % under a
+> cells-correct rubric
+
+**Sensitivity and specificity are computed by one function or not at all.**
+`mark.py`'s `confusion()` returns both, each `None` when its denominator is empty,
+with abstentions excluded from both and reported separately. The docstring gives
+the reason, and it is the framework's own:
+
+> a framework that answers "unsolvable" to everything has perfect sensitivity and
+> is worthless. Both numbers, always, or neither.
+
+### 8.2 The marker is calibrated; three of the four papers have never been sat
+
+Before any real submission is marked, four synthetic subjects sit every paper —
+an **oracle**, a **null**, a **memoriser** and a **bluffer** — against bands
+registered in advance (`exam/grading/calibration.py`). `assert_calibrated()`
+raises rather than warns, because "an uncalibrated marker's output is not a
+low-confidence result, it is not a result".
+
+It calibrates. The oracle scores exactly 1.000 and the null exactly 0.000 on all
+four papers (`exam/artifacts/calibration.json`), and the interesting numbers are
+the middle two, which catch things a band cannot express:
+
+* the held-out **memoriser** scores 1.00 on the replay half and 0.15 on the
+  held-out half — a gap of 0.85 — and on the over-sampled `blocked_crossing`
+  class it goes 5/5 to 0/5;
+* the verdict **bluffer** posts sensitivity 1.0 with specificity 0.0, which is
+  exactly the degenerate strategy the paired metric exists to expose;
+* the adaptation **memoriser** trips a `silently_wrong` counter twice.
+
+One pre-registered band failed on first contact — the held-out bluffer scored
+0.45 against a band ending at 0.35 — and it was **replaced rather than widened**,
+by two mix-invariant checks, with the original reasoning preserved verbatim in
+the code (`exam/DECISIONS.md` D-EX-010).
+
+**Only one paper has been sat by a real subject.** Two fresh subagent readers,
+given a bundle and a sheet and nothing else, each scored 46.0/46.0 on the
+handover paper (`exam/artifacts/reports/p15-handover-a0.reader-tier{1,2}.report.json`).
+Held-out, adaptation and verdict have never been answered by anything but the
+four fakes; no answers or reports exist for them in the tree.
+
+And the handover result is weaker than a perfect score sounds. The exam's own
+status file says so before anyone else can:
+
+> **The second number is not a measurement.** Both tiers hit the ceiling, so the
+> paper had no room left to show a difference. A zero delta from a saturated
+> sheet is uninformative about the value of the playbook, and reporting it as
+> "the playbook is worth nothing" would be wrong.
+
+> **Worse, the exam measures the wrong side of the pre-registered prediction.**
+> `Theoria.md` 1.11 predicts that the manual-only reader *catches up*, and that
+> the difference shows up as 多付的搜索成本 — a **cost**, not an accuracy.
+
+The exam has no cost instrument, so the quantity the framework actually predicts
+was not measured. We report the tier difference as **unmeasured**: the artefacts
+record `tier2_minus_tier1: null`, and the 0.000 that could be computed from two
+saturated scores is arithmetic, not an observation.
+
+### 8.3 Leak protection, and the check that silently did nothing
+
+The sheet and the key are separate objects by construction — `Item.paper` and
+`Item.truth` are distinct fields, and `Paper.sheet()` is built from a method that
+never receives a truth. On top of that, `exam/leakage.py` attacks each sheet five
+ways: declared answer probes, structural key-disjointness, positional
+independence, metadata independence, and an adversarial "cheater" subagent given
+the sheet alone. `check_paper()` raises before the sheet is written, so a leaking
+build fails closed. The archiver ships `key_sha256` and copies no truth file at
+all, because an archive that ships the keys beside the sheets rebuilds the leak
+inside the archive.
+
+The static checks come back clean: **1,790 declared probes across the four
+papers, 0 probe hits, 0 structural hits** (`exam/artifacts/leakage.json`).
+
+That number is worth almost nothing on its own, and the directory says why.
+
+**Two real leaks shipped, and the cheater found both.** The verdict paper's
+`points` field encoded the answer — 3.0 for solvable, 2.0 for unsolvable — which
+yielded **17 of 17 claims with no board reasoning at all**, measured rather than
+estimated. And the held-out paper's world description published the dynamics in
+prose, taking a reader from 47.5 % to essentially full marks. Both are fixed
+(uniform point values; a world block that no longer states dynamics).
+
+The reason the static checks missed them is the most transferable thing in this
+section:
+
+> `answer_labels` was an *optional* hook on each paper module. No module
+> implemented it. So `check_paper` received `answer_of=None` and checks 3 and 4
+> **silently did nothing on all four papers**. An optional check is a check that
+> does not run, and it fails in the direction that looks like success.
+
+The repair added label derivation from the key, and it did not fully close the
+hole: `leakage.json` records `label_sets_checked: []` for the handover and
+adaptation papers, so the positional and metadata checks still run on nothing for
+two of the four. The directory's own reading is the one we adopt — "the static
+checks are necessary and cheap, and the adversarial reader is the one that found
+the leaks".
+
+Both guards are tested by being made to fire, which is the only way to know a
+guard exists: `exam/tests/test_core.py` opens with "a leak checker that cannot be
+made to fire is not a leak checker", and includes a test pinning the exact
+point-value leak that shipped. A separate module, `exam/guard.py`, handles two
+different jobs — a network tripwire that replaces `socket.socket` for the
+duration of a build, and a pile guard that reads the cut itself rather than a
+copy and refuses any sealed game, any unregistered id, and a missing id. It is
+honest about its own scope: "Not a sandbox — a process determined to get out can
+get out. It is a tripwire for the accident that actually happens."
+
+### 8.4 What the exam does not establish
+
+* **Three of four papers have no real result.** Held-out, adaptation and verdict
+  exist as machinery and as calibration runs. Nothing has sat them.
+* **n = 1 per handover tier**, on a saturated sheet. Nothing here supports a
+  variance claim about fresh readers, and nothing here prices a playbook.
+* **No cross-type total should be quoted.** The four papers were built by four
+  separate agents and their rubric weights are not calibrated against each other.
+* **The calibration bands are outside the rubric digest.** The digest hashes the
+  rubric modules' source text and travels onto every sheet and report; the bands
+  live elsewhere, so a quiet widening there would not surface as a mismatch. One
+  band has already been changed once — recorded, and correctly — which is exactly
+  why the hole matters. Closing it is not done.
+* **The cheater's numbers are prose, not artefacts.** The brief prompts are
+  digested in the run manifest but the directory holding them is gitignored, and
+  no cheater response or transcript is archived. We report those figures as
+  findings the exam reports, not as results a reader can re-derive here.
+* **Two cheater agents, four sheets, one pass** — and none of them has seen the
+  fixed sheets. In the directory's own words: *the leaks that remain are the ones
+  nobody has looked for yet.*
+
+The exam's sharpest sentence is about itself, and it generalises past this
+paper:
+
+> An exam is two instruments in a trenchcoat: a question-setter and a marker.
+> The question-setter can be checked by reading it. The marker cannot — a marking
+> bug produces a plausible number, and a plausible number is indistinguishable
+> from a result.
+
+### 8.5 One thing the exam found in what it was examining
+
+Building the handover bundle, and then independently both readers, caught a
+defect in the artefact under examination: `a0-spike/theory/theory.dsl` ships
+`invariant box_row_parity (Box.pos.row) mod 2 = 1` marked `[status: proven]`.
+What the push rule conserves is the **parity** of the coordinate; the value `1`
+is a fact about the particular board the evidence came from. The manual therefore
+ships, marked proven, a sentence that is false on most boards of its own world —
+including several on the exam sheet.
+
+The bundles keep it verbatim and nothing was repaired, on the grounds that
+repairing a deliverable in order to examine it would be examining a document
+nobody shipped.
+
+---
+
+## 9 · The preflight — every link in the live chain, for zero quota
+
+Everything reported so far is offline. Phase 3 is not, and the step between them
+is the one where a framework quietly stops being closed: the arm acquires a
+credential, the credential acquires a network, and the record of what happened
+becomes something the arm itself wrote. This section reports the run that
+exercised that chain **before** any of it could cost anything, and — as much as
+it reports the result — what the run does *not* establish.
+
+### 9.1 The trick, and the sequence
+
+A finding from the baseline track makes the preflight possible:
+`scorecard.total_actions` equalled the count of **successful** actions on every
+sample examined, with `RESET` counted separately, so a `RESET` is not billed
+(`baseline-arms/BUDGET_REPORT.md`; restated as the arm's design basis at
+`theoria-arm/DECISIONS.md` D-P8-004, and extended by the proxy track from 4
+scorecards to 32 in `proxy/scoring/arc_v1.py`). The arm's own docstring states
+the consequence:
+
+> opening a scorecard, sending one RESET and closing again exercises every link
+> in the live chain for zero quota:
+> `arm -> env proxy -> key injection -> sealed-pile guard -> ARC -> ledger`
+
+That is what was run, on `g50t-5849a774` from the development pile
+(`theoria-arm/runs/preflight-20260728T012057Z/`; note the slug — an earlier
+attempt 26 s before it aborted after two records and is superseded). The ledger
+holds 23 records: a scorecard open (200), **18 `RESET` attempts** of which 17
+returned 400 and the eighteenth returned 200 with one 64×64 frame, and a
+scorecard close that needed two tries — 404, then 200.
+
+**No `ACTION` command was ever sent.** The API's own close response is the
+witness: `total_actions: 0`, `actions: 0`, `level_actions: [0,0,0,0,0,0,0]`,
+`score: 0.0`. The arm's reconciliation agrees — `successful_actions: 0` over 18
+`env_steps` — and the cost block records `model_calls: 0`, `usd: 0.0`
+(`.../MANIFEST.json`, `.../run.json`).
+
+The run also produced three findings that only a live chain can produce, and
+they are the reason a dry run against a mock would not have substituted:
+
+* **18 attempts for one `RESET`.** `arc-recon`'s 40-attempt retry envelope is
+  load-bearing right now rather than a historical artefact; `proxy/forward.py`'s
+  5 attempts, which exclude 400 entirely, would have returned a hard failure
+  (`theoria-arm/RUN_STATE.md`).
+* **No `score` field exists in live command responses.** The ledger format's
+  score obligation is therefore undischargeable against the real API, and that
+  is filed as an incident rather than waived (`theoria-arm/INCIDENTS.md`
+  INC-TA-002).
+* **The close needed two tries.** A card that is not closed yields nothing and a
+  closed card cannot be re-fetched, so a low retry count silently loses the
+  score.
+
+### 9.2 What is sealed, and how strongly
+
+Three properties are claimed for the shell. They are not equally well
+established, and the differences matter more than the shared direction.
+
+**The credential is injected inside the environment proxy and nowhere else.**
+The arm holds no key; `proxy/env_proxy.py` reads it from the gitignored `.env`,
+registers it with a process-wide scrubbing vault, and adds the header on the way
+out. Everything the ledger writer emits passes through `VAULT.scrub()` first
+(`proxy/redact.py`, wired at `proxy/ledger.py`). The sharpest evidence is a
+byte-identical pair of requests in `proxy/tests/test_seal.py`: sent directly the
+request returns 401, sent through the proxy it returns 200, and the difference is
+entirely a key the arm never held. A mock arm that can see any credential
+environment variable refuses to start.
+
+Two limits belong immediately beside that. First, the proxy track's own format
+document **retracted** the stronger version of this claim after a red-team pass
+collected on it; what it now says is that *a credential the proxies injected
+cannot reach the ledger* — not that a ledger cannot contain a key, because "a
+writer cannot redact what it has never been told and cannot see"
+(`proxy/LEDGER_FORMAT.md` §4). Second, and specific to this run: **no executable
+check scans the live ledger for the credential.** The arm's archiver advertises
+that check in its docstring and does not implement it — the parameter it would
+need is accepted and unused (`theoria-arm/armtools/archive.py`). The unit test
+that does perform a byte scan runs against the mock. So the claim here rests on
+construction, a mock-level test, and an incident count of zero, and we state it
+that way.
+
+**The sealed pile was not touched, and here the check is real.** The
+first-contact manifest carries a byte scan of the records rather than the guard's
+opinion of what it blocked: `game_ids_anywhere_in_the_records:
+["g50t-5849a774"]`, `sealed_game_ids_found: []`, `sealed_pile_untouched: true`,
+`cut_integrity: true`
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`). The guard
+reads the cut itself — `arc-recon/data/piles.json`, integrity-checked against its
+sha256 — rather than a copy, and its fingerprint is recorded at run start: 4
+development games, 21 sealed, `unknown_policy: "deny"`. The preflight manifest
+predates that scan and carries only the counters.
+
+**Zero guardrail bypasses were *recorded*.** The preflight's sealing block reads
+`bypass_attempts: 0`, `guard_blocks: 0`, `credential_in_body: 0`,
+`sealed_pile_requests: 0`, `incidents: 0`, and every one of the 18 environment
+steps carries `guard.decision: "allow"`. That zero is informative rather than
+vacuous, because the same counter demonstrably fires: a separate experiment in
+which the model CLI presented its own credential produced **66 `bypass_attempt`
+incidents and 65 consecutive 401s**, which is the sealing property working rather
+than a defect (`theoria-arm/evidence/model-proxy-401.jsonl`). The guard's own
+credibility comes from an adversarial pass by an independent context — 46
+attacks, **29 of which landed on first contact**, four rated critical, all 46 now
+blocked and resident in the suite (`proxy/REDTEAM.md`, `proxy/STATUS.md`).
+
+### 9.3 Four things this run does not establish
+
+The gap between what the shell is designed to guarantee and what this run
+demonstrates is wide enough to be worth enumerating.
+
+1. **Only one of the two proxies was live.** The design is a double proxy —
+   environment and model — so that the arm sees exactly two hosts on the network.
+   The model side was **not** proxied for this arm; every model call carries
+   `proxied: false`, and it is a declared gap rather than an oversight
+   (`theoria-arm/GAPS.md` GAP 1, `theoria-arm/DECISIONS.md` D-P8-002). What is
+   lost is stated there: the recorded request is the prompt the arm sent the CLI,
+   not the body the CLI sent onward, so **no conclusion about input-token
+   composition may be drawn from this ledger**.
+2. **The spend gate did not gate this run.** `proxy/spend_gate.py` exists, is
+   wired keyword-only into the forwarder so that a caller who forgets it gets a
+   `TypeError` rather than a line in the next incident report, and is tested
+   through an adversarial pass that demonstrated and then fixed five bypasses.
+   But it was wired at 08:42 Z and the preflight ran at 01:20 Z — the file hashes
+   differ, no run artefact mentions a reservation, and its own manifest records
+   that it *"was never pointed at a live upstream"*. The bound actually in force
+   during the preflight was an in-process counter, which is exactly the class of
+   gate that failed in the incident the shared gate was built to answer.
+3. **No live replay has been performed.** Frames are stored whole and hashed and
+   a replayer exists, but the evidence in the tree is of a different thing: 16
+   independently recorded sessions of one fixed opening on one development-pile
+   game agree bit-for-bit across **372 pairwise comparisons**, with sessions
+   truncated at the first failed step and agreement claimed only where at least
+   two sessions reached a position
+   (`proxy/runs/p9-shell-harden/replay_spotcheck_ar25.json`). The proxy track
+   states the size of that itself: it is cross-session determinism *of the
+   environment*, on one game where the acceptance line asks for two, and it is
+   not evidence that these proxies reproduce a run.
+4. **A self-consistent ledger is not an authenticated one.** Every reconciliation
+   check aligns the file against itself, so a sufficiently careful forger with
+   write access reconciles clean. Hardening raised the price of forgery — a frame
+   hash must really hash its own frame or the writer refuses it, sequence numbers
+   must be dense and unique — but a price is not a proof. The proposed answer is a
+   hash chain whose head is published outside the file; it is registered and not
+   built. The honest statement of closure is the one the track wrote for itself:
+
+   > the ledger is complete and self-consistent, and the arm cannot write it —
+   > but the operator can. Phase 1's "no bypass" was always a claim about the
+   > arm, and that one still holds.
+
+   Its timing is awkward and we record it as such: the chain was wanted before
+   the first live run, and the first live run has already happened without it.
+
+### 9.4 What was spent, in the end
+
+The preflight spent nothing. The first-contact run that followed it did spend:
+7 successful actions, 40 commands sent, 5 model calls, a score of 0.0 and 0 of 7
+levels completed
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`). We draw
+no capability conclusion from that in either direction, and the arm's own gap
+list says why — the plan and commit beats were reached but barely exercised, so
+a surprise count of zero for those beats is structurally zero rather than
+measured zero, and one engine contributed no rows at all.
+
+Two incidents bound the cost figures further. Two arms played the same game
+concurrently on one quota, so **every wall-clock and HTTP-amplification number
+this track reports is confounded** and is an upper bound on the arm's own cost
+rather than a measurement of it (`theoria-arm/INCIDENTS.md` INC-TA-001). And
+cache reads are **structurally zero** — not small, but a different quantity —
+because every model call is a fresh process in a fresh directory, which is the
+sealing decision working as designed (INC-TA-005).
+
+What the preflight does establish is narrow and worth having: the live chain
+runs end to end, the credential is injected in one place and the arm never holds
+it, the sealed pile is untouched by a check on the bytes rather than on the
+guard's self-report, and the whole thing cost zero billable actions. It is a
+statement about the apparatus, not about the framework.
+
+---
+
+## 10 · Limitations and honesty clauses
 
 `Theoria.md` §3.2 item 8 fixes, in advance, the list of things this project must
 disclose. It is transcribed here clause by clause and answered for *this* paper,
@@ -1431,7 +2054,7 @@ the exam, the cost magnitude — is unevidenced here and is not claimed.
 
 ---
 
-## 8 · Related work
+## 11 · Related work
 
 ### 8.1 Three waves, and the thing they kept upgrading
 

@@ -1,4 +1,4 @@
-## 7 · Limitations and honesty clauses
+## 10 · Limitations and honesty clauses
 
 `Theoria.md` §3.2 item 8 fixes, in advance, the list of things this project must
 disclose. It is transcribed here clause by clause and answered for *this* paper,
