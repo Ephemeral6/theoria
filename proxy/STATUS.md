@@ -56,8 +56,13 @@ games; this is the first.
   the price — the frame hash must hash its own frames, `seq` must be dense and
   unique, one run is one arm, the card's totals must add up, the canon validator
   runs on the audit path — but a price is not a proof. The structural answer is
-  a hash chain with the head published outside the file; it changes the envelope
-  and so needs a version bump and three arms' agreement.
+  a hash chain with the head published outside the file, proposed in
+  `monitor/inbox/20260728T2200Z-proxy-ledger-hash-chain.md`. It is **cheaper
+  than D-024 first said**: with `prev` optional the format stays at `v1.0`, so
+  no version bump and no coordination with the other arms — the compulsion
+  comes from the published head, not from the field being required. The
+  deadline is the first live run rather than Phase 4, because a chain is
+  evidence only for records written after it exists.
 * **Three guard limits, stated rather than implied (D-022, D-023).** The
   value-join that catches an id split across two fields depends on key order;
   base64 is chased one level; a secret the writer has never seen and that does

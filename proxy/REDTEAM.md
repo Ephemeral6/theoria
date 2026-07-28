@@ -429,9 +429,12 @@ here so nobody has to wonder whether the goalposts moved:
   sufficiently careful forger writing canonical records reconciles clean. The
   test passes because the forgery it uses is now detectable, not because
   forgery is. P-9 raised the price; it did not authenticate anything. The
-  structural answer is a hash chain with the head published outside the file,
-  which changes the envelope and therefore needs a version bump and three arms'
-  agreement. Registered as D-024.
+  structural answer is a hash chain with the head published outside the file.
+  Registered as D-024 and written up as
+  `monitor/inbox/20260728T2200Z-proxy-ledger-hash-chain.md`. D-024 first
+  priced it at a version bump and a three-arm negotiation; that was wrong — an
+  **optional** `prev` keeps the format at `v1.0` and the enforcement comes from
+  the published head instead.
 * **The value-join is order-dependent.** An id split across two fields is
   caught when the values concatenate in key order and not otherwise.
 * **Base64 is chased one level.**

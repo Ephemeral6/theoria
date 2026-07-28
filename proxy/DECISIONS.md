@@ -423,9 +423,47 @@ The structural answer is a hash chain whose head is published outside the file:
 each record carrying the digest of its predecessor, and the final digest
 recorded somewhere an attacker with write access to the ledger does not reach.
 That subsumes the duplicate-`seq` and forged-hash findings as special cases. It
-also changes the envelope, which under §8 means a version bump and a
-conversation with three arms and the Phase 2 battery — so it is registered here
-and not done quietly at the end of a hardening pass.
+is registered here and written up as a proposal rather than done quietly at the
+end of a hardening pass —
+`monitor/inbox/20260728T2200Z-proxy-ledger-hash-chain.md`.
+
+**Correction, made while writing that proposal.** This entry first said the
+chain "changes the envelope, which under §8 means a version bump and a
+conversation with three arms and the Phase 2 battery". That was wrong, and
+wrong in the direction that makes a thing not get done: it priced the work at a
+cross-track negotiation when it does not need one.
+
+`prev` can be **optional**, and then `v` stays `1.0`. §1 says fields are added
+only by appending; §8 bumps `v` when a field's *meaning* changes or a
+*required* field is added, and an optional field is neither. v1.0 readers —
+the battery's adapter, the other arms — are unaffected and need not move.
+
+The obvious objection is that an optional field is one a forger simply omits.
+It is not, because the compulsion does not come from the format. It comes from
+the **published head**: `run_start` declares that the run is chained,
+`runs/*/MANIFEST.json` declares how long the chain should be and what it hashes
+to, and the validator then treats a missing `prev` exactly as it treats a wrong
+one. Omitting the head is a decision a person has to make, and it leaves its
+trace in git. That is stronger than a required field, which would only have
+retired every existing reader.
+
+Two things the chain still would not buy, recorded here so the next person does
+not have to rediscover them — and recorded at all because §4's "a ledger
+through the writer cannot contain a key" was an over-claim that RED-15
+collected on in this same session:
+
+* **Forgery before publication still works.** The property gained is precisely
+  *tamper-evidence after the head is published*, not authentication of the
+  recording.
+* **Nothing local can prove the frames came from ARC.** Only an API-signed
+  receipt could, and the API offers none.
+
+There is also a timing argument, which is the reason this is not simply
+deferred to Phase 4 where the absence would actually be felt: **a chain is
+evidence only for records written after it exists.** Every round it is put off
+is a round of ledgers that can never be chained retroactively. It costs nothing
+to build before the first live run and cannot be applied to that run
+afterwards.
 
 Until it exists, the honest form of the closure claim is: **the ledger is
 complete and self-consistent, and the arm cannot write to it — but the operator

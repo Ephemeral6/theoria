@@ -33,7 +33,10 @@
 * a live run through the proxies — nothing here has met the real API;
 * the second game for the replay-spot-check line, and a real replay through
   `replay.py`;
-* record authentication (D-024) — a hash chain, which needs a version bump;
+* record authentication (D-024) — a hash chain, proposed in
+  `monitor/inbox/20260728T2200Z-proxy-ledger-hash-chain.md`. No version bump
+  after all: `prev` optional keeps the format at `v1.0`. Wanted **before** the
+  first live run, since a chain cannot be applied to a ledger retroactively;
 * the battery's turn axis, and `cost.py` reading each record's own
   `pricing_ref` plus a per-call cost series.
 
