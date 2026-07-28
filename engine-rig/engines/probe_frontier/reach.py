@@ -48,6 +48,15 @@ class Reachability:
     plan: Optional[List[str]] = None
     expansions: int = 0
     backend: str = "stub-bfs"
+    # What entitles `status == UNREACHABLE` to be read as a fact about the
+    # world.  `basis` is "exhausted" when the bundled search emptied its queue
+    # (it raises rather than returns on budget) or "proved" when Fast Downward
+    # cleared `backends.proves_unsolvable`; `budget` is the limit that search
+    # ran under.  Without these the payload asserted "the configuration is
+    # unreachable" and gave a reader no way to tell that from "the search
+    # stopped" -- the assertion was true, and unverifiable from the artefact.
+    basis: Optional[str] = None
+    budget: Optional[int] = None
 
     @property
     def length(self) -> Optional[int]:
@@ -58,6 +67,11 @@ class Reachability:
         return self.status == REACHABLE
 
     def as_json(self) -> Dict[str, Any]:
+        # `basis` / `budget` are recorded on the object and withheld from this
+        # payload: the dict is published into `artifacts/candidates.jsonl`,
+        # whose sha256 is pinned in `release/MANIFEST.jsonl`.  The gap it leaves
+        # -- an `unreachable` verdict a reader cannot re-derive -- is C11's
+        # filed proposal to the release track, not an oversight.
         return {
             "status": self.status,
             "problem": self.problem,
@@ -93,9 +107,15 @@ def reach(domain: Domain, base: Problem, goal_atoms: Sequence[Atom],
     problem = reachability_problem(base, goal_atoms, name)
     plan, result = fd_adapter.solve_parsed(domain, problem, prune=prune)
     if plan is None:
+        # `solve_parsed` returns `None` only when unsolvability was established:
+        # the bundled search raises on its budget, and the FD path raises unless
+        # `backends.proves_unsolvable` says so.  Which of the two it was is
+        # recorded rather than left to be inferred from the code.
         return Reachability(
             status=UNREACHABLE, problem=name, goal_atoms=tuple(goal_atoms),
             expansions=result.expansions,
+            basis="exhausted" if result.exhaustive else "proved-by-planner",
+            budget=result.max_expansions,
         )
     return Reachability(
         status=REACHABLE, problem=name, goal_atoms=tuple(goal_atoms),

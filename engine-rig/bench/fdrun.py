@@ -249,7 +249,8 @@ def _invoke(command: List[str], config: str, tier: str,
     started = time.perf_counter()
     try:
         completed = subprocess.run(
-            command, cwd=workdir, capture_output=True, text=True, timeout=timeout
+            command, cwd=workdir, capture_output=True, text=True,
+            encoding="utf-8", errors="replace", timeout=timeout
         )
     except subprocess.TimeoutExpired:
         return FdMeasurement(

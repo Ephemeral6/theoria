@@ -66,7 +66,8 @@ def _git(repo_root: str, *args: str) -> str:
     try:
         out = subprocess.run(
             ["git", "-C", repo_root, *args],
-            capture_output=True, text=True, timeout=60,
+            capture_output=True, text=True, encoding="utf-8",
+            errors="replace", timeout=60,
         )
         return (out.stdout or "").strip()
     except (OSError, subprocess.SubprocessError):
