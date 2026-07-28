@@ -68,6 +68,17 @@ check(t["prediction_scored"]["verdict"] in
       "the carried formula was not scored")
 check("retention" in t, "no retention record")
 
+# Whether this game can test the carried theory at all decides how every other
+# number in the report may be read, so it must be present and it must be
+# stated, not inferred. INC-TA-007's neighbour: the first carry had no such
+# field and its replay result was read as evidence it could not be.
+check(isinstance(t.get("carried_theory_is_testable_on_this_game"), bool),
+      "the cold report does not say whether the carried theory is testable here")
+check(isinstance((t.get("actions") or {}).get("shared"), list),
+      "no action-vocabulary overlap was computed")
+check("evidence" in (t.get("replay_means") or ""),
+      "the report does not say what its replay result means")
+
 carried = json.load(open(os.path.join(d, "CARRIED.json"), encoding="utf-8"))
 check(carried["carried"]["theory.dsl"]["sha256"], "the carried manual is unhashed")
 check(not os.path.exists(os.path.join(d, "books", "problem.json")) or
