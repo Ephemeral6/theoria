@@ -1,0 +1,15 @@
+=== run 1: python -m tools.engine_table ===
+engine_table: 98 facts verified against 19 artifacts
+engine_table: wrote engine-rig\ENGINE_TABLE.md (34768 bytes, 8 rows)
+exit=0
+ENGINE_TABLE.md sha256: 22564de19337d4c4e3f1f138ee27fe12b24825db7ac3d468bc86299c71510512
+
+=== run 2: python -m tools.engine_table ===
+engine_table: 98 facts verified against 19 artifacts
+engine_table: wrote engine-rig\ENGINE_TABLE.md (34768 bytes, 8 rows)
+exit=0
+ENGINE_TABLE.md sha256: 22564de19337d4c4e3f1f138ee27fe12b24825db7ac3d468bc86299c71510512
+
+=== run 3: --check ===
+engine_table: 98 facts verified; ENGINE_TABLE.md is current
+exit=0

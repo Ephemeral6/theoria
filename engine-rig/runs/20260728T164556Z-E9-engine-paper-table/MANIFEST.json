@@ -1,0 +1,51 @@
+{
+  "prompt_id": "E9-engine-paper-table",
+  "branch": "agent/e9-engine-paper-table",
+  "base_commit": "05a21bd",
+  "utc": "2026-07-28T16:45:56Z",
+  "author": "RES-3 / verify lane",
+  "lane": "verify",
+  "territory": "engine-rig",
+  "method": "collect the eight processes' numbers into the paper's §3 table; every cell probed out of an artifact under runs/ by a regeneration script that exits non-zero on drift; one adversarial audit dispatched against the result",
+  "utc_note": "the run id is this machine's true UTC. It sorts BEFORE 20260729T000000Z-E11-engine-crosscheck-deep, which it depends on, because E11 stamped itself with the local date rather than UTC. Recorded rather than smoothed over.",
+  "deliverables": [
+    "engine-rig/ENGINE_TABLE.md",
+    "engine-rig/tools/engine_table.py"
+  ],
+  "files": [
+    {
+      "path": "engine-rig/ENGINE_TABLE.md",
+      "sha256": "22564de19337d4c4e3f1f138ee27fe12b24825db7ac3d468bc86299c71510512",
+      "bytes": 35215
+    },
+    {
+      "path": "engine-rig/tools/engine_table.py",
+      "sha256": "70d444448876810f6c4baeacc4deb4e204d0092863879106115062c51637e87c",
+      "bytes": 47391
+    }
+  ],
+  "processes_tabulated": 8,
+  "facts_probed": 98,
+  "artifacts_read": 19,
+  "boundary_cells_unmeasured": 1,
+  "boundary_cells_partially_unmeasured": 4,
+  "regeneration_byte_stable": true,
+  "regeneration_sha256_run1": "22564de19337d4c4e3f1f138ee27fe12b24825db7ac3d468bc86299c71510512",
+  "regeneration_sha256_run2": "22564de19337d4c4e3f1f138ee27fe12b24825db7ac3d468bc86299c71510512",
+  "negative_controls_passed": 5,
+  "suite": "315 passed, 9 skipped",
+  "engine_rig_code_bytes_changed": 0,
+  "engines_modified": 0,
+  "api_calls": 0,
+  "network": false,
+  "cost_usd": 0.0,
+  "sealed_pile_contact": "none",
+  "runs_consumed": [
+    "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep",
+    "engine-rig/runs/20260728T072633Z-E2-fd-ladder-bench",
+    "engine-rig/runs/20260728T141724Z-E5-cert-recheck",
+    "engine-rig/runs/p13-fd-real",
+    "fuzzlab/runs/20260728T152000Z-V10-fuzz-mutation-power",
+    "theoria-arm/runs/20260728T015354Z-g50t-first-contact"
+  ]
+}
