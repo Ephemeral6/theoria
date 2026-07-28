@@ -28,7 +28,9 @@ reap / quota check / 三振限内复活 / ci_merge 合并即交付 / 页面轻�
 4. needs_human / CONFLICT → 该转用户的转用户
 5. **前端判定**：master 变了 / 关键事件 / 3h 硬底 → 全量更新
    （spec + scan + push + 发给用户）；否则不动（轻刷反射层已做）
-6. 更新 loop_state 与本文件；commit + push；`ScheduleWakeup`
+6. 更新 loop_state 与本文件；**提交只写显式路径，永不 `git add -A`**
+   （2026-07-28 事故：一次 `add -A` 把 OPS-M 正在编辑的 ci_merge.py 半成品
+   扫上了 master）；push；`ScheduleWakeup`
    （正常 1800s；hold 3600s）
 
 ## 当前态势快照（2026-07-28T11:45Z）

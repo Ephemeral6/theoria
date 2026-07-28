@@ -48,7 +48,7 @@
     ],
     "ops": [
       {
-        "age_min": 23,
+        "age_min": 52,
         "cycle": 6,
         "id": "OPS-A",
         "kind": "ops",
@@ -59,29 +59,29 @@
         "state": "idle"
       },
       {
-        "age_min": 105,
-        "cycle": 3,
+        "age_min": 9,
+        "cycle": 4,
         "id": "OPS-B",
         "kind": "ops",
         "name": "浏览器专员",
-        "note": "邮箱无新 OPEN；两份提案待裁决；本轮把 ACCESS_CHECK 第 8 项记为未了结的那封信写成可发草稿（未发送），建议下轮起做条款定期漂移核查",
-        "outputs": 5,
+        "note": "条款漂移基线已建（terms_canary.json，四页 + 14 个语义锚点）；本轮复核结果无漂移；两份提案仍待裁决",
+        "outputs": 4,
         "role": "需要真浏览器和登录态的活：官方条款、账户核查",
         "state": "idle"
       },
       {
-        "age_min": 55,
+        "age_min": 83,
         "cycle": 4,
         "id": "OPS-M",
         "kind": "ops",
         "name": "合并裁判",
         "note": "反射层健康但 quota:HOLD 连带停掉了零 token 的 ci_merge，合并停摆 96 分钟；已手动补位合入两分支、队列清空，全量门 14/14 绿；上轮 gates: 改动已在生产验到",
-        "outputs": 7,
+        "outputs": 6,
         "role": "脚本合不动的冲突由它裁决；顺利合并早已自动化",
         "state": "working"
       },
       {
-        "age_min": 339,
+        "age_min": 368,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -94,7 +94,7 @@
     ],
     "standing": [
       {
-        "age_min": 35,
+        "age_min": 63,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
@@ -105,7 +105,7 @@
         "state": "working"
       },
       {
-        "age_min": 33,
+        "age_min": 61,
         "cycle": 2,
         "id": "RES-2",
         "kind": "standing",
@@ -532,7 +532,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 20:12:59",
+  "generated_at": "2026-07-28 20:41:38",
   "grid": {
     "A1": {
       "active": [
@@ -1406,29 +1406,33 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/audit/DRIFT-20260728T1147Z-probes-have-hardcoded-scope-that-stopped-growing.md",
-      "monitor/ci/merge.log",
-      "monitor/inbox/20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md",
-      "monitor/inbox/20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md",
+      "onitor/HANDOFF.md",
+      "monitor/inbox/20260728T061513Z-OPS-B-terms-vs-arcrecon.md",
+      "monitor/inbox/20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md",
+      "monitor/inbox/20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md",
+      "monitor/inbox/20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md",
+      "monitor/inbox/20260728T103219Z-opsm-gate-fixed-and-a-commit-swept-my-edit.md",
+      "monitor/inbox/20260728T2200Z-proxy-ledger-hash-chain.md",
       "monitor/index.html",
+      "monitor/loop_state.json",
+      "monitor/mailbox/OPS-M.md",
       "monitor/reflex.log",
-      "monitor/scan.py",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/audit/archive/DRIFT-20260728T1147Z-probes-have-hardcoded-scope-that-stopped-growing.md",
-      "monitor/board/items/S10-invariant-on-resource.md",
-      "monitor/board/items/S8-provenance-backfill.md",
-      "monitor/board/items/S9-contract-change-protocol.md",
-      "monitor/inbox/archive/20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md",
-      "monitor/inbox/archive/20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md",
-      "monitor/reflex.lock"
+      "monitor/board/items/S11-sealed-halfguard.md",
+      "monitor/inbox/archive/20260728T061513Z-OPS-B-terms-vs-arcrecon.md",
+      "monitor/inbox/archive/20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md",
+      "monitor/inbox/archive/20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md",
+      "monitor/inbox/archive/20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md",
+      "monitor/inbox/archive/20260728T103219Z-opsm-gate-fixed-and-a-commit-swept-my-edit.md",
+      "monitor/inbox/archive/20260728T2200Z-proxy-ledger-hash-chain.md"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "b7fa0ca audit: cycle 6 -- the probes stopped growing with the tree",
+    "git_head": "",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1440,13 +1444,13 @@
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/audit/archive/DRIFT-20260728T1147Z-probes-have-hardcoded-scope-that-stopped-growing.md",
-      "monitor/board/items/S10-invariant-on-resource.md",
-      "monitor/board/items/S8-provenance-backfill.md",
-      "monitor/board/items/S9-contract-change-protocol.md",
-      "monitor/inbox/archive/20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md",
-      "monitor/inbox/archive/20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md",
-      "monitor/reflex.lock"
+      "monitor/board/items/S11-sealed-halfguard.md",
+      "monitor/inbox/archive/20260728T061513Z-OPS-B-terms-vs-arcrecon.md",
+      "monitor/inbox/archive/20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md",
+      "monitor/inbox/archive/20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md",
+      "monitor/inbox/archive/20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md",
+      "monitor/inbox/archive/20260728T103219Z-opsm-gate-fixed-and-a-commit-swept-my-edit.md",
+      "monitor/inbox/archive/20260728T2200Z-proxy-ledger-hash-chain.md"
     ]
   },
   "p1_green": 9,
@@ -1918,14 +1922,14 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 7 份：20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T103219Z-opsm-gate-fixed-and-a-commit-swept-my-edit.md, 20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 1 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**17 条 TO-MONITOR 待监控回复**。 OPS-A 第6轮 idle（23 分钟前）； OPS-B 第3轮 idle（105 分钟前）； OPS-M 第4轮 working（54 分钟前）； OPS-R 第1轮 idle（339 分钟前）",
+      "detail": "**18 条 TO-MONITOR 待监控回复**。 OPS-A 第6轮 idle（51 分钟前）； OPS-B 第4轮 idle（9 分钟前）； OPS-M 第4轮 working（83 分钟前）； OPS-R 第1轮 idle（368 分钟前）",
       "rows": [
         {
-          "age_min": 23,
+          "age_min": 51,
           "cycle": 6,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -1934,16 +1938,16 @@
           "status": "green"
         },
         {
-          "age_min": 105,
-          "cycle": 3,
+          "age_min": 9,
+          "cycle": 4,
           "id": "OPS-B",
           "name": "浏览器专员",
-          "note": "邮箱无新 OPEN；两份提案待裁决；本轮把 ACCESS_CHECK 第 8 项记为未了结的那封信写成可发草稿（未发送），建议下轮起做条款定期漂移核查",
+          "note": "条款漂移基线已建（terms_canary.json，四页 + 14 个语义锚点）；本轮复核结果无漂移；两份提案仍待裁决",
           "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 54,
+          "age_min": 83,
           "cycle": 4,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -1952,7 +1956,7 @@
           "status": "green"
         },
         {
-          "age_min": 339,
+          "age_min": 368,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -1962,7 +1966,7 @@
         }
       ],
       "status": "green",
-      "to_monitor": 17
+      "to_monitor": 18
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3176 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
@@ -1977,7 +1981,7 @@
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 30 个提交 / 6 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 32 个提交 / 6 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "partial"
     },
     "verify_gates": {
