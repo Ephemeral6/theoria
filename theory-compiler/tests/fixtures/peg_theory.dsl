@@ -6,7 +6,15 @@
 
 word_table:
   board
-  object Peg { pos: Int, alive: Bool }
+  # E-07. `unique` says no two *live* pegs ever share a cell. Without it this
+  # manual does not entail its own `conflict exclusive`: `jump_right` quantifies
+  # over a second peg and pins it only by position, so the groundings
+  # (?a=Peg_0, ?b=Peg_1) and (?a=Peg_0, ?b=Peg_3) both claim Peg_0 whenever
+  # Peg_1 and Peg_3 stand on one cell — 600 such collisions across the 80,000
+  # representable states, and none of them reachable, which is why no replay
+  # ever caught it. The fact was always true of the world and had nowhere to be
+  # written down.
+  object Peg { pos: Int unique, alive: Bool }
   # E-05: the domain declares that a pagoda potential exists over the cells.
   # The numbers are not here — they come from the LP certificate, per level.
   weights w over Peg.pos

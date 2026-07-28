@@ -12,6 +12,14 @@ from typing import Optional
 class Field:
     name: str
     type: str
+    # E-07. `pos: Int unique` — no two *live* instances of this type ever share
+    # a value of this field. It is a fact about the world (pegs cannot stack;
+    # two ghosts in a corridor might), so it belongs in the per-world manual
+    # rather than in any backend, and declaring it is what lets `conflict
+    # exclusive` be *entailed* by a manual whose rules quantify over a second
+    # instance. It is a claim, not a hint: `certify_uniqueness` proves the
+    # initial state satisfies it and that `step` preserves it.
+    unique: bool = False
 
 
 @dataclass

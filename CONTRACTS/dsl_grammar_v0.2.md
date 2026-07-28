@@ -7,11 +7,17 @@
 which stays frozen and unedited — v0.1 is what the M8 rehearsal was built and
 tagged against, and rewriting it would rewrite that history.
 
-**Freeze policy.** v0.2 is frozen at the tag that carries this line. Anything
-further goes into a `dsl_grammar_v0.3.md`, by the same rule that produced this
-file: **a change needs a ledger entry or a defect that forced it**, named in the
-revision record. "It would read better" is not a reason to touch a contract two
-tracks compile against.
+**Freeze policy.** v0.2 is frozen **at the tag that carries this line**.
+Anything after that tag goes into a `dsl_grammar_v0.3.md`, by the same rule that
+produced this file: **a change needs a ledger entry or a defect that forced it**,
+named in the revision record. "It would read better" is not a reason to touch a
+contract two tracks compile against.
+
+Revision items 11 and 12 landed **before** that tag, in the same unmerged branch
+as the rest of this file, and are recorded here rather than in a v0.3 for that
+reason. After the tag the identical change would have needed a new file; the
+policy is about the tag, not about the calendar, and this note exists so the
+distinction cannot be quietly reinterpreted later.
 
 **Why this one needs no countersignature and `candidates_schema_v0.2.md` does.**
 `CONTRACTS/` holds contracts of two different kinds. This grammar is *owned* by
@@ -37,12 +43,28 @@ document and that parser disagree, the parser is the defect.
 ```
 word_table:
   board                                   # never co-varies; implicit
-  object <Name> { <field>: <Type>, ... }  # observations only
+  object <Name> { <field>: <Type> [unique], ... }   # observations only
   <ObjName> [segment: <method> ev: <range> compress: <bytes>]
   domain   <name> { <v1>, <v2>, ... }     # NEW — a finite value set        (E-02)
   landmark <name>                         # NEW — a cell the level locates  (E-04)
   weights  <name> over <field>            # NEW — a potential the level fills (E-05)
 ```
+
+**`unique` on a field** (E-07) says: no two *live* instances of this type ever
+share a value of it. `pos: Int unique` is "pegs cannot stack". It is a fact
+about the world — pegs cannot, two ghosts in a corridor might — so it is
+per-world content in world-independent syntax, and it belongs to the manual
+rather than to any backend.
+
+It is a **claim, not a hint**, and carries its own proof obligation: the level's
+initial state satisfies it, and `step` preserves it. The second half is the one
+that matters, because a property that holds at the start and rots one move later
+would void every proof resting on it. A backend that uses the declaration
+without discharging it is doing the thing `semantics:` exists to prevent.
+
+An unrecognised field modifier is an **error**. The parser must not skip it: a
+dropped `unique` leaves a manual that reads as though it entails `conflict
+exclusive` and does not.
 
 `domain`, `landmark` and `weights` all declare a **name** whose **value** lives
 in the problem instance. That is the domain/problem split made writable: v0.1
@@ -101,8 +123,9 @@ objects intersect, and only those. Pairs are settled by two routes:
 1. **Guard analysis** — sound, incomplete, syntactic. Two guards are disjoint if
    they match different actions or differ in an action argument; if one requires
    a predicate the other negates; if they demand different colours of one cell;
-   if one requires `free(t)` and the other a non-background colour of `t`; or if
-   one requires `free(t)` and the other `t = wall`. Anything else is
+   if one requires `free(t)` and the other a non-background colour of `t`; if
+   one requires `free(t)` and the other `t = wall`; or if they pin two
+   *different* live instances to one value of a `unique` field. Anything else is
    **undischarged**, never "assumed fine".
 2. **Exhaustive sweep** — the predictor, run over every state the level can
    represent, **not** the reachable ones. Reachability is a property of one
@@ -115,10 +138,16 @@ A sweep may also discharge the obligation **conditionally**, relative to a
 because the machine produces both halves: a clean sweep under the condition and
 a concrete witness without it. A conditional discharge is simultaneously a
 defect report — the manual claims something it does not entail — and belongs in
-the ledger. **E-07** is the standing instance: `conflict exclusive` on a manual
-whose schema quantifies over a second instance cannot be entailed, because
-saying "no other live instance of this type is on this cell" needs quantification
-inside a guard, which this contract does not have and must not gain by hand.
+the ledger.
+
+**E-07 was the instance, and it is closed.** `conflict exclusive` on a manual
+whose schema quantifies over a second instance could not be entailed: saying
+"no other live instance of this type is on this cell" is not expressible in a
+guard. The fix was not to weaken the check but to give the manual somewhere to
+put the fact — `unique` on a field, revision item 12 — which is why the
+expressivity ledger is the prescribed response to a gap rather than a place
+things go to be forgotten. The conditional route remains for manuals that need
+the condition and do not declare it.
 
 ### events
 
@@ -231,6 +260,7 @@ silently.
 | 9 | weight vectors may come from a certificate | **E-06**, D-TC-013 | `gen_lean` read the numbers from the certificate and the other three backends read them only from the level, so a manual either hand-copied the engine's vector into a checked-in file or rendered a `theory.md` that named a potential it could not show |
 | 10 | a backend must refuse an unimplemented `semantics:` value | the `semantics:` proposal's own closing paragraph, and a defect found while finalising this version | `gen_pddl` reads only the AST — never the IR, never the predictor — so no guard reached it, and a manual declaring `frame reset` + `cascade multi_frame` compiled to a STRIPS encoding of `persist` + `single_frame` without a word of complaint |
 | 11 | `conflict` must be discharged, not merely declared | **E-07**, and this contract's own §semantics, which said "`certify` must prove it" while nothing did | for one revision the manual named which of constraint 9's two routes it claimed and no tool checked either. A declaration nobody verifies reads exactly like a verified one — strictly worse than not asking, because it looks like evidence |
+| 12 | `unique` on an object field | **E-07** | the peg manual declared `conflict exclusive` and could not entail it: its jump schema quantifies over a second peg and pins it only by position, so two groundings both claim the jumping peg whenever two pegs share a cell. The fact that pegs cannot stack was true of the world and had nowhere to be written down |
 
 Ledger entries E-01 through E-05 are **discharged** by this revision. E-03 was
 the one named as "the one to fix first"; it is item 1.

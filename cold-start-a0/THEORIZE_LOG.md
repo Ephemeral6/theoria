@@ -360,7 +360,7 @@ Things the world said that `dsl_grammar_v0.1` cannot.
 | E-04 | declaring a board landmark (`portal_exit`, the goal cell) | free-floating names resolved by the problem instance | the domain/problem boundary is real but unwritten; a reader of `theory.dsl` alone cannot tell which names are level data |
 | E-05 | a weight function over cells for a pagoda invariant | the vector lives in the problem instance (M5) | same as E-04 |
 | E-06 | a proof method for goals no linear pagoda covers | nothing — `CertificateGapError` refuses to generate | `goal count(Peg, alive) = 1` stays unproven: three of the five single-peg terminals admit no linear pagoda at all |
-| E-07 | saying that two live instances of one type never share a cell | nothing — the peg manual's `conflict exclusive` is discharged only *conditionally* | see below |
+| E-07 | saying that two live instances of one type never share a cell | **discharged** — `unique` on a field (`dsl_grammar_v0.2` revision item 12) | see below |
 
 E-03 is the one to fix first: a manual whose default behaviour is a comment is
 not a manual.
@@ -390,13 +390,30 @@ cannot carry it either: it reaches linear arithmetic, counts, parity and finite
 weights, and "these two positions differ" is none of those. `count(Peg, pos = c,
 alive = true) <= 1` would need a quantifier over cells that invariants lack.
 
-**Cost of not having it.** The strongest thing any tool can say about the peg
-manual is *conditional*: `exclusive` holds under a named condition
-(`distinct_positions`), fails without it, and both halves are machine-checked
-with a witness. That is a real result and it is weaker than the manual's own
-claim. It is the same shape as the finding behind D-TC-012 — a rule can be
-right as a *problem* solution and wrong as a *domain* — and it is the reason
-the check sweeps every representable state rather than the reachable ones.
+**Cost of not having it, while it lasted.** The strongest thing any tool could
+say about the peg manual was *conditional*: `exclusive` holds under a named
+condition (`distinct_positions`), fails without it, both halves machine-checked
+with a witness. A real result, and weaker than the manual's own claim. Same
+shape as the finding behind D-TC-012 — a rule can be right as a *problem*
+solution and wrong as a *domain* — and the reason the check sweeps every
+representable state rather than the reachable ones.
+
+**Discharged, 2026-07-28.** Not by weakening the check: by giving the manual
+somewhere to put the fact. `object Peg { pos: Int unique, alive: Bool }` says
+what was always true of the world, and with it guard analysis discharges all
+228 overlapping pairs directly — the conditional route is no longer reached.
+`unique` is itself an obligation rather than an assertion (`certify_uniqueness`:
+true initially, preserved by `step` across all 59,560 well-formed transitions),
+because a restriction nobody checks is how a manual comes to describe a world it
+does not have.
+
+Two hazards found and closed while adding it, both the same shape as the one
+`semantics:` exists to close: the field regex was unanchored, so `pos: Int
+unique` parsed as plain `pos: Int` and the modifier **vanished silently**; and
+the pretty-printer omitted it, so a parse→print→parse round trip produced a
+manual that no longer entailed its own `conflict exclusive` and looked entirely
+normal. An unrecognised field modifier is now an error, and the round-trip test
+compares fields rather than names.
 
 ---
 

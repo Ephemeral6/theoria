@@ -13,9 +13,9 @@ from pathlib import Path
 import pytest
 
 from theory_compiler.conflict import (
-    CLAIMED_ARGS, CONDITIONS, DISTINCT_POSITIONS, ConflictError,
-    cell_universe, certify_conflict, check_conflict, claimed_objects,
-    disjointness_reason,
+    CLAIMED_ARGS, CONDITIONS, DISTINCT_POSITIONS, ConflictError, Uniqueness,
+    cell_universe, certify_conflict, certify_uniqueness, check_conflict,
+    claimed_objects, disjointness_reason,
 )
 from theory_compiler.generators.gen_python import generate_python
 from theory_compiler.ir import build_ir
@@ -243,14 +243,28 @@ def _manuals():
 
 
 def _status(dsl: Path, problem: Path) -> dict:
+    """The same call `build_ir` makes, uniqueness context included.
+
+    The first version of this helper omitted `uniq=`, so it exercised a path
+    production never takes and reported peg as `conditional` long after the
+    `unique` declaration had made it green. A harness that measures a different
+    code path than the one that ships is worse than no harness: it goes on
+    agreeing with a stale expectation.
+    """
     ast = parse_theory(dsl.read_text(encoding="utf-8"))
     ir = build_ir(ast, load_problem(str(problem)))
+    uniq = Uniqueness(ast, ir.problem)
     report = check_conflict(ir.rules, ir.semantics, ir.problem.background,
-                            strict=False)
-    if report.green:
-        return {"status": "green", "route": "guard analysis"}
+                            strict=False, uniq=uniq)
     ns: dict = {}
     exec(generate_python(ast, ir.problem), ns)
+    if uniq:
+        # A disjointness proof that rests on `unique` is only worth as much as
+        # `unique` is, so the declaration is discharged before it is used.
+        certify_uniqueness(ns, uniq, cell_universe(ir.problem))
+    if report.green:
+        return {"status": "green", "route": "guard analysis",
+                "unique_fields": dict(uniq.unique_field)}
     report = certify_conflict(report, ns, ir.semantics, cell_universe(ir.problem))
     return report.swept
 
@@ -267,36 +281,82 @@ class TestInventory:
 
     @pytest.mark.parametrize("name,dsl,problem", _manuals(),
                              ids=[m[0] for m in _manuals()])
-    def test_every_manual_has_a_known_conflict_status(self, name, dsl, problem):
+    def test_every_manual_discharges_its_declared_conflict_policy(
+            self, name, dsl, problem):
         if not dsl.exists() or not problem.exists():
             pytest.skip("%s is not generated" % dsl)
         swept = _status(dsl, problem)
-        if name == "peg":
-            assert swept["status"] == "conditional", swept
-            assert swept["condition"] == DISTINCT_POSITIONS
-            assert swept["ledger"] == "E-07"
-        else:
-            assert swept["status"] == "green", (
-                "%s no longer discharges its declared conflict policy: %s"
-                % (name, json.dumps(swept, ensure_ascii=False)))
+        assert swept["status"] == "green", (
+            "%s no longer discharges its declared conflict policy: %s"
+            % (name, json.dumps(swept, ensure_ascii=False)))
 
-    def test_the_peg_gap_is_real_and_stays_measured(self):
-        """Both halves, so neither can rot.
+    def test_peg_discharges_only_because_of_the_unique_declaration(self):
+        """E-07, closed — and pinned to the reason it closed.
 
-        If the unconditional sweep ever came back clean the entry would be
-        stale and should be promoted to green; if the restricted one ever came
-        back dirty the manual would be wrong outright.
+        Delete `unique` from the peg manual and this manual stops entailing
+        its own `conflict exclusive`. Asserting the *mechanism* rather than
+        just the green keeps that from being rediscovered the hard way.
         """
-        swept = _status(FIXTURES / "peg_theory.dsl",
-                        FIXTURES / "peg5_problem.json")
-        assert swept["pairs_examined_unrestricted"] == 80000
-        assert swept["pairs_examined_restricted"] == 59560
-        state, action, message = swept["witness_without_the_condition"]
-        assert "both fire on" in message and "Peg_0" in message
-        assert CONDITIONS[swept["condition"]].startswith("no two live instances")
+        ast = parse_theory((FIXTURES / "peg_theory.dsl").read_text(encoding="utf-8"))
+        problem = load_problem(str(FIXTURES / "peg5_problem.json"))
+        ir = build_ir(ast, problem)
 
-    def test_the_condition_is_named_rather_than_anonymous(self):
-        """A conditional discharge is only a result if the reader can see what
-        it rests on."""
+        with_unique = check_conflict(ir.rules, ir.semantics, problem.background,
+                                     strict=False,
+                                     uniq=Uniqueness(ast, problem))
+        assert with_unique.green
+
+        without = check_conflict(ir.rules, ir.semantics, problem.background,
+                                 strict=False, uniq=None)
+        assert not without.green, (
+            "the peg manual now discharges without `unique`, so either the "
+            "manual changed or a new disjointness rule made E-07 moot — either "
+            "way this test and the ledger entry need revisiting")
+        assert len(without.undischarged) == 24
+
+    def test_the_unique_declaration_is_proved_not_assumed(self):
+        """`unique` restricts the state space, so it is itself an obligation.
+
+        Both halves: true of the initial state, and preserved by `step`. The
+        second is the one that matters — without it the declaration could hold
+        at the start, rot one move later, and void every disjointness proof
+        resting on it.
+        """
+        ast = parse_theory((FIXTURES / "peg_theory.dsl").read_text(encoding="utf-8"))
+        problem = load_problem(str(FIXTURES / "peg5_problem.json"))
+        ns: dict = {}
+        exec(generate_python(ast, problem), ns)
+        proof = certify_uniqueness(ns, Uniqueness(ast, problem),
+                                   cell_universe(problem))
+        assert proof["status"] == "proved"
+        assert proof["obligations"] == ["initial", "preserved"]
+        assert proof["well_formed_transitions_examined"] == 59560
+        assert proof["fields"] == {"Peg": "pos"}
+
+    def test_a_world_that_breaks_uniqueness_is_refused(self):
+        """The negative control: the check must be capable of failing.
+
+        A manual is free to declare `unique` on a field its rules do not in
+        fact keep unique, and then every proof built on it is void. Here two
+        pegs are placed on one cell in the level itself.
+        """
+        ast = parse_theory((FIXTURES / "peg_theory.dsl").read_text(encoding="utf-8"))
+        doc = json.loads((FIXTURES / "peg5_problem.json").read_text(encoding="utf-8"))
+        doc["objects"][1]["pos"] = doc["objects"][0]["pos"]
+        from theory_compiler.problem import from_json
+        problem = from_json(doc)
+        ns: dict = {}
+        exec(generate_python(ast, problem), ns)
+        with pytest.raises(ConflictError) as exc:
+            certify_uniqueness(ns, Uniqueness(ast, problem),
+                               cell_universe(problem))
+        assert "initial state" in str(exc.value)
+
+    def test_the_conditional_route_still_exists_for_manuals_without_unique(self):
+        """E-07 is closed for peg, not deleted from the tool.
+
+        A manual that needs the condition and does not declare it still gets a
+        named conditional discharge rather than a silent pass.
+        """
         assert DISTINCT_POSITIONS in CONDITIONS
-        assert CONDITIONS[DISTINCT_POSITIONS]
+        assert CONDITIONS[DISTINCT_POSITIONS].startswith("no two live instances")

@@ -230,9 +230,21 @@ class TheoryParser:
         if fields_str:
             for part in fields_str.split(","):
                 part = part.strip()
-                fm = re.match(r'(\w+)\s*:\s*(\w+)', part)
-                if fm:
-                    fields.append(Field(fm.group(1), fm.group(2)))
+                # Anchored, and trailing text is an error rather than debris.
+                # The previous pattern was `re.match(r'(\w+)\s*:\s*(\w+)')` with
+                # no `$`, so `pos: Int unique` parsed as a plain `pos: Int` and
+                # the modifier vanished without a word — the v0.1-parser hazard
+                # (skip what you do not recognise, compile a different world)
+                # reproduced inside one line.
+                fm = re.match(r'(\w+)\s*:\s*(\w+)(?:\s+(unique))?\s*$', part)
+                if not fm:
+                    raise ParseError(
+                        f"cannot parse field {part!r} in object {name}. The "
+                        f"form is `<name>: <Type>` with an optional `unique` "
+                        f"modifier (E-07); anything else is refused rather "
+                        f"than skipped.", self.pos + 1)
+                fields.append(Field(fm.group(1), fm.group(2),
+                                    unique=bool(fm.group(3))))
         self.pos += 1
         return ObjectDecl(name, fields)
 

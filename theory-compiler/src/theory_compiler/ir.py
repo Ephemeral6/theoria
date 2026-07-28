@@ -334,9 +334,10 @@ def build_ir(ast: TheoryAST, problem: ProblemSpec, certificate=None,
                             and any("`weights %s " % n in w for n in filled))]
 
     if check_conflicts:
-        from .conflict import check_conflict
+        from .conflict import Uniqueness, check_conflict
         report = check_conflict(rules, ast.semantics, problem.background,
-                                strict=False)
+                                strict=False,
+                                uniq=Uniqueness(ast, problem))
         warnings.extend(report.warnings())
 
     return WorldIR(

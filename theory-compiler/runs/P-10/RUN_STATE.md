@@ -3,7 +3,7 @@
 Prompt: `monitor/prompts/P-10-contracts-v02.md` · branch `agent/p10-contracts-v02` ·
 base `edb3c37` · 2026-07-28.
 
-一次开窗，五项清偿。契约两份、缺陷两条、回归四份，外加 `conflict` 证明义务。
+一次开窗，七项清偿。契约两份、缺陷两条、回归四份，外加 `conflict` 证明义务与它抓出的 E-07。
 
 ---
 
@@ -81,7 +81,7 @@ base `edb3c37` · 2026-07-28.
 的说明书**——`press_left` 与 `door_opens_left` 守卫逐字相同，是级联，一个 claim
 Button 一个 claim Door。所以只在 claim 集相交的规则对上要求互斥。
 
-两条路线，报告说明是哪条付的账：**守卫分析**（五条可判定理由，健全不完备）与
+两条路线，报告说明是哪条付的账：**守卫分析**（六条可判定理由，健全不完备）与
 **穷举扫描**（预测器跑每一个**可表示**状态，不是可达状态）。`build_ir` 只警告不报错
 ——`gen_python` 是穿过 `build_ir` 造预测器的，在那里报错等于把穷举路线要用的预测器
 一起否掉；致命判定在 `certify_conflict`，也正是契约原文说的位置。
@@ -95,6 +95,29 @@ claim 同一枚跳棋，只要另外两枚共格就同时触发。80,000 个可�
 
 **与 A1 那个错同形**：规则作为 problem 解是对的，作为 domain 是错的。可达集里两枚棋
 从不共格，所以任何重放都永远看不见它。
+
+### 7 · E-07 清偿——给说明书一个地方写下它
+
+**不是把检查放松。** 加 `unique` 字段修饰符（契约修订记录第 12 条）：
+`object Peg { pos: Int unique, alive: Bool }`。这条世界事实一直为真、一直没处可写；
+有了它，守卫分析把 228 对重叠规则**全部**直接判绿，条件路线不再被走到。
+**七份说明书现在全部 green。**
+
+想过并否掉的三条：把 `exclusive` 读弱成「可达态上成立」（正是 A1 犯过的错）；
+改判 `conflict priority:`（要给 24 条生成名的接地规则写全序，而且「谁赢」在这里是
+假问题）；把「同类实例不共格」**内置进检查器**（不健全——有的世界里两个东西就是
+可以同格）。`unique` 把它放回说明书，语法跨局同一、内容随局变。
+
+**`unique` 自己也是义务**：`certify_uniqueness` 证初始态成立**且** `step` 保持
+（59,560 条良构转移全扫）。只证前一半，就是 `semantics:` 要关的洞在低一层重演。
+
+**加它时抓到两个同形隐患**，都已修：字段正则没锚定，`pos: Int unique` 被解析成普通
+`pos: Int`，修饰符**静默消失**；漂亮打印器不发 `unique`，于是 parse→print→parse
+一圈之后得到一份**不再蕴含自己 `conflict exclusive`**、而且看起来完全正常的说明书。
+现在不认识的字段修饰符是错误，round-trip 测试比字段不比名字。
+
+**条件路线保留**：需要该条件却不声明的说明书，仍然只拿到具名的有条件结论加一个反例。
+E-07 对孔明棋清偿是因为孔明棋现在**说得出**那件事，不是因为这个问题被判定不重要。
 
 ---
 
@@ -138,8 +161,7 @@ claim 同一枚跳棋，只要另外两枚共格就同时触发。80,000 个可�
   不等待。
 * **E-06 的证明那一半仍然 open。** 见上。
 * ~~**`conflict` 的证明义务无人校验。**~~ **本轮追加清偿**，见上面第 6 节。
-* **E-07（新）**：守卫语言无法表达「两个同类实例不共格」，所以孔明棋说明书的
-  `conflict exclusive` 只能**有条件**成立。不是检查器的不完备，是说明书说不出来。
+* ~~**E-07**~~ **已清偿**，见上面第 7 节。
 * **`frame reset` / `conflict priority:` / `cascade multi_frame` 三个取值无后端。**
   全部报错，不近似。
 * **共享 `gen_pddl` 不消费 `ProblemSpec`。** 它的签名是
@@ -157,8 +179,8 @@ claim 同一枚跳棋，只要另外两枚共格就同时触发。80,000 个可�
 ## Tests
 
 ```
-theory-compiler          191 passed          (THEORIA_REQUIRE_LEAN=1，含真 Lean 编译)
-theory-compiler          183 passed, 8 skipped   (无 lean 时的默认)
+theory-compiler          195 passed          (THEORIA_REQUIRE_LEAN=1，含真 Lean 编译)
+theory-compiler          187 passed, 8 skipped   (无 lean 时的默认)
 cold-start-a0             56 passed          (LEAN=… 时；无 lean 时 53 passed, 3 skipped)
 ```
 

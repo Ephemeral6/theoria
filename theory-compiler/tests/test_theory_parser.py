@@ -138,8 +138,11 @@ class TestPegTheory:
         assert wt.has_board is True
         assert len(wt.objects) == 1
         assert wt.objects[0].name == "Peg"
-        assert wt.objects[0].fields[0] == Field("pos", "Int")
+        # E-07: `pos` carries the `unique` modifier, which is what makes this
+        # manual entail its own `conflict exclusive`.
+        assert wt.objects[0].fields[0] == Field("pos", "Int", unique=True)
         assert wt.objects[0].fields[1] == Field("alive", "Bool")
+        assert wt.objects[0].fields[1].unique is False
 
     def test_events_parsed(self):
         es = self.ast.events
@@ -181,6 +184,11 @@ class TestPegTheory:
         printed = print_theory(self.ast)
         ast2 = parse_theory(printed)
         assert ast2.word_table.objects[0].name == "Peg"
+        # E-07. This assertion is the whole reason to compare fields and not
+        # just names: the printer used to emit `pos: Int`, so a round trip
+        # produced a manual that no longer entailed its own `conflict
+        # exclusive` — and looked completely normal.
+        assert ast2.word_table.objects[0].fields == self.ast.word_table.objects[0].fields
         assert len(ast2.rules.rules) == len(self.ast.rules.rules)
         for r1, r2 in zip(self.ast.rules.rules, ast2.rules.rules):
             assert r1.name == r2.name
@@ -253,3 +261,35 @@ class TestNestedParensInEventArgs:
             self._rule("act=push(Cart, up) and free(above(Cart) "
                        "then moved(Cart, up)")
         assert "unbalanced" in str(exc.value).lower()
+
+
+# ------------------------------------------------------- E-07 · the modifier
+
+def test_unique_is_parsed_and_defaults_off():
+    from theory_compiler.parser.theory_parser import parse_theory as _p
+    src = ("word_table:\n  board\n  object Peg { pos: Int unique, alive: Bool }\n"
+           "semantics:\n  frame persist\n  conflict exclusive\n"
+           "  cascade single_frame\n"
+           "events:\n  event removed(p)\n"
+           "rules:\n  rule r\n    when act=jump(Peg, left) then removed(Peg)\n"
+           "goal:\n  goal count(Peg, alive = true) = 1\n")
+    fields = _p(src).word_table.objects[0].fields
+    assert fields[0].unique is True and fields[1].unique is False
+
+
+def test_an_unknown_field_modifier_is_refused_not_dropped():
+    """The regex used to be unanchored, so `pos: Int unique` parsed as a plain
+    `pos: Int` and the modifier vanished silently — the v0.1-parser hazard
+    (skip what you do not recognise, compile a different world) reproduced
+    inside a single line. A dropped `unique` is worse than a rejected one: the
+    manual reads as though it entails `conflict exclusive` and does not."""
+    from theory_compiler.parser.theory_parser import parse_theory as _p, ParseError
+    src = ("word_table:\n  board\n  object Peg { pos: Int frobnicate, alive: Bool }\n"
+           "semantics:\n  frame persist\n  conflict exclusive\n"
+           "  cascade single_frame\n"
+           "events:\n  event removed(p)\n"
+           "rules:\n  rule r\n    when act=jump(Peg, left) then removed(Peg)\n"
+           "goal:\n  goal count(Peg, alive = true) = 1\n")
+    with pytest.raises(ParseError) as exc:
+        _p(src)
+    assert "frobnicate" in str(exc.value)
