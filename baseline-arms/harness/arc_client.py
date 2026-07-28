@@ -56,7 +56,7 @@ import urllib.error
 import urllib.request
 from typing import Any, Dict, List, Optional, Tuple
 
-from . import ledger
+from . import ledger, spend
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TRACK = os.path.dirname(HERE)
@@ -92,8 +92,28 @@ def sealed_pile(path: str = PILES_PATH):
     return set(load_piles(path)["sealed_pile"])
 
 
+def env_file() -> str:
+    """Where `.env` lives, from a checkout or from a linked worktree of one.
+
+    `.env` is gitignored, so it does not travel with a branch -- and CLAUDE.md
+    instructs every agent to work in `.worktrees/<id>/`, where the file
+    therefore does not exist. Resolving only against the importing checkout made
+    the credential unreachable from exactly the place the conventions say to
+    work, so a worktree falls back to the main checkout, which is the same
+    resolution `proxy/spend_gate.py` uses for the pool ledger and for the same
+    reason. The key is still read, still only from a gitignored file, and still
+    never copied anywhere.
+    """
+    here = os.path.join(REPO, ".env")
+    if os.path.exists(here):
+        return here
+    from proxy.spend_gate import main_checkout
+    main = main_checkout(REPO)
+    return os.path.join(main, ".env") if main else here
+
+
 def load_api_key(env_path: Optional[str] = None) -> str:
-    path = env_path or os.path.join(REPO, ".env")
+    path = env_path or env_file()
     if not os.path.exists(path):
         raise RuntimeError(
             "%s not found. Copy .env.example to .env and set ARC_API_KEY." % path
@@ -152,8 +172,13 @@ def issued_cookie_names(headers: Any) -> List[str]:
 
 class ArcClient:
     def __init__(self, api_key: Optional[str] = None, base_url: str = BASE_URL,
-                 timeout: int = 30, cookies: bool = True):
+                 timeout: int = 30, cookies: bool = True,
+                 spend_binding: Optional["spend.SpendBinding"] = None):
         self._key = api_key or load_api_key()
+        #: The claim on the shared pool this client spends against. There is no
+        #: default and no way to switch it off: `request()` refuses without one.
+        #: See `harness/spend.py` and `proxy/SPEND_GATE.md`.
+        self.spend = spend_binding
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
         self.sealed = sealed_pile()
@@ -205,6 +230,19 @@ class ArcClient:
     # -- transport ---------------------------------------------------------
     def request(self, method: str, path: str, body: Optional[Dict[str, Any]] = None,
                 note: str = "", raise_on_error: bool = True) -> Tuple[int, Any]:
+        # The gate, on the first line of the path that spends. Not a convention
+        # a caller has to remember: a client with no claim on the shared pool
+        # cannot open a socket at all. INC-BA-003's second session obeyed every
+        # rule it knew about; the rule it needed did not exist to be known, so
+        # this one is a function that raises rather than a paragraph.
+        if self.spend is None:
+            raise spend.NoSpendBinding(
+                "this ArcClient has no claim on the shared spend pool, so an "
+                "outbound request to %s would be money nobody can total. "
+                "Construct it with `ArcClient(spend_binding=...)` -- see "
+                "harness/spend.py and proxy/SPEND_GATE.md." % path)
+        self.spend.check_action(1)                # refuses before the socket
+
         url = self.base_url + path
         headers = {"X-API-Key": self._key, "Accept": "application/json"}
         payload = None
@@ -267,6 +305,15 @@ class ArcClient:
             "cookies_sent": sent,
             "cookies_held_after": self.cookies_held(),
         })
+
+        # Charged after the probe line is on disk, and charged whatever the
+        # status was. A 400 crossed the wire, counted against the rate limit and
+        # happened; a pool that only counts successes is a pool that undercounts
+        # itself by exactly D-005's 5-11x retry amplification. If this raises,
+        # the cap was reached -- the spend is already recorded, and the refusal
+        # is the point.
+        self.spend.record_action(1, detail={"path": path, "status": status,
+                                            "note": note})
 
         if status >= 400 or status < 0:
             if raise_on_error:

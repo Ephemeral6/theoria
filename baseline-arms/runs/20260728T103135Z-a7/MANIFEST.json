@@ -1,0 +1,9 @@
+{
+  "base_commit": "979e0bce5766c28f5a13bddfc84521616609fe10",
+  "branch": "agent/a7-envelope-finish",
+  "prompt_id": "A7-envelope-finish",
+  "scope": "variance envelope: g50t / sk48 / tn36 x 3 repeats, haiku tier, 30-action budget; ar25 keeps its degraded annotation and is not re-run",
+  "territory": "baseline-arms",
+  "utc": "2026-07-28T10:31:36Z",
+  "worker": "APP-A7"
+}

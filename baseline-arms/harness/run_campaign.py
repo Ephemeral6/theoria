@@ -35,12 +35,17 @@ import threading
 import time
 from typing import Any, Dict, List, Optional
 
-from . import arc_client, bare_cc, ledger
+from . import arc_client, bare_cc, ledger, spend
 
 TRACK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DIR = os.path.join(TRACK, "out")
 CELLS_PATH = os.path.join(OUT_DIR, "campaign_cells.jsonl")
 GATE_PATH = os.path.join(OUT_DIR, "campaign_gate.json")
+#: Append-only, tracked. Adjudications: which cells have been ruled on, by
+#: whom, and what was fixed as a result. See `barriers()` and G4 below.
+BARRIERS_PATH = os.path.join(OUT_DIR, "campaign_barriers.jsonl")
+
+CAMPAIGN_NAME = "phase3-variance-envelope"
 
 CAMPAIGN_TIER = bare_cc.MODEL_TIERS["cheap"]
 REPEATS = 3
@@ -78,6 +83,82 @@ COMPUTE_SECONDS_CAP = 20 * 3600
 MIN_ACTIONS_FOR_RATIOS = 20     # ratios are noise below this
 
 DEAD_OUTCOMES = ("no_reset_window", "harness_error", "model_error", "api_unusable")
+#: Outcomes that are NOT dead cells, spelled out because two of them are new and
+#: the distinction is load-bearing. `failure_grind` is an episode that spent its
+#: budget and failed a lot of actions -- a result about the arm, measured by G5
+#: and G2, not evidence the API is down. `spend_gate_tripped` is the pool
+#: refusing, which is a correct stop and says nothing about the API at all.
+#: Filing either under a dead outcome would put a *finding* into G4's streak and
+#: stop the campaign for having measured something.
+LIVE_OUTCOMES = ("budget_exhausted", "failure_grind", "spend_gate_tripped",
+                 "win", "game_over", "gave_up", "unparseable_reply",
+                 "spend_ceiling_hit")
+
+
+# ------------------------------------------------------------------- barriers
+def barriers() -> List[Dict[str, Any]]:
+    """Adjudications, oldest first. See `evaluate_gate` for what they change.
+
+    A budget gate is a stop-and-adjudicate mechanism, but the first version had
+    no way to record that the adjudication had happened -- so G4, once tripped,
+    was permanent, and BUDGET_REPORT section 11.5's "re-runs just append, and
+    `--gate-only` can re-adjudicate at any time" was not actually reachable.
+    A barrier is that record.
+
+    **The rule for what a barrier moves, stated once so it is not discovered one
+    gate at a time.** The eight thresholds are two kinds:
+
+      * **Condition clocks** -- G4 (consecutive dead cells) and G6a (real time
+        since the first cell started). Each is a claim about what is happening
+        *now*: "the API is failing repeatedly", "this has been running all day".
+        A barrier restarts both, because a campaign that ran for twenty-four
+        minutes, stopped on a correct refusal, was diagnosed, and resumed
+        sixteen hours later has neither a live failure streak nor a day of
+        running behind it -- it has a gap, and measuring the gap is a unit
+        error of the same family as the one that split G6 in two.
+      * **Cumulative sums** -- G1, G1b, G2, G3, G5, G6b, G7. Every one of them
+        keeps summing every cell ever recorded, adjudicated or not. Money spent
+        is never forgiven, compute hours already burned still count, and a
+        sealed-pile contact is not something an adjudication can retire. A
+        barrier that reset a dollar total would be the "raise the threshold
+        until it goes green" move that section 11.3 exists to forbid, and the
+        test for it is here: `test_a_barrier_moves_g4_and_nothing_else`.
+
+    And it has to say what was fixed. `remediations` is required and a barrier
+    with an empty one is refused, because the entire difference between an
+    adjudication and a mute button is whether something changed.
+    """
+    if not os.path.exists(BARRIERS_PATH):
+        return []
+    out = []
+    for line in open(BARRIERS_PATH, encoding="utf-8"):
+        line = line.strip()
+        if not line:
+            continue
+        record = json.loads(line)
+        if not record.get("remediations"):
+            raise ValueError(
+                "%s has a barrier with no `remediations` (%r). A barrier that "
+                "does not say what was fixed is a gate being silenced, which is "
+                "the one move BUDGET_REPORT.md section 11.3 rules out."
+                % (BARRIERS_PATH, record.get("barrier_id")))
+        out.append(record)
+    return out
+
+
+def cells_after_last_barrier(cells: List[Dict[str, Any]],
+                             bars: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """The cells G4 still judges: everything after the last adjudicated run_id."""
+    if not bars:
+        return cells
+    last = bars[-1].get("adjudicated_through_run_id")
+    ids = [c.get("run_id") for c in cells]
+    if last not in ids:
+        # Fail closed: a barrier naming a cell that is not in the record cannot
+        # be positioned, so it is not applied. Judging everything is the safe
+        # direction -- it can only stop the campaign, never let it run on.
+        return cells
+    return cells[ids.index(last) + 1:]
 
 
 # ------------------------------------------------------------------ ledgering
@@ -116,6 +197,11 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
     spending the money is not a gate.
     """
     tripped: List[str] = []
+    # `judged` is the post-adjudication segment: what the two condition clocks
+    # (G4, G6a) look at. Everything else below sums `cells`, all of them.
+    bars = barriers()
+    judged = cells_after_last_barrier(cells, bars)
+
     total_cost = sum(c.get("cost_usd", 0.0) or 0.0 for c in cells)
     total_ok = sum(c.get("actions_ok", 0) or 0 for c in cells)
     total_failed = sum(c.get("actions_failed", 0) or 0 for c in cells)
@@ -152,14 +238,21 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
             tripped.append("G5 action success %.3f < floor %.2f" % (rate, ACTION_SUCCESS_FLOOR))
 
     streak = 0
-    for c in cells:
+    for c in judged:
         streak = streak + 1 if c.get("outcome") in DEAD_OUTCOMES else 0
         if streak >= CONSECUTIVE_DEAD_CAP:
-            tripped.append("G4 %d consecutive dead cells, last %s (%s)"
-                           % (streak, c.get("run_id"), c.get("outcome")))
+            tripped.append("G4 %d consecutive dead cells, last %s (%s)%s"
+                           % (streak, c.get("run_id"), c.get("outcome"),
+                              (" [judging %d of %d cells, after barrier %s]"
+                               % (len(judged), len(cells), bars[-1]["barrier_id"]))
+                              if bars else ""))
             break
 
-    elapsed = elapsed_seconds(cells)
+    # G6a is a condition clock: real time since the *current* segment's first
+    # cell. Measured across an adjudicated stop it would count the stop itself,
+    # which is a duration nobody spent and nothing was running for. G6b below
+    # is the work-done clock and keeps summing every cell ever recorded.
+    elapsed = elapsed_seconds(judged)
     if elapsed is not None and elapsed > ELAPSED_SECONDS_CAP:
         tripped.append("G6a elapsed %.1f h > cap %.1f h"
                        % (elapsed / 3600, ELAPSED_SECONDS_CAP / 3600))
@@ -180,6 +273,13 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
         "state": "red" if tripped else "green",
         "tripped": tripped,
         "evaluated_at": ledger.utcnow(),
+        # Printed and persisted whether or not G4 fires, so a green gate can
+        # never quietly be green *because* of a barrier nobody noticed.
+        "barriers": [{"barrier_id": b["barrier_id"],
+                      "adjudicated_through_run_id": b.get("adjudicated_through_run_id"),
+                      "utc": b.get("utc"),
+                      "remediations": b.get("remediations")} for b in bars],
+        "g4_judges_cells": len(judged),
         "totals": {
             "cells": len(cells),
             "cost_usd": round(total_cost, 4),
@@ -188,8 +288,10 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
             "actions_failed": total_failed,
             "http_calls": total_http,
             "compute_seconds": round(total_wall, 1),
-            "elapsed_seconds": (round(elapsed_seconds(cells), 1)
-                                if elapsed_seconds(cells) is not None else None),
+            "elapsed_seconds": round(elapsed, 1) if elapsed is not None else None,
+            "elapsed_seconds_all_cells": (
+                round(elapsed_seconds(cells), 1)
+                if elapsed_seconds(cells) is not None else None),
             "http_per_action": round(total_http / total_ok, 2) if total_ok else None,
             "action_success_rate": (round(total_ok / (total_ok + total_failed), 3)
                                     if (total_ok + total_failed) else None),
@@ -226,35 +328,125 @@ def print_gate(gate: Dict[str, Any]) -> None:
              (t["compute_seconds"] or 0) / 3600))
     print("  $/action %s | http/action %s | success %s"
           % (t["usd_per_action"], t["http_per_action"], t["action_success_rate"]))
-    for tier, spend in sorted(t["cost_by_tier"].items()):
-        print("  tier %-28s $%.4f / cap $%.2f" % (tier, spend, TIER_USD_CAP.get(tier, 0.0)))
+    for tier, tier_spend in sorted(t["cost_by_tier"].items()):
+        print("  tier %-28s $%.4f / cap $%.2f"
+              % (tier, tier_spend, TIER_USD_CAP.get(tier, 0.0)))
+    # Always printed, never only when G4 fires: a green gate must not be green
+    # because of a barrier the reader did not know was there.
+    for bar in gate.get("barriers", []):
+        print("  BARRIER %s (%s): G4 judges the %d cell(s) after %s"
+              % (bar["barrier_id"], bar.get("utc"), gate.get("g4_judges_cells", 0),
+                 bar.get("adjudicated_through_run_id")))
     for reason in gate["tripped"]:
         print("  TRIPPED: %s" % reason)
 
 
+def print_pool(when: str) -> None:
+    """The shared pool, across every campaign and every session.
+
+    Printed at both ends of a game because the number that matters is the one
+    INC-BA-003 could not see: not what this campaign spent, but what the pool
+    holds in total while other sessions are also drawing on it.
+    """
+    try:
+        gate = spend.SpendGate()
+        totals = gate.totals()
+    except spend.SpendGateError as exc:
+        print("\n=== shared spend pool (%s): UNAVAILABLE ===\n  %s" % (when, exc))
+        return
+    print("\n=== shared spend pool (%s) ===" % when)
+    print("  spent $%.4f / $%.2f   %d / %d actions   (%d live reservation(s))"
+          % (totals.usd, totals.ceiling_usd, totals.actions,
+             totals.ceiling_actions, len(totals.live)))
+    for name, bucket in sorted(totals.by_campaign.items()):
+        print("    %-34s $%8.4f  %6d actions" % (name, bucket["usd"], bucket["actions"]))
+    if len(totals.live) > 1:
+        print("  NOTE: %d concurrent reservations on one pool -- counted, which "
+              "is what INC-BA-003 could not do." % len(totals.live))
+
+
 # --------------------------------------------------------------------- runner
+def cell_caps(model: str, budget: int) -> Dict[str, Any]:
+    """What one cell may claim from the shared pool.
+
+    Both numbers are the campaign's own gates, restated as a claim rather than
+    computed afresh, so there is one threshold and not two that can drift:
+
+      * dollars -- G2's ceiling exactly (`CELL_COST_MULTIPLE` x the tier's pilot
+        unit price x the action budget). A cell that would exhaust its
+        reservation is a cell G2 was about to fail anyway; the difference is
+        that the pool refuses it before the money leaves rather than after.
+      * actions -- G3's ceiling (`HTTP_PER_ACTION_CAP` x budget) plus the
+        episode's fixed overhead: the RESET envelope retries up to 30 times and
+        the scorecard is opened once and closed with up to 8 retries.
+    """
+    unit = PILOT_UNIT.get(model, {}).get("usd_per_action")
+    usd = (CELL_COST_MULTIPLE * unit * budget) if unit is not None else 5.00
+    overhead = 30 + 1 + 8
+    return {"usd": round(usd, 4),
+            "actions": int(HTTP_PER_ACTION_CAP * budget) + overhead}
+
+
 def run_repeat(game_id: str, model: str, budget: int, rep: int,
                results: Dict[int, Dict[str, Any]], lock: threading.Lock) -> None:
     started = time.time()
+    caps = cell_caps(model, budget)
+    binding = None
+    #: Bound before the try so the `finally` cannot raise a NameError over the
+    #: top of a SealedGameError -- the one exception here that is re-raised, and
+    #: the one that must never be masked.
+    summary: Optional[Dict[str, Any]] = None
+
+    def dead(outcome: str, exc: Exception) -> Dict[str, Any]:
+        return {"run_id": None, "arm": "bare_cc", "game_id": game_id,
+                "model": model, "budget": budget, "outcome": outcome,
+                "error": "%s: %s" % (type(exc).__name__, exc),
+                "spend_gate_rule": getattr(exc, "rule", None),
+                "actions_ok": 0, "actions_failed": 0, "model_calls": 0,
+                "cost_usd": 0.0, "http_calls_gameplay": 0}
+
     try:
-        summary = bare_cc.play(game_id, model, budget, verbose=False)
+        # One reservation per cell, not per campaign. Three repeats run
+        # concurrently, so a shared claim would give three threads one set of
+        # counters and no cell could say what it had spent -- which is
+        # INC-BA-003's third damage (an append-only file mixing campaigns with
+        # no line able to say which was which) reproduced one level down. Per
+        # cell, the reservation id lands in the cell record and the attribution
+        # is exact rather than reconstructed.
+        binding = spend.open_binding(
+            CAMPAIGN_NAME, caps["usd"], caps["actions"],
+            holder={"game_id": game_id, "model": model, "repeat": rep,
+                    "budget": budget, "runner": "run_campaign"},
+            ttl_seconds=7200)
+        summary = bare_cc.play(game_id, model, budget, verbose=False,
+                               spend_binding=binding)
     except arc_client.SealedGameError:
         raise
+    except spend.SpendGateError as exc:
+        # The pool refused. Not a harness fault and not an API fault: a correct
+        # refusal, recorded with the rule that produced it.
+        summary = dead("spend_gate_tripped", exc)
     except Exception as exc:
-        summary = {"run_id": None, "arm": "bare_cc", "game_id": game_id,
-                   "model": model, "budget": budget, "outcome": "harness_error",
-                   "error": "%s: %s" % (type(exc).__name__, exc),
-                   "actions_ok": 0, "actions_failed": 0, "model_calls": 0,
-                   "cost_usd": 0.0, "http_calls_gameplay": 0}
+        summary = dead("harness_error", exc)
+    finally:
+        if binding is not None:
+            # Give the unspent remainder back. What was spent stays against the
+            # pool for ever; only the *hold* is released.
+            if summary is not None:
+                summary["spend"] = summary.get("spend") or binding.describe()
+            binding.release("cell finished")
+    summary["cell_caps"] = caps
     summary["wall_seconds"] = round(time.time() - started, 1)
     summary["repeat"] = rep
-    summary["campaign"] = "phase3-variance-envelope"
+    summary["campaign"] = CAMPAIGN_NAME
     with lock:
         results[rep] = summary
-    print("  [rep %d] %s -> %s (%d ok / %d failed, $%.4f, %.0fs)"
+    print("  [rep %d] %s -> %s (%d ok / %d failed, longest fail run %s, "
+          "$%.4f, %.0fs)"
           % (rep, model, summary["outcome"], summary.get("actions_ok", 0),
-             summary.get("actions_failed", 0), summary.get("cost_usd", 0.0),
-             summary["wall_seconds"]), flush=True)
+             summary.get("actions_failed", 0),
+             summary.get("actions_failed_consecutive_max", "?"),
+             summary.get("cost_usd", 0.0), summary["wall_seconds"]), flush=True)
 
 
 def run_game(game_id: str, model: str, repeats: int, budget: int) -> List[Dict[str, Any]]:
@@ -294,6 +486,7 @@ def main(argv=None) -> int:
         gate = evaluate_gate(load_cells())
         write_gate(gate)
         print_gate(gate)
+        print_pool("now")
         return 3 if gate["state"] == "red" else 0
 
     if not args.game:
@@ -316,6 +509,7 @@ def main(argv=None) -> int:
         print("\ngate is already RED -- not starting %s" % game_id)
         return 3
 
+    print_pool("before %s" % game_id)
     cells = run_game(game_id, args.model, args.repeats, args.budget)
     for cell in cells:
         append_cell(cell)
@@ -323,6 +517,7 @@ def main(argv=None) -> int:
     gate = evaluate_gate(load_cells())
     write_gate(gate)
     print_gate(gate)
+    print_pool("after %s" % game_id)
     print(json.dumps(cells, indent=2, sort_keys=True))
     return 3 if gate["state"] == "red" else 0
 
