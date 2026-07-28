@@ -1,0 +1,61 @@
+{
+  "prompt_id": "P7-paper-section7",
+  "worker": "APP-P7",
+  "branch": "agent/p7-paper-section7",
+  "base_commit": "f1346fb97b5b739f9e03355cb335e8bd302a54ca",
+  "utc": "2026-07-28T10:20:14Z",
+  "territory": "papers",
+  "deliverables": [
+    {
+      "id": "1",
+      "what": "sections/11_related.md rewritten -- six lines of related work, every citation cross-verified against two independent sources",
+      "path": "papers/phase1-workshop/sections/11_related.md"
+    },
+    {
+      "id": "1b",
+      "what": "the bibliography REVIEW E2 asks for; records that could not be confirmed twice are absent rather than hedged",
+      "path": "papers/phase1-workshop/references.bib"
+    },
+    {
+      "id": "2",
+      "what": "sections/07_battery.md re-derived against battery v2; every number read from battery/artifacts/*.json",
+      "path": "papers/phase1-workshop/sections/07_battery.md"
+    },
+    {
+      "id": "3",
+      "what": "REVIEW.md open items triaged by cost of fix: writing / re-derive / new experiment",
+      "path": "papers/phase1-workshop/REVIEW_TRIAGE.md"
+    }
+  ],
+  "method": {
+    "literature": "six parallel subagents, one per line of related work, each required to cross-verify every bibliographic record against two independent sources and to record the exact URLs and what each confirmed; a record confirmable only once was dropped",
+    "adversarial_check": "two independent re-check passes over samples of the confirmed set, chosen adversarially rather than randomly",
+    "battery": "numbers read directly from battery/artifacts/*.json rather than transcribed from battery/REPORT_V2.md prose; report-only statements are attributed to the report"
+  },
+  "artefacts_read": [
+    "battery/artifacts/capability_spectrum.json",
+    "battery/artifacts/discrimination.json",
+    "battery/artifacts/discrimination_arms.json",
+    "battery/artifacts/gaming_audit.json",
+    "battery/artifacts/redundancy.json",
+    "battery/artifacts/validation_material.json",
+    "battery/REPORT_V0.md",
+    "battery/REPORT_V1.md",
+    "battery/REPORT_V2.md",
+    "battery/DECISIONS.md",
+    "battery/STATUS.md",
+    "baseline-arms/SCHEMA_LOCATE.md",
+    "papers/phase1-workshop/REVIEW.md",
+    "papers/phase1-workshop/CITECHECK.md",
+    "papers/phase1-workshop/OPEN_ITEMS.md",
+    "papers/phase1-workshop/OUTLINE.md"
+  ],
+  "network": {
+    "used": true,
+    "why": "bibliographic verification only -- DOI resolution, catalogue and proceedings lookups",
+    "arc_api_calls": 0,
+    "game_spend": 0,
+    "sealed_pile_reads": 0
+  },
+  "files": []
+}

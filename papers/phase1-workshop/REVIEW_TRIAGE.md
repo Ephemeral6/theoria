@@ -108,6 +108,15 @@ reversibility · §9.1 cites the ARC determinism precheck without putting 9/9, 3
 9/9, 9/9 in the sentence · the abstract drops "unplanned" from the Lean catch ·
 typography, mixed `·` and `—`, 重证 glossed two ways.
 
+**New, found at P7 and not in either audit — subsection numbers survived the
+renumber.** `runs/20260728T092517Z-P6/SECTION_RENUMBER.md` says only the `## n ·`
+heading line changed in the three moved files, and that is exactly the problem:
+`sections/10_limitations.md` still numbers its subsections **7.1–7.5**, and
+`sections/11_related.md` numbered its subsections **8.1–8.2** until P7 fixed that
+file. So the paper contains two §7.1s and two §7.3s, and any cross-reference to
+"§7.x" is ambiguous between the battery section and the limitations section. `W`,
+one pass over `sections/10_limitations.md`, plus a sweep for cross-references.
+
 Open, **R**: `arc-recon/README.md:185` still says all 25 games are
 `never_audited` while the same file says the log supersedes it — a repo fix, not a
 paper fix, and it needs the log read · `battery/METRICS.md:7` and
