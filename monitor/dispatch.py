@@ -3,6 +3,17 @@
     python monitor/dispatch.py                 # launch every pending prompt
     python monitor/dispatch.py --only R-1      # launch a specific one
     python monitor/dispatch.py --dry-run       # show the plan, launch nothing
+    python monitor/dispatch.py --health        # content-free liveness report
+
+Context isolation contract (the reason --health exists):
+executor sessions run in their own processes with their own context windows;
+nothing flows back into the monitor unless the monitor reads it. The monitor
+therefore audits executors ONLY through their public interface — branches,
+commits, RUN_STATE/STATUS files, runs/ archives, PARTNER_SYNC — never their
+transcripts. dispatch-logs/ exist solely for launch-failure forensics
+(CLI/auth errors); --health reports pid-alive / log-size / branch-created
+WITHOUT reading log content, and reading a log body is warranted only when a
+launch died before its branch appeared.
 
 "Pending" = a P-*/R-*/M-* file in monitor/prompts/ whose agent branch does not
 exist yet (local or remote). The branch check is the anti-double-run guard:
@@ -80,13 +91,43 @@ def launch(pid, path, log_dir):
     return proc.pid, log_path
 
 
+def health():
+    """Content-free status of every dispatched session: pid alive, log bytes
+    (a growing log = a working session), branch created. Never prints log
+    content — that is the isolation contract."""
+    procs = set()
+    if os.name == "nt":
+        out = subprocess.run(["tasklist", "/FI", "IMAGENAME eq node.exe", "/FO", "CSV"],
+                             capture_output=True, text=True).stdout
+        procs = {line.split('","')[1] for line in out.splitlines() if line.startswith('"')}
+    branches = existing_branches()
+    if not os.path.isdir(LOGS):
+        print("no dispatch logs.")
+        return
+    for name in sorted(os.listdir(LOGS)):
+        if not name.endswith(".log"):
+            continue
+        pid = prompt_id(name)
+        path = os.path.join(LOGS, name)
+        size = os.path.getsize(path)
+        age_min = (datetime.datetime.now().timestamp() - os.path.getmtime(path)) / 60
+        branch = "branch:yes" if pid and branch_taken(pid, branches) else "branch:no"
+        print("%-6s log=%7dB  last-write %4.0f min ago  %s"
+              % (pid or "?", size, age_min, branch))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--only", help="dispatch just this prompt id (e.g. R-1)")
     ap.add_argument("--force", action="store_true",
                     help="launch even if the agent branch already exists")
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--health", action="store_true",
+                    help="content-free liveness report of dispatched sessions")
     args = ap.parse_args()
+    if args.health:
+        health()
+        return 0
 
     os.makedirs(LOGS, exist_ok=True)
     branches = existing_branches()
