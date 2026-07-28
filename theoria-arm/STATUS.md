@@ -1,13 +1,76 @@
 # STATUS — theoria-arm
 
-**Milestone: P-8, the Theoria arm's first online contact.** Branch
-`agent/p8-theoria-arm`, base commit `df9f748`. This file is the state of the
-track; the reasons live in `DECISIONS.md` and the per-run account in
-`runs/<slug>/MANIFEST.json`.
+**Milestone: E3, the second online game.** Branch `agent/e3-engines-online`,
+base commit `e182c95`. The previous milestone, P-8 (first online contact), is
+recorded below and unchanged. This file is the state of the track; the reasons
+live in `DECISIONS.md` and the per-run account in `runs/<slug>/MANIFEST.json`.
 
 ---
 
-## Where this stands
+## E3 — carrying the books to sk48
+
+P-8 proved the loop turns online. E3 asks two different questions, and neither
+of them is about winning:
+
+1. **does the engine supply chain hold up on a live game** — one row per
+   dispatch per engine in `engines_online.jsonl`, with `delivered`, `error`,
+   `skipped` and `n_refusals` as four separate columns, because a refusal is an
+   engine working and an error is not;
+2. **does a written theory transfer to a game it was not written for** — the
+   g50t manual is carried into sk48 and certified *cold*, before the first
+   model call, so the numbers belong to an unrepaired manual.
+
+The game is **sk48-d8078629**, and tn36 was excluded for a mechanical reason
+rather than a preference: `precheck.json` records its `available_actions` as
+`[6]`, ACTION6 is the click family that `_legal_actions` filters out (D-P8-012),
+and the arm would have found no legal action and stopped before its first turn.
+sk48 offers `[1, 2, 3, 4, 6, 7]`. Pre-flight on it cost **0 billed actions**:
+64×64, ten colours, eight levels, RESET in 5 attempts, and no `score` field —
+the same Phase 1 obligation gap P-8 reported, unchanged.
+
+### The pre-registered number
+
+The carried manual does not only assert things about g50t. One theorem states a
+*formula* — `unexplained(frame_0) = D0 - K` — and claims it is arithmetic that
+can be run in advance. That claim is about this framework's renderer, not about
+g50t, so a different game can genuinely test it. Evaluated on sk48's opening
+frames and written to disk **before** certify ran:
+
+| | |
+|---|---|
+| D0 (dynamic non-background cells at t0) | 73 |
+| K (distinct declared colours present at t0) | 3 |
+| **predicted unexplained cells** | **70** |
+
+`transfer.json` carries a `prediction-only` revision with that number and no
+certify result in it, then a `cold` revision with the verdict. The discipline is
+`probe`'s: a prediction recorded after its result is not a prediction.
+
+### Before the money
+
+`armtools/spend_check.py` runs first and writes `BUDGET_PLAN.json`. Two things
+come out of it.
+
+**S3's shared spend gate has not landed.** `proxy/spend_gate.py` does not exist
+on this commit and `agent/s3-spend-gate` carries nothing matching `*spend*`
+under `proxy/`. The gate is looked for every time, used if present, and
+recorded `absent` with no reservation held if not — never as a pass. A test
+pins that.
+
+**The action budget is not the binding constraint.** At P-8's measured $1.2635
+per desk call, reaching 120 actions costs about **$35**; an $18 ceiling stops the
+run at roughly **29–61 actions**. Saying so before the first action is what makes
+the outturn a measurement of the bill's shape rather than a shortfall against
+120.
+
+```bash
+cd theoria-arm && bash verify_e3.sh                 # 78 tests + a carried mock run
+cd theoria-arm && bash verify_e3.sh <the live slug> # and the live artefacts
+```
+
+---
+
+## P-8 — where the first online contact stands
 
 The three arms of `Theoria.md`'s main table are: `bare_cc` (zero division of
 labour, measured), the Schema reproduction (half), and this one (full). This is

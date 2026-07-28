@@ -28,6 +28,7 @@ import json
 import os
 import re
 import sys
+import time
 from typing import Any, Dict, List, Optional
 
 if __package__ in (None, ""):
@@ -334,6 +335,31 @@ def _histogram(values) -> Dict[str, int]:
     return out
 
 
+def _file_hashes(run_dir: str) -> Dict[str, str]:
+    """sha256 of everything the run wrote, except the manifest itself.
+
+    `MANIFEST.json` is excluded because it is written after this runs and would
+    otherwise carry a hash of a previous version of itself -- a number that
+    looks like provenance and is not.
+    """
+    import hashlib                                      # noqa: PLC0415
+    out: Dict[str, str] = {}
+    for root, _dirs, names in os.walk(run_dir):
+        if "__pycache__" in root:
+            continue
+        for name in sorted(names):
+            if name in ("MANIFEST.json",):
+                continue
+            path = os.path.join(root, name)
+            rel = os.path.relpath(path, run_dir).replace(os.sep, "/")
+            try:
+                with open(path, "rb") as fh:
+                    out[rel] = hashlib.sha256(fh.read()).hexdigest()
+            except OSError:
+                out[rel] = None
+    return out
+
+
 def build(slug: str, *, prompt_id: str = "P-8") -> Dict[str, Any]:
     run_dir = _bootstrap.path("runs", slug)
     ledger_path = os.path.join(run_dir, "ledger.jsonl")
@@ -365,6 +391,17 @@ def build(slug: str, *, prompt_id: str = "P-8") -> Dict[str, Any]:
         "arm": "theoria",
         "branch": git("rev-parse", "--abbrev-ref", "HEAD"),
         "base_commit": git("rev-parse", "HEAD"),
+        # CLAUDE.md's manifest convention requires prompt_id / branch /
+        # base_commit / utc. The first three were here from P-8; `utc` was not,
+        # and its absence went unnoticed because nothing reads a manifest until
+        # someone is trying to reconstruct when a run happened. Stamped at
+        # archive time, with the run's own start time beside it -- they differ
+        # by however long the run took, and conflating them would misdate every
+        # run this arm has produced.
+        "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "utc_meaning": "when this manifest was built, not when the run started",
+        "run_started_utc": next((r.get("utc") for r in mine
+                                 if r.get("event") == "run_start"), None),
         "seed": None,
         "seed_note": ("this arm draws no random numbers: engine dispatch, the "
                       "compilers and the planner are deterministic, and the one "
@@ -387,10 +424,17 @@ def build(slug: str, *, prompt_id: str = "P-8") -> Dict[str, Any]:
         "sealing": sealing(mine),
         "surprises": summary.get("surprises"),
         "scorecard": scorecard,
+        # E3. Present only on a run that carried books / recorded dispatches;
+        # `null` on a cold start, which is a fact about the run rather than a
+        # missing field.
+        "transfer": summary.get("transfer"),
+        "engines_online": summary.get("engines_online"),
+        "bill": summary.get("bill"),
         "files": sorted(
             os.path.relpath(os.path.join(root, name), run_dir).replace(os.sep, "/")
             for root, _dirs, names in os.walk(run_dir) for name in names
             if "__pycache__" not in root),
+        "file_sha256": _file_hashes(run_dir),
     }
 
     with open(os.path.join(run_dir, "MANIFEST.json"), "w",

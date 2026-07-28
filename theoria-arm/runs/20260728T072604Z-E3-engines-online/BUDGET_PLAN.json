@@ -15,8 +15,8 @@
  "carried_books_from": "20260728T015354Z-g50t-first-contact",
  "game_id": "sk48-d8078629",
  "projection": {
-  "actions_reachable_best_case": 60,
-  "actions_reachable_worst_case": 28,
+  "actions_reachable_best_case": 61,
+  "actions_reachable_worst_case": 29,
   "available": true,
   "binding_constraint": "cost_ceiling",
   "desk_calls_the_ceiling_buys": 14,
@@ -25,13 +25,13 @@
   "inputs": {
    "action_cap": 120,
    "frames_per_theorize": 4,
-   "legal_actions_opening_sweep": 4,
+   "legal_actions_opening_sweep": 5,
    "max_theorize_per_turn": 2,
    "usd_ceiling": 18.0,
    "wall_clock_s": 10800
   },
-  "projected_usd_if_action_cap_were_reached": 36.64,
-  "reading": "the action budget is NOT the binding constraint: reaching 120 actions would take about $37 of desk time, so the run will stop on cost_ceiling at roughly 28-60 actions. That gap is the measurement, not a shortfall -- E3 asks for the bill shape, and this is its predicted shape stated before the money is spent."
+  "projected_usd_if_action_cap_were_reached": 35.38,
+  "reading": "the action budget is NOT the binding constraint: reaching 120 actions would take about $35 of desk time, so the run will stop on cost_ceiling at roughly 29-61 actions. That gap is the measurement, not a shortfall -- E3 asks for the bill shape, and this is its predicted shape stated before the money is spent."
  },
  "reservation": {
   "held": false,

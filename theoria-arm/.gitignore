@@ -5,8 +5,8 @@ runs/*/trace.jsonl
 runs/dryrun-*/
 runs/pytest-*/
 runs/smoke*/
-runs_live.log
-.live_slug
+runs_live*.log
+.live_slug*
 __pycache__/
 *.pyc
 

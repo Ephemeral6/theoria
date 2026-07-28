@@ -1,0 +1,212 @@
+{
+  "arm": "theoria",
+  "arm_version": {
+    "files": 28,
+    "sha256": "d5c5161cca2e1dda80c97feef7b7323f6f95718c638a8d29b9fb3a90b809dcdd"
+  },
+  "env_proxy": {
+    "arm": "theoria",
+    "card_ids": [
+      "95f3bf0d-6c7f-48fc-b0f3-99292855258e"
+    ],
+    "commands": 5,
+    "denials": 0,
+    "guard": {
+      "allow_only": null,
+      "cut_version": "v1",
+      "n_dev": 4,
+      "n_sealed": 21,
+      "piles_path": "arc-recon/data/piles.json",
+      "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+      "unknown_policy": "deny"
+    },
+    "guids": {
+      "sk48-d8078629": "9c18b834-6978-4c1e-a256-d4144db95f75"
+    },
+    "incidents": 6,
+    "key_injected": true,
+    "meta_calls": 2,
+    "run_id": "r-01009b3d8f9942d7",
+    "upstream": "https://three.arcprize.org",
+    "variant": null
+  },
+  "game_id": "sk48-d8078629",
+  "ledger": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e3-engines-online\\theoria-arm\\runs\\preflight-20260728T074237Z\\ledger.jsonl",
+  "run_id": "r-01009b3d8f9942d7",
+  "slug": "preflight-20260728T074237Z",
+  "summary": {
+    "attempt_log": [
+      {
+        "attempts": 5,
+        "note": "RESET",
+        "ok": true,
+        "path": "/api/cmd/RESET",
+        "status": 200
+      }
+    ],
+    "available_actions": [
+      1,
+      2,
+      3,
+      4,
+      6,
+      7
+    ],
+    "budget": {
+      "actions_failed": 0,
+      "actions_left": 0,
+      "actions_ok": 0,
+      "ceiling_actions": 0,
+      "ceiling_commands": 120,
+      "commands_sent": 5,
+      "http_amplification": null,
+      "probe_actions": 0,
+      "reserve_for_probes": 0,
+      "resets": 1
+    },
+    "card_id": "95f3bf0d-6c7f-48fc-b0f3-99292855258e",
+    "colours_in_frame": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      8,
+      9,
+      14
+    ],
+    "elapsed_s": 10.7,
+    "env_proxy": {
+      "arm": "theoria",
+      "card_ids": [
+        "95f3bf0d-6c7f-48fc-b0f3-99292855258e"
+      ],
+      "commands": 5,
+      "denials": 0,
+      "guard": {
+        "allow_only": null,
+        "cut_version": "v1",
+        "n_dev": 4,
+        "n_sealed": 21,
+        "piles_path": "arc-recon/data/piles.json",
+        "sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+        "unknown_policy": "deny"
+      },
+      "guids": {
+        "sk48-d8078629": "9c18b834-6978-4c1e-a256-d4144db95f75"
+      },
+      "incidents": 6,
+      "key_injected": true,
+      "meta_calls": 2,
+      "run_id": "r-01009b3d8f9942d7",
+      "upstream": "https://three.arcprize.org",
+      "variant": null
+    },
+    "envelope_keys": [
+      "action_input",
+      "available_actions",
+      "frame",
+      "full_reset",
+      "game_id",
+      "guid",
+      "levels_completed",
+      "state",
+      "win_levels"
+    ],
+    "grid_shape": [
+      64,
+      64
+    ],
+    "guid_present": true,
+    "has_score_field": false,
+    "levels_completed": 0,
+    "n_frames": 1,
+    "reset_attempts": 5,
+    "reset_status": 200,
+    "scorecard_on_close": {
+      "card_id": "95f3bf0d-6c7f-48fc-b0f3-99292855258e",
+      "environments": [
+        {
+          "actions": 0,
+          "completed": false,
+          "id": "sk48-d8078629",
+          "level_count": 8,
+          "levels_completed": 0,
+          "resets": 0,
+          "runs": [
+            {
+              "actions": 0,
+              "completed": false,
+              "guid": "9c18b834-6978-4c1e-a256-d4144db95f75",
+              "level_actions": [
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0,
+                0
+              ],
+              "level_baseline_actions": [
+                61,
+                177,
+                101,
+                103,
+                230,
+                181,
+                125,
+                92
+              ],
+              "level_scores": [
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "levels_completed": 0,
+              "resets": 0,
+              "score": 0.0,
+              "state": "NOT_FINISHED"
+            }
+          ],
+          "score": 0.0
+        }
+      ],
+      "opaque": {
+        "run_id": "r-01009b3d8f9942d7"
+      },
+      "score": 0.0,
+      "tags": [
+        "theoria",
+        "p8",
+        "preflight",
+        "agent"
+      ],
+      "tags_scores": [
+        {
+          "actions": 0,
+          "id": "keyboard_click",
+          "levels_completed": 0,
+          "number_of_environments": 1,
+          "number_of_levels": 8,
+          "score": 0.0
+        }
+      ],
+      "total_actions": 0,
+      "total_environments": 1,
+      "total_environments_completed": 0,
+      "total_levels": 8,
+      "total_levels_completed": 0
+    },
+    "scorecard_opened": true,
+    "state": "NOT_FINISHED",
+    "win_levels": 8
+  }
+}
