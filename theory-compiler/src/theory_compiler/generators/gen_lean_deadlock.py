@@ -160,6 +160,196 @@ def _state_literal(encoding: PositionalEncoding, pinned: Dict[int, str],
     return "⟨%s⟩" % ", ".join(parts)
 
 
+# ------------------------------------------------- reading the emission back
+
+_TERM_EQ = re.compile(r"s\.(\w+) == \.(\w+)\Z")
+_TERM_CLEAR = re.compile(r"s\.clear \.(\w+)\Z")
+_TERM_NE_CELL = re.compile(r"s\.(\w+) != c\Z")
+_TERM_NE_SLOT = re.compile(r"s\.(\w+) != s\.(\w+)\Z")
+_ARM = re.compile(r"  \| \.(\w+) => (.*)\Z")
+_ASSIGN = re.compile(r"(\w+) := \.(\w+)\Z")
+
+
+def _block(lines: List[str], header: str) -> List[str]:
+    """The indented lines under `header`, up to the first blank or unindented one."""
+    try:
+        start = lines.index(header) + 1
+    except ValueError:
+        raise DeadlockLeanError("the emitted development has no `%s`" % header)
+    out = []
+    while start < len(lines) and lines[start].startswith("  "):
+        out.append(lines[start])
+        start += 1
+    return out
+
+
+def _constructors(lines: List[str], header: str) -> List[str]:
+    return [line[4:] for line in _block(lines, header) if line.startswith("  | ")]
+
+
+def _conjuncts_of(body: str) -> List[str]:
+    return [part.strip() for part in body.split("&&")]
+
+
+def _read_terms(body: str, what: str):
+    """`s.b1 == .c12 && s.clear .c13` -> ((slot, cell)..., (cell,)...)."""
+    equals, empty = [], []
+    for term in _conjuncts_of(body):
+        match = _TERM_EQ.fullmatch(term)
+        if match:
+            equals.append((match.group(1), match.group(2)))
+            continue
+        match = _TERM_CLEAR.fullmatch(term)
+        if match:
+            empty.append(match.group(1))
+            continue
+        raise DeadlockLeanError("cannot read the term %r in the emitted %s"
+                                % (term, what))
+    return tuple(sorted(equals)), tuple(sorted(empty))
+
+
+def reread(source: str, task: StripsTask, encoding: PositionalEncoding, cert) -> Dict:
+    """Read the emitted Lean back and refuse if it does not say what it should.
+
+    **This is the link the rest of the chain does not cover, and it was missing.**
+    `strips_encoding.verify` checks the *encoding* against the *task*; every
+    obligation is re-derived against the *encoding*. Between the last of those
+    checks and the theorem sits a step nothing was reading: the rendering of
+    `guards`/`effects` into Lean text. A rendering bug there — a `push` arm
+    emitted as `=> s`, say — produces a file that passes every check upstream,
+    compiles, and prints an empty axiom set for a theorem about a world in which
+    no box ever moves.
+
+    So the artefact itself is parsed back with the grammar it was written in, and
+    every piece is compared against the checked encoding: the `Cell` and `Move`
+    constructors, each `legal` arm's guard, each `applyMove` arm's assignments,
+    `St.clear`, `wf`, `Pat`, `Goal`, `s0`. The comparison is structural and
+    exact; `wf` / `Pat` / `Goal` additionally get evaluated over every encodable
+    state, degenerate ones included, because those are the states the emitted
+    theorems quantify over.
+    """
+    lines = source.split("\n")
+    slots = list(encoding.slots)
+    checked = {}
+
+    cells = _constructors(lines, "inductive Cell where")
+    if cells != list(encoding.cells):
+        raise DeadlockLeanError("the emitted `Cell` is %s, the task's cells are %s"
+                                % (cells, list(encoding.cells)))
+    struct = [line.strip().split(" : ")[0] for line in _block(lines, "structure St where")
+              if " : Cell" in line]
+    if struct != slots:
+        raise DeadlockLeanError("the emitted `St` has slots %s, the encoding has %s"
+                                % (struct, slots))
+
+    clear_body = _block(lines, "def St.clear (s : St) (c : Cell) : Bool :=")[0].strip()
+    clear_slots = []
+    for term in _conjuncts_of(clear_body):
+        match = _TERM_NE_CELL.fullmatch(term)
+        if not match:
+            raise DeadlockLeanError("cannot read %r in the emitted `St.clear`" % term)
+        clear_slots.append(match.group(1))
+    if sorted(clear_slots) != sorted(slots):
+        raise DeadlockLeanError(
+            "the emitted `St.clear` reads slots %s; a cell is clear when *no* slot "
+            "stands on it, so it has to read all of %s" % (clear_slots, slots))
+
+    wf_body = _block(lines, "def wf (s : St) : Bool :=")[0].strip()
+    wf_pairs = set()
+    for term in _conjuncts_of(wf_body):
+        match = _TERM_NE_SLOT.fullmatch(term)
+        if not match:
+            raise DeadlockLeanError("cannot read %r in the emitted `wf`" % term)
+        wf_pairs.add(frozenset(match.groups()))
+    expected_pairs = {frozenset((a, b)) for i, a in enumerate(slots) for b in slots[i + 1:]}
+    if wf_pairs != expected_pairs:
+        raise DeadlockLeanError(
+            "the emitted `wf` compares %s; well-formedness is every unordered pair, "
+            "%s" % (sorted(map(sorted, wf_pairs)), sorted(map(sorted, expected_pairs))))
+
+    move_names = _constructors(lines, "inductive Move where")
+    expected_moves = [_move_name(a) for a in task.actions]
+    if move_names != expected_moves:
+        missing = sorted(set(expected_moves) - set(move_names))
+        extra = sorted(set(move_names) - set(expected_moves))
+        raise DeadlockLeanError(
+            "the emitted `Move` is not the task's ground action set: %d "
+            "constructor(s) against %d ground action(s); missing %s, unexpected %s"
+            % (len(move_names), len(expected_moves), missing[:5], extra[:5]))
+
+    legal_arms, apply_arms = {}, {}
+    for line in _block(lines, "def legal (s : St) (m : Move) : Bool :="):
+        match = _ARM.fullmatch(line)
+        if match:
+            legal_arms[match.group(1)] = _read_terms(match.group(2), "`legal`")
+    for line in _block(lines, "def applyMove (s : St) (m : Move) : St :="):
+        match = _ARM.fullmatch(line)
+        if not match:
+            continue
+        body = match.group(2)
+        if body == "s":
+            apply_arms[match.group(1)] = ()
+            continue
+        if not (body.startswith("{ s with ") and body.endswith(" }")):
+            raise DeadlockLeanError("cannot read the `applyMove` arm %r" % body)
+        assigns = []
+        for part in body[len("{ s with "):-len(" }")].split(", "):
+            piece = _ASSIGN.fullmatch(part.strip())
+            if not piece:
+                raise DeadlockLeanError("cannot read the assignment %r" % part)
+            assigns.append(piece.groups())
+        apply_arms[match.group(1)] = tuple(sorted(assigns))
+
+    for action in task.actions:
+        name = _move_name(action)
+        guard = encoding.guards[action]
+        want_guard = (tuple(sorted((slots[s], c) for s, c in guard.equals)),
+                      tuple(sorted(guard.empty)))
+        if legal_arms.get(name) != want_guard:
+            raise DeadlockLeanError(
+                "the emitted `legal` arm for %s says %r; the checked encoding of "
+                "%s says %r" % (name, legal_arms.get(name), action, want_guard))
+        want_effect = tuple(sorted((slots[s], c)
+                                   for s, c in encoding.effects[action].assigns))
+        if apply_arms.get(name) != want_effect:
+            raise DeadlockLeanError(
+                "the emitted `applyMove` arm for %s says %r; the checked encoding "
+                "of %s says %r. An arm that drops an assignment produces a file "
+                "that compiles and proves nothing."
+                % (name, apply_arms.get(name), action, want_effect))
+    checked["moves"] = len(task.actions)
+
+    start = None
+    for line in lines:
+        if line.startswith("def s0 : St := "):
+            start = tuple(part.strip().lstrip(".")
+                          for part in line[len("def s0 : St := ⟨"):-1].split(","))
+            break
+    if start != encoding.initial():
+        raise DeadlockLeanError("the emitted `s0` is %s, the level starts at %s"
+                                % (start, encoding.initial()))
+
+    pat = _read_terms(_block(lines, "def Pat (s : St) : Bool :=")[0].strip(), "`Pat`")
+    goal = _read_terms(_block(lines, "def Goal (s : St) : Bool :=")[0].strip(), "`Goal`")
+
+    def holds(state, terms):
+        equals, empty = terms
+        return (all(state[slots.index(s)] == c for s, c in equals)
+                and all(c not in state for c in empty))
+
+    pattern = list(cert.pattern)
+    for state in encoding.states(well_formed_only=False):
+        if holds(state, pat) != encoding.holds(state, pattern):
+            raise DeadlockLeanError(
+                "the emitted `Pat` disagrees with the certificate's pattern at %s"
+                % (state,))
+        if holds(state, goal) != encoding.is_goal(state):
+            raise DeadlockLeanError(
+                "the emitted `Goal` disagrees with the problem's goal at %s" % (state,))
+    checked["states_evaluated"] = len(encoding.states(well_formed_only=False))
+    return checked
+
+
 # ------------------------------------------------------------------- emission
 
 def generate_deadlock_lean(task: StripsTask, encoding: PositionalEncoding,
@@ -207,12 +397,22 @@ def generate_deadlock_lean(task: StripsTask, encoding: PositionalEncoding,
             "closing `pat_no_goal` by `decide` would take %d leaf goals, over the "
             "budget of %d" % (no_goal_leaves, MAX_LEAN_CASES))
 
+    if getattr(encoding, "verified_stats", None) is None:
+        raise DeadlockLeanError(
+            "this encoding has not been checked against the task. Call "
+            "`strips_encoding.verify(encoding)` first: without it the chain from "
+            "the PDDL to the emitted `legal`/`applyMove` has an unchecked link in "
+            "the middle, and the theorem would be about whatever the encoding "
+            "happened to say.")
+
     L: List[str] = []
     _header(L, task, encoding, cert, pattern, pinned, free, moves, leaves)
     _world(L, task, encoding, cells, slots, moves)
     _predicates(L, encoding, cert, pattern, goal_atoms)
     _theorems(L, encoding, slots, pinned, free, pat_reads, split_for_no_goal)
     _exhibits(L, encoding, plan, witness)
+
+    reread(("\n".join(L)) + "\n", task, encoding, cert)
 
     L.append("#print axioms pat_pins")
     L.append("#print axioms closed_pinned")

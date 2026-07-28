@@ -85,41 +85,41 @@ def axioms_empty(output: str, names) -> List[str]:
             if "'%s' does not depend on any axioms" % n not in output]
 
 
-PAT_MARKER = "def Pat (s : St) : Bool :=\n  "
+#: Where each fixture's pattern is moved to for the negative control. One square
+#: in from the wall in both cases -- a region the boxes can be pushed out of.
+CONTROL_CELLS = {"pair": ("c22", "c23"), "corner": ("c22",)}
 
 
-def tamper(source: str, cert, encoding) -> str:
-    """The same file with the pattern moved one region in. Must go red.
+def control_source(name: str, task, encoding, cert) -> str:
+    """The development **regenerated** for a pattern that is not a dead region.
 
-    The edit is aimed at the body of `Pat` and nowhere else: the same cell name
-    appears dozens of times inside `legal`, and a blind `replace` would mutate a
-    move instead of the pattern and leave the file provable — a negative control
-    that passes for the wrong reason is worse than none.
+    Regenerated, not string-patched. Editing `Pat` inside a finished file leaves
+    `pat_pins` and `closed_pinned` pinned to the old cells, so `lean` goes red
+    from that desynchronisation rather than from the pattern being escapable --
+    a control that fails for the wrong reason, which is worse than none. (The
+    first version of this function did exactly that, and worse: it replaced the
+    cell name across the whole file and hit one of `legal`'s 112 branches.)
+
+    The control is checked to be a control first: this track's own `recheck` has
+    to reject the moved pattern, on closure, before Lean is asked anything.
     """
-    head, rest = source.split(PAT_MARKER, 1)
-    line, tail = rest.split("\n", 1)
-    mentioned = {a.args[-1] for a in cert.pattern}
-    replacement = next(c for c in encoding.cells if c not in mentioned)
-    moved = line.replace(".%s" % cert.pattern[0].args[-1], "." + replacement, 1)
-    if moved == line:
-        raise SystemExit("the negative control did not change anything")
-
-    # And check the control is a control: the moved pattern has to be one this
-    # track's own re-derivation rejects. Otherwise `lean` going red would be
-    # evidence of a typo somewhere, not of the axiom check having teeth.
-    first = cert.pattern[0]
+    cells = CONTROL_CELLS[name]
+    if len(cells) != len(cert.pattern):
+        raise SystemExit("no control pattern of the right width for %r" % name)
     probe = dc.DeadlockCertificate(
         claim="negative control", domain=cert.domain, problem=cert.problem,
-        pattern=[Atom(first.name, first.args[:-1] + (replacement,))] + list(cert.pattern[1:]),
+        pattern=[Atom(a.name, a.args[:-1] + (c,)) for a, c in zip(cert.pattern, cells)],
         closure=cert.closure, n_deleting_actions=-1, blocked_actions=[],
         goal_conflict=None, coverage="", produced_by="control", provenance="control")
     try:
         dc.recheck(probe, encoding)
-    except CertificateError:
-        pass
+    except CertificateError as exc:
+        if "closure fails" not in str(exc):
+            raise SystemExit("the control pattern was rejected for the wrong "
+                             "reason: %s" % exc)
     else:
         raise SystemExit("the negative control's pattern is still a dead region")
-    return head + PAT_MARKER + moved + "\n" + tail
+    return gen_lean_deadlock.generate_deadlock_lean(task, encoding, probe)
 
 
 def deadlock_case(name: str, certificate: str, workdir: str) -> Dict:
@@ -152,16 +152,22 @@ def deadlock_case(name: str, certificate: str, workdir: str) -> Dict:
     report["lean"] = {"returncode": lean["returncode"], "seconds": lean["seconds"]}
     report["axioms_not_empty"] = axioms_empty(lean["output"], DEADLOCK_THEOREMS)
     report["sorry_in_output"] = "sorryAx" in lean["output"]
+    report["reread"] = gen_lean_deadlock.reread(source, task, encoding, cert)
     report["ok"] = (lean["returncode"] == 0
                     and not report["axioms_not_empty"]
                     and not report["sorry_in_output"])
 
-    control = run_lean(tamper(source, cert, encoding), workdir, "Control_" + name)
+    control = run_lean(control_source(name, task, encoding, cert),
+                       workdir, "Control_" + name)
     report["negative_control"] = {
+        "pattern": " AND ".join("at(%s,%s)" % (a.args[0], c) for a, c
+                                in zip(cert.pattern, CONTROL_CELLS[name])),
         "returncode": control["returncode"],
         "seconds": control["seconds"],
         "rejected": control["returncode"] != 0,
+        "failed_on_closure": "closed_pinned" in control["output"],
     }
+    report["ok"] = report["ok"] and report["negative_control"]["failed_on_closure"]
     report["ok"] = report["ok"] and report["negative_control"]["rejected"]
     return report
 

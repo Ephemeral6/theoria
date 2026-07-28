@@ -4,15 +4,59 @@
   "files": [
     {
       "path": "CONTRACTS/deadlock_certificate_v0.1.md",
-      "sha256": "80a52c7c2c69f33a8c363a783475d526d3f4155d4c0b996a7ca7b02ad6c6bd1b"
+      "sha256": "906ffcf8134dd7280bf6e30a81c27462c9a7212374495d631054a70da7e210b2"
     },
     {
-      "path": "theory-compiler/src/theory_compiler/strips.py",
-      "sha256": "a40f87a7f2df20d33435a5f3b5199843043d00a80c6681c6ea8f2f382530965e"
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/PLAN.md",
+      "sha256": "3b712ee95319da040cae5ae6a465093286d98243f07e9a91a19830fc0d3f0cd0"
     },
     {
-      "path": "theory-compiler/src/theory_compiler/strips_encoding.py",
-      "sha256": "fc4c4458a03b6803f4688a03f3487125dd84cabd32fdd424e4db2e9e762a5b6a"
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/RUN_STATE.md",
+      "sha256": "86380f41a5b6d6dee051d9d643da507583e98d89feb1a8a569c262505d76fd41"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/corner.lean",
+      "sha256": "13195b0d8741f4459b386bdaca5a22adbc4509b73029e9e56b978c693ba647c3"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/pair.lean",
+      "sha256": "4febe8f58781bd46897077eeb3176d81ce3dc3056f60b14b8fc7c73065478329"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/spike_encoding.py",
+      "sha256": "cbf02d1a818c1ef01fd2fd7b86f4acb1d60f699dc7040d3552c74ce5f5f44d3d"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/Control_corner.lean",
+      "sha256": "30fff257c89530da3847289fa9e52a720e2f6f2e29531393bac58bfd84c497ff"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/Control_pair.lean",
+      "sha256": "62515dda9453fbf79d9b5eb464af8f7da8c154954230e26952537750634b3755"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/Deadlock_corner.lean",
+      "sha256": "13195b0d8741f4459b386bdaca5a22adbc4509b73029e9e56b978c693ba647c3"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/Deadlock_pair.lean",
+      "sha256": "4febe8f58781bd46897077eeb3176d81ce3dc3056f60b14b8fc7c73065478329"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/EVIDENCE.json",
+      "sha256": "a9f1df8ad1ca7c3d9ffd7c389a665a860ef8c5454fdba0d3ec69da71bb3a5e12"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/Ic3_algebraic.lean",
+      "sha256": "f9f3f5a55c85c7b091d5ec4398a46387b0eead988abb550f0d928b8160522dc4"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/Ic3_computational.lean",
+      "sha256": "759576749b5e2dde64e88726e4b18131f53a4b42c0815aabe2eb24f8fb383569"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/lean-toolchain",
+      "sha256": "780c5b3424b12629ebe77451eda1ac2a2079bc7b81b6fa37969892afb8d32c0e"
     },
     {
       "path": "theory-compiler/src/theory_compiler/deadlock_certificate.py",
@@ -20,31 +64,15 @@
     },
     {
       "path": "theory-compiler/src/theory_compiler/generators/gen_lean_deadlock.py",
-      "sha256": "22bb83fca917a60dda1c5e097564fa92554834340ce62eae6787e7ddbd58e8fa"
+      "sha256": "1845a2eb2518f7e4f2d8759b0e8b56da1754c30aae722a647f5fe58f76c60eb2"
     },
     {
-      "path": "theory-compiler/tools/transcribe_deadlock_certificates.py",
-      "sha256": "13d98fe8fa8dcada64c3d7673fbe22c9aed5b85f06055c806131f55c188ef244"
+      "path": "theory-compiler/src/theory_compiler/strips.py",
+      "sha256": "a40f87a7f2df20d33435a5f3b5199843043d00a80c6681c6ea8f2f382530965e"
     },
     {
-      "path": "theory-compiler/tools/build_deadlock_lean.py",
-      "sha256": "cbbdd94c3a2a8320ae6e0d12c2cf2cf6f9618a5807ae6fadf391a3cce0549ec0"
-    },
-    {
-      "path": "theory-compiler/tools/verify_c4.py",
-      "sha256": "56121915f7102190598430c22db52f86b3aa0f9a2d09eda23b89d4bf65d192f8"
-    },
-    {
-      "path": "theory-compiler/tests/test_strips.py",
-      "sha256": "315cfa39e2a5cb038e2c0af7f2945f6b74fae76f9bafaa032c0ecfb88d39e06d"
-    },
-    {
-      "path": "theory-compiler/tests/test_deadlock_certificate.py",
-      "sha256": "41b1a65745049e7e969de445f9cbedec22c282ba6432bc0c64324a3a6ae20931"
-    },
-    {
-      "path": "theory-compiler/tests/test_gen_lean_deadlock.py",
-      "sha256": "470a7a3efbe7526587f42bc0a60982dfb07058789d8381d34b4d7b1151024a71"
+      "path": "theory-compiler/src/theory_compiler/strips_encoding.py",
+      "sha256": "541ca095a8348c2eab4d43d3b1f6ff91b061ac5a109307a96aab19c6f39b0ffb"
     },
     {
       "path": "theory-compiler/tests/fixtures/deadlock_open4far_b1c11.json",
@@ -55,6 +83,10 @@
       "sha256": "f5063450d26bb6057e807c049b876d75e810759f074e675019c178f96a114f8e"
     },
     {
+      "path": "theory-compiler/tests/fixtures/strips/PROVENANCE.json",
+      "sha256": "29397e37c0555b27b2300eca57d26478ead637ffb83fe419e6d511ccdbad0427"
+    },
+    {
       "path": "theory-compiler/tests/fixtures/strips/sokoban_domain.pddl",
       "sha256": "40ce1effb64bc626412c8e9dd163d51dfbefdd7ee27d588784450631606b98c1"
     },
@@ -63,28 +95,28 @@
       "sha256": "639583f4dac05102449132717a760b10feca3e87c06918c76a23aa2b0c53cfe1"
     },
     {
-      "path": "theory-compiler/tests/fixtures/strips/PROVENANCE.json",
-      "sha256": "29397e37c0555b27b2300eca57d26478ead637ffb83fe419e6d511ccdbad0427"
+      "path": "theory-compiler/tests/test_deadlock_certificate.py",
+      "sha256": "41b1a65745049e7e969de445f9cbedec22c282ba6432bc0c64324a3a6ae20931"
     },
     {
-      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/pair.lean",
-      "sha256": "4febe8f58781bd46897077eeb3176d81ce3dc3056f60b14b8fc7c73065478329"
+      "path": "theory-compiler/tests/test_gen_lean_deadlock.py",
+      "sha256": "ab94499691d7f3d57153967db844d6d18feeaa1f9e08718c2ae89cfb8f7fecba"
     },
     {
-      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/corner.lean",
-      "sha256": "13195b0d8741f4459b386bdaca5a22adbc4509b73029e9e56b978c693ba647c3"
+      "path": "theory-compiler/tests/test_strips.py",
+      "sha256": "6dd22cb8bd9c8414c33a7ff56fd207fc1866bfd5023e58bc1ed721af3bf4d908"
     },
     {
-      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/EVIDENCE.json",
-      "sha256": "70803fa05f29c7f454a2ef5b85e1253a5b9722f4ec30c89ad2e15c6737d93f21"
+      "path": "theory-compiler/tools/build_deadlock_lean.py",
+      "sha256": "cbbdd94c3a2a8320ae6e0d12c2cf2cf6f9618a5807ae6fadf391a3cce0549ec0"
     },
     {
-      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/RUN_STATE.md",
-      "sha256": "32534540b356999d7362a5ceae7011c050761f0cbd013d15c04b2513720855ba"
+      "path": "theory-compiler/tools/transcribe_deadlock_certificates.py",
+      "sha256": "13d98fe8fa8dcada64c3d7673fbe22c9aed5b85f06055c806131f55c188ef244"
     },
     {
-      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/PLAN.md",
-      "sha256": "3b712ee95319da040cae5ae6a465093286d98243f07e9a91a19830fc0d3f0cd0"
+      "path": "theory-compiler/tools/verify_c4.py",
+      "sha256": "3e5fae481213144c47201ca15f2ed5edfe5bced5194b8a667220af37d1a13fe7"
     }
   ],
   "inputs": [
@@ -109,18 +141,33 @@
         "axioms_not_empty": [],
         "case": "pair",
         "lean_returncode": 0,
+        "negative_control": {
+          "failed_on_closure": true,
+          "pattern": "at(b1,c22) AND at(b2,c23)",
+          "rejected": true,
+          "returncode": 1,
+          "seconds": 3.7
+        },
         "seconds": 3.7
       },
       {
         "axioms_not_empty": [],
         "case": "corner",
         "lean_returncode": 0,
-        "seconds": 57.4
+        "negative_control": {
+          "failed_on_closure": true,
+          "pattern": "at(b1,c22)",
+          "rejected": true,
+          "returncode": 1,
+          "seconds": 58.0
+        },
+        "seconds": 58.2
       },
       {
         "axioms_not_empty": [],
         "case": "ic3-computational",
         "lean_returncode": 0,
+        "negative_control": null,
         "seconds": 0.3
       },
       {
@@ -131,11 +178,17 @@
         ],
         "case": "ic3-algebraic",
         "lean_returncode": 0,
+        "negative_control": null,
         "seconds": 0.3
       }
     ],
-    "pytest": "283 passed (THEORIA_REQUIRE_LEAN=1)",
+    "pytest": "288 passed (THEORIA_REQUIRE_LEAN=1)",
     "pytest_before": "224 passed"
+  },
+  "review": {
+    "fixed_in": "D-TC-028",
+    "kind": "adversarial, read-only",
+    "verdict": "could not refute the theorems; found one broken link in the checking chain (emitted Lean text was unread) plus three smaller defects"
   },
   "territory": "theory-compiler",
   "toolchain": {
