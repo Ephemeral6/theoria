@@ -1,38 +1,40 @@
 {
-  "cycle": 8,
-  "utc": "2026-07-28T12:55Z",
-  "last_audited_commit": "9e61399",
-  "range_this_cycle": "1a8ed00..9e61399 (9 commits, 64 files)",
+  "cycle": 9,
+  "utc": "2026-07-28T14:00Z",
+  "last_audited_commit": "a7afa60",
+  "range_this_cycle": "9e61399..a7afa60 (25 commits, 103 files)",
   "mode": "incremental",
   "covered": {
-    "纪律漂移": "封存 ID 命中 4 文件全为污染登记与本邮箱文本；密钥零命中；主线 append-only 零新增删除。**另为 S11 跑了实证**：全仓（含 gitignored）无 environment_files 路径、无以封存 id/词根命名的目录、家目录无 ~/.arc* 缓存、代码零处调用 play-local/list-games/swarms —— 游戏源码从未被拉取，S11 是预防不是事故",
+    "纪律漂移": "封存 ID 命中 5 文件；新增的 baseline-arms/tests/test_transport.py:276 是护栏测试（raises(SealedGameError) + 开发堆负控制），其余为污染登记与本邮箱文本；密钥零命中；主线 append-only 零新增删除",
     "基准漂移": "无新增",
-    "证据漂移": "P9 报的两条陈旧前提逐例独立复核（未转述孤证）→ 本轮报告",
+    "证据漂移": "无新增",
     "目标漂移": "无新增",
-    "流程漂移": "工单前提被树推翻，连续两例 → 本轮报告",
-    "要求引用了不存在的东西": "a0-spike/verify.sh 欠 4 周期；verify_gates 范围未加 monitor/prompts/**，该文件同时不在板上、不在探针视野",
-    "监控自身漂移": "TERRITORIES 已改 _discover_territories()，上轮主建议全额采纳"
+    "流程漂移": "无新增",
+    "要求引用了不存在的东西": "a0-spike/verify.sh 欠 5 周期；已建议判死（删掉 C2 工单那行 + 在 archive 工单里记一句事后判定），别再补脚本",
+    "单向门": "AUDITOR.md 第 7 维，本轮首次全仓扫 → DRIFT-app-and-res-claims-are-a-one-way-door；同时记录三处正面范例（spend_gate 的 price_unpriced 出口、runner 的 finally 释放、封存护栏测试的负控制）",
+    "监控自身漂移": "无新增"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T1251Z-work-orders-whose-premise-the-tree-overtook.md"
+    "DRIFT-20260728T1356Z-app-and-res-claims-are-a-one-way-door.md"
   ],
   "pending_on_monitor": [
-    "a0-spike/verify.sh：补上或删掉 C2 工单那行（欠 4 周期，建议别再挂着）",
-    "verify_gates 扫描范围加 monitor/prompts/**（欠 1 周期）",
-    "theoria-arm 七个 run 补 MANIFEST（欠 1 周期）",
-    "papers/ 被两次认领，需监控解开（P9 报）",
-    "WP10 的 scale 按 R2 收窄（量小，欠 2 周期）",
-    "建议把『S11 是预防不是事故』的实证结论写进 S11 正文"
+    "cmd_sweep 对 RES-* 改用 ops-status 心跳判活；APP-* 要么给心跳要么别让它领（本轮报告）",
+    "给 cmd_sweep 补一个会红的负样本测试（本轮报告，第 7 维第二句判据）",
+    "V3-battery-discrimination.APP-V3 移进 done/（分支 174c5a6 早已合并）",
+    "a0-spike/verify.sh：建议判死结案而非补脚本（欠 5 周期）",
+    "verify_gates 扫描范围加 monitor/prompts/**（欠 2 周期）",
+    "theoria-arm 七个 run 补 MANIFEST（欠 2 周期）",
+    "WP10 的 scale 按 R2 收窄（欠 3 周期）"
   ],
   "method_notes": [
     "红线扫描 scratchpad/redline.py <base> <head>",
-    "封存源码落盘核查（S11 类）：find 全仓 environment_files*、以封存 id/词根命名的目录、~/.arc*，再 grep 代码里 play-local/list-games/swarms —— 只看路径名，不读内容",
-    "append-only 精确分析须用 bytes 再 decode('utf-8','replace')，Windows 默认 gbk 会崩",
-    "判『某段是否已发布到主线』：git rev-list --first-parent master 是否含该 sha"
+    "第 7 维（单向门）扫法：grep 状态写入点（mode=/hold/frozen/claimed），对每个状态问『谁退出它』并去 log 里查那条路径今天是否真被调用过；再找『不可能变红的检查』——看它有没有负样本测试",
+    "封存源码落盘核查（S11 类）：find environment_files*、以封存 id/词根命名的目录、~/.arc*，再 grep play-local/list-games/swarms —— 只看路径名不读内容",
+    "append-only 精确分析须用 bytes 再 decode('utf-8','replace')，Windows 默认 gbk 会崩"
   ],
   "next_cycle_focus": [
-    "复核本轮一条 + 五件欠账",
-    "六个新目录（fuzzlab/figures/worldgen/ablation-arm/exam/theoria-arm）的内容维度巡检 —— 连欠两轮",
-    "增量起点 9e61399"
+    "复核本轮一条 + 七件欠账",
+    "六个新目录（fuzzlab/figures/worldgen/ablation-arm/exam/theoria-arm）的内容维度巡检 —— 已连欠三轮，下轮无论如何做掉",
+    "增量起点 a7afa60"
   ]
 }
