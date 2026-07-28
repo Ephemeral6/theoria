@@ -290,6 +290,24 @@ def _flatten_costs(result: Any, args: Tuple[Any, ...],
     return _resort(result)
 
 
+def _scale_costs(result: Any, args: Tuple[Any, ...],
+                 kwargs: Dict[str, Any]) -> Any:
+    """Double every reported cost.
+
+    Written as the *order-preserving* cost lie, to sit beside
+    `_flatten_costs`'s order-destroying one. Scaling every cost by the same
+    positive constant divides every `value` by that constant and leaves the
+    engine's own sort key in the same order, so `ranking_is_sound` is untouched
+    by construction rather than by luck, and only `costs_are_the_world's` can
+    see it. No re-sort is needed for the same reason.
+    """
+    if not result:
+        raise mut.inert("no actions ranked; no cost to misreport")
+    for value in result:
+        value.cost = value.cost * 2.0
+    return result
+
+
 def _probevalue_partition_relabel(result: Any, args: Tuple[Any, ...],
                                   kwargs: Dict[str, Any]) -> Any:
     hit = False
@@ -549,14 +567,35 @@ mut.register(
         id="pf-flatten-reported-costs",
         engine=ENGINE, seam=RANK_SEAM, kind=mut.INCONSISTENT,
         claim=_COST_CLAIM,
-        description="EXPECTED SURVIVOR: report cost 1.0 for every action -- the "
-                    "engine ignoring the caller's cost map -- then re-sort under "
-                    "the engine's own key so the returned order is internally "
-                    "consistent. `value_bits_per_cost` in the payload is now "
-                    "wrong for every non-unit-cost action and the ranking is the "
-                    "one a cost-blind engine would give.",
+        description="report cost 1.0 for every action -- the engine ignoring "
+                    "the caller's cost map -- then re-sort under the engine's "
+                    "own key so the returned order is internally consistent. "
+                    "`value_bits_per_cost` in the payload is now wrong for every "
+                    "non-unit-cost action and the ranking is the one a "
+                    "cost-blind engine would give. Pre-registered in V-10 as an "
+                    "EXPECTED SURVIVOR against `ranking_is_sound`, and it "
+                    "survived; V-13 added `costs_are_the_world's` for exactly "
+                    "this gap, so `expect_kill` now names that invariant and "
+                    "the mutant is a real prediction again rather than a "
+                    "recorded blind spot.",
         corrupt=_flatten_costs,
-        expect_kill=("ranking_is_sound",),
+        expect_kill=("costs_are_the_world's",),
+    ),
+    mut.Mutant(
+        id="pf-scale-reported-costs",
+        engine=ENGINE, seam=RANK_SEAM, kind=mut.INCONSISTENT,
+        claim=_COST_CLAIM,
+        description="double every reported cost. Paired with "
+                    "pf-flatten-reported-costs and differing from it in one "
+                    "way that matters: scaling by a positive constant divides "
+                    "every `value` by that constant and so preserves the "
+                    "engine's own sort order exactly. The flattening mutant "
+                    "could in principle have been caught by a ranking check on "
+                    "some world where it reordered something; this one cannot "
+                    "be, on any world, so a kill here is `costs_are_the_world's` "
+                    "comparing against the cost map and nothing else.",
+        corrupt=_scale_costs,
+        expect_kill=("costs_are_the_world's",),
     ),
     mut.Mutant(
         id="pf-probevalue-partition-relabel",

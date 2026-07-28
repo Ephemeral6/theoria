@@ -21,7 +21,9 @@ import math
 
 import pytest
 
-from fuzzlab.oracles import gf2, search
+from fuzzlab import campaign, prng
+from fuzzlab.oracles import gf2, motion, search
+from fuzzlab.worlds import gridworld
 
 
 # ------------------------------------------------------------------- entropy
@@ -186,3 +188,106 @@ def test_distance_to_any_separates_unreachable_from_over_budget():
     assert search.distance_to_any("a", step, {"a"}) == (0, True)
     assert search.distance_to_any("a", step, {"b"}) == (1, True)
     assert search.distance_to_any("a", step, {"z"}) == (None, True)
+
+
+# --------------------------------------------------------------------- motion
+#
+# `oracles/motion.py` is the truth source for `cegis_miner`'s `effect.*`, so it
+# is the one place a bug would turn a correct engine into a filed defect. Every
+# case below is a hand-built frame pair with the answer written out.
+
+def _grid(rows):
+    return [list(r) for r in rows]
+
+
+def test_motion_reads_a_unit_step():
+    a = _grid([[0, 0, 0], [0, 5, 0], [0, 0, 0]])
+    b = _grid([[0, 0, 0], [0, 0, 5], [0, 0, 0]])
+    m = motion.read_motion(a, b, (1, 1), 5, 0)
+    assert (m.type, m.delta, m.to, m.frm) == ("move", (0, 1), (1, 2), (1, 1))
+
+
+def test_motion_reads_no_change_as_none():
+    a = _grid([[0, 5], [0, 0]])
+    assert motion.read_motion(a, _grid([[0, 5], [0, 0]]), (1, 1), 5, 0).type == "none"
+
+
+def test_motion_handles_an_overlapping_step_of_a_tall_mover():
+    """The vacated and entered strips do not touch the displacement directly.
+
+    A 2x1 mover stepping down vacates its top row and enters the row below its
+    bottom -- two cells two apart -- so any oracle that read the displacement off
+    the diff's corners would answer (2, 0) here. The right answer is (1, 0).
+    """
+    a = _grid([[7, 0], [7, 0], [0, 0]])
+    b = _grid([[0, 0], [7, 0], [7, 0]])
+    m = motion.read_motion(a, b, (2, 1), 7, 0)
+    assert (m.type, m.delta) == ("move", (1, 0))
+
+
+def test_motion_reads_a_teleport_with_disjoint_before_and_after():
+    a = _grid([[3, 0, 0], [0, 0, 0], [0, 0, 0]])
+    b = _grid([[0, 0, 0], [0, 0, 0], [0, 0, 3]])
+    m = motion.read_motion(a, b, (1, 1), 3, 0)
+    assert (m.type, m.delta, m.to) == ("move", (2, 2), (2, 2))
+
+
+def test_motion_is_not_fooled_by_a_same_coloured_neighbour():
+    """A static obstacle of the mover's colour sits where a wrong reading lands.
+
+    The 1x2 mover at (0,0) steps right to (0,1); an obstacle of the same colour
+    occupies (0,3). Two anchors of a 1x2 all-colour block cover the entered
+    cell, so the candidate set is genuinely ambiguous and only the exact replay
+    against frame `b` discards the wrong one.
+    """
+    a = _grid([[4, 4, 0, 4], [0, 0, 0, 0]])
+    b = _grid([[0, 4, 4, 4], [0, 0, 0, 0]])
+    m = motion.read_motion(a, b, (1, 2), 4, 0)
+    assert (m.type, m.delta) == ("move", (0, 1))
+
+
+def test_motion_refuses_a_diff_no_rigid_translation_explains():
+    """Two objects move at once: the oracle must say so, not pick one."""
+    a = _grid([[6, 0, 0], [6, 0, 0]])
+    b = _grid([[0, 6, 0], [0, 0, 6]])
+    with pytest.raises(motion.Unreadable):
+        motion.read_motion(a, b, (1, 1), 6, 0)
+
+
+def test_motion_refuses_a_recolour():
+    """A changed cell that is neither mover->background nor background->mover."""
+    a = _grid([[2, 0], [0, 0]])
+    b = _grid([[2, 9], [0, 0]])
+    with pytest.raises(motion.Unreadable):
+        motion.read_motion(a, b, (1, 1), 2, 0)
+
+
+@pytest.mark.parametrize("index", [0, 3, 11, 29, 57])
+def test_motion_agrees_with_the_generator_on_whole_gridworlds(index):
+    """The oracle against the world's own transition function, end to end.
+
+    `gridworld.Rules.step` is "the world's transition function, standing alone
+    from any engine" and `world.anchors` is its record. The oracle never reads
+    either -- it works from the rendered pixels -- so agreement across a whole
+    trajectory is an independent confirmation, and it is the check that would
+    catch a silently wrong oracle before it filed 21 false accusations.
+    """
+    world = gridworld.generate(prng.derive(campaign.DEFAULT_SEED, "gridworld", index))
+    read = motion.motions(world)
+    assert not motion.unreadable_reasons(world)
+    for t in range(len(world.action_list)):
+        want = (world.anchors[t + 1][0] - world.anchors[t][0],
+                world.anchors[t + 1][1] - world.anchors[t][1])
+        got = read[t]
+        if want == (0, 0):
+            assert got.type == "none", (index, t, got)
+        else:
+            assert (got.type, got.delta, got.to) == \
+                ("move", want, tuple(world.anchors[t + 1])), (index, t, got)
+
+
+def test_mover_anchors_reconstructs_the_whole_trajectory():
+    world = gridworld.generate(prng.derive(campaign.DEFAULT_SEED, "gridworld", 3))
+    anchors = motion.mover_anchors(world)
+    assert anchors is not None
+    assert anchors == [tuple(a) for a in world.anchors[:len(anchors)]]

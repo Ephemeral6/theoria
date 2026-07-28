@@ -28,6 +28,43 @@ wrong.
 `CertificateError` — the LP succeeded but the rational snap failed exact
 re-checking — is documented behaviour (D-007), so it is recorded as `skipped`
 with the reason rather than counted as a defect.
+
+## The bare `return []`, and what it was hiding (V-13)
+
+All four invariants used to open with `if cert is None: return []` (or
+`if heuristic is None`). That made "I checked this world and found nothing"
+and "I could not check this world at all" the *same empty list*, and
+`campaign.json` counts a world as evaluated by an invariant unless that
+invariant filed a `skipped`. So the standing campaign reported 500 of 500
+worlds evaluated for each of the four while the real figure is about 270 —
+`lp_potential` issues no certificate on roughly 46% of `jumpgraph` worlds, and
+on those worlds every invariant here costs a `linprog` call and reports
+nothing.
+
+The negative control for this is due to a parallel cross-check (E-11) and is
+worth stating because it is sharper than any argument: replace
+`engines.lp_potential.run` with `return None, None` — the engine **entirely
+disabled** — and the four invariants' output is byte-identical to the real
+engine's, while `campaign.json` goes on reporting `evaluated: 500, skipped: 0`.
+A battery that cannot tell a working engine from a deleted one is not measuring
+the engine. `tests/test_battery.py:test_a_dead_lp_potential_shows_up_as_lost_coverage`
+is that experiment, kept as a regression.
+
+Each `return []` is now a `finding.skipped` carrying the reason. **Nothing about
+the engine changed and no new claim is checked** — the four invariants are the
+same four. What changed is that the campaign's coverage column stopped
+overstating itself by ~46%.
+
+Two numbers that must not be mixed, because they answer different questions:
+
+* **~270/500 is about this battery** — the worlds on which these invariants
+  actually evaluate anything;
+* **the engine's incompleteness is ~21% of worlds** (E-11, exhaustive:
+  639/2189 = 29.2% of certificate-less *cases*, 21.3% of the whole). Most
+  certificate-less worlds are worlds where a goal is genuinely reachable and
+  declining to certify is the engine being *sound*, which is the opposite of a
+  gap. "No certificate" is not "incomplete", and the coverage number is not an
+  engine defect rate.
 """
 
 import math
@@ -79,6 +116,26 @@ def _solve(world: Any):
     return engine.run(world.graph, world.initial, goal_states=list(world.goal_states))
 
 
+def _skip_no_certificate(world: Any, invariant: str) -> finding.Finding:
+    """No certificate, so this invariant has nothing to evaluate — say so.
+
+    Not a defect and not a pass. `lp_potential` is entitled to decline
+    (D-014), and every invariant in this module is conditional on a certificate
+    existing, so a world without one is a world this invariant did not judge.
+    Recording it keeps `campaign.json`'s `invariant_worlds_evaluated` honest;
+    the `return []` it replaces made a declined world indistinguishable from a
+    clean one. See the module docstring for the measured size of the difference.
+    """
+    return finding.skipped(
+        ENGINE, invariant, world,
+        "the engine issued no certificate for this configuration, so there is "
+        "no claim to check. Declining is permitted (sound but incomplete, "
+        "DECISIONS.md D-014) and is often the *correct* answer here, since a "
+        "goal may be genuinely reachable; either way this world was not judged "
+        "by this invariant.",
+        initial=world.initial, cause="no_certificate")
+
+
 def _skip_certificate_error(world: Any, invariant: str,
                             exc: Exception) -> List[finding.Finding]:
     return [finding.skipped(
@@ -97,7 +154,7 @@ def certificate_implies_unreachable(world: Any) -> List[finding.Finding]:
     except CertificateError as exc:
         return _skip_certificate_error(world, "certificate_implies_unreachable", exc)
     if cert is None:
-        return []                       # no claim made; incompleteness is allowed
+        return [_skip_no_certificate(world, "certificate_implies_unreachable")]
 
     distance, exhausted = search.distance_to_any(
         world.initial, _successors(world.graph), _goal_set(world))
@@ -129,7 +186,7 @@ def three_conditions_hold(world: Any) -> List[finding.Finding]:
     except CertificateError as exc:
         return _skip_certificate_error(world, "three_conditions_hold", exc)
     if cert is None:
-        return []
+        return [_skip_no_certificate(world, "three_conditions_hold")]
 
     weights = [Fraction(w) for w in cert.weights]
 
@@ -175,7 +232,7 @@ def heuristic_is_admissible(world: Any) -> List[finding.Finding]:
     except CertificateError as exc:
         return _skip_certificate_error(world, "heuristic_is_admissible", exc)
     if heuristic is None:
-        return []
+        return [_skip_no_certificate(world, "heuristic_is_admissible")]
 
     states = list(world.graph.get("states") or ())
     if not states:
@@ -211,7 +268,7 @@ def infinite_means_unreachable(world: Any) -> List[finding.Finding]:
     except CertificateError as exc:
         return _skip_certificate_error(world, "infinite_means_unreachable", exc)
     if heuristic is None:
-        return []
+        return [_skip_no_certificate(world, "infinite_means_unreachable")]
 
     states = list(world.graph.get("states") or ())
     if not states or len(states) > SWEEP_BUDGET:

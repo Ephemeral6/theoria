@@ -1,4 +1,4 @@
-"""`cegis_miner` — four invariants, evaluated directly rather than via bitmasks.
+"""`cegis_miner` — six invariants, evaluated directly rather than via bitmasks.
 
 The engine reasons in integer bitmasks over transition indices. Every check here
 re-derives the same facts by calling `atoms.evaluate` on each `(state, action)`
@@ -26,13 +26,58 @@ asserting past either would file a bug against a promise never made:
 | `frontier_is_complete_to_size` | every minimal consistent guard within the rule's own size bound is in the frontier |
 | `applicable_equals_support` | a consistent rule's applicable set is its support, so `coverage` is n/n |
 | `guards_partition_the_evidence` | the ground rules are mutually exclusive and explain every transition |
+| `effects_agree_with_the_evidence` | the effect a rule claims is the motion its evidence actually shows |
+| `rules_fire_on_the_action_they_name` | the action a rule is filed under is the action taken at every transition it claims |
+
+## What V-13 added, and the gap it closed
+
+The first four invariants are, between them, a complete theory of **guards** —
+of *when* a rule fires. Not one of them read `Rule.effect`, so a rule set with
+correct guards and inverted effects passed the entire battery clean
+(`runs/…-V10-fuzz-mutation-power/PUBLISHED_VS_AUDITED.md`: `effect.*` is five
+published fields, all five mechanically consumed downstream by
+`cold-start-a0/prime/probe_runner.py:72`, and audited by a single pinned
+assertion on one engine-rig fixture). `effects_agree_with_the_evidence` is the
+missing half: what the rule says *happens*.
+
+Its truth comes from `fuzzlab/oracles/motion.py`, which reads the world's
+rendered frames and nothing else. That is not fussiness. The obvious source —
+`transitions[i].effect` — is `cegis_miner` repeating `mdl_segmenter`'s
+narration, so comparing against it would certify that the miner agrees with the
+segmenter while staying blind to both being wrong the same way. The oracle is
+allowed to fail: a frame pair it cannot resolve into one rigid mover
+translation is recorded `skipped` with the reason, never passed and never
+violated.
+
+**Scope, and why it is not uniform.** These two new invariants iterate
+`result.all_rules`; the four older ones iterate `result.rules`. That difference
+is deliberate and each half of it is a decision:
+
+* `all_rules` is what `cegis_miner/__init__.py:candidates()` publishes, and the
+  35 lifted rules in a measured 224 (15.6%) had never entered any invariant —
+  not a field unread, a whole class of candidate unlooked-at. Lifted rules are
+  the *most* wanted kind, being the generalised `push(?dir)` a playbook wants;
+* `guards_partition_the_evidence` must **not** move to `all_rules`. A lifted
+  rule covers exactly the transitions of the ground rules it collapses, so
+  mutual exclusion is false of `all_rules` by construction and the invariant
+  would fire on every world for a reason that is not a defect;
+* `frontier_guards_are_consistent` and `frontier_is_complete_to_size` must not
+  either: a lifted guard's atoms carry the direction variable, and evaluating
+  `act==?dir` against a concrete action is not a question with an answer.
+
+`applicable_equals_support` **was** moved to `all_rules` in V-13, because
+`lift()` builds both sets as the union over members whose own two sets are
+equal, so the claim is exactly as true of a lifted rule and is published in the
+same `coverage` string.
 """
 
 import itertools
-from typing import Any, Dict, List, Sequence, Set, Tuple
+from typing import Any, Dict, List, Optional, Sequence, Set, Tuple
 
 from fuzzlab import rig  # noqa: F401  (path bootstrap)
+from fuzzlab.oracles import motion
 from fuzzlab.props import finding
+from fuzzlab.worlds.gridworld import DELTA
 
 from engines import cegis_miner as engine  # noqa: E402
 from engines.cegis_miner import atoms as atom_mod  # noqa: E402
@@ -83,12 +128,54 @@ def _mine(world: Any):
                                                split_by_color=split)
         try:
             transitions = engine.transitions_from_segmentation(
-                world.frames, world.action_list, seg, background=background)
+                world.frames, world.action_list, seg, background=background,
+                track=_mover_track(world, seg))
         except ValueError as exc:
             errors.append("split_by_color=%s: %s" % (split, exc))
             continue
         return engine.mine(transitions), transitions, split
     raise Unminable("; ".join(errors))
+
+
+def _mover_track(world: Any, seg: Any) -> Optional[Any]:
+    """The segmenter track that is the world's mover, or `None` to keep the default.
+
+    **This is a corpus repair, and it is the second one this battery has needed.**
+    `transitions_from_segmentation` takes the track to mine as a parameter and
+    falls back to `seg.tracks[0]` — the segmenter's first component in raster
+    order. `_mine` used to take that fallback, and on the campaign seed's first
+    60 gridworlds **21 of the 57 minable ones were mining a static obstacle**.
+    A rock yields one `blocked_<D>` rule per action, `effect: none`, guards that
+    are trivially mutually exclusive and trivially complete: all four guard
+    invariants pass, on a rule set that says nothing ever happens. That is the
+    same shape of defect `worlds/gridworld.py:_place_obstacles` documents — a
+    green campaign over a corpus that could not have contradicted anything —
+    and it is why 37% of this engine's worlds were not testing it.
+
+    Which track is the mover is settled against `oracles/motion.py`'s
+    pixel-derived trajectory, so the choice does not depend on the segmenter
+    being right about anything except where it says its own tracks are. It is a
+    choice about **what to mine**, made before the miner runs; no invariant's
+    truth comes from here.
+
+    `None` (keep `tracks[0]`) when the pixels do not fix the mover's path —
+    chiefly a world whose mover never moves, where every object is static and
+    the distinction has no content.
+    """
+    anchors = motion.mover_anchors(world)
+    if anchors is None:
+        return None
+    shape, _colour, _background = motion.mover_spec(world)
+    for track in seg.tracks:
+        if tuple(track.shape) != shape:
+            continue
+        if len(track.anchors) < len(anchors):
+            continue
+        if all(track.anchors[t] is not None
+               and tuple(track.anchors[t]) == tuple(anchors[t])
+               for t in range(len(anchors))):
+            return track
+    return None
 
 
 def _fires_on(guard: Sequence[Any], transitions: Sequence[Any]) -> Set[int]:
@@ -199,14 +286,22 @@ def frontier_is_complete_to_size(world: Any) -> List[finding.Finding]:
 
 
 def applicable_equals_support(world: Any) -> List[finding.Finding]:
-    """A consistent rule's applicable set is exactly its support."""
+    """A consistent rule's applicable set is exactly its support.
+
+    Iterates `all_rules`, not `rules`: `lift()` builds a lifted rule's
+    `applicable` and `support` as the unions over members that each satisfy this
+    equality, so it is claimed of a lifted rule exactly as strongly, and
+    `candidates()` publishes the resulting `coverage` string for both. Before
+    V-13 every invariant here stopped at `result.rules` and the lifted class —
+    15.6% of published rules, measured — was never looked at.
+    """
     try:
         result, _transitions, _split = _mine(world)
     except (NoSeparatingGuard, Unminable) as exc:
         return _skip_no_guard(world, "applicable_equals_support", exc)
 
     out: List[finding.Finding] = []
-    for rule in result.rules:
+    for rule in result.all_rules:
         if set(rule.applicable) != set(rule.support):
             out.append(finding.violated(
                 ENGINE, "applicable_equals_support", world,
@@ -255,6 +350,253 @@ def guards_partition_the_evidence(world: Any) -> List[finding.Finding]:
     return out
 
 
+#: `_claimed_delta` could not resolve a parameterised effect against this
+#: transition's action. Distinct from `None`, which is the claim that nothing
+#: moved — conflating the two turns "I cannot read this claim" into "the engine
+#: says nothing happened" and manufactures violations.
+UNRESOLVED = object()
+
+
+def _mined_subject(world: Any, transitions: Sequence[Any]) -> Optional[finding.Finding]:
+    """`None` if the mined object is the world's mover; a `skipped` if it is not.
+
+    **This check is the difference between an invariant and a false accusation,
+    and it was found by making the accusation.** `transitions_from_segmentation`
+    is called with `track=None`, so it mines `seg.tracks[0]` — whichever track
+    the segmenter happened to list first. Measured on the campaign seed's first
+    60 gridworlds: of the 57 that mine at all, **21 mine a static obstacle
+    rather than the mover**. Those worlds produce a rule set of `blocked_*`
+    rules with `effect: none`, which is a *true* description of a rock, and the
+    first version of `effects_agree_with_the_evidence` reported all 21 as
+    violations because it compared them against the mover's motion.
+
+    That is also a finding about this battery rather than about the engine, and
+    it is filed as one in `BUGS.md`: in those 21 worlds the four guard
+    invariants are auditing a rule set that says nothing ever happens.
+
+    Identity is settled by comparing two independently derived trajectories —
+    the anchors the segmenter put in `state.anchor` (which is *input* to the
+    miner, and the same input its guards are evaluated against) against the
+    anchors `oracles/motion.py` chains out of the pixels. Nothing the miner
+    computed is consulted.
+    """
+    if not transitions:
+        return finding.skipped(
+            ENGINE, "effects_agree_with_the_evidence", world,
+            "no transitions were mined from this world")
+    shape, _colour, _background = motion.mover_spec(world)
+    anchors = motion.mover_anchors(world)
+    if anchors is None:
+        return finding.skipped(
+            ENGINE, "effects_agree_with_the_evidence", world,
+            "the pixels do not fix the mover's trajectory — either it never "
+            "moves in this world, or a frame pair is not one rigid mover "
+            "translation — so which object was mined cannot be established "
+            "without asking the segmenter")
+    mined = tuple(transitions[0].state.shape)
+    if mined != shape:
+        return finding.skipped(
+            ENGINE, "effects_agree_with_the_evidence", world,
+            "the mined track has bounding box %s and the world's mover is %s, "
+            "so this rule set describes some other object; "
+            "transitions_from_segmentation mines seg.tracks[0] and the "
+            "segmenter did not list the mover first"
+            % (list(mined), list(shape)),
+            mined_shape=list(mined), mover_shape=list(shape),
+            cause="mined_track_is_not_the_mover")
+    off = [t.index for t in transitions
+           if t.index >= len(anchors) or tuple(anchors[t.index]) != tuple(t.state.anchor)]
+    if off:
+        return finding.skipped(
+            ENGINE, "effects_agree_with_the_evidence", world,
+            "the mined track's anchors diverge from the mover's pixel-derived "
+            "trajectory at %d of %d transitions (first: %d), so this rule set "
+            "describes some other object of the same bounding box"
+            % (len(off), len(transitions), off[0]),
+            first_divergence=off[0],
+            cause="mined_track_is_not_the_mover")
+    return None
+
+
+def _claimed_delta(rule: Any, action: str) -> Optional[Tuple[int, int]]:
+    """The displacement this rule claims for a transition whose action is `action`.
+
+    `None` means the rule claims nothing moved. Three shapes, all read off the
+    published `Effect` and not off anything the miner computed:
+
+    * `type != "move"` — the rule claims nothing happens;
+    * `direction` set to a concrete compass name — the lifted template was
+      instantiated to one direction, so that is the claim for every member;
+    * `direction` set to anything the world does not recognise as a direction
+      (the engine writes `"?dir"`) — the claim is parameterised, and for a
+      transition taking action `a` it resolves to `DELTA[a]`. That is exactly
+      what `miner.py:_normalise` requires of every member before lifting them,
+      so it is the engine's own reading of the variable and not this module's.
+
+    `UNRESOLVED` is returned when a parameterised effect meets an action the
+    world does not name a direction for. It must not collapse into `None`:
+    `None` is the positive claim *nothing moved*, and reading an unresolvable
+    claim as that one would report a violation on every transition where the
+    mover did move. `gridworld` only ever issues compass actions, so this branch
+    is unreachable today — it is written because the alternative is a false
+    accusation waiting for the first family that is not `gridworld`.
+    """
+    effect = rule.effect
+    if effect.type != motion.MOVE:
+        return None
+    direction = getattr(effect, "direction", None)
+    if direction is not None:
+        if direction in DELTA:
+            return DELTA[direction]
+        resolved = DELTA.get(action)          # the variable, resolved per witness
+        return UNRESOLVED if resolved is None else resolved
+    return (int(effect.dy), int(effect.dx))
+
+
+def effects_agree_with_the_evidence(world: Any) -> List[finding.Finding]:
+    """A rule's `effect` is the motion its own evidence actually shows.
+
+    For every rule the engine publishes — ground and lifted — and every
+    transition index in that rule's support, the displacement the rule claims is
+    compared against the displacement `oracles/motion.py` reads out of the two
+    frames. The oracle imports nothing from `engines`; see its module docstring
+    for why `transitions[i].effect` is not an acceptable source of truth here.
+
+    `effect.to` is checked **only when the engine sets it**. `mine()` keeps a
+    destination only when every witness agrees on one, so `to = None` is a
+    documented refusal to claim rather than a false claim, and asserting against
+    it would file a bug against a promise never made. That leaves a real
+    residual gap — an engine that dropped a destination it could have stated
+    would not be caught — and `mutants/cegis_miner.py:cm-drop-effect-destination`
+    is registered as a predicted survivor so the gap is measured rather than
+    merely admitted.
+    """
+    invariant = "effects_agree_with_the_evidence"
+    try:
+        result, transitions, _split = _mine(world)
+    except (NoSeparatingGuard, Unminable) as exc:
+        return _skip_no_guard(world, invariant, exc)
+
+    truth = motion.motions(world)
+    refused = motion.unreadable_reasons(world)
+    actions = world.action_list
+
+    # The comparison is only meaningful if the engine's transition index means
+    # what the oracle assumes: the index of the frame the transition starts
+    # from. Checked, not assumed -- a silent renumbering would turn every
+    # comparison below into a comparison of unrelated pairs.
+    stray = sorted({t.index for t in transitions} - set(truth) - set(refused))
+    if stray:
+        return [finding.skipped(
+            ENGINE, invariant, world,
+            "the engine emitted transition indices %s with no corresponding "
+            "frame pair, so the oracle cannot line its evidence up with the "
+            "engine's" % stray[:6], stray=stray[:6])]
+
+    subject = _mined_subject(world, transitions)
+    if subject is not None:
+        return [subject]
+
+    out: List[finding.Finding] = []
+    unread: List[int] = []
+    for rule in result.all_rules:
+        for index in sorted(rule.support):
+            if index not in truth:
+                unread.append(index)
+                continue
+            action = actions[index] if index < len(actions) else None
+            claimed = _claimed_delta(rule, action)
+            actual = truth[index]
+            if claimed is UNRESOLVED:
+                unread.append(index)
+                continue
+            if claimed is None:
+                if actual.type != motion.NONE:
+                    out.append(finding.violated(
+                        ENGINE, invariant, world,
+                        "rule %s claims effect %r on transition %d, but the "
+                        "frames show the mover displaced by %s"
+                        % (rule.name, rule.effect.type, index, (actual.delta,)),
+                        rule=rule.name, transition=index,
+                        claimed=rule.effect.as_json(), actual_type=actual.type,
+                        actual_delta=list(actual.delta)))
+                    return out
+                continue
+            if actual.type != motion.MOVE or actual.delta != claimed:
+                out.append(finding.violated(
+                    ENGINE, invariant, world,
+                    "rule %s claims the mover moves by %s on transition %d "
+                    "(action %r), but the frames show %s"
+                    % (rule.name, list(claimed), index, action,
+                       "no motion" if actual.type == motion.NONE
+                       else "a displacement of %s" % (list(actual.delta),)),
+                    rule=rule.name, transition=index, action=action,
+                    claimed=rule.effect.as_json(),
+                    claimed_delta=list(claimed), actual_type=actual.type,
+                    actual_delta=list(actual.delta)))
+                return out
+            destination = getattr(rule.effect, "to", None)
+            if destination is not None and tuple(destination) != actual.to:
+                out.append(finding.violated(
+                    ENGINE, invariant, world,
+                    "rule %s claims the mover lands at %s on transition %d, "
+                    "but the frames put it at %s"
+                    % (rule.name, list(destination), index, list(actual.to)),
+                    rule=rule.name, transition=index,
+                    claimed=rule.effect.as_json(),
+                    claimed_to=list(destination), actual_to=list(actual.to)))
+                return out
+
+    if unread and not out:
+        out.append(finding.skipped(
+            ENGINE, invariant, world,
+            "%d of %d supported transition(s) could not be read as one rigid "
+            "mover translation, so their effects were not judged: %s"
+            % (len(unread), sum(len(r.support) for r in result.all_rules),
+               refused.get(unread[0], "no reason recorded")),
+            unreadable=sorted(set(unread))[:6]))
+    return out
+
+
+def rules_fire_on_the_action_they_name(world: Any) -> List[finding.Finding]:
+    """`rule.action` is the action really taken at every transition it claims.
+
+    `mine()` groups transitions by `(action, effect.key())` and files the group
+    under `members[0].action`, so a rule naming an action is asserting that the
+    whole group shares it. The published `action` field is what a manual hangs
+    the rule off; a rule filed under the wrong one is a true statement about the
+    world attached to the wrong lever.
+
+    Lifted rules are exempt by their own definition — `lift()` sets
+    `action = "?dir"` precisely because the members disagree — so the check runs
+    only where the named action is one the world can take.
+    """
+    invariant = "rules_fire_on_the_action_they_name"
+    try:
+        result, _transitions, _split = _mine(world)
+    except (NoSeparatingGuard, Unminable) as exc:
+        return _skip_no_guard(world, invariant, exc)
+
+    actions = world.action_list
+    out: List[finding.Finding] = []
+    for rule in result.all_rules:
+        if rule.action not in DELTA:
+            continue                    # the direction variable; nothing named
+        for index in sorted(rule.support):
+            if index >= len(actions):
+                continue
+            if actions[index] != rule.action:
+                out.append(finding.violated(
+                    ENGINE, invariant, world,
+                    "rule %s is filed under action %r but transition %d, which "
+                    "it claims, took action %r"
+                    % (rule.name, rule.action, index, actions[index]),
+                    rule=rule.name, transition=index,
+                    claimed_action=rule.action, actual_action=actions[index]))
+                return out
+    return out
+
+
 def _choose(n: int, k: int) -> int:
     out = 1
     for i in range(k):
@@ -267,6 +609,8 @@ INVARIANTS = {
     "frontier_is_complete_to_size": frontier_is_complete_to_size,
     "applicable_equals_support": applicable_equals_support,
     "guards_partition_the_evidence": guards_partition_the_evidence,
+    "effects_agree_with_the_evidence": effects_agree_with_the_evidence,
+    "rules_fire_on_the_action_they_name": rules_fire_on_the_action_they_name,
 }
 
 

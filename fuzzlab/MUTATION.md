@@ -466,3 +466,176 @@ consequence runs the other way and is worth stating in the engine's favour: a
 "returns a valid but non-optimal plan" mutant is a *real* defect here rather
 than a false positive, because `stub-bfs` does promise optimality where
 `fd-satisficing` would not.
+
+---
+
+# V-13 — the invariants added because V-10 measured the blind spots
+
+V-10's cross-cut (`runs/20260728T152000Z-V10-fuzz-mutation-power/PUBLISHED_VS_AUDITED.md`)
+counted the six engines' published payloads at **111 leaf fields**, of which 25
+were asserted by an invariant, 22 were read only as an index or a gate, and
+**64 had never been touched**. It ranked what to fix. V-13 did the top two, plus
+the coverage-accounting item V-10 booked and did not do.
+
+Three invariants were added, taking the battery from 23 to 26. Each has mutants,
+because **an invariant no mutant has ever killed and the blank it replaced are
+the same thing in evidence**. Every number below is measured.
+
+Reproduce: `python -m fuzzlab.mutation --engine cegis_miner --worlds 40` and
+`--engine probe_frontier`. Raw JSON in
+`runs/20260728T161127Z-V13-audit-the-published-surface/partials/`.
+
+## `cegis_miner.effects_agree_with_the_evidence`
+
+The gap, in V-10's words: all four existing invariants audit **guards** — *when*
+a rule fires. None read `Rule.effect` at all. So a rule set with perfect guards
+and inverted effects passed the entire battery clean, and `effect.*` is five
+published fields that `cold-start-a0/prime/probe_runner.py:72` consumes
+mechanically.
+
+Truth comes from `fuzzlab/oracles/motion.py`, which reads the world's rendered
+frames and imports nothing from `engines`. The tempting source —
+`transitions[i].effect` — is `cegis_miner` repeating `mdl_segmenter`'s
+narration, so comparing against it would have certified that the miner agrees
+with the segmenter while staying blind to both being wrong the same way. The
+oracle is checked against `gridworld.Rules.step` end to end in
+`tests/test_oracles.py` — 4455 transitions over 200 worlds, zero disagreement,
+zero unreadable — which is a check the campaign itself cannot perform.
+
+| mutant | kind | eval | inert | result |
+|---|---|---|---|---|
+| `cm-flip-effect-delta` | unsound | 25 | 15 | **killed 25/25**, first world 1 |
+| `cm-effect-none-becomes-move` | unsound | 37 | 3 | **killed 23/37**, first world 1 |
+| `cm-drift-effect-destination` | unsound | 14 | 26 | **killed 14/14**, first world 1 |
+| `cm-freeze-lifted-direction` | unsound | 23 | 17 | **killed 23/23**, first world 1 |
+| `cm-drop-effect-destination` | incomplete | 14 | 26 | **SURVIVED — predicted** |
+
+`cm-effect-none-becomes-move` killing 23 of 37 rather than 37 of 37 is not a
+weakness and is worth reading: the missing worlds are ones where the invariant
+records a `skipped` because the mined track could not be established as the
+mover (see the corpus section below), so the mutant ran on a world the invariant
+had declined to judge. That is the accounting working rather than failing.
+
+`cm-freeze-lifted-direction` is the one that closes V-10's largest single hole:
+before V-13 no invariant iterated `result.all_rules`, so the **35 lifted rules
+in a measured 224 published (15.6%)** were not a field left unread but an entire
+class of candidate nobody had looked at — and lifted rules are the *most* wanted
+kind, being the generalised `push(?dir)` a playbook wants.
+
+**`cm-drop-effect-destination` is the designed negative control.** `mine()`
+populates `effect.to` only when every witness agrees on a landing cell, so
+`to = None` is a documented refusal to claim; the invariant therefore asserts
+against `to` only where the engine states one. Clearing it is a real omission
+this invariant will not catch, it was pre-registered as a survivor, and it
+survived. That is the measured size of the remaining gap rather than a sentence
+claiming the gap is small.
+
+**Why none of these kills is a tautology.** The V-10 adversarial pass caught
+`cm-weaken-ground-guard` selecting its injection point with
+`_fires_on(weaker) > support` — the very predicate its target invariant
+evaluates — making its death circular. Every mutant above picks its target
+**structurally** ("the first ground rule whose effect is a move", "the first
+lifted rule"), none imports `oracles/motion.py`, and none asks whether the value
+it writes would trip anything. What licenses the kills is the **baseline**: on
+the clean tree the invariant returns nothing on every world it judges, so the
+oracle and the engine already agree there, and the mutant is the only thing that
+changed.
+
+## `cegis_miner.rules_fire_on_the_action_they_name`
+
+`action` was on V-10's unaudited list. `mine()` groups on
+`(transition.action, effect.key())`, so a rule naming an action asserts the
+whole group took it; a rule filed under the wrong one is a true statement about
+the world attached to the wrong lever.
+
+| mutant | kind | eval | inert | result |
+|---|---|---|---|---|
+| `cm-relabel-rule-action` | unsound | 39 | 1 | **killed 39/39**, first world 1 |
+
+Deliberately kept apart from the effect mutants: a ground rule's `dy`/`dx` are
+explicit, so re-filing it under another direction leaves
+`effects_agree_with_the_evidence` reading exactly the same claim, and only the
+action invariant can see it. The clean single-invariant attribution is the
+evidence that the two are independent rather than one check written twice.
+
+## `probe_frontier.costs_are_the_world's`
+
+V-10 ranked this second and the reason survives contact: `value_bits_per_cost`
+is this engine's whole output semantics — it exists to answer "which experiment
+next" — and `cost` was read by exactly one invariant, as a **sort key only**.
+`ranking_is_sound` asserts that `(-value, -entropy, cost, action)` ascends, and
+a uniformly wrong cost still ascends.
+
+| mutant | kind | eval | inert | result |
+|---|---|---|---|---|
+| `pf-flatten-reported-costs` | inconsistent | 35 | 5 | **killed 35/35** (V-10: survived) |
+| `pf-scale-reported-costs` | inconsistent | 40 | 0 | **killed 40/40**, first world 1 |
+
+`pf-flatten-reported-costs` was V-10's pre-registered expected survivor against
+`ranking_is_sound`, and it survived: an engine silently degraded to cost-blind
+entropy ranking, with `value_bits_per_cost` wrong for every non-unit-cost
+action, invisible to a green campaign. Its `expect_kill` now names
+`costs_are_the_world's` and it dies.
+
+**`pf-scale-reported-costs` is the stronger of the two.** Scaling every cost by
+a positive constant divides every `value` by that constant and preserves the
+engine's own sort order *on every world*, so no ranking check could ever have
+caught it on any input. A kill there is the cost comparison and nothing else.
+
+## Two V-10 predictions this run refutes
+
+1. **`cm-shrink-lifted-support` is no longer a survivor.** V-10 pre-registered
+   it as one on the ground that "every invariant iterates `result.rules`, never
+   `result.all_rules`, while `candidates()` publishes `all_rules`". V-13 moved
+   `applicable_equals_support` to `all_rules` — `lift()` builds both sets as
+   unions over members whose own two sets are equal, so the claim is exactly as
+   true of a lifted rule and is published in the same `coverage` string — and
+   the mutant now dies **23/23**. V-10's prediction was correct about the
+   battery as it stood and is no longer true of it.
+
+   Scope did **not** move uniformly, and each exception is a decision rather
+   than an oversight: `guards_partition_the_evidence` must stay on `rules`,
+   because a lifted rule covers exactly the transitions of the ground rules it
+   collapses and mutual exclusion is therefore false of `all_rules` by
+   construction; both `frontier_*` invariants must stay too, because a lifted
+   guard's atoms carry the direction variable and evaluating `act==?dir` against
+   a concrete action is not a question with an answer.
+
+2. **`pf-flatten-reported-costs` is no longer a survivor**, as above.
+
+`cm-empty-frontier` and `cm-truncation-alibi` remain survivors, exactly as V-10
+predicted and for the reason it gave: `frontier_is_complete_to_size` opens with
+`if rule.frontier_truncated or not rule.frontier: continue`, so both are exempt
+by construction. V-13 did not touch that and does not claim to have.
+
+## A corpus defect found by trying to file a false accusation
+
+The first version of `effects_agree_with_the_evidence` reported **21 violations
+across 60 worlds**. `fuzzlab/README.md` says to check the oracle before filing.
+The oracle was right; the **subject** was wrong.
+
+`transitions_from_segmentation` takes the track to mine as a parameter and falls
+back to `seg.tracks[0]` — the segmenter's first component in raster order.
+`props/cegis_miner.py:_mine` had always taken that fallback, and **21 of the 57
+minable worlds were mining a static obstacle**. A rock yields one `blocked_<D>`
+rule per action with `effect: none`, guards that are trivially mutually
+exclusive and trivially complete: all four guard invariants pass, on a rule set
+that says nothing ever happens. Those rules are *true of the rock*, so this is
+not an engine defect. It is 37% of this engine's corpus not testing it — the
+same shape of defect `worlds/gridworld.py:_place_obstacles` documents, where an
+unsatisfiable acceptance test produced 0 obstacles in 3200 worlds and a fully
+green campaign that certified nothing.
+
+`_mine` now selects the track whose anchors match `oracles/motion.py`'s
+pixel-derived mover trajectory. Measured on the same 60 worlds: the unminable
+count is **unchanged at 3**, the "not the mover" skips fall from 21 to 6, and
+`effects_agree_with_the_evidence` covers **51 of 60** instead of 36 — still with
+zero violations. Over the standing 500-world campaign it evaluates **426 of
+500**: 20 unminable, 54 where the pixels do not fix the mover's path at all
+(chiefly a mover that never moves, so no pixel names its position).
+
+**This is why a mutant is not a substitute for a real defect, and vice versa.**
+A mutant proves an invariant *can* fire; only a real defect proves it fires *in
+the right place*. Here the second kind of evidence arrived first, and reading
+the 21 findings instead of counting them is what turned a bad invariant into a
+corpus repair.

@@ -1,0 +1,68 @@
+{
+  "prompt_id": "V13-audit-the-published-surface",
+  "branch": "agent/v13-audit-the-published-surface",
+  "base_commit": "68a8365a5ec42eebd6df704e315c99aa8b1e73a2",
+  "utc": "2026-07-28T16:11:27Z",
+  "lane": "verify",
+  "author": "RES-3 executor",
+  "builds_on": {
+    "branch": "agent/v10-fuzz-mutation-power",
+    "commit": "0d0068f",
+    "merged_into_this_branch": true,
+    "input": "fuzzlab/runs/20260728T152000Z-V10-fuzz-mutation-power/PUBLISHED_VS_AUDITED.md"
+  },
+  "scope": {
+    "written": ["fuzzlab/"],
+    "engine_rig_bytes_changed": 0,
+    "contracts_bytes_changed": 0,
+    "network": "none",
+    "api_calls": 0,
+    "sealed_pile_contact": "none"
+  },
+  "deliverables": [
+    "fuzzlab/oracles/motion.py",
+    "fuzzlab/props/cegis_miner.py",
+    "fuzzlab/props/probe_frontier.py",
+    "fuzzlab/props/lp_potential.py",
+    "fuzzlab/mutants/cegis_miner.py",
+    "fuzzlab/mutants/probe_frontier.py",
+    "fuzzlab/tests/test_battery.py",
+    "fuzzlab/tests/test_oracles.py",
+    "fuzzlab/MUTATION.md",
+    "fuzzlab/BUGS.md"
+  ],
+  "new_invariants": [
+    {
+      "engine": "cegis_miner",
+      "name": "effects_agree_with_the_evidence",
+      "oracle": "fuzzlab/oracles/motion.py",
+      "oracle_imports_engines": false,
+      "killed_by": ["cm-flip-effect-delta", "cm-effect-none-becomes-move",
+                    "cm-drift-effect-destination", "cm-freeze-lifted-direction"]
+    },
+    {
+      "engine": "cegis_miner",
+      "name": "rules_fire_on_the_action_they_name",
+      "oracle": "world.action_list",
+      "oracle_imports_engines": false,
+      "killed_by": ["cm-relabel-rule-action"]
+    },
+    {
+      "engine": "probe_frontier",
+      "name": "costs_are_the_world's",
+      "oracle": "world.cost_map()",
+      "oracle_imports_engines": false,
+      "killed_by": ["pf-flatten-reported-costs", "pf-scale-reported-costs"]
+    }
+  ],
+  "new_mutants": [
+    "cm-flip-effect-delta",
+    "cm-effect-none-becomes-move",
+    "cm-drift-effect-destination",
+    "cm-drop-effect-destination",
+    "cm-freeze-lifted-direction",
+    "cm-relabel-rule-action",
+    "pf-scale-reported-costs"
+  ],
+  "adversarial_review": "ADVERSARIAL-1.md"
+}

@@ -1,0 +1,17 @@
+[ok  ] oracle and battery tests
+        ........................................................................ [ 80%]
+        .................                                                        [100%]
+[ok  ] campaign smoke, all six engines
+          "worlds_checked": 360
+        }
+        
+        -> out\campaign.json
+[ok  ] engine-rig's own suite (the tree under test)
+        ..........s....................................ss....................... [ 44%]
+        ........................................................................ [ 66%]
+        ........................................................................ [ 88%]
+        ....................................                                     [100%]
+
+last campaign totals: {"generator_errors": 0, "invariants": 26, "raised": 0, "skipped": 140, "violated": 0, "worlds_checked": 360}
+
+green
