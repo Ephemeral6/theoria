@@ -930,3 +930,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：`python papers/phase1-workshop/assemble.py` 确定性重装 12 节（~24 107 词）；改前空跑不脏树。零 API、零模型调用、零网络、$0.00、封存堆零接触；`battery/` 一个制品都没重算，全部按提交时的字节读。
 阻塞：无。
 下一步：**给所有轨道的一条更正，比本工单其余部分都值钱**——`arc-recon/data/piles.json` **在 Windows 检出上确实是 CRLF**：`git ls-files --eol` 报 `i/lf w/crlf`，`core.autocrlf=true`，且没有 `.gitattributes` 盖住这条路径，于是同一个 blob 在本 worktree 里带 **111 个 CRLF**、裸哈希 `f2ef44d1…`，LF 归一化后才是 `d3140eff…`。我一度按某次核查把「Windows 上还有第三个值」当成杜撰删掉了——**那次核查量的是主检出（恰好是 LF），结论对一个工作副本成立、对仓库不成立**。凡是把某个「文件哈希」当成跨机器稳定量来用的地方（发布清单、冻结包、任何 `files[].sha256`），都要么先归一化再算、要么写明是在哪种检出上算的。另：`OPEN_ITEMS.md` 的 A2 在 A1 关闭后已解锁，是离投稿最近的一条；六条 `battery/` 自己的 stale 串（`METRICS.md` 仍自称 v1、K10 条目与自己的 tier 列打架、`REPORT_V2.md` 的「37 land / 13 demoted」是 v2.1 前的数、`DECISIONS.md` 没给 v2.1 四道防御留条目）不是本领地的活，已投 `monitor/inbox/`。
+
+## [engine-rig] 2026-07-29T00:12Z S15-ledger-hashchain
+状态：账本上链，按 D-024 已裁决的方案施工（未重新设计）。`prev` = 前一行**磁盘字节**的 sha256（含它自己的 prev），进 canon.ENVELOPE 由写入方独占，可选字段所以格式仍是 v1.0，与 seq 在同一把锁内赋值。`proxy/tools/verify_chain.py` 逐行按字节校验，六种结局（PASS/FAIL/PARTIAL/UNCHAINED/EMPTY/MISSING）互不折叠。交付前的对抗性复核推翻了两处并已修：**尾部截断原本验成 PASS**（没有东西链到最后一行，而删掉跑砸的那段结尾正是动机最强的篡改），现由 `--expect-head-file` 校验**前缀**——同时解决了「同一份共享账本被后续诚实追加后，旧链头必然报 FAIL」这个会把警报训练成噪音的问题；以及 LEDGER_FORMAT §2 仍写着链头「随分支提交进 git」，而 runner 写的位置在 gitignore 的 var/ 下——**见证写进了伪造者同样能改的地方**，代码/测试/文档/决策四道都没拦住，一条 git check-ignore 才拆穿。
+测试：proxy 283 通过（新增 28 条链测试，每条真的动一次文件再要求变红；含正对照与两条把诚实边界钉住的测试）。
+阻塞：none
+下一步：链尚无消费者——冻结打分器没有链检查项（D-014 要求配伪造负对照）、validate_ledger 不走链、upgrade_ledger 未给 lifted 流标 chain.enabled=false。已在 D-029 里明写「未做」，免得被当成已做。
