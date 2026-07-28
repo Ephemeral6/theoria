@@ -101,3 +101,54 @@ asserted a comparison it had no second arm to make.
 * `2026-07-28T13:05Z` — worktree and branch created off `d1733df`; run directory
   and this plan written before any code, deliberately: the plan is the artefact
   the two previous attempts did not leave behind.
+
+* `2026-07-28T13:25Z` — **step 1 done: `worlds/a0_abl.py`, `worlds/a2_abl.py`.**
+
+  Both are selectors, not reimplementations. `A0World` and `A2World` already
+  expose the exact four methods `plan_abl.run_plan` asks a world for —
+  `initial` / `step` / `render` / `is_win` — so upstream objects are handed
+  through unwrapped. That is a constraint rather than convenience: every line
+  of adapter between the arm and the world is a place a *second* difference
+  could enter, and P-1/P-2 would then be testing the adapter instead of the cut.
+
+  One wrapper exists, in `a2_abl`, and it is the exhibit. Upstream documents
+  `A2World.step_holed` as *"not a variant of the world … the referee's copy of
+  what the holed manual claims"*, so it is given the world's interface as
+  `HoledManualWorld`, carries `is_a_world = False`, and every method except
+  `step` delegates. The two must be nameable separately and never confused,
+  because confusing them is precisely the failure E2 exists to display.
+
+  `a2_abl.disagreement()` computes the difference rather than asserting it, and
+  the first run is a good sign for the exhibit:
+
+  ```
+  55 reachable states explored, 1 disagreement
+  state (6,4,1) + DOWN:  world goes to (7,6,1);  manual says (6,4,1)
+  ```
+
+  **Exactly one transition** out of the whole reachable set, and it is the
+  teleport. That is the exhibit in one line: the holed manual is right about
+  everything except the single rule that makes the level solvable, which is
+  what makes "unsolvable" a theorem true of the manual and false of the world —
+  and what makes it invisible to an arm that owes no certificate.
+
+  A count of zero here would have meant the exhibit exhibits nothing; the
+  function is written to make that loud rather than quiet.
+
+## Handoff — where the next session picks this up
+
+**A4a is claimed by RES-1 and is not finished.** The board lock is deliberate:
+this is a resumption, not a fresh claim. A restarted RES-1 must read this file
+and continue at step 2 rather than run `board.py claim`.
+
+Done: step 1 (worlds).
+Next: **step 2, `theory/`** — the arm's own DSL copy with the laws section
+demoted. `downgrade.py` is a pure text transform and already asserts, in
+`downgrade_text`, that no `[status: proven]` survives; it needs a source DSL to
+transform, which is `cold-start-a0`'s manual, copied into `ablation-arm/theory/`
+and never edited in place. Then step 3, the driver, which is the piece
+`DESIGN.md` §12 lists only implicitly and which is why the arm has never run
+end to end.
+
+Nothing in this run has made an API call, opened a socket, or touched the
+sealed pile, and no byte has been written into any upstream tree.
