@@ -413,7 +413,7 @@
       },
       "direction": "neutral",
       "family": "economy",
-      "tier": "main"
+      "tier": "reference"
     },
     "E2": {
       "by_status": {
@@ -423,7 +423,7 @@
       },
       "direction": "higher",
       "family": "economy",
-      "tier": "main"
+      "tier": "reference"
     },
     "E3": {
       "by_status": {
@@ -461,7 +461,7 @@
       },
       "direction": "neutral",
       "family": "economy",
-      "tier": "main"
+      "tier": "reference"
     },
     "E7": {
       "by_status": {
@@ -489,7 +489,7 @@
       },
       "direction": "higher",
       "family": "epistemic",
-      "tier": "main"
+      "tier": "reference"
     },
     "K11": {
       "by_status": {
@@ -507,7 +507,7 @@
       },
       "direction": "higher",
       "family": "epistemic",
-      "tier": "main"
+      "tier": "reference"
     },
     "K13": {
       "by_status": {
@@ -536,7 +536,7 @@
       },
       "direction": "higher",
       "family": "epistemic",
-      "tier": "main"
+      "tier": "reference"
     },
     "K3": {
       "by_status": {
@@ -612,7 +612,7 @@
       },
       "direction": "lower",
       "family": "mechanism",
-      "tier": "main"
+      "tier": "reference"
     },
     "M2": {
       "by_status": {
@@ -639,7 +639,7 @@
       },
       "direction": "lower",
       "family": "mechanism",
-      "tier": "main"
+      "tier": "reference"
     },
     "M5": {
       "by_status": {
@@ -676,7 +676,7 @@
       },
       "direction": "higher",
       "family": "planning",
-      "tier": "main"
+      "tier": "reference"
     },
     "P3": {
       "by_status": {
@@ -695,7 +695,7 @@
       },
       "direction": "lower",
       "family": "planning",
-      "tier": "main"
+      "tier": "reference"
     },
     "P5": {
       "by_status": {
@@ -704,7 +704,7 @@
       },
       "direction": "neutral",
       "family": "planning",
-      "tier": "main"
+      "tier": "reference"
     },
     "X1": {
       "by_status": {
@@ -734,7 +734,7 @@
       },
       "direction": "higher",
       "family": "exploration",
-      "tier": "main"
+      "tier": "reference"
     },
     "X4": {
       "by_status": {
@@ -753,7 +753,7 @@
       },
       "direction": "neutral",
       "family": "exploration",
-      "tier": "main"
+      "tier": "reference"
     },
     "X6": {
       "by_status": {
