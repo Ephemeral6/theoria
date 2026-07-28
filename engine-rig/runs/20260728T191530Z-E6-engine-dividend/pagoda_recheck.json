@@ -1,0 +1,212 @@
+{
+  "all_passed": true,
+  "method": "the three conditions re-derived from the rule set, with the move set grounded from the declared rules; the producer's own obligation list is refused as input and compared once, as a differential, in anchors.pagoda_differential",
+  "n_accepted": 3,
+  "n_certificates": 3,
+  "n_differentials_agree": 3,
+  "n_passed": 3,
+  "rows": [
+    {
+      "certificate": "peg4-1110-pagoda",
+      "conditions": {
+        "goal_break": true,
+        "potential_init": true,
+        "potential_nonincreasing": true,
+        "predicate_wellformed": true,
+        "ruleset_binding": true
+      },
+      "differential": {
+        "agrees": true,
+        "certificate": "peg4-1110-pagoda",
+        "checks": {
+          "bound_agrees": true,
+          "goal_states_agree": true,
+          "initial_state_agrees": true,
+          "listed_moves_replay": true,
+          "move_set_agrees": true,
+          "weights_agree": true
+        },
+        "derived_goal_states": [
+          "0100"
+        ],
+        "derived_initial_state": [
+          "1110"
+        ],
+        "document": "pagoda_4_1110_to_0100.json",
+        "document_goal_states": [
+          "0100"
+        ],
+        "document_initial_state": "1110",
+        "document_sha256": "5fd37c24c7f11edfd7a249cb78f5d88d3021147e030b2126577d868e122519aa",
+        "document_weights": [
+          -1,
+          1,
+          0,
+          1
+        ],
+        "n_moves_derived": 4,
+        "n_moves_listed": 4,
+        "replay_mismatches": [],
+        "ruleset": "peg4-1110",
+        "transcribed_weights": {
+          "pos0": -1,
+          "pos1": 1,
+          "pos2": 0,
+          "pos3": 1
+        }
+      },
+      "document": "pagoda_4_1110_to_0100.json",
+      "expected": "ACCEPT",
+      "failed_conditions": [],
+      "goal_reachable": false,
+      "n_potential_checks": 32,
+      "n_raising_transitions": 0,
+      "n_satisfying": 8,
+      "n_states": 16,
+      "passed": true,
+      "potential_at_init": [
+        0
+      ],
+      "potential_bound": 0,
+      "ruleset": "peg4-1110",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT"
+    },
+    {
+      "certificate": "peg5-11011-to-01000-pagoda",
+      "conditions": {
+        "goal_break": true,
+        "potential_init": true,
+        "potential_nonincreasing": true,
+        "predicate_wellformed": true,
+        "ruleset_binding": true
+      },
+      "differential": {
+        "agrees": true,
+        "certificate": "peg5-11011-to-01000-pagoda",
+        "checks": {
+          "bound_agrees": true,
+          "goal_states_agree": true,
+          "initial_state_agrees": true,
+          "listed_moves_replay": true,
+          "move_set_agrees": true,
+          "weights_agree": true
+        },
+        "derived_goal_states": [
+          "01000"
+        ],
+        "derived_initial_state": [
+          "11011"
+        ],
+        "document": "pagoda_5_11011_to_01000.json",
+        "document_goal_states": [
+          "01000"
+        ],
+        "document_initial_state": "11011",
+        "document_sha256": "365074345f865361660c8b447d99bd32d4c8fb1e7497e91bc1c7e4720346f035",
+        "document_weights": [
+          -1,
+          1,
+          0,
+          1,
+          -1
+        ],
+        "n_moves_derived": 6,
+        "n_moves_listed": 6,
+        "replay_mismatches": [],
+        "ruleset": "peg5-11011-to-01000",
+        "transcribed_weights": {
+          "pos0": -1,
+          "pos1": 1,
+          "pos2": 0,
+          "pos3": 1,
+          "pos4": -1
+        }
+      },
+      "document": "pagoda_5_11011_to_01000.json",
+      "expected": "ACCEPT",
+      "failed_conditions": [],
+      "goal_reachable": false,
+      "n_potential_checks": 132,
+      "n_raising_transitions": 0,
+      "n_satisfying": 22,
+      "n_states": 32,
+      "passed": true,
+      "potential_at_init": [
+        0
+      ],
+      "potential_bound": 0,
+      "ruleset": "peg5-11011-to-01000",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT"
+    },
+    {
+      "certificate": "peg5-11011-to-00010-pagoda",
+      "conditions": {
+        "goal_break": true,
+        "potential_init": true,
+        "potential_nonincreasing": true,
+        "predicate_wellformed": true,
+        "ruleset_binding": true
+      },
+      "differential": {
+        "agrees": true,
+        "certificate": "peg5-11011-to-00010-pagoda",
+        "checks": {
+          "bound_agrees": true,
+          "goal_states_agree": true,
+          "initial_state_agrees": true,
+          "listed_moves_replay": true,
+          "move_set_agrees": true,
+          "weights_agree": true
+        },
+        "derived_goal_states": [
+          "00010"
+        ],
+        "derived_initial_state": [
+          "11011"
+        ],
+        "document": "pagoda_5_11011_to_00010.json",
+        "document_goal_states": [
+          "00010"
+        ],
+        "document_initial_state": "11011",
+        "document_sha256": "6d88e9edf11680f4f497dadf35264c081ea5015b4ac23a16c06a671e51124406",
+        "document_weights": [
+          -1,
+          1,
+          0,
+          1,
+          -1
+        ],
+        "n_moves_derived": 6,
+        "n_moves_listed": 6,
+        "replay_mismatches": [],
+        "ruleset": "peg5-11011-to-00010",
+        "transcribed_weights": {
+          "pos0": -1,
+          "pos1": 1,
+          "pos2": 0,
+          "pos3": 1,
+          "pos4": -1
+        }
+      },
+      "document": "pagoda_5_11011_to_00010.json",
+      "expected": "ACCEPT",
+      "failed_conditions": [],
+      "goal_reachable": false,
+      "n_potential_checks": 132,
+      "n_raising_transitions": 0,
+      "n_satisfying": 22,
+      "n_states": 32,
+      "passed": true,
+      "potential_at_init": [
+        0
+      ],
+      "potential_bound": 0,
+      "ruleset": "peg5-11011-to-00010",
+      "second_opinion": "no goal state is reachable -- the claim is true of this rule set",
+      "verdict": "ACCEPT"
+    }
+  ]
+}

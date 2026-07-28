@@ -1,0 +1,183 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e6-dividend-v2\engine-rig\runs\20260728T191530Z-E6-engine-dividend\guarded\sokoban_guarded_full_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e6-dividend-v2\engine-rig\runs\20260728T191530Z-E6-engine-dividend\guarded\far7_guarded_full.pddl' --sas-file output.sas
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Parsing: [0.000s CPU, 0.002s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.016s CPU, 0.001s wall-clock]
+Preparing model... [0.000s CPU, 0.000s wall-clock]
+Generated 26 rules.
+Computing model... [0.000s CPU, 0.008s wall-clock]
+1154 relevant atoms
+1696 auxiliary atoms
+2850 final queue length
+3903 total queue pushes
+Completing instantiation... [0.000s CPU, 0.006s wall-clock]
+Instantiating: [0.016s CPU, 0.016s wall-clock]
+Computing fact groups...
+Finding invariants...
+7 initial candidates
+Finding invariants: [0.016s CPU, 0.001s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.001s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+89 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.016s CPU, 0.003s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Processing axioms: [0.000s CPU, 0.001s wall-clock]
+Translating task: [0.000s CPU, 0.008s wall-clock]
+696 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+11 propositions removed
+Detecting unreachable propositions: [0.000s CPU, 0.004s wall-clock]
+Reordering and filtering variables...
+92 of 92 variables necessary.
+49 of 52 mutex groups necessary.
+432 of 432 operators necessary.
+64 of 64 axiom rules necessary.
+Reordering and filtering variables: [0.016s CPU, 0.003s wall-clock]
+Translator variables: 92
+Translator derived variables: 40
+Translator facts: 317
+Translator goal facts: 2
+Translator mutex groups: 49
+Translator total mutex groups size: 188
+Translator operators: 432
+Translator axioms: 64
+Translator task size: 4215
+warning: could not determine peak memory
+Writing output... [0.000s CPU, 0.013s wall-clock]
+Done! [0.047s CPU, 0.050s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'let(hlm,eval_modify_costs(landmark_sum(lm_factory=lm_reasonable_orders_hps(lm_rhw()),pref=false),cost_type=one),let(hff,eval_modify_costs(ff(),cost_type=one),lazy_greedy([hff,hlm],preferred=[hff,hlm],cost_type=one,reopen_closed=false)))' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmprq9qso2u\sas_plan' < output.sas
+[t=0.000147s, 1960 KB] Search code revision: 7120aa0
+[t=0.000234s, 1972 KB] reading input...
+[t=0.004737s, 2624 KB] done reading input!
+[t=0.007213s, 3360 KB] Simplifying 3624 unary operators... done! [3624 unary operators]
+[t=0.008271s, 3620 KB] time to simplify: 0.001063s
+[t=0.008426s, 3620 KB] Initializing additive heuristic...
+[t=0.008431s, 3620 KB] Initializing FF heuristic...
+[t=0.009319s, 3620 KB] Initializing landmark sum heuristic...
+[t=0.009325s, 3620 KB] Generating landmark graph...
+[t=0.009384s, 3620 KB] Building a landmark graph with reasonable orders.
+[t=0.009456s, 3620 KB] Initializing Exploration...
+[t=0.009893s, 3768 KB] Generating landmarks using the RPG/SAS+ approach
+[t=0.011075s, 3860 KB] Landmarks generation time: 0.001689s
+[t=0.011083s, 3860 KB] Discovered 15 landmarks, of which 7 are disjunctive and 0 are conjunctive.
+[t=0.011085s, 3860 KB] There are 16 landmark orderings.
+[t=0.011091s, 3860 KB] approx. reasonable orders
+[t=0.011112s, 3860 KB] Landmarks generation time: 0.001786s
+[t=0.011117s, 3860 KB] Discovered 15 landmarks, of which 7 are disjunctive and 0 are conjunctive.
+[t=0.011119s, 3860 KB] There are 16 landmark orderings.
+[t=0.011121s, 3860 KB] Landmark graph generation time: 0.001798s
+[t=0.011127s, 3860 KB] Landmark graph contains 15 landmarks, of which 7 are disjunctive and 0 are conjunctive.
+[t=0.011129s, 3860 KB] Landmark graph contains 16 orderings.
+[t=0.011184s, 3860 KB] Building successor generator... done!
+[t=0.011325s, 3860 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.011328s, 3860 KB] time for successor generation creation: 0.000134s
+[t=0.011333s, 3860 KB] Variables: 92
+[t=0.011336s, 3860 KB] FactPairs: 317
+[t=0.011339s, 3860 KB] Bytes per state: 16
+[t=0.011368s, 3860 KB] Conducting lazy best first search, (real) bound = 2147483647
+[t=0.011419s, 3860 KB] New best heuristic value for landmark_sum_heuristic: 9
+[t=0.011423s, 3860 KB] New best heuristic value for ff: 31
+[t=0.011425s, 3860 KB] g=0, 1 evaluated, 0 expanded
+[t=0.011436s, 3860 KB] Initial heuristic value for landmark_sum_heuristic: 9
+[t=0.011439s, 3860 KB] Initial heuristic value for ff: 31
+[t=0.011466s, 3860 KB] New best heuristic value for ff: 29
+[t=0.011470s, 3860 KB] g=1, 2 evaluated, 1 expanded
+[t=0.011496s, 3860 KB] New best heuristic value for ff: 21
+[t=0.011500s, 3860 KB] g=2, 3 evaluated, 2 expanded
+[t=0.011570s, 3860 KB] New best heuristic value for ff: 15
+[t=0.011573s, 3860 KB] g=4, 6 evaluated, 5 expanded
+[t=0.011727s, 3860 KB] New best heuristic value for landmark_sum_heuristic: 8
+[t=0.011731s, 3860 KB] g=8, 13 evaluated, 12 expanded
+[t=0.011985s, 3860 KB] New best heuristic value for ff: 14
+[t=0.011989s, 3860 KB] g=7, 26 evaluated, 25 expanded
+[t=0.012028s, 3860 KB] New best heuristic value for landmark_sum_heuristic: 7
+[t=0.012032s, 3860 KB] New best heuristic value for ff: 13
+[t=0.012034s, 3860 KB] g=8, 28 evaluated, 27 expanded
+[t=0.012053s, 3860 KB] New best heuristic value for landmark_sum_heuristic: 6
+[t=0.012057s, 3860 KB] g=9, 29 evaluated, 28 expanded
+[t=0.012088s, 3860 KB] New best heuristic value for ff: 11
+[t=0.012092s, 3860 KB] g=9, 31 evaluated, 30 expanded
+[t=0.012217s, 3860 KB] New best heuristic value for landmark_sum_heuristic: 5
+[t=0.012221s, 3860 KB] g=12, 39 evaluated, 38 expanded
+[t=0.012434s, 3860 KB] New best heuristic value for ff: 8
+[t=0.012438s, 3860 KB] g=15, 52 evaluated, 51 expanded
+[t=0.012454s, 3860 KB] New best heuristic value for ff: 6
+[t=0.012458s, 3860 KB] g=16, 53 evaluated, 52 expanded
+[t=0.012473s, 3860 KB] New best heuristic value for ff: 4
+[t=0.012477s, 3860 KB] g=17, 54 evaluated, 53 expanded
+[t=0.012491s, 3860 KB] New best heuristic value for landmark_sum_heuristic: 3
+[t=0.012495s, 3860 KB] New best heuristic value for ff: 2
+[t=0.012497s, 3860 KB] g=18, 55 evaluated, 54 expanded
+[t=0.012507s, 3860 KB] New best heuristic value for landmark_sum_heuristic: 1
+[t=0.012512s, 3860 KB] New best heuristic value for ff: 1
+[t=0.012514s, 3860 KB] g=19, 56 evaluated, 55 expanded
+[t=0.012521s, 3860 KB] Solution found!
+[t=0.012526s, 3860 KB] Actual search time: 0.001151s
+move c77 c67 up (1)
+move c67 c57 up (1)
+move c57 c56 left (1)
+move c56 c46 up (1)
+move c46 c45 left (1)
+move c45 c44 left (1)
+move c44 c43 left (1)
+push c43 c33 c23 b2 up (1)
+push c33 c23 c13 b2 up (1)
+move c23 c33 down (1)
+move c33 c32 left (1)
+move c32 c31 left (1)
+move c31 c21 up (1)
+move c21 c11 up (1)
+move c11 c12 right (1)
+push c12 c22 c32 b1 down (1)
+push c22 c32 c42 b1 down (1)
+push c32 c42 c52 b1 down (1)
+push c42 c52 c62 b1 down (1)
+push c52 c62 c72 b1 down (1)
+[t=0.012529s, 3928 KB] Plan length: 20 step(s).
+[t=0.012529s, 3928 KB] Plan cost: 20
+[t=0.012529s, 3928 KB] Expanded 56 state(s).
+[t=0.012529s, 3928 KB] Reopened 0 state(s).
+[t=0.012529s, 3928 KB] Evaluated 57 state(s).
+[t=0.012529s, 3928 KB] Evaluations: 114
+[t=0.012529s, 3928 KB] Generated 199 state(s).
+[t=0.012529s, 3928 KB] Dead ends: 0 state(s).
+[t=0.012529s, 3928 KB] Number of registered states: 57
+[t=0.012529s, 3928 KB] Int hash set load factor: 57/64 = 0.890625
+[t=0.012529s, 3928 KB] Int hash set resizes: 6
+[t=0.012529s, 3928 KB] Search time: 0.001162s
+[t=0.012529s, 3928 KB] Total time: 0.012529s
+Solution found.
+Remove intermediate file output.sas
+search exit code: 0
+

@@ -32,6 +32,35 @@ from engines.fd_adapter import backends
 
 PROMPT_ID = "E2-fd-ladder-bench"
 
+# The provenance quartet the repo requires.  When this bench writes into a run
+# directory somebody else opened -- which is how E6 was handed over, as a
+# directory with a MANIFEST.json and nothing else -- these four say who opened it
+# and are never overwritten by a later run into the same directory.  Everything
+# else the manifest holds is a record of the run that just happened and is
+# replaced; anything neither this module nor the repo knows about (`worker`,
+# `salvaged_from`, notes somebody added by hand) is left exactly as it was.
+_PROVENANCE = ("prompt_id", "branch", "base_commit", "utc")
+
+
+def _merge_manifest(path: str, fresh: dict) -> dict:
+    """Add this run's record to a manifest that may already exist.
+
+    A run directory's MANIFEST.json is its identity.  Overwriting one because a
+    second process wrote a second artifact into the same directory would destroy
+    the only record of who opened it and why -- so the merge is: the quartet and
+    every unknown key survive, the run's own fields are refreshed.
+    """
+    if not os.path.isfile(path):
+        return fresh
+    with open(path, "r", encoding="utf-8") as fh:
+        existing = json.load(fh)
+    merged = dict(existing)
+    for key, value in fresh.items():
+        if key in _PROVENANCE and existing.get(key):
+            continue
+        merged[key] = value
+    return merged
+
 
 def _git(repo_root: str, *args: str) -> str:
     try:
@@ -70,6 +99,10 @@ def main(argv=None) -> int:
                         help="timed runs per cell; the fastest is kept")
     parser.add_argument("--skip-dividend", action="store_true")
     parser.add_argument("--skip-ladder", action="store_true")
+    parser.add_argument("--prompt-id", default=PROMPT_ID,
+                        help="the item this run belongs to; recorded in "
+                             "MANIFEST.json, and ignored when the directory "
+                             "already names one")
     args = parser.parse_args(argv)
 
     here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))   # engine-rig/
@@ -118,7 +151,7 @@ def main(argv=None) -> int:
 
     manifest = {
         # The four the repo requires, first and unabbreviated.
-        "prompt_id": PROMPT_ID,
+        "prompt_id": args.prompt_id,
         "branch": _git(repo_root, "rev-parse", "--abbrev-ref", "HEAD"),
         "base_commit": _git(repo_root, "rev-parse", "HEAD"),
         "utc": utc,
@@ -130,6 +163,10 @@ def main(argv=None) -> int:
         },
         "command": "python -m bench --out %s --repeats %d" % (args.out, args.repeats),
         "repeats": args.repeats,
+        # When the artifacts below were measured.  Not the same as `utc`, which
+        # is when the directory was opened and which a merge preserves.
+        "run_utc": utc,
+        "status": "complete",
 
         # The item's third deliverable: the gap `.toolchain/` leaves, stated in
         # the manifest rather than in prose somebody has to go looking for.
@@ -157,7 +194,8 @@ def main(argv=None) -> int:
         path = os.path.join(out_dir, name)
         if os.path.isfile(path):
             manifest["files"].append({"path": name, "sha256": _sha256(path)})
-    _write_json(os.path.join(out_dir, "MANIFEST.json"), manifest)
+    manifest_path = os.path.join(out_dir, "MANIFEST.json")
+    _write_json(manifest_path, _merge_manifest(manifest_path, manifest))
 
     if problems:
         print("\nSOUNDNESS PROBLEMS (%d):" % len(problems))

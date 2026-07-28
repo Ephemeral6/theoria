@@ -196,61 +196,111 @@ def measure(executable: str, domain_path: str, problem_path: str,
         command, config = backends.fd_command(
             executable, domain_path, problem_path, plan_path, tier, heuristic
         )
-        started = time.perf_counter()
-        try:
-            completed = subprocess.run(
-                command, cwd=workdir, capture_output=True, text=True, timeout=timeout
-            )
-        except subprocess.TimeoutExpired:
-            return FdMeasurement(
-                tier=tier, config=config, heuristic=heuristic,
-                wall_seconds=time.perf_counter() - started,
-                error="timeout after %ds" % timeout,
-            )
-        wall = time.perf_counter() - started
-        log = (completed.stdout or "") + (completed.stderr or "")
+        return _invoke(command, config, tier, heuristic, workdir, plan_path,
+                       timeout, keep_log)
 
-        if keep_log:
-            os.makedirs(os.path.dirname(keep_log) or ".", exist_ok=True)
-            with open(keep_log, "w", encoding="utf-8", newline="\n") as fh:
-                fh.write(log)
 
-        record = FdMeasurement(
-            tier=tier, config=config, heuristic=heuristic,
-            returncode=completed.returncode, wall_seconds=wall,
-            nodes={key: _sum(pattern, log) for key, pattern in _COUNTERS.items()},
-            translator={key: _sum(pattern, log) for key, pattern in _TRANSLATOR.items()},
-            search_seconds=_last(_SEARCH_TIME, log),
-            fd_total_seconds=_last(_TOTAL_TIME, log),
-            peak_memory_kb=_last(_PEAK_MEMORY, log, int),
-            plan_length=_last(_PLAN_LENGTH, log, int),
-            plan_cost=_last(_PLAN_COST, log, int),
+def measure_search(executable: str, domain_path: str, problem_path: str,
+                   search: str, timeout: int = 300,
+                   keep_log: Optional[str] = None) -> FdMeasurement:
+    """One instance under a **verbatim** `--search` string.
+
+    Everything else in this module goes through `backends.fd_command`, on the
+    rule stated in the module docstring: a bench must not be able to measure a
+    configuration the adapter would never run.  This function is the one
+    deliberate exception, and the reason is the same reason `fd-optimal/blind`
+    is in `dividend.py`'s rung list -- it is a **control**, not a rung.
+
+    What it exists for is E2's gap G7.  `astar(blind())`'s expansion count is a
+    function of FD's f-tie-break as well as of the instance: an adversarial
+    review of that run found `far5`'s baseline moving 958 -> 1479 (+54%) under a
+    different open list, while the dividend *ratios* barely moved.  Measuring
+    that needs two open lists, and `backends` has vocabulary for exactly one --
+    `FD_HEURISTICS` names heuristics, not tie-breaks.  The alternative was to
+    teach the adapter a tie-break parameter that no caller of the adapter wants,
+    which is a benchmark editing the thing it benchmarks.
+
+    So the argv is built here, in the same shape `fd_command` builds it (driver
+    options before the files, `--search` after), and every configuration handed
+    to it is recorded verbatim in the artifact beside its numbers.  Each one is
+    an optimal, complete search, so `backends.proves_unsolvable`'s optimal-rung
+    reading of exit 12 is the right one and is reused unchanged.
+    """
+    with tempfile.TemporaryDirectory() as workdir:
+        plan_path = os.path.join(workdir, "sas_plan")
+        command = ([sys.executable, executable] if executable.endswith(".py")
+                   else [executable])
+        command += ["--plan-file", plan_path, domain_path, problem_path,
+                    "--search", search]
+        return _invoke(command, search, backends.FD_OPTIMAL, None, workdir,
+                       plan_path, timeout, keep_log)
+
+
+def _invoke(command: List[str], config: str, tier: str,
+            heuristic: Optional[str], workdir: str, plan_path: str,
+            timeout: int, keep_log: Optional[str]) -> FdMeasurement:
+    """Run one already-built argv and parse what it printed.
+
+    Split out of `measure()` so that `measure_search()` can reuse the log
+    parsing and the outcome classification verbatim rather than growing a second
+    copy of them that could drift.  Nothing about the parsing depends on how the
+    argv was built.
+    """
+    started = time.perf_counter()
+    try:
+        completed = subprocess.run(
+            command, cwd=workdir, capture_output=True, text=True, timeout=timeout
         )
-        initial = _INITIAL_H.findall(log)
-        if initial:
-            record.initial_h = "%s=%s" % initial[-1]
+    except subprocess.TimeoutExpired:
+        return FdMeasurement(
+            tier=tier, config=config, heuristic=heuristic,
+            wall_seconds=time.perf_counter() - started,
+            error="timeout after %ds" % timeout,
+        )
+    wall = time.perf_counter() - started
+    log = (completed.stdout or "") + (completed.stderr or "")
 
-        written = backends.plan_file_written(plan_path)
-        if written is not None:
-            with open(written, "r", encoding="utf-8") as fh:
-                record.plan = backends.parse_sas_plan(fh.read())
-            record.solved = True
-            # Trust the plan file over the log line: an anytime configuration
-            # prints one `Plan length` per improvement and the file is the last.
-            record.plan_length = len(record.plan)
-        elif backends.proves_unsolvable(tier, completed.returncode, log):
-            record.proved_unsolvable = True
-        elif (completed.returncode == backends.FD_SEARCH_UNSOLVED_INCOMPLETE
-              and backends.FD_EXHAUSTED in log):
-            # It emptied its open list and said so, but on this rung that is not
-            # a proof this rig will accept.  See `not_entitled` above.
-            record.not_entitled = True
-        else:
-            record.error = (
-                "no plan file and no proof (exit %d, rung %s): %s"
-                % (completed.returncode, tier, log[-300:])
-            )
-        return record
+    if keep_log:
+        os.makedirs(os.path.dirname(keep_log) or ".", exist_ok=True)
+        with open(keep_log, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(log)
+
+    record = FdMeasurement(
+        tier=tier, config=config, heuristic=heuristic,
+        returncode=completed.returncode, wall_seconds=wall,
+        nodes={key: _sum(pattern, log) for key, pattern in _COUNTERS.items()},
+        translator={key: _sum(pattern, log) for key, pattern in _TRANSLATOR.items()},
+        search_seconds=_last(_SEARCH_TIME, log),
+        fd_total_seconds=_last(_TOTAL_TIME, log),
+        peak_memory_kb=_last(_PEAK_MEMORY, log, int),
+        plan_length=_last(_PLAN_LENGTH, log, int),
+        plan_cost=_last(_PLAN_COST, log, int),
+    )
+    initial = _INITIAL_H.findall(log)
+    if initial:
+        record.initial_h = "%s=%s" % initial[-1]
+
+    written = backends.plan_file_written(plan_path)
+    if written is not None:
+        with open(written, "r", encoding="utf-8") as fh:
+            record.plan = backends.parse_sas_plan(fh.read())
+        record.solved = True
+        # Trust the plan file over the log line: an anytime configuration
+        # prints one `Plan length` per improvement and the file is the last.
+        record.plan_length = len(record.plan)
+    elif backends.proves_unsolvable(tier, completed.returncode, log):
+        record.proved_unsolvable = True
+    elif (completed.returncode == backends.FD_SEARCH_UNSOLVED_INCOMPLETE
+          and backends.FD_EXHAUSTED in log):
+        # It emptied its open list and said so, but on this rung that is not
+        # a proof this rig will accept.  See `not_entitled` above.
+        record.not_entitled = True
+    else:
+        record.error = (
+            "no plan file and no proof (exit %d, rung %s): %s"
+            % (completed.returncode, tier, log[-300:])
+        )
+    return record
 
 
 def repeat(executable: str, domain_path: str, problem_path: str,
