@@ -14,6 +14,7 @@
       "E2-fd-ladder-bench",
       "E4-property-fuzz",
       "E5-cert-recheck",
+      "E9-engine-paper-table",
       "P10-figures-into-paper",
       "P11-battery-section-refresh",
       "P4-figures",
@@ -39,6 +40,7 @@
       "V10-fuzz-mutation-power",
       "V11-negative-control-census",
       "V12-worldgen-gate-deaf",
+      "V13-audit-the-published-surface",
       "V14-standing-negative-control-probe",
       "V2-exam-on-worldgen",
       "V4-exam-selftest"
@@ -57,6 +59,7 @@
       "给专业规划器的三档性能定价",
       "用 500 个随机世界轰炸六个引擎找 bug",
       "证书独立复核器（不靠 Lean 一条路）",
+      "引擎章节的论文表格",
       "把图正式接进论文正文",
       "P11-battery-section-refresh",
       "论文figures：把数据变成可复现的图",
@@ -82,6 +85,7 @@
       "V10-fuzz-mutation-power",
       "V11-negative-control-census",
       "V12-worldgen-gate-deaf",
+      "V13-audit-the-published-surface",
       "V14-standing-negative-control-probe",
       "让考卷跑在新造的 20 个练习世界上",
       "考卷自检 + 出三类判决题（验判卷的人对不对）"
@@ -100,6 +104,7 @@
       "给专业规划器的三档性能定价",
       "用 500 个随机世界轰炸六个引擎找 bug",
       "证书独立复核器（不靠 Lean 一条路）",
+      "引擎章节的论文表格",
       "把图正式接进论文正文",
       "P11-battery-section-refresh",
       "论文figures：把数据变成可复现的图",
@@ -125,31 +130,34 @@
       "V10-fuzz-mutation-power",
       "V11-negative-control-census",
       "V12-worldgen-gate-deaf",
+      "V13-audit-the-published-surface",
       "V14-standing-negative-control-probe",
       "让考卷跑在新造的 20 个练习世界上",
       "考卷自检 + 出三类判决题（验判卷的人对不对）"
     ],
     "in_progress_plain": [
       "对照版 AI 的离线标定",
-      "V15-census-sampling-frame",
+      "V16-determinism-has-no-caller",
+      "语法补计数锁词汇",
+      "E7-deadlock-claim-audit",
       "V7-exam-stress-fanout",
       "S17-fleet-evidence-capture",
       "指标体系首次区分两组 AI 的能力差"
     ],
     "ops": [
       {
-        "age_min": 10,
-        "cycle": 12,
+        "age_min": 12,
+        "cycle": 13,
         "id": "OPS-A",
         "kind": "ops",
         "name": "漂移审计员",
-        "note": "cycle 12: merge queue stalled ~95min, 13 branches, 169 FLAG lines vs 54 MERGED, no backoff and no escalation in flag(); the root cause is in monitor/gates.py and the only role permitted to fix it is the monitor itself -- the branch that would fix gates is blocked by the broken gate",
-        "outputs": 16,
+        "note": "ESCALATION: zero merges for 40 minutes (last MERGED 16:37:52Z), 16 branches blocked, 245 flags. OPS-M has a tested one-line fix for monitor/gates.py and CHARTER forbids it from applying; only the monitor may. Asked the monitor to apply it or hand it to the user.",
+        "outputs": 17,
         "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
-        "state": "idle"
+        "state": "blocked"
       },
       {
-        "age_min": 18,
+        "age_min": 53,
         "cycle": 6,
         "id": "OPS-B",
         "kind": "ops",
@@ -160,18 +168,18 @@
         "state": "idle"
       },
       {
-        "age_min": 41,
-        "cycle": 7,
+        "age_min": 24,
+        "cycle": 8,
         "id": "OPS-M",
         "kind": "ops",
         "name": "合并裁判",
-        "note": "队列堵死：13 分支未合、14 个 flag，已全部裁决。其中 6 个是新 verify 闸门自身跑不起来（bash 吃掉反斜杠 + verify.py 无 sys.path 契约），非分支之错；修法须两步否则只是把红换个位置。gates.py 属监控领地，我只报不改。见 inbox 20260728T161500Z",
-        "outputs": 10,
+        "note": "根因找到并实测：verify.sh 闸门一直由 WSL 的 Linux bash 执行（非 Git Bash），一行可修且已验证 rc=0；订正 cycle 7 的归因，我自己提的三个修法均被实测证伪。队列仍全堵 14 flag/14 分支，三个 agent 独立确认而无人有权修。已归档陈旧 flag a7。见 inbox 20260728T170640Z",
+        "outputs": 12,
         "role": "脚本合不动的冲突由它裁决；顺利合并早已自动化",
         "state": "blocked"
       },
       {
-        "age_min": 80,
+        "age_min": 115,
         "cycle": 2,
         "id": "OPS-R",
         "kind": "ops",
@@ -184,7 +192,7 @@
     ],
     "standing": [
       {
-        "age_min": 80,
+        "age_min": 115,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
@@ -195,7 +203,7 @@
         "state": "working"
       },
       {
-        "age_min": 77,
+        "age_min": 111,
         "cycle": 4,
         "id": "RES-2",
         "kind": "standing",
@@ -206,18 +214,18 @@
         "state": "working"
       },
       {
-        "age_min": 4,
-        "cycle": 16,
+        "age_min": 2,
+        "cycle": 20,
         "id": "RES-3",
         "kind": "standing",
         "name": "验证与考卷研究员",
-        "note": "V14 已交付 push（结论：探针现在不该进闸，六个数字支撑；最值钱的是那个空结果——修掉解析缺陷后混淆矩阵零变化，因为 141 个入口里 74 个不在金标准抽样框内）。自供两件补上：V15-census-sampling-frame（补齐抽样框，人工判定必须盲于探针输出）、V16-determinism-has-no-caller（全仓最强的确定性检查器零测试调用）。手上：E9 / V13 / V15。",
-        "outputs": 7,
+        "note": "监控点名的模式三路普查全回：约 340 处判据点、48 处不安全，全文已进 inbox 20260729T063000Z。最坏一条方向是反的（theoria-arm 吞掉的异常剪掉后继，然后报'穷举了整个可达集'——崩得越多健康证明越干净）；一条回旋镖打在自己身上（engine-rig/tools/p13_fd_dividend.py:129 裸 returncode==12，而正确谓词 backends.proves_unsolvable 就在它已 import 的模块里）。据此建议 C10 第(1)件从'定正典'改成'采纳已有正典'。手上 V15 / C10 / V16 在跑。",
+        "outputs": 8,
         "role": "常驻推进：凭什么相信这些数字——考卷、电池、引擎交叉验证",
         "state": "working"
       },
       {
-        "age_min": 49,
+        "age_min": 84,
         "cycle": 6,
         "id": "RES-4",
         "kind": "standing",
@@ -308,17 +316,19 @@
         "finished": [
           "E10-engine-crosscheck",
           "E11-engine-crosscheck-deep",
+          "引擎章节的论文表格",
           "V10-fuzz-mutation-power",
           "V11-negative-control-census",
           "V12-worldgen-gate-deaf",
+          "V13-audit-the-published-surface",
           "V14-standing-negative-control-probe"
         ],
         "id": "RES-3",
         "kind": "worker",
         "name": "手动会话",
-        "now": "V15-census-sampling-frame",
+        "now": "V16-determinism-has-no-caller",
         "orphan": false,
-        "outputs": 6,
+        "outputs": 8,
         "running": true
       },
       {
@@ -384,6 +394,26 @@
         "orphan": false,
         "outputs": 1,
         "running": false
+      },
+      {
+        "finished": [],
+        "id": "W-130",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "E7-deadlock-claim-audit",
+        "orphan": false,
+        "outputs": 0,
+        "running": true
+      },
+      {
+        "finished": [],
+        "id": "W-131",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "语法补计数锁词汇",
+        "orphan": false,
+        "outputs": 0,
+        "running": true
       },
       {
         "finished": [
@@ -491,11 +521,11 @@
   },
   "blocking_findings": 1,
   "board": {
-    "available": 1,
+    "available": 0,
     "blocked": 2,
-    "claimed": 9,
-    "done": 41,
-    "listing": "=== available ===\n  p3  C9-count-lock-vocabulary     cell=C1  territory=theory-compiler \n=== blocked ===\n  S18-fleetkit-extract         waits on S17-fleet-evidence-capture\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A3-campaign-devpile          by RES-1\n  A4b-ablation-calibrate       by RES-1\n  E9-engine-paper-table        by RES-3\n  P12-paper-multi-review       by RES-2\n  S17-fleet-evidence-capture   by RES-4\n  V13-audit-the-published-surface by RES-3\n  V15-census-sampling-frame    by RES-3\n  V3-battery-discrimination    by APP-V3\n  V7-exam-stress-fanout        by RES-2\n=== done (41) ===\n  A4-ablation-online.superseded-by-A4a\n  A4a-ablation-build.RES-1\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C6-worldgen-mutate.W-1251\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  E10-engine-crosscheck.RES-3\n  E11-engine-crosscheck-deep.RES-3\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  E5-cert-recheck.W-1411\n  P10-figures-into-paper.W-1253\n  P11-battery-section-refresh.RES-2\n  P4-figures.W-1611\n  P5-release.RES-2\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  R2-release-licence.W-1412\n  S1-quota-auto-exit.W-1250\n  S10-invariant-on-resource.W-1251\n  S11-sealed-halfguard.W-1410\n  S12-quota-hold-tests.W-1412\n  S13-verify-gate-enforced.RES-1\n  S14-gates-for-all.RES-4\n  S15-ledger-hashchain.RES-4\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S5-phase1-close.W-1250\n  S6-merge-gate-509.superseded-by-derived-gate\n  S8-provenance-backfill.W-1412\n  S9-contract-change-protocol.W-1250\n  V10-fuzz-mutation-power.RES-3\n  V11-negative-control-census.RES-3\n  V12-worldgen-gate-deaf.RES-3\n  V14-standing-negative-control-probe.RES-3\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
+    "claimed": 11,
+    "done": 43,
+    "listing": "=== available ===\n=== blocked ===\n  S18-fleetkit-extract         waits on S17-fleet-evidence-capture\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A3-campaign-devpile          by RES-1\n  A4b-ablation-calibrate       by RES-1\n  C10-unsolvable-proof-canon   by RES-3\n  C9-count-lock-vocabulary     by W-131\n  E7-deadlock-claim-audit      by W-130\n  P12-paper-multi-review       by RES-2\n  S17-fleet-evidence-capture   by RES-4\n  V15-census-sampling-frame    by RES-3\n  V16-determinism-has-no-caller by RES-3\n  V3-battery-discrimination    by APP-V3\n  V7-exam-stress-fanout        by RES-2\n=== done (43) ===\n  A4-ablation-online.superseded-by-A4a\n  A4a-ablation-build.RES-1\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C6-worldgen-mutate.W-1251\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  E10-engine-crosscheck.RES-3\n  E11-engine-crosscheck-deep.RES-3\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  E5-cert-recheck.W-1411\n  E9-engine-paper-table.RES-3\n  P10-figures-into-paper.W-1253\n  P11-battery-section-refresh.RES-2\n  P4-figures.W-1611\n  P5-release.RES-2\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  R2-release-licence.W-1412\n  S1-quota-auto-exit.W-1250\n  S10-invariant-on-resource.W-1251\n  S11-sealed-halfguard.W-1410\n  S12-quota-hold-tests.W-1412\n  S13-verify-gate-enforced.RES-1\n  S14-gates-for-all.RES-4\n  S15-ledger-hashchain.RES-4\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S5-phase1-close.W-1250\n  S6-merge-gate-509.superseded-by-derived-gate\n  S8-provenance-backfill.W-1412\n  S9-contract-change-protocol.W-1250\n  V10-fuzz-mutation-power.RES-3\n  V11-negative-control-census.RES-3\n  V12-worldgen-gate-deaf.RES-3\n  V13-audit-the-published-surface.RES-3\n  V14-standing-negative-control-probe.RES-3\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
   },
   "con_green": 1,
   "constraints": [
@@ -754,7 +784,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-29 00:57:57",
+  "generated_at": "2026-07-29 01:32:42",
   "grid": {
     "A1": {
       "active": [
@@ -1634,25 +1664,29 @@
       "ablation-arm/artifacts/run_all.json",
       "ablation-arm/artifacts/verify.json",
       "monitor/board/board.log",
-      "monitor/board/claimed/E11-engine-crosscheck-deep.RES-3.md",
-      "monitor/board/claimed/V14-standing-negative-control-probe.RES-3.md",
-      "monitor/board/items/E10-engine-crosscheck.md",
-      "monitor/board/items/E9-engine-paper-table.md",
-      "monitor/bus/OPS-B/cursor.json",
-      "monitor/bus/OPS-B/out.jsonl",
+      "monitor/board/claimed/E9-engine-paper-table.RES-3.md",
+      "monitor/board/claimed/V13-audit-the-published-surface.RES-3.md",
+      "monitor/board/items/C10-unsolvable-proof-canon.md",
+      "monitor/board/items/C9-count-lock-vocabulary.md",
+      "monitor/board/items/E7-deadlock-claim-audit.md",
+      "monitor/board/items/V16-determinism-has-no-caller.md",
       "monitor/bus/OPS-M/cursor.json",
+      "monitor/bus/RES-1/in.jsonl",
+      "monitor/bus/RES-2/in.jsonl",
+      "monitor/bus/RES-3/in.jsonl",
       "monitor/bus/RES-3/out.jsonl",
+      "monitor/bus/RES-4/in.jsonl",
       "monitor/ci/CONFLICT-origin_agent_bus2-ablation-readonly.md",
-      "monitor/ci/CONFLICT-origin_agent_r2-release-licence.md",
       "monitor/ci/CONFLICT-origin_agent_s14-gates-for-all.md",
       "monitor/ci/CONFLICT-origin_agent_s15-ledger-hashchain.md",
       "monitor/ci/CONFLICT-origin_agent_s8-provenance-backfill.md",
       "monitor/ci/CONFLICT-origin_agent_s9-contract-change-protocol.md",
       "monitor/ci/CONFLICT-origin_agent_v12-worldgen-gate-deaf.md",
+      "monitor/ci/merge.lock",
       "monitor/ci/merge.log",
+      "monitor/inbox/20260728T171500Z-RES-3-correction-sealed-audit-and-the-bigger-hole.md",
       "monitor/index.html",
       "monitor/ops-status/RES-3.json",
-      "monitor/quota.py",
       "monitor/quota_state.json",
       "monitor/reflex.lock",
       "monitor/reflex.log",
@@ -1668,23 +1702,25 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/E9-engine-paper-table.RES-3.md",
-      "monitor/board/claimed/V15-census-sampling-frame.RES-3.md",
-      "monitor/board/done/E10-engine-crosscheck.RES-3.md",
-      "monitor/board/done/E11-engine-crosscheck-deep.RES-3.md",
-      "monitor/board/done/V14-standing-negative-control-probe.RES-3.md",
-      "monitor/board/items/C10-unsolvable-proof-canon.md",
-      "monitor/board/items/V16-determinism-has-no-caller.md",
-      "monitor/bus/RES-3/in.jsonl",
-      "monitor/ci/CONFLICT-origin_agent_v14-standing-negative-control-probe.md",
-      "monitor/inbox/20260729T014500Z-RES-3-e11-crosscheck-findings-for-engine-rig.md",
-      "monitor/inbox/20260729T015500Z-RES-3-two-files-disagree-on-what-proves-unsolvable.md",
-      "monitor/inbox/20260729T021500Z-RES-3-cegis-lifted-rules-and-the-missing-object-binding.md",
+      "monitor/board/claimed/C10-unsolvable-proof-canon.RES-3.md",
+      "monitor/board/claimed/C9-count-lock-vocabulary.W-131.md",
+      "monitor/board/claimed/E7-deadlock-claim-audit.W-130.md",
+      "monitor/board/claimed/V16-determinism-has-no-caller.RES-3.md",
+      "monitor/board/done/E9-engine-paper-table.RES-3.md",
+      "monitor/board/done/V13-audit-the-published-surface.RES-3.md",
+      "monitor/board/items/C11-tool-failure-as-truth.md",
+      "monitor/bus/RES-1/URGENT",
+      "monitor/bus/RES-2/URGENT",
+      "monitor/bus/RES-3/cursor.json",
+      "monitor/bus/RES-4/URGENT",
+      "monitor/ci/CONFLICT-origin_agent_e9-engine-paper-table.md",
+      "monitor/ci/CONFLICT-origin_agent_v13-audit-the-published-surface.md",
+      "monitor/inbox/20260729T063000Z-RES-3-the-pattern-you-named-appears-three-more-times.md",
       "theoria-arm/.pytest-runs/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "8e2c7e0 audit: cycle 12 -- the queue retries a failure that cannot change, and no role may fix it",
+    "git_head": "91d3a86 audit: cycle 13 -- forty minutes with no merges and a tested one-line fix nobody may apply",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1703,18 +1739,20 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/E9-engine-paper-table.RES-3.md",
-      "monitor/board/claimed/V15-census-sampling-frame.RES-3.md",
-      "monitor/board/done/E10-engine-crosscheck.RES-3.md",
-      "monitor/board/done/E11-engine-crosscheck-deep.RES-3.md",
-      "monitor/board/done/V14-standing-negative-control-probe.RES-3.md",
-      "monitor/board/items/C10-unsolvable-proof-canon.md",
-      "monitor/board/items/V16-determinism-has-no-caller.md",
-      "monitor/bus/RES-3/in.jsonl",
-      "monitor/ci/CONFLICT-origin_agent_v14-standing-negative-control-probe.md",
-      "monitor/inbox/20260729T014500Z-RES-3-e11-crosscheck-findings-for-engine-rig.md",
-      "monitor/inbox/20260729T015500Z-RES-3-two-files-disagree-on-what-proves-unsolvable.md",
-      "monitor/inbox/20260729T021500Z-RES-3-cegis-lifted-rules-and-the-missing-object-binding.md",
+      "monitor/board/claimed/C10-unsolvable-proof-canon.RES-3.md",
+      "monitor/board/claimed/C9-count-lock-vocabulary.W-131.md",
+      "monitor/board/claimed/E7-deadlock-claim-audit.W-130.md",
+      "monitor/board/claimed/V16-determinism-has-no-caller.RES-3.md",
+      "monitor/board/done/E9-engine-paper-table.RES-3.md",
+      "monitor/board/done/V13-audit-the-published-surface.RES-3.md",
+      "monitor/board/items/C11-tool-failure-as-truth.md",
+      "monitor/bus/RES-1/URGENT",
+      "monitor/bus/RES-2/URGENT",
+      "monitor/bus/RES-3/cursor.json",
+      "monitor/bus/RES-4/URGENT",
+      "monitor/ci/CONFLICT-origin_agent_e9-engine-paper-table.md",
+      "monitor/ci/CONFLICT-origin_agent_v13-audit-the-published-surface.md",
+      "monitor/inbox/20260729T063000Z-RES-3-the-pattern-you-named-appears-three-more-times.md",
       "theoria-arm/.pytest-runs/"
     ]
   },
@@ -2170,7 +2208,7 @@
       "status": "green"
     },
     "bus": {
-      "detail": "总线已上线；**1 个会话还没读过**（RES-3）——它们下个循环读到指令后即被托管。",
+      "detail": "已送达，欠回执：RES-4(1)",
       "status": "partial"
     },
     "conflict_scan": {
@@ -2192,32 +2230,45 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 30 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md, 20260728T142000Z-W-1251-open-spec-json-carries-the-verdict-and-most-of-the-rule-set.md, 20260728T142100Z-W-1251-t2-switch-push-also-breaks-the-miner-and-a-forbidden-action-is-unlearnable.md, 20260728T143000Z-W-1253-p10-territory-and-a-latent-render-defect.md, 20260728T143836Z-opsm-reflex-stalls-are-invisible.md, 20260728T145500Z-W-1252-handover-package-found-four-generator-defects.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md, 20260728T1500Z-W-1412-s12-audit-two-doors-without-exits.md, 20260728T150200Z-W-1411-cert-recheck-findings.md, 20260728T151000Z-W-1250-board-done-is-not-idempotent-on-windows-and-it-locks-territories.md, 20260728T151500Z-W-1251-the-concurrency-gate-is-blind-right-now-24-agents-and-6gb-free.md, 20260728T151500Z-W-1252-count-lock-is-a-tracking-bug-not-a-vocabulary-gap.md, 20260728T151500Z-W-1253-v6-released-with-design.md, 20260728T1520Z-W-1412-self-report-master-push.md, 20260728T152500Z-W-1250-two-phase1-items-can-go-green-and-their-notes-are-stale.md, 20260728T153030Z-RES-3-worldgen-qc-gate-pinned.md, 20260728T153500Z-RES-3-figures-verify-is-red-on-master.md, 20260728T154500Z-RES-3-sealed-contact-audit-cannot-fail.md, 20260728T154800Z-RES-4-two-live-silent-failures.md, 20260728T160000Z-RES-2-p5-done-and-two-findings-for-other-territories.md, 20260728T161500Z-opsm-adjudication-14-flags-gate-runner-broken.md, 20260728T164500Z-RES-2-upstream-defects-battery-and-exam.md, 20260728T171500Z-RES-3-correction-sealed-audit-and-the-bigger-hole.md, 20260728T194500Z-RES-1-four-territories-still-ungated.md, 20260728T212000Z-RES-1-relpath-determinism.md, 20260729T014500Z-RES-3-e11-crosscheck-findings-for-engine-rig.md, 20260729T015500Z-RES-3-two-files-disagree-on-what-proves-unsolvable.md, 20260729T021500Z-RES-3-cegis-lifted-rules-and-the-missing-object-binding.md",
+      "detail": "待裁决提案 32 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md, 20260728T142000Z-W-1251-open-spec-json-carries-the-verdict-and-most-of-the-rule-set.md, 20260728T142100Z-W-1251-t2-switch-push-also-breaks-the-miner-and-a-forbidden-action-is-unlearnable.md, 20260728T143000Z-W-1253-p10-territory-and-a-latent-render-defect.md, 20260728T143836Z-opsm-reflex-stalls-are-invisible.md, 20260728T145500Z-W-1252-handover-package-found-four-generator-defects.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md, 20260728T1500Z-W-1412-s12-audit-two-doors-without-exits.md, 20260728T150200Z-W-1411-cert-recheck-findings.md, 20260728T151000Z-W-1250-board-done-is-not-idempotent-on-windows-and-it-locks-territories.md, 20260728T151500Z-W-1251-the-concurrency-gate-is-blind-right-now-24-agents-and-6gb-free.md, 20260728T151500Z-W-1252-count-lock-is-a-tracking-bug-not-a-vocabulary-gap.md, 20260728T151500Z-W-1253-v6-released-with-design.md, 20260728T1520Z-W-1412-self-report-master-push.md, 20260728T152500Z-W-1250-two-phase1-items-can-go-green-and-their-notes-are-stale.md, 20260728T153030Z-RES-3-worldgen-qc-gate-pinned.md, 20260728T153500Z-RES-3-figures-verify-is-red-on-master.md, 20260728T154500Z-RES-3-sealed-contact-audit-cannot-fail.md, 20260728T154800Z-RES-4-two-live-silent-failures.md, 20260728T160000Z-RES-2-p5-done-and-two-findings-for-other-territories.md, 20260728T161500Z-opsm-adjudication-14-flags-gate-runner-broken.md, 20260728T164500Z-RES-2-upstream-defects-battery-and-exam.md, 20260728T170640Z-opsm-the-verify-gate-runs-under-wsl.md, 20260728T171500Z-RES-3-correction-sealed-audit-and-the-bigger-hole.md, 20260728T194500Z-RES-1-four-territories-still-ungated.md, 20260728T212000Z-RES-1-relpath-determinism.md, 20260729T014500Z-RES-3-e11-crosscheck-findings-for-engine-rig.md, 20260729T015500Z-RES-3-two-files-disagree-on-what-proves-unsolvable.md, 20260729T021500Z-RES-3-cegis-lifted-rules-and-the-missing-object-binding.md, 20260729T063000Z-RES-3-the-pattern-you-named-appears-three-more-times.md",
       "status": "partial"
     },
     "needs_human": {
-      "detail": "六个 App 会话全部在岗，无需你出手。",
-      "rows": [],
-      "status": "green"
+      "detail": "需要你重开的会话：RES-1 在线战役研究员（114 分钟没心跳）； RES-2 论文与释出研究员（111 分钟没心跳）",
+      "rows": [
+        {
+          "id": "RES-1",
+          "name": "在线战役研究员",
+          "prompt": "monitor/prompts/ops/RES-1.md",
+          "why": "114 分钟没心跳"
+        },
+        {
+          "id": "RES-2",
+          "name": "论文与释出研究员",
+          "prompt": "monitor/prompts/ops/RES-2.md",
+          "why": "111 分钟没心跳"
+        }
+      ],
+      "status": "risk"
     },
     "offline_done": {
       "detail": "离线还差 1 格：V2 考卷(92%)。战役线已获授权可先行，不必等齐。",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第12轮 idle（9 分钟前）； OPS-B 第6轮 idle（18 分钟前）； OPS-M 第7轮 blocked（40 分钟前）； OPS-R 第2轮 working（80 分钟前）",
+      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第13轮 blocked（11 分钟前）； OPS-B 第6轮 idle（52 分钟前）； OPS-M 第8轮 blocked（23 分钟前）； OPS-R 第2轮 working（114 分钟前）",
       "rows": [
         {
-          "age_min": 9,
-          "cycle": 12,
+          "age_min": 11,
+          "cycle": 13,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "cycle 12: merge queue stalled ~95min, 13 branches, 169 FLAG lines vs 54 MERGED, no backoff and no escalation in flag(); the root cause is in monitor/gates.py and the only role permitted to fix it is the monitor itself -- the branch that would fix gates is blocked by the broken gate",
-          "state": "idle",
+          "note": "ESCALATION: zero merges for 40 minutes (last MERGED 16:37:52Z), 16 branches blocked, 245 flags. OPS-M has a tested one-line fix for monitor/gates.py and CHARTER forbids it from applying; only the monitor may. Asked the monitor to apply it or hand it to the user.",
+          "state": "blocked",
           "status": "green"
         },
         {
-          "age_min": 18,
+          "age_min": 52,
           "cycle": 6,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -2226,16 +2277,16 @@
           "status": "green"
         },
         {
-          "age_min": 40,
-          "cycle": 7,
+          "age_min": 23,
+          "cycle": 8,
           "id": "OPS-M",
           "name": "合并裁判",
-          "note": "队列堵死：13 分支未合、14 个 flag，已全部裁决。其中 6 个是新 verify 闸门自身跑不起来（bash 吃掉反斜杠 + verify.py 无 sys.path 契约），非分支之错；修法须两步否则只是把红换个位置。gates.py 属监控领地，我只报不改。见 inbox 20260728T161500Z",
+          "note": "根因找到并实测：verify.sh 闸门一直由 WSL 的 Linux bash 执行（非 Git Bash），一行可修且已验证 rc=0；订正 cycle 7 的归因，我自己提的三个修法均被实测证伪。队列仍全堵 14 flag/14 分支，三个 agent 独立确认而无人有权修。已归档陈旧 flag a7。见 inbox 20260728T170640Z",
           "state": "blocked",
           "status": "green"
         },
         {
-          "age_min": 80,
+          "age_min": 114,
           "cycle": 2,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2260,11 +2311,11 @@
       "status": "risk"
     },
     "self_driving": {
-      "detail": "RES-1 第2轮 working（79 分钟前）**疑似停下等人**； RES-2 第4轮 working（76 分钟前）**疑似停下等人**； RES-3 第16轮 working（4 分钟前）； RES-4 第6轮 working（48 分钟前）**疑似停下等人**　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。",
+      "detail": "RES-1 第2轮 working（114 分钟前）**疑似停下等人**； RES-2 第4轮 working（111 分钟前）**疑似停下等人**； RES-3 第20轮 working（1 分钟前）； RES-4 第6轮 working（83 分钟前）**疑似停下等人**　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。",
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 41 个提交 / 12 次合并（判断陈旧到 risk 就该重扫）。",
+      "detail": "spec.py 落后 44 个提交 / 12 次合并（判断陈旧到 risk 就该重扫）。",
       "status": "risk"
     },
     "spend": {
@@ -2272,8 +2323,8 @@
       "status": "green"
     },
     "supply": {
-      "detail": "板上仅剩 1 件可领（9 件在做），供货需要跟上。",
-      "status": "partial"
+      "detail": "**板已见底**：11 件在做，0 件可领——有人交付即空转，监控必须补货。",
+      "status": "risk"
     },
     "verify_gates": {
       "detail": "工单声称的 3 个 verify 脚本全部在树上；但**5 个领地合并时无人检查**：CONTRACTS、browser-ops、fleet-study、papers、release。领地 22：自带闸门 8、仅测试套件 9、**无闸门 5**。这不是有人食言——是从来没人要求过，ci_merge 现在每次把它打进 merge.log。",

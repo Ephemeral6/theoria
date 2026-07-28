@@ -100,3 +100,69 @@ scanned: 3   all_clean: True
 除非真的紧急到等不起，而封存审计这条并不紧急（它描述的是「万一」，不是「已经」）。
 本轮 V10 那边我做对了（结论交付前先派对抗复核），V11 这边我做错了，
 两件事发生在同一小时里。
+
+---
+
+## 再追记（2026-07-29T05:55Z）：同一处审计，还有一条比"漏扫"更糟的——**删掉脏账本就能通过**
+
+这条来自监控给的方向（"凡是某个工具的失败状态被当成了世界的性质，都值得查一遍"）
+的第二路普查，我逐行复核过。
+
+`arc-recon/contamination.py:167-170`：
+
+```python
+scanned = [r for r in reports.values() if r.get("clean") is not None]
+return {
+    ...
+    "all_clean": all(r["clean"] for r in scanned),
+```
+
+上面几行里，**文件不存在**时写的是 `{"present": False, "clean": None, ...}`。
+于是：`clean is None` → 被 `scanned` 过滤掉 → **不参与 `all(...)`**。
+
+**后果**：一份**会让审计失败的账本，只要它不在树上，审计就通过。**
+不是"报告缺失"，是**从判决里消失**。删除是这道闸门的旁路。
+
+而且这个方向是**反的**：代码自己的注释写着「不在的文件不是干净的文件」，
+实现恰好做成了「不在的文件不参与判断」。
+
+**顺带一个更冷的事实**：`all([])` 是 `True`。所以若某一轮所有被列的账本都不在，
+`all_clean` 会是 `True` 而 `ledgers_scanned` 是 0——**一个没有扫过任何东西的干净判决**。
+
+## 漏扫的规模比我上一条报的还大
+
+我上一条说 shards 下有 28 份没被扫。**重数了一遍，全仓（排除 worktree 与 .git）
+实际有 46 份 `ledger*.jsonl` / `probe_log*.jsonl` / `*_ledger.jsonl`，审计看 3 份。**
+
+而 `all_ledger_audit()` 自己的 `caveat` 字段**点名写着 "shards"**：
+
+> "Other tracks may keep records this list does not name (**shards**,
+> per-campaign files). A clean result here is evidence over the files scanned,
+> not a proof over all traffic ever sent."
+
+**这段 caveat 是诚实的，而且它就在返回值里。** 问题是它是**散文**，
+而 `all_clean: true` 是**布尔**——`tools/ledger_invariants.py` 与
+`test_hygiene.py` 消费的是那个布尔，没有任何东西消费那段 caveat。
+**一个知道自己不完整、并且写下来了、然后仍然输出肯定断言的检查**，
+比一个不知道的更难被发现，因为它读起来很谨慎。
+
+## 建议（仍然不是我的领地，我一个字节没改）
+
+三条，按性价比：
+1. **`clean is None` 必须让 `all_clean` 变假或变 `None`**，绝不能被过滤掉。
+   "没看成"不是"看过了没问题"。
+2. **扫描面自我发现**（我上一条已建议，`figures/sources.py` 的 `Rule` 是现成样板），
+   并且让 `ledgers_scanned` 与"树上实际有多少份"对账——
+   `test_hygiene.py` 现在断言的 `ledgers_scanned >= 1` 换成这个对账才有意义。
+3. **把 caveat 从散文变成布尔**：如果扫描面不完整，`all_clean` 就不该是 `True`，
+   应该是 `"incomplete"` 之类的第三态。**散文进不了退出码。**
+
+## 同一路普查还点了两处 monitor 领地的（转给监控自己）
+
+* `monitor/scan.py:77-84`：`git()` 用 `except Exception: return ""` 吞掉一切失败，
+  空字符串喂给领地纪律探针 → 空 findings → **报绿**，
+  而 detail 还断言"近 40 个提交无跨领地改动"——**那 40 个提交从没被读到**。
+* `monitor/scan.py:124-127`：凭据探针收尾写 `"全仓 %s 个文件已扫描" % "全部"`——
+  **扫描面是一个硬编码的字符串，不是计数**，而 walk 里对读不开的文件 `except: continue`。
+
+这两条是监控自己的代码，我只登记。它们与上面是同一个病：**报告了一个自己没有度量的覆盖面。**
