@@ -15,15 +15,55 @@ Theoria Phase 2 的落地：五族指标的定义与计算代码，加上电池�
 | **B8 v1 九条新指标**（预注册先于实现，先于回算） | ✅ |
 | **B9 区分力工序第一跑**（裸 CC vs Theoria 离线臂，口径已标注） | ✅ |
 | **B10 去冗余首跑**（聚类依据全量入 artifacts/） | ✅ |
+| **B11 Schema 臂接入**（`Theoria.md` 指定的对照臂，8 局上游轨迹） | ✅ |
+| **B12 区分力工序跑在指定梯度上**（CC vs Schema，逐局配对） | ✅ |
+| **B13 去冗余改为一族一代表**（跨族聚类不再互相淘汰） | ✅ |
+| **B14 抗游戏审计可执行化**（38 个 exploit，主表 19 → 6） | ✅ |
+| **B15 四道防御**（P4/K12 关闭，E2 修一半，K2 失败——预注册在先） | ✅ |
 
 ```bash
-python -m battery.run_battery      # 31 runs, 4 arms, 38 metrics
-python -m pytest battery/tests -q  # 117 passed
+python -m battery.run_battery      # 95 runs, 5 arms, 38 metrics, 1433 values
+python -m pytest battery/tests -q  # 213 passed
 python -m battery.docs             # 从注册表重新生成 METRICS.md
 ```
 
-结果见 [`REPORT_V1.md`](REPORT_V1.md)（v0 的见 [`REPORT_V0.md`](REPORT_V0.md)，
-原样保留）。设计取舍见 [`DECISIONS.md`](DECISIONS.md)。
+**上游 Schema 载荷与 S1 战役都不进 git，因此在任何 git worktree 里都不存在。**
+在分支上重算需要两个环境变量，否则会静默少掉一整条臂和一整个战役：
+
+```bash
+export THEORIA_SCHEMA_TRACES=<repo>/baseline-arms/schema_traces
+export THEORIA_BASELINE_ARMS=<repo>/baseline-arms
+```
+
+结果见 [`REPORT_V2.md`](REPORT_V2.md)（v1 见 [`REPORT_V1.md`](REPORT_V1.md)，
+v0 见 [`REPORT_V0.md`](REPORT_V0.md)，两份都原样保留，**包括 v1 错的那处**）。
+设计取舍见 [`DECISIONS.md`](DECISIONS.md)，去冗余依据见
+[`audit/REDUNDANCY.md`](audit/REDUNDANCY.md)。
+
+---
+
+## v2 最该先读的四件事
+
+1. **v1 的头号缺口在 v1 写下它的时候就已经不成立了。** `REPORT_V1.md` 开篇说
+   「Schema 臂不存在」并列为缺口之一；而 `SCHEMA_PATH_A.md` 在 `63ef0bf`
+   （02:53Z）就把开发堆 4 局的上游 Schema 轨迹落了盘，比 battery v1 的
+   `e82558b`（09:04Z）早六小时、同一棵树。v1 把「跑不了 Schema」（真，且永远真）
+   与「没有 Schema 轨迹」（当天早上起就是假）混成了一件事。工序 1 要的是轨迹，
+   不是复现分数。D-B-019。
+2. **加了一整条对照臂，未验证指标数一个没动：仍是 21 条**，逐条相同——整个认识族、
+   整个机制族、加 P4。这条是 v2 预注册的头号预测，**命中**。缺的不是基线材料，
+   是**带理论的对照臂**，而基线永远造不出它。
+3. **P3 是全电池唯一一条既在主表、又在指定梯度上被验证过的指标。** 主表六条里
+   五条没有工序 1 判决；而终于拿到跨臂效应量的八条里，七条在同一次回算里被工序 4
+   降级了。两个集合几乎不相交，这件事此前没人看得见。
+4. **X3——探索族的招牌、v1 唯一「如实分开」的那条——在真梯度上反着分**
+   （|δ|=0.562），Schema 臂的前载指数是**负的**。越强的臂新颖度越靠后。
+5. **v2.1 四道防御：两道关上、一道修了一半、一道是「防御戏」。** P4（加
+   `Step.won` 闸）与 K12（闭合拍必须有证据）关闭；E2 改插值后平坦成本的 run 在
+   任何长度都恰好 0.250（原先 9 拍 0.333、12 拍 0.250），**但集中攻击仍在**；
+   **K2 的防御失败**——要求声明抽样框，而攻击方写一句话就满足了，这正是 v2.1
+   封条里预先写明的 "defence theatre" 失败形态。四条里三条按预注册翻转，
+   **E2 回到主表是本轮唯一没预测到的方向**，理由与警告见 `REPORT_V2.md`。
 
 ---
 

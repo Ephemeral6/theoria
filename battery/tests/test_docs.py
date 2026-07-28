@@ -1,6 +1,8 @@
 """METRICS.md is generated; this keeps it from drifting from the code."""
 
+import io
 import os
+import tempfile
 
 from battery import docs
 
@@ -35,3 +37,28 @@ def test_predictions_file_is_present_and_names_every_family():
         assert "## %s" % family in body
     assert "Seal declaration" in body, \
         "the pre-registration must state what its author had already seen"
+
+
+def test_a_recompute_pointed_elsewhere_leaves_the_committed_docs_alone():
+    """`--out` must mean `--out`.
+
+    `REDUNDANCY.md` used to be written by `run_battery` to a fixed path, so
+    every run of `tests/test_determinism.py` -- which drives the real pipeline
+    over a six-run fixture -- quietly overwrote the committed audit document
+    with a three-cluster version. The suite passed the whole time; the damage
+    showed up as an unexplained dirty file in `git status`.
+    """
+    import battery.run_battery as rb
+
+    before = io.open(docs.REDUNDANCY_TARGET, encoding="utf-8").read()
+    with tempfile.TemporaryDirectory() as tmp:
+        ledger = os.path.join(tmp, "ledger.jsonl")
+        io.open(ledger, "w", encoding="utf-8", newline="\n").write("")
+        try:
+            rb.main(["--out", os.path.join(tmp, "artifacts"),
+                     "--ledger", ledger, "--a0", "none"])
+        except SystemExit:
+            pass
+        assert not os.path.exists(
+            os.path.join(tmp, "artifacts", "REDUNDANCY.md"))
+    assert io.open(docs.REDUNDANCY_TARGET, encoding="utf-8").read() == before

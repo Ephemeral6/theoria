@@ -1,313 +1,889 @@
 {
-  "main": [
+  "demoted_by_demonstration": [
     "E1",
-    "E2",
-    "E3",
     "E6",
     "K10",
-    "K11",
-    "K12",
     "K2",
-    "K7",
     "M1",
-    "M3",
     "M4",
-    "M6",
     "P2",
-    "P3",
-    "P4",
     "P5",
     "X3",
     "X5"
+  ],
+  "disagreements": [
+    {
+      "claim": "reports $0.0102 for a run of 40 billed model calls that really cost $0.4080; the 39 unpriced rows are read as free, and E2/E3/E5 compute happily on the same 1/40 of the bill",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "E1",
+      "register_tier": "main",
+      "tier": "reference"
+    },
+    {
+      "claim": "E2 = 0.250 at 9 turns vs 0.250 at 12 for the identical flat-cost arm: a 0% lift bought by `ceil(n/4)` and by nothing else, on a metric whose whole observed range is 0.162-0.321",
+      "fields_contradicted": [
+        "defended"
+      ],
+      "metric": "E2",
+      "register_tier": "main",
+      "tier": "main"
+    },
+    {
+      "claim": "E3 = 0.025, the exact floor 1/40, on a run of 40 refused repetitions of one action -- the bill settled on turn one because it was all spent on turn one, not because anything converged",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "E3",
+      "register_tier": "main",
+      "tier": "main"
+    },
+    {
+      "claim": "E6 = 1.000 tries/step, the minimum possible, from the 1 step of 60 that carries an annotation; the 59 unannotated steps burned 8 round trips each and the true mean is 7.88",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "E6",
+      "register_tier": "main",
+      "tier": "reference"
+    },
+    {
+      "claim": "K10 = 500, the metric `epistemic.py` calls the cheapest witness that the machine did something people do not, from a theory with no clauses, no concepts and no proof of anything.",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "K10",
+      "register_tier": "main",
+      "tier": "reference"
+    },
+    {
+      "claim": "K11 = 42 from a one-line header comment, on a theory with nothing in it to have revised.",
+      "fields_contradicted": [
+        "accidental"
+      ],
+      "metric": "K11",
+      "register_tier": "main",
+      "tier": "main"
+    },
+    {
+      "claim": "K12 = 1.000, a fully closed repair loop, from six booleans set to True with zero environment actions behind them.",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "K12",
+      "register_tier": "main",
+      "tier": "main"
+    },
+    {
+      "claim": "K2 = 1.000, the battery's flagship off-trace score, over a held-out set of one pair chosen by the manual's own author.",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "K2",
+      "register_tier": "main",
+      "tier": "reference"
+    },
+    {
+      "claim": "K7 = 0, no framework conflict detected, from a manual that wrote down only the accounts that came out positive.",
+      "fields_contradicted": [
+        "accidental"
+      ],
+      "metric": "K7",
+      "register_tier": "main",
+      "tier": "main"
+    },
+    {
+      "claim": "M1 = 0.0, the best attainable delay, from an arm that used 1 of 4 annotated mechanisms and used it by walking into it.",
+      "fields_contradicted": [
+        "defended"
+      ],
+      "metric": "M1",
+      "register_tier": "main",
+      "tier": "reference"
+    },
+    {
+      "claim": "M4 = 0.0, instant detection, from an episode that closed no repair beat, changed no clause and repaired nothing.",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "M4",
+      "register_tier": "main",
+      "tier": "reference"
+    },
+    {
+      "claim": "M6 = 1.000, maximal collateral, from a manual whose entire theorem inventory was the single theorem the repair broke.",
+      "fields_contradicted": [
+        "accidental"
+      ],
+      "metric": "M6",
+      "register_tier": "main",
+      "tier": "main"
+    },
+    {
+      "claim": "P2 = +0.600 on an arm whose rate was flat at one action per decision for the whole run; the trend is three retries of the first model call.",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "P2",
+      "register_tier": "main",
+      "tier": "reference"
+    },
+    {
+      "claim": "P4 = 0.083 — an eighth of optimal, better than any solved run can score — on an arm that took one action, gave up, and won nothing.",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "P4",
+      "register_tier": "main",
+      "tier": "main"
+    },
+    {
+      "claim": "P5 = 0.000 — 'the infrastructure never failed' — on a run in which the API refused 140 of its 160 HTTP requests.",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "P5",
+      "register_tier": "main",
+      "tier": "reference"
+    },
+    {
+      "claim": "X3 = 1.000, the maximum, on an arm that explored for eight turns and then spent eight turns trapped in one state; a dead end and a closed theory have the same novelty curve.",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "X3",
+      "register_tier": "main",
+      "tier": "reference"
+    },
+    {
+      "claim": "X5 = 24 distinct states on an arm that never left one game state, which is the number X1 and X2 are told to be read beside.",
+      "fields_contradicted": [
+        "accidental",
+        "defended"
+      ],
+      "metric": "X5",
+      "register_tier": "main",
+      "tier": "reference"
+    }
+  ],
+  "main": [
+    "E2",
+    "E3",
+    "K11",
+    "K12",
+    "K7",
+    "M3",
+    "M6",
+    "P3",
+    "P4"
   ],
   "metrics": {
     "E1": {
       "accidental": false,
       "defence": "Diagnostic.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "reports $0.0102 for a run of 40 billed model calls that really cost $0.4080; the 39 unpriced rows are read as free, and E2/E3/E5 compute happily on the same 1/40 of the bill",
+        "defence": "Refuse the money metrics unless every call carries a price, or report priced-call coverage in the support field so a reader sees 1/40 rather than a total. `capabilities()` asks `any`, and the honest question is `all`.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "neutral",
       "how_to_game": "Not a ranking.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
+      "tier": "reference",
+      "tier_is_advisory": true,
+      "tier_note": "diagnostic: declares no direction, so it is excluded from ordering claims by `direction` regardless of tier. The exploit still matters -- this metric is named as the defence for other metrics, and a defence that can be reached without the capability defends nothing."
     },
     "E2": {
       "accidental": true,
       "defence": "Requires at least eight turns, and pairs by game so two arms are compared over the same problem.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "E2 = 0.250 at 9 turns vs 0.250 at 12 for the identical flat-cost arm: a 0% lift bought by `ceil(n/4)` and by nothing else, on a metric whose whole observed range is 0.162-0.321",
+        "defence": "Use a fractional head instead of a ceiling -- interpolate the cost at the 25% mark rather than rounding up to a whole turn -- so a flat run scores 0.25 at every length. One line, and it removes the whole effect. Nothing implements it.",
+        "defended": false,
+        "succeeded": false
+      },
+      "direction": "higher",
       "how_to_game": "Die early -- a run that ends on turn four spent 100% of its cost in its first quarter. Or dump one enormous prompt on turn one.",
+      "register_tier": "main",
+      "status": "register contradicted on defended",
       "tier": "main"
     },
     "E3": {
       "accidental": true,
       "defence": "Same eight-turn floor and same pairing.",
       "defended": true,
+      "demonstrated": {
+        "accidental": false,
+        "claim": "E3 = 0.025, the exact floor 1/40, on a run of 40 refused repetitions of one action -- the bill settled on turn one because it was all spent on turn one, not because anything converged",
+        "defence": "Same as E2: the eight-turn floor bounds length, not lopsidedness. A within-run permutation null would price how surprising the crossing turn is; nothing computes one. The honest note is that E3's *accidental* exposure is smaller than its register claims, not that it is defended.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "lower",
       "how_to_game": "As E2, from the other end.",
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
       "tier": "main"
     },
     "E4": {
       "accidental": true,
       "defence": "None implemented. Prompt caching and context compaction do exactly this, for reasons that have nothing to do with understanding, and the battery cannot currently tell a compaction policy from a theory that closed.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "E4 = 0.000, the best attainable value, on an arm whose prompt body grows exactly quadratically -- the token axis is constant by construction on a one-shot CLI, so the growth is invisible to E4 and E7 reads it at 0.072",
+        "defence": "E7 is the defence, and it is implemented -- but it is a *second metric*, not a guard on this one. E4 still reports 0.000 with status `ok` and nothing in the battery marks that reading as uninformative. Refusing E4 when the context series has near-zero variance would; `metrics/__init__.py:167` already detects the case and returns 0.0 instead of declining.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "lower",
       "how_to_game": "Truncate or compact the context on a schedule and the quadratic term vanishes.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "E5": {
       "accidental": true,
       "defence": "Would need pairing against P4. Not implemented.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "E5 = $0.0000204/action, 613x better than the cheapest real bare_cc run, from one model call and 500 repetitions of one action",
+        "defence": "Read against P4 -- were those actions on a shortest path? -- which `gaming.py` already names and which needs ground truth no live run has. What *could* be implemented without ground truth is a distinct-action or distinct-state denominator; X5 already computes distinct states and nothing joins them.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "lower",
       "how_to_game": "Emit many cheap actions; the denominator grows faster than the numerator.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "E6": {
       "accidental": false,
       "defence": "Diagnostic, and registered `neutral` so no ordering can use it. Read it before believing E1 or E5.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "E6 = 1.000 tries/step, the minimum possible, from the 1 step of 60 that carries an annotation; the 59 unannotated steps burned 8 round trips each and the true mean is 7.88",
+        "defence": "Report coverage -- annotated steps over total steps -- in the support field, and decline the metric below some coverage. The support currently carries `steps` (the numerator's count) with no denominator, so the reading cannot be checked from the artefact alone.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "neutral",
       "how_to_game": "Not a ranking -- it measures the API and the retry policy, which is the point.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
+      "tier": "reference",
+      "tier_is_advisory": true,
+      "tier_note": "diagnostic: declares no direction, so it is excluded from ordering claims by `direction` regardless of tier. The exploit still matters -- this metric is named as the defence for other metrics, and a defence that can be reached without the capability defends nothing."
     },
     "E7": {
       "accidental": true,
       "defence": "None implemented. `prompt_chars` counts what the harness chose to assemble, so a compaction policy and a theory that closed produce the same flat curve. The improvement over E4 is only that the axis is no longer constant by construction, so the metric can now be wrong in an interesting way instead of silent.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "E7 = 0.000, the best attainable value, on an arm that re-reads a fixed 5000-character prompt and remembers nothing at all; E4 on the same run reads 0.068",
+        "defence": "None implemented, as the register already says. The nearest implementable guard is the same one E4 needs: decline when the series has near-zero variance, instead of scoring a constant at the best possible value. The window that produces the constant is `history[-12:]` in the harness, so the battery could also read it and report it as a confound rather than a score.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "lower",
       "how_to_game": "Truncate or summarise the assembled prompt on a schedule and the quadratic term vanishes -- exactly E4's defect, one layer further out.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "K1": {
       "accidental": true,
       "defence": "None, and none is wanted. K1 is the battery's *control*: it is the number the field already optimises, and its job here is to be high for everyone so that K2 can be the thing that separates. Reporting K1 as an achievement is the error this whole phase exists to avoid.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K1 = 1.000, perfect replay, over a single memorised pair, while the same manual is wrong on all 500 pairs it never saw.",
+        "defence": "None, and `gaming.py` is right that none is wanted: K1's value is that it is high for everyone. The one thing the battery does not do is refuse a denominator of 1, which would cost nothing and stop the control from being quoted as a result.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Overfit. A model with enough parameters replays its own history perfectly and knows nothing.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "K10": {
       "accidental": false,
       "defence": "A deadlock theorem carries a Lean proof obligation with zero axioms; a false one does not compile. The battery counts rather than checks, so the defence is external to it -- but it is a real one, and it is why this metric stays in the main table.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K10 = 500, the metric `epistemic.py` calls the cheapest witness that the machine did something people do not, from a theory with no clauses, no concepts and no proof of anything.",
+        "defence": "The claimed defence — Lean will not compile a false deadlock — is real and lives entirely outside `battery/`. Nothing in the battery opens a Lean file, and the adapter's own test is `\"dead\" in line`. Requiring a `proven` clause per counted deadlock would move the defence inside.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Emit many trivial `prune ... => dead` entries.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
+      "tier": "reference"
     },
     "K11": {
       "accidental": false,
       "defence": "Diagnostic; a low count is ambiguous between 'right first time' and 'never checked'.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K11 = 42 from a one-line header comment, on a theory with nothing in it to have revised.",
+        "defence": "Registered `neutral` and excluded from ordering by the registry. `a0_spike.py` additionally refuses to launder a prose count into the field, which is the strongest form of this defence available and it is implemented in an adapter.",
+        "defended": true,
+        "succeeded": true
+      },
+      "direction": "neutral",
       "how_to_game": "Not a ranking.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental",
+      "tier": "main",
+      "tier_is_advisory": true,
+      "tier_note": "diagnostic: declares no direction, so it is excluded from ordering claims by `direction` regardless of tier. The exploit still matters -- this metric is named as the defence for other metrics, and a defence that can be reached without the capability defends nothing."
     },
     "K12": {
       "accidental": false,
       "defence": "`beats_required` is fixed at six by `Theoria.md`'s A2 acceptance, not by the arm, and the adapter sets it. An arm that closes four of six reports 0.67 and cannot redefine the six.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K12 = 1.000, a fully closed repair loop, from six booleans set to True with zero environment actions behind them.",
+        "defence": "The denominator is genuinely fixed by the adapter, which is the defence `gaming.py` names and it is implemented. The numerator is not defended at all: nothing requires a closed beat to have cost anything, changed anything or solved anything. `Beat.env_actions` is already carried and unread.",
+        "defended": false,
+        "succeeded": false
+      },
+      "direction": "higher",
       "how_to_game": "Declare fewer beats. The denominator is the arm's own claim about what a repair loop consists of.",
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
       "tier": "main"
     },
     "K13": {
       "accidental": true,
       "defence": "None implemented, and the exposure is live rather than hypothetical: the two arms in hand used different repair strategies (`patch` vs `rebuild`) and the ratio cannot separate strategy from capability. `strategy` is carried into the support field so the confound is at least visible, which is not the same as defended.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K13 = 0.0, the cheapest repair the metric can express, from an episode that spent no environment actions because it did no work.",
+        "defence": "None implemented. `strategy` is carried into the support field so a reader can see patch-versus-rebuild, which `gaming.py` correctly says is visibility rather than defence. Requiring a closed L6 beat before a ratio is reported would tie the cost to an outcome.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "lower",
       "how_to_game": "Report the patch and not the re-derivation. An incremental repair that quietly re-mines the world afterwards looks five times cheaper than one that says so.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "K14": {
       "accidental": true,
       "defence": "K5 counts the vocabulary and would show the shrinkage, but nothing pairs them automatically, and K5 is itself gameable in the opposite direction. The pair K7/K14 is the intended reading and it is a convention, not a mechanism.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K14 = +1001 bits, a perfect worst-concept account, from a manual whose word table contains one word — the live a0-no-button shape.",
+        "defence": "None implemented. `gaming.py` names K5 as the companion that would show the shrinkage and says in the same breath that nothing pairs them; `REPORT_V1.md` item 4 asks for a vocabulary floor. Neither exists in code.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Admit no small concepts. A vocabulary of one large concept has a minimum equal to its maximum.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "K2": {
       "accidental": false,
       "defence": "Held-out by construction; the manual is frozen before the held-out pairs are scored, and A0's seal is stamped in THEORIZE_LOG.md.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K2 = 1.000, the battery's flagship off-trace score, over a held-out set of one pair chosen by the manual's own author.",
+        "defence": "`gaming.py` says held-out by construction and cites A0's seal in THEORIZE_LOG.md. The seal is real and external; the battery implements no part of it. K2 does not read `held_out_frame`, enforces no minimum denominator, and cannot tell 1/1 from 39960/39960. Reading the frame into the support field and flooring the denominator are both one-line fixes.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Very little: the pairs are by construction the ones the trace never exercised.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
+      "tier": "reference"
     },
     "K3": {
       "accidental": true,
       "defence": "An LLM asked for theorems will produce them in quantity. Needs a non-triviality filter that does not exist yet.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K3 = 40, ten times the best real manual in the repository, from forty unproven unevidenced clauses of kind `theorem`.",
+        "defence": "None implemented. `Clause.proven` is parsed and carried on every clause and no metric reads it; counting only proven clauses would not make K3 non-trivial but would make it cost something.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Write many trivial theorems. `0 = 0` is a theorem.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "K4": {
       "accidental": true,
       "defence": "None implemented -- and A0 demonstrates the failure rather than merely predicting it. A0's manual scores K4 = 1.000 *because* it rejected the one generalisation it lacked evidence for (THEORIZE_LOG R-05), and that same omission is why its K2 is 0.000. Evidence coverage rewards exactly the caution that held-out accuracy punishes. K4 must never be reported without K2 beside it.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K4 = 1.000, perfect evidence coverage, from a manual that annotated the one rule it was sure of and left forty un-annotated.",
+        "defence": "None implemented. `gaming.py` says K4 must never be reported without K2 beside it; nothing pairs them, and K2 is `insufficient-data` on this run, so the pairing would not fire even if it existed.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Only write down clauses you have complete evidence for. Omitting every hard rule scores 1.0.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "K5": {
       "accidental": true,
       "defence": "K6 is meant to price each name, but see K6.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K5 = 100 while K6, K7 and K14 all report insufficient-data, because a concept with no compression account is invisible to every metric that would price it.",
+        "defence": "None implemented. The stated defence is K6, and K6 skips exactly the concepts that would embarrass it. Reporting the priced share of the vocabulary — `len(gains)/len(concepts)` — is already computed inside K6 and thrown away.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Name more things.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "K6": {
       "accidental": true,
       "defence": "The minimum would be the honest statistic; the mean is reported with min and max in its support fields, but the headline number is still a mean. Fix in v1.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K6 = 1000000.0 bits and K5 = 100 on the same manual, defeating the register's claim that K6 prices what K5 counts.",
+        "defence": "None implemented. `gaming.py` promises the fix in v1 — report the minimum instead of the mean — and v1 added K14 as a separate metric while leaving the mean as the headline. K14 does not rescue this run: it returns the same 1e6.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Admit one enormous concept and reject every small one. A0's mean is +706 bits, carried entirely by the Cart at +2125 while two of the three concepts are negative.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "K7": {
       "accidental": false,
       "defence": "Diagnostic.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K7 = 0, no framework conflict detected, from a manual that wrote down only the accounts that came out positive.",
+        "defence": "Registered `neutral`, and neutral metrics are excluded from ordering by `metrics/__init__.py`. That much is implemented. What is *not* defended is K7's use in `PREDICTIONS.md` as a structural prediction, where a count of zero is treated as evidence rather than as an absence of evidence.",
+        "defended": true,
+        "succeeded": true
+      },
+      "direction": "neutral",
       "how_to_game": "Not a ranking -- a count of a framework conflict.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental",
+      "tier": "main",
+      "tier_is_advisory": true,
+      "tier_note": "diagnostic: declares no direction, so it is excluded from ordering claims by `direction` regardless of tier. The exploit still matters -- this metric is named as the defence for other metrics, and a defence that can be reached without the capability defends nothing."
     },
     "K8": {
       "accidental": true,
       "defence": "None. And the denominator is tiny (9 on A0), so the ratio is noisy as well as gameable.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K8 = 1.000, a perfect probe-executability rate, from designing exactly one probe and running it.",
+        "defence": "None implemented, as `gaming.py` states. A floor on `designed` would remove the 1/1 case; nothing would remove the incentive to propose fewer experiments.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Design only probes you already know you can run.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "K9": {
       "accidental": true,
       "defence": "None implemented.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "K9 = 999 against a best-in-repository 3, from a playbook of single-line preferences no engine consumes.",
+        "defence": "None implemented. A playbook entry that no planner reads costs nothing to write; pairing K9 against P1 or P4 would price it, and nothing pairs them.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Write more playbook entries.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "M1": {
       "accidental": true,
       "defence": "Luck does not repeat across games, and the pairing is cross-game. Read beside M2.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "M1 = 0.0, the best attainable delay, from an arm that used 1 of 4 annotated mechanisms and used it by walking into it.",
+        "defence": "`gaming.py` claims cross-game pairing. `discriminate.py` pairs by `game_id`, and every run carrying `truth.mechanisms` is a self-built world whose `game_id` is None (capability_spectrum.json), so M1 has never been paired with anything. Reading it beside M2 is a convention, not code. The implementable defence is to refuse M1 when M2 < 1.0, or to report the mean over *annotated* rather than used mechanisms.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "lower",
       "how_to_game": "Flail at random and hit the mechanism early by luck.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on defended",
+      "tier": "reference"
     },
     "M2": {
       "accidental": true,
       "defence": "None beyond reading it with M1 -- a mechanism used late is still used.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "M2 = 1.000, perfect uptake, over an annotation table containing one mechanism the arm stumbled into on step 40.",
+        "defence": "None implemented; `gaming.py` says so and is right. A floor on the annotation size, or a report of `used/annotated` as a pair rather than a ratio, would at least make 1/1 visibly different from 3/3.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Same flailing; uptake is a hit counter and random play eventually hits everything.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "M3": {
       "accidental": false,
       "defence": "n/a",
       "defended": true,
+      "demonstrated": {
+        "accidental": false,
+        "claim": "No value of M3 is reachable by any run: the body is a guard followed by a second guard, so the exploit fails and the metric measures nothing yet.",
+        "defence": "Unimplemented by design; `mechanism.py` says guessing at the shape of data nobody has produced is how a metric ends up measuring its author's imagination. Nothing to defend until a multi-level annotation exists.",
+        "defended": true,
+        "succeeded": false
+      },
+      "direction": "lower",
       "how_to_game": "Unimplemented.",
+      "register_tier": "main",
+      "status": "register confirmed by demonstration",
       "tier": "main"
     },
     "M4": {
       "accidental": false,
       "defence": "The variants are authored before the metric reads them and are named in the artefact, so the choice of change is auditable rather than tunable after the fact. Gaming it requires choosing easy variants *and* publishing the list of variants chosen.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "M4 = 0.0, instant detection, from an episode that closed no repair beat, changed no clause and repaired nothing.",
+        "defence": "`gaming.py` calls the variants auditable because they are named in the artefact. That is a property of the write-up, not of the battery: nothing in `battery/` checks that the variants were chosen independently of the evidence set, and the undetected ones are excluded from the mean rather than penalised in it. Folding undetected episodes in at a declared ceiling would be a defence; excluding them is the defect.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "lower",
       "how_to_game": "Inject only changes that fire on the first action. The delay is a property of which rule was broken at least as much as of the manual that noticed.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
+      "tier": "reference"
     },
     "M5": {
       "accidental": true,
       "defence": "None implemented. Nothing in the battery checks that the injected variants were chosen independently of the evidence set, and the only producer in the repository authored both.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "M5 = 1.000, a perfect detection rate, over exactly one injected change chosen after the evidence set was fixed.",
+        "defence": "None implemented, as `gaming.py` states. An episode-count floor would at least stop 1/1 from reading like 4/4.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Inject only changes you already know the evidence exercises, and the rate is 1.0 by construction.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "M6": {
       "accidental": false,
       "defence": "Diagnostic. The unambiguous number is in the support field: how many repairs would have left a silently false theorem standing without dependency tracking.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "M6 = 1.000, maximal collateral, from a manual whose entire theorem inventory was the single theorem the repair broke.",
+        "defence": "Registered `neutral`, and `metrics/__init__.py` excludes neutral metrics from every ordering claim. That defence is in the code and it holds. The unambiguous number really is in the support field, and it is a count rather than a share.",
+        "defended": true,
+        "succeeded": true
+      },
+      "direction": "neutral",
       "how_to_game": "Not a ranking -- and both directions have a bad reading, which is why it does not rank.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental",
+      "tier": "main",
+      "tier_is_advisory": true,
+      "tier_note": "diagnostic: declares no direction, so it is excluded from ordering claims by `direction` regardless of tier. The exploit still matters -- this metric is named as the defence for other metrics, and a defence that can be reached without the capability defends nothing."
     },
     "P1": {
       "accidental": true,
       "defence": "Read against P4 (were those actions on the shortest path?) -- but P4 needs ground truth, so most runs have no check at all.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "P1 = 60.000 — thirty times the highest value in the repository — on one model call and sixty repetitions of a single action that changed nothing.",
+        "defence": "P1 would have to be read against evidence that the actions went somewhere: P4, a level count, or `Step.won`. P4 needs ground truth that most runs do not have, and the other two are not read by any metric.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Emit ten actions per model call. Any actions. The metric cannot tell a plan from a burst.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "P2": {
       "accidental": false,
       "defence": "An *increasing* batch size is a deliberate schedule; a harness that batches does so at a constant rate, which cancels in the difference.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "P2 = +0.600 on an arm whose rate was flat at one action per decision for the whole run; the trend is three retries of the first model call.",
+        "defence": "Compute P2 over turns, not over call rows — `Call.turn` already carries the decision axis and `Run.turn_costs()` already builds it for the economy family.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Batch more actions per call as the run goes on.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
+      "tier": "reference"
     },
     "P3": {
       "accidental": true,
       "defence": "Compared only within a game, where every arm faces the same reversibility. The pairing is implemented.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "P3 = 0.000, the best attainable value, on an arm that undid every single move; the same twelve moves without the frame's tick score 1.000.",
+        "defence": "The same canonical state projection X4 needs. Pairing by game equalises the arms but cannot restore a signal that the observation format destroyed.",
+        "defended": true,
+        "succeeded": true
+      },
+      "direction": "lower",
       "how_to_game": "Never undo -- easy in a game whose actions are irreversible, impossible in one where they are not.",
+      "register_tier": "main",
+      "status": "register confirmed by demonstration",
       "tier": "main"
     },
     "P4": {
       "accidental": false,
       "defence": "Restricted to solve attempts with ground truth; coverage walks are refused outright.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "P4 = 0.083 — an eighth of optimal, better than any solved run can score — on an arm that took one action, gave up, and won nothing.",
+        "defence": "Refuse P4 unless the run reached the goal. `Step.won` is already on the model and already populated by the adapter; gating on it turns every one of these runs into `not-applicable` instead of a leaderboard entry.",
+        "defended": false,
+        "succeeded": false
+      },
+      "direction": "lower",
       "how_to_game": "Nothing cheap: the ratio needs a real optimal plan and a real attempt to reach the goal.",
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
       "tier": "main"
     },
     "P5": {
       "accidental": false,
       "defence": "Diagnostic. Read it before believing P1 or P2.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "P5 = 0.000 — 'the infrastructure never failed' — on a run in which the API refused 140 of its 160 HTTP requests.",
+        "defence": "Count refused requests, not refused steps: `Step.http_tries` is already on the model. A P5 computed over attempts would read 0.875 on this run instead of 0.000.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "neutral",
       "how_to_game": "Not a ranking -- it measures the infrastructure, which is the point.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
+      "tier": "reference",
+      "tier_is_advisory": true,
+      "tier_note": "diagnostic: declares no direction, so it is excluded from ordering claims by `direction` regardless of tier. The exploit still matters -- this metric is named as the defence for other metrics, and a defence that can be reached without the capability defends nothing."
     },
     "X1": {
       "accidental": true,
       "defence": "Floor the run length and read it beside X5; a low revisit rate over 8 distinct states is not the same fact as a low revisit rate over 200.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "X1 = 0.000, the best attainable value, on an arm that clicks a coordinate it has never clicked before every turn and holds no model of where it has been.",
+        "defence": "Floor the *distinct-state* count against the reachable space rather than the run length, or refuse X1 on a run the harness terminated. A revisit rate is only a fact about an arm when the arm had somewhere to revisit and time to do it.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "lower",
       "how_to_game": "Never revisit anything: flail through a large state space taking a fresh action every turn. A run that dies on turn three scores a perfect 0.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "X2": {
       "accidental": true,
       "defence": "Same floor as X1; X2 is really X3's input rather than a score of its own.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "X2 = 1.000, the maximum, on an arm pinned in a single state for all twenty turns; the novelty is entirely in the coordinates it picks, not in anything it reaches.",
+        "defence": "Quotient the action space before keying transitions — bucket or drop click coordinates — or normalise the novel count against the transitions actually available from the states visited, so a run that visited one state cannot claim to have exhausted a frontier.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Take a never-before-tried action every turn. Short runs score 1.0 automatically -- three of the pilot's runs do exactly that.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "X3": {
       "accidental": false,
       "defence": "Gaming it requires deliberately wasting late turns, which costs score on every other metric at once.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "X3 = 1.000, the maximum, on an arm that explored for eight turns and then spent eight turns trapped in one state; a dead end and a closed theory have the same novelty curve.",
+        "defence": "Refuse X3 when the last quarter observes one distinct state, or require the run to have made progress in its second half (`Step.won`, `Step.level`) before reading its novelty decay as convergence.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Repeat yourself deliberately in the last quarter to widen the gap.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
+      "tier": "reference"
     },
     "X4": {
       "accidental": true,
       "defence": "Normalised by run length, which removes the length effect but not the early-exit effect.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "X4 = 0.000, the best attainable value, on an arm that pressed one key twenty-four times and moved nothing; the frame's tick counter makes every no-op observation look like a discovery.",
+        "defence": "State identity would have to be computed on a canonical projection of the observation with the animated cells removed. `battery/model.py` offers no such projection and no adapter builds one, so every state-identity metric inherits the environment's animation.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "lower",
       "how_to_game": "End the run before a streak can form.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     },
     "X5": {
       "accidental": false,
       "defence": "Diagnostic.",
       "defended": true,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "X5 = 24 distinct states on an arm that never left one game state, which is the number X1 and X2 are told to be read beside.",
+        "defence": "Same canonical projection X4 needs. Until state identity means game state rather than frame bytes, X5 counts frames and cannot corroborate anything.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "neutral",
       "how_to_game": "Not a ranking.",
-      "tier": "main"
+      "register_tier": "main",
+      "status": "register contradicted on accidental, defended",
+      "tier": "reference",
+      "tier_is_advisory": true,
+      "tier_note": "diagnostic: declares no direction, so it is excluded from ordering claims by `direction` regardless of tier. The exploit still matters -- this metric is named as the defence for other metrics, and a defence that can be reached without the capability defends nothing."
     },
     "X6": {
       "accidental": true,
       "defence": "Would need the arm's action to be attributable to a decision rather than to a retry policy. The ledger collapses the harness's retry loop into one row, so a repeat across logged steps *is* an arm decision -- but nothing checks that the arm was shown the failure before choosing, and on the pilot harness it demonstrably was not.",
       "defended": false,
+      "demonstrated": {
+        "accidental": true,
+        "claim": "X6 = 1.000, the maximum, on an arm whose action is a pure function of the step index; the failure flag is not one of its inputs and it scores as if it read every refusal.",
+        "defence": "The post-failure action would have to be compared against the arm's own action distribution — an arm that never repeats any action cannot demonstrate anything by not repeating this one — or the refused action would have to be re-offered and declined.",
+        "defended": false,
+        "succeeded": true
+      },
+      "direction": "higher",
       "how_to_game": "Vary the action after every failure on principle, without reading the failure. A harness that rotates its action list on retry scores 1.0 having modelled nothing at all.",
+      "register_tier": "reference",
+      "status": "register confirmed by demonstration",
       "tier": "reference"
     }
   },
+  "n_demonstrated": 38,
+  "n_disagreements": 17,
+  "n_prose_only": 0,
   "reference": [
+    "E1",
     "E4",
     "E5",
+    "E6",
     "E7",
     "K1",
+    "K10",
     "K13",
     "K14",
+    "K2",
     "K3",
     "K4",
     "K5",
     "K6",
     "K8",
     "K9",
+    "M1",
     "M2",
+    "M4",
     "M5",
     "P1",
+    "P2",
+    "P5",
     "X1",
     "X2",
+    "X3",
     "X4",
+    "X5",
     "X6"
   ],
-  "rule": "accidental and not defended -> reference; else main"
+  "rule": "accidental and not defended -> reference; else main. Where an executed exploit exists its fields decide, because the prose register's booleans are unfalsifiable as written."
 }

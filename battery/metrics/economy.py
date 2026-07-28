@@ -35,6 +35,23 @@ CONVERGENCE_SHARE = 0.9  # "the turn by which the bill is essentially settled"
 MIN_TURNS_FOR_SHAPE = 8
 
 
+def _cost_through(costs, mark: float) -> float:
+    """Cumulative cost up to a fractional turn position.
+
+    Whole turns up to `floor(mark)`, plus the matching fraction of the turn
+    the mark lands inside. Treating a turn's cost as spread evenly across it is
+    the only assumption available -- the ledger records a cost per decision,
+    not a cost per instant -- and it is the assumption that makes a flat run
+    score its share exactly, at every run length.
+    """
+    whole = int(mark)
+    head = sum(costs[:whole])
+    remainder = mark - whole
+    if remainder > 0 and whole < len(costs):
+        head += costs[whole] * remainder
+    return head
+
+
 def _costs(run: Run) -> List[float]:
     """Cost per billed model call, in call order. The money axis."""
     return [c.cost_usd or 0.0 for c in sorted(run.calls, key=lambda c: c.idx)]
@@ -68,10 +85,24 @@ def total_cost(run: Run):
 def frontload_index(run: Run):
     """Claim C2's signature, and a Phase 4 primary endpoint.
 
-    Deliberately *not* normalised for run length. A short run is trivially
-    front-loaded, which is a real confound; the discrimination pass pairs by
-    game to control for it, and `METRICS.md` records it as this metric's main
-    way of being gamed.
+    **The head is interpolated, not rounded** (v2.1). Through v2 this took
+    `ceil(n × 0.25)` whole turns, so the head was 3/9 = 33% of a nine-turn run
+    and 3/12 = 25% of a twelve-turn one, and a *perfectly flat* run scored
+    0.333 or 0.250 depending only on where it stopped. Run length here is set
+    by the crash, not by the arm: `bare_cc.py` has four separate early breaks
+    and the API refused a large share of actions. The artefact was the size of
+    the whole finding — E2's observed range across every real run was
+    0.162–0.321, and `ceil` alone manufactures a swing of that magnitude.
+
+    Interpolating the cumulative cost at exactly 25% of the turn axis makes a
+    flat run score 0.250 at every length, which is the property the definition
+    is supposed to have.
+
+    Still deliberately *not* normalised away from concentration: an arm that
+    genuinely pays early should score high, and that is the measurement. Note
+    what this does **not** fix — a run that dumps its entire bill on turn one
+    still scores near 1.0 over any number of turns, so the anti-gaming audit
+    keeps E2 in the reference tier on the concentration attack alone.
     """
     costs = _turn_costs(run)
     total = sum(costs)
@@ -80,8 +111,9 @@ def frontload_index(run: Run):
     if len(costs) < MIN_TURNS_FOR_SHAPE:
         return thin("E2", "fewer than %d turns; a short run is trivially "
                           "front-loaded" % MIN_TURNS_FOR_SHAPE)
-    k = max(1, math.ceil(len(costs) * FRONTLOAD_K))
-    return ok("E2", sum(costs[:k]) / total, turns=len(costs), head_turns=k,
+    head = _cost_through(costs, len(costs) * FRONTLOAD_K)
+    return ok("E2", head / total, turns=len(costs),
+              head_turns=round(len(costs) * FRONTLOAD_K, 9),
               billed_calls=len(run.calls))
 
 

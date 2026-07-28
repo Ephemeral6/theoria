@@ -27,6 +27,8 @@ from __future__ import annotations
 
 from typing import Dict
 
+from battery.metrics import REGISTRY
+
 # metric_id -> how_to_game / accidental / defence / defended
 GAMING_REGISTER: Dict[str, Dict[str, object]] = {
 
@@ -357,8 +359,33 @@ GAMING_REGISTER: Dict[str, Dict[str, object]] = {
 }
 
 
+def _demonstrated() -> Dict[str, object]:
+    """The executable register, or nothing if it cannot be built.
+
+    Imported lazily so a broken exploit module degrades this audit to the
+    prose register rather than taking the whole recompute down with it.
+    """
+    try:
+        from battery.audit.exploits import collect
+        return collect()
+    except Exception:            # pragma: no cover - defensive
+        return {}
+
+
 def tier_of(metric_id: str) -> str:
-    """`main` or `reference`, by the mechanical rule."""
+    """`main` or `reference` — decided by demonstration where one exists.
+
+    v0 and v1 ran this rule over two hand-set booleans, and the suite only ever
+    checked that an entry *existed*, never that it was true. A wrong
+    `defended: True` therefore kept a gameable metric in the main table and
+    nothing noticed. `battery/audit/exploits/` closes that: where a metric has
+    an executed exploit, its `accidental`/`defended` are facts about the code
+    and they win. The prose entry is kept beside them so the disagreement stays
+    visible rather than being edited away.
+    """
+    exploit = _demonstrated().get(metric_id)
+    if exploit is not None:
+        return exploit.proposed_tier
     entry = GAMING_REGISTER.get(metric_id)
     if entry is None:
         return "reference"      # unregistered means unaudited means not main
@@ -367,14 +394,86 @@ def tier_of(metric_id: str) -> str:
     return "main"
 
 
+def _register_tier(metric_id: str) -> str:
+    """What the prose register alone would have said.  Kept for the diff."""
+    entry = GAMING_REGISTER.get(metric_id)
+    if entry is None:
+        return "reference"
+    if entry.get("accidental") and not entry.get("defended"):
+        return "reference"
+    return "main"
+
+
 def audit() -> Dict[str, object]:
+    demonstrated = _demonstrated()
     rows = {}
+    disagreements = []
     for metric_id in sorted(GAMING_REGISTER):
         entry = dict(GAMING_REGISTER[metric_id])
         entry["tier"] = tier_of(metric_id)
+        entry["register_tier"] = _register_tier(metric_id)
+
+        # For a `neutral` metric the tier is advisory and the direction is the
+        # real guard: a diagnostic is excluded from every ordering because it
+        # declares no direction, whether it sits in `main` or `reference`.
+        # Worth saying in the artefact because the three independent audits
+        # that produced these demonstrations did *not* agree on how to treat
+        # neutral metrics -- some recorded the neutral direction as itself a
+        # defence, some recorded the exploit and let the tier fall. Both
+        # readings are defensible and the disagreement is left standing rather
+        # than normalised, since normalising it would hide that a hand-set
+        # boolean is still doing work here.
+        card = REGISTRY.get(metric_id)
+        entry["direction"] = card.direction if card else None
+        if card is not None and card.direction == "neutral":
+            entry["tier_is_advisory"] = True
+            entry["tier_note"] = (
+                "diagnostic: declares no direction, so it is excluded from "
+                "ordering claims by `direction` regardless of tier. The "
+                "exploit still matters -- this metric is named as the defence "
+                "for other metrics, and a defence that can be reached without "
+                "the capability defends nothing.")
+
+        exploit = demonstrated.get(metric_id)
+        if exploit is None:
+            entry["demonstrated"] = None
+            entry["status"] = "prose only — no executed exploit"
+            rows[metric_id] = entry
+            continue
+
+        entry["demonstrated"] = {
+            "claim": exploit.claim,
+            "succeeded": exploit.succeeded,
+            "accidental": exploit.accidental,
+            "defended": exploit.defended,
+            "defence": exploit.defence,
+        }
+        deltas = [field for field in ("accidental", "defended")
+                  if bool(entry.get(field)) != bool(
+                      getattr(exploit, field))]
+        if entry["tier"] != entry["register_tier"] or deltas:
+            disagreements.append({
+                "metric": metric_id,
+                "register_tier": entry["register_tier"],
+                "tier": entry["tier"],
+                "fields_contradicted": deltas,
+                "claim": exploit.claim,
+            })
+        entry["status"] = ("register contradicted on %s" % ", ".join(deltas)
+                           if deltas else "register confirmed by demonstration")
         rows[metric_id] = entry
+
     return {
-        "rule": "accidental and not defended -> reference; else main",
+        "rule": ("accidental and not defended -> reference; else main. Where "
+                 "an executed exploit exists its fields decide, because the "
+                 "prose register's booleans are unfalsifiable as written."),
+        "n_demonstrated": len(demonstrated),
+        "n_prose_only": sum(1 for m in rows if rows[m]["demonstrated"] is None),
+        "n_disagreements": len(disagreements),
+        "disagreements": disagreements,
+        "demoted_by_demonstration": sorted(
+            d["metric"] for d in disagreements
+            if d["register_tier"] == "main" and d["tier"] == "reference"),
         "main": sorted(m for m in rows if rows[m]["tier"] == "main"),
         "reference": sorted(m for m in rows if rows[m]["tier"] == "reference"),
         "metrics": rows,

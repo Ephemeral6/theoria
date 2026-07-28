@@ -1,0 +1,569 @@
+{
+  "arms_present": [
+    "bare_cc",
+    "schema_repro"
+  ],
+  "available": true,
+  "confounds": [
+    "arm and harness are bundled: the Schema side is an upstream agent on upstream infrastructure, not this project's harness running a different model. A separating metric has separated capability together with plumbing.",
+    "the Schema side is upstream *released* material, not a reproduction we ran. baseline-arms/SCHEMA_PATH_A.md section 6: the score column <复现值> stays empty and this pass does not fill it.",
+    "upstream declares no licence for this material (SCHEMA_LOCATE.md 2.3), so the payload is gitignored and only derived statistics appear in any artefact."
+  ],
+  "control_runs": 88,
+  "gradient": "bare_cc (weaker) vs schema_repro (stronger), paired by game",
+  "metrics": {
+    "E1": {
+      "direction": "neutral",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "E2": {
+      "direction": "higher",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "E3": {
+      "direction": "lower",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "E4": {
+      "agrees_with_declared_direction": true,
+      "cliffs_delta": -0.875,
+      "direction": "lower",
+      "family": "economy",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "large",
+      "medians": {
+        "bare_cc": 0.248594407,
+        "schema_repro": 0.053614176
+      },
+      "n_high_games": 4,
+      "n_low_games": 4,
+      "n_paired_games": 4,
+      "note": "4 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.1250). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 4,
+        "min_attainable_p": 0.125,
+        "n": 4,
+        "p_value": 0.125,
+        "ties": 0,
+        "wins": 0
+      },
+      "verdict": "underpowered"
+    },
+    "E5": {
+      "direction": "lower",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "E6": {
+      "direction": "neutral",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "E7": {
+      "direction": "lower",
+      "family": "economy",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K1": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K10": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K11": {
+      "direction": "neutral",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "K12": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K13": {
+      "direction": "lower",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K14": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K2": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K3": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K4": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K5": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K6": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K7": {
+      "direction": "neutral",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "K8": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "K9": {
+      "direction": "higher",
+      "family": "epistemic",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M1": {
+      "direction": "lower",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M2": {
+      "direction": "higher",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M3": {
+      "direction": "lower",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M4": {
+      "direction": "lower",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M5": {
+      "direction": "higher",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "M6": {
+      "direction": "neutral",
+      "family": "mechanism",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "P1": {
+      "agrees_with_declared_direction": true,
+      "cliffs_delta": 1.0,
+      "direction": "higher",
+      "family": "planning",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "large",
+      "medians": {
+        "bare_cc": 0.793492681,
+        "schema_repro": 1.015264428
+      },
+      "n_high_games": 4,
+      "n_low_games": 4,
+      "n_paired_games": 4,
+      "note": "4 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.1250). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 0,
+        "min_attainable_p": 0.125,
+        "n": 4,
+        "p_value": 0.125,
+        "ties": 0,
+        "wins": 4
+      },
+      "verdict": "underpowered"
+    },
+    "P2": {
+      "agrees_with_declared_direction": true,
+      "cliffs_delta": 1.0,
+      "direction": "higher",
+      "family": "planning",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "large",
+      "medians": {
+        "bare_cc": -0.155038916,
+        "schema_repro": 0.008213513
+      },
+      "n_high_games": 4,
+      "n_low_games": 4,
+      "n_paired_games": 4,
+      "note": "4 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.1250). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 0,
+        "min_attainable_p": 0.125,
+        "n": 4,
+        "p_value": 0.125,
+        "ties": 0,
+        "wins": 4
+      },
+      "verdict": "underpowered"
+    },
+    "P3": {
+      "agrees_with_declared_direction": true,
+      "cliffs_delta": -0.375,
+      "direction": "lower",
+      "family": "planning",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "medium",
+      "medians": {
+        "bare_cc": 0.129786631,
+        "schema_repro": 0.00093633
+      },
+      "n_high_games": 4,
+      "n_low_games": 4,
+      "n_paired_games": 4,
+      "note": "3 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.2500). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 2,
+        "min_attainable_p": 0.25,
+        "n": 3,
+        "p_value": 1.0,
+        "ties": 1,
+        "wins": 1
+      },
+      "verdict": "underpowered"
+    },
+    "P4": {
+      "direction": "lower",
+      "family": "planning",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 0,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 0; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    },
+    "P5": {
+      "direction": "neutral",
+      "family": "planning",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "n_high_games": 4,
+      "n_low_games": 4,
+      "n_paired_games": 4,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "X1": {
+      "agrees_with_declared_direction": true,
+      "cliffs_delta": -0.625,
+      "direction": "lower",
+      "family": "exploration",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "large",
+      "medians": {
+        "bare_cc": 0.278435693,
+        "schema_repro": 0.084637118
+      },
+      "n_high_games": 4,
+      "n_low_games": 4,
+      "n_paired_games": 4,
+      "note": "4 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.1250). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 4,
+        "min_attainable_p": 0.125,
+        "n": 4,
+        "p_value": 0.125,
+        "ties": 0,
+        "wins": 0
+      },
+      "verdict": "underpowered"
+    },
+    "X2": {
+      "agrees_with_declared_direction": false,
+      "cliffs_delta": -0.1875,
+      "direction": "higher",
+      "family": "exploration",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "small",
+      "medians": {
+        "bare_cc": 0.975238357,
+        "schema_repro": 0.94085297
+      },
+      "n_high_games": 4,
+      "n_low_games": 4,
+      "n_paired_games": 4,
+      "note": "3 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.2500). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 2,
+        "min_attainable_p": 0.25,
+        "n": 3,
+        "p_value": 1.0,
+        "ties": 1,
+        "wins": 1
+      },
+      "verdict": "underpowered"
+    },
+    "X3": {
+      "agrees_with_declared_direction": false,
+      "cliffs_delta": -0.5625,
+      "direction": "higher",
+      "family": "exploration",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "large",
+      "medians": {
+        "bare_cc": 0.014987662,
+        "schema_repro": -0.007395678
+      },
+      "n_high_games": 4,
+      "n_low_games": 4,
+      "n_paired_games": 4,
+      "note": "3 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.2500). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 3,
+        "min_attainable_p": 0.25,
+        "n": 3,
+        "p_value": 0.25,
+        "ties": 1,
+        "wins": 0
+      },
+      "verdict": "underpowered",
+      "warning": "separates the gradient strongly (|d| = 0.562) but in the opposite direction to the one declared. Either the definition is measuring something else, or the declared direction is wrong. Do not use until resolved."
+    },
+    "X4": {
+      "agrees_with_declared_direction": true,
+      "cliffs_delta": -0.625,
+      "direction": "lower",
+      "family": "exploration",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "magnitude": "large",
+      "medians": {
+        "bare_cc": 0.09305205,
+        "schema_repro": 0.010863339
+      },
+      "n_high_games": 4,
+      "n_low_games": 4,
+      "n_paired_games": 4,
+      "note": "4 paired games cannot reach p<0.05 however cleanly the metric separates (smallest attainable two-sided p is 0.1250). The effect size stands; the test does not.",
+      "sign_test": {
+        "losses": 4,
+        "min_attainable_p": 0.125,
+        "n": 4,
+        "p_value": 0.125,
+        "ties": 0,
+        "wins": 0
+      },
+      "verdict": "underpowered"
+    },
+    "X5": {
+      "direction": "neutral",
+      "family": "exploration",
+      "games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "n_high_games": 4,
+      "n_low_games": 4,
+      "n_paired_games": 4,
+      "note": "diagnostic metric; it describes a run, it does not rank one",
+      "verdict": "not-ranked"
+    },
+    "X6": {
+      "direction": "higher",
+      "family": "exploration",
+      "games": [],
+      "n_high_games": 0,
+      "n_low_games": 4,
+      "n_paired_games": 0,
+      "note": "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common, nothing to pair",
+      "verdict": "no-data"
+    }
+  },
+  "power": "a two-sided sign test needs 6 non-tied paired games to be able to reach p<0.05 at all; the pilot has 4",
+  "specified_by": "Theoria.md Phase 2 process 1 -- CC vs Schema"
+}

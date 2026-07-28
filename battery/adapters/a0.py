@@ -271,6 +271,35 @@ def _concepts(accounts: List[Dict[str, Any]], frames: List[Any],
     return concepts
 
 
+def _held_out_frame(behavioural: Dict[str, Any],
+                    held_out: Dict[str, Any]) -> Optional[str]:
+    """How A0's held-out set was drawn, in one line.
+
+    `model.py` carries `held_out_frame` precisely so that A0's K2 and
+    a0-spike's K2 cannot be read as the same quantity — one is a handful of
+    adversarial gaps, the other an exhaustive enumeration. This adapter never
+    populated it, so K2 went unguarded until v2.1, and `REPORT_V1.md`'s claim
+    that the field is carried "on every theory-bearing run" was false.
+
+    Composed from the artefact's own counts rather than written as a constant,
+    so it cannot drift away from the numbers it describes.
+    """
+    pairs = held_out.get("held_out_pairs")
+    if not pairs:
+        return None
+    replayed = behavioural.get("pairs")
+    states = behavioural.get("reachable_states")
+    where = []
+    if replayed:
+        where.append("%d replayed pairs" % replayed)
+    if states:
+        where.append("%d reachable states" % states)
+    return ("%d state-action pair(s) the full-history trace never covered%s. "
+            "Adversarial gaps left by the trace, not a sample drawn from the "
+            "world -- not comparable with an exhaustive enumeration."
+            % (pairs, " out of " + " over ".join(where) if where else ""))
+
+
 def load_a0_runs(root: str = A0_ROOT, *,
                  piles: Optional[Piles] = None) -> List[Run]:
     piles = piles or load_piles()
@@ -331,6 +360,7 @@ def load_a0_runs(root: str = A0_ROOT, *,
             replay_agree=behavioural.get("agree"),
             held_out_pairs=held_out.get("held_out_pairs"),
             held_out_agree=held_out.get("agree"),
+            held_out_frame=_held_out_frame(behavioural, held_out),
         )
 
         plan = _read_json(os.path.join(artifacts, spec["plan"])) or {}

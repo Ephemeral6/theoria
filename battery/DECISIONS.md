@@ -258,3 +258,109 @@ thing that is discovered later rather than declared now. `run_battery` carries
 an `EXCLUDED_SOURCES` list into `capability_spectrum.json`'s provenance, so
 "not ingested" is a recorded decision with a reason attached rather than an
 omission someone has to notice.
+
+### D-B-019 · "No Schema arm" was two different facts, and v1 reported the wrong one
+
+`REPORT_V1.md` leads with *the Schema arm does not exist*, and lists the
+missing CC vs Schema gradient as gap number one. That was already false when it
+was written. `baseline-arms/SCHEMA_PATH_A.md` landed at commit `63ef0bf`
+(2026-07-28T02:53Z) and battery v1 at `e82558b` (09:04Z) — six hours later, on
+the same day, in the same tree.
+
+The conflation is worth naming precisely, because both halves are real and only
+one of them was a gap:
+
+| question | status |
+|---|---|
+| can we *run* Schema and get our own reproduction score? | **no**, and probably never — the harness was never released |
+| do we have Schema-side *trajectories* on the development pile? | **yes**, since 02:53Z that day |
+
+`SCHEMA_PATH_A.md` §6 draws exactly this line and says of the second row:
+*Phase 2 指标电池要的 Schema 侧材料 ✅ 本轮解决*. Process 1 needs trajectories,
+not a reproduction score — it asks whether a metric separates two arms, and for
+that the upstream ledger is sufficient material. v1 read "no Schema arm" off
+`SCHEMA_LOCATE.md`, which is about the harness, and never revisited it.
+
+So `discriminate_arms()` is the primary pass from v2 on, and the model ladder
+drops to secondary. The ladder is not deleted: it holds the harness fixed,
+which the cross-arm pass cannot, so the two passes fail in different directions
+and disagreement between them is information.
+
+`⟨复现值⟩` in `Theoria.md:271` stays empty. Nothing here fills it, and this
+decision does not license anyone to.
+
+### D-B-020 · Only derived statistics from the upstream payload, never the payload
+
+Upstream declares no licence (`SCHEMA_LOCATE.md` §2.3), which is why
+`baseline-arms/.gitignore` excludes the 87.7 MB payload and tracks only
+`MANIFEST.json`. `Theoria.md` Phase 4 publishes every tracked file, so anything
+the battery commits about this material is effectively republished.
+
+The rule this track adopts: **the battery commits effect sizes, correlations
+and per-metric verdicts; it never commits a frame, an action sequence, a
+transcript, a prompt, or any per-step record derived from one.** A Cliff's
+delta over four games is a statistic about our instrument, not a redistribution
+of somebody's dataset; a state-key digest column would be closer to the line
+and is not written to any artefact.
+
+`SCHEMA_PATH_A.md` §7.1 flags that citing specific numbers may still need a
+licence judgement. That judgement is not this track's to make and is not made
+here — it is escalated in `PARTNER_SYNC.md`, and until it comes back the
+artefacts stay at the aggregate-statistic level described above.
+
+### D-B-021 · The S1 shard exclusion is lifted, because its premise expired
+
+D-B-018 excluded `baseline-arms/out/shards/` for a stated reason: *untracked,
+actively appended during this recompute*. That was true when it was written and
+is not true now. The shards carry a terminal `status`, none carries the
+in-flight `live_episode` key, no producer process is running, every file's last
+line parses, and their `run_id` set is **disjoint** from `ledger.jsonl` — so
+ingesting them duplicates nothing.
+
+Ingested: 56 further `bare_cc` runs. They are written by the same
+`harness/ledger.py` writers as the merged ledger, so the schema is identical by
+construction rather than by luck.
+
+One clause of D-B-018 still bites and is not waved away: these files are
+**untracked**, so nothing pins them for a reader except the sha256 list in the
+run manifest. That is weaker than a tracked input and is recorded as such.
+
+A second thing this turned up. S1 labels itself with a **differently named
+field in a directory `load_campaigns()` did not read** — `scenario` in
+`out/campaign/campaign_<stem>.json`, against `campaign` in
+`out/campaign_cells.jsonl`. Nothing errored; 48 runs simply came out
+`unlabelled`. That is D-B-013's failure mode exactly, one campaign later, which
+suggests the real fix is upstream: a `campaign` field on the ledger row itself,
+which remains this track's one standing request.
+
+### D-B-022 · The gaming register had to become executable, because prose cannot be wrong
+
+`Theoria.md` process 4 demotes a metric that is gameable, accidental and
+undefended. Through v1 those were three hand-written booleans, and `tier_of()`
+demoted metrics on their strength. The suite checked that a register entry
+*existed* — `test_every_registered_metric_has_a_gaming_entry` — and never that
+it was true. So a wrong `defended: True` kept a gameable metric in the main
+table, and 117 passing tests could not tell anyone.
+
+`battery/audit/exploits/` is the register made falsifiable: an actual `Run` per
+metric that scores at or near the best value while possessing none of the
+capability, with `succeeded` read from `evaluate()` rather than asserted. Where
+a demonstration exists, its fields decide the tier. **17 of 38 entries were
+contradicted and 13 metrics demoted**, four of them contradicting a
+`defended: True` that had never been checked.
+
+The prose entry is kept beside the demonstration rather than corrected in
+place. A register that gets quietly edited to agree with its own audit has
+learned nothing; the disagreement is the finding.
+
+`accidental` stays a judgement — "would a real arm do this without trying" is
+not decidable from a `Run` — but it is now required to be argued from a named
+file in this repository, and every exploit's docstring names the one it argues
+from.
+
+**One inconsistency is left standing.** Three independent audits produced these
+demonstrations and they did not agree on whether a `neutral` direction is
+itself a defence, so some diagnostics fell to `reference` and some did not. The
+artefact marks neutral tiers advisory and explains that *direction*, not tier,
+excludes a diagnostic from an ordering. Normalising the disagreement would have
+concealed that a hand-set boolean is still doing work here.

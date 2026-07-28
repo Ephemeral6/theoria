@@ -5,8 +5,12 @@
   ],
   "metrics": {
     "E1": {
-      "computed_runs": 22,
+      "computed_runs": 78,
       "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
@@ -17,9 +21,13 @@
         "bare_cc/unlabelled/sk48-d8078629",
         "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "n_paired_games": 4,
+      "n_paired_games": 0,
       "process1_verdict": "not-ranked",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
@@ -30,101 +38,159 @@
         "bare_cc/unlabelled/sk48-d8078629",
         "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "summary": "22 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked",
+      "summary": "78 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 22
+      "validation_runs": 78
     },
     "E2": {
-      "computed_runs": 12,
+      "computed_runs": 67,
       "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536"
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "n_paired_games": 4,
-      "process1_verdict": "underpowered",
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536"
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "summary": "12 control runs over 4 games (m4-pilot, phase3-variance-envelope); process 1: underpowered",
+      "summary": "67 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 12
+      "validation_runs": 67
     },
     "E3": {
-      "computed_runs": 12,
+      "computed_runs": 67,
       "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536"
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "n_paired_games": 4,
-      "process1_verdict": "underpowered",
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536"
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "summary": "12 control runs over 4 games (m4-pilot, phase3-variance-envelope); process 1: underpowered",
+      "summary": "67 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 12
+      "validation_runs": 67
     },
     "E4": {
-      "computed_runs": 14,
+      "computed_runs": 74,
       "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
         "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629"
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99"
       ],
       "n_paired_games": 4,
       "process1_verdict": "underpowered",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
         "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629"
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99"
       ],
-      "summary": "14 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered",
+      "summary": "74 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus); process 1: underpowered",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 14
+      "validation_runs": 74
     },
     "E5": {
-      "computed_runs": 22,
+      "computed_runs": 78,
       "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
@@ -135,9 +201,13 @@
         "bare_cc/unlabelled/sk48-d8078629",
         "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "n_paired_games": 4,
-      "process1_verdict": "underpowered",
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
@@ -148,18 +218,22 @@
         "bare_cc/unlabelled/sk48-d8078629",
         "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "summary": "22 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered",
+      "summary": "78 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 22
+      "validation_runs": 78
     },
     "E6": {
-      "computed_runs": 20,
+      "computed_runs": 76,
       "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
@@ -170,9 +244,13 @@
         "bare_cc/unlabelled/sk48-d8078629",
         "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "n_paired_games": 4,
+      "n_paired_games": 0,
       "process1_verdict": "not-ranked",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
@@ -183,43 +261,57 @@
         "bare_cc/unlabelled/sk48-d8078629",
         "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "summary": "20 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked",
+      "summary": "76 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 20
+      "validation_runs": 76
     },
     "E7": {
-      "computed_runs": 14,
+      "computed_runs": 70,
       "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
         "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629"
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "n_paired_games": 4,
-      "process1_verdict": "underpowered",
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
         "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629"
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "summary": "14 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered",
+      "summary": "70 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 14
+      "validation_runs": 70
     },
     "K1": {
       "computed_runs": 6,
@@ -484,8 +576,12 @@
       "validation_runs": 0
     },
     "P1": {
-      "computed_runs": 22,
+      "computed_runs": 82,
       "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
@@ -494,11 +590,19 @@
         "bare_cc/unlabelled/ar25-0c556536",
         "bare_cc/unlabelled/g50t-5849a774",
         "bare_cc/unlabelled/sk48-d8078629",
-        "bare_cc/unlabelled/tn36-ef4dde99"
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99"
       ],
       "n_paired_games": 4,
       "process1_verdict": "underpowered",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
@@ -507,76 +611,132 @@
         "bare_cc/unlabelled/ar25-0c556536",
         "bare_cc/unlabelled/g50t-5849a774",
         "bare_cc/unlabelled/sk48-d8078629",
-        "bare_cc/unlabelled/tn36-ef4dde99"
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99"
       ],
-      "summary": "22 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered",
+      "summary": "82 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus); process 1: underpowered",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 22
+      "validation_runs": 82
     },
     "P2": {
-      "computed_runs": 14,
+      "computed_runs": 74,
       "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
         "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629"
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99"
       ],
       "n_paired_games": 4,
       "process1_verdict": "underpowered",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
         "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629"
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99"
       ],
-      "summary": "14 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered",
+      "summary": "74 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus); process 1: underpowered",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 14
+      "validation_runs": 74
     },
     "P3": {
-      "computed_runs": 21,
+      "computed_runs": 85,
       "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
         "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629"
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99"
       ],
-      "n_paired_games": 3,
+      "n_paired_games": 4,
       "process1_verdict": "underpowered",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
         "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
         "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99",
         "theoria_a0/cold-start-a0",
         "theoria_a2/cold-start-a2"
       ],
-      "summary": "15 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered",
+      "summary": "79 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: underpowered",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 15
+      "validation_runs": 79
     },
     "P4": {
       "computed_runs": 1,
@@ -591,21 +751,12 @@
       "validation_runs": 0
     },
     "P5": {
-      "computed_runs": 30,
+      "computed_runs": 94,
       "control_sources": [
-        "bare_cc/m4-pilot/ar25-0c556536",
-        "bare_cc/m4-pilot/g50t-5849a774",
-        "bare_cc/m4-pilot/sk48-d8078629",
-        "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/ar25-0c556536",
-        "bare_cc/unlabelled/g50t-5849a774",
-        "bare_cc/unlabelled/sk48-d8078629",
-        "bare_cc/unlabelled/tn36-ef4dde99"
-      ],
-      "n_paired_games": 4,
-      "process1_verdict": "not-ranked",
-      "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
@@ -615,155 +766,58 @@
         "bare_cc/unlabelled/g50t-5849a774",
         "bare_cc/unlabelled/sk48-d8078629",
         "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99"
+      ],
+      "n_paired_games": 4,
+      "process1_verdict": "not-ranked",
+      "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99",
         "theoria_a0/cold-start-a0",
         "theoria_a2/cold-start-a2"
       ],
-      "summary": "24 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked",
+      "summary": "88 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: not-ranked",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 24
+      "validation_runs": 88
     },
     "X1": {
-      "computed_runs": 23,
+      "computed_runs": 87,
       "control_sources": [
-        "bare_cc/m4-pilot/ar25-0c556536",
-        "bare_cc/m4-pilot/g50t-5849a774",
-        "bare_cc/m4-pilot/sk48-d8078629",
-        "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629",
-        "bare_cc/unlabelled/tn36-ef4dde99"
-      ],
-      "n_paired_games": 3,
-      "process1_verdict": "underpowered",
-      "sources": [
-        "bare_cc/m4-pilot/ar25-0c556536",
-        "bare_cc/m4-pilot/g50t-5849a774",
-        "bare_cc/m4-pilot/sk48-d8078629",
-        "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629",
-        "bare_cc/unlabelled/tn36-ef4dde99",
-        "theoria_a0/cold-start-a0",
-        "theoria_a2/cold-start-a2"
-      ],
-      "summary": "17 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered",
-      "validation_games": [
-        "ar25-0c556536",
-        "g50t-5849a774",
-        "sk48-d8078629",
-        "tn36-ef4dde99"
-      ],
-      "validation_runs": 17
-    },
-    "X2": {
-      "computed_runs": 23,
-      "control_sources": [
-        "bare_cc/m4-pilot/ar25-0c556536",
-        "bare_cc/m4-pilot/g50t-5849a774",
-        "bare_cc/m4-pilot/sk48-d8078629",
-        "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629",
-        "bare_cc/unlabelled/tn36-ef4dde99"
-      ],
-      "n_paired_games": 3,
-      "process1_verdict": "underpowered",
-      "sources": [
-        "bare_cc/m4-pilot/ar25-0c556536",
-        "bare_cc/m4-pilot/g50t-5849a774",
-        "bare_cc/m4-pilot/sk48-d8078629",
-        "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629",
-        "bare_cc/unlabelled/tn36-ef4dde99",
-        "theoria_a0/cold-start-a0",
-        "theoria_a2/cold-start-a2"
-      ],
-      "summary": "17 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered",
-      "validation_games": [
-        "ar25-0c556536",
-        "g50t-5849a774",
-        "sk48-d8078629",
-        "tn36-ef4dde99"
-      ],
-      "validation_runs": 17
-    },
-    "X3": {
-      "computed_runs": 17,
-      "control_sources": [
-        "bare_cc/m4-pilot/ar25-0c556536",
-        "bare_cc/m4-pilot/g50t-5849a774",
-        "bare_cc/m4-pilot/sk48-d8078629",
-        "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536"
-      ],
-      "n_paired_games": 3,
-      "process1_verdict": "underpowered",
-      "sources": [
-        "bare_cc/m4-pilot/ar25-0c556536",
-        "bare_cc/m4-pilot/g50t-5849a774",
-        "bare_cc/m4-pilot/sk48-d8078629",
-        "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "theoria_a0/cold-start-a0",
-        "theoria_a2/cold-start-a2"
-      ],
-      "summary": "11 control runs over 4 games (m4-pilot, phase3-variance-envelope); process 1: underpowered",
-      "validation_games": [
-        "ar25-0c556536",
-        "g50t-5849a774",
-        "sk48-d8078629",
-        "tn36-ef4dde99"
-      ],
-      "validation_runs": 11
-    },
-    "X4": {
-      "computed_runs": 23,
-      "control_sources": [
-        "bare_cc/m4-pilot/ar25-0c556536",
-        "bare_cc/m4-pilot/g50t-5849a774",
-        "bare_cc/m4-pilot/sk48-d8078629",
-        "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629",
-        "bare_cc/unlabelled/tn36-ef4dde99"
-      ],
-      "n_paired_games": 3,
-      "process1_verdict": "underpowered",
-      "sources": [
-        "bare_cc/m4-pilot/ar25-0c556536",
-        "bare_cc/m4-pilot/g50t-5849a774",
-        "bare_cc/m4-pilot/sk48-d8078629",
-        "bare_cc/m4-pilot/tn36-ef4dde99",
-        "bare_cc/phase3-variance-envelope/ar25-0c556536",
-        "bare_cc/unlabelled/ar25-0c556536",
-        "bare_cc/unlabelled/sk48-d8078629",
-        "bare_cc/unlabelled/tn36-ef4dde99",
-        "theoria_a0/cold-start-a0",
-        "theoria_a2/cold-start-a2"
-      ],
-      "summary": "17 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered",
-      "validation_games": [
-        "ar25-0c556536",
-        "g50t-5849a774",
-        "sk48-d8078629",
-        "tn36-ef4dde99"
-      ],
-      "validation_runs": 17
-    },
-    "X5": {
-      "computed_runs": 30,
-      "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
@@ -772,11 +826,265 @@
         "bare_cc/unlabelled/ar25-0c556536",
         "bare_cc/unlabelled/g50t-5849a774",
         "bare_cc/unlabelled/sk48-d8078629",
-        "bare_cc/unlabelled/tn36-ef4dde99"
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99"
+      ],
+      "n_paired_games": 4,
+      "process1_verdict": "underpowered",
+      "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99",
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "81 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: underpowered",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 81
+    },
+    "X2": {
+      "computed_runs": 87,
+      "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99"
+      ],
+      "n_paired_games": 4,
+      "process1_verdict": "underpowered",
+      "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99",
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "81 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: underpowered",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 81
+    },
+    "X3": {
+      "computed_runs": 79,
+      "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99"
+      ],
+      "n_paired_games": 4,
+      "process1_verdict": "underpowered",
+      "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99",
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "73 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: underpowered",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 73
+    },
+    "X4": {
+      "computed_runs": 87,
+      "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99"
+      ],
+      "n_paired_games": 4,
+      "process1_verdict": "underpowered",
+      "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99",
+        "theoria_a0/cold-start-a0",
+        "theoria_a2/cold-start-a2"
+      ],
+      "summary": "81 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: underpowered",
+      "validation_games": [
+        "ar25-0c556536",
+        "g50t-5849a774",
+        "sk48-d8078629",
+        "tn36-ef4dde99"
+      ],
+      "validation_runs": 81
+    },
+    "X5": {
+      "computed_runs": 94,
+      "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
+        "bare_cc/m4-pilot/ar25-0c556536",
+        "bare_cc/m4-pilot/g50t-5849a774",
+        "bare_cc/m4-pilot/sk48-d8078629",
+        "bare_cc/m4-pilot/tn36-ef4dde99",
+        "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
+        "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99"
       ],
       "n_paired_games": 4,
       "process1_verdict": "not-ranked",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
@@ -786,46 +1094,68 @@
         "bare_cc/unlabelled/g50t-5849a774",
         "bare_cc/unlabelled/sk48-d8078629",
         "bare_cc/unlabelled/tn36-ef4dde99",
+        "schema_repro/upstream-claude_fable_opus/ar25-0c556536",
+        "schema_repro/upstream-claude_fable_opus/g50t-5849a774",
+        "schema_repro/upstream-claude_fable_opus/sk48-d8078629",
+        "schema_repro/upstream-claude_fable_opus/tn36-ef4dde99",
+        "schema_repro/upstream-gpt_5_6_sol/ar25-0c556536",
+        "schema_repro/upstream-gpt_5_6_sol/g50t-5849a774",
+        "schema_repro/upstream-gpt_5_6_sol/sk48-d8078629",
+        "schema_repro/upstream-gpt_5_6_sol/tn36-ef4dde99",
         "theoria_a0/cold-start-a0",
         "theoria_a2/cold-start-a2"
       ],
-      "summary": "24 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked",
+      "summary": "88 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: not-ranked",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 24
+      "validation_runs": 88
     },
     "X6": {
-      "computed_runs": 15,
+      "computed_runs": 71,
       "control_sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
         "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
         "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "n_paired_games": 4,
-      "process1_verdict": "underpowered",
+      "n_paired_games": 0,
+      "process1_verdict": "no-data",
       "sources": [
+        "bare_cc/S1 baseline-parity/ar25-0c556536",
+        "bare_cc/S1 baseline-parity/g50t-5849a774",
+        "bare_cc/S1 baseline-parity/sk48-d8078629",
+        "bare_cc/S1 baseline-parity/tn36-ef4dde99",
         "bare_cc/m4-pilot/ar25-0c556536",
         "bare_cc/m4-pilot/g50t-5849a774",
         "bare_cc/m4-pilot/sk48-d8078629",
         "bare_cc/m4-pilot/tn36-ef4dde99",
         "bare_cc/phase3-variance-envelope/ar25-0c556536",
+        "bare_cc/unlabelled/ar25-0c556536",
+        "bare_cc/unlabelled/g50t-5849a774",
+        "bare_cc/unlabelled/sk48-d8078629",
         "bare_cc/unlabelled/tn36-ef4dde99"
       ],
-      "summary": "15 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered",
+      "summary": "71 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data",
       "validation_games": [
         "ar25-0c556536",
         "g50t-5849a774",
         "sk48-d8078629",
         "tn36-ef4dde99"
       ],
-      "validation_runs": 15
+      "validation_runs": 71
     }
   },
   "n_unvalidated": 21,

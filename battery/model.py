@@ -317,6 +317,12 @@ class Run:
             "optimal": bool(self.truth and self.truth.optimal_steps),
             "mechanisms": bool(self.truth and self.truth.mechanisms),
             "solve_attempt": self.intent == "solve",
+            # Reached the goal, as opposed to having been *trying* to.
+            # `solve_attempt` is an intent and every ledgered run declares it;
+            # this is an outcome. Path efficiency may only be asked of a run
+            # that arrived, because the ratio has no floor and a run that gives
+            # up on step one scores better than any solve.
+            "won": any(s.won for s in self.steps),
             "repairs": bool(self.repairs),
             "prompt_chars": any(c.prompt_chars for c in self.calls),
             "http_tries": any(s.http_tries is not None for s in self.steps),

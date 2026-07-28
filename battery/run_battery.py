@@ -16,6 +16,7 @@ any float that could differ in its last bit between machines -- which is why
 from __future__ import annotations
 
 import argparse
+import glob
 import hashlib
 import json
 import os
@@ -25,10 +26,12 @@ from typing import Any, Dict, List, Optional, Sequence
 from battery.adapters import (
     load_a0_runs, load_a0_spike_runs, load_ledger_runs,
 )
+from battery.adapters.ledger_jsonl import load_campaigns
 from battery.adapters.a2 import load_a2_runs
+from battery.adapters.schema_traces import load_schema_runs, resolve_root
 from battery.audit import discriminate
 from battery.audit.contrast import contrast
-from battery.audit.discriminate import power_note
+from battery.audit.discriminate import discriminate_arms, power_note
 from battery.audit.gaming import audit as gaming_audit
 from battery.audit.gaming import tier_of
 from battery.audit.redundancy import cluster
@@ -53,23 +56,58 @@ BUNDLES = [
     ("cold-start-a2", os.path.join(REPO, "cold-start-a2"), load_a2_runs),
 ]
 
+BASELINE = os.path.join(REPO, "baseline-arms")
+
+# `out/shards/` and `out/campaign/` are untracked, so — like the Schema
+# payload — they are absent from every git worktree, and a recompute on a
+# branch would silently drop a whole campaign rather than fail. Same fix, same
+# reason it is a fix and not a convenience: the resolved path lands in the
+# manifest, so "which copy" stays an answerable question.
+BASELINE_ENV = "THEORIA_BASELINE_ARMS"
+
+
+def resolve_baseline(root: Optional[str] = None) -> str:
+    if root is not None:
+        return root
+    return os.environ.get(BASELINE_ENV) or BASELINE
+
+
+# The S1 campaign's ledger shards.  v1 excluded these; D-B-021 records why the
+# exclusion was lifted, and the short version is that its stated premise --
+# "actively appended during this recompute" -- stopped being true. They are
+# written by the same `harness/ledger.py` writers as the merged ledger, so the
+# schema is identical by construction rather than by luck.
+def _shards(baseline: Optional[str] = None) -> List[str]:
+    return sorted(glob.glob(os.path.join(
+        resolve_baseline(baseline), "out", "shards", "ledger.*.jsonl")))
+
+
+def _ledgers(baseline: Optional[str] = None) -> List[str]:
+    return [os.path.join(resolve_baseline(baseline), "ledger.jsonl")]
+
+
 SOURCES = [
-    ("baseline-arms ledger", os.path.join(REPO, "baseline-arms", "ledger.jsonl")),
+    ("baseline-arms ledger", os.path.join(BASELINE, "ledger.jsonl")),
 ]
 
-# Read, and deliberately not read.  `baseline-arms/out/shards/` holds a third
-# campaign that another session is writing right now -- untracked, several
-# megabytes, and growing between one recompute and the next.  Ingesting it
-# would make the artefacts non-reproducible and would fold an unmerged
-# in-flight campaign into a published number.  It is named here so that
-# "not ingested" is a recorded decision rather than an oversight.
+# Read, and deliberately not read.  Named here so that "not ingested" is a
+# recorded decision with a reason rather than an omission someone has to
+# notice.
 EXCLUDED_SOURCES = [
     {
-        "path": "baseline-arms/out/shards/",
-        "reason": ("a concurrent session's S1 campaign: untracked, actively "
-                   "appended during this recompute, and not the variance "
-                   "envelope. Ingesting live untracked input would break "
-                   "byte-reproducibility."),
+        "path": "baseline-arms/out/shards/probe_log.*.jsonl",
+        "reason": ("HTTP transaction logs, not trajectories. They carry an "
+                   "`X-API-Key` request header, and the battery has no metric "
+                   "that needs them -- so the credential-shaped path is never "
+                   "opened rather than opened and skipped."),
+    },
+    {
+        "path": "baseline-arms/schema_traces/**  (payload, not statistics)",
+        "reason": ("upstream declares no licence (SCHEMA_LOCATE.md 2.3), so "
+                   "the payload stays gitignored and only aggregate "
+                   "statistics derived from it enter any artefact. No frame, "
+                   "action sequence, transcript or per-step record is "
+                   "written. See D-B-020."),
     },
 ]
 
@@ -86,7 +124,10 @@ def file_digest(path: str) -> Optional[str]:
 
 def collect_runs(piles: Piles, *, ledgers: Optional[Sequence[str]] = None,
                  a0_root: Optional[str] = None,
-                 bundles: Optional[Sequence[str]] = None) -> List[Run]:
+                 bundles: Optional[Sequence[str]] = None,
+                 schema_root: Optional[str] = None,
+                 with_schema: bool = True,
+                 baseline: Optional[str] = None) -> List[Run]:
     """Every run the battery can see, guardrail already applied by adapters.
 
     Sources are injectable so the determinism test can run the real pipeline
@@ -99,9 +140,21 @@ def collect_runs(piles: Piles, *, ledgers: Optional[Sequence[str]] = None,
     test and several adapter tests already point it at fixtures.
     """
     runs: List[Run] = []
+    # Campaign labels are resolved once, against the same baseline root the
+    # ledgers come from. The S1 checkpoints live in `out/campaign/` and label
+    # themselves in a field named `scenario`; reading them from a different
+    # root than the shards would label half a campaign.
+    campaigns = load_campaigns(
+        os.path.join(resolve_baseline(baseline), "out", "campaign_cells.jsonl"))
     for path in (ledgers if ledgers is not None
-                 else [p for _, p in SOURCES]):
-        runs.extend(load_ledger_runs(path, piles=piles))
+                 else _ledgers(baseline) + _shards(baseline)):
+        runs.extend(load_ledger_runs(path, piles=piles, campaigns=campaigns))
+
+    # The control arm `Theoria.md` Phase 2 process 1 actually specifies.
+    # Returns [] when the untracked payload is absent, which is what a fresh
+    # clone and every git worktree look like.
+    if with_schema:
+        runs.extend(load_schema_runs(schema_root, piles=piles))
 
     wanted = set(bundles) if bundles is not None else {n for n, _, _ in BUNDLES}
     for name, root, loader in BUNDLES:
@@ -120,6 +173,13 @@ def write_json(path: str, payload: Any) -> None:
     os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     body = json.dumps(payload, sort_keys=True, indent=2,
                       ensure_ascii=False) + "\n"
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
+        fh.write(body)
+
+
+def write_text(path: str, body: str) -> None:
+    """LF everywhere, like `write_json`, so a diff means a change."""
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(body)
 
@@ -172,17 +232,29 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                              "the baseline-arms ledger.")
     parser.add_argument("--a0", default=A0_ROOT,
                         help="A0 bundle root, or 'none' to skip it")
+    parser.add_argument("--baseline", default=None,
+                        help="baseline-arms root. Defaults to "
+                             "$THEORIA_BASELINE_ARMS, then the repo-relative "
+                             "path. out/shards/ and out/campaign/ are "
+                             "untracked, so a git worktree needs this set.")
+    parser.add_argument("--schema", default=None,
+                        help="upstream Schema trajectory root. Defaults to "
+                             "$THEORIA_SCHEMA_TRACES, then the repo-relative "
+                             "path. The payload is gitignored, so a git "
+                             "worktree needs this set.")
     args = parser.parse_args(argv)
 
     a0_root = None if args.a0 == "none" else args.a0
     # `--a0 none` means "ledgers only", and has meant that since v0. Extending
-    # it to the two new bundles keeps the existing determinism and adapter
-    # tests isolated from the live repository rather than silently pulling
-    # three more sources into them.
+    # it to the new bundles and to the Schema payload keeps the existing
+    # determinism and adapter tests isolated from the live repository rather
+    # than silently pulling more sources into them.
     bundles = [] if a0_root is None else None
+    with_schema = a0_root is not None
     piles = load_piles()          # raises if the cut has drifted
     runs = collect_runs(piles, ledgers=args.ledger, a0_root=a0_root,
-                        bundles=bundles)
+                        bundles=bundles, schema_root=args.schema,
+                        with_schema=with_schema, baseline=args.baseline)
     if not runs:
         print("no runs found; nothing to recompute", file=sys.stderr)
         return 1
@@ -190,18 +262,36 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     values = {run.run_id: evaluate(run) for run in runs}
 
     ledger_paths = (args.ledger if args.ledger is not None
-                    else [p for _, p in SOURCES])
+                    else _ledgers(args.baseline) + _shards(args.baseline))
     inputs = {os.path.basename(p): file_digest(p) for p in ledger_paths}
     if a0_root:
         inputs["a0 raw_trace.jsonl"] = file_digest(os.path.join(
             a0_root, "artifacts", "raw_trace.jsonl"))
 
+    # The Schema payload is untracked and lives outside the tree a worktree
+    # checks out, so "which copy produced these numbers" is a question a reader
+    # cannot otherwise ask.  The upstream manifest's own digest answers it in
+    # one line, and it is tracked even though the payload is not.
+    schema_root = resolve_root(args.schema) if with_schema else None
+    schema_manifest = (os.path.join(schema_root, "MANIFEST.json")
+                       if schema_root else None)
+    schema_provenance = {
+        "root": schema_root,
+        "present": bool(schema_manifest and os.path.exists(schema_manifest)),
+        "manifest_sha256": (file_digest(schema_manifest)
+                            if schema_manifest else None),
+        "note": ("payload is gitignored (no upstream licence); only "
+                 "aggregate statistics derived from it appear in any "
+                 "artefact -- D-B-020"),
+    }
+
     n_games = len({r.game_id for r in runs if r.game_id})
     payload = {
-        "battery_version": "v1",
+        "battery_version": "v2",
         "provenance": {
             "cut": piles.provenance(),
             "input_digests": inputs,
+            "schema_traces": schema_provenance,
             "excluded_sources": EXCLUDED_SOURCES,
             "n_runs": len(runs),
             "n_games": n_games,
@@ -213,10 +303,27 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         "runs": spectrum(runs, values),
     }
 
+    # Process 1, primary: the gradient `Theoria.md` names.
+    arms_pass = discriminate_arms(runs, values)
+    arms_pass["power"] = power_note(len(
+        {r.game_id for r in runs
+         if r.arm in ("bare_cc", "schema_repro") and r.game_id}))
+
+    # Process 1, secondary: the within-`bare_cc` model ladder. Kept because it
+    # holds the harness fixed, which the cross-arm pass cannot.
     discrimination = discriminate(runs, values)
     discrimination["power"] = power_note(n_games)
+    # The primary pass licenses a metric; the ladder is corroboration. A
+    # reader following one file to a verdict should be told which is which.
+    discrimination["role"] = (
+        "secondary. The primary process-1 pass is discrimination_arms.json "
+        "(CC vs Schema, the gradient Theoria.md specifies). This one holds "
+        "the harness fixed and varies only the model, so the two passes are "
+        "confounded in different directions and disagreement between them is "
+        "information rather than noise.")
 
     write_json(os.path.join(args.out, "capability_spectrum.json"), payload)
+    write_json(os.path.join(args.out, "discrimination_arms.json"), arms_pass)
     write_json(os.path.join(args.out, "discrimination.json"), discrimination)
     # Process 1 and the arm contrast go to different files on purpose: one
     # validates metrics on control arms, the other reports what the validated
@@ -224,14 +331,24 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     # citing its own results as evidence that its metrics are sound.
     write_json(os.path.join(args.out, "arm_contrast.json"),
                contrast(runs, values))
+    # The 验证材料 column reports the *primary* verdict, so a metric licensed
+    # by the ladder alone cannot read as licensed by the specified gradient.
     write_json(os.path.join(args.out, "validation_material.json"),
-               material(runs, values, discrimination))
+               material(runs, values, arms_pass))
+    # The basis, not just the verdict -- but written by `battery.docs`, not
+    # here. `REDUNDANCY.md` is a *committed document*, and a recompute pointed
+    # at `--out` must not touch the tree: `tests/test_determinism.py` runs this
+    # pipeline over a small fixture, and while this function wrote to a fixed
+    # path that test silently overwrote the real audit document with a
+    # three-cluster version computed from six runs.
     write_json(os.path.join(args.out, "redundancy.json"), cluster(values))
     write_json(os.path.join(args.out, "gaming_audit.json"), gaming_audit())
 
     ok_counts = sum(1 for r in values for v in values[r].values() if v.ok)
     contrasted = contrast(runs, values)
-    validated = material(runs, values, discrimination)
+    validated = material(runs, values, arms_pass)
+    paired = sum(1 for m in arms_pass["metrics"].values()
+                 if m["n_paired_games"] >= 2)
     print("runs           %d (%d games, arms: %s)"
           % (len(runs), n_games, ", ".join(sorted({r.arm for r in runs}))))
     print("campaigns      %s"
@@ -240,11 +357,15 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
           % (len(REGISTRY), ok_counts))
     print("main table     %s" % ", ".join(gaming_audit()["main"]))
     print("reference      %s" % ", ".join(gaming_audit()["reference"]))
+    print("process 1      %s | schema arm available: %s | %d of %d metrics "
+          "pair on >=2 games"
+          % (arms_pass["gradient"], arms_pass["available"], paired,
+             len(REGISTRY)))
     print("arm contrast   %d of %d metrics have data on both sides"
           % (contrasted["n_metrics_with_overlap"], contrasted["n_metrics"]))
     print("unvalidated    %d metrics never computed on a control arm: %s"
           % (validated["n_unvalidated"], ", ".join(validated["unvalidated"])))
-    print("power          %s" % discrimination["power"])
+    print("power          %s" % arms_pass["power"])
     print("artefacts      %s" % args.out)
     return 0
 

@@ -30,9 +30,9 @@ A metric reading `none — never computed on a control arm` has not been shown t
 separate anything. `Theoria.md` is blunt about what that means:
 分不开已知差异的指标，没资格测未知差异.
 
-**Main table (19):** E1, E2, E3, E6, K10, K11, K12, K2, K7, M1, M3, M4, M6, P2, P3, P4, P5, X3, X5
+**Main table (9):** E2, E3, K11, K12, K7, M3, M6, P3, P4
 
-**Reference (19):** E4, E5, E7, K1, K13, K14, K3, K4, K5, K6, K8, K9, M2, M5, P1, X1, X2, X4, X6
+**Reference (29):** E1, E4, E5, E6, E7, K1, K10, K13, K14, K2, K3, K4, K5, K6, K8, K9, M1, M2, M4, M5, P1, P2, P5, X1, X2, X3, X4, X5, X6
 
 **Never validated on a control arm (21):** K1, K10, K11, K12, K13, K14, K2, K3, K4, K5, K6, K7, K8, K9, M1, M2, M3, M4, M5, M6, P4
 
@@ -42,12 +42,12 @@ separate anything. `Theoria.md` is blunt about what that means:
 
 | id | direction | tier | needs | 验证材料 | definition |
 |---|---|---|---|---|---|
-| `X1` | lower | reference | steps, observations | 17 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Fraction of observed states that had been visited before. |
-| `X2` | higher | reference | steps, observations | 17 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Fraction of (state, action) transitions taken for the first time. |
-| `X3` | higher | main | steps, observations | 11 control runs over 4 games (m4-pilot, phase3-variance-envelope); process 1: underpowered | Novelty in the first quarter of a run minus novelty in the last quarter; the curve's shape as one number. |
-| `X4` | lower | reference | steps, observations | 17 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Longest run of consecutive steps discovering no new state, as a fraction of the run's length. |
-| `X5` | neutral | main | steps, observations | 24 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Distinct states observed. Support for X1/X4, not a ranking. |
-| `X6` | higher | reference | steps, failed_steps | 15 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Fraction of failed steps after which the arm chose a different action. Does the arm read its own refusals? |
+| `X1` | lower | reference | steps, observations | 81 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: underpowered | Fraction of observed states that had been visited before. |
+| `X2` | higher | reference | steps, observations | 81 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: underpowered | Fraction of (state, action) transitions taken for the first time. |
+| `X3` | higher | reference | steps, observations | 73 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: underpowered | Novelty in the first quarter of a run minus novelty in the last quarter; the curve's shape as one number. |
+| `X4` | lower | reference | steps, observations | 81 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: underpowered | Longest run of consecutive steps discovering no new state, as a fraction of the run's length. |
+| `X5` | neutral | reference | steps, observations | 88 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: not-ranked | Distinct states observed. Support for X1/X4, not a ranking. |
+| `X6` | higher | reference | steps, failed_steps | 71 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data | Fraction of failed steps after which the arm chose a different action. Does the arm read its own refusals? |
 
 **How each would be gamed.**
 
@@ -68,11 +68,11 @@ separate anything. `Theoria.md` is blunt about what that means:
 
 | id | direction | tier | needs | 验证材料 | definition |
 |---|---|---|---|---|---|
-| `P1` | higher | reference | steps, model_calls | 22 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Successful environment actions per model call. |
-| `P2` | higher | main | steps, model_calls | 14 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Actions per model call in the run's second half minus the first half; is a decision buying more actions as the run goes on? |
-| `P3` | lower | main | steps, observations | 15 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Fraction of steps that returned to the state two steps earlier — an undo. |
-| `P4` | lower | main | steps, truth, optimal, solve_attempt | none — never computed on a control arm | Actual successful steps divided by the shortest known plan. 1.0 is optimal; needs ground truth, so development pile and A0 only, and needs the run to have been trying to win. |
-| `P5` | neutral | main | steps | 24 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Fraction of environment steps that failed outright. A diagnostic: it is the confound P1 and P2 are most exposed to. |
+| `P1` | higher | reference | steps, model_calls | 82 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus); process 1: underpowered | Successful environment actions per model call. |
+| `P2` | higher | reference | steps, model_calls | 74 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus); process 1: underpowered | Actions per model call in the run's second half minus the first half; is a decision buying more actions as the run goes on? |
+| `P3` | lower | main | steps, observations | 79 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: underpowered | Fraction of steps that returned to the state two steps earlier — an undo. |
+| `P4` | lower | main | steps, truth, optimal, solve_attempt, won | none — never computed on a control arm | Actual successful steps divided by the shortest known plan, over runs that reached the goal. 1.0 is optimal; needs ground truth, so development pile and A0 only. |
+| `P5` | neutral | reference | steps | 88 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus, upstream-gpt_5_6_sol); process 1: not-ranked | Fraction of environment steps that failed outright. A diagnostic: it is the confound P1 and P2 are most exposed to. |
 
 **How each would be gamed.**
 
@@ -91,13 +91,13 @@ separate anything. `Theoria.md` is blunt about what that means:
 
 | id | direction | tier | needs | 验证材料 | definition |
 |---|---|---|---|---|---|
-| `E1` | neutral | main | model_calls, cost | 22 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Total model cost. Support for the shape metrics, not a ranking. |
-| `E2` | higher | main | model_calls, cost | 12 control runs over 4 games (m4-pilot, phase3-variance-envelope); process 1: underpowered | Share of total cost spent in the first 25% of turns. High means front-loaded: the arm paid to understand, then coasted. |
-| `E3` | lower | main | model_calls, cost | 12 control runs over 4 games (m4-pilot, phase3-variance-envelope); process 1: underpowered | Fraction of the run's turns needed to reach 90% of its total cost. Low means the bill settled early. |
-| `E4` | lower | reference | model_calls | 14 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | R^2 of a quadratic fit to context tokens per turn minus R^2 of a linear fit. Positive means context is accelerating. |
-| `E5` | lower | reference | steps, model_calls, cost | 22 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | Total cost divided by successful environment actions. |
-| `E6` | neutral | main | steps, http_tries | 20 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Mean HTTP attempts the harness burned per logged environment step. A diagnostic: it prices the infrastructure the other economy metrics charge silently to the arm. |
-| `E7` | lower | reference | model_calls, prompt_chars | 14 control runs over 4 games (m4-pilot, phase3-variance-envelope, unlabelled); process 1: underpowered | R^2 of a quadratic fit to prompt size per turn minus R^2 of a linear fit. Positive means what the arm re-reads is accelerating. |
+| `E1` | neutral | reference | model_calls, cost | 78 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Total model cost. Support for the shape metrics, not a ranking. |
+| `E2` | higher | main | model_calls, cost | 67 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data | Share of total cost spent in the first 25% of turns. High means front-loaded: the arm paid to understand, then coasted. |
+| `E3` | lower | main | model_calls, cost | 67 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data | Fraction of the run's turns needed to reach 90% of its total cost. Low means the bill settled early. |
+| `E4` | lower | reference | model_calls | 74 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled, upstream-claude_fable_opus); process 1: underpowered | R^2 of a quadratic fit to context tokens per turn minus R^2 of a linear fit. Positive means context is accelerating. |
+| `E5` | lower | reference | steps, model_calls, cost | 78 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data | Total cost divided by successful environment actions. |
+| `E6` | neutral | reference | steps, http_tries | 76 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: not-ranked | Mean HTTP attempts the harness burned per logged environment step. A diagnostic: it prices the infrastructure the other economy metrics charge silently to the arm. |
+| `E7` | lower | reference | model_calls, prompt_chars | 70 control runs over 4 games (S1 baseline-parity, m4-pilot, phase3-variance-envelope, unlabelled); process 1: no-data | R^2 of a quadratic fit to prompt size per turn minus R^2 of a linear fit. Positive means what the arm re-reads is accelerating. |
 
 **How each would be gamed.**
 
@@ -120,10 +120,10 @@ separate anything. `Theoria.md` is blunt about what that means:
 
 | id | direction | tier | needs | 验证材料 | definition |
 |---|---|---|---|---|---|
-| `M1` | lower | main | truth, mechanisms | none — never computed on a control arm | Mean steps between a mechanism becoming visible and the arm first using it, over annotated mechanisms it did use. |
+| `M1` | lower | reference | truth, mechanisms | none — never computed on a control arm | Mean steps between a mechanism becoming visible and the arm first using it, over annotated mechanisms it did use. |
 | `M2` | higher | reference | truth, mechanisms | none — never computed on a control arm | Fraction of annotated mechanisms the arm ever used. |
 | `M3` | lower | main | steps, truth, mechanisms | none — never computed on a control arm | Mean first-use delay for mechanisms met again on a later level — does understanding travel? (Claim C3.) |
-| `M4` | lower | main | repairs | none — never computed on a control arm | Mean environment actions until a changed rule first contradicts the manual, over changes the manual noticed at all. |
+| `M4` | lower | reference | repairs | none — never computed on a control arm | Mean environment actions until a changed rule first contradicts the manual, over changes the manual noticed at all. |
 | `M5` | higher | reference | repairs | none — never computed on a control arm | Fraction of injected rule changes the manual notices on the evidence it already holds. |
 | `M6` | neutral | main | repairs | none — never computed on a control arm | Mean share of the manual's theorems invalidated by one repair. A diagnostic: a repair that invalidates nothing had nothing load-bearing downstream. |
 
@@ -147,12 +147,12 @@ separate anything. `Theoria.md` is blunt about what that means:
 | id | direction | tier | needs | 验证材料 | definition |
 |---|---|---|---|---|---|
 | `K1` | higher | reference | theory | none — never computed on a control arm | Full-history exact replay accuracy: the fraction of observed state-action pairs on which the manual agrees with the world. |
-| `K10` | higher | main | theory | none — never computed on a control arm | Deadlock theorems: machine-checked proofs that a region of the search space can never reach the goal. |
+| `K10` | higher | reference | theory | none — never computed on a control arm | Deadlock theorems: machine-checked proofs that a region of the search space can never reach the goal. |
 | `K11` | neutral | main | theory | none — never computed on a control arm | Manual revisions. The concept-birth timeline's coarse axis. |
 | `K12` | higher | main | repairs | none — never computed on a control arm | Share of the six repair beats — 打脸→定位→戳探→修订→重证→解出 — that closed. |
 | `K13` | lower | reference | repairs | none — never computed on a control arm | Environment actions spent repairing, over the actions the original theory cost. Low means the repair was localised. |
 | `K14` | higher | reference | theory | none — never computed on a control arm | Minimum per-concept compression gain in bits. The statistic K6's mean hides. |
-| `K2` | higher | main | theory | none — never computed on a control arm | Accuracy on state-action pairs the trace never covered. The metric replay cannot see. |
+| `K2` | higher | reference | theory | none — never computed on a control arm | Accuracy on state-action pairs the trace never covered. The metric replay cannot see. |
 | `K3` | higher | reference | theory | none — never computed on a control arm | Invariants and theorems in the manual. |
 | `K4` | higher | reference | theory | none — never computed on a control arm | Mean coverage over clauses the manual annotates with one; the count of unannotated clauses is reported alongside, not folded in. |
 | `K5` | higher | reference | theory | none — never computed on a control arm | Concepts admitted to the manual's word table. |

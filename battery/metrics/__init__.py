@@ -115,6 +115,9 @@ _NEED_REASONS = {
     "solve_attempt": "this trace is a coverage walk, not an attempt to win; "
                      "scoring it for path efficiency would measure the "
                      "trace's purpose rather than the arm",
+    "won": "this run never reached the goal, and path efficiency has no floor "
+           "-- a run that gives up on step one scores better than any solve, "
+           "so scoring a loss would rank failure as excellence",
     "repairs": "this arm records no repair episode; an arm with no manual "
                "cannot be refuted by one, so the absence is structural",
     "prompt_chars": "no model call records the size of the prompt it was sent",

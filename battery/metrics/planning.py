@@ -110,14 +110,33 @@ def step_failure_rate(run: Run):
 
 
 @metric("P4", "planning",
-        "Actual successful steps divided by the shortest known plan. 1.0 is "
-        "optimal; needs ground truth, so development pile and A0 only, and "
-        "needs the run to have been trying to win.",
-        needs=("steps", "truth", "optimal", "solve_attempt"),
+        "Actual successful steps divided by the shortest known plan, over runs "
+        "that reached the goal. 1.0 is optimal; needs ground truth, so "
+        "development pile and A0 only.",
+        needs=("steps", "truth", "optimal", "solve_attempt", "won"),
         direction="lower", unit="ratio")
 def solution_redundancy(run: Run):
+    """Path efficiency, and it may only be asked of a run that got there.
+
+    **1.0 is not a floor**, which made this metric monotone in failure until
+    v2.1: one action against a twelve-step plan scores 0.083, better than any
+    solved run can score, and `intent="solve"` is set for every ledgered run
+    whatever the outcome. `battery/audit/exploits/` demonstrates it. Five real
+    runs in `baseline-arms/ledger.jsonl` stopped at exactly ten cumulative
+    failures and would have topped this table given ground truth.
+
+    The `won` guard is the defence `gaming.py` had claimed since v0 —
+    "restricted to solve attempts with ground truth" — which turned out to
+    restrict coverage walks and not failures. `Step.won` was populated by every
+    adapter and read by nothing.
+
+    The cost is real and was accepted in advance: P4 is now unscoreable on
+    every losing run, which on current material makes it a one-value metric
+    behind two guards. A metric that rewards giving up is worse.
+    """
     optimal = run.truth.optimal_steps
     actions = len(run.ok_steps)
     if not optimal:
         return thin("P4", "no optimal plan length")
-    return ok("P4", actions / optimal, actions=actions, optimal=optimal)
+    return ok("P4", actions / optimal, actions=actions, optimal=optimal,
+              won=True)

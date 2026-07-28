@@ -52,12 +52,39 @@ def load_campaigns(cells: str = CAMPAIGN_CELLS,
       weaker fact than one read from a field, and the difference should not
       disappear into the artefacts.
 
+    A third campaign (`S1 baseline-parity`) labels itself with a **differently
+    named field in a directory this function did not look at**: its checkpoints
+    are `out/campaign/campaign_<stem>.json`, an object with a nested
+    `episodes[]` array, and the label lives in `scenario` rather than
+    `campaign`.  Nothing errored when that campaign appeared — its runs simply
+    came out `unlabelled`, which is the same failure mode D-B-013 was written
+    about, one campaign later.
+
     A run in neither index gets `None`, which is reported as `unlabelled`
     rather than guessed at.  Missing files are not an error.
     """
     out: Dict[str, str] = {}
     if out_dir is None:
         out_dir = os.path.dirname(cells)
+
+    # S1: nested episodes, and the label is `scenario`.  Globbed narrowly --
+    # `out/campaign_ar25.log` (the envelope) and `out/campaign/campaign_ar25.json`
+    # (S1) are different campaigns with near-identical names, so a widened
+    # glob would pool them.
+    for path in sorted(glob.glob(os.path.join(
+            out_dir, "campaign", "campaign_*.json"))):
+        try:
+            with open(path, "r", encoding="utf-8") as fh:
+                doc = json.load(fh)
+        except (OSError, ValueError):
+            continue
+        if not isinstance(doc, dict):
+            continue
+        scenario = doc.get("scenario")
+        for episode in doc.get("episodes") or []:
+            run_id = episode.get("run_id")
+            if run_id and scenario:
+                out[run_id] = scenario
 
     for path in sorted(glob.glob(os.path.join(out_dir, "pilot_*.json"))):
         try:
