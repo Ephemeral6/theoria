@@ -24,6 +24,6 @@ tests\test_bundle.py:44: AssertionError
 =========================== short test summary info ===========================
 FAILED tests/test_bundle.py::test_the_partition_loses_nothing - AssertionErro...
 !!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
-1 failed, 1 passed in 0.21s
+1 failed, 1 passed in 0.20s
 
 ```

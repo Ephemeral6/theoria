@@ -23,3 +23,7 @@ V15 交付时自己点了下一步，我同意并下发：**17 个新增 pinned 
 交付前另派对抗性 subagent，专打两条：(a) 新判据是不是把分歧藏进了别的格；(b) 一致率的改善是不是来自重判者看过了新判据因而互相趋同（那是判据的效果，也可能是趋同压力，要能分开说）。
 
 边界：只写 verify-lab/；零 API、零网络、封存堆零接触。留痕 verify-lab/runs/<UTC>-V17-pin-the-partial-verdict/。
+
+
+---
+**前任 RES-3 会话已停（心跳 >45 分钟、配额窗口正常，判为上下文满或被关闭）。**它可能已有半成品：先 `git branch -a | grep v17-pin-the-partial-verdict` 与查 runs/ 再决定接续还是重做。
