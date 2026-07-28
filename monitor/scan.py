@@ -502,6 +502,42 @@ def load_history():
 
 # ---------------------------------------------------------------- render
 
+# 人话层：把专有名词翻译成任何人扫一眼就懂的表述。数据仍来自 spec，
+# 这里只管怎么说。
+PLAIN_WP = {
+    "WP1": ("造仪器", "引擎、编译器、离线彩排——AI 理解世界要用的全套工具"),
+    "WP2": ("防作弊外壳", "所有实验经代理留痕，考题保密由程序保证"),
+    "WP3": ("AI 上线练习", "让 AI 第一次在真游戏里学规则、做证明（练习关）"),
+    "WP4": ("对照组数据", "普通 AI 和前人方法在同样关卡上的成绩"),
+    "WP5": ("打分体系", "怎么衡量『真的理解了』：指标电池 + 考卷"),
+    "WP6": ("正式大考", "在从未见过的 19 个关卡上跑完全部对比实验"),
+    "WP7": ("附加考题", "不可解判定、换规则适应、移交测试"),
+    "WP8": ("统计与预注册", "先写下预测再看结果，防止事后编故事"),
+    "WP9": ("写论文", "从车间报告到可投稿的正文"),
+    "WP10": ("公开一切", "代码、数据、证明全量释出，任何人可复跑"),
+}
+PLAIN_TASK = {
+    "P-8": "让 AI 第一次上线打真游戏",
+    "P-9": "给实验外壳上锁（打分器 + 防作弊复测）",
+    "P-10": "升级两条流水线之间的数据契约",
+    "P-11": "考题保密审计与登记",
+    "P-12": "补齐对照组的成绩数据",
+    "P-13": "接入专业规划求解器",
+    "P-14": "扩充打分体系并首次对比两组 AI",
+    "P-15": "出考卷的机器（四种题型）",
+    "P-16": "写第一篇阶段论文草稿",
+    "P-17": "验证『学会的知识能带去下一关』",
+    "R-1": "复盘：从过去的失败里找规律",
+    "B-1": "浏览器专员：处理需要真人网页的事",
+    "M-0": "合并员：把所有人的成果安全合到主线",
+}
+STAGES = [
+    ("① 造仪器", ["WP1", "WP2", "WP5"], "工具、外壳、打分体系"),
+    ("② 上线练习", ["WP3", "WP4"], "练习关实战 + 对照组"),
+    ("③ 正式大考", ["WP6", "WP7", "WP8"], "封存关卡上的确证实验"),
+    ("④ 论文与公开", ["WP9", "WP10"], "写作与全量释出"),
+]
+
 LABEL = {"green": "达成", "partial": "部分", "risk": "有风险",
          "blocked": "受阻", "missing": "缺失", "info": "记录"}
 SEV = {"blocking": "阻塞", "high": "高", "medium": "中", "low": "低", "info": "信息"}
@@ -707,249 +743,266 @@ def load_prompts():
     return tickets
 
 
+def ring(pct):
+    """SVG progress ring with the big number inside."""
+    r, c = 62, 2 * 3.14159 * 62
+    filled = c * pct / 100.0
+    return ('<svg viewBox="0 0 150 150" class="ring" role="img" '
+            'aria-label="论文完成度 %.1f%%">'
+            '<circle cx="75" cy="75" r="%d" class="rbg"/>'
+            '<circle cx="75" cy="75" r="%d" class="rfg" '
+            'stroke-dasharray="%.1f %.1f" transform="rotate(-90 75 75)"/>'
+            '<text x="75" y="72" class="rnum">%.1f%%</text>'
+            '<text x="75" y="94" class="rlab">论文完成度</text></svg>'
+            % (pct, r, r, filled, c - filled, pct))
+
+
+def sparkline(history):
+    pts = [row.get("paper_progress") for row in history
+           if row.get("paper_progress") is not None]
+    if len(pts) < 2:
+        pts = ([history[-1].get("paper_progress", 0)] * 2) if history else [0, 0]
+    W, H = 220, 44
+    ymax = max(max(pts) * 1.3, 10)
+    n = len(pts)
+    xy = [(W * i / (n - 1), H - 4 - (H - 10) * v / ymax) for i, v in enumerate(pts)]
+    path = " ".join("%s%.1f %.1f" % ("M" if i == 0 else "L", x, y)
+                    for i, (x, y) in enumerate(xy))
+    return ('<svg viewBox="0 0 %d %d" class="spark"><path d="%s"/>'
+            '<circle cx="%.1f" cy="%.1f" r="3.5"/></svg>'
+            % (W, H, path, xy[-1][0], xy[-1][1]))
+
+
+def stage_pct(wps):
+    plan = {p["id"]: p for p in spec.PAPER_PLAN}
+    tw = sum(plan[w]["weight"] for w in wps)
+    return sum(plan[w]["weight"] * plan[w]["pct"] for w in wps) / tw if tw else 0
+
+
 def render(state, refresh=None):
     m = state["metrics"]
+    paper = state["paper_progress"]
+    hist = state["history"]
+    delta = ""
+    prev = [r.get("paper_progress") for r in hist[:-1]
+            if r.get("paper_progress") is not None]
+    if prev:
+        d = paper - prev[-1]
+        if abs(d) >= 0.05:
+            delta = '<span class="delta %s">%s%.1f%%</span>' % (
+                "up" if d > 0 else "down", "+" if d > 0 else "", d)
+
+    fleet = []
+    ls = read_json("monitor/loop_state.json", {}) or {}
+    remote = set(git("branch", "-r", "--format=%(refname:short)").splitlines())
+    for pid in ls.get("in_flight", []):
+        slug = "agent/" + pid.lower().replace("-", "")
+        done = any(slug in b for b in remote)
+        fleet.append((pid, PLAIN_TASK.get(pid, pid), done))
+    n_running = sum(1 for f in fleet if not f[2])
+
+    needs = [f for f in state["findings"]
+             if f["severity"] == "blocking" and "已裁决" not in f["title"]
+             and "已解决" not in f["title"]]
+
+    wins = []
+    for ex in reversed(spec.ITERATION_LOOP):
+        if ex["status"] == "green":
+            wins.append(ex["summary"])
+        if len(wins) >= 5:
+            break
+
     parts = []
     A = parts.append
-
-    A('<title>Theoria · 研究进展监视器</title>')
+    A('<title>Theoria · 进度</title>')
     if refresh:
         A('<meta http-equiv="refresh" content="%d">' % refresh)
     A(STYLE)
-    A('<header>')
-    A('<div class="masthead"><h1>Theoria 研究进展监视器</h1>'
-      '<p class="sub">以 <code>Theoria.md</code> 为唯一基准，对工作树逐条对表。'
-      '<span class="stamp">扫描于 %s · %s · %s</span></p></div>' %
-      (esc(state["generated_at"]), esc(m["git_branch"]), esc(m["git_head"][:40])))
 
-    # ---- headline: paper-workload progress
-    A(hero_progress(dict(state["progress"], paper=state["paper_progress"])))
-
-    # ---- paper workload map: the official definition of "done"
-    A('<section class="mainloop"><h2>论文工作量地图 <span class="note">— 完成目标'
-      '的正式定义；规模对标 Schema 论文（25 局全集 + 全量 artifacts）'
-      '</span></h2>')
-    A('<table class="wide"><thead><tr><th>工作包</th><th>论文槽位</th>'
-      '<th>规模（Schema 对标）</th><th>完成度</th><th>证据 / 在跑工单</th>'
-      '</tr></thead><tbody>')
-    for wp in spec.PAPER_PLAN:
-        A('<tr><td><b>%s</b> %s<span class="clause">权重 %.0f%%</span></td>'
-          '<td class="nt">%s</td><td class="nt">%s</td>'
-          '<td><div class="hb" style="min-width:70px"><i style="width:%d%%"></i></div>'
-          '<span class="hv">%d%%</span></td><td class="nt">%s</td></tr>'
-          % (esc(wp["id"]), esc(wp["name"]), wp["weight"] * 100,
-             esc(wp["slot"]), esc(wp["scale"]), wp["pct"], wp["pct"],
-             md_bold(esc(wp["evidence"]))))
-    A('</tbody></table></section>')
-
-    # ---- topline
-    lb, lp, ll = state["loop_stats"]
-    A('<div class="tiles">')
-    for label, value, sub in [
-        ("实验→框架回灌", "%d/%d 已回灌" % (ll, lp),
-         "问题来自 %d 个实验" % lb),
-        ("Phase 1 验收单", "%d/%d 达成" % (state["p1_green"], state["p1_total"]),
-         "全绿才准烧游戏钱"),
-        ("八道工序", "%d/%d 引擎就位" % (state["eng_green"], len(spec.ENGINES)),
-         "缺 IC3/PDR 与死锁刻画"),
-        ("十条约束", "%d 条已落实" % state["con_green"], "其余 %d 条部分或缺失"
-         % (10 - state["con_green"])),
-        ("封存堆", "%d 局零接触" % m["sealed_count"], "piles %s…" % m["piles_sha"]),
-        ("阻塞级发现", "%d 条" % state["blocking_findings"], "需用户裁决"),
-    ]:
-        A('<div class="tile"><div class="tv">%s</div><div class="tl">%s</div>'
-          '<div class="ts">%s</div></div>' % (esc(value), esc(label), esc(sub)))
-    A('</div>')
-    A('</header>')
+    # ---------- header: the number, the trend, the fleet ----------
+    A('<header><div class="top">')
+    A(ring(paper))
+    A('<div class="topmid"><h1>Theoria 研究进度</h1>'
+      '<p class="one">目标：一篇实验规模对标 Schema 的可发表论文。'
+      '眼下 <b>%d 个 AI 会话</b>在并行干活%s</p>'
+      '<div class="sparkrow">%s<span class="sparklab">进度曲线</span></div></div>'
+      % (n_running, delta, sparkline(hist)))
+    A('<div class="topstats">')
+    for v, k in [(("%d" % n_running), "会话在飞"),
+                 (("%d/%d" % (state["loop_stats"][2], state["loop_stats"][1])),
+                  "实验问题已回灌"),
+                 (("%d" % len(needs)), "需要你处理"),
+                 (esc(state["generated_at"][5:16]), "上次扫描")]:
+        A('<div class="ts2"><b>%s</b><span>%s</span></div>' % (v, k))
+    A('</div></div></header>')
 
     A('<main>')
 
-    # ---- the main loop: experiment-driven framework iteration
-    board, n_prob, n_landed = loop_board()
-    A('<section class="mainloop"><h2>实验 → 框架迭代回路 '
-      '<span class="note">— 研究的主环（Theoria.md Phase 3『一次迭代的形状』）；'
-      '组件建设只是它的脚手架</span></h2>')
-    A(board)
+    # ---------- the journey ----------
+    A('<section><h2>四步走到论文</h2><div class="journey">')
+    for i, (name, wps, sub) in enumerate(STAGES):
+        pct = stage_pct(wps)
+        cls = "done" if pct >= 95 else ("now" if pct >= 15 else
+                                        ("soon" if i and stage_pct(STAGES[i-1][1]) >= 50 else "later"))
+        if i == 0 or pct > 0:
+            cls = "now" if 15 <= pct < 95 else cls
+        A('<div class="leg %s"><div class="legpct">%.0f%%</div>'
+          '<div class="legbar"><i style="width:%.0f%%"></i></div>'
+          '<div class="legname">%s</div><div class="legsub">%s</div></div>'
+          % (cls, pct, pct, esc(name), esc(sub)))
+    A('</div></section>')
+
+    # ---------- work packages, plain ----------
+    A('<section><h2>十块拼图</h2><div class="wpgrid">')
+    for wp in spec.PAPER_PLAN:
+        plain, sub = PLAIN_WP.get(wp["id"], (wp["name"], ""))
+        A('<div class="wpcard"><div class="wphead"><b>%s</b>'
+          '<span class="wppct">%d%%</span></div>'
+          '<div class="wpbar"><i style="width:%d%%"></i></div>'
+          '<p class="wpsub">%s</p>'
+          '<p class="wpnext" title="%s">%s</p></div>'
+          % (esc(plain), wp["pct"], wp["pct"], esc(sub),
+             esc(wp["scale"]), md_bold(esc(wp["evidence"]))))
+    A('</div></section>')
+
+    # ---------- fleet ----------
+    A('<section><h2>正在进行</h2><div class="fleet">')
+    for pid, task, done in fleet:
+        A('<div class="crew %s"><i class="dot"></i><b>%s</b><span>%s</span></div>'
+          % ("done" if done else "run", esc(task),
+             "已交付" if done else "进行中"))
+    if not fleet:
+        A('<p class="note">当前没有在飞会话。</p>')
+    A('</div></section>')
+
+    # ---------- needs you ----------
+    A('<section><h2>需要你的事</h2>')
+    if needs:
+        for f in needs:
+            A('<div class="needs"><b>%s</b><p>%s</p></div>'
+              % (esc(f["title"]), md_bold(esc(f["action"]))))
+    else:
+        A('<p class="allclear">✓ 目前没有任何需要你出手的事——决策已代行，'
+          '执行在跑，出问题会在这里出现。</p>')
     A('</section>')
 
-    # ---- charts: the state of every part, drawn
-    A('<section><h2>进度总览 <span class="note">— 每区一条堆叠条，悬停看明细</span></h2>')
-    A(chart_legend())
-    A(chart_stacked(state["sections"]))
-    A('</section>')
+    # ---------- recent wins ----------
+    A('<section><h2>最近拿下</h2><ul class="wins">')
+    for w in wins:
+        A('<li>%s</li>' % esc(w))
+    A('</ul></section>')
 
-    A('<section><h2>装置地图 <span class="note">— Theoria.md 1.10 的车间与装置，'
-      '逐件着色；悬停看实况与对应工单</span></h2>')
-    A(arch_map())
-    A('</section>')
+    # ---------- audit view, collapsed ----------
+    A('<section><h2>审计明细 <span class="note">— 专业视图，逐条引 Theoria.md '
+      '条款；日常不用看</span></h2>')
 
-    A('<section><h2>总进度趋势 <span class="note">— 跨扫描累积，'
-      '来自 monitor/history.jsonl；分母是全程</span></h2>')
-    A('<div class="trendbox">' + chart_trend(state["history"]) + '</div>')
-    A('</section>')
+    def fold(title, body):
+        A('<details class="fold"><summary>%s</summary>%s</details>' % (title, body))
 
-    # ---- multi-agent conflict scan (live, every run)
-    cf = state["probes"]["conflict_scan"]
-    A('<section><h2>多 agent 冲突扫描 <span class="note">— 每次运行重查：'
-      '冲突标记 / 未合并路径 / 跨领地提交</span></h2>')
-    A('<div class="conflict %s"><span class="pill %s">%s</span> %s</div>'
-      % (cf["status"], cf["status"],
-         "无冲突" if cf["status"] == "green" else "发现冲突",
-         md_bold(esc(cf["detail"]))))
-    A('</section>')
+    b = []
+    B = b.append
+    B(chart_legend()); B(chart_stacked(state["sections"]))
+    fold("分区进度（四段 / 工序 / 约束 / Claim）", "".join(b))
 
-    # ---- provenance audit (live, every run)
-    pv = state["probes"]["provenance_scan"]
-    A('<section><h2>留痕审计 <span class="note">— 实验中间文件必须进各领地的 '
-      'append-only runs/ 档案（含 MANIFEST：命令、seed、代码 commit、逐文件哈希）；'
-      '重跑 = 新 run，永不覆盖</span></h2>')
-    A('<div class="conflict %s"><span class="pill %s">%s</span> %s</div>'
-      % (pv["status"], pv["status"],
-         "全部建档" if pv["status"] == "green" else "有欠账",
-         md_bold(esc(pv["detail"]))))
-    A('</section>')
+    board, _, _ = loop_board()
+    fold("实验 → 框架迭代回路（研究主环全记录）", board)
+    fold("装置地图（Theoria.md 1.10 逐件对表）", arch_map())
 
-    # ---- dispatch workboard: self-reported vs verified
-    db = state["probes"]["dispatch_board"]
-    ib = state["probes"]["inbox"]
-    A('<section><h2>工作板 <span class="note">— 自报（分支/PARTNER_SYNC）与'
-      '核实（探针）两列永不合并，不一致即信号</span></h2>')
-    A('<div class="conflict %s"><span class="pill %s">%s</span> %s</div>'
-      % (db["status"], db["status"], "工单", md_bold(esc(db["detail"]))))
-    if db.get("rows"):
-        A('<table class="wide" style="margin-top:10px"><thead><tr><th>工单</th>'
-          '<th>分支</th><th>自报</th></tr></thead><tbody>')
-        for r in db["rows"]:
-            A('<tr><td>%s</td><td><code>%s</code></td><td>%s</td></tr>'
-              % (esc(r["prompt"]), esc(r["branch"]),
-                 "✓" if r["self_reported"] else "—"))
-        A('</tbody></table>')
-    A('<div class="conflict %s" style="margin-top:10px">'
-      '<span class="pill %s">提案箱</span> %s</div>'
-      % (ib["status"], ib["status"], md_bold(esc(ib["detail"]))))
-    A('</section>')
+    b = []; B = b.append
+    B('<div class="trendbox">' + chart_trend(hist) + '</div>')
+    fold("进度历史曲线", "".join(b))
 
-    # ---- findings first: this is the point of the monitor
-    A('<section><h2>监视器发现 <span class="note">— 不在任何 incidents.jsonl 里，'
-      '由本次对表产生</span></h2>')
+    b = []; B = b.append
+    B('<table class="wide"><thead><tr><th>工作包</th><th>论文槽位</th>'
+      '<th>规模（Schema 对标）</th><th>完成度</th><th>证据</th></tr></thead><tbody>')
+    for wp in spec.PAPER_PLAN:
+        B('<tr><td><b>%s</b> %s</td><td class="nt">%s</td><td class="nt">%s</td>'
+          '<td>%d%%</td><td class="nt">%s</td></tr>'
+          % (esc(wp["id"]), esc(wp["name"]), esc(wp["slot"]), esc(wp["scale"]),
+             wp["pct"], md_bold(esc(wp["evidence"]))))
+    B('</tbody></table>')
+    fold("论文工作量地图（正式口径）", "".join(b))
+
+    b = []; B = b.append
     for f in state["findings"]:
-        A('<article class="finding %s">' % f["severity"])
-        A('<div class="fhead"><span class="fid">%s</span>'
-          '<span class="sev %s">%s</span><h3>%s</h3></div>'
-          % (esc(f["id"]), f["severity"], SEV.get(f["severity"], f["severity"]),
-             esc(f["title"])))
-        A('<p>%s</p>' % md_bold(esc(f["body"])))
-        A('<p class="action"><b>下一步</b> · %s</p>' % md_bold(esc(f["action"])))
-        A('</article>')
-    A('</section>')
+        B('<article class="finding %s"><div class="fhead"><span class="fid">%s</span>'
+          '<span class="sev %s">%s</span><h3>%s</h3></div><p>%s</p>'
+          '<p class="action"><b>下一步</b> · %s</p></article>'
+          % (f["severity"], esc(f["id"]), f["severity"],
+             SEV.get(f["severity"], f["severity"]), esc(f["title"]),
+             md_bold(esc(f["body"])), md_bold(esc(f["action"]))))
+    fold("监视器发现（全部 %d 条）" % len(state["findings"]), "".join(b))
 
-    # ---- phases
-    A('<section><h2>四段进度 <span class="note">— 每行标注它出自 Theoria.md 的哪一句</span></h2>')
+    b = []; B = b.append
     for ph in state["phases"]:
-        c = ph["_counts"]
-        A('<div class="phase">')
-        A('<div class="phead"><h3>%s</h3><span class="gate">门槛：%s</span>'
-          '<span class="bar">%s</span></div>'
-          % (esc(ph["name"]), esc(ph["gate"]),
-             "".join('<i class="%s" style="flex:%d"></i>' % (k, v)
-                     for k, v in c.items() if v)))
-        A('<table><tbody>')
+        B('<div class="phase"><div class="phead"><h3>%s</h3>'
+          '<span class="gate">门槛：%s</span></div><table><tbody>' %
+          (esc(ph["name"]), esc(ph["gate"])))
         for it in ph["items"]:
-            A('<tr class="%s"><td class="st">%s</td><td class="lb"><b>%s</b>'
+            B('<tr class="%s"><td class="st">%s</td><td class="lb"><b>%s</b>'
               '<span class="clause">%s</span></td><td class="nt">%s</td></tr>'
               % (it["_status"], cell(it["_status"]), esc(it["label"]),
                  esc(it["clause"]), md_bold(esc(it["_note"]))))
-        A('</tbody></table></div>')
-    A('</section>')
+        B('</tbody></table></div>')
+    fold("四段验收单逐条", "".join(b))
 
-    # ---- engines
-    A('<section><h2>车间引擎清单 <span class="note">— Theoria.md 1.10(b) 的八道工序</span></h2>')
-    A('<table class="wide"><thead><tr><th>工序</th><th>引擎</th><th>状态</th>'
-      '<th>实况</th></tr></thead><tbody>')
+    b = []; B = b.append
+    B('<table class="wide"><tbody>')
     for e in spec.ENGINES:
-        A('<tr class="%s"><td><b>%s</b><span class="clause">%s</span></td><td>%s</td>'
-          '<td>%s</td><td class="nt">%s</td></tr>'
-          % (e["status"], esc(e["step"]), esc(e["module"]), esc(e["engine"]),
-             cell(e["status"]), md_bold(esc(e["note"]))))
-    A('</tbody></table></section>')
+        B('<tr class="%s"><td><b>%s</b></td><td>%s</td><td>%s</td>'
+          '<td class="nt">%s</td></tr>'
+          % (e["status"], esc(e["step"]), esc(e["engine"]), cell(e["status"]),
+             md_bold(esc(e["note"]))))
+    B('</tbody></table>')
+    fold("车间八工序", "".join(b))
 
-    # ---- constraints
-    A('<section><h2>十条强制约束 <span class="note">— Theoria.md 1.10(e)</span></h2>')
-    A('<table class="wide"><thead><tr><th>#</th><th>约束</th><th>状态</th>'
-      '<th>实况</th></tr></thead><tbody>')
+    b = []; B = b.append
+    B('<table class="wide"><tbody>')
     for c in spec.CONSTRAINTS:
-        A('<tr class="%s"><td class="num">%d</td><td>%s</td><td>%s</td>'
+        B('<tr class="%s"><td class="num">%d</td><td>%s</td><td>%s</td>'
           '<td class="nt">%s</td></tr>'
           % (c["status"], c["n"], esc(c["text"]), cell(c["status"]),
              md_bold(esc(c["note"]))))
-    A('</tbody></table></section>')
+    B('</tbody></table>')
+    fold("十条强制约束", "".join(b))
 
-    # ---- claims
-    A('<section><h2>Claim 菜单 <span class="note">— Phase 3 现在列死的五条</span></h2>')
-    A('<table class="wide"><thead><tr><th>#</th><th>角色</th><th>claim</th>'
-      '<th>状态</th><th>实况</th></tr></thead><tbody>')
-    for c in spec.CLAIMS:
-        A('<tr class="%s"><td class="num">%s</td><td>%s</td><td>%s</td><td>%s</td>'
-          '<td class="nt">%s</td></tr>'
-          % (c["status"], esc(c["id"]), esc(c["role"]), esc(c["text"]),
-             cell(c["status"]), md_bold(esc(c["note"]))))
-    A('</tbody></table></section>')
+    cf = state["probes"]["conflict_scan"]
+    pv = state["probes"]["provenance_scan"]
+    ib = state["probes"]["inbox"]
+    b = []
+    b.append('<div class="conflict %s"><b>冲突扫描</b> %s</div>'
+             % (cf["status"], md_bold(esc(cf["detail"]))))
+    b.append('<div class="conflict %s"><b>留痕审计</b> %s</div>'
+             % (pv["status"], md_bold(esc(pv["detail"]))))
+    b.append('<div class="conflict %s"><b>提案箱</b> %s</div>'
+             % (ib["status"], md_bold(esc(ib["detail"]))))
+    fold("冲突 / 留痕 / 提案箱（每轮实测）", "".join(b))
 
-    # ---- live facts
-    A('<section><h2>本次扫描读到的事实 <span class="note">— 全部可复演</span></h2>')
-    A('<div class="facts">')
-    facts = [
-        ("HEAD", m["git_head"]),
-        ("未提交 / 未跟踪", "%d 项（其中未跟踪 %d）" % (len(m["dirty"]), len(m["untracked"]))),
-        ("PARTNER_SYNC", "%d 段，最后一段 %s" % (m["sync_entries"], m.get("sync_last", "—"))),
-        ("开发堆", ", ".join(m["dev_pile"]) or "—"),
-        ("封存堆", "%d 局" % m["sealed_count"]),
-        ("incidents.jsonl", "%d 条" % m["incidents"]),
-        ("engine-rig 候选流", "%d 条" % m["engine_candidates"]),
-        ("A0 候选流", "%d 条，%d 条转移" % (m["a0_candidates"], m["a0_transitions"])),
-    ]
-    for k, v in facts:
-        A('<div class="fact"><span class="fk">%s</span><span class="fv">%s</span></div>'
-          % (esc(k), esc(v)))
-    for track, line in (m.get("tests") or {}).items():
-        A('<div class="fact"><span class="fk">%s 测试</span><span class="fv">%s</span></div>'
-          % (esc(track), esc(line)))
-    A('</div>')
-    if not m.get("tests"):
-        A('<p class="note">测试未运行 —— 用 <code>python monitor/scan.py --tests</code> '
-          '把两条轨道的 pytest 结果也纳入本次扫描。</p>')
-    A('</section>')
-
-    # ---- tickets
-    A('<section><h2>工单 <span class="note">— 复制整份，直接粘给一个新的 '
-      'Claude Code 会话；派工顺序见 monitor/prompts/README.md</span></h2>')
-    for i, t in enumerate(state["tickets"]):
-        tid = "tk%d" % i
-        A('<details class="ticket"><summary><span class="tfile">%s</span>%s'
-          '<button class="copy" onclick="copyTicket(event,\'%s\')">复制工单</button>'
-          '</summary><textarea id="%s" readonly rows="16" spellcheck="false">%s'
+    b = []; B = b.append
+    for t in state["tickets"]:
+        tid = "tk_%s" % re.sub(r"\W", "", t["file"])
+        B('<details class="ticket"><summary><span class="tfile">%s</span>%s'
+          '<button class="copy" onclick="copyTicket(event,\'%s\')">复制</button>'
+          '</summary><textarea id="%s" readonly rows="14" spellcheck="false">%s'
           '</textarea></details>'
-          % (esc(t["file"]), esc(t["title"]), tid, tid,
-             html.escape(t["text"])))
-    A("""<script>
+          % (esc(t["file"]), esc(t["title"]), tid, tid, html.escape(t["text"])))
+    B("""<script>
 function copyTicket(ev, id){
   ev.preventDefault(); ev.stopPropagation();
   var ta = document.getElementById(id), btn = ev.target;
-  ta.focus(); ta.select(); ta.setSelectionRange(0, ta.value.length);
-  var ok = false;
-  try { ok = document.execCommand('copy'); } catch(e) {}
-  if (!ok && navigator.clipboard) {
-    navigator.clipboard.writeText(ta.value).then(function(){ flash(btn); });
-  } else { flash(btn); }
-  function flash(b){ var t=b.textContent; b.textContent='已复制 ✓';
-    setTimeout(function(){ b.textContent=t; }, 1600); }
+  ta.focus(); ta.select();
+  var ok=false; try { ok=document.execCommand('copy'); } catch(e){}
+  if(!ok && navigator.clipboard){ navigator.clipboard.writeText(ta.value); }
+  var t=btn.textContent; btn.textContent='已复制 ✓';
+  setTimeout(function(){ btn.textContent=t; }, 1500);
 }
 </script>""")
-    A('</section>')
+    fold("工单原文（%d 份）" % len(state["tickets"]), "".join(b))
 
-    A('<footer><p>本页由 <code>monitor/scan.py</code> 从工作树生成，'
-      '判断依据记在 <code>monitor/spec.py</code>（逐条引用 Theoria.md 的出处）。'
-      '重跑即刷新。监视器只写 <code>monitor/</code>，不碰任何轨道。</p></footer>')
+    A('</section>')
+    A('<footer><p>由 <code>monitor/scan.py</code> 生成；判断依据与出处在 '
+      '<code>monitor/spec.py</code>。人话层只是翻译，数据与审计口径不变。'
+      '重跑即刷新；<code>--watch 120</code> 自动刷新。</p></footer>')
     A('</main>')
     return "\n".join(parts)
 
@@ -1166,6 +1219,86 @@ td.num{width:38px;color:var(--mut);font-family:ui-monospace,monospace}
 .ticket textarea{display:block;width:100%;border:none;border-top:1px solid var(--line);
   background:var(--bg);color:var(--fg);padding:14px 16px;resize:vertical;
   font:12.5px/1.6 ui-monospace,Menlo,Consolas,monospace;box-sizing:border-box}
+
+/* ---- plain progress-first layout ---- */
+.top{display:flex;gap:30px;align-items:center;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:26px 30px}
+.ring{width:150px;height:150px;flex:0 0 auto}
+.rbg{fill:none;stroke:var(--missingbg);stroke-width:11}
+.rfg{fill:none;stroke:var(--st-green);stroke-width:11;stroke-linecap:round}
+.rnum{font:700 27px system-ui,sans-serif;fill:var(--fg);text-anchor:middle}
+.rlab{font:12px system-ui,sans-serif;fill:var(--mut);text-anchor:middle}
+.topmid{flex:1;min-width:240px}
+.topmid h1{font-size:24px;margin:0 0 6px}
+.one{margin:0 0 10px;font-size:14.5px;color:var(--mut)}
+.one b{color:var(--fg)}
+.delta{margin-left:8px;font:700 13px system-ui,sans-serif;padding:1px 8px;
+  border-radius:99px}
+.delta.up{background:var(--greenbg);color:var(--green)}
+.delta.down{background:var(--riskbg);color:var(--risk)}
+.sparkrow{display:flex;align-items:center;gap:10px}
+.spark{width:220px;height:44px}
+.spark path{fill:none;stroke:var(--st-green);stroke-width:2.5}
+.spark circle{fill:var(--st-green)}
+.sparklab{font-size:11.5px;color:var(--mut)}
+.topstats{display:grid;grid-template-columns:1fr 1fr;gap:10px 26px}
+.ts2 b{display:block;font-size:21px;font-family:system-ui,sans-serif}
+.ts2 span{font-size:12px;color:var(--mut)}
+
+.journey{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
+.leg{background:var(--card);border:1px solid var(--line);border-radius:11px;
+  padding:16px 18px;border-top:4px solid var(--missing)}
+.leg.done{border-top-color:var(--st-green)}
+.leg.now{border-top-color:var(--st-partial)}
+.leg.soon{border-top-color:var(--st-blocked)}
+.legpct{font:700 30px system-ui,sans-serif;letter-spacing:-.02em}
+.legbar{height:7px;border-radius:99px;background:var(--missingbg);overflow:hidden;
+  margin:8px 0 10px}
+.legbar i{display:block;height:100%;background:var(--st-green)}
+.leg.now .legbar i{background:var(--st-partial)}
+.legname{font-weight:700;font-size:14.5px}
+.legsub{font-size:12px;color:var(--mut);margin-top:2px}
+
+.wpgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:12px}
+.wpcard{background:var(--card);border:1px solid var(--line);border-radius:11px;
+  padding:15px 17px}
+.wphead{display:flex;justify-content:space-between;align-items:baseline;font-size:14.5px}
+.wppct{font:700 19px system-ui,sans-serif}
+.wpbar{height:7px;border-radius:99px;background:var(--missingbg);overflow:hidden;
+  margin:8px 0}
+.wpbar i{display:block;height:100%;background:var(--st-green)}
+.wpsub{margin:0 0 7px;font-size:12.5px;color:var(--mut)}
+.wpnext{margin:0;font-size:12px;color:var(--mut);border-top:1px dashed var(--line);
+  padding-top:7px}
+
+.fleet{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:9px}
+.crew{display:flex;align-items:center;gap:10px;background:var(--card);
+  border:1px solid var(--line);border-radius:9px;padding:11px 14px;font-size:13.5px}
+.crew b{font-weight:600;flex:1}
+.crew span{font-size:11.5px;color:var(--mut)}
+.dot{width:9px;height:9px;border-radius:99px;flex:0 0 auto}
+.crew.run .dot{background:var(--st-partial);animation:pulse 1.6s infinite}
+.crew.done .dot{background:var(--st-green)}
+@keyframes pulse{50%{opacity:.35}}
+
+.needs{background:var(--card);border:1px solid var(--line);
+  border-left:4px solid var(--st-risk);border-radius:9px;padding:14px 18px;
+  margin-bottom:10px}
+.needs p{margin:6px 0 0;font-size:13.5px;color:var(--mut)}
+.allclear{background:var(--greenbg);color:var(--green);border-radius:9px;
+  padding:13px 18px;font-size:14px}
+.wins{margin:0;padding-left:22px}
+.wins li{margin-bottom:7px;font-size:14px}
+
+.fold{background:var(--card);border:1px solid var(--line);border-radius:9px;
+  margin-bottom:9px;overflow:hidden}
+.fold>summary{padding:12px 16px;cursor:pointer;font-weight:600;font-size:13.5px;
+  list-style:none}
+.fold>summary::-webkit-details-marker{display:none}
+.fold>summary::before{content:"▸ ";color:var(--mut)}
+.fold[open]>summary::before{content:"▾ "}
+.fold>*:not(summary){margin:0 16px 14px}
 
 footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
   color:var(--mut);font-size:12.5px}

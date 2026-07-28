@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 08:33:20",
+  "generated_at": "2026-07-28 09:06:54",
   "history": [
     {
       "findings": {
@@ -469,18 +469,13 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/history.jsonl",
-      "monitor/index.html",
-      "monitor/scan.py",
-      "monitor/spec.py",
-      "monitor/state.json",
-      ".claude/",
+      "onitor/scan.py",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "df9f748 monitor: five supplemental prompts (P-13..P-17) -- zero overlap with the running round",
+    "git_head": "a2032b1 monitor: reap on completion -- a headless session whose branch reaches origin is killed at once",
     "incidents": 8,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -488,7 +483,6 @@
     "sync_last": "2026-07-28T12:30:00Z",
     "tests": {},
     "untracked": [
-      ".claude/",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/"
     ]
