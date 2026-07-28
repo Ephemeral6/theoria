@@ -1,58 +1,129 @@
 {
+  "adversarial": {
+    "charges_upheld": 5,
+    "charges_withdrawn": 4,
+    "pinned_matrix_invariant": true,
+    "population_range": [
+      84,
+      260
+    ],
+    "variants_built": 12,
+    "verdict": "qualify, do not rewrite"
+  },
   "api_calls": 0,
   "author": "RES-3 executor",
-  "base_commit": "15bee911b5711b33b4615f87eebfbb183a187df0",
-  "blinding": "nine judging agents worked from a git-archive export of this branch with verify-lab/ removed; verify-lab does not exist on master, so the redaction is the mainline's own state. Declared breaches in BLINDING.md.",
+  "base_commit": "5442f495eff4f16b6e6f2c6065a8ccb3dbcf5ed6",
+  "baseline_rev": "3fa7170",
+  "baseline_rev_why": "the merge of V11 and V14, before V15 committed any instrument of its own. Without a pin the frame counts its own tooling and every V15 commit lowers V11's measured coverage -- in V15's favour. The adversarial pass found 241/243/244 in one run directory.",
+  "blinding": {
+    "breached_by": "PARTNER_SYNC.md -- tracked, at the repository root, in every judge's tree, carrying V11's aggregate, V14's FNR 32% and a per-file probe verdict on worldgen/build.py",
+    "conclusion": "the leak cannot account for the finding, and its direction flatters V15 so it is not leaned on",
+    "exposed_of_judged": "29/126",
+    "exposed_vs_unexposed_present_rate": [
+      0.55,
+      0.34
+    ],
+    "method": "nine judging agents worked from a git-archive export of this branch with verify-lab/ removed",
+    "p_one_sided": 0.055,
+    "pinned_fnr_with_every_exposed_row_deleted": 0.484
+  },
   "branch": "agent/v15-census-sampling-frame",
   "commands": [
     "python verify-lab/frame/frame.py",
     "python verify-lab/frame/reconcile.py",
-    "python verify-lab/frame/matrix.py"
+    "python verify-lab/frame/matrix.py",
+    "python verify-lab/frame/matrix.py --sensitivity",
+    "python verify-lab/frame/matrix.py --reproduction",
+    "python verify-lab/frame/leakage.py"
   ],
   "files": [
     {
       "path": "verify-lab/frame/frame.py",
-      "sha256": "2fc7f2470db3df705fc78c13b538337dba434e4b3c5f3c82ed8f92b78b68349d"
+      "sha256": "7955425ed0fa8e6f78385952266582e49203e70bdec3b9047a1e5d455cec6b9a"
     },
     {
       "path": "verify-lab/frame/reconcile.py",
-      "sha256": "4da7033cc238b082779015fe3200b359ef74b85fd9a37684987bd0f9adde0407"
+      "sha256": "866fd8a805dda2c6d1d388f4c25fab4ed1b3b0c7bcb111643ac756e930d4de49"
     },
     {
       "path": "verify-lab/frame/matrix.py",
-      "sha256": "98094970b2f3d0ee94d6d52fe94c67f2ffb6f25043b33db15b02261fb0cf6f6b"
+      "sha256": "0b2c1e9d7c7a2c769db59b7bd3868b307cf25fd48b15d28992e2a94056fa1f18"
+    },
+    {
+      "path": "verify-lab/frame/leakage.py",
+      "sha256": "3ce1dd2eb99fbeef7666403039131e5bf4f8e7d903d224f6261d5ead457d736b"
     },
     {
       "path": "verify-lab/FRAME.md",
-      "sha256": "53e1bcb1b9a7f8db939961c6d814f8cf0a4c37b59d102ad43ca6d36e13d9760f"
+      "sha256": "a9735008623582a6ad2d46d3175f6a9a9ce460f4ee57ac262c1327da54f385a8"
     },
     {
       "path": "verify-lab/MATRIX_V15.md",
-      "sha256": "119e19af66f49c90d425eb6c436e1f114b160227403535ab2cf60a0ed8dab6f0"
+      "sha256": "85505b6051f17bd97a6fe90c8baeb8c93ac5ae149584e563e4cfc6ca0d6067c9"
     },
     {
       "path": "verify-lab/SUPPLEMENT_TABLE.md",
       "sha256": "a29b496487248643036a2666f45ae78475d31d1f008c368fe6286f4a9e924489"
     },
     {
+      "path": "verify-lab/NEGATIVE_CONTROL.md",
+      "sha256": "c3c206d3bcc91755024c305410c7a6734b50138a9971eba779b6c91de8722943"
+    },
+    {
       "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/BLINDING.md",
-      "sha256": "27ffc7177916e944d052f1389e021cefc3522f7ce3542c7ca8754c7dbfd01d0e"
+      "sha256": "035774ae7ee2b62cedcb492aeb37c0e508ba3fe1a06890255cf15c7769330813"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/RUN_STATE.md",
+      "sha256": "a5ccc21ef36b69a27ac2baf8a8b0ac27d8dbf04f9ab3f2b4635848ef711a4e7c"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/ADVERSARIAL.md",
+      "sha256": "9e7b0ea118eaedde42b596b9de9d793b870bbb899dfb201d8c124e5529914e00"
     },
     {
       "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/frame.json",
-      "sha256": "a22c727ecb85788028ca0b439cfbc9942941b94771456cc7dc82842ab5c689a1"
+      "sha256": "b748a84436c75c434d7f806bbcb055ef7540de78a8481afcd5a158810be3c6b0"
     },
     {
       "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/reconciliation.json",
-      "sha256": "bc201c404644809e59a35222851cccf87dc123c23b17415d975f1dc07221da73"
+      "sha256": "a3718383fc6ec9538d45fb550efe36e66c3e9f737459e16fa7b5e3d02d36b411"
     },
     {
       "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/matrix.json",
-      "sha256": "757899ad665d2d1c97d4dc0d520d759f2b74af4db28140b9bd057e29fe342c6d"
+      "sha256": "68754b6756fa1f5591bbc8792ee9f2b8f7193c1670a8863d8984d11ece90dcbf"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/leakage.json",
+      "sha256": "1851423767895ca15c4291581f7f4d0ace6a73624b743a1cc5f32e3dc434215c"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/reproduction.json",
+      "sha256": "fa6a1ecc8326125ac55ac3adf11e7eed96588207eac72261db26a441152c8100"
     },
     {
       "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/difference_set.txt",
       "sha256": "0e3d94dafa224179c7c5eaf4e0ba11345e223ba783f325db8bdc019ff54a4a53"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/frame.stdout.txt",
+      "sha256": "df8e84c242ec30986d5b233b3d2070f3286e18b8ff5be13f37e3b3abde607255"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/reconcile.stdout.txt",
+      "sha256": "5e73f70eb4deac9109f7514b11f750d3714646fc8ebf58d13a3f5d95632f0bf7"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/matrix.stdout.txt",
+      "sha256": "3f8fd5206520036ef93fc025c1f7ea65f7b05f7d753ab2c41dd7d4c663903221"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/sensitivity.stdout.txt",
+      "sha256": "af3caac0078d28c64ea7fd832d155e5dc5dfe51aaae76a033cf761c7cc2b28b5"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/leakage.stdout.txt",
+      "sha256": "e7b8f1770b525e73799af713a4a357bedb86064ad2b1a5c97243b110c4d490dd"
     },
     {
       "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/partials/b1-monitor.md",
@@ -93,8 +164,16 @@
   ],
   "headline": {
     "difference_set": 134,
-    "frame_units": 243,
+    "fnr_decomposition": {
+      "after_restriction_alone": 0.396,
+      "after_supplement": 0.507,
+      "share_from_restriction": "42%",
+      "v11_unrestricted": 0.317
+    },
+    "frame_units": 241,
     "hand_judged": 126,
+    "harsh_folding_reverses_pinned": false,
+    "harsh_folding_reverses_unrestricted": true,
     "matrix_strict": {
       "probe_enumerated_only": {
         "FN": 36,
@@ -111,18 +190,20 @@
         "TP": 70,
         "n": 219
       },
-      "v14_reproduction": {
+      "v14_closest_approach": {
         "FN": 20,
         "FP": 3,
         "TN": 29,
         "TP": 43,
-        "n": 95
+        "n": 95,
+        "note": "NOT a reproduction: V14 published n=97, TN=31, FPR 0.088"
       }
     },
+    "negctl_coverage_of_v14_own_rule_pct": 99.3,
     "negctl_coverage_pct": 58.1,
     "not_judged": {
-      "stratum_C_suites": 6,
-      "the_probe_itself": 2
+      "probe.py_and_calibrate.py": 2,
+      "stratum_C_suites": 6
     },
     "v11_coverage_pct": 44.4
   },

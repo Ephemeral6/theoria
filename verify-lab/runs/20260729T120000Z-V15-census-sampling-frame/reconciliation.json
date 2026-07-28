@@ -1,4 +1,5 @@
 {
+  "baseline_rev": "3fa7170",
   "difference_by_stratum": {
     "A": 101,
     "B": 27
@@ -267,6 +268,7 @@
     "theory-compiler/tests",
     "worldgen/tests"
   ],
+  "negctl_coverage_of_v14_rule_pct": 99.3,
   "negctl_coverage_pct": 58.1,
   "negctl_in_frame": 140,
   "negctl_outside_frame": 1,
@@ -274,6 +276,7 @@
     "monitor/tests/mutants.py"
   ],
   "negctl_pinned": 141,
+  "v11_coverage_of_v14_rule_pct": 50.7,
   "v11_coverage_pct": 44.4,
   "v11_frame_paths_covered": 107,
   "v11_rows": 127,
@@ -291,5 +294,6 @@
     "`proxy/redact.py` Vault / `scrub_outbound`（密钥密封）",
     "`proxy/ledger.py` + `proxy/canon.py` 写入端拒绝（非规范字段 / 成本禁令 / frame_hash）",
     "`proxy/scoring/`（冻结计分器 S-0..S-12 + 自哈希）"
-  ]
+  ],
+  "v14_rule_population": 136
 }

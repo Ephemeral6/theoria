@@ -200,11 +200,36 @@ def tracked_files(root: str, rev: Optional[str] = None) -> List[str]:
     return [line for line in out.replace("\\", "/").split("\n") if line]
 
 
+#: rev -> {path: bytes}. One `git archive` per revision instead of one
+#: `git show` per file: the naive version spawned ~650 processes per build and
+#: took the whole run past two minutes.
+_TREE_CACHE: Dict[str, Dict[str, bytes]] = {}
+
+
+def _tree(root: str, rev: str) -> Dict[str, bytes]:
+    if rev not in _TREE_CACHE:
+        import io
+        import tarfile
+        blob = subprocess.run(["git", "-C", root, "archive", rev],
+                              capture_output=True, check=True).stdout
+        out: Dict[str, bytes] = {}
+        with tarfile.open(fileobj=io.BytesIO(blob)) as tar:
+            for member in tar.getmembers():
+                if not member.isfile():
+                    continue
+                handle = tar.extractfile(member)
+                if handle is not None:
+                    out[member.name.replace("\\", "/")] = handle.read()
+        _TREE_CACHE[rev] = out
+    return _TREE_CACHE[rev]
+
+
 def read_file(root: str, rel: str, rev: Optional[str] = None) -> str:
     if rev:
-        proc = subprocess.run(["git", "-C", root, "show", "%s:%s" % (rev, rel)],
-                              capture_output=True, check=True)
-        return proc.stdout.decode("utf-8")
+        data = _tree(root, rev).get(rel)
+        if data is None:
+            raise OSError("%s not in %s" % (rel, rev))
+        return data.decode("utf-8")
     with open(os.path.join(root, rel), "r", encoding="utf-8") as handle:
         return handle.read()
 
