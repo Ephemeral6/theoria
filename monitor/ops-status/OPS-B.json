@@ -1,1 +1,1 @@
-{"id": "OPS-B", "utc": "2026-07-28T10:25Z", "cycle": 3, "state": "idle", "note": "邮箱无新 OPEN；两份提案待裁决；本轮把 ACCESS_CHECK 第 8 项记为未了结的那封信写成可发草稿（未发送），建议下轮起做条款定期漂移核查"}
+{"id": "OPS-B", "utc": "2026-07-28T12:28Z", "cycle": 4, "state": "idle", "note": "条款漂移基线已建（terms_canary.json，四页 + 14 个语义锚点）；本轮复核结果无漂移；两份提案仍待裁决"}
