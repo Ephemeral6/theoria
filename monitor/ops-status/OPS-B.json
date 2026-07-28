@@ -1,1 +1,1 @@
-{"id": "OPS-B", "utc": "2026-07-28T18:42Z", "cycle": 8, "state": "idle", "note": "总线空、邮箱无 OPEN。S11 卡点精确到一个文件：bad_root 恰只剩 {CLAUDE.md}，37 行挡住同分支 1780 行封存护栏；已 bus.say 给出两步最小动作，并把『同因 FLAG 已原样重报约 35 次』转给 OPS-R。条款漂移巡检按天，下次到期再跑"}
+{"id": "OPS-B", "utc": "2026-07-28T19:44Z", "cycle": 9, "state": "idle", "note": "条款巡检第二次：四页 NO-DRIFT（哈希逐位相等、18 个锚点全真、ToS last_updated 未变）。S11 仍未合并（19:43Z 仍在原样重报），cycle 8 已给最小动作，不再重复报"}
