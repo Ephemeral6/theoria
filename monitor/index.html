@@ -283,14 +283,24 @@ td.num{width:38px;color:var(--mut);font-family:ui-monospace,monospace}
 .wpnext{margin:0;font-size:12px;color:var(--mut);border-top:1px dashed var(--line);
   padding-top:7px}
 
-.fleet{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:9px}
-.crew{display:flex;align-items:center;gap:10px;background:var(--card);
-  border:1px solid var(--line);border-radius:9px;padding:11px 14px;font-size:13.5px}
-.crew b{font-weight:600;flex:1}
-.crew span{font-size:11.5px;color:var(--mut)}
+.fleet{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:9px}
+.crew{display:flex;align-items:center;gap:11px;background:var(--card);
+  border:1px solid var(--line);border-radius:9px;padding:10px 13px;font-size:13.5px}
+.crew.lost{border-color:var(--st-risk);border-left-width:4px}
+.cellbadge{flex:0 0 auto;min-width:34px;text-align:center;padding:5px 7px;
+  border-radius:7px;font:700 12.5px system-ui,sans-serif;
+  background:var(--greenbg);color:var(--green)}
+.cellbadge.ops{background:var(--blockedbg);color:var(--blocked)}
+.crewbody{flex:1;min-width:0}
+.crewbody b{font-weight:600;display:block;line-height:1.35}
+.crewbody em{font-style:normal;font-size:11px;color:var(--mut);
+  font-family:ui-monospace,Menlo,Consolas,monospace}
+.crewst{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;
+  font-size:11.5px;color:var(--mut)}
 .dot{width:9px;height:9px;border-radius:99px;flex:0 0 auto}
 .crew.run .dot{background:var(--st-partial);animation:pulse 1.6s infinite}
 .crew.done .dot{background:var(--st-green)}
+.crew.lost .dot{background:var(--st-risk)}
 @keyframes pulse{50%{opacity:.35}}
 
 .needs{background:var(--card);border:1px solid var(--line);
@@ -320,12 +330,12 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
 </style>
 <header><div class="top">
 <svg viewBox="0 0 150 150" class="ring" role="img" aria-label="论文完成度 30.8%"><circle cx="75" cy="75" r="62" class="rbg"/><circle cx="75" cy="75" r="62" class="rfg" stroke-dasharray="120.0 269.6" transform="rotate(-90 75 75)"/><text x="75" y="72" class="rnum">30.8%</text><text x="75" y="94" class="rlab">论文完成度</text></svg>
-<div class="topmid"><h1>Theoria 研究进度</h1><p class="one">目标：一篇实验规模对标 Schema 的可发表论文。眼下 <b>12 个 AI 会话</b>在并行干活<span class="delta up">+4.0%</span></p><div class="sparkrow"><svg viewBox="0 0 220 44" class="spark"><path d="M0.0 13.8 L220.0 13.8"/><circle cx="220.0" cy="13.8" r="3.5"/></svg><span class="sparklab">进度曲线</span></div></div>
+<div class="topmid"><h1>Theoria 研究进度</h1><p class="one">目标：一篇实验规模对标 Schema 的可发表论文。眼下 <b>7 个 AI 会话</b>在并行干活<span class="delta up">+4.0%</span></p><div class="sparkrow"><svg viewBox="0 0 220 44" class="spark"><path d="M0.0 13.8 L220.0 13.8"/><circle cx="220.0" cy="13.8" r="3.5"/></svg><span class="sparklab">进度曲线</span></div></div>
 <div class="topstats">
-<div class="ts2"><b>12</b><span>会话在飞</span></div>
+<div class="ts2"><b>7</b><span>会话在飞</span></div>
 <div class="ts2"><b>7/20</b><span>实验问题已回灌</span></div>
 <div class="ts2"><b>0</b><span>需要你处理</span></div>
-<div class="ts2"><b>07-28 10:35</b><span>上次扫描</span></div>
+<div class="ts2"><b>07-28 10:40</b><span>上次扫描</span></div>
 </div></div></header>
 <main>
 <section><h2>项目地图 <span class="note">— 横轴：工作从左往右推进；纵轴：六个子系统。格子越绿越完成，呼吸点 = 该格有会话在跑；悬停看格子的实况。新工单编号即坐标（如 A3-xxx）。</span></h2>
@@ -379,21 +389,21 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
 <td class="mc" style="--f:0.15" title="P5（15%）：主文 + Schema 地板释出　在跑：P-19"><span class="mpct">15%</span><span class="mdots"><i class="mdot"></i></span></td>
 </tr>
 </tbody></table></div>
-<p class="note">地图外的运维会话：合并员：把所有人的成果安全合到主线（M-0）；常驻审计员：低频巡查项目漂移（A-1）；浏览器专员：处理需要真人网页的事（B-1）；沉淀舰队通用技能，加速后续会话（P-24）；复盘：从过去的失败里找规律（R-1）</p>
+<p class="note">地图外的运维会话：合并员：把所有人的成果安全合到主线（M-0）；沉淀舰队通用技能，加速后续会话（P-24）；复盘：从过去的失败里找规律（R-1）</p>
 </section>
-<section><h2>正在进行</h2><div class="fleet">
-<div class="crew run"><i class="dot"></i><b>补齐对照组的成绩数据</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>合并员：把所有人的成果安全合到主线</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>常驻审计员：低频巡查项目漂移</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>浏览器专员：处理需要真人网页的事</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>造对照版 AI（去掉证明能力的消融臂）</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>打包公开：陌生人一条命令复跑全部</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>实测游戏一步会不会动好几帧</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>把数据画成论文用的图</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>起草大考前要封存的规则包</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>整理相关文献与引用</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>沉淀舰队通用技能，加速后续会话</b><span>进行中</span></div>
-<div class="crew run"><i class="dot"></i><b>复盘：从过去的失败里找规律</b><span>进行中</span></div>
+<section><h2>正在进行 <span class="note">— 7 在跑，<b style="color:var(--st-risk)">5 失联</b>，徽章 = 它点亮地图上的哪一格</span></h2><div class="fleet">
+<div class="crew lost"><span class="cellbadge ">A1</span><div class="crewbody"><b>造对照版 AI（去掉证明能力的消融臂）</b><em>P-18 · 16 分钟</em></div><span class="crewst"><i class="dot"></i>失联（进程死亡且无产出）</span></div>
+<div class="crew lost"><span class="cellbadge ">P5</span><div class="crewbody"><b>打包公开：陌生人一条命令复跑全部</b><em>P-19 · 16 分钟</em></div><span class="crewst"><i class="dot"></i>失联（进程死亡且无产出）</span></div>
+<div class="crew lost"><span class="cellbadge ">V5</span><div class="crewbody"><b>把数据画成论文用的图</b><em>P-21 · 16 分钟</em></div><span class="crewst"><i class="dot"></i>失联（进程死亡且无产出）</span></div>
+<div class="crew lost"><span class="cellbadge ops">运维</span><div class="crewbody"><b>常驻审计员：低频巡查项目漂移</b><em>A-1 · 16 分钟</em></div><span class="crewst"><i class="dot"></i>失联（进程死亡且无产出）</span></div>
+<div class="crew lost"><span class="cellbadge ops">运维</span><div class="crewbody"><b>浏览器专员：处理需要真人网页的事</b><em>B-1 · 16 分钟</em></div><span class="crewst"><i class="dot"></i>失联（进程死亡且无产出）</span></div>
+<div class="crew run"><span class="cellbadge ">A3</span><div class="crewbody"><b>补齐对照组的成绩数据</b><em>P-12</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">P2</span><div class="crewbody"><b>整理相关文献与引用</b><em>P-23 · 16 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">S2</span><div class="crewbody"><b>实测游戏一步会不会动好几帧</b><em>P-20 · 16 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ">S4</span><div class="crewbody"><b>起草大考前要封存的规则包</b><em>P-22 · 16 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ops">运维</span><div class="crewbody"><b>合并员：把所有人的成果安全合到主线</b><em>M-0 · 1 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ops">运维</span><div class="crewbody"><b>沉淀舰队通用技能，加速后续会话</b><em>P-24 · 16 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
+<div class="crew run"><span class="cellbadge ops">运维</span><div class="crewbody"><b>复盘：从过去的失败里找规律</b><em>R-1 · 16 分钟</em></div><span class="crewst"><i class="dot"></i>进行中</span></div>
 </div></section>
 <section><h2>需要你的事</h2>
 <p class="allclear">✓ 目前没有任何需要你出手的事——决策已代行，执行在跑，出问题会在这里出现。</p>
@@ -421,291 +431,6 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
 <details class="fold"><summary>车间八工序</summary><table class="wide"><tbody><tr class="green"><td><b>分割·追踪·事件叙述</b></td><td>最小编辑脚本搜索 (MDL)</td><td><span class="pill green">达成</span></td><td class="nt">A0 上真跑了：算子空间扩到两个，由脚本比特自己选出 uniform_color（4423 vs 6511 bit）。</td></tr><tr class="green"><td><b>规则挖掘</b></td><td>CEGIS / 版本空间</td><td><span class="pill green">达成</span></td><td class="nt">前沿真的被交出来并被逐个裁决（A0 的 R-01/R-02 各留下一条『证据无法决定』的记录）。</td></tr><tr class="green"><td><b>守恒律 / 奇偶</b></td><td>零空间计算 (ℚ / GF(2))</td><td><span class="pill green">达成</span></td><td class="nt">A0 上交出了本项目至今最漂亮的一条结果：door_latch —— 引擎在 152 个匿名指示位上把『门存在 iff 按钮未按』当作守恒律算了出来，275 条转移全支持。</td></tr><tr class="green"><td><b>势函数 + 启发</b></td><td>线性规划</td><td><span class="pill green">达成</span></td><td class="nt">pagoda 权重解得出、证书三条件精确有理数复核通过；不完备性写成了测试而非藏起来。</td></tr><tr class="green"><td><b>兜底归纳不变量</b></td><td>IC3 / PDR</td><td><span class="pill green">达成</span></td><td class="nt">M9 落地：归纳不变量三件套 + 独立检查器复核；peg 0111（LP 不完备例）拿到非线性证书 —— 这道工序存在的全部理由已兑现。</td></tr><tr class="partial"><td><b>规划</b></td><td>Fast Downward（不自研）</td><td><span class="pill partial">部分</span></td><td class="nt">接口就位，后端是 BFS 桩。单位代价下长度最优，所以 A0 这种小世界够用；但三档阶梯的后两档（A*+可采纳启发、地标分段）都还不存在。</td></tr><tr class="green"><td><b>死锁刻画</b></td><td>定理机器局部化 + trap 学习</td><td><span class="pill green">达成</span></td><td class="nt">M9 落地：条件化迷你不可解定理带证书，同一定理接进规划器作剪枝，节点数下降有前后对比。C1 的日常供给线通了。</td></tr><tr class="green"><td><b>探索 / 戳探</b></td><td>前沿主动学习</td><td><span class="pill green">达成</span></td><td class="nt">M9 起探针经规划器定价（到达计划计入成本，unreachable 有裁决）；A0′ 实证 13 条可执行探针。约束 7 的落点齐了。</td></tr><tr class="partial"><td><b>证明</b></td><td>Lean 4 + 决策程序</td><td><span class="pill partial">部分</span></td><td class="nt">工具链已钉版本并本地就位。但生成器分叉了：theory-compiler 的 gen_lean 完全忽略自己的 AST 参数（D-A0-011），A0 只好另写一套。约束 1『同源多形态』目前有两个源。</td></tr></tbody></table></details>
 <details class="fold"><summary>十条强制约束</summary><table class="wide"><tbody><tr class="partial"><td class="num">1</td><td>理论必须可执行——同源多形态（Lean + Python + PDDL + 渲染）</td><td><span class="pill partial">部分</span></td><td class="nt">四形态都有代码，但有两套生成器（A0 一套、theory-compiler 一套），且只有 gen_markdown 是真正 AST 通用的。同源二字目前打折。</td></tr><tr class="partial"><td class="num">2</td><td>规划前全史重放——双重对账（转移重放 + 渲染一致性，全帧责任制）</td><td><span class="pill partial">部分</span></td><td class="nt">A0 上真的生效过，而且是<b>它把 Button 和 Door 逼进词汇表的</b>：两个像素没人认领 → 廉价层在 frame 0 就失败。这是约束 2 在野外的第一次真实咬合。但 certify 目录尚未落盘。</td></tr><tr class="missing"><td class="num">3</td><td>行动唯一通道；预测失误即弃计划</td><td><span class="pill missing">缺失</span></td><td class="nt">无 runner、无执行环，尚未成为可检查的事实。</td></tr><tr class="partial"><td class="num">4</td><td>唯一写入点：LLM 只许改两本书；引擎只进候选箱；生成物禁止手改</td><td><span class="pill partial">部分</span></td><td class="nt">候选箱纪律良好（append-only，status 恒为 candidate，有校验器）。但 A0 的表达力条目 E-03 记录：帧公理写在 theory.dsl 的注释里、硬编码在各后端中 —— <b>step 最重要的语义事实不在唯一写入点管辖内</b>。</td></tr><tr class="risk"><td class="num">5</td><td>无证据/无收益不入册</td><td><span class="pill risk">有风险</span></td><td class="nt">A0 第一次冷启动就撞出框架自身的内部冲突（O-04）：Button 与 Door 的压缩账目是<b>负的</b>（−17 / −13 bit），按约束 5 应当拒绝；按约束 2 全帧责任制又必须接受。两条准入准则互相矛盾，目前的处理是『照收并把负数如实写进说明书』。<b>Theoria.md 需要为此裁决。</b></td></tr><tr class="partial"><td class="num">6</td><td>全称断言必须带证明；裸 UNSAT 禁止</td><td><span class="pill partial">部分</span></td><td class="nt">机制在（LP 证书 + Lean），但尚未在任何一局上端到端跑完。</td></tr><tr class="risk"><td class="num">7</td><td>定理未经戳探不得定案</td><td><span class="pill risk">有风险</span></td><td class="nt">A0 上零条可执行探针，press_is_direction_free 就此永远停在 probe: pending —— 而这恰恰是 DC22 型『漏写规则』的实名复现。约束 7 在设计上正确，在第一次实战中<b>没有可执行的落点</b>。</td></tr><tr class="missing"><td class="num">8</td><td>无意外则无模型调用；执行、校验与引擎全程零调用</td><td><span class="pill missing">缺失</span></td><td class="nt">模型代理不存在 = 没有任何东西在数模型调用。这条约束目前不可证伪。</td></tr><tr class="partial"><td class="num">9</td><td>转移无歧义是定理：每个(状态,动作)恰一后继</td><td><span class="pill partial">部分</span></td><td class="nt">engine-rig 在 fixture 上、A0 在三个 track 上都报告了 mutually_exclusive=true；但这是引擎的运行时检查，不是 Lean 的证明义务。</td></tr><tr class="green"><td class="num">10</td><td>玩法书禁存字面解：句型仅 排序/剪枝/启发/分解</td><td><span class="pill green">达成</span></td><td class="nt">playbook 解析器带负向测试（playbook_violation.dsl），反作弊是语法级的 —— 这条是十条里落实得最干净的。</td></tr></tbody></table></details>
 <details class="fold"><summary>冲突 / 留痕 / 提案箱（每轮实测）</summary><div class="conflict green"><b>冲突扫描</b> 三类检查全空：无冲突标记、无未合并路径、近 40 个提交无跨领地改动。</div><div class="conflict partial"><b>留痕审计</b> 尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：engine-rig, cold-start-a0, cold-start-a2, a0-spike, baseline-arms, arc-recon, battery。</div><div class="conflict green"><b>提案箱</b> 提案箱空。</div></details>
-<details class="fold"><summary>工单原文（17 份）</summary><details class="ticket"><summary><span class="tfile">P-10-contracts-v02.md</span>P-10 · CONTRACTS v0.2：契约演化窗口（一次开窗，全部清偿）<button class="copy" onclick="copyTicket(event,'tk_P10contractsv02md')">复制</button></summary><textarea id="tk_P10contractsv02md" readonly rows="14" spellcheck="false"># P-10 · CONTRACTS v0.2：契约演化窗口（一次开窗，全部清偿）
-
-基准文件是 `Theoria.md`。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 最后十段（engine-rig 的 enum 挂旗、cold-start-a2 的两条缺陷上报、自己轨道的 E-06）、`CONTRACTS/` 两份契约、`cold-start-a0/proposals/dsl_grammar_v0.2_semantics.md`，跑本轨道测试，绿了开工。
-分支制：`agent/p10-contracts-v02` + 独立 worktree；push 分支不碰 master。
-领地：`theory-compiler/` 与 `CONTRACTS/`（candidates_schema 的 v0.2 升版已由监控裁决 F-14 授权：**只做加法**，v0.1 校验器保留）。
-
-清偿清单（全部是别的轨道排队等你的）：
-
-1. **candidates_schema v0.2**：新增 M9 两引擎的 kind 枚举值 + 可选字段，v0.2 校验器新增、v0.1 保留；变更逐条注明哪台引擎逼的；PARTNER_SYNC 挂会签请求（engine-rig 回签后生效——异轨道异步会签，不等待，先落草案）。
-2. **dsl_grammar v0.2 定稿**：`semantics:` 提案裁决落文（若 P-5 已采纳则补正式版本号与迁移说明）；E-06（证书权重自动注入，消灭手抄）实现进编译链。
-3. **cold-start-a2 上报的两条缺陷**：修复 + 负向测试（缺陷内容见 PARTNER_SYNC 94a8202 与 cold-start-a2/DECISIONS.md）。
-4. **回归**：peg、cold-start-a0、a0-spike、cold-start-a2 四份 DSL 全部过新编译链——契约升版不许弄坏任何既有消费者。
-
-技巧：四份 DSL 的兼容验证派四个并行 subagent；v0.2 草案写完派一个「engine-rig 视角」subagent 只读草案模拟会签审查，它挑出的刺先修再挂签。
-
-收工仪式：runs/ 归档（prompt_id: P-10）；STATUS 更新；PARTNER_SYNC 追加（含会签请求）；push 分支。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-11-arc-hygiene.md</span>P-11 · arc-recon 卫生收口：F-11 落账 + 金丝雀 + 接入核查清尾<button class="copy" onclick="copyTicket(event,'tk_P11archygienemd')">复制</button></summary><textarea id="tk_P11archygienemd" readonly rows="14" spellcheck="false"># P-11 · arc-recon 卫生收口：F-11 落账 + 金丝雀 + 接入核查清尾
-
-基准文件是 `Theoria.md`（一刀切堆、一件接入核查、金丝雀重放条款）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 最后十段、`baseline-arms/INCIDENTS.md`（INC-BA-001 全文）、monitor 页面 F-11 的裁决文本，绿了开工（本领地无测试套件，跑一遍 `arc-recon/precheck.py --help` 冒烟即可）。
-分支制：`agent/p11-arc-hygiene` + 独立 worktree；push 分支不碰 master。
-领地：`arc-recon/`。其余只读；PARTNER_SYNC 只追加。
-
-三件：
-
-1. **F-11 裁决落账**（监控代行裁决已作出，你只执行）：contamination_log 追加 9 局的知识污染登记（等级按 INC-BA-001 的自报表）；ls20/ft09 标 `quarantined_from_claims`；新增一行 incident 记录裁决依据与主张集 21→19 的后果。piles.json 哈希锁定不动。
-2. **金丝雀重放机制**：每局一条固定动作序列 + 期望帧哈希，存 `data/canary.json`；跑一次开发堆 4 局作基线（每局 ≤6 动作）；写好定期重跑脚本（漂移 = incident 并冻结战役的逻辑进代码）。
-3. **接入核查清尾**：速率/配额一栏用 baseline 的实测口径归档；帧缓存与释出许可条款查官网文档落一行结论；跨会话残留用金丝雀基线顺带回答。
-
-红线：封存堆 API 零接触；动作预算全工单 ≤30。
-
-技巧：金丝雀 4 局并行 subagent 跑；落账文本先过一个对抗性 subagent（只读证据链，试图挑出「登记与裁决不符」处）。
-
-收工仪式：runs/ 归档（prompt_id: P-11）；README 更新；PARTNER_SYNC 追加；push 分支。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-12-envelope-finish.md</span>P-12 · baseline-arms：包络续跑 + 账本正典迁移 + 留痕补档<button class="copy" onclick="copyTicket(event,'tk_P12envelopefinishmd')">复制</button></summary><textarea id="tk_P12envelopefinishmd" readonly rows="14" spellcheck="false"># P-12 · baseline-arms：包络续跑 + 账本正典迁移 + 留痕补档
-
-基准文件是 `Theoria.md`（Phase 3 经济、1.12 主表）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 最后十段、本领地全部文档（尤其 `BUDGET_REPORT.md` §11 的 G4 判决），跑本领地测试，绿了开工。
-分支制：`agent/p12-envelope-finish` + 独立 worktree；push 分支不碰 master。
-领地：`baseline-arms/`。其余只读；PARTNER_SYNC 只追加。
-
-三件：
-
-1. **包络续跑**（F-15 裁决执行）：g50t/sk48/tn36 按原协议（×3 重复）续跑；ar25 记 `degraded` 不追跑，包络表单独一行注明证据；预算闸门照旧硬性；若再出 G4，停下记录并在 PARTNER_SYNC 标注请监控重裁（这是唯一允许的停）。
-2. **账本正典迁移**（F-16 裁决执行）：存量账本按 `proxy/LEDGER_FORMAT.md` 出迁移器转正典（原始文件不动，转换产物 + 迁移器版本入 runs/）；battery 的 INPUT_FORMAT 若有出入在 PARTNER_SYNC 向其登记。
-3. **留痕补档**：本领地历史产物（试点、包络首局、schema_traces）补建 `runs/` 档案与 MANIFEST（prompt_id 用回溯标注 `retro:P-7`）——失败 run 同等归档。
-
-红线：封存堆双零接触（API + 内容，下载守卫保持 fail-closed）；密钥只经 proxy；预算闸门优先于一切「再跑一局」。
-
-技巧：三局包络用循环推进（跑完一局→审计 subagent 复核账本自洽→过闸门→下一局）；迁移器写完用 fuzz 循环对拍（原始 vs 迁移后逐字段）。
-
-收工仪式：runs/ 归档；BUDGET_REPORT/TOUCHED_GAMES 续账；PARTNER_SYNC 追加；push 分支。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-13-fd-real.md</span>P-13 · engine-rig：Fast Downward 真接入，三档阶梯补全<button class="copy" onclick="copyTicket(event,'tk_P13fdrealmd')">复制</button></summary><textarea id="tk_P13fdrealmd" readonly rows="14" spellcheck="false"># P-13 · engine-rig：Fast Downward 真接入，三档阶梯补全
-
-基准文件是 `Theoria.md`（1.10b 规划一行：「不自研，白捡二十五年规划工程」；三档阶梯）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 最后十段、`engine-rig/STATUS.md` 的 FD 尝试日志、`cold-start-a0` 里 Fast Downward blocker 的记录（commit b1a1feb，只读），跑 engine-rig 测试，绿了开工。
-分支制：`agent/p13-fd-real` + 独立 worktree；push 分支不碰 master。
-领地：`engine-rig/`。其余只读；PARTNER_SYNC 只追加。
-
-目标：把 `fd_adapter` 的 backend 从 BFS 桩换成真 Fast Downward，调用方零改动（接口 `solve(domain, problem)` 不变，桩保留为 fallback）。
-
-1. **获取 FD**：源码编译（Windows：CMake + VS Build Tools 或 MSYS2，官方支持）或可信预编译。下载来源 URL + 版本 + 哈希入 runs/ 的 MANIFEST——工具链也要溯源。装到领地内或用户目录，`FAST_DOWNWARD` 环境变量接入（现有查找逻辑已支持），不进仓库。
-2. **三档阶梯打通**：BFS 桩（保留）→ A* + LM-cut/iPDB（最优档）→ LAMA（满意档）。skip 掉的那条 FD 专用测试自动生效，再补：三档在同一 problem 上答案一致性（最优档间）与档位选择逻辑。
-3. **实测红利**：M9 的死锁剪枝在真 FD 上重跑节点数对比；A0/A2 的 domain.pddl 喂 FD 求解与桩对拍。
-4. 若 Windows 编译死磕两小时仍不通：如实记 blocker（试了什么、卡在哪、可行替代），不许用桩冒充 FD——诚实的失败报告也是合格交付。
-
-技巧：编译与适配并行两个 subagent；对拍用 fuzz 循环（随机小 problem 桩 vs FD 逐一比对最优长度）。
-
-收工仪式：runs/ 归档（prompt_id: P-13）；STATUS/DECISIONS 记一笔；PARTNER_SYNC 追加；push 分支。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-14-battery-v1.md</span>P-14 · battery v1：吃下全部新材料，区分力工序第一跑<button class="copy" onclick="copyTicket(event,'tk_P14batteryv1md')">复制</button></summary><textarea id="tk_P14batteryv1md" readonly rows="14" spellcheck="false"># P-14 · battery v1：吃下全部新材料，区分力工序第一跑
-
-基准文件是 `Theoria.md`（Phase 2 四道工序）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 最后十段、`battery/STATUS.md` 与 REPORT_V0、`PREDICTIONS.md`，跑 battery 测试，绿了开工。
-分支制：`agent/p14-battery-v1` + 独立 worktree；push 分支不碰 master。
-领地：`battery/`。其余只读；PARTNER_SYNC 只追加。注意：P-12 正在别的分支迁移 baseline 账本、P-9 在定正典守卫——**不要依赖它们的未合并产物**，以 master 上现有材料为准，接口留好对齐位。
-
-目标：v0 → v1，三件：
-
-1. **吃新材料**：cold-start-a2 的轨迹与修复回路账（认识族：修复回路的六拍成本正是 U4 的度量原料）、a0-spike 的 held-out 与 adapt 数据（机制族：检测延迟/修复成本/连带作废）、包络首局 ar25×haiku 的真账本（经济族 + 探索族的 degraded 案例——它对指标是好样本不是坏数据）。全量回算，REPORT_V1 落盘。
-2. **区分力工序第一跑**：现在有了真对照材料——裸 CC（试点+包络）vs Theoria 离线臂（A0 系列）。逐指标算效应量；注意这还不是 Theoria.md 要求的 CC vs Schema 对照（Schema 路 A 材料未齐），如实标注口径并在指标表加一列「验证材料」。
-3. **去冗余**：相关性聚类首跑，每族留代表，聚类依据入 audit/。
-
-红线：零 API 零模型调用；封存护栏照旧；PREDICTIONS.md 只许追加（v1 新指标先预注册再回算——顺序是纪律）。
-
-技巧：三件并行 subagent；每个新指标过一遍「怎么刷它」对抗审计；确定性 diff 循环把关。
-
-收工仪式：runs/ 归档（prompt_id: P-14）；STATUS 更新；PARTNER_SYNC 追加；push 分支。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-15-exam-builder.md</span>P-15 · 考卷构造器：评测协议的主动器（目前无人认领的整块）<button class="copy" onclick="copyTicket(event,'tk_P15exambuildermd')">复制</button></summary><textarea id="tk_P15exambuildermd" readonly rows="14" spellcheck="false"># P-15 · 考卷构造器：评测协议的主动器（目前无人认领的整块）
-
-基准文件是 `Theoria.md`（1.11 怎么给三种 agent 打分——考卷四题型；Phase 4 考卷时序）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 最后十段、`battery/`（被动器，你的姊妹件）与 `proxy/variants.py`（变体注入的执行面），绿了开工。
-分支制：`agent/p15-exam-builder` + 独立 worktree；push 分支不碰 master。
-领地：新建顶层 `exam/`。其余只读；PARTNER_SYNC 只追加。
-
-目标：把考卷从条款变成可执行的出题机+判卷机，全部先在自建世界族（A0/A0′/A2 世界）上闭环彩排——不花 API：
-
-1. **held-out 预测题**：从轨迹切留出集，喂被试的 theory.py 预测、逐帧判分（a0-spike 已示范过一次抓到错规则，把它机制化）。
-2. **分层移交测试自动化**：两档交付（只说明书 / 说明书+玩法书）各起一个**全新 subagent 读者**，无历史无上下文，读交付物答题（step 语义、哪些名字是关卡数据、给定状态下最优动作），判卷标准写死；「新读者打平作者」的度量落成分数。
-3. **改规则适应题**：程序化改一条规则生成变体世界 + 真值，度量被试的检测延迟/修复成本/连带作废（对齐 a0-spike 的 adapt 三量）。
-4. **三类判决题出题法**：小空间不可解 / 大空间不可解 / 可解但难，各出一题于 A2 世界族，判卷同时打灵敏度与特异度；每题带构造性依据登记（接 proxy/variants 的依据格式，为 Phase 4 封存局出题预演流程）。
-
-红线：零 API；封存堆双零接触；出题真值与被试严格隔离（裁判 subagent 持真值，出题产物不含答案泄漏——用一个「作弊者 subagent」拿着题面试图榨出答案来验证）。
-
-技巧：四题型并行 subagent；判卷器先自测（拿已知满分/零分的假被试标定）。
-
-收工仪式：runs/ 归档（prompt_id: P-15）；README+STATUS；PARTNER_SYNC 追加；push 分支。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-16-workshop-paper.md</span>P-16 · Phase 1 结的最小可发表单元：workshop 文初稿<button class="copy" onclick="copyTicket(event,'tk_P16workshoppapermd')">复制</button></summary><textarea id="tk_P16workshoppapermd" readonly rows="14" spellcheck="false"># P-16 · Phase 1 结的最小可发表单元：workshop 文初稿
-
-基准文件是 `Theoria.md`（阶段交付物条款：「Phase 1 结：A0–A2 + 电池对既有轨迹的回算，独立可成 workshop 文」；第三部分论文叙事是骨架）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 全文、四份验收报告（`cold-start-a0/A0_REPORT.md`、`prime/A0P_REPORT.md`、`a0-spike/THEORIZE_LOG.md`、`cold-start-a2/A2_REPORT.md`）、`battery/REPORT_V0.md`。
-分支制：`agent/p16-workshop-paper` + 独立 worktree；push 分支不碰 master。
-领地：新建顶层 `papers/phase1-workshop/`。其余只读；PARTNER_SYNC 只追加。
-
-目标：把已经真实发生的东西收束成一篇 workshop 短文初稿（Markdown 即可，图先做数据后做样式）。素材全在树上，一个数字都不需要新造：
-
-- 钩子：预测满分与理解破产可共存（A0 的 R-05 洞 = DC22 盲区在自建世界的复现；A2 的假定理展品）；
-- 主体：A0/A0′ 对照（可逆性&gt;覆盖率——本仓库最强的受控实验）、真 A1（证书过数据边界、空公理集）、A2 修复回路六拍；
-- 图 1：概念诞生时间线（cold-start-a0 THEORIZE_LOG 的修订史，带触发事件）；
-- 图 2：A0 vs A0′ 覆盖-准确率对照；图 3：A2 打脸→重证回路的账目流；
-- 电池一节：REPORT_V0 的能力谱 + 预注册纪律说明；
-- 诚实条款逐条照录（Theoria.md 3.2 第 8 节的口径：仅确定性环境、语法脚手架披露、A2 是同构自建而非上游重放——引 INC-004）。
-
-红线：**每个数字必须能指回树上的一个文件**（引用用相对路径）；没有的实验不许写「we show」；不代改任何报告原文；署名占位。
-
-技巧：逐节并行 subagent 起草，一个「审稿人 subagent」拿评审视角（新颖性/证据/可复现）过一遍再改；图的数据抽取脚本入 `papers/phase1-workshop/figures/`，确定性可重生成。
-
-收工仪式：runs/ 归档（prompt_id: P-16）；PARTNER_SYNC 追加；push 分支。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-17-a3-transfer.md</span>P-17 · A3 跨关迁移彩排：C3 的第一份离线证据<button class="copy" onclick="copyTicket(event,'tk_P17a3transfermd')">复制</button></summary><textarea id="tk_P17a3transfermd" readonly rows="14" spellcheck="false"># P-17 · A3 跨关迁移彩排：C3 的第一份离线证据
-
-基准文件是 `Theoria.md`（1.10a 的 domain/problem 切分：「说明书是 domain 跨关不变，关卡布局是 problem 逐关实例——C3『迁移』的严格含义就是 domain 带得走」；Claim C3）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 最后十段、`cold-start-a0/`（含 prime）与 `cold-start-a2/` 的全套做法，跑两者测试，绿了开工。
-分支制：`agent/p17-a3-transfer` + 独立 worktree；push 分支不碰 master。
-领地：新建顶层 `cold-start-a3/`。其余只读（A0/A2 的世界与流水线可 import 复用）；PARTNER_SYNC 只追加。
-
-目标：自建一个**两关世界**——同一套机制（推动、按钮-门、传送），不同布局（墙、起点、目标、portal 位置全变）——验证两本书跨关带得走：
-
-1. **第一关冷启动**：全环跑通（沿用 A0′ 的可逆机关设计——F-12 裁决已采纳的准则），theory.dsl 落成 domain（机制）+ problem₁（布局）两部分，playbook 至少入一条定理级条目（死锁或地标序）。
-2. **第二关零重学验证**：携 domain + playbook 进第二关，只从首帧提取 problem₂（布局重建，不许重新挖规则）；直接 certify + plan。度量并落账：第二关的 theorize 轮数（预期 0 或仅裁决新布局）、引擎调用量、到首个 plan 的成本——**与第一关同量对照，这就是 C3 的账单形状证据**。
-3. **对照臂**：同一个第二关从零冷启动一遍（不带书），成本对照表二列并排——「白嫖」的量化。
-4. **负对照**：第二关故意换一条机制（比如 portal 变单向），验证带旧 domain 的 certify 能抓住（渲染失配/重放失配触发 theorize），而不是无声地错下去——迁移的安全阀也要测。
-5. `A3_REPORT.md` 收束：C3 在离线世界的成立范围与限制（这为 theoria-arm 在线跨关直接铺路）。
-
-红线：零 API；生成物不手改；真值只在裁判 subagent 手里（同 A2 纪律）。
-
-技巧：两关的冷启动与对照臂并行 subagent；负对照单独一个；回路循环推进。
-
-收工仪式：runs/ 归档（prompt_id: P-17）；PARTNER_SYNC 追加；push 分支。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-18-ablation-arm.md</span>P-18 · 消融臂：Theoria − 定理义务（评审口中的『活命臂』）<button class="copy" onclick="copyTicket(event,'tk_P18ablationarmmd')">复制</button></summary><textarea id="tk_P18ablationarmmd" readonly rows="14" spellcheck="false"># P-18 · 消融臂：Theoria − 定理义务（评审口中的『活命臂』）
-
-基准 `Theoria.md`（Phase 4「必设消融臂」：把谁都能抄的工程省从 claim 里切出去）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 尾十段、`cold-start-a0/` 与 `cold-start-a2/` 的流水线（你的母体，只读），跑其测试绿了开工。**先出计划再动手**：把消融的精确刀口写进 `ablation-arm/DESIGN.md`（砍什么、留什么、为什么这一刀恰好分离『工程省』与『理解省』），这一步用最深的思考（ultrathink 级）——刀口切错，整个消融白跑。
-分支制：`agent/p18-ablation-arm` + 独立 worktree；push 分支不碰 master。领地：新建顶层 `ablation-arm/`。
-
-目标：实现 Theoria−定理义务臂并在离线世界上标定。
-
-1. **刀口**（DESIGN.md 定稿后照做）：保留 DSL、对象化、重放层 certify（廉价层全保）；砍掉全部证明义务——无 Lean、无证书、UNSAT 裸信、玩法书定理级条目降为经验级。其余内环与引擎调用一字不改（差异可归因）。
-2. **离线标定**：A0 与 A2 世界各跑一遍全环，与全量 Theoria 的既有结果并排：分数、重放精确度、以及**它错在哪**——A2 的假不可达定理这一臂应当照信不误（没有证明义务就没有打脸机制），把这个预期失败真实展示出来，它就是消融臂存在的意义。
-3. 接口对齐 proxy 账本格式，在线就绪（但本工单零 API）。
-
-前沿工具要求：子代理分工各持上下文（实现 / 标定 / 对抗审查三线）；**Stop-hook 式收工**——写 `ablation-arm/verify.sh`（跑两世界全环 + 断言与全量臂的差异恰为设计的刀口），不绿不许收工；测试挂后台循环；发现可复用流程沉淀成 `.claude/skills/`（只增不改）；收尾做一轮 simplify 式质量清理。
-
-留痕：边跑边落盘，开工即建 `ablation-arm/runs/&lt;UTC&gt;-p18/`，每步增量写入；上下文里的信息视同不存在。
-收工：RUN_STATE + MANIFEST(prompt_id: P-18) + PARTNER_SYNC + push 分支。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-19-release-kit.md</span>P-19 · 释出包：任何陌生人一条命令复跑（WP10，Schema 地板对齐）<button class="copy" onclick="copyTicket(event,'tk_P19releasekitmd')">复制</button></summary><textarea id="tk_P19releasekitmd" readonly rows="14" spellcheck="false"># P-19 · 释出包：任何陌生人一条命令复跑（WP10，Schema 地板对齐）
-
-基准 `Theoria.md`（Phase 4 释出清单 + 「规模与开放性够到 Schema 的地板」）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 尾十段、各领地 README，绿了开工。先出计划：`release/PLAN.md` 列出 Theoria.md 释出清单的每一项对应树上哪个路径、缺什么。
-分支制：`agent/p19-release-kit` + 独立 worktree；push 分支不碰 master。领地：新建顶层 `release/`。
-
-目标：把「可复现」从口号变成一条命令。
-
-1. **artifact 清单器**：脚本枚举全部应释出物（账本、两本书四形态、Lean 证明、候选箱、探针日志、电池代码与结果、incident 台账、runs 档案），逐文件 sha256 落 `release/MANIFEST.jsonl`；对照 Theoria.md 释出清单逐项打勾/标缺。
-2. **一条命令复跑**：`release/reproduce.py`——按领地依次重跑确定性产物（fixtures、engines、四形态编译、A0/A2 全环、battery 回算），与 MANIFEST 哈希比对，出 `REPRODUCTION_REPORT.md`。跑不了的（需 API/需真值）如实分级标注。
-3. **REPRODUCING.md**：陌生人视角的复跑指南（环境、顺序、预期时长、每步的判据）。写完用一个**全新 subagent 当陌生人**照文档执行一遍，卡在哪改哪——文档失败改文档，不许口头解释。
-4. 凭据与封存红线自检：清单器必须证明释出集里无 .env 值、无封存局帧数据。
-
-前沿工具要求：清单/复跑/文档三线子代理并行；Stop-hook 式收工——`release/verify.sh`（复跑一遍 + 哈希全对 + 红线自检绿）不绿不收工；把「复跑验证」沉淀成 `.claude/skills/reproduce-check`；对抗措辞照用：让陌生人 subagent 『prove to me this works』。
-
-留痕：边跑边落盘（`release/runs/&lt;UTC&gt;-p19/`），复跑报告的失败与成功同等归档。
-收工：RUN_STATE + MANIFEST(prompt_id: P-19) + PARTNER_SYNC + push 分支。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-20-cascade-probe.md</span>P-20 · 级联语义在线裁决：单动作到底会不会返回多帧<button class="copy" onclick="copyTicket(event,'tk_P20cascadeprobemd')">复制</button></summary><textarea id="tk_P20cascadeprobemd" readonly rows="14" spellcheck="false"># P-20 · 级联语义在线裁决：单动作到底会不会返回多帧
-
-基准 `Theoria.md`（Phase 1「一件轨迹作业」：级联语义裁决——step 建模「动作→帧序列」还是「动作→单帧」；这是 1.8 留的悬案，A0 的 D-A0-004 暂选了单帧）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 尾十段、`arc-recon/README.md` 与 incidents 尾部、`proxy/LEDGER_FORMAT.md`，绿了开工。
-分支制：`agent/p20-cascade-probe` + 独立 worktree；push 分支不碰 master。领地：`arc-recon/`，**只新增 `arc-recon/cascade/` 子目录**——不改任何既有文件（P-11 的分支可能未合并，避开它碰过的路径，合并才干净）。
-
-目标：用最少的动作在开发堆上正面回答——是否存在返回 len(frame)&gt;1 的动作（动画/内部 tick）？
-
-1. 设计判别序列（先写预测再打）：优先选可能触发级联的动作（推动可动物、按压类），4 局各 ≤7 动作，总预算 ≤30；每个响应记录 frame 列表长度、逐帧哈希。
-2. 结论三选一落 `arc-recon/cascade/VERDICT.md`：(a) 观测到多帧——step 必须建模帧序列，A0 的 D-A0-004 需要修订通告（PARTNER_SYNC 知会 theory-compiler 轨道）；(b) 全部单帧——单帧假设在观测范围内成立，写明覆盖范围与不能排除什么；(c) 混合/异常——如实分档。
-3. 顺带免费拿：这 ≤30 个动作的帧序列同时是跨会话残留与金丝雀的补充样本，交叉核对已有基线。
-
-红线：封存堆零接触；密钥经环境读取不落盘；预算硬顶 30 动作，先算后花；重试策略沿用 INC-005 的包络（别重蹈 H-A 短 ID 的初判覆辙）。
-
-前沿工具要求：4 局并行 subagent 各打各的（独立上下文互不污染预测）；判决文本过一个对抗性 subagent（专挑「说得比证据满」——这个仓库已经为此栽过两次）；Stop-hook 式收工——`cascade/verify.sh` 断言账目完整（每个动作有请求、响应、帧哈希三件套）。
-
-留痕：边跑边落盘（`arc-recon/cascade/runs/&lt;UTC&gt;-p20/`，每个 API 响应即刻写入）；上下文即将蒸发是默认。
-收工：RUN_STATE + MANIFEST(prompt_id: P-20) + PARTNER_SYNC + push 分支。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-21-figures.md</span>P-21 · 论文图表流水线：数据在树上，图还不存在<button class="copy" onclick="copyTicket(event,'tk_P21figuresmd')">复制</button></summary><textarea id="tk_P21figuresmd" readonly rows="14" spellcheck="false"># P-21 · 论文图表流水线：数据在树上，图还不存在
-
-基准 `Theoria.md`（3.2 的图清单：图2 账单形状、图3 能力谱、图4 迁移、图6 概念诞生时间线）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 尾十段、`battery/REPORT_V0.md`、各 THEORIZE_LOG（只读），绿了开工。规划先行：`figures/PLAN.md` 先列每张图的数据源路径与形态。
-分支制：`agent/p21-figures` + 独立 worktree；push 分支不碰 master。领地：新建顶层 `figures/`。
-
-目标：每张图一个**确定性生成脚本**（数据→CSV 中间层→图，同输入两跑逐字节同图）：
-
-1. 图6 概念诞生时间线——cold-start-a0 THEORIZE_LOG 的修订史 + 触发事件，带时间轴；
-2. A0 vs A0′ 覆盖-准确率对照（论文最强受控实验的主图）；
-3. 图2 账单形状（初版）——baseline 试点/包络账本的逐回合成本曲线，theoria-arm 一有账本即可加列（接口留好）；
-4. 图3 能力谱（初版）——battery REPORT 的族×臂矩阵；
-5. A2 修复回路六拍账目流。
-
-样式统一：无障碍色板、双主题、SVG+PNG 双出。**Stop-hook 收工**：`figures/verify.sh` = 全部图重生成两遍 diff 为空 + 每张图的数据源哈希记录在旁。子代理按图并行；发现可复用的画图流程沉淀 `.claude/skills/`。
-留痕：边跑边落盘 `figures/runs/&lt;UTC&gt;-p21/`。收工：RUN_STATE + MANIFEST(prompt_id: P-21) + PARTNER_SYNC + push。全程自主。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-22-freeze-kit.md</span>P-22 · 冻结包起草：Phase 4 开跑前必须提交哈希的一切<button class="copy" onclick="copyTicket(event,'tk_P22freezekitmd')">复制</button></summary><textarea id="tk_P22freezekitmd" readonly rows="14" spellcheck="false"># P-22 · 冻结包起草：Phase 4 开跑前必须提交哈希的一切
-
-基准 `Theoria.md`（Phase 4 冻结清单 13 项 + 统计裁决规则 + 冻结前待定五项——原文逐字是你的需求书）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 尾十段、`baseline-arms/BUDGET_REPORT.md`（n 由包络方差定的原料）、`battery/PREDICTIONS.md`，绿了开工。
-分支制：`agent/p22-freeze-kit` + 独立 worktree；push 分支不碰 master。领地：新建顶层 `freeze/`。
-
-目标：把封存战役的预注册材料从条款变成可哈希提交的文件包（起草，不冻结——冻结动作留给人）：
-
-1. `freeze/MANIFEST_DRAFT.md`：13 项逐条→树上对应物路径 + 版本；缺的标缺并指向在飞工单；
-2. `freeze/STATS_RULES.md`：统计裁决规则逐字草案——三主终点（U3 达成率/判决题准确率含特异度/前载指数配对差）、Wilcoxon 配对、n 的定法（引包络实测方差，含 ar25 degraded 的敏感性处理）、其余指标一律标探索性；
-3. `freeze/CLAIMS_TEXT.md`：C1–C5 逐字文本 + **双结局**（成立怎么写/不成立怎么写，两版都先写死）；
-4. `freeze/PENDING_FIVE.md`：待定五项现状表——已可定的给出建议值与依据（模型版本串可实测；预算可从包络外推），真需要用户拍板的明确标 needs_human。
-
-最难的裁决（n 的取值、主终点措辞）用最深思考（ultrathink 级），并派对抗性子代理攻击草案（「这条规则事后能被钻空子吗」——抗游戏审计的精神）。**Stop-hook 收工**：`freeze/verify.sh` = 13 项清单逐条有落点或有标注，无一遗漏。
-留痕：`freeze/runs/&lt;UTC&gt;-p22/` 边跑边写。收工：RUN_STATE + MANIFEST(prompt_id: P-22) + PARTNER_SYNC + push。全程自主。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-23-related-work.md</span>P-23 · 相关工作与引文库：§7 的弹药<button class="copy" onclick="copyTicket(event,'tk_P23relatedworkmd')">复制</button></summary><textarea id="tk_P23relatedworkmd" readonly rows="14" spellcheck="false"># P-23 · 相关工作与引文库：§7 的弹药
-
-基准 `Theoria.md`（3.1 三波谱系 + 3.2 第 7 节的六条线：世界模型三波、规划的证书与启发、CEGIS/ILP、Petri 不变量与 IC3、证明携带代码、LLM+定理证明）。开工仪式：读 `CLAUDE.md`、`papers/phase1-workshop/`（P-16 的初稿，你的下游），绿了开工。
-分支制：`agent/p23-related-work` + 独立 worktree；push 分支不碰 master。领地：`papers/related-work/`（papers 下新增子目录，不动 P-16 的文件——它的分支可能未合并）。
-
-目标：六条线各一节 + BibTeX 库：
-
-1. 每条线：3–8 篇真实文献（可用 WebSearch/WebFetch 核实题录——**只查学术文献，不碰任何 ARC 游戏攻略/机制页面**，封存红线在检索场景同样生效，前车之鉴 INC-BA-001）；每篇一句「它做了什么」+ 一句「我们的 delta」；
-2. `references.bib`：逐条经两个来源交叉核实（标题/年份/venue 对得上才收；核不实的挂 unverified 段落，不混入正库）；
-3. `RELATED.md`：可直接并入论文的行文草稿，贯穿 Theoria.md 的主轴句（每波升级的是检验制度）；
-4. 特别核实一条：Schema 的规范署名（baseline-arms 已发现应为 Zeng et al. 非 Feng et al.）与正确引用格式。
-
-证据纪律最高优先：**查不到的文献宁可不引**，杜撰题录是这个仓库最不可原谅的漂移（A-1 会抽查）。子代理按六条线并行，各自附检索留痕；对抗性子代理抽查 20% 题录复核。
-留痕：`papers/related-work/runs/&lt;UTC&gt;-p23/`（每次检索的 query 与结果落盘）。收工：RUN_STATE + MANIFEST(prompt_id: P-23) + PARTNER_SYNC + push。全程自主。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-24-fleet-skills.md</span>P-24 · 舰队技能库：把重复流程沉淀成 skill，加速之后的每一个会话<button class="copy" onclick="copyTicket(event,'tk_P24fleetskillsmd')">复制</button></summary><textarea id="tk_P24fleetskillsmd" readonly rows="14" spellcheck="false"># P-24 · 舰队技能库：把重复流程沉淀成 skill，加速之后的每一个会话
-
-背景：这个仓库由多个并行 Claude Code 会话开发（读 `monitor/METHOD.md` 与 `monitor/prompts/README.md` 了解体制）。每份工单都在重复同样的仪式：建 worktree 分支、建 runs/ 档案写 MANIFEST、写 verify.sh、收工 PARTNER_SYNC + push。这些应当各成一个项目 skill，让以后每个会话开箱即用——**对舰队的每小时产出是乘法**。
-分支制：`agent/p24-fleet-skills` + 独立 worktree；push 分支不碰 master。领地：`.claude/skills/`（共享地面，**只新增目录，不改任何已有 skill**）。
-
-目标：四个 skill，各含 SKILL.md（触发条件写清楚）+ 辅助脚本：
-
-1. `fleet-branch-ritual`：开工仪式一键化——从最新 master 建 agent 分支 + worktree、读 SYNC 尾部、跑本领地测试的标准流程；
-2. `runs-archive`：留痕一键化——建 `runs/&lt;UTC&gt;-&lt;slug&gt;/`、增量写入辅助、MANIFEST 生成器（prompt_id/branch/base_commit/seed/逐文件 sha256）；
-3. `verify-gate`：Stop-hook 式收工——按领地惯例生成并执行 verify.sh，不绿报清单；
-4. `handoff-close`：收工仪式一键化——RUN_STATE 模板、PARTNER_SYNC 段落格式化（追加式校验：只许在文件尾加自己的段落）、push 分支。
-
-每个 skill 在一个临时 worktree 里**真实演练一遍**（演练产物入 runs/ 作为 skill 的验收证据）；描述字段要让触发精准（照 skill-creator 的最佳实践）。写完派一个新子代理只按 SKILL.md 使用四个技能走完整流程——它卡住的地方就是文档缺陷，修文档不修使用者。
-留痕：`.claude/skills/runs-p24/`（演练档案）。收工：PARTNER_SYNC + push 分支。全程自主。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-8-theoria-arm.md</span>P-8 · Theoria 臂在线化：三臂中最后一条，当前关键路径<button class="copy" onclick="copyTicket(event,'tk_P8theoriaarmmd')">复制</button></summary><textarea id="tk_P8theoriaarmmd" readonly rows="14" spellcheck="false"># P-8 · Theoria 臂在线化：三臂中最后一条，当前关键路径
-
-基准文件是 `Theoria.md`（内环五拍 1.10d、十条约束、分工三律）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 最后十段、`proxy/README.md` 与 `LEDGER_FORMAT.md`、`cold-start-a0/` 与 `cold-start-a2/` 的 THEORIZE_LOG（你的全部前例），然后跑一遍 proxy 与 engine-rig 的测试，绿了才开工。
-分支制：从最新 master 建 `agent/p8-theoria-arm` + 独立 git worktree；完成后 push 分支，**不碰 master**（M-0 合并）。
-领地：新建顶层 `theoria-arm/`。其余只读；PARTNER_SYNC 只追加。
-
-目标：把离线已四度证活的内环（A0/A0′/A1/A2）接到真 API 上——**Theoria 臂的第一次在线对局**，对象是开发堆 `g50t-5849a774`（预检已 PASS 的局）。经 proxy 双代理走 observe→theorize→certify→probe→plan→commit；引擎全部用 engine-rig 现成件，编译用 theory-compiler；theorize 的 LLM 调用过模型代理入账（约束 8 从此有实测账单）。不追求赢——追求**回路在线转起来且账全**：哪怕只推进两三个关卡，七种意外的计数、theorize 轮数、逐回合成本曲线都要真实落账。
-
-红线：动作预算 ≤120（含戳探），先算后花；密钥零接触（proxy 注入）；封存堆零接触；生成物不手改（约束 4）。
-
-技巧：内环各拍可派 subagent（theorize 掌台一个、certify 独立一个、互不污染上下文）；对局主循环用循环自动推进，意外触发才回 theorize；每次 theorize 前后快照两本书（概念诞生时间线的原料）。
-
-收工仪式：`theoria-arm/runs/&lt;UTC&gt;-g50t-first-contact/` 归档全部中间件 + `MANIFEST.json`（含 prompt_id: P-8, branch, base_commit, seed）；RUN_STATE.md + STATUS.md；PARTNER_SYNC 追加一段；push 分支。验收标准是合同，做不到的部分如实报 gap，不许降线。全程自主，不停下来问。
-</textarea></details><details class="ticket"><summary><span class="tfile">P-9-shell-harden.md</span>P-9 · 外壳收口：冻结打分器 + 密封红队 + 账本正典守卫<button class="copy" onclick="copyTicket(event,'tk_P9shellhardenmd')">复制</button></summary><textarea id="tk_P9shellhardenmd" readonly rows="14" spellcheck="false"># P-9 · 外壳收口：冻结打分器 + 密封红队 + 账本正典守卫
-
-基准文件是 `Theoria.md`（Phase 1 五层 (5)、验收单、总纪律）。开工仪式：读 `CLAUDE.md`、PARTNER_SYNC 最后十段、`proxy/STATUS.md` 与 `DECISIONS.md`，跑 proxy 测试套件，绿了才开工。
-分支制：`agent/p9-shell-harden` + 独立 worktree；push 分支不碰 master。
-领地：`proxy/`。其余只读；PARTNER_SYNC 只追加。
-
-四件收口：
-
-1. **冻结打分器**：接入并冻结（版本 + 哈希入 run.json）；逐局跑完即打分入库，与 scorecard 对账，不等 = incident 自动落账。吸收 baseline 的实测口径：失败 400 不计费、`total_actions` = 成功动作数。
-2. **密封红队复测**：派独立红队 subagent 写攻击集——绕代理出网、臂进程摸密钥、短 ID/大小写/变体后缀混护栏、伪造 scorecard——密封测试全挡住才算绿；攻击集本身入 tests 常驻。
-3. **账本正典守卫**（F-16 裁决执行）：proxy 拒收非正典字段；给 baseline-arms 提供正典迁移器接口文档（迁移本体归 P-12）。
-4. **复放抽检**：包络首局（ar25×haiku）的账本迁入正典后做逐比特复放抽检——Phase 1 验收单那行的第一个真实数据点。
-
-技巧：建造与攻击分离（红队独立上下文）；fuzz 循环跑护栏；对账器边界用 battery 作者视角的 subagent 审一遍字段。
-
-收工仪式：runs/ 归档（MANIFEST 含 prompt_id: P-9）；STATUS 更新；PARTNER_SYNC 追加；push 分支。验收是合同不许降线。全程自主，不停下来问。
-</textarea></details><script>
-function copyTicket(ev, id){
-  ev.preventDefault(); ev.stopPropagation();
-  var ta = document.getElementById(id), btn = ev.target;
-  ta.focus(); ta.select();
-  var ok=false; try { ok=document.execCommand('copy'); } catch(e){}
-  if(!ok && navigator.clipboard){ navigator.clipboard.writeText(ta.value); }
-  var t=btn.textContent; btn.textContent='已复制 ✓';
-  setTimeout(function(){ btn.textContent=t; }, 1500);
-}
-</script></details>
 </section>
 <footer><p>由 <code>monitor/scan.py</code> 生成；判断依据与出处在 <code>monitor/spec.py</code>。人话层只是翻译，数据与审计口径不变。重跑即刷新；<code>--watch 120</code> 自动刷新。</p></footer>
 </main>

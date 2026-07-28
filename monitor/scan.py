@@ -800,14 +800,52 @@ def render(state, refresh=None):
             delta = '<span class="delta %s">%s%.1f%%</span>' % (
                 "up" if d > 0 else "down", "+" if d > 0 else "", d)
 
-    fleet = []
     ls = read_json("monitor/loop_state.json", {}) or {}
     remote = set(git("branch", "-r", "--format=%(refname:short)").splitlines())
+    registry = read_json("monitor/dispatch-logs/registry.json", {}) or {}
+    cell_of = {}
+    for cid, cd in spec.GRID.items():
+        for a in cd.get("active", []):
+            cell_of[a] = cid
+    OPS = {"R-1": "运维", "B-1": "运维", "A-1": "运维", "M-0": "运维",
+           "P-24": "运维"}
+
+    def pid_alive_win(pidnum):
+        out = subprocess.run(["tasklist", "/FI", "PID eq %d" % pidnum,
+                              "/FO", "CSV"], capture_output=True,
+                             text=True).stdout
+        return str(pidnum) in out
+
+    fleet = []
     for pid in ls.get("in_flight", []):
-        slug = "agent/" + pid.lower().replace("-", "")
-        done = any(slug in b for b in remote)
-        fleet.append((pid, PLAIN_TASK.get(pid, pid), done))
-    n_running = sum(1 for f in fleet if not f[2])
+        slug = "agent/" + (pid.lower().replace("-", "")
+                           if re.match(r"^[PRMBA]-\d+$", pid) else pid.lower())
+        delivered = any(slug in b for b in remote)
+        entry = registry.get(pid)
+        runtime = ""
+        alive = None
+        if entry:
+            alive = pid_alive_win(entry["pid"])
+            try:
+                import calendar
+                t0 = calendar.timegm(time.strptime(entry["started"],
+                                                   "%Y%m%dT%H%M%SZ"))
+                runtime = "%d 分钟" % max(1, int((time.time() - t0) / 60))
+            except Exception:
+                runtime = ""
+        if delivered:
+            status, scls = "已交付 · 待合并", "done"
+        elif entry and alive is False:
+            status, scls = "失联（进程死亡且无产出）", "lost"
+        else:
+            status, scls = "进行中", "run"
+        fleet.append({"id": pid, "task": PLAIN_TASK.get(pid, pid),
+                      "cell": OPS.get(pid) or cell_of.get(pid, "—"),
+                      "status": status, "scls": scls, "runtime": runtime})
+    order = {"lost": 0, "run": 1, "done": 2}
+    fleet.sort(key=lambda f: (order[f["scls"]], f["cell"]))
+    n_running = sum(1 for f in fleet if f["scls"] == "run")
+    n_lost = sum(1 for f in fleet if f["scls"] == "lost")
 
     needs = [f for f in state["findings"]
              if f["severity"] == "blocking" and "已裁决" not in f["title"]
@@ -869,19 +907,26 @@ def render(state, refresh=None):
                  pct, dots))
         A('</tr>')
     A('</tbody></table></div>')
-    ops = [(pid, task) for pid, task, done in fleet
-           if not done and pid in ("R-1", "B-1", "A-1", "M-0", "P-24")]
+    ops = [f2 for f2 in fleet if f2["cell"] == "运维" and f2["scls"] == "run"]
     if ops:
         A('<p class="note">地图外的运维会话：%s</p>'
-          % "；".join("%s（%s）" % (esc(t), esc(p)) for p, t in ops))
+          % "；".join("%s（%s）" % (esc(f2["task"]), esc(f2["id"]))
+                      for f2 in ops))
     A('</section>')
 
     # ---------- fleet ----------
-    A('<section><h2>正在进行</h2><div class="fleet">')
-    for pid, task, done in fleet:
-        A('<div class="crew %s"><i class="dot"></i><b>%s</b><span>%s</span></div>'
-          % ("done" if done else "run", esc(task),
-             "已交付" if done else "进行中"))
+    A('<section><h2>正在进行 <span class="note">— %d 在跑%s，'
+      '徽章 = 它点亮地图上的哪一格</span></h2><div class="fleet">'
+      % (n_running,
+         ("，<b style=\"color:var(--st-risk)\">%d 失联</b>" % n_lost)
+         if n_lost else ""))
+    for f2 in fleet:
+        meta = " · ".join(x for x in (f2["id"], f2["runtime"]) if x)
+        A('<div class="crew %s"><span class="cellbadge %s">%s</span>'
+          '<div class="crewbody"><b>%s</b><em>%s</em></div>'
+          '<span class="crewst"><i class="dot"></i>%s</span></div>'
+          % (f2["scls"], "ops" if f2["cell"] == "运维" else "", esc(f2["cell"]),
+             esc(f2["task"]), esc(meta), esc(f2["status"])))
     if not fleet:
         A('<p class="note">当前没有在飞会话。</p>')
     A('</div></section>')
@@ -989,26 +1034,6 @@ def render(state, refresh=None):
              % (ib["status"], md_bold(esc(ib["detail"]))))
     fold("冲突 / 留痕 / 提案箱（每轮实测）", "".join(b))
 
-    b = []; B = b.append
-    for t in state["tickets"]:
-        tid = "tk_%s" % re.sub(r"\W", "", t["file"])
-        B('<details class="ticket"><summary><span class="tfile">%s</span>%s'
-          '<button class="copy" onclick="copyTicket(event,\'%s\')">复制</button>'
-          '</summary><textarea id="%s" readonly rows="14" spellcheck="false">%s'
-          '</textarea></details>'
-          % (esc(t["file"]), esc(t["title"]), tid, tid, html.escape(t["text"])))
-    B("""<script>
-function copyTicket(ev, id){
-  ev.preventDefault(); ev.stopPropagation();
-  var ta = document.getElementById(id), btn = ev.target;
-  ta.focus(); ta.select();
-  var ok=false; try { ok=document.execCommand('copy'); } catch(e){}
-  if(!ok && navigator.clipboard){ navigator.clipboard.writeText(ta.value); }
-  var t=btn.textContent; btn.textContent='已复制 ✓';
-  setTimeout(function(){ btn.textContent=t; }, 1500);
-}
-</script>""")
-    fold("工单原文（%d 份）" % len(state["tickets"]), "".join(b))
 
     A('</section>')
     A('<footer><p>由 <code>monitor/scan.py</code> 生成；判断依据与出处在 '
@@ -1302,14 +1327,24 @@ td.num{width:38px;color:var(--mut);font-family:ui-monospace,monospace}
 .wpnext{margin:0;font-size:12px;color:var(--mut);border-top:1px dashed var(--line);
   padding-top:7px}
 
-.fleet{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:9px}
-.crew{display:flex;align-items:center;gap:10px;background:var(--card);
-  border:1px solid var(--line);border-radius:9px;padding:11px 14px;font-size:13.5px}
-.crew b{font-weight:600;flex:1}
-.crew span{font-size:11.5px;color:var(--mut)}
+.fleet{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:9px}
+.crew{display:flex;align-items:center;gap:11px;background:var(--card);
+  border:1px solid var(--line);border-radius:9px;padding:10px 13px;font-size:13.5px}
+.crew.lost{border-color:var(--st-risk);border-left-width:4px}
+.cellbadge{flex:0 0 auto;min-width:34px;text-align:center;padding:5px 7px;
+  border-radius:7px;font:700 12.5px system-ui,sans-serif;
+  background:var(--greenbg);color:var(--green)}
+.cellbadge.ops{background:var(--blockedbg);color:var(--blocked)}
+.crewbody{flex:1;min-width:0}
+.crewbody b{font-weight:600;display:block;line-height:1.35}
+.crewbody em{font-style:normal;font-size:11px;color:var(--mut);
+  font-family:ui-monospace,Menlo,Consolas,monospace}
+.crewst{flex:0 0 auto;display:inline-flex;align-items:center;gap:6px;
+  font-size:11.5px;color:var(--mut)}
 .dot{width:9px;height:9px;border-radius:99px;flex:0 0 auto}
 .crew.run .dot{background:var(--st-partial);animation:pulse 1.6s infinite}
 .crew.done .dot{background:var(--st-green)}
+.crew.lost .dot{background:var(--st-risk)}
 @keyframes pulse{50%{opacity:.35}}
 
 .needs{background:var(--card);border:1px solid var(--line);

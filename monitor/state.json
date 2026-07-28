@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 10:35:58",
+  "generated_at": "2026-07-28 10:40:29",
   "history": [
     {
       "findings": {
@@ -469,17 +469,15 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/dispatch.py",
-      "monitor/index.html",
+      "onitor/index.html",
       "monitor/scan.py",
-      "monitor/spec.py",
       "monitor/state.json",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "a0a83d2 monitor: aggressive dispatch round -- 11 sessions aloft, breakaway fix, paper 30.8%",
+    "git_head": "038816d monitor: the project becomes a 2D map -- subsystems x stages, progress painted on the grid",
     "incidents": 8,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
