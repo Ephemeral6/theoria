@@ -1,7 +1,7 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T11:05:00Z",
- "cycle": 1,
+ "utc": "2026-07-28T13:30:00Z",
+ "cycle": 2,
  "state": "working",
- "note": "V4-exam-selftest: audit done -- 2/3 asks already shipped by P-15/V2; building marker mutation self-test + fault-injection matrix + sens/spec matrix"
+ "note": "V4-exam-selftest DELIVERED (branch agent/v4-exam-selftest, board done). A4a-ablation-build IN PROGRESS -- claimed, build plan + step 1 (both worlds) pushed on agent/a4a-ablation-build. Out of context; needs a session restart to continue at step 2 (theory/). Do NOT claim a new item on restart -- resume A4a."
 }

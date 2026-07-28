@@ -180,8 +180,10 @@ def main():
                 state["death_counts"] = deaths
                 save_loop(state)
 
-        # 4. ci merge (its own lock + M-0 standdown check inside)
-        if not hold:
+        # 4. ci merge — runs even under quota hold: it spends zero tokens
+        # (git + pytest only), and a worker's proposal caught it being
+        # stopped by a budget it cannot possibly consume.
+        if True:
             r = run([sys.executable, os.path.join(HERE, "ci_merge.py")],
                     timeout=3600)
             merged = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]

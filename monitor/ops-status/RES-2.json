@@ -1,1 +1,1 @@
-{"id": "RES-2", "utc": "2026-07-28T11:16Z", "cycle": 1, "state": "working", "note": "P8 built and 8/8 gates green; discovery rules + coverage probe + E2/E3/E4 on the plate; adversarial reviewer running before delivery"}
+{"id": "RES-2", "utc": "2026-07-28T11:58Z", "cycle": 2, "state": "blocked", "note": "P8 delivered (pushed, board done). P9 claimed + recon pushed, but papers/ territory is also held by claimed/P7-paper-section7.APP-P7 -- monitor ruling requested. Context near exhausted; state fully on disk."}
