@@ -162,6 +162,14 @@ def _run_game(game_id: str, *,
                                 "undetermined_checks":
                                     score_report["undetermined_checks"]}
 
+    # Fields this run wrote that LEDGER_FORMAT.md §3/§4 does not list. Empty is
+    # the normal state. Non-empty is either a typo that is now a typo on disk,
+    # or a field the format should be listing -- and without this the only
+    # durable trace of either is a stderr warning nobody kept, since Python
+    # dedups a repeated warning to one line. `Ledger.unknown_fields` was
+    # offered as the backstop; a backstop nothing reads is a comment.
+    record["unknown_ledger_fields"] = dict(run.unknown_fields)
+
     os.makedirs(runs_dir, exist_ok=True)
     with open(os.path.join(runs_dir, run_id + ".json"), "w",
               encoding="utf-8", newline="") as fh:

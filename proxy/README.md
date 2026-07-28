@@ -35,8 +35,12 @@ all, because a reconciliation nobody could perform is not a reconciliation that
 passed.
 
 And the canon: `LEDGER_FORMAT.md` is not a description of what these proxies
-happen to write. `canon.py` refuses a non-canonical field before it reaches
-disk, and `tools/validate_ledger.py` refuses one on read (F-16).
+happen to write. `canon.py` refuses a forbidden spelling before it reaches disk,
+and `tools/validate_ledger.py` refuses one on read (F-16). A field the format
+merely does not *mention* is kept, with a warning: the writer runs after the
+request has been sent, so refusing a record cannot un-send it — the one time
+this refused one, it discarded a reply that had already cost $2.695
+(`CONTRACT_CHANGES.md`, D-029).
 
 ## Run it
 
@@ -88,10 +92,11 @@ ARC_BASE_URL=http://127.0.0.1:8711 MODEL_BASE_URL=http://127.0.0.1:8712 <arm>
 | `model_proxy.py` | the arm's only route to a provider; records the usage block verbatim |
 | `variants.py`, `variants/` | the wrapper-legal operator set, and four specs each carrying a constructive justification |
 | `replay.py` | replays a run from the ledger; a **probe scorecard** keeps the original game's counts clean |
-| `canon.py` | the field registry both directions consult. `env_step` and `model_call` are closed shapes; auxiliary payloads are open; every v0 spelling is refused **by name, with its replacement**. |
+| `canon.py` | the field registry both directions consult. Additive-safe: an unlisted field on `env_step`/`model_call` is warned about and kept; auxiliary payloads are open; every v0 spelling is refused **by name, with its replacement**, and so is every dollar-shaped one. |
+| `CONTRACT_CHANGES.md`, `canon_contract.json`, `tools/contract.py` | widening the shared contract is free, narrowing it is a breaking change that must be announced. The pin and its direction classifier are what make that checkable rather than hoped for. |
 | `scoring/`, `SCORING.md` | the frozen scorer. `frozen.json` holds its source hash; a drifted scorer refuses to score rather than scoring under a changed rule. |
 | `reconcile.py` | the score obligation, plus a recompute of the derived `level` fields. Runs the frozen scorer's battery rather than a second copy of it. |
-| `tools/` | `validate_ledger.py` (§18), `upgrade_ledger.py` (§7, interface in `CANON_MIGRATION.md`), `replay_spotcheck.py` |
+| `tools/` | `validate_ledger.py` (§18), `upgrade_ledger.py` (§7, interface in `CANON_MIGRATION.md`), `replay_spotcheck.py`, `contract.py` (§8) |
 | `tests/fixtures/scorecard_corpus.json` | 32 real closed scorecards from `baseline-arms`'s campaign. The evidence behind the scorer's calibration and behind the mock's shape. |
 | `cost.py`, `pricing/` | cost as a conversion over a versioned price table. No dollar figure is ever written to the ledger. |
 | `runner.py` | orchestrates one game: one run, one scorecard, one shared step counter |

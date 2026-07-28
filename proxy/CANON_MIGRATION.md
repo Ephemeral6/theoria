@@ -88,7 +88,12 @@ the scorer has three verdicts.
 `"lifted_from": "baseline-arms/v0"`. That was written before the two shapes'
 field sets were closed, and a closed shape cannot carry an extra marker. So
 provenance moved to the synthesised `run_start`, where the payload is open (§6)
-— and it says strictly more there:
+— and it says strictly more there.
+
+(That premise expired: since S9 the two shapes are additive-safe and *could*
+carry a per-record marker. The decision stands on the reason that outlived it —
+the block below says more than a boolean would, and provenance belongs where it
+can be stated once and completely.)
 
 ```json
 "lifted": {
@@ -135,17 +140,29 @@ time. If you write into a canonical ledger yourself, expect these:
 
 * every v0 spelling in the table above, by name, with its replacement quoted in
   the error message;
-* any field at all on `env_step` or `model_call` outside §3/§4 — those two
-  shapes are closed, because the Phase 2 battery reads them without branching
-  and an extra field is a branch;
 * `cost`, `cost_usd`, `total_cost_usd`, `price_usd` anywhere;
+* an envelope field (`v`, `seq`, `ts`, `event`, `run_id`, `arm`) set by a
+  caller — those are the writer's;
+* a **missing required** field on `env_step` or `model_call`;
 * `frames` that is not a list; `score`/`levels_completed`/`step_idx`/`level`
   that is a bool; an `action` that is not exactly `{name, id, data}`; a `guard`
   without a decision; a `usage` that is not an object.
 
+**What it will no longer refuse, since S9:** a field on `env_step`/`model_call`
+that §3/§4 simply does not list. Those two shapes used to be closed; the closure
+refused a live `model_call` after the provider had been paid $2.695 and the
+reply was discarded (INC-TA-006), and a writer that runs after the money is
+spent may not refuse — refusing cannot un-spend it, only destroy the evidence.
+Such a field is now warned about (`canon.UnknownField`, counted in
+`Ledger.unknown_fields`) and written, and `validate_ledger.py` reports it as a
+**notice** that leaves the verdict alone. The reasoning is `proxy/DECISIONS.md`
+D-029; the rule for changing this contract again is `proxy/CONTRACT_CHANGES.md`.
+
+For this migrator that is a widening and nothing you do changes: a lifted stream
+that was canonical before is canonical now.
+
 Auxiliary records (`run_start`, `run_end`, `env_meta`, `guard_block`,
 `incident`) keep an **open** payload — only their required keys are enforced.
-That is deliberate: §6 exists so the two shapes can stay closed.
 
 ## 7. What we would like back, and what we are not asking for
 

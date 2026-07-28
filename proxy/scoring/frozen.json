@@ -2,6 +2,11 @@
   "_readme": "The freeze record. Editing a scorer's source without changing its scorer_id is what this file exists to make impossible: proxy.scoring.verify_frozen() recomputes the hash and refuses to score on disagreement. A new scoring rule gets a new scorer_id and a new entry; entries are never rewritten, because runs already scored carry the old id and must stay reproducible.",
   "scorers": {
     "arc_v1": {
+      "depends_on": {
+        "canon.py": "sha256:0b6f2dbd5064d40f8f119f6ae88d318e4abb2d329eaddcf46e79e9236b886fba",
+        "tools/validate_ledger.py": "sha256:1114d35d8acbf9c5d069b82fbdb832b5ff8ef5cb90a190240c031c5430f597de"
+      },
+      "depends_on_note": "S-12 delegates to tools/validate_ledger.py, which consults canon.py, so the scorer's answers live partly in these two files. Added 2026-07-28 by S9 after additive-safety changed S-12's verdict on an unlisted field while arc_v1.py hashed exactly as before. The entry's own `sha256` and `version` are untouched: no run in the corpus changes its number, because no writer could produce such a stream until now. Re-freezing these hashes is a deliberate act -- see proxy/CONTRACT_CHANGES.md.",
       "frozen_at": "2026-07-28",
       "frozen_by": "P-9 (agent/p9-shell-harden)",
       "hash_note": "sha256 over the source with newlines normalised to LF",

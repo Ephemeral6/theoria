@@ -45,6 +45,16 @@ def test_the_arm_finishes_the_game(played):
     assert record["summary"]["levels_completed"] == 3
 
 
+def test_the_run_report_says_whether_anything_unlisted_was_written(played):
+    """`Ledger.unknown_fields` is the durable half of the additive-safe warning
+    -- Python dedups a repeated warning to one stderr line, so on a long run the
+    tally is the only complete trace. A tally nothing reads is a comment, so the
+    runner puts it in `run.json`. Empty here, and empty is the assertion: a
+    clean run must be able to say so, or the field is noise."""
+    record, _ = played
+    assert record["unknown_ledger_fields"] == {}
+
+
 def test_the_arm_never_saw_a_key(played):
     record, ledger_path = played
     assert record["env_proxy"]["key_injected"] is True
