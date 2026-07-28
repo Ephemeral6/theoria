@@ -183,35 +183,44 @@ def test_a_stray_byte_outside_the_arm_turns_this_check_red():
     control that is also red against the old code is not a control for this
     change.
 
-    The victim path is chosen to look maximally like innocent noise: it is under
-    `proxy/var/` and ends in `.jsonl`, so it trips two of the old exclusion
-    tokens at once.  It is deliberately *not* `spend_gate.jsonl` -- corrupting a
-    real ledger to test the alarm is committing the offence to prove it is
-    detectable -- and deliberately *not* on the hard list either, so what is
-    being demonstrated is the empty-run control firing on its own merits.
+    The victim path is chosen to look maximally like innocent noise: it ends in
+    `.jsonl` and sits at the repo root, so it trips one of the old exclusion
+    tokens.  It is deliberately *not* on the hard list, so what is being
+    demonstrated is the empty-run control firing on its own merits.
+
+    It is also deliberately **outside `pin.UPSTREAM_TREES`**, and that is the
+    part the adversarial review forced.  The first version of this control wrote
+    under `proxy/var/`, and `proxy` is an upstream tree that
+    `test_a_full_run_leaves_every_upstream_tree_byte_identical` already hashes
+    unconditionally -- so the byte was caught by a pre-A9 test that was never
+    broken, and this one proved nothing about the change.  A top-level file is
+    watched only by `outside.watched()`, which is the code under test; the
+    assertion below that `pin` cannot see it is what makes the discrimination
+    explicit rather than assumed.
     """
-    victim_rel = "proxy/var/a9-negative-control-%d.jsonl" % os.getpid()
-    victim = os.path.join(REPO, victim_rel.replace("/", os.sep))
-    var_dir = os.path.dirname(victim)
-    made_dir = not os.path.isdir(var_dir)
+    victim_rel = "a9-negative-control-%d.jsonl" % os.getpid()
+    victim = os.path.join(REPO, victim_rel)
 
     assert not outside.is_hard(victim_rel), (
         "the victim is on the hard list, so this would prove the hard list "
         "fires and say nothing about the empty-run control")
+    assert victim_rel not in pin.hash_tree(), (
+        "the victim is inside an upstream tree, so the pre-A9 pin test would "
+        "catch it too and this control would not discriminate")
 
     def run_then_trespass():
         _run_a0_base()
-        os.makedirs(var_dir, exist_ok=True)
         with open(victim, "wb") as handle:
             handle.write(b"x")
 
     try:
         obs = outside.observe(run_then_trespass)
+        assert victim_rel not in pin.hash_tree(), (
+            "the pin hashed the victim after all; this control is not "
+            "discriminating between A9 and the code that predates it")
     finally:
         if os.path.exists(victim):
             os.remove(victim)
-        if made_dir and os.path.isdir(var_dir) and not os.listdir(var_dir):
-            os.rmdir(var_dir)
     assert not os.path.exists(victim), "the negative control left its own litter"
 
     assert victim_rel in obs.reported, (
@@ -241,15 +250,15 @@ def test_a_mutated_existing_file_outside_the_arm_turns_this_check_red():
     arm's own litter -- no file belonging to another territory is touched to
     test the alarm.
     """
-    victim_rel = "proxy/var/a9-mutation-control-%d.jsonl" % os.getpid()
-    victim = os.path.join(REPO, victim_rel.replace("/", os.sep))
-    var_dir = os.path.dirname(victim)
-    made_dir = not os.path.isdir(var_dir)
+    victim_rel = "a9-mutation-control-%d.jsonl" % os.getpid()
+    victim = os.path.join(REPO, victim_rel)
 
     try:
-        os.makedirs(var_dir, exist_ok=True)
         with open(victim, "wb") as handle:
             handle.write(b"seed\n")
+        assert victim_rel not in pin.hash_tree(), (
+            "the victim is inside an upstream tree, so the pre-A9 pin test "
+            "would catch it too")
 
         def run_then_append():
             _run_a0_base()
@@ -260,8 +269,6 @@ def test_a_mutated_existing_file_outside_the_arm_turns_this_check_red():
     finally:
         if os.path.exists(victim):
             os.remove(victim)
-        if made_dir and os.path.isdir(var_dir) and not os.listdir(var_dir):
-            os.rmdir(var_dir)
     assert not os.path.exists(victim), "the mutation control left its own litter"
 
     assert victim_rel not in obs.background, (
@@ -274,6 +281,97 @@ def test_a_mutated_existing_file_outside_the_arm_turns_this_check_red():
     assert victim_rel not in outside.superseded_criterion(obs.observed), (
         "the superseded criterion also reports this, so it is not a control "
         "for the A9 change")
+
+
+@pytest.mark.slow
+def test_the_subtraction_and_the_hard_list_against_a_real_concurrent_writer():
+    """The control that was missing, and the only one that runs the subtraction.
+
+    Everything else in this file leaves `background` empty, because a worktree
+    has no concurrent fleet in it: the adversarial review measured 0 background
+    paths in 75/75 idle windows here and concluded, correctly, that
+    `Observation.subtracted` and `Observation.reported_by_hard_list` had never
+    had a non-empty input outside a hand-built object.  A branch reached only by
+    a hand-built object is a branch nobody has watched fire.
+
+    So this test *is* the concurrent session.  A thread appends to two files for
+    the whole observation -- through the idle leg and the run leg both, which is
+    exactly the shape of fleet noise -- and the two files differ in one respect
+    only:
+
+    * `a9-noise-<pid>.txt` is ordinary, so the control must **subtract** it;
+    * `a9-noise-<pid>/ledger.jsonl` matches the mandated `**/ledger.jsonl` rule,
+      so it must be **reported anyway**.
+
+    Same writer, same cadence, same wall clock, opposite verdicts. That is the
+    hard list doing work the empty-run control would otherwise undo, executed
+    rather than asserted about a dictionary literal.
+    """
+    import threading
+
+    pid = os.getpid()
+    ordinary_rel = "a9-noise-%d.txt" % pid
+    hard_rel = "a9-noise-%d/ledger.jsonl" % pid
+    ordinary = os.path.join(REPO, ordinary_rel)
+    hard = os.path.join(REPO, hard_rel.replace("/", os.sep))
+    hard_dir = os.path.dirname(hard)
+
+    assert not outside.is_hard(ordinary_rel)
+    assert outside.is_hard(hard_rel), (
+        "%s must match the mandated **/ledger.jsonl rule or this test proves "
+        "nothing about the hard list" % hard_rel)
+
+    stop = threading.Event()
+
+    def churn():
+        n = 0
+        while not stop.is_set():
+            n += 1
+            for path in (ordinary, hard):
+                try:
+                    with open(path, "ab") as handle:
+                        handle.write(b"%d\n" % n)
+                except OSError:
+                    pass
+            stop.wait(0.05)
+
+    writer = threading.Thread(target=churn, daemon=True)
+    try:
+        os.makedirs(hard_dir, exist_ok=True)
+        for path in (ordinary, hard):
+            with open(path, "wb") as handle:
+                handle.write(b"seed\n")
+        writer.start()
+        obs = outside.observe(_run_a0_base)
+    finally:
+        stop.set()
+        writer.join(timeout=10)
+        for path in (ordinary, hard):
+            if os.path.exists(path):
+                os.remove(path)
+        if os.path.isdir(hard_dir) and not os.listdir(hard_dir):
+            os.rmdir(hard_dir)
+    assert not os.path.exists(ordinary) and not os.path.isdir(hard_dir), \
+        "the concurrent-writer control left its own litter"
+
+    # The premise: both files really did move during both legs.
+    assert ordinary_rel in obs.background and hard_rel in obs.background, (
+        "the writer did not reach the idle leg, so nothing below is a test of "
+        "the subtraction. background=%s" % obs.background[:5])
+    assert ordinary_rel in obs.observed and hard_rel in obs.observed
+
+    # The subtraction, executed on real data for the first time.
+    assert ordinary_rel in obs.subtracted, obs.message()
+    assert ordinary_rel not in obs.reported, (
+        "an ordinary path that moved during the empty run was still reported, "
+        "so the control subtracted nothing: %s" % obs.message())
+
+    # The hard list, overriding it on the same data.
+    assert hard_rel in obs.reported, (
+        "a hard-listed path was subtracted as background noise -- this is the "
+        "one thing the hard list exists to prevent: %s" % obs.message())
+    assert hard_rel in obs.reported_by_hard_list
+    assert hard_rel not in obs.subtracted
 
 
 def test_the_hard_list_is_reported_even_when_it_is_background_noise():
@@ -338,6 +436,36 @@ def test_the_hard_list_covers_every_path_the_old_criterion_hid():
         assert hits, "no file on this tree matches hard-list pattern %r" % pattern
 
 
+def test_the_ledger_rules_are_checked_against_the_proxy_s_own_layout():
+    """Not against a literal retyped out of `outside.py` into this file.
+
+    The adversarial review's sharpest point about the hard list: every
+    assertion about `proxy/var/spend_gate.jsonl` compared a string in
+    `outside.py` with the same string retyped here, so an upstream rename would
+    leave all of them green while the rule protected nothing.
+
+    `proxy/paths.py` is the authority -- "One module so no other file guesses at
+    the layout" -- so the rules are checked against it. `spend_gate.jsonl` is
+    not a constant there (the gate takes its ledger path from configuration),
+    so what can be pinned is the directory and the sibling ledger, and that is
+    what is pinned: move `VAR_DIR` and this goes red.
+    """
+    from proxy import paths
+
+    var_rel = os.path.relpath(paths.VAR_DIR, REPO).replace(os.sep, "/")
+    ledger_rel = os.path.relpath(paths.LEDGER_PATH, REPO).replace(os.sep, "/")
+
+    assert outside.is_hard(ledger_rel), (
+        "proxy.paths.LEDGER_PATH (%s) is not covered by the hard list" % ledger_rel)
+    spend_gate = [p for p, _why in outside.ALL_HARD
+                  if p.endswith("spend_gate.jsonl")]
+    assert len(spend_gate) == 1, spend_gate
+    assert spend_gate[0].startswith(var_rel + "/"), (
+        "the hard list pins %r but proxy.paths.VAR_DIR is %r -- the rule is "
+        "aimed at a directory the proxy no longer uses"
+        % (spend_gate[0], var_rel))
+
+
 def test_the_glob_matcher_does_not_leak_across_directories():
     """`*` must not cross `/`, or `arc-recon/data/*.jsonl` silently widens.
 
@@ -371,3 +499,35 @@ def test_the_snapshot_does_not_inherit_the_pin_s_artifacts_blind_spot():
     assert "PARTNER_SYNC.md" in seen, (
         "top-level files are not watched; a run that appended to the shared "
         "status board would pass this suite")
+    assert not any(p.startswith(".pytest-runs/")
+                   or "/.pytest-runs/" in p for p in seen), \
+        "pytest's per-run temp dirs are being hashed as if they were territory"
+
+
+def test_dotfiles_at_the_root_are_watched_because_one_of_them_is_the_key():
+    """`.env` is the highest-consequence file in the repo and was not watched.
+
+    `watched()` used to drop every top-level name beginning with `.`, which
+    silently excluded `.env`, `.env.example`, `.gitignore` and `.gitattributes`
+    -- while nested dot-directories were walked regardless, so the rule was not
+    even consistent with itself. The adversarial review found it.
+
+    Only sha256s are taken, never bytes, so watching `.env` cannot leak the key
+    it holds; `CLAUDE.md`'s sealing discipline is about the value entering the
+    repository, and a hash is what lets this notice a change without reading
+    one.
+    """
+    seen = outside.snapshot()
+    # `.git` is a *file* in a worktree (a gitdir pointer), not a directory, so
+    # skipping by name rather than by type is what keeps it out.
+    root_dotfiles = [n for n in os.listdir(REPO)
+                     if n.startswith(".")
+                     and n not in outside.SKIP_DIRS
+                     and os.path.isfile(os.path.join(REPO, n))]
+    missed = [n for n in root_dotfiles if n not in seen]
+    assert missed == [], "top-level dotfiles not watched: %s" % missed
+    assert ".gitignore" in seen, (
+        "no top-level dotfile is watched at all, so this test is vacuous on "
+        "this checkout")
+    for skipped in (".git", ".worktrees"):
+        assert not any(p.startswith(skipped + "/") for p in seen), skipped

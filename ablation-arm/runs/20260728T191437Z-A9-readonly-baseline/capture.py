@@ -6,19 +6,26 @@ Writes, next to itself:
 
 * `01-empty-run-control.json`  -- the background set, on its own
 * `02-real-run.json`           -- the controlled observation of `run_arm.run_all(["a0-base"])`
-* `03-negative-control.json`   -- one byte written under `proxy/var/`, and the
+* `03-negative-control.json`   -- one byte created at the repo root, and the
                                   same observed set run through the superseded
                                   criterion for contrast
+* `03b-negative-control-mutation.json` -- one byte *appended* to a file that
+                                  already existed, which is the shape a real
+                                  escape would take
+* `03c-concurrent-writer.json` -- a thread writing across both legs: the only
+                                  measurement here in which the empty-run
+                                  subtraction actually runs
 * `04-hard-list-reachability.json` -- which hard-list patterns match a file that
                                   actually exists on this tree
 
 Zero API calls, zero network.  `run_arm` is offline by construction
 (`ablcore/ledger_abl.py`: "Zero API calls, zero network, zero dollars").
 
-The negative control writes exactly one byte to a uniquely named file under
-`proxy/var/` and removes it in a `finally`; `proxy/var/` is gitignored runtime
-output and the file is never `spend_gate.jsonl`.  The script asserts the litter
-is gone before it exits.
+Every victim is a uniquely named file at the repo **root**, removed in a
+`finally` and asserted gone before the script exits.  The root rather than
+`proxy/var/` because the adversarial review showed the latter is already hashed
+unconditionally by `pin` -- see `ADVERSARIAL-RESPONSE.md`.  No file belonging to
+another territory is touched.
 """
 
 from __future__ import annotations
@@ -75,31 +82,34 @@ def main():
     })
 
     # 03 -- the negative control, with the superseded criterion as contrast.
-    victim_rel = "proxy/var/a9-negative-control-%d.jsonl" % os.getpid()
-    victim = os.path.join(REPO, victim_rel.replace("/", os.sep))
-    var_dir = os.path.dirname(victim)
-    made_dir = not os.path.isdir(var_dir)
+    # The victim is at the repo ROOT, not under `proxy/var/`. The adversarial
+    # review showed why: `proxy` is in `pin.UPSTREAM_TREES` and `var` is not in
+    # `pin.SKIP_DIRS`, so a byte written there is caught unconditionally by the
+    # pre-A9 pin test and the control discriminates nothing.
+    victim_rel = "a9-negative-control-%d.jsonl" % os.getpid()
+    victim = os.path.join(REPO, victim_rel)
+    from ablcore import pin
+    assert victim_rel not in pin.hash_tree(), "victim is inside an upstream tree"
 
     def run_then_trespass():
         run_a0()
-        os.makedirs(var_dir, exist_ok=True)
         with open(victim, "wb") as handle:
             handle.write(b"x")
 
     try:
         neg = outside.observe(run_then_trespass)
+        seen_by_pin = victim_rel in pin.hash_tree()
     finally:
         if os.path.exists(victim):
             os.remove(victim)
-        if made_dir and os.path.isdir(var_dir) and not os.listdir(var_dir):
-            os.rmdir(var_dir)
     assert not os.path.exists(victim), "the negative control left its own litter"
 
     let_through = outside.superseded_criterion(neg.observed)
     dump("03-negative-control.json", {
-        "what": "one byte written to proxy/var/ during the run",
+        "what": "one byte written at the repo root during the run",
         "victim": victim_rel,
         "victim_bytes": 1,
+        "victim_visible_to_the_pre_A9_pin_test": seen_by_pin,
         "victim_removed_afterwards": not os.path.exists(victim),
         "victim_is_on_hard_list": outside.is_hard(victim_rel),
         "A9_criterion_reports_it": victim_rel in neg.reported,
@@ -114,12 +124,9 @@ def main():
     # existed before the first snapshot, so the diff is a content change rather
     # than a key addition. An addition is caught by any criterion that diffs key
     # sets at all; an append is the shape a real escape would take.
-    mut_rel = "proxy/var/a9-mutation-control-%d.jsonl" % os.getpid()
-    mut = os.path.join(REPO, mut_rel.replace("/", os.sep))
-    mut_dir = os.path.dirname(mut)
-    mut_made_dir = not os.path.isdir(mut_dir)
+    mut_rel = "a9-mutation-control-%d.jsonl" % os.getpid()
+    mut = os.path.join(REPO, mut_rel)
     try:
-        os.makedirs(mut_dir, exist_ok=True)
         with open(mut, "wb") as handle:
             handle.write(b"seed\n")
 
@@ -132,8 +139,6 @@ def main():
     finally:
         if os.path.exists(mut):
             os.remove(mut)
-        if mut_made_dir and os.path.isdir(mut_dir) and not os.listdir(mut_dir):
-            os.rmdir(mut_dir)
     assert not os.path.exists(mut), "the mutation control left its own litter"
 
     dump("03b-negative-control-mutation.json", {
@@ -148,6 +153,70 @@ def main():
         "superseded_criterion_lets_the_byte_through":
             mut_rel not in outside.superseded_criterion(mutation.observed),
         **mutation.as_dict(),
+    })
+
+    # 03c -- the subtraction itself, which nothing else here reaches. In a
+    # worktree the background set is always empty, so `subtracted` and
+    # `reported_by_hard_list` never receive a non-empty input; the adversarial
+    # review measured 0 background paths in 75/75 idle windows and said so. So
+    # this *is* the concurrent session: a thread appends to two files across
+    # both legs, one ordinary and one matching the mandated `**/ledger.jsonl`
+    # rule. Same writer, same cadence, opposite verdicts.
+    import threading
+
+    pid = os.getpid()
+    ordinary_rel = "a9-noise-%d.txt" % pid
+    hard_rel = "a9-noise-%d/ledger.jsonl" % pid
+    ordinary = os.path.join(REPO, ordinary_rel)
+    hard = os.path.join(REPO, hard_rel.replace("/", os.sep))
+    hard_dir = os.path.dirname(hard)
+    stop = threading.Event()
+
+    def churn():
+        n = 0
+        while not stop.is_set():
+            n += 1
+            for path in (ordinary, hard):
+                try:
+                    with open(path, "ab") as handle:
+                        handle.write(b"%d\n" % n)
+                except OSError:
+                    pass
+            stop.wait(0.05)
+
+    writer = threading.Thread(target=churn, daemon=True)
+    try:
+        os.makedirs(hard_dir, exist_ok=True)
+        for path in (ordinary, hard):
+            with open(path, "wb") as handle:
+                handle.write(b"seed\n")
+        writer.start()
+        noisy = outside.observe(run_a0)
+    finally:
+        stop.set()
+        writer.join(timeout=10)
+        for path in (ordinary, hard):
+            if os.path.exists(path):
+                os.remove(path)
+        if os.path.isdir(hard_dir) and not os.listdir(hard_dir):
+            os.rmdir(hard_dir)
+    assert not os.path.exists(ordinary) and not os.path.isdir(hard_dir), \
+        "the concurrent-writer control left its own litter"
+
+    dump("03c-concurrent-writer.json", {
+        "what": "a real concurrent writer touching two files across both legs: "
+                "the only measurement in this directory where the empty-run "
+                "subtraction actually runs",
+        "ordinary_path": ordinary_rel,
+        "hard_listed_path": hard_rel,
+        "hard_rule_it_matches": outside.hard_reason(hard_rel),
+        "both_moved_during_the_empty_leg":
+            ordinary_rel in noisy.background and hard_rel in noisy.background,
+        "ordinary_was_subtracted": ordinary_rel in noisy.subtracted,
+        "ordinary_was_reported": ordinary_rel in noisy.reported,
+        "hard_listed_was_reported": hard_rel in noisy.reported,
+        "hard_listed_was_subtracted": hard_rel in noisy.subtracted,
+        **noisy.as_dict(),
     })
 
     # 04 -- is any hard-list rule reachable by a file that exists?

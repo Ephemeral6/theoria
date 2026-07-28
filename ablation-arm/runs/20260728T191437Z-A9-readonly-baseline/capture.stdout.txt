@@ -1,11 +1,12 @@
-watched top-level entries (27): CLAUDE.md, CONTRACTS, LICENSE, PARTNER_SYNC.md, README.md, ROBUSTNESS.md, Theoria.md, a0-spike, arc-recon, baseline-arms, battery, browser-ops, cold-start-a0, cold-start-a2, cold-start-a3, engine-rig, exam, figures, fleet-study, fuzzlab, monitor, papers, proxy, release, theoria-arm, theory-compiler, worldgen
+watched top-level entries (30): .env.example, .gitattributes, .gitignore, CLAUDE.md, CONTRACTS, LICENSE, PARTNER_SYNC.md, README.md, ROBUSTNESS.md, Theoria.md, a0-spike, arc-recon, baseline-arms, battery, browser-ops, cold-start-a0, cold-start-a2, cold-start-a3, engine-rig, exam, figures, fleet-study, fuzzlab, monitor, papers, proxy, release, theoria-arm, theory-compiler, worldgen
 wrote 01-empty-run-control.json
 wrote 02-real-run.json
 wrote 03-negative-control.json
 wrote 03b-negative-control-mutation.json
+wrote 03c-concurrent-writer.json
 wrote 04-hard-list-reachability.json
 
-empty-run control : background=0 observed=0 reported=0 (idle 2.52s / run 0.24s)
-real run          : background=0 observed=0 reported=0 (idle 2.58s / run 1.77s / makeup 0.00s, aligned=True)
+empty-run control : background=0 observed=0 reported=0 (idle 2.52s / run 0.26s)
+real run          : background=0 observed=0 reported=0 (idle 2.59s / run 1.00s / makeup 0.00s, aligned=True)
 negative control  : reported=True ; superseded lets it through=True
 EXIT=0

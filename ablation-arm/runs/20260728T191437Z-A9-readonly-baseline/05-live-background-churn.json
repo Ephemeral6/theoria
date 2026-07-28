@@ -3,6 +3,8 @@
   "idle_floor_seconds_chosen": 2.0,
   "live_root": "C:\\Users\\user\\Desktop\\theoria",
   "read_only": true,
+  "superseded_by": "08-live-background-resample.json",
+  "superseded_note": "UNDERSIZED FRAME -- 4 windows / 53s could not see monitor/ci/merge.log, the largest writer on this tree. Kept as the record of the first measurement, not as a current estimate.",
   "what": "read-only measurement of concurrent-fleet churn in the live worktree, to size the background set the empty-run control has to subtract",
   "windows": [
     {

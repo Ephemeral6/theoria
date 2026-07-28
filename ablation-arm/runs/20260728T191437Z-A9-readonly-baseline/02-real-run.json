@@ -1,8 +1,9 @@
 {
   "action": "run_arm.run_all(['a0-base'])",
+  "action_seconds": 0.648,
   "aligned": true,
   "background": [],
-  "files_watched": 2430,
+  "files_watched": 2433,
   "hard_list": [
     {
       "pattern": "proxy/var/spend_gate.jsonl",
@@ -25,20 +26,24 @@
       "why": "per-territory ledger: the accounting a claim is later checked against"
     },
     {
-      "pattern": "**/ledger.*.jsonl",
+      "pattern": "baseline-arms/**/ledger.*.jsonl",
       "why": "sharded ledgers: the form the ledgers actually take on this tree"
     },
     {
-      "pattern": "**/candidates.jsonl",
+      "pattern": "engine-rig/**/candidates.jsonl",
       "why": "the frozen contract's append-only stream, which lives outside CONTRACTS/"
     }
   ],
-  "idle_seconds": 2.577,
+  "idle_seconds": 2.588,
+  "idle_sleep": 2.0,
   "makeup_seconds": 0.0,
+  "makeup_sleep": 0.0,
   "observed": [],
   "reported": [],
   "reported_by_hard_list": [],
-  "run_seconds": 1.765,
+  "run_seconds": 1.002,
+  "snapshot_seconds": 0.314,
   "subtracted": [],
+  "unreadable": [],
   "what": "run_arm.run_all(['a0-base']) under the empty-run control"
 }

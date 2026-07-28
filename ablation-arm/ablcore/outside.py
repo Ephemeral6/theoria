@@ -82,6 +82,31 @@ wall-clock neighbourhood, which is what alignment needs; `Observation` carries
 both durations so a reader can check the ratio instead of trusting this
 paragraph.
 
+## Where this actually runs, and what that does to the control
+
+**Read this before trusting the subtraction.**  `observe()` defaults to
+`root=REPO`, and `REPO` is the directory above this arm -- which under
+`monitor/ci_merge.py` is a throwaway `git worktree`, not the live tree.  A fresh
+worktree has no `proxy/var/`, no running fleet and no concurrent writer, so the
+background set there is **empty**, and an empty background subtracts nothing.
+
+That is not a hypothesis.  The adversarial review of this module measured 75
+consecutive idle windows inside this worktree and got 0 background paths in
+75/75, and `background == []` in 6/6 full observations across both trees; the
+run directory's own `01`/`02`/`07` artefacts agree.  So in CI this check is
+currently a plain "nothing outside the arm moved", with the empty-run control
+contributing nothing at all, and `subtracted` / `reported_by_hard_list` have
+never had a non-empty input outside a hand-built `Observation` and the
+concurrent-writer test that was added to force one.
+
+Which is fine, and is the point worth being clear about: **the control is
+insurance, not the mechanism.**  When the check runs somewhere quiet it costs
+one 2-second sleep and changes nothing.  When it runs somewhere noisy -- the
+live tree, or CI once the fleet writes into the worktree -- it is what stops the
+next person from reaching for a path-shape exclusion table.  The failure it
+prevents is not a failing test; it is the *fix* someone would apply to a failing
+test.
+
 ## What the control does *not* remove, measured rather than argued
 
 An empty-run control subtracts a writer only if that writer is active during
@@ -93,11 +118,22 @@ one leg occasionally, and when that one leg is the real one the check goes red
 for something this arm did not do.
 
 This is not hypothetical here.  `runs/20260728T191437Z-A9-readonly-baseline/`
-measured it on the live worktree: the tree is completely still at 2s, 5s and 15s,
-then moves four files at 30s -- `monitor/index.html`, `monitor/reflex.lock`,
-`monitor/reflex.log`, `monitor/state.json` -- the monitor's reflex loop, 127
-ticks logged, median gap 300s, shortest 42s.  Against a ~0.95s run leg that is a
-residual false-red probability of about 2% per run, worst case.
+measured it on the live worktree.  The first measurement was too small to trust
+and the adversarial review said so: four windows totalling 53s found the tree
+still at 2s/5s/15s and moving four files at 30s (the monitor's reflex loop), and
+put the residual at ~2% per run.  A 110-window resample over 263s
+(`08-live-background-resample.json`) says **24 of 110 windows moved something,
+p = 0.22, residual false red ~8.7% per run** -- four times the first estimate.
+The dominant writer is `monitor/ci/merge.log` (12 of 24 windows), the CI merge
+loop, which the first frame never sampled at all; `monitor/index.html`,
+`monitor/ci/merge.lock`, `browser-ops/terms_canary.json`,
+`monitor/dispatch-logs/*.log` and `monitor/board/board.log` follow.  `05`/`06`
+are kept as the record of the undersized frame rather than overwritten.
+
+Note the sting the review pointed out: `.log` was one of the seven tokens the
+superseded criterion excluded.  `monitor/ci/merge.log` is a false-positive class
+the broken criterion suppressed and this one re-opens, deliberately, with
+nothing to quiet it.
 
 It is left in place rather than patched:
 
@@ -113,6 +149,16 @@ It is left in place rather than patched:
 So the residual is reported honestly instead: a red carries `background`,
 `observed` and `subtracted` alongside it, which is what a reader needs to tell a
 5-minute timer from an escape.  An escape reproduces; a timer does not.
+
+And the deeper objection, which stands and is not answered by any tuning: a
+single-sample control subtracts a writer with probability `p` and pays a false
+red with probability `p(1-p)`.  No window length drives that to zero -- a short
+window means `p -> 0` and nothing is subtracted, a long one means `p -> 1` and
+false positives turn into false negatives.  The 2.0s floor sits at the
+`p -> 0` end on purpose: at this repo's churn it subtracts almost nothing and
+pays ~9% false reds, which is the side of that trade the audit's finding says to
+be on.  A red is cheap -- look at `background` and re-run.  The other side of
+the trade is what the audit found: silence.
 
 ## The hard list: never subtracted, ever
 
@@ -146,9 +192,17 @@ ARM = "ablation-arm"
 #: `pin.SKIP_DIRS`: `artifacts` and `runs` are not here, because another track's
 #: `artifacts/` is one of the things it is worst to write and `pin` skipping it
 #: was half of what the audit found.
+#:
+#: Everything here is a tool's own cache or a checkout of something else.
+#: `.pytest-runs` earns its place the same way `.pytest_cache` does -- it is
+#: pytest's per-run temporary directory (`theoria-arm/.pytest-runs/pytest-*/`),
+#: not an arm's output.  The adversarial review found that without it the
+#: `**/ledger.jsonl` hard-list rule reaches another arm's pytest temp files and
+#: makes them un-suppressible.
 SKIP_DIRS = frozenset({
-    ".git", ".worktrees", "__pycache__", ".pytest_cache", ".toolchain",
-    ".lake", ".mypy_cache", ".ruff_cache", ".venv", "node_modules",
+    ".git", ".worktrees", "__pycache__", ".pytest_cache", ".pytest-runs",
+    ".toolchain", ".lake", ".mypy_cache", ".ruff_cache", ".venv",
+    ".claude", "node_modules",
 })
 
 #: Paths that are reported even when they also move during the empty run.
@@ -183,18 +237,31 @@ HARD_LIST: Tuple[Tuple[str, str], ...] = (
 #: what was mandated and what was added, and reject the additions without
 #: touching the mandated five.  Both close a row of the audit's own table:
 #:
-#: * `**/ledger.*.jsonl` -- the ledgers are sharded in practice
+#: * `baseline-arms/**/ledger.*.jsonl` -- the ledgers are sharded in practice
 #:   (`baseline-arms/out/shards/ledger.a7-g50t.jsonl` and ten siblings exist on
 #:   this tree).  A hard list that only matches the unsharded name would not
 #:   have covered a single one of the ledgers that actually exist there.
-#: * `**/candidates.jsonl` -- the frozen contract's append-only stream.
-#:   `CLAUDE.md` names it by that name ("`candidates.jsonl` is append-only");
-#:   the audit's table lists `engine-rig/artifacts/candidates.jsonl` as one of
-#:   the paths the old criterion wrongly excluded, and `CONTRACTS/**` does not
-#:   reach it because it does not live under `CONTRACTS/`.
+#: * `engine-rig/**/candidates.jsonl` -- the frozen contract's append-only
+#:   stream.  `CLAUDE.md` names it by that name ("`candidates.jsonl` is
+#:   append-only") and `engine-rig/tools/validate_candidates.py` is its
+#:   executable schema; the audit's table lists
+#:   `engine-rig/artifacts/candidates.jsonl` as one of the paths the old
+#:   criterion wrongly excluded, and `CONTRACTS/**` does not reach it because it
+#:   does not live under `CONTRACTS/`.
+#:
+#: **Both were narrower once and were widened back by review.**  They started as
+#: `**/ledger.*.jsonl` and `**/candidates.jsonl`, and the adversarial review
+#: measured what that actually caught on the live tree: of the 18 files matching
+#: `**/candidates.jsonl`, only 2 are the frozen stream -- ten are
+#: `worldgen/out/qc/*/candidates.jsonl`, another territory's regenerated QC
+#: scratch.  Since the hard list is never subtracted, a neighbour regenerating
+#: QC scratch would have made this check *deterministically* red for something
+#: this arm did not do.  That is the exact pressure that produced the tightening
+#: the DRIFT note documents, so the prefixes are anchored to the territory whose
+#: file the audit actually named.  The mandated five below are untouched.
 HARD_LIST_EXTENSIONS: Tuple[Tuple[str, str], ...] = (
-    ("**/ledger.*.jsonl", "sharded ledgers: the form the ledgers actually take on this tree"),
-    ("**/candidates.jsonl", "the frozen contract's append-only stream, which lives outside CONTRACTS/"),
+    ("baseline-arms/**/ledger.*.jsonl", "sharded ledgers: the form the ledgers actually take on this tree"),
+    ("engine-rig/**/candidates.jsonl", "the frozen contract's append-only stream, which lives outside CONTRACTS/"),
 )
 
 ALL_HARD: Tuple[Tuple[str, str], ...] = HARD_LIST + HARD_LIST_EXTENSIONS
@@ -257,18 +324,37 @@ def watched(root: str = REPO) -> Tuple[str, ...]:
     Top-level **files** are included on purpose (`PARTNER_SYNC.md`, `CLAUDE.md`,
     `Theoria.md`): the previous check watched only directories, so a run that
     appended to the shared status board would have passed it.
+
+    Entries are skipped **by name**, not by a leading dot.  The adversarial
+    review caught the earlier `name.startswith(".")` rule dropping `.env` --
+    which `CLAUDE.md` makes the single highest-consequence file in the repo --
+    while nested dot-directories were walked anyway, so the rule was not even
+    consistent with itself.  Only the sha256 of `.env` is ever taken, never its
+    bytes, so watching it cannot leak the key it holds; that is the whole point
+    of hashing rather than diffing.
     """
     out = []
     for name in sorted(os.listdir(root)):
-        if name == ARM or name in SKIP_DIRS or name.startswith("."):
+        if name == ARM or name in SKIP_DIRS:
             continue
         out.append(name)
     return tuple(out)
 
 
 def snapshot(root: str = REPO,
-             entries: Optional[Sequence[str]] = None) -> Dict[str, str]:
-    """repo-relative path (forward slashes) -> sha256, for everything watched."""
+             entries: Optional[Sequence[str]] = None,
+             unreadable: Optional[List[str]] = None) -> Dict[str, str]:
+    """repo-relative path (forward slashes) -> sha256, for everything watched.
+
+    A file that cannot be read is appended to `unreadable` rather than silently
+    dropped.  It matters: on Windows the spend gate takes a byte-range lock on
+    its own ledger (`proxy/spend_gate.py`), and a locked file leaving the
+    snapshot on one side and returning on the other is a reported diff with no
+    write behind it -- while a file locked across *both* snapshots disappears
+    from both dicts and produces no diff at all, which no hard list can rescue
+    because the path never enters the evidence.  Counting them is the honest
+    minimum; `Observation.unreadable` carries the count to the reader.
+    """
     out: Dict[str, str] = {}
     for name in (watched(root) if entries is None else entries):
         full = os.path.join(root, name)
@@ -276,7 +362,8 @@ def snapshot(root: str = REPO,
             try:
                 out[name.replace(os.sep, "/")] = sha256_file(full)
             except OSError:
-                pass
+                if unreadable is not None:
+                    unreadable.append(name.replace(os.sep, "/"))
             continue
         for dirpath, dirnames, filenames in os.walk(full):
             dirnames[:] = sorted(d for d in dirnames if d not in SKIP_DIRS)
@@ -286,9 +373,9 @@ def snapshot(root: str = REPO,
                 try:
                     out[rel] = sha256_file(path)
                 except OSError:
-                    # Vanished or locked mid-walk. A concurrent session's file
-                    # we cannot read is not evidence about this arm.
-                    continue
+                    # Vanished or locked mid-walk. Recorded, not swallowed.
+                    if unreadable is not None:
+                        unreadable.append(rel)
     return dict(sorted(out.items()))
 
 
@@ -307,13 +394,29 @@ class Observation:
 
     def __init__(self, background: List[str], observed: List[str],
                  idle_seconds: float, run_seconds: float,
-                 makeup_seconds: float, files_watched: int):
+                 makeup_seconds: float, files_watched: int,
+                 action_seconds: float = 0.0, idle_sleep: float = 0.0,
+                 makeup_sleep: float = 0.0, snapshot_seconds: float = 0.0,
+                 unreadable: Optional[List[str]] = None):
         self.background = background
         self.observed = observed
         self.idle_seconds = idle_seconds
         self.run_seconds = run_seconds
         self.makeup_seconds = makeup_seconds
         self.files_watched = files_watched
+        #: The action alone, with the snapshot around it taken out. `aligned`
+        #: compares *this* against the sleeps, because both legs pay one
+        #: snapshot and it cancels -- the earlier predicate compared
+        #: `2*snapshot + sleep >= action + snapshot` and so reported aligned
+        #: while the control was short by up to one snapshot's worth of
+        #: exposure. Caught by the adversarial review.
+        self.action_seconds = action_seconds
+        self.idle_sleep = idle_sleep
+        self.makeup_sleep = makeup_sleep
+        self.snapshot_seconds = snapshot_seconds
+        #: Files the snapshot could not read on either leg. Not evidence either
+        #: way, but a number the reader is entitled to see.
+        self.unreadable = sorted(set(unreadable or ()))
         noise = set(background)
         self.reported = sorted(p for p in observed
                                if p not in noise or is_hard(p))
@@ -328,8 +431,13 @@ class Observation:
 
     @property
     def aligned(self) -> bool:
-        """Was the empty leg exposed at least as long as the real leg?"""
-        return (self.idle_seconds + self.makeup_seconds) >= self.run_seconds
+        """Was the empty leg exposed at least as long as the real leg?
+
+        Per file, the idle leg's exposure is `idle_sleep + snapshot` and the
+        real leg's is `action + snapshot`; the snapshot cancels, so the test is
+        sleeps vs action and nothing else.
+        """
+        return (self.idle_sleep + self.makeup_sleep) >= self.action_seconds
 
     def as_dict(self) -> Dict[str, object]:
         return {
@@ -337,6 +445,11 @@ class Observation:
             "idle_seconds": round(self.idle_seconds, 3),
             "makeup_seconds": round(self.makeup_seconds, 3),
             "run_seconds": round(self.run_seconds, 3),
+            "action_seconds": round(self.action_seconds, 3),
+            "idle_sleep": round(self.idle_sleep, 3),
+            "makeup_sleep": round(self.makeup_sleep, 3),
+            "snapshot_seconds": round(self.snapshot_seconds, 3),
+            "unreadable": self.unreadable,
             "aligned": self.aligned,
             "background": self.background,
             "observed": self.observed,
@@ -352,12 +465,19 @@ class Observation:
         for path in self.reported[:10]:
             why = hard_reason(path)
             lines.append("  %s%s" % (path, "   [hard list: %s]" % why if why else ""))
-        lines.append("background=%d observed=%d subtracted=%d "
-                     "idle=%.2fs makeup=%.2fs run=%.2fs watched=%d"
+        lines.append("background=%d observed=%d subtracted=%d unreadable=%d "
+                     "idle_sleep=%.2fs makeup_sleep=%.2fs action=%.2fs "
+                     "snapshot=%.2fs watched=%d"
                      % (len(self.background), len(self.observed),
-                        len(self.subtracted), self.idle_seconds,
-                        self.makeup_seconds, self.run_seconds,
+                        len(self.subtracted), len(self.unreadable),
+                        self.idle_sleep, self.makeup_sleep,
+                        self.action_seconds, self.snapshot_seconds,
                         self.files_watched))
+        if not self.background:
+            lines.append("NOTE: the background set is empty, so the empty-run "
+                         "control subtracted nothing and this reduces to "
+                         "'nothing outside the arm moved'. That is the normal "
+                         "case inside a worktree; see the module docstring.")
         return "\n".join(lines)
 
 
@@ -370,18 +490,32 @@ def observe(action: Callable[[], None], root: str = REPO,
     the shortfall and its background is unioned in, so the control's exposure is
     never shorter than the run's.
     """
-    entries = watched(root)
+    # Each snapshot re-enumerates the top level rather than reusing one frozen
+    # list. Freezing it was a false negative and a sharp one: a **new** file or
+    # directory created at the repo root during the run was not in the list, so
+    # it was never hashed, so it never appeared in the diff -- a run that
+    # dropped a file in the repo root would have passed silently, which is the
+    # exact failure the outer test's own docstring says it exists to catch. It
+    # surfaced only when the negative control's victim moved from `proxy/var/`
+    # to the root; the listdir it costs is nothing against what it buys.
+    unreadable: List[str] = []
 
     t0 = time.time()
-    first = snapshot(root, entries)
+    first = snapshot(root, None, unreadable)
+    snap_a = time.time() - t0
     time.sleep(idle_floor)
-    second = snapshot(root, entries)
+    t_snap = time.time()
+    second = snapshot(root, None, unreadable)
+    snap_b = time.time() - t_snap
     idle_seconds = time.time() - t0
     background = set(diff(first, second))
 
     t1 = time.time()
     action()
-    third = snapshot(root, entries)
+    action_seconds = time.time() - t1
+    t_snap = time.time()
+    third = snapshot(root, None, unreadable)
+    snap_c = time.time() - t_snap
     run_seconds = time.time() - t1
     observed = diff(second, third)
 
@@ -393,16 +527,26 @@ def observe(action: Callable[[], None], root: str = REPO,
     # (`ledger_abl.py`: zero API calls, zero network), so the premise holds
     # today; it is written down because it is a premise and not a fact.
     makeup_seconds = 0.0
-    shortfall = run_seconds - idle_seconds
+    makeup_sleep = 0.0
+    #: Sleeps against the action, not wall clocks against wall clocks: each leg
+    #: pays exactly one snapshot per file, so the snapshot cancels out of the
+    #: comparison. The earlier `run_seconds - idle_seconds` form compared the
+    #: two totals and left the control short by up to one snapshot.
+    shortfall = action_seconds - idle_floor
     if shortfall > 0:
         t2 = time.time()
         time.sleep(shortfall)
-        fourth = snapshot(root, entries)
+        makeup_sleep = shortfall
+        fourth = snapshot(root, None, unreadable)
         makeup_seconds = time.time() - t2
         background |= set(diff(third, fourth))
 
     return Observation(sorted(background), observed, idle_seconds,
-                       run_seconds, makeup_seconds, len(second))
+                       run_seconds, makeup_seconds, len(second),
+                       action_seconds=action_seconds, idle_sleep=idle_floor,
+                       makeup_sleep=makeup_sleep,
+                       snapshot_seconds=(snap_a + snap_b + snap_c) / 3.0,
+                       unreadable=unreadable)
 
 
 #: The criterion this module replaces, kept executable so the negative control

@@ -1,0 +1,32 @@
+live tree: C:\Users\user\Desktop\theoria ; 110 windows of 2.0s
+baseline snapshot: 3012 files
+  window  21: ['monitor/index.html']
+  window  22: ['monitor/index.html', 'monitor/state.json']
+  window  26: ['monitor/ci/CONFLICT-origin_agent_s14-gates-for-all.md', 'monitor/ci/merge.log']
+  window  29: ['monitor/ci/CONFLICT-origin_agent_s15-ledger-hashchain.md', 'monitor/ci/merge.log']
+  window  30: ['monitor/ci/merge.log']
+  window  31: ['monitor/ci/CONFLICT-origin_agent_s8-provenance-backfill.md', 'monitor/ci/merge.log']
+  window  32: ['monitor/ci/CONFLICT-origin_agent_s9-contract-change-protocol.md', 'monitor/ci/merge.log']
+  window  33: ['monitor/ci/CONFLICT-origin_agent_v12-worldgen-gate-deaf.md', 'monitor/ci/merge.log']
+  window  34: ['monitor/ci/CONFLICT-origin_agent_v16-determinism-has-no-caller.md', 'monitor/ci/merge.log']
+  window  35: ['monitor/ci/merge.lock', 'monitor/ci/merge.log']
+  window  54: ['browser-ops/terms_canary.json']
+  window  59: ['monitor/index.html']
+  window  60: ['monitor/index.html', 'monitor/reflex.lock', 'monitor/reflex.log', 'monitor/state.json']
+  window  61: ['browser-ops/terms_canary.json']
+  window  68: ['browser-ops/runs/2026-07-28-visits.md', 'monitor/board/board.log', 'monitor/board/claimed/V5-battery-freeze.W-252.md', 'monitor/board/done/V5-battery-freeze.W-252.md', 'monitor/ops-status/OPS-B.json']
+  window  71: ['monitor/reflex.lock']
+  window  79: ['monitor/ci/merge.lock']
+  window  80: ['monitor/ci/merge.log']
+  window  82: ['monitor/ci/CONFLICT-origin_agent_bus2-ablation-readonly.md', 'monitor/ci/merge.log']
+  window  86: ['monitor/inbox/20260728T194500Z-W-252-addendum-board-state-moved-while-i-worked.md']
+  window  87: ['monitor/ci/CONFLICT-origin_agent_c9-count-lock-vocabulary.md', 'monitor/ci/merge.log']
+  window  89: ['monitor/ci/merge.log']
+  window 108: ['monitor/dispatch-logs/W-252-20260728T185408Z.log']
+  window 109: ['monitor/dispatch-logs/W-252-20260728T185408Z.log', 'monitor/dispatch-logs/exits.json']
+
+24/110 windows moved something (p=0.218, 95% CI 0.1512-0.3042)
+exposure 263s, 0.0912 events/s, residual false red ~8.7% per run
+top paths: [('monitor/ci/merge.log', 12), ('monitor/index.html', 4), ('monitor/state.json', 2), ('monitor/ci/merge.lock', 2), ('browser-ops/terms_canary.json', 2), ('monitor/reflex.lock', 2), ('monitor/dispatch-logs/W-252-20260728T185408Z.log', 2), ('monitor/ci/CONFLICT-origin_agent_s14-gates-for-all.md', 1)]
+wall clock 263s; wrote 08-live-background-resample.json
+EXIT=0

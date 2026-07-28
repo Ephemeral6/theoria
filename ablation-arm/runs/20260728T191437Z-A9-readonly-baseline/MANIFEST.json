@@ -1,59 +1,85 @@
 {
+  "adversarial_review": {
+    "outcome": "all findings accepted; 9 fixed in code, the rest recorded with reasons; one further bug (frozen top-level entry list hid new root files) found while fixing them",
+    "response": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/ADVERSARIAL-RESPONSE.md",
+    "verbatim": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/ADVERSARIAL-VERBATIM.md",
+    "verdicts": {
+      "a_empty_run_control": "WEAK",
+      "b_hard_list": "WEAK",
+      "c_negative_control": "WEAK"
+    }
+  },
   "api_dollars": 0,
   "base_commit": "7df12a39d1dbdcaff593c487694173adbf4acebc",
   "branch": "agent/a9-readonly-baseline",
   "files": [
     {
       "path": "ablation-arm/ablcore/outside.py",
-      "sha256": "acfa1f0b0095fd80c28f1ab3489c6799e58b8565621d04324453bd146c5ef71c"
+      "sha256": "194fdeee33a54a4662f55b569fb721857a9c3f0efb534a942555492be07fe174"
     },
     {
       "path": "ablation-arm/tests/test_readonly.py",
-      "sha256": "e22a58c85429f3a48734113c8675a7d7e704b1bbcf0bfeae162d38d16da2cc86"
+      "sha256": "bb49a93643dcee3b796be44b7dc7f7bd6fc25f6f6ebed630b919f0eed7673d3a"
     },
     {
       "path": "ablation-arm/RUN_STATE.md",
-      "sha256": "a3ce12baf5cf2ce2a2b936b0901cee5439d61efbdcf86818f36c7f141cda2f79"
+      "sha256": "a5baf2458058935c1690477f1d18c79ad55d002f18b7c86c495afaee47f1d688"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/01-empty-run-control.json",
-      "sha256": "da4b2906e987034e0bd93e0b1a42713f68d35333a2f946bbfee9b9a29bdc390b"
+      "sha256": "0efa3cde9df306143e09791c28379ec545c8fbaa4125a571a7172bd7d09d511d"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/02-real-run.json",
-      "sha256": "070c1f138e7c3522e62285e5c416e4c6f3f562c8ab36e09b96257adc974501e0"
+      "sha256": "9ae8e8cb03c13721097734c2dc89d75b5d997b6c0ab1c4d4eb8e38228907bdf3"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/03-negative-control.json",
-      "sha256": "7631f52f473f7e14f3e4ca2faae6d070d08520b0e43de58a945bf812383ec9a0"
+      "sha256": "a2f888c1024af04f4d43457c61d1dedad1320781f11e97925bd00a4fa7e402df"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/03b-negative-control-mutation.json",
-      "sha256": "474037dfef1cda12d04c553dd85c4299a0fffc031c8e9bb37341b25c15dd37f9"
+      "sha256": "35d58f65743c670f0b87d24c354d5c6a059568370e12341e1cc97206a3bdae6d"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/03c-concurrent-writer.json",
+      "sha256": "1dc33524c599db7e71e9110eeeac40c8fa8e0d3eb724ebab83314ffe28ca635e"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/04-hard-list-reachability.json",
-      "sha256": "381cba534abe153e61583a675f6aac8ff033d3a8b4b7a638a3c20ced2a8b3b67"
+      "sha256": "505384b321dfd9159de4722dc78b0a5b620903727bb21e41e0e3de42fd27cc18"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/05-live-background-churn.json",
-      "sha256": "158fa32b6aabbe3e39e7c3b25ba60256a22d0c616fe8dd41aecb241f005b7e4d"
+      "sha256": "cc9a7bff2e7f1acdd2517d6ec896e1f4aef9cf80d97f75b99daf346449137157"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/06-periodic-writer-residual.json",
-      "sha256": "5e9b7af5694d78c3b8fcfee6a096efcc9c6285a9a04f7bc18951af561ff4b1d7"
+      "sha256": "27c714ebc70d5c283b5f8ec87d00c2805aea7fb6757e6b67d08af248f497b29a"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/07-repeat-trials.json",
-      "sha256": "67f6cb2466b4ce5d100072793265b77e92facc1737a20f2efaa2d68025745cb0"
+      "sha256": "2dcf9963c4d9e0bfd8d8779cc374030df4a432ed56963364a206f20f2671b889"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/08-live-background-resample.json",
+      "sha256": "5be38b0bce4e00e1cee4f84db9034f05caecdab05990e4f1d027651d55b06a03"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/ADVERSARIAL-RESPONSE.md",
+      "sha256": "5d96361f0319c1dd8c97990ad76092e5ceb25ccb7cd1b30bcba8938c860bdacb"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/ADVERSARIAL-VERBATIM.md",
+      "sha256": "202607094e0538f8357121ac8ccc01e42ea0d4ea6bc523b479c94d51767f7c80"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture.py",
-      "sha256": "9dfd76aa06601a0a935fd20a70415984dfc3e6bdf19e67e4c9b88c0b9b1f829b"
+      "sha256": "1f38e67eeb6d12cc642bc027548f7ae10631d0aa795047cfe01e0038439e6966"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture.stdout.txt",
-      "sha256": "f2dc8ca9c9ccfb0d42d5ac678bf8ac2fa070c383708dbc06c4ab562707b25512"
+      "sha256": "06e03118b5d0b517d6cf446ceeefa3a25467630e98e8be0dd434072d2149b97f"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_live_background.py",
@@ -62,6 +88,14 @@
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_live_background.stdout.txt",
       "sha256": "a0630af3daaea75d5cab1b5a9f09b13c6d73c43517978c0645e5a820416eb490"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_live_resample.py",
+      "sha256": "5bf96c72188997d2b7e4f8a5acb51f902329c480394f1fc09bc13ae8ca1e2b45"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_live_resample.stdout.txt",
+      "sha256": "029895ab6ee31b384e062dfc7175b000f29c15f8d33439ba3d275b17705b6c7c"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_periodic_writer.py",
@@ -81,21 +115,25 @@
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/pytest-readonly.stdout.txt",
-      "sha256": "00dcfd52c9dd9e2cad277b354e3b59fcb6415f1dd370451dc5851e21c79b6e71"
+      "sha256": "5cd6de34874d536083549e2d8a184ef98ec76c7e458e3d2f323e5085cdf7e273"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/pytest.stdout.txt",
-      "sha256": "f69d566fb3805a4a0a363ba32283992bc5d8bb09ab2a594f60de9a6db77efff1"
+      "sha256": "c0499e68b19caf5ab856925484a877af9f9068bac3c0634d11edb6fc04f7ff77"
     },
     {
       "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/verify.stdout.txt",
-      "sha256": "c42c1d0b769c0724d30ebddc696e8d5fd718af9e8031c950e84283e6481cdc00"
+      "sha256": "4a490282824d828f082c4b2e741d5b5e4c28543e51c6d5ca7fc995b2387fb477"
     }
   ],
   "network_calls": 0,
   "prompt_id": "A9-readonly-baseline",
   "responds_to": "monitor/audit/DRIFT-20260728T1501Z-the-tightened-criterion-hides-the-worst-writes.md (high)",
   "sealed_pile_contact": "none",
+  "superseded_evidence": {
+    "05-live-background-churn.json": "undersized frame, kept as the record",
+    "06-periodic-writer-residual.json": "undersized frame + mixed estimators, kept as the record"
+  },
   "utc": "2026-07-28T19:14:37Z",
   "what": "the read-only criterion rebuilt on an empty-run control, a hard list, and a negative control that also fails against the superseded criterion"
 }

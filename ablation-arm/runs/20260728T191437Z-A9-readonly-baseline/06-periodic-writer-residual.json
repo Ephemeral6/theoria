@@ -22,6 +22,8 @@
   "residual_false_red_probability_per_run": 0.02262,
   "run_leg_seconds": 0.95,
   "source": "monitor/reflex.log (live worktree, read-only)",
+  "superseded_by": "08-live-background-resample.json",
+  "superseded_note": "SUPERSEDED -- its headline residual (0.02262) used gap_seconds_min while its prose used the median, and it was computed from the undersized frame in 05. The measured residual is ~8.7% per run.",
   "ticks_seen": 127,
   "what": "the periodic writer the empty-run control cannot subtract, and the residual false-red rate it implies"
 }

@@ -1,8 +1,9 @@
 {
   "A9_criterion_reports_it": true,
+  "action_seconds": 0.154,
   "aligned": true,
   "background": [],
-  "files_watched": 2431,
+  "files_watched": 2434,
   "hard_list": [
     {
       "pattern": "proxy/var/spend_gate.jsonl",
@@ -25,28 +26,32 @@
       "why": "per-territory ledger: the accounting a claim is later checked against"
     },
     {
-      "pattern": "**/ledger.*.jsonl",
+      "pattern": "baseline-arms/**/ledger.*.jsonl",
       "why": "sharded ledgers: the form the ledgers actually take on this tree"
     },
     {
-      "pattern": "**/candidates.jsonl",
+      "pattern": "engine-rig/**/candidates.jsonl",
       "why": "the frozen contract's append-only stream, which lives outside CONTRACTS/"
     }
   ],
-  "idle_seconds": 2.785,
+  "idle_seconds": 2.554,
+  "idle_sleep": 2.0,
   "makeup_seconds": 0.0,
+  "makeup_sleep": 0.0,
   "observed": [
-    "proxy/var/a9-mutation-control-42880.jsonl"
+    "a9-mutation-control-31360.jsonl"
   ],
   "reported": [
-    "proxy/var/a9-mutation-control-42880.jsonl"
+    "a9-mutation-control-31360.jsonl"
   ],
   "reported_by_hard_list": [],
-  "run_seconds": 0.505,
+  "run_seconds": 0.419,
+  "snapshot_seconds": 0.273,
   "subtracted": [],
   "superseded_criterion_lets_the_byte_through": true,
   "superseded_criterion_reports": [],
-  "victim": "proxy/var/a9-mutation-control-42880.jsonl",
+  "unreadable": [],
+  "victim": "a9-mutation-control-31360.jsonl",
   "victim_existed_before_the_first_snapshot": true,
   "victim_in_background": false,
   "victim_removed_afterwards": true,

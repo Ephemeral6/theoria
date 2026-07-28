@@ -74,50 +74,115 @@ board would have passed it. 2 430 files are now watched, against 468 before.
 
 | | |
 |---|---|
-| files watched | 2 430 (was: six trees, `artifacts/`+`runs/` skipped) |
-| background set, this worktree | 0 paths (idle 2.5s) |
+| files watched | 2 433 (was: six trees, `artifacts/`+`runs/` skipped, 468 files) |
+| background set, this worktree | 0 paths (idle 2.0s) — and that is a finding, see below |
 | observed set, real run | 0 paths |
-| reported | 0 |
-| alignment | idle 2.58s ≥ run 1.77s, make-up 0.00s |
-| negative control (create) | reported ✅ / superseded criterion lets it through ✅ |
-| negative control (append) | reported ✅ / superseded criterion lets it through ✅ |
+| reported | 0, in 12/12 repeat trials (`07`) |
+| alignment | idle sleep 2.0s ≥ action 1.00s, make-up 0.00s |
+| negative control (create, repo root) | reported ✅ / superseded criterion lets it through ✅ / invisible to `pin` ✅ |
+| negative control (append, repo root) | reported ✅ / superseded criterion lets it through ✅ |
+| concurrent-writer control (`03c`) | ordinary path **subtracted**, hard-listed path **reported anyway** — same writer, same cadence |
 | audit's six hidden paths | 6/6 hidden by the superseded criterion, 6/6 on the hard list |
-| hard-list patterns matching a real file | 6 of 7 (`spend_gate.jsonl` is gitignored runtime output, absent on a fresh checkout — which is why it is pinned by name, not by presence) |
-| suite | `python -m pytest` → **62 passed**, exit 0 |
+| hard-list patterns matching a real file | 6 of 7 (`spend_gate.jsonl` is gitignored runtime output, absent on a fresh checkout — which is why it is pinned by name, and cross-checked against `proxy.paths.VAR_DIR`) |
+| live-tree churn (`08`, 110 windows / 263s) | 24 windows moved something, p = 0.22, **residual false red ~8.7% per run** |
+| suite | `python -m pytest` → **65 passed**, exit 0 |
 | gate | `bash verify.sh` → **GREEN**, exit 0 |
 
-**The limitation, measured rather than argued.** A background set of zero inside
-this worktree measures the criterion but not the problem, so the same machinery
-was pointed read-only at the live worktree where the fleet actually runs
-(`05-live-background-churn.json`). It is completely still at 2s, 5s and 15s, and
-at 30s four files move: `monitor/index.html`, `monitor/reflex.lock`,
-`monitor/reflex.log`, `monitor/state.json` — the monitor's reflex loop, 127 ticks
-logged, median gap 300s, shortest 42s (`06-periodic-writer-residual.json`).
+**The limitation, measured rather than argued.** An empty-run control removes a
+writer only if it is active in *both* legs. A writer that is periodic, or simply
+sparse, is in neither leg most of the time and in exactly one leg the rest — and
+when that one leg is the real one, the check goes red for something this arm did
+not do.
 
-That is a **periodic** writer, and an empty-run control removes a writer only if
-it is active in both legs. This one is in neither leg ~98% of the time and in
-exactly one leg the rest, so against a ~0.95s run leg it is a residual **false
-red of about 2% per run**. It is left in place deliberately: excluding those four
-paths by name or by shape is the precise defect this ticket removes, and the
-superseded criterion would have reported two of the four while hiding the other
-two — including `monitor/state.json`, which is on the hard list because it must
-never be hidden. Retrying on red and reporting only what repeats would remove
-the false red and would also remove a genuine escape that only fires on a cold
-first run; trading a 2% false red for a silent false negative is the trade that
-produced the audit finding. So a red carries `background`, `observed` and
-`subtracted` with it, which is what a reader needs to tell a five-minute timer
-from an escape: an escape reproduces, a timer does not.
+The first measurement of this was too small and is left in place, marked, as the
+record of an error rather than overwritten: `05` sampled four windows totalling
+53s, found the live tree still at 2s/5s/15s and moving four monitor files at
+30s, and put the residual at ~2% per run. `08` resampled at 110 windows over
+263s: **24/110 windows moved something, p = 0.22, residual ~8.7% per run**, four
+times the first figure. The dominant writer — `monitor/ci/merge.log`, the CI
+merge loop, in 12 of the 24 — was never sampled by the first frame at all.
 
-The same measurement is the answer to "is the hard list decoration": on the live
-tree `monitor/state.json` moved as pure background noise inside a 30s window, so
-`Observation.reported_by_hard_list` is reachable in a real run and not only in
-the hand-built unit test. That is the occasional false red the audit said was
-worth accepting, observed rather than predicted.
+It is left in place deliberately. `.log` was one of the seven tokens the
+superseded criterion excluded, so excluding `monitor/ci/merge.log` by name is
+the precise defect this ticket removes. Retrying on red and reporting only what
+repeats would remove the false red and would also remove a genuine escape that
+only fires on a cold first run; trading a ~9% false red for a silent false
+negative is the trade that produced the audit finding. A red carries
+`background`, `observed`, `subtracted` and `unreadable` with it, which is what a
+reader needs to tell a timer from an escape: an escape reproduces, a timer does
+not.
+
+And the objection that no tuning answers: a single-sample control subtracts with
+probability ~p and pays a false red with ~2p(1−p). No window length drives that
+to zero — short means nothing is subtracted, long means false positives become
+false negatives. The 2.0s floor sits at the "subtract almost nothing" end on
+purpose.
+
+**The adversarial review overturned most of the first draft.** Full text in
+`runs/…/ADVERSARIAL-VERBATIM.md`, verbatim; what changed in response, item by
+item, in `ADVERSARIAL-RESPONSE.md`. Three verdicts, all WEAK. The load-bearing
+ones:
+
+* **The control is inert where this gate runs.** `observe()` roots at the
+  worktree, and under `monitor/ci_merge.py` that is a throwaway checkout with no
+  fleet in it — 0 background paths in 75/75 idle windows. So in CI this is
+  currently a plain "nothing outside moved" and the control contributes nothing.
+  That is now the first thing the module docstring says, and `message()` prints
+  it on any red with an empty background. It is insurance, not the mechanism:
+  what it prevents is not a failing test but the *fix* someone reaches for when
+  a test fails.
+* **Both negative controls were firing against a test that predates A9.** The
+  victims sat under `proxy/var/`, which `pin` hashes unconditionally, so the
+  pre-existing upstream test caught the same byte. Both victims moved to the
+  repo root and both tests now assert `victim not in pin.hash_tree()`.
+* **My residual false-red figure was wrong by 4×**, from a four-window frame.
+  Re-measured above.
+* **`.env` was not watched at all** — `watched()` dropped every top-level
+  dotfile while walking nested dot-directories anyway. Now skipped by name;
+  `test_dotfiles_at_the_root_are_watched_because_one_of_them_is_the_key` pins
+  it. Only sha256s are taken, never bytes.
+* **`subtracted` and `reported_by_hard_list` had never executed on real data.**
+  `test_the_subtraction_and_the_hard_list_against_a_real_concurrent_writer` now
+  *is* the concurrent session — a thread appending to two files across both
+  legs, one ordinary and one matching the mandated `**/ledger.jsonl` rule — and
+  asserts the first is subtracted and the second reported anyway. `03c` is the
+  measured form.
+* **My two hard-list extensions over-matched.** Of 18 files matching
+  `**/candidates.jsonl`, only 2 were the frozen stream; ten were another
+  territory's regenerated QC scratch, which would have made this check
+  deterministically red for something this arm did not do — the exact pressure
+  that produced the tightening being undone. Narrowed to
+  `engine-rig/**/candidates.jsonl` and `baseline-arms/**/ledger.*.jsonl`. **The
+  mandated five are untouched**; the extensions were mine to narrow.
+* **`aligned` compared the wrong quantities** (both legs pay one snapshot, so it
+  cancels), and the **`OSError` swallow** hid a locked file from the evidence in
+  both directions. Both fixed; `Observation` now carries `action_seconds`,
+  `idle_sleep`, `makeup_sleep`, `snapshot_seconds` and `unreadable`.
+* **The `spend_gate.jsonl` assertions were tautologies** — a literal compared
+  against itself retyped. Now derived from `proxy.paths`.
+
+**And one the review did not find, which moving the victim exposed.** `observe()`
+enumerated the watched top-level entries once and reused the list for every
+snapshot, so **a new file or directory created at the repo root during the run
+was never hashed and never appeared in the diff**. A run that dropped a file in
+the repo root would have passed silently — verbatim the failure
+`test_a_full_run_writes_only_inside_this_arm`'s docstring claims to catch. Each
+snapshot now re-enumerates, and the relocated negative control is the regression
+test. That bug was only reachable because the review forced the victim out of
+`proxy/var/`; it is the best argument in this entry for having run the review.
 
 **Tree discipline.** `run_arm` and `verify.sh` rewrite this arm's own committed
 artifacts (timestamps in `episode.jsonl`, `run_all.json`, `verify.json`); every
 one was restored with `git checkout -- ablation-arm/artifacts` and
 `git status ablation-arm/` is clean apart from the intended changes. Nothing
-outside `ablation-arm/` is modified by this ticket; the two negative-control
-bytes under `proxy/var/` exist only inside a single `observe()` call and are
-removed and asserted gone in a `finally`.
+outside `ablation-arm/` is modified by this ticket; the negative controls' files
+are uniquely named, live at the repo root for the length of one `observe()`
+call, and are removed and asserted gone in a `finally`. No file belonging to
+another territory is written at any point.
+
+**Left for whoever owns the monitor, not decided here.** `monitor/bus/*`,
+`monitor/board/board.log` and `monitor/inbox/*` are written continuously during
+a live dispatch and are *not* on the hard list, so an arm forging a board claim
+during one could be subtracted as background. They are the monitor's territory
+and the ticket's hard list did not name them; adding them is a monitor-side
+call.

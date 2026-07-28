@@ -1,9 +1,12 @@
 {
-  "A9_criterion_reports_it": true,
-  "action_seconds": 0.155,
+  "action_seconds": 0.181,
   "aligned": true,
-  "background": [],
-  "files_watched": 2433,
+  "background": [
+    "a9-noise-31360.txt",
+    "a9-noise-31360/ledger.jsonl"
+  ],
+  "both_moved_during_the_empty_leg": true,
+  "files_watched": 2435,
   "hard_list": [
     {
       "pattern": "proxy/var/spend_gate.jsonl",
@@ -34,36 +37,32 @@
       "why": "the frozen contract's append-only stream, which lives outside CONTRACTS/"
     }
   ],
-  "idle_seconds": 2.658,
+  "hard_listed_path": "a9-noise-31360/ledger.jsonl",
+  "hard_listed_was_reported": true,
+  "hard_listed_was_subtracted": false,
+  "hard_rule_it_matches": "**/ledger.jsonl -- per-territory ledger: the accounting a claim is later checked against",
+  "idle_seconds": 2.544,
   "idle_sleep": 2.0,
   "makeup_seconds": 0.0,
   "makeup_sleep": 0.0,
   "observed": [
-    "a9-negative-control-31360.jsonl"
+    "a9-noise-31360.txt",
+    "a9-noise-31360/ledger.jsonl"
   ],
+  "ordinary_path": "a9-noise-31360.txt",
+  "ordinary_was_reported": false,
+  "ordinary_was_subtracted": true,
   "reported": [
-    "a9-negative-control-31360.jsonl"
+    "a9-noise-31360/ledger.jsonl"
   ],
-  "reported_by_hard_list": [],
-  "run_seconds": 0.423,
-  "snapshot_seconds": 0.309,
-  "subtracted": [],
-  "superseded_criterion_lets_the_byte_through": true,
-  "superseded_criterion_reports": [],
-  "superseded_criterion_tokens": [
-    "/var/",
-    "/runs/",
-    "/out/",
-    "/artifacts/",
-    ".jsonl",
-    ".log",
-    "state.json"
+  "reported_by_hard_list": [
+    "a9-noise-31360/ledger.jsonl"
+  ],
+  "run_seconds": 0.46,
+  "snapshot_seconds": 0.274,
+  "subtracted": [
+    "a9-noise-31360.txt"
   ],
   "unreadable": [],
-  "victim": "a9-negative-control-31360.jsonl",
-  "victim_bytes": 1,
-  "victim_is_on_hard_list": false,
-  "victim_removed_afterwards": true,
-  "victim_visible_to_the_pre_A9_pin_test": false,
-  "what": "one byte written at the repo root during the run"
+  "what": "a real concurrent writer touching two files across both legs: the only measurement in this directory where the empty-run subtraction actually runs"
 }

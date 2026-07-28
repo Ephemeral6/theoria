@@ -25,7 +25,7 @@
       "superseded_reports_it": false
     }
   },
-  "files_watched": 2430,
+  "files_watched": 2433,
   "patterns": [
     {
       "examples": [],
@@ -91,20 +91,16 @@
       ],
       "files_on_this_tree": 10,
       "mandated_by_ticket": false,
-      "pattern": "**/ledger.*.jsonl",
+      "pattern": "baseline-arms/**/ledger.*.jsonl",
       "why": "sharded ledgers: the form the ledgers actually take on this tree"
     },
     {
       "examples": [
-        "cold-start-a0/artifacts/candidates.jsonl",
-        "cold-start-a0/prime/artifacts/candidates.jsonl",
-        "cold-start-a2/artifacts/candidates.jsonl",
-        "engine-rig/artifacts/candidates.jsonl",
-        "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/candidates.jsonl"
+        "engine-rig/artifacts/candidates.jsonl"
       ],
-      "files_on_this_tree": 17,
+      "files_on_this_tree": 1,
       "mandated_by_ticket": false,
-      "pattern": "**/candidates.jsonl",
+      "pattern": "engine-rig/**/candidates.jsonl",
       "why": "the frozen contract's append-only stream, which lives outside CONTRACTS/"
     }
   ],
