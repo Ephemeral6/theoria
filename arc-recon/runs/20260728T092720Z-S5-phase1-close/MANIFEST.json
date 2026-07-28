@@ -1,15 +1,37 @@
 {
-  "prompt_id": "S5-phase1-close",
-  "branch": "agent/s5-phase1-close",
+  "action_budget": 10,
+  "action_budget_note": "zero API calls this round; the P-20 probe data predates the item and the ruling is a re-analysis of it",
+  "actions_spent": 0,
   "base_commit": "7724f60a5127b2d7ae75b184bab8178ad9ccc947",
-  "utc": "2026-07-28T09:27:20Z",
-  "worker": "W-5200",
-  "territory": "arc-recon",
+  "branch": "agent/s5-phase1-close",
+  "files": [],
   "phase1_items": [
     "p1-access",
     "p1-cascade"
   ],
-  "action_budget": 10,
-  "actions_spent": 0,
-  "files": []
+  "phase1_items_now_green": [
+    "接入核查各项已入账",
+    "级联语义已裁决"
+  ],
+  "prompt_id": "S5-phase1-close",
+  "sealed_pile_contact": "none",
+  "territory": "arc-recon",
+  "utc": "2026-07-28T09:27:20Z",
+  "verify": {
+    "arc_recon": "bash arc-recon/verify.sh -> VERIFY: green",
+    "cascade": "bash arc-recon/cascade/verify.sh -> PASS (27 steps, 4 games, 31 ledger entries, 22 actions)"
+  },
+  "worker": "W-5200 -> W-1250",
+  "workers": [
+    {
+      "did": "the whole adjudication and the access-check closure; killed before it could commit, work sat uncommitted for five hours",
+      "id": "W-5200",
+      "utc": "2026-07-28T09:27:20Z"
+    },
+    {
+      "did": "verified and committed W-5200's work unaltered as its own commit, then closed the books: README accounting, VERDICT supersession banner, two incidents, RUN_STATE, PARTNER_SYNC",
+      "id": "W-1250",
+      "utc": "2026-07-28T14:39:45Z"
+    }
+  ]
 }

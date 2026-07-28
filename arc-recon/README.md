@@ -63,7 +63,7 @@ open access-check questions:
 
 | Question | Answer |
 |---|---|
-| **cascade semantics** — one frame per action, or several? | `frame` is a **list of frames** (length 1 on RESET, each 64x64). The API models `action -> frame sequence`, so `step` must be shaped that way. Whether it ever exceeds 1 needs an action that triggers an internal tick. |
+| **cascade semantics** — one frame per action, or several? | `frame` is a **list of frames** (length 1 on RESET, each 64x64). ⚠️ **The rest of this cell was an inference and has been superseded** — see [`CASCADE_RULING.md`](CASCADE_RULING.md). It read the frame *list* as a statement about the world's *rules*; the batch is a render burst, and `step` is frozen as `S → A → frames[-1]`. Kept rather than rewritten because the mis-reading is the finding: the observation was right and the conclusion drawn from it was not, for three days. |
 | **is `level` a response field?** | **Yes** — `levels_completed` and `win_levels`. No need to infer it from score jumps. Cross-check: `win_levels` 7 == `len(baseline_actions)` 7 in the catalogue. |
 | session handle | RESET returns a `guid` |
 | action space | `available_actions: [1,2,3,4,5]` — no ACTION6 for this `keyboard`-tagged game, matching its tag |
@@ -124,10 +124,47 @@ PASS certifies RESET-state reproducibility and no-op consistency, and tn36
 remains **gameplay-blocked until the ACTION6 data shape is resolved**.
 
 **Access-check items settled by the precheck runs**: cascade semantics —
-`action → frame sequence` confirmed observationally (7-frame and 2-frame
-responses); cross-session residue — none on any of the four (identical RESET
-hashes, and g50t's re-check reproduced the *previous day's* hashes exactly);
-`levels_completed` / `win_levels` maintained throughout.
+multi-frame responses confirmed observationally (7-frame and 2-frame batches;
+what they *mean* took a second instrument, see below); cross-session residue —
+none on any of the four (identical RESET hashes, and g50t's re-check reproduced
+the *previous day's* hashes exactly); `levels_completed` / `win_levels`
+maintained throughout.
+
+## The access check is closed — all eight items
+
+`ACCESS_CHECK.md` is the ledger, one row per Theoria.md Phase 1 item. As of
+2026-07-28 (S5) every row is answered or closed, and the two that were still
+open are closed like this:
+
+| # | Item | How it closed | Residuals, named |
+|---|---|---|---|
+| 4 | does one action return several frames | **yes, up to 113 — and adjudicated**: the batch is a **render burst, not an internal tick**. `step` is frozen `S → A → frames[-1]`; `cascade single_frame` for the four development worlds; `theory.pddl` needs **no** derived predicates. [`CASCADE_RULING.md`](CASCADE_RULING.md) | G-1 the tick criterion has never been run *directly*; G-2 every trace stopped at level 0; G-3 the 113-frame batch has only been counted, never read cell by cell |
+| 6 | rate limits and quota | **closed for the question Phase 1 asked** — the campaign fits, worst aggregate peak 432 rpm of 600 (`data/rate_budget.json`, `rate_budget.py`) | no 429 has ever been observed, so the backoff curve is unmeasured — the budget is built on a limit we have never touched |
+| 2 | cross-session residue | **closed** — none across four sessions; now standing surveillance (daily canary) rather than an open question | — |
+| 8 | frame caching and release licensing | **closed, and less restrictive than first read** — caching is designed behaviour, our own numbers are explicitly publishable, ARC's raw content is not | the salvaged P-20 raw ledgers are ARC content and join the §8 release-redaction obligation |
+
+**The cascade item is worth reading for how it went wrong, not just how it came
+out.** The observation — `frame` is a list — was correct on day one and is in
+the table above. The conclusion drawn from it, "the world has an internal tick,
+so `step` must be `action → frame sequence`", was an *inference* that rode the
+observation's evidence for three days and reached `ACCESS_CHECK.md` §4 and this
+file as though it had been measured. Theoria.md:299 had already named
+**animation** and **internal tick** as two candidate causes of one observation;
+the syllogism at Theoria.md:301 compressed them into one, and nobody re-opened
+it until an instrument that could tell them apart existed. What separated them
+was per-frame hashing plus the question "is an intermediate frame a state a rule
+could fire *from*" — two different measurements of the same bytes.
+
+**The evidence nearly did not survive.** P-20's per-frame probe lived as an
+untracked directory inside a worktree with no manifest; a `git worktree prune`
+would have deleted the evidence for a Phase 1 gate item. It is now
+[`cascade/`](cascade/), raw ledgers included, because
+`cascade/verify.py` recomputes the frame hashes from the stored bodies — without
+them the salvaged evidence would be a summary that agrees with itself.
+
+```bash
+cd arc-recon && bash cascade/verify.sh    # 27 steps, 4 games, 31 ledger entries, PASS
+```
 
 **Budget.** ≤20 executed ACTIONs per game (RESETs logged, not counted), spent
 16 / 20 / 16 / 16 on ar25 / g50t / sk48 / tn36. A 10-minute harness timeout
