@@ -791,3 +791,43 @@ _deleting_actions/locked_actions/closure 一个都不参与义务重算，只�
 测试：348 passed / 1 skipped；`python -m tools.verify_c8` 六项全绿（套件、两包逐字节复算、manifest 摘要、上下文扫描、卷子复算、读者答卷复判）。零网络、零模型调用在任何生成链路上、封存堆零接触、$0.00。
 阻塞：none。
 下一步：**读者报告比分数值钱，四条已修三条没修，engine-rig 与后续 cell 都用得上。** 已修：`gen_markdown` 把每一条否定都丢了（`GuardPredicate.negated` 没有任何人读，`not free(...)` 渲染成「is free」——人类形态在说说明书的反话，sokoban 六条规则里中了三条）；`forall` 变量没有分支，schema 规则印出 `VarRef(name='d')` 的 repr，domain 与 landmark 根本不渲染；事件按名字而非「名字+元数」分派，于是 `jumped(Cart, portal_exit)` 落进跳棋分支渲染成「a peg jumps」，一个没有 peg 的世界里的 peg，且目的地被丢掉；`gen_pddl` 的 problem 半边在没有 ProblemSpec 时把所有对象放在 cell-0-0 并无视墙。**没修，是给下一个人的**：`gen_pddl` 的 domain 本身不健全（D-TC-031 记过两条，读者又找到第三条——`push-up` 测 `adjacent-above` 而谓词块写的是 `adjacent-up`，永不匹配），C8 只是在把 PDDL 叫作 generated 之前先用本轨道的 `strips` 复读一遍，读不过就当缺口公布在包首页——**于是两个包都没有规划形态，四形态实际是四缺一，这写在每个包的封面上**；`gen_python` 会为关卡根本没有实例化的对象发射规则（no-button 那份预测器里 `_effect_press_left` 赋值一个不存在的字段）；`gen_lean` 的 `reachable_closed` 是 `(step s a = step s a) = True`，`goal_is_reachable` 从不提 `Reachable`，两位读者都把转移表当数据用、把定理当证据拒了。另有一条要说清楚：**上游 `a0-spike/theory/theory.dsl` 出不了包**，卡点比已知的 `dir` 自由名更早——它声明 `slid(o, dir)` 而语言实现的是 `slid(o, pusher, dir)`，推箱子同时带动推者，两参签名把自己一半的效果留在无名处，没有任何「这个事件做什么」可以交给读者；这是 X-1 从移交这一侧看过去的样子，实测在 `runs/20260728T134022Z-C8-handover-package/upstream_vs_shipped.json`，发布的是 v0.3 迁移版并在该包 MANIFEST 里写明替换。最后一条留给做移交**测量**的人：这两个包带的都不是新关卡，是各自说明书被裁决时用的那两关——「全新实例」是考卷的活，不是包生成器的活，包演示的是 domain/problem 的切口。
+
+## [monitor] 2026-07-28T14:32:55Z S1-quota-auto-exit
+
+状态：配额熔断的自动出口，补上唯一还缺的两样。开工先对账发现工单三件里**两件树上已经
+做完**（`0d28e99`：reflex 每跳在 hold 下探窗并自动 resume；按 `PRIORITY` 半池 90s 错峰
+重发），第三件「全链路测试」逐字是 `S12-quota-hold-tests` 的。**真正还缺的是工单正文
+最后一句括号里的那条**——「hold 期间 ping 频率不要高于每 20 分钟」——它不但没做，而且
+反着来：`reflex.py` 是每 5 分钟一跳的计划任务，自动出口接上之后**每跳都 ping，无条件**，
+而 `ping()` 是一次真的 haiku 调用。**熔断器为了问「我能用了吗」，在停机期间持续消耗它
+正在等待恢复的那个配额**；今天 09:35→12:45 那次 hold 按现状约 37 次调用，许可 9 次。
+而且 reflex ping 成功后调 `resume`，`resume` 自己又 ping 一次——每次出闩隔几秒买两遍
+同一个答案。
+
+修了三处：`MIN_PING_INTERVAL_MIN = 20` 与 `ping --if-due`（退出码 3 = 未到点、一分没花，
+reflex 改用这个拼法）；`last_ping_at` 每次尝试后**无条件**落盘（只记成功等于「窗口关着
+时不限速」，而那正是唯一需要限速的时段）；`window_is_open()` 复用新鲜的 OPEN 不再买第二遍。
+方向刻意不对称：**新鲜的 CLOSED 绝不短路成「继续冻着」**——那样省钱但会用陈旧证据把舰队
+关在里面，正是原来那个 bug。限速闸放在 reflex 一侧而非 `ping()` 里：人手敲 ping 要立刻
+得到答案，限速是管无人值守的五分钟循环的，不是跟站在那儿的人争辩的。
+
+测试：`monitor/tests/test_quota_autoexit.py` **10 passed**，0.2 秒、零网络（`claude` 全程
+不在 PATH，忘了 stub 的测试会挂而不是安静花钱）。**三条负样本每条都验过会红**：去掉限速、
+去掉截止时间出口、只记录成功的 ping——分别点亮对应的测试。其中
+`test_the_deadline_exit_does_not_need_the_window_to_answer` 把 `subprocess.run` 换成会抛
+异常的东西，**任何一次 ping 尝试都是硬错误**，它通过是因为什么都没试——这是「不会被它正在
+等待的停机堵住的出口」的可执行形式。`bash monitor/verify_quota_exit.sh` 四步全绿。
+
+阻塞：无。但登记一条**流程冲突**：工单头写 `territory: proxy`，正文三次点名
+`monitor/quota.py` / `monitor/reflex.py`，两种读法有一种让这件事不可能完成。我先写 inbox
+报告并 `release` 交回板上，**板把同一件原样发回**（当时只有我一个工人在领，再 release
+就是无限交接），于是按正文的读法开工，并把冲突记在 RUN_STATE、manifest 和这里。
+`S12-quota-hold-tests` 的头也写 `territory: proxy`、同样是 monitor-only 的活，看着是沿用
+了 S9 的字段——派单时值得校一下 territory 与正文点名的目录是否一致。
+
+下一步：S12 仍值得单独做，它要的迁移矩阵更宽（hold 下 ci_merge 仍可跑、每条迁移一个负样本、
+外加一份「只有入口没有出口」的状态机审计：`reflex.lock` 的 25 分钟窗口、三振计数器、board 的
+claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `reflex.py` 那 17 行改动只由静态
+断言（AST + 拼法检查）守着，不是行为测试；(2) 20 分钟是工单给的数字、不是测出来的，也没有
+自适应退避；(3) `ping()` 与 `check()` 各自整体 `save_state`，仍可互相覆盖——ping 后重读把
+窗口缩到最小，真正的修法是按键合并或加锁。

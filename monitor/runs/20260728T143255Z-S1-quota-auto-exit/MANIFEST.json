@@ -1,0 +1,21 @@
+{
+  "prompt_id": "S1-quota-auto-exit",
+  "branch": "agent/s1-quota-auto-exit",
+  "base_commit": "5defae76aa9958a439536302a55dab0d31f4abbd",
+  "utc": "2026-07-28T14:32:55Z",
+  "worker": "W-1250",
+  "territory_as_written": "proxy",
+  "territory_as_worked": "monitor",
+  "territory_note": "The item's header says proxy; its body names monitor/quota.py and monitor/reflex.py three times and describes changes possible nowhere else. Flagged to the monitor inbox and released once; the board returned the same item, so it was worked under the body's reading. See RUN_STATE.md.",
+  "delivered": {
+    "command": "bash monitor/verify_quota_exit.sh",
+    "result": "VERIFY OK -- 4 steps, 10 tests, 3 negative controls all fire"
+  },
+  "already_on_master": {
+    "commit": "0d28e99",
+    "covers": ["(1) reflex probes in hold and auto-resumes", "(2) priority requeue, half pool, 90s stagger, reflex.log line"]
+  },
+  "network": "none",
+  "api_spend_usd": 0.0,
+  "sealed_pile_contact": "none"
+}
