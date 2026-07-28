@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 08:24:29",
+  "generated_at": "2026-07-28 08:33:20",
   "history": [
     {
       "findings": {
@@ -360,6 +360,98 @@
         }
       },
       "ts": "2026-07-28 08:14:22"
+    },
+    {
+      "findings": {
+        "blocking": 1,
+        "high": 5,
+        "info": 7,
+        "low": 3,
+        "medium": 2
+      },
+      "paper_progress": 26.8,
+      "progress": 37.6,
+      "sections": {
+        "Claim 菜单": {
+          "blocked": 2,
+          "missing": 2,
+          "partial": 1
+        },
+        "Phase 1 · 封闭系统": {
+          "green": 5,
+          "partial": 8,
+          "risk": 3
+        },
+        "Phase 2 · 指标电池": {
+          "green": 1,
+          "partial": 2
+        },
+        "Phase 3 · 框架迭代（开发堆）": {
+          "missing": 2,
+          "partial": 3
+        },
+        "Phase 4 · 确证（封存堆）": {
+          "missing": 5,
+          "partial": 1
+        },
+        "十条强制约束": {
+          "green": 1,
+          "missing": 2,
+          "partial": 5,
+          "risk": 2
+        },
+        "车间八工序": {
+          "green": 7,
+          "partial": 2
+        }
+      },
+      "ts": "2026-07-28 08:32:36"
+    },
+    {
+      "findings": {
+        "blocking": 1,
+        "high": 5,
+        "info": 7,
+        "low": 3,
+        "medium": 2
+      },
+      "paper_progress": 26.8,
+      "progress": 39.0,
+      "sections": {
+        "Claim 菜单": {
+          "blocked": 2,
+          "missing": 2,
+          "partial": 1
+        },
+        "Phase 1 · 封闭系统": {
+          "green": 6,
+          "partial": 8,
+          "risk": 2
+        },
+        "Phase 2 · 指标电池": {
+          "green": 1,
+          "partial": 2
+        },
+        "Phase 3 · 框架迭代（开发堆）": {
+          "missing": 2,
+          "partial": 3
+        },
+        "Phase 4 · 确证（封存堆）": {
+          "missing": 5,
+          "partial": 1
+        },
+        "十条强制约束": {
+          "green": 1,
+          "missing": 2,
+          "partial": 5,
+          "risk": 2
+        },
+        "车间八工序": {
+          "green": 7,
+          "partial": 2
+        }
+      },
+      "ts": "2026-07-28 08:33:20"
     }
   ],
   "loop_stats": [
@@ -377,19 +469,18 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/prompts/README.md",
+      "onitor/history.jsonl",
+      "monitor/index.html",
+      "monitor/scan.py",
+      "monitor/spec.py",
+      "monitor/state.json",
       ".claude/",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/",
-      "monitor/prompts/P-13-fd-real.md",
-      "monitor/prompts/P-14-battery-v1.md",
-      "monitor/prompts/P-15-exam-builder.md",
-      "monitor/prompts/P-16-workshop-paper.md",
-      "monitor/prompts/P-17-a3-transfer.md"
+      "baseline-arms/out/shards/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "edb3c37 monitor: round-4 audit -- P batch fully landed, progress 20.9% -> 39.0%, dispatch round 4",
+    "git_head": "df9f748 monitor: five supplemental prompts (P-13..P-17) -- zero overlap with the running round",
     "incidents": 8,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -399,16 +490,12 @@
     "untracked": [
       ".claude/",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/",
-      "monitor/prompts/P-13-fd-real.md",
-      "monitor/prompts/P-14-battery-v1.md",
-      "monitor/prompts/P-15-exam-builder.md",
-      "monitor/prompts/P-16-workshop-paper.md",
-      "monitor/prompts/P-17-a3-transfer.md"
+      "baseline-arms/out/shards/"
     ]
   },
   "p1_green": 6,
   "p1_total": 16,
+  "paper_progress": 26.8,
   "phases": [
     {
       "_counts": {
@@ -474,8 +561,8 @@
           "status": "partial"
         },
         {
-          "_note": "开发堆 4 局全部 PASS（重试包络盖过 1–3 分钟的波浪式瞬时故障；每局 ≤20 动作）。INC-001/002 正式改判（INC-001b/002a/005）。  〔本次扫描：arc-recon 预检裁定：unknown。 但 baseline-arms 的重试实验里 ACTION 178/1546 次返回 200 —— INC-002『0 次成功』已不成立，预检需在重试策略下重跑。〕",
-          "_status": "risk",
+          "_note": "开发堆 4 局全部 PASS（重试包络盖过 1–3 分钟的波浪式瞬时故障；每局 ≤20 动作）。INC-001/002 正式改判（INC-001b/002a/005）。  〔本次扫描：逐局判决：ar25=PASS； g50t=PASS； sk48=PASS； tn36=PASS。全 PASS。〕",
+          "_status": "green",
           "clause": "Phase 1 验收单",
           "id": "p1-determinism",
           "label": "确定性预检全绿",
@@ -550,8 +637,8 @@
           "status": "partial"
         },
         {
-          "_note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：密钥只出现在 .env（已 gitignore=True）；全仓 全部 个文件已扫描。〕",
-          "_status": "green",
+          "_note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：密钥泄漏进：.claude/worktrees/p11-arc-hygiene/.env〕",
+          "_status": "risk",
           "clause": "Phase 1 验收单",
           "id": "p1-seal-test",
           "label": "密封测试（臂内无凭据；绕开双代理的出网必须失败）",
@@ -757,12 +844,12 @@
       "status": "green"
     },
     "credential_hygiene": {
-      "detail": "密钥只出现在 .env（已 gitignore=True）；全仓 全部 个文件已扫描。",
-      "status": "green"
+      "detail": "密钥泄漏进：.claude/worktrees/p11-arc-hygiene/.env",
+      "status": "risk"
     },
     "determinism_state": {
-      "detail": "arc-recon 预检裁定：unknown。 但 baseline-arms 的重试实验里 ACTION 178/1546 次返回 200 —— INC-002『0 次成功』已不成立，预检需在重试策略下重跑。",
-      "status": "risk"
+      "detail": "逐局判决：ar25=PASS； g50t=PASS； sk48=PASS； tn36=PASS。全 PASS。",
+      "status": "green"
     },
     "dispatch_board": {
       "detail": "12 份在册工单，0 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",

@@ -149,23 +149,21 @@ def probe_pile_integrity():
 
 
 def probe_determinism_state():
+    """Per-game verdicts from arc-recon/data/precheck.json."""
     pre = read_json("arc-recon/data/precheck.json", {})
-    verdict = pre.get("verdict") or pre.get("status") or "unknown"
-    # the counter-evidence: did any ACTION ever return 200?
-    ok_actions = 0
-    total_actions = 0
-    for row in iter_jsonl("baseline-arms/probe_log.jsonl"):
-        url = row.get("url") or ""
-        if "/cmd/ACTION" in url:
-            total_actions += 1
-            if row.get("status") == 200:
-                ok_actions += 1
-    detail = "arc-recon 预检裁定：%s。" % verdict
-    if total_actions:
-        detail += (" 但 baseline-arms 的重试实验里 ACTION %d/%d 次返回 200 —— "
-                   "INC-002『0 次成功』已不成立，预检需在重试策略下重跑。"
-                   % (ok_actions, total_actions))
-    return {"status": "risk" if ok_actions else "blocked", "detail": detail}
+    results = pre.get("results") or {}
+    verdicts = {}
+    for gid, r in results.items():
+        v = r.get("verdict")
+        verdicts[gid] = (v.get("verdict") if isinstance(v, dict) else v) or "?"
+    if not verdicts:
+        return {"status": "blocked", "detail": "precheck.json 无逐局判决。"}
+    n_pass = sum(1 for v in verdicts.values() if v == "PASS")
+    detail = "逐局判决：" + "； ".join("%s=%s" % (g.split("-")[0], v)
+                                       for g, v in sorted(verdicts.items()))
+    if n_pass == len(verdicts):
+        return {"status": "green", "detail": detail + "。全 PASS。"}
+    return {"status": "partial", "detail": detail}
 
 
 def probe_a0_state():
@@ -458,11 +456,19 @@ def compute_progress(phases):
     return {"total": round(100 * total, 1), "by_phase": by_phase}
 
 
+def compute_paper_progress():
+    """Progress toward the publishable paper — the official target since
+    2026-07-28. Denominator = PAPER_PLAN in spec.py (Schema-scale campaign)."""
+    total = sum(p["weight"] * p["pct"] for p in spec.PAPER_PLAN)
+    return round(total, 1)
+
+
 def append_history(state):
     """One JSONL row per scan — the raw material of the trend chart."""
     row = {
         "ts": state["generated_at"],
         "progress": state["progress"]["total"],
+        "paper_progress": state["paper_progress"],
         "sections": {s["name"]: s["counts"] for s in state["sections"]},
         "findings": {},
     }
@@ -554,9 +560,10 @@ def chart_stacked(sections):
 
 
 def chart_trend(history):
-    """Whole-programme progress (%) across scans."""
-    pts = [(row.get("ts", ""), row["progress"])
-           for row in history if "progress" in row]
+    """Progress (%) across scans — paper-workload basis where recorded."""
+    pts = [(row.get("ts", ""), row.get("paper_progress", row.get("progress")))
+           for row in history
+           if row.get("paper_progress") is not None or "progress" in row]
     if not pts:
         return '<p class="note">尚无历史 —— 每次扫描若有变化会自动记一笔。</p>'
 
@@ -620,11 +627,12 @@ def hero_progress(progress):
         % (esc(bp["name"]), bp["pct"], bp["pct"], bp["weight"] * 100)
         for bp in progress["by_phase"])
     return ('<div class="hero"><div class="hnum">%.1f<small>%%</small></div>'
-            '<div class="hbody"><div class="htitle">研究总进度'
-            '<span class="note">　100%% = Theoria.md 全程：四段验收、封存战役、裁决与释出全部完成。'
-            '权重与折算规则记在 monitor/spec.py，改定义必须改那里。</span></div>'
-            '<div class="hbar">%s</div><div class="hrows">%s</div></div></div>'
-            % (progress["total"], "".join(segs), rows))
+            '<div class="hbody"><div class="htitle">论文完成度'
+            '<span class="note">　100%% = 可发表的主论文：实验规模对标 Schema'
+            '（全公开集 + 全量 artifacts 释出的地板）。分母是下方论文工作量地图'
+            '（monitor/spec.py 的 PAPER_PLAN）；四段进度为参考口径：%.1f%%。</span>'
+            '</div><div class="hbar">%s</div><div class="hrows">%s</div></div></div>'
+            % (progress["paper"], progress["total"], "".join(segs), rows))
 
 
 FIX_LABEL = {"landed": ("已回灌", "green"), "dispatched": ("修复中·已派工", "partial"),
@@ -714,8 +722,25 @@ def render(state, refresh=None):
       '<span class="stamp">扫描于 %s · %s · %s</span></p></div>' %
       (esc(state["generated_at"]), esc(m["git_branch"]), esc(m["git_head"][:40])))
 
-    # ---- headline: whole-programme progress
-    A(hero_progress(state["progress"]))
+    # ---- headline: paper-workload progress
+    A(hero_progress(dict(state["progress"], paper=state["paper_progress"])))
+
+    # ---- paper workload map: the official definition of "done"
+    A('<section class="mainloop"><h2>论文工作量地图 <span class="note">— 完成目标'
+      '的正式定义；规模对标 Schema 论文（25 局全集 + 全量 artifacts）'
+      '</span></h2>')
+    A('<table class="wide"><thead><tr><th>工作包</th><th>论文槽位</th>'
+      '<th>规模（Schema 对标）</th><th>完成度</th><th>证据 / 在跑工单</th>'
+      '</tr></thead><tbody>')
+    for wp in spec.PAPER_PLAN:
+        A('<tr><td><b>%s</b> %s<span class="clause">权重 %.0f%%</span></td>'
+          '<td class="nt">%s</td><td class="nt">%s</td>'
+          '<td><div class="hb" style="min-width:70px"><i style="width:%d%%"></i></div>'
+          '<span class="hv">%d%%</span></td><td class="nt">%s</td></tr>'
+          % (esc(wp["id"]), esc(wp["name"]), wp["weight"] * 100,
+             esc(wp["slot"]), esc(wp["scale"]), wp["pct"], wp["pct"],
+             md_bold(esc(wp["evidence"]))))
+    A('</tbody></table></section>')
 
     # ---- topline
     lb, lp, ll = state["loop_stats"]
@@ -1206,6 +1231,7 @@ def build(with_tests=False):
         "tickets": load_prompts(),
     }
     state["progress"] = compute_progress(phases)
+    state["paper_progress"] = compute_paper_progress()
     n_prob = sum(len(ex["problems"]) for ex in spec.ITERATION_LOOP)
     n_landed = sum(1 for ex in spec.ITERATION_LOOP
                    for p in ex["problems"] if p["status"] == "landed")
