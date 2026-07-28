@@ -10,7 +10,7 @@
 
 > **Draft status — v0.3.** This is a working draft assembled from the acceptance
 > reports already in the repository. Authorship, affiliation and venue are
-> unfilled placeholders, and at ~22 600 words it is roughly five times a workshop
+> unfilled placeholders, and at ~23 000 words it is roughly five times a workshop
 > budget — the cut is a separate pass, and no material has been dropped yet in
 > order to make it.
 >
@@ -57,7 +57,7 @@ Lean with the axiom list inspected.
 
 Phase 1 is offline: four acceptances on self-built deterministic worlds, a
 metrics battery recomputed over trajectories that already existed, an examination
-instrument, and one live run that spent nothing. Seven results.
+instrument, and one live run that spent nothing. Eight results.
 **(1)** On a 9×9 self-built world, the induced manual replays 276/276 frames and
 22 356/22 356 pixels with zero anomalies and is nonetheless wrong on 3 of 236
 reachable (state, action) pairs — accuracy 0.000, over the three pairs (n = 3)
@@ -84,30 +84,38 @@ axiom list — the instrument returns `[]` for both — where one is true of its
 world and the other is not. The instrument cannot tell them apart, and is not
 supposed to.
 
-The battery, run over existing trajectories at zero new spend, immediately found
-three of its own metrics measuring something other than what they claim, and
-reports that no metric on this pilot can reach significance — a two-sided sign
-test over four paired games has a smallest attainable *p* of 0.125. **(5)** A
-theory carried unchanged to a second level of the same game re-fits from a single
+**(5)** A metrics battery recomputed over 95 runs across five arms at zero new
+spend, whose harshest reader is its own audit: 34 of 38 executable exploits still
+score a metric at or near its best value while possessing none of the capability
+it claims to measure, 17 of its written defence claims were contradicted by their
+own demonstration, and the exploration family's declared signature separates the
+one gradient the design specifies *backwards*. No metric on this pilot can reach
+significance in any case — a two-sided sign test over four paired games has a
+smallest attainable *p* of 0.125.
+
+**(6)** A theory carried unchanged to a second level of the same game re-fits from a single
 frame and wins with zero engine stages, zero adjudicated candidates and zero
 theorize rounds, at 252/252 against the referee — while the verification work is
 paid in full and at the same rate. Two perturbed levels, each breaking a
 mechanism the carried theory does not know about, were both caught, and both were
 caught only *after* acting: the free static layer passed them and returned the
-same plan. **(6)** An examination instrument with four question types, a marker
+same plan. **(7)** An examination instrument with four question types, a marker
 calibrated on four synthetic subjects with pre-registered bands, and a leak
 checker that reports 1 790 probes with no hits — and which nonetheless missed two
 real leaks that an adversarial reader found, because the hook the checker needed
 was optional and no paper implemented it. Three of its four papers have never
-been sat. **(7)** A live run against the real API that exercised the whole
+been sat. **(8)** A live run against the real API that exercised the whole
 credential path — key injected in one place, sealed pile untouched by a check on
 the bytes — for zero billable actions.
 
 We claim none of the framework's comparative results. No arm was run against a
 baseline. No game was played *for* this paper: the battery recomputes over
 trajectories that already existed, and the comparative effect sizes it reports
-are across a model ladder within one control arm, not across the framework's
-arms. The theorize step is a checked-in artefact rather than a measured
+run between two *control* arms — bare Claude Code, and released upstream Schema
+trajectories — and across a model ladder within one of them. **None is across the
+framework's own arms**, and the Schema side is another team's agent on another
+team's infrastructure, so every effect size there bundles capability with
+plumbing. The theorize step is a checked-in artefact rather than a measured
 language-model step, and every world is small enough for `decide` to enumerate.
 The contribution is an instrument and a demonstration artefact — Phase 1
 establishes that the instrument exists, that it produces the failure mode on
@@ -371,7 +379,8 @@ game spend.
 > 独立可成 workshop 文
 
 This paper is that unit and nothing more. It reports the three acceptances and
-the battery's first recompute. It reports no play, no baseline comparison, and
+the battery's recompute, now in its third version. It reports no play, no
+baseline comparison of the framework's own arms, and
 no claim from the Phase 3 claim menu.
 
 ---
@@ -2225,8 +2234,10 @@ comparison run; that a machine-checked impossibility can be produced whose
 weights crossed a data boundary between two independently developed tracks and
 whose empty axiom list is a check that has been made to fail on purpose; that the
 refutation loop closed on a false theorem in six recorded beats; and that a
-passive metrics battery over existing trajectories immediately found three of its
-own metrics measuring something other than what they claim.
+passive metrics battery over existing trajectories, once its anti-gaming register
+was made executable rather than written, contradicted 17 of its own defence claims
+by demonstration and found the exploration family's declared signature separating
+the specified gradient backwards.
 
 Everything else in `Theoria.md` — the ordering claim, the bill shape, transfer,
 the exam, the cost magnitude — is unevidenced here and is not claimed.
