@@ -219,6 +219,32 @@ change across the whole regeneration is one field of `a0_report.json`: the
 absolute path of the Lean binary that ran. That field is machine-dependent and is
 ledger **X-4** — recorded, not fixed, because changing it is a schema decision.
 
+### FINDING-7 · The manifest pinned bytes no checkout would ever reproduce
+
+Found by checking rather than by anything failing. `MANIFEST.json` digests the
+files it lists; built naively it digests the **working copy**, and on Windows
+with `core.autocrlf=true` the working copy is CRLF while git stores LF. **7 of 19
+entries did not match the committed blob** — `THEORIZE_LOG.md` at 28,453 bytes in
+the manifest against 28,005 committed, and six more. Nothing reported it: both
+files were perfectly valid, and the mismatch is invisible unless you compare the
+digest to `git show`.
+
+That is worse than having no manifest. Its whole job is to let a later reader
+confirm the artefacts are the ones the run measured, and a digest that no clone
+can reproduce answers a question nobody asked while looking exactly like
+verification. It is also the same root cause as FINDING-5 one layer up, which is
+why `.gitattributes` alone was not enough: that fixes what *checkout* writes, not
+what an editor writes afterwards.
+
+Fixed twice over — the working tree is normalised to LF (no content changed; `git
+diff --numstat` is empty across all 22 files) and `make_manifest.py --verify`
+now compares every recorded digest against `git show :<path>`, so the failure
+mode is detectable instead of merely absent today:
+
+```bash
+python runs/20260728T040057Z-c2/make_manifest.py --verify   # 19 files; 0 mismatched
+```
+
 ### FINDING-6 · The gate that would have caught this does not exist, confirmed a second time
 
 OPS-M's conflict note ends with an instrument observation for monitoring:
@@ -242,9 +268,14 @@ gate waves through.
 ```bash
 cd a0-spike
 python -m probes.semantics_probe --out runs/20260728T040057Z-c2   # the adjudication
-python -m pytest -q                                              # 42 passed
+python -m pytest -q                                              # 44 passed
 python -m pipeline.run_a0                                        # four forms + certify
+python runs/20260728T040057Z-c2/make_manifest.py --verify        # 19 files, 0 mismatched
 ```
+
+All four exit 0, and `semantics_probe` exits non-zero unless every one of the
+three statements is decided — so a green run of it is the adjudication holding,
+not merely the script finishing.
 
 `probes/semantics_probe.py` uses ground truth only to grade, never to predict —
 the standing rule in `pipeline/stages.py`. It is deterministic; no seed, no clock,

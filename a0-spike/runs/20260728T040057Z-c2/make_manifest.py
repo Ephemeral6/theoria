@@ -60,10 +60,56 @@ def git(*args: str) -> str:
                           capture_output=True, text=True).stdout.strip()
 
 
+def verify() -> int:
+    """Do the recorded digests match what git actually stores?
+
+    Worth its own mode because they silently did not, once. On Windows with
+    `core.autocrlf=true` an editor writes CRLF, git stores LF, and a manifest
+    built from the *working copy* pins bytes no fresh checkout will ever
+    reproduce -- 7 of 19 entries, undetectable by reading either file. A manifest
+    whose digests do not match the repository is worse than no manifest: it looks
+    like verification and answers a question nobody asked.
+
+    Compares against the index (`git show :<path>`), which is what will be
+    committed and therefore what a clone receives.
+    """
+    path = os.path.join(HERE, "MANIFEST.json")
+    if not os.path.isfile(path):
+        print("no MANIFEST.json to verify")
+        return 1
+    with open(path, encoding="utf-8") as fh:
+        manifest = json.load(fh)
+
+    bad = []
+    for name, record in sorted(manifest.get("files", {}).items()):
+        # Test the exit code, never the emptiness of stdout: `probes/__init__.py`
+        # is a legitimately empty file, and reading "no bytes" as "no such blob"
+        # reported it as missing when it was staged and correct. A verifier that
+        # cries wolf on an empty file gets switched off.
+        shown = subprocess.run(["git", "-C", REPO, "show", ":" + name],
+                               capture_output=True)
+        blob = shown.stdout
+        if shown.returncode != 0:
+            bad.append((name, "not in the index"))
+        elif hashlib.sha256(blob).hexdigest() != record["sha256"]:
+            bad.append((name, "digest differs from the stored blob (line endings?)"))
+
+    for name, why in bad:
+        print("  MISMATCH %s -- %s" % (name, why))
+    print("%d files; %d mismatched" % (len(manifest.get("files", {})), len(bad)))
+    return 1 if bad else 0
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--utc", required=True, help="ISO8601 Z, the run's stamp")
+    parser.add_argument("--utc", help="ISO8601 Z, the run's stamp")
+    parser.add_argument("--verify", action="store_true",
+                        help="check recorded digests against the git index")
     args = parser.parse_args()
+    if args.verify:
+        return verify()
+    if not args.utc:
+        parser.error("--utc is required unless --verify is given")
 
     files = {}
     missing = []
