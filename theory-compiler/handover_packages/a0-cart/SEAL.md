@@ -7,6 +7,8 @@ A handover package is supposed to be everything its reader gets. The build scans
 3. **an artefact that is not here** — a log, a ledger, a status file;
 4. **conversational deixis** — "as we discussed", "see above".
 
+Those four and no more. It does **not** try to catch every prose mention of something that lives elsewhere: a generated file's own docstring may name the pipeline that produced it, and a source comment may name a component you do not have. Neither gives you a reference you need to follow — but do not read a clean scan as a promise that no sentence in here mentions anything outside it.
+
 Two files are excluded from the scan and it matters that you know which: `MANIFEST.json`, which records on purpose where these files came from in the repository that produced them, and `SEAL.md` — this file — which quotes what the scan found and would otherwise report itself. Nothing else is excluded.
 
 ## Result

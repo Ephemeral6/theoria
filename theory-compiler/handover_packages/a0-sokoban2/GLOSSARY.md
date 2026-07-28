@@ -43,7 +43,7 @@ Every row here is a name whose value this package can *show* you changing — or
 | `arena` | 49 cells | 49 cells | *same here* |
 | `background_colour` | 0 | 0 | *same here* |
 | `board_shape` | 7 x 7 | 7 x 7 | *same here* |
-| `goal_cell` | — | — | *same here* |
+| `goal_cell (the board's field, which the manual's goal clause may not consult)` | — | — | *same here* |
 | `landmark target` | (3, 1) | (3, 3) | **differs** |
 | `non_background_cells` | 3 | 4 | **differs** |
 
@@ -72,3 +72,16 @@ These clauses of the manual contain a number. A law is a fact about the world; a
 | `invariant` | `invariant box_row_parity (Box.pos.row) mod 2 = 1 [status: proven]` |
 | `invariant` | `invariant box_col_parity (Box.pos.col) mod 2 = 1 [status: proven]` |
 | `invariant` | `invariant box_parity (Box.pos.row + Box.pos.col) mod 2 = 0 [status: proven]` |
+
+## What the manual says it has checked
+
+Each of these carries a tag saying how its author says it was established. **A tag is a claim about evidence that is not in this package.** Nothing here re-derives one, and a reader should not treat `proven` or `passed` as checked.
+
+Where a claim can be tested against the two boards in `levels/`, test it. A claim that speaks about how a board starts — a parity, a distance, whether the goal is reachable — is a claim about *some* board, and this package carries two you can hold it against.
+
+| clause | kind | what its author says |
+|---|---|---|
+| `box_row_parity` | invariant | status: proven |
+| `box_col_parity` | invariant | status: proven |
+| `box_parity` | invariant | status: proven |
+| `unsolvable_mismatch` | theorem | probe: passed, depends: ['push2'] |

@@ -1,12 +1,142 @@
 {
-  "base_commit": "9c65d6a8f24819457ae4fb24e0a51c43fc121fd6",
+  "acceptance": {
+    "protocol": "a fresh subagent per package, given a staged copy outside the repository, permitted to read every file and forbidden to execute any; truth computed from the package's own compiled predictor",
+    "round1": {
+      "a0-cart": "24/25",
+      "a0-sokoban2": "29/29",
+      "note": "the one wrong item was the sheet's defect, not the reader's; see RUN_STATE.md"
+    },
+    "round2": {
+      "a0-cart": "24/24",
+      "a0-sokoban2": "29/29",
+      "abstentions": 0,
+      "wrong": 0
+    }
+  },
+  "base_commit": "16d759176e2bd9765eb6ed15f3cdf27f2cb86d68",
   "branch": "agent/c8-handover-package",
   "cell": "C3",
-  "files": [],
+  "cost": {
+    "api_calls": 0,
+    "model_calls_on_any_generation_path": 0,
+    "network": "none",
+    "sealed_pile_contact": "none",
+    "usd": 0.0
+  },
+  "files": [
+    {
+      "path": "theory-compiler/src/theory_compiler/handover.py",
+      "sha256": "4e9caa580c904b07956668ea2361b7e18e752de88d9bcbe0adcf4bb277039a9c"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/generators/gen_markdown.py",
+      "sha256": "26d8bd717ca6a57261a8cb6c328a5ea942c7f7171a439d38300f7327430abd83"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/generators/gen_pddl.py",
+      "sha256": "a1b375b160a494a2ce1b9018e0c5a8c7f193de78aaef5b63605a94fa03ac0824"
+    },
+    {
+      "path": "theory-compiler/tools/build_handover_packages.py",
+      "sha256": "328cebffc9f30b3946486760744eff83143641a3cbdaa3e43e63bd7e1e4561bc"
+    },
+    {
+      "path": "theory-compiler/tools/handover_exam.py",
+      "sha256": "0e44724dc0ca91b7801ac1598401797bc42bbd11c0b247c1a0bada0b5b958078"
+    },
+    {
+      "path": "theory-compiler/tools/verify_c8.py",
+      "sha256": "88c53a3fbc038712cef3ebebf27b1a2949a9a280b2b9609daf4e2c080f7a1a74"
+    },
+    {
+      "path": "theory-compiler/tests/test_handover.py",
+      "sha256": "b5473ea79cd77c0d6de128847f4dd414d69391489ace46c8882c2cc6789ab21d"
+    },
+    {
+      "path": "theory-compiler/handover_packages/a0-cart/MANIFEST.json",
+      "sha256": "2e3e0eeeee786a35ffdf3af6c865f64b13f8b0b38b900febe1238173457bc98e"
+    },
+    {
+      "path": "theory-compiler/handover_packages/a0-sokoban2/MANIFEST.json",
+      "sha256": "49a26ff550b142e28f9d27f3d5cb72231ddf81c81e1c29d1fe5609644648988c"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T134022Z-C8-handover-package/MANIFEST.json",
+      "sha256": "630fd17cf417ff78141ed475afb1facd683ece74da28c544a8da4b42d826726a"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T134022Z-C8-handover-package/RUN_STATE.md",
+      "sha256": "91c3ed5688b1e1d7f38e667f7193bcb8688956353b195653bc21710b0988bdfa"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T134022Z-C8-handover-package/upstream_vs_shipped.json",
+      "sha256": "f0a19903944329bf98e0faff5daae55a3520e67a9422bc607a534304b2163940"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T134022Z-C8-handover-package/acceptance/a0-cart.answers.json",
+      "sha256": "d25d39f741713798d6d4f789f52ffced1f509e707d7d5107eedb275679d7e1bf"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T134022Z-C8-handover-package/acceptance/a0-cart.report.json",
+      "sha256": "ca892da21d3a01bad0813e75f01fbf04bd4a4ac958fa5392492ab8a87fa42609"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T134022Z-C8-handover-package/acceptance/a0-cart.sheet.json",
+      "sha256": "d318443d6d8484e445a36ee62a95246ac01c82f7e9d8a7c5ed9d5e5a0cce99a2"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T134022Z-C8-handover-package/acceptance/a0-cart.truth.json",
+      "sha256": "8ed8f4dfda501e4991349cb2108288954a01d9c69b141c739de0cf9a02587737"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T134022Z-C8-handover-package/acceptance/a0-sokoban2.answers.json",
+      "sha256": "bc83f0b56a471653b7c9af0b0a2f8ce48383edf6ce54e8e4da10c5e959346b4c"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T134022Z-C8-handover-package/acceptance/a0-sokoban2.report.json",
+      "sha256": "b07c1a99817573a8d46b413c606aa00af76966b1fc90a79a7e7b1722e24fb7a8"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T134022Z-C8-handover-package/acceptance/a0-sokoban2.sheet.json",
+      "sha256": "6a3d10bedf93b5f3fd1540f2b4c2d29b0b8a9a2fa576da3a1cecb898ef236e49"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T134022Z-C8-handover-package/acceptance/a0-sokoban2.truth.json",
+      "sha256": "4d41127f362e4643dc6f423036830f63a67a12ee553b374cf3db343fb610318f"
+    }
+  ],
   "goal": "theory_compiler.handover: theory.dsl (+playbook.dsl) -> self-contained handover package (four forms + deterministic NL render + glossary index + zero session context); two packages built and read by a fresh subagent",
+  "packages": {
+    "a0-cart": {
+      "boards": [
+        "base",
+        "no-button"
+      ],
+      "forms_present": [
+        "english",
+        "executable",
+        "proof"
+      ],
+      "tier": "manual+playbook"
+    },
+    "a0-sokoban2": {
+      "boards": [
+        "match",
+        "crossing-up"
+      ],
+      "forms_present": [
+        "english",
+        "executable",
+        "proof"
+      ],
+      "tier": "manual"
+    }
+  },
   "prompt_id": "C8-handover-package",
-  "status": "in-progress",
+  "status": "done",
   "territory": "theory-compiler",
+  "tests": "348 passed, 1 skipped",
   "utc": "2026-07-28T13:40:22Z",
+  "verify": "cd theory-compiler && python -m tools.verify_c8",
   "worker": "W-1252"
 }

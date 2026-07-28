@@ -52,7 +52,7 @@ Every row here is a name whose value this package can *show* you changing — or
 | `arena` | 38 cells | 37 cells | **differs** |
 | `background_colour` | 0 | 0 | *same here* |
 | `board_shape` | 9 x 9 | 9 x 9 | *same here* |
-| `goal_cell` | (2, 7) | — | **differs** |
+| `goal_cell (the board's field, which the manual's goal clause may not consult)` | (2, 7) | — | **differs** |
 | `landmark portal_exit` | (1, 1) | (1, 1) | *same here* |
 | `non_background_cells` | 43 | 44 | **differs** |
 
@@ -85,6 +85,18 @@ These clauses of the manual contain a number. A law is a fact about the world; a
 | `goal` | `goal Cart.pos = (2, 7)` |
 | `invariant` | `invariant cart_unique count(Cart) = 1 [status: proven]` |
 | `invariant` | `invariant door_latch count(Button, 8) + count(Door) = 1 [status: proven]` |
+
+## What the manual says it has checked
+
+Each of these carries a tag saying how its author says it was established. **A tag is a claim about evidence that is not in this package.** Nothing here re-derives one, and a reader should not treat `proven` or `passed` as checked.
+
+Where a claim can be tested against the two boards in `levels/`, test it. A claim that speaks about how a board starts — a parity, a distance, whether the goal is reachable — is a claim about *some* board, and this package carries two you can hold it against.
+
+| clause | kind | what its author says |
+|---|---|---|
+| `cart_unique` | invariant | status: proven |
+| `door_latch` | invariant | status: proven |
+| `press_is_direction_free` | theorem | probe: pending, depends: ['press_left'] |
 
 ## Names the playbook uses that the manual does not define
 

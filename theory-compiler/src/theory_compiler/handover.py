@@ -640,18 +640,45 @@ def render_board(level: LevelInput, spec: ProblemSpec) -> str:
         lines += ["## Landmarks", "",
                   "This board locates no landmark.", ""]
 
+    coincidences = [(name, inst.name)
+                    for name, cell in sorted(spec.landmarks.items())
+                    for inst in sorted(spec.instances, key=lambda i: i.name)
+                    if inst.present and tuple(inst.pos) == tuple(cell)]
+    if coincidences:
+        lines += ["## Something already true on this board", "",
+                  "An object starts on a cell a landmark names. Depending on "
+                  "the manual's goal clause this board may already be won "
+                  "before any action is taken — check the clause; this page "
+                  "only reports the coincidence.", ""]
+        for landmark, obj in coincidences:
+            lines.append("- `%s` starts on the cell `%s` names."
+                         % (obj, landmark))
+        lines.append("")
+
+    lines += ["## Goal cell", ""]
     if spec.goal_cell is not None:
-        lines += ["## Goal cell", "",
-                  "This board names %s as its goal cell. Whether the manual's "
-                  "goal clause uses it is a question for the manual."
+        lines += ["This board's `goal_cell` field is %s. Whether the manual's "
+                  "goal clause consults it is a question for the manual: a "
+                  "manual whose goal clause writes a coordinate outright "
+                  "ignores this field entirely."
                   % _cell_text(spec.goal_cell), ""]
+    else:
+        lines += ["This board supplies no `goal_cell`. That does not mean the "
+                  "board has no goal — if the manual's goal clause names a "
+                  "landmark or writes a coordinate outright, the goal comes "
+                  "from there.", ""]
     if spec.weights:
         lines += ["## Weight vectors this board supplies", ""]
         for name in sorted(spec.weights):
             lines.append("- `%s` = %s" % (name, spec.weights[name]))
         lines.append("")
     lines += ["## Cells in play", "",
-              "%d cells are listed in this board's arena." % len(spec.arena), ""]
+              "This board's `LEVEL.json` carries an `arena` list of %d cells. "
+              "It is the board's own note of which cells are worth considering "
+              "and **no rule of the manual consults it** — whether a cell can "
+              "be stood on is decided by `free`, whose definition is in "
+              "`manual/PRIMITIVES.md`. Treat `arena` as a convenience, not as "
+              "law." % len(spec.arena), ""]
     return "\n".join(lines).rstrip() + "\n"
 
 
@@ -678,7 +705,8 @@ def _level_observables(spec: ProblemSpec) -> Dict[str, str]:
         "non_background_cells": str(sum(
             1 for row in spec.board for v in row if v != spec.background)),
         "arena": "%d cells" % len(spec.arena),
-        "goal_cell": _cell_text(spec.goal_cell),
+        "goal_cell (the board's field, which the manual's goal clause may "
+        "not consult)": _cell_text(spec.goal_cell),
     }
     for name in sorted(spec.landmarks):
         out["landmark %s" % name] = _cell_text(spec.landmarks[name])
@@ -877,6 +905,37 @@ def render_glossary(ast: Any, manual_dsl: str, levels: Sequence[LevelInput],
             lines.append("| `%s` | `%s` |" % (head, clause))
         lines.append("")
 
+    # ---- what the manual says it checked ---------------------------------
+    laws = getattr(ast, "laws", None)
+    claims = (list(getattr(laws, "invariants", []) or []) +
+              list(getattr(laws, "theorems", []) or [])) if laws else []
+    lines += ["## What the manual says it has checked", ""]
+    if not claims:
+        lines += ["The manual states no invariant and no theorem.", ""]
+    else:
+        lines += ["Each of these carries a tag saying how its author says it "
+                  "was established. **A tag is a claim about evidence that is "
+                  "not in this package.** Nothing here re-derives one, and a "
+                  "reader should not treat `proven` or `passed` as checked.",
+                  "",
+                  "Where a claim can be tested against the two boards in "
+                  "`levels/`, test it. A claim that speaks about how a board "
+                  "starts — a parity, a distance, whether the goal is "
+                  "reachable — is a claim about *some* board, and this package "
+                  "carries two you can hold it against.", "",
+                  "| clause | kind | what its author says |", "|---|---|---|"]
+        for item in claims:
+            tags = []
+            for attr in ("status", "probe", "depends", "source"):
+                value = getattr(item, attr, None)
+                if value not in (None, "", []):
+                    tags.append("%s: %s" % (attr, value))
+            kind = ("invariant" if item in (getattr(laws, "invariants", []) or [])
+                    else "theorem")
+            lines.append("| `%s` | %s | %s |"
+                         % (item.name, kind, ", ".join(tags) or "nothing"))
+        lines.append("")
+
     if playbook_ast is not None:
         vocabulary = _manual_vocabulary(ast)
         unknown = [n for n in _playbook_names(playbook_ast)
@@ -1009,6 +1068,13 @@ def render_seal(findings: Sequence[Finding]) -> str:
              "file;",
              "4. **conversational deixis** — \"as we discussed\", \"see above\".",
              "",
+             "Those four and no more. It does **not** try to catch every prose "
+             "mention of something that lives elsewhere: a generated file's "
+             "own docstring may name the pipeline that produced it, and a "
+             "source comment may name a component you do not have. Neither "
+             "gives you a reference you need to follow — but do not read a "
+             "clean scan as a promise that no sentence in here mentions "
+             "anything outside it.", "",
              "Two files are excluded from the scan and it matters that you know "
              "which: `MANIFEST.json`, which records on purpose where these files "
              "came from in the repository that produced them, and `SEAL.md` — "
@@ -1067,18 +1133,36 @@ def render_readme(spec: PackageSpec, forms: Dict[str, Any],
     lines += ["", "`manual/MANUAL.dsl` is the manual as its author wrote it, "
               "byte for byte. Where the English rendering and the source seem to "
               "disagree, the source is the deliverable.", "",
-              "## The four forms", "",
-              "One manual compiles to four co-derived forms. Two are of the "
-              "manual alone and two must be grounded on a board, which is why "
-              "this package carries two boards: what is identical between them "
-              "is the world, and what differs is the board.", "",
-              "| form | where | derived from |", "|---|---|---|",
-              "| English | `manual/MANUAL.md` | the manual alone |",
-              "| planning (domain) | `manual/DOMAIN.pddl` | the manual alone |",
-              "| executable | `levels/<board>/predictor.py` | the manual, on that board |",
-              "| proof | `levels/<board>/Level.lean` | the manual, on that board |",
-              "| planning (problem) | `levels/<board>/problem.pddl` | the manual, on that board |",
-              ""]
+              "## The forms", "",
+              "One manual compiles to four co-derived forms — English, "
+              "planning, executable, proof. The planning form comes in two "
+              "files rather than one, because a planning task splits into a "
+              "domain (the world) and a problem (the board), which is why the "
+              "table below has five rows for four forms. Two of the rows are of "
+              "the manual alone and three must be grounded on a board, which is "
+              "why this package carries two boards.", "",
+              "**What differs between the two boards is supplied by a board.** "
+              "The converse does not hold and it matters: two boards agreeing "
+              "is not a law, only a coincidence this package cannot see past. "
+              "`GLOSSARY.md` marks the two cases apart rather than letting you "
+              "run the inference backwards.", "",
+              "| form | where | derived from | in this package? |",
+              "|---|---|---|---|"]
+    for label, where, derived, key in (
+            ("English", "`manual/MANUAL.md`", "the manual alone", "english"),
+            ("planning (domain)", "`manual/DOMAIN.pddl`", "the manual alone",
+             "planning_domain"),
+            ("executable", "`levels/<board>/predictor.py`",
+             "the manual, on that board", "executable"),
+            ("proof", "`levels/<board>/Level.lean`",
+             "the manual, on that board", "proof"),
+            ("planning (problem)", "`levels/<board>/problem.pddl`",
+             "the manual, on that board", "planning_problem")):
+        present = forms.get(key, {}).get("status") == "generated"
+        lines.append("| %s | %s | %s | %s |"
+                     % (label, where, derived,
+                        "yes" if present else "**no — see below**"))
+    lines.append("")
     if missing:
         lines += ["**Not every form is here.** The following could not be "
                   "derived from this manual, and the generator's own reason is "
@@ -1120,6 +1204,48 @@ def _canonical_json(doc: Any) -> str:
 
 def _sha256(text: str) -> str:
     return hashlib.sha256(text.encode("utf-8")).hexdigest()
+
+
+def check_pddl(domain: str, problem: str) -> None:
+    """Refuse a PDDL pair that is not a well-formed planning task.
+
+    The first fresh reader of the cart package found `manual/DOMAIN.pddl`
+    unusable and `MANIFEST.json` calling it `generated`: two actions referred to
+    a `?dest` that was in no parameter list, two had lost their preconditions
+    entirely, the moving actions tested `adjacent-above` while the predicate
+    block and the problem file both said `adjacent-up`, and three actions —
+    the teleport, the button press, the door opening, which is the whole
+    non-trivial content of that world — compiled to `(and (and))`. Had the
+    reader treated the planning form as authoritative, every optimal-action
+    answer would have been wrong, and the package would have scored that as the
+    reader's failure.
+
+    A form generated is not a form checked. A backend that cannot yet emit a
+    sound encoding is a declared gap; one that emits an unsound encoding under a
+    green status is a trap.
+
+    The check is `strips.parse_domain` plus `strips.ground` — this track's own
+    STRIPS front end, which already refuses an unbound variable, an undeclared
+    predicate, a wrong arity and an empty effect, and which is the reader a
+    planning form is actually for.  Nothing is re-implemented here; what is new
+    is that the handover builder now *runs* it before calling a form generated.
+
+    It refuses more than a planner would: negative preconditions are outside the
+    subset it reads, so a domain using one is declared a gap rather than
+    shipped.  That trade is deliberate. An over-refusal costs the reader a form
+    and says so on the front page; an under-refusal costs them the answer and
+    says nothing.
+    """
+    from . import strips
+
+    _domain_name, _arities, _types, schemas = strips.parse_domain(domain)
+    if not schemas:
+        raise HandoverError("the domain declares no action at all")
+    task = strips.ground(domain, problem)
+    if not task.actions:
+        raise HandoverError(
+            "the domain and the board ground to no applicable action; the "
+            "encoding and the level do not meet")
 
 
 def _try(name: str, thunk) -> Tuple[Optional[str], Dict[str, Any]]:
@@ -1169,11 +1295,17 @@ def build_files(spec: PackageSpec) -> Tuple[Dict[str, str], Dict[str, Any]]:
 
     # PDDL domain: of the manual alone, so it is generated once, from the first
     # board's geometry only to size the cell universe of the *problem* half.
-    domain, status = _try(
-        "planning_domain",
-        lambda: generate_pddl(ast, specs[0].name,
-                              specs[0].width or 2, specs[0].height or 3,
-                              problem=specs[0])[0])
+    # Validated against that board before it is called generated -- see
+    # `check_pddl`, and the reader report that made it necessary.
+    def _domain() -> str:
+        text, problem_text = generate_pddl(ast, specs[0].name,
+                                           specs[0].width or 2,
+                                           specs[0].height or 3,
+                                           problem=specs[0])
+        check_pddl(text, problem_text)
+        return text
+
+    domain, status = _try("planning_domain", _domain)
     forms["planning_domain"] = status
     if domain is not None:
         files["manual/DOMAIN.pddl"] = domain
@@ -1195,10 +1327,13 @@ def build_files(spec: PackageSpec) -> Tuple[Dict[str, str], Dict[str, Any]]:
         if text is not None:
             files[base + "Level.lean"] = text
 
-        text, st = _try(
-            "planning_problem",
-            lambda p=problem: generate_pddl(ast, p.name, p.width or 2,
-                                            p.height or 3, problem=p)[1])
+        def _problem(p=problem) -> str:
+            domain_text, problem_text = generate_pddl(
+                ast, p.name, p.width or 2, p.height or 3, problem=p)
+            check_pddl(domain_text, problem_text)
+            return problem_text
+
+        text, st = _try("planning_problem", _problem)
         entry["planning_problem"] = st
         if text is not None:
             files[base + "problem.pddl"] = text

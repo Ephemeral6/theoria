@@ -47,6 +47,7 @@ manual was wrong, and the thing under test is the package.
 from __future__ import annotations
 
 import argparse
+import hashlib
 import importlib.util
 import json
 import os
@@ -56,6 +57,11 @@ from collections import deque
 from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 ABSTAIN = "abstain"
+
+
+def _digest(*parts: str) -> str:
+    """A short id derived from the question and never from the answer."""
+    return hashlib.sha256("|".join(parts).encode("utf-8")).hexdigest()[:8]
 
 
 class ExamError(RuntimeError):
@@ -286,8 +292,10 @@ def _probes(namespace: Dict[str, Any]) -> Dict[str, Tuple[str, str, str]]:
         "board",
         json.dumps(sorted([r, c] for r, row in enumerate(board)
                           for c, v in enumerate(row) if v != background)),
-        "the cells whose own colour is not the background colour — the cells "
-        "nothing can stand on")
+        "which cells of the `board` array carry a colour other than the "
+        "background — the cells `free` refuses for that reason. (The package "
+        "does not use the word `wall_cells`; this item names the thing, not a "
+        "term of art.)")
     out["board_shape"] = ("board", json.dumps(list(namespace["GRID"] or [])),
                           "how many rows the board has and how many columns")
     out["background_colour"] = ("board", str(background),
@@ -314,18 +322,44 @@ def _probes(namespace: Dict[str, Any]) -> Dict[str, Tuple[str, str, str]]:
             "the world's `%s` setting — how a turn is put together" % key)
     out["direction_vocabulary"] = (
         "manual", json.dumps(sorted(namespace.get("DIRECTIONS", {}))),
-        "the directions that exist")
+        "which directions exist at all")
     out["action_vocabulary"] = (
         "manual", json.dumps(sorted(_action_text(a) for a in namespace["ACTIONS"])),
         "the actions that can be taken")
-    out["goal_form"] = ("manual", _goal_source(namespace),
-                        "what has to be true for the game to be won")
-    for rule_name, displacement in sorted(_effect_signature(namespace).items()):
+    out["goal_form"] = (
+        "manual", _goal_source(namespace),
+        "the *shape* of the winning condition — which object has to be where — "
+        "as opposed to the particular cell, which is a separate name")
+    for rule_name, (origin, displacement) in sorted(
+            _effect_signature(namespace).items()):
         out["effect_of_" + rule_name] = (
-            "manual", displacement,
+            origin, displacement,
             "what the rule `%s` does to each thing it touches, in cells "
             "travelled" % rule_name)
     return out
+
+
+_EFFECT_HEADER = "def _effect_%s(state):"
+
+
+def _effect_origin(rule_name: str, namespace: Dict[str, Any]) -> str:
+    """`manual` unless the rule's effect reads something a board supplies.
+
+    A rule is world law; *what it does* need not be. `teleport_down` puts the
+    Cart on the cell `portal_exit` names, and only the board says which cell
+    that is — so the displacement it applies is board data wearing a rule's
+    name. Classifying it `manual` because two boards happened to place the
+    landmark identically would mark a reader wrong for noticing, which is what
+    it did before this function existed.
+    """
+    source = namespace["__source__"]
+    header = _EFFECT_HEADER % rule_name
+    start = source.find(header)
+    if start == -1:
+        return "manual"
+    end = source.find("\ndef ", start + len(header))
+    body = source[start:end if end != -1 else len(source)]
+    return "board" if "LANDMARKS[" in body else "manual"
 
 
 def _goal_source(namespace: Dict[str, Any]) -> str:
@@ -336,21 +370,26 @@ def _goal_source(namespace: Dict[str, Any]) -> str:
     raise ExamError("the shipped predictor states no goal")
 
 
-def _effect_signature(namespace: Dict[str, Any]) -> Dict[str, str]:
+def _effect_signature(namespace: Dict[str, Any]) -> Dict[str, Tuple[str, str]]:
     """What each rule *does*, measured by applying its effect to a probe state.
 
     Read off the compiled effect rather than off the source text: a rule's
     displacement is the fact a step-semantics question turns on, and measuring it
     cannot drift out of step with the rule the way a transcription can.
     """
-    out: Dict[str, str] = {}
+    out: Dict[str, Tuple[str, str]] = {}
     for name, _guard, effect, _objs in namespace["RULES"]:
+        origin = _effect_origin(name, namespace)
         before = namespace["State"]()
         after = before.copy()
         try:
             effect(after)
         except Exception:                          # noqa: BLE001
-            out[_schema_name(name, namespace)] = "unmeasurable"
+            # A rule the level cannot even *apply* -- `gen_python` emits rules
+            # for object types the level does not instantiate, so the effect
+            # assigns a field this board's `State` has not got. Board-dependent
+            # by definition, which is what the origin says.
+            out[_schema_name(name, namespace)] = ("board", "unmeasurable")
             continue
         changes = []
         for field in _fields(namespace):
@@ -363,7 +402,8 @@ def _effect_signature(namespace: Dict[str, Any]) -> Dict[str, str]:
             else:
                 changes.append("%s becomes %s" % (field, _value_text(b)))
         out.setdefault(_schema_name(name, namespace),
-                       "; ".join(changes) if changes else "nothing changes")
+                       (origin,
+                        "; ".join(changes) if changes else "nothing changes"))
     return out
 
 
@@ -398,7 +438,15 @@ def build_sheet(package_dir: str) -> Dict[str, Any]:
                     continue
                 seen_rules.add(schema)
                 items.append({
-                    "item_id": "step-%s-%02d" % (level_id, len(items) + 1),
+                    # Stable across sheet revisions and answer-free. Keying on
+                    # the rule would put the answer in the item id; keying on
+                    # position renumbers every later item when one is dropped,
+                    # and a set of answers that stops lining up reads as the
+                    # reader having been wrong. The question decides the id.
+                    "item_id": "step-%s-%s" % (
+                        level_id,
+                        _digest(level_id, _state_text(state, fields),
+                                _action_text(action))),
                     "kind": "step_semantics",
                     "level": level_id,
                     "before": _state_text(state, fields),
@@ -444,8 +492,11 @@ def build_sheet(package_dir: str) -> Dict[str, Any]:
                 continue
             truth = "world_law"
         items.append({
-            "item_id": "name-%02d" % (len([i for i in items
-                                           if i["kind"] == "name_class"]) + 1),
+            # Keyed by the probe, not by position. A positional id renumbers
+            # every item after the one that gets dropped, so a set of answers
+            # stops lining up with the sheet it was written for and the
+            # mismatch reads as the reader having been wrong.
+            "item_id": "name-%s" % name,
             "kind": "name_class",
             "name": name,
             "definition": definition,
@@ -470,7 +521,8 @@ def build_sheet(package_dir: str) -> Dict[str, Any]:
                 continue
             picked += 1
             items.append({
-                "item_id": "opt-%s-%02d" % (level_id, picked),
+                "item_id": "opt-%s-%s" % (
+                    level_id, _digest(level_id, _state_text(state, fields))),
                 "kind": "optimal_action",
                 "level": level_id,
                 "state": _state_text(state, fields),
@@ -496,18 +548,33 @@ def build_sheet(package_dir: str) -> Dict[str, Any]:
 
 def reader_sheet(sheet: Dict[str, Any]) -> Dict[str, Any]:
     """The sheet minus the answers.  What the reader is actually handed."""
+    # A per-board block for something every board agrees on is a cue that the
+    # thing is per-board data -- which is the exact mistake one family of items
+    # exists to detect. Collapse anything identical across boards into one
+    # entry, so the sheet stops arguing with its own questions.
+    def _collapse(block):
+        values = list(block.values())
+        if values and all(v == values[0] for v in values[1:]):
+            return {"every board": values[0]}
+        return block
+
     return {
         "levels": sheet["levels"],
-        "state_fields": sheet["state_fields"],
-        "action_vocabulary": sheet["action_vocabulary"],
-        "rule_vocabulary": sheet["rule_vocabulary"],
+        "state_fields": _collapse(sheet["state_fields"]),
+        "action_vocabulary": _collapse(sheet["action_vocabulary"]),
+        "rule_vocabulary": _collapse(sheet["rule_vocabulary"]),
         "answer_grammar": {
             "step_semantics": ("`<field>=<value>; …; rule=<name>` — every field "
                                "listed in `state_fields` for that level, in any "
                                "order, plus `rule`. A cell is written `(row,col)` "
                                "and a true/false value `true` or `false`. The "
                                "rule name must be one from `rule_vocabulary`."),
-            "name_class": "exactly one word: `level_data` or `world_law`",
+            "name_class": ("exactly one word: `level_data` if a board supplies "
+                           "it, `world_law` if no board can change it. There "
+                           "are only these two words, so something fixed by the "
+                           "language the manual is written in — rather than by "
+                           "this particular world — is still `world_law`: no "
+                           "board supplies it."),
             "optimal_action": ("exactly one action, written as it appears in "
                                "`action_vocabulary`"),
             "any": ("`abstain` is allowed anywhere; it scores nothing and is "

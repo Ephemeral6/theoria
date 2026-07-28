@@ -191,7 +191,12 @@ def _render_rules(rs: RulesSection) -> str:
                 "?%s in %s" % (var, domain)
                 for var, domain in sorted(bindings.items()))
 
-        lines.append(f"- **{_name_to_natural(rule.name)}**{confidence}{binding}: "
+        # The rule's own name in backticks beside the prose one. Rendering
+        # `blocked_box_on_wall` only as "blocked box on wall" leaves the form a
+        # reader is told to read first unable to supply the spelling every
+        # other form of the same manual uses.
+        lines.append(f"- **{_name_to_natural(rule.name)}** (`{rule.name}`)"
+                     f"{confidence}{binding}: "
                      f"When {guard_text}, then {event_text}.")
     lines.append("")
     return "\n".join(lines)
@@ -353,7 +358,12 @@ def _func_to_natural(fc: FuncCall) -> str:
         "below": "the cell below {}",
         "left": "the cell to the left of {}",
         "right": "the cell to the right of {}",
-        "free": "{} is free (unoccupied)",
+        # "unoccupied" alone was three quarters of the definition and the
+        # missing quarter decides pushes: `free` is also *on the board* and
+        # *not a wall*. A reader who took the parenthetical at face value fires
+        # `push2` toward a wall and off the edge of the grid.
+        "free": "{} is free — on the board, not a wall, and nothing standing "
+                "on it",
         "adjacent": "{} is adjacent to {}",
         "occupied": "{} is occupied",
         "count": "the number of {}",
@@ -365,16 +375,28 @@ def _func_to_natural(fc: FuncCall) -> str:
             return spatial_map[name].format(*args)
         except (IndexError, KeyError):
             return f"{_name_to_natural(name)}({', '.join(args)})"
-    if name == "moved":
-        if len(args) == 2:
-            return f"{args[0]} moves {args[1]}"
-        return f"{args[0]} moves"
-    if name == "teleported":
-        if len(args) == 2:
-            return f"{args[0]} teleports to {args[1]}"
-        return f"{args[0]} teleports"
-    if name == "vanished":
-        return f"{args[0]} vanishes"
-    if name == "jumped":
-        return f"a peg jumps from {args[0]} over {args[1]} to {args[2]}" if len(args) >= 3 else f"a peg jumps"
+    # Events, worded from what `gen_python._effect` compiles each one to and
+    # keyed on name *and* arity, the way that dispatch is. The old table keyed
+    # on name alone, so `jumped(Cart, portal_exit)` — the two-argument
+    # teleport — fell into the peg-solitaire branch and rendered as "a peg
+    # jumps": a peg in a world with no peg, and the destination dropped, which
+    # is the one thing that clause says.
+    event_map = {
+        ("moved", 2): "{0} moves one cell {1}",
+        ("moved", 1): "{0} moves",
+        ("slid", 3): ("{0} slides two cells {2}, and {1} advances one cell {2} "
+                      "— onto the cell {0} has just left"),
+        ("stayed", 1): "nothing changes; {0} and everything else stay put",
+        ("jumped", 2): "{0} is placed on the cell {1} names",
+        ("teleported", 2): "{0} is placed on the cell {1} names",
+        ("jumped", 3): ("{0} travels two cells {2}, and {1} is removed from "
+                        "play"),
+        ("recolored", 2): "{0}'s colour becomes {1}",
+        ("vanished", 1): "{0} stops being present",
+        ("appeared", 1): "{0} starts being present",
+        ("removed", 1): "{0} is taken out of play",
+    }
+    key = (name, len(args))
+    if key in event_map:
+        return event_map[key].format(*args)
     return f"{_name_to_natural(name)}({', '.join(args)})"

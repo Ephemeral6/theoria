@@ -11,19 +11,24 @@ does not, so the repository carries an example of each delivery tier.
 with its playbook, at tier `manual+playbook`.
 
 `a0-sokoban2` is the `a0-spike` manual at tier `manual`, and which file that is
-takes a sentence. `a0-spike/theory/theory.dsl` leaves `dir` a free name: its own
-generator passes it in as a function parameter, so nothing in the file says what
-`dir` ranges over, and `gen_python` refuses it (*"expected a direction from
-['down', 'left', 'right', 'up'], got NameRef(name='dir')"*). A package built from
-it therefore has an English form and a PDDL form and **no executable and no
-proof** — it is measured below and recorded in the run, but it is not what gets
-shipped, because a handover package missing three of five forms measures the
-migration rather than the manual. What ships is
-`tests/fixtures/sokoban2_theory.dsl`: the same manual with the v0.3 repairs, held
-against `a0-spike/world/sokoban2.py` as ground truth by `tools/probe_mentions.py`.
-The substitution is recorded in that package's `MANIFEST.json` under
-`provenance`, where a reader checking "is this really the deliverable?" will
-find it.
+takes a paragraph. **The upstream `a0-spike/theory/theory.dsl` yields no package
+at all**, and the refusal is earlier than the known blocker. The known blocker is
+that it leaves `dir` a free name — its own generator passes it in as a function
+parameter, so nothing in the file says what `dir` ranges over, and `gen_python`
+stops at *"expected a direction from ['down', 'left', 'right', 'up'], got
+NameRef(name='dir')"*. The builder never gets that far: the manual declares
+`slid(o, dir)`, a two-argument slide, and the language implements
+`slid(o, pusher, dir)`. A push moves the box **and** carries the pusher, so a
+two-argument signature leaves half the effect unnamed, and there is no statement
+of what the event does that could be handed to a reader. That is ledger X-1 seen
+from the handover side. Measured, with both refusal messages, in
+`runs/20260728T134022Z-C8-handover-package/upstream_vs_shipped.json`.
+
+What ships is `tests/fixtures/sokoban2_theory.dsl`: the same manual with the v0.3
+repairs, held against `a0-spike/world/sokoban2.py` as ground truth by
+`tools/probe_mentions.py`. The substitution is recorded in that package's
+`MANIFEST.json` under `provenance`, where a reader checking "is this really the
+deliverable?" will find it.
 """
 
 from __future__ import annotations
@@ -104,10 +109,13 @@ def sokoban_package() -> PackageSpec:
                 "copied_from": "theory-compiler/tests/fixtures/sokoban2_theory.dsl",
                 "upstream": "a0-spike/theory/theory.dsl",
                 "why_not_upstream": (
-                    "the upstream manual leaves `dir` a free name, which "
-                    "`gen_python` refuses; a package built from it carries no "
-                    "executable and no proof form. The shipped file is that "
-                    "manual with the v0.3 repairs (X-1, X-5) and every rule "
+                    "no package can be built from the upstream manual. It "
+                    "declares `slid(o, dir)`; a push moves the box and carries "
+                    "the pusher, so a two-argument slide leaves half its own "
+                    "effect unnamed and there is nothing to tell a reader the "
+                    "event does. It also leaves `dir` a free name, which the "
+                    "executable and proof backends refuse. The shipped file is "
+                    "that manual with the v0.3 repairs (X-1, X-5), every rule "
                     "bound over a declared `domain direction`."),
                 "ground_truth_check": (
                     "theory-compiler/tools/probe_mentions.py, against "

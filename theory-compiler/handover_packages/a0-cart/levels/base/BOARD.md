@@ -37,8 +37,8 @@ Size: 9 rows by 9 columns. Background colour: 0.
 
 ## Goal cell
 
-This board names (2, 7) as its goal cell. Whether the manual's goal clause uses it is a question for the manual.
+This board's `goal_cell` field is (2, 7). Whether the manual's goal clause consults it is a question for the manual: a manual whose goal clause writes a coordinate outright ignores this field entirely.
 
 ## Cells in play
 
-38 cells are listed in this board's arena.
+This board's `LEVEL.json` carries an `arena` list of 38 cells. It is the board's own note of which cells are worth considering and **no rule of the manual consults it** — whether a cell can be stood on is decided by `free`, whose definition is in `manual/PRIMITIVES.md`. Treat `arena` as a convenience, not as law.

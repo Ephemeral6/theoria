@@ -32,6 +32,16 @@ Size: 7 rows by 7 columns. Background colour: 0.
 |---|---|
 | `target` | (3, 3) |
 
+## Something already true on this board
+
+An object starts on a cell a landmark names. Depending on the manual's goal clause this board may already be won before any action is taken — check the clause; this page only reports the coincidence.
+
+- `Box` starts on the cell `target` names.
+
+## Goal cell
+
+This board supplies no `goal_cell`. That does not mean the board has no goal — if the manual's goal clause names a landmark or writes a coordinate outright, the goal comes from there.
+
 ## Cells in play
 
-49 cells are listed in this board's arena.
+This board's `LEVEL.json` carries an `arena` list of 49 cells. It is the board's own note of which cells are worth considering and **no rule of the manual consults it** — whether a cell can be stood on is decided by `free`, whose definition is in `manual/PRIMITIVES.md`. Treat `arena` as a convenience, not as law.

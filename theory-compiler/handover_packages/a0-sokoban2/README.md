@@ -13,17 +13,19 @@ You have been given **the manual only, and there is not supposed to be a playboo
 
 `manual/MANUAL.dsl` is the manual as its author wrote it, byte for byte. Where the English rendering and the source seem to disagree, the source is the deliverable.
 
-## The four forms
+## The forms
 
-One manual compiles to four co-derived forms. Two are of the manual alone and two must be grounded on a board, which is why this package carries two boards: what is identical between them is the world, and what differs is the board.
+One manual compiles to four co-derived forms — English, planning, executable, proof. The planning form comes in two files rather than one, because a planning task splits into a domain (the world) and a problem (the board), which is why the table below has five rows for four forms. Two of the rows are of the manual alone and three must be grounded on a board, which is why this package carries two boards.
 
-| form | where | derived from |
-|---|---|---|
-| English | `manual/MANUAL.md` | the manual alone |
-| planning (domain) | `manual/DOMAIN.pddl` | the manual alone |
-| executable | `levels/<board>/predictor.py` | the manual, on that board |
-| proof | `levels/<board>/Level.lean` | the manual, on that board |
-| planning (problem) | `levels/<board>/problem.pddl` | the manual, on that board |
+**What differs between the two boards is supplied by a board.** The converse does not hold and it matters: two boards agreeing is not a law, only a coincidence this package cannot see past. `GLOSSARY.md` marks the two cases apart rather than letting you run the inference backwards.
+
+| form | where | derived from | in this package? |
+|---|---|---|---|
+| English | `manual/MANUAL.md` | the manual alone | yes |
+| planning (domain) | `manual/DOMAIN.pddl` | the manual alone | **no — see below** |
+| executable | `levels/<board>/predictor.py` | the manual, on that board | yes |
+| proof | `levels/<board>/Level.lean` | the manual, on that board | yes |
+| planning (problem) | `levels/<board>/problem.pddl` | the manual, on that board | **no — see below** |
 
 **Not every form is here.** The following could not be derived from this manual, and the generator's own reason is recorded in `MANIFEST.json` under `forms`:
 

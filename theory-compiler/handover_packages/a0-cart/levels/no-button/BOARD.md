@@ -33,6 +33,10 @@ Size: 9 rows by 9 columns. Background colour: 0.
 |---|---|
 | `portal_exit` | (1, 1) |
 
+## Goal cell
+
+This board supplies no `goal_cell`. That does not mean the board has no goal — if the manual's goal clause names a landmark or writes a coordinate outright, the goal comes from there.
+
 ## Cells in play
 
-37 cells are listed in this board's arena.
+This board's `LEVEL.json` carries an `arena` list of 37 cells. It is the board's own note of which cells are worth considering and **no rule of the manual consults it** — whether a cell can be stood on is decided by `free`, whose definition is in `manual/PRIMITIVES.md`. Treat `arena` as a convenience, not as law.
