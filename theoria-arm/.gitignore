@@ -1,0 +1,13 @@
+# Run payloads: frames are large and regenerable from the ledger, which is not.
+# The ledger, the books, the snapshots, the probes, the surprises, the desk
+# transcripts and the manifest ARE tracked -- they are the account.
+runs/*/trace.jsonl
+runs/dryrun-*/
+runs/pytest-*/
+runs/smoke*/
+runs_live.log
+.live_slug
+__pycache__/
+*.pyc
+
+.pytest_cache/

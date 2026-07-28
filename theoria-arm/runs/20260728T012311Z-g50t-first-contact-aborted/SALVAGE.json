@@ -1,0 +1,21 @@
+{
+ "card_ids": [
+  "32ca4788-e9a7-424e-926c-a47b557c03a9"
+ ],
+ "env_steps": 85,
+ "env_steps_ok": 6,
+ "records": 88,
+ "run_end_present": false,
+ "scorecard_on_close": null,
+ "slug": "20260728T012311Z-g50t-first-contact",
+ "successful_actions": 5,
+ "trace": {
+  "cascade_lengths": [
+   1,
+   7,
+   9
+  ],
+  "path": "C:\\Users\\user\\Desktop\\theoria-wt-p8\\theoria-arm\\runs\\20260728T012311Z-g50t-first-contact\\trace.jsonl",
+  "states": 6
+ }
+}

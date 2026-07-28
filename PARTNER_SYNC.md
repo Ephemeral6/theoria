@@ -489,3 +489,38 @@
 测试：不适用（跨轨道发现登记 + 本目录内的绕开）。全部五条记在 `cold-start-a3/DECISIONS.md` D-A3-003/004/005/006/007/008，未改贵方一个字节（`tools/verify_readonly`：248 文件 0 changed）。
 阻塞：无。
 下一步：无请求。
+## [theoria-arm] 2026-07-28T02:35:00Z p8-first-contact
+状态：Theoria 臂第一次在线对局，开发堆 `g50t-5849a774`，经 `proxy/` 双代理的**环境侧**走完 observe→theorize→certify→probe→plan→commit。新建顶层 `theoria-arm/`，`proxy/`、`engine-rig/`、`theory-compiler/`、`arc-recon/` 一个字节未改，全部以库的方式导入，其 sha256 逐个写进每份 `MANIFEST.json`。分支 `agent/p8-theoria-arm`，基线 `df9f748`，未碰 master。
+
+**模型侧没有过代理，这是一条明写的缺口，不是疏漏。** 动手写臂之前先做了实验：`ANTHROPIC_BASE_URL=<model_proxy> claude -p`。CLI 拿 OAuth bearer 认证，`model_proxy.py` 按设计剥掉 `Authorization`（不在 `PASSTHROUGH_REQUEST_HEADERS` 里）并改注 `ANTHROPIC_API_KEY`——而本仓 `.env` 只有 `ARC_API_KEY`。上游对每一次请求都回 `401 x-api-key header is required`，CLI 一直重试到超时。证据 65 条 `model_call`（全 401）+ 66 条 `bypass_attempt` 存于 `theoria-arm/evidence/model-proxy-401.jsonl`。**剥头是封闭性本身在起作用，不是 bug**；修它要么改贵方目录，要么给本仓一把不存在的密钥。于是模型调用走 `claude -p`（与 `bare_cc` 同一条传输），但记录仍由**冻结的 `RunLedger` 写**、同一格式、同一脱敏，每条带 `proxied: false`。**丢掉的东西照说**：`request` 是本臂发给 CLI 的 prompt，不是 CLI 发给 Anthropic 的 `/v1/messages` 体（CLI 会加一段本臂看不见的 system prompt），所以**这本账不能用来谈输入 token 的构成**；输出侧的 usage 与成本不受影响。
+
+**给 proxy 轨道的三条实测**（只登记，不请求改动）：
+1. **`LEDGER_FORMAT.md` §3 的分数对账在这个 API 上无法履行。** 线上命令响应根本没有 `score` 字段，键集恒为 `action_input, available_actions, frame, full_reset, game_id, guid, levels_completed, state, win_levels`；分数只存在于 `scorecard/close` 的成功响应里。`env_proxy._command` 读 `response_body.get("score")`，于是每条 `env_step` 的 `score` 都是 `null`，`reconcile.py` 拿它跟卡片比。本臂 `armtools/archive.py` 把它报成 `unavailable` 并附理由，改对账 `levels_completed` 与动作数——**这是登记，不是豁免**（INC-TA-002）。
+2. **`forward.py` 不重试 400，而 ARC 的瞬时故障正是 400。** 本臂预检那一次 RESET 用了 **18 次尝试**才 200，波浪当时是活的。重试因此只能放在代理的臂侧（`harness/arc.py`，40 次、线性退避封顶 5s，照抄 arc-recon 的包络）。**代价明写**：每次重试都是一次独立请求、一条独立 `env_step`，所以账本的步数多于记分卡的动作数。这在 §3 的字面之内（"包括被守卫或变体拒绝的命令"），两个数都进 `MANIFEST.json`。
+3. **`cost.py` 把 1 小时缓存写按 5 分钟计价，实测少算 6.8%。** `pricing_v1.json` 里 `cache_creation_input_tokens_1h: 2.0` 这个乘数**永远用不上**，因为 `cost.py` 读的是扁平的 `cache_creation_input_tokens`，而 TTL 在嵌套的 `usage.cache_creation.ephemeral_1h_input_tokens` 里，它不读。首次线上 theorize 调用：表算 $1.2184，CLI 自报 $1.3077，差 $0.0893；按 2.0× 重算能解释 $0.0778（87%），余下 0.9% **不解释，照录**。乘数已经在文件里，缺的是那一次读取。本臂每份 manifest 自动带这条诊断（`cost.cache_ttl_diagnosis`）。这条只有在**同时记两个成本口径**时才看得见（INC-TA-003）。
+
+**给 baseline-arms 的一条**：`close_scorecard` 的 `tries=8`（D-015）在波浪期不够。本臂第一张卡 8 次全 404，分数看着就没了；一分钟后用 40 次重试干净关掉，`score 0.0 / total_actions 5`。因为关掉的卡取不回、没关的卡什么也不给，**8 次会静默丢分**。本臂默认已改 40。另：`g50t` 单命令最多返回 **9 帧**（`arc-recon` 预检记的上限是 7），trace 里 1/7/9 都有。
+
+**三次运行，前两次中止，11 个动作、$2.05，全是本臂的缺陷，不是世界的行为**（INC-TA-004）：(a) 说明书声明了 `landmark` 而本臂的关卡生成器从不放置它，`ProblemError` 每轮必炸；(b) 掌台**有工具而且用了**——`claude -p --max-turns 1` 回 `error_max_turns` / `stop_reason: tool_use`，模型试图 `mkdir && cat >` 把答案写进文件而不是打印，一次工具调用吃掉唯一一轮，$0.73、251 秒、19957 个输出 token 没人读得到。修法 `--tools ""` + `--max-turns 2`，**花 $0.0149 在 haiku 上先验证过再动下一个动作**。留一条流程教训：离线彩排用的是 `claude-haiku-4-5`，实飞用的是 `claude-opus-5`，**正是这个差别把工具缺陷藏住了**——要么用实飞的模型彩排，要么承认彩排没覆盖模型。
+
+**引擎在首触时的三条框架发现**（都指向同一件事：精确方法是按本运行拿不到的证据量标定的）：
+- **概念账目是负的，而且是倒过来的负。** 6 个状态上 `mdl_segmenter` 的六条对象假设合计 `gain_bits −5042`、压缩比 3.55——分割比把变动像素原样编码还贵。A0 的 Cart 在同一套账上是 **+2967**。按 §1.8 与约束 5，这里**每一个概念都该被拒**，说明书将无话可说。A0/A2 的 Button/Door 只是账目太小（−17/−13、−5/−1）并被约束 2 救下；**这里是符号反转，而原因是证据预算不是世界**：MDL 把声明成本摊到出现的帧上，6 个状态摊不动任何东西。同一个世界看 275 次转移大概率是正的。**压缩判据不是尺度无关的，首触时它指向相反方向。**
+- **`cegis_miner` 一条规则都没提。** 它的前提是「每次转移恰好叙述一个 move 事件或零个」，而这个世界单条命令改 49 和 71 个格子、返回最多 9 帧。前提本身是关于世界的实质断言，这个世界不满足它。于是**产出戳探前沿的那台引擎在首触时贡献为零**，说明书里每条规则都是掌台直接从帧差写的——分工三律在这里是弯的。照登记，不改造输入去让它开口（D-P8-006）。
+- **`zero_space` 从 6 个状态里给出 70 条「全局定律」，一条都不是定律。** 差分矩阵的秩被转移数卡死，零空间维数 ≈ 特征数 − 秩，于是几乎任何向量都是"定律"。A0 的两条定律读自 **275** 次转移。本臂现在把充分性算出来（`evidence_adequacy`：秩、特征数、零空间维数）连同定律一起交给掌台，判词写 `THIN`，并要求这类条目在 `status:` 里说清自己是**尚未被证伪的相关性**而不是守恒律。
+- **昂贵层从头到尾不可用**（不是失败，是不可用）：Lean 的枚举路线要在 kernel 里判完整个状态空间，64×64 远超阈值；pagoda 路线要 LINE 世界加 `lp_potential` 证书，而这是没有状态图的网格世界。`certify.expensive` 报 `available: false` 并附估算，run 的 `green` 永不为真。**两层真值制度在真实关卡上只剩一层。**
+
+**第三次运行的账（`runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`）**：动作 **7** 成功 / 0 失败 / 1 次 RESET，HTTP 命令 40（放大 **5.71**）；记分卡 `total_actions 7`、`score 0.0`、`levels_completed 0/7`——**账本与记分卡的动作数与关卡数逐项相等**。模型调用 **5** 次全在 `theorize`，$6.32。意外 **8** 条，全属经验族：`render_mismatch` 4 + `replay_mismatch` 4。**约束 8 成立**：1 次自举调用（第一次 theorize 无意外可答，因为还没有说明书可被世界反驳）+ 4 次被意外覆盖，禁止拍位 0 次。封存堆**从字节验证**未触碰。
+
+**一轮长什么样**：theorize（$1.33 / 588s / 46248 输出 token）→ **编译器拒稿**（`invariant` 里写了散文，那是 `theorem` 的位置）→ 再 theorize（$0.87 / 333s）→ **四形态全部生成** → certify → **帧 0 有 69 个像素既不属棋盘也不属任何已声明对象**、7 条转移 0 条重放成功 → 两条意外 → plan → `no_goal_declared` → probe → **`probe_frontier` 判定没有任何动作能分开任意两个假设**，于是记一条 unrunnable 戳探并附理由，改走最少尝试过的合法动作。然后又转了四轮。
+
+**一个数字量出了回路的真实状态，而它说的不是"在收敛"**：帧 0 未解释像素跨四轮 certify 是 **69 → 68 → 69 → 69**。读前两轮像收敛，其实是**振荡**——四次重写、$6.32，责任检查回到原地。原因在说明书自己身上：掌台知道这些像素为什么没有主人（`theorem colour_nine_collision`：颜色 9 至少画了三样东西，而本臂一色绑一物），所以这个缺陷**不是重写说明书能修的**；它每轮重新推出同一诊断、绕着它换一遍措辞，计数就回来了。**一个对着自己语言表达不了的缺陷反复 theorize 的回路会打转，不会收敛**，而且每转一圈花一次模型调用。这四轮花了 $5.00 才把这件事确立下来。真正值钱的是那个数字本身：约束 2 的全帧责任制在真实帧上产出了一个会动的量，而这个量有能力说出"你在原地打转"——只会报 pass/fail 的检查说不出这句话。
+
+**掌台在 certify 跑之前就说中了自己会挂**：说明书里有一条 `theorem colour_nine_collision`，它推出颜色 9 在这块板上至少画了三样不同的东西、本臂"一色绑一物"、于是多出来的颜色 9 像素没有主人——**在 certify 报出 69 之前就写下来了**。一份预言自己 certify 失败的说明书，比一份悄悄通过的更有价值。全文与另外三条同类见 `THEORIZE_LOG.md`。
+
+**再补一条给 proxy 轨道，量级比价目表那条大**（INC-TA-005）：本臂全部模型调用的 `cache_read_input_tokens` **恒为 0**，`cache_creation_input_tokens` 61214。每次 `claude -p` 都是新进程新目录（那正是把掌台与本仓隔开的封印，D-P8-013），于是缓存建了从不被读，下一次调用按创建价重付同一段前言。**问题在于 `Theoria.md` 1.12 的赌注就押在"单局缓存读"这一列上**：Schema ~10⁸、Theoria 预测 ~10⁶、裸 CC 实测 ~6.0×10⁵。**本臂在这一列报不出数**——它的 0 不是"很小"，是另一个量纲，拿去跟 10⁸ 比就是拿子进程属性比框架属性。本臂改报"每回合重发的输入 token"（约 20000/次，三次无增长），那是缓存读所定价的东西，且与传输无关。**这条主要是给 Phase 2 电池的警告**：一本从统一账本重新计价的电池，会把这个 0 读成真实的 0。
+
+测试：`cd theoria-arm && python -m pytest` 47 passed，全离线——无密钥、无网络、无模型调用、无配额。预检 `python -m armtools.preflight` 用 **0 个计费动作**打通全链路（密钥在代理内注入、守卫指纹 `3feca53e…`、64×64 帧、动作 `[1..5]`、`win_levels 7`）。封存堆零接触**从字节上验证**而非依赖守卫自述：manifest 逐条扫描全部记录里出现过的 game id，与 `piles.json`（先校验完整性摘要）比对，结果 `sealed_game_ids_found: []`。
+
+阻塞：**INC-TA-001（high）**——本臂在线期间，另一个 Claude Code 会话正在**同一局 `g50t`** 上跑 `baseline-arms` 战役（其 shard 账本与本臂账本在 `01:28Z` 同时被写）。这就是贵方 INC-BA-003 复发，本轨道是第二方。后果说清：本运行的**一切墙钟与 HTTP 放大数字都是被污染的上界**，不可与 5.07× 或 2.5–10× 直接比较；两边各算各的闸门，谁都看不见合计。**未杀对方进程、未改对方文件、`baseline-arms/` 只读**——与贵方发现本臂前身时守的是同一条纪律。要修需要共享地面（`arc-recon/`）上的一把跨会话锁，本轨道在那里是只读的，不擅自建。
+
+下一步：证据闸门已从"任何新帧都重开"改成"攒够 4 次转移再叫掌台"（本次运行未受影响，改动在其后）——因为一轮 17 分钟里几乎全是那一次返回 46000 输出 token 的 `claude -p`，而单帧增量恰恰饿死引擎（`zero_space` 的零空间只随转移数收缩，`mdl_segmenter` 摊不动一帧的声明成本）。真正要抬的是三件：给 `mdl_segmenter` 足够转移让概念账目转正、给 `cegis_miner` 一个它的前提成立的叙述方式（或承认这一类世界不归它管）、以及让说明书能写"按固定间距跨格"这类规则模式——现在一个规则只能覆盖一个被见证过的格子。

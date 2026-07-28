@@ -1,0 +1,104 @@
+{
+ "card_ids": [
+  "e8389453-bb38-473a-9ff2-d18e3268c4cc"
+ ],
+ "env_steps": 40,
+ "env_steps_ok": 8,
+ "recertify": {
+  "cheap_green": false,
+  "compile_ok": true,
+  "plan_status": "no_goal_declared",
+  "proof_layer_available": false
+ },
+ "records": 47,
+ "run_end_present": false,
+ "scorecard_on_close": {
+  "card_id": "e8389453-bb38-473a-9ff2-d18e3268c4cc",
+  "environments": [
+   {
+    "actions": 7,
+    "completed": false,
+    "id": "g50t-5849a774",
+    "level_count": 7,
+    "levels_completed": 0,
+    "resets": 0,
+    "runs": [
+     {
+      "actions": 7,
+      "completed": false,
+      "guid": "33dd5ef3-07a8-4bf2-af3f-bd8ff1b27af0",
+      "level_actions": [
+       7,
+       0,
+       0,
+       0,
+       0,
+       0,
+       0
+      ],
+      "level_baseline_actions": [
+       78,
+       175,
+       179,
+       230,
+       96,
+       54,
+       67
+      ],
+      "level_scores": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "levels_completed": 0,
+      "resets": 0,
+      "score": 0.0,
+      "state": "NOT_FINISHED"
+     }
+    ],
+    "score": 0.0
+   }
+  ],
+  "opaque": {
+   "prompt_id": "P-8",
+   "run_id": "r-b526769a14ef47e0"
+  },
+  "score": 0.0,
+  "tags": [
+   "theoria",
+   "p8",
+   "first-contact",
+   "agent"
+  ],
+  "tags_scores": [
+   {
+    "actions": 7,
+    "id": "keyboard",
+    "levels_completed": 0,
+    "number_of_environments": 1,
+    "number_of_levels": 7,
+    "score": 0.0
+   }
+  ],
+  "total_actions": 7,
+  "total_environments": 1,
+  "total_environments_completed": 0,
+  "total_levels": 7,
+  "total_levels_completed": 0
+ },
+ "slug": "20260728T015354Z-g50t-first-contact",
+ "successful_actions": 7,
+ "trace": {
+  "cascade_lengths": [
+   1,
+   7,
+   9
+  ],
+  "path": "C:\\Users\\user\\Desktop\\theoria-wt-p8\\theoria-arm\\runs\\20260728T015354Z-g50t-first-contact\\trace.jsonl",
+  "states": 8
+ }
+}
