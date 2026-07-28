@@ -299,3 +299,48 @@ not silently re-badged as a v2 measurement.
 `PAPER.md` for both the v2 figures and the v0 ones. The three surviving hits for
 "26 runs / 2 arms / 29 metrics" are all inside §7.1's own sentence describing what
 v0 *was*, which is the one place they belong.
+
+## Third addendum — §10's remaining v0 citations, and what checking them found
+
+Asked to verify the three `battery/REPORT_V0.md` citations §10 still carries.
+All three are sound. Checking them turned up two defects in **§7**, which is the
+useful part.
+
+**The three citations, checked.**
+
+1. **§10.3's quotation** — "A0 ran engines and hand adjudication with no LLM in the
+   loop, so it has no model calls". Verbatim at `battery/REPORT_V0.md:114`,
+   including the sentence that follows it. ✅
+2. **The claim it supports** — "every economy metric is `not-applicable` on the
+   Theoria arm". Re-derived at v2 rather than taken on trust: all 7 economy
+   metrics across all three Theoria arms are `not-applicable`, 49 slots, no
+   exceptions. ✅ Still exactly true.
+3. **§10.1(a)'s "the battery's economy family is `not-applicable` on the Theoria
+   arm"** — same check, same result. ✅
+
+**What the check found in §7.** Counting economy statuses per arm showed the
+Schema arm with **4 `ok` slots** where the family was supposed to be empty. Two
+things followed.
+
+* **`battery/REPORT_V2.md` says flatly that "the economy family collapsed to
+  `no-data`", and its own process-1 table contradicts it** — E4 sits there at
+  δ = −0.875 over 4 paired games. The report is right about the six cost-bearing
+  metrics and wrong as stated: **E4 is a curvature fit over context tokens**, and
+  its `needs` field asks for `model_calls`, not for a price, so it survives a
+  corpus with no cost field. §7.3 now states the exception and
+  `PROVENANCE.md`'s disagreements table records it. Precedence rule applied as
+  written — artefacts beat prose reports, and the report is not edited.
+* **The larger one: three of the eight rankable metrics rest on half the arm.**
+  The Schema side is two upstream collections of four games each, and only the
+  Claude-side one records model calls — 197, 279, 288, 564 against the Codex-side
+  collection's four zeros. P1, P2 and E4 all divide by model calls, so their
+  Schema side is 4 runs of 8, and their effect sizes compare bare Claude Code
+  against **one vendor's** upstream agent. The other five rankable metrics use all
+  8. Nothing in the source reports separates these two cases, and §7.2's table
+  presented all eight rows as if they rested on the same material. The table now
+  carries a **Schema-side runs** column and the paragraph under it says what the
+  split means: a confound beyond the arm-and-harness bundle the artefact already
+  declares.
+
+That second finding is this paper's own, not a restatement — it came out of
+checking a citation that turned out to be fine.
