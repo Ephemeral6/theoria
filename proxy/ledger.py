@@ -5,6 +5,10 @@ module. Corrections are new `incident` records.
 
 Every record goes through `redact.VAULT.scrub()` on its way to disk, so a
 credential cannot reach the file even if an arm put one in a request body.
+
+Every record is also checked against `proxy/canon.py` first, so a field the
+format does not define never reaches disk at all (F-16: this file is the
+canon).
 """
 
 import hashlib
@@ -15,8 +19,9 @@ import time
 from typing import Any, Dict, List, Optional
 
 from . import LEDGER_VERSION
+from . import canon
 from .paths import LEDGER_PATH
-from .redact import VAULT
+from .redact import VAULT, scrub_keyish
 
 EVENTS = frozenset({
     "env_step", "model_call", "run_start", "run_end",
@@ -30,6 +35,26 @@ ARMS = frozenset({
 INCIDENT_KINDS = frozenset({
     "score_mismatch", "replay_mismatch", "nondeterminism",
     "credential_in_body", "bypass_attempt", "sealed_pile_request",
+    # A run that could not be reconciled at all is not a run that reconciled.
+    # baseline-arms lost 22 of 23 scorecards to a transient 404 and the loss
+    # was silent; an obligation that cannot be discharged is an incident.
+    "score_unreconciled",
+    # The frozen scorer's source no longer hashes to its freeze record.
+    "scorer_drift",
+    # An upstream handed our credential back and the proxy removed it before
+    # the arm saw it. The arm holding no key is the property; a reflection is
+    # an attempt on it, whether or not anyone meant one.
+    "credential_reflected",
+    # The transport finished somewhere other than where it was aimed, or asked
+    # to. Redirects are refused, so this should be unreachable -- which is the
+    # state a security property is in right before it stops holding.
+    "redirect_refused",
+    # A model prompt named a sealed game. The cut's rule 2 counts reading about
+    # a sealed game as contamination, and a prompt is a way to do that.
+    "sealed_pile_in_prompt",
+    # A line in the file is not a v1.0 record. The file is append-only, so it
+    # cannot be removed; recording it is the only correction available.
+    "ledger_unreadable_line",
 })
 
 _LOCKS: Dict[str, threading.Lock] = {}
@@ -101,13 +126,33 @@ class Ledger:
             raise ValueError("unknown event %r (LEDGER_FORMAT.md §3, §4, §6)" % event)
         if arm not in ARMS:
             raise ValueError("unknown arm %r; register it in ledger.ARMS" % (arm,))
+        canon.check(event, fields)
+        if event == "env_step":
+            # The writer computes this itself on every normal path; a caller
+            # that supplies one has to supply the right one. A frame_hash that
+            # does not hash its own frames makes every replay that consulted it
+            # meaningless, and nothing downstream would notice (RED-41).
+            expected = frame_hash(fields.get("frames"))
+            if fields.get("frame_hash") != expected:
+                raise canon.NonCanonicalField(
+                    "frame_hash is %r but the frames on this record hash to %r. "
+                    "The hash is the unit of replay comparison; a record that "
+                    "disagrees with itself cannot be replayed against anything."
+                    % (fields.get("frame_hash"), expected))
         record: Dict[str, Any] = {
             "v": LEDGER_VERSION,
             "event": event,
             "run_id": run_id,
             "arm": arm,
         }
-        record.update(VAULT.scrub(fields))
+        clean = VAULT.scrub(fields)
+        if event != "model_call":
+            # Environment traffic only. `model_call` keeps its bodies verbatim
+            # (§4, D-005), and a long run of alphanumerics there is ordinary
+            # model output; an arm putting a key in a *prompt* still raises a
+            # `credential_in_body` incident at the proxy.
+            clean = scrub_keyish(clean)
+        record.update(clean)
         with self._lock:
             self._seq += 1
             record["seq"] = self._seq
@@ -123,7 +168,20 @@ class Ledger:
         return read_ledger(self.path)
 
 
-def read_ledger(path: str = LEDGER_PATH) -> List[Dict[str, Any]]:
+def read_ledger(path: str = LEDGER_PATH, strict: bool = True,
+                rejected: Optional[List[Dict[str, Any]]] = None
+                ) -> List[Dict[str, Any]]:
+    """Read a ledger. §8: a reader rejects what it does not know.
+
+    `strict=False` rejects the *line* instead of the *file*. The distinction
+    matters because the file is append-only and anyone who can append can add
+    one `{"v":"2.0"}` line — under strict reading that single line makes every
+    record before it permanently unauditable, which turns an append-only log
+    into a denial-of-service surface (RED-44). Non-strict readers still refuse
+    to interpret the unknown line; they collect it in `rejected` so the caller
+    can report it, and the frozen scorer turns it into a failed check rather
+    than an exception.
+    """
     if not os.path.exists(path):
         return []
     out = []
@@ -135,14 +193,25 @@ def read_ledger(path: str = LEDGER_PATH) -> List[Dict[str, Any]]:
             try:
                 record = json.loads(line)
             except json.JSONDecodeError as exc:
-                raise ValueError("%s:%d is not JSON: %s" % (path, lineno, exc))
+                if strict:
+                    raise ValueError("%s:%d is not JSON: %s" % (path, lineno, exc))
+                if rejected is not None:
+                    rejected.append({"line": lineno, "kind": "not_json",
+                                     "detail": str(exc)})
+                continue
             version = record.get("v")
             if version != LEDGER_VERSION:
-                raise ValueError(
+                message = (
                     "%s:%d has ledger version %r, this reader knows %r. A reader "
                     "must reject what it does not know rather than guess "
                     "(LEDGER_FORMAT.md §8)." % (path, lineno, version, LEDGER_VERSION)
                 )
+                if strict:
+                    raise ValueError(message)
+                if rejected is not None:
+                    rejected.append({"line": lineno, "kind": "unknown_version",
+                                     "detail": message})
+                continue
             out.append(record)
     return out
 
@@ -156,10 +225,17 @@ class RunLedger:
     """A ledger bound to one run: keeps the step and call counters, and derives
     the level boundaries that LEDGER_FORMAT.md §3 assigns to the ledger."""
 
-    def __init__(self, ledger: Ledger, run_id: str, arm: str):
+    def __init__(self, ledger: Ledger, run_id: str, arm: str,
+                 game_id: Optional[str] = None):
         self.ledger = ledger
         self.run_id = run_id
         self.arm = arm
+        #: One run is one arm playing one game once, so the game is a property
+        #: of the run and every record it writes can carry it. The Phase 2
+        #: battery asked for this on `model_call`: without it a run that
+        #: thought and never acted lands as `unknown`, and its guardrail can
+        #: only filter model traffic by rejoining it to `env_step` records.
+        self.game_id = game_id
         self._step_idx = -1
         self._call_idx = -1
         self._levels_completed = 0
@@ -195,8 +271,13 @@ class RunLedger:
         # step happened on; an increase means the step ended a level.
         before = self._levels_completed
         after = before if levels_completed is None else int(levels_completed)
-        boundary = after > before
+        boundary = bool(after > before)
         self._levels_completed = after
+
+        # `status` is always present, null when unknown. A reader must be able
+        # to tell "the command failed" from "nobody wrote down whether it did".
+        http = dict(http or {})
+        http.setdefault("status", None)
 
         return self._append(
             "env_step",
@@ -215,7 +296,7 @@ class RunLedger:
             level_boundary=boundary,
             variant=variant,
             guard=guard or {"decision": "allow"},
-            http=http or {},
+            http=http,
             **extra,
         )
 
@@ -224,13 +305,11 @@ class RunLedger:
                    usage: Optional[Dict[str, Any]] = None,
                    pricing_ref: Optional[Dict[str, Any]] = None,
                    step_idx: Optional[int] = None,
+                   game_id: Optional[str] = None,
                    http: Optional[Dict[str, Any]] = None,
                    **extra: Any) -> Dict[str, Any]:
-        if "cost" in extra or "cost_usd" in extra:
-            raise ValueError(
-                "cost does not belong in the ledger: it is a conversion from "
-                "usage x a versioned price table (LEDGER_FORMAT.md §4, §5)."
-            )
+        # `canon.check` refuses `cost`/`cost_usd` along with the rest of the
+        # non-canonical vocabulary, and says what to write instead.
         return self._append(
             "model_call",
             call_idx=self._next_call(),
@@ -238,9 +317,14 @@ class RunLedger:
             model=model,
             request=request,
             response=response,
-            usage=dict(usage or {}),
+            # Copied, not coerced: `dict(usage)` on something that is not a
+            # mapping would either raise a confusing error or invent a shape,
+            # and canon.check is the thing that should be saying no here.
+            usage=dict(usage) if isinstance(usage, dict) else (
+                {} if usage is None else usage),
             pricing_ref=pricing_ref,
             step_idx=step_idx,
+            game_id=game_id if game_id is not None else self.game_id,
             http=http or {},
             **extra,
         )

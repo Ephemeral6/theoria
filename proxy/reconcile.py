@@ -20,34 +20,33 @@ from typing import Any, Dict, List, Optional
 
 from .ledger import Ledger, RunLedger, read_ledger
 from .paths import LEDGER_PATH
+from .scoring import score_records
+from .scoring.arc_v1 import CardView, _as_int
 
 
-def scorecard_score(scorecard: Any) -> Optional[int]:
-    """Pull a score out of whatever shape the scorecard came back in.
+def scorecard_view(scorecard: Any, game_id: Optional[str] = None) -> CardView:
+    """Read a scorecard, whatever shape it came back in.
 
-    The mock reports a flat `score`; the live API's card aggregates per game.
-    Both are handled, and an unrecognised shape returns None rather than a
-    guess -- a fabricated number here would defeat the whole check.
+    There is exactly one scorecard reader in this package and it lives in the
+    frozen scorer. `proxy/STATUS.md` used to note that this module "handles two
+    shapes and will need a third if the real one differs" -- it did differ, and
+    two readers drifting apart is precisely how a reconciliation obligation
+    turns into a reconciliation ritual. So this delegates.
     """
-    if not isinstance(scorecard, dict):
-        return None
-    if isinstance(scorecard.get("score"), int):
-        return scorecard["score"]
-    cards = scorecard.get("cards")
-    if isinstance(cards, dict):
-        total = 0
-        for entry in cards.values():
-            scores = (entry or {}).get("scores") or []
-            numeric = [s for s in scores if isinstance(s, int)]
-            if numeric:
-                total += max(numeric)
-        return total
-    return None
+    return CardView(scorecard, game_id=game_id)
+
+
+def scorecard_score(scorecard: Any) -> Optional[float]:
+    """The card's own score, or None. Kept as a name because callers outside
+    this module use it."""
+    return scorecard_view(scorecard).score
 
 
 def reconcile_run(run_id: str, ledger_path: str = LEDGER_PATH,
                   write_incident: bool = True) -> Dict[str, Any]:
-    records = [r for r in read_ledger(ledger_path) if r.get("run_id") == run_id]
+    rejected: List[Dict[str, Any]] = []
+    records = [r for r in read_ledger(ledger_path, strict=False, rejected=rejected)
+               if r.get("run_id") == run_id]
     steps = sorted([r for r in records if r.get("event") == "env_step"],
                    key=lambda r: r.get("step_idx", 0))
     ends = [r for r in records if r.get("event") == "run_end"]
@@ -57,16 +56,19 @@ def reconcile_run(run_id: str, ledger_path: str = LEDGER_PATH,
                 "detail": "no env_step records for this run"}
 
     # -- score from the ledger ------------------------------------------
-    observed = [r.get("levels_completed") for r in steps
-                if isinstance(r.get("levels_completed"), int)]
-    ledger_levels = max(observed) if observed else 0
+    observed = [_as_int(r.get("levels_completed")) for r in steps]
+    observed = [v for v in observed if v is not None]
+    ledger_levels = observed[-1] if observed else 0
     boundaries = sum(1 for r in steps if r.get("level_boundary"))
-    scored = [r.get("score") for r in steps if isinstance(r.get("score"), int)]
+    scored = [_as_int(r.get("score")) for r in steps]
+    scored = [v for v in scored if v is not None]
     ledger_score = max(scored) if scored else None
 
     # -- score from the API's scorecard ----------------------------------
-    card = (ends[-1].get("scorecard") if ends else None)
-    card_score = scorecard_score(card)
+    games = sorted({r.get("game_id") for r in steps if isinstance(r.get("game_id"), str)})
+    card = scorecard_view(ends[-1].get("scorecard") if ends else None,
+                          game_id=games[0] if len(games) == 1 else None)
+    card_score = card.score
 
     # -- re-derive the derived-and-recorded fields ------------------------
     level_errors: List[Dict[str, Any]] = []
@@ -86,12 +88,19 @@ def reconcile_run(run_id: str, ledger_path: str = LEDGER_PATH,
                 "recomputed": {"level": expected_level,
                                "level_boundary": expected_boundary}})
 
-    problems: List[str] = []
-    if card_score is None:
-        problems.append("no scorecard score could be read from run_end")
-    elif ledger_score is not None and ledger_score != card_score:
-        problems.append("ledger score %s != scorecard score %s"
-                        % (ledger_score, card_score))
+    # The card-side obligation is the frozen scorer's battery, run here rather
+    # than reimplemented here. Two implementations of one obligation drift, and
+    # the drift is invisible until the day they disagree about a real run.
+    scored = score_records(records)
+    problems: List[str] = [
+        "%s: %s" % (check["id"], check["claim"])
+        for check in scored["checks"] if check["verdict"] == "FAIL"
+    ]
+    if scored["verdict"] == "UNDETERMINED":
+        problems.append(
+            "the score could not be reconciled at all (%s); an obligation that "
+            "cannot be discharged is not an obligation that passed"
+            % ", ".join(scored["undetermined_checks"] or []))
     if boundaries != ledger_levels:
         problems.append("%d level boundaries but levels_completed reached %d"
                         % (boundaries, ledger_levels))
@@ -101,15 +110,30 @@ def reconcile_run(run_id: str, ledger_path: str = LEDGER_PATH,
 
     report = {
         "run_id": run_id,
+        "ledger_health": {"unreadable_lines": len(rejected),
+                          "detail": rejected[:10] or None},
         "steps": len(steps),
         "ledger_score": ledger_score,
         "ledger_levels_completed": ledger_levels,
         "level_boundaries": boundaries,
         "scorecard_score": card_score,
+        "scorecard_shape": card.shape,
+        "scorecard_levels_completed": card.levels_completed,
+        "scorer": scored["scorer"],
+        "scorer_verdict": scored["verdict"],
         "level_field_errors": level_errors[:20] or None,
         "problems": problems or None,
         "verdict": "PASS" if not problems else "FAIL",
     }
+
+    if rejected and write_incident:
+        run = RunLedger(Ledger(ledger_path), run_id, steps[0].get("arm", "probe"))
+        run.incident(
+            "ledger_unreadable_line",
+            "%d line(s) in %s are not v1.0 records; they were skipped rather "
+            "than allowed to make every run in the file unauditable"
+            % (len(rejected), ledger_path),
+            lines=[r["line"] for r in rejected[:20]])
 
     if problems and write_incident:
         arm = steps[0].get("arm", "probe")

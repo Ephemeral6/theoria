@@ -34,7 +34,7 @@ from . import forward as fwd
 from .guard import SealedPileGuard
 from .ledger import Ledger, RunLedger, canonical, sha256
 from .paths import LEDGER_PATH, UPSTREAM_ARC
-from .redact import VAULT, looks_like_credential, read_secret
+from .redact import VAULT, looks_like_credential, read_secret, scrub_outbound
 from .variants import Refusal, Variant, VariantRuntime, _Remap
 
 COMMAND = re.compile(r"^/api/cmd/(RESET|ACTION([1-9][0-9]?))/?$")
@@ -72,7 +72,7 @@ class EnvProxyConfig:
         # The credential enters the process here and nowhere else.
         self.api_key = api_key if api_key is not None else read_secret(
             "ARC_API_KEY", required=require_key)
-        VAULT.register(self.api_key)
+        VAULT.register(self.api_key, force=True)
 
         self.ledger = ledger or Ledger(ledger_path)
         # The runner shares one RunLedger across both proxies, so step and call
@@ -89,6 +89,9 @@ class _State:
         self.lock = threading.Lock()
         self.card_ids: list = []
         self.guids: Dict[str, str] = {}
+        #: guid -> game_id. The inverse of `guids`, and the one the guard needs:
+        #: a command that names only a session has to be attributable to a game.
+        self.session_games: Dict[str, str] = {}
         self.runtimes: Dict[str, VariantRuntime] = {}
         self.commands = 0
         self.meta_calls = 0
@@ -140,6 +143,18 @@ class _Handler(BaseHTTPRequestHandler):
             body = bytes(payload)
         else:
             body = json.dumps(payload).encode("utf-8")
+
+        # Nothing leaves for the arm carrying a credential -- not from us, and
+        # not from an upstream that echoed one back.
+        body, headers, leaked = scrub_outbound(body, dict(headers or {}), VAULT)
+        if leaked:
+            self.state.incidents += 1
+            self.cfg.run.incident(
+                "credential_reflected",
+                "the upstream returned a registered credential to the arm in "
+                "%s; it was removed before the arm saw it" % ", ".join(leaked),
+                path=self.path.partition("?")[0], places=leaked)
+
         self.send_response(status)
         for key, value in (headers or {}).items():
             self.send_header(key, value)
@@ -158,19 +173,42 @@ class _Handler(BaseHTTPRequestHandler):
         except (json.JSONDecodeError, UnicodeDecodeError):
             body = None
 
+        # The keyless check runs before the internal-endpoint branch, not
+        # after: `/__proxy/health` used to be a route on which an arm could
+        # present a credential and have nobody notice (RED-09).
+        self._check_arm_is_keyless(path, body, raw)
+
         if path.startswith("/__proxy/"):
             return self._internal(path)
 
-        self._check_arm_is_keyless(path, body, raw)
-
-        verdict = self.cfg.guard.check_request(path, query, body)
+        match = COMMAND.match(path)
+        known_game = self._game_for_session(body)
+        verdict = self.cfg.guard.check_request(
+            path, query, body, raw=raw, headers=self.headers,
+            known_game=known_game, is_command=bool(match))
         if verdict["decision"] == "deny":
             return self._deny(method, path, query, body, verdict)
 
-        match = COMMAND.match(path)
         if match:
             return self._command(method, path, query, body, raw, match)
         return self._meta(method, path, query, body, raw)
+
+    def _game_for_session(self, body: Any) -> Optional[str]:
+        """Which game a `guid` belongs to, if this proxy opened the session.
+
+        A `guid` is only obtainable through a RESET, and a RESET is guarded --
+        so a session this proxy opened is a session for a game it allowed. A
+        `guid` it has never seen belongs to a session opened somewhere else,
+        which is exactly the shape of playing a sealed game through a
+        side-channel; `check_request` refuses a command it cannot attribute.
+        """
+        if not isinstance(body, dict):
+            return None
+        guid = body.get("guid")
+        if not isinstance(guid, str):
+            return None
+        with self.state.lock:
+            return self.state.session_games.get(guid)
 
     # -- sealing checks ----------------------------------------------------
     def _check_arm_is_keyless(self, path: str, body: Any, raw: bytes) -> None:
@@ -240,9 +278,25 @@ class _Handler(BaseHTTPRequestHandler):
 
     def _forward(self, method: str, path: str, query: str, raw: bytes) -> fwd.Response:
         url = self.cfg.upstream + path + (("?" + query) if query else "")
-        return fwd.forward(url, method, self._upstream_headers(),
-                           raw or None, timeout=self.cfg.timeout,
-                           max_attempts=self.cfg.max_attempts)
+        response = fwd.forward(url, method, self._upstream_headers(),
+                               raw or None, timeout=self.cfg.timeout,
+                               max_attempts=self.cfg.max_attempts)
+        self._note_redirect(url, response)
+        return response
+
+    def _note_redirect(self, url: str, response: fwd.Response) -> None:
+        """A refused redirect is a record, for the same reason a refused
+        command is: "nobody tried" and "somebody tried and was stopped" must
+        not look the same in the ledger."""
+        if response.redirect_to or fwd.crossed_hosts(url, response.final_url):
+            self.state.incidents += 1
+            self.cfg.run.incident(
+                "redirect_refused",
+                "the upstream answered %s with a redirect; it was not followed, "
+                "because following it would replay the injected credential to "
+                "the host it named" % response.status,
+                intended=url, location=response.redirect_to,
+                final_url=response.final_url)
 
     def _command(self, method: str, path: str, query: str, body: Any,
                  raw: bytes, match) -> None:
@@ -287,6 +341,7 @@ class _Handler(BaseHTTPRequestHandler):
             guid = (response_body or {}).get("guid") or body.get("guid")
             if guid:
                 self.state.guids[game_id] = guid
+                self.state.session_games[guid] = game_id
 
         frames = response_body.get("frame") if isinstance(response_body, dict) else None
         if frames is not None and not isinstance(frames, list):
@@ -298,10 +353,22 @@ class _Handler(BaseHTTPRequestHandler):
             "forwarded": forwarded,
             "request_sha256": sha256(body),
         }
+        if getattr(response, "final_url", None) if forwarded else None:
+            http["final_url"] = response.final_url
+        if forwarded and getattr(response, "redirect_to", None):
+            http["redirect_refused_to"] = response.redirect_to
         if forwarded_path != path:
             http["forwarded_path"] = forwarded_path
         if attempts > 1:
             http["attempt_log"] = attempt_log
+
+        # The rest of the response body, minus the frames it already stored
+        # whole. The live API returns `win_levels`, `available_actions`,
+        # `full_reset` and `action_input` on every command, and a record that
+        # dropped them would not be the complete record Phase 1 claims.
+        rest = None
+        if isinstance(response_body, dict):
+            rest = {k: v for k, v in response_body.items() if k != "frame"}
 
         self.cfg.run.env_step(
             game_id=game_id,
@@ -313,6 +380,7 @@ class _Handler(BaseHTTPRequestHandler):
             score=(response_body or {}).get("score"),
             levels_completed=(response_body or {}).get("levels_completed"),
             variant=self.cfg.variant.reference(applied) if self.cfg.variant else None,
+            response=rest,
             http=http,
         )
         self._respond(status if status > 0 else 502, response_body)
@@ -336,6 +404,8 @@ class _Handler(BaseHTTPRequestHandler):
             http={"method": method, "path": path, "query": query or None,
                   "status": response.status, "elapsed_ms": response.elapsed_ms,
                   "attempts": response.attempts, "forwarded": True,
+                  "final_url": response.final_url,
+                  "redirect_refused_to": response.redirect_to,
                   "request_sha256": sha256(body if body is not None else "")})
         self._respond(response.status if response.status > 0 else 502,
                       response.body, response.passthrough_headers())

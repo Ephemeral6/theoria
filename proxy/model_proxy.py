@@ -30,7 +30,8 @@ from . import forward as fwd
 from .cost import DEFAULT_TABLE, PriceTable
 from .ledger import Ledger, RunLedger, sha256
 from .paths import LEDGER_PATH, UPSTREAM_MODEL
-from .redact import VAULT, read_secret
+from .guard import SealedPileGuard
+from .redact import VAULT, read_secret, scrub_outbound
 
 ANTHROPIC_VERSION = "2023-06-01"
 
@@ -51,6 +52,8 @@ class ModelProxyConfig:
                  ledger: Optional[Ledger] = None,
                  run: Optional[RunLedger] = None,
                  pricing_table: str = DEFAULT_TABLE,
+                 game_id: Optional[str] = None,
+                 guard: Optional[SealedPileGuard] = None,
                  host: str = "127.0.0.1", port: int = 0,
                  timeout: float = 300.0,
                  max_attempts: int = 3):
@@ -65,12 +68,20 @@ class ModelProxyConfig:
 
         self.api_key = api_key if api_key is not None else read_secret(
             key_env, required=require_key)
-        VAULT.register(self.api_key)
+        VAULT.register(self.api_key, force=True)
 
         self.ledger = ledger or Ledger(ledger_path)
         # A runner shares one RunLedger across both proxies so `call_idx` and
         # `step_idx` come from a single counter per run.
-        self.run = run or RunLedger(self.ledger, run_id, arm)
+        # `game_id` here rather than only on the runner's shared RunLedger:
+        # the standalone path builds its own, and every `model_call` it wrote
+        # carried `game_id: null` -- the exact gap the Phase 2 battery raised.
+        self.game_id = game_id
+        self.run = run or RunLedger(self.ledger, run_id, arm, game_id=game_id)
+        # The sealed-pile guard reads model traffic too. The cut's rule 2
+        # counts *reading about* a sealed game as contamination, and a prompt
+        # that names one teaches the model exactly that (RED-32).
+        self.guard = guard if guard is not None else SealedPileGuard()
         try:
             self.pricing = PriceTable.load(pricing_table)
         except KeyError:
@@ -108,6 +119,16 @@ class _Handler(BaseHTTPRequestHandler):
 
     def _respond(self, status: int, body: bytes,
                  headers: Optional[Dict[str, str]] = None) -> None:
+        # The arm holds no credential, and a provider that echoes ours back in
+        # a body or a header is a way for it to acquire one (RED-12).
+        body, headers, leaked = scrub_outbound(bytes(body), dict(headers or {}),
+                                               VAULT)
+        if leaked:
+            self.cfg.run.incident(
+                "credential_reflected",
+                "the provider returned a registered credential to the arm in "
+                "%s; it was removed before the arm saw it" % ", ".join(leaked),
+                path=self.path.partition("?")[0], places=leaked)
         self.send_response(status)
         for key, value in (headers or {}).items():
             self.send_header(key, value)
@@ -145,6 +166,24 @@ class _Handler(BaseHTTPRequestHandler):
         # The arm may declare which env_step this call is deciding. It is the
         # only thing an arm gets to add to the ledger, and it is metadata, not
         # content -- the battery needs a per-turn axis for cost.
+        verdict = self.cfg.guard.check_request(path, query, body, raw=raw,
+                                               headers=self.headers)
+        if verdict["decision"] == "deny":
+            self.cfg.run.guard_block(
+                game_id=verdict.get("game_id"), rule=verdict.get("rule"),
+                reason=verdict.get("reason"), path=path, query=query or None,
+                method=method, peer=self.client_address[0],
+                cut_sha256=verdict.get("cut_sha256"), surface="model_proxy")
+            self.cfg.run.incident(
+                "sealed_pile_in_prompt", verdict.get("reason"),
+                game_id=verdict.get("game_id"), rule=verdict.get("rule"),
+                path=path)
+            return self._respond(403, json.dumps({
+                "error": "refused by the sealed-pile guard",
+                "rule": verdict.get("rule"),
+                "game_id": verdict.get("game_id"),
+                "detail": verdict.get("reason")}).encode())
+
         declared_step = self.headers.get("X-Theoria-Step")
         step_idx: Optional[int] = None
         if declared_step is not None:
@@ -301,12 +340,14 @@ def main(argv=None) -> int:
     ap.add_argument("--host", default="127.0.0.1")
     ap.add_argument("--arm", required=True)
     ap.add_argument("--run-id", required=True)
+    ap.add_argument("--game", default=None,
+                    help="the game this run plays; goes on every model_call")
     ap.add_argument("--upstream", default=UPSTREAM_MODEL)
     ap.add_argument("--provider", default="anthropic")
     ap.add_argument("--ledger", default=LEDGER_PATH)
     args = ap.parse_args(argv)
 
-    cfg = ModelProxyConfig(run_id=args.run_id, arm=args.arm, upstream=args.upstream,
+    cfg = ModelProxyConfig(run_id=args.run_id, arm=args.arm, game_id=args.game, upstream=args.upstream,
                            provider=args.provider, ledger_path=args.ledger,
                            host=args.host, port=args.port)
     proxy = ModelProxy(cfg)
