@@ -28,23 +28,59 @@ sk48 offers `[1, 2, 3, 4, 6, 7]`. Pre-flight on it cost **0 billed actions**:
 64×64, ten colours, eight levels, RESET in 5 attempts, and no `score` field —
 the same Phase 1 obligation gap P-8 reported, unchanged.
 
-### The pre-registered number
+### What the first carry actually established, after review
 
-The carried manual does not only assert things about g50t. One theorem states a
-*formula* — `unexplained(frame_0) = D0 - K` — and claims it is arithmetic that
-can be run in advance. That claim is about this framework's renderer, not about
-g50t, so a different game can genuinely test it. Evaluated on sk48's opening
-frames and written to disk **before** certify ran:
+The mechanism ran: carry the two books, compute the new level from the carried
+manual's own declarations, compile the four forms, certify against the new
+game's frames — all before a model was called. That machinery is what E3 asked
+to be built and it works.
 
-| | |
-|---|---|
-| D0 (dynamic non-background cells at t0) | 73 |
-| K (distinct declared colours present at t0) | 3 |
-| **predicted unexplained cells** | **70** |
+**The transfer claim itself is untested by that run, and the reason is sharp.**
+The carried manual's generated `ACTIONS` is `[('key', 5)]` and all three of its
+rules open with `if action != ('key', 5): return False`. sk48's
+`available_actions` is `[1,2,3,4,6,7]` — **there is no ACTION5**. So every rule
+in the manual is unreachable, `step` is the identity for every action this arm
+can send, and replay 0/5 is trivial rather than structural. The manual's
+colour-semantics theorem also asserts the background is 0; on sk48 it is 5.
 
-`transfer.json` carries a `prediction-only` revision with that number and no
-certify result in it, then a `cold` revision with the verdict. The discipline is
-`probe`'s: a prediction recorded after its result is not a prediction.
+The first reading of this run claimed the manual's render-accounting formula
+predicted its own failure number (70 against an observed 72) and that the +2 was
+a transfer result. An adversarial review refuted it and the refutation holds:
+`certify`'s `cells_unexplained` is **identically** `D0 − covered_by_objects`
+given how the board is built and how the generated `render` paints, so the
+prediction error is identically `K − covered_by_objects`, **D0 cancels**, and
+the agreement could never have failed. The "corrected formula" derived from it
+is that same quantity's definition written backwards. And the correction was
+already in the carried manual one theorem below the formula, so sk48 taught
+nobody anything: a faithful reading predicts 72, exactly right, and the
+refutation was of `inner/transfer.py`.
+
+The superseded reading is kept verbatim in the run's `RUN_STATE.md` under the
+correction. Full account: `DECISIONS.md` D-E3-012.
+
+**The requirement this produces for any future carry:** check that the carried
+manual's declared actions intersect the new game's `available_actions` *before
+spending anything*. It is free to compute and it is the difference between a
+transfer experiment and a manual that cannot be tested on the game it was
+carried to.
+
+### Two faults the live run found
+
+**INC-TA-006 — an upstream schema change ate a paid desk call.**
+`LEDGER_FORMAT.md` §4 closed `model_call`'s field set after P-8 landed, and P-8
+wrote five fields straight onto that record. `canon.py` refused every one of
+this arm's model calls, *after* the provider had been paid: `desk.calls` said 1,
+`desk_log.json` was `[]`, and the ledger held zero `model_call` records. Cost:
+$2.695 and one discarded reply, stopped before it became $15. The fields now
+ride inside `request`; a paid reply is no longer discarded by a bookkeeping
+failure; and a test drives `ModelDesk` into a real `RunLedger`. `upstream_pin()`
+had hashed the change into every manifest all along — **nothing compares those
+hashes between runs**, so it documented the incident instead of preventing it.
+
+**INC-TA-007 — level data crossed despite the exclusion.** Seven of g50t's
+landmark coordinates reached sk48's computed level verbatim through
+`# arc-cell:` comments inside the manual, which does travel. Stripped on carry
+now, with both hashes recorded so the modification is visible.
 
 ### Before the money
 

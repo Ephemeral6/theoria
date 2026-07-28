@@ -404,3 +404,102 @@ whose whole content is that keys 6 and 7 are unknown and must be held in
 reserve. The opening sweep presses 7 on the first turn, because the sweep
 predates any manual and takes the world's word for what is legal. The manual's
 advice and the arm's behaviour disagree on turn one, in the record, for free.
+
+## D-E3-010 · The five extra fields ride inside `request`, and a paid reply outranks a tidy ledger
+
+`LEDGER_FORMAT.md` §4 closed `model_call`'s field set after P-8 landed, and P-8
+wrote `beat`, `label`, `transport`, `proxied` and `proxy_gap` straight onto that
+record. `canon.py` refuses all five (INC-TA-006).
+
+Dropping them was not available. `beat` is what makes constraint 8 checkable
+from the ledger rather than asserted in prose, and `proxied`/`transport` are
+what stop a reader mistaking this arm's CLI traffic for proxied traffic. §4's
+own refusal text points at §6 — "put it on an auxiliary record instead" — but
+that route is closed here: `EVENTS` in `proxy/ledger.py` admits exactly seven
+names, and none of them fits a model call's metadata (`env_meta` requires
+`http` and means the environment side, `guard_block` requires `rule`/`path`,
+`incident.kind` has a whitelist). Adding an eighth means editing another
+track's directory.
+
+So they went into `request`, which is a caller-owned object on the canonical
+record and already carried three of the five. Nothing is lost, no event is
+invented, no upstream file is touched, and `beat` stays on the ledger one level
+deeper. `armtools/archive.py` reads both depths, because a constraint-8 check
+that silently read `unknown` off every record of a P-8-era run would report a
+violation that is really a schema migration.
+
+The second half of this decision matters more than the first. **By the time the
+ledger is written the provider has been paid**, so the arm's own log entry and
+the transcript are written *first*, the ledger write is wrapped, and a refusal
+is recorded in `desk.ledger_failures` and surfaced in
+`summary()["calls_missing_from_ledger"]`. An incomplete ledger that says exactly
+where it is incomplete is strictly better than a call that cost $2.70 and left
+nothing behind. The old ordering turned a schema mismatch into a lost purchase.
+
+And the test that pins it drives `ModelDesk` into a **real** `RunLedger` with
+only the CLI stubbed. P-8's tests checked the record's shape against hand-built
+dictionaries and passed while the live writer refused the real thing; the gap
+was not a missing assertion but a missing subject.
+
+## D-E3-011 · Landmark coordinates are level data, so they are stripped on carry
+
+Excluding `problem.json` from the carry turned out to be an exclusion drawn
+around a filename when the thing to exclude was a kind of content. Seven of
+g50t's landmark coordinates reached sk48's computed level verbatim through
+`# arc-cell: (r, c)` comments **inside the manual**, which is exactly what does
+travel (INC-TA-007).
+
+`transfer.strip_level_data` removes the hints at carry time. Three details are
+deliberate:
+
+* **On carry, not on write.** The source run's books are untouched, and the
+  stripping is visible as a diff in the `rev01-carried` snapshot rather than
+  being a silent difference between two files that claim the same provenance.
+* **Both hashes are recorded.** `sha256` and `sha256_before_stripping` sit side
+  by side in `CARRIED.json`, so a reader checking what was carried cannot miss
+  that the text was modified in transit.
+* **The landmark still declares itself.** Only the coordinates go. The level
+  then places it at the origin and lists it under `landmarks_defaulted`, which
+  is the pre-existing and visible failure mode for a coordinate the level cannot
+  supply — not a new silent one.
+
+## D-E3-012 · The first cold-transfer reading was wrong, and the run record keeps both
+
+An adversarial review refuted E3's first headline, and every one of its points
+was verified independently before being accepted.
+
+The claim was that the carried manual predicted its own responsibility number on
+sk48 (70 against an observed 72) and that the +2 was a mechanically explained
+transfer result. What is actually true is that `certify`'s `cells_unexplained`
+is **identically** `D0 − covered_by_objects`, given how `problem_from_frames`
+builds the board and how the generated `render` paints one pixel per object. So
+the prediction error is identically `K − covered_by_objects`, **D0 cancels**, and
+the agreement could never have failed. The "corrected formula" derived from it is
+`n_unexplained_at_t0`'s own definition written backwards — unfalsifiable, and
+right on every game forever.
+
+Worse for the claim: the correction was already in the carried manual, one
+theorem below the formula. `responsibility_ceiling_is_two_pixels` says colours
+whose raster-first cells are constant board cells "would explain nothing they
+were not already given" — precisely sk48's condition on two of three objects. A
+reading faithful to the theorem *cluster* predicts 72, exactly right. The
+refutation was of `inner/transfer.py`, which implements the formula's
+one-sentence summary and drops the qualifier beside it.
+
+And no theory content transferred at all: the carried manual's only declared
+action is `('key', 5)`, sk48 does not offer ACTION5, so every rule is unreachable
+and `step` is the identity for every action the arm can send.
+
+Two decisions come out of this.
+
+**The run record keeps the original reading verbatim, under the correction.** A
+run that quietly rewrote its own first conclusion would be the exact failure this
+repository keeps writing incident reports about, and the superseded text is the
+evidence that the review did work rather than a claim that it did.
+
+**A carry should check the action-vocabulary intersection before it spends
+anything.** It is free to compute — the manual's declared actions against the
+game's `available_actions` — and it is the difference between a transfer
+experiment and a manual that cannot be tested on the game it was carried to.
+Recorded here as the next run's first requirement rather than implemented in the
+middle of a live run.
