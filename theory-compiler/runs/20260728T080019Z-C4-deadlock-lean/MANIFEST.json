@@ -1,0 +1,147 @@
+{
+  "base_commit": "ded9cd79e9083de0e1a1de0adb20e42508c6ad66",
+  "branch": "agent/c4-deadlock-lean",
+  "files": [
+    {
+      "path": "CONTRACTS/deadlock_certificate_v0.1.md",
+      "sha256": "80a52c7c2c69f33a8c363a783475d526d3f4155d4c0b996a7ca7b02ad6c6bd1b"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/strips.py",
+      "sha256": "a40f87a7f2df20d33435a5f3b5199843043d00a80c6681c6ea8f2f382530965e"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/strips_encoding.py",
+      "sha256": "fc4c4458a03b6803f4688a03f3487125dd84cabd32fdd424e4db2e9e762a5b6a"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/deadlock_certificate.py",
+      "sha256": "947337091471247d0c9976f72cf72b009d090796cc46b5279b9ead5c1d327bf8"
+    },
+    {
+      "path": "theory-compiler/src/theory_compiler/generators/gen_lean_deadlock.py",
+      "sha256": "22bb83fca917a60dda1c5e097564fa92554834340ce62eae6787e7ddbd58e8fa"
+    },
+    {
+      "path": "theory-compiler/tools/transcribe_deadlock_certificates.py",
+      "sha256": "13d98fe8fa8dcada64c3d7673fbe22c9aed5b85f06055c806131f55c188ef244"
+    },
+    {
+      "path": "theory-compiler/tools/build_deadlock_lean.py",
+      "sha256": "cbbdd94c3a2a8320ae6e0d12c2cf2cf6f9618a5807ae6fadf391a3cce0549ec0"
+    },
+    {
+      "path": "theory-compiler/tools/verify_c4.py",
+      "sha256": "56121915f7102190598430c22db52f86b3aa0f9a2d09eda23b89d4bf65d192f8"
+    },
+    {
+      "path": "theory-compiler/tests/test_strips.py",
+      "sha256": "315cfa39e2a5cb038e2c0af7f2945f6b74fae76f9bafaa032c0ecfb88d39e06d"
+    },
+    {
+      "path": "theory-compiler/tests/test_deadlock_certificate.py",
+      "sha256": "41b1a65745049e7e969de445f9cbedec22c282ba6432bc0c64324a3a6ae20931"
+    },
+    {
+      "path": "theory-compiler/tests/test_gen_lean_deadlock.py",
+      "sha256": "470a7a3efbe7526587f42bc0a60982dfb07058789d8381d34b4d7b1151024a71"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/deadlock_open4far_b1c11.json",
+      "sha256": "9fadf29cb1ed3ec84d2fb5a9cb95ab9b2ca8f66ccb0f1b05d10925e64c596e65"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/deadlock_open4far_b1c12_b2c13.json",
+      "sha256": "f5063450d26bb6057e807c049b876d75e810759f074e675019c178f96a114f8e"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/strips/sokoban_domain.pddl",
+      "sha256": "40ce1effb64bc626412c8e9dd163d51dfbefdd7ee27d588784450631606b98c1"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/strips/sokoban_open4far.pddl",
+      "sha256": "639583f4dac05102449132717a760b10feca3e87c06918c76a23aa2b0c53cfe1"
+    },
+    {
+      "path": "theory-compiler/tests/fixtures/strips/PROVENANCE.json",
+      "sha256": "29397e37c0555b27b2300eca57d26478ead637ffb83fe419e6d511ccdbad0427"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/pair.lean",
+      "sha256": "4febe8f58781bd46897077eeb3176d81ce3dc3056f60b14b8fc7c73065478329"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/corner.lean",
+      "sha256": "13195b0d8741f4459b386bdaca5a22adbc4509b73029e9e56b978c693ba647c3"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/verify/EVIDENCE.json",
+      "sha256": "70803fa05f29c7f454a2ef5b85e1253a5b9722f4ec30c89ad2e15c6737d93f21"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/RUN_STATE.md",
+      "sha256": "32534540b356999d7362a5ceae7011c050761f0cbd013d15c04b2513720855ba"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/PLAN.md",
+      "sha256": "3b712ee95319da040cae5ae6a465093286d98243f07e9a91a19830fc0d3f0cd0"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "engine-rig/artifacts/candidates.jsonl",
+      "role": "source of the transcribed deadlock certificates (read as data, never imported)"
+    },
+    {
+      "path": "engine-rig/fixtures/data/sokoban_domain.pddl",
+      "role": "source of the transcribed STRIPS domain"
+    },
+    {
+      "path": "engine-rig/fixtures/data/sokoban_open4far.pddl",
+      "role": "source of the transcribed STRIPS problem"
+    }
+  ],
+  "prompt_id": "C4-deadlock-lean",
+  "result": {
+    "all_ok": true,
+    "cases": [
+      {
+        "axioms_not_empty": [],
+        "case": "pair",
+        "lean_returncode": 0,
+        "seconds": 3.7
+      },
+      {
+        "axioms_not_empty": [],
+        "case": "corner",
+        "lean_returncode": 0,
+        "seconds": 57.4
+      },
+      {
+        "axioms_not_empty": [],
+        "case": "ic3-computational",
+        "lean_returncode": 0,
+        "seconds": 0.3
+      },
+      {
+        "axioms_not_empty": [
+          "inv_closed",
+          "inv_all",
+          "unsolvable"
+        ],
+        "case": "ic3-algebraic",
+        "lean_returncode": 0,
+        "seconds": 0.3
+      }
+    ],
+    "pytest": "283 passed (THEORIA_REQUIRE_LEAN=1)",
+    "pytest_before": "224 passed"
+  },
+  "territory": "theory-compiler",
+  "toolchain": {
+    "lean": "leanprover/lean4:v4.9.0",
+    "python": "3.13"
+  },
+  "utc": "2026-07-28T08:00:19Z",
+  "worker": "W-1541"
+}

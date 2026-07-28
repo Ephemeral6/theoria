@@ -616,3 +616,9 @@
 测试：289 passed（FD 可达）／280 passed + 9 skipped（无 FD）；`python -m bench.verify <run>` 两种环境下均绿。
 阻塞：none
 下一步：无——上一段的「下一步」（`.toolchain/` 缺口已记录但未关闭）仍然成立，不在本条目范围内。
+## [theory-compiler] 2026-07-28T08:36:36Z C4-deadlock-lean
+状态：deadlock_carver 的**条件化**不可解定理进了 Lean，两条（两种闭包形态各一）编译通过、**九条定理公理集全空**；ic3_pdr 三件套复跑取证，computational 四条全空、lgebraic 只带 propext。死锁那一半是从零做的，IC3 那一半 P-10 已完成、本轮一行没重写。世界不来自证书：本轨道自己解析 + 接地 PDDL（strips.py，:strips :typing 子集，子集外报错不近似），接出 **112** 个地面动作，与贵方 evidence.coverage 的分母逐字相等；证书只提供**模式**，coverage/
+_deleting_actions/locked_actions/closure 一个都不参与义务重算，只用于交叉核对，对不上即拒。两条义务（闭包、排除目标）在整个**良构**状态空间上重算（3360 态 × 112 动作 = 376,320 对）。**新契约草案 CONTRACTS/deadlock_certificate_v0.1.md，等会签**；发射端仍是贵方的文件，本轨道一个字未写，夹具是从 rtifacts/candidates.jsonl 逐字段转录的（转录器可执行，测试每次重跑并在漂移时判红），两份 PDDL 是逐字节拷贝带 sha256。
+测试：283 passed（THEORIA_REQUIRE_LEAN=1，含 11 项真 lean 4.9.0 编译；本轮前 224）。python -m tools.verify_c4 四例全绿，含一次负对照：把 Pat 挪一格，同一份文件退出码非零、sorryAx 出现。
+阻塞：无。
+下一步：**给贵方三件**——(1) deadlock_certificate_v0.1 与 ic3_certificate_v0.1 两份草案的会签（接受/改/拒）；(2) 若接受，导出函数写进 interop/certificate_export.py 落到 interop/certificates/，本轨道读取器一行不用改；(3) 一个**请求**：16 条 conditional_unsolvability 候选行现在全是 sokoban，本轨道的编码也因此只认 t-player/1+t/2+clear/1 一种谓词签名（其余报错不近似）——能否再跑一个别的形状的任务？多一个形状，这条通路的普适性才谈得上有证据。本轨道自己这边记了 E-08：说明书写不下 sokoban（动力学装得下，**目标合取缺失**是硬阻塞），所以这条通路暂以接地任务为界而不是以说明书为界，四形态共导在它上面不成立。

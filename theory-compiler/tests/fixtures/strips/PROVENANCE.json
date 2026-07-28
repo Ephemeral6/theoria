@@ -1,0 +1,18 @@
+{
+  "why": "Two PDDL files, copied byte-for-byte out of the engine-rig track's fixture directory so that this track can ground the task itself. They are data, not code: nothing here imports engine-rig, and these copies are never written back. The copy exists because a `deadlock_carver` certificate is a statement about a grounded task, and the consumer has to hold its own copy of that task -- taking the transition relation from the certificate would let the certificate pick the actions it is closed under.",
+  "not_ours": "These are engine-rig's artefacts. This directory is theory-compiler's test tree; the files are transcriptions and do not pretend otherwise. `test_strips.py::test_the_transcribed_pddl_has_not_drifted` fails if either copy stops matching its source.",
+  "files": [
+    {
+      "path": "sokoban_domain.pddl",
+      "source": "engine-rig/fixtures/data/sokoban_domain.pddl",
+      "sha256": "40ce1effb64bc626412c8e9dd163d51dfbefdd7ee27d588784450631606b98c1",
+      "produced_by": "engine-rig/fixtures/sokoban.py"
+    },
+    {
+      "path": "sokoban_open4far.pddl",
+      "source": "engine-rig/fixtures/data/sokoban_open4far.pddl",
+      "sha256": "639583f4dac05102449132717a760b10feca3e87c06918c76a23aa2b0c53cfe1",
+      "produced_by": "engine-rig/fixtures/sokoban.py"
+    }
+  ]
+}

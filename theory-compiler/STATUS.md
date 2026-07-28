@@ -1,5 +1,122 @@
 # STATUS — theory-compiler track
 
+## C4 达成：死锁定理与 IC3 不变量都进了 Lean，公理集为空 (2026-07-28)
+
+分支 `agent/c4-deadlock-lean`，base `ded9cd7`，工人 `W-1541`。全文见
+[`runs/20260728T080019Z-C4-deadlock-lean/RUN_STATE.md`](runs/20260728T080019Z-C4-deadlock-lean/RUN_STATE.md)。
+
+```
+theory-compiler   283 passed   (THEORIA_REQUIRE_LEAN=1，含 11 项真 Lean 编译)
+                  224 -> 283   （+59，全部本轮新增）
+python -m tools.verify_c4      四个案例全绿，含一次负对照
+```
+
+### 验收：两类证书各至少一条，`lean` 4.9.0 实跑
+
+| 证书 | 定理 | 叶子目标 | 编译 | `#print axioms` |
+|---|---|---|---|---|
+| `deadlock_carver` `at(b1,c11)`（`no_deleting_action`） | 三条 + 两件展品 | 28,672 | 60s | **九条全空** |
+| `deadlock_carver` `at(b1,c12) AND at(b2,c13)`（`deleting_actions_blocked`） | 同上 | 1,792 | 4.2s | **九条全空** |
+| `ic3_pdr` peg4 `computational` | `inv_init`/`inv_closed`/`inv_all`/`unsolvable` | — | <1s | **四条全空** |
+| `ic3_pdr` peg4 `algebraic` | 同上 | — | <1s | `propext`（设计如此） |
+
+无 `sorry`，无 `native_decide`，无 `Classical.choice`。
+
+### 两半并不对称：IC3 那半上一轮就做完了
+
+P-10 已经把 ic3 消费端做全（读取器、`cnf(...)` 语法、`_ic3_lean`、24 项测试）。
+本轮对它做的是**复跑取证**：本机此前 `elan` 没有默认工具链，`shutil.which("lean")`
+找得到而 `lean` 跑不动，历史上的绿是在别的机器上取的。设了默认工具链后重跑，四条
+公理集实测落盘在 `runs/.../verify/EVIDENCE.json`。**一行没重写。**
+
+工程量几乎全在死锁那一半，那一半此前是零。
+
+### 死锁：条件化定理，以及它带来的三个新问题
+
+```lean
+theorem dead : ∀ (r s : St), wf r = true → Pat r = true → ReachFrom r s → Goal s = false
+```
+
+`ReachFrom r` 从**任意** `r` 起步而不是从 `s₀`——这就是「条件化」在 Lean 里的形状，
+与 pagoda / ic3 那两份全局不可达定理唯一的量词差别。Theoria 1.9 的原话是「整局
+不可解是稀罕事，死角遍地都是」。
+
+**问题一：世界从哪来。** 16 条死锁候选行全部是 sokoban，而说明书写不下 sokoban。
+勘察结论（两个只读 subagent，独立复核）：DSL 的**动力学**装得下——`free(...)` 就是
+`clear`，`toward(o,?d)` 就是 `adj`，push 同时移动箱子与人可写成两条同守卫、认领对象
+不相交的规则；装不下的是**目标**，`goal:` 只收一个表达式，没有合取也没有地标集合，
+而 sokoban 要「每个箱子各就各位」。于是接口下移一层：本轨道自己解析 + 接地 PDDL
+（`strips.py`），证书只提供模式。这条缺口记为 **E-08**，不是绕过，是照录。
+
+**问题二：原子集合上定理是假的。** 没什么拦得住一个集合同时含 `at(b1,c12)` 与
+`clear(c12)`。生产方为此要 h² 不动点；本轨道从另一头到同一处，把状态重表示成
+**一物一格的元组**，互斥事实成了数据的形状。这一步穷举核对：3360 良构态 × 112 动作
+= 376,320 对，守卫与效果逐对对齐，且 3352 个可达态全部良构。
+
+**问题三：良构不是装饰。** 丢掉它，闭包对那条 pair 模式就是**假的**——两个退化态
+（人站在被推的箱子里）能推出模式。所以 `wf` 作为假设进了定理，并有一项测试盯着那两个
+反例还在。
+
+### 最该记住的一条：条件化定理有它专属的「绿而假」
+
+D-A3-007 那份 `I := true` 的教训是：空公理集分辨不出没证东西的证明。条件化定理的
+同形失效模式是**条件无人满足**——每条义务空空地全过，`#print axioms` 打印空集。
+`recheck` 因此要求良构见证，生成物里发 `pat_witness`。
+
+还有一层：在一局本来就输定的关卡上证死区定理，句句为真、什么也没说明。所以夹具选的是
+**可解的** `sokoban-open4far`，生成物里发 `theorem level_is_winnable`，附一条 11 步
+逐步 `by decide` 的通关，与 `dead` 并排。
+
+**负对照**：把 `Pat` 往里挪一格（`c12,c13` → `c22,c23`），同一份文件 `lean` 退出码
+非零、`sorryAx` 出现。空公理集这条检查因此不是摆设。
+
+### 交叉核对：账对不上就拒绝
+
+证书的 `coverage` / `n_deleting_actions` / `blocked_actions` **一个都不参与义务重算**，
+只用于核对两边谈的是不是同一个任务：本轨道接地出 112 个地面动作（48 move + 64 push），
+必须等于 `evidence.coverage` 的分母；证书点名的 4 个被挡 push 必须逐个在本轨道的动作
+集里解析得到且确实删除模式原子；本轨道数出的删除动作一个都不许被漏掉不谈。十项负向
+测试覆盖这些路径。
+
+### 新增交付
+
+| 文件 | 角色 |
+|---|---|
+| `CONTRACTS/deadlock_certificate_v0.1.md` | schema 草案 + 会签请求（**发射端仍是 engine-rig 的**） |
+| `src/theory_compiler/strips.py` | 独立的 typed-STRIPS 解析 + 接地，子集外一律报错 |
+| `src/theory_compiler/strips_encoding.py` | 一物一格编码 + 穷举忠实性核对 + 最短通关 |
+| `src/theory_compiler/deadlock_certificate.py` | 读取器、两条义务重算、交叉核对、`bite` 账 |
+| `src/theory_compiler/generators/gen_lean_deadlock.py` | Lean 发射器（只有 `computational`） |
+| `tools/transcribe_deadlock_certificates.py` | 从候选行转录夹具，可执行、被测试重跑 |
+| `tools/build_deadlock_lean.py` / `tools/verify_c4.py` | 单条构建 / C4 验收全跑 |
+| `tests/test_strips.py` / `test_deadlock_certificate.py` / `test_gen_lean_deadlock.py` | 59 项 |
+
+### 未清偿
+
+* **E-08：说明书写不下 sokoban。** 目标合取（或地标集合）缺失是硬阻塞；附带
+  `conflict.disjointness_reason` 缺 `free(t)` 对 `X.pos = t` 的判据，
+  `gen_pddl._extract_pred_pddl` 仍对不认识的子句静默丢弃。在补上之前，这条通路以
+  接地任务为界而不是以说明书为界，**四形态共导在这条通路上不成立**。
+* **发射端**——两份契约（`ic3_certificate_v0.1`、`deadlock_certificate_v0.1`）都还是
+  草案，`engine-rig` 未会签，`interop/certificates/` 里没有这两类文档。本轨道不代写。
+* **只有一个谓词签名。** 编码只认 `at-player/1` + `at/2` + `clear/1`；16 条死锁候选行
+  也全是 sokoban。这条通路的普适性不由本轮证据支持，已在契约里作为请求写给对方。
+* **规模。** 叶子数随未钉住槽位指数增长，16 格 3 槽已经 60s。要上大棋盘，需要的是别的
+  证明形状，不是更大的预算。
+* P-10 的三条未清偿照旧（三个 `semantics:` 取值无后端；共享 `gen_pddl` 不消费
+  `ProblemSpec`；`theory_grammar.lark` 是死文件）。
+
+### 跑法
+
+```bash
+cd theory-compiler && THEORIA_REQUIRE_LEAN=1 python -m pytest    # 283 passed
+cd theory-compiler && python -m tools.verify_c4                  # C4 验收，含负对照
+```
+
+`lean` 不在 PATH 时 Lean 测试自动跳过，其余照常。
+
+---
+
 ## 契约演化窗口 (P-10) 达成 (2026-07-28)
 
 分支 `agent/p10-contracts-v02`，base `edb3c37`。全文见

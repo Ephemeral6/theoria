@@ -1,0 +1,32 @@
+{
+  "blocked_actions": [],
+  "claim": "every reachable state containing at(b1,c11) is dead",
+  "closure": "no_deleting_action",
+  "conclusion": "at(b1,c11) AND not-goal => dead",
+  "coverage": "112/112",
+  "domain": "sokoban",
+  "goal_conflict": {
+    "goal_atom": "at(b1,c42)",
+    "pattern_atom": "at(b1,c11)",
+    "why": "mutex: the two can never hold in the same reachable state"
+  },
+  "n_deleting_actions": 0,
+  "pattern": [
+    [
+      "at",
+      "b1",
+      "c11"
+    ]
+  ],
+  "pattern_text": "at(b1,c11)",
+  "problem": "sokoban-open4far",
+  "produced_by": "engine-rig/engines/deadlock_carver",
+  "provenance": {
+    "note": "A transcription, not an engine-rig artefact. The emitting half of this schema belongs to engine-rig and is not written by this track; until it exists the consumer is tested against this copy, and a test re-runs the transcription to keep the two identical.",
+    "row_id": "9134187b-6724-5683-a510-ea807e577d9c",
+    "row_timestamp": "2026-07-27T00:00:00Z",
+    "source": "engine-rig/artifacts/candidates.jsonl",
+    "transcribed_by": "theory-compiler/tools/transcribe_deadlock_certificates.py"
+  },
+  "schema": "deadlock_carver/conditional_unsolvability_certificate@1"
+}
