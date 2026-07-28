@@ -384,7 +384,11 @@ def probe_dispatch_board():
                          "branch": branch or "—",
                          "self_reported": self_rep})
     if not rows:
-        return {"status": "green", "detail": "本轮无在册工单。", "rows": []}
+        # 工作板取代了逐件派单，prompts/ 目录自然空了——但「空」在这里
+        # 不等于「无事」，报 green 会让盘面看起来比现实干净。
+        return {"status": "green",
+                "detail": "派单已由工作板取代（见 supply 探针），本探针不再适用。",
+                "rows": [], "retired": True}
     n_rep = sum(1 for r in rows if r["self_reported"])
     return {"status": "green" if n_rep else "partial",
             "detail": "%d 份在册工单，%d 份有自报痕迹（分支或 PARTNER_SYNC）。"
@@ -494,7 +498,9 @@ def probe_ops_duty():
         for r in rows)
     if tm:
         detail = "**%d 条 TO-MONITOR 待监控回复**。 " % tm + detail
-    st = "risk" if stale else ("partial" if missing else "green")
+    # 未回复的 TO-MONITOR 必须影响状态：把它只写进 detail 而状态仍报 green，
+    # 正是今天反复出现的「沉默的乐观」——盘面绿着，欠债堆着。
+    st = "risk" if stale else ("partial" if (missing or tm) else "green")
     return {"status": st, "detail": detail, "rows": rows, "to_monitor": tm}
 
 

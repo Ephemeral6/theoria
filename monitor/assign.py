@@ -87,9 +87,13 @@ def add_research(cell, territory, title, body, priority, deps, urgent,
     if os.path.exists(path):
         iid += "-b"
         path = os.path.join(ITEMS, iid + ".md")
-    text = ("priority: %d\ncell: %s\nterritory: %s\ndeps: %s\n\n# %s · %s\n\n%s\n"
-            % (1 if urgent else priority, cell, territory, deps or "none",
-               iid, title, body or title))
+    head = "priority: %d\ncell: %s\nterritory: %s\ndeps: %s\n" % (
+        1 if urgent else priority, cell, territory, deps or "none")
+    if lane:
+        head += "lane: %s\n" % lane
+    if author:
+        head += "author: %s\n" % author
+    text = head + "\n# %s · %s\n\n%s\n" % (iid, title, body or title)
     open(path, "w", encoding="utf-8", newline="\n").write(text)
     print("已下发研究任务：%s（领地 %s，优先级 %s）"
           % (iid, territory, 1 if urgent else priority))

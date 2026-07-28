@@ -74,7 +74,7 @@
     ],
     "ops": [
       {
-        "age_min": 24,
+        "age_min": 31,
         "cycle": 8,
         "id": "OPS-A",
         "kind": "ops",
@@ -85,7 +85,7 @@
         "state": "idle"
       },
       {
-        "age_min": 110,
+        "age_min": 117,
         "cycle": 4,
         "id": "OPS-B",
         "kind": "ops",
@@ -96,7 +96,7 @@
         "state": "idle"
       },
       {
-        "age_min": 13,
+        "age_min": 20,
         "cycle": 5,
         "id": "OPS-M",
         "kind": "ops",
@@ -107,7 +107,7 @@
         "state": "working"
       },
       {
-        "age_min": 469,
+        "age_min": 476,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -120,24 +120,24 @@
     ],
     "standing": [
       {
-        "age_min": 7,
+        "age_min": 5,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
         "name": "在线战役研究员",
-        "note": "A4a step 4 done and pushed: exhibits/. E1 holds (verdict identical, reason evaporates). E2 holds (unsolvable on a solvable level, bus empty) plus a charity control -- handed the solution path the arm DOES localise (mispredicted_step, 1 diff), so the cut removed what produces the counterexample, not the ability to repair. E3 NOT constructible: D-A2-006 was fixed upstream, so pddl_addressable is dead code; reported as a pre-registered falsifier with 5 measurements, not substituted. Next: step 5, tests/.",
+        "note": "A4a step 5 done and pushed: tests/, 45 passed in 3.8s. The two sentences in P-18's source that named non-existent tests are now true. Writing test_readonly.py found a blind spot in the pin itself (SKIP_DIRS excludes upstream artifacts/, which is exactly where the exhibits call into a2pipeline) -- now covered by name. Suite also caught itself downgrading a checked-in artifact via a subset run_all. Next: step 6, verify.sh.",
         "outputs": 0,
         "role": "常驻推进：Theoria 臂在真 API 上跑出结果（论文最大缺口）",
         "state": "working"
       },
       {
-        "age_min": 33,
+        "age_min": 4,
         "cycle": 3,
         "id": "RES-2",
         "kind": "standing",
         "name": "论文与释出研究员",
-        "note": "P5-release claimed; release/ was greenfield so release/PLAN.md is written and pushed (branch agent/p5-release), with the R2 licence filter recorded as a precondition on the manifest rather than a follow-up. Enumerator not started -- context exhausted, handing off.",
-        "outputs": 1,
+        "note": "P5 steps 1-4 done and pushed (licence posture, red-line probe, enumerator+manifest 1949 rows, Theoria checklist, reproduce report 3/9). Reproduce found a figures build break I introduced in P8; fixed on agent/figures-zero-cost-run, verify 8/8 green. Steps 5-6 open: REPRODUCING.md + stranger subagent.",
+        "outputs": 2,
         "role": "常驻推进：把已有结果写成能投出去的论文与释出包",
         "state": "working"
       }
@@ -617,7 +617,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 22:22:40",
+  "generated_at": "2026-07-28 22:29:56",
   "grid": {
     "A1": {
       "active": [
@@ -1491,13 +1491,17 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/index.html",
-      "monitor/ops/OPS-A.md",
-      "monitor/ops/OPS-B.md",
-      "monitor/ops/OPS-M.md",
-      "monitor/ops/OPS-R.md",
-      "monitor/res/RES-1.md",
-      "monitor/res/RES-2.md",
+      "onitor/assign.py",
+      "monitor/ci/merge.log",
+      "monitor/index.html",
+      "monitor/mailbox/OPS-A.md",
+      "monitor/mailbox/OPS-B.md",
+      "monitor/mailbox/OPS-M.md",
+      "monitor/mailbox/OPS-R.md",
+      "monitor/mailbox/RES-1.md",
+      "monitor/mailbox/RES-2.md",
+      "monitor/reflex.lock",
+      "monitor/reflex.log",
       "monitor/scan.py",
       "monitor/state.json",
       ".claude/",
@@ -1510,11 +1514,17 @@
       "baseline-arms/out/shards/probe_log.ar25.jsonl",
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
-      "baseline-arms/out/shards/probe_log.tn36.jsonl"
+      "baseline-arms/out/shards/probe_log.tn36.jsonl",
+      "monitor/board/items/A3-campaign-level2.md",
+      "monitor/board/items/P11-battery-section-refresh.md",
+      "monitor/board/items/V5-verdict-three-types.md",
+      "monitor/bus/OPS-M/cursor.json",
+      "monitor/bus/OPS-M/out.jsonl",
+      "monitor/mailbox/archive/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "15ecf80 monitor: a real message bus, so an app session can be hosted end to end",
+    "git_head": "bdaaf80 inbox: P8 broke the figures build on master; P5's reproduce step found it",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1532,7 +1542,13 @@
       "baseline-arms/out/shards/probe_log.ar25.jsonl",
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
-      "baseline-arms/out/shards/probe_log.tn36.jsonl"
+      "baseline-arms/out/shards/probe_log.tn36.jsonl",
+      "monitor/board/items/A3-campaign-level2.md",
+      "monitor/board/items/P11-battery-section-refresh.md",
+      "monitor/board/items/V5-verdict-three-types.md",
+      "monitor/bus/OPS-M/cursor.json",
+      "monitor/bus/OPS-M/out.jsonl",
+      "monitor/mailbox/archive/"
     ]
   },
   "p1_green": 9,
@@ -1987,7 +2003,7 @@
       "status": "green"
     },
     "bus": {
-      "detail": "总线已上线；**6 个会话还没读过**（OPS-A, OPS-B, OPS-M, OPS-R, RES-1, RES-2）——它们下个循环读到指令后即被托管。",
+      "detail": "总线已上线；**5 个会话还没读过**（OPS-A, OPS-B, OPS-R, RES-1, RES-2）——它们下个循环读到指令后即被托管。",
       "status": "partial"
     },
     "conflict_scan": {
@@ -2003,12 +2019,13 @@
       "status": "green"
     },
     "dispatch_board": {
-      "detail": "本轮无在册工单。",
+      "detail": "派单已由工作板取代（见 supply 探针），本探针不再适用。",
+      "retired": true,
       "rows": [],
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 1 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md",
+      "detail": "待裁决提案 3 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md",
       "status": "partial"
     },
     "needs_human": {
@@ -2017,10 +2034,10 @@
       "status": "green"
     },
     "ops_duty": {
-      "detail": "**22 条 TO-MONITOR 待监控回复**。 OPS-A 第8轮 idle（23 分钟前）； OPS-B 第4轮 idle（110 分钟前）； OPS-M 第5轮 working（12 分钟前）； OPS-R 第1轮 idle（469 分钟前）",
+      "detail": "OPS-A 第8轮 idle（30 分钟前）； OPS-B 第4轮 idle（117 分钟前）； OPS-M 第5轮 working（20 分钟前）； OPS-R 第1轮 idle（476 分钟前）",
       "rows": [
         {
-          "age_min": 23,
+          "age_min": 30,
           "cycle": 8,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -2029,7 +2046,7 @@
           "status": "green"
         },
         {
-          "age_min": 110,
+          "age_min": 117,
           "cycle": 4,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -2038,7 +2055,7 @@
           "status": "green"
         },
         {
-          "age_min": 12,
+          "age_min": 20,
           "cycle": 5,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2047,7 +2064,7 @@
           "status": "green"
         },
         {
-          "age_min": 469,
+          "age_min": 476,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2057,7 +2074,7 @@
         }
       ],
       "status": "green",
-      "to_monitor": 22
+      "to_monitor": 0
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3184 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
@@ -2072,7 +2089,7 @@
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 2 个提交 / 0 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 4 个提交 / 0 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "green"
     },
     "supply": {
