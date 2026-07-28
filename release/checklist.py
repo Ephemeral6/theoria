@@ -77,7 +77,12 @@ CHECKLIST: tuple[tuple[str, str, tuple[str, ...]], ...] = (
     (
         "复跑说明",
         "reproduction instructions -- how a stranger re-runs this",
-        ("release/REPRODUCING.md", "*/REPRODUCING.md", "release/reproduce.py"),
+        # The DOCUMENT, not the tool. `release/reproduce.py` was in this matcher
+        # until step 5, which meant that committing the script flipped this item
+        # from ABSENT to PRESENT while the instructions still did not exist --
+        # a tick earned by the wrong artefact. 复跑说明 is something a stranger
+        # reads; a script they cannot find is not it.
+        ("release/REPRODUCING.md", "*/REPRODUCING.md"),
     ),
     (
         "runs 档案（P5 条目追加）",

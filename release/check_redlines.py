@@ -1,6 +1,7 @@
 """The release red lines, as an executable check that runs before anything else.
 
-    python release/check_redlines.py
+    python release/check_redlines.py                 # before generating a release
+    python release/check_redlines.py --mode verify   # checking one you were handed
 
 Two red lines, from the P5 work order:
 
@@ -28,10 +29,14 @@ message.
 `mask()` is the only thing that may print anything derived from it, and it emits
 `7171...05dd (len 36)` — enough to confirm a key was loaded, not enough to use.
 
-The check is deliberately *not* skipped when `.env` is absent. A missing `.env`
-means this check cannot run, and a check that cannot run must say so loudly
-rather than pass quietly; that is the failure mode this repository has now hit
-in three separate places.
+A missing `.env` is not silently tolerated. In the default `generate` mode it is
+a hard failure: a check that cannot run must say so loudly rather than pass
+quietly, which is the failure mode this repository has now hit in three separate
+places. `--mode verify` is the one exception, and it exists for a real person --
+someone checking a release they were handed, who has no `.env` because the
+credential was never theirs and never shipped. For them there is no key to
+search the tree for, so the check is *not applicable* rather than failed. The
+strict mode is the default so that forgetting the flag fails closed.
 
 ## What the sealed-pile check actually tests
 
@@ -46,6 +51,7 @@ the reason each is allowed.
 
 from __future__ import annotations
 
+import argparse
 import json
 import os
 import subprocess
@@ -96,8 +102,26 @@ def _abs(rel: str) -> str:
     return os.path.join(REPO_ROOT, *rel.split("/"))
 
 
-def check_credential(paths: list[str]) -> tuple[list[str], list[str]]:
-    """``(violations, notes)``. The key never leaves memory."""
+def check_credential(paths: list[str], mode: str = "generate") -> tuple[list[str], list[str]]:
+    """``(violations, notes)``. The key never leaves memory.
+
+    Two modes, because two different people run this and the honest answer
+    differs:
+
+    * ``generate`` (**the default, and the safe one**) -- someone is about to
+      produce a release from this tree. A missing key means the check cannot
+      run, and a check that cannot run must fail loudly rather than pass
+      quietly. This is the mode `enumerate.py` uses, always.
+    * ``verify`` -- someone is checking a release they were handed. They have no
+      `.env`, because the credential was never theirs and never shipped. There
+      is no key to search the tree for, so the check is *not applicable* rather
+      than failed, and saying "violation" at them would be telling a stranger
+      their clean checkout is dirty.
+
+    The default is strict on purpose: forgetting the flag must fail closed, and
+    the person who needs `verify` is following a document that tells them to
+    pass it.
+    """
     try:
         from client import load_api_key, mask  # noqa: E402
     except Exception as exc:  # pragma: no cover
@@ -109,10 +133,19 @@ def check_credential(paths: list[str]) -> tuple[list[str], list[str]]:
     try:
         key = load_api_key()
     except Exception as exc:
+        if mode == "verify":
+            return (
+                [],
+                ["credential check NOT APPLICABLE: no ARC_API_KEY is reachable from this "
+                 "checkout, which is expected when verifying a release rather than "
+                 "generating one -- the credential was never shipped. There is no key to "
+                 "search this tree for."],
+            )
         return (
             [f"cannot load ARC_API_KEY ({type(exc).__name__}). This check DID NOT RUN. "
              "A credential check that silently skips is the failure it exists to prevent; "
-             "restore .env and re-run before generating any release manifest."],
+             "restore .env and re-run, or pass --mode verify if you are checking a release "
+             "you were handed rather than producing one."],
             [],
         )
     needle = key.encode()
@@ -241,9 +274,19 @@ def check_sealed(paths: list[str]) -> tuple[list[str], list[str]]:
     return violations, notes
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    ap = argparse.ArgumentParser(description=__doc__ or "")
+    ap.add_argument(
+        "--mode",
+        choices=("generate", "verify"),
+        default="generate",
+        help="generate (default, strict: a missing key fails) or verify (checking a "
+        "release you were handed; no key is expected)",
+    )
+    args = ap.parse_args(argv)
+
     paths = _tracked()
-    cred_v, cred_n = check_credential(paths)
+    cred_v, cred_n = check_credential(paths, mode=args.mode)
     seal_v, seal_n = check_sealed(paths)
 
     for n in cred_n + seal_n:
