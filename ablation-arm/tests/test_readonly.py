@@ -329,8 +329,10 @@ def test_the_hard_list_covers_every_path_the_old_criterion_hid():
     present = outside.snapshot()
     for pattern, _why in outside.ALL_HARD:
         if pattern == "proxy/var/spend_gate.jsonl":
-            # gitignored runtime output; absent on a fresh checkout by design,
+            # Gitignored runtime output: absent on a fresh checkout by design,
             # which is exactly why it is pinned by name rather than by presence.
+            # The skip is not a hole -- a typo in this pattern still fails the
+            # `missed` assertion above, which matches the literal path.
             continue
         hits = [p for p in present if outside._to_regex(pattern).match(p)]
         assert hits, "no file on this tree matches hard-list pattern %r" % pattern
