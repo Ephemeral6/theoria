@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 14:12:30",
+  "generated_at": "2026-07-28 14:21:26",
   "history": [
     {
       "findings": {
@@ -515,26 +515,27 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/index.html",
-      "monitor/prompts/ops/OPS-A-auditor.md",
-      "monitor/prompts/ops/OPS-B-browser.md",
-      "monitor/prompts/ops/OPS-M-merger.md",
-      "monitor/prompts/ops/OPS-R-retro.md",
-      "monitor/scan.py",
-      "monitor/state.json",
+      "gitignore",
+      "monitor/board/board.log",
+      "monitor/board/items/V3-battery-discrimination.md",
+      "monitor/loop_state.json",
+      "monitor/mailbox/OPS-A.md",
+      "monitor/mailbox/OPS-B.md",
+      "monitor/spec.py",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/ops/",
-      "monitor/prompts/ops/OPS-A.md",
-      "monitor/prompts/ops/OPS-B.md",
-      "monitor/prompts/ops/OPS-M.md",
-      "monitor/prompts/ops/OPS-R.md"
+      "monitor/audit/DRIFT-20260728T0618Z-append-only-probe-born-red.md",
+      "monitor/audit/DRIFT-20260728T0618Z-phase3-gate-crossed-unrecorded.md",
+      "monitor/audit/DRIFT-20260728T0618Z-spec-notes-announced-fixed-but-not.md",
+      "monitor/board/claimed/",
+      "monitor/inbox/20260728T061513Z-OPS-B-terms-vs-arcrecon.md",
+      "monitor/refresh.cmd"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "3205992 monitor: crash recovery -- hard concurrency cap, self-serve board, terminal workers, ops mailbox",
+    "git_head": "d426b92 monitor: worktrees move inside the repo, and the rule that keeps them there",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -546,16 +547,17 @@
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/ops/",
-      "monitor/prompts/ops/OPS-A.md",
-      "monitor/prompts/ops/OPS-B.md",
-      "monitor/prompts/ops/OPS-M.md",
-      "monitor/prompts/ops/OPS-R.md"
+      "monitor/audit/DRIFT-20260728T0618Z-append-only-probe-born-red.md",
+      "monitor/audit/DRIFT-20260728T0618Z-phase3-gate-crossed-unrecorded.md",
+      "monitor/audit/DRIFT-20260728T0618Z-spec-notes-announced-fixed-but-not.md",
+      "monitor/board/claimed/",
+      "monitor/inbox/20260728T061513Z-OPS-B-terms-vs-arcrecon.md",
+      "monitor/refresh.cmd"
     ]
   },
   "p1_green": 7,
   "p1_total": 16,
-  "paper_progress": 30.8,
+  "paper_progress": 39.0,
   "phases": [
     {
       "_counts": {
@@ -697,7 +699,7 @@
           "status": "partial"
         },
         {
-          "_note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：无泄漏。密钥另有 1 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。〕",
+          "_note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：无泄漏。密钥另有 2 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env, .worktrees/wt-p8/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。〕",
           "_status": "green",
           "clause": "Phase 1 验收单",
           "id": "p1-seal-test",
@@ -908,7 +910,7 @@
       "status": "green"
     },
     "credential_hygiene": {
-      "detail": "无泄漏。密钥另有 1 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。",
+      "detail": "无泄漏。密钥另有 2 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env, .worktrees/wt-p8/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。",
       "status": "green"
     },
     "determinism_state": {
@@ -1036,51 +1038,51 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 7 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 8 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "OPS-A 未启动； OPS-B 未启动； OPS-M 未启动； OPS-R 未启动",
+      "detail": "**4 条 TO-MONITOR 待监控回复**。 OPS-A 第0轮 idle（6 分钟前）； OPS-B 第1轮 idle（0 分钟前）； OPS-M 第0轮 idle（5 分钟前）； OPS-R 第0轮 idle（5 分钟前）",
       "rows": [
         {
-          "age_min": null,
-          "cycle": null,
+          "age_min": 6,
+          "cycle": 0,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "等待启动握手",
-          "state": "未启动",
-          "status": "missing"
+          "note": "booted",
+          "state": "idle",
+          "status": "green"
         },
         {
-          "age_min": null,
-          "cycle": null,
+          "age_min": 0,
+          "cycle": 1,
           "id": "OPS-B",
           "name": "浏览器专员",
-          "note": "等待启动握手",
-          "state": "未启动",
-          "status": "missing"
+          "note": "邮箱 03:57Z 条目三项全部 ACK；对照提案已投 inbox（20260728T061513Z）；账户面板已登录实查完毕，工单三条了结，无在手活",
+          "state": "idle",
+          "status": "green"
         },
         {
-          "age_min": null,
-          "cycle": null,
+          "age_min": 5,
+          "cycle": 0,
           "id": "OPS-M",
           "name": "合并裁判",
-          "note": "等待启动握手",
-          "state": "未启动",
-          "status": "missing"
+          "note": "booted",
+          "state": "idle",
+          "status": "green"
         },
         {
-          "age_min": null,
-          "cycle": null,
+          "age_min": 5,
+          "cycle": 0,
           "id": "OPS-R",
           "name": "回顾员",
-          "note": "等待启动握手",
-          "state": "未启动",
-          "status": "missing"
+          "note": "booted",
+          "state": "idle",
+          "status": "green"
         }
       ],
-      "status": "partial",
-      "to_monitor": 0
+      "status": "green",
+      "to_monitor": 4
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
