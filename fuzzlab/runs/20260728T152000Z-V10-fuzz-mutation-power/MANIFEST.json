@@ -1,0 +1,20 @@
+{
+  "prompt_id": "V10-fuzz-mutation-power",
+  "branch": "agent/v10-fuzz-mutation-power",
+  "base_commit": "baf1671",
+  "utc": "2026-07-28T15:20:00Z",
+  "author": "RES-3",
+  "lane": "verify",
+  "territory": "fuzzlab",
+  "engines": 6,
+  "invariants": 23,
+  "mutants": 54,
+  "survivors": 15,
+  "invariants_no_mutant_could_kill_before_fix": ["partition_matches_truth"],
+  "invariants_no_mutant_could_kill_after_fix": [],
+  "api_calls": 0,
+  "network": false,
+  "cost_usd": 0.0,
+  "engine_rig_bytes_changed": 0,
+  "sealed_pile_contact": "none"
+}
