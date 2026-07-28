@@ -1,0 +1,14 @@
+{
+  "prompt_id": "P9-paper-to-submittable",
+  "branch": "agent/p9-paper-to-submittable",
+  "base_commit": "d1733df",
+  "utc": "2026-07-28T11:55:00Z",
+  "worker": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "status": "reconnaissance-only",
+  "spend": {"api_calls": 0, "model_calls": 0, "usd": 0.0, "network": false},
+  "sealed_pile_contact": "none",
+  "files_edited_outside_this_run_dir": [],
+  "blocked_on": "papers territory is also held by claimed/P7-paper-section7.APP-P7; monitor ruling requested in monitor/mailbox/RES-2.md"
+}
