@@ -19,11 +19,12 @@ by passing `allow_dev=True`; the sealed pile is never lifted.
 
 from __future__ import annotations
 
+import json
 import os
 import socket
 import sys
 from contextlib import contextmanager
-from typing import Any, Dict, Iterator, Optional
+from typing import Any, Dict, Iterator, Optional, Tuple
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
@@ -36,11 +37,37 @@ from battery.guard import (  # noqa: E402
 
 __all__ = ["CutIntegrityError", "Piles", "SealedPileError", "UnknownGameError",
            "load_piles", "NetworkForbidden", "no_network",
-           "assert_synthetic_world", "provenance"]
+           "assert_synthetic_world", "generated_worlds", "provenance"]
 
 #: Worlds an exam may be set in at this phase.  All self-built, all with fully
 #: known ground truth, none in either pile.
+#:
+#: The three hand-built ones are listed; the generated ones are not, because a
+#: hardcoded list of twenty ids is a list that goes stale the first time the
+#: factory ships a twenty-first.  `generated_worlds()` reads the factory's own
+#: roster instead, which is the thing that makes an id *audited* rather than
+#: merely spelled correctly -- being in `INDEX.json` means the world was built,
+#: measured and stamped by `worldgen.build`.
 SYNTHETIC_WORLDS = ("a0", "a0-prime", "a2")
+
+#: The world factory's roster. Read, never written, by this module.
+WORLDGEN_INDEX = os.path.join(REPO, "worldgen", "out", "worlds", "INDEX.json")
+
+
+def generated_worlds() -> Tuple[str, ...]:
+    """Every world id the factory has actually built, from its own roster.
+
+    An empty tuple when the factory has not been built -- which is a real state
+    (a fresh checkout), and it means an exam set in a generated world refuses
+    with "unknown id" rather than proceeding against files that are not there.
+    """
+    try:
+        with open(WORLDGEN_INDEX, encoding="utf-8") as handle:
+            roster = json.load(handle)
+    except (OSError, ValueError):
+        return ()
+    return tuple(sorted(str(row["world_id"]) for row in roster.get("worlds", [])
+                        if row.get("world_id")))
 
 
 class NetworkForbidden(RuntimeError):
@@ -89,6 +116,8 @@ def assert_synthetic_world(world_id: Optional[str], *,
     key = world_id.strip().lower()
     if key in SYNTHETIC_WORLDS:
         return "synthetic"
+    if key in generated_worlds():
+        return "generated"
     piles = piles or load_piles()
     verdict = piles.classify(world_id)
     if verdict == "sealed":
@@ -113,4 +142,12 @@ def assert_synthetic_world(world_id: Optional[str], *,
 def provenance(piles: Optional[Piles] = None) -> Dict[str, Any]:
     """What every exam artefact records about the cut it was built under."""
     piles = piles or load_piles()
-    return {"synthetic_worlds": list(SYNTHETIC_WORLDS), **piles.provenance()}
+    # The generated roster is deliberately NOT here. `provenance()` lands on
+    # every sheet, and the factory's world ids are words: `t2-unsolvable-nodoor`
+    # and `t1-walk-maze` put "unsolvable" and "walk" -- both live answers on the
+    # adaptation paper -- in front of the examinee. The exam's own leak probes
+    # caught it on the first run, which is the whole argument for having them.
+    # A count is safe and is what a reader of the artefact actually wants.
+    return {"synthetic_worlds": list(SYNTHETIC_WORLDS),
+            "generated_worlds_available": len(generated_worlds()),
+            **piles.provenance()}
