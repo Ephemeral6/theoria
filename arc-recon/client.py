@@ -43,9 +43,41 @@ class ArcApiError(Exception):
         self.path = path
 
 
+def main_checkout(start: str) -> Optional[str]:
+    """The main worktree's root, if `start` is a linked worktree of one.
+
+    A linked worktree has a `.git` **file** holding `gitdir: <path>`, and that
+    path is `<main>/.git/worktrees/<name>`. `.env` is gitignored, so it exists
+    only in the main checkout -- which makes every network-facing tool here
+    unusable from a worktree, and the working agreement requires worktrees.
+    Returns None for a normal checkout or anything unrecognised; the caller
+    treats that as "no fallback", never as an error.
+    """
+    marker = os.path.join(start, ".git")
+    if not os.path.isfile(marker):
+        return None
+    try:
+        line = open(marker, encoding="utf-8").readline().strip()
+    except OSError:
+        return None
+    if not line.startswith("gitdir:"):
+        return None
+    gitdir = os.path.abspath(os.path.join(start, line[len("gitdir:"):].strip()))
+    parts = gitdir.replace("\\", "/").split("/")
+    if len(parts) < 4 or parts[-3] != ".git" or parts[-2] != "worktrees":
+        return None
+    return os.path.dirname(os.path.dirname(os.path.dirname(gitdir)))
+
+
 def load_api_key(env_path: Optional[str] = None) -> str:
     """Read ARC_API_KEY from the gitignored .env. Never returned to a log."""
     path = env_path or os.path.join(REPO, ".env")
+    if not os.path.exists(path) and env_path is None:
+        main = main_checkout(REPO)
+        if main:
+            candidate = os.path.join(main, ".env")
+            if os.path.exists(candidate):
+                path = candidate
     if not os.path.exists(path):
         raise RuntimeError(
             "%s not found. Copy .env.example to .env and set ARC_API_KEY." % path

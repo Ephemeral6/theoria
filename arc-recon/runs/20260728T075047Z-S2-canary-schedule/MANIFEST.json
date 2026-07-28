@@ -1,0 +1,83 @@
+{
+  "action_budget": {
+    "declared": 12,
+    "unit": "ARC scorecard actions (successful ACTIONs); RESET is a command and costs none"
+  },
+  "actions_spent": 12,
+  "base_commit": "ded9cd79e9083de0e1a1de0adb20e42508c6ad66",
+  "branch": "agent/s2-canary-schedule",
+  "files": [
+    {
+      "path": "arc-recon/canary_schedule.py",
+      "sha256": "67883b30b1bc888bae948ae47c88e8e48bbc575e6c0b952a71595cdfe097e014"
+    },
+    {
+      "path": "arc-recon/canary.py",
+      "sha256": "761c2da22418fd75e2de66f5f533b9a1fe165a125cb80d08a0480f7a3f92b171"
+    },
+    {
+      "path": "arc-recon/client.py",
+      "sha256": "a744b6ecdc820a220797d009631d4f0030d37c055c3aba5c853949ad2f10ff8a"
+    },
+    {
+      "path": "arc-recon/test_canary_schedule.py",
+      "sha256": "ab645d9c90afd4bdba181264bda82b803c7a63cb606087e2f1d9e6d551d3f727"
+    },
+    {
+      "path": "arc-recon/verify.sh",
+      "sha256": "ed4f8db65771df760c4e706af5c333f1ac48b29c7f953d1e54303915ae8098b6"
+    },
+    {
+      "path": "arc-recon/ACCESS_CHECK.md",
+      "sha256": "ba5625b3f61e50178e0a1f7b1310d8fcd97e1b07465f548dda410d9459af9154"
+    },
+    {
+      "path": "arc-recon/README.md",
+      "sha256": "132076a11fbe38b51b17c4eb6b140eabfe69f1cb6b1df7a1479d36fc38bcca2e"
+    },
+    {
+      "path": "arc-recon/data/canary_schedule.json",
+      "sha256": "9909a831737cc60aa8ae4e16eb4584d0ed0f731f3d6e63eb59cbf98a3f19d30c"
+    },
+    {
+      "path": "arc-recon/data/canary_schedule_state.json",
+      "sha256": "920f66089b487437531cf79cb7bd0a6ef79b38639b34d1b7edf1df54dfce9996"
+    },
+    {
+      "path": "arc-recon/data/canary.json",
+      "sha256": "42d1e1b593b331ff1686eab93f5fff98c80fcdb7f516e58a404a8e5985bffba4"
+    },
+    {
+      "path": "arc-recon/data/canary_runs.jsonl",
+      "sha256": "631f3d198c47b19e6bfc0082e054bed4f174469d2d1ff4ae616935476b07dff3"
+    }
+  ],
+  "goal": [
+    "make the canary replay a standing, scheduled instrument (daily, not every 5 min)",
+    "drift criterion wired to incident + campaign freeze (already built; add the blindness criterion)",
+    "close the last two access-check items: cross-session residue, frame caching and release licensing"
+  ],
+  "live_sweep": {
+    "actions": 12,
+    "commands": 16,
+    "http_calls": 16,
+    "profile": "quick",
+    "spend_gate": "absent (proxy/spend_gate.py not on master at this commit)",
+    "utc": "2026-07-28T07:57:15Z",
+    "verdicts": {
+      "ar25-0c556536": "PASS",
+      "g50t-5849a774": "PASS",
+      "sk48-d8078629": "PASS",
+      "tn36-ef4dde99": "PASS"
+    }
+  },
+  "prompt_id": "S2-canary-schedule",
+  "territory": "arc-recon",
+  "utc": "2026-07-28T07:50:47Z",
+  "verify": {
+    "command": "cd arc-recon && bash verify.sh",
+    "result": "green",
+    "tests": "82 offline (40 inherited + 42 new)"
+  },
+  "worker": "W-1540"
+}

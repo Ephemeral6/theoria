@@ -1,0 +1,29 @@
+{
+  "consecutive_incomplete": 0,
+  "last": {
+    "outcome": "pass",
+    "profile": "quick",
+    "t": "2026-07-28T07:57:15Z",
+    "verdicts": {
+      "ar25-0c556536": "PASS",
+      "g50t-5849a774": "PASS",
+      "sk48-d8078629": "PASS",
+      "tn36-ef4dde99": "PASS"
+    }
+  },
+  "profiles": {
+    "quick": {
+      "last_attempt": "2026-07-28T07:57:15Z",
+      "last_outcome": "pass",
+      "last_pass": "2026-07-28T07:57:15Z",
+      "last_plan": {
+        "ar25-0c556536": 5,
+        "g50t-5849a774": 2,
+        "sk48-d8078629": 5,
+        "tn36-ef4dde99": 0
+      }
+    }
+  },
+  "updated": "2026-07-28T07:57:15Z",
+  "v": "1"
+}
