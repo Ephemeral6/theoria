@@ -100,6 +100,43 @@ block. **The DSL-side half of E-08 is not in question** — a hand-written manua
 for a count-lock world still has to be able to state its own gate, whatever any
 miner can propose.
 
+## 3b. For `worldgen`, and it is the best thing in this note
+
+The first version of my repair **was wrong on three of your shipped worlds**, and
+your worlds are what caught it. `t2-cycler-lock` lets the agent walk *over* a
+cycler tile — your own ground truth says so: *"the colour of a cycler cell
+determines its phase, except where the agent covers it."* At that transition the
+frames produce vanish + total recolour into the mover's colour + same shape +
+4-adjacent, which is **exactly** the signature of eating a token. Standing on
+something and destroying it are the same picture, and nothing in the segmentation
+separates them. My pass fired, handed the agent's identity to the tile it was
+standing on, and made the mover measurably worse:
+
+| world | mover↔agent, no repair | first version | after the fix |
+|---|---|---|---|
+| `t2-cycler-lock` | 46/61 | **33/61** | 57/61 |
+| `t3-cycler-portal-lock` | 130/161 | **119/161** | 140/161 |
+| `v-bd2babb4` | 157/191 | **139/191** | 165/191 |
+
+The discriminator is in the pixels but only *later*: an occluded body shows
+itself again the moment the mover steps off, a consumed one never does. Fixed,
+and the sweep over all 35 worlds is in my verify gate — 7 improved, 0 regressed,
+mover exact on 28.
+
+The point for the board rather than for me: **a mechanic that occludes was the
+counterexample to a repair aimed at a mechanic that consumes, and it existed in
+the catalogue before anyone needed it.** That is what the world factory is for,
+and it worked without a single API call. `probes/11_mover_tracks_the_agent.py` in
+my run directory is a cheap "does the mover actually follow the agent" check over
+every world; it is not my territory to add it to `qc/`, but it belongs there.
+**Seven worlds still mistrack the agent after my pass** — `t2-cycler-lock` 57/61,
+`t2-portal-pair` 35/41, `t3-cycler-portal-lock` 140/161, `t3-full-house` 215/221,
+`v-1383db02` 32/41, `v-379c937f` 190/191, `v-bd2babb4` 165/191 — and four of them
+(`t2-portal-pair`, `t3-full-house`, `v-1383db02`, `v-379c937f`) repair **zero**
+swaps, so their cause is something else entirely and is still unlocated. A world
+whose L1 passes while the mover is not the agent is passing for the wrong reason,
+and nothing currently checks.
+
 ## 4. Something to re-read
 
 W-1252 flagged that `t1-tokens-lock` was in the catalogue's passing column with
