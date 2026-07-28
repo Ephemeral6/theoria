@@ -1,45 +1,45 @@
 {
-  "cycle": 10,
-  "utc": "2026-07-28T15:05Z",
-  "last_audited_commit": "8d42373",
-  "range_this_cycle": "a7afa60..8d42373 (40 commits, 231 files)",
+  "cycle": 11,
+  "utc": "2026-07-28T15:40Z",
+  "last_audited_commit": "4d6f1ee",
+  "range_this_cycle": "8d42373..4d6f1ee (35 commits, 411 files)",
   "mode": "incremental",
-  "channel": "总线已接：每周期开头 python monitor/bus.py read OPS-A；ack 用 bus.py ack OPS-A <seq>；有话 bus.py say OPS-A。睡眠改 1800 秒（新契约）",
+  "channel": "总线：周期开头 python monitor/bus.py read OPS-A；ack/say 同法。本轮 bus 无新消息，已 say 一条。睡眠 1800 秒",
   "covered": {
-    "纪律漂移": "封存 ID 命中 6 文件：release/MANIFEST.jsonl 是分类清单（含 id 的 30 个文件全部 releasable-flagged，非静默可释出），其余为污染登记、护栏夹具、本邮箱归档；密钥零命中；主线 append-only 零新增删除",
-    "单向门": "总线 #2 指派的复核：ablation-arm 越界测试的收紧判据 → DRIFT-the-tightened-criterion-hides-the-worst-writes（high）",
+    "纪律漂移": "封存 ID 命中 6 文件全为污染登记/release 分类清单/盘面渲染；密钥零命中；主线 append-only 零新增删除。**约束 4 专项已查**：自称生成物的文件（A0.lean / theory_exec.py / ablation-arm 的 pddl 与 theory.py）逐个查提交历史，无一次脱离生成器单独被改 —— 干净",
+    "流程漂移": "留痕正典四个必填字段无人执行 → 本轮报告（33 份 MANIFEST.json 有 9 份缺 utc；11 个 runs/ 无 MANIFEST.json）",
     "基准漂移": "无新增",
-    "证据漂移": "release kit 的许可闸门实测到位（needs-written-permission 19 / not-releasable 1），第二轮那条 high 在工具层闭环",
-    "目标漂移": "无新增；WP10 散文仍未按 R2 收窄（欠 4 周期，量小）",
-    "流程漂移": "ablation-arm/verify.sh 已补并跑绿",
-    "要求引用了不存在的东西": "a0-spike/verify.sh 仍缺（欠 6 周期）；已两次建议判死结案",
-    "监控自身漂移": "无新增"
+    "证据漂移": "无新增",
+    "目标漂移": "无新增",
+    "要求引用了不存在的东西": "a0-spike/verify.sh 仍缺（欠 6 周期）",
+    "单向门": "上轮报告待监控处置，本轮未复扫",
+    "监控自身漂移": "probe_provenance 只判文件存在不判字段 → 并入本轮报告"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T1501Z-the-tightened-criterion-hides-the-worst-writes.md"
+    "DRIFT-20260728T1537Z-the-manifest-canon-checks-the-filename-not-the-fields.md"
   ],
   "constraints_declared": [
-    "扇出纪律（必须派 subagent 并行 + 对抗性复核）本会话执行不了：harness 硬约束禁止未经用户要求调用 subagent，优先级高于仓库契约。已通过 bus say 告知监控，替代做法是自证伪 + 报告内附可复现命令。"
+    "扇出纪律本会话执行不了（harness 禁止未经用户要求调用 subagent，优先级高于仓库契约）。已 bus say 告知监控；替代做法是自证伪 + 报告内附可复现命令。"
   ],
   "pending_on_monitor": [
-    "ablation-arm 越界判据改空跑对照差集 + 硬清单 + 负样本测试（本轮报告）",
-    "S13 通则：每个新装闸门附一个会让它变红的负样本",
-    "cmd_sweep 对 RES-* 用心跳判活；APP-* 给心跳或禁止领活（上轮报告）",
+    "probe_provenance 加字段检查 + 9 份回填 utc，或改正典把 utc 降为可选（本轮报告）",
+    "三个真缺 manifest 的 run：theory-compiler/P-10、ablation-arm/2026-07-28-p18、figures/20260728T034857Z-p21",
+    "ablation-arm 越界判据改空跑对照差集 + 硬清单 + 负样本（上轮 high）",
+    "cmd_sweep 对 RES-* 用心跳判活；APP-* 给心跳或禁止领活",
     "a0-spike/verify.sh 判死结案（欠 6 周期）",
-    "verify_gates 范围加 monitor/prompts/**（欠 3 周期）",
-    "theoria-arm 七个 run 补 MANIFEST（欠 3 周期）",
-    "WP10 的 scale 按 R2 收窄（欠 4 周期）"
+    "verify_gates 范围加 monitor/prompts/**",
+    "theoria-arm 七个 run 补 MANIFEST",
+    "WP10 的 scale 按 R2 收窄"
   ],
   "method_notes": [
-    "**读中文文件一律用文件读取工具，不要用 Bash 回显**：本机 Bash stdout 按 GBK 渲染，python print/cat 出来的中文是乱码而文件本身是好的 UTF-8。本轮差点据此报一条假漂移（总线消息损坏），查字节才发现是显示层。",
-    "调 bus.py 时不要 print 它的 stdout（GBK 编码器会在 U+FFFD 上抛 UnicodeEncodeError），只打印 returncode",
-    "红线扫描 scratchpad/redline.py <base> <head>",
-    "第 7 维扫法：对每个状态问『谁退出它、那条路径今天真被调用过吗』；对每个检查问『还有没有会让它变红的负样本』",
-    "审排除表/白名单类判据的手法：把常量元组贴进 python，拿真实关键路径逐条过一遍，看它遮住了谁"
+    "**读中文文件一律用文件读取工具，不要用 Bash 回显**：本机 Bash stdout 按 GBK 渲染，文件本身是好的 UTF-8。曾差点据此报假漂移。",
+    "**heredoc 里不要写含反斜杠的 python 字面量**（如 replace('\\\\','/')）——会被 shell 吞掉引号导致 SyntaxError。写进 scratchpad 的 .py 文件再跑。",
+    "调 bus.py 时不要 print 它的 stdout，只打印 returncode",
+    "常用脚本：scratchpad/redline.py（红线）、manifests.py（MANIFEST 字段完整性）、utc_alias.py、dim6.py（假阳性高）",
+    "审排除表/白名单类判据：把常量元组贴进 python，拿真实关键路径逐条过一遍，看它遮住了谁"
   ],
   "next_cycle_focus": [
-    "复核本轮一条 + S13",
-    "六个新目录的内容维度巡检 —— 已连欠四轮",
-    "增量起点 8d42373"
+    "复核本轮一条 + 上轮 high（ablation-arm 判据）+ 单向门那条",
+    "增量起点 4d6f1ee"
   ]
 }

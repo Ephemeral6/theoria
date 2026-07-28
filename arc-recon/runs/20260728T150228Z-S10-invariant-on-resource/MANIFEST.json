@@ -1,0 +1,46 @@
+{
+  "prompt_id": "S10-invariant-on-resource",
+  "branch": "agent/s10-invariant-on-resource",
+  "base_commit": "fb813ce4d5559b50ccc5019f7c12ad46a532e688",
+  "utc": "2026-07-28T15:02:28Z",
+  "worker": "W-1251",
+  "territory": "arc-recon",
+  "status": "complete",
+  "offline": true,
+  "api_actions_spent": 0,
+  "landed": [
+    "arc-recon/tools/__init__.py",
+    "arc-recon/tools/ledger_invariants.py",
+    "arc-recon/test_ledger_invariants.py",
+    "arc-recon/verify.sh"
+  ],
+  "proposed_not_landed": [
+    "arc-recon/runs/20260728T150228Z-S10-invariant-on-resource/proposed/board_log_invariants.py",
+    "arc-recon/runs/20260728T150228Z-S10-invariant-on-resource/proposed/concurrency_invariants.py"
+  ],
+  "proposed_not_landed_reason": "both audit resources under monitor/, which is outside this item's declared territory; filed to monitor/inbox/ with their live findings",
+  "measured": {
+    "ledgers_scanned": 3,
+    "ledger_lines": {
+      "arc-recon/data/recon_ledger.jsonl": 1231,
+      "baseline-arms/ledger.jsonl": 560,
+      "baseline-arms/probe_log.jsonl": 1953
+    },
+    "all_clean": true,
+    "live_key_comparison": "loaded",
+    "tests": "111 passed (82 pre-existing + 29 new)",
+    "verify_sh": "green",
+    "resource_2_live": {
+      "worker_max": 7,
+      "agent_processes": 24,
+      "min_free_gb": 8,
+      "free_gb": 6.01,
+      "clean": false
+    },
+    "resource_3_live": {
+      "log_only": ["S1-quota-auto-exit", "S5-phase1-close"],
+      "disk_only": [],
+      "clean": false
+    }
+  }
+}

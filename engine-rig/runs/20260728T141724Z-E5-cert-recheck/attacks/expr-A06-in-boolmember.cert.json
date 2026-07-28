@@ -1,0 +1,49 @@
+{
+  "claim": "conditional_unsolvability",
+  "kind": "dead_region",
+  "name": "A06-in-boolmember",
+  "predicate": [
+    "and",
+    [
+      "in",
+      [
+        "var",
+        "pos0"
+      ],
+      [
+        true
+      ]
+    ],
+    [
+      "in",
+      [
+        "var",
+        "pos1"
+      ],
+      [
+        true
+      ]
+    ],
+    [
+      "in",
+      [
+        "var",
+        "pos2"
+      ],
+      [
+        true
+      ]
+    ],
+    [
+      "in",
+      [
+        "var",
+        "pos3"
+      ],
+      [
+        true
+      ]
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

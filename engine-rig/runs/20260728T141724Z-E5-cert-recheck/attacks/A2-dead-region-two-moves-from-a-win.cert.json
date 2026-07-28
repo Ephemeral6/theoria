@@ -1,0 +1,61 @@
+{
+  "claim": "conditional_unsolvability",
+  "comment": "b1=1,1 OR player=3,2 b1=3,2 b2=1,3 -- the latter is 2 moves from a WELL-FORMED win",
+  "kind": "dead_region",
+  "name": "attack-A2-dead-region-two-moves-from-a-win",
+  "predicate": [
+    "or",
+    [
+      "=",
+      [
+        "var",
+        "b1"
+      ],
+      [
+        "lit",
+        "1,1"
+      ]
+    ],
+    [
+      "and",
+      [
+        "=",
+        [
+          "var",
+          "player"
+        ],
+        [
+          "lit",
+          "3,2"
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "b1"
+        ],
+        [
+          "lit",
+          "3,2"
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "b2"
+        ],
+        [
+          "lit",
+          "1,3"
+        ]
+      ]
+    ]
+  ],
+  "produced_by": "engines/deadlock_carver (M9)",
+  "ruleset": {
+    "name": "sokoban-open4far"
+  },
+  "schema": "engine-rig/recheck/certificate-v1"
+}

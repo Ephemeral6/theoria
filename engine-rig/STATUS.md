@@ -68,10 +68,10 @@ in `PARTNER_SYNC.md`.
 
 ## Test suite
 
-255 passed with Fast Downward reachable; 252 passed, 3 skipped without. The
-three that skip are the cross-rung agreement checks, which need a real planner
-by definition; everything else — including the whole driver protocol — runs on
-any machine.
+309 passed, 9 skipped on a machine with no Fast Downward build. The skips are
+all FD's: the cross-rung agreement checks and the ladder bench rows, which need
+a real planner by definition. Everything else — including the whole driver
+protocol and the certificate rechecker — runs on any machine.
 
 ## The dividend, re-measured on a planner that knows nothing about this rig
 
@@ -154,6 +154,80 @@ number is affected -- `carve()` cannot emit such a pattern, two positions of one
 box being mutex -- but that was a property of another module being trusted, and
 `guardable()` now checks it. `tools/p13_fd_dividend.py` had the check; `bench/`
 had dropped it.
+
+## The certificates, rechecked by something that never met the engines (E5)
+
+`recheck/` is a second, independent route to "is this certificate the right
+object" — the first being Lean, which answers a different question. It takes a
+**rule set** and a **certificate** as two files and derives everything else: the
+state space is the full product of the declared variable domains, and every edge
+is computed by grounding the rules. It reads no edge list, takes no state space
+from the certificate, and imports nothing from `engines/` (D-028; a test
+enforces the import ban).
+
+```bash
+python -m recheck <rules.json> <cert.json>       # 0 ACCEPT 1 REJECT 3 INCONSISTENT
+python -m recheck.verify_all --out runs/<id>     # the whole thing, expectations included
+```
+
+**The two runs it exists for.**
+
+| rule set | certificate | verdict | |
+|---|---|---|---|
+| `peg4-0111` | `ic3_pdr`'s invariant | **ACCEPT** | 16 states, three conditions green |
+| `a2-holed` | A2's `right_room_locked` | **ACCEPT** | 148 states — agrees with Lean, which is the only thing that makes the next row mean anything |
+| `a2-world` | the same certificate | **REJECT** | `inv_closed`, witness `{cart=6,4} -down-> {cart=7,6}` |
+
+The A2 pair is one certificate — the 0/1 pagoda weight
+`cold-start-a2/theory/generated_holed/theory.lean` proves closed by `decide`,
+`#print axioms unsolvable` = `[]` — against two rule sets one rule apart.
+Against the manual it was written for it verifies. Against the world's own rules
+it fails, and an independent breadth-first search over the same derived relation
+reaches the goal in **18 actions**, the same length as A2's own recorded
+refutation. A rechecker that passed that would not be lenient; it would be wrong.
+
+All **18** `deadlock_carver` theorems recheck green as `dead_region`
+certificates — 16 on `open4far`, 2 on `ringstuck` — against multi-valued rule
+sets nobody grounded for them.
+
+**The state space had to be restricted, so the restriction is proved** (D-029).
+The pair deadlocks are false over the raw product, where the player may stand on
+a box; the carver reasons over h²-consistent states. A rule set may therefore
+declare a constraint, and the rechecker refuses to use it until it has shown the
+constraint holds at init and is closed under every action. That closes the
+cheapest attack there is: add `constraint: cart != "6,4"` to A2's world and the
+false theorem verifies — except `constraint_closed` fails.
+
+**The rule sets are transcriptions, and that is where the risk actually is**
+(D-030). Every case is anchored to something published elsewhere, and an
+adversarial audit ran the differentials rather than reading the code:
+
+| anchor | measured |
+|---|---|
+| A2's recorded 18-action refutation replayed through `a2-world`, compared on the rendered 9×9 | 19/19 frames, 0/1539 pixels wrong |
+| the derived step vs `cold-start-a2`'s compiled predictors, whole product | 592/592 both worlds, and 0/592 differences in *which rules fire* |
+| Lean's explicit 592-row `step` table vs `a2-holed` | 592/592 |
+| the pagoda table vs Lean's `def w` | 37/37 cells, exactly 21 zeros |
+| the sokoban encoding vs the generated PDDL, independently grounded | 26 880/26 880 `open4far`, 1 056/1 056 `ringstuck` |
+| optima the fixtures state by hand: ring 1, open4 6, ringstuck unsolvable, open4far 11; peg 1110/0111/1011 unsolvable, 1101 in 2 | 8/8 |
+
+The differential was itself checked for the ability to fail: `a2-world`'s rules
+against the *holed* predictor give exactly 4 disagreements, all of them the
+teleport.
+
+**25 forgeries, 24 refused and one that works.** `forgeries.py` catalogues ways
+to lie to this rechecker — an invariant no state satisfies, one every state
+satisfies, a certificate bringing its own goal or edge list, a shrunken variable
+domain, a constraint that excludes the witness, a rule set edited under the same
+name — each with the condition that must be the one to fail. The one that works
+is **`delete-the-rule`**: hand it a rule set with a rule missing and a
+certificate true of it, and it accepts, correctly. That is Theoria §1.3 entire
+and no certificate checker can see it; it is carried as `expect: NOT-CAUGHT` and
+the suite fails if it ever starts being caught.
+
+Two anchors need `cold-start-a2/` on the machine. This package reads that
+directory and writes nothing to it; when it is absent the anchors are reported
+**unavailable**, never as passes.
 
 ## Convergence interface (post-M8)
 

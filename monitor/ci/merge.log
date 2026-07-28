@@ -42,3 +42,25 @@
 2026-07-28T15:07:27Z FLAG origin/agent/a4a-ablation-build: merge conflict
 2026-07-28T15:07:45Z MERGED origin/agent/c6-worldgen-mutate (dirs: PARTNER_SYNC.md,monitor,worldgen; gates: worldgen)
 2026-07-28T15:08:30Z MERGED origin/agent/c9-count-lock-vocabulary (dirs: PARTNER_SYNC.md,cold-start-a0,monitor,theory-compiler; gates: cold-start-a0,theory-compiler)
+2026-07-28T15:12:25Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T15:12:56Z MERGED origin/agent/e5-cert-recheck (dirs: PARTNER_SYNC.md,engine-rig; gates: engine-rig)
+2026-07-28T15:12:59Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T15:13:07Z MERGED origin/agent/p5-release (dirs: release; gates: none)
+2026-07-28T15:17:31Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T15:17:47Z MERGED origin/agent/a7-envelope-finish (dirs: PARTNER_SYNC.md,baseline-arms; gates: baseline-arms)
+2026-07-28T15:17:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T15:17:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T15:18:24Z MERGED origin/agent/s1-quota-auto-exit (dirs: PARTNER_SYNC.md,monitor; gates: monitor)
+2026-07-28T15:22:27Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T15:22:35Z FLAG origin/agent/a7-envelope-finish: push rejected (race?)
+2026-07-28T15:22:38Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T15:22:42Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T15:22:57Z MERGED origin/agent/s10-invariant-on-resource (dirs: PARTNER_SYNC.md,arc-recon,monitor; gates: arc-recon,monitor)
+2026-07-28T15:22:58Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T15:23:07Z MERGED origin/agent/s12-quota-hold-tests (dirs: PARTNER_SYNC.md,monitor; gates: monitor)
+2026-07-28T15:27:25Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T15:27:35Z MERGED origin/agent/a7-envelope-finish (dirs: PARTNER_SYNC.md,baseline-arms; gates: baseline-arms)
+2026-07-28T15:27:38Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T15:27:41Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T15:27:42Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T15:27:56Z MERGED origin/agent/s13-verify-gate-enforced (dirs: monitor; gates: monitor)
