@@ -1,0 +1,3365 @@
+{
+  "form": "ladder_benchmark",
+  "repeats": 3,
+  "repeat_rule": "fastest of N; wall-clock noise is one-sided",
+  "stub_max_expansions": 200000,
+  "fast_downward": "C:/Users/user/Desktop/theoria/.worktrees/p13/engine-rig/.toolchain/downward/fast-downward.py",
+  "configs": [
+    "stub-bfs",
+    "fd-optimal/lmcut",
+    "fd-optimal/ipdb",
+    "fd-satisficing"
+  ],
+  "node_counts_are_not_comparable_across_rungs": "stub-bfs expands grounded STRIPS states; Fast Downward expands SAS+ states after translation. No ratio between the two appears here.",
+  "results": [
+    {
+      "instance": {
+        "name": "gripper-01",
+        "family": "gripper",
+        "optimum": 3,
+        "optimum_source": "closed form",
+        "solvable": true,
+        "note": "1 ball(s) to ferry; optimum 2m+2*ceil(m/2)-1"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 3,
+          "nodes": {
+            "expanded": 5,
+            "generated": 7,
+            "ground_actions": 12
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.000151
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 3,
+          "plan_cost": 3,
+          "nodes": {
+            "expanded": 4,
+            "generated": 7,
+            "evaluated": 6,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 4,
+            "facts": 10,
+            "operators": 10,
+            "mutex_groups": 2,
+            "task_size": 69
+          },
+          "initial_h": "lmcut=3",
+          "error": null,
+          "timing": {
+            "search_seconds": 9.2e-05,
+            "fd_total_seconds": 0.001822,
+            "wall_seconds": 0.148179,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 3,
+          "plan_cost": 3,
+          "nodes": {
+            "expanded": 4,
+            "generated": 7,
+            "evaluated": 6,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 4,
+            "facts": 10,
+            "operators": 10,
+            "mutex_groups": 2,
+            "task_size": 69
+          },
+          "initial_h": "cpdbs=3",
+          "error": null,
+          "timing": {
+            "search_seconds": 6.8e-05,
+            "fd_total_seconds": 0.004026,
+            "wall_seconds": 0.150894,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 3,
+          "plan_cost": 3,
+          "nodes": {
+            "expanded": 4,
+            "generated": 8,
+            "evaluated": 5,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 4,
+            "facts": 10,
+            "operators": 10,
+            "mutex_groups": 2,
+            "task_size": 69
+          },
+          "initial_h": "ff=3",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000101,
+            "fd_total_seconds": 0.002282,
+            "wall_seconds": 0.15131,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 3,
+        "optimal_rung_lengths": {
+          "stub-bfs": 3,
+          "fd-optimal/lmcut": 3,
+          "fd-optimal/ipdb": 3
+        },
+        "satisficing_length": 3,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "gripper-02",
+        "family": "gripper",
+        "optimum": 5,
+        "optimum_source": "closed form",
+        "solvable": true,
+        "note": "2 ball(s) to ferry; optimum 2m+2*ceil(m/2)-1"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 5,
+          "nodes": {
+            "expanded": 18,
+            "generated": 25,
+            "ground_actions": 20
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.000319
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 5,
+          "plan_cost": 5,
+          "nodes": {
+            "expanded": 8,
+            "generated": 22,
+            "evaluated": 16,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 5,
+            "facts": 14,
+            "operators": 18,
+            "mutex_groups": 2,
+            "task_size": 121
+          },
+          "initial_h": "lmcut=5",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000137,
+            "fd_total_seconds": 0.0019,
+            "wall_seconds": 0.148674,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 5,
+          "plan_cost": 5,
+          "nodes": {
+            "expanded": 6,
+            "generated": 17,
+            "evaluated": 13,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 5,
+            "facts": 14,
+            "operators": 18,
+            "mutex_groups": 2,
+            "task_size": 121
+          },
+          "initial_h": "cpdbs=5",
+          "error": null,
+          "timing": {
+            "search_seconds": 9.3e-05,
+            "fd_total_seconds": 0.007322,
+            "wall_seconds": 0.152128,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 5,
+          "plan_cost": 5,
+          "nodes": {
+            "expanded": 7,
+            "generated": 20,
+            "evaluated": 8,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 5,
+            "facts": 14,
+            "operators": 18,
+            "mutex_groups": 2,
+            "task_size": 121
+          },
+          "initial_h": "ff=5",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000135,
+            "fd_total_seconds": 0.002429,
+            "wall_seconds": 0.147185,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 5,
+        "optimal_rung_lengths": {
+          "stub-bfs": 5,
+          "fd-optimal/lmcut": 5,
+          "fd-optimal/ipdb": 5
+        },
+        "satisficing_length": 5,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "gripper-03",
+        "family": "gripper",
+        "optimum": 9,
+        "optimum_source": "closed form",
+        "solvable": true,
+        "note": "3 ball(s) to ferry; optimum 2m+2*ceil(m/2)-1"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 9,
+          "nodes": {
+            "expanded": 81,
+            "generated": 87,
+            "ground_actions": 28
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.001134
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 9,
+          "plan_cost": 9,
+          "nodes": {
+            "expanded": 54,
+            "generated": 168,
+            "evaluated": 74,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 6,
+            "facts": 19,
+            "operators": 26,
+            "mutex_groups": 3,
+            "task_size": 178
+          },
+          "initial_h": "lmcut=7",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000362,
+            "fd_total_seconds": 0.002198,
+            "wall_seconds": 0.149996,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b2 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 9,
+          "plan_cost": 9,
+          "nodes": {
+            "expanded": 66,
+            "generated": 208,
+            "evaluated": 79,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 6,
+            "facts": 19,
+            "operators": 26,
+            "mutex_groups": 3,
+            "task_size": 178
+          },
+          "initial_h": "cpdbs=4",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.00017,
+            "fd_total_seconds": 0.007754,
+            "wall_seconds": 0.159248,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 9,
+          "plan_cost": 9,
+          "nodes": {
+            "expanded": 13,
+            "generated": 44,
+            "evaluated": 14,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 6,
+            "facts": 19,
+            "operators": 26,
+            "mutex_groups": 3,
+            "task_size": 178
+          },
+          "initial_h": "ff=7",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000215,
+            "fd_total_seconds": 0.00257,
+            "wall_seconds": 0.152912,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 9,
+        "optimal_rung_lengths": {
+          "stub-bfs": 9,
+          "fd-optimal/lmcut": 9,
+          "fd-optimal/ipdb": 9
+        },
+        "satisficing_length": 9,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "gripper-04",
+        "family": "gripper",
+        "optimum": 11,
+        "optimum_source": "closed form",
+        "solvable": true,
+        "note": "4 ball(s) to ferry; optimum 2m+2*ceil(m/2)-1"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 11,
+          "nodes": {
+            "expanded": 238,
+            "generated": 253,
+            "ground_actions": 36
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.003524
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 11,
+          "plan_cost": 11,
+          "nodes": {
+            "expanded": 107,
+            "generated": 366,
+            "evaluated": 162,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 7,
+            "facts": 24,
+            "operators": 34,
+            "mutex_groups": 4,
+            "task_size": 233
+          },
+          "initial_h": "lmcut=9",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000749,
+            "fd_total_seconds": 0.00274,
+            "wall_seconds": 0.151689,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 11,
+          "plan_cost": 11,
+          "nodes": {
+            "expanded": 217,
+            "generated": 766,
+            "evaluated": 237,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 7,
+            "facts": 24,
+            "operators": 34,
+            "mutex_groups": 4,
+            "task_size": 233
+          },
+          "initial_h": "cpdbs=5",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000367,
+            "fd_total_seconds": 0.00997,
+            "wall_seconds": 0.157112,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)",
+            "(move roomb rooma)",
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 11,
+          "plan_cost": 11,
+          "nodes": {
+            "expanded": 16,
+            "generated": 63,
+            "evaluated": 17,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 7,
+            "facts": 24,
+            "operators": 34,
+            "mutex_groups": 4,
+            "task_size": 233
+          },
+          "initial_h": "ff=9",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000203,
+            "fd_total_seconds": 0.002655,
+            "wall_seconds": 0.150265,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 11,
+        "optimal_rung_lengths": {
+          "stub-bfs": 11,
+          "fd-optimal/lmcut": 11,
+          "fd-optimal/ipdb": 11
+        },
+        "satisficing_length": 11,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "gripper-05",
+        "family": "gripper",
+        "optimum": 15,
+        "optimum_source": "closed form",
+        "solvable": true,
+        "note": "5 ball(s) to ferry; optimum 2m+2*ceil(m/2)-1"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 15,
+          "nodes": {
+            "expanded": 693,
+            "generated": 703,
+            "ground_actions": 44
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.011596
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 15,
+          "plan_cost": 15,
+          "nodes": {
+            "expanded": 611,
+            "generated": 2299,
+            "evaluated": 670,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 8,
+            "facts": 29,
+            "operators": 42,
+            "mutex_groups": 5,
+            "task_size": 288
+          },
+          "initial_h": "lmcut=11",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.002917,
+            "fd_total_seconds": 0.004845,
+            "wall_seconds": 0.153131,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(move roomb rooma)",
+            "(pick b5 rooma left)",
+            "(move rooma roomb)",
+            "(drop b5 roomb left)",
+            "(drop b4 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 15,
+          "plan_cost": 15,
+          "nodes": {
+            "expanded": 656,
+            "generated": 2448,
+            "evaluated": 687,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 8,
+            "facts": 29,
+            "operators": 42,
+            "mutex_groups": 5,
+            "task_size": 288
+          },
+          "initial_h": "cpdbs=6",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.00093,
+            "fd_total_seconds": 0.012038,
+            "wall_seconds": 0.160038,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b4 rooma left)",
+            "(pick b5 rooma right)",
+            "(move rooma roomb)",
+            "(drop b4 roomb left)",
+            "(drop b5 roomb right)",
+            "(move roomb rooma)",
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 15,
+          "plan_cost": 15,
+          "nodes": {
+            "expanded": 22,
+            "generated": 98,
+            "evaluated": 23,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 8,
+            "facts": 29,
+            "operators": 42,
+            "mutex_groups": 5,
+            "task_size": 288
+          },
+          "initial_h": "ff=11",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000258,
+            "fd_total_seconds": 0.002831,
+            "wall_seconds": 0.152497,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)",
+            "(move roomb rooma)",
+            "(pick b5 rooma left)",
+            "(move rooma roomb)",
+            "(drop b5 roomb left)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 15,
+        "optimal_rung_lengths": {
+          "stub-bfs": 15,
+          "fd-optimal/lmcut": 15,
+          "fd-optimal/ipdb": 15
+        },
+        "satisficing_length": 15,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "gripper-06",
+        "family": "gripper",
+        "optimum": 17,
+        "optimum_source": "closed form",
+        "solvable": true,
+        "note": "6 ball(s) to ferry; optimum 2m+2*ceil(m/2)-1"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 17,
+          "nodes": {
+            "expanded": 1830,
+            "generated": 1853,
+            "ground_actions": 52
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.034802
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 17,
+          "plan_cost": 17,
+          "nodes": {
+            "expanded": 1338,
+            "generated": 5271,
+            "evaluated": 1556,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 9,
+            "facts": 34,
+            "operators": 50,
+            "mutex_groups": 6,
+            "task_size": 343
+          },
+          "initial_h": "lmcut=13",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.007574,
+            "fd_total_seconds": 0.009554,
+            "wall_seconds": 0.161301,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)",
+            "(move roomb rooma)",
+            "(pick b5 rooma left)",
+            "(pick b6 rooma right)",
+            "(move rooma roomb)",
+            "(drop b5 roomb left)",
+            "(drop b6 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 17,
+          "plan_cost": 17,
+          "nodes": {
+            "expanded": 1783,
+            "generated": 6970,
+            "evaluated": 1825,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 9,
+            "facts": 34,
+            "operators": 50,
+            "mutex_groups": 6,
+            "task_size": 343
+          },
+          "initial_h": "cpdbs=7",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.002205,
+            "fd_total_seconds": 0.015296,
+            "wall_seconds": 0.167814,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b5 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b5 roomb right)",
+            "(move roomb rooma)",
+            "(pick b2 rooma left)",
+            "(pick b3 rooma right)",
+            "(move rooma roomb)",
+            "(drop b2 roomb left)",
+            "(drop b3 roomb right)",
+            "(move roomb rooma)",
+            "(pick b4 rooma left)",
+            "(pick b6 rooma right)",
+            "(move rooma roomb)",
+            "(drop b4 roomb left)",
+            "(drop b6 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 17,
+          "plan_cost": 17,
+          "nodes": {
+            "expanded": 25,
+            "generated": 124,
+            "evaluated": 26,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 9,
+            "facts": 34,
+            "operators": 50,
+            "mutex_groups": 6,
+            "task_size": 343
+          },
+          "initial_h": "ff=13",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000275,
+            "fd_total_seconds": 0.00296,
+            "wall_seconds": 0.152647,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)",
+            "(move roomb rooma)",
+            "(pick b5 rooma left)",
+            "(pick b6 rooma right)",
+            "(move rooma roomb)",
+            "(drop b5 roomb left)",
+            "(drop b6 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 17,
+        "optimal_rung_lengths": {
+          "stub-bfs": 17,
+          "fd-optimal/lmcut": 17,
+          "fd-optimal/ipdb": 17
+        },
+        "satisficing_length": 17,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "gripper-07",
+        "family": "gripper",
+        "optimum": 21,
+        "optimum_source": "closed form",
+        "solvable": true,
+        "note": "7 ball(s) to ferry; optimum 2m+2*ceil(m/2)-1"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 21,
+          "nodes": {
+            "expanded": 4721,
+            "generated": 4735,
+            "ground_actions": 60
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.100796
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 21,
+          "plan_cost": 21,
+          "nodes": {
+            "expanded": 4556,
+            "generated": 18426,
+            "evaluated": 4674,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 10,
+            "facts": 39,
+            "operators": 58,
+            "mutex_groups": 7,
+            "task_size": 398
+          },
+          "initial_h": "lmcut=15",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.024084,
+            "fd_total_seconds": 0.026155,
+            "wall_seconds": 0.175235,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)",
+            "(move roomb rooma)",
+            "(pick b5 rooma left)",
+            "(pick b6 rooma right)",
+            "(move rooma roomb)",
+            "(drop b5 roomb left)",
+            "(move roomb rooma)",
+            "(pick b7 rooma left)",
+            "(move rooma roomb)",
+            "(drop b7 roomb left)",
+            "(drop b6 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 21,
+          "plan_cost": 21,
+          "nodes": {
+            "expanded": 4654,
+            "generated": 18752,
+            "evaluated": 4711,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 10,
+            "facts": 39,
+            "operators": 58,
+            "mutex_groups": 7,
+            "task_size": 398
+          },
+          "initial_h": "cpdbs=8",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.005701,
+            "fd_total_seconds": 0.020604,
+            "wall_seconds": 0.170092,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b2 rooma left)",
+            "(pick b5 rooma right)",
+            "(move rooma roomb)",
+            "(drop b2 roomb left)",
+            "(drop b5 roomb right)",
+            "(move roomb rooma)",
+            "(pick b1 rooma left)",
+            "(pick b3 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b3 roomb right)",
+            "(move roomb rooma)",
+            "(pick b4 rooma left)",
+            "(pick b6 rooma right)",
+            "(move rooma roomb)",
+            "(drop b4 roomb left)",
+            "(drop b6 roomb right)",
+            "(move roomb rooma)",
+            "(pick b7 rooma left)",
+            "(move rooma roomb)",
+            "(drop b7 roomb left)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 21,
+          "plan_cost": 21,
+          "nodes": {
+            "expanded": 31,
+            "generated": 170,
+            "evaluated": 32,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 10,
+            "facts": 39,
+            "operators": 58,
+            "mutex_groups": 7,
+            "task_size": 398
+          },
+          "initial_h": "ff=15",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000347,
+            "fd_total_seconds": 0.003063,
+            "wall_seconds": 0.149995,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)",
+            "(move roomb rooma)",
+            "(pick b5 rooma left)",
+            "(pick b6 rooma right)",
+            "(move rooma roomb)",
+            "(drop b5 roomb left)",
+            "(drop b6 roomb right)",
+            "(move roomb rooma)",
+            "(pick b7 rooma left)",
+            "(move rooma roomb)",
+            "(drop b7 roomb left)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 21,
+        "optimal_rung_lengths": {
+          "stub-bfs": 21,
+          "fd-optimal/lmcut": 21,
+          "fd-optimal/ipdb": 21
+        },
+        "satisficing_length": 21,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "gripper-08",
+        "family": "gripper",
+        "optimum": 23,
+        "optimum_source": "closed form",
+        "solvable": true,
+        "note": "8 ball(s) to ferry; optimum 2m+2*ceil(m/2)-1"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 23,
+          "nodes": {
+            "expanded": 11742,
+            "generated": 11773,
+            "ground_actions": 68
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.270427
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 23,
+          "plan_cost": 23,
+          "nodes": {
+            "expanded": 10537,
+            "generated": 43808,
+            "evaluated": 11102,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 11,
+            "facts": 44,
+            "operators": 66,
+            "mutex_groups": 8,
+            "task_size": 453
+          },
+          "initial_h": "lmcut=17",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.064536,
+            "fd_total_seconds": 0.066686,
+            "wall_seconds": 0.218506,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)",
+            "(move roomb rooma)",
+            "(pick b5 rooma left)",
+            "(pick b6 rooma right)",
+            "(move rooma roomb)",
+            "(drop b5 roomb left)",
+            "(drop b6 roomb right)",
+            "(move roomb rooma)",
+            "(pick b7 rooma left)",
+            "(pick b8 rooma right)",
+            "(move rooma roomb)",
+            "(drop b7 roomb left)",
+            "(drop b8 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 23,
+          "plan_cost": 23,
+          "nodes": {
+            "expanded": 11661,
+            "generated": 48206,
+            "evaluated": 11733,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 11,
+            "facts": 44,
+            "operators": 66,
+            "mutex_groups": 8,
+            "task_size": 453
+          },
+          "initial_h": "cpdbs=9",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.013493,
+            "fd_total_seconds": 0.030227,
+            "wall_seconds": 0.1818,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b2 rooma left)",
+            "(pick b7 rooma right)",
+            "(move rooma roomb)",
+            "(drop b2 roomb left)",
+            "(drop b7 roomb right)",
+            "(move roomb rooma)",
+            "(pick b1 rooma left)",
+            "(pick b3 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b3 roomb right)",
+            "(move roomb rooma)",
+            "(pick b4 rooma left)",
+            "(pick b5 rooma right)",
+            "(move rooma roomb)",
+            "(drop b4 roomb left)",
+            "(drop b5 roomb right)",
+            "(move roomb rooma)",
+            "(pick b6 rooma left)",
+            "(pick b8 rooma right)",
+            "(move rooma roomb)",
+            "(drop b6 roomb left)",
+            "(drop b8 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 23,
+          "plan_cost": 23,
+          "nodes": {
+            "expanded": 34,
+            "generated": 203,
+            "evaluated": 35,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 11,
+            "facts": 44,
+            "operators": 66,
+            "mutex_groups": 8,
+            "task_size": 453
+          },
+          "initial_h": "ff=17",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000391,
+            "fd_total_seconds": 0.003465,
+            "wall_seconds": 0.158291,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)",
+            "(move roomb rooma)",
+            "(pick b5 rooma left)",
+            "(pick b6 rooma right)",
+            "(move rooma roomb)",
+            "(drop b5 roomb left)",
+            "(drop b6 roomb right)",
+            "(move roomb rooma)",
+            "(pick b7 rooma left)",
+            "(pick b8 rooma right)",
+            "(move rooma roomb)",
+            "(drop b7 roomb left)",
+            "(drop b8 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 23,
+        "optimal_rung_lengths": {
+          "stub-bfs": 23,
+          "fd-optimal/lmcut": 23,
+          "fd-optimal/ipdb": 23
+        },
+        "satisficing_length": 23,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "gripper-09",
+        "family": "gripper",
+        "optimum": 27,
+        "optimum_source": "closed form",
+        "solvable": true,
+        "note": "9 ball(s) to ferry; optimum 2m+2*ceil(m/2)-1"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 27,
+          "nodes": {
+            "expanded": 28653,
+            "generated": 28671,
+            "ground_actions": 76
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.745996
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 27,
+          "plan_cost": 27,
+          "nodes": {
+            "expanded": 28377,
+            "generated": 119757,
+            "evaluated": 28574,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 12,
+            "facts": 49,
+            "operators": 74,
+            "mutex_groups": 9,
+            "task_size": 508
+          },
+          "initial_h": "lmcut=19",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.188228,
+            "fd_total_seconds": 0.190451,
+            "wall_seconds": 0.352637,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)",
+            "(move roomb rooma)",
+            "(pick b5 rooma left)",
+            "(pick b6 rooma right)",
+            "(move rooma roomb)",
+            "(drop b5 roomb left)",
+            "(drop b6 roomb right)",
+            "(move roomb rooma)",
+            "(pick b7 rooma left)",
+            "(pick b8 rooma right)",
+            "(move rooma roomb)",
+            "(drop b7 roomb left)",
+            "(move roomb rooma)",
+            "(pick b9 rooma left)",
+            "(move rooma roomb)",
+            "(drop b9 roomb left)",
+            "(drop b8 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 27,
+          "plan_cost": 27,
+          "nodes": {
+            "expanded": 28548,
+            "generated": 120328,
+            "evaluated": 28639,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 12,
+            "facts": 49,
+            "operators": 74,
+            "mutex_groups": 9,
+            "task_size": 508
+          },
+          "initial_h": "cpdbs=10",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.033253,
+            "fd_total_seconds": 0.052263,
+            "wall_seconds": 0.20959,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b9 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b9 roomb right)",
+            "(move roomb rooma)",
+            "(pick b2 rooma left)",
+            "(pick b3 rooma right)",
+            "(move rooma roomb)",
+            "(drop b2 roomb left)",
+            "(drop b3 roomb right)",
+            "(move roomb rooma)",
+            "(pick b4 rooma left)",
+            "(pick b5 rooma right)",
+            "(move rooma roomb)",
+            "(drop b4 roomb left)",
+            "(drop b5 roomb right)",
+            "(move roomb rooma)",
+            "(pick b6 rooma left)",
+            "(pick b7 rooma right)",
+            "(move rooma roomb)",
+            "(drop b6 roomb left)",
+            "(drop b7 roomb right)",
+            "(move roomb rooma)",
+            "(pick b8 rooma left)",
+            "(move rooma roomb)",
+            "(drop b8 roomb left)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 27,
+          "plan_cost": 27,
+          "nodes": {
+            "expanded": 40,
+            "generated": 260,
+            "evaluated": 41,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 12,
+            "facts": 49,
+            "operators": 74,
+            "mutex_groups": 9,
+            "task_size": 508
+          },
+          "initial_h": "ff=19",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000428,
+            "fd_total_seconds": 0.003574,
+            "wall_seconds": 0.162768,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b3 rooma left)",
+            "(pick b4 rooma right)",
+            "(move rooma roomb)",
+            "(drop b3 roomb left)",
+            "(drop b4 roomb right)",
+            "(move roomb rooma)",
+            "(pick b5 rooma left)",
+            "(pick b6 rooma right)",
+            "(move rooma roomb)",
+            "(drop b5 roomb left)",
+            "(drop b6 roomb right)",
+            "(move roomb rooma)",
+            "(pick b7 rooma left)",
+            "(pick b8 rooma right)",
+            "(move rooma roomb)",
+            "(drop b7 roomb left)",
+            "(drop b8 roomb right)",
+            "(move roomb rooma)",
+            "(pick b9 rooma left)",
+            "(move rooma roomb)",
+            "(drop b9 roomb left)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 27,
+        "optimal_rung_lengths": {
+          "stub-bfs": 27,
+          "fd-optimal/lmcut": 27,
+          "fd-optimal/ipdb": 27
+        },
+        "satisficing_length": 27,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "gripper-10",
+        "family": "gripper",
+        "optimum": 29,
+        "optimum_source": "closed form",
+        "solvable": true,
+        "note": "10 ball(s) to ferry; optimum 2m+2*ceil(m/2)-1"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 29,
+          "nodes": {
+            "expanded": 68566,
+            "generated": 68605,
+            "ground_actions": 84
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 1.953944
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 29,
+          "plan_cost": 29,
+          "nodes": {
+            "expanded": 66176,
+            "generated": 284241,
+            "evaluated": 67344,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 13,
+            "facts": 54,
+            "operators": 82,
+            "mutex_groups": 10,
+            "task_size": 563
+          },
+          "initial_h": "lmcut=21",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.507241,
+            "fd_total_seconds": 0.509516,
+            "wall_seconds": 0.692549,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b10 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b10 roomb right)",
+            "(move roomb rooma)",
+            "(pick b2 rooma left)",
+            "(pick b3 rooma right)",
+            "(move rooma roomb)",
+            "(drop b2 roomb left)",
+            "(drop b3 roomb right)",
+            "(move roomb rooma)",
+            "(pick b4 rooma left)",
+            "(pick b5 rooma right)",
+            "(move rooma roomb)",
+            "(drop b4 roomb left)",
+            "(drop b5 roomb right)",
+            "(move roomb rooma)",
+            "(pick b6 rooma left)",
+            "(pick b7 rooma right)",
+            "(move rooma roomb)",
+            "(drop b6 roomb left)",
+            "(drop b7 roomb right)",
+            "(move roomb rooma)",
+            "(pick b8 rooma left)",
+            "(pick b9 rooma right)",
+            "(move rooma roomb)",
+            "(drop b8 roomb left)",
+            "(drop b9 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 29,
+          "plan_cost": 29,
+          "nodes": {
+            "expanded": 68443,
+            "generated": 293242,
+            "evaluated": 68553,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 13,
+            "facts": 54,
+            "operators": 82,
+            "mutex_groups": 10,
+            "task_size": 563
+          },
+          "initial_h": "cpdbs=11",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.081668,
+            "fd_total_seconds": 0.102506,
+            "wall_seconds": 0.263097,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b3 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b3 roomb right)",
+            "(move roomb rooma)",
+            "(pick b10 rooma left)",
+            "(pick b2 rooma right)",
+            "(move rooma roomb)",
+            "(drop b10 roomb left)",
+            "(drop b2 roomb right)",
+            "(move roomb rooma)",
+            "(pick b4 rooma left)",
+            "(pick b5 rooma right)",
+            "(move rooma roomb)",
+            "(drop b4 roomb left)",
+            "(drop b5 roomb right)",
+            "(move roomb rooma)",
+            "(pick b6 rooma left)",
+            "(pick b7 rooma right)",
+            "(move rooma roomb)",
+            "(drop b6 roomb left)",
+            "(drop b7 roomb right)",
+            "(move roomb rooma)",
+            "(pick b8 rooma left)",
+            "(pick b9 rooma right)",
+            "(move rooma roomb)",
+            "(drop b8 roomb left)",
+            "(drop b9 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 29,
+          "plan_cost": 29,
+          "nodes": {
+            "expanded": 43,
+            "generated": 300,
+            "evaluated": 44,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 13,
+            "facts": 54,
+            "operators": 82,
+            "mutex_groups": 10,
+            "task_size": 563
+          },
+          "initial_h": "ff=21",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000467,
+            "fd_total_seconds": 0.003744,
+            "wall_seconds": 0.161874,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(pick b1 rooma left)",
+            "(pick b10 rooma right)",
+            "(move rooma roomb)",
+            "(drop b1 roomb left)",
+            "(drop b10 roomb right)",
+            "(move roomb rooma)",
+            "(pick b2 rooma left)",
+            "(pick b3 rooma right)",
+            "(move rooma roomb)",
+            "(drop b2 roomb left)",
+            "(drop b3 roomb right)",
+            "(move roomb rooma)",
+            "(pick b4 rooma left)",
+            "(pick b5 rooma right)",
+            "(move rooma roomb)",
+            "(drop b4 roomb left)",
+            "(drop b5 roomb right)",
+            "(move roomb rooma)",
+            "(pick b6 rooma left)",
+            "(pick b7 rooma right)",
+            "(move rooma roomb)",
+            "(drop b6 roomb left)",
+            "(drop b7 roomb right)",
+            "(move roomb rooma)",
+            "(pick b8 rooma left)",
+            "(pick b9 rooma right)",
+            "(move rooma roomb)",
+            "(drop b8 roomb left)",
+            "(drop b9 roomb right)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 29,
+        "optimal_rung_lengths": {
+          "stub-bfs": 29,
+          "fd-optimal/lmcut": 29,
+          "fd-optimal/ipdb": 29
+        },
+        "satisficing_length": 29,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "sokoban-open4",
+        "family": "sokoban",
+        "optimum": 6,
+        "optimum_source": "hand-derived",
+        "solvable": true,
+        "note": "committed fixture; optimum 6 argued in deadlock_carver/README.md"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 6,
+          "nodes": {
+            "expanded": 47,
+            "generated": 96,
+            "ground_actions": 112
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.004221
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 6,
+          "plan_cost": 6,
+          "nodes": {
+            "expanded": 7,
+            "generated": 19,
+            "evaluated": 16,
+            "reopened": 0,
+            "dead_ends": 1
+          },
+          "translator": {
+            "variables": 19,
+            "facts": 80,
+            "operators": 112,
+            "mutex_groups": 16,
+            "task_size": 1029
+          },
+          "initial_h": "lmcut=6",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.00029,
+            "fd_total_seconds": 0.003064,
+            "wall_seconds": 0.165888,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c44 c34 up)",
+            "(move c34 c24 up)",
+            "(move c24 c23 left)",
+            "(push c23 c33 c43 b2 down)",
+            "(move c33 c32 left)",
+            "(push c32 c22 c12 b1 up)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 6,
+          "plan_cost": 6,
+          "nodes": {
+            "expanded": 7,
+            "generated": 19,
+            "evaluated": 16,
+            "reopened": 0,
+            "dead_ends": 1
+          },
+          "translator": {
+            "variables": 19,
+            "facts": 80,
+            "operators": 112,
+            "mutex_groups": 16,
+            "task_size": 1029
+          },
+          "initial_h": "cpdbs=6",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000103,
+            "fd_total_seconds": 0.096653,
+            "wall_seconds": 0.258678,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c44 c34 up)",
+            "(move c34 c24 up)",
+            "(move c24 c23 left)",
+            "(push c23 c33 c43 b2 down)",
+            "(move c33 c32 left)",
+            "(push c32 c22 c12 b1 up)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 6,
+          "plan_cost": 6,
+          "nodes": {
+            "expanded": 6,
+            "generated": 19,
+            "evaluated": 8,
+            "reopened": 0,
+            "dead_ends": 1
+          },
+          "translator": {
+            "variables": 19,
+            "facts": 80,
+            "operators": 112,
+            "mutex_groups": 16,
+            "task_size": 1029
+          },
+          "initial_h": "ff=8",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000163,
+            "fd_total_seconds": 0.003825,
+            "wall_seconds": 0.164157,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c44 c34 up)",
+            "(move c34 c24 up)",
+            "(move c24 c23 left)",
+            "(push c23 c33 c43 b2 down)",
+            "(move c33 c32 left)",
+            "(push c32 c22 c12 b1 up)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 6,
+        "optimal_rung_lengths": {
+          "stub-bfs": 6,
+          "fd-optimal/lmcut": 6,
+          "fd-optimal/ipdb": 6
+        },
+        "satisficing_length": 6,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "sokoban-open4far",
+        "family": "sokoban",
+        "optimum": null,
+        "optimum_source": null,
+        "solvable": true,
+        "note": "committed fixture; the deep one -- boxes cross the board"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 11,
+          "nodes": {
+            "expanded": 808,
+            "generated": 1139,
+            "ground_actions": 112
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.026986
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 11,
+          "plan_cost": 11,
+          "nodes": {
+            "expanded": 23,
+            "generated": 68,
+            "evaluated": 49,
+            "reopened": 0,
+            "dead_ends": 7
+          },
+          "translator": {
+            "variables": 19,
+            "facts": 80,
+            "operators": 112,
+            "mutex_groups": 16,
+            "task_size": 1029
+          },
+          "initial_h": "lmcut=7",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000824,
+            "fd_total_seconds": 0.003599,
+            "wall_seconds": 0.163338,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c44 c43 left)",
+            "(push c43 c33 c23 b2 up)",
+            "(push c33 c23 c13 b2 up)",
+            "(move c23 c33 down)",
+            "(move c33 c32 left)",
+            "(move c32 c31 left)",
+            "(move c31 c21 up)",
+            "(move c21 c11 up)",
+            "(move c11 c12 right)",
+            "(push c12 c22 c32 b1 down)",
+            "(push c22 c32 c42 b1 down)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 11,
+          "plan_cost": 11,
+          "nodes": {
+            "expanded": 12,
+            "generated": 35,
+            "evaluated": 29,
+            "reopened": 0,
+            "dead_ends": 3
+          },
+          "translator": {
+            "variables": 19,
+            "facts": 80,
+            "operators": 112,
+            "mutex_groups": 16,
+            "task_size": 1029
+          },
+          "initial_h": "cpdbs=11",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000137,
+            "fd_total_seconds": 0.37067,
+            "wall_seconds": 0.534566,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c44 c43 left)",
+            "(push c43 c33 c23 b2 up)",
+            "(push c33 c23 c13 b2 up)",
+            "(move c23 c33 down)",
+            "(move c33 c32 left)",
+            "(move c32 c31 left)",
+            "(move c31 c21 up)",
+            "(move c21 c11 up)",
+            "(move c11 c12 right)",
+            "(push c12 c22 c32 b1 down)",
+            "(push c22 c32 c42 b1 down)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 37,
+          "plan_cost": 37,
+          "nodes": {
+            "expanded": 95,
+            "generated": 291,
+            "evaluated": 124,
+            "reopened": 0,
+            "dead_ends": 28
+          },
+          "translator": {
+            "variables": 19,
+            "facts": 80,
+            "operators": 112,
+            "mutex_groups": 16,
+            "task_size": 1029
+          },
+          "initial_h": "ff=10",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000741,
+            "fd_total_seconds": 0.004381,
+            "wall_seconds": 0.166066,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c44 c34 up)",
+            "(push c34 c33 c32 b2 left)",
+            "(move c33 c23 up)",
+            "(move c23 c13 up)",
+            "(move c13 c12 left)",
+            "(move c12 c11 left)",
+            "(move c11 c21 down)",
+            "(push c21 c22 c23 b1 right)",
+            "(move c22 c12 up)",
+            "(move c12 c11 left)",
+            "(move c11 c21 down)",
+            "(move c21 c31 down)",
+            "(move c31 c41 down)",
+            "(move c41 c42 right)",
+            "(push c42 c32 c22 b2 up)",
+            "(push c32 c22 c12 b2 up)",
+            "(move c22 c21 left)",
+            "(move c21 c11 up)",
+            "(push c11 c12 c13 b2 right)",
+            "(move c12 c22 down)",
+            "(move c22 c32 down)",
+            "(move c32 c33 right)",
+            "(move c33 c34 right)",
+            "(move c34 c24 up)",
+            "(move c24 c14 up)",
+            "(push c14 c13 c12 b2 left)",
+            "(push c13 c23 c33 b1 down)",
+            "(move c23 c22 left)",
+            "(move c22 c21 left)",
+            "(move c21 c11 up)",
+            "(push c11 c12 c13 b2 right)",
+            "(move c12 c22 down)",
+            "(move c22 c23 right)",
+            "(push c23 c33 c43 b1 down)",
+            "(move c33 c34 right)",
+            "(move c34 c44 down)",
+            "(push c44 c43 c42 b1 left)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": null,
+        "optimal_rung_lengths": {
+          "stub-bfs": 11,
+          "fd-optimal/lmcut": 11,
+          "fd-optimal/ipdb": 11
+        },
+        "satisficing_length": 37,
+        "optimum_ok": null,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "sokoban-ring",
+        "family": "sokoban",
+        "optimum": 1,
+        "optimum_source": "hand-derived",
+        "solvable": true,
+        "note": "committed fixture; 1-wide corridor loop"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 1,
+          "nodes": {
+            "expanded": 1,
+            "generated": 3,
+            "ground_actions": 40
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.001398
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 1,
+          "plan_cost": 1,
+          "nodes": {
+            "expanded": 2,
+            "generated": 2,
+            "evaluated": 3,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 14,
+            "facts": 40,
+            "operators": 28,
+            "mutex_groups": 12,
+            "task_size": 263
+          },
+          "initial_h": "lmcut=1",
+          "error": null,
+          "timing": {
+            "search_seconds": 8.6e-05,
+            "fd_total_seconds": 0.002066,
+            "wall_seconds": 0.154095,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(push c11 c12 c13 b1 right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 1,
+          "plan_cost": 1,
+          "nodes": {
+            "expanded": 2,
+            "generated": 2,
+            "evaluated": 3,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 14,
+            "facts": 40,
+            "operators": 28,
+            "mutex_groups": 12,
+            "task_size": 263
+          },
+          "initial_h": "cpdbs=1",
+          "error": null,
+          "timing": {
+            "search_seconds": 5.1e-05,
+            "fd_total_seconds": 0.004462,
+            "wall_seconds": 0.152385,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(push c11 c12 c13 b1 right)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 1,
+          "plan_cost": 1,
+          "nodes": {
+            "expanded": 2,
+            "generated": 4,
+            "evaluated": 3,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 14,
+            "facts": 40,
+            "operators": 28,
+            "mutex_groups": 12,
+            "task_size": 263
+          },
+          "initial_h": "ff=1",
+          "error": null,
+          "timing": {
+            "search_seconds": 7.9e-05,
+            "fd_total_seconds": 0.00257,
+            "wall_seconds": 0.152955,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(push c11 c12 c13 b1 right)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": 1,
+        "optimal_rung_lengths": {
+          "stub-bfs": 1,
+          "fd-optimal/lmcut": 1,
+          "fd-optimal/ipdb": 1
+        },
+        "satisficing_length": 1,
+        "optimum_ok": true,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "sokoban-ringstuck",
+        "family": "sokoban",
+        "optimum": null,
+        "optimum_source": null,
+        "solvable": false,
+        "note": "committed fixture; unsolvable -- a box cannot turn a corner"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": false,
+          "proved_unsolvable": true,
+          "plan_length": null,
+          "nodes": {
+            "expanded": 44,
+            "generated": 44,
+            "ground_actions": 40
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.001816
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 12,
+          "solved": false,
+          "proved_unsolvable": true,
+          "not_entitled": false,
+          "plan_length": null,
+          "plan_cost": null,
+          "nodes": {
+            "expanded": 0,
+            "generated": 0,
+            "evaluated": 1,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 1,
+            "facts": 2,
+            "operators": 0,
+            "mutex_groups": 0,
+            "task_size": 4
+          },
+          "initial_h": "lmcut=infinity",
+          "error": null,
+          "timing": {
+            "search_seconds": 4.3e-05,
+            "fd_total_seconds": 0.001804,
+            "wall_seconds": 0.144651,
+            "peak_memory_kb": null
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 12,
+          "solved": false,
+          "proved_unsolvable": true,
+          "not_entitled": false,
+          "plan_length": null,
+          "plan_cost": null,
+          "nodes": {
+            "expanded": 0,
+            "generated": 0,
+            "evaluated": 1,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 1,
+            "facts": 2,
+            "operators": 0,
+            "mutex_groups": 0,
+            "task_size": 4
+          },
+          "initial_h": "cpdbs=infinity",
+          "error": null,
+          "timing": {
+            "search_seconds": 3.5e-05,
+            "fd_total_seconds": 0.001965,
+            "wall_seconds": 0.146242,
+            "peak_memory_kb": null
+          }
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 12,
+          "solved": false,
+          "proved_unsolvable": false,
+          "not_entitled": true,
+          "plan_length": null,
+          "plan_cost": null,
+          "nodes": {
+            "expanded": 0,
+            "generated": 0,
+            "evaluated": 1,
+            "reopened": 0,
+            "dead_ends": 1
+          },
+          "translator": {
+            "variables": 1,
+            "facts": 2,
+            "operators": 0,
+            "mutex_groups": 0,
+            "task_size": 4
+          },
+          "initial_h": "ff=infinity",
+          "error": null,
+          "timing": {
+            "search_seconds": 3.6e-05,
+            "fd_total_seconds": 0.002126,
+            "wall_seconds": 0.14615,
+            "peak_memory_kb": null
+          }
+        }
+      ],
+      "verdicts": {
+        "optimum": null,
+        "optimal_rung_lengths": {},
+        "satisficing_length": null,
+        "optimum_ok": null,
+        "agreement_ok": null,
+        "satisficing_ok": null,
+        "solvability_claims": {
+          "stub-bfs": "unsolvable",
+          "fd-optimal/lmcut": "unsolvable",
+          "fd-optimal/ipdb": "unsolvable",
+          "fd-satisficing": "no answer"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "sokoban-far4",
+        "family": "sokoban",
+        "optimum": null,
+        "optimum_source": null,
+        "solvable": null,
+        "note": "generated: 4x4 interior, open4far's construction"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 11,
+          "nodes": {
+            "expanded": 808,
+            "generated": 1139,
+            "ground_actions": 112
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.026525
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 11,
+          "plan_cost": 11,
+          "nodes": {
+            "expanded": 23,
+            "generated": 68,
+            "evaluated": 49,
+            "reopened": 0,
+            "dead_ends": 7
+          },
+          "translator": {
+            "variables": 19,
+            "facts": 80,
+            "operators": 112,
+            "mutex_groups": 16,
+            "task_size": 1029
+          },
+          "initial_h": "lmcut=7",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000796,
+            "fd_total_seconds": 0.003731,
+            "wall_seconds": 0.166093,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c44 c43 left)",
+            "(push c43 c33 c23 b2 up)",
+            "(push c33 c23 c13 b2 up)",
+            "(move c23 c33 down)",
+            "(move c33 c32 left)",
+            "(move c32 c31 left)",
+            "(move c31 c21 up)",
+            "(move c21 c11 up)",
+            "(move c11 c12 right)",
+            "(push c12 c22 c32 b1 down)",
+            "(push c22 c32 c42 b1 down)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 11,
+          "plan_cost": 11,
+          "nodes": {
+            "expanded": 12,
+            "generated": 35,
+            "evaluated": 29,
+            "reopened": 0,
+            "dead_ends": 3
+          },
+          "translator": {
+            "variables": 19,
+            "facts": 80,
+            "operators": 112,
+            "mutex_groups": 16,
+            "task_size": 1029
+          },
+          "initial_h": "cpdbs=11",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000143,
+            "fd_total_seconds": 0.372546,
+            "wall_seconds": 0.539265,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c44 c43 left)",
+            "(push c43 c33 c23 b2 up)",
+            "(push c33 c23 c13 b2 up)",
+            "(move c23 c33 down)",
+            "(move c33 c32 left)",
+            "(move c32 c31 left)",
+            "(move c31 c21 up)",
+            "(move c21 c11 up)",
+            "(move c11 c12 right)",
+            "(push c12 c22 c32 b1 down)",
+            "(push c22 c32 c42 b1 down)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 37,
+          "plan_cost": 37,
+          "nodes": {
+            "expanded": 95,
+            "generated": 291,
+            "evaluated": 124,
+            "reopened": 0,
+            "dead_ends": 28
+          },
+          "translator": {
+            "variables": 19,
+            "facts": 80,
+            "operators": 112,
+            "mutex_groups": 16,
+            "task_size": 1029
+          },
+          "initial_h": "ff=10",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000714,
+            "fd_total_seconds": 0.004451,
+            "wall_seconds": 0.172694,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c44 c34 up)",
+            "(push c34 c33 c32 b2 left)",
+            "(move c33 c23 up)",
+            "(move c23 c13 up)",
+            "(move c13 c12 left)",
+            "(move c12 c11 left)",
+            "(move c11 c21 down)",
+            "(push c21 c22 c23 b1 right)",
+            "(move c22 c12 up)",
+            "(move c12 c11 left)",
+            "(move c11 c21 down)",
+            "(move c21 c31 down)",
+            "(move c31 c41 down)",
+            "(move c41 c42 right)",
+            "(push c42 c32 c22 b2 up)",
+            "(push c32 c22 c12 b2 up)",
+            "(move c22 c21 left)",
+            "(move c21 c11 up)",
+            "(push c11 c12 c13 b2 right)",
+            "(move c12 c22 down)",
+            "(move c22 c32 down)",
+            "(move c32 c33 right)",
+            "(move c33 c34 right)",
+            "(move c34 c24 up)",
+            "(move c24 c14 up)",
+            "(push c14 c13 c12 b2 left)",
+            "(push c13 c23 c33 b1 down)",
+            "(move c23 c22 left)",
+            "(move c22 c21 left)",
+            "(move c21 c11 up)",
+            "(push c11 c12 c13 b2 right)",
+            "(move c12 c22 down)",
+            "(move c22 c23 right)",
+            "(push c23 c33 c43 b1 down)",
+            "(move c33 c34 right)",
+            "(move c34 c44 down)",
+            "(push c44 c43 c42 b1 left)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": null,
+        "optimal_rung_lengths": {
+          "stub-bfs": 11,
+          "fd-optimal/lmcut": 11,
+          "fd-optimal/ipdb": 11
+        },
+        "satisficing_length": 37,
+        "optimum_ok": null,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "sokoban-far5",
+        "family": "sokoban",
+        "optimum": null,
+        "optimum_source": null,
+        "solvable": null,
+        "note": "generated: 5x5 interior, open4far's construction"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 13,
+          "nodes": {
+            "expanded": 988,
+            "generated": 1549,
+            "ground_actions": 200
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.053726
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 13,
+          "plan_cost": 13,
+          "nodes": {
+            "expanded": 30,
+            "generated": 103,
+            "evaluated": 69,
+            "reopened": 0,
+            "dead_ends": 4
+          },
+          "translator": {
+            "variables": 28,
+            "facts": 125,
+            "operators": 200,
+            "mutex_groups": 25,
+            "task_size": 1815
+          },
+          "initial_h": "lmcut=10",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.001904,
+            "fd_total_seconds": 0.005456,
+            "wall_seconds": 0.177102,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c55 c45 up)",
+            "(move c45 c44 left)",
+            "(move c44 c34 up)",
+            "(move c34 c24 up)",
+            "(move c24 c14 up)",
+            "(move c14 c13 left)",
+            "(move c13 c12 left)",
+            "(push c12 c22 c32 b1 down)",
+            "(push c22 c32 c42 b1 down)",
+            "(push c32 c42 c52 b1 down)",
+            "(move c42 c43 right)",
+            "(push c43 c33 c23 b2 up)",
+            "(push c33 c23 c13 b2 up)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 13,
+          "plan_cost": 13,
+          "nodes": {
+            "expanded": 14,
+            "generated": 41,
+            "evaluated": 33,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 28,
+            "facts": 125,
+            "operators": 200,
+            "mutex_groups": 25,
+            "task_size": 1815
+          },
+          "initial_h": "cpdbs=13",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000173,
+            "fd_total_seconds": 0.811241,
+            "wall_seconds": 0.983888,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c55 c45 up)",
+            "(move c45 c35 up)",
+            "(move c35 c25 up)",
+            "(move c25 c15 up)",
+            "(move c15 c14 left)",
+            "(move c14 c13 left)",
+            "(move c13 c12 left)",
+            "(push c12 c22 c32 b1 down)",
+            "(push c22 c32 c42 b1 down)",
+            "(push c32 c42 c52 b1 down)",
+            "(move c42 c43 right)",
+            "(push c43 c33 c23 b2 up)",
+            "(push c33 c23 c13 b2 up)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 21,
+          "plan_cost": 21,
+          "nodes": {
+            "expanded": 59,
+            "generated": 216,
+            "evaluated": 76,
+            "reopened": 0,
+            "dead_ends": 16
+          },
+          "translator": {
+            "variables": 28,
+            "facts": 125,
+            "operators": 200,
+            "mutex_groups": 25,
+            "task_size": 1815
+          },
+          "initial_h": "ff=18",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000648,
+            "fd_total_seconds": 0.005411,
+            "wall_seconds": 0.170924,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c55 c45 up)",
+            "(move c45 c44 left)",
+            "(move c44 c43 left)",
+            "(move c43 c42 left)",
+            "(move c42 c32 up)",
+            "(push c32 c33 c34 b2 right)",
+            "(move c33 c23 up)",
+            "(move c23 c24 right)",
+            "(move c24 c14 up)",
+            "(move c14 c13 left)",
+            "(move c13 c12 left)",
+            "(push c12 c22 c32 b1 down)",
+            "(push c22 c32 c42 b1 down)",
+            "(push c32 c42 c52 b1 down)",
+            "(move c42 c43 right)",
+            "(move c43 c44 right)",
+            "(push c44 c34 c24 b2 up)",
+            "(push c34 c24 c14 b2 up)",
+            "(move c24 c25 right)",
+            "(move c25 c15 up)",
+            "(push c15 c14 c13 b2 left)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": null,
+        "optimal_rung_lengths": {
+          "stub-bfs": 13,
+          "fd-optimal/lmcut": 13,
+          "fd-optimal/ipdb": 13
+        },
+        "satisficing_length": 21,
+        "optimum_ok": null,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    },
+    {
+      "instance": {
+        "name": "sokoban-far6",
+        "family": "sokoban",
+        "optimum": null,
+        "optimum_source": null,
+        "solvable": null,
+        "note": "generated: 6x6 interior, open4far's construction"
+      },
+      "rungs": [
+        {
+          "config": "stub-bfs",
+          "tier": "stub-bfs",
+          "solved": true,
+          "proved_unsolvable": false,
+          "plan_length": 17,
+          "nodes": {
+            "expanded": 3152,
+            "generated": 4785,
+            "ground_actions": 312
+          },
+          "error": null,
+          "timing": {
+            "wall_seconds": 0.246664
+          }
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/lmcut",
+          "heuristic": "lmcut",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 17,
+          "plan_cost": 17,
+          "nodes": {
+            "expanded": 47,
+            "generated": 164,
+            "evaluated": 92,
+            "reopened": 0,
+            "dead_ends": 6
+          },
+          "translator": {
+            "variables": 39,
+            "facts": 180,
+            "operators": 312,
+            "mutex_groups": 36,
+            "task_size": 2813
+          },
+          "initial_h": "lmcut=13",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.004149,
+            "fd_total_seconds": 0.008716,
+            "wall_seconds": 0.183153,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c66 c56 up)",
+            "(move c56 c46 up)",
+            "(move c46 c45 left)",
+            "(move c45 c44 left)",
+            "(move c44 c34 up)",
+            "(move c34 c24 up)",
+            "(move c24 c14 up)",
+            "(move c14 c13 left)",
+            "(move c13 c12 left)",
+            "(push c12 c22 c32 b1 down)",
+            "(push c22 c32 c42 b1 down)",
+            "(push c32 c42 c52 b1 down)",
+            "(push c42 c52 c62 b1 down)",
+            "(move c52 c42 up)",
+            "(move c42 c43 right)",
+            "(push c43 c33 c23 b2 up)",
+            "(push c33 c23 c13 b2 up)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-optimal",
+          "config": "fd-optimal/ipdb",
+          "heuristic": "ipdb",
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 17,
+          "plan_cost": 17,
+          "nodes": {
+            "expanded": 18,
+            "generated": 55,
+            "evaluated": 43,
+            "reopened": 0,
+            "dead_ends": 0
+          },
+          "translator": {
+            "variables": 39,
+            "facts": 180,
+            "operators": 312,
+            "mutex_groups": 36,
+            "task_size": 2813
+          },
+          "initial_h": "cpdbs=17",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.000335,
+            "fd_total_seconds": 1.59703,
+            "wall_seconds": 1.774145,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c66 c56 up)",
+            "(move c56 c46 up)",
+            "(move c46 c36 up)",
+            "(move c36 c26 up)",
+            "(move c26 c16 up)",
+            "(move c16 c15 left)",
+            "(move c15 c14 left)",
+            "(move c14 c13 left)",
+            "(move c13 c12 left)",
+            "(push c12 c22 c32 b1 down)",
+            "(push c22 c32 c42 b1 down)",
+            "(push c32 c42 c52 b1 down)",
+            "(push c42 c52 c62 b1 down)",
+            "(move c52 c42 up)",
+            "(move c42 c43 right)",
+            "(push c43 c33 c23 b2 up)",
+            "(push c33 c23 c13 b2 up)"
+          ],
+          "replayed_by_rig_validator": true
+        },
+        {
+          "tier": "fd-satisficing",
+          "config": "fd-satisficing",
+          "heuristic": null,
+          "returncode": 0,
+          "solved": true,
+          "proved_unsolvable": false,
+          "not_entitled": false,
+          "plan_length": 27,
+          "plan_cost": 27,
+          "nodes": {
+            "expanded": 111,
+            "generated": 410,
+            "evaluated": 133,
+            "reopened": 0,
+            "dead_ends": 21
+          },
+          "translator": {
+            "variables": 39,
+            "facts": 180,
+            "operators": 312,
+            "mutex_groups": 36,
+            "task_size": 2813
+          },
+          "initial_h": "ff=22",
+          "error": null,
+          "timing": {
+            "search_seconds": 0.00126,
+            "fd_total_seconds": 0.007545,
+            "wall_seconds": 0.182938,
+            "peak_memory_kb": null
+          },
+          "plan": [
+            "(move c66 c65 left)",
+            "(move c65 c64 left)",
+            "(move c64 c63 left)",
+            "(move c63 c53 up)",
+            "(move c53 c52 left)",
+            "(move c52 c42 up)",
+            "(move c42 c32 up)",
+            "(push c32 c33 c34 b2 right)",
+            "(move c33 c43 down)",
+            "(move c43 c44 right)",
+            "(push c44 c34 c24 b2 up)",
+            "(push c34 c24 c14 b2 up)",
+            "(move c24 c25 right)",
+            "(move c25 c15 up)",
+            "(push c15 c14 c13 b2 left)",
+            "(push c14 c13 c12 b2 left)",
+            "(move c13 c23 down)",
+            "(move c23 c33 down)",
+            "(move c33 c32 left)",
+            "(move c32 c31 left)",
+            "(move c31 c21 up)",
+            "(move c21 c11 up)",
+            "(push c11 c12 c13 b2 right)",
+            "(push c12 c22 c32 b1 down)",
+            "(push c22 c32 c42 b1 down)",
+            "(push c32 c42 c52 b1 down)",
+            "(push c42 c52 c62 b1 down)"
+          ],
+          "replayed_by_rig_validator": true
+        }
+      ],
+      "verdicts": {
+        "optimum": null,
+        "optimal_rung_lengths": {
+          "stub-bfs": 17,
+          "fd-optimal/lmcut": 17,
+          "fd-optimal/ipdb": 17
+        },
+        "satisficing_length": 27,
+        "optimum_ok": null,
+        "agreement_ok": true,
+        "satisficing_ok": true,
+        "solvability_claims": {
+          "stub-bfs": "solved",
+          "fd-optimal/lmcut": "solved",
+          "fd-optimal/ipdb": "solved",
+          "fd-satisficing": "solved"
+        },
+        "solvability_consistent": true
+      }
+    }
+  ]
+}

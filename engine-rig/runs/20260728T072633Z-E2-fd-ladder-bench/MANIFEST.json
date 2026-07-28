@@ -1,0 +1,68 @@
+{
+  "prompt_id": "E2-fd-ladder-bench",
+  "branch": "agent/e2-fd-ladder-bench",
+  "base_commit": "e182c957214e8dbe08ecea01c2805d7a1af7cf22",
+  "utc": "2026-07-28T07:49:28Z",
+  "host": {
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.13",
+    "machine": "AMD64"
+  },
+  "command": "python -m bench --out runs/20260728T072633Z-E2-fd-ladder-bench --repeats 3",
+  "repeats": 3,
+  "toolchain": {
+    "available": true,
+    "driver": "C:/Users/user/Desktop/theoria/.worktrees/p13/engine-rig/.toolchain/downward/fast-downward.py",
+    "why_not_in_the_repository": ".toolchain/ is gitignored by design (~1.6 GB of compiler, planner and build tree). See P-13.",
+    "reproducibility_gap": "Every Fast Downward number in this run came from a binary that is not tracked by git and cannot be rebuilt from the repository alone. The repo's byte-reproducibility requirement does not cover them. What replaces it is the hash, commit and build command below: a rebuild that hashes differently is a question a reader can raise.",
+    "toolchain_manifest": "engine-rig/runs/p13-fd-real/TOOLCHAIN_MANIFEST.md",
+    "toolchain_manifest_present": true,
+    "build_command": "cmake -G Ninja -S src -B builds/release -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=<mingw64>/bin/gcc.exe -DCMAKE_CXX_COMPILER=<mingw64>/bin/g++.exe -DCMAKE_EXE_LINKER_FLAGS=\"-static\" && cmake --build builds/release",
+    "expected": {
+      "binary_sha256": "645671ae40d825478a043a9f94c856dc6130a11c166b3393837c153c5020aee1",
+      "fd_commit": "7120aa01704bfe8e3b9b92c062a4f775bc89c7bd",
+      "fd_version": "Fast Downward 24.06+",
+      "compiler": "winlibs mingw-w64 GCC 16.1.0 (UCRT, posix threads, SEH, r3)"
+    },
+    "reported_version": "Fast Downward 24.06+",
+    "reported_revision": "7120aa0",
+    "binary": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p13\\engine-rig\\.toolchain\\downward\\builds\\release\\bin\\downward.exe",
+    "binary_sha256": "645671ae40d825478a043a9f94c856dc6130a11c166b3393837c153c5020aee1",
+    "binary_bytes": 280538976,
+    "matches_p13_manifest": true,
+    "notes": [],
+    "checks_against_p13": {
+      "binary_sha256": true,
+      "fd_commit": true,
+      "fd_version": true
+    }
+  },
+  "determinism": {
+    "structural_results_are_reproducible": "Node counts, plan lengths, task sizes and exit codes are a function of the instance and the configuration. verify.py re-derives them and compares exactly.",
+    "timings_are_not": "Every wall-clock figure is a property of this machine at this moment. verify.py checks that timings are present and ordered sanely; it never compares them for equality, and neither should a reader.",
+    "fd_numbers_are_not_reconstructible_from_git": "Every Fast Downward number in this run came from a binary that is not tracked by git and cannot be rebuilt from the repository alone. The repo's byte-reproducibility requirement does not cover them. What replaces it is the hash, commit and build command below: a rebuild that hashes differently is a question a reader can raise."
+  },
+  "soundness_problems": [],
+  "files": [
+    {
+      "path": "toolchain.json",
+      "sha256": "f8573bc6141ebf887df1fc5a4d35fae05ce211e1e9b883e1c5f2cf131969ce71"
+    },
+    {
+      "path": "ladder.json",
+      "sha256": "e83e0f76476373e5eb46377e4e1010a5cb3020a552c42ebac7e2ba1145a1e8f3"
+    },
+    {
+      "path": "LADDER.md",
+      "sha256": "3c414cdb7bb868489abbf58c0a95c88a19dc503be6cddc422c551be8c968cc74"
+    },
+    {
+      "path": "dividend.json",
+      "sha256": "de5d425f9c307f5f586873c39bfef4d7d5b24690c1f458b3da93d98624076a68"
+    },
+    {
+      "path": "DIVIDEND.md",
+      "sha256": "aa0dd334031b9659389caa5e5ce4cc31ff6732b1a6d4785ec401ce911ad01f39"
+    }
+  ]
+}

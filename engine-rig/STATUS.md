@@ -106,6 +106,42 @@ backends. `a0-spike` (match / mismatch), `cold-start-a0` (base / no-button),
 on unsolvability, including three instances where FD independently proves the
 UNSAT the bundled search found. `runs/p13-fd-real/DIVIDEND.md`.
 
+## What the ladder is worth (E2, 2026-07-28)
+
+`bench/` prices the three rungs on one batch — a gripper size ladder with a
+closed-form optimum and the sokoban fixtures extended by size. Full numbers in
+`runs/20260728T072633Z-E2-fd-ladder-bench/`.
+
+* **Fast Downward's cost here is startup, not search.** Every FD row on the batch
+  sits between 140 and 260 ms almost regardless of instance; on `sokoban-far6`
+  the search itself is 4.1 ms of a 181 ms bill. The crossover against the bundled
+  rung is at `gripper-08`, ~10^4 stub expansions. Every instance this rig
+  currently generates is below it, so **D-025's determinism pin costs nothing in
+  speed today.**
+* **`ipdb` never pays on this batch**: `sokoban-far6` 1794 ms end to end against
+  `lmcut`'s 181 ms, for 18 expansions against 47. Its pattern databases are built
+  before it searches.
+* **LAMA's first plan reaches 3.4x the optimum** (`open4far`: 37 against 11) while
+  being the only rung that scales — 43 expansions at `gripper-10` where `lmcut`
+  expands 66,176. `plan.optimal = False` there is load-bearing.
+* **Node counts are reported per rung and never divided across rungs** (D-026):
+  the stub expands grounded STRIPS states, FD expands SAS+ states.
+
+**The deadlock dividend, and the qualification.** The M9 numbers were taken
+against a blind search, and they replicate: `far4` blind 837 -> 574 (-31%) on FD,
+matching `tools/p13_fd_dividend.py`'s `open4far` figure to the state, through an
+independently written compilation (D-027). But switch the heuristic on and the
+dividend goes to zero. Holding the guard fixed at the 8 corner theorems both
+sides can take, `far6`: `blind` 3070 -> 2762 (-10%), `lmcut` 47 -> 47, `ipdb`
+18 -> 18. **A proved deadlock is a substitute for a heuristic, not an addition to
+one.** 1.9's frequency argument stands; its speed-up half does not survive a real
+planner. Soundness held everywhere: plan length unchanged on every optimal
+comparison, every guarded plan replayed against the original domain.
+
+Pair deadlocks cannot reach the admissible rungs at all: their guard needs `:adl`,
+FD's translator makes that an axiom, and `lmcut` / `ipdb` refuse a task with
+axioms (exit 34). `blind` accepts it. Pinned by a test.
+
 ## Convergence interface (post-M8)
 
 `engine-rig/interop/` exports LP-solved pagoda certificates for the
