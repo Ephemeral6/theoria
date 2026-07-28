@@ -1595,6 +1595,11 @@ def build(with_tests=False):
         "blocked": bl.count("waits on"),
         "listing": bl.strip(),
     }
+    try:
+        import agents as agents_mod
+        state["agents"] = agents_mod.collect()
+    except Exception as exc:
+        state["agents"] = {"error": str(exc)}
     state["grid"] = spec.GRID
     state["grid_cols"] = spec.GRID_COLS
     state["paper_plan"] = spec.PAPER_PLAN

@@ -1,11 +1,219 @@
 {
+  "agents": {
+    "delivered_ids": [
+      "A4-ablation-online",
+      "C1-worldgen",
+      "C4-deadlock-lean",
+      "E2-fd-ladder-bench",
+      "E4-property-fuzz",
+      "P4-figures",
+      "P6-paper-assembly",
+      "S2-canary-schedule",
+      "S3-spend-gate",
+      "V2-exam-on-worldgen"
+    ],
+    "delivered_plain": [
+      "对照版 AI（去掉证明能力）上线",
+      "世界工厂：7 类机制、20 个带标准答案的练习世界",
+      "把死锁定理和不变量送进 Lean 做机器验证",
+      "给专业规划器的三档性能定价",
+      "用 500 个随机世界轰炸六个引擎找 bug",
+      "论文figures：把数据变成可复现的图",
+      "把各处结果组装成论文正文",
+      "把「金丝雀重放」做成每天自动跑的体检",
+      "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
+      "让考卷跑在新造的 20 个练习世界上"
+    ],
+    "in_progress_plain": [
+      "跨关迁移协议：把学到的知识带去下一关",
+      "A7-envelope-finish",
+      "C7-dsl-v03-mentions",
+      "让引擎在真游戏里供货（第二关）",
+      "量化引擎改进带来的实际红利",
+      "释出包：陌生人一条命令复跑全部结果",
+      "P7-paper-section7",
+      "起草大考前要封存的规则包",
+      "Phase 1 收口：把地基验收单清干净",
+      "指标体系首次区分两组 AI 的能力差"
+    ],
+    "ops": [
+      {
+        "age_min": 40,
+        "cycle": 4,
+        "id": "OPS-A",
+        "kind": "ops",
+        "name": "漂移审计员",
+        "note": "cycle 4: spec.py untouched across 45 commits / 14 merged branches -- PAPER_PLAN pct and GRID active are hand-written constants and the headline paper-progress number is computed from them; staleness is all in the under-reporting direction",
+        "outputs": 9,
+        "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
+        "state": "idle"
+      },
+      {
+        "age_min": 115,
+        "cycle": 2,
+        "id": "OPS-B",
+        "kind": "ops",
+        "name": "浏览器专员",
+        "note": "07:24Z 条目已 ACK（其所要提案 06:15Z 已投）；落地核查：arc-recon 采纳了许可那一半、封存那一半未落地，新提案 20260728T082500Z；D-1 已由零内容探针升级为实测",
+        "outputs": 4,
+        "role": "需要真浏览器和登录态的活：官方条款、账户核查",
+        "state": "idle"
+      },
+      {
+        "age_min": 40,
+        "cycle": 3,
+        "id": "OPS-M",
+        "kind": "ops",
+        "name": "合并裁判",
+        "note": "反射层已按效果判据复核确认活着，本轮零手动合并、零 flag、队列空；发现合并门 NO_TEST_OK 把六个目录共 509 个测试排除在门外，已报 inbox 20260728T093832Z",
+        "outputs": 6,
+        "role": "脚本合不动的冲突由它裁决；顺利合并早已自动化",
+        "state": "idle"
+      },
+      {
+        "age_min": 227,
+        "cycle": 1,
+        "id": "OPS-R",
+        "kind": "ops",
+        "name": "回顾员",
+        "note": "cycle 1 done: 1 OPEN acked (4 self-reports verified true), 2 proposals in inbox after adversarial review, 3 live faults raised to TO-MONITOR (reflex task Disabled / pid_alive(0)==True / quota missed a real session-limit death). Sleeping 43200s.",
+        "outputs": 7,
+        "role": "从所有痕迹里挖跨轨道重复出现的失败模式",
+        "state": "idle"
+      }
+    ],
+    "workers": [
+      {
+        "finished": [],
+        "id": "APP-A7",
+        "kind": "worker",
+        "name": "手动会话",
+        "now": "A7-envelope-finish",
+        "outputs": 0,
+        "running": false
+      },
+      {
+        "finished": [],
+        "id": "APP-C7",
+        "kind": "worker",
+        "name": "手动会话",
+        "now": "C7-dsl-v03-mentions",
+        "outputs": 0,
+        "running": false
+      },
+      {
+        "finished": [],
+        "id": "APP-P7",
+        "kind": "worker",
+        "name": "手动会话",
+        "now": "P7-paper-section7",
+        "outputs": 0,
+        "running": false
+      },
+      {
+        "finished": [],
+        "id": "APP-V3",
+        "kind": "worker",
+        "name": "手动会话",
+        "now": "指标体系首次区分两组 AI 的能力差",
+        "outputs": 0,
+        "running": false
+      },
+      {
+        "finished": [
+          "给专业规划器的三档性能定价"
+        ],
+        "id": "W-1520",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "释出包：陌生人一条命令复跑全部结果",
+        "outputs": 1,
+        "running": false
+      },
+      {
+        "finished": [],
+        "id": "W-1521",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "让引擎在真游戏里供货（第二关）",
+        "outputs": 0,
+        "running": false
+      },
+      {
+        "finished": [
+          "把「金丝雀重放」做成每天自动跑的体检",
+          "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
+          "让考卷跑在新造的 20 个练习世界上"
+        ],
+        "id": "W-1540",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "outputs": 3,
+        "running": false
+      },
+      {
+        "finished": [
+          "把死锁定理和不变量送进 Lean 做机器验证"
+        ],
+        "id": "W-1541",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "起草大考前要封存的规则包",
+        "outputs": 1,
+        "running": false
+      },
+      {
+        "finished": [
+          "世界工厂：7 类机制、20 个带标准答案的练习世界",
+          "用 500 个随机世界轰炸六个引擎找 bug",
+          "把各处结果组装成论文正文"
+        ],
+        "id": "W-1610",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "outputs": 3,
+        "running": false
+      },
+      {
+        "finished": [
+          "论文figures：把数据变成可复现的图"
+        ],
+        "id": "W-1611",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "量化引擎改进带来的实际红利",
+        "outputs": 1,
+        "running": false
+      },
+      {
+        "finished": [],
+        "id": "W-5200",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "Phase 1 收口：把地基验收单清干净",
+        "outputs": 0,
+        "running": false
+      },
+      {
+        "finished": [],
+        "id": "W-5201",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "跨关迁移协议：把学到的知识带去下一关",
+        "outputs": 0,
+        "running": false
+      }
+    ]
+  },
   "blocking_findings": 1,
   "board": {
     "available": 2,
     "blocked": 1,
-    "claimed": 7,
+    "claimed": 10,
     "done": 10,
-    "listing": "=== available ===\n  p2  A4a-ablation-build           cell=A1  territory=ablation-arm\n  p2  C6-worldgen-mutate           cell=V2  territory=worldgen\n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n=== claimed ===\n  A6-transfer-protocol         by W-5201\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n=== done (10) ===\n  A4-ablation-online.superseded-by-A4a\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  V2-exam-on-worldgen.W-1540"
+    "listing": "=== available ===\n  p2  A4a-ablation-build           cell=A1  territory=ablation-arm\n  p2  C6-worldgen-mutate           cell=V2  territory=worldgen\n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n=== claimed ===\n  A6-transfer-protocol         by W-5201\n  A7-envelope-finish           by APP-A7\n  C7-dsl-v03-mentions          by APP-C7\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P7-paper-section7            by APP-P7\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n=== done (10) ===\n  A4-ablation-online.superseded-by-A4a\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  V2-exam-on-worldgen.W-1540"
   },
   "con_green": 1,
   "constraints": [
@@ -264,29 +472,29 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 18:14:30",
+  "generated_at": "2026-07-28 18:20:53",
   "grid": {
     "A1": {
       "active": [
         "P-18"
       ],
-      "note": "裸 CC 全套 + 消融臂离线；Theoria 臂离线件齐",
-      "pct": 75
+      "note": "裸 CC 全套 + 消融臂保全",
+      "pct": 80
     },
     "A2": {
       "active": [
         "A2-crosscheck",
         "P-17"
       ],
-      "note": "A0/A0′/A2/A3 四世界 + 双 A0 互考",
-      "pct": 85
+      "note": "五个自建世界 + 双 A0 互考",
+      "pct": 90
     },
     "A3": {
       "active": [
         "P-12"
       ],
-      "note": "开发堆在线：preflight PASS，包络 1/4，关卡推进待开",
-      "pct": 18
+      "note": "开发堆在线：preflight PASS，第二关待复工",
+      "pct": 20
     },
     "A4": {
       "active": [],
@@ -302,13 +510,13 @@
       "active": [
         "C1-worldgen"
       ],
-      "note": "DSL v0.2 + 四形态生成器 + refuse 语义",
-      "pct": 95
+      "note": "DSL v0.2 + 四形态 + refuse 语义",
+      "pct": 98
     },
     "C2": {
       "active": [],
-      "note": "A0/A0′/A1/A2/A3 五件离线验收；a0-spike 迁移在修",
-      "pct": 92
+      "note": "五件离线验收 + 世界工厂 20 个新世界",
+      "pct": 95
     },
     "C3": {
       "active": [],
@@ -324,22 +532,22 @@
       "active": [
         "P-19"
       ],
-      "note": "Lean 证明与四形态随释出；复跑脚本待建",
-      "pct": 35
+      "note": "四形态 + Lean 随释出；复跑脚本在做",
+      "pct": 45
     },
     "E1": {
       "active": [
         "E1-property-fuzz"
       ],
-      "note": "六引擎 + M9 三件全绿，性质测试战役待跑",
-      "pct": 98
+      "note": "六引擎全绿 + 500 世界性质轰炸零违规",
+      "pct": 100
     },
     "E2": {
       "active": [
         "P-13"
       ],
-      "note": "FD 24.06 真接入，三级梯子；基准对比待做 → E2 板项",
-      "pct": 95
+      "note": "FD 三档已定价，死锁红利已量化",
+      "pct": 100
     },
     "E3": {
       "active": [],
@@ -359,57 +567,57 @@
     "P1": {
       "active": [],
       "note": "方法论与骨架",
-      "pct": 75
+      "pct": 80
     },
     "P2": {
       "active": [
         "P-23"
       ],
-      "note": "PAPER.md + sections + 引文核查 + 自审",
-      "pct": 70
+      "note": "PAPER.md v0.2，三个结果入文",
+      "pct": 80
     },
     "P3": {
       "active": [
         "P3-case-study"
       ],
-      "note": "案例素材齐（A0′ 对照、A2 展品、A3 迁移裁决）",
-      "pct": 35
+      "note": "案例素材齐（A0′ 对照、A2 展品、A3 迁移）",
+      "pct": 45
     },
     "P4": {
       "active": [],
       "note": "预注册包起草中",
-      "pct": 20
+      "pct": 30
     },
     "P5": {
       "active": [
         "P-19"
       ],
-      "note": "释出包脚手架待建",
-      "pct": 20
+      "note": "释出包在做",
+      "pct": 35
     },
     "S1": {
       "active": [],
-      "note": "双代理 + 护栏 + 账本 + 对账 + 变体层全落地",
-      "pct": 92
+      "note": "双代理 + 护栏 + 账本 + 对账 + 变体层",
+      "pct": 95
     },
     "S2": {
       "active": [
         "P-20"
       ],
-      "note": "预检 4/4 PASS + 金丝雀基线；级联探针交付",
-      "pct": 85
+      "note": "预检 4/4 + 金丝雀每日体检常态化",
+      "pct": 92
     },
     "S3": {
       "active": [],
-      "note": "在线对账实证（0 计费动作核对）；花费闸门在建",
-      "pct": 45
+      "note": "共享花费闸门落地，五种绕法已封",
+      "pct": 75
     },
     "S4": {
       "active": [
         "P-22"
       ],
       "note": "冻结包起草中",
-      "pct": 25
+      "pct": 35
     },
     "S5": {
       "active": [],
@@ -418,18 +626,18 @@
     },
     "V1": {
       "active": [],
-      "note": "电池五族 + 预注册纪律",
-      "pct": 95
+      "note": "五族指标 + 预注册",
+      "pct": 98
     },
     "V2": {
       "active": [],
-      "note": "exam 四题型 + 泄漏防护 + battery v1",
-      "pct": 80
+      "note": "考卷四题型跑上 20 个世界",
+      "pct": 88
     },
     "V3": {
       "active": [],
-      "note": "区分力首跑在跑（App 会话）",
-      "pct": 40
+      "note": "区分力在做（被额度中断）",
+      "pct": 45
     },
     "V4": {
       "active": [],
@@ -440,8 +648,8 @@
       "active": [
         "P-21"
       ],
-      "note": "能力谱与考卷的发表版图表",
-      "pct": 15
+      "note": "图表流水线可复现，六张图数据就位",
+      "pct": 55
     }
   },
   "grid_cols": [
@@ -1138,14 +1346,9 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/board/board.log",
-      "monitor/board/claimed/P6-paper-assembly.W-1610.md",
-      "monitor/ci/merge.log",
-      "monitor/history.jsonl",
+      "onitor/app.html",
+      "monitor/board/board.log",
       "monitor/index.html",
-      "monitor/mailbox/ALL.md",
-      "monitor/quota.py",
-      "monitor/quota_state.json",
       "monitor/reflex.log",
       "monitor/scan.py",
       "monitor/spec.py",
@@ -1154,12 +1357,14 @@
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/done/P6-paper-assembly.W-1610.md",
-      "monitor/inbox/20260728T110000Z-W-1610-paper-section-7-is-stale-because-battery-went-v0-to-v2.md"
+      "monitor/agents.py",
+      "monitor/board/claimed/A7-envelope-finish.APP-A7.md",
+      "monitor/board/claimed/C7-dsl-v03-mentions.APP-C7.md",
+      "monitor/board/claimed/P7-paper-section7.APP-P7.md"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "3d4a4c6 Merge remote-tracking branch 'origin/agent/p6-paper-assembly' into HEAD",
+    "git_head": "f1346fb monitor: land the two fixes I had only announced, and the probe catches its first live violation",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1171,54 +1376,56 @@
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/done/P6-paper-assembly.W-1610.md",
-      "monitor/inbox/20260728T110000Z-W-1610-paper-section-7-is-stale-because-battery-went-v0-to-v2.md"
+      "monitor/agents.py",
+      "monitor/board/claimed/A7-envelope-finish.APP-A7.md",
+      "monitor/board/claimed/C7-dsl-v03-mentions.APP-C7.md",
+      "monitor/board/claimed/P7-paper-section7.APP-P7.md"
     ]
   },
   "p1_green": 9,
   "p1_total": 16,
   "paper_plan": [
     {
-      "evidence": "四件离线验收全绿 + M9 八工序齐 + FD 真接入；余：a0-spike 的 v0.2 迁移在跑（C2）",
+      "evidence": "六引擎 + M9 + FD 三档实测定价；E4 用 500 个世界 × 23 条不变量轰炸，零违规",
       "id": "WP1",
       "name": "框架本体与离线验收",
-      "pct": 95,
+      "pct": 98,
       "scale": "对标：Schema 的 world_model.py 方法论一节。我们：DSL+四形态+六/八引擎+A0/A0′/A1/A2 四件离线验收",
       "slot": "§3 框架 · 图5 DC22案例 · 图6 概念时间线",
       "weight": 0.15
     },
     {
-      "evidence": "proxy 全链路实证：preflight PASS，密钥从不出代理，护栏零绕过，0 计费动作",
+      "evidence": "花费闸门落地（对抗测试先破了五种绕法）；金丝雀每日体检；预检 4/4",
       "id": "WP2",
       "name": "封闭系统与外壳可信度",
-      "pct": 88,
+      "pct": 92,
       "scale": "Schema 无此层（其复现失败正是教训）。我们：双代理+护栏+对账+复放抽检",
       "slot": "§2 方法可信度（密封/复放/对账）",
       "weight": 0.08
     },
     {
-      "evidence": "首次真 API 接触成功（g50t，18 次重试拿到 RESET）；关卡推进尚未开始 → E3",
+      "evidence": "臂在线链路通、preflight 零计费；第二关与迁移协议在做（额度停机中断）",
       "id": "WP3",
       "name": "Theoria 臂在线迭代战役（开发堆）",
-      "pct": 22,
+      "pct": 25,
       "scale": "对标：Schema 25 局全集单臂全跑。我们：4 局 × 迭代至退出条件（U3≥k 局 + Δ 内 + 账单形状可见）",
       "slot": "§5 实验主体 · 图2 账单形状（Theoria 列）",
       "weight": 0.2
     },
     {
-      "evidence": "裸 CC 包络 + 上游路 A 165 文件已落盘；消融臂离线件待接",
+      "evidence": "裸 CC 包络 + 上游 165 文件；消融臂已保全并记录真实状态",
       "id": "WP4",
       "name": "对照臂数据（CC 包络 + Schema 路A + 消融臂）",
-      "pct": 30,
+      "pct": 45,
       "scale": "CC：4 局×3 重复；Schema：上游 artifacts 开发堆子集直读（F-13 口径）；消融臂：−定理义务",
       "slot": "表1 主表另两列 · §6 消融",
       "weight": 0.08
     },
     {
-      "evidence": "exam 四题型 + 泄漏防护建成；battery v1 在跑（V3 区分力首跑）",
+      "evidence": "考卷跑上世界工厂（20 世界）；battery 区分力在做；三类题型说明了自身边界",
       "id": "WP5",
       "name": "评测两器：电池冻结 + 考卷构造器",
-      "pct": 70,
+      "pct": 82,
       "scale": "电池五族过四道工序后冻结 v1；考卷四题型出题机+判卷机在自建族闭环",
       "slot": "§4 评测协议 · 图3 能力谱与考卷",
       "weight": 0.1
@@ -1242,34 +1449,34 @@
       "weight": 0.06
     },
     {
-      "evidence": "冻结包起草中；n 由包络方差定的机制已有实测原料",
+      "evidence": "冻结包起草中（S4）；Phase 1 收口在做（S5）",
       "id": "WP8",
       "name": "预注册与统计裁决（冻结清单 13 项）",
-      "pct": 25,
+      "pct": 40,
       "scale": "三主终点（U3 达成率/判决题准确率/前载指数）+ Wilcoxon 配对 + n 由包络方差定",
       "slot": "§5 统计口径 · 双结局文本",
       "weight": 0.05
     },
     {
-      "evidence": "papers/ 已有 PAPER.md + sections + 图数据 + 引文核查 + 自审",
+      "evidence": "PAPER.md v0.2 三个结果入文；图表流水线可复现出图；电池一节待更新",
       "id": "WP9",
       "name": "论文写作（workshop 文 → 主文）",
-      "pct": 35,
+      "pct": 55,
       "scale": "Phase 1 结 workshop 文（P-16 在跑）→ Phase 3 结案例研究 → 主文",
       "slot": "全文（3.2 的八节骨架）",
       "weight": 0.05
     },
     {
-      "evidence": "runs/ 留痕正典化；释出清单脚本待建",
+      "evidence": "释出包在做（P5）；runs/ 留痕正典化；图与数据双向可追",
       "id": "WP10",
       "name": "释出包（Schema 地板对齐）",
-      "pct": 30,
+      "pct": 45,
       "scale": "对标 Schema：全公开集 artifacts。我们：全账本+两本书四形态+Lean+候选箱+探针日志+电池代码+incident 台账+复跑说明",
       "slot": "§8 开放性声明",
       "weight": 0.03
     }
   ],
-  "paper_progress": 39.0,
+  "paper_progress": 45.0,
   "phases": [
     {
       "_counts": {
@@ -1644,14 +1851,14 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 20 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md, 20260728T075952Z-opsm-reflex-still-dead-unboundlocal.md, 20260728T081500Z-W-1540-reflex-is-dead-and-the-canary-wants-a-daily-slot.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md, 20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T110000Z-W-1610-paper-section-7-is-stale-because-battery-went-v0-to-v2.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 17 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md, 20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T110000Z-W-1610-paper-section-7-is-stale-because-battery-went-v0-to-v2.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**12 条 TO-MONITOR 待监控回复**。 OPS-A 第4轮 idle（34 分钟前）； OPS-B 第2轮 idle（109 分钟前）； OPS-M 第3轮 idle（33 分钟前）； OPS-R 第1轮 idle（221 分钟前）",
+      "detail": "**12 条 TO-MONITOR 待监控回复**。 OPS-A 第4轮 idle（40 分钟前）； OPS-B 第2轮 idle（115 分钟前）； OPS-M 第3轮 idle（39 分钟前）； OPS-R 第1轮 idle（227 分钟前）",
       "rows": [
         {
-          "age_min": 34,
+          "age_min": 40,
           "cycle": 4,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -1660,7 +1867,7 @@
           "status": "green"
         },
         {
-          "age_min": 109,
+          "age_min": 115,
           "cycle": 2,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1669,7 +1876,7 @@
           "status": "green"
         },
         {
-          "age_min": 33,
+          "age_min": 39,
           "cycle": 3,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -1678,7 +1885,7 @@
           "status": "green"
         },
         {
-          "age_min": 221,
+          "age_min": 227,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",

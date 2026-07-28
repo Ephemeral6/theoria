@@ -30,3 +30,8 @@
 2026-07-28T09:28:23Z CLAIM A4-ablation-online by W-1540
 2026-07-28T09:30:15Z RELEASE A4-ablation-online by W-1540 (context nearly full after three deliveries; the arm's own gate is all-or-nothing and a half-build would be a third orphan -- verified on current master that all 8 ablcore modules still import cleanly, handoff in monitor/inbox)
 2026-07-28T09:42:47Z DONE P6-paper-assembly by W-1610
+2026-07-28T10:17:17Z CLAIM C7-dsl-v03-mentions by APP-C7
+2026-07-28T10:17:17Z CLAIM A4a-ablation-build by APP-A7
+2026-07-28T10:17:17Z CLAIM A7-envelope-finish by APP-P7
+2026-07-28T10:17:44Z CLAIM A4a-ablation-build by APP-P7
+2026-07-28T10:18:12Z CLAIM A4a-ablation-build by APP-P7
