@@ -511,8 +511,16 @@ def _optimal_items() -> List[Item]:
             leak_probes=_probes(
                 item_id,
                 "/".join(truth["optimal_actions"]) or NO_ACTION, truth),
-            tags=(FAMILY_OPTIMAL, "level:" + level_id,
-                  "solvable" if truth["solvable"] else "dead"),
+            # No `dead`/`solvable` tag.  The first build carried one, and tags
+            # are printed on the sheet: it told the reader, in one word, the
+            # answer to the sharpest item on the paper.  `leakage.metadata_hits`
+            # did not catch it because it buckets on the whole `tags` value,
+            # which the `level:` token makes unique per item -- so the bucket
+            # holding the leak had one member and was skipped as an identifier.
+            # The dead/solvable split is recoverable from the key, where it
+            # belongs; `test_no_single_tag_token_predicts_an_answer` is the
+            # check that would have caught it.
+            tags=(FAMILY_OPTIMAL, "level:" + level_id),
         ))
     return items
 

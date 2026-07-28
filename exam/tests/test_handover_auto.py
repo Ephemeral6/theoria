@@ -336,6 +336,43 @@ def test_the_prompt_names_no_place_the_reader_could_go(tier):
         assert token not in text, "%s leaks %r" % (tier, token)
 
 
+def test_no_single_tag_token_predicts_an_answer():
+    """The leak that shipped once, and the check that now stands where it was.
+
+    `Item.tags` is printed on the sheet.  The first build tagged the two boards
+    with no solution `dead`, which is the answer to those items written beside
+    the question.  `leakage.metadata_hits` missed it and was right to by its own
+    rule: it buckets on the whole `tags` value, every item also carries a unique
+    `level:` token, so every bucket held one item and was skipped as an
+    identifier rather than a key.  The rule "a field that is different on every
+    item predicts nothing" is true of values and false of *tokens*.
+
+    So: bucket on each token separately, inside one answer alphabet, and refuse
+    any token that appears on more than one item and agrees with the answer
+    every time.
+    """
+    labels = HA.answer_labels(PAPER, KEY)
+    by_kind = {}
+    for item in PAPER.items:
+        if item.item_id in labels:
+            by_kind.setdefault(item.paper["kind"], []).append(item)
+
+    offenders = []
+    for kind, items in sorted(by_kind.items()):
+        if len({labels[i.item_id] for i in items}) < 2:
+            continue
+        buckets = {}
+        for item in items:
+            for token in item.tags:
+                buckets.setdefault(token, set()).add(labels[item.item_id])
+        for token, seen in sorted(buckets.items()):
+            n = sum(1 for i in items if token in i.tags)
+            if n > 1 and len(seen) == 1 and n < len(items):
+                offenders.append((kind, token, sorted(seen), n))
+    assert not offenders, (
+        "a tag token printed on the sheet is an answer key: %s" % offenders)
+
+
 @pytest.mark.parametrize("tier", HA.TIERS)
 def test_the_prompt_carries_no_answer(tier):
     """Every probe the paper declared, run against the prompt and not just the

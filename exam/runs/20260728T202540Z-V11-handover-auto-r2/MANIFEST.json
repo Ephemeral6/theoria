@@ -1,0 +1,56 @@
+{
+  "api_calls": 0,
+  "base_commit": "18a39417e1212efba31b9cd6b040eaea3ac0f491",
+  "branch": "agent/v11-handover-auto",
+  "files": [
+    {
+      "path": "exam/grading/registry.py",
+      "sha256": "d075e3ee7ff25ee9d9ccffeb0e5297887c7faa4eefb8d282181813b7390d5f9d"
+    },
+    {
+      "path": "exam/grading/rubrics_handover_auto.py",
+      "sha256": "35f517a3f9c3b5739222fe0f36ab861e4c7614d2fef6a75e5575cef2bb734ce2"
+    },
+    {
+      "path": "exam/papers/handover_auto.py",
+      "sha256": "13ccf8f250f1f92ac386e4de290d53898d3529fb91869fd1df2e7828ea1083fb"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/BLINDING.md",
+      "sha256": "a1351669a8311ea601dbb0b8656356e3281bd52ba537800d8d054fee955f9971"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/PREREGISTRATION.json",
+      "sha256": "cff77e9332d65f93bd3251ca1462620f4cf64dac7e471ab1ad15838588abaf21"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/prompts/tier1_manual.prompt.md",
+      "sha256": "9c8025744d99092fff1bd2a14b64a69211b3ea5e09ee6780c419ceff15fb8c2c"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/prompts/tier2_manual_playbook.prompt.md",
+      "sha256": "9f46872030768dfe908cc05669f4f1522d100f815b804d297e366edb36816ca8"
+    },
+    {
+      "path": "exam/runs/20260728T202540Z-V11-handover-auto-r2/sheet.json",
+      "sha256": "bed97ba27aaeb844052383bcab7d6a79ad9c23c1f769479100e06165b843ec83"
+    },
+    {
+      "path": "exam/tests/test_handover_auto.py",
+      "sha256": "1e7abcc56cea02878621057e163a0686fb59a4afd810cfddb03793d42f4970f5"
+    },
+    {
+      "path": "exam/tools/run_handover_auto.py",
+      "sha256": "ed7badab095ea8919709c4d6bbfbf5790bb2cd7f1ad5b4be9b332c12354379bd"
+    }
+  ],
+  "network": "none; every build runs inside exam.guard.no_network()",
+  "prompt_id": "V11-handover-auto",
+  "run_id": "20260728T202540Z-V11-handover-auto-r2",
+  "sealed_pile_contact": "none",
+  "supersedes": "exam/runs/20260728T202101Z-V11-handover-auto (VOIDED.md)",
+  "territory": "exam",
+  "utc": "2026-07-28T20:25:40Z",
+  "what": "Theoria.md 1.11 layered handover, automated. Second cohort: the first was voided when the sheet's tags printed `dead` on the two boards with no solution (see BLINDING.md).",
+  "world_id": "a0"
+}
