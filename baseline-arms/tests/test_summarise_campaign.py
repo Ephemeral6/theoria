@@ -171,3 +171,26 @@ def test_the_live_summary_runs_and_marks_ar25_degraded(capsys):
     assert "DEGRADED" in out
     assert "F-15" in out
     assert "excluded as degraded" in out
+
+
+
+# ------------------------------------------------------------- re-run mixing
+def test_a_re_run_game_is_flagged_not_silently_pooled(tmp_path, monkeypatch):
+    """Appending is the only write path, so re-running a game's three repeats
+    gives six cells. They all count -- for a variance envelope a failed episode
+    is a sample, not a mistake -- but the over-count has to be visible."""
+    monkeypatch.setattr(adjudications, "ADJUDICATIONS_PATH",
+                        str(tmp_path / "none.jsonl"))
+    cells = three("g50t-5849a774", "a") + three("g50t-5849a774", "b")
+    entry = sc.by_game(cells)["g50t-5849a774"]
+    assert entry["repeats"] == 6
+    assert entry["repeats_expected"] == 3
+    assert entry["over_expected_repeats"]
+    assert entry["metrics"]["actions_ok"]["n"] == 6      # all of them count
+
+
+def test_a_game_at_protocol_repeats_is_not_flagged(tmp_path, monkeypatch):
+    monkeypatch.setattr(adjudications, "ADJUDICATIONS_PATH",
+                        str(tmp_path / "none.jsonl"))
+    entry = sc.by_game(three("g50t-5849a774", "a"))["g50t-5849a774"]
+    assert entry["over_expected_repeats"] is None

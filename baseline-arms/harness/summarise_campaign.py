@@ -125,9 +125,26 @@ def by_game(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
                 "is one tier by construction (DECISIONS.md D-011); reporting it "
                 "per game would drop one of them silently."
                 % (game_id, out[game_id]["model"], model))
+        # Appending is the only write path, so a re-run of a game's three
+        # repeats yields six cells for that game and the spread silently mixes
+        # the failed attempt with the good one. summarise_pilot solves this by
+        # keeping the better attempt per cell and *returning* the dropped ones;
+        # here the honest move is different -- for a variance envelope every
+        # episode is a sample and discarding the bad ones would be exactly the
+        # bias the envelope exists to measure. So all of them count, and the
+        # over-count is named rather than hidden.
+        expected = run_campaign.REPEATS
         entry: Dict[str, Any] = {
             "model": model,
             "repeats": len(group),
+            "repeats_expected": expected,
+            "over_expected_repeats": (
+                None if len(group) <= expected else
+                "this game has %d cells where the protocol is %d. Every episode "
+                "counts towards the spread -- for a variance envelope a failed "
+                "attempt is a sample, not a mistake -- but the mean and sd below "
+                "pool attempts from more than one sitting, so read them with the "
+                "cell table above." % (len(group), expected)),
             "outcomes": sorted(c.get("outcome") for c in group),
             "run_ids": sorted(c.get("run_id") or "?" for c in group),
             "degraded": degraded.get(game_id),
@@ -210,6 +227,9 @@ def main(argv=None) -> int:
     print("\n=== per game: spread across repeats ===")
     for game_id, entry in sorted(per_game.items()):
         mark = "  ** DEGRADED **" if entry.get("degraded") else ""
+        if entry.get("over_expected_repeats"):
+            mark += "  ** %d REPEATS, PROTOCOL IS %d **" % (
+                entry["repeats"], entry["repeats_expected"])
         print("\n%s  (%s, %d repeats)  action success %s%s"
               % (game_id, entry["model"], entry["repeats"],
                  entry["pooled_action_success_rate"], mark))

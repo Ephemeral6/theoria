@@ -64,15 +64,15 @@
   },
   "combined_exposure": {
     "combined_http": 12748,
-    "combined_usd": 48.0386,
+    "combined_usd": 49.1527,
     "envelope_http": 425,
     "envelope_usd": 2.5275,
     "other_campaign_count": 4,
     "other_campaigns_http": 12323,
     "other_campaigns_live": 1,
-    "other_campaigns_usd": 45.5111
+    "other_campaigns_usd": 46.6252
   },
-  "evaluated_at": "2026-07-28T01:34:24Z",
+  "evaluated_at": "2026-07-28T02:10:00Z",
   "state": "green",
   "totals": {
     "action_success_rate": 0.595,
@@ -88,7 +88,7 @@
     "http_calls": 425,
     "http_per_action": 9.66,
     "sittings": 1,
-    "total_span_seconds": 25976.7,
+    "total_span_seconds": 28112.4,
     "usd_per_action": 0.0574
   },
   "tripped": []
