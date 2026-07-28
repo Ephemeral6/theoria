@@ -285,15 +285,33 @@ def build(paths: list[str]) -> list[dict]:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__ or "")
     ap.add_argument("--dry-run", action="store_true", help="classify and report; write nothing")
+    ap.add_argument(
+        "--mode",
+        choices=("generate", "verify"),
+        default="generate",
+        help="generate (default, strict: a missing credential fails) or verify (checking a "
+        "release you were handed; no credential expected). Passed through to the red-line "
+        "check.",
+    )
+    # This flag was accepted only by check_redlines.py while THIS script's abort
+    # message told the reader to pass it here. A stranger following
+    # REPRODUCING.md hit that dead end on the document's second command: the step
+    # failed demanding a credential, the error named a remedy, and the remedy did
+    # not parse. An error that advertises a flag the program rejects is worse
+    # than one that says nothing.
     args = ap.parse_args(argv)
 
     paths = _tracked()
-    cred_v, _ = redlines.check_credential(paths)
+    cred_v, cred_n = redlines.check_credential(paths, mode=args.mode)
+    for _n in cred_n:
+        print(f"  note {_n}")
     seal_v, _ = redlines.check_sealed(paths)
     if cred_v or seal_v:
         print("ABORT: the red lines are not clear; no manifest generated.", file=sys.stderr)
         for v in cred_v + seal_v:
             print(f"  {v}", file=sys.stderr)
+        # Non-zero even under --dry-run. It used to print ABORT and exit 0, so
+        # anything scripting it read a clean pass off a refusal.
         return 2
     print(f"red lines clear over {len(paths)} tracked files")
 

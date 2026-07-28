@@ -16,6 +16,12 @@ advertising.
   directories. An unpacked tarball without `.git` will not work.
 * Nothing else, for everything in this document.
 
+**Windows readers, one setting.** Git's default `core.autocrlf=true` rewrites
+line endings on checkout, which changes a file's bytes and therefore its sha256.
+`release/` pins LF in its own `.gitattributes`, so this is handled — but if you
+see a manifest diff made up only of text files, check `git config core.autocrlf`
+before concluding that anything drifted.
+
 You do **not** need an API key. You do not need `.env`. You do not need network
 access. If any step here asks you for one of those, that is a defect in this
 document — see §6.
@@ -53,9 +59,17 @@ would be hiding the ledger that proves the seal held.
 ## 2. Rebuild the manifest and confirm it matches
 
 ```bash
-python release/enumerate.py
+python release/enumerate.py --mode verify
 git diff --stat release/MANIFEST.jsonl
 ```
+
+`--mode verify` again, for the same reason as §1: without it this runs the strict
+red-line check, which needs the credential in order to search for it.
+
+**Check the exit code and the last line, not the diff.** A good run ends with
+`wrote release/MANIFEST.jsonl (N rows)` and exits 0. An aborted run exits
+non-zero and writes nothing — and then `git diff` is *also* empty, so an empty
+diff looks exactly like success. It is not.
 
 `MANIFEST.jsonl` is one line per tracked file: path, sha256, size, and a
 **licence class**. Regenerating it in your checkout should produce no diff. If
@@ -89,11 +103,13 @@ python release/checklist.py
 cat release/CHECKLIST.md
 ```
 
-This walks the release list from the design document item by item. Three of the
-ten items are `WITHHELD` — they exist, they are complete, and you cannot be
-handed them (class B, above). One is `ABSENT`. Two more matched and are still
-not quite what the list asks for, and the report says which and why rather than
-ticking them.
+This walks the release list from the design document item by item. **Read the
+counts off the tool, not off this sentence** — a count written here is a count
+that goes stale, and this document already did that once. What to look for:
+several items come back `WITHHELD`, meaning they exist and are complete and you
+cannot be handed them (class B, above); and two items *matched* and are still not
+what the list asks for, with the report saying which and why instead of ticking
+them.
 
 ## 5. Reproduce what can be reproduced
 
@@ -121,6 +137,11 @@ The grades you should expect, and how to read them:
 | `needs-api` | regenerating means replaying games against the live benchmark: real money, and the sealed-pile discipline applies to every call. You cannot do this and neither should you |
 | `needs-ground-truth` | the input is not in this release and cannot be |
 
+**Known: `battery` drifts.** `--all` regenerates the metric battery and its
+artefacts do not match the manifest. That is a real, open finding reported
+upstream, not a step you did wrong. Don't spend time on it — do tell us if
+anything *else* drifts.
+
 The strongest single check in the repository is the figure pipeline's, and you
 can run it directly:
 
@@ -128,16 +149,39 @@ can run it directly:
 bash figures/verify.sh
 ```
 
-Eight gates, including two builds diffed byte-for-byte, the committed tree
-compared against a fresh build, and a coverage probe that runs its own negative
-control first. It takes a couple of minutes.
+Gates numbered 0 through 8, including two builds diffed byte-for-byte, the
+committed tree compared against a fresh build, and a coverage probe that runs its
+own negative control first. It takes a couple of minutes.
+
+## 5b. Run the test suites
+
+§0 and §6 make claims about what skips and what fails. Here is how to see it,
+which until now the document asserted and gave you no way to observe:
+
+```bash
+cd engine-rig && python -m pytest      # 3 skip without Fast Downward
+cd worldgen   && python -m pytest
+cd exam       && python -m pytest
+```
+
+Skips from a missing Lean or Fast Downward toolchain are expected. Failures are
+not.
+
+**These steps dirty your checkout.** `enumerate.py`, `checklist.py` and
+`reproduce.py` write into `release/`, and the generators that `reproduce.py`
+invokes write into their own territories before it restores them. A non-empty
+`git status` after a full pass is expected; `git checkout -- .` returns you to a
+clean tree.
 
 ## 6. When something does not work
 
-**The document is wrong, not you.** That is the standing rule here: this file
-was tested by handing it to someone with no context and watching where they got
-stuck, and every place they got stuck was fixed here rather than explained to
-them. If you get stuck, the same applies — the fix belongs in this file.
+**The document is wrong, not you.** That is the standing rule, and it has been
+exercised: this file was handed to a reader with no context, and they got stuck
+on the second command — it failed demanding an API key that §0 promises you do
+not need, and the error advised a flag that command did not accept. Both are
+fixed, along with six other things that one run found, including a step whose
+documented success signal was indistinguishable from the step never running. If
+you get stuck anyway, the fix still belongs in this file and not in you.
 
 Known-good expectations, so you can tell a defect from a design decision:
 

@@ -98,15 +98,18 @@ only one of those two is recoverable.
 
 ## Status
 
-**Steps 1-5 done.** `LICENCE_POSTURE.md` and `check_redlines.py` (both red lines
+**All six steps done.** `LICENCE_POSTURE.md` and `check_redlines.py` (both red lines
 measured clear); `enumerate.py` and `MANIFEST.jsonl` (1,940 rows, byte-identical
 across two runs, red lines gating generation); `checklist.py` and `CHECKLIST.md`
 (6 present, 3 withheld, 1 absent, plus two items that matched and still were not
 what the list asks for). `reproduce.py` and `REPRODUCTION_REPORT.md`
 (3 of 9 declared targets reproduced; the rest graded, not hidden). `REPRODUCING.md` (the checklist's
-last ABSENT item now closes: 7 present, 3 withheld, 0 absent). Step 6 open: the
-stranger subagent, which is the only remaining test of whether the document
-works on someone who has not read any of this.
+last ABSENT item now closes: 7 present, 3 withheld, 0 absent). and the stranger subagent ran against a clean
+clone with no `.env`. It got stuck on the document's **second command** and
+found seven defects; all are fixed and recorded in `RUN_STATE`-equivalent form
+in the commit history. Two upstream findings it surfaced -- the battery drifting
+and an exam artefact embedding absolute maintainer paths -- are reported to the
+monitor and are not this territory's to fix.
 
 **Order matters and is enforced:** `enumerate.py` -> `checklist.py` ->
 `reproduce.py`. Running reproduce against a manifest written before the tree
