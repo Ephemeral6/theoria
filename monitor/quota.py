@@ -70,6 +70,22 @@ PRIORITY = ["M-0", "P-8", "P-20", "P-18", "P-19", "P-9", "P-12", "P-13",
 # dispatch dies on the limit and `check` simply holds again.
 MAX_HOLD_HOURS = 6
 
+# The exit costs money, and it costs it during an outage.
+#
+# `ping` is one real `claude -p --model haiku` call. The reflex tick is every
+# five minutes and, once the auto-exit was wired in, it pinged on *every* tick
+# while held -- so the breaker spent the very quota it was waiting to get back,
+# twelve times an hour, for as long as the window stayed shut. Today's hold ran
+# 09:35 to 12:45: ~37 calls where the work order allowed 9.
+#
+# Twenty minutes is the work order's number and it is a reasonable one: the
+# window it is watching is five hours long (see the module docstring), so
+# checking three times an hour costs at most a few minutes of lateness against
+# a multi-hour wait. The deadline exit in `check` is what actually ends a
+# normal hold; this ping is the second opinion, and a second opinion does not
+# need to be continuous.
+MIN_PING_INTERVAL_MIN = 20
+
 # "resets 8:20pm (Asia/Shanghai)" / "resets 8pm" / "will reset at 20:20 (UTC)"
 RESET_RE = re.compile(r"reset(?:s|\s+at)?\s+(\d{1,2})(?::(\d{2}))?\s*"
                       r"([ap]\.?m\.?)?(?:\s*\(([^)]+)\))?", re.I)
@@ -218,13 +234,54 @@ def check():
     return 0
 
 
-def ping():
-    """One minimal haiku call: the cheapest question the window can answer."""
+def ping_due(st, now=None):
+    """Whether an automatic ping may spend a call now, and why not if not.
+
+    Reads `last_ping_at`, which `ping` writes on **every** attempt regardless
+    of the answer. Recording only successes would mean no throttle exactly
+    while the window is shut, which is the only time the throttle matters.
+    """
+    last = parse_stamp(st.get("last_ping_at"))
+    if last is None:
+        return True, "no ping on record"
+    now = now or datetime.datetime.now(datetime.timezone.utc)
+    waited = (now - last).total_seconds() / 60.0
+    if waited >= MIN_PING_INTERVAL_MIN:
+        return True, "%.0f min since the last ping" % waited
+    return False, ("last ping %.0f min ago; automatic pings are capped at one "
+                   "per %d min because each one spends the quota it is waiting "
+                   "on" % (waited, MIN_PING_INTERVAL_MIN))
+
+
+def ping(if_due=False):
+    """One minimal haiku call: the cheapest question the window can answer.
+
+    `if_due=True` is the automatic caller's spelling and obeys the throttle,
+    returning 3 without spending anything when a ping is not yet due. A bare
+    `ping` is a person asking, and a person who types the command gets an
+    answer -- the throttle exists to stop an unattended five-minute loop, not
+    to argue with whoever is standing there.
+    """
+    if if_due:
+        due, why = ping_due(load(STATE, {}))
+        if not due:
+            print("ping skipped: %s" % why)
+            return 3
+
     import shutil
     claude = shutil.which("claude")
     proc = subprocess.run([claude, "-p", "reply with: ok", "--model", "haiku"],
                           capture_output=True, text=True, timeout=120)
     ok = proc.returncode == 0 and "ok" in proc.stdout.lower()
+
+    # Reloaded *after* the call, not before: the call can take two minutes and
+    # `check` runs on its own schedule, so a state dict read beforehand would
+    # be stale and saving it would silently undo a hold that arrived meanwhile.
+    st = load(STATE, {"mode": "normal", "requeue": [], "history": []})
+    st["last_ping_at"] = now_utc()
+    st["last_ping_result"] = "OPEN" if ok else "CLOSED"
+    save_state(st)
+
     print("window %s" % ("OPEN" if ok else "CLOSED"))
     if not ok:
         blob = (proc.stdout + proc.stderr).strip().splitlines()
@@ -234,13 +291,37 @@ def ping():
     return 0 if ok else 2
 
 
+def window_is_open(st):
+    """Ask the window, unless it was just asked.
+
+    The automatic path pings and then calls `resume`, which used to ping again
+    -- two paid calls per exit, seconds apart, during the outage the calls are
+    waiting on. A fresh OPEN is evidence; re-buying it immediately is not
+    diligence, it is the same measurement twice.
+
+    Only a fresh **OPEN** short-circuits. A fresh CLOSED still re-pings from a
+    manual `resume`, because the person running it is asking whether the
+    situation has changed and "it hadn't, 3 minutes ago" is not an answer to
+    that. In the automatic path the throttle catches it one level up.
+    """
+    if st.get("last_ping_result") != "OPEN":
+        return ping() == 0
+    due, _ = ping_due(st)
+    if due:
+        return ping() == 0
+    print("window OPEN (from the ping %s, inside the %d-min window)"
+          % (st.get("last_ping_at"), MIN_PING_INTERVAL_MIN))
+    return True
+
+
 def resume(stagger=90):
     st = load(STATE, {"mode": "normal", "requeue": []})
     if not st["requeue"]:
         # An empty queue is not a reason to stay held. The hold froze the
         # fleet from 09:35 past its own 20:20 reset because this branch
         # returned without ever clearing the mode (OPS-M cycle 5).
-        if st.get("mode") != "normal" and ping() == 0:
+        if st.get("mode") != "normal" and window_is_open(st):
+            st = load(STATE, {"mode": "normal", "requeue": []})   # ping wrote
             st["mode"] = "normal"
             st["resumed_at"] = now_utc()
             save_state(st)
@@ -248,9 +329,10 @@ def resume(stagger=90):
             return 0
         print("nothing to resume.")
         return 0
-    if ping() != 0:
+    if not window_is_open(st):
         print("window still closed — try later.")
         return 2
+    st = load(STATE, {"mode": "normal", "requeue": []})           # ping wrote
     order = sorted(st["requeue"],
                    key=lambda p: PRIORITY.index(p) if p in PRIORITY else 99)
     half = max(3, len(order) // 2)
@@ -269,8 +351,11 @@ def resume(stagger=90):
 
 
 def main():
-    cmd = sys.argv[1] if len(sys.argv) > 1 else "check"
-    return {"check": check, "ping": ping, "resume": resume}[cmd]()
+    argv = sys.argv[1:]
+    cmd = argv[0] if argv else "check"
+    if cmd == "ping":
+        return ping(if_due="--if-due" in argv)
+    return {"check": check, "resume": resume}[cmd]()
 
 
 if __name__ == "__main__":

@@ -870,3 +870,42 @@ D-A2-006（PDDL 接地缺陷）还在；它已被上游修好——补丁开关�
 测试：80 passed。两场战役账本各自对齐：`audit_pool` 包络 12 格 clean、重测 6 格 clean；`audit_cells` 18/18 clean，封存堆 1449 条记录 PASS。
 阻塞：无。
 下一步：无请求。$/调用 那条悬项若要查，是 Anthropic 侧的事，不在本轨道量程内。
+## [monitor] 2026-07-28T14:32:55Z S1-quota-auto-exit
+
+状态：配额熔断的自动出口，补上唯一还缺的两样。开工先对账发现工单三件里**两件树上已经
+做完**（`0d28e99`：reflex 每跳在 hold 下探窗并自动 resume；按 `PRIORITY` 半池 90s 错峰
+重发），第三件「全链路测试」逐字是 `S12-quota-hold-tests` 的。**真正还缺的是工单正文
+最后一句括号里的那条**——「hold 期间 ping 频率不要高于每 20 分钟」——它不但没做，而且
+反着来：`reflex.py` 是每 5 分钟一跳的计划任务，自动出口接上之后**每跳都 ping，无条件**，
+而 `ping()` 是一次真的 haiku 调用。**熔断器为了问「我能用了吗」，在停机期间持续消耗它
+正在等待恢复的那个配额**；今天 09:35→12:45 那次 hold 按现状约 37 次调用，许可 9 次。
+而且 reflex ping 成功后调 `resume`，`resume` 自己又 ping 一次——每次出闩隔几秒买两遍
+同一个答案。
+
+修了三处：`MIN_PING_INTERVAL_MIN = 20` 与 `ping --if-due`（退出码 3 = 未到点、一分没花，
+reflex 改用这个拼法）；`last_ping_at` 每次尝试后**无条件**落盘（只记成功等于「窗口关着
+时不限速」，而那正是唯一需要限速的时段）；`window_is_open()` 复用新鲜的 OPEN 不再买第二遍。
+方向刻意不对称：**新鲜的 CLOSED 绝不短路成「继续冻着」**——那样省钱但会用陈旧证据把舰队
+关在里面，正是原来那个 bug。限速闸放在 reflex 一侧而非 `ping()` 里：人手敲 ping 要立刻
+得到答案，限速是管无人值守的五分钟循环的，不是跟站在那儿的人争辩的。
+
+测试：`monitor/tests/test_quota_autoexit.py` **10 passed**，0.2 秒、零网络（`claude` 全程
+不在 PATH，忘了 stub 的测试会挂而不是安静花钱）。**三条负样本每条都验过会红**：去掉限速、
+去掉截止时间出口、只记录成功的 ping——分别点亮对应的测试。其中
+`test_the_deadline_exit_does_not_need_the_window_to_answer` 把 `subprocess.run` 换成会抛
+异常的东西，**任何一次 ping 尝试都是硬错误**，它通过是因为什么都没试——这是「不会被它正在
+等待的停机堵住的出口」的可执行形式。`bash monitor/verify_quota_exit.sh` 四步全绿。
+
+阻塞：无。但登记一条**流程冲突**：工单头写 `territory: proxy`，正文三次点名
+`monitor/quota.py` / `monitor/reflex.py`，两种读法有一种让这件事不可能完成。我先写 inbox
+报告并 `release` 交回板上，**板把同一件原样发回**（当时只有我一个工人在领，再 release
+就是无限交接），于是按正文的读法开工，并把冲突记在 RUN_STATE、manifest 和这里。
+`S12-quota-hold-tests` 的头也写 `territory: proxy`、同样是 monitor-only 的活，看着是沿用
+了 S9 的字段——派单时值得校一下 territory 与正文点名的目录是否一致。
+
+下一步：S12 仍值得单独做，它要的迁移矩阵更宽（hold 下 ci_merge 仍可跑、每条迁移一个负样本、
+外加一份「只有入口没有出口」的状态机审计：`reflex.lock` 的 25 分钟窗口、三振计数器、board 的
+claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `reflex.py` 那 17 行改动只由静态
+断言（AST + 拼法检查）守着，不是行为测试；(2) 20 分钟是工单给的数字、不是测出来的，也没有
+自适应退避；(3) `ping()` 与 `check()` 各自整体 `save_state`，仍可互相覆盖——ping 后重读把
+窗口缩到最小，真正的修法是按键合并或加锁。
