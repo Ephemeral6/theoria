@@ -21,6 +21,7 @@ from .ledger import Ledger, RunLedger, canonical, sha256
 from .model_proxy import ModelProxy, ModelProxyConfig
 from .paths import LEDGER_PATH, RUNS_DIR, UPSTREAM_ARC, UPSTREAM_MODEL
 from .variants import Variant
+from . import scoring
 
 
 def new_run_id() -> str:
@@ -42,17 +43,23 @@ def run_game(game_id: str, *,
              model: str = "mock-model-1",
              stream: bool = False,
              arm_factory=None,
+             scorer_id: str = scoring.DEFAULT_SCORER,
              runs_dir: str = RUNS_DIR) -> Dict[str, Any]:
     run_id = run_id or new_run_id()
     ledger = Ledger(ledger_path)
-    run = RunLedger(ledger, run_id, arm)
+    run = RunLedger(ledger, run_id, arm, game_id=game_id)
+
+    # Verified before the game starts, not after it. A run that turns out to
+    # have been scored by an edited scorer has already cost its actions.
+    scorer_fp = scoring.verify_frozen(scorer_id)
 
     env_cfg = EnvProxyConfig(run_id=run_id, arm=arm, upstream=env_upstream,
                              api_key=env_key, require_key=require_keys,
                              ledger=ledger, run=run, guard=guard, variant=variant)
     model_cfg = ModelProxyConfig(run_id=run_id, arm=arm, upstream=model_upstream,
                                  api_key=model_key, require_key=require_keys,
-                                 ledger=ledger, run=run)
+                                 ledger=ledger, run=run, game_id=game_id,
+                                 guard=env_cfg.guard)
 
     with EnvProxy(env_cfg) as env_proxy, ModelProxy(model_cfg) as model_proxy:
         run.run_start(
@@ -63,6 +70,7 @@ def run_game(game_id: str, *,
             variant=variant.fingerprint() if variant else None,
             pricing=model_cfg.pricing.reference() if model_cfg.pricing else None,
             proxy_version=_proxy_version(),
+            scorer=scorer_fp,
         )
 
         if arm_factory is None:
@@ -89,6 +97,18 @@ def run_game(game_id: str, *,
                   "summary": summary,
                   "env_proxy": env_proxy.summary(),
                   "model_proxy": model_proxy.summary()}
+
+    # Scored the moment the game ends, not in a sweep afterwards: Phase 3
+    # audits the order results arrive in, and a batch decided all at once is a
+    # batch someone could have decided after seeing it.
+    score_report = scoring.score_run(run_id, ledger_path=ledger_path,
+                                     scorer_id=scorer_id)
+    record["scorer"] = score_report["scorer"]
+    record["score"] = score_report["score"]
+    record["reconciliation"] = {"verdict": score_report["verdict"],
+                                "failed_checks": score_report["failed_checks"],
+                                "undetermined_checks":
+                                    score_report["undetermined_checks"]}
 
     os.makedirs(runs_dir, exist_ok=True)
     with open(os.path.join(runs_dir, run_id + ".json"), "w",

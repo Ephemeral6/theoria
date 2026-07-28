@@ -202,9 +202,8 @@ class World:
             # different purposes -- a game and a prefix replay's probe -- are
             # distinguishable even in a freshly started world.
             card_id = "card-" + self._digest("card", self._cards_opened, metadata)
-            self.cards[card_id] = {"card_id": card_id, "metadata": metadata,
-                                   "cards": {}, "won": 0, "played": 0,
-                                   "total_actions": 0, "score": 0}
+            self.cards[card_id] = {"card_id": card_id, "opaque": metadata,
+                                   "environments": {}}
             return {"card_id": card_id}
 
     def close_card(self, card_id: str) -> Dict[str, Any]:
@@ -212,22 +211,87 @@ class World:
             card = self.cards.get(card_id)
             if card is None:
                 return {"error": "no such card_id", "card_id": card_id}
-            return json.loads(json.dumps(card))
+            return self._render_card(card)
+
+    #: The scorecard's shape is **copied from 31 real closed cards** held in
+    #: this repository (`proxy/tests/fixtures/scorecard_corpus.json`), not
+    #: invented. `proxy/STATUS.md` predicted the first live run would be
+    #: surprised by the card's shape; the corpus arrived from
+    #: `baseline-arms`'s campaign before that run, so the surprise is spent
+    #: here, offline, instead of on a paid game.
+    #:
+    #: One thing is the mock's own and is **not** a claim about the API: the
+    #: per-level score. Every real card in the corpus reports 0.0 with zero
+    #: levels completed, so the partial-credit rule is not determined by any
+    #: evidence we hold. The mock uses 1.0 per completed level because a mock
+    #: needs *some* rule; the frozen scorer never depends on it (it only
+    #: checks that a positive score and a completed level agree in sign).
+    def _render_card(self, card: Dict[str, Any]) -> Dict[str, Any]:
+        environments = []
+        total_actions = total_levels = total_levels_completed = 0
+        completed_environments = 0
+        for game_id, env in sorted(card["environments"].items()):
+            runs = [dict(r) for r in env["runs"]]
+            actions = sum(r["actions"] for r in runs)
+            levels_completed = max((r["levels_completed"] for r in runs), default=0)
+            level_count = len(LEVELS)
+            score = round(levels_completed / float(level_count), 4)
+            completed = any(r["completed"] for r in runs)
+            environments.append({
+                "actions": actions, "completed": completed, "id": game_id,
+                "level_count": level_count, "levels_completed": levels_completed,
+                "resets": env["resets"] - 1 if env["resets"] else 0,
+                "runs": runs, "score": score,
+            })
+            total_actions += actions
+            total_levels += level_count
+            total_levels_completed += levels_completed
+            completed_environments += 1 if completed else 0
+
+        score = round(total_levels_completed / float(total_levels), 4) if total_levels else 0.0
+        return {
+            "card_id": card["card_id"],
+            "environments": environments,
+            "opaque": card["opaque"],
+            "score": score,
+            "tags": list(card["opaque"].get("tags") or []),
+            "tags_scores": [],
+            "total_actions": total_actions,
+            "total_environments": len(environments),
+            "total_environments_completed": completed_environments,
+            "total_levels": total_levels,
+            "total_levels_completed": total_levels_completed,
+        }
 
     def _touch_card(self, session: Session) -> None:
         card = self.cards.get(session.card_id or "")
         if card is None:
             return
-        entry = card["cards"].setdefault(
-            session.game_id, {"game_id": session.game_id, "total_plays": 0,
-                              "scores": [], "actions": 0, "states": []})
-        entry["actions"] = session.actions
-        entry["scores"] = [session.levels_completed]
-        entry["states"] = [session.state]
-        card["total_actions"] = sum(g["actions"] for g in card["cards"].values())
-        card["score"] = sum(max(g["scores"]) for g in card["cards"].values())
-        card["won"] = sum(1 for g in card["cards"].values() if "WIN" in g["states"])
-        card["played"] = len(card["cards"])
+        env = card["environments"].setdefault(
+            session.game_id, {"resets": 0, "runs": []})
+        level_count = len(LEVELS)
+        run = None
+        for candidate in env["runs"]:
+            if candidate["guid"] == session.guid:
+                run = candidate
+                break
+        if run is None:
+            run = {"actions": 0, "completed": False, "guid": session.guid,
+                   "level_actions": [0] * level_count,
+                   "level_baseline_actions": [8] * level_count,
+                   "level_scores": [0.0] * level_count,
+                   "levels_completed": 0, "resets": 0, "score": 0.0,
+                   "state": session.state}
+            env["runs"].append(run)
+        # `total_actions` counts successful non-RESET commands. That is not an
+        # assumption: it holds exactly in all 31 real cards in the corpus.
+        run["actions"] = session.actions
+        run["levels_completed"] = session.levels_completed
+        run["state"] = session.state
+        run["completed"] = session.state == "WIN"
+        run["level_scores"] = [1.0 if i < session.levels_completed else 0.0
+                               for i in range(level_count)]
+        run["score"] = round(session.levels_completed / float(level_count), 4)
 
     def reset(self, game_id: str, card_id: Optional[str]) -> Dict[str, Any]:
         with self.lock:
@@ -237,9 +301,8 @@ class World:
             self.sessions[guid] = session
             card = self.cards.get(card_id or "")
             if card is not None:
-                card["cards"].setdefault(
-                    game_id, {"game_id": game_id, "total_plays": 0, "scores": [],
-                              "actions": 0, "states": []})["total_plays"] += 1
+                card["environments"].setdefault(
+                    game_id, {"resets": 0, "runs": []})["resets"] += 1
             self._touch_card(session)
             return session.body()
 

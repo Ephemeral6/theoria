@@ -163,7 +163,14 @@ def test_the_ledger_score_equals_the_scorecard_score(played):
     record, ledger_path = played
     report = reconcile_run(record["run_id"], ledger_path, write_incident=False)
     assert report["verdict"] == "PASS", report
-    assert report["ledger_score"] == report["scorecard_score"] == 3
+    # The two sides agree in the unit they both report: levels completed. The
+    # card's `score` is a fraction (3 of 3 levels -> 1.0) and the step field is
+    # a count, so asserting they are equal would be asserting two different
+    # things are the same number and calling the coincidence a check.
+    assert report["ledger_levels_completed"] == 3
+    assert report["scorecard_levels_completed"] == 3
+    assert report["scorecard_score"] == 1.0
+    assert report["scorer"]["id"] == "arc_v1"
     assert report["level_boundaries"] == 3
 
 

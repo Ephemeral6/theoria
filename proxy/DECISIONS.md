@@ -154,3 +154,279 @@ stripped, and a `bypass_attempt` incident is recorded.
 The replay and reconciliation tests each have a companion that forges the
 ledger and asserts the check goes red. A check that has never been observed to
 fail is not evidence that anything passed.
+
+---
+
+*Below: P-9, the shell's closing pass. Frozen scorer, canon guard, red team,
+replay spot check.*
+
+## D-015 · The score is a conversion, so it is not in the ledger — the failure is
+
+`Theoria.md` Phase 1 §5 says "逐局跑完即打分入库、与 scorecard 对账". The score
+lands in `proxy/var/scores/<run_id>.json` and in `run.json`; it does **not** go
+into the ledger.
+
+This is D-004's argument applied to a second derived quantity. A score written
+into an append-only file is wrong the day the scoring rule changes and cannot be
+corrected; with the scorer outside, a re-score re-prices history instead of
+contradicting it. §5 already rules score derived — the frozen scorer is the
+`cost.py` of levels.
+
+What *does* go into the ledger is the failure. A reconciliation that disagreed
+is an `incident` of kind `score_mismatch`, and one that could not be performed
+at all is `score_unreconciled`. That second kind is new and it is the point:
+`baseline-arms` lost 22 of 23 scorecards to a transient close-404 and the loss
+was **silent**, so Phase 1's reconciliation obligation was quietly not being
+performed. A scorer that returned PASS for "nothing to compare" would reproduce
+exactly that, so the scorer has three verdicts and `UNDETERMINED` never
+collapses into `PASS`.
+
+Scoring happens the moment a game ends, inside `runner.run_game`, not in a sweep
+afterwards — Phase 3 audits the order results arrive in, and a batch decided all
+at once is a batch someone could have decided after seeing it.
+
+## D-016 · The upstream scorer is not vendored, and that is a decision
+
+`Theoria.md` Phase 1 §5 asks for the frozen scorer "原样接入", and
+`baseline-arms/SCHEMA_LOCATE.md` §2.4 identified the upstream
+`score_trajectories.py` as pure standard-library Python that runs offline —
+apparently the exact thing wanted. `baseline-arms` deliberately did not fetch it
+(`SCHEMA_PATH_A.md` §2.2) and left the call to a separate deliberate act. This
+is that act, and the answer is still no. Three reasons:
+
+* **Judging whether it is safe to read requires reading it**, which is the exact
+  shape of INC-BA-001 — the contamination incident in which looking for upstream
+  material taught a subagent the mechanics of nine sealed games. The file is
+  probably harmless. "Probably" is what INC-BA-001 was made of.
+* **The upstream release declares no licence**, and `Theoria.md` Phase 4
+  publishes every tracked file. Vendoring it decides its redistributability on
+  its author's behalf.
+* **Fetching and running third-party code** is not something one track does on
+  its own authority.
+
+So `proxy/scoring/arc_v1.py` is ours, and the *freeze* — not the provenance — is
+what makes it satisfy the discipline: one scorer, hashed, named in every
+artefact, identical across the three arms. `REGISTRY` takes a second scorer by
+construction. If the upstream file is ever adopted it registers beside this one
+under its own id with its own freeze entry, and every `run.json` already records
+which scorer produced its number, so past runs keep their attribution instead of
+being silently re-scored.
+
+The honest cost, stated plainly: our scorer is not the upstream scorer, so a
+number from it is not directly comparable to the upstream 98.98%. It does not
+try to be — it publishes the API's own scorecard numbers and reconciles them,
+and refuses to reimplement the partial-credit percentage at all, because all 32
+real scorecards we hold report zero completed levels and the formula is
+therefore not determined by any evidence we have.
+
+## D-017 · The canon refuses, rather than describing
+
+F-16 ruled `LEDGER_FORMAT.md` the canon. Until P-9 that ruling was a statement
+about what the proxies happened to write: `**extra` would carry any field at all
+onto disk. `proxy/canon.py` is the refusal — a field registry consulted by the
+writer before serialisation and by `tools/validate_ledger.py` on read, so both
+directions are judged by one table.
+
+Three lines, and the second is the contentious one:
+
+* **A banned spelling is named with its replacement.** `frame`, `timestamp`,
+  `total_cost_usd` and the rest of the v0 vocabulary raise an error that quotes
+  the canonical field and points at the migrator. A refusal that does not teach
+  is a refusal the next caller routes around by renaming the field — which is
+  why every dollar-shaped spelling carries the whole reason rather than "see the
+  other entry".
+* **`env_step` and `model_call` are closed; auxiliaries are open.** Two shapes
+  means two shapes: the Phase 2 battery reads them without branching, and an
+  extra field is a branch someone eventually has to write. Auxiliary payloads
+  stay loose because §6 exists precisely so the two shapes can stay closed — a
+  `run_start` carries whatever a run needs to describe itself.
+* **Types are checked only where a wrong one would produce a plausible wrong
+  number.** `score` may not be a bool, because `True` sums as 1. `frames` must
+  be a list, because a bare frame written where a list belongs is the
+  observation-losing bug §7 was written about. This is not a schema validator
+  and does not try to become one.
+
+## D-018 · `env_step` gains `response`, because "complete record" was not true
+
+The first closure property is that every bit entering or leaving an arm is in
+the ledger. It was not. A live command response carries `win_levels`,
+`available_actions`, `full_reset` and `action_input`; `env_step` recorded
+`frames`, `state`, `score` and `levels_completed`, and dropped the rest on the
+floor. Nobody noticed because no live run has gone through the proxies yet —
+the mock did not return those fields.
+
+`response` holds the response body with `frame` removed. Frames are already
+stored whole and hashed; storing them twice would be two things to keep in
+agreement.
+
+`win_levels` is why this is more than tidiness: it is the only place the
+environment states how many levels a game has, so without it **no score
+fraction is computable from the ledger alone** — and Phase 1's whole position is
+that conclusions come only from the ledger.
+
+Two facts about the live API were learned in the same pass and are worth
+recording where someone will find them. `env_step.score` is a field the live API
+**does not return**; it stays in §3 (a shape does not change under the same `v`)
+and stays null on live traffic, and nothing should be built on it. And the live
+scorecard's shape is `environments[]`, not the flat `score` the mock returned
+nor the `cards` mapping `reconcile.py` had guessed at — `STATUS.md` predicted
+that surprise and it arrived, but from a corpus rather than from a paid run.
+
+## D-019 · The mock now returns the real scorecard, copied from 32 real cards
+
+`baseline-arms`'s campaign left 32 closed scorecards on disk. They are now
+`proxy/tests/fixtures/scorecard_corpus.json`, the mock emits that shape, and the
+frozen scorer is calibrated against them. Two consequences worth stating:
+
+* **The surprise `STATUS.md` predicted is spent offline.** It said the first
+  live run should expect the scorecard's shape to differ, and that
+  `reconcile.scorecard_score` "will need a third [reading] if the real one
+  differs". It did differ; the third reading exists; it was paid for with a file
+  read rather than with actions.
+* **One number in the mock is the mock's own and is not a claim about the API.**
+  The per-level score. Every real card reports 0.0 with zero levels completed, so
+  the partial-credit rule is not determined by evidence. The mock uses 1.0 per
+  completed level because a mock needs *some* rule, and the frozen scorer never
+  depends on it — S-3 only checks that a positive score and a completed level
+  agree in sign, and S-9's bound holds under either reading of `score`.
+
+## D-020 · The migrator preserves time, so it does not use the writer
+
+`tools/upgrade_ledger.py` builds records itself instead of calling
+`Ledger.append`. The reason is narrow and is the only one: `append` stamps `ts`
+with the current time, and a migration must preserve when things happened. A
+lifted stream is a record of the run, not of the translation. Everything else
+the writer does — the canon check, the vault scrub, the canonical spelling — is
+done explicitly at the same point.
+
+`LEDGER_FORMAT.md` §7 originally said to mark each lifted record
+`"lifted_from": "baseline-arms/v0"`. That was written before the two shapes'
+field sets were closed, and a closed shape cannot carry an extra marker. So
+provenance moved to the synthesised `run_start`, whose payload is open, and it
+says strictly more there: source path, source sha256, migrator version, record
+counts, the fields dropped and the holes v0 left. Every lifted record belongs to
+a run, so nothing is unattributed, and a reader can still tell a lifted stream
+from a native one — which is what the marker was for.
+
+The tool refuses what it does not understand (`UnknownDialect`) rather than
+guessing. A migrator that guessed would write a canonical-looking record with
+invented meaning, and afterwards the invention would be indistinguishable from a
+recording.
+
+## D-021 · The replay spot check reads history instead of buying it
+
+Phase 1's acceptance list wants a bit-exact environment-side replay. A real
+replay costs actions on a live scorecard, and no live run has gone through the
+proxies yet — so that line had no data behind it.
+
+It turned out the evidence was already on disk. `baseline-arms`'s harness opens
+every session with the same fixed probe sweep (RESET, ACTION1…ACTION7) before
+the model chooses anything, and it opened fourteen sessions on `ar25-0c556536`.
+`arc-recon`'s determinism precheck ran the same opening on the same game in a
+different campaign, on a different day, through a different harness. Sixteen
+sessions with an identical opening are sixteen replays of that opening.
+
+`tools/replay_spotcheck.py` therefore replays nothing. Two rules keep it honest:
+a session is **truncated at its first failed step** (a 400 returns no frame, and
+what follows a lost frame is a different history, not a divergent replay), and
+agreement is only claimed where **at least two sessions reach the position** —
+one session agreeing with itself is not evidence.
+
+Result: 16 sessions, 9 positions, 372 pairwise comparisons, zero disagreements.
+
+Stated as narrowly as the evidence allows: this is cross-session, cross-campaign
+determinism **of the environment**, on **one** game. It is not evidence that our
+proxies reproduce a run — that needs a live replay through `replay.py`, and it
+is still owed. The acceptance line asks for two games; this is the first.
+
+## D-022 · The guard reads a request the way a server would, not the way a form does
+
+The red team put a sealed id past the old scan eleven different ways, and most
+of them were the same mistake in different clothes: the guard looked where it
+expected the id to be. `check_request` now takes the path, the query, every
+header, the **raw bytes**, every string in the parsed body including dictionary
+keys, and the concatenation of the body's values — and it looks at each of
+those in several readings: percent-decoded up to three times, NFKC-normalised,
+zero-width characters stripped, and base64 blobs decoded one level.
+
+Four of the eleven are worth naming because each was a wrong assumption rather
+than an oversight:
+
+* **A bare stem is a game id.** `ls20` matched nothing, because the pattern
+  required a `-<8 hex>` suffix. INC-005 recorded that the live API answers
+  short ids — with a *fake* 200, which is worse than a real one — so a request
+  naming a bare stem is a request that reaches the game. The scan now
+  recognises any token that equals a stem in the register.
+* **Case is not decoration.** `[0-9a-f]` let `ls20-9607627B` through while the
+  stem's case was being handled two lines above.
+* **A body that will not parse is a body that still gets sent.** `json.loads`
+  failing set `body = None`, the guard saw nothing, and `_forward` shipped the
+  original bytes regardless. Form encoding, a trailing `{}`, a BOM and a
+  trailing NUL all worked.
+* **A command that names no game still plays one.** A `guid` is a session, and
+  a session belongs to a game. The proxy now remembers which game each `guid`
+  it opened belongs to, and a command it cannot attribute to a game is refused
+  — an unattributable command is exactly how a sealed game would be played
+  through a session opened somewhere else.
+
+**What this does not close, stated rather than implied.** The value-join that
+catches an id split across two fields depends on the key order; a different
+order defeats it. Base64 is chased one level. Neither is a defence against an
+attacker who controls both ends of the encoding, and neither claims to be. The
+guard's real strength is elsewhere: the arm has no credential, so it cannot go
+around the proxy at all, and these are defences against a *mistake* reaching a
+sealed game rather than against a determined smuggler inside our own harness.
+
+The model proxy is now guarded too. `piles.json` rule 2 counts *reading about* a
+sealed game as contamination, and a prompt that names one teaches the model that
+game — the environment proxy being guarded while the model proxy was not is a
+gap in the same rule, not a different one.
+
+## D-023 · Two directions of credential handling, and the claim cut to fit
+
+`Vault.scrub` ran toward disk only. An upstream that echoes the key back in a
+response body or header handed it straight to the arm, the ledger stayed clean,
+and so the leak was unrecorded as well as unstopped. Both proxies now scrub
+what they hand the arm, and a reflection raises a `credential_reflected`
+incident: the arm holding no credential is the property the whole construction
+exists to make true, and a response is as good a way to acquire one as a
+request.
+
+Three narrower repairs in the same pass: a secret used as a dictionary **key**
+survived a value-only scrubber; a credential shorter than the length floor was
+never registered at all, so the floor that exists to avoid corrupting text was
+declining to protect the actual key; and the base64 and percent-encoded
+spellings of a secret are now registered alongside it, because they are the
+same secret.
+
+The claim in `LEDGER_FORMAT.md` §4 has been cut down to what is true. It said a
+ledger through the writer cannot contain a key; it can, if the key is one the
+proxies have never seen. What holds is that an *injected* credential cannot,
+that a key-shaped string in environment traffic is redacted by pattern with the
+structurally key-shaped fields exempted, and that `model_call` bodies are exempt
+from the pattern pass because §4 requires them verbatim. A writer cannot redact
+what it has never been told and cannot see; saying so is worth more than a
+sentence that reads better.
+
+## D-024 · The ledger is self-consistent, not authenticated
+
+The red team's sharpest finding has no local fix. `reconcile.py` and the frozen
+scorer check the file against itself: every check is internal consistency, so a
+file that no proxy ever wrote reconciles clean if it is written carefully
+enough. P-9 raised the price of forgery — the frame hash must hash its own
+frames, `seq` must be dense and unique, level fields must recompute, the run
+must belong to one arm, the card's totals must add up, and the scorer runs the
+canon validator over the run before it will judge it — but a price is not a
+proof. Anyone who can write the file can write a consistent file.
+
+The structural answer is a hash chain whose head is published outside the file:
+each record carrying the digest of its predecessor, and the final digest
+recorded somewhere an attacker with write access to the ledger does not reach.
+That subsumes the duplicate-`seq` and forged-hash findings as special cases. It
+also changes the envelope, which under §8 means a version bump and a
+conversation with three arms and the Phase 2 battery — so it is registered here
+and not done quietly at the end of a hardening pass.
+
+Until it exists, the honest form of the closure claim is: **the ledger is
+complete and self-consistent, and the arm cannot write to it — but the operator
+can.** Phase 1's "no bypass" property was always about the arm, and it holds.

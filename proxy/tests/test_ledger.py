@@ -11,7 +11,7 @@ from proxy.redact import VAULT, Vault, mask
 def test_lines_are_canonical_and_newline_terminated(tmp_path):
     path = str(tmp_path / "l.jsonl")
     ledger = Ledger(path)
-    ledger.append("env_meta", "r1", "probe", request={"b": 1, "a": 2})
+    ledger.append("env_meta", "r1", "probe", request={"b": 1, "a": 2}, http={})
 
     with open(path, "rb") as fh:
         raw = fh.read()
@@ -25,9 +25,9 @@ def test_seq_is_dense_and_survives_reopen(tmp_path):
     path = str(tmp_path / "l.jsonl")
     first = Ledger(path)
     for _ in range(3):
-        first.append("env_meta", "r1", "probe")
+        first.append("env_meta", "r1", "probe", http={})
     second = Ledger(path)                                # a new writer, same file
-    second.append("env_meta", "r1", "probe")
+    second.append("env_meta", "r1", "probe", http={})
 
     seqs = [r["seq"] for r in read_ledger(path)]
     assert seqs == [1, 2, 3, 4]
@@ -46,13 +46,16 @@ def test_unknown_event_and_arm_are_refused(tmp_path):
     with pytest.raises(ValueError, match="unknown event"):
         ledger.append("something_else", "r1", "probe")
     with pytest.raises(ValueError, match="unknown arm"):
-        ledger.append("env_meta", "r1", "not_an_arm")
+        ledger.append("env_meta", "r1", "not_an_arm", http={})
 
 
 def test_cost_may_not_be_written_into_the_ledger(tmp_path):
     run = RunLedger(Ledger(str(tmp_path / "l.jsonl")), "r1", "probe")
-    with pytest.raises(ValueError, match="cost does not belong"):
-        run.model_call("anthropic", "claude-opus-5", usage={}, cost_usd=0.01)
+    for banned in ("cost", "cost_usd", "total_cost_usd"):
+        with pytest.raises(ValueError, match="not canonical") as exc:
+            run.model_call("anthropic", "claude-opus-5", usage={}, **{banned: 0.01})
+        # the refusal has to teach, or the next caller just renames the field
+        assert "versioned price table" in str(exc.value)
 
 
 def test_frame_hash_covers_the_whole_sequence():
@@ -90,7 +93,8 @@ def test_a_secret_cannot_reach_the_file(tmp_path):
     secret = "sk-ant-abcdefghijklmnopqrstuvwxyz012345"
     VAULT.register(secret)
     run = RunLedger(Ledger(str(tmp_path / "l.jsonl")), "r1", "probe")
-    run.env_meta(request={"body": "key=" + secret, "headers": {"X-API-Key": secret}})
+    run.env_meta(request={"body": "key=" + secret, "headers": {"X-API-Key": secret}},
+                 http={})
 
     blob = open(str(tmp_path / "l.jsonl"), encoding="utf-8").read()
     assert secret not in blob
@@ -111,7 +115,7 @@ def test_mask_is_safe_to_log():
 
 def test_version_constant_matches_the_written_records(tmp_path):
     ledger = Ledger(str(tmp_path / "l.jsonl"))
-    record = ledger.append("env_meta", "r1", "probe")
+    record = ledger.append("env_meta", "r1", "probe", http={})
     assert record["v"] == LEDGER_VERSION
 
 

@@ -1,0 +1,12 @@
+{
+  "migrator": "proxy.tools.upgrade_ledger",
+  "migrator_version": "1.0.0",
+  "out": "C:\\Users\\user\\AppData\\Local\\Temp/ar25_canon.jsonl",
+  "out_sha256": "sha256:c30d47d24d27c57c7f5b2d9613db72ca18eb29f5ee9a8c0fc8a1364773257b11",
+  "records_in": 1125,
+  "records_out": 1153,
+  "runs": 14,
+  "runs_with_scorecard": 8,
+  "source": "../theoria/baseline-arms/out/shards/ledger.ar25.jsonl",
+  "source_sha256": "sha256:a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9"
+}

@@ -1,0 +1,25 @@
+{
+  "_readme": "The freeze record. Editing a scorer's source without changing its scorer_id is what this file exists to make impossible: proxy.scoring.verify_frozen() recomputes the hash and refuses to score on disagreement. A new scoring rule gets a new scorer_id and a new entry; entries are never rewritten, because runs already scored carry the old id and must stay reproducible.",
+  "scorers": {
+    "arc_v1": {
+      "frozen_at": "2026-07-28",
+      "frozen_by": "P-9 (agent/p9-shell-harden)",
+      "hash_note": "sha256 over the source with newlines normalised to LF",
+      "not_included": "the ARC-AGI-3 partial-credit percentage. No scorecard in this repository's corpus has a completed level, so the per-level formula is not determined by evidence and is not guessed at.",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0",
+      "what_it_scores": "one run of one arm on one game, from the canonical v1.0 ledger"
+    }
+  },
+  "upstream_scorer_not_vendored": {
+    "file": "score_trajectories.py (upstream Schema release)",
+    "if_adopted": "register it in proxy/scoring/REGISTRY under its own scorer_id with its own freeze entry; every run.json already records which scorer produced its number, so past runs keep their attribution.",
+    "reasons": [
+      "baseline-arms SCHEMA_PATH_A.md 2.2: judging whether it is safe requires reading it, and reading upstream artefacts is the exact shape of INC-BA-001, the sealed-pile contamination incident",
+      "the upstream release declares no licence, and Theoria.md Phase 4 publishes every tracked file",
+      "fetching and running third-party code is not something this track does on its own authority"
+    ],
+    "status": "deliberately not fetched"
+  }
+}

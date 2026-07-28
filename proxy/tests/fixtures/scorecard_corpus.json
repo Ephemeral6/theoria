@@ -1,0 +1,2878 @@
+{
+ "_claim": "for every entry, scorecard.total_actions == ledger.actions_ok, where actions_ok counts successful non-RESET commands. 31 of 31.",
+ "_pile": "development pile only (ar25/g50t/sk48/tn36). No sealed-pile game appears here.",
+ "_source": "baseline-arms/probe_log.jsonl and baseline-arms/out/shards/probe_log.*.jsonl, 'close scorecard' responses with status 200. Copied, not modified; that track's files were not touched.",
+ "_what": "31 real ARC-AGI-3 scorecards, closed by baseline-arms' pilot and envelope campaigns, paired with the counts their own ledgers report. This is the evidence behind proxy/scoring/arc_v1.py's CALIBRATION and behind the mock's scorecard shape.",
+ "entries": [
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 31,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-05257e97",
+   "scorecard": {
+    "card_id": "c473f008-01c6-4c7c-9ba3-8fd965fd6be1",
+    "environments": [
+     {
+      "actions": 31,
+      "completed": false,
+      "id": "ar25-0c556536",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 31,
+        "completed": false,
+        "guid": "14ab4b4f-58f2-4eeb-81a7-0e9e567a9979",
+        "level_actions": [
+         31,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         50,
+         75,
+         37,
+         89,
+         159,
+         233,
+         73
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-05257e97"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 31,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 31,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 39,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-0cd850f1",
+   "scorecard": {
+    "card_id": "be2272ae-6d2d-4d92-9916-161e64913acd",
+    "environments": [
+     {
+      "actions": 39,
+      "completed": false,
+      "id": "ar25-0c556536",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 39,
+        "completed": false,
+        "guid": "2cc7c656-4998-48ce-99dc-57573c195a03",
+        "level_actions": [
+         39,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         50,
+         75,
+         37,
+         89,
+         159,
+         233,
+         73
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-0cd850f1"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 39,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 39,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 25,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-20804484",
+   "scorecard": {
+    "card_id": "304b9599-f9df-4d7a-9871-36e314de33a5",
+    "environments": [
+     {
+      "actions": 25,
+      "completed": false,
+      "id": "ar25-0c556536",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 25,
+        "completed": false,
+        "guid": "c9ab3ab7-d6de-45cd-b2c4-976b9e89917d",
+        "level_actions": [
+         25,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         50,
+         75,
+         37,
+         89,
+         159,
+         233,
+         73
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-20804484"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 25,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 25,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 11,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd",
+   "scorecard": {
+    "card_id": "b37caf1f-d35b-4c23-a05e-a63554b83efa",
+    "environments": [
+     {
+      "actions": 11,
+      "completed": false,
+      "id": "ar25-0c556536",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 11,
+        "completed": false,
+        "guid": "7cb0089f-a6f1-4438-b2b3-5725da6d3bf5",
+        "level_actions": [
+         11,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         50,
+         75,
+         37,
+         89,
+         159,
+         233,
+         73
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 11,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 11,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 8,
+    "actions_ok": 67,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-76390591",
+   "scorecard": {
+    "card_id": "e066018a-97a5-4248-8e38-6d577092c387",
+    "environments": [
+     {
+      "actions": 67,
+      "completed": false,
+      "id": "ar25-0c556536",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 67,
+        "completed": false,
+        "guid": "8bd5eb3f-b927-4d3b-88fe-fb02c99256d9",
+        "level_actions": [
+         67,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         50,
+         75,
+         37,
+         89,
+         159,
+         233,
+         73
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "GAME_OVER"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-76390591"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 67,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 67,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 45,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-9d5fb85d",
+   "scorecard": {
+    "card_id": "7e10fed6-792a-45ad-8af0-fedf1aa72f21",
+    "environments": [
+     {
+      "actions": 45,
+      "completed": false,
+      "id": "ar25-0c556536",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 45,
+        "completed": false,
+        "guid": "857ebd85-38e3-4ed7-801c-e64a79ec25bf",
+        "level_actions": [
+         45,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         50,
+         75,
+         37,
+         89,
+         159,
+         233,
+         73
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-9d5fb85d"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 45,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 45,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 28,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-cfc26bc8",
+   "scorecard": {
+    "card_id": "6ce2dfc7-d402-4b3c-bd61-3f56888033b9",
+    "environments": [
+     {
+      "actions": 28,
+      "completed": false,
+      "id": "ar25-0c556536",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 28,
+        "completed": false,
+        "guid": "fa0033d6-df35-4902-af57-0f67a842912b",
+        "level_actions": [
+         28,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         50,
+         75,
+         37,
+         89,
+         159,
+         233,
+         73
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-cfc26bc8"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 28,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 28,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 34,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-d396aabd",
+   "scorecard": {
+    "card_id": "2354b34f-71dd-4496-a241-7667cb05940f",
+    "environments": [
+     {
+      "actions": 34,
+      "completed": false,
+      "id": "ar25-0c556536",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 34,
+        "completed": false,
+        "guid": "3bd2f199-f73b-4b70-a87a-38566c74a103",
+        "level_actions": [
+         34,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         50,
+         75,
+         37,
+         89,
+         159,
+         233,
+         73
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-d396aabd"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 34,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 34,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 22,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-d919fde0",
+   "scorecard": {
+    "card_id": "7a3fe1b6-b806-4882-a2a7-4dd10cc961a8",
+    "environments": [
+     {
+      "actions": 22,
+      "completed": false,
+      "id": "ar25-0c556536",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 22,
+        "completed": false,
+        "guid": "befa11a9-422a-4f1f-a5fb-70fe85d0b7f7",
+        "level_actions": [
+         22,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         50,
+         75,
+         37,
+         89,
+         159,
+         233,
+         73
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-d919fde0"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 22,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 22,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 73,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-52bd4daf",
+   "scorecard": {
+    "card_id": "8017bdd1-9550-4015-8427-46a12adf9cf8",
+    "environments": [
+     {
+      "actions": 73,
+      "completed": false,
+      "id": "g50t-5849a774",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 73,
+        "completed": false,
+        "guid": "e815a85c-4d91-4588-b777-38aaca415832",
+        "level_actions": [
+         73,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         78,
+         175,
+         179,
+         230,
+         96,
+         54,
+         67
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-52bd4daf"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 73,
+      "id": "keyboard",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 73,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 51,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-7272ff90",
+   "scorecard": {
+    "card_id": "e6ce1a1c-9815-4823-85b6-0fd4ba37dbe4",
+    "environments": [
+     {
+      "actions": 51,
+      "completed": false,
+      "id": "g50t-5849a774",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 51,
+        "completed": false,
+        "guid": "f3536c3f-7905-404f-ba5b-50bf78e7019b",
+        "level_actions": [
+         51,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         78,
+         175,
+         179,
+         230,
+         96,
+         54,
+         67
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-7272ff90"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 51,
+      "id": "keyboard",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 51,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 17,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-7f0e5671",
+   "scorecard": {
+    "card_id": "0ad88e54-a78a-485d-9744-3378fbdbe2f0",
+    "environments": [
+     {
+      "actions": 17,
+      "completed": false,
+      "id": "g50t-5849a774",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 17,
+        "completed": false,
+        "guid": "871aef42-b89e-4ec8-9784-b267709063c4",
+        "level_actions": [
+         17,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         78,
+         175,
+         179,
+         230,
+         96,
+         54,
+         67
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-7f0e5671"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 17,
+      "id": "keyboard",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 17,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 56,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-7fadf62f",
+   "scorecard": {
+    "card_id": "bf79e13f-eb03-4006-ae26-b856fdd32b21",
+    "environments": [
+     {
+      "actions": 56,
+      "completed": false,
+      "id": "g50t-5849a774",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 56,
+        "completed": false,
+        "guid": "7f061d0b-e469-4cad-86e1-636a992b9ada",
+        "level_actions": [
+         56,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         78,
+         175,
+         179,
+         230,
+         96,
+         54,
+         67
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-7fadf62f"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 56,
+      "id": "keyboard",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 56,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 41,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-84d307e7",
+   "scorecard": {
+    "card_id": "f02e666f-b3b0-4459-b57d-5006e072c2c5",
+    "environments": [
+     {
+      "actions": 41,
+      "completed": false,
+      "id": "g50t-5849a774",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 41,
+        "completed": false,
+        "guid": "cfedf59a-b9d5-4cad-a77e-94635cc87a4f",
+        "level_actions": [
+         41,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         78,
+         175,
+         179,
+         230,
+         96,
+         54,
+         67
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-84d307e7"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 41,
+      "id": "keyboard",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 41,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 6,
+    "actions_ok": 14,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-opus-5",
+   "run_id": "bare_cc-g50t-claude-opus-5-f60e48af",
+   "scorecard": {
+    "card_id": "95c25ced-c1be-4c8f-b1be-e81a286f61f8",
+    "environments": [
+     {
+      "actions": 14,
+      "completed": false,
+      "id": "g50t-5849a774",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 14,
+        "completed": false,
+        "guid": "91526757-1558-46fa-95b2-33a615b1240f",
+        "level_actions": [
+         14,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         78,
+         175,
+         179,
+         230,
+         96,
+         54,
+         67
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-g50t-claude-opus-5-f60e48af"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-opus-5",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 14,
+      "id": "keyboard",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 14,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 27,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-1d80fcad",
+   "scorecard": {
+    "card_id": "1b17101d-3fad-4c63-a8c9-82d9d2a8bd57",
+    "environments": [
+     {
+      "actions": 27,
+      "completed": false,
+      "id": "sk48-d8078629",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 27,
+        "completed": false,
+        "guid": "c7d8b79a-d2d0-4e00-a722-e40900c98bc5",
+        "level_actions": [
+         27,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         61,
+         177,
+         101,
+         103,
+         230,
+         181,
+         125,
+         92
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-1d80fcad"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 27,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 27,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 27,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-773cb2e4",
+   "scorecard": {
+    "card_id": "32c5049e-3a7e-46dd-b8cf-8e58630d205b",
+    "environments": [
+     {
+      "actions": 27,
+      "completed": false,
+      "id": "sk48-d8078629",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 27,
+        "completed": false,
+        "guid": "01f93c89-9271-4d23-94cc-c5b5e174ec30",
+        "level_actions": [
+         27,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         61,
+         177,
+         101,
+         103,
+         230,
+         181,
+         125,
+         92
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-773cb2e4"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 27,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 27,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 23,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-83d7707d",
+   "scorecard": {
+    "card_id": "2d155ee7-4604-4494-9422-a1a75e91bbf8",
+    "environments": [
+     {
+      "actions": 23,
+      "completed": false,
+      "id": "sk48-d8078629",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 23,
+        "completed": false,
+        "guid": "7ef4e354-25a8-4f90-889f-ebd410460729",
+        "level_actions": [
+         23,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         61,
+         177,
+         101,
+         103,
+         230,
+         181,
+         125,
+         92
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-83d7707d"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 23,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 23,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 29,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-89edd132",
+   "scorecard": {
+    "card_id": "98797b35-aafc-4aea-b00d-40c935dd8420",
+    "environments": [
+     {
+      "actions": 29,
+      "completed": false,
+      "id": "sk48-d8078629",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 29,
+        "completed": false,
+        "guid": "17b54ecf-6919-4268-a01e-fb82f18ff86c",
+        "level_actions": [
+         29,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         61,
+         177,
+         101,
+         103,
+         230,
+         181,
+         125,
+         92
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-89edd132"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 29,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 29,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 9,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-8d1d4ff7",
+   "scorecard": {
+    "card_id": "72116b4e-7b4c-409c-9089-548f590011f9",
+    "environments": [
+     {
+      "actions": 9,
+      "completed": false,
+      "id": "sk48-d8078629",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 9,
+        "completed": false,
+        "guid": "30eb98a8-558b-4e5b-ab8c-cdd02e641d71",
+        "level_actions": [
+         9,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         61,
+         177,
+         101,
+         103,
+         230,
+         181,
+         125,
+         92
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-8d1d4ff7"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 9,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 9,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 33,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-93e72f11",
+   "scorecard": {
+    "card_id": "985fb80d-5a82-4e22-a145-0c582708dd41",
+    "environments": [
+     {
+      "actions": 33,
+      "completed": false,
+      "id": "sk48-d8078629",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 33,
+        "completed": false,
+        "guid": "802b1bbc-90b0-4ac7-a96c-8b22f671d973",
+        "level_actions": [
+         33,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         61,
+         177,
+         101,
+         103,
+         230,
+         181,
+         125,
+         92
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-93e72f11"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 33,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 33,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 15,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-9782af92",
+   "scorecard": {
+    "card_id": "0dd81223-f01b-49de-b6a5-5f24c1120096",
+    "environments": [
+     {
+      "actions": 15,
+      "completed": false,
+      "id": "sk48-d8078629",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 15,
+        "completed": false,
+        "guid": "c2c5aca5-35bc-4cdf-bf4b-dbf14efe3236",
+        "level_actions": [
+         15,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         61,
+         177,
+         101,
+         103,
+         230,
+         181,
+         125,
+         92
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-9782af92"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 15,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 15,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 38,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-a6ec50e6",
+   "scorecard": {
+    "card_id": "555c6f02-2c29-47f5-93f6-d54d815e1a35",
+    "environments": [
+     {
+      "actions": 38,
+      "completed": false,
+      "id": "sk48-d8078629",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 38,
+        "completed": false,
+        "guid": "d70d0377-023c-4145-b9f8-79cd5fa19de1",
+        "level_actions": [
+         38,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         61,
+         177,
+         101,
+         103,
+         230,
+         181,
+         125,
+         92
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-a6ec50e6"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 38,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 38,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 27,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-d6290d5e",
+   "scorecard": {
+    "card_id": "68c8f2ac-c237-4f95-a5b8-2fa96ed9d4bb",
+    "environments": [
+     {
+      "actions": 27,
+      "completed": false,
+      "id": "sk48-d8078629",
+      "level_count": 8,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 27,
+        "completed": false,
+        "guid": "6a3b33e7-e83d-44ad-a14b-340e0d5e934e",
+        "level_actions": [
+         27,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         61,
+         177,
+         101,
+         103,
+         230,
+         181,
+         125,
+         92
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-d6290d5e"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 27,
+      "id": "keyboard_click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 8,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 27,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 8,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 12,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-0da9ce88",
+   "scorecard": {
+    "card_id": "03f362db-7a2b-48d9-b943-09d60fc1391d",
+    "environments": [
+     {
+      "actions": 12,
+      "completed": false,
+      "id": "tn36-ef4dde99",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 12,
+        "completed": false,
+        "guid": "8213edd3-3a2a-43ca-bb65-62d45b636fbb",
+        "level_actions": [
+         12,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         72,
+         26,
+         40,
+         30,
+         55,
+         62
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-0da9ce88"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 12,
+      "id": "click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 12,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 12,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-4ace40c9",
+   "scorecard": {
+    "card_id": "0d6b8c2d-eee9-46a4-a360-a0ba75fe8344",
+    "environments": [
+     {
+      "actions": 12,
+      "completed": false,
+      "id": "tn36-ef4dde99",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 12,
+        "completed": false,
+        "guid": "645e3cba-3637-484f-ad64-5d1a03d5933e",
+        "level_actions": [
+         12,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         72,
+         26,
+         40,
+         30,
+         55,
+         62
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-4ace40c9"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 12,
+      "id": "click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 12,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 18,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-5486ec81",
+   "scorecard": {
+    "card_id": "879fdf43-9690-483a-8069-07389124d24f",
+    "environments": [
+     {
+      "actions": 18,
+      "completed": false,
+      "id": "tn36-ef4dde99",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 18,
+        "completed": false,
+        "guid": "cfe05019-df35-4ce9-b03e-60ad199bee3f",
+        "level_actions": [
+         18,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         72,
+         26,
+         40,
+         30,
+         55,
+         62
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-5486ec81"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 18,
+      "id": "click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 18,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 17,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-57508a3f",
+   "scorecard": {
+    "card_id": "867c77ed-3a2b-44a9-9aac-f7f67c4f8477",
+    "environments": [
+     {
+      "actions": 17,
+      "completed": false,
+      "id": "tn36-ef4dde99",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 17,
+        "completed": false,
+        "guid": "720f1b1b-18af-42e7-9eb1-8365ce5877a4",
+        "level_actions": [
+         17,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         72,
+         26,
+         40,
+         30,
+         55,
+         62
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-57508a3f"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 17,
+      "id": "click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 17,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 22,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-5d3c12a0",
+   "scorecard": {
+    "card_id": "15b738fc-a872-4d0d-af45-18e0199c315c",
+    "environments": [
+     {
+      "actions": 22,
+      "completed": false,
+      "id": "tn36-ef4dde99",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 22,
+        "completed": false,
+        "guid": "f3874a03-a9de-4139-80c8-e60ce48b36cc",
+        "level_actions": [
+         22,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         72,
+         26,
+         40,
+         30,
+         55,
+         62
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-5d3c12a0"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 22,
+      "id": "click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 22,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 32,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-6ac78438",
+   "scorecard": {
+    "card_id": "704f9a7b-dd31-4734-804a-234a88c3cff9",
+    "environments": [
+     {
+      "actions": 32,
+      "completed": false,
+      "id": "tn36-ef4dde99",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 32,
+        "completed": false,
+        "guid": "d847af6f-c5f6-43cb-939c-0d7e2129c02d",
+        "level_actions": [
+         32,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         72,
+         26,
+         40,
+         30,
+         55,
+         62
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-6ac78438"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 32,
+      "id": "click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 32,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 12,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-9aaeab54",
+   "scorecard": {
+    "card_id": "2a7d2417-6aa3-4947-8b74-fd7e8ebbaa7d",
+    "environments": [
+     {
+      "actions": 12,
+      "completed": false,
+      "id": "tn36-ef4dde99",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 12,
+        "completed": false,
+        "guid": "e5f7e42c-ab7a-4aef-a515-a5528d716bbe",
+        "level_actions": [
+         12,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         72,
+         26,
+         40,
+         30,
+         55,
+         62
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-9aaeab54"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 12,
+      "id": "click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 12,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  },
+  {
+   "arm": "bare_cc",
+   "ledger": {
+    "actions_failed": 10,
+    "actions_ok": 32,
+    "levels_completed": 0,
+    "resets": 1
+   },
+   "model": "claude-haiku-4-5-20251001",
+   "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-a34b4342",
+   "scorecard": {
+    "card_id": "8e7fd609-e0ed-4eb4-9383-2fe5a33e6548",
+    "environments": [
+     {
+      "actions": 32,
+      "completed": false,
+      "id": "tn36-ef4dde99",
+      "level_count": 7,
+      "levels_completed": 0,
+      "resets": 0,
+      "runs": [
+       {
+        "actions": 32,
+        "completed": false,
+        "guid": "67daac3c-da72-44cc-a956-d7cd5e9427aa",
+        "level_actions": [
+         32,
+         0,
+         0,
+         0,
+         0,
+         0,
+         0
+        ],
+        "level_baseline_actions": [
+         32,
+         72,
+         26,
+         40,
+         30,
+         55,
+         62
+        ],
+        "level_scores": [
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0,
+         0.0
+        ],
+        "levels_completed": 0,
+        "resets": 0,
+        "score": 0.0,
+        "state": "NOT_FINISHED"
+       }
+      ],
+      "score": 0.0
+     }
+    ],
+    "opaque": {
+     "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-a34b4342"
+    },
+    "score": 0.0,
+    "tags": [
+     "baseline-arms",
+     "bare_cc",
+     "claude-haiku-4-5-20251001",
+     "agent"
+    ],
+    "tags_scores": [
+     {
+      "actions": 32,
+      "id": "click",
+      "levels_completed": 0,
+      "number_of_environments": 1,
+      "number_of_levels": 7,
+      "score": 0.0
+     }
+    ],
+    "total_actions": 32,
+    "total_environments": 1,
+    "total_environments_completed": 0,
+    "total_levels": 7,
+    "total_levels_completed": 0
+   }
+  }
+ ]
+}

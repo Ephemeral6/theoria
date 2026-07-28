@@ -1,0 +1,96 @@
+{
+  "_seed_note": "no randomness: every tool here is deterministic and every artefact is byte-reproducible for a fixed input.",
+  "artifacts": {
+    "migration_ar25.json": "sha256:da390f8c8343cbcbac569b63044cddb366918f971725103fc779fac61e1d93ce",
+    "replay_spotcheck_ar25.json": "sha256:5a735599b8897c1b8730c07c349c1fba1b4e85142670fadf6f3d33bd6ba00d3d",
+    "scores_ar25_lifted.json": "sha256:8ec51d49ebb7d4e3fe4021e7af9550354576d54ec31f48cda98469591b984ffd",
+    "validate_ar25_canon.json": "sha256:913a7354d086e0de663dc35d5efefa62f5a51059664bb92be479bf4d69eb7b50"
+  },
+  "base_commit": "edb3c3748f89ee3a7f4275780880654c2749153e",
+  "branch": "agent/p9-shell-harden",
+  "cost": {
+    "_note": "nothing in P-9 spent a dollar or opened a socket to the internet. The replay evidence was read out of ledgers that already existed.",
+    "api_calls": 0,
+    "model_calls": 0,
+    "usd": 0.0
+  },
+  "date": "2026-07-28",
+  "inputs": [
+    {
+      "_note": "another track's untracked campaign output. Read, never written. It grew by one scorecard during this session -- a concurrent session is appending to it (INC-BA-003) -- so this digest is a snapshot.",
+      "path": "baseline-arms/out/shards/ledger.ar25.jsonl",
+      "read_only": true,
+      "sha256": "sha256:a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9"
+    },
+    {
+      "_note": "closed scorecards, attached to the lifted run_end records",
+      "path": "baseline-arms/out/shards/probe_log.ar25.jsonl",
+      "read_only": true
+    },
+    {
+      "_note": "the determinism precheck's raw HTTP exchanges; the second campaign in the replay spot check",
+      "path": "arc-recon/data/recon_ledger.jsonl",
+      "read_only": true
+    }
+  ],
+  "intermediate": {
+    "ar25_canon.jsonl": {
+      "_note": "the lifted canonical ledger, 87 MB of frames, not archived. Reproduce with the command below and compare this digest.",
+      "sha256": "sha256:c30d47d24d27c57c7f5b2d9613db72ca18eb29f5ee9a8c0fc8a1364773257b11"
+    }
+  },
+  "pile_discipline": {
+    "_note": "ar25 is development pile. Sealed ids appear in this branch only as strings in red-team payloads aimed at loopback sinks.",
+    "api_calls": 0,
+    "games_touched": [
+      "ar25-0c556536"
+    ],
+    "sealed_pile_requests": 0
+  },
+  "prompt_id": "P-9",
+  "reproduce": [
+    "python -m proxy.tools.upgrade_ledger baseline-arms/out/shards/ledger.ar25.jsonl -o ar25_canon.jsonl --scorecards baseline-arms/out/shards/probe_log.ar25.jsonl",
+    "python -m proxy.tools.validate_ledger --json ar25_canon.jsonl",
+    "python -m proxy.tools.replay_spotcheck --canon ar25_canon.jsonl --recon arc-recon/data/recon_ledger.jsonl --game ar25-0c556536",
+    "python -m proxy.scoring --ledger ar25_canon.jsonl --all --no-incident --no-artifact"
+  ],
+  "results": {
+    "migration": {
+      "records_in": 1125,
+      "records_out": 1153,
+      "runs": 14,
+      "runs_with_scorecard": 8
+    },
+    "replay_spotcheck": {
+      "_claim": "cross-session, cross-campaign bit-exact agreement of the environment on ONE game (ar25-0c556536). Not a replay through these proxies, and the acceptance line asks for two games.",
+      "disagreements": 0,
+      "pairwise_comparisons": 372,
+      "sessions": 16,
+      "steps_compared": 9,
+      "verdict": "PASS"
+    },
+    "scoring": {
+      "FAIL": 0,
+      "PASS": 8,
+      "UNDETERMINED": 6,
+      "_note": "the six UNDETERMINED runs lost their scorecard to the transient close-404 baseline-arms recorded as D-015. UNDETERMINED is not PASS."
+    },
+    "tests": {
+      "_note": "includes the 44-test red-team suite, all blocked",
+      "failed": 0,
+      "passed": 180
+    }
+  },
+  "scorer": {
+    "frozen_at": "2026-07-28",
+    "frozen_by": "P-9 (agent/p9-shell-harden)",
+    "hash_note": "sha256 over the source with newlines normalised to LF",
+    "not_included": "the ARC-AGI-3 partial-credit percentage. No scorecard in this repository's corpus has a completed level, so the per-level formula is not determined by evidence and is not guessed at.",
+    "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+    "source": "proxy/scoring/arc_v1.py",
+    "version": "1.0.0",
+    "what_it_scores": "one run of one arm on one game, from the canonical v1.0 ledger"
+  },
+  "seed": null,
+  "title": "shell hardening: frozen scorer, sealed red team, canon guard, replay spot check"
+}

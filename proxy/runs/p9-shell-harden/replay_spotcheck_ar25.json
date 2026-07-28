@@ -1,0 +1,97 @@
+{
+  "comparisons": [
+    {
+      "action": "RESET",
+      "agree": true,
+      "frame_hash": "sha256:5e5512627a123ab155dd822cb97c920aca689815736cdeef6824178476e37400",
+      "position": 0,
+      "sessions": 16
+    },
+    {
+      "action": "ACTION1",
+      "agree": true,
+      "frame_hash": "sha256:d56a6266d1805d457d00c089ab2ae6dd82c36a8fe63e975fcff2834678987cc0",
+      "position": 1,
+      "sessions": 14
+    },
+    {
+      "action": "ACTION2",
+      "agree": true,
+      "frame_hash": "sha256:0c4bc7da9f06191d0b121db07e5082d1d87d7bb07387b1d45e77fd6f57b81103",
+      "position": 2,
+      "sessions": 12
+    },
+    {
+      "action": "ACTION3",
+      "agree": true,
+      "frame_hash": "sha256:f6c45396f553fefdea002a78b438d4f8599d534ec9a5329fcbcd2401b9a81eae",
+      "position": 3,
+      "sessions": 9
+    },
+    {
+      "action": "ACTION4",
+      "agree": true,
+      "frame_hash": "sha256:34004670a1a3e3f53f4269ade8f6efc26a5715e2d247dcc5110235575bd9f979",
+      "position": 4,
+      "sessions": 8
+    },
+    {
+      "action": "ACTION5",
+      "agree": true,
+      "frame_hash": "sha256:8a098614b7dd570cf6ea5f2f2e6b3955e3f894c0cdb81d3718894a3ca5119888",
+      "position": 5,
+      "sessions": 8
+    },
+    {
+      "action": "ACTION1",
+      "agree": true,
+      "frame_hash": "sha256:c687a181acb93dbf472057150ae3364187e2984aab65cddef99801cf06b2e24d",
+      "position": 6,
+      "sessions": 2
+    },
+    {
+      "action": "ACTION2",
+      "agree": true,
+      "frame_hash": "sha256:d9f4bb6e2da88145764298827b007664bbde981e2861c2116f2614959b553e76",
+      "position": 7,
+      "sessions": 2
+    },
+    {
+      "action": "ACTION3",
+      "agree": true,
+      "frame_hash": "sha256:7946af991f404f4464d81530eb17385f74ee16e0749effd6e2b5a9539517d218",
+      "position": 8,
+      "sessions": 2
+    }
+  ],
+  "disagreements": [],
+  "game_id": "ar25-0c556536",
+  "n_sessions": 16,
+  "pairwise_comparisons": 372,
+  "sessions": [
+    "bare_cc-ar25-claude-haiku-4-5-20251001-05257e97",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-0cd850f1",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-20804484",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-247c595a",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-49073b7e",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-4db7c438",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-5d725cbe",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-76390591",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-9d5fb85d",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-af4a5bb6",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-cfc26bc8",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-d396aabd",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-d919fde0",
+    "bare_cc-ar25-claude-haiku-4-5-20251001-f5de007d",
+    "recon/run-a",
+    "recon/run-b"
+  ],
+  "sources": {
+    "canon": [
+      "C:\\Users\\user\\AppData\\Local\\Temp/ar25_canon.jsonl"
+    ],
+    "recon": "../theoria/arc-recon/data/recon_ledger.jsonl"
+  },
+  "steps_compared": 9,
+  "verdict": "PASS"
+}

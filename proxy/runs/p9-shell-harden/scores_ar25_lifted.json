@@ -1,0 +1,1898 @@
+[
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "detail": "scorecard shape is 'absent'; the score cannot be reconciled against the API. A closed card cannot be re-fetched, so this is not recoverable after the fact.",
+        "id": "S-0",
+        "verdict": "UNDETERMINED"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 5,
+      "actions_ok": 8,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 9,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 13,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 14
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-247c595a",
+    "score": {
+      "basis": "unavailable",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": null
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": null,
+      "game_ids": [],
+      "level_count": null,
+      "levels_completed": null,
+      "score": null,
+      "shape": "absent",
+      "state": null,
+      "total_actions": null
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": [
+      "S-0"
+    ],
+    "verdict": "UNDETERMINED"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "detail": "scorecard shape is 'absent'; the score cannot be reconciled against the API. A closed card cannot be re-fetched, so this is not recoverable after the fact.",
+        "id": "S-0",
+        "verdict": "UNDETERMINED"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 1,
+      "actions_ok": 10,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 11,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 12,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 12
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-4db7c438",
+    "score": {
+      "basis": "unavailable",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": null
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": null,
+      "game_ids": [],
+      "level_count": null,
+      "levels_completed": null,
+      "score": null,
+      "shape": "absent",
+      "state": null,
+      "total_actions": null
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": [
+      "S-0"
+    ],
+    "verdict": "UNDETERMINED"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "id": "S-0",
+        "shape": "arc_live",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard total_actions == successful non-RESET commands",
+        "id": "S-1",
+        "ledger": 39,
+        "note": "calibrated: refused 400/500 requests are not billed and RESET is counted separately (CALIBRATION)",
+        "scorecard": 39,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard levels_completed == ledger's",
+        "id": "S-2",
+        "ledger": 0,
+        "scorecard": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a positive score iff a level was completed",
+        "id": "S-3",
+        "levels_completed": 0,
+        "note": "the only relation between score and levels this corpus pins down; the partial-credit formula is not reimplemented here",
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "bound": 1.0,
+        "claim": "the card's score is within any reading of it",
+        "id": "S-9",
+        "levels_completed": 0,
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card's totals agree with its own environments",
+        "id": "S-10",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card and the step responses agree on the level count",
+        "id": "S-8",
+        "ledger": 8,
+        "note": "the ledger's copy is the API's `win_levels`, recorded on every command response",
+        "scorecard": 8,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the scorecard covers the game the ledger played",
+        "id": "S-4",
+        "ledger": [
+          "ar25-0c556536"
+        ],
+        "scorecard": [
+          "ar25-0c556536"
+        ],
+        "verdict": "PASS"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 10,
+      "actions_ok": 39,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 40,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 49,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 50
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-0cd850f1",
+    "score": {
+      "basis": "scorecard",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": 0.0
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": "be2272ae-6d2d-4d92-9916-161e64913acd",
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_count": 8,
+      "levels_completed": 0,
+      "score": 0.0,
+      "shape": "arc_live",
+      "state": "NOT_FINISHED",
+      "total_actions": 39
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": null,
+    "verdict": "PASS"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "id": "S-0",
+        "shape": "arc_live",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard total_actions == successful non-RESET commands",
+        "id": "S-1",
+        "ledger": 31,
+        "note": "calibrated: refused 400/500 requests are not billed and RESET is counted separately (CALIBRATION)",
+        "scorecard": 31,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard levels_completed == ledger's",
+        "id": "S-2",
+        "ledger": 0,
+        "scorecard": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a positive score iff a level was completed",
+        "id": "S-3",
+        "levels_completed": 0,
+        "note": "the only relation between score and levels this corpus pins down; the partial-credit formula is not reimplemented here",
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "bound": 1.0,
+        "claim": "the card's score is within any reading of it",
+        "id": "S-9",
+        "levels_completed": 0,
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card's totals agree with its own environments",
+        "id": "S-10",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card and the step responses agree on the level count",
+        "id": "S-8",
+        "ledger": 8,
+        "note": "the ledger's copy is the API's `win_levels`, recorded on every command response",
+        "scorecard": 8,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the scorecard covers the game the ledger played",
+        "id": "S-4",
+        "ledger": [
+          "ar25-0c556536"
+        ],
+        "scorecard": [
+          "ar25-0c556536"
+        ],
+        "verdict": "PASS"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 10,
+      "actions_ok": 31,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 32,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 41,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 42
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-05257e97",
+    "score": {
+      "basis": "scorecard",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": 0.0
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": "c473f008-01c6-4c7c-9ba3-8fd965fd6be1",
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_count": 8,
+      "levels_completed": 0,
+      "score": 0.0,
+      "shape": "arc_live",
+      "state": "NOT_FINISHED",
+      "total_actions": 31
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": null,
+    "verdict": "PASS"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "detail": "scorecard shape is 'absent'; the score cannot be reconciled against the API. A closed card cannot be re-fetched, so this is not recoverable after the fact.",
+        "id": "S-0",
+        "verdict": "UNDETERMINED"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 10,
+      "actions_ok": 30,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 31,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 40,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 41
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-5d725cbe",
+    "score": {
+      "basis": "unavailable",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": null
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": null,
+      "game_ids": [],
+      "level_count": null,
+      "levels_completed": null,
+      "score": null,
+      "shape": "absent",
+      "state": null,
+      "total_actions": null
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": [
+      "S-0"
+    ],
+    "verdict": "UNDETERMINED"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "id": "S-0",
+        "shape": "arc_live",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard total_actions == successful non-RESET commands",
+        "id": "S-1",
+        "ledger": 67,
+        "note": "calibrated: refused 400/500 requests are not billed and RESET is counted separately (CALIBRATION)",
+        "scorecard": 67,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard levels_completed == ledger's",
+        "id": "S-2",
+        "ledger": 0,
+        "scorecard": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a positive score iff a level was completed",
+        "id": "S-3",
+        "levels_completed": 0,
+        "note": "the only relation between score and levels this corpus pins down; the partial-credit formula is not reimplemented here",
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "bound": 1.0,
+        "claim": "the card's score is within any reading of it",
+        "id": "S-9",
+        "levels_completed": 0,
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card's totals agree with its own environments",
+        "id": "S-10",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card and the step responses agree on the level count",
+        "id": "S-8",
+        "ledger": 8,
+        "note": "the ledger's copy is the API's `win_levels`, recorded on every command response",
+        "scorecard": 8,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the scorecard covers the game the ledger played",
+        "id": "S-4",
+        "ledger": [
+          "ar25-0c556536"
+        ],
+        "scorecard": [
+          "ar25-0c556536"
+        ],
+        "verdict": "PASS"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 8,
+      "actions_ok": 67,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 68,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 75,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 76
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-76390591",
+    "score": {
+      "basis": "scorecard",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": 0.0
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": "e066018a-97a5-4248-8e38-6d577092c387",
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_count": 8,
+      "levels_completed": 0,
+      "score": 0.0,
+      "shape": "arc_live",
+      "state": "GAME_OVER",
+      "total_actions": 67
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": null,
+    "verdict": "PASS"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "id": "S-0",
+        "shape": "arc_live",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard total_actions == successful non-RESET commands",
+        "id": "S-1",
+        "ledger": 25,
+        "note": "calibrated: refused 400/500 requests are not billed and RESET is counted separately (CALIBRATION)",
+        "scorecard": 25,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard levels_completed == ledger's",
+        "id": "S-2",
+        "ledger": 0,
+        "scorecard": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a positive score iff a level was completed",
+        "id": "S-3",
+        "levels_completed": 0,
+        "note": "the only relation between score and levels this corpus pins down; the partial-credit formula is not reimplemented here",
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "bound": 1.0,
+        "claim": "the card's score is within any reading of it",
+        "id": "S-9",
+        "levels_completed": 0,
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card's totals agree with its own environments",
+        "id": "S-10",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card and the step responses agree on the level count",
+        "id": "S-8",
+        "ledger": 8,
+        "note": "the ledger's copy is the API's `win_levels`, recorded on every command response",
+        "scorecard": 8,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the scorecard covers the game the ledger played",
+        "id": "S-4",
+        "ledger": [
+          "ar25-0c556536"
+        ],
+        "scorecard": [
+          "ar25-0c556536"
+        ],
+        "verdict": "PASS"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 10,
+      "actions_ok": 25,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 26,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 35,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 36
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-20804484",
+    "score": {
+      "basis": "scorecard",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": 0.0
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": "304b9599-f9df-4d7a-9871-36e314de33a5",
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_count": 8,
+      "levels_completed": 0,
+      "score": 0.0,
+      "shape": "arc_live",
+      "state": "NOT_FINISHED",
+      "total_actions": 25
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": null,
+    "verdict": "PASS"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "detail": "scorecard shape is 'absent'; the score cannot be reconciled against the API. A closed card cannot be re-fetched, so this is not recoverable after the fact.",
+        "id": "S-0",
+        "verdict": "UNDETERMINED"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 10,
+      "actions_ok": 25,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 26,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 35,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 36
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-f5de007d",
+    "score": {
+      "basis": "unavailable",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": null
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": null,
+      "game_ids": [],
+      "level_count": null,
+      "levels_completed": null,
+      "score": null,
+      "shape": "absent",
+      "state": null,
+      "total_actions": null
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": [
+      "S-0"
+    ],
+    "verdict": "UNDETERMINED"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "id": "S-0",
+        "shape": "arc_live",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard total_actions == successful non-RESET commands",
+        "id": "S-1",
+        "ledger": 22,
+        "note": "calibrated: refused 400/500 requests are not billed and RESET is counted separately (CALIBRATION)",
+        "scorecard": 22,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard levels_completed == ledger's",
+        "id": "S-2",
+        "ledger": 0,
+        "scorecard": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a positive score iff a level was completed",
+        "id": "S-3",
+        "levels_completed": 0,
+        "note": "the only relation between score and levels this corpus pins down; the partial-credit formula is not reimplemented here",
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "bound": 1.0,
+        "claim": "the card's score is within any reading of it",
+        "id": "S-9",
+        "levels_completed": 0,
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card's totals agree with its own environments",
+        "id": "S-10",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card and the step responses agree on the level count",
+        "id": "S-8",
+        "ledger": 8,
+        "note": "the ledger's copy is the API's `win_levels`, recorded on every command response",
+        "scorecard": 8,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the scorecard covers the game the ledger played",
+        "id": "S-4",
+        "ledger": [
+          "ar25-0c556536"
+        ],
+        "scorecard": [
+          "ar25-0c556536"
+        ],
+        "verdict": "PASS"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 10,
+      "actions_ok": 22,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 23,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 32,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 33
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-d919fde0",
+    "score": {
+      "basis": "scorecard",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": 0.0
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": "7a3fe1b6-b806-4882-a2a7-4dd10cc961a8",
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_count": 8,
+      "levels_completed": 0,
+      "score": 0.0,
+      "shape": "arc_live",
+      "state": "NOT_FINISHED",
+      "total_actions": 22
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": null,
+    "verdict": "PASS"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "id": "S-0",
+        "shape": "arc_live",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard total_actions == successful non-RESET commands",
+        "id": "S-1",
+        "ledger": 45,
+        "note": "calibrated: refused 400/500 requests are not billed and RESET is counted separately (CALIBRATION)",
+        "scorecard": 45,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard levels_completed == ledger's",
+        "id": "S-2",
+        "ledger": 0,
+        "scorecard": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a positive score iff a level was completed",
+        "id": "S-3",
+        "levels_completed": 0,
+        "note": "the only relation between score and levels this corpus pins down; the partial-credit formula is not reimplemented here",
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "bound": 1.0,
+        "claim": "the card's score is within any reading of it",
+        "id": "S-9",
+        "levels_completed": 0,
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card's totals agree with its own environments",
+        "id": "S-10",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card and the step responses agree on the level count",
+        "id": "S-8",
+        "ledger": 8,
+        "note": "the ledger's copy is the API's `win_levels`, recorded on every command response",
+        "scorecard": 8,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the scorecard covers the game the ledger played",
+        "id": "S-4",
+        "ledger": [
+          "ar25-0c556536"
+        ],
+        "scorecard": [
+          "ar25-0c556536"
+        ],
+        "verdict": "PASS"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 10,
+      "actions_ok": 45,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 46,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 55,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 56
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-9d5fb85d",
+    "score": {
+      "basis": "scorecard",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": 0.0
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": "7e10fed6-792a-45ad-8af0-fedf1aa72f21",
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_count": 8,
+      "levels_completed": 0,
+      "score": 0.0,
+      "shape": "arc_live",
+      "state": "NOT_FINISHED",
+      "total_actions": 45
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": null,
+    "verdict": "PASS"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "detail": "scorecard shape is 'absent'; the score cannot be reconciled against the API. A closed card cannot be re-fetched, so this is not recoverable after the fact.",
+        "id": "S-0",
+        "verdict": "UNDETERMINED"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 10,
+      "actions_ok": 34,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 35,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 44,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 45
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-af4a5bb6",
+    "score": {
+      "basis": "unavailable",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": null
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": null,
+      "game_ids": [],
+      "level_count": null,
+      "levels_completed": null,
+      "score": null,
+      "shape": "absent",
+      "state": null,
+      "total_actions": null
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": [
+      "S-0"
+    ],
+    "verdict": "UNDETERMINED"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "id": "S-0",
+        "shape": "arc_live",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard total_actions == successful non-RESET commands",
+        "id": "S-1",
+        "ledger": 28,
+        "note": "calibrated: refused 400/500 requests are not billed and RESET is counted separately (CALIBRATION)",
+        "scorecard": 28,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard levels_completed == ledger's",
+        "id": "S-2",
+        "ledger": 0,
+        "scorecard": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a positive score iff a level was completed",
+        "id": "S-3",
+        "levels_completed": 0,
+        "note": "the only relation between score and levels this corpus pins down; the partial-credit formula is not reimplemented here",
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "bound": 1.0,
+        "claim": "the card's score is within any reading of it",
+        "id": "S-9",
+        "levels_completed": 0,
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card's totals agree with its own environments",
+        "id": "S-10",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card and the step responses agree on the level count",
+        "id": "S-8",
+        "ledger": 8,
+        "note": "the ledger's copy is the API's `win_levels`, recorded on every command response",
+        "scorecard": 8,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the scorecard covers the game the ledger played",
+        "id": "S-4",
+        "ledger": [
+          "ar25-0c556536"
+        ],
+        "scorecard": [
+          "ar25-0c556536"
+        ],
+        "verdict": "PASS"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 10,
+      "actions_ok": 28,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 29,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 38,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 39
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-cfc26bc8",
+    "score": {
+      "basis": "scorecard",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": 0.0
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": "6ce2dfc7-d402-4b3c-bd61-3f56888033b9",
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_count": 8,
+      "levels_completed": 0,
+      "score": 0.0,
+      "shape": "arc_live",
+      "state": "NOT_FINISHED",
+      "total_actions": 28
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": null,
+    "verdict": "PASS"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "id": "S-0",
+        "shape": "arc_live",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard total_actions == successful non-RESET commands",
+        "id": "S-1",
+        "ledger": 34,
+        "note": "calibrated: refused 400/500 requests are not billed and RESET is counted separately (CALIBRATION)",
+        "scorecard": 34,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "scorecard levels_completed == ledger's",
+        "id": "S-2",
+        "ledger": 0,
+        "scorecard": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a positive score iff a level was completed",
+        "id": "S-3",
+        "levels_completed": 0,
+        "note": "the only relation between score and levels this corpus pins down; the partial-credit formula is not reimplemented here",
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "bound": 1.0,
+        "claim": "the card's score is within any reading of it",
+        "id": "S-9",
+        "levels_completed": 0,
+        "score": 0.0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card's totals agree with its own environments",
+        "id": "S-10",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the card and the step responses agree on the level count",
+        "id": "S-8",
+        "ledger": 8,
+        "note": "the ledger's copy is the API's `win_levels`, recorded on every command response",
+        "scorecard": 8,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the scorecard covers the game the ledger played",
+        "id": "S-4",
+        "ledger": [
+          "ar25-0c556536"
+        ],
+        "scorecard": [
+          "ar25-0c556536"
+        ],
+        "verdict": "PASS"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 10,
+      "actions_ok": 34,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 35,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 44,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 45
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-d396aabd",
+    "score": {
+      "basis": "scorecard",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": 0.0
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": "2354b34f-71dd-4496-a241-7667cb05940f",
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_count": 8,
+      "levels_completed": 0,
+      "score": 0.0,
+      "shape": "arc_live",
+      "state": "NOT_FINISHED",
+      "total_actions": 34
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": null,
+    "verdict": "PASS"
+  },
+  {
+    "arm": "bare_cc",
+    "checks": [
+      {
+        "claim": "the records are canonical and internally consistent",
+        "id": "S-12",
+        "n_problems": 0,
+        "problems": null,
+        "verdict": "PASS"
+      },
+      {
+        "arms": [
+          "bare_cc"
+        ],
+        "claim": "the run belongs to exactly one arm",
+        "id": "S-11",
+        "note": "one run is one arm playing one game once; records from a second arm under the same run_id are somebody appending to somebody else's run",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "every step can be classified",
+        "id": "S-13",
+        "verdict": "PASS"
+      },
+      {
+        "claim": "a scorecard was captured for this run",
+        "detail": "scorecard shape is 'absent'; the score cannot be reconciled against the API. A closed card cannot be re-fetched, so this is not recoverable after the fact.",
+        "id": "S-0",
+        "verdict": "UNDETERMINED"
+      },
+      {
+        "boundaries": 0,
+        "claim": "level boundaries recompute from the step sequence",
+        "id": "S-6",
+        "levels_completed": 0,
+        "verdict": "PASS"
+      },
+      {
+        "claim": "the run has exactly one run_end",
+        "id": "S-7",
+        "verdict": "PASS"
+      }
+    ],
+    "failed_checks": null,
+    "game_ids": [
+      "ar25-0c556536"
+    ],
+    "ledger": {
+      "actions_failed": 10,
+      "actions_ok": 33,
+      "actions_refused": 0,
+      "arms": [
+        "bare_cc"
+      ],
+      "card_ids": [],
+      "game_ids": [
+        "ar25-0c556536"
+      ],
+      "level_boundaries": 0,
+      "level_count": 8,
+      "levels_completed": 0,
+      "levels_reported": 34,
+      "malformed": null,
+      "max_step_score": null,
+      "model_calls": 43,
+      "resets": 1,
+      "status_missing": 0,
+      "steps": 44
+    },
+    "ledger_health": {
+      "detail": null,
+      "unreadable_lines": 0
+    },
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-49073b7e",
+    "score": {
+      "basis": "unavailable",
+      "level_count": 8,
+      "levels_completed": 0,
+      "partial_credit_formula": "not reimplemented; see the module docstring -- no scorecard in this corpus has a completed level",
+      "value": null
+    },
+    "scorecard": {
+      "aggregate_errors": null,
+      "card_id": null,
+      "game_ids": [],
+      "level_count": null,
+      "levels_completed": null,
+      "score": null,
+      "shape": "absent",
+      "state": null,
+      "total_actions": null
+    },
+    "scorer": {
+      "frozen_at": "2026-07-28",
+      "id": "arc_v1",
+      "sha256": "sha256:b7d2e810ac4d0cc5ba135b086963365f4b457bef1fc8da253398d99aaaac8ed2",
+      "source": "proxy/scoring/arc_v1.py",
+      "version": "1.0.0"
+    },
+    "undetermined_checks": [
+      "S-0"
+    ],
+    "verdict": "UNDETERMINED"
+  }
+]

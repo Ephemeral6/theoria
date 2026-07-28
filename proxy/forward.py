@@ -3,11 +3,24 @@
 Nothing here knows about ARC or about model providers. It opens the socket, it
 retries the retryable, and it reports what happened -- including the per-attempt
 statuses, which the ledger records when there was more than one.
+
+**It does not follow redirects.** `urllib`'s default handler does, and its
+redirect handler copies every request header except `Content-Length` and
+`Content-Type` onto the new request -- so a `302` from the upstream would
+replay the injected credential to whatever host the redirect named. The red
+team landed exactly that (RED-01) and it is the one attack that breaks sealing
+without the arm doing anything: the whole double-proxy argument is that the key
+exists only inside this process, and a courier that carries it to a third party
+on request ends the argument.
+
+A redirect is therefore returned to the caller as-is, with the `Location`
+recorded, so the refusal is visible rather than silent (RED-02).
 """
 
 import json
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -24,15 +37,40 @@ HOP_BY_HOP = frozenset({
 })
 
 
+class _NoRedirects(urllib.request.HTTPRedirectHandler):
+    """Hand the 3xx back instead of chasing it.
+
+    `redirect_request` returning `None` makes `urllib` stop and surface the
+    response, which is what we want: the caller sees the redirect, records it,
+    and nothing leaves this process for the host the redirect named.
+    """
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return None
+
+
+#: Built once. `urlopen` uses the global opener chain, which follows redirects;
+#: this one does not.
+_OPENER = urllib.request.build_opener(_NoRedirects)
+
+
 class Response:
     def __init__(self, status: int, headers: Dict[str, str], body: bytes,
-                 elapsed_ms: int, attempts: int, attempt_log: List[Dict[str, Any]]):
+                 elapsed_ms: int, attempts: int, attempt_log: List[Dict[str, Any]],
+                 final_url: Optional[str] = None,
+                 redirect_to: Optional[str] = None):
         self.status = status
         self.headers = headers
         self.body = body
         self.elapsed_ms = elapsed_ms
         self.attempts = attempts
         self.attempt_log = attempt_log
+        #: Where the transport actually finished. The ledger used to record the
+        #: URL the proxy *intended*; those are the same thing only as long as
+        #: nothing redirects, which is precisely what was not being checked.
+        self.final_url = final_url
+        #: The `Location` of a refused redirect, if there was one.
+        self.redirect_to = redirect_to
 
     @property
     def text(self) -> str:
@@ -55,22 +93,26 @@ def forward(url: str, method: str, headers: Dict[str, str],
     attempt_log: List[Dict[str, Any]] = []
     started = time.time()
     status, response_headers, raw = TRANSPORT_STATUS, {}, b""
+    final_url: Optional[str] = None
 
     for attempt in range(1, max_attempts + 1):
         request = urllib.request.Request(url, data=body, headers=headers, method=method)
         attempt_started = time.time()
         try:
-            with urllib.request.urlopen(request, timeout=timeout) as response:
+            with _OPENER.open(request, timeout=timeout) as response:
                 status = response.status
                 response_headers = dict(response.headers.items())
                 raw = response.read()
+                final_url = getattr(response, "url", None)
         except urllib.error.HTTPError as exc:
             status = exc.code
             response_headers = dict(exc.headers.items()) if exc.headers else {}
             raw = exc.read()
+            final_url = getattr(exc, "url", None)
         except Exception as exc:                       # transport-level failure
             status = TRANSPORT_STATUS
             response_headers = {}
+            final_url = None
             raw = json.dumps({"error": "%s: %s" % (type(exc).__name__, exc)}).encode()
 
         attempt_log.append({"attempt": attempt, "status": status,
@@ -80,6 +122,24 @@ def forward(url: str, method: str, headers: Dict[str, str],
         if attempt < max_attempts:
             sleep(backoff * attempt)
 
+    redirect_to = None
+    if 300 <= status < 400:
+        redirect_to = response_headers.get("Location") or response_headers.get("location")
+
     return Response(status, response_headers, raw,
                     int((time.time() - started) * 1000),
-                    len(attempt_log), attempt_log)
+                    len(attempt_log), attempt_log,
+                    final_url=final_url, redirect_to=redirect_to)
+
+
+def crossed_hosts(intended: str, final: Optional[str]) -> bool:
+    """Whether the transport finished somewhere other than where it was aimed.
+
+    With redirects refused this should never be true. It is checked anyway,
+    because "should never" is the state a security property is in right before
+    it stops holding.
+    """
+    if not final:
+        return False
+    a, b = urllib.parse.urlsplit(intended), urllib.parse.urlsplit(final)
+    return (a.scheme, a.netloc) != (b.scheme, b.netloc)
