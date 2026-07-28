@@ -173,18 +173,18 @@
     ],
     "ops": [
       {
-        "age_min": 30,
-        "cycle": 21,
+        "age_min": 1,
+        "cycle": 22,
         "id": "OPS-A",
         "kind": "ops",
         "name": "漂移审计员",
-        "note": "cycle 21: no new report. Both priorities unmoved -- verify-lab still absent from master, gates.py untouched, one merge in 40 minutes, 24 branches and 1136 flag lines. Three sessions alive; OPS-M silent 271 minutes and six blocked branches wait only on its judgment. Red lines clean again through the outage.",
-        "outputs": 30,
+        "note": "cycle 22: the queue is thawing -- four merges since 21:39 -- but the fix that unjammed it is an uncommitted working-tree edit to monitor/gates.py, 34 minutes old. master still has the broken line, so the thaw is real but unreproducible, and s14 is still red behind its own fix. Disclosed that my own autostash pushes moved that file twice.",
+        "outputs": 32,
         "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
         "state": "idle"
       },
       {
-        "age_min": 82,
+        "age_min": 89,
         "cycle": 10,
         "id": "OPS-B",
         "kind": "ops",
@@ -195,7 +195,7 @@
         "state": "idle"
       },
       {
-        "age_min": 302,
+        "age_min": 309,
         "cycle": 8,
         "id": "OPS-M",
         "kind": "ops",
@@ -206,7 +206,7 @@
         "state": "blocked"
       },
       {
-        "age_min": 393,
+        "age_min": 400,
         "cycle": 2,
         "id": "OPS-R",
         "kind": "ops",
@@ -219,7 +219,7 @@
     ],
     "standing": [
       {
-        "age_min": 393,
+        "age_min": 400,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
@@ -230,7 +230,7 @@
         "state": "working"
       },
       {
-        "age_min": 389,
+        "age_min": 396,
         "cycle": 4,
         "id": "RES-2",
         "kind": "standing",
@@ -241,7 +241,7 @@
         "state": "working"
       },
       {
-        "age_min": 17,
+        "age_min": 23,
         "cycle": 30,
         "id": "RES-3",
         "kind": "standing",
@@ -252,7 +252,7 @@
         "state": "working"
       },
       {
-        "age_min": 361,
+        "age_min": 368,
         "cycle": 6,
         "id": "RES-4",
         "kind": "standing",
@@ -577,7 +577,7 @@
     "blocked": 2,
     "claimed": 2,
     "done": 54,
-    "listing": "=== available (ͨ�ù��˿��� 18) ===\n  p1  A3-campaign-devpile          cell=A3  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p1  A3-campaign-level2           cell=A3  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p1  S17-fleet-evidence-capture   cell=S17 territory=fleet-study    lane:infra������ͣ�ڣ��ѽ�⣩\n  p1  S23-unreadable-is-not-clean  cell=S23 territory=release        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  A8-campaign-ledger-pipeline  cell=A8  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p2  P12-paper-multi-review       cell=P12 territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  P13-paper-intro-abstract     cell=P13 territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  P14-honesty-section          cell=P14 territory=paper          lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  S16-silent-failure-hunt      cell=S16 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S19-session-liveness         cell=S19 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S20-gate-negative-sample     cell=S20 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S21-app-session-death        cell=S21 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  A4b-ablation-calibrate       cell=A2  territory=ablation-arm   lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  A6-transfer-protocol         cell=A3  territory=cold-start-a3  lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  E3-engines-online            cell=E3  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  S22-access-check-close       cell=S22 territory=arc-recon      lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  S7-ledger-hashchain          cell=S3  territory=proxy          lane:infra������ͣ�ڣ��ѽ�⣩\n  p4  S4-freeze                    cell=S4  territory=freeze         lane:campaign������ͣ�ڣ��ѽ�⣩\n=== reserved�����������������о�Ա���� 7�� ===\n  p1  V19-unverified-is-not-true   lane=verify   owner=RES-3(17����ǰ) territory=worldgen\n  p2  V5-verdict-three-types       lane=verify   owner=RES-3(17����ǰ) territory=exam\n  p2  V7-exam-stress-fanout        lane=verify   owner=RES-3(17����ǰ) territory=exam\n  p2  V8-judge-trust-audit         lane=verify   owner=RES-3(17����ǰ) territory=exam\n  p2  V9-battery-gaming-audit      lane=verify   owner=RES-3(17����ǰ) territory=battery\n  p3  V18-battery-prereg-check     lane=verify   owner=RES-3(17����ǰ) territory=battery\n  p3  V6-exam-on-sealed-dryrun     lane=verify   owner=RES-3(17����ǰ) territory=exam\n=== blocked ===\n  S18-fleetkit-extract         waits on S17-fleet-evidence-capture\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  C10-unsolvable-proof-canon   by RES-3\n  C11-tool-failure-as-truth    by RES-3\n=== done (54) ===\n  A4-ablation-online.superseded-by-A4a\n  A4a-ablation-build.RES-1\n  A7-envelope-finish.APP-A7\n  A9-readonly-baseline.RES-3\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C6-worldgen-mutate.W-1251\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  C9-count-lock-vocabulary.W-131\n  E10-engine-crosscheck.RES-3\n  E11-engine-crosscheck-deep.RES-3\n  E14-crash-is-not-a-finding.RES-3\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  E5-cert-recheck.W-1411\n  E6-engine-dividend.W-130\n  E7-deadlock-claim-audit.W-130\n  E9-engine-paper-table.RES-3\n  P10-figures-into-paper.W-1253\n  P11-battery-section-refresh.RES-2\n  P4-figures.W-1611\n  P5-release.RES-2\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  R2-release-licence.W-1412\n  S1-quota-auto-exit.W-1250\n  S10-invariant-on-resource.W-1251\n  S11-sealed-halfguard.W-1410\n  S12-quota-hold-tests.W-1412\n  S13-verify-gate-enforced.RES-1\n  S14-gates-for-all.RES-4\n  S15-ledger-hashchain.RES-4\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S5-phase1-close.W-1250\n  S6-merge-gate-509.superseded-by-derived-gate\n  S8-provenance-backfill.W-1412\n  S9-contract-change-protocol.W-1250\n  V10-fuzz-mutation-power.RES-3\n  V11-handover-auto.RES-3\n  V11-negative-control-census.RES-3\n  V12-worldgen-gate-deaf.RES-3\n  V13-audit-the-published-surface.RES-3\n  V14-standing-negative-control-probe.RES-3\n  V15-census-sampling-frame.RES-3\n  V16-determinism-has-no-caller.RES-3\n  V17-pin-the-partial-verdict.RES-3\n  V2-exam-on-worldgen.W-1540\n  V3-battery-discrimination.APP-V3\n  V4-exam-selftest.RES-1\n  V5-battery-freeze.W-252"
+    "listing": "=== available (ͨ�ù��˿��� 18) ===\n  p1  A3-campaign-devpile          cell=A3  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p1  A3-campaign-level2           cell=A3  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p1  S17-fleet-evidence-capture   cell=S17 territory=fleet-study    lane:infra������ͣ�ڣ��ѽ�⣩\n  p1  S23-unreadable-is-not-clean  cell=S23 territory=release        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  A8-campaign-ledger-pipeline  cell=A8  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p2  P12-paper-multi-review       cell=P12 territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  P13-paper-intro-abstract     cell=P13 territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  P14-honesty-section          cell=P14 territory=paper          lane:paper������ͣ�ڣ��ѽ�⣩\n  p2  S16-silent-failure-hunt      cell=S16 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S19-session-liveness         cell=S19 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S20-gate-negative-sample     cell=S20 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p2  S21-app-session-death        cell=S21 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  A4b-ablation-calibrate       cell=A2  territory=ablation-arm   lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  A6-transfer-protocol         cell=A3  territory=cold-start-a3  lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  E3-engines-online            cell=E3  territory=theoria-arm    lane:campaign������ͣ�ڣ��ѽ�⣩\n  p3  S22-access-check-close       cell=S22 territory=arc-recon      lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  S7-ledger-hashchain          cell=S3  territory=proxy          lane:infra������ͣ�ڣ��ѽ�⣩\n  p4  S4-freeze                    cell=S4  territory=freeze         lane:campaign������ͣ�ڣ��ѽ�⣩\n=== reserved�����������������о�Ա���� 7�� ===\n  p1  V19-unverified-is-not-true   lane=verify   owner=RES-3(23����ǰ) territory=worldgen\n  p2  V5-verdict-three-types       lane=verify   owner=RES-3(23����ǰ) territory=exam\n  p2  V7-exam-stress-fanout        lane=verify   owner=RES-3(23����ǰ) territory=exam\n  p2  V8-judge-trust-audit         lane=verify   owner=RES-3(23����ǰ) territory=exam\n  p2  V9-battery-gaming-audit      lane=verify   owner=RES-3(23����ǰ) territory=battery\n  p3  V18-battery-prereg-check     lane=verify   owner=RES-3(23����ǰ) territory=battery\n  p3  V6-exam-on-sealed-dryrun     lane=verify   owner=RES-3(23����ǰ) territory=exam\n=== blocked ===\n  S18-fleetkit-extract         waits on S17-fleet-evidence-capture\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  C10-unsolvable-proof-canon   by RES-3\n  C11-tool-failure-as-truth    by RES-3\n=== done (54) ===\n  A4-ablation-online.superseded-by-A4a\n  A4a-ablation-build.RES-1\n  A7-envelope-finish.APP-A7\n  A9-readonly-baseline.RES-3\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C6-worldgen-mutate.W-1251\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  C9-count-lock-vocabulary.W-131\n  E10-engine-crosscheck.RES-3\n  E11-engine-crosscheck-deep.RES-3\n  E14-crash-is-not-a-finding.RES-3\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  E5-cert-recheck.W-1411\n  E6-engine-dividend.W-130\n  E7-deadlock-claim-audit.W-130\n  E9-engine-paper-table.RES-3\n  P10-figures-into-paper.W-1253\n  P11-battery-section-refresh.RES-2\n  P4-figures.W-1611\n  P5-release.RES-2\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  R2-release-licence.W-1412\n  S1-quota-auto-exit.W-1250\n  S10-invariant-on-resource.W-1251\n  S11-sealed-halfguard.W-1410\n  S12-quota-hold-tests.W-1412\n  S13-verify-gate-enforced.RES-1\n  S14-gates-for-all.RES-4\n  S15-ledger-hashchain.RES-4\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S5-phase1-close.W-1250\n  S6-merge-gate-509.superseded-by-derived-gate\n  S8-provenance-backfill.W-1412\n  S9-contract-change-protocol.W-1250\n  V10-fuzz-mutation-power.RES-3\n  V11-handover-auto.RES-3\n  V11-negative-control-census.RES-3\n  V12-worldgen-gate-deaf.RES-3\n  V13-audit-the-published-surface.RES-3\n  V14-standing-negative-control-probe.RES-3\n  V15-census-sampling-frame.RES-3\n  V16-determinism-has-no-caller.RES-3\n  V17-pin-the-partial-verdict.RES-3\n  V2-exam-on-worldgen.W-1540\n  V3-battery-discrimination.APP-V3\n  V4-exam-selftest.RES-1\n  V5-battery-freeze.W-252"
   },
   "con_green": 1,
   "constraints": [
@@ -843,7 +843,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-29 06:10:36",
+  "generated_at": "2026-07-29 06:17:34",
   "grid": {
     "A1": {
       "active": [
@@ -1775,10 +1775,11 @@
       "ablation-arm/artifacts/verify.json",
       "monitor/board.py",
       "monitor/board/board.log",
-      "monitor/board/claimed/E8-ic3-scale.W-130.md",
-      "monitor/board/claimed/V11-handover-auto.RES-3.md",
-      "monitor/board/items/C11-tool-failure-as-truth.md",
-      "monitor/board/items/E14-crash-is-not-a-finding.md",
+      "monitor/board/items/C11-tool-failure-as-truth.md -> monitor/board/claimed/C11-tool-failure-as-truth.RES-3.md",
+      "monitor/board/items/E14-crash-is-not-a-finding.md -> monitor/board/done/E14-crash-is-not-a-finding.RES-3.md",
+      "monitor/board/claimed/V11-handover-auto.RES-3.md -> monitor/board/done/V11-handover-auto.RES-3.md",
+      "monitor/board/claimed/E8-ic3-scale.W-130.md -> monitor/board/items/E8-ic3-scale.md",
+      "monitor/bus/OPS-A/cursor.json",
       "monitor/bus/OPS-B/cursor.json",
       "monitor/bus/RES-3/out.jsonl",
       "monitor/ci/CONFLICT-origin_agent_a4a-ablation-build.md",
@@ -1796,6 +1797,10 @@
       "monitor/ci/merge.log",
       "monitor/ci_merge.py",
       "monitor/gates.py",
+      "monitor/inbox/20260728T204349Z-W-1622-supply-low-zero-is-the-guard-measuring-itself.md",
+      "monitor/inbox/20260728T204718Z-W-1620-the-jam-is-not-the-lane-guard-eight-branches-die-on-a-backslash.md",
+      "monitor/inbox/20260728T205239Z-W-1621-the-board-reads-empty-for-a-different-reason-than-you-wrote-down.md",
+      "monitor/inbox/20260728T213500Z-W-1630-fleet-study-cannot-merge.md",
       "monitor/inbox/20260728T185529Z-W-251-lane-guard-deadlocks-generic-workers.md -> monitor/inbox/archive/20260728T185529Z-W-251-lane-guard-deadlocks-generic-workers.md",
       "monitor/index.html",
       "monitor/ops-status/RES-3.json",
@@ -1817,14 +1822,8 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/C11-tool-failure-as-truth.RES-3.md",
-      "monitor/board/done/E14-crash-is-not-a-finding.RES-3.md",
-      "monitor/board/done/V11-handover-auto.RES-3.md",
-      "monitor/board/items/E8-ic3-scale.md",
-      "monitor/inbox/20260728T204349Z-W-1622-supply-low-zero-is-the-guard-measuring-itself.md",
-      "monitor/inbox/20260728T204718Z-W-1620-the-jam-is-not-the-lane-guard-eight-branches-die-on-a-backslash.md",
-      "monitor/inbox/20260728T205239Z-W-1621-the-board-reads-empty-for-a-different-reason-than-you-wrote-down.md",
-      "monitor/inbox/20260728T213500Z-W-1630-fleet-study-cannot-merge.md",
+      "monitor/audit/DRIFT-20260728T2214Z-the-fix-that-unjammed-the-queue-is-not-committed.md",
+      "monitor/reflex.lock",
       "theoria-arm/.pytest-runs/"
     ],
     "engine_candidates": 44,
@@ -1848,14 +1847,8 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/C11-tool-failure-as-truth.RES-3.md",
-      "monitor/board/done/E14-crash-is-not-a-finding.RES-3.md",
-      "monitor/board/done/V11-handover-auto.RES-3.md",
-      "monitor/board/items/E8-ic3-scale.md",
-      "monitor/inbox/20260728T204349Z-W-1622-supply-low-zero-is-the-guard-measuring-itself.md",
-      "monitor/inbox/20260728T204718Z-W-1620-the-jam-is-not-the-lane-guard-eight-branches-die-on-a-backslash.md",
-      "monitor/inbox/20260728T205239Z-W-1621-the-board-reads-empty-for-a-different-reason-than-you-wrote-down.md",
-      "monitor/inbox/20260728T213500Z-W-1630-fleet-study-cannot-merge.md",
+      "monitor/audit/DRIFT-20260728T2214Z-the-fix-that-unjammed-the-queue-is-not-committed.md",
+      "monitor/reflex.lock",
       "theoria-arm/.pytest-runs/"
     ]
   },
@@ -2337,31 +2330,31 @@
       "status": "partial"
     },
     "needs_human": {
-      "detail": "需要你重开的会话：OPS-M 合并裁判（301 分钟没心跳）； RES-1 在线战役研究员（392 分钟没心跳）； RES-2 论文与释出研究员（389 分钟没心跳）； RES-4 基础设施研究员（361 分钟没心跳）",
+      "detail": "需要你重开的会话：OPS-M 合并裁判（308 分钟没心跳）； RES-1 在线战役研究员（399 分钟没心跳）； RES-2 论文与释出研究员（395 分钟没心跳）； RES-4 基础设施研究员（367 分钟没心跳）",
       "rows": [
         {
           "id": "OPS-M",
           "name": "合并裁判",
           "prompt": "monitor/prompts/ops/OPS-M.md",
-          "why": "301 分钟没心跳"
+          "why": "308 分钟没心跳"
         },
         {
           "id": "RES-1",
           "name": "在线战役研究员",
           "prompt": "monitor/prompts/ops/RES-1.md",
-          "why": "392 分钟没心跳"
+          "why": "399 分钟没心跳"
         },
         {
           "id": "RES-2",
           "name": "论文与释出研究员",
           "prompt": "monitor/prompts/ops/RES-2.md",
-          "why": "389 分钟没心跳"
+          "why": "395 分钟没心跳"
         },
         {
           "id": "RES-4",
           "name": "基础设施研究员",
           "prompt": "monitor/prompts/ops/RES-4.md",
-          "why": "361 分钟没心跳"
+          "why": "367 分钟没心跳"
         }
       ],
       "status": "risk"
@@ -2371,10 +2364,10 @@
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第21轮 idle（29 分钟前）； OPS-B 第10轮 idle（82 分钟前）； OPS-M 第8轮 blocked（301 分钟前）； OPS-R 第2轮 working（392 分钟前）",
+      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第21轮 idle（35 分钟前）； OPS-B 第10轮 idle（88 分钟前）； OPS-M 第8轮 blocked（308 分钟前）； OPS-R 第2轮 working（399 分钟前）",
       "rows": [
         {
-          "age_min": 29,
+          "age_min": 35,
           "cycle": 21,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -2383,7 +2376,7 @@
           "status": "green"
         },
         {
-          "age_min": 82,
+          "age_min": 88,
           "cycle": 10,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -2392,7 +2385,7 @@
           "status": "green"
         },
         {
-          "age_min": 301,
+          "age_min": 308,
           "cycle": 8,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2401,7 +2394,7 @@
           "status": "risk"
         },
         {
-          "age_min": 392,
+          "age_min": 399,
           "cycle": 2,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2426,7 +2419,7 @@
       "status": "risk"
     },
     "self_driving": {
-      "detail": "RES-1 第2轮 working（392 分钟前）**疑似停下等人**； RES-2 第4轮 working（389 分钟前）**疑似停下等人**； RES-3 第30轮 working（16 分钟前）； RES-4 第6轮 working（361 分钟前）**疑似停下等人**　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。",
+      "detail": "RES-1 第2轮 working（399 分钟前）**疑似停下等人**； RES-2 第4轮 working（395 分钟前）**疑似停下等人**； RES-3 第30轮 working（22 分钟前）； RES-4 第6轮 working（367 分钟前）**疑似停下等人**　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。",
       "status": "risk"
     },
     "spec_freshness": {

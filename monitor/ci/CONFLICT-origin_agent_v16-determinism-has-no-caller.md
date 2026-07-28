@@ -14,7 +14,7 @@ E         'fleet-study'
 tests\test_gates.py:105: AssertionError
 _________________ test_a_limit_signature_flips_normal_to_hold _________________
 
-rig = <conftest.rig.<locals>.Rig object at 0x000001E53A73B8C0>
+rig = <conftest.rig.<locals>.Rig object at 0x000001CC1262B8C0>
 
     def test_a_limit_signature_flips_normal_to_hold(rig):
         rig.write_state()
@@ -35,7 +35,7 @@ tests\test_quota.py:45: AssertionError
 HOLD — 日志中的限额签名：hit your session limit · resets 8:20pm
 __________ test_a_session_that_pushed_its_branch_is_not_a_quota_kill __________
 
-rig = <conftest.rig.<locals>.Rig object at 0x000001E53A73BB60>
+rig = <conftest.rig.<locals>.Rig object at 0x000001CC1262BB60>
 
     def test_a_session_that_pushed_its_branch_is_not_a_quota_kill(rig):
         """It finished. A limit line in the log of a session whose work landed is
@@ -45,8 +45,8 @@ rig = <conftest.rig.<locals>.Rig object at 0x000001E53A73BB60>
     
 >       assert quota.check() == 0
 E       assert 2 == 0
-E        +  where 2 = <function check at 0x000001E53A65FD80>()
-E        +    where <function check at 0x000001E53A65FD80> = quota.check
+E        +  where 2 = <function check at 0x000001CC1256FD80>()
+E        +    where <function check at 0x000001CC1256FD80> = quota.check
 
 tests\test_quota.py:68: AssertionError
 ---------------------------- Captured stdout call -----------------------------
