@@ -1,0 +1,25 @@
+{
+  "cycle": 1,
+  "utc": "2026-07-28T03:36Z",
+  "last_audited_commit": "7c55c090149c469c0607a120e2a7c24f70c9ab7c",
+  "last_audited_short": "7c55c09",
+  "mode": "cold-start (无前序游标，本轮全量；下轮起增量)",
+  "covered": {
+    "纪律漂移": "封存堆 21 局全 ID 扫全部已跟踪文件（命中 25 文件，逐一判为登记/护栏/否决清单，无对局接触）；密钥值全树扫描 + git check-ignore 复核；append-only 三文件全历史删除行统计",
+    "基准漂移": "未系统巡（本轮时间给了前一项）",
+    "证据漂移": "抽查 P-13 FD 接入声明 → 产物在树上，STATUS 自陈诚实；schema_traces 路 A 取材 → allowlist 仅开发堆 4 局，885 个封存文件被拒，провenance 完整",
+    "目标漂移": "未巡（PAPER_PLAN 对位留待下轮）",
+    "流程漂移": "runs/ 与 MANIFEST 全领地盘点 → DRIFT-manifest-has-no-canonical-form",
+    "监控自身漂移": "spec.py 手写 note × 2 + scan.py 探针 × 2 复核 → DRIFT-monitor-verdicts-stale"
+  },
+  "reports_this_cycle": [
+    "DRIFT-20260728T0336Z-partner-sync-in-place-rewrite.md",
+    "DRIFT-20260728T0336Z-monitor-verdicts-stale.md",
+    "DRIFT-20260728T0336Z-manifest-has-no-canonical-form.md"
+  ],
+  "next_cycle_focus": [
+    "基准漂移与目标漂移：本轮未巡，下轮优先",
+    "增量起点 7c55c09 之后的提交；合并队列正在每分钟落一笔，下轮增量会不小",
+    "复看三条报告是否被监控处置（处置后由监控移入 archive/，我不动 archive）"
+  ]
+}
