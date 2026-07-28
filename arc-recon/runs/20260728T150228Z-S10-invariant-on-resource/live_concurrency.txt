@@ -1,0 +1,8 @@
+﻿== negative controls: both go red as they must
+== live machine
+   gate constants from monitor/reflex.py: WORKER_MAX=7 MIN_FREE_GB=8
+   agent processes: 24
+   free RAM: 6.01 GB
+   VIOLATION: live agent processes 24 exceed WORKER_MAX 7
+   VIOLATION: free RAM 6.0 GB is below MIN_FREE_GB 8
+   OVER OR UNKNOWN

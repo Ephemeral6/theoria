@@ -1,0 +1,6 @@
+﻿== negative control: goes red as it must
+== live board
+   log says held : E5-cert-recheck, S1-quota-auto-exit, S10-invariant-on-resource, S12-quota-hold-tests, S13-verify-gate-enforced, S5-phase1-close, V3-battery-discrimination
+   claimed/ holds: E5-cert-recheck, S10-invariant-on-resource, S12-quota-hold-tests, S13-verify-gate-enforced, V3-battery-discrimination
+   LOG ONLY (moved out by hand): S1-quota-auto-exit, S5-phase1-close
+   DIVERGED
