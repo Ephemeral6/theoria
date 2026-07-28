@@ -2,6 +2,7 @@
 # input: a throwaway git repo containing
 #   corrupt.jsonl  -- names a sealed game, invalid UTF-8
 #   vanished.md    -- tracked by git, deleted from the tree
+# <TMP> stands in for this run's temp directory.
 
   note      credential loaded for comparison only: 7171...05dd (len 36)
   note      3 tracked file(s) scanned for the literal key

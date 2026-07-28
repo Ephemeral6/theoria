@@ -2,6 +2,7 @@
 # input: a throwaway git repo containing
 #   corrupt.jsonl  -- names a sealed game, invalid UTF-8
 #   vanished.md    -- tracked by git, deleted from the tree
+# <TMP> stands in for this run's temp directory.
 
   note      credential loaded for comparison only: 7171...05dd (len 36)
   note      3 of 4 tracked file(s) scanned for the literal key; 1 could not be opened
@@ -9,9 +10,9 @@
   note      3 of 4 tracked file(s) scanned for sealed game ids; 2 could not be read or parsed
   note      1 file(s) mention a sealed id without carrying payload -- guards, tests, audit documents and the cut itself. Naming a sealed game in order to keep it out is not contact with it, and a release that stripped these would be hiding the very ledger that proves the seal held. Listed, not failed:
   note          arc-recon/data/piles.json names bp35-0a0ad940, cd82-fb555c5d, cn04-2fe56bfb, dc22-fdcac232, ft09-0d8bbf25, ka59-38d34dbb, lf52-271a04aa, lp85-305b61c3, ls20-9607627b, m0r0-492f87ba, r11l-495a7899, re86-8af5384d, s5i5-18d95033, sb26-7fbdac44, sc25-635fd71a, sp80-589a99af, su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47, and NO record pairs a sealed id with payload -- checked record by record, not by co-occurrence
-  NEEDS HUMAN (credential) vanished.md could not be opened (FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\s23-tree-1zsc_2eu\\vanished.md'), so it has NOT been searched for the literal key. This is a tracked file: it ships in the manifest whether or not this check could read it.
+  NEEDS HUMAN (credential) vanished.md could not be opened (FileNotFoundError: [Errno 2] No such file or directory: '<TMP>\\vanished.md'), so it has NOT been searched for the literal key. This is a tracked file: it ships in the manifest whether or not this check could read it.
   NEEDS HUMAN (sealed)     corrupt.jsonl names bp35-0a0ad940 and could NOT be parsed (UnicodeDecodeError: 'utf-8' codec can't decode byte 0x80 in position 29: invalid start byte), so no record in it has been judged. An unparseable file that names a sealed game is the one case where 'no finding' and 'did not look' are easiest to confuse and most expensive to get wrong.
-  NEEDS HUMAN (sealed)     vanished.md could not be opened (FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\s23-tree-1zsc_2eu\\vanished.md'), so it has NOT been checked for sealed material. A tracked file this check could not read is not a tracked file with nothing in it.
+  NEEDS HUMAN (sealed)     vanished.md could not be opened (FileNotFoundError: [Errno 2] No such file or directory: '<TMP>\\vanished.md'), so it has NOT been checked for sealed material. A tracked file this check could not read is not a tracked file with nothing in it.
 
 red lines: 0 credential violation(s), 0 sealed-pile violation(s), 3 file(s) this check could not read over 4 tracked files.
 

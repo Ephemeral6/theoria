@@ -3,6 +3,7 @@
 #   bp35-0a0ad940 registered with claims='quarantined' (a typo:
 #   not one of CLAIM_STATES, so it is in no settled bucket)
 # and a DATA_DIR with no recon_ledger.jsonl in it at all.
+# <TMP> stands in for this run's temp directory.
 
   piles.json sha256 MATCHES (cut unmodified)
   ar25-0c556536      dev      trajectories_reviewed      n/a

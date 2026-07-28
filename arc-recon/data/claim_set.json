@@ -44,6 +44,7 @@
         "contacts": {},
         "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
         "ledger_lines": 1231,
+        "present": true,
         "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
         "sealed_games_contacted": [],
         "sealed_ids_seen_in_responses": 21,
@@ -69,13 +70,15 @@
           "tu93",
           "vc33",
           "wa30"
-        ]
+        ],
+        "unreadable": []
       },
       "baseline-arms/ledger.jsonl": {
         "clean": true,
         "contacts": {},
         "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
         "ledger_lines": 560,
+        "present": true,
         "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
         "sealed_games_contacted": [],
         "sealed_ids_seen_in_responses": 0,
@@ -101,13 +104,15 @@
           "tu93",
           "vc33",
           "wa30"
-        ]
+        ],
+        "unreadable": []
       },
       "baseline-arms/probe_log.jsonl": {
         "clean": true,
         "contacts": {},
         "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
-        "ledger_lines": 1945,
+        "ledger_lines": 1955,
+        "present": true,
         "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
         "sealed_games_contacted": [],
         "sealed_ids_seen_in_responses": 0,
@@ -133,7 +138,8 @@
           "tu93",
           "vc33",
           "wa30"
-        ]
+        ],
+        "unreadable": []
       }
     },
     "ledgers_scanned": 3
@@ -164,6 +170,7 @@
     "contacts": {},
     "definition": "contact = sealed id in the request url or request body; a sealed id in a response is a listing, not a touch",
     "ledger_lines": 1231,
+    "present": true,
     "responses_note": "GET /api/games returns the whole public set, so all 21 sealed ids appear in read-only responses; that is the catalogue the cut was made from",
     "sealed_games_contacted": [],
     "sealed_ids_seen_in_responses": 21,
@@ -189,7 +196,8 @@
       "tu93",
       "vc33",
       "wa30"
-    ]
+    ],
+    "unreadable": []
   },
   "sealed_pile_size": 21,
   "source": "derived from data/contamination_log.jsonl by contamination.py",

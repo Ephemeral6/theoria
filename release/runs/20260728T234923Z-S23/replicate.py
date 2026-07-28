@@ -108,6 +108,22 @@ def run_capture(fn, *args, **kwargs) -> tuple[str, object]:
     return buf.getvalue(), result
 
 
+def scrub(text: str, *volatile: str) -> str:
+    """Replace this run's temp paths with a stable placeholder.
+
+    `verify.sh` re-runs this script, so its output is written on every green
+    run. A `FileNotFoundError` message carries the absolute path of the
+    `mkdtemp()` that produced it, which differs every time -- so the archive
+    would show a diff after every verification, and an artefact that changes
+    whenever you look at it teaches a reader to ignore its diff. That is the
+    same lesson as the bug: a signal that always fires carries nothing.
+    """
+    for path in volatile:
+        for form in (path, path.replace("\\", "\\\\"), path.replace("\\", "/")):
+            text = text.replace(form, "<TMP>")
+    return text
+
+
 # --------------------------------------------------------------- scenario one
 
 
@@ -158,8 +174,9 @@ def scenario_redlines(out_dir: str) -> list[str]:
                          f"{BASE_REF if label == 'before' else 'this working tree'}\n")
                 fh.write("# input: a throwaway git repo containing\n")
                 fh.write("#   corrupt.jsonl  -- names a sealed game, invalid UTF-8\n")
-                fh.write("#   vanished.md    -- tracked by git, deleted from the tree\n\n")
-                fh.write(text)
+                fh.write("#   vanished.md    -- tracked by git, deleted from the tree\n")
+                fh.write("# <TMP> stands in for this run's temp directory.\n\n")
+                fh.write(scrub(text, tree))
                 fh.write(f"\nexit code: {code}\n")
             summary.append(f"check_redlines {label}: exit {code}")
     finally:
@@ -216,8 +233,9 @@ def scenario_contamination(out_dir: str) -> list[str]:
                 fh.write("# input: the real contamination log plus one planted record\n")
                 fh.write(f"#   {game} registered with claims='quarantined' (a typo:\n")
                 fh.write("#   not one of CLAIM_STATES, so it is in no settled bucket)\n")
-                fh.write("# and a DATA_DIR with no recon_ledger.jsonl in it at all.\n\n")
-                fh.write(text)
+                fh.write("# and a DATA_DIR with no recon_ledger.jsonl in it at all.\n")
+                fh.write("# <TMP> stands in for this run's temp directory.\n\n")
+                fh.write(scrub(text, data))
                 fh.write(f"\nexit code: {code}\n")
             summary.append(f"contamination {label}: exit {code}")
     finally:
