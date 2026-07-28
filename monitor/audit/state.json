@@ -1,18 +1,15 @@
 {
-  "cycle": 16,
-  "utc": "2026-07-28T18:26Z",
-  "last_audited_commit": "1ae2074",
-  "range_this_cycle": "49f9f7a..1ae2074",
+  "cycle": 17,
+  "utc": "2026-07-28T19:00Z",
+  "last_audited_commit": "9163a52",
+  "range_this_cycle": "1ae2074..9163a52 (3 commits, 30 files)",
   "mode": "incremental",
   "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "单向门": "第四轮同一处，本轮量代价：19 分支 / 91 提交成品停在门外，其中 26 提交是修这道门用的（s14-gates-for-all + v14/v11/v16 negative-control + v13）。零交付 107 分钟，FLAG 400，阻塞 20。三轮趋势 13/169 → 17/350 → 20/400，积压每小时约翻一倍而生产端未停",
-    "纪律漂移": "封存 / 密钥 / append-only 主线均无异常",
-    "其余维度": "让位于队列"
+    "事故期纪律专项（本轮主项）": "四个常驻会话全灭、队列停摆 140 分钟的混乱期里，专查纪律有没有被应急动作绕过：封存 ID 命中仅盘面渲染文件；密钥零命中；append-only 区间内零删除；merge.log 全历史仅 1 处 NO GATE（15:43Z papers，已报过），无新增绕过；近三小时 master 上未触碰任何受保护根文件（CLAUDE.md / Theoria.md / CONTRACTS / .gitignore）。**结论：应急期间纪律守住了，无漂移，按沉默即健康不写报告。**",
+    "单向门": "队列仍冻：末次 MERGED 仍 16:37:52Z ⇒ 140 分钟零交付。gates.py 未改、probe_merge_queue 未加。前四轮已充分报告，本轮不重复。"
   },
-  "reports_this_cycle": [
-    "DRIFT-20260728T1825Z-ninety-one-commits-of-finished-work-stranded.md"
-  ],
+  "reports_this_cycle": [],
   "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
   "pending_on_monitor": [
     "**最急（已升 critical）**：应用 OPS-M cycle 8 的一行——gates.py 显式解析 Git Bash 的绝对路径（Program Files 下的 Git/bin/bash.exe），不要让 CreateProcess 的 PATH 搜索选到 System32 里 WSL 的 bash；若监控仍未动，按 CHARTER 阶梯交给用户",
@@ -41,14 +38,22 @@
     "常用脚本：redline.py、manifests.py、probe_red.py、negsample.py、flags.py（merge.log 阻塞时长与重报次数）、dim6.py"
   ],
   "next_cycle_focus": [
-    "先看 MERGED 是否恢复增长（末次仍 16:37:52Z）",
-    "probe_merge_queue / probe_a1_state / gates.py 三件是否落地",
-    "增量起点 1ae2074"
+    "先看 MERGED 是否恢复增长（末次仍 16:37:52Z，已 140 分钟）",
+    "gates.py / probe_merge_queue / probe_a1_state 三件是否落地",
+    "增量起点 9163a52"
   ],
   "superseded": [
     "我 cycle 12 报告里引用的 OPS-M cycle-7 根因（Git Bash 吃反斜杠）已被 OPS-M 自己在 cycle 8 实跑证伪，以 WSL bash 为准。跨会话引用别人的诊断时要留意它可能被其作者推翻。"
   ],
   "vindicated": [
     "cycle 8 报的 APP-*/RES-* 认领无法自动释放：监控在 1ae2074 定为 obsolete 并上板 S21（含「新起常驻会话绝不能被误扫」的负样本），采纳形态比我建议的更完整。这次三个常驻会话死了两小时、六件在手工单人工释放，是它的实际代价。"
-  ]
+  ],
+  "handoff": {
+    "这份文件就是交接": "我若无声消失（四个常驻研究员今天全灭于上下文耗尽，监控原话 the one failure mode no API can heal），新会话按本节冷启动即可，不需要问任何人。",
+    "启动词": "用户贴的 OPS-A 启动词 + monitor/ops/OPS-A.md（契约，每周期重读）+ monitor/AUDITOR.md（八个漂移维度）+ monitor/CHARTER.md（分工）。",
+    "每周期顺序": "python monitor/bus.py read OPS-A → 读 monitor/mailbox/OPS-A.md 与 ALL.md 的 OPEN 条目 → 从本文件 last_audited_commit 增量审 → 写 monitor/audit/HEARTBEAT 与 monitor/ops-status/OPS-A.json → commit+push（只 add monitor/audit、自己邮箱、ops-status、bus/OPS-A）→ sleep 1800。",
+    "当前最急": "合并队列已停摆 140 分钟；修法是 monitor/gates.py 里一行（显式解析 Git Bash 而非让 PATH 选到 System32 的 WSL bash，OPS-M cycle 8 已实跑验证）；按 CHARTER 只有监控可改，已升 critical 并请其转交用户，用户尚未回复。**不要自行代改——只写自己的产出目录是本角色红线。**",
+    "别重蹈的假阳性": "见 false_positives_i_caught_myself；另：报别人已报过的事之前先读它的 commit（OPS-M/OPS-B 常先我一步）。",
+    "判据脚本": "全在 scratchpad（会随会话消失，逻辑很短可重写）：redline.py 红线、flags.py 解析 merge.log 的阻塞时长与重报次数、probe_red.py 用 ast 查探针有没有活的状态机、manifests.py 查 MANIFEST 必填字段、negsample.py 查闸门有没有负样本。"
+  }
 }
