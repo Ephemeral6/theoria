@@ -41,6 +41,28 @@ SURVEY-environment 已经自己收回过「`:419-424` 会发表虚假负结果�
 换句话说：那个 `%d` 崩溃不是护栏，它只保护了给人看的那一半，机器可读的那一半照发。
 修法因此没有依赖崩溃，而是给 `same_answer` 加了第三个取值。
 
+### 我查过、判**不成立**的一处：`engines/cegis_miner/miner.py:321`
+
+SURVEY-environment 的「穷举触顶专查」把它记成「有旗标，但对错了尺子」：
+
+```python
+size = min(max(len(guard), 1), max_frontier_size)
+frontier = enumerate_frontier(positives, universe, masks, size)
+truncated = len(guard) > max_frontier_size          # 1 > 3 -> False
+```
+
+读起来像是：一个 1-literal 的 guard 只枚举到深度 1，却仍发 `frontier_truncated: false`。
+
+**我复核后判它不是本工单的缺陷。** `frontier` 的语义是「与本 guard **同长**的其他可分离
+guard」，不是「所有深度 ≤3 的可分离 guard」；`enumerate_frontier` 在 guard 自身的长度上
+枚举是设计，不是截断。`frontier_truncated` 表达的是「guard 比我们能穷举的还长，
+所以退到深度 3 枚举」——它报的正是它说要报的东西。而 `frontier_max_size` **在 payload 里
+逐行发布且准确**（已发布的 10 行 cegis 候选是 2 或 3），读者能自己看到深度。
+
+E11 交叉复核测到的「深度 3 上 125 处遗漏」是**对 frontier 承诺什么的理解差异**，
+不是旗标说了假话。SURVEY 自己也是按**文档缺陷**低调处理的，我同意那个定性。
+**列在这里，是因为「我判它不成立」和「我漏了它」在报告里长得一样，必须分开。**
+
 ### #7 为什么是「成立但潜伏」（我自己的论证，不是抄的）
 
 `_assign` 构造的是 `(n+m)×(n+m)` 方阵，每个 prev 都有一条有限代价的 vanish 通道、
