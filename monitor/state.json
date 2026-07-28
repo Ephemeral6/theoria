@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 08:14:22",
+  "generated_at": "2026-07-28 08:24:29",
   "history": [
     {
       "findings": {
@@ -377,30 +377,19 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/prompts/P-1-api-truth.md",
-      "monitor/prompts/P-1-arc-recon-close.md",
-      "monitor/prompts/P-2-dual-proxy.md",
-      "monitor/prompts/P-3-battery.md",
-      "monitor/prompts/P-4-engine-rig.md",
-      "monitor/prompts/P-5-compiler-merge.md",
-      "monitor/prompts/P-6-a2-world.md",
-      "monitor/prompts/P-7-cc-campaign.md",
-      "monitor/prompts/README.md",
-      "monitor/spec.py",
+      "onitor/prompts/README.md",
+      ".claude/",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/prompts/M-0-merge.md",
-      "monitor/prompts/P-10-contracts-v02.md",
-      "monitor/prompts/P-11-arc-hygiene.md",
-      "monitor/prompts/P-12-envelope-finish.md",
-      "monitor/prompts/P-8-theoria-arm.md",
-      "monitor/prompts/P-9-shell-harden.md",
-      "monitor/prompts/R-1-retrospective.md",
-      "monitor/prompts/archive/round3/"
+      "monitor/prompts/P-13-fd-real.md",
+      "monitor/prompts/P-14-battery-v1.md",
+      "monitor/prompts/P-15-exam-builder.md",
+      "monitor/prompts/P-16-workshop-paper.md",
+      "monitor/prompts/P-17-a3-transfer.md"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "",
+    "git_head": "edb3c37 monitor: round-4 audit -- P batch fully landed, progress 20.9% -> 39.0%, dispatch round 4",
     "incidents": 8,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -408,16 +397,14 @@
     "sync_last": "2026-07-28T12:30:00Z",
     "tests": {},
     "untracked": [
+      ".claude/",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/prompts/M-0-merge.md",
-      "monitor/prompts/P-10-contracts-v02.md",
-      "monitor/prompts/P-11-arc-hygiene.md",
-      "monitor/prompts/P-12-envelope-finish.md",
-      "monitor/prompts/P-8-theoria-arm.md",
-      "monitor/prompts/P-9-shell-harden.md",
-      "monitor/prompts/R-1-retrospective.md",
-      "monitor/prompts/archive/round3/"
+      "monitor/prompts/P-13-fd-real.md",
+      "monitor/prompts/P-14-battery-v1.md",
+      "monitor/prompts/P-15-exam-builder.md",
+      "monitor/prompts/P-16-workshop-paper.md",
+      "monitor/prompts/P-17-a3-transfer.md"
     ]
   },
   "p1_green": 6,
@@ -778,7 +765,7 @@
       "status": "risk"
     },
     "dispatch_board": {
-      "detail": "7 份在册工单，0 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",
+      "detail": "12 份在册工单，0 份有自报痕迹（分支或 PARTNER_SYNC）。核实列以各专项探针为准。",
       "rows": [
         {
           "branch": "—",
@@ -802,6 +789,36 @@
           "branch": "—",
           "id": "P-12",
           "prompt": "P-12-envelope-finish.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-13",
+          "prompt": "P-13-fd-real.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-14",
+          "prompt": "P-14-battery-v1.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-15",
+          "prompt": "P-15-exam-builder.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-16",
+          "prompt": "P-16-workshop-paper.md",
+          "self_reported": false
+        },
+        {
+          "branch": "—",
+          "id": "P-17",
+          "prompt": "P-17-a3-transfer.md",
           "self_reported": false
         },
         {
