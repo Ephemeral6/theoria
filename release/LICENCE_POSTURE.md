@@ -70,17 +70,21 @@ section, and it is a real limitation rather than a formatting detail.
 
 ## Red lines: measured, not asserted
 
-`release/check_redlines.py`, run against all **1,938** tracked files at
-`398144e`:
+`release/check_redlines.py`, run against every tracked file. **The counts below
+were true when written and are not maintained here** — run the tool for current
+ones. A reader following `REPRODUCING.md` found this section already stale by
+twelve files, which is the hand-copied-fact failure this repository keeps
+rediscovering, appearing once more in a file that warns about it:
 
 * **credential — clear.** No tracked file contains the literal `ARC_API_KEY`
   value. The five tracked `probe_log*.jsonl` files, which battery's own
   provenance flags as carrying an `X-API-Key` request header, hold the string
   `"<redacted>"` in that header. The redaction discipline held.
 * **sealed pile — clear.** No record in any tracked file pairs a sealed game id
-  with payload. Twenty-seven files *name* sealed ids; all twenty-seven are
-  guards, tests, audit documents, the cut itself, or the contamination ledger —
-  files whose job is to name the sealed games in order to keep them out.
+  with payload. A few dozen files *name* sealed ids, and every one is a guard, a
+  test, an audit document, the cut itself, or the contamination ledger — files
+  whose job is to name the sealed games in order to keep them out. That count
+  grows with the repository; the tool prints the current one.
 
 The check reports the value of neither: the key is loaded through
 `arc-recon/client.py`, compared in memory, and only ever printed through
