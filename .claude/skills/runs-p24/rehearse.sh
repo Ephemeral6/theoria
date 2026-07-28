@@ -141,8 +141,12 @@ rm -f "$RUN/leak.md"
 expect 0 "sealed green again once removed" -- "$PY" "$GUARD" sealed --base "$BASE"
 
 printf '\n--- 4c credential: a .env value reaching a tracked file (fake key, never a real one)\n'
-printf 'FAKE_TOKEN=zzz-not-a-real-key-0123456789\n' > .env
-printf 'token = "zzz-not-a-real-key-0123456789"\n' > engine-rig/p24r_leak.py
+# The fake value is *composed at run time* and never appears as a literal in this
+# file. First attempt hard-coded it, and the guard duly flagged rehearse.sh
+# itself -- correct behaviour, useless fixture.
+FAKEVAL="rehearsal-not-a-key-$(printf '%s' "$BASE" | cut -c1-16)"
+printf 'FAKE_TOKEN=%s\n' "$FAKEVAL" > .env
+printf 'token = "%s"\n' "$FAKEVAL" > engine-rig/p24r_leak.py
 expect 1 "secret guard goes red on a leaked value" -- "$PY" "$GUARD" secret --base "$BASE"
 rm -f engine-rig/p24r_leak.py
 expect 0 "secret green again once removed" -- "$PY" "$GUARD" secret --base "$BASE"
