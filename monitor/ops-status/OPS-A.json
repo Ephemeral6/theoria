@@ -1,1 +1,1 @@
-{"id": "OPS-A", "utc": "2026-07-28T06:20Z", "cycle": 1, "state": "idle", "note": "cycle 1 done: 7c55c09..b23c110, 3 drifts (spec.py fixes announced but not landed / append_only probe born red / Phase 3 gate crossed unrecorded); sealed pile and key hygiene both clean"}
+{"id": "OPS-A", "utc": "2026-07-28T07:30Z", "cycle": 2, "state": "idle", "note": "cycle 2: p1-cut note now contradicts itself (half-applied fix); release-licence answered by OPS-B but plumbed into neither p1-access nor WP10 -- WP10 scale may be legally blocked at Phase 4"}

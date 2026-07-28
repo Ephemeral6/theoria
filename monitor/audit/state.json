@@ -1,27 +1,29 @@
 {
-  "cycle": 2,
-  "utc": "2026-07-28T06:20Z",
-  "last_audited_commit": "b23c110",
-  "range_this_cycle": "7c55c09..b23c110 (29 commits, 423 files, +127434/-306)",
-  "head_at_writing": "d426b92",
+  "cycle": 3,
+  "utc": "2026-07-28T07:30Z",
+  "last_audited_commit": "ab99697",
+  "range_this_cycle": "b23c110..ab99697 (39 files)",
   "mode": "incremental",
   "covered": {
-    "纪律漂移": "封存堆 21 局全 ID + 短 ID 词根扫全部已跟踪文件；本轮新增命中 7 文件逐条判读，全为护栏夹具/否决清单/外部条款笔记，零对局。browser-ops 外部接触逐条留痕、未点封存局链接。密钥值扫描 + check-ignore 复核：无被跟踪泄漏。append-only 三文件删除行 1（已裁决豁免的 63ef0bf）",
-    "基准漂移": "Theoria.md:305 的 Phase 3 门 vs p1 未全绿 → DRIFT-phase3-gate-crossed-unrecorded",
-    "证据漂移": "03:57Z 裁决书宣布的 6 件修复逐件对树复核 → 4 实到 2 未到 → DRIFT-spec-notes-announced-fixed-but-not",
-    "目标漂移": "仍未巡（连欠两轮，下轮第一优先）",
-    "流程漂移": "上轮 MANIFEST 正典建议已落地（CLAUDE.md:141 + scan.py 双计数），本轮无新增",
-    "监控自身漂移": "probe_append_only 恒红 → DRIFT-append-only-probe-born-red；probe_credential_hygiene 与 MANIFEST 双计数复核正确"
+    "纪律漂移": "增量封存 ID 命中全在污染登记与本邮箱文本；密钥零命中；append-only 三文件本区间零删除",
+    "基准漂移": "Theoria.md:299 接入核查逐项对树 → 两项（释出许可条款、速率配额）已被 browser-ops 答掉但未回流",
+    "证据漂移": "监控上一轮宣布的每一条逐件复核：p1-engines 实到、S3 note 实到、credential_hygiene 实到；p1-cut 半到；p3 例外未到",
+    "目标漂移": "本轮补巡（欠两轮）：GRID 14 个 active 全部落在项目格；ops 产出（browser-ops）落不进 GRID/PAPER_PLAN 任何槽位 → 释出许可结论无回流路径。WP1–WP9 的 evidence 逐条抽查留待下轮",
+    "流程漂移": "无新增",
+    "监控自身漂移": "p1-cut note 自相矛盾 → 报告；append_only 仍恒红（监控已认领下轮修，未重复报）"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T0618Z-spec-notes-announced-fixed-but-not.md",
-    "DRIFT-20260728T0618Z-append-only-probe-born-red.md",
-    "DRIFT-20260728T0618Z-phase3-gate-crossed-unrecorded.md"
+    "DRIFT-20260728T0725Z-p1-cut-note-says-both.md",
+    "DRIFT-20260728T0725Z-release-licence-answered-but-unplumbed.md"
+  ],
+  "pending_on_monitor": [
+    "p3 跨门例外：06:27Z 承诺写成 finding + p3 段注明，本轮未落树；下轮仍无则升级为报告",
+    "append_only 豁免基线：06:27Z 认领下轮改",
+    "p1-cut note 后半句删除"
   ],
   "next_cycle_focus": [
-    "目标漂移：PAPER_PLAN 槽位对位（已连欠两轮，第一优先）",
-    "复核本轮三条的处置；spec.py 两条 note 是否真落地",
-    "probe_gates 若已实现则复验；probe_append_only 的豁免表若已加则复验",
-    "增量起点 b23c110（实跑从 d426b92 之后）"
+    "WP1–WP9 的 evidence 字段逐条对树抽查（目标漂移这一维只做了一半）",
+    "复核本轮两条 + 监控欠的三条",
+    "增量起点 ab99697"
   ]
 }
