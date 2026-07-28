@@ -18,7 +18,10 @@ python -m recheck.verify_all --out runs/<id>          # the whole thing, with ex
 python -m recheck.build_cases --check                 # the cases have not been hand-edited
 ```
 
-Exit codes: `0` ACCEPT, `1` REJECT, `3` INCONSISTENT, `2` the input would not load.
+Exit codes: `0` ACCEPT, `1` REJECT, `3` INCONSISTENT, `2` the input would not
+load, `4` the recheck itself failed. `4` exists because an uncaught exception
+otherwise leaves Python's own status of 1, which is REJECT — a crash and a
+refusal are not the same answer.
 
 **Nothing in `recheck/` imports `engines/`.** A test enforces it
 (`test_recheck_never_imports_the_engines`).
@@ -43,6 +46,11 @@ Closure is checked from **every** state satisfying the predicate, reachable or
 not. Restricting it to the reachable part would be circular: what is reachable
 is exactly what the certificate is supposed to bound.
 
+`goal_break` is checked over the whole product; closure is checked over the
+subspace the rule set's constraint admits (see below), so the verdict reports
+how many states the predicate covers that no obligation touched. For a genuine
+`open4far` pair deadlock that is 2 of 16.
+
 ## Why the rule set is a *rule* set
 
 The transition relation is never read. A rule set declares finite variables with
@@ -56,24 +64,35 @@ firing rule writes is unchanged, which makes `step` total), `conflict exclusive`
 (two rules writing one variable on one action is an error, not a precedence
 question), `cascade single_frame` (guards and effects read the pre-state).
 
-Three obligations are discharged on the rule set **before** any certificate is
+These obligations are discharged on the rule set **before** any certificate is
 looked at, so a broken world never gets reported as a broken certificate:
 
 * `step_single_valued` — no `(state, action)` has two rules claiming a variable
-* `effects_in_domain` — no rule can drive a variable outside its declared domain
-* `constraint_init` / `constraint_closed` — a rule set may declare a
-  well-formedness constraint, and this rechecker **proves it inductive** instead
-  of believing it
+* `effects_in_domain` — no rule *that fires* can drive a variable outside its
+  declared domain
+* `goal_satisfiable` — some state in the declared space satisfies the goal
+* `constraint_init` / `constraint_closed` / `constraint_contains_reachable` — a
+  rule set may declare a well-formedness constraint, and this rechecker **proves
+  it inductive** instead of believing it, then measures that it really does
+  contain everything reachable
 
-That last one is load-bearing and it is also the sharpest knife in the drawer.
-The sokoban deadlock theorems are false over the raw product — a state with the
-player standing on a box is in the product and lets a "dead" box be pushed out
-of its corner — and true over the states the grounded task can represent. So the
-rule set declares "the player and the boxes are on distinct cells", and the
-rechecker refuses to use it until it has shown the constraint holds at the
-initial state and is closed under every action. Shrinking the space to hide an
-escaping transition therefore fails here rather than passing quietly: see the
-`constrained-witness` forgery.
+The constraint obligations are load-bearing and also the sharpest knife in the
+drawer. The sokoban deadlock theorems are false over the raw product — a state
+with the player standing on a box is in the product and lets a "dead" box be
+pushed out of its corner — and true over the states the grounded task can
+represent. So the rule set declares "the player and the boxes are on distinct
+cells", and the rechecker refuses to use it until it has shown the constraint
+holds at the initial state and is closed under every action. Adding
+`constraint: cart != "6,4"` to A2's world would otherwise verify the false
+theorem; it fails `constraint_closed` instead (`constrained-witness`).
+
+`goal_satisfiable` is there because of one specific attack, and the shape of it
+is worth keeping in mind: `effects_in_domain` only ever evaluates an effect
+whose guard fires, so shrinking `cart`'s domain to the left room **and**
+retargeting one entry of the `nb` table stops `teleport_down` firing, and the
+out-of-domain literal is never reached. What that pair of edits cannot hide is
+that the goal cell went with the shrink — and `unsolvable` is free in a world
+with no goal state (`shrunken-domain-and-patched-guard`).
 
 ## The second opinion, and its limit
 
@@ -133,12 +152,32 @@ anchors are reported as **unavailable**, never as passes.
 
 `forgeries.py` is a catalogue of ways to lie to this rechecker, each with the
 rejection it must draw and the condition that must be the one to fail.
-24 entries in three families — lying in the certificate, lying in the rule set,
-and one that works.
+31 entries in three families — lying in the certificate, lying in the rule set,
+and the two that end in ACCEPT.
 
 ```bash
 python -c "from recheck import forgeries; print(forgeries.summary(forgeries.run_all())['n_as_declared'])"
 ```
+
+**Six of them were found by adversarial review, and four of those worked.**
+Three reviewers were run against this package with no brief except to break it —
+one on the expression language, one on the rule set's obligations, one on
+whether the rule sets are the worlds they name. Reports and every input are in
+`runs/20260728T141724Z-E5-cert-recheck/attacks/`. What they found:
+
+| finding | was | now |
+|---|---|---|
+| a `def` compiled for guards keeps `["act"]`, so a rule set's **goal** could read the action label, evaluate to `None`, and become unsatisfiable — a real ACCEPT on the solvable `peg4-1101` | wrong ACCEPT | defs are compiled twice, once per scope; `act-through-a-def` |
+| a domain shrink plus one retargeted `nb` entry passes `effects_in_domain`, because the effect's guard no longer fires | wrong ACCEPT | `goal_satisfiable`; `shrunken-domain-and-patched-guard` |
+| `goal_break` was evaluated on the constrained subspace, so a dead region could contain a winning state parked outside it | wrong ACCEPT | `goal_break` over the whole product; `region-hiding-a-win` |
+| a dead region's states outside the constraint carry no obligation, and nothing said so — 286 of 496 in the reviewer's example | silent | counted and stated in every verdict; `region-reaching-outside-the-constraint` |
+| deep nesting, `["lit"]` with no argument, and a deep `json.loads` all escaped as tracebacks, exiting 1 — indistinguishable from REJECT | crash read as REJECT | depth cap, total `render`/`names_used`, exit code 4 |
+| the certificate→rule set binding was by name only | weak | every generated certificate carries the rule set file's sha256; `tampered-under-the-same-name` |
+
+The transcription audit found **no** discrepancy, having run the differentials
+rather than reading the code — and checked its own differential could fail by
+pointing it at the wrong predictor, where it reported exactly the 4 teleport
+states.
 
 **The one that works is `delete-the-rule`.** Hand the rechecker a rule set with
 a rule missing and a certificate true of it, and it accepts — correctly. That

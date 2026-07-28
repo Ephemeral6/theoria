@@ -25,22 +25,41 @@ Three obligations are discharged on the rule set alone, before any certificate
 is looked at:
 
   `step_single_valued`  no (state, action) has two rules claiming one variable
-  `effects_in_domain`   no rule can drive a variable outside its declared domain
-  `constraint_sound`    the declared well-formedness constraint, if any, holds
-                        at the initial state and is closed under every action
+  `effects_in_domain`   no rule *that fires* can drive a variable outside its
+                        declared domain
+  `goal_satisfiable`    some state in the declared space satisfies the goal
+  `constraint_init`     the declared constraint holds at every initial state
+  `constraint_closed`   and is closed under every action, from every state
+                        satisfying it
+  `constraint_contains_reachable`
+                        and therefore contains everything reachable -- measured
+                        by a breadth-first pass, not inferred from the two above
 
-The third is what makes it safe to restrict the checks to a subspace.  A rule
-set may say "the player and the boxes are on distinct cells" -- without which
-the sokoban deadlock theorems would be rejected on states the grounded task
-cannot represent -- but it may not *assume* it.  A constraint that is not
-inductive is refused, so shrinking the state space to hide an escaping
-transition fails here rather than passing quietly downstream.
+The constraint obligations are what make it safe to restrict the checks to a
+subspace.  A rule set may say "the player and the boxes are on distinct cells"
+-- without which the sokoban deadlock theorems would be rejected on states the
+grounded task cannot represent -- but it may not *assume* it.
+
+`goal_satisfiable` is there because of a specific attack.  Narrowing a
+variable's domain to strand an escaping transition is caught by
+`effects_in_domain` only while the escaping rule still fires; retarget one entry
+in a guard's lookup table as well and the effect is never evaluated, and the
+shrink goes through.  What it cannot hide is that the same shrink took the goal
+cell out of the space -- and `unsolvable` is true for free in a world with no
+goal state.  An adversarial review built exactly that pair of edits and it
+verified; this obligation is the answer to it.
+
+**What is still not caught, and cannot be:** a rule set that is internally
+consistent and simply is not the world -- a rule deleted, a guard rewritten.
+Every obligation here is about the description; none can be about the world.
+That is Theoria 1.3, and `forgeries.py`'s `delete-the-rule`.
 """
 
 import hashlib
 import itertools
 import json
 import os
+from collections import deque
 from dataclasses import dataclass, field
 from typing import Callable, Dict, List, Mapping, Optional, Sequence, Tuple
 
@@ -200,17 +219,31 @@ class RuleSet:
             raise RuleSetError(str(exc)) from exc
         self.tables = tables
 
-        base = Scope(variables=self.var_index, tables=tables, macros={},
-                     macro_arity={}, allow_action=True)
+        # The defs are compiled **twice**, once per scope, and that is not
+        # tidiness. `allow_action` is enforced when an expression is compiled,
+        # so a def compiled for guards has already resolved `["act"]` into a
+        # closure; handing those closures to a scope that merely sets the flag
+        # to False lets a goal, a constraint or a certificate read the action
+        # label through a def. It then evaluates to `None` -- silently turning
+        # a comparison against it into a constant `False`, which is exactly how
+        # a solvable world gets an unsatisfiable goal and a wrong ACCEPT. An
+        # adversarial review found it that way. Compiling the bodies again with
+        # `allow_action=False` makes the second scope raise on any def that
+        # mentions the action, which is the check the flag was supposed to be.
         try:
-            self.scope = compile_macros(macros, base)
+            self.scope = compile_macros(macros, Scope(
+                variables=self.var_index, tables=tables, macros={},
+                macro_arity={}, allow_action=True))
         except ExprError as exc:
             raise RuleSetError("defs: %s" % exc) from exc
-        # Certificates read states only: no `act`, but the same tables and defs.
-        self.state_scope = Scope(
-            variables=self.var_index, tables=tables, macros=self.scope.macros,
-            macro_arity=self.scope.macro_arity, allow_action=False,
-        )
+        try:
+            self.state_scope = compile_macros(macros, Scope(
+                variables=self.var_index, tables=tables, macros={},
+                macro_arity={}, allow_action=False))
+        except ExprError as exc:
+            raise RuleSetError(
+                "defs: %s -- a def reachable from the goal, the constraint or a "
+                "certificate may not read the action label" % exc) from exc
 
         self.init_src = spec.get("init")
         self.init: Tuple[State, ...] = self._parse_init(self.init_src)
@@ -458,8 +491,51 @@ class RuleSet:
             if closed_bad:
                 result.witnesses["constraint_closed"] = closed_bad
 
+            # The premise every constrained check rests on, measured rather than
+            # inferred. It follows from the two conditions above, and running it
+            # anyway costs one breadth-first pass and means a bug in the closure
+            # loop cannot quietly widen what "well-formed" is allowed to hide.
+            if not init_bad and not closed_bad and not in_domain and not single:
+                escaped = self._reachable_outside_constraint(max_witnesses)
+                result.conditions["constraint_contains_reachable"] = not escaped
+                if escaped:
+                    result.witnesses["constraint_contains_reachable"] = escaped
+
+        # Independent of everything above: it needs no transition relation, only
+        # the goal and the constraint, so it is answered even for a rule set
+        # that has already failed something else.
+        satisfying_goal = any(
+            self.constraint(state) and self.goal(state) for state in states)
+        result.conditions["goal_satisfiable"] = satisfying_goal
+        if not satisfying_goal:
+            result.witnesses["goal_satisfiable"] = [
+                "no state in the declared space satisfies the goal, so "
+                "`unsolvable` is true of this rule set for free and any "
+                "certificate of it establishes nothing. The usual cause is "
+                "a variable domain narrowed until the goal fell out of it."
+            ]
+
         self._obligations = result
         return result
+
+    def _reachable_outside_constraint(self, max_witnesses: int) -> List[str]:
+        """States reachable from init that the declared constraint excludes."""
+        states = self.states()
+        rows = self.transitions()
+        index_of = {state: i for i, state in enumerate(states)}
+        seen = {index_of[state] for state in self.init}
+        queue = deque(seen)
+        escaped: List[str] = []
+        while queue:
+            index = queue.popleft()
+            if not self.constraint(states[index]) and len(escaped) < max_witnesses:
+                escaped.append(self.render_state(states[index]))
+            for a in range(len(self.actions)):
+                target = rows[index][a]
+                if target >= 0 and target not in seen:
+                    seen.add(target)
+                    queue.append(target)
+        return escaped
 
     # ------------------------------------------------------------ rendering
 

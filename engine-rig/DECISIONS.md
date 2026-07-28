@@ -665,6 +665,35 @@ is in the catalogue as `constrained-witness`, and it fails on
 constraint holding at init contains every reachable state, so restricting a
 reachability claim to it changes nothing.
 
+**What an adversarial review corrected, and it is the interesting half.**
+"Restricting a reachability claim to it changes nothing" is true of the
+*reachability* claim and was quietly assumed to be true of the check. It is not.
+Both conditions of a dead region were being evaluated on `P and constraint`
+while the accepted claim was stated over `P`, so a reviewer built a region
+containing an outright winning state -- parked at a player/box collision the
+constraint excludes -- and it passed `goal_break`; and another where 286 of 496
+covered states carried no obligation at all, with nothing in the output saying
+so. Three changes:
+
+* **`goal_break` moved to the whole product.** It costs nothing there -- a
+  pattern that contradicts the goal contradicts it everywhere, and all 18 carver
+  theorems still pass -- and it kills the hidden-win region outright.
+* **Closure stays on the subspace**, because the sokoban pair deadlocks are
+  genuinely false over the raw product and moving it would reject them. What
+  changed is that the verdict now *counts* the states the predicate covers
+  outside the constraint and names the qualifier carrying them, in every report.
+  The genuine `open4far` pair theorems lean on it by 2 states each; saying so is
+  the difference between a qualified result and a silent one.
+* **The qualifier's premise is measured, not inferred.** `constraint_contains_reachable`
+  runs a breadth-first pass and checks that no reachable state lies outside the
+  constraint. It follows from the other two conditions; running it anyway costs
+  one pass and means a bug in the closure loop cannot quietly widen what
+  "well-formed" is allowed to hide.
+
+The claim a `dead_region` licenses is now written the way `deadlock_carver`
+writes it, qualifier included: *every reachable state* containing the pattern is
+dead.
+
 ---
 
 ## D-030 · The rule sets are transcriptions, and the anchors are outside the package
@@ -695,3 +724,65 @@ frames is not an argument, it is a count.
 the theory-compiler track's directory: this package reads it, writes nothing to
 it, and reports the anchors as **unavailable** rather than as passes when it is
 absent. A missing cross-check is a missing check.
+
+---
+
+## D-031 · A scope flag is not a check until the thing it guards is recompiled
+
+**Context.** `recheck`'s expression language says `["act"]` -- the action label --
+is legal only inside a rule guard. A certificate, a goal or a constraint denotes
+a *set of states*; one that reads the action is describing the rules. The rule
+was enforced by a `allow_action` flag on the compiling scope.
+
+**The defect an adversarial review found.** Compilation turns an expression into
+a closure, and `defs` were compiled once, with `allow_action=True`, for the
+guards. The state-reading scope was then built by reusing those *already
+compiled* closures and setting the flag to `False`. A closure does not
+re-consult the flag. So a rule set could write
+
+```json
+"defs":  [{"name": "peek", "params": [], "body": ["=", ["act"], ["lit", "jump(0,1,2)"]]}],
+"goal":  ["call", "peek"]
+```
+
+and the goal would read the action. At evaluation the state scope passes
+`action=None`, so the comparison is a constant `False`, the goal becomes
+unsatisfiable, and the world is trivially "unsolvable". Measured on `peg4-1101`,
+which is solvable in two moves: with the honest goal the catalogue's
+`claims-everything` certificate is REJECTed and the second opinion prints the
+two-action win; with the goal restated as `["call","peek"]` the same certificate
+is **ACCEPTed**, and the second opinion agrees, because it reads the same
+poisoned goal. Nothing on stdout hinted at it -- `render` printed the goal as
+`peek()`, and the report did not print the goal at all.
+
+**Decision.** Compile the defs **twice**, once per scope. The second compilation
+raises on any def that mentions the action, which is what the flag was always
+supposed to mean. Three smaller changes travel with it:
+
+* `compile_macros` extends the enclosing scope's macros instead of replacing
+  them, so a certificate can call the rule set's `free` -- which the docstring
+  had claimed all along and which had silently not been true. That is fixed
+  *after* the leak, deliberately: fixing it first would have made the leak
+  reachable from certificates too.
+* the verdict now prints the goal and the coverage counts, so a poisoned goal
+  has somewhere to be visible.
+* expression depth is capped at 64 by an iterative walk, and `render` and
+  `names_used` are total. They run on input that has not been compiled -- a
+  verdict summarises the certificate it is rejecting -- so `["lit"]` with no
+  argument used to raise `IndexError` from inside the rejection, and 900 nested
+  `and`s used to raise `RecursionError`, which is not a `ValueError` and escaped
+  every `except` around a load.
+
+**Why it matters more than the bug.** All of those crashes exited with Python's
+own status of 1, which this tool defines as REJECT. A caller reading the exit
+code could not tell a refused certificate from a checker that fell over. There
+is now an exit code 4 for "the recheck itself failed", and it is the same
+distinction D-024 had to make for Fast Downward: a proof and a shrug must not
+share a return value.
+
+**The general lesson, since this is the second time.** The reviewer also caught
+this package mid-edit, in a state where `obligations()` raised `NameError` on
+every input -- and reported, correctly, that it exited 1 and looked like a
+rejection. A guarantee enforced at construction time has to be re-established
+every time the constructed thing is reused, and a checker's failure mode has to
+be distinguishable from its verdict. Neither is a fact about expressions.

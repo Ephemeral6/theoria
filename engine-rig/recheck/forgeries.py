@@ -18,11 +18,24 @@ the reason the certificate schema refuses `goal`, `init`, `states`,
 **Lying in the rule set.**  Strictly the more dangerous family, because the rule
 set is the thing the rechecker trusts.  Shrink a variable's domain so the
 escaping successor has nowhere to land; declare a well-formedness constraint
-that excludes the state the certificate fails on; smuggle in an edge list.  All
-three are caught before any certificate is read, by the obligations the rule set
-owes about itself.
+that excludes the state the certificate fails on; edit the rules and keep the
+name; smuggle in an edge list; reach the action label from the goal through a
+def.  Each is caught before any certificate is read, by an obligation the rule
+set owes about itself -- but three of those obligations exist only because an
+adversarial review got past the ones that were here first, and the entries
+below say which.
 
-**The one that is not caught, and is listed anyway.**  Delete a rule.  A rule
+**The ones that end in ACCEPT, and are listed anyway.**  Two do.
+
+`region-reaching-outside-the-constraint` is accepted because it is *true* -- of
+every reachable state, which is the qualifier `deadlock_carver`'s own theorem
+carries ("every reachable state containing P is dead").  Closure is checked on
+the constrained subspace, so a region's members outside that subspace carry no
+obligation; rejecting them would reject every genuine pair deadlock, which leans
+on the same qualifier by two states each.  What was wrong before the review was
+silence: the verdict now counts them, and this entry fails unless it does.
+
+**Delete a rule.**  A rule
 set missing a rule is a perfectly well-formed rule set, its constraint is
 inductive, its step is single-valued, and a certificate true of it verifies.
 That is not a hole in this rechecker; it is the whole of Theoria §1.3, and the
@@ -46,6 +59,9 @@ CASES_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "cases")
 
 LOAD_ERROR = "LOAD-ERROR"
 NOT_CAUGHT = "NOT-CAUGHT"
+# Accepted, correctly, but only under a qualifier -- and the verdict has to say
+# so with a number rather than passing in silence.
+QUALIFIED = "ACCEPT-QUALIFIED"
 
 
 def case(name: str) -> dict:
@@ -290,6 +306,112 @@ def _a_rule_set_that_raises() -> Tuple[dict, dict]:
     return spec, _peg_cert(name="cert-over-a-partial-table")
 
 
+def _read_the_action_through_a_def() -> Tuple[dict, dict]:
+    """The one that worked. `allow_action` was enforced at compile time only.
+
+    A def compiled for guards has already resolved `["act"]` into a closure, and
+    the goal's scope used to reuse those closures with the flag merely set to
+    False.  So a rule set could restate its goal as `["call", "peek"]`, `act`
+    would evaluate to `None`, the comparison would be a constant `False`, and a
+    solvable world would get an unsatisfiable goal -- ACCEPT on `peg4-1101`,
+    with the second opinion agreeing because it reads the same poisoned goal.
+    Found by an adversarial review; the defs are now compiled twice, once per
+    scope.
+    """
+    spec = copy.deepcopy(case("peg4-1101.rules.json"))
+    spec["defs"] = [{"name": "peek", "params": [],
+                     "body": ["=", ["act"], ["lit", "jump(0,1,2)"]]}]
+    spec["goal"] = ["call", "peek"]
+    return spec, _peg_cert(name="cert-over-a-poisoned-goal", predicate=["and"])
+
+
+def _nest_past_the_stack() -> Tuple[dict, dict]:
+    """900 nested `and`s: a RecursionError is not a ValueError, so it escaped."""
+    node: object = ["and"]
+    for _ in range(900):
+        node = ["and", node]
+    return case("peg4-0111.rules.json"), _peg_cert(
+        name="forged-deep-predicate", predicate=node)
+
+
+def _malformed_enough_to_break_the_report() -> Tuple[dict, dict]:
+    """`["lit"]` with no argument -- rendered into the verdict before compiling."""
+    return case("peg4-0111.rules.json"), _peg_cert(
+        name="forged-arity-zero-lit", predicate=["=", ["lit"], ["var", "pos1"]])
+
+
+def _shrink_the_domain_and_patch_the_guard() -> Tuple[dict, dict]:
+    """Shrink the domain, then stop the escaping rule from firing at all.
+
+    `effects_in_domain` only evaluates an effect whose guard fires, so
+    retargeting one neighbour-table entry hides the out-of-domain literal and
+    the shrink goes through.  Caught now by `goal_satisfiable`: the same shrink
+    takes the goal cell out of the space, and `unsolvable` is free in a world
+    with no goal state.  Found by an adversarial review.
+    """
+    spec = copy.deepcopy(case("a2-world.rules.json"))
+    spec["name"] = "forged-a2-shrunken-and-patched"
+    zero = {"1,3", "1,4", "2,1", "2,2", "2,3", "2,4", "3,1", "3,2", "3,3", "3,4",
+            "4,1", "4,2", "4,3", "4,4", "5,1", "5,2", "5,3", "5,4",
+            "6,2", "6,3", "6,4"}
+    for variable in spec["variables"]:
+        if variable["name"] == "cart":
+            variable["domain"] = sorted(zero)
+    entries = []
+    for row in spec["tables"]["nb"]["entries"]:
+        if row[0] not in zero:
+            continue
+        if row[0] == "6,4" and row[1] == "down":
+            row = ["6,4", "down", "6,4"]
+        entries.append(row)
+    spec["tables"]["nb"]["entries"] = entries
+    return spec, case("a2-right-room-locked.cert.json")
+
+
+def _sokoban_region(predicate, name: str) -> Tuple[dict, dict]:
+    spec = case("sokoban-open4far-dead-b1-11.cert.json")
+    spec["name"] = name
+    spec.pop("ruleset", None)
+    spec["predicate"] = predicate
+    return case("sokoban-open4far.rules.json"), spec
+
+
+def _hide_a_goal_state_outside_the_constraint() -> Tuple[dict, dict]:
+    """A dead region containing a win, parked where the constraint hid it.
+
+    `goal_break` used to be evaluated only on constraint-satisfying states, so a
+    region could contain an outright goal state as long as that state was
+    ill-formed.  It is checked over the whole product now, which costs nothing
+    on any genuine theorem: a pattern that contradicts the goal contradicts it
+    everywhere.
+    """
+    return _sokoban_region(
+        ["or", ["=", ["var", "b1"], ["lit", "1,1"]],
+         ["and", ["=", ["var", "player"], ["lit", "1,3"]],
+          ["=", ["var", "b1"], ["lit", "4,2"]],
+          ["=", ["var", "b2"], ["lit", "1,3"]]]],
+        "forged-region-hiding-a-win")
+
+
+def _region_reaching_out_of_the_constraint() -> Tuple[dict, dict]:
+    """Accepted -- and the report has to say how much of it went unchecked.
+
+    The region includes `{player=3,2, b1=3,2, b2=1,3}`, which is two actions
+    from a win.  That state is ill-formed and therefore unreachable, so the
+    theorem `deadlock_carver` actually writes -- "every *reachable* state
+    containing the pattern is dead" -- is still true of it, and rejecting would
+    also reject every genuine pair deadlock.  What was wrong was silence: the
+    verdict now counts the states carried by the reachability qualifier rather
+    than by a check.
+    """
+    return _sokoban_region(
+        ["or", ["=", ["var", "b1"], ["lit", "1,1"]],
+         ["and", ["=", ["var", "player"], ["lit", "3,2"]],
+          ["=", ["var", "b1"], ["lit", "3,2"]],
+          ["=", ["var", "b2"], ["lit", "1,3"]]]],
+        "forged-region-reaching-outside")
+
+
 def _delete_the_rule() -> Tuple[dict, dict]:
     """The one that works, and is listed for that reason."""
     return case("a2-holed.rules.json"), case("a2-right-room-locked.cert.json")
@@ -383,6 +505,36 @@ CATALOGUE: Tuple[Forgery, ...] = (
             _owns_less_than_it_writes, None,
             "would let two rules write one variable with neither declaring it"),
 
+    Forgery("region-hiding-a-win", "dead-region",
+            "a dead region containing a goal state the constraint excludes",
+            REJECT, _hide_a_goal_state_outside_the_constraint, "goal_break",
+            "goal_break is checked over the whole product; a pattern that "
+            "contradicts the goal contradicts it everywhere"),
+    Forgery("region-reaching-outside-the-constraint", "dead-region",
+            "a dead region two actions from a win, through an ill-formed state",
+            QUALIFIED, _region_reaching_out_of_the_constraint, None,
+            "true of every reachable state, which is the theorem the carver "
+            "writes -- but the verdict now counts what the qualifier carried"),
+
+    Forgery("act-through-a-def", "rule-set",
+            "a goal reading the action label through a def", LOAD_ERROR,
+            _read_the_action_through_a_def, None,
+            "compiled closures kept `act` after the scope flag was flipped; "
+            "this produced a real ACCEPT on a solvable world"),
+    Forgery("deep-predicate", "certificate", "900 nested `and`s", REJECT,
+            _nest_past_the_stack, "predicate_wellformed",
+            "a RecursionError is not a ValueError, so it escaped every catch"),
+    Forgery("arity-zero-lit", "certificate", "`[\"lit\"]` with no argument",
+            REJECT, _malformed_enough_to_break_the_report, "predicate_wellformed",
+            "the verdict renders the certificate it is rejecting, so rendering "
+            "has to be total"),
+    Forgery("shrunken-domain-and-patched-guard", "rule-set",
+            "a domain cut, and one neighbour retargeted so the escaping rule "
+            "never fires", REJECT, _shrink_the_domain_and_patch_the_guard,
+            "goal_satisfiable",
+            "effects_in_domain only sees effects whose guard fires; the same "
+            "shrink takes the goal cell out of the space"),
+
     Forgery("partial-table", "rule-set",
             "a table lookup with no entry and no default", REJECT,
             _a_rule_set_that_raises, "rules_evaluate",
@@ -427,7 +579,7 @@ def attempt(forgery: Forgery) -> Attempt:
         ruleset_spec, certificate_spec = forgery.build()
         ruleset = ruleset_from_spec(ruleset_spec)
         certificate = certificate_from_spec(certificate_spec)
-    except (RuleSetError, CertificateError) as exc:
+    except (RuleSetError, CertificateError, RecursionError) as exc:
         return Attempt(
             forgery=forgery, verdict=LOAD_ERROR, message=str(exc),
             as_declared=forgery.expect == LOAD_ERROR,
@@ -442,6 +594,14 @@ def attempt(forgery: Forgery) -> Attempt:
 
     if forgery.expect == NOT_CAUGHT:
         as_declared = verdict.verdict == ACCEPT
+    elif forgery.expect == QUALIFIED:
+        # Accepting is not enough: the verdict must also report how many states
+        # the reachability qualifier carried rather than a check.
+        as_declared = (
+            verdict.verdict == ACCEPT
+            and verdict.stats.get("n_satisfying_outside_constraint", 0) > 0
+            and any("reachability qualifier" in reason for reason in verdict.reasons)
+        )
     elif forgery.expect == REJECT:
         as_declared = (
             verdict.verdict == REJECT

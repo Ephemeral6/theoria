@@ -1,0 +1,29 @@
+{
+  "claim": "unsolvable",
+  "defs": [
+    {
+      "body": [
+        "=",
+        [
+          "act"
+        ],
+        [
+          "lit",
+          "jump(0,1,2)"
+        ]
+      ],
+      "name": "peek",
+      "params": []
+    }
+  ],
+  "kind": "inductive_invariant",
+  "name": "A29",
+  "predicate": [
+    "not",
+    [
+      "call",
+      "peek"
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

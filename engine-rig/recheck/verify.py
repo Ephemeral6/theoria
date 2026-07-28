@@ -7,6 +7,17 @@ The three conditions are the Lean skeleton of Theoria 1.10(a), unchanged:
     inv_closed  it survives every rule, from every state satisfying it
     goal_break  no state satisfying it is a goal state
 
+`goal_break` is evaluated over the **whole** product, not over the subspace the
+rule set's constraint carves out.  It costs nothing to do so -- a predicate that
+contradicts the goal contradicts it everywhere -- and evaluating it on the
+subspace let a dead region contain an outright winning state, provided that
+state was ill-formed.  Closure cannot be widened the same way: the sokoban pair
+deadlocks are genuinely false over the raw product, so closure stays on the
+constrained subspace and the verdict reports, with a count, how many states the
+predicate covers that no obligation touched.  Those are carried by the
+reachability qualifier the carver's theorem already has, and the premise of that
+qualifier -- `constraint_contains_reachable` -- is measured, not assumed.
+
 Everything here is deliberately dumb.  There is no fixpoint, no frame stack, no
 generalisation -- just a loop over the product of the declared domains.  A
 checker clever enough to be wrong in the same way as the engine would be no
@@ -81,7 +92,15 @@ class Verdict:
                         self.ruleset_summary.get("n_states"),
                         self.ruleset_summary.get("n_rules")))
         lines.append("  claim      %s" % self.certificate_summary.get("claim"))
+        lines.append("  goal       %s" % self.ruleset_summary.get("goal"))
         lines.append("  predicate  %s" % self.certificate_summary.get("predicate"))
+        if "n_satisfying" in self.stats:
+            lines.append(
+                "  covers     %s of %s states (%s outside the constraint, %s reachable)"
+                % (self.stats.get("n_satisfying"),
+                   self.stats.get("n_states"),
+                   self.stats.get("n_satisfying_outside_constraint"),
+                   self.stats.get("n_satisfying_reachable")))
         for name, value in sorted(self.ruleset_conditions.items()):
             lines.append("  rules  %-20s %s" % (name, "ok" if value else "FAILED"))
         for name, value in sorted(self.conditions.items()):
@@ -144,6 +163,21 @@ def _bfs(ruleset: RuleSet, states: Sequence[tuple], rows, sources: Sequence[int]
                 return True, plan, root[target], len(seen)
             queue.append(target)
     return False, None, None, len(seen)
+
+
+def _reachable(ruleset: RuleSet, states, rows) -> set:
+    """Indices reachable from the initial states, over the derived relation."""
+    index_of = {state: i for i, state in enumerate(states)}
+    seen = {index_of[state] for state in ruleset.init}
+    queue = deque(seen)
+    while queue:
+        index = queue.popleft()
+        for a in range(len(ruleset.actions)):
+            target = rows[index][a]
+            if target >= 0 and target not in seen:
+                seen.add(target)
+                queue.append(target)
+    return seen
 
 
 def shortest_plan(ruleset: RuleSet) -> Optional[List[str]]:
@@ -216,7 +250,12 @@ def recheck(ruleset: RuleSet, certificate: Certificate,
     try:
         rows = ruleset.transitions()
         inside = [ruleset.constraint(state) for state in states]
-        is_goal = [inside[i] and ruleset.goal(state) for i, state in enumerate(states)]
+        # Unrestricted by the constraint. `goal_break` is the one condition that
+        # costs nothing to check over the whole product -- a pattern excluding
+        # the goal excludes it everywhere -- and restricting it let a region
+        # containing a goal state pass by putting that state outside the
+        # constraint. An adversarial review built exactly that.
+        is_goal = [ruleset.goal(state) for state in states]
     except (ExprError, RuleSetError) as exc:         # pragma: no cover - obligations catch it
         verdict.verdict = REJECT
         verdict.ruleset_conditions["rules_evaluate"] = False
@@ -284,13 +323,40 @@ def recheck(ruleset: RuleSet, certificate: Certificate,
     if goal_bad:
         verdict.witnesses["goal_break"] = goal_bad
 
+    reachable = _reachable(ruleset, states, rows)
+    n_all_satisfying = sum(1 for flag in satisfies if flag)
+    outside = n_all_satisfying - len(region)
+
     verdict.stats = {
         "n_states": len(states),
         "n_wellformed": sum(1 for flag in inside if flag),
         "n_satisfying": len(region),
+        "n_satisfying_anywhere": n_all_satisfying,
+        "n_satisfying_outside_constraint": outside,
+        "n_satisfying_reachable": sum(1 for i in range(len(states))
+                                      if satisfies[i] and i in reachable),
         "n_goal_states": sum(1 for flag in is_goal if flag),
         "n_transitions": len(states) * len(ruleset.actions),
     }
+
+    # What the constraint costs, said out loud.  Closure is checked on the
+    # constrained subspace -- it has to be, or the sokoban pair deadlocks would
+    # be rejected on states the grounded task cannot represent -- so states the
+    # predicate covers outside it carry no obligation at all.  They are covered
+    # instead by the reachability qualifier, and the premise of that qualifier
+    # is `constraint_contains_reachable`, which the rule set discharged above.
+    # Reporting the count is not decoration: an adversarial review wrote a
+    # pattern where 286 of 496 states were carried that way, and nothing in the
+    # output said so.
+    if outside:
+        verdict.reasons.append(
+            "%d of the %d states satisfying the predicate lie outside the rule "
+            "set's well-formedness constraint. Closure is not checked on them. "
+            "They are covered by the reachability qualifier instead: no "
+            "reachable state lies outside the constraint, which was verified "
+            "rather than assumed, so what is licensed here is the claim about "
+            "*reachable* states -- which is the claim deadlock_carver writes."
+            % (outside, n_all_satisfying))
 
     # --------------------------------------------------- the second opinion
     if sources:

@@ -206,10 +206,78 @@ def test_every_forgery_behaves_as_the_catalogue_declares():
     assert len(attempts) >= 20
 
 
-def test_the_only_forgery_that_works_is_the_one_no_checker_can_catch():
+def test_nothing_is_accepted_except_the_two_that_are_declared():
+    """Two forgeries end in ACCEPT, and both are on the record for why.
+
+    `delete-the-rule` is the one no certificate checker can catch.
+    `region-reaching-outside-the-constraint` is correct under the reachability
+    qualifier the carver's theorem actually carries -- and is only allowed to
+    pass while the verdict reports, with a count, how much of the region rested
+    on that qualifier rather than on a check.
+    """
     accepted = [a for a in forgeries.run_all() if a.verdict == ACCEPT]
-    assert [a.forgery.name for a in accepted] == ["delete-the-rule"]
-    assert accepted[0].forgery.expect == forgeries.NOT_CAUGHT
+    assert sorted(a.forgery.name for a in accepted) == [
+        "delete-the-rule", "region-reaching-outside-the-constraint"]
+    assert sorted(a.forgery.expect for a in accepted) == [
+        forgeries.QUALIFIED, forgeries.NOT_CAUGHT]
+
+
+def test_a_def_cannot_smuggle_the_action_label_into_a_state_predicate():
+    """The one forgery that produced a real wrong ACCEPT before it was fixed."""
+    payload = spec("peg4-1101", "rules")
+    payload["defs"] = [{"name": "peek", "params": [],
+                        "body": ["=", ["act"], ["lit", "jump(0,1,2)"]]}]
+    payload["goal"] = ["call", "peek"]
+    with pytest.raises(RuleSetError) as caught:
+        ruleset_from_spec(payload)
+    assert "action" in str(caught.value)
+
+
+def test_a_certificate_can_call_the_rule_sets_own_defs():
+    """`compile_macros` used to drop the enclosing scope, which hid the above."""
+    payload = spec("a2-right-room-locked", "cert")
+    payload["predicate"] = ["not", ["call", "free", ["var", "cart"]]]
+    verdict = recheck(rules("a2-world"), certificate_from_spec(payload))
+    assert verdict.conditions["predicate_wellformed"] is True
+
+
+def test_a_shrunken_domain_that_drops_the_goal_is_refused():
+    """`unsolvable` is free in a world with no goal state."""
+    payload = spec("peg4-0111", "rules")
+    payload["variables"][1]["domain"] = [0]        # pos1, which the goal needs
+    payload["init"]["pos1"] = 0
+    unbound = spec("peg4-0111-ic3", "cert")
+    unbound.pop("ruleset")
+    verdict = recheck(ruleset_from_spec(payload), certificate_from_spec(unbound))
+    assert verdict.verdict == REJECT
+    assert verdict.ruleset_conditions["goal_satisfiable"] is False
+
+
+def test_a_dead_region_may_not_hide_a_goal_state_outside_the_constraint():
+    payload = spec("sokoban-open4far-dead-b1-11", "cert")
+    payload.pop("ruleset")
+    payload["predicate"] = [
+        "or", ["=", ["var", "b1"], ["lit", "1,1"]],
+        ["and", ["=", ["var", "player"], ["lit", "1,3"]],
+         ["=", ["var", "b1"], ["lit", "4,2"]],
+         ["=", ["var", "b2"], ["lit", "1,3"]]]]
+    verdict = recheck(rules("sokoban-open4far"), certificate_from_spec(payload))
+    assert verdict.verdict == REJECT
+    assert verdict.conditions["goal_break"] is False
+
+
+def test_every_accepted_region_reports_what_the_constraint_left_unchecked():
+    """The genuine pair deadlocks lean on the qualifier too, by 2 states each."""
+    verdict = recheck(rules("sokoban-open4far"),
+                      cert("sokoban-open4far-dead-b1-12-b2-13"))
+    assert verdict.verdict == ACCEPT
+    assert verdict.stats["n_satisfying_outside_constraint"] == 2
+    assert any("reachability qualifier" in reason for reason in verdict.reasons)
+
+
+def test_the_constraint_provably_contains_everything_reachable():
+    conditions = rules("sokoban-open4far").obligations().conditions
+    assert conditions["constraint_contains_reachable"]
 
 
 def test_no_forgery_ever_produces_an_inconsistent_verdict():

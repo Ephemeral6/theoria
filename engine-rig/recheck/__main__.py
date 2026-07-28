@@ -9,11 +9,19 @@ should still be able to tell the three apart:
                      a defect in this checker, escalated rather than rounded
                      down to a pass
     2  the input would not load at all
+    4  the recheck itself failed
+
+`4` exists because an uncaught exception used to leave Python's own exit status
+of 1, which is `REJECT` -- so a crash and a refused certificate looked identical
+to any caller reading only the status. An adversarial review pointed that out
+while this file was being edited underneath it, which is about as direct a
+demonstration as one could ask for.
 """
 
 import argparse
 import json
 import sys
+import traceback
 
 from recheck.certificate import CertificateError, load_certificate
 from recheck.ruleset import RuleSetError, load_ruleset
@@ -37,11 +45,17 @@ def main(argv=None) -> int:
     try:
         ruleset = load_ruleset(args.ruleset)
         certificate = load_certificate(args.certificate)
-    except (RuleSetError, CertificateError, ValueError, OSError) as exc:
+    except (RuleSetError, CertificateError, ValueError, RecursionError, OSError) as exc:
         print("could not load: %s" % exc, file=sys.stderr)
         return 2
 
-    verdict = recheck(ruleset, certificate)
+    try:
+        verdict = recheck(ruleset, certificate)
+    except Exception:                       # noqa: BLE001 -- deliberately broad
+        traceback.print_exc()
+        print("the recheck itself failed; this is not a REJECT", file=sys.stderr)
+        return 4
+
     if not args.quiet:
         print(verdict.report())
     if args.json_out:

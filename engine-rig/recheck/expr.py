@@ -42,6 +42,28 @@ class ExprError(ValueError):
 
 SCALAR_TYPES = (str, int, bool)
 
+# Compilation, rendering and name collection all recurse, so a deep enough
+# expression is a stack overflow rather than a rejection -- and a `RecursionError`
+# is not a `ValueError`, so it escapes every `except` around a load. The depth is
+# capped here instead, by an *iterative* walk that cannot itself overflow. 64 is
+# far past anything a certificate needs; the pagoda predicate is 3 deep.
+MAX_DEPTH = 64
+
+
+def check_depth(node: object, where: str, limit: int = MAX_DEPTH) -> None:
+    """Refuse an expression nested deeper than `limit`, without recursing."""
+    stack = [(node, 1)]
+    while stack:
+        item, depth = stack.pop()
+        if depth > limit:
+            raise ExprError(
+                "%s: expression nested deeper than %d. This rechecker recurses "
+                "over expressions, so depth is capped rather than left to the "
+                "interpreter's stack." % (where, limit))
+        if isinstance(item, list):
+            for child in item:
+                stack.append((child, depth + 1))
+
 
 def check_scalar(value: object, where: str) -> Value:
     if isinstance(value, bool) or isinstance(value, int) or isinstance(value, str):
@@ -314,16 +336,25 @@ def compile_macros(macros: Mapping[str, Macro], scope: Scope) -> Scope:
     at the moment a body is compiled, its own name is not yet in scope, so
     `["call", self, ...]` fails to resolve.  Termination is then structural and
     does not depend on a depth counter anyone could raise.
+
+    The compiled result **extends** whatever the enclosing scope already had, so
+    a certificate's defs can call the rule set's.  It used to replace them, which
+    silently made the rule set's vocabulary unavailable to certificates and made
+    the shadowing check below unreachable.
     """
-    compiled: Dict[str, Compiled] = {}
-    arity: Dict[str, int] = {}
-    current = scope
+    compiled: Dict[str, Compiled] = dict(scope.macros)
+    arity: Dict[str, int] = dict(scope.macro_arity)
     for name, macro in macros.items():
+        if name in compiled:
+            raise ExprError(
+                "def %s is already declared in an enclosing scope; shadowing it "
+                "would redefine a name the rules were compiled against" % name)
         body_scope = Scope(
-            variables=current.variables, tables=current.tables,
+            variables=scope.variables, tables=scope.tables,
             macros=dict(compiled), macro_arity=dict(arity),
-            allow_action=current.allow_action, params=macro.params,
+            allow_action=scope.allow_action, params=macro.params,
         )
+        check_depth(macro.body, "def %s" % name)
         compiled[name] = compile_expr(macro.body, body_scope)
         arity[name] = len(macro.params)
     return Scope(
@@ -335,6 +366,7 @@ def compile_macros(macros: Mapping[str, Macro], scope: Scope) -> Scope:
 
 def compile_guard(node: object, scope: Scope, where: str) -> Compiled:
     """Compile a rule guard: reads the action as well, must return a boolean."""
+    check_depth(node, where)
     inner = compile_expr(node, scope)
 
     def guard(state, action, params):
@@ -348,6 +380,7 @@ def compile_guard(node: object, scope: Scope, where: str) -> Compiled:
 
 def compile_predicate(node: object, scope: Scope, where: str) -> Callable[[State], bool]:
     """Compile an expression that must evaluate to a boolean on every state."""
+    check_depth(node, where)
     inner = compile_expr(node, scope)
 
     def predicate(state: State) -> bool:
@@ -360,7 +393,20 @@ def compile_predicate(node: object, scope: Scope, where: str) -> Callable[[State
 
 
 def names_used(node: object) -> Tuple[List[str], List[str], List[str]]:
-    """(variables, tables, defs) an expression mentions -- for reporting."""
+    """(variables, tables, defs) an expression mentions -- for reporting.
+
+    Total by construction: this runs on input that has not been compiled yet --
+    a verdict summarises the certificate it is rejecting -- so a malformed or
+    deeply nested expression must come back as an empty answer, never as a
+    traceback out of the tool.
+    """
+    try:
+        return _names_used(node)
+    except (RecursionError, IndexError, TypeError, ValueError):
+        return [], [], []
+
+
+def _names_used(node: object) -> Tuple[List[str], List[str], List[str]]:
     variables: List[str] = []
     tables: List[str] = []
     defs: List[str] = []
@@ -384,7 +430,19 @@ def names_used(node: object) -> Tuple[List[str], List[str], List[str]]:
 
 
 def render(node: object) -> str:
-    """A readable one-line rendering, for witnesses and reports."""
+    """A readable one-line rendering, for witnesses and reports.
+
+    Total for the same reason as `names_used`: it is called on expressions that
+    have not been validated, so `["lit"]` with no argument has to render as
+    something rather than raise `IndexError` from inside a verdict.
+    """
+    try:
+        return _render(node)
+    except (RecursionError, IndexError, TypeError, ValueError):
+        return "<unrenderable expression>"
+
+
+def _render(node: object) -> str:
     if not isinstance(node, list) or not node or not isinstance(node[0], str):
         return repr(node)
     op, args = node[0], node[1:]
@@ -397,23 +455,23 @@ def render(node: object) -> str:
     if op == "param":
         return "?" + str(args[0])
     if op in ("=", "!="):
-        return "(%s %s %s)" % (render(args[0]), op, render(args[1]))
+        return "(%s %s %s)" % (_render(args[0]), op, _render(args[1]))
     if op in ("and", "or"):
         if not args:
             return "true" if op == "and" else "false"
-        return "(%s)" % (" %s " % op).join(render(a) for a in args)
+        return "(%s)" % (" %s " % op).join(_render(a) for a in args)
     if op == "not":
-        return "!%s" % render(args[0])
+        return "!%s" % _render(args[0])
     if op == "in":
         members = args[1] if isinstance(args[1], list) else []
         shown = ", ".join(repr(m) for m in members[:6])
         if len(members) > 6:
             shown += ", ... (%d total)" % len(members)
-        return "%s in {%s}" % (render(args[0]), shown)
+        return "%s in {%s}" % (_render(args[0]), shown)
     if op == "if":
-        return "(if %s then %s else %s)" % tuple(render(a) for a in args[:3])
+        return "(if %s then %s else %s)" % tuple(_render(a) for a in args[:3])
     if op == "table":
-        return "%s[%s]" % (args[0], ", ".join(render(a) for a in args[1:]))
+        return "%s[%s]" % (args[0], ", ".join(_render(a) for a in args[1:]))
     if op == "call":
-        return "%s(%s)" % (args[0], ", ".join(render(a) for a in args[1:]))
+        return "%s(%s)" % (args[0], ", ".join(_render(a) for a in args[1:]))
     return repr(node)

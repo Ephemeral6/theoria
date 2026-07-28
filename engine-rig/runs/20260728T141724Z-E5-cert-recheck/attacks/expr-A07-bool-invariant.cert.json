@@ -1,0 +1,59 @@
+{
+  "claim": "unsolvable",
+  "kind": "inductive_invariant",
+  "name": "A07-bool-invariant",
+  "predicate": [
+    "and",
+    [
+      "or",
+      [
+        "=",
+        [
+          "var",
+          "pos1"
+        ],
+        [
+          "lit",
+          false
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "pos2"
+        ],
+        [
+          "lit",
+          true
+        ]
+      ]
+    ],
+    [
+      "or",
+      [
+        "=",
+        [
+          "var",
+          "pos1"
+        ],
+        [
+          "lit",
+          true
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "pos2"
+        ],
+        [
+          "lit",
+          false
+        ]
+      ]
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

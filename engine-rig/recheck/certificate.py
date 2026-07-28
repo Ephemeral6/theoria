@@ -19,6 +19,11 @@ Two kinds, matching the two engines M9 added:
       first condition becomes non-vacuity instead: a pattern no state satisfies
       is closed and goal-free for free, and certifies nothing.
 
+      The claim is the carver's own, qualifier included: *every reachable state*
+      containing P is dead.  Closure is checked on the states the rule set's
+      constraint admits, so the qualifier is doing work whenever P reaches past
+      it, and `verify` reports how much.
+
 A certificate may carry its own `tables` and `defs`, because a pagoda weight
 table *is* the certificate's content.  It may not shadow a name the rule set
 declared: a certificate that redefined the rule set's `free` would be rewriting
