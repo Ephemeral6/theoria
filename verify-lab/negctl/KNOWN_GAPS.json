@@ -709,13 +709,14 @@
       "verdict": "absent"
     },
     "verify-lab/negctl/calibrate.py": {
-      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "note": "Hand-annotated. This is a measurement tool, not a gate: `main()` always returns 0 and only ever prints. The enumerator counts it because it ends in `raise SystemExit(main())`, and by V11's own taxonomy that makes it a dead gate -- exactly the `figures/manifest.py` / `release/checklist.py` shape the census names. Pinned absent and left absent: the honest fix is for the calibration to have no `__main__` exit path at all, or to fail when the criterion degrades below a pinned rate, and neither is this item's work.",
       "owner": "lane: verify (RES-3) -- this probe's own territory",
       "verdict": "absent"
     },
     "verify-lab/negctl/probe.py": {
       "owner": "lane: verify (RES-3) -- this probe's own territory",
-      "verdict": "present"
+      "verdict": "present",
+      "note": "Hand-annotated. `present` via verify-lab/negctl/tests/test_probe.py, which plants a gate with no negative control and requires exit 1. A probe exempt from its own rule would be the 142nd case of the disease it looks for, so test_the_probe_is_subject_to_its_own_rule asserts this key exists."
     },
     "worldgen/build.py": {
       "census_v11": "no/yes",
