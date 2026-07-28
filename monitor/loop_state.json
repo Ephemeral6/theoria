@@ -47,10 +47,22 @@
     "monitor_rebirth": "HANDOFF.md rewritten every heartbeat; deep rebirth (re-derive from disk+git, not context) every ~6 heartbeats (~3h); quota death = pause not amnesia, wakeup resumes after ~5h window refresh; a fresh session reading HANDOFF + memory IS the monitor",
     "dispatch_policy": "event-driven: (1) per-completion -- a branch merged by M-0 frees its territory, author+dispatch follow-up work consuming the merged outputs at once, freshness beats batching; (2) critical-path preemption -- if WP3 critical path (theoria-arm) is idle or dead, relaunch immediately, jumps every queue; (3) M-0 fires when >=3 delivered-unmerged branches accumulate OR a pending dispatch depends on one; (4) caps: <=10 monitor-dispatched sessions, 2 slots reserved for services (A-1/B-*/M-0); (5) all launches gated by quota mode; recovering = priority list at half pool; (6) backpressure: no new prompt on a territory with a delivered-but-unmerged branch, unless the new work is additive-only in a fresh subdir; (7) staleness: a prompt authored >24h ago re-validates against the tree before launch",
     "frontend_policy": "light refresh (scan.py only, cheap, no spec rewrite): every heartbeat where any event occurred (completion, DRIFT report, quota flip) -- probes re-derive live facts, history dedup keeps it quiet; full update (spec judgments + findings + PAPER_PLAN + push + deliver page to user): (a) after each M-0 merge lands on master, (b) on any critical event (DRIFT-CRITICAL, quota hold enter/exit, new needs_human), (c) at every ~3h rebirth as part of re-derivation, (d) hard floor one full update per 3h even if quiet; SendUserFile only on full updates, never on light refreshes",
-    "stagger": "batch dispatch sleeps 45s between launches; storms kill"
+    "stagger": "batch dispatch sleeps 45s between launches; storms kill",
+    "auto_revive": "heartbeat auto-relaunches lost sessions (guard prevents doubles); a prompt lost >=3 times is a suspected prompt-level defect: stop relaunching, escalate as a finding, rewrite or split the prompt before the next attempt"
   },
   "heartbeat_count": 0,
   "notes": {
-    "launch-storm": "simultaneous 11-session launch killed 6; 45s staggered relaunch at ~1042 local revived all -- stagger now built into dispatch.py batch mode; all 11 dispatched sessions alive as of this heartbeat"
+    "launch-storm": "simultaneous 11-session launch killed 6; 45s staggered relaunch at ~1042 local revived all -- stagger now built into dispatch.py batch mode; all 11 dispatched sessions alive as of this heartbeat",
+    "p18-serial-deaths": "P-18 died silently 3x (empty logs each time) while batchmates survived; 4th attempt (pid 15720) under watch -- if it dies, the prompt gets rewritten/split per auto_revive rule instead of a 5th identical launch"
+  },
+  "death_counts": {
+    "P-18": 3,
+    "B-1": 2,
+    "P-24": 1,
+    "P-19": 1,
+    "P-21": 1,
+    "M-0": 1,
+    "A-1": 1,
+    "R-1": 1
   }
 }
