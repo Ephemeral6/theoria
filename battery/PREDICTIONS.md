@@ -238,3 +238,152 @@ collapsing them would hide the only contrast the repair metrics have.
    closing. This is E4's defect moved one layer outward, not cured. It is
    registered because a measurable confounded axis beats an unmeasurable clean
    one, and because the confound now lives in a field a reader can check.
+
+---
+
+# v2 — the CC vs Schema contrast, pre-registered 2026-07-28
+
+Appended, never edited. Everything above stands as written, including where it
+was wrong.
+
+This batch registers **no new metrics**. It registers directional predictions
+for the 38 existing metrics on a gradient that has never been run: `bare_cc`
+against `schema_repro`, paired by game. That is the contrast `Theoria.md`
+Phase 2 process 1 names, and v0 and v1 both reported it as impossible.
+
+## Seal declaration — and this one is materially stronger than v1's
+
+v1's seal was weak for one avoidable reason: the recon passes that preceded it
+quoted values. `REPORT_V1.md` made fixing that item 1 on the v2 list. It was
+fixed, and here is the accounting.
+
+**The procedure actually followed.** The two reconnaissance passes over
+`baseline-arms/schema_traces/` and `baseline-arms/out/campaign/` were
+commissioned under a written instruction to return **field names, nesting
+paths, value types and closed label sets only**, with an explicit prohibition
+on scores, counts, durations, token totals, sample records, ranges, and
+magnitude comparisons between runs. This table was written **before either
+report was read**, and before the adapter that reads the material existed.
+
+**Seen anyway, and it must be declared.** Two leaks, both from tracked files
+this author had already read for other reasons:
+
+1. **The upstream per-game outcome scores are encoded in directory names** —
+   `claude_fable_opus/` names its four run directories with a trailing score,
+   and `gpt_5_6_sol/` does not. Reading a directory listing therefore disclosed
+   four numbers. They are *outcome* scores, not behavioural values, and every
+   metric below is behavioural; more to the point, the direction of this
+   gradient was fixed by `Theoria.md` long before this session — Schema is the
+   published 98.98 state of the art and `bare_cc` is a one-shot CLI baseline.
+   Nothing about which arm is stronger was learned here.
+2. **File counts and byte sizes per game**, from `SCHEMA_PATH_A.md` section 2.1.
+
+**Not seen, and this is the part that matters.** Not one step, action,
+observation, token count, cost, duration, retry, session length or turn count
+from any trace file in `schema_traces/`. No metric value on the Schema side of
+any of the 38 rows below. The author does not know, at the time of writing,
+**which of these metrics the Schema material can even be computed on** — the
+recon reports that would say so were not read until this section had been
+written to disk in full.
+
+That last point is the strongest form available here and it was chosen on
+purpose. Writing the predictions before knowing what is computable makes it
+impossible to quietly drop the rows that were going to look bad, because the
+set of rows was fixed before their computability was known.
+
+## The prediction that matters most, stated separately
+
+**Adding the Schema arm does not rescue the epistemic family.**
+
+`REPORT_V1.md` recorded that 21 of 38 metrics had never been computed on a
+control arm — the whole epistemic family, the whole mechanism family, and P4 —
+and named the missing Schema arm as the cause. **That diagnosis is predicted
+here to be wrong**, and the prediction is cheap to check.
+
+`PREDICTIONS.md` v0 assumed `schema_repro` would carry a replay-level world
+model and therefore light up K1 and K2. The material that actually arrived is
+**upstream trajectories, not an upstream model**. A ledger of what an agent did
+contains no manual, no concepts, no clauses, no probes and no compression
+account, so:
+
+* **K1–K14 stay `not-applicable` on both control arms.** The epistemic family
+  remains entirely unvalidated after this round.
+* **M1–M6 stay `not-applicable` on both**, for the different reason that they
+  need per-game hand-annotated mechanism ground truth, which no ARC game has.
+* **P4 stays `not-applicable` on both**, needing an optimal plan length that
+  only a self-built world has.
+
+If that holds, the Schema arm closes the validation gap for exploration,
+planning and economy and closes **none** of it for the two families where
+Theoria's distinctive claims live. The honest headline would then be that the
+battery's unvalidated fraction improves from 21/38 to roughly 20/38, not to
+zero — and that no amount of further baseline material can fix the rest,
+because the missing ingredient is a *theory-bearing control arm*, which does
+not exist and cannot be constructed from a baseline.
+
+## Exploration
+
+| id | dir | prediction | reasoning |
+|---|---|---|---|
+| X1 | lower | **wrong-direction**: `schema > bare_cc` | the length confound v1 found on the Theoria arms, now on the control side. A run that wins revisits a hub; a run that dies on step three cannot revisit anything. X1 as defined rewards dying early |
+| X2 | higher | **wrong-direction**: `bare_cc > schema` | same mechanism from the other end. A three-step run takes three first-time transitions and scores 1.000 by construction |
+| X3 | higher | **agrees** | the family's signature and its one real hope. A capable agent's novelty is concentrated early and collapses once it has the level's measure. Expect many `bare_cc` runs to be `insufficient-data` — too short to have quarters — which is itself the finding |
+| X4 | lower | **no-effect** | normalised by run length, so the early-exit effect it cannot remove roughly cancels the thrashing effect it can |
+| X5 | neutral | not ranked | `schema` far above `bare_cc` trivially; it is the support X1 and X4 must be read beside |
+| X6 | higher | **no-effect** | already falsified on `bare_cc` in v1 (1.000, measuring the prompt builder). Nothing about the Schema side is expected to rescue it |
+
+## Planning
+
+| id | dir | prediction | reasoning |
+|---|---|---|---|
+| P1 | higher | **agrees, for the wrong reason** | v1 established P1 ~ P5 at rho = -0.837: actions-per-call is mostly an API-failure readout. The Schema side ran on upstream infrastructure and should fail less, so P1 will separate — as a plumbing gradient wearing a capability gradient's clothes. **A `discriminating` verdict here should not be believed** |
+| P2 | higher | **no-effect** | neither control arm plans across turns; both re-decide each step |
+| P3 | lower | **wrong-direction**: `schema > bare_cc` | backtracking needs a state to return to, and the length confound again |
+| P4 | lower | **no-data on both sides** | needs an optimal plan length; no ARC game has one |
+| P5 | neutral | not ranked | `bare_cc` far above `schema`; this is the confound, not a result |
+
+## Economy
+
+Every row here is conditional on upstream logging token usage at all, which is
+**not known at the time of writing**. If it does not, the economy family is
+one-sided again and the whole conditional block below resolves to `no-data` —
+which would be a finding, not a failure of the prediction.
+
+| id | dir | prediction | reasoning |
+|---|---|---|---|
+| E1 | neutral | not ranked | total spend; a diagnostic |
+| E2 | higher | **no-effect** | **the sharpest prediction in this batch.** E2 is a `Theoria.md` Phase 4 *primary endpoint* and claim C2's signature. But C2 is about a theory-bearing arm paying up front; **both control arms are transcript-memory agents**, so neither should front-load. Predicting no separation on the primary endpoint is predicting that E2 measures the thing it claims to and not general competence. **If E2 separates CC from Schema cleanly, E2 is measuring capability rather than front-loading, and its status as C2's signature is in trouble** |
+| E3 | lower | **no-effect** | E2 restated from the other end; it should agree with E2 whatever E2 does |
+| E4 | lower | **wrong-direction**: `bare_cc` scores better | `bare_cc` is a fresh one-shot CLI per turn, so its context is constant by construction and it scores a perfect flat curve while understanding nothing. The Schema side runs multi-turn sessions whose context genuinely grows. E4 will crown the arm with no memory at all |
+| E5 | lower | **agrees** | cost per *successful* action, and `bare_cc`'s denominator is savaged by the failure rate |
+| E6 | neutral | not ranked | prices the infrastructure; registered `neutral` in v1 precisely so nobody ranks an arm on it |
+| E7 | lower | **wrong-direction**, same as E4 | E4's defect moved one layer out, as v1 already recorded. Predicting they fail together is predicting rho(E4,E7) stays near 1 |
+
+## Mechanism and Epistemic
+
+| id | prediction |
+|---|---|
+| M1, M2, M3, M4, M5, M6 | **`not-applicable` on both control arms** — no per-game mechanism annotation exists for any ARC game, and no repair loop can exist on an arm with no manual |
+| K1 ... K14 (all 14) | **`not-applicable` on both control arms** — the Schema material is a trajectory ledger, not a published world model. See the separate section above; this is the prediction this batch is really for |
+
+## Three named ways this batch could be wrong
+
+1. **The Schema side may not be one arm.** `schema_traces/` holds two upstream
+   collections built by different agents on different scaffolding. If they do
+   not share a schema they are two arms, and pooling them into `schema_repro`
+   would manufacture within-arm variance that belongs between arms. The adapter
+   must check; if they differ, the pre-registered pairing is against a pooled
+   construct this table did not describe, and that has to be said in the report
+   rather than absorbed.
+2. **Every prediction here is confounded by harness.** `bare_cc` is this
+   project's CLI against the live API; the Schema side is somebody else's agent
+   on somebody else's infrastructure. There is no version of this contrast that
+   separates arm from plumbing, and several rows above (P1, P5, E4, E7)
+   predict that the plumbing will win. A `discriminating` verdict on this
+   gradient is weaker evidence than the same verdict on the model ladder, which
+   at least holds the harness fixed.
+3. **Four paired games still cannot reach p<0.05.** Unchanged since v0. Every
+   verdict below will read `underpowered`, and the effect sizes are the only
+   thing anyone should read. Six non-tied paired games remains the floor, and
+   this material does not supply them — it supplies a second arm on the same
+   four games, which buys pairing quality, not power.
