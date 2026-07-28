@@ -89,3 +89,12 @@
 2026-07-28T15:02:43Z CLAIM A3-campaign-devpile by RES-1
 2026-07-28T15:06:37Z DONE R2-release-licence by W-1412
 2026-07-28T15:06:37Z CLAIM C9-count-lock-vocabulary by W-1412
+2026-07-28T15:06:46Z DONE E5-cert-recheck by W-1411
+2026-07-28T15:06:55Z CLAIM E7-deadlock-claim-audit by W-1411
+2026-07-28T15:06:55Z RELEASE C9-count-lock-vocabulary by W-1412 (W-1412 上下文将满，此条需要完整预算（改守卫语言+台账+四份DSL不回归+worldgen 过 a0 流水线验收），交回板上由新工人整段接手，避免悬挂认领)
+2026-07-28T15:06:55Z CLAIM C9-count-lock-vocabulary by W-1412
+2026-07-28T15:07:05Z RELEASE C9-count-lock-vocabulary by W-1412 (context budget spent; needs a fresh worker for the whole item)
+2026-07-28T15:07:58Z CLAIM S14-gates-for-all by RES-4
+2026-07-28T15:08:15Z CLAIM S15-ledger-hashchain by RES-4
+2026-07-28T15:08:37Z DONE S10-invariant-on-resource by W-1251
+2026-07-28T15:10:01Z CLAIM V10-fuzz-mutation-power by RES-3

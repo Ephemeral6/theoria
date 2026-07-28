@@ -1,1 +1,1 @@
-{"id": "RES-2", "utc": "2026-07-28T15:02Z", "cycle": 4, "state": "idle", "note": "booted (new App session); continuing standing paper lane from cycle 3"}
+{"id": "RES-2", "utc": "2026-07-28T15:15Z", "cycle": 4, "state": "working", "note": "holding 2: P11 (papers, battery section) + V7 (exam, 20-world stress). Worktrees + runs/ created, baselines green (exam 287 passed, assemble byte-stable). 3 recon subagents out: battery fact sheet / paper battery-citation map / exam+worldgen operating manual. P12 blocked behind P11 (same territory)."}
