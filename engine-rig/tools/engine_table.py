@@ -310,6 +310,9 @@ FACTS: dict[str, tuple[object, object]] = {
     "zs.fixtureB_features": ("16", md(f"{E11}/partials/probe_frontier-via-bruteforce.md", r"`analyse` 给出：(\d+) 个特征")),
     "dl.far6_blind_pct": ("-10.0", jf(f"{E2}/dividend.json", lambda d: (lambda f: f"{100 * (f['expansions_after'] - f['expansions_before']) / f['expansions_before']:.1f}")(_fd_row(d, "far6", "singleton", "fd-optimal/blind")), "far6/singleton/blind, (after-before)/before")),
     "dl.m9_ringstuck": ("44 → 22", md("engine-rig/STATUS.md", r"M9's (44 → 22) is a fact about the bundled search")),
+    "fd.coldstart_domains": (7, jf(f"{P13}/dividend.json", lambda d: len(d["cross_check"]), "len(cross_check)")),
+    "dl.unadjudicated_exam": ("9", md(f"{E11}/partials/deadlock-via-reachability.md", r"\*\*(\d+)\*\* unsolvable exam\n    items")),
+    "dl.unadjudicated_arc": ("3", md(f"{E11}/partials/deadlock-via-reachability.md", r"json` — (\d+) unsolvable ARC-variant claims")),
 }
 
 
@@ -328,7 +331,7 @@ ROWS = [
         engine="`mdl_segmenter`",
         solves="Trajectory → objects and events, priced in bits. The segmentation with the shortest description wins.",
         fixture="Fixture A `cart_world`; {mdl.worlds} `gridworld` worlds, {mdl.frames} frames, {mdl.cells} cells, {mdl.events_repriced} events (E11)",
-        recheck="**Independent checker.** The published payload alone is replayed back into frames by a reconstructor the rig does not contain; the cost model is re-derived from the README's bit table, not imported from `costs.py`; all {mdl.events_repriced} events are re-priced individually.",
+        recheck="**Independent checker.** The published payload alone is replayed back into frames by a reconstructor the rig does not contain; the cost model is re-derived from the README's bit table, not imported from `costs.py`; all {mdl.events_repriced} events are re-priced individually. The analyst's own qualifier travels with this: the bit check is code-independent but **not doc-independent**, so an error shared between the README and `costs.py` would pass it.",
         boundary=(
             "**Measured.** Geometry is exact — **{mdl.cells_wrong} wrong cells in {mdl.cells}** — but per-cell colour of non-uniform objects is not published at all: "
             "{mdl.unrecoverable} cells ({mdl.unrecoverable_pct} %) are unrecoverable, and `color: null` is a perfect predictor of which. "
@@ -380,7 +383,7 @@ ROWS = [
     dict(
         engine="`fd_adapter`",
         solves="One `solve(domain, problem)` interface over a three-rung planner ladder — bundled BFS, Fast Downward optimal, LAMA satisficing — and the rule that decides when \"no plan\" is a proof.",
-        fixture="Fixture D sokoban (four levels) and a gripper size ladder (E2); the generated cold-start domains, {fd.crosscheck_agree} of them (P13)",
+        fixture="Fixture D sokoban (four levels) and a gripper size ladder (E2); {fd.coldstart_domains} generated cold-start domains (P13)",
         recheck="**Differential + independent checker.** Every rung is run against the others on the same instance — **{fd.crosscheck_agree}** agree on plan length and on unsolvability, three of them FD independently proving an UNSAT the bundled search found — and a from-scratch grounder and BFS reproduce `open4far` at {fd.open4far_actions} ground actions, {fd.open4far_states} reachable states, optimal {fd.open4far_optimal}.",
         boundary=(
             "**Measured on cost, and explicitly {unmeasured} on the one comparison the paper wants.** "
@@ -409,7 +412,7 @@ ROWS = [
         recheck="**Three independent routes.** `recheck/` derives the transition relation from a rule set nobody grounded for it (**{dl.recheck_dead_regions}** `dead_region` certificates green); an E11 grounder and exhaustive reachability adjudicate **{dl.theorems}** theorems with two negative controls correctly rejected; and the theory-compiler track carries two of them as axiom-free Lean.",
         boundary=(
             "**Measured, in both directions, and one half of the original claim did not survive.** "
-            "Truth is clean — across the whole unsolvability inventory, **{dl.claims}**. "
+            "Truth is clean — across the unsolvability inventory that was adjudicated, **{dl.claims}**. (That inventory is not the repository's whole one: the exam truth set's {dl.unadjudicated_exam} unsolvable items, {dl.unadjudicated_arc} ARC-variant claims needing the live game, and `cold-start-a3`'s negative control were out of budget and are recorded as unadjudicated, not as confirmed.) "
             "Completeness is capped by the evidence, not by a budget: `MAX_PATTERN = 2` is the width of an h² mutex, so the theorems cover {dl.coverage_open4far} % of `open4far`'s dead reachable states and **{dl.uncovered} % are dead for reasons no 2-atom pattern can state**. Widening it means implementing h^m, which is a different engine. "
             "The speed-up half of Theoria 1.9 **does not survive a real planner**: on `far6` the theorems buy `{dl.far6_blind}` expansions against a blind search ({dl.far6_blind_pct} %) and **`{dl.far6_lmcut}` against `lmcut`, `{dl.far6_ipdb}` against `ipdb`**. A proved deadlock is a substitute for a heuristic, not an addition to one. "
             "Pair deadlocks reach the admissible rungs only through a second encoding, and doing so is a net loss — the natural guard becomes an FD axiom and `lmcut`/`ipdb` refuse the task outright, while the STRIPS `indexed` re-encoding is accepted and expands *more* (`far6` `{dl.far6_indexed_lmcut}`). "
