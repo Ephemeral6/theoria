@@ -59,10 +59,40 @@ NOT_TERRITORIES = {".git", ".worktrees", ".claude", ".toolchain", "__pycache__",
                    ".pytest_cache", ".vscode", ".idea"}
 
 
+#: `bash` 在 PATH 上解析到的是 **WSL** 的 bash——另一个 Linux，`/mnt/c` 挂载、
+#: 只有 python3、看不见 Windows 这边装的 numpy/scipy/pytest。仓库的 `.sh` 闸门
+#: 写的是 Git Bash 的口径，所以这里显式指名，不听 PATH 的。
+GIT_BASH_CANDIDATES = (
+    r"C:\Program Files\Git\bin\bash.exe",
+    r"C:\Program Files\Git\usr\bin\bash.exe",
+    r"C:\Program Files (x86)\Git\bin\bash.exe",
+)
+
+
+def _bash() -> str:
+    for cand in GIT_BASH_CANDIDATES:
+        if os.path.isfile(cand):
+            return cand
+    return "bash"
+
+
 def _runner(path: str) -> List[str]:
     if path.endswith(".py"):
         return [sys.executable, path]
-    return ["bash", path]
+    # 两个 bug 叠在同一行上，W-1620 只看见了第一个（2026-07-29）：
+    #
+    # (1) Windows 绝对路径交给 MSYS/WSL bash，反斜杠被当成转义吃掉：
+    #     `C:\Users\...\verify.sh` → `C:Usersverify.sh`，报 No such file or
+    #     directory，而 ci_merge 把它记成「verify gate red」。8 条已交付分支
+    #     因此被判成验证失败，每 5 分钟重刷一次 flag。
+    # (2) 但只修反斜杠会换来另一种红：PATH 上的 `bash` 是 WSL 的，
+    #     那里 `python` 根本不存在（只有 python3），闸门第 14 行就 exec 失败。
+    #     实测过才发现——**一个「一行修复」如果没被真跑过，它修的是报错文本，
+    #     不是闸门。**
+    #
+    # 这一整类是**假红**：与今晚普查的假绿反向，但同样是工具的失败被写成了
+    # 被检查对象的性质。假绿放过坏活，假红扣住好活，都在冒充判决。
+    return [_bash(), path.replace("\\", "/")]
 
 
 def find_gate(root: str, directory: str) -> Optional[Dict[str, Any]]:

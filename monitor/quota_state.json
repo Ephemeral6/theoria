@@ -1,12 +1,29 @@
 {
-  "mode": "normal",
+  "mode": "hold",
   "requeue": [],
-  "history": [],
-  "detected_at": "2026-07-29T00:57Z",
-  "reset_hint": "session limit \u00b7 resets 1:20am (Asia/Shanghai)",
-  "note": "ping confirmed OPEN at the 1:20 reset; released",
-  "resumed_at": "2026-07-29T01:30Z",
-  "last_ping_at": "2026-07-28T18:52:03Z",
-  "last_ping_result": "OPEN",
-  "reopen_at": "2026-07-29T06:57:00Z"
+  "history": [
+    {
+      "at": "2026-07-28T20:57:11Z",
+      "from": "log-scan"
+    },
+    {
+      "at": "2026-07-28T20:57:17Z",
+      "from": "log-scan"
+    },
+    {
+      "at": "2026-07-28T21:26:55Z",
+      "from": "monitor-false-positive-clear"
+    },
+    {
+      "at": "2026-07-28T21:42:12Z",
+      "from": "log-scan"
+    }
+  ],
+  "detected_at": "2026-07-28T21:42:12Z",
+  "reset_hint": "You've hit your session limit \u00b7 resets 6:20am (Asia/Shanghai)",
+  "note": "false hold cleared 2026-07-29: the log-scan matched a sentence that DENIES a session limit (and would also match the string quota.py). Detector narrowed to HARD_SIGNATURES + prose exclusion; scan now returns None.",
+  "resumed_at": "2026-07-28T21:26:55Z",
+  "last_ping_at": "2026-07-28T22:02:26Z",
+  "last_ping_result": "CLOSED",
+  "reopen_at": "2026-07-28T22:20:00Z"
 }

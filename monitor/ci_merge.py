@@ -82,9 +82,14 @@ def gate_for(worktree, directory):
 
 
 def sh(args, cwd=ROOT, timeout=1800):
+    # 子进程的 stdout 在这里是管道，Windows 上 Python 于是按 cp936 编码，
+    # 闸门只要打印一个非 GBK 字符就死于 UnicodeEncodeError——而 ci_merge
+    # 把它记成「verify gate red」。monitor 自己的闸门就是这么红的。
+    # 这仓库已经为 GBK/UTF-8 付过四次账，所以在唯一的出口处钉死。
+    env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUTF8="1")
     return subprocess.run(args, cwd=cwd, capture_output=True, text=True,
                           encoding="utf-8", errors="replace",
-                          timeout=timeout)
+                          timeout=timeout, env=env)
 
 
 def log_line(msg):

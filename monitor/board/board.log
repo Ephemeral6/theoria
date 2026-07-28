@@ -153,3 +153,16 @@
 2026-07-28T19:57:40Z DONE V17-pin-the-partial-verdict by RES-3
 2026-07-28T20:19:51Z DONE E6-engine-dividend by W-130
 2026-07-28T20:19:51Z CLAIM E8-ic3-scale by W-130
+2026-07-28T21:01:01Z DONE V11-handover-auto by RES-3
+2026-07-28T21:01:18Z CLAIM E14-crash-is-not-a-finding by RES-3
+2026-07-28T21:27:34Z CLAIM S17-fleet-evidence-capture by W-1630
+2026-07-28T21:28:18Z CLAIM S23-unreadable-is-not-clean by W-1631
+2026-07-28T21:29:03Z CLAIM P12-paper-multi-review by W-1632
+2026-07-28T21:29:49Z CLAIM P14-honesty-section by W-1633
+2026-07-28T21:42:02Z SWEEP P12-paper-multi-review released (worker W-1632 gone)
+2026-07-28T21:42:02Z SWEEP P14-honesty-section released (worker W-1633 gone)
+2026-07-28T21:42:02Z SWEEP S17-fleet-evidence-capture released (worker W-1630 gone)
+2026-07-28T21:42:02Z SWEEP S23-unreadable-is-not-clean released (worker W-1631 gone)
+2026-07-28T21:51:45Z DONE E14-crash-is-not-a-finding by RES-3
+2026-07-28T21:52:02Z SWEEP E8-ic3-scale released (worker W-130 gone)
+2026-07-28T21:52:15Z CLAIM C11-tool-failure-as-truth by RES-3

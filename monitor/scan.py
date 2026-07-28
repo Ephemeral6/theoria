@@ -515,7 +515,7 @@ def probe_scheduled_tasks():
     for name, role in want.items():
         out = subprocess.run(["schtasks", "/Query", "/TN", name, "/FO", "LIST"],
                              capture_output=True, text=True,
-                 encoding="utf-8", errors="replace")
+                             encoding="utf-8", errors="replace")
         if out.returncode != 0:
             rows.append("%s **未注册**（%s）" % (name, role))
             bad.append(name)
@@ -1254,8 +1254,14 @@ def render(state, refresh=None):
     def pid_alive_win(pidnum):
         out = subprocess.run(["tasklist", "/FI", "PID eq %d" % pidnum,
                               "/FO", "CSV"], capture_output=True,
-                             text=True).stdout
-        return str(pidnum) in out
+                             text=True, encoding="utf-8",
+                             errors="replace").stdout
+        # tasklist 说的是 GBK。PYTHONIOENCODING=utf-8 一设，解码就在
+        # reader 线程里炸掉——而线程里的异常不会往上抛，它只是让
+        # .stdout 变成 None，调用点于是把 None 当输出读。
+        # 闸门报的那句 "argument of type NoneType is not iterable"
+        # 整条链就在这里（2026-07-29）。
+        return str(pidnum) in (out or "")
 
     fleet = []
     for pid in ls.get("in_flight", []):

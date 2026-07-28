@@ -1,8 +1,10 @@
 # CONFLICT-origin_agent_bus2-ablation-readonly.md
 branch: origin/agent/bus2-ablation-readonly
-reason: verify gate red in ablation-arm (verify.sh)
+reason: merge conflict
 
 ```
-/bin/bash: C:UsersuserAppDataLocalTempci-merge-4q9u8_1cablation-armverify.sh: No such file or directory
+Auto-merging ablation-arm/tests/test_readonly.py
+CONFLICT (content): Merge conflict in ablation-arm/tests/test_readonly.py
+Automatic merge failed; fix conflicts and then commit the result.
 
 ```
