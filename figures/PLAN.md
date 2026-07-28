@@ -606,6 +606,8 @@ declared, and that is where the work went.
 | 10 | turn-axis agreement checked per run, reported either way | the battery counts decisions, this plate counts `step_idx` |
 | 11 | `check_coverage.py` + `verify.sh` gate 8, with a mandatory negative control | gates 1–7 were green on the tree that had both drifts |
 | 12 | CSV gains 8 shape columns, value **and** status for each metric | one empty cell for two different absences is how an absence becomes a zero |
+| 13 | a `tracked=True` rule discovers only what git tracks; `build_all.py` warns when git cannot say | discovery widens an untracked file's blast radius — a stray `pilot_scratch.json` was invisible to a four-name list and would be hashed and read by a bare glob, on one machine and not on a clean checkout. Demonstrated with a scratch file that the rule correctly refused |
+| 14 | `manifest.py` takes `--prompt-id` / `--worker` | they were constants, so a second run's manifest would have declared itself P4's, and a provenance record naming the wrong prompt reads as authoritative |
 
 **Three things found while doing it, none of them in this territory, none
 touched.** (i) `battery/metrics/economy.py` fills E4's `support["turns"]` from

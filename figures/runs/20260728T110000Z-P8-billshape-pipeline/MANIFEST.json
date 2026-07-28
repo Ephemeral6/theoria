@@ -32,7 +32,7 @@
     "out/light/fig07_a0_vs_a0prime.png": "c211d2f0d525c5dd201cc56a3feac872518129dd7541b2249e928a885ceec728",
     "out/light/fig07_a0_vs_a0prime.svg": "4a01a9b4c2dbd18d0ba1e8eeecc13cba7e40906e6cb65505954ea22423f6ac29"
   },
-  "base_commit": "98593a09790386867a79f9bbac11452c82d64727",
+  "base_commit": "f0e4389697808eee79c23e45e3e5d6f817c0bc6f",
   "branch": "agent/p8-billshape-pipeline",
   "command": "python figures/build_all.py",
   "excluded_inputs": [
@@ -130,7 +130,7 @@
     "light",
     "dark"
   ],
-  "utc": "2026-07-28T11:12:59Z",
+  "utc": "2026-07-28T11:20:57Z",
   "verified_by": "figures/verify.sh",
   "worker": "RES-2"
 }

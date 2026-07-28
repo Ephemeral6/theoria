@@ -391,6 +391,43 @@ def _rule_key(rule: Rule, entry: str, member: str = "") -> str:
     return f"{rule.name}:{stem}"
 
 
+def _tracked_paths(root: str) -> frozenset[str] | None:
+    """Repo-relative paths git tracks under ``root``, or ``None`` if git cannot say.
+
+    Discovery widened the blast radius of an untracked file: before, only the
+    paths named here were read, so a stray ``pilot_scratch.json`` in
+    ``baseline-arms/out/`` was invisible. A rule would pick it up, hash it into
+    ``SOURCES.sha256`` and feed its rows to a figure -- on one machine and not
+    on another, which is the determinism requirement failing at its root.
+
+    So a ``tracked=True`` rule discovers only what git tracks. That is not a new
+    policy, it is this module's third opening rule made to apply to rules as
+    well as to names: a source that is not committed cannot be rebuilt from a
+    clean checkout. It also keeps the promise the work order actually asked for
+    -- a run that lands enters the figure with **no code edit** -- because
+    committing the data is not a code edit.
+    """
+    try:
+        proc = subprocess.run(
+            ["git", "-C", REPO_ROOT, "ls-files", "-z", "--", root],
+            capture_output=True,
+            text=True,
+            check=True,
+            env={**os.environ, "GIT_PAGER": "cat"},
+        )
+    except (OSError, subprocess.CalledProcessError):
+        return None
+    return frozenset(p for p in proc.stdout.split("\0") if p)
+
+
+#: Rules whose tracked-only filter could not be applied, with the reason. Empty
+#: on any normal checkout. Reported by ``build_all.py`` rather than swallowed:
+#: falling back to "discover everything" is a *weaker* guarantee, and a weaker
+#: guarantee that nobody is told about is the failure mode this repository keeps
+#: rediscovering.
+TRACKING_UNAVAILABLE: list[str] = []
+
+
 def _scan(rule: Rule) -> list[str]:
     """Entry names under ``rule.root`` matching ``rule.pattern``, sorted.
 
@@ -402,23 +439,54 @@ def _scan(rule: Rule) -> list[str]:
         entries = os.listdir(rule.abs_root)
     except OSError:
         return []
-    return sorted(e for e in entries if fnmatch.fnmatch(e, rule.pattern))
+    named = sorted(e for e in entries if fnmatch.fnmatch(e, rule.pattern))
+    if not rule.tracked:
+        return named  # untracked by design; the floor for these rules is zero
+
+    tracked = _tracked_paths(rule.root)
+    if tracked is None:
+        TRACKING_UNAVAILABLE.append(
+            f"rule {rule.name!r}: git could not list tracked files under {rule.root}/, "
+            "so discovery fell back to every matching entry on disk. An untracked file "
+            "here would enter the build on this machine and not on a clean checkout."
+        )
+        return named
+    keep = []
+    for entry in named:
+        prefix = f"{rule.root}/{entry}"
+        # A directory entry counts as tracked when git tracks anything inside
+        # it; the member check below decides whether it is a run this rule
+        # describes.
+        if prefix in tracked or any(p.startswith(prefix + "/") for p in tracked):
+            keep.append(entry)
+    return keep
 
 
 def _discover(rule: Rule) -> tuple[Source, ...]:
     found: list[Source] = []
     seen_paths: set[str] = set()
+    tracked = _tracked_paths(rule.root) if rule.tracked else None
+
+    def usable(rel: str, abs_path: str) -> bool:
+        if not os.path.exists(abs_path):
+            return False
+        return tracked is None or rel in tracked
 
     for entry in _scan(rule):
         abs_entry = os.path.join(rule.abs_root, entry)
         if rule.kind == "dir":
             if not os.path.isdir(abs_entry):
                 continue
-            # Every member must be present. A run directory with a manifest and
-            # no cost curve is not half a run; it is a directory this rule does
-            # not describe, and guessing which half to use is how a cost column
-            # silently becomes wrong.
-            if not all(os.path.exists(os.path.join(abs_entry, m)) for m in rule.members):
+            # Every member must be present **and tracked**. A run directory with
+            # a manifest and no cost curve is not half a run; it is a directory
+            # this rule does not describe, and guessing which half to use is how
+            # a cost column silently becomes wrong. An untracked member is the
+            # same problem wearing a different hat: it is there on this machine
+            # and not on a clean checkout.
+            if not all(
+                usable(f"{rule.root}/{entry}/{m}", os.path.join(abs_entry, m))
+                for m in rule.members
+            ):
                 continue
             for member in rule.members:
                 rel = f"{rule.root}/{entry}/{member}"
@@ -435,9 +503,9 @@ def _discover(rule: Rule) -> tuple[Source, ...]:
                     )
                 )
         else:
-            if not os.path.isfile(abs_entry):
-                continue
             rel = f"{rule.root}/{entry}"
+            if not os.path.isfile(abs_entry) or not usable(rel, abs_entry):
+                continue
             seen_paths.add(rel)
             found.append(
                 Source(

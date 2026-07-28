@@ -24,6 +24,17 @@ directory, the filename pattern, the members required inside each entry, and a
 What moved is only who enumerates the family: the filesystem, rather than a tuple
 that ages.
 
+**A `tracked=True` rule discovers only what git tracks**, and that is this file's
+third opening rule applying to rules as well as to names. Discovery widens the
+blast radius of an untracked file: a stray `pilot_scratch.json` dropped into
+`baseline-arms/out/` was invisible when only four filenames were read, and a bare
+glob would hash it into `SOURCES.sha256` and feed its rows to a figure — on one
+machine and not on a clean checkout. It also keeps the promise the work order
+actually asked for, because *committing the data is not a code edit*. When git
+cannot answer, discovery falls back to every matching entry and says so through
+`sources.TRACKING_UNAVAILABLE`, which `build_all.py` prints: a weaker guarantee
+nobody is told about is the failure mode this repository keeps rediscovering.
+
 The floor is the part that makes discovery safe rather than merely convenient. A
 glob that finds nothing is indistinguishable from a family that is empty, so each
 rule records how many members were on disk when it was written; `verify.sh` gate
