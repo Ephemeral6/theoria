@@ -25,12 +25,21 @@ rather than one that prints a hardcoded table. What that means here:
 
 * Every cell value is **probed** out of an artifact — a JSON field, a JSONL
   aggregate, or a regex anchored in a run's Markdown report. The prose in `ROWS`
-  contains `{fact.key}` placeholders and no bare figures.
+  carries `{fact.key}` placeholders.
+
+  **An earlier version of this paragraph claimed the prose contains "no bare
+  figures". That was false** — an adversarial audit counted at least 28 unprobed
+  numerals. Nine more are probed now; what remains is identifiers and code
+  constants (`D-003`, `GF(2)`, `MAX_PATTERN = 2`, `C(|V|,4)`), exempted **by
+  name** in `tests/test_engine_table.py` so that adding one is a visible
+  decision rather than a widened regex. The correction is left in place rather
+  than edited away, because a self-description that drifted from the artifact is
+  the same defect the tool is built to catch.
 * The `expect` beside each probe is a **tripwire, not a source**. If an artifact
   is edited, `probe() != expect` and the script refuses to write.
 * **The verdict is wired to the exit code.** Today's whole-repo sweep found that
   the commonest defect in this repository is a verdict computed correctly and
-  then connected to nothing, so this script has five negative controls proving
+  then connected to nothing, so this script has six negative controls proving
   its own "no" is reachable (`measured/negative-controls.txt`):
 
   | control | expected | got |
@@ -40,19 +49,25 @@ rather than one that prints a hardcoded table. What that means here:
   | the committed table is stale (`--check`) | 1 | 1 |
   | the table references a fact that does not exist | 3 | 3 |
   | a row is given an empty boundary cell | 3 | 3 |
+  | a multi-file probe loses one of its files | 3 | 3 |
+
+  The last one was added after the adversarial audit found two probes reading
+  five files through a bare `read_text()`, so a missing file exited **1** as an
+  uncaught `FileNotFoundError` instead of the contracted **3**. The tool that
+  lectures about D-024 had the D-024 defect.
 
   Exit 3 is kept apart from exit 1 deliberately, for the reason D-024 and D-031
   had to learn twice: a checker that fell over must not share a return value
   with a checker that returned a verdict.
 
-98 facts, 19 artifacts, 6 runs.
+143 facts, 19 artifacts, 6 runs.
 
 ## Measured, twice each
 
 * `python -m tools.engine_table` — run twice, `ENGINE_TABLE.md` **byte-identical**
-  (`sha256 22564de1…10512` both times). `--check` returns 0.
+  (`sha256 a57e7310…04d47b5b` both times). `--check` returns 0.
   Transcript: `measured/engine_table.twice.txt`.
-* `python -m pytest` — **315 passed, 9 skipped**, twice.
+* `python -m pytest` — **319 passed, 9 skipped**, twice (4 of them this item's own guards).
   Transcript: `measured/pytest.twice.txt`. (`STATUS.md` still says 309; the nine
   skips are Fast Downward's, as documented — `.toolchain/` is gitignored and this
   machine has no build.)
@@ -67,8 +82,10 @@ measuring it would take and names the open item (`monitor/board/items/E8-ic3-sca
 whose own wording is the right summary: there is one point, so no line can be
 drawn.
 
-Four further rows carry a **partially** unmeasured boundary, and each says so in
-the same words rather than trailing off:
+**All six other rows** carry a partially unmeasured boundary, and each says so
+in the same words rather than trailing off. Three of the six were added after the
+adversarial audit pointed out that rows 2 and 3 declared a world-family limit and
+rows 4 and 7 did not, though they are just as narrow:
 
 * `fd_adapter` — the property battery has never run against any Fast Downward
   rung, and the fall-back is *structural* (`backends.py:152-154` forces
@@ -77,21 +94,36 @@ the same words rather than trailing off:
   needs a change to `props` **and** a build.
 * `lp_potential` — for 638 of the 639 genuine silences, "no linear pagoda
   exists" is HiGHS returning float infeasibility. No exact Farkas dual was
-  produced, so that is a solver's claim and not a proof.
+  produced, so that is a solver's claim and not a proof. **Plus** (added after
+  the audit) every world tested was `jumpgraph`; the engine hard-codes peg-jump
+  geometry, so there is no second family without writing one.
 * `cegis_miner` — minimal guards of 4+ literals, and every world family but the
   grid.
 * `probe_frontier` — the planner-backed path (`run_with_planner` /
-  `ExecutableProbe`) has no brute-force comparison at all.
+  `ExecutableProbe`) has no brute-force comparison at all, and whether the two
+  degeneracy defects are reachable from this repo's own call sites is itself
+  unconfirmed.
+* `zero_space` — every family but `parityworld`, **and `g50t` itself** (added
+  after the audit; see below).
+* `deadlock_carver` — every theorem ever carved came from four sokoban
+  instances; what `MAX_PATTERN = 2` is worth in any other domain is unmeasured
+  (added after the audit).
+
+Only `mdl_segmenter` has no unmeasured clause, and its cell instead carries a
+measured-but-unflattering one the first draft had omitted.
 
 ## Two numbers that move against the rig's own interest
 
 Both were checked back to their source rather than taken from circulation.
 
-1. **`lp_potential`'s incompleteness is 639/2189 = 29.2 %, not 46 %.** The
-   circulating 46 % (46.6 % at the campaign's N=500) is the *no-certificate*
-   rate. 24.0 pp of it is the engine correctly declining to prove a false
-   statement — the goal was reachable. Quoting 46 % as incompleteness overstates
-   the boundary by about 2×.
+1. **`lp_potential`'s incompleteness is 639/2189 = 29.2 % at N = 3000, not
+   46 %.** The circulating figure is a *no-certificate rate* measured at the
+   campaign's N = 500, where it decomposes into 22.6 % genuine incompleteness
+   plus 24.0 pp of the engine correctly declining to prove a false statement.
+   Quoting 46.6 % as incompleteness overstates it by about 2× — 46.6 against
+   22.6, both shares of all worlds. **The two scales must not be spliced**; the
+   first draft of the table did splice them, and the adversarial audit caught
+   it.
 2. **`deadlock_carver`'s pruning dividend is zero against an admissible
    heuristic.** On `far6`: blind 3070 → 2762, `lmcut` 47 → 47, `ipdb` 18 → 18.
    Theoria 1.9's frequency argument stands; its speed-up half does not survive a
@@ -125,15 +157,41 @@ Recorded because they are the kind of thing that gets silently absorbed.
   boundary stays 未测, because a certificate being correctly bound says nothing
   about where the engine stops.
 
-## Adversarial review
+## Adversarial review — and it changed six of the eight rows
 
-An adversarial reviewer was dispatched against the finished table with two
-assignments: sample 8 numbers at random and re-derive them from `runs/`, and
-audit every boundary cell for "not measured" written as "the boundary is X".
-Its report is `ADVERSARIAL-table-audit.md` in this directory. Its findings are
-recorded in `ADVERSARIAL-outcome.md` alongside what was changed in response —
-including anything it overturned, which is recorded as overturned rather than
-argued with.
+An adversarial reviewer was dispatched with two assignments: sample 8 numbers at
+random and re-derive them from `runs/`, and audit every boundary cell for "not
+measured" written as "the boundary is X". Report:
+`ADVERSARIAL-table-audit.md`. What was done about it: `ADVERSARIAL-outcome.md`.
+**Every finding was accepted; none was argued with.**
+
+Its verdict is the useful sentence:
+
+> **8 of 8 sampled numbers transcribed correctly. 0 of 8 sentences fully clean.**
+
+Nothing was fabricated — the reviewer recomputed the JSON-backed figures itself
+rather than trusting the probes. What broke was the prose around the digits:
+
+* **Two outright wrong sentences.** "17 theorems" (17 is the *row* count; 16 are
+  theorems, the 17th row is a pruning account). "Every rung is run against the
+  others" (P13 cross-checks exactly two rungs; the satisficing rung never takes
+  part, and the three FD UNSATs all exit 12, which this rig's own manifest says
+  is not a proof — contradicting the same cell four sentences later).
+* **Four denominator switches**, including one — 64 fields "asserted by no
+  invariant", when the census's asserted column is 25 and the answer is 86 —
+  that ran in the rig's favour.
+* **One genuine "unmeasured written as measured":** `g50t` was on the *measured*
+  side of `zero_space`'s boundary. Nothing has ever checked correctness there;
+  every g50t figure in the table is a census of what was published.
+
+It also found this tool committing the defect it lectures about: two probes read
+five files through a bare `read_text()`, so a missing file exited 1 instead of
+the contracted 3. Fixed, and pinned by NC7.
+
+**The structural lesson, which belongs in the paper:** a per-number tripwire
+protects digits, not claims. Six rows changed here without a single probe
+firing, because every digit in them was already right. The defence against that
+is an adversarial reader, not a better script.
 
 ## Not done, and why
 

@@ -88,7 +88,9 @@ def test_every_number_in_the_table_is_backed_by_a_probe():
     # Identifiers, code constants and combinatorics -- not measurements.
     exempt = {
         "0", "1", "2", "3", "4", "12", "16", "64", "0.0", "1.0", "1.9",
-        "002", "003", "024", "0111",
+        "002", "003", "008", "024", "0111",
+        "2,3",      # the (2,3) object shape in probe_frontier's enumerated space
+        "2, 3",     # a cross-reference to rows 2, 3 and 4
     }
     offenders = []
     for row in engine_table.ROWS:

@@ -16,29 +16,29 @@
   "files": [
     {
       "path": "engine-rig/ENGINE_TABLE.md",
-      "sha256": "6ecdc6ca0922e042a8ff0441aa2346ef0f0e3ca0623fd1b7b90f682e167d25e1",
-      "bytes": 38686
+      "sha256": "a57e7310b5fbba3b6d7346b0333d96ebdce2033daa8abfe44dea544204d47b5b",
+      "bytes": 49811
     },
     {
       "path": "engine-rig/tools/engine_table.py",
-      "sha256": "e771332892b32e7f0848220a67ead42c8a9110997065e08da954f21d128bbce0",
-      "bytes": 50507
+      "sha256": "d46a851582bcd38398155d0e7bc080606a5d3a36abb92a687226545ee4195e22",
+      "bytes": 64341
     },
     {
       "path": "engine-rig/tests/test_engine_table.py",
-      "sha256": "4355b3bc560a0cc6b4cc116599b2a4625f5a3b41edbc269be0ceb276cc4f17ea",
-      "bytes": 4442
+      "sha256": "eb7c57084efba67687ab37cce68308cf92bb210049aa3e3ac2f8bfae64664bea",
+      "bytes": 4590
     }
   ],
   "processes_tabulated": 8,
-  "facts_probed": 118,
+  "facts_probed": 143,
   "artifacts_read": 19,
   "boundary_cells_unmeasured": 1,
-  "boundary_cells_partially_unmeasured": 4,
+  "boundary_cells_partially_unmeasured": 6,
   "regeneration_byte_stable": true,
-  "regeneration_sha256_run1": "6ecdc6ca0922e042a8ff0441aa2346ef0f0e3ca0623fd1b7b90f682e167d25e1",
-  "regeneration_sha256_run2": "6ecdc6ca0922e042a8ff0441aa2346ef0f0e3ca0623fd1b7b90f682e167d25e1",
-  "negative_controls_passed": 6,
+  "regeneration_sha256_run1": "a57e7310b5fbba3b6d7346b0333d96ebdce2033daa8abfe44dea544204d47b5b",
+  "regeneration_sha256_run2": "a57e7310b5fbba3b6d7346b0333d96ebdce2033daa8abfe44dea544204d47b5b",
+  "negative_controls_passed": 7,
   "suite": "319 passed, 9 skipped (4 of them added by this item)",
   "engine_rig_code_bytes_changed": 0,
   "engines_modified": 0,
@@ -53,5 +53,19 @@
     "engine-rig/runs/p13-fd-real",
     "fuzzlab/runs/20260728T152000Z-V10-fuzz-mutation-power",
     "theoria-arm/runs/20260728T015354Z-g50t-first-contact"
-  ]
+  ],
+  "adversarial_review": {
+    "report": "ADVERSARIAL-table-audit.md",
+    "outcome": "ADVERSARIAL-outcome.md",
+    "sampled_numbers": 8,
+    "sampled_numbers_correct": 8,
+    "sentences_fully_clean": 0,
+    "sentences_overturned": 2,
+    "scope_or_denominator_switches": 4,
+    "unmeasured_written_as_measured": 1,
+    "measured_written_as_unmeasured": 0,
+    "generator_defects_found": 3,
+    "findings_accepted": "all",
+    "findings_disputed": 0
+  }
 }

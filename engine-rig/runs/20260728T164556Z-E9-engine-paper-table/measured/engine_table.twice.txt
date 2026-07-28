@@ -1,15 +1,15 @@
 === run 1 ===
-engine_table: 118 facts verified against 19 artifacts
-engine_table: wrote engine-rig\ENGINE_TABLE.md (38173 bytes, 8 rows)
+engine_table: 143 facts verified against 19 artifacts
+engine_table: wrote engine-rig\ENGINE_TABLE.md (49160 bytes, 8 rows)
 exit=0
-ENGINE_TABLE.md sha256: 6ecdc6ca0922e042a8ff0441aa2346ef0f0e3ca0623fd1b7b90f682e167d25e1
+ENGINE_TABLE.md sha256: a57e7310b5fbba3b6d7346b0333d96ebdce2033daa8abfe44dea544204d47b5b
 
 === run 2 ===
-engine_table: 118 facts verified against 19 artifacts
-engine_table: wrote engine-rig\ENGINE_TABLE.md (38173 bytes, 8 rows)
+engine_table: 143 facts verified against 19 artifacts
+engine_table: wrote engine-rig\ENGINE_TABLE.md (49160 bytes, 8 rows)
 exit=0
-ENGINE_TABLE.md sha256: 6ecdc6ca0922e042a8ff0441aa2346ef0f0e3ca0623fd1b7b90f682e167d25e1
+ENGINE_TABLE.md sha256: a57e7310b5fbba3b6d7346b0333d96ebdce2033daa8abfe44dea544204d47b5b
 
 === run 3: --check ===
-engine_table: 118 facts verified; ENGINE_TABLE.md is current
+engine_table: 143 facts verified; ENGINE_TABLE.md is current
 exit=0
