@@ -116,5 +116,6 @@ game spend.
 > 独立可成 workshop 文
 
 This paper is that unit and nothing more. It reports the three acceptances and
-the battery's first recompute. It reports no play, no baseline comparison, and
+the battery's recompute, now in its third version. It reports no play, no
+baseline comparison of the framework's own arms, and
 no claim from the Phase 3 claim menu.
