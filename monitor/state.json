@@ -3,9 +3,9 @@
   "board": {
     "available": 2,
     "blocked": 1,
-    "claimed": 8,
-    "done": 9,
-    "listing": "=== available ===\n  p2  A4a-ablation-build           cell=A1  territory=ablation-arm\n  p2  C6-worldgen-mutate           cell=V2  territory=worldgen\n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n=== claimed ===\n  A6-transfer-protocol         by W-5201\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P6-paper-assembly            by W-1610\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n=== done (9) ===\n  A4-ablation-online.superseded-by-A4a\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  V2-exam-on-worldgen.W-1540"
+    "claimed": 7,
+    "done": 10,
+    "listing": "=== available ===\n  p2  A4a-ablation-build           cell=A1  territory=ablation-arm\n  p2  C6-worldgen-mutate           cell=V2  territory=worldgen\n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n=== claimed ===\n  A6-transfer-protocol         by W-5201\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n=== done (10) ===\n  A4-ablation-online.superseded-by-A4a\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  V2-exam-on-worldgen.W-1540"
   },
   "con_green": 1,
   "constraints": [
@@ -264,7 +264,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 17:41:46",
+  "generated_at": "2026-07-28 18:14:30",
   "grid": {
     "A1": {
       "active": [
@@ -863,6 +863,52 @@
         }
       },
       "ts": "2026-07-28 14:24:22"
+    },
+    {
+      "findings": {
+        "blocking": 1,
+        "high": 5,
+        "info": 7,
+        "low": 3,
+        "medium": 2
+      },
+      "paper_progress": 39.0,
+      "progress": 42.5,
+      "sections": {
+        "Claim 菜单": {
+          "blocked": 2,
+          "missing": 2,
+          "partial": 1
+        },
+        "Phase 1 · 封闭系统": {
+          "green": 9,
+          "partial": 7
+        },
+        "Phase 2 · 指标电池": {
+          "green": 1,
+          "partial": 2
+        },
+        "Phase 3 · 框架迭代（开发堆）": {
+          "missing": 2,
+          "partial": 3,
+          "risk": 1
+        },
+        "Phase 4 · 确证（封存堆）": {
+          "missing": 5,
+          "partial": 1
+        },
+        "十条强制约束": {
+          "green": 1,
+          "missing": 2,
+          "partial": 5,
+          "risk": 2
+        },
+        "车间八工序": {
+          "green": 7,
+          "partial": 2
+        }
+      },
+      "ts": "2026-07-28 18:12:55"
     }
   ],
   "iteration_loop": [
@@ -1093,42 +1139,40 @@
     ],
     "dirty": [
       "onitor/board/board.log",
-      "monitor/board/claimed/A4-ablation-online.W-1540.md",
+      "monitor/board/claimed/P6-paper-assembly.W-1610.md",
       "monitor/ci/merge.log",
-      "monitor/ci_merge.py",
-      "monitor/inbox/20260728T0800Z-W-1520-19-deadlock-speedup-half-does-not-hold.md",
-      "monitor/inbox/20260728T091200Z-W-1541-s4-and-p22-are-the-same-deliverable-drafted-twice.md",
-      "monitor/inbox/20260728T093832Z-opsm-merge-gate-skips-509-tests.md",
-      "monitor/inbox/20260728T094500Z-W-1540-v2-shipped-one-of-four-and-the-unlock-is-worldgen-mutate.md",
-      "monitor/inbox/20260728T094500Z-W-1611-a4-precondition-unmet-and-p18-is-a-second-orphan.md",
+      "monitor/history.jsonl",
       "monitor/index.html",
+      "monitor/mailbox/ALL.md",
+      "monitor/quota.py",
+      "monitor/quota_state.json",
       "monitor/reflex.log",
+      "monitor/scan.py",
+      "monitor/spec.py",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/done/A4-ablation-online.superseded-by-A4a.md",
-      "monitor/board/items/",
-      "monitor/inbox/archive/"
+      "monitor/board/done/P6-paper-assembly.W-1610.md",
+      "monitor/inbox/20260728T110000Z-W-1610-paper-section-7-is-stale-because-battery-went-v0-to-v2.md"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "c77b8ec OPS-M cycle 3: reflex verified alive by effect; the merge gate skips 509 tests",
+    "git_head": "3d4a4c6 Merge remote-tracking branch 'origin/agent/p6-paper-assembly' into HEAD",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 98,
-    "sync_last": "2026-07-28T09:42:00Z",
+    "sync_entries": 99,
+    "sync_last": "2026-07-28T10:55:00Z",
     "tests": {},
     "untracked": [
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/done/A4-ablation-online.superseded-by-A4a.md",
-      "monitor/board/items/",
-      "monitor/inbox/archive/"
+      "monitor/board/done/P6-paper-assembly.W-1610.md",
+      "monitor/inbox/20260728T110000Z-W-1610-paper-section-7-is-stale-because-battery-went-v0-to-v2.md"
     ]
   },
   "p1_green": 9,
@@ -1438,7 +1482,8 @@
     {
       "_counts": {
         "missing": 2,
-        "partial": 3
+        "partial": 3,
+        "risk": 1
       },
       "clause": "Theoria.md §2 Phase 3",
       "gate": "Phase 1 全绿才准进",
@@ -1470,6 +1515,15 @@
           "label": "表达力台账（哪局哪条规则逼 DSL 扩一格）",
           "note": "A0 已产出五条真实条目（E-01..E-05），但它们埋在 THEORIZE_LOG.md 里。Theoria.md 要求这是一份公开台账 —— 应提升为独立的被跟踪文件。",
           "status": "partial"
+        },
+        {
+          "_note": "如实登记，不追认合规。事实：p3-envelope 已实花 $2.53 跑 ar25×haiku×3，而 Phase 1 当时 16 项中 6 项绿。**例外依据**：方差包络是 Phase 4 定重复数 n 的前置，且花费受预算闸门硬约束（G4 实际开火并拦停在 1/4 局）。**代价**：这批数据是在并发负载下测得的，单价不可与试点直接比较（INC-BA-003）。**规矩**：此后任何跨门花费必须先在此登记一条，再动手。",
+          "_status": "risk",
+          "clause": "Theoria.md:305「全绿才准烧游戏钱」；OPS-A DRIFT 2026-07-28",
+          "id": "p3-gate-exception",
+          "label": "【例外登记】Phase 1 未全绿即启动了 Phase 3 的花费",
+          "note": "如实登记，不追认合规。事实：p3-envelope 已实花 $2.53 跑 ar25×haiku×3，而 Phase 1 当时 16 项中 6 项绿。**例外依据**：方差包络是 Phase 4 定重复数 n 的前置，且花费受预算闸门硬约束（G4 实际开火并拦停在 1/4 局）。**代价**：这批数据是在并发负载下测得的，单价不可与试点直接比较（INC-BA-003）。**规矩**：此后任何跨门花费必须先在此登记一条，再动手。",
+          "status": "risk"
         },
         {
           "_note": "ar25×haiku×3 已跑并被预算闸门 G4（连续死格，真实劣化）拦停，1/4 局，$2.53。F-15 裁决：ar25 记 degraded 不追，其余 3 局继续 → P-12。",
@@ -1569,8 +1623,8 @@
       "status": "partial"
     },
     "append_only": {
-      "detail": "追加式文件出现删除：PARTNER_SYNC.md（累计删除 2 行）。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。",
-      "status": "risk"
+      "detail": "4 个追加式文件无新增删除（2 行历史删除已裁决豁免：同窗口自我订正）。",
+      "status": "green"
     },
     "conflict_scan": {
       "detail": "三类检查全空：无冲突标记、无未合并路径、近 40 个提交无跨领地改动。",
@@ -1590,14 +1644,14 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 19 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md, 20260728T075952Z-opsm-reflex-still-dead-unboundlocal.md, 20260728T081500Z-W-1540-reflex-is-dead-and-the-canary-wants-a-daily-slot.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md, 20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 20 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md, 20260728T075952Z-opsm-reflex-still-dead-unboundlocal.md, 20260728T081500Z-W-1540-reflex-is-dead-and-the-canary-wants-a-daily-slot.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md, 20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T110000Z-W-1610-paper-section-7-is-stale-because-battery-went-v0-to-v2.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**12 条 TO-MONITOR 待监控回复**。 OPS-A 第4轮 idle（1 分钟前）； OPS-B 第2轮 idle（76 分钟前）； OPS-M 第3轮 idle（0 分钟前）； OPS-R 第1轮 idle（188 分钟前）",
+      "detail": "**12 条 TO-MONITOR 待监控回复**。 OPS-A 第4轮 idle（34 分钟前）； OPS-B 第2轮 idle（109 分钟前）； OPS-M 第3轮 idle（33 分钟前）； OPS-R 第1轮 idle（221 分钟前）",
       "rows": [
         {
-          "age_min": 1,
+          "age_min": 34,
           "cycle": 4,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -1606,7 +1660,7 @@
           "status": "green"
         },
         {
-          "age_min": 76,
+          "age_min": 109,
           "cycle": 2,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1615,7 +1669,7 @@
           "status": "green"
         },
         {
-          "age_min": 0,
+          "age_min": 33,
           "cycle": 3,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -1624,7 +1678,7 @@
           "status": "green"
         },
         {
-          "age_min": 188,
+          "age_min": 221,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -1666,10 +1720,10 @@
         "weight": 0.12
       },
       {
-        "contrib": 9.0,
+        "contrib": 8.75,
         "id": "p3",
         "name": "Phase 3 · 框架迭代（开发堆）",
-        "pct": 30.0,
+        "pct": 29.2,
         "weight": 0.3
       },
       {
@@ -1680,7 +1734,7 @@
         "weight": 0.28
       }
     ],
-    "total": 42.8
+    "total": 42.5
   },
   "sections": [
     {
@@ -1700,7 +1754,8 @@
     {
       "counts": {
         "missing": 2,
-        "partial": 3
+        "partial": 3,
+        "risk": 1
       },
       "name": "Phase 3 · 框架迭代（开发堆）"
     },

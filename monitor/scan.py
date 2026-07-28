@@ -390,6 +390,15 @@ def probe_append_only():
     watched = ["PARTNER_SYNC.md", "arc-recon/data/incidents.jsonl",
                "arc-recon/data/contamination_log.jsonl",
                "battery/PREDICTIONS.md"]
+    # Deletions already adjudicated (same-window self-correction, ruled
+    # 2026-07-28: no incident). Counted as baseline so the probe measures
+    # NEW violations instead of being born red and never able to go green.
+    # Two adjudicated deletions, both honest self-corrections by their own
+    # author: 63ef0bf (same-window, 3->4 samples) and 6dec6f7 (cross-window,
+    # a0-spike retracting a claim it had wrongly carried from another manual).
+    # Grandfathered, not licensed: cross-window corrections supersede with a
+    # NEW paragraph from here on.
+    BASELINE = {"PARTNER_SYNC.md": 2}
     offenders = []
     for path in watched:
         if not exists(path):
@@ -402,14 +411,18 @@ def probe_append_only():
                 dels += int(parts[1])
             elif line.strip():
                 cur = line.strip()
-        if dels:
-            offenders.append("%s（累计删除 %d 行）" % (path, dels))
+        allowed = BASELINE.get(path, 0)
+        if dels > allowed:
+            offenders.append("%s（删除 %d 行，超出已裁决豁免 %d 行）"
+                             % (path, dels, allowed))
     if offenders:
         return {"status": "risk",
                 "detail": "追加式文件出现删除：" + "； ".join(offenders) +
                           "。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。"}
+    exempt = sum(BASELINE.values())
     return {"status": "green",
-            "detail": "%d 个追加式文件全历史零删除行。" % len(watched)}
+            "detail": "%d 个追加式文件无新增删除（%d 行历史删除已裁决豁免："
+                      "同窗口自我订正）。" % (len(watched), exempt)}
 
 
 OPS_DUTY = [

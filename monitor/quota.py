@@ -36,6 +36,8 @@ LOGS = os.path.join(HERE, "dispatch-logs")
 STATE = os.path.join(HERE, "quota_state.json")
 
 SIGNATURES = [
+    # observed verbatim 2026-07-28: "You've hit your session limit · resets 8:20pm"
+    r"session limit", r"Session limit", r"hit your .*limit", r"resets \d",
     r"usage limit", r"Usage limit", r"limit will reset", r"rate.?limit",
     r"overloaded", r"Overloaded", r"credit balance", r"quota",
     r"429", r"insufficient.*credits",
@@ -128,9 +130,9 @@ def ping():
     ok = proc.returncode == 0 and "ok" in proc.stdout.lower()
     print("window %s" % ("OPEN" if ok else "CLOSED"))
     if not ok:
-        line = next((l.strip()[:200] for l in
-                     (proc.stdout + proc.stderr).splitlines()
-                     if SIG_RE.search(l)), "(no signature)")
+        blob = (proc.stdout + proc.stderr).strip().splitlines()
+        line = next((l.strip()[:200] for l in blob if SIG_RE.search(l)),
+                    (blob[-1][:200] if blob else "(no output)"))
         print("hint: %s" % line)
     return 0 if ok else 2
 
