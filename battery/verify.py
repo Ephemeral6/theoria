@@ -307,6 +307,14 @@ def shipped_note(out_dir):
 
 
 def main():
+    # The other half of the encoding problem.  Children are told to emit UTF-8
+    # and decoded as UTF-8; this end has to be able to *print* what came back.
+    # `run_battery` prints metric prose containing non-cp936 characters, and a
+    # gate that dies with UnicodeEncodeError while printing its own verdict is
+    # a gate whose verdict nobody read.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(errors="replace")
+
     problems = []
     scratch = tempfile.mkdtemp(prefix="battery-verify-")
     try:

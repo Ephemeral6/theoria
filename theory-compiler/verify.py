@@ -294,6 +294,13 @@ def shipped_drift():
 
 
 def main():
+    # The other half of the encoding problem.  Children are told to emit UTF-8
+    # and decoded as UTF-8; this end has to be able to *print* what came back.
+    # The host console is cp936, and a gate that dies with UnicodeEncodeError
+    # while printing its own verdict is a gate whose verdict nobody read.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(errors="replace")
+
     problems = []
     scratch = tempfile.mkdtemp(prefix="theory-compiler-verify-")
     try:
