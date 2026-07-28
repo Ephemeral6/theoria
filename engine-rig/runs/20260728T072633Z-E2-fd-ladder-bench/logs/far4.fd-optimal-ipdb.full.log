@@ -16,12 +16,12 @@ Normalizing Datalog program...
 Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
 Preparing model... [0.000s CPU, 0.000s wall-clock]
 Generated 26 rules.
-Computing model... [0.000s CPU, 0.003s wall-clock]
+Computing model... [0.016s CPU, 0.004s wall-clock]
 347 relevant atoms
 496 auxiliary atoms
 843 final queue length
 1083 total queue pushes
-Completing instantiation... [0.016s CPU, 0.001s wall-clock]
+Completing instantiation... [0.000s CPU, 0.001s wall-clock]
 Instantiating: [0.016s CPU, 0.006s wall-clock]
 Computing fact groups...
 Finding invariants...
@@ -34,7 +34,7 @@ Choosing groups...
 32 uncovered facts
 Choosing groups: [0.000s CPU, 0.000s wall-clock]
 Building translation key... [0.000s CPU, 0.000s wall-clock]
-Computing fact groups: [0.000s CPU, 0.002s wall-clock]
+Computing fact groups: [0.000s CPU, 0.001s wall-clock]
 Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
 Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
 Building mutex information...
@@ -76,12 +76,12 @@ INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(ipdb())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpotth477c\sas_plan' < output.sas
-[t=0.000147s, 1972 KB] Search code revision: 7120aa0
-[t=0.000243s, 1984 KB] reading input...
-[t=0.001473s, 2204 KB] done reading input!
-[t=0.002850s, 2864 KB] Initializing canonical PDB heuristic...
-[t=0.002903s, 2864 KB] Generating patterns using: hill climbing pattern collection generator
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(ipdb())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpa0b0gekl\sas_plan' < output.sas
+[t=0.000165s, 1956 KB] Search code revision: 7120aa0
+[t=0.000260s, 1956 KB] reading input...
+[t=0.001518s, 2196 KB] done reading input!
+[t=0.002876s, 2796 KB] Initializing canonical PDB heuristic...
+[t=0.002887s, 2796 KB] Generating patterns using: hill climbing pattern collection generator
 Remove intermediate file output.sas
 search exit code: 34
 

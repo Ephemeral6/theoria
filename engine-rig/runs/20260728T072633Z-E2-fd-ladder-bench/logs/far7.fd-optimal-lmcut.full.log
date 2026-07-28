@@ -44,7 +44,7 @@ Processing axioms...
 Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
 Translator axioms removed by simplifying: 0
 Processing axioms: [0.000s CPU, 0.001s wall-clock]
-Translating task: [0.016s CPU, 0.009s wall-clock]
+Translating task: [0.016s CPU, 0.008s wall-clock]
 696 effect conditions simplified
 0 implied preconditions added
 Detecting unreachable propositions...
@@ -76,10 +76,10 @@ INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmp56gz3o9k\sas_plan' < output.sas
-[t=0.000153s, 1924 KB] Search code revision: 7120aa0
-[t=0.000242s, 1924 KB] reading input...
-[t=0.004649s, 2640 KB] done reading input!
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpv8knh_36\sas_plan' < output.sas
+[t=0.000150s, 1968 KB] Search code revision: 7120aa0
+[t=0.000246s, 1968 KB] reading input...
+[t=0.004808s, 2604 KB] done reading input!
 Remove intermediate file output.sas
 search exit code: 34
 

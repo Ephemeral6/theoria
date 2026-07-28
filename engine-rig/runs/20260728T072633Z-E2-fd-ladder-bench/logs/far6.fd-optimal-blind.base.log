@@ -14,9 +14,9 @@ Instantiating...
 Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
 Normalizing Datalog program...
 Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
-Preparing model... [0.016s CPU, 0.000s wall-clock]
+Preparing model... [0.000s CPU, 0.000s wall-clock]
 Generated 20 rules.
-Computing model... [0.000s CPU, 0.005s wall-clock]
+Computing model... [0.016s CPU, 0.005s wall-clock]
 703 relevant atoms
 984 auxiliary atoms
 1687 final queue length
@@ -76,43 +76,43 @@ INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(blind())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmp8skaydny\sas_plan' < output.sas
-[t=0.000151s, 1952 KB] Search code revision: 7120aa0
-[t=0.000249s, 1952 KB] reading input...
-[t=0.003149s, 2504 KB] done reading input!
-[t=0.004293s, 2888 KB] Initializing blind search heuristic...
-[t=0.004333s, 2888 KB] Building successor generator... done!
-[t=0.004450s, 2952 KB] peak memory difference for successor generator creation: 64 KB
-[t=0.004452s, 2952 KB] time for successor generation creation: 0.000109s
-[t=0.004458s, 2952 KB] Variables: 39
-[t=0.004462s, 2952 KB] FactPairs: 180
-[t=0.004464s, 2952 KB] Bytes per state: 8
-[t=0.004476s, 2952 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
-[t=0.004496s, 2992 KB] New best heuristic value for blind: 1
-[t=0.004500s, 2992 KB] g=0, 1 evaluated, 0 expanded
-[t=0.004502s, 2992 KB] f = 1, 1 evaluated, 0 expanded
-[t=0.004510s, 2992 KB] Initial heuristic value for blind: 1
-[t=0.004514s, 2992 KB] pruning method: none
-[t=0.004523s, 2992 KB] f = 2, 3 evaluated, 1 expanded
-[t=0.004531s, 2992 KB] f = 3, 6 evaluated, 3 expanded
-[t=0.004541s, 2992 KB] f = 4, 10 evaluated, 6 expanded
-[t=0.004551s, 2992 KB] f = 5, 15 evaluated, 10 expanded
-[t=0.004563s, 2992 KB] f = 6, 21 evaluated, 15 expanded
-[t=0.004575s, 2992 KB] f = 7, 27 evaluated, 21 expanded
-[t=0.004591s, 2992 KB] f = 8, 39 evaluated, 27 expanded
-[t=0.004620s, 2992 KB] f = 9, 65 evaluated, 39 expanded
-[t=0.004669s, 2992 KB] f = 10, 121 evaluated, 65 expanded
-[t=0.004764s, 2992 KB] f = 11, 226 evaluated, 121 expanded
-[t=0.004929s, 2992 KB] f = 12, 402 evaluated, 226 expanded
-[t=0.005216s, 3008 KB] f = 13, 702 evaluated, 402 expanded
-[t=0.005683s, 3028 KB] f = 14, 1182 evaluated, 702 expanded
-[t=0.006328s, 3028 KB] f = 15, 1917 evaluated, 1182 expanded
-[t=0.007391s, 3088 KB] f = 16, 2989 evaluated, 1917 expanded
-[t=0.009015s, 3180 KB] f = 17, 4518 evaluated, 2989 expanded
-[t=0.009158s, 3332 KB] New best heuristic value for blind: 0
-[t=0.009165s, 3332 KB] g=17, 4649 evaluated, 3069 expanded
-[t=0.009170s, 3332 KB] Solution found!
-[t=0.009173s, 3332 KB] Actual search time: 0.004657s
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(blind())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpc_ywjfha\sas_plan' < output.sas
+[t=0.000150s, 1948 KB] Search code revision: 7120aa0
+[t=0.000236s, 1960 KB] reading input...
+[t=0.003160s, 2504 KB] done reading input!
+[t=0.004171s, 2848 KB] Initializing blind search heuristic...
+[t=0.004199s, 2848 KB] Building successor generator... done!
+[t=0.004312s, 2920 KB] peak memory difference for successor generator creation: 72 KB
+[t=0.004314s, 2920 KB] time for successor generation creation: 0.000106s
+[t=0.004322s, 2920 KB] Variables: 39
+[t=0.004324s, 2920 KB] FactPairs: 180
+[t=0.004327s, 2920 KB] Bytes per state: 8
+[t=0.004338s, 2920 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.004354s, 2932 KB] New best heuristic value for blind: 1
+[t=0.004358s, 2932 KB] g=0, 1 evaluated, 0 expanded
+[t=0.004360s, 2932 KB] f = 1, 1 evaluated, 0 expanded
+[t=0.004368s, 2944 KB] Initial heuristic value for blind: 1
+[t=0.004372s, 2944 KB] pruning method: none
+[t=0.004380s, 2944 KB] f = 2, 3 evaluated, 1 expanded
+[t=0.004389s, 2944 KB] f = 3, 6 evaluated, 3 expanded
+[t=0.004398s, 2944 KB] f = 4, 10 evaluated, 6 expanded
+[t=0.004408s, 2944 KB] f = 5, 15 evaluated, 10 expanded
+[t=0.004421s, 2944 KB] f = 6, 21 evaluated, 15 expanded
+[t=0.004432s, 2944 KB] f = 7, 27 evaluated, 21 expanded
+[t=0.004447s, 2944 KB] f = 8, 39 evaluated, 27 expanded
+[t=0.004475s, 2944 KB] f = 9, 65 evaluated, 39 expanded
+[t=0.004524s, 2944 KB] f = 10, 121 evaluated, 65 expanded
+[t=0.004622s, 2944 KB] f = 11, 226 evaluated, 121 expanded
+[t=0.004787s, 2944 KB] f = 12, 402 evaluated, 226 expanded
+[t=0.005072s, 2956 KB] f = 13, 702 evaluated, 402 expanded
+[t=0.005543s, 2988 KB] f = 14, 1182 evaluated, 702 expanded
+[t=0.006193s, 2988 KB] f = 15, 1917 evaluated, 1182 expanded
+[t=0.007243s, 3068 KB] f = 16, 2989 evaluated, 1917 expanded
+[t=0.008749s, 3160 KB] f = 17, 4518 evaluated, 2989 expanded
+[t=0.008886s, 3292 KB] New best heuristic value for blind: 0
+[t=0.008893s, 3292 KB] g=17, 4649 evaluated, 3069 expanded
+[t=0.008897s, 3292 KB] Solution found!
+[t=0.008900s, 3292 KB] Actual search time: 0.004527s
 move c66 c56 up (1)
 move c56 c46 up (1)
 move c46 c36 up (1)
@@ -130,23 +130,23 @@ move c52 c42 up (1)
 move c42 c43 right (1)
 push c43 c33 c23 b2 up (1)
 push c33 c23 c13 b2 up (1)
-[t=0.009175s, 3332 KB] Plan length: 17 step(s).
-[t=0.009175s, 3332 KB] Plan cost: 17
-[t=0.009175s, 3332 KB] Expanded 3070 state(s).
-[t=0.009175s, 3332 KB] Reopened 0 state(s).
-[t=0.009175s, 3332 KB] Evaluated 4652 state(s).
-[t=0.009175s, 3332 KB] Evaluations: 4652
-[t=0.009175s, 3332 KB] Generated 10488 state(s).
-[t=0.009175s, 3332 KB] Dead ends: 0 state(s).
-[t=0.009175s, 3332 KB] Expanded until last jump: 2989 state(s).
-[t=0.009175s, 3332 KB] Reopened until last jump: 0 state(s).
-[t=0.009175s, 3332 KB] Evaluated until last jump: 4518 state(s).
-[t=0.009175s, 3332 KB] Generated until last jump: 10202 state(s).
-[t=0.009175s, 3332 KB] Number of registered states: 4652
-[t=0.009175s, 3332 KB] Int hash set load factor: 4652/8192 = 0.567871
-[t=0.009175s, 3332 KB] Int hash set resizes: 13
-[t=0.009175s, 3332 KB] Search time: 0.004701s
-[t=0.009175s, 3332 KB] Total time: 0.009175s
+[t=0.008903s, 3292 KB] Plan length: 17 step(s).
+[t=0.008903s, 3292 KB] Plan cost: 17
+[t=0.008903s, 3292 KB] Expanded 3070 state(s).
+[t=0.008903s, 3292 KB] Reopened 0 state(s).
+[t=0.008903s, 3292 KB] Evaluated 4652 state(s).
+[t=0.008903s, 3292 KB] Evaluations: 4652
+[t=0.008903s, 3292 KB] Generated 10488 state(s).
+[t=0.008903s, 3292 KB] Dead ends: 0 state(s).
+[t=0.008903s, 3292 KB] Expanded until last jump: 2989 state(s).
+[t=0.008903s, 3292 KB] Reopened until last jump: 0 state(s).
+[t=0.008903s, 3292 KB] Evaluated until last jump: 4518 state(s).
+[t=0.008903s, 3292 KB] Generated until last jump: 10202 state(s).
+[t=0.008903s, 3292 KB] Number of registered states: 4652
+[t=0.008903s, 3292 KB] Int hash set load factor: 4652/8192 = 0.567871
+[t=0.008903s, 3292 KB] Int hash set resizes: 13
+[t=0.008903s, 3292 KB] Search time: 0.004567s
+[t=0.008903s, 3292 KB] Total time: 0.008903s
 Solution found.
 Remove intermediate file output.sas
 search exit code: 0

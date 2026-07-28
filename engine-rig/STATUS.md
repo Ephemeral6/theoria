@@ -138,9 +138,22 @@ one.** 1.9's frequency argument stands; its speed-up half does not survive a rea
 planner. Soundness held everywhere: plan length unchanged on every optimal
 comparison, every guarded plan replayed against the original domain.
 
-Pair deadlocks cannot reach the admissible rungs at all: their guard needs `:adl`,
-FD's translator makes that an axiom, and `lmcut` / `ipdb` refuse a task with
-axioms (exit 34). `blind` accepts it. Pinned by a test.
+Pair deadlocks reach the admissible rungs only through a second encoding, and
+doing so is a net loss. The obvious guard needs `:adl`, FD turns the `forall`
+into an axiom, and `lmcut` / `ipdb` refuse a task with axioms (exit 34). Dropping
+the quantifier for indexed static selectors (`indexed` guard) is pure STRIPS and
+they accept it -- but `lmcut` then expands *more*: `far4` 23 -> 34, `far6`
+47 -> 66, with the task an order of magnitude larger, because FD compiles a
+negative precondition on a fluent into one operator copy per other value. Optimal
+length unchanged throughout. Both halves pinned by tests.
+
+An adversarial review of the run also found a latent unsoundness in the compiler:
+the pair guard reads the pre-state, so a pattern naming one box twice blocks
+transitions that *leave* it (measured: `far4` optimal 11 -> 25). No reported
+number is affected -- `carve()` cannot emit such a pattern, two positions of one
+box being mutex -- but that was a property of another module being trusted, and
+`guardable()` now checks it. `tools/p13_fd_dividend.py` had the check; `bench/`
+had dropped it.
 
 ## Convergence interface (post-M8)
 

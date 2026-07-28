@@ -8,7 +8,7 @@ INFO     translator memory limit: None
 INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e2-fd-ladder-bench\engine-rig\runs\20260728T072633Z-E2-fd-ladder-bench\guarded\sokoban_guarded_full_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e2-fd-ladder-bench\engine-rig\runs\20260728T072633Z-E2-fd-ladder-bench\guarded\far6_guarded_full.pddl' --sas-file output.sas
 Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
 Parsing...
-Parsing: [0.000s CPU, 0.002s wall-clock]
+Parsing: [0.016s CPU, 0.002s wall-clock]
 Normalizing task... [0.000s CPU, 0.000s wall-clock]
 Instantiating...
 Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
@@ -21,8 +21,8 @@ Computing model... [0.000s CPU, 0.006s wall-clock]
 1224 auxiliary atoms
 2063 final queue length
 2787 total queue pushes
-Completing instantiation... [0.016s CPU, 0.004s wall-clock]
-Instantiating: [0.016s CPU, 0.012s wall-clock]
+Completing instantiation... [0.000s CPU, 0.004s wall-clock]
+Instantiating: [0.000s CPU, 0.012s wall-clock]
 Computing fact groups...
 Finding invariants...
 7 initial candidates
@@ -33,8 +33,8 @@ Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
 Choosing groups...
 68 uncovered facts
 Choosing groups: [0.000s CPU, 0.000s wall-clock]
-Building translation key... [0.000s CPU, 0.000s wall-clock]
-Computing fact groups: [0.000s CPU, 0.002s wall-clock]
+Building translation key... [0.016s CPU, 0.000s wall-clock]
+Computing fact groups: [0.016s CPU, 0.002s wall-clock]
 Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
 Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
 Building mutex information...
@@ -68,20 +68,20 @@ Translator operators: 296
 Translator axioms: 48
 Translator task size: 2925
 warning: could not determine peak memory
-Writing output... [0.016s CPU, 0.011s wall-clock]
-Done! [0.031s CPU, 0.038s wall-clock]
+Writing output... [0.000s CPU, 0.012s wall-clock]
+Done! [0.031s CPU, 0.039s wall-clock]
 translate exit code: 0
 
 INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(ipdb())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmppkqazo6j\sas_plan' < output.sas
-[t=0.000152s, 1960 KB] Search code revision: 7120aa0
-[t=0.000247s, 1960 KB] reading input...
-[t=0.003436s, 2536 KB] done reading input!
-[t=0.004577s, 2940 KB] Initializing canonical PDB heuristic...
-[t=0.004586s, 2940 KB] Generating patterns using: hill climbing pattern collection generator
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(ipdb())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmp3m03jphj\sas_plan' < output.sas
+[t=0.000146s, 1952 KB] Search code revision: 7120aa0
+[t=0.000235s, 1964 KB] reading input...
+[t=0.003567s, 2536 KB] done reading input!
+[t=0.004792s, 2944 KB] Initializing canonical PDB heuristic...
+[t=0.004800s, 2944 KB] Generating patterns using: hill climbing pattern collection generator
 Remove intermediate file output.sas
 search exit code: 34
 

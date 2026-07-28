@@ -8,7 +8,7 @@ INFO     translator memory limit: None
 INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e2-fd-ladder-bench\engine-rig\runs\20260728T072633Z-E2-fd-ladder-bench\guarded\sokoban_guarded_full_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e2-fd-ladder-bench\engine-rig\runs\20260728T072633Z-E2-fd-ladder-bench\guarded\far5_guarded_full.pddl' --sas-file output.sas
 Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
 Parsing...
-Parsing: [0.000s CPU, 0.001s wall-clock]
+Parsing: [0.016s CPU, 0.002s wall-clock]
 Normalizing task... [0.000s CPU, 0.000s wall-clock]
 Instantiating...
 Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
@@ -16,13 +16,13 @@ Normalizing Datalog program...
 Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
 Preparing model... [0.000s CPU, 0.000s wall-clock]
 Generated 26 rules.
-Computing model... [0.016s CPU, 0.004s wall-clock]
+Computing model... [0.000s CPU, 0.005s wall-clock]
 570 relevant atoms
 824 auxiliary atoms
 1394 final queue length
 1847 total queue pushes
 Completing instantiation... [0.000s CPU, 0.003s wall-clock]
-Instantiating: [0.016s CPU, 0.009s wall-clock]
+Instantiating: [0.000s CPU, 0.009s wall-clock]
 Computing fact groups...
 Finding invariants...
 7 initial candidates
@@ -51,7 +51,7 @@ Detecting unreachable propositions...
 0 operators removed
 0 axioms removed
 11 propositions removed
-Detecting unreachable propositions: [0.000s CPU, 0.002s wall-clock]
+Detecting unreachable propositions: [0.016s CPU, 0.002s wall-clock]
 Reordering and filtering variables...
 52 of 52 variables necessary.
 25 of 28 mutex groups necessary.
@@ -68,18 +68,18 @@ Translator operators: 184
 Translator axioms: 32
 Translator task size: 1847
 warning: could not determine peak memory
-Writing output... [0.016s CPU, 0.010s wall-clock]
-Done! [0.031s CPU, 0.029s wall-clock]
+Writing output... [0.000s CPU, 0.010s wall-clock]
+Done! [0.031s CPU, 0.030s wall-clock]
 translate exit code: 0
 
 INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmp3btl5ahr\sas_plan' < output.sas
-[t=0.000131s, 1916 KB] Search code revision: 7120aa0
-[t=0.000222s, 1916 KB] reading input...
-[t=0.002305s, 2380 KB] done reading input!
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmp8u6djkxs\sas_plan' < output.sas
+[t=0.000153s, 1972 KB] Search code revision: 7120aa0
+[t=0.000245s, 1984 KB] reading input...
+[t=0.002345s, 2432 KB] done reading input!
 Remove intermediate file output.sas
 search exit code: 34
 

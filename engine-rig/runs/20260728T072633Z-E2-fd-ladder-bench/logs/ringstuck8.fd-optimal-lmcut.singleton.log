@@ -34,42 +34,42 @@ Translator operators: 0
 Translator axioms: 0
 Translator task size: 4
 warning: could not determine peak memory
-Writing output... [0.000s CPU, 0.005s wall-clock]
-Done! [0.000s CPU, 0.012s wall-clock]
+Writing output... [0.000s CPU, 0.006s wall-clock]
+Done! [0.000s CPU, 0.013s wall-clock]
 translate exit code: 0
 
 INFO     Running search (release).
 INFO     search stdin: output.sas
 INFO     search time limit: None
 INFO     search memory limit: None
-INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmp14quly79\sas_plan' < output.sas
-[t=0.000145s, 1948 KB] Search code revision: 7120aa0
-[t=0.000229s, 1960 KB] reading input...
-[t=0.000324s, 1972 KB] done reading input!
-[t=0.001527s, 2504 KB] Initializing landmark cut heuristic...
-[t=0.001555s, 2508 KB] Building successor generator... done!
-[t=0.001569s, 2508 KB] peak memory difference for successor generator creation: 0 KB
-[t=0.001571s, 2508 KB] time for successor generation creation: 0.000006s
-[t=0.001576s, 2544 KB] Variables: 1
-[t=0.001580s, 2544 KB] FactPairs: 2
-[t=0.001582s, 2544 KB] Bytes per state: 4
-[t=0.001595s, 2548 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
-[t=0.001617s, 2572 KB] Initial state is a dead end.
-[t=0.001621s, 2572 KB] Initial heuristic value for lmcut: infinity
-[t=0.001623s, 2572 KB] pruning method: none
-[t=0.001631s, 2572 KB] Completely explored state space -- no solution!
-[t=0.001633s, 2572 KB] Actual search time: 0.000005s
-[t=0.001637s, 2572 KB] Expanded 0 state(s).
-[t=0.001637s, 2572 KB] Reopened 0 state(s).
-[t=0.001637s, 2572 KB] Evaluated 1 state(s).
-[t=0.001637s, 2572 KB] Evaluations: 1
-[t=0.001637s, 2572 KB] Generated 0 state(s).
-[t=0.001637s, 2572 KB] Dead ends: 0 state(s).
-[t=0.001637s, 2572 KB] Number of registered states: 1
-[t=0.001637s, 2572 KB] Int hash set load factor: 1/1 = 1.000000
-[t=0.001637s, 2572 KB] Int hash set resizes: 0
-[t=0.001637s, 2572 KB] Search time: 0.000043s
-[t=0.001637s, 2572 KB] Total time: 0.001637s
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpcolmrn9w\sas_plan' < output.sas
+[t=0.000138s, 1952 KB] Search code revision: 7120aa0
+[t=0.000233s, 1952 KB] reading input...
+[t=0.000321s, 1972 KB] done reading input!
+[t=0.001535s, 2588 KB] Initializing landmark cut heuristic...
+[t=0.001564s, 2588 KB] Building successor generator... done!
+[t=0.001574s, 2588 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.001576s, 2588 KB] time for successor generation creation: 0.000004s
+[t=0.001583s, 2588 KB] Variables: 1
+[t=0.001585s, 2588 KB] FactPairs: 2
+[t=0.001589s, 2588 KB] Bytes per state: 4
+[t=0.001600s, 2588 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.001620s, 2600 KB] Initial state is a dead end.
+[t=0.001622s, 2600 KB] Initial heuristic value for lmcut: infinity
+[t=0.001625s, 2600 KB] pruning method: none
+[t=0.001628s, 2600 KB] Completely explored state space -- no solution!
+[t=0.001632s, 2600 KB] Actual search time: 0.000006s
+[t=0.001635s, 2600 KB] Expanded 0 state(s).
+[t=0.001635s, 2600 KB] Reopened 0 state(s).
+[t=0.001635s, 2600 KB] Evaluated 1 state(s).
+[t=0.001635s, 2600 KB] Evaluations: 1
+[t=0.001635s, 2600 KB] Generated 0 state(s).
+[t=0.001635s, 2600 KB] Dead ends: 0 state(s).
+[t=0.001635s, 2600 KB] Number of registered states: 1
+[t=0.001635s, 2600 KB] Int hash set load factor: 1/1 = 1.000000
+[t=0.001635s, 2600 KB] Int hash set resizes: 0
+[t=0.001635s, 2600 KB] Search time: 0.000037s
+[t=0.001635s, 2600 KB] Total time: 0.001635s
 Search stopped without finding a solution.
 Remove intermediate file output.sas
 search exit code: 12
