@@ -1,5 +1,58 @@
 # STATUS — theory-compiler track
 
+## 契约演化窗口 (P-10) 达成 (2026-07-28)
+
+分支 `agent/p10-contracts-v02`，base `edb3c37`。全文见
+[`runs/P-10/RUN_STATE.md`](runs/P-10/RUN_STATE.md)。
+
+```
+theory-compiler   163 passed   (THEORIA_REQUIRE_LEAN=1，含真 Lean 编译)
+cold-start-a0      54 passed   (LEAN=… 时)
+```
+
+四项清偿：
+
+| # | 交付 | 状态 |
+|---|---|---|
+| 1 | `CONTRACTS/candidates_schema_v0.2.md` + 独立 v0.2 校验器 | **草案**，等 engine-rig 会签 |
+| 2 | `CONTRACTS/dsl_grammar_v0.2.md` 定稿 + 迁移说明 | 定稿（本轨道独有，无需会签） |
+| 3 | E-06 的转录那一半（证书权重注入编译链） | 清偿；**证明那一半仍 open** |
+| 4 | cold-start-a2 上报的两条缺陷 | 修复 + 8 项负向测试 |
+| 5 | 四份 DSL 回归 | 四个 subagent 全部 PASS |
+
+### 本轮最该记住的三件事
+
+**契约草案被对抗式复核判过 REFUSE，三条 blocker 全部属实。** 最要命的一条是：
+第一稿的 v0.2 校验器加了「id 不得重复」，既超出契约文本，又把 engine-rig 一个
+**正在通过的**测试判红——而理由本身是反的，确定性 id 是内容地址，重复恰恰证明两行
+逐字节相同。另两条是悄悄丢掉 v0.1 的零分母与空行规则（在一份自称「不改变既有字段
+含义」的文档里），以及把会签成本低估约一个数量级。现在有 `TestAdditive` 每次跑：
+两个校验器读同一份语料，凡 v0.1 收的 v0.2 必须收。**「加法」最容易在实现里悄悄
+变成「顺手也收紧一点」。**
+
+**测试一直在测另一棵树。** 可编辑安装记的是绝对路径，worktree 里
+`import theory_compiler` 解析到原目录。一次 163 项全绿之前的那次 149 项全绿，
+对旁边磁盘上的改动一个字都没测。已加 `conftest.py`；同类的
+`THEORIA_REQUIRE_LEAN=1` 也补上了，因为默认 `pytest -q` 会在半秒内绿着跑完、
+**一次 `lean` 都没调**，而跳掉的正是 A1 的验收项。
+
+**`gen_pddl` 读了 `semantics:` 却不校验它。** 实测：`frame reset` +
+`cascade multi_frame` 的说明书，`gen_python` 拒绝、`gen_lean` 拒绝、`gen_pddl`
+照发不误——它只读 AST。这是 `semantics:` 段自己要关的洞在低一层重演。已补守卫。
+
+### 未清偿
+
+* **会签未到手**——契约是草案。
+* **E-06 的证明那一半**：`goal count(Peg, alive) = 1` 仍证不出来。五个单子终局里
+  三个没有线性 pagoda 函数。下一步是 `ic3_pdr` 的证书导出，在 engine-rig 那一侧。
+* **`conflict` 的证明义务无人校验**：v0.2 让说明书说清它 claim 哪条路线，没有后端
+  去证。声明了而没人校验，比不声明更坏。
+* 三个 `semantics:` 取值无后端（全部报错，不近似）；共享 `gen_pddl` 仍不消费
+  `ProblemSpec`；`theory_grammar.lark` 是死文件（已钉警告）。
+
+---
+
+
 ## 汇合 sprint (P-5) 达成：真 A1 (2026-07-28)
 
 83/83 测试通过，其中 8 项真正调用 `lean` 编译生成物并读 `#print axioms`。

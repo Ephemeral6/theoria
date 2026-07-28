@@ -20,6 +20,7 @@ from theory_compiler.certificate import load_certificate
 from theory_compiler.generators.gen_lean import (
     CertificateGapError, LeanGenError, generate_lean,
 )
+from theory_compiler.ir import IRError
 from theory_compiler.parser.theory_parser import parse_theory
 from theory_compiler.problem import from_json, load_problem
 
@@ -151,9 +152,15 @@ def test_refuses_a_pagoda_invariant_with_no_certificate(peg):
 
 
 def test_refuses_weights_that_disagree_with_the_certificate(peg, cert):
+    """Still refused, now one layer down.
+
+    The check moved from this backend into `build_ir`, so it fires for every
+    form rather than only for the one that happened to hold the certificate —
+    hence `IRError` and not `LeanGenError`. The message is unchanged.
+    """
     ast, problem = peg
     problem.weights["w"] = [0, 0, 0, 0, 0]
-    with pytest.raises(LeanGenError) as exc:
+    with pytest.raises(IRError) as exc:
         generate_lean(ast, problem, cert)
     assert "stale" in str(exc.value)
 

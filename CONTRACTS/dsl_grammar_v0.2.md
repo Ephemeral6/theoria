@@ -1,8 +1,25 @@
 # dsl_grammar_v0.2.md
 
+**Version:** 0.2 · **Status:** 定稿（`theory-compiler` 单方所有，不需要会签）·
+**Effective:** 2026-07-28
+
 **Owner:** the `theory-compiler` track. **Supersedes:** `dsl_grammar_v0.1.md`,
 which stays frozen and unedited — v0.1 is what the M8 rehearsal was built and
 tagged against, and rewriting it would rewrite that history.
+
+**Freeze policy.** v0.2 is frozen at the tag that carries this line. Anything
+further goes into a `dsl_grammar_v0.3.md`, by the same rule that produced this
+file: **a change needs a ledger entry or a defect that forced it**, named in the
+revision record. "It would read better" is not a reason to touch a contract two
+tracks compile against.
+
+**Why this one needs no countersignature and `candidates_schema_v0.2.md` does.**
+`CONTRACTS/` holds contracts of two different kinds. This grammar is *owned* by
+this track — `engine-rig` neither writes nor reads `theory.dsl` — so adopting a
+ledger-forced extension is this track's call alone. `candidates_schema.md` is
+the other kind: `engine-rig` is the writer and this track only reads, so its
+revision is a draft until the writer signs. Ownership, not politeness, decides
+which is which.
 
 Every change below was forced by a specific entry in the expressivity ledger
 (`cold-start-a0/THEORIZE_LOG.md` §表达力台账) or by a specific defect found while
@@ -65,6 +82,14 @@ order instead cost the A0 sprint a real bug: `press_left` recoloured a button,
 and `door_opens_left` then re-read its guard against the updated state, found
 the new colour and silently did not fire.
 
+**Every backend must refuse a value it does not implement.** Declaring the fact
+buys nothing if a generator reads the declaration and encodes a different world
+anyway — that is this section's own hazard, one layer down. So a backend
+supporting only part of the value set raises, names the value, and stops;
+`fd_adapter`'s rule, applied to the compiler. As of v0.2 no backend in this
+repository implements `frame reset`, `conflict priority:`, or `cascade
+multi_frame`; all three parse, and all three are refused at generation.
+
 ### events
 
 Unchanged in syntax. Newly load-bearing: a backend dispatches on **name and
@@ -125,8 +150,21 @@ laws:
   finite weight functions of pagoda type. **Connectivity-class invariants remain
   unsupported** — record them in the ledger; do not extend this contract by hand.
 * **domain/problem split:** `word_table` + `semantics` + `rules` + `laws` are the
-  domain and travel across levels. Grid layout, initial state, landmark
-  coordinates and weight vectors are the problem, and are supplied per level.
+  domain and travel across levels. Grid layout, initial state and landmark
+  coordinates are the problem, and are supplied per level.
+
+* **Weight vectors are the one thing the split does not settle.** A `weights w`
+  declaration names a free vector, and its numbers may arrive from the level
+  *or* from an engine certificate. **A compiler must accept the certificate as a
+  source** — requiring the level to repeat the numbers means hand-copying an
+  engine's output into a checked-in file, and a hand-copy is how a proof comes
+  to rest on weights nobody re-solved. If both sources supply the vector they
+  must be **equal**, and a disagreement is an error, not a precedence question.
+  One certificate fills one declared name; a compiler holding one certificate
+  and two unfilled declarations must **refuse** rather than pick.
+  Whichever source won must be recorded in every form that prints the numbers —
+  `source: lp_potential` says an engine solved for them, and a reader who cannot
+  see which file they came from cannot check that.
 
 ### A standing limit worth stating in the contract
 
@@ -160,8 +198,89 @@ silently.
 | 7 | `source:` on an invariant | **E-05** | nothing distinguished an engine-derived invariant from an author-derived one |
 | 8 | balanced-paren argument parsing | **D-A0-013** | `then jumped(Cart, (1, 1))` parsed its second argument as the name `(1, 1` and raised nothing — a silently wrong AST |
 
+| 9 | weight vectors may come from a certificate | **E-06**, D-TC-013 | `gen_lean` read the numbers from the certificate and the other three backends read them only from the level, so a manual either hand-copied the engine's vector into a checked-in file or rendered a `theory.md` that named a potential it could not show |
+| 10 | a backend must refuse an unimplemented `semantics:` value | the `semantics:` proposal's own closing paragraph, and a defect found while finalising this version | `gen_pddl` reads only the AST — never the IR, never the predictor — so no guard reached it, and a manual declaring `frame reset` + `cascade multi_frame` compiled to a STRIPS encoding of `persist` + `single_frame` without a word of complaint |
+
 Ledger entries E-01 through E-05 are **discharged** by this revision. E-03 was
 the one named as "the one to fix first"; it is item 1.
+
+**E-06 is not discharged, and item 9 is not it.** E-06 is the ledger entry for
+`goal count(Peg, alive) = 1` being *unprovable*: on the 5-cell board from
+`11011`, three of the five single-peg goals admit no linear pagoda function at
+all — `engine-rig`'s own `test_interop.py` pins them as unprovable by this
+method, not merely unexported. The configuration really is unsolvable; the
+invariant language cannot carry the conclusion. Item 9 discharges the
+*transcription* half that E-06 dragged along with it. The proof half stays open
+and needs one of two things, neither of which is a grammar change:
+
+* the invariant language grows past linear arithmetic / counts / parity / finite
+  weights — which this contract explicitly forbids doing by hand; or
+* a different proof method supplies the certificate. `ic3_pdr` is the live
+  candidate: it is the engine that exists *because* `lp_potential` is infeasible
+  on exactly this kind of configuration, and it reports the same three
+  obligations (`inv_init` / `inv_closed` / `goal_break`) that this compiler
+  already knows how to re-derive. What is missing is a certificate export for
+  it — `engine-rig/interop/certificates/` holds pagoda documents only. That is
+  the shape of the next round, and it is `engine-rig`'s side of the boundary.
+
+Until then a compiler must keep **refusing** to emit a theorem broader than its
+certificate. That refusal is the contract's own rule (see the standing limit
+above), and it is the entire reason E-06 is a recorded open question rather than
+a slightly-overclaiming `unsolvable`.
+
+---
+
+## Migrating a v0.1 manual to v0.2
+
+Mechanical, and short. A v0.1 manual is a v0.2 manual **plus one required
+section**; everything else v0.2 added is opt-in.
+
+1. **Add `semantics:`** — the only mandatory step, and the only one that can
+   change what the manual means. Place it after `word_table:`, before `events:`,
+   and state all three:
+
+   ```
+   semantics:
+     frame     persist        # or reset
+     conflict  exclusive      # or priority: r1 > r2 > ...
+     cascade   single_frame   # or multi_frame
+   ```
+
+   **Do not copy these three values from another manual.** They are per-world
+   facts. `persist` / `exclusive` / `single_frame` is what A0 and A2 both
+   declared, but a decaying world does not persist, and a world with a
+   self-triggering tick is not `single_frame`. If you do not know which is true,
+   that is a finding to probe, not a default to accept — the whole reason the
+   section is mandatory is that guessing it silently produces a different world.
+
+2. Everything else is optional and changes nothing until used: `domain`,
+   `landmark`, `weights` / `pagoda(...)` / `source:`, `forall ?v in ...`,
+   `not <predicate>`. A v0.1 manual that uses none of them compiles under v0.2
+   to the same four forms.
+
+3. `playbook.dsl` needs no migration at all.
+
+### The one hazard, stated plainly
+
+**A v0.2 manual parses under a v0.1 parser — silently, and to a different
+world.** The v0.1 parser skips lines it does not recognise, so `semantics:` and
+its three statements vanish and the manual compiles under whatever default the
+backend happens to hard-code. That is not graceful degradation; it is the exact
+failure the section was added to close.
+
+Consequences, in both directions:
+
+* **v0.1 manual under a v0.2 parser** → **rejected**, loudly, for a missing
+  `semantics:` section. This is deliberate (D-TC-011): the same status as a
+  missing `goal:`. Migration is adding three lines, and being told to add them
+  beats compiling a world nobody declared.
+* **v0.2 manual under a v0.1 parser** → **accepted, wrongly**. Nothing warns.
+  If you must feed a manual to a v0.1 parser, delete the `semantics:` section
+  first and accept that you no longer know which world you compiled.
+
+By contrast, a missing `landmark` declaration is a **warning**, not an error —
+it compiles to exactly the same world and costs only legibility. E-03 is
+mandatory because it changes the world; E-04 is not because it does not.
 
 ### Deliberately not changed
 

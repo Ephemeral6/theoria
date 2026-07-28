@@ -16,8 +16,19 @@ from ..parser.ast_nodes import (
 )
 
 
-def generate_markdown(ast: TheoryAST) -> str:
-    """Generate a human-readable Markdown document from a TheoryAST."""
+def generate_markdown(ast: TheoryAST, ir=None) -> str:
+    """Generate a human-readable Markdown document from a TheoryAST.
+
+    `ir` is optional and adds nothing the AST already says; it carries the
+    *resolved* weight vectors and their provenance (`WorldIR.weights` /
+    `weight_sources`). Without it a manual that declares `weights w` and proves
+    `pagoda(w) <= 0` renders a document naming a potential it cannot show — the
+    numbers exist, in a certificate, and only the Lean backend ever saw them.
+    Passing the IR is what makes `theory.md` a form of the *same* fact rather
+    than a summary of it (E-05, and the hand-copying E-06 set out to remove).
+
+    Output is byte-identical to the previous behaviour when `ir` is omitted.
+    """
     sections = []
 
     sections.append("# World Description\n")
@@ -49,7 +60,29 @@ def generate_markdown(ast: TheoryAST) -> str:
     if ast.laws:
         sections.append(_render_laws(ast.laws))
 
+    if ir is not None and getattr(ir, "weights", None):
+        sections.append(_render_weights(ir))
+
     return "\n".join(sections) + "\n"
+
+
+def _render_weights(ir) -> str:
+    """The numbers behind a named potential, and who solved for them.
+
+    The provenance line is not decoration. `source: lp_potential` in the manual
+    says an engine derived the weights rather than the author; a reader of
+    `theory.md` alone could not check that, and "an engine solved for these"
+    is precisely the claim A1 turns on.
+    """
+    lines = ["## The Numbers Behind the Named Quantities\n"]
+    for name in sorted(ir.weights):
+        vector = ir.weights[name]
+        source = ir.weight_sources.get(name, "unstated")
+        lines.append("- **%s**: %s" % (_name_to_natural(name),
+                                       ", ".join(str(v) for v in vector)))
+        lines.append("  (one value per position, in order; from %s)" % source)
+    lines.append("")
+    return "\n".join(lines)
 
 
 def _render_semantics(sem) -> str:

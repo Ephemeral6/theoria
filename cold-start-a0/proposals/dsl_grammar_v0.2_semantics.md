@@ -2,8 +2,41 @@
 
 **To:** the `theory-compiler` track (owner of `CONTRACTS/dsl_grammar_v0.1.md`)
 **From:** `cold-start-a0`
-**Status:** implemented as a local dialect here, requesting adoption upstream.
-`CONTRACTS/dsl_grammar_v0.1.md` is frozen and **has not been touched**.
+**Status:** **ADOPTED — 2026-07-28, `CONTRACTS/dsl_grammar_v0.2.md` §semantics,
+revision record item 1.** Taken essentially verbatim, including the request that
+mattered most: the section is **mandatory**, and a manual without it is
+*rejected* rather than defaulted (`theory_compiler.ir.build_ir` raises, per
+D-TC-011 — same status as a missing `goal:`).
+
+Two things this proposal asked for and did **not** get, recorded so the gap is
+visible rather than assumed away:
+
+* **The `conflict` proof obligation is declared, not discharged.** v0.2 makes a
+  manual say which of constraint 9's two routes it claims. No backend yet
+  *proves* pairwise guard disjointness for `exclusive`, or totality of the order
+  for `priority:`. The declaration tells `certify` what to prove; nobody has
+  written that check.
+* **`frame reset`, `conflict priority:` and `cascade multi_frame` parse but have
+  no backend.** Every manual in the repo declares `persist` / `exclusive` /
+  `single_frame`, so the other branch of each has never been compiled. This
+  proposal asked that a backend meeting a value it does not implement *raise*
+  rather than approximate, following `fd_adapter`'s rule. Measured, one manual
+  mutated to `frame reset` + `cascade multi_frame` put through all three
+  generators:
+
+  | backend | before | now |
+  |---|---|---|
+  | `gen_python` | refuses (`UnsupportedClause`) | unchanged |
+  | `gen_lean` | refuses — it builds the predictor first, so it inherits the guard rather than having one | unchanged |
+  | `gen_pddl` | **emitted a domain and problem**, silently, encoding `persist`/`single_frame` | refuses |
+
+  `gen_pddl` reads only the AST, never the IR or the predictor, so nothing
+  carried the guard to it. That is this proposal's own hazard one layer down:
+  the manual states the semantic fact and the compiler ignores it. Fixed
+  2026-07-28 (`gen_pddl._check_semantics`, with a negative test).
+
+`CONTRACTS/dsl_grammar_v0.1.md` is frozen and **was never touched**; v0.2 is a
+new file. The text below is the original request, unedited.
 
 ---
 

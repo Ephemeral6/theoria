@@ -82,9 +82,34 @@ def _direction_of(rule: RuleDecl) -> str:
     raise UnsupportedClause("rule %s has no action clause" % rule.name)
 
 
+def _addressable(problem: Problem, special) -> List[Tuple[int, int]]:
+    """The PDDL cell universe: the arena, plus every cell the domain **names**.
+
+    `problem.arena` is floor plus the cells the board cannot explain, i.e. the
+    cells the Cart can *be in*. That is the right universe for Lean and for
+    Python, whose `arena` means exactly that. It is the wrong one for PDDL,
+    because a PDDL action can take a parameter typed by a cell the Cart never
+    occupies — `teleport-down`'s `?p - markedcell` is the Portal, a *static*
+    coloured cell, which is in neither the floor nor the dynamic set and so
+    reached the `:objects` block from neither side. With no instance of its
+    type the action grounds to nothing and the planner answers UNSAT on a manual
+    that contains the teleport rule. Silently: an empty grounding is not an
+    error anywhere in the chain.
+
+    Reported by `cold-start-a2` (D-A2-006), which hit it on the first compile of
+    its control manual. A0 could not see it: A0's goal is reachable through the
+    Door, so no A0 plan ever needed the jump action to ground, and the defect
+    returned a correct answer by luck.
+
+    These cells are **addressable, not occupiable** — `_problem` withholds
+    `(passable ...)` from them, so a move action still cannot step onto one.
+    """
+    return sorted(set(tuple(c) for c in problem.arena) | set(special))
+
+
 def generate_pddl(ast: TheoryAST, problem: Problem) -> Tuple[str, str]:
     special, _colours = _classify(ast, problem)
-    arena = [tuple(c) for c in problem.arena]
+    cells = _addressable(problem, special)
     cart = next(o for o in problem.objects if o.name == "Cart")
 
     door = next((o for o in problem.objects if o.name == "Door"), None)
@@ -94,7 +119,7 @@ def generate_pddl(ast: TheoryAST, problem: Problem) -> Tuple[str, str]:
 
     subtypes = sorted({t for t in special.values()})
     domain = _domain(ast, subtypes, door, switch, portal_cells)
-    instance = _problem(ast, problem, arena, special, cart, door, switch)
+    instance = _problem(ast, problem, cells, special, cart, door, switch)
     return domain, instance
 
 
@@ -241,8 +266,9 @@ def _action_toggle(name: str, direction: str, door_event, door,
     return "\n".join(lines)
 
 
-def _problem(ast: TheoryAST, problem: Problem, arena, special, cart,
+def _problem(ast: TheoryAST, problem: Problem, cells, special, cart,
              door, switch) -> str:
+    """`cells` is `_addressable(...)`, not `problem.arena` — see its docstring."""
     L: List[str] = []
     L.append("; Auto-generated from theory.dsl + the derived problem instance.")
     L.append("(define (problem %s)" % problem.name)
@@ -250,24 +276,24 @@ def _problem(ast: TheoryAST, problem: Problem, arena, special, cart,
     L.append("")
     L.append("  (:objects")
     by_type: Dict[str, List[str]] = {}
-    for cell in arena:
+    for cell in cells:
         by_type.setdefault(special.get(cell, "cell"), []).append(_cell_name(cell))
     for type_name in sorted(by_type):
         L.append("    %s - %s" % (" ".join(sorted(by_type[type_name])), type_name))
     L.append("  )")
     L.append("")
     L.append("  (:init")
-    arena_set = set(arena)
-    for cell in arena:
+    cell_set = set(cells)
+    for cell in cells:
         for direction, (dr, dc) in sorted(DELTA.items()):
             other = (cell[0] + dr, cell[1] + dc)
-            if other in arena_set:
+            if other in cell_set:
                 L.append("    (adj-%s %s %s)" % (direction, _cell_name(cell),
                                                  _cell_name(other)))
     L.append("    (at %s)" % _cell_name(tuple(cart.pos)))
     blocked = {tuple(o.pos) for o in problem.objects if o.name != "Cart"}
     blocked |= {c for c, t in special.items() if t == "markedcell"}
-    for cell in arena:
+    for cell in cells:
         if cell not in blocked:
             L.append("    (passable %s)" % _cell_name(cell))
     for name, cell in sorted(problem.landmarks.items()):

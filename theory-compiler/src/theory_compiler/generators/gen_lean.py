@@ -546,7 +546,20 @@ def generate_lean(ast: TheoryAST, problem: ProblemSpec,
     if proof not in PROOF_MODES:
         raise LeanGenError("proof must be one of %r, got %r"
                            % (list(PROOF_MODES), proof))
-    ir = build_ir(ast, problem)
+    # The certificate goes in *here*, not into this backend's own bookkeeping:
+    # `_resolve_weights` is the single place a `weights <name>` declaration
+    # acquires numbers, and the level-vs-certificate agreement check moved
+    # there with it — which is why a stale level copy now raises `IRError`
+    # rather than `LeanGenError` (E-05/E-06).
+    #
+    # Which forms this reaches, stated exactly, because the obvious reading is
+    # wrong: any caller that hands `build_ir` a certificate gets the resolved
+    # vector and the agreement check. That is this backend and
+    # `generate_markdown(ast, ir)`. `gen_python` and `gen_pddl` take no
+    # certificate and never see one — not an oversight: neither form's output
+    # depends on the weights, so there is nothing in them that could go stale.
+    # The predictor is a `step` function; a pagoda potential is not part of it.
+    ir = build_ir(ast, problem, certificate)
     ns = _load_predictor(ast, problem)
 
     request = _pagoda_request(ir)
@@ -573,15 +586,17 @@ def generate_lean(ast: TheoryAST, problem: ProblemSpec,
             "Add `weights %s over <field>` (E-05)."
             % (inv_name, weights_name, weights_name))
 
-    # The certificate is the source of truth for the numbers. The level may
-    # repeat them — a self-contained problem file is sometimes worth having —
-    # but then the two must agree, because a stale copy is how a proof ends up
-    # resting on weights nobody solved for.
-    supplied = ir.weights.get(weights_name)
-    if supplied is not None and list(supplied) != list(certificate.weights):
+    # The numbers themselves, and the agreement check against any level copy,
+    # were resolved by `build_ir` above. What is left to check here is that the
+    # resolution actually landed on *this* invariant's potential: a certificate
+    # that filled some other declared name would leave this one without a
+    # vector, and a backend that then read `certificate.weights` anyway would be
+    # quietly proving a theorem about a potential the manual did not name.
+    if list(ir.weights.get(weights_name, [])) != list(certificate.weights):
         raise LeanGenError(
-            "the level supplies %s = %s and the certificate carries %s. One of "
-            "them is stale; they must agree before either becomes a theorem."
-            % (weights_name, supplied, certificate.weights))
+            "invariant %r is a potential over %r, but the certificate's vector "
+            "was not resolved onto that name (it holds %r). One certificate "
+            "fills one declared potential; compile with the certificate for %s."
+            % (inv_name, weights_name, ir.weights.get(weights_name), weights_name))
 
     return _pagoda_lean(ir, ns, certificate, inv_name, bound, proof)

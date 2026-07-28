@@ -141,3 +141,85 @@ v0.1 说明书，包括 `cold-start-a0/theory/theory.dsl`——那是一份正�
 
 `tests/fixtures/peg5_problem.json` 据此删掉了 `weights` 字段：证书带着数字，
 关卡不再复述。
+
+## D-TC-014: candidates_schema 的 v0.2 只做加法，而且要有人来签
+
+**决策**: 新开 `CONTRACTS/candidates_schema_v0.2.md`（草案）与一份**独立**的 v0.2
+校验器 `tools/validate_candidates_v02.py`；v0.1 契约文件与 `engine-rig` 那份校验器
+一字未动，v0.1 继续是 v0.1 的权威。改动是四类：`engine` 枚举 +2、`kind` 枚举 +2、
+`evidence.basis`、`derived_from` 与 `contract` 三个可选字段。
+
+**理由**: M9 的 `deadlock_carver` / `ic3_pdr` 不在六值枚举里，engine-rig 按 D-018
+把它们挂在 `fd_adapter` / `lp_potential` 名下出货——那是在冻结契约之内能做的最好
+选择，代价是流里 18 行的 `engine` 字段指着两台没跑过的引擎。开枚举是这条压力唯一
+的正解。两个新 `kind` 不是为了对称：死锁定理的证明义务是**两条**（模式闭合、
+模式-目标互斥），与不变量的三条不同，裁决方按 `kind` 派活会去找三条不存在的义务；
+而 `pruning_account` 里根本没有 `actions`，一个遍历 `kind == "plan"` 的消费者在那
+一行上拿 `KeyError`。`ic3_pdr` **不发**新 `kind`，因为它的两个产物确实就是
+invariant 和 plan——为对称而造词就是本文件在修的那种毛病的镜像。
+
+**为什么是草案而不是定稿**: `engine`/`kind` 的写方是 engine-rig，本轨道只读。
+异轨道异步会签：草案先落，PARTNER_SYNC 挂请求，不等待。
+
+## D-TC-015: v0.2 校验器不做 id 唯一性检查
+
+**背景**: 第一稿加了「同一文件内 `id` 不得重复」，理由写的是「append-only，重复
+id 是改写过的行顶着旧名字」。一次以 engine-rig 视角做的对抗式复核当场推翻。
+
+**决策**: 删掉，并把理由写进契约，免得下一版再加一次。
+
+**理由**: 三条，任何一条都够。(1) engine-rig 确定性模式下 `id` 是**内容地址**
+（`uuid5` over `[engine, kind, payload, evidence]`），重复的 id 恰恰**证明**两行
+逐字节相同，而不是改写。(2) append-only 禁止的是删改已写入的行；追加不修改任何行。
+(3) `engine-rig/tests/test_integration.py::test_a_second_full_run_only_adds_lines`
+把同一次 run 写两遍进同一文件再断言该流合法——那份流在 v0.1 下合法，在 v0.2 下也
+必须合法。**一条把既有的、合规的、正在通过的测试判红的「加法」，不是加法。**
+
+同一次复核还抓到第一稿悄悄丢掉了 v0.1 的两条规则（`coverage` 分母为零、空行是
+错误），都在一份自称「不改变既有字段含义」的文档里。已恢复，并且加了
+`TestAdditive`：两个校验器读同一份语料，凡 v0.1 收的 v0.2 必须收。**「加法」最容易
+在实现里悄悄变成「顺手也收紧一点」，所以这条断言要能跑，不能只是写着。**
+
+## D-TC-016: 权重在 IR 里解析一次，不在后端各解析各的
+
+**决策**: `build_ir(ast, problem, certificate=None)`，新增 `_resolve_weights`：
+证书填未填的声明；关卡也给了就必须**相等**；一份证书面对两个未填声明时**拒绝**
+而不是挑一个。`WorldIR.weight_sources` 记下来源，`gen_markdown` 把数字和出处一起
+渲染出来。「关卡副本过期」的检查从 `gen_lean` 搬到这里，因此改抛 `IRError`。
+
+**理由**: D-TC-013 只做了半步——把「关卡必须提供权重」降为警告。剩下半步是数字
+**从哪来**：此前只有 `gen_lean` 读证书，另外三个后端只读关卡。后果有两个，都真实
+发生过：要么把引擎的向量手抄进入库的关卡文件（A1 想消掉的正是这道工序，而手抄正是
+「证明建立在没人重新求解过的权重上」的发生方式），要么 `theory.md` 渲染出一份
+**点名了一个它展示不出来的势函数**的说明书。一个源，四种形态看同一份数字，出处
+跟着数字走。
+
+**没做的**: 这**不是** E-06。E-06 是 `goal count(Peg, alive) = 1` **证不出来**——
+五个单子终局里三个根本没有线性 pagoda 函数。本条清偿的是 E-06 顺带拖着的转录问题，
+证明那一半仍然 open，`CertificateGapError` 继续拒绝生成。下一步是 `ic3_pdr` 的证书
+导出，而那在 engine-rig 那一侧。
+
+## D-TC-017: 声明了不实现就报错——`gen_pddl` 补上这条守卫
+
+**背景**: 定稿 `dsl_grammar_v0.2` 时按 `semantics:` 提案的收尾段做了一次实测：把
+一份说明书改成 `frame reset` + `cascade multi_frame`，过三个生成器。`gen_python`
+拒绝（一直有守卫），`gen_lean` 拒绝（它先建预测器，守卫是**继承**来的，自己没有），
+`gen_pddl` **照发不误**——它只读 AST，从不建 IR、从不建预测器，所以没有任何东西把
+守卫带到它面前。
+
+**决策**: `gen_pddl._check_semantics`，超出支持子集即 `UnsupportedClause`，附负向
+测试。
+
+**理由**: 这正是 `semantics:` 段自己要关的那个洞，在低一层重演：说明书把语义事实
+写下来了，编译器读了，然后编码了另一个世界。`fd_adapter` 的规矩——支持子集之外是
+错误，永远不是静默近似——对编译器同样成立。**声明一件事而没人校验，比不声明更坏，
+因为它读起来像已经被检查过了。**
+
+## D-TC-018: 测试必须测所在的那棵树
+
+**决策**: 新增 `theory-compiler/conftest.py`，把本包的 `src/` 插到 `sys.path` 最前。
+
+**理由**: `pyproject.toml` 声明的是可编辑安装，而可编辑安装记的是**绝对路径**。
+在第二个检出里（git worktree、clone、别处装过的 CI），`import theory_compiler`
+解析到**原来那个目录**，于是整套测试对着工作区里没有的代码跑绿。不是假想：本轮就
+这么发生过，一次 149 项全绿之后才发现它对旁边磁盘上的改动一个字都没测。
