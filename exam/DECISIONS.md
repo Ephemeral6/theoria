@@ -266,3 +266,134 @@ against, which is the only property the archive actually needs.
 The manifest carries no wall clock, for the reason stated in `CLAUDE.md`: a
 timestamp makes two identical runs differ, and destroys the cheapest check that
 a run was deterministic at all.
+
+---
+
+## D-EX-012 — the marker is tested in the middle of its range, not only at the ends
+
+`exam/grading/selftest.py`. Seven mutants with predicted scores, eight injected
+marker faults, and a detection matrix over the two.
+
+**Why.** `calibration.py` pins the marker with `oracle == 1.0` and
+`null == 0.0`. Both are exact and both follow from construction, and between
+them they say nothing about any submission that is neither ground truth nor
+silence — which is every real one. A marker can be exact at both endpoints and
+arbitrary in between, and every check that existed before this module would
+pass it.
+
+The mutants are chosen so the expected score is arithmetic rather than
+judgement: dropping a set of answers costs exactly what those items were
+awarded; dropping one answer moves one item's mark; reversing the key's item
+order moves none. There is no band anywhere in this module, because a band is
+what you write when the expectation depends on item mix, and none of these do.
+
+**The faults exist to test the checks, not the marker.** Injecting
+`pays_for_silence` and watching the null band fire proves the band is load
+bearing; a check nobody has watched refuse is a check nobody has tested. The
+matrix that comes out has the same shape as the leakage table in D-EX-011 and
+is read the same way: **the zeros are the finding.**
+
+## D-EX-013 — the calibration bands were one-sided, and `truncates_partial` proved it
+
+First fault-matrix run: eight faults injected, seven caught, and
+`truncates_partial` — partial credit silently zeroed — caught by nothing at all.
+
+The reason is structural rather than an oversight in one band. Every band in
+`EXPECTED` for the two informative fakes is `Band(0.0, x)`: bounded above, open
+below. A marker that *depresses* scores satisfies all of them. `oracle == 1.0`
+is the only lower bound in the protocol, and it only ever sees answers that are
+already full credit, so it cannot see a partial being crushed.
+
+**Closed with a seventh mutant rather than a lower band.** `partial_credit_
+survives` removes one component of a composite answer and requires a paper
+whose rubrics award partial credit to produce a score strictly between zero and
+full. A lower band would have been a number fitted to what the first run
+happened to produce, which is the failure D-EX-010 was written about; this is
+structural and survives a change of item mix.
+
+It declares itself **inapplicable** on `heldout` and `handover`, whose answers
+have no removable component, rather than reporting a pass there. That is
+D-EX-011's lesson applied before it costs anything: an optional check is a
+check that does not run, and a check that cannot run has not passed.
+
+## D-EX-014 — an illegible answer is no longer read as the claim `never`
+
+`rubrics_adaptation._read_claim` (was `_read_index`). Found by the `garbage`
+mutant on its first run, before this module had ever marked anything real.
+
+**The defect.** The function had two outcomes where it needed three. Everything
+it could not parse fell through to "did not claim a detection", and the caller
+wrote that down as the substantive answer `never`. On `v-a0-03` — the one
+variant that is genuinely undetectable on its base level — `never` **is** the
+truth. So a submission containing no answer at all collected that item in full:
+
+| submitted on every item | adaptation score |
+|---|---|
+| an unparseable string | 1.600 / 144 |
+| `""` | 1.600 / 144 |
+| `{}` | 1.600 / 144 |
+| `null` | 1.600 / 144 |
+
+All 1.6 points sit on the two `v-a0-03.detect` items, and
+`v-a0-03.detect.match` paid **1.0 of 1.0**. The item exists to ask whether an
+examinee can tell "the change is invisible from here" from "I did not look";
+the marker could not tell those apart either. The other three papers pay
+exactly 0.000 for the same four submissions, which is why nothing had noticed.
+
+**The fix, and the one asymmetry in it.** Illegibility is a third outcome,
+scored `wrong` with `said: "unreadable"`. A **bare** `null` is illegible; a
+`null` *under a key the examinee wrote down* — `{"per_level": {"match": null}}`
+— is a legible "never", because presence of the key is the claim and a bare
+null is what a broken serialiser emits. That distinction is load bearing: it is
+the spelling the reference answers use.
+
+**No calibration number moved.** oracle 1.0 / null 0.0 / memoriser 0.1708 /
+bluffer 0.1708 before and after, on all four papers, and the suite was green
+on both sides. A bugfix that also re-tunes the instrument is two changes
+wearing one coat, and this one is not.
+
+## D-EX-015 — the confusion pair is split by class, and coverage is printed beside it
+
+`exam/grading/confusion_matrix.py`, and `artifacts/matrix/verdict_confusion.md`.
+
+**Why split.** Classes (i) and (ii) exist because "I enumerated it" and "I
+proved it" are different achievements. Pooled sensitivity destroys that
+distinction: it sums all nine unsolvable items regardless of which class they
+came from, so an arm that aces the small-space family and cannot touch the
+large-space one reports the same 1.000 as an arm that reasons.
+
+**Why coverage.** `mark.confusion` keeps abstentions out of the denominator and
+says so, which is the right call — an abstention is not a wrong answer. The
+consequence is that the rate alone is uninterpretable: an arm that abstains on
+everything it cannot do scores 1.000 on what is left. The matrix therefore
+prints `rate (answered / class size)` in every cell.
+
+**The measurement that justifies both.** The memoriser's pooled pair is
+sensitivity **1.000** and specificity **1.000** — numerically identical to
+ground truth — while it scores 0.5882. Split, it abstains on **4 of 4**
+large-space items and has never answered one. The pooled pair cannot tell the
+memoriser from the oracle; the split can. That is the argument for the split as
+a measurement rather than a preference.
+
+**Empty denominators print `--`, never `0.000`.** Class (i) contains no
+solvable items, so specificity there is undefined, not zero. An arm cannot fail
+a test it was never given, and a table that writes those cells as zero says it
+did.
+
+## D-EX-016 — a second digest, over the marker and the bands, pinned by a test
+
+`selftest.protocol_digest()` over `mark.py`, `calibration.py`, `selftest.py`.
+
+**Why a second one.** `registry.digest()` covers the rubrics and travels onto
+every sheet. It deliberately does not cover the bands, and `calibration.py`
+said so in a comment above `EXPECTED` — "a quiet widening here would not show
+up as a digest mismatch" — which is `STATUS.md` open weakness 3, self-reported
+and unfixed. One band has already been widened once (D-EX-010), legitimately
+and on the record; nothing existed that would catch an unrecorded one.
+
+**Why not extend the existing digest.** That value is the seal on every sheet.
+Extending it would change every sheet and every stored artefact for the sake of
+a check that has no reason to travel to an examinee. A separate hash, pinned by
+`test_a_widened_band_changes_the_protocol_digest`, gets the property at the
+cost of one deliberate test edit — which is the point: widening a band now
+requires an edit that a reviewer sees.

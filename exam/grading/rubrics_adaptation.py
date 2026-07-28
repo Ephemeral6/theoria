@@ -103,36 +103,66 @@ def _is_abstain(answer: Any) -> bool:
     return False
 
 
-def _read_index(answer: Any) -> Tuple[bool, Optional[int]]:
-    """(claims a detection, the claimed 1-based index).
+#: What `_read_claim` returns when the answer says nothing it can read.  Kept as
+#: a named constant because the whole point is that this outcome is *not* the
+#: same as claiming "it never diverged here" -- see below.
+UNREADABLE = (False, False, None)
 
-    Deliberately forgiving about *shape* and strict about *content*.  Three
-    spellings of "it never diverged here" are accepted -- `None`, the string
-    "never", and `{"detected": false}` -- because the shape of the answer is not
-    what is being measured and a rubric that marks a right answer wrong for
-    punctuation is measuring formatting.  Nothing about the number itself is
-    forgiven; that is the measurement.
+
+def _read_claim(answer: Any) -> Tuple[bool, bool, Optional[int]]:
+    """(legible, claims a detection, the claimed 1-based index).
+
+    Deliberately forgiving about *shape* and strict about *content*.  Four
+    spellings of "it never diverged here" are accepted -- the string "never",
+    `False`, `{"detected": false}`, and `{"index": null}` -- because the shape
+    of the answer is not what is being measured and a rubric that marks a right
+    answer wrong for punctuation is measuring formatting.  Nothing about the
+    number itself is forgiven; that is the measurement.
+
+    **Legibility is the third outcome, and it used to be missing.**  Until
+    V4-exam-selftest this function had two outcomes, and everything it could not
+    parse -- an unparseable string, `""`, `{}`, a bare `null` -- fell through to
+    "did not claim a detection", which the caller then wrote down as the
+    substantive answer `never`.  On `v-a0-03`, the one variant that is genuinely
+    undetectable on its base level, `never` **is** the truth, so a submission of
+    pure nonsense collected that item in full: measured at 1.6 of 144 points on
+    this paper for `"__V4_GARBAGE__"`, `""`, `{}` and `null` alike, all of it on
+    the two `v-a0-03.detect` items.
+
+    That is the failure this paper exists to catch, wearing the marker's
+    uniform: the item asks whether an examinee can tell "the change is
+    invisible from here" from "I did not look", and the marker could not tell
+    those apart either.  A forgiving reader may not invent a claim the examinee
+    did not make; an illegible answer is now `wrong` with `said` recorded as
+    `unreadable`, worth nothing and distinguishable in the report from both a
+    real "never" and an abstention.
+
+    One asymmetry is deliberate.  A **bare** `None` is illegible, but a `None`
+    *value under a key the examinee wrote down* is a legible "never": in
+    `{"per_level": {"match": null}}` the examinee named the level and declined
+    to give it an index, which is an assertion.  A bare `null` asserts nothing
+    and is what a broken serialiser emits.  Presence of the key is the claim.
     """
     if answer is None:
-        return False, None
+        return UNREADABLE
     if isinstance(answer, bool):        # bool before int: True is not index 1
-        return bool(answer), None
+        return True, bool(answer), None
     if isinstance(answer, int):
-        return True, int(answer)
+        return True, True, int(answer)
     if isinstance(answer, str):
         text = answer.strip().lower()
         if text in ("never", "none", "not detected", "no divergence"):
-            return False, None
+            return True, False, None
         try:
-            return True, int(text)
+            return True, True, int(text)
         except ValueError:
-            return False, None
+            return UNREADABLE
     if isinstance(answer, dict):
         if "index" in answer or "detected" in answer:
             detected = answer.get("detected")
             index = answer.get("index")
             if detected is False:
-                return False, None
+                return True, False, None
             if isinstance(index, bool):
                 index = None
             if isinstance(index, str):
@@ -141,9 +171,25 @@ def _read_index(answer: Any) -> Tuple[bool, Optional[int]]:
                 except ValueError:
                     index = None
             if index is None:
-                return bool(detected), None
-            return True, int(index)
-    return False, None
+                return True, bool(detected), None
+            return True, True, int(index)
+    return UNREADABLE
+
+
+def _read_level_claim(said_map: Dict[str, Any], level: str
+                      ) -> Tuple[bool, bool, Optional[int]]:
+    """`_read_claim` for one level of a per-level map.
+
+    A level the examinee did not mention is illegible: not answered, not
+    "never".  A level they did mention with a `null` index is a legible "never",
+    which is the spelling the reference answers use.
+    """
+    if level not in said_map:
+        return UNREADABLE
+    value = said_map[level]
+    if value is None:
+        return True, False, None
+    return _read_claim(value)
 
 
 def _read_set(answer: Any, key: str) -> Optional[List[str]]:
@@ -304,7 +350,12 @@ def grade_detect(answer: Any, truth: Dict[str, Any], item: Item) -> ItemScore:
     if _is_abstain(answer):
         return _score(item, 0.0, "abstain", {"why": "abstained"}, abstained=True)
 
-    claimed, index = _read_index(answer)
+    legible, claimed, index = _read_claim(answer)
+    if not legible:
+        return _score(item, 0.0, "unreadable",
+                      {"why": "the answer states neither an observation index "
+                              "nor that the change was never detected; a "
+                              "reader may not invent the claim it cannot read"})
     truth_index = truth.get("index")
     fraction = _index_fraction(index if claimed else None, truth_index)
 
@@ -341,18 +392,33 @@ def grade_detect_cross(answer: Any, truth: Dict[str, Any], item: Item) -> ItemSc
             said_map = candidate
 
     per_level: Dict[str, float] = {}
+    unreadable: List[str] = []
+    said_never: List[str] = []
     for level in sorted(truth_map):
-        claimed, index = _read_index(said_map.get(level))
+        legible, claimed, index = _read_level_claim(said_map, level)
+        if not legible:
+            # A level the examinee never mentioned is not a claim that nothing
+            # happened there. Scoring it as one paid an empty submission for the
+            # levels whose truth is `None` -- see `_read_claim`.
+            unreadable.append(level)
+            per_level[level] = 0.0
+            continue
+        if not claimed:
+            said_never.append(level)
         per_level[level] = _index_fraction(index if claimed else None,
                                            truth_map[level])
     fraction = (sum(per_level.values()) / len(per_level)) if per_level else 0.0
 
-    said_never = sorted(k for k in truth_map
-                        if not _read_index(said_map.get(k))[0])
     detail = {"per_level_fraction": {k: round(v, 6) for k, v in per_level.items()},
-              "claimed_never_on": said_never,
+              "claimed_never_on": sorted(said_never),
+              "unreadable_on": sorted(unreadable),
               "truth_never_on": sorted(k for k, v in truth_map.items() if v is None)}
-    said = "never" if len(said_never) == len(truth_map) else "detected"
+    if len(unreadable) == len(truth_map):
+        said = "unreadable"
+    elif len(said_never) == len(truth_map):
+        said = "never"
+    else:
+        said = "detected"
     return _score(item, fraction, said, detail)
 
 
