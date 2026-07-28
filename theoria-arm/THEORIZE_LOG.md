@@ -255,10 +255,23 @@ Things the world said that the DSL, the compiler, or this arm could not.
 | E-01 | two events from one rule (`then moved(A, down) and moved(B, up)`) | `ParseError: Invalid function call`. Observed in the offline dry run: the desk inferred the syntax from `cascade single_frame` and the guard grammar's `and`, and it does not exist. | the desk must split one observed simultaneity into two rules with identical guards, which `conflict exclusive` then has to be told is not an ambiguity |
 | E-02 | a landmark's coordinates | the DSL has nowhere to write them (correctly — they are level data), but the arm supplied no `landmarks` either, so every manual declaring one failed to compile | one aborted run and $1.31; fixed by `# arc-cell: (r, c)` on the declaration line |
 | E-03 | a literal colour in the word table | `object Cart { color: Int }` names the field, never the value, so the arm cannot find the object in the frame | `# arc-colour: <n>` on the declaration line, read by the arm, invisible to the compiler |
+| E-08 | **an object with extent** | `gen_python`'s `render` paints exactly one cell per instance (`grid[r][c] = colour`), so a 24-pixel ring declared as one object is drawn as one pixel and the other 23 are unexplained forever. **This is what made the first run's responsibility count oscillate rather than fall.** | **FIXED, arm side.** `# arc-instances: all` spreads one declaration over every cell of that colour the board cannot explain, one instance each of the same type, so `forall ?x in <Type>` grounds a rule over the whole object. Measured on the first run's own manual and frames: **69 unexplained → 24**. The one-cell-per-instance limit itself is `theory-compiler`'s and remains |
 | E-04 | a click action with coordinates | the guard language has no way to say "act on cell (r, c)" | not needed on `g50t` (`available_actions` is `[1..5]`), but it shuts the click family out of this arm entirely; the card tells the desk to raise it as a `theorem`, never to invent syntax |
 | E-05 | one pixel of an object turning a new colour | `recolored(o, c)` recolours a whole object and there is no `grew(o)`; a counter that fills a pixel at a time cannot be written | the manual leaves the row-63 tally bar unexplained in the frames where it has partly filled, and says so |
 | E-06 | a rule schema over cells at a fixed pitch (`moved` by six) | `moved(o, dir)` is one cell and `jumped(o, landmark)` needs a named destination, so a regular grid of cells needs one landmark and one rule *per cell* | the manual covers the two cells witnessed and explicitly predicts nothing about the other 46; the pitch is carried as a theorem |
 | E-07 | prose in an `invariant` | `invariant` bodies must contain a comparison operator; only `theorem` takes a sentence. The desk conflated them and the parse failed with "No comparison op in invariant" | one repair round, $1.33. The card now states the rule in the imperative and a test pins both halves — this one was a prompt bug, not a language limit |
+
+**E-08 was the load-bearing one and it was ours.** Two objects sharing a
+colour still cannot be told apart (that part of `O-03` stands, and is
+`theory-compiler`-adjacent), but *an object being bigger than one pixel* was
+purely this arm's limit: the level generator produced one instance per
+declaration and left the rest of the object homeless. The DSL was never in the
+way — it grounds `forall ?x in <Type>` over as many instances as the level
+supplies, and the level is ours to compute. The measurement on the first run's
+own artefacts: 3 instances and 69 unexplained pixels before, 47 instances and
+24 after. What is left is a modelling job the desk can now actually do — 24
+cells whose colour no declaration claims — rather than a wall it could only
+write a theorem about.
 
 E-02 and E-03 are the same shape and worth naming as one: **the domain/problem
 split is real and the DSL enforces it, but the arm has to carry the problem

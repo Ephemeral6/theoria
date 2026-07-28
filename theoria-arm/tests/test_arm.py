@@ -271,6 +271,111 @@ def test_the_problem_instance_is_computed_not_written(tmp_path):
     assert problem["board"][0][1] == problem["background"]
 
 
+def _ring_store():
+    """A 6x6 world, a 4-cell ring of colour 9 that moves down, a colour-3 pip."""
+    def frame(ring, pip=(0, 5)):
+        grid = [[0] * 6 for _ in range(6)]
+        for r, c in ring:
+            grid[r][c] = 9
+        grid[pip[0]][pip[1]] = 3
+        return grid
+    return _store([frame([(1, 1), (1, 2), (2, 1), (2, 2)]),
+                   frame([(3, 1), (3, 2), (4, 1), (4, 2)])], ["ACTION2"])
+
+
+RING_THEORY = """semantics:
+  frame persist
+  conflict exclusive
+  cascade single_frame
+
+word_table:
+  board
+  object Ring { pos: Coord, color: Int }   # arc-colour: 9  arc-instances: all
+  Ring [segment: uniform_color ev: t0-t1 compress: 0]
+
+events:
+  event moved(o, dir)
+
+rules:
+  rule shift forall ?p in Ring [ev: t1 cov: 1/1]
+    when act=key(2) and free(below(?p)) then moved(?p, down)
+"""
+
+
+def test_one_declaration_covers_every_cell_the_board_cannot_explain(tmp_path):
+    """E-08. `render` paints one cell per instance, so an object with extent
+    needs one instance per cell. Before this, a 4-cell ring was drawn as a
+    single pixel and the other three were unexplained forever -- which is what
+    made the first live run's responsibility count oscillate instead of fall."""
+    store = _ring_store()
+    decls = theorize._objects_from_theory(RING_THEORY)
+    assert decls[0]["instances"] == "all"
+
+    problem = problem_from_frames(store, decls)
+    assert len(problem["objects"]) == 4
+    assert {o["name"] for o in problem["objects"]} == {
+        "Ring_r1c1", "Ring_r1c2", "Ring_r2c1", "Ring_r2c2"}
+    assert all(o["type"] == "Ring" for o in problem["objects"])
+    assert problem["instances_per_declaration"] == {"Ring": 4}
+
+    books = Books(str(tmp_path))
+    books.write(theory=RING_THEORY)
+    books.write_problem(problem)
+    result = books.compile_all()
+    assert result["ok"], result["errors"]
+
+    namespace, error = books.load_predictor()
+    assert namespace is not None, error
+    # `forall ?p in Ring` grounds once per instance.
+    assert len(namespace["RULES"]) == 4
+    # And the responsibility check goes green, which is the whole point.
+    drawn = namespace["render"](namespace["initial_state"]())
+    assert describe_diff(drawn, store.grids[0]) == "no cells changed"
+
+
+def test_the_level_predicts_the_responsibility_count_certify_will_report(tmp_path):
+    """A number in the level file that disagreed with the check it predicts
+    would be worse than no number. A dynamic cell showing the BACKGROUND colour
+    at t0 needs no owner -- the board already draws it."""
+    store = _ring_store()
+    problem = problem_from_frames(store,
+                                  theorize._objects_from_theory(RING_THEORY))
+    r = problem["responsibility"]
+    assert r["dynamic_cells"] == 8          # 4 vacated + 4 arrived-at
+    assert r["need_an_owner_at_t0"] == 4    # only the 4 the ring occupies at t0
+    assert r["n_unexplained_at_t0"] == 0
+
+    books = Books(str(tmp_path))
+    books.write(theory=RING_THEORY)
+    books.write_problem(problem)
+    books.compile_all()
+    report = certify.cheap(books, store, commit.action_to_manual)
+    assert report["checks"]["responsibility"]["ok"] is True
+    assert (report["checks"]["responsibility"]["cells_unexplained"]
+            == r["n_unexplained_at_t0"])
+
+
+def test_a_declaration_that_would_swallow_the_frame_is_capped_and_says_so():
+    from inner.books import MAX_INSTANCES_PER_DECL     # noqa: PLC0415
+    grids = [[[0] * 64 for _ in range(64)] for _ in range(2)]
+    for i in range(400):                               # 400 dynamic cells of colour 7
+        grids[0][i // 64][i % 64] = 7
+    store = _store(grids, ["ACTION1"])
+    problem = problem_from_frames(
+        store, [{"name": "Blob", "type": "Blob", "color": 7, "instances": "all"}])
+    assert len(problem["objects"]) == MAX_INSTANCES_PER_DECL
+    assert problem["instance_caps_hit"]
+    assert "capped" in problem["instance_caps_hit"][0]
+
+
+def test_a_single_cell_object_is_still_a_single_instance():
+    store = _ring_store()
+    problem = problem_from_frames(
+        store, [{"name": "Pip", "type": "Pip", "color": 3, "instances": "one"}])
+    assert len(problem["objects"]) == 1
+    assert "instances_per_declaration" not in problem
+
+
 def test_an_object_the_frame_cannot_locate_is_recorded_not_crashed(tmp_path):
     store = _store([[[0, 0], [0, 6]], [[0, 6], [0, 0]]], ["ACTION1"])
     problem = problem_from_frames(store, [{"name": "Ghost", "type": "Ghost",

@@ -37,6 +37,18 @@ import _bootstrap                                     # noqa: F401  (sys.path)
 #: the run is not.
 LEAN_STATE_CEILING = 200_000
 
+#: How many instances one `arc-instances: all` declaration may produce.
+#:
+#: Each instance becomes two fields on the generated `State` dataclass and
+#: multiplies every `forall`-grounded rule, so `step` cost is linear in this and
+#: BFS cost is worse. The bound that matters is the dynamic set -- objects only
+#: ever cover cells the board cannot explain -- and on a 64x64 ARC frame that
+#: has been observed for a few dozen commands the dynamic set is in the dozens
+#: to low hundreds. This cap exists so a declaration naming the background
+#: colour cannot produce four thousand instances; when it bites, the level file
+#: says so in `instance_caps_hit` rather than silently truncating.
+MAX_INSTANCES_PER_DECL = 150
+
 
 class CompileResult(dict):
     pass
@@ -275,8 +287,45 @@ def problem_from_frames(store, objects: List[Dict[str, Any]], *,
 
     instances = []
     unlocated = []
+    spread: Dict[str, int] = {}
+    capped: List[str] = []
     for decl in objects:
         colour = decl.get("color")
+
+        # E-08: one declaration may cover many cells.
+        #
+        # `gen_python`'s `render` paints exactly one cell per instance
+        # (`grid[r][c] = colour`), so an object with extent -- a 24-cell ring, a
+        # 3x3 token -- cannot be one instance however it is declared. That limit
+        # is theory-compiler's and is not ours to change. What *was* ours, and
+        # was wrong, is that a declaration produced exactly one instance at the
+        # first matching cell, which left every other cell of the object with no
+        # owner and the responsibility check reporting them forever.
+        #
+        # `arc-instances: all` uses the compiler's own machinery instead of
+        # fighting it: one instance per cell, all of the same declared TYPE, so
+        # `forall ?x in <Type>` grounds a rule over the whole object. The cells
+        # chosen are the DYNAMIC ones showing that colour -- the board already
+        # explains the constant cells, and constraint 2 asks objects to account
+        # for exactly what the board cannot.
+        if decl.get("instances") == "all" and colour is not None:
+            cells = sorted(cell for cell in dynamic
+                           if grid[cell[0]][cell[1]] == colour)
+            if len(cells) > MAX_INSTANCES_PER_DECL:
+                capped.append("%s: %d cells of colour %s, capped at %d"
+                              % (decl["name"], len(cells), colour,
+                                 MAX_INSTANCES_PER_DECL))
+                cells = cells[:MAX_INSTANCES_PER_DECL]
+            if not cells:
+                unlocated.append(decl["name"])
+            spread[decl["name"]] = len(cells)
+            for r, c in cells:
+                instances.append({
+                    "name": "%s_r%dc%d" % (decl["name"], r, c),
+                    "type": decl.get("type", decl["name"]),
+                    "pos": [r, c], "present": True, "color": colour})
+            continue
+
         pos = _find_colour(grid, colour) if colour is not None else None
         if pos is None:
             # A declared object the frame cannot locate is a defect in the
@@ -294,6 +343,32 @@ def problem_from_frames(store, objects: List[Dict[str, Any]], *,
 
     problem = {"name": name, "grid": [height, width], "background": background,
                "board": board, "objects": instances}
+    if spread:
+        problem["instances_per_declaration"] = spread
+    if capped:
+        problem["instance_caps_hit"] = capped
+    # What the manual's objects will and will not be able to draw, computed
+    # here so the number is in the level file rather than only in certify's
+    # report -- and computed the way certify computes it, or it would be a
+    # number that disagrees with the check it predicts.
+    #
+    # A dynamic cell needs an owner only if it is NOT showing the background
+    # colour at t0: the board writes background into every dynamic cell, so a
+    # dynamic cell that happens to be background at t0 already renders
+    # correctly. Counting those as unexplained (the first version of this did)
+    # over-reports by exactly the number of cells an object has yet to move
+    # into.
+    owned = {(i["pos"][0], i["pos"][1]) for i in instances if i.get("present")}
+    needs_owner = {cell for cell in dynamic
+                   if grid[cell[0]][cell[1]] != background}
+    problem["responsibility"] = {
+        "dynamic_cells": len(dynamic),
+        "need_an_owner_at_t0": len(needs_owner),
+        "covered_by_objects": len(owned & needs_owner),
+        "will_be_unexplained_at_t0": sorted(
+            [list(c) for c in (needs_owner - owned)])[:32],
+        "n_unexplained_at_t0": len(needs_owner - owned),
+    }
     # A landmark the manual declares but the level does not locate is a HARD
     # error in `check_against_theory` -- the rule that names it has no value to
     # use -- so a manual that reaches for a named cell cannot compile unless the

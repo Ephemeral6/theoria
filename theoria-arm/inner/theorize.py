@@ -402,5 +402,11 @@ def _objects_from_theory(text: str) -> List[Dict[str, Any]]:
         hint = re.search(r"arc-colou?r\s*[:=]\s*(\d+)", tail)
         if hint:
             colour = int(hint.group(1))
-        out.append({"name": name, "type": name, "color": colour})
+        # `arc-instances: all` spreads one declaration over every dynamic cell
+        # of that colour, as one instance each of the same type -- the only way
+        # an object with extent can be drawn, because the generated `render`
+        # paints one cell per instance. See `books.problem_from_frames`.
+        spread = re.search(r"arc-instances\s*[:=]\s*(all|one)\b", tail)
+        out.append({"name": name, "type": name, "color": colour,
+                    "instances": (spread.group(1) if spread else "one")})
     return out

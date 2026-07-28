@@ -264,6 +264,13 @@ class FrameStore:
             "colours_seen": sorted(hist),
             "constant_cells": len(self.constant_cells()),
             "dynamic_cells": len(dynamic),
+            # The number the manual's objects actually have to cover: a dynamic
+            # cell showing the background colour in frame 0 is already drawn
+            # correctly by the board, so only the rest need an owner. This is
+            # the figure certify's responsibility pass will report against.
+            "cells_needing_an_owner": sum(
+                1 for r, c in dynamic
+                if grids and grids[0][r][c] != self.background()),
             "dynamic_box": list(self.bounding_box(dynamic) or []) or None,
             "cascade_lengths": sorted({s.n_frames for s in self.steps}),
             "max_frames_in_one_command": max((s.n_frames for s in self.steps),

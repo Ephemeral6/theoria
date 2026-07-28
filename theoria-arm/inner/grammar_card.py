@@ -48,9 +48,39 @@ one space. Order is free. `#` starts a comment on its own line.
   decoration: the level instance is COMPUTED from the frames, and the colour is
   how the arm finds your object in the grid. An object without it is located
   nowhere, is drawn at (0,0), and the responsibility check will report every
-  one of its pixels as unexplained. If two objects share a colour, they cannot
-  be told apart by this arm -- declare one object, or say in a `theorem` that
-  you believe there are two and why.
+  one of its pixels as unexplained.
+
+### OBJECTS WITH EXTENT — read this before declaring anything
+An instance is drawn as EXACTLY ONE CELL. A 3x3 token or a 24-pixel ring is
+therefore not one instance, however you declare it, and if you declare it as
+one then every other cell of it is an unexplained pixel forever.
+
+Add `arc-instances: all` and the arm creates ONE INSTANCE PER CELL, all of the
+same declared type, covering every cell of that colour the board cannot explain:
+
+    object Ring  { pos: Coord, color: Int }   # arc-colour: 9  arc-instances: all
+    object Token { pos: Coord, color: Int }   # arc-colour: 1  arc-instances: all
+    object Pip   { pos: Coord, color: Int }   # arc-colour: 3
+
+`Pip` has no `arc-instances`, so it is a single cell — correct for a genuine
+one-pixel marker, wrong for anything else.
+
+Consequences you must design for:
+
+* **There is no instance called `Ring`.** There are `Ring_r8c14`,
+  `Ring_r8c15`, … A rule that names `Ring` will not compile. Write rules over
+  the TYPE instead:
+
+        rule shift forall ?p in Ring [ev: t2 cov: 1/1]
+          when act=key(2) and free(below(?p)) then moved(?p, down)
+
+  `forall ?p in <ObjectType>` grounds the rule once per instance.
+* **Every cell that ever changed needs an owner**, or it is unexplained. Count
+  them: the evidence brief gives you `dynamic_cells`. If your declarations
+  cannot cover them all, say which are left over and why, in a `theorem`.
+* Two objects of the SAME colour still cannot be told apart by this arm — it
+  looks objects up by colour and nothing else. Declare one type covering both
+  and carry the belief that they are distinct as a `theorem`.
 
 ## events:
     event moved(o, dir) | jumped(o, dest) | recolored(o, c) | vanished(o)
