@@ -87,3 +87,71 @@ The check reports the value of neither: the key is loaded through
 `mask()`. It runs **before** the enumerator and again on every regeneration,
 because a release manifest publishes every tracked file and `CLAUDE.md` records
 that a key committed here is a key published later, effectively irreversibly.
+
+---
+
+## From the classification to the package (R2)
+
+The classification above is a judgement. `release/bundle.py` is the acting-on:
+it reads `MANIFEST.jsonl` and writes the two files that a person assembling the
+release actually uses.
+
+| file | what it is |
+|---|---|
+| `release/BUNDLE.jsonl` | the **1,930** files that ship — allow-listed by verdict, each carrying its class and, where flagged, the reason to read it once |
+| `release/FRAME_HASHES.jsonl` | the **20** that do not — path, sha256, size, the evidence for the verdict, and the command that regenerates it |
+
+```bash
+python release/bundle.py            # rebuild both
+python release/bundle.py --check    # fail if stale, or if anything ships that may not
+```
+
+Three properties are worth naming because each exists to prevent a specific way
+of publishing something we may not:
+
+* **Allow-list, never deny-list.** A file ships only on an explicitly listed
+  verdict, so an artefact class nobody has classified yet (`needs_human`) is out
+  by default. A deny-list ships everything nobody thought about.
+* **What is withheld is enumerated, hashed, and given a recipe.** An unmet
+  openness target stated as a named gap is honest; the same target unmet by
+  silent omission is not. A reader with their own ARC key regenerates the bytes
+  and checks them against our hash.
+* **`--check` re-derives rather than trusts.** A bundle built once and then
+  drifting from the manifest is worse than no bundle: it carries the authority
+  of having been checked.
+
+`releasable-flagged` **ships**. It is class C — derived statistics that mention
+ARC identifiers without carrying environment payload — and the flag is an
+instruction to a human reader, not a licence reservation. Withholding all 146
+would hold back `CLAUDE.md` and `PARTNER_SYNC.md`, and a filter that
+over-withholds is a filter somebody widens in a hurry on release day, which is
+how the under-withholding accident happens.
+
+## needs_human
+
+**Nobody on this track applies for the republication permission.** `TERMS.md`
+§2 requires *"express prior written permission"* and the default is refusal;
+asking for it is a commitment made in the project's name, to a named
+counterparty, about how third-party material will be used. That is a human
+decision, and it is recorded here rather than actioned.
+
+1. **Apply, or decide not to, for permission to republish the 20 withheld ARC
+   interaction records.** Contact point per `TERMS.md`: the address ARC gives
+   for licence questions. If granted, the 20 move to `releasable` and
+   `bundle.py` picks them up with no code change; if refused or not sought, the
+   openness statement stands as drafted. **Blocks nothing** — the release is
+   shippable today without it, one limitation lighter or heavier.
+2. **Settle `battery/tests/fixtures/ledger_fixture.jsonl`.** The enumerator
+   holds it at class B while flagging it as probably synthetic, because the file
+   alone cannot prove its own provenance. A human who knows
+   `battery/tests/make_fixture.py` wrote it can reclassify it to A in one line.
+   Until then it is withheld, which is the safe direction.
+
+**One self-reference, stated so it does not surprise anyone.** `BUNDLE.jsonl`
+and `FRAME_HASHES.jsonl` are themselves tracked, so the next `enumerate.py` run
+classifies them too and the manifest grows. Both land in class C — they name ARC
+game ids in file paths but carry no environment payload — so they ship, and the
+red-line check is clear over them (no sealed id, no credential). The practical
+consequence is only that **the 1,930 / 20 counts move as the repository grows**,
+which is why `bundle.py --check` exists and why the openness statement says to
+re-derive them at submission rather than quoting this file.
