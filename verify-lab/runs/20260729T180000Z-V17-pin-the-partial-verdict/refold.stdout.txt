@@ -1,0 +1,5 @@
+substituted 22 re-judged rows into the gold standard
+  strict before n=145  TP 35  FN 36  FP 1   TN 73  FNR 0.507 FPR 0.014
+  strict after  n=145  TP 34  FN 28  FP 2   TN 81  FNR 0.452 FPR 0.024
+  harsh  before n=145  TP 26  FN 18  FP 10  TN 91  FNR 0.409 FPR 0.099
+  harsh  after  n=145  TP 25  FN 18  FP 11  TN 91  FNR 0.419 FPR 0.108

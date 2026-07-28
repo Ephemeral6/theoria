@@ -1,0 +1,625 @@
+{
+  "incomplete_judges": {},
+  "kappa_delta_bootstrap": {
+    "can_red_PLACEBO": {
+      "ci95": [
+        -0.306,
+        0.0
+      ],
+      "draws": 19999,
+      "p_delta_le_0": 1.0,
+      "point": -0.124
+    },
+    "has_negctl_all": {
+      "ci95": [
+        -0.109,
+        0.33
+      ],
+      "draws": 20000,
+      "p_delta_le_0": 0.141,
+      "point": 0.118
+    },
+    "has_negctl_partial_stratum": {
+      "ci95": [
+        -0.533,
+        0.415
+      ],
+      "draws": 19967,
+      "p_delta_le_0": 0.348,
+      "point": 0.078
+    }
+  },
+  "new": {
+    "can_red_all_PLACEBO": {
+      "distribution": {
+        "否": 2,
+        "是": 43,
+        "部分": 21
+      },
+      "kappa": 0.872,
+      "n_items": 22,
+      "po": 0.939,
+      "unanimous": 20,
+      "unanimous_pct": 0.909
+    },
+    "has_negctl_all": {
+      "distribution": {
+        "否": 43,
+        "是": 12,
+        "部分": 11
+      },
+      "kappa": 0.882,
+      "n_items": 22,
+      "po": 0.939,
+      "unanimous": 20,
+      "unanimous_pct": 0.909
+    },
+    "has_negctl_partial_stratum": {
+      "distribution": {
+        "否": 31,
+        "是": 3,
+        "部分": 8
+      },
+      "kappa": 0.77,
+      "n_items": 14,
+      "po": 0.905,
+      "unanimous": 12,
+      "unanimous_pct": 0.857
+    },
+    "judges": [
+      "N1",
+      "N2",
+      "N3"
+    ]
+  },
+  "old": {
+    "can_red_all_PLACEBO": {
+      "distribution": {
+        "否": 0,
+        "是": 42,
+        "部分": 24
+      },
+      "kappa": 1.0,
+      "n_items": 22,
+      "po": 1.0,
+      "unanimous": 22,
+      "unanimous_pct": 1.0
+    },
+    "has_negctl_all": {
+      "distribution": {
+        "否": 16,
+        "是": 30,
+        "部分": 20
+      },
+      "kappa": 0.764,
+      "n_items": 22,
+      "po": 0.848,
+      "unanimous": 17,
+      "unanimous_pct": 0.773
+    },
+    "has_negctl_partial_stratum": {
+      "distribution": {
+        "否": 6,
+        "是": 18,
+        "部分": 18
+      },
+      "kappa": 0.689,
+      "n_items": 14,
+      "po": 0.81,
+      "unanimous": 10,
+      "unanimous_pct": 0.714
+    },
+    "judges": [
+      "O1",
+      "O2",
+      "O3"
+    ]
+  },
+  "partial_n": 14,
+  "per_row": {
+    "ablation-arm/exhibits/e2_a2.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "部分",
+      "O2": "部分",
+      "O3": "部分"
+    },
+    "baseline-arms/harness/summarise_envelope.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "部分",
+      "O2": "部分",
+      "O3": "部分"
+    },
+    "cold-start-a0/certify/replay.py": {
+      "N1": "部分",
+      "N2": "部分",
+      "N3": "部分",
+      "O1": "是",
+      "O2": "是",
+      "O3": "是"
+    },
+    "cold-start-a0/pipeline/engines_stage.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "否",
+      "O2": "否",
+      "O3": "否"
+    },
+    "cold-start-a2/a2pipeline/certify_a2.py": {
+      "N1": "部分",
+      "N2": "部分",
+      "N3": "部分",
+      "O1": "是",
+      "O2": "是",
+      "O3": "是"
+    },
+    "cold-start-a2/a2pipeline/exhibit.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "部分",
+      "O1": "部分",
+      "O2": "部分",
+      "O3": "是"
+    },
+    "cold-start-a2/a2pipeline/repair.py": {
+      "N1": "部分",
+      "N2": "部分",
+      "N3": "部分",
+      "O1": "是",
+      "O2": "是",
+      "O3": "是"
+    },
+    "cold-start-a3/a3pipeline/certify_a3.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "是",
+      "O2": "是",
+      "O3": "是"
+    },
+    "cold-start-a3/a3pipeline/run_l1.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "否",
+      "O2": "否",
+      "O3": "否"
+    },
+    "engine-rig/engines/fd_adapter/validate.py": {
+      "N1": "是",
+      "N2": "是",
+      "N3": "是",
+      "O1": "是",
+      "O2": "是",
+      "O3": "是"
+    },
+    "engine-rig/fixtures/pair_flip.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "否",
+      "O2": "否",
+      "O3": "否"
+    },
+    "engine-rig/recheck/verify_all.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "部分",
+      "O1": "是",
+      "O2": "是",
+      "O3": "是"
+    },
+    "exam/model.py": {
+      "N1": "是",
+      "N2": "是",
+      "N3": "是",
+      "O1": "是",
+      "O2": "是",
+      "O3": "是"
+    },
+    "exam/papers/handover.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "部分",
+      "O2": "部分",
+      "O3": "部分"
+    },
+    "monitor/ci_merge.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "部分",
+      "O2": "否",
+      "O3": "部分"
+    },
+    "monitor/gates.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "部分",
+      "O2": "否",
+      "O3": "否"
+    },
+    "monitor/quota.py": {
+      "N1": "是",
+      "N2": "是",
+      "N3": "是",
+      "O1": "是",
+      "O2": "是",
+      "O3": "是"
+    },
+    "monitor/reflex.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "是",
+      "O2": "是",
+      "O3": "部分"
+    },
+    "monitor/scan.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "部分",
+      "O2": "部分",
+      "O3": "部分"
+    },
+    "papers/phase1-workshop/figures/fig2_coverage_accuracy.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "否",
+      "O2": "否",
+      "O3": "否"
+    },
+    "theory-compiler/src/theory_compiler/strips_encoding.py": {
+      "N1": "是",
+      "N2": "是",
+      "N3": "是",
+      "O1": "是",
+      "O2": "是",
+      "O3": "是"
+    },
+    "worldgen/generate.py": {
+      "N1": "否",
+      "N2": "否",
+      "N3": "否",
+      "O1": "部分",
+      "O2": "部分",
+      "O3": "否"
+    }
+  },
+  "reason_code_agreement": {
+    "n": 22,
+    "per_row": {
+      "ablation-arm/exhibits/e2_a2.py": [
+        "D2",
+        "D2",
+        "D3"
+      ],
+      "baseline-arms/harness/summarise_envelope.py": [
+        "D2",
+        "D2",
+        "D2"
+      ],
+      "cold-start-a0/certify/replay.py": [
+        "C",
+        "C",
+        "C"
+      ],
+      "cold-start-a0/pipeline/engines_stage.py": [
+        "D2",
+        "D2",
+        "D2"
+      ],
+      "cold-start-a2/a2pipeline/certify_a2.py": [
+        "C",
+        "C",
+        "C"
+      ],
+      "cold-start-a2/a2pipeline/exhibit.py": [
+        "D3",
+        "D3",
+        "C"
+      ],
+      "cold-start-a2/a2pipeline/repair.py": [
+        "C",
+        "C",
+        "C"
+      ],
+      "cold-start-a3/a3pipeline/certify_a3.py": [
+        "D3",
+        "D3",
+        "D3"
+      ],
+      "cold-start-a3/a3pipeline/run_l1.py": [
+        "D1",
+        "D1",
+        "D1"
+      ],
+      "engine-rig/engines/fd_adapter/validate.py": [
+        "—",
+        "—",
+        "—"
+      ],
+      "engine-rig/fixtures/pair_flip.py": [
+        "D2",
+        "D2",
+        "D2"
+      ],
+      "engine-rig/recheck/verify_all.py": [
+        "D2",
+        "D2",
+        "C"
+      ],
+      "exam/model.py": [
+        "—",
+        "—",
+        "—"
+      ],
+      "exam/papers/handover.py": [
+        "D2",
+        "D2",
+        "D2"
+      ],
+      "monitor/ci_merge.py": [
+        "D1",
+        "D0",
+        "D1"
+      ],
+      "monitor/gates.py": [
+        "D0",
+        "D0",
+        "D0"
+      ],
+      "monitor/quota.py": [
+        "—",
+        "—",
+        "—"
+      ],
+      "monitor/reflex.py": [
+        "D1",
+        "D0",
+        "D1"
+      ],
+      "monitor/scan.py": [
+        "D3",
+        "D0",
+        "D2"
+      ],
+      "papers/phase1-workshop/figures/fig2_coverage_accuracy.py": [
+        "D1",
+        "D0",
+        "D1"
+      ],
+      "theory-compiler/src/theory_compiler/strips_encoding.py": [
+        "—",
+        "—",
+        "—"
+      ],
+      "worldgen/generate.py": [
+        "D2",
+        "D2",
+        "D2"
+      ]
+    },
+    "po": 0.773,
+    "unanimous": 15
+  },
+  "reason_codes_new_arm": {
+    "C": 11,
+    "D0": 7,
+    "D1": 9,
+    "D2": 20,
+    "D3": 7,
+    "—": 12
+  },
+  "rejudgement": {
+    "change_rate": 0.857,
+    "changed": 12,
+    "n": 14,
+    "rows": [
+      {
+        "changed": true,
+        "new_majority": "否",
+        "path": "ablation-arm/exhibits/e2_a2.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "否",
+          "否",
+          "否"
+        ]
+      },
+      {
+        "changed": true,
+        "new_majority": "否",
+        "path": "baseline-arms/harness/summarise_envelope.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "否",
+          "否",
+          "否"
+        ]
+      },
+      {
+        "changed": false,
+        "new_majority": "部分",
+        "path": "cold-start-a2/a2pipeline/certify_a2.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "部分",
+          "部分",
+          "部分"
+        ]
+      },
+      {
+        "changed": true,
+        "new_majority": "否",
+        "path": "cold-start-a2/a2pipeline/exhibit.py",
+        "split": true,
+        "v15": "部分",
+        "votes": [
+          "否",
+          "否",
+          "部分"
+        ]
+      },
+      {
+        "changed": false,
+        "new_majority": "部分",
+        "path": "cold-start-a2/a2pipeline/repair.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "部分",
+          "部分",
+          "部分"
+        ]
+      },
+      {
+        "changed": true,
+        "new_majority": "否",
+        "path": "cold-start-a3/a3pipeline/certify_a3.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "否",
+          "否",
+          "否"
+        ]
+      },
+      {
+        "changed": true,
+        "new_majority": "否",
+        "path": "cold-start-a3/a3pipeline/run_l1.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "否",
+          "否",
+          "否"
+        ]
+      },
+      {
+        "changed": true,
+        "new_majority": "否",
+        "path": "engine-rig/recheck/verify_all.py",
+        "split": true,
+        "v15": "部分",
+        "votes": [
+          "否",
+          "否",
+          "部分"
+        ]
+      },
+      {
+        "changed": true,
+        "new_majority": "否",
+        "path": "exam/papers/handover.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "否",
+          "否",
+          "否"
+        ]
+      },
+      {
+        "changed": true,
+        "new_majority": "否",
+        "path": "monitor/gates.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "否",
+          "否",
+          "否"
+        ]
+      },
+      {
+        "changed": true,
+        "new_majority": "否",
+        "path": "monitor/reflex.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "否",
+          "否",
+          "否"
+        ]
+      },
+      {
+        "changed": true,
+        "new_majority": "否",
+        "path": "monitor/scan.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "否",
+          "否",
+          "否"
+        ]
+      },
+      {
+        "changed": true,
+        "new_majority": "是",
+        "path": "theory-compiler/src/theory_compiler/strips_encoding.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "是",
+          "是",
+          "是"
+        ]
+      },
+      {
+        "changed": true,
+        "new_majority": "否",
+        "path": "worldgen/generate.py",
+        "split": false,
+        "v15": "部分",
+        "votes": [
+          "否",
+          "否",
+          "否"
+        ]
+      }
+    ],
+    "split_panels": 2
+  },
+  "reproduces_v15": {
+    "new": {
+      "all": {
+        "n": 22,
+        "rate": 0.409,
+        "reproduced": 9
+      },
+      "partial_stratum": {
+        "n": 14,
+        "rate": 0.143,
+        "reproduced": 2
+      }
+    },
+    "old": {
+      "all": {
+        "n": 22,
+        "rate": 0.591,
+        "reproduced": 13
+      },
+      "partial_stratum": {
+        "n": 14,
+        "rate": 0.429,
+        "reproduced": 6
+      }
+    }
+  },
+  "sample_n": 22
+}

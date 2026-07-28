@@ -116,6 +116,45 @@ def score(tables: Dict[str, Dict[str, Dict[str, str]]], judges: Sequence[str],
     }
 
 
+def bootstrap_delta(tables: Dict[str, Dict[str, Dict[str, str]]],
+                    paths: Sequence[str], field: str, draws: int = 20000,
+                    seed: int = 20260729) -> Dict[str, object]:
+    """Percentile interval for kappa(new) - kappa(old), resampling *items*.
+
+    n = 22 items and three judges per arm. A kappa difference of 0.08 on a
+    14-item stratum is not obviously distinguishable from noise, and saying so
+    with an interval is cheaper than arguing about it. Items are resampled with
+    replacement -- judges are a fixed panel, not a sample, so they are not
+    resampled.
+    """
+    import random
+    rng = random.Random(seed)
+    cols = {arm: [[tables[j][p][field] for p in paths] for j in judges]
+            for arm, judges in ARMS.items()}
+    deltas: List[float] = []
+    idx = range(len(paths))
+    for _ in range(draws):
+        pick = [rng.choice(idx) for _ in idx]
+        ks = {}
+        for arm in ARMS:
+            resampled = [[col[i] for i in pick] for col in cols[arm]]
+            ks[arm] = _fleiss(resampled)
+        if ks["old"] is None or ks["new"] is None:
+            continue
+        deltas.append(ks["new"] - ks["old"])
+    deltas.sort()
+    if not deltas:
+        return {"draws": 0}
+    def q(p: float) -> float:
+        return deltas[min(len(deltas) - 1, int(p * len(deltas)))]
+    return {
+        "draws": len(deltas),
+        "point": round(deltas[len(deltas) // 2], 3),
+        "ci95": [round(q(0.025), 3), round(q(0.975), 3)],
+        "p_delta_le_0": round(sum(1 for d in deltas if d <= 0) / len(deltas), 3),
+    }
+
+
 def run(dirpath: str, sample: str) -> Dict[str, object]:
     blob = json.load(open(sample, encoding="utf-8"))
     rows = blob["rows"]
@@ -152,6 +191,34 @@ def run(dirpath: str, sample: str) -> Dict[str, object]:
             "can_red_all_PLACEBO": score(tables, judges, all_paths, "can_red"),
         }
 
+    rep["kappa_delta_bootstrap"] = {
+        "has_negctl_all": bootstrap_delta(tables, all_paths, "has_negctl"),
+        "has_negctl_partial_stratum": bootstrap_delta(tables, partial_paths,
+                                                      "has_negctl"),
+        "can_red_PLACEBO": bootstrap_delta(tables, all_paths, "can_red"),
+    }
+
+    # Test-retest against V15. The `old` arm is the important one: three fresh
+    # judges, V15's own criterion verbatim, V15's own rows. Whatever they fail to
+    # reproduce is unreliability in the published gold standard, and it is
+    # measurable here for the first time -- V11 and V15 left no overlapping rows,
+    # so nothing in the 253 could ever have shown it.
+    def _majority(votes: Sequence[str]) -> str:
+        return max(CATS, key=lambda c: (votes.count(c), -CATS.index(c)))
+
+    repro: Dict[str, object] = {}
+    for arm, judges in ARMS.items():
+        per_scope: Dict[str, object] = {}
+        for scope, scope_paths in (("all", all_paths), ("partial_stratum", partial_paths)):
+            hit = sum(1 for p in scope_paths
+                      if _majority([tables[j][p]["has_negctl"] for j in judges]) == v15[p])
+            per_scope[scope] = {
+                "n": len(scope_paths), "reproduced": hit,
+                "rate": round(hit / len(scope_paths), 3) if scope_paths else None,
+            }
+        repro[arm] = per_scope
+    rep["reproduces_v15"] = repro
+
     # Re-judgement outcome: what the new arm's majority says about the 14 rows
     # V15 called `部分`, and how often that differs from V15.
     changed: List[Dict[str, object]] = []
@@ -179,6 +246,26 @@ def run(dirpath: str, sample: str) -> Dict[str, object]:
             code = tables[judge][path].get("reason") or "(none)"
             reasons[code] = reasons.get(code, 0) + 1
     rep["reason_codes_new_arm"] = reasons
+
+    # Does the reason code agree? This is not a nicety. The criterion's whole
+    # defence against "you made 部分 narrow by hiding the disagreement in 否" is
+    # that a row leaving 部分 carries a typed reason, so anyone can re-fold at
+    # D1/D2/D3. If the three judges write different codes for the same row, that
+    # ledger is not a ledger and the defence fails.
+    codes = [[tables[j][p].get("reason") or "(none)" for p in all_paths]
+             for j in ARMS["new"]]
+    pairs = [(0, 1), (0, 2), (1, 2)]
+    agree_code = sum(sum(1 for a, b in zip(codes[i], codes[j]) if a == b)
+                     for i, j in pairs) / (len(pairs) * len(all_paths))
+    unanimous_code = sum(1 for k in range(len(all_paths))
+                         if len({c[k] for c in codes}) == 1)
+    rep["reason_code_agreement"] = {
+        "po": round(agree_code, 3),
+        "unanimous": unanimous_code,
+        "n": len(all_paths),
+        "per_row": {p: [codes[i][k] for i in range(3)]
+                    for k, p in enumerate(all_paths)},
+    }
     rep["per_row"] = {
         p: {j: tables[j][p]["has_negctl"] for j in list(ARMS["old"]) + list(ARMS["new"])}
         for p in all_paths}
@@ -210,6 +297,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print(_fmt("有负控, all 22", blob["has_negctl_all"]))        # type: ignore[index]
         print(_fmt("有负控, 部分 stratum", blob["has_negctl_partial_stratum"]))  # type: ignore[index]
         print(_fmt("能红 (PLACEBO)", blob["can_red_all_PLACEBO"]))   # type: ignore[index]
+    print("-- kappa(new) - kappa(old), 20k item bootstrap")
+    for tag, blob in rep["kappa_delta_bootstrap"].items():  # type: ignore[union-attr]
+        print("   %-32s %+.3f  95%% CI [%+.3f, %+.3f]  P(delta<=0)=%.3f"
+              % (tag, blob["point"], blob["ci95"][0], blob["ci95"][1],
+                 blob["p_delta_le_0"]))
+    print("-- majority verdict reproduces V15's published cell")
+    for arm in ("old", "new"):
+        blob = rep["reproduces_v15"][arm]  # type: ignore[index]
+        print("   %-4s  all 22: %2d/%2d (%.0f%%)    部分 stratum: %2d/%2d (%.0f%%)"
+              % (arm, blob["all"]["reproduced"], blob["all"]["n"],
+                 100 * blob["all"]["rate"],
+                 blob["partial_stratum"]["reproduced"], blob["partial_stratum"]["n"],
+                 100 * blob["partial_stratum"]["rate"]))
     rj = rep["rejudgement"]
     print("-- re-judgement of the %d rows V15 graded 部分" % rj["n"])  # type: ignore[index]
     print("   changed %d (%.0f%%), split panels %d"
@@ -220,6 +320,12 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
                  "/".join(row["votes"]), "  SPLIT" if row["split"] else ""))
     print("-- reason codes, new arm: %s"
           % json.dumps(rep["reason_codes_new_arm"], ensure_ascii=False))
+    rc = rep["reason_code_agreement"]
+    print("   reason-code agreement po=%.3f  unanimous %d/%d"
+          % (rc["po"], rc["unanimous"], rc["n"]))            # type: ignore[index]
+    for path, trio in sorted(rc["per_row"].items()):          # type: ignore[index]
+        if len(set(trio)) > 1:
+            print("      SPLIT %-52s %s" % (path, "/".join(trio)))
     if args.json:
         with open(args.json, "w", encoding="utf-8", newline="\n") as handle:
             json.dump(rep, handle, ensure_ascii=False, indent=2, sort_keys=True)
