@@ -1,15 +1,17 @@
 {
-  "cycle": 17,
-  "utc": "2026-07-28T19:00Z",
-  "last_audited_commit": "9163a52",
-  "range_this_cycle": "1ae2074..9163a52 (3 commits, 30 files)",
+  "cycle": 18,
+  "utc": "2026-07-28T19:30Z",
+  "last_audited_commit": "7df12a3",
+  "range_this_cycle": "9163a52..7df12a3",
   "mode": "incremental",
   "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "事故期纪律专项（本轮主项）": "四个常驻会话全灭、队列停摆 140 分钟的混乱期里，专查纪律有没有被应急动作绕过：封存 ID 命中仅盘面渲染文件；密钥零命中；append-only 区间内零删除；merge.log 全历史仅 1 处 NO GATE（15:43Z papers，已报过），无新增绕过；近三小时 master 上未触碰任何受保护根文件（CLAUDE.md / Theoria.md / CONTRACTS / .gitignore）。**结论：应急期间纪律守住了，无漂移，按沉默即健康不写报告。**",
-    "单向门": "队列仍冻：末次 MERGED 仍 16:37:52Z ⇒ 140 分钟零交付。gates.py 未改、probe_merge_queue 未加。前四轮已充分报告，本轮不重复。"
+    "单向门（终局）": "舰队停摆：171 分钟零交付、FLAG 648、阻塞 22；reflex 每 5 分钟逐字重印同一批 21 条 FLAG；六个会话仅 OPS-A 与 RES-3 有近期心跳，OPS-M 141 分钟、监控 34 分钟无动作；板上 25 件因领地互撞发不出去",
+    "纪律（复核）": "停摆期间无连带纪律事故：密钥零命中、封存 ID 仅盘面渲染、append-only 主线零删除、无新增闸门绕过、受保护根文件未触碰"
   },
-  "reports_this_cycle": [],
+  "reports_this_cycle": [
+    "DRIFT-20260728T1929Z-the-fleet-has-wound-down-around-a-one-line-fix.md"
+  ],
   "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
   "pending_on_monitor": [
     "**最急（已升 critical）**：应用 OPS-M cycle 8 的一行——gates.py 显式解析 Git Bash 的绝对路径（Program Files 下的 Git/bin/bash.exe），不要让 CreateProcess 的 PATH 搜索选到 System32 里 WSL 的 bash；若监控仍未动，按 CHARTER 阶梯交给用户",
@@ -55,5 +57,6 @@
     "当前最急": "合并队列已停摆 140 分钟；修法是 monitor/gates.py 里一行（显式解析 Git Bash 而非让 PATH 选到 System32 的 WSL bash，OPS-M cycle 8 已实跑验证）；按 CHARTER 只有监控可改，已升 critical 并请其转交用户，用户尚未回复。**不要自行代改——只写自己的产出目录是本角色红线。**",
     "别重蹈的假阳性": "见 false_positives_i_caught_myself；另：报别人已报过的事之前先读它的 commit（OPS-M/OPS-B 常先我一步）。",
     "判据脚本": "全在 scratchpad（会随会话消失，逻辑很短可重写）：redline.py 红线、flags.py 解析 merge.log 的阻塞时长与重报次数、probe_red.py 用 ast 查探针有没有活的状态机、manifests.py 查 MANIFEST 必填字段、negsample.py 查闸门有没有负样本。"
-  }
+  },
+  "escalation": "已按 CHARTER 阶梯顶给监控三次（16:47Z / 17:20Z / 18:26Z），17:20Z 明确请其转交用户；本轮升级链上环静默，改为直接同时报给用户。**始终未越权代改 monitor/gates.py**——只写自己的产出目录是本角色红线。"
 }
