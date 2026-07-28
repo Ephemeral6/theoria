@@ -52,45 +52,58 @@
   "clusters": [
     {
       "coverage": {
-        "E1": 22
+        "E1": 78
       },
+      "cross_family": false,
       "families": [
         "economy"
       ],
       "members": [
         "E1"
       ],
-      "representative": "E1"
+      "representative": "E1",
+      "representatives_by_family": {
+        "economy": "E1"
+      }
     },
     {
       "coverage": {
-        "E2": 12
+        "E2": 67
       },
+      "cross_family": false,
       "families": [
         "economy"
       ],
       "members": [
         "E2"
       ],
-      "representative": "E2"
+      "representative": "E2",
+      "representatives_by_family": {
+        "economy": "E2"
+      }
     },
     {
       "coverage": {
-        "E3": 12
+        "E3": 67
       },
+      "cross_family": false,
       "families": [
         "economy"
       ],
       "members": [
         "E3"
       ],
-      "representative": "E3"
+      "representative": "E3",
+      "representatives_by_family": {
+        "economy": "E3"
+      }
     },
     {
       "coverage": {
-        "E4": 14,
-        "E7": 14
+        "E4": 74,
+        "E7": 70
       },
+      "cross_family": false,
       "families": [
         "economy"
       ],
@@ -98,49 +111,65 @@
         "E4",
         "E7"
       ],
-      "representative": "E4"
+      "representative": "E4",
+      "representatives_by_family": {
+        "economy": "E4"
+      }
     },
     {
       "coverage": {
-        "E5": 22
+        "E5": 78
       },
+      "cross_family": false,
       "families": [
         "economy"
       ],
       "members": [
         "E5"
       ],
-      "representative": "E5"
+      "representative": "E5",
+      "representatives_by_family": {
+        "economy": "E5"
+      }
     },
     {
       "coverage": {
-        "E6": 20
+        "E6": 76
       },
+      "cross_family": false,
       "families": [
         "economy"
       ],
       "members": [
         "E6"
       ],
-      "representative": "E6"
+      "representative": "E6",
+      "representatives_by_family": {
+        "economy": "E6"
+      }
     },
     {
       "coverage": {
         "K1": 6
       },
+      "cross_family": false,
       "families": [
         "epistemic"
       ],
       "members": [
         "K1"
       ],
-      "representative": "K1"
+      "representative": "K1",
+      "representatives_by_family": {
+        "epistemic": "K1"
+      }
     },
     {
       "coverage": {
         "K10": 6,
         "K8": 5
       },
+      "cross_family": false,
       "families": [
         "epistemic"
       ],
@@ -148,43 +177,58 @@
         "K10",
         "K8"
       ],
-      "representative": "K10"
+      "representative": "K10",
+      "representatives_by_family": {
+        "epistemic": "K10"
+      }
     },
     {
       "coverage": {
         "K11": 6
       },
+      "cross_family": false,
       "families": [
         "epistemic"
       ],
       "members": [
         "K11"
       ],
-      "representative": "K11"
+      "representative": "K11",
+      "representatives_by_family": {
+        "epistemic": "K11"
+      }
     },
     {
       "coverage": {
         "K12": 2
       },
+      "cross_family": false,
       "families": [
         "epistemic"
       ],
       "members": [
         "K12"
       ],
-      "representative": "K12"
+      "representative": "K12",
+      "representatives_by_family": {
+        "epistemic": "K12"
+      }
     },
     {
       "coverage": {
         "K13": 2
       },
+      "cross_family": false,
       "families": [
         "epistemic"
       ],
       "members": [
         "K13"
       ],
-      "representative": "K13"
+      "representative": "K13",
+      "representatives_by_family": {
+        "epistemic": "K13"
+      }
     },
     {
       "coverage": {
@@ -192,6 +236,7 @@
         "K5": 6,
         "K7": 5
       },
+      "cross_family": false,
       "families": [
         "epistemic"
       ],
@@ -200,307 +245,441 @@
         "K5",
         "K7"
       ],
-      "representative": "K5"
+      "representative": "K5",
+      "representatives_by_family": {
+        "epistemic": "K5"
+      }
     },
     {
       "coverage": {
         "K2": 2
       },
+      "cross_family": false,
       "families": [
         "epistemic"
       ],
       "members": [
         "K2"
       ],
-      "representative": "K2"
+      "representative": "K2",
+      "representatives_by_family": {
+        "epistemic": "K2"
+      }
     },
     {
       "coverage": {
         "K3": 6
       },
+      "cross_family": false,
       "families": [
         "epistemic"
       ],
       "members": [
         "K3"
       ],
-      "representative": "K3"
+      "representative": "K3",
+      "representatives_by_family": {
+        "epistemic": "K3"
+      }
     },
     {
       "coverage": {
         "K4": 6
       },
+      "cross_family": false,
       "families": [
         "epistemic"
       ],
       "members": [
         "K4"
       ],
-      "representative": "K4"
+      "representative": "K4",
+      "representatives_by_family": {
+        "epistemic": "K4"
+      }
     },
     {
       "coverage": {
         "K6": 5,
-        "X1": 23
+        "X1": 87,
+        "X4": 87
       },
+      "cross_family": true,
       "families": [
         "epistemic",
         "exploration"
       ],
       "members": [
         "K6",
-        "X1"
+        "X1",
+        "X4"
       ],
-      "representative": "X1"
+      "representative": "X1",
+      "representatives_by_family": {
+        "epistemic": "K6",
+        "exploration": "X1"
+      },
+      "warning": "this cluster spans 2 families (epistemic, exploration). A correlation across a family boundary is evidence about the sample, not about the metrics -- these families are answering different questions and Theoria.md organises the battery by family for that reason. No metric here is absorbed across the boundary: each family keeps its own representative."
     },
     {
       "coverage": {
         "K9": 2
       },
+      "cross_family": false,
       "families": [
         "epistemic"
       ],
       "members": [
         "K9"
       ],
-      "representative": "K9"
+      "representative": "K9",
+      "representatives_by_family": {
+        "epistemic": "K9"
+      }
     },
     {
       "coverage": {
         "M1": 6
       },
+      "cross_family": false,
       "families": [
         "mechanism"
       ],
       "members": [
         "M1"
       ],
-      "representative": "M1"
+      "representative": "M1",
+      "representatives_by_family": {
+        "mechanism": "M1"
+      }
     },
     {
       "coverage": {
         "M2": 6
       },
+      "cross_family": false,
       "families": [
         "mechanism"
       ],
       "members": [
         "M2"
       ],
-      "representative": "M2"
+      "representative": "M2",
+      "representatives_by_family": {
+        "mechanism": "M2"
+      }
     },
     {
       "coverage": {
         "M3": 0
       },
+      "cross_family": false,
       "families": [
         "mechanism"
       ],
       "members": [
         "M3"
       ],
-      "representative": "M3"
+      "representative": "M3",
+      "representatives_by_family": {
+        "mechanism": "M3"
+      }
     },
     {
       "coverage": {
         "M4": 2
       },
+      "cross_family": false,
       "families": [
         "mechanism"
       ],
       "members": [
         "M4"
       ],
-      "representative": "M4"
+      "representative": "M4",
+      "representatives_by_family": {
+        "mechanism": "M4"
+      }
     },
     {
       "coverage": {
         "M5": 2
       },
+      "cross_family": false,
       "families": [
         "mechanism"
       ],
       "members": [
         "M5"
       ],
-      "representative": "M5"
+      "representative": "M5",
+      "representatives_by_family": {
+        "mechanism": "M5"
+      }
     },
     {
       "coverage": {
         "M6": 2
       },
+      "cross_family": false,
       "families": [
         "mechanism"
       ],
       "members": [
         "M6"
       ],
-      "representative": "M6"
+      "representative": "M6",
+      "representatives_by_family": {
+        "mechanism": "M6"
+      }
     },
     {
       "coverage": {
-        "P1": 22
+        "P1": 82
       },
+      "cross_family": false,
       "families": [
         "planning"
       ],
       "members": [
         "P1"
       ],
-      "representative": "P1"
+      "representative": "P1",
+      "representatives_by_family": {
+        "planning": "P1"
+      }
     },
     {
       "coverage": {
-        "P2": 14
+        "P2": 74
       },
+      "cross_family": false,
       "families": [
         "planning"
       ],
       "members": [
         "P2"
       ],
-      "representative": "P2"
+      "representative": "P2",
+      "representatives_by_family": {
+        "planning": "P2"
+      }
     },
     {
       "coverage": {
-        "P3": 21
+        "P3": 85
       },
+      "cross_family": false,
       "families": [
         "planning"
       ],
       "members": [
         "P3"
       ],
-      "representative": "P3"
+      "representative": "P3",
+      "representatives_by_family": {
+        "planning": "P3"
+      }
     },
     {
       "coverage": {
         "P4": 1
       },
+      "cross_family": false,
       "families": [
         "planning"
       ],
       "members": [
         "P4"
       ],
-      "representative": "P4"
+      "representative": "P4",
+      "representatives_by_family": {
+        "planning": "P4"
+      }
     },
     {
       "coverage": {
-        "P5": 30
+        "P5": 94
       },
+      "cross_family": false,
       "families": [
         "planning"
       ],
       "members": [
         "P5"
       ],
-      "representative": "P5"
+      "representative": "P5",
+      "representatives_by_family": {
+        "planning": "P5"
+      }
     },
     {
       "coverage": {
-        "X2": 23
+        "X2": 87
       },
+      "cross_family": false,
       "families": [
         "exploration"
       ],
       "members": [
         "X2"
       ],
-      "representative": "X2"
+      "representative": "X2",
+      "representatives_by_family": {
+        "exploration": "X2"
+      }
     },
     {
       "coverage": {
-        "X3": 17
+        "X3": 79
       },
+      "cross_family": false,
       "families": [
         "exploration"
       ],
       "members": [
         "X3"
       ],
-      "representative": "X3"
+      "representative": "X3",
+      "representatives_by_family": {
+        "exploration": "X3"
+      }
     },
     {
       "coverage": {
-        "X4": 23
+        "X5": 94
       },
-      "families": [
-        "exploration"
-      ],
-      "members": [
-        "X4"
-      ],
-      "representative": "X4"
-    },
-    {
-      "coverage": {
-        "X5": 30
-      },
+      "cross_family": false,
       "families": [
         "exploration"
       ],
       "members": [
         "X5"
       ],
-      "representative": "X5"
+      "representative": "X5",
+      "representatives_by_family": {
+        "exploration": "X5"
+      }
     },
     {
       "coverage": {
-        "X6": 15
+        "X6": 71
       },
+      "cross_family": false,
       "families": [
         "exploration"
       ],
       "members": [
         "X6"
       ],
-      "representative": "X6"
+      "representative": "X6",
+      "representatives_by_family": {
+        "exploration": "X6"
+      }
     }
   ],
   "coverage_note": "257 of 703 metric pairs share enough runs to correlate at all. A cluster count near the metric count reflects thin data, not twenty independent findings.",
+  "cross_family_clusters": [
+    [
+      "K6",
+      "X1",
+      "X4"
+    ]
+  ],
+  "eliminated": [
+    {
+      "coverage": 70,
+      "family": "economy",
+      "metric": "E7",
+      "reason": "clusters with E4 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); E4 carries 74 usable values against this metric's 70, so it represents the group for the economy family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.",
+      "representative_coverage": 74,
+      "represented_by": "E4",
+      "rho_with_representative": 0.984708249,
+      "shared_runs": 70
+    },
+    {
+      "coverage": 5,
+      "family": "epistemic",
+      "metric": "K14",
+      "reason": "clusters with K5 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); K5 carries 6 usable values against this metric's 5, so it represents the group for the epistemic family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.",
+      "representative_coverage": 6,
+      "represented_by": "K5",
+      "rho_with_representative": -1.0,
+      "shared_runs": 5
+    },
+    {
+      "coverage": 5,
+      "family": "epistemic",
+      "metric": "K7",
+      "reason": "clusters with K5 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); K5 carries 6 usable values against this metric's 5, so it represents the group for the epistemic family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.",
+      "representative_coverage": 6,
+      "represented_by": "K5",
+      "rho_with_representative": 1.0,
+      "shared_runs": 5
+    },
+    {
+      "coverage": 5,
+      "family": "epistemic",
+      "metric": "K8",
+      "reason": "clusters with K10 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); K10 carries 6 usable values against this metric's 5, so it represents the group for the epistemic family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.",
+      "representative_coverage": 6,
+      "represented_by": "K10",
+      "rho_with_representative": -0.968245837,
+      "shared_runs": 5
+    },
+    {
+      "coverage": 87,
+      "family": "exploration",
+      "metric": "X4",
+      "reason": "clusters with X1 at |rho| >= 0.9 (single-linkage, so the link may be transitive rather than direct); X1 carries 87 usable values against this metric's 87, so it represents the group for the exploration family. Not deleted -- still computed, reported and correlated, and excluded only from being counted as a separate finding.",
+      "representative_coverage": 87,
+      "represented_by": "X1",
+      "rho_with_representative": 0.903429313,
+      "shared_runs": 87
+    }
+  ],
   "matrix": [
     {
       "a": "E1",
       "b": "E2",
       "reason": null,
-      "rho": 0.342657343,
-      "shared_runs": 12
+      "rho": 0.139875489,
+      "shared_runs": 67
     },
     {
       "a": "E1",
       "b": "E3",
       "reason": null,
-      "rho": -0.295443249,
-      "shared_runs": 12
+      "rho": -0.198543046,
+      "shared_runs": 67
     },
     {
       "a": "E1",
       "b": "E4",
       "reason": null,
-      "rho": 0.252747253,
-      "shared_runs": 14
+      "rho": 0.495897122,
+      "shared_runs": 70
     },
     {
       "a": "E1",
       "b": "E5",
       "reason": null,
-      "rho": 0.611518916,
-      "shared_runs": 22
+      "rho": 0.075000948,
+      "shared_runs": 78
     },
     {
       "a": "E1",
       "b": "E6",
       "reason": null,
-      "rho": 0.088755177,
-      "shared_runs": 20
+      "rho": -0.197187912,
+      "shared_runs": 76
     },
     {
       "a": "E1",
       "b": "E7",
       "reason": null,
-      "rho": 0.243956044,
-      "shared_runs": 14
+      "rho": 0.549890648,
+      "shared_runs": 70
     },
     {
       "a": "E1",
@@ -646,22 +825,22 @@
       "a": "E1",
       "b": "P1",
       "reason": null,
-      "rho": -0.724776006,
-      "shared_runs": 22
+      "rho": 0.000974277,
+      "shared_runs": 78
     },
     {
       "a": "E1",
       "b": "P2",
       "reason": null,
-      "rho": 0.178611782,
-      "shared_runs": 14
+      "rho": 0.237300298,
+      "shared_runs": 70
     },
     {
       "a": "E1",
       "b": "P3",
       "reason": null,
-      "rho": -0.155410635,
-      "shared_runs": 15
+      "rho": -0.320064833,
+      "shared_runs": 71
     },
     {
       "a": "E1",
@@ -674,85 +853,85 @@
       "a": "E1",
       "b": "P5",
       "reason": null,
-      "rho": 0.400932428,
-      "shared_runs": 22
+      "rho": -0.215218022,
+      "shared_runs": 78
     },
     {
       "a": "E1",
       "b": "X1",
       "reason": null,
-      "rho": 0.022917462,
-      "shared_runs": 17
+      "rho": -0.094979542,
+      "shared_runs": 73
     },
     {
       "a": "E1",
       "b": "X2",
       "reason": null,
-      "rho": -0.178719958,
-      "shared_runs": 17
+      "rho": -0.102285192,
+      "shared_runs": 73
     },
     {
       "a": "E1",
       "b": "X3",
       "reason": null,
-      "rho": -0.377551923,
-      "shared_runs": 11
+      "rho": -0.104159873,
+      "shared_runs": 65
     },
     {
       "a": "E1",
       "b": "X4",
       "reason": null,
-      "rho": -0.115783953,
-      "shared_runs": 17
+      "rho": -0.285195599,
+      "shared_runs": 73
     },
     {
       "a": "E1",
       "b": "X5",
       "reason": null,
-      "rho": 0.573486509,
-      "shared_runs": 22
+      "rho": 0.697111817,
+      "shared_runs": 78
     },
     {
       "a": "E1",
       "b": "X6",
       "reason": null,
-      "rho": -0.467177367,
-      "shared_runs": 15
+      "rho": -0.131329107,
+      "shared_runs": 71
     },
     {
       "a": "E2",
       "b": "E3",
       "reason": null,
-      "rho": -0.097234487,
-      "shared_runs": 12
+      "rho": -0.051394903,
+      "shared_runs": 67
     },
     {
       "a": "E2",
       "b": "E4",
       "reason": null,
-      "rho": -0.041958042,
-      "shared_runs": 12
+      "rho": -0.032524543,
+      "shared_runs": 67
     },
     {
       "a": "E2",
       "b": "E5",
       "reason": null,
-      "rho": 0.58041958,
-      "shared_runs": 12
+      "rho": 0.021669726,
+      "shared_runs": 67
     },
     {
       "a": "E2",
       "b": "E6",
       "reason": null,
-      "rho": 0.678321678,
-      "shared_runs": 12
+      "rho": 0.086101965,
+      "shared_runs": 67
     },
     {
       "a": "E2",
       "b": "E7",
       "reason": null,
-      "rho": -0.097902098,
-      "shared_runs": 12
+      "rho": -0.008420465,
+      "shared_runs": 67
     },
     {
       "a": "E2",
@@ -898,22 +1077,22 @@
       "a": "E2",
       "b": "P1",
       "reason": null,
-      "rho": -0.529121103,
-      "shared_runs": 12
+      "rho": 0.138597477,
+      "shared_runs": 67
     },
     {
       "a": "E2",
       "b": "P2",
       "reason": null,
-      "rho": -0.214036405,
-      "shared_runs": 12
+      "rho": -0.099563947,
+      "shared_runs": 67
     },
     {
       "a": "E2",
       "b": "P3",
       "reason": null,
-      "rho": -0.439372426,
-      "shared_runs": 11
+      "rho": -0.071914645,
+      "shared_runs": 66
     },
     {
       "a": "E2",
@@ -926,78 +1105,78 @@
       "a": "E2",
       "b": "P5",
       "reason": null,
-      "rho": 0.568456297,
-      "shared_runs": 12
+      "rho": -0.111277531,
+      "shared_runs": 67
     },
     {
       "a": "E2",
       "b": "X1",
       "reason": null,
-      "rho": -0.37185041,
-      "shared_runs": 11
+      "rho": -0.153330038,
+      "shared_runs": 66
     },
     {
       "a": "E2",
       "b": "X2",
       "reason": null,
-      "rho": 0.225467429,
-      "shared_runs": 11
+      "rho": 0.05178107,
+      "shared_runs": 66
     },
     {
       "a": "E2",
       "b": "X3",
       "reason": null,
-      "rho": -0.579811882,
-      "shared_runs": 11
+      "rho": -0.242756027,
+      "shared_runs": 65
     },
     {
       "a": "E2",
       "b": "X4",
       "reason": null,
-      "rho": -0.5400582,
-      "shared_runs": 11
+      "rho": -0.206644487,
+      "shared_runs": 66
     },
     {
       "a": "E2",
       "b": "X5",
       "reason": null,
-      "rho": -0.210527612,
-      "shared_runs": 12
+      "rho": 0.086921186,
+      "shared_runs": 67
     },
     {
       "a": "E2",
       "b": "X6",
       "reason": null,
-      "rho": -0.284547405,
-      "shared_runs": 12
+      "rho": 0.034085596,
+      "shared_runs": 67
     },
     {
       "a": "E3",
       "b": "E4",
       "reason": null,
-      "rho": 0.269264733,
-      "shared_runs": 12
+      "rho": 0.02015016,
+      "shared_runs": 67
     },
     {
       "a": "E3",
       "b": "E5",
       "reason": null,
-      "rho": -0.213167914,
-      "shared_runs": 12
+      "rho": 0.067007279,
+      "shared_runs": 67
     },
     {
       "a": "E3",
       "b": "E6",
       "reason": null,
-      "rho": 0.142111942,
-      "shared_runs": 12
+      "rho": 0.101572427,
+      "shared_runs": 67
     },
     {
       "a": "E3",
       "b": "E7",
       "reason": null,
-      "rho": 0.228127066,
-      "shared_runs": 12
+      "rho": -0.004457823,
+      "shared_runs": 67
     },
     {
       "a": "E3",
@@ -1143,22 +1322,22 @@
       "a": "E3",
       "b": "P1",
       "reason": null,
-      "rho": -0.071685354,
-      "shared_runs": 12
+      "rho": -0.182244724,
+      "shared_runs": 67
     },
     {
       "a": "E3",
       "b": "P2",
       "reason": null,
-      "rho": 0.172634924,
-      "shared_runs": 12
+      "rho": 0.178839447,
+      "shared_runs": 67
     },
     {
       "a": "E3",
       "b": "P3",
       "reason": null,
-      "rho": -0.16716167,
-      "shared_runs": 11
+      "rho": 0.136061432,
+      "shared_runs": 66
     },
     {
       "a": "E3",
@@ -1171,71 +1350,71 @@
       "a": "E3",
       "b": "P5",
       "reason": null,
-      "rho": 0.098801482,
-      "shared_runs": 12
+      "rho": 0.213070624,
+      "shared_runs": 67
     },
     {
       "a": "E3",
       "b": "X1",
       "reason": null,
-      "rho": -0.471179425,
-      "shared_runs": 11
+      "rho": 0.09943736,
+      "shared_runs": 66
     },
     {
       "a": "E3",
       "b": "X2",
       "reason": null,
-      "rho": 0.24618355,
-      "shared_runs": 11
+      "rho": -0.198628984,
+      "shared_runs": 66
     },
     {
       "a": "E3",
       "b": "X3",
       "reason": null,
-      "rho": -0.007088812,
-      "shared_runs": 11
+      "rho": 0.23065759,
+      "shared_runs": 65
     },
     {
       "a": "E3",
       "b": "X4",
       "reason": null,
-      "rho": -0.374371859,
-      "shared_runs": 11
+      "rho": 0.124238898,
+      "shared_runs": 66
     },
     {
       "a": "E3",
       "b": "X5",
       "reason": null,
-      "rho": 0.302111117,
-      "shared_runs": 12
+      "rho": -0.220368579,
+      "shared_runs": 67
     },
     {
       "a": "E3",
       "b": "X6",
       "reason": null,
-      "rho": 0.530151149,
-      "shared_runs": 12
+      "rho": 0.186320523,
+      "shared_runs": 67
     },
     {
       "a": "E4",
       "b": "E5",
       "reason": null,
-      "rho": -0.27032967,
-      "shared_runs": 14
+      "rho": -0.189607208,
+      "shared_runs": 70
     },
     {
       "a": "E4",
       "b": "E6",
       "reason": null,
-      "rho": -0.138461538,
-      "shared_runs": 14
+      "rho": 0.007156105,
+      "shared_runs": 70
     },
     {
       "a": "E4",
       "b": "E7",
       "reason": null,
-      "rho": 0.991208791,
-      "shared_runs": 14
+      "rho": 0.984708249,
+      "shared_runs": 70
     },
     {
       "a": "E4",
@@ -1381,22 +1560,22 @@
       "a": "E4",
       "b": "P1",
       "reason": null,
-      "rho": 0.369066406,
-      "shared_runs": 14
+      "rho": 0.089589839,
+      "shared_runs": 74
     },
     {
       "a": "E4",
       "b": "P2",
       "reason": null,
-      "rho": 0.269020215,
-      "shared_runs": 14
+      "rho": 0.069078899,
+      "shared_runs": 74
     },
     {
       "a": "E4",
       "b": "P3",
       "reason": null,
-      "rho": -0.263588521,
-      "shared_runs": 13
+      "rho": -0.17761008,
+      "shared_runs": 73
     },
     {
       "a": "E4",
@@ -1409,64 +1588,64 @@
       "a": "E4",
       "b": "P5",
       "reason": null,
-      "rho": -0.33076012,
-      "shared_runs": 14
+      "rho": -0.161055653,
+      "shared_runs": 74
     },
     {
       "a": "E4",
       "b": "X1",
       "reason": null,
-      "rho": -0.175466389,
-      "shared_runs": 13
+      "rho": -0.077897878,
+      "shared_runs": 73
     },
     {
       "a": "E4",
       "b": "X2",
       "reason": null,
-      "rho": -0.107750866,
-      "shared_runs": 13
+      "rho": -0.049679211,
+      "shared_runs": 73
     },
     {
       "a": "E4",
       "b": "X3",
       "reason": null,
-      "rho": 0.026967994,
-      "shared_runs": 11
+      "rho": 0.03436425,
+      "shared_runs": 69
     },
     {
       "a": "E4",
       "b": "X4",
       "reason": null,
-      "rho": -0.379787838,
-      "shared_runs": 13
+      "rho": -0.167376171,
+      "shared_runs": 73
     },
     {
       "a": "E4",
       "b": "X5",
       "reason": null,
-      "rho": 0.550662129,
-      "shared_runs": 14
+      "rho": 0.396983328,
+      "shared_runs": 74
     },
     {
       "a": "E4",
       "b": "X6",
       "reason": null,
-      "rho": 0.49788331,
-      "shared_runs": 13
+      "rho": 0.222280563,
+      "shared_runs": 69
     },
     {
       "a": "E5",
       "b": "E6",
       "reason": null,
-      "rho": 0.37608126,
-      "shared_runs": 20
+      "rho": 0.157706583,
+      "shared_runs": 76
     },
     {
       "a": "E5",
       "b": "E7",
       "reason": null,
-      "rho": -0.261538462,
-      "shared_runs": 14
+      "rho": -0.196640714,
+      "shared_runs": 70
     },
     {
       "a": "E5",
@@ -1612,22 +1791,22 @@
       "a": "E5",
       "b": "P1",
       "reason": null,
-      "rho": -0.735627656,
-      "shared_runs": 22
+      "rho": -0.631331323,
+      "shared_runs": 78
     },
     {
       "a": "E5",
       "b": "P2",
       "reason": null,
-      "rho": -0.048511842,
-      "shared_runs": 14
+      "rho": -0.094003186,
+      "shared_runs": 70
     },
     {
       "a": "E5",
       "b": "P3",
       "reason": null,
-      "rho": 0.063867384,
-      "shared_runs": 15
+      "rho": 0.3135065,
+      "shared_runs": 71
     },
     {
       "a": "E5",
@@ -1640,57 +1819,57 @@
       "a": "E5",
       "b": "P5",
       "reason": null,
-      "rho": 0.477925142,
-      "shared_runs": 22
+      "rho": 0.532534592,
+      "shared_runs": 78
     },
     {
       "a": "E5",
       "b": "X1",
       "reason": null,
-      "rho": 0.206257162,
-      "shared_runs": 17
+      "rho": 0.326960442,
+      "shared_runs": 73
     },
     {
       "a": "E5",
       "b": "X2",
       "reason": null,
-      "rho": -0.049746792,
-      "shared_runs": 17
+      "rho": -0.17765228,
+      "shared_runs": 73
     },
     {
       "a": "E5",
       "b": "X3",
       "reason": null,
-      "rho": -0.377551923,
-      "shared_runs": 11
+      "rho": 0.052247103,
+      "shared_runs": 65
     },
     {
       "a": "E5",
       "b": "X4",
       "reason": null,
-      "rho": 0.161588594,
-      "shared_runs": 17
+      "rho": 0.319877568,
+      "shared_runs": 73
     },
     {
       "a": "E5",
       "b": "X5",
       "reason": null,
-      "rho": -0.117800335,
-      "shared_runs": 22
+      "rho": -0.306682191,
+      "shared_runs": 78
     },
     {
       "a": "E5",
       "b": "X6",
       "reason": null,
-      "rho": -0.441648549,
-      "shared_runs": 15
+      "rho": -0.265925799,
+      "shared_runs": 71
     },
     {
       "a": "E6",
       "b": "E7",
       "reason": null,
-      "rho": -0.12967033,
-      "shared_runs": 14
+      "rho": 0.039594779,
+      "shared_runs": 70
     },
     {
       "a": "E6",
@@ -1836,22 +2015,22 @@
       "a": "E6",
       "b": "P1",
       "reason": null,
-      "rho": -0.550688507,
-      "shared_runs": 20
+      "rho": -0.450618931,
+      "shared_runs": 76
     },
     {
       "a": "E6",
       "b": "P2",
       "reason": null,
-      "rho": -0.066152512,
-      "shared_runs": 14
+      "rho": -0.050668464,
+      "shared_runs": 70
     },
     {
       "a": "E6",
       "b": "P3",
       "reason": null,
-      "rho": -0.123476943,
-      "shared_runs": 15
+      "rho": 0.439479393,
+      "shared_runs": 71
     },
     {
       "a": "E6",
@@ -1864,50 +2043,50 @@
       "a": "E6",
       "b": "P5",
       "reason": null,
-      "rho": 0.856838098,
-      "shared_runs": 20
+      "rho": 0.566455643,
+      "shared_runs": 76
     },
     {
       "a": "E6",
       "b": "X1",
       "reason": null,
-      "rho": -0.04838131,
-      "shared_runs": 17
+      "rho": 0.376038231,
+      "shared_runs": 73
     },
     {
       "a": "E6",
       "b": "X2",
       "reason": null,
-      "rho": 0.020267212,
-      "shared_runs": 17
+      "rho": -0.254491718,
+      "shared_runs": 73
     },
     {
       "a": "E6",
       "b": "X3",
       "reason": null,
-      "rho": -0.471939904,
-      "shared_runs": 11
+      "rho": 0.079147428,
+      "shared_runs": 65
     },
     {
       "a": "E6",
       "b": "X4",
       "reason": null,
-      "rho": -0.124690411,
-      "shared_runs": 17
+      "rho": 0.356496121,
+      "shared_runs": 73
     },
     {
       "a": "E6",
       "b": "X5",
       "reason": null,
-      "rho": -0.235393219,
-      "shared_runs": 20
+      "rho": -0.294056447,
+      "shared_runs": 76
     },
     {
       "a": "E6",
       "b": "X6",
       "reason": null,
-      "rho": -0.149477106,
-      "shared_runs": 15
+      "rho": 0.010428725,
+      "shared_runs": 71
     },
     {
       "a": "E7",
@@ -2053,22 +2232,22 @@
       "a": "E7",
       "b": "P1",
       "reason": null,
-      "rho": 0.338126708,
-      "shared_runs": 14
+      "rho": 0.202620525,
+      "shared_runs": 70
     },
     {
       "a": "E7",
       "b": "P2",
       "reason": null,
-      "rho": 0.299891387,
-      "shared_runs": 14
+      "rho": 0.14954416,
+      "shared_runs": 70
     },
     {
       "a": "E7",
       "b": "P3",
       "reason": null,
-      "rho": -0.203967308,
-      "shared_runs": 13
+      "rho": -0.203183563,
+      "shared_runs": 69
     },
     {
       "a": "E7",
@@ -2081,50 +2260,50 @@
       "a": "E7",
       "b": "P5",
       "reason": null,
-      "rho": -0.295242255,
-      "shared_runs": 14
+      "rho": -0.286182015,
+      "shared_runs": 70
     },
     {
       "a": "E7",
       "b": "X1",
       "reason": null,
-      "rho": -0.104713813,
-      "shared_runs": 13
+      "rho": -0.12420075,
+      "shared_runs": 69
     },
     {
       "a": "E7",
       "b": "X2",
       "reason": null,
-      "rho": -0.156052978,
-      "shared_runs": 13
+      "rho": -0.031224054,
+      "shared_runs": 69
     },
     {
       "a": "E7",
       "b": "X3",
       "reason": null,
-      "rho": 0.107871978,
-      "shared_runs": 11
+      "rho": -0.072337466,
+      "shared_runs": 65
     },
     {
       "a": "E7",
       "b": "X4",
       "reason": null,
-      "rho": -0.314600374,
-      "shared_runs": 13
+      "rho": -0.238674615,
+      "shared_runs": 69
     },
     {
       "a": "E7",
       "b": "X5",
       "reason": null,
-      "rho": 0.530838292,
-      "shared_runs": 14
+      "rho": 0.557782078,
+      "shared_runs": 70
     },
     {
       "a": "E7",
       "b": "X6",
       "reason": null,
-      "rho": 0.49788331,
-      "shared_runs": 13
+      "rho": 0.222579629,
+      "shared_runs": 69
     },
     {
       "a": "K1",
@@ -5000,15 +5179,15 @@
       "a": "P1",
       "b": "P2",
       "reason": null,
-      "rho": -0.056541159,
-      "shared_runs": 14
+      "rho": 0.156508153,
+      "shared_runs": 74
     },
     {
       "a": "P1",
       "b": "P3",
       "reason": null,
-      "rho": -0.010702051,
-      "shared_runs": 15
+      "rho": -0.35665967,
+      "shared_runs": 75
     },
     {
       "a": "P1",
@@ -5021,57 +5200,57 @@
       "a": "P1",
       "b": "P5",
       "reason": null,
-      "rho": -0.837324205,
-      "shared_runs": 22
+      "rho": -0.89891825,
+      "shared_runs": 82
     },
     {
       "a": "P1",
       "b": "X1",
       "reason": null,
-      "rho": 0.075536063,
-      "shared_runs": 17
+      "rho": -0.246795086,
+      "shared_runs": 77
     },
     {
       "a": "P1",
       "b": "X2",
       "reason": null,
-      "rho": -0.006484518,
-      "shared_runs": 17
+      "rho": 0.158891212,
+      "shared_runs": 77
     },
     {
       "a": "P1",
       "b": "X3",
       "reason": null,
-      "rho": 0.306897453,
-      "shared_runs": 11
+      "rho": -0.199446161,
+      "shared_runs": 69
     },
     {
       "a": "P1",
       "b": "X4",
       "reason": null,
-      "rho": 0.083162713,
-      "shared_runs": 17
+      "rho": -0.297747545,
+      "shared_runs": 77
     },
     {
       "a": "P1",
       "b": "X5",
       "reason": null,
-      "rho": -0.203433024,
-      "shared_runs": 22
+      "rho": 0.361138185,
+      "shared_runs": 82
     },
     {
       "a": "P1",
       "b": "X6",
       "reason": null,
-      "rho": 0.256435547,
-      "shared_runs": 15
+      "rho": 0.221119577,
+      "shared_runs": 71
     },
     {
       "a": "P2",
       "b": "P3",
       "reason": null,
-      "rho": 0.036186073,
-      "shared_runs": 13
+      "rho": -0.060106158,
+      "shared_runs": 73
     },
     {
       "a": "P2",
@@ -5084,50 +5263,50 @@
       "a": "P2",
       "b": "P5",
       "reason": null,
-      "rho": 0.099111344,
-      "shared_runs": 14
+      "rho": -0.213966056,
+      "shared_runs": 74
     },
     {
       "a": "P2",
       "b": "X1",
       "reason": null,
-      "rho": 0.097907903,
-      "shared_runs": 13
+      "rho": 0.042120204,
+      "shared_runs": 73
     },
     {
       "a": "P2",
       "b": "X2",
       "reason": null,
-      "rho": -0.519748667,
-      "shared_runs": 13
+      "rho": -0.263340864,
+      "shared_runs": 73
     },
     {
       "a": "P2",
       "b": "X3",
       "reason": null,
-      "rho": 0.670512607,
-      "shared_runs": 11
+      "rho": 0.109209776,
+      "shared_runs": 69
     },
     {
       "a": "P2",
       "b": "X4",
       "reason": null,
-      "rho": 0.005684112,
-      "shared_runs": 13
+      "rho": -0.015624616,
+      "shared_runs": 73
     },
     {
       "a": "P2",
       "b": "X5",
       "reason": null,
-      "rho": 0.061878491,
-      "shared_runs": 14
+      "rho": 0.216480124,
+      "shared_runs": 74
     },
     {
       "a": "P2",
       "b": "X6",
       "reason": null,
-      "rho": 0.156700056,
-      "shared_runs": 13
+      "rho": -0.143722063,
+      "shared_runs": 69
     },
     {
       "a": "P3",
@@ -5140,50 +5319,50 @@
       "a": "P3",
       "b": "P5",
       "reason": null,
-      "rho": -0.13752984,
-      "shared_runs": 21
+      "rho": 0.362893998,
+      "shared_runs": 85
     },
     {
       "a": "P3",
       "b": "X1",
       "reason": null,
-      "rho": 0.722883178,
-      "shared_runs": 21
+      "rho": 0.785535423,
+      "shared_runs": 85
     },
     {
       "a": "P3",
       "b": "X2",
       "reason": null,
-      "rho": -0.489783078,
-      "shared_runs": 21
+      "rho": -0.521202182,
+      "shared_runs": 85
     },
     {
       "a": "P3",
       "b": "X3",
       "reason": null,
-      "rho": 0.898794199,
-      "shared_runs": 17
+      "rho": 0.477781688,
+      "shared_runs": 79
     },
     {
       "a": "P3",
       "b": "X4",
       "reason": null,
-      "rho": 0.735875543,
-      "shared_runs": 21
+      "rho": 0.830655807,
+      "shared_runs": 85
     },
     {
       "a": "P3",
       "b": "X5",
       "reason": null,
-      "rho": -0.050902304,
-      "shared_runs": 21
+      "rho": -0.599740562,
+      "shared_runs": 85
     },
     {
       "a": "P3",
       "b": "X6",
       "reason": null,
-      "rho": 0.307787178,
-      "shared_runs": 12
+      "rho": 0.058861129,
+      "shared_runs": 68
     },
     {
       "a": "P4",
@@ -5238,153 +5417,154 @@
       "a": "P5",
       "b": "X1",
       "reason": null,
-      "rho": -0.281851344,
-      "shared_runs": 23
+      "rho": 0.235862702,
+      "shared_runs": 87
     },
     {
       "a": "P5",
       "b": "X2",
       "reason": null,
-      "rho": 0.446788819,
-      "shared_runs": 23
+      "rho": 0.031520605,
+      "shared_runs": 87
     },
     {
       "a": "P5",
       "b": "X3",
       "reason": null,
-      "rho": -0.572699612,
-      "shared_runs": 17
+      "rho": 0.030275339,
+      "shared_runs": 79
     },
     {
       "a": "P5",
       "b": "X4",
       "reason": null,
-      "rho": -0.01725175,
-      "shared_runs": 23
+      "rho": 0.336950265,
+      "shared_runs": 87
     },
     {
       "a": "P5",
       "b": "X5",
       "reason": null,
-      "rho": -0.257362543,
-      "shared_runs": 30
+      "rho": -0.538984144,
+      "shared_runs": 94
     },
     {
       "a": "P5",
       "b": "X6",
       "reason": null,
-      "rho": -0.135858173,
-      "shared_runs": 15
+      "rho": -0.168559039,
+      "shared_runs": 71
     },
     {
       "a": "X1",
       "b": "X2",
       "reason": null,
-      "rho": -0.759115115,
-      "shared_runs": 23
+      "rho": -0.678238084,
+      "shared_runs": 87
     },
     {
       "a": "X1",
       "b": "X3",
       "reason": null,
-      "rho": 0.828841465,
-      "shared_runs": 17
+      "rho": 0.558859743,
+      "shared_runs": 79
     },
     {
       "a": "X1",
       "b": "X4",
       "reason": null,
-      "rho": 0.803511517,
-      "shared_runs": 23
+      "rho": 0.903429313,
+      "shared_runs": 87
     },
     {
       "a": "X1",
       "b": "X5",
       "reason": null,
-      "rho": 0.138876605,
-      "shared_runs": 23
+      "rho": -0.498188606,
+      "shared_runs": 87
     },
     {
       "a": "X1",
       "b": "X6",
       "reason": null,
-      "rho": -0.157485197,
-      "shared_runs": 13
+      "rho": -0.134649188,
+      "shared_runs": 69
     },
     {
       "a": "X2",
       "b": "X3",
       "reason": null,
-      "rho": -0.830456127,
-      "shared_runs": 17
+      "rho": -0.57581491,
+      "shared_runs": 79
     },
     {
       "a": "X2",
       "b": "X4",
       "reason": null,
-      "rho": -0.336109728,
-      "shared_runs": 23
+      "rho": -0.51670031,
+      "shared_runs": 87
     },
     {
       "a": "X2",
       "b": "X5",
       "reason": null,
-      "rho": -0.509069331,
-      "shared_runs": 23
+      "rho": 0.134721921,
+      "shared_runs": 87
     },
     {
       "a": "X2",
       "b": "X6",
       "reason": null,
-      "rho": 0.389884663,
-      "shared_runs": 13
+      "rho": 0.292523533,
+      "shared_runs": 69
     },
     {
       "a": "X3",
       "b": "X4",
       "reason": null,
-      "rho": 0.726928949,
-      "shared_runs": 17
+      "rho": 0.471642557,
+      "shared_runs": 79
     },
     {
       "a": "X3",
       "b": "X5",
       "reason": null,
-      "rho": 0.356947257,
-      "shared_runs": 17
+      "rho": -0.296560954,
+      "shared_runs": 79
     },
     {
       "a": "X3",
       "b": "X6",
       "reason": null,
-      "rho": 0.22,
-      "shared_runs": 11
+      "rho": -0.13697828,
+      "shared_runs": 65
     },
     {
       "a": "X4",
       "b": "X5",
       "reason": null,
-      "rho": -0.313340058,
-      "shared_runs": 23
+      "rho": -0.632309842,
+      "shared_runs": 87
     },
     {
       "a": "X4",
       "b": "X6",
       "reason": null,
-      "rho": -0.022497885,
-      "shared_runs": 13
+      "rho": -0.102516034,
+      "shared_runs": 69
     },
     {
       "a": "X5",
       "b": "X6",
       "reason": null,
-      "rho": 0.157278146,
-      "shared_runs": 15
+      "rho": 0.126068147,
+      "shared_runs": 71
     }
   ],
   "method": "Spearman rank correlation; single-linkage clustering at |rho| >= 0.9, transitive by construction so the result does not depend on the order metrics arrive in",
   "min_shared_runs": 4,
-  "n_clusters": 33,
+  "n_clusters": 32,
+  "n_eliminated": 5,
   "n_metrics": 38,
   "n_pairs": 703,
   "n_pairs_measured": 257,
@@ -5405,6 +5585,7 @@
     "K3",
     "K4",
     "K5",
+    "K6",
     "K9",
     "M1",
     "M2",
@@ -5420,7 +5601,6 @@
     "X1",
     "X2",
     "X3",
-    "X4",
     "X5",
     "X6"
   ],
@@ -5428,7 +5608,7 @@
     {
       "a": "E4",
       "b": "E7",
-      "rho": 0.991208791
+      "rho": 0.984708249
     },
     {
       "a": "K10",
@@ -5454,6 +5634,11 @@
       "a": "K6",
       "b": "X1",
       "rho": 0.9
+    },
+    {
+      "a": "X1",
+      "b": "X4",
+      "rho": 0.903429313
     }
   ],
   "threshold": 0.9
