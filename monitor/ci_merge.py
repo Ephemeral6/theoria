@@ -39,11 +39,18 @@ TEST_CMDS = {
     "cold-start-a2": [sys.executable, "-m", "pytest", "-q", "-x"],
     "a0-spike": [sys.executable, "-m", "pytest", "-q", "-x"],
     "exam": [sys.executable, "-m", "pytest", "-q", "-x"],
+    # OPS-M cycle 3: these five were declared docs-only and their 509 tests
+    # never ran at the merge gate. They have suites; they get gated.
+    "worldgen": [sys.executable, "-m", "pytest", "-q", "-x"],
+    "fuzzlab": [sys.executable, "-m", "pytest", "-q", "-x"],
+    "theoria-arm": [sys.executable, "-m", "pytest", "-q", "-x"],
+    "cold-start-a3": [sys.executable, "-m", "pytest", "-q", "-x"],
+    "ablation-arm": [sys.executable, "-m", "pytest", "-q", "-x"],
 }
 # dirs that are docs/data only — merge without a test run
-NO_TEST_OK = {"papers", "figures", "freeze", "release", "worldgen", "fuzzlab",
+NO_TEST_OK = {"papers", "figures", "freeze", "release",
               "crosscheck", "browser-ops", "monitor", "arc-recon",
-              "baseline-arms", "theoria-arm", "ablation-arm", "cold-start-a3",
+              "baseline-arms",
               "CONTRACTS", ".claude"}
 
 

@@ -1,11 +1,11 @@
 {
   "blocking_findings": 1,
   "board": {
-    "available": 0,
-    "blocked": 0,
-    "claimed": 9,
-    "done": 8,
-    "listing": "=== available ===\n=== claimed ===\n  A4-ablation-online           by W-1540\n  A6-transfer-protocol         by W-5201\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P6-paper-assembly            by W-1610\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n=== done (8) ===\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  V2-exam-on-worldgen.W-1540"
+    "available": 2,
+    "blocked": 1,
+    "claimed": 8,
+    "done": 9,
+    "listing": "=== available ===\n  p2  A4a-ablation-build           cell=A1  territory=ablation-arm\n  p2  C6-worldgen-mutate           cell=V2  territory=worldgen\n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n=== claimed ===\n  A6-transfer-protocol         by W-5201\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P6-paper-assembly            by W-1610\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  V3-battery-discrimination    by APP-V3\n=== done (9) ===\n  A4-ablation-online.superseded-by-A4a\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  V2-exam-on-worldgen.W-1540"
   },
   "con_green": 1,
   "constraints": [
@@ -264,7 +264,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 17:28:56",
+  "generated_at": "2026-07-28 17:41:46",
   "grid": {
     "A1": {
       "active": [
@@ -1093,67 +1093,42 @@
     ],
     "dirty": [
       "onitor/board/board.log",
-      "monitor/board/claimed/V2-exam-on-worldgen.W-1540.md",
-      "monitor/board/items/A4-ablation-online.md",
+      "monitor/board/claimed/A4-ablation-online.W-1540.md",
       "monitor/ci/merge.log",
+      "monitor/ci_merge.py",
+      "monitor/inbox/20260728T0800Z-W-1520-19-deadlock-speedup-half-does-not-hold.md",
+      "monitor/inbox/20260728T091200Z-W-1541-s4-and-p22-are-the-same-deliverable-drafted-twice.md",
+      "monitor/inbox/20260728T093832Z-opsm-merge-gate-skips-509-tests.md",
+      "monitor/inbox/20260728T094500Z-W-1540-v2-shipped-one-of-four-and-the-unlock-is-worldgen-mutate.md",
+      "monitor/inbox/20260728T094500Z-W-1611-a4-precondition-unmet-and-p18-is-a-second-orphan.md",
       "monitor/index.html",
-      "monitor/loop_state.json",
-      "monitor/prompts/A-1-drift-auditor.md",
-      "monitor/prompts/A2-crosscheck.md",
-      "monitor/prompts/B-1-browser-ops.md",
-      "monitor/prompts/C1-worldgen.md",
-      "monitor/prompts/C2-semantics-migrate.md",
-      "monitor/prompts/E1-property-fuzz.md",
-      "monitor/prompts/M-0-merge.md",
-      "monitor/prompts/P-10-contracts-v02.md",
-      "monitor/prompts/P-11-arc-hygiene.md",
-      "monitor/prompts/P-12-envelope-finish.md",
-      "monitor/prompts/P-13-fd-real.md",
-      "monitor/prompts/P-14-battery-v1.md",
-      "monitor/prompts/P-15-exam-builder.md",
-      "monitor/prompts/P-16-workshop-paper.md",
-      "monitor/prompts/P-17-a3-transfer.md",
-      "monitor/prompts/P-18-ablation-arm.md",
-      "monitor/prompts/P-19-release-kit.md",
-      "monitor/prompts/P-20-cascade-probe.md",
-      "monitor/prompts/P-21-figures.md",
-      "monitor/prompts/P-22-freeze-kit.md",
-      "monitor/prompts/P-23-related-work.md",
-      "monitor/prompts/P-24-fleet-skills.md",
-      "monitor/prompts/P-8-theoria-arm.md",
-      "monitor/prompts/P-9-shell-harden.md",
-      "monitor/prompts/P3-case-study.md",
-      "monitor/prompts/R-1-retrospective.md",
-      "monitor/prompts/S3-spend-gate.md",
       "monitor/reflex.log",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/claimed/A4-ablation-online.W-1540.md",
-      "monitor/board/done/V2-exam-on-worldgen.W-1540.md",
-      "monitor/inbox/20260728T094500Z-W-1540-v2-shipped-one-of-four-and-the-unlock-is-worldgen-mutate.md",
-      "monitor/prompts/archive/superseded-by-board/"
+      "monitor/board/done/A4-ablation-online.superseded-by-A4a.md",
+      "monitor/board/items/",
+      "monitor/inbox/archive/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "7768517 Merge remote-tracking branch 'origin/agent/e4-property-fuzz' into HEAD",
+    "git_head": "c77b8ec OPS-M cycle 3: reflex verified alive by effect; the merge gate skips 509 tests",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 96,
-    "sync_last": "2026-07-28T10:20:00Z",
+    "sync_entries": 98,
+    "sync_last": "2026-07-28T09:42:00Z",
     "tests": {},
     "untracked": [
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/claimed/A4-ablation-online.W-1540.md",
-      "monitor/board/done/V2-exam-on-worldgen.W-1540.md",
-      "monitor/inbox/20260728T094500Z-W-1540-v2-shipped-one-of-four-and-the-unlock-is-worldgen-mutate.md",
-      "monitor/prompts/archive/superseded-by-board/"
+      "monitor/board/done/A4-ablation-online.superseded-by-A4a.md",
+      "monitor/board/items/",
+      "monitor/inbox/archive/"
     ]
   },
   "p1_green": 9,
@@ -1615,23 +1590,23 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 23 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md, 20260728T075952Z-opsm-reflex-still-dead-unboundlocal.md, 20260728T0800Z-W-1520-19-deadlock-speedup-half-does-not-hold.md, 20260728T081500Z-W-1540-reflex-is-dead-and-the-canary-wants-a-daily-slot.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md, 20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T091200Z-W-1541-s4-and-p22-are-the-same-deliverable-drafted-twice.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T094500Z-W-1540-v2-shipped-one-of-four-and-the-unlock-is-worldgen-mutate.md, 20260728T094500Z-W-1611-a4-precondition-unmet-and-p18-is-a-second-orphan.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 19 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md, 20260728T075952Z-opsm-reflex-still-dead-unboundlocal.md, 20260728T081500Z-W-1540-reflex-is-dead-and-the-canary-wants-a-daily-slot.md, 20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md, 20260728T082700Z-W-1521-upstream-pin-is-written-but-never-diffed.md, 20260728T083000Z-W-1611-p21-figures-was-orphaned-and-p4-salvaged-it.md, 20260728T083700Z-W-1541-c4-deadlock-lean-done-and-two-cross-track-asks.md, 20260728T093000Z-W-1610-a0-vocabulary-cannot-separate-a-count-lock-world.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**10 条 TO-MONITOR 待监控回复**。 OPS-A 第3轮 idle（52 分钟前）； OPS-B 第2轮 idle（63 分钟前）； OPS-M 第2轮 working（86 分钟前）； OPS-R 第1轮 idle（175 分钟前）",
+      "detail": "**12 条 TO-MONITOR 待监控回复**。 OPS-A 第4轮 idle（1 分钟前）； OPS-B 第2轮 idle（76 分钟前）； OPS-M 第3轮 idle（0 分钟前）； OPS-R 第1轮 idle（188 分钟前）",
       "rows": [
         {
-          "age_min": 52,
-          "cycle": 3,
+          "age_min": 1,
+          "cycle": 4,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "cycle 3: two 06:27Z verdicts unlanded after two cycles (escalated as promised); first hit on the new dimension 6 -- C2 merged with its named stop-gate a0-spike/verify.sh never written; reflex fix verified live (two real merges)",
+          "note": "cycle 4: spec.py untouched across 45 commits / 14 merged branches -- PAPER_PLAN pct and GRID active are hand-written constants and the headline paper-progress number is computed from them; staleness is all in the under-reporting direction",
           "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 63,
+          "age_min": 76,
           "cycle": 2,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1640,16 +1615,16 @@
           "status": "green"
         },
         {
-          "age_min": 86,
-          "cycle": 2,
+          "age_min": 0,
+          "cycle": 3,
           "id": "OPS-M",
           "name": "合并裁判",
-          "note": "三个分支已手动合入（含 C2-semantics-migrate），全量门 9 目录首次全绿；但 TheoriaReflex 虽已启用仍每轮 UnboundLocalError 崩溃，ci_merge 仍无自动驱动，详见 inbox 20260728T075952Z",
-          "state": "working",
+          "note": "反射层已按效果判据复核确认活着，本轮零手动合并、零 flag、队列空；发现合并门 NO_TEST_OK 把六个目录共 509 个测试排除在门外，已报 inbox 20260728T093832Z",
+          "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 175,
+          "age_min": 188,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -1659,7 +1634,7 @@
         }
       ],
       "status": "green",
-      "to_monitor": 10
+      "to_monitor": 12
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3176 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
