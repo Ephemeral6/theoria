@@ -14,9 +14,16 @@ from harness import interlock                                       # noqa: E402
 
 NOW = 1_800_000_000.0            # fixed clock; nothing here reads the real one
 
+# A process table with something ordinary in it. An *empty* table is not "no
+# campaigns" -- it is a scan that failed, and check() treats it as one.
+IDLE = [(1, 0, "/sbin/init"), (2, 1, "python -m pytest tests/")]
+
 
 def lister(rows, error=None):
-    return lambda: (rows, error)
+    """Rows may be (pid, cmdline) or (pid, ppid, cmdline); the short form gets
+    ppid 1, i.e. not an ancestor of the test's own pid."""
+    full = [r if len(r) == 3 else (r[0], 1, r[1]) for r in rows]
+    return lambda: (full, error)
 
 
 def checkpoint(tmp_path, name, **state):
@@ -77,7 +84,7 @@ def test_a_fresh_running_checkpoint_blocks(tmp_path):
     root = checkpoint(tmp_path, "campaign_g50t.json", game_id="g50t-5849a774",
                       status="running", cost_usd=11.07, http_calls=2803,
                       live_episode={"at": iso(NOW - 120)})
-    state = interlock.check(lister=lister([]), roots=[root], now=NOW, own_pid=1)
+    state = interlock.check(lister=lister(IDLE), roots=[root], now=NOW, own_pid=1)
     assert not state["clear"]
     assert "campaign_g50t.json" in state["blockers"][0]
 
@@ -87,7 +94,7 @@ def test_a_stale_running_checkpoint_does_not_block_forever(tmp_path):
     root = checkpoint(tmp_path, "campaign_g50t.json", game_id="g50t-5849a774",
                       status="running", cost_usd=11.07,
                       live_episode={"at": iso(NOW - 6 * 3600)})
-    state = interlock.check(lister=lister([]), roots=[root], now=NOW, own_pid=1)
+    state = interlock.check(lister=lister(IDLE), roots=[root], now=NOW, own_pid=1)
     assert state["clear"], state["blockers"]
     assert state["checkpoints"][0]["stale_running"] is True
 
@@ -96,7 +103,7 @@ def test_a_finished_checkpoint_does_not_block(tmp_path):
     root = checkpoint(tmp_path, "campaign_tn36.json", game_id="tn36-ef4dde99",
                       status="episode_limit_hit", cost_usd=8.28,
                       ended=iso(NOW - 60))
-    state = interlock.check(lister=lister([]), roots=[root], now=NOW, own_pid=1)
+    state = interlock.check(lister=lister(IDLE), roots=[root], now=NOW, own_pid=1)
     assert state["clear"], state["blockers"]
 
 
@@ -107,7 +114,7 @@ def test_the_newest_episode_end_counts_as_activity(tmp_path):
                       status="running", started=iso(NOW - 20 * 3600),
                       episodes=[{"n": 1, "ended": iso(NOW - 19 * 3600)},
                                 {"n": 2, "ended": iso(NOW - 300)}])
-    state = interlock.check(lister=lister([]), roots=[root], now=NOW, own_pid=1)
+    state = interlock.check(lister=lister(IDLE), roots=[root], now=NOW, own_pid=1)
     assert not state["clear"]
 
 
@@ -115,7 +122,7 @@ def test_an_unreadable_checkpoint_is_reported_not_crashed(tmp_path):
     directory = tmp_path / "baseline-arms" / "out" / "campaign"
     directory.mkdir(parents=True)
     (directory / "campaign_x.json").write_text("{ truncated", encoding="utf-8")
-    state = interlock.check(lister=lister([]), roots=[str(tmp_path)], now=NOW,
+    state = interlock.check(lister=lister(IDLE), roots=[str(tmp_path)], now=NOW,
                             own_pid=1)
     assert "unreadable" in state["checkpoints"][0]
 
@@ -151,7 +158,7 @@ def test_an_unreadable_checkpoint_blocks(tmp_path):
     directory = tmp_path / "baseline-arms" / "out" / "campaign"
     directory.mkdir(parents=True)
     (directory / "campaign_x.json").write_text("{ truncated", encoding="utf-8")
-    state = interlock.check(lister=lister([]), roots=[str(tmp_path)], now=NOW,
+    state = interlock.check(lister=lister(IDLE), roots=[str(tmp_path)], now=NOW,
                             own_pid=1)
     assert not state["clear"]
     assert any("could not be read" in b for b in state["blockers"])
@@ -189,7 +196,9 @@ def test_the_real_process_lister_works_on_this_platform():
     rows, error = interlock.list_processes()
     assert error is None, error
     assert rows, "the process table came back empty"
-    assert any(isinstance(pid, int) for pid, _ in rows)
+    assert all(isinstance(pid, int) and isinstance(ppid, int)
+               for pid, ppid, _ in rows)
+    assert any(ppid > 0 for _pid, ppid, _ in rows), "no parent ids came back"
 
 
 def test_worktree_roots_includes_this_checkout():
@@ -290,3 +299,91 @@ def test_every_spending_entry_point_consults_the_interlock():
     for module in (campaign, run_campaign, run_pilot, bare_cc):
         source = inspect.getsource(module.main)
         assert "interlock.check()" in source, module.__name__
+
+
+
+# ------------------------------------------ ancestry (the first real-run bug)
+def test_our_own_launcher_is_not_a_rival_campaign():
+    """`python -m harness.run_campaign` started from a shell leaves that shell
+    holding a command line containing the module name. On the first real run
+    the check reported three live campaigns when there was one and it was us,
+    and refused to start the command it exists to protect."""
+    rows = [(100, 1, 'bash -c "cd x && python -m harness.run_campaign --game g50t"'),
+            (200, 100, 'nohup python -m harness.run_campaign --game g50t'),
+            (300, 200, 'python -m harness.run_campaign --game g50t')]
+    state = interlock.check(lister=lister(rows), roots=[], now=NOW, own_pid=300)
+    assert state["clear"], state["blockers"]
+
+
+def test_a_sibling_shell_running_a_campaign_still_blocks():
+    """Excluding ancestors must not excuse a campaign in another shell."""
+    rows = [(100, 1, 'bash -c "python -m harness.run_campaign --game g50t"'),
+            (300, 100, "python -m harness.run_campaign --game g50t"),
+            (400, 1, 'bash -c "python -m harness.campaign --game sk48"'),
+            (500, 400, "python -m harness.campaign --game sk48-d8078629")]
+    state = interlock.check(lister=lister(rows), roots=[], now=NOW, own_pid=300)
+    assert not state["clear"]
+    assert {p["pid"] for p in state["processes"]} == {400, 500}
+
+
+def test_an_ancestor_cycle_cannot_hang_the_scan():
+    rows = [(1, 2, "a -m harness.campaign --game g50t"),
+            (2, 1, "b -m harness.campaign --game g50t"),
+            (3, 1, "python -m harness.campaign --game g50t-5849a774")]
+    state = interlock.check(lister=lister(rows), roots=[], now=NOW, own_pid=1)
+    assert not state["clear"]
+
+
+# --------------------------------- an empty process table is not "all clear"
+def test_an_empty_process_table_is_an_error_not_a_clearance():
+    """A running machine always has processes. The real lister once returned
+    zero rows with no error -- a non-UTF-8 byte in someone's command line killed
+    subprocess's decode thread, stdout came back empty and returncode was 0 --
+    and zero rows read as 'nothing is running'. That is the one way this check
+    can fail open."""
+    state = interlock.check(lister=lister([]), roots=[], now=NOW, own_pid=1)
+    assert not state["clear"]
+    assert any("empty" in b or "cannot determine" in b for b in state["blockers"])
+
+
+def test_the_real_lister_reports_an_empty_table_as_an_error():
+    rows, error = interlock.list_processes()
+    assert (rows and error is None) or (not rows and error)
+
+
+# --------------------------------------------- foreign ARC players (reported)
+FOREIGN = ("python -m harness.run --game g50t-5849a774 --budget 102 "
+           "--model claude-opus-5")
+
+
+def test_a_foreign_track_playing_a_dev_game_is_reported_not_blocked():
+    """Twenty-five worktrees run concurrently; blocking on all of them would
+    deadlock the repository. The hazard is a shared quota, so it is recorded."""
+    state = interlock.check(lister=lister([(900, 1, FOREIGN)]), roots=[],
+                            now=NOW, own_pid=1)
+    assert state["clear"], state["blockers"]
+    assert [f["pid"] for f in state["foreign_players"]] == [900]
+    assert state["foreign_players"][0]["games"] == ["g50t-5849a774"]
+
+
+def test_our_own_read_only_tools_are_not_foreign_players():
+    """audit_cells takes --game too."""
+    state = interlock.check(
+        lister=lister([(901, 1, "python -m harness.audit_cells --game g50t-5849a774")]),
+        roots=[], now=NOW, own_pid=1)
+    assert state["foreign_players"] == []
+
+
+def test_our_own_campaign_is_counted_once_as_a_blocker_not_twice_as_foreign():
+    state = interlock.check(
+        lister=lister([(902, 1, "python -m harness.campaign --game g50t-5849a774")]),
+        roots=[], now=NOW, own_pid=1)
+    assert [p["pid"] for p in state["processes"]] == [902]
+    assert state["foreign_players"] == []
+
+
+def test_a_process_naming_no_dev_game_is_not_a_foreign_player():
+    state = interlock.check(
+        lister=lister([(903, 1, "python -m some.other.thing --input data.csv")]),
+        roots=[], now=NOW, own_pid=1)
+    assert state["foreign_players"] == []

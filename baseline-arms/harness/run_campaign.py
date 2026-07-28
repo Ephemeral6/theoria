@@ -391,7 +391,8 @@ def print_gate(gate: Dict[str, Any]) -> None:
 
 # --------------------------------------------------------------------- runner
 def run_repeat(game_id: str, model: str, budget: int, rep: int,
-               results: Dict[int, Dict[str, Any]], lock: threading.Lock) -> None:
+               results: Dict[int, Dict[str, Any]], lock: threading.Lock,
+               conditions: Optional[Dict[str, Any]] = None) -> None:
     started = time.time()
     try:
         summary = bare_cc.play(game_id, model, budget, verbose=False)
@@ -406,6 +407,12 @@ def run_repeat(game_id: str, model: str, budget: int, rep: int,
     summary["wall_seconds"] = round(time.time() - started, 1)
     summary["repeat"] = rep
     summary["campaign"] = "phase3-variance-envelope"
+    # What else was hitting the same API while this cell was measured. A
+    # variance envelope's whole value is that the spread is the arm's; under
+    # contention it is the afternoon's (BUDGET_REPORT.md 11.2). Recording the
+    # conditions per cell is what lets a later reader tell the two apart
+    # instead of having to trust that somebody checked.
+    summary["conditions"] = conditions or {}
     with lock:
         results[rep] = summary
     print("  [rep %d] %s -> %s (%d ok / %d failed, $%.4f, %.0fs)"
@@ -414,7 +421,8 @@ def run_repeat(game_id: str, model: str, budget: int, rep: int,
              summary["wall_seconds"]), flush=True)
 
 
-def run_game(game_id: str, model: str, repeats: int, budget: int) -> List[Dict[str, Any]]:
+def run_game(game_id: str, model: str, repeats: int, budget: int,
+             conditions: Optional[Dict[str, Any]] = None) -> List[Dict[str, Any]]:
     """The `repeats` episodes of one cell, concurrently.
 
     Concurrent because the whole point is repeated *identical* cells: running
@@ -428,7 +436,8 @@ def run_game(game_id: str, model: str, repeats: int, budget: int) -> List[Dict[s
     results: Dict[int, Dict[str, Any]] = {}
     lock = threading.Lock()
     threads = [threading.Thread(target=run_repeat,
-                                args=(game_id, model, budget, rep, results, lock))
+                                args=(game_id, model, budget, rep, results, lock,
+                                      conditions))
                for rep in range(1, repeats + 1)]
     for t in threads:
         t.start()
@@ -489,7 +498,26 @@ def main(argv=None) -> int:
         print("\ngate is already RED -- not starting %s" % game_id)
         return 3
 
-    cells = run_game(game_id, args.model, args.repeats, args.budget)
+    foreign = lock.get("foreign_players") or []
+    if foreign:
+        print("\nNOTE: %d process(es) outside this track are playing "
+              "development-pile games right now:" % len(foreign))
+        for f in foreign:
+            print("  pid %d  %s  %s" % (f["pid"], ",".join(f["games"]),
+                                        f["cmdline"][:110]))
+        print("Not a blocker -- cross-track serialisation is not this track's "
+              "to impose. Recorded on every cell as `conditions` so the spread "
+              "carries the conditions it was measured under.")
+    conditions = {
+        "foreign_players": [{"pid": f["pid"], "games": f["games"],
+                             "cmdline": f["cmdline"][:200]} for f in foreign],
+        "same_game_contention": sorted({g for f in foreign for g in f["games"]
+                                        if g == game_id}),
+        "own_track_campaigns_live": [p["pid"] for p in lock["processes"]],
+        "observed_at": ledger.utcnow(),
+    }
+
+    cells = run_game(game_id, args.model, args.repeats, args.budget, conditions)
     for cell in cells:
         append_cell(cell)
 

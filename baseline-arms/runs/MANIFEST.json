@@ -287,7 +287,7 @@
       "prompt_id": "retro:P-7"
     }
   ],
-  "entries_sha256": "sha256:26b11ecd402ae701c3b88bc6619f3469ac9f3d058001e5030c7ff0d5416ae606",
+  "entries_sha256": "sha256:4033db3f12083974327b4a8b69f86abef131b028d049e14bc8309c5832c9f0f5",
   "files": [
     "runs/s1-full-run-not-archived/run.json",
     "runs/fetch-schema-traces-path-a/run.json",
@@ -317,10 +317,10 @@
     "runs/bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b/run.json",
     "runs/bare_cc-ar25-claude-haiku-4-5-20251001-24d8edcd/run.json"
   ],
-  "generated_at": "2026-07-28T02:10:01Z",
+  "generated_at": "2026-07-28T03:06:54Z",
   "prompt_id": "P-12",
   "provenance": {
-    "base_commit": "210e1ffc2be555f2ad85b362868fb9746d6b51a4",
+    "base_commit": "5dc2cdf8b62020f7229e28432ffa7d75461d361c",
     "branch": "agent/p12-envelope-finish",
     "tree_dirty": true,
     "worktree": "C:\\Users\\user\\Desktop\\theoria-wt-p12"

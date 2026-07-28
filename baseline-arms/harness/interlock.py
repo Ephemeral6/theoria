@@ -77,6 +77,15 @@ CAMPAIGN_MODULES = ("harness.campaign", "harness.run_campaign",
 # contain the text. A too-eager exclusion here is the failure that costs money.
 READ_ONLY_FLAGS = ("--gate-only",)
 
+# This track's read-only tools take `--game` too, so they would otherwise look
+# like foreign ARC players by the rule below.
+OUR_READ_ONLY_MODULES = ("harness.audit_cells", "harness.campaign_status",
+                         "harness.summarise_campaign", "harness.summarise_pilot",
+                         "harness.merge_ledger", "harness.interlock",
+                         "harness.archive_runs", "harness.migrate_ledger",
+                         "harness.validate_canon", "harness.probe_api",
+                         "harness.fetch_schema_traces")
+
 _TS = "%Y-%m-%dT%H:%M:%SZ"
 
 
@@ -90,50 +99,147 @@ def _parse_ts(value: Any) -> Optional[float]:
 
 
 # ------------------------------------------------------------ process table
-def list_processes() -> Tuple[List[Tuple[int, str]], Optional[str]]:
-    """`([(pid, command_line)], error)`. `error` non-None means unavailable."""
+def list_processes() -> Tuple[List[Tuple[int, int, str]], Optional[str]]:
+    """`([(pid, ppid, command_line)], error)`. `error` non-None means unavailable.
+
+    The parent id is not decoration. A campaign started from a shell leaves the
+    shell holding a command line that contains the module name, so without the
+    ancestry the check counts its own launcher as a rival campaign -- which it
+    did, on the first real run, blocking the very command it was protecting.
+    """
     if os.name == "nt":
         cmd = ["powershell", "-NoProfile", "-NonInteractive", "-Command",
+               "[Console]::OutputEncoding = [Text.Encoding]::UTF8; "
                "Get-CimInstance Win32_Process | "
-               "Select-Object ProcessId,CommandLine | ConvertTo-Json -Compress"]
+               "Select-Object ProcessId,ParentProcessId,CommandLine | "
+               "ConvertTo-Json -Compress"]
     else:
-        cmd = ["ps", "-eo", "pid=,args="]
+        cmd = ["ps", "-eo", "pid=,ppid=,args="]
     try:
-        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+        # Bytes, not text=True. Some process on this machine has a command line
+        # that is not valid UTF-8, and with text=True the decode blows up inside
+        # subprocess's reader thread: the exception is printed to stderr, stdout
+        # comes back EMPTY, and returncode is 0. The scan then reported zero
+        # processes with no error -- which reads as "no campaign is running".
+        # A decode failure must never be able to clear this check.
+        proc = subprocess.run(cmd, capture_output=True, timeout=60)
     except Exception as exc:                       # no shell, no ps, no policy
         return [], "%s: %s" % (type(exc).__name__, exc)
     if proc.returncode != 0:
-        return [], "exit %d: %s" % (proc.returncode, (proc.stderr or "")[:200])
+        return [], "exit %d: %s" % (
+            proc.returncode, (proc.stderr or b"").decode("utf-8", "replace")[:200])
+    stdout = (proc.stdout or b"").decode("utf-8", "replace")
 
-    out: List[Tuple[int, str]] = []
+    out: List[Tuple[int, int, str]] = []
     if os.name == "nt":
         try:
-            rows = json.loads(proc.stdout or "[]")
+            rows = json.loads(stdout or "[]")
         except json.JSONDecodeError as exc:
             return [], "unparseable process list: %s" % exc
         if isinstance(rows, dict):
-            rows = [rows]
+            rows = [rows]                      # ConvertTo-Json unwraps a single row
         for row in rows:
             pid = row.get("ProcessId")
             if isinstance(pid, int):
-                out.append((pid, row.get("CommandLine") or ""))
+                ppid = row.get("ParentProcessId")
+                out.append((pid, ppid if isinstance(ppid, int) else 0,
+                            row.get("CommandLine") or ""))
     else:
-        for line in (proc.stdout or "").splitlines():
-            m = re.match(r"\s*(\d+)\s+(.*)$", line)
+        for line in stdout.splitlines():
+            m = re.match(r"\s*(\d+)\s+(\d+)\s+(.*)$", line)
             if m:
-                out.append((int(m.group(1)), m.group(2)))
+                out.append((int(m.group(1)), int(m.group(2)), m.group(3)))
+    if not out:
+        # A running machine always has processes. An empty list means the scan
+        # failed in a way that did not raise -- an unparseable shape, a policy
+        # that returned nothing, a decode that ate the output -- and treating it
+        # as "nothing is running" is the one way this check can fail open.
+        return [], "the process table came back empty, which cannot be true"
     return out, None
 
 
-def live_processes(lister: Callable[[], Tuple[List[Tuple[int, str]], Optional[str]]] = list_processes,
+def ancestors(pid: int, parent_of: Dict[int, int], limit: int = 64) -> set:
+    """`pid` and every process above it, so a launcher is never a rival.
+
+    Bounded, because a corrupt or recycled parent map can contain a cycle and
+    this runs before anything else the interlock does.
+    """
+    chain = {pid}
+    seen = 0
+    while pid in parent_of and seen < limit:
+        pid = parent_of[pid]
+        if pid in chain or pid <= 0:
+            break
+        chain.add(pid)
+        seen += 1
+    return chain
+
+
+def foreign_players(rows: List[Tuple[int, int, str]], mine: set,
+                    ours: set) -> List[Dict[str, Any]]:
+    """Processes outside this track that are playing the same ARC games.
+
+    INC-BA-003's hazard is a shared quota and a shared bill, not a module name.
+    This repository now carries some twenty-five concurrent worktrees, and other
+    tracks run their own arms against the same four development-pile games -- so
+    a check that only knew `baseline-arms.harness.*` was blind to most of the
+    contention that can spoil a variance measurement.
+
+    The rule is deliberately module-agnostic: **anything invoking a Python
+    module with a development-pile game id on its command line is playing the
+    API we are playing.** That catches a track whose entry point this module has
+    never heard of, which is the point.
+
+    These are *reported, not blocked.* Serialising across tracks is not this
+    track's to impose -- every track doing so would deadlock the repository, and
+    the tickets are written to run concurrently. What is this track's job is to
+    make sure a number measured under contention is never mistaken for one
+    measured without it: BUDGET_REPORT.md 11.2 is what happens otherwise.
+    """
+    dev = tuple(_dev_ids())
+    out = []
+    for pid, _ppid, cmdline in rows:
+        if pid in mine or pid in ours:
+            continue
+        if " -m " not in cmdline and "-m" not in cmdline.split():
+            continue
+        if any(re.search(r"-m\s*%s(\s|$)" % re.escape(m), cmdline)
+               for m in OUR_READ_ONLY_MODULES):
+            continue
+        hit = [g for g in dev if g in cmdline]
+        if hit:
+            out.append({"pid": pid, "games": hit, "cmdline": cmdline[:300]})
+    return out
+
+
+def _dev_ids() -> List[str]:
+    try:
+        from . import arc_client
+        return list(arc_client.dev_pile())
+    except Exception:
+        return []
+
+
+def live_processes(lister: Callable[[], Tuple[List[Tuple[int, int, str]], Optional[str]]] = list_processes,
                    own_pid: Optional[int] = None) -> Tuple[List[Dict[str, Any]], Optional[str]]:
     own_pid = os.getpid() if own_pid is None else own_pid
     rows, error = lister()
     if error is not None:
         return [], error
+    if not rows:
+        # Checked here as well as in list_processes, because this is the layer
+        # every caller goes through: an empty table is the one shape that reads
+        # as "nothing is running" while actually meaning "the scan failed".
+        return [], "the process table came back empty, which cannot be true"
+    # Self and every ancestor. `python -m harness.run_campaign` started from a
+    # shell leaves that shell -- and any wrapper above it -- holding a command
+    # line containing the module name, so all of them match the module regex.
+    # On the first real run this blocked the command it was meant to protect,
+    # reporting three live campaigns when there was one and it was us.
+    mine = ancestors(own_pid, {pid: ppid for pid, ppid, _ in rows})
     found = []
-    for pid, cmdline in rows:
-        if pid == own_pid:
+    for pid, _ppid, cmdline in rows:
+        if pid in mine:
             continue
         for module in CAMPAIGN_MODULES:
             # `-m harness.campaign`, and not `harness.campaign_status`, which is
@@ -245,6 +351,13 @@ def check(lister: Callable[[], Tuple[List[Tuple[int, str]], Optional[str]]] = li
     procs, proc_error = live_processes(lister=lister, own_pid=own_pid)
     checkpoints = scan_checkpoints(roots=roots, now=now, stale_after=stale_after)
 
+    foreign: List[Dict[str, Any]] = []
+    if proc_error is None:
+        rows, _ = lister()
+        mine = ancestors(os.getpid() if own_pid is None else own_pid,
+                         {pid: ppid for pid, ppid, _ in rows})
+        foreign = foreign_players(rows, mine, {p["pid"] for p in procs})
+
     blockers: List[str] = []
     for p in procs:
         blockers.append("pid %d is running %s" % (p["pid"], p["module"]))
@@ -282,6 +395,10 @@ def check(lister: Callable[[], Tuple[List[Tuple[int, str]], Optional[str]]] = li
         "blockers": blockers,
         "process_scan_error": proc_error,
         "processes": procs,
+        # Reported, never a blocker -- see foreign_players. A caller that is
+        # about to *measure* something rather than just spend should read this
+        # and record it alongside the measurement.
+        "foreign_players": foreign,
         "checkpoints": checkpoints,
         "stale_after_seconds": stale_after,
     }
@@ -335,6 +452,12 @@ def main(argv=None) -> int:
     exposure = combined_exposure(state["checkpoints"])
     print("  other campaigns: $%.2f over %d HTTP calls"
           % (exposure["other_campaigns_usd"], exposure["other_campaigns_http"]))
+    for f in state["foreign_players"]:
+        print("  FOREIGN: pid %d is playing %s from outside this track: %s"
+              % (f["pid"], ", ".join(f["games"]), f["cmdline"][:120]))
+    if state["foreign_players"]:
+        print("  (reported, not blocking -- cross-track serialisation is not "
+              "this track's to impose. A measurement taken now must record it.)")
     for reason in state["blockers"]:
         print("  BLOCKED: %s" % reason)
     return 0 if state["clear"] else 3
