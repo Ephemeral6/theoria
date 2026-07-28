@@ -1,0 +1,84 @@
+{
+  "arm": "bare_cc",
+  "budget": 20,
+  "campaign": "m4-pilot",
+  "card_id": "3162a584-7534-4ce3-bfd0-3905c3bbab47",
+  "ended": "2026-07-27T17:26:07Z",
+  "error": null,
+  "evidence": [
+    {
+      "bytes": 2295,
+      "path": "baseline-arms/out/pilot_sk48-d8078629.json",
+      "sha256": "sha256:e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5",
+      "tracked": true
+    },
+    {
+      "bytes": 5217897,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+      "tracked": true
+    },
+    {
+      "bytes": 1179447,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:f3ef0e1e5cf88a9511764a750f7fb9711125ae3ef3805442a565ebc57cef4eb2",
+      "tracked": true
+    },
+    {
+      "bytes": 5191,
+      "path": "baseline-arms/out/pilot_sk48.log",
+      "sha256": "sha256:60ec67d227d1eddc4169d75a3835d2e33a2612df960c2be74d133d67485e72e3",
+      "tracked": false
+    }
+  ],
+  "game_id": "sk48-d8078629",
+  "id": "bare_cc-sk48-claude-opus-5-42705d3c",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 21,
+    "model_call": 20,
+    "other": 0
+  },
+  "model": "claude-opus-5",
+  "outcome": "budget_exhausted",
+  "prompt_id": "retro:P-7",
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": 6,
+    "actions_ok": 14,
+    "cost_usd": 1.5623339999999997,
+    "http_calls_gameplay": 99,
+    "levels_completed": 0,
+    "model_calls": 20,
+    "wall_seconds": 431.9
+  },
+  "started": "2026-07-27T17:18:58Z",
+  "summary": {
+    "actions_failed": 6,
+    "actions_ok": 14,
+    "arm": "bare_cc",
+    "budget": 20,
+    "cache_creation_tokens": 137832,
+    "cache_read_tokens": 359228,
+    "card_id": "3162a584-7534-4ce3-bfd0-3905c3bbab47",
+    "cost_usd": 1.5623339999999997,
+    "ended": "2026-07-27T17:26:07Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "sk48-d8078629",
+    "http_amplification": 7.07,
+    "http_calls_gameplay": 99,
+    "input_tokens": 40,
+    "levels_completed": 0,
+    "model": "claude-opus-5",
+    "model_calls": 20,
+    "outcome": "budget_exhausted",
+    "output_tokens": 168,
+    "reset_attempts": 5,
+    "run_id": "bare_cc-sk48-claude-opus-5-42705d3c",
+    "started": "2026-07-27T17:18:58Z",
+    "wall_seconds": 431.9,
+    "win_levels": 8
+  },
+  "superseded_by_rerun": false
+}

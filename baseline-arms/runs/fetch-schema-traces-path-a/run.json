@@ -1,0 +1,34 @@
+{
+  "arm": null,
+  "campaign": "m6-schema-path-a",
+  "evidence": [
+    {
+      "bytes": 44390,
+      "path": "baseline-arms/schema_traces/MANIFEST.json",
+      "sha256": "sha256:817545a1cf382175f3e0537743f5dcc5d0817844f7555a41e5792abe8a0844c3",
+      "tracked": true
+    },
+    {
+      "bytes": 9462,
+      "path": "baseline-arms/SCHEMA_PATH_A.md",
+      "sha256": "sha256:9821239d815be2d7d03176ea6b7a5f987887c18bea730e1046b3006d613091f5",
+      "tracked": true
+    }
+  ],
+  "file_count": 165,
+  "game_id": null,
+  "id": "fetch-schema-traces-path-a",
+  "kind": "fetch",
+  "model": null,
+  "note": "development-pile directories only; the payload is gitignored under DECISIONS.md D-013 and reproduced from the hashes in its own MANIFEST",
+  "outcome": "complete",
+  "prompt_id": "retro:P-7",
+  "seed": null,
+  "seed_note": "a download has no seed; the dataset revision in schema_traces/MANIFEST.json pins what was fetched",
+  "spend": {
+    "actions_failed": 0,
+    "actions_ok": 0,
+    "cost_usd": 0.0,
+    "http_calls_gameplay": null
+  }
+}

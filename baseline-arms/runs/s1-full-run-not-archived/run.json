@@ -1,0 +1,13 @@
+{
+  "campaigns_seen": 4,
+  "checkpoints": [
+    "ar25-0c556536 (episode_limit_hit)",
+    "g50t-5849a774 (running)",
+    "sk48-d8078629 (running)",
+    "tn36-ef4dde99 (episode_limit_hit)"
+  ],
+  "id": "s1-full-run-not-archived",
+  "kind": "excluded",
+  "prompt_id": null,
+  "reason": "the approved S1 haiku full run (BUDGET_REPORT.md 3.4) is driven by a concurrent session and its checkpoints and ledger shards were still being written when this archive was built. Archiving a file mid-write would record a hash that is true of nothing. INCIDENTS.md INC-BA-003."
+}

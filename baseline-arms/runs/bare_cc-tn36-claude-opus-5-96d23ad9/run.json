@@ -1,0 +1,84 @@
+{
+  "arm": "bare_cc",
+  "budget": 20,
+  "campaign": "m4-pilot",
+  "card_id": "a98e2f13-5b27-4404-9ee7-2372cb329706",
+  "ended": "2026-07-27T17:23:15Z",
+  "error": null,
+  "evidence": [
+    {
+      "bytes": 2259,
+      "path": "baseline-arms/out/pilot_tn36-ef4dde99.json",
+      "sha256": "sha256:130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e",
+      "tracked": true
+    },
+    {
+      "bytes": 5217897,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+      "tracked": true
+    },
+    {
+      "bytes": 1179447,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:f3ef0e1e5cf88a9511764a750f7fb9711125ae3ef3805442a565ebc57cef4eb2",
+      "tracked": true
+    },
+    {
+      "bytes": 3562,
+      "path": "baseline-arms/out/pilot_tn36.log",
+      "sha256": "sha256:9e1a22efa95229dfc0bd20b694868b758db0e1aeb074f9b4dfefee2485ccdffd",
+      "tracked": false
+    }
+  ],
+  "game_id": "tn36-ef4dde99",
+  "id": "bare_cc-tn36-claude-opus-5-96d23ad9",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 11,
+    "model_call": 10,
+    "other": 0
+  },
+  "model": "claude-opus-5",
+  "outcome": "api_unusable",
+  "prompt_id": "retro:P-7",
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": 10,
+    "actions_ok": 0,
+    "cost_usd": 0.750876,
+    "http_calls_gameplay": 80,
+    "levels_completed": 0,
+    "model_calls": 10,
+    "wall_seconds": 496.9
+  },
+  "started": "2026-07-27T17:15:01Z",
+  "summary": {
+    "actions_failed": 10,
+    "actions_ok": 0,
+    "arm": "bare_cc",
+    "budget": 20,
+    "cache_creation_tokens": 65865,
+    "cache_read_tokens": 178252,
+    "card_id": "a98e2f13-5b27-4404-9ee7-2372cb329706",
+    "cost_usd": 0.750876,
+    "ended": "2026-07-27T17:23:15Z",
+    "final_state": null,
+    "game_id": "tn36-ef4dde99",
+    "http_amplification": null,
+    "http_calls_gameplay": 80,
+    "input_tokens": 20,
+    "levels_completed": 0,
+    "model": "claude-opus-5",
+    "model_calls": 10,
+    "outcome": "api_unusable",
+    "output_tokens": 120,
+    "reset_attempts": 14,
+    "run_id": "bare_cc-tn36-claude-opus-5-96d23ad9",
+    "started": "2026-07-27T17:15:01Z",
+    "wall_seconds": 496.9,
+    "win_levels": 7
+  },
+  "superseded_by_rerun": false
+}

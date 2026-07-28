@@ -1,0 +1,84 @@
+{
+  "arm": "bare_cc",
+  "budget": 20,
+  "campaign": "m4-pilot",
+  "card_id": "25348b1f-5171-434e-8fe9-9b5a508ad7da",
+  "ended": "2026-07-27T17:23:09Z",
+  "error": null,
+  "evidence": [
+    {
+      "bytes": 2273,
+      "path": "baseline-arms/out/pilot_ar25-0c556536.json",
+      "sha256": "sha256:810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a",
+      "tracked": true
+    },
+    {
+      "bytes": 5217897,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+      "tracked": true
+    },
+    {
+      "bytes": 1179447,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:f3ef0e1e5cf88a9511764a750f7fb9711125ae3ef3805442a565ebc57cef4eb2",
+      "tracked": true
+    },
+    {
+      "bytes": 4477,
+      "path": "baseline-arms/out/pilot_ar25.log",
+      "sha256": "sha256:69ab429d24fed9c18138b8904231e852ec98f84f3ec3d20d1bfa635954630967",
+      "tracked": false
+    }
+  ],
+  "game_id": "ar25-0c556536",
+  "id": "bare_cc-ar25-claude-opus-5-2f8b6919",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 18,
+    "model_call": 17,
+    "other": 0
+  },
+  "model": "claude-opus-5",
+  "outcome": "api_unusable",
+  "prompt_id": "retro:P-7",
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": 10,
+    "actions_ok": 7,
+    "cost_usd": 1.300445,
+    "http_calls_gameplay": 104,
+    "levels_completed": 0,
+    "model_calls": 17,
+    "wall_seconds": 557.7
+  },
+  "started": "2026-07-27T17:13:53Z",
+  "summary": {
+    "actions_failed": 10,
+    "actions_ok": 7,
+    "arm": "bare_cc",
+    "budget": 20,
+    "cache_creation_tokens": 114435,
+    "cache_read_tokens": 304850,
+    "card_id": "25348b1f-5171-434e-8fe9-9b5a508ad7da",
+    "cost_usd": 1.300445,
+    "ended": "2026-07-27T17:23:09Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "ar25-0c556536",
+    "http_amplification": 14.86,
+    "http_calls_gameplay": 104,
+    "input_tokens": 34,
+    "levels_completed": 0,
+    "model": "claude-opus-5",
+    "model_calls": 17,
+    "outcome": "api_unusable",
+    "output_tokens": 140,
+    "reset_attempts": 2,
+    "run_id": "bare_cc-ar25-claude-opus-5-2f8b6919",
+    "started": "2026-07-27T17:13:53Z",
+    "wall_seconds": 557.7,
+    "win_levels": 8
+  },
+  "superseded_by_rerun": false
+}

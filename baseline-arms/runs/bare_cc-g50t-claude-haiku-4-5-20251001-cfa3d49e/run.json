@@ -1,0 +1,84 @@
+{
+  "arm": "bare_cc",
+  "budget": 20,
+  "campaign": "m4-pilot",
+  "card_id": "d39121c8-f527-47ef-8aef-bad9dc1ee5b5",
+  "ended": "2026-07-27T17:13:33Z",
+  "error": null,
+  "evidence": [
+    {
+      "bytes": 2302,
+      "path": "baseline-arms/out/pilot_g50t-5849a774.json",
+      "sha256": "sha256:079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8",
+      "tracked": true
+    },
+    {
+      "bytes": 5217897,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+      "tracked": true
+    },
+    {
+      "bytes": 1179447,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:f3ef0e1e5cf88a9511764a750f7fb9711125ae3ef3805442a565ebc57cef4eb2",
+      "tracked": true
+    },
+    {
+      "bytes": 4931,
+      "path": "baseline-arms/out/pilot_g50t.log",
+      "sha256": "sha256:af5ceb00967e309b808be39e7d73a8ff8a915aebfc97b44d6ef7368aada1e742",
+      "tracked": false
+    }
+  ],
+  "game_id": "g50t-5849a774",
+  "id": "bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 21,
+    "model_call": 20,
+    "other": 0
+  },
+  "model": "claude-haiku-4-5-20251001",
+  "outcome": "budget_exhausted",
+  "prompt_id": "retro:P-7",
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": 6,
+    "actions_ok": 14,
+    "cost_usd": 0.45078270000000004,
+    "http_calls_gameplay": 98,
+    "levels_completed": 0,
+    "model_calls": 20,
+    "wall_seconds": 718.4
+  },
+  "started": "2026-07-27T17:01:36Z",
+  "summary": {
+    "actions_failed": 6,
+    "actions_ok": 14,
+    "arm": "bare_cc",
+    "budget": 20,
+    "cache_creation_tokens": 121290,
+    "cache_read_tokens": 430327,
+    "card_id": "d39121c8-f527-47ef-8aef-bad9dc1ee5b5",
+    "cost_usd": 0.45078270000000004,
+    "ended": "2026-07-27T17:13:33Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "g50t-5849a774",
+    "http_amplification": 7.0,
+    "http_calls_gameplay": 98,
+    "input_tokens": 200,
+    "levels_completed": 0,
+    "model": "claude-haiku-4-5-20251001",
+    "model_calls": 20,
+    "outcome": "budget_exhausted",
+    "output_tokens": 32994,
+    "reset_attempts": 5,
+    "run_id": "bare_cc-g50t-claude-haiku-4-5-20251001-cfa3d49e",
+    "started": "2026-07-27T17:01:36Z",
+    "wall_seconds": 718.4,
+    "win_levels": 7
+  },
+  "superseded_by_rerun": false
+}

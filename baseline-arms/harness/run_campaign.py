@@ -28,14 +28,15 @@ campaign where it stands -- see BUDGET_REPORT.md section 9.
 """
 
 import argparse
+import calendar
 import json
 import os
 import sys
 import threading
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Tuple
 
-from . import arc_client, bare_cc, ledger
+from . import adjudications, arc_client, bare_cc, interlock, ledger
 
 TRACK = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT_DIR = os.path.join(TRACK, "out")
@@ -75,6 +76,26 @@ CONSECUTIVE_DEAD_CAP = 2
 # day"; COMPUTE is the one that means "this is doing far more work than planned".
 ELAPSED_SECONDS_CAP = 8 * 3600
 COMPUTE_SECONDS_CAP = 20 * 3600
+# G6a is measured over the current *sitting*, not from the first cell ever
+# recorded. `campaign_cells.jsonl` is append-only and BUDGET_REPORT.md 11.5
+# closes by saying a re-run just appends to it -- so the record is designed to
+# span sessions, and a clock anchored to its first line measures the calendar,
+# not the campaign. It ran for the six hours the campaign spent stopped at 1/4
+# waiting for INC-BA-003 to clear, which would have taken it past the 8 h cap
+# before a single new cell was bought: honouring 11.5's serialisation
+# precondition would itself have tripped the clause. Two cells separated by more
+# than SESSION_GAP are in different sittings.
+#
+# **The cap is not touched, and this is not a relaxation of what G6a was for.**
+# A campaign that genuinely runs for eight hours without a break still trips it,
+# identically. What changes is that eight hours of *not running* no longer
+# counts as running -- the same class of correction as the G6a/G6b split
+# recorded in BUDGET_REPORT.md section 9, which was also a unit error in this
+# clause. The residue that calendar-elapsed did legitimately catch -- a campaign
+# dragging on indefinitely across many sittings -- moves to G6c, a clause that
+# did not exist before, so the net change to the gate adds a constraint.
+SESSION_GAP_SECONDS = 2 * 3600
+TOTAL_SPAN_SECONDS_CAP = 72 * 3600
 MIN_ACTIONS_FOR_RATIOS = 20     # ratios are noise below this
 
 DEAD_OUTCOMES = ("no_reset_window", "harness_error", "model_error", "api_unusable")
@@ -99,16 +120,70 @@ def load_cells() -> List[Dict[str, Any]]:
 
 
 # ---------------------------------------------------------------------- gate
-def elapsed_seconds(cells: List[Dict[str, Any]]) -> Optional[float]:
-    """Real time since the first cell started, in seconds."""
-    stamps = [c.get("started") for c in cells if c.get("started")]
-    if not stamps:
+def _epoch(stamp: Optional[str]) -> Optional[float]:
+    """A `...Z` stamp as UTC epoch seconds.
+
+    `calendar.timegm`, not `mktime` + `time.timezone`: the latter reads a UTC
+    stamp as local time and corrects with the *standard* offset, so it is off by
+    an hour anywhere that observes daylight saving. This track runs in a zone
+    that does not, which is why it never showed.
+    """
+    if not stamp:
         return None
-    first = time.strptime(min(stamps), "%Y-%m-%dT%H:%M:%SZ")
-    return time.time() - time.mktime(first) + time.timezone
+    try:
+        return calendar.timegm(time.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ"))
+    except (ValueError, TypeError):
+        return None
 
 
-def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
+def sittings(cells: List[Dict[str, Any]],
+             gap: float = SESSION_GAP_SECONDS) -> List[Tuple[float, float]]:
+    """Cells grouped into maximal runs with no idle gap longer than `gap`.
+
+    Returns `[(first_start, last_end), ...]` in chronological order.
+    """
+    windows = []
+    for c in cells:
+        start = _epoch(c.get("started"))
+        if start is None:
+            continue
+        windows.append((start, _epoch(c.get("ended")) or start))
+    windows.sort()
+    groups: List[Tuple[float, float]] = []
+    for start, end in windows:
+        if groups and start - groups[-1][1] <= gap:
+            groups[-1] = (groups[-1][0], max(groups[-1][1], end))
+        else:
+            groups.append((start, end))
+    return groups
+
+
+def elapsed_seconds(cells: List[Dict[str, Any]],
+                    now: Optional[float] = None,
+                    gap: float = SESSION_GAP_SECONDS) -> Optional[float]:
+    """Elapsed time of the current sitting, in seconds.
+
+    If the newest cell ended longer than `gap` ago the campaign is idle, and the
+    answer is the span of the last sitting that did happen -- not the time since.
+    """
+    now = time.time() if now is None else now
+    groups = sittings(cells, gap)
+    if not groups:
+        return None
+    first, last = groups[-1]
+    return (now - first) if (now - last) <= gap else (last - first)
+
+
+def total_span_seconds(cells: List[Dict[str, Any]],
+                       now: Optional[float] = None) -> Optional[float]:
+    """First cell ever recorded to now: what G6c caps."""
+    now = time.time() if now is None else now
+    starts = [s for s in (_epoch(c.get("started")) for c in cells) if s is not None]
+    return (now - min(starts)) if starts else None
+
+
+def evaluate_gate(cells: List[Dict[str, Any]],
+                  adjudications_path: str = adjudications.ADJUDICATIONS_PATH) -> Dict[str, Any]:
     """Returns {"state": "green"|"red", "tripped": [...], "totals": {...}}.
 
     Deliberately computed from the persisted cell records rather than from
@@ -151,8 +226,17 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
         if rate < ACTION_SUCCESS_FLOOR:
             tripped.append("G5 action success %.3f < floor %.2f" % (rate, ACTION_SUCCESS_FLOOR))
 
+    # G4 is the one clause an outside reviewer may suspend for named cells, via
+    # harness/adjudications.py. The suspended cells are dropped from the streak's
+    # input entirely -- they neither extend a streak nor break one, because the
+    # ruling is that they are not evidence, and a non-evidential cell should not
+    # get to certify that the cells around it were fine either. Every suspension
+    # is named in the gate record below; none of them is silent.
+    g4_suspended = adjudications.suspended("G4", path=adjudications_path)
     streak = 0
     for c in cells:
+        if c.get("run_id") in g4_suspended:
+            continue
         streak = streak + 1 if c.get("outcome") in DEAD_OUTCOMES else 0
         if streak >= CONSECUTIVE_DEAD_CAP:
             tripped.append("G4 %d consecutive dead cells, last %s (%s)"
@@ -161,11 +245,15 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
 
     elapsed = elapsed_seconds(cells)
     if elapsed is not None and elapsed > ELAPSED_SECONDS_CAP:
-        tripped.append("G6a elapsed %.1f h > cap %.1f h"
+        tripped.append("G6a sitting elapsed %.1f h > cap %.1f h"
                        % (elapsed / 3600, ELAPSED_SECONDS_CAP / 3600))
     if total_wall > COMPUTE_SECONDS_CAP:
         tripped.append("G6b compute %.1f h > cap %.1f h"
                        % (total_wall / 3600, COMPUTE_SECONDS_CAP / 3600))
+    span = total_span_seconds(cells)
+    if span is not None and span > TOTAL_SPAN_SECONDS_CAP:
+        tripped.append("G6c campaign span %.1f h > cap %.1f h"
+                       % (span / 3600, TOTAL_SPAN_SECONDS_CAP / 3600))
 
     # G7 is the one that is not about money. It should be unreachable -- the
     # client refuses sealed games before opening a socket -- so if it ever
@@ -176,9 +264,21 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
             tripped.append("G7 SEALED-PILE CONTACT: cell %s names %s, not in the "
                            "development pile" % (c.get("run_id"), c.get("game_id")))
 
+    # Every cell an adjudication removed from a clause's input, named here so the
+    # exclusion is as visible as the trip would have been. A gate record that did
+    # not carry this would let a suspension read as an absence of evidence.
+    suspensions = [
+        {"clause": "G4", "run_id": rid, "finding": rec["finding"],
+         "authority": rec["authority"], "reason": rec["reason"],
+         "evidence": rec["evidence"]}
+        for rid, rec in sorted(g4_suspended.items())
+        if any(c.get("run_id") == rid for c in cells)
+    ]
+
     return {
         "state": "red" if tripped else "green",
         "tripped": tripped,
+        "adjudicated": suspensions,
         "evaluated_at": ledger.utcnow(),
         "totals": {
             "cells": len(cells),
@@ -188,8 +288,9 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
             "actions_failed": total_failed,
             "http_calls": total_http,
             "compute_seconds": round(total_wall, 1),
-            "elapsed_seconds": (round(elapsed_seconds(cells), 1)
-                                if elapsed_seconds(cells) is not None else None),
+            "elapsed_seconds": None if elapsed is None else round(elapsed, 1),
+            "sittings": len(sittings(cells)),
+            "total_span_seconds": None if span is None else round(span, 1),
             "http_per_action": round(total_http / total_ok, 2) if total_ok else None,
             "action_success_rate": (round(total_ok / (total_ok + total_failed), 3)
                                     if (total_ok + total_failed) else None),
@@ -204,13 +305,36 @@ def evaluate_gate(cells: List[Dict[str, Any]]) -> Dict[str, Any]:
             "consecutive_dead": CONSECUTIVE_DEAD_CAP,
             "elapsed_seconds": ELAPSED_SECONDS_CAP,
             "compute_seconds": COMPUTE_SECONDS_CAP,
+            "total_span_seconds": TOTAL_SPAN_SECONDS_CAP,
+            "session_gap_seconds": SESSION_GAP_SECONDS,
         },
     }
 
 
+def attach_exposure(gate: Dict[str, Any],
+                    checkpoints: Optional[List[Dict[str, Any]]] = None) -> Dict[str, Any]:
+    """Add the two-campaign total to a gate record.
+
+    INC-BA-003's complaint was not that the combined spend was too high, it was
+    that no counter anywhere held it. This puts it in the same file as the gate
+    verdict. It is reported, not enforced: see interlock.combined_exposure.
+    """
+    checkpoints = (interlock.scan_checkpoints() if checkpoints is None
+                   else checkpoints)
+    gate["combined_exposure"] = interlock.combined_exposure(
+        checkpoints,
+        envelope_usd=gate["totals"]["cost_usd"],
+        envelope_http=gate["totals"]["http_calls"])
+    return gate
+
+
 def write_gate(gate: Dict[str, Any]) -> None:
     os.makedirs(OUT_DIR, exist_ok=True)
-    with open(GATE_PATH, "w", encoding="utf-8") as fh:
+    # newline="\n": on Windows the default translates to CRLF, and .gitattributes
+    # then normalises it back on the way into git -- so the file on disk and the
+    # file in the tree differ byte for byte. Determinism is a requirement here,
+    # not a nicety (CLAUDE.md conventions), so write LF directly.
+    with open(GATE_PATH, "w", encoding="utf-8", newline="\n") as fh:
         json.dump(gate, fh, indent=2, sort_keys=True)
     ledger.probe("campaign_gate", {"state": gate["state"], "tripped": gate["tripped"],
                                    "totals": gate["totals"]})
@@ -219,15 +343,25 @@ def write_gate(gate: Dict[str, Any]) -> None:
 def print_gate(gate: Dict[str, Any]) -> None:
     t = gate["totals"]
     print("\n=== budget gate: %s ===" % gate["state"].upper())
-    print("  cells %s | $%.4f | ok %s / failed %s | http %s | elapsed %.1f h "
-          "| compute %.1f h"
+    print("  cells %s | $%.4f | ok %s / failed %s | http %s | sitting %.1f h "
+          "| compute %.1f h | span %.1f h over %s sitting(s)"
           % (t["cells"], t["cost_usd"], t["actions_ok"], t["actions_failed"],
              t["http_calls"], (t["elapsed_seconds"] or 0) / 3600,
-             (t["compute_seconds"] or 0) / 3600))
+             (t["compute_seconds"] or 0) / 3600,
+             (t.get("total_span_seconds") or 0) / 3600, t.get("sittings")))
     print("  $/action %s | http/action %s | success %s"
           % (t["usd_per_action"], t["http_per_action"], t["action_success_rate"]))
     for tier, spend in sorted(t["cost_by_tier"].items()):
         print("  tier %-28s $%.4f / cap $%.2f" % (tier, spend, TIER_USD_CAP.get(tier, 0.0)))
+    for s in gate.get("adjudicated") or []:
+        print("  ADJUDICATED: %s suspended for %s by %s (%s)"
+              % (s["clause"], s["run_id"], s["authority"], s["finding"]))
+    exposure = gate.get("combined_exposure")
+    if exposure:
+        print("  combined exposure: $%.2f  (this envelope $%.2f + %d other "
+              "campaign(s) $%.2f)"
+              % (exposure["combined_usd"], exposure["envelope_usd"],
+                 exposure["other_campaign_count"], exposure["other_campaigns_usd"]))
     for reason in gate["tripped"]:
         print("  TRIPPED: %s" % reason)
 
@@ -291,7 +425,7 @@ def main(argv=None) -> int:
     args = ap.parse_args(argv)
 
     if args.gate_only:
-        gate = evaluate_gate(load_cells())
+        gate = attach_exposure(evaluate_gate(load_cells()))
         write_gate(gate)
         print_gate(gate)
         return 3 if gate["state"] == "red" else 0
@@ -309,8 +443,24 @@ def main(argv=None) -> int:
     game_id = matches[0]
     assert game_id not in arc_client.sealed_pile(), "sealed game reached the campaign"
 
-    # Pre-flight: never start a game the gate has already stopped.
-    gate = evaluate_gate(load_cells())
+    # Pre-flight 1: never start while another campaign is spending. Under
+    # contention a variance envelope measures the contention (INC-BA-003,
+    # BUDGET_REPORT.md 11.5). This check is what makes that a fact rather than
+    # an intention.
+    lock = interlock.check()
+    if not lock["clear"]:
+        print("interlock: BLOCKED -- another campaign is live in this track")
+        for reason in lock["blockers"]:
+            print("  %s" % reason)
+        print("\nnot starting %s. Re-run when the other campaign has finished; "
+              "`python -m harness.interlock` reports the current state."
+              % game_id)
+        ledger.probe("interlock_block", {"game_id": game_id,
+                                         "blockers": lock["blockers"]})
+        return 4
+
+    # Pre-flight 2: never start a game the gate has already stopped.
+    gate = attach_exposure(evaluate_gate(load_cells()), lock["checkpoints"])
     if gate["state"] == "red":
         print_gate(gate)
         print("\ngate is already RED -- not starting %s" % game_id)
@@ -320,7 +470,7 @@ def main(argv=None) -> int:
     for cell in cells:
         append_cell(cell)
 
-    gate = evaluate_gate(load_cells())
+    gate = attach_exposure(evaluate_gate(load_cells()))
     write_gate(gate)
     print_gate(gate)
     print(json.dumps(cells, indent=2, sort_keys=True))

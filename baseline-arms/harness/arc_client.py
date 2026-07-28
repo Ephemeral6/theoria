@@ -58,10 +58,28 @@ def sealed_pile(path: str = PILES_PATH):
 
 
 def load_api_key(env_path: Optional[str] = None) -> str:
+    """`ARC_API_KEY` from the environment, else from the repo's gitignored `.env`.
+
+    The environment is checked first because `.env` lives at the root of the
+    main checkout and is gitignored, so it is absent from every worktree. The
+    alternative -- copying it in -- would put a second copy of the credential on
+    disk for every branch anyone works on, and `CLAUDE.md` already documents
+    `set -a; . ./.env; set +a` as the way to load it. One copy, injected.
+
+    The key still never reaches the arm: `bare_cc.call_model` strips
+    `ARC_API_KEY` from the environment it hands the model subprocess.
+    """
+    if env_path is None:
+        from_env = os.environ.get("ARC_API_KEY", "").strip()
+        if from_env:
+            return from_env
     path = env_path or os.path.join(REPO, ".env")
     if not os.path.exists(path):
         raise RuntimeError(
-            "%s not found. Copy .env.example to .env and set ARC_API_KEY." % path
+            "ARC_API_KEY is not in the environment and %s does not exist. "
+            "Either `set -a; . <repo>/.env; set +a` (needed in a worktree, "
+            "where the gitignored .env is absent) or create .env from "
+            ".env.example." % path
         )
     for line in open(path, encoding="utf-8"):
         line = line.strip()

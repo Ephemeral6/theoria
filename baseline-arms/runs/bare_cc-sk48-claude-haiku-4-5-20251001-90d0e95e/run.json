@@ -1,0 +1,84 @@
+{
+  "arm": "bare_cc",
+  "budget": 20,
+  "campaign": "m4-pilot",
+  "card_id": "8261128a-faea-4328-9f19-2fb31174395a",
+  "ended": "2026-07-27T17:18:16Z",
+  "error": null,
+  "evidence": [
+    {
+      "bytes": 2295,
+      "path": "baseline-arms/out/pilot_sk48-d8078629.json",
+      "sha256": "sha256:e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5",
+      "tracked": true
+    },
+    {
+      "bytes": 5217897,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+      "tracked": true
+    },
+    {
+      "bytes": 1179447,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:f3ef0e1e5cf88a9511764a750f7fb9711125ae3ef3805442a565ebc57cef4eb2",
+      "tracked": true
+    },
+    {
+      "bytes": 5191,
+      "path": "baseline-arms/out/pilot_sk48.log",
+      "sha256": "sha256:60ec67d227d1eddc4169d75a3835d2e33a2612df960c2be74d133d67485e72e3",
+      "tracked": false
+    }
+  ],
+  "game_id": "sk48-d8078629",
+  "id": "bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 21,
+    "model_call": 20,
+    "other": 0
+  },
+  "model": "claude-haiku-4-5-20251001",
+  "outcome": "budget_exhausted",
+  "prompt_id": "retro:P-7",
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": 5,
+    "actions_ok": 15,
+    "cost_usd": 0.5984182999999998,
+    "http_calls_gameplay": 106,
+    "levels_completed": 0,
+    "model_calls": 20,
+    "wall_seconds": 1002.7
+  },
+  "started": "2026-07-27T17:01:35Z",
+  "summary": {
+    "actions_failed": 5,
+    "actions_ok": 15,
+    "arm": "bare_cc",
+    "budget": 20,
+    "cache_creation_tokens": 126209,
+    "cache_read_tokens": 430403,
+    "card_id": "8261128a-faea-4328-9f19-2fb31174395a",
+    "cost_usd": 0.5984182999999998,
+    "ended": "2026-07-27T17:18:16Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "sk48-d8078629",
+    "http_amplification": 7.07,
+    "http_calls_gameplay": 106,
+    "input_tokens": 200,
+    "levels_completed": 0,
+    "model": "claude-haiku-4-5-20251001",
+    "model_calls": 20,
+    "outcome": "budget_exhausted",
+    "output_tokens": 60552,
+    "reset_attempts": 1,
+    "run_id": "bare_cc-sk48-claude-haiku-4-5-20251001-90d0e95e",
+    "started": "2026-07-27T17:01:35Z",
+    "wall_seconds": 1002.7,
+    "win_levels": 8
+  },
+  "superseded_by_rerun": false
+}

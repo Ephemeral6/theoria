@@ -1,0 +1,85 @@
+{
+  "arm": "bare_cc",
+  "budget": 20,
+  "campaign": "m4-pilot",
+  "card_id": "de5ee60c-0ff2-4893-bdaf-45e322656e93",
+  "ended": "2026-07-27T17:13:52Z",
+  "error": "None",
+  "evidence": [
+    {
+      "bytes": 2273,
+      "path": "baseline-arms/out/pilot_ar25-0c556536.json",
+      "sha256": "sha256:810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a",
+      "tracked": true
+    },
+    {
+      "bytes": 5217897,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+      "tracked": true
+    },
+    {
+      "bytes": 1179447,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:f3ef0e1e5cf88a9511764a750f7fb9711125ae3ef3805442a565ebc57cef4eb2",
+      "tracked": true
+    },
+    {
+      "bytes": 4477,
+      "path": "baseline-arms/out/pilot_ar25.log",
+      "sha256": "sha256:69ab429d24fed9c18138b8904231e852ec98f84f3ec3d20d1bfa635954630967",
+      "tracked": false
+    }
+  ],
+  "game_id": "ar25-0c556536",
+  "id": "bare_cc-ar25-claude-sonnet-5-fe359600",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 1,
+    "model_call": 1,
+    "other": 0
+  },
+  "model": "claude-sonnet-5",
+  "outcome": "model_error",
+  "prompt_id": "retro:P-7",
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": 0,
+    "actions_ok": 0,
+    "cost_usd": 0.08226570000000001,
+    "http_calls_gameplay": 0,
+    "levels_completed": 0,
+    "model_calls": 1,
+    "wall_seconds": 42.6
+  },
+  "started": "2026-07-27T17:13:11Z",
+  "summary": {
+    "actions_failed": 0,
+    "actions_ok": 0,
+    "arm": "bare_cc",
+    "budget": 20,
+    "cache_creation_tokens": 11877,
+    "cache_read_tokens": 24009,
+    "card_id": "de5ee60c-0ff2-4893-bdaf-45e322656e93",
+    "cost_usd": 0.08226570000000001,
+    "ended": "2026-07-27T17:13:52Z",
+    "error": "None",
+    "final_state": null,
+    "game_id": "ar25-0c556536",
+    "http_amplification": null,
+    "http_calls_gameplay": 0,
+    "input_tokens": 2,
+    "levels_completed": 0,
+    "model": "claude-sonnet-5",
+    "model_calls": 1,
+    "outcome": "model_error",
+    "output_tokens": 253,
+    "reset_attempts": 15,
+    "run_id": "bare_cc-ar25-claude-sonnet-5-fe359600",
+    "started": "2026-07-27T17:13:11Z",
+    "wall_seconds": 42.6,
+    "win_levels": 8
+  },
+  "superseded_by_rerun": false
+}

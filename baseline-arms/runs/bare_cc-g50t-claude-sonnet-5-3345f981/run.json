@@ -1,0 +1,85 @@
+{
+  "arm": "bare_cc",
+  "budget": 20,
+  "campaign": "m4-pilot",
+  "card_id": "b501cc59-4865-4aed-8230-4d0c343a3186",
+  "ended": "2026-07-27T17:14:08Z",
+  "error": "None",
+  "evidence": [
+    {
+      "bytes": 2302,
+      "path": "baseline-arms/out/pilot_g50t-5849a774.json",
+      "sha256": "sha256:079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8",
+      "tracked": true
+    },
+    {
+      "bytes": 5217897,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+      "tracked": true
+    },
+    {
+      "bytes": 1179447,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:f3ef0e1e5cf88a9511764a750f7fb9711125ae3ef3805442a565ebc57cef4eb2",
+      "tracked": true
+    },
+    {
+      "bytes": 4931,
+      "path": "baseline-arms/out/pilot_g50t.log",
+      "sha256": "sha256:af5ceb00967e309b808be39e7d73a8ff8a915aebfc97b44d6ef7368aada1e742",
+      "tracked": false
+    }
+  ],
+  "game_id": "g50t-5849a774",
+  "id": "bare_cc-g50t-claude-sonnet-5-3345f981",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 3,
+    "model_call": 3,
+    "other": 0
+  },
+  "model": "claude-sonnet-5",
+  "outcome": "model_error",
+  "prompt_id": "retro:P-7",
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": 0,
+    "actions_ok": 2,
+    "cost_usd": 0.18255929999999998,
+    "http_calls_gameplay": 2,
+    "levels_completed": 0,
+    "model_calls": 3,
+    "wall_seconds": 35.0
+  },
+  "started": "2026-07-27T17:13:34Z",
+  "summary": {
+    "actions_failed": 0,
+    "actions_ok": 2,
+    "arm": "bare_cc",
+    "budget": 20,
+    "cache_creation_tokens": 24556,
+    "cache_read_tokens": 82701,
+    "card_id": "b501cc59-4865-4aed-8230-4d0c343a3186",
+    "cost_usd": 0.18255929999999998,
+    "ended": "2026-07-27T17:14:08Z",
+    "error": "None",
+    "final_state": "NOT_FINISHED",
+    "game_id": "g50t-5849a774",
+    "http_amplification": 1.0,
+    "http_calls_gameplay": 2,
+    "input_tokens": 6,
+    "levels_completed": 0,
+    "model": "claude-sonnet-5",
+    "model_calls": 3,
+    "outcome": "model_error",
+    "output_tokens": 693,
+    "reset_attempts": 2,
+    "run_id": "bare_cc-g50t-claude-sonnet-5-3345f981",
+    "started": "2026-07-27T17:13:34Z",
+    "wall_seconds": 35.0,
+    "win_levels": 7
+  },
+  "superseded_by_rerun": true
+}

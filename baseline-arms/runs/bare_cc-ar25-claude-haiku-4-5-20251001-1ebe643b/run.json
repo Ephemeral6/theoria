@@ -1,0 +1,86 @@
+{
+  "arm": "bare_cc",
+  "budget": 30,
+  "campaign": "phase3-variance-envelope",
+  "card_id": "0fab7a75-ad85-4de6-b514-668746cc364e",
+  "ended": "2026-07-27T18:40:06Z",
+  "error": null,
+  "evidence": [
+    {
+      "bytes": 2191,
+      "path": "baseline-arms/out/campaign_cells.jsonl",
+      "sha256": "sha256:6722537a1fe8e62e801cacf34a8b5a5b8416da67a14a6d91137c622f8621aa17",
+      "tracked": true
+    },
+    {
+      "bytes": 5386,
+      "path": "baseline-arms/out/campaign_gate.json",
+      "sha256": "sha256:2254a954815a098a16a0e3c17b3e71da84ca2097a9ef3404f871ca9e51987706",
+      "tracked": true
+    },
+    {
+      "bytes": 5217897,
+      "path": "baseline-arms/ledger.jsonl",
+      "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+      "tracked": true
+    },
+    {
+      "bytes": 1179447,
+      "path": "baseline-arms/probe_log.jsonl",
+      "sha256": "sha256:f3ef0e1e5cf88a9511764a750f7fb9711125ae3ef3805442a565ebc57cef4eb2",
+      "tracked": true
+    }
+  ],
+  "game_id": "ar25-0c556536",
+  "id": "bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b",
+  "kind": "run",
+  "ledger_records": {
+    "env_step": 25,
+    "model_call": 24,
+    "other": 0
+  },
+  "model": "claude-haiku-4-5-20251001",
+  "outcome": "api_unusable",
+  "prompt_id": "retro:P-7",
+  "repeat": 2,
+  "seed": null,
+  "seed_note": "no seed exists for this arm: the model call is nondeterministic and the run id is a uuid4. Per LEDGER_FORMAT.md the replay substitute is the verbatim model request/response/usage in the ledger; see evidence.",
+  "spend": {
+    "actions_failed": 10,
+    "actions_ok": 14,
+    "cost_usd": 0.7959840000000001,
+    "http_calls_gameplay": 142,
+    "levels_completed": 0,
+    "model_calls": 24,
+    "wall_seconds": 1120.4
+  },
+  "started": "2026-07-27T18:21:28Z",
+  "summary": {
+    "actions_failed": 10,
+    "actions_ok": 14,
+    "arm": "bare_cc",
+    "budget": 30,
+    "cache_creation_tokens": 251134,
+    "cache_read_tokens": 585720,
+    "campaign": "phase3-variance-envelope",
+    "card_id": "0fab7a75-ad85-4de6-b514-668746cc364e",
+    "cost_usd": 0.7959840000000001,
+    "ended": "2026-07-27T18:40:06Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "ar25-0c556536",
+    "http_amplification": 10.14,
+    "http_calls_gameplay": 142,
+    "input_tokens": 240,
+    "levels_completed": 0,
+    "model": "claude-haiku-4-5-20251001",
+    "model_calls": 24,
+    "outcome": "api_unusable",
+    "output_tokens": 34457,
+    "repeat": 2,
+    "reset_attempts": 12,
+    "run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-1ebe643b",
+    "started": "2026-07-27T18:21:28Z",
+    "wall_seconds": 1120.4,
+    "win_levels": 8
+  }
+}

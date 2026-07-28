@@ -1,0 +1,77 @@
+{
+  "campaign": "f16-ledger-canon",
+  "counts": {
+    "env_step": 286,
+    "model_call": 274,
+    "unknown": 0
+  },
+  "evidence": [
+    {
+      "bytes": 5467,
+      "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/report.json",
+      "sha256": "sha256:9acf7ac67e15ccf2f26cec848ab62cf4da63b41307e24ca8e826cb4390b4727c",
+      "tracked": true
+    },
+    {
+      "bytes": 4593181,
+      "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/ledger.canon.jsonl",
+      "sha256": "sha256:a9ca65c0c510b12a7d518d1520d0240b58f90baa636be41fc8d36bce26b5377b",
+      "tracked": true
+    },
+    {
+      "bytes": 45677,
+      "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/costs.sidecar.jsonl",
+      "sha256": "sha256:a19752287435c1ae99082454900698abeed650d955aadbdbdba22e6b22e31679",
+      "tracked": true
+    }
+  ],
+  "finding": "F-16",
+  "id": "migration-ledger-v0-to-v1.0",
+  "kind": "migration",
+  "migrator": "baseline-arms/migrate_ledger/1.1.0",
+  "outcome": "complete",
+  "produced": [
+    {
+      "bytes": 4593181,
+      "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/ledger.canon.jsonl",
+      "records": 560,
+      "sha256": "sha256:a9ca65c0c510b12a7d518d1520d0240b58f90baa636be41fc8d36bce26b5377b"
+    },
+    {
+      "bytes": 45677,
+      "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/costs.sidecar.jsonl",
+      "records": 274,
+      "sha256": "sha256:a19752287435c1ae99082454900698abeed650d955aadbdbdba22e6b22e31679"
+    }
+  ],
+  "prompt_id": "P-12",
+  "records": 560,
+  "seed": null,
+  "seed_note": "a migration has no seed; it is a pure function of its inputs, and the input hash in `source` pins it",
+  "source": {
+    "bytes": 5217897,
+    "path": "baseline-arms/ledger.jsonl",
+    "records": 560,
+    "sha256": "sha256:0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b"
+  },
+  "spend": {
+    "actions_failed": 0,
+    "actions_ok": 0,
+    "cost_usd": 0.0
+  },
+  "target_format": "1.0",
+  "unfillable_fields": {
+    "card_id": 18,
+    "frames/frame_hash": 101,
+    "guid": 20,
+    "http.elapsed_ms": 286,
+    "http.method/path/status/request_sha256": 274,
+    "http.request_sha256": 286,
+    "http.stream": 274,
+    "pricing_ref": 274,
+    "request": 274,
+    "response": 274,
+    "score": 286
+  },
+  "warnings": []
+}
