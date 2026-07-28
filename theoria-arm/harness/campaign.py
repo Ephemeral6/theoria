@@ -295,9 +295,37 @@ class Campaign:
 
     # -- one leg -----------------------------------------------------------
     def _leg_slug(self, game_id: str, index: int) -> str:
-        return "%s-%s-leg%02d" % (
-            time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()),
-            game_id.split("-")[0], index)
+        """A slug with no game in it.
+
+        This used to be `<utc>-<stem>-leg<nn>`, e.g. `...-g50t-leg01`, which put
+        the game stem into the run directory path -- and therefore into every
+        absolute path under it: `candidates.jsonl`, `books/generated/*.lean`,
+        the transcript directory. That matters because several of those paths
+        reach the model:
+
+        * `world/adapt.py` records `{"error", "traceback"}` for an engine that
+          raises and `evidence_brief` dumps the report into the prompt; an
+          `OSError` message carries the path it failed on. Forcing a
+          candidate-write failure put six occurrences of `g50t` into a
+          20,975-char prompt.
+        * `books.compile_all` stringifies write errors into `compile_errors`,
+          which is also concatenated into the prompt.
+        * Lean prefixes every diagnostic with the absolute source path, and a
+          `proof_failure` payload carries `stderr` verbatim into the next
+          prompt.
+
+        `Theoria.md:353` is a hard rule -- 游戏 ID 永不进模型上下文 -- so the
+        cheapest place to keep it is to never put the id in a path. The game is
+        still recorded, in `run.json`, the ledger and `campaign.json`, none of
+        which the desk can read. `ModelDesk.forbid_in_prompt` is the backstop
+        for the channels this does not anticipate.
+
+        The leg index is per game, so `<utc>-leg01` can repeat across games in
+        one campaign; the timestamp is what separates them, and `campaign.json`
+        maps every slug to its game.
+        """
+        return "%s-leg%02d" % (
+            time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()), index)
 
     def run_leg(self, game_id: str, index: int,
                 seed_books: Optional[str]) -> Dict[str, Any]:

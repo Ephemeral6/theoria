@@ -647,3 +647,56 @@ def test_the_desks_own_vocabulary_survives_inside_request(tmp_path, binding):
     # step_idx stays top-level: it IS in the canonical set, and the cost curve
     # joins on it.
     assert calls[0]["step_idx"] == 7
+
+
+# ------------------------------ 11. the game id may never reach the model
+#
+# `Theoria.md:353` seals four overfitting channels. The fourth -- the game's
+# walkthrough may already be in the pre-training corpus -- cannot be closed,
+# only reduced, and the reduction is a hard rule in those words: 硬规:游戏 ID
+# 永不进模型上下文,全程匿名化.
+#
+# Before A3 that rule held by omission: nothing sanitised model-bound text, and
+# `build_prompt` was clean only because nobody had wired an id in. An
+# adversarial probe showed omission is not enough -- an engine traceback
+# carrying an absolute path from a game-stemmed run directory put six
+# occurrences of `g50t` inside a real 20,975-char prompt.
+
+def test_a_prompt_carrying_the_game_id_is_never_sent(tmp_path, binding):
+    """And it is refused *before* the subprocess, so it costs nothing."""
+    from harness.modelcall import AnonymityBreach       # noqa: PLC0415
+
+    rl = _real_run_ledger(tmp_path, "anon.jsonl")
+    d = desk(rl, spend=binding,
+             envelope={"result": "x", "total_cost_usd": 9.99,
+                       "subtype": "success",
+                       "usage": {"input_tokens": 1, "output_tokens": 1}})
+    d.forbid_in_prompt = ("g50t-5849a774", "g50t")
+
+    leaky = ("engine report: {'error': \"[Errno 13] Permission denied: "
+             "'C:\\runs\\20260729T000000Z-g50t-leg01\\candidates.jsonl'\"}")
+    with pytest.raises(AnonymityBreach) as caught:
+        d.call(leaky, beat="theorize")
+
+    assert "g50t" in str(caught.value)
+    # Nothing was sent and nothing was billed: the refusal is before the seam.
+    assert d.calls == 0
+    assert d.cli_cost_usd == 0.0
+    assert not spends(pool_of(binding))
+
+
+def test_the_guard_does_not_fire_on_an_ordinary_prompt(tmp_path, binding):
+    """The negative control. A guard that refuses everything proves nothing."""
+    rl = _real_run_ledger(tmp_path, "anon2.jsonl")
+    d = desk(rl, spend=binding,
+             envelope={"result": "a manual", "total_cost_usd": 0.1,
+                       "subtype": "success",
+                       "usage": {"input_tokens": 1, "output_tokens": 1}})
+    d.forbid_in_prompt = ("g50t-5849a774", "g50t")
+    assert d.call("the frame is 64x64 and one object moved", beat="theorize")
+    assert d.calls == 1
+
+
+def pool_of(binding):
+    """The gate behind a binding, for asserting nothing was charged."""
+    return binding.gate

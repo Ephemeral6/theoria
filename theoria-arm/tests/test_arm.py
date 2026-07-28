@@ -1014,3 +1014,51 @@ def test_a_manual_without_a_declared_ambiguity_type_files_crashes_as_crashes(
         "a crash was filed as an ambiguity -- a finding about the world")
     assert report["pairs_checked"] <= report["pairs_nominal"]
     assert report["ok"] is False
+
+
+def test_the_arms_desk_is_armed_against_the_game_id(tmp_path):
+    """The wiring, not the mechanism.
+
+    `test_desk_gate.py` proves `ModelDesk` refuses a prompt carrying the game
+    id. That is worth nothing if `inner/loop.py` builds the desk without arming
+    it, which is exactly the kind of gap that let the rule hold "by omission"
+    in the first place. So: build the arm the way `play()` does and look at the
+    desk it actually made.
+
+    Both spellings must be present. The stem is the half that leaks -- it is
+    what a run slug embeds and therefore what an absolute path in an engine
+    traceback carries into the prompt.
+    """
+    from inner.loop import TheoriaArm                   # noqa: PLC0415
+    from proxy.ledger import Ledger, RunLedger          # noqa: PLC0415
+
+    class _Run:
+        def __init__(self, d):
+            self.dir = str(d)
+            self.run_id = "r-wiring"
+            self.run = RunLedger(Ledger(str(d / "l.jsonl")), "r-wiring",
+                                 "theoria", game_id="g50t-5849a774")
+            self.spend_binding = None
+
+    arm = TheoriaArm(env_base="http://127.0.0.1:1", run=_Run(tmp_path),
+                     game_id="g50t-5849a774", budget_actions=1, offline=True)
+
+    assert "g50t-5849a774" in arm.desk.forbid_in_prompt
+    assert "g50t" in arm.desk.forbid_in_prompt
+
+
+def test_a_campaign_leg_slug_carries_no_game(tmp_path):
+    """The other half of the same rule, at the source.
+
+    The guard is a backstop. The fix is that the id never enters a path, so it
+    cannot be picked up by a traceback, a compiler error or a Lean diagnostic
+    that this arm has not thought of.
+    """
+    from harness import campaign as camp                # noqa: PLC0415
+
+    c = camp.Campaign(prompt_id="A3-campaign-devpile", out_dir=str(tmp_path),
+                      games=["g50t-5849a774"])
+    slug = c._leg_slug("g50t-5849a774", 1)
+    assert "g50t" not in slug
+    assert "5849a774" not in slug
+    assert slug.endswith("-leg01")

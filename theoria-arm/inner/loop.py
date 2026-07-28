@@ -151,7 +151,12 @@ class TheoriaArm:
         self.desk = ModelDesk(
             run.run, model=model, pricing_ref=pricing,
             cost_ceiling_usd=None if offline else cost_ceiling_usd,
-            transcript_dir=os.path.join(self.dir, "desk"))
+            transcript_dir=os.path.join(self.dir, "desk"),
+            # Both the full id and its stem. The stem is the half that actually
+            # leaks: it is what a run slug embeds, so it is what an absolute
+            # path in an engine traceback or a Lean diagnostic carries into the
+            # prompt. `Theoria.md:353`.
+            forbid_in_prompt=(game_id, game_id.split("-")[0]))
 
         #: How many commands had been recorded when the desk was last called.
         #: The evidence gate in `_theorize_and_certify` turns on it.

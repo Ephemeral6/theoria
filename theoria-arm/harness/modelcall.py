@@ -83,7 +83,7 @@ import shutil
 import subprocess
 import tempfile
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
 
 from harness.spend import NoSpendBinding, SpendBinding      # noqa: F401
 
@@ -99,6 +99,19 @@ PROVIDER = "anthropic-claude-code-cli"
 
 class ModelError(RuntimeError):
     pass
+
+
+class AnonymityBreach(RuntimeError):
+    """A prompt carried a game id.
+
+    Its own class rather than a `ModelError` because the two mean opposite
+    things to a caller. `inner/loop.py` catches desk failures and records them
+    as evidence to go back and theorize against -- which is right for a timeout
+    or an empty reply, and exactly wrong here. A leaked id is not something the
+    loop can learn from; it is a defect in the harness, and the run that
+    produced it is not admissible under `Theoria.md:353` whatever it goes on to
+    measure.
+    """
 
 
 class CostCeilingReached(RuntimeError):
@@ -140,7 +153,8 @@ class ModelDesk:
                  # evidence), but a timeout still throws away a paid call.
                  timeout: int = 1800,
                  spend: Optional[SpendBinding] = None,
-                 transcript_dir: Optional[str] = None):
+                 transcript_dir: Optional[str] = None,
+                 forbid_in_prompt: Sequence[str] = ()):
         self.run = run                                # proxy.ledger.RunLedger
         self.model = model
         self.pricing_ref = pricing_ref
@@ -157,6 +171,32 @@ class ModelDesk:
         #: default: when neither is present `call()` raises, it does not spend.
         self.spend = spend
         self.transcript_dir = transcript_dir
+        #: Substrings that may not appear in any prompt this desk sends.
+        #:
+        #: `Theoria.md:353` names four overfitting channels and seals each. The
+        #: fourth -- model priors, "公开游戏的攻略可能已在预训练语料里" -- cannot
+        #: be closed, only reduced, and the reduction is a hard rule stated in
+        #: those words: **硬规:游戏 ID 永不进模型上下文,全程匿名化**.
+        #:
+        #: Until A3 that rule held by omission. Nothing sanitised model-bound
+        #: text; `build_prompt` was clean only because nobody had ever wired an
+        #: id into it. An adversarial probe found the omission is not enough:
+        #: `world/adapt.py` records `{"error", "traceback"}` for any engine that
+        #: raises, `evidence_brief` dumps that report into the prompt, and an
+        #: `OSError` message carries the path it failed on -- which is under a
+        #: run directory whose slug used to embed the game stem. Forcing a
+        #: candidate-write failure put **six** occurrences of `g50t` inside a
+        #: 20,975-char prompt. Two more channels of the same shape are live but
+        #: dormant: `books.compile_all` stringifies write errors into
+        #: `compile_errors`, and Lean prefixes every diagnostic with the
+        #: absolute file path, which reaches the next prompt verbatim inside a
+        #: `proof_failure` payload.
+        #:
+        #: So the rule is enforced here instead, at the one place every prompt
+        #: passes through, and it is checked *before* the subprocess starts:
+        #: a leaked id is not something to discover in the transcript after
+        #: paying for the call.
+        self.forbid_in_prompt = tuple(s for s in forbid_in_prompt if s)
 
         self.calls = 0
         self.cli_cost_usd = 0.0
@@ -251,6 +291,22 @@ class ModelDesk:
             raise CostCeilingReached(
                 "spent $%.4f of a $%.2f ceiling over %d calls"
                 % (self.cli_cost_usd, self.cost_ceiling_usd, self.calls))
+
+        # Before the gate and before the subprocess: a prompt carrying the game
+        # id must not be sent, and finding out afterwards costs both the money
+        # and the run's admissibility as evidence.
+        leaked = sorted({s for s in self.forbid_in_prompt if s in prompt})
+        if leaked:
+            raise AnonymityBreach(
+                "the prompt carries %s, which Theoria.md:353 forbids ever "
+                "entering model context (硬规:游戏 ID 永不进模型上下文,"
+                "全程匿名化). Not sent, not charged. This is almost never a "
+                "hand-written id -- the usual source is an engine traceback or "
+                "a compiler error carrying an absolute path from a run "
+                "directory whose slug embeds the game stem, which reaches the "
+                "prompt through evidence_brief or a surprise payload. Give the "
+                "run a game-free slug rather than deleting the evidence."
+                % ", ".join(repr(s) for s in leaked))
 
         model = model or self.model
 
