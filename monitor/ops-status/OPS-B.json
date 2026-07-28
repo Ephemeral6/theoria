@@ -1,1 +1,1 @@
-{"id": "OPS-B", "utc": "2026-07-28T14:32Z", "cycle": 5, "state": "idle", "note": "总线已入循环第0步（#1 已回执）；A 条已成 S11 由 W-1410 认领，B 条（公开 replay 红线）仍无归宿，已 bus.say 提请搭 S11 的 CLAUDE.md 编辑窗口，拟插入原文备在 browser-ops/REDLINE-replay-proposed-text.md；条款漂移下次按天巡"}
+{"id": "OPS-B", "utc": "2026-07-28T16:36Z", "cycle": 6, "state": "idle", "note": "总线空。核查发现 S11 标 done 但分支未合并：ci_merge 自 15:47Z 起十余次原样重报 touches protected root files，根因是工单第(3)项要改 CLAUDE.md 而合并门禁止改它——按规格无法自动落地，已 bus.say 建议由监控代落并顺带带上 replay 红线；另报扇出纪律与会话级 subagent 约束的冲突"}
