@@ -128,7 +128,7 @@ papers 5、worldgen 5、arc-recon 4、proxy 3、fuzzlab 2、theoria-arm 2、a0-s
 
 这不是随机的缺口。它有形状：
 
-* **整片新territory没进普查** —— `monitor/` 的 14 个入口一个都没被 V11 判过，
+* **整片领地没进普查** —— `monitor/` 的 14 个入口一个都没被 V11 判过，
   而 `monitor/` 是给别人的闸门评级的那套东西。
 * **每条流水线的中间步骤都缺** —— V11 判了 `cold-start-a2/run_all.py`，
   没判它调用的 12 个 `a2pipeline/*.py`。而退出码的诚实性恰恰是逐步骤的。

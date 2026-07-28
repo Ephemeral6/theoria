@@ -47,11 +47,13 @@ file"），不是为了对上数字才加的；而在加它之前，TP/FP/TN 三
 
 * **绝对值都翻了一倍**：FP 3 → 6，FN 20 → 41。金标准从 95 行涨到 219 行，
   也就是说 V14 的矩阵此前算在总体的 43% 上，现在算在 90% 上。
-* **但假阳的那 3 个新增，一个都不在探针的总体里。**
-  新增的 5 个假阳 —— `engine-rig/fixtures/peg4.py`、`engine-rig/fixtures/sokoban.py`、
-  `theory-compiler/src/theory_compiler/problem.py`，加上 `arc-recon/client.py` 与
-  `proxy/spend_gate.py`（这两个 V11 判过、negctl 也没枚举）—— **全部是 `probe.py`
-  不枚举的文件**。判据在它们身上会答错，可探针从来不问它们。
+* **但新增的 3 个假阳，一个都不在探针的总体里。**
+  6 个假阳按来源分：V11 金标准本来就有的 3 个（`arc-recon/client.py`、
+  `proxy/spend_gate.py`、`worldgen/build.py`），V15 补齐带来的 3 个
+  （`engine-rig/fixtures/peg4.py`、`engine-rig/fixtures/sokoban.py`、
+  `theory-compiler/src/theory_compiler/problem.py`）。
+  **6 个里有 5 个是 `probe.py` 不枚举的文件** —— 判据在它们身上会答错，
+  可探针从来不问它们。
   在探针真正报告的那 145 个单元上，**假阳只有 1 个**：`worldgen/build.py`，
   而那是 V14 自己就点过名的粒度冲突（`gate_failures()` 有负控，
   同一文件里的 `check_determinism()` 全仓零测试）。
