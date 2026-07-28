@@ -1,0 +1,41 @@
+{
+  "agent_start": [
+    2,
+    2
+  ],
+  "colors": {
+    "block": 2
+  },
+  "entities": [
+    {
+      "cell": [
+        2,
+        3
+      ],
+      "kind": "block",
+      "props": {}
+    }
+  ],
+  "families": [
+    "push"
+  ],
+  "flags": {},
+  "goal": [
+    2,
+    5
+  ],
+  "intended_solvable": true,
+  "layout": [
+    "#######",
+    "#..#..#",
+    "#.....#",
+    "#..#..#",
+    "#######"
+  ],
+  "notes": "A block in the only gap of a divider, with room on both sides. The agent can walk round and shove it back, so `push` is witnessable unboundedly often.",
+  "seed": 102,
+  "tier": 1,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t1-push-open"
+}

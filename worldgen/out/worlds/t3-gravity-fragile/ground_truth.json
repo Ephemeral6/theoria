@@ -1,0 +1,404 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 39,
+    "injective": true,
+    "states": 39
+  },
+  "grid": [
+    7,
+    9
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 39,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 7 x 9",
+      "states_checked": 39,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "nothing_rests_on_a_free_cell",
+      "statement": "no movable has a free cell below it, and the agent has no cell below it that it could be deposited on \u2014 every state a reader can observe is a settle fixpoint, so there is nowhere left to fall",
+      "states_checked": 39,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "block_count",
+      "statement": "exactly 1 cell(s) show colour 2 at all times",
+      "states_checked": 39,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "blocks_disjoint",
+      "statement": "no two blocks ever occupy the same cell",
+      "states_checked": 39,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "single_armed_tile",
+      "statement": "at most one fragile tile is armed at any instant",
+      "states_checked": 39,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "armed_tile_under_agent",
+      "statement": "an armed fragile tile's cell is the agent's cell",
+      "states_checked": 39,
+      "verified": true
+    },
+    {
+      "name": "tile_state_is_monotone",
+      "note": "prose only \u2014 not checkable on a single state",
+      "statement": "a fragile tile's state only ever rises, 0 -> 1 -> 2, so a collapsed tile is never crossed again",
+      "verified": false
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "block": 2,
+    "collapsed": 4,
+    "floor": 0,
+    "fragile": 3,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": false,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": false,
+        "rule": "fall",
+        "verdict": "unreachable"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "agent_does_not_fall_onto_live_entities",
+        "verdict": "unreachable"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "up_is_inert",
+        "verdict": "unreachable"
+      },
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 only where the agent can reach the far side of the block",
+        "measured": 3,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+        "rule": "push",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_block",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "re_witnessable",
+        "claimed": true,
+        "measured": 2,
+        "re_witnessable": true,
+        "reversible": false,
+        "rule": "cross_fragile",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_collapsed",
+        "verdict": "agrees"
+      }
+    ],
+    "components": 7,
+    "reachable_states": 39,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_block": {
+        "firing_states": 1,
+        "firing_transitions": 1,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_collapsed": {
+        "firing_states": 6,
+        "firing_transitions": 6,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 39,
+        "firing_transitions": 79,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "cross_fragile": {
+        "firing_states": 3,
+        "firing_transitions": 3,
+        "max_witnesses": 2,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "push": {
+        "firing_states": 3,
+        "firing_transitions": 3,
+        "max_witnesses": 3,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 39,
+        "firing_transitions": 64,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 6,
+    "rules_single_witness": [],
+    "rules_total": 6
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [
+      "agent_does_not_fall_onto_live_entities",
+      "fall",
+      "up_is_inert"
+    ],
+    "declared": [
+      "agent_does_not_fall_onto_live_entities",
+      "blocked_by_block",
+      "blocked_by_collapsed",
+      "blocked_by_wall",
+      "cross_fragile",
+      "fall",
+      "push",
+      "up_is_inert",
+      "walk"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [],
+    "fired": [
+      "blocked_by_block",
+      "blocked_by_collapsed",
+      "blocked_by_wall",
+      "cross_fragile",
+      "push",
+      "walk"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "cascade": true,
+      "name": "fall",
+      "reversible": false,
+      "then": "that thing descends one cell, and this repeats to a fixpoint \u2014 a post-step settlement, appended to whatever rule ended the step, never tagged as a rule of its own",
+      "when": "a movable has a free cell directly below it, or the agent has a cell directly below it that the agent may be deposited on",
+      "why": "descending a ledge cannot be undone from below, so a fall is a one-way edge in the reachable graph and any rule witnessed only above a ledge gets exactly one witness"
+    },
+    {
+      "cascade": true,
+      "name": "agent_does_not_fall_onto_live_entities",
+      "reversible": true,
+      "then": "the agent does not descend into it \u2014 it stays where it is, hovering, until it walks in and triggers the effect properly",
+      "when": "the cell below the agent holds an uncollected token or an intact fragile tile",
+      "why": "an agent dropped onto a fragile tile would skip `interact` and leave the tile ARMED while rendering exactly as INTACT, and a state the frame cannot distinguish is a world that cannot be learned from its trace.  The hovering *is* visible \u2014 the token or tile is right there under the agent \u2014 so this is a rule a reader can witness rather than an unexplained exception"
+    },
+    {
+      "cascade": true,
+      "name": "up_is_inert",
+      "reversible": true,
+      "then": "the agent rises into it, then falls straight back during the same step's settlement, so the state after the step equals the state before it",
+      "when": "act=UP and the cell above the agent is plain floor",
+      "why": "scoped to plain floor because it is false otherwise, and was published unscoped: gravity claims no target cell, so UP into a fragile tile, a latch, a toggle or a shut cycler dispatches to that mechanism's `interact`, which fires *before* the fall back. One UP into a fragile tile returns the agent to where it started and leaves the tile permanently collapsed"
+    },
+    {
+      "name": "push",
+      "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+      "then": "the block moves one cell in direction D and the agent takes the block's old cell",
+      "when": "act=D and the target cell holds a block and the cell beyond it in direction D is free"
+    },
+    {
+      "clause": true,
+      "name": "blocked_by_block",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a block and the cell beyond it is not free"
+    },
+    {
+      "name": "cross_fragile",
+      "re_witnessable": true,
+      "reversible": false,
+      "then": "the agent moves onto the tile and the tile arms.  The tile does not collapse on this step: the collapse happens later, in settlement, on the first step at which the agent is no longer standing there \u2014 so in the trace the tile changes to the collapsed colour one frame after the crossing, not in the frame of the crossing itself",
+      "when": "act=D and the target cell holds an intact fragile tile",
+      "why": "one witness per tile, so the count is the number of tiles \u2014 2 here"
+    },
+    {
+      "clause": true,
+      "name": "blocked_by_collapsed",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a collapsed fragile tile"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 20,
+    "goal": [
+      5,
+      7
+    ],
+    "optimal_length": 8,
+    "optimal_plan": [
+      "RIGHT",
+      "RIGHT",
+      "DOWN",
+      "RIGHT",
+      "RIGHT",
+      "DOWN",
+      "RIGHT",
+      "RIGHT"
+    ],
+    "reachable_states": 39,
+    "solvable": true,
+    "world_id": "t3-gravity-fragile"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "block": 2,
+      "collapsed": 4,
+      "fragile": 3
+    },
+    "entities": [
+      {
+        "cell": [
+          2,
+          3
+        ],
+        "kind": "fragile",
+        "props": {}
+      },
+      {
+        "cell": [
+          3,
+          4
+        ],
+        "kind": "block",
+        "props": {}
+      },
+      {
+        "cell": [
+          4,
+          5
+        ],
+        "kind": "fragile",
+        "props": {}
+      }
+    ],
+    "families": [
+      "consumable",
+      "gravity",
+      "push"
+    ],
+    "flags": {
+      "gravity": true
+    },
+    "goal": [
+      5,
+      7
+    ],
+    "intended_solvable": true,
+    "layout": [
+      "#########",
+      "#.......#",
+      "###.#####",
+      "#.......#",
+      "#####.###",
+      "#.......#",
+      "#########"
+    ],
+    "notes": "Gravity, a shovable block and two one-shot floors. Every descent is one-way and every crossing is one-shot, so the reachable graph is close to a DAG \u2014 the extreme opposite of `t1-cycler-gate`.",
+    "seed": 302,
+    "tier": 3,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "t3-gravity-fragile"
+  },
+  "world_id": "t3-gravity-fragile"
+}

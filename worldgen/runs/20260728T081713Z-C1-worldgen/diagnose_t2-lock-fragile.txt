@@ -1,0 +1,221 @@
+﻿world t2-lock-fragile: 111 frames, 110 transitions, 5 tracks, 98 atoms
+
+FAILS  track=obj0 action=DOWN effect=('move', 1, 0, None)  (1 positives)
+  NoSeparatingGuard: no literal separates transition 1 from the positives
+  negative t=1 action=DOWN
+  positive t=0 action=DOWN
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 1  negative=100202101
+    row 1  positive=160202101
+    row 2  negative=161110101
+    row 2  positive=101110101
+
+FAILS  track=obj0 action=DOWN effect=('vanish', 0, 0, None)  (1 positives)
+  NoSeparatingGuard: no literal separates transition 0 from the positives
+  negative t=0 action=DOWN
+  positive t=1 action=DOWN
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 1  negative=160202101
+    row 1  positive=100202101
+    row 2  negative=101110101
+    row 2  positive=161110101
+
+FAILS  track=obj1 action=LEFT effect=('none', 0, 0, None)  (25 positives)
+  NoSeparatingGuard: no literal separates transition 33 from the positives
+  negative t=33 action=LEFT
+  positive t=5 action=LEFT
+  every atom in the vocabulary agrees on both: False
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 1  negative=100602101
+    row 1  positive=100202101
+    row 5  negative=100010301
+    row 5  positive=160010301
+
+FAILS  track=obj1 action=RIGHT effect=('none', 0, 0, None)  (14 positives)
+  NoSeparatingGuard: no literal separates transition 60 from the positives
+  negative t=60 action=RIGHT
+  positive t=6 action=RIGHT
+  every atom in the vocabulary agrees on both: False
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 1  negative=100602101
+    row 1  positive=100202101
+    row 5  negative=100010301
+    row 5  positive=160010301
+
+FAILS  track=obj2 action=DOWN effect=('move', 1, 0, None)  (8 positives)
+  NoSeparatingGuard: no literal separates transition 76 from the positives
+  negative t=76 action=DOWN
+  positive t=72 action=DOWN
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 1  negative=100000101
+    row 1  positive=100006101
+    row 5  negative=100016001
+    row 5  positive=100010001
+
+FAILS  track=obj2 action=DOWN effect=('none', 0, 0, None)  (27 positives)
+  NoSeparatingGuard: no literal separates transition 72 from the positives
+  negative t=72 action=DOWN
+  positive t=76 action=DOWN
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 1  negative=100006101
+    row 1  positive=100000101
+    row 5  negative=100010001
+    row 5  positive=100016001
+
+FAILS  track=obj2 action=LEFT effect=('move', 0, -1, None)  (6 positives)
+  NoSeparatingGuard: no literal separates transition 77 from the positives
+  negative t=77 action=LEFT
+  positive t=80 action=LEFT
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 5  negative=100016001
+    row 5  positive=100010601
+
+FAILS  track=obj2 action=LEFT effect=('none', 0, 0, None)  (26 positives)
+  NoSeparatingGuard: no literal separates transition 80 from the positives
+  negative t=80 action=LEFT
+  positive t=77 action=LEFT
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 5  negative=100010601
+    row 5  positive=100016001
+
+FAILS  track=obj2 action=RIGHT effect=('move', 0, 1, None)  (2 positives)
+  NoSeparatingGuard: no literal separates transition 83 from the positives
+  negative t=83 action=RIGHT
+  positive t=78 action=RIGHT
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 4  negative=101016101
+    row 4  positive=101010101
+    row 5  negative=100010001
+    row 5  positive=100016001
+
+FAILS  track=obj2 action=RIGHT effect=('none', 0, 0, None)  (21 positives)
+  NoSeparatingGuard: no literal separates transition 78 from the positives
+  negative t=78 action=RIGHT
+  positive t=83 action=RIGHT
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 4  negative=101010101
+    row 4  positive=101016101
+    row 5  negative=100016001
+    row 5  positive=100010001
+
+FAILS  track=obj3 action=DOWN effect=('move', 1, 0, None)  (4 positives)
+  NoSeparatingGuard: no literal separates transition 4 from the positives
+  negative t=4 action=DOWN
+  positive t=2 action=DOWN
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 3  negative=100010141
+    row 3  positive=160010141
+    row 5  negative=160010301
+    row 5  positive=100010301
+
+FAILS  track=obj3 action=DOWN effect=('none', 0, 0, None)  (30 positives)
+  NoSeparatingGuard: no literal separates transition 1 from the positives
+  negative t=1 action=DOWN
+  positive t=0 action=DOWN
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 1  negative=100202101
+    row 1  positive=160202101
+    row 2  negative=161110101
+    row 2  positive=101110101
+
+FAILS  track=obj3 action=DOWN effect=('recolor', 0, 0, 6)  (1 positives)
+  NoSeparatingGuard: no literal separates transition 0 from the positives
+  negative t=0 action=DOWN
+  positive t=1 action=DOWN
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 1  negative=160202101
+    row 1  positive=100202101
+    row 2  negative=101110101
+    row 2  positive=161110101
+
+FAILS  track=obj3 action=LEFT effect=('move', 0, -1, None)  (3 positives)
+  NoSeparatingGuard: no literal separates transition 5 from the positives
+  negative t=5 action=LEFT
+  positive t=8 action=LEFT
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 5  negative=160010301
+    row 5  positive=106010301
+
+FAILS  track=obj3 action=LEFT effect=('none', 0, 0, None)  (29 positives)
+  NoSeparatingGuard: no literal separates transition 8 from the positives
+  negative t=8 action=LEFT
+  positive t=5 action=LEFT
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 5  negative=106010301
+    row 5  positive=160010301
+
+FAILS  track=obj3 action=RIGHT effect=('move', 0, 1, None)  (4 positives)
+  NoSeparatingGuard: no literal separates transition 11 from the positives
+  negative t=11 action=RIGHT
+  positive t=6 action=RIGHT
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 4  negative=161010101
+    row 4  positive=101010101
+    row 5  negative=100010301
+    row 5  positive=160010301
+
+FAILS  track=obj3 action=RIGHT effect=('none', 0, 0, None)  (19 positives)
+  NoSeparatingGuard: no literal separates transition 6 from the positives
+  negative t=6 action=RIGHT
+  positive t=11 action=RIGHT
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 4  negative=101010101
+    row 4  positive=161010101
+    row 5  negative=160010301
+    row 5  positive=100010301
+
+FAILS  track=obj3 action=UP effect=('move', -1, 0, None)  (6 positives)
+  NoSeparatingGuard: no literal separates transition 29 from the positives
+  negative t=29 action=UP
+  positive t=9 action=UP
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 1  negative=160202101
+    row 1  positive=100202101
+    row 5  negative=100010301
+    row 5  positive=160010301
+
+FAILS  track=obj3 action=UP effect=('none', 0, 0, None)  (13 positives)
+  NoSeparatingGuard: no literal separates transition 9 from the positives
+  negative t=9 action=UP
+  positive t=29 action=UP
+  every atom in the vocabulary agrees on both: True
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 1  negative=100202101
+    row 1  positive=160202101
+    row 5  negative=160010301
+    row 5  positive=100010301

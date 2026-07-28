@@ -1,0 +1,57 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "portal": 2
+  },
+  "entities": [
+    {
+      "cell": [
+        3,
+        1
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "twoway",
+        "pair": "p"
+      }
+    },
+    {
+      "cell": [
+        4,
+        7
+      ],
+      "kind": "portal",
+      "props": {
+        "mode": "twoway",
+        "pair": "p"
+      }
+    }
+  ],
+  "families": [
+    "portal"
+  ],
+  "flags": {},
+  "goal": [
+    5,
+    7
+  ],
+  "intended_solvable": true,
+  "layout": [
+    "#########",
+    "#....#..#",
+    "#.####..#",
+    "#...##..#",
+    "#.###...#",
+    "#.....#.#",
+    "#########"
+  ],
+  "notes": "Two mouths, same colour, and nothing in the palette says they are linked \u2014 the pairing has to be induced from behaviour.",
+  "seed": 202,
+  "tier": 2,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t2-portal-pair"
+}

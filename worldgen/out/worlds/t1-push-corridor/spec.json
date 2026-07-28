@@ -1,0 +1,41 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "block": 2
+  },
+  "entities": [
+    {
+      "cell": [
+        1,
+        3
+      ],
+      "kind": "block",
+      "props": {}
+    }
+  ],
+  "families": [
+    "push"
+  ],
+  "flags": {},
+  "goal": [
+    3,
+    4
+  ],
+  "intended_solvable": true,
+  "layout": [
+    "######",
+    "#....#",
+    "#.####",
+    "#....#",
+    "######"
+  ],
+  "notes": "The block can be shoved exactly once before it meets the wall, and the agent can never reach its far side. Identical rule, one witness. This is the A0 vs A0\u2032 contrast with the mechanism held fixed and only the geometry moved.",
+  "seed": 103,
+  "tier": 1,
+  "variant_delta": "same mechanism, dead-end corridor instead of an open room",
+  "variant_of": "t1-push-open",
+  "world_id": "t1-push-corridor"
+}

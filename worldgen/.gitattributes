@@ -1,0 +1,13 @@
+# Every artefact in this directory is byte-compared: `build.py --check` rebuilds
+# the catalogue and diffs it, and `raw_trace.jsonl` has to stay byte-identical in
+# shape to cold-start-a0's producer, which writes with newline="\n".
+#
+# `core.autocrlf` is true on the machine this was built on.  Without this file
+# the first commit normalises these files, the next Windows checkout materialises
+# CRLF, and the traces silently stop matching.  Every sibling artefact directory
+# in this repo pins the same thing.
+* text eol=lf
+*.jsonl text eol=lf
+*.json  text eol=lf
+*.md    text eol=lf
+*.py    text eol=lf

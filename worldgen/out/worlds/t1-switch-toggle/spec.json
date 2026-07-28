@@ -1,0 +1,69 @@
+{
+  "agent_start": [
+    1,
+    2
+  ],
+  "colors": {
+    "door": 4,
+    "switch": 2,
+    "switch_on": 3
+  },
+  "entities": [
+    {
+      "cell": [
+        3,
+        4
+      ],
+      "kind": "door",
+      "props": {
+        "net": "a",
+        "polarity": "open_when_on"
+      }
+    },
+    {
+      "cell": [
+        4,
+        1
+      ],
+      "kind": "switch",
+      "props": {
+        "mode": "toggle",
+        "net": "a"
+      }
+    },
+    {
+      "cell": [
+        4,
+        2
+      ],
+      "kind": "door",
+      "props": {
+        "net": "a",
+        "polarity": "open_when_on"
+      }
+    }
+  ],
+  "families": [
+    "switch_door"
+  ],
+  "flags": {},
+  "goal": [
+    4,
+    5
+  ],
+  "intended_solvable": true,
+  "layout": [
+    "#######",
+    "#...#.#",
+    "#...#.#",
+    "#.....#",
+    "#...#.#",
+    "#######"
+  ],
+  "notes": "A0\u2032's central mechanic on its own. The switch is re-witnessable from all four directions and both ways, and it is load-bearing: the door is the only gap in the divider, so the goal is unreachable until it is thrown.",
+  "seed": 104,
+  "tier": 1,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t1-switch-toggle"
+}

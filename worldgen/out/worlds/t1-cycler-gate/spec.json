@@ -1,0 +1,47 @@
+{
+  "agent_start": [
+    2,
+    2
+  ],
+  "colors": {
+    "cycler": 2,
+    "cycler_1": 3,
+    "cycler_2": 4
+  },
+  "entities": [
+    {
+      "cell": [
+        2,
+        4
+      ],
+      "kind": "cycler",
+      "props": {
+        "k": 3,
+        "open_phase": 2
+      }
+    }
+  ],
+  "families": [
+    "color_cycle"
+  ],
+  "flags": {},
+  "goal": [
+    4,
+    5
+  ],
+  "intended_solvable": true,
+  "layout": [
+    "#######",
+    "#.....#",
+    "#.....#",
+    "#.....#",
+    "#.....#",
+    "#######"
+  ],
+  "notes": "A gate that has to be pushed twice to open and stays open. Fully reversible: keep pushing and the phase comes back round. The cheapest world in the catalogue for which the naive 'colour means state' reading is right.",
+  "seed": 107,
+  "tier": 1,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t1-cycler-gate"
+}

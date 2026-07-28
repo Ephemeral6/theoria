@@ -1,0 +1,25 @@
+{
+  "budget": 70,
+  "coverage": "69/232",
+  "coverage_fraction": 0.2974,
+  "covered_pairs": 69,
+  "frames": 71,
+  "reachable_states": 58,
+  "rules_never_witnessed": {
+    "advance_cycler": 7,
+    "blocked_by_wall": 40,
+    "walk": 112,
+    "walk_through_cycler": 4
+  },
+  "rules_witnessed": {
+    "advance_cycler": 1,
+    "blocked_by_wall": 14,
+    "walk": 55
+  },
+  "state_action_pairs": 232,
+  "transitions": 70,
+  "win_frames": [
+    34,
+    35
+  ]
+}

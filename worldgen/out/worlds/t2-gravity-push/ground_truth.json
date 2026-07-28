@@ -1,0 +1,314 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 35,
+    "injective": true,
+    "states": 35
+  },
+  "grid": [
+    7,
+    9
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 35,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 7 x 9",
+      "states_checked": 35,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "nothing_rests_on_a_free_cell",
+      "statement": "no movable has a free cell below it, and the agent has no cell below it that it could be deposited on \u2014 every state a reader can observe is a settle fixpoint, so there is nowhere left to fall",
+      "states_checked": 35,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "block_count",
+      "statement": "exactly 1 cell(s) show colour 2 at all times",
+      "states_checked": 35,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "blocks_disjoint",
+      "statement": "no two blocks ever occupy the same cell",
+      "states_checked": 35,
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "block": 2,
+    "floor": 0,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": false,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": false,
+        "rule": "fall",
+        "verdict": "unreachable"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "agent_does_not_fall_onto_live_entities",
+        "verdict": "unreachable"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": null,
+        "re_witnessable": null,
+        "reversible": true,
+        "rule": "up_is_inert",
+        "verdict": "unreachable"
+      },
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 only where the agent can reach the far side of the block",
+        "measured": 2,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+        "rule": "push",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_block",
+        "verdict": "agrees"
+      }
+    ],
+    "components": 7,
+    "reachable_states": 35,
+    "reversibility_score": 1.0,
+    "rules": {
+      "blocked_by_block": {
+        "firing_states": 1,
+        "firing_transitions": 1,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "blocked_by_wall": {
+        "firing_states": 35,
+        "firing_transitions": 71,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "push": {
+        "firing_states": 2,
+        "firing_transitions": 2,
+        "max_witnesses": 2,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 35,
+        "firing_transitions": 66,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 4,
+    "rules_single_witness": [],
+    "rules_total": 4
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [
+      "agent_does_not_fall_onto_live_entities",
+      "fall",
+      "up_is_inert"
+    ],
+    "declared": [
+      "agent_does_not_fall_onto_live_entities",
+      "blocked_by_block",
+      "blocked_by_wall",
+      "fall",
+      "push",
+      "up_is_inert",
+      "walk"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [],
+    "fired": [
+      "blocked_by_block",
+      "blocked_by_wall",
+      "push",
+      "walk"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "cascade": true,
+      "name": "fall",
+      "reversible": false,
+      "then": "that thing descends one cell, and this repeats to a fixpoint \u2014 a post-step settlement, appended to whatever rule ended the step, never tagged as a rule of its own",
+      "when": "a movable has a free cell directly below it, or the agent has a cell directly below it that the agent may be deposited on",
+      "why": "descending a ledge cannot be undone from below, so a fall is a one-way edge in the reachable graph and any rule witnessed only above a ledge gets exactly one witness"
+    },
+    {
+      "cascade": true,
+      "name": "agent_does_not_fall_onto_live_entities",
+      "reversible": true,
+      "then": "the agent does not descend into it \u2014 it stays where it is, hovering, until it walks in and triggers the effect properly",
+      "when": "the cell below the agent holds an uncollected token or an intact fragile tile",
+      "why": "an agent dropped onto a fragile tile would skip `interact` and leave the tile ARMED while rendering exactly as INTACT, and a state the frame cannot distinguish is a world that cannot be learned from its trace.  The hovering *is* visible \u2014 the token or tile is right there under the agent \u2014 so this is a rule a reader can witness rather than an unexplained exception"
+    },
+    {
+      "cascade": true,
+      "name": "up_is_inert",
+      "reversible": true,
+      "then": "the agent rises into it, then falls straight back during the same step's settlement, so the state after the step equals the state before it",
+      "when": "act=UP and the cell above the agent is plain floor",
+      "why": "scoped to plain floor because it is false otherwise, and was published unscoped: gravity claims no target cell, so UP into a fragile tile, a latch, a toggle or a shut cycler dispatches to that mechanism's `interact`, which fires *before* the fall back. One UP into a fragile tile returns the agent to where it started and leaves the tile permanently collapsed"
+    },
+    {
+      "name": "push",
+      "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+      "then": "the block moves one cell in direction D and the agent takes the block's old cell",
+      "when": "act=D and the target cell holds a block and the cell beyond it in direction D is free"
+    },
+    {
+      "clause": true,
+      "name": "blocked_by_block",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell holds a block and the cell beyond it is not free"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 14,
+    "goal": [
+      5,
+      7
+    ],
+    "optimal_length": 10,
+    "optimal_plan": [
+      "RIGHT",
+      "RIGHT",
+      "LEFT",
+      "LEFT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT"
+    ],
+    "reachable_states": 35,
+    "solvable": true,
+    "world_id": "t2-gravity-push"
+  },
+  "spec": {
+    "agent_start": [
+      1,
+      1
+    ],
+    "colors": {
+      "block": 2
+    },
+    "entities": [
+      {
+        "cell": [
+          3,
+          5
+        ],
+        "kind": "block",
+        "props": {}
+      }
+    ],
+    "families": [
+      "gravity",
+      "push"
+    ],
+    "flags": {
+      "gravity": true
+    },
+    "goal": [
+      5,
+      7
+    ],
+    "intended_solvable": true,
+    "layout": [
+      "#########",
+      "#.......#",
+      "###.#####",
+      "#.......#",
+      "#.#######",
+      "#.......#",
+      "#########"
+    ],
+    "notes": "Ledges and a shaft. `UP` is inert here \u2014 the agent moves and gravity settles it straight back \u2014 and descending a ledge cannot be undone, so the reachable graph is genuinely layered rather than a big reversible blob.",
+    "seed": 204,
+    "tier": 2,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "t2-gravity-push"
+  },
+  "world_id": "t2-gravity-push"
+}

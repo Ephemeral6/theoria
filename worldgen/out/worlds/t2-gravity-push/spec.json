@@ -1,0 +1,46 @@
+{
+  "agent_start": [
+    1,
+    1
+  ],
+  "colors": {
+    "block": 2
+  },
+  "entities": [
+    {
+      "cell": [
+        3,
+        5
+      ],
+      "kind": "block",
+      "props": {}
+    }
+  ],
+  "families": [
+    "gravity",
+    "push"
+  ],
+  "flags": {
+    "gravity": true
+  },
+  "goal": [
+    5,
+    7
+  ],
+  "intended_solvable": true,
+  "layout": [
+    "#########",
+    "#.......#",
+    "###.#####",
+    "#.......#",
+    "#.#######",
+    "#.......#",
+    "#########"
+  ],
+  "notes": "Ledges and a shaft. `UP` is inert here \u2014 the agent moves and gravity settles it straight back \u2014 and descending a ledge cannot be undone, so the reachable graph is genuinely layered rather than a big reversible blob.",
+  "seed": 204,
+  "tier": 2,
+  "variant_delta": "",
+  "variant_of": null,
+  "world_id": "t2-gravity-push"
+}

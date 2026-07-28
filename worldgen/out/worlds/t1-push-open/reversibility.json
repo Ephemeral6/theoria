@@ -1,0 +1,77 @@
+{
+  "claim_disagreements": [],
+  "claims": [
+    {
+      "axis": "reversible",
+      "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "rule": "walk",
+      "verdict": "deferred"
+    },
+    {
+      "axis": "reversible",
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": true,
+      "rule": "blocked_by_wall",
+      "verdict": "agrees"
+    },
+    {
+      "axis": "reversible",
+      "claimed": "conditional \u2014 only where the agent can reach the far side of the block",
+      "measured": 3,
+      "re_witnessable": true,
+      "reversible": "conditional \u2014 only where the agent can reach the far side of the block",
+      "rule": "push",
+      "verdict": "deferred"
+    },
+    {
+      "axis": "reversible",
+      "claimed": true,
+      "measured": -1,
+      "re_witnessable": true,
+      "reversible": true,
+      "rule": "blocked_by_block",
+      "verdict": "agrees"
+    }
+  ],
+  "components": 5,
+  "reachable_states": 49,
+  "reversibility_score": 1.0,
+  "rules": {
+    "blocked_by_block": {
+      "firing_states": 5,
+      "firing_transitions": 5,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "blocked_by_wall": {
+      "firing_states": 41,
+      "firing_transitions": 75,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "push": {
+      "firing_states": 4,
+      "firing_transitions": 4,
+      "max_witnesses": 3,
+      "re_witnessable": true,
+      "single_witness": false
+    },
+    "walk": {
+      "firing_states": 49,
+      "firing_transitions": 112,
+      "max_witnesses": -1,
+      "re_witnessable": true,
+      "single_witness": false
+    }
+  },
+  "rules_re_witnessable": 4,
+  "rules_single_witness": [],
+  "rules_total": 4
+}
