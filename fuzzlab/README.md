@@ -24,6 +24,14 @@ the question. So `oracles/gf2.py` is a separate bitset Gaussian elimination and
 `fuzzlab` **never modifies `engine-rig`** — `rig.py` puts it on `sys.path` and
 that is the entire interaction. Defects go here and to `PARTNER_SYNC.md`.
 
+The rule bites hardest where an engine consumes another engine's output.
+`cegis_miner` publishes `effect.*` — what a rule says *happens* — and the
+obvious source of truth for it is `transitions[i].effect`, which is
+`cegis_miner` repeating `mdl_segmenter`'s narration. Judging one against the
+other establishes that the two agree, and is blind to both being wrong the same
+way. So `oracles/motion.py` recomputes what happened from the world's rendered
+pixels and imports nothing from `engines` at all.
+
 ## The other half: can these invariants fire at all?
 
 A green campaign says something about the engines only to the extent that the
@@ -57,11 +65,22 @@ green campaign for as long as it existed.
 | engine | family | invariants |
 |---|---|---|
 | `mdl_segmenter` | `gridworld` | masks partition the foreground · masks follow anchors · events agree with tracks · script-bits identity |
-| `cegis_miner` | `gridworld` | frontier guards are consistent · frontier complete to its own size bound · applicable == support · guards partition the evidence |
+| `cegis_miner` | `gridworld` | frontier guards are consistent · frontier complete to its own size bound · applicable == support · guards partition the evidence · **effects agree with the evidence** · **rules fire on the action they name** |
 | `zero_space` | `parityworld` | laws hold on the trajectory · law space is complete (both directions) · rank–nullity · membership agrees |
 | `lp_potential` | `jumpgraph` | certificate ⟹ unreachable · the three conditions hold in exact rationals · heuristic is admissible · infinite ⟹ unreachable |
 | `fd_adapter` | `blockworld` | plan replays to the goal · optimal rungs are optimal · no plan ⟹ unsolvable |
-| `probe_frontier` | `hypset` | partition matches the observation table · entropy matches brute force · ranking is sound · `splits` is honest |
+| `probe_frontier` | `hypset` | partition matches the observation table · entropy matches brute force · ranking is sound · `splits` is honest · **costs are the world's** |
+
+**Coverage is reported per invariant and it is not the world count.**
+`campaign.json`'s `invariant_worlds_evaluated` subtracts the worlds an invariant
+filed a `skipped` on, so an invariant that declines is visible as a smaller
+number rather than as a silent pass. Two of them decline often and for stated
+reasons: `lp_potential`'s four evaluate 267 of 500, because the engine issues no
+certificate on 46.6% of `jumpgraph` worlds and every claim there is conditional
+on one; all six `cegis_miner` invariants evaluate 465 of 500, declining the
+worlds where the object that was mined cannot be established as the mover.
+Those numbers used to read 500 and 500 — and the second one used to read 480
+while 54 of those 480 were auditing a rock. See `BUGS.md` § V-13 supersede.
 
 `BUGS.md` lists what was **deliberately not** asserted and why. Writing an
 invariant against a guarantee nobody made produces a confident, wrong bug report,

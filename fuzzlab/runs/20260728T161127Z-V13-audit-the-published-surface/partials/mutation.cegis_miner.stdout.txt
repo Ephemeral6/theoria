@@ -1,0 +1,19 @@
+cegis_miner      15 mutants over 40 worlds
+  cm-frontier-guard-inconsistent   unsound      eval=39   inert=1    killed by frontier_guards_are_consistent
+  cm-drop-frontier-guard           incomplete   eval=35   inert=5    killed by frontier_is_complete_to_size
+  cm-empty-frontier                incomplete   eval=39   inert=1    SURVIVED
+  cm-truncation-alibi              incomplete   eval=35   inert=5    SURVIVED
+  cm-inflate-applicable            unsound      eval=39   inert=1    killed by applicable_equals_support
+  cm-weaken-ground-guard           unsound      eval=39   inert=1    killed by guards_partition_the_evidence
+  cm-drop-rule                     incomplete   eval=39   inert=1    killed by guards_partition_the_evidence
+  cm-shrink-lifted-support         incomplete   eval=34   inert=6    killed by applicable_equals_support
+  cm-flip-effect-delta             unsound      eval=37   inert=3    killed by effects_agree_with_the_evidence
+  cm-effect-none-becomes-move      unsound      eval=36   inert=4    killed by effects_agree_with_the_evidence
+  cm-drift-effect-destination      unsound      eval=18   inert=22   killed by effects_agree_with_the_evidence
+  cm-drop-effect-destination       incomplete   eval=18   inert=22   SURVIVED
+  cm-freeze-lifted-direction       unsound      eval=34   inert=6    killed by effects_agree_with_the_evidence
+  cm-lift-admits-a-wrong-direction unsound      eval=32   inert=8    killed by effects_agree_with_the_evidence
+  cm-relabel-rule-action           unsound      eval=39   inert=1    killed by rules_fire_on_the_action_they_name
+
+wrote C:\Users\user\Desktop\theoria\.worktrees\v13-audit-the-published-surface\fuzzlab\out\mutation.cegis_miner.json
+mutants: 15   survivors: 3
