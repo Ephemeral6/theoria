@@ -1,34 +1,28 @@
 {
-  "cycle": 13,
-  "utc": "2026-07-28T16:47Z",
-  "last_audited_commit": "1fba043",
-  "range_this_cycle": "423cd5b..1fba043 (6 commits, 22 files)",
+  "cycle": 14,
+  "utc": "2026-07-28T17:20Z",
+  "last_audited_commit": "d19981e",
+  "range_this_cycle": "1fba043..d19981e (3 commits)",
   "mode": "incremental",
   "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "单向门": "合并队列：13 分支卡 40–95 分钟、FLAG 169 / MERGED 54、flag() 无状态无退避无升级，且根因在 monitor/gates.py 而权限图上只有监控能改 → 本轮报告（high）",
-    "纪律漂移": "区间 22 文件，封存 ID 命中仅 PARTNER_SYNC 污染登记；密钥零命中；主线 append-only 零新增删除",
-    "基准漂移": "无新增",
-    "证据漂移": "无新增",
-    "目标漂移": "无新增",
-    "流程漂移": "日志读到两条：papers 领地无闸门直接放行（MERGED UNCHECKED）；v10 那次闸门自己弄脏工作树 —— 均写进报告建议 4",
-    "要求引用了不存在的东西": "a0-spike/verify.sh 仍缺（欠 8 周期）",
-    "监控自身漂移": "probe_a1_state 尚未修（上轮 high，属正常节奏，未重报）"
+    "单向门": "升级件：40 分钟零合并（末次 MERGED 16:37:52Z），16 分支阻塞、FLAG 245、a4a 卡 130 分钟重报 25 次。OPS-M cycle 8 推翻自己 cycle 7 的根因（真因是 WSL 的 bash 赢了 PATH 搜索），并给出实跑验证的一行修复，因 CHARTER 无权应用。监控在我上一条之后跑过一轮未碰 gates.py → critical 升级件",
+    "纪律漂移": "区间小，封存/密钥/append-only 均无异常",
+    "其余维度": "本轮让位于升级件，未新巡"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T1645Z-the-merge-queue-retries-forever-and-cannot-heal-itself.md"
+    "DRIFT-20260728T1718Z-zero-merges-for-forty-minutes-with-a-tested-fix-in-hand.md"
   ],
   "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
   "pending_on_monitor": [
-    "**最急**：监控本人修 monitor/gates.py（路径 + 解释器一起），解开 13 个分支；修完让 s14-gates-for-all 接管",
-    "flag() 加状态与升级：CONFLICT-*.md 别覆盖写、同因重复 3 次停重试并派活、重试退避",
-    "把『最久未落地分支卡了多少分钟』上盘面",
-    "probe_a1_state 改一行让它能变绿 + 补样本（上轮 high）",
+    "**最急（已升 critical）**：应用 OPS-M cycle 8 的一行——gates.py 显式解析 Git Bash 的绝对路径（Program Files 下的 Git/bin/bash.exe），不要让 CreateProcess 的 PATH 搜索选到 System32 里 WSL 的 bash；若监控仍未动，按 CHARTER 阶梯交给用户",
+    "flag() 加 first_seen/count、同因三次停重试并派活、重试退避",
+    "probe_a1_state 改一行让它能变绿 + 补样本",
     "把 ast 判据搬进 monitor 作 meta 探针",
-    "03:57Z 规则后半句：把手写与探针的矛盾显式记出来（第三次提）",
+    "03:57Z 规则后半句：矛盾显式记出来（第三次提）",
     "probe_provenance 加字段检查 + 9 份回填 utc",
     "cmd_sweep 对 RES-* 用心跳判活；APP-* 给心跳或禁止领活",
-    "a0-spike/verify.sh 判死结案（欠 8 周期）",
+    "a0-spike/verify.sh 判死结案（欠 9 周期）",
     "verify_gates 范围加 monitor/prompts/**",
     "WP10 的 scale 按 R2 收窄"
   ],
@@ -45,8 +39,11 @@
     "常用脚本：redline.py、manifests.py、probe_red.py、negsample.py、flags.py（merge.log 阻塞时长与重报次数）、dim6.py"
   ],
   "next_cycle_focus": [
-    "复核 gates.py 是否被修、队列是否解冻（最急）",
+    "第一件事就是看 merge.log 的 MERGED 是否恢复增长；未恢复则继续升级",
     "复核 probe_a1_state 与 A9/S20",
-    "增量起点 1fba043"
+    "增量起点 d19981e"
+  ],
+  "superseded": [
+    "我 cycle 12 报告里引用的 OPS-M cycle-7 根因（Git Bash 吃反斜杠）已被 OPS-M 自己在 cycle 8 实跑证伪，以 WSL bash 为准。跨会话引用别人的诊断时要留意它可能被其作者推翻。"
   ]
 }
