@@ -198,13 +198,14 @@ function render(s){
   h += `<h2>研究员正在做的事 <span class="note">— 自己从任务板领活，做完接着领；
     额度停机时暂停，复工后从磁盘接着干</span></h2>
     <div class="fleet">` + busy.map(w => `
-      <div class="crew ${w.running ? "" : "done"}">
-        <span class="dot2 ${w.running ? "run" : "stop"}"></span>
+      <div class="crew ${w.orphan ? "risk" : (w.running ? "" : "done")}">
+        <span class="dot2 ${w.orphan ? "stop" : (w.running ? "run" : "stop")}"></span>
         <div class="cbody"><b>${esc(w.now)}</b>
           <em>${w.finished.length
             ? "这位之前交付过：" + w.finished.map(esc).join("　·　")
             : "这是它的第一件活"}</em></div>
-        <span class="cst">${w.running ? "进行中" : "已停"}</span>
+        <span class="cst">${w.orphan ? "无人在做<br>（已交回板上）"
+          : (w.running ? "进行中" : "已停")}</span>
       </div>`).join("") + "</div>";
   if (idle.length) {
     const past = idle.flatMap(w => w.finished);

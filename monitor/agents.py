@@ -47,6 +47,16 @@ PLAIN_ITEM = {
     "P7-paper-section7": "论文第 7 节：相关工作",
     "A3-campaign-devpile": "开发堆在线战役：把 Theoria 臂推到退出条件",
     "P9-paper-to-submittable": "把论文推进到可投稿",
+    "S9-contract-change-protocol": "契约变更协议：改契约要走什么流程",
+    "C8-handover-package": "移交测试包：让陌生 agent 只读两本书就能接手",
+    "P10-figures-into-paper": "把图正式接进论文正文",
+    "S1-quota-auto-exit": "让配额熔断器学会自己开闩",
+    "S12-quota-hold-tests": "熔断器的全链路测试",
+    "S7-ledger-hashchain": "账本哈希链（让账本不可篡改）",
+    "C9-count-lock-vocabulary": "语法补计数锁词汇",
+    "V6-exam-on-sealed-dryrun": "封存考卷的干跑演练",
+    "E9-engine-paper-table": "引擎章节的论文表格",
+    "R2-release-licence": "释出许可条款落地",
     "V4-exam-selftest": "考卷自检 + 出三类判决题（验判卷的人对不对）",
     "E5-cert-recheck": "证书独立复核器（不靠 Lean 一条路）",
     "P8-billshape-pipeline": "把论文「账单形状」图接上真数据管线",
@@ -91,9 +101,34 @@ def board_state():
     return done, claimed
 
 
+def _live_task_names():
+    """哪些 TheoriaAgent-* 任务真在跑。
+
+    不用 schtasks 的文字状态判断——中文系统下它输出 GBK 且状态词是中文，
+    按 UTF-8 找 "Running" 永远匹配不上（今天因此把八个活着的工人全报成已停）。
+    改用 CSV + 状态列的位置无关判据：`schtasks /Query /FO CSV` 里
+    "Running"/"正在运行" 之外一律视为未跑，且 CSV 用系统编码解。"""
+    out = subprocess.run(["schtasks", "/Query", "/FO", "CSV", "/NH"],
+                         capture_output=True)
+    text = out.stdout.decode("gbk", "replace")
+    live = set()
+    for line in text.splitlines():
+        cols = [c.strip('"') for c in line.split('","')]
+        if len(cols) >= 3 and "TheoriaAgent-" in cols[0]:
+            name = cols[0].strip('"').lstrip("\\").replace("TheoriaAgent-", "")
+            if cols[2].strip('"') in ("Running", "正在运行"):
+                live.add(name)
+    return live
+
+
+_LIVE = None
+
+
 def task_running(name):
-    out = sh(["schtasks", "/Query", "/TN", "TheoriaAgent-%s" % name, "/FO", "LIST"])
-    return "Running" in out or "正在运行" in out
+    global _LIVE
+    if _LIVE is None:
+        _LIVE = _live_task_names()
+    return name in _LIVE
 
 
 def ops_cards(meta=None, kind="ops"):
@@ -138,14 +173,16 @@ def worker_cards():
             continue
         finished = [PLAIN_ITEM.get(i, i) for i in done.get(wid, [])]
         now = claimed.get(wid)
-        running = task_running(wid) if wid.startswith("W-") else False
+        running = task_running(wid) if wid.startswith("W-") else None
+        # None = App 会话（无法从任务表判断，按有认领即视为在岗）
         cards.append({
             "id": wid,
             "name": "研究工人" if wid.startswith("W-") else "手动会话",
             "kind": "worker",
             "finished": finished,
             "now": PLAIN_ITEM.get(now, now) if now else None,
-            "running": running,
+            "running": bool(running) if running is not None else bool(now),
+            "orphan": bool(now) and running is False,
             "outputs": len(finished),
         })
     return cards

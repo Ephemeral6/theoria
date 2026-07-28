@@ -12,6 +12,7 @@
       "P6-paper-assembly",
       "P7-paper-section7",
       "P8-billshape-pipeline",
+      "P9-paper-to-submittable",
       "S2-canary-schedule",
       "S3-spend-gate",
       "S6-merge-gate-509",
@@ -30,6 +31,7 @@
       "把各处结果组装成论文正文",
       "论文第 7 节：相关工作",
       "把论文「账单形状」图接上真数据管线",
+      "把论文推进到可投稿",
       "把「金丝雀重放」做成每天自动跑的体检",
       "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
       "补上合并门的漏洞（六个目录 509 个测试从未跑过）",
@@ -38,22 +40,16 @@
     ],
     "in_progress_plain": [
       "把对照版 AI 真正建起来",
-      "跨关迁移协议：把学到的知识带去下一关",
       "给世界工厂加「改一条规则」的变体生成",
-      "C8-handover-package",
-      "让引擎在真游戏里供货（第二关）",
-      "量化引擎改进带来的实际红利",
-      "P10-figures-into-paper",
+      "移交测试包：让陌生 agent 只读两本书就能接手",
+      "把图正式接进论文正文",
       "释出包：陌生人一条命令复跑全部结果",
-      "把论文推进到可投稿",
-      "起草大考前要封存的规则包",
-      "Phase 1 收口：把地基验收单清干净",
-      "S9-contract-change-protocol",
+      "契约变更协议：改契约要走什么流程",
       "指标体系首次区分两组 AI 的能力差"
     ],
     "ops": [
       {
-        "age_min": 47,
+        "age_min": 54,
         "cycle": 7,
         "id": "OPS-A",
         "kind": "ops",
@@ -64,7 +60,7 @@
         "state": "idle"
       },
       {
-        "age_min": 69,
+        "age_min": 76,
         "cycle": 4,
         "id": "OPS-B",
         "kind": "ops",
@@ -75,7 +71,7 @@
         "state": "idle"
       },
       {
-        "age_min": 45,
+        "age_min": 53,
         "cycle": 5,
         "id": "OPS-M",
         "kind": "ops",
@@ -86,7 +82,7 @@
         "state": "idle"
       },
       {
-        "age_min": 428,
+        "age_min": 435,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -99,26 +95,26 @@
     ],
     "standing": [
       {
-        "age_min": 123,
+        "age_min": 7,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
         "name": "在线战役研究员",
-        "note": "V4-exam-selftest DELIVERED (branch agent/v4-exam-selftest, board done). A4a-ablation-build IN PROGRESS -- claimed, build plan + step 1 (both worlds) pushed on agent/a4a-ablation-build. Out of context; needs a session restart to continue at step 2 (theory/). Do NOT claim a new item on restart -- resume A4a.",
+        "note": "A4a step 2 done and pushed (agent/a4a-ablation-build): theory/ cut from upstream by build_theory.py, 4 manuals + 1 playbook, 7 invariants demoted / 4 theorems deleted / 1 soundness-bearing prune. Cut asserted in the AST not a grep; both failure modes watched refusing; byte-reproducible. Next: step 3, the driver -- its first decision is where the trace comes from.",
         "outputs": 0,
         "role": "常驻推进：Theoria 臂在真 API 上跑出结果（论文最大缺口）",
         "state": "working"
       },
       {
-        "age_min": 121,
+        "age_min": 3,
         "cycle": 2,
         "id": "RES-2",
         "kind": "standing",
         "name": "论文与释出研究员",
-        "note": "P8 delivered (pushed, board done). P9 claimed + recon pushed, but papers/ territory is also held by claimed/P7-paper-section7.APP-P7 -- monitor ruling requested. Context near exhausted; state fully on disk.",
+        "note": "P9 figure clause delivered (scoped by human ruling): paper figures now cite the deterministic pipeline, the paper second implementation kept as witness via check_figure_parity.py -- 12 agree, 1 one-sided, 1 adjudicated (paper miscounted adjudications 18 vs 17, P-03 has no verdict). Pushed, board done.",
         "outputs": 1,
         "role": "常驻推进：把已有结果写成能投出去的论文与释出包",
-        "state": "blocked"
+        "state": "idle"
       }
     ],
     "workers": [
@@ -130,6 +126,7 @@
         "kind": "worker",
         "name": "手动会话",
         "now": null,
+        "orphan": false,
         "outputs": 1,
         "running": false
       },
@@ -141,6 +138,7 @@
         "kind": "worker",
         "name": "手动会话",
         "now": null,
+        "orphan": false,
         "outputs": 1,
         "running": false
       },
@@ -152,6 +150,7 @@
         "kind": "worker",
         "name": "手动会话",
         "now": null,
+        "orphan": false,
         "outputs": 1,
         "running": false
       },
@@ -161,8 +160,9 @@
         "kind": "worker",
         "name": "手动会话",
         "now": "指标体系首次区分两组 AI 的能力差",
+        "orphan": false,
         "outputs": 0,
-        "running": false
+        "running": true
       },
       {
         "finished": [
@@ -172,28 +172,32 @@
         "kind": "worker",
         "name": "手动会话",
         "now": "把对照版 AI 真正建起来",
+        "orphan": false,
         "outputs": 1,
-        "running": false
+        "running": true
       },
       {
         "finished": [
-          "把论文「账单形状」图接上真数据管线"
+          "把论文「账单形状」图接上真数据管线",
+          "把论文推进到可投稿"
         ],
         "id": "RES-2",
         "kind": "worker",
         "name": "手动会话",
-        "now": "把论文推进到可投稿",
-        "outputs": 1,
-        "running": false
+        "now": "释出包：陌生人一条命令复跑全部结果",
+        "orphan": false,
+        "outputs": 2,
+        "running": true
       },
       {
         "finished": [],
         "id": "W-1250",
         "kind": "worker",
         "name": "研究工人",
-        "now": "S9-contract-change-protocol",
+        "now": "契约变更协议：改契约要走什么流程",
+        "orphan": false,
         "outputs": 0,
-        "running": false
+        "running": true
       },
       {
         "finished": [],
@@ -201,26 +205,29 @@
         "kind": "worker",
         "name": "研究工人",
         "now": "给世界工厂加「改一条规则」的变体生成",
+        "orphan": false,
         "outputs": 0,
-        "running": false
+        "running": true
       },
       {
         "finished": [],
         "id": "W-1252",
         "kind": "worker",
         "name": "研究工人",
-        "now": "C8-handover-package",
+        "now": "移交测试包：让陌生 agent 只读两本书就能接手",
+        "orphan": false,
         "outputs": 0,
-        "running": false
+        "running": true
       },
       {
         "finished": [],
         "id": "W-1253",
         "kind": "worker",
         "name": "研究工人",
-        "now": "P10-figures-into-paper",
+        "now": "把图正式接进论文正文",
+        "orphan": false,
         "outputs": 0,
-        "running": false
+        "running": true
       },
       {
         "finished": [
@@ -229,17 +236,9 @@
         "id": "W-1520",
         "kind": "worker",
         "name": "研究工人",
-        "now": "释出包：陌生人一条命令复跑全部结果",
+        "now": null,
+        "orphan": false,
         "outputs": 1,
-        "running": false
-      },
-      {
-        "finished": [],
-        "id": "W-1521",
-        "kind": "worker",
-        "name": "研究工人",
-        "now": "让引擎在真游戏里供货（第二关）",
-        "outputs": 0,
         "running": false
       },
       {
@@ -252,6 +251,7 @@
         "kind": "worker",
         "name": "研究工人",
         "now": null,
+        "orphan": false,
         "outputs": 3,
         "running": false
       },
@@ -262,7 +262,8 @@
         "id": "W-1541",
         "kind": "worker",
         "name": "研究工人",
-        "now": "起草大考前要封存的规则包",
+        "now": null,
+        "orphan": false,
         "outputs": 1,
         "running": false
       },
@@ -276,6 +277,7 @@
         "kind": "worker",
         "name": "研究工人",
         "now": null,
+        "orphan": false,
         "outputs": 3,
         "running": false
       },
@@ -286,37 +288,20 @@
         "id": "W-1611",
         "kind": "worker",
         "name": "研究工人",
-        "now": "量化引擎改进带来的实际红利",
+        "now": null,
+        "orphan": false,
         "outputs": 1,
-        "running": false
-      },
-      {
-        "finished": [],
-        "id": "W-5200",
-        "kind": "worker",
-        "name": "研究工人",
-        "now": "Phase 1 收口：把地基验收单清干净",
-        "outputs": 0,
-        "running": false
-      },
-      {
-        "finished": [],
-        "id": "W-5201",
-        "kind": "worker",
-        "name": "研究工人",
-        "now": "跨关迁移协议：把学到的知识带去下一关",
-        "outputs": 0,
         "running": false
       }
     ]
   },
   "blocking_findings": 1,
   "board": {
-    "available": 1,
+    "available": 10,
     "blocked": 3,
-    "claimed": 13,
-    "done": 16,
-    "listing": "=== available ===\n  p3  V6-exam-on-sealed-dryrun     cell=V4  territory=exam           \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A4a-ablation-build           by RES-1\n  A6-transfer-protocol         by W-5201\n  C6-worldgen-mutate           by W-1251\n  C8-handover-package          by W-1252\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P10-figures-into-paper       by W-1253\n  P5-release                   by W-1520\n  P9-paper-to-submittable      by RES-2\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  S9-contract-change-protocol  by W-1250\n  V3-battery-discrimination    by APP-V3\n=== done (16) ===\n  A4-ablation-online.superseded-by-A4a\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C7-dsl-v03-mentions.APP-C7\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S6-merge-gate-509.superseded-by-derived-gate\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
+    "claimed": 7,
+    "done": 17,
+    "listing": "=== available ===\n  p1  S11-sealed-halfguard         cell=S2  territory=arc-recon      \n  p1  S5-phase1-close              cell=S2  territory=arc-recon      \n  p2  E5-cert-recheck              cell=E5  territory=engine-rig     \n  p2  E7-deadlock-claim-audit      cell=E2  territory=engine-rig     \n  p2  S10-invariant-on-resource    cell=S1  territory=arc-recon      \n  p2  S8-provenance-backfill       cell=S3  territory=theoria-arm    \n  p3  E6-engine-dividend           cell=E2  territory=engine-rig     \n  p3  E8-ic3-scale                 cell=E2  territory=engine-rig     \n  p3  E9-engine-paper-table        cell=E5  territory=engine-rig     \n  p3  V6-exam-on-sealed-dryrun     cell=V4  territory=exam           \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A4a-ablation-build           by RES-1\n  C6-worldgen-mutate           by W-1251\n  C8-handover-package          by W-1252\n  P10-figures-into-paper       by W-1253\n  P5-release                   by RES-2\n  S9-contract-change-protocol  by W-1250\n  V3-battery-discrimination    by APP-V3\n=== done (17) ===\n  A4-ablation-online.superseded-by-A4a\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C7-dsl-v03-mentions.APP-C7\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S6-merge-gate-509.superseded-by-derived-gate\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
   },
   "con_green": 1,
   "constraints": [
@@ -575,7 +560,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 21:41:10",
+  "generated_at": "2026-07-28 21:48:40",
   "grid": {
     "A1": {
       "active": [
@@ -1449,43 +1434,74 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/board/board.log",
-      "monitor/board/claimed/A7-envelope-finish.APP-A7.md",
-      "monitor/board/items/C6-worldgen-mutate.md",
-      "monitor/board/items/C8-handover-package.md",
-      "monitor/board/items/S9-contract-change-protocol.md",
+      "onitor/agents.py",
+      "monitor/app.html",
+      "monitor/board.py",
+      "monitor/board/board.log",
+      "monitor/board/claimed/A6-transfer-protocol.W-5201.md",
+      "monitor/board/claimed/E3-engines-online.W-1521.md",
+      "monitor/board/claimed/E6-engine-dividend.W-1611.md",
+      "monitor/board/claimed/P5-release.W-1520.md",
+      "monitor/board/claimed/P9-paper-to-submittable.RES-2.md",
+      "monitor/board/claimed/S4-freeze.W-1541.md",
+      "monitor/board/claimed/S5-phase1-close.W-5200.md",
+      "monitor/ci/merge.log",
+      "monitor/index.html",
       "monitor/mailbox/RES-2.md",
-      "monitor/quota_state.json",
+      "monitor/ops-status/RES-1.json",
+      "monitor/ops-status/RES-2.json",
       "monitor/reflex.log",
+      "monitor/reflex.py",
+      "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/",
-      "monitor/board/claimed/C6-worldgen-mutate.W-1251.md",
-      "monitor/board/claimed/C8-handover-package.W-1252.md",
-      "monitor/board/claimed/S9-contract-change-protocol.W-1250.md",
-      "monitor/board/done/A7-envelope-finish.APP-A7.md",
-      "monitor/board/items/S1-quota-auto-exit.md"
+      "baseline-arms/out/shards/ledger.ar25.jsonl",
+      "baseline-arms/out/shards/ledger.g50t.jsonl",
+      "baseline-arms/out/shards/ledger.sk48.jsonl",
+      "baseline-arms/out/shards/ledger.tn36.jsonl",
+      "baseline-arms/out/shards/probe_log.ar25.jsonl",
+      "baseline-arms/out/shards/probe_log.g50t.jsonl",
+      "baseline-arms/out/shards/probe_log.sk48.jsonl",
+      "baseline-arms/out/shards/probe_log.tn36.jsonl",
+      "monitor/board/claimed/P5-release.RES-2.md",
+      "monitor/board/done/P9-paper-to-submittable.RES-2.md",
+      "monitor/board/items/A6-transfer-protocol.md",
+      "monitor/board/items/E3-engines-online.md",
+      "monitor/board/items/E6-engine-dividend.md",
+      "monitor/board/items/S4-freeze.md",
+      "monitor/board/items/S5-phase1-close.md",
+      "monitor/reflex.lock"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "9c65d6a monitor: one-way doors become a standing audit dimension",
+    "git_head": "398144e Merge remote-tracking branch 'origin/agent/p9-paper-to-submittable' into HEAD",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 105,
-    "sync_last": "2026-07-28T12:55:00Z",
+    "sync_entries": 108,
+    "sync_last": "2026-07-28T12:25:00Z",
     "tests": {},
     "untracked": [
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/",
-      "monitor/board/claimed/C6-worldgen-mutate.W-1251.md",
-      "monitor/board/claimed/C8-handover-package.W-1252.md",
-      "monitor/board/claimed/S9-contract-change-protocol.W-1250.md",
-      "monitor/board/done/A7-envelope-finish.APP-A7.md",
-      "monitor/board/items/S1-quota-auto-exit.md"
+      "baseline-arms/out/shards/ledger.ar25.jsonl",
+      "baseline-arms/out/shards/ledger.g50t.jsonl",
+      "baseline-arms/out/shards/ledger.sk48.jsonl",
+      "baseline-arms/out/shards/ledger.tn36.jsonl",
+      "baseline-arms/out/shards/probe_log.ar25.jsonl",
+      "baseline-arms/out/shards/probe_log.g50t.jsonl",
+      "baseline-arms/out/shards/probe_log.sk48.jsonl",
+      "baseline-arms/out/shards/probe_log.tn36.jsonl",
+      "monitor/board/claimed/P5-release.RES-2.md",
+      "monitor/board/done/P9-paper-to-submittable.RES-2.md",
+      "monitor/board/items/A6-transfer-protocol.md",
+      "monitor/board/items/E3-engines-online.md",
+      "monitor/board/items/E6-engine-dividend.md",
+      "monitor/board/items/S4-freeze.md",
+      "monitor/board/items/S5-phase1-close.md",
+      "monitor/reflex.lock"
     ]
   },
   "p1_green": 9,
@@ -1675,7 +1691,7 @@
           "status": "partial"
         },
         {
-          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判（开发堆 4 局可玩）；F-11 已落账：claim_set.json 为 19，ls20/ft09 隔离，9 局登记在册。  〔本次扫描：封存堆 21 局零接触（已核对 3176 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
+          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判（开发堆 4 局可玩）；F-11 已落账：claim_set.json 为 19，ls20/ft09 隔离，9 局登记在册。  〔本次扫描：封存堆 21 局零接触（已核对 3184 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
           "_status": "green",
           "clause": "Phase 1 · 一刀切堆",
           "id": "p1-cut",
@@ -1961,10 +1977,10 @@
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**20 条 TO-MONITOR 待监控回复**。 OPS-A 第7轮 idle（47 分钟前）； OPS-B 第4轮 idle（68 分钟前）； OPS-M 第5轮 idle（45 分钟前）； OPS-R 第1轮 idle（427 分钟前）",
+      "detail": "**20 条 TO-MONITOR 待监控回复**。 OPS-A 第7轮 idle（54 分钟前）； OPS-B 第4轮 idle（76 分钟前）； OPS-M 第5轮 idle（52 分钟前）； OPS-R 第1轮 idle（435 分钟前）",
       "rows": [
         {
-          "age_min": 47,
+          "age_min": 54,
           "cycle": 7,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -1973,7 +1989,7 @@
           "status": "green"
         },
         {
-          "age_min": 68,
+          "age_min": 76,
           "cycle": 4,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1982,7 +1998,7 @@
           "status": "green"
         },
         {
-          "age_min": 45,
+          "age_min": 52,
           "cycle": 5,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -1991,7 +2007,7 @@
           "status": "green"
         },
         {
-          "age_min": 427,
+          "age_min": 435,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2004,11 +2020,11 @@
       "to_monitor": 20
     },
     "pile_integrity": {
-      "detail": "封存堆 21 局零接触（已核对 3176 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
+      "detail": "封存堆 21 局零接触（已核对 3184 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
       "status": "green"
     },
     "provenance_scan": {
-      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：2 个 run（正典 1，**无留痕 1**），最新 20260728T130500Z-A4a-ablation-build； arc-recon：2 个 run（正典 2），最新 P-11； battery：2 个 run（正典 2），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：1 个 run（正典 1），最新 p-17； engine-rig：2 个 run（正典 1，非正典 1(md)），最新 p13-fd-real； exam：3 个 run（正典 3），最新 p15-rehearsal-01； figures：3 个 run（正典 2，**无留痕 1**），最新 20260728T110000Z-P8-billshape-pipeline； fuzzlab：1 个 run（正典 1），最新 20260728T085448Z-E4-property-fuzz； proxy：2 个 run（正典 2），最新 p9-shell-harden； theoria-arm：11 个 run（正典 4，**无留痕 7**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：3 个 run（正典 2，**无留痕 1**），最新 P-10； worldgen：1 个 run（正典 1），最新 20260728T081713Z-C1-worldgen。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：baseline-arms, cold-start-a0, cold-start-a2, papers。",
+      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：2 个 run（正典 1，**无留痕 1**），最新 20260728T130500Z-A4a-ablation-build； arc-recon：2 个 run（正典 2），最新 P-11； baseline-arms：1 个 run（正典 1），最新 20260728T103135Z-a7； battery：2 个 run（正典 2），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：1 个 run（正典 1），最新 p-17； engine-rig：2 个 run（正典 1，非正典 1(md)），最新 p13-fd-real； exam：3 个 run（正典 3），最新 p15-rehearsal-01； figures：3 个 run（正典 2，**无留痕 1**），最新 20260728T110000Z-P8-billshape-pipeline； fuzzlab：1 个 run（正典 1），最新 20260728T085448Z-E4-property-fuzz； proxy：2 个 run（正典 2），最新 p9-shell-harden； theoria-arm：11 个 run（正典 4，**无留痕 7**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：3 个 run（正典 2，**无留痕 1**），最新 P-10； worldgen：1 个 run（正典 1），最新 20260728T081713Z-C1-worldgen。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, papers。",
       "status": "partial"
     },
     "scheduled_tasks": {
@@ -2016,8 +2032,8 @@
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 38 个提交 / 6 次合并（判断陈旧到 partial 档 就该重扫）。",
-      "status": "partial"
+      "detail": "spec.py 落后 53 个提交 / 10 次合并（判断陈旧到 risk 就该重扫）。",
+      "status": "risk"
     },
     "verify_gates": {
       "detail": "**声称存在却没有的收工闸门 1 处**：ablation-arm/verify.sh（A4a-ablation-build 声称）。闸门不是被绕过，是根本没造出来。",

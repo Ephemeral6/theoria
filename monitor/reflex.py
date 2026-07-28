@@ -88,6 +88,13 @@ def main():
                     events.append("queue-skip:%s" % pid_str)
             os.remove(qpath)
 
+        # 0c. sweep orphaned board claims — a worker killed by the quota or a
+        # crash leaves its claim hanging, so the board thinks the work is in
+        # progress and the territory stays locked against everyone else.
+        sw = run([sys.executable, os.path.join(HERE, "board.py"), "sweep"])
+        events += ["sweep:" + l.split()[0] for l in sw.stdout.splitlines()
+                   if "freed from" in l]
+
         # 1. reap
         out = run([sys.executable, os.path.join(HERE, "dispatch.py"),
                    "--reap"]).stdout

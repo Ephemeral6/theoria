@@ -1,7 +1,7 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T13:30:00Z",
+ "utc": "2026-07-28T14:15:00Z",
  "cycle": 2,
  "state": "working",
- "note": "V4-exam-selftest DELIVERED (branch agent/v4-exam-selftest, board done). A4a-ablation-build IN PROGRESS -- claimed, build plan + step 1 (both worlds) pushed on agent/a4a-ablation-build. Out of context; needs a session restart to continue at step 2 (theory/). Do NOT claim a new item on restart -- resume A4a."
+ "note": "A4a step 2 done and pushed (agent/a4a-ablation-build): theory/ cut from upstream by build_theory.py, 4 manuals + 1 playbook, 7 invariants demoted / 4 theorems deleted / 1 soundness-bearing prune. Cut asserted in the AST not a grep; both failure modes watched refusing; byte-reproducible. Next: step 3, the driver -- its first decision is where the trace comes from."
 }
