@@ -2,6 +2,7 @@ priority: 3
 cell: E5
 territory: engine-rig
 deps: none
+lane: verify
 
 # E9 · 八道工序的论文表：把引擎从「有」变成「值多少」
 

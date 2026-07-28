@@ -594,7 +594,8 @@ def _bus_probe():
 
     直接读总线文件，不经子进程——今天已经两次被 GBK/UTF-8 的解码差异咬到
     （一次把八个活着的工人报成已停，一次把未读报成已回执）。判据只信文件。"""
-    agents_ids = ["OPS-A", "OPS-B", "OPS-M", "OPS-R", "RES-1", "RES-2"]
+    agents_ids = ["OPS-A", "OPS-B", "OPS-M", "OPS-R",
+                  "RES-1", "RES-2", "RES-3", "RES-4"]
     never, owed, seen_ok = [], [], 0
     for a in agents_ids:
         d = rel("monitor", "bus", a)
@@ -645,7 +646,7 @@ def _self_driving():
     停在那里等人的会话，心跳会定格——这正是用户今天观察到的现象。"""
     import time as _t
     rows = []
-    for rid in ("RES-1", "RES-2"):
+    for rid in ("RES-1", "RES-2", "RES-3", "RES-4"):
         path = "monitor/ops-status/%s.json" % rid
         if not exists(path):
             rows.append("%s 未启动" % rid)
@@ -672,7 +673,8 @@ def probe_needs_human():
     import time as _t
     roster = [("OPS-A", "漂移审计员", 120), ("OPS-B", "浏览器专员", 240),
               ("OPS-M", "合并裁判", 180), ("OPS-R", "回顾员", 900),
-              ("RES-1", "在线战役研究员", 90), ("RES-2", "论文与释出研究员", 90)]
+              ("RES-1", "在线战役研究员", 90), ("RES-2", "论文与释出研究员", 90),
+              ("RES-3", "验证与考卷研究员", 90), ("RES-4", "基础设施研究员", 90)]
     dead = []
     for rid, name, stale_min in roster:
         path = "monitor/ops-status/%s.json" % rid

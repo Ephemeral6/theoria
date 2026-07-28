@@ -2,7 +2,7 @@ priority: 3
 cell: E10
 territory: engine-rig
 deps: none
-lane: campaign
+lane: verify
 
 # E10-engine-crosscheck · 六引擎交叉验证：互相当对方的独立复核器
 

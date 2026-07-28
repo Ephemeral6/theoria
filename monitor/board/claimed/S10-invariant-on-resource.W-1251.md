@@ -2,6 +2,7 @@ priority: 2
 cell: S1
 territory: arc-recon
 deps: none
+lane: infra
 
 # S10 · 不变式挂在资源上，不要挂在写者身上
 

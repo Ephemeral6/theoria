@@ -81,3 +81,11 @@
 2026-07-28T14:52:51Z DONE S8-provenance-backfill by W-1412
 2026-07-28T14:52:55Z CLAIM S12-quota-hold-tests by W-1412
 2026-07-28T14:54:36Z DONE P5-release by RES-2
+2026-07-28T14:59:04Z DONE S13-verify-gate-enforced by RES-1
+2026-07-28T14:59:59Z DONE S12-quota-hold-tests by W-1412
+2026-07-28T14:59:59Z CLAIM R2-release-licence by W-1412
+2026-07-28T15:02:17Z CLAIM P11-battery-section-refresh by RES-2
+2026-07-28T15:02:17Z CLAIM V7-exam-stress-fanout by RES-2
+2026-07-28T15:02:43Z CLAIM A3-campaign-devpile by RES-1
+2026-07-28T15:06:37Z DONE R2-release-licence by W-1412
+2026-07-28T15:06:37Z CLAIM C9-count-lock-vocabulary by W-1412

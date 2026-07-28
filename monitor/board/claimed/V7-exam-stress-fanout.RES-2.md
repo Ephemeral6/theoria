@@ -2,7 +2,7 @@ priority: 2
 cell: V7
 territory: exam
 deps: none
-lane: paper
+lane: verify
 
 # V7-exam-stress-fanout · 考卷全量压测：每道题派独立判卷员
 

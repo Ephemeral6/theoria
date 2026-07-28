@@ -18,8 +18,11 @@
       "P7-paper-section7",
       "P8-billshape-pipeline",
       "P9-paper-to-submittable",
+      "R2-release-licence",
       "S1-quota-auto-exit",
       "S11-sealed-halfguard",
+      "S12-quota-hold-tests",
+      "S13-verify-gate-enforced",
       "S2-canary-schedule",
       "S3-spend-gate",
       "S5-phase1-close",
@@ -47,8 +50,11 @@
       "论文第 7 节：相关工作",
       "把论文「账单形状」图接上真数据管线",
       "把论文推进到可投稿",
+      "释出许可条款落地",
       "让配额熔断器学会自己开闩",
       "S11-sealed-halfguard",
+      "熔断器的全链路测试",
+      "S13-verify-gate-enforced",
       "把「金丝雀重放」做成每天自动跑的体检",
       "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
       "Phase 1 收口：把地基验收单清干净",
@@ -76,8 +82,11 @@
       "论文第 7 节：相关工作",
       "把论文「账单形状」图接上真数据管线",
       "把论文推进到可投稿",
+      "释出许可条款落地",
       "让配额熔断器学会自己开闩",
       "S11-sealed-halfguard",
+      "熔断器的全链路测试",
+      "S13-verify-gate-enforced",
       "把「金丝雀重放」做成每天自动跑的体检",
       "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
       "Phase 1 收口：把地基验收单清干净",
@@ -88,26 +97,27 @@
       "考卷自检 + 出三类判决题（验判卷的人对不对）"
     ],
     "in_progress_plain": [
+      "开发堆在线战役：把 Theoria 臂推到退出条件",
+      "语法补计数锁词汇",
       "证书独立复核器（不靠 Lean 一条路）",
+      "V7-exam-stress-fanout",
       "S10-invariant-on-resource",
-      "熔断器的全链路测试",
-      "S13-verify-gate-enforced",
       "指标体系首次区分两组 AI 的能力差"
     ],
     "ops": [
       {
-        "age_min": 58,
-        "cycle": 8,
+        "age_min": 1,
+        "cycle": 9,
         "id": "OPS-A",
         "kind": "ops",
         "name": "漂移审计员",
-        "note": "cycle 8: first full sweep on the new one-way-door dimension -- APP-*/RES-* board claims have no exit but their own session, and V3 has held its territory for six hours since its branch merged",
-        "outputs": 10,
+        "note": "cycle 9: bus wired in; answered the assigned review -- the tightened ablation-arm criterion does let real trespass through, and it hides the spend ledger, the contamination log, incidents and the candidates stream. Fan-out discipline cannot be executed by this session; told the monitor via bus.",
+        "outputs": 12,
         "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
         "state": "idle"
       },
       {
-        "age_min": 21,
+        "age_min": 30,
         "cycle": 5,
         "id": "OPS-B",
         "kind": "ops",
@@ -118,7 +128,7 @@
         "state": "idle"
       },
       {
-        "age_min": 16,
+        "age_min": 26,
         "cycle": 6,
         "id": "OPS-M",
         "kind": "ops",
@@ -129,7 +139,7 @@
         "state": "idle"
       },
       {
-        "age_min": 504,
+        "age_min": 513,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -142,26 +152,48 @@
     ],
     "standing": [
       {
-        "age_min": 15,
-        "cycle": 2,
+        "age_min": 4,
+        "cycle": 0,
         "id": "RES-1",
         "kind": "standing",
         "name": "在线战役研究员",
-        "note": "A4a-ablation-build DELIVERED (board done; agent/a4a-ablation-build pushed). verify.sh GREEN, 56 tests. P-6 demonstrated: a true impossibility and a false one agree on 10/10 decision fields. The arm CAN localise when handed a counterexample -- the cut removed what produces one. E3 reported as a pre-registered falsifier. Claiming next campaign item.",
+        "note": "booted (session restart; prior session had reached cycle 3, last delivery S13-verify-gate-enforced). Re-reading contract + charter, then bus.",
         "outputs": 0,
         "role": "常驻推进：Theoria 臂在真 API 上跑出结果（论文最大缺口）",
         "state": "idle"
       },
       {
-        "age_min": 2,
-        "cycle": 3,
+        "age_min": 4,
+        "cycle": 4,
         "id": "RES-2",
         "kind": "standing",
         "name": "论文与释出研究员",
-        "note": "P5-release complete, all six steps, pushed on agent/p5-release. Stranger subagent found 7 defects incl. a blocker on the document second command; all fixed. Two upstream findings reported: battery drifts on regeneration, exam build_manifest embeds absolute paths.",
+        "note": "booted (new App session); continuing standing paper lane from cycle 3",
         "outputs": 3,
         "role": "常驻推进：把已有结果写成能投出去的论文与释出包",
         "state": "idle"
+      },
+      {
+        "age_min": null,
+        "cycle": null,
+        "id": "RES-3",
+        "kind": "standing",
+        "name": "验证与考卷研究员",
+        "note": "",
+        "outputs": 0,
+        "role": "常驻推进：凭什么相信这些数字——考卷、电池、引擎交叉验证",
+        "state": "未启动"
+      },
+      {
+        "age_min": null,
+        "cycle": null,
+        "id": "RES-4",
+        "kind": "standing",
+        "name": "基础设施研究员",
+        "note": "",
+        "outputs": 0,
+        "role": "常驻推进：这台机器本身可不可信——闸门、留痕、释出、防悄悄失败",
+        "state": "未启动"
       }
     ],
     "workers": [
@@ -214,14 +246,15 @@
       {
         "finished": [
           "把对照版 AI 真正建起来",
+          "S13-verify-gate-enforced",
           "考卷自检 + 出三类判决题（验判卷的人对不对）"
         ],
         "id": "RES-1",
         "kind": "worker",
         "name": "手动会话",
-        "now": "S13-verify-gate-enforced",
+        "now": "开发堆在线战役：把 Theoria 臂推到退出条件",
         "orphan": false,
-        "outputs": 2,
+        "outputs": 3,
         "running": true
       },
       {
@@ -233,10 +266,10 @@
         "id": "RES-2",
         "kind": "worker",
         "name": "手动会话",
-        "now": null,
+        "now": "V7-exam-stress-fanout",
         "orphan": false,
         "outputs": 3,
-        "running": false
+        "running": true
       },
       {
         "finished": [
@@ -312,14 +345,16 @@
       },
       {
         "finished": [
+          "释出许可条款落地",
+          "熔断器的全链路测试",
           "S8-provenance-backfill"
         ],
         "id": "W-1412",
         "kind": "worker",
         "name": "研究工人",
-        "now": "熔断器的全链路测试",
+        "now": "语法补计数锁词汇",
         "orphan": false,
-        "outputs": 1,
+        "outputs": 3,
         "running": true
       },
       {
@@ -390,11 +425,11 @@
   },
   "blocking_findings": 1,
   "board": {
-    "available": 3,
+    "available": 0,
     "blocked": 1,
-    "claimed": 5,
-    "done": 27,
-    "listing": "=== available ===\n  p2  R2-release-licence           cell=P5  territory=release        \n  p3  C9-count-lock-vocabulary     cell=C1  territory=theory-compiler \n  p3  V6-exam-on-sealed-dryrun     cell=V4  territory=exam           \n=== blocked ===\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  E5-cert-recheck              by W-1411\n  S10-invariant-on-resource    by W-1251\n  S12-quota-hold-tests         by W-1412\n  S13-verify-gate-enforced     by RES-1\n  V3-battery-discrimination    by APP-V3\n=== done (27) ===\n  A4-ablation-online.superseded-by-A4a\n  A4a-ablation-build.RES-1\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C6-worldgen-mutate.W-1251\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P10-figures-into-paper.W-1253\n  P4-figures.W-1611\n  P5-release.RES-2\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  S1-quota-auto-exit.W-1250\n  S11-sealed-halfguard.W-1410\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S5-phase1-close.W-1250\n  S6-merge-gate-509.superseded-by-derived-gate\n  S8-provenance-backfill.W-1412\n  S9-contract-change-protocol.W-1250\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
+    "claimed": 7,
+    "done": 30,
+    "listing": "=== available ===\n=== blocked ===\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A3-campaign-devpile          by RES-1\n  C9-count-lock-vocabulary     by W-1412\n  E5-cert-recheck              by W-1411\n  P11-battery-section-refresh  by RES-2\n  S10-invariant-on-resource    by W-1251\n  V3-battery-discrimination    by APP-V3\n  V7-exam-stress-fanout        by RES-2\n=== done (30) ===\n  A4-ablation-online.superseded-by-A4a\n  A4a-ablation-build.RES-1\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C6-worldgen-mutate.W-1251\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P10-figures-into-paper.W-1253\n  P4-figures.W-1611\n  P5-release.RES-2\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  R2-release-licence.W-1412\n  S1-quota-auto-exit.W-1250\n  S11-sealed-halfguard.W-1410\n  S12-quota-hold-tests.W-1412\n  S13-verify-gate-enforced.RES-1\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S5-phase1-close.W-1250\n  S6-merge-gate-509.superseded-by-derived-gate\n  S8-provenance-backfill.W-1412\n  S9-contract-change-protocol.W-1250\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
   },
   "con_green": 1,
   "constraints": [
@@ -653,7 +688,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 22:57:15",
+  "generated_at": "2026-07-28 23:06:35",
   "grid": {
     "A1": {
       "active": [
@@ -1527,11 +1562,40 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/bus/RES-1/in.jsonl",
-      "monitor/bus/RES-2/in.jsonl",
-      "monitor/res/RES-1.md",
-      "monitor/res/RES-2.md",
+      "blation-arm/artifacts/a0-base/episode.jsonl",
+      "ablation-arm/artifacts/a0-base/run_report.json",
+      "ablation-arm/artifacts/a0-no-button/run_report.json",
+      "ablation-arm/artifacts/a2-base/episode.jsonl",
+      "ablation-arm/artifacts/a2-base/run_report.json",
+      "ablation-arm/artifacts/a2-charitable/episode.jsonl",
+      "ablation-arm/artifacts/a2-charitable/run_report.json",
+      "ablation-arm/artifacts/a2-holed/run_report.json",
+      "ablation-arm/artifacts/run_all.json",
+      "ablation-arm/artifacts/verify.json",
+      "monitor/agents.py",
+      "monitor/board/board.log",
+      "monitor/board/claimed/E5-cert-recheck.W-1411.md",
+      "monitor/board/claimed/S10-invariant-on-resource.W-1251.md",
+      "monitor/board/claimed/S12-quota-hold-tests.W-1412.md",
+      "monitor/board/claimed/S13-verify-gate-enforced.RES-1.md",
+      "monitor/board/items/A3-campaign-devpile.md",
+      "monitor/board/items/E10-engine-crosscheck.md",
+      "monitor/board/items/E9-engine-paper-table.md",
+      "monitor/board/items/P11-battery-section-refresh.md",
+      "monitor/board/items/R2-release-licence.md",
+      "monitor/board/items/S7-ledger-hashchain.md",
+      "monitor/board/items/V5-verdict-three-types.md",
+      "monitor/board/items/V6-exam-on-sealed-dryrun.md",
+      "monitor/board/items/V7-exam-stress-fanout.md",
+      "monitor/bus.py",
+      "monitor/bus/RES-1/URGENT",
+      "monitor/bus/RES-2/URGENT",
+      "monitor/index.html",
+      "monitor/ops-status/RES-1.json",
+      "monitor/ops-status/RES-2.json",
       "monitor/scan.py",
+      "monitor/spec.py",
+      "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
@@ -1543,13 +1607,33 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/bus/RES-1/URGENT",
-      "monitor/bus/RES-2/URGENT",
+      "monitor/board/claimed/A3-campaign-devpile.RES-1.md",
+      "monitor/board/claimed/P11-battery-section-refresh.RES-2.md",
+      "monitor/board/claimed/R2-release-licence.W-1412.md",
+      "monitor/board/claimed/V7-exam-stress-fanout.RES-2.md",
+      "monitor/board/done/S12-quota-hold-tests.W-1412.md",
+      "monitor/board/done/S13-verify-gate-enforced.RES-1.md",
+      "monitor/board/items/E11-engine-crosscheck-deep.md",
+      "monitor/board/items/S14-gates-for-all.md",
+      "monitor/board/items/S15-ledger-hashchain.md",
+      "monitor/board/items/S16-silent-failure-hunt.md",
+      "monitor/board/items/V8-judge-trust-audit.md",
+      "monitor/board/items/V9-battery-gaming-audit.md",
+      "monitor/bus/RES-1/cursor.json",
+      "monitor/bus/RES-1/out.jsonl",
+      "monitor/bus/RES-2/cursor.json",
+      "monitor/bus/RES-2/out.jsonl",
+      "monitor/mailbox/RES-3.md",
+      "monitor/mailbox/RES-4.md",
+      "monitor/prompts/ops/RES-3.md",
+      "monitor/prompts/ops/RES-4.md",
+      "monitor/res/RES-3.md",
+      "monitor/res/RES-4.md",
       "theoria-arm/.pytest-runs/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "fb813ce monitor: standing researchers go parallel, and fan-out stops being optional",
+    "git_head": "1575b1d audit: cycle 9 -- the exclusion that hides exactly the writes worth catching",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1568,8 +1652,28 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/bus/RES-1/URGENT",
-      "monitor/bus/RES-2/URGENT",
+      "monitor/board/claimed/A3-campaign-devpile.RES-1.md",
+      "monitor/board/claimed/P11-battery-section-refresh.RES-2.md",
+      "monitor/board/claimed/R2-release-licence.W-1412.md",
+      "monitor/board/claimed/V7-exam-stress-fanout.RES-2.md",
+      "monitor/board/done/S12-quota-hold-tests.W-1412.md",
+      "monitor/board/done/S13-verify-gate-enforced.RES-1.md",
+      "monitor/board/items/E11-engine-crosscheck-deep.md",
+      "monitor/board/items/S14-gates-for-all.md",
+      "monitor/board/items/S15-ledger-hashchain.md",
+      "monitor/board/items/S16-silent-failure-hunt.md",
+      "monitor/board/items/V8-judge-trust-audit.md",
+      "monitor/board/items/V9-battery-gaming-audit.md",
+      "monitor/bus/RES-1/cursor.json",
+      "monitor/bus/RES-1/out.jsonl",
+      "monitor/bus/RES-2/cursor.json",
+      "monitor/bus/RES-2/out.jsonl",
+      "monitor/mailbox/RES-3.md",
+      "monitor/mailbox/RES-4.md",
+      "monitor/prompts/ops/RES-3.md",
+      "monitor/prompts/ops/RES-4.md",
+      "monitor/res/RES-3.md",
+      "monitor/res/RES-4.md",
       "theoria-arm/.pytest-runs/"
     ]
   },
@@ -2025,7 +2129,7 @@
       "status": "green"
     },
     "bus": {
-      "detail": "总线已上线；**4 个会话还没读过**（OPS-A, OPS-R, RES-1, RES-2）——它们下个循环读到指令后即被托管。",
+      "detail": "总线已上线；**1 个会话还没读过**（OPS-R）——它们下个循环读到指令后即被托管。",
       "status": "partial"
     },
     "conflict_scan": {
@@ -2051,24 +2155,37 @@
       "status": "partial"
     },
     "needs_human": {
-      "detail": "六个 App 会话全部在岗，无需你出手。",
-      "rows": [],
-      "status": "green"
-    },
-    "ops_duty": {
-      "detail": "**1 条 TO-MONITOR 待监控回复**。 OPS-A 第8轮 idle（58 分钟前）； OPS-B 第5轮 idle（21 分钟前）； OPS-M 第6轮 idle（16 分钟前）； OPS-R 第1轮 idle（503 分钟前）",
+      "detail": "需要你重开的会话：RES-3 验证与考卷研究员（从未启动）； RES-4 基础设施研究员（从未启动）",
       "rows": [
         {
-          "age_min": 58,
-          "cycle": 8,
+          "id": "RES-3",
+          "name": "验证与考卷研究员",
+          "prompt": "monitor/prompts/ops/RES-3.md",
+          "why": "从未启动"
+        },
+        {
+          "id": "RES-4",
+          "name": "基础设施研究员",
+          "prompt": "monitor/prompts/ops/RES-4.md",
+          "why": "从未启动"
+        }
+      ],
+      "status": "risk"
+    },
+    "ops_duty": {
+      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第9轮 idle（0 分钟前）； OPS-B 第5轮 idle（30 分钟前）； OPS-M 第6轮 idle（25 分钟前）； OPS-R 第1轮 idle（512 分钟前）",
+      "rows": [
+        {
+          "age_min": 0,
+          "cycle": 9,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "cycle 8: first full sweep on the new one-way-door dimension -- APP-*/RES-* board claims have no exit but their own session, and V3 has held its territory for six hours since its branch merged",
+          "note": "cycle 9: bus wired in; answered the assigned review -- the tightened ablation-arm criterion does let real trespass through, and it hides the spend ledger, the contamination log, incidents and the candidates stream. Fan-out discipline cannot be executed by this session; told the monitor via bus.",
           "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 21,
+          "age_min": 30,
           "cycle": 5,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -2077,7 +2194,7 @@
           "status": "green"
         },
         {
-          "age_min": 16,
+          "age_min": 25,
           "cycle": 6,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2086,7 +2203,7 @@
           "status": "green"
         },
         {
-          "age_min": 503,
+          "age_min": 512,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2096,7 +2213,7 @@
         }
       ],
       "status": "partial",
-      "to_monitor": 1
+      "to_monitor": 2
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3184 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
@@ -2111,16 +2228,16 @@
       "status": "risk"
     },
     "self_driving": {
-      "detail": "RES-1 第2轮 idle（15 分钟前）； RES-2 第3轮 idle（2 分钟前）",
+      "detail": "RES-1 第0轮 idle（3 分钟前）； RES-2 第4轮 idle（4 分钟前）； RES-3 未启动； RES-4 未启动",
       "status": "green"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 34 个提交 / 8 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 37 个提交 / 8 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "partial"
     },
     "supply": {
-      "detail": "板上 3 件可领、5 件在做，供货充足。",
-      "status": "green"
+      "detail": "板上仅剩 1 件可领（7 件在做），供货需要跟上。",
+      "status": "partial"
     },
     "verify_gates": {
       "detail": "工单声称的 1 个 verify 脚本全部在树上。",

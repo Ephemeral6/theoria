@@ -32,7 +32,8 @@ import time
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 BUS = os.path.join(HERE, "bus")
-AGENTS = ["OPS-A", "OPS-B", "OPS-M", "OPS-R", "RES-1", "RES-2"]
+AGENTS = ["OPS-A", "OPS-B", "OPS-M", "OPS-R",
+          "RES-1", "RES-2", "RES-3", "RES-4"]
 
 
 def utc():

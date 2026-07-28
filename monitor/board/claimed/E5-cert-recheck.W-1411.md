@@ -2,6 +2,7 @@ priority: 2
 cell: E5
 territory: engine-rig
 deps: none
+lane: verify
 
 # E5-cert-recheck · IC3 与死锁引擎的证书独立复核器
 

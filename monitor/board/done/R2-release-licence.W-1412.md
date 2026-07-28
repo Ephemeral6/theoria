@@ -2,6 +2,7 @@ priority: 2
 cell: P5
 territory: release
 deps: P5-release
+lane: infra
 
 # R2 · 释出包的许可合规：帧数据默认不许再释出
 

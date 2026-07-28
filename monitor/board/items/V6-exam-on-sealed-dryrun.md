@@ -2,6 +2,7 @@ priority: 3
 cell: V4
 territory: exam
 deps: none
+lane: verify
 
 # V6 · 考卷的封存彩排：流程先跑通，一局都不碰
 

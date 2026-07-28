@@ -2,7 +2,7 @@ priority: 2
 cell: V5
 territory: exam
 deps: none
-lane: campaign
+lane: verify
 
 # V5-verdict-three-types · 判决题三类各出一题并自检
 

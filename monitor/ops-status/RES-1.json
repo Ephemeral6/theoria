@@ -1,7 +1,7 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T19:20:00Z",
- "cycle": 2,
+ "utc": "2026-07-28T20:10:00Z",
+ "cycle": 0,
  "state": "idle",
- "note": "A4a-ablation-build DELIVERED (board done; agent/a4a-ablation-build pushed). verify.sh GREEN, 56 tests. P-6 demonstrated: a true impossibility and a false one agree on 10/10 decision fields. The arm CAN localise when handed a counterexample -- the cut removed what produces one. E3 reported as a pre-registered falsifier. Claiming next campaign item."
+ "note": "booted (session restart; prior session had reached cycle 3, last delivery S13-verify-gate-enforced). Re-reading contract + charter, then bus."
 }
