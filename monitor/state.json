@@ -1,11 +1,11 @@
 {
   "blocking_findings": 1,
   "board": {
-    "available": 2,
+    "available": 4,
     "blocked": 1,
-    "claimed": 5,
-    "done": 0,
-    "listing": "=== available ===\n  p1  S3-spend-gate                cell=S3  territory=proxy\n  p5  A4-ablation-online           cell=A4  territory=ablation-arm\n=== blocked ===\n  V2-exam-on-worldgen          waits on C1-worldgen\n=== claimed ===\n  C4-deadlock-lean             by W-1541\n  E2-fd-ladder-bench           by W-1520\n  E3-engines-online            by W-1521\n  S2-canary-schedule           by W-1540\n  V3-battery-discrimination    by APP-V3"
+    "claimed": 7,
+    "done": 1,
+    "listing": "=== available ===\n  p3  P5-release                   cell=P5  territory=release\n  p4  E4-property-fuzz             cell=E1  territory=fuzzlab\n  p4  S4-freeze                    cell=S4  territory=freeze\n  p5  A4-ablation-online           cell=A4  territory=ablation-arm\n=== blocked ===\n  V2-exam-on-worldgen          waits on C1-worldgen\n=== claimed ===\n  C1-worldgen                  by W-1610\n  C4-deadlock-lean             by W-1541\n  E2-fd-ladder-bench           by W-1520\n  E3-engines-online            by W-1521\n  P4-figures                   by W-1611\n  S3-spend-gate                by W-1540\n  V3-battery-discrimination    by APP-V3\n=== done (1) ===\n  S2-canary-schedule.W-1540"
   },
   "con_green": 1,
   "constraints": [
@@ -264,7 +264,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 15:50:07",
+  "generated_at": "2026-07-28 16:17:49",
   "grid": {
     "A1": {
       "active": [
@@ -1092,41 +1092,56 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/AUDITOR.md",
-      "monitor/board/board.log",
-      "monitor/board/items/C4-deadlock-lean.md",
-      "monitor/board/items/S2-canary-schedule.md",
+      "onitor/board/board.log",
+      "monitor/board/claimed/S2-canary-schedule.W-1540.md",
+      "monitor/board/items/S3-spend-gate.md",
+      "monitor/ci/merge.log",
+      "monitor/inbox/20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md",
       "monitor/index.html",
       "monitor/mailbox/OPS-A.md",
-      "monitor/spec.py",
+      "monitor/mailbox/OPS-M.md",
+      "monitor/reflex.log",
+      "monitor/reflex.py",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/claimed/C4-deadlock-lean.W-1541.md",
-      "monitor/board/claimed/S2-canary-schedule.W-1540.md",
-      "monitor/board/items/S3-spend-gate.md",
-      "monitor/inbox/20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md"
+      "monitor/board/claimed/C1-worldgen.W-1610.md",
+      "monitor/board/claimed/P4-figures.W-1611.md",
+      "monitor/board/claimed/S3-spend-gate.W-1540.md",
+      "monitor/board/done/",
+      "monitor/board/items/E4-property-fuzz.md",
+      "monitor/board/items/P5-release.md",
+      "monitor/board/items/S4-freeze.md",
+      "monitor/inbox/20260728T0800Z-W-1520-19-deadlock-speedup-half-does-not-hold.md",
+      "monitor/inbox/20260728T081500Z-W-1540-reflex-is-dead-and-the-canary-wants-a-daily-slot.md",
+      "monitor/reflex.lock"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "ded9cd7 audit: cycle 2 -- the licence question was answered three commits ago and nothing downstream knows",
+    "git_head": "1e7002d Merge remote-tracking branch 'origin/agent/s2-canary-schedule' into HEAD",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 83,
-    "sync_last": "2026-07-28",
+    "sync_entries": 89,
+    "sync_last": "2026-07-28T08:20:00Z",
     "tests": {},
     "untracked": [
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/claimed/C4-deadlock-lean.W-1541.md",
-      "monitor/board/claimed/S2-canary-schedule.W-1540.md",
-      "monitor/board/items/S3-spend-gate.md",
-      "monitor/inbox/20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md"
+      "monitor/board/claimed/C1-worldgen.W-1610.md",
+      "monitor/board/claimed/P4-figures.W-1611.md",
+      "monitor/board/claimed/S3-spend-gate.W-1540.md",
+      "monitor/board/done/",
+      "monitor/board/items/E4-property-fuzz.md",
+      "monitor/board/items/P5-release.md",
+      "monitor/board/items/S4-freeze.md",
+      "monitor/inbox/20260728T0800Z-W-1520-19-deadlock-speedup-half-does-not-hold.md",
+      "monitor/inbox/20260728T081500Z-W-1540-reflex-is-dead-and-the-canary-wants-a-daily-slot.md",
+      "monitor/reflex.lock"
     ]
   },
   "p1_green": 9,
@@ -1316,7 +1331,7 @@
           "status": "partial"
         },
         {
-          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判（开发堆 4 局可玩）；F-11 已落账：claim_set.json 为 19，ls20/ft09 隔离，9 局登记在册。  〔本次扫描：封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
+          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判（开发堆 4 局可玩）；F-11 已落账：claim_set.json 为 19，ls20/ft09 隔离，9 局登记在册。  〔本次扫描：封存堆 21 局零接触（已核对 3176 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
           "_status": "green",
           "clause": "Phase 1 · 一刀切堆",
           "id": "p1-cut",
@@ -1567,7 +1582,7 @@
       "status": "partial"
     },
     "append_only": {
-      "detail": "追加式文件出现删除：PARTNER_SYNC.md（累计删除 1 行）。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。",
+      "detail": "追加式文件出现删除：PARTNER_SYNC.md（累计删除 2 行）。既往裁决：同窗口自我订正可，跨窗口须新段落 supersede。",
       "status": "risk"
     },
     "conflict_scan": {
@@ -1703,14 +1718,14 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 12 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 15 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md, 20260728T075952Z-opsm-reflex-still-dead-unboundlocal.md, 20260728T0800Z-W-1520-19-deadlock-speedup-half-does-not-hold.md, 20260728T081500Z-W-1540-reflex-is-dead-and-the-canary-wants-a-daily-slot.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**8 条 TO-MONITOR 待监控回复**。 OPS-A 第2轮 idle（21 分钟前）； OPS-B 第1轮 idle（88 分钟前）； OPS-M 第1轮 working（87 分钟前）； OPS-R 第1轮 idle（76 分钟前）",
+      "detail": "**9 条 TO-MONITOR 待监控回复**。 OPS-A 第2轮 idle（49 分钟前）； OPS-B 第1轮 idle（116 分钟前）； OPS-M 第2轮 working（15 分钟前）； OPS-R 第1轮 idle（104 分钟前）",
       "rows": [
         {
-          "age_min": 21,
+          "age_min": 49,
           "cycle": 2,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -1719,7 +1734,7 @@
           "status": "green"
         },
         {
-          "age_min": 88,
+          "age_min": 116,
           "cycle": 1,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1728,16 +1743,16 @@
           "status": "green"
         },
         {
-          "age_min": 87,
-          "cycle": 1,
+          "age_min": 15,
+          "cycle": 2,
           "id": "OPS-M",
           "name": "合并裁判",
-          "note": "无 flag、无待合分支；但探针发现 TheoriaReflex 计划任务 Disabled/exit1，ci_merge 失去驱动，本周期已代跑，详情见 inbox 与 TO-MONITOR",
+          "note": "三个分支已手动合入（含 C2-semantics-migrate），全量门 9 目录首次全绿；但 TheoriaReflex 虽已启用仍每轮 UnboundLocalError 崩溃，ci_merge 仍无自动驱动，详见 inbox 20260728T075952Z",
           "state": "working",
           "status": "green"
         },
         {
-          "age_min": 76,
+          "age_min": 104,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -1747,14 +1762,14 @@
         }
       ],
       "status": "green",
-      "to_monitor": 8
+      "to_monitor": 9
     },
     "pile_integrity": {
-      "detail": "封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
+      "detail": "封存堆 21 局零接触（已核对 3176 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
       "status": "green"
     },
     "provenance_scan": {
-      "detail": "已建档：engine-rig：1 个 run（正典 0，非正典 1(md)），最新 p13-fd-real； theory-compiler：1 个 run（正典 0，**无留痕 1**），最新 P-10； arc-recon：1 个 run（正典 1），最新 P-11； proxy：1 个 run（正典 1），最新 p9-shell-harden； battery：1 个 run（正典 1），最新 P-14。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, a0-spike, baseline-arms。",
+      "detail": "已建档：engine-rig：2 个 run（正典 1，非正典 1(md)），最新 p13-fd-real； theory-compiler：1 个 run（正典 0，**无留痕 1**），最新 P-10； a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； arc-recon：2 个 run（正典 2），最新 P-11； proxy：1 个 run（正典 1），最新 p9-shell-harden； battery：2 个 run（正典 2），最新 P-14。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, baseline-arms。",
       "status": "partial"
     },
     "scheduled_tasks": {

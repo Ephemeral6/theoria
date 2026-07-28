@@ -88,6 +88,18 @@ def main():
                     events.append("queue-skip:%s" % pid_str)
             os.remove(qpath)
 
+        # 1. reap
+        out = run([sys.executable, os.path.join(HERE, "dispatch.py"),
+                   "--reap"]).stdout
+        killed = [l for l in out.splitlines() if "killed" in l]
+        events += ["reap:" + l.split()[0] for l in killed]
+
+        # 2. quota
+        q = run([sys.executable, os.path.join(HERE, "quota.py"), "check"])
+        hold = q.returncode == 2
+        if hold:
+            events.append("quota:HOLD")
+
         # 0b. worker headcount — long-lived workers claim their own items from
         # the board, so the monitor controls only the population, never the
         # per-item dispatch. Target scales with what the board still holds.
@@ -131,18 +143,6 @@ def main():
                 events.append("worker-spawn:%s" % wid
                               if "started" in r.stdout else
                               "worker-fail:%s" % wid)
-
-        # 1. reap
-        out = run([sys.executable, os.path.join(HERE, "dispatch.py"),
-                   "--reap"]).stdout
-        killed = [l for l in out.splitlines() if "killed" in l]
-        events += ["reap:" + l.split()[0] for l in killed]
-
-        # 2. quota
-        q = run([sys.executable, os.path.join(HERE, "quota.py"), "check"])
-        hold = q.returncode == 2
-        if hold:
-            events.append("quota:HOLD")
 
         # 3. revive (skip in hold)
         if not hold:

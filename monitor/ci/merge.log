@@ -7,3 +7,7 @@
 2026-07-28T03:37:14Z MERGED origin/agent/p17-a3-transfer (dirs: PARTNER_SYNC.md,cold-start-a3)
 2026-07-28T03:37:21Z MERGED origin/agent/p8-theoria-arm (dirs: PARTNER_SYNC.md,theoria-arm)
 2026-07-28T03:43:08Z MERGED origin/agent/p9-shell-harden (dirs: PARTNER_SYNC.md,monitor,proxy)
+2026-07-28T07:55:10Z MERGED origin/agent/c2-semantics-migrate (dirs: PARTNER_SYNC.md,a0-spike)
+2026-07-28T07:55:18Z MERGED origin/agent/v3-battery-discrimination (dirs: PARTNER_SYNC.md,battery)
+2026-07-28T07:57:46Z MERGED origin/agent/e2-fd-ladder-bench (dirs: PARTNER_SYNC.md,engine-rig)
+2026-07-28T08:16:33Z MERGED origin/agent/s2-canary-schedule (dirs: PARTNER_SYNC.md,arc-recon)
