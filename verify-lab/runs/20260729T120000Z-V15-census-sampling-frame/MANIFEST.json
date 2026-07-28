@@ -1,0 +1,138 @@
+{
+  "api_calls": 0,
+  "author": "RES-3 executor",
+  "base_commit": "15bee911b5711b33b4615f87eebfbb183a187df0",
+  "blinding": "nine judging agents worked from a git-archive export of this branch with verify-lab/ removed; verify-lab does not exist on master, so the redaction is the mainline's own state. Declared breaches in BLINDING.md.",
+  "branch": "agent/v15-census-sampling-frame",
+  "commands": [
+    "python verify-lab/frame/frame.py",
+    "python verify-lab/frame/reconcile.py",
+    "python verify-lab/frame/matrix.py"
+  ],
+  "files": [
+    {
+      "path": "verify-lab/frame/frame.py",
+      "sha256": "2fc7f2470db3df705fc78c13b538337dba434e4b3c5f3c82ed8f92b78b68349d"
+    },
+    {
+      "path": "verify-lab/frame/reconcile.py",
+      "sha256": "4da7033cc238b082779015fe3200b359ef74b85fd9a37684987bd0f9adde0407"
+    },
+    {
+      "path": "verify-lab/frame/matrix.py",
+      "sha256": "98094970b2f3d0ee94d6d52fe94c67f2ffb6f25043b33db15b02261fb0cf6f6b"
+    },
+    {
+      "path": "verify-lab/FRAME.md",
+      "sha256": "53e1bcb1b9a7f8db939961c6d814f8cf0a4c37b59d102ad43ca6d36e13d9760f"
+    },
+    {
+      "path": "verify-lab/MATRIX_V15.md",
+      "sha256": "119e19af66f49c90d425eb6c436e1f114b160227403535ab2cf60a0ed8dab6f0"
+    },
+    {
+      "path": "verify-lab/SUPPLEMENT_TABLE.md",
+      "sha256": "a29b496487248643036a2666f45ae78475d31d1f008c368fe6286f4a9e924489"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/BLINDING.md",
+      "sha256": "27ffc7177916e944d052f1389e021cefc3522f7ce3542c7ca8754c7dbfd01d0e"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/frame.json",
+      "sha256": "a22c727ecb85788028ca0b439cfbc9942941b94771456cc7dc82842ab5c689a1"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/reconciliation.json",
+      "sha256": "bc201c404644809e59a35222851cccf87dc123c23b17415d975f1dc07221da73"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/matrix.json",
+      "sha256": "757899ad665d2d1c97d4dc0d520d759f2b74af4db28140b9bd057e29fe342c6d"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/difference_set.txt",
+      "sha256": "0e3d94dafa224179c7c5eaf4e0ba11345e223ba783f325db8bdc019ff54a4a53"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/partials/b1-monitor.md",
+      "sha256": "753531f9dd2c7aeab7353f4f6f7949649477e71317c1996f1d50fb20354a25da"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/partials/b2-baseline-arms.md",
+      "sha256": "772c9d8b23142344e6223107e18c03c92d872299331054c85ff18c3e8891ea1f"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/partials/b3-theory-compiler.md",
+      "sha256": "78b1f78de86790ff93ddc1a3805dfc6414d88d255ccbb7c16b02ea16ba9f3054"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/partials/b4-cold-start-a0.md",
+      "sha256": "23c19004f0170705ce51b32a31e19d3a57af171b422505880ccb09362b679555"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/partials/b5-cold-start-a2.md",
+      "sha256": "3e2802576244d797f44024ffafe8aa740bf9a9fba4e52efd4800aa9fb9c65367"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/partials/b6-cold-start-a3.md",
+      "sha256": "e1b856db6ede30e7f05271c5dc8dfb74fce62de047618d49a0309f9caec2ed1b"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/partials/b7-engine-rig.md",
+      "sha256": "879dafc75f96b4842471d5e601f816951e425534994842a51b6f645f9911f86e"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/partials/b8-exam-figures-ablation.md",
+      "sha256": "f056daa05792a729dd4b203f3e06cbb1f60a7d184b105a17b833af67d389edd6"
+    },
+    {
+      "path": "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/partials/b9-papers-worldgen-arc-proxy.md",
+      "sha256": "9e85952ef5da55bea682ad17e79f3c97ec9bf25df658d6d55a521fd36eb97a8b"
+    }
+  ],
+  "headline": {
+    "difference_set": 134,
+    "frame_units": 243,
+    "hand_judged": 126,
+    "matrix_strict": {
+      "probe_enumerated_only": {
+        "FN": 36,
+        "FNR": 0.507,
+        "FP": 1,
+        "TN": 73,
+        "TP": 35,
+        "n": 145
+      },
+      "v11_plus_v15": {
+        "FN": 41,
+        "FP": 6,
+        "TN": 102,
+        "TP": 70,
+        "n": 219
+      },
+      "v14_reproduction": {
+        "FN": 20,
+        "FP": 3,
+        "TN": 29,
+        "TP": 43,
+        "n": 95
+      }
+    },
+    "negctl_coverage_pct": 58.1,
+    "not_judged": {
+      "stratum_C_suites": 6,
+      "the_probe_itself": 2
+    },
+    "v11_coverage_pct": 44.4
+  },
+  "lane": "verify",
+  "network": "none",
+  "prompt_id": "V15-census-sampling-frame",
+  "sealed_pile_contact": "none",
+  "utc": "2026-07-29T12:00:00Z",
+  "what": "Define the population of acceptance entry points, reconcile V11's 127 and negctl's 141 against it, hand-judge the difference set blind to the probe, and recompute V14's confusion matrix on the supplemented gold standard.",
+  "wrote_only_under": [
+    "verify-lab/"
+  ]
+}
