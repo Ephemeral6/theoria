@@ -8,19 +8,29 @@
 **⟨AUTHOR PLACEHOLDER⟩**
 ⟨AFFILIATION PLACEHOLDER⟩ · ⟨CONTACT PLACEHOLDER⟩
 
-> **Draft status — v0.2.** This is a working draft assembled from the acceptance
-> reports already in the repository. Authorship, affiliation, venue and
-> bibliography are unfilled placeholders, and at ~19 500 words it is roughly five
-> times a workshop budget — the cut is a separate pass, and no material has been
-> dropped yet in order to make it.
+> **Draft status — v0.3.** This is a working draft assembled from the acceptance
+> reports already in the repository. Authorship, affiliation and venue are
+> unfilled placeholders, and at ~22 600 words it is roughly five times a workshop
+> budget — the cut is a separate pass, and no material has been dropped yet in
+> order to make it.
 >
-> v0.2 adds three sections — §6 (A3, transfer), §8 (the exam) and §9 (the
-> preflight) — and renumbers the two that follow them; the map from v0.1 is
-> `papers/phase1-workshop/runs/20260728T092517Z-P6/SECTION_RENUMBER.md`.
-> **§7 is known stale**: the battery was rebuilt from v0 to v2 after that section
-> was written, and it carries a standing note saying so rather than a repair.
+> v0.2 added three sections — §6 (A3, transfer), §8 (the exam) and §9 (the
+> preflight) — and renumbered the two that follow them; the map from v0.1 is
+> `papers/phase1-workshop/runs/20260728T092517Z-P6/SECTION_RENUMBER.md`. v0.3
+> closes the two gaps that renumbering left. **§7 has been re-derived against
+> battery v2** — it reported v0 behind a standing note admitting the battery had
+> moved, and every figure in it is now read from `battery/artifacts/*.json`
+> rather than from a report's prose. **§11 has a bibliography**:
+> `papers/phase1-workshop/references.bib`, 70 records each cross-verified against
+> two independent sources, with the traces in
+> `papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/`; no
+> `[bib: TODO]` marker survives anywhere in the draft, and the records that could
+> not be confirmed twice are named as uncited rather than hedged.
+>
 > `papers/phase1-workshop/OPEN_ITEMS.md` is the derived checklist of everything
-> the two audits left open, including that one.
+> the two audits left open. `papers/phase1-workshop/REVIEW_TRIAGE.md` sorts the
+> referee pass by what each fix costs — writing, re-derivation, or an experiment
+> that has not been run.
 >
 > **The binding rule.** Every quantitative claim in the body carries the
 > repo-relative path of the artefact it came from;
@@ -128,9 +138,10 @@ transition function, it agrees on **233 of 236** reachable (state, action) pairs
 never have contained, and on those three its accuracy is **0.000**
 (`cold-start-a0/artifacts/score_vs_truth.json`, field `held_out.accuracy`). The
 metrics battery, recomputing over the same trajectory, reports the same manual at
-**K4 evidence coverage = 1.000 and K2 held-out accuracy = 0.000**
-(`battery/REPORT_V0.md`), and draws the consequence for measurement rather than
-for A0:
+**K4 evidence coverage = 1.000 and K2 held-out accuracy = 0.000** — K4 over 7
+annotated clauses, K2 over 3 pairs with 0 agreements, unchanged from v0 to v2
+(`battery/artifacts/capability_spectrum.json`, run `a0-base`) — and draws the
+consequence for measurement rather than for A0:
 
 > Evidence coverage rewards precisely the caution that held-out accuracy
 > punishes. A battery reporting K4 alone would show a flawless manual.
@@ -218,19 +229,20 @@ Scoped to what was actually run:
    loop that closes it** — 打脸 (refute) → 定位 (locate) → 戳探 (probe) → 修订
    (revise) → 重证 (re-certify) → 解出 (solve), each beat settled by an artefact
    (`cold-start-a2/artifacts/loop_ledger.json`: 8 beats, 8 pass, 0 fail).
-4. **A metrics battery recomputed over trajectories that already existed** — 26
-   runs, 4 development-pile games, 2 arms, at zero new game spend and zero model
-   calls (`battery/REPORT_V0.md`) — with directional predictions pre-registered
-   before the first recompute, including a seal declaration marking which A0
-   predictions are post-dictions (`battery/PREDICTIONS.md`).
+4. **A metrics battery recomputed over trajectories that already existed** — 95
+   runs, 5 arms, 4 development-pile games, 38 metrics, at zero new game spend and
+   zero model calls (`battery/artifacts/capability_spectrum.json`;
+   `battery/REPORT_V2.md`) — with directional predictions pre-registered before
+   each recompute, including a seal declaration marking which A0 predictions are
+   post-dictions (`battery/PREDICTIONS.md`).
 
 **Scope limit, stated here rather than deferred.** Every pipeline result in this
 paper — A0, A0′, A1, A2 — was produced offline, on small deterministic worlds
 this project built itself; no game was played for it and no network was touched
 (`cold-start-a2/A2_REPORT.md` §7). The battery is passive: it recomputes over
 trajectories that already existed and spends nothing new
-(`battery/REPORT_V0.md`). No sealed-pile game was played or read for any result
-here — though §7.1 records that the sealed pile is nonetheless no longer clean,
+(`battery/REPORT_V2.md`). No sealed-pile game was played or read for any result
+here — though §10.1 records that the sealed pile is nonetheless no longer clean,
 for reasons that have nothing to do with this paper's experiments. And the
 theorize step is not a measured language-model step: the manuals are checked in
 as artefacts, written by hand from engine output, so
@@ -244,7 +256,7 @@ report already states its own.
 ## 2 · The framework, in the amount this paper needs
 
 The full design is `Theoria.md`. This section carries only the parts the Phase 1
-results are unintelligible without; §8 places the whole thing against its
+results are unintelligible without; §11 places the whole thing against its
 neighbours.
 
 ### 2.1 Two books, and what each answers
@@ -420,7 +432,7 @@ in the manual's own words:
 > if and only if the Button is unpressed.**
 
 The rule says *when* it happens; the law says *that it held on every one of the
-275 transitions*. The distinction matters and §8.1's own table forbids
+275 transitions*. The distinction matters and §11.1's own table forbids
 overstating it: `zero_space` reads data, not rules, so what it returns is an
 empirical regularity — "true of everything already experienced", which is exactly
 what that table assigns to the second wave. Upgrading it to "true of everything"
@@ -914,7 +926,7 @@ and the paper states it that way.
 | beat | claim | evidence | result |
 |---|---|---|---|
 | **打脸** (refutation) | the theorem is false | `cold-start-a2/artifacts/refutation.json` | 18 actions, `win` on frame 18 |
-| **定位** (localisation) | §1.4's three-way narrows it | `cold-start-a2/artifacts/locate_report.json` | board ✗, goal test ✗, **step ✓ at t=11** |
+| **定位** (localisation) | `Theoria.md` §1.4's three-way narrows it | `cold-start-a2/artifacts/locate_report.json` | board ✗, goal test ✗, **step ✓ at t=11** |
 | **戳探** (probe) | predictions first, then execute | `cold-start-a2/artifacts/probes.jsonl` | 5 designed, 4 run, 1 recorded unrunnable; trace 184 → 196 frames |
 | **修订** (revision) | rewritten from the probe record | `cold-start-a2/theory/theory_repaired.dsl` | re-derivable from grown evidence |
 | **重证** (re-proof) | the old certificate dies, a true one replaces it | `cold-start-a2/artifacts/repair_report.json` | Lean RED then GREEN |
@@ -924,7 +936,7 @@ and the paper states it that way.
 absent**: M0, the complete manual, and M5, the exhibit, precede the six loop
 beats. Three rows deserve more than a row.
 
-**定位 is a three-check, not a search.** All three of §1.4's places are checked
+**定位 is a three-check, not a search.** All three of `Theoria.md` §1.4's places are checked
 rather than stopping at the first, because "step 12 disagrees" without "and the
 board and goal test were fine" has narrowed nothing. At t=11 the Cart is at
 **(6,4)**, the action is **DOWN**, the manual fires nothing and predicts it stays,
@@ -989,7 +1001,7 @@ identical in *generator, tactic, dependency surface and axiom list*: same
 GREEN. **The instrument returns the same verdict for a theorem that is true of
 its world and one that is not, and it is not supposed to do anything else.** Lean
 guarantees *true relative to the manual*; whether the manual matches the world is
-settled by §1.4's refutation loop and nowhere else.
+settled by `Theoria.md` §1.4's refutation loop and nowhere else.
 
 What is lost with the false version is a rhetorical minimal pair, and it should
 be named rather than glossed: because the goals differ, the repaired file does
@@ -1959,7 +1971,7 @@ account. Nothing in this section is a concession extracted by a reviewer; all of
 it was written down by the runs themselves, and the paths are given so it can be
 checked rather than believed.
 
-### 7.1 The pre-declared clauses, answered
+### 10.1 The pre-declared clauses, answered
 
 **(a) 便宜是预测 — "cheap" is a prediction, not a result.** `Theoria.md`'s cost
 claim (C5, total spend 10⁸ → 10⁶) belongs to Phase 4 and is not evidenced here in
@@ -2005,7 +2017,7 @@ public, the grammar diff is public, and v0.1 was not edited.
 **(e) 单一 benchmark 家族 — a single benchmark family.** This paper is weaker than
 that clause anticipates: it reports **no benchmark result at all**. Every world
 in §3–§5 was built by us; A1's is peg solitaire. The one thing recomputed over
-ARC trajectories is the battery (§6), and those trajectories are a control-arm
+ARC trajectories is the battery (§7), and those trajectories are a control-arm
 pilot, not a Theoria result.
 
 **(f) 封存堆污染分级与预训练先验 — sealed-pile contamination grading and the
@@ -2039,7 +2051,7 @@ pretraining-prior caveat.** Two entries, and both are worse than "clean":
   enter model context. Any absolute phrasing of "induced from zero" is
   discounted accordingly. This paper makes no induction claim about any ARC game.
 
-### 7.2 A correction to the repository's own summary
+### 10.2 A correction to the repository's own summary
 
 `CLAUDE.md` states that no game has been played and that all 25 are registered
 `never_audited`. That was true when written and is **not true now**. The
@@ -2053,7 +2065,7 @@ nothing reached level 2. This is the legitimate use of a development pile, and
 recording it is the point of having one; it is corrected here because a paper
 that repeated `CLAUDE.md`'s sentence would be repeating something false.
 
-### 7.3 What the individual acceptances do not show
+### 10.3 What the individual acceptances do not show
 
 **The theorize step is not a measured LLM step.** This is the largest caveat in
 the paper and it is stated first. `cold-start-a2/A2_REPORT.md` §8 puts it
@@ -2148,30 +2160,43 @@ inside the loop, from a wrong manual — and one of those bugs manufactured a
 obligation for a theorem that is false. The four-co-derived-forms design is meant
 to make that drift visible; here it took a human reading the plan output.
 
-### 7.4 What the battery cannot yet certify
+### 10.4 What the battery cannot yet certify
 
-Restated from §6 so that the limitations section is complete on its own. Every
-ranked metric's verdict in `battery/artifacts/discrimination.json` is
-`underpowered` or `no-data` — 24 of 29, the other 5 being direction-less
-diagnostics returned as `not-ranked` — and that is arithmetic rather than
-softness: a
-two-sided sign test over four paired games has a smallest attainable p of
-**0.125**, so no metric can clear p < 0.05 on this data however cleanly it
+Restated from §7 so that the limitations section is complete on its own. Every
+ranked metric's verdict is `underpowered` or `no-data` — **31 of 38** on the model
+ladder and **31 of 38** on the specified gradient, the other 7 in each case being
+direction-less diagnostics returned as `not-ranked`
+(`battery/artifacts/discrimination.json`,
+`battery/artifacts/discrimination_arms.json`) — and that is arithmetic rather than
+softness: a two-sided sign test over four paired games has a smallest attainable p
+of **0.125**, so no metric can clear p < 0.05 on this data however cleanly it
 separates, and six non-tied paired games is the floor for the test to be able to
-clear the bar at all. There is no Schema arm and there may never be
-(`baseline-arms/SCHEMA_LOCATE.md`); the model ladder is a substitute and
-`battery/DECISIONS.md` D-B-004 argues why it is weaker. The battery's author also
-wrote the metric definitions, which is structurally impossible to blind, and four
-metrics on A0 are marked `[seen]` post-dictions in `battery/PREDICTIONS.md` rather
-than being passed off as predictions.
+clear the bar at all.
 
-One further data-integrity note belongs here rather than in §6: the ledger the
+Two statements this section used to make have been overtaken and are corrected
+rather than left standing. There **is** a Schema arm — 8 runs of released upstream
+trajectories, which is what let process 1 run on the gradient `Theoria.md`
+specifies; what does not exist, and may never, is a *reproduction*, because the
+harness was never published (`baseline-arms/SCHEMA_LOCATE.md`;
+`battery/DECISIONS.md` D-B-019). And the model ladder is no longer the substitute
+for that gradient but a second, differently-confounded pass beside it, which is
+why §7.6 reports P1 separating the two in opposite directions.
+
+What does not change is the part that matters here: the battery's author also
+wrote the metric definitions, which is structurally impossible to blind; four
+metrics on A0 are marked `[seen]` post-dictions in `battery/PREDICTIONS.md` rather
+than being passed off as predictions; and **21 of 38 metrics have never been
+checked against any known gradient at all** — the entire epistemic family, the
+entire mechanism family, and P4 — a count that adding a whole second control arm
+moved by zero (`battery/artifacts/validation_material.json`).
+
+One further data-integrity note belongs here rather than in §7: the ledger the
 battery reads was produced in part by two concurrent sessions on the same track
 sharing one budget and one API quota without knowing about each other
 (`baseline-arms/INCIDENTS.md` INC-BA-003). The runs are individually accounted,
 but any aggregate read off that ledger inherits the incident.
 
-### 7.5 The one thing this paper claims
+### 10.5 The one thing this paper claims
 
 That the pipeline runs end to end on self-built deterministic worlds; that on
 those worlds a manual can be perfect on replay and wrong about the world in a way
