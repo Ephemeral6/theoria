@@ -60,7 +60,14 @@ KNOWN_DIRS = {"engine-rig", "theory-compiler", "proxy", "battery",
               "exam", "worldgen", "fuzzlab", "theoria-arm", "ablation-arm",
               "arc-recon", "baseline-arms", "papers", "figures", "freeze",
               "release", "crosscheck", "browser-ops", "monitor", "CONTRACTS",
-              ".claude"}
+              ".claude",
+              # M-0 裁决 2026-07-29（监控代行）：两块新领地准入。
+              # `fleet-study` 是舰队自身的证据集（S17 建），`verify-lab` 是
+              # RES-3 那三路普查与负控探针的落脚处——六条已交付分支卡在
+              # 「unknown territory」上等的就是这一句。准入不等于免检：
+              # 两块地按 S13 各自欠一个闸门，`gates.py` 的普查会一直把它们
+              # 记成 UNGATED，直到它们自己交出来。
+              "fleet-study", "verify-lab"}
 
 
 def gate_for(worktree, directory):

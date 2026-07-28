@@ -113,7 +113,8 @@ def test_this_repository_is_where_the_survey_says_it_is():
     # 更新这个集合的同时要说明：它的闸门由 S17-fleet-evidence-capture 负责补，
     # 补上之后这条测试会再红一次，那是对的。
     assert set(survey["ungated"]) <= {"CONTRACTS", "browser-ops", "papers",
-                                      "release", "fleet-study"}, survey["ungated"]
+                                      "release", "fleet-study",
+                                      "verify-lab"}, survey["ungated"]
     assert "proxy" in survey["non_canonical"]
 
 

@@ -166,3 +166,5 @@
 2026-07-28T21:51:45Z DONE E14-crash-is-not-a-finding by RES-3
 2026-07-28T21:52:02Z SWEEP E8-ic3-scale released (worker W-130 gone)
 2026-07-28T21:52:15Z CLAIM C11-tool-failure-as-truth by RES-3
+2026-07-28T22:59:54Z DONE C11-tool-failure-as-truth by RES-3
+2026-07-28T23:00:14Z CLAIM V19-unverified-is-not-true by RES-3
