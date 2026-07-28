@@ -253,3 +253,107 @@ toolkit 自动从环境读取（`arc_agi.Arcade()`）。
   **这不构成机制泄露**（只是 id 与 CLI 语法，无规则、无目标、无转移函数描述），
   但按"如实登记"的要求写在这里，由 `arc-recon` 判断是否需要动 `contamination_register`。
   本会话判断：**不需要**——这两局在 INC-BA-001 中已被登记为实质泄露，等级不会因此再升。
+
+---
+
+## 7. 追补（第二轮，真 Chrome 接入后）：Testing Policy 是本项目真正该读的那份文件
+
+来源：<https://arcprize.org/policy>（"ARC Prize Verified Official Testing Policy"，20,924 字符）
+
+第一轮漏了它——它不在 docs 站，也不在 ToS 的目录里，只在**页脚**以 "Testing Policy" 挂着。
+它比 ToS 贴近本项目得多，因为 ToS 是一份通用网站模板，而这份是 ARC **自己写的、
+针对基准测试行为**的政策。**它推翻了 §2.2 的一半结论。**
+
+### 7.1 推翻：独立测试并公开自己的分数，官方明文允许
+
+原文（FAQ "WHAT IF MY SUBMISSION IS NOT SELECTED FOR VERIFICATION?"）：
+
+> "You are also free to test on public data and share your scores independently. Please state
+> clearly the data you tested on, how you tested, and that your results are not verified by
+> ARC Prize."
+
+同页 FAQ "WHY SHOULD THE COMMUNITY TRUST ARC PRIZE?"：
+
+> "We invite the community to reproduce our results."
+
+**必须把两件事切开，否则会把这条读成比它实际更宽的许可：**
+
+| 释出物 | 归谁 | 口径 |
+|---|---|---|
+| **我们自己测出来的分数、指标、结论** | 我们 | ✅ **官方明文允许公开**，附三项披露义务：测了哪份数据、怎么测的、未经 ARC 验证 |
+| **ARC 的 Content 本身**（帧、轨迹、游戏源码、题面） | ARC Prize, Inc. | ❌ 仍受 ToS §2 约束，aggregate / republish 需书面许可 |
+
+所以 §2.2 判定 1 应当**收窄**而不是撤销：`Theoria.md` Phase 4 的释出清单里，
+**「我们的测量结果」不需要许可**（但需要那三句披露），
+**「ARC 的原始帧/轨迹」仍需要许可**。这两类东西在同一个 manifest 里，必须分开标注。
+
+> 这也意味着 §5 那三个待发问题里，**第 2 条（Phase 4 释出许可）的紧迫性下降**——
+> 只要释出物限于我们自己的数字与方法，就已经落在明文允许里。仍需问的是：
+> 若清单要附**原始帧或轨迹样本**作为可复现性证据，那一部分需不需要许可。
+
+### 7.2 官方对"违规"的定义与后果，比 ToS 具体得多
+
+原文（FAQ "WHAT HAPPENS IF SOMEONE VIOLATES THIS POLICY?"）：
+
+> "If we have reason to believe a submission has violated this policy - for example, by
+> targeting our evaluation sets or otherwise manipulating results - we will conduct an
+> investigation."
+
+后果原文：invalidate 并移除结果、公开标注该结果已作废、
+"barring the party from future testing - up to and including permanent exclusion"。
+
+**判定**：这套惩戒的适用对象是 **submission**（提交到排行榜的作品），
+不是普通的 API 调用。它**没有**把"用脚本自动调 API"列为违规——
+恰恰相反，ARC-AGI-3 的整个评测就是模型自动take action（见 §7.4）。
+
+> 这实质性地缓和了 §5 问题 1 的担忧：**ToS §3(3) 的"禁止自动化访问"是通用网站模板语言，
+> 而 ARC 自己的测试政策通篇预设自动化 agent 是正常用法。** 两份文件冲突时，
+> 后者是专门法且更新更近。**但这仍是我们的解读，不是 ARC 的书面确认**——
+> §5 问题 1 保留，只是从"阻塞"降为"稳妥起见问一句"。
+
+### 7.3 新的封存污染向量：官方公开发布封存局的评测回放
+
+原文（"How We Run Evaluations: ARC-AGI-3"）：
+
+> "Results are published as scorecards on arcprize.org … New in ARC-AGI-3 is the concept of
+> replays. You can view the exact run a model performed on any individual task."
+
+**该页正文里直接挂着一条指向封存局 `re86` 回放的链接**（原文点名 "a replay of GPT-5.4 (High)
+on task 're86'"）。`re86-8af5384d` 在 INC-BA-001 里已登记为"轻微"污染。
+
+**本会话没有点开它。** 但这确立了一条第一轮没发现的向量：
+**任何人都能在 arcprize.org 上看任意一局的逐帧回放，不需要 key、不需要登录。**
+按 `piles.json` rule 2，看一遍封存局的回放与玩一遍等价。
+`browser-ops/` 与任何 harness 都不得访问 `arcprize.org/scorecards/*` 与 replay 页面，
+除非该 scorecard 是我们自己产的、且只含开发堆。
+
+同段还写明 ARC-AGI-1/2 的**测试结果（含模型输出与逐题分数）发布到 HuggingFace**——
+ARC-AGI-3 侧未提 HF，但 scorecard 页本身是公开的。
+
+### 7.4 顺带确认的三条，对 Phase 2/4 有用
+
+1. **ARC-AGI-3 的公开集比半私有集更难。** 原文："The public demo is harder than the
+   Semi-Private set, so we expect Semi-Private scores to be the higher of the two；
+   scores are in good agreement when within ±15 percentage points."
+   **本项目的 25 局全部属于 public demo**，即最难的那一档；本轨道的封存刀口是**自我纪律**，
+   与 ARC 自己的 Semi-Private / Private 分层是两回事，不要在文档里混为一谈。
+2. **官方评测默认不给模型任何工具。** 原文："We do not enable additional tools behind the
+   model, including code execution. We specifically do not enable web search…
+   tool use should be opt-in, not opt-out, so any tool use will always be declared."
+   这对本项目是一条**基线可比性**的约束：Theoria 的掌台用引擎与工具，
+   与官方 leaderboard 数字不同源，任何对比都必须声明这一点。
+3. **官方发布了 ARC-AGI-3 的第一方人类数据**（原文 "we've collected human data for …
+   ARC-AGI-3 (found here)"）。这对 `Theoria.md` 的人类基线有价值，
+   **但那个链接大概率覆盖全部 25 局**——按 INC-BA-001 的教训，
+   取它必须是一次带白名单守卫的单独决定，不是顺手点开。**本会话没有点。**
+
+### 7.5 账户面板（工单第 2 条）的第二轮结果
+
+真 Chrome 已接入（`list_connected_browsers` 返回 1 个本地实例）。
+`arcprize.org/platform` **302 到 `/platform/user` 后再跳 `/login`**，页面为：
+
+> "Sign in to the ARC-AGI Research Platform — Access API keys and ARC-AGI-3 developer tools"
+> Continue with Google / Continue with GitHub
+
+**即该 Chrome 没有 arcprize 登录态。本会话仍未尝试登录**（登录属禁止动作）。
+状态维持在 `RUN_STATE.md` 的 needs_human #1，但阻塞原因从"没有浏览器"更正为"浏览器有、登录态没有"。
