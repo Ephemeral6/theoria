@@ -25,6 +25,15 @@ run_pilot.py: widening it should be a code change with a diff, not a flag.
 The budget gate below is the operative one, not advisory. Every threshold is
 anchored to a measured pilot number, and tripping any of them stops the
 campaign where it stands -- see BUDGET_REPORT.md section 9.
+
+Two things gate a start besides the clauses themselves:
+
+  * `harness/interlock.py` refuses to begin while another campaign in this
+    track is spending (INC-BA-003). Exit code 4, no override.
+  * `harness/adjudications.py` is the only channel by which an outside ruling
+    can take named cells out of a clause's input, and it reaches G4 alone.
+
+Exit codes: 0 green, 2 bad arguments, 3 gate red, 4 interlocked.
 """
 
 import argparse
