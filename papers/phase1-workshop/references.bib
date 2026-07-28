@@ -42,6 +42,12 @@
 %   * muggleton1994ilptheory's volume is *19--20*. That is a genuine combined
 %     double volume, not a mistyped page range.
 %
+% FIVE ENTRIES ARE PRESENT BUT UNCITED, deliberately: beasley1992pegsolitaire,
+% cropper2021popper, evans2018dilp, hubert2026alphaproof, trinh2024alphageometry.
+% They were confirmed to the same standard as the rest and are kept because they
+% are the obvious next citations if a section is allowed to run longer. They are
+% not orphans and should not be pruned as such.
+%
 % ONE RECORD IS CONFIRMED TO SECONDARY-SOURCE STANDARD ONLY. openai.com returns
 % 403 to automated fetching, so brooks2024sora's 13-name contributor list was
 % confirmed from independent scholarly bibliographies rather than from the page
@@ -191,6 +197,190 @@
   howpublished = {Impossible Research},
   url          = {https://schema-harness.github.io/},
   note         = {No paper, no arXiv id, no DOI, no released harness code. Commonly mis-cited as ``Feng et al.''; Feng is the last author. The 98.98\% figure is self-reported on the public set and is not independently verified. See baseline-arms/SCHEMA\_LOCATE.md}
+}
+
+% =====================================================================
+% Active automata learning and FSM conformance testing
+% =====================================================================
+
+@article{angluin1987lstar,
+  title   = {Learning regular sets from queries and counterexamples},
+  author  = {Angluin, Dana},
+  journal = {Information and Computation},
+  volume  = {75},
+  number  = {2},
+  pages   = {87--106},
+  year    = {1987},
+  doi     = {10.1016/0890-5401(87)90052-6},
+  note    = {The L* algorithm, and the origin of the minimally-adequate-teacher setting whose reset assumption section 3 is about}
+}
+
+@article{chow1978wmethod,
+  title   = {Testing Software Design Modeled by Finite-State Machines},
+  author  = {Chow, Tsun S.},
+  journal = {IEEE Transactions on Software Engineering},
+  volume  = {SE-4},
+  number  = {3},
+  pages   = {178--187},
+  year    = {1978},
+  doi     = {10.1109/TSE.1978.231496},
+  note    = {The W-method. Crossref renders the volume as SE-4; many secondary records flatten it to 4}
+}
+
+% =====================================================================
+% Certificates and admissible heuristics in classical planning
+%
+% Three fields were deliberately left out because they could not be confirmed
+% twice: AAAI-15 page numbers, Edelkamp ECP-01 page numbers (two conflicting
+% values in circulation), and whether Beasley has a 1985 first edition. Absent,
+% not guessed.
+%
+% DO NOT "CORRECT" culberson1998pdb's venue. Semantic Scholar renders it as
+% "International Conference on Climate Informatics" — a venue-merge artefact from
+% the CI / Comput. Intell. abbreviation collision. The ISSN and the journal field
+% agree it is Computational Intelligence.
+% =====================================================================
+
+@inproceedings{pommerening2015general,
+  title     = {From Non-Negative to General Operator Cost Partitioning},
+  author    = {Pommerening, Florian and Helmert, Malte and R{\"o}ger, Gabriele and Seipp, Jendrik},
+  booktitle = {Proceedings of the Twenty-Ninth AAAI Conference on Artificial Intelligence (AAAI 2015)},
+  volume    = {29},
+  publisher = {AAAI Press},
+  year      = {2015},
+  doi       = {10.1609/aaai.v29i1.9668},
+  note      = {Page numbers not confirmed in two sources and are therefore omitted}
+}
+
+@inproceedings{seipp2015potential,
+  title     = {New Optimization Functions for Potential Heuristics},
+  author    = {Seipp, Jendrik and Pommerening, Florian and Helmert, Malte},
+  booktitle = {Proceedings of the Twenty-Fifth International Conference on Automated Planning and Scheduling (ICAPS 2015)},
+  volume    = {25},
+  pages     = {193--201},
+  publisher = {AAAI Press},
+  year      = {2015},
+  doi       = {10.1609/icaps.v25i1.13714}
+}
+
+@inproceedings{pommerening2014lp,
+  title     = {{LP}-Based Heuristics for Cost-Optimal Planning},
+  author    = {Pommerening, Florian and R{\"o}ger, Gabriele and Helmert, Malte and Bonet, Blai},
+  booktitle = {Proceedings of the Twenty-Fourth International Conference on Automated Planning and Scheduling (ICAPS 2014)},
+  volume    = {24},
+  pages     = {226--234},
+  publisher = {AAAI Press},
+  year      = {2014},
+  doi       = {10.1609/icaps.v24i1.13621}
+}
+
+@inproceedings{helmert2009lmcut,
+  title     = {Landmarks, Critical Paths and Abstractions: What's the Difference Anyway?},
+  author    = {Helmert, Malte and Domshlak, Carmel},
+  booktitle = {Proceedings of the Nineteenth International Conference on Automated Planning and Scheduling (ICAPS 2009)},
+  volume    = {19},
+  pages     = {162--169},
+  publisher = {AAAI Press},
+  year      = {2009},
+  doi       = {10.1609/icaps.v19i1.13370}
+}
+
+@article{culberson1998pdb,
+  title   = {Pattern Databases},
+  author  = {Culberson, Joseph C. and Schaeffer, Jonathan},
+  journal = {Computational Intelligence},
+  volume  = {14},
+  pages   = {318--334},
+  year    = {1998},
+  doi     = {10.1111/0824-7935.00065}
+}
+
+@inproceedings{edelkamp2001pdb,
+  title     = {Planning with Pattern Databases},
+  author    = {Edelkamp, Stefan},
+  booktitle = {Proceedings of the Sixth European Conference on Planning (ECP 2001)},
+  address   = {Toledo, Spain},
+  year      = {2001},
+  note      = {Two conflicting page ranges are in circulation (13--24 and 13--34); neither was confirmed, so neither is given}
+}
+
+@inproceedings{eriksson2017certificates,
+  title     = {Unsolvability Certificates for Classical Planning},
+  author    = {Eriksson, Salom{\'e} and R{\"o}ger, Gabriele and Helmert, Malte},
+  booktitle = {Proceedings of the Twenty-Seventh International Conference on Automated Planning and Scheduling (ICAPS 2017)},
+  volume    = {27},
+  pages     = {88--97},
+  publisher = {AAAI Press},
+  year      = {2017},
+  doi       = {10.1609/icaps.v27i1.13818}
+}
+
+@inproceedings{eriksson2018proofsystem,
+  title     = {A Proof System for Unsolvable Planning Tasks},
+  author    = {Eriksson, Salom{\'e} and R{\"o}ger, Gabriele and Helmert, Malte},
+  booktitle = {Proceedings of the Twenty-Eighth International Conference on Automated Planning and Scheduling (ICAPS 2018)},
+  volume    = {28},
+  pages     = {65--73},
+  publisher = {AAAI Press},
+  year      = {2018},
+  doi       = {10.1609/icaps.v28i1.13899}
+}
+
+@inproceedings{hoffmann2014unsolvability,
+  title     = {``Distance''? {W}ho Cares? {T}ailoring Merge-and-Shrink Heuristics to Detect Unsolvability},
+  author    = {Hoffmann, J{\"o}rg and Kissmann, Peter and Torralba, {\'A}lvaro},
+  booktitle = {ECAI 2014},
+  series    = {Frontiers in Artificial Intelligence and Applications},
+  volume    = {263},
+  pages     = {441--446},
+  publisher = {IOS Press},
+  year      = {2014},
+  doi       = {10.3233/978-1-61499-419-0-441},
+  note      = {The quotation marks around ``Distance'' are part of the title. Crossref returns this title HTML-escaped and with mangled author names; the IOS Press page has the correct forms}
+}
+
+@article{helmert2006fastdownward,
+  title   = {The Fast Downward Planning System},
+  author  = {Helmert, Malte},
+  journal = {Journal of Artificial Intelligence Research},
+  volume  = {26},
+  pages   = {191--246},
+  year    = {2006},
+  doi     = {10.1613/jair.1705}
+}
+
+@incollection{berlekamp2004winningways,
+  title     = {Purging Pegs Properly},
+  author    = {Berlekamp, Elwyn R. and Conway, John H. and Guy, Richard K.},
+  booktitle = {Winning Ways for Your Mathematical Plays},
+  edition   = {2},
+  volume    = {4},
+  chapter   = {23},
+  pages     = {803--841},
+  publisher = {A K Peters},
+  year      = {2004},
+  note      = {Origin of the pagoda function. EDITION TRAP: this chapter is volume 4 in the 2004 A K Peters second edition and volume 2 (Games in Particular) in the 1982 Academic Press first edition, where the pagoda material is at pages 729--730}
+}
+
+@book{beasley1992pegsolitaire,
+  title     = {The Ins and Outs of Peg Solitaire},
+  author    = {Beasley, John D.},
+  publisher = {Oxford University Press},
+  address   = {Oxford},
+  year      = {1992},
+  note      = {Both readable bibliographies give 1992. A 1985 Oxford first edition in the Recreations in Mathematics series is plausible but was not confirmable from any reachable catalogue --- re-check with library access before submission}
+}
+
+@inproceedings{kiyomi2001pegsolitaire,
+  title     = {Integer Programming Based Algorithms for Peg Solitaire Problems},
+  author    = {Kiyomi, Masashi and Matsui, Tomomi},
+  booktitle = {Computers and Games},
+  series    = {Lecture Notes in Computer Science},
+  pages     = {229--240},
+  publisher = {Springer},
+  year      = {2001},
+  doi       = {10.1007/3-540-45579-5_15},
+  note      = {Presented at CG 2000. States the pagoda condition in the form lp\_potential solves, and shows the pagoda argument is the linear relaxation of an integer program}
 }
 
 % =====================================================================

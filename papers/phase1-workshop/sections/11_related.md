@@ -69,7 +69,53 @@ catches a rule written *wrong*, never a rule left *out*.
 
 ### 11.2 Where this sits, one neighbour at a time
 
-**Certificates and admissible heuristics in planning.** PENDING-LINE-2
+**Certificates and admissible heuristics in planning.** This is the literature
+anchor for 证书与启发同源 — certificate and heuristic are the same object. An
+admissible *h(s)* is a lower bound, and an unsolvability certificate is its limit
+case *h(s₀) = ∞*. The identity is not ours: potential heuristics are admissible
+lower bounds obtained from a linear program [`pommerening2015general`,
+`seipp2015potential`], the operator-counting framework recovers several heuristic
+families as LPs over constraints every plan's operator counts must satisfy
+[`pommerening2014lp`], and landmark, critical-path and abstraction heuristics are
+all lower-bound constructions differing mainly in what they may see
+[`helmert2009lmcut`, `culberson1998pdb`, `edelkamp2001pdb`].
+`engine-rig/engines/lp_potential` is that identity realised as one solver, pushed
+to the degenerate end of the bound — it asks only whether the LP admits a
+potential separating the initial configuration from the goal. It is **sound but
+incomplete**: it never certifies a solvable configuration, and some genuinely
+unsolvable ones admit no *linear* certificate (`engine-rig/DECISIONS.md` D-014).
+
+The object it computes has a name and a provenance: a **pagoda function**, an
+assignment of values to positions that cannot increase under any legal jump,
+introduced to prove peg-solitaire configurations unreachable
+[`berlekamp2004winningways`]. Formulating that argument as the linear relaxation
+of an integer program is also prior work [`kiyomi2001pegsolitaire`], and it is the
+closest published analogue of what this engine does. The discipline of shipping
+the evidence rather than the verdict is prior work too: unsolvability claims used
+to be taken on trust while plans were independently validated, which is the gap
+certificate formats and then a proof system for unsolvable tasks were built to
+close [`eriksson2017certificates`, `eriksson2018proofsystem`]; and collapsing a
+heuristic to the two-valued reachable/unreachable question when unsolvability is
+the goal is a known move [`hoffmann2014unsolvability`]. Fast Downward, which
+`engine-rig/engines/fd_adapter` wraps behind a `solve(domain, problem)` interface,
+is used rather than competed with [`helmert2006fastdownward`], so the search half
+of the pipeline is a citation and not a contribution.
+
+The delta is twofold and narrow. **That literature certifies tasks whose rules are
+given; here the rules were *induced* from an observed transition ledger**, so the
+LP's constraints are mined by `engine-rig/engines/zero_space` and
+`engine-rig/engines/cegis_miner` rather than read off a domain description, and
+the soundness argument transfers only as far as the mining does — a certificate is
+a theorem about the induced rules and is only as good as they are. Second, **the
+certificate participates in a repair loop rather than terminating the argument**:
+where an infeasibility result closes an instance, a failed derivation here is a
+signal that the induced rules are wrong, and that is what the loop consumes
+(`cold-start-a2/artifacts/loop_ledger.json`). Two consequences follow that are
+worth stating because they are costs rather than features. A repair to the manual
+can invalidate a certificate that was correct with respect to the earlier rules.
+And a method that answers only "unreachable or don't know" cannot be scored by how
+close its estimates are, which is why §5 reports what it decided and what it left
+open rather than an error measure.
 
 **Program synthesis, version spaces, and ILP.** `engine-rig/engines/cegis_miner`
 runs the counterexample-guided loop of sketching and syntax-guided synthesis
@@ -177,15 +223,18 @@ those are answered above — the version space, the specification-validity probl
 and the mined-specification setting. Two are recorded here rather than argued away.
 
 **"Reversibility beats coverage" is close to the reset assumption in active
-automata learning.** Membership/equivalence-query learning assumes the learner can
-reset to a known state, precisely because without a reset a transition cannot be
-re-witnessed; §3's irreversible latch removes the reset for the button mechanism
-and A0′'s toggle restores it. The review also names FSM conformance testing as the
-owner of "replay coverage does not certify the model". **Neither anchor is cited
-here, because neither was verified to this section's standard in the pass that
-built it.** Rather than attach a plausible-looking citation to a literature nobody
-in this pass read, the debt is left visible: it is item D in
-`papers/phase1-workshop/OPEN_ITEMS.md`, and it is writing rather than experiment.
+automata learning.** L\* and the membership/equivalence-query line assume the
+learner can reset to a known state, precisely because a transition that cannot be
+re-witnessed cannot be pinned down [`angluin1987lstar`]; §3's irreversible latch
+removes the reset for the button mechanism and A0′'s toggle restores it, so the
+finding there is the standard reason that assumption is made, arrived at from the
+other direction. The neighbouring claim — that replay coverage does not certify
+the model — is the FSM conformance-testing problem, whose W-method
+[`chow1978wmethod`] exists because covering every observed transition is not the
+same as distinguishing every state. Vasilevskii's independent line on the same
+problem is named in `papers/phase1-workshop/REVIEW.md` and is **not** cited here:
+it was not verified to this section's standard, and attaching a plausible-looking
+record to a source nobody in this pass read is the same failure as inventing one.
 
 **"Prediction perfect, understanding broken" is this framework's own premise, not a
 finding.** §5's procedure is to take a certified manual, delete a rule that never

@@ -57,5 +57,137 @@
     "game_spend": 0,
     "sealed_pile_reads": 0
   },
-  "files": []
+  "files": [
+    {
+      "path": "papers/phase1-workshop/sections/07_battery.md",
+      "sha256": "b7eb3736c19bf4dd2c3cb69c1460a6f85a96241d67123a5a8dd30991118ab62b"
+    },
+    {
+      "path": "papers/phase1-workshop/sections/11_related.md",
+      "sha256": "12917840b58c7e1ab8b1c7053c1bcfef504324a2b5c8752df26436f2a4f52540"
+    },
+    {
+      "path": "papers/phase1-workshop/sections/03_a0.md",
+      "sha256": "a0112e2890f4c8eea0ea1c4f1e87b2f85ac51dfaf799bc1dd7b19b0a3bb75b49"
+    },
+    {
+      "path": "papers/phase1-workshop/references.bib",
+      "sha256": "db4006b122d45b61f362c66ef27d551b856d612a0c207f63dd63eaa4745a1096"
+    },
+    {
+      "path": "papers/phase1-workshop/REVIEW_TRIAGE.md",
+      "sha256": "3a01050e244ee92d1480af214afae313cb1d8a2ff9c6f1518a46fa398fa4dc2a"
+    },
+    {
+      "path": "papers/phase1-workshop/OPEN_ITEMS.md",
+      "sha256": "8406a1ae0d48f32a246de3323bcf789c5d7729e3fb6320d2a52512a3966b5b84"
+    },
+    {
+      "path": "papers/phase1-workshop/OUTLINE.md",
+      "sha256": "12ff0aed1a2f0877ace5a301834bc7a990a1baba461eed80fa8841419adde6ec"
+    },
+    {
+      "path": "papers/phase1-workshop/PAPER.md",
+      "sha256": "c1ba29bffdd3d7afd024c59b6146124c2a6f7b11859e629ecff8d24cb692d3ef"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/audit-sample-a.md",
+      "sha256": "f1f92ab8f02d5e8481d703d4780cf9790fcf9611cf4d0c4a0fb21f3846f72461"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/audit-sample-b.md",
+      "sha256": "afdb503a66645ae48aac33bc2f7d32aed44e6172a94ae28b0ead2739a4c4b8bb"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/line0-schema-attribution.md",
+      "sha256": "32a46c6f5665bd3a46fa0fe0df6a7812dfbc60a1409d11a5e9d8c92ff44696fe"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/line1-world-models.md",
+      "sha256": "9add21eca2b78936a83db4cd2957d5a73d324e3ad905bddb3ae09e569bb12952"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/line2-planning-certificates.md",
+      "sha256": "563debfac38fe4bdc33419474e9223a8cade4e06f212ad4eae48ebde3ec9d833"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/line3-cegis-ilp.md",
+      "sha256": "9761c8a16546da3a1e0d07db47691c7de9359c156514ef0e99f95aeb79730fe8"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/line4-petri-ic3.md",
+      "sha256": "dd29aeffad273fbe3e969d3fa0fe6528838cfbbe4deb2656fe603f83fc8e27fa"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/line5-pcc-spec-validity.md",
+      "sha256": "8f55ffb4b69f32b524ea47e57c5dced0581c1656c667111b6ece7b714add1edc"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/line6-llm-theorem-proving.md",
+      "sha256": "10e73affc279ac5371ed95f019a9246aa3e4384b827fe1b318f42255f9668e9f"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/line7-automata-learning.md",
+      "sha256": "0db6eb5ca9f9ee8ea6801fd26c89d94ee15eaee0aa71f6b476fbdae09c61770b"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/drafts/line1-world-models.md",
+      "sha256": "250d60b361fb4d44a8f6c6c0f7ac06b04badceac8f1bd03dbbc8a7180645eca4"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/drafts/line2-planning-certificates.md",
+      "sha256": "25901f8f45b6ef2b214346d6aaf51c42941a97aa6707c489ffab54f9c162f3ea"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/drafts/line3-cegis-ilp.md",
+      "sha256": "63b162746ce52a84ed74acf1b1a9a7c0f92dab9927cb28ac31392e8620e6d9a5"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/drafts/line4-petri-ic3.md",
+      "sha256": "c16529786bb2e8d37af433047bb4273ae51b80f3b8f348365acdcd748b31217b"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/drafts/line5-pcc-spec-validity.md",
+      "sha256": "89578fd18551a5fed9fc2e956573ef9c48eb161ad2da50f1eea654824b58616f"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/drafts/line6-llm-theorem-proving.md",
+      "sha256": "81332e6a7838d4e75268482510867aa8e82fc36bf431cc285862609400d588a9"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/RUN_STATE.md",
+      "sha256": "ff68189a8e682486c4f16cdc2236ddfec74a8b15c73d2eec1112e5251b5ee294"
+    }
+  ],
+  "bibliography": {
+    "entries": 70,
+    "cited": 65,
+    "bib_todo_markers_remaining": 0,
+    "uncited_but_kept": [
+      "beasley1992pegsolitaire",
+      "cropper2021popper",
+      "evans2018dilp",
+      "hubert2026alphaproof",
+      "trinh2024alphageometry"
+    ],
+    "dropped_unverifiable": [
+      "Unsolvability IPC 2016",
+      "Lautenbach (trap calculation)",
+      "Vasilevskii (conformance testing)"
+    ]
+  },
+  "adversarial_audit": {
+    "sample_a": {
+      "sampled": 20,
+      "of": 37,
+      "clean": 24,
+      "defect": 1,
+      "unverifiable": 0
+    },
+    "sample_b": {
+      "sampled": 4,
+      "clean": 3,
+      "partial": 1
+    }
+  }
 }
