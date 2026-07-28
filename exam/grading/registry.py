@@ -35,6 +35,7 @@ RUBRIC_MODULES: Tuple[str, ...] = (
     "exam.grading.rubrics_handover",
     "exam.grading.rubrics_adaptation",
     "exam.grading.rubrics_verdict",
+    "exam.grading.rubrics_handover_auto",
 )
 
 
