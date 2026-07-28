@@ -1,0 +1,12 @@
+# Determinism is a requirement in this repo, not a nicety: artefacts and
+# generated forms are byte-reproducible for a fixed seed, and two clean runs
+# are compared by sha256.  `core.autocrlf` on a Windows checkout would rewrite
+# every line ending and break that comparison for a reason unrelated to the
+# pipeline.  LF is pinned here for the same reason `engine-rig/.gitattributes`
+# pins it there.
+* text eol=lf
+*.jsonl text eol=lf
+*.json  text eol=lf
+*.dsl   text eol=lf
+*.pddl  text eol=lf
+*.lean  text eol=lf

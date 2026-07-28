@@ -1,0 +1,333 @@
+{
+  "arm": "l1_cold_start",
+  "cheap": {
+    "anomaly_count": 0,
+    "anomaly_kinds": [],
+    "frames": 333,
+    "green": true,
+    "pixels_checked": 26973,
+    "pixels_unexplained": 0,
+    "trace": "l1_sweep.jsonl",
+    "transitions": 332
+  },
+  "cheap_anomalies": [],
+  "compile": {
+    "domain.pddl": 4491,
+    "dsl": "theory/domain.dsl",
+    "goal_bound": [
+      7,
+      7
+    ],
+    "lean_invariant": "supplied builder",
+    "pddl_cells_added": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        6
+      ]
+    ],
+    "pddl_landmarks": {
+      "entry_cells": {
+        "exit_a": [
+          [
+            2,
+            2
+          ]
+        ],
+        "exit_b": [
+          [
+            2,
+            6
+          ]
+        ]
+      },
+      "entry_colour": {
+        "exit_a": 3,
+        "exit_b": 4
+      },
+      "exit_cells": {
+        "exit_a": [
+          1,
+          6
+        ],
+        "exit_b": [
+          3,
+          2
+        ]
+      },
+      "facts_added": 4,
+      "jump_actions": 8,
+      "landmarks": [
+        "exit_a",
+        "exit_b"
+      ],
+      "predicates": [
+        "entry-exit-a",
+        "entry-exit-b",
+        "exit-exit-a",
+        "exit-exit-b"
+      ]
+    },
+    "problem": "a3-l1",
+    "problem.json": 2449,
+    "problem.pddl": 3492,
+    "theory.lean": 57262,
+    "theory.md": 4733,
+    "theory.py": 13891
+  },
+  "compile_vacuous": {
+    "domain.pddl": 4491,
+    "dsl": "theory/domain.dsl",
+    "goal_bound": [
+      7,
+      7
+    ],
+    "lean_invariant": "A0 default (vacuous unless a Button latch is found \u2014 trap T4)",
+    "pddl_cells_added": [
+      [
+        2,
+        2
+      ],
+      [
+        2,
+        6
+      ]
+    ],
+    "pddl_landmarks": {
+      "entry_cells": {
+        "exit_a": [
+          [
+            2,
+            2
+          ]
+        ],
+        "exit_b": [
+          [
+            2,
+            6
+          ]
+        ]
+      },
+      "entry_colour": {
+        "exit_a": 3,
+        "exit_b": 4
+      },
+      "exit_cells": {
+        "exit_a": [
+          1,
+          6
+        ],
+        "exit_b": [
+          3,
+          2
+        ]
+      },
+      "facts_added": 4,
+      "jump_actions": 8,
+      "landmarks": [
+        "exit_a",
+        "exit_b"
+      ],
+      "predicates": [
+        "entry-exit-a",
+        "entry-exit-b",
+        "exit-exit-a",
+        "exit-exit-b"
+      ]
+    },
+    "problem": "a3-l1",
+    "problem.json": 2449,
+    "problem.pddl": 3492,
+    "theory.lean": 56603,
+    "theory.md": 4733,
+    "theory.py": 13891
+  },
+  "expected": {
+    "cheap_anomalies": 0,
+    "cheap_frames": 333,
+    "plan_status": "SAT"
+  },
+  "green": true,
+  "lean": {
+    "available": true,
+    "axiom_reports": [
+      {
+        "axioms": [],
+        "name": "inv_all"
+      }
+    ],
+    "errors": [],
+    "file": "theory/generated_l1/theory.lean",
+    "green": true,
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+    "reason": null,
+    "returncode": 0,
+    "sorries": []
+  },
+  "lean_vacuous": {
+    "available": true,
+    "axiom_reports": [
+      {
+        "axioms": [],
+        "name": "inv_all"
+      }
+    ],
+    "errors": [],
+    "file": "theory/generated_l1_vacuous/theory.lean",
+    "green": true,
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+    "reason": null,
+    "returncode": 0,
+    "sorries": []
+  },
+  "meter": {
+    "candidates_adjudicated": 0,
+    "certify_runs": 3,
+    "compile_runs": 2,
+    "dsl_clauses_written": 0,
+    "engine_stages": 0,
+    "plan_runs": 1,
+    "theorize_rounds": 0,
+    "world_actions": 332,
+    "world_frames": 333
+  },
+  "plan": {
+    "actions": [
+      "(push-up c6-1 c5-1)",
+      "(press-up c5-1 c4-1 c6-7)",
+      "(push-right c5-1 c5-2)",
+      "(push-right c5-2 c5-3)",
+      "(push-up c5-3 c4-3)",
+      "(push-up c4-3 c3-3)",
+      "(push-left c3-3 c3-2)",
+      "(teleport-a-up c3-2 c2-2 c1-6)",
+      "(push-right c1-6 c1-7)",
+      "(push-down c1-7 c2-7)",
+      "(push-down c2-7 c3-7)",
+      "(push-down c3-7 c4-7)",
+      "(push-down c4-7 c5-7)",
+      "(push-down c5-7 c6-7)",
+      "(push-down c6-7 c7-7)"
+    ],
+    "backend": "stub-bfs",
+    "directions": [
+      "up",
+      "up",
+      "right",
+      "right",
+      "up",
+      "up",
+      "left",
+      "up",
+      "right",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down"
+    ],
+    "domain": "theory/generated_l1/domain.pddl",
+    "green": true,
+    "length": 15,
+    "manual_final_cell": [
+      7,
+      7
+    ],
+    "manual_reaches_goal": true,
+    "name": "generated_l1",
+    "problem": "theory/generated_l1/problem.pddl",
+    "status": "SAT",
+    "world_actions": [
+      "UP",
+      "UP",
+      "RIGHT",
+      "RIGHT",
+      "UP",
+      "UP",
+      "LEFT",
+      "UP",
+      "RIGHT",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN"
+    ]
+  },
+  "problem_provenance": {
+    "also_derivable": {
+      "goal_cell": [
+        7,
+        7
+      ],
+      "goal_cell_note": "A0's derive reads the goal off the frames whose `win` flag is set; the supplied value is used instead so both routes answer the same question",
+      "landmarks": {},
+      "landmarks_note": "empty: A0's derive infers a landmark only for a single jump destination and A3 has two (trap T1) \u2014 nothing was overwritten"
+    },
+    "counts": {
+      "arena_cells": 33,
+      "background": 0,
+      "board_non_background_cells": 48,
+      "grid": [
+        9,
+        9
+      ],
+      "object_names": [
+        "Cart",
+        "Door",
+        "Switch"
+      ],
+      "objects": 3
+    },
+    "derived_fields": 6,
+    "fields": {
+      "arena": "derived_from_trace",
+      "background": "derived_from_trace",
+      "board": "derived_from_trace",
+      "goal_cell": "supplied",
+      "height": "derived_from_trace",
+      "landmarks": "supplied",
+      "name": "supplied",
+      "objects": "derived_from_trace",
+      "width": "derived_from_trace"
+    },
+    "inputs_read": {
+      "actions": 332,
+      "frames": 333
+    },
+    "route": "trace",
+    "shared_priors": {
+      "note": "the manual's word_table, identical on both routes, so it does not separate them",
+      "object_colour_map": {
+        "5": "Door",
+        "6": "Cart",
+        "7": "Switch",
+        "8": "Switch"
+      }
+    },
+    "source": "artifacts/l1_sweep.jsonl",
+    "supplied_fields": 3,
+    "supplied_values": {
+      "goal_cell": [
+        7,
+        7
+      ],
+      "landmarks": {
+        "exit_a": [
+          1,
+          6
+        ],
+        "exit_b": [
+          3,
+          2
+        ]
+      },
+      "name": "a3-l1"
+    }
+  }
+}

@@ -1,0 +1,421 @@
+{
+  "levels": {
+    "a3-l1": {
+      "coverage": {
+        "coverage": 1.0,
+        "frames": 333,
+        "guard_contexts": {
+          "blocked_down": 13,
+          "blocked_left": 26,
+          "blocked_right": 26,
+          "blocked_up": 14,
+          "door_open_down": 1,
+          "door_open_up": 1,
+          "door_shut_down": 1,
+          "push_down": 41,
+          "push_left": 32,
+          "push_right": 32,
+          "push_up": 41,
+          "switch_down": 2,
+          "switch_up": 2,
+          "teleport_a_down": 2,
+          "teleport_a_left": 2,
+          "teleport_a_right": 2,
+          "teleport_a_up": 2,
+          "teleport_b_down": 2,
+          "teleport_b_left": 2,
+          "teleport_b_right": 2,
+          "teleport_b_up": 2
+        },
+        "level": "a3-l1",
+        "pairs_covered": 248,
+        "pairs_reachable": 248,
+        "reachable_states": 62,
+        "rule_generating_contexts": [
+          "push_down",
+          "push_left",
+          "push_right",
+          "push_up",
+          "switch_down",
+          "switch_up",
+          "teleport_a_down",
+          "teleport_a_left",
+          "teleport_a_right",
+          "teleport_a_up",
+          "teleport_b_down",
+          "teleport_b_left",
+          "teleport_b_right",
+          "teleport_b_up"
+        ],
+        "transitions": 332
+      },
+      "truth": {
+        "cart_start": [
+          6,
+          1
+        ],
+        "door_cell": [
+          6,
+          7
+        ],
+        "exit_a": [
+          1,
+          6
+        ],
+        "exit_b": [
+          3,
+          2
+        ],
+        "goal_cell": [
+          7,
+          7
+        ],
+        "guard_contexts": {
+          "blocked_down": 13,
+          "blocked_left": 26,
+          "blocked_right": 26,
+          "blocked_up": 14,
+          "door_open_down": 1,
+          "door_open_up": 1,
+          "door_shut_down": 1,
+          "push_down": 41,
+          "push_left": 32,
+          "push_right": 32,
+          "push_up": 41,
+          "switch_down": 2,
+          "switch_up": 2,
+          "teleport_a_down": 2,
+          "teleport_a_left": 2,
+          "teleport_a_right": 2,
+          "teleport_a_up": 2,
+          "teleport_b_down": 2,
+          "teleport_b_left": 2,
+          "teleport_b_right": 2,
+          "teleport_b_up": 2
+        },
+        "level": "a3-l1",
+        "portal_a": [
+          2,
+          2
+        ],
+        "portal_b": [
+          2,
+          6
+        ],
+        "portal_one_way": false,
+        "reachable_states": 62,
+        "rewired_exit_b": null,
+        "shortest_solution": [
+          "UP",
+          "UP",
+          "RIGHT",
+          "RIGHT",
+          "UP",
+          "UP",
+          "UP",
+          "LEFT",
+          "RIGHT",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN",
+          "DOWN"
+        ],
+        "shortest_solution_length": 15,
+        "solvable": true,
+        "switch_cell": [
+          4,
+          1
+        ]
+      }
+    },
+    "a3-l2": {
+      "coverage": {
+        "coverage": 1.0,
+        "frames": 337,
+        "guard_contexts": {
+          "blocked_down": 12,
+          "blocked_left": 23,
+          "blocked_right": 25,
+          "blocked_up": 11,
+          "door_open_down": 1,
+          "door_open_up": 1,
+          "door_shut_up": 1,
+          "push_down": 46,
+          "push_left": 36,
+          "push_right": 36,
+          "push_up": 46,
+          "switch_down": 2,
+          "teleport_a_down": 2,
+          "teleport_a_left": 2,
+          "teleport_a_up": 2,
+          "teleport_b_left": 2,
+          "teleport_b_right": 2,
+          "teleport_b_up": 2
+        },
+        "level": "a3-l2",
+        "pairs_covered": 252,
+        "pairs_reachable": 252,
+        "reachable_states": 63,
+        "rule_generating_contexts": [
+          "push_down",
+          "push_left",
+          "push_right",
+          "push_up",
+          "switch_down",
+          "teleport_a_down",
+          "teleport_a_left",
+          "teleport_a_up",
+          "teleport_b_left",
+          "teleport_b_right",
+          "teleport_b_up"
+        ],
+        "transitions": 336
+      },
+      "truth": {
+        "cart_start": [
+          6,
+          7
+        ],
+        "door_cell": [
+          3,
+          1
+        ],
+        "exit_a": [
+          1,
+          5
+        ],
+        "exit_b": [
+          4,
+          1
+        ],
+        "goal_cell": [
+          1,
+          1
+        ],
+        "guard_contexts": {
+          "blocked_down": 12,
+          "blocked_left": 23,
+          "blocked_right": 25,
+          "blocked_up": 11,
+          "door_open_down": 1,
+          "door_open_up": 1,
+          "door_shut_up": 1,
+          "push_down": 46,
+          "push_left": 36,
+          "push_right": 36,
+          "push_up": 46,
+          "switch_down": 2,
+          "teleport_a_down": 2,
+          "teleport_a_left": 2,
+          "teleport_a_up": 2,
+          "teleport_b_left": 2,
+          "teleport_b_right": 2,
+          "teleport_b_up": 2
+        },
+        "level": "a3-l2",
+        "portal_a": [
+          5,
+          1
+        ],
+        "portal_b": [
+          1,
+          6
+        ],
+        "portal_one_way": false,
+        "reachable_states": 63,
+        "rewired_exit_b": null,
+        "shortest_solution": [
+          "LEFT",
+          "DOWN",
+          "UP",
+          "UP",
+          "UP",
+          "UP",
+          "UP",
+          "UP",
+          "UP",
+          "UP"
+        ],
+        "shortest_solution_length": 10,
+        "solvable": true,
+        "switch_cell": [
+          7,
+          6
+        ]
+      }
+    },
+    "a3-l2-oneway": {
+      "truth": {
+        "cart_start": [
+          6,
+          7
+        ],
+        "door_cell": [
+          3,
+          1
+        ],
+        "exit_a": [
+          1,
+          5
+        ],
+        "exit_b": [
+          4,
+          1
+        ],
+        "goal_cell": [
+          1,
+          1
+        ],
+        "guard_contexts": {
+          "blocked_down": 4,
+          "blocked_left": 12,
+          "blocked_right": 12,
+          "blocked_up": 4,
+          "push_down": 28,
+          "push_left": 20,
+          "push_right": 20,
+          "push_up": 28,
+          "switch_down": 2,
+          "teleport_b_left": 2,
+          "teleport_b_right": 2,
+          "teleport_b_up": 2
+        },
+        "level": "a3-l2-oneway",
+        "portal_a": [
+          5,
+          1
+        ],
+        "portal_b": [
+          1,
+          6
+        ],
+        "portal_one_way": true,
+        "reachable_states": 34,
+        "rewired_exit_b": null,
+        "shortest_solution": null,
+        "shortest_solution_length": null,
+        "solvable": false,
+        "switch_cell": [
+          7,
+          6
+        ]
+      }
+    },
+    "a3-l2-rewired": {
+      "truth": {
+        "cart_start": [
+          6,
+          7
+        ],
+        "door_cell": [
+          3,
+          1
+        ],
+        "exit_a": [
+          1,
+          5
+        ],
+        "exit_b": [
+          4,
+          1
+        ],
+        "goal_cell": [
+          1,
+          1
+        ],
+        "guard_contexts": {
+          "blocked_down": 12,
+          "blocked_left": 23,
+          "blocked_right": 25,
+          "blocked_up": 11,
+          "door_open_down": 1,
+          "door_open_up": 1,
+          "door_shut_up": 1,
+          "push_down": 46,
+          "push_left": 36,
+          "push_right": 36,
+          "push_up": 46,
+          "switch_down": 2,
+          "teleport_a_down": 2,
+          "teleport_a_left": 2,
+          "teleport_a_up": 2,
+          "teleport_b_left": 2,
+          "teleport_b_right": 2,
+          "teleport_b_up": 2
+        },
+        "level": "a3-l2-rewired",
+        "portal_a": [
+          5,
+          1
+        ],
+        "portal_b": [
+          1,
+          6
+        ],
+        "portal_one_way": false,
+        "reachable_states": 63,
+        "rewired_exit_b": [
+          7,
+          1
+        ],
+        "shortest_solution": [
+          "LEFT",
+          "DOWN",
+          "UP",
+          "UP",
+          "UP",
+          "UP",
+          "UP",
+          "UP",
+          "RIGHT",
+          "UP",
+          "UP",
+          "LEFT",
+          "UP",
+          "UP",
+          "UP"
+        ],
+        "shortest_solution_length": 15,
+        "solvable": true,
+        "switch_cell": [
+          7,
+          6
+        ]
+      }
+    }
+  },
+  "rules": [
+    {
+      "name": "push",
+      "then": "the Cart moves one cell in the action's direction",
+      "when": "the target cell is floor, or the Door cell while the Door is absent"
+    },
+    {
+      "name": "blocked",
+      "then": "nothing changes",
+      "when": "the target cell is a wall, the grid edge, or the Door while present"
+    },
+    {
+      "name": "toggle",
+      "then": "the Switch flips 7<->8 AND the Door appears/vanishes to match, in the same transition; the Cart does not move",
+      "when": "the target cell is the Switch"
+    },
+    {
+      "name": "teleport_a",
+      "then": "the Cart is placed on portal-B",
+      "when": "the target cell is portal-A (colour 3)"
+    },
+    {
+      "name": "teleport_b",
+      "then": "the Cart is placed on portal-A (deleted in a3-l2-oneway; rewired in a3-l2-rewired)",
+      "when": "the target cell is portal-B (colour 4)"
+    },
+    {
+      "name": "win",
+      "then": "the frame is flagged as a win; the goal cell is NOT rendered",
+      "when": "the Cart is on the level's goal cell"
+    }
+  ]
+}

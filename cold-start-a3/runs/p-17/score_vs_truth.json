@@ -1,0 +1,35 @@
+{
+  "reading": "Replay against a trajectory answers 'is the manual consistent with what I saw'. This answers 'is the manual right'. For the carried manual the level was never explored, so this is the accuracy of transfer rather than of induction.",
+  "results": [
+    {
+      "accuracy": 1.0,
+      "level": "a3-l1",
+      "mismatches": [],
+      "note": "the manual on the level it was induced from",
+      "pairs_checked": 248,
+      "pairs_correct": 248,
+      "perfect": true,
+      "theory": "theory/generated_l1/theory.py"
+    },
+    {
+      "accuracy": 1.0,
+      "level": "a3-l2",
+      "mismatches": [],
+      "note": "THE CARRIED MANUAL on a level it never explored",
+      "pairs_checked": 252,
+      "pairs_correct": 252,
+      "perfect": true,
+      "theory": "theory/generated_l2/theory.py"
+    },
+    {
+      "accuracy": 1.0,
+      "level": "a3-l2",
+      "mismatches": [],
+      "note": "the control arm's manual, induced from level 2's own sweep",
+      "pairs_checked": 252,
+      "pairs_correct": 252,
+      "perfect": true,
+      "theory": "theory/generated_l2_scratch/theory.py"
+    }
+  ]
+}

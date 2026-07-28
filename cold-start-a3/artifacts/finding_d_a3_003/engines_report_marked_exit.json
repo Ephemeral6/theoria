@@ -1,0 +1,3557 @@
+{
+  "board": {
+    "background": 0,
+    "dynamic_cells": 35,
+    "map": [
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        1,
+        0,
+        1,
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    ],
+    "static_cells": 46
+  },
+  "frames": 326,
+  "mining": {
+    "explains_every_transition": {
+      "obj0": true,
+      "obj1": true,
+      "obj2": true,
+      "obj3": true,
+      "obj4": true
+    },
+    "mutually_exclusive": {
+      "obj0": true,
+      "obj1": true,
+      "obj2": true,
+      "obj3": true,
+      "obj4": true
+    },
+    "rules": [
+      {
+        "action": "DOWN",
+        "coverage": "3/3",
+        "effect": {
+          "to": 3,
+          "type": "recolor"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "act==DOWN",
+          "color(obj0)==6"
+        ],
+        "name": "obj0_recolor3_DOWN",
+        "track": "obj0"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "2/2",
+        "effect": {
+          "to": 3,
+          "type": "recolor"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "act==LEFT",
+          "color(obj0)==6"
+        ],
+        "name": "obj0_recolor3_LEFT",
+        "track": "obj0"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "2/2",
+        "effect": {
+          "to": 3,
+          "type": "recolor"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "act==RIGHT",
+          "color(obj0)==6"
+        ],
+        "name": "obj0_recolor3_RIGHT",
+        "track": "obj0"
+      },
+      {
+        "action": "UP",
+        "coverage": "2/2",
+        "effect": {
+          "to": 3,
+          "type": "recolor"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "act==UP",
+          "color(obj0)==6"
+        ],
+        "name": "obj0_recolor3_UP",
+        "track": "obj0"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "2/2",
+        "effect": {
+          "to": 6,
+          "type": "recolor"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "act==DOWN",
+          "tcolor(DOWN)==4"
+        ],
+        "name": "obj0_recolor6_DOWN",
+        "track": "obj0"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "3/3",
+        "effect": {
+          "to": 6,
+          "type": "recolor"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "act==LEFT",
+          "tcolor(LEFT)==4"
+        ],
+        "name": "obj0_recolor6_LEFT",
+        "track": "obj0"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "2/2",
+        "effect": {
+          "to": 6,
+          "type": "recolor"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "act==RIGHT",
+          "tcolor(RIGHT)==4"
+        ],
+        "name": "obj0_recolor6_RIGHT",
+        "track": "obj0"
+      },
+      {
+        "action": "UP",
+        "coverage": "2/2",
+        "effect": {
+          "to": 6,
+          "type": "recolor"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "act==UP",
+          "tcolor(UP)==4"
+        ],
+        "name": "obj0_recolor6_UP",
+        "track": "obj0"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "83/83",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 4,
+        "guard": [
+          "!tcolor(DOWN)==4",
+          "act==DOWN",
+          "color(obj0)==3"
+        ],
+        "name": "obj0_still_DOWN",
+        "track": "obj0"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "68/68",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 4,
+        "guard": [
+          "!tcolor(LEFT)==4",
+          "act==LEFT",
+          "color(obj0)==3"
+        ],
+        "name": "obj0_still_LEFT",
+        "track": "obj0"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "71/71",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 4,
+        "guard": [
+          "!tcolor(RIGHT)==4",
+          "act==RIGHT",
+          "color(obj0)==3"
+        ],
+        "name": "obj0_still_RIGHT",
+        "track": "obj0"
+      },
+      {
+        "action": "UP",
+        "coverage": "85/85",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 4,
+        "guard": [
+          "!tcolor(UP)==4",
+          "act==UP",
+          "color(obj0)==3"
+        ],
+        "name": "obj0_still_UP",
+        "track": "obj0"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "2/2",
+        "effect": {
+          "to": 4,
+          "type": "recolor"
+        },
+        "frontier_size": 14,
+        "guard": [
+          "act==DOWN",
+          "color(obj1)==6"
+        ],
+        "name": "obj1_recolor4_DOWN",
+        "track": "obj1"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "2/2",
+        "effect": {
+          "to": 4,
+          "type": "recolor"
+        },
+        "frontier_size": 14,
+        "guard": [
+          "act==LEFT",
+          "color(obj1)==6"
+        ],
+        "name": "obj1_recolor4_LEFT",
+        "track": "obj1"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "2/2",
+        "effect": {
+          "to": 4,
+          "type": "recolor"
+        },
+        "frontier_size": 14,
+        "guard": [
+          "act==RIGHT",
+          "color(obj1)==6"
+        ],
+        "name": "obj1_recolor4_RIGHT",
+        "track": "obj1"
+      },
+      {
+        "action": "UP",
+        "coverage": "4/4",
+        "effect": {
+          "to": 4,
+          "type": "recolor"
+        },
+        "frontier_size": 14,
+        "guard": [
+          "act==UP",
+          "color(obj1)==6"
+        ],
+        "name": "obj1_recolor4_UP",
+        "track": "obj1"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "2/2",
+        "effect": {
+          "to": 6,
+          "type": "recolor"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "act==DOWN",
+          "tcolor(DOWN)==3"
+        ],
+        "name": "obj1_recolor6_DOWN",
+        "track": "obj1"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "3/3",
+        "effect": {
+          "to": 6,
+          "type": "recolor"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "act==LEFT",
+          "tcolor(LEFT)==3"
+        ],
+        "name": "obj1_recolor6_LEFT",
+        "track": "obj1"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "3/3",
+        "effect": {
+          "to": 6,
+          "type": "recolor"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "act==RIGHT",
+          "tcolor(RIGHT)==3"
+        ],
+        "name": "obj1_recolor6_RIGHT",
+        "track": "obj1"
+      },
+      {
+        "action": "UP",
+        "coverage": "2/2",
+        "effect": {
+          "to": 6,
+          "type": "recolor"
+        },
+        "frontier_size": 5,
+        "guard": [
+          "act==UP",
+          "tcolor(UP)==3"
+        ],
+        "name": "obj1_recolor6_UP",
+        "track": "obj1"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "84/84",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 4,
+        "guard": [
+          "!tcolor(DOWN)==3",
+          "act==DOWN",
+          "color(obj1)==4"
+        ],
+        "name": "obj1_still_DOWN",
+        "track": "obj1"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "68/68",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 4,
+        "guard": [
+          "!tcolor(LEFT)==3",
+          "act==LEFT",
+          "color(obj1)==4"
+        ],
+        "name": "obj1_still_LEFT",
+        "track": "obj1"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "70/70",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 4,
+        "guard": [
+          "!tcolor(RIGHT)==3",
+          "act==RIGHT",
+          "color(obj1)==4"
+        ],
+        "name": "obj1_still_RIGHT",
+        "track": "obj1"
+      },
+      {
+        "action": "UP",
+        "coverage": "83/83",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 4,
+        "guard": [
+          "!tcolor(UP)==3",
+          "act==UP",
+          "color(obj1)==4"
+        ],
+        "name": "obj1_still_UP",
+        "track": "obj1"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "3/3",
+        "effect": {
+          "to": 7,
+          "type": "recolor"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==DOWN",
+          "tcolor(DOWN)==8"
+        ],
+        "name": "obj2_recolor7_DOWN",
+        "track": "obj2"
+      },
+      {
+        "action": "UP",
+        "coverage": "1/1",
+        "effect": {
+          "to": 7,
+          "type": "recolor"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==UP",
+          "tcolor(UP)==8"
+        ],
+        "name": "obj2_recolor7_UP",
+        "track": "obj2"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "1/1",
+        "effect": {
+          "to": 8,
+          "type": "recolor"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==DOWN",
+          "tcolor(DOWN)==7"
+        ],
+        "name": "obj2_recolor8_DOWN",
+        "track": "obj2"
+      },
+      {
+        "action": "UP",
+        "coverage": "3/3",
+        "effect": {
+          "to": 8,
+          "type": "recolor"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==UP",
+          "tcolor(UP)==7"
+        ],
+        "name": "obj2_recolor8_UP",
+        "track": "obj2"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "84/84",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "!at(3,1)",
+          "act==DOWN"
+        ],
+        "name": "obj2_still_DOWN",
+        "track": "obj2"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "73/73",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==LEFT"
+        ],
+        "name": "obj2_still_LEFT",
+        "track": "obj2"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "75/75",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==RIGHT"
+        ],
+        "name": "obj2_still_RIGHT",
+        "track": "obj2"
+      },
+      {
+        "action": "UP",
+        "coverage": "85/85",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "!at(5,1)",
+          "act==UP"
+        ],
+        "name": "obj2_still_UP",
+        "track": "obj2"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "5/5",
+        "effect": {
+          "type": "appear"
+        },
+        "frontier_size": 6,
+        "guard": [
+          "!in_bounds(strip(DOWN))",
+          "act==DOWN"
+        ],
+        "name": "obj3_appear_DOWN",
+        "track": "obj3"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "4/4",
+        "effect": {
+          "type": "appear"
+        },
+        "frontier_size": 6,
+        "guard": [
+          "!in_bounds(strip(DOWN))",
+          "act==LEFT"
+        ],
+        "name": "obj3_appear_LEFT",
+        "track": "obj3"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "4/4",
+        "effect": {
+          "type": "appear"
+        },
+        "frontier_size": 6,
+        "guard": [
+          "!in_bounds(strip(DOWN))",
+          "act==RIGHT"
+        ],
+        "name": "obj3_appear_RIGHT",
+        "track": "obj3"
+      },
+      {
+        "action": "UP",
+        "coverage": "6/6",
+        "effect": {
+          "type": "appear"
+        },
+        "frontier_size": 6,
+        "guard": [
+          "!in_bounds(strip(DOWN))",
+          "act==UP"
+        ],
+        "name": "obj3_appear_UP",
+        "track": "obj3"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "61/61",
+        "effect": {
+          "dx": 0,
+          "dy": 1,
+          "type": "move"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "act==DOWN",
+          "free(strip(DOWN))"
+        ],
+        "name": "obj3_step_DOWN",
+        "track": "obj3"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "37/37",
+        "effect": {
+          "dx": -1,
+          "dy": 0,
+          "type": "move"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "act==LEFT",
+          "free(strip(LEFT))"
+        ],
+        "name": "obj3_step_LEFT",
+        "track": "obj3"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "40/40",
+        "effect": {
+          "dx": 1,
+          "dy": 0,
+          "type": "move"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "act==RIGHT",
+          "free(strip(RIGHT))"
+        ],
+        "name": "obj3_step_RIGHT",
+        "track": "obj3"
+      },
+      {
+        "action": "UP",
+        "coverage": "61/61",
+        "effect": {
+          "dx": 0,
+          "dy": -1,
+          "type": "move"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "act==UP",
+          "free(strip(UP))"
+        ],
+        "name": "obj3_step_UP",
+        "track": "obj3"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "18/18",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 0,
+        "guard": [
+          "!clear(strip(DOWN))",
+          "!tcolor(DOWN)==3",
+          "!tcolor(DOWN)==4",
+          "act==DOWN",
+          "in_bounds(strip(DOWN))"
+        ],
+        "name": "obj3_still_DOWN",
+        "track": "obj3"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "26/26",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==LEFT",
+          "tcolor(LEFT)==1"
+        ],
+        "name": "obj3_still_LEFT",
+        "track": "obj3"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "26/26",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==RIGHT",
+          "tcolor(RIGHT)==1"
+        ],
+        "name": "obj3_still_RIGHT",
+        "track": "obj3"
+      },
+      {
+        "action": "UP",
+        "coverage": "18/18",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 0,
+        "guard": [
+          "!clear(strip(UP))",
+          "!tcolor(DOWN)==1",
+          "!tcolor(UP)==4",
+          "act==UP",
+          "in_bounds(strip(DOWN))"
+        ],
+        "name": "obj3_still_UP",
+        "track": "obj3"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "4/4",
+        "effect": {
+          "type": "vanish"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "!clear(strip(DOWN))",
+          "act==DOWN",
+          "tcolor(UP)==1"
+        ],
+        "name": "obj3_vanish_DOWN",
+        "track": "obj3"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "6/6",
+        "effect": {
+          "type": "vanish"
+        },
+        "frontier_size": 0,
+        "guard": [
+          "!clear(strip(LEFT))",
+          "!tcolor(LEFT)==1",
+          "act==LEFT",
+          "free(strip(DOWN))"
+        ],
+        "name": "obj3_vanish_LEFT",
+        "track": "obj3"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "5/5",
+        "effect": {
+          "type": "vanish"
+        },
+        "frontier_size": 0,
+        "guard": [
+          "!clear(strip(RIGHT))",
+          "!tcolor(RIGHT)==1",
+          "act==RIGHT",
+          "free(strip(DOWN))"
+        ],
+        "name": "obj3_vanish_RIGHT",
+        "track": "obj3"
+      },
+      {
+        "action": "UP",
+        "coverage": "4/4",
+        "effect": {
+          "type": "vanish"
+        },
+        "frontier_size": 0,
+        "guard": [
+          "!clear(strip(UP))",
+          "!tcolor(UP)==1",
+          "act==UP",
+          "free(strip(LEFT))"
+        ],
+        "name": "obj3_vanish_UP",
+        "track": "obj3"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "3/3",
+        "effect": {
+          "type": "appear"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==DOWN",
+          "tcolor(DOWN)==8"
+        ],
+        "name": "obj4_appear_DOWN",
+        "track": "obj4"
+      },
+      {
+        "action": "UP",
+        "coverage": "1/1",
+        "effect": {
+          "type": "appear"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==UP",
+          "tcolor(UP)==8"
+        ],
+        "name": "obj4_appear_UP",
+        "track": "obj4"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "84/84",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "!at(3,1)",
+          "act==DOWN"
+        ],
+        "name": "obj4_still_DOWN",
+        "track": "obj4"
+      },
+      {
+        "action": "LEFT",
+        "coverage": "73/73",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==LEFT"
+        ],
+        "name": "obj4_still_LEFT",
+        "track": "obj4"
+      },
+      {
+        "action": "RIGHT",
+        "coverage": "75/75",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==RIGHT"
+        ],
+        "name": "obj4_still_RIGHT",
+        "track": "obj4"
+      },
+      {
+        "action": "UP",
+        "coverage": "85/85",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 2,
+        "guard": [
+          "!at(5,1)",
+          "act==UP"
+        ],
+        "name": "obj4_still_UP",
+        "track": "obj4"
+      },
+      {
+        "action": "DOWN",
+        "coverage": "1/1",
+        "effect": {
+          "type": "vanish"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==DOWN",
+          "tcolor(DOWN)==7"
+        ],
+        "name": "obj4_vanish_DOWN",
+        "track": "obj4"
+      },
+      {
+        "action": "UP",
+        "coverage": "3/3",
+        "effect": {
+          "type": "vanish"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==UP",
+          "tcolor(UP)==7"
+        ],
+        "name": "obj4_vanish_UP",
+        "track": "obj4"
+      },
+      {
+        "action": "?dir",
+        "coverage": "307/307",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 4,
+        "guard": [
+          "!tcolor(?dir)==4",
+          "act==?dir",
+          "color(obj0)==3"
+        ],
+        "name": "obj0_still",
+        "track": "obj0"
+      },
+      {
+        "action": "?dir",
+        "coverage": "305/305",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 4,
+        "guard": [
+          "!tcolor(?dir)==3",
+          "act==?dir",
+          "color(obj1)==4"
+        ],
+        "name": "obj1_still",
+        "track": "obj1"
+      },
+      {
+        "action": "?dir",
+        "coverage": "148/148",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==?dir"
+        ],
+        "name": "obj2_still",
+        "track": "obj2"
+      },
+      {
+        "action": "?dir",
+        "coverage": "199/199",
+        "effect": {
+          "direction": "?dir",
+          "type": "move"
+        },
+        "frontier_size": 3,
+        "guard": [
+          "act==?dir",
+          "free(strip(?dir))"
+        ],
+        "name": "obj3_step",
+        "track": "obj3"
+      },
+      {
+        "action": "?dir",
+        "coverage": "52/52",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==?dir",
+          "tcolor(?dir)==1"
+        ],
+        "name": "obj3_still",
+        "track": "obj3"
+      },
+      {
+        "action": "?dir",
+        "coverage": "148/148",
+        "effect": {
+          "type": "none"
+        },
+        "frontier_size": 1,
+        "guard": [
+          "act==?dir"
+        ],
+        "name": "obj4_still",
+        "track": "obj4"
+      }
+    ],
+    "vocabulary_size": 164
+  },
+  "note": "the level-1 cold start: its entire evidence",
+  "probes": [
+    {
+      "coverage": "3/3",
+      "frontier": [
+        [
+          "act==DOWN",
+          "color(obj0)==6"
+        ],
+        [
+          "!color(obj0)==3",
+          "act==DOWN"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "rule": "obj0_recolor3_DOWN",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "2/2",
+      "frontier": [
+        [
+          "act==LEFT",
+          "color(obj0)==6"
+        ],
+        [
+          "!color(obj0)==3",
+          "act==LEFT"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "rule": "obj0_recolor3_LEFT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "2/2",
+      "frontier": [
+        [
+          "act==RIGHT",
+          "color(obj0)==6"
+        ],
+        [
+          "!color(obj0)==3",
+          "act==RIGHT"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "rule": "obj0_recolor3_RIGHT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "2/2",
+      "frontier": [
+        [
+          "act==UP",
+          "color(obj0)==6"
+        ],
+        [
+          "!color(obj0)==3",
+          "act==UP"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "rule": "obj0_recolor3_UP",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "action": "DOWN",
+      "construction": {
+        "direction": "DOWN",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 4
+      },
+      "coverage": "2/2",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "act==DOWN",
+          "tcolor(DOWN)==4"
+        ],
+        [
+          "act==DOWN",
+          "at(1,6)"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj0_recolor6_DOWN_0"
+        ],
+        "silent": [
+          "obj0_recolor6_DOWN_1"
+        ]
+      },
+      "rule": "obj0_recolor6_DOWN",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "LEFT",
+      "construction": {
+        "direction": "LEFT",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 4
+      },
+      "coverage": "3/3",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "act==LEFT",
+          "tcolor(LEFT)==4"
+        ],
+        [
+          "act==LEFT",
+          "at(2,7)"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj0_recolor6_LEFT_0"
+        ],
+        "silent": [
+          "obj0_recolor6_LEFT_1"
+        ]
+      },
+      "rule": "obj0_recolor6_LEFT",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "RIGHT",
+      "construction": {
+        "direction": "RIGHT",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 4
+      },
+      "coverage": "2/2",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "act==RIGHT",
+          "tcolor(RIGHT)==4"
+        ],
+        [
+          "act==RIGHT",
+          "at(2,5)"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj0_recolor6_RIGHT_0"
+        ],
+        "silent": [
+          "obj0_recolor6_RIGHT_1"
+        ]
+      },
+      "rule": "obj0_recolor6_RIGHT",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "UP",
+      "construction": {
+        "direction": "UP",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 4
+      },
+      "coverage": "2/2",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "act==UP",
+          "tcolor(UP)==4"
+        ],
+        [
+          "act==UP",
+          "at(3,6)"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj0_recolor6_UP_0"
+        ],
+        "silent": [
+          "obj0_recolor6_UP_1"
+        ]
+      },
+      "rule": "obj0_recolor6_UP",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "DOWN",
+      "construction": {
+        "direction": "DOWN",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 4
+      },
+      "coverage": "83/83",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!tcolor(DOWN)==4",
+          "act==DOWN",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!tcolor(DOWN)==4",
+          "act==DOWN"
+        ],
+        [
+          "!at(1,6)",
+          "act==DOWN",
+          "color(obj0)==3"
+        ],
+        [
+          "!at(1,6)",
+          "!color(obj0)==6",
+          "act==DOWN"
+        ]
+      ],
+      "n_hypotheses": 4,
+      "partition": {
+        "fires": [
+          "obj0_still_DOWN_2",
+          "obj0_still_DOWN_3"
+        ],
+        "silent": [
+          "obj0_still_DOWN_0",
+          "obj0_still_DOWN_1"
+        ]
+      },
+      "rule": "obj0_still_DOWN",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "LEFT",
+      "construction": {
+        "direction": "LEFT",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 4
+      },
+      "coverage": "68/68",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!tcolor(LEFT)==4",
+          "act==LEFT",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!tcolor(LEFT)==4",
+          "act==LEFT"
+        ],
+        [
+          "!at(2,7)",
+          "act==LEFT",
+          "color(obj0)==3"
+        ],
+        [
+          "!at(2,7)",
+          "!color(obj0)==6",
+          "act==LEFT"
+        ]
+      ],
+      "n_hypotheses": 4,
+      "partition": {
+        "fires": [
+          "obj0_still_LEFT_2",
+          "obj0_still_LEFT_3"
+        ],
+        "silent": [
+          "obj0_still_LEFT_0",
+          "obj0_still_LEFT_1"
+        ]
+      },
+      "rule": "obj0_still_LEFT",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "RIGHT",
+      "construction": {
+        "direction": "RIGHT",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 4
+      },
+      "coverage": "71/71",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!tcolor(RIGHT)==4",
+          "act==RIGHT",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!tcolor(RIGHT)==4",
+          "act==RIGHT"
+        ],
+        [
+          "!at(2,5)",
+          "act==RIGHT",
+          "color(obj0)==3"
+        ],
+        [
+          "!at(2,5)",
+          "!color(obj0)==6",
+          "act==RIGHT"
+        ]
+      ],
+      "n_hypotheses": 4,
+      "partition": {
+        "fires": [
+          "obj0_still_RIGHT_2",
+          "obj0_still_RIGHT_3"
+        ],
+        "silent": [
+          "obj0_still_RIGHT_0",
+          "obj0_still_RIGHT_1"
+        ]
+      },
+      "rule": "obj0_still_RIGHT",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "UP",
+      "construction": {
+        "direction": "UP",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 4
+      },
+      "coverage": "85/85",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!tcolor(UP)==4",
+          "act==UP",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!tcolor(UP)==4",
+          "act==UP"
+        ],
+        [
+          "!at(3,6)",
+          "act==UP",
+          "color(obj0)==3"
+        ],
+        [
+          "!at(3,6)",
+          "!color(obj0)==6",
+          "act==UP"
+        ]
+      ],
+      "n_hypotheses": 4,
+      "partition": {
+        "fires": [
+          "obj0_still_UP_2",
+          "obj0_still_UP_3"
+        ],
+        "silent": [
+          "obj0_still_UP_0",
+          "obj0_still_UP_1"
+        ]
+      },
+      "rule": "obj0_still_UP",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "coverage": "2/2",
+      "frontier": [
+        [
+          "act==DOWN",
+          "color(obj1)==6"
+        ],
+        [
+          "!color(obj1)==4",
+          "act==DOWN"
+        ],
+        [
+          "!in_bounds(strip(DOWN))",
+          "act==DOWN",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(LEFT))",
+          "act==DOWN",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(RIGHT))",
+          "act==DOWN",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(UP))",
+          "act==DOWN",
+          "color(obj0)==3"
+        ],
+        [
+          "!present(obj3)",
+          "act==DOWN",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(DOWN))",
+          "act==DOWN"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(LEFT))",
+          "act==DOWN"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(RIGHT))",
+          "act==DOWN"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(UP))",
+          "act==DOWN"
+        ],
+        [
+          "!color(obj0)==6",
+          "!present(obj3)",
+          "act==DOWN"
+        ],
+        [
+          "!color(obj3)==6",
+          "act==DOWN",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!color(obj3)==6",
+          "act==DOWN"
+        ]
+      ],
+      "n_hypotheses": 14,
+      "rule": "obj1_recolor4_DOWN",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "2/2",
+      "frontier": [
+        [
+          "act==LEFT",
+          "color(obj1)==6"
+        ],
+        [
+          "!color(obj1)==4",
+          "act==LEFT"
+        ],
+        [
+          "!in_bounds(strip(DOWN))",
+          "act==LEFT",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(LEFT))",
+          "act==LEFT",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(RIGHT))",
+          "act==LEFT",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(UP))",
+          "act==LEFT",
+          "color(obj0)==3"
+        ],
+        [
+          "!present(obj3)",
+          "act==LEFT",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(DOWN))",
+          "act==LEFT"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(LEFT))",
+          "act==LEFT"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(RIGHT))",
+          "act==LEFT"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(UP))",
+          "act==LEFT"
+        ],
+        [
+          "!color(obj0)==6",
+          "!present(obj3)",
+          "act==LEFT"
+        ],
+        [
+          "!color(obj3)==6",
+          "act==LEFT",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!color(obj3)==6",
+          "act==LEFT"
+        ]
+      ],
+      "n_hypotheses": 14,
+      "rule": "obj1_recolor4_LEFT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "2/2",
+      "frontier": [
+        [
+          "act==RIGHT",
+          "color(obj1)==6"
+        ],
+        [
+          "!color(obj1)==4",
+          "act==RIGHT"
+        ],
+        [
+          "!in_bounds(strip(DOWN))",
+          "act==RIGHT",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(LEFT))",
+          "act==RIGHT",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(RIGHT))",
+          "act==RIGHT",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(UP))",
+          "act==RIGHT",
+          "color(obj0)==3"
+        ],
+        [
+          "!present(obj3)",
+          "act==RIGHT",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(DOWN))",
+          "act==RIGHT"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(LEFT))",
+          "act==RIGHT"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(RIGHT))",
+          "act==RIGHT"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(UP))",
+          "act==RIGHT"
+        ],
+        [
+          "!color(obj0)==6",
+          "!present(obj3)",
+          "act==RIGHT"
+        ],
+        [
+          "!color(obj3)==6",
+          "act==RIGHT",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!color(obj3)==6",
+          "act==RIGHT"
+        ]
+      ],
+      "n_hypotheses": 14,
+      "rule": "obj1_recolor4_RIGHT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "4/4",
+      "frontier": [
+        [
+          "act==UP",
+          "color(obj1)==6"
+        ],
+        [
+          "!color(obj1)==4",
+          "act==UP"
+        ],
+        [
+          "!in_bounds(strip(DOWN))",
+          "act==UP",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(LEFT))",
+          "act==UP",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(RIGHT))",
+          "act==UP",
+          "color(obj0)==3"
+        ],
+        [
+          "!in_bounds(strip(UP))",
+          "act==UP",
+          "color(obj0)==3"
+        ],
+        [
+          "!present(obj3)",
+          "act==UP",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(DOWN))",
+          "act==UP"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(LEFT))",
+          "act==UP"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(RIGHT))",
+          "act==UP"
+        ],
+        [
+          "!color(obj0)==6",
+          "!in_bounds(strip(UP))",
+          "act==UP"
+        ],
+        [
+          "!color(obj0)==6",
+          "!present(obj3)",
+          "act==UP"
+        ],
+        [
+          "!color(obj3)==6",
+          "act==UP",
+          "color(obj0)==3"
+        ],
+        [
+          "!color(obj0)==6",
+          "!color(obj3)==6",
+          "act==UP"
+        ]
+      ],
+      "n_hypotheses": 14,
+      "rule": "obj1_recolor4_UP",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "action": "DOWN",
+      "construction": {
+        "direction": "DOWN",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 3
+      },
+      "coverage": "2/2",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "act==DOWN",
+          "tcolor(DOWN)==3"
+        ],
+        [
+          "act==DOWN",
+          "at(1,2)"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj1_recolor6_DOWN_0"
+        ],
+        "silent": [
+          "obj1_recolor6_DOWN_1"
+        ]
+      },
+      "rule": "obj1_recolor6_DOWN",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "LEFT",
+      "construction": {
+        "direction": "LEFT",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 3
+      },
+      "coverage": "3/3",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "act==LEFT",
+          "tcolor(LEFT)==3"
+        ],
+        [
+          "act==LEFT",
+          "at(2,3)"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj1_recolor6_LEFT_0"
+        ],
+        "silent": [
+          "obj1_recolor6_LEFT_1"
+        ]
+      },
+      "rule": "obj1_recolor6_LEFT",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "RIGHT",
+      "construction": {
+        "direction": "RIGHT",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 3
+      },
+      "coverage": "3/3",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "act==RIGHT",
+          "tcolor(RIGHT)==3"
+        ],
+        [
+          "act==RIGHT",
+          "at(2,1)"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj1_recolor6_RIGHT_0"
+        ],
+        "silent": [
+          "obj1_recolor6_RIGHT_1"
+        ]
+      },
+      "rule": "obj1_recolor6_RIGHT",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "UP",
+      "construction": {
+        "direction": "DOWN",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 1
+      },
+      "coverage": "2/2",
+      "entropy_bits": 0.970951,
+      "frontier": [
+        [
+          "act==UP",
+          "tcolor(UP)==3"
+        ],
+        [
+          "act==UP",
+          "at(3,2)"
+        ],
+        [
+          "!clear(strip(UP))",
+          "act==UP",
+          "tcolor(DOWN)==1"
+        ],
+        [
+          "!free(strip(UP))",
+          "act==UP",
+          "tcolor(DOWN)==1"
+        ],
+        [
+          "!tcolor(UP)==0",
+          "act==UP",
+          "tcolor(DOWN)==1"
+        ]
+      ],
+      "n_hypotheses": 5,
+      "partition": {
+        "fires": [
+          "obj1_recolor6_UP_2",
+          "obj1_recolor6_UP_3",
+          "obj1_recolor6_UP_4"
+        ],
+        "silent": [
+          "obj1_recolor6_UP_0",
+          "obj1_recolor6_UP_1"
+        ]
+      },
+      "rule": "obj1_recolor6_UP",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "DOWN",
+      "construction": {
+        "direction": "DOWN",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 3
+      },
+      "coverage": "84/84",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!tcolor(DOWN)==3",
+          "act==DOWN",
+          "color(obj1)==4"
+        ],
+        [
+          "!color(obj1)==6",
+          "!tcolor(DOWN)==3",
+          "act==DOWN"
+        ],
+        [
+          "!at(1,2)",
+          "act==DOWN",
+          "color(obj1)==4"
+        ],
+        [
+          "!at(1,2)",
+          "!color(obj1)==6",
+          "act==DOWN"
+        ]
+      ],
+      "n_hypotheses": 4,
+      "partition": {
+        "fires": [
+          "obj1_still_DOWN_2",
+          "obj1_still_DOWN_3"
+        ],
+        "silent": [
+          "obj1_still_DOWN_0",
+          "obj1_still_DOWN_1"
+        ]
+      },
+      "rule": "obj1_still_DOWN",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "LEFT",
+      "construction": {
+        "direction": "LEFT",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 3
+      },
+      "coverage": "68/68",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!tcolor(LEFT)==3",
+          "act==LEFT",
+          "color(obj1)==4"
+        ],
+        [
+          "!color(obj1)==6",
+          "!tcolor(LEFT)==3",
+          "act==LEFT"
+        ],
+        [
+          "!at(2,3)",
+          "act==LEFT",
+          "color(obj1)==4"
+        ],
+        [
+          "!at(2,3)",
+          "!color(obj1)==6",
+          "act==LEFT"
+        ]
+      ],
+      "n_hypotheses": 4,
+      "partition": {
+        "fires": [
+          "obj1_still_LEFT_2",
+          "obj1_still_LEFT_3"
+        ],
+        "silent": [
+          "obj1_still_LEFT_0",
+          "obj1_still_LEFT_1"
+        ]
+      },
+      "rule": "obj1_still_LEFT",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "RIGHT",
+      "construction": {
+        "direction": "RIGHT",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 3
+      },
+      "coverage": "70/70",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!tcolor(RIGHT)==3",
+          "act==RIGHT",
+          "color(obj1)==4"
+        ],
+        [
+          "!color(obj1)==6",
+          "!tcolor(RIGHT)==3",
+          "act==RIGHT"
+        ],
+        [
+          "!at(2,1)",
+          "act==RIGHT",
+          "color(obj1)==4"
+        ],
+        [
+          "!at(2,1)",
+          "!color(obj1)==6",
+          "act==RIGHT"
+        ]
+      ],
+      "n_hypotheses": 4,
+      "partition": {
+        "fires": [
+          "obj1_still_RIGHT_2",
+          "obj1_still_RIGHT_3"
+        ],
+        "silent": [
+          "obj1_still_RIGHT_0",
+          "obj1_still_RIGHT_1"
+        ]
+      },
+      "rule": "obj1_still_RIGHT",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "UP",
+      "construction": {
+        "direction": "UP",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 3
+      },
+      "coverage": "83/83",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!tcolor(UP)==3",
+          "act==UP",
+          "color(obj1)==4"
+        ],
+        [
+          "!color(obj1)==6",
+          "!tcolor(UP)==3",
+          "act==UP"
+        ],
+        [
+          "!at(3,2)",
+          "act==UP",
+          "color(obj1)==4"
+        ],
+        [
+          "!at(3,2)",
+          "!color(obj1)==6",
+          "act==UP"
+        ]
+      ],
+      "n_hypotheses": 4,
+      "partition": {
+        "fires": [
+          "obj1_still_UP_2",
+          "obj1_still_UP_3"
+        ],
+        "silent": [
+          "obj1_still_UP_0",
+          "obj1_still_UP_1"
+        ]
+      },
+      "rule": "obj1_still_UP",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "DOWN",
+      "construction": {
+        "direction": "DOWN",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 7
+      },
+      "coverage": "84/84",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!at(3,1)",
+          "act==DOWN"
+        ],
+        [
+          "!tcolor(DOWN)==7",
+          "!tcolor(DOWN)==8",
+          "act==DOWN"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj2_still_DOWN_0"
+        ],
+        "silent": [
+          "obj2_still_DOWN_1"
+        ]
+      },
+      "rule": "obj2_still_DOWN",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "UP",
+      "construction": {
+        "direction": "UP",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 7
+      },
+      "coverage": "85/85",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!at(5,1)",
+          "act==UP"
+        ],
+        [
+          "!tcolor(UP)==7",
+          "!tcolor(UP)==8",
+          "act==UP"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj2_still_UP_0"
+        ],
+        "silent": [
+          "obj2_still_UP_1"
+        ]
+      },
+      "rule": "obj2_still_UP",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "coverage": "5/5",
+      "frontier": [
+        [
+          "!in_bounds(strip(DOWN))",
+          "act==DOWN"
+        ],
+        [
+          "!in_bounds(strip(LEFT))",
+          "act==DOWN"
+        ],
+        [
+          "!in_bounds(strip(RIGHT))",
+          "act==DOWN"
+        ],
+        [
+          "!in_bounds(strip(UP))",
+          "act==DOWN"
+        ],
+        [
+          "!present(obj3)",
+          "act==DOWN"
+        ],
+        [
+          "!color(obj3)==6",
+          "act==DOWN"
+        ]
+      ],
+      "n_hypotheses": 6,
+      "rule": "obj3_appear_DOWN",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "4/4",
+      "frontier": [
+        [
+          "!in_bounds(strip(DOWN))",
+          "act==LEFT"
+        ],
+        [
+          "!in_bounds(strip(LEFT))",
+          "act==LEFT"
+        ],
+        [
+          "!in_bounds(strip(RIGHT))",
+          "act==LEFT"
+        ],
+        [
+          "!in_bounds(strip(UP))",
+          "act==LEFT"
+        ],
+        [
+          "!present(obj3)",
+          "act==LEFT"
+        ],
+        [
+          "!color(obj3)==6",
+          "act==LEFT"
+        ]
+      ],
+      "n_hypotheses": 6,
+      "rule": "obj3_appear_LEFT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "4/4",
+      "frontier": [
+        [
+          "!in_bounds(strip(DOWN))",
+          "act==RIGHT"
+        ],
+        [
+          "!in_bounds(strip(LEFT))",
+          "act==RIGHT"
+        ],
+        [
+          "!in_bounds(strip(RIGHT))",
+          "act==RIGHT"
+        ],
+        [
+          "!in_bounds(strip(UP))",
+          "act==RIGHT"
+        ],
+        [
+          "!present(obj3)",
+          "act==RIGHT"
+        ],
+        [
+          "!color(obj3)==6",
+          "act==RIGHT"
+        ]
+      ],
+      "n_hypotheses": 6,
+      "rule": "obj3_appear_RIGHT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "6/6",
+      "frontier": [
+        [
+          "!in_bounds(strip(DOWN))",
+          "act==UP"
+        ],
+        [
+          "!in_bounds(strip(LEFT))",
+          "act==UP"
+        ],
+        [
+          "!in_bounds(strip(RIGHT))",
+          "act==UP"
+        ],
+        [
+          "!in_bounds(strip(UP))",
+          "act==UP"
+        ],
+        [
+          "!present(obj3)",
+          "act==UP"
+        ],
+        [
+          "!color(obj3)==6",
+          "act==UP"
+        ]
+      ],
+      "n_hypotheses": 6,
+      "rule": "obj3_appear_UP",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "61/61",
+      "frontier": [
+        [
+          "act==DOWN",
+          "free(strip(DOWN))"
+        ],
+        [
+          "act==DOWN",
+          "clear(strip(DOWN))"
+        ],
+        [
+          "act==DOWN",
+          "tcolor(DOWN)==0"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj3_step_DOWN",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "37/37",
+      "frontier": [
+        [
+          "act==LEFT",
+          "free(strip(LEFT))"
+        ],
+        [
+          "act==LEFT",
+          "clear(strip(LEFT))"
+        ],
+        [
+          "act==LEFT",
+          "tcolor(LEFT)==0"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj3_step_LEFT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "40/40",
+      "frontier": [
+        [
+          "act==RIGHT",
+          "free(strip(RIGHT))"
+        ],
+        [
+          "act==RIGHT",
+          "clear(strip(RIGHT))"
+        ],
+        [
+          "act==RIGHT",
+          "tcolor(RIGHT)==0"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj3_step_RIGHT",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "61/61",
+      "frontier": [
+        [
+          "act==UP",
+          "free(strip(UP))"
+        ],
+        [
+          "act==UP",
+          "clear(strip(UP))"
+        ],
+        [
+          "act==UP",
+          "tcolor(UP)==0"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj3_step_UP",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "coverage": "4/4",
+      "frontier": [
+        [
+          "!clear(strip(DOWN))",
+          "act==DOWN",
+          "tcolor(UP)==1"
+        ],
+        [
+          "!free(strip(DOWN))",
+          "act==DOWN",
+          "tcolor(UP)==1"
+        ],
+        [
+          "!tcolor(DOWN)==0",
+          "act==DOWN",
+          "tcolor(UP)==1"
+        ]
+      ],
+      "n_hypotheses": 3,
+      "rule": "obj3_vanish_DOWN",
+      "tier": null,
+      "verdict": "no experiment separates these guards in this world \u2014 they are extensionally identical here; decide on description length"
+    },
+    {
+      "action": "DOWN",
+      "construction": {
+        "direction": "DOWN",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 7
+      },
+      "coverage": "84/84",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!at(3,1)",
+          "act==DOWN"
+        ],
+        [
+          "!tcolor(DOWN)==7",
+          "!tcolor(DOWN)==8",
+          "act==DOWN"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj4_still_DOWN_0"
+        ],
+        "silent": [
+          "obj4_still_DOWN_1"
+        ]
+      },
+      "rule": "obj4_still_DOWN",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    },
+    {
+      "action": "UP",
+      "construction": {
+        "direction": "UP",
+        "mover_anchor": [
+          1,
+          1
+        ],
+        "painted_color": 7
+      },
+      "coverage": "85/85",
+      "entropy_bits": 1.0,
+      "frontier": [
+        [
+          "!at(5,1)",
+          "act==UP"
+        ],
+        [
+          "!tcolor(UP)==7",
+          "!tcolor(UP)==8",
+          "act==UP"
+        ]
+      ],
+      "n_hypotheses": 2,
+      "partition": {
+        "fires": [
+          "obj4_still_UP_0"
+        ],
+        "silent": [
+          "obj4_still_UP_1"
+        ]
+      },
+      "rule": "obj4_still_UP",
+      "tier": "hypothetical",
+      "verdict": "separable in principle, but the world was never observed in this configuration \u2014 not emitted as an executable probe"
+    }
+  ],
+  "segmentation": {
+    "baseline_bits": 8480,
+    "event_types": {
+      "appear": 23,
+      "move": 199,
+      "recolor": 46,
+      "vanish": 23
+    },
+    "mover": "obj3",
+    "operator": "connected_components(4)+uniform_color",
+    "operator_comparison": [
+      {
+        "baseline_bits": 8480,
+        "chosen": true,
+        "events": 291,
+        "operator": "connected_components(4)+uniform_color",
+        "ratio": 0.6802,
+        "reidentification": {
+          "applied": true,
+          "merged": [
+            {
+              "from": "obj6",
+              "into": "obj3"
+            },
+            {
+              "from": "obj7",
+              "into": "obj3"
+            },
+            {
+              "from": "obj8",
+              "into": "obj3"
+            },
+            {
+              "from": "obj9",
+              "into": "obj3"
+            },
+            {
+              "from": "obj11",
+              "into": "obj3"
+            },
+            {
+              "from": "obj12",
+              "into": "obj3"
+            },
+            {
+              "from": "obj13",
+              "into": "obj3"
+            },
+            {
+              "from": "obj14",
+              "into": "obj3"
+            },
+            {
+              "from": "obj15",
+              "into": "obj3"
+            },
+            {
+              "from": "obj16",
+              "into": "obj3"
+            },
+            {
+              "from": "obj18",
+              "into": "obj3"
+            },
+            {
+              "from": "obj19",
+              "into": "obj3"
+            },
+            {
+              "from": "obj20",
+              "into": "obj3"
+            },
+            {
+              "from": "obj21",
+              "into": "obj3"
+            },
+            {
+              "from": "obj22",
+              "into": "obj3"
+            },
+            {
+              "from": "obj23",
+              "into": "obj3"
+            },
+            {
+              "from": "obj24",
+              "into": "obj3"
+            },
+            {
+              "from": "obj25",
+              "into": "obj3"
+            },
+            {
+              "from": "obj27",
+              "into": "obj3"
+            },
+            {
+              "from": "obj5",
+              "into": "obj4"
+            },
+            {
+              "from": "obj10",
+              "into": "obj4"
+            },
+            {
+              "from": "obj17",
+              "into": "obj4"
+            },
+            {
+              "from": "obj26",
+              "into": "obj4"
+            }
+          ],
+          "operator": "template_match+disjoint_lifetime",
+          "saved_bits": 253,
+          "script_bits_after": 5768,
+          "script_bits_before": 6021,
+          "tracks_after": 5,
+          "tracks_before": 28
+        },
+        "script_bits": 5768,
+        "tracks": 5
+      },
+      {
+        "baseline_bits": 8480,
+        "chosen": false,
+        "events": 528,
+        "operator": "connected_components(4)",
+        "ratio": 1.0246,
+        "reidentification": {
+          "applied": true,
+          "merged": [
+            {
+              "from": "obj23",
+              "into": "obj0"
+            },
+            {
+              "from": "obj25",
+              "into": "obj0"
+            },
+            {
+              "from": "obj28",
+              "into": "obj0"
+            },
+            {
+              "from": "obj32",
+              "into": "obj0"
+            },
+            {
+              "from": "obj36",
+              "into": "obj0"
+            },
+            {
+              "from": "obj41",
+              "into": "obj0"
+            },
+            {
+              "from": "obj43",
+              "into": "obj0"
+            },
+            {
+              "from": "obj49",
+              "into": "obj0"
+            },
+            {
+              "from": "obj51",
+              "into": "obj0"
+            },
+            {
+              "from": "obj55",
+              "into": "obj0"
+            },
+            {
+              "from": "obj58",
+              "into": "obj0"
+            },
+            {
+              "from": "obj68",
+              "into": "obj0"
+            },
+            {
+              "from": "obj79",
+              "into": "obj0"
+            },
+            {
+              "from": "obj82",
+              "into": "obj0"
+            },
+            {
+              "from": "obj85",
+              "into": "obj0"
+            },
+            {
+              "from": "obj87",
+              "into": "obj0"
+            },
+            {
+              "from": "obj112",
+              "into": "obj0"
+            },
+            {
+              "from": "obj117",
+              "into": "obj0"
+            },
+            {
+              "from": "obj121",
+              "into": "obj0"
+            },
+            {
+              "from": "obj125",
+              "into": "obj0"
+            },
+            {
+              "from": "obj129",
+              "into": "obj0"
+            },
+            {
+              "from": "obj140",
+              "into": "obj0"
+            },
+            {
+              "from": "obj143",
+              "into": "obj0"
+            },
+            {
+              "from": "obj146",
+              "into": "obj0"
+            },
+            {
+              "from": "obj149",
+              "into": "obj0"
+            },
+            {
+              "from": "obj152",
+              "into": "obj0"
+            },
+            {
+              "from": "obj154",
+              "into": "obj0"
+            },
+            {
+              "from": "obj157",
+              "into": "obj0"
+            },
+            {
+              "from": "obj167",
+              "into": "obj0"
+            },
+            {
+              "from": "obj170",
+              "into": "obj0"
+            },
+            {
+              "from": "obj176",
+              "into": "obj0"
+            },
+            {
+              "from": "obj181",
+              "into": "obj0"
+            },
+            {
+              "from": "obj30",
+              "into": "obj1"
+            },
+            {
+              "from": "obj34",
+              "into": "obj1"
+            },
+            {
+              "from": "obj61",
+              "into": "obj1"
+            },
+            {
+              "from": "obj63",
+              "into": "obj1"
+            },
+            {
+              "from": "obj66",
+              "into": "obj1"
+            },
+            {
+              "from": "obj71",
+              "into": "obj1"
+            },
+            {
+              "from": "obj73",
+              "into": "obj1"
+            },
+            {
+              "from": "obj76",
+              "into": "obj1"
+            },
+            {
+              "from": "obj90",
+              "into": "obj1"
+            },
+            {
+              "from": "obj93",
+              "into": "obj1"
+            },
+            {
+              "from": "obj96",
+              "into": "obj1"
+            },
+            {
+              "from": "obj98",
+              "into": "obj1"
+            },
+            {
+              "from": "obj101",
+              "into": "obj1"
+            },
+            {
+              "from": "obj104",
+              "into": "obj1"
+            },
+            {
+              "from": "obj107",
+              "into": "obj1"
+            },
+            {
+              "from": "obj110",
+              "into": "obj1"
+            },
+            {
+              "from": "obj119",
+              "into": "obj1"
+            },
+            {
+              "from": "obj123",
+              "into": "obj1"
+            },
+            {
+              "from": "obj132",
+              "into": "obj1"
+            },
+            {
+              "from": "obj134",
+              "into": "obj1"
+            },
+            {
+              "from": "obj137",
+              "into": "obj1"
+            },
+            {
+              "from": "obj160",
+              "into": "obj1"
+            },
+            {
+              "from": "obj162",
+              "into": "obj1"
+            },
+            {
+              "from": "obj165",
+              "into": "obj1"
+            },
+            {
+              "from": "obj184",
+              "into": "obj1"
+            },
+            {
+              "from": "obj187",
+              "into": "obj1"
+            },
+            {
+              "from": "obj190",
+              "into": "obj1"
+            },
+            {
+              "from": "obj192",
+              "into": "obj1"
+            },
+            {
+              "from": "obj195",
+              "into": "obj1"
+            },
+            {
+              "from": "obj198",
+              "into": "obj1"
+            },
+            {
+              "from": "obj201",
+              "into": "obj1"
+            },
+            {
+              "from": "obj7",
+              "into": "obj2"
+            },
+            {
+              "from": "obj10",
+              "into": "obj2"
+            },
+            {
+              "from": "obj47",
+              "into": "obj2"
+            },
+            {
+              "from": "obj116",
+              "into": "obj2"
+            },
+            {
+              "from": "obj128",
+              "into": "obj2"
+            },
+            {
+              "from": "obj180",
+              "into": "obj2"
+            },
+            {
+              "from": "obj8",
+              "into": "obj3"
+            },
+            {
+              "from": "obj11",
+              "into": "obj3"
+            },
+            {
+              "from": "obj14",
+              "into": "obj3"
+            },
+            {
+              "from": "obj17",
+              "into": "obj3"
+            },
+            {
+              "from": "obj20",
+              "into": "obj3"
+            },
+            {
+              "from": "obj22",
+              "into": "obj3"
+            },
+            {
+              "from": "obj26",
+              "into": "obj3"
+            },
+            {
+              "from": "obj40",
+              "into": "obj3"
+            },
+            {
+              "from": "obj48",
+              "into": "obj3"
+            },
+            {
+              "from": "obj56",
+              "into": "obj3"
+            },
+            {
+              "from": "obj60",
+              "into": "obj3"
+            },
+            {
+              "from": "obj64",
+              "into": "obj3"
+            },
+            {
+              "from": "obj70",
+              "into": "obj3"
+            },
+            {
+              "from": "obj74",
+              "into": "obj3"
+            },
+            {
+              "from": "obj78",
+              "into": "obj3"
+            },
+            {
+              "from": "obj81",
+              "into": "obj3"
+            },
+            {
+              "from": "obj84",
+              "into": "obj3"
+            },
+            {
+              "from": "obj89",
+              "into": "obj3"
+            },
+            {
+              "from": "obj92",
+              "into": "obj3"
+            },
+            {
+              "from": "obj95",
+              "into": "obj3"
+            },
+            {
+              "from": "obj99",
+              "into": "obj3"
+            },
+            {
+              "from": "obj102",
+              "into": "obj3"
+            },
+            {
+              "from": "obj105",
+              "into": "obj3"
+            },
+            {
+              "from": "obj108",
+              "into": "obj3"
+            },
+            {
+              "from": "obj131",
+              "into": "obj3"
+            },
+            {
+              "from": "obj135",
+              "into": "obj3"
+            },
+            {
+              "from": "obj139",
+              "into": "obj3"
+            },
+            {
+              "from": "obj142",
+              "into": "obj3"
+            },
+            {
+              "from": "obj145",
+              "into": "obj3"
+            },
+            {
+              "from": "obj148",
+              "into": "obj3"
+            },
+            {
+              "from": "obj151",
+              "into": "obj3"
+            },
+            {
+              "from": "obj155",
+              "into": "obj3"
+            },
+            {
+              "from": "obj159",
+              "into": "obj3"
+            },
+            {
+              "from": "obj163",
+              "into": "obj3"
+            },
+            {
+              "from": "obj168",
+              "into": "obj3"
+            },
+            {
+              "from": "obj171",
+              "into": "obj3"
+            },
+            {
+              "from": "obj174",
+              "into": "obj3"
+            },
+            {
+              "from": "obj183",
+              "into": "obj3"
+            },
+            {
+              "from": "obj186",
+              "into": "obj3"
+            },
+            {
+              "from": "obj189",
+              "into": "obj3"
+            },
+            {
+              "from": "obj193",
+              "into": "obj3"
+            },
+            {
+              "from": "obj196",
+              "into": "obj3"
+            },
+            {
+              "from": "obj199",
+              "into": "obj3"
+            },
+            {
+              "from": "obj202",
+              "into": "obj3"
+            },
+            {
+              "from": "obj204",
+              "into": "obj3"
+            },
+            {
+              "from": "obj6",
+              "into": "obj4"
+            },
+            {
+              "from": "obj45",
+              "into": "obj4"
+            },
+            {
+              "from": "obj114",
+              "into": "obj4"
+            },
+            {
+              "from": "obj178",
+              "into": "obj4"
+            },
+            {
+              "from": "obj205",
+              "into": "obj4"
+            },
+            {
+              "from": "obj9",
+              "into": "obj5"
+            },
+            {
+              "from": "obj12",
+              "into": "obj5"
+            },
+            {
+              "from": "obj15",
+              "into": "obj5"
+            },
+            {
+              "from": "obj18",
+              "into": "obj5"
+            },
+            {
+              "from": "obj27",
+              "into": "obj5"
+            },
+            {
+              "from": "obj29",
+              "into": "obj5"
+            },
+            {
+              "from": "obj31",
+              "into": "obj5"
+            },
+            {
+              "from": "obj33",
+              "into": "obj5"
+            },
+            {
+              "from": "obj35",
+              "into": "obj5"
+            },
+            {
+              "from": "obj37",
+              "into": "obj5"
+            },
+            {
+              "from": "obj44",
+              "into": "obj5"
+            },
+            {
+              "from": "obj52",
+              "into": "obj5"
+            },
+            {
+              "from": "obj53",
+              "into": "obj5"
+            },
+            {
+              "from": "obj80",
+              "into": "obj5"
+            },
+            {
+              "from": "obj83",
+              "into": "obj5"
+            },
+            {
+              "from": "obj88",
+              "into": "obj5"
+            },
+            {
+              "from": "obj91",
+              "into": "obj5"
+            },
+            {
+              "from": "obj94",
+              "into": "obj5"
+            },
+            {
+              "from": "obj100",
+              "into": "obj5"
+            },
+            {
+              "from": "obj103",
+              "into": "obj5"
+            },
+            {
+              "from": "obj106",
+              "into": "obj5"
+            },
+            {
+              "from": "obj111",
+              "into": "obj5"
+            },
+            {
+              "from": "obj113",
+              "into": "obj5"
+            },
+            {
+              "from": "obj115",
+              "into": "obj5"
+            },
+            {
+              "from": "obj118",
+              "into": "obj5"
+            },
+            {
+              "from": "obj120",
+              "into": "obj5"
+            },
+            {
+              "from": "obj122",
+              "into": "obj5"
+            },
+            {
+              "from": "obj124",
+              "into": "obj5"
+            },
+            {
+              "from": "obj126",
+              "into": "obj5"
+            },
+            {
+              "from": "obj141",
+              "into": "obj5"
+            },
+            {
+              "from": "obj144",
+              "into": "obj5"
+            },
+            {
+              "from": "obj150",
+              "into": "obj5"
+            },
+            {
+              "from": "obj169",
+              "into": "obj5"
+            },
+            {
+              "from": "obj172",
+              "into": "obj5"
+            },
+            {
+              "from": "obj175",
+              "into": "obj5"
+            },
+            {
+              "from": "obj177",
+              "into": "obj5"
+            },
+            {
+              "from": "obj182",
+              "into": "obj5"
+            },
+            {
+              "from": "obj185",
+              "into": "obj5"
+            },
+            {
+              "from": "obj188",
+              "into": "obj5"
+            },
+            {
+              "from": "obj194",
+              "into": "obj5"
+            },
+            {
+              "from": "obj197",
+              "into": "obj5"
+            },
+            {
+              "from": "obj200",
+              "into": "obj5"
+            },
+            {
+              "from": "obj203",
+              "into": "obj5"
+            },
+            {
+              "from": "obj206",
+              "into": "obj5"
+            },
+            {
+              "from": "obj16",
+              "into": "obj13"
+            },
+            {
+              "from": "obj19",
+              "into": "obj13"
+            },
+            {
+              "from": "obj39",
+              "into": "obj13"
+            },
+            {
+              "from": "obj54",
+              "into": "obj13"
+            },
+            {
+              "from": "obj173",
+              "into": "obj13"
+            },
+            {
+              "from": "obj24",
+              "into": "obj21"
+            },
+            {
+              "from": "obj38",
+              "into": "obj21"
+            },
+            {
+              "from": "obj42",
+              "into": "obj21"
+            },
+            {
+              "from": "obj46",
+              "into": "obj21"
+            },
+            {
+              "from": "obj50",
+              "into": "obj21"
+            },
+            {
+              "from": "obj57",
+              "into": "obj21"
+            },
+            {
+              "from": "obj59",
+              "into": "obj21"
+            },
+            {
+              "from": "obj62",
+              "into": "obj21"
+            },
+            {
+              "from": "obj65",
+              "into": "obj21"
+            },
+            {
+              "from": "obj67",
+              "into": "obj21"
+            },
+            {
+              "from": "obj69",
+              "into": "obj21"
+            },
+            {
+              "from": "obj72",
+              "into": "obj21"
+            },
+            {
+              "from": "obj75",
+              "into": "obj21"
+            },
+            {
+              "from": "obj77",
+              "into": "obj21"
+            },
+            {
+              "from": "obj86",
+              "into": "obj21"
+            },
+            {
+              "from": "obj97",
+              "into": "obj21"
+            },
+            {
+              "from": "obj109",
+              "into": "obj21"
+            },
+            {
+              "from": "obj127",
+              "into": "obj21"
+            },
+            {
+              "from": "obj130",
+              "into": "obj21"
+            },
+            {
+              "from": "obj133",
+              "into": "obj21"
+            },
+            {
+              "from": "obj136",
+              "into": "obj21"
+            },
+            {
+              "from": "obj138",
+              "into": "obj21"
+            },
+            {
+              "from": "obj147",
+              "into": "obj21"
+            },
+            {
+              "from": "obj153",
+              "into": "obj21"
+            },
+            {
+              "from": "obj156",
+              "into": "obj21"
+            },
+            {
+              "from": "obj158",
+              "into": "obj21"
+            },
+            {
+              "from": "obj161",
+              "into": "obj21"
+            },
+            {
+              "from": "obj164",
+              "into": "obj21"
+            },
+            {
+              "from": "obj166",
+              "into": "obj21"
+            },
+            {
+              "from": "obj179",
+              "into": "obj21"
+            },
+            {
+              "from": "obj191",
+              "into": "obj21"
+            }
+          ],
+          "operator": "template_match+disjoint_lifetime",
+          "saved_bits": 1967,
+          "script_bits_after": 8689,
+          "script_bits_before": 10656,
+          "tracks_after": 8,
+          "tracks_before": 207
+        },
+        "script_bits": 8689,
+        "tracks": 8
+      }
+    ],
+    "ratio": 0.6802,
+    "script_bits": 5768,
+    "tracks": [
+      {
+        "color": 3,
+        "first_frame": 0,
+        "frames_present": 326,
+        "id": "obj0",
+        "shape": [
+          1,
+          1
+        ]
+      },
+      {
+        "color": 4,
+        "first_frame": 0,
+        "frames_present": 326,
+        "id": "obj1",
+        "shape": [
+          1,
+          1
+        ]
+      },
+      {
+        "color": 7,
+        "first_frame": 0,
+        "frames_present": 326,
+        "id": "obj2",
+        "shape": [
+          1,
+          1
+        ]
+      },
+      {
+        "color": 6,
+        "first_frame": 0,
+        "frames_present": 307,
+        "id": "obj3",
+        "shape": [
+          1,
+          1
+        ]
+      },
+      {
+        "color": 5,
+        "first_frame": 0,
+        "frames_present": 154,
+        "id": "obj4",
+        "shape": [
+          1,
+          1
+        ]
+      }
+    ]
+  },
+  "trace": "l1_sweep.jsonl",
+  "transitions": 325,
+  "zero_space": {
+    "cell_local_laws": 174,
+    "cells": 35,
+    "colors": [
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8"
+    ],
+    "difference_rank": 34,
+    "features": 210,
+    "global_laws": [
+      {
+        "rendering": "(8@18 + 5@30) mod 2 = 1",
+        "support": [
+          "8@(4,1)",
+          "5@(6,7)"
+        ],
+        "value": 1
+      },
+      {
+        "rendering": "(6@0 + 6@1 + 6@2 + 6@3 + 6@4 + 6@5 + 6@6 + 6@7 + 6@8 + 6@9 + 6@10 + 6@11 + 6@12 + 6@13 + 6@14 + 6@15 + 6@16 + 6@17 + 6@19 + 6@20 + 6@21 + 6@22 + 6@23 + 6@24 + 6@25 + 6@26 + 6@27 + 6@28 + 6@29 + 6@30 + 6@31 + 6@32 + 6@33 + 6@34) mod 2 = 1",
+        "support": [
+          "6@(1,1)",
+          "6@(1,2)",
+          "6@(1,3)",
+          "6@(1,5)",
+          "6@(1,6)",
+          "6@(1,7)",
+          "6@(2,1)",
+          "6@(2,2)",
+          "6@(2,3)",
+          "6@(2,5)",
+          "6@(2,6)",
+          "6@(2,7)",
+          "6@(3,1)",
+          "6@(3,2)",
+          "6@(3,3)",
+          "6@(3,5)",
+          "6@(3,6)",
+          "6@(3,7)",
+          "6@(4,3)",
+          "6@(4,5)",
+          "6@(4,6)",
+          "6@(4,7)",
+          "6@(5,1)",
+          "6@(5,2)",
+          "6@(5,3)",
+          "6@(5,7)",
+          "6@(6,1)",
+          "6@(6,2)",
+          "6@(6,3)",
+          "6@(6,7)",
+          "6@(7,1)",
+          "6@(7,2)",
+          "6@(7,3)",
+          "6@(7,7)"
+        ],
+        "value": 1
+      }
+    ],
+    "space_dimension": 176
+  }
+}

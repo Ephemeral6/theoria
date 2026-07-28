@@ -1,0 +1,147 @@
+{
+  "agreed": [],
+  "canonical_agreed": 20,
+  "canonical_agreed_rules": [
+    "down  act=push(MOVER,down) & colored(target,3) => jumped(MOVER,LM@3)",
+    "down  act=push(MOVER,down) & colored(target,4) => jumped(MOVER,LM@4)",
+    "down  act=push(MOVER,down) & colored(target,7) => recolored(TOGGLE,8)",
+    "down  act=push(MOVER,down) & colored(target,7) => vanished(BARRIER)",
+    "down  act=push(MOVER,down) & colored(target,8) => appeared(BARRIER)",
+    "down  act=push(MOVER,down) & colored(target,8) => recolored(TOGGLE,7)",
+    "down  act=push(MOVER,down) & free(target) => moved(MOVER,down)",
+    "left  act=push(MOVER,left) & colored(target,3) => jumped(MOVER,LM@3)",
+    "left  act=push(MOVER,left) & colored(target,4) => jumped(MOVER,LM@4)",
+    "left  act=push(MOVER,left) & free(target) => moved(MOVER,left)",
+    "right act=push(MOVER,right) & colored(target,3) => jumped(MOVER,LM@3)",
+    "right act=push(MOVER,right) & colored(target,4) => jumped(MOVER,LM@4)",
+    "right act=push(MOVER,right) & free(target) => moved(MOVER,right)",
+    "up    act=push(MOVER,up) & colored(target,3) => jumped(MOVER,LM@3)",
+    "up    act=push(MOVER,up) & colored(target,4) => jumped(MOVER,LM@4)",
+    "up    act=push(MOVER,up) & colored(target,7) => recolored(TOGGLE,8)",
+    "up    act=push(MOVER,up) & colored(target,7) => vanished(BARRIER)",
+    "up    act=push(MOVER,up) & colored(target,8) => appeared(BARRIER)",
+    "up    act=push(MOVER,up) & colored(target,8) => recolored(TOGGLE,7)",
+    "up    act=push(MOVER,up) & free(target) => moved(MOVER,up)"
+  ],
+  "canonical_agreement": 0.7143,
+  "canonical_laws_agreed": [
+    "count(BARRIER)+count(TOGGLE,8)=1",
+    "count(MOVER)=1"
+  ],
+  "canonical_laws_only_left": [],
+  "canonical_laws_only_right": [],
+  "canonical_only_in_left": [],
+  "canonical_only_in_right": [
+    "left  act=push(MOVER,left) & colored(target,7) => recolored(TOGGLE,8)",
+    "left  act=push(MOVER,left) & colored(target,7) => vanished(BARRIER)",
+    "left  act=push(MOVER,left) & colored(target,8) => appeared(BARRIER)",
+    "left  act=push(MOVER,left) & colored(target,8) => recolored(TOGGLE,7)",
+    "right act=push(MOVER,right) & colored(target,7) => recolored(TOGGLE,8)",
+    "right act=push(MOVER,right) & colored(target,7) => vanished(BARRIER)",
+    "right act=push(MOVER,right) & colored(target,8) => appeared(BARRIER)",
+    "right act=push(MOVER,right) & colored(target,8) => recolored(TOGGLE,7)"
+  ],
+  "canonical_rules_left": 20,
+  "canonical_rules_right": 28,
+  "clauses_written_left": 20,
+  "clauses_written_right": 7,
+  "landmark_roles_left": {
+    "exit_a": "LM@3",
+    "exit_b": "LM@4"
+  },
+  "landmark_roles_right": {
+    "warp_a_exit": "LM@3",
+    "warp_b_exit": "LM@4"
+  },
+  "landmarks_left": [
+    "exit_a",
+    "exit_b"
+  ],
+  "landmarks_right": [
+    "warp_a_exit",
+    "warp_b_exit"
+  ],
+  "laws_agreed": [],
+  "laws_only_left": [
+    "invariant cart_unique()",
+    "invariant switch_door_latch()",
+    "theorem portal_destination_is_absolute"
+  ],
+  "laws_only_right": [
+    "invariant agent_unique()",
+    "invariant gate_latch()",
+    "theorem gate_is_solid",
+    "theorem toggle_is_direction_free",
+    "theorem warp_exit_is_a_landmark"
+  ],
+  "left": "theory/domain.dsl",
+  "neither_has_a_goal_section": true,
+  "objects_left": [
+    "Cart",
+    "Door",
+    "Switch"
+  ],
+  "objects_right": [
+    "Agent",
+    "Gate",
+    "Switch"
+  ],
+  "only_in_left": [
+    "act=push(Cart,down) & colored(below,3) => jumped(Cart,exit_a)",
+    "act=push(Cart,down) & colored(below,4) => jumped(Cart,exit_b)",
+    "act=push(Cart,down) & colored(below,7) => recolored(Switch,8)",
+    "act=push(Cart,down) & colored(below,7) => vanished(Door)",
+    "act=push(Cart,down) & colored(below,8) => appeared(Door)",
+    "act=push(Cart,down) & colored(below,8) => recolored(Switch,7)",
+    "act=push(Cart,down) & free(below) => moved(Cart,down)",
+    "act=push(Cart,left) & colored(leftof,3) => jumped(Cart,exit_a)",
+    "act=push(Cart,left) & colored(leftof,4) => jumped(Cart,exit_b)",
+    "act=push(Cart,left) & free(leftof) => moved(Cart,left)",
+    "act=push(Cart,right) & colored(rightof,3) => jumped(Cart,exit_a)",
+    "act=push(Cart,right) & colored(rightof,4) => jumped(Cart,exit_b)",
+    "act=push(Cart,right) & free(rightof) => moved(Cart,right)",
+    "act=push(Cart,up) & colored(above,3) => jumped(Cart,exit_a)",
+    "act=push(Cart,up) & colored(above,4) => jumped(Cart,exit_b)",
+    "act=push(Cart,up) & colored(above,7) => recolored(Switch,8)",
+    "act=push(Cart,up) & colored(above,7) => vanished(Door)",
+    "act=push(Cart,up) & colored(above,8) => appeared(Door)",
+    "act=push(Cart,up) & colored(above,8) => recolored(Switch,7)",
+    "act=push(Cart,up) & free(above) => moved(Cart,up)"
+  ],
+  "only_in_right": [
+    "act=push(Agent,d) & colored(toward,3) => jumped(Agent,warp_a_exit)",
+    "act=push(Agent,d) & colored(toward,4) => jumped(Agent,warp_b_exit)",
+    "act=push(Agent,d) & colored(toward,7) => recolored(Switch,8)",
+    "act=push(Agent,d) & colored(toward,7) => vanished(Gate)",
+    "act=push(Agent,d) & colored(toward,8) => appeared(Gate)",
+    "act=push(Agent,d) & colored(toward,8) => recolored(Switch,7)",
+    "act=push(Agent,d) & free(toward) => moved(Agent,d)"
+  ],
+  "reading": "A rule is 'agreed' when its action, its sorted guard atoms and its effect match. Names, evidence annotations and comments are discarded: they are not the manual's content. Any difference below is either a real difference in what two evidence sets license, or a defect in one of the manuals.",
+  "right": "theory/domain_l2_scratch.dsl",
+  "roles_left": {
+    "Cart": "MOVER",
+    "Door": "BARRIER",
+    "Switch": "TOGGLE"
+  },
+  "roles_right": {
+    "Agent": "MOVER",
+    "Gate": "BARRIER",
+    "Switch": "TOGGLE"
+  },
+  "semantics_agree": true,
+  "semantics_left": {
+    "cascade": "single_frame",
+    "conflict": "exclusive",
+    "frame": "persist"
+  },
+  "semantics_right": {
+    "cascade": "single_frame",
+    "conflict": "exclusive",
+    "frame": "persist"
+  },
+  "strict_agreed": 0,
+  "strict_agreement": 0.0,
+  "strict_rules_left": 20,
+  "strict_rules_right": 7
+}

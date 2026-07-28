@@ -1,0 +1,45 @@
+{
+  "cheap": {
+    "anomalies": [],
+    "anomaly_kinds": [],
+    "frames": 333,
+    "green": true,
+    "pixels_checked": 26973,
+    "pixels_unexplained": 0,
+    "theory": "theory\\generated_l1\\theory.py",
+    "trace": "l1_sweep.jsonl",
+    "transitions": 332
+  },
+  "lean": {
+    "available": true,
+    "axiom_reports": [
+      {
+        "axioms": [],
+        "name": "inv_all"
+      }
+    ],
+    "errors": [],
+    "file": "theory/generated_l1/theory.lean",
+    "green": true,
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+    "reason": null,
+    "returncode": 0,
+    "sorries": []
+  },
+  "lean_vacuous": {
+    "available": true,
+    "axiom_reports": [
+      {
+        "axioms": [],
+        "name": "inv_all"
+      }
+    ],
+    "errors": [],
+    "file": "theory/generated_l1_vacuous/theory.lean",
+    "green": true,
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+    "reason": null,
+    "returncode": 0,
+    "sorries": []
+  }
+}

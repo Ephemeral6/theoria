@@ -1,0 +1,211 @@
+{
+  "accounts": [
+    {
+      "colour": 7,
+      "laws_naming_it": [
+        "invariant switch_door_latch"
+      ],
+      "manual_bytes": 530,
+      "name": "Switch",
+      "object_id": "obj0",
+      "responsibility_cells": [
+        [
+          4,
+          1
+        ]
+      ],
+      "rules_targeting_it": [
+        "press_up",
+        "press_down",
+        "unpress_up",
+        "unpress_down"
+      ],
+      "script_delta": 7,
+      "script_with": 73,
+      "script_without": 80
+    },
+    {
+      "colour": 6,
+      "laws_naming_it": [
+        "invariant cart_unique"
+      ],
+      "manual_bytes": 1774,
+      "name": "Cart",
+      "object_id": "obj1",
+      "responsibility_cells": [
+        [
+          1,
+          1
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          1,
+          5
+        ],
+        [
+          1,
+          6
+        ],
+        [
+          1,
+          7
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          2,
+          5
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          3,
+          5
+        ],
+        [
+          3,
+          6
+        ],
+        [
+          3,
+          7
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          4,
+          5
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          4,
+          7
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          6,
+          7
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          7,
+          7
+        ]
+      ],
+      "rules_targeting_it": [
+        "push_up",
+        "push_down",
+        "push_left",
+        "push_right",
+        "teleport_a_up",
+        "teleport_a_down",
+        "teleport_a_left",
+        "teleport_a_right",
+        "teleport_b_up",
+        "teleport_b_down",
+        "teleport_b_left",
+        "teleport_b_right"
+      ],
+      "script_delta": 2371,
+      "script_with": 2539,
+      "script_without": 4910
+    },
+    {
+      "colour": 5,
+      "laws_naming_it": [
+        "invariant switch_door_latch"
+      ],
+      "manual_bytes": 517,
+      "name": "Door",
+      "object_id": "obj2",
+      "responsibility_cells": [
+        [
+          6,
+          7
+        ]
+      ],
+      "rules_targeting_it": [
+        "door_opens_up",
+        "door_opens_down",
+        "door_closes_up",
+        "door_closes_down"
+      ],
+      "script_delta": 8,
+      "script_with": 72,
+      "script_without": 80
+    }
+  ],
+  "manual": "domain.dsl",
+  "note": "priced against a responsibility-complete alternative (Theoria 1.8, as corrected by A0's O-04). Every object here has a POSITIVE account, unlike A0's and A2's \u2014 see the module docstring: the cause is the toggle.",
+  "source": "candidates_l1.jsonl"
+}
