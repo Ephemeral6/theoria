@@ -523,3 +523,22 @@ landed. Both `negctl/criterion.py` and `negctl/probe.py` swallow the parse
 failure in a bare `except`, so the file left their population without a sound.
 `frame.py` admits it and marks it `unparseable`, which is the whole argument for
 marking rather than skipping. Territory: `release/`. Not fixed here.
+
+## One of V14's six arguments does not survive the frame
+
+Reported because it cuts the other way, and a report that only carries the
+convenient half is the failure this lab exists to name.
+
+**V14's argument 2** — "≥17 of the 141 are not acceptance entry points: 4 world
+definitions, 3 report scripts, a package `__init__`, 3 exhibits, 5 one-off
+scripts inside frozen `runs/<id>/`" — **does not hold under a written
+population definition.** All 17 are tracked and invocable, so all 17 are
+population members; 5 carry the `frozen` marker and are reported rather than
+gated on. A report script is precisely the thing to ask "does your verdict reach
+the exit code" of — `worldgen/runs/.../lint_unused.py` counts its findings,
+prints them, and returns 0 — so excluding it from the population assumes the
+answer. Under the frame, negctl over-collects **one** thing, not seventeen:
+`monitor/tests/mutants.py`, which is a test file.
+
+So the frame **weakens V14's argument 2 and substantially strengthens its
+argument 4**. Both are recorded. Nobody may cite one without the other.
