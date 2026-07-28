@@ -157,8 +157,8 @@ def captured_probes(monkeypatch):
     return records
 
 
-def test_the_probe_log_records_names_not_values(captured_probes):
-    api = arc_client.ArcClient(api_key="x")
+def test_the_probe_log_records_names_not_values(captured_probes, scratch_binding):
+    api = arc_client.ArcClient(api_key="x", spend_binding=scratch_binding)
     api._opener = _seeding_opener(api)
     api.request("POST", "/api/cmd/RESET", body={"game_id": "ar25-0c556536"},
                 note="t")
@@ -168,11 +168,12 @@ def test_the_probe_log_records_names_not_values(captured_probes):
     assert entry["cookies_enabled"] is True
 
 
-def test_cookies_sent_is_the_jar_before_the_call_not_after(captured_probes):
+def test_cookies_sent_is_the_jar_before_the_call_not_after(captured_probes,
+                                                           scratch_binding):
     """A snapshot taken inside the log call describes what the call PRODUCED.
     The first request of a session, which provably echoed nothing, would then be
     recorded as holding the server's cookies."""
-    api = arc_client.ArcClient(api_key="x")
+    api = arc_client.ArcClient(api_key="x", spend_binding=scratch_binding)
     api._opener = _seeding_opener(api)
     api.request("POST", "/api/cmd/RESET", body={"game_id": "ar25-0c556536"},
                 note="first call of the session")
@@ -181,13 +182,13 @@ def test_cookies_sent_is_the_jar_before_the_call_not_after(captured_probes):
     assert entry["cookies_held_after"] == ["GAMESESSION"]
 
 
-def test_no_test_in_this_file_writes_to_the_real_probe_log():
+def test_no_test_in_this_file_writes_to_the_real_probe_log(scratch_binding):
     """The guard for the mistake above: if the fixture ever stops intercepting,
     this notices before a tracked append-only file grows test noise."""
     real = os.path.join(os.path.dirname(os.path.dirname(
         os.path.abspath(__file__))), "probe_log.jsonl")
     before = os.path.getsize(real) if os.path.exists(real) else 0
-    api = arc_client.ArcClient(api_key="x")
+    api = arc_client.ArcClient(api_key="x", spend_binding=scratch_binding)
     api._opener = _seeding_opener(api)
     original = ledger.probe
     ledger.probe = lambda kind, detail, **kw: None
