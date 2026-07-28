@@ -229,7 +229,7 @@ def run_world(spec: WorldRun, out_root: Optional[str] = None) -> Dict[str, Any]:
 
     # -- 2. certify (cheap layer only; the expensive one is the cut) ----------
     theory_py = os.path.join(out_dir, "theory.py")
-    cheap = certify_abl.cheap(theory_py, trace_path)
+    cheap = _stable_paths(certify_abl.cheap(theory_py, trace_path))
     certify_abl.report_surprises(bus, cheap, beat="certify")
     beats["certify"] = {
         "layers_run": ["cheap"],
@@ -243,7 +243,7 @@ def run_world(spec: WorldRun, out_root: Optional[str] = None) -> Dict[str, Any]:
     # -- 2b. the sweep: a referee-side second opinion that never reaches the bus
     if spec.sweep_trace:
         sweep_path = os.path.join(REPO, spec.sweep_trace)
-        sweep = certify_abl.cheap(theory_py, sweep_path)
+        sweep = _stable_paths(certify_abl.cheap(theory_py, sweep_path))
         beats["certify"]["sweep"] = {
             "trace": spec.sweep_trace,
             "trace_sha256": sha256_file(sweep_path),
@@ -311,6 +311,27 @@ def run_world(spec: WorldRun, out_root: Optional[str] = None) -> Dict[str, Any]:
                                         else None)
     report["ledger"] = _write_ledger(spec, world, plan_report, out_dir)
     _write(os.path.join(out_dir, "run_report.json"), report)
+    return report
+
+
+
+def _stable_paths(report: Dict[str, Any]) -> Dict[str, Any]:
+    """Rewrite the cheap layer's `theory` path so the artefact does not depend
+    on where the run was launched from.
+
+    `certify.replay` records it with `os.path.relpath(theory_py)` -- relative to
+    the **current working directory** -- so the same run launched from the repo
+    root and from `ablation-arm/` writes two different files. That is a real
+    reproducibility wart rather than a cosmetic one: the report is checked in,
+    so it flips back and forth in git depending on who ran it and from where.
+    Normalised here, in this arm's own report, which is the only place it can be
+    normalised without editing another track's code.
+    """
+    theory = report.get("theory")
+    if isinstance(theory, str):
+        report = dict(report)
+        report["theory"] = os.path.relpath(
+            os.path.abspath(theory), HERE).replace("\\", "/")
     return report
 
 
