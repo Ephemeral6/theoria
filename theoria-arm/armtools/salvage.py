@@ -73,12 +73,57 @@ def rebuild_trace(records: List[Dict[str, Any]], out_path: str) -> Dict[str, Any
             "cascade_lengths": sorted({len(r.get("frames") or []) for r in steps})}
 
 
+def recertify(run_dir: str, trace_path: str) -> Dict[str, Any]:
+    """Re-run the cheap certify layer against the archived books.
+
+    `certify.json`, `plan.json` and `turns.json` are written only when the arm
+    reaches `_finish()`, so a run stopped from outside loses them. They are
+    recoverable, because everything they were computed from is archived: the
+    manual, the level instance and the frames. This re-runs certify and plan on
+    exactly those inputs and writes the result **labelled as reconstructed** --
+    it is not the live report, it is the same computation repeated, and it is
+    only trustworthy because certify and plan are deterministic and spend no
+    model call.
+    """
+    from inner import certify, commit, plan as plan_beat     # noqa: PLC0415
+    from inner.books import Books                            # noqa: PLC0415
+    from world.frames import load_store                      # noqa: PLC0415
+
+    books = Books(os.path.join(run_dir, "books"))
+    store = load_store(trace_path)
+    compiled = books.compile_all()
+    report: Dict[str, Any] = {
+        "reconstructed": True,
+        "note": ("re-run after the fact from the archived books and the "
+                 "ledger-rebuilt trace, because the run was stopped before it "
+                 "wrote its own certify/plan reports. certify and plan are "
+                 "deterministic and spend no model call, so this is the same "
+                 "computation repeated -- but it is a reconstruction and is "
+                 "labelled one."),
+        "compile": {"ok": bool(compiled.get("ok")),
+                    "errors": compiled.get("errors"),
+                    "forms": sorted((compiled.get("forms") or {})),
+                    "lean_state_estimate": compiled.get("lean_state_estimate")},
+    }
+    report["certify"] = certify.run(books, store, commit.action_to_manual,
+                                    compiled)
+    namespace, error = books.load_predictor()
+    if namespace is None:
+        report["plan"] = {"status": "no_predictor", "detail": error}
+    else:
+        report["plan"] = plan_beat.plan(books, namespace, compiled)
+    return report
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--slug", required=True)
     ap.add_argument("--close", action="store_true",
                     help="open a proxy and close the scorecard (real traffic)")
     ap.add_argument("--game", default="g50t-5849a774")
+    ap.add_argument("--recertify", action="store_true",
+                    help="re-run certify and plan against the archived books "
+                         "(deterministic, no model call, labelled reconstructed)")
     args = ap.parse_args(argv)
 
     run_dir = _bootstrap.path("runs", args.slug)
@@ -97,7 +142,25 @@ def main(argv=None) -> int:
         "card_ids": cards,
         "run_end_present": any(r.get("event") == "run_end" for r in records),
     }
-    out["trace"] = rebuild_trace(records, os.path.join(run_dir, "trace.jsonl"))
+    trace_path = os.path.join(run_dir, "trace.jsonl")
+    out["trace"] = rebuild_trace(records, trace_path)
+
+    if args.recertify:
+        try:
+            report = recertify(run_dir, trace_path)
+            with open(os.path.join(run_dir, "certify_reconstructed.json"), "w",
+                      encoding="utf-8", newline="\n") as fh:
+                json.dump(report, fh, indent=1, sort_keys=True, default=str)
+                fh.write("\n")
+            out["recertify"] = {
+                "compile_ok": report["compile"]["ok"],
+                "cheap_green": (report.get("certify") or {}).get("cheap_green"),
+                "proof_layer_available": (report.get("certify") or {}).get(
+                    "proof_layer_available"),
+                "plan_status": (report.get("plan") or {}).get("status"),
+            }
+        except Exception as exc:                       # noqa: BLE001
+            out["recertify"] = {"error": "%s: %s" % (type(exc).__name__, exc)}
 
     if args.close and cards:
         from harness.arc import ArcThroughProxy       # noqa: PLC0415

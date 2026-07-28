@@ -167,3 +167,51 @@ track's own 44 tests and two mock dry runs — did not surface, because:
 Both aborts are archived in full rather than deleted —
 `runs/*-aborted/ABORTED.md` — including the manual attempt 1 produced, which
 was good, and the 19,957 output tokens attempt 2 paid for and never printed.
+
+---
+
+## INC-TA-005 · This arm's transport makes cache reads structurally zero, and that is the axis the bet is on — severity: high for measurement, none for the run
+
+**What.** Across every model call of the first contact, the recorded usage
+reads:
+
+```
+cache_creation_input_tokens : 61,214
+cache_read_input_tokens     :      0
+```
+
+Zero, not "low". Every `claude -p` invocation is a **fresh process in a fresh
+temporary directory** — that is deliberate, and it is the sealing that keeps
+the desk from reading `Theoria.md`, the pile cut and the other arms' traces
+(D-P8-013). The cost is that no session state survives between calls, so each
+call creates a cache it will never read and the next call pays full
+cache-creation price for the same preamble, grammar card and evidence brief.
+
+**Why this matters more than 6.8% of a price table.** `Theoria.md` 1.12 states
+the wager as a table whose distinguishing column is **单局缓存读** — cache reads
+per game — with Schema at ~10⁸ (measured 2.04–3.41×10⁸), Theoria predicted at
+~10⁶, and `baseline-arms` filling the bare-CC row at ~6.0×10⁵. C5's whole
+content is that understanding shows up as a change in the *shape* of the bill.
+
+**This arm cannot report a number in that column.** Its cache-read count is
+zero by construction of its transport, and zero is not a small number on that
+axis — it is a different quantity. Anyone comparing this run's cache reads with
+Schema's ~10⁸ would be comparing a framework property with a subprocess
+property.
+
+**What the run *can* report** is total input tokens re-sent per turn, which is
+the quantity cache reads are a *price* for, and which is transport-independent:
+~20,000 per call, three calls, no growth across them because the evidence brief
+is capped and the manual replaces rather than accumulates. That is the honest
+form of the C5 measurement from this arm, and it is what the run report uses.
+
+**What would close it.** Either a model proxy this arm can actually reach —
+which is `D-P8-002`'s gap, and which would put every call in one HTTP session
+where prompt caching works normally — or an arm that keeps one CLI session
+alive across calls, which would break the neutral-directory seal. The first is
+the right fix and it is not this track's to make.
+
+Recorded here rather than in `GAPS.md` alone because it is a measurement
+hazard for **Phase 2**: a battery that re-prices every arm's history from one
+ledger will read this arm's cache-read column as a genuine zero unless it knows
+why it is zero.

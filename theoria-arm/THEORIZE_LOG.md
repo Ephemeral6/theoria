@@ -265,3 +265,58 @@ split is real and the DSL enforces it, but the arm has to carry the problem
 data across the boundary somehow, and comments are where it ended up.** A
 manual read by a human is unaffected; a manual read by the compiler needs a
 level file it has no way to request.
+
+---
+
+## The result: the loop cycles rather than converges, and the count says so
+
+Unexplained pixels at frame 0, across the four certify rounds of the first
+contact:
+
+```
+69 → 68 → 69 → 69
+```
+
+Four rewrites, five desk calls, $6.32, and the responsibility failure ends
+where it began. This is the run's headline finding and it should not be
+softened into "early days".
+
+**Why it cycles is legible, and that is the interesting part.** The desk is not
+failing to see the problem — it diagnosed it in round one, in
+`theorem colour_nine_collision`, before certify had reported anything:
+
+> One colour binds one object, so Player takes 9 and the 11 dynamic colour-9
+> HUD pixels of frames 0-4 plus the 6 underline pixels have no object and will
+> be reported unexplained. I believe there are at least three distinct colour-9
+> entities; the arm cannot tell them apart, so I said so here instead of
+> pretending.
+
+The defect is `E-03` — this arm locates an object by its colour, so two objects
+sharing a colour are one object — and **no rewriting of `theory.dsl` can fix
+it**, because the manual is not where the defect lives. Each round the desk
+re-derives the same diagnosis, rewords the manual around it, and the count
+returns.
+
+`Theoria.md` 1.10(d) says the loop is driven by surprise. It is silent on what
+happens when the same surprise fires against a defect the manual has no way to
+address, and this run is that case: **the loop will spend one model call per
+cycle, forever, until something outside the manual changes.** Two things follow
+and neither is a criticism of the framework:
+
+1. **A surprise that recurs unchanged is different in kind from a surprise that
+   recurs smaller.** The arm now has the number that distinguishes them —
+   `cells_unexplained` — and it is the obvious input to a rule that stops
+   calling the desk about a surprise it cannot answer. The evidence gate
+   (`MIN_NEW_FRAMES_BETWEEN_THEORIZE`) is a blunter version of this: it at least
+   makes each cycle buy more evidence.
+2. **The expressivity ledger is not a footnote, it is the work queue.** `E-03`
+   is the single thing standing between this manual and a green responsibility
+   check, and it is an arm defect, not a DSL limit — the DSL is perfectly
+   capable of declaring three objects; this arm cannot *find* them, because it
+   looks them up by colour.
+
+The measurement itself is the win. Constraint 2's full-frame responsibility
+pass produced a real, moving quantity on a real 64×64 frame, and that quantity
+was able to say *you are going in circles*. A check that could only report pass
+or fail could not have said it, and four more rounds would have been spent
+before anyone noticed.

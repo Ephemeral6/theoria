@@ -1,43 +1,50 @@
 {
  "budget": {
   "actions_failed": 0,
-  "actions_left": 104,
-  "actions_ok": 5,
+  "actions_left": 102,
+  "actions_ok": 7,
   "ceiling_actions": 109,
   "ceiling_commands": 3000,
-  "commands_sent": 32,
-  "http_amplification": 6.4,
+  "commands_sent": 40,
+  "http_amplification": 5.714,
   "probe_actions": 0,
   "reserve_for_probes": 0,
   "resets": 1
  },
  "desk": {
-  "beats": [],
-  "calls": 0,
-  "cli_cost_usd": 0.0,
+  "beats": [
+   "theorize"
+  ],
+  "calls": 5,
+  "cli_cost_usd": 6.317658,
   "cost_ceiling_usd": 16.0,
   "model": "claude-opus-5",
-  "usage_total": {}
+  "usage_total": {
+   "cache_creation_input_tokens": 116470,
+   "cache_read_input_tokens": 0,
+   "input_tokens": 10,
+   "output_tokens": 202694
+  }
  },
- "elapsed_s": 75.9,
+ "elapsed_s": 2755.8,
  "outcome": "not_started",
- "steps": 5,
+ "steps": 7,
  "stopped_because": "",
  "surprises": {
   "by_family": {
    "computational": 0,
-   "empirical": 0
+   "empirical": 8
   },
   "by_kind": {
    "execution_mismatch": 0,
    "heuristic_miss": 0,
    "probe_refutation": 0,
    "proof_failure": 0,
-   "render_mismatch": 0,
-   "replay_mismatch": 0,
+   "render_mismatch": 4,
+   "replay_mismatch": 4,
    "search_timeout": 0
   },
-  "total": 0,
-  "unhandled": 0
+  "total": 8,
+  "unhandled": 2
  }
 }

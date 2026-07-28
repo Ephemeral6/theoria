@@ -147,6 +147,12 @@ substitute").
   were reconciled instead.
 * **Constraint 9 was checked by sampling**, over the states the run visited,
   not proved over all states. The report says `scope: sampled`.
+* **The cache-read column of `Theoria.md` 1.12 is not measurable from this
+  arm.** Every `claude -p` call is a fresh process, so cache reads are zero by
+  construction of the transport, not by any property of the framework
+  (`INC-TA-005`). What the run reports instead is input tokens re-sent per
+  turn, which is what cache reads are the price of and which does not depend on
+  the transport.
 * **`zero_space`'s laws are correlations, not conservation laws**, at this
   evidence volume, and the arm says so in `evidence_adequacy.verdict` rather
   than passing them on at face value.

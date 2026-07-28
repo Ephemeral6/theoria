@@ -4221,7 +4221,7 @@
    9,
    9,
    9,
-   9,
+   0,
    0,
    0
   ]
@@ -4231,53 +4231,69 @@
   64
  ],
  "landmarks": {
-  "cell_r0c0": [
-   8,
-   14
+  "button_cell": [
+   10,
+   40
   ],
-  "cell_r1c0": [
-   14,
-   14
+  "corridor_cell": [
+   52,
+   16
   ],
-  "exit_cell": [
-   50,
-   44
+  "gate_cell": [
+   40,
+   16
+  ],
+  "goal_cell": [
+   52,
+   46
+  ],
+  "hud_slot_a": [
+   1,
+   1
+  ],
+  "hud_slot_b": [
+   1,
+   5
+  ],
+  "start_cell": [
+   10,
+   16
   ]
  },
  "name": "level-1",
  "objects": [
   {
    "color": 9,
-   "name": "Player",
+   "name": "Marker",
    "pos": [
     1,
     1
    ],
    "present": true,
-   "type": "Player"
-  },
-  {
-   "color": 2,
-   "name": "Done",
-   "pos": [
-    0,
-    0
-   ],
-   "present": false,
-   "type": "Done"
+   "type": "Marker"
   },
   {
    "color": 1,
-   "name": "Token",
+   "name": "Unused",
    "pos": [
     1,
     5
    ],
    "present": true,
-   "type": "Token"
+   "type": "Unused"
+  },
+  {
+   "color": 2,
+   "name": "Spent",
+   "pos": [
+    0,
+    0
+   ],
+   "present": false,
+   "type": "Spent"
   }
  ],
  "unlocated": [
-  "Done"
+  "Spent"
  ]
 }
