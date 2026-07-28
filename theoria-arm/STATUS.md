@@ -20,10 +20,19 @@ The goal set for it was **not** to win. It was that the loop turns online and
 that the books balance: the seven surprises counted for real, theorize rounds
 counted for real, and a per-turn cost curve measured rather than predicted.
 
+**Three live runs, two of them aborted on defects in this arm.** The honest
+headline of the milestone: the inner loop had been proved four times offline
+and still carried three defects that only a live 64×64 world surfaced. All
+three are fixed, all three are recorded with the evidence that found them, and
+the cost of finding them — 11 actions and $2.05 — is counted in this track's
+totals rather than written off. `GAPS.md` is the contract read back line by
+line, `INCIDENTS.md` INC-TA-004 is the account of the aborts, and the aborted
+runs are archived intact rather than deleted.
+
 ## The suite
 
 ```bash
-cd theoria-arm && python -m pytest          # 44 passed
+cd theoria-arm && python -m pytest          # 46 passed
 ```
 
 No key, no network, no model call, no quota. Every property the live run

@@ -116,6 +116,18 @@ one space. Order is free. `#` starts a comment on its own line.
     theorem exit_needs_key "prose, in the manual's own words"
       [depends: push_up, unlock  probe: pending]
 
+  THE TWO ARE NOT INTERCHANGEABLE AND THIS IS THE EASIEST MISTAKE TO MAKE:
+
+    `invariant <name> <expr> <op> <value> [status: ...]`
+        The body MUST contain one of  =  !=  <  >  <=  >=  . It is an
+        equation, not a sentence. `invariant foo "in words ..."` is a parse
+        error: "No comparison op in invariant".
+
+    `theorem <name> "<prose>" [depends: ... probe: pending|passed]`
+        The body MUST be a quoted sentence. This is where a belief you cannot
+        write as an equation goes -- and most of what you want to say after
+        six transitions belongs here, not in `invariant`.
+
   Invariant bodies are stored as RAW TEXT and are not checked by any backend
   (the sole exception is the `pagoda(w)` form, which needs a LINE world and an
   LP certificate and does not apply here). Declaring one is a claim you are

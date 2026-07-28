@@ -221,6 +221,28 @@ def test_the_law_cell_cap_narrows_loudly_or_not_at_all():
 
 
 # ----------------------------------------------------------------- the books
+def test_prose_in_an_invariant_is_a_parse_error_and_the_card_says_so():
+    """The desk conflated `invariant` (an equation) with `theorem` (a
+    sentence) on the first live run and paid a repair round for it. The card
+    now states the rule; this pins both halves."""
+    from theory_compiler.parser.theory_parser import ParseError, parse_theory  # noqa: PLC0415
+    from inner.grammar_card import CARD                # noqa: PLC0415
+
+    bad = WORKED_EXAMPLE.replace(
+        "  invariant cart_unique count(Cart) = 1 [status: observed]",
+        '  invariant cart_unique "there is only ever one cart" [status: observed]')
+    with pytest.raises(ParseError):
+        parse_theory(bad)
+
+    good = WORKED_EXAMPLE.replace(
+        "  invariant cart_unique count(Cart) = 1 [status: observed]",
+        '  theorem cart_unique "there is only ever one cart" [probe: pending]')
+    parse_theory(good)                                 # a sentence is fine here
+
+    assert "No comparison op in invariant" in CARD
+    assert "NOT INTERCHANGEABLE" in CARD
+
+
 def test_the_grammar_card_example_actually_compiles(tmp_path):
     """The card is handed to the desk as a constraint statement. If it stops
     being true the desk is being lied to."""

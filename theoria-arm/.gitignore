@@ -9,3 +9,5 @@ runs_live.log
 .live_slug
 __pycache__/
 *.pyc
+
+.pytest_cache/
