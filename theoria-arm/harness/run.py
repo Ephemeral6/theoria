@@ -183,6 +183,21 @@ def main(argv=None) -> int:
     ap.add_argument("--model", default="claude-opus-5")
     ap.add_argument("--cost-ceiling", type=float, default=20.0)
     ap.add_argument("--wall-clock", type=float, default=3 * 3600)
+    ap.add_argument("--carry-books", default=None, metavar="BOOKS_DIR",
+                    help="seed the two books from a finished run's `books/` "
+                         "directory instead of starting from nothing. Only "
+                         "theory.dsl and playbook.dsl travel; problem.json is "
+                         "the level instance and is recomputed from THIS "
+                         "game's frames.")
+    ap.add_argument("--carry-source-game", default=None,
+                    help="the game id the carried books were written for; "
+                         "recorded in CARRIED.json and transfer.json")
+    ap.add_argument("--tags", default=None,
+                    help="comma-separated scorecard tags")
+    ap.add_argument("--prompt-id", default="P-8",
+                    help="written into the scorecard's opaque block and into "
+                         "every manifest, so a run can be traced to the item "
+                         "that asked for it")
     args = ap.parse_args(argv)
 
     from inner.loop import TheoriaArm                 # noqa: PLC0415
@@ -197,7 +212,12 @@ def main(argv=None) -> int:
                           model=args.model,
                           cost_ceiling_usd=args.cost_ceiling,
                           wall_clock_s=args.wall_clock,
-                          offline=args.mock and not args.desk)
+                          offline=args.mock and not args.desk,
+                          carry_books=args.carry_books,
+                          carry_source_game=args.carry_source_game,
+                          tags=([t.strip() for t in args.tags.split(",")]
+                                if args.tags else None),
+                          prompt_id=args.prompt_id)
 
     if args.mock:
         from proxy.mock.arc_mock import DEFAULT_KEY, MockArc   # noqa: PLC0415

@@ -1,0 +1,47 @@
+{
+ "basis": {
+  "available": true,
+  "calls": 5,
+  "note": "cost is dominated by output tokens: input is cache-creation only and two orders of magnitude smaller",
+  "output_tokens_per_call_mean": 40538.8,
+  "seconds_per_call_max": 608.2,
+  "seconds_per_call_mean": 516.2,
+  "source_run": "20260728T015354Z-g50t-first-contact",
+  "usd_per_call_max": 1.489011,
+  "usd_per_call_mean": 1.263532,
+  "usd_total": 6.317658
+ },
+ "campaign": "theoria-arm",
+ "carried_books_from": "20260728T015354Z-g50t-first-contact",
+ "game_id": "sk48-d8078629",
+ "projection": {
+  "actions_reachable_best_case": 60,
+  "actions_reachable_worst_case": 28,
+  "available": true,
+  "binding_constraint": "cost_ceiling",
+  "desk_calls_the_ceiling_buys": 14,
+  "desk_calls_the_ceiling_buys_at_worst_observed_price": 12,
+  "desk_calls_the_wall_clock_allows": 20,
+  "inputs": {
+   "action_cap": 120,
+   "frames_per_theorize": 4,
+   "legal_actions_opening_sweep": 4,
+   "max_theorize_per_turn": 2,
+   "usd_ceiling": 18.0,
+   "wall_clock_s": 10800
+  },
+  "projected_usd_if_action_cap_were_reached": 36.64,
+  "reading": "the action budget is NOT the binding constraint: reaching 120 actions would take about $37 of desk time, so the run will stop on cost_ceiling at roughly 28-60 actions. That gap is the measurement, not a shortfall -- E3 asks for the bill shape, and this is its predicted shape stated before the money is spent."
+ },
+ "reservation": {
+  "held": false,
+  "reason": "absent"
+ },
+ "spend_gate": {
+  "available": false,
+  "campaign": "theoria-arm",
+  "detail": "proxy/spend_gate.py does not exist on this commit. S3-spend-gate is the item that creates it and it has not landed: branch agent/s3-spend-gate carries no file under proxy/ matching *spend*. Until it does, this run budgets against its own arithmetic only and CANNOT see what a concurrent session has spent against the same key and the same bill -- which is precisely the exposure S3 was raised to close (INC-BA-003).",
+  "path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e3-engines-online\\proxy\\spend_gate.py",
+  "status": "absent"
+ }
+}

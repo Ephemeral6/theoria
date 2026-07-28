@@ -110,13 +110,22 @@ class ModelDesk:
                  # (`inner/loop.py` records the failure and goes back for
                  # evidence), but a timeout still throws away a paid call.
                  timeout: int = 1800,
-                 transcript_dir: Optional[str] = None):
+                 transcript_dir: Optional[str] = None,
+                 context: Optional[Any] = None):
         self.run = run                                # proxy.ledger.RunLedger
         self.model = model
         self.pricing_ref = pricing_ref
         self.cost_ceiling_usd = cost_ceiling_usd
         self.timeout = timeout
         self.transcript_dir = transcript_dir
+        #: An optional zero-argument callable returning whatever the caller
+        #: wants stamped on each log entry. The bill's *shape* -- what the nth
+        #: dollar bought -- needs the action count standing when the call was
+        #: made, and that number lives in the loop, not here. Asking for it at
+        #: call time is the only way to get it right: reconstructing it
+        #: afterwards from timestamps guesses, and a guessed x-axis is not a
+        #: measurement.
+        self.context = context
 
         self.calls = 0
         self.cli_cost_usd = 0.0
@@ -195,6 +204,11 @@ class ModelDesk:
                  "cli_cost_usd": cli_cost, "usage": usage,
                  "step_idx": step_idx, "chars_in": len(prompt),
                  "chars_out": len(text)}
+        if self.context is not None:
+            try:
+                entry.update(self.context() or {})
+            except Exception as exc:                   # noqa: BLE001
+                entry["context_error"] = "%s: %s" % (type(exc).__name__, exc)
         self.log.append(entry)
         self._write_transcript(entry, prompt, text, stderr)
 
