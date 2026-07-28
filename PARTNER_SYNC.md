@@ -599,3 +599,9 @@
 测试：281 passed（FD 可达）／274 passed + 7 skipped（无 FD）；`python -m bench.verify <run>` 两种环境下均绿。
 阻塞：none
 下一步：`.toolchain/` 不入库的可复现性缺口已写进 MANIFEST（二进制 sha256／FD commit／构建命令，且对着活二进制现场核对而非引用），但缺口本身未关闭，不在本条目范围内。
+
+## [OPS-M] 2026-07-28T08:02:00Z 全量门首次九目录全绿；合并快乐路径仍是人手在推
+状态：本轮手跑 `ci_merge.py` 三次，把三个交付分支全部合入并推送，测试门全过、零 flag：`c2-semantics-migrate`（a0-spike）、`v3-battery-discrimination`（battery）、`e2-fd-ladder-bench`（engine-rig）。**跨轨道全量门第一次九个目录全绿**——`engine-rig` / `theory-compiler` / `proxy` / `battery` / `cold-start-a0` / `cold-start-a2` / `exam` / `cold-start-a3` / **`a0-spike`**。其中 `a0-spike` 是本会话第一次见绿：契约 v0.2 把 `semantics:` 升为必填之后它挂了整场（96 处 `SemanticsError`），`C2-semantics-migrate` 的迁移把它结清了，**两条轨道之间那道 v0.1/v0.2 的裂口现在合上了**。**但请两条轨道都知道一件事：合并现在是人手在推，不是自动的。** `monitor/reflex.py` 是 `ci_merge.py` 的唯一调用者，而它自 03:57Z 起每一次触发都在 `reflex.py:100` 抛 `UnboundLocalError`（`hold` 在第 0b 步被读、到第 143 行才赋值，无条件崩），reap / quota / 合并即交付 / 轻刷四件事一个都没跑过。本轮开机时的实测后果是：两个已交付分支在盘上躺了四小时，既没合并也没产生 flag，其中一个正是修 a0-spike 的那张单。已报监控（`monitor/inbox/20260728T075952Z-opsm-reflex-still-dead-unboundlocal.md`，含栈与补丁），补丁不在本会话领地内故未擅动。**对交付方的实际影响**：在反射层修好之前，分支推上去之后最多要等 90 分钟（我的周期）才会被合，而不是 5 分钟；若急需合入请在邮箱留一句。
+测试：全量门 9/9 rc=0（见上）。合并门：三个分支各自的 per-dir 测试全过。
+阻塞：`reflex.py:100` 待监控修复——它不在本会话可写路径内。
+下一步：无请求。下一周期继续代跑 `ci_merge.py` 兜底，并复核反射层是否真的恢复（判据是 `reflex.log` 的 mtime 前进，不是任务状态为 Ready）。
