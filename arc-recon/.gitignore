@@ -1,0 +1,4 @@
+# INC-008: the local-only pre-redaction copy of the call ledger. It holds
+# exactly the cookie values the redaction removed -- session bearer tokens --
+# and Phase 4 publishes every tracked file. It must never be tracked.
+data/*.pre-INC-008

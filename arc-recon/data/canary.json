@@ -1,0 +1,221 @@
+{
+  "budget": {
+    "actions_per_game": 6,
+    "invocation_cap": 30,
+    "total_actions_for_the_development_pile": 16
+  },
+  "confirmations": [
+    {
+      "actions_executed": 16,
+      "http_calls": 147,
+      "t": "2026-07-28T00:35:59Z",
+      "verdicts": {
+        "ar25-0c556536": "PASS",
+        "g50t-5849a774": "PASS",
+        "sk48-d8078629": "PASS",
+        "tn36-ef4dde99": "PASS"
+      }
+    }
+  ],
+  "created": "2026-07-28T00:28:16Z",
+  "games": {
+    "ar25-0c556536": {
+      "actions": 5,
+      "expected": [
+        {
+          "action": "RESET",
+          "hash": "5e5512627a123ab1",
+          "index": 0,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION1",
+          "hash": "d56a6266d1805d45",
+          "index": 1,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION2",
+          "hash": "0c4bc7da9f06191d",
+          "index": 2,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION3",
+          "hash": "f6c45396f553fefd",
+          "index": 3,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION4",
+          "hash": "34004670a1a3e3f5",
+          "index": 4,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION5",
+          "hash": "8a098614b7dd570c",
+          "index": 5,
+          "levels_completed": 0,
+          "n_frames": 1
+        }
+      ],
+      "sequence": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "source": "precheck.json run_a/run_b, both replays agreeing (verdict PASS)"
+    },
+    "g50t-5849a774": {
+      "actions": 2,
+      "expected": [
+        {
+          "action": "RESET",
+          "hash": "801726dc499f3f52",
+          "index": 0,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION1",
+          "hash": "801726dc499f3f52",
+          "index": 1,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION2",
+          "hash": "e665977d6ad439ff",
+          "index": 2,
+          "levels_completed": 0,
+          "n_frames": 7
+        }
+      ],
+      "sequence": [
+        1,
+        2
+      ],
+      "source": "precheck.json run_a/run_b, both replays agreeing (verdict PASS)"
+    },
+    "sk48-d8078629": {
+      "actions": 5,
+      "expected": [
+        {
+          "action": "RESET",
+          "hash": "2af9d6ed05c69323",
+          "index": 0,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION1",
+          "hash": "ea1fb5279a3c939b",
+          "index": 1,
+          "levels_completed": 0,
+          "n_frames": 2
+        },
+        {
+          "action": "ACTION2",
+          "hash": "36dda2ff33b15d95",
+          "index": 2,
+          "levels_completed": 0,
+          "n_frames": 2
+        },
+        {
+          "action": "ACTION3",
+          "hash": "71a459368eabd05f",
+          "index": 3,
+          "levels_completed": 0,
+          "n_frames": 2
+        },
+        {
+          "action": "ACTION4",
+          "hash": "11d20ed09d45f904",
+          "index": 4,
+          "levels_completed": 0,
+          "n_frames": 2
+        },
+        {
+          "action": "ACTION1",
+          "hash": "ee828e7d744c1593",
+          "index": 5,
+          "levels_completed": 0,
+          "n_frames": 2
+        }
+      ],
+      "sequence": [
+        1,
+        2,
+        3,
+        4,
+        1
+      ],
+      "source": "precheck.json run_a/run_b, both replays agreeing (verdict PASS)"
+    },
+    "tn36-ef4dde99": {
+      "actions": 4,
+      "expected": [
+        {
+          "action": "RESET",
+          "hash": "1491b31f98da62d0",
+          "index": 0,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION1",
+          "hash": "1491b31f98da62d0",
+          "index": 1,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION2",
+          "hash": "1491b31f98da62d0",
+          "index": 2,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION3",
+          "hash": "1491b31f98da62d0",
+          "index": 3,
+          "levels_completed": 0,
+          "n_frames": 1
+        },
+        {
+          "action": "ACTION4",
+          "hash": "1491b31f98da62d0",
+          "index": 4,
+          "levels_completed": 0,
+          "n_frames": 1
+        }
+      ],
+      "sequence": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "source": "precheck.json run_a/run_b, both replays agreeing (verdict PASS)"
+    }
+  },
+  "hash_function": "sha256 of json.dumps(frame, sort_keys=True, separators=(',',':')), first 16 hex chars -- the same function the precheck used (precheck.hash_frames)",
+  "policy": {
+    "id_form": "full id only; short-id 200s are counterfeit (INC-005)",
+    "on_drift": "append incident to data/incidents.jsonl and write data/campaign_freeze.json",
+    "on_incomplete": "INCOMPLETE: no incident, no freeze -- an outage is not drift, and must not be able to mask it either",
+    "rebaseline": "`canary.py rebaseline --reason ...` only; a replay never rewrites an expectation",
+    "scorecard": "canary plays open their own scorecard tagged `canary`"
+  },
+  "purpose": "Theoria.md Phase 1 接入核查: detect behaviour drift under an unchanged game_id. Drift = incident + campaign freeze.",
+  "version": "v1"
+}

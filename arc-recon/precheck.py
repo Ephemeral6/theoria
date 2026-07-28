@@ -75,6 +75,9 @@ BUDGET_PER_GAME = 20
 # rides out ~3 minutes.
 RESET_ATTEMPTS = 40
 ACTION_ATTEMPTS = 40
+# After this many consecutive failures, drop the ALB routing cookies so the
+# next attempt is a fresh replica draw. See send_command's REDRAW note.
+REDRAW_EVERY = 5
 
 
 class SealedGameError(Exception):
@@ -149,6 +152,16 @@ def send_command(client: ArcClient, path: str, body: Dict[str, Any],
     Full id only. Short-id 200s are counterfeit (see module docstring), so the
     request body never varies across attempts: same body, same session, until
     a live replica answers or the envelope is exhausted.
+
+    REDRAW (INC-007a). This envelope was designed against a transport that was
+    re-routed on every attempt -- 40 identical retries worked precisely because
+    each was a fresh draw at a replica that might hold the session. The cookie
+    jar removes that: once pinned, all 40 attempts go to the same replica, so if
+    THAT replica is the broken one, retrying is only waiting. Every
+    `REDRAW_EVERY` failures the routing cookies are dropped (the session cookie
+    is kept) to force a new draw. In practice this almost never fires -- the
+    measured amplification after the fix is 1.00 attempt per command -- but the
+    envelope must not have become weaker than the thing it replaced.
     """
     status, parsed = -1, None
     for k in range(attempts):
@@ -163,6 +176,10 @@ def send_command(client: ArcClient, path: str, body: Dict[str, Any],
             except (TypeError, ValueError):
                 parsed = raw
             if _retryable(status, parsed) and k < attempts - 1:
+                if (k + 1) % REDRAW_EVERY == 0:
+                    redraw = getattr(client, "clear_routing_cookies", None)
+                    if callable(redraw):
+                        redraw()
                 time.sleep(min(delay_base * (k + 1), delay_cap))
                 continue
             return status, parsed, {"attempts": k + 1}
@@ -348,10 +365,36 @@ def run(game_id: str, client: Optional[ArcClient] = None,
     }
 
 
+# ASCII only: this is the smoke gate, and a GBK console turns a CJK print into a
+# UnicodeEncodeError on some machines (cold-start-a2 D-A2-007, same root cause).
+USAGE = """precheck.py -- determinism precheck: replay a fixed action sequence
+twice and compare frame hashes. SPENDS ACTIONS. Development pile only.
+
+    python precheck.py                       every development-pile game
+    python precheck.py <game_id>             one game
+    python precheck.py <game_id>:<length>    shorten the sequence
+    python precheck.py <game_id>:<length>:<already_spent>
+
+Targets are `game_id[:length[:actions_already_spent]]`; `already_spent` charges
+prior spend on that game against its %d-action cap. The report is merged per
+game into data/precheck.json, so a partial rerun does not clobber other games.
+
+Anything that is not a development-pile game is REFUSED (exit 2) -- a
+successful RESET returns the first frame, so a precheck pointed at a sealed
+game would burn it.
+
+Related: `canary.py` (cheap periodic drift check built from this report),
+`contamination.py` (the register and the sealed claim set).
+""" % BUDGET_PER_GAME
+
+
 def main(argv: List[str]) -> int:
     """Targets are `game_id[:length[:actions_already_spent]]`. The report is
     merged per game into any existing precheck.json, so partial reruns do not
     clobber other games' results."""
+    if argv and argv[0] in ("-h", "--help", "help"):
+        print(USAGE)
+        return 0
     tokens = argv or dev_pile()
     client = ArcClient()
     results: Dict[str, Any] = {}
