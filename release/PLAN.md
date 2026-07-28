@@ -98,9 +98,11 @@ only one of those two is recoverable.
 
 ## Status
 
-**Step 1 done** (`LICENCE_POSTURE.md`, `check_redlines.py` — both red lines
-measured clear over 1,938 tracked files). Steps 2-6 open: the enumerator, the
-checklist cross-walk, `reproduce.py`, `REPRODUCING.md`, the stranger subagent.
+**Steps 1-2 done.** `LICENCE_POSTURE.md` and `check_redlines.py` (both red lines
+measured clear); `enumerate.py` and `MANIFEST.jsonl` (1,940 rows, byte-identical
+across two runs, red lines gating generation). Steps 3-6 open: the checklist
+cross-walk against `Theoria.md`, `reproduce.py`, `REPRODUCING.md`, the stranger
+subagent.
 
 Previously: **plan only.** No enumerator, no manifest, no reproduce script yet. The next
 session starts at step 1 — and should read `browser-ops/TERMS.md` §2 and
