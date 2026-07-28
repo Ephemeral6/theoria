@@ -1,0 +1,90 @@
+{
+  "absorbs": [
+    "E12-adopt-the-unsolvable-canon"
+  ],
+  "api_calls": 0,
+  "base_commit": "b0d3d3d09a6f1283310dadcac887e112ee8feca8",
+  "branch": "agent/c11-tool-failure-as-truth",
+  "files": [
+    {
+      "path": "engine-rig/tools/p13_fd_dividend.py",
+      "sha256": "fce3ff2cc14106e656c07ea7a0c7e2b5f89b4f00438a870218e94b20de99a195"
+    },
+    {
+      "path": "engine-rig/tools/check_solver_status.py",
+      "sha256": "d218ad7a5d47e5bd0e1ae1c4aab3e21cd28c2dfa6f8819b4def5f2f0ebba1748"
+    },
+    {
+      "path": "engine-rig/tests/test_tool_failure_is_not_truth.py",
+      "sha256": "4488620c13cda0e9745c0c92701c58c41a85371d200a3b5fcb7c4bb7b176ec49"
+    },
+    {
+      "path": "engine-rig/engines/lp_potential/potential.py",
+      "sha256": "9390c0dfaa3a2cb23b1debc61a33ba782ac097531db35740feb7f8a9cec491d1"
+    },
+    {
+      "path": "engine-rig/engines/lp_potential/__init__.py",
+      "sha256": "5f2b5e3175456de6b12df7301afe13af352281368a90e357f60616a0848ae5ea"
+    },
+    {
+      "path": "engine-rig/engines/zero_space/zerospace.py",
+      "sha256": "d8f61b34c094ce97ca1f015a17d1662292af022f74e338e73e9d0a7e6c1478f9"
+    },
+    {
+      "path": "engine-rig/engines/mdl_segmenter/segmenter.py",
+      "sha256": "8de890e35c08c71760e3e4864404fdc295238b4f3c3b4cf53ca6952ad9d23e26"
+    },
+    {
+      "path": "engine-rig/engines/probe_frontier/reach.py",
+      "sha256": "14fa92ad10833674fc85e84b1efa8c78be7d84fda7f6586afd5b2188fa8e5bf1"
+    },
+    {
+      "path": "engine-rig/engines/fd_adapter/search.py",
+      "sha256": "4051b3ca8133aad1c2dfa200e5b3a2ab469a10b9c41202d33be97e4b25bb0376"
+    },
+    {
+      "path": "engine-rig/engines/fd_adapter/backends.py",
+      "sha256": "7702b16adf4a12ce0caa0598d0aa55a896226698f87bc047606b1346034ed396"
+    },
+    {
+      "path": "engine-rig/recheck/verify.py",
+      "sha256": "624a7948778daf498eb66a0ef39f41273b48c5823f39c8db6dd67cd23bb00608"
+    },
+    {
+      "path": "engine-rig/bench/fdrun.py",
+      "sha256": "7a37c8bd2e1a35797ad9b52b7ad7caa049551d716c76ef4dff328f524ff268f9"
+    },
+    {
+      "path": "engine-rig/bench/toolchain.py",
+      "sha256": "3507404c70b21049148257f22a3b249302ff9b5b3aaef107d42f40542da2e6e2"
+    },
+    {
+      "path": "engine-rig/bench/__main__.py",
+      "sha256": "72cc2db90d6f8a06f4ae32ff7286ab2013f16c13e2341eddddd64a1e8afb54b4"
+    },
+    {
+      "path": "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/CORRECTIONS.md",
+      "sha256": "6c6cfe640562859a880a4ed33dcb1e3c734d0f9acc7fd145156aa5161c273022"
+    },
+    {
+      "path": "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/CALIBRATION.md",
+      "sha256": "dad2b84b09cbb33edf11750adbbd9ad6d13c22ac199bc123bac714fe3787a20e"
+    },
+    {
+      "path": "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/RECONCILIATION.md",
+      "sha256": "fad5f32043d645b3a09948b13a2cfeb2d77db57acf369b4126d9855ee8fcf1ea"
+    },
+    {
+      "path": "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/MUTATION.md",
+      "sha256": "90d7c18ed1a5aa8d0c57844d0fcbcfc9cbb1e63557967d8a04a792169270c27d"
+    }
+  ],
+  "network": "none",
+  "prompt_id": "C11-tool-failure-as-truth",
+  "sealed_pile_contact": "none",
+  "spend_usd": 0.0,
+  "standing_check": "python -m tools.check_solver_status  ->  0 ERROR, 0 NOTE on engine-rig",
+  "territory": "engine-rig",
+  "tests": "engine-rig: python -m pytest -q -- all pass (9 skipped: no Fast Downward build on this machine, .toolchain/ is gitignored by design)",
+  "utc": "2026-07-29T08:00:00Z"
+}
