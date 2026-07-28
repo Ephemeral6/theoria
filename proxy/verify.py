@@ -2,16 +2,25 @@
 
     cd proxy && python verify.py
 
-Three rungs, and the territory is finished only if all three are green:
+Four rungs, and the territory is finished only if all four are green:
 
   1. the suite passes;
-  2. the real pipeline runs once, offline -- one whole game through both
+  2. `verify_spend.sh` passes -- proxy's previous gate, kept (see below);
+  3. the real pipeline runs once, offline -- one whole game through both
      proxies against the mocks: no key, no network, no cost;
-  3. the ledger that run produced carries the envelope `LEDGER_FORMAT.md` v1.0
+  4. the ledger that run produced carries the envelope `LEDGER_FORMAT.md` v1.0
      requires on every record, its `seq` is dense from 1, and it passes the
      format's own executable checker.
 
-Rung 3 is the one that is usually missing.  A green suite says the writer does
+Rung 2 exists because of how `gates.py` chooses: the canonical `verify.py`
+supersedes any other `verify*` script, so the moment this file was added,
+`verify_spend.sh` -- until then proxy's only gate, and the one that checks the
+spend gate has not grown an off switch -- stopped running at merge time.
+Dropping a live check while *adding* a gate would be a peculiar way to fail the
+task that added it, so it is invoked here instead. The cost is honest and
+worth naming: it re-runs the suite, so this gate is slow.
+
+Rung 4 is the one that is usually missing.  A green suite says the writer does
 what its author thought; it does not say a game was played, and it does not say
 the stream it emitted still matches the format document.  The two are different
 claims and only the second one is "this territory is done".
@@ -125,7 +134,7 @@ def fail(problems, message):
 
 
 def rung_tests(problems):
-    print("[1/3] suite")
+    print("[1/4] suite")
     # No `-q`: pytest.ini already sets it, and a second one suppresses the
     # summary line this prints.
     r = sh([sys.executable, "-m", "pytest"])
@@ -187,8 +196,40 @@ sys.stdout.write("RUN_ID " + record["run_id"] + "\n")
 '''
 
 
+def rung_spend_gate(problems):
+    """Run `verify_spend.sh`, which this file superseded as proxy's gate.
+
+    `gates.py` prefers the canonical `verify.py` over any other `verify*`
+    script, so the moment this file appeared, `verify_spend.sh` stopped running
+    at merge time.  It had been proxy's only gate, and it is the one that
+    checks the spend gate has not grown an off switch -- losing it silently
+    while *adding* a gate would be a funny way to fail the task that added it.
+
+    It is not fatal when bash is missing: on a host with no bash it never ran
+    either.  But absent is said out loud rather than skipped, because "could
+    not run" reading as "passed" is the whole subject.
+    """
+    print("[2/4] the spend gate (verify_spend.sh, superseded but not dropped)")
+    script = os.path.join(HERE, "verify_spend.sh")
+    if not os.path.isfile(script):
+        fail(problems, "verify_spend.sh is gone; proxy's spend-gate checks "
+                       "are no longer run by anything")
+        return
+    bash = shutil.which("bash")
+    if not bash:
+        print("   note  no bash on PATH, so verify_spend.sh did NOT run -- "
+              "this is not a pass, it is an unchecked area")
+        return
+    r = sh([bash, script])
+    if r.returncode != 0:
+        fail(problems, "verify_spend.sh exited %d\n%s"
+             % (r.returncode, (r.stdout + r.stderr)[-3000:]))
+        return
+    print("   ok    spend gate has no off switch, no stray egress")
+
+
 def rung_real_run(problems, scratch, ledger_path):
-    print("[2/3] one real run -- one game through both proxies, offline mocks, "
+    print("[3/4] one real run -- one game through both proxies, offline mocks, "
           "no key, no cost")
     r = sh([sys.executable, "-", REPO, scratch], cwd=REPO, stdin=PLAY)
     if r.returncode != 0:
@@ -216,7 +257,7 @@ def _load_ledger(problems, ledger_path):
 
 
 def rung_artifact_fields(problems, scratch, ledger_path):
-    print("[3/3] artefact self-check")
+    print("[4/4] artefact self-check")
     records = _load_ledger(problems, ledger_path)
 
     if len(records) < MIN_RECORDS:
@@ -344,12 +385,21 @@ def _var_snapshot():
 
 
 def main():
+    # The other half of the encoding problem.  Children are told to emit UTF-8
+    # and decoded as UTF-8; this end has to be able to *print* what came back.
+    # `validate_ledger` quotes LEDGER_FORMAT.md section marks, the host console
+    # is cp936, and a gate that dies with UnicodeEncodeError while printing its
+    # own verdict is a gate whose verdict nobody read.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(errors="replace")
+
     problems = []
     before = _var_snapshot()
     scratch = tempfile.mkdtemp(prefix="proxy-verify-")
     try:
         ledger_path = os.path.join(scratch, "ledger.jsonl")
         rung_tests(problems)
+        rung_spend_gate(problems)
         if rung_real_run(problems, scratch, ledger_path):
             rung_artifact_fields(problems, scratch, ledger_path)
         leak = var_leak(before)
