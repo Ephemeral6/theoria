@@ -1,0 +1,31 @@
+FIGURE 2 - coverage vs accuracy, A0 against A0-prime
+sources: cold-start-a0/artifacts/score_vs_truth.json
+         cold-start-a0/prime/artifacts/prime_report.json
+------------------------------------------------------------------------------
+
+                coverage of reachable (s,a) pairs           accuracy vs truth
+
+  A0             #######################################.  233/236 = 98.7%
+                 #######################################.  233/236 = 98.7288%
+                 mechanism: Button, latch - pressable once
+                 executable probes: 0   revisions: 0   replay: GREEN
+
+  A0-prime run A ###################.....................  107/228 = 46.9%
+                 ########################################  228/228 = 100.0000%
+                 mechanism: Switch, toggle - re-witnessable
+                 executable probes: 13   revisions: 0   replay: GREEN
+
+------------------------------------------------------------------------------
+SEEDED-ERROR EXPERIMENT (A0-prime run B) - controlled, not a discovery
+
+  seed        : push_onto_crate — the Cart may walk onto colour 4; zero evidence, and the trajectory never pushes into the Crate, so replay cannot see it
+  replay      : GREEN - blind, as predicted
+  Lean caught : ArenaEscape: step sends the mover to (2, 4), which the board does not list as arena (from (2, 3) on right)
+  probe caught: push_onto_crate (1 probe run)
+  repair      : delete rule push_onto_crate  ->  1 revision
+  accuracy    : 0.9912 -> 1.0000
+
+------------------------------------------------------------------------------
+Reversibility beats coverage. A0 saw nearly every reachable (state, action) pair and shipped a manual wrong in three places; A0-prime saw under half and shipped one with no errors. The variable is not how much was seen but whether what was seen could be seen again.
+
+CAVEAT: Two runs, one variable changed, both worlds self-built and adjudicated by the same instance. A controlled comparison at n=1 per arm, not a statistical result.

@@ -1,0 +1,64 @@
+{
+  "arms": [
+    {
+      "accuracy_vs_truth": 0.987288,
+      "agree": 233,
+      "arm": "A0",
+      "coverage": 0.987288,
+      "disagree": 3,
+      "executable_probes": 0,
+      "explorer": "exhaustive",
+      "held_out_accuracy": 0.0,
+      "held_out_pairs": 3,
+      "mechanism": "Button, latch - pressable once",
+      "pairs_covered": 233,
+      "pairs_total": 236,
+      "replay_green": true,
+      "revisions": 0,
+      "source": "cold-start-a0/artifacts/score_vs_truth.json"
+    },
+    {
+      "accuracy_vs_truth": 1.0,
+      "agree": 228,
+      "arm": "A0-prime run A",
+      "coverage": 0.469298,
+      "disagree": 0,
+      "executable_probes": 13,
+      "explorer": "truncated",
+      "held_out_accuracy": null,
+      "held_out_pairs": null,
+      "mechanism": "Switch, toggle - re-witnessable",
+      "pairs_covered": 107,
+      "pairs_total": 228,
+      "replay_green": true,
+      "revisions": 0,
+      "source": "cold-start-a0/prime/artifacts/prime_report.json"
+    }
+  ],
+  "caveat": "Two runs, one variable changed, both worlds self-built and adjudicated by the same instance. A controlled comparison at n=1 per arm, not a statistical result.",
+  "claim": "Reversibility beats coverage. A0 saw nearly every reachable (state, action) pair and shipped a manual wrong in three places; A0-prime saw under half and shipped one with no errors. The variable is not how much was seen but whether what was seen could be seen again.",
+  "derivations": {
+    "A0-prime.pairs_covered": "trace['a0p-base'].covered_pairs, the truncated explorer's own count.",
+    "A0.covered_equals_agreed": "A0's covered count and its agreement count are both 233. That is not a coincidence: the three uncovered pairs are exactly the three the manual gets wrong (cold-start-a0/THEORIZE_LOG.md R-05).",
+    "A0.pairs_covered": "pairs - held_out.held_out_pairs = 236 - 3 = 233. The held-out set is defined as the pairs the trajectory could never contain, so its complement is the covered set. Agrees with the 233/236 coverage figure in cold-start-a0/prime/A0P_REPORT.md §1."
+  },
+  "seeded_error_experiment": {
+    "accuracy_after": 1.0,
+    "accuracy_before": 0.991228,
+    "arm": "A0-prime run B (seeded error, controlled)",
+    "caught_by_coverage_probe": [
+      "push_onto_crate"
+    ],
+    "caught_by_lean": "ArenaEscape: step sends the mover to (2, 4), which the board does not list as arena (from (2, 3) on right)",
+    "probes_run": 1,
+    "repair": "delete rule push_onto_crate",
+    "replay_on_seeded_manual": "GREEN - blind, as predicted",
+    "revisions": 1,
+    "seed": "push_onto_crate — the Cart may walk onto colour 4; zero evidence, and the trajectory never pushes into the Crate, so replay cannot see it",
+    "source": "cold-start-a0/prime/artifacts/prime_report.json"
+  },
+  "sources": [
+    "cold-start-a0/artifacts/score_vs_truth.json",
+    "cold-start-a0/prime/artifacts/prime_report.json"
+  ]
+}
