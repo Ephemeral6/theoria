@@ -459,3 +459,79 @@ Next: **step 5, `tests/`.** The three source claims in `_bootstrap.py:24`,
 material for all three is now on disk, and `pin.hash_tree` has been running
 either side of every command in this run, so `test_readonly.py` is writing down
 a check that has already been passing rather than inventing one.
+
+* `2026-07-28T17:15Z` — **step 5 done: `tests/`. 45 passed in 3.8s.**
+
+  Five files. Two of them exist because P-18's source names them, and `STATUS.md`
+  recorded both sentences as false-at-the-time while deliberately leaving the
+  source uncorrected. They are true now.
+
+  | file | tests | what it settles |
+  |---|---|---|
+  | `test_readonly.py` | 5 | `_bootstrap.py:24` — the upstream trees, hashed around a *full* run |
+  | `test_incision.py` | 13 | `certify_abl.py:33` and `downgrade.py:22` — the cut, at every place the source claims it is asserted |
+  | `test_loop.py` | 11 | the schedule is the bus predicate, and P-6 |
+  | `test_exhibits.py` | 10 | E1, E2, and the falsifier E3 |
+  | `test_build_and_determinism.py` | 6 | generated files stay generated; two runs stay one run |
+
+  ### A blind spot in the read-only pin, found while writing the test for it
+
+  `pin.SKIP_DIRS` excludes `artifacts/` and `runs/`, and P-18's reason is sound
+  as far as it goes — they are the other tracks' own outputs and hashing them
+  would make the pin noisy. But it is a blind spot **exactly where this arm's
+  newest code reaches**: `e2_a2.charity_control` and `e3_charitable` call into
+  `cold-start-a2/a2pipeline`, whose `main()` functions write into
+  `cold-start-a2/artifacts/`. Only `locate()` is called and only `locate()`
+  reads — but *only reads* is a claim that is cheap to check and expensive to be
+  wrong about, so `test_readonly.py` now hashes those two directories itself, by
+  name, around the full run. Clean.
+
+  The pin is also shown **firing**, against a doctored `before` rather than a
+  real edit: proving the alarm works by writing into another track's tree would
+  be committing the offence to test the alarm.
+
+  ### `nothing calls it` is parsed, not grepped
+
+  `certify_abl.py:33` claims nothing calls the expensive layer. The test walks
+  every `ast.Call` in the arm's own sources rather than grepping for
+  `expensive(` — a grep misses `getattr(certify_abl, "expensive")()` and trips
+  over the word in a docstring. Result: no caller, and `expensive()` still
+  raises `ObligationCut` when called directly.
+
+  ### Both of `downgrade.py:22`'s halves, separated
+
+  The in-function assertion checks the transform **as it runs**, on whatever
+  text it is handed. The test checks **the files that shipped** — a different
+  claim, and the one a reader of `theory/` actually depends on. Both are here,
+  and the in-function one is watched refusing on a manual whose `laws:` section
+  is last, which is where a section-boundary bug would run past the end.
+
+  ### The tests that assert a negative result
+
+  `test_exhibits.py` asserts E3 is **not** constructible, with its five
+  measurements. That reads oddly until you consider the alternative: a test that
+  skipped E3, or asserted `holds is True` and got deleted when it failed, would
+  leave the repository with no record that a designed exhibit had expired. If
+  someone later restores the mechanism, the test fails — and the assertion
+  message says to rebuild E3 and rewrite the test rather than relax it.
+
+  Same shape in `test_loop.py`: the comparator is fed a doctored report to prove
+  it can say `different`, and the driver's source is checked for an
+  `"owed": True` branch — because a driver with no such branch would produce an
+  empty bus in every run and prove nothing about the incision.
+
+  ### One defect the suite found in itself
+
+  `test_the_comparison_would_report_a_difference_if_there_were_one` called
+  `run_all` with a **three-world subset**, which overwrote the checked-in
+  five-world `artifacts/run_all.json`. A test suite that quietly downgrades the
+  deliverable it is testing is worse than no suite. `run_all` now takes
+  `write=False` for subset callers, with the reason in its docstring, and after
+  a full `pytest` run the only modified artefacts are the three ledgers —
+  differing in `ts`, which is the documented exemption.
+
+Next: **step 6, `verify.sh`** — the arm's own completion gate, and the place
+`BUILD_PLAN`'s acceptance table has to be honoured: A4a's gate may assert 4 of
+the 7 pre-registered predictions plus all four shadows plus the read-only pin,
+and must *record* P-1/P-2/P-4 as numbers without comparing them, because the
+comparison needs a second arm and that is A4b.

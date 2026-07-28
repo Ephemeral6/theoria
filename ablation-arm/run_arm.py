@@ -608,8 +608,16 @@ def _exhibit_comparison(reports: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def run_all(keys: Optional[List[str]] = None) -> Dict[str, Any]:
-    """Every world, with the upstream trees hashed on both sides of the run."""
+def run_all(keys: Optional[List[str]] = None, *,
+            write: bool = True) -> Dict[str, Any]:
+    """Every world, with the upstream trees hashed on both sides of the run.
+
+    `write=False` is for callers running a **subset**. `artifacts/run_all.json`
+    is a deliverable, and a partial run that overwrote it would quietly
+    replace a five-world record with a three-world one -- which is exactly
+    the kind of downgrade nobody notices until a later step reads it and finds
+    a world missing. Tests take this path.
+    """
     before = pin.hash_tree()
     reports = {}
     for key in (keys or [w.key for w in WORLDS]):
@@ -637,7 +645,8 @@ def run_all(keys: Optional[List[str]] = None) -> Dict[str, Any]:
         "surprise_kinds_available_to_this_arm": len(
             SurpriseBus(ablated=True).kinds_available()),
     }
-    _write(os.path.join(ARTIFACTS, "run_all.json"), payload)
+    if write:
+        _write(os.path.join(ARTIFACTS, "run_all.json"), payload)
     return payload
 
 
