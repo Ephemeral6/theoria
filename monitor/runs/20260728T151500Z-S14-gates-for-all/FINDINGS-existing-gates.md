@@ -88,6 +88,33 @@ S14 条目称「十个领地只有三个真有 verify（exam/worldgen/proxy）�
 `monitor/ci_merge.py`，本轮移进 `monitor/gates.py`（`NO_TESTS_COLLECTED`，
 结局名 `broken`，并有注入自检 `test_tests_that_collect_nothing_are_broken_not_green`）。
 
+## 7b. monitor 自己有 17 处同类解码点 —— 但**不能一把梭**
+
+`grep -n "text=True" monitor/*.py | grep -v encoding=` 在本轮修完 `ci_merge.py`
+与新写的 `gates.py` 之后，仍有 **17 处**用宿主 locale（cp936）解码子进程输出：
+
+* `dispatch.py` 7 处（50 / 100 / 197 / 307 / 309 / 318 / 337）
+* `scan.py` 6 处（80 / 516 / 577 / 727 / 1160 / 1789）
+* `quota.py` 3 处（141 / 148 / 226）
+* `reflex.py` 1 处（42）
+
+**但把它们统统改成 `encoding="utf-8"` 是错的，而且错得和原 bug 同源。**
+
+子进程分两类，编码相反：
+
+| 子进程 | 实际输出编码 | 该怎么解 |
+|---|---|---|
+| Python 脚本（`board.py list`、`scan.py`、各领地 pytest） | UTF-8 | `encoding="utf-8"` |
+| **Windows 原生工具**（`tasklist`，见 `dispatch.py:318`、`ci_merge.py` 的 `m0_alive`） | **控制台代码页（本机 GBK）** | locale，或干脆 `errors="replace"` 后只匹配 ASCII |
+
+`dispatch.py:318` 解析的正是 `tasklist` 输出——**工人存活判断**。把它强行按 UTF-8 解，
+就是今天那起「八个活人报成死」换一个方向再犯一次。
+
+所以本轮**只**钉死了两处确定是 Python 子进程的（`ci_merge.sh()`、`gates.sh()`），
+其余 17 处逐个定性后再改，列为 **S16 的第一件事**。
+写在这里是因为：一个只看见「`text=True` 没写 encoding」就全局替换的修法，
+会在最要命的那一处制造回归，而它同样不会报错。
+
 ## 8. 顺带记录（非本任务范围）
 
 `monitor/worker.cmd` / `monitor/_worker_run.cmd` 以
