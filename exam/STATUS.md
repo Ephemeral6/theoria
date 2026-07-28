@@ -20,8 +20,74 @@ and what it cannot do. The last section is the one to read first.
 | fresh-reader run, both tiers | done |
 | cheater-subagent run, all four sheets | done |
 | run archive, `runs/<id>/MANIFEST.json` | done |
+| marker self-test: 7 mutants, 8 injected faults, detection matrix (V4) | done |
+| sensitivity/specificity matrix, split by verdict class (V4) | done |
+| `verify.py`: one command for the whole territory (V4) | done |
 
-Tests: **157 passed, 1 skipped**. The skip is `test_the_old_theory_stand_in_matches_the_compiled_manual`, which unblocks itself when the A0 manual can be parsed again — see the cross-track note below.
+Tests: **287 passed** (253 inherited + 34 new). The line above this one said "157 passed, 1 skipped" until
+V4-exam-selftest; V2-exam-on-worldgen had added 96 tests without updating it, and
+the skip had already unblocked itself. Counted rather than copied forward.
+
+## V4-exam-selftest — the marker was only ever tested at its endpoints
+
+`calibration.py` pins `oracle == 1.0` and `null == 0.0`, exactly, on all four
+papers. Both follow from construction, and between them they say nothing about
+any submission that is neither ground truth nor silence — which is every real
+one. `exam/grading/selftest.py` attacks the middle, and found things.
+
+**A live defect in a shipped rubric, on the mutants' first run.** An answer the
+adaptation rubric could not parse was read as the substantive claim `never`, and
+on `v-a0-03` — the one variant undetectable on its base level — `never` is the
+truth. A submission containing nothing scored **1.600 / 144**, all of it on the
+two `v-a0-03.detect` items, and `v-a0-03.detect.match` paid **1.0 of 1.0**. The
+item exists to ask whether an examinee can tell "the change is invisible from
+here" from "I did not look"; the marker could not tell those apart either.
+Fixed, with no calibration number moving. D-EX-014.
+
+**The calibration bands were one-sided.** Every band in `EXPECTED` for the
+informative fakes is `Band(0.0, x)` — bounded above, open below — so a marker
+that *depresses* scores satisfies all of them. Injecting `truncates_partial`
+caught nothing at all on the first fault-matrix run. Closed with a seventh
+mutant rather than a fitted lower band. D-EX-013.
+
+**The confusion pair cannot do the job alone.** With the cheater on the matrix,
+three examinees report sensitivity 1.000: ground truth, the memoriser, and a
+reader who never saw the world. `oracle` and `cheater-v4` are identical in
+**every cell** of the class split and differ only in the score. D-EX-015.
+
+**A second digest** now covers `mark.py` and `calibration.py`, pinned by a test,
+which closes what used to be open weakness 3. D-EX-016.
+
+## V4 — the cheater pass against the fixed sheets
+
+Old weakness 11 said no adversarial reader had seen the sheets since the two
+leaks were fixed. Two have now, and both were scored against the key rather than
+believed.
+
+**Verdict sheet: 17 of 17 claims correct**, against a 9/17 majority baseline,
+having predicted 13.8 for itself. On the real rubric that is **17.0 / 34 =
+0.5000** — the cap is exactly one half because it submitted no certificate and
+no witness anywhere, which is the paper's defence working as designed. Most of
+its leverage was cheap arithmetic on the board, which is solving cheaply rather
+than cheating; three genuine sheet-structure tells are recorded in the run's
+`RUN_STATE.md` (a relabelling that is provably a no-op, byte-identical grids
+under weaker wrappers, and a unique unwrapped control). The `points` leak P-15
+fixed is confirmed dead.
+
+**Held-out sheet: one confirmed leak whose measured yield was negative.**
+`instructions` opened with "A0 is a sokoban variant" while `world.description`,
+on the same sheet, said the dynamics "are deliberately not stated here". A0's
+push slides the box **two** cells; vanilla sokoban slides it one. The cheater
+took the genre name, predicted one-cell pushes at confidence 0.97, and scored
+**0 of 6** — while scoring 9 of 9 on the edge-blocked items, which need no
+dynamics and are the null baseline. Removed anyway: this paper asks whether a
+theory learned `push2` from evidence rather than assuming push-one from a prior,
+so naming the genre is an undeclared second experiment.
+
+Its third claim — six items whose answers are printed as other items' inputs —
+**did not survive checking: 0 of 6**. A full 80×80 successor scan found one real
+instance it had not named. Two confident cheater reports, two different failure
+modes, both caught by the same rule: verify before believing.
 
 ## What the rehearsal actually measured
 
@@ -153,11 +219,13 @@ manual into a different world silently. The gap is that nothing migrated A0.
 2. **No cost instrument anywhere in the exam.** Account for search cost and the
    handover item becomes the measurement 1.11 describes; without it, it is an
    accuracy test of a prediction that is not about accuracy.
-3. **`EXPECTED` is not covered by the rubric digest.** The digest hashes
-   `grading/rubrics_*.py`; the calibration bands live in `calibration.py`, so a
-   quiet widening there would not surface as a mismatch. One band was already
-   widened once (D-EX-010, recorded). Extending the digest is the real fix and is
-   not done.
+3. ~~**`EXPECTED` is not covered by the rubric digest.**~~ **Closed by V4**
+   (D-EX-016). `selftest.protocol_digest()` hashes `mark.py`, `calibration.py`
+   and `selftest.py` together, and a test pins the value, so widening a band now
+   requires a deliberate edit a reviewer sees. It is a *second* digest rather
+   than an extension of the first: the rubric digest is the seal on every sheet,
+   and extending it would rewrite every stored artefact for a check that has no
+   reason to travel to an examinee.
 4. **`cart_region` in the verdict certificate checker is sound but incomplete** —
    it takes the undirected closure of a relation that is directed once an action
    is forbidden, so it over-approximates reachability. It can never certify a
@@ -196,6 +264,36 @@ manual into a different world silently. The gap is that nothing migrated A0.
    uniform, not by removing the field. Any future paper that weights items by
    anything correlated with the answer reintroduces it; the new metadata check
    is what stands between that and a shipped leak.
-11. **Two cheater agents, four sheets, one pass.** No adversarial reader has
-   seen the fixed sheets. The leaks that remain are the ones nobody has looked
-   for yet.
+11. ~~**Two cheater agents, four sheets, one pass.**~~ **Partly closed by V4.**
+   Two more cheaters have now sat the two sheets that changed — verdict and
+   held-out — and both results are above. `adaptation` and `handover` are
+   unchanged since P-15's pass, so they are as attacked as they ever were,
+   which is once each. The standing form of this weakness is that a cheater
+   pass is a sample, not a proof: what it did not find is not absent.
+
+12. **The held-out replay/heldout split is recoverable from the state alone.**
+   Measured at **79/80** by V4's cheater and confirmed: all 40 replay items put
+   the box on both-odd coordinates drawn from **7 distinct cells**, while the 40
+   held-out items use **29**. The two halves are not distributionally matched at
+   the level of state, so a memorising theory can tell which half it is standing
+   in without reading the tag. It leaks nothing about the *answers* — the
+   answer-class stratification is exact to the item, 4/5/4/5/16/6 in both halves
+   — but "held-out" here partly means "box on an even coordinate" rather than
+   "same situations, unseen transition", and the `gap_replay_minus_heldout`
+   headline inherits that. Fixing it means resampling the split, which changes
+   the paper substantively and needs its own pre-registration.
+
+13. **One held-out item's answer is printed on the sheet as another item's
+   input.** `a0h-074`'s `frame_after` is `a0h-042`'s `frame_before`, both in the
+   replay half. Found by a full 80×80 successor scan, not by the cheater, which
+   claimed six such pairs and had **none** of them right. Inside the replay
+   half consecutive trajectory states are expected to neighbour each other, so
+   this is a generation-time check that was never written rather than a
+   surprise. Same resampling run as weakness 12.
+
+14. **A cheater's confidence is not evidence, and now there are numbers.**
+   Across two passes: the verdict cheater under-predicted itself (13.8 forecast,
+   17 measured), and the held-out cheater was *most* confident (0.97) on the six
+   claims that were **all wrong**, because the leak it exploited handed it a
+   prior — vanilla sokoban — that is false of A0. Every cheater claim must be
+   scored against the key before it is believed or acted on.

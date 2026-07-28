@@ -168736,15 +168736,15 @@
   "n_items": 60,
   "paper_id": "p15-adaptation-a0",
   "question_type": "adaptation",
-  "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697",
-  "rubric_module_digest": "3cf6b2ad1b4dbbca94bc1ba2bc7088fb4ea9be72e23f8d1d5066ea04e7d94cda",
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+  "rubric_module_digest": "7320c75c1db0e1f162efd56aa93d8a2b3cef086aa520bbd814952c8790cf1e4e",
   "schema": "exam/v0.1",
   "total_points": 144.0,
   "world": {
     "answer_alphabets": "exam/grading/rubrics_adaptation.py",
     "base_manual": {
       "path": "a0-spike/theory/theory.dsl",
-      "sha256": "7884ffadaecd09b1da7ab1628db0665a0741b243085856eb3ae17e2350780f26"
+      "sha256": "12da1501355c50b3ad658648272996fed2e5530297e7803a2ef49e8b9960175b"
     },
     "base_world_id": "a0",
     "cut_version": "v1",
@@ -168754,6 +168754,7 @@
       "sk48-d8078629",
       "tn36-ef4dde99"
     ],
+    "generated_worlds_available": 20,
     "n_sealed": 21,
     "note": "Every variant is a deterministic rewrite of one rule of a self-built world. No game, no API, no network.",
     "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",

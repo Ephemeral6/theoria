@@ -132,7 +132,7 @@
       },
       "probe_hits": 0,
       "probes_declared": 363,
-      "sheet_bytes": 26901,
+      "sheet_bytes": 26908,
       "structural_hits": 0
     },
     {
@@ -146,7 +146,7 @@
       "paper_id": "p15-handover-a0",
       "probe_hits": 0,
       "probes_declared": 58,
-      "sheet_bytes": 13566,
+      "sheet_bytes": 13598,
       "structural_hits": 0
     },
     {
@@ -160,7 +160,7 @@
       "paper_id": "p15-adaptation-a0",
       "probe_hits": 0,
       "probes_declared": 1284,
-      "sheet_bytes": 382236,
+      "sheet_bytes": 382268,
       "structural_hits": 0
     },
     {
@@ -278,7 +278,7 @@
       },
       "probe_hits": 0,
       "probes_declared": 85,
-      "sheet_bytes": 20172,
+      "sheet_bytes": 20204,
       "structural_hits": 0
     }
   ]

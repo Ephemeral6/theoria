@@ -1,0 +1,453 @@
+{
+  "class_meaning": {
+    "large_unsolvable": "(ii) 2^60 to 2^120 configurations; only an invariant can answer",
+    "small_unsolvable": "(i) exhaustive search answers correctly here, possibly for a reason that does not transfer",
+    "solvable_hard": "(iii) the false-positive trap, each with a computed witness plan"
+  },
+  "class_sizes": {
+    "large_unsolvable": 4,
+    "small_unsolvable": 5,
+    "solvable_hard": 8
+  },
+  "examinees": {
+    "bluffer": {
+      "awarded": 9.0,
+      "fraction": 0.264706,
+      "is_fake": true,
+      "pooled": {
+        "abstained_on_negative": 0,
+        "abstained_on_positive": 0,
+        "fn": 0,
+        "fp": 8,
+        "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+        "positive_class": "unsolvable",
+        "sensitivity": 1.0,
+        "specificity": 0.0,
+        "tn": 0,
+        "tp": 9
+      },
+      "possible": 34.0,
+      "split": {
+        "by_class": {
+          "large_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": null,
+            "coverage_positive": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 4,
+            "n_negative": 0,
+            "n_positive": 4,
+            "sensitivity": 1.0,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 4
+          },
+          "small_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": null,
+            "coverage_positive": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 5,
+            "n_negative": 0,
+            "n_positive": 5,
+            "sensitivity": 1.0,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 5
+          },
+          "solvable_hard": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": 1.0,
+            "coverage_positive": null,
+            "fn": 0,
+            "fp": 8,
+            "n": 8,
+            "n_negative": 8,
+            "n_positive": 0,
+            "sensitivity": null,
+            "sensitivity_undefined_because": "this class contains no unsolvable items, so there is nothing to be sensitive to. The cell is empty, not zero.",
+            "specificity": 0.0,
+            "tn": 0,
+            "tp": 0
+          }
+        },
+        "note": "Sensitivity and specificity are reported side by side and never combined. An abstention counts toward neither rate and is carried in its own column.",
+        "overall": {
+          "abstained_on_negative": 0,
+          "abstained_on_positive": 0,
+          "coverage_negative": 1.0,
+          "coverage_positive": 1.0,
+          "fn": 0,
+          "fp": 8,
+          "n": 17,
+          "n_negative": 8,
+          "n_positive": 9,
+          "sensitivity": 1.0,
+          "specificity": 0.0,
+          "tn": 0,
+          "tp": 9
+        },
+        "positive_class": "unsolvable"
+      }
+    },
+    "cheater-v4": {
+      "awarded": 17.0,
+      "fraction": 0.5,
+      "is_fake": false,
+      "pooled": {
+        "abstained_on_negative": 0,
+        "abstained_on_positive": 0,
+        "fn": 0,
+        "fp": 0,
+        "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+        "positive_class": "unsolvable",
+        "sensitivity": 1.0,
+        "specificity": 1.0,
+        "tn": 8,
+        "tp": 9
+      },
+      "possible": 34.0,
+      "split": {
+        "by_class": {
+          "large_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": null,
+            "coverage_positive": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 4,
+            "n_negative": 0,
+            "n_positive": 4,
+            "sensitivity": 1.0,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 4
+          },
+          "small_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": null,
+            "coverage_positive": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 5,
+            "n_negative": 0,
+            "n_positive": 5,
+            "sensitivity": 1.0,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 5
+          },
+          "solvable_hard": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": 1.0,
+            "coverage_positive": null,
+            "fn": 0,
+            "fp": 0,
+            "n": 8,
+            "n_negative": 8,
+            "n_positive": 0,
+            "sensitivity": null,
+            "sensitivity_undefined_because": "this class contains no unsolvable items, so there is nothing to be sensitive to. The cell is empty, not zero.",
+            "specificity": 1.0,
+            "tn": 8,
+            "tp": 0
+          }
+        },
+        "note": "Sensitivity and specificity are reported side by side and never combined. An abstention counts toward neither rate and is carried in its own column.",
+        "overall": {
+          "abstained_on_negative": 0,
+          "abstained_on_positive": 0,
+          "coverage_negative": 1.0,
+          "coverage_positive": 1.0,
+          "fn": 0,
+          "fp": 0,
+          "n": 17,
+          "n_negative": 8,
+          "n_positive": 9,
+          "sensitivity": 1.0,
+          "specificity": 1.0,
+          "tn": 8,
+          "tp": 9
+        },
+        "positive_class": "unsolvable"
+      }
+    },
+    "memoriser": {
+      "awarded": 20.0,
+      "fraction": 0.588235,
+      "is_fake": true,
+      "pooled": {
+        "abstained_on_negative": 3,
+        "abstained_on_positive": 4,
+        "fn": 0,
+        "fp": 0,
+        "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+        "positive_class": "unsolvable",
+        "sensitivity": 1.0,
+        "specificity": 1.0,
+        "tn": 5,
+        "tp": 5
+      },
+      "possible": 34.0,
+      "split": {
+        "by_class": {
+          "large_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 4,
+            "coverage_negative": null,
+            "coverage_positive": 0.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 4,
+            "n_negative": 0,
+            "n_positive": 4,
+            "sensitivity": null,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 0
+          },
+          "small_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": null,
+            "coverage_positive": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 5,
+            "n_negative": 0,
+            "n_positive": 5,
+            "sensitivity": 1.0,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 5
+          },
+          "solvable_hard": {
+            "abstained_on_negative": 3,
+            "abstained_on_positive": 0,
+            "coverage_negative": 0.625,
+            "coverage_positive": null,
+            "fn": 0,
+            "fp": 0,
+            "n": 8,
+            "n_negative": 8,
+            "n_positive": 0,
+            "sensitivity": null,
+            "sensitivity_undefined_because": "this class contains no unsolvable items, so there is nothing to be sensitive to. The cell is empty, not zero.",
+            "specificity": 1.0,
+            "tn": 5,
+            "tp": 0
+          }
+        },
+        "note": "Sensitivity and specificity are reported side by side and never combined. An abstention counts toward neither rate and is carried in its own column.",
+        "overall": {
+          "abstained_on_negative": 3,
+          "abstained_on_positive": 4,
+          "coverage_negative": 0.625,
+          "coverage_positive": 0.555556,
+          "fn": 0,
+          "fp": 0,
+          "n": 17,
+          "n_negative": 8,
+          "n_positive": 9,
+          "sensitivity": 1.0,
+          "specificity": 1.0,
+          "tn": 5,
+          "tp": 5
+        },
+        "positive_class": "unsolvable"
+      }
+    },
+    "null": {
+      "awarded": 0.0,
+      "fraction": 0.0,
+      "is_fake": true,
+      "pooled": {
+        "abstained_on_negative": 8,
+        "abstained_on_positive": 9,
+        "fn": 0,
+        "fp": 0,
+        "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+        "positive_class": "unsolvable",
+        "sensitivity": null,
+        "specificity": null,
+        "tn": 0,
+        "tp": 0
+      },
+      "possible": 34.0,
+      "split": {
+        "by_class": {
+          "large_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 4,
+            "coverage_negative": null,
+            "coverage_positive": 0.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 4,
+            "n_negative": 0,
+            "n_positive": 4,
+            "sensitivity": null,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 0
+          },
+          "small_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 5,
+            "coverage_negative": null,
+            "coverage_positive": 0.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 5,
+            "n_negative": 0,
+            "n_positive": 5,
+            "sensitivity": null,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 0
+          },
+          "solvable_hard": {
+            "abstained_on_negative": 8,
+            "abstained_on_positive": 0,
+            "coverage_negative": 0.0,
+            "coverage_positive": null,
+            "fn": 0,
+            "fp": 0,
+            "n": 8,
+            "n_negative": 8,
+            "n_positive": 0,
+            "sensitivity": null,
+            "sensitivity_undefined_because": "this class contains no unsolvable items, so there is nothing to be sensitive to. The cell is empty, not zero.",
+            "specificity": null,
+            "tn": 0,
+            "tp": 0
+          }
+        },
+        "note": "Sensitivity and specificity are reported side by side and never combined. An abstention counts toward neither rate and is carried in its own column.",
+        "overall": {
+          "abstained_on_negative": 8,
+          "abstained_on_positive": 9,
+          "coverage_negative": 0.0,
+          "coverage_positive": 0.0,
+          "fn": 0,
+          "fp": 0,
+          "n": 17,
+          "n_negative": 8,
+          "n_positive": 9,
+          "sensitivity": null,
+          "specificity": null,
+          "tn": 0,
+          "tp": 0
+        },
+        "positive_class": "unsolvable"
+      }
+    },
+    "oracle": {
+      "awarded": 34.0,
+      "fraction": 1.0,
+      "is_fake": true,
+      "pooled": {
+        "abstained_on_negative": 0,
+        "abstained_on_positive": 0,
+        "fn": 0,
+        "fp": 0,
+        "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+        "positive_class": "unsolvable",
+        "sensitivity": 1.0,
+        "specificity": 1.0,
+        "tn": 8,
+        "tp": 9
+      },
+      "possible": 34.0,
+      "split": {
+        "by_class": {
+          "large_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": null,
+            "coverage_positive": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 4,
+            "n_negative": 0,
+            "n_positive": 4,
+            "sensitivity": 1.0,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 4
+          },
+          "small_unsolvable": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": null,
+            "coverage_positive": 1.0,
+            "fn": 0,
+            "fp": 0,
+            "n": 5,
+            "n_negative": 0,
+            "n_positive": 5,
+            "sensitivity": 1.0,
+            "specificity": null,
+            "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given.",
+            "tn": 0,
+            "tp": 5
+          },
+          "solvable_hard": {
+            "abstained_on_negative": 0,
+            "abstained_on_positive": 0,
+            "coverage_negative": 1.0,
+            "coverage_positive": null,
+            "fn": 0,
+            "fp": 0,
+            "n": 8,
+            "n_negative": 8,
+            "n_positive": 0,
+            "sensitivity": null,
+            "sensitivity_undefined_because": "this class contains no unsolvable items, so there is nothing to be sensitive to. The cell is empty, not zero.",
+            "specificity": 1.0,
+            "tn": 8,
+            "tp": 0
+          }
+        },
+        "note": "Sensitivity and specificity are reported side by side and never combined. An abstention counts toward neither rate and is carried in its own column.",
+        "overall": {
+          "abstained_on_negative": 0,
+          "abstained_on_positive": 0,
+          "coverage_negative": 1.0,
+          "coverage_positive": 1.0,
+          "fn": 0,
+          "fp": 0,
+          "n": 17,
+          "n_negative": 8,
+          "n_positive": 9,
+          "sensitivity": 1.0,
+          "specificity": 1.0,
+          "tn": 8,
+          "tp": 9
+        },
+        "positive_class": "unsolvable"
+      }
+    }
+  },
+  "paper_id": "p15-verdict-a2",
+  "positive_class": "unsolvable",
+  "question_type": "verdict",
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091"
+}
