@@ -1,0 +1,178 @@
+[
+ {
+  "path": "fuzzlab/.gitattributes",
+  "sha256": "3ec7469ef06a1496c27321c513e5339c17681a2934a0e14cc1698b091620f58e"
+ },
+ {
+  "path": "fuzzlab/BUGS.md",
+  "sha256": "9e89a1d085b1220b6a72963c821fbe042be6325dd05cad38d9f4d570a4482626"
+ },
+ {
+  "path": "fuzzlab/README.md",
+  "sha256": "ffddd67c5421c7e7d4aae30781d0e271f3c57649a356bdeb786e7fb9dfd4dd3e"
+ },
+ {
+  "path": "fuzzlab/RUN_STATE.md",
+  "sha256": "62ba9e2cb50fe76c961fcfec960887159c1fa5a98ab391bff1f71f85cf487be7"
+ },
+ {
+  "path": "fuzzlab/__init__.py",
+  "sha256": "8160983aeb933c587722fb158a34edc182b8ebd153633a39b6739529c49cac43"
+ },
+ {
+  "path": "fuzzlab/campaign.py",
+  "sha256": "4891a63ed7b8e47344254ff7f8df0a270bd81c05df828c6f2667b94de4429585"
+ },
+ {
+  "path": "fuzzlab/conftest.py",
+  "sha256": "2a1578fd94c581094d3f29bb4bfe4d3360729280f120ddbd3a02b14e4aa89636"
+ },
+ {
+  "path": "fuzzlab/minimize.py",
+  "sha256": "0d1d6c7cb65e65e515e612c84680d03aa578e64f6e0303c983ae9c79a2e8e368"
+ },
+ {
+  "path": "fuzzlab/prng.py",
+  "sha256": "9d18e3290f29b85a88f76d385f34be59c101e73c721a8e55ce287b8e42a8c66d"
+ },
+ {
+  "path": "fuzzlab/pytest.ini",
+  "sha256": "54d2fa577593ce1654d04970928c52ad07c7d7ff30460288eabef542e062b265"
+ },
+ {
+  "path": "fuzzlab/rig.py",
+  "sha256": "443d29f82d5735e60b0db9dfd49c5b444f54f35da143852a0f255543ed48dda3"
+ },
+ {
+  "path": "fuzzlab/verify.py",
+  "sha256": "fb0ecb38e7d08857f1753b8d53f04e4ed9e129d2f4d4437264589b8dcd0facfb"
+ },
+ {
+  "path": "fuzzlab/.pytest_cache/.gitignore",
+  "sha256": "e7c6bb30148cf667606dcd63e7ca77acaa3cfb0c8303bf09e6419e1e1669dc6d"
+ },
+ {
+  "path": "fuzzlab/.pytest_cache/CACHEDIR.TAG",
+  "sha256": "37dc88ef9a0abeddbe81053a6dd8fdfb13afb613045ea1eb4a5c815a74a3bde4"
+ },
+ {
+  "path": "fuzzlab/.pytest_cache/README.md",
+  "sha256": "420e808d79a6c25d3cda0af33bc4782314a14949866682c68ce8149e89b66b70"
+ },
+ {
+  "path": "fuzzlab/.pytest_cache/v/cache/lastfailed",
+  "sha256": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a"
+ },
+ {
+  "path": "fuzzlab/.pytest_cache/v/cache/nodeids",
+  "sha256": "3997c14e39c9075735bfbb6ce1e45991db54e5c21d49e85f782505695b01a25a"
+ },
+ {
+  "path": "fuzzlab/archive/cegis_miner.frontier_guards_are_consistent.skipped.json",
+  "sha256": "e3b6ed308564633c94f8ea11dd28859bb71ce849b2b952a1b3341d517373831e"
+ },
+ {
+  "path": "fuzzlab/oracles/__init__.py",
+  "sha256": "9d0e9a0f769dbf0241181d798a1285741ab821fc6106026f780348c7a30392c8"
+ },
+ {
+  "path": "fuzzlab/oracles/gf2.py",
+  "sha256": "b29a94f22aa596037764ca2e0e85f5f9e367af83974a8778538359c30ee3bcc7"
+ },
+ {
+  "path": "fuzzlab/oracles/search.py",
+  "sha256": "177182f9eeece21aef5bd8f73fb181eeb78bd1943f73ea7f9e0da11578079196"
+ },
+ {
+  "path": "fuzzlab/out/campaign.json",
+  "sha256": "6a9845affabb0a23d916f4e2fe7eb7f02a267f09e1f588bf51126397516183d8"
+ },
+ {
+  "path": "fuzzlab/out/findings.jsonl",
+  "sha256": "81502f95b9ef29be2532725134c8cbfb03ecd4c692603f0c7f6a495d6490b3b1"
+ },
+ {
+  "path": "fuzzlab/out/seeds.jsonl",
+  "sha256": "761379d7037f6ecb3b1f8338b6216e61d683a1fd9ee00d1db29a4f3efc2175b7"
+ },
+ {
+  "path": "fuzzlab/props/__init__.py",
+  "sha256": "3c4138cff95af2d28a3306cdd01cfc59d7b821441413f9f6ed5fa0bdf1c6709f"
+ },
+ {
+  "path": "fuzzlab/props/cegis_miner.py",
+  "sha256": "8a811439bdab28eefdd4d09448489ef2dea0bb8eae805b5a88ea1706dec35cd6"
+ },
+ {
+  "path": "fuzzlab/props/fd_adapter.py",
+  "sha256": "b530ef554d17d157dbb46355b539ba7b1a54b2e20ab3f697debf605798651f68"
+ },
+ {
+  "path": "fuzzlab/props/finding.py",
+  "sha256": "05996404bc32161f00220a790159b536f0c7879e075046bc3cbe9b8dd37a4f4f"
+ },
+ {
+  "path": "fuzzlab/props/lp_potential.py",
+  "sha256": "ec77bce809669c6096541043b34eb7958580a3c127e75644859787294e863b36"
+ },
+ {
+  "path": "fuzzlab/props/mdl_segmenter.py",
+  "sha256": "e1620cd80534aa0f706b1bb465b824eaba3ce60e213f9efe2cbacd92b2cdefe3"
+ },
+ {
+  "path": "fuzzlab/props/probe_frontier.py",
+  "sha256": "91a4c655e1c7a5a175d3419844aaba39e10a3346ea9e07bf2494df9a50e711e9"
+ },
+ {
+  "path": "fuzzlab/props/zero_space.py",
+  "sha256": "03c74bd2d4f27d5df7026e39c1d4f787dd0a390262c6401e925ca13fb3dffb25"
+ },
+ {
+  "path": "fuzzlab/runs/20260728T085448Z-E4-property-fuzz/GENERATOR_AUDIT.md",
+  "sha256": "eb75c666a465c6c6ecbb1eaeb5e6f99d4a1665b4644ae2f58fb13f1dec88bfb8"
+ },
+ {
+  "path": "fuzzlab/runs/20260728T085448Z-E4-property-fuzz/MANIFEST.json",
+  "sha256": "f6fb64b48adc855f0950f2601074b2bca511c094a76759a074af71df060d188b"
+ },
+ {
+  "path": "fuzzlab/tests/__init__.py",
+  "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+ },
+ {
+  "path": "fuzzlab/tests/test_battery.py",
+  "sha256": "cddedea521ac225a807643c607a235be5a6a7ad94828bb72c9422d46a2d4ab0e"
+ },
+ {
+  "path": "fuzzlab/tests/test_oracles.py",
+  "sha256": "da3bc8715a1a134e1479034e5ff9562055a7743692cf101a9e070e879eb3b7fb"
+ },
+ {
+  "path": "fuzzlab/worlds/__init__.py",
+  "sha256": "d0098e132c72f5710d60fb4012be1a58a629df1e530080b284129c22729fc247"
+ },
+ {
+  "path": "fuzzlab/worlds/blockworld.py",
+  "sha256": "f170ebcc3f265583629545d23104938f85bc889e4d4fe78818c19614d1cbce01"
+ },
+ {
+  "path": "fuzzlab/worlds/common.py",
+  "sha256": "ec57a8039fe21810c734cdd7e72d99c10617c2ae360757429cecee44d8d233b0"
+ },
+ {
+  "path": "fuzzlab/worlds/gridworld.py",
+  "sha256": "ce7d9f0bb478f01ae3673dbf478e41425aff399d8c210fc637642253c4010d82"
+ },
+ {
+  "path": "fuzzlab/worlds/hypset.py",
+  "sha256": "d57f3add4d2e0db7b9627707c8a4dee784b3b0739cc33c3a18eb391e556a80fa"
+ },
+ {
+  "path": "fuzzlab/worlds/jumpgraph.py",
+  "sha256": "ef807e300342d36d660c8a2cff2e553d113381905b01e378de9cd036fd588938"
+ },
+ {
+  "path": "fuzzlab/worlds/parityworld.py",
+  "sha256": "4ee00bd5d17140eeb15deb4ad61991a790c5e51e273a61fbc1b7edc7e9858b8d"
+ }
+]
