@@ -1,0 +1,118 @@
+{
+  "adjudicated": {
+    "cascade": "single_frame",
+    "conflict": "exclusive",
+    "frame": "persist"
+  },
+  "adversarial_review": "One pass, commissioned to refute and told its report would be filed unedited. Confirmed all three values SOUND against world/sokoban2.py; landed four hits on the evidence, all accepted: the on-wall exclusion was a reachability argument in disguise (render is injective -- 2352 states, 2352 frames, 0 collisions), the 52 are a push2 guard defect (X-5), the generated step() declared `exclusive` without enforcing it, and `frame persist` holds only under the wide reading of the compound `slid` event (the narrow reading costs 376 mismatches, X-1). runs/20260728T040057Z-c2/ADVERSARIAL_REVIEW.md",
+  "base_commit": "32059928f7bb1c075d25553346c487837d961d64",
+  "branch": "agent/c2-semantics-migrate",
+  "contract": "CONTRACTS/dsl_grammar_v0.2.md revision item 1 (ledger E-03)",
+  "determinism": "The probe and all four forms are deterministic: no seed, no clock, no network. One field is not byte-reproducible across machines -- a0_report.json records the absolute path of the Lean binary that ran; ledger X-4, recorded not fixed.",
+  "evidence": {
+    "both_readings_wrong": 52,
+    "both_readings_wrong_disposition": "a push2 guard defect (ledger X-5), evidence about neither statement; not filtered out, reported",
+    "cascade_multi_frame_only_wrong": 27030,
+    "cascade_single_frame_only_wrong": 0,
+    "conflict_max_rules_claiming_one_object": 1,
+    "frame_persist_only_wrong": 0,
+    "frame_reset_only_wrong": 45630,
+    "instrument": "a0-spike/probes/semantics_probe.py",
+    "levels": 5,
+    "representable_state_action_pairs": 47040
+  },
+  "files": {
+    "a0-spike/.gitattributes": {
+      "bytes": 579,
+      "sha256": "5defe8a376f97e42819179f920c89f361b92612d7aef47a668fbef254f20f2c5"
+    },
+    "a0-spike/THEORIZE_LOG.md": {
+      "bytes": 26264,
+      "sha256": "1f955f292a9571f909a872e3055871583155bdb4b2db7e47ff1ccafbad933735"
+    },
+    "a0-spike/artifacts/A0.lean": {
+      "bytes": 3434,
+      "sha256": "d734001850dbd39724b675a99c99e046ebf655b180c4f5a795fefe4d8908b1e9"
+    },
+    "a0-spike/artifacts/a0_report.json": {
+      "bytes": 44342,
+      "sha256": "602188b3b9358ac0c5c339f6b310fc972875cd3724db0103b2a6be1dce71a092"
+    },
+    "a0-spike/artifacts/pddl/domain.pddl": {
+      "bytes": 1173,
+      "sha256": "3e769be1857fcdd4b23a72d2fbe7dd06916e2c7505b79d0bb19874b34a6dbac9"
+    },
+    "a0-spike/artifacts/pddl/problem_match.pddl": {
+      "bytes": 4626,
+      "sha256": "1156de1b25f4c51898f355c1c49a0e4c21c1a3230bba773af3620c0f78c31fcf"
+    },
+    "a0-spike/artifacts/pddl/problem_mismatch.pddl": {
+      "bytes": 4810,
+      "sha256": "269df51985c9dd029be0730c1789437ad4691bc2b3e1fc65ee9859555fb64282"
+    },
+    "a0-spike/artifacts/theory_exec.py": {
+      "bytes": 4482,
+      "sha256": "f5cec2ab0ef359d97005ea98fa525da3b13bd2716958e0dbe0aa55bfcb6327f4"
+    },
+    "a0-spike/pipeline/cross_form.py": {
+      "bytes": 7235,
+      "sha256": "b5382e01326662080f2898c743746908f0a28816a7516d1aa49b41fb5ed65230"
+    },
+    "a0-spike/pipeline/gen_exec.py": {
+      "bytes": 13984,
+      "sha256": "e4886b85d35b6b3ad31ce695001e83f667fce6bcebc99ade82b8a01406ebc623"
+    },
+    "a0-spike/probes/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "a0-spike/probes/semantics_probe.py": {
+      "bytes": 23262,
+      "sha256": "50dfccb43d9effa9a95033e51af4592d1df7740f1a6f2ca8839405274c7c73b9"
+    },
+    "a0-spike/runs/20260728T040057Z-c2/ADVERSARIAL_REVIEW.md": {
+      "bytes": 21704,
+      "sha256": "3fb44e1690eb7eea3c5edeae2fa535e2d5a491f7bf4f1320f58b44b6e2ba169b"
+    },
+    "a0-spike/runs/20260728T040057Z-c2/PLAN.md": {
+      "bytes": 6091,
+      "sha256": "cfdff3d74953d27cae40386a3bd0bda2b356d6358f60a38fbd7ad2856c95baf5"
+    },
+    "a0-spike/runs/20260728T040057Z-c2/RUN_STATE.md": {
+      "bytes": 12520,
+      "sha256": "a825cd7985a24d0c27a9ad78b1981e042bfa49e641a277e5aa18a4140f612d85"
+    },
+    "a0-spike/runs/20260728T040057Z-c2/make_manifest.py": {
+      "bytes": 6086,
+      "sha256": "95d9301b484e0b962e4ae51f4d521a495802c32bb959850a7a203cb717d6d338"
+    },
+    "a0-spike/runs/20260728T040057Z-c2/semantics_probe.json": {
+      "bytes": 17359,
+      "sha256": "4abe36964202cbb4b69be1a25cd79d55d16dba021d128050c386947c31112cf4"
+    },
+    "a0-spike/tests/test_a0.py": {
+      "bytes": 16720,
+      "sha256": "b25f197b5f1d37967ce0776a92d784b9e46f26bf7990bb321ebc909cac7b9ad9"
+    },
+    "a0-spike/theory/theory.dsl": {
+      "bytes": 4471,
+      "sha256": "0f563753beeae186656dfc29bf0ee27b17e512a5d0b3dcc3a641ff71cea7aee7"
+    }
+  },
+  "network": "none. No API calls, no sealed-pile contact.",
+  "open_ledger_entries": [
+    "X-1",
+    "X-2",
+    "X-3",
+    "X-4",
+    "X-5"
+  ],
+  "pipeline": "python -m pipeline.run_a0 -> exit 0; certify exact, held-out 39960 states 0 mismatches, lean=py 9408/9408",
+  "prompt_id": "C2-semantics-migrate",
+  "run_id": "20260728T040057Z-c2",
+  "territory": "a0-spike/ only; PARTNER_SYNC.md appended",
+  "tests": "python -m pytest -q -> 43 passed, 0 failed, 0 error (baseline at base_commit: 32 FAILED/ERROR, 6 passed)",
+  "track": "engine-rig",
+  "utc": "2026-07-28T06:32:25Z",
+  "what": "Migrate a0-spike's manual from dsl_grammar v0.1 to v0.2 by adjudicating the three `semantics:` statements as facts about the A0 world, each by refuting its alternative against ground truth."
+}

@@ -1,0 +1,795 @@
+{
+  "cascade": {
+    "both_wrong": 52,
+    "cases": 47040,
+    "multi_frame_mismatches": 27082,
+    "multi_frame_mismatches_by_stratum": {
+      "off_wall": 22582,
+      "on_wall": 4500
+    },
+    "multi_frame_only": 27030,
+    "reading": "single_frame vs multi_frame",
+    "rounds_histogram": {
+      "quiescent": 47040
+    },
+    "single_frame_mismatches": 52,
+    "single_frame_mismatches_by_stratum": {
+      "off_wall": 0,
+      "on_wall": 52
+    },
+    "single_frame_only": 0,
+    "witnesses": [
+      {
+        "action": "DOWN",
+        "level": "match",
+        "state": {
+          "box": [
+            0,
+            1
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "under_multi_frame": {
+          "box": [
+            0,
+            1
+          ],
+          "player": [
+            6,
+            0
+          ]
+        },
+        "why": "every rule guards on the same action, so holding it across rounds lets `walk` re-fire and the player slides until something stops it",
+        "world": {
+          "box": [
+            0,
+            1
+          ],
+          "player": [
+            1,
+            0
+          ]
+        }
+      },
+      {
+        "action": "RIGHT",
+        "level": "match",
+        "state": {
+          "box": [
+            0,
+            1
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "under_multi_frame": {
+          "box": [
+            0,
+            5
+          ],
+          "player": [
+            0,
+            4
+          ]
+        },
+        "why": "every rule guards on the same action, so holding it across rounds lets `walk` re-fire and the player slides until something stops it",
+        "world": {
+          "box": [
+            0,
+            3
+          ],
+          "player": [
+            0,
+            1
+          ]
+        }
+      },
+      {
+        "action": "DOWN",
+        "level": "match",
+        "state": {
+          "box": [
+            0,
+            2
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "under_multi_frame": {
+          "box": [
+            0,
+            2
+          ],
+          "player": [
+            6,
+            0
+          ]
+        },
+        "why": "every rule guards on the same action, so holding it across rounds lets `walk` re-fire and the player slides until something stops it",
+        "world": {
+          "box": [
+            0,
+            2
+          ],
+          "player": [
+            1,
+            0
+          ]
+        }
+      },
+      {
+        "action": "RIGHT",
+        "level": "match",
+        "state": {
+          "box": [
+            0,
+            2
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "under_multi_frame": {
+          "box": [
+            0,
+            6
+          ],
+          "player": [
+            0,
+            5
+          ]
+        },
+        "why": "every rule guards on the same action, so holding it across rounds lets `walk` re-fire and the player slides until something stops it",
+        "world": {
+          "box": [
+            0,
+            2
+          ],
+          "player": [
+            0,
+            1
+          ]
+        }
+      },
+      {
+        "action": "DOWN",
+        "level": "match",
+        "state": {
+          "box": [
+            0,
+            3
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "under_multi_frame": {
+          "box": [
+            0,
+            3
+          ],
+          "player": [
+            6,
+            0
+          ]
+        },
+        "why": "every rule guards on the same action, so holding it across rounds lets `walk` re-fire and the player slides until something stops it",
+        "world": {
+          "box": [
+            0,
+            3
+          ],
+          "player": [
+            1,
+            0
+          ]
+        }
+      }
+    ]
+  },
+  "conflict": {
+    "cases": 47040,
+    "max_common_object_claims": 1,
+    "max_common_object_claims_by_stratum": {
+      "off_wall": 1,
+      "on_wall": 1
+    },
+    "max_rules_fired": 1,
+    "no_rule_fired": 0,
+    "strata": {
+      "off_wall": 39960,
+      "on_wall": 7080
+    },
+    "violations": []
+  },
+  "frame": {
+    "both_wrong": 52,
+    "cases": 47040,
+    "on_wall_witnesses": [
+      {
+        "action": "DOWN",
+        "level": "match",
+        "manual": {
+          "box": [
+            3,
+            5
+          ],
+          "player": [
+            1,
+            5
+          ]
+        },
+        "state": {
+          "box": [
+            1,
+            5
+          ],
+          "player": [
+            0,
+            5
+          ]
+        },
+        "who_is_on_a_wall": [
+          "box"
+        ],
+        "why": "a `push2` guard defect, not a frame question: the world checks is_wall(target) before target != box, so a box parked on a wall blocks the player, and no guard can say `the Box is not on a wall`. `reset` predicts the same wrong successor here, so this case discriminates nothing. See RUN_STATE FINDING-2 and ledger X-5.",
+        "world": {
+          "box": [
+            1,
+            5
+          ],
+          "player": [
+            0,
+            5
+          ]
+        }
+      },
+      {
+        "action": "LEFT",
+        "level": "match",
+        "manual": {
+          "box": [
+            1,
+            3
+          ],
+          "player": [
+            1,
+            5
+          ]
+        },
+        "state": {
+          "box": [
+            1,
+            5
+          ],
+          "player": [
+            1,
+            6
+          ]
+        },
+        "who_is_on_a_wall": [
+          "box"
+        ],
+        "why": "a `push2` guard defect, not a frame question: the world checks is_wall(target) before target != box, so a box parked on a wall blocks the player, and no guard can say `the Box is not on a wall`. `reset` predicts the same wrong successor here, so this case discriminates nothing. See RUN_STATE FINDING-2 and ledger X-5.",
+        "world": {
+          "box": [
+            1,
+            5
+          ],
+          "player": [
+            1,
+            6
+          ]
+        }
+      },
+      {
+        "action": "DOWN",
+        "level": "match",
+        "manual": {
+          "box": [
+            6,
+            4
+          ],
+          "player": [
+            4,
+            4
+          ]
+        },
+        "state": {
+          "box": [
+            4,
+            4
+          ],
+          "player": [
+            3,
+            4
+          ]
+        },
+        "who_is_on_a_wall": [
+          "box"
+        ],
+        "why": "a `push2` guard defect, not a frame question: the world checks is_wall(target) before target != box, so a box parked on a wall blocks the player, and no guard can say `the Box is not on a wall`. `reset` predicts the same wrong successor here, so this case discriminates nothing. See RUN_STATE FINDING-2 and ledger X-5.",
+        "world": {
+          "box": [
+            4,
+            4
+          ],
+          "player": [
+            3,
+            4
+          ]
+        }
+      },
+      {
+        "action": "RIGHT",
+        "level": "match",
+        "manual": {
+          "box": [
+            4,
+            6
+          ],
+          "player": [
+            4,
+            4
+          ]
+        },
+        "state": {
+          "box": [
+            4,
+            4
+          ],
+          "player": [
+            4,
+            3
+          ]
+        },
+        "who_is_on_a_wall": [
+          "box"
+        ],
+        "why": "a `push2` guard defect, not a frame question: the world checks is_wall(target) before target != box, so a box parked on a wall blocks the player, and no guard can say `the Box is not on a wall`. `reset` predicts the same wrong successor here, so this case discriminates nothing. See RUN_STATE FINDING-2 and ledger X-5.",
+        "world": {
+          "box": [
+            4,
+            4
+          ],
+          "player": [
+            4,
+            3
+          ]
+        }
+      },
+      {
+        "action": "LEFT",
+        "level": "match",
+        "manual": {
+          "box": [
+            4,
+            2
+          ],
+          "player": [
+            4,
+            4
+          ]
+        },
+        "state": {
+          "box": [
+            4,
+            4
+          ],
+          "player": [
+            4,
+            5
+          ]
+        },
+        "who_is_on_a_wall": [
+          "box"
+        ],
+        "why": "a `push2` guard defect, not a frame question: the world checks is_wall(target) before target != box, so a box parked on a wall blocks the player, and no guard can say `the Box is not on a wall`. `reset` predicts the same wrong successor here, so this case discriminates nothing. See RUN_STATE FINDING-2 and ledger X-5.",
+        "world": {
+          "box": [
+            4,
+            4
+          ],
+          "player": [
+            4,
+            5
+          ]
+        }
+      },
+      {
+        "action": "UP",
+        "level": "match",
+        "manual": {
+          "box": [
+            2,
+            4
+          ],
+          "player": [
+            4,
+            4
+          ]
+        },
+        "state": {
+          "box": [
+            4,
+            4
+          ],
+          "player": [
+            5,
+            4
+          ]
+        },
+        "who_is_on_a_wall": [
+          "box"
+        ],
+        "why": "a `push2` guard defect, not a frame question: the world checks is_wall(target) before target != box, so a box parked on a wall blocks the player, and no guard can say `the Box is not on a wall`. `reset` predicts the same wrong successor here, so this case discriminates nothing. See RUN_STATE FINDING-2 and ledger X-5.",
+        "world": {
+          "box": [
+            4,
+            4
+          ],
+          "player": [
+            5,
+            4
+          ]
+        }
+      },
+      {
+        "action": "LEFT",
+        "level": "match",
+        "manual": {
+          "box": [
+            5,
+            3
+          ],
+          "player": [
+            5,
+            5
+          ]
+        },
+        "state": {
+          "box": [
+            5,
+            5
+          ],
+          "player": [
+            5,
+            6
+          ]
+        },
+        "who_is_on_a_wall": [
+          "box"
+        ],
+        "why": "a `push2` guard defect, not a frame question: the world checks is_wall(target) before target != box, so a box parked on a wall blocks the player, and no guard can say `the Box is not on a wall`. `reset` predicts the same wrong successor here, so this case discriminates nothing. See RUN_STATE FINDING-2 and ledger X-5.",
+        "world": {
+          "box": [
+            5,
+            5
+          ],
+          "player": [
+            5,
+            6
+          ]
+        }
+      },
+      {
+        "action": "UP",
+        "level": "match",
+        "manual": {
+          "box": [
+            3,
+            5
+          ],
+          "player": [
+            5,
+            5
+          ]
+        },
+        "state": {
+          "box": [
+            5,
+            5
+          ],
+          "player": [
+            6,
+            5
+          ]
+        },
+        "who_is_on_a_wall": [
+          "box"
+        ],
+        "why": "a `push2` guard defect, not a frame question: the world checks is_wall(target) before target != box, so a box parked on a wall blocks the player, and no guard can say `the Box is not on a wall`. `reset` predicts the same wrong successor here, so this case discriminates nothing. See RUN_STATE FINDING-2 and ledger X-5.",
+        "world": {
+          "box": [
+            5,
+            5
+          ],
+          "player": [
+            6,
+            5
+          ]
+        }
+      }
+    ],
+    "persist_mismatches": 52,
+    "persist_mismatches_by_stratum": {
+      "off_wall": 0,
+      "on_wall": 52
+    },
+    "persist_only": 0,
+    "reading": "persist vs reset",
+    "reset_mismatches": 45682,
+    "reset_mismatches_by_stratum": {
+      "off_wall": 38712,
+      "on_wall": 6970
+    },
+    "reset_only": 45630,
+    "witnesses": [
+      {
+        "action": "UP",
+        "level": "match",
+        "state": {
+          "box": [
+            0,
+            1
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "under_reset": {
+          "box": [
+            3,
+            3
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "why": "no firing rule mentions the box, so `reset` returns it to its declared initial value",
+        "world": {
+          "box": [
+            0,
+            1
+          ],
+          "player": [
+            0,
+            0
+          ]
+        }
+      },
+      {
+        "action": "DOWN",
+        "level": "match",
+        "state": {
+          "box": [
+            0,
+            1
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "under_reset": {
+          "box": [
+            3,
+            3
+          ],
+          "player": [
+            1,
+            0
+          ]
+        },
+        "why": "no firing rule mentions the box, so `reset` returns it to its declared initial value",
+        "world": {
+          "box": [
+            0,
+            1
+          ],
+          "player": [
+            1,
+            0
+          ]
+        }
+      },
+      {
+        "action": "LEFT",
+        "level": "match",
+        "state": {
+          "box": [
+            0,
+            1
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "under_reset": {
+          "box": [
+            3,
+            3
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "why": "no firing rule mentions the box, so `reset` returns it to its declared initial value",
+        "world": {
+          "box": [
+            0,
+            1
+          ],
+          "player": [
+            0,
+            0
+          ]
+        }
+      },
+      {
+        "action": "UP",
+        "level": "match",
+        "state": {
+          "box": [
+            0,
+            2
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "under_reset": {
+          "box": [
+            3,
+            3
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "why": "no firing rule mentions the box, so `reset` returns it to its declared initial value",
+        "world": {
+          "box": [
+            0,
+            2
+          ],
+          "player": [
+            0,
+            0
+          ]
+        }
+      },
+      {
+        "action": "DOWN",
+        "level": "match",
+        "state": {
+          "box": [
+            0,
+            2
+          ],
+          "player": [
+            0,
+            0
+          ]
+        },
+        "under_reset": {
+          "box": [
+            3,
+            3
+          ],
+          "player": [
+            1,
+            0
+          ]
+        },
+        "why": "no firing rule mentions the box, so `reset` returns it to its declared initial value",
+        "world": {
+          "box": [
+            0,
+            2
+          ],
+          "player": [
+            1,
+            0
+          ]
+        }
+      }
+    ]
+  },
+  "levels": [
+    "crossing_DOWN",
+    "crossing_LEFT",
+    "crossing_RIGHT",
+    "crossing_UP",
+    "match"
+  ],
+  "manual": "theory/theory.dsl",
+  "per_level": {
+    "crossing_DOWN": {
+      "cases": 9408,
+      "conflicts": 0,
+      "multi_frame": 5397,
+      "persist": 10,
+      "reset": 9136,
+      "single_frame": 10
+    },
+    "crossing_LEFT": {
+      "cases": 9408,
+      "conflicts": 0,
+      "multi_frame": 5302,
+      "persist": 12,
+      "reset": 9140,
+      "single_frame": 12
+    },
+    "crossing_RIGHT": {
+      "cases": 9408,
+      "conflicts": 0,
+      "multi_frame": 5397,
+      "persist": 10,
+      "reset": 9136,
+      "single_frame": 10
+    },
+    "crossing_UP": {
+      "cases": 9408,
+      "conflicts": 0,
+      "multi_frame": 5302,
+      "persist": 12,
+      "reset": 9140,
+      "single_frame": 12
+    },
+    "match": {
+      "cases": 9408,
+      "conflicts": 0,
+      "multi_frame": 5684,
+      "persist": 8,
+      "reset": 9130,
+      "single_frame": 8
+    }
+  },
+  "probe": "semantics_probe",
+  "rule_claims": {
+    "blocked_box_crossing": [
+      "player"
+    ],
+    "blocked_box_landing": [
+      "player"
+    ],
+    "blocked_wall": [
+      "player"
+    ],
+    "push2": [
+      "box",
+      "player"
+    ],
+    "walk": [
+      "player"
+    ]
+  },
+  "section_supplied_by_probe": false,
+  "verdict": {
+    "adjudicated_on": {
+      "both_wrong_is_a_finding": "52 cases mispredict under BOTH readings of `frame` and both of `cascade`. They are not evidence about either statement -- they are a `push2` guard defect (ledger X-5), and they are reported here rather than filtered out so that the count cannot quietly become a count of something else.",
+      "cascade": "the whole sweep, same rule as frame",
+      "conflict": "the whole sweep, both strata, unconditional",
+      "frame": "the whole sweep; cases where both readings mispredict are excluded because they discriminate nothing, not because of where they sit"
+    },
+    "cascade": "single_frame",
+    "conflict": "exclusive",
+    "frame": "persist"
+  }
+}

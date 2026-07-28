@@ -99,7 +99,7 @@
     ],
     "compile_output": "",
     "compiles": true,
-    "lean": "C:\\Users\\user\\Desktop\\theoria\\cold-start-a0\\.toolchain\\lean-4.9.0-windows\\bin\\lean.exe",
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
     "non_vacuous": true,
     "sorry_in_source": false,
     "theorems": [

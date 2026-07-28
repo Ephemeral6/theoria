@@ -1,0 +1,10 @@
+# The compiled forms are byte-reproducible artefacts: `theory_exec.py`, the PDDL
+# domain and problem, and `A0.lean` are all regenerated from `theory.dsl` and
+# compared. On a machine with core.autocrlf=true a CRLF translation on checkout
+# makes every regeneration look like a modification with no content change --
+# which is exactly what happened during the v0.1 -> v0.2 migration (C2): three
+# artefacts showed as `M` in `git status` and produced an empty `git diff`.
+#
+# Same reason and same line as engine-rig/.gitattributes. a0-spike simply never
+# got one.
+* text eol=lf

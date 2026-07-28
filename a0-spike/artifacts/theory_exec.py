@@ -85,18 +85,32 @@ RULES = [("walk", _rule_walk), ("push2", _rule_push2), ("blocked_wall", _rule_bl
 
 
 def step(state, direction):
-    """Apply one action. Exactly one rule must fire (constraint 9)."""
+    """Apply one action. Exactly one rule must fire (constraint 9).
+
+    `semantics: conflict exclusive` says **at most one rule per object per
+    transition**, and `frame persist` plus a total rule set says at least one.
+    So the check is on the number of rules that fired, not on the number of
+    distinct successors they produced. An earlier version compared outcomes and
+    let two rules through whenever they happened to agree -- which reads like
+    enforcement, passes every test while the guards really are disjoint, and
+    stops being true the moment a rule is added. Two rules firing is a violation
+    of the declared semantics whether or not they agree about the answer.
+    """
     fired = []
     for name, rule in RULES:
         trial = replace(state)
         if rule(trial, direction):
             fired.append((name, trial))
-    if len(fired) != 1:
-        outcomes = {(s.player, s.box) for _, s in fired}
-        if len(outcomes) != 1:
-            raise RuntimeError(
-                "ambiguous successor for %s: %r" % (direction, [n for n, _ in fired])
-            )
+    if len(fired) > 1:
+        raise RuntimeError(
+            "conflict exclusive violated for %s: %r fired together"
+            % (direction, [n for n, _ in fired])
+        )
+    if not fired:
+        raise RuntimeError(
+            "no rule fired for %s in %r -- the rule set is not total, so the "
+            "manual determines no successor here" % (direction, state)
+        )
     return fired[0][1]
 
 

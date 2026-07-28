@@ -34,6 +34,54 @@ class UncompilableTheory(Exception):
     """The manual uses something this generator cannot express -- refuse loudly."""
 
 
+# ---------------------------------------------------------------- semantics
+
+# What this generator actually implements, as opposed to what it accepts.
+#
+# `persist` is the frame axiom the RULE_TEMPLATE encodes: a rule mutates the
+# fields its event names and leaves the rest of `state` alone, so an object no
+# firing rule mentions carries through unchanged. `exclusive` is what STEP_TEMPLATE
+# encodes: it evaluates every rule against the pre-state and **raises** if more
+# than one fires, so the declaration is enforced at run time rather than merely
+# assumed. `single_frame` is what `step` encodes: one call, one successor, every
+# guard read against the pre-state.
+#
+# The other branch of each is *parseable* and unimplemented. Compiling one of
+# those to this encoding is the defect `CONTRACTS/dsl_grammar_v0.2.md` revision
+# item 10 records against `gen_pddl`: the manual states the semantic fact and the
+# compiler ignores it, emitting a STRIPS encoding of `persist` + `single_frame`
+# "without a word of complaint". This generator's standing rule is the opposite
+# one -- never `True`, never `pass` -- so an unimplemented value is a hard error,
+# named, and never a silent approximation. That is `fd_adapter`'s rule applied
+# here, and v0.2 §semantics requires it of *every* backend.
+IMPLEMENTED_SEMANTICS = {
+    "frame": {"persist"},
+    "conflict": {"exclusive"},
+    "cascade": {"single_frame"},
+}
+
+
+def _check_semantics(theory: Any) -> None:
+    """Refuse a declared value this generator does not implement."""
+    semantics = getattr(theory, "semantics", None)
+    if semantics is None:
+        raise UncompilableTheory(
+            "the manual carries no `semantics:` section, or this parser is too "
+            "old to surface one. Under dsl_grammar v0.2 the frame axiom, the "
+            "conflict policy and the cascade shape are mandatory facts about "
+            "the world; compiling without them picks a world by accident."
+        )
+    for statement, implemented in sorted(IMPLEMENTED_SEMANTICS.items()):
+        declared = getattr(semantics, statement, None)
+        if declared not in implemented:
+            raise UncompilableTheory(
+                "manual declares `%s %s`; this generator implements only %s. "
+                "Refusing rather than emitting an encoding of a world the "
+                "manual did not declare (dsl_grammar v0.2, section `semantics`)."
+                % (statement, declared, " | ".join(sorted(implemented)))
+            )
+
+
 # --------------------------------------------------------------- expressions
 
 def _node(kind: str, node: Any) -> bool:
@@ -63,13 +111,15 @@ def _compile_cell(node: Any) -> str:
 
 
 def _compile_predicate(node: Any) -> str:
-    """A boolean guard clause. Raises on anything unrecognised."""
-    # The parser swallows `not <pred>` into a NameRef holding the whole text.
+    """A boolean guard clause, **positive**. Raises on anything unrecognised.
+
+    Negation is not handled here. Under dsl_grammar v0.2 it is a property of the
+    enclosing `GuardPredicate` (`negated`, ledger E-01), not of the expression,
+    and `_compile_clause` is the only place allowed to read it. Folding it back
+    in here would give two places that can each think the other did it.
+    """
     if _node("NameRef", node):
-        text = _name_of(node).strip()
-        if text.startswith("not "):
-            return "(not %s)" % _compile_text(text[4:].strip())
-        raise UncompilableTheory("bare name in a guard: %r" % text)
+        raise UncompilableTheory("bare name in a guard: %r" % _name_of(node))
 
     if _node("FuncCall", node):
         if node.name == "free":
@@ -79,50 +129,38 @@ def _compile_predicate(node: Any) -> str:
         raise UncompilableTheory("unknown predicate %r" % node.name)
 
     if _node("Comparison", node):
-        left, right = node.left, node.right
-        negated = False
-        if _node("NameRef", left) and _name_of(left).startswith("not "):
-            negated = True
-            left = _reparse_field(_name_of(left)[4:].strip())
         if node.op != "=":
             raise UncompilableTheory("unsupported comparison %r" % node.op)
-        expr = "(%s == %s)" % (_compile_cell(left), _compile_cell(right))
-        return "(not %s)" % expr if negated else expr
+        return "(%s == %s)" % (_compile_cell(node.left), _compile_cell(node.right))
 
     raise UncompilableTheory("unsupported guard clause: %r" % (node,))
 
 
-class _Field:
-    def __init__(self, obj: str, field_name: str):
-        self.obj = obj
-        self.field_name = field_name
+def _compile_clause(clause: Any) -> str:
+    """A `GuardPredicate`, negation included.
 
+    The negation lives on the clause under v0.2 (`not <predicate>`, E-01,
+    revision item 2). Under v0.1 the parser folded it into a `NameRef` holding
+    the text `"not free(...)"`, and this generator read only `clause.expr`.
+    When the parser moved, nothing here broke loudly: the negation simply
+    stopped arriving, and every `not` in the manual compiled to its own
+    opposite. `blocked_wall` became "the way ahead is clear **and** the box is
+    there" -- an unsatisfiable guard where the manual had written the exact
+    complement.
 
-def _reparse_field(text: str) -> Any:
-    if "." not in text:
-        raise UncompilableTheory("expected <Object>.<field>, got %r" % text)
-    obj, field = text.split(".", 1)
-    node = _Field(obj.strip(), field.strip())
-    node.__class__.__name__ = "FieldAccess"
-    return node
-
-
-def _compile_text(text: str) -> str:
-    """Compile a predicate the parser handed back as raw text."""
-    text = text.strip()
-    if text.startswith("free(") and text.endswith(")"):
-        inner = text[5:-1].strip()
-        for name, steps in (("ahead", 1), ("beyond", 2)):
-            prefix = name + "("
-            if inner.startswith(prefix) and inner.endswith(")"):
-                args = inner[len(prefix):-1].split(",")
-                if len(args) != 2:
-                    raise UncompilableTheory("%s takes (object, dir)" % name)
-                return "_free(state, _step_from(state.%s, direction, %d))" % (
-                    args[0].strip().lower(), steps
-                )
-        raise UncompilableTheory("unsupported argument to free: %r" % inner)
-    raise UncompilableTheory("cannot compile predicate text %r" % text)
+    That is this module's own rule violated (`never True, never pass`), so the
+    absence of the attribute is a hard error rather than a default of False: a
+    parser too old to carry the negation must stop the build, not quietly
+    compile a different world.
+    """
+    if not hasattr(clause, "negated"):
+        raise UncompilableTheory(
+            "guard clause carries no `negated` flag -- this is a pre-v0.2 "
+            "parser, whose negations this generator would silently drop. "
+            "Refusing rather than compiling a different world."
+        )
+    text = _compile_predicate(clause.expr)
+    return "(not %s)" % text if clause.negated else text
 
 
 # ------------------------------------------------------------------- effects
@@ -215,18 +253,32 @@ RULES = [%(names)s]
 
 
 def step(state, direction):
-    """Apply one action. Exactly one rule must fire (constraint 9)."""
+    """Apply one action. Exactly one rule must fire (constraint 9).
+
+    `semantics: conflict exclusive` says **at most one rule per object per
+    transition**, and `frame persist` plus a total rule set says at least one.
+    So the check is on the number of rules that fired, not on the number of
+    distinct successors they produced. An earlier version compared outcomes and
+    let two rules through whenever they happened to agree -- which reads like
+    enforcement, passes every test while the guards really are disjoint, and
+    stops being true the moment a rule is added. Two rules firing is a violation
+    of the declared semantics whether or not they agree about the answer.
+    """
     fired = []
     for name, rule in RULES:
         trial = replace(state)
         if rule(trial, direction):
             fired.append((name, trial))
-    if len(fired) != 1:
-        outcomes = {(s.player, s.box) for _, s in fired}
-        if len(outcomes) != 1:
-            raise RuntimeError(
-                "ambiguous successor for %%s: %%r" %% (direction, [n for n, _ in fired])
-            )
+    if len(fired) > 1:
+        raise RuntimeError(
+            "conflict exclusive violated for %%s: %%r fired together"
+            %% (direction, [n for n, _ in fired])
+        )
+    if not fired:
+        raise RuntimeError(
+            "no rule fired for %%s in %%r -- the rule set is not total, so the "
+            "manual determines no successor here" %% (direction, state)
+        )
     return fired[0][1]
 
 
@@ -243,6 +295,7 @@ def simulate(initial, actions):
 def generate(dsl_text: str, height: int, width: int, walls: Sequence[Tuple[int, int]],
              player_color: int = 2, box_color: int = 4, wall_color: int = 8) -> str:
     theory = parse_theory(dsl_text)
+    _check_semantics(theory)
     parts = [PRELUDE % {
         "height": height, "width": width, "walls": sorted(tuple(w) for w in walls),
         "player_color": player_color, "box_color": box_color, "wall_color": wall_color,
@@ -255,7 +308,7 @@ def generate(dsl_text: str, height: int, width: int, walls: Sequence[Tuple[int, 
             if _node("GuardAction", clause):
                 continue                    # every A0 action is a directional move
             if _node("GuardPredicate", clause):
-                conditions.append(_compile_predicate(clause.expr))
+                conditions.append(_compile_clause(clause))
             else:
                 raise UncompilableTheory("unsupported clause %r" % (clause,))
         guard = " and ".join(conditions) if conditions else "True"
