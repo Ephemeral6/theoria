@@ -88,7 +88,7 @@
     },
     {
       "path": "papers/phase1-workshop/PAPER.md",
-      "sha256": "5b833a71a8873f67072c4aad3a2100d7131c548953bb48793cc865f6f7bf085b"
+      "sha256": "d01d39fe3019cf67d523973562337c0e70ce4a2e20e82e6a0b2bf0562de21b2f"
     },
     {
       "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/audit-sample-a.md",
@@ -156,7 +156,7 @@
     },
     {
       "path": "papers/phase1-workshop/runs/20260728T102014Z-P7/RUN_STATE.md",
-      "sha256": "a9929a2284b7d5e4782123acc3644993082982a9c554bb8a65aacf3fded31ebe"
+      "sha256": "fab287f4473b73c3aa20a1e8b2f0f1e449318b4b4fa8ae83349a287c6e897ffd"
     }
   ],
   "bibliography": {

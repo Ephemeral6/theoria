@@ -110,7 +110,21 @@ def candidates(lane=None):
                                             # not strip a lane bare (monitor,
                                             # 2026-07-28: the guard was one-sided)
         out.append((m["priority"], iid, f, m))
-    out.sort(key=lambda r: (r[0], r[1]))
+    try:
+        sys.path.insert(0, HERE)
+        import spec as _spec
+        focus = list(getattr(_spec, "PHASE_FOCUS", []))
+        boost = int(getattr(_spec, "FOCUS_BOOST", 0))
+    except Exception:
+        focus, boost = [], 0
+
+    def rank(row):
+        pri, iid, _f, m = row
+        if boost and m.get("lane") in focus:
+            pri -= boost + (len(focus) - focus.index(m["lane"]) - 1) * 0.1
+        return (pri, iid)
+
+    out.sort(key=rank)
     return out
 
 
@@ -179,6 +193,43 @@ def cmd_release(iid, worker, reason="unstated"):
     return 0
 
 
+def cmd_sweep(dry=False):
+    """把死掉的工人还占着的认领交回板上。
+
+    一次性工人被额度或崩溃打断后，claimed/ 里的认领永远挂着：板以为有人在做，
+    领地被锁，新工人领不到活。判据保守——只清 W-* 前缀（一次性工人）且其
+    计划任务已不在运行的；App/常驻会话（APP-*/RES-*）一律不动，它们的存活
+    从任务表看不出来。"""
+    import subprocess
+    out = subprocess.run(["schtasks", "/Query", "/FO", "CSV", "/NH"],
+                         capture_output=True)
+    text = out.stdout.decode("gbk", "replace")
+    live = set()
+    for line in text.splitlines():
+        cols = [c.strip('"') for c in line.split('","')]
+        if len(cols) >= 3 and "TheoriaAgent-" in cols[0]:
+            name = cols[0].strip('"').lstrip("\\").replace("TheoriaAgent-", "")
+            if cols[2].strip('"') in ("Running", "正在运行"):
+                live.add(name)
+    freed = []
+    for f in sorted(os.listdir(CLAIMED)):
+        if not f.endswith(".md"):
+            continue
+        iid, worker = f[:-3].split(".")[0], f[:-3].split(".")[1]
+        if not worker.startswith("W-") or worker in live:
+            continue
+        freed.append((iid, worker))
+        if not dry:
+            os.rename(os.path.join(CLAIMED, f),
+                      os.path.join(ITEMS, "%s.md" % iid))
+            note("SWEEP %s released (worker %s gone)" % (iid, worker))
+    if not freed:
+        print("no orphaned claims")
+    for iid, worker in freed:
+        print("%-28s freed from %s" % (iid, worker))
+    return 0
+
+
 def main():
     a = sys.argv[1:]
     if not a or a[0] == "list":
@@ -186,6 +237,8 @@ def main():
     if a[0] == "claim":
         lane = a[3] if len(a) > 3 and a[2] == "--lane" else None
         return cmd_claim(a[1], lane)
+    if a[0] == "sweep":
+        return cmd_sweep("--dry-run" in a)
     if a[0] == "done":
         return cmd_done(a[1], a[2])
     if a[0] == "release":

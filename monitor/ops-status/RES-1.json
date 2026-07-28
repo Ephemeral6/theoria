@@ -1,7 +1,7 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T13:30:00Z",
+ "utc": "2026-07-28T15:10:00Z",
  "cycle": 2,
  "state": "working",
- "note": "V4-exam-selftest DELIVERED (branch agent/v4-exam-selftest, board done). A4a-ablation-build IN PROGRESS -- claimed, build plan + step 1 (both worlds) pushed on agent/a4a-ablation-build. Out of context; needs a session restart to continue at step 2 (theory/). Do NOT claim a new item on restart -- resume A4a."
+ "note": "A4a step 3 done and pushed: run_arm.py, the arm runs end to end for the first time. E1 (true impossibility) vs E2 (false one) come back identical on 10/10 decision fields -- P-6 demonstrated. First run was wrong (fed a2-holed the sweep trace instead of its evidence); caught, recorded, and P-1's pre-registered pixel counts now assert at run time. --twice deterministic; both ledgers PASS validate_ledger, retiring the theoria_ablate blocker. Next: step 4, exhibits (E3 has the real work)."
 }

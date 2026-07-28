@@ -49,6 +49,78 @@ SIG_RE = re.compile("|".join(SIGNATURES))
 PRIORITY = ["M-0", "P-8", "P-20", "P-18", "P-19", "P-9", "P-12", "P-13",
             "P-15", "P-17", "R-1", "A-1", "B-1"]
 
+# A hold has to be able to end without anything going right.
+#
+# `resume` is one exit, and it asks the window a question: it only opens if
+# `ping` succeeds.  That makes it an exit which the outage itself can hold
+# shut -- and worse, one that can be shut by something unrelated, since `ping`
+# needs the `claude` CLI on PATH and raises without it.  A hold that began at
+# 09:35 outlived its own stated 20:20 reset for exactly this reason.
+#
+# The reset hint already carries the answer: the provider says when the window
+# reopens.  So the deadline is the second exit, and it is the one that cannot
+# be blocked by the outage it is waiting on.  When the hint carries no readable
+# time, MAX_HOLD_HOURS bounds the hold anyway -- an unparsable hint is not a
+# reason to stay held forever.
+#
+# The cap binds a *parsed* deadline too, and deliberately: the window this
+# breaker exists for is five hours (see the module docstring), so a hint that
+# reads as further out than six has more likely been misread than not.  Erring
+# short is the cheap direction -- if the window really is still shut, the next
+# dispatch dies on the limit and `check` simply holds again.
+MAX_HOLD_HOURS = 6
+
+# "resets 8:20pm (Asia/Shanghai)" / "resets 8pm" / "will reset at 20:20 (UTC)"
+RESET_RE = re.compile(r"reset(?:s|\s+at)?\s+(\d{1,2})(?::(\d{2}))?\s*"
+                      r"([ap]\.?m\.?)?(?:\s*\(([^)]+)\))?", re.I)
+
+
+def parse_stamp(text):
+    """Our own `now_utc()` spelling, tolerating the minute-only variant."""
+    for fmt in ("%Y-%m-%dT%H:%M:%SZ", "%Y-%m-%dT%H:%MZ"):
+        try:
+            return datetime.datetime.strptime(text, fmt).replace(
+                tzinfo=datetime.timezone.utc)
+        except (ValueError, TypeError):
+            continue
+    return None
+
+
+def reopen_at(st):
+    """When the window is expected to reopen, in UTC. None if unknowable.
+
+    Read off the provider's own words rather than assumed, so the wait is as
+    long as the outage says it is and not one tick longer.
+    """
+    detected = parse_stamp(st.get("detected_at"))
+    if detected is None:
+        return None
+    cap = detected + datetime.timedelta(hours=MAX_HOLD_HOURS)
+    match = RESET_RE.search(st.get("reset_hint") or "")
+    if not match:
+        return cap
+    hour, minute, meridiem, zone = match.groups()
+    hour, minute = int(hour), int(minute or 0)
+    meridiem = (meridiem or "").replace(".", "").lower()
+    if meridiem == "pm" and hour != 12:
+        hour += 12
+    elif meridiem == "am" and hour == 12:
+        hour = 0
+    if not 0 <= hour <= 23:
+        return cap
+    try:
+        from zoneinfo import ZoneInfo
+        tz = ZoneInfo(zone.strip()) if zone else datetime.timezone.utc
+    except Exception:
+        # An unrecognised zone would put the deadline anywhere; the cap is the
+        # honest answer, not a guess at what the provider meant.
+        return cap
+    local = detected.astimezone(tz)
+    when = local.replace(hour=hour, minute=minute, second=0, microsecond=0)
+    if when <= local:                      # the hint means the next such time
+        when += datetime.timedelta(days=1)
+    return min(when.astimezone(datetime.timezone.utc), cap)
+
 
 def now_utc():
     return datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
@@ -116,9 +188,34 @@ def check():
         print("HOLD — quota kills: %s" % ", ".join(h[0] for h in hits))
         print("hint: %s" % st["reset_hint"])
         return 2
+    if st.get("mode") != "normal":
+        # No fresh kills and the deadline has passed: the window the hold was
+        # waiting on has reopened, so the hold has finished being true. Cleared
+        # here rather than in `resume` because `check` is the one a caller
+        # already runs every tick -- an exit nobody invokes is not an exit.
+        due = reopen_at(st)
+        now = datetime.datetime.now(datetime.timezone.utc)
+        st["reopen_at"] = due.strftime("%Y-%m-%dT%H:%M:%SZ") if due else None
+        if due and now >= due:
+            st["mode"] = "normal"
+            st["auto_released_at"] = now_utc()
+            st["note"] = ("hold expired on its own: the window reopened at %s"
+                          % st["reopen_at"])
+            save_state(st)
+            print("hold expired (window reopened %s) -> mode=normal"
+                  % st["reopen_at"])
+            if st["requeue"]:
+                # Not relaunched from here: `check` must not spawn sessions.
+                print("requeue still pending: %s -- run `resume`"
+                      % ", ".join(st["requeue"]))
+            return 0
+        save_state(st)
+        print("mode=%s requeue=%s reopen_at=%s"
+              % (st["mode"], st["requeue"] or "[]", st["reopen_at"] or "?"))
+        return 2
     save_state(st)
     print("mode=%s requeue=%s" % (st["mode"], st["requeue"] or "[]"))
-    return 0 if st["mode"] == "normal" else 2
+    return 0
 
 
 def ping():

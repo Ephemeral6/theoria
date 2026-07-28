@@ -242,8 +242,10 @@ comparison run; that a machine-checked impossibility can be produced whose
 weights crossed a data boundary between two independently developed tracks and
 whose empty axiom list is a check that has been made to fail on purpose; that the
 refutation loop closed on a false theorem in six recorded beats; and that a
-passive metrics battery over existing trajectories immediately found three of its
-own metrics measuring something other than what they claim.
+passive metrics battery over existing trajectories, once its anti-gaming register
+was made executable rather than written, contradicted 17 of its own defence claims
+by demonstration and found the exploration family's declared signature separating
+the specified gradient backwards.
 
 Everything else in `Theoria.md` — the ordering claim, the bill shape, transfer,
 the exam, the cost magnitude — is unevidenced here and is not claimed.

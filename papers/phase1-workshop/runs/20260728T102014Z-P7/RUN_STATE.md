@@ -235,3 +235,67 @@ A restatement is a cross-reference too, and it goes stale the same way:
 check, because the checker strips the file reference and the range's tail
 survives. It is external and correct. The check is left noisy rather than tuned
 until it goes quiet, which is the failure mode the exam section spends a page on.
+
+## Second addendum — the numbers §7's re-derivation orphaned elsewhere
+
+The sweep above looked at section *references*. This pass looked at the numbers,
+on the principle that re-deriving one section silently invalidates every other
+section that restated it. Six places had gone stale, and two of them were claims
+a referee would have been right to call dishonest.
+
+**In the abstract.**
+
+* The battery result claimed the pass "immediately found **three** of its own
+  metrics measuring something other than what they claim". That was v0's finding.
+  v2's audit is far harsher and the sentence was understating it: **34 of 38
+  executable exploits still land, 17 written defence claims were contradicted by
+  their own demonstration**, and X3 — the exploration family's declared signature
+  — separates the specified gradient backwards.
+* **The load-bearing one.** The honesty paragraph said the comparative effect
+  sizes "are across a model ladder within one control arm". Under v2 that is
+  false: the primary pass is CC vs Schema, **two** control arms paired by game.
+  Rewritten to say exactly that, keeping the claim that actually matters — none
+  of it is across the framework's own arms — and adding the confound the artefact
+  itself declares, that the Schema side is another team's agent on another team's
+  infrastructure.
+* A numbering defect found while editing: the abstract promised "Seven results"
+  and listed eight things, because the battery paragraph had lost its number.
+  Numbered **(5)**, the rest shifted, and the count is now **Eight**. Nothing
+  outside the abstract referenced the result numbers, so the renumber was safe.
+* Its own word count, which this run had just changed. ~22 600 → ~23 000.
+
+**In §1.** The contribution list still advertised "26 runs, 4 games, 2 arms"
+against `battery/REPORT_V0.md`. Now 95 runs, 5 arms, 38 metrics, cited to
+`capability_spectrum.json`.
+
+**In §2.** "It reports the three acceptances and the battery's *first* recompute."
+It is the third. Also tightened "no baseline comparison" to "no baseline
+comparison *of the framework's own arms*", since v2 does compare two control arms
+and the unqualified form is now the same overclaim as the abstract's.
+
+**In §10.5.** The closing summary repeated the "three of its own metrics" figure.
+Replaced with what v2 actually supports.
+
+**In `PROVENANCE.md`.** The whole §7 block indexed v0 and has been re-derived —
+scope, the specified gradient, X3, P1's two-pass disagreement, E2 on both passes,
+the executable audit, de-redundancy, the unvalidated count. **Two rows were
+deleted rather than updated**, which is the more interesting half: the *X5
+cross-check* row indexed a claim that left §7 entirely once REVIEW showed both
+counts descend from the same explorer, and the per-model dollar and median figures
+under E5 and E2 index aggregates §7 no longer cites. An index row for a claim the
+paper no longer makes is worse than no row. Its source-disagreement entry on the
+discriminative verdicts was also re-derived: 24-of-29 → **31 of 38 on each pass**,
+and two internal references in it (§7.3, §7.2) were the limitations section's old
+numbers and are now §10.3 and §10.2.
+
+**What stays pointing at v0, deliberately.** Three `battery/REPORT_V0.md`
+citations survive in §1, §10 and `PROVENANCE.md`. Each is a **quotation of that
+report's own words** or a statement only that report makes — the K4/K2 blockquote,
+the "no LLM in the loop" line, and ρ = −0.83, which no artefact carries. That is
+the same rule §7 follows: a report's statement is attributed to the report, and is
+not silently re-badged as a v2 measurement.
+
+**A check that now exists.** A short script re-run at the end greps the assembled
+`PAPER.md` for both the v2 figures and the v0 ones. The three surviving hits for
+"26 runs / 2 arms / 29 metrics" are all inside §7.1's own sentence describing what
+v0 *was*, which is the one place they belong.
