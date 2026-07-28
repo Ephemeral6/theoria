@@ -15,7 +15,7 @@ python figures/build_all.py               # all six, into figures/{csv,out}
 python figures/build_all.py --list        # the fixed build order
 python figures/build_all.py --only fig03_capability_spectrum
 bash    figures/verify.sh                 # the gate: build twice, diff, check
-python  figures/manifest.py --run-dir figures/runs/<UTC>-<prompt-id>
+python  figures/manifest.py --run-dir figures/runs/<UTC>-<id> --prompt-id <id> --worker <who>
 ```
 
 `verify.sh` is the thing to run before committing. It builds everything twice
@@ -24,11 +24,22 @@ the committed tree against a fresh build so a stale figure cannot hide behind a
 green determinism check, re-hashes every declared input, and refuses a figure
 script that touches the filesystem outside `sources.py`.
 
+Gate 8 is a different kind of check and worth knowing about separately. Gates
+1–7 are all satisfied by a figure that quietly *omits* data, and P8 found two
+such omissions in a tree that was green on every one of them — two tracked
+roll-ups and a theoria run directory that no hand-written list mentioned.
+`check_coverage.py` walks the tree itself and asks whether what is on disk
+reached the picture, and it runs a **negative control first**: the pre-P8 input
+list is reconstructed and the probe is required to fail on it. That control
+caught the probe's own first version, which took its inventory from the same
+registry it was auditing and so stayed green over the exact defect it existed to
+find.
+
 ## The six
 
 | figure | claim it serves | the thing it must not let you conclude |
 |---|---|---|
-| `fig02_bill_shape` | C2: understanding is bought early and spent late | that theoria costs 6× more per turn. **The two arms are not priced in the same unit** — a `bare_cc` turn buys one model call that picks one action; a theoria turn buys a desk call that theorises across the run. 5 calls covered 7 actions. |
+| `fig02_bill_shape` | C2: understanding is bought early and spent late | that theoria costs 6× more per turn. **The two arms are not priced in the same unit** — a `bare_cc` turn buys one model call that picks one action; a theoria turn buys a desk call that theorises across the run. 5 calls covered 7 actions. And that the theoria arm scores *low* on the front-load index: it has **no** E2/E3/E4, because the live arm is in none of battery v2's arms. |
 | `fig03_capability_spectrum` | the battery's family × arm matrix | that an empty cell is a bad score. 96 of 190 cells are `not-applicable` — structural, drawn hatched — and 9 are `insufficient-data`, drawn outlined. Neither is ever a zero. |
 | `fig04_a3_transfer` | C3: the domain is what travels between levels | that transfer saved 97 % of everything. The bottom three meter lines are 1:1, 3:3, 1:1 and are drawn for that reason; two of the control arm's five theorize rounds were toolchain tax, not world-learning. |
 | `fig05_a2_repair_loop` | the DC22 case: a machine-checked theorem false of the world, and its repair | that the loop scored 8/8. `loop_ledger.json` holds eight beats; the loop proper is six. M0 and M5 are prelude and are drawn as prelude. |
@@ -61,7 +72,10 @@ distinction is checkable rather than merely drawn.
    CSV columns, and separately **what must survive into the picture**.
 2. Declare every source in `sources.py`. Never `open()` a path in a figure
    script; `verify.sh` gate 7 will catch you, and the reason is that an
-   undeclared read is an unhashed read.
+   undeclared read is an unhashed read. If the input is a *family that grows* —
+   one file or directory per run — declare a `Rule` instead of listing its
+   members, and give the rule a floor. A hand-written member list is a list that
+   will fall behind the directory, and it has twice.
 3. Write the module against the contract: `NAME` matching the filename, and
    `build() -> {"csv": ..., "images": [...4...], "notes": [...]}`.
 4. Register it in `build_all.py`'s `FIGURES` tuple. Explicit order, never
@@ -94,5 +108,7 @@ This directory writes only inside itself. Every data directory is read-only, and
 No figure reads anything belonging to a **sealed-pile** game. Sources are
 self-built worlds or the four development-pile games; `fig03` stamps the pile
 cut's sha256 from the battery's own provenance block. `SOURCES.md` records what
-is absent and why, and where two artefacts disagree about a number — in three
-places they do, and in all three both numbers travel.
+is absent and why, and every place two artefacts disagree about a number. The
+standing rule where they do is that **both numbers travel** — the count is not
+written down here, because a hand-copied count of the disagreements would become
+one of them.
