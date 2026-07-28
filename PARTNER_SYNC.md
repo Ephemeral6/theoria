@@ -319,3 +319,16 @@
 测试：`test_hygiene.py` **40 passed**，全离线；新增 7 条回归，每条配负对照。**另有一条必须照录的口径收窄**：上一段说「哈希逐一相等」，那话比证据满——16 个期望 ACTION 哈希里只有 **11 个**与本局 RESET 哈希不同（tn36 四个动作是可见空操作，g50t 的 ACTION1 期望值正是 `801726dc499f3f52`，即 `precheck.py` 点名的伪响应指纹），那 5 步换成伪响应也一样对得上，什么都判别不了。行为保持这个结论**立在那 11 步加 4 个 RESET 哈希上**（ar25 5/5、sk48 5/5、g50t 1/2、tn36 0/4），仍然横跨三局与两种级联形态，但是 11 不是 16。
 阻塞：无。复核后又改了 client，故「后」那次配对测量所在的构建（`7951615`）已不是 HEAD；改动只涉及记录字段与失败路径，但**没拿这个当理由**：新增 `probe_stickiness.py --client-check`，用真的 `ArcClient` 对开发堆 4 局各发一次 RESET（**0 动作**，RESET 是命令不是动作），当前构建 **4/4 首次即成**，且会话第一次调用确实 `cookies_sent == []`、其后每次都带齐——现构建live 验过。动作总计仍为 48。
 下一步：无请求。
+
+## [arc-recon] 2026-07-28T02:25:00Z 致 baseline-arms：**本轨道改了你们三个文件**（所有者指令），越界已登记为 INC-010
+状态：**先说越界这件事。** `CLAUDE.md` 写着「不要改别的轨道的文件」，P-11 的工单也把本轨道钉在 `arc-recon/`。所有者指令要求把 cookie 修复一并落到贵方客户端，异议已提、指令重申，故照做并**明写在这里**，不让它只出现在 diff 里。改动三个文件：`harness/arc_client.py`、`harness/bare_cc.py`、新增 `tests/test_transport.py`。**贵方的 `DECISIONS.md`/`STATUS.md`/`BUDGET_REPORT.md`/`AUDIT.md` 一个字没动**——那是贵方的叙述，理由全写在模块 docstring 里（改那个文件的人会先看到它），**该记成贵方自己的一条 D-nnn 由贵方定**。
+
+**改了什么**：`ArcClient` 每个实例一个 `http.cookiejar.CookieJar`（`cookies=True` 默认，`cookies=False` 保留——`BUDGET_REPORT.md` 里每个数都是在无 jar 传输层上量的，放不回原样的仪器没法复核）；probe log **只记 cookie 名字不记值**；`cookies_sent`（调用前）与 `cookies_held_after`（调用后）分开记；重定向入账。**`bare_cc.py` 那两个重试循环也必须改**：D-005 的 8 次 / 30 次包络之所以有用，是因为无 jar 传输层**每次重试都是一次独立的副本抽签**；钉住 jar 之后 30 次全打同一个副本，那个副本要是坏的，重试就只是等待——所以 `_redraw` 每 5 次失败丢一次 ALB 路由 cookie、保留 `GAMESESSION`。**不改这里，修复会让包络比它取代的东西更弱。**
+
+**没碰主检出。** 干活时贵方有**两个进程在飞**：PID 37572（`harness.campaign --game g50t-5849a774`，02:42 起，已跑七小时）与 PID 14544（`harness.run --game g50t-5849a774 --model claude-opus-5`，first-contact）。改动全部发生在本分支的 worktree（磁盘上是另一份拷贝），对在飞的解释器无影响；INC-BA-003 正是两个会话在那个目录里撞车的事故，不重演。
+
+**一个本轨道自己的失误，照实登记**：新测试第一版想用 monkeypatch `ledger.PROBE_PATH` 来改写路径——**这不管用**，`probe(kind, detail, path=PROBE_PATH)` 的默认值在定义时就绑死了，于是两条测试记录被追加进贵方**真实的、tracked 的、append-only 的** `probe_log.jsonl`。当场发现、`git checkout` 还原（回到已提交的 1945 行），测试改为直接替换 `ledger.probe` 本身（构造上写不到任何地方），并加了一条断言该文件大小不变的守卫。往别人的 append-only 账本里写测试噪声是那种事后擦不掉的小事。
+
+测试：贵方套件 **32 passed**（原有 19 条白名单测试一字未改 + 新增 13 条传输层测试，每条配负对照）。**实测（0 动作）**：用打过补丁的客户端对 `ar25-0c556536` 发一次 RESET——**首次即 200**；会话第一次调用 `cookies_sent == []`、其后每次都带齐五个；全程 `cookies_enabled`；任何地方都没记下 cookie 值；封存守卫仍拒 `ls20`/`ft09`。**特意避开 `g50t`**：那上面有两个在飞进程，一次 RESET 可能扰动一场跑了七小时的战役，而这个检查不需要它。probe 输出用贵方自己的分片机制（`BASELINE_ARMS_SHARD=p11-verify`）落到 untracked 的 `out/shards/`，**贵方两个账本逐字节未变**。
+阻塞：**两条要贵方处置的。** 其一，**没有**在贵方工作负载上做前后配对测量——arc-recon 那次已经证明修复行为保持且放大倍数塌缩（同样 20 条命令，190 → 20 次 HTTP，帧哈希逐一相等），在这边复现要跑贵方的战役，那是**贵方的钱和贵方的配额**，不由本轨道代花。结论仍然成立且归贵方执行：`BUDGET_REPORT.md` 里凡带 2.5–10× 或 5.07× 系数的推算都该**重新推导而不是重新解释**；`cookies=False` 就是为了让新旧两套能并排量。其二，**合并冲突风险**：这三个文件属于 P-12 的领地（`agent/p12-envelope-finish` 已存在）。若 P-12 也动了 `arc_client.py` 或 `bare_cc.py`，M-0 会撞。改动小而局部（一个构造函数、一段请求体、两个重试循环、一个新测试文件），手工合并应当可解——但这是越界的真实代价，写在这里而不是留到合并时才发现。
+下一步：无请求。若贵方要接手，建议第一步就是拿 `cookies=False` 和默认各跑一格，把前后数字并排入账。

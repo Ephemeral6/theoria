@@ -174,6 +174,31 @@ def parse_action(text: str) -> Tuple[Optional[int], Optional[Dict[str, int]], st
 
 
 # ---------------------------------------------------------------- the loop
+# After this many consecutive failures, drop the ALB routing cookies so the next
+# attempt is a fresh replica draw. See `_redraw` and arc-recon INC-007a.
+REDRAW_EVERY = 5
+
+
+def _redraw(client: arc_client.ArcClient, failures: int) -> None:
+    """Let go of the replica pin every few failures.
+
+    D-005 sized these envelopes against a transport that was re-routed on every
+    attempt -- eight or thirty identical retries worked precisely because each
+    was an independent draw at a replica that might hold the session. The cookie
+    jar removes that: once pinned, every retry goes to the same replica, so if
+    THAT replica is the broken one, retrying is only waiting. Dropping the pins
+    restores the draw while keeping `GAMESESSION`.
+
+    In practice this should almost never fire -- arc-recon measured 1.00 attempt
+    per command after the fix -- but the envelope must not have become weaker
+    than the thing it replaced.
+    """
+    if failures and failures % REDRAW_EVERY == 0:
+        redraw = getattr(client, "clear_routing_cookies", None)
+        if callable(redraw):
+            redraw()
+
+
 def resilient(client: arc_client.ArcClient, path: str, body: Dict[str, Any],
               note: str, tries: int = 8) -> Tuple[int, Any, int]:
     """D-005: 400 'game not found' is transient. Retry it."""
@@ -183,6 +208,7 @@ def resilient(client: arc_client.ArcClient, path: str, body: Dict[str, Any],
                                         raise_on_error=False)
         if status == 200:
             return status, parsed, k + 1
+        _redraw(client, k + 1)
         time.sleep(0.4 * (k + 1))
     return status, parsed, tries
 
@@ -193,6 +219,7 @@ def reset_with_retry(client: arc_client.ArcClient, game_id: str, card_id: str,
         status, body = client.reset(game_id, card_id, raise_on_error=False)
         if status == 200 and isinstance(body, dict):
             return body, k + 1
+        _redraw(client, k + 1)
         time.sleep(0.5)
     return None, tries
 

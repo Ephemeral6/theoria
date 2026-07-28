@@ -12,14 +12,49 @@ Two things are structural here, not advisory:
 This deliberately does not import `arc-recon/client.py`: that file belongs to
 another track and this track may not modify it, so duplicating ~60 lines is
 cheaper than coupling to something we cannot fix.
+
+COOKIE JAR (arc-recon INC-007 / INC-007a / INC-009; ported here 2026-07-28).
+The API sits behind an AWS ALB that issues `AWSALBAPP-*` routing cookies and a
+`GAMESESSION` cookie. A client that does not echo them is load-balanced afresh
+on every request, lands on a replica that does not hold the session, and gets
+back `400 game <id> not found` -- which both tracks read as an intermittent
+server fault for two days. arc-recon measured it: **20/20 first-attempt RESETs
+with a jar, 0/20 without**, arms interleaved and placed on different games so
+neither could starve the other, plus 8/8 walking all four development games out
+and back on one jar. Its paired canary sweep went from 190 HTTP calls to 20 for
+the same 20 commands -- zero retries -- with identical frame hashes, so the fix
+is behaviour-preserving and not merely faster.
+
+That is where D-005's 5.07x amplification and the `[400x7, 200]` storm come
+from. This track's own figures were measured on the jar-less transport, so
+`cookies=False` is kept: an instrument you cannot put back the way it was is one
+you cannot re-verify, and BUDGET_REPORT's numbers should be re-derived, not
+quietly reinterpreted.
+
+Three details that cost arc-recon an incident each, honoured here rather than
+rediscovered:
+
+  * **Cookie NAMES only, never values.** `GAMESESSION` is a bearer token for a
+    live session; the probe log is tracked and Phase 4 publishes every tracked
+    file. arc-recon's INC-008 happened because its redaction lived inside one
+    function and a second writer went around it -- and this module is a second
+    writer by design (`ledger.probe`, not that function).
+  * **The right tense.** `HTTPCookieProcessor` absorbs the response's cookies
+    *during* `open()`, so a jar snapshot taken afterwards describes the call's
+    result, not what the call sent. `cookies_sent` is captured before.
+  * **The retry envelope changes meaning.** Retries used to be independent
+    routing draws; with a pinned jar they all hit the same replica, so
+    `clear_routing_cookies()` exists and the retry loops in `bare_cc.py` call it.
 """
 
+import http.cookiejar
 import json
 import os
+import re
 import time
 import urllib.error
 import urllib.request
-from typing import Any, Dict, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from . import ledger
 
@@ -73,14 +108,88 @@ def load_api_key(env_path: Optional[str] = None) -> str:
     raise RuntimeError("ARC_API_KEY is not set in %s" % path)
 
 
+# RFC 6265 cookie-name is a token: no separators, no whitespace.
+_COOKIE_TOKEN = re.compile(r"^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$")
+
+
+def cookie_names(set_cookie_header: str) -> List[str]:
+    """The name at the head of ONE Set-Cookie header. At most one, by design.
+
+    Deliberately does not split on commas. arc-recon's first version did, and a
+    value containing a comma then produced a fragment of the VALUE dressed as a
+    name -- the redactor leaking through itself. A response carries one
+    `Set-Cookie` header per cookie, so reading only each header's head is both
+    correct and safe; if a caller has already collapsed several into one string
+    this under-reports, which is the only direction a redactor may fail in.
+    """
+    head = (set_cookie_header or "").split(";", 1)[0].strip()
+    if "=" not in head:
+        return []
+    name = head.split("=", 1)[0].strip()
+    return [name] if _COOKIE_TOKEN.match(name) else []
+
+
+def issued_cookie_names(headers: Any) -> List[str]:
+    """Names from EVERY Set-Cookie header. This server sends five.
+
+    `headers.get("Set-Cookie")` returns only the first and `dict(headers)` keeps
+    only the last, so either would under-report what the server issued while the
+    jar quietly held more.
+    """
+    raw: List[str] = []
+    getter = getattr(headers, "get_all", None)
+    if callable(getter):
+        raw = list(getter("Set-Cookie") or [])
+    else:
+        for key, value in getattr(headers, "items", lambda: [])():
+            if str(key).lower() == "set-cookie" and value:
+                raw.append(value)
+    names: List[str] = []
+    for header in raw:
+        names.extend(cookie_names(header))
+    return names
+
+
 class ArcClient:
     def __init__(self, api_key: Optional[str] = None, base_url: str = BASE_URL,
-                 timeout: int = 30):
+                 timeout: int = 30, cookies: bool = True):
         self._key = api_key or load_api_key()
         self.base_url = base_url.rstrip("/")
         self.timeout = timeout
         self.sealed = sealed_pile()
         self.calls = 0
+
+        # See the module docstring. One jar per client, shared across games --
+        # arc-recon's cross-game probe established that game A's GAMESESSION
+        # does not poison game B's, so this needs no per-game bookkeeping.
+        self.cookies = cookies
+        self.jar = http.cookiejar.CookieJar()
+        self._opener = urllib.request.build_opener(
+            *([urllib.request.HTTPCookieProcessor(self.jar)] if cookies else []))
+        self.transport = {
+            "cookies": cookies,
+            "description": ("cookie jar shared across games (arc-recon INC-007)"
+                            if cookies else
+                            "bare urllib, no cookie jar -- the transport every "
+                            "figure in BUDGET_REPORT.md was measured on"),
+        }
+
+    def cookies_held(self) -> List[str]:
+        """Names only. Values are credentials and never leave this object."""
+        return sorted(c.name for c in self.jar)
+
+    def clear_routing_cookies(self) -> None:
+        """Drop the ALB pins, keep the session identity.
+
+        D-005's envelope retried an identical request up to 30 times, and that
+        worked because the jar-less transport re-drew a replica every time. A
+        pinned jar sends all 30 to the same one, so if that replica is the
+        broken one, retrying is only waiting. `GAMESESSION` stays: the session
+        is what we are trying to reach, not what is wrong.
+        """
+        for cookie in list(self.jar):
+            if cookie.name.upper().startswith("AWSALB"):
+                self.jar.clear(cookie.domain, cookie.path, cookie.name)
 
     # -- the guard ---------------------------------------------------------
     def assert_playable(self, game_id: str) -> None:
@@ -105,33 +214,58 @@ class ArcClient:
 
         started = time.time()
         request = urllib.request.Request(url, data=payload, headers=headers, method=method)
+        # Snapshot the jar BEFORE the call: HTTPCookieProcessor absorbs the
+        # response's cookies during `open()`, so a snapshot taken afterwards
+        # would describe what the call produced, not what it sent -- and the
+        # first call of a session, which provably echoed nothing, would be
+        # logged as though it had.
+        sent = self.cookies_held()
+        final_url = url
         try:
-            with urllib.request.urlopen(request, timeout=self.timeout) as response:
+            with self._opener.open(request, timeout=self.timeout) as response:
                 status = response.status
-                text = response.read().decode("utf-8")
+                text = response.read().decode("utf-8", "replace")
+                issued = issued_cookie_names(response.headers)
+                final_url = response.geturl() or url
         except urllib.error.HTTPError as exc:
             status = exc.code
             text = exc.read().decode("utf-8", "replace")
+            issued = issued_cookie_names(exc.headers)
+            final_url = exc.geturl() or url
         except Exception as exc:                       # transport-level failure
             status = -1
             text = "%s: %s" % (type(exc).__name__, exc)
+            issued = []
         self.calls += 1
 
         try:
             parsed: Any = json.loads(text)
-        except json.JSONDecodeError:
+        except (json.JSONDecodeError, TypeError):
             parsed = None
 
         ledger.probe("arc_api_call", {
             "note": note,
             "method": method,
             "url": url,
+            # Equal to `url` unless a redirect was followed. build_opener
+            # follows them, and the log previously could not show that at all.
+            "final_url": final_url,
+            "redirected": final_url != url,
             "request_headers": {k: (REDACTED if k == "X-API-Key" else v)
                                 for k, v in headers.items()},
             "request_body": body,
             "status": status,
             "elapsed_ms": int((time.time() - started) * 1000),
             "response_summary": _summarise(parsed if parsed is not None else text),
+            # Cookie NAMES only, never values. Two tenses because they answer
+            # different questions: what this request carried, and what the
+            # response left behind. The `Cookie` header itself is attached by
+            # HTTPCookieProcessor inside `open()`, so it never appears in
+            # `request_headers` -- `cookies_sent` is the only record of it.
+            "cookies_enabled": self.cookies,
+            "set_cookie_names": sorted(set(issued)),
+            "cookies_sent": sent,
+            "cookies_held_after": self.cookies_held(),
         })
 
         if status >= 400 or status < 0:
