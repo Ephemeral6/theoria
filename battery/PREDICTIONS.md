@@ -387,3 +387,122 @@ which would be a finding, not a failure of the prediction.
    thing anyone should read. Six non-tied paired games remains the floor, and
    this material does not supply them — it supplies a second arm on the same
    four games, which buys pairing quality, not power.
+
+---
+
+# v2.1 — four defences, pre-registered 2026-07-28, before any were written
+
+Appended, never edited.
+
+`REPORT_V2.md` closes with a numbered list of what v3 needs. Items 1 and 2 are
+four small changes inside `battery/metrics/`, each closing a hole that an
+executed exploit demonstrated. **Changing a metric after seeing its numbers is
+exactly the move process 1 and process 4 exist to catch**, so the predictions
+go down first, in the same file and under the same rule as every other batch.
+
+## What is being changed, and the discipline that applies
+
+These are **defences, not redefinitions toward a hoped-for result**. Each was
+named in `gaming.py`'s register as the defence *before* any number existed;
+each reads a field `battery/model.py` already carries and no metric ever read.
+That is a narrower thing than tuning a metric, but it is not nothing, and the
+test is stated in advance: **a defence that moves a published value has changed
+the measurement, not protected it.** For three of the four, the prediction is
+that no published value moves at all.
+
+## The four
+
+| id | defence | field it reads |
+|---|---|---|
+| P4 | refuse to score a run that never reached the goal | `Step.won` |
+| K2 | refuse to score a held-out set whose sampling frame is undeclared | `Theory.held_out_frame` |
+| K12 | a closed beat requires the episode to show evidence it happened | `Repair.repair_actions` / `changed_clause` |
+| E2 | interpolate the cost at the 25% mark instead of `ceil`-ing to a whole turn | — |
+
+## Predictions
+
+**P4 — `not-applicable` unless the run won.** P4 is currently monotone in
+failure: 1.0 is not a floor and one action against a 12-step plan scores 0.083.
+The battery has produced exactly one P4 value in its history — `a2-refutation`,
+18 actions against an 18-step optimal plan — and **that run won**.
+
+* Prediction: `a2-refutation` keeps **P4 = 1.000, unchanged**. No published
+  number moves.
+* Prediction: `exploit_P4` stops landing, and P4 returns to the main table.
+* Named risk: this makes P4 unscoreable on every losing run forever, which on
+  current material means P4 is a one-value metric guarded by a second guard.
+  That is a real cost and it is accepted — a metric that rewards giving up is
+  worse than a metric that rarely fires.
+
+**K2 — `not-applicable` unless the frame is declared.** K2 scores 1.000 over a
+held-out set of one pair, indistinguishable from an exhaustive enumeration.
+`model.py` documents at length that `held_out_frame` exists to prevent exactly
+this comparison, and no metric reads it.
+
+* This requires an **adapter change as well**, and that is worth flagging
+  rather than burying: `REPORT_V1.md` claimed the field "now carries a one-line
+  description of the sampling frame on every theory-bearing run". **That claim
+  is false.** `a0-base` carries no frame, and neither does `a2-refutation`. So
+  `adapters/a0.py` must declare A0's frame — the fact is already documented
+  (the 3 state-action pairs its trace never covered) — before the metric can
+  require one.
+* Prediction: `a0-base` keeps **K2 = 0.000** and `a0-spike` keeps **K2 =
+  1.000**, both unchanged, both now carrying a frame a reader can compare. The
+  DC22 shape survives intact; it would have been destroyed by the more obvious
+  fix of a denominator floor, which is why a floor is not the fix.
+* Prediction: `exploit_K2` stops landing, and K2 returns to the main table.
+
+**K12 — a closed beat needs evidence the beat happened.** K12 currently reads
+six self-reported booleans from a file the producer wrote.
+
+* The defence is deliberately *not* "every beat must spend environment
+  actions": `model.py` is explicit that localisation and re-proof are offline
+  work and honestly cost zero. The requirement is at the **episode** level — an
+  episode may not report closed beats while showing neither environment cost
+  nor a changed clause.
+* Prediction: `a2-probed` keeps **K12 = 1.000** (48 actions, `teleport_down`
+  changed) and `a0-spike` keeps **K12 = 0.000** (four episodes, real work, no
+  beat closed). No published number moves.
+* Prediction: `exploit_K12` stops landing, and K12 returns to the main table.
+
+**E2 — interpolate, and only half the hole closes.** E2's head is
+`ceil(n × 0.25)`, so a perfectly flat-cost run scores 0.333 at 9 turns and
+0.250 at 12, and run length is set by the crash rather than by the arm.
+
+* Prediction: **every published E2 value moves.** This is the one defence that
+  changes the measurement, and it is a correction rather than a protection: the
+  current numbers contain a length artefact of the same magnitude as their
+  entire spread (observed range 0.162–0.321 across every real run). Direction:
+  values pull toward 0.25, and the short runs move most. `sk48` at 9 turns
+  (0.311) and `tn36` at 10 (0.321) should fall furthest.
+* Prediction: a synthetic flat-cost run scores **exactly 0.250 at every
+  length**, which is the property the current definition lacks.
+* **Prediction: E2 does NOT return to the main table.** Interpolation fixes the
+  length artefact and does nothing about the concentration attack — a run that
+  dumps its whole bill on turn one still scores ~0.99 over 20 turns. Predicting
+  that E2 stays in `reference` after its own fix is predicting that the second
+  hole is the real one, and that a Phase 4 primary endpoint is still not safe.
+* Prediction: E2's process-1 verdict stays `no-data`. The Schema corpus records
+  no cost, so no E2 pair can form however the head is computed.
+
+## Aggregate predictions, so this cannot be scored loosely
+
+1. **Main table 6 → 9.** P4, K2 and K12 return; E2 does not.
+2. **Exactly one of the four published-value sets moves: E2's.** P4, K2 and K12
+   keep every value they currently report.
+3. **No process-1 verdict changes**, on either gradient. None of these four
+   metrics has a cross-arm pair now and none gains one.
+4. **The unvalidated count stays 21.** These are defences, not new material.
+5. The four exploits flip `succeeded` to `False` and their tests invert — the
+   exploit suite becomes the regression test for the defences.
+
+## The way this batch could be wrong
+
+The honest failure mode is **defence theatre**: each change makes a metric
+harder to game *in the exact way that was demonstrated*, and an exploit is one
+adversary's imagination rather than a proof of safety. `exploit_P4` attacked
+via early exit; requiring a win closes that and says nothing about a run that
+wins by a lucky path. The four demonstrations that flip to `False` below are
+evidence that four specific holes closed, and are **not** evidence that these
+metrics are now sound. Nothing here licenses moving any of them out of the
+reference tier on any ground other than the one demonstrated.
