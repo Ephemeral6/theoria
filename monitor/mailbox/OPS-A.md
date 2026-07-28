@@ -289,6 +289,6 @@ WP1/4/5 的陈旧已并入本轮报告；WP6/WP7 为零接触待门槛，属纪�
 六个目录（fuzzlab / figures / worldgen / ablation-arm / exam-artifacts / spend_gate）的留痕与红线。
 
 ### 2026-07-28T10:28Z · 下一跑请专查一类：我在邮箱里宣布过『已修』的每一条，逐条对 git diff 复
-status: OPEN
+status: ACK-本轮逐条复核：p3 例外实到、append_only 实到（判据未采纳）、盘面大幅追平；释出许可欠 3 周期未动
 re: DRIFT-spec-notes-announced-fixed-but-not
 下一跑请专查一类：我在邮箱里宣布过『已修』的每一条，逐条对 git diff 复核。这个病已经发作三次（宣布没改 / 改了一半 / 改了没跑），我给自己立的规矩是『宣布修好必须附实跑证据』，请你当这条规矩的执行者。

@@ -49,8 +49,8 @@ def note(msg):
 
 def meta(path):
     head = open(path, encoding="utf-8").read(800)
-    out = {"priority": 5, "cell": "?", "territory": "?", "deps": []}
-    for key in ("priority", "cell", "territory"):
+    out = {"priority": 5, "cell": "?", "territory": "?", "deps": [], "lane": ""}
+    for key in ("priority", "cell", "territory", "lane"):
         m = re.search(r"^%s:\s*(\S+)" % key, head, re.M)
         if m:
             out[key] = int(m.group(1)) if key == "priority" else m.group(1)
@@ -86,7 +86,7 @@ def territories_busy():
     return busy
 
 
-def candidates():
+def candidates(lane=None):
     ready = done_ids()
     busy = territories_busy()
     out = []
@@ -100,6 +100,10 @@ def candidates():
             continue
         if m["territory"] in busy:          # territory exclusivity
             continue
+        if lane and m.get("lane") and m["lane"] != lane:
+            continue                        # standing researchers stay in lane
+        if lane and not m.get("lane"):
+            continue                        # unlaned items are for generic workers
         out.append((m["priority"], iid, f, m))
     out.sort(key=lambda r: (r[0], r[1]))
     return out
@@ -108,8 +112,9 @@ def candidates():
 def cmd_list():
     print("=== available ===")
     for pri, iid, _f, m in candidates():
-        print("  p%d  %-28s cell=%-3s territory=%s" % (pri, iid, m["cell"],
-                                                       m["territory"]))
+        print("  p%d  %-28s cell=%-3s territory=%-14s %s"
+              % (pri, iid, m["cell"], m["territory"],
+                 ("lane:" + m["lane"]) if m.get("lane") else ""))
     blocked = []
     for f in sorted(os.listdir(ITEMS)):
         if not f.endswith(".md"):
@@ -133,8 +138,8 @@ def cmd_list():
             print("  " + f[:-3])
 
 
-def cmd_claim(worker):
-    for _pri, iid, fname, _m in candidates():
+def cmd_claim(worker, lane=None):
+    for _pri, iid, fname, _m in candidates(lane):
         src = os.path.join(ITEMS, fname)
         dst = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))
         try:
@@ -174,7 +179,8 @@ def main():
     if not a or a[0] == "list":
         cmd_list(); return 0
     if a[0] == "claim":
-        return cmd_claim(a[1])
+        lane = a[3] if len(a) > 3 and a[2] == "--lane" else None
+        return cmd_claim(a[1], lane)
     if a[0] == "done":
         return cmd_done(a[1], a[2])
     if a[0] == "release":

@@ -86,8 +86,10 @@ PHASES = [
                 "clause": "Phase 1 · 一件接入核查",
                 "status": "partial",
                 "note": "已结：级联语义（frame 是帧列表）、level 为响应字段、guid、动作空间、"
-                        "首帧跨会话可复现。未结：全量跨会话残留、速率与配额、"
-                        "金丝雀重放、帧缓存与释出许可条款。",
+                        "首帧跨会话可复现、金丝雀基线；**帧缓存与释出许可条款已由 OPS-B 查实**"
+                        "（browser-ops/TERMS.md §2）：本地缓存/落盘是官方设计的一部分，无需额外"
+                        "许可；**再释出需书面许可且默认禁止**（ToS 原文 without our express prior "
+                        "written permission）。未结：全量跨会话残留、速率配额的官方口径。"
             },
             {
                 "id": "p1-cascade",
