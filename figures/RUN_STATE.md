@@ -5,6 +5,14 @@ Narrative for `P4-figures` (worker `W-1611`, branch `agent/p4-figures`, base
 `figures/runs/20260728T082401Z-P4-figures/MANIFEST.json`; this file is the part
 a manifest cannot carry.
 
+> **Superseded in part by P10** (`W-1253`, 2026-07-28,
+> `runs/20260728T134521Z-P10-figures-into-paper/`). The pipeline now writes a
+> second, publication profile under `figures/paper/`, `verify.sh` has eleven
+> gates rather than eight, and two rendering defects that had been in the tree
+> since P-21 are fixed — a plate's SVG and PNG were different geometry, and
+> `fig07`'s layout never converged. P4's and P8's narratives below are left as
+> written.
+
 ## Where it stands
 
 Six figures, two themes, SVG and PNG — 24 images and 6 CSVs. `verify.sh` is

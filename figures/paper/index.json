@@ -1,0 +1,1073 @@
+{
+  "figures": [
+    {
+      "artifacts": [
+        {
+          "format": "pdf",
+          "path": "figures/paper/light/figure1_concept_timeline.pdf",
+          "sha256": "329977558d9f956d1444b3cffdbbdc8d8bc633b25d9ae2c77c3827e9c816d193",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/light/figure1_concept_timeline.png",
+          "sha256": "5116f420f1401ff3d29ea2408575c5457e92ef4e26d0ca837f0bd779177ae6a0",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/light/figure1_concept_timeline.svg",
+          "sha256": "a38fbdbeddccb33f68febbdc159e490375785d26c0913914f4f3ad4d4fc005ae",
+          "theme": "light"
+        },
+        {
+          "format": "pdf",
+          "path": "figures/paper/dark/figure1_concept_timeline.pdf",
+          "sha256": "52ef82018a3a0ea63a646d50a0b5aaac45e9c7b19f42104a4cf494486e9ed03b",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/dark/figure1_concept_timeline.png",
+          "sha256": "9683867ecde928955539bcddcca299925b595e70ccf5b633d861b48b2cedb92d",
+          "theme": "dark"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/dark/figure1_concept_timeline.svg",
+          "sha256": "3ec9276be5f6e21e952f5a883256ce5af89b5327730bf22beafafbad33fa921c",
+          "theme": "dark"
+        }
+      ],
+      "cite": "Figure 1",
+      "csv": {
+        "path": "figures/csv/fig06_concept_timeline.csv",
+        "sha256": "ac1ca32f3fb6c8c0c4896f5369f93f3c203c67f4d9151ef351bd1d68026ddd30"
+      },
+      "generator": "figures/fig06_concept_timeline.py",
+      "missing_sources": [],
+      "number": 1,
+      "pipeline_plate": "fig06_concept_timeline",
+      "pub_name": "figure1_concept_timeline",
+      "runs": [
+        {
+          "ids": [
+            "a0-base",
+            "a0-no-button"
+          ],
+          "kind": "json_keys",
+          "label": "A0 runs accounted for",
+          "source": "cold-start-a0/artifacts/concept_accounts.json"
+        },
+        {
+          "ids": [
+            "848d683a3 2026-07-27T17:02:02Z",
+            "406d69f11 2026-07-28T01:20:16Z",
+            "85da55088 2026-07-28T01:33:12Z",
+            "672044a89 2026-07-28T02:24:29Z",
+            "3f3f39652 2026-07-28T02:41:00Z"
+          ],
+          "kind": "git_commits",
+          "label": "revisions of the theorize log",
+          "source": "cold-start-a0/THEORIZE_LOG.md"
+        }
+      ],
+      "screen_artifacts": [
+        {
+          "format": "svg",
+          "path": "figures/out/light/fig06_concept_timeline.svg",
+          "sha256": "a38fbdbeddccb33f68febbdc159e490375785d26c0913914f4f3ad4d4fc005ae",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/light/fig06_concept_timeline.png",
+          "sha256": "6f37a908ca538b5cd62a8e88926a87965ce6b5f664cfa1aeaeceb34fd779c2b5",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/out/dark/fig06_concept_timeline.svg",
+          "sha256": "3ec9276be5f6e21e952f5a883256ce5af89b5327730bf22beafafbad33fa921c",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/dark/fig06_concept_timeline.png",
+          "sha256": "a65c3378b1cd54f5317d22ae24384e8374cb1c498dfa9d3b96722a759f32ed0c",
+          "theme": "dark"
+        }
+      ],
+      "section": "3",
+      "section_title": "A0 and A0' -- reversibility beats coverage",
+      "shows": "Every candidate the engines proposed, the verdict the LLM gave it, and the point at which it entered the manual. The compiler-defect iterations are on a subordinate lane because they were not manual revisions: the manual was revised zero times by certify, and a timeline that showed three revisions without saying whose they were would overstate the loop.",
+      "sources": [
+        {
+          "path": "cold-start-a0/THEORIZE_LOG.md",
+          "present": true,
+          "sha256": "fd16da792b38e59542480d9968bdb9c3df24aad86ae5c09a398ae1c006f86b51",
+          "tracked": true,
+          "what": "adjudication blocks (O-/R-/L-/P-/E-) with verdicts, and the revision-history table"
+        },
+        {
+          "path": "cold-start-a0/artifacts/candidates.jsonl",
+          "present": true,
+          "sha256": "b44422ffc7ec0690aa423b4271aed8513af046df87d1bb6c9f4e170cb3eb5818",
+          "tracked": true,
+          "what": "the 28 engine proposals as they arrived -- the evidence end of the timeline"
+        },
+        {
+          "path": "cold-start-a0/artifacts/concept_accounts.json",
+          "present": true,
+          "sha256": "8142db524edd316cbd40ae8a2a950f49d335df1ffeaa814bef0b6e38be6075a1",
+          "tracked": true,
+          "what": "per-concept verdict, script_delta_bits, the laws and rules that name it"
+        }
+      ],
+      "status": "complete",
+      "supersedes": [
+        "papers/phase1-workshop/figures/fig1_concept_timeline.py"
+      ],
+      "title": "A concept's path from engine evidence to admission in the A0 manual"
+    },
+    {
+      "artifacts": [
+        {
+          "format": "pdf",
+          "path": "figures/paper/light/figure2_a0_vs_a0prime.pdf",
+          "sha256": "6d85f69b4142de9604f01d81b40547d21b9f9f1f0ae94449be1626bb8ec1c029",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/light/figure2_a0_vs_a0prime.png",
+          "sha256": "c3cae5b47a4069f41c445a4b03a58e7c0cd84c150789249f9148083cc8af5e9e",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/light/figure2_a0_vs_a0prime.svg",
+          "sha256": "2a4bd4358e098a428589e56cdb7a9450515333a2d8e0f49188be5ee3db5b1e2b",
+          "theme": "light"
+        },
+        {
+          "format": "pdf",
+          "path": "figures/paper/dark/figure2_a0_vs_a0prime.pdf",
+          "sha256": "9aa922d967fdb803b32494e9fb8e432e8343cc423d776f80bb644c2cd716f3fd",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/dark/figure2_a0_vs_a0prime.png",
+          "sha256": "519f0ef758f490da133bedb89dd7ac568a82c91147766e9f7d402ba3059d2f6f",
+          "theme": "dark"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/dark/figure2_a0_vs_a0prime.svg",
+          "sha256": "9d3d5cc492c10a8fed47f68aa83a4d02e6ad3a8627f51fd700b3fdf97516bd28",
+          "theme": "dark"
+        }
+      ],
+      "cite": "Figure 2",
+      "csv": {
+        "path": "figures/csv/fig07_a0_vs_a0prime.csv",
+        "sha256": "1b8914e610ad1780c1e026006c934b20a1c9d2c9c5ab8e16807d8c169f7e4345"
+      },
+      "generator": "figures/fig07_a0_vs_a0prime.py",
+      "missing_sources": [],
+      "number": 2,
+      "pipeline_plate": "fig07_a0_vs_a0prime",
+      "pub_name": "figure2_a0_vs_a0prime",
+      "runs": [
+        {
+          "ids": [
+            "run_a",
+            "run_b"
+          ],
+          "kind": "json_keys",
+          "label": "A0' runs in the prime report",
+          "source": "cold-start-a0/prime/artifacts/prime_report.json"
+        },
+        {
+          "ids": [
+            "v2"
+          ],
+          "kind": "json_value",
+          "label": "battery version",
+          "source": "battery/artifacts/capability_spectrum.json"
+        }
+      ],
+      "screen_artifacts": [
+        {
+          "format": "svg",
+          "path": "figures/out/light/fig07_a0_vs_a0prime.svg",
+          "sha256": "2a4bd4358e098a428589e56cdb7a9450515333a2d8e0f49188be5ee3db5b1e2b",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/light/fig07_a0_vs_a0prime.png",
+          "sha256": "c25325851b6eb7bb78fb2015628436e64dfa5ca3c35d3e560e4cf580c6a58936",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/out/dark/fig07_a0_vs_a0prime.svg",
+          "sha256": "9d3d5cc492c10a8fed47f68aa83a4d02e6ad3a8627f51fd700b3fdf97516bd28",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/dark/fig07_a0_vs_a0prime.png",
+          "sha256": "9fc1743504c78d7ea9d8ad828d82c1d2b05d7cf97e67f8150074a11b10a7ca77",
+          "theme": "dark"
+        }
+      ],
+      "section": "3",
+      "section_title": "A0 and A0' -- reversibility beats coverage",
+      "shows": "Evidence coverage on x, accuracy on y, with replay (K1, on-trace) and held-out (K2, off-trace) accuracy plotted as a drop line per run. The drop line is the finding. A0' saw 46.9% of the state-action pairs A0 saw and was more accurate -- re-witnessability beating coverage.",
+      "sources": [
+        {
+          "path": "battery/artifacts/capability_spectrum.json",
+          "present": true,
+          "sha256": "205d2a6cb9e8f0601d495bfc8a715048d35f5ac0d67c6f18d593d1c9d5123af6",
+          "tracked": true,
+          "what": "cards (id/family/direction/unit), runs.*.metrics.* with value+status+support, coverage. fig02 takes E2/E3/E4 from here rather than recomputing three Phase 4 endpoints"
+        },
+        {
+          "path": "cold-start-a0/artifacts/score_vs_truth.json",
+          "present": true,
+          "sha256": "8bf2e036afc9e951af6ced93e920c395a49af45dae21878aedd34d3ad1babadd",
+          "tracked": true,
+          "what": "233/236 agreement and the three pairs R-05 named before the score existed"
+        },
+        {
+          "path": "cold-start-a0/prime/artifacts/prime_report.json",
+          "present": true,
+          "sha256": "14847f5d28beb75dd0279fa3a659601ff15849f5ecd939204ced56133266aa37",
+          "tracked": true,
+          "what": "A0': run A coverage/accuracy, run B's seeded error, the probe counts"
+        }
+      ],
+      "status": "complete",
+      "supersedes": [
+        "papers/phase1-workshop/figures/fig2_coverage_accuracy.py"
+      ],
+      "title": "Coverage against accuracy: A0 against A0'"
+    },
+    {
+      "artifacts": [
+        {
+          "format": "pdf",
+          "path": "figures/paper/light/figure3_a2_repair_loop.pdf",
+          "sha256": "03fb8884b0c666c5377e4266554bfbf3fbdc84469f5b4ad1444d49df2634d916",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/light/figure3_a2_repair_loop.png",
+          "sha256": "e953f63837cd8af43dbe1aaa4658e19f909e664c5ece7f8f2546b8f5a5f47bb5",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/light/figure3_a2_repair_loop.svg",
+          "sha256": "aa446747be03ac284e7a31a88672e2781fb86a692525f88bc9c947dc87d17e25",
+          "theme": "light"
+        },
+        {
+          "format": "pdf",
+          "path": "figures/paper/dark/figure3_a2_repair_loop.pdf",
+          "sha256": "5868a06080a52958120697a2fea789bff07f30f4be9aa688d8f90d4e5291dd1b",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/dark/figure3_a2_repair_loop.png",
+          "sha256": "efd2d04365826bdd0209bdbe778f9055b2d0fdd846346a0d74693fc0d326cc8d",
+          "theme": "dark"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/dark/figure3_a2_repair_loop.svg",
+          "sha256": "23c65a047462c88b9dde8443f3af76be2b7cd93e8ec8a2688375edde9390e64d",
+          "theme": "dark"
+        }
+      ],
+      "cite": "Figure 3",
+      "csv": {
+        "path": "figures/csv/fig05_a2_repair_loop.csv",
+        "sha256": "b8ca26c86e5954fd94f767792820857400d59d2acae0a0837a6be136fe10c6db"
+      },
+      "generator": "figures/fig05_a2_repair_loop.py",
+      "missing_sources": [],
+      "number": 3,
+      "pipeline_plate": "fig05_a2_repair_loop",
+      "pub_name": "figure3_a2_repair_loop",
+      "runs": [
+        {
+          "ids": [
+            "a2-base"
+          ],
+          "kind": "json_value",
+          "label": "the world this exhibit was built in",
+          "source": "cold-start-a2/artifacts/loop_ledger.json"
+        },
+        {
+          "ids": [
+            "v2"
+          ],
+          "kind": "json_value",
+          "label": "battery version",
+          "source": "battery/artifacts/capability_spectrum.json"
+        }
+      ],
+      "screen_artifacts": [
+        {
+          "format": "svg",
+          "path": "figures/out/light/fig05_a2_repair_loop.svg",
+          "sha256": "aa446747be03ac284e7a31a88672e2781fb86a692525f88bc9c947dc87d17e25",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/light/fig05_a2_repair_loop.png",
+          "sha256": "2cbe6c1c82c9bc5ae40d4ee1eb4d7aa50a949e5262c6f0cbf5566225c9a1c9cc",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/out/dark/fig05_a2_repair_loop.svg",
+          "sha256": "23c65a047462c88b9dde8443f3af76be2b7cd93e8ec8a2688375edde9390e64d",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/dark/fig05_a2_repair_loop.png",
+          "sha256": "7bac05a5d51fb2c52c479eac560f1859561b107cc81d0bdc624edac024e7840e",
+          "theme": "dark"
+        }
+      ],
+      "section": "5",
+      "section_title": "A2 -- the exhibit, and the loop that repairs it",
+      "shows": "The beat flow M0 -> M5 -> L1 … L6, each beat carrying its status and its one decisive number, over an account strip of environment actions spent. At M5 the manual replays the play record at 100%, Lean signs an axiom-free `unsolvable` theorem, and the world contradicts it -- the co-occurrence of those three facts is the whole DC22 phenomenon.",
+      "sources": [
+        {
+          "path": "battery/artifacts/capability_spectrum.json",
+          "present": true,
+          "sha256": "205d2a6cb9e8f0601d495bfc8a715048d35f5ac0d67c6f18d593d1c9d5123af6",
+          "tracked": true,
+          "what": "cards (id/family/direction/unit), runs.*.metrics.* with value+status+support, coverage. fig02 takes E2/E3/E4 from here rather than recomputing three Phase 4 endpoints"
+        },
+        {
+          "path": "cold-start-a2/A2_REPORT.md",
+          "present": true,
+          "sha256": "b11897a02fcbf3ff620b3796dc31c32ec851e5662e6fa8bd97b7039dc5f8204c",
+          "tracked": true,
+          "what": "the full-sweep RED pixel figures (128 unexplained of 20088 checked), which exist in no artefact"
+        },
+        {
+          "path": "cold-start-a2/artifacts/engines_diff.json",
+          "present": true,
+          "sha256": "041ad92e7e45d073830e1ef3c8901091d7db793a2b44a2fe57f9300435e90e94",
+          "tracked": true,
+          "what": "M0: the sweep proposes 23 rules including one jump effect; the history proposes 22 and no jump -- the hole, made a number"
+        },
+        {
+          "path": "cold-start-a2/artifacts/engines_diff_probed.json",
+          "present": true,
+          "sha256": "8f04eac2a4032a5c03502c85626479b9c088ac8b5b7fe1abf5f5a67d32afe0a7",
+          "tracked": true,
+          "what": "L4: the grown evidence re-proposes the jump rule at transition 194 -- re_derivable_from_grown_evidence, as a count rather than a boolean"
+        },
+        {
+          "path": "cold-start-a2/artifacts/exhibit_report.json",
+          "present": true,
+          "sha256": "905c6a214ebe5d56a7efc82fd1ed971f7f64e8fb5144a12e5b14aaad1f4f35e1",
+          "tracked": true,
+          "what": "M5: the manual that replays green, is signed axiom-free, and is false of the world"
+        },
+        {
+          "path": "cold-start-a2/artifacts/locate_report.json",
+          "present": true,
+          "sha256": "8001a7b6b3d8251986b5802ae7e8b2bc465268a863888d8ca6dd90d5cde00da9",
+          "tracked": true,
+          "what": "L2: the three-way narrowing, and the one transition it lands on"
+        },
+        {
+          "path": "cold-start-a2/artifacts/loop_ledger.json",
+          "present": true,
+          "sha256": "8d711fabcc40aae2e67838c5c91a11192c1c946fd9c89bf2149d1f0c1e878eb6",
+          "tracked": true,
+          "what": "the six-beat account: beat, name, claim, status, detail, evidence"
+        },
+        {
+          "path": "cold-start-a2/artifacts/plan_repaired.json",
+          "present": true,
+          "sha256": "8583e7a74eedc1c05d17c0f4cbed79dc3a79cb31112d2da2aedae60071330f15",
+          "tracked": true,
+          "what": "L6: SAT, length 18, and the world agreeing"
+        },
+        {
+          "path": "cold-start-a2/artifacts/probe_report.json",
+          "present": true,
+          "sha256": "5f48e19b116267afbf6bc60f16def91c1dbcd2b8998f1e3bbe10bde6f3336270",
+          "tracked": true,
+          "what": "L3: designed / executed / refuted / not-separable"
+        },
+        {
+          "path": "cold-start-a2/artifacts/probes.jsonl",
+          "present": true,
+          "sha256": "1072a81f6a65fed72e678c0237832664932548a384c464fed6d7d604450a749d",
+          "tracked": true,
+          "what": "L3 probe rows; P-03 carries no outcome fields at all -- designed and not separable in this world"
+        },
+        {
+          "path": "cold-start-a2/artifacts/refutation.json",
+          "present": true,
+          "sha256": "3030e7bd3b1e707f3b46da8e131b88a65896113fd47937d2eeedb9d07575feb8",
+          "tracked": true,
+          "what": "L1: the solved episode that contradicts the machine-checked theorem"
+        },
+        {
+          "path": "cold-start-a2/artifacts/repair_report.json",
+          "present": true,
+          "sha256": "246b741529c990b7bb2b8a7f4e89922e889a6dc6109a9eb1891124f62bc2f8b6",
+          "tracked": true,
+          "what": "what the repair changed"
+        },
+        {
+          "path": "cold-start-a2/artifacts/trace_summary.json",
+          "present": true,
+          "sha256": "cb7b6146dc72137792a9dd0e165e0dfdee333ee026c48ffc3adf46470ddf84dd",
+          "tracked": true,
+          "what": "the evidence spine: raw vs history trace, and the one omitted pair that fires the deleted rule"
+        }
+      ],
+      "status": "complete",
+      "supersedes": [
+        "papers/phase1-workshop/figures/fig3_loop_ledger.py"
+      ],
+      "title": "The A2 exhibit and the six-beat loop that repairs it"
+    },
+    {
+      "artifacts": [
+        {
+          "format": "pdf",
+          "path": "figures/paper/light/figure4_a3_transfer.pdf",
+          "sha256": "416579976fa8eb05a9ce7ba9bd438d2ad9415316b6ece6f347ecf65650608ec6",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/light/figure4_a3_transfer.png",
+          "sha256": "33dc38cc472a71d5952fffa809a3cc7b871a13cb47a4e7d42313a288c75069c4",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/light/figure4_a3_transfer.svg",
+          "sha256": "1d8b342181c00bed5e6702f2bb6e311eb2c9fed174d503a1acb7fc79446167f2",
+          "theme": "light"
+        },
+        {
+          "format": "pdf",
+          "path": "figures/paper/dark/figure4_a3_transfer.pdf",
+          "sha256": "f3cdf59902f82553e42c3f0c59bd40952ab11649bfd3964c1d48a4af31509031",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/dark/figure4_a3_transfer.png",
+          "sha256": "2c508cdfa976f79f4f10be4aa5d1a5317ebc02c1c5d5c8e05712c11810194a25",
+          "theme": "dark"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/dark/figure4_a3_transfer.svg",
+          "sha256": "e1d0d0587c6388b534b941fcad67315b46b9c06131b25ce2ff3d6f40b8148e64",
+          "theme": "dark"
+        }
+      ],
+      "cite": "Figure 4",
+      "csv": {
+        "path": "figures/csv/fig04_a3_transfer.csv",
+        "sha256": "b467a07308bb7f5e26233a081dabaf49d1159c499f3811ab5036aa499cf6f067"
+      },
+      "generator": "figures/fig04_a3_transfer.py",
+      "missing_sources": [],
+      "number": 4,
+      "pipeline_plate": "fig04_a3_transfer",
+      "pub_name": "figure4_a3_transfer",
+      "runs": [
+        {
+          "ids": [
+            "l1_cold_start",
+            "l2_from_scratch",
+            "l2_transfer"
+          ],
+          "kind": "json_pluck",
+          "label": "arms compared",
+          "source": "cold-start-a3/artifacts/bill_table.json"
+        }
+      ],
+      "screen_artifacts": [
+        {
+          "format": "svg",
+          "path": "figures/out/light/fig04_a3_transfer.svg",
+          "sha256": "1d8b342181c00bed5e6702f2bb6e311eb2c9fed174d503a1acb7fc79446167f2",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/light/fig04_a3_transfer.png",
+          "sha256": "e6dc0219868f86fa472101acce241abefc3b6508010f0fd0d169e3e32d46e2d9",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/out/dark/fig04_a3_transfer.svg",
+          "sha256": "e1d0d0587c6388b534b941fcad67315b46b9c06131b25ce2ff3d6f40b8148e64",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/dark/fig04_a3_transfer.png",
+          "sha256": "209ebadd53e22b0951b34067de598013dc76d80ac64d8467291bddd77d709a6b",
+          "theme": "dark"
+        }
+      ],
+      "section": "6",
+      "section_title": "A3 -- the second level costs one frame, and the free check is blind",
+      "shows": "The like-for-like level-2 comparison, meter line by meter line, control arm against transfer arm. The bottom three lines -- compile 1:1, certify 3:3, plan 1:1 -- do not move, and they are drawn for that reason: an axis that hid them would be measuring something other than transfer.",
+      "sources": [
+        {
+          "path": "cold-start-a3/A3_REPORT.md",
+          "present": true,
+          "sha256": "66fd6bfd65c4c48d36e9c25298a32fd0c59baa573172df1398de0fbda737d16a",
+          "tracked": true,
+          "what": "the toolchain-tax count, the broken-blind incident, levels-not-games, structural-not-economic -- prose that no JSON carries"
+        },
+        {
+          "path": "cold-start-a3/artifacts/bill_l2_from_scratch.json",
+          "present": true,
+          "sha256": "3fe85f7876ebbc6cb088a6bab9e9813faca5e4c7e6090d21ca64a39ba7f6c7fe",
+          "tracked": true,
+          "what": "the control arm's bill, same event shape"
+        },
+        {
+          "path": "cold-start-a3/artifacts/bill_l2_transfer.json",
+          "present": true,
+          "sha256": "3ae1b4124de204addd72b925b0b58ab9302d3c4f36b5c9c7bf721255e95c2a5e",
+          "tracked": true,
+          "what": "the transfer arm's bill as an event sequence: seq, amount, running_total, why"
+        },
+        {
+          "path": "cold-start-a3/artifacts/bill_table.json",
+          "present": true,
+          "sha256": "0325f118cf375635d7c782361b5b253b983379e5b09f921fb82a13b14b02d0ed",
+          "tracked": true,
+          "what": "the like-for-line level-2 comparison: from-scratch vs transfer, per meter line, with the cross-level warning in `note`"
+        },
+        {
+          "path": "cold-start-a3/artifacts/negative_controls.json",
+          "present": true,
+          "sha256": "ce085da8af43c407be831168be3283de2e6d4c00aef39cd13fb0da1faa4a99c5",
+          "tracked": true,
+          "what": "the safety valve: both rewired worlds caught, neither claimed a win, and static certify caught none of them"
+        },
+        {
+          "path": "cold-start-a3/artifacts/provenance_l2_transfer.json",
+          "present": true,
+          "sha256": "3545b6c742db1c91c38cbebc7a6b52b09a33760b7f459540450c5dd2073b9b72",
+          "tracked": true,
+          "what": "6 derived / 3 supplied -- the three level constants handed to every arm alike"
+        },
+        {
+          "path": "cold-start-a3/artifacts/score_vs_truth.json",
+          "present": true,
+          "sha256": "ac57397580e0d5688fd9b6c56c513faf69531ecf1b7bf4a3ae9bf7c55b3c0346",
+          "tracked": true,
+          "what": "accuracy over every reachable (state, action) pair, with the real n (248/252/252)"
+        }
+      ],
+      "status": "complete",
+      "supersedes": [],
+      "title": "A3 transfer: which meter lines move when the books are carried"
+    },
+    {
+      "artifacts": [
+        {
+          "format": "pdf",
+          "path": "figures/paper/light/figure5_capability_spectrum.pdf",
+          "sha256": "fe4fc7d18946a84d34db323891a2d72ce6a175ffc0b82a0058ec22c93ecbdb4d",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/light/figure5_capability_spectrum.png",
+          "sha256": "74dce90e2ac64bef1032d6231f1375349f9e9cade4663868bebb68fd0bdfa34c",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/light/figure5_capability_spectrum.svg",
+          "sha256": "f7c38e208c63c43181410f0a049c279bb2e5044b3638eda26399ffea4d30bc53",
+          "theme": "light"
+        },
+        {
+          "format": "pdf",
+          "path": "figures/paper/dark/figure5_capability_spectrum.pdf",
+          "sha256": "886efbae9856eb675358359645704e74d5de78239712c40b9d33b88ca957e7e1",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/dark/figure5_capability_spectrum.png",
+          "sha256": "01331aa2a3962026d137e936c227711e84031e1c40ff18d78439dba6af623060",
+          "theme": "dark"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/dark/figure5_capability_spectrum.svg",
+          "sha256": "2d5dce0a30f79e3f6a7ddc535bb783074ab1674d17bc00b49372c313df389ccc",
+          "theme": "dark"
+        }
+      ],
+      "cite": "Figure 5",
+      "csv": {
+        "path": "figures/csv/fig03_capability_spectrum.csv",
+        "sha256": "684f8447b08bdc72d8ccdfa71b82645a4dabe333934f440fcfa8110a9bde081c"
+      },
+      "generator": "figures/fig03_capability_spectrum.py",
+      "missing_sources": [],
+      "number": 5,
+      "pipeline_plate": "fig03_capability_spectrum",
+      "pub_name": "figure5_capability_spectrum",
+      "runs": [
+        {
+          "ids": [
+            "v2"
+          ],
+          "kind": "json_value",
+          "label": "battery version",
+          "source": "battery/artifacts/capability_spectrum.json"
+        },
+        {
+          "ids": [
+            "bare_cc",
+            "schema_repro",
+            "theoria_a0",
+            "theoria_a0_spike",
+            "theoria_a2"
+          ],
+          "kind": "json_value",
+          "label": "arms",
+          "source": "battery/artifacts/capability_spectrum.json"
+        },
+        {
+          "ids": [
+            "S1 baseline-parity",
+            "m4-pilot",
+            "phase3-variance-envelope",
+            "unlabelled",
+            "upstream-claude_fable_opus",
+            "upstream-gpt_5_6_sol"
+          ],
+          "kind": "json_value",
+          "label": "campaigns",
+          "source": "battery/artifacts/capability_spectrum.json"
+        }
+      ],
+      "screen_artifacts": [
+        {
+          "format": "svg",
+          "path": "figures/out/light/fig03_capability_spectrum.svg",
+          "sha256": "f7c38e208c63c43181410f0a049c279bb2e5044b3638eda26399ffea4d30bc53",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/light/fig03_capability_spectrum.png",
+          "sha256": "bca339f435fe56ad97d66b5dcd74e2cc6119f0ba07f36196bd58fb9e24b95620",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/out/dark/fig03_capability_spectrum.svg",
+          "sha256": "2d5dce0a30f79e3f6a7ddc535bb783074ab1674d17bc00b49372c313df389ccc",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/dark/fig03_capability_spectrum.png",
+          "sha256": "fa453a794bef3f6f16be1363efb2860efd79c3bd21708082ee708260dfe070dd",
+          "theme": "dark"
+        }
+      ],
+      "section": "7",
+      "section_title": "The metrics battery, recomputed over existing trajectories",
+      "shows": "Every battery metric by family against every arm, each cell the arm median normalised within its row and oriented so that further along the ramp is always better. The empty cells are the result as much as the full ones: structural absences are hatched and insufficient data is outlined, and neither is ever drawn as a zero.",
+      "sources": [
+        {
+          "path": "battery/artifacts/arm_contrast.json",
+          "present": true,
+          "sha256": "c851d749426b4a6f9a45c55a94ee39bb0f6e7002d05902b4c7baf38552f92ae0",
+          "tracked": true,
+          "what": "which metrics have cross-arm overlap (7 of 38) and the control arm"
+        },
+        {
+          "path": "battery/artifacts/capability_spectrum.json",
+          "present": true,
+          "sha256": "205d2a6cb9e8f0601d495bfc8a715048d35f5ac0d67c6f18d593d1c9d5123af6",
+          "tracked": true,
+          "what": "cards (id/family/direction/unit), runs.*.metrics.* with value+status+support, coverage. fig02 takes E2/E3/E4 from here rather than recomputing three Phase 4 endpoints"
+        },
+        {
+          "path": "battery/artifacts/gaming_audit.json",
+          "present": true,
+          "sha256": "191c0ee8cf2c796a8f739f506dee52840bf2be02394be40a16a17e6ce0a07cce",
+          "tracked": true,
+          "what": "tier demotions -- K4 must never be rendered without K2 beside it"
+        },
+        {
+          "path": "battery/artifacts/validation_material.json",
+          "present": true,
+          "sha256": "06313f87c8d6ebbee8dff2398ef48a625f378234f4aa71c19da1e79138822c38",
+          "tracked": true,
+          "what": "control_arms -- the control/treatment split as a declared field, not an inference from arm names"
+        }
+      ],
+      "status": "complete",
+      "supersedes": [],
+      "title": "The metrics battery: the family x arm capability spectrum"
+    },
+    {
+      "artifacts": [
+        {
+          "format": "pdf",
+          "path": "figures/paper/light/figure6_bill_shape.pdf",
+          "sha256": "cc1c3ec0acde7bb3ce6e119d6312b842274387e34faff551c396ea4cdbe66b3c",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/light/figure6_bill_shape.png",
+          "sha256": "5582f8cb7c89f8b152b9751369a71281a3462f3e74c914ae81f4d39ee3c4d567",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/light/figure6_bill_shape.svg",
+          "sha256": "f4e6a30c15f1bd50405c8a4db47bd02e6915b01aef74dd5ca69be22dd42e899a",
+          "theme": "light"
+        },
+        {
+          "format": "pdf",
+          "path": "figures/paper/dark/figure6_bill_shape.pdf",
+          "sha256": "fbf73867236624b92ec8cc06a8fb5fb2303f4809f8f13a3f0d36b9ba17476bb4",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/paper/dark/figure6_bill_shape.png",
+          "sha256": "e0cf4f148abdde112d9dcab17335073ce5ca1edbf98933a841673f9ece7a51c6",
+          "theme": "dark"
+        },
+        {
+          "format": "svg",
+          "path": "figures/paper/dark/figure6_bill_shape.svg",
+          "sha256": "ca7430e38897ffa21f7f7db0034e62fa83fe8b55c7e3fec3f1b402d25fefa991",
+          "theme": "dark"
+        }
+      ],
+      "cite": "Figure 6",
+      "csv": {
+        "path": "figures/csv/fig02_bill_shape.csv",
+        "sha256": "f74367ed355ed60472677a489bb4b98a3cda5bebf194d139a6be6e350fcaad02"
+      },
+      "generator": "figures/fig02_bill_shape.py",
+      "missing_sources": [
+        {
+          "path": "baseline-arms/out/shards/ledger.ar25.jsonl",
+          "why": "untracked in master; a figure built on it cannot be rebuilt from a clean checkout. Drop it in and it is picked up automatically -- and now so is any shard whose name nobody wrote down here."
+        },
+        {
+          "path": "baseline-arms/out/shards/ledger.g50t.jsonl",
+          "why": "untracked in master; a figure built on it cannot be rebuilt from a clean checkout. Drop it in and it is picked up automatically -- and now so is any shard whose name nobody wrote down here."
+        },
+        {
+          "path": "baseline-arms/out/shards/ledger.sk48.jsonl",
+          "why": "untracked in master; a figure built on it cannot be rebuilt from a clean checkout. Drop it in and it is picked up automatically -- and now so is any shard whose name nobody wrote down here."
+        },
+        {
+          "path": "baseline-arms/out/shards/ledger.tn36.jsonl",
+          "why": "untracked in master; a figure built on it cannot be rebuilt from a clean checkout. Drop it in and it is picked up automatically -- and now so is any shard whose name nobody wrote down here."
+        }
+      ],
+      "number": 6,
+      "pipeline_plate": "fig02_bill_shape",
+      "pub_name": "figure6_bill_shape",
+      "runs": [
+        {
+          "ids": [
+            "20260728T012311Z-g50t-first-contact-aborted",
+            "20260728T014402Z-g50t-first-contact-aborted",
+            "20260728T015354Z-g50t-first-contact",
+            "preflight-20260728T012057Z"
+          ],
+          "kind": "discovery",
+          "label": "theoria-arm run directories",
+          "source": "rule 'theoria_run'"
+        },
+        {
+          "ids": [
+            "pilot_ar25-0c556536.json",
+            "pilot_g50t-5849a774.json",
+            "pilot_g50t_sonnet_rerun.json",
+            "pilot_sk48-d8078629.json",
+            "pilot_sk48_sonnet_rerun.json",
+            "pilot_tn36-ef4dde99.json"
+          ],
+          "kind": "discovery",
+          "label": "baseline pilot roll-ups",
+          "source": "rule 'pilot_rollup'"
+        },
+        {
+          "ids": [
+            "v2"
+          ],
+          "kind": "json_value",
+          "label": "battery version",
+          "source": "battery/artifacts/capability_spectrum.json"
+        }
+      ],
+      "screen_artifacts": [
+        {
+          "format": "svg",
+          "path": "figures/out/light/fig02_bill_shape.svg",
+          "sha256": "f4e6a30c15f1bd50405c8a4db47bd02e6915b01aef74dd5ca69be22dd42e899a",
+          "theme": "light"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/light/fig02_bill_shape.png",
+          "sha256": "90990f35ff115e5af007265eb84f1588588f5b05c83e05a60d46c60947d693c3",
+          "theme": "light"
+        },
+        {
+          "format": "svg",
+          "path": "figures/out/dark/fig02_bill_shape.svg",
+          "sha256": "ca7430e38897ffa21f7f7db0034e62fa83fe8b55c7e3fec3f1b402d25fefa991",
+          "theme": "dark"
+        },
+        {
+          "format": "png",
+          "path": "figures/out/dark/fig02_bill_shape.png",
+          "sha256": "617f2400a68411c223a4e11521bef07a5932f4d92d84541c988486d39b6d9c38",
+          "theme": "dark"
+        }
+      ],
+      "section": "7",
+      "section_title": "The metrics battery, recomputed over existing trajectories",
+      "shows": "Cumulative cost against turn, per run, with the normalised panel the front-load index reads, the E2 head boundary and E3 convergence crossings drawn as the constructions that define them, and E4 context growth against run length. Runs that ended on an API failure are dashed; runs whose outcome is not on disk are dotted.",
+      "sources": [
+        {
+          "path": "baseline-arms/BUDGET_REPORT.md",
+          "present": true,
+          "sha256": "b463e49de21fa9af30f55035a439b21ace637d96c2f539ebef05e7d41208fb02",
+          "tracked": true,
+          "what": "section 2.1's per-arm price table -- the USD 0.1459 per successful action for bare_cc opus, which is the only baseline figure comparable to the theoria arm's"
+        },
+        {
+          "path": "baseline-arms/ledger.jsonl",
+          "present": true,
+          "sha256": "0eef1cdf067958085393bf89fe6716f7688fce0f63e85a992f0b6601c7361f4b",
+          "tracked": true,
+          "what": "pilot ledger; model-call records carry total_cost_usd, usage and step_idx"
+        },
+        {
+          "path": "baseline-arms/out/pilot_ar25-0c556536.json",
+          "present": true,
+          "sha256": "810327d746d20b46734ab268e5d722b83ac7ab7a1f5ca108d55ad494c253af3a",
+          "tracked": true,
+          "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
+        },
+        {
+          "path": "baseline-arms/out/pilot_g50t-5849a774.json",
+          "present": true,
+          "sha256": "079809eddb2e3421ad8683591d6493e0d3c693d343e3d0bf8b777c3e294fcae8",
+          "tracked": true,
+          "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
+        },
+        {
+          "path": "baseline-arms/out/pilot_g50t_sonnet_rerun.json",
+          "present": true,
+          "sha256": "45ea8a961fbfac01c9eca0350cb0c1b13bcf565137e30b3d99a5b623f24eeb30",
+          "tracked": true,
+          "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
+        },
+        {
+          "path": "baseline-arms/out/pilot_sk48-d8078629.json",
+          "present": true,
+          "sha256": "e47080b5523ad6d48e249af018488386aaf8b939ece1b74d66a356deec6217e5",
+          "tracked": true,
+          "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
+        },
+        {
+          "path": "baseline-arms/out/pilot_sk48_sonnet_rerun.json",
+          "present": true,
+          "sha256": "3c6a81e246ef79552e952adfe94eb3b71e1e777c69c65227c7ed34b12eda2faf",
+          "tracked": true,
+          "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
+        },
+        {
+          "path": "baseline-arms/out/pilot_tn36-ef4dde99.json",
+          "present": true,
+          "sha256": "130f60804b683b177191e127dc38067b9a2eee897a24dd4cd491d1c02ba59d1e",
+          "tracked": true,
+          "what": "per-run roll-up: cost_usd, model_calls, actions_ok/failed, outcome, budget. outcome is what draws a curve solid, dashed or dotted"
+        },
+        {
+          "path": "baseline-arms/out/shards/ledger.ar25.jsonl",
+          "present": false,
+          "sha256": null,
+          "tracked": false,
+          "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
+        },
+        {
+          "path": "baseline-arms/out/shards/ledger.g50t.jsonl",
+          "present": false,
+          "sha256": null,
+          "tracked": false,
+          "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
+        },
+        {
+          "path": "baseline-arms/out/shards/ledger.sk48.jsonl",
+          "present": false,
+          "sha256": null,
+          "tracked": false,
+          "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
+        },
+        {
+          "path": "baseline-arms/out/shards/ledger.tn36.jsonl",
+          "present": false,
+          "sha256": null,
+          "tracked": false,
+          "what": "envelope campaign ledger shard, same two dialects as the pilot ledger"
+        },
+        {
+          "path": "battery/REPORT_V0.md",
+          "present": true,
+          "sha256": "90bf3eb00defeb4a525d15983e3baec46c51939300febd5ccc3c97e1783e2245",
+          "tracked": true,
+          "what": "the step-failure confound panel C draws: 'Between 27% and 45% of steps in the pilot' failed outright, which makes E5 cost-per-action a price list"
+        },
+        {
+          "path": "battery/artifacts/capability_spectrum.json",
+          "present": true,
+          "sha256": "205d2a6cb9e8f0601d495bfc8a715048d35f5ac0d67c6f18d593d1c9d5123af6",
+          "tracked": true,
+          "what": "cards (id/family/direction/unit), runs.*.metrics.* with value+status+support, coverage. fig02 takes E2/E3/E4 from here rather than recomputing three Phase 4 endpoints"
+        },
+        {
+          "path": "papers/phase1-workshop/REVIEW.md",
+          "present": true,
+          "sha256": "a5ad9bf75921326fb541b1ed98a6bd893de98ce3e8afc56fc3f0bea7180f8591",
+          "tracked": true,
+          "what": "the audit that recomputes REPORT_V0's failure band as 28.3%-45.1% and records that the 27% lower bound does not reproduce. Declared so both numbers travel: the plate had been drawing the refuted bound alone"
+        },
+        {
+          "path": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/MANIFEST.json",
+          "present": true,
+          "sha256": "5421e042ca10b517c1d11271db1c8c24b4e3df9e6e8ba9bf1f716829685d6fd3",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json]"
+        },
+        {
+          "path": "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/cost_curve.json",
+          "present": true,
+          "sha256": "fb450e8733cc3c083c6fbdebeff691f0ce0f780ad38766e40eda054cd6e3935a",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json]"
+        },
+        {
+          "path": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/MANIFEST.json",
+          "present": true,
+          "sha256": "4bc21e074558db9a8b73396637fca9f781686705fc1be0de5804594aec8bba34",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json]"
+        },
+        {
+          "path": "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/cost_curve.json",
+          "present": true,
+          "sha256": "183c07e7e4c9678dcde120ea51df3ab481b5cf40d05092b6f307244a56dbb873",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json]"
+        },
+        {
+          "path": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json",
+          "present": true,
+          "sha256": "998b0422a317a0a7a48f0aef9f955f328f64623c2b2e4eb447daf7bfe8e6519b",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json]"
+        },
+        {
+          "path": "theoria-arm/runs/20260728T015354Z-g50t-first-contact/cost_curve.json",
+          "present": true,
+          "sha256": "481e94ae45cc50cbe64078b08732332f5a4b5437dc81dab14a568a65c55f9cd2",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json]"
+        },
+        {
+          "path": "theoria-arm/runs/preflight-20260728T012057Z/MANIFEST.json",
+          "present": true,
+          "sha256": "5781de56da2de675b05f6b416c57f3f72ba57b5a9220eb846c6b49d27a955225",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [MANIFEST.json]"
+        },
+        {
+          "path": "theoria-arm/runs/preflight-20260728T012057Z/cost_curve.json",
+          "present": true,
+          "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570",
+          "tracked": true,
+          "what": "a theoria-arm run: per-desk-call cost, and the manifest carrying arm/game_id/outcome and the arm's own cost reconciliation [cost_curve.json]"
+        }
+      ],
+      "status": "partial",
+      "supersedes": [],
+      "title": "Bill shape: what each arm's turns cost, and when"
+    }
+  ],
+  "profile": {
+    "publication": {
+      "formats": [
+        "pdf",
+        "png",
+        "svg"
+      ],
+      "png_dpi": 300,
+      "root": "figures/paper",
+      "themes": [
+        "light",
+        "dark"
+      ]
+    },
+    "screen": {
+      "formats": [
+        "svg",
+        "png"
+      ],
+      "png_dpi": 200,
+      "root": "figures/out",
+      "themes": [
+        "light",
+        "dark"
+      ]
+    }
+  },
+  "regenerate": "python figures/build_all.py",
+  "schema": "theoria-figures-paper-index/v1",
+  "verify": "bash figures/verify.sh"
+}
