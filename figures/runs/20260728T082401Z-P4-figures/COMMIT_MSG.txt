@@ -1,0 +1,54 @@
+P4: salvage the P-21 figure pipeline, correct it, and finish it
+
+figures/ did not exist on master. It existed uncommitted in .worktrees/wt-p21/
+on agent/p21-figures -- theme.py, sources.py, build_all.py, manifest.py,
+verify.sh, PLAN.md and two figure scripts, of which one had ever been built.
+The deterministic-figures skill is distilled from that code, so re-deriving the
+pipeline would have produced a second contract disagreeing with the documented
+one. Salvaged instead; the run MANIFEST records exactly what was carried over.
+
+Three defects in the salvaged code, all the same shape -- an artefact drifted
+and the figure code did not know:
+
+* fig03 could not be built at all. Its column axis came from arm_contrast.json,
+  a v1-era artefact that knows four arms where battery v2 scores five. The
+  guard was right to refuse to guess and wrong about who the authority is.
+  The axis now comes from capability_spectrum.provenance.arms and the
+  control/treatment split from validation_material.control_arms; the stale
+  artefact is still read and its disagreement reported rather than absorbed.
+* fig03 drew "NO SCHEMA ARM ... there may never be one" across the plate.
+  REPORT_V2 records the Schema arm as ingested -- 8 runs, 4 development-pile
+  games x 2 upstream collections -- and pairs it against bare_cc BY GAME,
+  which does control for the world. Rewritten, and the world-confound claim
+  confined to the Theoria columns where it still holds.
+* PLAN.md section 2 identified A0-prime as the battery run a0-spike.
+  A0-prime is cold-start-a0/prime/, which was on disk in P-21's own worktree.
+  a0-spike is a separate cold start on a different world run by the other
+  track. The two readings say opposite things, and the P-21 one would have
+  headlined a comparison REPORT_V1 explicitly forbids -- K2 0.000 over three
+  adversarial gaps against K2 1.000 over 39960 exhaustive cases.
+
+Added: fig04_a3_transfer (P-21 declared it out of scope; the data has been
+finished in cold-start-a3/artifacts since P-17), and the theoria arm on fig02.
+That arm did not arrive through the interface P-21 left open for it: its
+ledger is a third record dialect whose model_call rows carry no top-level
+cost, so the arm's own cost_curve.json is read instead. The two arms are not
+priced in the same unit and the plate says so.
+
+theme.check_no_mathtext raises on a bare '$' in figure text. P4's own first
+draft of fig02's caveat quoted two dollar amounts and rendered them as italic
+mathtext with the dollar signs eaten and the numbers run together. It is
+deterministically wrong, so both builds carried it and the byte-identity gate
+stayed green.
+
+theme.save pins SVG newlines to LF. matplotlib writes SVG through a text-mode
+handle, so it emitted CRLF on Windows while .gitattributes stores LF -- a
+fresh checkout plus a Windows rebuild would have failed verify.sh gate 6 with
+no defect to find.
+
+verify.sh gains gate 7: no figure script reaches the filesystem directly, so
+an undeclared -- and therefore unhashed -- read cannot slip in.
+
+Six figures, two themes, SVG and PNG, each through a CSV audit layer.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>

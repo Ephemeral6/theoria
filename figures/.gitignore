@@ -1,0 +1,3 @@
+# verify.sh's scratch trees. They are built twice and diffed, then deleted.
+.verify/
+__pycache__/

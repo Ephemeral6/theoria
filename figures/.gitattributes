@@ -1,0 +1,10 @@
+# Determinism: the figures and their CSV intermediate layer are byte-compared by
+# verify.sh. `core.autocrlf` must not be allowed to rewrite them on checkout --
+# that would make every build "fail" on a Windows clone for no reason.
+*.csv   text eol=lf
+*.svg   text eol=lf
+*.py    text eol=lf
+*.sh    text eol=lf
+*.md    text eol=lf
+SOURCES.sha256 text eol=lf
+*.png   binary
