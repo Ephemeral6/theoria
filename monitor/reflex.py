@@ -26,7 +26,7 @@ LOCK = os.path.join(HERE, "reflex.lock")
 RLOG = os.path.join(HERE, "reflex.log")
 LOOP = os.path.join(HERE, "loop_state.json")
 MAX_DEATHS = 3
-WORKER_MAX = 4      # spawning is back ON: the crash-era safeties are all in place
+WORKER_MAX = 7      # spawning is back ON: the crash-era safeties are all in place
                     # now (memory admission, 45s stagger, orphan sweep, quota
                     # gate), so worker supply no longer waits for a human.
 MIN_FREE_GB = 8     # admission control: no spawn below this much free RAM

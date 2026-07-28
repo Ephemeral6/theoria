@@ -56,3 +56,6 @@
 2026-07-28T13:46:39Z SWEEP S4-freeze released (worker W-1541 gone)
 2026-07-28T13:46:39Z SWEEP S5-phase1-close released (worker W-5200 gone)
 2026-07-28T13:47:21Z CLAIM P5-release by RES-2
+2026-07-28T14:11:54Z CLAIM S11-sealed-halfguard by W-1410
+2026-07-28T14:12:39Z CLAIM E5-cert-recheck by W-1411
+2026-07-28T14:13:23Z CLAIM S8-provenance-backfill by W-1412
