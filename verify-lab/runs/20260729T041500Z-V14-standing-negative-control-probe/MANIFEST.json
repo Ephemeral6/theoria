@@ -1,0 +1,106 @@
+{
+  "prompt_id": "V14-standing-negative-control-probe",
+  "branch": "agent/v14-standing-negative-control-probe",
+  "base_commit": "a2b4b7cb19c0238b8cf404fc11fd4fea80779f38",
+  "utc": "2026-07-29T04:15:00Z",
+  "lane": "verify (RES-3)",
+  "inputs": {
+    "gold_standard": "verify-lab/runs/20260728T152000Z-V11-negative-control-census/CENSUS_TABLE.md",
+    "merged_from": "origin/agent/v11-negative-control-census",
+    "shape_copied_from": [
+      "worldgen/qc/KNOWN_MISS.json (agent/v12-worldgen-gate-deaf)",
+      "figures/check_coverage.py --self-test",
+      "figures/verify.sh gate 7 (ast, not regex)"
+    ]
+  },
+  "measured": {
+    "census_rows": 127,
+    "in_scope": 103,
+    "out_of_scope": 8,
+    "unresolvable": 16,
+    "detector": "A-B",
+    "confusion_strict": {
+      "TP": 44,
+      "FN": 19,
+      "FP": 3,
+      "TN": 31,
+      "false_positive_rate": 0.0882,
+      "false_negative_rate": 0.3016,
+      "precision": 0.9362,
+      "accuracy": 0.7732
+    },
+    "confusion_strict_excluding_granularity_conflicts": {
+      "TP": 35,
+      "FN": 17,
+      "FP": 0,
+      "TN": 29,
+      "false_positive_rate": 0.0,
+      "false_negative_rate": 0.3269,
+      "precision": 1.0
+    },
+    "confusion_harsh": {
+      "TP": 35,
+      "FN": 11,
+      "FP": 12,
+      "TN": 39,
+      "false_positive_rate": 0.2353,
+      "false_negative_rate": 0.2391
+    },
+    "entry_points_enumerated": 141,
+    "pinned_absent": 108,
+    "pinned_present": 33,
+    "probe_on_this_tree": {
+      "verdict": "green",
+      "exit_code": 0
+    },
+    "probe_own_tests": {
+      "passed": 24,
+      "failed": 0,
+      "exit_code": 0
+    }
+  },
+  "network": "none. No API call, no .env read, no sealed-pile contact. Pure ast over the working tree.",
+  "wrote_outside_verify_lab": "nothing",
+  "files": [
+    {
+      "path": "verify-lab/negctl/criterion.py",
+      "sha256": "ac837268b906cfdccd72f711ae9889486c81021ec8720e011495adfafa724408"
+    },
+    {
+      "path": "verify-lab/negctl/probe.py",
+      "sha256": "d7567b1c8799a9aed2f944aea0496d10864c7b7cbf5b933ad52cd25403614ba8"
+    },
+    {
+      "path": "verify-lab/negctl/calibrate.py",
+      "sha256": "f771fce0a19c798647a37739a62851867418a4829259af3c803e8d745f0fb791"
+    },
+    {
+      "path": "verify-lab/negctl/KNOWN_GAPS.json",
+      "sha256": "43fc0131c73ff370c2ecb0bb8a3aaaa130d6f767522880575c08fac22716305d"
+    },
+    {
+      "path": "verify-lab/negctl/tests/test_probe.py",
+      "sha256": "51abfe5af6026478742bca1e90d61cc8a5b6e42d51bcaa8eaafa5a5dd0897b23"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/CALIBRATION.md",
+      "sha256": "4ea8a4943c1fe244a0b546dc36c76f4a8a64caf832a98ec4fc28a45657a51174"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/NOT_IDLE.md",
+      "sha256": "ece31dd2af20f4b640ec38545e004bdf0cca387b1d9c670d33b3bddd64fab2b0"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/calibration.json",
+      "sha256": "11c871e8a7c23b4a14916b7acbe8dcbca82088e5d1d16a9c5a43b09ac09b0003"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/probe.json",
+      "sha256": "cf6e5aa635570f78a5692bd312ebf26af4532b14e4519947fcfa436ed582be5f"
+    },
+    {
+      "path": "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/make_pin.py",
+      "sha256": "310bee004045e35dea06456f0df0278255a4c971d20ae90826b08d3f786daac0"
+    }
+  ]
+}

@@ -264,3 +264,117 @@ with the negative control as the acceptance line — a fix without one would be,
 in evidence, indistinguishable from the current state. A census that produced
 only accusations and no demonstration of the remedy would be easy to file and
 easy to ignore.
+
+---
+
+# The standing probe (V14)
+
+The census above is a photograph. 35 of 127 entry points had no executable
+demonstration that they can fail, and nothing in this repository asks the 36th
+for one. `verify-lab/negctl/` is the part that asks.
+
+```bash
+python verify-lab/negctl/probe.py             # the probe; exit 1 on a finding
+python verify-lab/negctl/probe.py --verbose   # every entry point and its verdict
+python verify-lab/negctl/calibrate.py         # the criterion against V11's 127 rows
+python -m pytest verify-lab/negctl/tests -q   # the probe's own negative control
+```
+
+On this tree, today: **141 entry points, 141 pinned, PROBE: green, exit 0.**
+
+## What had to be decided before any of it could be written
+
+**"Has a negative control" was a human judgement.** Six auditors read code and
+decided. To make it standing it has to become decidable, and the proxy is:
+
+> some `test_*` function in some `test_*.py` **targets this file** — an import
+> binding in its module resolves here, and the function, or a helper defined
+> beside it, uses that name — **and contains a failure assertion**:
+> `pytest.raises`, `assert <exit code> == <nonzero>`, `assert not <verdict>`,
+> `assert <findings> != []`, `assert any(... for ... in <findings>)`, and the
+> short pinned list in `criterion.py`.
+
+Parsed with `ast`, never grepped, for the reason `figures/verify.sh` gate 7
+records: its first version was a regex and its first finding was a phrase inside a
+docstring. A docstring that says "this is the negative control" is invisible to
+this criterion on purpose.
+
+**The proxy is not the judgement, and the gap is measured, not guessed.**
+`runs/20260729T041500Z-V14-standing-negative-control-probe/CALIBRATION.md`, on the
+103 census rows that name a single Python file:
+
+| | count | rate |
+|---|---|---|
+| false `present` — a real gap the probe stays quiet about | 3 of 34 | 8.8% (**0.0%** excluding the 8 files the census itself judged twice) |
+| false `absent` — a red on a gate that *does* have a negative control | **19 of 63** | **30.2%** |
+
+The naive criterion — judge by whether the test function's *name* sounds negative
+— is strictly worse at the same false-positive rate (FNR 44%), and is kept in the
+code only as the weakened probe in the not-idling proof.
+
+**Only deviation gates.** Somebody else's 35 gaps are not this item's to close, so
+`negctl/KNOWN_GAPS.json` pins all 141 entry points with the territory that owns
+each — the shape and the reasoning are `worldgen/qc/KNOWN_MISS.json`'s. A pinned
+gap is quiet. A **new** entry point with no negative control, or a pinned
+`present` that has become `absent`, is red. Two of V12's rules are deliberately
+softened and the reasons are in `probe.py`'s docstring: a *closed* gap reports
+rather than gates (141 files across nine territories, and a probe that turns every
+repair into a red gets switched off), and so does a gate that has lost its
+non-zero exit path (the enumerator that decides what counts as a gate has never
+been calibrated against anything, and gating on an uncalibrated enumerator is the
+mistake this lab exists to name).
+
+**The probe has its own negative control, and it is not idling.**
+`negctl/tests/test_probe.py`, 24 tests: a synthetic tree with a new gate and no
+negative control must exit non-zero; the same tree with one must exit 0; tests
+that only exercise the happy path must not count. Then each planted red is replayed
+against a deliberately weakened probe and the test asserts the weak version *lets
+it through* — `NOT_IDLE.md` has the table. It earned its keep immediately: the
+first run failed 9 of 24 because the enumerator only recognised `return 1` and not
+`return 1 if problems else 0`, which is how most of this repository spells it. The
+probe was reporting green on a tree containing a planted, undemonstrated gate.
+
+## Should this be a merge gate
+
+**No. Not as a blocking gate. Yes as a required advisory step.** The number, not
+the feeling:
+
+A blocking gate's cost is its false alarms, and for this probe a false alarm is a
+criterion false *negative* — a red on a gate whose negative control the criterion
+cannot see. That is **30%**. Roughly one in three properly-negative-controlled
+gates added to this repository would be blocked by a probe that is wrong about it.
+The only ways through are to weaken the criterion, or to register the file in
+`KNOWN_GAPS.json` — which is an exemption list by another name. A gate that makes
+people write exemptions gets turned off wholesale, and that is worse than no gate,
+because a disabled gate still looks like coverage in a list of checks.
+
+The 30% is also not evenly spread, which makes it worse rather than better. It
+concentrates in two classes named in `CALIBRATION.md` §3: orchestrators whose
+demonstration lives one level down (9 rows), and negative controls that are not
+pytest at all (6 rows) — `--self-test`, `--calibrate`, a pre-registered
+expectations table, `negctl.py`. Those six are among the **best** negative-control
+work in the repository. A merge gate whose false alarms land hardest on the people
+doing the thing right is not a gate, it is a tax on the practice.
+
+What the numbers *do* support:
+
+1. **Run it advisory in CI**, printing its findings, not blocking. Its false
+   `present` rate is 8.8% and 0.0% once the census's own granularity conflicts are
+   excluded — so when it does say `NEW_GAP`, it is very likely right. High
+   precision, low recall: exactly the shape you want in a reviewer's checklist and
+   exactly the wrong shape for a merge blocker.
+2. **Put `NEW_GAP` on the review checklist, not in the branch protection.** The
+   finding is one line and names the file. A human confirms in under a minute, and
+   a human is the right adjudicator for "the demonstration is in the layer below".
+3. **Re-calibrate before promoting it.** The bar for making this blocking is a
+   false-alarm rate near where `figures/check_coverage.py` sits, and the two
+   routes there are both real work someone would have to fund: teach the criterion
+   the non-pytest negative-control forms (detector B recovers 5 of them and misses
+   92%), or adopt a convention that a gate declares its own negative control so
+   the criterion stops having to infer one.
+
+One caveat the reader is owed: the criterion was tuned in three rounds against
+this same 127-row census, so **8.8% and 30% are lower bounds**. There is no
+held-out set — one census is not two. `ADVERSARIAL.md` in the run directory is an
+independent attempt to break the criterion from outside the calibration rows, and
+its findings, including where they overturn the above, are recorded there.

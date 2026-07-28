@@ -1,0 +1,88 @@
+census rows: 127   in scope: 103   out of scope: 8   unresolvable: 16
+rows whose file is shared with a differently-judged row: 8 (ablation-arm/run_arm.py, arc-recon/client.py, arc-recon/contamination.py, arc-recon/precheck.py, exam/verify.py, proxy/spend_gate.py, worldgen/build.py, worldgen/qc/run_qc.py)
+
+detector N
+  three-way (gold -> predicted):
+    yes      present=27  absent=19 
+    partial  present=8   absent=9  
+    no       present=3   absent=31 
+  strict (partial=has)   : TP=35 FN=28 FP=3 TN=31  FPR=0.0882 FNR=0.4444 prec=0.9211 acc=0.6804
+  harsh  (partial=lacks) : TP=27 FN=19 FP=11 TN=40  FPR=0.2157 FNR=0.413 prec=0.7105 acc=0.6907
+  strict, no file shared : TP=28 FN=24 FP=0 TN=29  FPR=0.0 FNR=0.4615 prec=1.0 acc=0.7037
+
+detector A-
+  three-way (gold -> predicted):
+    yes      present=32  absent=14 
+    partial  present=8   absent=9  
+    no       present=3   absent=31 
+  strict (partial=has)   : TP=40 FN=23 FP=3 TN=31  FPR=0.0882 FNR=0.3651 prec=0.9302 acc=0.732
+  harsh  (partial=lacks) : TP=32 FN=14 FP=11 TN=40  FPR=0.2157 FNR=0.3043 prec=0.7442 acc=0.7423
+  strict, no file shared : TP=31 FN=21 FP=0 TN=29  FPR=0.0 FNR=0.4038 prec=1.0 acc=0.7407
+
+detector A
+  three-way (gold -> predicted):
+    yes      present=33  absent=13 
+    partial  present=9   absent=8  
+    no       present=4   absent=30 
+  strict (partial=has)   : TP=42 FN=21 FP=4 TN=30  FPR=0.1176 FNR=0.3333 prec=0.913 acc=0.7423
+  harsh  (partial=lacks) : TP=33 FN=13 FP=13 TN=38  FPR=0.2549 FNR=0.2826 prec=0.7174 acc=0.732
+  strict, no file shared : TP=33 FN=19 FP=1 TN=28  FPR=0.0345 FNR=0.3654 prec=0.9706 acc=0.7531
+
+detector B
+  three-way (gold -> predicted):
+    yes      present=4   absent=42 
+    partial  present=1   absent=16 
+    no       present=0   absent=34 
+  strict (partial=has)   : TP=5 FN=58 FP=0 TN=34  FPR=0.0 FNR=0.9206 prec=1.0 acc=0.4021
+  harsh  (partial=lacks) : TP=4 FN=42 FP=1 TN=50  FPR=0.0196 FNR=0.913 prec=0.8 acc=0.5567
+  strict, no file shared : TP=5 FN=47 FP=0 TN=29  FPR=0.0 FNR=0.9038 prec=1.0 acc=0.4198
+
+detector A-B
+  three-way (gold -> predicted):
+    yes      present=35  absent=11 
+    partial  present=9   absent=8  
+    no       present=3   absent=31 
+  strict (partial=has)   : TP=44 FN=19 FP=3 TN=31  FPR=0.0882 FNR=0.3016 prec=0.9362 acc=0.7732
+  harsh  (partial=lacks) : TP=35 FN=11 FP=12 TN=39  FPR=0.2353 FNR=0.2391 prec=0.7447 acc=0.7629
+  strict, no file shared : TP=35 FN=17 FP=0 TN=29  FPR=0.0 FNR=0.3269 prec=1.0 acc=0.7901
+
+detector AB
+  three-way (gold -> predicted):
+    yes      present=36  absent=10 
+    partial  present=10  absent=7  
+    no       present=4   absent=30 
+  strict (partial=has)   : TP=46 FN=17 FP=4 TN=30  FPR=0.1176 FNR=0.2698 prec=0.92 acc=0.7835
+  harsh  (partial=lacks) : TP=36 FN=10 FP=14 TN=37  FPR=0.2745 FNR=0.2174 prec=0.72 acc=0.7526
+  strict, no file shared : TP=37 FN=15 FP=1 TN=28  FPR=0.0345 FNR=0.2885 prec=0.9737 acc=0.8025
+
+--- disagreements under detector A-B ---
+FALSE NEGATIVE  engine-rig/bench/__main__.py                            gold=partial 
+FALSE NEGATIVE  theory-compiler/tools/verify_c8.py                      gold=partial 
+FALSE NEGATIVE  theory-compiler/tools/probe_mentions.py                 gold=yes     
+FALSE NEGATIVE  theory-compiler/tools/transcribe_deadlock_certificates.py gold=yes     
+FALSE NEGATIVE  theory-compiler/tools/build_deadlock_lean.py            gold=partial 
+FALSE NEGATIVE  exam/verify.py                                          gold=partial 
+FALSE NEGATIVE  exam/tools/build_papers.py                              gold=yes     
+FALSE NEGATIVE  exam/tools/run_exam.py                                  gold=yes     
+FALSE NEGATIVE  exam/tools/run_selftest.py                              gold=yes     
+FALSE NEGATIVE  battery/run_battery.py                                  gold=partial 
+      via battery/tests/test_determinism.py::test_artefacts_carry_no_wall_clock:61  (assert <planted bad thing> not in <output>)
+FALSE POSITIVE  worldgen/build.py                                       gold=no      
+      via worldgen/tests/test_build_gate.py::test_each_gate_can_fail_on_its_own:49  (assert <complaint> in <findings>)
+      via worldgen/tests/test_build_gate.py::test_every_gate_fails_together:57  (assert any(... for ... in <findings>))
+FALSE NEGATIVE  worldgen/qc/run_qc.py                                   gold=partial 
+FALSE NEGATIVE  proxy/model_proxy.py                                    gold=yes     
+      via proxy/tests/test_redteam.py::test_red12_a_reflected_key_does_not_reach_the_arm_from_the_model_proxy:393  (assert <planted bad thing> not in <output>)
+FALSE POSITIVE  proxy/spend_gate.py                                     gold=no      
+      via proxy/tests/test_spend_gate.py::test_the_check_reads_another_campaigns_spend:50  (pytest.raises)
+      via proxy/tests/test_spend_gate.py::test_a_second_campaign_cannot_reserve_headroom_the_first_is_holding:67  (pytest.raises)
+FALSE POSITIVE  arc-recon/client.py                                     gold=no      
+      via arc-recon/test_canary_schedule.py::test_an_explicit_env_path_is_never_second_guessed:429  (pytest.raises)
+      via arc-recon/test_hygiene.py::test_cookies_can_be_turned_off_to_reproduce_the_old_transport:248  (assert <planted bad thing> not in <output>)
+FALSE NEGATIVE  ablation-arm/run_exhibits.py                            gold=yes     
+FALSE NEGATIVE  baseline-arms/harness/audit_cells.py                    gold=partial 
+FALSE NEGATIVE  cold-start-a3/run_all.py                                gold=yes     
+FALSE NEGATIVE  cold-start-a3/a3pipeline/negctl.py                      gold=yes     
+FALSE NEGATIVE  a0-spike/pipeline/run_a0.py                             gold=yes     
+FALSE NEGATIVE  a0-spike/runs/20260728T040057Z-c2/make_manifest.py      gold=yes     
+FALSE NEGATIVE  a0-spike/probes/semantics_probe.py                      gold=partial 
