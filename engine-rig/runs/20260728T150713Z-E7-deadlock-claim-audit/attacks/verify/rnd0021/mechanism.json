@@ -1,0 +1,220 @@
+{
+  "boxes": {
+    "b1": "c41",
+    "b2": "c12"
+  },
+  "goal_reached_in_relaxation": {
+    "deletes_of_at-player_restored": true,
+    "deletes_of_at_restored": false,
+    "deletes_of_clear_restored": false,
+    "full_relaxation (what FD's translator computes)": true,
+    "no_relaxation_at_all (real dynamics)": false
+  },
+  "justification_chain": [
+    {
+      "atom": [
+        "at",
+        "b1",
+        "c41"
+      ],
+      "by": "INITIAL STATE",
+      "depth": 0
+    },
+    {
+      "atom": [
+        "at",
+        "b2",
+        "c11"
+      ],
+      "by": "(push c13 c12 c11 b2 left)",
+      "depth": 0,
+      "needs": [
+        [
+          "at-player",
+          "c13"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "clear",
+          "c11"
+        ]
+      ]
+    },
+    {
+      "atom": [
+        "at-player",
+        "c13"
+      ],
+      "by": "(move c12 c13 right)",
+      "depth": 1,
+      "needs": [
+        [
+          "at-player",
+          "c12"
+        ],
+        [
+          "clear",
+          "c13"
+        ]
+      ]
+    },
+    {
+      "atom": [
+        "at-player",
+        "c12"
+      ],
+      "by": "(push c11 c12 c13 b2 right)",
+      "depth": 2,
+      "needs": [
+        [
+          "at-player",
+          "c11"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "clear",
+          "c13"
+        ]
+      ]
+    },
+    {
+      "atom": [
+        "at-player",
+        "c11"
+      ],
+      "by": "(move c21 c11 up)",
+      "depth": 3,
+      "needs": [
+        [
+          "at-player",
+          "c21"
+        ],
+        [
+          "clear",
+          "c11"
+        ]
+      ]
+    },
+    {
+      "atom": [
+        "at-player",
+        "c21"
+      ],
+      "by": "(move c22 c21 left)",
+      "depth": 4,
+      "needs": [
+        [
+          "at-player",
+          "c22"
+        ],
+        [
+          "clear",
+          "c21"
+        ]
+      ]
+    },
+    {
+      "atom": [
+        "at-player",
+        "c22"
+      ],
+      "by": "(move c32 c22 up)",
+      "depth": 5,
+      "needs": [
+        [
+          "at-player",
+          "c32"
+        ],
+        [
+          "clear",
+          "c22"
+        ]
+      ]
+    },
+    {
+      "atom": [
+        "at-player",
+        "c32"
+      ],
+      "by": "(move c42 c32 up)",
+      "depth": 6,
+      "needs": [
+        [
+          "at-player",
+          "c42"
+        ],
+        [
+          "clear",
+          "c32"
+        ]
+      ]
+    },
+    {
+      "atom": [
+        "at-player",
+        "c42"
+      ],
+      "by": "INITIAL STATE",
+      "depth": 7
+    },
+    {
+      "atom": [
+        "clear",
+        "c32"
+      ],
+      "by": "INITIAL STATE",
+      "depth": 7
+    },
+    {
+      "atom": [
+        "clear",
+        "c22"
+      ],
+      "by": "INITIAL STATE",
+      "depth": 6
+    },
+    {
+      "atom": [
+        "clear",
+        "c21"
+      ],
+      "by": "INITIAL STATE",
+      "depth": 5
+    },
+    {
+      "atom": [
+        "clear",
+        "c11"
+      ],
+      "by": "INITIAL STATE",
+      "depth": 4
+    },
+    {
+      "atom": [
+        "at",
+        "b2",
+        "c12"
+      ],
+      "by": "INITIAL STATE",
+      "depth": 3
+    },
+    {
+      "atom": [
+        "clear",
+        "c13"
+      ],
+      "by": "INITIAL STATE",
+      "depth": 3
+    }
+  ],
+  "player": "c42",
+  "witness_state": 8
+}

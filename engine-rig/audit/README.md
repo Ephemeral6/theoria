@@ -42,8 +42,11 @@ is unavailable, but because the interesting number needs it evaluated on 3 342
 states and that is 3 342 subprocesses otherwise. An independent reimplementation
 nobody compared to the original is a second guess rather than a second opinion,
 so `relaxation_vs_fd` compares them state by state and the agreement count is
-reported next to every conclusion that rests on it (16/16 at the time of
-writing).
+reported next to every conclusion that rests on it. This module contributes 16
+of those comparisons; the adversarial pass added 100 more across four further
+geometries and a second encoding, and separately verified `far4` **exhaustively**
+— all 3342 states injected into the translated SAS task, 0 disagreements. The
+figure to quote is **116/116**, not this module's 16/16.
 
 ## The prediction this package got wrong
 
@@ -53,9 +56,15 @@ pair deadlocks (`deleting_actions_blocked` — the pushes exist and need a cell 
 other box holds) should not, because the relaxation drops exactly the deletes
 that argument turns on.
 
-**They do not split.** The relaxation catches both, and the reason is worth more
-than the prediction was: dropping deletes does not *manufacture* atoms. `clear`
-is false on a box's cell at the start and the relaxation never adds it back
-without an actual push, so the player still cannot get between two adjacent
-boxes. The module keeps its original reasoning in its docstring, and the result
-that refuted it beside it.
+**They do not split.** The relaxation catches both. The module keeps its original
+reasoning in its docstring, and the result that refuted it beside it.
+
+The *explanation* first offered for that — dropping deletes does not manufacture
+atoms, `clear` is false on a box's cell at the start and never comes back without
+an actual push — is **also wrong**, and an adversarial reviewer showed it by
+re-encoding sokoban with `occupied` instead of `clear`: the relaxation still
+finds all 2904 dead states on `far4` with occupancy information removed
+entirely. What is load-bearing is **static push geometry** — a box against a wall
+has no pusher cell outside the wall, so it is confined to one row or column
+whatever the relaxation does with `clear`. Both the prediction and the wrong
+explanation stay on the record; see `DEADLOCK_CLAIM.md` §3d and §7.

@@ -41,6 +41,35 @@ If the split is real, the honest claim is not "deadlock theorems do not speed
 planners up" but something narrower and more useful: **a deadlock theorem is
 worth what it adds to the planner's own relaxation, and the two kinds this rig
 proves sit on opposite sides of that line.**
+
+--------------------------------------------------------------------------
+WHAT HAPPENED.  The prediction above is wrong, and is kept because a prediction
+deleted after it fails is a prediction nobody made.
+
+**The two kinds do not split.**  `deadstart-corner{4,5,6}` and
+`deadstart-pair{4,5,6}` are both settled *unguarded* at 0 expansions with
+h = infinity; the live control searches normally (21/41/88).  The conclusion the
+split was meant to license is reached anyway, by the coverage measurement in
+`claim.py` instead of by this contrast.
+
+**The explanation first given for that is also wrong.**  It was: dropping
+deletes cannot manufacture atoms, `clear` is false on a box's cell at the start
+and never comes back without a real push, so the player still cannot get between
+two adjacent boxes.  An adversarial reviewer re-encoded sokoban with `occupied`
+in place of `clear` and the relaxation still found all 2904 dead states on
+`far4` with occupancy information removed entirely.  What is load-bearing is
+**static push geometry**: a box against a wall has no pusher cell outside the
+wall, so it is confined to one row or column whatever the relaxation does with
+`clear`.
+
+**And (A)/(B) is a false dichotomy.**  Both hold, on different rows.  (A) is
+right about containment -- no theorem-dead state on this family is outside the
+relaxation.  But (B) is literally true on some searches: `astar(ipdb())` on far6
+reports `Dead ends: 0`, having never generated a dead state at all.  Neither
+covers the effect that does exist, which is that deleting the dead push
+operators makes the relaxation harder and raises h on *live* states.
+
+See `DEADLOCK_CLAIM.md` §3c, §3d and §7.
 """
 
 from typing import List, Tuple

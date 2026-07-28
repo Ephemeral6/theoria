@@ -1,0 +1,9 @@
+{
+  "n_theorems": 132,
+  "regen_base": "88f15f48d7dcc1e8",
+  "disk_base": "88f15f48d7dcc1e8",
+  "regen_guard": "d0dee99fa2531b53",
+  "disk_guard": "5db5a090cc856cd1",
+  "base_matches_disk": true,
+  "guard_matches_disk": false
+}

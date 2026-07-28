@@ -1,0 +1,256 @@
+{
+  "domain": "sokoban_nc_domain.pddl",
+  "instance": "far4-nc",
+  "kind": "noclear",
+  "n_agree": 24,
+  "n_checked": 24,
+  "n_python_alive_fd_dead": 0,
+  "n_python_dead_fd_alive": 0,
+  "n_python_relaxation_dead": 2904,
+  "n_reachable": 3342,
+  "n_theorem_dead": 1512,
+  "n_theorem_dead_outside_relaxation": 0,
+  "n_truly_dead": 2904,
+  "rows": [
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 0
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 12
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 69
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 293
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 315
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 588
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 604
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 855
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 1106
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 1136
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 1377
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 1553
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 1647
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 1907
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 1941
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 2176
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 2285
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 2455
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 2603
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 2728
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 2885
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 3007
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 3109
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": false,
+      "fd_returncode": 0,
+      "fd_solved": true,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 3247
+    }
+  ]
+}

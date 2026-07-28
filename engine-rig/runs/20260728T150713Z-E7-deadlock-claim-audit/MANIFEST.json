@@ -1,8 +1,313 @@
 {
+  "attacks_command": "python attacks/<script>.py, run from this run directory; each writes its own JSON beside itself. DEADLOCK_CLAIM.md section 7 says what each one attacked and which numbers it broke.",
   "base_commit": "6f6b87a49fc3545269a35bedb49465fd50ac4c9b",
   "branch": "agent/e7-deadlock-claim-audit",
+  "command": "python -m audit --out runs/20260728T150713Z-E7-deadlock-claim-audit",
+  "determinism": {
+    "fd_numbers_are_not_reconstructible_from_git": "Every Fast Downward number in this run came from a binary that is not tracked by git and cannot be rebuilt from the repository alone. The repo's byte-reproducibility requirement does not cover them. What replaces it is the hash, commit and build command below: a rebuild that hashes differently is a question a reader can raise.",
+    "ipdb_expansion_counts_are_measured_but_are_not_evidence": "DEADLOCK_CLAIM.md section 7b withdraws them: iPDB's pattern generation moves the count by more than the effect under study. They are re-derived on a fixed task, where that lottery cannot bite, but no conclusion in the document rests on an ipdb row.",
+    "structural_results_are_reproducible": "Node counts, generated and evaluated counts, initial heuristic values, plan lengths, translator task sizes and exit codes are a function of the instance and the configuration. audit/verify.py re-derives a subset -- far4 blind before/after and every dead-start instance -- and compares them exactly.",
+    "the_set_results_need_no_planner_at_all": "The three sets of DEADLOCK_CLAIM.md section 3 (truly dead, relaxation dead, theorem dead) are pure Python over the reachable space, and so is the rnd0021 counterexample of section 3a. audit/verify.py regenerates rnd0021 from attacks/a3_family.py's random_level(seed=20260728) and recomputes its numbers rather than reading them, so that check runs on a machine that has never built a planner.",
+    "timings_are_not": "Every wall-clock figure here is a property of this machine at this moment. audit/verify.py checks that timings are present, non-negative and no larger than the run they sit inside; it never compares them for equality, and neither should a reader."
+  },
+  "directories": [
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 24,
+      "path": "attacks/crosscheck/noclear-box-on-goal-nc/logs"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 24,
+      "path": "attacks/crosscheck/noclear-far4-nc/logs"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 16,
+      "path": "attacks/crosscheck/sokoban-ell/logs"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 24,
+      "path": "attacks/crosscheck/sokoban-goal-in-corner/logs"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 12,
+      "path": "attacks/crosscheck/sokoban-three-b/logs"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 54,
+      "path": "attacks/independent/logs"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 18,
+      "path": "attacks/logs/a2"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 454,
+      "path": "attacks/logs/a3"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 8,
+      "path": "attacks/logs/a5"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 27,
+      "path": "attacks/logs/a7"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 381,
+      "path": "attacks/verify/admissible/logs"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 42,
+      "path": "attacks/verify/rnd0021/fd-logs"
+    },
+    {
+      "holds": "raw Fast Downward logs",
+      "n_log_files": 148,
+      "path": "logs"
+    },
+    {
+      "holds": "the PDDL the audit generated and ran",
+      "n_log_files": 0,
+      "path": "instances"
+    },
+    {
+      "holds": "the PDDL the attacks generated and ran",
+      "n_log_files": 0,
+      "path": "attacks/work"
+    },
+    {
+      "holds": "the far4 one-state problems of the exhaustive sweep",
+      "n_log_files": 0,
+      "path": "attacks/independent/work"
+    },
+    {
+      "holds": "the three-far8 regeneration",
+      "n_log_files": 0,
+      "path": "attacks/verify/admissible/work"
+    },
+    {
+      "holds": "the 14 one-state problems FD was asked about",
+      "n_log_files": 0,
+      "path": "attacks/verify/rnd0021/problems"
+    }
+  ],
+  "files": [
+    {
+      "path": "claim_audit.json",
+      "sha256": "f6c53064686d9f6f95e80fbaa48417a4368982baffa95459c9dc76ac84d9e7b7"
+    },
+    {
+      "path": "../../DEADLOCK_CLAIM.md",
+      "sha256": "87dd828d2996baca6959a4889e3432362c1dac809c5a679a9816aacfe761c93e"
+    },
+    {
+      "path": "attacks/a2_ladder.json",
+      "sha256": "e6db4e326539480c79416d4363ffefa92448c51685bad387f1103ebdf99b2316"
+    },
+    {
+      "path": "attacks/a3_hand.json",
+      "sha256": "31fb9c81ed8b061370c7b7ac5c6c380d1d7d971d5eaa7318d9ac5013d86ec8f7"
+    },
+    {
+      "path": "attacks/a3_random.json",
+      "sha256": "a3d4cbde034f1d2971195a1b37a9bd115cf4d042163c18371eeb8f7f37b43803"
+    },
+    {
+      "path": "attacks/a7_hunt.json",
+      "sha256": "8df96de00369d25134213cdbdbb6c7cddaf6c0f326c2d8a09086fd61ae5a2c89"
+    },
+    {
+      "path": "attacks/crosscheck_noclear_box-on-goal.json",
+      "sha256": "5d6ff47c3f0448f04a116bbc5552037cc7f581e7621bb1ac9a0e193477fe2550"
+    },
+    {
+      "path": "attacks/crosscheck_noclear_far4.json",
+      "sha256": "f90af416762a9e5b6c711d9d2a14701133ebc86136978ea1814101f3e97309a1"
+    },
+    {
+      "path": "attacks/crosscheck_sokoban_ell.json",
+      "sha256": "bcce17221db8c0637aa3c00e9b1c4ffe35488e15171d0a2bb5f8029da3e679fc"
+    },
+    {
+      "path": "attacks/crosscheck_sokoban_goal-in-corner.json",
+      "sha256": "1ed01716ad6204521191ece91c2d380ac90cce6d06b2452f96cf218fab6e5b31"
+    },
+    {
+      "path": "attacks/crosscheck_sokoban_three-b.json",
+      "sha256": "80877402545064cc8515e2c6e5ba64c29e5953cec9146db32afd181cf2689894"
+    },
+    {
+      "path": "attacks/goalcut.json",
+      "sha256": "4daaa13cdc47dc6699683c7c22663eb319f10a8713dca2d18e5e6023375e054d"
+    },
+    {
+      "path": "attacks/independent/fullcheck.json",
+      "sha256": "d0580c5e4c72618e99e3a3f7ccab61429af18aa24670b1a85c32bbe3e5871cfd"
+    },
+    {
+      "path": "attacks/independent/sasprobe.json",
+      "sha256": "964e2f174e9fc329b510333f98a21cec3f14276b2a9ea57efa24b60d495f79a7"
+    },
+    {
+      "path": "attacks/noclear_compare.json",
+      "sha256": "b704b9263842302404021d949d2886f29c03cd533eb15aef951eb81c08c11d5d"
+    },
+    {
+      "path": "attacks/sweep_fuzz.json",
+      "sha256": "d03aae7ff5c6fee5c492c7c180367580ae62725fdd7165d590bc437c14aaed5f"
+    },
+    {
+      "path": "attacks/sweep_named.json",
+      "sha256": "179f2f3bbe47ba626cd74a3617a9112f320f2edef29e6e7359f53aa089825340"
+    },
+    {
+      "path": "attacks/verify/admissible/MANIFEST.json",
+      "sha256": "5ead2ba9420f0a377009ec941927a37a5b100513e7c16fd0b375bb693a2ed1c4"
+    },
+    {
+      "path": "attacks/verify/admissible/SUMMARY.json",
+      "sha256": "fa68a011f1a33707539ff8fe283db5e1e0aecf058a33496a1e2f04e7c700c306"
+    },
+    {
+      "path": "attacks/verify/admissible/deadsets.json",
+      "sha256": "9ea7749da53fe95b48e515700d5dad970fd722ae7746535341274cf8897dabdf"
+    },
+    {
+      "path": "attacks/verify/admissible/far9_budget.json",
+      "sha256": "b61e445279d9deb13a924bfd689c86506f0b8d339c2187555890d0108b4c5c11"
+    },
+    {
+      "path": "attacks/verify/admissible/lmcut_rows.json",
+      "sha256": "7cb4b1208a5777899208fa4ea7472ebbc0d5f02c0cdf645b9cc3cf58f5098ebc"
+    },
+    {
+      "path": "attacks/verify/admissible/pinned_patterns.json",
+      "sha256": "3dcf607d485cf7596281ecd2c67069824a6f41f19fd9d6b627a7e388b05fcd0d"
+    },
+    {
+      "path": "attacks/verify/admissible/swap_bigpatterns.json",
+      "sha256": "b9b56dd1032bf8f362b37fdbc41f59d6e8bc52b7a89189d6f42dd9e0c75a66ac"
+    },
+    {
+      "path": "attacks/verify/admissible/swap_budget.json",
+      "sha256": "14e4408876b3594a607fdcd1234f5c8b148eee11d41eb98bbebc69fec81ab8db"
+    },
+    {
+      "path": "attacks/verify/admissible/swap_greedy_guarded.json",
+      "sha256": "27a0897a6ca260501c33b87b036290867a5caa46eb1fd507a4f45f3be587b564"
+    },
+    {
+      "path": "attacks/verify/admissible/swap_manual_patterns.json",
+      "sha256": "d4ff413ce492abf7031cf71534879be5904ea29a8b5f42ca1096015f027dcc15"
+    },
+    {
+      "path": "attacks/verify/admissible/swap_sweep.json",
+      "sha256": "5831931d1a245e0f1ffd54231ce91d859644ea12949f45fc44e75b6949fff539"
+    },
+    {
+      "path": "attacks/verify/admissible/swap_winning_pattern.json",
+      "sha256": "8ed7a2cab72b31079109f6129a6448e3e9c964f59bfa8468453662f33766d7ea"
+    },
+    {
+      "path": "attacks/verify/admissible/three-far8_provenance.json",
+      "sha256": "0ade1851b1a72c6907f7c672585f6182bc0ecc223f2ffa74c2797088c939c89a"
+    },
+    {
+      "path": "attacks/verify/admissible/three-far8_v2.json",
+      "sha256": "b0bbfc5d567438c4e2149cf971b36607aed7fc8690fb33473dd6cba03c5e1679"
+    },
+    {
+      "path": "attacks/verify/rnd0021/VERDICT.json",
+      "sha256": "d0230bd33d194217c3c8e64c065407cc2eab9121cdd8da306fd6c6a55ab61104"
+    },
+    {
+      "path": "attacks/verify/rnd0021/fd_check.json",
+      "sha256": "ee849ae79dba03e9e302a97ca590cf150d1dbc11838ed77ae7472bd9ef89ce31"
+    },
+    {
+      "path": "attacks/verify/rnd0021/mechanism.json",
+      "sha256": "7efc3ea915e91d852aab3e605365d2f0bad15c2fcdd30c5a67c979bde5b06dab"
+    },
+    {
+      "path": "attacks/verify/rnd0021/recompute.json",
+      "sha256": "942f67df9837ebea9534cfef4ae08acf07e5e97c214ed7ba09084d65050d45e8"
+    },
+    {
+      "path": "attacks/verify/rnd0021/states.json",
+      "sha256": "7de63946e7f28faaf1b60230e4ae0925719b6f15a1fbfff0691d23dbb29a223b"
+    },
+    {
+      "path": "attacks/verify/sweep_soundness.json",
+      "sha256": "4ef6cd9ff67b374126b75fec4858331918f0a37dd81782fc9a863a418a00139e"
+    },
+    {
+      "path": "attacks/wider.json",
+      "sha256": "803f8035ea520903cc141e5e2c11d8a6f6ba358b37a030aa446da165f81eb964"
+    }
+  ],
+  "host": {
+    "machine": "AMD64",
+    "platform": "Windows-11-10.0.26200-SP0",
+    "python": "3.13.13"
+  },
+  "notes": [
+    "DEADLOCK_CLAIM.md is listed in files[] as ../../DEADLOCK_CLAIM.md. It lives in engine-rig/, not in this run directory, but it is the artefact the run exists to support, and a hash on it is what keeps the document and its evidence from drifting apart -- which they did twice before the current draft.",
+    "Three numbers this run originally published were broken by its own adversarial reviewers and are withdrawn in DEADLOCK_CLAIM.md section 7: the far8 and far9 ipdb dividends, n_theorem_dead_outside_relaxation = 0 read as a statement about the encoding rather than about the far{N} family, and the 'redundant, not unused' explanation of the zero.",
+    "attacks/a6_subsets.py and attacks/a2b_ipdb_repeat.py wrote no output and attacks/a7_hunt.py was killed at 71 of a planned 400 instances. Section 7d records that; the absence of their JSON from files[] is that fact, not an omission from this manifest."
+  ],
   "prompt_id": "E7-deadlock-claim-audit",
-  "status": "in-progress",
+  "soundness_problems": [],
+  "status": "done",
+  "toolchain": {
+    "available": true,
+    "binary": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p13\\engine-rig\\.toolchain\\downward\\builds\\release\\bin\\downward.exe",
+    "binary_bytes": 280538976,
+    "binary_sha256": "645671ae40d825478a043a9f94c856dc6130a11c166b3393837c153c5020aee1",
+    "build_command": "cmake -G Ninja -S src -B builds/release -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=<mingw64>/bin/gcc.exe -DCMAKE_CXX_COMPILER=<mingw64>/bin/g++.exe -DCMAKE_EXE_LINKER_FLAGS=\"-static\" && cmake --build builds/release",
+    "checks_against_p13": {
+      "binary_sha256": true,
+      "fd_commit": true,
+      "fd_version": true
+    },
+    "driver": "C:/Users/user/Desktop/theoria/.worktrees/p13/engine-rig/.toolchain/downward/fast-downward.py",
+    "expected": {
+      "binary_sha256": "645671ae40d825478a043a9f94c856dc6130a11c166b3393837c153c5020aee1",
+      "compiler": "winlibs mingw-w64 GCC 16.1.0 (UCRT, posix threads, SEH, r3)",
+      "fd_commit": "7120aa01704bfe8e3b9b92c062a4f775bc89c7bd",
+      "fd_version": "Fast Downward 24.06+"
+    },
+    "matches_p13_manifest": true,
+    "notes": [],
+    "re_derived_not_copied": "This block was probed from the live binary when the manifest was completed, not copied from E2's manifest. audit/verify.py compares binary_sha256 against the planner in front of it before it re-measures anything, so a structural comparison cannot quietly be made against a different build.",
+    "reported_revision": "7120aa0",
+    "reported_version": "Fast Downward 24.06+",
+    "reproducibility_gap": "Every Fast Downward number in this run came from a binary that is not tracked by git and cannot be rebuilt from the repository alone. The repo's byte-reproducibility requirement does not cover them. What replaces it is the hash, commit and build command below: a rebuild that hashes differently is a question a reader can raise.",
+    "toolchain_manifest": "engine-rig/runs/p13-fd-real/TOOLCHAIN_MANIFEST.md",
+    "toolchain_manifest_present": true,
+    "why_not_in_the_repository": ".toolchain/ is gitignored by design (~1.6 GB of compiler, planner and build tree). See P-13."
+  },
   "utc": "20260728T150713Z",
-  "worker": "W-1411"
+  "verified_by": "python -m audit.verify runs/20260728T150713Z-E7-deadlock-claim-audit",
+  "why_the_directories_are_not_hashed_file_by_file": "Those directories hold 1232 raw Fast Downward logs and several thousand generated PDDL files. A hash for each would run to thousands of entries and make this manifest unreadable, which is the opposite of what a manifest is for. Every conclusion in DEADLOCK_CLAIM.md is drawn from the JSON in files[], and that IS hashed file by file; the logs are the raw material those JSON files were parsed out of, kept so a reader can re-parse them rather than trust the parser. The log counts are recorded here so that a wholesale deletion is at least visible.",
+  "worker": [
+    {
+      "did": "ran the measurements: audit/claim.py end to end, the attacks a1-a7, the sweeps and the crosschecks. Left this manifest a six-key stub marked in-progress.",
+      "id": "W-1411"
+    },
+    {
+      "did": "finished the audit: the adversarial review that broke three published numbers (DEADLOCK_CLAIM.md section 7), the rnd0021 counterexample and its structural argument, audit/verify.py, and this manifest.",
+      "id": "W-130"
+    }
+  ]
 }
