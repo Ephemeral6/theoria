@@ -55,6 +55,11 @@ INCIDENT_KINDS = frozenset({
     # A line in the file is not a v1.0 record. The file is append-only, so it
     # cannot be removed; recording it is the only correction available.
     "ledger_unreadable_line",
+    # The shared spend pool refused, so a request the arm made did not complete
+    # or its response never reached the arm. INC-BA-003's whole complaint was
+    # that a budget stop left no trace anyone else could see; a refusal that
+    # only appears as a 500 to the arm is that again, one layer down.
+    "spend_gate_refused",
 })
 
 _LOCKS: Dict[str, threading.Lock] = {}

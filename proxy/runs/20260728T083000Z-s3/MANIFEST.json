@@ -1,0 +1,133 @@
+{
+  "adversarial_review": {
+    "all_fixed": true,
+    "bypasses_demonstrated": 5,
+    "headline": "the pool was one pool per checkout (51 of them, $10,959.90 combined authorised exposure); dollars were never authorised before they were spent (one call put $600 through a $10 ceiling)",
+    "method": "subagent instructed to break the claim; 11 exploit scripts written and run",
+    "report": "proxy/runs/20260728T083000Z-s3/ADVERSARIAL.md",
+    "still_open": [
+      "check->record is not atomic: 7 requests admitted into 1 action of headroom",
+      "POSIX stale-lock (unlink-and-recreate) untestable on this machine",
+      "record() does not check released/expired",
+      "a reservation id read from the pool file can be spent under",
+      "baseline-arms' own HTTP client is not behind the gate"
+    ]
+  },
+  "base_commit": "733dcfd74cef80abb8454222ffd43e05ac060e7b",
+  "branch": "agent/s3-spend-gate-v2",
+  "campaign_attribution": {
+    "decided_from_campaign_cells": 151,
+    "ledger": "baseline-arms/ledger.jsonl",
+    "lines": 560,
+    "rewritten": false,
+    "undecidable": 409
+  },
+  "faults_found_in_the_salvage": [
+    "shared-name write probe raced two concurrent gates into a false refusal",
+    "one unpriced call refused ALL spend pool-wide, permanently and unrecoverably",
+    "no module-level reserve(), which is the form a live caller had already guessed"
+  ],
+  "files": [
+    {
+      "path": "baseline-arms/harness/ledger.py",
+      "sha256": "464dd498f5584d88ea9d52c65f38683c280b488b6d07e3c697585f6278396863"
+    },
+    {
+      "path": "proxy/DECISIONS.md",
+      "sha256": "0478e5c9caf28878aa5acc1ae3a65f12b684047a84c5ad88ee968e9472fa5f77"
+    },
+    {
+      "path": "proxy/SPEND_GATE.md",
+      "sha256": "c358a1da1e81765623b6cba8945c7a85416e42011d54230ed3ba7bf604f76ae0"
+    },
+    {
+      "path": "proxy/cost.py",
+      "sha256": "3d6782fa7dcf060de994f6e33c001f5866447bccdb6fd23b0a7476c7ec90544d"
+    },
+    {
+      "path": "proxy/env_proxy.py",
+      "sha256": "8322130855af6bbb6e4c11980fc071a4b1b546970a40ff84fd22b04e3a6309ba"
+    },
+    {
+      "path": "proxy/forward.py",
+      "sha256": "0331201596dca0d00a925891768b732c1f245dc1e082b1d3d2c5283f095fab39"
+    },
+    {
+      "path": "proxy/ledger.py",
+      "sha256": "0bdb6078416b758b5e7411e67e56d2b888974f6b19bd016fe205d563523f23f7"
+    },
+    {
+      "path": "proxy/model_proxy.py",
+      "sha256": "e34a699d6a1c4ccc43d455eed4b9faec2853533db52fc46cfd03f94c1faeb5ac"
+    },
+    {
+      "path": "proxy/runner.py",
+      "sha256": "6024b7466626bf542f3b46d715f525da4a7e81f59701f4aeeaa672814e77312c"
+    },
+    {
+      "path": "proxy/runs/20260728T083000Z-s3/ADVERSARIAL.md",
+      "sha256": "27c8ca8628c3cbd20c792cd3495051b1471d806741f60f8e2cab2eb15a150562"
+    },
+    {
+      "path": "proxy/spend_gate.py",
+      "sha256": "eec29a96a2a6033cd0be69cc2aea373e585e9c69051cea1754ff3f5a585c1c63"
+    },
+    {
+      "path": "proxy/spend_policy.json",
+      "sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572"
+    },
+    {
+      "path": "proxy/tests/conftest.py",
+      "sha256": "9d73a1476305255db0325ca837051fc5f8179f5b13be7bc480a86cfdc529d531"
+    },
+    {
+      "path": "proxy/tests/test_spend_gate.py",
+      "sha256": "453bc8c3249aaa05f89ddb3462fdc67bdc82b7c7adb71d4a32a109c648824d63"
+    },
+    {
+      "path": "proxy/tests/test_spend_gate_concurrency.py",
+      "sha256": "7545cc67001f67b14454a0f5770d6f0637f1875a52b511f9586adcd78f9bff0d"
+    },
+    {
+      "path": "proxy/tests/test_spend_gate_egress.py",
+      "sha256": "ce1129b34bfd11eaf9fc6da5a1e3869089ac2ab6b4b0998aa43b6bd3f6c19e0a"
+    },
+    {
+      "path": "proxy/verify_spend.sh",
+      "sha256": "4dd33ee94df244834581de81b8ae8b5eeb3952433970efb5f692d28ee9bddca4"
+    }
+  ],
+  "goal": [
+    "one shared, cross-session, atomic spend register; the check reads the GLOBAL sum",
+    "campaign field through proxy and baseline-arms; undecidable history marked unknown, never guessed",
+    "fail-closed with no optional form: no reservation / no policy / no ledger => no egress",
+    "concurrency proven by multi-process fuzz, not by threads",
+    "proxy/SPEND_GATE.md: how each track plugs in, and INC-BA-003's real cost"
+  ],
+  "money_spent": {
+    "arc_actions": 0,
+    "note": "offline throughout; the gate was never pointed at a live upstream",
+    "usd": 0.0
+  },
+  "prompt_id": "S3-spend-gate",
+  "provenance": {
+    "branch_name": "agent/s3-spend-gate-v2 rather than agent/s3-spend-gate, because the latter is checked out in that dead session's worktree and taking it would have meant destroying the directory the salvage came from",
+    "note": "916 lines of uncommitted, untracked, never-executed work left by a dead session at 2026-07-28T04:07Z. Salvaged rather than rewritten; audited, three faults fixed, then wired and tested. The board item was written believing the file did not exist, which was true when W-1521 checked, four hours before it was written.",
+    "salvaged_from": ".worktrees/wt-s3/proxy/{spend_gate.py,spend_policy.json}"
+  },
+  "territory": "proxy (+ the one sanctioned cross-border edit: baseline-arms/harness/ledger.py)",
+  "tests": {
+    "baseline_arms": 32,
+    "proxy_suite_after": 257,
+    "proxy_suite_before": 180,
+    "spend_gate": 58,
+    "spend_gate_concurrency": 6,
+    "spend_gate_egress": 15
+  },
+  "utc": "2026-07-28T08:42:54Z",
+  "verify": {
+    "command": "cd proxy && bash verify_spend.sh",
+    "result": "green"
+  },
+  "worker": "W-1540"
+}

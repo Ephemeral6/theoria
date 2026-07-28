@@ -72,6 +72,58 @@ class PriceTable:
                 "lines": {k: round(v, 6) for k, v in lines.items()},
                 "unpriced_usage_keys": unknown or None}
 
+    def ceiling_for(self, body: Any) -> Dict[str, Any]:
+        """The most this request could cost, computed *before* it is sent.
+
+        `cost()` prices a call after the fact, which is the only way to know
+        what it really cost -- and is therefore useless as a gate. An
+        adversarial pass put $600 through a $10 ceiling in one call for exactly
+        this reason: the money was checked only after it had left. What makes a
+        pre-flight possible is that the Anthropic Messages API requires
+        `max_tokens`, so the expensive half of the bill has a stated bound
+        before the socket opens.
+
+        Returns `{"usd": float}` when a bound exists, or `{"usd": None,
+        "why": ...}` when none can be computed. **A missing bound is a
+        refusal, not a zero** -- the caller must not send what it cannot price,
+        because an unpriceable call is unbounded and the pool has no way to
+        notice it going by.
+
+        The input side is estimated from the serialised request at a
+        deliberately pessimistic 3 characters per token; the output side uses
+        `max_tokens` in full. Both err upward: this is a ceiling, and a ceiling
+        that is sometimes too low is not a ceiling.
+        """
+        if not isinstance(body, dict):
+            return {"usd": None, "why": "the request body is not a JSON object, "
+                                        "so no model and no max_tokens can be read"}
+        model = body.get("model")
+        prices = self.models.get(model) if isinstance(model, str) else None
+        if prices is None:
+            return {"usd": None, "model": model,
+                    "why": "model %r is not in %s, so this call has no "
+                           "computable ceiling" % (model, self.name)}
+        max_tokens = body.get("max_tokens")
+        if not isinstance(max_tokens, int) or max_tokens <= 0:
+            return {"usd": None, "model": model,
+                    "why": "max_tokens is %r; without it the output side of the "
+                           "bill is unbounded" % (max_tokens,)}
+
+        per_token_in = prices["input"] / 1_000_000.0
+        per_token_out = prices["output"] / 1_000_000.0
+        # Pessimistic: 3 chars/token is below any real tokeniser's ratio for
+        # English, and cache multipliers can only raise the input side, so the
+        # largest of them is applied to all of it.
+        chars = len(json.dumps(body, ensure_ascii=False))
+        input_tokens = chars / 3.0
+        multiplier = max([1.0] + [float(m) for m in self.cache.values()])
+        usd = input_tokens * per_token_in * multiplier + max_tokens * per_token_out
+        return {"usd": round(usd, 6), "model": model,
+                "basis": {"max_tokens": max_tokens,
+                          "estimated_input_tokens": int(input_tokens),
+                          "cache_multiplier_applied": multiplier,
+                          "chars_per_token_assumed": 3.0}}
+
 
 def price_run(records: List[Dict[str, Any]], table: PriceTable) -> Dict[str, Any]:
     total = 0.0

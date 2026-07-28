@@ -468,3 +468,86 @@ afterwards.
 Until it exists, the honest form of the closure claim is: **the ledger is
 complete and self-consistent, and the arm cannot write to it — but the operator
 can.** Phase 1's "no bypass" property was always about the arm, and it holds.
+
+## D-025 · The spend gate is on the socket, not beside it
+
+`forward.forward()` takes a keyword-only `permit` with **no default**. A caller
+that does not pass one gets a `TypeError` at the call site.
+
+The alternative — a `check_budget()` a caller is expected to call first — is
+what INC-BA-003 already tried, and the reason it failed is instructive. The
+second session obeyed every rule it knew about, including the pile cut, which
+is a far more demanding rule than "check the budget". It did not fail at
+compliance. **The rule it needed did not exist to be known.** A convention binds
+only the people who have read it, and that set is not one you can enumerate at
+03:00 when a second session starts.
+
+So the gate is shaped like `assert_playable()`: a function on the first line of
+the path that spends, whose refusal is an exception rather than a return value.
+A refusal returned as a `Response` would let a budget breach be retried as
+though it were weather.
+
+The permit is checked before **every attempt**, not once per `forward()` call.
+One call can open up to `max_attempts` sockets; the pool's action unit is one
+outbound request; and a retry storm is precisely the shape that reaches the
+600 rpm limit. A gate that charged a retry loop as one request would be blind
+to the case it was built for.
+
+## D-026 · Undeclared is answered with a small number, not with a shrug
+
+A proxy constructed without a reservation takes one itself, using the policy's
+`default_run_caps` ($5.00 / 600 actions).
+
+Three options were on the table and two are worse. **Refusing to construct**
+would have made the field required, which breaks `theoria-arm/harness/run.py`
+and `proxy/replay.py` — code this ticket may not edit — and a fail-closed
+change that another track has to fix before anything runs at all is a change
+that gets reverted. **Claiming the pool's whole remaining headroom** would mean
+two undeclared runs can never coexist, which is a rule nobody would keep.
+
+The default caps are deliberately small. Not declaring a budget should be
+inconvenient rather than unlimited: $5 is under a tenth of the whole approved
+programme, so an undeclared run cannot quietly become a campaign, and the global
+pool ceiling binds on top of it regardless. The holder record carries
+`undeclared: true`, so the monitor can see who did not say.
+
+## D-027 · Blindness is scoped to the quantity it blinds
+
+An unpriced model call makes the pool's **dollar** total a lower bound, so no
+further dollar may be spent against it. It says nothing whatever about ARC
+actions, which are counted by the request and not by a price table.
+
+The inherited code refused *everything* on one unpriced call, and wiring the
+gate to the egress path is what exposed that: a single mock model call with a
+name absent from `proxy/pricing/` stopped the **environment** proxy — which
+spends no dollars at all — for every session sharing the pool, permanently,
+because the ledger is append-only and nothing could take it back.
+
+A gate that can brick the whole programme on one missing price-table row is not
+fail-closed. It is a single point of failure wearing fail-closed's clothes, and
+the difference matters because the first kind gets fixed and the second kind
+gets disabled.
+
+`price_unpriced(reservation, usd=…, resolves=…, reason=…)` is the way back, and
+it is narrow on purpose: appended rather than edited, a stated reason required,
+and it refuses to resolve more blindness than the pool actually has — otherwise
+the count could be driven negative and the gate re-opened on nothing.
+
+## D-028 · The historical ledger is read, not rewritten
+
+`baseline-arms/ledger.jsonl` has 560 lines with no `campaign` field. New lines
+carry one; the old ones are attributed at **read** time, by a rule with exactly
+one source: a line's own `campaign` wins, otherwise `run_id` is looked up in
+`out/campaign_cells.jsonl`, otherwise `unknown`.
+
+Rewriting the file in place would be the INC-008 manoeuvre, and INC-008 was a
+deliberate, incident-recorded exception taken because the ledger contained
+something that must not be there — session bearer tokens. Nothing here is
+*wrong* in those lines. They are silent, and silence is recoverable from a file
+that already exists.
+
+The measured result is **151 decidable, 409 not**, and the 409 stay `unknown`.
+The other reconstructions available — infer from timestamps, or from which games
+ran together — would produce a complete-looking table, and that is the objection
+to them: a spend figure that cannot be checked against anything is worse than a
+gap that is visible.
