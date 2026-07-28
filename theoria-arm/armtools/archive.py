@@ -26,6 +26,7 @@ Four obligations are discharged here and each one can fail loudly:
 import argparse
 import json
 import os
+import re
 import sys
 from typing import Any, Dict, List, Optional
 
@@ -218,6 +219,32 @@ def sealing(records: List[Dict[str, Any]], key_len: int = 36) -> Dict[str, Any]:
     for record in incidents:
         by_kind[record.get("kind")] = by_kind.get(record.get("kind"), 0) + 1
     blob = json.dumps(records)
+
+    # The sealed pile, checked against the cut itself rather than against the
+    # guard's own opinion of what it blocked. The guard fails closed and is
+    # tested, but "the guard did not fire" is a statement about the guard; this
+    # is a statement about the bytes. Every game id mentioned anywhere in this
+    # run's records is compared with `arc-recon/data/piles.json`.
+    sealed_seen: List[str] = []
+    games_seen: List[str] = []
+    try:
+        from proxy.guard import load_piles              # noqa: PLC0415
+        piles = load_piles(verify=True)
+        sealed = set(piles.get("sealed_pile") or [])
+        if not sealed:
+            raise ValueError("piles.json carries no sealed_pile; refusing to "
+                             "report 'sealed pile untouched' from an empty set")
+        pattern = re.compile(r"\b([A-Za-z0-9]{2,6}-[0-9a-f]{8})\b")
+        for match in pattern.finditer(blob):
+            game = match.group(1)
+            if game not in games_seen:
+                games_seen.append(game)
+            if game in sealed and game not in sealed_seen:
+                sealed_seen.append(game)
+        cut_ok: Any = True
+    except Exception as exc:                            # noqa: BLE001
+        cut_ok = "%s: %s" % (type(exc).__name__, exc)
+
     return {
         "incidents": len(incidents),
         "by_kind": by_kind,
@@ -226,6 +253,10 @@ def sealing(records: List[Dict[str, Any]], key_len: int = 36) -> Dict[str, Any]:
         "sealed_pile_requests": by_kind.get("sealed_pile_request", 0),
         "redacted_markers": blob.count("<redacted>"),
         "guard_blocks": sum(1 for r in records if r.get("event") == "guard_block"),
+        "game_ids_anywhere_in_the_records": sorted(games_seen),
+        "sealed_game_ids_found": sorted(sealed_seen),
+        "sealed_pile_untouched": (not sealed_seen) if cut_ok is True else cut_ok,
+        "cut_integrity": cut_ok,
     }
 
 

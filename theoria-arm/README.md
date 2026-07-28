@@ -86,6 +86,17 @@ own request and its own `env_step`. The pre-flight for the first live run
 needed 18 attempts for a single RESET. `MANIFEST.json` carries both counts and
 the amplification.
 
+**`candidates.jsonl` grows by a full engine sweep per theorize round, and that
+is not duplication.** The engines are re-dispatched on the whole history every
+time the desk is called, so a run with eight rounds has eight `zero_space`
+sweeps in the box — roughly 360 invariant rows each. They are not copies: each
+sweep sees more transitions than the last, so the laws it proposes and the
+`evidence.transitions` it cites differ. The frozen candidate schema has no
+round field (`CONTRACTS/candidates_schema.md`, seven keys, not ours to change),
+so `timestamp` and `evidence` are what separate one sweep from another. Expect
+a few thousand rows and a few megabytes on a full run; git packs it down by
+roughly ten to one.
+
 **The proof layer is usually unavailable on a real level, and says so.** Lean's
 enumerative development decides every state in the kernel; a 64×64 grid world
 has far too many. The pagoda development needs a LINE world and an
