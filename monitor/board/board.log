@@ -98,3 +98,4 @@
 2026-07-28T15:08:15Z CLAIM S15-ledger-hashchain by RES-4
 2026-07-28T15:08:37Z DONE S10-invariant-on-resource by W-1251
 2026-07-28T15:10:01Z CLAIM V10-fuzz-mutation-power by RES-3
+2026-07-28T15:11:24Z CLAIM V11-negative-control-census by RES-3

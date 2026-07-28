@@ -664,6 +664,58 @@ def _self_driving():
                        if stalled_any else "")}
 
 
+def _offline_done():
+    """离线收工没有？——收工即可全力转向烧钱与墙钟的战役（用户已授权）。
+
+    判据是离线七格：引擎两格、编译两格、评测两格、离线对局一格。
+    它们都 >=95 时，建造期正式结束，剩余重量全在战役与写作上。"""
+    cells = {"E1": "引擎建成", "E2": "引擎验证", "C1": "编译链",
+             "C2": "离线验收", "V1": "指标电池", "V2": "考卷",
+             "A2": "自建世界对局"}
+    lag = [(k, spec.GRID.get(k, {}).get("pct", 0), v)
+           for k, v in cells.items() if spec.GRID.get(k, {}).get("pct", 0) < 95]
+    if not lag:
+        return {"status": "green",
+                "detail": "**离线已收工**（七格全 ≥95%）——战役线可全速；"
+                          "其余赛道转纯 token 工作。"}
+    return {"status": "partial",
+            "detail": "离线还差 %d 格：%s。战役线已获授权可先行，不必等齐。"
+                      % (len(lag), "、".join("%s %s(%d%%)" % (k, v, p)
+                                             for k, p, v in lag))}
+
+
+def _spend_watch():
+    """花了多少、剩多少 —— 账号额度是唯一的真约束，且是共享池。"""
+    led = rel("proxy", "var", "spend_gate.jsonl")
+    if not os.path.exists(led):
+        return {"status": "partial", "detail": "闸门账本尚未产生记录。"}
+    total, rows = 0.0, 0
+    by_campaign = {}
+    for line in open(led, encoding="utf-8", errors="ignore"):
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            r = json.loads(line)
+        except Exception:
+            continue
+        usd = float(r.get("usd") or 0)
+        total += usd
+        rows += 1
+        c = r.get("campaign") or "未标注"
+        by_campaign[c] = by_campaign.get(c, 0.0) + usd
+    ENVELOPE = 200.0
+    left = ENVELOPE - total
+    detail = ("开发堆战役包 $%.0f，已花 **$%.2f**，剩 $%.2f（%d 条记账）"
+              % (ENVELOPE, total, left, rows))
+    if by_campaign:
+        detail += "；分战役：" + "、".join(
+            "%s $%.2f" % (k, v) for k, v in sorted(by_campaign.items())[:4])
+    if left < 40:
+        return {"status": "risk", "detail": detail + "　→ **余额不足，需续包**"}
+    return {"status": "green", "detail": detail}
+
+
 def probe_needs_human():
     """全系统唯一需要人出手的事：App 会话死了（上下文满或被关）。
 
@@ -698,6 +750,8 @@ def probe_needs_human():
 PROBES = {
     "credential_hygiene": probe_credential_hygiene,
     "needs_human": probe_needs_human,
+    "offline_done": lambda: _offline_done(),
+    "spend": lambda: _spend_watch(),
     "self_driving": lambda: _self_driving(),
     "bus": lambda: _bus_probe(),
     "supply": lambda: _supply(),
