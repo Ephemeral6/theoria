@@ -269,6 +269,98 @@ author will look for them.
   cost rows and USD 48.39 of campaign spend, declared-and-absent. The rule now
   picks up any shard dropped in, including one whose filename nobody wrote down.
 
+## The adversarial review, and the blocker it found in the probe
+
+An adversarial reviewer was run over the finished branch on three axes —
+evidence, reproducibility, novelty — instructed to refute rather than to
+approve. It could not refute the six load-bearing claims (it re-derived each
+from the tree: the two unread roll-ups and their line styles from `98593a0`'s
+`fig02_bill_shape.py`, the unreachable empty-curve branch, that no figure
+recomputes E2/E3/E4, that the head boundary is derived, that the live theoria
+arm has no battery run, and the E4 support-key disagreement). It found sixteen
+defects. The one worth reading is the first.
+
+**BLOCKER — the negative control was still auditing through the thing it
+audits.** The probe walked the filesystem, but took the *root* and the *pattern*
+it walked from `sources.rule(...)` — the registry under audit — and the
+self-test narrowed `sources.DISCOVERED`, which is derived state that nobody
+edits by hand. So the control exercised the one narrowing the probe already
+survived. Narrowing the **`Rule`** instead — a tightened pattern, which is what
+a real regression actually looks like — reproduced drift D-1 exactly and the
+probe reported nothing: both runs back to dotted, outcomes committed on disk,
+gate green.
+
+That is the *same* finding as the one this run had already congratulated itself
+for fixing, one level up. The first version called the registry as a function;
+the second took its parameters from it. **An oracle can be captured through an
+argument as easily as through a call**, and "I walk the filesystem myself" was
+not the property that mattered — *where* it walks was. The probe now states its
+root, pattern and member filenames as literals, deliberately duplicating
+`sources.DISCOVERY`. Duplication is wrong everywhere else in this directory and
+right here: two independently written descriptions of one tree can disagree, and
+the disagreement is the finding. One description checked against itself cannot
+disagree with anything.
+
+The other fifteen, all applied:
+
+* **The plate contradicted itself.** The caveat asserted `THE TURN AXES DIFFER`
+  in capitals and then reported `0 run(s) disagree`. It now states the checked
+  result in whichever direction the check came out.
+* **Both examples under that rule were wrong, and wrong in the flattering
+  direction** — they made a true mechanism look like it had instances it does
+  not have. `ddabe772` *agrees* on the turn axis and its E3 crossing is marked;
+  its 20-against-24 is the E4 support-key finding, a different thing.
+  `9022a076` has no battery turn count at all. Corrected next to the claim
+  rather than deleted, and the claim itself stands.
+* **Five numbers were literals on the plate, two of them duplicating numbers the
+  same build computes.** `USD 0.9025` and `-8.3 %` are now derived from the
+  basis run's manifest — they reproduce the literals exactly, which is the
+  point: they were right, and they were a second definition. The three that
+  cannot be computed here (`USD 0.1459`, and the two failure bands) are now
+  **declared sources**, so a number quoted on the plate is a hashed number.
+* **The plate drew a refuted bound alone.** `REPORT_V0`'s 27-45 % is recomputed
+  as 28.3-45.1 % in `papers/phase1-workshop/REVIEW.md`, which records that the
+  27 % lower bound does not reproduce. Both now travel, and the red-ink
+  threshold in panel C's gutter moved off the refuted number — no run on this
+  build sits between the two, which is the reason to move it now rather than
+  after one does.
+* **`8` was hand-copied where `0.25` was derived.** The short-run floor is now
+  quoted from the battery's own reason string in the hashed artefact.
+* **`fnmatch` is case-insensitive on win32 and case-sensitive on POSIX**, so the
+  same tree could have been inventoried differently by operating system. Now
+  `fnmatchcase`. A real determinism defect, invisible on any single machine.
+* **`SOURCES.md` claimed no script in `figures/` opens an undeclared path.**
+  False as of this run, and false in a way that matters: the probe is exactly
+  such a script, on purpose. Rewritten to say which two files are outside gate
+  7's scope and why that is the correct scope.
+* **The untracked-shard exposure is now named rather than left to surface as an
+  unexplained hash diff.** `build_all.py` prints a `WARN` per folded-in
+  untracked shard, demonstrated with a scratch file. Two of this territory's own
+  numbers come from that tree and are marked as not checkable from a clean
+  checkout.
+* **The probe's stated question was wider than the one it asked** — it skipped
+  half-written run directories on the same predicate the rule uses, so a run
+  landing with a cost curve and no manifest would have been invisible to both at
+  once. Now named as a failure. None exist today; the class is watched.
+* **`manifest.py`'s flags were made required rather than defaulted.** Leaving
+  `P4-figures` as a default would have left the trap armed for whoever ran the
+  command without reading the comment explaining the trap.
+* **A newly landed malformed run would have killed the build of all six figures
+  with a bare `KeyError`.** It now raises naming the directory and the missing
+  fields.
+* **P-21's claim that the extractor takes a `--ledger` list** is false — there is
+  no `argparse` in `fig02` — and gets a `P8 CORRECTION` in place, per this
+  plan's own convention.
+* Two docstring overclaims and one count in `README.md` were narrowed to what is
+  actually true.
+
+And two layout defects that the longer text introduced, caught by looking at the
+plates rather than by any gate: panel C's title ran off the right edge, and
+panel D's x-label printed through the first two lines of the caveat. Both were
+byte-identical between builds and green on all eight gates. That is the third
+time in two runs that the thing no gate can see was a rendering fault found by
+opening the picture.
+
 ## Discipline
 
 Zero API calls, zero model calls, zero network, zero spend. Sealed pile

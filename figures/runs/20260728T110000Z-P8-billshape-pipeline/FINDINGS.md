@@ -106,13 +106,31 @@ from the first — the precise failure `figures/SOURCES.md` exists to prevent.
 
 Two consequences that must be said on the plate rather than smoothed over:
 
-1. **The turn axes are not the same.** The battery's turn axis is *model-call
-   order* (`INPUT_FORMAT.md` gap 5: the ledger has no explicit turn index).
-   fig02's x-axis is `step_idx`. For most runs the two agree; for
-   `ddabe772` the battery counts 20 turns over 24 billed calls, and for
-   `9022a076` 7 turns over 10 calls. Where they disagree, E3's crossing is
-   **not** drawn as a position on fig02's axis; the value is reported and the
-   disagreement is named.
+1. **The turn axes are not the same *quantity*, so they are checked.** The
+   battery's turn axis is *model-call order* (`INPUT_FORMAT.md` gap 5: the
+   ledger has no explicit turn index); fig02's x-axis is `step_idx`. E3's
+   crossing is drawn only where the two coincide, and the check is reported
+   either way.
+
+   > **Correction, written after the check was built.** The two examples first
+   > given here were both wrong, and in the same direction — they made a rule
+   > that is right look like it had instances that it does not have. On this
+   > tree **the two axes agree on all 12 runs that carry a battery turn count**,
+   > and every E3 crossing that exists is therefore markable.
+   >
+   > `ddabe772` was cited as a disagreement. It is not: `shape_turns = 20`,
+   > `len(points) = 20`, `max_turn = 20`, `axis_agrees = True`, and its crossing
+   > *is* marked. Its 20-against-24 is a different disagreement entirely — E2/E3
+   > support against **E4** support, which is the battery-internal labelling
+   > finding below, not a turn-axis mismatch.
+   >
+   > `9022a076` was cited as "7 turns over 10 calls". Its E2 and E3 are
+   > `insufficient-data` and carry **no support at all**, so it has no battery
+   > turn count for anything to disagree with; the 7 came from the run-level
+   > `turns` field, which is a third quantity again. The mechanism is real and
+   > the two examples under it never happened — the same shape as `fc17ae0`, and
+   > the reason to write the correction next to the claim rather than to delete
+   > the claim.
 2. **The theoria arm has no E2/E3/E4 at all.** Battery v2's five arms are
    `bare_cc`, `schema_repro`, `theoria_a0`, `theoria_a0_spike`, `theoria_a2`.
    The theoria arm fig02 draws — the live ARC run — is in none of them, so its

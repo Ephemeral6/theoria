@@ -89,6 +89,8 @@ def main(argv: list[str] | None = None) -> int:
     # indistinguishable from the strong one right up until it is not.
     for warning in sources.TRACKING_UNAVAILABLE:
         print(f"WARN: {warning}", file=sys.stderr)
+    for warning in sources.untracked_inclusions():
+        print(f"WARN: {warning}", file=sys.stderr)
 
     wanted = tuple(args.only) if args.only else FIGURES
     unknown = [w for w in wanted if w not in FIGURES]

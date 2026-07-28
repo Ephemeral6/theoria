@@ -182,6 +182,13 @@ its root. They are named in `SOURCES.md` as a known-absent input with the exact
 path to drop in, and the extractor takes a `--ledger` list so adding them is
 configuration, not code.
 
+> **P8 CORRECTION.** There is no `--ledger` list and there never was: `fig02`
+> has no `argparse` at all. P-21 described an interface it planned and did not
+> build, and the sentence survived because nobody had reason to run the command
+> it describes. What is true as of P8 is stronger — a shard dropped into
+> `baseline-arms/out/shards/` is picked up by the `envelope_ledger` rule with no
+> configuration and no code, including one whose filename nobody wrote down.
+
 **Shape.** Cumulative cost (USD) against turn index, one line per run, grouped
 and coloured by model (haiku / sonnet / opus) — the model ladder is v0's
 substitute for the missing Schema arm (`battery/DECISIONS.md` D-B-004, and
@@ -621,11 +628,24 @@ premise about the empty theoria column was stale. (iii) The untracked
 rows and USD 48.39 of campaign spend are still declared-and-absent — the rule now
 picks up *any* shard dropped in, including ones nobody wrote down.
 
-**And one found in P8's own work, which is the one worth reading.** The coverage
-probe's first version was green, and worthless: it took its disk-side inventory
-from `sources.discovered(...)`, the same registry the figure reads, so when its
-negative control narrowed that registry back to the pre-P8 roll-up list, *both*
-sides narrowed together and the probe reported nothing over the exact defect it
-had been written to catch. It is `fuzzlab`'s house rule in a new place — the
-judge may not call the engine it is judging — and it was caught only because the
-negative control was written before the probe was believed.
+**And one found in P8's own work, twice, which is the part worth reading.** The
+coverage probe's first version was green and worthless: it took its disk-side
+inventory from `sources.discovered(...)`, the same registry the figure reads, so
+when its negative control narrowed that registry back to the pre-P8 roll-up
+list, *both* sides narrowed together and the probe reported nothing over the
+exact defect it had been written to catch. It is `fuzzlab`'s house rule in a new
+place — the judge may not call the engine it is judging — and it was caught only
+because the negative control was written before the probe was believed.
+
+The second version was wrong the same way and was **not** caught by that
+control. It walked the filesystem itself, which felt like the fix, but took the
+root and the pattern it walked *from the rule it was auditing*, and the control
+narrowed `DISCOVERED` — derived state nobody edits — rather than the `Rule`. An
+adversarial reviewer narrowed the `Rule.pattern` instead, which is what a real
+regression looks like, and reproduced drift D-1 with the probe silent: both runs
+back to dotted, their outcomes committed on disk, every gate green. **An oracle
+can be captured through an argument as easily as through a function call**, and
+"it walks the filesystem itself" was never the property that mattered — *where*
+it walks was. The probe now states root, pattern and member filenames as
+literals, and the control narrows the rule. `figures/RUN_STATE.md` records the
+full review round and the fifteen other defects it found.

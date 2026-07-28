@@ -15,7 +15,7 @@ python figures/build_all.py               # all six, into figures/{csv,out}
 python figures/build_all.py --list        # the fixed build order
 python figures/build_all.py --only fig03_capability_spectrum
 bash    figures/verify.sh                 # the gate: build twice, diff, check
-python  figures/manifest.py --run-dir figures/runs/<UTC>-<prompt-id>
+python  figures/manifest.py --run-dir figures/runs/<UTC>-<id> --prompt-id <id> --worker <who>
 ```
 
 `verify.sh` is the thing to run before committing. It builds everything twice
@@ -108,5 +108,7 @@ This directory writes only inside itself. Every data directory is read-only, and
 No figure reads anything belonging to a **sealed-pile** game. Sources are
 self-built worlds or the four development-pile games; `fig03` stamps the pile
 cut's sha256 from the battery's own provenance block. `SOURCES.md` records what
-is absent and why, and where two artefacts disagree about a number — in three
-places they do, and in all three both numbers travel.
+is absent and why, and every place two artefacts disagree about a number. The
+standing rule where they do is that **both numbers travel** — the count is not
+written down here, because a hand-copied count of the disagreements would become
+one of them.

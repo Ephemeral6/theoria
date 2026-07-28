@@ -28,12 +28,13 @@ import build_all  # noqa: E402
 import sources  # noqa: E402
 import theme  # noqa: E402
 
-#: Defaults, overridable on the command line. They were constants until P8,
-#: which meant a second run's manifest would have declared itself P4's -- a
-#: provenance record that names the wrong prompt is worse than none, because it
-#: reads as authoritative.
-PROMPT_ID = "P4-figures"
-WORKER = "W-1611"
+#: No defaults, on purpose. These were constants (``P4-figures`` / ``W-1611``)
+#: until P8, so any later run that forgot a flag would have written a manifest
+#: declaring itself P4's -- and a provenance record naming the wrong prompt is
+#: worse than no record, because it reads as authoritative. Making them optional
+#: with the old values as defaults would have left exactly that trap armed for
+#: whoever ran the command without reading this comment, so ``--prompt-id`` and
+#: ``--worker`` are required arguments instead.
 
 
 def _git(*args: str) -> str:
@@ -83,7 +84,7 @@ def collect_inputs() -> tuple[dict[str, str], list[dict[str, str]]]:
     return inputs, excluded
 
 
-def build_manifest(prompt_id: str = PROMPT_ID, worker: str = WORKER) -> dict:
+def build_manifest(prompt_id: str, worker: str) -> dict:
     inputs, excluded = collect_inputs()
     artifacts = collect_artifacts()
     return {
@@ -151,8 +152,8 @@ def build_manifest(prompt_id: str = PROMPT_ID, worker: str = WORKER) -> dict:
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__ or "")
     ap.add_argument("--run-dir", required=True, help="figures/runs/<UTC>-<prompt-id>")
-    ap.add_argument("--prompt-id", default=PROMPT_ID, help="the board item this build belongs to")
-    ap.add_argument("--worker", default=WORKER, help="who ran it")
+    ap.add_argument("--prompt-id", required=True, help="the board item this build belongs to")
+    ap.add_argument("--worker", required=True, help="who ran it")
     args = ap.parse_args(argv)
 
     run_dir = args.run_dir if os.path.isabs(args.run_dir) else os.path.join(sources.REPO_ROOT, args.run_dir)

@@ -80,7 +80,11 @@ Two warnings are *drawn*, per PLAN.md section 3:
   API died is not a cheap run;
 * panel C is the step-failure strip. ``REPORT_V0`` records 27-45% of pilot
   steps failing outright, which makes E5 cost-per-action a price list rather
-  than a skill measure. The reader meets that confound on the plate.
+  than a skill measure. The reader meets that confound on the plate -- and meets
+  it twice, because ``papers/phase1-workshop/REVIEW.md`` recomputes the band as
+  28.3-45.1% and records that the 27% lower bound does not reproduce. Both
+  numbers are drawn; the repository's rule where two artefacts disagree is that
+  both travel.
 
 Nothing absent is drawn as zero: a run with no roll-up has no outcome (dotted,
 labelled), and a run that took no action has no failure rate (labelled absent).
@@ -142,6 +146,14 @@ MODEL_LADDER: tuple[str, ...] = (
     "claude-sonnet-5",
     "claude-opus-5",
 )
+
+#: The lower edge of the step-failure band, used only to decide which rate in
+#: panel C's gutter is inked as critical. It is REVIEW.md's **reproduced** 28.3%
+#: and not REPORT_V0's 27%: that lower bound is recorded as not reproducing, and
+#: a threshold is a poor place to keep a refuted number alive. No run on this
+#: build falls between the two, so nothing on the plate moves -- which is the
+#: reason to fix it now rather than after something does.
+FAILURE_BAND_LOW = 0.283
 
 #: Outcomes that mean "this curve was cut short by the API, not by thrift".
 OUTCOME_DASHED: frozenset[str] = frozenset({"model_error", "api_unusable"})
@@ -314,8 +326,11 @@ _COST_BASIS_RULE = (
 
 
 def _cost_basis(curves: list[dict]) -> dict | None:
-    """The theoria run the cost-basis caveat describes, or ``None``."""
-    played = [c for c in curves if c["manifest"].get("game_id")]
+    """The theoria run the cost-basis caveat describes, or ``None``.
+
+    Safe to call over the whole curve list: baseline curves carry no manifest.
+    """
+    played = [c for c in curves if (c.get("manifest") or {}).get("game_id")]
     if not played:
         return None
     return max(played, key=lambda c: (c["ledger_cost"], c["run_id"]))
@@ -360,6 +375,17 @@ def _load_theoria_curves() -> tuple[list[dict], list[str]]:
         manifest_key = members["MANIFEST.json"].key
         rows = sources.read_json(curve_key)
         manifest = sources.read_json(manifest_key)
+        # A newly landed run reaches this loop without anyone reviewing it, which
+        # is the point of discovery and also its risk: a malformed manifest would
+        # otherwise kill the build of all six figures with a bare KeyError naming
+        # a field and not a directory. Say which run and what it is missing.
+        missing = [k for k in ("slug", "arm", "cost") if k not in manifest]
+        if missing:
+            raise ValueError(
+                f"theoria run {entry}: MANIFEST.json is missing {missing}. It was "
+                f"discovered by rule {THEORIA_RULE!r}; either the run is half-written or "
+                "the arm's manifest schema changed, and this figure must not guess which."
+            )
         slug = manifest["slug"]
         cost = manifest.get("cost") or {}
 
@@ -585,10 +611,16 @@ def _attach_shape(curves: list[dict], shape: dict) -> list[str]:
         # is **a different quantity**: economy.py fills E2/E3 from
         # ``run.turn_costs()`` (decisions) and E4 from ``len(run.calls)``
         # (billed calls, retries included). On
-        # bare_cc-sk48-claude-sonnet-5-9022a076 that is 7 against 10. Widening
+        # bare_cc-g50t-claude-sonnet-5-ddabe772 that is 20 against 24. Widening
         # the fallback to E4 made this plate report a turn-axis disagreement
         # that does not exist -- the two numbers were never the same
         # measurement. Reported to the battery's territory, not fixed here.
+        #
+        # (The first version of this comment cited 9022a076 as the example. That
+        # run's E2 and E3 are insufficient-data and carry no support at all, so
+        # it has no E2/E3 turn count for E4's to disagree with; the 7 came from
+        # the run-level `turns` field, which is a third thing again. The rule was
+        # right and the example under it never happened.)
         support: dict = {}
         for m in ("E2", "E3"):
             support = cells[m].get("support") or {}
@@ -933,9 +965,15 @@ def _render(
     colour_of = {m: colours[i] for i, m in enumerate(models)}
     marker_of = {g: theme.series_marker(i) for i, g in enumerate(games)}
 
-    fig = plt.figure(figsize=(11.0, 13.0))
+    # The bottom row is empty axes whose only job is to reserve height for the
+    # caveat, which `theme.caveat` draws in figure coordinates and which
+    # therefore takes part in no layout. Every time the caveat grows this row
+    # has to grow with it, and the failure mode when it does not is panel D's
+    # x-label printing straight through the first two lines of text -- legible
+    # in neither, identical between builds, green on every gate.
+    fig = plt.figure(figsize=(11.0, 13.8))
     gs = fig.add_gridspec(
-        4, 2, height_ratios=[1.00, 1.30, 0.80, 0.42], width_ratios=[1.0, 1.0]
+        4, 2, height_ratios=[1.00, 1.30, 0.80, 0.72], width_ratios=[1.0, 1.0]
     )
     ax_abs = fig.add_subplot(gs[0, 0])
     ax_norm = fig.add_subplot(gs[0, 1])
@@ -1197,7 +1235,10 @@ def _render(
             rate_colour = p["muted"]
         else:
             rate_text = f"{c['n_failed']}/{c['n_actions']} = {c['fail_rate'] * 100:.0f}%"
-            rate_colour = theme.STATUS["critical"] if c["fail_rate"] >= 0.27 else p["ink_secondary"]
+            rate_colour = (
+                theme.STATUS["critical"] if c["fail_rate"] >= FAILURE_BAND_LOW
+                else p["ink_secondary"]
+            )
         ax_strip.text(
             rate_x, row, rate_text, ha="left", va="center",
             fontsize=theme.BASE_FONT_SIZE - 3, color=rate_colour,
@@ -1224,8 +1265,11 @@ def _render(
     ax_strip.grid(False)
     ax_strip.set_xlabel("turn (one tick per environment action)")
     ax_strip.set_title(
+        # Short enough to fit the plate. The two disagreeing bands are named in
+        # full in the caveat; a title that runs off the right edge states
+        # neither of them.
         "C. the confound first: environment actions per turn, failures in red "
-        "(REPORT_V0: 27-45% of pilot steps failed outright)",
+        "(both published failure bands are in the caveat)",
         loc="left",
     )
     strip_handles = [
@@ -1340,26 +1384,70 @@ def _render(
     fig.suptitle(
         "Figure 2 -- bill shape: the per-turn cost curve (C2: bought early, spent late)"
     )
-    theme.caveat(
-        fig,
-        "THE TWO ARMS ARE NOT PRICED IN THE SAME UNIT. A bare_cc turn buys one model call that "
-        "picks one action; a theoria turn buys a desk call that theorises across the whole run "
-        "-- 5 calls covered 7 actions, so its curve is short and tall by construction and the "
-        "vertical gap in panel A is NOT a like-for-like markup. Per successful action the "
-        "comparison that does hold is USD 0.9025 (theoria, 7 actions) against USD 0.1459 "
-        "(bare_cc opus, BUDGET_REPORT.md 2.1) -- and even that is one theoria run against a pilot. "
-        "The third arm is still absent, and absence is not zero: there is no Schema arm in this "
-        "ledger (baseline-arms/SCHEMA_LOCATE.md), so the model ladder stands in for it "
-        "(battery/DECISIONS.md D-B-004, weaker by REPORT_V0's own note). Theoria dollars are the "
-        "provider's own arithmetic; the repo price table disagrees by -8.3% and that is a finding "
-        "about the table, not the run. Cost is summed over retried calls sharing a turn. Panel C "
-        "is the price-list confound: with 27-45% of steps failing, E5 cost-per-action tracks "
-        f"token pricing, not skill. {n_absent_optional} optional ledger(s) declared and absent -- "
-        "named by rule in figures/sources.py, not silently dropped. "
-        + _shape_caveat(curves, shape),
-        theme=theme_name,
-    )
+    theme.caveat(fig, _caveat_text(curves, shape, n_absent_optional), theme=theme_name)
     return theme.save(fig, NAME, theme_name)
+
+
+#: The one number in the caveat that this pipeline cannot compute and does not
+#: parse: the baseline comparator, which exists only in a Markdown table.
+#: Declared in sources.py so it is hashed, and quoted with its location so a
+#: reader can check it. Parsing a figure out of prose would be a second, worse
+#: dependency -- but reading a number off an *undeclared* file, which is what
+#: this plate did before P8, is the failure the registry exists to prevent.
+BASELINE_PRICE_CITE = "baseline-arms/BUDGET_REPORT.md 2.1, opus row"
+
+
+def _caveat_text(curves: list[dict], shape: dict, n_absent_optional: int) -> str:
+    """The caveat, with its arithmetic computed rather than typed.
+
+    Two of these numbers used to be literals that the same build also computed
+    into ``notes`` -- two definitions of one number, which is the exact failure
+    this whole change is premised on. They are now derived from the basis run's
+    own manifest.
+    """
+    basis = _cost_basis(curves)
+    if basis is None:
+        unit = (
+            "THE TWO ARMS ARE NOT PRICED IN THE SAME UNIT, and this build has no theoria run "
+            "with a game to quantify it from, so no per-action comparison is stated."
+        )
+    else:
+        m = basis["manifest"]
+        cost = m["cost"]
+        recon = m.get("reconciliation") or {}
+        actions = recon.get("successful_actions")
+        calls = cost.get("model_calls")
+        per_action = (
+            f"USD {cost['cli_reported_usd'] / actions:.4f} (theoria, {actions} actions) "
+            f"against USD 0.1459 (bare_cc opus, {BASELINE_PRICE_CITE})"
+            if actions
+            else "absent -- the basis run declares no successful actions to divide by"
+        )
+        unit = (
+            "THE TWO ARMS ARE NOT PRICED IN THE SAME UNIT. A bare_cc turn buys one model call "
+            "that picks one action; a theoria turn buys a desk call that theorises across the "
+            f"whole run -- {calls} calls covered {actions} actions, so its curve is short and "
+            "tall by construction and the vertical gap in panel A is NOT a like-for-like "
+            f"markup. Per successful action the comparison that does hold is {per_action} -- "
+            "and even that is one theoria run against a pilot. Theoria dollars are the "
+            "provider's own arithmetic; the repo price table disagrees by "
+            f"{cost['relative_delta'] * 100:.1f}% and that is a finding about the table, not "
+            "the run."
+        )
+    return (
+        unit
+        + " The third arm is still absent, and absence is not zero: there is no Schema arm in "
+        "this ledger (baseline-arms/SCHEMA_LOCATE.md), so the model ladder stands in for it "
+        "(battery/DECISIONS.md D-B-004, weaker by REPORT_V0's own note). Cost is summed over "
+        "retried calls sharing a turn. Panel C is the price-list confound: with a large share "
+        "of steps failing, E5 cost-per-action tracks token pricing, not skill. BOTH FIGURES FOR "
+        "THAT SHARE TRAVEL, because they disagree: battery/REPORT_V0.md says 27-45%, and "
+        "papers/phase1-workshop/REVIEW.md recomputes 28.3-45.1% and records that the 27% lower "
+        "bound does not reproduce. The panel is annotated with REPORT_V0's band, which is the "
+        f"one it was drawn against. {n_absent_optional} optional ledger(s) declared and absent "
+        "-- named by rule in figures/sources.py, not silently dropped. "
+        + _shape_caveat(curves, shape)
+    )
 
 
 def _shape_caveat(curves: list[dict], shape: dict) -> str:
@@ -1376,6 +1464,33 @@ def _shape_caveat(curves: list[dict], shape: dict) -> str:
             if c["shape_turns"] is not None and not c["axis_agrees"]
         }
     )
+    n_agree = sum(1 for c in curves if c["axis_agrees"])
+
+    # The anti-gaming floor is quoted from the battery's own reason string, not
+    # written out here. `MIN_TURNS_FOR_SHAPE = 8` lives in
+    # battery/metrics/economy.py, and the same argument that keeps FRONTLOAD_K
+    # out of this file applies to it: a hand-copied fact about another file is a
+    # fact that will go stale. The reason text is in the hashed artefact.
+    thin_reasons = sorted(
+        {
+            str(c["shape"]["E2"]["reason"])
+            for c in curves
+            if c["shape"]["E2"].get("status") == "insufficient-data"
+            and c["shape"]["E2"].get("reason")
+        }
+    )
+    if thin_reasons:
+        floor_sentence = (
+            "The battery's own floor is quoted rather than restated -- it reports those runs as "
+            'insufficient-data with the reason "'
+            + '"; "'.join(thin_reasons)
+            + '" -- so a short run gets that verdict rather than a flattering number.'
+        )
+    else:
+        floor_sentence = (
+            "No drawn run fell under the battery's short-run floor on this build, so no "
+            "insufficient-data reason is quoted."
+        )
     return (
         "E2/E3/E4 ARE THE BATTERY'S NUMBERS, NOT THIS PLATE'S. They are read from "
         "battery/artifacts/capability_spectrum.json, whose definitions are: E2, "
@@ -1385,17 +1500,21 @@ def _shape_caveat(curves: list[dict], shape: dict) -> str:
         + " E4, "
         + cards["E4"]["definition"]
         + " Recomputing them here would be a second definition of a Phase 4 primary "
-        "endpoint. THE TURN AXES DIFFER: the battery counts turns in model-call order "
-        "(battery/INPUT_FORMAT.md gap 5), this plate counts step_idx, so E3's crossing is "
-        f"marked only where the two coincide -- {len(mismatch)} run(s) disagree and are left "
-        "unmarked rather than approximated"
-        + (f" ({', '.join(mismatch)})" if mismatch else "")
-        + f". {len(unscored_runs)} drawn run(s) carry no E2 at all, of which {len(no_battery)} "
+        "endpoint. THE TWO TURN AXES ARE CHECKED, NOT ASSUMED TO MATCH: the battery counts "
+        "turns in model-call order (battery/INPUT_FORMAT.md gap 5) and this plate counts "
+        "step_idx, so E3's crossing is marked only on runs where the two coincide. "
+        + (
+            f"On this build {len(mismatch)} run(s) disagree ({', '.join(mismatch)}) and are "
+            "left unmarked rather than approximated."
+            if mismatch
+            else f"On this build they agree on all {n_agree} run(s) that carry a battery turn "
+            "count, and that agreement is the licence to draw the marks at all."
+        )
+        + f" {len(unscored_runs)} drawn run(s) carry no E2 at all, of which {len(no_battery)} "
         "have no battery run: the live theoria arm is in none of battery v2's arms ("
         + ", ".join(shape["arms"])
-        + "), so its front-load index is ABSENT, not low. The battery's own floor is that a "
-        "run shorter than 8 turns is trivially front-loaded, and those runs report "
-        "insufficient-data rather than a flattering number."
+        + "), so its front-load index is ABSENT, not low. "
+        + floor_sentence
     )
 
 

@@ -57,10 +57,20 @@ table of paths is a second source of truth that drifts away from the first, and
 drift of exactly that kind produced three of the defects P4 found (see
 `PLAN.md` §9). `sources.py` is short and commented; read it.
 
-No script in `figures/` opens a path that is not declared in `sources.py`, and
-`verify.sh` gate 7 enforces it textually. That is not a style rule: an
-undeclared read is an unhashed read, and a figure with an unhashed input keeps
-building green while the input drifts underneath it.
+No **figure** script opens a path that is not declared in `sources.py`, and
+`verify.sh` gate 7 enforces it by parsing `fig*.py` with `ast` rather than by
+grepping — the regex version's first finding was the phrase "never ``open()``"
+inside a docstring. That is not a style rule: an undeclared read is an unhashed
+read, and a figure with an unhashed input keeps building green while the input
+drifts underneath it.
+
+`sources.py` and `check_coverage.py` are the two files this does not cover, and
+both are outside it on purpose. `sources.py` is where the reading happens.
+`check_coverage.py` is the auditor: it walks the tree with `os.listdir` and
+opens what it finds, because an oracle that reached the tree only through the
+registry it audits could prove that registry self-consistent and nothing else.
+Gate 7's glob is `fig*.py`, so neither is scanned, and that is the correct
+scope rather than an oversight in it.
 
 One non-file source is declared out of band: `git log --follow
 cold-start-a0/THEORIZE_LOG.md`, read through `sources.git_log()`. It supplies
@@ -91,6 +101,20 @@ keep their `ABSENT…` lines in `SOURCES.sha256`. Drop any of them in and it is
 picked up automatically; so is **any other shard matching `ledger.*.jsonl`**,
 including one whose name nobody wrote down, which is the part the previous
 hand-written list could not do.
+
+**Name the cost of that, because it is real.** This rule is the one place where
+discovery is deliberately not tracked-only, so a working tree that *has* the
+shards builds a different figure from a clean checkout — more curves, a
+different `SOURCES.sha256`, and gates 4 and 6 red. That was already true of the
+four named paths before P8; the rule widens it to any matching filename. It is
+now said out loud rather than left to be discovered as an unexplained hash diff:
+`build_all.py` prints a `WARN` naming every untracked shard it folded in, so the
+red gate arrives with its reason attached.
+
+Two of this file's own numbers come from that same untracked tree — the ~2 000
+cost rows and the USD 48.39 — and are therefore **not checkable from a clean
+checkout**. They were measured in a working tree that has the shards. Anyone
+verifying them needs that tree.
 
 The same tree holds `out/campaign/campaign_*.json`, whose four files sum to
 **USD 48.39** of campaign spend that appears in no tracked report. Not read here,

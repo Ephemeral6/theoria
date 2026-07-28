@@ -11,8 +11,11 @@ matches a fresh build, every source hash is unchanged, and the picture is
 missing two runs' worth of evidence. Green all the way down.
 
 So this is the probe form of that failure. It does not re-derive anything the
-figure computes; it asks four questions of the finished build, each of which was
-answered wrongly by the tree as committed before P8:
+figure computes; it asks four questions of the finished build. **Two of them were
+answered wrongly by the tree as committed before P8** -- questions 2 and 3 below.
+Questions 1 and 4 could not have been asked of that tree at all: it had no
+discovery rules and no shape verdicts, so they are not evidence of anything that
+went wrong, they are the two places the new machinery could go wrong next:
 
 1. **Is every discovery rule at its floor?** A rule that finds nothing looks
    exactly like a family that is empty.
@@ -36,14 +39,20 @@ whole method. The first version of this file took its disk-side inventory from
 ``sources.discovered(...)`` -- the same registry the figure reads -- and its own
 negative control caught it: narrowing the registry back to the pre-P8 roll-up
 list narrowed *both* sides at once, so the probe stayed green over the exact
-defect it was written for. An oracle that calls the thing it audits can only
-prove that thing self-consistent. So the inventory below comes from
-``os.listdir`` and the verdict comes from the registry, and the probe is the
-place where the two are made to agree.
+defect it was written for. **The second version was still wrong the same way, one
+level up**: it walked the filesystem, but took the root and the pattern it walked
+*from the rule it was auditing*, so tightening a ``Rule.pattern`` -- which is what
+a real regression looks like, since ``DISCOVERED`` is derived state nobody edits
+-- moved the oracle's eyes along with it. An oracle that calls the thing it
+audits can only prove that thing self-consistent, and it can do that through a
+parameter as easily as through a function call. So the inventory below is stated
+as literals, the walk is ``os.listdir``, the verdict comes from the registry, and
+the negative control narrows the **rule**.
 """
 
 from __future__ import annotations
 
+import dataclasses
 import fnmatch
 import json
 import os
@@ -53,6 +62,26 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 import fig02_bill_shape as fig02  # noqa: E402
 import sources  # noqa: E402
+
+
+#: The probe's own inventory, stated as literals.
+#:
+#: These deliberately duplicate `sources.DISCOVERY`'s roots, patterns and member
+#: filenames instead of reading them off the rules. The first version of this
+#: file did read them off the rules, and that was still the oracle calling the
+#: engine it audits, one level up: narrowing a `Rule`'s pattern -- which is what
+#: a real regression looks like, since `DISCOVERED` is derived and nobody edits
+#: it by hand -- narrowed the probe's own inventory in the same motion, and the
+#: probe reported nothing while both victims went back to being drawn dotted.
+#:
+#: Duplication is the point here and nowhere else in this directory. Two
+#: independently written descriptions of the same tree can disagree, and the
+#: disagreement is the finding; one description checked against itself cannot
+#: disagree with anything.
+THEORIA_ROOT = "theoria-arm/runs"
+THEORIA_MEMBERS = ("cost_curve.json", "MANIFEST.json")
+ROLLUP_ROOT = "baseline-arms/out"
+ROLLUP_PATTERN = "pilot_*.json"
 
 
 def _abs(rel: str) -> str:
@@ -73,29 +102,51 @@ def _theoria_dirs_with_cost() -> list[tuple[str, list, dict]]:
     Walked, not read out of the registry. The registry's opinion of which runs
     exist is precisely what is being audited.
     """
-    root = sources.rule(fig02.THEORIA_RULE).root
     out: list[tuple[str, list, dict]] = []
-    for entry in _walk(root):
-        curve_path = _abs(f"{root}/{entry}/cost_curve.json")
-        manifest_path = _abs(f"{root}/{entry}/MANIFEST.json")
-        if not (os.path.isfile(curve_path) and os.path.isfile(manifest_path)):
+    for entry in _walk(THEORIA_ROOT):
+        curve_path = _abs(f"{THEORIA_ROOT}/{entry}/cost_curve.json")
+        if not os.path.isfile(curve_path):
             continue
         with open(curve_path, encoding="utf-8") as fh:
             rows = json.load(fh)
-        with open(manifest_path, encoding="utf-8") as fh:
-            manifest = json.load(fh)
+        manifest_path = _abs(f"{THEORIA_ROOT}/{entry}/MANIFEST.json")
+        manifest: dict = {}
+        if os.path.isfile(manifest_path):
+            with open(manifest_path, encoding="utf-8") as fh:
+                manifest = json.load(fh)
         out.append((entry, rows, manifest))
     return out
 
 
+def _partial_theoria_dirs() -> list[str]:
+    """Run directories carrying some of the members but not all.
+
+    The rule skips these, correctly -- half a run is not a run. But the *oracle*
+    must not skip them on the same predicate, or a run that landed with a cost
+    curve and a manifest still being written would be invisible to the rule and
+    to its auditor at once, with the floor still satisfied. None exist today;
+    the point is that the class is watched rather than that it is populated.
+    """
+    partial: list[str] = []
+    for entry in _walk(THEORIA_ROOT):
+        present = [
+            m for m in THEORIA_MEMBERS if os.path.isfile(_abs(f"{THEORIA_ROOT}/{entry}/{m}"))
+        ]
+        if present and len(present) != len(THEORIA_MEMBERS):
+            missing = [m for m in THEORIA_MEMBERS if m not in present]
+            partial.append(f"{entry} (has {', '.join(present)}; missing {', '.join(missing)})")
+    return partial
+
+
 def _rollups_on_disk() -> dict[str, str]:
     """``{run_id: file}`` over every roll-up on disk, registry not consulted."""
-    rule = sources.rule(fig02.ROLLUP_RULE)
     found: dict[str, str] = {}
-    for entry in _walk(rule.root):
-        if not fnmatch.fnmatch(entry, rule.pattern):
+    for entry in _walk(ROLLUP_ROOT):
+        # fnmatchcase, not fnmatch: fnmatch normcases on win32, so the same tree
+        # would be inventoried differently on Windows and on Linux.
+        if not fnmatch.fnmatchcase(entry, ROLLUP_PATTERN):
             continue
-        path = _abs(f"{rule.root}/{entry}")
+        path = _abs(f"{ROLLUP_ROOT}/{entry}")
         if not os.path.isfile(path):
             continue
         with open(path, encoding="utf-8") as fh:
@@ -104,7 +155,7 @@ def _rollups_on_disk() -> dict[str, str]:
             continue
         for row in payload:
             if isinstance(row, dict) and row.get("run_id"):
-                found[row["run_id"]] = f"{rule.root}/{entry}"
+                found[row["run_id"]] = f"{ROLLUP_ROOT}/{entry}"
     return found
 
 
@@ -120,6 +171,12 @@ def check() -> list[str]:
     drawn = {c["run_id"]: c for c in curves}
 
     # --- 2. every cost-bearing theoria run is drawn or explained ----------
+    for entry in _partial_theoria_dirs():
+        failures.append(
+            f"theoria run directory {entry}: the discovery rule requires every member and "
+            "so skips it, which means neither the rule nor this probe would notice it. A "
+            "half-written run must be named, not silently dropped by both."
+        )
     for entry, rows, manifest in _theoria_dirs_with_cost():
         slug = manifest.get("slug") or entry
         if slug in drawn:
@@ -158,14 +215,13 @@ def check() -> list[str]:
     return failures
 
 
-#: The four roll-up files the pre-P8 ``ROLLUP_KEYS`` tuple named. Kept so the
-#: probe can be shown failing on the exact tree it was written for.
-_PRE_P8_ROLLUPS = (
-    "pilot_ar25-0c556536.json",
-    "pilot_g50t-5849a774.json",
-    "pilot_sk48-d8078629.json",
-    "pilot_tn36-ef4dde99.json",
-)
+#: A pattern matching exactly the four roll-ups the pre-P8 ``ROLLUP_KEYS`` tuple
+#: named -- ``pilot_<game>-<hash>.json`` and not ``pilot_<game>_sonnet_rerun``.
+#: The control narrows the **rule**, not the list the rule produced: a real
+#: regression is somebody tightening a pattern or moving a root, and
+#: ``DISCOVERED`` is derived state that nobody edits by hand. Narrowing derived
+#: state exercised the one narrowing this probe already survived.
+_PRE_P8_PATTERN = "pilot_????-*.json"
 
 #: The two runs that drift D-1 left drawn as outcome-unknown.
 _PRE_P8_VICTIMS = ("bare_cc-g50t-claude-sonnet-5-ddabe772", "bare_cc-sk48-claude-sonnet-5-9022a076")
@@ -186,16 +242,27 @@ def self_test() -> list[str]:
     """
     problems: list[str] = []
     rule_name = fig02.ROLLUP_RULE
-    original = sources.DISCOVERED[rule_name]
+    original_rules = sources.DISCOVERY
+    original_found = dict(sources.DISCOVERED)
     try:
-        sources.DISCOVERED[rule_name] = tuple(
-            s for s in original if s.path.rsplit("/", 1)[-1] in _PRE_P8_ROLLUPS
+        # Narrow the rule, then re-run discovery through the registry's own
+        # machinery, exactly as a tightened pattern on master would behave.
+        # Its floor is lowered too -- otherwise gate 0 catches the regression
+        # first and the probe is never asked the question.
+        sources.DISCOVERY = tuple(
+            dataclasses.replace(r, pattern=_PRE_P8_PATTERN, floor=4)
+            if r.name == rule_name
+            else r
+            for r in original_rules
         )
-        if len(sources.DISCOVERED[rule_name]) != len(_PRE_P8_ROLLUPS):
+        sources.DISCOVERED = {
+            r.name: sources._discover(r) for r in sources.DISCOVERY
+        }
+        narrowed = len(sources.DISCOVERED[rule_name])
+        if narrowed != 4:
             problems.append(
-                "self-test could not reconstruct the pre-P8 tree: expected "
-                f"{len(_PRE_P8_ROLLUPS)} roll-ups, narrowed to "
-                f"{len(sources.DISCOVERED[rule_name])}"
+                "self-test could not reconstruct the pre-P8 tree: expected the narrowed "
+                f"rule to find 4 roll-ups, it found {narrowed}"
             )
             return problems
         fired = check()
@@ -207,7 +274,8 @@ def self_test() -> list[str]:
                     "green because it cannot see the defect, not because there is none."
                 )
     finally:
-        sources.DISCOVERED[rule_name] = original
+        sources.DISCOVERY = original_rules
+        sources.DISCOVERED = original_found
     return problems
 
 

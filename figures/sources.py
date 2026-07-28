@@ -80,6 +80,34 @@ SOURCES: tuple[Source, ...] = (
     #
     # fig02's shape metrics come from the battery's own capability_spectrum,
     # declared once below for every figure that reads it.
+    #
+    # Three prose sources, declared for the same reason a2_report and a3_report
+    # are: fig02's caveat quotes numbers that live in no JSON, and a figure
+    # asserting a number out of an undeclared file is asserting an unhashed
+    # number. P8 found all three being quoted on the plate with nothing hashing
+    # them.
+    Source(
+        key="baseline_budget_report",
+        path="baseline-arms/BUDGET_REPORT.md",
+        figures=("fig02_bill_shape",),
+        what="section 2.1's per-arm price table -- the USD 0.1459 per successful action for "
+        "bare_cc opus, which is the only baseline figure comparable to the theoria arm's",
+    ),
+    Source(
+        key="battery_report_v0",
+        path="battery/REPORT_V0.md",
+        figures=("fig02_bill_shape",),
+        what="the step-failure confound panel C draws: 'Between 27% and 45% of steps in the "
+        "pilot' failed outright, which makes E5 cost-per-action a price list",
+    ),
+    Source(
+        key="paper_review",
+        path="papers/phase1-workshop/REVIEW.md",
+        figures=("fig02_bill_shape",),
+        what="the audit that recomputes REPORT_V0's failure band as 28.3%-45.1% and records "
+        "that the 27% lower bound does not reproduce. Declared so both numbers travel: the "
+        "plate had been drawing the refuted bound alone",
+    ),
     # ---- fig03: capability spectrum ---------------------------------------
     Source(
         key="validation_material",
@@ -439,7 +467,13 @@ def _scan(rule: Rule) -> list[str]:
         entries = os.listdir(rule.abs_root)
     except OSError:
         return []
-    named = sorted(e for e in entries if fnmatch.fnmatch(e, rule.pattern))
+    # fnmatchcase, not fnmatch. fnmatch applies os.path.normcase, which is
+    # case-INSENSITIVE on win32 and case-sensitive on POSIX, so a file named
+    # PILOT_X.JSON would be discovered on Windows and not on Linux -- the same
+    # tree yielding a different SOURCES.sha256 and different images depending on
+    # the operating system. _scan sorts os.listdir for exactly this class of
+    # reason and would otherwise have left the case folding to the platform.
+    named = sorted(e for e in entries if fnmatch.fnmatchcase(e, rule.pattern))
     if not rule.tracked:
         return named  # untracked by design; the floor for these rules is zero
 
@@ -586,6 +620,35 @@ def discovered_groups(name: str) -> list[tuple[str, dict[str, Source]]]:
         entry, member = src.path[len(r.root) + 1 :].split("/", 1)
         groups.setdefault(entry, {})[member] = src
     return sorted(groups.items())
+
+
+def untracked_inclusions() -> list[str]:
+    """Present-but-untracked members a rule folded into this build.
+
+    Only ``tracked=False`` rules can produce these, and only the envelope shards
+    are such a rule. It is a real exposure and it is named rather than left to
+    surface as an unexplained hash diff: a working tree holding the shards
+    builds a different figure from a clean checkout, so ``SOURCES.sha256`` moves
+    and gates 4 and 6 go red. That was already true of the four paths this rule
+    replaced; what is new is that the reason arrives with the red gate.
+    """
+    out = []
+    for r in DISCOVERY:
+        if r.tracked:
+            continue
+        tracked = _tracked_paths(r.root)
+        for src in DISCOVERED[r.name]:
+            if not src.exists():
+                continue
+            if tracked is not None and src.path in tracked:
+                continue
+            out.append(
+                f"rule {r.name!r} folded in {src.path}, which is present here and not "
+                "tracked. This build is not reproducible from a clean checkout, and "
+                "verify.sh gates 4 and 6 will report a hash difference with this as the "
+                "cause."
+            )
+    return out
 
 
 def floor_violations() -> list[str]:
