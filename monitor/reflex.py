@@ -1,0 +1,130 @@
+"""Reflex layer (upgrade #1): everything that needs no judgment, every 5 min.
+
+Registered as a Windows scheduled task; zero tokens. The monitor session
+keeps only judgment (prompts, adjudication, spec updates). Steps:
+
+    1. reap        — kill sessions whose branch reached origin
+    2. quota check — flip to hold on limit signatures
+    3. revive      — relaunch lost sessions (three-strikes rule)
+    4. ci merge    — deterministic merge-on-delivery (test-gated)
+    5. light refresh — regenerate the dashboard from the tree
+
+All state changes go through the same files the monitor uses (registry,
+loop_state, quota_state), so the monitor's next heartbeat sees everything.
+The reflex never commits to git and never authors or edits prompts.
+"""
+
+import json
+import os
+import subprocess
+import sys
+import time
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(HERE)
+LOCK = os.path.join(HERE, "reflex.lock")
+RLOG = os.path.join(HERE, "reflex.log")
+LOOP = os.path.join(HERE, "loop_state.json")
+MAX_DEATHS = 3
+
+
+def rlog(msg):
+    stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    with open(RLOG, "a", encoding="utf-8") as fh:
+        fh.write("%s %s\n" % (stamp, msg))
+
+
+def run(args, timeout=2400):
+    return subprocess.run(args, cwd=ROOT, capture_output=True, text=True,
+                          timeout=timeout)
+
+
+def load_loop():
+    if os.path.exists(LOOP):
+        return json.load(open(LOOP, encoding="utf-8"))
+    return {}
+
+
+def save_loop(state):
+    tmp = LOOP + ".tmp"
+    json.dump(state, open(tmp, "w", encoding="utf-8"),
+              ensure_ascii=False, indent=2)
+    os.replace(tmp, LOOP)
+
+
+def main():
+    if os.path.exists(LOCK):
+        if time.time() - os.path.getmtime(LOCK) < 1500:
+            return 0            # previous reflex still at work
+        os.remove(LOCK)
+    open(LOCK, "w").write(str(os.getpid()))
+    try:
+        events = []
+
+        # 1. reap
+        out = run([sys.executable, os.path.join(HERE, "dispatch.py"),
+                   "--reap"]).stdout
+        killed = [l for l in out.splitlines() if "killed" in l]
+        events += ["reap:" + l.split()[0] for l in killed]
+
+        # 2. quota
+        q = run([sys.executable, os.path.join(HERE, "quota.py"), "check"])
+        hold = q.returncode == 2
+        if hold:
+            events.append("quota:HOLD")
+
+        # 3. revive (skip in hold)
+        if not hold:
+            reg_path = os.path.join(HERE, "dispatch-logs", "registry.json")
+            reg = (json.load(open(reg_path, encoding="utf-8"))
+                   if os.path.exists(reg_path) else {})
+            state = load_loop()
+            deaths = state.get("death_counts", {})
+            remote = run(["git", "branch", "-r", "--list", "origin/agent/*",
+                          "--format=%(refname:short)"]).stdout.lower()
+            revived = 0
+            for pid_str, entry in sorted(reg.items()):
+                if entry.get("reaped") != "exited":
+                    continue
+                slug = (pid_str.lower().replace("-", "")
+                        if len(pid_str) <= 4 else pid_str.lower())
+                if "agent/%s" % slug in remote:
+                    continue        # it delivered; nothing to revive
+                n = deaths.get(pid_str, 0)
+                if n >= MAX_DEATHS:
+                    events.append("three-strikes:%s" % pid_str)
+                    continue
+                if revived:
+                    time.sleep(45)   # stagger is law
+                r = run([sys.executable, os.path.join(HERE, "dispatch.py"),
+                         "--only", pid_str])
+                if "launched" in r.stdout:
+                    deaths[pid_str] = n + 1
+                    revived += 1
+                    events.append("revive:%s(#%d)" % (pid_str, n + 1))
+            if revived or deaths != state.get("death_counts", {}):
+                state["death_counts"] = deaths
+                save_loop(state)
+
+        # 4. ci merge (its own lock + M-0 standdown check inside)
+        if not hold:
+            r = run([sys.executable, os.path.join(HERE, "ci_merge.py")],
+                    timeout=3600)
+            merged = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
+            flagged = [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
+            events += merged + flagged
+
+        # 5. light dashboard refresh
+        run([sys.executable, os.path.join(HERE, "scan.py")], timeout=600)
+
+        rlog(" | ".join(events) if events else "quiet")
+        return 0
+    finally:
+        try:
+            os.remove(LOCK)
+        except OSError:
+            pass
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

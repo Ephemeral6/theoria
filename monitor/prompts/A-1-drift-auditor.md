@@ -1,3 +1,4 @@
+<!-- model: sonnet -->
 # A-1 · 常驻漂移审计员
 
 你的全部任务书在 `monitor/AUDITOR.md`——现在读它，然后照做。

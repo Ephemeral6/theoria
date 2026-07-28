@@ -145,33 +145,44 @@ def reap():
         print("registry empty.")
 
 
+MODEL_TAG = re.compile(r"<!--\s*model:\s*(opus|sonnet|haiku)\s*-->")
+
+
+def model_for(path):
+    """Cost tiering (upgrade #3): a prompt opts into a cheaper model with an
+    HTML comment near the top, e.g. `<!-- model: sonnet -->`. Default opus."""
+    with open(path, encoding="utf-8") as fh:
+        head = fh.read(600)
+    m = MODEL_TAG.search(head)
+    return m.group(1) if m else "opus"
+
+
 def launch(pid, path, log_dir):
-    text = open(path, encoding="utf-8").read()
-    claude = shutil.which("claude")
-    if not claude:
+    if not shutil.which("claude"):
         sys.exit("claude CLI not on PATH")
+    model = model_for(path)
     stamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     log_path = os.path.join(log_dir, "%s-%s.log" % (pid, stamp))
-    log = open(log_path, "a", encoding="utf-8")
-    log.write("=== dispatch %s at %s ===\n" % (pid, stamp))
-    log.flush()
+    with open(log_path, "a", encoding="utf-8") as log:
+        log.write("=== dispatch %s at %s model=%s ===\n" % (pid, stamp, model))
     flags = 0
     if os.name == "nt":
-        # DETACHED + NEW_PROCESS_GROUP alone was not enough: all seven
-        # sessions of the first fleet died silently mid-run (empty logs, no
-        # branches) while the user's own app sessions survived — consistent
-        # with a Job-Object cleanup killing our children between monitor
-        # turns. BREAKAWAY_FROM_JOB detaches them from any inherited job.
+        # DETACHED + NEW_PROCESS_GROUP alone was not enough: a whole fleet
+        # once died silently mid-run while the user's app sessions survived —
+        # consistent with Job-Object cleanup. BREAKAWAY escapes any inherited
+        # job. The session runs under _runner.py so its exit code and stderr
+        # always land on disk (upgrade #5).
         flags = (subprocess.CREATE_NEW_PROCESS_GROUP
                  | 0x00000008     # DETACHED_PROCESS
                  | 0x01000000)    # CREATE_BREAKAWAY_FROM_JOB
     proc = subprocess.Popen(
-        [claude, "-p", text, "--model", "opus", "--dangerously-skip-permissions"],
-        cwd=ROOT, stdout=log, stderr=subprocess.STDOUT,
+        [sys.executable, os.path.join(HERE, "_runner.py"),
+         pid, path, log_path, model],
+        cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
         stdin=subprocess.DEVNULL, creationflags=flags)
     reg = load_registry()
     reg[pid] = {"pid": proc.pid, "log": os.path.basename(log_path),
-                "started": stamp, "reaped": None}
+                "started": stamp, "model": model, "reaped": None}
     save_registry(reg)
     return proc.pid, log_path
 
