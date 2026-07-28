@@ -32,7 +32,7 @@ import shutil
 import subprocess
 import sys
 import tempfile
-from typing import Any, Dict, List, Optional, Sequence
+from typing import Any, Dict, List, Optional, Sequence, Tuple
 
 from .core import explorer, trace, truth
 from .core.spec import WorldSpec
@@ -108,9 +108,38 @@ def build_world(spec: WorldSpec, root: str,
     }
 
 
+def all_specs() -> List[WorldSpec]:
+    """The twenty, then the mutants, in that order.
+
+    Mutants are deliberately **not** members of `generate.CATALOGUE` — several of
+    them are unsolvable and `tests/test_catalogue_invariants.py` asserts the
+    catalogue ships exactly one unsolvability certificate — but they are built
+    here, so every gate below and the determinism check apply to them without a
+    second implementation. A mutant that fails a build gate is not a mutant.
+
+    They are also not rows in `INDEX.json`, and that is a correction rather than
+    a preference. Putting them there is what `exam/guard.py` admits an id from,
+    so it was the obvious move; it also breaks five tests in `exam/`, which
+    asserts the roster is exactly twenty worlds and offers every row to a paper
+    builder that cannot build one on a three-state world. Admission is `exam/`'s
+    decision to make in `exam/`'s territory. The mutants' own roster is
+    `MUTATIONS.json → roster`, which carries the same rows in the same shape.
+    """
+    from . import mutate                       # late: mutate imports this module
+    return list(CATALOGUE) + mutate.mutant_specs()
+
+
 def build_all(root: str = OUT, ids: Optional[Sequence[str]] = None,
-              quiet: bool = False) -> Dict[str, Any]:
-    specs = [BY_ID[i] for i in ids] if ids else list(CATALOGUE)
+              quiet: bool = False, specs: Optional[Sequence[WorldSpec]] = None,
+              index_name: Optional[str] = "INDEX.json",
+              prompt_id: str = "C1-worldgen") -> Dict[str, Any]:
+    if specs is not None:
+        specs = list(specs)
+    elif ids:
+        by_id = {s.world_id: s for s in all_specs()}
+        specs = [by_id[i] for i in ids]
+    else:
+        specs = list(CATALOGUE)
     rows: List[Dict[str, Any]] = []
     for spec in specs:
         row = build_world(spec, root)
@@ -125,7 +154,7 @@ def build_all(root: str = OUT, ids: Optional[Sequence[str]] = None,
                      if row["claim_disagreements"] else ""))
 
     manifest = {
-        "prompt_id": "C1-worldgen",
+        "prompt_id": prompt_id,
         "worlds": rows,
         "totals": {
             "worlds": len(rows),
@@ -148,11 +177,24 @@ def build_all(root: str = OUT, ids: Optional[Sequence[str]] = None,
                 and r["intended_solvable"] != r["solvable"]),
         },
     }
-    if ids is None:
-        with open(os.path.join(root, "INDEX.json"), "w",
+    if ids is None and index_name:
+        with open(os.path.join(root, index_name), "w",
                   encoding="utf-8", newline="\n") as handle:
             handle.write(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     return manifest
+
+
+def build_mutants(root: str = OUT, quiet: bool = False) -> Dict[str, Any]:
+    """Build every mutant and return a manifest in `build_all`'s exact shape.
+
+    Same `build_world`, same rows, same `totals` keys, so `gate_failures` judges
+    a mutant by the identical five checks it judges a catalogue world by. The
+    manifest is not written to `INDEX.json`; it goes into `MUTATIONS.json` under
+    `roster`, for the reason in `all_specs.__doc__`.
+    """
+    from . import mutate                       # late: mutate imports this module
+    return build_all(root, specs=mutate.mutant_specs(), quiet=quiet,
+                     index_name=None, prompt_id="C6-worldgen-mutate")
 
 
 GATES = (
@@ -211,24 +253,34 @@ def check_determinism(ids: Optional[Sequence[str]] = None) -> List[str]:
             return ["the comparison build failed:\n" + tail[-2000:]]
 
         differences: List[str] = []
-        for spec in ([BY_ID[i] for i in ids] if ids else CATALOGUE):
+        by_id = {s.world_id: s for s in all_specs()}
+        wanted = [by_id[i] for i in ids] if ids else all_specs()
+        pairs: List[Tuple[str, str]] = []
+        for spec in wanted:
             for name in ("raw_trace.jsonl", "spec.json", "coverage.json",
                          "ground_truth.json", "GROUND_TRUTH.md",
                          "reversibility.json"):
-                a = os.path.join(OUT, spec.world_id, name)
-                b = os.path.join(scratch, spec.world_id, name)
-                if not os.path.exists(b):
-                    differences.append("%s/%s missing from the comparison build"
-                                       % (spec.world_id, name))
-                    continue
-                if not os.path.exists(a):
-                    differences.append("%s/%s missing from the committed build"
-                                       % (spec.world_id, name))
-                    continue
-                with open(a, "rb") as fa, open(b, "rb") as fb:
-                    if fa.read() != fb.read():
-                        differences.append("%s/%s differs between runs"
-                                           % (spec.world_id, name))
+                pairs.append((spec.world_id, name))
+        if not ids:
+            # The two roster files are outputs like any other and were not
+            # diffed before. `MUTATIONS.json` in particular is computed from two
+            # reachable graphs and a product search, so it is exactly the shape
+            # of artefact where a `set` reaching an output would hide.
+            pairs.append(("", "INDEX.json"))
+            pairs.append(("", "MUTATIONS.json"))
+        for world_id, name in pairs:
+            label = "%s/%s" % (world_id, name) if world_id else name
+            a = os.path.join(OUT, world_id, name)
+            b = os.path.join(scratch, world_id, name)
+            if not os.path.exists(b):
+                differences.append("%s missing from the comparison build" % label)
+                continue
+            if not os.path.exists(a):
+                differences.append("%s missing from the committed build" % label)
+                continue
+            with open(a, "rb") as fa, open(b, "rb") as fb:
+                if fa.read() != fb.read():
+                    differences.append("%s differs between runs" % label)
         return differences
     finally:
         shutil.rmtree(scratch, ignore_errors=True)
@@ -254,12 +306,39 @@ def main() -> int:
         print(json.dumps(manifest["totals"], indent=2, sort_keys=True))
 
     failures = gate_failures(manifest)
+
+    if ids is None:
+        from . import mutate
+        for orphan in mutate.prune_orphans(args.into):
+            print("pruned orphan mutant directory %s (no live mutation claims "
+                  "that digest)" % orphan)
+        mutants = build_mutants(args.into, quiet=args.quiet)
+        if not args.quiet:
+            print()
+            print(json.dumps(mutants["totals"], indent=2, sort_keys=True))
+        failures.extend(gate_failures(mutants))
+
     if failures:
         print()
         print("BUILD GATE FAILED:")
         for line in failures:
             print("  " + line)
         return 1
+
+    if ids is None:
+        # After the gates, because every number in it is measured against worlds
+        # that have just been certified; and inside this build rather than in a
+        # separate command, so that `--check`'s comparison build produces one too
+        # and the descriptors are held to the same byte-for-byte standard as the
+        # worlds they describe.
+        mutate.write_descriptors(args.into, roster=mutants)
+        problems = mutate.mutation_gate_failures(args.into)
+        if problems:
+            print()
+            print("MUTATION GATE FAILED:")
+            for line in problems:
+                print("  " + line)
+            return 1
 
     if args.check and into_default:
         differences = check_determinism(ids)
@@ -272,7 +351,9 @@ def main() -> int:
         print("determinism: every artefact byte-identical across two builds "
               "in separate interpreters at different PYTHONHASHSEED")
     if not args.quiet:
-        print("build gate: %d world(s) green" % len(manifest["worlds"]))
+        print("build gate: %d catalogue world(s)%s green"
+              % (len(manifest["worlds"]),
+                 "" if ids is not None else " + %d mutant(s)" % len(mutants["worlds"])))
     return 0
 
 

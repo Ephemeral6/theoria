@@ -18,7 +18,7 @@
   "worlds": {
     "t1-switch-latch": {
       "l1_l2": {
-        "candidates": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\c1-worldgen\\worldgen\\out\\qc\\t1-switch-latch\\candidates.jsonl",
+        "candidates": "worldgen/out/qc/t1-switch-latch/candidates.jsonl",
         "executable_probes": 1,
         "explains_every_transition": {
           "obj0": true,
@@ -40,9 +40,9 @@
         },
         "probes": 9,
         "rules_mined": 27,
-        "schema_output": "OK   C:\\Users\\user\\Desktop\\theoria\\.worktrees\\c1-worldgen\\worldgen\\out\\qc\\t1-switch-latch\\candidates.jsonl (35 rows)",
+        "schema_output": "OK   worldgen/out/qc/t1-switch-latch/candidates.jsonl (35 rows)",
         "schema_valid": true,
-        "trace": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\c1-worldgen\\worldgen\\out\\worlds\\t1-switch-latch\\raw_trace.jsonl",
+        "trace": "worldgen/out/worlds/t1-switch-latch/raw_trace.jsonl",
         "tracks": 4,
         "transitions": 30
       },
@@ -194,7 +194,7 @@
     },
     "t1-switch-toggle": {
       "l1_l2": {
-        "candidates": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\c1-worldgen\\worldgen\\out\\qc\\t1-switch-toggle\\candidates.jsonl",
+        "candidates": "worldgen/out/qc/t1-switch-toggle/candidates.jsonl",
         "executable_probes": 0,
         "explains_every_transition": {
           "obj0": true,
@@ -216,9 +216,9 @@
         },
         "probes": 17,
         "rules_mined": 31,
-        "schema_output": "OK   C:\\Users\\user\\Desktop\\theoria\\.worktrees\\c1-worldgen\\worldgen\\out\\qc\\t1-switch-toggle\\candidates.jsonl (38 rows)",
+        "schema_output": "OK   worldgen/out/qc/t1-switch-toggle/candidates.jsonl (38 rows)",
         "schema_valid": true,
-        "trace": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\c1-worldgen\\worldgen\\out\\worlds\\t1-switch-toggle\\raw_trace.jsonl",
+        "trace": "worldgen/out/worlds/t1-switch-toggle/raw_trace.jsonl",
         "tracks": 4,
         "transitions": 40
       },
@@ -436,10 +436,10 @@
     },
     "t2-lock-fragile": {
       "l1_l2": {
-        "candidates": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\c1-worldgen\\worldgen\\out\\qc\\t2-lock-fragile\\candidates.jsonl",
+        "candidates": "worldgen/out/qc/t2-lock-fragile/candidates.jsonl",
         "error": "NoSeparatingGuard: no literal separates transition 1 from the positives",
         "live": false,
-        "trace": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\c1-worldgen\\worldgen\\out\\worlds\\t2-lock-fragile\\raw_trace.jsonl"
+        "trace": "worldgen/out/worlds/t2-lock-fragile/raw_trace.jsonl"
       },
       "l3": {
         "error": "NoSeparatingGuard: no literal separates transition 1 from the positives",

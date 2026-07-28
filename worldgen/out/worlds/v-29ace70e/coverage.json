@@ -1,0 +1,23 @@
+{
+  "budget": 50,
+  "coverage": "43/240",
+  "coverage_fraction": 0.1792,
+  "covered_pairs": 43,
+  "frames": 51,
+  "reachable_states": 60,
+  "rules_never_witnessed": {
+    "blocked_by_lock": 1,
+    "blocked_by_wall": 100,
+    "collect_token": 7,
+    "walk": 83,
+    "walk_through_lock": 6
+  },
+  "rules_witnessed": {
+    "blocked_by_wall": 20,
+    "collect_token": 2,
+    "walk": 28
+  },
+  "state_action_pairs": 240,
+  "transitions": 50,
+  "win_frames": []
+}

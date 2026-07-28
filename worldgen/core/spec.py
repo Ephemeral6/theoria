@@ -106,6 +106,21 @@ class WorldSpec:
         wanted = set(kinds)
         return tuple(e for e in self.entities if e.kind in wanted)
 
+    def forbidden_actions(self) -> "frozenset":
+        """The actions this world refuses outright, from `flags["forbidden_action"]`.
+
+        A *world-level* semantic knob, and the only one this library has that no
+        entity prop can express — every other rule-level parameter in
+        `worldgen/mutate.py`'s `KNOBS` table is already a prop some mechanism
+        reads.  Stored as a single action name rather than a list because the
+        value has to survive `_pairs` and stay hashable, and because one
+        forbidden action is the edit the exam's own `forbid_action` wrapper
+        makes (`exam/papers/verdict.py`).  Absent in all twenty catalogue
+        worlds, so the knob is inert for them by construction.
+        """
+        name = self.flag("forbidden_action")
+        return frozenset() if name is None else frozenset({str(name)})
+
     # ---------------------------------------------------------- (de)serialise
     def as_json(self) -> Dict[str, Any]:
         return {
@@ -161,7 +176,12 @@ def validate(spec: WorldSpec) -> None:
     every kind present that does not collide with a reserved colour or with
     another kind.
     """
-    from .types import RESERVED
+    from .types import ACTIONS, RESERVED
+
+    forbidden = spec.flag("forbidden_action")
+    if forbidden is not None and forbidden not in ACTIONS:
+        raise ValueError("%s: forbidden_action %r is not one of %s"
+                         % (spec.world_id, forbidden, ", ".join(ACTIONS)))
 
     if not spec.layout or len({len(r) for r in spec.layout}) != 1:
         raise ValueError("%s: layout is not rectangular" % spec.world_id)
