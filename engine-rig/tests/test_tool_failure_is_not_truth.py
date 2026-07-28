@@ -420,3 +420,62 @@ def test_a_search_result_carries_the_budget_it_ran_under():
         "the placeholder the Fast Downward path builds must not inherit a claim "
         "about a bundled search that never ran"
     )
+
+
+# ------------------------------------------- the standing check, and its own
+
+def test_the_standing_check_is_green_on_this_territory():
+    """`tools/check_solver_status` runs here, in the suite that gates merges.
+
+    `monitor/gates.py` resolves engine-rig's gate to pytest -- there is no
+    `verify.sh` in this directory -- so a check that is not a test is a check
+    that does not run.
+    """
+    from tools import check_solver_status as check
+
+    findings = [f for f in check.check_paths([check.HERE])
+                if f.level == check.ERROR]
+    assert not findings, "\n".join(f.render() for f in findings)
+
+
+def test_the_standing_check_catches_the_defect_it_was_written_for():
+    """Its own negative control: the pre-fix line, verbatim."""
+    from tools import check_solver_status as check
+
+    before = "unsolvable=done.returncode == 12,\n"
+    findings = check.check_source("f(\n    %s)\n" % before, "<synthetic>")
+    assert len(findings) == 1
+    assert findings[0].target == "unsolvable"
+    assert findings[0].level == check.ERROR
+
+
+def test_the_standing_check_accepts_the_fix():
+    """Routing the same comparison through a predicate has to silence it.
+
+    Otherwise the only way to a green check is to stop asking the question,
+    which is worse than the defect.
+    """
+    from tools import check_solver_status as check
+
+    after = ("f(\n    unsolvable=backends.proves_unsolvable("
+             "rung, done.returncode, log),\n)\n")
+    assert check.check_source(after, "<synthetic>") == []
+
+
+@pytest.mark.parametrize("source", [
+    # Control flow: nobody stores the comparison as a claim.
+    "if proc.returncode != 0:\n    raise RuntimeError('boom')\n",
+    # A gate reporting on its own subprocess -- note level at most, never error.
+    "ok = proc.returncode == 0\n",
+    # The engine's own verdict field, compared to its own constant.
+    "reachable = self.status == REACHABLE\n",
+    # A raise is the conservative direction and is never a finding.
+    "def unsolvable(r):\n    if r.status != 2:\n        raise LpUnavailable()\n"
+    "    return None\n",
+])
+def test_the_standing_check_does_not_fire_on_correct_code(source):
+    """The false positives calibration found and the vocabulary now excludes."""
+    from tools import check_solver_status as check
+
+    assert [f for f in check.check_source(source, "<synthetic>")
+            if f.level == check.ERROR] == []
