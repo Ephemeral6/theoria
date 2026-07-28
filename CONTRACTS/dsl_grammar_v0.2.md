@@ -13,7 +13,7 @@ produced this file: **a change needs a ledger entry or a defect that forced it**
 named in the revision record. "It would read better" is not a reason to touch a
 contract two tracks compile against.
 
-Revision items 11 and 12 landed **before** that tag, in the same unmerged branch
+Revision items 11 to 13 landed **before** that tag, in the same unmerged branch
 as the rest of this file, and are recorded here rather than in a v0.3 for that
 reason. After the tag the identical change would have needed a new file; the
 policy is about the tag, not about the calendar, and this note exists so the
@@ -230,9 +230,20 @@ laws:
 `pagoda(...)` is **sound but incomplete**: some genuinely unsolvable
 configurations admit no linear pagoda function at all. On the 5-cell peg board
 from `11011`, exactly two of the five single-peg goals are certifiable this way.
-A generator must therefore **refuse** to emit a proof whose theorem is broader
-than the certificate it was given, rather than narrowing the claim silently. An
-uncoverable goal is an open question, and belongs in the ledger.
+
+A generator must **never** emit a proof whose theorem is broader than what it
+has actually established. It does not follow that it must refuse: if it holds a
+*second* method that closes the residue, using it is not a weakening but the
+whole point of having more than one. The rule is therefore about attribution
+rather than abstention — **every goal must be carried by a named method, and the
+artefact must say which**. Blending two arguments into one claim is the failure
+mode; so is withholding a proof the compiler can produce.
+
+When no method it has can license a goal, it refuses, and the goal is an open
+question that belongs in the ledger. E-06 was that case and is now discharged
+this way: certificate where the certificate reaches, exhaustion of the reachable
+set where it does not, each named in the emitted file. The method gap itself is
+unchanged — exhaustion is `O(reachable set)` and refuses above a stated bound.
 
 ---
 
@@ -261,6 +272,7 @@ silently.
 | 10 | a backend must refuse an unimplemented `semantics:` value | the `semantics:` proposal's own closing paragraph, and a defect found while finalising this version | `gen_pddl` reads only the AST — never the IR, never the predictor — so no guard reached it, and a manual declaring `frame reset` + `cascade multi_frame` compiled to a STRIPS encoding of `persist` + `single_frame` without a word of complaint |
 | 11 | `conflict` must be discharged, not merely declared | **E-07**, and this contract's own §semantics, which said "`certify` must prove it" while nothing did | for one revision the manual named which of constraint 9's two routes it claimed and no tool checked either. A declaration nobody verifies reads exactly like a verified one — strictly worse than not asking, because it looks like evidence |
 | 12 | `unique` on an object field | **E-07** | the peg manual declared `conflict exclusive` and could not entail it: its jump schema quantifies over a second peg and pins it only by position, so two groundings both claim the jumping peg whenever two pegs share a cell. The fact that pegs cannot stack was true of the world and had nowhere to be written down |
+| 13 | a generator may close a goal by a second method, with attribution | **E-06** | `goal count(Peg, alive) = 1` went one revision unproven. The certificate could not license it and the compiler refused — right while the pagoda route was the only route, and a withheld proof once exhaustion was also available |
 
 Ledger entries E-01 through E-05 are **discharged** by this revision. E-03 was
 the one named as "the one to fix first"; it is item 1.

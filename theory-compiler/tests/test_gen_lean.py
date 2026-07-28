@@ -123,12 +123,21 @@ def test_algebraic_proof_is_smaller_than_the_state_space(peg, cert, tmp_path):
 
 # ---------------------------------------------------------------- overclaiming
 
-def test_refuses_goals_the_certificate_does_not_cover(peg, cert):
-    """`lp_potential` is sound but incomplete. Three of the five single-peg
-    goals on this board admit no linear pagoda at all, and the generator must
-    say so rather than emit a theorem that means less than it reads.
+def test_goals_the_certificate_does_not_cover_go_to_the_other_method(peg, cert):
+    """This used to assert a refusal, and the change is the point (E-06).
+
+    `lp_potential` is sound but incomplete: three of the five single-peg goals
+    on this board admit no linear pagoda at all. While the pagoda route was the
+    only route, refusing was the honest answer — emitting `unsolvable` would
+    have meant less than it read. It is no longer the only route, so refusing
+    would now be *withholding a proof the compiler can produce*, which is its
+    own kind of dishonesty.
+
+    What must not regress is that the generator never emits a claim no method
+    licenses; `test_an_unenumerable_world_is_still_refused` is that assertion
+    now, and it is the one that keeps this from being a quiet weakening.
     """
-    ast, problem = peg
+    ast, _problem = peg
     doc = {
         "name": "peg5-any-single", "n_pos": 5, "background": 0,
         "objects": [{"name": f"Peg_{i}", "type": "Peg", "pos": i, "color": 1}
@@ -136,12 +145,11 @@ def test_refuses_goals_the_certificate_does_not_cover(peg, cert):
         "weights": {"w": cert.weights},
         "goal_states": ["10000", "01000", "00100", "00010", "00001"],
     }
-    with pytest.raises(CertificateGapError) as exc:
-        generate_lean(ast, from_json(doc), cert)
-    message = str(exc.value)
+    source = generate_lean(ast, from_json(doc), cert)
+    assert "theorem unsolvable" in source
     for uncovered in ("10000", "00100", "00001"):
-        assert uncovered in message
-    assert "incompleteness" in message
+        assert uncovered in source, "the header must name what it could not cover"
+    assert "exhausting the" in source
 
 
 def test_refuses_a_pagoda_invariant_with_no_certificate(peg):
@@ -265,3 +273,83 @@ def test_the_committed_lean_artifact_is_not_stale():
     assert actual == expected, (
         "lean/TheoriaLean.lean is out of date. Regenerate it — see README."
     )
+
+
+# ----------------------------------------------- E-06 · the second method
+
+ANY_SINGLE_PEG = {
+    "name": "peg5-any-single", "n_pos": 5, "background": 0,
+    "objects": [{"name": f"Peg_{i}", "type": "Peg", "pos": i, "color": 1}
+                for i in (0, 1, 3, 4)],
+    "goal_states": ["10000", "01000", "00100", "00010", "00001"],
+}
+
+
+def test_the_uncovered_goals_are_closed_by_exhaustion(peg, cert):
+    """E-06's proof half.
+
+    `goal count(Peg, alive) = 1` was unproven for one revision: the certificate
+    excludes one of the five single-peg terminals and `lp_potential` admits no
+    linear pagoda for some of the rest, so the compiler refused. Refusing was
+    right while there was one method. There are two, and exhausting the
+    reachable set closes what the certificate cannot.
+    """
+    ast, _ = peg
+    source = generate_lean(ast, from_json(ANY_SINGLE_PEG), cert)
+    assert "theorem unsolvable" in source
+    assert "theorem inv_all" in source
+    assert "sorry" not in source and "native_decide" not in source
+
+
+def test_the_two_methods_stay_attributed(peg, cert):
+    """A blended claim would be worse than either half.
+
+    A reader has to be able to see which goal each argument carried, and the
+    file must not say more than is known: that a goal is *not covered by this
+    certificate* is a fact about the certificate, while "no linear pagoda
+    exists" is a fact about the method that only `lp_potential` can report.
+    Conflating them would libel `01000`, which has a certificate of its own in
+    `interop/`.
+    """
+    ast, _ = peg
+    source = generate_lean(ast, from_json(ANY_SINGLE_PEG), cert)
+    assert "not excluded by this certificate" in source
+    assert "no linear pagoda function at all" not in source, (
+        "the header claims non-existence of a pagoda for goals this "
+        "certificate merely does not cover")
+    assert "00010" in source and "excludes 1 of them algebraically" in source
+
+
+def test_a_reachable_goal_is_refused_rather_than_proved(peg, cert):
+    """The soundness edge: exhaustion must not 'prove' a false theorem."""
+    doc = dict(ANY_SINGLE_PEG)
+    doc["goal_states"] = ["11011"]          # the initial state itself
+    with pytest.raises(LeanGenError) as exc:
+        generate_lean(peg[0], from_json(doc), cert)
+    assert "reachable" in str(exc.value)
+
+
+def test_an_unenumerable_world_is_still_refused(peg, cert, monkeypatch):
+    """The refusal stays for the case neither method reaches.
+
+    Exhaustion is O(reachable set), so it discharges this configuration and not
+    the method gap. A board whose reachable set is astronomical must come back
+    as `CertificateGapError`, not as a file nobody can compile.
+    """
+    from theory_compiler.generators import gen_lean as module
+    monkeypatch.setattr(module, "MAX_ENUMERATED_STATES", 2)
+    with pytest.raises(CertificateGapError) as exc:
+        generate_lean(peg[0], from_json(ANY_SINGLE_PEG), cert)
+    message = str(exc.value)
+    assert "exceeds 2 states" in message
+    assert "no method it has can license" in message
+
+
+@needs_lean
+def test_the_hybrid_development_compiles_with_an_empty_axiom_set(peg, cert, tmp_path):
+    """The claim is only worth what `lean` says about it."""
+    ast, _ = peg
+    output = run_lean(generate_lean(ast, from_json(ANY_SINGLE_PEG), cert), tmp_path)
+    for name in ("inv_all", "unsolvable"):
+        assert f"'{name}' does not depend on any axioms" in output, output
+    assert "sorryAx" not in output

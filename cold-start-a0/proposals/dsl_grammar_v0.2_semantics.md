@@ -19,8 +19,9 @@ visible rather than assumed away:
   `exclusive` and does not entail it — two groundings of one schema both claim
   the jumping peg whenever two pegs share a cell (600 collisions across the
   80,000 representable state-action pairs; 0 across the 59,560 where no two live
-  pegs coincide). The manual cannot state the missing condition, because it
-  needs quantification inside a guard. Ledger **E-07**.
+  pegs coincide). **Also settled**: the manual gained `unique` on a field
+  (revision item 12), which says the missing fact, and all seven manuals in the
+  repository now discharge by guard analysis alone. Ledger **E-07** closed.
 * **`frame reset`, `conflict priority:` and `cascade multi_frame` parse but have
   no backend.** Every manual in the repo declares `persist` / `exclusive` /
   `single_frame`, so the other branch of each has never been compiled. This

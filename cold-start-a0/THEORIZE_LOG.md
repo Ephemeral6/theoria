@@ -359,11 +359,45 @@ Things the world said that `dsl_grammar_v0.1` cannot.
 | E-03 | a frame axiom / default clause | a comment at the top of `theory.dsl` and a hard-coded rule in the backends | **the most important semantic fact about `step` is not in the DSL at all** |
 | E-04 | declaring a board landmark (`portal_exit`, the goal cell) | free-floating names resolved by the problem instance | the domain/problem boundary is real but unwritten; a reader of `theory.dsl` alone cannot tell which names are level data |
 | E-05 | a weight function over cells for a pagoda invariant | the vector lives in the problem instance (M5) | same as E-04 |
-| E-06 | a proof method for goals no linear pagoda covers | nothing — `CertificateGapError` refuses to generate | `goal count(Peg, alive) = 1` stays unproven: three of the five single-peg terminals admit no linear pagoda at all |
+| E-06 | a proof method for goals no linear pagoda covers | **discharged** — the certificate covers what it covers, exhaustion closes the rest, each goal attributed to its method | see below |
 | E-07 | saying that two live instances of one type never share a cell | **discharged** — `unique` on a field (`dsl_grammar_v0.2` revision item 12) | see below |
 
 E-03 is the one to fix first: a manual whose default behaviour is a comment is
 not a manual.
+
+### E-06, in full — one proposition, two methods
+
+`goal count(Peg, alive) = 1` was unproven for one revision. The certificate
+excludes `00010` algebraically; `10000`, `00100` and `00001` admit **no linear
+pagoda function at all** (`engine-rig/tests/test_interop.py` pins them as
+unprovable by that method, not merely unexported), and `01000` has a certificate
+of its own that the compilation was not given. So the pagoda route could not
+license the manual's theorem, and the compiler refused — correctly, while that
+was the only route.
+
+**Discharged 2026-07-28 by using the other method the compiler already had.**
+The reachable set from `11011` is five states — `11011`, `00111`, `11100`,
+`01001`, `10010` — and none of them has one peg. Exhausting it closes every goal
+the certificate does not, and `decide` keeps the axiom set empty. Measured, not
+asserted: `lean` 4.9.0 exits 0 on the generated file and reports
+`'inv_all' does not depend on any axioms` and
+`'unsolvable' does not depend on any axioms`.
+
+**The two arguments stay separate and attributed.** The file's header names
+which goal each one carried, because they are not the same argument and a
+blended claim would be worse than either half. It also says only what is known:
+that a goal is *not excluded by this certificate* is a fact about the
+certificate, whereas *no linear pagoda exists* is a fact about the method that
+only `lp_potential` can report — the first draft of the header conflated the
+two and libelled `01000`, which has a certificate.
+
+**What is not discharged.** The method gap is unchanged: `lp_potential` is still
+sound and incomplete, and exhaustion is `O(reachable set)`. On the 33-cell
+English board the reachable set is astronomical and the same manual is refused —
+`MAX_ENUMERATED_STATES` bounds it, and crossing the bound produces a refusal
+rather than a file nobody can compile. So **the proposition is proved and the
+method gap stands**; a board where neither method reaches still has no proof,
+and D-TC-008's trade-off (empty axioms xor linear proof size) is untouched.
 
 ### E-07, in full — an obligation the guard language cannot let a manual meet
 

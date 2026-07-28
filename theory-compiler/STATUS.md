@@ -6,21 +6,22 @@
 [`runs/P-10/RUN_STATE.md`](runs/P-10/RUN_STATE.md)。
 
 ```
-theory-compiler   195 passed   (THEORIA_REQUIRE_LEAN=1，含真 Lean 编译)
+theory-compiler   200 passed   (THEORIA_REQUIRE_LEAN=1，含真 Lean 编译)
 cold-start-a0      56 passed   (LEAN=… 时)
 ```
 
-七项清偿：
+八项清偿：
 
 | # | 交付 | 状态 |
 |---|---|---|
 | 1 | `CONTRACTS/candidates_schema_v0.2.md` + 独立 v0.2 校验器 | **草案**，等 engine-rig 会签 |
 | 2 | `CONTRACTS/dsl_grammar_v0.2.md` 定稿 + 迁移说明 | 定稿（本轨道独有，无需会签） |
-| 3 | E-06 的转录那一半（证书权重注入编译链） | 清偿；**证明那一半仍 open** |
+| 3 | E-06 的转录那一半（证书权重注入编译链） | 清偿 |
 | 4 | cold-start-a2 上报的两条缺陷 | 修复 + 8 项负向测试 |
 | 5 | 四份 DSL 回归 | 四个 subagent 全部 PASS |
 | 6 | `conflict` 证明义务（追加） | 清偿，两条路线；当场抓到 **E-07** |
 | 7 | **E-07 本身**（再追加） | 清偿——`unique` 字段修饰符；七份说明书**全部**直接判绿 |
+| 8 | **E-06 的证明那一半**（再追加） | 清偿——第二种证明方法，两条论证分开署名 |
 
 ### 本轮最该记住的三件事
 
@@ -77,11 +78,26 @@ cold-start-a0      56 passed   (LEAN=… 时)
 
 条件路线**保留**：需要该条件却不声明的说明书，仍然只拿到具名的有条件结论加一个反例。
 
+### E-06 的证明那一半已清偿：换一种证明方法，不是换一种说法
+
+`goal count(Peg, alive) = 1` 现在**证出来了**。证书排除得了的目标走代数论证，
+排除不了的（`lp_potential` 对其中三个根本不存在线性 pagoda）交给**穷举可达集**——
+从 `11011` 出发只有 5 个可达态，没有一个是单子局面。`lean` 4.9.0 实跑退出码 0，
+`inv_all` 与 `unsolvable` **双双空公理集**。
+
+**两条论证在生成物里分开署名**，逐个目标写清是谁扛的。第一版表头写成「其余四个
+**根本不存在**线性 pagoda」——**假的**，`01000` 自己有一份证书，只是这次编译没拿到。
+「本证书没排除它」是关于证书的事实，「不存在线性 pagoda」是关于方法的事实。已改。
+
+**拒绝保留**：可达集超过 `MAX_ENUMERATED_STATES` 就退回 `CertificateGapError`。
+**清偿的是那条命题，不是那个方法缺口**——33 格棋盘上同一份说明书照样被拒，
+D-TC-008 的取舍一字未变。
+
 ### 未清偿
 
 * **会签未到手**——契约是草案。
-* **E-06 的证明那一半**：`goal count(Peg, alive) = 1` 仍证不出来。五个单子终局里
-  三个没有线性 pagoda 函数。下一步是 `ic3_pdr` 的证书导出，在 engine-rig 那一侧。
+* **方法缺口本身**：`lp_potential` 仍然可靠而不完备，穷举仍然是 O(可达集)。
+  可达集大到两种方法都够不着的世界，仍然没有证明。
 * 三个 `semantics:` 取值无后端（全部报错，不近似）；共享 `gen_pddl` 仍不消费
   `ProblemSpec`；`theory_grammar.lark` 是死文件（已钉警告）。
 

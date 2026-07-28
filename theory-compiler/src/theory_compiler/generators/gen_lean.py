@@ -244,16 +244,28 @@ def _pagoda_lean(ir: WorldIR, ns: dict, cert: PagodaCertificate,
 
     missing = covers(cert, goal_states)
     if missing:
+        # E-06. The certificate cannot license these goals — `lp_potential` is
+        # sound but incomplete and some of them admit no linear pagoda at all.
+        # Refusing outright was right while there was only one method; it is
+        # wrong now that there are two. Exhaustion is tried, and *only* the
+        # goals the certificate does not cover are handed to it, so the two
+        # arguments stay attributable rather than being blended into one claim.
+        feasible, why = _exhaustible(ns)
+        if feasible:
+            return _hybrid_lean(ir, ns, cert, inv_name, bound,
+                                goal_states, missing)
         raise CertificateGapError(
             "the manual's goal picks out %s on this board, and certificate %r "
             "excludes only %s. %s is left unproven.\n\n"
             "This is `lp_potential`'s documented incompleteness, not a bug to "
             "route around: some genuinely unsolvable configurations admit no "
-            "linear pagoda function. Narrow the level's `goal_states` to what "
-            "the certificate covers, or obtain a certificate that covers the "
-            "rest, or state the claim as open. This generator will not emit a "
-            "theorem the certificate does not license."
-            % (goal_states, cert.claim, cert.goal_states, missing))
+            "linear pagoda function. Exhausting the reachable set is the other "
+            "method this compiler has, and it is not available here either: %s."
+            "\n\nNarrow the level's `goal_states` to what the certificate "
+            "covers, or obtain a certificate that covers the rest, or state the "
+            "claim as open. This generator will not emit a theorem no method it "
+            "has can license."
+            % (goal_states, cert.claim, cert.goal_states, missing, why))
 
     derived = _derive_moves(ns, n)
     if set(derived) != set(cert.moves()):
@@ -461,6 +473,175 @@ def _provenance(path: str) -> str:
 
 
 # -------------------------------------------------------------- enumerative
+
+#: Above this, transcribing the reachable set into Lean stops being a proof and
+#: starts being a build problem. The number is a policy, not a discovery: what
+#: matters is that the limit is *stated* and that crossing it produces a refusal
+#: rather than a file nobody can compile.
+MAX_ENUMERATED_STATES = 4096
+
+
+def _exhaustible(ns: dict) -> Tuple[bool, str]:
+    """Can the reachable set be transcribed? `(feasible, why not)`.
+
+    Bounded rather than trusting: a world whose reachable set is astronomical
+    must be refused, not enumerated until the machine gives up. `_reachable`
+    would happily run for a very long time on a 33-cell board.
+    """
+    start = ns["initial_state"]()
+    seen = {start.key()}
+    queue = [start]
+    while queue:
+        state = queue.pop(0)
+        for action in ns["ACTIONS"]:
+            nxt = ns["step"](state, action)
+            if nxt.key() not in seen:
+                if len(seen) >= MAX_ENUMERATED_STATES:
+                    return False, ("the reachable set exceeds %d states, so "
+                                   "exhaustion would not produce a proof anyone "
+                                   "could check" % MAX_ENUMERATED_STATES)
+                seen.add(nxt.key())
+                queue.append(nxt)
+    return True, ""
+
+
+def _hybrid_lean(ir: WorldIR, ns: dict, cert: PagodaCertificate,
+                 inv_name: str, bound: int, goal_states: Sequence[str],
+                 missing: Sequence[str]) -> str:
+    """E-06. The certificate covers some goals; exhaustion covers the rest.
+
+    `lp_potential` is sound but incomplete: on the 5-cell board from `11011`,
+    three of the five single-peg terminals admit **no linear pagoda function at
+    all** — `engine-rig`'s own `test_interop.py` pins them as unprovable by that
+    method rather than merely unexported. So the manual's
+    `goal count(Peg, alive) = 1` could not be proved, and the compiler refused
+    to emit a theorem broader than its certificate. That refusal was right; what
+    was missing was a second method.
+
+    Exhaustion is that method, and the compiler already had it. The reachable
+    set is finite and small, none of its states satisfies the goal, and `decide`
+    closes it with an empty axiom set. The two proofs are kept **separate and
+    attributed**, because they are not the same argument and a reader should be
+    able to see which one carried which goal:
+
+    * `inv_all` — the declared potential is at most its bound on every reachable
+      state. The numbers are the engine's, re-derived by `certificate.recheck`
+      before anything is emitted.
+    * `unsolvable` — no reachable state satisfies the goal, by exhaustion.
+
+    **What this does not do.** It does not make the pagoda method complete, and
+    it does not scale: exhaustion is `O(reachable set)`, so a 33-cell English
+    board is out of reach and the same manual would be refused there. The
+    *proposition* is discharged for this configuration; the *method gap* stands
+    and stays in the ledger.
+    """
+    states, index = _reachable(ns)
+    covered = [g for g in goal_states if g not in set(missing)]
+    occupancies = [ns["occupancy"](s) for s in states]
+
+    # A reachable state is a counterexample if it is one of the states the
+    # theorem excludes **or** if the manual's own goal predicate accepts it.
+    # Both, not either: `goal_states` is the level's narrowing of the goal and
+    # `is_goal` is the manual's, and checking only `is_goal` would miss exactly
+    # the case where the level names a state the manual's predicate does not
+    # pick out — which is how a false `unsolvable` gets emitted.
+    targets = set(goal_states)
+    hits = [i for i, s in enumerate(states)
+            if occupancies[i] in targets or ns["is_goal"](s)]
+    if hits:
+        raise LeanGenError(
+            "the goal is reachable: %d of the %d reachable states satisfy it "
+            "(e.g. %s), so `unsolvable` is false and no development will be "
+            "emitted. A certificate covering part of the goal does not change "
+            "that, and exhaustion is what made it visible."
+            % (len(hits), len(states), occupancies[hits[0]]))
+
+    L: List[str] = []
+    L.append("/-")
+    L.append("  Auto-generated from theory.dsl — DO NOT EDIT.")
+    L.append("")
+    L.append("  Problem: %s.  Reachable states: %d." % (ir.problem.name, len(states)))
+    L.append("  Declared semantics: frame %s, conflict %s, cascade %s."
+             % (ir.semantics.frame, ir.semantics.conflict, ir.semantics.cascade))
+    L.append("")
+    L.append("  TWO METHODS, AND WHICH GOAL EACH ONE CARRIES (ledger E-06).")
+    L.append("")
+    L.append("  The manual's goal picks out %d state(s) on this board." % len(goal_states))
+    L.append("  Certificate %s" % _provenance(cert.path))
+    L.append("  produced by %s excludes %d of them algebraically:"
+             % (cert.produced_by, len(covered)))
+    for state in covered:
+        L.append("    %s   potential %+d > %+d, the initial bound"
+                 % (state, cert.potential(state), cert.initial_potential))
+    L.append("  The other %d are **not excluded by this certificate** — their"
+             % len(missing))
+    L.append("  potential does not exceed the bound, so the argument says")
+    L.append("  nothing about them:")
+    for state in missing:
+        L.append("    %s   potential %+d, which does not exceed the bound"
+                 % (state, cert.potential(state)))
+    L.append("  That is a statement about *this* certificate and not about the")
+    L.append("  method: another certificate may exclude some of them, and for")
+    L.append("  others no linear pagoda function exists at all. Which is which")
+    L.append("  is `lp_potential`'s to report, not this generator's to guess —")
+    L.append("  so they are all closed the same way here, by exhausting the")
+    L.append("  reachable set.")
+    L.append("  Both arguments end in `decide`; neither adds an axiom.")
+    L.append("")
+    L.append("  This does not make the pagoda method complete and it does not")
+    L.append("  scale: exhaustion is O(reachable set). On a board whose reachable")
+    L.append("  set is large the same manual is refused, and correctly.")
+    L.append("-/")
+    L.append("")
+    L.append("inductive St where")
+    for i, occ in enumerate(occupancies):
+        L.append("  | s%d   -- %s" % (i, occ))
+    L.append("  deriving DecidableEq, Repr")
+    L.append("")
+    actions = list(ns["ACTIONS"])
+    L.append("inductive Act where")
+    for i, a in enumerate(actions):
+        L.append("  | a%d   -- %s" % (i, "(" + ", ".join(map(str, a)) + ")"))
+    L.append("  deriving DecidableEq, Repr")
+    L.append("")
+    L.append("/-- The manual's rules, transcribed from the executable form. -/")
+    L.append("def step : St → Act → St")
+    for i, state in enumerate(states):
+        for j, action in enumerate(actions):
+            L.append("  | .s%d, .a%d => .s%d"
+                     % (i, j, index[ns["step"](state, action).key()]))
+    L.append("")
+    L.append("def Goal : St → Bool")
+    for i in range(len(states)):
+        L.append("  | .s%d => false" % i)
+    L.append("")
+    L.append("inductive Reachable : St → Prop where")
+    L.append("  | init : Reachable .s0")
+    L.append("  | step : ∀ s a, Reachable s → Reachable (step s a)")
+    L.append("")
+    L.append("/-- The engine's weights, %s, evaluated on each reachable state." % inv_name)
+    L.append("    w = %s -- from the certificate, re-derived before emission. -/"
+             % (cert.weights,))
+    L.append("def potential : St → Int")
+    for i, occ in enumerate(occupancies):
+        L.append("  | .s%d => %d" % (i, cert.potential(occ)))
+    L.append("")
+    L.append("theorem inv_all (s : St) : potential s ≤ %d := by" % bound)
+    L.append("  cases s <;> decide")
+    L.append("")
+    L.append("theorem no_goal_state (s : St) : Goal s = false := by")
+    L.append("  cases s <;> rfl")
+    L.append("")
+    L.append("theorem unsolvable : ¬ ∃ s : St, Reachable s ∧ Goal s = true := by")
+    L.append("  rintro ⟨s, _, hg⟩")
+    L.append("  rw [no_goal_state s] at hg")
+    L.append("  exact Bool.noConfusion hg")
+    L.append("")
+    L.append("#print axioms inv_all")
+    L.append("#print axioms unsolvable")
+    L.append("")
+    return "\n".join(L)
+
 
 def _enumerative_lean(ir: WorldIR, ns: dict) -> str:
     states, index = _reachable(ns)
