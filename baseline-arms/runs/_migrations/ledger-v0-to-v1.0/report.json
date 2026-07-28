@@ -5,7 +5,7 @@
     "model_call": 274,
     "unknown": 0
   },
-  "generated_at": "2026-07-28T00:50:49Z",
+  "generated_at": "2026-07-28T01:11:00Z",
   "grades": {
     "attempts_defaulted": 160,
     "joined_arm": 274,
@@ -27,10 +27,10 @@
   },
   "migrator": "baseline-arms/migrate_ledger/1.1.0",
   "output": {
-    "bytes": 4593181,
+    "bytes": 4594003,
     "path": "baseline-arms/runs/_migrations/ledger-v0-to-v1.0/ledger.canon.jsonl",
     "records": 560,
-    "sha256": "sha256:a9ca65c0c510b12a7d518d1520d0240b58f90baa636be41fc8d36bce26b5377b"
+    "sha256": "sha256:574a654b07586544d54007c8ae3f32b0f075d691f9b75cbdd2a65b0b9098b1fa"
   },
   "records": 560,
   "runs": {

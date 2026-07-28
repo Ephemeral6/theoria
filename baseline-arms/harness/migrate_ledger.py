@@ -449,7 +449,13 @@ def lift_model_call(rec: Dict[str, Any], seq: int, call_idx: int,
             sidecar[key] = rec[key]
             out["lift_dropped_to_sidecar"].append(key)
     if sidecar:
-        out["lift"]["cost"] = (
+        # Not keyed "cost": LEDGER_FORMAT section 5 forbids a dollar figure
+        # anywhere in a model_call, and harness/validate_canon.py enforces that
+        # by rejecting any key containing "cost" -- bluntly, on purpose. An
+        # explanatory string under a cost-shaped key would be the one exception
+        # a reader has to check by hand, which is exactly how the rule stops
+        # being mechanical.
+        out["lift"]["sidecar"] = (
             "total_cost_usd is in costs.sidecar.jsonl keyed by seq. "
             "LEDGER_FORMAT.md section 5 forbids a dollar figure anywhere in a "
             "model_call -- cost is derived later from usage and a named price "
