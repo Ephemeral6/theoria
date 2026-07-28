@@ -419,3 +419,171 @@ rediscovering them. Each is real and each was reproduced.
   repository's own definition and the probe excises it entirely. One of the best
   negative controls in the tree — `probe_mentions`'s pre-registered expectations —
   runs from a heredoc inside one of them.
+
+---
+
+# The sampling frame (V15)
+
+The two sections above rest on two counts — V11's 127 entry points and V14's 141
+— and neither was drawn from a population. V11's is the union of what six
+auditors happened to find. V14's is the output of an enumerator its own report
+measures as missing 26% and admitting ≥17 non-gates. Two overlapping convenience
+samples.
+
+That is why V14's adversarial repair produced an empty result: it fixed a real
+parse defect and the confusion matrix did not move one cell, because **74 of the
+141 entry points had never been in V11's survey** and the confirmed false
+positive was one of them.
+
+`verify-lab/frame/frame.py` is the population, written down and executable.
+`verify-lab/FRAME.md` is the definition and the reconciliation;
+`verify-lab/SUPPLEMENT_TABLE.md` is 126 hand judgements filling the difference
+set, taken **blind to the probe**; `verify-lab/MATRIX_V15.md` is the recomputed
+matrix. The blinding method and its declared breaches are in
+`runs/20260729T120000Z-V15-census-sampling-frame/BLINDING.md`.
+
+```bash
+python verify-lab/frame/frame.py        # 241 units at the pinned baseline rev
+python verify-lab/frame/reconcile.py    # what V11 and negctl each reached
+python verify-lab/frame/matrix.py       # the matrix, V14's protocol, V15's gold
+```
+
+## The three things that changed
+
+**1. Membership is invocability, not the ability to fail.** V14's enumerator
+requires a non-zero exit path, so the class of *dead* gates — a gate whose
+verdict stopped reaching an exit code — is structurally invisible to it. V11
+answered `否` to "can it go red" fifteen times. `can_refuse` is a column here,
+never a filter.
+
+**2. Coverage, measured.** Of 241 units, V11's census reaches **44.4%** and
+negctl's pin reaches **58.1%** — but that second number must never travel alone.
+Measured against **V14's own membership rule** (invocable, can fail, not frozen,
+`.py` only: 136 units) the probe covers **99.3%**, and the adversarial pass's
+slightly wider reading of the same rule gives **93.1%**. The probe covers
+93–99% of what it claims to enumerate; 58% is it measured against a frame drawn
+deliberately wider, and quoting only 58% is the move this item exists to
+criticise. V11 covers **50.7%** even under V14's own rule, which is the claim
+that actually carries the argument. The difference set is **134**, not 74. Its shape
+is not random: `monitor/` — the rig that grades everyone else's gates — had
+**none** of its 14 entry points surveyed; every pipeline's intermediate steps
+are missing while its `run_all.py` is present; `figures/` has its aggregator
+judged and fig02–fig07 not.
+
+**3. The matrix, on a gold standard that went from 43% of the population to
+90%.** Same protocol as V14 (`strict` folding, per-row, one existing `.py`);
+the reproduction of V14's published numbers is exact on TP/FN/FP.
+
+| | n | TP | FN | FP | TN | FNR |
+|---|---|---|---|---|---|---|
+| V11 gold only (reproduces V14) | 95 | 43 | **20** | **3** | 29 | 0.317 |
+| V11 + V15 gold | 219 | 70 | **41** | **6** | 102 | 0.369 |
+| V11 + V15, restricted to what `probe.py` enumerates | 145 | 35 | **36** | **1** | 73 | **0.507** |
+
+**Half that move is not the supplement.** Decomposed: `0.317` (V11 gold,
+unrestricted) → `0.396` (**restriction to probe-enumerated files alone**, +7.9pp,
+42% of the move) → `0.507` (**the 126 judgements**, +11.1pp, 58%). The
+restriction step needed none of V15's work — V14 could have computed it on the
+day it shipped, from its own enumerator. The supplement is worth ~11pp, not
+~19pp; the other ~8pp is V14 having measured its headline over the rows its
+criterion could be *asked* about rather than the files its probe would *report*
+on.
+
+**Both error counts doubled, and they moved for opposite reasons.** All five new
+false `present` are on files the probe does **not** enumerate — the criterion is
+wrong about them and the probe never asks. On the population the probe actually
+reports on, the false-positive count is **1**, and it is `worldgen/build.py`, the
+granularity conflict V14 already named. What got worse is the false alarms:
+**FNR 39.6% → 50.7%** on the enumerated population.
+
+**The single largest fragility, stated here and not in an appendix: under the
+`harsh` folding the *unrestricted* matrix reverses.** FNR 0.261 → 0.253 (down)
+and FP 12 → 17, i.e. supplementing the gold makes the false-alarm rate slightly
+*better* and makes false positives the growing problem. That folding is printed
+in the same JSON and defended in the same docstring as the one used here. It does
+**not** reverse under the pinned restriction (harsh pinned: 0.344 → 0.409, same
+direction as strict), which is the restriction the conclusion rests on — but
+anyone quoting the unrestricted table gets the opposite story, and they are not
+misreading it.
+
+Relatedly: of the 36 pinned FN, 19 are V11-origin and 17 are V15-origin, and
+**10 of those 17 are `部分` rows** — the grade `strict` folds into "has a
+negative control", and the grade the nine judges used most inconsistently
+(b4 0/12, b1 3/14, b5 3/13, b8 3/17).
+
+> **This supersedes the figure in the V14 table above, row 4.** The number that
+> decides CI admission is not 32%; on the population the probe reports on, and
+> against a gold standard covering 90% of it, it is **≈51%**. **V14's "not a
+> merge gate, not today" is not weakened by the larger frame — it is
+> strengthened, and its own supporting number was optimistic.**
+
+## The empty result, resolved
+
+V14's adversarial repair could not be scored because its most expensive victim,
+`cold-start-a2/a2pipeline/engines.py`, was outside the gold standard. It is
+inside now. The blind judge (batch `b5`, working from a tree with no
+`verify-lab/` in it) found no negative control targeting that file — its tests
+all target the engine libraries two levels down, or the `cold-start-a0` /
+`cold-start-a3` wrappers, which are different implementations. The criterion says
+`absent`. The pin says `absent`. **The cell is a true negative: V14's repair was
+correct, and its own calibration set was unable to say so.**
+
+## What V15 did not do
+
+* **The blinding was breached, and by this repository's own delivery
+  discipline.** `PARTNER_SYNC.md` is tracked, sits at the root, was in all nine
+  judges' trees, and carries V11's aggregate (`有负控「否」35`), V14's `FNR 32%`,
+  and a per-file probe verdict on `worldgen/build.py` — the single false positive
+  in the pinned matrix. 29 of 126 judged paths (23%) are named in a tracked file
+  that also discusses negative controls; exposed-vs-unexposed present rate 0.55
+  vs 0.34, one-sided p = 0.055. The direction is *toward* `present`, which
+  inflates FN and therefore flatters this item's conclusion, so it cannot be
+  leaned on. **Deleting every exposed row moves pinned FNR 0.507 → 0.484**, still
+  far above V14's 0.318, so the leak cannot account for the finding. Measured by
+  `verify-lab/frame/leakage.py`; full record in `BLINDING.md`. A future blind
+  pass in this repository must `git rm PARTNER_SYNC.md monitor/` from the judges'
+  tree — deleting one directory is not enough when findings are published to the
+  root.
+* **Zero `实测`.** All 126 supplement rows are `读码`. V11 had 24 observed rows
+  and discovered, in doing so, that six auditors sharing one worktree confound
+  every artefact-drift finding. This batch buys that confound off and pays in
+  evidence strength.
+* **6 stratum-C units (test suites) unjudged** — negctl scores none of them, so
+  they cannot move the matrix. A declared gap, not a silent one.
+* **2 units cannot be judged blind**: `negctl/probe.py` and `negctl/criterion.py`.
+  Judging them means reading them.
+* **File granularity is unfixed**, and the one in-frame false positive is exactly
+  that.
+* **A frame cannot count a gate that should exist and does not.** V11 found two
+  by hand (`battery` has no one-command gate; `release/bundle.py` does not exist).
+  No enumerator will ever produce those.
+
+## Found in passing, another territory's to fix
+
+**`release/checklist.py` does not parse.** A raw newline inside a string literal
+at `:45`, on the mainline since commit `fa59795`; `python release/checklist.py`
+is an immediate `SyntaxError`. V11's census records running it to
+`7 present, 3 withheld, 0 absent`, `exit 0` — which was true before the defect
+landed. Both `negctl/criterion.py` and `negctl/probe.py` swallow the parse
+failure in a bare `except`, so the file left their population without a sound.
+`frame.py` admits it and marks it `unparseable`, which is the whole argument for
+marking rather than skipping. Territory: `release/`. Not fixed here.
+
+## One of V14's six arguments does not survive the frame
+
+Reported because it cuts the other way, and a report that only carries the
+convenient half is the failure this lab exists to name.
+
+**V14's argument 2** — "≥17 of the 141 are not acceptance entry points: 4 world
+definitions, 3 report scripts, a package `__init__`, 3 exhibits, 5 one-off
+scripts inside frozen `runs/<id>/`" — **does not hold under a written
+population definition.** All 17 are tracked and invocable, so all 17 are
+population members; 5 carry the `frozen` marker and are reported rather than
+gated on. A report script is precisely the thing to ask "does your verdict reach
+the exit code" of — `worldgen/runs/.../lint_unused.py` counts its findings,
+prints them, and returns 0 — so excluding it from the population assumes the
+answer. Under the frame, negctl over-collects **one** thing, not seventeen:
+`monitor/tests/mutants.py`, which is a test file.
+
+So the frame **weakens V14's argument 2 and substantially strengthens its
+argument 4**. Both are recorded. Nobody may cite one without the other.
