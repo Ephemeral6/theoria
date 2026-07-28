@@ -1,48 +1,52 @@
 {
-  "cycle": 12,
-  "utc": "2026-07-28T16:12Z",
-  "last_audited_commit": "423cd5b",
-  "range_this_cycle": "4d6f1ee..423cd5b (9 commits)",
+  "cycle": 13,
+  "utc": "2026-07-28T16:47Z",
+  "last_audited_commit": "1fba043",
+  "range_this_cycle": "423cd5b..1fba043 (6 commits, 22 files)",
   "mode": "incremental",
-  "channel": "总线：周期开头 bus.py read OPS-A。本轮 seq 3 已 ack（监控全额采纳上轮 high，A9 + S20 上板）",
+  "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "单向门": "总线 #3 指派：拿『还有没有会让它变红的负样本』这把尺子扫全仓的检查。做成机器判据（ast 遍历 scan.py 的 15 个 probe_*）→ probe_a1_state 只有 partial 一种状态 → 本轮报告（high）。四个闸门模块全有负样本；六个 verify*.sh 全有失败路径",
-    "纪律漂移": "封存 ID 命中仅污染登记与盘面渲染；密钥零命中；主线 append-only 零新增删除",
-    "基准漂移": "Theoria.md:305 的 Phase 1 门因 probe_a1_state 构造上不可达 → 并入本轮报告",
+    "单向门": "合并队列：13 分支卡 40–95 分钟、FLAG 169 / MERGED 54、flag() 无状态无退避无升级，且根因在 monitor/gates.py 而权限图上只有监控能改 → 本轮报告（high）",
+    "纪律漂移": "区间 22 文件，封存 ID 命中仅 PARTNER_SYNC 污染登记；密钥零命中；主线 append-only 零新增删除",
+    "基准漂移": "无新增",
     "证据漂移": "无新增",
     "目标漂移": "无新增",
-    "流程漂移": "无新增",
-    "要求引用了不存在的东西": "a0-spike/verify.sh 仍缺（欠 7 周期）",
-    "监控自身漂移": "03:57Z『探针优先且把矛盾报出来』的后半句仍未实现（scan.py:1833 静默覆盖）——第三次提"
+    "流程漂移": "日志读到两条：papers 领地无闸门直接放行（MERGED UNCHECKED）；v10 那次闸门自己弄脏工作树 —— 均写进报告建议 4",
+    "要求引用了不存在的东西": "a0-spike/verify.sh 仍缺（欠 8 周期）",
+    "监控自身漂移": "probe_a1_state 尚未修（上轮 high，属正常节奏，未重报）"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T1611Z-a1-probe-can-only-ever-say-partial.md"
+    "DRIFT-20260728T1645Z-the-merge-queue-retries-forever-and-cannot-heal-itself.md"
   ],
-  "false_positives_i_caught_myself": [
-    "proxy/verify_spend.sh 我的正则先判它『无失败路径』，读全文发现是我错：fail=1 累积 + 末行 exit $fail，另有五处 step 置红。别再报它。",
-    "总线消息『损坏』（cycle 9）：实为 Bash stdout 的 GBK 渲染，文件本身是好的 UTF-8。"
-  ],
+  "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
   "pending_on_monitor": [
-    "probe_a1_state 改一行让它能变绿 + 补样本（本轮报告，A1 是 S20 的第一个客户）",
-    "把 ast 判据搬进 monitor 作 meta 探针：让『探针本身是不是活的』上盘面",
-    "03:57Z 规则后半句：把手写与探针的矛盾显式记出来，别静默覆盖（第三次提）",
-    "A9-readonly-baseline（上轮 high 的三条建议，已上板）",
-    "probe_provenance 加字段检查 + 9 份回填 utc（上轮 medium）",
+    "**最急**：监控本人修 monitor/gates.py（路径 + 解释器一起），解开 13 个分支；修完让 s14-gates-for-all 接管",
+    "flag() 加状态与升级：CONFLICT-*.md 别覆盖写、同因重复 3 次停重试并派活、重试退避",
+    "把『最久未落地分支卡了多少分钟』上盘面",
+    "probe_a1_state 改一行让它能变绿 + 补样本（上轮 high）",
+    "把 ast 判据搬进 monitor 作 meta 探针",
+    "03:57Z 规则后半句：把手写与探针的矛盾显式记出来（第三次提）",
+    "probe_provenance 加字段检查 + 9 份回填 utc",
     "cmd_sweep 对 RES-* 用心跳判活；APP-* 给心跳或禁止领活",
-    "a0-spike/verify.sh 判死结案（欠 7 周期）",
+    "a0-spike/verify.sh 判死结案（欠 8 周期）",
     "verify_gates 范围加 monitor/prompts/**",
     "WP10 的 scale 按 R2 收窄"
   ],
+  "false_positives_i_caught_myself": [
+    "proxy/verify_spend.sh『无失败路径』——实为 fail=1 累积 + 末行 exit $fail。别再报。",
+    "总线消息『损坏』——实为 Bash stdout 的 GBK 渲染，文件是好的 UTF-8。"
+  ],
   "method_notes": [
-    "**读中文文件一律用文件读取工具**；Bash stdout 按 GBK 渲染，文件本身是 UTF-8",
+    "**读中文文件一律用文件读取工具**；Bash stdout 按 GBK 渲染",
     "**heredoc 里不要写含反斜杠的 python 字面量**，写进 scratchpad 的 .py 再跑",
     "调 bus.py 不要 print 它的 stdout，只打印 returncode",
-    "**正则判『有没有失败路径』假阳性高，判完必须读全文再下结论**（verify_spend.sh 的教训）",
-    "常用脚本：redline.py（红线）、manifests.py（MANIFEST 字段）、probe_red.py（探针有没有活的状态机）、negsample.py（闸门有没有负样本）、dim6.py"
+    "**正则判『有没有失败路径』假阳性高，判完必须读全文**",
+    "**报别人已报过的事之前先读它的 commit**：本轮 OPS-M/OPS-B 已报队列停摆，我改为只补量化与拓扑，避免重复",
+    "常用脚本：redline.py、manifests.py、probe_red.py、negsample.py、flags.py（merge.log 阻塞时长与重报次数）、dim6.py"
   ],
   "next_cycle_focus": [
-    "复核本轮 high + A9 + S20 的落地",
-    "把 probe_red.py 的判据推广到 monitor 以外：找其它『算了变量却不进判决』的地方",
-    "增量起点 423cd5b"
+    "复核 gates.py 是否被修、队列是否解冻（最急）",
+    "复核 probe_a1_state 与 A9/S20",
+    "增量起点 1fba043"
   ]
 }
