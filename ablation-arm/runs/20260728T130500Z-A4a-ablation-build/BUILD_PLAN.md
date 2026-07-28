@@ -239,3 +239,134 @@ build that is not already sitting upstream in finished form — the explorers
 (`cold-start-a0/world/explorer.py`, `cold-start-a2/a2world/explorer.py`) produce
 them, and whether to re-explore or read an existing artefact is step 3's first
 decision. Everything else the driver needs now exists.
+
+* `2026-07-28T15:05Z` — **step 3 done: `run_arm.py`. The arm has now run end to
+  end, which it never had before.**
+
+  ```
+  a0-base        SAT    verdict=solvable    surprises=0  loop_turns=False
+  a0-no-button   UNSAT  verdict=unsolvable  surprises=0  loop_turns=False  [E1]
+  a2-base        SAT    verdict=solvable    surprises=0  loop_turns=False
+  a2-holed       UNSAT  verdict=unsolvable  surprises=0  loop_turns=False  [E2]
+       sweep (raw_trace.jsonl, off the bus): green=False anomalies=44
+  E1 (true impossibility) vs E2 (false one): 10/10 decision fields identical
+  surprise kinds: 7 in the taxonomy, 6 available to this arm
+  P-1 pre-registered counts hold: True
+  upstream trees unchanged: True (386 files hashed)
+  ```
+
+  ### The loop is not a step table with the repair beats deleted
+
+  `DESIGN.md` §7.2 is the sentence this file had to obey: 不能把
+  refute/locate/probe/repair 从步骤表里删掉,然后报告「消融臂修不好」. So the
+  driver has all six beats including `theorize`, and the schedule is one line —
+  `if bus.turns_the_loop()` — which is `Theoria.md:233` verbatim and identical
+  in both arms. Whether the loop turns is then decided by *what can reach the
+  bus*, and that is decided by the incision. It is derived, not arranged.
+
+  Theorize is reached when the bus says so and records **that a turn is owed and
+  what owes it**, then stops: theorize is the LLM's beat and this arm is offline
+  by construction. Recording the debt is honest; inventing the turn would not be.
+
+  ### The result the ticket asks for
+
+  E1 is a **true** impossibility (A0 with no Button really is unsolvable). E2 is
+  a **false** one (the holed manual's world is solvable in 18 moves). The driver
+  computes the comparison rather than leaving it to a reader:
+
+  | field | E1 `a0-no-button` | E2 `a2-holed` | |
+  |---|---|---|---|
+  | verdict | unsolvable | unsolvable | same |
+  | settled / settled_by | True / search | True / search | same |
+  | certificate_owed | False | False | same |
+  | directed_probes_scheduled | 0 | 0 | same |
+  | distinguishes_proof_from_exhaustion | False | False | same |
+  | cheap layer green | True | True | same |
+  | surprises on the bus | 0 | 0 | same |
+  | loop turns / theorize owed | False / False | False / False | same |
+
+  **10 of 10 decision-carrying fields identical.** One of those two verdicts is
+  true and the other is false, and nothing this arm records tells them apart.
+  Not because of a bug — the fields match precisely because the cut removed the
+  only machinery whose output would have differed: the certificate obligation
+  and the directed probes it schedules. That is P-6, and it is the ticket's
+  question answered with a table instead of an argument.
+
+  ### The driver's first run was wrong, and what caught it
+
+  On its first run `a2-holed` came back with **3 surprises and a turning loop**,
+  which reads as P-6 falsified. It was not. I had pointed the holed manual at
+  `raw_trace.jsonl` — the right rule applied to the wrong artefact.
+  `cold-start-a2/artifacts/exhibit_report.json` names the holed manual's
+  evidence as **`history_trace.jsonl`**, and records both readings itself:
+
+  * `certify_cheap` on the evidence: **green**, 184 frames, 14904 pixels;
+  * `certify_cheap_vs_full_sweep`: **red**, 44 anomalies, first at t=184 cell
+    (6,4) — with upstream's own reading, that the hole is invisible to the
+    evidence its theorizer had, which is exactly Theoria §1.3's claim and
+    exactly its limit.
+
+  My run had reproduced the **sweep**, not the evidence. `trace_summary.json`
+  states the cut rule — `history_trace = raw_trace[0 .. portal_transition]`,
+  omitting **exactly one** pair, `cart=(6,4) pressed=1 act=DOWN` — the same
+  single disagreement `a2_abl.disagreement()` computed in step 1, arrived at
+  from the other side.
+
+  Three things changed as a result, and the third is the one that matters:
+
+  1. `a2-holed`'s evidence is now `history_trace.jsonl`;
+  2. the fuller record is kept as a **sweep**: run, reported, and explicitly
+     **off the bus**, because a surprise the arm could not have had is not a
+     surprise — putting it on the bus would turn the loop on the referee's
+     knowledge and destroy the exhibit. Its 44 anomalies match upstream's 44
+     through a different code path, which is an independent reproduction rather
+     than a copied number;
+  3. **P-1's pre-registered counts are now asserted at run time.** `DESIGN.md`
+     §8 does not state P-1 as "accuracy is equal", it states the counts — A0
+     base 22356 pixels 0 anomalies, A2 holed 14904 pixels 0 anomalies. Those
+     counts are a fingerprint of **which record was replayed**, so checking them
+     catches exactly this mistake. All three worlds that state a number hit it
+     (22356 / 20088 / 14904), and a wrong trace now turns the run red instead of
+     producing a plausible finding.
+
+  The general lesson, recorded because it will recur: *read the artefact the
+  full arm read* is not a rule a driver can follow by itself. Which artefact
+  that is has to be read out of upstream's own report, per manual.
+
+  ### Determinism, and the one exemption
+
+  `run_arm.py --twice` runs everything into two roots and compares: **30 files,
+  deterministic: True.** Two things are handled rather than ignored:
+
+  * the **ledger is compared modulo `ts`** — `proxy.ledger` stamps every record
+    with a wall clock, which is right in a record of an event. Verified that
+    `ts` is the *only* differing field, not assumed;
+  * the **output root is normalised**, because the two runs are handed different
+    roots and a report that faithfully records where it wrote is right to
+    differ. Comparing raw bytes there would be calling a difference in the
+    inputs a defect in the outputs.
+
+  `__pycache__` is excluded (bytecode for the generated `theory.py`, embeds a
+  source mtime) and gitignored.
+
+  ### A cross-track blocker retired with evidence
+
+  `STATUS.md` records `theoria_ablate` as a blocker needing the proxy track:
+  `RunLedger(arm="theoria_ablate")` constructs silently and then fails
+  `validate_ledger` on every line. **It does not apply to the code as written.**
+  `ledger_abl.ARM` is `theoria` with an `ABLATION_BLOCK` carrying
+  `requested_arm_name`, and both episodes validate:
+
+  ```
+  ablation-arm/artifacts/a0-base/episode.jsonl: PASS (15 records, 0 problem(s))
+  ablation-arm/artifacts/a2-base/episode.jsonl: PASS (21 records, 0 problem(s))
+  ```
+
+  The two UNSAT worlds have no episode, and the report says so with a reason
+  rather than omitting the key. STATUS.md is to be corrected in step 7.
+
+Next: **step 4, the exhibits.** E1 and E2 now have their runs and their
+comparison; `exhibits/e1_a0.py` and `e2_a2.py` are the modules that present
+them, and `e3_charitable.py` is the one with real work left — it needs
+`compile_ablated(addressable=False)`, the encoding-defect branch, which the
+driver already exposes as a per-world flag but no world uses yet.

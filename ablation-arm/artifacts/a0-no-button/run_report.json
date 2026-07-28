@@ -1,0 +1,120 @@
+{
+  "beats": {
+    "certify": {
+      "layer_omitted": "expensive",
+      "layers_run": [
+        "cheap"
+      ],
+      "omitted_because": "constraint 6 is the cut; `certify_abl.expensive` raises ObligationCut and nothing calls it",
+      "pre_registered": {
+        "anomaly_kinds": [],
+        "expected_frames": null,
+        "expected_pixels": null,
+        "failures": [],
+        "green": true,
+        "holds": true,
+        "observed_frames": 112,
+        "observed_pixels": 9072,
+        "source": "DESIGN.md §8 P-1"
+      },
+      "report": {
+        "anomalies": [],
+        "anomaly_kinds": [],
+        "frames": 112,
+        "green": true,
+        "pixels_checked": 9072,
+        "pixels_unexplained": 0,
+        "theory": "ablation-arm\\artifacts\\a0-no-button\\theory.py",
+        "trace": "raw_trace_no_button.jsonl",
+        "transitions": 111
+      }
+    },
+    "commit": {
+      "committed": false,
+      "execution_mismatches": null,
+      "why_not": "the plan came back UNSAT, so there is nothing to commit",
+      "world_reaches_goal": null
+    },
+    "compile": {
+      "domain.pddl": 1510,
+      "forms_emitted": 3,
+      "forms_in_full_arm": 4,
+      "omitted_because": "constraint 1's proof form is a proof obligation; this arm has none (DESIGN.md §4 C-1).  ArenaEscape goes with it (§6 shadow 3).",
+      "pddl_addressability_patch": true,
+      "pddl_cells_added": [
+        [
+          7,
+          3
+        ]
+      ],
+      "problem.json": 2285,
+      "problem.pddl": 3927,
+      "theory.lean": null,
+      "theory.md": 1646,
+      "theory.py": 6594
+    },
+    "loop_gate": {
+      "bus": {
+        "ablated": true,
+        "count": 0,
+        "kinds_available_to_this_arm": 6,
+        "kinds_in_taxonomy": 7,
+        "kinds_removed_by_the_cut": [
+          "proof_failure"
+        ],
+        "surprises": [],
+        "turns_the_loop": false
+      },
+      "derived_not_arranged": "the repair beats are not deleted from a step table; they are reached iff the bus is non-empty, and what can reach the bus is what the incision decides (DESIGN.md §7.2, §7.3)",
+      "rule": "Theoria.md:233 -- 有意外才回 theorize. One line, both arms: `if bus.turns_the_loop()`",
+      "turns_the_loop": false
+    },
+    "plan": {
+      "backend": null,
+      "certificate": null,
+      "certificate_owed": false,
+      "directed_probes_scheduled": 0,
+      "distinguishes_proof_from_exhaustion": false,
+      "domain": "domain.pddl",
+      "full_arm_would": "owe a certificate (constraint 6) and probe the theorem's `depends:` clauses (constraint 7) before settling",
+      "name": "a0-no-button",
+      "note": "no plan exists under this manual.  This arm has no constraint 6: the verdict is final as it stands.  No certificate is owed, no invariant is sought, no directed probe is scheduled, and nothing is placed on the surprise bus -- so the loop does not turn.  DESIGN.md §7.3.",
+      "problem": "problem.pddl",
+      "settled": true,
+      "settled_by": "search",
+      "status": "UNSAT",
+      "unsat_evidence": "no plan exists for a0-no-button",
+      "verdict": "unsolvable"
+    },
+    "theorize": {
+      "entered": false,
+      "owed": false,
+      "why_not_owed": "the plan came back UNSAT and this arm settles it bare (C-4). No certificate is owed (constraint 6, cut), so there is no theorem, no `depends:` clause, and no directed probe (constraint 7, shadow 1) -- nothing exists that could put a refutation on the bus. THIS IS THE FINDING, not a quiet success: the verdict is archived unexamined whether it is true or false, and the arm cannot tell which."
+    }
+  },
+  "exhibit": "E1",
+  "ledger": {
+    "why": "no plan, so no episode: unsolvable",
+    "written": null
+  },
+  "manual": "ablation-arm/theory/a0_no_button.dsl",
+  "manual_sha256": "00a23468c56a7eddab65ef1e2df74990a5ff460875abc7ed5c1df7705d8425b7",
+  "note": "A0 with no Button: genuinely unsolvable, and the manual said so truthfully until the cut deleted `unsolvable_no_button`. The verdict should be right and the reason should be bare search.",
+  "settled": true,
+  "surprises": {
+    "ablated": true,
+    "count": 0,
+    "kinds_available_to_this_arm": 6,
+    "kinds_in_taxonomy": 7,
+    "kinds_removed_by_the_cut": [
+      "proof_failure"
+    ],
+    "surprises": [],
+    "turns_the_loop": false
+  },
+  "trace": "cold-start-a0/artifacts/raw_trace_no_button.jsonl",
+  "trace_sha256": "c443d29b8cf021c543cffa51106495b6baedf69e65d2ec4e9180b70d59682216",
+  "trace_source": "read, never re-explored: a different trace would be a second difference between the arms and P-1/P-2 could not be settled (DESIGN.md §5)",
+  "verdict": "unsolvable",
+  "world": "a0-no-button"
+}

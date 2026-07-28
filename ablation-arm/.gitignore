@@ -1,0 +1,9 @@
+# The interpreter's bytecode for the generated `theory.py`. It embeds a source
+# mtime, so it differs between two otherwise identical runs -- `run_arm.py
+# --twice` skips it for that reason and git should not carry it either.
+__pycache__/
+*.pyc
+
+# `run_arm.py --twice` writes two throwaway roots here and compares them. The
+# comparison is the product; the roots are scaffolding.
+artifacts/_determinism/

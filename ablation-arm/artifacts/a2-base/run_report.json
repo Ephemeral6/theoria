@@ -1,0 +1,157 @@
+{
+  "beats": {
+    "certify": {
+      "layer_omitted": "expensive",
+      "layers_run": [
+        "cheap"
+      ],
+      "omitted_because": "constraint 6 is the cut; `certify_abl.expensive` raises ObligationCut and nothing calls it",
+      "pre_registered": {
+        "anomaly_kinds": [],
+        "expected_frames": 248,
+        "expected_pixels": 20088,
+        "failures": [],
+        "green": true,
+        "holds": true,
+        "observed_frames": 248,
+        "observed_pixels": 20088,
+        "source": "DESIGN.md §8 P-1"
+      },
+      "report": {
+        "anomalies": [],
+        "anomaly_kinds": [],
+        "frames": 248,
+        "green": true,
+        "pixels_checked": 20088,
+        "pixels_unexplained": 0,
+        "theory": "ablation-arm\\artifacts\\a2-base\\theory.py",
+        "trace": "raw_trace.jsonl",
+        "transitions": 247
+      }
+    },
+    "commit": {
+      "committed": true,
+      "execution_mismatches": [],
+      "why_not": null,
+      "world_reaches_goal": true
+    },
+    "compile": {
+      "domain.pddl": 1833,
+      "forms_emitted": 3,
+      "forms_in_full_arm": 4,
+      "omitted_because": "constraint 1's proof form is a proof obligation; this arm has none (DESIGN.md §4 C-1).  ArenaEscape goes with it (§6 shadow 3).",
+      "pddl_addressability_patch": true,
+      "pddl_cells_added": [
+        [
+          7,
+          4
+        ]
+      ],
+      "problem.json": 2536,
+      "problem.pddl": 3764,
+      "theory.lean": null,
+      "theory.md": 2225,
+      "theory.py": 8283
+    },
+    "loop_gate": {
+      "bus": {
+        "ablated": true,
+        "count": 0,
+        "kinds_available_to_this_arm": 6,
+        "kinds_in_taxonomy": 7,
+        "kinds_removed_by_the_cut": [
+          "proof_failure"
+        ],
+        "surprises": [],
+        "turns_the_loop": false
+      },
+      "derived_not_arranged": "the repair beats are not deleted from a step table; they are reached iff the bus is non-empty, and what can reach the bus is what the incision decides (DESIGN.md §7.2, §7.3)",
+      "rule": "Theoria.md:233 -- 有意外才回 theorize. One line, both arms: `if bus.turns_the_loop()`",
+      "turns_the_loop": false
+    },
+    "plan": {
+      "actions": [
+        "(push-up c5-1 c4-1)",
+        "(push-up c4-1 c3-1)",
+        "(push-up c3-1 c2-1)",
+        "(press-up c2-1 c1-1 c6-4)",
+        "(push-down c2-1 c3-1)",
+        "(push-down c3-1 c4-1)",
+        "(push-down c4-1 c5-1)",
+        "(push-right c5-1 c5-2)",
+        "(push-down c5-2 c6-2)",
+        "(push-right c6-2 c6-3)",
+        "(push-right c6-3 c6-4)",
+        "(teleport-down c6-4 c7-4 c7-6)",
+        "(push-right c7-6 c7-7)",
+        "(push-up c7-7 c6-7)",
+        "(push-up c6-7 c5-7)",
+        "(push-up c5-7 c4-7)",
+        "(push-up c4-7 c3-7)",
+        "(push-up c3-7 c2-7)"
+      ],
+      "backend": "stub-bfs",
+      "directions": [
+        "up",
+        "up",
+        "up",
+        "up",
+        "down",
+        "down",
+        "down",
+        "right",
+        "down",
+        "right",
+        "right",
+        "down",
+        "right",
+        "up",
+        "up",
+        "up",
+        "up",
+        "up"
+      ],
+      "domain": "domain.pddl",
+      "execution_mismatches": [],
+      "green": true,
+      "length": 18,
+      "manual_reaches_goal": true,
+      "name": "a2-base",
+      "problem": "problem.pddl",
+      "settled_by": "witness",
+      "status": "SAT",
+      "world_reaches_goal": true
+    },
+    "theorize": {
+      "entered": false,
+      "owed": false,
+      "why_not_owed": "the cheap layer found no anomaly and the committed plan matched prediction. A silent loop here is the framework working as designed -- 无意外时 plan/commit 静默运转,免费 (Theoria.md:233)."
+    }
+  },
+  "exhibit": null,
+  "ledger": {
+    "outcome": "WIN",
+    "steps": 19,
+    "written": "ablation-arm/artifacts/a2-base/episode.jsonl"
+  },
+  "manual": "ablation-arm/theory/a2_base.dsl",
+  "manual_sha256": "09e2ce1fc8d06eadc89a9ce8dad61488d90470186cabd9aad3d6074de458f80a",
+  "note": "the A2 world with its teleport rule intact.",
+  "settled": null,
+  "surprises": {
+    "ablated": true,
+    "count": 0,
+    "kinds_available_to_this_arm": 6,
+    "kinds_in_taxonomy": 7,
+    "kinds_removed_by_the_cut": [
+      "proof_failure"
+    ],
+    "surprises": [],
+    "turns_the_loop": false
+  },
+  "trace": "cold-start-a2/artifacts/raw_trace.jsonl",
+  "trace_sha256": "2cc840908260978e46a9ab5028bba0ed7e8b1788aa668d738e173ac18ef52116",
+  "trace_source": "read, never re-explored: a different trace would be a second difference between the arms and P-1/P-2 could not be settled (DESIGN.md §5)",
+  "verdict": "solvable",
+  "world": "a2-base"
+}
