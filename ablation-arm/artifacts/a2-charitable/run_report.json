@@ -24,7 +24,7 @@
         "green": true,
         "pixels_checked": 20088,
         "pixels_unexplained": 0,
-        "theory": "artifacts\\a2-base\\theory.py",
+        "theory": "artifacts\\a2-charitable\\theory.py",
         "trace": "raw_trace.jsonl",
         "transitions": 247
       }
@@ -40,15 +40,10 @@
       "forms_emitted": 3,
       "forms_in_full_arm": 4,
       "omitted_because": "constraint 1's proof form is a proof obligation; this arm has none (DESIGN.md §4 C-1).  ArenaEscape goes with it (§6 shadow 3).",
-      "pddl_addressability_patch": true,
-      "pddl_cells_added": [
-        [
-          7,
-          4
-        ]
-      ],
-      "problem.json": 2536,
-      "problem.pddl": 3764,
+      "pddl_addressability_patch": false,
+      "pddl_cells_added": [],
+      "problem.json": 2542,
+      "problem.pddl": 3770,
       "theory.lean": null,
       "theory.md": 2225,
       "theory.py": 8283
@@ -116,7 +111,7 @@
       "green": true,
       "length": 18,
       "manual_reaches_goal": true,
-      "name": "a2-base",
+      "name": "a2-charitable",
       "problem": "problem.pddl",
       "settled_by": "witness",
       "status": "SAT",
@@ -132,11 +127,11 @@
   "ledger": {
     "outcome": "WIN",
     "steps": 19,
-    "written": "ablation-arm/artifacts/a2-base/episode.jsonl"
+    "written": "ablation-arm/artifacts/a2-charitable/episode.jsonl"
   },
   "manual": "ablation-arm/theory/a2_base.dsl",
   "manual_sha256": "09e2ce1fc8d06eadc89a9ce8dad61488d90470186cabd9aad3d6074de458f80a",
-  "note": "the A2 world with its teleport rule intact.",
+  "note": "the CHARITABLE variant, and the only world here whose manual is not at fault: `a2_base`, teleport rule present, steps correct, cheap layer green over all 248 frames, compiled with D-A2-006's workaround switched off (`addressable=False`). DESIGN.md §E3 expected the PDDL backend to fail to ground `teleport-down`'s `?p - markedcell` and the planner to return UNSAT on a manual with nothing wrong with it. **It does not.** The planner returns SAT with the workaround on and off, and the emitted PDDL is byte-identical either way: the gap D-A2-006 described was closed upstream, so `pddl_addressable` is now dead code on this input. This world is therefore E3's *material* and not E3, which is why it carries no exhibit tag -- `exhibits/e3_charitable.py` owns the finding and reports the designed construction as no longer constructible.",
   "settled": null,
   "surprises": {
     "ablated": true,
@@ -153,5 +148,5 @@
   "trace_sha256": "2cc840908260978e46a9ab5028bba0ed7e8b1788aa668d738e173ac18ef52116",
   "trace_source": "read, never re-explored: a different trace would be a second difference between the arms and P-1/P-2 could not be settled (DESIGN.md §5)",
   "verdict": "solvable",
-  "world": "a2-base"
+  "world": "a2-charitable"
 }

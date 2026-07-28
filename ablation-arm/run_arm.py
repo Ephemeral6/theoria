@@ -162,6 +162,26 @@ WORLDS: Tuple[WorldRun, ...] = (
                   "arm still has. The world passed to `commit` is the REAL one; "
                   "`a2_abl.manual_world()` is deliberately not used, because "
                   "the point is that the arm never finds out."),
+    WorldRun("a2-charitable", "a2_base.dsl",
+             "cold-start-a2/artifacts/raw_trace.jsonl", a2_abl.world,
+             addressable=False, exhibit=None,
+             expect_pixels=20088, expect_frames=248,
+             note="the CHARITABLE variant, and the only world here whose manual "
+                  "is not at fault: `a2_base`, teleport rule present, steps "
+                  "correct, cheap layer green over all 248 frames, compiled "
+                  "with D-A2-006's workaround switched off "
+                  "(`addressable=False`). DESIGN.md §E3 expected the PDDL "
+                  "backend to fail to ground `teleport-down`'s `?p - "
+                  "markedcell` and the planner to return UNSAT on a manual "
+                  "with nothing wrong with it. **It does not.** The planner "
+                  "returns SAT with the workaround on and off, and the emitted "
+                  "PDDL is byte-identical either way: the gap D-A2-006 "
+                  "described was closed upstream, so `pddl_addressable` is now "
+                  "dead code on this input. This world is therefore E3's "
+                  "*material* and not E3, which is why it carries no exhibit "
+                  "tag -- `exhibits/e3_charitable.py` owns the finding and "
+                  "reports the designed construction as no longer "
+                  "constructible."),
 )
 
 WORLD_BY_KEY = {w.key: w for w in WORLDS}
@@ -442,9 +462,15 @@ def determinism(keys: Optional[List[str]] = None) -> Dict[str, Any]:
         """
         with open(path, encoding="utf-8") as handle:
             text = handle.read()
-        # Both spellings a report can carry: the absolute root, and the
-        # repo-relative one -- `certify.replay` records the latter.
-        for base in (root, os.path.relpath(root, REPO)):
+        # Every spelling a report can carry. `certify.replay` records its
+        # theory path relative to the *current working directory*, so which one
+        # appears depends on where the run was launched from -- the repo root
+        # and `ablation-arm/` both happen, and the two-component tail is what
+        # survives either way.
+        tail = os.path.join(os.path.basename(os.path.dirname(root)),
+                            os.path.basename(root))
+        for base in (root, os.path.relpath(root, REPO),
+                     os.path.relpath(root, HERE), tail):
             for spelling in (base, base.replace("\\", "\\\\"),
                              base.replace("\\", "/"),
                              base.replace("/", "\\").replace("\\", "\\\\")):

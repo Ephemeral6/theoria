@@ -370,3 +370,92 @@ comparison; `exhibits/e1_a0.py` and `e2_a2.py` are the modules that present
 them, and `e3_charitable.py` is the one with real work left — it needs
 `compile_ablated(addressable=False)`, the encoding-defect branch, which the
 driver already exposes as a per-world flag but no world uses yet.
+
+* `2026-07-28T16:20Z` — **step 4 done: `exhibits/`. Two hold, and the third is a
+  pre-registered falsifier rather than a missing deliverable.**
+
+  ```
+  E1   holds=True   (i) small-space unsolvable -- exhaustive search is feasible
+  E2   holds=True   (iii) the specificity failure -- unsolvable on a solvable level
+  E3   holds=False  the adversarial-review control, not a verdict class
+  ```
+
+  ### E1 — 判决相同,理由蒸发
+
+  | | |
+  |---|---|
+  | this arm's verdict | `unsolvable`, settled_by `search`, and **correct** |
+  | the full arm's reason | `[{"axioms": [], "name": "unsolvable"}]` — an `#print axioms` report with an empty axiom list |
+  | this arm's reason | `certificate: None`, `certificate_owed: False`, `directed_probes: 0` |
+
+  Measured at the verdict the two arms are indistinguishable, which is the half
+  of the testimony that makes the other half readable: **an evaluation that
+  scores answers would report this ablation as having cost nothing.**
+
+  ### E2 — 照信不误, plus the charity control
+
+  Green over 184/184 frames of its own evidence, planner UNSAT, world solvable
+  in 18, bus empty, loop still. And the control that answers the review's first
+  punch — 你没给它反例,当然它修不好:
+
+  ```
+  charity control: given the world's solved episode for free,
+                   culprits = ['mispredicted_step'], exactly 1 step diff,
+                   upstream_unchanged = True
+  ```
+
+  **The ablated arm localises correctly when it is handed the counterexample.**
+  That is recorded inside E2, the exhibit it threatens, because it sharpens the
+  finding rather than weakening it: the ablation did not remove the ability to
+  repair, it removed the thing that *produces* the counterexample. The repair
+  machinery is intact and idle, and idle for a reason derived from the incision.
+
+  ### E3 — the designed construction no longer exists, and the module says so
+
+  §E3's recipe was: complete manual + `pddl_addressable(enabled=False)` → UNSAT
+  → hand it the solution path → three checks green, empty culprit set. Five
+  measurements, all performed by the module rather than quoted from a session:
+
+  | | |
+  |---|---|
+  | **M1** | `enabled=False` and `enabled=True` emit **byte-identical** `problem.pddl` and `domain.pddl` |
+  | **M2** | why: the generator names **38** cell objects where the derived arena holds **37**, and `c7-4` is grounded with the patch off. D-A2-006's gap was closed upstream; `compile_abl.pddl_addressable` is dead code on this input |
+  | **M3** | so the complete manual plans **SAT** either way, `teleport-down` in the plan. The construction cannot start |
+  | **M4** | the nearest live UNSAT on a manual with nothing wrong with it — complete manual, *truncated* evidence: cheap green over 184 frames, planner UNSAT — but its `theory.py` **raises** a missing-landmark `KeyError` on the witness path, because the landmark is derived from evidence that stops before that cell is seen. `locate` cannot return a culprit set at all |
+  | **M5** | the empty culprit set does exist — complete manual, full evidence: zero culprits, zero step diffs — but that manual plans SAT, so there is no false impossibility for the empty set to be empty *about* |
+
+  E3 needs the **conjunction** (UNSAT ∧ locate all-green ∧ a claim that is
+  false). M3/M4/M5 are the three ways it comes apart here, and no two can be
+  brought together on this repository's material.
+
+  `DESIGN.md` §10 item 3 pre-registered 三查没有全绿 as a falsifier requiring
+  §9's argument to be withdrawn. What is refuted is narrower and more specific:
+  **not the reading of D-A2-006 but its continued existence.** The point E3
+  defended survives, measured in E2's charity control. What is genuinely lost is
+  E3's other half — a clean demonstration that a planner's UNSAT can be a fact
+  about the encoding rather than the world, which is what makes
+  `Theoria.md:43`'s three-way non-exhaustive without a proof. M4 is weaker
+  evidence for it (a reader can fairly say the fault is the truncated evidence,
+  not the encoding) and is recorded as a gap for A4b.
+
+  `run_exhibits.py` exits **0 even when an exhibit does not hold**: a falsifier
+  that turns the build red is a falsifier nobody will ever report. The status
+  code is for a broken run, not for a finding that goes against the design.
+
+  ### Housekeeping this step turned up
+
+  * `a2-charitable` is on the driver as E3's **material** and carries **no
+    exhibit tag** — the planner returns SAT there, and a world tagged E3 in a
+    report that says SAT would read as an exhibit that passed.
+  * the determinism harness had a second path-shape bug: `certify.replay`
+    records its theory path relative to the **current working directory**, so
+    which spelling appears depends on where the run was launched. Now normalised
+    on the two-component tail, and checked from both `ablation-arm/` and the
+    repo root: **38 files, deterministic from either.**
+  * three ledgers now, all `PASS (0 problems)` under `proxy validate_ledger`.
+
+Next: **step 5, `tests/`.** The three source claims in `_bootstrap.py:24`,
+`certify_abl.py:33` and `downgrade.py:22` name tests that do not exist; the
+material for all three is now on disk, and `pin.hash_tree` has been running
+either side of every command in this run, so `test_readonly.py` is writing down
+a check that has already been passing rather than inventing one.
