@@ -37,6 +37,8 @@
     "provenance": "write-as-you-go: run dir created at start, incremental writes per step; context-only info counts as nonexistent",
     "reap": "dispatch.py --reap every heartbeat: branch on origin => taskkill the process tree at once; self-exited sessions marked",
     "auditor": "A-1 standing drift auditor: reads monitor/AUDITOR.md each cycle, hourly cadence, 6 cycles then exit; heartbeat relaunches if dead; reports in monitor/audit/, silence = healthy; monitor reads reports every heartbeat and adjudicates",
-    "quota": "quota.py check every heartbeat; limit-signature deaths -> hold (no dispatch, minimal heartbeats); ping (1 haiku call) gates resume; staggered priority relaunch at half pool, runs/ provenance makes restarts lossless"
-  }
+    "quota": "quota.py check every heartbeat; limit-signature deaths -> hold (no dispatch, minimal heartbeats); ping (1 haiku call) gates resume; staggered priority relaunch at half pool, runs/ provenance makes restarts lossless",
+    "monitor_rebirth": "HANDOFF.md rewritten every heartbeat; deep rebirth (re-derive from disk+git, not context) every ~6 heartbeats (~3h); quota death = pause not amnesia, wakeup resumes after ~5h window refresh; a fresh session reading HANDOFF + memory IS the monitor"
+  },
+  "heartbeat_count": 0
 }
