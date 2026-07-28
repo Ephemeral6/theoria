@@ -3,6 +3,6 @@ branch: origin/agent/s15-ledger-hashchain
 reason: verify gate red in proxy (verify_spend.sh)
 
 ```
-/bin/bash: C:UsersuserAppDataLocalTempci-merge-hsgvb7k3proxyverify_spend.sh: No such file or directory
+/bin/bash: C:UsersuserAppDataLocalTempci-merge-_1rordooproxyverify_spend.sh: No such file or directory
 
 ```

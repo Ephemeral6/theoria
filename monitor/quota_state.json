@@ -1,9 +1,11 @@
 {
-  "mode": "normal",
+  "mode": "hold",
   "requeue": [],
   "history": [],
-  "detected_at": "2026-07-28T09:35Z",
-  "reset_hint": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
-  "note": "window verified OPEN by ping; hold released manually \u2014 the auto-exit is board item S12",
-  "resumed_at": "2026-07-28T12:45Z"
+  "detected_at": "2026-07-29T00:57Z",
+  "reset_hint": "session limit \u00b7 resets 1:20am (Asia/Shanghai)",
+  "note": "detected from dispatch logs, not the registry \u2014 registry lags behind fresh deaths",
+  "resumed_at": "2026-07-28T12:45Z",
+  "last_ping_at": "2026-07-28T16:57:15Z",
+  "last_ping_result": "CLOSED"
 }

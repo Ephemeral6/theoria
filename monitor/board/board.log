@@ -118,3 +118,9 @@
 2026-07-28T16:03:07Z CLAIM V14-standing-negative-control-probe by RES-3
 2026-07-28T16:05:16Z DONE S14-gates-for-all by RES-4
 2026-07-28T16:05:16Z DONE S15-ledger-hashchain by RES-4
+2026-07-28T16:35:43Z DONE E11-engine-crosscheck-deep by RES-3
+2026-07-28T16:35:43Z CLAIM E10-engine-crosscheck by RES-3
+2026-07-28T16:36:08Z DONE E10-engine-crosscheck by RES-3
+2026-07-28T16:36:16Z CLAIM E9-engine-paper-table by RES-3
+2026-07-28T16:51:20Z DONE V14-standing-negative-control-probe by RES-3
+2026-07-28T16:52:45Z CLAIM V15-census-sampling-frame by RES-3

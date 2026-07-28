@@ -176,7 +176,45 @@ def quota_line(log_name):
     return None
 
 
+def scan_logs_for_limit(window_s=3600):
+    """直接扫最近的 dispatch 日志找限额签名。
+
+    只信注册簿会慢一拍：刚被限额打死的会话，注册簿的 reaped 还没写上，
+    check() 就报 normal——2026-07-29 心跳实测三个工人 4 秒内全死于
+    session limit，而探针仍报 normal。日志不会滞后，它是第一手证据。"""
+    if not os.path.isdir(LOGS):
+        return None
+    cutoff = time.time() - window_s
+    for name in sorted(os.listdir(LOGS), reverse=True):
+        if not name.endswith(".log"):
+            continue
+        path = os.path.join(LOGS, name)
+        if os.path.getmtime(path) < cutoff:
+            continue
+        try:
+            text = open(path, encoding="utf-8", errors="ignore").read()
+        except Exception:
+            continue
+        m = SIG_RE.search(text)
+        if m:
+            line = text[m.start():m.start() + 200].strip().splitlines()[0]
+            return line
+    return None
+
+
 def check():
+    fresh = scan_logs_for_limit()
+    if fresh:
+        st = load(STATE, {"mode": "normal", "requeue": [], "history": []})
+        if st.get("mode") != "hold":
+            st["mode"] = "hold"
+            st["detected_at"] = now_utc()
+            st["reset_hint"] = fresh
+            st.setdefault("history", []).append(
+                {"at": st["detected_at"], "from": "log-scan"})
+            save_state(st)
+        print("HOLD — 日志中的限额签名：%s" % fresh)
+        return 2
     reg = load(os.path.join(LOGS, "registry.json"), {})
     st = load(STATE, {"mode": "normal", "requeue": [], "history": []})
     hits = []
