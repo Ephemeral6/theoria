@@ -1,0 +1,9 @@
+# LF, pinned. Same reason engine-rig and theory-compiler pin it: this track's
+# artefacts are byte-compared -- the ledger is canonical JSON with `\n`
+# terminators by LEDGER_FORMAT.md §1, the generated forms are byte-stable, and
+# the book snapshots are diffed against each other to build the concept-birth
+# timeline. A `core.autocrlf` that rewrites them turns every one of those
+# comparisons into a false negative.
+* text eol=lf
+*.png binary
+*.jsonl text eol=lf

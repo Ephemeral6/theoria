@@ -1,0 +1,245 @@
+"""The theorize desk's model calls, and the account they leave behind.
+
+Constraint 8 says the bill's shape is guaranteed by construction: a model is
+called only when there is a surprise, and never during execute, certify or the
+engines. That constraint is only worth anything if the bill is *measured*, so
+every call made anywhere in this arm goes through `ModelDesk.call`, which is
+the only place in the package that starts a model process.
+
+## Why this is not the model proxy, and what was tried
+
+`proxy/model_proxy.py` is the designed route and it does not work here. It was
+tried, live, before this file was written:
+
+    ANTHROPIC_BASE_URL=<model proxy>  claude -p --model claude-haiku-4-5 ...
+
+The CLI authenticates with an OAuth bearer. The model proxy strips
+`Authorization` at the boundary (it is not in `PASSTHROUGH_REQUEST_HEADERS`)
+and injects `ANTHROPIC_API_KEY` instead -- and there is no `ANTHROPIC_API_KEY`
+in this repo's `.env`, only `ARC_API_KEY`. Upstream answered
+`401 {"message": "x-api-key header is required"}` to every request and the CLI
+retried until the run timed out. Twenty-eight `model_call` records at status
+401 and the matching `bypass_attempt` incidents are the evidence; they are
+archived with the run.
+
+The stripping is not a bug -- it is the sealing property, and repairing it means
+editing `proxy/`, which belongs to another track. So the model side of this
+run is **recorded but not proxied**, and that is a declared gap, not a silent
+one. What is preserved:
+
+* the record is written by the frozen writer, `proxy.ledger.RunLedger`, so it
+  is byte-identical in shape to a proxied `model_call` and goes through
+  `redact.py` on the way to disk;
+* the provider's `usage` block is copied through **verbatim** from the CLI's
+  own result envelope -- not reshaped, not summed (LEDGER_FORMAT.md §4);
+* `http.forwarded` is `false` and `transport` names the CLI, so no reader can
+  mistake this for traffic that crossed the proxy.
+
+What is lost: the request and response bodies are the CLI's envelope rather
+than the raw `/v1/messages` exchange, so the recorded prompt is what this arm
+sent to the CLI, not what the CLI sent to Anthropic (it adds a system prompt
+this arm never sees). Any conclusion about *input* token composition is
+therefore off-limits from this ledger. Output usage and cost are not affected.
+
+## Two independent cost figures, on purpose
+
+The CLI reports `total_cost_usd`. `proxy/cost.py` derives a cost from the
+recorded `usage` and a hashed price table that has never been checked against
+a real bill. Recording both lets them be compared -- the first validation of
+`pricing_v1.json` against a provider's own arithmetic. They are compared in
+the run report; a disagreement is a finding about the price table.
+"""
+
+import json
+import os
+import shutil
+import subprocess
+import tempfile
+import time
+from typing import Any, Dict, List, Optional
+
+#: The CLI is started here, outside the repository, for baseline-arms' D-009
+#: reason: Claude Code walks parent directories looking for CLAUDE.md, and a
+#: desk started inside the repo would read Theoria.md, the pile cut, the other
+#: arms' traces and this arm's own source. The desk gets the candidate stream,
+#: the two books and the frames -- and nothing else.
+NEUTRAL_PARENT = tempfile.gettempdir()
+
+PROVIDER = "anthropic-claude-code-cli"
+
+
+class ModelError(RuntimeError):
+    pass
+
+
+class CostCeilingReached(RuntimeError):
+    """Not an error in the run. The run's end when nothing else stopped it."""
+
+
+def claude_bin() -> str:
+    """On Windows the npm shim is claude.cmd; CreateProcess will not find the
+    extensionless POSIX wrapper that `which claude` reports under Git Bash."""
+    for name in ("claude.cmd", "claude.exe", "claude"):
+        found = shutil.which(name)
+        if found:
+            return found
+    raise ModelError("the `claude` CLI is not on PATH")
+
+
+class ModelDesk:
+    """Every model call this arm makes, and the ledger records they leave.
+
+    `beat` names which beat of the inner loop asked -- `theorize`, `probe`, or
+    the two that must never appear, `certify` and `commit`. It is written into
+    the record, so constraint 8 becomes checkable from the ledger rather than
+    asserted in prose.
+    """
+
+    #: The beats Theoria.md 1.10(d)/(e) allows to spend a model call. Anything
+    #: else raises here rather than being caught later by an auditor.
+    ALLOWED_BEATS = frozenset({"theorize", "probe_design"})
+
+    def __init__(self, run, *, model: str = "claude-opus-5",
+                 pricing_ref: Optional[Dict[str, Any]] = None,
+                 cost_ceiling_usd: Optional[float] = 20.0,
+                 timeout: int = 900,
+                 transcript_dir: Optional[str] = None):
+        self.run = run                                # proxy.ledger.RunLedger
+        self.model = model
+        self.pricing_ref = pricing_ref
+        self.cost_ceiling_usd = cost_ceiling_usd
+        self.timeout = timeout
+        self.transcript_dir = transcript_dir
+
+        self.calls = 0
+        self.cli_cost_usd = 0.0
+        self.usage_total: Dict[str, int] = {}
+        self.log: List[Dict[str, Any]] = []
+
+    # -- the account -------------------------------------------------------
+    def _absorb_usage(self, usage: Dict[str, Any]) -> None:
+        for key, value in (usage or {}).items():
+            if isinstance(value, int):
+                self.usage_total[key] = self.usage_total.get(key, 0) + value
+
+    def summary(self) -> Dict[str, Any]:
+        return {"model": self.model, "calls": self.calls,
+                "cli_cost_usd": round(self.cli_cost_usd, 6),
+                "usage_total": dict(self.usage_total),
+                "cost_ceiling_usd": self.cost_ceiling_usd,
+                "beats": sorted({entry["beat"] for entry in self.log})}
+
+    # -- the call ----------------------------------------------------------
+    def call(self, prompt: str, *, beat: str, step_idx: Optional[int] = None,
+             model: Optional[str] = None, label: str = "",
+             max_turns: int = 1) -> str:
+        if beat not in self.ALLOWED_BEATS:
+            raise ModelError(
+                "beat %r may not spend a model call. Theoria.md constraint 8: "
+                "the large model appears at theorize and at probe design, and "
+                "nowhere else -- execute, certify, plan and the engines are "
+                "zero-call by construction." % (beat,))
+        if (self.cost_ceiling_usd is not None
+                and self.cli_cost_usd >= self.cost_ceiling_usd):
+            raise CostCeilingReached(
+                "spent $%.4f of a $%.2f ceiling over %d calls"
+                % (self.cli_cost_usd, self.cost_ceiling_usd, self.calls))
+
+        model = model or self.model
+        envelope, elapsed_ms, stderr = self._invoke(prompt, model)
+
+        usage = envelope.get("usage") or {}
+        text = envelope.get("result") or ""
+        cli_cost = float(envelope.get("total_cost_usd") or 0.0)
+
+        self.calls += 1
+        self.cli_cost_usd += cli_cost
+        self._absorb_usage(usage)
+
+        # The request as *this arm* sent it. Named `prompt` rather than
+        # `messages` so nobody mistakes it for the /v1/messages body: the CLI
+        # wraps it in a system prompt this arm never sees.
+        request = {"transport": "claude-code-cli", "model": model,
+                   "max_turns": max_turns, "prompt": prompt,
+                   "beat": beat, "label": label}
+
+        self.run.model_call(
+            provider=PROVIDER,
+            model=model,
+            request=request,
+            response=envelope,
+            usage=usage,
+            pricing_ref=self.pricing_ref,
+            step_idx=step_idx,
+            http={"method": "CLI", "path": "claude -p --output-format json",
+                  "status": 200 if envelope.get("subtype") == "success" else 500,
+                  "elapsed_ms": elapsed_ms, "attempts": 1,
+                  "forwarded": False, "stream": False},
+            beat=beat,
+            label=label,
+            transport="claude-code-cli",
+            proxied=False,
+            proxy_gap="model_proxy strips Authorization and no ANTHROPIC_API_KEY "
+                      "exists; see harness/modelcall.py and DECISIONS D-P8-002",
+        )
+
+        entry = {"call": self.calls, "beat": beat, "label": label,
+                 "model": model, "elapsed_ms": elapsed_ms,
+                 "cli_cost_usd": cli_cost, "usage": usage,
+                 "step_idx": step_idx, "chars_in": len(prompt),
+                 "chars_out": len(text)}
+        self.log.append(entry)
+        self._write_transcript(entry, prompt, text, stderr)
+
+        if not text.strip():
+            raise ModelError("the desk returned nothing (subtype=%r, stderr=%r)"
+                             % (envelope.get("subtype"), (stderr or "")[:300]))
+        return text
+
+    # -- plumbing ----------------------------------------------------------
+    def _invoke(self, prompt: str, model: str):
+        cmd = [claude_bin(), "-p", "--model", model,
+               "--output-format", "json", "--max-turns", "1"]
+        env = dict(os.environ)
+        # The desk must not be able to reach the game credential, and must not
+        # inherit a base URL that would send it somewhere unrecorded.
+        env.pop("ARC_API_KEY", None)
+
+        started = time.time()
+        with tempfile.TemporaryDirectory(dir=NEUTRAL_PARENT) as cwd:
+            try:
+                proc = subprocess.run(cmd, cwd=cwd, env=env, input=prompt,
+                                      capture_output=True, text=True,
+                                      encoding="utf-8", errors="replace",
+                                      timeout=self.timeout)
+            except subprocess.TimeoutExpired:
+                raise ModelError("claude -p timed out after %ds" % self.timeout)
+        elapsed_ms = int((time.time() - started) * 1000)
+
+        try:
+            envelope = json.loads(proc.stdout)
+        except json.JSONDecodeError:
+            raise ModelError("unparseable CLI output: %s"
+                             % (proc.stdout or proc.stderr or "")[:400])
+        return envelope, elapsed_ms, proc.stderr
+
+    def _write_transcript(self, entry: Dict[str, Any], prompt: str,
+                          text: str, stderr: str) -> None:
+        """The prompt and the reply, in full, on disk. The ledger has them too,
+        but a human reading the concept-birth timeline should not have to grep
+        a JSONL for a 40 KB prompt."""
+        if not self.transcript_dir:
+            return
+        os.makedirs(self.transcript_dir, exist_ok=True)
+        name = "call-%03d-%s%s.md" % (entry["call"], entry["beat"],
+                                      ("-" + entry["label"]) if entry["label"] else "")
+        path = os.path.join(self.transcript_dir, name)
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write("# %s\n\n" % name[:-3])
+            fh.write("model: `%s` · %d ms · $%.6f · usage %s\n\n"
+                     % (entry["model"], entry["elapsed_ms"],
+                        entry["cli_cost_usd"], json.dumps(entry["usage"], sort_keys=True)))
+            fh.write("## prompt\n\n```\n%s\n```\n\n" % prompt)
+            fh.write("## reply\n\n```\n%s\n```\n" % text)
+            if stderr and stderr.strip():
+                fh.write("\n## stderr\n\n```\n%s\n```\n" % stderr[:4000])
