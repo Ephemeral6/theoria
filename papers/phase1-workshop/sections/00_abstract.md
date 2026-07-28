@@ -8,7 +8,7 @@
 
 > **Draft status — v0.3.** This is a working draft assembled from the acceptance
 > reports already in the repository. Authorship, affiliation and venue are
-> unfilled placeholders, and at ~23 000 words it is roughly five times a workshop
+> unfilled placeholders, and at ~23 200 words it is roughly five times a workshop
 > budget — the cut is a separate pass, and no material has been dropped yet in
 > order to make it.
 >
