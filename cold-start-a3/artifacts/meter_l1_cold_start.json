@@ -1,0 +1,86 @@
+{
+  "arm": "l1_cold_start",
+  "carries_books": false,
+  "cost_to_first_plan": {
+    "candidates_adjudicated": 0,
+    "certify_runs": 3,
+    "compile_runs": 2,
+    "dsl_clauses_written": 0,
+    "engine_stages": 0,
+    "plan_runs": 1,
+    "theorize_rounds": 0,
+    "world_actions": 332,
+    "world_frames": 333
+  },
+  "counts": {
+    "candidates_adjudicated": 0,
+    "certify_runs": 3,
+    "compile_runs": 2,
+    "dsl_clauses_written": 0,
+    "engine_stages": 0,
+    "plan_runs": 1,
+    "theorize_rounds": 0,
+    "world_actions": 332,
+    "world_frames": 333
+  },
+  "events": [
+    {
+      "amount": 333,
+      "line": "world_frames",
+      "running_total": 333,
+      "seq": 0,
+      "why": "l1_sweep.jsonl \u2014 the cold start's whole evidence"
+    },
+    {
+      "amount": 332,
+      "line": "world_actions",
+      "running_total": 332,
+      "seq": 1,
+      "why": "l1_sweep.jsonl \u2014 the cold start's whole evidence"
+    },
+    {
+      "amount": 1,
+      "line": "compile_runs",
+      "running_total": 1,
+      "seq": 2,
+      "why": "domain.dsl + a3-l1 -> generated_l1"
+    },
+    {
+      "amount": 1,
+      "line": "compile_runs",
+      "running_total": 2,
+      "seq": 3,
+      "why": "the same instance with no invariant builder \u2014 the T4 exhibit"
+    },
+    {
+      "amount": 1,
+      "line": "certify_runs",
+      "running_total": 1,
+      "seq": 4,
+      "why": "cheap replay of generated_l1 over l1_sweep"
+    },
+    {
+      "amount": 1,
+      "line": "certify_runs",
+      "running_total": 2,
+      "seq": 5,
+      "why": "lean on generated_l1"
+    },
+    {
+      "amount": 1,
+      "line": "certify_runs",
+      "running_total": 3,
+      "seq": 6,
+      "why": "lean on the vacuous T4 exhibit"
+    },
+    {
+      "amount": 1,
+      "line": "plan_runs",
+      "running_total": 1,
+      "seq": 7,
+      "why": "fd_adapter.solve on generated_l1"
+    }
+  ],
+  "level": "a3-l1",
+  "note": "the cold start: mines level 1 from its own sweep and writes the two books from scratch"
+}

@@ -1,0 +1,46 @@
+{
+  "all_caught": true,
+  "controls": [
+    {
+      "anomaly_kinds": [
+        "goal_mismatch",
+        "render_mismatch",
+        "unowned_pixel"
+      ],
+      "arm": "l2_negctl_oneway",
+      "caught": true,
+      "claimed_a_win": false,
+      "edit": "the portal's B -> exit_b leg is deleted",
+      "first_mismatch": null,
+      "level": "a3-l2-oneway",
+      "outcome": "replay_mismatch",
+      "planned": true,
+      "replay_certify_green": false,
+      "static_certify_green": true,
+      "theorize_triggered": true,
+      "world_is_solvable": false
+    },
+    {
+      "anomaly_kinds": [
+        "goal_mismatch",
+        "render_mismatch",
+        "unowned_pixel"
+      ],
+      "arm": "l2_negctl_rewired",
+      "caught": true,
+      "claimed_a_win": false,
+      "edit": "the portal's B leg lands the Cart on a different cell",
+      "first_mismatch": null,
+      "level": "a3-l2-rewired",
+      "outcome": "replay_mismatch",
+      "planned": true,
+      "replay_certify_green": false,
+      "static_certify_green": true,
+      "theorize_triggered": true,
+      "world_is_solvable": true
+    }
+  ],
+  "none_claimed_a_win": true,
+  "reading": "Both controls are invisible on the board and visible in the replay. The static layer is free but blind to a transition-function edit; the replay layer costs plan-length actions and catches both. That boundary is the honest statement of what the carried-domain safety valve does.",
+  "static_layer_caught_any": false
+}

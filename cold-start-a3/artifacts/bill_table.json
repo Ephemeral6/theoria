@@ -1,0 +1,188 @@
+{
+  "arms": [
+    {
+      "arm": "l1_cold_start",
+      "carries_books": false,
+      "level": "a3-l1",
+      "note": "the baseline: level 1 from nothing, carrying nothing"
+    },
+    {
+      "arm": "l2_from_scratch",
+      "carries_books": false,
+      "level": "a3-l2",
+      "note": "the control arm: level 2 from nothing, carrying nothing"
+    },
+    {
+      "arm": "l2_transfer",
+      "carries_books": true,
+      "level": "a3-l2",
+      "note": "carries domain.dsl + playbook.dsl from level 1, unchanged"
+    }
+  ],
+  "cost_to_first_plan": {
+    "l1_cold_start": {
+      "candidates_adjudicated": 41,
+      "certify_runs": 2,
+      "compile_runs": 1,
+      "dsl_clauses_written": 23,
+      "engine_stages": 1,
+      "plan_runs": 1,
+      "theorize_rounds": 1,
+      "world_actions": 332,
+      "world_frames": 333
+    },
+    "l2_from_scratch": {
+      "candidates_adjudicated": 35,
+      "certify_runs": 2,
+      "compile_runs": 1,
+      "dsl_clauses_written": 33,
+      "engine_stages": 1,
+      "plan_runs": 1,
+      "theorize_rounds": 5,
+      "world_actions": 336,
+      "world_frames": 337
+    },
+    "l2_transfer": {
+      "candidates_adjudicated": 0,
+      "certify_runs": 1,
+      "compile_runs": 1,
+      "dsl_clauses_written": 0,
+      "engine_stages": 0,
+      "plan_runs": 1,
+      "theorize_rounds": 0,
+      "world_actions": 0,
+      "world_frames": 1
+    }
+  },
+  "like_for_like_level_2": {
+    "candidates_adjudicated": {
+      "l2_from_scratch": 35,
+      "l2_transfer": 0,
+      "ratio": 0.0,
+      "saved": 35
+    },
+    "certify_runs": {
+      "l2_from_scratch": 3,
+      "l2_transfer": 3,
+      "ratio": 1.0,
+      "saved": 0
+    },
+    "compile_runs": {
+      "l2_from_scratch": 1,
+      "l2_transfer": 1,
+      "ratio": 1.0,
+      "saved": 0
+    },
+    "dsl_clauses_written": {
+      "l2_from_scratch": 33,
+      "l2_transfer": 0,
+      "ratio": 0.0,
+      "saved": 33
+    },
+    "engine_stages": {
+      "l2_from_scratch": 1,
+      "l2_transfer": 0,
+      "ratio": 0.0,
+      "saved": 1
+    },
+    "plan_runs": {
+      "l2_from_scratch": 1,
+      "l2_transfer": 1,
+      "ratio": 1.0,
+      "saved": 0
+    },
+    "theorize_rounds": {
+      "l2_from_scratch": 5,
+      "l2_transfer": 0,
+      "ratio": 0.0,
+      "saved": 5
+    },
+    "world_actions": {
+      "l2_from_scratch": 346,
+      "l2_transfer": 10,
+      "ratio": 0.028901734104046242,
+      "saved": 336
+    },
+    "world_frames": {
+      "l2_from_scratch": 347,
+      "l2_transfer": 11,
+      "ratio": 0.03170028818443804,
+      "saved": 336
+    }
+  },
+  "note": "Ratios against l1_cold_start compare across levels and therefore mix in whatever differs between them. The like-for-like block is the same level with and without the books, and is the number to quote.",
+  "table": [
+    {
+      "l1_cold_start": 348,
+      "l2_from_scratch": 347,
+      "l2_from_scratch_vs_baseline": 0.9971,
+      "l2_transfer": 11,
+      "l2_transfer_vs_baseline": 0.0316,
+      "line": "world_frames"
+    },
+    {
+      "l1_cold_start": 347,
+      "l2_from_scratch": 346,
+      "l2_from_scratch_vs_baseline": 0.9971,
+      "l2_transfer": 10,
+      "l2_transfer_vs_baseline": 0.0288,
+      "line": "world_actions"
+    },
+    {
+      "l1_cold_start": 1,
+      "l2_from_scratch": 1,
+      "l2_from_scratch_vs_baseline": 1.0,
+      "l2_transfer": 0,
+      "l2_transfer_vs_baseline": 0.0,
+      "line": "engine_stages"
+    },
+    {
+      "l1_cold_start": 41,
+      "l2_from_scratch": 35,
+      "l2_from_scratch_vs_baseline": 0.8537,
+      "l2_transfer": 0,
+      "l2_transfer_vs_baseline": 0.0,
+      "line": "candidates_adjudicated"
+    },
+    {
+      "l1_cold_start": 1,
+      "l2_from_scratch": 5,
+      "l2_from_scratch_vs_baseline": 5.0,
+      "l2_transfer": 0,
+      "l2_transfer_vs_baseline": 0.0,
+      "line": "theorize_rounds"
+    },
+    {
+      "l1_cold_start": 23,
+      "l2_from_scratch": 33,
+      "l2_from_scratch_vs_baseline": 1.4348,
+      "l2_transfer": 0,
+      "l2_transfer_vs_baseline": 0.0,
+      "line": "dsl_clauses_written"
+    },
+    {
+      "l1_cold_start": 1,
+      "l2_from_scratch": 1,
+      "l2_from_scratch_vs_baseline": 1.0,
+      "l2_transfer": 1,
+      "l2_transfer_vs_baseline": 1.0,
+      "line": "compile_runs"
+    },
+    {
+      "l1_cold_start": 3,
+      "l2_from_scratch": 3,
+      "l2_from_scratch_vs_baseline": 1.0,
+      "l2_transfer": 3,
+      "l2_transfer_vs_baseline": 1.0,
+      "line": "certify_runs"
+    },
+    {
+      "l1_cold_start": 1,
+      "l2_from_scratch": 1,
+      "l2_from_scratch_vs_baseline": 1.0,
+      "l2_transfer": 1,
+      "l2_transfer_vs_baseline": 1.0,
+      "line": "plan_runs"
+    }
+  ]
+}

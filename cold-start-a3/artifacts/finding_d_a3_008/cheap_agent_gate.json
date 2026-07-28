@@ -1,0 +1,4 @@
+{
+  "note": "The control arm named its mover Agent and its barrier Gate. Four components assume otherwise: certify.replay.ACTION_NAMES emits (\"push\",\"Cart\",dir); gen_python_a0.generate_python defaults mover=\"Cart\"; gen_lean_a0.door_latch_invariant and A3 own switch_latch_invariant key on Door_present; and A3 own bind_goal emits state.Cart_pos. The manual is correct and uncertifiable.",
+  "raised": "AttributeError: 'State' object has no attribute 'Cart_pos'"
+}

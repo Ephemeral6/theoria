@@ -1,0 +1,96 @@
+{
+  "actions": [
+    "(step-left c6-7 c6-6)",
+    "(switch-press-down c6-6 c7-6 c3-1)",
+    "(step-up c6-6 c5-6)",
+    "(step-up c5-6 c4-6)",
+    "(step-up c4-6 c3-6)",
+    "(step-up c3-6 c2-6)",
+    "(warp-b-up c2-6 c1-6 c4-1)",
+    "(step-up c4-1 c3-1)",
+    "(step-up c3-1 c2-1)",
+    "(step-up c2-1 c1-1)"
+  ],
+  "backend": "stub-bfs",
+  "directions": [
+    "left",
+    "down",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up",
+    "up"
+  ],
+  "domain": "theory/generated_l2_scratch/domain.pddl",
+  "green": true,
+  "length": 10,
+  "manual_final_cell": [
+    1,
+    1
+  ],
+  "manual_reaches_goal": true,
+  "manual_trail": [
+    [
+      6,
+      7
+    ],
+    [
+      6,
+      6
+    ],
+    [
+      6,
+      6
+    ],
+    [
+      5,
+      6
+    ],
+    [
+      4,
+      6
+    ],
+    [
+      3,
+      6
+    ],
+    [
+      2,
+      6
+    ],
+    [
+      4,
+      1
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      1,
+      1
+    ]
+  ],
+  "name": "generated_l2_scratch",
+  "problem": "theory/generated_l2_scratch/problem.pddl",
+  "status": "SAT",
+  "world_actions": [
+    "LEFT",
+    "DOWN",
+    "UP",
+    "UP",
+    "UP",
+    "UP",
+    "UP",
+    "UP",
+    "UP",
+    "UP"
+  ]
+}

@@ -1,0 +1,86 @@
+{
+  "arm": "l2_negctl_rewired",
+  "carries_books": true,
+  "cost_to_first_plan": {
+    "candidates_adjudicated": 0,
+    "certify_runs": 1,
+    "compile_runs": 1,
+    "dsl_clauses_written": 0,
+    "engine_stages": 0,
+    "plan_runs": 1,
+    "theorize_rounds": 0,
+    "world_actions": 0,
+    "world_frames": 1
+  },
+  "counts": {
+    "candidates_adjudicated": 0,
+    "certify_runs": 3,
+    "compile_runs": 1,
+    "dsl_clauses_written": 0,
+    "engine_stages": 0,
+    "plan_runs": 1,
+    "theorize_rounds": 0,
+    "world_actions": 10,
+    "world_frames": 11
+  },
+  "events": [
+    {
+      "amount": 1,
+      "line": "world_frames",
+      "running_total": 1,
+      "seq": 0,
+      "why": "the transfer arm's entire observation"
+    },
+    {
+      "amount": 1,
+      "line": "compile_runs",
+      "running_total": 1,
+      "seq": 1,
+      "why": "domain.dsl + problem_2 -> four forms"
+    },
+    {
+      "amount": 1,
+      "line": "certify_runs",
+      "running_total": 1,
+      "seq": 2,
+      "why": "render/responsibility check on frame 0"
+    },
+    {
+      "amount": 1,
+      "line": "plan_runs",
+      "running_total": 1,
+      "seq": 3,
+      "why": "fd_adapter.solve on a3-l2-rewired"
+    },
+    {
+      "amount": 10,
+      "line": "world_actions",
+      "running_total": 10,
+      "seq": 4,
+      "why": "executing the plan"
+    },
+    {
+      "amount": 10,
+      "line": "world_frames",
+      "running_total": 11,
+      "seq": 5,
+      "why": "frames returned by the execution (frame 0 already charged)"
+    },
+    {
+      "amount": 1,
+      "line": "certify_runs",
+      "running_total": 2,
+      "seq": 6,
+      "why": "replay the execution under the manual"
+    },
+    {
+      "amount": 1,
+      "line": "certify_runs",
+      "running_total": 3,
+      "seq": 7,
+      "why": "Lean on the carried domain, new instance"
+    }
+  ],
+  "level": "a3-l2-rewired",
+  "note": "negative control 2: carried domain, one mechanism rewired"
+}

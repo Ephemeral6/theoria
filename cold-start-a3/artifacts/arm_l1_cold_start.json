@@ -1,0 +1,335 @@
+{
+  "arm": "l1_cold_start",
+  "bill": {
+    "arm": "l1_cold_start",
+    "carries_books": false,
+    "cost_to_first_plan": {
+      "candidates_adjudicated": 41,
+      "certify_runs": 2,
+      "compile_runs": 1,
+      "dsl_clauses_written": 23,
+      "engine_stages": 1,
+      "plan_runs": 1,
+      "theorize_rounds": 1,
+      "world_actions": 332,
+      "world_frames": 333
+    },
+    "counts": {
+      "candidates_adjudicated": 41,
+      "certify_runs": 3,
+      "compile_runs": 1,
+      "dsl_clauses_written": 23,
+      "engine_stages": 1,
+      "plan_runs": 1,
+      "theorize_rounds": 1,
+      "world_actions": 347,
+      "world_frames": 348
+    },
+    "events": [
+      {
+        "amount": 333,
+        "line": "world_frames",
+        "running_total": 333,
+        "seq": 0,
+        "why": "l1_sweep.jsonl \u2014 this arm's whole evidence"
+      },
+      {
+        "amount": 332,
+        "line": "world_actions",
+        "running_total": 332,
+        "seq": 1,
+        "why": "l1_sweep.jsonl \u2014 this arm's whole evidence"
+      },
+      {
+        "amount": 1,
+        "line": "engine_stages",
+        "running_total": 1,
+        "seq": 2,
+        "why": "run_stage on l1_sweep.jsonl"
+      },
+      {
+        "amount": 41,
+        "line": "candidates_adjudicated",
+        "running_total": 41,
+        "seq": 3,
+        "why": "adjudicate candidates_l1.jsonl"
+      },
+      {
+        "amount": 1,
+        "line": "theorize_rounds",
+        "running_total": 1,
+        "seq": 4,
+        "why": "declared in THEORIZE_LOG.md"
+      },
+      {
+        "amount": 23,
+        "line": "dsl_clauses_written",
+        "running_total": 23,
+        "seq": 5,
+        "why": "counted from domain.dsl: 20 rules + 3 laws"
+      },
+      {
+        "amount": 1,
+        "line": "compile_runs",
+        "running_total": 1,
+        "seq": 6,
+        "why": "domain.dsl + problem -> four forms"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 1,
+        "seq": 7,
+        "why": "cheap replay over the sweep"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 2,
+        "seq": 8,
+        "why": "lean"
+      },
+      {
+        "amount": 1,
+        "line": "plan_runs",
+        "running_total": 1,
+        "seq": 9,
+        "why": "fd_adapter.solve on generated_l1"
+      },
+      {
+        "amount": 15,
+        "line": "world_actions",
+        "running_total": 347,
+        "seq": 10,
+        "why": "executing the plan"
+      },
+      {
+        "amount": 15,
+        "line": "world_frames",
+        "running_total": 348,
+        "seq": 11,
+        "why": "frames returned by the execution"
+      },
+      {
+        "amount": 1,
+        "line": "certify_runs",
+        "running_total": 3,
+        "seq": 12,
+        "why": "replay the execution"
+      }
+    ],
+    "level": "a3-l1",
+    "note": "the baseline: level 1 from nothing, carrying nothing"
+  },
+  "certify_cheap": {
+    "anomaly_count": 0,
+    "anomaly_kinds": [],
+    "frames": 333,
+    "green": true,
+    "pixels_checked": 26973,
+    "pixels_unexplained": 0,
+    "trace": "l1_sweep.jsonl",
+    "transitions": 332
+  },
+  "certify_lean": {
+    "available": true,
+    "axiom_reports": [
+      {
+        "axioms": [],
+        "name": "inv_all"
+      }
+    ],
+    "errors": [],
+    "file": "theory/generated_l1/theory.lean",
+    "green": true,
+    "lean": "C:\\Users\\user\\.elan\\toolchains\\leanprover--lean4---v4.9.0\\bin\\lean.exe",
+    "reason": null,
+    "returncode": 0,
+    "sorries": []
+  },
+  "certify_replay": {
+    "anomaly_count": 0,
+    "anomaly_kinds": [],
+    "frames": 16,
+    "green": true,
+    "pixels_checked": 1296,
+    "pixels_unexplained": 0,
+    "trace": "l1_execution.jsonl",
+    "transitions": 15
+  },
+  "clauses": {
+    "laws": 3,
+    "rules": 20,
+    "total": 23
+  },
+  "compiled": {
+    "domain.pddl": 4491,
+    "problem.json": 2449,
+    "problem.pddl": 3492,
+    "theory.lean": 57262,
+    "theory.md": 4733,
+    "theory.py": 13891
+  },
+  "execution": {
+    "actions": [
+      "UP",
+      "UP",
+      "RIGHT",
+      "RIGHT",
+      "UP",
+      "UP",
+      "LEFT",
+      "UP",
+      "RIGHT",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN"
+    ],
+    "actions_spent": 15,
+    "level": "a3-l1",
+    "plan_length": 15,
+    "trace": "l1_execution.jsonl",
+    "win": true
+  },
+  "level": "a3-l1",
+  "outcome": "win",
+  "plan": {
+    "actions": [
+      "(push-up c6-1 c5-1)",
+      "(press-up c5-1 c4-1 c6-7)",
+      "(push-right c5-1 c5-2)",
+      "(push-right c5-2 c5-3)",
+      "(push-up c5-3 c4-3)",
+      "(push-up c4-3 c3-3)",
+      "(push-left c3-3 c3-2)",
+      "(teleport-a-up c3-2 c2-2 c1-6)",
+      "(push-right c1-6 c1-7)",
+      "(push-down c1-7 c2-7)",
+      "(push-down c2-7 c3-7)",
+      "(push-down c3-7 c4-7)",
+      "(push-down c4-7 c5-7)",
+      "(push-down c5-7 c6-7)",
+      "(push-down c6-7 c7-7)"
+    ],
+    "backend": "stub-bfs",
+    "directions": [
+      "up",
+      "up",
+      "right",
+      "right",
+      "up",
+      "up",
+      "left",
+      "up",
+      "right",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down",
+      "down"
+    ],
+    "domain": "theory/generated_l1/domain.pddl",
+    "green": true,
+    "length": 15,
+    "manual_final_cell": [
+      7,
+      7
+    ],
+    "manual_reaches_goal": true,
+    "name": "generated_l1",
+    "problem": "theory/generated_l1/problem.pddl",
+    "status": "SAT",
+    "world_actions": [
+      "UP",
+      "UP",
+      "RIGHT",
+      "RIGHT",
+      "UP",
+      "UP",
+      "LEFT",
+      "UP",
+      "RIGHT",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN",
+      "DOWN"
+    ]
+  },
+  "provenance": {
+    "also_derivable": {
+      "goal_cell": [
+        7,
+        7
+      ],
+      "goal_cell_note": "A0's derive reads the goal off the frames whose `win` flag is set; the supplied value is used instead so both routes answer the same question",
+      "landmarks": {},
+      "landmarks_note": "empty: A0's derive infers a landmark only for a single jump destination and A3 has two (trap T1) \u2014 nothing was overwritten"
+    },
+    "counts": {
+      "arena_cells": 33,
+      "background": 0,
+      "board_non_background_cells": 48,
+      "grid": [
+        9,
+        9
+      ],
+      "object_names": [
+        "Cart",
+        "Door",
+        "Switch"
+      ],
+      "objects": 3
+    },
+    "derived_fields": 6,
+    "fields": {
+      "arena": "derived_from_trace",
+      "background": "derived_from_trace",
+      "board": "derived_from_trace",
+      "goal_cell": "supplied",
+      "height": "derived_from_trace",
+      "landmarks": "supplied",
+      "name": "supplied",
+      "objects": "derived_from_trace",
+      "width": "derived_from_trace"
+    },
+    "inputs_read": {
+      "actions": 332,
+      "frames": 333
+    },
+    "route": "trace",
+    "shared_priors": {
+      "note": "the manual's word_table, identical on both routes, so it does not separate them",
+      "object_colour_map": {
+        "5": "Door",
+        "6": "Cart",
+        "7": "Switch",
+        "8": "Switch"
+      }
+    },
+    "source": "artifacts/l1_sweep.jsonl",
+    "supplied_fields": 3,
+    "supplied_values": {
+      "goal_cell": [
+        7,
+        7
+      ],
+      "landmarks": {
+        "exit_a": [
+          1,
+          6
+        ],
+        "exit_b": [
+          3,
+          2
+        ]
+      },
+      "name": "a3-l1"
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "also_derivable": {
+    "goal_cell": [
+      7,
+      7
+    ],
+    "goal_cell_note": "A0's derive reads the goal off the frames whose `win` flag is set; the supplied value is used instead so both routes answer the same question",
+    "landmarks": {},
+    "landmarks_note": "empty: A0's derive infers a landmark only for a single jump destination and A3 has two (trap T1) \u2014 nothing was overwritten"
+  },
+  "counts": {
+    "arena_cells": 33,
+    "background": 0,
+    "board_non_background_cells": 48,
+    "grid": [
+      9,
+      9
+    ],
+    "object_names": [
+      "Cart",
+      "Door",
+      "Switch"
+    ],
+    "objects": 3
+  },
+  "derived_fields": 6,
+  "fields": {
+    "arena": "derived_from_trace",
+    "background": "derived_from_trace",
+    "board": "derived_from_trace",
+    "goal_cell": "supplied",
+    "height": "derived_from_trace",
+    "landmarks": "supplied",
+    "name": "supplied",
+    "objects": "derived_from_trace",
+    "width": "derived_from_trace"
+  },
+  "inputs_read": {
+    "actions": 332,
+    "frames": 333
+  },
+  "route": "trace",
+  "shared_priors": {
+    "note": "the manual's word_table, identical on both routes, so it does not separate them",
+    "object_colour_map": {
+      "5": "Door",
+      "6": "Cart",
+      "7": "Switch",
+      "8": "Switch"
+    }
+  },
+  "source": "artifacts/l1_sweep.jsonl",
+  "supplied_fields": 3,
+  "supplied_values": {
+    "goal_cell": [
+      7,
+      7
+    ],
+    "landmarks": {
+      "exit_a": [
+        1,
+        6
+      ],
+      "exit_b": [
+        3,
+        2
+      ]
+    },
+    "name": "a3-l1"
+  }
+}

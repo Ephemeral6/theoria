@@ -1,0 +1,121 @@
+{
+  "arm": "l2_from_scratch",
+  "carries_books": false,
+  "cost_to_first_plan": {
+    "candidates_adjudicated": 35,
+    "certify_runs": 2,
+    "compile_runs": 1,
+    "dsl_clauses_written": 33,
+    "engine_stages": 1,
+    "plan_runs": 1,
+    "theorize_rounds": 5,
+    "world_actions": 336,
+    "world_frames": 337
+  },
+  "counts": {
+    "candidates_adjudicated": 35,
+    "certify_runs": 3,
+    "compile_runs": 1,
+    "dsl_clauses_written": 33,
+    "engine_stages": 1,
+    "plan_runs": 1,
+    "theorize_rounds": 5,
+    "world_actions": 346,
+    "world_frames": 347
+  },
+  "events": [
+    {
+      "amount": 337,
+      "line": "world_frames",
+      "running_total": 337,
+      "seq": 0,
+      "why": "l2_sweep.jsonl \u2014 this arm's whole evidence"
+    },
+    {
+      "amount": 336,
+      "line": "world_actions",
+      "running_total": 336,
+      "seq": 1,
+      "why": "l2_sweep.jsonl \u2014 this arm's whole evidence"
+    },
+    {
+      "amount": 1,
+      "line": "engine_stages",
+      "running_total": 1,
+      "seq": 2,
+      "why": "run_stage on l2_sweep.jsonl"
+    },
+    {
+      "amount": 35,
+      "line": "candidates_adjudicated",
+      "running_total": 35,
+      "seq": 3,
+      "why": "adjudicate candidates_l2_scratch.jsonl"
+    },
+    {
+      "amount": 5,
+      "line": "theorize_rounds",
+      "running_total": 5,
+      "seq": 4,
+      "why": "declared in THEORIZE_LOG_L2_SCRATCH.md"
+    },
+    {
+      "amount": 33,
+      "line": "dsl_clauses_written",
+      "running_total": 33,
+      "seq": 5,
+      "why": "counted from domain_l2_scratch.dsl: 28 rules + 5 laws"
+    },
+    {
+      "amount": 1,
+      "line": "compile_runs",
+      "running_total": 1,
+      "seq": 6,
+      "why": "domain_l2_scratch.dsl + problem -> four forms"
+    },
+    {
+      "amount": 1,
+      "line": "certify_runs",
+      "running_total": 1,
+      "seq": 7,
+      "why": "cheap replay over the sweep"
+    },
+    {
+      "amount": 1,
+      "line": "certify_runs",
+      "running_total": 2,
+      "seq": 8,
+      "why": "lean"
+    },
+    {
+      "amount": 1,
+      "line": "plan_runs",
+      "running_total": 1,
+      "seq": 9,
+      "why": "fd_adapter.solve on generated_l2_scratch"
+    },
+    {
+      "amount": 10,
+      "line": "world_actions",
+      "running_total": 346,
+      "seq": 10,
+      "why": "executing the plan"
+    },
+    {
+      "amount": 10,
+      "line": "world_frames",
+      "running_total": 347,
+      "seq": 11,
+      "why": "frames returned by the execution"
+    },
+    {
+      "amount": 1,
+      "line": "certify_runs",
+      "running_total": 3,
+      "seq": 12,
+      "why": "replay the execution"
+    }
+  ],
+  "level": "a3-l2",
+  "note": "the control arm: level 2 from nothing, carrying nothing"
+}

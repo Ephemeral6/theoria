@@ -1,0 +1,68 @@
+{
+  "also_derivable": {
+    "goal_cell": null,
+    "goal_cell_note": "the goal cell is not rendered (D-A3-002); one frame or a thousand, it is not in the pixels",
+    "landmarks": {},
+    "landmarks_note": "a portal exit is plain floor (D-A3-003); it is not in the pixels either"
+  },
+  "counts": {
+    "arena_cells": 35,
+    "background": 0,
+    "board_non_background_cells": 46,
+    "grid": [
+      9,
+      9
+    ],
+    "object_names": [
+      "Cart",
+      "Door",
+      "Switch"
+    ],
+    "objects": 3
+  },
+  "derived_fields": 6,
+  "fields": {
+    "arena": "derived_from_frame",
+    "background": "derived_from_frame",
+    "board": "derived_from_frame",
+    "goal_cell": "supplied",
+    "height": "derived_from_frame",
+    "landmarks": "supplied",
+    "name": "supplied",
+    "objects": "derived_from_frame",
+    "width": "derived_from_frame"
+  },
+  "inputs_read": {
+    "actions": 0,
+    "frames": 1
+  },
+  "route": "frame",
+  "shared_priors": {
+    "note": "the manual's word_table, identical on both routes, so it does not separate them",
+    "object_colour_map": {
+      "5": "Door",
+      "6": "Cart",
+      "7": "Switch",
+      "8": "Switch"
+    }
+  },
+  "source": "artifacts/l2_frame0.json",
+  "supplied_fields": 3,
+  "supplied_values": {
+    "goal_cell": [
+      1,
+      1
+    ],
+    "landmarks": {
+      "exit_a": [
+        1,
+        5
+      ],
+      "exit_b": [
+        4,
+        1
+      ]
+    },
+    "name": "a3-l2"
+  }
+}
