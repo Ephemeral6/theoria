@@ -94,7 +94,21 @@ def by_reservation(records: List[Dict[str, Any]],
 
 
 def audit(cells: List[Dict[str, Any]], campaign: str,
-          gate: Optional[spend.SpendGate] = None) -> Dict[str, Any]:
+          gate: Optional[spend.SpendGate] = None,
+          focus: Optional[str] = None) -> Dict[str, Any]:
+    """Reconcile `campaign`'s pool lines against `cells`.
+
+    `cells` must be **every** cell of the campaign. `focus` narrows which rows
+    are reported in detail and nothing else.
+
+    That split is not cosmetic. The first version let `--game sk48` filter the
+    cell list itself, and the very next run reported g50t's three reservations
+    as orphans -- "unattributable spend", the most serious thing this tool can
+    say -- because their cells had been filtered out of the comparison. An
+    attribution check computed over a subset of the record answers a question
+    nobody asked, and it answers it alarmingly. Attribution is a property of the
+    whole campaign or it is nothing.
+    """
     records = pool_records(gate)
     pool = by_reservation(records, campaign)
 
@@ -203,8 +217,16 @@ def audit(cells: List[Dict[str, Any]], campaign: str,
             "looks like and is not a discrepancy."
             % (campaign, len(unclaimed_informational)))
 
+    # Attribution is settled above, over every cell. Only now is the view
+    # narrowed, and the count of what was hidden travels with the report.
+    shown = rows
+    if focus:
+        prefix = focus.split("-")[0]
+        shown = [r for r in rows if (r.get("game_id") or "").startswith(prefix)]
+
     problems = sum(len(r["problems"]) for r in rows)
-    return {"campaign": campaign, "cells": rows, "orphans": orphans,
+    return {"campaign": campaign, "cells": shown, "all_cells": len(rows),
+            "focus": focus, "orphans": orphans,
             "unclaimed_informational": unclaimed_informational,
             "findings": findings, "problem_count": problems,
             "unreconcilable_count": sum(1 for r in rows if r.get("unreconcilable")),
@@ -236,10 +258,11 @@ def print_report(report: Dict[str, Any]) -> None:
                  json.dumps(item["holder"], sort_keys=True)))
     for finding in report["findings"]:
         print("\n  FINDING: %s" % finding)
-    print("\n=== %s: %d cell(s), %d reconciled, %d unreconcilable, "
-          "%d problem(s) ==="
-          % ("CLEAN" if report["clean"] else "NOT CLEAN", len(report["cells"]),
-             len(report["cells"]) - report["unreconcilable_count"],
+    scope = ("%d shown of %d cell(s) in the campaign"
+             % (len(report["cells"]), report["all_cells"])
+             if report.get("focus") else "%d cell(s)" % report["all_cells"])
+    print("\n=== %s: %s, %d unreconcilable, %d problem(s) ==="
+          % ("CLEAN" if report["clean"] else "NOT CLEAN", scope,
              report["unreconcilable_count"], report["problem_count"]))
 
 
@@ -250,12 +273,9 @@ def main(argv=None) -> int:
     ap.add_argument("--json", default=None)
     args = ap.parse_args(argv)
 
-    cells = run_campaign.load_cells()
-    if args.game:
-        prefix = args.game.split("-")[0]
-        cells = [c for c in cells if (c.get("game_id") or "").startswith(prefix)]
-
-    report = audit(cells, args.campaign)
+    # Every cell, always. `--game` is a `focus`, not a filter on the record --
+    # see `audit()` for why that distinction is load-bearing.
+    report = audit(run_campaign.load_cells(), args.campaign, focus=args.game)
     print_report(report)
     if args.json:
         os.makedirs(os.path.dirname(os.path.abspath(args.json)), exist_ok=True)

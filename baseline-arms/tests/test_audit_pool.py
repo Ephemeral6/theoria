@@ -166,6 +166,34 @@ def test_a_campaign_with_no_cells_is_attributed_not_orphaned(scratch_gate):
     assert any("not a discrepancy" in f for f in report["findings"])
 
 
+def test_focusing_on_one_game_does_not_orphan_the_others(scratch_gate):
+    """The regression. `--game sk48` used to filter the cell list itself, so the
+    next run reported g50t's three reservations as unattributable spend -- the
+    most serious thing this tool can say -- because their cells had been
+    filtered out of the comparison it was making."""
+    first = _live(scratch_gate)
+    _spend_actions(scratch_gate, first, 1 + 1 + 50 + 1)
+    scratch_gate.record(first, usd=0.5, actions=0)
+    scratch_gate.release(first)
+
+    second = _live(scratch_gate)
+    _spend_actions(scratch_gate, second, 1 + 1 + 40 + 1)
+    scratch_gate.record(second, usd=0.7, actions=0)
+    scratch_gate.release(second)
+
+    cells = [_cell(first.reservation_id, repeat=1),
+             dict(_cell(second.reservation_id, gameplay=40, cost=0.7, repeat=2),
+                  game_id="sk48-d8078629")]
+
+    report = audit_pool.audit(cells, CAMPAIGN, scratch_gate, focus="sk48-d8078629")
+    assert report["orphans"] == [], "focusing invented an orphan"
+    assert report["clean"]
+    # The view narrowed; the record did not.
+    assert len(report["cells"]) == 1
+    assert report["all_cells"] == 2
+    assert report["cells"][0]["game_id"] == "sk48-d8078629"
+
+
 def test_a_pre_gate_cell_is_unreconcilable_not_a_problem(scratch_gate):
     """An alarm nobody can ever clear is one people learn to ignore. The three
     ar25 cells have no pool line and never will."""
