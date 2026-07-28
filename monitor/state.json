@@ -1,11 +1,11 @@
 {
   "blocking_findings": 1,
   "board": {
-    "available": 3,
+    "available": 2,
     "blocked": 1,
-    "claimed": 3,
+    "claimed": 5,
     "done": 0,
-    "listing": "=== available ===\n  p3  S2-canary-schedule           cell=S2  territory=arc-recon\n  p4  C4-deadlock-lean             cell=C4  territory=theory-compiler\n  p5  A4-ablation-online           cell=A4  territory=ablation-arm\n=== blocked ===\n  V2-exam-on-worldgen          waits on C1-worldgen\n=== claimed ===\n  E2-fd-ladder-bench           by W-1520\n  E3-engines-online            by W-1521\n  V3-battery-discrimination    by APP-V3"
+    "listing": "=== available ===\n  p1  S3-spend-gate                cell=S3  territory=proxy\n  p5  A4-ablation-online           cell=A4  territory=ablation-arm\n=== blocked ===\n  V2-exam-on-worldgen          waits on C1-worldgen\n=== claimed ===\n  C4-deadlock-lean             by W-1541\n  E2-fd-ladder-bench           by W-1520\n  E3-engines-online            by W-1521\n  S2-canary-schedule           by W-1540\n  V3-battery-discrimination    by APP-V3"
   },
   "con_green": 1,
   "constraints": [
@@ -264,7 +264,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 15:23:28",
+  "generated_at": "2026-07-28 15:50:07",
   "grid": {
     "A1": {
       "active": [
@@ -1092,24 +1092,26 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/board/board.log",
-      "monitor/board/items/E2-fd-ladder-bench.md",
-      "monitor/board/items/E3-engines-online.md",
+      "onitor/AUDITOR.md",
+      "monitor/board/board.log",
+      "monitor/board/items/C4-deadlock-lean.md",
+      "monitor/board/items/S2-canary-schedule.md",
       "monitor/index.html",
-      "monitor/loop_state.json",
-      "monitor/reflex.py",
-      "monitor/scan.py",
+      "monitor/mailbox/OPS-A.md",
+      "monitor/spec.py",
       "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/claimed/E2-fd-ladder-bench.W-1520.md",
-      "monitor/board/claimed/E3-engines-online.W-1521.md"
+      "monitor/board/claimed/C4-deadlock-lean.W-1541.md",
+      "monitor/board/claimed/S2-canary-schedule.W-1540.md",
+      "monitor/board/items/S3-spend-gate.md",
+      "monitor/inbox/20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "e182c95 ops: OPS-R cycle 1 -- two cross-track patterns, three live faults",
+    "git_head": "ded9cd7 audit: cycle 2 -- the licence question was answered three commits ago and nothing downstream knows",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1121,8 +1123,10 @@
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
-      "monitor/board/claimed/E2-fd-ladder-bench.W-1520.md",
-      "monitor/board/claimed/E3-engines-online.W-1521.md"
+      "monitor/board/claimed/C4-deadlock-lean.W-1541.md",
+      "monitor/board/claimed/S2-canary-schedule.W-1540.md",
+      "monitor/board/items/S3-spend-gate.md",
+      "monitor/inbox/20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md"
     ]
   },
   "p1_green": 9,
@@ -1312,12 +1316,12 @@
           "status": "partial"
         },
         {
-          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判；F-11 已落账（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——contamination_log 还没有那 9 局的登记 → P-11。  〔本次扫描：封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
+          "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判（开发堆 4 局可玩）；F-11 已落账：claim_set.json 为 19，ls20/ft09 隔离，9 局登记在册。  〔本次扫描：封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
           "_status": "green",
           "clause": "Phase 1 · 一刀切堆",
           "id": "p1-cut",
           "label": "切堆清单已提交并哈希",
-          "note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判；F-11 已落账（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——contamination_log 还没有那 9 局的登记 → P-11。",
+          "note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判（开发堆 4 局可玩）；F-11 已落账：claim_set.json 为 19，ls20/ft09 隔离，9 局登记在册。",
           "probe": "pile_integrity",
           "status": "green"
         },
@@ -1699,23 +1703,23 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 11 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
+      "detail": "待裁决提案 12 份：20260728T034833Z-OPS-R-findings-have-no-dispatch-right.md, 20260728T034833Z-OPS-R-optional-checks-fail-open.md, 20260728T034833Z-OPS-R-shared-spend-gate.md, 20260728T034833Z-OPS-R-stale-self-description.md, 20260728T034833Z-OPS-R-three-strikes-common-cause.md, 20260728T035214Z-opsm-conflict-a0spike-semantics.md, 20260728T061513Z-OPS-B-terms-vs-arcrecon.md, 20260728T062038Z-opsm-reflex-task-dead.md, 20260728T062959Z-OPS-R-invariant-belongs-to-the-resource.md, 20260728T062959Z-OPS-R-liveness-stored-not-derived.md, 20260728T074900Z-W-1521-e3-launched-without-the-spend-gate.md, 20260728T2200Z-proxy-ledger-hash-chain.md",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**7 条 TO-MONITOR 待监控回复**。 OPS-A 第1轮 idle（61 分钟前）； OPS-B 第1轮 idle（62 分钟前）； OPS-M 第1轮 working（60 分钟前）； OPS-R 第1轮 idle（50 分钟前）",
+      "detail": "**8 条 TO-MONITOR 待监控回复**。 OPS-A 第2轮 idle（21 分钟前）； OPS-B 第1轮 idle（88 分钟前）； OPS-M 第1轮 working（87 分钟前）； OPS-R 第1轮 idle（76 分钟前）",
       "rows": [
         {
-          "age_min": 61,
-          "cycle": 1,
+          "age_min": 21,
+          "cycle": 2,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "cycle 1 done: 7c55c09..b23c110, 3 drifts (spec.py fixes announced but not landed / append_only probe born red / Phase 3 gate crossed unrecorded); sealed pile and key hygiene both clean",
+          "note": "cycle 2: p1-cut note now contradicts itself (half-applied fix); release-licence answered by OPS-B but plumbed into neither p1-access nor WP10 -- WP10 scale may be legally blocked at Phase 4",
           "state": "idle",
           "status": "green"
         },
         {
-          "age_min": 62,
+          "age_min": 88,
           "cycle": 1,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1724,7 +1728,7 @@
           "status": "green"
         },
         {
-          "age_min": 60,
+          "age_min": 87,
           "cycle": 1,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -1733,7 +1737,7 @@
           "status": "green"
         },
         {
-          "age_min": 50,
+          "age_min": 76,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -1743,7 +1747,7 @@
         }
       ],
       "status": "green",
-      "to_monitor": 7
+      "to_monitor": 8
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3159 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",

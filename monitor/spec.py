@@ -103,9 +103,8 @@ PHASES = [
                 "label": "切堆清单已提交并哈希",
                 "clause": "Phase 1 · 一刀切堆",
                 "status": "green",
-                "note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判；F-11 已落账"
-                        "（开发堆 4 局可玩）。F-11 裁决（主张集 21→19）**尚未落账**——"
-                        "contamination_log 还没有那 9 局的登记 → P-11。",
+                "note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判（开发堆 4 局可玩）；"
+                        "F-11 已落账：claim_set.json 为 19，ls20/ft09 隔离，9 局登记在册。",
                 "probe": "pile_integrity",
             },
             {
