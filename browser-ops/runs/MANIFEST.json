@@ -1,6 +1,6 @@
 {
   "api_calls_made": 0,
-  "base_commit": "d426b926dade412dc22146462fbfd4aa34a6a19b",
+  "base_commit": "edd2b80c96c1270fd7a4328920c36c34fc363058",
   "billable_actions": 0,
   "branch": "master",
   "credentials_entered": "none -- the user completed OAuth themselves",
@@ -15,18 +15,22 @@
     },
     {
       "path": "browser-ops/runs/2026-07-28-visits.md",
-      "sha256": "8ad8b594ae3b4ff7c0c9d9a5f3e0f98b39a95b76caf60deb2dac2fa8a81a2525"
+      "sha256": "f30c1f9bc666c1da55183c012060bec710c3190ded0bdd32f907f94f0990b557"
     },
     {
       "path": "monitor/inbox/20260728T061513Z-OPS-B-terms-vs-arcrecon.md",
       "sha256": "bda3a47713731df725c449a8cb9574c7157598ac722fd257bdb389e7b1483d73"
+    },
+    {
+      "path": "monitor/inbox/20260728T082500Z-OPS-B-permissive-half-landed-without-the-containment-half.md",
+      "sha256": "c47a172c0f4dfb5fbe6dfeabef7bfc526abf9115eab70f5c4bb1c3c7db450f94"
     }
   ],
   "pages_declined": 10,
-  "pages_visited": 20,
+  "pages_visited": 21,
   "prompt_id": "OPS-B-browser",
-  "run": "browser-ops terms & account recon, three passes",
+  "run": "browser-ops terms & account recon, cycles 0-2",
   "screenshots_committed": 0,
   "sealed_pile_contact": 0,
-  "utc": "2026-07-28T06:15Z"
+  "utc": "2026-07-28T08:25Z"
 }
