@@ -1,0 +1,21 @@
+{
+  "blind_after": 3,
+  "blind_after_note": "Consecutive INCOMPLETE runs before the inability to measure is itself filed as an incident. Not a freeze: an outage is not drift.",
+  "enabled": true,
+  "profiles": {
+    "full": {
+      "action_budget": 30,
+      "interval_hours": 168,
+      "mode": "complete",
+      "note": "The weekly sweep: every game, every stored step. It buys the steps `quick` skips on purpose -- tn36's four accepted no-ops discriminate nothing against forgery, but their invariance is itself a property of the environment, and a canary that never checks it would not notice if those actions started doing something."
+    },
+    "quick": {
+      "action_budget": 12,
+      "interval_hours": 24,
+      "mode": "discriminating",
+      "note": "The daily sweep. Cheapest plan that still buys every discriminating step (INC-009); games with no discriminating step are reduced to a RESET-only check, which costs no actions."
+    }
+  },
+  "purpose": "Theoria.md Phase 1 接入核查: 定期重跑对哈希. Cadence lives here so that changing it is a diff, not a habit.",
+  "v": "1"
+}

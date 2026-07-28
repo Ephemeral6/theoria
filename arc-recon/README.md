@@ -28,11 +28,16 @@ cd arc-recon && python precheck_resume.py reconstruct   # rebuild runs from the 
 cd arc-recon && python canary.py status          # offline: spec, last replay, freeze state
 cd arc-recon && python canary.py replay          # the drift check; 16 actions for the whole dev pile
 cd arc-recon && python canary.py check-freeze    # exit 1 if campaigns are frozen
+cd arc-recon && python canary_schedule.py status    # offline: cadence, plans, last outcomes
+cd arc-recon && python canary_schedule.py due       # offline, free: exit 0 = a sweep is due
+cd arc-recon && python canary_schedule.py run       # the daily sweep; 12 actions, SPENDS THEM
+cd arc-recon && python canary_schedule.py run --dry-run   # plan and gate, spend nothing
+cd arc-recon && python canary_schedule.py install   # prints the scheduled-task command
 cd arc-recon && python contamination.py --json   # register, sealed claim set, ledger audit
 cd arc-recon && python probe_stickiness.py       # cookie A/B; zero actions
 cd arc-recon && python probe_stickiness.py --cross-game   # one jar, all 4 games
 cd arc-recon && python redact_ledger.py          # INC-008 check; --apply to redact
-cd arc-recon && python -m pytest test_hygiene.py # 40 offline tests
+cd arc-recon && python -m pytest                 # 82 offline tests, no API, no network
 ```
 
 The access check itself — every Phase 1 item, what settled it, what is still
@@ -158,7 +163,7 @@ environment still being played.
 baseline run: they were derived offline from `precheck.json`, using only steps
 that the precheck's two independent replays already agreed on, and the baseline
 run then had to reproduce them. It did, 4/4, so the development pile now has
-three agreeing replays across two days and three sessions — which is also the
+six agreeing replays across two days and four sessions — which is also the
 strongest evidence on the cross-session-residue item.
 
 Three properties are what make it a check rather than a ritual:
@@ -174,6 +179,43 @@ Three properties are what make it a check rather than a ritual:
 * **An outage is not drift, and cannot hide drift.** A replay that could not
   finish is `INCOMPLETE` — neither a pass nor a freeze. Only a mismatch with both
   hashes present freezes anything.
+
+### 定期 — the schedule ([`canary_schedule.py`](canary_schedule.py))
+
+A baseline taken once is a photograph. The cadence lives in the tracked
+`data/canary_schedule.json`, the state in `data/canary_schedule_state.json`, and
+`due` is free — so a 5-minute automation can ask the cheap question 288 times a
+day and buy the expensive answer once.
+
+| profile | cadence | actions | discriminating steps bought | what it adds |
+|---|---|---|---|---|
+| `quick` | daily | **12** | **11 / 11** | the whole drift-detection power of the full sweep |
+| `full` | weekly | 16 | 11 / 11 | tn36's four no-ops, whose *invariance* nothing else watches |
+
+The daily sweep is cheaper without being weaker. INC-009 showed only 11 of the
+16 expected ACTION hashes can discriminate at all — the rest repeat their own
+game's RESET hash or land on the counterfeit fingerprint, so a forged response
+would satisfy them too. The plan is **derived from `canary.json` at run time**,
+not hardcoded, so a re-baseline cannot leave the schedule pointing at the wrong
+prefix. Games with nothing to discriminate stay in as a RESET-only check, which
+costs nothing: RESET is a command, not an action.
+
+**The failure mode a scheduled canary adds** is that INCOMPLETE stops being
+rare. An outage is correctly not drift — but a canary that is INCOMPLETE every
+day has stopped measuring while its log keeps filling. Three in a row files a
+`process` incident saying exactly that. It does not freeze campaigns: being
+unable to look is not evidence that anything changed.
+
+Exit codes are the interface: `0` PASS · `1` DRIFT (incident + freeze) · `2`
+refused on safety grounds · `3` nothing to do · `4` INCOMPLETE · `5` gated.
+
+First scheduled sweep, 2026-07-28T07:57Z: **4/4 PASS, 12 actions, 16 HTTP calls
+for 16 commands.**
+
+This belongs in a daily scheduled task, **not** in `monitor/reflex.py`'s
+5-minute loop — that cadence would spend 3,456 actions a day to watch something
+that changes when an operator deploys a build. The reflex is welcome to call
+`due`, which is free, and let it decide.
 
 ## INC-006 — F-11 ruled: the sealed claim set is 19, not 21
 

@@ -357,10 +357,49 @@ def compare(expected: List[Dict[str, Any]],
     }
 
 
+def apply_plan(spec: Dict[str, Any], plan: Dict[str, int]) -> Dict[str, Any]:
+    """Return a copy of `spec` whose sequences are cut to the planned lengths.
+
+    A scheduled canary buys a *prefix*, not always the whole sequence, so the
+    daily sweep can be cheaper than the full one without becoming a different
+    instrument: the expectations are the same stored hashes, just fewer of
+    them. Truncating `expected` alongside `sequence` is the load-bearing half
+    -- if only the sequence were cut, `compare` would call the steps that were
+    never meant to run `unusable` and every planned sweep would report
+    INCOMPLETE, which is the verdict reserved for an outage.
+
+    `plan[game] == 0` is legal and means RESET-only: index 0 is the RESET
+    frame, RESET is a command rather than an action (ACCESS_CHECK.md 6b), so
+    such a game is checked for **zero** action cost.
+    """
+    cut = dict(spec)
+    games = {}
+    for game_id, want in plan.items():
+        game = spec["games"][game_id]
+        if want < 0 or want > len(game["sequence"]):
+            raise BudgetExceeded(
+                "%s: planned %d actions, spec has %d"
+                % (game_id, want, len(game["sequence"])))
+        games[game_id] = {**game,
+                          "sequence": game["sequence"][:want],
+                          "expected": game["expected"][:want + 1],
+                          "actions": want}
+    cut["games"] = games
+    return cut
+
+
 def replay(games: Optional[List[str]] = None,
            client: Optional[ArcClient] = None,
-           note: str = "") -> Dict[str, Any]:
+           note: str = "",
+           plan: Optional[Dict[str, int]] = None,
+           tags: Optional[List[str]] = None) -> Dict[str, Any]:
     spec = load_spec()
+    if plan is not None:
+        unknown = [g for g in plan if g not in spec["games"]]
+        if unknown:
+            raise RuntimeError("no canary spec for: %s" % ", ".join(unknown))
+        spec = apply_plan(spec, plan)
+        games = games or sorted(plan)
     targets = games or sorted(spec["games"])
     unknown = [g for g in targets if g not in spec["games"]]
     if unknown:
@@ -374,7 +413,8 @@ def replay(games: Optional[List[str]] = None,
                              % (planned, INVOCATION_CAP))
 
     client = client or ArcClient()
-    card_id = client.open_scorecard(tags=["canary", SPEC_VERSION])["card_id"]
+    card_id = client.open_scorecard(
+        tags=["canary", SPEC_VERSION] + list(tags or []))["card_id"]
     results, drifted = {}, []
     for game_id in targets:
         outcome = play(client, game_id, spec["games"][game_id], card_id)
@@ -401,6 +441,10 @@ def replay(games: Optional[List[str]] = None,
                                              "no cookie jar"}),
         "card_id": card_id,
         "targets": targets,
+        # A truncated sweep is a different measurement from a full one and the
+        # run record has to say so, or `canary_runs.jsonl` becomes a column of
+        # http_calls figures with no denominator.
+        "plan": {g: len(spec["games"][g]["sequence"]) for g in targets},
         "planned_actions": planned,
         "actions_executed": sum(r["actions_executed"] for r in results.values()),
         "http_calls": sum(r["http_calls"] for r in results.values()),

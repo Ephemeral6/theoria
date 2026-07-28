@@ -9,13 +9,13 @@ measurement where the docs contradict it — both are recorded when they disagre
 | # | Item | Status | Settled by |
 |---|---|---|---|
 | 1 | RESET semantics — full reset or level reset, hidden random source | **answered** | precheck, 4 games |
-| 2 | Cross-session residue | **answered** — none, now across three sessions and two days | precheck ×2 + canary |
+| 2 | Cross-session residue | **closed** — none, across four sessions; the question is now standing surveillance, not an open item | precheck ×2 + canary ×2 |
 | 3 | Scorecard semantics — one card per game, in-card aggregation | **answered, with two traps** | baseline-arms measurement + official docs |
 | 4 | Does one action return several frames | **answered** — yes | precheck (7 frames on one command) |
 | 5 | Is `level` a response field | **answered** — yes | precheck |
 | 6 | Rate limits and quota | **answered** — see below; the binding constraint is not what we assumed | official docs + baseline-arms measurement + this track's probe |
-| 7 | Canary replay | **built and baselined** | [`canary.py`](canary.py), [`data/canary.json`](data/canary.json) |
-| 8 | Frame caching and release licensing | **answered conservatively** — publishing raw frames is not licensed | official terms |
+| 7 | Canary replay | **standing** — built, baselined, and now on a daily schedule | [`canary.py`](canary.py), [`canary_schedule.py`](canary_schedule.py), [`data/canary.json`](data/canary.json) |
+| 8 | Frame caching and release licensing | **closed, and less restrictive than we first read it** — caching is designed behaviour, our own numbers are explicitly publishable, ARC's raw content is not | official terms + [`browser-ops/TERMS.md`](../browser-ops/TERMS.md) cross-check |
 
 ---
 
@@ -35,15 +35,19 @@ a level, which only longer play can show.
 ## 2 · Cross-session residue — none
 
 The strongest evidence on this item is now the canary rather than the precheck,
-because it adds a third session and a second day at zero extra design cost:
+because every replay it makes adds another session at zero extra design cost —
+and it now makes one a day without being asked (item 7a):
 
 | replay | when | source |
 |---|---|---|
 | precheck run-a | 2026-07-27/28 | `data/precheck.json` |
 | precheck run-b | 2026-07-27/28, separate session and scorecard | `data/precheck.json` |
 | canary baseline | 2026-07-28T00:35Z, separate session and scorecard | `data/canary_runs.jsonl` |
+| canary paired sweep ×2 | 2026-07-28T01:10Z / 01:11Z, one per transport | `data/canary_runs.jsonl` |
+| first scheduled sweep | 2026-07-28T07:57Z, separate session and scorecard | `data/canary_runs.jsonl` |
 
-All three agree hash-for-hash on every step of every development-pile game. A
+All of them agree hash-for-hash on every step they share, across **six replays
+in four sessions spanning two days and two different HTTP transports**. A
 session leaves nothing behind that a later session can see: same RESET state,
 same frames from the same actions.
 
@@ -51,6 +55,20 @@ Note what this does *not* say. It says the environment is reproducible, not that
 it is stateless — the server clearly keeps per-session state (that is what the
 `guid` and the `GAMESESSION` cookie are for). The claim is only that state does
 not leak *between* sessions.
+
+**Why this item is now closed rather than merely answered.** Five replays said
+the same thing, and a sixth saying it again is not what changes the item's
+status. What changes it is that the question has an owner: residue would show up
+as a canary mismatch, the canary now runs daily (item 7), and a mismatch freezes
+campaigns. "No residue" has stopped being a finding somebody has to remember to
+re-check and become a property that is watched. If it ever stops being true, the
+freeze file says so before the next campaign spends anything.
+
+One boundary worth keeping in view: the canary would catch residue only where it
+changes a frame the canary looks at. Residue confined to steps deeper than the
+stored sequences, or to fields other than `frame`, is outside what any of this
+measures — and that limit is a property of the instrument, not evidence about
+the server.
 
 ## 3 · Scorecard semantics — one card per game holds, and two traps
 
@@ -242,16 +260,75 @@ that is what it should be cited for. Nothing here says how the API behaves under
 concurrency, or whether the documented 600 rpm limit binds once retries stop
 dominating traffic.
 
-## 7 · Canary replay — built
+## 7 · Canary replay — built, and now standing
 
-Theoria.md asks for a fixed sequence per game, re-run periodically against stored
-hashes, with drift treated as an incident that freezes campaigns. Built as
-[`canary.py`](canary.py); the spec and expectations are
+Theoria.md asks for a fixed sequence per game, re-run **periodically** against
+stored hashes, with drift treated as an incident that freezes campaigns. The
+check is [`canary.py`](canary.py); the spec and expectations are
 [`data/canary.json`](data/canary.json), replay history is
 `data/canary_runs.jsonl`, the gate is `data/campaign_freeze.json`.
 
 16 actions buys a full sweep of the development pile. Baseline confirmed
 2026-07-28: 4/4 PASS.
+
+### 7a · 定期 — the word the first build did not implement
+
+A baseline taken once is a photograph. [`canary_schedule.py`](canary_schedule.py)
+is the clock: cadence in the tracked, human-editable
+[`data/canary_schedule.json`](data/canary_schedule.json), state in
+`data/canary_schedule_state.json`, and a free `due` check so a 5-minute
+automation can ask the cheap question 288 times a day and buy the expensive
+answer once.
+
+**The daily sweep costs 12 actions and gives up nothing.** INC-009 established
+that only 11 of the full sweep's 16 expected ACTION hashes can discriminate at
+all — the other five either repeat their own game's RESET hash or land on the
+counterfeit fingerprint `801726dc499f3f52`, so a forged response would satisfy
+them exactly as well as a genuine one. `plan_profile` derives, from
+`canary.json` at run time, the cheapest plan that still funds every
+discriminating step:
+
+| profile | cadence | actions | discriminating steps | RESET checks |
+|---|---|---|---|---|
+| `quick` | daily | 12 | **11 / 11** | 4 / 4 |
+| `full` | weekly | 16 | 11 / 11 | 4 / 4 |
+
+The 4 actions `quick` drops are tn36's, which are accepted no-ops whose frame
+never changes; the game stays in the sweep as a **RESET-only check**, because
+RESET is a command rather than an action (§6b) and therefore costs nothing. The
+weekly `full` sweep exists to buy those four back: they cannot catch a forgery,
+but their invariance is a real property of the environment, and a canary that
+never looked at it would not notice if those actions started doing something.
+
+The plan is *derived*, not written down. A re-baseline that changes which steps
+discriminate changes the plan on the next run, so the schedule cannot quietly
+end up pointing at the wrong prefix — the failure mode a hardcoded game list
+would have.
+
+**One new failure mode, which the one-off canary did not have.** INCOMPLETE is
+deliberately neither a pass nor drift: an outage must not be able to halt the
+programme, and must not be able to hide drift either. Run on a schedule, that
+verdict acquires a shape of its own — a canary that is INCOMPLETE every day has
+stopped measuring, silently, while its log fills with entries. Consecutive
+INCOMPLETE runs are therefore counted, and at `blind_after` (3) the module files
+a `process`-severity incident saying so. It does **not** freeze campaigns: being
+unable to look is not evidence that anything changed. It refuses only to let the
+silence go unrecorded.
+
+**First scheduled sweep, 2026-07-28T07:57Z**: 4/4 PASS, 12 actions, 16 HTTP
+calls for 16 commands — 1.00 attempt per command, every step first-attempt, the
+post-INC-007 figure reproduced in a fourth session.
+
+Exit codes are the interface the scheduler reads: `0` PASS, `1` DRIFT (incident
+filed, campaigns frozen), `2` refused on safety grounds, `3` nothing to do,
+`4` INCOMPLETE, `5` gated (frozen, or the shared spend gate refused).
+
+**Where it should be installed, and where it should not.** `canary_schedule.py
+install` prints a daily Windows scheduled task. It deliberately does not belong
+in `monitor/reflex.py`, which runs every 5 minutes: the reflex layer is for work
+that costs nothing, and a canary on that cadence would spend 3,456 actions a day
+to answer a question that changes on the scale of an operator deploying a new
+build. The reflex may call `due` — that is free — and let it decide.
 
 ## 8 · Frame caching and release licensing
 
@@ -281,25 +358,94 @@ The same terms also warrant that users will not access the Services by automated
 means — boilerplate that contradicts the existence of a machine-facing benchmark
 API. Record that as ambiguity, not as permission.
 
-**The conclusions for Phase 4's release manifest:**
+**The conclusions for Phase 4's release manifest** (as first written; §8a
+supersedes 1 and adds a category to 3):
 
-1. **Local caching for our own analysis**: not addressed by anything we found;
-   proceed, but it is unaddressed rather than permitted.
+1. ~~**Local caching for our own analysis**: not addressed by anything we found;
+   proceed, but it is unaddressed rather than permitted.~~ **Addressed and
+   permitted** — see §8a.1.
 2. **Publishing raw frames**: treat as **requiring written permission**
    (team@arcprize.org). No licence found grants it and the compilation clause
-   arguably bars it.
+   arguably bars it. *(Stands. §8a.2 narrows what counts as "raw frames".)*
 3. **Publishing derived, non-reconstructive artifacts** — frame *hashes*, counts,
    metrics, the canary's expectation tables — sits on far safer ground and is
    what this repository actually needs. `data/canary.json` stores hashes, not
-   frames, for this reason as well as size.
+   frames, for this reason as well as size. *(Stands, and §8a.2 upgrades it from
+   "safer ground" to explicitly permitted, with three disclosure obligations.)*
 4. The ledger `data/recon_ledger.jsonl` **does** contain full response bodies,
    i.e. raw frames, and it is tracked. Before any public release it must be
    either redacted to hashes or covered by permission. **This is an open
-   obligation, flagged here, not discharged by this ticket.**
+   obligation, flagged here, not discharged by this ticket.** *(Stands, and
+   §8a.3 sharpens why.)*
 
-Confidence is medium-low on this item and the reason is structural: no
+~~Confidence is medium-low on this item and the reason is structural: no
 ARC-AGI-3-specific API terms of service appears to exist, so a generic website
-terms document is doing work it was not written for.
+terms document is doing work it was not written for.~~ **The document this
+sentence said did not exist does exist** — see §8a.
+
+### 8a · Cross-checked against the official-side excerpts, and the reading loosens
+
+[`browser-ops/TERMS.md`](../browser-ops/TERMS.md) is an independent read of the
+same terms from the browser side, with the original sentences quoted and each
+one's URL attached. Cross-checking it against the above moves three of the four
+conclusions, all in the same direction — **we had read the terms more
+restrictively than they are written.**
+
+**1. Local caching is not merely unaddressed; it is the officially documented
+design.** The Kaggle starter's own troubleshooting text says games "are cached in
+`environment_files/` and you're fully offline", and the local-vs-online page
+advertises unlimited local instances with no key. Conclusion 1 was written from
+the absence of a statement; the statement exists and is permissive.
+**One line: caching ARC data locally for our own analysis is permitted, and no
+permission needs to be sought for it.**
+
+**2. Our own measurements are explicitly publishable; ARC's content is not.**
+The decisive document is not the site terms at all — it is the *ARC Prize
+Verified Official Testing Policy* (`arcprize.org/policy`), which §8 could not
+have weighed because it did not find it: it is linked only from the page footer.
+It says, in terms, "You are also free to test on public data and share your
+scores independently. Please state clearly the data you tested on, how you
+tested, and that your results are not verified by ARC Prize."
+
+That splits the release manifest in two, and the split has to be explicit in the
+manifest itself or the permissive half will be read as covering the other:
+
+| what is being released | governed by | verdict |
+|---|---|---|
+| our scores, metrics, hashes, methods, conclusions | Testing Policy | **permitted**, subject to three disclosures: what data, how tested, not ARC-verified |
+| ARC's frames, trajectories, game source, task statements | ToS §2 / §4 | **written permission required** (team@arcprize.org), with attribution if granted |
+
+The Testing Policy's enforcement clauses aim at *submissions* — results
+targeting the leaderboard — and its whole frame presumes automated agents are
+the normal way to play. That is a specific, recent, ARC-authored document
+sitting over a generic 2024 website template, which is what the medium-low
+confidence above was hedging against. **The hedge is discharged for the release
+question.** It is not discharged for the automation question: ToS §3(3) still
+bars "automated or non-human means" in words, and only a written answer from ARC
+settles that. The risk there is account termination, which is irreversible, so it
+stays open — see §5 of `browser-ops/TERMS.md` for the letter that has not been
+sent.
+
+**3. The ledger obligation survives the loosening, and gets sharper.** Nothing
+above helps `data/recon_ledger.jsonl`: it holds full response bodies, which are
+ARC's content, and ToS §4's first prohibited activity names by description
+exactly what it is — data systematically retrieved from the Services to compile
+a database. Internal analysis of it is squarely inside §2's "internal business
+purpose". **Publishing it is the line, and `redact_ledger.py` is the way over
+it.** Note that the first scheduled canary sweep appended 16 more raw response
+bodies to that file, so the obligation grows slightly with every replay — which
+is an argument for redacting at release time rather than trying to keep the
+ledger clean as it goes, since the ledger's completeness is what makes it
+evidence at all.
+
+**A disagreement worth recording, since both sides are ours.** §8 above says of
+game data that "no licence is stated" and warns against reading absence as
+permission. `browser-ops/TERMS.md` reaches the same place from the other
+direction — it finds the statement, and the statement is a prohibition. The two
+readings agree; what changed is that the second one found the ARC-specific
+document, and that document turned out to *grant* the thing this repository
+actually needs to publish. Both are kept: the caution was correct given what §8
+had read, and it was more caution than the full record requires.
 
 ---
 
@@ -325,3 +471,31 @@ terms document is doing work it was not written for.
   it means the report understates what is known.
 * **No sealed game was contacted.** `contamination.py`'s ledger audit checks this
   over every call ever made, and it is a test (`test_hygiene.py`).
+
+---
+
+## What S2 (the scheduling ticket) did not do
+
+* **Nothing is installed.** `canary_schedule.py install` *prints* a scheduled-task
+  command; it does not run `schtasks`. Putting a standing, spending task on this
+  machine is an owner decision, and an agent in a temporary worktree is the
+  wrong thing to make it: the path it would register is the worktree's, which
+  disappears. Install from the main checkout.
+* **The shared spend gate is not on this path yet, and the record says so.**
+  `proxy/spend_gate.py` is not on master at this commit, so `open_spend_gate`
+  writes `spend_gate: "absent"` into the run record rather than treating its
+  absence as approval. When it lands, it is used with no flag and no opt-out,
+  and any refusal from it stops the sweep — there is a test for that. What is
+  *not* done is the reverse direction: the gate does not know the canary exists,
+  so a campaign's headroom calculation will not currently anticipate 12 actions
+  a day.
+* **The blindness threshold is a guess.** `blind_after: 3` says "three days of
+  not being able to look is long enough to be worth an incident". Nothing
+  measured that; it is in the config file so it can be argued with in a diff.
+* **The canary still only watches what its sequences reach.** Drift deeper in a
+  level, or in response fields other than `frame`, is outside the instrument.
+  Lengthening the sequences would cost actions daily, which is exactly the
+  trade the profiles exist to make explicit.
+* **`available_actions` is still not re-examined**, and the raw frames in
+  `data/recon_ledger.jsonl` are still unredacted — both inherited, both
+  unchanged, and the ledger one now grows by 16 bodies per sweep (§8a.3).
