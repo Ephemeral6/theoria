@@ -115,6 +115,12 @@ _NEED_REASONS = {
     "solve_attempt": "this trace is a coverage walk, not an attempt to win; "
                      "scoring it for path efficiency would measure the "
                      "trace's purpose rather than the arm",
+    "repairs": "this arm records no repair episode; an arm with no manual "
+               "cannot be refuted by one, so the absence is structural",
+    "prompt_chars": "no model call records the size of the prompt it was sent",
+    "http_tries": "the source records no HTTP attempt count per step",
+    "failed_steps": "no step in this run failed, so there is no failure to "
+                    "respond to",
 }
 
 

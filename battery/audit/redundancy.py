@@ -99,12 +99,53 @@ def cluster(values: Dict[str, Dict[str, Value]]) -> Dict[str, object]:
             "coverage": {m: coverage[m] for m in members},
         })
 
+    # The basis, not just the verdict.  A cluster assignment is an assertion
+    # about every pair that did *not* cluster as much as about the pairs that
+    # did, and "these two metrics say the same thing" is not checkable from a
+    # list of clusters alone.  Every pair is emitted with its rho and the
+    # number of runs the correlation was computed over, so a reader can see
+    # which non-clusterings were decisions and which were simply absences --
+    # on thin data most pairs share too few runs to correlate at all, and a
+    # matrix full of `null` is a very different fact from a matrix full of
+    # small correlations.
+    pairs = []
+    measured = 0
+    for (a, b), value in sorted(rho.items()):
+        shared = len(set(_series(values, a)) & set(_series(values, b)))
+        if value is not None:
+            measured += 1
+        pairs.append({
+            "a": a, "b": b,
+            "rho": None if value is None else round(value, 9),
+            "shared_runs": shared,
+            "reason": (None if value is not None
+                       else "fewer than %d shared runs" % MIN_SHARED),
+        })
+
+    families: Dict[str, List[str]] = {}
+    for mid in ids:
+        families.setdefault(REGISTRY[mid].family, []).append(mid)
+
     return {
         "threshold": THRESHOLD,
         "min_shared_runs": MIN_SHARED,
+        "method": ("Spearman rank correlation; single-linkage clustering at "
+                   "|rho| >= %.1f, transitive by construction so the result "
+                   "does not depend on the order metrics arrive in"
+                   % THRESHOLD),
         "n_clusters": len(clusters),
         "n_metrics": len(ids),
+        "n_pairs": len(pairs),
+        "n_pairs_measured": measured,
+        "n_pairs_unmeasurable": len(pairs) - measured,
+        "coverage_note": (
+            "%d of %d metric pairs share enough runs to correlate at all. A "
+            "cluster count near the metric count reflects thin data, not "
+            "twenty independent findings."
+            % (measured, len(pairs))),
         "strong_pairs": strong,
         "clusters": clusters,
         "representatives": sorted(c["representative"] for c in clusters),
+        "by_family": {f: sorted(ms) for f, ms in sorted(families.items())},
+        "matrix": pairs,
     }

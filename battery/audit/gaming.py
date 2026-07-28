@@ -67,6 +67,21 @@ GAMING_REGISTER: Dict[str, Dict[str, object]] = {
     },
     "X5": {"how_to_game": "Not a ranking.", "accidental": False,
            "defence": "Diagnostic.", "defended": True},
+    "X6": {
+        "how_to_game": "Vary the action after every failure on principle, "
+                       "without reading the failure. A harness that rotates "
+                       "its action list on retry scores 1.0 having modelled "
+                       "nothing at all.",
+        "accidental": True,
+        "defence": "Would need the arm's action to be attributable to a "
+                   "decision rather than to a retry policy. The ledger "
+                   "collapses the harness's retry loop into one row, so a "
+                   "repeat across logged steps *is* an arm decision -- but "
+                   "nothing checks that the arm was shown the failure before "
+                   "choosing, and on the pilot harness it demonstrably was "
+                   "not.",
+        "defended": False,
+    },
 
     # ---- planning -----------------------------------------------------
     "P1": {
@@ -146,6 +161,28 @@ GAMING_REGISTER: Dict[str, Dict[str, object]] = {
         "defended": False,
     },
 
+    "E6": {
+        "how_to_game": "Not a ranking -- it measures the API and the retry "
+                       "policy, which is the point.",
+        "accidental": False,
+        "defence": "Diagnostic, and registered `neutral` so no ordering can "
+                   "use it. Read it before believing E1 or E5.",
+        "defended": True,
+    },
+    "E7": {
+        "how_to_game": "Truncate or summarise the assembled prompt on a "
+                       "schedule and the quadratic term vanishes -- exactly "
+                       "E4's defect, one layer further out.",
+        "accidental": True,
+        "defence": "None implemented. `prompt_chars` counts what the harness "
+                   "chose to assemble, so a compaction policy and a theory "
+                   "that closed produce the same flat curve. The improvement "
+                   "over E4 is only that the axis is no longer constant by "
+                   "construction, so the metric can now be wrong in an "
+                   "interesting way instead of silent.",
+        "defended": False,
+    },
+
     # ---- mechanism ----------------------------------------------------
     "M1": {
         "how_to_game": "Flail at random and hit the mechanism early by luck.",
@@ -164,6 +201,37 @@ GAMING_REGISTER: Dict[str, Dict[str, object]] = {
     },
     "M3": {"how_to_game": "Unimplemented.", "accidental": False,
            "defence": "n/a", "defended": True},
+    "M4": {
+        "how_to_game": "Inject only changes that fire on the first action. "
+                       "The delay is a property of which rule was broken at "
+                       "least as much as of the manual that noticed.",
+        "accidental": False,
+        "defence": "The variants are authored before the metric reads them "
+                   "and are named in the artefact, so the choice of change is "
+                   "auditable rather than tunable after the fact. Gaming it "
+                   "requires choosing easy variants *and* publishing the list "
+                   "of variants chosen.",
+        "defended": True,
+    },
+    "M5": {
+        "how_to_game": "Inject only changes you already know the evidence "
+                       "exercises, and the rate is 1.0 by construction.",
+        "accidental": True,
+        "defence": "None implemented. Nothing in the battery checks that the "
+                   "injected variants were chosen independently of the "
+                   "evidence set, and the only producer in the repository "
+                   "authored both.",
+        "defended": False,
+    },
+    "M6": {
+        "how_to_game": "Not a ranking -- and both directions have a bad "
+                       "reading, which is why it does not rank.",
+        "accidental": False,
+        "defence": "Diagnostic. The unambiguous number is in the support "
+                   "field: how many repairs would have left a silently false "
+                   "theorem standing without dependency tracking.",
+        "defended": True,
+    },
 
     # ---- epistemic ----------------------------------------------------
     "K1": {
@@ -251,6 +319,41 @@ GAMING_REGISTER: Dict[str, Dict[str, object]] = {
     "K11": {"how_to_game": "Not a ranking.", "accidental": False,
             "defence": "Diagnostic; a low count is ambiguous between 'right "
                        "first time' and 'never checked'.", "defended": True},
+    "K12": {
+        "how_to_game": "Declare fewer beats. The denominator is the arm's own "
+                       "claim about what a repair loop consists of.",
+        "accidental": False,
+        "defence": "`beats_required` is fixed at six by `Theoria.md`'s A2 "
+                   "acceptance, not by the arm, and the adapter sets it. An "
+                   "arm that closes four of six reports 0.67 and cannot "
+                   "redefine the six.",
+        "defended": True,
+    },
+    "K13": {
+        "how_to_game": "Report the patch and not the re-derivation. An "
+                       "incremental repair that quietly re-mines the world "
+                       "afterwards looks five times cheaper than one that "
+                       "says so.",
+        "accidental": True,
+        "defence": "None implemented, and the exposure is live rather than "
+                   "hypothetical: the two arms in hand used different repair "
+                   "strategies (`patch` vs `rebuild`) and the ratio cannot "
+                   "separate strategy from capability. `strategy` is carried "
+                   "into the support field so the confound is at least "
+                   "visible, which is not the same as defended.",
+        "defended": False,
+    },
+    "K14": {
+        "how_to_game": "Admit no small concepts. A vocabulary of one large "
+                       "concept has a minimum equal to its maximum.",
+        "accidental": True,
+        "defence": "K5 counts the vocabulary and would show the shrinkage, "
+                   "but nothing pairs them automatically, and K5 is itself "
+                   "gameable in the opposite direction. The pair K7/K14 is "
+                   "the intended reading and it is a convention, not a "
+                   "mechanism.",
+        "defended": False,
+    },
 }
 
 

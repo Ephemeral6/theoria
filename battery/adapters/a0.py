@@ -140,6 +140,42 @@ def parse_dsl(path: str) -> Tuple[List[Clause], int]:
 
     clauses: List[Clause] = []
     revision = 1
+
+    # A clause's annotation bracket does not always sit on the clause's own
+    # line.  Every theorem in the repository puts it on the next one:
+    #
+    #     theorem unsolvable_mismatch "..."
+    #       [depends: push2  probe: passed]
+    #
+    # A strictly line-by-line reader therefore reported `proven=False` and
+    # `probe_pending=False` for precisely the clauses that carry a proof or a
+    # pending probe -- silently, and on every arm at once.  The clause's text
+    # is now the clause line plus any following bracket-only continuation
+    # lines, which is the smallest change that reads the grammar as written.
+    #
+    # This stays deliberately shallow.  The grammar belongs to the
+    # theory-compiler track; the battery counts clauses and reads annotations
+    # and understands none of the semantics.  `INPUT_FORMAT.md` records the
+    # coupling as this adapter's weakest joint, and the real fix is a
+    # machine-readable manifest emitted next to the DSL.
+    pending: List[str] = []          # the clause being accumulated
+    pending_head: Optional[re.Match] = None
+
+    def flush() -> None:
+        if pending_head is None:
+            return
+        text = " ".join(pending)
+        cov = _COV_RE.search(text)
+        clauses.append(Clause(
+            name=pending_head.group(2),
+            kind=pending_head.group(1),
+            evidence_transitions=_count_evidence(text),
+            coverage_num=int(cov.group(1)) if cov else None,
+            coverage_den=int(cov.group(2)) if cov else None,
+            proven="status: proven" in text or "probe: passed" in text,
+            probe_pending="probe: pending" in text,
+        ))
+
     for line in lines:
         stripped = line.strip()
         rev = re.search(r"revision\s+(\d+)", stripped)
@@ -148,19 +184,21 @@ def parse_dsl(path: str) -> Tuple[List[Clause], int]:
         if stripped.startswith("#"):
             continue
         match = _CLAUSE_RE.match(line)
-        if not match:
+        if match:
+            flush()
+            pending_head, pending = match, [line]
             continue
-        kind, name = match.group(1), match.group(2)
-        cov = _COV_RE.search(line)
-        clauses.append(Clause(
-            name=name,
-            kind=kind,
-            evidence_transitions=_count_evidence(line),
-            coverage_num=int(cov.group(1)) if cov else None,
-            coverage_den=int(cov.group(2)) if cov else None,
-            proven="status: proven" in line or "probe: passed" in line,
-            probe_pending="probe: pending" in line,
-        ))
+        # A bracket on its own line belongs to the clause above it.  Anything
+        # else -- a blank line, a section header, a `when`/`then` body -- ends
+        # the clause, so an annotation further down the file cannot be
+        # misattributed to a clause it does not belong to.
+        if pending_head is not None and stripped.startswith("["):
+            pending.append(line)
+            continue
+        if pending_head is not None and not stripped.startswith("["):
+            flush()
+            pending_head, pending = None, []
+    flush()
     return clauses, revision
 
 

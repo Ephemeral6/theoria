@@ -122,3 +122,39 @@ def distinct_states(run: Run):
     if not seen:
         return thin("X5", "no observed states")
     return ok("X5", len(seen))
+
+
+@metric("X6", "exploration",
+        "Fraction of failed steps after which the arm chose a different "
+        "action. Does the arm read its own refusals?",
+        needs=("steps", "failed_steps"), direction="higher", unit="share")
+def post_failure_action_change(run: Run):
+    """What the degraded envelope run made measurable.
+
+    Between a fifth and a half of the pilot's environment steps are refused
+    outright -- HTTP 400 "game not found" and 500s -- and until now the battery
+    treated that purely as a confound to be divided out (P5). It is also a
+    *stimulus*: the environment just told the arm that this action, right now,
+    does not work. An arm carrying any model of the interaction should try
+    something else; an arm that re-decides from a fresh prompt every turn has
+    no memory of the refusal and should repeat itself at roughly chance.
+
+    Deliberately measured across the failure boundary only, and only where the
+    next step exists. A run whose last step failed contributes no window,
+    because "what did it do next" has no answer.
+
+    The reading is not clean and the register says so: a harness that varies
+    its action on retry would score 1.0 for reasons that have nothing to do
+    with the arm. That is why this sits in the reference tier.
+    """
+    changed = 0
+    windows = 0
+    for i, step in enumerate(run.steps[:-1]):
+        if not step.failed:
+            continue
+        windows += 1
+        if run.steps[i + 1].action != step.action:
+            changed += 1
+    if windows == 0:
+        return thin("X6", "no failed step is followed by another step")
+    return ok("X6", changed / windows, changed=changed, windows=windows)
