@@ -1,0 +1,2 @@
+judging tree: 2287 files kept, 290 removed
+residual exposure: 4/22 sampled paths named in a topic file; 0 in a file carrying this lab's verdict vocabulary

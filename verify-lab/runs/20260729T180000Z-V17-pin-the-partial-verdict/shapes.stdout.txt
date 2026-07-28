@@ -1,0 +1,24 @@
+== 控制只读源码，从不执行被判文件
+   [V15 b1] monitor/ci_merge.py                                        有负控=否
+   [V15 b1] monitor/reflex.py                                          有负控=部分
+   同一批 b1。`ci_merge.py` 的测试是对源码字符串 grep，判 `否`；`reflex.py` 的测试是 AST
+   解析加断言、同样从不执行 `reflex.main()`，判 `部分`。
+
+== 控制打的是同功能的第二份实现
+   [V15 b5] cold-start-a2/a2pipeline/engines.py                        有负控=否
+   [V15 b1] monitor/scan.py                                            有负控=部分
+   [V15 b9] worldgen/generate.py                                       有负控=部分
+   b5 在自己的附注里写下规则「打的是别处…按判据一律不算，故判 `否`」；b1 与 b9 对同一形状判 `部分`。规则被独立写下过，只是没被写进判据。
+
+== 文件内有一条拒绝路径被演示过，其余若干条没有
+   [V15 b3] theory-compiler/src/theory_compiler/parser/theory_parser.py 有负控=是
+   [V15 b3] theory-compiler/src/theory_compiler/strips_encoding.py     有负控=部分
+   同一批 b3。`theory_parser.py` 明写「`SemanticsError` 的 7 处 raise 全树无任何断言」仍判
+   `是`；`strips_encoding.py` 明写「负控只有一处且只打到构造器」判 `部分`。
+
+== 预注册变异体存在且可执行，但没有断言绑定它的结果
+   [V15 b6] cold-start-a3/a3pipeline/run_l1.py                         有负控=部分
+   [V11 arms] run_arm.py --twice                                         有负控=部分
+   V15 判 `部分`（「可执行的预注册变体，但没有任何断言绑定它的结果」）；V11 对同一形状也判
+   `部分`（「算半个演示」）。**这一对是一致的**，登在这里是因为一个只列不一致的清单会骗人。
+
