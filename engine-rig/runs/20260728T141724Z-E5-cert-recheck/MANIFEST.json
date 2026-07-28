@@ -1,0 +1,187 @@
+{
+  "base_commit": "bd7e9e786129cb045d579f1df649fad6b4ec053d",
+  "branch": "agent/e5-cert-recheck",
+  "files": [
+    {
+      "path": "engine-rig/recheck/__init__.py",
+      "sha256": "6555df106ebcff03ef950a61dcd20e1a5b675ffdb31e5c182b94d04351b2e1ce"
+    },
+    {
+      "path": "engine-rig/recheck/expr.py",
+      "sha256": "561e378621c64e6d43e1de7bd891546214b1f4ee1df53ea28978bf2cb0d563c8"
+    },
+    {
+      "path": "engine-rig/recheck/ruleset.py",
+      "sha256": "321ec437b904687e8abd42e2a237ff55b06e6e3664a3224be0e2290403f63028"
+    },
+    {
+      "path": "engine-rig/recheck/certificate.py",
+      "sha256": "f43dbe15b8b9aa5b224e622507e251eb5afab5cbd4ad7f27d98c23d7e44bfae6"
+    },
+    {
+      "path": "engine-rig/recheck/verify.py",
+      "sha256": "e515ed411ba8ccf017eb80caffeb175c7581a2d2b8c1fa205521c09916f4b5cc"
+    },
+    {
+      "path": "engine-rig/recheck/anchors.py",
+      "sha256": "71d6bc567d8a0e231d9856b133a657c319b78bea2203bca30ed96ea78760b710"
+    },
+    {
+      "path": "engine-rig/recheck/forgeries.py",
+      "sha256": "ee713fc65480288eb256556c944c2623561f8c905ac6837214421e970145f279"
+    },
+    {
+      "path": "engine-rig/recheck/build_cases.py",
+      "sha256": "0da07fc068a325d2d07b778c1f8e685c58c5c11bece55abe8bec797d63ce5007"
+    },
+    {
+      "path": "engine-rig/recheck/verify_all.py",
+      "sha256": "e174d9086ec3ebb20ce5e003170cc4702a5ff8e8f1f0f3d81e8fa6ae9bc3957e"
+    },
+    {
+      "path": "engine-rig/recheck/__main__.py",
+      "sha256": "9a2edae0cfd61ac8da046280829f896ed1b4bfe70fa8dc9e475a6c60d5e7638c"
+    },
+    {
+      "path": "engine-rig/recheck/README.md",
+      "sha256": "31bdbf1d94937af5726576199470b126065187b874b3c6a2b0eb0cc561a2d5ae"
+    },
+    {
+      "path": "engine-rig/tests/test_recheck.py",
+      "sha256": "a6235fd598d35da56911975d8b40c0f075896bad035b7eae85211bd21705179e"
+    },
+    {
+      "path": "engine-rig/recheck/cases/a2-holed.rules.json",
+      "sha256": "47065c5e8270ce2b7891f36e138d8ea56dad8251afb2100459d6a2b106518045"
+    },
+    {
+      "path": "engine-rig/recheck/cases/a2-right-room-locked.cert.json",
+      "sha256": "1005005e65ec230511d77597d2969f015c46cc23298e322978e2633d472141d3"
+    },
+    {
+      "path": "engine-rig/recheck/cases/a2-world.rules.json",
+      "sha256": "92270094ab2d7f3a5cf16f6690157c61ad5ac618acc1b76f59682f38a66b621e"
+    },
+    {
+      "path": "engine-rig/recheck/cases/peg4-0111-ic3.cert.json",
+      "sha256": "6387a05c465ab50fc3caa52468755782875c482e5bb775a6e2d843ce820c3f7c"
+    },
+    {
+      "path": "engine-rig/recheck/cases/peg4-0111.rules.json",
+      "sha256": "1603d7eea0bdca9a3d667506e31eaf98069ff7fd87cd4fe3056fffc5b6c25950"
+    },
+    {
+      "path": "engine-rig/recheck/cases/peg4-1011.rules.json",
+      "sha256": "b65f7935019e16840d16e8bbca1a56e22db44cd268adff571a11b8df308990c0"
+    },
+    {
+      "path": "engine-rig/recheck/cases/peg4-1101.rules.json",
+      "sha256": "d2324c2a8315c1706c35348c3b0a69ddbeb1b2fed182b11202c7c70e32a0f303"
+    },
+    {
+      "path": "engine-rig/recheck/cases/peg4-1110.rules.json",
+      "sha256": "c7224d00fbfbd7cc5105accf11aacf1ebcb8e4b8d12595e502186820238152b2"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4.rules.json",
+      "sha256": "f2c2445a04ede21576b0c52b7e48ef3b9ba3219cbb9d9faaeb133f6cd6d81fee"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-11.cert.json",
+      "sha256": "1a23ab90a49512e22f8bbe4baf73f3fb9f5bb8c49798ca7867a2e560a35dc307"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-12-b2-13.cert.json",
+      "sha256": "a447995558173bebbac5e4103598a465304a2e7182c92970387076436345eb60"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-13-b2-12.cert.json",
+      "sha256": "3f7192751540b5414056e4e28e695df2880cf2b6514fa034d65d9df51894edb1"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-14.cert.json",
+      "sha256": "7eba72a84c7e16809fe0491a16dfcf2ec9bbd3a0b2c01b39fc63ebecdd7c6a84"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-21-b2-31.cert.json",
+      "sha256": "ec696b12eefbaeb75b2d46cb46ebc4b1f658e863afad3d8ef70cb7221c381cbe"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-24-b2-34.cert.json",
+      "sha256": "f8c9db1739a8563ae29434e6279599b32cbaf05f9c038448e5c1fce90574cbcf"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-31-b2-21.cert.json",
+      "sha256": "452d9f2dfdd6d06d0142291df6383fca03ceb715319288a8844000fd9cbc1f26"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-34-b2-24.cert.json",
+      "sha256": "a3bf8826d3ca8d399dd12577c4f0437e729ebea82c495fb4a49ef8bf3dc25258"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-41.cert.json",
+      "sha256": "32baa80f2029f6e97b42984a72d4545c4c3a6230b7a9f009c4b5e7e9e5e7e6b9"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-42-b2-43.cert.json",
+      "sha256": "7d66f20031ff2e6fb5705b669efa3f1dc066922e72c7a947e824e60481b14788"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-43-b2-42.cert.json",
+      "sha256": "09cdb6c270810b62215791592ff91a442731fd865fbe4daf74655dabe050e7eb"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b1-44.cert.json",
+      "sha256": "4542330f047d01aa5271f74ab9591a222b146d7e22d659d4b0cc96dc1b7f2bea"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b2-11.cert.json",
+      "sha256": "a30b1772a9d30f712d89df8ae7c822307b08874a6e6cc92ab95106e5e7017a46"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b2-14.cert.json",
+      "sha256": "84c21a8cca53c5fde29a27eee94195a76c1e1d55fb4514cfec1bde21631f5f5d"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b2-41.cert.json",
+      "sha256": "09a102c9ca8350dafe3b189518ce40615cd892d4e2535a39f96fc5de5e9af56b"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far-dead-b2-44.cert.json",
+      "sha256": "1f5e70e40326473f01e5d9b7ffd9035b5ef3ac9dcce9e62b9d4a3ca7d1461aec"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-open4far.rules.json",
+      "sha256": "d010d2b77220aea6120dd0d883227477c5c3822b9f1bd1989869d46acafc5c31"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-ring.rules.json",
+      "sha256": "cf54fce1c9046a0c40938af95c9118303a08ab4e6247f6da9e802760332cf901"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-ringstuck-dead-b1-11.cert.json",
+      "sha256": "e6d33e18271df3635daf2690b1d0390722ec446d4fdd3a5b438b9849c7199351"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-ringstuck-dead-b1-14.cert.json",
+      "sha256": "d60282c02840a95da47463d826137cb343aff7a1b89544db1eb346923c4d6149"
+    },
+    {
+      "path": "engine-rig/recheck/cases/sokoban-ringstuck.rules.json",
+      "sha256": "888630e1352cef1f0bc25cc8dc07c9833b54234fb1c3db13efc8a9f5e8a2f160"
+    },
+    {
+      "path": "engine-rig/runs/20260728T141724Z-E5-cert-recheck/recheck_report.json",
+      "sha256": "8713a70da62830ab75226f8134a3902fe2b5fc0996f7f875040015ac1533010c"
+    },
+    {
+      "path": "engine-rig/runs/20260728T141724Z-E5-cert-recheck/RUN_STATE.md",
+      "sha256": "ae052c5d8870011d450134a9be78cfcf7b9f6a60033625df7fb33d5688c22635"
+    }
+  ],
+  "head_commit": "a2a129c639fbc863b1d067834d1a8d3d08a66ffc",
+  "prompt_id": "E5-cert-recheck",
+  "status": "complete",
+  "utc": "20260728T141724Z",
+  "worker": "W-1411"
+}

@@ -1,0 +1,21 @@
+{
+  "claim": "conditional_unsolvability",
+  "kind": "dead_region",
+  "name": "A10b-default-only-false",
+  "predicate": [
+    "table",
+    "t",
+    [
+      "var",
+      "pos0"
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1",
+  "tables": {
+    "t": {
+      "arity": 1,
+      "default": false,
+      "entries": []
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "claim": "unsolvable",
+  "defs": [
+    {
+      "body": [
+        "=",
+        [
+          "param",
+          "pos0"
+        ],
+        [
+          "var",
+          "pos0"
+        ]
+      ],
+      "name": "f",
+      "params": [
+        "pos0"
+      ]
+    },
+    {
+      "body": [
+        "call",
+        "f",
+        [
+          "param",
+          "pos0"
+        ]
+      ],
+      "name": "g",
+      "params": [
+        "pos0"
+      ]
+    }
+  ],
+  "kind": "inductive_invariant",
+  "name": "A13-param-shadows-var",
+  "predicate": [
+    "and",
+    [
+      "call",
+      "f",
+      [
+        "var",
+        "pos1"
+      ]
+    ],
+    [
+      "call",
+      "g",
+      [
+        "var",
+        "pos2"
+      ]
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

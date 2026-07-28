@@ -1,0 +1,32 @@
+{
+  "claim": "unsolvable",
+  "kind": "inductive_invariant",
+  "name": "A14-shadow-table",
+  "predicate": [
+    "=",
+    [
+      "table",
+      "nb",
+      [
+        "var",
+        "cart"
+      ],
+      [
+        "lit",
+        "up"
+      ]
+    ],
+    [
+      "lit",
+      "1,1"
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1",
+  "tables": {
+    "nb": {
+      "arity": 2,
+      "default": "1,1",
+      "entries": []
+    }
+  }
+}
