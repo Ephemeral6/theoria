@@ -1,7 +1,7 @@
 # Theoria 1.9 的「每证一个死锁，规划器同时提速」——提速那一半，在有真规划器时不成立
 
 来源：工单 `E2-fd-ladder-bench`，工人 `W-1520`，分支 `agent/e2-fd-ladder-bench`，
-提交 `77f3b11`。数据：`engine-rig/runs/20260728T072633Z-E2-fd-ladder-bench/`。
+提交 `77f3b11` + `bef0b86`。数据：`engine-rig/runs/20260728T072633Z-E2-fd-ladder-bench/`。
 
 这是一条**冲着设计文档去的发现**，不是实现缺陷，所以走 inbox 而不是只留在
 PARTNER_SYNC 里。
@@ -44,17 +44,35 @@ Fast Downward，把启发式当唯一变量：
 建议 §1.9 的措辞把提速改成有条件的，或明确它指的是「对没有可采纳启发式的搜索」。
 现在的写法会让人以为定理和启发式的收益可以相加，而实测是几乎不能。
 
-## 附带的硬限制（可能影响规划层选型）
+## 附带发现：成对死锁递得进去，而且递进去是净亏
 
-成对死锁（两个箱子并排贴墙那类）的守卫需要全称量化的否定合取，即 `:adl`。
-FD 的转译器把它变成**公理**，而 `astar(lmcut())` 和 `astar(ipdb())` 一律拒收带
-公理的任务（driver exit 34，`This configuration does not support axioms!`），
-`astar(blind())` 收。
+（本节在提交 `bef0b86` 被改写过一次。初版写的是「成对死锁根本递不进两个最优档」，
+那个说法被我自己派的对抗性复核推翻了，原话保留在这里以便对照。）
 
-也就是说：**成对死锁在两个最优档上根本递不进去**，不是收益为零，是通道不通。
-按上面的结论，代价大概是零，但那是推断不是实测——已在 RUN_STATE.md 记为 G3。
-此限制已用测试钉住（`test_the_full_guard_is_refused_by_the_optimal_rung_for_the_reason_recorded`），
-将来 FD 换版本放开了，会以测试失败的形式冒出来而不是悄悄成立。
+成对死锁（两个箱子并排贴墙那类）的**那一种**守卫需要全称量化的否定合取，即
+`:adl`。FD 的 `normalize.py` 把任何 `forall` 前条件变成**公理**，而
+`astar(lmcut())` 和 `astar(ipdb())` 一律拒收带公理的任务（driver exit 34，
+`This configuration does not support axioms!`），`astar(blind())` 收。
+
+但成对死锁本身并不需要量化，需要的只是「schema 不知道某位置有几个死伙伴」。
+把它们编号即可：静态谓词 `npair<k> ?b ?to` 给出个数，`deadpair<i> ?b ?to ?ob ?oc`
+点名第 i 个，每个元数一条 `push-pair<k>` schema 把它们绑上、各加一条基态
+`(not (at ?ob_i ?oc_i))`。纯 `:strips :typing :negative-preconditions`，无公理，
+两个最优档照收。
+
+**递进去之后是净亏：**
+
+| 实例 | 档 | 未加守卫 | 加成对定理（`indexed`） | 任务规模 |
+|---|---|---|---|---|
+| `far4` | `astar(lmcut())` | 23 | **34** | 1029 → 4101 |
+| `far6` | `astar(lmcut())` | 47 | **66** | 2813 → 26253 |
+
+最优长度全程不变（健全性成立），但 lmcut 扩展得**更多**，任务规模涨一个数量级：
+FD 把流变元上的否定前条件编译成「该变元每个其它取值一份算子副本」。本该只花
+grounding 的守卫，花掉了搜索。
+
+对规划层选型的意思：不是「通道不通」，是**通道通着、但不该走**。这与上面的主结论
+同向——可采纳启发式已经把死区避开了，再把定理塞进任务只是在给它加负担。
 
 ## 未确立的部分（别过度引用）
 

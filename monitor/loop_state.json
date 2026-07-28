@@ -3,8 +3,15 @@
   "started": "2026-07-28T08:55:00Z",
   "pool_target": 16,
   "in_flight": [
-    "C2-semantics-migrate(app)",
-    "V3-battery-discrimination(app)"
+    "W-1520",
+    "W-1521",
+    "W-1540",
+    "W-1541",
+    "W-1610",
+    "W-1611",
+    "W-5200",
+    "W-5201",
+    "APP-V3"
   ],
   "completed": [
     "P-10",
@@ -61,5 +68,15 @@
     "OPS-B": "booted 06:15Z",
     "OPS-M": "booted 06:15Z",
     "OPS-R": "booted 06:15Z"
+  },
+  "ramp": {
+    "started": "2026-07-28T09:22Z",
+    "plan": "2 -> verify -> +2 -> verify -> +2, cap 6",
+    "batch1": [
+      "W-5200",
+      "W-5201"
+    ],
+    "pre_existing_workers": 6,
+    "note": "board was empty at 17:22 (0 available, 7 claimed, 6 done) -- authored 4 new items before launching; the bottleneck had moved from headcount to work supply"
   }
 }

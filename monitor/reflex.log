@@ -9,3 +9,16 @@
 2026-07-28T03:57:22Z quiet
 2026-07-28T08:17:00Z MERGED origin/agent/s2-canary-schedule (dirs: PARTNER_SYNC.md,arc-recon)
 2026-07-28T08:17:42Z quiet
+2026-07-28T08:22:34Z quiet
+2026-07-28T08:27:53Z MERGED origin/agent/e2-fd-ladder-bench (dirs: PARTNER_SYNC.md,engine-rig)
+2026-07-28T08:32:32Z quiet
+2026-07-28T08:37:33Z quiet
+2026-07-28T08:42:58Z MERGED origin/agent/c4-deadlock-lean (dirs: CONTRACTS,PARTNER_SYNC.md,theory-compiler)
+2026-07-28T08:47:32Z quiet
+2026-07-28T08:52:32Z quiet
+2026-07-28T08:57:42Z MERGED origin/agent/c1-worldgen (dirs: PARTNER_SYNC.md,worldgen)
+2026-07-28T09:03:14Z MERGED origin/agent/c4-deadlock-lean (dirs: CONTRACTS,PARTNER_SYNC.md,theory-compiler)
+2026-07-28T09:09:47Z MERGED origin/agent/s3-spend-gate-v2 (dirs: PARTNER_SYNC.md,baseline-arms,proxy)
+2026-07-28T09:12:40Z MERGED origin/agent/p4-figures (dirs: PARTNER_SYNC.md,figures)
+2026-07-28T09:17:33Z quiet
+2026-07-28T09:22:32Z quiet
