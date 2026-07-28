@@ -1,0 +1,7 @@
+{
+ "id": "RES-1",
+ "utc": "2026-07-28T11:05:00Z",
+ "cycle": 1,
+ "state": "working",
+ "note": "V4-exam-selftest: audit done -- 2/3 asks already shipped by P-15/V2; building marker mutation self-test + fault-injection matrix + sens/spec matrix"
+}

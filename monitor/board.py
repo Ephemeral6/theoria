@@ -104,6 +104,11 @@ def candidates(lane=None):
             continue                        # standing researchers stay in lane
         if lane and not m.get("lane"):
             continue                        # unlaned items are for generic workers
+        if not lane and m.get("lane"):
+            continue                        # laned items belong to their standing
+                                            # researcher; a generic worker must
+                                            # not strip a lane bare (monitor,
+                                            # 2026-07-28: the guard was one-sided)
         out.append((m["priority"], iid, f, m))
     out.sort(key=lambda r: (r[0], r[1]))
     return out
