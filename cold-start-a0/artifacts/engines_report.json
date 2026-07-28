@@ -446,7 +446,7 @@
         "track": "obj2"
       }
     ],
-    "vocabulary_size": 162
+    "vocabulary_size": 172
   },
   "probes": [
     {
@@ -707,6 +707,24 @@
         "baseline_bits": 7360,
         "chosen": true,
         "events": 216,
+        "identity_repair": {
+          "applied": false,
+          "delta_bits": 0,
+          "n_swaps": 0,
+          "near_misses": [
+            {
+              "eaten": "obj0",
+              "mover": "obj1",
+              "t": 99,
+              "why": "recolour is not this track's whole body in the vanishing track's colour"
+            }
+          ],
+          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape)",
+          "priced_by": "not script length -- see module docstring",
+          "script_bits_after": 4423,
+          "script_bits_before": 4423,
+          "swaps": []
+        },
         "operator": "connected_components(4)+uniform_color",
         "ratio": 0.601,
         "reidentification": {
@@ -726,6 +744,24 @@
         "baseline_bits": 7360,
         "chosen": false,
         "events": 332,
+        "identity_repair": {
+          "applied": false,
+          "delta_bits": 0,
+          "n_swaps": 0,
+          "near_misses": [
+            {
+              "eaten": "obj51",
+              "mover": "obj49",
+              "t": 99,
+              "why": "recolour is not this track's whole body in the vanishing track's colour"
+            }
+          ],
+          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape)",
+          "priced_by": "not script length -- see module docstring",
+          "script_bits_after": 6511,
+          "script_bits_before": 6511,
+          "swaps": []
+        },
         "operator": "connected_components(4)",
         "ratio": 0.775,
         "reidentification": {

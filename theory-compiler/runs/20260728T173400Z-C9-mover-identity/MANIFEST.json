@@ -1,0 +1,12 @@
+{
+  "prompt_id": "C9-count-lock-vocabulary",
+  "branch": "agent/c9-count-lock-vocabulary",
+  "base_commit": "86d79c62586d9f5926509939e3028ef35c159a59",
+  "utc": "20260728T173400Z",
+  "worker": "W-131",
+  "scope": "second pass on C9: the acceptance line W-1252 recorded as unmet -- worldgen's count-lock world through cold-start-a0's pipeline. The vocabulary widening (E-08) is already on master; what remains is the upstream cause W-1252 measured: mover selection anchors every positional atom on a token.",
+  "predecessor_run": "theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary",
+  "network": "none",
+  "api_spend": "none",
+  "sealed_pile_contact": "none"
+}

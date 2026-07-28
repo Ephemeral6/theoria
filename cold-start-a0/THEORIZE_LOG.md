@@ -362,6 +362,7 @@ Things the world said that `dsl_grammar_v0.1` cannot.
 | E-06 | a proof method for goals no linear pagoda covers | **discharged** — the certificate covers what it covers, exhaustion closes the rest, each goal attributed to its method | see below |
 | E-07 | saying that two live instances of one type never share a cell | **discharged** — `unique` on a field (`dsl_grammar_v0.2` revision item 12) | see below |
 | E-08 | a guard that counts (`count(Token, present = false) >= k`) — the count-lock gate | **discharged** — one rung, in the guard language; see below | the rung below it is a quantifier and it is deliberately not taken |
+| E-09 | putting a *named track* in a *place*: "the object I am about to step onto is **that** one" (`faces(T,D)`) — the miner vocabulary, not the grammar | **discharged** — one rung, mover-relative, one step; see below | 2 bits per repaired transition paid in the segmentation script, and the pass that pays them is the one place the pipeline does not adjudicate by compression |
 
 E-03 is the one to fix first: a manual whose default behaviour is a comment is
 not a manual.
@@ -419,6 +420,70 @@ the threshold correctly at 0, 1, 2 and 3 tokens. The miner's counting atom ships
 alongside it with its measured benefit recorded as **zero on the only world that
 asked for it** — see that run's `RUN_STATE.md`, which is where a widening that
 did not pay belongs rather than in a footnote.
+
+### E-09, in full — the vocabulary knew about tracks and about places, never both
+
+**Which world forced it.** `worldgen`'s `t2-lock-fragile`, transition 31 — the
+same world as E-08, and that is not a coincidence but it *is* a different gap.
+E-08 was cut from a misattribution: the miner was stuck because a token had been
+handed the agent's identity, not because it could not count. With the
+segmentation repaired (`cold-start-a0/pipeline/identity_swap.py`) the world goes
+from **19 failing mining groups to one**, and that one is real:
+
+    FAILS  track=obj1 action=RIGHT effect=('none',0,0,None)  (23 positives)
+    NoSeparatingGuard: no literal separates transition 31 from the positives
+
+**What v1 could not say.** The rule is "this token does nothing when the agent
+presses RIGHT", and the transition it must exclude is the one where the agent,
+standing directly to its left, steps onto it and eats it. `a0_relational_v1` was
+relational about *colours and strips*, and indexed by *track*, but it had no atom
+that put a named track in a place:
+
+| atom | why it cannot separate t=31 |
+|---|---|
+| `tcolor(RIGHT)==2` | "the cell ahead is a token" — also true at t=71, where the agent eats a **different** token and obj1 does nothing. Violates 1 positive. |
+| `at(1,2)` | reads the mover's own anchor; the agent stands there again at t=59 and t=69, after obj1 is gone. Violates 2 positives. |
+| `present(obj1)` / `color(obj1)==2` | indexed by track but blind to where it is. True at t=31. |
+| `count(k)>=t` | reads the frame, not a relation. `count(0)` is 19 at t=31 and ranges 19–22 over the positives, so t=31 sits **inside** the positives' range on every colour. |
+
+Measured rather than argued, and adversarially: of the 120 atoms in the
+vocabulary at the time, **0** are true on all 23 positives and false at t=31; only
+19 hold on all the positives and all 19 also hold at t=31. The conjunction of all
+19 — the strongest guard the vocabulary can build for this rule — still admits
+t=31. So no conjunction of *any* size works, and the failure is expressivity
+rather than CEGIS search order. Probe:
+`theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/09_adversarial_no_atom_separates.py`.
+
+**What was added.** One atom. `faces(T,D)` — *track T's anchor is where the
+mover's anchor would be after one step in direction D*. Four limits, each with a
+test: one step only (distance is not a parameter); mover-relative only (no
+relation between two non-mover tracks); anchors, not body overlap (that is the
+touching-objects gap and is its own row); and only `(track, direction)` pairs the
+trajectory actually exhibited, since a pair that is never true is a constant.
+
+**What it cost.** Nothing, in the currency that matters here: ten atom kinds
+still fit in four bits, so unlike E-08 no existing atom was re-priced. `faces` is
+priced at `2 * (_TRACK_BITS + _DIR_BITS)` = 8 bits of payload — the same payload
+as `at(r,c)`, by the published rule that an identity literal costs twice a
+predicate. At the predicate price it would have been the cheapest atom in the
+vocabulary while being the most instance-bound one, and it would have displaced
+`tcolor` in guards with no need of it. Every mined guard in the tree is unchanged
+across the widening; exactly one new guard uses the new atom, and it is the rule
+that forced it:
+
+    obj1, RIGHT, nothing happens   <-   !faces(obj1,RIGHT) and act==RIGHT
+
+**What it did not fix, said plainly.** `t2-lock-fragile` now passes L1, L2 and
+L3a (replay 110/110, render 287/287) and mines 36 rules. Its held-out accuracy is
+**0.497**, and the reason is visible in the rule the lock produces: the gate
+opens exactly once, so CEGIS separates that single witness with the cheapest
+conjunction available (`!clear(strip(RIGHT)) and !present(obj1) and act==RIGHT
+and free(strip(LEFT))`) rather than with a count. **`count` appears in no mined
+guard on this world even now.** E-08's miner-side atom therefore has its measured
+benefit at zero for the second time, on the world that asked for it, under
+correct tracking — which is the cleaner test W-1252 could not run. That is
+recorded here rather than argued away; the DSL-side half of E-08 is untouched by
+it, because a hand-written manual still has to be able to state the gate.
 
 ### E-06, in full — one proposition, two methods
 
