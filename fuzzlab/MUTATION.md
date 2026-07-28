@@ -137,6 +137,72 @@ conclusion is: **the campaign's size is justified by corpus diversity, not by
 invariant sensitivity, and only the second half of that sentence has been
 measured.**
 
+## `worlds_inert` turns out to measure something the campaign gets wrong
+
+An unintended result, and the one with the most direct consequence for anything
+that quotes the campaign.
+
+`campaign.py`'s docstring lists three things the driver refuses to do. The third:
+
+> **it does not count a world as covered unless an invariant actually ran on
+> it.** `worlds_generated` and `worlds_checked` are reported separately, per
+> engine, and they are allowed to differ.
+
+The implementation computes it as `n_worlds` minus the number of `skipped`
+findings that invariant emitted. That sees an invariant which *declares* it
+cannot judge this world. It cannot see an invariant that simply returns.
+
+All four `lp_potential` invariants open with a bare early exit —
+`props/lp_potential.py:99-100, 131-132, 178, 214` — when the engine issued no
+certificate:
+
+```python
+if cert is None:
+    return []                       # no claim made; incompleteness is allowed
+```
+
+The comment is right: `lp_potential` is sound but incomplete, and declining to
+certify is documented behaviour, not a defect. But the *bookkeeping* is wrong.
+An invariant that returns an empty list because it checked and found nothing
+wrong, and an invariant that returns an empty list because it never looked, are
+the same value. So `out/campaign.json` reports:
+
+```
+lp_potential  checked=500  skipped=0
+   certificate_implies_unreachable   500
+   three_conditions_hold             500
+   heuristic_is_admissible           500
+   infinite_means_unreachable        500
+```
+
+— four invariants, each credited with 500 worlds of coverage.
+
+**The mutation run measures the real figure without needing new instrumentation.**
+A mutant whose defect can only be injected where a certificate exists raises
+`mut.inert` everywhere else, so `worlds_inert` *is* the count of worlds on which
+the invariant had nothing to say. For `lp_potential` that is roughly **46 % of
+the corpus** (the per-engine partial reports 21 of 40 worlds carrying a
+certificate; 108 of 200 on a wider sweep). `heuristic_is_admissible` is thinner
+still — its comparison loop reaches only about 8 % of the states it walks.
+
+So the honest restatement is:
+
+> `lp_potential`'s four invariants are evaluated on ~270 of the standing 500
+> worlds, not 500, and `campaign.json` cannot currently say so.
+
+This is a defect in `fuzzlab`, not in any engine, and it is in this territory.
+The fix is to replace each bare `return []` with a `finding.skipped(...)`
+carrying its reason — which is what `finding.py` exists for and what the other
+engines' properties already do. It is **not** applied here, deliberately: it
+changes the campaign's published counts, so it belongs with a campaign re-run
+and a superseding section in `BUGS.md`, not folded into a mutation item's diff
+where nobody would look for it. Registered as follow-up rather than done
+quietly.
+
+The general form is worth stating because the same shape was found in six other
+territories on the same day: **a silent no-op counted as coverage**. Here the
+driver's own docstring promises exactly the guarantee the code does not deliver.
+
 ## The harness has its own negative control
 
 The failure mode of a mutation harness is loud in the direction of *more*
