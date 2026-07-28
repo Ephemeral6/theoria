@@ -1,12 +1,99 @@
 {
-  "prompt_id": "C9-count-lock-vocabulary",
-  "branch": "agent/c9-count-lock-vocabulary",
-  "base_commit": "86d79c62586d9f5926509939e3028ef35c159a59",
-  "utc": "20260728T173400Z",
-  "worker": "W-131",
-  "scope": "second pass on C9: the acceptance line W-1252 recorded as unmet -- worldgen's count-lock world through cold-start-a0's pipeline. The vocabulary widening (E-08) is already on master; what remains is the upstream cause W-1252 measured: mover selection anchors every positional atom on a token.",
-  "predecessor_run": "theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary",
-  "network": "none",
   "api_spend": "none",
-  "sealed_pile_contact": "none"
+  "base_commit": "86d79c62586d9f5926509939e3028ef35c159a59",
+  "branch": "agent/c9-count-lock-vocabulary",
+  "files": [
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/RUN_STATE.md",
+      "sha256": "2fc4348efd1f4e68c68712223b3d06bfb1238d56bce9d57b22cd71f2ae695ec8"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/candidates.t1-tokens-lock.jsonl",
+      "sha256": "53bef8ec50dd90c8e66b87503bc09ba24e376d970b5c4bc02018471a9632350b"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/candidates.t1-walk-maze.jsonl",
+      "sha256": "f5de2e12f9f8f91e5f0b652a8360d30c07dff9222384a80ab639dadd6feb25e3"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/candidates.t2-lock-fragile.jsonl",
+      "sha256": "ef02b9ba70c4439ecca478574b8dd39d2beac9cff9ad541fdd3424efcf0d80fe"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/engines_report.t1-tokens-lock.json",
+      "sha256": "36f01a4f048a7130be86d5309f3b5e5732389994210ac6e3d47cfddabd46cb56"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/engines_report.t1-walk-maze.json",
+      "sha256": "e1db5f0724bdf61a0885c61e77d85fc1daca9113b5e7e50714fe5cd5c1367e54"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/engines_report.t2-lock-fragile.json",
+      "sha256": "b6b331650dd8318acf0120b2787f4cc3932dabd3e4037059a300a792416dd131"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/summary.json",
+      "sha256": "1746e5d79da76126f7c1b94c004afcacd5ce5d8c4b06436fb4f8c0050b3f315b"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/worldgen-qc/QC.json",
+      "sha256": "4957bcee32935e483b0045f912168cb08923e4d37f45e09259fdb071d604a74f"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/worldgen-qc/dirtied-by-the-run.txt",
+      "sha256": "f4ac6365ec5350e62b00f85edb070b58196fb0c9835e852b969ccaf4031e3b3c"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/worldgen-qc/t2-lock-fragile.candidates.jsonl",
+      "sha256": "e7424e2d198135d5bdccb3b218a8c75bb604da9464c27ebb89c1993c7adab827"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/worldgen-qc/t2-lock-fragile.engines_report.json",
+      "sha256": "b6b331650dd8318acf0120b2787f4cc3932dabd3e4037059a300a792416dd131"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/worldgen_qc.txt",
+      "sha256": "0d4369f24b75ec8eceda068a0e4ca5e886228b7a0ef4a2b549146ede1b58b1b9"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/05_track_anatomy.py",
+      "sha256": "4dd510667d074d6da99e665c8bd87d39da28116ccdb1381d14fb2cde408c2a23"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/06_where_identity_moves.py",
+      "sha256": "b92f76b06502ec15aef12a9e8321bf389f7154bd6b93867d89ea19d4133a07c2"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/07_price_the_two_readings.py",
+      "sha256": "8cf8ccdea3eb876d5f9e9c015999393a8cf17a628ac922e166212bc13a1a9782"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/08_acceptance_pipeline.py",
+      "sha256": "d9e8a6fc323dc29d31e4925ca9876351c8f40b5a0757cc5d6f07ecb1da119da9"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/09_adversarial_no_atom_separates.py",
+      "sha256": "65f6227fa35e0cec7e9b688100714ba405b3c54bfd3e7717fbb636126d054a8d"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/10_four_manuals_four_forms.py",
+      "sha256": "2de901cb081091bc1e22a5dad90b7796ee0ab99b20f9a633de27c32d4304e72a"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/a0_segmentation_probe.py",
+      "sha256": "bac288f1871c73c2943a1017ec0f50a98dc994ea6df9fc12973aa8143b810ed4"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/verify.sh",
+      "sha256": "bd703ab692030558fa22a817ec3aac5237813f47485484e1447cc15b32950edc"
+    }
+  ],
+  "network": "none",
+  "predecessor_run": "theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary",
+  "prompt_id": "C9-count-lock-vocabulary",
+  "scope": "second pass on C9: the acceptance line W-1252 recorded as unmet -- worldgen's count-lock world through cold-start-a0's pipeline. The vocabulary widening (E-08) is already on master; what remains is the upstream cause W-1252 measured: mover selection anchors every positional atom on a token.",
+  "sealed_pile_contact": "none",
+  "utc": "20260728T173400Z",
+  "verify": "bash theory-compiler/runs/20260728T173400Z-C9-mover-identity/verify.sh  -> VERIFY GREEN",
+  "worker": "W-131"
 }
