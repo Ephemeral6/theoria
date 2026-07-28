@@ -9,8 +9,10 @@
 | M2 裸 CC harness + 记账管线 | `baseline-arms-m2-harness` | ✅ 达成 |
 | M3 Schema 官方发布物定位 | `baseline-arms-m3-schema-locate` | ✅ 达成（判定为「找不到」支） |
 | M4 试点 + 预算闸门 | `baseline-arms-m4-pilot-gate` | ✅ 达成 |
-| M5 方差包络战役 | `baseline-arms-m5-variance` | ⚠️ **闸门红，停在 1/4 局** |
+| M5 方差包络战役 | `baseline-arms-m5-variance` | 🔄 **P-12 续跑中**（ar25 记 degraded） |
 | M6 Schema 路 A 材料 | `baseline-arms-m6-path-a` | ✅ 达成 |
+| M7 账本正典迁移（F-16） | — | ✅ 达成 |
+| M8 溯源档案 `runs/`（METHOD 8/9） | — | ✅ 达成 |
 
 文档：[`AUDIT.md`](AUDIT.md)（第 0 步审计）·
 [`SCHEMA_LOCATE.md`](SCHEMA_LOCATE.md)（M3 结论）·
@@ -18,11 +20,77 @@
 [`DECISIONS.md`](DECISIONS.md)（设计决策）·
 [`INCIDENTS.md`](INCIDENTS.md)（事件）·
 [`TOUCHED_GAMES.md`](TOUCHED_GAMES.md)（触碰登记）·
-[`BUDGET_REPORT.md`](BUDGET_REPORT.md)（闸门，§9 是可执行的止损条件）
+[`BUDGET_REPORT.md`](BUDGET_REPORT.md)（闸门，§9 是可执行的止损条件）·
+[`runs/MANIFEST.json`](runs/MANIFEST.json)（溯源档案索引）
 
 ---
 
-## 本轮（P-7）结果摘要
+## 本轮（P-12）结果摘要
+
+三件事，外加开工时发现的一件必须先解决的。
+
+### 先解决的那件：包络续跑的前置条件在开工时**并未满足**
+
+`BUDGET_REPORT.md` §11.5 把「先解决 INC-BA-003」写成复跑的前置条件。开工时对方那场
+S1 全量**仍在跑**（g50t 第 9 集、sk48 第 11 集，两场合计已花约 $42）。照工单直接开跑，
+量到的还是争用——§11.2 已经证过一次。
+
+处置是把那句话变成一个检查：`harness/interlock.py`（`DECISIONS.md` D-017），
+两个独立信号（进程表 + 跨 worktree 的检查点新鲜度），两个都拿不到时判阻塞，无 override。
+配套把 INC-BA-003 抱怨的「谁都看不见合计数」补上：`campaign_gate.json` 现在带
+`combined_exposure`。
+
+顺带**跑一次真的就抓到一个假阳性**：`--gate-only` 是只读的，却被算成一场活着的战役——
+一个会对自己的诊断说「不」的互锁。已修，见提交 `6b19d38`。
+
+### 闸门的两处改动（都必须被当成改动来审，不是背景噪声）
+
+1. **F-15 落地通道**（D-016）。闸门是从 `campaign_cells.jsonl` 现算的，三个 ar25 死格
+   就在文件头，`--gate-only` 判红，`run_campaign` 拒开任何一局——**不给裁决一条通道，
+   F-15 就无法执行**。`harness/adjudications.py` 是能想到的最窄的通道：
+   只有 `G4` 可挂起、只对逐条点名的 `run_id`、点名其他子句在写入和读取时各被拒一次、
+   轨道不能自裁。那三格花的 $2.5275 仍进每一个 cap。
+2. **G6a 改量「坐班」，新增 G6c**（D-018）。**8 h 的 cap 一个字没动。**
+   原来的 G6a 从第一行起算，在包络停摆的六个多小时里一直走，开工时读到 6.2 h——
+   等对方战役跑完就会先撞上 8 h。**遵守 §11.5 会触发 §11.5 要求你在其之下遵守的子句。**
+   连续跑满八小时照样触发；日历时钟真正抓得住的残余移进 G6c（原先不存在），
+   所以闸门净增一条约束。
+
+### 账本正典迁移（F-16）：**完成**
+
+`harness/migrate_ledger.py`，560 条全部抬进 v1.0，原文件未动，产物在
+`runs/_migrations/ledger-v0-to-v1.0/`。四个来源等级逐字段标注。
+join 命中：card_id 268/286、guid 266/286、arm 274/274。
+
+**抬不动的必须点名**：`model_call.request` / `response` v0 只记了长度和错误标志，
+而正典把逐字记录定为模型侧不可重放的替代品——**每一条被抬上来的 model_call 都永久
+不可重放**，这个洞只能由 proxy 对未来的运行补。`score` 不是忘了记，上游响应里就没有。
+金额移进 sidecar（正典禁止账本里出现美元数）。
+4 条 `ACTION0` 原样保留并标记——请求真的发出去过。
+
+261 例 fuzz，核心不变量是**键守恒**：输入的每一个键要么映射、要么在 `lift_unmapped`、
+要么在 `lift_dropped_to_sidecar`。
+
+顺带发现两件与 proxy 有关的事，已在 PARTNER_SYNC 登记：
+`proxy/tools/validate_ledger.py` 与 `upgrade_ledger.py` **都不存在**（`proxy/tools/`
+这个目录没有），而 `LEDGER_FORMAT.md` 用现在时描述它们；§7 对 v0 的描述说有 8 个键，
+实际有 24 个。
+
+### 溯源档案 `runs/`：**完成**
+
+20 条：17 个 run（其中 **10 个是死 run**，同等归档）、路 A 那次抓取、这次迁移、
+以及一条「**故意没归档什么**」。`prompt_id` 对 P-12 之前的活标 `retro:P-7`。
+`seed` 一律留空并写明原因——本臂没有 seed，填一个数会比留空更糟。
+
+顺带修掉三个只在「第二局落地时才咬人」的缺陷（提交 `fa462a2`）：
+`summarise_campaign` 的 (game, model) 折叠会静默丢格；它没有任何办法表达
+F-15 要求的「degraded 单独一行」；`audit_cells` 的封存前缀是子串匹配，
+对 8 位十六进制的 run_id 尾巴有约 1.5%/百条的**假阳性**——而它印出来的是
+「sealed ids present」，跟真事故长得一模一样。
+
+---
+
+## 上一轮（P-7）结果摘要
 
 ### M5 方差包络：**闸门 G4 触发，跑完第 1 局即停**
 
