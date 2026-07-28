@@ -112,11 +112,11 @@ against every game in the dataset"，swarm 的 `--game` 缺省即 "plays all ava
    proxy 层或文件系统层，那超出本条目范围，也超出 `arc-recon` 领地。
    缓解：`scan` 是**事后**探测器，挂在 `verify.sh` 上，所以「有人绕过去了」这件事
    会在下一次 verify 时被看见——但那时源码已经落盘了。
-2. **触发器是名单，名单会漏。** 我按上游文档里出现过的调用形态写（make 目标、
-   `main.py --agent`、`arc_agi` / `Arcade()` / `arc.make(`、`swarm`、`environment_files`），
-   并加了一条兜底：**任何命令、无论是否命中触发器，只要点名封存局就拒**。
-   兜底覆盖的是「点名封存局」，覆盖不了「一个我没预料到的、缺省全量的新入口」。
-   本轮已派对抗性子代理专攻这一点，结论见下节。
+2. **触发器是名单，名单会漏——而且已经被证明会漏。** 对抗性复核在触发器覆盖面上
+   一口气找到四条（见下节 1/6/7/8）。修完之后名单**仍然是名单**：兜底只覆盖
+   「点名封存局」，覆盖不了「一个谁都没预料到的、缺省全量的新入口」。
+   这条 gap 不会因为修了九个洞而关闭，只会变窄。
+   **`scan` 是它唯一的对冲**：入口漏了，落盘的名字漏不掉。
 3. **OPS-B 提案的 B / C / E 三项本条目未做**，因为不在条目目标里：
    B（replay 页写进封存红线明文清单）属**不可逆损害**那一类，与本条目同级；
    C（§6 配额措辞改两层口径）、E（`recon_findings.json` 加 `superseded_by`）是账目质量。
@@ -124,6 +124,70 @@ against every game in the dataset"，swarm 的 `--game` 缺省即 "plays all ava
 
 ---
 
-## 对抗性复核
+## 对抗性复核 —— 派了一个专攻绕过的子代理，它找到 **9 条真绕过**
 
-见下节「对抗性复核结果」。
+明令：只许读本地文件，**不许联网、不许搜索任何与 ARC 局有关的东西**；
+每条发现必须**实跑确认**，找不到就说找不到，不许编。它交回的每一条我都复跑过。
+
+**先说一件事：封存名匹配那部分它没打穿。** 全 id、4 字符前缀、逗号列表、
+开发+封存混列、引号形式、`9ar25f0e` / `9ls20a` 的边界锚定——全部照设计工作。
+**九个洞全在别处**：触发器的**覆盖面**、argv 被拍平成一个字符串、以及 Python 的真值判断。
+**设计注意力去的地方守住了，出事的全是它周围的管道。**
+
+| # | 绕过 | 原判定 | 现判定 |
+|---|---|---|---|
+| 1 | `make -C ARC-AGI-3-Agents play-local`（以及 `-f` `-s` `-j4` `--directory=` `gmake` `mingw32-make`） | **allow** | `deny_unfiltered` |
+| 2 | `assert_local_pull_allowed(g for g in [])` —— 生成器 | **返回 `[]`，无异常** | `LocalEngineRefusal` |
+| 3 | `make play-local GAME=ar25` | **allow** | `deny_unfiltered` |
+| 4 | `... --game=ar25 && uv run main.py`（及 `;` `&` `\|\|` 换行、引号内、注释后） | **allow** | 按段判，取最重 |
+| 5 | `--game=ar25 --game=` / `--game ar25 all` / `--game ar25 *` | **allow** | `deny_unknown` |
+| 6 | `uv run main.py`、`python main.py -a random`、`python -m agents.main --agent=x`、`swarm_runner.py` | **allow** | `deny_default_all` |
+| 7 | `import arc_agi_3`（触发器写的 `arc_agi` 前瞻排除了 `_` 与数字，对真实包名**永远不匹配**） | **allow** | `deny_default_all` |
+| 8 | `curl .../tasks/LS20`、`ENVIRONMENT_FILES` —— 大小写 | **allow** | `deny_sealed` / 触发 |
+| 9 | `scan` 漏掉空的封存目录（只看 filenames）与「目标是文件」 | **报 clean** | 两者都红 |
+
+外加两条小的：非字符串输入抛 `TypeError` 而不是 `LocalEngineRefusal`
+（撞死也算 fail-closed，但 `except LocalEngineRefusal` 的调用方接不住）；
+`--json` 被从 argv **任意位置**剥掉，会把子命令自己的 `--json` 吃掉。都已修。
+
+### 其中两条改的是规则，不只是正则，单独记
+
+**(a) `make play-local GAME=ar25` 本来是我写在文档里的正面例子，而它是错的。**
+`GAME=` 这个拼法**是我发明的**。手上唯一的证据（`browser-ops/TERMS.md` §4.2，
+带原文与 URL）只为 **swarm runner** 记了 `--game`，而 `make play-local` 记的是
+"Runs your agent against every game in the dataset"，**一个参数都没有**。
+GNU make 对没被引用的变量覆盖**是沉默接受的**——Makefile 若不消费 `GAME`，
+这条命令会打全 25 局，而命令行**看起来是过滤过的**。
+**「看起来过滤过」比「看起来危险」更糟**：它是会被照抄的那一版。
+拒 `verify-local` 的理由（一对没写名字的局无法对切分核验）逐字适用于
+`play-local`（一个没验证过的变量）。所以 `play-local` 进了拒绝集。
+**它可以出来——等 Makefile 进树里、并且被证明确实消费某个具名变量之后，不是之前。**
+
+**(b) 生成器让 `assert_local_pull_allowed` 开放失败。** `if not game_ids`
+对任何生成器对象都是假，于是 `(g for g in cfg if want(g))`——安全的列表推导
+去掉方括号的那个孪生兄弟——**跳过了「说出你那四局」的拒绝**，返回空白名单，
+调用方接着无过滤地拉。**调用点上什么都不显眼。** 现在先 materialize 再判空。
+
+### 它明说打不穿的
+
+切分闸门（缺失 / 损坏 / 被拓宽的 `piles.json` 一律拒绝，经 CLI 重定向 `PILES_PATH` 实测）；
+小写封存名检测的全部形态；Windows junction 进缓存**没有**逃过 `scan_dir`。
+它诚实登记了一条**未确认**：真符号链接（`mklink /D`）因权限建不出来，
+所以 `followlinks=False` 那条理论缺口**它不认领为发现**——这条自律值得照录。
+
+---
+
+## 修复后的复测
+
+| 检查 | 结果 |
+|---|---|
+| 九条绕过 + 全部变体逐条重跑 | 35 条命令，**still-allowed: 1** |
+| 那 1 条 | `uv run main.py --game=ar25` —— **本来就该 allow**（swarm runner + 开发堆过滤，是唯一有文档依据的合法形态） |
+| 控制组（合法过滤形态、`python -m pytest`、`git status`） | 全部仍 allow，没有被误伤 |
+| API 开放失败探针（generator / filter / set / None / 裸字符串 / 含 None） | **6/6 REFUSED** |
+| `python -m pytest`（arc-recon 全量） | **233 passed**（继承 82 + 新增 151） |
+| `bash verify.sh` | **VERIFY: green** |
+
+新增测试从 105 涨到 **151**，多出来的就是那九条各自的具名回归。
+它们在测试文件里单独成块并写了理由，因为**教训是可推广的**，
+而下一个改触发器的人需要先读到这个教训。

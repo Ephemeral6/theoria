@@ -143,9 +143,12 @@ the swarm runner's `--game` flag all default to every game in the dataset
 (`browser-ops/TERMS.md` §4.2). Source is worse than trajectories — it hands over
 the finished answer to the mechanics. So:
 
-* Any path that pulls `environment_files/`, or runs `make list-games` /
-  `make play-local` / `make verify-local` / the swarm runner, **must name the
-  four development-pile games explicitly**. Unfiltered means all 25.
+* Any path that pulls `environment_files/`, or runs the swarm runner, **must
+  name the four development-pile games explicitly**. Unfiltered means all 25.
+* `make play-local`, `make list-games` and `make verify-local` are **refused
+  outright**: no filter argument is documented for any of them, and make accepts
+  an unreferenced `GAME=` override in silence — so a filter we invented would
+  play all 25 while looking filtered. Use the swarm runner with `--game=`.
 * This is enforced in code, not by memory — `arc-recon/local_engine_guard.py`
   is a positive whitelist that defaults to deny. Put it in front of the call:
 
@@ -155,6 +158,10 @@ the finished answer to the mechanics. So:
   python local_engine_guard.py run   -- <command...>   # vets, then execs if allowed
   python local_engine_guard.py scan  environment_files # names-only cache sweep
   ```
+
+  It is a **pre-flight, not a sandbox**: a process that never calls it can still
+  run anything. `scan` is the after-the-fact detector for that case, and it is
+  in `verify.sh` for exactly that reason.
 
 * A local run makes **no API call**, so it leaves no trace in
   `data/recon_ledger.jsonl` and `contamination.py`'s audit stays green right

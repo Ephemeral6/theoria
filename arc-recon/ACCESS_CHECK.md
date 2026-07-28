@@ -499,8 +499,9 @@ negative list meets an unforeseen path shape and fails *open*, and failing open
 here cannot be undone.
 
 ```bash
-python local_engine_guard.py check -- make play-local            # exit 2, DENY_DEFAULT_ALL
-python local_engine_guard.py check -- make play-local GAME=ar25  # exit 0
+python local_engine_guard.py check -- make play-local                    # exit 2
+python local_engine_guard.py check -- uv run main.py --agent=x           # exit 2
+python local_engine_guard.py check -- uv run main.py --agent=x --game=ar25   # exit 0
 python local_engine_guard.py run   -- <argv...>   # vets, then execs only if allowed
 python local_engine_guard.py scan  environment_files/   # names-only sweep of a cache
 ```
@@ -510,25 +511,62 @@ Five refusals, one permission:
 1. `deny_default_all` — a game-playing or game-pulling command with no `--game`
    selector. Silence is the dangerous case upstream, so it is the refused case here.
 2. `deny_sealed` — any of the 21 named anywhere on the line, by full id or by
-   4-character prefix, tested *before* the allow branch so a line naming both
-   piles reads as sealed.
+   4-character prefix, case-insensitively, tested *before* the allow branch so a
+   line naming both piles reads as sealed.
 3. `deny_unknown` — a selector token that is not exactly a development-pile id
    or its exact prefix. Upstream treats the value as an ID *prefix*, so
    `--game=s` would widen to `sk48` **and** five sealed games; only the two
-   exact forms pass.
-4. `deny_unfiltered` — `make list-games` and `make verify-local`, which take no
-   filter at all. We already hold the 25 ids in `piles.json`; there is nothing
-   `list-games` can tell us that is worth running it for.
+   exact forms pass. A flag carrying an *empty* value is refused here too:
+   with last-wins semantics `--game=ar25 --game=` is no filter at all, wearing
+   the costume of a filtered run.
+4. `deny_unfiltered` — `make play-local`, `make list-games` and
+   `make verify-local`. **No filter argument is documented for any of them** —
+   `--game` is documented only for the swarm runner (see the correction below).
 5. Refuse-everything if `data/piles.json` is absent, malformed, or no longer
    hashes to the value `CLAUDE.md` pins. A guard that cannot read the cut does
    not know what it is guarding.
 
-Two properties worth stating because they are what the tests are about. The
+Three properties worth stating because they are what the tests are about. The
 prefix match is **boundary-anchored on both sides**, so `blobs/9ar25f0e/` does
 not read as `ar25` — the exact failure `SCHEMA_PATH_A.md` §3.1 found the hard
-way. And `scan` **opens nothing**: it is a sieve over filenames, and there is a
-test that fails if any file under the swept directory is opened. Downloading is
-not reading; a guard that quoted the file it was refusing would be the leak.
+way. Each shell **segment is judged alone** (split on `&&`, `||`, `;`, `|`, `&`,
+newline, `#`) and the most severe verdict wins, because one dev-pile token must
+not license the other statements sharing the line. And `scan` **opens nothing**:
+it is a sieve over file *and directory* names, and there is a test that fails if
+any file under the swept directory is opened. Downloading is not reading; a
+guard that quoted the file it was refusing would be the leak.
+
+#### 8b.1 · What an adversarial pass found, and the one correction that matters
+
+The first version of this guard was attacked by a reviewer briefed to break it,
+and it found **nine working bypasses**. Each is now a named regression test in
+`test_local_engine_guard.py`. The sealed-name matcher held — every hole was in
+the *reach* of the trigger list, in argv flattening, or in Python truthiness.
+Two are worth writing down here rather than only in the tests:
+
+**`make play-local GAME=ar25` was this document's own worked example, and it was
+wrong.** `GAME=` is a spelling *we invented*. The only evidence we hold —
+`browser-ops/TERMS.md` §4.2, quoting the docs with URLs — documents `--game` for
+the **swarm runner** and documents `make play-local` as "Runs your agent against
+every game in the dataset" **with no argument at all**. GNU make accepts an
+unreferenced variable override in silence, so if the Makefile does not consume
+`GAME`, that command plays all 25 while looking filtered, and **looking filtered
+is worse than looking dangerous**: it is the form somebody copies. The same
+reasoning that refuses `verify-local` for an unnamed pair condemns `play-local`
+for an unverified variable, so `play-local` moved into the refused set. It can
+come back out when the Makefile is in the tree and shown to honour a named
+variable — not before.
+
+**`assert_local_pull_allowed` failed open on a generator.** `if not game_ids` is
+false for any generator object, so `(g for g in cfg if want(g))` — the
+bracket-less twin of a safe list comprehension — skipped the "name your four
+games" refusal, returned an empty allowlist, and left the caller pulling
+unfiltered. Nothing at the call site looked wrong. It now materialises the
+sequence before testing it.
+
+The generalisable lesson: the design attention had gone to the sealed-name
+matcher, and that is the part that held. The failures were all in the plumbing
+around it.
 
 
 

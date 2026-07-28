@@ -14,9 +14,26 @@
     "3. carry the rule into CLAUDE.md's sealed-pile discipline"
   ],
   "tests": {
-    "arc-recon pytest": "187 passed (82 inherited + 105 new)",
+    "arc-recon pytest": "233 passed (82 inherited + 151 new)",
     "local_engine_guard.py selftest": "green",
     "bash verify.sh": "VERIFY: green, including the two new steps"
+  },
+  "adversarial_review": {
+    "brief": "break the guard; local files only, no web; every finding confirmed by an actual run",
+    "bypasses_confirmed": 9,
+    "bypasses_fixed": 9,
+    "minor_fixed": 2,
+    "held_under_attack": [
+      "the pile-cut gate (missing / malformed / widened piles.json refuses everything)",
+      "lowercase sealed-name matching, including boundary anchoring against 9ar25f0e and 9ls20a",
+      "a Windows junction into the cache did not evade scan_dir"
+    ],
+    "unconfirmed_and_not_claimed": "a true symlink into the cache -- mklink /D needed privilege the reviewer did not have, so the followlinks=False gap stays open and unproven",
+    "rule_changes_not_just_regexes": [
+      "make play-local moved into UNFILTERABLE_TARGETS: GAME= was a spelling we invented and no filter argument is documented for that target",
+      "assert_local_pull_allowed materialises its argument before the emptiness test -- a generator object is always truthy and was failing open"
+    ],
+    "recheck": "35 bypass variants re-run; still-allowed 1, and that one (uv run main.py --game=ar25) is the documented legitimate form. 6/6 API fail-open probes refuse. Controls unaffected."
   },
   "out_of_territory_edits": [
     "CLAUDE.md -- authorised explicitly by the board item's goal (3)",
@@ -25,22 +42,27 @@
   "not_committed": [
     "arc-recon/data/claim_set.json -- verify.sh regenerates it; the only delta was ledger_lines 1945->1953, counting baseline-arms' untracked probe log. Reverted, not landed."
   ],
+  "known_gaps": [
+    "the guard is a pre-flight, not a sandbox: a process that never calls it can still run anything. scan is the after-the-fact detector and is in verify.sh.",
+    "the trigger list is a list and will miss an unforeseen default-all entry point; the adversarial pass proved this by finding four such misses. Narrowed, not closed.",
+    "OPS-B proposal items B / C / E are out of this item's scope and were deliberately not done -- referred to monitor/inbox instead of edited in passing."
+  ],
   "files": [
     {
       "path": "arc-recon/local_engine_guard.py",
-      "sha256": "ffa04b2ed578c848048e9672239db4ebd74be75803f234f832b3df3379b3035b"
+      "sha256": "070840bd76d007a50f40db856497be4951a1e192bda0146ca8f5c7e988eef51e"
     },
     {
       "path": "arc-recon/test_local_engine_guard.py",
-      "sha256": "d02c5c1162891b94272cea1521b9bbd86801409678fd815e40566daa0c1b95db"
+      "sha256": "e2c01c2f6786f5fe897403a38f7e96ce1313458fb3ad0f6e9d13b6b98fa61ab5"
     },
     {
       "path": "arc-recon/ACCESS_CHECK.md",
-      "sha256": "89d4dbd020a1e48492742357a3e891cc6530b14adb0657cbffa43bb9d30eb88e"
+      "sha256": "42e863984f9f6bfd6840f0d43ad137899c90fbd2b3ba6776d77f968e5dec2bee"
     },
     {
       "path": "arc-recon/README.md",
-      "sha256": "017058f0fa28464fbcf10c8a0e497a8bee14eb17a78599b021b807bb377f4bef"
+      "sha256": "c33dd1d41ec271d41e573dca850fbf797448273837373eeb441ff712b9a33093"
     },
     {
       "path": "arc-recon/verify.sh",
@@ -48,12 +70,11 @@
     },
     {
       "path": "CLAUDE.md",
-      "sha256": "8964d2d1630c7a70e7d252ffeac488d0bff73013a700223e5923b94b5a2961df"
+      "sha256": "dabae8266a5863e1013ad33024f37ba46d5cc5d3ef93ca7aa66bc20d6fb0dc31"
     },
     {
       "path": ".gitignore",
       "sha256": "9c727d9e4daca7e10401eabf816e7daf412912b85847f52b31ec68f317e78f28"
     }
-  ],
-  "note": "sha256 values above are the pre-adversarial-review state; if the review lands fixes, RUN_STATE.md records them and a superseding manifest entry is appended in the same directory."
+  ]
 }

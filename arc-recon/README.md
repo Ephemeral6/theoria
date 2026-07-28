@@ -421,12 +421,21 @@ that path, and `ACCESS_CHECK.md` §8b is its reasoning. Positive whitelist,
 default deny, boundary-anchored prefixes, sealed tested before allow:
 
 ```bash
-python local_engine_guard.py check -- make play-local            # exit 2 — unfiltered is all 25
-python local_engine_guard.py check -- make play-local GAME=ar25  # exit 0
+python local_engine_guard.py check -- make play-local             # exit 2 — no documented filter
+python local_engine_guard.py check -- uv run main.py --agent=x    # exit 2 — unfiltered is all 25
+python local_engine_guard.py check -- uv run main.py --agent=x --game=ar25    # exit 0
 python local_engine_guard.py run   -- <argv...>    # vets, then execs only if allowed
 python local_engine_guard.py scan  environment_files   # names-only sweep; opens nothing
 python local_engine_guard.py selftest              # asserts its own claims, offline
 ```
+
+An adversarial pass against the first version found **nine working bypasses**;
+each is a named regression test now, and `ACCESS_CHECK.md` §8b.1 records the two
+that changed the rules rather than just the regexes. The sharpest: this file's
+own worked example used to be `make play-local GAME=ar25`, and `GAME=` is a
+spelling **we invented** — no filter argument is documented for that target, and
+make swallows an unreferenced variable in silence, so it would have played all
+25 while looking filtered. It is refused now.
 
 `selftest` and `scan` both run in `verify.sh`. `environment_files/` is
 gitignored, and nothing under it may be read except the four development games —
