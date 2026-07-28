@@ -18,16 +18,16 @@ step () {
   printf '\n== %s\n' "$1"
 }
 
-step "1/5  cold-start-a0 suite (includes the 26 new C9 tests)"
+step "1/6  cold-start-a0 suite (includes the 38 new C9 tests)"
 ( cd cold-start-a0 && python -m pytest ) || fail=1
 
-step "2/5  theory-compiler suite -- the DSL side must not move"
+step "2/6  theory-compiler suite -- the DSL side must not move"
 ( cd theory-compiler && python -m pytest ) || fail=1
 
-step "3/5  cold-start-a0 end to end"
+step "3/6  cold-start-a0 end to end"
 ( cd cold-start-a0 && python run_all.py ) || fail=1
 
-step "4/5  A0's mined guards are byte-identical to the base commit"
+step "4/6  A0's mined guards are byte-identical to the base commit"
 python - <<'PY' || fail=1
 import json, subprocess, sys
 base = "86d79c6"
@@ -46,7 +46,12 @@ for path in ("cold-start-a0/artifacts/candidates.jsonl",
 sys.exit(1 if bad else 0)
 PY
 
-step "5/5  C9's acceptance line -- the count-lock world through the pipeline"
+step "5/6  the mover tracks the agent on every world, or at least no fewer"
+python "$ROOT/theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/11_mover_tracks_the_agent.py" \
+  > /dev/null 2>&1 && echo "   [ok ] 0 worlds regressed" || {
+    echo "   [FAIL] a world regressed -- rerun the probe for the table"; fail=1; }
+
+step "6/6  C9's acceptance line -- the count-lock world through the pipeline"
 python - <<'PY' || fail=1
 import os, sys, tempfile
 sys.path.insert(0, os.path.join(os.getcwd(), "cold-start-a0"))

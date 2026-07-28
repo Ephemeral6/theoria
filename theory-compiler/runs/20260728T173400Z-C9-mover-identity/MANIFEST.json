@@ -1,11 +1,12 @@
 {
+  "adversarial_review": "probes/10_adversarial_identity_swap.py refuted the first version of identity_swap on three shipped worlds; the design changed in response. See RUN_STATE.md section 3b.",
   "api_spend": "none",
   "base_commit": "86d79c62586d9f5926509939e3028ef35c159a59",
   "branch": "agent/c9-count-lock-vocabulary",
   "files": [
     {
       "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/RUN_STATE.md",
-      "sha256": "2fc4348efd1f4e68c68712223b3d06bfb1238d56bce9d57b22cd71f2ae695ec8"
+      "sha256": "8b9ea258f45784eaf8a94ed721ec48919f48ec7b0afdeee671c3f2907106229d"
     },
     {
       "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/acceptance/candidates.t1-tokens-lock.jsonl",
@@ -56,6 +57,18 @@
       "sha256": "0d4369f24b75ec8eceda068a0e4ca5e886228b7a0ef4a2b549146ede1b58b1b9"
     },
     {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/adversarial_identity_swap.HEAD.json",
+      "sha256": "66f56768d3e1c091c2d94200ba59b4f8d13ea619573f3fff5faee32101f1e066"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/adversarial_identity_swap.worktree.json",
+      "sha256": "149a35037ab6ef0599c6f194267afa29a03000a53f03c90530c94941f7e10c2d"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/mover_tracks_the_agent.json",
+      "sha256": "278209ebe3d143fffd396fe2eb4b5999d3d24d8dfaa6cf8dd44a9d129095ac3d"
+    },
+    {
       "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/05_track_anatomy.py",
       "sha256": "4dd510667d074d6da99e665c8bd87d39da28116ccdb1381d14fb2cde408c2a23"
     },
@@ -76,8 +89,16 @@
       "sha256": "65f6227fa35e0cec7e9b688100714ba405b3c54bfd3e7717fbb636126d054a8d"
     },
     {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/10_adversarial_identity_swap.py",
+      "sha256": "ead04929cce08ad178bf4f34948cb75bc22e50a4761ba9655bf2f8508cfc07b0"
+    },
+    {
       "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/10_four_manuals_four_forms.py",
       "sha256": "2de901cb081091bc1e22a5dad90b7796ee0ab99b20f9a633de27c32d4304e72a"
+    },
+    {
+      "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/11_mover_tracks_the_agent.py",
+      "sha256": "3ccb06dff293bfc790aa2197b366cb9dc5299793ab8e50c52d4f78ff177260e3"
     },
     {
       "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/a0_segmentation_probe.py",
@@ -85,7 +106,7 @@
     },
     {
       "path": "theory-compiler/runs/20260728T173400Z-C9-mover-identity/verify.sh",
-      "sha256": "bd703ab692030558fa22a817ec3aac5237813f47485484e1447cc15b32950edc"
+      "sha256": "74662135c91bf4a9415098e7cab386a26e163e51a9eb082615d80c9fb1e1d640"
     }
   ],
   "network": "none",

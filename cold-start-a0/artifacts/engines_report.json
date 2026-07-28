@@ -719,7 +719,8 @@
               "why": "recolour is not this track's whole body in the vanishing track's colour"
             }
           ],
-          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape)",
+          "occlusion_test_ran": true,
+          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape,not_occlusion)",
           "priced_by": "not script length -- see module docstring",
           "script_bits_after": 4423,
           "script_bits_before": 4423,
@@ -756,14 +757,15 @@
               "why": "recolour is not this track's whole body in the vanishing track's colour"
             }
           ],
-          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape)",
+          "occlusion_test_ran": true,
+          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape,not_occlusion)",
           "priced_by": "not script length -- see module docstring",
           "script_bits_after": 6511,
           "script_bits_before": 6511,
           "swaps": []
         },
         "operator": "connected_components(4)",
-        "ratio": 0.775,
+        "ratio": 0.7179,
         "reidentification": {
           "applied": true,
           "merged": [
@@ -1105,13 +1107,13 @@
             }
           ],
           "operator": "template_match+disjoint_lifetime",
-          "saved_bits": 807,
-          "script_bits_after": 5704,
+          "saved_bits": 1227,
+          "script_bits_after": 5284,
           "script_bits_before": 6511,
           "tracks_after": 6,
           "tracks_before": 90
         },
-        "script_bits": 5704,
+        "script_bits": 5284,
         "tracks": 6
       }
     ],

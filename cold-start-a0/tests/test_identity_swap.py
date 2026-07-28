@@ -45,8 +45,10 @@ COST = CostModel(7, 9, max_objects=5)
 # ----------------------------------------------------------------- fixtures
 
 def _track(track_id, color, anchors, rel_cells=((0, 0),), n=4):
-    """A one-cell track present exactly where `anchors` is not None."""
-    masks = [None if a is None else ((a[0], a[1]),) for a in anchors]
+    """A track whose body is `rel_cells` offset from each non-None anchor."""
+    masks = [None if a is None
+             else tuple((a[0] + dr, a[1] + dc) for dr, dc in rel_cells)
+             for a in anchors]
     first = next(i for i, a in enumerate(anchors) if a is not None)
     return Track(track_id=track_id, first_frame=first, color=color,
                  shape=(1, 1), rel_cells=tuple(rel_cells),
@@ -165,6 +167,231 @@ def test_a_plain_recolour_with_no_vanish_is_left_alone():
     out, report = repair_identity_swaps(seg, COST)
     assert not report.applied and not report.swaps and not report.near_misses
     assert out is seg
+
+
+# --- the holes an adversarial pass found, each pinned -----------------------
+# `theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/
+#  10_adversarial_identity_swap.py` was written to refute this pass.  Every case
+# below is one it broke before these refusals existed.
+
+@pytest.mark.parametrize("shape", ["two movers, one candidate",
+                                   "one mover, two candidates"])
+def test_an_ambiguous_pairing_is_refused_rather_than_decided_by_track_id(shape):
+    """Both readings fit the same pixels equally well.
+
+    Choosing between them by track id would make the answer an artefact of which
+    raster cell the segmenter numbered first, dressed up as physics.
+    """
+    if shape == "two movers, one candidate":
+        tracks = [_track("obj0", 6, [(1, 1), (1, 2), None, None]),
+                  _track("obj1", 6, [(1, 5), (1, 4), None, None]),
+                  _track("obj2", 2, [(1, 3)] * 4)]
+        vanishers, recolours = ["obj0", "obj1"], [("obj2", (1, 3))]
+    else:
+        tracks = [_track("obj0", 6, [(1, 1), (1, 3), None, None]),
+                  _track("obj1", 2, [(1, 2)] * 4),
+                  _track("obj2", 2, [(1, 4)] * 4)]
+        vanishers, recolours = ["obj0"], [("obj1", (1, 2)), ("obj2", (1, 4))]
+
+    events = [Event(t=1, type="vanish", track=v, params={},
+                    bits=COST.vanish_bits()) for v in vanishers]
+    events += [Event(t=1, type="recolor", track=tid,
+                     params={"cells": [list(cell)], "to": [6]},
+                     bits=COST.recolor_bits(1)) for tid, cell in recolours]
+    seg = Segmentation(tracks=tracks, events=events,
+                       script_bits=sum(e.bits for e in events),
+                       baseline_bits=999, declaration_bits=0, n_frames=4)
+
+    out, report = repair_identity_swaps(seg, COST)
+    assert not report.applied and not report.swaps
+    assert any("does not choose one" in m["why"] for m in report.near_misses)
+    assert out is seg
+
+
+def test_two_independent_swaps_at_one_transition_are_both_taken():
+    """Refusing ambiguity must not become refusing plurality: when the pairing
+    is forced, greedy first-fit's habit of finding one of two is a defect."""
+    tracks = [_track("obj0", 6, [(1, 1), (1, 2), None, None]),
+              _track("obj1", 6, [(5, 1), (5, 2), None, None]),
+              _track("obj2", 2, [(1, 3)] * 4),
+              _track("obj3", 2, [(5, 3)] * 4)]
+    events = [
+        Event(t=1, type="vanish", track="obj0", params={}, bits=COST.vanish_bits()),
+        Event(t=1, type="vanish", track="obj1", params={}, bits=COST.vanish_bits()),
+        Event(t=1, type="recolor", track="obj2",
+              params={"cells": [[1, 3]], "to": [6]}, bits=COST.recolor_bits(1)),
+        Event(t=1, type="recolor", track="obj3",
+              params={"cells": [[5, 3]], "to": [6]}, bits=COST.recolor_bits(1)),
+    ]
+    seg = Segmentation(tracks=tracks, events=events,
+                       script_bits=sum(e.bits for e in events),
+                       baseline_bits=999, declaration_bits=0, n_frames=4)
+    _out, report = repair_identity_swaps(seg, COST)
+    assert report.applied
+    assert sorted((s.mover, s.eaten) for s in report.swaps) == \
+        [("obj0", "obj2"), ("obj1", "obj3")]
+    assert report.as_json()["delta_bits"] == 4
+
+
+def test_a_stale_declared_colour_does_not_hide_a_genuine_step_onto():
+    """`Track.color` is the colour at declaration.  A mover that has already
+    recoloured carries a stale one, and adjudicating against it refused a real
+    consumption -- which is exactly what happens on the second hop of a chain."""
+    mover = _track("obj0", 7, [(1, 1), (1, 2), None, None])
+    eaten = _track("obj1", 2, [(1, 3), (1, 3), (1, 3), (1, 3)])
+    events = [
+        Event(t=0, type="recolor", track="obj0",
+              params={"cells": [[1, 1]], "to": [6]}, bits=COST.recolor_bits(1)),
+        Event(t=1, type="vanish", track="obj0", params={}, bits=COST.vanish_bits()),
+        Event(t=1, type="recolor", track="obj1",
+              params={"cells": [[1, 3]], "to": [6]}, bits=COST.recolor_bits(1)),
+    ]
+    seg = Segmentation(tracks=[mover, eaten], events=events,
+                       script_bits=sum(e.bits for e in events),
+                       baseline_bits=999, declaration_bits=0, n_frames=4)
+    _out, report = repair_identity_swaps(seg, COST)
+    assert report.applied, "the mover is colour 6 by t=1, not the declared 7"
+    assert [(s.mover, s.eaten) for s in report.swaps] == [("obj0", "obj1")]
+
+
+def test_a_track_that_comes_back_is_not_a_track_that_was_eaten():
+    """Otherwise the mover inherits the returning body and teleports."""
+    mover = _track("obj0", 6, [(1, 1), (1, 2), None, None, None, None])
+    eaten = _track("obj1", 2, [(1, 3), (1, 3), (1, 3), None, (6, 6), (6, 6)])
+    events = [
+        Event(t=1, type="vanish", track="obj0", params={}, bits=COST.vanish_bits()),
+        Event(t=1, type="recolor", track="obj1",
+              params={"cells": [[1, 3]], "to": [6]}, bits=COST.recolor_bits(1)),
+    ]
+    seg = Segmentation(tracks=[mover, eaten], events=events,
+                       script_bits=sum(e.bits for e in events),
+                       baseline_bits=999, declaration_bits=0, n_frames=6)
+    out, report = repair_identity_swaps(seg, COST)
+    assert not report.applied
+    assert any("returns after a gap" in m["why"] for m in report.near_misses)
+    assert out is seg
+
+
+def test_a_vanishing_track_that_comes_back_is_left_to_reidentify():
+    mover = _track("obj0", 6, [(1, 1), (1, 2), None, (2, 2), (2, 3), (2, 4)])
+    eaten = _track("obj1", 2, [(1, 3)] * 6)
+    events = [
+        Event(t=1, type="vanish", track="obj0", params={}, bits=COST.vanish_bits()),
+        Event(t=1, type="recolor", track="obj1",
+              params={"cells": [[1, 3]], "to": [6]}, bits=COST.recolor_bits(1)),
+    ]
+    seg = Segmentation(tracks=[mover, eaten], events=events,
+                       script_bits=sum(e.bits for e in events),
+                       baseline_bits=999, declaration_bits=0, n_frames=6)
+    _out, report = repair_identity_swaps(seg, COST)
+    assert not report.applied
+    assert any("belongs to reidentify" in m["why"] for m in report.near_misses)
+
+
+def test_a_recolour_of_cells_that_are_not_the_track_s_body_is_refused():
+    """Counting the cells is not enough -- n cells elsewhere on the board would
+    have passed that test."""
+    scene = _swap_scene(cells=[[5, 5]])
+    _out, report = repair_identity_swaps(scene, COST)
+    assert not report.applied
+    assert any("whole body" in m["why"] for m in report.near_misses)
+
+
+@needs_worldgen
+def test_standing_on_something_is_not_eating_it():
+    """The attack that decided the design.
+
+    `t2-cycler-lock`'s agent walks over a cycler tile. Vanish + total recolour +
+    same shape + adjacent — the signature is identical to eating a token, and
+    nothing in the `Segmentation` tells them apart. The pixels do, but only
+    later: an occluded body shows itself again the moment the mover steps off,
+    and a consumed one never does.
+    """
+    from pipeline import multi_miner, segment_operators
+    from pipeline.board import extract_board, object_layer
+    from pipeline.engines_stage import background_color
+    from world.ground_truth import read_trace
+
+    path = os.path.join(WORLDGEN, "t2-cycler-lock", "raw_trace.jsonl")
+    if not os.path.exists(path):
+        pytest.skip("t2-cycler-lock not generated")
+    frames, _actions, _wins = read_trace(path)
+    board = extract_board(frames)
+    background = background_color(board, frames)
+    layer = object_layer(frames, board, background=background)
+    _op, seg, report = segment_operators.choose_operator(layer, background=background)
+
+    repair = next(r for r in report if r["chosen"])["identity_repair"]
+    assert repair["occlusion_test_ran"], "the caller must hand over the pixels"
+    assert any("stood on it rather than consuming it" in m["why"]
+               for m in repair["near_misses"])
+    assert repair["n_swaps"] == 1, "only the one real consumption survives"
+    assert multi_miner.mover_track(seg) == "obj0"
+
+
+def test_a_repair_without_the_pixels_says_it_could_not_run_the_test():
+    """The occlusion test needs the frames. A caller that withholds them gets a
+    more permissive pass, and the report says which one it got."""
+    _out, report = repair_identity_swaps(_swap_scene(), COST)
+    assert report.as_json()["occlusion_test_ran"] is False
+    _out, with_pixels = repair_identity_swaps(
+        _swap_scene(), COST, frames=[[[0] * 9] * 7] * 4, background=0)
+    assert with_pixels.as_json()["occlusion_test_ran"] is True
+
+
+def test_a_consumed_track_is_not_resurrected_by_reidentify():
+    """The repair truncates the eaten track, which makes it disjoint from any
+    later look-alike -- exactly the pair `reidentify` merges. A consumed object
+    did not come back."""
+    from pipeline.reidentify import reidentify
+
+    eaten = _track("obj1", 2, [(1, 3), (1, 3), None, None])
+    twin = _track("obj2", 2, [None, None, None, (4, 4)])
+    seg = Segmentation(
+        tracks=[eaten, twin],
+        events=[Event(t=1, type="vanish", track="obj1",
+                      params={"consumed_by": "obj0"}, bits=COST.vanish_bits()),
+                Event(t=2, type="appear", track="obj2", params={}, bits=30)],
+        script_bits=100, baseline_bits=999, declaration_bits=0, n_frames=4)
+    _out, merge = reidentify(seg, COST)
+    assert not merge.merged, "a consumed object was declared to have returned"
+
+
+def test_a_ragged_segmentation_is_refused_not_re_threaded():
+    mover = _track("obj0", 6, [(1, 1), (1, 2), None, None])
+    eaten = _track("obj1", 2, [(1, 3), (1, 3), (1, 3), (1, 3)])
+    del eaten.masks[3]           # ragged: mdl_segmenter never emits this
+    del eaten.anchors[3]
+    events = [
+        Event(t=1, type="vanish", track="obj0", params={}, bits=COST.vanish_bits()),
+        Event(t=1, type="recolor", track="obj1",
+              params={"cells": [[1, 3]], "to": [6]}, bits=COST.recolor_bits(1)),
+    ]
+    seg = Segmentation(tracks=[mover, eaten], events=events,
+                       script_bits=sum(e.bits for e in events),
+                       baseline_bits=999, declaration_bits=0, n_frames=4)
+    out, report = repair_identity_swaps(seg, COST)
+    assert not report.applied
+    assert any("ragged" in m["why"] for m in report.near_misses)
+    assert out is seg
+
+
+def test_the_repair_leaves_a_well_formed_segmentation():
+    seg, report = repair_identity_swaps(_swap_scene(), COST)
+    assert report.applied
+    ids = {t.track_id for t in seg.tracks}
+    for track in seg.tracks:
+        assert len(track.masks) == len(track.anchors) == seg.n_frames
+        for mask, anchor in zip(track.masks, track.anchors):
+            assert (mask is None) == (anchor is None), track.track_id
+        assert any(m is not None for m in track.masks), "no empty track survives"
+    for event in seg.events:
+        assert event.track in ids
+    for t in range(seg.n_frames):
+        live = [tuple(x.masks[t]) for x in seg.tracks if x.masks[t] is not None]
+        flat = [cell for body in live for cell in body]
+        assert len(flat) == len(set(flat)), "two tracks claim one cell at t=%d" % t
+    assert seg.script_bits == report.script_bits_after
 
 
 def test_a_vanish_with_no_recolour_is_left_alone():

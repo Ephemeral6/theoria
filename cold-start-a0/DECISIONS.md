@@ -414,10 +414,44 @@ mis-anchored reading has no rule script at all: the miner raises
 `identity_repair.delta_bits` in every artefact so a reader can disagree with the
 trade rather than having to discover it.
 
-**代价照录.** Two bits per swap, on the record. A0 itself repairs zero swaps and
-records one refusal at the Button press. The three `object_hypothesis` candidate
-rows move because they carry this report; every mined guard in the tree is
-byte-identical.
+**代价照录.** Two bits per swap for a one-cell mover, on the record. A0 itself
+repairs zero swaps and records one refusal at the Button press. The three
+`object_hypothesis` candidate rows move because they carry this report; every
+mined guard in the tree is byte-identical.
+
+**The pass needs the pixels, and that was found by attacking it rather than by
+designing it.** An adversarial review found the case in a shipped world:
+`t2-cycler-lock`'s agent walks *over* a cycler tile, and the frames produce the
+signature exactly — vanish, total recolour into the mover's colour, same shape,
+adjacent. Standing on something and destroying it are the same picture at that
+transition, and no test on the `Segmentation` can tell them apart. The first
+version therefore fired on occlusion and made the mover *worse* there: 46/61
+frames tracking the agent before, 33/61 after, on three of the shipped worlds.
+
+The discriminator is in the pixels but only *later* — an occluded body shows
+itself again the moment the mover steps off, and a consumed one never does. The
+pass now takes the object layer and refuses any candidate whose cells go back to
+showing something other than floor. Measured over all 35 worldgen worlds through
+`choose_operator`: **7 improved, 0 regressed**, and the three cycler worlds moved
+from "harmed" to "improved". `probes/11_mover_tracks_the_agent.py` is that sweep
+and it is in the verify gate, so a future change cannot quietly regress a world.
+
+Three further things the same review closed, each with a test: an ambiguous
+transition is now refused **whole** rather than resolved by track id (which would
+have made the answer an artefact of raster order); `Track.color` is the colour at
+declaration and goes stale, so the mover's colour is replayed from its recolour
+events; and `reidentify` no longer merges a track this pass marked `consumed_by`
+— truncating the eaten track is precisely what manufactures the disjoint-lifetime
+pair that merge gets wrong.
+
+**上游定价对齐.** The review also caught the pass charging in a different currency
+from the script it was editing: `choose_operator` built its `CostModel` with
+`max_objects=len(seg.tracks)` while `segment_trajectory` uses the most components
+in any **one frame**, so `b_objid` differed and the advertised +2 was +4 or +6 on
+three worlds. `_max_objects` now reproduces upstream's number. This was a
+pre-existing mis-pricing in `reidentify`'s call, not something this pass
+introduced — A0's losing operator moves 5704 → 5284 bits and the chosen operator
+does not move.
 
 **The clean fix is not ours.** Charging a recolour above a move, or making the
 assignment prefer colour continuity, would delete this pass. That is

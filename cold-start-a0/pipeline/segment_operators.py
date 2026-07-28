@@ -100,6 +100,23 @@ OPERATORS: Dict[str, Callable] = {
 }
 
 
+def _max_objects(seg: Segmentation) -> int:
+    """The width `segment_trajectory` charged its object ids in.
+
+    Upstream sizes `b_objid` by the most components in **any one frame**, not by
+    the number of tracks (`segmenter.py`, `max_objects = max(len(comps) …)`), and
+    a post-pass that re-prices events has to charge in the same currency or
+    `script_bits` stops being the length of any single code -- which matters
+    here, because `script_bits` is what this function compares between operators.
+    Tracks present in a frame are exactly that frame's components, so this
+    reproduces the number rather than guessing at it.
+    """
+    per_frame = (sum(1 for track in seg.tracks
+                     if track.mask_at(i) is not None)
+                 for i in range(seg.n_frames))
+    return max(max(per_frame, default=1), 1)
+
+
 @contextlib.contextmanager
 def _operator(fn: Callable):
     original = _seg.connected_components
@@ -153,8 +170,9 @@ def choose_operator(frames: Sequence[Frame], background: int = 0):
     swap_reports = {}
     for name in sorted(OPERATORS):
         seg = segment_with(name, frames, background=background)
-        cost = CostModel(height, width, max_objects=max(len(seg.tracks), 1))
-        repaired, swap_report = repair_identity_swaps(seg, cost)
+        cost = CostModel(height, width, max_objects=_max_objects(seg))
+        repaired, swap_report = repair_identity_swaps(
+            seg, cost, frames=frames, background=background)
         if swap_report.applied:
             seg = repaired
         swap_reports[name] = swap_report

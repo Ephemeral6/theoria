@@ -64,13 +64,15 @@ did not see it.
 to work with).
 
 It fires on one pattern and one only: track `a` vanishes at *t*, track `b`
-recolours **all** of its cells to `a`'s colour at *t*, `a` and `b` have the same
-shape, and their anchors are 4-adjacent. Then `a` moved onto `b` and `b` was
-consumed. Non-adjacent swaps, partial recolours and shape changes are refused
-and counted into the report as near misses, so the next rung will have a forcing
-case rather than a guess.
+recolours **all** of its own cells to `a`'s colour *as of t*, `a` and `b` have
+the same shape, and their anchors are 4-adjacent. Then `a` moved onto `b` and `b`
+was consumed. Everything else is refused with a named reason and counted into the
+report as a near miss, so the next rung will have a forcing case rather than a
+guess. The refusal set is wider than it started — §3b is why, and it is the most
+important thing in this run after the acceptance itself.
 
-**It costs 2 bits per swap and the report says so.** This is the only
+**It costs 2 bits per swap for a one-cell mover, and the report says so.** This
+is the only
 segmentation decision in the pipeline not made by script length, because script
 length is precisely what prefers the wrong answer here. The criterion actually
 being applied is total description length — segmentation script *plus* rule
@@ -142,6 +144,63 @@ four bits, so unlike E-08 no existing atom was re-priced.
 Ledger entry: `cold-start-a0/THEORIZE_LOG.md` **E-09**, with the forcing world,
 the transition, the four-atom table of what v1 could not say, and the price.
 
+## 3b. The adversarial round, which changed the design
+
+A subagent was pointed at `identity_swap.py` and told to refute the claim that it
+"repairs exactly the case where the mover stepped onto a stationary object, never
+fires where that is not what happened, and never corrupts the Segmentation".
+**It refuted it, on shipped data, and it was right.**
+
+The decisive case: `worldgen`'s `t2-cycler-lock` lets the agent walk *over* a
+cycler tile, whose own ground truth says so ("the colour of a cycler cell
+determines its phase, except where the agent covers it"). The frames at that
+transition produce the signature exactly — vanish, total recolour into the
+mover's colour, same shape, 4-adjacent. **Standing on something and destroying it
+are the same picture**, and no test on the `Segmentation` can separate them. The
+first version fired, handed the agent's identity to the tile it was standing on,
+and made the mover *worse* on three worlds:
+
+| world | mover↔agent, repair off | first version | after the fix |
+|---|---|---|---|
+| `t2-cycler-lock` | 46/61 | **33/61** | **57/61** |
+| `t3-cycler-portal-lock` | 130/161 | **119/161** | **140/161** |
+| `v-bd2babb4` | 157/191 | **139/191** | **165/191** |
+
+The discriminator is in the pixels, but only *later*: an occluded body shows
+itself again the moment the mover steps off; a consumed one never does. The pass
+now takes the object layer and refuses any candidate whose cells go back to
+showing something other than floor. Sweep over **all 35** worldgen worlds through
+`choose_operator` (`probes/11_mover_tracks_the_agent.py`, now in the verify gate):
+
+    worlds: 35   improved: 7   regressed: 0   mover exact everywhere: 28
+
+Four more findings from the same review, each closed with a test:
+
+* **an ambiguous transition is refused whole.** Two movers contesting one object,
+  or one mover with two candidates, used to be resolved by `sorted()` on track
+  id — which makes the answer an artefact of which raster cell the segmenter
+  numbered first. Refusing plurality would have been the other error, so a
+  *forced* multiple pairing is still taken, and that has its own test.
+* **`Track.color` is the colour at declaration** and goes stale the moment the
+  track recolours, so a genuine second hop in a chain was being refused. The
+  mover's colour is now replayed from its recolour events.
+* **`reidentify` was resurrecting consumed objects.** Truncating the eaten track
+  is exactly what manufactures a disjoint-lifetime pair, and the merge then
+  declares a consumed object to have come back. Tracks marked `consumed_by` are
+  now excluded from merging.
+* **the pass was charging in a different currency from the script it edited.**
+  `choose_operator` built its `CostModel` with `max_objects=len(seg.tracks)`
+  while `segment_trajectory` uses the most components in any *one frame*, so the
+  advertised "+2 bits per swap" was **+4 and +6** on three worlds. `_max_objects`
+  now reproduces upstream's number. This was a pre-existing mis-pricing in
+  `reidentify`'s call rather than something this pass introduced; A0's *losing*
+  operator moves 5704 → 5284 bits and the chosen one does not move.
+
+Two findings were accepted rather than fixed, and are stated in the module
+docstring rather than left to be discovered: the pass reads a **signature**, not
+physics, so a vanish beside a coincidental recolour would still be repaired; and,
+like `reidentify`, it returns the input object when nothing fires.
+
 ## 4. The acceptance line, met
 
 `bash theory-compiler/runs/20260728T173400Z-C9-mover-identity/verify.sh` →
@@ -209,7 +268,7 @@ is a fact about the grammar and not about any miner.
 
 | surface | result |
 |---|---|
-| `cold-start-a0` suite | **82 passed** (26 new) |
+| `cold-start-a0` suite | **94 passed** (38 new) |
 | `theory-compiler` suite | **363 passed, 1 skipped**; **364 passed** under `THEORIA_REQUIRE_LEAN=1` |
 | `engine-rig` suite | **315 passed, 9 skipped** — untouched, no file in it modified |
 | `cold-start-a0/run_all.py` | nine steps green, schema validation OK |
@@ -217,6 +276,7 @@ is a fact about the grammar and not about any miner.
 | `worldgen` `t1-switch-toggle` | 31 `rule_hypothesis` rows, guards **byte-identical** |
 | `worldgen` `t1-switch-latch` | 27 `rule_hypothesis` rows, guards **byte-identical** |
 | A0's own identity repair | **0 swaps**, one refusal at t=99 (the Button press — the Switch recolours while the Door vanishes, and the recolour is not into the vanishing track's colour). Pinned by a test. |
+| every worldgen world's mover | **7 improved, 0 regressed** of 35; exact on 28 |
 
 **The work order's "四份既有 DSL 不回归" clause, checked against the base commit
 rather than against itself.** A subagent ran the four cross-track manuals through
