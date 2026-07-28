@@ -1,29 +1,35 @@
 {
-  "cycle": 3,
-  "utc": "2026-07-28T07:30Z",
-  "last_audited_commit": "ab99697",
-  "range_this_cycle": "b23c110..ab99697 (39 files)",
+  "cycle": 4,
+  "utc": "2026-07-28T08:35Z",
+  "last_audited_commit": "4d3f993",
+  "range_this_cycle": "ab99697..4d3f993 (26 commits, 323 files)",
   "mode": "incremental",
   "covered": {
-    "纪律漂移": "增量封存 ID 命中全在污染登记与本邮箱文本；密钥零命中；append-only 三文件本区间零删除",
-    "基准漂移": "Theoria.md:299 接入核查逐项对树 → 两项（释出许可条款、速率配额）已被 browser-ops 答掉但未回流",
-    "证据漂移": "监控上一轮宣布的每一条逐件复核：p1-engines 实到、S3 note 实到、credential_hygiene 实到；p1-cut 半到；p3 例外未到",
-    "目标漂移": "本轮补巡（欠两轮）：GRID 14 个 active 全部落在项目格；ops 产出（browser-ops）落不进 GRID/PAPER_PLAN 任何槽位 → 释出许可结论无回流路径。WP1–WP9 的 evidence 逐条抽查留待下轮",
-    "流程漂移": "无新增",
-    "监控自身漂移": "p1-cut note 自相矛盾 → 报告；append_only 仍恒红（监控已认领下轮修，未重复报）"
+    "纪律漂移": "封存 ID 命中 9 文件全为污染登记/护栏夹具/本邮箱文本；密钥零命中；PARTNER_SYNC 区间内第二笔删除已查证——两笔同在 agent/c2-semantics-migrate 分支、随 84e9a26 一起进 master，主线未见错版，判非违规",
+    "基准漂移": "无新增",
+    "证据漂移": "监控 06:27Z/07:49Z/08:17Z 宣布的逐件复核：p1-cut 实到、反射层实到（证据最硬）、p3 例外与 append_only 基线两轮未到 → 报告；释出许可接线只过一轮，不计",
+    "目标漂移": "WP3、WP5 的 evidence 对树抽查通过（theoria-arm/runs 九目录、exam/ battery/ 结构齐）。WP1/2/4/6-9 留待下轮",
+    "流程漂移": "无新增；C2 的 runs/20260728T040057Z-c2/MANIFEST.json 齐 prompt_id/branch/base_commit/utc，留痕正典已生效",
+    "要求引用了不存在的东西": "AUDITOR.md 新增第 6 维，本轮首次按它巡 → DRIFT-stop-hook-verify-gates-are-decoration（C2 已合并但 a0-spike/verify.sh 从未存在）",
+    "监控自身漂移": "两条裁决未落树 → DRIFT-two-verdicts-still-unlanded"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T0725Z-p1-cut-note-says-both.md",
-    "DRIFT-20260728T0725Z-release-licence-answered-but-unplumbed.md"
+    "DRIFT-20260728T0831Z-two-verdicts-still-unlanded.md",
+    "DRIFT-20260728T0831Z-stop-hook-verify-gates-are-decoration.md"
   ],
   "pending_on_monitor": [
-    "p3 跨门例外：06:27Z 承诺写成 finding + p3 段注明，本轮未落树；下轮仍无则升级为报告",
-    "append_only 豁免基线：06:27Z 认领下轮改",
-    "p1-cut note 后半句删除"
+    "p3 跨门例外 finding + p3 段注记（06:27Z 承诺，已欠 2 周期，本轮已升级为报告）",
+    "append_only 判据（06:27Z 承诺，已欠 2 周期；本轮给出更好的修法：--first-parent 而非豁免表）",
+    "释出许可接进 spec 的 p1-access 与 WP10（07:49Z 承诺，欠 1 周期，未计）",
+    "a0-spike/verify.sh：补上或删掉工单里那行"
+  ],
+  "method_notes": [
+    "红线扫描脚本化在 scratchpad/redline.py（base head 两参），每轮直接跑，别再手写",
+    "第 6 维扫描 scratchpad/dim6.py 假阳性高：契约用轨道内相对路径，必须先对 engine-rig/theory-compiler 等根解析一遍再判缺失"
   ],
   "next_cycle_focus": [
-    "WP1–WP9 的 evidence 字段逐条对树抽查（目标漂移这一维只做了一半）",
-    "复核本轮两条 + 监控欠的三条",
-    "增量起点 ab99697"
+    "复核本轮两条 + 监控欠的四件",
+    "WP1/WP2/WP4/WP6-WP9 的 evidence 逐条对树抽查（WP3/WP5 已过）",
+    "增量起点 4d3f993"
   ]
 }
