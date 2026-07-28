@@ -1,8 +1,9 @@
 {
-  "mode": "hold",
+  "mode": "normal",
   "requeue": [],
   "history": [],
   "detected_at": "2026-07-28T09:35Z",
   "reset_hint": "You've hit your session limit \u00b7 resets 8:20pm (Asia/Shanghai)",
-  "note": "session-limit, not per-request rate limit; all sessions (headless + app ops) share it"
+  "note": "session-limit, not per-request rate limit; all sessions (headless + app ops) share it",
+  "resumed_at": "2026-07-28T13:10:42Z"
 }

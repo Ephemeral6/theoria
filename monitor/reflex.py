@@ -96,6 +96,18 @@ def main():
 
         # 2. quota
         q = run([sys.executable, os.path.join(HERE, "quota.py"), "check"])
+        # The hold had no exit: nothing ever called resume, so a session-limit
+        # at 09:35 kept the fleet frozen long after its 20:20 reset (OPS-M
+        # cycle 5). Every tick in hold now probes the window and lifts it.
+        if q.returncode == 2:
+            probe = run([sys.executable, os.path.join(HERE, "quota.py"),
+                         "ping"], timeout=180)
+            if probe.returncode == 0:
+                r = run([sys.executable, os.path.join(HERE, "quota.py"),
+                         "resume"], timeout=1800)
+                events.append("quota:RESUMED")
+                q = run([sys.executable, os.path.join(HERE, "quota.py"),
+                         "check"])
         hold = q.returncode == 2
         if hold:
             events.append("quota:HOLD")

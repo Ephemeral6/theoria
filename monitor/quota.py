@@ -140,6 +140,15 @@ def ping():
 def resume(stagger=90):
     st = load(STATE, {"mode": "normal", "requeue": []})
     if not st["requeue"]:
+        # An empty queue is not a reason to stay held. The hold froze the
+        # fleet from 09:35 past its own 20:20 reset because this branch
+        # returned without ever clearing the mode (OPS-M cycle 5).
+        if st.get("mode") != "normal" and ping() == 0:
+            st["mode"] = "normal"
+            st["resumed_at"] = now_utc()
+            save_state(st)
+            print("queue empty and window open -> mode=normal")
+            return 0
         print("nothing to resume.")
         return 0
     if ping() != 0:
