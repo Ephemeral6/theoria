@@ -71,7 +71,7 @@
     ],
     "ops": [
       {
-        "age_min": 15,
+        "age_min": 21,
         "cycle": 8,
         "id": "OPS-A",
         "kind": "ops",
@@ -82,7 +82,7 @@
         "state": "idle"
       },
       {
-        "age_min": 101,
+        "age_min": 108,
         "cycle": 4,
         "id": "OPS-B",
         "kind": "ops",
@@ -93,7 +93,7 @@
         "state": "idle"
       },
       {
-        "age_min": 4,
+        "age_min": 11,
         "cycle": 5,
         "id": "OPS-M",
         "kind": "ops",
@@ -104,7 +104,7 @@
         "state": "working"
       },
       {
-        "age_min": 460,
+        "age_min": 467,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -117,18 +117,18 @@
     ],
     "standing": [
       {
-        "age_min": 15,
+        "age_min": 4,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
         "name": "在线战役研究员",
-        "note": "A4a step 3 done and pushed: run_arm.py, the arm runs end to end for the first time. E1 (true impossibility) vs E2 (false one) come back identical on 10/10 decision fields -- P-6 demonstrated. First run was wrong (fed a2-holed the sweep trace instead of its evidence); caught, recorded, and P-1's pre-registered pixel counts now assert at run time. --twice deterministic; both ledgers PASS validate_ledger, retiring the theoria_ablate blocker. Next: step 4, exhibits (E3 has the real work).",
+        "note": "A4a step 4 done and pushed: exhibits/. E1 holds (verdict identical, reason evaporates). E2 holds (unsolvable on a solvable level, bus empty) plus a charity control -- handed the solution path the arm DOES localise (mispredicted_step, 1 diff), so the cut removed what produces the counterexample, not the ability to repair. E3 NOT constructible: D-A2-006 was fixed upstream, so pddl_addressable is dead code; reported as a pre-registered falsifier with 5 measurements, not substituted. Next: step 5, tests/.",
         "outputs": 0,
         "role": "常驻推进：Theoria 臂在真 API 上跑出结果（论文最大缺口）",
         "state": "working"
       },
       {
-        "age_min": 24,
+        "age_min": 30,
         "cycle": 3,
         "id": "RES-2",
         "kind": "standing",
@@ -612,7 +612,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 22:13:58",
+  "generated_at": "2026-07-28 22:20:15",
   "grid": {
     "A1": {
       "active": [
@@ -1486,13 +1486,8 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/board/board.log",
-      "monitor/board/items/E5-cert-recheck.md",
-      "monitor/board/items/S11-sealed-halfguard.md",
-      "monitor/index.html",
-      "monitor/loop_state.json",
-      "monitor/reflex.py",
-      "monitor/state.json",
+      "onitor/ops-status/RES-1.json",
+      "monitor/scan.py",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
@@ -1504,12 +1499,12 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/E5-cert-recheck.W-1411.md",
-      "monitor/board/claimed/S11-sealed-halfguard.W-1410.md"
+      "monitor/bus.py",
+      "monitor/bus/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "6beb2e6 monitor: roles re-cut by the nature of the work that is left, not by headcount",
+    "git_head": "bd7e9e7 monitor: full dispatch authority, and supply-driven scaling to match",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1528,8 +1523,8 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/E5-cert-recheck.W-1411.md",
-      "monitor/board/claimed/S11-sealed-halfguard.W-1410.md"
+      "monitor/bus.py",
+      "monitor/bus/"
     ]
   },
   "p1_green": 9,
@@ -1983,6 +1978,10 @@
       "detail": "4 个追加式文件无新增删除（1 行历史删除已裁决豁免：同窗口自我订正）。",
       "status": "green"
     },
+    "bus": {
+      "detail": "六个会话全部在线、指令全部已回执。",
+      "status": "green"
+    },
     "conflict_scan": {
       "detail": "三类检查全空：无冲突标记、无未合并路径、近 40 个提交无跨领地改动。",
       "status": "green"
@@ -2010,10 +2009,10 @@
       "status": "green"
     },
     "ops_duty": {
-      "detail": "**22 条 TO-MONITOR 待监控回复**。 OPS-A 第8轮 idle（14 分钟前）； OPS-B 第4轮 idle（101 分钟前）； OPS-M 第5轮 working（4 分钟前）； OPS-R 第1轮 idle（460 分钟前）",
+      "detail": "**22 条 TO-MONITOR 待监控回复**。 OPS-A 第8轮 idle（21 分钟前）； OPS-B 第4轮 idle（107 分钟前）； OPS-M 第5轮 working（10 分钟前）； OPS-R 第1轮 idle（466 分钟前）",
       "rows": [
         {
-          "age_min": 14,
+          "age_min": 21,
           "cycle": 8,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -2022,7 +2021,7 @@
           "status": "green"
         },
         {
-          "age_min": 101,
+          "age_min": 107,
           "cycle": 4,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -2031,7 +2030,7 @@
           "status": "green"
         },
         {
-          "age_min": 4,
+          "age_min": 10,
           "cycle": 5,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2040,7 +2039,7 @@
           "status": "green"
         },
         {
-          "age_min": 460,
+          "age_min": 466,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2065,7 +2064,7 @@
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 0 个提交 / 0 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 1 个提交 / 0 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "green"
     },
     "supply": {

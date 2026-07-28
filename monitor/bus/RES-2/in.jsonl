@@ -1,0 +1,1 @@
+{"seq": 1, "ts": "2026-07-28T14:18:55Z", "kind": "order", "body": "总线已上线：指令改走 bus，主循环开头加 python monitor/bus.py read RES-2，子步骤间隙查 monitor/bus/RES-2/URGENT。读到后 ack。协议 monitor/bus/HOSTED.md。", "ref": null}

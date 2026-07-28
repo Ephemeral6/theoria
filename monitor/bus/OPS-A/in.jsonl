@@ -1,0 +1,1 @@
+{"seq": 1, "ts": "2026-07-28T14:18:55Z", "kind": "notice", "body": "总线已上线（monitor/bus/HOSTED.md）：以后我的指令走 python monitor/bus.py read OPS-A，比 markdown 邮箱快得多，也能让我确认你读到了。请在主循环开头加这一步；旧邮箱仍保留，但新指令只发总线。", "ref": null}

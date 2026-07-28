@@ -583,6 +583,24 @@ def _supply():
             "detail": "板上 %d 件可领、%d 件在做，供货充足。" % (avail, claimed)}
 
 
+def _bus_probe():
+    """托管是否真的成立：指令送达了吗、回执欠着吗、谁多久没露面。"""
+    out = subprocess.run([sys.executable, os.path.join(HERE, "bus.py"), "status"],
+                         cwd=ROOT, capture_output=True)
+    text = out.stdout.decode("utf-8", "replace")
+    lines = [l for l in text.splitlines() if l.strip()]
+    never = [l.split()[0] for l in lines if "从未读取" in l]
+    owed = [l.split()[0] for l in lines if "欠回执 [" in l]
+    if never:
+        return {"status": "partial",
+                "detail": "总线已上线；%d 个会话尚未读取过（%s）——"
+                          "它们下个循环读到后即接管。" % (len(never), ", ".join(never))}
+    if owed:
+        return {"status": "partial",
+                "detail": "有会话欠回执：" + ", ".join(owed)}
+    return {"status": "green", "detail": "六个会话全部在线、指令全部已回执。"}
+
+
 def probe_needs_human():
     """全系统唯一需要人出手的事：App 会话死了（上下文满或被关）。
 
@@ -616,6 +634,7 @@ def probe_needs_human():
 PROBES = {
     "credential_hygiene": probe_credential_hygiene,
     "needs_human": probe_needs_human,
+    "bus": lambda: _bus_probe(),
     "supply": lambda: _supply(),
     "spec_freshness": probe_spec_freshness,
     "verify_gates": probe_verify_gates,

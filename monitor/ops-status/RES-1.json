@@ -1,7 +1,7 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T15:10:00Z",
+ "utc": "2026-07-28T16:25:00Z",
  "cycle": 2,
  "state": "working",
- "note": "A4a step 3 done and pushed: run_arm.py, the arm runs end to end for the first time. E1 (true impossibility) vs E2 (false one) come back identical on 10/10 decision fields -- P-6 demonstrated. First run was wrong (fed a2-holed the sweep trace instead of its evidence); caught, recorded, and P-1's pre-registered pixel counts now assert at run time. --twice deterministic; both ledgers PASS validate_ledger, retiring the theoria_ablate blocker. Next: step 4, exhibits (E3 has the real work)."
+ "note": "A4a step 4 done and pushed: exhibits/. E1 holds (verdict identical, reason evaporates). E2 holds (unsolvable on a solvable level, bus empty) plus a charity control -- handed the solution path the arm DOES localise (mispredicted_step, 1 diff), so the cut removed what produces the counterexample, not the ability to repair. E3 NOT constructible: D-A2-006 was fixed upstream, so pddl_addressable is dead code; reported as a pre-registered falsifier with 5 measurements, not substituted. Next: step 5, tests/."
 }

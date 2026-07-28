@@ -1,0 +1,1 @@
+{"seq": 1, "ts": "2026-07-28T14:18:55Z", "kind": "order", "body": "总线已上线：从现在起我的指令走 bus，不再走 markdown 邮箱。请在你的主循环开头加一步 python monitor/bus.py read RES-1，并在每个子步骤间隙看一眼 monitor/bus/RES-1/URGENT 是否存在。读到本条后 ack 一下，我要确认链路通了。协议全文 monitor/bus/HOSTED.md。", "ref": null}
