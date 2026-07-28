@@ -1,0 +1,51 @@
+{
+  "files_watched": 3024,
+  "idle_floor_seconds_chosen": 2.0,
+  "live_root": "C:\\Users\\user\\Desktop\\theoria",
+  "read_only": true,
+  "what": "read-only measurement of concurrent-fleet churn in the live worktree, to size the background set the empty-run control has to subtract",
+  "windows": [
+    {
+      "exposure_seconds": 2.343,
+      "of_those_on_the_hard_list": [],
+      "of_those_the_superseded_criterion_would_have_reported": [],
+      "paths": [],
+      "paths_moved": 0,
+      "requested_seconds": 2.0
+    },
+    {
+      "exposure_seconds": 5.394,
+      "of_those_on_the_hard_list": [],
+      "of_those_the_superseded_criterion_would_have_reported": [],
+      "paths": [],
+      "paths_moved": 0,
+      "requested_seconds": 5.0
+    },
+    {
+      "exposure_seconds": 15.355,
+      "of_those_on_the_hard_list": [],
+      "of_those_the_superseded_criterion_would_have_reported": [],
+      "paths": [],
+      "paths_moved": 0,
+      "requested_seconds": 15.0
+    },
+    {
+      "exposure_seconds": 30.328,
+      "of_those_on_the_hard_list": [
+        "monitor/state.json"
+      ],
+      "of_those_the_superseded_criterion_would_have_reported": [
+        "monitor/index.html",
+        "monitor/reflex.lock"
+      ],
+      "paths": [
+        "monitor/index.html",
+        "monitor/reflex.lock",
+        "monitor/reflex.log",
+        "monitor/state.json"
+      ],
+      "paths_moved": 4,
+      "requested_seconds": 30.0
+    }
+  ]
+}

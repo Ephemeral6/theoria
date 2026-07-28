@@ -1,0 +1,63 @@
+{
+  "A9_criterion_reports_it": true,
+  "aligned": true,
+  "background": [],
+  "files_watched": 2430,
+  "hard_list": [
+    {
+      "pattern": "proxy/var/spend_gate.jsonl",
+      "why": "spend gate ledger: foreign write = spending out of control"
+    },
+    {
+      "pattern": "arc-recon/data/*.jsonl",
+      "why": "contamination/incident ledgers: foreign write = the pile-cut record tampered with"
+    },
+    {
+      "pattern": "CONTRACTS/**",
+      "why": "frozen v0.1 contracts: foreign write = a frozen contract routed around"
+    },
+    {
+      "pattern": "monitor/state.json",
+      "why": "monitor state: foreign write = the watcher edited by the watched"
+    },
+    {
+      "pattern": "**/ledger.jsonl",
+      "why": "per-territory ledger: the accounting a claim is later checked against"
+    },
+    {
+      "pattern": "**/ledger.*.jsonl",
+      "why": "sharded ledgers: the form the ledgers actually take on this tree"
+    },
+    {
+      "pattern": "**/candidates.jsonl",
+      "why": "the frozen contract's append-only stream, which lives outside CONTRACTS/"
+    }
+  ],
+  "idle_seconds": 2.642,
+  "makeup_seconds": 0.0,
+  "observed": [
+    "proxy/var/a9-negative-control-42880.jsonl"
+  ],
+  "reported": [
+    "proxy/var/a9-negative-control-42880.jsonl"
+  ],
+  "reported_by_hard_list": [],
+  "run_seconds": 0.476,
+  "subtracted": [],
+  "superseded_criterion_lets_the_byte_through": true,
+  "superseded_criterion_reports": [],
+  "superseded_criterion_tokens": [
+    "/var/",
+    "/runs/",
+    "/out/",
+    "/artifacts/",
+    ".jsonl",
+    ".log",
+    "state.json"
+  ],
+  "victim": "proxy/var/a9-negative-control-42880.jsonl",
+  "victim_bytes": 1,
+  "victim_is_on_hard_list": false,
+  "victim_removed_afterwards": true,
+  "what": "one byte written to proxy/var/ during the run"
+}

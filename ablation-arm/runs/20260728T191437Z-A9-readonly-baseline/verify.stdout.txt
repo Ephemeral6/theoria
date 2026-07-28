@@ -1,0 +1,96 @@
+
+==============================================================================
+== build_theory --check
+==============================================================================
+theory/ -- 4 manual(s) + 1 playbook(s) cut from upstream
+  a0_base.dsl        <- cold-start-a0/theory/theory.dsl            2 invariant(s) demoted, 1 theorem(s) deleted
+  a0_no_button.dsl   <- cold-start-a0/theory/theory_no_button.dsl  1 invariant(s) demoted, 1 theorem(s) deleted
+  a2_base.dsl        <- cold-start-a2/theory/theory.dsl            2 invariant(s) demoted, 1 theorem(s) deleted
+  a2_holed.dsl       <- cold-start-a2/theory/theory_holed.dsl      2 invariant(s) demoted, 1 theorem(s) deleted
+  a0_playbook.dsl    <- cold-start-a0/theory/playbook.dsl          2 playbook entr(ies) demoted
+  totals: 7 invariants demoted, 4 theorems deleted, 2 playbook entries demoted (1 soundness-bearing)
+  parser's reading of the cut manuals:
+    a0_base.dsl        invariants=2 ['empirical']  theorems=0
+    a0_no_button.dsl   invariants=1 ['empirical']  theorems=0
+    a2_base.dsl        invariants=2 ['empirical']  theorems=0
+    a2_holed.dsl       invariants=2 ['empirical']  theorems=0
+
+clean: theory/ is byte-identical to a fresh cut
+
+==============================================================================
+== pytest
+==============================================================================
+.............................................................            [100%]
+
+==============================================================================
+== run_arm
+==============================================================================
+ablation arm -- 5 world(s)
+  a0-base        SAT    verdict=solvable    surprises=0  loop_turns=False
+  a0-no-button   UNSAT  verdict=unsolvable  surprises=0  loop_turns=False  [E1]
+  a2-base        SAT    verdict=solvable    surprises=0  loop_turns=False
+  a2-holed       UNSAT  verdict=unsolvable  surprises=0  loop_turns=False  [E2]
+       sweep (raw_trace.jsonl, off the bus): green=False anomalies=44
+  a2-charitable  SAT    verdict=solvable    surprises=0  loop_turns=False
+  E1 (true impossibility) vs E2 (false one): 10/10 decision fields identical -> indistinguishable=True
+  surprise kinds: 7 in the taxonomy, 6 available to this arm
+  P-1 pre-registered counts hold: True
+  upstream trees unchanged: True (468 files hashed)
+
+==============================================================================
+== run_arm --twice
+==============================================================================
+determinism: 38 file(s) compared, 3 ledger(s) modulo `ts`
+  deterministic: True
+
+==============================================================================
+== run_exhibits
+==============================================================================
+E1   holds=True   (i) small-space unsolvable -- exhaustive search is feasible
+E2   holds=True   (iii) the specificity failure -- `unsolvable` on a solvable level
+E3   holds=False  the adversarial-review control, not a verdict class
+
+all hold: False
+not holding: E3 -- see artifacts/exhibits.json; a pre-registered falsifier is a result, not a red build
+wrote C:\Users\user\Desktop\theoria\.worktrees\a9-readonly-baseline\ablation-arm\artifacts\exhibits.json
+
+==============================================================================
+== the gate: what A4a asserts
+==============================================================================
+  P-3            ok
+  P-5(correct)   ok
+  P-6            ok
+  P-7            ok
+  shadow-1       ok
+  shadow-2       ok
+  shadow-3       ok
+  shadow-4       ok
+  read-only      ok
+  P-1(counts)    ok
+
+==============================================================================
+== recorded for A4b -- NOT asserted, and cannot turn this red
+==============================================================================
+  P-1             RECORDED
+      replay accuracy, byte-equal to the full arm
+  P-2             RECORDED
+      behavioural / held-out accuracy, equal to the full arm
+  P-4             RECORDED
+      this arm is cheaper, not dearer
+  P-5(identical)  RECORDED
+      the A0 verdict is *identical* to the full arm's
+  E3              NOT CONSTRUCTIBLE
+      the charitable exhibit
+
+==============================================================================
+== stages
+  build_theory --check   ok
+  pytest                 ok
+  run_arm                ok
+  run_arm --twice        ok
+  run_exhibits           ok
+
+wrote C:\Users\user\Desktop\theoria\.worktrees\a9-readonly-baseline\ablation-arm\artifacts\verify.json
+
+GREEN
+verify EXIT=0

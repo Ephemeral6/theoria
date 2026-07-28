@@ -1,0 +1,85 @@
+{
+  "api_dollars": 0,
+  "base_commit": "7df12a39d1dbdcaff593c487694173adbf4acebc",
+  "branch": "agent/a9-readonly-baseline",
+  "files": [
+    {
+      "path": "ablation-arm/ablcore/outside.py",
+      "sha256": "4fb3c57cd2a2db50a3b90740270bf011e83e393c5d0c4147156ecb65cb7acdc8"
+    },
+    {
+      "path": "ablation-arm/tests/test_readonly.py",
+      "sha256": "be44332cda78b76dcf6b2d5584f248471c32a8421e80fedebb5b4c1463e93c1e"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/01-empty-run-control.json",
+      "sha256": "da4b2906e987034e0bd93e0b1a42713f68d35333a2f946bbfee9b9a29bdc390b"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/02-real-run.json",
+      "sha256": "070c1f138e7c3522e62285e5c416e4c6f3f562c8ab36e09b96257adc974501e0"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/03-negative-control.json",
+      "sha256": "7631f52f473f7e14f3e4ca2faae6d070d08520b0e43de58a945bf812383ec9a0"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/03b-negative-control-mutation.json",
+      "sha256": "474037dfef1cda12d04c553dd85c4299a0fffc031c8e9bb37341b25c15dd37f9"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/04-hard-list-reachability.json",
+      "sha256": "381cba534abe153e61583a675f6aac8ff033d3a8b4b7a638a3c20ced2a8b3b67"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/05-live-background-churn.json",
+      "sha256": "158fa32b6aabbe3e39e7c3b25ba60256a22d0c616fe8dd41aecb241f005b7e4d"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/06-periodic-writer-residual.json",
+      "sha256": "5e9b7af5694d78c3b8fcfee6a096efcc9c6285a9a04f7bc18951af561ff4b1d7"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture.py",
+      "sha256": "9dfd76aa06601a0a935fd20a70415984dfc3e6bdf19e67e4c9b88c0b9b1f829b"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture.stdout.txt",
+      "sha256": "f2dc8ca9c9ccfb0d42d5ac678bf8ac2fa070c383708dbc06c4ab562707b25512"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_live_background.py",
+      "sha256": "379753b4911bc3b5ae51ea8ff8b5b43109dce7302bf2e7931f96df2894d0b0cf"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_live_background.stdout.txt",
+      "sha256": "a0630af3daaea75d5cab1b5a9f09b13c6d73c43517978c0645e5a820416eb490"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_periodic_writer.py",
+      "sha256": "198c224ca61457fa76dc58b80e801f85108636f8eefec3672ce29e7ba3eca59c"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/capture_periodic_writer.stdout.txt",
+      "sha256": "ab4dd387772853f190a6213aaf06e5b0170588d3c1e647c26f724b313c7ff193"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/pytest-readonly.stdout.txt",
+      "sha256": "00dcfd52c9dd9e2cad277b354e3b59fcb6415f1dd370451dc5851e21c79b6e71"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/pytest.stdout.txt",
+      "sha256": "f69d566fb3805a4a0a363ba32283992bc5d8bb09ab2a594f60de9a6db77efff1"
+    },
+    {
+      "path": "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/verify.stdout.txt",
+      "sha256": "c42c1d0b769c0724d30ebddc696e8d5fd718af9e8031c950e84283e6481cdc00"
+    }
+  ],
+  "network_calls": 0,
+  "prompt_id": "A9-readonly-baseline",
+  "responds_to": "monitor/audit/DRIFT-20260728T1501Z-the-tightened-criterion-hides-the-worst-writes.md (high)",
+  "sealed_pile_contact": "none",
+  "utc": "2026-07-28T19:14:37Z",
+  "what": "the read-only criterion rebuilt on an empty-run control, a hard list, and a negative control that also fails against the superseded criterion"
+}

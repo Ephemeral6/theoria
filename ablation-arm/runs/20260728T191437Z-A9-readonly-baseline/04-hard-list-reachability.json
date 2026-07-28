@@ -1,0 +1,112 @@
+{
+  "audit_table_paths_hidden_by_the_superseded_criterion": {
+    "arc-recon/data/contamination_log.jsonl": {
+      "on_hard_list": true,
+      "superseded_reports_it": false
+    },
+    "arc-recon/data/incidents.jsonl": {
+      "on_hard_list": true,
+      "superseded_reports_it": false
+    },
+    "baseline-arms/ledger.jsonl": {
+      "on_hard_list": true,
+      "superseded_reports_it": false
+    },
+    "engine-rig/artifacts/candidates.jsonl": {
+      "on_hard_list": true,
+      "superseded_reports_it": false
+    },
+    "monitor/state.json": {
+      "on_hard_list": true,
+      "superseded_reports_it": false
+    },
+    "proxy/var/spend_gate.jsonl": {
+      "on_hard_list": true,
+      "superseded_reports_it": false
+    }
+  },
+  "files_watched": 2430,
+  "patterns": [
+    {
+      "examples": [],
+      "files_on_this_tree": 0,
+      "mandated_by_ticket": true,
+      "pattern": "proxy/var/spend_gate.jsonl",
+      "why": "spend gate ledger: foreign write = spending out of control"
+    },
+    {
+      "examples": [
+        "arc-recon/data/canary_runs.jsonl",
+        "arc-recon/data/contamination_log.jsonl",
+        "arc-recon/data/incidents.jsonl",
+        "arc-recon/data/recon_ledger.jsonl"
+      ],
+      "files_on_this_tree": 4,
+      "mandated_by_ticket": true,
+      "pattern": "arc-recon/data/*.jsonl",
+      "why": "contamination/incident ledgers: foreign write = the pile-cut record tampered with"
+    },
+    {
+      "examples": [
+        "CONTRACTS/candidates_schema.md",
+        "CONTRACTS/candidates_schema_v0.2.md",
+        "CONTRACTS/deadlock_certificate_v0.1.md",
+        "CONTRACTS/dsl_grammar_v0.1.md",
+        "CONTRACTS/dsl_grammar_v0.2.md"
+      ],
+      "files_on_this_tree": 7,
+      "mandated_by_ticket": true,
+      "pattern": "CONTRACTS/**",
+      "why": "frozen v0.1 contracts: foreign write = a frozen contract routed around"
+    },
+    {
+      "examples": [
+        "monitor/state.json"
+      ],
+      "files_on_this_tree": 1,
+      "mandated_by_ticket": true,
+      "pattern": "monitor/state.json",
+      "why": "monitor state: foreign write = the watcher edited by the watched"
+    },
+    {
+      "examples": [
+        "baseline-arms/ledger.jsonl",
+        "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/ledger.jsonl",
+        "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage/ledger.jsonl",
+        "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage2/ledger.jsonl",
+        "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/ledger.jsonl"
+      ],
+      "files_on_this_tree": 10,
+      "mandated_by_ticket": true,
+      "pattern": "**/ledger.jsonl",
+      "why": "per-territory ledger: the accounting a claim is later checked against"
+    },
+    {
+      "examples": [
+        "baseline-arms/out/shards/ledger.a7-g50t.jsonl",
+        "baseline-arms/out/shards/ledger.a7-sk48.jsonl",
+        "baseline-arms/out/shards/ledger.a7-tn36.jsonl",
+        "baseline-arms/out/shards/ledger.a7smoke.jsonl",
+        "baseline-arms/out/shards/ledger.a7up-opus-g50t.jsonl"
+      ],
+      "files_on_this_tree": 10,
+      "mandated_by_ticket": false,
+      "pattern": "**/ledger.*.jsonl",
+      "why": "sharded ledgers: the form the ledgers actually take on this tree"
+    },
+    {
+      "examples": [
+        "cold-start-a0/artifacts/candidates.jsonl",
+        "cold-start-a0/prime/artifacts/candidates.jsonl",
+        "cold-start-a2/artifacts/candidates.jsonl",
+        "engine-rig/artifacts/candidates.jsonl",
+        "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/candidates.jsonl"
+      ],
+      "files_on_this_tree": 17,
+      "mandated_by_ticket": false,
+      "pattern": "**/candidates.jsonl",
+      "why": "the frozen contract's append-only stream, which lives outside CONTRACTS/"
+    }
+  ],
+  "what": "does each hard-list pattern match anything that actually exists on this checkout -- a rule nothing can trip has never been tested"
+}

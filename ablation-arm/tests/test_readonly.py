@@ -22,7 +22,7 @@ import os
 
 import pytest
 
-from ablcore import pin
+from ablcore import outside, pin
 
 ARM = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.dirname(ARM)
@@ -121,29 +121,245 @@ def test_a_full_run_leaves_every_upstream_tree_byte_identical():
             "it, so nothing else would have noticed." % (relative, moved[:5]))
 
 
+# --------------------------------------------------------------------------
+# "nothing outside this arm moved", rebuilt on an empty-run control.
+#
+# The previous version of this section subtracted concurrent-fleet noise with a
+# tuple of path shapes and was falsified by
+# `monitor/audit/DRIFT-20260728T1501Z-the-tightened-criterion-hides-the-worst-writes.md`
+# (high): the shapes it excluded were exactly the shared ledgers.  `ablcore/outside.py`
+# carries the replacement and the full reasoning; these tests are its callers.
+# --------------------------------------------------------------------------
+
+
+def _run_a0_base():
+    import run_arm
+    run_arm.run_all(["a0-base"])
+
+
 @pytest.mark.slow
 def test_a_full_run_writes_only_inside_this_arm():
     """The other half: not just *unchanged upstream*, but *nothing outside*.
 
     A run that left upstream alone and dropped files in the repo root would pass
     the test above and still be wrong.
-    """
-    import run_arm
 
-    watched = [d for d in os.listdir(REPO)
-               if os.path.isdir(os.path.join(REPO, d))
-               and d not in {".git", ".worktrees", "ablation-arm"}
-               and not d.startswith(".")]
-    before = {name: pin.hash_tree((name,)) for name in watched}
-    run_arm.run_all(["a0-base"])
-    # 并发舰队下，别的 agent 同时在写自己的领地，快照对比会把它们的写入
-    # 记到本臂头上（实测撞到 proxy/var/spend_gate.jsonl，本臂全仓 grep
-    # 无一处提到 spend_gate）。所以判据从「全仓无变化」收紧为
-    # 「无变化，或变化能追溯到本臂」——运行期账本类文件不算数。
-    CONCURRENT = ("/var/", "/runs/", "/out/", "/artifacts/",
-                  ".jsonl", ".log", "state.json")
-    for name in watched:
-        moved = pin.changed(before[name], pin.hash_tree((name,)))
-        mine = [m for m in moved
-                if not any(tok in m.replace("\\", "/") for tok in CONCURRENT)]
-        assert mine == [], "%s changed: %s" % (name, mine[:5])
+    Concurrent sessions write their own territories while this runs, so the
+    comparison is against an **empty-run control** taken in the same wall-clock
+    neighbourhood: only paths that moved during the run and *not* during the
+    idle window count, plus `outside.HARD_LIST`, which is never subtracted.
+    """
+    obs = outside.observe(_run_a0_base)
+
+    assert obs.files_watched > 1000, (
+        "only %d files outside the arm were hashed, which is too few to be the "
+        "repo -- the snapshot is probably looking at the wrong root"
+        % obs.files_watched)
+    assert obs.aligned, (
+        "the empty-run control was exposed for %.2fs but the run for %.2fs; a "
+        "control shorter than the thing it controls does not subtract the "
+        "noise it is meant to subtract"
+        % (obs.idle_seconds + obs.makeup_seconds, obs.run_seconds))
+    assert obs.reported == [], obs.message()
+
+
+@pytest.mark.slow
+def test_a_stray_byte_outside_the_arm_turns_this_check_red():
+    """The negative control the audit asked for, and the proof it is not a no-op.
+
+    Suggestion (3) verbatim: *write one byte under `proxy/var/` and assert the
+    check must go red*.  Without it, nobody can show the alarm still fires after
+    the rewrite.
+
+    The second half is the V12/V16 requirement: the same observed set is run
+    through `outside.superseded_criterion` -- the exact tuple this ticket
+    replaced -- and the byte is shown to be **let through** there.  A negative
+    control that is also red against the old code is not a control for this
+    change.
+
+    The victim path is chosen to look maximally like innocent noise: it is under
+    `proxy/var/` and ends in `.jsonl`, so it trips two of the old exclusion
+    tokens at once.  It is deliberately *not* `spend_gate.jsonl` -- corrupting a
+    real ledger to test the alarm is committing the offence to prove it is
+    detectable -- and deliberately *not* on the hard list either, so what is
+    being demonstrated is the empty-run control firing on its own merits.
+    """
+    victim_rel = "proxy/var/a9-negative-control-%d.jsonl" % os.getpid()
+    victim = os.path.join(REPO, victim_rel.replace("/", os.sep))
+    var_dir = os.path.dirname(victim)
+    made_dir = not os.path.isdir(var_dir)
+
+    assert not outside.is_hard(victim_rel), (
+        "the victim is on the hard list, so this would prove the hard list "
+        "fires and say nothing about the empty-run control")
+
+    def run_then_trespass():
+        _run_a0_base()
+        os.makedirs(var_dir, exist_ok=True)
+        with open(victim, "wb") as handle:
+            handle.write(b"x")
+
+    try:
+        obs = outside.observe(run_then_trespass)
+    finally:
+        if os.path.exists(victim):
+            os.remove(victim)
+        if made_dir and os.path.isdir(var_dir) and not os.listdir(var_dir):
+            os.rmdir(var_dir)
+    assert not os.path.exists(victim), "the negative control left its own litter"
+
+    assert victim_rel in obs.reported, (
+        "one byte written outside this arm did not turn the check red. "
+        "observed=%s reported=%s" % (obs.observed[:5], obs.reported[:5]))
+
+    let_through = outside.superseded_criterion(obs.observed)
+    assert victim_rel not in let_through, (
+        "the superseded criterion also reports this byte, so this negative "
+        "control does not test the A9 change -- pick a victim the old path-shape "
+        "table actually excluded")
+
+
+@pytest.mark.slow
+def test_a_mutated_existing_file_outside_the_arm_turns_this_check_red():
+    """The harder half of the negative control: modification, not creation.
+
+    The test above writes a *new* file, which is a pure addition to the
+    snapshot -- and an addition is the easy case, caught by any criterion that
+    diffs key sets at all.  The write this arm would realistically commit is an
+    *append* to a file that already exists (that is what the false positive that
+    started all this was: a concurrent session appending to a ledger).
+
+    So the victim is created before the first snapshot, is therefore present and
+    unchanged in the empty-run leg, and is appended to during the run leg.  Its
+    key is in `before` and in `after`; only its content moves.  It stays this
+    arm's own litter -- no file belonging to another territory is touched to
+    test the alarm.
+    """
+    victim_rel = "proxy/var/a9-mutation-control-%d.jsonl" % os.getpid()
+    victim = os.path.join(REPO, victim_rel.replace("/", os.sep))
+    var_dir = os.path.dirname(victim)
+    made_dir = not os.path.isdir(var_dir)
+
+    try:
+        os.makedirs(var_dir, exist_ok=True)
+        with open(victim, "wb") as handle:
+            handle.write(b"seed\n")
+
+        def run_then_append():
+            _run_a0_base()
+            with open(victim, "ab") as handle:
+                handle.write(b"x")
+
+        obs = outside.observe(run_then_append)
+    finally:
+        if os.path.exists(victim):
+            os.remove(victim)
+        if made_dir and os.path.isdir(var_dir) and not os.listdir(var_dir):
+            os.rmdir(var_dir)
+    assert not os.path.exists(victim), "the mutation control left its own litter"
+
+    assert victim_rel not in obs.background, (
+        "the victim moved during the empty-run leg too, so this proves nothing "
+        "about the run leg")
+    assert victim_rel in obs.observed, "the appended byte was not even observed"
+    assert victim_rel in obs.reported, (
+        "one byte appended to an existing file outside this arm did not turn "
+        "the check red. reported=%s" % obs.reported[:5])
+    assert victim_rel not in outside.superseded_criterion(obs.observed), (
+        "the superseded criterion also reports this, so it is not a control "
+        "for the A9 change")
+
+
+def test_the_hard_list_is_reported_even_when_it_is_background_noise():
+    """The control's one structural hole, closed by hand.
+
+    If another session writes a file during *both* legs it lands in the
+    background set and is subtracted.  For most files that is right.  For the
+    shared ledgers it is not, and this pins that: a hard-list path is reported
+    even when it is present in the background, while an ordinary path in the
+    same position is subtracted.
+    """
+    hard = "proxy/var/spend_gate.jsonl"
+    ordinary = "engine-rig/runs/p13-fd-real/some-scratch.txt"
+    assert outside.is_hard(hard) and not outside.is_hard(ordinary)
+
+    obs = outside.Observation(background=[hard, ordinary],
+                              observed=[hard, ordinary],
+                              idle_seconds=2.0, run_seconds=1.0,
+                              makeup_seconds=0.0, files_watched=2000)
+    assert obs.reported == [hard]
+    assert obs.reported_by_hard_list == [hard]
+    assert obs.subtracted == [ordinary]
+
+
+def test_the_hard_list_covers_every_path_the_old_criterion_hid():
+    """The audit's own table, turned into a regression lock.
+
+    The DRIFT note listed six real paths the path-shape tuple excluded.  Each is
+    asserted to be let through by the superseded criterion (so the table is a
+    faithful record of the bug) and caught by the replacement.
+
+    The two arms of this test are not redundant: the first proves the old
+    criterion really was blind here, the second proves the new one is not.  A
+    test that only asserted the second would pass on code that never had the
+    bug.
+    """
+    hidden = ["proxy/var/spend_gate.jsonl",
+              "arc-recon/data/contamination_log.jsonl",
+              "arc-recon/data/incidents.jsonl",
+              "engine-rig/artifacts/candidates.jsonl",
+              "baseline-arms/ledger.jsonl",
+              "monitor/state.json"]
+    assert outside.superseded_criterion(hidden) == [], (
+        "the audit's table says all six were excluded by the old criterion; "
+        "this one was not: %s" % outside.superseded_criterion(hidden))
+    missed = [p for p in hidden if not outside.is_hard(p)]
+    assert missed == [], "not on the hard list: %s" % missed
+
+    #: Every hard-list pattern must match something that exists on this tree, or
+    #: the rule has never been exercised by anything real.  (The adversarial
+    #: review's question (b): a hard list of paths nobody ever writes is a rule
+    #: that has not been tested.)
+    present = outside.snapshot()
+    for pattern, _why in outside.ALL_HARD:
+        if pattern == "proxy/var/spend_gate.jsonl":
+            # gitignored runtime output; absent on a fresh checkout by design,
+            # which is exactly why it is pinned by name rather than by presence.
+            continue
+        hits = [p for p in present if outside._to_regex(pattern).match(p)]
+        assert hits, "no file on this tree matches hard-list pattern %r" % pattern
+
+
+def test_the_glob_matcher_does_not_leak_across_directories():
+    """`*` must not cross `/`, or `arc-recon/data/*.jsonl` silently widens.
+
+    `fnmatch` would let it, and on Windows would also fold case.  A hard list
+    whose reach depends on the host OS is not a hard list.
+    """
+    assert outside.is_hard("arc-recon/data/incidents.jsonl")
+    assert not outside.is_hard("arc-recon/data/sub/incidents.jsonl")
+    assert outside.is_hard("CONTRACTS/candidates_schema.md")
+    assert outside.is_hard("baseline-arms/out/shards/ledger.a7-g50t.jsonl")
+    assert not outside.is_hard("ablation-arm/runs/x/ledger-notes.md")
+    assert not outside.is_hard("proxy/var/some_other.jsonl")
+
+
+def test_the_snapshot_does_not_inherit_the_pin_s_artifacts_blind_spot():
+    """`pin.SKIP_DIRS` drops `artifacts/` and `runs/`; this must not.
+
+    Half the audit's finding was that the worst-consequence paths were excluded
+    by the criterion.  The other half is that some of them were never hashed at
+    all, so no criterion could have reported them.
+    """
+    assert "artifacts" in pin.SKIP_DIRS and "runs" in pin.SKIP_DIRS
+    assert "artifacts" not in outside.SKIP_DIRS
+    assert "runs" not in outside.SKIP_DIRS
+
+    seen = outside.snapshot()
+    assert any("/artifacts/" in p for p in seen), "no upstream artifacts hashed"
+    assert any("/runs/" in p for p in seen), "no upstream runs/ hashed"
+    assert not any(p.startswith("ablation-arm/") for p in seen), \
+        "the arm's own tree is inside the watch, so its own writes read as escapes"
+    assert "PARTNER_SYNC.md" in seen, (
+        "top-level files are not watched; a run that appended to the shared "
+        "status board would pass this suite")
