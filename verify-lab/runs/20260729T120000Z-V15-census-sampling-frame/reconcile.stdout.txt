@@ -1,0 +1,7 @@
+frame                       244 units
+V11 census                  127 rows -> 107 frame units (43.9%)
+  rows naming no frame unit  12
+negctl pin                  141 paths -> 140 in frame (57.4%), 1 outside
+difference set (frame minus V11) 137   (stratum A 104, stratum B 27)
+in V11 but not pinned by negctl   37
+pinned by negctl but not in V11   70

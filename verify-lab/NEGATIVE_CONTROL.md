@@ -443,7 +443,7 @@ matrix. The blinding method and its declared breaches are in
 `runs/20260729T120000Z-V15-census-sampling-frame/BLINDING.md`.
 
 ```bash
-python verify-lab/frame/frame.py        # 241 units, three strata
+python verify-lab/frame/frame.py        # 244 units, three strata
 python verify-lab/frame/reconcile.py    # what V11 and negctl each reached
 python verify-lab/frame/matrix.py       # the matrix, V14's protocol, V15's gold
 ```
@@ -456,8 +456,8 @@ verdict stopped reaching an exit code — is structurally invisible to it. V11
 answered `否` to "can it go red" fifteen times. `can_refuse` is a column here,
 never a filter.
 
-**2. Coverage, measured.** Of 241 units, V11's census reaches **44.4%** and
-negctl's pin reaches **58.1%**. The difference set is **134**, not 74. Its shape
+**2. Coverage, measured.** Of 244 units, V11's census reaches **43.9%** and
+negctl's pin reaches **57.4%**. The difference set is **137**, not 74. Its shape
 is not random: `monitor/` — the rig that grades everyone else's gates — had
 **none** of its 14 entry points surveyed; every pipeline's intermediate steps
 are missing while its `run_all.py` is present; `figures/` has its aggregator

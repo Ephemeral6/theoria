@@ -1,0 +1,10 @@
+frame: 244 acceptance entry points
+  stratum A (invocable)          193   (186 python, 7 shell)
+  stratum B (terminal refusal)    34
+  stratum C (test suites)         17
+  marked frozen (under runs/)     15
+  marked generated                 0
+  live (neither marker)          229   (A 178, B 34)
+  -- measured, not a filter --
+  can refuse (non-zero path)     202
+  cannot refuse                   42

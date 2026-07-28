@@ -50,13 +50,17 @@ V14 的枚举器要求非零退出路径（`probe.py: has_main_block and can_exi
 
 | 分层 | 是什么 | 数量 |
 |---|---|---|
-| **A 可调用** | tracked、非测试的 `.py` 且有 `if __name__ == "__main__"`；或 tracked、非测试的 `.sh` | 190（183 py + 7 sh） |
+| **A 可调用** | tracked、非测试的 `.py` 且有 `if __name__ == "__main__"`；或 tracked、非测试的 `.sh` | 193（186 py + 7 sh） |
 | **B 终止性拒绝库** | 不在 A 里，抛一个仓库自己定义的 `Exception` 子类，被至少一个 A 层文件 import，且该异常在它自己以外的任何非测试文件里**无人 catch** | 34 |
 | **C 测试套件** | 每个直接含 `test_*.py` 的目录算一个 | 17 |
-| | **合计** | **241** |
+| | **合计** | **244** |
 
-（本文档的计数取自把 `frame.py` / `reconcile.py` / `matrix.py` 自己也纳入之前的那一版；
-纳入之后是 243。抽样框把自己数进去是对的 —— 一个豁免自己规则的探针，正是它在找的病。）
+**计数会漂，这是设计。** 抽样框枚举的是当下这棵树。差集被切下来的那一刻它是
+**241**；交付时是 **244**，多出来的三个是 `verify-lab/frame/frame.py`、`reconcile.py`、
+`matrix.py` —— 抽样框自己的三件工具。它把自己数进去是对的：一个豁免自己规则的探针，
+正是它在找的病。代价是**这三个入口没有人判过**，它们和后面那 6 个测试套件、
+2 个探针本体一样，是声明出来的缺口。本文档引的是交付时的 244；
+`SUPPLEMENT_TABLE.md` 的 126 行对应的是切差集那一刻的 241。
 
 **分层 B 为什么必须存在。** 它装的正是 V11 最锋利的那几个发现所在的类：
 `proxy/guard.py`、`exam/leakage.py`、`battery/guard.py` 靠抛异常拒绝，压根没有 `__main__`，
@@ -107,18 +111,18 @@ V14 的枚举器要求非零退出路径（`probe.py: has_main_block and can_exi
 ## 2. 对账：V11 的 127 与 negctl 的 141
 
 ```
-抽样框                        241 个单元
-V11 普查                      127 行 →  107 个单元（44.4%）
+抽样框                        244 个单元
+V11 普查                      127 行 →  107 个单元（43.9%）
   其中不指向任何单元的行         12
-negctl 的钉子                 141 条路径 → 140 在框内（58.1%），1 在框外
-差集（框 减 V11）              134（分层 A 101，分层 B 27，分层 C 6）
+negctl 的钉子                 141 条路径 → 140 在框内（57.4%），1 在框外
+差集（框 减 V11）              137（分层 A 104，分层 B 27，分层 C 6）
 在 V11 里但 negctl 没钉        37
 negctl 钉了但 V11 没判         70
 ```
 
 ### V11 漏了什么
 
-**134 个单元（56%）。** 按领地：monitor 14、baseline-arms 13、theory-compiler 13、
+**137 个单元（56%）。** 按领地（切差集时的 134 个，加上抽样框自己的三件工具）：monitor 14、baseline-arms 13、theory-compiler 13、
 cold-start-a0/a2/a3 各 12、engine-rig 11、exam 6、figures 6、ablation-arm 5、
 papers 5、worldgen 5、arc-recon 4、proxy 3、fuzzlab 2、theoria-arm 2、a0-spike 1。
 
@@ -147,7 +151,7 @@ papers 5、worldgen 5、arc-recon 4、proxy 3、fuzzlab 2、theoria-arm 2、a0-s
 
 ### negctl 漏了什么、多收了什么
 
-* **漏 101 个** —— 框内 241 个单元它枚举 140 个。三类：
+* **漏 104 个** —— 框内 244 个单元它枚举 140 个。三类：
   分层 B（27 个终止性拒绝库，它压根不看）、分层 C（17 个测试套件，它压根不看）、
   以及**没有非零退出路径的 A 层文件**（`can_refuse=False` 的 42 个中的大部分）——
   最后这一类是它的枚举器按定义排除的，也就是「死闸」这一整类对它不可见。
@@ -163,11 +167,13 @@ papers 5、worldgen 5、arc-recon 4、proxy 3、fuzzlab 2、theoria-arm 2、a0-s
 判据与 V11 逐字相同，九个判定员并行，**全部盲于探针**（做法与破口见
 `runs/20260729T120000Z-V15-census-sampling-frame/BLINDING.md`）。
 
-差集是 134，判了 126，差在：
+差集在切下来的那一刻是 134，判了 126，差在：
 * 6 个分层 C 单元 —— 测试套件。negctl 一个都不打分，判了也不会动矩阵一格；
   这是**声明的缺口，不是沉默的缺口**。
 * 2 个 `verify-lab/negctl/probe.py` 与 `criterion.py` —— 判它们就要读它们，
   而读它们正是盲判禁止的事。
+* 交付时又多出 3 个：`verify-lab/frame/` 的三件工具，它们在差集切下来之后才进树。
+  **它们同样没人判过**，写在这里而不是留给下一个人发现。
 
 计数：
 

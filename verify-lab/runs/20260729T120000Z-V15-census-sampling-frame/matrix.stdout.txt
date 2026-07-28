@@ -1,0 +1,13 @@
+frame 244 units; probe enumerates 145
+
+-- gold folding: strict   (V11 95 files, V15 adds 124) --
+V11 gold only (V14 repro)    n=95   TP 43  FN 20  FP 3   TN 29   FNR 0.317  FPR 0.094 
+V11+V15 gold                 n=219  TP 70  FN 41  FP 6   TN 102  FNR 0.369  FPR 0.056 
+V11 gold, probe-enumerated   n=76   TP 29  FN 19  FP 1   TN 27   FNR 0.396  FPR 0.036 
+V11+V15 gold, enumerated     n=145  TP 35  FN 36  FP 1   TN 73   FNR 0.507  FPR 0.014 
+
+-- gold folding: harsh   (V11 95 files, V15 adds 124) --
+V11 gold only (V14 repro)    n=95   TP 34  FN 12  FP 12  TN 37   FNR 0.261  FPR 0.245 
+V11+V15 gold                 n=219  TP 59  FN 20  FP 17  TN 123  FNR 0.253  FPR 0.121 
+V11 gold, probe-enumerated   n=76   TP 21  FN 11  FP 9   TN 35   FNR 0.344  FPR 0.205 
+V11+V15 gold, enumerated     n=145  TP 26  FN 18  FP 10  TN 91   FNR 0.409  FPR 0.099 
