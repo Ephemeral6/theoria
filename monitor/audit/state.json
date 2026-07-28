@@ -1,40 +1,38 @@
 {
-  "cycle": 7,
-  "utc": "2026-07-28T11:50Z",
-  "last_audited_commit": "1a8ed00",
-  "range_this_cycle": "3822815..1a8ed00 (26 commits, 161 files)",
+  "cycle": 8,
+  "utc": "2026-07-28T12:55Z",
+  "last_audited_commit": "9e61399",
+  "range_this_cycle": "1a8ed00..9e61399 (9 commits, 64 files)",
   "mode": "incremental",
   "covered": {
-    "纪律漂移": "封存 ID 命中 5 文件全为污染登记与本邮箱文本；密钥零命中；主线 append-only 零新增删除（全历史三笔 e24f140/6dec6f7/63ef0bf，--first-parent 仍只 63ef0bf 一笔，新判据未误报）",
+    "纪律漂移": "封存 ID 命中 4 文件全为污染登记与本邮箱文本；密钥零命中；主线 append-only 零新增删除。**另为 S11 跑了实证**：全仓（含 gitignored）无 environment_files 路径、无以封存 id/词根命名的目录、家目录无 ~/.arc* 缓存、代码零处调用 play-local/list-games/swarms —— 游戏源码从未被拉取，S11 是预防不是事故",
     "基准漂移": "无新增",
-    "证据漂移": "按 10:28Z 常设指令复核监控宣布的每一条：append_only 判据、ALL.md 撤销重画、释出许可接线 + R2 板项，全部实到",
-    "目标漂移": "WP10 的 scale 仍承诺『全公开集 artifacts』而 R2 已判定帧数据做不到——量小，写进 TO-MONITOR 未单开",
-    "流程漂移": "六个新交付目录的留痕抽查：fuzzlab/worldgen/exam 齐；figures 2/3、ablation-arm 1/2、theoria-arm 4/11 → 并入本轮报告",
-    "要求引用了不存在的东西": "a0-spike/verify.sh 仍缺（欠 3 周期），且已从板与探针视野中同时消失 → 并入本轮报告",
-    "监控自身漂移": "TERRITORIES / provenance / verify_gates 三处写死范围停止生长 → 本轮报告"
+    "证据漂移": "P9 报的两条陈旧前提逐例独立复核（未转述孤证）→ 本轮报告",
+    "目标漂移": "无新增",
+    "流程漂移": "工单前提被树推翻，连续两例 → 本轮报告",
+    "要求引用了不存在的东西": "a0-spike/verify.sh 欠 4 周期；verify_gates 范围未加 monitor/prompts/**，该文件同时不在板上、不在探针视野",
+    "监控自身漂移": "TERRITORIES 已改 _discover_territories()，上轮主建议全额采纳"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T1147Z-probes-have-hardcoded-scope-that-stopped-growing.md"
+    "DRIFT-20260728T1251Z-work-orders-whose-premise-the-tree-overtook.md"
   ],
   "pending_on_monitor": [
-    "TERRITORIES 改推导或加陈旧比对探针（本轮报告）",
-    "verify_gates 扫描范围加 monitor/prompts/**（本轮报告）",
-    "theoria-arm 七个 run 补 MANIFEST，preflight 与 salvage/aborted 优先（本轮报告）",
-    "a0-spike/verify.sh 重新挂板（欠 3 周期）",
-    "WP10 的 scale 按 R2 收窄（量小）"
-  ],
-  "retracted_by_me": [
-    "上轮建议『开一件工单去发许可申请』——R2 写的『不要自行申请，写进 needs_human』更对，对外发函不是 agent 替人做的决定。以 R2 为准。"
+    "a0-spike/verify.sh：补上或删掉 C2 工单那行（欠 4 周期，建议别再挂着）",
+    "verify_gates 扫描范围加 monitor/prompts/**（欠 1 周期）",
+    "theoria-arm 七个 run 补 MANIFEST（欠 1 周期）",
+    "papers/ 被两次认领，需监控解开（P9 报）",
+    "WP10 的 scale 按 R2 收窄（量小，欠 2 周期）",
+    "建议把『S11 是预防不是事故』的实证结论写进 S11 正文"
   ],
   "method_notes": [
     "红线扫描 scratchpad/redline.py <base> <head>",
-    "append-only 精确分析：scratchpad 内联脚本，git log 输出必须用 bytes 再 decode('utf-8','replace')——Windows 默认 gbk 会崩",
-    "判『某段是否已发布到主线』：git rev-list --first-parent master 里是否含该 sha",
-    "第 6 维扫描 scratchpad/dim6.py，假阳性高：契约用轨道内相对路径"
+    "封存源码落盘核查（S11 类）：find 全仓 environment_files*、以封存 id/词根命名的目录、~/.arc*，再 grep 代码里 play-local/list-games/swarms —— 只看路径名，不读内容",
+    "append-only 精确分析须用 bytes 再 decode('utf-8','replace')，Windows 默认 gbk 会崩",
+    "判『某段是否已发布到主线』：git rev-list --first-parent master 是否含该 sha"
   ],
   "next_cycle_focus": [
-    "复核本轮一条；theoria-arm MANIFEST 补齐；a0-spike/verify.sh 是否重新挂板",
-    "六个新目录的红线巡检本轮只做了留痕维度，下轮补做内容维度（封存 ID / 密钥 / 生成物手改）",
-    "增量起点 1a8ed00"
+    "复核本轮一条 + 五件欠账",
+    "六个新目录（fuzzlab/figures/worldgen/ablation-arm/exam/theoria-arm）的内容维度巡检 —— 连欠两轮",
+    "增量起点 9e61399"
   ]
 }
