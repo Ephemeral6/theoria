@@ -229,6 +229,46 @@ Two anchors need `cold-start-a2/` on the machine. This package reads that
 directory and writes nothing to it; when it is absent the anchors are reported
 **unavailable**, never as passes.
 
+## What an engine is worth, assembled for the paper (E6)
+
+`ENGINE_DIVIDEND.md`, built by `python -m tools.engine_dividend_table` from three
+artefacts, with `--check` to fail if it goes stale. Measurements in
+`runs/20260728T191530Z-E6-engine-dividend/`.
+
+Two thirds of E6's brief was already done and is **cited, not re-run**: E2
+measured the deadlock dividend and the three-rung ladder, E7 audited the
+dividend to destruction. What E6 added:
+
+* **Pagoda certificates are no longer unrechecked.** E5 left `lp_potential`
+  uncovered and said so; the only checker for those certificates imported the
+  producing engine and trusted the producer's own witness list. `recheck/` now
+  has a fourth condition shape that grounds the move set from the declared
+  geometry and **refuses** an `obligations` key as input. 4 certificates, all
+  ACCEPT; 3 have producer documents and all 3 differentials agree; 11 new
+  forgeries, all as declared. The fourth case, `keyed-gate`, exists because a
+  naive checker false-rejects it -- its only potential-raising move needs two
+  keys and every two-key state is already outside the region.
+* **The zero row.** `open4`: 16 true theorems, **47 expansions before and 47
+  after**, pruner fired 0 times. D-020 argued this row is the informative one and
+  it existed in no regenerable artefact. The theorems are sound and the hook is
+  connected; there is no dead region on the path this search takes.
+* Wall clock charged against `search_seconds` rather than the ~150 ms driver
+  clock, with carving on the invoice -- **0 of 6 rows that ran a search repay the
+  carve** -- and a tie-break sweep closing E2's gap G7.
+
+**The rule the assembler now states, and why** (D-033): it reads verdicts rather
+than re-deriving them. A draft that recomputed section C's optimality agreement
+scored "no known optimum" as "disagreement" and rendered **no** against three
+admissible planners. Three further defects had one shape -- a column reading a
+key that does not exist and rendering as a valid table full of `--`. A
+re-render-and-diff `--check` catches none of them; only a test pinning a real
+number does, and the suite now pins several plus perturbation tests.
+
+**Do not quote the §A table on its own.** Both its columns are heuristic-free
+controls, the `ipdb` column is E7-demoted to *measured, not evidence*, and the
+guard is a choice with a sign -- the `indexed` encoding makes `far5` blind go
+958 -> 1159, a 21% loss.
+
 ## Convergence interface (post-M8)
 
 `engine-rig/interop/` exports LP-solved pagoda certificates for the
