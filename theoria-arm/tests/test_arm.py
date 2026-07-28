@@ -400,6 +400,29 @@ def test_probe_hypotheses_include_one_ablation_per_rule(tmp_path):
 
 
 # ----------------------------------------------------------------- the reply
+def test_the_evidence_gate_waits_for_a_batch_but_never_cancels_a_call():
+    """A surprise triggers theorize; it does not make another pass over the
+    same frames worth $1.30. The gate delays a call until enough new world has
+    arrived -- and stands aside when the budget is nearly spent, so a run
+    cannot end without theorizing on what it has."""
+    from inner.loop import MIN_NEW_FRAMES_BETWEEN_THEORIZE as N   # noqa: PLC0415
+    assert N >= 2
+
+    class Fake:
+        def __init__(self, steps, last, left):
+            self.steps = list(range(steps))
+            self._frames_at_last_theorize = last
+            self.actions_left = left
+
+        def gated(self):
+            new = len(self.steps) - self._frames_at_last_theorize
+            return new < N and self.actions_left > N
+
+    assert Fake(steps=6, last=5, left=100).gated()        # 1 new: wait
+    assert not Fake(steps=9, last=5, left=100).gated()    # 4 new: go
+    assert not Fake(steps=6, last=5, left=2).gated()      # nearly out: go anyway
+
+
 def test_the_cost_cross_check_prices_a_real_usage_block():
     """Two independent cost figures per run: the CLI's own `total_cost_usd` and
     `proxy/cost.py` over the recorded usage. A cross-check that can only fail in
@@ -437,6 +460,25 @@ def test_the_cache_ttl_gap_is_diagnosed_rather_than_left_as_a_delta():
 
     none = _cache_ttl_diagnosis([{"model": "claude-opus-5", "usage": {}}], None)
     assert "not a source of disagreement" in none["verdict"]
+
+
+def test_the_sealed_pile_check_reads_the_bytes_and_fails_closed():
+    """"The guard did not fire" is a statement about the guard. The manifest
+    has to make a statement about what actually crossed the wire."""
+    from armtools.archive import sealing                # noqa: PLC0415
+    clean = [{"event": "env_step", "game_id": "g50t-5849a774", "run_id": "r"}]
+    report = sealing(clean)
+    assert report["cut_integrity"] is True
+    assert report["sealed_pile_untouched"] is True
+    assert report["game_ids_anywhere_in_the_records"] == ["g50t-5849a774"]
+
+    # A sealed id anywhere in any record -- not only in a game_id field --
+    # must show up. bp35-0a0ad940 is on the sealed pile.
+    dirty = clean + [{"event": "model_call", "run_id": "r",
+                      "request": {"prompt": "compare with bp35-0a0ad940"}}]
+    report = sealing(dirty)
+    assert report["sealed_game_ids_found"] == ["bp35-0a0ad940"]
+    assert report["sealed_pile_untouched"] is False
 
 
 def test_the_bootstrap_theorize_is_named_not_smuggled(tmp_path):

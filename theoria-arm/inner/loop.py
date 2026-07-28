@@ -58,6 +58,25 @@ MAX_THEORIZE_PER_TURN = 2
 #: related to its action count, and an unattended run needs an end.
 DEFAULT_WALL_CLOCK_S = 3 * 3600
 
+#: How much new world must arrive before the desk is worth calling again.
+#:
+#: The evidence gate started as a binary: any new frame reopened it. On the
+#: first live run that meant one probe action per theorize -- a $1.3, nine-minute
+#: call to adjudicate a single extra transition -- and a two-hour run spent its
+#: whole budget on theory and took about a dozen actions. That is not wrong in
+#: principle (Theoria's whole claim is that playing is the byproduct), but it is
+#: wasteful in practice: four transitions cost the same one call to adjudicate
+#: and tell the desk four times as much, and the engines in particular are
+#: starved by single-frame increments -- `zero_space`'s null space shrinks with
+#: the transition count, and `mdl_segmenter` cannot amortise a declaration over
+#: one frame.
+#:
+#: So the gate is quantitative: a surprise still triggers theorize, but only
+#: once this much new evidence has accumulated since the last call. A run that
+#: ends before the quota is met still theorizes on what it has -- the quota
+#: delays a call, it never cancels one.
+MIN_NEW_FRAMES_BETWEEN_THEORIZE = 4
+
 
 class TheoriaArm:
     def __init__(self, *, env_base: str, run, game_id: str,
@@ -256,12 +275,15 @@ class TheoriaArm:
         # differently-worded manual against identical data at full price. What
         # the loop needs then is more world. So the turn falls through to probe
         # and the manual stays red until evidence arrives that could change it.
-        if (self._frames_at_last_theorize == len(self.store.steps)
-                and self.books.theory.strip()):
+        new_frames = len(self.store.steps) - self._frames_at_last_theorize
+        if (self.books.theory.strip()
+                and new_frames < MIN_NEW_FRAMES_BETWEEN_THEORIZE
+                and self.budget.actions_left > MIN_NEW_FRAMES_BETWEEN_THEORIZE):
             record["theorize"] = (
-                "skipped: %d surprise(s) pending but no new evidence since the "
-                "last call. Going to get some."
-                % len(self.register.pending))
+                "skipped: %d surprise(s) pending but only %d new transition(s) "
+                "since the last call (want %d). Going to get more."
+                % (len(self.register.pending), new_frames,
+                   MIN_NEW_FRAMES_BETWEEN_THEORIZE))
             if not self.certify_reports:
                 record["certify"] = _certify_line(self._certify())
             return
