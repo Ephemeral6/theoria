@@ -24,7 +24,7 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from _fleet import (  # noqa: E402
-    detect_test_cmd, die, iso, load_ctx, rel, repo_root, save_ctx, say,
+    detect_test_cmd, die, git, iso, load_ctx, rel, repo_root, save_ctx, say,
     utc_now, write_text,
 )
 
@@ -42,6 +42,8 @@ set -u
 ROOT=$(cd "$(dirname "$0")" && git rev-parse --show-toplevel) || exit 2
 cd "$ROOT" || exit 2
 PY=${{PYTHON:-python}}
+export PY                       # `check` runs its command in `sh -c`, a new process
+export PYTHONIOENCODING=utf-8   # this repo's prose is Chinese; consoles here are not UTF-8
 PASS=0
 FAIL=0
 LOGDIR=$(mktemp -d 2>/dev/null || printf '%s' "${{TMPDIR:-/tmp}}/verify.$$")
@@ -76,6 +78,37 @@ exit 1
 
 def shq(s):
     return "'" + str(s).replace("'", "'\\''") + "'"
+
+
+def warn_or_pin_eol(root, out, pin):
+    """A shell script committed on a `core.autocrlf=true` checkout comes back
+    with CRLF, and `sh` then fails on `\\r` with an error that names the wrong
+    line. Pin eol=lf for it, or at least say so out loud."""
+    rc, val, _ = git(["config", "--get", "core.autocrlf"], cwd=root)
+    if val.strip().lower() not in ("true", "input"):
+        return
+    rel_out = rel(out, root)
+    rc, attr, _ = git(["check-attr", "text", "eol", "--", rel_out], cwd=root)
+    if "eol: lf" in attr:
+        return
+    ga = out.parent / ".gitattributes"
+    line = "%s text eol=lf\n" % out.name
+    if pin:
+        prev = read_text_safe(ga)
+        if line not in prev:
+            write_text(ga, (prev + ("" if prev.endswith("\n") or not prev else "\n")) + line)
+        say("pinned eol=lf for %s in %s" % (out.name, rel(ga, root)))
+        return
+    say("WARNING: core.autocrlf=%s and nothing pins eol for %s." % (val.strip(), rel_out))
+    say("         Committed as-is it will come back with CRLF and `sh` will fail on \\r.")
+    say("         Re-run with --pin-eol, or add `%s` to %s." % (line.strip(), rel(ga, root)))
+
+
+def read_text_safe(p):
+    try:
+        return Path(p).read_text(encoding="utf-8")
+    except OSError:
+        return ""
 
 
 def cmd_gen(args, root):
@@ -145,6 +178,7 @@ def cmd_gen(args, root):
         os.chmod(out, 0o755)
     except OSError:
         pass
+    warn_or_pin_eol(root, out, args.pin_eol)
     ctx["verify_sh"] = rel(out, root)
     save_ctx(ctx, cwd=root)
     say(rel(out, root))
@@ -231,6 +265,8 @@ def main(argv=None):
     p.add_argument("--require", action="append", help="path the工单 promised; asserts it exists")
     p.add_argument("--check", action="append", help='extra check, "name::shell command"')
     p.add_argument("--allow", action="append", help="path exempt from the boundary/sealed guards")
+    p.add_argument("--pin-eol", action="store_true",
+                   help="write `verify.sh text eol=lf` into the sibling .gitattributes")
     p.set_defaults(fn=cmd_gen)
 
     p = sub.add_parser("run", help="execute verify.sh and print the checklist")

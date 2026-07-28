@@ -20,6 +20,15 @@ from pathlib import Path
 
 FLEET_COMMON_VERSION = "1"
 
+# Every prompt, board section and RUN_STATE in this repo is part Chinese, and the
+# console these scripts run on is usually cp936/cp1252. Force UTF-8 out, so a
+# checklist stays readable wherever it is piped.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):  # pragma: no cover - non-reconfigurable stream
+        pass
+
 # --------------------------------------------------------------------------
 # process
 
