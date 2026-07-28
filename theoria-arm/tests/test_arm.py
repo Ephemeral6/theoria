@@ -416,6 +416,39 @@ def test_a_reply_without_a_theory_block_is_not_silently_accepted():
     assert parsed["blocks_found"] == []
 
 
+def test_a_declared_landmark_is_placed_from_its_cell_hint():
+    """A landmark the level cannot place is a hard compile error, so the hint
+    has to survive the round trip from the manual into the level instance."""
+    text = ("word_table:\n"
+            "  landmark exit_cell   # arc-cell: (7, 3)\n"
+            "  landmark portal      # arc-cell: 12,40\n"
+            "  landmark nowhere\n")
+    found = theorize._landmarks_from_theory(text)
+    assert found == {"exit_cell": (7, 3), "portal": (12, 40), "nowhere": None}
+
+    store = _store([[[0, 0], [0, 6]], [[0, 6], [0, 0]]], ["ACTION1"])
+    problem = problem_from_frames(store, [], landmarks=found)
+    assert problem["landmarks"]["exit_cell"] == [7, 3]
+    assert problem["landmarks"]["nowhere"] == [0, 0]
+    assert problem["landmarks_defaulted"] == ["nowhere"]
+
+
+def test_a_manual_declaring_a_landmark_compiles_once_the_level_places_it(tmp_path):
+    theory = WORKED_EXAMPLE.replace(
+        "  object Cart { pos: Coord, color: Int }",
+        "  object Cart { pos: Coord, color: Int }\n"
+        "  landmark exit_cell   # arc-cell: (0, 1)").replace(
+        "goal count(Cart) = 1", "goal Cart.pos = exit_cell")
+    books = Books(str(tmp_path))
+    books.write(theory=theory)
+    store = _store([[[0, 0, 0], [0, 0, 0], [0, 6, 0]]], [])
+    books.write_problem(problem_from_frames(
+        store, theorize._objects_from_theory(theory),
+        landmarks=theorize._landmarks_from_theory(theory)))
+    result = books.compile_all()
+    assert result["ok"], result["errors"]
+
+
 def test_the_colour_hint_is_read_off_the_object_declaration():
     text = ("word_table:\n"
             "  object Cart { pos: Coord, color: Int }  # arc-colour: 6\n"

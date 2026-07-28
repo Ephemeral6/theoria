@@ -178,11 +178,19 @@ class ArcThroughProxy:
             self.card_id = parsed.get("card_id")
         return self.card_id
 
-    def close_scorecard(self, tries: int = 8) -> Optional[Dict[str, Any]]:
+    def close_scorecard(self, tries: int = 40) -> Optional[Dict[str, Any]]:
         """D-015: a closed card can never be re-fetched, and close 404s
         transiently. 22 of baseline-arms' 23 pilot closes returned an instant
         404 with no retry, and the score exists *only* in a successful close
-        response -- so a close that is not retried loses the score silently."""
+        response -- so a close that is not retried loses the score silently.
+
+        **Eight is not enough.** `baseline-arms`' D-015 fix uses `tries=8`, and
+        on this run's first card that failed: eight attempts returned 404 and
+        the score looked lost. The same card closed cleanly on a retry with
+        `tries=40` a minute later. Under an active 400 wave the close endpoint
+        needs the same wave-outlasting envelope every other endpoint needs, so
+        the default here is 40. Reported to the track that owns D-015 rather
+        than fixed there."""
         if not self.card_id:
             return None
         for k in range(tries):

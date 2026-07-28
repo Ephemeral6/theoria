@@ -1,0 +1,112 @@
+{
+ "arm": "theoria",
+ "arm_version": {
+  "files": 22,
+  "sha256": "74146df854c41226cb6f11e5a96d281a35f12f654a46d98b1f095beef10a3262"
+ },
+ "base_commit": "606c5820c26745b51687db9e0e0aa3994402b877",
+ "branch": "agent/p8-theoria-arm",
+ "budget": {
+  "actions_failed": 0,
+  "actions_left": 0,
+  "actions_ok": 0,
+  "ceiling_actions": 0,
+  "ceiling_commands": 120,
+  "commands_sent": 18,
+  "http_amplification": null,
+  "probe_actions": 0,
+  "reserve_for_probes": 0,
+  "resets": 1
+ },
+ "constraint_8": {
+  "calls_at_forbidden_beats": {},
+  "calls_by_beat": {},
+  "calls_without_any_surprise": false,
+  "holds": true,
+  "model_calls": 0,
+  "note": "probe design spent no model call: the frontier is computed by probe_frontier, which is exact on a deterministic world. Constraint 8 permits a call there; this run did not need one.",
+  "surprises": 0,
+  "surprises_by_kind": {}
+ },
+ "cost": {
+  "cli_reported_usd": 0.0,
+  "delta_usd": 0.0,
+  "from_price_table": {
+   "calls_priced": 0,
+   "calls_unpriced": [],
+   "usd": 0.0
+  },
+  "model_calls": 0,
+  "price_table": {
+   "sha256": "sha256:27ce4bb488204fb429efff841c4ec7a63c536d717b36b103fe22004eca5b1f42",
+   "table": "pricing_v1"
+  },
+  "relative_delta": null,
+  "usage_total": {},
+  "verdict": "the price table and the provider's own arithmetic DISAGREE -- this is a finding about proxy/pricing/pricing_v1.json, not about the run"
+ },
+ "files": [
+  "ledger.jsonl",
+  "run.json"
+ ],
+ "game_id": null,
+ "ledger": {
+  "format": "LEDGER_FORMAT v1.0",
+  "path": "ledger.jsonl",
+  "records": 23,
+  "records_this_run": 23
+ },
+ "outcome": null,
+ "prompt_id": "P-8",
+ "reconciliation": {
+  "env_steps": 18,
+  "env_steps_ok": 1,
+  "http_amplification": null,
+  "levels_completed_from_ledger": 0,
+  "resets": 1,
+  "score_reconciliation": "unavailable",
+  "score_reconciliation_detail": "no `score` field appears in any live ARC command response, so the ledger-derived score LEDGER_FORMAT.md \u00a73 asks for cannot be computed. This is a property of the environment, not a failure of the run, and it means the \u00a73 obligation is UNDISCHARGEABLE as written against this API. It is reported, not waived.",
+  "successful_actions": 0
+ },
+ "run_id": "r-c54354d4988f485a",
+ "scorecard": null,
+ "sealing": {
+  "by_kind": {},
+  "bypass_attempts": 0,
+  "credential_in_body": 0,
+  "guard_blocks": 0,
+  "incidents": 0,
+  "redacted_markers": 0,
+  "sealed_pile_requests": 0
+ },
+ "seed": null,
+ "seed_note": "this arm draws no random numbers: engine dispatch, the compilers and the planner are deterministic, and the one stochastic component is the model, whose sampling is not controllable through `claude -p`. Determinism is therefore claimed for everything except the desk's text, and the desk's text is recorded verbatim instead.",
+ "slug": "preflight-20260728T012057Z",
+ "stopped_because": null,
+ "surprises": null,
+ "upstream_pin": {
+  "CONTRACTS/candidates_schema.md": "2006cd073090672b37a315d86d2caacbdbf92e00346279bdc5c69623f1b15221",
+  "arc-recon/data/piles.json": "f2ef44d100caee9075b9c52b6c2694d9bb47d628702e0c1911655eb9f9790826",
+  "engine-rig/common/candidates.py": "34868b1135b9ff2854156bc1960ead01963bca093905a4bf8fea2c966fdc78cc",
+  "engine-rig/engines/cegis_miner/__init__.py": "96db3a7e28f51216a456cde75555d56a747dfbc9259028add4d596bdcdc86d30",
+  "engine-rig/engines/mdl_segmenter/__init__.py": "5f90cf0186655797f472d7c455eaa550ac7c22a477ec1b3a7193854a16a0212e",
+  "engine-rig/engines/probe_frontier/__init__.py": "f25e012f355231ba0802edf0653b5c76c27895ba856754e1c1fb58a4b455fad8",
+  "engine-rig/engines/zero_space/__init__.py": "b367d04cd2e29a0d5070d717dc7aaf50d9e5b0d86bfea542250279db201f418b",
+  "engine-rig/tools/validate_candidates.py": "c4791d53674b56950c603c75ca7caa5e4a63a9c295698c2932b329a15eb0dfc4",
+  "proxy/LEDGER_FORMAT.md": "e923ab33815ccf775ee7b894a9fd4fb08766a9be23337fb08066a6080a2293e1",
+  "proxy/cost.py": "174b83f54efc4abb3c60194e92c86c6fda3c95ab1d27c469a55f1aaacb4b0faf",
+  "proxy/env_proxy.py": "cd50c59c6beb7827f0e0bb197126c65d5f5dc171074d7426d6ebf9ef5f8a3c8a",
+  "proxy/forward.py": "896c13c889ff9965eb57bcca747fc066fd97341dbaac8640752020543b2458d9",
+  "proxy/guard.py": "a8b613c4db0fafef431517f20819c1a321e6c2497a17acf5ef3f190210d728ab",
+  "proxy/ledger.py": "b694f0c6457c37c4799d7e41bb8ad848248091b04bfb9849738bdcde65912342",
+  "proxy/model_proxy.py": "717a8885156c8a202a27895fe19d53160824f1dee8de0886d7ccb20ae0d98ca2",
+  "proxy/pricing/pricing_v1.json": "ed81118ae10b3a07c14288a48d33c404d48bf6853c0303a26457f6e736334e9a",
+  "proxy/redact.py": "31962e6c4b00445faddddb8ef1a963761fbad5ccc173cc7e0d5dd4f574809ff9",
+  "theory-compiler/src/theory_compiler/generators/gen_lean.py": "c4aaac04cf414f4154e8283ba80677e7d165d5e1d3d1cc54275cfd0b43b24873",
+  "theory-compiler/src/theory_compiler/generators/gen_markdown.py": "25ea38352ea90c2f88b8b72e142f1679abffa6d407ace0d13c455ac126dde53d",
+  "theory-compiler/src/theory_compiler/generators/gen_pddl.py": "5e5c4191ccb6900430274a1e8c9de3d0b898beacf49b127286c4d9ca9d599675",
+  "theory-compiler/src/theory_compiler/generators/gen_python.py": "0e599dfc7f579245663ded9bc15db884694e0c7a56bcad2a3d86c8a25aa010d4",
+  "theory-compiler/src/theory_compiler/parser/theory_parser.py": "9deba600ff17bdf19efe829816e0d9c8713600e621a480b3866214fdcf7dda5a"
+ },
+ "world": null
+}

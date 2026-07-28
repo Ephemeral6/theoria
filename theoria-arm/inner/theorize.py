@@ -332,10 +332,13 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
 
         # The level instance is computed, never written by the desk.
         objects = objects_hint or _objects_from_theory(parsed["theory"])
+        landmarks = _landmarks_from_theory(parsed["theory"])
         try:
             from .books import problem_from_frames                # noqa: PLC0415
-            books.write_problem(problem_from_frames(store, objects))
+            books.write_problem(problem_from_frames(store, objects,
+                                                    landmarks=landmarks))
             round_entry["objects_located"] = len(objects)
+            round_entry["landmarks"] = {k: v for k, v in landmarks.items()}
         except Exception as exc:                                  # noqa: BLE001
             round_entry["problem_error"] = "%s: %s" % (type(exc).__name__, exc)
 
@@ -358,7 +361,27 @@ def run(desk, books, store: FrameStore, candidates_path: str, *,
 
 
 OBJECT_DECL = re.compile(r"^\s*object\s+(\w+)\s*\{([^}]*)\}", re.M)
-COLOUR_FIELD = re.compile(r"\bcolor(?:ing)?\s*:\s*\w+")
+LANDMARK_DECL = re.compile(r"^\s*landmark\s+(\w+)\s*(.*)$", re.M)
+CELL_HINT = re.compile(r"arc-cell\s*[:=]\s*\(?\s*(\d+)\s*,\s*(\d+)\s*\)?")
+
+
+def _landmarks_from_theory(text: str) -> Dict[str, Any]:
+    """Where each declared landmark sits, from `# arc-cell: (r, c)`.
+
+    A landmark is level data by definition (the domain/problem split), so the
+    manual names it and the level places it. There is nowhere in the DSL to
+    write the coordinates -- that is the point -- so the desk supplies them in a
+    comment on the declaration line and this reads them back out. A landmark
+    with no hint is still declared, and lands at the origin with the fact
+    recorded, because the alternative is a compile error naming a level file the
+    desk never sees.
+    """
+    out: Dict[str, Any] = {}
+    for match in LANDMARK_DECL.finditer(text or ""):
+        hint = CELL_HINT.search(match.group(2) or "")
+        out[match.group(1)] = ((int(hint.group(1)), int(hint.group(2)))
+                               if hint else None)
+    return out
 
 
 def _objects_from_theory(text: str) -> List[Dict[str, Any]]:

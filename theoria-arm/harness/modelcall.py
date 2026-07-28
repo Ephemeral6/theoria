@@ -102,7 +102,14 @@ class ModelDesk:
     def __init__(self, run, *, model: str = "claude-opus-5",
                  pricing_ref: Optional[Dict[str, Any]] = None,
                  cost_ceiling_usd: Optional[float] = 20.0,
-                 timeout: int = 900,
+                 # A theorize prompt carries the frame, the diffs and the
+                 # engine report; the first live call on a 64x64 world took
+                 # over ten minutes on `claude-opus-5` before it returned
+                 # anything. 900s was the first value here and it was too
+                 # close to that. A desk that times out is not fatal any more
+                 # (`inner/loop.py` records the failure and goes back for
+                 # evidence), but a timeout still throws away a paid call.
+                 timeout: int = 1800,
                  transcript_dir: Optional[str] = None):
         self.run = run                                # proxy.ledger.RunLedger
         self.model = model

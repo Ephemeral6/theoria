@@ -244,6 +244,7 @@ def _write(path: str, text: str) -> None:
 
 
 def problem_from_frames(store, objects: List[Dict[str, Any]], *,
+                        landmarks: Optional[Dict[str, Any]] = None,
                         name: str = "level-1") -> Dict[str, Any]:
     """The level instance, computed from what has been observed.
 
@@ -293,6 +294,24 @@ def problem_from_frames(store, objects: List[Dict[str, Any]], *,
 
     problem = {"name": name, "grid": [height, width], "background": background,
                "board": board, "objects": instances}
+    # A landmark the manual declares but the level does not locate is a HARD
+    # error in `check_against_theory` -- the rule that names it has no value to
+    # use -- so a manual that reaches for a named cell cannot compile unless the
+    # level supplies coordinates. The desk gives them on the declaration line
+    # (`# arc-cell: (r, c)`); anything it forgets is defaulted to the origin and
+    # listed, so the failure is a visible placement rather than a compile that
+    # dies with a message about a level file the desk never sees.
+    if landmarks:
+        placed, defaulted = {}, []
+        for lm_name, cell in landmarks.items():
+            if cell is None:
+                placed[lm_name] = [0, 0]
+                defaulted.append(lm_name)
+            else:
+                placed[lm_name] = list(cell)
+        problem["landmarks"] = placed
+        if defaulted:
+            problem["landmarks_defaulted"] = defaulted
     if unlocated:
         problem["unlocated"] = unlocated
     return problem

@@ -1,0 +1,43 @@
+{
+ "budget": {
+  "actions_failed": 0,
+  "actions_left": 119,
+  "actions_ok": 1,
+  "ceiling_actions": 120,
+  "ceiling_commands": 3000,
+  "commands_sent": 10,
+  "http_amplification": 10.0,
+  "probe_actions": 0,
+  "reserve_for_probes": 0,
+  "resets": 1
+ },
+ "desk": {
+  "beats": [],
+  "calls": 0,
+  "cli_cost_usd": 0.0,
+  "cost_ceiling_usd": 18.0,
+  "model": "claude-opus-5",
+  "usage_total": {}
+ },
+ "elapsed_s": 23.7,
+ "outcome": "not_started",
+ "steps": 1,
+ "stopped_because": "",
+ "surprises": {
+  "by_family": {
+   "computational": 0,
+   "empirical": 0
+  },
+  "by_kind": {
+   "execution_mismatch": 0,
+   "heuristic_miss": 0,
+   "probe_refutation": 0,
+   "proof_failure": 0,
+   "render_mismatch": 0,
+   "replay_mismatch": 0,
+   "search_timeout": 0
+  },
+  "total": 0,
+  "unhandled": 0
+ }
+}

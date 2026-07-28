@@ -28,13 +28,20 @@ one space. Order is free. `#` starts a comment on its own line.
     board                                   # declares the never-varying cells
     object Cart { pos: Coord, color: Int }  # arc-colour: 6
     object Door { pos: Coord, color: Int, present: Bool }  # arc-colour: 5
-    landmark exit_cell                      # a named cell; the LEVEL supplies coords
+    landmark exit_cell                      # arc-cell: (7, 3)
     domain dir { up, down, left, right }    # a value domain, for `forall`
     Cart [segment: uniform_color ev: t0-t12 compress: 2125]   # the concept account
 
   Field types in use: `pos: Coord`, `color: Int`, `present: Bool`, `alive: Bool`.
   Only pos/alive/present/color are observations the compiler reasons over.
   `pos: Coord` is what makes this a GRID world (directions up/down/left/right).
+
+  EVERY `landmark` line MUST carry a trailing `# arc-cell: (row, col)` comment.
+  A landmark is level data, so the manual names it and the level places it —
+  and there is nowhere in the DSL to write coordinates, which is the point of
+  the split. A landmark the level cannot place is a HARD compile error, so a
+  landmark you declare without this comment lands at (0,0) and takes your rule
+  with it.
 
   EVERY `object` line MUST carry a trailing `# arc-colour: <n>` comment naming
   the hex colour code that object shows in the frame. That comment is not
