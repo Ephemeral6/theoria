@@ -29,5 +29,6 @@
 - 只写自己的产出目录 + 自己的邮箱 + PARTNER_SYNC 自己的段落；
 - 封存堆 19+2 局零接触（API 与内容双零）；密钥只在 `.env`，值不进任何被跟踪文件；
 - append-only 文件（PARTNER_SYNC / incidents / PREDICTIONS）只追加，跨提交窗口用新段落 supersede；
+- 需要 worktree 时建在仓库内 `.worktrees/<名字>/`（已 gitignore），不要在桌面新建目录；
 - 边跑边落盘：只存在于上下文里的信息视同不存在；
 - 完成即 commit + push（只 add 自己领地的路径）。

@@ -13,3 +13,4 @@ __pycache__/
 *.egg-info/
 monitor/dispatch-logs/
 .claude/settings.local.json
+.worktrees/
