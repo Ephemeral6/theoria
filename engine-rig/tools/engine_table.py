@@ -313,6 +313,9 @@ FACTS: dict[str, tuple[object, object]] = {
     "fd.coldstart_domains": (7, jf(f"{P13}/dividend.json", lambda d: len(d["cross_check"]), "len(cross_check)")),
     "dl.unadjudicated_exam": ("9", md(f"{E11}/partials/deadlock-via-reachability.md", r"\*\*(\d+)\*\* unsolvable exam\n    items")),
     "dl.unadjudicated_arc": ("3", md(f"{E11}/partials/deadlock-via-reachability.md", r"json` — (\d+) unsolvable ARC-variant claims")),
+    "e5.forgeries_refused": (29, jf(f"{E5}/recheck_report.json", lambda d: sum(1 for a in d["forgeries"]["attempts"] if a["verdict"] != "ACCEPT"), "count(forgeries.attempts[*].verdict != ACCEPT)")),
+    "e5.forgeries_qualified": (1, jf(f"{E5}/recheck_report.json", lambda d: sum(1 for a in d["forgeries"]["attempts"] if a["expected"] == "ACCEPT-QUALIFIED"), "count(forgeries.attempts[*].expected == ACCEPT-QUALIFIED)")),
+    "e5.forgeries_not_caught": (1, jf(f"{E5}/recheck_report.json", lambda d: sum(1 for a in d["forgeries"]["attempts"] if a["expected"] == "NOT-CAUGHT"), "count(forgeries.attempts[*].expected == NOT-CAUGHT)")),
 }
 
 
@@ -568,10 +571,13 @@ def render(values: dict[str, str]) -> str:
     w(f"* Of the **{values['rig.published_fields']}** leaf fields the six engines publish into `candidates.jsonl`,")
     w(f"  **{values['rig.unaudited_fields']}** are asserted by no invariant. These reach the manual, and from there")
     w("  the adjudicating LLM's beliefs, carrying no evidence at all.")
-    w(f"* The certificate rechecker catalogues {values['e5.forgeries']} ways to lie to it and refuses all but")
-    w(f"  {values['e5.forgeries_accepted']}; the one that works is `delete-the-rule` — a certificate true of a rule set")
-    w("  with a rule missing — which is Theoria §1.3 entire and which no certificate")
-    w("  checker can see.")
+    w(f"* The certificate rechecker catalogues {values['e5.forgeries']} ways to lie to it. **{values['e5.forgeries_refused']}** are refused;")
+    w(f"  {values['e5.forgeries_qualified']} is accepted *with a recorded qualifier* (a dead region leaning on the")
+    w(f"  declared constraint); and exactly **{values['e5.forgeries_not_caught']}** is accepted with no qualifier and is")
+    w("  correct to accept — `delete-the-rule`, a certificate true of a rule set with")
+    w("  a rule missing. That last one is Theoria §1.3 entire, no certificate checker")
+    w("  can see it, and it is carried as `expect: NOT-CAUGHT` so the suite fails if")
+    w("  it ever starts being caught.")
     w("")
     w("## Provenance")
     w("")

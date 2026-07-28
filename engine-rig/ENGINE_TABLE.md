@@ -83,10 +83,13 @@ against the rig's own interest:
 * Of the **111** leaf fields the six engines publish into `candidates.jsonl`,
   **64** are asserted by no invariant. These reach the manual, and from there
   the adjudicating LLM's beliefs, carrying no evidence at all.
-* The certificate rechecker catalogues 31 ways to lie to it and refuses all but
-  2; the one that works is `delete-the-rule` — a certificate true of a rule set
-  with a rule missing — which is Theoria §1.3 entire and which no certificate
-  checker can see.
+* The certificate rechecker catalogues 31 ways to lie to it. **29** are refused;
+  1 is accepted *with a recorded qualifier* (a dead region leaning on the
+  declared constraint); and exactly **1** is accepted with no qualifier and is
+  correct to accept — `delete-the-rule`, a certificate true of a rule set with
+  a rule missing. That last one is Theoria §1.3 entire, no certificate checker
+  can see it, and it is carried as `expect: NOT-CAUGHT` so the suite fails if
+  it ever starts being caught.
 
 ## Provenance
 
@@ -130,6 +133,9 @@ pointed back at a run does not appear in the table.
 | `dl.uncovered` | `44.1` | `engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/partials/deadlock-via-reachability.md :: /adjudicated\.\*\* (\d+\.\d) % of\n  `open4far`'s dead reachable states/` |
 | `e5.forgeries` | `31` | `engine-rig/runs/20260728T141724Z-E5-cert-recheck/recheck_report.json :: counts.forgeries` |
 | `e5.forgeries_accepted` | `2` | `engine-rig/runs/20260728T141724Z-E5-cert-recheck/recheck_report.json :: forgeries.n_accepted` |
+| `e5.forgeries_not_caught` | `1` | `engine-rig/runs/20260728T141724Z-E5-cert-recheck/recheck_report.json :: count(forgeries.attempts[*].expected == NOT-CAUGHT)` |
+| `e5.forgeries_qualified` | `1` | `engine-rig/runs/20260728T141724Z-E5-cert-recheck/recheck_report.json :: count(forgeries.attempts[*].expected == ACCEPT-QUALIFIED)` |
+| `e5.forgeries_refused` | `29` | `engine-rig/runs/20260728T141724Z-E5-cert-recheck/recheck_report.json :: count(forgeries.attempts[*].verdict != ACCEPT)` |
 | `e5.green` | `True` | `engine-rig/runs/20260728T141724Z-E5-cert-recheck/recheck_report.json :: green` |
 | `e5.matrix_rows` | `22` | `engine-rig/runs/20260728T141724Z-E5-cert-recheck/recheck_report.json :: counts.matrix_rows` |
 | `fd.coldstart_domains` | `7` | `engine-rig/runs/p13-fd-real/dividend.json :: len(cross_check)` |
