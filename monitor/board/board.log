@@ -43,3 +43,8 @@
 2026-07-28T11:32:18Z CLAIM A4a-ablation-build by RES-1
 2026-07-28T11:37:15Z DONE P8-billshape-pipeline by RES-2
 2026-07-28T11:37:42Z CLAIM P9-paper-to-submittable by RES-2
+2026-07-28T13:38:09Z CLAIM S9-contract-change-protocol by W-1250
+2026-07-28T13:38:44Z DONE A7-envelope-finish by APP-A7
+2026-07-28T13:38:56Z CLAIM C6-worldgen-mutate by W-1251
+2026-07-28T13:39:40Z CLAIM C8-handover-package by W-1252
+2026-07-28T13:41:02Z CLAIM P10-figures-into-paper by W-1253

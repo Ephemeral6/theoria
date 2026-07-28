@@ -43,6 +43,7 @@
       "C8-handover-package",
       "让引擎在真游戏里供货（第二关）",
       "量化引擎改进带来的实际红利",
+      "P10-figures-into-paper",
       "释出包：陌生人一条命令复跑全部结果",
       "把论文推进到可投稿",
       "起草大考前要封存的规则包",
@@ -52,7 +53,7 @@
     ],
     "ops": [
       {
-        "age_min": 46,
+        "age_min": 47,
         "cycle": 7,
         "id": "OPS-A",
         "kind": "ops",
@@ -63,7 +64,7 @@
         "state": "idle"
       },
       {
-        "age_min": 67,
+        "age_min": 69,
         "cycle": 4,
         "id": "OPS-B",
         "kind": "ops",
@@ -74,7 +75,7 @@
         "state": "idle"
       },
       {
-        "age_min": 44,
+        "age_min": 45,
         "cycle": 5,
         "id": "OPS-M",
         "kind": "ops",
@@ -85,7 +86,7 @@
         "state": "idle"
       },
       {
-        "age_min": 426,
+        "age_min": 428,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -98,7 +99,7 @@
     ],
     "standing": [
       {
-        "age_min": 121,
+        "age_min": 123,
         "cycle": 2,
         "id": "RES-1",
         "kind": "standing",
@@ -109,7 +110,7 @@
         "state": "working"
       },
       {
-        "age_min": 120,
+        "age_min": 121,
         "cycle": 2,
         "id": "RES-2",
         "kind": "standing",
@@ -213,6 +214,15 @@
         "running": false
       },
       {
+        "finished": [],
+        "id": "W-1253",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "P10-figures-into-paper",
+        "outputs": 0,
+        "running": false
+      },
+      {
         "finished": [
           "给专业规划器的三档性能定价"
         ],
@@ -302,11 +312,11 @@
   },
   "blocking_findings": 1,
   "board": {
-    "available": 0,
+    "available": 1,
     "blocked": 3,
-    "claimed": 12,
+    "claimed": 13,
     "done": 16,
-    "listing": "=== available ===\n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A4a-ablation-build           by RES-1\n  A6-transfer-protocol         by W-5201\n  C6-worldgen-mutate           by W-1251\n  C8-handover-package          by W-1252\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P5-release                   by W-1520\n  P9-paper-to-submittable      by RES-2\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  S9-contract-change-protocol  by W-1250\n  V3-battery-discrimination    by APP-V3\n=== done (16) ===\n  A4-ablation-online.superseded-by-A4a\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C7-dsl-v03-mentions.APP-C7\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S6-merge-gate-509.superseded-by-derived-gate\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
+    "listing": "=== available ===\n  p3  V6-exam-on-sealed-dryrun     cell=V4  territory=exam           \n=== blocked ===\n  A4b-ablation-calibrate       waits on A4a-ablation-build\n  R2-release-licence           waits on P5-release\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A4a-ablation-build           by RES-1\n  A6-transfer-protocol         by W-5201\n  C6-worldgen-mutate           by W-1251\n  C8-handover-package          by W-1252\n  E3-engines-online            by W-1521\n  E6-engine-dividend           by W-1611\n  P10-figures-into-paper       by W-1253\n  P5-release                   by W-1520\n  P9-paper-to-submittable      by RES-2\n  S4-freeze                    by W-1541\n  S5-phase1-close              by W-5200\n  S9-contract-change-protocol  by W-1250\n  V3-battery-discrimination    by APP-V3\n=== done (16) ===\n  A4-ablation-online.superseded-by-A4a\n  A7-envelope-finish.APP-A7\n  C1-worldgen.W-1610\n  C4-deadlock-lean.W-1541\n  C7-dsl-v03-mentions.APP-C7\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  P4-figures.W-1611\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  S2-canary-schedule.W-1540\n  S3-spend-gate.W-1540\n  S6-merge-gate-509.superseded-by-derived-gate\n  V2-exam-on-worldgen.W-1540\n  V4-exam-selftest.RES-1"
   },
   "con_green": 1,
   "constraints": [
@@ -565,7 +575,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 21:39:56",
+  "generated_at": "2026-07-28 21:41:10",
   "grid": {
     "A1": {
       "active": [
@@ -1439,28 +1449,27 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "onitor/AUDITOR.md",
-      "monitor/board/board.log",
+      "onitor/board/board.log",
       "monitor/board/claimed/A7-envelope-finish.APP-A7.md",
       "monitor/board/items/C6-worldgen-mutate.md",
+      "monitor/board/items/C8-handover-package.md",
       "monitor/board/items/S9-contract-change-protocol.md",
-      "monitor/index.html",
-      "monitor/mailbox/OPS-A.md",
       "monitor/mailbox/RES-2.md",
       "monitor/quota_state.json",
       "monitor/reflex.log",
-      "monitor/state.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
       "monitor/board/claimed/C6-worldgen-mutate.W-1251.md",
+      "monitor/board/claimed/C8-handover-package.W-1252.md",
       "monitor/board/claimed/S9-contract-change-protocol.W-1250.md",
-      "monitor/board/done/A7-envelope-finish.APP-A7.md"
+      "monitor/board/done/A7-envelope-finish.APP-A7.md",
+      "monitor/board/items/S1-quota-auto-exit.md"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "0d28e99 monitor: the circuit breaker had no exit, and the fleet sat frozen past its own reset",
+    "git_head": "9c65d6a monitor: one-way doors become a standing audit dimension",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -1473,8 +1482,10 @@
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
       "monitor/board/claimed/C6-worldgen-mutate.W-1251.md",
+      "monitor/board/claimed/C8-handover-package.W-1252.md",
       "monitor/board/claimed/S9-contract-change-protocol.W-1250.md",
-      "monitor/board/done/A7-envelope-finish.APP-A7.md"
+      "monitor/board/done/A7-envelope-finish.APP-A7.md",
+      "monitor/board/items/S1-quota-auto-exit.md"
     ]
   },
   "p1_green": 9,
@@ -1950,10 +1961,10 @@
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**20 条 TO-MONITOR 待监控回复**。 OPS-A 第7轮 idle（45 分钟前）； OPS-B 第4轮 idle（67 分钟前）； OPS-M 第5轮 idle（43 分钟前）； OPS-R 第1轮 idle（426 分钟前）",
+      "detail": "**20 条 TO-MONITOR 待监控回复**。 OPS-A 第7轮 idle（47 分钟前）； OPS-B 第4轮 idle（68 分钟前）； OPS-M 第5轮 idle（45 分钟前）； OPS-R 第1轮 idle（427 分钟前）",
       "rows": [
         {
-          "age_min": 45,
+          "age_min": 47,
           "cycle": 7,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -1962,7 +1973,7 @@
           "status": "green"
         },
         {
-          "age_min": 67,
+          "age_min": 68,
           "cycle": 4,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -1971,7 +1982,7 @@
           "status": "green"
         },
         {
-          "age_min": 43,
+          "age_min": 45,
           "cycle": 5,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -1980,7 +1991,7 @@
           "status": "green"
         },
         {
-          "age_min": 426,
+          "age_min": 427,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2005,7 +2016,7 @@
       "status": "risk"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 36 个提交 / 6 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "detail": "spec.py 落后 38 个提交 / 6 次合并（判断陈旧到 partial 档 就该重扫）。",
       "status": "partial"
     },
     "verify_gates": {
