@@ -26,10 +26,32 @@ the same 20 commands -- zero retries -- with identical frame hashes, so the fix
 is behaviour-preserving and not merely faster.
 
 That is where D-005's 5.07x amplification and the `[400x7, 200]` storm come
-from. This track's own figures were measured on the jar-less transport, so
-`cookies=False` is kept: an instrument you cannot put back the way it was is one
-you cannot re-verify, and BUDGET_REPORT's numbers should be re-derived, not
-quietly reinterpreted.
+from.
+
+**The jar is ON by default, and this paragraph used to say the opposite.** It
+read "`cookies=False` is kept: an instrument you cannot put back the way it was
+is one you cannot re-verify, and BUDGET_REPORT's numbers should be re-derived,
+not quietly reinterpreted." That was a good intention and it was never true of
+the code: `__init__` has defaulted to `cookies=True` since the jar landed, and
+no caller except `transport_ab` passes anything else -- so `bare_cc`, and with
+it the whole variance campaign, silently changed transport. An adversarial audit
+of the g50t cells found it (D-019); nothing in the harness would have.
+
+The measurement is unambiguous, from this track's own probe logs:
+
+    jar off  (M4 pilot + the ar25 envelope, all history)  1922 calls
+             200: 249   400: 1315   404: 147   500: 208   transport error: 3
+    jar on   (g50t, this campaign)                          99 calls
+             200: 99
+
+So the honest statement, replacing the one above: **BUDGET_REPORT's section 2.1
+unit prices and every extrapolation built on them were measured on a transport
+that no longer exists.** `http_per_action` is not 7.11 any more; on the jar it
+is 1.0. They are not to be reinterpreted, and they are also not to be compared
+against anything measured after 2026-07-28 -- they must be re-derived. The jar
+stays on because it is a real fix that arc-recon measured (20/20 vs 0/20) and
+because turning it off now would make the campaign's own games incomparable with
+each other, which is the one thing a variance envelope cannot survive.
 
 Three details that cost arc-recon an incident each, honoured here rather than
 rediscovered:

@@ -25,24 +25,24 @@
       "claude-sonnet-5": 30.0
     }
   },
-  "evaluated_at": "2026-07-28T10:31:18Z",
-  "g4_judges_cells": 0,
+  "evaluated_at": "2026-07-28T12:39:49Z",
+  "g4_judges_cells": 3,
   "state": "green",
   "totals": {
-    "action_success_rate": 0.595,
+    "action_success_rate": 0.817,
     "actions_failed": 30,
-    "actions_ok": 44,
-    "cells": 3,
-    "compute_seconds": 3524.3,
+    "actions_ok": 134,
+    "cells": 6,
+    "compute_seconds": 6400.7,
     "cost_by_tier": {
-      "claude-haiku-4-5-20251001": 2.5275
+      "claude-haiku-4-5-20251001": 5.8695
     },
-    "cost_usd": 2.5275,
-    "elapsed_seconds": null,
-    "elapsed_seconds_all_cells": 58190.4,
-    "http_calls": 425,
-    "http_per_action": 9.66,
-    "usd_per_action": 0.0574
+    "cost_usd": 5.8695,
+    "elapsed_seconds": 1036.5,
+    "elapsed_seconds_all_cells": 65901.5,
+    "http_calls": 515,
+    "http_per_action": 3.84,
+    "usd_per_action": 0.0438
   },
   "tripped": []
 }

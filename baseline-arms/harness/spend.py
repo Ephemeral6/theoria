@@ -129,7 +129,13 @@ class SpendBinding:
         amount = self.model_call_ceiling_usd if unpriced else float(usd)
         self.gate.record(self.reservation, usd=amount, actions=0,
                          unpriced=unpriced, detail=detail or {})
-        self.usd_charged = round(self.usd_charged + amount, 6)
+        # Accumulate raw, round once at the edge. Rounding at every step made
+        # this counter drift from a plain sum of the same figures -- up to
+        # $0.000006 over thirty calls, which an adversarial audit of the g50t
+        # cells found by reconciling three totals that should have been one
+        # number. Immaterial as money and material as a claim: "the pool and the
+        # cell agree exactly" has to survive being checked exactly.
+        self.usd_charged += amount
         self.model_calls_charged += 1
         if unpriced:
             self.unpriced_calls += 1
