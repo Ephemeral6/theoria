@@ -68,8 +68,21 @@ NEVER_CARRIED = ("problem.json",)
 #: landmark whose hint is gone still declares itself; `problem_from_frames`
 #: places it at the origin and lists it under `landmarks_defaulted`, which is
 #: the existing, visible failure mode for a coordinate the level cannot supply.
-CELL_HINT_LINE = re.compile(r"(^\s*landmark\s+\w+.*?)#\s*arc-cell\s*[:=]\s*"
-                            r"\(?\s*\d+\s*,\s*\d+\s*\)?", re.M)
+#: The hint itself, matched exactly as `theorize.CELL_HINT` reads it back.
+#:
+#: The first version of this required a leading `#` and rejected a minus sign,
+#: while the detector that reports `landmarks_stripped` required neither. Every
+#: disagreement between the two was a coordinate that **leaked and was
+#: simultaneously attested as removed** -- `landmark a  arc-cell: (7, 8)` came
+#: through untouched with `a` named in `landmarks_stripped`, and the reader
+#: still pulled `(7, 8)` out of it. A provenance record that lies in the safe
+#: direction would be bad enough; this one lied in the dangerous direction.
+#:
+#: So there is now one pattern, it is a superset of what the reader accepts,
+#: and `strip_level_data` asserts the post-condition rather than trusting it.
+CELL_HINT_ANY = re.compile(r"#?\s*arc-cell\s*[:=]\s*\(?\s*-?\d+\s*,\s*-?\d+\s*\)?")
+LANDMARK_LINE = re.compile(r"^\s*landmark\s+(\w+)")
+STRIPPED_MARK = "  # arc-cell: carried, coordinates stripped"
 
 #: Declared names, by kind, as the grammar card writes them.
 DECL = {
@@ -96,17 +109,45 @@ def declared_names(text: str) -> Dict[str, List[str]]:
 
 
 # ------------------------------------------------------------------- carrying
-def strip_level_data(theory: str) -> Tuple[str, List[str]]:
-    """Remove the landmark cell hints, and say which ones went.
+class LevelDataSurvived(RuntimeError):
+    """A coordinate outlived the strip. Raised rather than returned, because
+    the caller's next act is to write the manual into a new game's run and the
+    whole point of the strip is that this cannot happen quietly."""
 
-    Returns the stripped text and the names whose coordinates were removed.
+
+def strip_level_data(theory: str) -> Tuple[str, List[str]]:
+    """Remove every landmark cell hint, and say which landmarks lost one.
+
+    Line-oriented rather than one global substitution: `re.sub` on the whole
+    text consumed only the first hint per landmark line, so
+    `# arc-cell: (1,2) arc-cell = (3,4)` left the second one readable and the
+    reader duly returned `(3, 4)`.
+
+    The post-condition is checked, not assumed. `_landmarks_from_theory` is the
+    only consumer that matters, so the test is simply that it can no longer read
+    a coordinate out of the result.
     """
     removed: List[str] = []
-    for match in re.finditer(r"^\s*landmark\s+(\w+)(.*)$", theory or "", re.M):
-        if re.search(r"arc-cell\s*[:=]", match.group(2) or ""):
+    lines = []
+    for line in (theory or "").splitlines():
+        match = LANDMARK_LINE.match(line)
+        if match and CELL_HINT_ANY.search(line):
             removed.append(match.group(1))
-    return CELL_HINT_LINE.sub(r"\1# arc-cell: carried, coordinates stripped -- ",
-                              theory or ""), removed
+            line = CELL_HINT_ANY.sub("", line).rstrip() + STRIPPED_MARK
+        lines.append(line)
+    out = "\n".join(lines)
+    if (theory or "").endswith("\n"):
+        out += "\n"
+
+    from .theorize import _landmarks_from_theory          # noqa: PLC0415
+    survived = {name: cell for name, cell
+                in _landmarks_from_theory(out).items() if cell is not None}
+    if survived:
+        raise LevelDataSurvived(
+            "these landmark coordinates outlived the strip and would have "
+            "entered the next game's level: %s. The manual is not carried."
+            % survived)
+    return out, removed
 
 
 def carry(books, source_books_dir: str, *,
@@ -239,7 +280,8 @@ def predict_unexplained(store, objects: List[Dict[str, Any]]) -> Dict[str, Any]:
 
 
 def action_overlap(namespace: Optional[Dict[str, Any]],
-                   legal_actions: List[int]) -> Dict[str, Any]:
+                   legal_actions: List[int],
+                   predictor_error: Optional[str] = None) -> Dict[str, Any]:
     """Do the carried manual's actions and the new game's overlap at all?
 
     Free to compute, and it decides whether a transfer experiment is possible
@@ -258,26 +300,65 @@ def action_overlap(namespace: Optional[Dict[str, Any]],
     calling the run a test of the carried theory, and the report says so in
     those words.
     """
+    # A predictor that would not load tells us nothing about what the manual
+    # declares, and saying "it declares no actions" would be a false factual
+    # claim about the theory published on the report's headline line -- the
+    # same class of misreading this function exists to prevent. Three reasons,
+    # three distinct verdicts.
+    if namespace is None:
+        return {
+            "manual_declares": None,
+            "manual_action_ids": None,
+            "game_offers": sorted(legal_actions or []),
+            "shared": None,
+            "testable": False,
+            "reason": "predictor_did_not_load",
+            "predictor_error": predictor_error,
+            "detail": (
+                "the carried manual's executable form did not load (%s), so no "
+                "overlap could be computed. This says nothing about what the "
+                "manual declares."
+                % (predictor_error or "no error was reported")),
+        }
+
     declared = list((namespace or {}).get("ACTIONS") or [])
-    # The manual's actions are `(kind, id)` pairs; the game's are ints.
+    # The manual's actions are `(kind, id)` pairs -- but `gen_python`'s
+    # alphabet is `(name,) + args`, so arity is whatever the rule's guards
+    # declare and a click-family manual is a 3-tuple. Anything that is not a
+    # `(kind, int)` pair is counted as unreadable rather than silently dropped:
+    # dropping it produced "declares no actions at all", which is false.
     declared_ids = sorted({int(a[1]) for a in declared
                            if isinstance(a, (list, tuple)) and len(a) == 2
-                           and str(a[1]).lstrip("-").isdigit()})
+                           and str(a[1]).lstrip("-").isdecimal()})
+    unreadable = [list(a) if isinstance(a, tuple) else a for a in declared
+                  if not (isinstance(a, (list, tuple)) and len(a) == 2
+                          and str(a[1]).lstrip("-").isdecimal())]
     shared = sorted(set(declared_ids) & set(legal_actions or []))
     out = {
         "manual_declares": [list(a) if isinstance(a, tuple) else a
                             for a in declared],
         "manual_action_ids": declared_ids,
+        "actions_not_readable_as_a_key_id": unreadable,
         "game_offers": sorted(legal_actions or []),
         "shared": shared,
         "testable": bool(shared),
+        "reason": None,
     }
-    if not declared_ids:
+    if not declared and not unreadable:
+        out["reason"] = "manual_declares_no_actions"
         out["detail"] = (
             "the carried manual declares no actions at all, so it makes no "
             "action-conditioned prediction and nothing this game does can "
             "confirm or refute its rules.")
+    elif not declared_ids:
+        out["reason"] = "no_action_readable_as_a_key_id"
+        out["detail"] = (
+            "the carried manual declares %d action(s), none of which is a "
+            "(kind, key-id) pair this comparison can read: %s. The overlap is "
+            "unknown, not empty."
+            % (len(unreadable), unreadable))
     elif not shared:
+        out["reason"] = "no_overlap"
         out["detail"] = (
             "the carried manual's rules fire only on %s and this game offers "
             "only %s. Every rule is unreachable, `step` is the identity for "

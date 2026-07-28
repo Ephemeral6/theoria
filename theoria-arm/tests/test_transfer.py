@@ -155,6 +155,61 @@ def test_a_stripped_landmark_lands_at_the_origin_and_is_listed(tmp_path):
     assert problem["landmarks_defaulted"] == ["hud_slot_a"]
 
 
+@pytest.mark.parametrize("line,label", [
+    ("  landmark a  # arc-cell: (7, 8)", "the shape the first version handled"),
+    ("  landmark a  arc-cell: (7, 8)", "no leading hash"),
+    ("  landmark a  # arc-cell = (7, 8)", "equals instead of colon"),
+    ("  landmark a  # arc-cell: (-1, 2)", "negative coordinate"),
+    ("  landmark a  # arc-cell: 7, 8", "no parentheses"),
+    ("  landmark a  # arc-cell: (1,2) arc-cell = (3,4)", "two hints on one line"),
+    ("  landmark a  # arc-cell:(70,80)", "no spaces, multi-digit"),
+])
+def test_no_shape_of_cell_hint_survives_the_strip(line, label):
+    """The coverage gap that let three leaks through.
+
+    The stripper originally required a leading `#` and rejected a minus sign,
+    while the detector that reports `landmarks_stripped` required neither. Every
+    disagreement was a coordinate that leaked **and was simultaneously attested
+    as removed** -- the provenance lied in the dangerous direction. The one
+    shape the old tests used, `# arc-cell: (0, 0)`, was the one shape that
+    worked.
+    """
+    stripped, removed = transfer.strip_level_data(line + "\n")
+    assert removed == ["a"], label
+    read_back = theorize._landmarks_from_theory(stripped)
+    assert read_back == {"a": None}, (label, stripped, read_back)
+
+
+def test_a_coordinate_that_outlives_the_strip_raises_rather_than_carries():
+    """The post-condition is checked, not assumed. If some future hint shape
+    slips past the pattern, the carry must fail loudly rather than write the
+    previous game's geometry into the next game's level."""
+    import inner.transfer as t                            # noqa: PLC0415
+
+    original = t.CELL_HINT_ANY
+    t.CELL_HINT_ANY = __import__("re").compile(r"never-matches-anything")
+    try:
+        with pytest.raises(transfer.LevelDataSurvived, match="outlived"):
+            t.strip_level_data("  landmark a  # arc-cell: (7, 8)\n")
+    finally:
+        t.CELL_HINT_ANY = original
+
+
+def test_a_landmark_with_no_hint_is_untouched_and_unreported():
+    stripped, removed = transfer.strip_level_data("  landmark a\n")
+    assert removed == []
+    assert stripped == "  landmark a\n"
+
+
+def test_an_arc_cell_outside_a_landmark_line_is_left_alone():
+    """`arc-cell` on an object line is not a landmark coordinate, so stripping
+    it would be a silent edit to something this function has no claim over."""
+    text = "  object Cart { pos: Coord }  # arc-colour: 6 arc-cell: (1, 2)\n"
+    stripped, removed = transfer.strip_level_data(text)
+    assert removed == []
+    assert stripped == text
+
+
 def test_stripping_is_recorded_on_both_sides_of_the_hash(tmp_path):
     """The carried manual is no longer byte-identical to its source, so both
     hashes are kept: a provenance record that showed only one would make the
@@ -302,8 +357,50 @@ def test_a_manual_declaring_no_actions_is_not_testable_either():
     assert result["manual_action_ids"] == []
     assert "declares no actions" in result["detail"]
 
-    # A predictor that failed to load is the same verdict, not a crash.
-    assert transfer.action_overlap(None, [1, 2, 3])["testable"] is False
+    assert result["reason"] == "manual_declares_no_actions"
+
+
+def test_a_predictor_that_would_not_load_is_not_a_claim_about_the_manual():
+    """`action_overlap(None, ...)` used to answer "the carried manual declares
+    no actions at all" -- a false factual claim about the theory, published on
+    the one line the cold report says a reader needs first. A compile failure
+    is not a property of the theory."""
+    result = transfer.action_overlap(None, [1, 2, 3],
+                                     predictor_error="SyntaxError: bad")
+    assert result["testable"] is False
+    assert result["reason"] == "predictor_did_not_load"
+    assert "SyntaxError: bad" in result["detail"]
+    assert "says nothing about what the manual declares" in result["detail"]
+    # It must NOT claim the manual declares nothing.
+    assert "declares no actions at all" not in result["detail"]
+    assert result["manual_action_ids"] is None
+
+
+def test_an_action_of_another_arity_is_unreadable_not_absent():
+    """`gen_python`'s alphabet is `(name,) + args`, so a click-family manual is
+    a 3-tuple. Dropping those silently produced "declares no actions at all",
+    which is false: the overlap is unknown, not empty."""
+    result = transfer.action_overlap(
+        {"ACTIONS": [("click", 10, 20), ("key",)]}, [1, 2])
+    assert result["testable"] is False
+    assert result["reason"] == "no_action_readable_as_a_key_id"
+    assert result["actions_not_readable_as_a_key_id"] == [["click", 10, 20],
+                                                          ["key"]]
+    assert "unknown, not empty" in result["detail"]
+    assert "declares no actions at all" not in result["detail"]
+
+
+def test_the_three_untestable_verdicts_are_distinguishable():
+    """All three set `testable: False`, and a test that asserted only that
+    locked in the false reason for two of them."""
+    reasons = {
+        transfer.action_overlap(None, [1])["reason"],
+        transfer.action_overlap({"ACTIONS": []}, [1])["reason"],
+        transfer.action_overlap({"ACTIONS": [("key", 5)]}, [1])["reason"],
+    }
+    assert reasons == {"predictor_did_not_load",
+                       "manual_declares_no_actions",
+                       "no_overlap"}
 
 
 def test_the_cold_report_leads_with_whether_the_run_can_test_anything():
@@ -658,12 +755,25 @@ def test_every_engine_dispatch_leaves_a_row_even_with_no_desk_call(tmp_path):
     assert rows, "no engine dispatch was recorded"
     assert rows[0]["label"] == "cold"
     assert rows[0]["dispatch_idx"] == 0
-    assert rows[0]["candidate_rows_total"] >= rows[0]["candidate_rows_added"]
+    # `total >= added` is true by construction (added = total - before, and
+    # before >= 0), so it tests nothing. What matters is that the sweep put
+    # rows in the stream at all.
+    assert rows[0]["candidate_rows_added"] > 0, (
+        "the cold dispatch appended no candidate rows")
 
     for name in ("mdl_segmenter", "cegis_miner", "zero_space"):
         row = rows[0]["engines"][name]
-        # Delivered or refused-with-a-reason; never silently empty.
-        assert row["delivered"] or row["error"] or row["skipped"], (name, row)
+        # This assertion used to read `delivered or error or skipped`, which
+        # expands to `(not error) or error or skipped` -- a tautology that an
+        # engine returning `{}` passes. What has to be true is that the engine
+        # SAID something: a result, a refusal, or an error.
+        said_something = (
+            row.get("error") or row.get("skipped")
+            or row.get("n_refusals") or row.get("verdict")
+            or row.get("n_tracks") is not None
+            or row.get("n_laws") is not None
+            or row.get("chosen_operator"))
+        assert said_something, (name, row)
 
     online = summary["engines_online"]
     assert online["dispatches"] == len(rows)
@@ -714,7 +824,12 @@ def test_identical_evidence_is_not_re_swept(tmp_path):
     rows_after_second = sum(1 for line in open(arm.candidates_path,
                                                encoding="utf-8") if line.strip())
 
-    assert second is first, "the second dispatch re-ran the engines"
+    # Not an identity check: the reused report is a shallow copy whose `store`
+    # summary is refreshed (that key is not engine output and does go stale).
+    # What must be identical is every engine's own report object.
+    for engine in ("mdl_segmenter", "cegis_miner", "zero_space"):
+        assert second[engine] is first[engine], (
+            "the second dispatch re-ran %s" % engine)
     assert rows_after_second == rows_after_first, (
         "the second dispatch appended %d duplicate candidate rows"
         % (rows_after_second - rows_after_first))
@@ -728,6 +843,50 @@ def test_identical_evidence_is_not_re_swept(tmp_path):
     assert "deterministic" in entries[1]["reused_because"]
     # A reused row still reports what the engines delivered.
     assert entries[1]["engines"]["mdl_segmenter"]["delivered"] is True
+
+
+def test_a_reused_dispatch_refreshes_the_world_summary_it_carries(tmp_path):
+    """`run_engines` returns `store: store.summary()` beside the engine reports.
+    That summary counts frameless steps -- a 500 on an action appends a step
+    with no frame, which cannot change what the engines computed but does
+    change what the world looks like. Left stale, `theorize` would put the live
+    summary at the top of the desk's prompt and this one inside "what the
+    engines proposed", and the two would disagree about the action that had
+    just failed."""
+    grids = [[[9, 0, 0, 0], [0, 0, 0, 0]],
+             [[0, 9, 0, 0], [0, 0, 0, 0]]]
+    store = _store(grids, ["ACTION1"])
+    arm = _bare_arm(tmp_path, store)
+
+    first = arm._dispatch_engines(label="cold")
+    steps_before = first["store"]["steps"]
+
+    # An action that failed: a step with no frames. No new grid, so the engine
+    # cache legitimately hits -- but the world is not what it was.
+    store.add(Step(2, "ACTION7", [], status=500))
+    second = arm._dispatch_engines(label="theorize")
+
+    assert arm.engine_rounds[1]["reused_from_dispatch_idx"] == 0
+    assert second["store"]["steps"] == steps_before + 1, (
+        "the reused report carried a stale world summary")
+    assert "ACTION7" in second["store"]["actions_used"]
+
+
+def test_the_cache_key_does_not_collide_on_the_first_frame(tmp_path):
+    """`max(0, n-1)` is not injective at n in {0, 1}: a 200 carrying no frame
+    leaves zero grids, and the first real frame also gave key 0, so the engines
+    were handed an answer computed over no frames while one existed."""
+    store = FrameStore()
+    store.add(Step(0, "RESET", []))                 # 200, no frame
+    arm = _bare_arm(tmp_path, store)
+    first = arm._dispatch_engines(label="cold")
+
+    store.add(Step(1, "ACTION1", [[[9, 0], [0, 0]]]))
+    second = arm._dispatch_engines(label="theorize")
+
+    assert "reused_from_dispatch_idx" not in arm.engine_rounds[1], (
+        "the first real frame was answered from a zero-frame sweep")
+    assert second is not first
 
 
 def test_new_evidence_does_re_sweep(tmp_path):
@@ -784,6 +943,12 @@ def test_a_refusal_counts_as_a_delivery_and_not_as_an_error(tmp_path):
     would turn E3's supply-chain measurement into a measurement of the game."""
     summary, _ = _carried_run(tmp_path, "refusal")
     miner = summary["engines_online"]["per_engine"]["cegis_miner"]
+    # The point of the test is that a refusal HAPPENED and was not counted as
+    # an error. Without this line the test passes just as well when nothing
+    # refuses, or when refusals stop being counted at all.
+    assert miner["refused_with_reason"] > 0, (
+        "this fixture is supposed to make cegis_miner refuse; it did not, so "
+        "the rest of these assertions are about nothing")
     assert miner["errored"] == 0
     assert miner["delivered"] == miner["dispatches"]
 

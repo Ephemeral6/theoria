@@ -128,12 +128,25 @@ class Register:
         and no call at any beat other than theorize and probe design. Both are
         decidable from the records, because `ModelDesk` writes `beat` into
         every one.
+
+        **Where `beat` lives changed.** `LEDGER_FORMAT.md` §4 closed the
+        `model_call` field set after P-8, so it now rides inside `request`;
+        P-8-era records still carry it at the top level. Both depths are read.
+        Reading only the top one made this auditor report
+        `calls_at_forbidden_beats: {"unknown": 1}` on every post-§4 ledger
+        while `armtools/archive.constraint_8` reported the same run as holding
+        — two auditors of the same constraint in the same arm, disagreeing on
+        every real file. The one that was wrong was this one, and its own
+        docstring is what said it could not be.
         """
         calls = [r for r in ledger_records
                  if r.get("event") == "model_call" and r.get("run_id") == run_id]
         beats: Dict[str, int] = {}
         for record in calls:
-            beat = record.get("beat") or "unknown"
+            request = record.get("request")
+            beat = (record.get("beat")
+                    or (request.get("beat") if isinstance(request, dict) else None)
+                    or "unknown")
             beats[beat] = beats.get(beat, 0) + 1
 
         illegal = {b: n for b, n in beats.items()

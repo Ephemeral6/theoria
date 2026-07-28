@@ -143,6 +143,43 @@ def test_the_audit_catches_a_call_at_a_forbidden_beat():
     assert not register.audit(dirty, "r")["constraint_8_holds"]
 
 
+def test_the_audit_reads_the_beat_where_the_writer_now_puts_it():
+    """`LEDGER_FORMAT.md` §4 closed the `model_call` field set after P-8, so
+    `beat` moved inside `request`. This test's neighbours hand-build the
+    P-8-era shape, which `canon.py` now refuses outright -- so they kept passing
+    while `Register.audit` reported `calls_at_forbidden_beats: {"unknown": 1}`
+    on every real ledger and disagreed with `archive.constraint_8` about the
+    same run. Both depths must read."""
+    register = surprise.Register()
+    register.fire("replay_mismatch", "x")
+    nested = [{"event": "model_call", "run_id": "r",
+               "request": {"beat": "theorize", "label": "round1"}}]
+    report = register.audit(nested, "r")
+    assert report["calls_by_beat"] == {"theorize": 1}
+    assert report["constraint_8_holds"]
+
+    dirty = nested + [{"event": "model_call", "run_id": "r",
+                       "request": {"beat": "commit"}}]
+    assert not register.audit(dirty, "r")["constraint_8_holds"]
+
+
+def test_the_audit_agrees_with_the_archiver_on_a_record_the_writer_accepts():
+    """Two auditors of constraint 8 in one arm. They disagreed on every ledger
+    written after the §4 migration, and the wrong one was the one whose
+    docstring said it could not be."""
+    from armtools.archive import constraint_8              # noqa: PLC0415
+    import tempfile                                        # noqa: PLC0415
+
+    register = surprise.Register()
+    register.fire("replay_mismatch", "x")
+    records = [{"event": "model_call", "run_id": "r", "call_idx": 0,
+                "request": {"beat": "theorize"}}]
+    mine = register.audit(records, "r")
+    theirs = constraint_8(records, tempfile.mkdtemp())
+    assert mine["calls_by_beat"] == theirs["calls_by_beat"] == {"theorize": 1}
+    assert mine["constraint_8_holds"] is theirs["holds"] is True
+
+
 def test_a_model_call_with_no_surprise_at_all_is_a_violation():
     register = surprise.Register()
     calls = [{"event": "model_call", "run_id": "r", "beat": "theorize"}]

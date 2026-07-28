@@ -141,7 +141,7 @@ class TheoriaArm:
         self.engine_log_path = os.path.join(self.dir, "engines_online.jsonl")
         self.engine_rounds: List[Dict[str, Any]] = []
         self._last_dispatch: Optional[Dict[str, Any]] = None
-        self._last_dispatch_transitions: int = -1
+        self._last_dispatch_frames: int = -1
         self._last_dispatch_idx: int = -1
 
         pricing = None
@@ -314,8 +314,9 @@ class TheoriaArm:
         # Whether this game can test the carried theory at all -- free to
         # compute, and it decides how every other number in this report may be
         # read. See `transfer.action_overlap`.
-        namespace, _ = self.books.load_predictor()
-        actions = transfer.action_overlap(namespace, self._legal_actions())
+        namespace, predictor_error = self.books.load_predictor()
+        actions = transfer.action_overlap(namespace, self._legal_actions(),
+                                          predictor_error=predictor_error)
 
         self.transfer_report = transfer.cold_report(
             provenance=self.carried, prediction=prediction,
@@ -360,9 +361,15 @@ class TheoriaArm:
         did not run is a fact about the run, and `engines_online.jsonl` is the
         record of what the supply chain actually did.
         """
-        transitions = max(0, len(self.store.grids) - 1)
+        # Keyed on the FRAME count, not the transition count. `max(0, n-1)` is
+        # not injective at n in {0, 1}: a 200 that carried no frame leaves zero
+        # grids and key 0, and the first real frame to arrive also gives key 0,
+        # so the engines would be handed an answer computed over no frames at
+        # all while one existed.
+        frames = len(self.store.grids)
+        transitions = max(0, frames - 1)
         if (self._last_dispatch is not None
-                and self._last_dispatch_transitions == transitions):
+                and self._last_dispatch_frames == frames):
             entry = {
                 "run_id": self.run.run_id,
                 "label": label,
@@ -372,20 +379,33 @@ class TheoriaArm:
                 "elapsed_ms": 0,
                 "reused_from_dispatch_idx": self._last_dispatch_idx,
                 "reused_because": (
-                    "no new transition since dispatch %d; the engines are "
+                    "no new frame since dispatch %d; the engines are "
                     "deterministic given the same frames, so a re-sweep would "
                     "append an exact copy of its rows"
                     % self._last_dispatch_idx),
+                "store_summary_refreshed": True,
                 "candidate_rows_total": _count_lines(self.candidates_path),
                 "candidate_rows_added": 0,
                 "error": None,
                 "engines": _engine_delivery(self._last_dispatch),
             }
+            # `run_engines` returns `store: store.summary()` alongside the
+            # engine reports, and that summary counts frameless steps -- a 500
+            # on an action appends a step with no frame, which cannot change
+            # what the engines computed but does change what the world looks
+            # like. Left stale, `theorize` would put the live summary at the
+            # top of the desk's prompt and this stale one inside "what the
+            # engines proposed", and the two would disagree about the action
+            # that had just failed. Refreshed on the reused copy, which is
+            # cheap and is not engine output.
+            reused = dict(self._last_dispatch)
+            reused["store"] = self.store.summary()
+            self._last_dispatch = reused
             self.engine_rounds.append(entry)
             with open(self.engine_log_path, "a", encoding="utf-8",
                       newline="\n") as fh:
                 fh.write(json.dumps(entry, sort_keys=True, default=str) + "\n")
-            return self._last_dispatch
+            return reused
 
         started = time.time()
         rows_before = _count_lines(self.candidates_path)
@@ -419,7 +439,7 @@ class TheoriaArm:
             fh.write(json.dumps(entry, sort_keys=True, default=str) + "\n")
         if error is None:
             self._last_dispatch = engines
-            self._last_dispatch_transitions = entry["transitions_seen"]
+            self._last_dispatch_frames = len(self.store.grids)
             self._last_dispatch_idx = entry["dispatch_idx"]
         return engines
 

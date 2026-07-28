@@ -296,8 +296,22 @@ def constraint_8(records: List[Dict[str, Any]], run_dir: str) -> Dict[str, Any]:
     bootstrap = 1 if calls else 0
     unexplained = max(0, len(calls) - bootstrap - len(surprises))
 
+    # A call the ledger refused is a call that was paid for and is absent from
+    # `calls`. Without this, a run whose every ledger write was rejected reports
+    # `model_calls: 0, holds: true` -- constraint 8 holding vacuously over money
+    # that was spent, which is INC-TA-006 re-expressed one layer up. The number
+    # lives in the run's `desk` summary; it is lifted here because the manifest
+    # is what anyone audits.
+    missing = 0
+    run_json = os.path.join(run_dir, "run.json")
+    if os.path.exists(run_json):
+        with open(run_json, encoding="utf-8") as fh:
+            desk = ((json.load(fh).get("summary") or {}).get("desk") or {})
+        missing = int(desk.get("calls_missing_from_ledger") or 0)
+
     return {
         "model_calls": len(calls),
+        "calls_paid_for_but_missing_from_the_ledger": missing,
         "calls_by_beat": beats,
         "surprises": len(surprises),
         "surprises_by_kind": _histogram(s.get("kind") for s in surprises),
@@ -305,7 +319,16 @@ def constraint_8(records: List[Dict[str, Any]], run_dir: str) -> Dict[str, Any]:
         "bootstrap_calls_allowed": bootstrap,
         "calls_beyond_bootstrap": max(0, len(calls) - bootstrap),
         "calls_not_covered_by_a_surprise": unexplained,
-        "holds": (not illegal) and unexplained == 0,
+        # `missing` makes this fail closed: a constraint checked over a ledger
+        # that is known to be missing paid calls has not been checked.
+        "holds": (not illegal) and unexplained == 0 and missing == 0,
+        "holds_note": (
+            "false when any paid call is missing from the ledger, because a "
+            "constraint 8 verdict computed over records that are known to be "
+            "incomplete is not a verdict."
+            if missing else
+            "every paid call reached the ledger, so this verdict is computed "
+            "over a complete record"),
         "bootstrap_note": (
             "the first theorize of a run answers no surprise because no manual "
             "exists yet for the world to contradict; it is counted as the one "
