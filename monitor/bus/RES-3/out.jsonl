@@ -1,1 +1,3 @@
 {"ts": "2026-07-28T15:07:52Z", "kind": "say", "ref": null, "body": "报到。verify 赛道常驻。打算先领 V7-exam-stress-fanout / V5-verdict-three-types / V8-judge-trust-audit 三件并行推。"}
+{"ts": "2026-07-28T15:23:01Z", "kind": "say", "ref": null, "body": "V11 普查副产物，值得你现在就知道：figures/verify.sh 在 master 上是红的——SOURCES.sha256 有 5 个源漂移（THEORIZE_LOG.md 的 E-08 来自 C9，cold-start-a2 三个产物来自消融臂）。图比它们的输入旧，而 P12 在板上。已写 inbox，我不碰 figures/。"}
+{"ts": "2026-07-28T15:25:27Z", "kind": "say", "ref": null, "body": "高优先级，已写 inbox 20260728T154500Z：arc-recon/contamination.py:338 的 main 只把 piles.json 哈希接到退出码上，sealed ADDRESSED 与 NEEDS ADJUDICATION 都是印完就丢；verify.sh:53 的 step 只看退出码。结果：真发生封存接触会打印警告然后 -- ok / VERIFY: green。拦截层（proxy 护栏 RED-01..46）是好的、检测函数也算得对，断的是判决到退出码那一段。我没修（不是我领地），建议给 arc-recon 派单并要求同时交付植入式负控。"}

@@ -112,7 +112,7 @@
     ],
     "ops": [
       {
-        "age_min": 15,
+        "age_min": 18,
         "cycle": 9,
         "id": "OPS-A",
         "kind": "ops",
@@ -123,7 +123,7 @@
         "state": "idle"
       },
       {
-        "age_min": 45,
+        "age_min": 48,
         "cycle": 5,
         "id": "OPS-B",
         "kind": "ops",
@@ -134,18 +134,18 @@
         "state": "idle"
       },
       {
-        "age_min": 40,
+        "age_min": 43,
         "cycle": 6,
         "id": "OPS-M",
         "kind": "ops",
         "name": "合并裁判",
         "note": "零 flag、零手动合并（反射层自己合了四个分支）、全量门 15/15 绿（ablation-arm 首次入列）；报一条：反射层卡死 34 分钟而退出码与日志末行都正常，锁的早退分支不写日志，见 inbox 20260728T143836Z",
-        "outputs": 10,
+        "outputs": 9,
         "role": "脚本合不动的冲突由它裁决；顺利合并早已自动化",
         "state": "idle"
       },
       {
-        "age_min": 528,
+        "age_min": 531,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -158,7 +158,7 @@
     ],
     "standing": [
       {
-        "age_min": 19,
+        "age_min": 22,
         "cycle": 0,
         "id": "RES-1",
         "kind": "standing",
@@ -169,7 +169,7 @@
         "state": "idle"
       },
       {
-        "age_min": 14,
+        "age_min": 17,
         "cycle": 4,
         "id": "RES-2",
         "kind": "standing",
@@ -180,18 +180,18 @@
         "state": "working"
       },
       {
-        "age_min": 9,
+        "age_min": 1,
         "cycle": 1,
         "id": "RES-3",
         "kind": "standing",
         "name": "验证与考卷研究员",
-        "note": "verify 赛道原 BOARD-EMPTY（exam/engine-rig/battery 三领地均被占），自供两件：A=V10-fuzz-mutation-power（fuzzlab 属性电池检出力，变异分析）B=V11-negative-control-census（全仓验收闸门负控普查）。两个 worktree 已建，准备扇出。",
-        "outputs": 0,
+        "note": "A=V10 变异框架已跑通（zero_space 5/5 预注册全中），5 个引擎分析员并行中；B=V11 负控普查 6 路并行，已回 2 路。副产物已写 inbox：figures/verify.sh 在 master 上是红的（5 个源漂移，已独立复核）。",
+        "outputs": 1,
         "role": "常驻推进：凭什么相信这些数字——考卷、电池、引擎交叉验证",
         "state": "working"
       },
       {
-        "age_min": 6,
+        "age_min": 9,
         "cycle": 1,
         "id": "RES-4",
         "kind": "standing",
@@ -717,7 +717,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 23:21:18",
+  "generated_at": "2026-07-28 23:24:24",
   "grid": {
     "A1": {
       "active": [
@@ -1596,10 +1596,11 @@
       "ablation-arm/artifacts/a2-charitable/episode.jsonl",
       "ablation-arm/artifacts/run_all.json",
       "ablation-arm/artifacts/verify.json",
-      "monitor/index.html",
-      "monitor/reflex.lock",
-      "monitor/reflex.log",
-      "monitor/state.json",
+      "monitor/bus/RES-3/out.jsonl",
+      "monitor/ci/CONFLICT-origin_agent_r2-release-licence.md",
+      "monitor/ci/merge.lock",
+      "monitor/ci/merge.log",
+      "monitor/ops-status/RES-3.json",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
@@ -1611,16 +1612,19 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
+      "monitor/ci/CONFLICT-origin_agent_a7-envelope-finish.md",
+      "monitor/ci/CONFLICT-origin_agent_s11-sealed-halfguard.md",
+      "monitor/inbox/20260728T153500Z-RES-3-figures-verify-is-red-on-master.md",
       "theoria-arm/.pytest-runs/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "2e96b47 monitor: capture the fleet's own record before it rots, then extract the kit",
+    "git_head": "77e9216 Merge remote-tracking branch 'origin/agent/s12-quota-hold-tests' into HEAD",
     "incidents": 16,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 116,
-    "sync_last": "2026-07-28T14:32:55Z",
+    "sync_entries": 118,
+    "sync_last": "2026-07-28T15:20:00Z",
     "tests": {},
     "untracked": [
       ".claude/",
@@ -1634,6 +1638,9 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
+      "monitor/ci/CONFLICT-origin_agent_a7-envelope-finish.md",
+      "monitor/ci/CONFLICT-origin_agent_s11-sealed-halfguard.md",
+      "monitor/inbox/20260728T153500Z-RES-3-figures-verify-is-red-on-master.md",
       "theoria-arm/.pytest-runs/"
     ]
   },
@@ -2111,7 +2118,7 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 16 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md, 20260728T142000Z-W-1251-open-spec-json-carries-the-verdict-and-most-of-the-rule-set.md, 20260728T142100Z-W-1251-t2-switch-push-also-breaks-the-miner-and-a-forbidden-action-is-unlearnable.md, 20260728T143000Z-W-1253-p10-territory-and-a-latent-render-defect.md, 20260728T143836Z-opsm-reflex-stalls-are-invisible.md, 20260728T145500Z-W-1252-handover-package-found-four-generator-defects.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md, 20260728T150200Z-W-1411-cert-recheck-findings.md, 20260728T151000Z-W-1250-board-done-is-not-idempotent-on-windows-and-it-locks-territories.md, 20260728T151500Z-W-1252-count-lock-is-a-tracking-bug-not-a-vocabulary-gap.md, 20260728T151500Z-W-1253-v6-released-with-design.md, 20260728T1520Z-W-1412-self-report-master-push.md, 20260728T152500Z-W-1250-two-phase1-items-can-go-green-and-their-notes-are-stale.md, 20260728T160000Z-RES-2-p5-done-and-two-findings-for-other-territories.md",
+      "detail": "待裁决提案 19 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md, 20260728T142000Z-W-1251-open-spec-json-carries-the-verdict-and-most-of-the-rule-set.md, 20260728T142100Z-W-1251-t2-switch-push-also-breaks-the-miner-and-a-forbidden-action-is-unlearnable.md, 20260728T143000Z-W-1253-p10-territory-and-a-latent-render-defect.md, 20260728T143836Z-opsm-reflex-stalls-are-invisible.md, 20260728T145500Z-W-1252-handover-package-found-four-generator-defects.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md, 20260728T1500Z-W-1412-s12-audit-two-doors-without-exits.md, 20260728T150200Z-W-1411-cert-recheck-findings.md, 20260728T151000Z-W-1250-board-done-is-not-idempotent-on-windows-and-it-locks-territories.md, 20260728T151500Z-W-1251-the-concurrency-gate-is-blind-right-now-24-agents-and-6gb-free.md, 20260728T151500Z-W-1252-count-lock-is-a-tracking-bug-not-a-vocabulary-gap.md, 20260728T151500Z-W-1253-v6-released-with-design.md, 20260728T1520Z-W-1412-self-report-master-push.md, 20260728T152500Z-W-1250-two-phase1-items-can-go-green-and-their-notes-are-stale.md, 20260728T153500Z-RES-3-figures-verify-is-red-on-master.md, 20260728T160000Z-RES-2-p5-done-and-two-findings-for-other-territories.md",
       "status": "partial"
     },
     "needs_human": {
@@ -2124,10 +2131,10 @@
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第9轮 idle（14 分钟前）； OPS-B 第5轮 idle（44 分钟前）； OPS-M 第6轮 idle（39 分钟前）； OPS-R 第1轮 idle（527 分钟前）",
+      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第9轮 idle（18 分钟前）； OPS-B 第5轮 idle（47 分钟前）； OPS-M 第6轮 idle（43 分钟前）； OPS-R 第1轮 idle（530 分钟前）",
       "rows": [
         {
-          "age_min": 14,
+          "age_min": 18,
           "cycle": 9,
           "id": "OPS-A",
           "name": "漂移审计员",
@@ -2136,7 +2143,7 @@
           "status": "green"
         },
         {
-          "age_min": 44,
+          "age_min": 47,
           "cycle": 5,
           "id": "OPS-B",
           "name": "浏览器专员",
@@ -2145,7 +2152,7 @@
           "status": "green"
         },
         {
-          "age_min": 39,
+          "age_min": 43,
           "cycle": 6,
           "id": "OPS-M",
           "name": "合并裁判",
@@ -2154,7 +2161,7 @@
           "status": "green"
         },
         {
-          "age_min": 527,
+          "age_min": 530,
           "cycle": 1,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2171,7 +2178,7 @@
       "status": "green"
     },
     "provenance_scan": {
-      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：2 个 run（正典 1，**无留痕 1**），最新 20260728T130500Z-A4a-ablation-build； arc-recon：2 个 run（正典 2），最新 P-11； baseline-arms：1 个 run（正典 1），最新 20260728T103135Z-a7； battery：2 个 run（正典 2），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：1 个 run（正典 1），最新 p-17； engine-rig：3 个 run（正典 2，非正典 1(md)），最新 p13-fd-real； exam：3 个 run（正典 3），最新 p15-rehearsal-01； figures：3 个 run（正典 2，**无留痕 1**），最新 20260728T110000Z-P8-billshape-pipeline； fuzzlab：1 个 run（正典 1），最新 20260728T085448Z-E4-property-fuzz； proxy：2 个 run（正典 2），最新 p9-shell-harden； release：1 个 run（正典 1），最新 20260728T140000Z-P5； theoria-arm：11 个 run（正典 4，**无留痕 7**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：5 个 run（正典 4，**无留痕 1**），最新 P-10； worldgen：2 个 run（正典 2），最新 20260728T134933Z-C6-worldgen-mutate。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, papers。",
+      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：2 个 run（正典 1，**无留痕 1**），最新 20260728T130500Z-A4a-ablation-build； arc-recon：3 个 run（正典 3），最新 P-11； baseline-arms：1 个 run（正典 1），最新 20260728T103135Z-a7； battery：2 个 run（正典 2），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：1 个 run（正典 1），最新 p-17； engine-rig：3 个 run（正典 2，非正典 1(md)），最新 p13-fd-real； exam：3 个 run（正典 3），最新 p15-rehearsal-01； figures：3 个 run（正典 2，**无留痕 1**），最新 20260728T110000Z-P8-billshape-pipeline； fuzzlab：1 个 run（正典 1），最新 20260728T085448Z-E4-property-fuzz； proxy：2 个 run（正典 2），最新 p9-shell-harden； release：1 个 run（正典 1），最新 20260728T140000Z-P5； theoria-arm：11 个 run（正典 4，**无留痕 7**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：5 个 run（正典 4，**无留痕 1**），最新 P-10； worldgen：2 个 run（正典 2），最新 20260728T134933Z-C6-worldgen-mutate。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, papers。",
       "status": "partial"
     },
     "scheduled_tasks": {
@@ -2179,15 +2186,15 @@
       "status": "risk"
     },
     "self_driving": {
-      "detail": "RES-1 第0轮 idle（18 分钟前）； RES-2 第4轮 working（13 分钟前）； RES-3 第1轮 working（8 分钟前）； RES-4 第1轮 working（5 分钟前）",
+      "detail": "RES-1 第0轮 idle（21 分钟前）； RES-2 第4轮 working（16 分钟前）； RES-3 第1轮 working（0 分钟前）； RES-4 第1轮 working（9 分钟前）",
       "status": "green"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 14 个提交 / 4 次合并（判断陈旧到 partial 档 就该重扫）。",
-      "status": "green"
+      "detail": "spec.py 落后 19 个提交 / 6 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "status": "partial"
     },
     "spend": {
-      "detail": "开发堆战役包 $200，已花 **$30.39**，剩 $169.61（3659 条记账）；分战役：arc-recon-canary-quick $0.00、phase3-unit-price-remeasure $19.83、phase3-variance-envelope $10.54、phase3-variance-envelope-quota-probe $0.02",
+      "detail": "开发堆战役包 $200，已花 **$30.55**，剩 $169.45（3746 条记账）；分战役：arc-recon-canary-quick $0.00、phase3-unit-price-recheck $0.16、phase3-unit-price-remeasure $19.83、phase3-variance-envelope $10.54",
       "status": "green"
     },
     "supply": {

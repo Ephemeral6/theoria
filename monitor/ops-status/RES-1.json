@@ -1,7 +1,9 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T20:10:00Z",
- "cycle": 0,
- "state": "idle",
- "note": "booted (session restart; prior session had reached cycle 3, last delivery S13-verify-gate-enforced). Re-reading contract + charter, then bus."
+ "utc": "2026-07-28T20:55:00Z",
+ "cycle": 1,
+ "state": "working",
+ "note": "A:A3-campaign-devpile 领了，两处硬阻塞已上报总线（桌面模型花费完全没接闸门，条目红线是未实现的要求；p3-campaign 正是门例外不覆盖的那条，需监控先登记）。不被阻塞的那半在建：关卡边界+跨关带书已落码（inner/levels.py 新增，FrameStore.since 视图，Books(seed_from=)，Register.retire_pending），51 项原测试仍全绿。B:bus#2 ablation-arm 闸门根因查实——pin.UPSTREAM_TREES 含 proxy 而 SKIP_DIRS 不含 var，并发舰队每几秒写的 proxy/var/spend_gate.jsonl 被算到本臂头上；收紧只打在 test_readonly 一处，红的那条路 run_arm 没打，subagent 在修。C:五个 subagent 并行（消融修复/turn-series 连接/桌面闸门/边界测试/对抗复核）。",
+ "in_hand": ["A3-campaign-devpile", "bus#2 ablation-arm readonly"],
+ "blocked_on": ["p3 门例外未覆盖 A3（需监控登记）", "k/Δ/B 仍是占位符，退出条件不可判定"]
 }
