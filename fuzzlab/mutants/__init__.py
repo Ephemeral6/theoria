@@ -96,6 +96,14 @@ class Mutant:
     description: str             # what is done to the return value, concretely
     corrupt: Corrupt = field(repr=False, default=None)
     expect_kill: Tuple[str, ...] = ()    # pre-registered, before any run
+    # Pre-registers the opposite prediction: *nothing* should catch this. Two
+    # analysts asked for it independently, and they were right — without it,
+    # a mutant written specifically to demonstrate a known blind spot has to
+    # name an invariant it does not believe will fire, and its correct survival
+    # then lands in `predicted_but_missed` as though the prediction had failed.
+    # That silently converts the sharpest kind of result — a designed negative
+    # control, surviving exactly as predicted — into a recorded miss.
+    predicted_survivor: bool = False
 
     def __post_init__(self) -> None:
         if self.kind not in KINDS:
@@ -108,11 +116,17 @@ class Mutant:
                 "mutant %s: `claim` is required. A mutant that does not "
                 "contradict a claim the engine makes is not a defect, and an "
                 "invariant that lets it through is not weak." % self.id)
-        if not self.expect_kill:
+        if self.predicted_survivor and self.expect_kill:
             raise ValueError(
-                "mutant %s: `expect_kill` is required and must be written "
-                "before the run. Reading the result first and then declaring "
-                "what was expected measures nothing." % self.id)
+                "mutant %s: predicted_survivor and expect_kill are opposite "
+                "predictions; declare one." % self.id)
+        if not self.expect_kill and not self.predicted_survivor:
+            raise ValueError(
+                "mutant %s: pre-register a prediction before the run -- either "
+                "`expect_kill` (these invariants should catch it) or "
+                "`predicted_survivor=True` (nothing should, and that is the "
+                "point). Reading the result first and then declaring what was "
+                "expected measures nothing." % self.id)
 
 
 class _Inert(Exception):

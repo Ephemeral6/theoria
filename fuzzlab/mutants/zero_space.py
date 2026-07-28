@@ -54,6 +54,14 @@ def _flip_law_value(result: Any, args: Tuple[Any, ...],
     return result
 
 
+def _drop_law(result: Any, args: Tuple[Any, ...],
+              kwargs: Dict[str, Any]) -> Any:
+    if not result.laws:
+        raise mut.inert("world has no laws to withhold")
+    result.laws = result.laws[:-1]
+    return result
+
+
 def _bump_difference_rank(result: Any, args: Tuple[Any, ...],
                           kwargs: Dict[str, Any]) -> Any:
     result.difference_rank += 1
@@ -105,6 +113,25 @@ mut.register(
                     "shape.",
         corrupt=_flip_law_value,
         expect_kill=("laws_hold_on_trajectory",),
+    ),
+    mut.Mutant(
+        id="zs-drop-law",
+        engine=ENGINE, seam=SEAM, kind=mut.INCOMPLETE,
+        claim="`result.laws` is the set of conservation laws the evidence "
+              "supports, and it is what `candidates()` publishes -- "
+              "engines/zero_space/__init__.py builds the payload from the laws, "
+              "not from the raw basis. A law silently dropped is a true fact "
+              "about the world that never reaches the manual.",
+        description="drop the last Law, leaving `basis` untouched. NOTE: this "
+                    "prediction is POST-HOC. The mutant was written by the "
+                    "adversarial reviewer after the first five had already run "
+                    "and zero_space had been reported as '0 survivors'. It is "
+                    "recorded as post-hoc rather than folded in among the "
+                    "pre-registered five, because the whole value of "
+                    "pre-registration is lost the moment a result is quietly "
+                    "relabelled as a prediction.",
+        corrupt=_drop_law,
+        predicted_survivor=True,
     ),
     mut.Mutant(
         id="zs-bump-difference-rank",

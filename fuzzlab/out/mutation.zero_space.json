@@ -11,15 +11,16 @@
         "rank_nullity"
       ],
       "invariants_no_mutant_kills": [],
-      "mutants": 5
+      "mutants": 6
     }
   },
-  "engine_rig_head": "baf1671",
+  "engine_rig_head": "f9d3e72",
   "mutants": [
     {
       "claim": "the basis spans *exactly* the space of conserved laws -- engines/zero_space/zerospace.py:analyse returns gf2.null_space of the difference matrix; props/zero_space.py names completeness as a separate claim from soundness.",
       "description": "drop the last vector from result.basis, leaving a strict subspace: every law returned is still true, one true law is withheld.",
-      "elapsed_s": 0.13,
+      "determined": true,
+      "elapsed_s": 0.12,
       "engine": "zero_space",
       "expect_kill": [
         "law_space_is_complete",
@@ -43,6 +44,7 @@
       "seam": "_analyse",
       "survived": false,
       "survived_all_detection": false,
+      "undetermined": false,
       "unexpected_kills": [],
       "worlds_confounded": 0,
       "worlds_evaluated": 25,
@@ -58,7 +60,8 @@
     {
       "claim": "every vector in the basis really is conserved along the trajectory (soundness half of the same claim).",
       "description": "append a single-feature vector known by the oracle to lie outside the true null space: the engine now asserts a law that is false of the world.",
-      "elapsed_s": 0.13,
+      "determined": true,
+      "elapsed_s": 0.12,
       "engine": "zero_space",
       "expect_kill": [
         "law_space_is_complete",
@@ -82,6 +85,7 @@
       "seam": "_analyse",
       "survived": false,
       "survived_all_detection": false,
+      "undetermined": false,
       "unexpected_kills": [],
       "worlds_confounded": 0,
       "worlds_evaluated": 25,
@@ -97,6 +101,7 @@
     {
       "claim": "Law.value is the parity the law actually holds at -- zerospace.py:Law documents it as the conserved value, and rendering() prints it as `mod 2 = <value>` into the manual.",
       "description": "flip the reported value of the first law. The law is still conserved; the constant it is conserved *at* is now wrong. A manual inheriting this states a false fact with the right shape.",
+      "determined": true,
       "elapsed_s": 0.12,
       "engine": "zero_space",
       "expect_kill": [
@@ -120,6 +125,7 @@
       "seam": "_analyse",
       "survived": false,
       "survived_all_detection": false,
+      "undetermined": false,
       "unexpected_kills": [],
       "worlds_confounded": 0,
       "worlds_evaluated": 25,
@@ -133,9 +139,48 @@
       }
     },
     {
+      "claim": "`result.laws` is the set of conservation laws the evidence supports, and it is what `candidates()` publishes -- engines/zero_space/__init__.py builds the payload from the laws, not from the raw basis. A law silently dropped is a true fact about the world that never reaches the manual.",
+      "description": "drop the last Law, leaving `basis` untouched. NOTE: this prediction is POST-HOC. The mutant was written by the adversarial reviewer after the first five had already run and zero_space had been reported as '0 survivors'. It is recorded as post-hoc rather than folded in among the pre-registered five, because the whole value of pre-registration is lost the moment a result is quietly relabelled as a prediction.",
+      "determined": true,
+      "elapsed_s": 0.12,
+      "engine": "zero_space",
+      "expect_kill": [],
+      "id": "zs-drop-law",
+      "killed": {
+        "law_space_is_complete": 0,
+        "laws_hold_on_trajectory": 0,
+        "membership_agrees": 0,
+        "rank_nullity": 0
+      },
+      "kind": "incomplete",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "law_space_is_complete": 0,
+        "laws_hold_on_trajectory": 0,
+        "membership_agrees": 0,
+        "rank_nullity": 0
+      },
+      "seam": "_analyse",
+      "survived": true,
+      "survived_all_detection": true,
+      "undetermined": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 25,
+      "worlds_inert": 0,
+      "worlds_offered": 25,
+      "worlds_to_first_kill": {
+        "law_space_is_complete": null,
+        "laws_hold_on_trajectory": null,
+        "membership_agrees": null,
+        "rank_nullity": null
+      }
+    },
+    {
       "claim": "difference_rank is the rank of the difference matrix, and dimension == n_features - difference_rank (rank-nullity).",
       "description": "report a difference rank one higher than the truth, so the engine's own two numbers no longer add up.",
-      "elapsed_s": 0.13,
+      "determined": true,
+      "elapsed_s": 0.12,
       "engine": "zero_space",
       "expect_kill": [
         "rank_nullity"
@@ -158,6 +203,7 @@
       "seam": "_analyse",
       "survived": false,
       "survived_all_detection": false,
+      "undetermined": false,
       "unexpected_kills": [],
       "worlds_confounded": 0,
       "worlds_evaluated": 25,
@@ -173,7 +219,8 @@
     {
       "claim": "contains(v) is true iff v is in the span of the basis -- zerospace.py:ZeroSpaceResult.contains delegates to gf2.in_span.",
       "description": "shadow contains() with a function that says yes to everything: the query interface now agrees the world conserves quantities it does not.",
-      "elapsed_s": 0.14,
+      "determined": true,
+      "elapsed_s": 0.12,
       "engine": "zero_space",
       "expect_kill": [
         "membership_agrees"
@@ -196,6 +243,7 @@
       "seam": "_analyse",
       "survived": false,
       "survived_all_detection": false,
+      "undetermined": false,
       "unexpected_kills": [],
       "worlds_confounded": 0,
       "worlds_evaluated": 25,

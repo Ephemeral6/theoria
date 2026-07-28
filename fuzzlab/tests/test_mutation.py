@@ -88,6 +88,12 @@ def test_a_mutant_that_changes_nothing_is_inert_and_not_a_survivor():
     assert row["worlds_evaluated"] == 0
     assert row["worlds_inert"] == len(worlds)
     assert row["predicted_but_missed"] == ["rank_nullity"]
+    # The assertions above are what this test originally checked, and an
+    # adversarial pass pointed out that they do not check what the name says:
+    # a mutant with `eval=0` was still reported `survived=True` and printed
+    # SURVIVED. The test passed while the property it is named for was false.
+    assert row["survived"] is False, "a mutant that never ran has not survived"
+    assert row["undetermined"] is True
 
 
 def test_touched_marks_a_change_repr_cannot_see():

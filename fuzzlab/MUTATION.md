@@ -67,10 +67,21 @@ Three engines make this a live hazard rather than a hypothetical:
 
 **1. Expectations are pre-registered.** `expect_kill` lists the invariants that
 *should* catch the mutant and is written before the driver runs; the
-constructor refuses a mutant without it. Without this, "the battery caught it"
-cannot be distinguished from writing mutants until one trips something. A kill
-by an invariant nobody predicted is itself reported (`unexpected_kills`) — it
-usually means the invariants are less independent than their docstrings claim.
+constructor refuses a mutant without it — or without `predicted_survivor=True`,
+which pre-registers the opposite prediction for a mutant written specifically to
+demonstrate a known blind spot. Without this, "the battery caught it" cannot be
+distinguished from writing mutants until one trips something. A kill by an
+invariant nobody predicted is itself reported (`unexpected_kills`) — it usually
+means the invariants are less independent than their docstrings claim.
+
+**What backs the word "before", and what does not.** The catalogues were written
+and only then run, but they were untracked while both happened, so **there is no
+commit ordering to appeal to, and the only evidence for "before" is this
+sentence**; a reader should take it as an assertion, not a proof. That is the
+same self-disclosure `worldgen/qc/PREREGISTERED_MUTANTS.md` makes about itself,
+and an adversarial reviewer was right to raise it. `zs-drop-law` is the one
+mutant marked **post-hoc** in its own `description`, because it was written after
+`zero_space` had already been published as "0 survivors".
 
 **2. Inert worlds leave the denominator.** A corruption is not always possible:
 there is no law to drop from a world with no laws. `corrupt` raises
@@ -132,10 +143,24 @@ the second**.
 Measuring the first needs *conditional* mutants — a defect injected only when
 some rare structural predicate holds — so that `worlds_to_first_kill` becomes
 the number of worlds needed to surface the condition. That is the natural next
-experiment and it is not done here. Until it is, the honest form of the
-conclusion is: **the campaign's size is justified by corpus diversity, not by
-invariant sensitivity, and only the second half of that sentence has been
-measured.**
+experiment and it is not done here.
+
+**And the adversarial pass showed the artefact is worse than the paragraph
+above admits.** Several `corrupt` functions *search* for their injection point
+using the invariant's own criterion for a violation — `zs-add-bogus-basis-vector`
+walks features until it finds one the oracle says is outside the span, and then
+inserts exactly that. The kill is then true **by construction**: the mutant was
+built to be the thing the invariant looks for. Such a kill establishes that the
+reporting path works end to end — which is not nothing, and is precisely what
+caught `partition_matches_truth` — but it is **not** evidence about sensitivity
+to a defect the engine would plausibly have.
+
+So the honest form of the conclusion is narrower than "500 worlds are a luxury":
+
+> Every invariant has a working detection path, demonstrated. **How sensitive
+> each is to a realistic defect is not measured by this run**, and
+> `worlds_to_first_kill = 1` is largely a property of how the mutants were
+> written rather than of the invariants.
 
 ## `worlds_inert` turns out to measure something the campaign gets wrong
 
@@ -260,15 +285,39 @@ territories — a verdict computed correctly and wired to nothing.
 54 mutants over six engines, one catalogue per engine, run at 25–40 worlds each.
 Baseline clean everywhere. Per-engine detail is in `runs/…/partials/`.
 
-| engine | invariants | mutants | survivors | invariants no mutant could kill |
-|---|---|---|---|---|
-| `mdl_segmenter` | 4 | 11 | 4 | none |
-| `cegis_miner` | 4 | 8 | 3 | none |
-| `zero_space` | 4 | 5 | 0 | none |
-| `lp_potential` | 4 | 6 | 1 | none |
-| `fd_adapter` | 3 | 6 | 2 | none |
-| `probe_frontier` | 4 | 18 | 5 | none — **after the fix below** |
-| **total** | **23** | **54** | **15** | |
+| engine | invariants | mutants | survivors | undetermined | invariants no mutant could kill |
+|---|---|---|---|---|---|
+| `mdl_segmenter` | 4 | 11 | 4 | 0 | none |
+| `cegis_miner` | 4 | 8 | 3 | 0 | none |
+| `zero_space` | 4 | 6 | 1 | 0 | none |
+| `lp_potential` | 4 | 6 | 1 | 0 | none |
+| `fd_adapter` | 3 | 6 | 1 | 1 | none |
+| `probe_frontier` | 4 | 18 | 5 | 0 | none — **after the fix below** |
+| **total** | **23** | **55** | **15** | **1** | |
+
+**Two of these numbers were different an hour ago, and the corrections came
+from the adversarial pass rather than from me.** Both are recorded in place
+rather than silently absorbed, because a table that only ever moved in the
+flattering direction is not evidence of anything. `runs/…/ADVERSARIAL-1.md` is
+the reviewer's own report.
+
+* **`zero_space` was published as "5 mutants, 0 survivors"** and read as the one
+  fully-covered engine. It was a sampling result. The reviewer wrote a sixth
+  mutant — drop one `Law`, leave `basis` untouched — and it survives 25/25,
+  because `candidates()` publishes `result.laws` while the completeness
+  invariant audits `result.basis`. I re-ran it independently and confirm the
+  survival. `zero_space` has the same blind spot as the other three; it was
+  hidden by which mutants happened to get written.
+* **`fd_adapter` was published as "2 survivors"**, one of which had
+  `worlds_evaluated = 0`. The reviewer found that `survived` did not require the
+  mutant to have run at all, so a `corrupt` that never applied printed as
+  `SURVIVED` — the most misleading row this tool could emit, since every row is
+  an accusation. `undetermined` is now a separate column and the driver prints
+  `UNDETERMINED (never ran)`. **The negative-control test that was supposed to
+  catch exactly this did not**: `test_a_mutant_that_changes_nothing_is_inert_and_not_a_survivor`
+  asserted the inert counts and never asserted `survived is False`. It passed
+  while the property in its own name was false. Both are fixed and the test now
+  asserts what it is called.
 
 **Every one of the 23 invariants is killed by at least one mutant — now.** One
 of them was not, before this run changed it, and that is the single most useful
@@ -318,14 +367,53 @@ insufficient* or *the mutant was not a real defect*, against the engine's
 documented promises. Grouped by what they have in common:
 
 **1. The battery audits less than the engine publishes.** Found independently on
-three engines: `mdl_segmenter`'s `Track.color` and `Segmentation.baseline_bits`,
+**four** engines — three analysts who could not see each other's work, plus the
+adversarial reviewer who found the fourth while trying to overturn the first
+three: `mdl_segmenter`'s `Track.color` and `Segmentation.baseline_bits`,
 `cegis_miner`'s lifted `all_rules` (four invariants iterate `result.rules`, while
 `candidates()` publishes `all_rules`), `probe_frontier`'s `ProbeValue.partition`
-and reported `cost`. **These fields reach `candidates.jsonl`, and from there the
-manual, and from there the LLM's beliefs about the world** — carrying no evidence
-at all, seated next to fields that carry some. This is the most consequential
-group and it was nobody's hypothesis going in; three analysts who could not see
-each other's work each hit one face of it.
+and reported `cost`, and `zero_space`'s `result.laws` — the payload is built from
+the laws, and the completeness invariant audits the basis. **These fields reach
+`candidates.jsonl`, and from there the manual, and from there the LLM's beliefs
+about the world** — carrying no evidence at all, seated next to fields that carry
+some. This is the most consequential group and it was nobody's hypothesis going
+in.
+
+**Measured, once the pattern was visible.** The survivors said the gap exists;
+a separate pass walked the whole publication surface and sized it
+(`runs/…/PUBLISHED_VS_AUDITED.md`, audit side measured with an in-process
+attribute-access recorder rather than by reading):
+
+| | fields |
+|---|---|
+| leaf fields the six engines publish into the payload | **111** |
+| asserted by at least one invariant | 25 |
+| read only as an index, a gate, or inside an aggregate | 22 |
+| **never audited by any invariant** | **64** |
+
+The sharpest instance is not any of the survivors. **`cegis_miner` publishes
+`effect.*` and no invariant has ever looked at it.** All four audit the *guard* —
+when a rule fires — and none compares the rule's stated effect against what the
+transition actually did. So a rule set with perfect guards and wrong effects
+passes the entire battery cleanly, is published as causal law, and is consumed
+mechanically downstream at `probe_runner.py:72`. On one 39-world sample the
+engine published 224 rules, 35 of them lifted and outside every invariant's
+reach.
+
+One published field turns out to be **false rather than merely unaudited**:
+`mdl_segmenter`'s `segment_operator` is written as a constant, so two
+segmentations of the same world cutting 23 tracks and 6 tracks emit an identical
+payload string naming the same operator.
+
+**One qualification the adversarial pass forced, and it matters.** "Nobody
+audits these" is too strong for `cegis_miner`: `engine-rig`'s own unit tests do
+cover part of the lifted rule set. The precise claim is **`fuzzlab` does not
+audit them**, and the distinction is not pedantic — `fuzzlab`'s house rule is
+that an oracle may not call the engine it judges, and `engine-rig`'s tests are
+under no such constraint. Coverage by a test that shares the engine's own
+assumptions is worth less than coverage by an independent oracle, but it is not
+zero, and reporting it as zero would be the same error this file warns about in
+the other direction.
 
 **2. The oracle shares machinery with the engine it judges.** `fd_adapter`'s
 `_model` builds the oracle's truth table with the engine's own

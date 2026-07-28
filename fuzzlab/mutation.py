@@ -156,8 +156,17 @@ def run_mutant(mutant: mut.Mutant, worlds: List[Any],
         "killed": kills,
         "raised_only": {name: raised_only[name] for name in invariants},
         "worlds_to_first_kill": first_kill,
-        "survived": not any(kills.values()),
-        "survived_all_detection": not any(kills.values())
+        # A mutant that never ran has not survived anything. Reported separately
+        # because the two look identical in every other column and mean opposite
+        # things: `survived` is a claim about the battery, `undetermined` is a
+        # claim about the mutant. An adversarial pass found this exact hole --
+        # a `corrupt` that always raised was being printed as SURVIVED with
+        # `eval=0`, which is the single most misleading row this tool could
+        # emit, since the whole report is a list of accusations.
+        "determined": evaluated > 0,
+        "survived": evaluated > 0 and not any(kills.values()),
+        "undetermined": evaluated == 0,
+        "survived_all_detection": evaluated > 0 and not any(kills.values())
         and not any(raised_only.values()),
         "unexpected_kills": unexpected,
         "predicted_but_missed": missed,
@@ -197,7 +206,8 @@ def run(engines: List[str], n_worlds: int, campaign_seed: int,
         for mutant in here:
             row = run_mutant(mutant, worlds, dirty, verbose)
             results.append(row)
-            verdict = ("SURVIVED" if row["survived"] else
+            verdict = ("UNDETERMINED (never ran)" if row["undetermined"] else
+                       "SURVIVED" if row["survived"] else
                        "killed by %s" % ",".join(
                            n for n, k in sorted(row["killed"].items()) if k))
             print("  %-32s %-12s eval=%-4d inert=%-4d %s"
