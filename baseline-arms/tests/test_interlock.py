@@ -178,3 +178,41 @@ def test_worktree_roots_includes_this_checkout():
     roots = interlock.worktree_roots()
     assert any(os.path.realpath(r) == os.path.realpath(interlock.REPO)
                for r in roots)
+
+
+# ---------------------------------------------- read-only invocations
+def test_a_gate_only_reader_is_not_a_live_campaign():
+    """Observed for real: three concurrent `--gate-only` readers showed up as
+    three live campaigns. The obvious way to ask "is it safe to start" must not
+    be the thing that says no."""
+    state = interlock.check(
+        lister=lister([(11, "python -m harness.run_campaign --gate-only")]),
+        roots=[], now=NOW, own_pid=1)
+    assert state["clear"], state["blockers"]
+
+
+def test_a_dry_run_fetch_is_not_a_live_campaign():
+    state = interlock.check(
+        lister=lister([(12, "python -m harness.fetch_schema_traces --dry-run")]),
+        roots=[], now=NOW, own_pid=1)
+    assert state["clear"], state["blockers"]
+
+
+def test_a_real_campaign_still_blocks_when_a_reader_is_also_running():
+    state = interlock.check(
+        lister=lister([(11, "python -m harness.run_campaign --gate-only"),
+                       (12, "python -u -m harness.campaign --game g50t-5849a774")]),
+        roots=[], now=NOW, own_pid=1)
+    assert not state["clear"]
+    assert len(state["processes"]) == 1
+    assert state["processes"][0]["pid"] == 12
+
+
+def test_a_nohup_wrapper_and_its_child_are_both_reported():
+    """Both are real: the wrapper exits with the child, so neither wedges the
+    check, and reporting both is more honest than guessing which is which."""
+    state = interlock.check(
+        lister=lister([(1000, 'nohup.exe python -u -m harness.campaign --game g50t'),
+                       (1001, "python.exe -u -m harness.campaign --game g50t")]),
+        roots=[], now=NOW, own_pid=1)
+    assert len(state["processes"]) == 2

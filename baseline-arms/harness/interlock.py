@@ -56,6 +56,15 @@ STALE_AFTER_SECONDS = 30 * 60
 CAMPAIGN_MODULES = ("harness.campaign", "harness.run_campaign",
                     "harness.run_pilot", "harness.bare_cc")
 
+# ...except with these flags, which make the invocation read-only. `--gate-only`
+# re-adjudicates the recorded cells and buys nothing; `--dry-run` lists and
+# fetches nothing. Treating them as live spend is not a harmless over-count: the
+# obvious way to ask "is it safe to start?" is to evaluate the gate, and an
+# interlock that blocks on its own diagnostic is one nobody can clear. Observed
+# for real -- three concurrent `--gate-only` readers showed up as three live
+# campaigns.
+READ_ONLY_FLAGS = ("--gate-only", "--dry-run", "--report-only", "--verify")
+
 _TS = "%Y-%m-%dT%H:%M:%SZ"
 
 
@@ -113,6 +122,8 @@ def live_processes(lister: Callable[[], Tuple[List[Tuple[int, str]], Optional[st
     found = []
     for pid, cmdline in rows:
         if pid == own_pid:
+            continue
+        if any(flag in cmdline for flag in READ_ONLY_FLAGS):
             continue
         for module in CAMPAIGN_MODULES:
             # `-m harness.campaign`, and not `harness.campaign_status`, which is
