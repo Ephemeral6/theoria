@@ -1,18 +1,18 @@
 {
-  "cycle": 23,
-  "utc": "2026-07-28T22:15Z",
-  "last_audited_commit": "4658e7a",
-  "range_this_cycle": "29f41ea..4658e7a",
+  "cycle": 24,
+  "utc": "2026-07-28T22:48Z",
+  "last_audited_commit": "cd92cc9",
+  "range_this_cycle": "4658e7a..cd92cc9",
   "mode": "incremental",
   "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "流程漂移": "队列解冻（21:39 后四次合并）但让它放行的 gates.py 修复只在工作树、未提交、已敞 34 分钟；master 仍是坏的一行。本机 reflex/ci_merge 从工作树读代码，所以未提交的编辑会真的改变系统行为而盘面看不出来。",
-    "自我披露": "本会话两次 git pull --rebase --autostash 搬运过这份唯一存在的修复，还原成功属侥幸；已写进方法笔记。",
-    "实测": "bash monitor/verify.sh 超过 2 分钟未返回被中断——monitor 领地仍红的 3 个分支可能卡在闸门自身跑不完，而非 bash 解析。",
-    "准确分解": "最近 8 分钟批次 21 个分支：merge conflict 7 / 等 OPS-M 6 / verify.sh in monitor 3 / verify.py 3 / protected root 1 / tests red 1。verify.sh 类 8→3，merge conflict 4→7（解冻越晚冲突越贵），与 cycle 19 订正后的模型一致。"
+    "结案": "gates.py 已提交到 master，verify.sh 类阻塞 3→0，c9 与 v16 随即合并；cycle 22 报的未提交敞口闭合。今晚累计合并 61 次。",
+    "阻塞换形态": "19 个：merge conflict 9（4→7→9）、等 OPS-M 6（静默 339 分钟、零代码需求）、verify.py 2、受保护根 1、真红 1、verify.sh 0。s14-gates-for-all 自己变成了 merge conflict——从「被自己的修复挡住」变成「与自己的修复冲突」。",
+    "自我订正": "cycle 22 说 monitor/verify.sh 可能跑不完——错。修复一提交那 3 个里 2 个立刻合了；一次 2 分钟超时不足以支撑机制结论。",
+    "纪律": "红线复核干净。"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T2214Z-the-fix-that-unjammed-the-queue-is-not-committed.md"
+    "DRIFT-20260728T2247Z-the-gate-is-fixed-and-the-blocker-is-now-a-missing-referee.md"
   ],
   "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
   "pending_on_monitor": [
@@ -47,9 +47,10 @@
     "**autostash 有搬运唯一副本的风险**：本机工作树可能长期存有未提交的关键修复（今晚是 monitor/gates.py），而 reflex/ci_merge 从工作树读代码。推送前先 git status 看一眼有没有别人的未提交改动，再决定用不用 --autostash。"
   ],
   "next_cycle_focus": [
-    "verify-lab 是否到 master（最急，已有裁决建立其上）",
-    "gates.py / OPS-M 是否醒",
-    "增量起点 29f41ea"
+    "OPS-M 是否醒 / 领地裁决是否改派（6 个分支零代码只等它）",
+    "冲突是否按年龄倒序清",
+    "v11/v15 是否落地（五件工单与一句论文判断建立其上）",
+    "增量起点 cd92cc9"
   ],
   "superseded": [
     "我 cycle 12 报告里引用的 OPS-M cycle-7 根因（Git Bash 吃反斜杠）已被 OPS-M 自己在 cycle 8 实跑证伪，以 WSL bash 为准。跨会话引用别人的诊断时要留意它可能被其作者推翻。"
