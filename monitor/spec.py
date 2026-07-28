@@ -514,6 +514,34 @@ FINDINGS = [
         "action": "P-12（迁移器）+ P-9（正典守卫：proxy 拒收非正典字段）。",
     },
     {
+        "id": "F-17",
+        "severity": "high",
+        "title": "工具的失败状态被当成世界的性质：340 处判据点扫出 48 处不安全"
+                 "【已裁决·监控代行：五件上板】",
+        "body": "RES-3 的三路只读普查（报告在 engine-rig/runs/20260729T000000Z-"
+                "E11-engine-crosscheck-deep/SURVEY-*.md）扫约 340 处判据点，判不安全 48 处。"
+                "**它们几乎全部偏向好消息**，这才是这条finding的要害——不是随机的错，"
+                "是有方向的错。四个家族：退出码当证明（p13_fd_dividend.py:129 裸 "
+                "returncode==12，而正确谓词 backends.proves_unsolvable 就在它已经 import 的"
+                "模块里）、缺省值当成立（worldgen/core/truth.py:279 的 .get('holds', True)，"
+                "35 份基准真值里 13 份因此报『不变量全部成立』）、崩溃当发现"
+                "（theoria-arm/inner/plan.py:172 吞异常后仍宣布『穷举了整个可达集』——"
+                "**崩得越多，健康证明越干净**）、读不开当干净（release/check_redlines.py:207 "
+                "让封存红线报无发现，而同包 enumerate.py:220 对同一情形判 needs_human）。\n\n"
+                "**目前没有已发表结论被推翻，但有已发表数字依赖读者重新推导**："
+                "lp_potential 的 29.2% 不完备率成立，是因为复核员自己去取了 HiGHS 的 status"
+                "（639 例沉默里 638 例是 status 2）——引擎自己把 status 1/2/3/4 塌成了同一个 "
+                "None。方法不健全而结论当前为真，两者必须分开说。",
+        "action": "【已裁决·监控代行 2026-07-29】五件上板，全部要求带负样本："
+                  "S23-unreadable-is-not-clean（p1，动的是封存红线闸门，含 RES-4 报的 "
+                  "arc-recon/contamination.py:338 退出码只反映 sha256）、"
+                  "V19-unverified-is-not-true、E14-crash-is-not-a-finding、"
+                  "E15-solver-status-bit、P14-honesty-section（写进论文，不藏进 limitations）。"
+                  "C10 改形：从『定正典』改为『采纳已有的 backends.proves_unsolvable』——"
+                  "新写会产生第二条正典，而两条正典正是这件工单要治的病。"
+                  "cold-start-a0/ 的同族缺陷只登记进 PARTNER_SYNC，不动手（非本轨道领地）。",
+    },
+    {
         "id": "F-01",
         "severity": "info",
         "title": "【已裁决 2026-07-28：出路 (b)】A2 与切堆纪律的冲突",

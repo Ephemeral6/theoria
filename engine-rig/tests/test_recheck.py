@@ -25,7 +25,14 @@ from recheck.certificate import (
 )
 from recheck.expr import ExprError
 from recheck.ruleset import RuleSetError, load_ruleset, ruleset_from_spec
-from recheck.verify import ACCEPT, INCONSISTENT, REJECT, recheck, shortest_plan
+from recheck.verify import (
+    ACCEPT,
+    INCONSISTENT,
+    REJECT,
+    reachable_states,
+    recheck,
+    shortest_plan,
+)
 
 CASES = build_cases.CASES_DIR
 
@@ -131,6 +138,204 @@ def test_the_deadlock_count_matches_what_m9_reported():
     assert counted == {"sokoban-open4far": 16, "sokoban-ringstuck": 2}
 
 
+# ------------------------------------------------ the pagoda certificates (E6)
+
+PAGODA = tuple(build_cases.PAGODA_CLAIMS)
+
+
+@pytest.mark.parametrize("name,ruleset_name,weights,bound,document", PAGODA)
+def test_every_pagoda_certificate_rechecks(name, ruleset_name, weights, bound, document):
+    """lp_potential's three exported certificates, re-derived from the rules.
+
+    The move set is grounded from the declared geometry.  The producer's own
+    `obligations` block -- which lists every move instance with its delta
+    already evaluated -- is refused as input by the schema, so a document that
+    omitted an inconvenient instance would gain nothing here.
+    """
+    verdict = recheck(rules(ruleset_name), cert(name))
+    assert verdict.verdict == ACCEPT, verdict.report()
+    assert verdict.conditions["potential_init"]
+    assert verdict.conditions["potential_nonincreasing"]
+    assert verdict.conditions["goal_break"]
+    assert verdict.stats["n_raising_transitions"] == 0
+    assert verdict.stats["potential_bound"] == bound
+    assert verdict.stats["n_states"] == 2 ** len(weights)
+    # The second opinion agrees, from a search sharing nothing with the above.
+    assert verdict.search["goal_reachable"] is False
+
+
+@pytest.mark.parametrize("name,ruleset_name,weights,bound,document", PAGODA)
+def test_every_pagoda_case_agrees_with_the_document_it_was_transcribed_from(
+        name, ruleset_name, weights, bound, document):
+    """The differential against `interop/certificates/`, which is read, not imported.
+
+    Four numbers are transcribed into `build_cases`; the start state, the goal
+    states and the move set are re-derived, and this is where the two are
+    compared.  It is also the only place the producer's witness list is looked
+    at, and a disagreement here would be a transcription finding rather than a
+    verdict.
+    """
+    report = anchors.pagoda_differential(rules(ruleset_name), cert(name), document)
+    assert report["agrees"], report
+    assert report["n_moves_derived"] == report["n_moves_listed"] > 0
+    assert report["replay_mismatches"] == []
+    assert list(weights) == report["document_weights"]
+
+
+def test_the_potential_obligation_is_quantified_over_moves_legal_from_the_region():
+    """The defect the salvaged draft had, kept as an executable exhibit.
+
+    `keyed-gate`'s only potential-raising move needs both keys, and any state
+    holding both is already over the bound -- so the move is legal from nowhere
+    the invariant admits, and the certificate is inductive.  A checker that
+    reads `delta > 0` off the geometry, as the draft did, rejects it.
+    """
+    ruleset, certificate = rules("keyed-gate"), cert("keyed-gate-pagoda")
+    verdict = recheck(ruleset, certificate)
+    assert verdict.verdict == ACCEPT, verdict.report()
+    assert verdict.stats["n_raising_transitions"] == 0
+    assert verdict.search["goal_reachable"] is False
+
+    # ... and the stronger check really would have rejected it: over the whole
+    # product, rather than over the region, a move does raise the potential.
+    potential = certificate.potential(ruleset)
+    states, rows = ruleset.states(), ruleset.transitions()
+    raising = [
+        "%s -%s-> %s" % (ruleset.render_state(states[i]), action,
+                         ruleset.render_state(states[rows[i][a]]))
+        for i in range(len(states))
+        for a, action in enumerate(ruleset.actions)
+        if rows[i][a] >= 0 and potential(states[rows[i][a]]) > potential(states[i])
+    ]
+    assert raising, "the exhibit is empty unless something raises the potential"
+    assert all(potential(states[i]) > certificate.bound
+               for i in range(len(states))
+               for a in range(len(ruleset.actions))
+               if rows[i][a] >= 0 and potential(states[rows[i][a]]) > potential(states[i]))
+
+
+def test_a_perturbed_weight_is_caught_by_the_potential_obligation():
+    """The tamper `interop`'s own test performs, against this checker instead."""
+    payload = spec("peg4-1110-pagoda", "cert")
+    payload.pop("ruleset")
+    payload["weights"]["pos3"] = 5
+    verdict = recheck(rules("peg4-1110"), certificate_from_spec(payload))
+    assert verdict.verdict == REJECT
+    assert verdict.conditions["potential_nonincreasing"] is False
+    assert verdict.conditions["potential_init"] is True
+    assert verdict.conditions["goal_break"] is True
+    assert verdict.witnesses["potential_nonincreasing"], "a rejection needs a witness"
+    assert any("raises the potential" in w
+               for w in verdict.witnesses["potential_nonincreasing"])
+
+
+def test_a_goal_sitting_exactly_on_the_bound_does_not_break_it():
+    """`potential(goal) > bound` is strict, and `1001` is one jump away."""
+    payload = spec("peg4-1110", "rules")
+    payload["goal"] = ["and",
+                       ["=", ["var", "pos0"], ["lit", 1]],
+                       ["=", ["var", "pos1"], ["lit", 0]],
+                       ["=", ["var", "pos2"], ["lit", 0]],
+                       ["=", ["var", "pos3"], ["lit", 1]]]
+    unbound = spec("peg4-1110-pagoda", "cert")
+    unbound.pop("ruleset")
+    verdict = recheck(ruleset_from_spec(payload), certificate_from_spec(unbound))
+    assert verdict.verdict == REJECT
+    assert verdict.conditions["goal_break"] is False
+    assert verdict.search["goal_reachable"] is True
+    assert len(verdict.search["witness_plan"]) == 1
+
+
+def test_a_pagoda_offered_for_a_solvable_start_fails_where_the_world_starts():
+    payload = spec("peg4-1110-pagoda", "cert")
+    payload.pop("ruleset")
+    verdict = recheck(rules("peg4-1101"), certificate_from_spec(payload))
+    assert verdict.verdict == REJECT
+    assert verdict.conditions["potential_init"] is False
+    assert verdict.search["goal_reachable"] is True
+
+
+def test_a_pagoda_certificate_may_not_carry_its_producers_obligations():
+    """`certificate_export.py::verify` trusts that list; nothing here may.
+
+    A document that omits a move instance from it passes that checker, so the
+    block is refused at load rather than ignored -- an ignored key would let the
+    same document in and leave a reader unsure which checker had run.
+    """
+    payload = spec("peg4-1110-pagoda", "cert")
+    payload["obligations"] = {"inv_closed": {"holds": True, "witnesses": []}}
+    with pytest.raises(CertificateError) as caught:
+        certificate_from_spec(payload)
+    assert "obligations" in str(caught.value)
+
+
+@pytest.mark.parametrize("key,value", [
+    ("predicate", ["and"]),
+    ("tables", {"w": {"arity": 1, "entries": [[0, 0]]}}),
+    ("defs", [{"name": "f", "params": [], "body": ["and"]}]),
+])
+def test_a_pagoda_certificate_carries_weights_and_nothing_else(key, value):
+    """Two sets of states and one verdict, or a key nothing reads.
+
+    A predicate alongside the weights could be checked on one and claimed about
+    the other; a table or a def has no predicate to appear in, so it would sit
+    in the file unread -- which is where a blind spot starts.
+    """
+    payload = spec("peg4-1110-pagoda", "cert")
+    payload[key] = value
+    with pytest.raises(CertificateError) as caught:
+        certificate_from_spec(payload)
+    assert key in str(caught.value)
+
+
+def test_a_predicate_certificate_may_not_carry_weights():
+    """The split runs both ways, or a kind could be chosen after the fact."""
+    for key, value in (("weights", {"pos1": 1}), ("bound", 0), ("occupied", 1)):
+        payload = spec("peg4-0111-ic3", "cert")
+        payload[key] = value
+        with pytest.raises(CertificateError) as caught:
+            certificate_from_spec(payload)
+        assert key in str(caught.value)
+
+
+def test_a_weight_on_a_value_the_world_cannot_hold_is_refused():
+    """`occupied: 2` on a 0/1 board makes the potential constant, and constant
+    potentials satisfy every closure obligation there is."""
+    payload = spec("peg4-1110-pagoda", "cert")
+    payload.pop("ruleset")
+    payload["occupied"] = 2
+    verdict = recheck(rules("peg4-1110"), certificate_from_spec(payload))
+    assert verdict.verdict == REJECT
+    assert verdict.conditions["predicate_wellformed"] is False
+
+
+def test_a_weight_must_be_an_integer():
+    payload = spec("peg4-1110-pagoda", "cert")
+    payload["weights"]["pos0"] = -0.5
+    with pytest.raises(CertificateError) as caught:
+        certificate_from_spec(payload)
+    assert "integer" in str(caught.value)
+
+
+def test_the_potential_counters_are_not_shared_with_the_other_kinds():
+    """One field per thing counted.
+
+    The draft this was salvaged from reused a single `n_transitions_checked`
+    across two certificate schemas, where it meant move instances in one and
+    legal transitions in the other; a reader of the report could not tell which
+    number they had.
+    """
+    pagoda = recheck(rules("peg4-1110"), cert("peg4-1110-pagoda"))
+    invariant = recheck(rules("peg4-0111"), cert("peg4-0111-ic3"))
+    assert "n_potential_checks" in pagoda.stats
+    assert "n_raising_transitions" in pagoda.stats
+    assert "n_potential_checks" not in invariant.stats
+    assert "n_raising_transitions" not in invariant.stats
+    # and it counts what its name says: one per action out of each region state
+    assert pagoda.stats["n_potential_checks"] == (
+        pagoda.stats["n_satisfying"] * len(rules("peg4-1110").actions))
+
+
 # ---------------------------------------------------------------- the anchors
 
 def test_peg_reachability_matches_the_hand_verified_docstring():
@@ -139,6 +344,19 @@ def test_peg_reachability_matches_the_hand_verified_docstring():
                            ("1011", None), ("1101", 2)):
         plan = shortest_plan(rules("peg4-%s" % start))
         assert (len(plan) if plan is not None else None) == optimum, start
+
+
+def test_peg5_reaches_the_five_states_interop_counted():
+    """interop/README.md: `11011` reaches only {00111, 11100, 01001, 10010}.
+
+    Enumerated there over a graph this package shares no code with, and the
+    thing both pagoda certificates for that board are claims about.
+    """
+    for name in verify_all.PEG5_RULESETS:
+        derived = tuple(sorted("".join(str(value) for value in state)
+                               for state in reachable_states(rules(name))))
+        assert derived == verify_all.PEG5_REACHABLE, name
+        assert min(state.count("1") for state in derived) == 2
 
 
 def test_sokoban_optima_match_the_fixture():
@@ -385,21 +603,39 @@ def test_the_generator_is_byte_stable():
 
 
 def test_recheck_never_imports_the_engines():
-    """The independence claim, enforced rather than asserted."""
+    """The independence claim, enforced rather than asserted.
+
+    `interop` is on the forbidden list as of E6.  The pagoda kind is rechecked
+    against certificates `interop/certificate_export.py` wrote, and that module
+    imports `engines.lp_potential.potential` -- so importing anything from
+    `interop` would reach the engine one hop further out and the independence
+    would be gone at exactly the point it is being claimed.  `anchors.py`
+    *reads* files under `interop/certificates/`, which is the same thing it does
+    to `cold-start-a2/` and is not an import.
+
+    The scan is also asserted to have covered the modules the pagoda work
+    touched: a filter that silently stopped matching would otherwise leave this
+    test passing over nothing.
+    """
     here = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     package = os.path.join(here, "recheck")
+    forbidden = ("engines", "tools.", "interop")
     offenders = []
+    scanned = []
     for name in sorted(os.listdir(package)):
         if not name.endswith(".py"):
             continue
+        scanned.append(name)
         with open(os.path.join(package, name), "r", encoding="utf-8") as handle:
             text = handle.read()
         for line in text.splitlines():
             stripped = line.strip()
-            if stripped.startswith(("import ", "from ")) and (
-                    "engines" in stripped or "tools." in stripped):
+            if stripped.startswith(("import ", "from ")) and any(
+                    token in stripped for token in forbidden):
                 offenders.append("%s: %s" % (name, stripped))
     assert not offenders, offenders
+    assert {"anchors.py", "build_cases.py", "certificate.py", "forgeries.py",
+            "verify.py", "verify_all.py"} <= set(scanned), scanned
 
 
 def test_the_whole_verify_script_is_green():

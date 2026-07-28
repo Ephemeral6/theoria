@@ -551,3 +551,67 @@ The other reconstructions available — infer from timestamps, or from which gam
 ran together — would produce a complete-looking table, and that is the objection
 to them: a spend figure that cannot be checked against anything is worse than a
 gap that is visible.
+
+## D-029 · D-024 built: the chain, and the two things it does not do
+
+D-024 registered a hash chain as the structural answer to RED-40 and left it
+unbuilt. S15 built it, without redesigning it — the shape below is D-024's, and
+the value of writing it down again is only that the claims are now measured
+rather than predicted.
+
+`prev` is the sha256 of the previous line's bytes **as written**, including that
+line's own `prev`. It is optional, so `v` stays `1.0` (§8 bumps for a changed
+meaning or a new *required* field; an optional one is neither). It lives in
+`canon.ENVELOPE`, so the writer owns it and a caller that supplies one is
+refused — a chain a caller can set is a chain a caller can forge. It is assigned
+under the same lock as `seq`, so the two cannot disagree about write order.
+
+**Why bytes and not a recomputation.** A verifier that re-serialises each record
+before hashing is checking that today's `canonical()` matches the one that wrote
+the file. Change that function once and every ledger ever written goes red
+simultaneously — which teaches everyone to ignore the alarm. Hashing the bytes
+on disk asks the only question worth asking.
+
+**Six verdicts, not two.** `verify_chain` returns PASS / FAIL / PARTIAL /
+UNCHAINED / EMPTY / MISSING. Collapsing UNCHAINED into PASS would have been the
+fifth time this repo mistook a check that never ran for a check that passed, and
+an empty file is refused for the same reason: two builds that produced nothing
+are byte-identical.
+
+**Publication is not writing, and this was nearly shipped wrong.** The first
+version of this work wrote `ledger_head` into `runs/<run_id>.json` and called
+the head published. It is not: `runs_dir` defaults under `proxy/var/`, and
+`proxy/.gitignore` ignores `var/` — correctly, it is runtime output. So the
+head was being written to a file the forger can rewrite as freely as the ledger
+itself, and the tamper-evidence argument bought exactly nothing while looking
+complete. One `git check-ignore` on the path settled it.
+
+The publication is therefore explicit and named in two places: `play()` returns
+the record so an **arm** lifts `ledger_head` into its tracked
+`runs/<slug>/MANIFEST.json`, and an operator outside an arm runs
+`verify_chain --emit-head <tracked path>`, which refuses to write a head for
+any stream that does not verify — a head witnessing an unverified file is worse
+than no head, because it looks like one. `test_the_runners_default_head_location_is_gitignored`
+pins the trap so that relocating `var/` forces someone to think about it.
+
+**The two limits, both now pinned as tests.** A forger who rewrites the whole
+file and recomputes every link produces a stream that verifies —
+`test_rewriting_the_whole_chain_is_NOT_caught_without_a_published_head`. Only
+the head published outside the file catches that.
+And the converse, found while measuring rather than while designing: **an
+interior edit does not move the head at all.** A real 61-record mock run had one
+score digit flipped on line 3; the chain walk caught it at line 4 while the head
+still matched the published value. Each mechanism misses exactly what the other
+catches, so the honest form is that both are load-bearing, not that one is a
+backstop for the other.
+
+Unchanged from D-024, and still the closing claim: forgery *before* publication
+still works, and nothing local can prove the frames came from ARC — only an
+API-signed receipt could, and the API offers none. What the ledger now supports
+is: **complete, self-consistent, unwritable by the arm — and, after the head is
+published, tamper-evident against the operator.**
+
+Not yet done, and listed so it is not mistaken for done: the frozen scorer has
+no chain check and therefore no forged negative control (D-014 requires one),
+`validate_ledger.py` does not walk the chain, and `upgrade_ledger.py` does not
+yet mark lifted streams unchained.

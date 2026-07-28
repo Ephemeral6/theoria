@@ -1,0 +1,253 @@
+{
+  "campaign_seed": 104375253266434,
+  "campaign_seed_hex": "0x00005eedc1e4f002",
+  "coverage": {
+    "lp_potential": {
+      "baseline_dirty_worlds": 0,
+      "invariants": [
+        "certificate_implies_unreachable",
+        "heuristic_is_admissible",
+        "infinite_means_unreachable",
+        "three_conditions_hold"
+      ],
+      "invariants_no_mutant_kills": [],
+      "mutants": 6
+    }
+  },
+  "engine_rig_head": "baf1671",
+  "mutants": [
+    {
+      "claim": "a certificate is only ever issued for a configuration from which no goal is reachable -- engines/lp_potential/README.md 'it can never prove a false one'; potential.py:solve_certificate returns None when the LP is infeasible (line 170) and raises CertificateError when the exact re-check fails (line 186). This is the *sound* half of 'sound but incomplete', and it is the one half the incompleteness does not excuse.",
+      "description": "on a world where BFS proves a goal reachable and the engine correctly issued nothing, return the certificate a run with both None-returning guards removed would publish: the all-zero weight vector, margin 1, and a conditions dict asserting all three conditions hold.",
+      "elapsed_s": 4.3,
+      "engine": "lp_potential",
+      "expect_kill": [
+        "certificate_implies_unreachable",
+        "three_conditions_hold"
+      ],
+      "id": "lp-certify-solvable",
+      "killed": {
+        "certificate_implies_unreachable": 10,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 10
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 0
+      },
+      "seam": "_solve",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 10,
+      "worlds_inert": 30,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "certificate_implies_unreachable": 1,
+        "heuristic_is_admissible": null,
+        "infinite_means_unreachable": null,
+        "three_conditions_hold": 1
+      }
+    },
+    {
+      "claim": "inv_closed: every legal move leaves the potential non-increasing, re-checked in exact rationals -- potential.py:check_exactly lines 205-209, README 'w[dst] - w[src] - w[over] <= 0 for every jump geometry'. A certificate whose weights let a listed move raise the potential has no closure step, so its unreachability claim does not follow.",
+      "description": "add the smallest integer to one weight that makes exactly one *listed* move raise the potential by 1, chosen so that no other listed move turns positive and the initial-to-goal gap is unchanged. The heuristic keeps the pre-edit certificate, so only the certificate is defective.",
+      "elapsed_s": 4.03,
+      "engine": "lp_potential",
+      "expect_kill": [
+        "three_conditions_hold"
+      ],
+      "id": "lp-raise-one-move",
+      "killed": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 12
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 0
+      },
+      "seam": "_solve",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 12,
+      "worlds_inert": 28,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "certificate_implies_unreachable": null,
+        "heuristic_is_admissible": null,
+        "infinite_means_unreachable": null,
+        "three_conditions_hold": 1
+      }
+    },
+    {
+      "claim": "same claim as lp-raise-one-move, plus: cert.moves is the full set of distinct jump geometries of the graph -- potential.py:moves_from_graph builds it from graph['edges'], and check_exactly's closure argument is only 'independent of which states are reachable' if the move list is complete. A certificate that omits a legal move which *would* raise the potential asserts unreachability on an argument with a hole in it.",
+      "description": "the identical weight edit as lp-raise-one-move, and then the broken move is dropped from cert.moves. Normatively three_conditions_hold should still catch it; the empirical prediction, written before the run, is that it cannot, because it re-checks the moves the engine reports rather than the moves the graph has.",
+      "elapsed_s": 4.05,
+      "engine": "lp_potential",
+      "expect_kill": [
+        "three_conditions_hold"
+      ],
+      "id": "lp-hide-the-raised-move",
+      "killed": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [
+        "three_conditions_hold"
+      ],
+      "raised_only": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 0
+      },
+      "seam": "_solve",
+      "survived": true,
+      "survived_all_detection": true,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 12,
+      "worlds_inert": 28,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "certificate_implies_unreachable": null,
+        "heuristic_is_admissible": null,
+        "infinite_means_unreachable": null,
+        "three_conditions_hold": null
+      }
+    },
+    {
+      "claim": "goal_break holds at the published margin: the LP constrains potential(s0) - potential(g) <= -margin (potential.py:142-149), check_exactly re-derives it at cert.margin, and as_json publishes margin and conditions side by side. A certificate reporting a margin its own weights do not achieve, with goal_break still True, states a false fact about its own strength.",
+      "description": "raise cert.margin to one more than the smallest achieved gap between a goal's potential and the initial potential, leaving weights, moves and conditions untouched. Nothing else in the engine reads margin, so this is the goal_break branch of three_conditions_hold on its own.",
+      "elapsed_s": 4.05,
+      "engine": "lp_potential",
+      "expect_kill": [
+        "three_conditions_hold"
+      ],
+      "id": "lp-overstate-margin",
+      "killed": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 21
+      },
+      "kind": "inconsistent",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 0
+      },
+      "seam": "_solve",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 21,
+      "worlds_inert": 19,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "certificate_implies_unreachable": null,
+        "heuristic_is_admissible": null,
+        "infinite_means_unreachable": null,
+        "three_conditions_hold": 1
+      }
+    },
+    {
+      "claim": "h(s) never exceeds the true shortest distance -- DECISIONS.md D-008 'admissible by construction', Heuristic.as_json publishes \"admissible\": true, and the whole point of the ceil-of-quotient form is that it is a lower bound.",
+      "description": "at one state the oracle proves reachable, return true distance + 1 instead of the engine's value; every other state answers exactly as before. The smallest possible inadmissibility -- if the invariant needs a wilder lie than this to fire, it is not checking admissibility.",
+      "elapsed_s": 2.1,
+      "engine": "lp_potential",
+      "expect_kill": [
+        "heuristic_is_admissible"
+      ],
+      "id": "lp-heuristic-off-by-one",
+      "killed": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 21,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 0
+      },
+      "seam": "_solve",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 21,
+      "worlds_inert": 19,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "certificate_implies_unreachable": null,
+        "heuristic_is_admissible": 1,
+        "infinite_means_unreachable": null,
+        "three_conditions_hold": null
+      }
+    },
+    {
+      "claim": "an infinite h is a per-state unsolvability claim and every such claim is checked against the enumeration -- README 'An infinite value is the certificate's per-state form'; potential.py:Heuristic.value documents inf as 'a per-state unsolvability claim'. Unlike a missing certificate, an infinite h is an assertion, so the incompleteness does not cover it.",
+      "description": "at one state the oracle proves reachable, return inf. Pre-registered against both heuristic invariants, not one: inf at a state with a finite true distance is also an overestimate, so infinite_means_unreachable cannot fire where heuristic_is_admissible does not.",
+      "elapsed_s": 0.88,
+      "engine": "lp_potential",
+      "expect_kill": [
+        "infinite_means_unreachable",
+        "heuristic_is_admissible"
+      ],
+      "id": "lp-infinite-on-reachable",
+      "killed": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 21,
+        "infinite_means_unreachable": 21,
+        "three_conditions_hold": 0
+      },
+      "kind": "unsound",
+      "predicted_but_missed": [],
+      "raised_only": {
+        "certificate_implies_unreachable": 0,
+        "heuristic_is_admissible": 0,
+        "infinite_means_unreachable": 0,
+        "three_conditions_hold": 0
+      },
+      "seam": "_solve",
+      "survived": false,
+      "survived_all_detection": false,
+      "unexpected_kills": [],
+      "worlds_confounded": 0,
+      "worlds_evaluated": 21,
+      "worlds_inert": 19,
+      "worlds_offered": 40,
+      "worlds_to_first_kill": {
+        "certificate_implies_unreachable": null,
+        "heuristic_is_admissible": 1,
+        "infinite_means_unreachable": 1,
+        "three_conditions_hold": null
+      }
+    }
+  ],
+  "worlds_per_engine": 40
+}

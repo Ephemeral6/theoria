@@ -1,0 +1,730 @@
+{
+  "bar": "worldgen/qc/PREREGISTERED.md",
+  "family_verdict": {
+    "L3b_passed": 0,
+    "L3b_required": 2,
+    "all_L1": true,
+    "all_L2": true,
+    "all_L3a": true,
+    "pass": false
+  },
+  "held_out_bar": 0.9,
+  "prompt_id": "C1-worldgen",
+  "sample": [
+    "t1-switch-toggle",
+    "t1-switch-latch",
+    "t2-lock-fragile"
+  ],
+  "worlds": {
+    "t1-switch-latch": {
+      "l1_l2": {
+        "candidates": "worldgen/out/qc/t1-switch-latch/candidates.jsonl",
+        "executable_probes": 1,
+        "explains_every_transition": {
+          "obj0": true,
+          "obj1": true,
+          "obj2": true,
+          "obj3": true
+        },
+        "frames": 31,
+        "global_laws": 3,
+        "l1_pass": true,
+        "l2_pass": true,
+        "live": true,
+        "mover": "obj0",
+        "mutually_exclusive": {
+          "obj0": true,
+          "obj1": true,
+          "obj2": true,
+          "obj3": true
+        },
+        "probes": 9,
+        "rules_mined": 27,
+        "schema_output": "OK   worldgen/out/qc/t1-switch-latch/candidates.jsonl (35 rows)",
+        "schema_valid": true,
+        "trace": "worldgen/out/worlds/t1-switch-latch/raw_trace.jsonl",
+        "tracks": 4,
+        "transitions": 30
+      },
+      "l3": {
+        "budget": 30,
+        "exhaustive_transitions": 79,
+        "guard_conflicts": {
+          "held_out": 0,
+          "replay": 0
+        },
+        "held_out": {
+          "accuracy": 0.895833,
+          "agree": 43,
+          "total": 48
+        },
+        "misses": [
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              1
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_UP",
+              "obj1": "obj1_still_UP",
+              "obj2": "obj2_still_UP",
+              "obj3": "obj3_still_UP"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1
+            },
+            "t": 44,
+            "true_rule": "blocked_by_wall"
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              2
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_UP",
+              "obj1": "obj1_still_UP",
+              "obj2": "obj2_still_UP",
+              "obj3": "obj3_still_UP"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1
+            },
+            "t": 51,
+            "true_rule": "blocked_by_wall"
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              3
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_UP",
+              "obj1": "obj1_still_UP",
+              "obj2": "obj2_still_UP",
+              "obj3": "obj3_still_UP"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1
+            },
+            "t": 54,
+            "true_rule": "blocked_by_wall"
+          },
+          {
+            "action": "UP",
+            "agent": [
+              3,
+              4
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_UP",
+              "obj1": "obj1_still_UP",
+              "obj2": "obj2_still_UP",
+              "obj3": "obj3_still_UP"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1
+            },
+            "t": 65,
+            "true_rule": "blocked_by_wall"
+          },
+          {
+            "action": "UP",
+            "agent": [
+              1,
+              5
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_UP",
+              "obj1": "obj1_still_UP",
+              "obj2": "obj2_still_UP",
+              "obj3": "obj3_still_UP"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1
+            },
+            "t": 78,
+            "true_rule": "blocked_by_wall"
+          }
+        ],
+        "mover": "obj0",
+        "prefix_matches_shipped_trace": true,
+        "reachable_states": 26,
+        "render_self_check": "80/80",
+        "render_self_check_ok": true,
+        "replay": {
+          "accuracy": 1.0,
+          "agree": 30,
+          "total": 30
+        },
+        "rules_mined": 22,
+        "tracks": 4
+      },
+      "verdict": {
+        "L1_liveness": true,
+        "L2_structure": true,
+        "L3a_replay": true,
+        "L3b_held_out": false,
+        "L3b_value": 0.895833,
+        "held_out_bar": 0.9
+      }
+    },
+    "t1-switch-toggle": {
+      "l1_l2": {
+        "candidates": "worldgen/out/qc/t1-switch-toggle/candidates.jsonl",
+        "executable_probes": 0,
+        "explains_every_transition": {
+          "obj0": true,
+          "obj1": true,
+          "obj2": true,
+          "obj3": true
+        },
+        "frames": 41,
+        "global_laws": 3,
+        "l1_pass": true,
+        "l2_pass": true,
+        "live": true,
+        "mover": "obj0",
+        "mutually_exclusive": {
+          "obj0": true,
+          "obj1": true,
+          "obj2": true,
+          "obj3": true
+        },
+        "probes": 17,
+        "rules_mined": 31,
+        "schema_output": "OK   worldgen/out/qc/t1-switch-toggle/candidates.jsonl (38 rows)",
+        "schema_valid": true,
+        "trace": "worldgen/out/worlds/t1-switch-toggle/raw_trace.jsonl",
+        "tracks": 4,
+        "transitions": 40
+      },
+      "l3": {
+        "budget": 40,
+        "exhaustive_transitions": 122,
+        "guard_conflicts": {
+          "held_out": 51,
+          "replay": 0
+        },
+        "held_out": {
+          "accuracy": 0.773333,
+          "agree": 58,
+          "total": 75
+        },
+        "misses": [
+          {
+            "action": "DOWN",
+            "agent": [
+              3,
+              2
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_appear_DOWN",
+              "obj2": "obj2_recolor2_DOWN",
+              "obj3": "obj3_appear_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 2,
+              "obj2": 2,
+              "obj3": 2
+            },
+            "t": 51,
+            "true_rule": "walk_through_door"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              4,
+              2
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_still_DOWN",
+              "obj1": "obj1_appear_DOWN",
+              "obj2": "obj2_recolor2_DOWN",
+              "obj3": "obj3_appear_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 2,
+              "obj2": 2,
+              "obj3": 2
+            },
+            "t": 52,
+            "true_rule": "blocked_by_wall"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              4,
+              3
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_still_DOWN",
+              "obj1": "obj1_appear_DOWN",
+              "obj2": "obj2_recolor2_DOWN",
+              "obj3": "obj3_appear_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 2,
+              "obj2": 2,
+              "obj3": 2
+            },
+            "t": 55,
+            "true_rule": "blocked_by_wall"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              2,
+              1
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_appear_DOWN",
+              "obj2": "obj2_recolor2_DOWN",
+              "obj3": "obj3_appear_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 2,
+              "obj2": 2,
+              "obj3": 2
+            },
+            "t": 60,
+            "true_rule": "walk"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              2,
+              2
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_appear_DOWN",
+              "obj2": "obj2_recolor2_DOWN",
+              "obj3": "obj3_appear_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 2,
+              "obj2": 2,
+              "obj3": 2
+            },
+            "t": 64,
+            "true_rule": "walk"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              3,
+              3
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_appear_DOWN",
+              "obj2": "obj2_recolor2_DOWN",
+              "obj3": "obj3_appear_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 2,
+              "obj2": 2,
+              "obj3": 2
+            },
+            "t": 66,
+            "true_rule": "walk"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              1,
+              1
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_appear_DOWN",
+              "obj2": "obj2_recolor2_DOWN",
+              "obj3": "obj3_appear_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 2,
+              "obj2": 2,
+              "obj3": 2
+            },
+            "t": 73,
+            "true_rule": "walk"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              1,
+              2
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_appear_DOWN",
+              "obj2": "obj2_recolor2_DOWN",
+              "obj3": "obj3_appear_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 2,
+              "obj2": 2,
+              "obj3": 2
+            },
+            "t": 77,
+            "true_rule": "walk"
+          }
+        ],
+        "mover": "obj0",
+        "prefix_matches_shipped_trace": true,
+        "reachable_states": 26,
+        "render_self_check": "123/123",
+        "render_self_check_ok": true,
+        "replay": {
+          "accuracy": 1.0,
+          "agree": 40,
+          "total": 40
+        },
+        "rules_mined": 26,
+        "tracks": 4
+      },
+      "verdict": {
+        "L1_liveness": true,
+        "L2_structure": true,
+        "L3a_replay": true,
+        "L3b_held_out": false,
+        "L3b_value": 0.773333,
+        "held_out_bar": 0.9
+      }
+    },
+    "t2-lock-fragile": {
+      "l1_l2": {
+        "candidates": "worldgen/out/qc/t2-lock-fragile/candidates.jsonl",
+        "executable_probes": 6,
+        "explains_every_transition": {
+          "obj0": true,
+          "obj1": true,
+          "obj2": true,
+          "obj3": true,
+          "obj4": true
+        },
+        "frames": 111,
+        "global_laws": 2,
+        "l1_pass": true,
+        "l2_pass": true,
+        "live": true,
+        "mover": "obj0",
+        "mutually_exclusive": {
+          "obj0": true,
+          "obj1": true,
+          "obj2": true,
+          "obj3": true,
+          "obj4": true
+        },
+        "probes": 13,
+        "rules_mined": 36,
+        "schema_output": "OK   worldgen/out/qc/t2-lock-fragile/candidates.jsonl (49 rows)",
+        "schema_valid": true,
+        "trace": "worldgen/out/worlds/t2-lock-fragile/raw_trace.jsonl",
+        "tracks": 5,
+        "transitions": 110
+      },
+      "l3": {
+        "budget": 110,
+        "exhaustive_transitions": 286,
+        "guard_conflicts": {
+          "held_out": 0,
+          "replay": 0
+        },
+        "held_out": {
+          "accuracy": 0.496933,
+          "agree": 81,
+          "total": 163
+        },
+        "misses": [
+          {
+            "action": "UP",
+            "agent": [
+              4,
+              7
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_still_UP",
+              "obj1": "obj1_still_UP",
+              "obj2": "obj2_still_UP",
+              "obj3": "obj3_still_UP",
+              "obj4": "obj4_still_UP",
+              "obj5": "obj5_still_UP",
+              "obj6": "obj6_still_UP"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1,
+              "obj4": 1,
+              "obj5": 1,
+              "obj6": 1
+            },
+            "t": 182,
+            "true_rule": "cross_fragile"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              3,
+              7
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_still_DOWN",
+              "obj2": "obj2_still_DOWN",
+              "obj3": "obj3_still_DOWN",
+              "obj4": "obj4_still_DOWN",
+              "obj5": "obj5_still_DOWN",
+              "obj6": "obj6_still_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1,
+              "obj4": 1,
+              "obj5": 1,
+              "obj6": 1
+            },
+            "t": 183,
+            "true_rule": "walk"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              4,
+              7
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_still_DOWN",
+              "obj2": "obj2_still_DOWN",
+              "obj3": "obj3_still_DOWN",
+              "obj4": "obj4_still_DOWN",
+              "obj5": "obj5_still_DOWN",
+              "obj6": "obj6_still_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1,
+              "obj4": 1,
+              "obj5": 1,
+              "obj6": 1
+            },
+            "t": 184,
+            "true_rule": "walk"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              5,
+              7
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_still_DOWN",
+              "obj2": "obj2_still_DOWN",
+              "obj3": "obj3_still_DOWN",
+              "obj4": "obj4_still_DOWN",
+              "obj5": "obj5_still_DOWN",
+              "obj6": "obj6_still_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1,
+              "obj4": 1,
+              "obj5": 1,
+              "obj6": 1
+            },
+            "t": 185,
+            "true_rule": "blocked_by_wall"
+          },
+          {
+            "action": "LEFT",
+            "agent": [
+              5,
+              7
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_still_LEFT",
+              "obj1": "obj1_still_LEFT",
+              "obj2": "obj2_still_LEFT",
+              "obj3": "obj3_still_LEFT",
+              "obj4": "obj4_still_LEFT",
+              "obj5": "obj5_still_LEFT",
+              "obj6": "obj6_still_LEFT"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1,
+              "obj4": 1,
+              "obj5": 1,
+              "obj6": 1
+            },
+            "t": 186,
+            "true_rule": "walk_through_lock"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              5,
+              6
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_still_DOWN",
+              "obj2": "obj2_still_DOWN",
+              "obj3": "obj3_still_DOWN",
+              "obj4": "obj4_still_DOWN",
+              "obj5": "obj5_still_DOWN",
+              "obj6": "obj6_still_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1,
+              "obj4": 1,
+              "obj5": 1,
+              "obj6": 1
+            },
+            "t": 187,
+            "true_rule": "blocked_by_wall"
+          },
+          {
+            "action": "LEFT",
+            "agent": [
+              5,
+              6
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_still_LEFT",
+              "obj1": "obj1_still_LEFT",
+              "obj2": "obj2_still_LEFT",
+              "obj3": "obj3_still_LEFT",
+              "obj4": "obj4_still_LEFT",
+              "obj5": "obj5_still_LEFT",
+              "obj6": "obj6_still_LEFT"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1,
+              "obj4": 1,
+              "obj5": 1,
+              "obj6": 1
+            },
+            "t": 188,
+            "true_rule": "walk"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              5,
+              5
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_still_DOWN",
+              "obj2": "obj2_still_DOWN",
+              "obj3": "obj3_still_DOWN",
+              "obj4": "obj4_still_DOWN",
+              "obj5": "obj5_still_DOWN",
+              "obj6": "obj6_still_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1,
+              "obj4": 1,
+              "obj5": 1,
+              "obj6": 1
+            },
+            "t": 189,
+            "true_rule": "blocked_by_wall"
+          }
+        ],
+        "mover": "obj0",
+        "prefix_matches_shipped_trace": true,
+        "reachable_states": 87,
+        "render_self_check": "287/287",
+        "render_self_check_ok": true,
+        "replay": {
+          "accuracy": 1.0,
+          "agree": 110,
+          "total": 110
+        },
+        "rules_mined": 36,
+        "tracks": 7
+      },
+      "verdict": {
+        "L1_liveness": true,
+        "L2_structure": true,
+        "L3a_replay": true,
+        "L3b_held_out": false,
+        "L3b_value": 0.496933,
+        "held_out_bar": 0.9
+      }
+    }
+  }
+}

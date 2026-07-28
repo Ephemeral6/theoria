@@ -157,7 +157,7 @@ def repair(variant: Variant, per_class: int = 4) -> Dict[str, Any]:
         evidence = explore.evidence_set(level, per_class=per_class)
         actions += evidence["action_budget_spent"]
         transitions.extend(stages.transitions_from_episodes(evidence["episodes"]))
-    rules = stages.mine(transitions)
+    rules, mine_account = stages.mine_with_account(transitions)
     certificate = stages.certify(rules, transitions)
 
     pushes = {}
@@ -165,12 +165,33 @@ def repair(variant: Variant, per_class: int = 4) -> Dict[str, Any]:
         if rule.name.startswith("push2"):
             pushes[rule.name] = sorted(a.name for a in rule.guard)
 
+    # E14 (adversarial review, correction 3): `replay_exact` and
+    # `exactly_one_successor` are the coverage and no-violation claims of this
+    # block, and they are computed by replaying the transitions through rules
+    # the miner produced. If the miner crashed, those rules are whatever
+    # `learn_dnf` happened to emit on the way past the exception, so the claims
+    # are about that accident and not about the variant. The first version of
+    # this change put the crash count *beside* them and left them true, which
+    # is exactly the "adjacent but not gated" failure the ticket exists to fix.
+    searched = mine_account.all_guards_searched
     return {
         "evidence_actions": actions,
         "transitions": len(transitions),
         "n_rules": len(rules),
-        "replay_exact": certificate["replay_exact"],
-        "exactly_one_successor": certificate["exactly_one_successor"],
+        "synthesis_crashes": mine_account.synthesis_crashes,
+        "all_guards_searched": searched,
+        "replay_exact": bool(certificate["replay_exact"]) and searched,
+        "exactly_one_successor": (bool(certificate["exactly_one_successor"])
+                                  and searched),
+        "replay_exact_before_crash_gate": bool(certificate["replay_exact"]),
+        "exactly_one_successor_before_crash_gate": bool(
+            certificate["exactly_one_successor"]),
+        "error": (None if searched else
+                  "synthesis raised %d time(s) (%s); the rules these claims "
+                  "were replayed through are a crash artefact"
+                  % (mine_account.synthesis_crashes,
+                     ", ".join("%s x%d" % (k, v) for k, v
+                               in sorted(mine_account.by_type.items())))),
         "push_guards": pushes,
         "push_effects": sorted(
             {str(r.effect[1]) for r in rules if r.name.startswith("push2")}
@@ -259,6 +280,20 @@ def main() -> int:
             ",".join(entry["invalidated_theorems"]) or "none",
             "STILL CORRECT" if entry["old_verdict_still_correct"] else "** FLIPPED **"))
     print("-" * 78)
+    # E14: the crash column, and the exit code that reads it. A table with no
+    # crash column cannot tell a repaired theory from a miner that fell over.
+    crashed = [e for e in result["variants"]
+               if not e["repair"]["all_guards_searched"]]
+    for entry in result["variants"]:
+        r = entry["repair"]
+        print("  repair %-9s synthesis_crashes=%-3d all_guards_searched=%-5s "
+              "replay_exact=%-5s exactly_one_successor=%s"
+              % (entry["variant"], r["synthesis_crashes"],
+                 r["all_guards_searched"], r["replay_exact"],
+                 r["exactly_one_successor"]))
+        if r.get("error"):
+            print("     !! %s" % r["error"])
+    print("-" * 78)
     for entry in result["variants"]:
         if entry["silently_wrong_without_dependency_tracking"]:
             print("  %s: the old theory still calls `mismatch` unsolvable, and it is now"
@@ -266,6 +301,11 @@ def main() -> int:
             print("     solvable. Caught only by [depends: %s] on theorem %s."
                   % (entry["changed_rule"], entry["invalidated_theorems"][0]))
     print("  -> %s" % path)
+    if crashed:
+        print("  FAILED: %d variant(s) re-mined through a crashed synthesis; "
+              "their repair verdicts say nothing about the variant."
+              % len(crashed))
+        return 1
     return 0
 
 

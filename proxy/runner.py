@@ -18,6 +18,7 @@ from typing import Any, Dict, Optional
 from .env_proxy import EnvProxy, EnvProxyConfig
 from .guard import SealedPileGuard
 from .ledger import Ledger, RunLedger, canonical, sha256
+from .tools import verify_chain
 from .model_proxy import ModelProxy, ModelProxyConfig
 from .paths import LEDGER_PATH, RUNS_DIR, UPSTREAM_ARC, UPSTREAM_MODEL
 from .spend_gate import default_campaign, default_gate
@@ -161,6 +162,39 @@ def _run_game(game_id: str, *,
                                 "failed_checks": score_report["failed_checks"],
                                 "undetermined_checks":
                                     score_report["undetermined_checks"]}
+
+    # D-024 / RED-40.  The chain inside the ledger only makes tampering
+    # *evident*; on its own it stops nobody from rewriting the whole file and
+    # recomputing every link.  What closes that is publishing the head
+    # somewhere the forger does not control: this run record is committed with
+    # the branch, and git is itself a hash chain that gets pushed to a remote,
+    # so the witness ends up on another machine.  Forging the ledger afterwards
+    # then means rewriting git history and the remote too -- far more expensive
+    # and far more detectable.
+    #
+    # The verdict is recorded alongside the hash on purpose.  A head published
+    # for a stream that does not actually verify would be a witness to nothing,
+    # and "unchained" must never be read later as "chain verified".
+    #
+    # !! THE DEFAULT PATH PUBLISHES NOTHING.  `runs_dir` defaults to
+    # `proxy/var/runs/`, and `proxy/.gitignore` ignores `var/` -- correctly, it
+    # is runtime output.  So writing the head here does not put it anywhere a
+    # forger cannot reach, and on its own this block buys exactly zero
+    # tamper-evidence.  It is still written because `play()` RETURNS this
+    # record: the arm lifts `ledger_head` into its own tracked
+    # `runs/<slug>/MANIFEST.json`, and *that* is the publication.  An operator
+    # working outside an arm publishes with
+    # `python -m proxy.tools.verify_chain <ledger> --emit-head <tracked path>`.
+    #
+    # Recording the trap in the code rather than only in the design note,
+    # because "the head is published" was believed here for as long as it took
+    # to run `git check-ignore` on the file this line writes.
+    chain = verify_chain.verify(ledger_path)
+    record["ledger_head"] = {"path": os.path.abspath(ledger_path),
+                             "last_seq": chain["last_seq"],
+                             "sha256": chain["head"],
+                             "lines": chain["lines"],
+                             "verdict": chain["verdict"]}
 
     os.makedirs(runs_dir, exist_ok=True)
     with open(os.path.join(runs_dir, run_id + ".json"), "w",

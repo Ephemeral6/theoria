@@ -1,0 +1,1242 @@
+{
+  "artefact": {
+    "lines": 403,
+    "sha256_16": "56555456155ab71f",
+    "source": "worktree"
+  },
+  "findings": [
+    {
+      "line": 1,
+      "tag": "false-positive/pixels",
+      "text": "fired on a scene with no motion at all: lamp L switched off while neighbour R changed colour. R's two later moves are now credited to L and R's track is truncated at t=1.",
+      "verdict": "REFUTES"
+    },
+    {
+      "line": 1,
+      "tag": "false-positive/hand-built",
+      "text": "fires; R's independent later moves are re-attributed to ['obj0'] and R's track dies at t=1.  Physically: nothing moved at t=1.",
+      "verdict": "REFUTES"
+    },
+    {
+      "line": 1,
+      "tag": "false-negative/stale colour",
+      "text": "repaired anyway",
+      "verdict": "holds"
+    },
+    {
+      "line": 1,
+      "tag": "recolour cells unvalidated",
+      "text": "refused",
+      "verdict": "holds"
+    },
+    {
+      "line": 2,
+      "tag": "pairing is an id artefact",
+      "text": "the pairing survived relabelling: []",
+      "verdict": "holds"
+    },
+    {
+      "line": 2,
+      "tag": "lexicographic id order",
+      "text": "winner was []",
+      "verdict": "note"
+    },
+    {
+      "line": 2,
+      "tag": "a perfect matching exists",
+      "text": "refused whole: two movers and two eaten with a unique perfect matching (m1->e2, m2->e1) are called ambiguous because the contested test is per-track, not per-matching. Sound but incomplete -- a real hand-over goes unrepaired.",
+      "verdict": "note"
+    },
+    {
+      "line": 3,
+      "tag": "invariants/clean repair",
+      "text": "masks==anchors==n_frames, no orphan events, no overlap, no empty track; script_bits = before + sum(deltas)",
+      "verdict": "holds"
+    },
+    {
+      "line": 3,
+      "tag": "two cost models in one script",
+      "text": "on 3 worlds the repair prices its new events with b_objid=3 while every other event in the same script uses b_objid=2. The advertised '+2 bits per swap' becomes +4, and the script_bits that `choose_operator` compares between operators is no longer a single code length.",
+      "verdict": "REFUTES"
+    },
+    {
+      "line": 3,
+      "tag": "'+2 bits per swap' is one-cell only",
+      "text": "delta is [2, -2, -6] for 1/2/3-cell movers; for k>=2 the repair is a net *saving*, which also means the matcher would never have picked the wrong reading there in the first place.",
+      "verdict": "note"
+    },
+    {
+      "line": 3,
+      "tag": "ragged masks (eaten shorter)",
+      "text": "refused whole and returned the input untouched (the segmentation is ragged -- some track)",
+      "verdict": "holds"
+    },
+    {
+      "line": 3,
+      "tag": "ragged masks (mover shorter)",
+      "text": "refused whole and returned the input untouched (the segmentation is ragged -- some track)",
+      "verdict": "holds"
+    },
+    {
+      "line": 3,
+      "tag": "anchors shorter than masks",
+      "text": "refused whole and returned the input untouched (the segmentation is ragged -- some track)",
+      "verdict": "holds"
+    },
+    {
+      "line": 3,
+      "tag": "empty track survives in tracks",
+      "text": "the eaten track always keeps its mask at t, so it cannot empty",
+      "verdict": "holds"
+    },
+    {
+      "line": 3,
+      "tag": "no-op returns the input object",
+      "text": "with zero swaps the *input* Segmentation is returned by identity, so callers cannot assume they own the result",
+      "verdict": "note"
+    },
+    {
+      "line": 4,
+      "tag": "A eats B then eats C",
+      "text": "both hops repaired, obj0 carries the whole trajectory, invariants clean",
+      "verdict": "holds"
+    },
+    {
+      "line": 4,
+      "tag": "hand-over cycle",
+      "text": "no cycle: an eaten track has its masks nulled from t+1 on, so `_present` can never make it a later mover; the graph is a forest of chains ([('obj1', 'obj0'), ('obj1', 'obj2')])",
+      "verdict": "holds"
+    },
+    {
+      "line": 4,
+      "tag": "inherits the eaten track's return",
+      "text": "not inherited",
+      "verdict": "holds"
+    },
+    {
+      "line": 4,
+      "tag": "self-consumption",
+      "text": "guarded twice: the id check, and mover must be absent at t+1 while eaten must be present at t+1",
+      "verdict": "holds"
+    },
+    {
+      "line": 5,
+      "tag": "swap-then-reidentify resurrects",
+      "text": "swap applied=True, merge applied=False",
+      "verdict": "holds"
+    },
+    {
+      "line": 5,
+      "tag": "reverse order as a remedy",
+      "text": "reversing does not help: reidentify-first produces gapped tracks, and the swap pass hands the whole post-t suffix (gap and return) to the mover -- see line 4's 'inherits the eaten track's return'.",
+      "verdict": "note"
+    },
+    {
+      "line": 6,
+      "tag": "t = 0",
+      "text": "swaps=1 problems=none",
+      "verdict": "holds"
+    },
+    {
+      "line": 6,
+      "tag": "t = last transition",
+      "text": "swaps=1 problems=none",
+      "verdict": "holds"
+    },
+    {
+      "line": 6,
+      "tag": "empty trajectory",
+      "text": "no events -> horizon -1 -> input returned unchanged (True)",
+      "verdict": "holds"
+    },
+    {
+      "line": 6,
+      "tag": "vanish past the last frame",
+      "text": "refused",
+      "verdict": "holds"
+    },
+    {
+      "line": 0,
+      "tag": "empirical: swap fires and is wrong",
+      "text": "worlds ['t2-cycler-lock', 't3-cycler-portal-lock', 'v-bd2babb4']: a swap fires and the result is demonstrably wrong against worldgen's own verified ground truth.",
+      "verdict": "REFUTES"
+    }
+  ],
+  "worlds": {
+    "t1-cycler-gate": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 55
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        71,
+        71
+      ],
+      "mover_agrees_without_repair": [
+        71,
+        71
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 2
+    },
+    "t1-fragile-bridge": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 5
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        11,
+        11
+      ],
+      "mover_agrees_without_repair": [
+        11,
+        11
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "t1-portal-oneway": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 8
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        11,
+        11
+      ],
+      "mover_agrees_without_repair": [
+        11,
+        11
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "t1-push-corridor": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 11,
+        "obj1": 1
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        21,
+        21
+      ],
+      "mover_agrees_without_repair": [
+        21,
+        21
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 2
+    },
+    "t1-push-open": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 25,
+        "obj1": 2
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        41,
+        41
+      ],
+      "mover_agrees_without_repair": [
+        41,
+        41
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 2
+    },
+    "t1-switch-latch": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 21
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        31,
+        31
+      ],
+      "mover_agrees_without_repair": [
+        31,
+        31
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [
+        "recolour is not this track's"
+      ],
+      "near_misses": 2,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 4
+    },
+    "t1-switch-toggle": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 27
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        41,
+        41
+      ],
+      "mover_agrees_without_repair": [
+        41,
+        41
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [
+        "recolour is not this track's"
+      ],
+      "near_misses": 2,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 4
+    },
+    "t1-tokens-lock": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 4,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 30
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        51,
+        51
+      ],
+      "mover_agrees_without_repair": [
+        29,
+        51
+      ],
+      "mover_color": 6,
+      "n_swaps": 2,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [
+        [
+          "obj0",
+          "obj2",
+          1
+        ],
+        [
+          "obj0",
+          "obj1",
+          21
+        ]
+      ],
+      "tracks": 3
+    },
+    "t1-walk-maze": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 22
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        41,
+        41
+      ],
+      "mover_agrees_without_repair": [
+        41,
+        41
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "t2-cycler-lock": {
+      "consumed_but_still_visible": [
+        [
+          "obj2",
+          7,
+          [
+            5
+          ]
+        ],
+        [
+          "obj0",
+          40,
+          [
+            5
+          ]
+        ]
+      ],
+      "delta_bits": 12,
+      "flags": [
+        "CONSUMED-BUT-STILL-VISIBLE[('obj2', 7, [5]), ('obj0', 40, [5])]",
+        "TWO-COLOUR-6-TRACKS-IN-49-FRAMES",
+        "MOVER-MISTRACKS-AGENT(33/61)",
+        "DELTA!=2/swap(12)"
+      ],
+      "frames_with_two_colour6_tracks": 49,
+      "move_counts": {
+        "obj0": 3,
+        "obj3": 19,
+        "obj4": 10
+      },
+      "mover": "obj3",
+      "mover_agrees_with_agent": [
+        33,
+        61
+      ],
+      "mover_agrees_without_repair": [
+        46,
+        61
+      ],
+      "mover_color": 6,
+      "n_swaps": 3,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [
+        [
+          "obj0",
+          "obj2",
+          7
+        ],
+        [
+          "obj3",
+          "obj1",
+          29
+        ],
+        [
+          "obj3",
+          "obj0",
+          40
+        ]
+      ],
+      "tracks": 5
+    },
+    "t2-gravity-push": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 5
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        11,
+        11
+      ],
+      "mover_agrees_without_repair": [
+        11,
+        11
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "t2-lock-fragile": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 6,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 65
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        111,
+        111
+      ],
+      "mover_agrees_without_repair": [
+        40,
+        111
+      ],
+      "mover_color": 6,
+      "n_swaps": 3,
+      "near_miss_kinds": [
+        "recolour is not this track's"
+      ],
+      "near_misses": 1,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [
+        [
+          "obj0",
+          "obj3",
+          1
+        ],
+        [
+          "obj0",
+          "obj1",
+          31
+        ],
+        [
+          "obj0",
+          "obj2",
+          71
+        ]
+      ],
+      "tracks": 5
+    },
+    "t2-portal-pair": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [
+        "MOVER-MISTRACKS-AGENT(35/41)"
+      ],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 15
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        35,
+        41
+      ],
+      "mover_agrees_without_repair": [
+        35,
+        41
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [
+        "not 4-adjacent; this pass cl"
+      ],
+      "near_misses": 5,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 3
+    },
+    "t2-portal-paired": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 4
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        11,
+        11
+      ],
+      "mover_agrees_without_repair": [
+        11,
+        11
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "t2-switch-push": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 108,
+        "obj1": 3
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        191,
+        191
+      ],
+      "mover_agrees_without_repair": [
+        191,
+        191
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [
+        "recolour is not this track's"
+      ],
+      "near_misses": 4,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 4
+    },
+    "t2-unsolvable-nodoor": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 5
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        11,
+        11
+      ],
+      "mover_agrees_without_repair": [
+        11,
+        11
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "t3-cycler-portal-lock": {
+      "consumed_but_still_visible": [
+        [
+          "obj2",
+          107,
+          [
+            7
+          ]
+        ],
+        [
+          "obj16",
+          139,
+          [
+            7
+          ]
+        ]
+      ],
+      "delta_bits": 18,
+      "flags": [
+        "CONSUMED-BUT-STILL-VISIBLE[('obj2', 107, [7]), ('obj16', 139, [7])]",
+        "TWO-COLOUR-6-TRACKS-IN-48-FRAMES",
+        "MOVER-MISTRACKS-AGENT(119/161)",
+        "DELTA!=2/swap(18)"
+      ],
+      "frames_with_two_colour6_tracks": 48,
+      "move_counts": {
+        "obj0": 68,
+        "obj16": 2,
+        "obj18": 8
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        119,
+        161
+      ],
+      "mover_agrees_without_repair": [
+        130,
+        161
+      ],
+      "mover_color": 6,
+      "n_swaps": 3,
+      "near_miss_kinds": [
+        "not 4-adjacent; this pass cl"
+      ],
+      "near_misses": 13,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [
+        [
+          "obj16",
+          "obj2",
+          107
+        ],
+        [
+          "obj17",
+          "obj1",
+          129
+        ],
+        [
+          "obj17",
+          "obj16",
+          139
+        ]
+      ],
+      "tracks": 7
+    },
+    "t3-full-house": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [
+        "MOVER-MISTRACKS-AGENT(215/221)"
+      ],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 143,
+        "obj1": 9
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        215,
+        221
+      ],
+      "mover_agrees_without_repair": [
+        215,
+        221
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [
+        "not 4-adjacent; this pass cl",
+        "recolour is not this track's"
+      ],
+      "near_misses": 5,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 6
+    },
+    "t3-gravity-fragile": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 11,
+        "obj2": 1
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        21,
+        21
+      ],
+      "mover_agrees_without_repair": [
+        21,
+        21
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 3
+    },
+    "t3-latch-maze": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 4,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 96
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        151,
+        151
+      ],
+      "mover_agrees_without_repair": [
+        100,
+        151
+      ],
+      "mover_color": 6,
+      "n_swaps": 2,
+      "near_miss_kinds": [
+        "recolour is not this track's"
+      ],
+      "near_misses": 1,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [
+        [
+          "obj0",
+          "obj3",
+          3
+        ],
+        [
+          "obj0",
+          "obj1",
+          50
+        ]
+      ],
+      "tracks": 5
+    },
+    "v-1383db02": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [
+        "MOVER-MISTRACKS-AGENT(32/41)"
+      ],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 12
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        32,
+        41
+      ],
+      "mover_agrees_without_repair": [
+        32,
+        41
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [
+        "not 4-adjacent; this pass cl"
+      ],
+      "near_misses": 6,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 3
+    },
+    "v-29ace70e": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 4,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 30
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        51,
+        51
+      ],
+      "mover_agrees_without_repair": [
+        29,
+        51
+      ],
+      "mover_color": 6,
+      "n_swaps": 2,
+      "near_miss_kinds": [
+        "recolour is not this track's"
+      ],
+      "near_misses": 1,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [
+        [
+          "obj0",
+          "obj2",
+          1
+        ],
+        [
+          "obj0",
+          "obj1",
+          21
+        ]
+      ],
+      "tracks": 4
+    },
+    "v-379c937f": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [
+        "MOVER-MISTRACKS-AGENT(190/191)"
+      ],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 144,
+        "obj1": 2
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        190,
+        191
+      ],
+      "mover_agrees_without_repair": [
+        190,
+        191
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [
+        "not 4-adjacent; this pass cl",
+        "recolour is not this track's"
+      ],
+      "near_misses": 2,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 5
+    },
+    "v-57cfb2b4": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 23
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        31,
+        31
+      ],
+      "mover_agrees_without_repair": [
+        31,
+        31
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "v-659c9594": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 41
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        51,
+        51
+      ],
+      "mover_agrees_without_repair": [
+        51,
+        51
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "v-7048ee5e": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 6
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        11,
+        11
+      ],
+      "mover_agrees_without_repair": [
+        11,
+        11
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "v-707a64ad": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 21
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        31,
+        31
+      ],
+      "mover_agrees_without_repair": [
+        31,
+        31
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [
+        "recolour is not this track's"
+      ],
+      "near_misses": 1,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 3
+    },
+    "v-a3446614": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 8
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        11,
+        11
+      ],
+      "mover_agrees_without_repair": [
+        11,
+        11
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "v-ab7a7d57": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 108,
+        "obj1": 3
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        191,
+        191
+      ],
+      "mover_agrees_without_repair": [
+        191,
+        191
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [
+        "recolour is not this track's"
+      ],
+      "near_misses": 4,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 4
+    },
+    "v-bd2babb4": {
+      "consumed_but_still_visible": [
+        [
+          "obj2",
+          160,
+          [
+            8
+          ]
+        ]
+      ],
+      "delta_bits": 12,
+      "flags": [
+        "CONSUMED-BUT-STILL-VISIBLE[('obj2', 160, [8])]",
+        "TWO-COLOUR-6-TRACKS-IN-28-FRAMES",
+        "MOVER-MISTRACKS-AGENT(139/191)",
+        "DELTA!=2/swap(12)"
+      ],
+      "frames_with_two_colour6_tracks": 28,
+      "move_counts": {
+        "obj0": 75,
+        "obj23": 17
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        139,
+        191
+      ],
+      "mover_agrees_without_repair": [
+        157,
+        191
+      ],
+      "mover_color": 6,
+      "n_swaps": 2,
+      "near_miss_kinds": [
+        "not 4-adjacent; this pass cl"
+      ],
+      "near_misses": 18,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [
+        [
+          "obj22",
+          "obj2",
+          160
+        ],
+        [
+          "obj23",
+          "obj1",
+          182
+        ]
+      ],
+      "tracks": 6
+    },
+    "v-c52c42ed": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 7
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        11,
+        11
+      ],
+      "mover_agrees_without_repair": [
+        11,
+        11
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "v-ce732813": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 5
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        11,
+        11
+      ],
+      "mover_agrees_without_repair": [
+        11,
+        11
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "v-d2c2b1b9": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 12
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        21,
+        21
+      ],
+      "mover_agrees_without_repair": [
+        21,
+        21
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [
+        "recolour is not this track's"
+      ],
+      "near_misses": 1,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 3
+    },
+    "v-eb4c5810": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 6
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        11,
+        11
+      ],
+      "mover_agrees_without_repair": [
+        11,
+        11
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [],
+      "near_misses": 0,
+      "operator": "connected_components(4)",
+      "swaps": [],
+      "tracks": 1
+    },
+    "v-efe43df1": {
+      "consumed_but_still_visible": [],
+      "delta_bits": 0,
+      "flags": [],
+      "frames_with_two_colour6_tracks": 0,
+      "move_counts": {
+        "obj0": 63,
+        "obj1": 3
+      },
+      "mover": "obj0",
+      "mover_agrees_with_agent": [
+        111,
+        111
+      ],
+      "mover_agrees_without_repair": [
+        111,
+        111
+      ],
+      "mover_color": 6,
+      "n_swaps": 0,
+      "near_miss_kinds": [
+        "recolour is not this track's"
+      ],
+      "near_misses": 1,
+      "operator": "connected_components(4)+uniform_color",
+      "swaps": [],
+      "tracks": 4
+    }
+  }
+}

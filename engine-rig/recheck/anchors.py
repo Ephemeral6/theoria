@@ -24,8 +24,31 @@ written by someone else, for another purpose, before this package existed:
 Both take their inputs from another track's directory and write nothing to it.
 Both are skipped, loudly, if that directory is not present: they are
 cross-checks, so an absent counterpart is a missing check, never a pass.
+
+`pagoda_differential`
+    `lp_potential`'s exported documents in `engine-rig/interop/certificates/`,
+    against the pagoda cases `build_cases` transcribes from them.  Four numbers
+    are transcribed -- the weights, the bound, and by name the rule set -- and
+    everything else in those documents is re-derived here: the start state, the
+    goal states, and the move set.
+
+    **This is the one place the producer's own `obligations` block is read, and
+    reading it is the point of the check.**  The document lists every move
+    instance with its delta already evaluated; `certificate_export.py::verify`
+    iterates that list, so a document that drops an inconvenient instance
+    verifies. The rechecker refuses the block as input (`certificate.py`,
+    `_FORBIDDEN`) and grounds the moves from the rules instead. Here the two are
+    compared -- every listed move replayed through the derived relation, and the
+    derived action set compared against the list both ways -- so that an
+    omission or a mislabelled move is *reported*, as a transcription finding,
+    rather than silently believed or silently ignored.
+
+    It reads files under `interop/`; it imports nothing from there. That
+    distinction is the same one this package makes about `cold-start-a2`, and it
+    is what `test_recheck_never_imports_the_engines` enforces.
 """
 
+import hashlib
 import json
 import os
 import re
@@ -34,9 +57,11 @@ from typing import Dict, List, Optional, Sequence, Tuple
 from recheck.ruleset import RuleSet
 
 REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+ENGINE_RIG = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 A2_ROOT = os.path.join(REPO_ROOT, "cold-start-a2")
 A2_EPISODE = os.path.join(A2_ROOT, "artifacts", "solved_episode.jsonl")
 A2_HOLED_LEAN = os.path.join(A2_ROOT, "theory", "generated_holed", "theory.lean")
+PAGODA_DOCUMENTS = os.path.join(ENGINE_RIG, "interop", "certificates")
 
 A2_BUTTON_CELL = (1, 1)
 A2_DOOR_CELL = (6, 4)
@@ -183,4 +208,131 @@ def a2_lean_step_table(ruleset: RuleSet, path: str = A2_HOLED_LEAN) -> Dict[str,
         "mismatches": mismatches[:8],
         "n_mismatches": len(mismatches),
         "agrees": not mismatches and len(rows) == expected,
+    }
+
+
+# ------------------------------------------- lp_potential's exported documents
+
+def pagoda_document(filename: str, directory: str = PAGODA_DOCUMENTS
+                    ) -> Tuple[Dict[str, object], str]:
+    """One producer document and the digest of the bytes it was read from."""
+    path = os.path.join(directory, filename)
+    if not os.path.exists(path):
+        raise AnchorUnavailable(path)
+    with open(path, "rb") as handle:
+        payload = handle.read()
+    return json.loads(payload.decode("utf-8")), hashlib.sha256(payload).hexdigest()
+
+
+def _bitstring(ruleset: RuleSet, state: tuple, occupied: object) -> str:
+    return "".join("1" if value == occupied else "0" for value in state)
+
+
+def _vacant(ruleset: RuleSet, occupied: object) -> Optional[tuple]:
+    """The "not occupied" value of each variable, when there is exactly one.
+
+    The producer's documents are strings of `0` and `1`, so replaying one of
+    their move instances means naming the empty value -- and naming it from the
+    rule set's declared domain rather than assuming `0`.  A variable with three
+    values has no single empty state and the replay says so instead of guessing.
+    """
+    out = []
+    for variable in ruleset.variables:
+        others = [value for value in variable.domain if value != occupied]
+        if len(others) != 1:
+            return None
+        out.append(others[0])
+    return tuple(out)
+
+
+def _goal_states(ruleset: RuleSet, occupied: object) -> List[str]:
+    return sorted(_bitstring(ruleset, state, occupied)
+                  for state in ruleset.states() if ruleset.goal(state))
+
+
+def pagoda_differential(ruleset: RuleSet, certificate, filename: str,
+                        directory: str = PAGODA_DOCUMENTS) -> Dict[str, object]:
+    """Compare a transcribed pagoda case against the document it came from.
+
+    Every field is compared in the direction that matters: the transcription is
+    checked against the producer, and the producer's move list is checked
+    against the relation this package grounds from the rules.  A disagreement is
+    reported, never resolved -- this function has no opinion about which side is
+    wrong, and that is what makes it an anchor rather than a second checker.
+    """
+    document, digest = pagoda_document(filename, directory)
+    occupied = certificate.occupied
+    weights = [certificate.weights.get("pos%d" % i)
+               for i in range(len(document.get("weights_integer") or ()))]
+    init = [_bitstring(ruleset, state, occupied) for state in ruleset.init]
+    goals = _goal_states(ruleset, occupied)
+
+    # The rule set's own moves: an action that changes some state is a move the
+    # geometry admits, and its label is the rule set's, not the document's.
+    rows = ruleset.transitions()
+    states = ruleset.states()
+    derived_actions = sorted(
+        action for a, action in enumerate(ruleset.actions)
+        if any(rows[i][a] != i for i in range(len(states)))
+    )
+
+    listed = (((document.get("obligations") or {}).get("inv_closed") or {})
+              .get("witnesses") or [])
+    listed_actions = sorted({str(entry.get("move")) for entry in listed
+                             if isinstance(entry, dict)})
+
+    vacant = _vacant(ruleset, occupied)
+    replay_mismatches: List[str] = []
+    for entry in listed:
+        if not isinstance(entry, dict):
+            continue
+        positions = entry.get("positions")
+        move = str(entry.get("move"))
+        if not isinstance(positions, list) or len(positions) != 3:
+            replay_mismatches.append("%s: no (src, over, dst) to replay" % move)
+            continue
+        if vacant is None:
+            replay_mismatches.append(
+                "%s: %s has a variable with more than two values, so `0` in the "
+                "document names no single state" % (move, ruleset.name))
+            continue
+        src, over, dst = positions
+        n = len(ruleset.variables)
+        before = tuple(occupied if i in (src, over) else vacant[i] for i in range(n))
+        after = tuple(occupied if i == dst else vacant[i] for i in range(n))
+        if move not in ruleset.actions:
+            replay_mismatches.append("%s is not an action of %s" % (move, ruleset.name))
+            continue
+        got = ruleset.step(before, move)
+        if got != after:
+            replay_mismatches.append(
+                "%s: document says %s -> %s, the rules make %s"
+                % (move, _bitstring(ruleset, before, occupied),
+                   _bitstring(ruleset, after, occupied),
+                   _bitstring(ruleset, got, occupied)))
+
+    checks = {
+        "weights_agree": weights == list(document.get("weights_integer") or ()),
+        "bound_agrees": certificate.bound == document.get("initial_potential"),
+        "initial_state_agrees": init == [document.get("initial_state")],
+        "goal_states_agree": goals == sorted(document.get("goal_states") or ()),
+        "move_set_agrees": derived_actions == listed_actions,
+        "listed_moves_replay": not replay_mismatches,
+    }
+    return {
+        "document": filename,
+        "document_sha256": digest,
+        "ruleset": ruleset.name,
+        "certificate": certificate.name,
+        "transcribed_weights": dict(sorted(certificate.weights.items())),
+        "document_weights": list(document.get("weights_integer") or ()),
+        "derived_initial_state": init,
+        "document_initial_state": document.get("initial_state"),
+        "derived_goal_states": goals,
+        "document_goal_states": sorted(document.get("goal_states") or ()),
+        "n_moves_derived": len(derived_actions),
+        "n_moves_listed": len(listed_actions),
+        "replay_mismatches": replay_mismatches[:4],
+        "checks": dict(sorted(checks.items())),
+        "agrees": all(checks.values()),
     }

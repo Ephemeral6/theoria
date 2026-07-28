@@ -8,7 +8,9 @@ construction certifies itself.  This package takes two files instead:
 
   * a **rule set** -- finite variables with explicit domains, an initial
     assignment, a goal predicate, and a list of guarded rules;
-  * a **certificate** -- a predicate and the claim it is supposed to license.
+  * a **certificate** -- the set of states it is about, either written as a
+    predicate or, for a pagoda, declared as weights and a bound and derived from
+    them, together with the claim it is supposed to license.
 
 and re-derives the transition relation itself, by grounding the rules over the
 full product of the declared domains.  It never reads a precomputed edge list,

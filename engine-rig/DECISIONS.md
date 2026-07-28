@@ -786,3 +786,53 @@ every input -- and reported, correctly, that it exited 1 and looked like a
 rejection. A guarantee enforced at construction time has to be re-established
 every time the constructed thing is reused, and a checker's failure mode has to
 be distinguishable from its verdict. Neither is a fact about expressions.
+
+---
+
+## D-033 · The summary table reads verdicts; it does not re-derive them
+
+*(Numbered 033 after D-032, which `agent/e7-deadlock-claim-audit` takes.)*
+
+**Context.** E6 assembles one table -- *what is an engine worth?* -- out of three
+runs that measured three different things. `tools/engine_dividend_table.py` is
+that assembler and `ENGINE_DIVIDEND.md` is its output.
+
+**Decision.** The assembler reads measurements and, where an artefact carries a
+**verdict**, reads that verdict rather than recomputing an equivalent one. Its
+arithmetic is confined to percentages and totals over fields it read.
+
+**Why, concretely.** An earlier draft recomputed section C's optimality
+agreement. Four sokoban instances have no *known* optimum; the recomputation
+scored "no ground truth" as "disagreement", rendered **no** against `lmcut`,
+`ipdb` and the bundled BFS, and printed the sentence *"Every optimal rung agrees
+... (4 disagreements)"*. E2's `ladder.json` carries `agreement_ok: true` on all
+four and its own `LADDER.md` renders them `yes`. A false accusation that three
+admissible planners returned non-optimal plans, in the file whose whole purpose
+is to be quoted in a paper. Reading `verdicts.agreement_ok` gives 0.
+
+**The generalisation, which is the part worth keeping.** Three further defects in
+the same draft had one shape: a column reading a key that does not exist,
+rendering as a valid table full of `--`.
+
+| column | read | actual field |
+|---|---|---|
+| FD blind | `config` | `rung` |
+| plan | `plan_unchanged` | `plan_length_unchanged` |
+| pagoda region | `n_region` | `n_satisfying` |
+| tie-break dividend | `dividend_min` | `guards.<guard>.dividend_min_pct` |
+
+**A `--check` that re-renders and diffs cannot catch any of them.** It proves the
+file matches its renderer, never that the renderer reads the right field; a
+wrong-key column is perfectly stable and perfectly wrong. The plan column was the
+worst of the four, because `stub.get("plan_unchanged", True)` would have printed
+`unchanged` for a guard that changed the plan -- a soundness claim defaulting to
+true. So: **every summary column is pinned by a test that asserts a real measured
+number, plus a perturbation test that moves one field in a temp copy and requires
+exactly the matching cell to move.** Two fields that agree on today's data are
+indistinguishable to a transcription test; only perturbation separates them.
+
+**A related call: what the theorem count beside a planner row means.** It is the
+number proved, which is not the number that reached the planner -- the
+`singleton` guard expresses size-1 theorems only, 8 of 40 on `far7`. The table
+carries both, because a dividend attributed to 40 theorems that eight bought is
+the same class of error as the columns above, one layer up.

@@ -1,0 +1,88 @@
+{
+ "prompt_id": "E14-crash-is-not-a-finding",
+ "instance_sets": [
+  "theoria-arm/runs/20260728T015354Z-g50t-first-contact",
+  "theoria-arm worked example (BFS, unreachable goal)",
+  "a0-spike"
+ ],
+ "claims_audited": 14,
+ "committed_claims_audited": 13,
+ "committed_claims_exercised_by_this_rerun": 12,
+ "committed_claims_not_exercised": 1,
+ "claims_that_carried_an_uncounted_crash": 0,
+ "crashes_observed_anywhere_in_this_rerun": 0,
+ "claims_deliberately_out_of_population": [
+  {
+   "claim": "a0-spike certify_generated.replay_exact",
+   "depends_on": "gen_exec.compile_module(theory/theory.dsl) -- `certify_generated(module, episodes)` never sees `rules`",
+   "value_under_an_injected_mining_crash": true
+  },
+  {
+   "claim": "a0-spike held_out.exact",
+   "depends_on": "the same compiled module, enumerated against world/sokoban2.py; no mined rule is consulted",
+   "value_under_an_injected_mining_crash": true
+  },
+  {
+   "claim": "a0-spike levels[*].theorem.unsolvable",
+   "depends_on": "stages.unsolvability_certificate(level) -- takes only a Level and compares two parities; no rules, no search",
+   "value_under_an_injected_mining_crash": true
+  }
+ ],
+ "reading": "A claim is counted as carrying an uncounted crash only if the instrumented re-run OBSERVED a crash under it. A claim the re-run never reached is reported separately and is NOT folded into the clean column -- 'no crash was recorded' and 'no crash happened' are the two things this whole ticket exists to keep apart, and collapsing them here would be the same error one level up."
+}
+
+- theoria-arm certify constraint 9 (`unambiguous`)
+    committed: True
+    re-run   : ok=True crashes=0
+
+- theoria-arm plan `unsat` / "the whole reachable set was enumerated"
+    committed: no_goal_declared
+    re-run   : ok=no_goal_declared crashes=None  [NOT EXERCISED]
+
+- theoria-arm plan `unsat` / "the whole reachable set (3 states) was enumerated", worked example, unreachable goal, through plan() rather than the tier
+    committed: n/a -- no committed artifact makes this claim
+    re-run   : ok=unsat crashes=0
+
+- a0-spike mined rule set: each disjunctive effect class asserts "this class admits no single conjunctive guard"
+    committed: 4 of 12 effect classes published as disjunctive
+    re-run   : ok=True crashes=0
+
+- a0-spike certify.replay_exact (replayed through the MINED rules)
+    committed: True
+    re-run   : ok=True crashes=0
+
+- a0-spike certify.exactly_one_successor (replayed through the MINED rules)
+    committed: True
+    re-run   : ok=True crashes=0
+
+- a0-spike adaptation repair[push1].replay_exact
+    committed: True
+    re-run   : ok=True crashes=0
+
+- a0-spike adaptation repair[push1].exactly_one_successor
+    committed: True
+    re-run   : ok=True crashes=0
+
+- a0-spike adaptation repair[push3].replay_exact
+    committed: True
+    re-run   : ok=True crashes=0
+
+- a0-spike adaptation repair[push3].exactly_one_successor
+    committed: True
+    re-run   : ok=True crashes=0
+
+- a0-spike adaptation repair[nocross].replay_exact
+    committed: True
+    re-run   : ok=True crashes=0
+
+- a0-spike adaptation repair[nocross].exactly_one_successor
+    committed: True
+    re-run   : ok=True crashes=0
+
+- a0-spike adaptation repair[ghost].replay_exact
+    committed: True
+    re-run   : ok=True crashes=0
+
+- a0-spike adaptation repair[ghost].exactly_one_successor
+    committed: True
+    re-run   : ok=True crashes=0
