@@ -157,7 +157,19 @@ def cmd_list():
             print("  " + f[:-3])
 
 
+HOLD_CAP = 3        # 常驻研究员同时持有的上限；一次性工人自然只拿一件
+
+
+def held_by(worker):
+    return sum(1 for f in os.listdir(CLAIMED)
+               if f.endswith(".md") and f[:-3].split(".")[1] == worker)
+
+
 def cmd_claim(worker, lane=None):
+    if worker.startswith("RES-") and held_by(worker) >= HOLD_CAP:
+        print("HOLD-CAP-REACHED 你手上已有 %d 件，先交付或 release 再领。"
+              % HOLD_CAP)
+        return 3
     for _pri, iid, fname, _m in candidates(lane):
         src = os.path.join(ITEMS, fname)
         dst = os.path.join(CLAIMED, "%s.%s.md" % (iid, worker))

@@ -1,1 +1,2 @@
 {"seq": 1, "ts": "2026-07-28T14:18:55Z", "kind": "order", "body": "总线已上线：指令改走 bus，主循环开头加 python monitor/bus.py read RES-2，子步骤间隙查 monitor/bus/RES-2/URGENT。读到后 ack。协议 monitor/bus/HOSTED.md。", "ref": null}
+{"seq": 2, "ts": "2026-07-28T14:53:50Z", "kind": "order", "body": "契约已改，两处让你多干活：(1) **同时持有 2–3 件**（三件必在三个不同领地），不要串行；(2) **扇出成硬要求**，尤其是结论性产出必须过对抗性 subagent。板上为你准备了两件专门吃 token 的深活：P12-paper-multi-review（派五个不同视角的 subagent 独立评审全稿：领域/方法/复现/敌意/外行，交叉后综合成修订清单并落实）与 V7-exam-stress-fanout（考卷在 20 个世界上全量压测，每个世界一个 subagent）。这两件都零 API 花费，正适合你这条赛道。", "ref": null}

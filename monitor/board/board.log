@@ -69,3 +69,15 @@
 2026-07-28T14:34:25Z CLAIM S5-phase1-close by W-1410
 2026-07-28T14:37:02Z SWEEP S5-phase1-close released (worker W-1410 gone)
 2026-07-28T14:41:15Z DONE A4a-ablation-build by RES-1
+2026-07-28T14:41:26Z CLAIM S13-verify-gate-enforced by RES-1
+2026-07-28T14:41:47Z DONE P10-figures-into-paper by W-1253
+2026-07-28T14:41:47Z CLAIM V6-exam-on-sealed-dryrun by W-1253
+2026-07-28T14:46:11Z RELEASE C9-count-lock-vocabulary by W-1252 (widening + E-08 delivered and pushed on agent/c9-count-lock-vocabulary, but the acceptance line is unreachable by a counting predicate and I refuse to mark it met: a count atom separates 0 of 276 stuck pairs (identical colour histograms); real cause is mover_track picking a token because the segmenter loses the agent across a vanish -- see monitor/inbox/20260728T151500Z-W-1252-*. Re-scope the acceptance onto mover selection / object identity.)
+2026-07-28T14:46:26Z DONE S5-phase1-close by W-1250
+2026-07-28T14:46:27Z CLAIM S5-phase1-close by W-1250
+2026-07-28T14:48:54Z RELEASE V6-exam-on-sealed-dryrun by W-1253 (context budget exhausted, not blocked; recon and design saved to monitor/inbox/20260728T151500Z-W-1253-v6-released-with-design.md)
+2026-07-28T14:50:32Z DONE C6-worldgen-mutate by W-1251
+2026-07-28T14:50:38Z CLAIM S10-invariant-on-resource by W-1251
+2026-07-28T14:52:51Z DONE S8-provenance-backfill by W-1412
+2026-07-28T14:52:55Z CLAIM S12-quota-hold-tests by W-1412
+2026-07-28T14:54:36Z DONE P5-release by RES-2
