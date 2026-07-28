@@ -1,0 +1,10 @@
+# Pin LF, for the same reason engine-rig and theory-compiler do.
+#
+# The figure extractors write their payloads with newline="\n" and the draft
+# claims they are byte-reproducible. If `core.autocrlf` rewrote them on
+# checkout, a reviewer's regenerated file would differ from the committed one
+# and the reproducibility claim would be false on their machine and true on
+# ours. Determinism is a requirement here, not a nicety.
+* text eol=lf
+*.png binary
+*.pdf binary

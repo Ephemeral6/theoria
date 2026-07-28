@@ -1,0 +1,196 @@
+{
+  "adjudication_counts": {
+    "law": 3,
+    "object": 4,
+    "probe": 3,
+    "rule": 8
+  },
+  "adjudications": [
+    {
+      "family": "object",
+      "id": "O-01",
+      "title": "`obj0`, colour 7 → **accept**, named `Button`",
+      "verdict": "accept"
+    },
+    {
+      "family": "object",
+      "id": "O-02",
+      "title": "`obj1`, colour 5 → **accept**, named `Door`",
+      "verdict": "accept"
+    },
+    {
+      "family": "object",
+      "id": "O-03",
+      "title": "`obj2`, colour 6 → **accept**, named `Cart`",
+      "verdict": "accept"
+    },
+    {
+      "family": "object",
+      "id": "O-04",
+      "title": "The compression account does not justify Button or Door — **admitted anyway**",
+      "verdict": "admitted anyway"
+    },
+    {
+      "family": "rule",
+      "id": "R-01",
+      "title": "`obj2_step_{UP,DOWN,LEFT,RIGHT}` → **accept** as `push_{up,down,left,right}`",
+      "verdict": "accept"
+    },
+    {
+      "family": "rule",
+      "id": "R-02",
+      "title": "`obj2_jump_DOWN` → **accept** as `teleport_down`",
+      "verdict": "accept"
+    },
+    {
+      "family": "rule",
+      "id": "R-03",
+      "title": "`obj0_recolor8_LEFT` → **accept** as `press_left`",
+      "verdict": "accept"
+    },
+    {
+      "family": "rule",
+      "id": "R-04",
+      "title": "`obj1_vanish_LEFT` → **accept** as `door_opens_left`",
+      "verdict": "accept"
+    },
+    {
+      "family": "rule",
+      "id": "R-05",
+      "title": "Direction generality of `press_left` / `door_opens_left` → **reject, probe-pending**",
+      "verdict": "reject, probe-pending"
+    },
+    {
+      "family": "rule",
+      "id": "R-06",
+      "title": "`obj0_still_LEFT`, `obj1_still_LEFT` → **entailed**",
+      "verdict": "entailed"
+    },
+    {
+      "family": "rule",
+      "id": "R-07",
+      "title": "`obj{0,1,2}_still_*`, all directions, and the lifted `obj{0,1,2}_still`",
+      "verdict": "entailed"
+    },
+    {
+      "family": "rule",
+      "id": "R-08",
+      "title": "Blocked-by-what → **not represented, logged**",
+      "verdict": "not represented, logged"
+    },
+    {
+      "family": "law",
+      "id": "L-01",
+      "title": "`(#6) mod 2 = 1` over 37 of the 38 arena cells → **accept** as `cart_unique`",
+      "verdict": "accept"
+    },
+    {
+      "family": "law",
+      "id": "L-02",
+      "title": "`[cell(3,2) is 8] + [cell(4,5) is 5] mod 2 = 1` → **accept** as `door_latch`",
+      "verdict": "accept"
+    },
+    {
+      "family": "law",
+      "id": "L-03",
+      "title": "The 113 `cell_local` laws → **not read**",
+      "verdict": "not read"
+    },
+    {
+      "family": "probe",
+      "id": "P-01",
+      "title": "`obj2_jump_DOWN` — separable, **hypothetical tier only**",
+      "verdict": "see body"
+    },
+    {
+      "family": "probe",
+      "id": "P-02",
+      "title": "`obj2_step_{UP,DOWN,LEFT,RIGHT}`, `obj2_still_{UP,LEFT,RIGHT}` — **no split anywhere**",
+      "verdict": "see body"
+    },
+    {
+      "family": "probe",
+      "id": "P-03",
+      "title": "`obj2_still_DOWN` — separable, hypothetical tier, 6 hypotheses → 2 classes",
+      "verdict": "see body"
+    }
+  ],
+  "claim": "The A0 manual was revised zero times by certify: both certify layers went green against revision 1. The iterations that did happen were in the compiler, not in the manual.",
+  "compiler_defects": [
+    {
+      "defect": "rules re-read their guards against the partially-updated state, so `press_left` recoloured the Button and `door_opens_left` then found colour 8 and silently did not fire",
+      "layer": "`gen_python_a0`",
+      "n": 1,
+      "surfaced_by": "the Door never opened in the generated `step`; caught by inspection, then pinned by `test_simultaneous_rule_semantics`"
+    },
+    {
+      "defect": "the Door's cell got no PDDL subtype, so `press`'s `?d - doorcell` parameter had an empty domain and grounded to nothing",
+      "layer": "`gen_pddl_a0`",
+      "n": 2,
+      "surfaced_by": "`fd_adapter` reported UNSAT on an instance that is plainly solvable"
+    },
+    {
+      "defect": "`engine-rig` grew a native `split_by_color` switch mid-sprint and the monkeypatched operator stopped matching its signature",
+      "layer": "`segment_operators`",
+      "n": 3,
+      "surfaced_by": "`TypeError` on the variant run"
+    }
+  ],
+  "expressivity_ledger": [
+    {
+      "cost": "none in the end",
+      "id": "E-01",
+      "wanted": "negation in a guard (`!clear(strip(D))`)",
+      "worked_around_by": "naming the complement predicate `blocked` — then dropped entirely, since R-07 made the negated guards unnecessary"
+    },
+    {
+      "cost": "manual is 3 clauses longer than the engine's own account; the lifted 212/212 evidence is split across four rules that each look weaker than it is",
+      "id": "E-02",
+      "wanted": "direction-lifted rules (`act=push(Cart, ?dir)`)",
+      "worked_around_by": "writing four rules"
+    },
+    {
+      "cost": "**the most important semantic fact about `step` is not in the DSL at all**",
+      "id": "E-03",
+      "wanted": "a frame axiom / default clause",
+      "worked_around_by": "a comment at the top of `theory.dsl` and a hard-coded rule in the backends"
+    },
+    {
+      "cost": "the domain/problem boundary is real but unwritten; a reader of `theory.dsl` alone cannot tell which names are level data",
+      "id": "E-04",
+      "wanted": "declaring a board landmark (`portal_exit`, the goal cell)",
+      "worked_around_by": "free-floating names resolved by the problem instance"
+    },
+    {
+      "cost": "same as E-04",
+      "id": "E-05",
+      "wanted": "a weight function over cells for a pagoda invariant",
+      "worked_around_by": "the vector lives in the problem instance (M5)"
+    }
+  ],
+  "revisions": [
+    {
+      "change": "the whole manual as it now stands: 3 objects, 7 rules, 2 invariants, 1 pending theorem",
+      "milestone": "M3",
+      "rev": 1,
+      "trigger": "one pass over all 28 candidates plus the board map"
+    },
+    {
+      "change": "`theory_no_button.dsl` — the base manual with every Button/Door-dependent clause deleted, plus `right_room_locked` and `unsolvable_no_button`",
+      "milestone": "M5",
+      "rev": 2,
+      "trigger": "the plan returned UNSAT on the no-Button variant, and constraint 6 forbids stopping at a bare UNSAT"
+    }
+  ],
+  "revisions_driven_by_certify": 0,
+  "source": "cold-start-a0/THEORIZE_LOG.md",
+  "verdict_counts": {
+    "accept": 9,
+    "admitted anyway": 1,
+    "entailed": 2,
+    "not read": 1,
+    "not represented, logged": 1,
+    "reject, probe-pending": 1,
+    "see body": 3
+  }
+}

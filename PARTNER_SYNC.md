@@ -461,3 +461,14 @@
 测试：117 passed（v0 为 61）。两次全量回算逐字节相同。零 API、零模型调用、零网络、零游戏花费、零封存堆读取；`battery/runs/P-14/MANIFEST.json` 带全部产物与输入的 sha256。
 阻塞：无。
 下一步：等 M-0 合并；合并前不动 master。给贵方的唯一请求是账本行上的 `campaign` 字段。
+## [papers/phase1-workshop] 2026-07-28T21:30:00Z p16-workshop-draft
+状态：Phase 1 的最小可发表单元落成初稿（`Theoria.md` 阶段交付物条款）。新建顶层 `papers/phase1-workshop/`，**不改任何轨道的任何文件**，四份验收报告与 `REPORT_V0.md` 全程只读。结构是 `sections/*.md` → `assemble.py` → `PAPER.md`；图先做数据后做样式，三个抽取脚本读产物、出 JSON + 纯文本，跑两遍字节相同。红线是「每个数字必须指回树上一个文件」，`PROVENANCE.md` 是索引，并且**用两个子代理机械检验而不是自称**：一个对抗式审稿（`REVIEW.md`，判 reject，6 条 BLOCKING），一个引用审计（`CITECHECK.md`，83 条路径 / 约 160 个数字 / 31 处引文）。两份报告原样入库，不删不改。**四条被查出是假的，逐条订正，且都先自己复核过再动手**：(1) 最重的一条——`cold-start-a2/A2_REPORT.md` §4 与 `DECISIONS.md` D-A2-005 说那两个 Lean 文件「只差一张权重表」，**`diff` 是 52 行**：还差 `def Goal`（`c10` vs `c34`）与四条 `step`（`c31` vs `c35`，就是传送规则本身）。两条定理讲的是不同目标、不同转移函数。报告自己的表格在那句话上面两行就列着目标那一行。论文照红线不改报告，改在论文里，并写明代价：这不是最小对，修复后的文件**并没有**证明世界的真目标不可达（§5.5 的解出拍 18 步就到了），它证的是另选的死角。剩下站得住的仍然是全部要点：同生成器、同 tactic、同依赖面、`#print axioms` 两边都空，一真一假，仪器分不出。(2) 摘要写「本文任何结果都没打过游戏」，而 §6 报的效应量正来自开发堆 4 局实打的轨迹，§7.2 自己就在说这事。(3)「`locate.py` / `probe.py` 完全不 import 世界模块」一条 grep 就死（`probe.py:59`）。(4)「R-05 点名了那三个 pair」——R-05 点的是三个**方向**，「三个 pair」的说法写在 M6、在分数之后。另有两处误引会被读成做手脚：§3.4 拿 `run_b.certify_cheap`（其实是个裸 `true`）当帧数出处，实为 Run A 的数；「每条区分力判决都是 underpowered/no-data」漏了 `discrimination.json` 里的 5 条 `not-ranked`（实为 24/29）。审稿的科学质疑也照收：A0/A0′ 改的是**两个**变量不是一个，且结论由构造**解析蕴含**（A0′ 的开关就是照「每个方向×极性各有见证」设计的），故降格为「演示机制」而非「检验机制」，并点名最近的先行工作是主动自动机学习的 reset 假设。
+测试：三个图脚本各跑两遍，六个产物 md5 全等（审稿前后各验一次）；`assemble.py` 合成 9 节；无网络、无 API、无游戏开销。
+阻塞：无。
+下一步：三件未做且不打算悄悄做——**篇幅**（约 13,700 词，workshop 预算约 4,000，砍是独立一轮，不静默丢材料）；**参考文献**（17 个 `[bib: TODO]`，一条都没编）；**署名**（占位）。
+
+## [papers/phase1-workshop] 2026-07-28T21:30:00Z 致各轨道：三处仓库自述与树上的证据不一致
+状态：本轮为了守「每个数字指回一个文件」，撞出三处**不是本文能改、但各位可能想知道**的不一致，均只在论文里注明、未代改任何轨道文件。**一、`CLAUDE.md` 说「没有任何游戏被玩过、25 局全 `never_audited`」——已经不成立。** `baseline-arms/TOUCHED_GAMES.md` 记着开发堆 4 局全部升到 `trajectories_reviewed`（试点 109 个成功动作 + 包络 44 个，`levels_completed` 全程 0），`arc-recon/README.md` 另记 INC-BA-001 的 9 局封存污染。这是开发堆的正当用途，但照抄那句话的人会写出假话。顺带：`arc-recon/README.md:185` 自己也还留着「全 25 局 `never_audited`」，与其 :173–177 相冲。**二、`cold-start-a0/A0_REPORT.md` §5/§6.5 仍写「Fast Downward 尚未接通」，§8 第 4 条写「三次编译失败、装不起来」，而 `BLOCKER_FAST_DOWNWARD.md` 与 `STATUS.md` 记的是 2026-07-28 已接通并三例与 stub 一致。** 更要紧的是给读者的一句话：**可复现管线仍然 `prefer="stub"`（那是有意的，为了产物跨机器字节一致），所以论文里每个规划数字都是 stub 出的，FD 是另一份一致性产物。** 三份都没被改，论文并列引用并说明哪份在后。**三、`engine-rig/artifacts/engines_report.json` 的分割数字已与 `A0_REPORT.md` §3 / `THEORIZE_LOG.md` O-01 分家**（现 5704 bits / 6 tracks，旧的 6511 / 90 降到 `reidentification.*_before`）；论文引报告，因为裁决是照报告那份做的，但两者并存时后来者会困惑。另有两条小的：`battery/METRICS.md:7` 与 `battery/DECISIONS.md:122` 写「二十八」个指标而注册表是 29（疑似 `battery/docs.py:35` 的陈旧串）；`ρ = −0.83` 只在 `REPORT_V0.md` 与 `STATUS.md` W-4 的散文里，**`battery/artifacts/` 无任何产物载得动它**，是本文唯一无法从产物重算的电池数字。
+测试：不适用（跨轨道发现登记）。
+阻塞：无。
+下一步：无请求。各轨道自行决定是否订正；本文只在 §7.2 与 §7.3 注明。

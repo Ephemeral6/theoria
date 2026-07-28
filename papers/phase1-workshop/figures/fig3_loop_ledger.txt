@@ -1,0 +1,93 @@
+FIGURE 3 - A2 ledger flow: 打脸 -> 重证, and what settled each beat
+source: cold-start-a2/artifacts/loop_ledger.json
+------------------------------------------------------------------------
+
+  +--------------------------------------------------------------------+
+  | [M0] 仪器 · the complete manual                        exhibit PASS|
+  +--------------------------------------------------------------------+
+    the pipeline induces a complete manual from the sweep, and it
+    is certified, provable and solvable
+      -> cold-start-a2/artifacts/engines_diff.json
+      -> cold-start-a2/artifacts/certify_generated.json
+      -> cold-start-a2/artifacts/plan_generated.json
+
+            |
+            v
+
+  +--------------------------------------------------------------------+
+  | [M5] 展品 · the theorem that is false of the world     exhibit PASS|
+  +--------------------------------------------------------------------+
+    the holed manual replays the play record at 100%, its planner
+    returns UNSAT, and Lean signs an axiom-free `unsolvable` —
+    which the world contradicts
+      -> cold-start-a2/artifacts/exhibit_report.json
+      -> cold-start-a2/theory/generated_holed/theory.lean
+
+            |
+            v
+
+  +--------------------------------------------------------------------+
+  | [L1] 打脸 (refutation)                                    loop PASS|
+  +--------------------------------------------------------------------+
+    a solved episode contradicts the machine-checked theorem
+      -> cold-start-a2/artifacts/refutation.json
+      -> cold-start-a2/artifacts/solved_episode.jsonl
+
+            |
+            v
+
+  +--------------------------------------------------------------------+
+  | [L2] 定位 (localisation)                                  loop PASS|
+  +--------------------------------------------------------------------+
+    §1.4's three-way narrows the error to one place on the witness
+    path
+      -> cold-start-a2/artifacts/locate_report.json
+
+            |
+            v
+
+  +--------------------------------------------------------------------+
+  | [L3] 戳探 (probe)                                         loop PASS|
+  +--------------------------------------------------------------------+
+    predictions written first, executed through frames, results
+    banked
+      -> cold-start-a2/artifacts/probes.jsonl
+      -> cold-start-a2/artifacts/probe_report.json
+      -> cold-start-a2/artifacts/probed_trace.jsonl
+
+            |
+            v
+
+  +--------------------------------------------------------------------+
+  | [L4] 修订 (revision)                                      loop PASS|
+  +--------------------------------------------------------------------+
+    the manual is rewritten from the probe record, and the grown
+    evidence re-proposes the rule that was added
+      -> cold-start-a2/theory/theory_repaired.dsl
+      -> cold-start-a2/artifacts/engines_diff_probed.json
+
+            |
+            v
+
+  +--------------------------------------------------------------------+
+  | [L5] 重证 (re-certification)                              loop PASS|
+  +--------------------------------------------------------------------+
+    the refuted certificate dies under the repaired step, and a
+    true one takes its place
+      -> cold-start-a2/artifacts/repair_report.json
+      -> cold-start-a2/theory/generated_repaired_stale/theory.lean
+      -> cold-start-a2/theory/generated_repaired/theory.lean
+
+            |
+            v
+
+  +--------------------------------------------------------------------+
+  | [L6] 解出 (solve)                                         loop PASS|
+  +--------------------------------------------------------------------+
+    the repaired manual plans, and the world agrees
+      -> cold-start-a2/artifacts/plan_repaired.json
+
+------------------------------------------------------------------------
+  8 beats, 8 pass, 0 fail, 0 absent; 6 of them are the loop itself.
+
+Every gate on the holed manual is green — replay, planner, Lean, empty axiom list — and the manual is still false of the world. The instrument cannot tell the two Lean files apart; the refutation loop is what settles it, and the ledger is the account of that loop turning.
