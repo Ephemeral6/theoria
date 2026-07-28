@@ -38,13 +38,13 @@
     ],
     "ops": [
       {
-        "age_min": 0,
+        "age_min": 1,
         "cycle": 5,
         "id": "OPS-A",
         "kind": "ops",
         "name": "漂移审计员",
         "note": "cycle 5: the ALL.md discipline broadcast is right but its cited example is wrong -- 6dec6f7 never reached master, so the rule as written would punish fixing your own error before merge; release-licence plumbing now 3 cycles overdue and its critical path is outside the repo",
-        "outputs": 8,
+        "outputs": 7,
         "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
         "state": "idle"
       },
@@ -71,7 +71,7 @@
         "state": "working"
       },
       {
-        "age_min": 251,
+        "age_min": 252,
         "cycle": 1,
         "id": "OPS-R",
         "kind": "ops",
@@ -496,7 +496,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 18:45:00",
+  "generated_at": "2026-07-28 18:45:24",
   "grid": {
     "A1": {
       "active": [
@@ -1371,6 +1371,8 @@
     ],
     "dirty": [
       "LAUDE.md",
+      "monitor/agents.py",
+      "monitor/app.html",
       "monitor/board/claimed/A6-transfer-protocol.W-5201.md",
       "monitor/board/claimed/A7-envelope-finish.APP-A7.md",
       "monitor/board/claimed/E3-engines-online.W-1521.md",
@@ -1389,7 +1391,12 @@
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
       "monitor/board/items/A3-campaign-devpile.md",
-      "monitor/board/items/P9-paper-to-submittable.md"
+      "monitor/board/items/P9-paper-to-submittable.md",
+      "monitor/mailbox/RES-1.md",
+      "monitor/mailbox/RES-2.md",
+      "monitor/prompts/ops/RES-1.md",
+      "monitor/prompts/ops/RES-2.md",
+      "monitor/res/"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
@@ -1406,7 +1413,12 @@
       "baseline-arms/out/campaign/",
       "baseline-arms/out/shards/",
       "monitor/board/items/A3-campaign-devpile.md",
-      "monitor/board/items/P9-paper-to-submittable.md"
+      "monitor/board/items/P9-paper-to-submittable.md",
+      "monitor/mailbox/RES-1.md",
+      "monitor/mailbox/RES-2.md",
+      "monitor/prompts/ops/RES-1.md",
+      "monitor/prompts/ops/RES-2.md",
+      "monitor/res/"
     ]
   },
   "p1_green": 9,
@@ -1882,7 +1894,7 @@
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**15 条 TO-MONITOR 待监控回复**。 OPS-A 第5轮 idle（0 分钟前）； OPS-B 第3轮 idle（17 分钟前）； OPS-M 第3轮 working（10 分钟前）； OPS-R 第1轮 idle（251 分钟前）",
+      "detail": "**15 条 TO-MONITOR 待监控回复**。 OPS-A 第5轮 idle（0 分钟前）； OPS-B 第3轮 idle（17 分钟前）； OPS-M 第3轮 working（11 分钟前）； OPS-R 第1轮 idle（251 分钟前）",
       "rows": [
         {
           "age_min": 0,
@@ -1903,7 +1915,7 @@
           "status": "green"
         },
         {
-          "age_min": 10,
+          "age_min": 11,
           "cycle": 3,
           "id": "OPS-M",
           "name": "合并裁判",
