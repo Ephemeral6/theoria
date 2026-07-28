@@ -311,11 +311,18 @@ class TheoriaArm:
         self._carried_compiled = compiled
         certify_report = self._certify()
 
+        # Whether this game can test the carried theory at all -- free to
+        # compute, and it decides how every other number in this report may be
+        # read. See `transfer.action_overlap`.
+        namespace, _ = self.books.load_predictor()
+        actions = transfer.action_overlap(namespace, self._legal_actions())
+
         self.transfer_report = transfer.cold_report(
             provenance=self.carried, prediction=prediction,
             compiled=compiled, certify_report=certify_report,
             store_summary=self.store.summary(),
-            actions_spent=self.budget.actions_ok)
+            actions_spent=self.budget.actions_ok,
+            actions=actions)
         _dump(report_path, self.transfer_report)
         self.books.snapshot("after-cold-certify")
         # The cold certify fires the surprises that will bring the desk in on

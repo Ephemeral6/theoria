@@ -267,6 +267,60 @@ def test_a_manual_that_cannot_draw_its_own_frame_makes_the_prediction_unscorable
     assert "KeyError" in scored["detail"]
 
 
+# ------------------------------------------------- can this game test it at all
+def test_a_manual_whose_actions_the_game_does_not_offer_is_not_testable():
+    """The reading the first live carry got wrong.
+
+    g50t's manual declares exactly one action, `('key', 5)`, and every rule
+    opens by refusing anything else. sk48 offers `[1,2,3,4,6,7]` and has no
+    ACTION5, so every rule was unreachable and `step` was the identity for every
+    action the arm could send -- which makes a replay failure evidence about the
+    mismatch and not about the manual. Nothing in the artefacts said so.
+    """
+    result = transfer.action_overlap({"ACTIONS": [("key", 5)]}, [1, 2, 3, 4, 7])
+    assert result["testable"] is False
+    assert result["manual_action_ids"] == [5]
+    assert result["game_offers"] == [1, 2, 3, 4, 7]
+    assert result["shared"] == []
+    assert "cannot test the carried theory" in result["detail"]
+
+
+def test_an_overlapping_vocabulary_is_testable():
+    result = transfer.action_overlap(
+        {"ACTIONS": [("key", 2), ("key", 5)]}, [1, 2, 3])
+    assert result["testable"] is True
+    assert result["shared"] == [2]
+    assert "can fire" in result["detail"]
+
+
+def test_a_manual_declaring_no_actions_is_not_testable_either():
+    """A manual with no actions makes no action-conditioned prediction, which
+    is a different reason for the same verdict and must not be silently folded
+    into 'no overlap'."""
+    result = transfer.action_overlap({"ACTIONS": []}, [1, 2, 3])
+    assert result["testable"] is False
+    assert result["manual_action_ids"] == []
+    assert "declares no actions" in result["detail"]
+
+    # A predictor that failed to load is the same verdict, not a crash.
+    assert transfer.action_overlap(None, [1, 2, 3])["testable"] is False
+
+
+def test_the_cold_report_leads_with_whether_the_run_can_test_anything():
+    """A reader must not have to reach the bottom of the report to learn that
+    every number above it is uninterpretable as evidence about the manual."""
+    report = transfer.cold_report(
+        provenance={}, prediction={"available": False},
+        compiled={"parsed": True, "ok": True, "forms": {"python": "p"}},
+        certify_report={"cheap": {"checks": {"replay": {"ok": False}}}},
+        store_summary={}, actions_spent=5,
+        actions=transfer.action_overlap({"ACTIONS": [("key", 5)]}, [1, 2]))
+
+    assert report["carried_theory_is_testable_on_this_game"] is False
+    assert report["replay_means"].startswith("NOT evidence")
+    assert report["actions"]["shared"] == []
+
+
 # ------------------------------------------------------------------ retention
 def test_retention_counts_names_kept_dropped_and_added():
     final = CARRIED_THEORY.replace("object Unused", "object Wall") + """

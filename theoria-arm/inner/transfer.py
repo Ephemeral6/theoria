@@ -238,6 +238,61 @@ def predict_unexplained(store, objects: List[Dict[str, Any]]) -> Dict[str, Any]:
     return out
 
 
+def action_overlap(namespace: Optional[Dict[str, Any]],
+                   legal_actions: List[int]) -> Dict[str, Any]:
+    """Do the carried manual's actions and the new game's overlap at all?
+
+    Free to compute, and it decides whether a transfer experiment is possible
+    before a single action is spent. The first live carry did not have it and
+    paid the price in interpretation rather than money: g50t's manual declares
+    exactly one action, `('key', 5)`, and every one of its rules opens by
+    refusing anything else; sk48 offers `[1, 2, 3, 4, 6, 7]` and has no ACTION5.
+    So every rule was unreachable, `step` was the identity for every action the
+    arm could send, and the run's replay result was trivial rather than
+    structural -- but nothing in the artefacts said so, and the first reading of
+    that run treated the replay failure as evidence about the manual.
+
+    A manual whose action vocabulary does not intersect the new game's cannot be
+    tested on it. That is not a reason to refuse the run -- there is still a
+    world to observe and a new manual to write -- but it is a reason to stop
+    calling the run a test of the carried theory, and the report says so in
+    those words.
+    """
+    declared = list((namespace or {}).get("ACTIONS") or [])
+    # The manual's actions are `(kind, id)` pairs; the game's are ints.
+    declared_ids = sorted({int(a[1]) for a in declared
+                           if isinstance(a, (list, tuple)) and len(a) == 2
+                           and str(a[1]).lstrip("-").isdigit()})
+    shared = sorted(set(declared_ids) & set(legal_actions or []))
+    out = {
+        "manual_declares": [list(a) if isinstance(a, tuple) else a
+                            for a in declared],
+        "manual_action_ids": declared_ids,
+        "game_offers": sorted(legal_actions or []),
+        "shared": shared,
+        "testable": bool(shared),
+    }
+    if not declared_ids:
+        out["detail"] = (
+            "the carried manual declares no actions at all, so it makes no "
+            "action-conditioned prediction and nothing this game does can "
+            "confirm or refute its rules.")
+    elif not shared:
+        out["detail"] = (
+            "the carried manual's rules fire only on %s and this game offers "
+            "only %s. Every rule is unreachable, `step` is the identity for "
+            "every action this arm can send, and a replay failure here is "
+            "evidence about that mismatch and NOT about the manual's content. "
+            "This run cannot test the carried theory."
+            % (declared_ids, sorted(legal_actions or [])))
+    else:
+        out["detail"] = (
+            "%d of the manual's %d declared actions are offered by this game, "
+            "so its rules can fire and a replay result is evidence about them."
+            % (len(shared), len(declared_ids)))
+    return out
+
+
 def score_prediction(prediction: Dict[str, Any],
                      certify_report: Dict[str, Any]) -> Dict[str, Any]:
     """Did the carried formula hold on a game it was not written for?"""
@@ -309,14 +364,26 @@ def retention(carried_theory: str, final_theory: str) -> Dict[str, Any]:
 def cold_report(*, provenance: Dict[str, Any], prediction: Dict[str, Any],
                 compiled: Dict[str, Any], certify_report: Dict[str, Any],
                 store_summary: Dict[str, Any],
-                actions_spent: int) -> Dict[str, Any]:
+                actions_spent: int,
+                actions: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
     """Everything the carried manual did on the new game before a model was called."""
     checks = ((certify_report or {}).get("cheap") or {}).get("checks") or {}
+    replay = checks.get("replay") or {}
     return {
         "stage": "cold",
         "model_calls_so_far": 0,
         "actions_spent_so_far": actions_spent,
         "provenance": provenance,
+        "actions": actions,
+        # The one line a reader needs before reading any other number here.
+        "carried_theory_is_testable_on_this_game": bool(
+            (actions or {}).get("testable")),
+        "replay_means": (
+            "the manual's rules can fire on this game, so a replay result is "
+            "evidence about them"
+            if (actions or {}).get("testable") else
+            "NOT evidence about the manual's rules: %s"
+            % (actions or {}).get("detail", "no action overlap was computed")),
         "compiled": {
             "parsed": bool(compiled.get("parsed")),
             "ok": bool(compiled.get("ok")),
