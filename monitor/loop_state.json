@@ -1,7 +1,7 @@
 {
   "mode": "fleet-loop",
   "started": "2026-07-28T08:55:00Z",
-  "pool_target": 14,
+  "pool_target": 16,
   "in_flight": [
     "P-12",
     "M-0",
@@ -14,7 +14,11 @@
     "P-22",
     "P-23",
     "P-24",
-    "R-1"
+    "R-1",
+    "E1-property-fuzz",
+    "A2-crosscheck",
+    "C1-worldgen",
+    "P3-case-study"
   ],
   "completed": [
     "P-10",

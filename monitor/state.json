@@ -130,7 +130,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-28 10:47:53",
+  "generated_at": "2026-07-28 10:51:55",
   "history": [
     {
       "findings": {
@@ -469,12 +469,19 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
+      "onitor/loop_state.json",
+      "monitor/scan.py",
+      "monitor/spec.py",
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/"
+      "baseline-arms/out/shards/",
+      "monitor/prompts/A2-crosscheck.md",
+      "monitor/prompts/C1-worldgen.md",
+      "monitor/prompts/E1-property-fuzz.md",
+      "monitor/prompts/P3-case-study.md"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "88ae1e4 monitor: staggered launches become law -- the storm that killed six is codified out",
+    "git_head": "b341795 monitor: P-24 relaunched after solo death; board back to zero lost",
     "incidents": 8,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
@@ -483,7 +490,11 @@
     "tests": {},
     "untracked": [
       "baseline-arms/out/campaign/",
-      "baseline-arms/out/shards/"
+      "baseline-arms/out/shards/",
+      "monitor/prompts/A2-crosscheck.md",
+      "monitor/prompts/C1-worldgen.md",
+      "monitor/prompts/E1-property-fuzz.md",
+      "monitor/prompts/P3-case-study.md"
     ]
   },
   "p1_green": 6,

@@ -971,13 +971,13 @@ GRID_ROWS = [
 ]
 
 GRID = {
-    "E1": {"pct": 95, "note": "六引擎全绿（MDL/CEGIS/零空间/LP/FD桩/前沿）", "active": []},
+    "E1": {"pct": 95, "note": "六引擎全绿（MDL/CEGIS/零空间/LP/FD桩/前沿）", "active": ["E1-property-fuzz", ]},
     "E2": {"pct": 85, "note": "M9 三件落地；FD 真后端在跑", "active": ["P-13"]},
     "E3": {"pct": 5,  "note": "引擎在线供货（经 theoria-arm 调用）", "active": []},
     "E4": {"pct": 0,  "note": "封存战役中的引擎供给", "active": []},
     "E5": {"pct": 20, "note": "引擎代码随释出包公开", "active": []},
 
-    "C1": {"pct": 90, "note": "DSL 语法 + 四形态生成器；契约 v0.2 交付待合并", "active": []},
+    "C1": {"pct": 90, "note": "DSL 语法 + 四形态生成器；契约 v0.2 交付待合并", "active": ["C1-worldgen", ]},
     "C2": {"pct": 95, "note": "真 A1（空公理集）+ A2 假定理展品 + A0/A0′ 全环", "active": []},
     "C3": {"pct": 5,  "note": "在线两本书：首局的 theory.dsl 尚在 P-8 分支里", "active": []},
     "C4": {"pct": 0,  "note": "封存局的证书生产线", "active": []},
@@ -990,7 +990,7 @@ GRID = {
     "S5": {"pct": 20, "note": "账本与 incident 台账随释出公开", "active": []},
 
     "A1": {"pct": 70, "note": "裸 CC 臂全套 + 消融臂在建；Theoria 臂离线件齐", "active": ["P-18"]},
-    "A2": {"pct": 60, "note": "离线标定：A0/A0′/A2/A3 四世界 + 消融对照在跑", "active": ["P-17"]},
+    "A2": {"pct": 60, "note": "离线标定：A0/A0′/A2/A3 四世界 + 消融对照在跑", "active": ["A2-crosscheck", "P-17"]},
     "A3": {"pct": 12, "note": "开发堆在线：P-8 首局交付；包络 1/4+续跑中", "active": ["P-12"]},
     "A4": {"pct": 0,  "note": "封存战役（门槛：Phase1 全绿 + 冻结提交）", "active": []},
     "A5": {"pct": 0,  "note": "主表三列 + 消融列", "active": []},
@@ -1003,7 +1003,7 @@ GRID = {
 
     "P1": {"pct": 70, "note": "方法论与骨架（Theoria.md 三部曲自带）", "active": []},
     "P2": {"pct": 60, "note": "workshop 文初稿交付待合并；相关工作在建", "active": ["P-23"]},
-    "P3": {"pct": 10, "note": "开发堆案例研究（概念时间线素材已够）", "active": []},
+    "P3": {"pct": 10, "note": "开发堆案例研究（概念时间线素材已够）", "active": ["P3-case-study", ]},
     "P4": {"pct": 15, "note": "预注册包：冻结清单/统计规则/双结局起草中", "active": []},
     "P5": {"pct": 15, "note": "主文 + Schema 地板释出", "active": ["P-19"]},
 }
