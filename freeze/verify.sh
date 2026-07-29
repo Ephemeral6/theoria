@@ -188,15 +188,48 @@ for f in files:
 dead = sum(1 for e in eps if e["outcome"] in
            {"api_unusable", "model_error", "harness_error", "no_reset_window"})
 lv = sum(1 for e in eps if e["levels_completed"] > 0)
-print("%d %.3f %.3f %d" % (len(eps), st.mean(ratios), dead / len(eps), lv))
+
+# Provenance, not just arithmetic. STATS_RULES.md 5.2 first described this
+# batch as a later, cleaner envelope re-run; it is in fact the S1 campaign that
+# was the contention source in INC-BA-003, started 109s BEFORE the envelope.
+# The arithmetic below is unchanged by that -- which is the whole problem: this
+# stage stayed green while measuring something other than what the prose said
+# it was measuring. So the identity of the data is now asserted too, and a
+# batch that stops matching the description turns this stage red rather than
+# silently re-blessing the old conclusion.
+docs = [json.load(open(f, encoding="utf-8")) for f in files]
+scen = {d.get("scenario") for d in docs}
+started = {d.get("started") for d in docs}
+status = {d.get("status") for d in docs}
+prov = "OK"
+if scen != {"S1 baseline-parity"}:
+    prov = "SCENARIO:%s" % ("|".join(sorted(str(s) for s in scen)))
+elif len(started) != 1:
+    prov = "STARTED-SPLIT:%d" % len(started)
+elif sorted(started)[0] >= "2026-07-27T18:21:25Z":
+    prov = "NOT-BEFORE-ENVELOPE:%s" % sorted(started)[0]
+elif status != {"episode_limit_hit"}:
+    prov = "STATUS:%s" % ("|".join(sorted(str(s) for s in status)))
+print("%d %.3f %.3f %d %s" % (len(eps), st.mean(ratios), dead / len(eps), lv, prov))
 PY
 )"
   if [ "$out" = "NODATA" ] || [ -z "$out" ]; then
     note "envelope present but unreadable"
   else
     set -- $out
-    N="$1"; RATIO="$2"; DEATH="$3"; WINS="$4"
+    N="$1"; RATIO="$2"; DEATH="$3"; WINS="$4"; PROV="$5"
     echo "        episodes=$N  negbinom obs/pred=$RATIO  infra-death=$DEATH  U3-wins=$WINS"
+    echo "        provenance=$PROV"
+    # Identity before arithmetic: 5.2's reading of these numbers depends on
+    # this batch being the S1 contention source, not a clean envelope re-run.
+    case "$PROV" in
+      OK) ok "provenance matches STATS_RULES.md 5.2 (S1 baseline-parity, pre-envelope, episode_limit_hit)" ;;
+      NOT-BEFORE-ENVELOPE:*) bad "this batch no longer predates the envelope ($PROV) -- 5.2's contention finding must be redone" ;;
+      SCENARIO:*) bad "scenario is not S1 baseline-parity ($PROV) -- 5.2 describes a different dataset" ;;
+      STARTED-SPLIT:*) bad "the four games no longer share one start ($PROV) -- they are not one campaign, so 5.3's leave-one-out may be live again" ;;
+      STATUS:*) bad "status is not episode_limit_hit ($PROV) -- '12 consecutive episodes, not 12 repeats' may no longer hold" ;;
+      *) bad "unrecognised provenance verdict: $PROV" ;;
+    esac
     # the ruling rests on these three; if any moves, STATS_RULES.md §5 must be redone
     awk -v r="$RATIO" 'BEGIN{exit !(r > 0.80 && r < 1.25)}' \
       && ok "variance still explained by the abort rule (obs/pred=$RATIO)" \
