@@ -10,10 +10,17 @@
   "sealed_pile_contact": "none",
   "ruling": {
     "subject": "sections/05_a2.md §5.2 item 3 -- \"The isomorphism is machine-checked, clause by clause\"",
-    "options_argued": ["keep", "qualify", "delete"],
+    "options_argued": [
+      "keep",
+      "qualify",
+      "delete"
+    ],
     "verdict": "delete the claim, keep the ledger, label every row",
     "qualify_rejected_because": "it fixes the adjective and keeps the noun; a softened overclaim survives review, which is the failure mode this repository has already seen twice on this exact sentence",
-    "prior_rounds_that_declined_to_rule": ["P12 review-d-hostile 1.7 (LANDS)", "P15 FINDINGS.md"]
+    "prior_rounds_that_declined_to_rule": [
+      "P12 review-d-hostile 1.7 (LANDS)",
+      "P15 FINDINGS.md"
+    ]
   },
   "measured": {
     "rows": 6,
@@ -30,23 +37,42 @@
   "files": [
     {
       "path": "papers/phase1-workshop/sections/05_a2.md",
-      "sha256": "16577a73784a26df61ee84a87a071852c6d906791f417654f2f40c978457d0ef"
+      "sha256": "d6b18f920386c7b250dddbb7aa0901818cc29f9afd699b8886713f4f3e71412c"
     },
     {
       "path": "papers/phase1-workshop/PAPER.md",
-      "sha256": "2f44b5d1b15b74af5af6a9852face303fb721fbbea95fa40d6b56b2d2095815c"
+      "sha256": "94c81a85b69b05b08c7d1d13d67ba5f277da538b383cf7b22d9c5a4e4a672cdb"
     },
     {
       "path": "papers/phase1-workshop/OPEN_ITEMS.md",
-      "sha256": "9f9ce87cd0c0a12947b46acf8331f6956c4317cdfb94844da759a0ad493e1f92"
+      "sha256": "d77e8c80b2fa8f385291ab69dfb49730b5d952ae256baa9e7791884e622bd851"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260729T160000Z-P17-machine-checked-ruling/RULING.md",
+      "sha256": "a871bd28ffa2e8d804cfd25397964ad836108e65fba697d53feb66a4e9ac5bb2"
     }
   ],
   "result": {
     "verify_paper": "PASS 6/6",
-    "opened": ["OPEN_ITEMS C12", "OPEN_ITEMS B5"],
-    "closed": ["OPEN_ITEMS C13"],
+    "opened": [
+      "OPEN_ITEMS C12 (widened)",
+      "OPEN_ITEMS B5",
+      "OPEN_ITEMS B6",
+      "OPEN_ITEMS C14",
+      "OPEN_ITEMS C15"
+    ],
+    "closed": [
+      "OPEN_ITEMS C13"
+    ],
     "self_supplied_followup": "P18-P18-certificate-verb-ruling",
     "factcheck_rounds": 2,
-    "adversarial_rounds": 1
+    "adversarial_rounds": 2,
+    "adversarial_lenses": [
+      "overturn-the-verdict",
+      "re-run-every-citation",
+      "cross-section-consistency"
+    ],
+    "blocker_found_and_fixed": "the row-5 repair made under this ruling asserted that the planner returns UNSAT on a manual containing the teleport rule; plan_generated.json and plan_repaired.json are both SAT in 18. D-A2-006 was worked around in A2 (compile_a2.py::pddl_addressable) before any A2 plan ran, and the paper quotes that decision's Finding without its Call. Withdrawn and rewritten; RULING.md section 7.",
+    "gate_was_green_throughout": "verify_paper 6/6 before, during and after the blocker -- its checks resolve citations, they do not open the artefact and compare the value"
   }
 }

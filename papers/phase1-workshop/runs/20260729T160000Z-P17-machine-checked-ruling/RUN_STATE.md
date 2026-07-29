@@ -101,6 +101,46 @@ overclaim in the replacement prose, (2) re-run every citation in the rewritten
 item and the fine-print paragraph, (3) sweep the rest of the paper for damage
 from the edit and for the same defect surviving elsewhere.
 
-*Results recorded below once in — this section is written before them on purpose,
-so that what was asked of the adversaries is on disk independently of what they
-found.*
+**All three landed on the same blocker, and they were right.** The full account
+is `RULING.md` §7; the short form is that a repair *this ruling made outside the
+item's mandate* stated a falsehood. It said the planner returns UNSAT on a manual
+containing the teleport rule, so its UNSAT is no evidence about the hole.
+`plan_generated.json` and `plan_repaired.json` are both **SAT in 18**; only the
+holed manual is UNSAT. D-A2-006 — the ungrounded-teleport defect the demotion
+rested on — was **worked around inside A2 before any A2 plan ran**
+(`compile_a2.py::pddl_addressable`, which is that decision's own *Call*), and the
+paper quotes the *Finding* and drops the *Call*, in §5.8 and now in §5.2.
+
+I read the paper's account of an artefact instead of the artefact, inside a
+ruling whose whole argument is that a claim must be checked against the thing it
+is about. That is the ruled-on error one level up: §5.2 said "machine-checked" of
+something a script had compared; I said "no evidence" of something I had not run.
+
+Two things are worth keeping from how it was caught.
+
+**The gate was green the entire time.** `verify_paper.py` passed 6/6 before the
+error, with the error committed, and after the repair. Its checks establish that
+a citation *resolves* and that a number-bearing block *has* one; none of the six
+opens the artefact and compares the value. The error was found by adversaries
+reading artefacts, and nothing in the repository could have found it otherwise.
+
+**The paper contradicted itself in four places and shipped.** The demotion
+disagreed with §5.2's own gate table, §5.3's block quote of the source report
+calling the planner right, §5.5's beat table recording SAT in 18, and the
+abstract. Withdrawing it restored all four; no separate repair was needed.
+
+The verdict itself was attacked on its merits and stood, as did row 6's repair,
+row 3's, the `(compressed)` repair and the board's task 3. Eight further defects
+were fixed in place (the row-5 axiom-list citation pointed at the `.lean` file
+rather than at the artefact holding the output; row 6 quoted a `win` key that
+file does not have; row 5's Chinese clause used `'` where `Theoria.md` uses `"`,
+so the one row labelled `Lean` was the one row whose quotation was inexact;
+§5.6's "fourteen of the 52" mixed entries with lines — fourteen entries are
+twenty-eight lines; "every clause" was a universal over a paragraph the table
+does not exhaust; the word "machine-checked" was still in the item, pointing at
+two subsections that never use it; the definition it gave for the term is the
+reading §6.6 keeps a vacuous artefact in the tree to forbid; and D-A2-001 was
+paraphrased as scoping the far side when it scopes the citations). Four were
+**recorded rather than repaired**, because repairing them honestly needs a
+measurement I do not have or an edit to an audit that is kept unedited: C14, C15,
+B6, and a widening of C12.

@@ -2,8 +2,9 @@
 
 RES-2, paper lane, 2026-07-29. Item: `monitor/board/claimed/P17-P17-machine-checked-ruling.RES-2.md`.
 
-*Status: DRAFT — options argued below; verdict recorded at the end once the
-fact-check rounds and the adversarial round are in.*
+*Status: FINAL. Two fact-check rounds and a three-lens adversarial round are in.
+The verdict below survived; one of the repairs made under it did not, and §6.1 is
+rewritten rather than deleted — see §7.*
 
 ## 0 · What is being ruled on
 
@@ -217,16 +218,24 @@ Turned up by fact-check round 1 (`FACTCHECK_rows.md`) while classifying the
 rows. None was in the item's scope; all four are in the ruling's, because a
 `kind` column is a promise that each row means what it says.
 
-1. **Row 5's plan half is not a complete search, and the paper's own §5.8 says
-   its verdict is uninformative.** The cell reads *"plan UNSAT + Lean
-   `unsolvable`, axioms `[]`"* against the clause 完备**搜索** — complete search.
-   `cold-start-a2/a2pipeline/plan.py:69` calls `fd_adapter.solve(..., prefer="stub")`,
-   the bundled BFS stub, and `cold-start-a2/A2_REPORT.md:277` says so. Worse,
-   §5.8's **D-A2-006** records that the PDDL backend cannot ground a teleport,
-   so the planner returns UNSAT on a manual *containing* the rule as well — a
-   verdict that is UNSAT either way is not evidence about the hole. The paper
-   states this defect six subsections later and never connects it to the row it
-   undercuts. The Lean half carries this row; the cell should say so.
+1. **Row 5's plan half is real evidence, and an earlier version of this ruling
+   said the opposite.** *Rewritten after the adversarial round; the original text
+   is quoted and answered in §7, because a ruling that got a fact wrong should
+   show the fact it got wrong.* The cell reads *"plan UNSAT + Lean `unsolvable`,
+   axioms `[]`"* against the clause 完备**搜索**. Two things are true of the plan
+   leg and neither demotes it. It runs the bundled BFS stub
+   (`cold-start-a2/a2pipeline/plan.py:70`, `prefer="stub"`), and
+   `cold-start-a2/A2_REPORT.md:277-279` discloses that in the same breath as its
+   consequence: *"Optimal for unit costs, so `SAT`/`UNSAT` and plan length are
+   sound here."* And §5.8's **D-A2-006** — the PDDL backend that cannot ground a
+   teleport — was **worked around inside A2 before any A2 plan was run**
+   (`cold-start-a2/a2pipeline/compile_a2.py:121,171`, `pddl_addressable`, which is
+   D-A2-006's own **Call**). With the workaround the planner discriminates
+   exactly on the hole: `plan_generated.json` and `plan_repaired.json` are both
+   **SAT in 18** on manuals containing the teleport rule, `plan_holed.json` is
+   **UNSAT**. The cell now says the proof carries the row and the plan
+   corroborates it.
+
 2. **Row 3 cites two fields that do not exist.** `184/184` is not a ratio
    `certify_cheap` computes (it records `frames: 184`, `transitions: 183`,
    `pixels_checked: 14904`, `pixels_unexplained: 0`), and there is no
@@ -243,3 +252,69 @@ rows. None was in the item's scope; all four are in the ruling's, because a
    **in the sweep stream**; the history stream proposes none
    (`engines_diff.json:103`, `rules_with_a_jump_effect: []`) — which is row 4's
    whole content. Unscoped, rows 1 and 4 read as contradicting each other.
+
+## 7 · What the adversarial round overturned, and how
+
+Three adversaries ran against the *applied text* rather than the draft: one
+trying to overturn the verdict, one re-running every citation in the rewritten
+item, one sweeping the rest of the paper for damage. All three independently
+landed on the same blocker, and they were right.
+
+**The overturned claim.** §6.1 of this ruling, and the paragraph it put into
+§5.2, said:
+
+> §5.8's D-A2-006 records that the PDDL backend cannot ground a teleport at all —
+> that planner returns UNSAT on a manual *containing* the rule too, so a verdict
+> which comes out UNSAT either way is no evidence about the hole.
+
+Every clause after the dash is false of the pipeline that produced A2's
+artefacts. `plan_generated.json` and `plan_repaired.json` are SAT in 18 on
+manuals that contain the teleport rule; only the holed manual is UNSAT.
+
+**How it happened, exactly.** Fact-check round 1 sourced the qualification from
+§5.8's prose and never opened `compile_a2.py` or `plan_repaired.json`. §5.8
+quotes D-A2-006's *Finding* and omits its *Call*, so the paper reports a defect
+that was fixed as though it were live. I read the paper's account of an artefact
+instead of the artefact, in a ruling whose entire argument is that a claim must
+be checked against the thing it is about. **That is the same error as the one
+being ruled on, one level up**: §5.2 said "machine-checked" of something a script
+had compared, and this ruling said "no evidence" of something it had not run.
+
+**What it cost, and what caught it.** The demotion contradicted three passages of
+the same section (§5.2's own gate table, §5.3's block quote of the source report
+calling the planner right, §5.5's beat table recording SAT in 18) and the
+abstract, which cites the planner's UNSAT as one of three gates. `verify_paper.py`
+was **green 6/6 across the whole episode** — before the error, with the error, and
+after the repair. Its checks establish that a citation resolves and that a
+number-bearing block has one; none of the six opens the artefact and compares the
+value. **A green gate was not evidence here, and only an adversary reading the
+artefacts was.**
+
+**What survived.** The verdict itself — delete the claim, keep the ledger, label
+every row — was attacked on its merits and stood: the option-2 rejection is the
+commissioning item's own stated policy, one row of six is Lean, and two
+independent prior rounds stopping at the sentence is real signal. Row 6's repair
+stood; an adversary tried to defend the original bare "refuted" and could not.
+Row 3's repair, the `(compressed)` repair and the board's task 3 all stood.
+
+**What else the round found, and where it went.** Fixed in place: the row-5
+citation pointed at the `.lean` file for an axiom list that only exists in
+`exhibit_report.json`; row 6 quoted a `win` key that file does not have
+(`final_win` / `win_frames` are the real ones); row 5's Chinese clause used
+`'` where `Theoria.md` uses `"`, so the one row labelled `Lean` was the one row
+whose quotation was not exact; §5.6 said "fourteen of the 52 are the weight
+table" — fourteen *entries*, twenty-eight *lines*; "every clause of §1.3's DC22
+sentence" was a universal over a paragraph the table does not exhaust, and the
+clauses span two sentences; the item still contained the word "machine-checked"
+and sent the reader to §5.3 and §5.6 for a term neither uses; the definition it
+gave for that term — a kernel proof with an empty axiom list — is the exact
+reading §6.6 keeps a vacuous artefact in the tree to forbid; and D-A2-001 was
+paraphrased as scoping the *far side* when it scopes the *citations*, a
+paraphrase the block quote nine lines above it contradicts. Recorded rather than
+repaired, because repairing them honestly needs a measurement or an audit edit:
+**C14** (row 4's clause and its check are not the same proposition), **C15**
+(row 1's citation trail dead-ends in a stream a later stage overwrote), **B6**
+(`CITECHECK.md`'s class-D count now includes two findings the text has fixed).
+**C12** was widened: its own quotation of the §4 heading is inexact, §11 carries
+the phrasing a third time, and the real defect there is a conjunction §4 itself
+retracts.
