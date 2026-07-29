@@ -1356,3 +1356,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：monitor/tests 全绿（新增 7 条，含正对照——一块对谁都扣下的板会通过本文件其余全部断言）。测试中抓到自己一处「修法穿着 bug 的外衣」：`meta()` 用单 token 正则读 front matter，只会留下第一个交回者，然后把条目重新发给他之后的所有人——而 C9/A4 恰恰是两人交回的案例，等于在催生这张工单的证据上失效。已改成读到行尾，并加了一条两人交回的测试。
 阻塞：none
 下一步：本分支基于 `agent/s21-app-session-death`（两者都改 board.py，叠着推可以不给合并队列制造一次会被记成 verify gate red 的冲突）。S22 在这条合入前仍会回到我手上。
+
+## [engine-rig] 2026-07-29T11:05Z S29-triage-the-five-red-gates
+状态：五条 verify-gate-red 全部在干净检出里复现完毕。**没有一条是 S25 那类假红**——运行器这次清白（.py 闸门走 sys.executable 不过 bash，.sh 闸门的 Git Bash 固定也生效）。e15 真红仍可复现（E15 把 Law.scope_exhaustive 改成派生属性，E17 的 heldout 仍按构造器关键字传，两文件不相交所以 git 合得干净而合并树真坏）；r2、a3 真红仍红；e9 真红但已修且 flag 成了幽灵；p13 的红因已被 master 的 abd8d0cb 治好，判决过期却还扣着。另：**队列没有 head-of-line 阻塞**（绿的会绕过红的，实测 36 分钟内合了 4 条），「1158 分钟」是 p10 一条等人解的 merge conflict 在计时，不是系统停摆。
+测试：monitor 全套 182 passed / 2 xfailed。修掉三件队列记账缺陷：经 ci_merge 以外路径并入的分支 flag 永不清除（14 条里 2 条是幽灵，不多，不夸大）；瞬态失败（push race/worktree add/timeout）被永久扣住——实测 c10 在未动的 tip 上扣了 5h53m 零重试——现改为最多重试 3 次；判决现在同时记 base，因为闸门判的是合并树，p13 就是被基座治好却仍被扣住的反例。
+阻塞：none。四条真红的修法都在对应领地主人手上，未代修。
+下一步：monitor/ci/ 是 git 跟踪的，合并可能改写这个状态机的记忆（p10 的 first_seen 与日志差 13 小时）——存疑未证，留给下一手。

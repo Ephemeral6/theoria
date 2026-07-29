@@ -142,6 +142,78 @@ def last_attempt(branch):
     return memo
 
 
+#: Failures that are not properties of the branch. Everything else -- a merge
+#: conflict, a red gate, protected root files -- is a verdict about the code,
+#: and re-running it on an unchanged tip only re-derives the same answer.
+#:
+#: These are different in kind: nothing about the branch caused them and
+#: therefore nothing about the branch can clear them. Holding them on an
+#: unchanged tip is a deadlock with no exit, because the hold is waiting for a
+#: push that has no reason to come.
+#:
+#: Measured on 2026-07-29: `c10-unsolvable-proof-canon` lost a push race at
+#: 04:15:23Z on tip `984f7b11`, which never moved. It was then printed in HELD
+#: every five minutes for **5 h 53 min with zero retries**, and merged the
+#: moment something finally re-ran it. `s21-app-session-death` was sitting in
+#: the same state when this was written.
+TRANSIENT_REASONS = ("push rejected", "worktree add failed", "timed out")
+
+
+def is_transient(reason):
+    """Was this failure about the world rather than about the branch?"""
+    low = (reason or "").lower()
+    return any(t in low for t in TRANSIENT_REASONS)
+
+
+#: How many times a transient failure is retried before it is held like any
+#: other. Set to the same number that already pages a human in `flag`, so the
+#: retries stop exactly when someone is being told to look.
+TRANSIENT_RETRY_CAP = 3
+
+
+def should_hold(memo, tip, base=None):
+    """Skip this branch? The hold rule itself, in one place.
+
+    A gate verdict is a statement about the **merged** tree, so it depends on
+    `origin/master` as much as on the branch. Keying the hold on the tip alone
+    made a verdict outlive the thing it described: `p13-figure-numbering` was
+    red because of a coverage probe in `figures/`, master cured that probe at
+    05:15Z, and the flag still read "verify gate red in figures" six hours
+    later with no retry. The comment above the old condition claimed "skipping
+    is therefore never a way for a fixed branch to stay stuck" -- p13 is the
+    counterexample, because it was fixed by the *base* moving, not the tip.
+
+    A flag written before `base:` existed has no base recorded. That is read as
+    "retry", not "skip": one wasted re-run per old flag, once, versus keeping
+    the failure mode this argument is about.
+
+    Extracted because `test_ci_merge_hold.py` had grown its own copy of the
+    condition, and a second copy of a rule drifts from the first. S21 shipped
+    with a docstring, a commit message and a reflex comment all describing a
+    third condition its code never had -- nothing caught it, because the tests
+    encoded the code rather than the rule. One function, one caller each side.
+
+    Transient failures are retried, but only `TRANSIENT_RETRY_CAP` times.
+    Retrying them forever would rebuild the exact problem the tip-keyed hold
+    was written to stop: on 2026-07-28 unbounded retries wrote 915 FLAG lines
+    across 24 branches, the same 21 strings every five minutes, while nothing
+    merged. A permanently-recurring transient is no longer transient, and the
+    honest thing to do with it is stop guessing and name a human -- which
+    `flag` already does at the same count.
+    """
+    if not (memo.get("tip") and memo["tip"] == tip):
+        return False
+    if base is not None and memo.get("base", "") != base:
+        return False                      # the base moved, or was never recorded
+    if not is_transient(memo.get("reason", "")):
+        return True
+    try:
+        attempts = int(memo.get("attempts", "0"))
+    except ValueError:
+        attempts = 0
+    return attempts >= TRANSIENT_RETRY_CAP
+
+
 def flag_branch(path):
     """The branch a flag file is about, read out of its own header.
 
@@ -231,9 +303,10 @@ def flag(branch, reason, detail, tip=None):
         attempts = 1
     path = flag_path(branch)
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write("# %s\nbranch: %s\nreason: %s\ntip: %s\n"
+        fh.write("# %s\nbranch: %s\nreason: %s\ntip: %s\nbase: %s\n"
                  "first_seen: %s\nlast_seen: %s\nattempts: %s\n\n```\n%s\n```\n"
                  % (os.path.basename(path), branch, reason, tip or "",
+                    branch_tip("origin/master"),
                     first_seen, stamp, attempts, detail[-4000:]))
     suffix = ""
     if attempts >= 3:
@@ -546,7 +619,7 @@ def main():
             # stale, and that retries immediately.  Skipping is therefore never
             # a way for a fixed branch to stay stuck.
             memo = last_attempt(b)
-            if memo.get("tip") and memo["tip"] == branch_tip(b):
+            if should_hold(memo, branch_tip(b), branch_tip("origin/master")):
                 held.append((b, memo.get("reason", "?"),
                              memo.get("attempts", "?")))
                 continue

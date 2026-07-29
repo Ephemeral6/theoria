@@ -87,9 +87,101 @@ extra_env=gates.gate_env(wt))`。
 所以 `sweep_stale_flags` 退掉的是 14 条里的 2 条。**队列堵住主要不是幽灵造成的，
 是十二条真的没合并的分支。** 这个修补消除的是噪声与误导，不是堵塞本身。
 
-## 3–5. p13-figure-numbering / r2-release-licence / a3-campaign-devpile
+## 3. `agent/p13-figure-numbering`（figures）—— **flag 当时真红；现在红因已被 master 治好，而它仍被扣着**
 
-（两个 subagent 仍在跑，落盘后补。）
+* 退出码 1，输出与 flag 文件逐字节相同。首个错误：
+  `FAIL: data on disk is not reaching the figures:`，随后 12 行 `COVERAGE: …`
+* 成因：`figures/verify.sh:211-212` 调 `check_coverage.py`，其
+  `_partial_theoria_dirs()`（`:121-138`）对任何「有 `MANIFEST.json` 但无
+  `cost_curve.json`」的 `theoria-arm/runs/*` 目录判失败。**它自己的 docstring 说
+  「今天一个都不存在」——现在有 12 个。** 这 12 个目录在 master 与分支上完全一样
+  （分支根本没碰 `theoria-arm/`），所以这是从基座继承来的、figures 自己探针的真失败。
+* **关键**：master 已在 `abd8d0cb`（05:15Z）把这个探针从「失败」改成「点名」。
+  用同一条闸门跑当前 master：**退出 0，绿。** 而 flag 写于 04:18:41Z——早一小时。
+* 步骤 3 与 6（`A vs B, byte for byte`、`committed tree matches a fresh build`）都过了，
+  所以**不是 CRLF／字节可复现性的问题**。
+* 重试时它真正会撞上的是一个 merge conflict（master 的 `abd8d0cb` 动了
+  `figures/fig06_concept_timeline.py`）——那是分支主人的事。
+
+## 4. `agent/r2-release-licence`（release）—— **真红，今天仍红，是基座漂移**
+
+* 退出码 1。首个错误：
+  `AssertionError: assert {...} == {...}` / `Extra items in the right set: 'release/.gitattributes'`，
+  以及 `FAIL BUNDLE.jsonl is stale -- rerun release/bundle.py`
+* 成因：分支在 merge-base `8d423734` 上按 1950 条清单生成了 shipped/withheld 划分；
+  master 随后落了 `release/.gitattributes`（`fa597957`），清单变成 1951 条。
+  合并后 master 的 1951 条 `MANIFEST.jsonl` 撞上分支的 1930 条 `BUNDLE.jsonl`，
+  于是恰好有一个文件两边都不在。**教科书式的语义合并冲突：git 合得干净，产物不一致。**
+* 分支单独是绿的（`release/` 里 pytest 退出 0）；红只存在于合并树里——
+  **而合并树正是 ci_merge 会推的那棵，所以这个判决是对的。**
+* 不是运行器缺陷：Git Bash 固定生效（闸门跑到了 5/5 步）、PYTHONPATH 有、无 mojibake、无缺工具。
+
+## 5. `agent/a3-campaign-devpile`（theoria-arm）—— **真红，是分支自己的内容**
+
+* 退出码 1。首个错误（`tests/test_arm.py:866`）：
+  `AssertionError: ["every run has a MANIFEST.json: missing for ['20260729T004020Z-leg01'] …"]`
+  与 flag 文件逐字节相同。
+* 直接跑 `armtools.verify_provenance` 得到 **6** 条失败（pytest 截断了列表）：缺 MANIFEST、
+  四个必填字段全无、账目对不上（账本 22 / 4 张已结算分卡 18）、花过动作的 run 指不到分卡、
+  有孤儿分卡、5 个 manifest 重新推导不再逐字节一致。
+* 同样的检查跑在 `origin/master` 上**一条都不失败**（两边 `theoria-arm` 树完全相同）。
+  分支新增了 `runs/20260729T004020Z-leg01/`（4 个文件，**没有 MANIFEST.json**），
+  并改了 `armtools/archive.py`——**manifest 的生成器**，这就是 master 上已有的 5 个
+  manifest 不再能重新推导出来的原因。修法失败信息自己写了：`python -m armtools.backfill --all`。
+* **零 API、零网络**，已确认：`verify.py:181-197` 的 `child_env()` 会剥掉
+  `ARC_API_KEY`/`ANTHROPIC_API_KEY`，驱动断言 `--mock` 在、`--desk` 不在，
+  实跑打印 `no key, no network`。
+
+---
+
+# 归类总表
+
+| 分支 | 领地 | 判定 | 归属 |
+|---|---|---|---|
+| e15-solver-status-bit | engine-rig | **真红，今天仍可复现** | engine-rig |
+| e9-engine-paper-table | engine-rig | 真红→已修，**flag 是幽灵** | monitor（已修） |
+| p13-figure-numbering | figures | 真红→**红因已被 master 治好，判决过期** | monitor（已修）+ 分支主人解冲突 |
+| r2-release-licence | release | **真红，仍红**（基座漂移） | release |
+| a3-campaign-devpile | theoria-arm | **真红，仍红**（分支自己的产物） | theoria-arm |
+
+**五条没有一条是 S25 那类假红。** `.py` 闸门经 `sys.executable` 跑、不过 bash，
+所以「反斜杠被吃掉」那一类在这里根本不可能发生；`.sh` 闸门的 Git Bash 固定也生效了。
+**运行器这次是清白的——但队列的记账不是。**
+
+# 队列本身：没有 head-of-line 阻塞
+
+**明确的否定答案，有代码为证**：`ci_merge.py:464-485` 的 `for b in todo:` 里唯一的
+`break` 是 `done >= args.max`，而 `done` 只在**成功**时加一；`try_merge` 返回 False
+直接落到下一条。每条分支各拿一个从 `origin/master` 新建的一次性 worktree
+（`:317-323`），互不污染。实测：10:08:05Z–10:44:09Z 之间合并了 **4** 条，
+同期有 10–13 条挂着 flag。**绿的会绕过红的。**
+
+所以五条红是五个独立问题。**「1158 分钟」也不是队列停摆**：它由
+`mergequeue.py:129` 现算，锚在 `p10-figures-into-paper` 的第一条 FLAG
+（`merge.log:47`，2026-07-28T15:12:59Z），而那是一条**只有人能解的 merge conflict**。
+把它当队列头条，读起来像系统停了，其实是一条等人的冲突在计时。
+
+# 本轮在 monitor 领地修掉的三件
+
+1. **`sweep_stale_flags`**：经 ci_merge 以外路径并入的分支，flag 永不清除（e9、s21）。
+2. **瞬态失败不再被永久扣住**：`push rejected` / `worktree add failed` / `timed out`
+   不是分支的属性，**所以分支怎么变都清不掉它**——这是一个没有出口的死锁。
+   实测 `c10` 在未动的 tip 上被扣了 **5 小时 53 分、零次重试**，一被重跑就合并了。
+   **但重试有上限**（`TRANSIENT_RETRY_CAP = 3`）：无限重试会重建 2026-07-28
+   那个「915 条 FLAG、什么都没合并」的老问题，而反复发生的瞬态已经不是瞬态。
+3. **判决现在同时记 `base`**：闸门判的是**合并树**，它同时取决于分支和 master。
+   只按 tip 扣住，会让判决活得比它描述的那棵树更久——**p13 就是反例**，
+   红因 05:15Z 在 master 上被治好，flag 六小时后还在说 red，零次重试。
+   老 flag 没有 `base:` 一律读作「重试」。
+
+`should_hold()` 现在是这条规则的**唯一副本**，主循环与测试都调它。
+原来测试里有一份自己的拷贝——**S21 正是这么出事的**：docstring、提交信息、
+reflex 注释都描述了一条代码里没有的第三判据，而十条测试编码的是代码不是规则。
+
+**未做**：`monitor/ci/` 被 git 跟踪（`merge.log` 与全部 `CONFLICT-*.md`），
+所以任何合并都可能改写这个状态机的记忆——这可能就是 p10 的 flag 说
+`first_seen 04:17:13Z` 而日志记着 13 小时之前的原因。**存疑未证，留给下一手。**
+
 
 ---
 
