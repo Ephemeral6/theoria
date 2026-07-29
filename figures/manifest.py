@@ -25,6 +25,7 @@ if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
 
 import build_all  # noqa: E402
+import paper_map  # noqa: E402
 import sources  # noqa: E402
 import theme  # noqa: E402
 
@@ -52,7 +53,10 @@ def _git(*args: str) -> str:
 def collect_artifacts() -> dict[str, str]:
     """sha256 of every produced artefact, keyed by path relative to figures/."""
     out: dict[str, str] = {}
-    for root in (theme.csv_root(), theme.out_root()):
+    # paper_root() is included from P10: the publication profile is a tracked
+    # artefact of this build, and a manifest that hashed only the screen profile
+    # would certify half of what the pipeline produces.
+    for root in (theme.csv_root(), theme.out_root(), theme.paper_root()):
         if not os.path.isdir(root):
             continue
         for dirpath, dirnames, filenames in os.walk(root):
@@ -101,6 +105,17 @@ def build_manifest(prompt_id: str, worker: str) -> dict:
         "figures": list(build_all.FIGURES),
         "themes": list(theme.THEMES),
         "formats": list(theme.FORMATS),
+        "paper_figures": {
+            f.cite: {
+                "plate": f.pipeline,
+                "section": f.section,
+                "pub_name": f.pub_name,
+                "status": paper_map.status_for(f.pipeline)[0],
+            }
+            for f in paper_map.PAPER_FIGURES
+        },
+        "publication_formats": list(paper_map.PUB_FORMATS),
+        "publication_png_dpi": paper_map.PUB_DPI,
         "artifact_digests": artifacts,
         "n_artifacts": len(artifacts),
         "inputs": inputs,
