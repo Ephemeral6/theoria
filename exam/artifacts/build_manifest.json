@@ -1,10 +1,10 @@
 {
   "papers": [
     {
-      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\cheater\\p15-heldout-a0.brief.txt",
-      "cheater_brief_sha256": "4d22e28cac2cbf328047719b962b950f574a86410bb3d5f29ce49f7cacc98623",
-      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\truth\\p15-heldout-a0.truth.json",
-      "key_sha256": "b8b6f83a3094164e1445023fc4544a1b47b9de92ca49c41ddd4ca5b7be8862b9",
+      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\cheater\\p15-heldout-a0.brief.txt",
+      "cheater_brief_sha256": "fdc4d33924be265b5269518f90cbf18c25bbd5756bd9beaa1d3d7d945c6007cf",
+      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\truth\\p15-heldout-a0.truth.json",
+      "key_sha256": "0fce7706e9f094d38a62fd9c5c1e831b6c22a9dbfe1b2d38d443f546516d94a4",
       "leakage": {
         "label_sets_checked": [
           "event",
@@ -143,16 +143,16 @@
       "n_items": 80,
       "paper_id": "p15-heldout-a0",
       "question_type": "heldout",
-      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
-      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\papers\\p15-heldout-a0.paper.json",
-      "sheet_sha256": "1f6e2cdcae738ab7eb21ca4eeedd3095e5e0c54b1140685ad7b387f79edc3166",
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\papers\\p15-heldout-a0.paper.json",
+      "sheet_sha256": "182066a2d5a5a7158bce52ffa53fce7697512a37891d5b0818f34a6a1a7ac05a",
       "total_points": 80.0
     },
     {
-      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\cheater\\p15-handover-a0.brief.txt",
-      "cheater_brief_sha256": "bfe6c61ed894a7aa321b44d769466d920682147d376a1beeb1e922274a64aff4",
-      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\truth\\p15-handover-a0.truth.json",
-      "key_sha256": "0749d1cb7705c775be9fb10d7edf3afa374701d7b8040d00cd3362d566d044b6",
+      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\cheater\\p15-handover-a0.brief.txt",
+      "cheater_brief_sha256": "c73d2ffadc99abffdac45223145aaecccfcdb1b7a991dd5de64858ef9c88f3ab",
+      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\truth\\p15-handover-a0.truth.json",
+      "key_sha256": "efb2745ab5ad35fd2e917f05f9b603d92c6f19d9f8199cc4e507484281cc8368",
       "leakage": {
         "label_sets_checked": [],
         "metadata_fields_checked": [
@@ -170,16 +170,16 @@
       "n_items": 29,
       "paper_id": "p15-handover-a0",
       "question_type": "handover",
-      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
-      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\papers\\p15-handover-a0.paper.json",
-      "sheet_sha256": "5193fd472cdf721aa35b8a82281e89dd58c899e0b26b0cdffd55336cb957de07",
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\papers\\p15-handover-a0.paper.json",
+      "sheet_sha256": "51681ccfe1a96b5d8c296c1c380c1ed96b8bf7302ddff1a736425ff11878ed20",
       "total_points": 46.0
     },
     {
-      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\cheater\\p15-adaptation-a0.brief.txt",
-      "cheater_brief_sha256": "798b720ef4850a5f901ec2f3278f8c858c9d7f31e981e7d799a221c121fcacdb",
-      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\truth\\p15-adaptation-a0.truth.json",
-      "key_sha256": "ea1c2f663db4cfcd561071f0c999f0edfb9bf9fc70e4f934ac0b03c2183f0172",
+      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\cheater\\p15-adaptation-a0.brief.txt",
+      "cheater_brief_sha256": "445e77778b4ccbe47c00bef7592812e883f035ff916b166442047a3089cd3491",
+      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\truth\\p15-adaptation-a0.truth.json",
+      "key_sha256": "45d177097b3af89340a7909f981ee6a8d0ae44992a10685620dca02192909911",
       "leakage": {
         "label_sets_checked": [],
         "metadata_fields_checked": [
@@ -197,16 +197,16 @@
       "n_items": 60,
       "paper_id": "p15-adaptation-a0",
       "question_type": "adaptation",
-      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
-      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\papers\\p15-adaptation-a0.paper.json",
-      "sheet_sha256": "ce4184dc69d333f4d8a258d1e5b526e3829d06701e5a71fbbe0403683d3b1b0c",
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\papers\\p15-adaptation-a0.paper.json",
+      "sheet_sha256": "b52ddbc8ed3d333fdff8358d7215387417adaf4986e257768c89463fd27a8ff2",
       "total_points": 144.0
     },
     {
-      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\cheater\\p15-verdict-a2.brief.txt",
-      "cheater_brief_sha256": "accc3df74165a9894f54c4fd858293e16924749536e7187f32ef33afb7e24e13",
-      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\truth\\p15-verdict-a2.truth.json",
-      "key_sha256": "2af5b22a0f1a89063794b9a03a295a77f0fc68b75353ab3d7c01db22cc8d92aa",
+      "cheater_brief_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\cheater\\p15-verdict-a2.brief.txt",
+      "cheater_brief_sha256": "1d4b2b90701fe7e5c9d1860241c4e10d167b6c24475bbf7fd2073d1a1c878b45",
+      "key_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\truth\\p15-verdict-a2.truth.json",
+      "key_sha256": "5f3d431ac0a140f4a35944f6e23b2fa6142dec1beb017b0b6085090cc19ce8bc",
       "leakage": {
         "label_sets_checked": [
           "board_size_class",
@@ -328,9 +328,9 @@
       "n_items": 17,
       "paper_id": "p15-verdict-a2",
       "question_type": "verdict",
-      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
-      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v4-exam-selftest\\exam\\artifacts\\papers\\p15-verdict-a2.paper.json",
-      "sheet_sha256": "3ba4a85e7b9778a3a1e095b8140bb7da8af1dbcbbd16882fa854bcc6a7797f02",
+      "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
+      "sheet_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\v5-verdict-three-types\\exam\\artifacts\\papers\\p15-verdict-a2.paper.json",
+      "sheet_sha256": "2e7e46f5970faff66055a1bb8c9ba0dc366b13062e6a5849110ea34984ce94ca",
       "total_points": 34.0
     }
   ],
@@ -355,10 +355,11 @@
     "modules": {
       "exam.grading.rubrics_adaptation": "7320c75c1db0e1f162efd56aa93d8a2b3cef086aa520bbd814952c8790cf1e4e",
       "exam.grading.rubrics_handover": "fc35ef2bd43941ca83956fb8a50ae4851fa59630387993856c29974cc06f2c5b",
+      "exam.grading.rubrics_handover_auto": "35f517a3f9c3b5739222fe0f36ab861e4c7614d2fef6a75e5575cef2bb734ce2",
       "exam.grading.rubrics_heldout": "c595101cdec408969758856885d4bb0f91bcb93ee0cd83571945064765f624e9",
-      "exam.grading.rubrics_verdict": "6961340614174a3fc41d32dbc7145239106846d5321b83df8adbca0529ce102a"
+      "exam.grading.rubrics_verdict": "dc696acc094082392311fd7c838c3342927c38fcec60b7dabac4583e6f860bb3"
     },
-    "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+    "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db",
     "rubrics": {
       "adapt.collateral.v1": "falsified manual rules, claims to re-examine, claims now false, and the standing verdict on `mismatch`; raises silently_wrong when the old verdict is kept on a variant where it flipped",
       "adapt.describe.v1": "the minimal set of rule-change labels consistent with the observations; set equality against CHANGE_LABELS",
@@ -368,6 +369,11 @@
       "handover.name_class": "Is this name something the level supplies (level_data) or something the world fixes across every level (world_law)?",
       "handover.optimal_action": "An action lying on some shortest solution from the given state; the whole optimal set is accepted, not one tie-break.",
       "handover.step_semantics": "One transition of the A0 manual: the next Player cell, the next Box cell and the rule that fired, all three or nothing.",
+      "handover_auto.counterexample": "A legal situation at which a claim the manual marks proven is false, checked by recomputing the claim there.",
+      "handover_auto.name_class": "Is this name something the level supplies (level_data) or something the world fixes across every level (world_law)?",
+      "handover_auto.optimal_action": "Half the points for an action on some shortest solution (or `none` when there is no solution), half for the length of that shortest solution.",
+      "handover_auto.rule_justification": "The subset of the offered clauses the claim's truth depends on; hits pay, spurious citations cost the same, exact set for full marks.",
+      "handover_auto.step_semantics": "One transition of the A0 manual: next Player cell, next Box cell and the rule that fired, all three or nothing. Same marking as handover.step_semantics, new items.",
       "heldout.frame_exact": "held-out prediction: the predicted frame must equal the true frame cell for cell. No partial credit -- a cells-correct score on a 7x7 board is ~96% for returning the input unchanged, so it would measure board size rather than theory. Abstention is recorded and scores zero.",
       "verdict.a2.claim_and_certificate": "Half the points for the verdict, half for the reason. On an unsolvable level the reason is a certificate this rubric verifies against the board (full) or a credible exhaustive search (partial); on a solvable one it is a witness plan this rubric replays."
     }

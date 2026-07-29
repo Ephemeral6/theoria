@@ -71,7 +71,9 @@
         "detail": {
           "calibration": [
             "adaptation/bluffer: scored 0.4896, expected in [0, 0.45] (claiming everything is invalidated must not pay: recall without precision is the failure mode this item type exists to price)",
-            "verdict/bluffer: scored 0.5294, expected in [0, 0.5] (always answering `unsolvable` buys perfect sensitivity and zero specificity; the score must reflect the pair, not the sensitivity)"
+            "verdict/bluffer: scored 0.5294, expected in [0, 0.5] (always answering `unsolvable` buys perfect sensitivity and zero specificity; the score must reflect the pair, not the sensitivity)",
+            "verdict/searcher: the marker awarded 34.0000 where arithmetic over the paper's points says 19.0000. This probe exists because no calibration fake submits this answer shape, so nothing else in the protocol looks at the branch it takes.",
+            "verdict/forged_certificate: the marker awarded 34.0000 where arithmetic over the paper's points says 17.0000. This probe exists because no calibration fake submits this answer shape, so nothing else in the protocol looks at the branch it takes."
           ],
           "mutant:partial_credit_survives": [
             "adaptation: failed",
@@ -127,7 +129,8 @@
           "mutant:drop_exact",
           "mutant:independence",
           "mutant:key_order",
-          "mutant:monotone"
+          "mutant:monotone",
+          "mutant:partial_credit_survives"
         ],
         "detail": {
           "calibration": [
@@ -155,9 +158,12 @@
           ],
           "mutant:monotone": [
             "adaptation: failed"
+          ],
+          "mutant:partial_credit_survives": [
+            "adaptation: failed"
           ]
         },
-        "n_catchers": 5,
+        "n_catchers": 6,
         "what_it_does": "the mark depends on how many items were marked before it, so the same answer scores differently in a different key"
       },
       "pays_for_silence": {
@@ -206,15 +212,20 @@
       "truncates_partial": {
         "caught": true,
         "caught_by": [
+          "calibration",
           "mutant:partial_credit_survives"
         ],
         "detail": {
+          "calibration": [
+            "verdict/searcher: the marker awarded 0.0000 where arithmetic over the paper's points says 19.0000. This probe exists because no calibration fake submits this answer shape, so nothing else in the protocol looks at the branch it takes.",
+            "verdict/forged_certificate: the marker awarded 0.0000 where arithmetic over the paper's points says 17.0000. This probe exists because no calibration fake submits this answer shape, so nothing else in the protocol looks at the branch it takes."
+          ],
           "mutant:partial_credit_survives": [
             "adaptation: failed",
             "verdict: failed"
           ]
         },
-        "n_catchers": 1,
+        "n_catchers": 2,
         "what_it_does": "partial credit is truncated to zero"
       }
     },
@@ -623,11 +634,11 @@
       "transplant": "an answer that is ground truth for an item with a different truth does not earn full marks here. Full marks for a transplanted answer means the rubric is checking shape and calling it correctness."
     }
   },
-  "protocol_digest": "3310f827f807856f01dd0490baa659952bef48323a84b5f095c81578ee1ecf6b",
+  "protocol_digest": "200c26f9c445844df27eb700dd7dd4de3c2f0db596c862479c6057bf17c51fa3",
   "protocol_modules": {
-    "exam.grading.calibration": "48dd52e416402f40142ef246ec33f8fbd6e07830b8056a2136a41a63402308f5",
-    "exam.grading.mark": "5fca1554b48d171828ec22f64a95faa06db1a12a71459a1acbd97cded8428d59",
+    "exam.grading.calibration": "69aa2d9ce060d6de08204a06cec6048fd9d363dfcb52aa5942453500e4afa744",
+    "exam.grading.mark": "9ce0a66824c770d4b5eaa63163ba23602aa52d191b007f7a9340d411966dedf9",
     "exam.grading.selftest": "29e8bcf7c8d62843bdd36169287620cdbd5c1260ef384ca8b9b940e5b85349bc"
   },
-  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091"
+  "rubric_digest": "36a23877f696d7adc55449cb08622e2cbb677212ef858033074979e2ad64c5db"
 }

@@ -386,3 +386,205 @@ for another spelling.
     weakness among several; it is the blocking one.
 19. **`abstain` is unpriced**, which is load-bearing for the memoriser
     calibration: that arm scores what it scores because of how much it abstains.
+
+
+## V5-verdict-three-types — the verdict paper was audited, and the marker was wrong
+
+Prompt `V5-verdict-three-types`, worker `W-1652`, branch
+`agent/v5-verdict-three-types`. Run
+`exam/runs/20260729T020000Z-V5-verdict-three-types/`.
+
+**The item asked for something that already existed.** Its four clauses — three
+classes in a self-built world family, constructive grounds per item, calibration
+by a known-full and a known-zero fake, sensitivity and specificity reported
+separately — were all delivered by P-15 and V4 as `p15-verdict-a2`. So this run
+took the item's own premise instead (考卷的可信度取决于判卷者本身对不对) and
+asked whether the delivered instrument is right. Six adversarial auditors, every
+finding re-derived here before anything was changed. It is not.
+
+**The certificate checker was unsound.** `relaxed_edges`' docstring claimed it
+"can never make a solvable level look unsolvable, which would hand out points
+for a false theorem". It could, three ways, because the graph was a second
+implementation of `Level.step` and the two disagreed about the teleport and the
+door. `cart_region` and `cut_set` certificates for **solvable** levels were
+accepted and paid **2.0 of 2.0**. The cheapest reproduction needs no malformed
+field at all — only a cell that is both the door and the portal. Not reachable
+through any shipped item (41,868 fuzzed well-formed solvable levels, zero unsound
+accepts), which is why nothing had noticed. One transition function now, plus
+`Level.wellformed_problems` at build time. D-EX-020.
+
+**The class (ii) bound was unsound off the comb, and a shipped constructor
+reaches it.** `comb_open(30)` under `observation_loss` on the corridor gives
+`m = 60`, a claimed 2^60, `exhaustive_feasible: False` — and **29,791** actual
+reachable states. `build()` would have shipped it as class (ii). The bound
+checked each dip in isolation and never checked the lane walked between dips.
+D-EX-021.
+
+**The class (ii) quotient is measured, and the inference drawn from it was
+wrong.** The four class (ii) levels have **180, 180, 600 and 177** reachable
+`(cart, button)` states, against a `lower_bound` of 2^60 to 2^120. This run
+briefly concluded that the quotient therefore decides the question, and derived
+`search_credible` from it (D-EX-022). **An adversarial review refuted that and
+the decision is withdrawn**: the quotient ignores `step_limit` outright, and it
+carries no latch state, so on a `require_all_switches` board where one switch is
+unreachable it reports the goal reachable and the level is unsolvable — both
+demonstrated with a shipped constructor and a shipped operator. Deriving
+credibility from an unsound abstraction replaced "a true statement was called
+false" with "a false statement is called true", and the second one *pays*.
+`search_credible` is `exhaustive_feasible` again; the quotient stays as a
+recorded measurement whose truth entry says in the same breath that it is not a
+search space. D-EX-022, withdrawn by D-EX-027.
+
+**The split confusion matrix cannot report a pair.** The three classes partition
+the paper *by answer*, so one denominator is empty in every class cell and the
+pair exists only pooled — the reading D-EX-015 shows means least. The truth
+already carried a stratification that cross-cuts the answer, unused:
+`board_size_class`, small 5/5 and large 4/3. Under it the bluffer's signature is
+`(1.000, 0.000)` in a single cell per stratum instead of joined across two rows
+of disjoint items. D-EX-024.
+
+**An unreadable answer was reported as an abstention** — in the column D-EX-006
+introduced so an abstention could not be confused with anything else. D-EX-025.
+
+**The calibration gate sees two of eleven marking outcomes.** Fourteen faults
+injected into the verdict rubric: **thirteen passed `assert_calibrated`**, twelve
+passed all seven mutants, two were caught by nothing anywhere, and all four
+calibration fractions were bit-identical under every one. The sheet advertises
+five answer shapes; the fakes submit three, and the mutants inherit those three
+because they are derived from the oracle. Five answer-shape probes now run at
+the gate, each with a score fixed by arithmetic. D-EX-026.
+
+**Four of the seventeen constructive justifications asserted something false or
+insufficient**, found by computation against the shipped level: `iii3` claimed
+three hazards lie on no minimal route when one lies on 72 of 204; `iii8`'s
+argument never mentioned the 120 switches its board requires latched, and the
+62-command walk that satisfies it as written loses; `iii7` quoted the cost of a
+plan of a different shape than the one it describes; `ii4` said "to the right of
+the start" where the count is "reachable", a phrasing worth one order of
+magnitude. All four corrected. No item's *claim* was wrong: 17 of 17
+independently confirmed.
+
+**And the key now says where its own answer came from.** Five of the eight
+solvable witnesses are breadth-first search output and three are constructions,
+and nothing said which. On a paper whose premise is 由构造即知答案 that is a
+disclosure gap, not a defect in the answers. D-EX-023.
+
+**And the run's own fixes were then attacked, which cost two of them.** A
+seventh, adversarial reviewer refuted three of seven claims. Excluding the button
+from `passable` (part of the certificate fix) **created a new unsoundness** in
+`row_col_deltas`, which was using the same predicate to ask a different question
+— a level solvable in one command was paid 2.0 of 2.0. D-EX-022 was withdrawn
+outright. Two smaller defects: a claim outside the paper's answer alphabet was
+scored as a *negative* classification, so `{"claim": "I do not know"}` earned
+specificity **1.000**; and D-EX-025's fix had landed in `confusion_matrix` but
+not in `mark.confusion`, which is the one the gate reads. All fixed and pinned.
+D-EX-027.
+
+Tests: **338 passed** (321 before). `python -m exam.verify` GREEN, determinism
+holds across `PYTHONHASHSEED` 7 and 99.
+
+### Closed by V5
+
+* ~~**4. `cart_region` is sound but incomplete.**~~ Still incomplete, and the
+  incompleteness is confirmed with a repro — but the *soundness* half of that
+  weakness was false when it was written. See D-EX-020.
+* ~~**6. The class (ii) bound assumes comb-shaped geometry.**~~ It now checks
+  the assumption and refuses. D-EX-021.
+
+### Open weaknesses V5 adds
+
+20. **The verdict sheet leaks through multiplicity, and nothing looks for it.**
+    Seven of the nine boards appear exactly once and six of those seven are
+    unsolvable, so *"if this `level_id` occurs elsewhere on the sheet, answer
+    solvable"* scores **13 of 17 against a 9 of 17 baseline**, needing no key and
+    no board reasoning. Add `len(hazards) == 1 → unsolvable` and it is **14 of
+    17**. Re-derived from scratch in the run's `verify_leak_claims.py`. The
+    module docstring argues board identity is safe on the strength of the
+    atrium, which is one board out of nine; the design that makes identity
+    carry no signal *within* a reused board is what makes *being reused* a
+    signal. D-EX-011 found value→answer and D-EX-018 token→answer; this is
+    **multiplicity→answer**, and no checker in `leakage.py` computes a
+    bucket-size feature. **Not fixed.** The fix is either a checker plus a
+    balancing item on each singleton board — which changes the paper and needs
+    its own pre-registration — or accepting it and saying so. This run did the
+    saying.
+21. **Production's leak check has never been run against the real answer.**
+    `verdict.py` declares no `answer_labels`, so labels come from
+    `derive_label_sets`, which drops any field whose text is already on the
+    sheet — and the item's own question prints *both* `solvable` and
+    `unsolvable` on all 17 sheets. The guard fires at 17/17 against a threshold
+    of 10.2 and `claim` is dropped; the labels actually checked are `class`,
+    `board_size_class` and `search_credible`, all referee-side strata. It is
+    D-EX-011's lesson one level up: there an optional check did not run, here
+    the check runs on labels that are not the answer. **Not fixed**, and note
+    that fixing it alone would not have caught weakness 20 either —
+    `metadata_hits` handed the real answer still reports clean, because
+    `METADATA_FIELDS` is three bookkeeping fields and all three are constant.
+22. **`win_tighten` is not merely exercised at its boundary — it is absent from
+    the level.** `variant_of(a2_echo(), win_score_required=1)` is byte-identical
+    to `a2_echo()`; `iii5`'s level dict, canonical blob and sheet side are the
+    unwrapped base game, and `operators_exercised` lists the operator on the
+    strength of a spec file alone. An unsolvable version **is** constructible
+    (`win_score_required=2` → 55 states, no solution, and `proxy/variants.py`
+    accepts the spec). It was not added because no certificate in the closed
+    grammar states that reason, so the oracle would score below 1.0 and
+    calibration would fail — the blocker is the grammar, not the world. That is
+    a sharper statement of the old weakness 5, which said the operator was
+    exercised at its no-op boundary.
+23. **Class (i) has no solvable control, so a class-(i)-conditional false
+    positive is invisible.** Two examinees with opposite pathologies — "small
+    enough to search, my search failed, therefore unsolvable" and "too big to
+    search, therefore unsolvable" — are identical in all ten printed cells *and*
+    in the score (0.7059 both), so the renderer's stated fallback ("the thing
+    that separates them is the score") is false for them. Relabelling one small
+    solvable item into class (i) separates them at 0.000 against 1.000 in that
+    one cell. The board-size split added by D-EX-024 does not close this: it
+    separates them by score fraction, not by a rate.
+24. **`certified_share_of_correct_unsolvable` reads 1.000 for a pure bluffer.**
+    Its denominator is the *correct* subset, so being wrong or silent on the
+    hard items raises it. A bluffer that attaches the key's certificates scores
+    specificity 0.000 with a reason-quality of 1.000; an examinee that answers
+    one item of seventeen also reads 1.000. It needs a denominator of all nine
+    unsolvable items and a printed coverage, the way the rates got one in
+    D-EX-015.
+25. **Abstention is weakly dominant.** An examinee that abstains on exactly the
+    items it would get wrong scores the same as one of identical competence that
+    answers and is wrong (0.7647 both), and prints strictly better-looking rates
+    — `--` where the honest one prints `0.000`. Coverage is the only trace and
+    it is a smaller visual penalty than a zero. This is the priced form of old
+    weakness 19.
+26. **The two directions are not priced symmetrically.** A bluffer scores
+    0.2647; an anti-bluffer that says `solvable` everywhere scores 0.3824 with
+    plans a search hands it free, and 0.4706 with the key's plans — because on
+    the solvable side the reason half is a witness a search finds, and on the
+    unsolvable side it is a certificate. Mirror-image rate rows, 1.4× to 1.8×
+    the score.
+27. **The class (ii) name still overstates what a naive enumerator faces.**
+    `lower_bound` (2^60 to 2^120) is a true statement about the raw product
+    space and is the honest account of what a complete search must cover. What
+    is not established is that *no* cheaper complete method exists — this run
+    tried to establish the opposite via the quotient and was wrong (D-EX-027),
+    which leaves the question open rather than settled. Making the class mean
+    what its name says needs switches that gate geometry, and that is a
+    different world family and a different paper.
+28. **The `searcher` probe cannot see a wrong `search_credible`.** Its
+    expectation reads `truth["search_credible"]` from the same key the marker
+    reads it from, so corrupting that field moves both and the gate stays green.
+    It is D-EX-026's own self-reference lesson surviving one field to the left,
+    and it is the check that would otherwise have caught D-EX-022. Fixing it
+    means recomputing credibility independently — an enumeration per item inside
+    `calibrate_one`, which runs in many tests — so it was measured and left
+    rather than paid for without a decision.
+29. **`_region_rep` computes the key's `cart_region` certificate with the
+    checker's own `components(relaxed_edges(...))`**, so `_self_check`'s "the
+    reference certificate verifies" is a tautology on the naming; only
+    `start_rep != goal_rep` is substantive. That is why the atrium's
+    representative migrated from `[1,1]` to `[1,3]` mid-run without any
+    assertion firing. Pre-existing, surfaced by this run.
+30. **`subset_lower_bound`'s lane precondition is a heavy false-negative
+    filter.** In fuzzing, 1,981 of 2,016 refusals (98%) were levels whose true
+    reachable state count already met 2^m; an L-shaped switch-free lane with six
+    verified out-and-back dips is refused. `_dip_source` compounds it by
+    minimising distance rather than preferring a source on the lane. Sound —
+    it only refuses to ship items — but "one contiguous row or column" is
+    strictly stronger than what the construction needs.
