@@ -426,7 +426,39 @@ class Campaign:
         # level-to-level (`Theoria.md` C3, `D-A3-002`).
         seed: Optional[str] = None
         for index in range(1, max_legs_per_game + 1):
-            leg = self.run_leg(game_id, index, seed)
+            try:
+                leg = self.run_leg(game_id, index, seed)
+            except (CampaignStopped, spend_mod.SpendGateError):
+                # The two that mean something. Re-raised to `run`, which knows
+                # the difference between ending a game and ending everything.
+                raise
+            except BaseException as exc:                # noqa: BLE001
+                # Everything else -- an ArcError, a transport failure, a bug in
+                # a beat. Previously these escaped `run`'s handler and killed
+                # the campaign without a final `save()`, losing the record of
+                # every leg that had already been paid for.
+                #
+                # A campaign is hours long and legs cost real money; one leg
+                # dying is a fact to record and move past, not a reason to
+                # discard the ones that worked. Recorded as a leg-shaped entry
+                # so `report()` and the figure pipeline see it, and counted as
+                # zero progress so a game that only ever raises still trips the
+                # zero-progress limit rather than retrying forever.
+                self.legs.append({
+                    "index": index, "game_id": game_id, "event": "leg_failed",
+                    "error": "%s: %s" % (type(exc).__name__, exc),
+                    "usd": 0.0,
+                    "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+                })
+                self.save()
+                self.zero_progress += 1
+                if self.zero_progress >= ZERO_PROGRESS_LIMIT:
+                    raise CampaignStopped(
+                        "%d legs in a row made no progress; the last %d ended "
+                        "in an exception" % (ZERO_PROGRESS_LIMIT,
+                                             self.zero_progress),
+                        {"game_id": game_id, "last_error": str(exc)})
+                continue
             self.legs.append(leg)
             self.save()
 
@@ -480,9 +512,164 @@ class Campaign:
     def save(self) -> str:
         """Atomically, after every leg. A campaign is hours long and the
         session running it will be interrupted."""
-        tmp = self.state_path + ".tmp"
-        with open(tmp, "w", encoding="utf-8", newline="\n") as fh:
-            json.dump(self.report(), fh, indent=1, sort_keys=True)
-            fh.write("\n")
-        os.replace(tmp, self.state_path)
+        self._write_json(self.state_path, self.report())
+        self._write_json(os.path.join(self.out_dir, "MANIFEST.json"),
+                         self.manifest())
         return self.state_path
+
+    @staticmethod
+    def _write_json(path: str, payload: Dict[str, Any]) -> None:
+        tmp = path + ".tmp"
+        with open(tmp, "w", encoding="utf-8", newline="\n") as fh:
+            json.dump(payload, fh, indent=1, sort_keys=True)
+            fh.write("\n")
+        os.replace(tmp, path)
+
+    def manifest(self) -> Dict[str, Any]:
+        """The four required provenance fields, written beside `campaign.json`.
+
+        CLAUDE.md: every experiment writes `runs/<id>/MANIFEST.json` with
+        `prompt_id`, `branch`, `base_commit` and `utc`. This module wrote only
+        `campaign.json`, which is the campaign's *result* and not its
+        provenance -- a distinction the convention makes on purpose, since
+        narrative and result both evaporate without the commit they came from.
+
+        Note this is the campaign-level manifest. Each leg's own run directory
+        gets its own from `armtools.archive`, and that is the one the figure-2
+        discovery rule looks for.
+        """
+        return {
+            "prompt_id": self.prompt_id,
+            "branch": _git("rev-parse", "--abbrev-ref", "HEAD"),
+            "base_commit": _git("rev-parse", "HEAD"),
+            "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ",
+                                 time.gmtime(self.started)),
+            "games": self.games,
+            "budget": {"campaign_usd": self.campaign_usd,
+                       "game_usd": self.game_usd,
+                       "leg_usd_cap": LEG_USD_CAP,
+                       "actions_per_level": self.actions_per_level},
+            "model": self.model,
+            "offline": self.offline,
+            "legs": [{"slug": leg.get("slug"), "game_id": leg.get("game_id"),
+                      "usd": leg.get("usd"), "outcome": leg.get("outcome")}
+                     for leg in self.legs],
+            "spent_usd": round(self.spent_usd, 6),
+            "stopped": self.stopped,
+        }
+
+
+def _git(*args: str) -> Optional[str]:
+    try:
+        import subprocess                              # noqa: PLC0415
+        out = subprocess.run(("git",) + args, cwd=REPO, capture_output=True,
+                             text=True, timeout=15)
+        return out.stdout.strip() or None
+    except Exception:                                  # noqa: BLE001
+        # A manifest missing its commit is worth more than a campaign that
+        # refused to start because git was slow.
+        return None
+
+
+# -- the entry point --------------------------------------------------------
+#
+# There was none. `campaign.py` had no `main`, no argparse and no `__main__`,
+# and nothing in the repo imported it except its own test -- so the module that
+# holds the authorised budget could not be started from a shell. That is also
+# why `run_leg` was the one method with no test: every test in
+# `tests/test_campaign.py` subclasses `Campaign` and replaces it.
+
+def main(argv=None) -> int:
+    import argparse                                    # noqa: PLC0415
+    import sys                                         # noqa: PLC0415
+
+    from harness.run import _scratch_policy            # noqa: PLC0415
+
+    ap = argparse.ArgumentParser(
+        description="The development-pile campaign: many legs, one budget.")
+    ap.add_argument("--prompt-id", default="A3-campaign-devpile")
+    ap.add_argument("--out-dir", required=True,
+                    help="the campaign's own run directory; campaign.json and "
+                         "MANIFEST.json are written here after every leg")
+    ap.add_argument("--games", nargs="+", default=list(DEV_PILE),
+                    help="checked against piles.json, not against DEV_PILE")
+    ap.add_argument("--max-legs", type=int, default=3)
+    ap.add_argument("--model", default="claude-opus-5")
+    ap.add_argument("--campaign-usd", type=float, default=CAMPAIGN_USD)
+    ap.add_argument("--game-usd", type=float, default=GAME_USD)
+    ap.add_argument("--actions-per-level", type=int, default=ACTIONS_PER_LEVEL)
+    ap.add_argument("--mock", action="store_true",
+                    help="play the whole campaign against proxy/mock. No key, "
+                         "no network, no ARC quota.")
+    ap.add_argument("--desk", action="store_true",
+                    help="with --mock, still call the real desk. This SPENDS "
+                         "model money against a mock world.")
+    ap.add_argument("--pool", default=None,
+                    help="a scratch spend-gate ledger. Required with --mock: "
+                         "a rehearsal's fictional reservations must not land "
+                         "in proxy/var/spend_gate.jsonl, which the whole fleet "
+                         "shares.")
+    ap.add_argument("--i-have-authorisation", action="store_true",
+                    help="start a LIVE campaign on the shared pool. Requires "
+                         "that the Phase 1 gate is green or that an exception "
+                         "is registered in monitor/spec.py p3-gate-exception, "
+                         "and that the campaign lane's spend authority applies "
+                         "to you (monitor/CHARTER.md). Neither is checked here "
+                         "-- this flag exists so that spending is a thing "
+                         "someone typed, not a default.")
+    args = ap.parse_args(argv)
+
+    # A live campaign is the single most expensive thing in this repo and the
+    # default must not be one. `harness/run.py` gets this wrong in the other
+    # direction -- bare `python -m harness.run` is a live money-spending run --
+    # and that is not a default worth copying.
+    if not args.mock and args.pool is None and not args.i_have_authorisation:
+        print("refusing to start a LIVE campaign without an explicit "
+              "acknowledgement.\n"
+              "\n"
+              "Theoria.md:305 makes the Phase 1 acceptance list the gate on "
+              "spending game money (全绿才准烧游戏钱), and monitor/state.json "
+              "currently reports p1_green 9 of 16. monitor/CHARTER.md grants "
+              "the campaign lane's spend to RES-1 alone.\n"
+              "\n"
+              "Rehearse instead:\n"
+              "  python -m harness.campaign --mock --pool <tmp>/pool.jsonl "
+              "--out-dir <dir>\n"
+              "\n"
+              "If a live run has been authorised, pass --i-have-authorisation "
+              "and record the exception in monitor/spec.py p3-gate-exception "
+              "first.", file=sys.stderr)
+        return 2
+
+    gate = (spend_mod.SpendGate() if args.pool is None
+            else spend_mod.SpendGate(_scratch_policy(args.pool)))
+    expect_pool = ({"pool": gate.policy.pool,
+                    "ledger_abspath": os.path.abspath(gate.ledger_path)}
+                   if args.pool else None)
+
+    kwargs: Dict[str, Any] = {
+        "prompt_id": args.prompt_id, "out_dir": args.out_dir,
+        "games": args.games, "model": args.model,
+        "campaign_usd": args.campaign_usd, "game_usd": args.game_usd,
+        "actions_per_level": args.actions_per_level,
+        "offline": args.mock and not args.desk,
+        "spend_gate": gate, "expect_pool": expect_pool,
+    }
+
+    if args.mock:
+        from proxy.mock.arc_mock import DEFAULT_KEY, MockArc   # noqa: PLC0415
+        with MockArc(api_key=DEFAULT_KEY, games=list(args.games)) as arc:
+            camp = Campaign(env_upstream=arc.base_url, env_key=DEFAULT_KEY,
+                            require_key=False, **kwargs)
+            report = camp.run(max_legs_per_game=args.max_legs)
+    else:
+        camp = Campaign(**kwargs)
+        report = camp.run(max_legs_per_game=args.max_legs)
+
+    print(json.dumps(report, indent=1, sort_keys=True, default=str))
+    return 0
+
+
+if __name__ == "__main__":
+    import sys
+    sys.exit(main())

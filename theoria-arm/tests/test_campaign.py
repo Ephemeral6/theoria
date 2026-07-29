@@ -245,3 +245,82 @@ def test_the_report_carries_the_authorised_package(tmp_path):
     report = run.run(max_legs_per_game=0)
     assert report["budget"] == {"campaign_usd": 200.0, "game_usd": 60.0,
                                 "leg_usd_cap": 25.0, "actions_per_level": 40}
+
+
+# ------------------------------------------------- the leg's dollar accounting
+#
+# The bug these exist for: `run_leg` read `summary["desk"]["cost_usd"]`, a key
+# `ModelDesk.summary()` has never emitted. It evaluated to None on every leg, so
+# `usd` was always 0.0, `spent_usd` and `by_game` never moved, and the $60/game
+# and $200/campaign ceilings could not trip. It survived because every test
+# above replaces `run_leg` wholesale -- the accounting was the one part of the
+# campaign nothing exercised.
+
+def test_the_leg_cost_reads_a_key_the_desk_actually_emits():
+    """The regression, stated as the shape of a real `ModelDesk.summary()`."""
+    usd, acct = camp._leg_cost({"desk": {
+        "model": "claude-opus-5", "calls": 3, "cli_cost_usd": 4.25,
+        "spend_gate": {"usd_charged": 4.25}}})
+    assert usd == 4.25
+    assert acct["cli_cost_usd"] == 4.25
+    assert acct["gate_usd_charged"] == 4.25
+
+
+def test_the_old_key_is_gone_from_the_desks_vocabulary():
+    """Pins the cause rather than the symptom.
+
+    If `ModelDesk.summary()` ever grows a `cost_usd`, the fix above becomes
+    ambiguous and this test says so before a campaign banks on it.
+    """
+    from harness.modelcall import ModelDesk             # noqa: PLC0415
+
+    class _Run:
+        run_id = "r"
+    keys = set(ModelDesk(_Run(), cost_ceiling_usd=1.0).summary())
+    assert "cli_cost_usd" in keys
+    assert "cost_usd" not in keys
+
+
+def test_the_ceiling_governs_on_the_larger_of_two_disagreeing_figures():
+    """INC-TA-003: `proxy/cost.py` under-bills 1h cache writes by 6.8%, and the
+    gate charges a ceiling for a call it cannot price. The two figures disagree
+    by construction, and a ceiling that believes the smaller one is a ceiling
+    that can be walked past."""
+    usd, acct = camp._leg_cost({"desk": {
+        "cli_cost_usd": 5.0, "spend_gate": {"usd_charged": 9.0}}})
+    assert usd == 9.0 and acct["governing_source"] == "gate"
+
+    usd, acct = camp._leg_cost({"desk": {
+        "cli_cost_usd": 9.0, "spend_gate": {"usd_charged": 5.0}}})
+    assert usd == 9.0 and acct["governing_source"] == "cli"
+
+
+def test_a_leg_that_reports_no_cost_at_all_is_recorded_as_such():
+    """Zero and unknown are different facts. An offline leg genuinely costs
+    nothing; a leg whose desk reported nothing is a hole in the accounts, and
+    booking both as 0.0 is how the original bug stayed invisible."""
+    usd, acct = camp._leg_cost({"desk": {}})
+    assert usd == 0.0
+    assert acct["governing_source"] == "no-cost-reported"
+    assert acct["gate_absent"] is True
+
+
+def test_a_game_ceiling_now_actually_trips(tmp_path):
+    """End to end through the real accounting.
+
+    Three legs at $25 take g50t to $75. The ceiling is checked *before* a leg,
+    not after, so the overrun to $75 is expected -- a leg is sized by
+    `_game_headroom` and then allowed to finish. What must happen is that the
+    *fourth* leg is refused and the campaign moves to the next game instead of
+    ending. With the old `cost_usd` key every leg booked $0.00, `by_game` never
+    moved, and neither the refusal nor the move ever happened.
+    """
+    run = _Fake([_summary(usd=25.0, kinds=["replay_mismatch"]),
+                 _summary(usd=25.0, kinds=["render_mismatch"]),
+                 _summary(usd=25.0, kinds=["proof_failure"])],
+                out_dir=str(tmp_path),
+                games=["g50t-5849a774", "sk48-d8078629"])
+    # `_Fake.run_leg` books through the same fields `run_leg` does.
+    report = run.run(max_legs_per_game=4)
+    assert report["by_game"]["g50t-5849a774"] >= 60.0
+    assert any(leg.get("event") == "game_end" for leg in report["legs"])
