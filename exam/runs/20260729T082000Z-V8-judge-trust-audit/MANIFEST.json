@@ -1,0 +1,163 @@
+{
+  "adversarial_pass": {
+    "all_addressed": true,
+    "blocking": [
+      "'a whole paper that nothing has ever checked' is false -- handover_auto has 34 dedicated passing tests and a published calibration table carrying the same 0.231 this run called new",
+      "the 18.000/34 strengthened-bluff figure was oracle-assisted: the probe hands the key's own certificate to the nine unsolvable items. The sheet-only figure is 11.000/34"
+    ],
+    "corrected": [
+      "~160 silence tokens is 59; () was labelled but never actually run against three papers",
+      "the run's own largest content-free payout, \"unsolvable\" at 12.000/144 on adaptation, was omitted from the defect section",
+      "handover_auto's giveaway is 22.4% under a per-family constant, not the 15.5% the shipped bluffer takes",
+      "V7 had already run a silence set against the four hand-built papers; the novelty claim is narrowed to the item-level work"
+    ],
+    "findings_returned": 14,
+    "withdrawn": [
+      "test_discrimination.py pins a worldgen artefact -- it is correctly scoped to port.world_ids()",
+      "abstain having no ground truth is a defect -- it is a decidability fact, not a defect",
+      "the whole anti-bluffer defence rests on denominator dilution -- calibration.py::STRUCTURAL pre-registers the bluffer pair as a hard failure",
+      "'the paper fails to separate memoriser from bluffer on 46 items' -- 41 of the 46 are joint zeros"
+    ]
+  },
+  "author": "RES-3",
+  "base_commit": "a7b5d44bd772b9c7ea0ea21ce599c7a97ea79a87",
+  "branch": "agent/v8-judge-trust-audit",
+  "clean": {
+    "certificates_accepted_on_a_solvable_level": "0 of 32",
+    "dead_items": 0,
+    "oracle_underpaid_on_any_paper": 0,
+    "silence_paid_on_heldout_handover_handover_auto": 0,
+    "verdict_marker_sensitivity": 1.0,
+    "verdict_marker_specificity": 1.0
+  },
+  "coverage": {
+    "items": 217,
+    "note": "handover_auto is absent from BUILDERS so the five BUILDERS-scoped tools miss it, but it has 34 dedicated passing tests and a published calibration in runs/20260728T202540Z-V11-handover-auto-r2",
+    "papers": 5,
+    "points": 362.0,
+    "silence_tokens_per_paper": 59
+  },
+  "fan_out": {
+    "examiners": 3,
+    "isolation": "one git worktree each, because verdict.build() races on the shared tracked exam/artifacts/variant_specs/ (V7 finding)"
+  },
+  "files": [
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/FINDINGS.md",
+      "sha256": "0192616abd23d383faf3a152dda24837bff70216ca4030c80d4aac6335e05266"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/MANIFEST.json",
+      "sha256": "85e8cc87ec5a4dfff735aa96da6d551cd2bf4249e595551180c236a6173ea5ea"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/asymmetry.json",
+      "sha256": "e21b28d3582afab656f01460341e4e18d32ffc7fc19dcb15536dd77d7b6c0a65"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/asymmetry.py",
+      "sha256": "6e0546fdc245221af2c1ff8044864c3f52d3da131c95ef2996dd29d79fae6496"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/calib.json",
+      "sha256": "1dc8c64ba51275d307671f5cd58f9a1a741aeeb1a97b85e5c3cb2880652942f9"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/calib.py",
+      "sha256": "099aff1e03f1981e93f1a93e5ba64854a31609333f4851bd64f19f78490e8644"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/detail.py",
+      "sha256": "b2f48c91e46b1c1ea79d13f5630a84c0e373695c266f8f64b4b78a1849aac066"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/disc_handbuilt.py",
+      "sha256": "ca7ad6c6dd7ca4fcc6073b479225068c4c24bc74f93a4cd3a3b2770a9338b058"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/handbuilt_discrimination.json",
+      "sha256": "6dbde3245a876f54d01af2fdae0f4216bc53ae7a1797be55f410ada2ca2a17b6"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/manifest_write.py",
+      "sha256": "e53e454c7cb650b55b8675f2ed5f8a942643e57d621d9889a596b781216bc84d"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/pairs.py",
+      "sha256": "8409938b21cceba9b2a75d4158906ab710f6a544aed477f5cefbe8f8db072017"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/report.py",
+      "sha256": "1021b5b0c77293e7401c1656a7d4677fd9779a627f4972d684e671819fd79d0e"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/sweep.py",
+      "sha256": "2ef49b4469ea2d1e8f7f9c51c1ec8ab0f1f730fafe68d4b004532ac1af87b170"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/three_class.json",
+      "sha256": "454d3df69666c721ba703ac94ffc7e4c8c8c9b31b81a250ba59c797f6086a535"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/three_class.py",
+      "sha256": "ac0a9af0dcccfdb3156618245f8596b6a939bd3bca3761b0d7fe18e12a5a7e03"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/trace.py",
+      "sha256": "ba3775f3d003f70bfef12369f1268bf276adc3ada5fad565662743a414be7f2f"
+    },
+    {
+      "path": "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/why.py",
+      "sha256": "dfb77457d8ed3aeb149f61b9896a987ef6577c1b203ea0ce68d4db0ac8b4f476"
+    }
+  ],
+  "fixed": 0,
+  "lane": "verify",
+  "measurement_findings": [
+    "verdict paper: const-unsolvable 9.000/34 against const-solvable 8.000/34 -- the impossibility bluff outscores its mirror by 12.5% relative, from a 9-vs-8 item split",
+    "in points, a false verdict and an abstention both pay 0.000; the penalty exists but lives outside the score, in confusion axes and in calibration.py::STRUCTURAL",
+    "zero discrimination: 26 items / 28.0 pts strictly identical across all three voters; 54 items / 60.0 pts (16.6% of all points) pay a theory-free voter full marks",
+    "heldout gives away 45.0% of its points to a frame-echoing bluffer, 18 of those 36 items inside the held-out split itself",
+    "a fifth outcome triple (oracle=T, memoriser=F, bluffer=T) covers 32 of 217 items; discrimination.py's taxonomy calls it impossible and does not port to these papers"
+  ],
+  "new_defects": [
+    {
+      "contract_violated": "rubrics_adaptation.py:278-282, which says false alarms never earn anything",
+      "id": "V8-D1",
+      "what": "a claimed detection carrying no index is scored as if it had asserted 'never': True and {'detected': True} take 1.000/1.000 verdict correct on v-a0-03.detect.match while the same ItemScore.detail carries false_alarm: true",
+      "where": "exam/grading/rubrics_adaptation.py:360 + :300-301"
+    },
+    {
+      "contract_violated": "_read_claim's own docstring at :122-138 -- the hole it says it was rewritten to close, left open one level down",
+      "id": "V8-D2",
+      "what": "an unparseable index inside a dict silently becomes the legible assertion 'never': {'index': 'x'} and {'index': ''} take 1.000/1.000 correct",
+      "where": "exam/grading/rubrics_adaptation.py:168-174"
+    },
+    {
+      "id": "V8-D3",
+      "what": "() pays 6.500/144 exactly as [] does; V7's strict xfail pins the list spelling only",
+      "where": "exam/grading/rubrics_adaptation.py:204"
+    },
+    {
+      "id": "V8-D4",
+      "what": "DETECTION_BANDS is farmable: a bare constant 18 on every item pays 6.250/144 with no dict and no world model",
+      "where": "exam/grading/rubrics_adaptation.py:283, :304-308"
+    },
+    {
+      "id": "V8-D5",
+      "what": "handover_auto is outside the registry, so calibrate_all/mutant_battery_all/fault_matrix/build_papers/discrimination do not reach it -- every 'all four papers' aggregate is about four of five",
+      "where": "exam/papers/__init__.py BUILDERS"
+    }
+  ],
+  "passive": {
+    "api_calls": 0,
+    "cost_usd": 0.0,
+    "model_calls_on_any_grading_path": 0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "V8-judge-trust-audit",
+  "territory": "exam",
+  "utc": "2026-07-29T08:20:00Z",
+  "why_nothing_fixed": "rubrics_adaptation is on the marking path for V4's published calibration numbers, so changing it moves them -- the same reason V7 pinned _read_set with a strict xfail instead of repairing it"
+}
