@@ -66,6 +66,12 @@ INCIDENT_KINDS = frozenset({
     # that a budget stop left no trace anyone else could see; a refusal that
     # only appears as a 500 to the arm is that again, one layer down.
     "spend_gate_refused",
+    # A `win_tighten` rewrote a WIN because the game reported no score at all,
+    # so it did not tighten the win condition -- it removed it, at every
+    # requirement value. The variant is still unsolvable and the rewrite is
+    # still the safe direction; what is wrong is that its unsolvability no
+    # longer follows from the construction its `justification` names (D-032).
+    "variant_degenerate",
 })
 
 _LOCKS: Dict[str, threading.Lock] = {}

@@ -1,0 +1,10 @@
+SCORING SESSION with 1 forged `degenerate` marker
+======================================================================
+
+The other half of the negative control. A guard that passes a scoring session because it cannot fire on one has not been tested on it.
+
+$ python -m proxy.tools.check_variant_degeneracy <forged ledger>
+C:\Users\user\AppData\Local\Temp\v22-evidence-24378q8a\scoring-forged.jsonl: REFUSED (126 records, 62 carrying a variant, 1 degenerate rewrite(s), 0 unreadable line(s))
+  seq 59  variant t-below  require_score=99  reason=score_below
+  R-V22  variant t-below is not exam-eligible: its verdict came from an abolished win condition, not a tightened one, so it does not count toward the reason score
+exit=2

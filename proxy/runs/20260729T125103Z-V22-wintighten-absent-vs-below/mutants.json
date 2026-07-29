@@ -1,0 +1,12 @@
+{
+  "control": {
+    "exit": 1,
+    "file": "proxy/variants.py",
+    "id": "M00",
+    "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
+    "seconds": 1.7,
+    "verdict": "killed",
+    "why": "control: no mutation at all; must NOT be killed"
+  },
+  "verdict": "harness-invalid"
+}
