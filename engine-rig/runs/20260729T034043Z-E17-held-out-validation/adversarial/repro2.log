@@ -1,4 +1,3 @@
-$ python -m heldout.run --out runs/20260729T034043Z-E17-held-out-validation/results.json
 zero_space -- 120 parityworld worlds, 60 transitions each
   gate fit==analyse: 120/120 worlds ok
   Z-S1                   laws=1140   delta_hit=100.0%  value_hit=100.0%
@@ -31,12 +30,9 @@ zero_space -- 120 parityworld worlds, 60 transitions each
   Z-S2/global/n6-k3      laws=200    delta_hit=20.0%  value_hit=20.0%
   Z-S2/global/n8-k2      laws=240    delta_hit=0.0%  value_hit=0.0%
   Z-S2/global/n8-k3      laws=320    delta_hit=25.0%  value_hit=25.0%
-  Z-S1   novelty: 0/2160 held-out rows are new; 120/120 splits withhold nothing new
-  Z-S2   novelty: 7200/7200 held-out rows are new; 0/780 splits withhold nothing new
   delta misses total: 1940
 lp_potential -- 289 pegN instances, 2422 held-out cases
   gate graph==fixture peg4: True
   baseline: 105 certs, 184 silent, 0 false; L2 0/506 states violate h<=d
   held-out: 1408 certs (1014 silent), inv_closed hit 26.4%, false certs 58 (4.1%)
-  emit gate (complete graph): let through 0; (reduced graph, the caller's) let through 1408, of which false 58
-exit=0
+  emit gate: withheld 1408, let through 0; raised-potential caught 1036

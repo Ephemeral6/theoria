@@ -43,6 +43,16 @@ class SplitOutcome:
     full_rank: int
     dimension: int
     laws: List[LawOutcome]
+    # How many of the withheld difference vectors are bit-identical to one the
+    # fit already consumed.  Added after E17's adversarial review (F1): in this
+    # family the difference vector is a function of the *operation* alone, so a
+    # transition-level split can withhold a row the training set already
+    # contains, and the re-check is then vacuous by substitution rather than
+    # informative.  A hit rate must be read next to this number: where
+    # `heldout_rows_duplicate == n_heldout`, the split withheld no information
+    # and its hit rate is a theorem about the corpus.
+    heldout_rows_duplicate: int = 0
+    heldout_rows_novel: int = 0
 
 
 def _features(world: ParityWorld) -> List[Feature]:
@@ -122,6 +132,9 @@ def score(world: ParityWorld, train: Sequence[int], heldout: Sequence[int],
             )
         )
 
+    train_rows = {encoded[t] ^ encoded[t + 1] for t in train}
+    duplicate = sum(1 for t in heldout if (encoded[t] ^ encoded[t + 1]) in train_rows)
+
     full = [encoded[t] ^ encoded[t + 1] for t in range(len(encoded) - 1)]
     return SplitOutcome(
         world_id=world.world_id,
@@ -133,6 +146,8 @@ def score(world: ParityWorld, train: Sequence[int], heldout: Sequence[int],
         full_rank=gf2.rank(full),
         dimension=len(basis),
         laws=outcomes,
+        heldout_rows_duplicate=duplicate,
+        heldout_rows_novel=len(heldout) - duplicate,
     )
 
 

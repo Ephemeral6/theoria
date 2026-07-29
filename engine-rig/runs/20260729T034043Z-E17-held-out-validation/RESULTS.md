@@ -1,5 +1,14 @@
 # E17 · results — the two numbers, and what they are not
 
+> **SUPERSEDED IN PART — read `CORRECTIONS.md` first.** The adversarial review
+> (`ADVERSARIAL-heldout.md`) overturned six claims in this file, including its
+> headline reading of the 100.0 % figure, its "the emit boundary already holds"
+> paragraph, its "alone among the eight rows" sentence, and its validity table's
+> claim that every miss carries a witness. This text is left exactly as first
+> written, because a correction is only checkable against the thing it corrects.
+> Where the two disagree, `CORRECTIONS.md` wins, and `ENGINE_TABLE.md` carries
+> the corrected wording.
+
 Splits, metrics, predictions and validity criteria were fixed in
 `PREREGISTRATION.md` and committed in `ef382c9` before the harness existed and
 before any of the numbers below did. `git merge-base --is-ancestor ef382c9 HEAD`

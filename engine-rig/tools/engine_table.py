@@ -376,6 +376,20 @@ FACTS: dict[str, tuple[object, object]] = {
     "ho.zs_worlds": (120, jf(f"{E17}/results.json", lambda d: d["zero_space"]["corpus"]["worlds"], "zero_space.corpus.worlds")),
     "ho.zs_train_pct": (70, jf(f"{E17}/results.json", lambda d: d["zero_space"]["corpus"]["s1_train_share_pct"], "zero_space.corpus.s1_train_share_pct")),
     "ho.zs_heldout_pct": (30, jf(f"{E17}/results.json", lambda d: d["zero_space"]["corpus"]["s1_heldout_share_pct"], "zero_space.corpus.s1_heldout_share_pct")),
+    "ho.zs_s1_novel_rows": (0, jf(f"{E17}/results.json", lambda d: d["zero_space"]["heldout_row_novelty"]["Z-S1"]["novel_rows"], "zero_space.heldout_row_novelty[Z-S1].novel_rows")),
+    "ho.zs_s1_rows": (2160, jf(f"{E17}/results.json", lambda d: d["zero_space"]["heldout_row_novelty"]["Z-S1"]["heldout_rows"], "zero_space.heldout_row_novelty[Z-S1].heldout_rows")),
+    "ho.zs_s2_novel_rows": (7200, jf(f"{E17}/results.json", lambda d: d["zero_space"]["heldout_row_novelty"]["Z-S2"]["novel_rows"], "zero_space.heldout_row_novelty[Z-S2].novel_rows")),
+    "ho.zs_s2_rows": (7200, jf(f"{E17}/results.json", lambda d: d["zero_space"]["heldout_row_novelty"]["Z-S2"]["heldout_rows"], "zero_space.heldout_row_novelty[Z-S2].heldout_rows")),
+    "ho.lp_gate_let_reduced": (1408, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["held_out_L1"]["emit_gate_let_through_reduced_graph"], "lp_potential.held_out_L1.emit_gate_let_through_reduced_graph")),
+    "ho.lp_false_emitted": (58, jf(f"{E17}/results.json", lambda d: d["lp_potential"]["held_out_L1"]["false_certificates_emitted_reduced_graph"], "lp_potential.held_out_L1.false_certificates_emitted_reduced_graph")),
+    # E17's adversarial review is itself an artifact under runs/, so the
+    # figures the table quotes from it are probed out of it like any other
+    # number rather than typed into the prose. A review that overturns a
+    # published cell has to be as re-checkable as the cell was.
+    "ho.adv_short_split": ("35.3", md(f"{E17}/ADVERSARIAL-heldout.md", r"\| \*\*random 20/80\*\* \| \d+ \| \*\*([\d.]+) %\*\*")),
+    "ho.adv_two_ops": ("2.0", md(f"{E17}/ADVERSARIAL-heldout.md", r"\| \*\*leave TWO ops out\*\* \| \d+ \| \*\*([\d.]+) %\*\*")),
+    "ho.adv_cyclic_local": ("100.0", md(f"{E17}/ADVERSARIAL-heldout.md", r"cyclic\s+cell_local laws=\d+\s+hit=\s*([\d.]+) %")),
+    "ho.adv_cyclic_global": ("66.7", md(f"{E17}/ADVERSARIAL-heldout.md", r"cyclic\s+cell_local laws=\d+\s+hit=\s*[\d.]+ %\s+global laws=\d+\s+hit=\s*([\d.]+) %")),
     "ho.zs_s1_global": ("100.0", jf(f"{E17}/results.json", _rate("Z-S1/global"), "zero_space.splits['Z-S1/global'] delta_hit/laws")),
     "ho.zs_s2_global": ("13.1", jf(f"{E17}/results.json", _rate("Z-S2/global"), "zero_space.splits['Z-S2/global'] delta_hit/laws")),
     "ho.zs_s2_global_laws": (1680, jf(f"{E17}/results.json", lambda d: d["zero_space"]["splits"]["Z-S2/global"]["laws"], "zero_space.splits['Z-S2/global'].laws")),
@@ -442,6 +456,13 @@ FACTS: dict[str, tuple[object, object]] = {
 
 UNMEASURED = "边界未测"
 
+# The two phrases the standing rule below is about. They are constants so that
+# `tests/test_engine_table.py` can bind to them: E17's adversarial review found
+# the rule stated as a paragraph with no test behind it, which is the exact
+# shape of defect this table's own tripwires exist to prevent (F17).
+VERIFIED = "已验证"
+SELF_CONSISTENT = "在观测证据上自洽"
+
 ROWS = [
     dict(
         engine="`mdl_segmenter`",
@@ -481,7 +502,7 @@ ROWS = [
             "`DECISIONS.md` **D-003** names this mechanism and rules it *still sound*: less observed difference space means a larger recovered invariant space. An adversarial review reproduced every number and overturned the word \"defect\". "
             "**A second over-assertion is not about the quantifier at all**: `scope` claims a *provenance* it never verified. Of {zs.cell_local_laws} `cell_local` laws, **{zs.cell_local_subsets} have a proper-subset support, and {zs.cell_local_in_span} of those lie in the engine's own encoding-law span** — they are world facts filed as encoding artefacts, and no test in the rig asserts anything about what `scope` *means*. The split this row's `solves` cell advertises is the line that measurement attacks. "
             "The scale on real data is worth quoting, but for what it is: on `g50t` the **modal** group of published laws is **{zs.g50t_worst}**, and **every published row carries `coverage` k = n**. The frozen contract has no field in which evidence thinness can be stated, so a law resting on {zs.g50t_modal_transitions} transitions here and one resting on Fixture B's {zs.fixtureB_transitions} are indistinguishable — that gap belongs to `/CONTRACTS/`, not to this engine. {zs.unaudited} of {zs.published} published fields are asserted by no invariant. "
-            "**Held out (E17), and this is the number that decides what \"已验证\" may mean here.** `verify(result, states)` re-checks each law on the very differences the elimination consumed, so it cannot fail by construction; E17 fitted on part of the evidence and re-checked on the part withheld, across {ho.zs_worlds} `parityworld` worlds. Under a random {ho.zs_train_pct} / {ho.zs_heldout_pct} transition split the recovered laws extrapolate perfectly — **{ho.zs_s1_global} %** of global laws hold on the withheld transitions. Withhold an entire *operation* instead and the same laws hold **{ho.zs_s2_global} %** of the time ({ho.zs_s2_global_laws} laws), and the split by operation width is **{ho.zs_s2_k2} % at k = 2 against {ho.zs_s2_k3} % at k = 3**. Both cuts were pre-registered together, before either number was seen, precisely because they disagree this hard: a hit rate here is a property of the cut as much as of the engine, and quoting one cut alone would be the flattering half of a measurement. **This is D-003 becoming visible, not a defect** — the engine's quantifier *is* the observed evidence, and a law that does not extrapolate to an unobserved operation is the documented behaviour, correctly reported. What it forbids is the word \"verified\" without the quantifier attached. A third figure is a genuine surprise and belongs to `scope` rather than to D-003: **{ho.zs_s2_local} %** of `cell_local` laws survive the same cut, not all of them, so thinner evidence does not merely add global laws — it manufactures encoding-local ones that are not there, which is the same over-assertion the paragraph above measures from the other side. "
+            "**Held out (E17), and this is the number that decides what \"已验证\" may mean here.** `verify(result, states)` re-checks each law on the very differences the elimination consumed, so it cannot fail by construction; E17 fitted on part of the evidence and re-checked on the part withheld, across {ho.zs_worlds} `parityworld` worlds. Under a random {ho.zs_train_pct} / {ho.zs_heldout_pct} transition split the recovered laws hold on **{ho.zs_s1_global} %** of the withheld transitions — **and that figure measures nothing**, which an adversarial review established and this cell is obliged to say before quoting it. A `parityworld` difference vector is a function of the *operation* alone, so a transition-level split withholds rows the fit already consumed: **{ho.zs_s1_novel_rows} of {ho.zs_s1_rows}** withheld rows are new, and the re-check passes by substitution. That is the same tautology as `verify()`, one indirection further out. The informative cut is leaving an entire *operation* out — **{ho.zs_s2_novel_rows} of {ho.zs_s2_rows}** withheld rows new — and there the laws hold **{ho.zs_s2_global} %** of the time ({ho.zs_s2_global_laws} laws), **{ho.zs_s2_k2} % at k = 2 against {ho.zs_s2_k3} % at k = 3**. **{ho.zs_s2_global} % is this row's held-out number; {ho.zs_s1_global} % is a control that came out vacuous.** Both cuts were pre-registered together before either number existed, which is why the vacuous one is published rather than dropped. Even the informative rate is a dial rather than a constant: an equally defensible one-fifth training split lands at **{ho.adv_short_split} %** and leaving two operations out at **{ho.adv_two_ops} %**. **This is D-003 becoming visible, not a defect** — the engine's quantifier *is* the observed evidence, and a law that does not extrapolate to an unobserved operation is the documented behaviour, correctly reported. What it forbids is the word \"verified\" without the quantifier attached. A third figure names a real mechanism at a magnitude that is **not** a property of the engine: **{ho.zs_s2_local} %** of `cell_local` laws survive the same cut, so thinner evidence does not merely add global laws — it manufactures encoding-local ones that are not there, the same `scope` over-assertion the paragraph above measures from the other side. But every one of those misses sits on cell 0 or cell n-1: `parityworld`'s windows are contiguous on a *line*, and a line has two ends that exactly one operation touches. Rebuilt cyclic, so that every cell is touched by k operations, the same family gives **{ho.adv_cyclic_local} %** here and **{ho.adv_cyclic_global} %** above. The mechanism is real; the magnitude is a fact about the corpus's shape. The `k` disaggregation was computed after the headline was read. "
             "**Two things are {unmeasured} here, and the second is the one that is easy to misread.** Behaviour on any family but `parityworld` — `gridworld`, `blockworld`, `hypset` and `jumpgraph` are never fed to this engine. And **`g50t` itself**: every g50t figure above is a census of what was *published*, not a check that any of it *holds*. Deciding that needs reachability enumeration over the live game, which both sources state is impossible offline. {zs.falsified_laws} is likewise reported by its own analyst as a **lower bound** — a stronger quantifier would only find more."
         ),
     ),
@@ -497,8 +518,8 @@ ROWS = [
             "Two limits are honestly **{unmeasured}**: for the other **{lp.no_farkas}** worlds \"no linear pagoda exists\" rests on HiGHS returning float infeasibility — no exact Farkas dual was produced, so that is a solver's claim and not a proof; and `n_pos ≤ {lp.max_npos}` is the whole corpus, so nothing above {lp.max_states} states was examined and the silence-vs-size trend must not be extrapolated. "
             "A third limit is **{unmeasured}** and rows 2 and 3 name their equivalent: **only the `jumpgraph` family was tested.** This engine hard-codes peg-jump geometry in four places, so there is no second family to try without writing one. "
             "**Held out (E17), and it splits cleanly into a pass and a hole.** What this engine fits on is the *move list*: `solve_certificate` builds one LP row per geometry and `inv_closed` then quantifies over that same list. Withhold one geometry at a time across {ho.lp_instances} `pegN` instances ({ho.lp_cases} cases, {ho.lp_silent} of them silent — silence is D-014 answering, never a miss) and of the {ho.lp_certs} certificates that come back only **{ho.lp_inv_rate} %** still satisfy `inv_closed` on the withheld geometry, **{ho.lp_false}** are outright false against BFS ground truth over the complete move set, and **{ho.lp_heldout_viol}** held-out states get an `h` above their true distance. Smallest witness, checkable by hand against Fixture C's own docstring: on `peg4` with goal `0100`, start `0011` and the geometry `jump(3,2,1)` withheld, the LP returns weights whose three conditions are all exactly true in the rationals -- certifying a goal the fixture's own hand-verified table says is reachable. The weights are in the run's `witnesses.false_certificates` block rather than here, so that no digit in this cell is unprobed. "
-            "**The pass is that the emit boundary already holds: {ho.lp_gate_let_through} of those certificates reach `candidates.jsonl`.** `premises_against_graph` re-derives the move list from the graph and withheld every one; the arithmetic half of it (a geometry that *raises* the potential, as opposed to one merely absent from the list) independently catches {ho.lp_gate_arith}. So the hole is in `check_exactly`, not at the emit gate, and the two must not be quoted as one. "
-            "**And the engine as it ships already passes a held-out check nobody had labelled as one**: the LP constrains exactly two state sets, `initial` and the goals, so every other state is held out — over {ho.lp_base_certs} complete-graph certificates that is **{ho.lp_base_viol} admissibility violations in {ho.lp_base_states} held-out states**. Alone among the eight rows, this engine's \"已验证\" was not circular to begin with. "
+            "**And the emit gate does not save it.** Handed the *complete* graph, `premises_against_graph` withholds all {ho.lp_certs} — but that asks whether the guard fires when handed the very evidence the hold-out says the caller lacks, and this engine's own docstring records that production cannot reach that branch. Handed the graph a partial-evidence caller actually holds, **{ho.lp_gate_let_reduced} are emitted, including all {ho.lp_false_emitted} false ones**, each carrying `holds: true` and `sound_over_graph: true` into the shared candidate stream. The guard is real against a *truncated certificate* and blind to *truncated evidence*, and only the second is what a hold-out models. Its counting half fires on all {ho.lp_certs} and its arithmetic half on {ho.lp_gate_arith}; that is an identity rather than two detectors, since `check_exactly` has already proved the listed moves non-increasing, so the only geometry that can raise the potential is the withheld one. "
+            "**One further figure, and it is entailed rather than observed**: the LP constrains exactly two state sets, `initial` and the goals, so every other state is outside the constraint set — over {ho.lp_base_certs} complete-graph certificates that is **{ho.lp_base_viol} admissibility violations in {ho.lp_base_states} such states**. It was drafted as evidence that this row's re-check had never been circular. It is not evidence at all: `inv_closed` over the complete move set *implies* admissibility on every finite-distance state, so no configuration exists in which the count could be non-zero. The states sit outside the LP's constraints but inside its argument, which quantifies over move instances and so covers them all. Retained as a consistency check on the harness, which is what it is. "
             "Two design consequences, both measured. No public path yields a heuristic for a solvable configuration, so all **{lp.heuristic_none_when_solvable}** reachable worlds get no bound at all — the heuristic exists only where no search would be run. And where it does exist it is usually vacuous: **{lp.h_zero_pct} %** of usable states get `h = 0`, and in **{lp.h_always_zero}** worlds `h` is 0 on *every* such state — an admissible bound that never once says anything. Sharpness is not claimed (D-008), and nothing in the rig currently measures it. {lp.unaudited} of {lp.published} published fields are asserted by no invariant."
         ),
     ),
@@ -675,29 +696,42 @@ def render(values: dict[str, str]) -> str:
     w("  claim as a proof rather than a solver's word; `cegis_miner` past 3 literals")
     w("  and past the grid family; `probe_frontier`'s planner-backed path.")
     w("")
-    w("## The standing rule on the word 「已验证」")
+    w(f"## The standing rule on the word 「{VERIFIED}」")
     w("")
-    w("**Where no held-out validation exists, a cell may say 「在观测证据上自洽」 and")
-    w("may not say 「已验证」.** Not as a stylistic preference — as the literal reading")
-    w("of what was done. A re-check that consumes the evidence the claim was fitted")
-    w("to answers \"is this claim consistent with its own inputs\", which for a")
-    w("least-squares-shaped engine is close to a tautology and for `zero_space` is")
-    w("one exactly: the laws *are* the null space of the observed differences, so")
-    w(sub("`verify()` re-checks `a·d = 0` on the same `d`. Two of the eight rows now have", values))
-    w("the other half (E17, and it is a boundary rather than a defect — see both");
-    w("cells); the remaining six do not, and their re-check columns are to be read")
-    w("with this sentence attached.")
+    w(f"**Where no held-out validation exists, a cell may say 「{SELF_CONSISTENT}」 and")
+    w(f"may not say 「{VERIFIED}」.** Not as a stylistic preference — as the literal")
+    w("reading of what was done. A re-check that consumes the evidence the claim was")
+    w("fitted to answers \"is this claim consistent with its own inputs\", which for")
+    w("`zero_space` is a tautology exactly: the laws *are* the null space of the")
+    w("observed differences, so `verify()` re-checks `a·d = 0` on the same `d`.")
     w("")
-    w(sub("The two numbers E17 produced are **{ho.zs_s2_global} %** (`zero_space`, global laws, one operation", values))
-    w(sub("withheld — against {ho.zs_s1_global} % under a random transition split of the same evidence) and", values))
-    w(sub("**{ho.lp_inv_rate} %** (`lp_potential`, `inv_closed` on a withheld move geometry, with", values))
-    w(sub("{ho.lp_false} certificates outright false). Both splits were registered before either", values))
-    w("number existed. Neither number is a score: `zero_space`'s quantifier is the")
-    w("observed evidence by decision (D-003) and `lp_potential` is sound but")
-    w("incomplete (D-014), so a miss measures how far a claim extrapolates, and")
-    w(sub("nothing else. The one figure that *is* a pass is {ho.lp_gate_let_through}: none of the false", values))
-    w("certificates reached the shared candidate stream, because the emit gate")
-    w("re-derives its premises from the graph rather than from the certificate.")
+    w("**Every row's re-check column is qualified by this sentence, including the two")
+    w("that now carry a held-out number.** E17 produced held-out validation for two")
+    w(f"of the eight, and its own adversarial review then reduced what that buys:")
+    w("")
+    w(sub("* `zero_space`: **{ho.zs_s2_global} %** of global laws survive when one operation is withheld", values))
+    w(sub("  ({ho.zs_s2_novel_rows} of {ho.zs_s2_rows} withheld rows carry information the fit had not seen). The", values))
+    w(sub("  companion cut, a random {ho.zs_train_pct} / {ho.zs_heldout_pct} transition split, returns {ho.zs_s1_global} % and is", values))
+    w(sub("  **vacuous**: {ho.zs_s1_novel_rows} of its {ho.zs_s1_rows} withheld rows are new. It is published as a", values))
+    w("  control that failed, not as a result.")
+    w(sub("* `lp_potential`: **{ho.lp_inv_rate} %** of certificates still satisfy `inv_closed` on a withheld", values))
+    w(sub("  move geometry, and {ho.lp_false} are outright false. Handed the same partial evidence the", values))
+    w(sub("  certificate was fitted on, the emit gate lets **{ho.lp_gate_let_reduced}** of them out, all", values))
+    w(sub("  {ho.lp_false_emitted} false ones among them; it withholds all of them only when handed the", values))
+    w("  complete graph, which a partial-evidence caller does not have.")
+    w("")
+    w("Neither number is a score. `zero_space`'s quantifier is the observed evidence")
+    w("by decision (D-003) and `lp_potential` is sound but incomplete (D-014), so a")
+    w("miss measures how far a claim extrapolates and nothing else. What the two")
+    w("numbers *do* settle is the wording: with them, those rows may state a")
+    w("held-out figure with its cut named. Without them, no row may.")
+    w("")
+    w("Corpus limits, since a rule with an unstated scope is worse than none: both")
+    w("measurements are on synthetic families generated by the harness")
+    w("(`parityworld`, `pegN`). No live-game data, and no other world family, has")
+    w("been held out for any engine. The magnitudes are corpus-shaped — the review")
+    w("showed both `zero_space` figures move by tens of points under an equally")
+    w("defensible corpus geometry or split fraction.")
     w("")
     w("Two numbers are corrections of figures that were circulating, and both run")
     w("against the rig's own interest:")

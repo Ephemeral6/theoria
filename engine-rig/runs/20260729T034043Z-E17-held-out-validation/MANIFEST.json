@@ -20,23 +20,31 @@
     },
     {
       "path": "engine-rig/heldout/zero_space_heldout.py",
-      "sha256": "e0a494e826d585b0653f541554419b9c55adbc5fc4e89ebb03c208083041bbaf"
+      "sha256": "a82c44c25f4de499e629d54ef25e08c00927db8a226227cca3e1bdd5d4dcd8a5"
     },
     {
       "path": "engine-rig/heldout/lp_potential_heldout.py",
-      "sha256": "8aeb80173c7faf46307ef6ad5dc3fb24f31d5ef7a9c77bd85aa2234b0bfedb56"
+      "sha256": "0f94526cbb210175368452441086705d3bd6eb283c1362cee46b1ce7a08089a3"
     },
     {
       "path": "engine-rig/heldout/run.py",
-      "sha256": "fbc03e299dbb6af99549d48894867fe87d3ff81dfb5857753d1cc125ab0dc17f"
+      "sha256": "13b04457b545373187c08de07f57e083cbcb7f602149247e3b02bbbbd3bf7c8b"
+    },
+    {
+      "path": "engine-rig/tests/test_heldout.py",
+      "sha256": "b70e153d6ce56d4bc4e1fae9c19146e0edf8e41ca51f30f800cf275f9d175ec8"
+    },
+    {
+      "path": "engine-rig/tests/test_engine_table.py",
+      "sha256": "306037f438dfcd84f9734234f4d0d4e6a71101532899a03a4ae7a86094b911c2"
     },
     {
       "path": "engine-rig/tools/engine_table.py",
-      "sha256": "08b3c5ffdbff2dbec3e60a1f49a8d226712c13439016710aaf684ccfcb1b2995"
+      "sha256": "eeefea1403fa583395032d68a5b580953170feb09fd6836f5f79d67bfc64b1f4"
     },
     {
       "path": "engine-rig/ENGINE_TABLE.md",
-      "sha256": "fa1de92e7c82df73f8c8501aa8491b9ef9531497aca7c08c7cc0a830456b95a7"
+      "sha256": "1f839dafab9a8b12de04492e94a33f78b13ddb0e9f0d08bb54cd5c540888cca9"
     },
     {
       "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/PREREGISTRATION.md",
@@ -44,23 +52,35 @@
     },
     {
       "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/results.json",
-      "sha256": "60bc41a7cd342cd9666926810672f71e1704ea462b9f2b07050ea4fbdced2853"
+      "sha256": "4c4e2d941842ea7bd28ab42ebd6b288292a42c337bae6b8fbe93e4a04d620073"
     },
     {
       "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/RESULTS.md",
-      "sha256": "c582cb4a9503b3de89f2d32f3a2897b689a954cd02ac7dfe65847e81c7378be7"
+      "sha256": "f4d33e0e9af6d405c02eaee413f1fee852df953e7a342cf60563bed5a069a788"
+    },
+    {
+      "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/ADVERSARIAL-heldout.md",
+      "sha256": "92be061cca3b1a5ed0c75e4663474a75d7312d9f892aa59f61c7c246fcfa1ee0"
+    },
+    {
+      "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/CORRECTIONS.md",
+      "sha256": "96f16c81d8dfc272823644aedf538ca42ffd6ecd94d39dca3165ebecd7b65f50"
     },
     {
       "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/measured/heldout-run.txt",
-      "sha256": "c84812b83687e10cbc714f92e4f21c7898e794108685ad5a1633d52dc4910df3"
+      "sha256": "7d6e0310631c547bf40fe9ef97329f7ed6d72df300743ed87f347e8252e810a8"
     },
     {
       "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/measured/pytest.txt",
-      "sha256": "baf43d4198e7eca567d80abca00be45da641b51a0bb8caa63ecd2de3c1f9b8d9"
+      "sha256": "ac4b1947c91bab75b16b460a80dba814760bda922b1bbb867223ab9d799f59a1"
+    },
+    {
+      "path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/measured/mutation-recheck.txt",
+      "sha256": "55c598451601f97b280e43d86c4cea01f6f96ce25aa2ed78399ff221058828b8"
     }
   ],
   "harness_commit": "c781a73e57d9e2546845c3693efbedfcabb34291",
-  "note": "The pre-registration commit is an ancestor of every commit that carries a number; `git merge-base --is-ancestor ef382c9ed80a7363127e30fedd9dccf4d83c6709 HEAD` is the proof. Zero API calls, zero network, zero sealed-pile contact; the corpora are generated in memory and no committed fixture is read or written except Fixture C, which is read as a correctness gate.",
+  "note": "The pre-registration commit is an ancestor of every commit that carries a number; `git merge-base --is-ancestor ef382c9ed80a7363127e30fedd9dccf4d83c6709 HEAD` is the proof. RESULTS.md is the pre-correction text and is superseded in part by CORRECTIONS.md, which records what ADVERSARIAL-heldout.md overturned; ENGINE_TABLE.md carries the corrected wording. Zero API calls, zero network, zero sealed-pile contact; the corpora are generated in memory and no committed fixture is read or written except Fixture C, which is read as a correctness gate.",
   "preregistration_commit": "ef382c9ed80a7363127e30fedd9dccf4d83c6709",
   "prompt_id": "E17-held-out-validation",
   "utc": "2026-07-29T03:40:43Z"

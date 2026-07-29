@@ -73,6 +73,36 @@ def test_a_boundary_that_was_never_measured_says_so_in_those_words():
     )
 
 
+def test_the_standing_rule_on_verified_is_published_and_names_the_held_out_rows():
+    """The rule must be a gate, not a paragraph.
+
+    E17's adversarial review (F17) found the rule stated in the file with no
+    test behind it, and — worse — forbidding a word no cell used, which makes it
+    unfalsifiable in both directions. So this binds it to something checkable:
+    the rule is present, and the only two rows permitted to quote a held-out
+    figure are the two that have one.
+    """
+    if not engine_table.TABLE.exists():
+        pytest.skip("ENGINE_TABLE.md has not been generated on this machine")
+    text = engine_table.TABLE.read_text(encoding="utf-8")
+
+    assert engine_table.SELF_CONSISTENT in text, (
+        "the standing rule's permitted wording is not published"
+    )
+    assert f"may not say 「{engine_table.VERIFIED}」" in text, (
+        "the standing rule itself is missing from the table"
+    )
+
+    held_out_rows = {"`zero_space`", "`lp_potential`"}
+    for row in engine_table.ROWS:
+        claims_held_out = "Held out (E17)" in row["boundary"]
+        assert claims_held_out == (row["engine"] in held_out_rows), (
+            f"{row['engine']} disagrees with the standing rule: a row may claim a "
+            "held-out figure only if E17 measured one for it, and both rows that "
+            "have one must say so"
+        )
+
+
 def test_every_number_in_the_table_is_backed_by_a_probe():
     """No bare numeral may appear in the row prose.
 

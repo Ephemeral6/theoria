@@ -71,9 +71,22 @@ def zero_space_section() -> Dict[str, Any]:
                 })
 
     rank_loss = Counter()
+    novelty: Dict[str, Counter] = {}
     for outcome in outcomes:
         rank_loss["%s" % outcome.split_name] += int(outcome.train_rank < outcome.full_rank)
         rank_loss["%s/splits" % outcome.split_name] += 1
+        # Does the split withhold any *information*, or only some rows? In this
+        # family a difference vector is a function of the operation alone, so a
+        # transition-level split can hold out only duplicates of rows the fit
+        # already saw -- in which case the hit rate is forced to 100 % by
+        # substitution and measures nothing. F1 of the adversarial review; the
+        # number is published so a reader cannot miss it.
+        counter = novelty.setdefault(outcome.split_name, Counter())
+        counter["splits"] += 1
+        counter["heldout_rows"] += outcome.n_heldout
+        counter["duplicate_rows"] += outcome.heldout_rows_duplicate
+        counter["novel_rows"] += outcome.heldout_rows_novel
+        counter["splits_withholding_nothing_new"] += int(outcome.heldout_rows_novel == 0)
 
     return {
         "corpus": {
@@ -94,7 +107,12 @@ def zero_space_section() -> Dict[str, Any]:
                                     "checked": len(worlds)},
         "splits": {k: dict(v) for k, v in sorted(tally.items())},
         "rank_loss": dict(rank_loss),
-        "misses": misses[:200],
+        "heldout_row_novelty": {k: dict(v) for k, v in sorted(novelty.items())},
+        # Uncapped: PREREGISTRATION.md section 5.3 requires a witness for
+        # *every* miss, and the first cut of this file wrote misses[:200]
+        # of 1940 while the validity table ticked the criterion. Caught by
+        # the adversarial review (F8).
+        "misses": misses,
         "misses_total": len(misses),
     }
 
@@ -120,6 +138,7 @@ def lp_potential_section() -> Dict[str, Any]:
     inv_hits = [c for c in certificates if c.heldout_inv_closed]
     false_certs = [c for c in certificates if c.claim_true is False]
     ungated = [c for c in certificates if not c.gate_withholds]
+    ungated_reduced = [c for c in certificates if not c.gate_withholds_reduced]
     caught_by_arithmetic = [c for c in certificates if c.gate_raising_moves]
 
     base_certs = [b for b in baselines if b.outcome == "certificate"]
@@ -157,17 +176,25 @@ def lp_potential_section() -> Dict[str, Any]:
             "false_certificate_rate_pct": _pct(len(false_certs), len(certificates)),
             "emit_gate_withheld": len(certificates) - len(ungated),
             "emit_gate_let_through": len(ungated),
+            # The gate as a caller holding only the reduced evidence would run
+            # it. This is the number that says whether the emit boundary
+            # protects anybody; the one above says whether it protects a caller
+            # who already has the answer. F5.
+            "emit_gate_let_through_reduced_graph": len(ungated_reduced),
+            "false_certificates_emitted_reduced_graph": sum(
+                1 for c in false_certs if not c.gate_withholds_reduced),
             "caught_by_raised_potential_too": len(caught_by_arithmetic),
             "heldout_admissibility_violations": sum(
                 c.admissibility_violations or 0 for c in certificates),
             "cases_with_admissibility_violations": len(heldout_violations),
         },
         "witnesses": {
-            "false_certificates": [witness(c) for c in false_certs[:20]],
+            "false_certificates": [witness(c) for c in false_certs],
             "inv_closed_misses": [witness(c) for c in certificates
-                                  if not c.heldout_inv_closed][:20],
-            "admissibility_violations": [witness(c) for c in heldout_violations[:20]],
-            "emit_gate_let_through": [witness(c) for c in ungated[:20]],
+                                  if not c.heldout_inv_closed],
+            "admissibility_violations": [witness(c) for c in heldout_violations],
+            "emit_gate_let_through": [witness(c) for c in ungated],
+            "emit_gate_let_through_reduced_graph": [witness(c) for c in ungated_reduced[:50]],
         },
     }
 
@@ -196,6 +223,11 @@ def summarise(report: Dict[str, Any]) -> List[str]:
         lines.append("  %-22s laws=%-6d delta_hit=%s%%  value_hit=%s%%"
                      % (name, row["laws"], _pct(row["delta_hit"], row["laws"]),
                         _pct(row["value_hit"], row["laws"])))
+    for name in sorted(zs["heldout_row_novelty"]):
+        row = zs["heldout_row_novelty"][name]
+        lines.append("  %-6s novelty: %d/%d held-out rows are new; %d/%d splits withhold nothing new"
+                     % (name, row["novel_rows"], row["heldout_rows"],
+                        row["splits_withholding_nothing_new"], row["splits"]))
     lines.append("  delta misses total: %d" % zs["misses_total"])
     lines.append("lp_potential -- %d pegN instances, %d held-out cases"
                  % (lp["corpus"]["instances"], lp["corpus"]["held_out_cases"]))
@@ -207,9 +239,10 @@ def summarise(report: Dict[str, Any]) -> List[str]:
     lines.append("  held-out: %d certs (%d silent), inv_closed hit %s%%, false certs %d (%s%%)"
                  % (h["certificates"], h["silent"], h["heldout_inv_closed_rate_pct"],
                     h["false_certificates"], h["false_certificate_rate_pct"]))
-    lines.append("  emit gate: withheld %d, let through %d; raised-potential caught %d"
-                 % (h["emit_gate_withheld"], h["emit_gate_let_through"],
-                    h["caught_by_raised_potential_too"]))
+    lines.append("  emit gate (complete graph): let through %d; (reduced graph, the caller's) let through %d, of which false %d"
+                 % (h["emit_gate_let_through"],
+                    h["emit_gate_let_through_reduced_graph"],
+                    h["false_certificates_emitted_reduced_graph"]))
     return lines
 
 

@@ -49,6 +49,13 @@ class HeldOutCase:
     heldout_inv_closed: Optional[bool] = None
     claim_true: Optional[bool] = None
     gate_withholds: Optional[bool] = None
+    # The same gate, handed the graph a caller *with the hold-out's own premise*
+    # would actually hold -- the reduced one.  Added after E17's adversarial
+    # review (F5): scoring the gate against the complete graph asks whether it
+    # catches a certificate when handed the very evidence the hold-out says is
+    # missing, which no real caller can do, and `engines/lp_potential/__init__.py`
+    # says outright that production cannot reach that branch.
+    gate_withholds_reduced: Optional[bool] = None
     # Kept apart on purpose.  `premises_against_graph` fails a certificate for
     # two different reasons and only the second is evidence that the *weights*
     # are wrong: a shorter move list is caught by counting, a raised potential is
@@ -156,6 +163,7 @@ def held_out_case(instance: Instance, graph: Dict[str, Any],
 
     heuristic = heuristic_from(certificate)
     emitted = lp_potential.candidates(certificate, heuristic, graph)
+    emitted_reduced = lp_potential.candidates(certificate, heuristic, reduced)
     premises = lp_potential.premises_against_graph(certificate, graph)
 
     violations, tested, first = _admissibility_on_heldout(certificate, graph)
@@ -166,6 +174,7 @@ def held_out_case(instance: Instance, graph: Dict[str, Any],
         heldout_inv_closed=inv_closed,
         claim_true=not instance.truly_reachable,
         gate_withholds=(emitted == []),
+        gate_withholds_reduced=(emitted_reduced == []),
         gate_missing_moves=sorted(premises["missing_moves"]),
         gate_raising_moves=sorted(premises["moves_raising_potential"]),
         weights=[str(w) for w in certificate.weights],
