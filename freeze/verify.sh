@@ -496,6 +496,167 @@ EOF
 fi
 echo
 
+# ------------- 10. the U3 axiom criterion: one rule, stated the same in both
+# RECONCILE N-4.  `STATS_RULES.md` §1.2 judges U3 criterion (b) by the G1
+# axiom WHITELIST; `CLAIMS_TEXT.md`'s C1 verbatim text said 空公理集 (empty
+# axiom set).  Both files claim to be the verbatim text of the SAME endpoint,
+# and they were incompatible: judge by the whitelist, publish by the empty set,
+# and the published sentence is false -- while wording rule 1 ("a claim may
+# come only from CLAIMS_TEXT.md") is broken in the direction nobody notices.
+#
+# Stage 9 guards a pre-registered SELECTION rule.  This stage guards a
+# pre-registered ACCEPTANCE criterion against the same failure mode: two
+# copies of one rule drifting apart.
+#
+# WHAT THIS ENFORCES:
+#   1. neither verbatim block in C1 states the superseded empty-axiom-set
+#      criterion (the amendment record above them may quote it -- that is
+#      prose, not a claim, and is deliberately out of scope);
+#   2. the 成立版 block names the whitelist in full -- all three allowed
+#      axioms AND both never-allowed ones, so it cannot be relaxed by
+#      quietly dropping `sorryAx` from the published sentence;
+#   3. STATS_RULES.md §1.2 still carries the same five names, so the two
+#      files cannot drift by one side forgetting the list;
+#   4. §9.2 (non-triviality check) and §9.14 (U3 has no implementation) are
+#      typed 开跑前置条件, not needs_impl.  This is the price of item 2:
+#      criterion (b) was relaxed, so criterion (c) is now the ONLY thing
+#      standing between a vacuous theorem and a counted U3 -- and a vacuous
+#      theorem is the case (b) scores most cleanly, since it uses the fewest
+#      axioms.  Relaxing (b) without hardening (c) leaves the endpoint easier
+#      to game than before the amendment;
+#   5. a NEGATIVE CONTROL: checks 1-2 are re-run against a mutated copy that
+#      restores the old wording, and must go red on it.  Without this the
+#      stage could pass by matching nothing.
+echo "[10] U3 criterion (b): CLAIMS_TEXT.md and STATS_RULES.md state one rule"
+g1_out="$(python - "$C" "$S" <<'PY' 2>&1
+import re, sys
+sys.stdout.reconfigure(encoding="utf-8")
+
+c_path, s_path = sys.argv[1:3]
+claims = open(c_path, encoding="utf-8").read()
+stats  = open(s_path, encoding="utf-8").read()
+
+ALLOWED  = ["propext", "Quot.sound", "Classical.choice"]
+REFUSED  = ["sorryAx", "ofReduceBool"]
+SUPERSEDED = ["公理集为空", "空公理集", "公理集非空"]
+
+def verbatim_blocks(text):
+    """The '> ' quote blocks under C1's 成立版/不成立版 headings, by name."""
+    out = {}
+    for name in ("成立版", "不成立版"):
+        m = re.search(r"^### %s（逐字）\s*$(.*?)(?=^###|\Z)" % name,
+                      text, re.M | re.S)
+        if m is None:
+            continue
+        out[name] = "\n".join(l for l in m.group(1).split("\n")
+                              if l.lstrip().startswith(">"))
+    return out
+
+def audit(text, label):
+    """Returns a list of complaints.  Empty list == the criterion is aligned."""
+    bad = []
+    blocks = verbatim_blocks(text)
+    for name in ("成立版", "不成立版"):
+        if name not in blocks:
+            bad.append("%s: C1 has no %s（逐字）block" % (label, name))
+            continue
+        for s in SUPERSEDED:
+            if s in blocks[name]:
+                bad.append("%s: C1 %s still states the superseded criterion %r"
+                           % (label, name, s))
+    hold = blocks.get("成立版", "")
+    for a in ALLOWED + REFUSED:
+        if a not in hold:
+            bad.append("%s: C1 成立版 does not name %r from the G1 whitelist" % (label, a))
+    return bad
+
+# 1 + 2 -- the live file
+live = audit(claims, "CLAIMS_TEXT.md")
+for b in live:
+    print("FAIL " + b)
+if not live:
+    print("PASS C1's two verbatim blocks state the G1 whitelist, not the empty axiom set")
+
+# 3 -- the other copy of the same rule.  Scoped to the whitelist TABLE, not to
+#      §1.2 at large: the surrounding prose argues about these axioms and names
+#      every one of them in passing, so a substring search over the section
+#      stays green even after the operative table is gutted.  The disposition
+#      each axiom receives is what has to match, so that is what is read.
+sec = re.search(r"### 1\.2(.*?)(?=^## |\Z)", stats, re.M | re.S)
+if not sec:
+    print("FAIL STATS_RULES.md: §1.2 not found -- criterion (b) has no home")
+else:
+    rows = [l for l in sec.group(1).split("\n") if "放行" in l and l.count("|") >= 3]
+    passes = [l for l in rows if "永不放行" not in l]
+    refuses = [l for l in rows if "永不放行" in l]
+    drift = []
+    for a in ALLOWED:
+        if not any(a in l for l in passes):
+            drift.append("%s is no longer on the 放行 row" % a)
+    for a in REFUSED:
+        if not any(a in l for l in refuses):
+            drift.append("%s is no longer on a 永不放行 row" % a)
+        if any(a in l for l in passes):
+            drift.append("%s has been moved onto the 放行 row" % a)
+    # The whitelist is CLOSED: the prose promises that adding an axiom after
+    # the freeze is an incident, and this is the executable half of that
+    # promise.  Checking only that the three are present would let a fourth
+    # be appended silently -- which is the cheapest way to relax criterion (b)
+    # without touching a single sentence anyone reads.
+    for l in passes:
+        cell = l.split("|")[2] if l.count("|") >= 3 else ""
+        extra = [n for n in re.findall(r"`([A-Za-z][\w.]*)`", cell)
+                 if n not in ALLOWED]
+        if extra:
+            drift.append("the 放行 row has grown: %s is not in the frozen "
+                         "whitelist (adding one is an incident, not an edit)"
+                         % ", ".join(sorted(set(extra))))
+    if drift:
+        print("FAIL STATS_RULES.md §1.2 whitelist table drifted: %s" % "; ".join(drift))
+    else:
+        print("PASS STATS_RULES.md §1.2 whitelist table gives all five axioms "
+              "the same disposition C1 publishes")
+
+# 4 -- the price of the relaxation
+for row, what in (("9.2", "non-triviality check (criterion c)"),
+                  ("9.14", "U3 has no implementation")):
+    line = next((l for l in stats.split("\n")
+                 if l.startswith("| %s |" % row)), None)
+    if line is None:
+        print("FAIL STATS_RULES.md §9: row %s is gone -- %s was a launch blocker" % (row, what))
+    elif "开跑前置条件" not in line:
+        print("FAIL STATS_RULES.md §%s downgraded: %s is no longer a launch blocker"
+              % (row, what))
+    else:
+        print("PASS §%s is a launch blocker (%s)" % (row, what))
+
+# 5 -- negative control: put the old wording back, the audit must catch it
+mutant = claims.replace(
+    "> `#print axioms` 只报告预注册白名单内公理（`propext` / `Quot.sound` / `Classical.choice`；\n"
+    "> `sorryAx` 与 `Lean.ofReduceBool` 永不放行）且通过非平凡性检查的定理，",
+    "> 公理集为空且通过非平凡性检查的定理，")
+if mutant == claims:
+    print("FAIL negative control could not be built: the 成立版 whitelist sentence "
+          "is not where this stage expects it -- the check may be scanning nothing")
+elif not audit(mutant, "mutant"):
+    print("FAIL negative control did not fire: restoring 空公理集 in C1 still passes "
+          "-- this stage is testing nothing")
+else:
+    print("PASS negative control fires: restoring 空公理集 in C1 turns this stage red")
+PY
+)"
+while IFS= read -r line; do
+  case "$line" in
+    "PASS "*) ok "${line#PASS }" ;;
+    "FAIL "*) bad "${line#FAIL }" ;;
+    "") ;;
+    *) bad "stage 10 did not run cleanly: $line" ;;
+  esac
+done <<EOF
+$g1_out
+EOF
+echo
+
 # ------------------------------------------------------------------ verdict
 echo "=============================================================="
 if [ "$FAIL" -eq 0 ]; then

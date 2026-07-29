@@ -264,7 +264,7 @@ F-11 已把 ft09/ls20 隔离出去。两者不要混。
 | # | 事 | 为什么挡冻结 | 出处 |
 |---|---|---|---|
 | A | ~~**消融臂不存在**~~ → **消融臂已建成，但无线上形态**（2026-07-29 复扫，见表下） | 起草时属实，现已不属实。臂在树上并已标定，**C2 的切分工具到位**；但两臂的美元列都是 `NOT MEASURED`，离线补不上，**C5 的成本切分仍然挡冻结** | `ablation-arm/{DESIGN,REPORT,STATUS}.md`；旧证据「分支与 master 逐字节相同、`ablation-arm/` 是空目录」**已作废** |
-| B | **U3 达成率没有任何实现** | 它是三个主终点之一，全仓没有对应指标，`Step.won` 无人消费 | `MANIFEST_DRAFT.md` ⛔ 8-a |
+| B | **U3 达成率没有任何实现** —— 2026-07-29 升为**开跑前置条件**（`STATS_RULES.md` §9.14），连同判据 (c) 的非平凡性检查（§9.2，同日自 `needs_impl` 升级） | 它是三个主终点之一，全仓没有对应指标，`Step.won` 无人消费。**为一个算不出来的量冻结裁决规则，冻的是一句不可执行的话**；且 G1 把判据 (b) 放宽为公理白名单之后，(c) 成了「恒真定理冒充 U3」唯一的门（升级理由见 `STATS_RULES.md` §9 表下方，修订记录见 `CLAIMS_TEXT.md` C1） | `MANIFEST_DRAFT.md` ⛔ 8-a；`build_manifest.py:173-178` |
 | C | **⟨n⟩ 的依据 untracked** | `baseline-arms/out/campaign/` 的 48 个 episode 不在 git 里；不可哈希 = 不能进预注册 | `git ls-files` 返回 0 |
 | D | **Theoria 臂的规划器未钉版** | `theoria-arm/inner/plan.py:112` 不传 `prefer=`，规划器档位取决于跑它那台机器的 `$FAST_DOWNWARD` | `MANIFEST_DRAFT.md` ⚠ 7-a |
 
