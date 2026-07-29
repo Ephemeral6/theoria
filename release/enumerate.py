@@ -203,22 +203,31 @@ def _is_payload(value) -> bool:
 
 
 def _records_pairing(path: str, named: list[str], jsonl: bool) -> int | None:
-    """Count of records pairing an ARC id with payload; ``None`` if unparseable."""
-    try:
-        with open(path, encoding="utf-8") as fh:
-            records = (
-                (json.loads(ln) for ln in fh if ln.strip()) if jsonl else iter([json.load(fh)])
-            )
-            n = 0
-            for rec in records:
-                blob = json.dumps(rec)
-                if not any(g in blob for g in named):
-                    continue
-                if any(_is_payload(d.get(k)) for d in redlines._walk(rec) for k in PAYLOAD_KEYS):
-                    n += 1
-            return n
-    except (OSError, ValueError, UnicodeDecodeError):
+    """Count of records pairing an ARC id with payload; ``None`` if unparseable.
+
+    The `None` was already right here when `check_redlines` was still answering
+    the same question with `[]`. What was wrong is that it was right *separately*
+    -- its own `try`, its own tuple of exception types, one package holding two
+    implementations of one rule. That is the arrangement that produced the split
+    in the first place, so reading through `redlines.read_json_records` is the
+    part of this that has to hold: whichever way the rule moves next, it moves
+    once.
+
+    It also inherits the eager read, which fixes a defect this copy shared: the
+    lazy generator unwound on a malformed line thousands of records in, throwing
+    away every count already made.
+    """
+    records, _why = redlines.read_json_records(path, jsonl)
+    if records is None:
         return None
+    n = 0
+    for rec in records:
+        blob = json.dumps(rec)
+        if not any(g in blob for g in named):
+            continue
+        if any(_is_payload(d.get(k)) for d in redlines._walk(rec) for k in PAYLOAD_KEYS):
+            n += 1
+    return n
 
 
 def _review_note(rel: str, blob: bytes, cls: str) -> str | None:

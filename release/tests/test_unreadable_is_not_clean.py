@@ -351,6 +351,26 @@ def test_both_scripts_read_through_the_same_decision(tmp_path):
     )
 
 
+def test_the_enumerator_routes_its_parse_through_the_shared_reader(tmp_path, monkeypatch):
+    """Asserted by substitution, not by inspection.
+
+    `_records_pairing` reaching the right verdict proves only that it agrees
+    today; two implementations agreed on the day the second one was written too.
+    Replacing the shared reader must change the enumerator's answer, or it is
+    still carrying a copy.
+    """
+    path = tmp_path / "x.jsonl"
+    path.write_text('{"game_id": "zz00-dead", "frame": [[1]]}\n', encoding="utf-8")
+
+    assert enum._records_pairing(str(path), ["zz00-dead"], True) == 1
+
+    monkeypatch.setattr(redlines, "read_json_records",
+                        lambda *_a, **_k: (None, "forced by the test"))
+    assert enum._records_pairing(str(path), ["zz00-dead"], True) is None, (
+        "enumerate.py still parses through a copy of its own"
+    )
+
+
 def test_needs_human_is_never_spelled_the_same_way_as_no_finding(tmp_path):
     """`[]` means "read it, found nothing"; `None` means "did not read it"."""
     empty = tmp_path / "empty.jsonl"
