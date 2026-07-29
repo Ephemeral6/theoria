@@ -73,6 +73,48 @@ class PushPatchError(Exception):
     """The generated text is not the text this rewrite was written for."""
 
 
+def _split_domain_close(domain: str) -> Tuple[str, str]:
+    """Peel off the lone `)` that closes `(define (domain …)`.
+
+    `gen_pddl_a0` writes that paren on its own last line, which puts it *inside*
+    the text of the final `(:action …)` block once the domain is split on the
+    action marker.  Rewriting or deleting the last action therefore silently
+    takes the domain's closing paren with it, and the loop below cannot notice:
+    it is looking at action names, and this is not one.
+
+    That is not hypothetical.  It is what this file did until 2026-07-29: the
+    last action in a push manual is always a `block_*` rule, always dropped, and
+    the resulting domain lost its final paren every time — surfacing four call
+    frames away as `engines.fd_adapter.pddl.PddlError: unbalanced parentheses`,
+    a message about the planner rather than about the rewrite that caused it.
+    """
+    lines = domain.rstrip("\n").splitlines()
+    for i in range(len(lines) - 1, -1, -1):
+        if lines[i].strip() == ")":
+            return "\n".join(lines[:i]) + "\n", "\n".join(lines[i:]) + "\n"
+    raise PushPatchError(
+        "no closing paren line in the generated domain; "
+        "gen_pddl_a0's output has changed")
+
+
+def _balanced(text: str) -> bool:
+    """Parens balance, ignoring `;` comments.  The cheap half of the check.
+
+    The expensive half — that the result is a domain the planner's own parser
+    accepts — belongs to the test suite, which runs `fd_adapter`'s
+    `parse_domain` over every patched pair.  A rewrite whose only reader is a
+    planner four frames downstream is exactly the shape the fingerprint note
+    complains about, so it gets a reader here too.
+    """
+    depth = 0
+    for line in text.splitlines():
+        code = line.split(";", 1)[0]
+        depth += code.count("(") - code.count(")")
+        if depth < 0:
+            return False
+    return depth == 0
+
+
 def _event(rule) -> Tuple[str, str]:
     ev = rule.event
     obj = ev.args[0].name if ev.args and isinstance(ev.args[0], NameRef) else ""
@@ -215,7 +257,8 @@ def patch(domain: str, instance: str, ast: TheoryAST, mover: str,
     action_of = {name.replace("_", "-"): name for name in kinds}
 
     marker = "  (:action "
-    head, _, rest = domain.partition(marker)
+    body, domain_close = _split_domain_close(domain)
+    head, _, rest = body.partition(marker)
     blocks = [marker + part for part in rest.split(marker)] if rest else []
 
     rewritten = deleted = guarded = 0
@@ -244,12 +287,16 @@ def patch(domain: str, instance: str, ast: TheoryAST, mover: str,
             guarded += 1
             continue
         out_blocks.append(block)
-    domain = head + "".join(out_blocks)
+    domain = head + "".join(out_blocks) + domain_close
 
     if rewritten != len(table) or deleted != len(drop):
         raise PushPatchError(
             "expected %d push rewrites and %d deletions, made %d and %d"
             % (len(table), len(drop), rewritten, deleted))
+    if not _balanced(domain):
+        raise PushPatchError(
+            "the rewritten domain does not balance; refusing to hand the "
+            "planner a file whose error message would be about the planner")
 
     # --------------------------------------------------------------- instance
     facts = ["    (%s c%d-%d)" % (_predicate(o), *object_cells[o])

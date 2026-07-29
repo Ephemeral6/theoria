@@ -65,8 +65,9 @@ import hashlib
 import json
 import os
 import platform
+import re
 import sys
-from typing import Dict, List, Optional, Sequence, Tuple
+from typing import Dict, List, Optional, Sequence, Set, Tuple
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -75,7 +76,9 @@ import _bootstrap  # noqa: F401,E402
 from theory_compiler.parser.ast_nodes import (  # noqa: E402
     FuncCall, GuardAction, GuardPredicate, NameRef, NumberLit, TheoryAST,
 )
-from theory_compiler.parser.playbook_parser import parse_playbook  # noqa: E402
+from theory_compiler.parser.playbook_parser import (  # noqa: E402
+    PlaybookParseError, parse_playbook,
+)
 from theory_compiler.parser.theory_parser import parse_theory  # noqa: E402
 
 from compile.dialect import parse_semantics  # noqa: E402  (cold-start-a0)
@@ -273,6 +276,47 @@ def domain_laws(ast: TheoryAST) -> List[Dict[str, object]]:
     return out
 
 
+def _parse_playbook_lenient(text: str) -> Tuple[object, List[Dict[str, object]]]:
+    """Parse what the grammar accepts; name, by line, what it rejects.
+
+    `parse_playbook` is all-or-nothing, and on this repository's own books that
+    is a wall rather than a check.  **A3's `theory/playbook.dsl` does not parse**
+    — line 81 writes `[ev: 2/2 levels, n=2 — indicative only]` where
+    `_parse_prefer` accepts only `[ev: k/n]` — and nothing in A3 ever found out,
+    because A3 compiles its *domain* and never once hands its playbook to a
+    parser.  "Carrying the two books" was, in A3, carrying one book and a file.
+    → D-A6-003.
+
+    Refusing outright would be defensible and is the wrong call here: it would
+    make the A3 negative controls unrunnable through this protocol, which is the
+    one thing the item asks the controls to prove.  A rejected line is an entry
+    that **does not travel**, and this function treats it as exactly that — the
+    line is dropped, recorded verbatim with the parser's own message, and lands
+    in the manifest under `entries_unparsed`.  A receiver reading `PACK.json`
+    learns that the book was carried in part and which part was left; a receiver
+    of a pack that had refused would learn nothing at all.
+    """
+    lines = text.splitlines()
+    dead: Set[int] = set()
+    unparsed: List[Dict[str, object]] = []
+    for _ in range(len(lines) + 1):
+        attempt = "\n".join("" if i in dead else line
+                            for i, line in enumerate(lines))
+        try:
+            return parse_playbook(attempt), unparsed
+        except PlaybookParseError as exc:
+            match = re.match(r"Line (\d+):\s*(.*)", str(exc), re.S)
+            if match is None:
+                raise
+            index = int(match.group(1)) - 1
+            if index in dead or not (0 <= index < len(lines)):
+                raise
+            dead.add(index)
+            unparsed.append({"line": index + 1, "text": lines[index].strip(),
+                             "error": match.group(2).strip()})
+    raise PackError("the playbook could not be parsed even one line at a time")
+
+
 def playbook_entries(text: str) -> List[Dict[str, object]]:
     """The playbook's **theorem-grade** entries, and only those.
 
@@ -292,9 +336,9 @@ def playbook_entries(text: str) -> List[Dict[str, object]]:
     admissibility was considered and not claimed; reading that as theorem-grade
     would turn the most careful line in the file into the strongest one.
     """
-    book = parse_playbook(text)
+    book, unparsed = _parse_playbook_lenient(text)
     kept: List[Dict[str, object]] = []
-    dropped: List[str] = []
+    dropped: List[str] = ["unparsed:line %d" % u["line"] for u in unparsed]
     for stmt in book.statements:
         kind = type(stmt).__name__.replace("Stmt", "").lower()
         justification = getattr(stmt, "proof", None) or \
@@ -315,7 +359,7 @@ def playbook_entries(text: str) -> List[Dict[str, object]]:
             "depends": list(getattr(stmt, "params", None) or []),
             "probe": None, "status": None, "source": None,
         })
-    return kept, dropped
+    return kept, dropped, unparsed
 
 
 # ------------------------------------------------------------------ fingerprint
@@ -472,7 +516,7 @@ def build(pack_dir: str, domain_path: str, playbook_path: str,
         supplied.append("goal_cell")
 
     laws = domain_laws(ast)
-    play_kept, play_dropped = playbook_entries(playbook_text)
+    play_kept, play_dropped, play_unparsed = playbook_entries(playbook_text)
     carried = laws + play_kept
 
     manifest: Dict[str, object] = {
@@ -485,7 +529,13 @@ def build(pack_dir: str, domain_path: str, playbook_path: str,
                 "sha256": sha256_bytes(domain_text.encode("utf-8")),
                 "bytes": len(domain_text.encode("utf-8")),
                 "rules": len(ast.rules.rules),
-                "laws": len(getattr(ast.laws, "laws", []) or []),
+                # `LawsSection` has `invariants` and `theorems`; it has no
+                # `laws`, so the obvious spelling of this line reported 0 for
+                # every domain ever packed -- including one with two invariants
+                # and a theorem.  A count that is always zero is not a count.
+                "laws": (len(getattr(ast.laws, "invariants", []) or [])
+                         + len(getattr(ast.laws, "theorems", []) or [])
+                         if ast.laws is not None else 0),
             },
             "playbook": {
                 "file": "playbook.dsl",
@@ -493,6 +543,8 @@ def build(pack_dir: str, domain_path: str, playbook_path: str,
                 "bytes": len(playbook_text.encode("utf-8")),
                 "entries_carried": len(play_kept),
                 "entries_left_behind": play_dropped,
+                "parsed": "partial" if play_unparsed else "whole",
+                "entries_unparsed": play_unparsed,
             },
         },
         "theorems": carried,

@@ -24,7 +24,7 @@
     "up",
     "up"
   ],
-  "domain": "theory/generated_l2rew/domain.pddl",
+  "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_rewired/domain.pddl",
   "green": true,
   "length": 10,
   "manual_final_cell": [
@@ -79,7 +79,7 @@
     ]
   ],
   "name": "a3-l2-rewired",
-  "problem": "theory/generated_l2rew/problem.pddl",
+  "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/a3_l2_rewired/problem.pddl",
   "status": "SAT",
   "world_actions": [
     "LEFT",

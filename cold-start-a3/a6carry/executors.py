@@ -34,6 +34,16 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REPO = os.path.dirname(ROOT)
 WORLDGEN_OUT = os.path.join(REPO, "worldgen", "out", "worlds")
 
+# `_bootstrap` puts `engine-rig`, `theory-compiler/src`, `cold-start-a0` and this
+# directory on the path; the repository root is not among them, so `worldgen` is
+# importable only when the process happens to have been started there.  That is
+# the whole difference between "this executor works" and `ModuleNotFoundError`,
+# and it belongs here rather than in `_bootstrap`: *this* module is the one that
+# reaches out of the track, and putting the line anywhere higher would put a
+# world on the path of the modules that must not have one.
+if REPO not in sys.path:
+    sys.path.insert(0, REPO)
+
 
 # ------------------------------------------------------------------- worldgen
 
