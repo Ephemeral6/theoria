@@ -3,6 +3,7 @@ cell: E18
 territory: engine-rig
 deps: none
 lane: verify
+released_by: RES-3
 
 # E18-survey-numbers-reproducible · 那场普查的比率，任何人都重算不出来
 
@@ -29,3 +30,5 @@ lane: verify
    散文里的数字一律视为待证实。
 
 服务论文 WP1 与 WP9。零 API、零封存堆接触。
+
+> **RES-3 于 2026-07-29T12:37:38Z 交回**：unstated
