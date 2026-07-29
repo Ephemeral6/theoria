@@ -1,0 +1,34 @@
+{
+  "prompt_id": "A4b-ablation-calibrate",
+  "branch": "agent/a4b-ablation-calibrate",
+  "base_commit": "e46e7fe9e453e59ea273ce864d645c496594fbc6",
+  "utc": "2026-07-28T15:36:48Z",
+  "what": "Calibration of the ablation arm against the full arm: the A0 side-by-side table (score, replay accuracy, theorize rounds, cost) and the A2 false-theorem exhibit, both as regenerable artefacts.",
+  "cost": {
+    "api_calls": 0,
+    "network": false,
+    "usd": 0.0,
+    "note": "offline by construction; ledger_abl.py:9 -- zero API calls, zero network, zero dollars"
+  },
+  "commands": [
+    "python ablation-arm/run_arm.py",
+    "python ablation-arm/run_exhibits.py",
+    "python ablation-arm/calibrate.py",
+    "cd ablation-arm && python -m pytest -q",
+    "bash ablation-arm/verify.sh"
+  ],
+  "produces": [
+    "ablation-arm/calibrate.py",
+    "ablation-arm/artifacts/calibration.json",
+    "ablation-arm/REPORT.md",
+    "ablation-arm/tests/test_calibration.py"
+  ],
+  "reads_readonly": [
+    "cold-start-a0/artifacts/*",
+    "cold-start-a0/certify/score_vs_truth.py",
+    "cold-start-a0/theory/generated*/theory.lean",
+    "cold-start-a2/artifacts/*",
+    "cold-start-a2/theory/generated*/theory.lean"
+  ],
+  "files": []
+}
