@@ -118,6 +118,11 @@ PHASES = [
                         "外加 no-button 变体的 Lean 不可解证书。A0『证活』。"
                         "留下的洞（press 方向泛化不可证、零可执行探针）见 F-05/F-09。",
                 "probe": "a0_state",
+                # The probe counts ten artefacts on disk. It never runs the
+                # pipeline, never checks certify passed, never checks the plan
+                # was SAT -- "10/10 landed" is not "感知→…→赢". File presence
+                # can show something is missing; it cannot show A0 worked.
+                "probe_scope": "partial",
             },
             {
                 "id": "p1-a1",
@@ -155,6 +160,12 @@ PHASES = [
                         "红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。"
                         "凭据卫生干净：密钥只在 .env（本监视器每轮复验）。",
                 "probe": "credential_hygiene",
+                # The item is a conjunction and this probe tests one half: it
+                # looks for the key's value in the tree and never attempts an
+                # egress bypass. proxy/tests/test_seal.py is the check for the
+                # other half and the board does not run it. So the probe may
+                # report a problem here, but it may not call the item done.
+                "probe_scope": "partial",
             },
             {
                 "id": "p1-replay-audit",
