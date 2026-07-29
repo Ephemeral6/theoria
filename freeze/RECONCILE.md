@@ -217,8 +217,18 @@ P-22 `STATS_RULES.md:276-278` 写 `baseline-arms/out/campaign/` 的 48 集是
       `approx` 0.0266，差二十倍、跨过 α 两次，而 `scipy` 默认 `method="auto"`
       会按数据形状自动切换——不写死等于把能翻转结论的选择留给运行时。
       已登记 **needs_impl 9.13**：冻结前须用真实形状的模拟数据跑两条路、选定写死。
-- [ ] **G5 · `dsl_grammar_v0.2` 的 tag 不存在**（`MANIFEST_DRAFT.s4draft.md:60-62`）。
-      已进 `build_manifest.py` 的 item 2 注释，散文里也要留一条。
+- [x] **G5 · `dsl_grammar_v0.2` 的 tag 不存在**（`MANIFEST_DRAFT.s4draft.md:60-62`）
+      —— ✅ 已移植（RES-1，2026-07-29，`MANIFEST_DRAFT.md` 待办 2-b）。
+      已进 `build_manifest.py` 的 item 2 注释，散文里也留了一条。
+      **复核后比 S4 记的更糟：这个引用是自指的。**
+      `CONTRACTS/dsl_grammar_v0.2.md:10` 写「frozen at the tag that carries this
+      line」——实测仓库 24 个 tag 全是 `engine-rig-m*` 一族，无一指向 DSL 语法；
+      而且「携带此行的那个 tag」写下时就无法满足：事后补切 tag，它指向的提交里
+      「此行」所在内容已与写下时不同，**「携带此行」指哪一版本本身有歧义**。
+      **补个 tag 修不好，必须改写那句话。** 已给三条出路（具名 tag / 指名提交哈希 /
+      随冻结包一起冻结）并写明「保持现状不是选项」。
+      **属于 `CONTRACTS/`，两条赛道都不得单方面改**，故只登记不动手，
+      请监控转 theory-compiler 赛道或走 S9 的契约变更流程。
 - [ ] **G6 · §14 外部工具链表 + 「没有 Python 依赖锁」是头号技术债**（`:232-247`）。
       已进 `build_manifest.py` 的 X-2，散文要展开。
 - [ ] **G7 · 剔除上限**（`:53-55`）：某终点被剔除的对数 > 全部对数的 1/3 ⇒
