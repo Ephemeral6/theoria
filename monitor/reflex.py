@@ -110,9 +110,25 @@ def main():
         # 0c. sweep orphaned board claims — a worker killed by the quota or a
         # crash leaves its claim hanging, so the board thinks the work is in
         # progress and the territory stays locked against everyone else.
-        sw = run([sys.executable, os.path.join(HERE, "board.py"), "sweep"])
+        # `--include-standing` since S21. Standing sessions were exempt because
+        # nothing could tell a dead App session from a busy one; `board.py` now
+        # can, and requires all three of a stale heartbeat, an unanswered
+        # URGENT, and two full cycles of silence before it will free anything.
+        # Three researchers died to a session limit on 2026-07-29 and six items
+        # -- including the campaign mainline -- stayed locked for two hours
+        # because this ran without it.
+        sw = run([sys.executable, os.path.join(HERE, "board.py"), "sweep",
+                  "--include-standing"])
         events += ["sweep:" + l.split()[0] for l in sw.stdout.splitlines()
                    if "freed from" in l]
+        # A standing release is reported separately and by name. It is a much
+        # bigger event than reaping a one-shot worker -- it says a researcher
+        # is gone -- and folding the two into one `sweep:` line would bury the
+        # louder one under the routine one.
+        for line in sw.stdout.splitlines():
+            if "freed from" in line and "RES-" in line:
+                events.append("STANDING-DEAD:%s" % line.split()[0])
+                rlog("standing session released a claim: %s" % line.strip())
 
         # 0d. dashboard server — the logon task could not be registered
         # (needs admin), so reflex keeps the port alive itself. Without this

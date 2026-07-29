@@ -292,7 +292,85 @@ def _revoke_authorisation(path):
             fh.write(stripped)
 
 
-def cmd_sweep(dry=False):
+#: Derived from STALE_MIN rather than restated. A second copy of "how long is
+#: too long" is a number that drifts from the first one, and this file already
+#: says why it reads mtime instead of self-reported time -- the same argument
+#: applies to keeping one threshold instead of two.
+#:
+#: Two full cycles, because one cycle of silence has an innocent reading: the
+#: session is inside a long sub-step. Two does not.
+STANDING_CYCLE_MIN = STALE_MIN
+STANDING_DEAD_MIN = STALE_MIN * 2
+
+
+def standing_verdict(agent, now=None):
+    """Is this standing session dead? Returns (dead: bool, why: str).
+
+    Three conditions, and **all three** must hold. Each alone has an innocent
+    reading, which is exactly why the original sweep refused to touch standing
+    sessions at all:
+
+      * heartbeat older than two cycles -- but a session deep in one long task
+        legitimately goes quiet for a while;
+      * an `URGENT` file still sitting unread -- but it may have been dropped
+        seconds ago;
+      * no bus traffic since the heartbeat -- but a session can work without
+        saying anything.
+
+    Together they are not innocent: a live session re-reads its bus every cycle,
+    and `URGENT` is the one thing it is contractually required to notice
+    between sub-steps. Silence on all three for twice its own period means
+    nobody is reading.
+
+    The cost of getting this wrong is asymmetric and that decides the design.
+    Freeing a live session's claim makes two agents write one territory --
+    which is the failure the board exists to prevent. Leaving a dead one costs
+    a locked territory until someone looks. So every uncertainty resolves to
+    "alive": an unreadable heartbeat, a missing bus directory, a clock that
+    makes no sense -- all keep the claim.
+    """
+    now = now or time.time()
+    hb = os.path.join(OPS_STATUS, "%s.json" % agent)
+    if not os.path.exists(hb):
+        return False, "no heartbeat file at all -- never started, not died"
+    try:
+        age_min = (now - os.path.getmtime(hb)) / 60.0
+    except OSError as exc:
+        return False, "heartbeat unreadable (%s); refusing to guess" % exc
+    if age_min < STANDING_DEAD_MIN:
+        return False, ("heartbeat %.0f min old, under the %d-min bar"
+                       % (age_min, STANDING_DEAD_MIN))
+
+    urgent = os.path.join(HERE, "bus", agent, "URGENT")
+    if not os.path.exists(urgent):
+        # No interrupt was pending, so silence proves much less: the session
+        # was never asked to prove it was reading.
+        return False, ("heartbeat %.0f min old but no URGENT was pending -- "
+                       "silence alone is not death" % age_min)
+    try:
+        urgent_age = (now - os.path.getmtime(urgent)) / 60.0
+    except OSError:
+        return False, "URGENT unreadable; refusing to guess"
+    if urgent_age < STANDING_CYCLE_MIN:
+        return False, ("URGENT is only %.0f min old -- not yet one cycle, it "
+                       "may simply not have come round" % urgent_age)
+
+    return True, ("heartbeat %.0f min old (>%d), and an URGENT posted %.0f min "
+                  "ago (>%d) is still unread"
+                  % (age_min, STANDING_DEAD_MIN, urgent_age, STANDING_CYCLE_MIN))
+
+
+#: Appended to an item whose standing holder died. Written because the human
+#: doing this by hand on 2026-07-29 wrote it by hand every time.
+INHERIT_NOTE = """
+> **前任持有者 %s 于 %s 判定死亡**（%s）。
+> **分支上可能有半成品**：接手前先看 `git branch -r --list 'origin/agent/%s*'`
+> 与该领地的 `runs/`，再决定是重做还是接续。重做前请说明为什么不接续——
+> 半成品被静默丢弃过一次，代价是同一件事做了两遍。
+"""
+
+
+def cmd_sweep(dry=False, include_standing=False):
     """把死掉的工人还占着的认领交回板上。
 
     一次性工人被额度或崩溃打断后，claimed/ 里的认领永远挂着：板以为有人在做，
@@ -310,23 +388,46 @@ def cmd_sweep(dry=False):
             name = cols[0].strip('"').lstrip("\\").replace("TheoriaAgent-", "")
             if cols[2].strip('"') in ("Running", "正在运行"):
                 live.add(name)
-    freed = []
+    freed, kept = [], []
     for f in sorted(os.listdir(CLAIMED)):
         if not f.endswith(".md"):
             continue
         iid, worker = f[:-3].split(".")[0], f[:-3].split(".")[1]
-        if not worker.startswith("W-") or worker in live:
+        standing = worker.startswith(("RES-", "APP-", "OPS-"))
+        if standing:
+            if not include_standing:
+                continue
+            dead, why = standing_verdict(worker)
+            if not dead:
+                kept.append((iid, worker, why))
+                continue
+        elif not worker.startswith("W-") or worker in live:
             continue
-        freed.append((iid, worker))
+        else:
+            why = "scheduled task is no longer running"
+        freed.append((iid, worker, why))
         if not dry:
             dst = os.path.join(ITEMS, "%s.md" % iid)
             os.rename(os.path.join(CLAIMED, f), dst)
             _revoke_authorisation(dst)   # 死掉的工人不该把我的签字留在板上
-            note("SWEEP %s released (worker %s gone)" % (iid, worker))
+            if standing:
+                # The item carries the news. A released claim otherwise looks
+                # identical to one nobody ever took, and the next holder
+                # cheerfully redoes work that is already sitting on a branch.
+                stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+                with open(dst, "a", encoding="utf-8", newline="\n") as fh:
+                    fh.write(INHERIT_NOTE % (worker, stamp, why, iid.lower()))
+            note("SWEEP %s released (%s %s: %s)"
+                 % (iid, "standing" if standing else "worker", worker, why))
     if not freed:
         print("no orphaned claims")
-    for iid, worker in freed:
-        print("%-28s freed from %s" % (iid, worker))
+    for iid, worker, why in freed:
+        print("%-28s freed from %-8s %s" % (iid, worker, why))
+    # Kept standing claims are printed too. The whole reason this mode did not
+    # exist is fear of killing a live session, so the refusals are the part a
+    # reader needs to see to believe the releases.
+    for iid, worker, why in kept:
+        print("%-28s KEPT   %-8s %s" % (iid, worker, why))
     return 0
 
 
@@ -338,7 +439,8 @@ def main():
         lane = a[3] if len(a) > 3 and a[2] == "--lane" else None
         return cmd_claim(a[1], lane)
     if a[0] == "sweep":
-        return cmd_sweep("--dry-run" in a)
+        return cmd_sweep("--dry-run" in a,
+                         include_standing="--include-standing" in a)
     if a[0] == "done":
         return cmd_done(a[1], a[2])
     if a[0] == "release":
