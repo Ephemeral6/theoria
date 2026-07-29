@@ -1,0 +1,79 @@
+{
+  "api_calls": 0,
+  "base_commit": "580c645d120b81ce12fe6bd0917fe51100e9e873",
+  "branch": "agent/s30-scan-crash-is-invisible",
+  "files": [
+    {
+      "bytes": 142940,
+      "path": "monitor/scan.py",
+      "sha256": "135383e8d6fa01000d174d7bfccaa89ceb7362bc67aa707cc7decda7835811fb"
+    },
+    {
+      "bytes": 17091,
+      "path": "monitor/reflex.py",
+      "sha256": "a692efc808b9fffb920554372e4ca501353b85c3eec0ee4a73c3b35619918944"
+    },
+    {
+      "bytes": 13291,
+      "path": "monitor/verify.py",
+      "sha256": "42eec11e3c0dc1a3834b0eb47aea6e12c93fdf9f351d783cf1228f46b3ceb394"
+    },
+    {
+      "bytes": 1171,
+      "path": "monitor/verify.sh",
+      "sha256": "415cba39966638056ef7b49d663efaa2840df1f0c20ceffe1e9e1b1907576d6d"
+    },
+    {
+      "bytes": 20005,
+      "path": "monitor/app.html",
+      "sha256": "5f26459a2d02fc23712f1960ae6c2bb7e3e73c31e70a06feca9523a09ad75daa"
+    },
+    {
+      "bytes": 4103,
+      "path": "monitor/README.md",
+      "sha256": "63513479860e710ccdb452d8020c535bb7c63814b6c23e23bd423319c97beeb8"
+    },
+    {
+      "bytes": 1021,
+      "path": "monitor/.gitignore",
+      "sha256": "29ee1e95ceeefb3dcccba7eb2d422c76ee6d43e52c714722a7cd3c128c7a763c"
+    },
+    {
+      "bytes": 12164,
+      "path": "monitor/CRASHES.md",
+      "sha256": "4f36a764cadfd68e9585126e441fc50b9f442d06fd816053fc587cd2bb7d0378"
+    },
+    {
+      "bytes": 0,
+      "path": "monitor/crashes.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 26488,
+      "path": "monitor/tests/test_scan_failure_exit.py",
+      "sha256": "e3ee3fe417660c55b239e3b8b3240941e8ab8ebb93b68430014228207266bbfd"
+    },
+    {
+      "bytes": 6500,
+      "path": "monitor/tests/test_freshness_js.py",
+      "sha256": "74686af0cf542880acd0b546734602677bcd6b18a70b227b0c84b8e078e735ca"
+    },
+    {
+      "bytes": 7043,
+      "path": "monitor/tests/mutants.py",
+      "sha256": "05e037037ea093037ef4d36f19674e46cde7b760e4a0885f7952e875c520b463"
+    }
+  ],
+  "goal": "A scan crash must not look like a quiet no-op: fail-exit writes a failing state.json, the page renders red, the renderer distrusts a stale generated_at, the 55 refresh.log tracebacks are classified into a tracked file, and a negative sample proves all of it.",
+  "prompt_id": "S30-scan-crash-is-invisible",
+  "sealed_pile_contact": false,
+  "territory": "monitor",
+  "tests": {
+    "adversarial_review": "2 subagents tasked with refutation; forensic thesis survived with 4 numbers corrected, 12 code defects found and fixed",
+    "mutants": "3 new mutants RED against a real baseline; 2 pre-existing PATCH-DID-NOT-APPLY in quota.py, not introduced here",
+    "pytest": "253 passed, 2 xfailed (baseline 220 passed / 2 xfailed; +33)",
+    "verify.sh": "GREEN exit 0 -- state.json carries all 13 required fields"
+  },
+  "utc": "2026-07-29T17:23:01Z",
+  "worker": "W-1680"
+}

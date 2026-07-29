@@ -1,0 +1,14 @@
+# 运行时的锁：谁还活着、谁持有哪把锁。**是状态，不是产物。**
+#
+# 根 .gitignore 第 19-24 行已经为 `monitor/ops-status/*.lock` 写下过这段推理，
+# 但它是**逐条列路径**的，于是 `monitor/reflex.lock` 从缝里漏了过去，一直被跟踪
+# 到 2026-07-29（S30 顺带修）。所以这里写模式，不写路径——路径表会老，树不会
+# 停止生长。
+#
+# 被跟踪的后果不是理论上的：`reflex.py:79` 认 mtime 在 1500 秒内的锁为「上一轮
+# 还在跑」并**直接返回 0**，而 git checkout 会把 mtime 设成 checkout 的时刻——
+# 于是任何一次 clone / merge / worktree-add 都会造出一把「看起来刚出生」的锁，
+# 让 reflex 静默地空转最多 5 个心跳。实测：新建 worktree 后立即测得 age=5s，
+# 锁里那个 pid 早已死亡。另一个后果是 `release/MANIFEST.jsonl` 把它收为
+# `releasable`——一份别的机器、别的时刻的存活快照，会被 Phase 4 发布出去。
+*.lock
