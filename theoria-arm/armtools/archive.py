@@ -35,6 +35,8 @@ if __package__ in (None, ""):
 
 import _bootstrap                                     # noqa: F401  (sys.path)
 
+from harness.modelcall import call_field
+
 from proxy.ledger import read_ledger
 
 
@@ -264,8 +266,8 @@ def constraint_8(records: List[Dict[str, Any]], run_dir: str) -> Dict[str, Any]:
     calls = [r for r in records if r.get("event") == "model_call"]
     beats: Dict[str, int] = {}
     for record in calls:
-        beats[record.get("beat") or "unknown"] = \
-            beats.get(record.get("beat") or "unknown", 0) + 1
+        beat = call_field(record, "beat") or "unknown"
+        beats[beat] = beats.get(beat, 0) + 1
     illegal = {b: n for b, n in beats.items()
                if b not in ("theorize", "probe_design")}
 
@@ -316,8 +318,8 @@ def cost_curve(records: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         out.append({
             "call_idx": record.get("call_idx"),
             "step_idx": record.get("step_idx"),
-            "beat": record.get("beat"),
-            "label": record.get("label"),
+            "beat": call_field(record, "beat"),
+            "label": call_field(record, "label"),
             "model": record.get("model"),
             "usd": (response.get("total_cost_usd")
                     if isinstance(response, dict) else None),
@@ -474,14 +476,14 @@ def _invocations(calls: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     """
     out: List[Dict[str, Any]] = []
     for record in calls:
-        label = record.get("label") or ""
+        label = call_field(record, "label") or ""
         fresh = (
             not out
             or label in ("", "round1")
             or record.get("step_idx") != out[-1]["step_idx"]
-            or record.get("beat") != out[-1]["beat"])
+            or call_field(record, "beat") != out[-1]["beat"])
         if fresh:
-            out.append({"beat": record.get("beat"),
+            out.append({"beat": call_field(record, "beat"),
                         "step_idx": record.get("step_idx"),
                         "calls": [record]})
         else:

@@ -486,3 +486,92 @@ def test_a_flat_run_scores_a_quarter_on_the_interpolated_head():
         shape = archive._frontload([1.0] * n)
         assert shape["status"] == "ok"
         assert shape["frontload_index_25"] == pytest.approx(0.25, abs=1e-9)
+
+
+# ------------------------------------------- both record shapes, read as one
+#
+# `beat`/`label`/`transport` moved from the top level of a `model_call` into
+# `request` (D-A3-004), because `canon.MODEL_CALL_FIELDS` is closed and the
+# top-level form could not be written at all. Five readers assumed the old
+# shape, and moving the fields without fixing them was demonstrated to:
+#
+#   * flip constraint 8 to `holds: false` on every future live run, and
+#   * empty `turn_series.json` -- `_turn_spine` filters `beat == "theorize"`
+#     against a None -- which is the raw material for the bill-shape figure.
+#
+# Both shapes are permanent: the three archived P-8 runs are committed
+# artifacts in the old shape and feed the figure registry. So these test both,
+# and the new-shape half is the one that was missing.
+
+def _call(idx, *, beat="theorize", label="round1", step_idx=0, new_shape=True):
+    base = {"event": "model_call", "run_id": "r-shape", "arm": "theoria",
+            "call_idx": idx, "step_idx": step_idx, "provider": "p",
+            "model": "claude-opus-5",
+            "response": {"total_cost_usd": 1.0},
+            "usage": {"input_tokens": 1, "output_tokens": 1}}
+    if new_shape:
+        base["request"] = {"beat": beat, "label": label,
+                           "transport": "claude-code-cli"}
+    else:
+        base["request"] = {"prompt": "x"}
+        base.update(beat=beat, label=label, transport="claude-code-cli")
+    return base
+
+
+@pytest.mark.parametrize("new_shape", [True, False],
+                         ids=["fields-inside-request", "fields-top-level"])
+def test_constraint_8_reads_the_beat_in_either_shape(new_shape):
+    """The regression. On the new shape without the compat read, every call
+    tallied as `unknown`, `unknown` is not an allowed beat, and constraint 8 --
+    the one Theoria.md guarantees by construction -- reported violated on a run
+    that had not violated anything."""
+    from armtools.archive import constraint_8           # noqa: PLC0415
+
+    # One call, so the bootstrap exception covers it and `holds` turns purely
+    # on the beat tally -- which is the part the record shape decides. (With
+    # two calls and no surprises.jsonl, `holds` is legitimately false for an
+    # unrelated reason: every call past the first must answer a surprise.)
+    out = constraint_8([_call(0, new_shape=new_shape)], "")
+    assert out["calls_by_beat"] == {"theorize": 1}
+    assert not out["calls_at_forbidden_beats"]
+    assert out["holds"] is True
+
+    # And a genuinely forbidden beat must still be caught in either shape --
+    # otherwise this passes by reading nothing at all.
+    bad = constraint_8([_call(0, beat="commit", new_shape=new_shape)], "")
+    assert bad["calls_at_forbidden_beats"] == {"commit": 1}
+    assert bad["holds"] is False
+
+
+@pytest.mark.parametrize("new_shape", [True, False],
+                         ids=["fields-inside-request", "fields-top-level"])
+def test_a_retry_is_grouped_with_its_invocation_in_either_shape(new_shape):
+    """`_invocations` starts a new invocation at every `round1`. With `label`
+    unreadable it was always "", so `fresh` was always true, every retry became
+    its own invocation, and the per-turn cost was split across turns that never
+    happened."""
+    from armtools.archive import _invocations           # noqa: PLC0415
+
+    calls = [_call(0, label="round1", new_shape=new_shape),
+             _call(1, label="round1-retry1", new_shape=new_shape),
+             _call(2, label="round1", step_idx=1, new_shape=new_shape)]
+    invocations = _invocations(calls)
+
+    assert len(invocations) == 2, "the retry started a third invocation"
+    assert all(i["beat"] == "theorize" for i in invocations)
+
+
+def test_the_turn_spine_sees_theorize_on_the_new_shape():
+    """The deliverable, guarded directly.
+
+    `_turn_spine` deals invocations out by `beat == "theorize"`; against a None
+    that selection is empty and `turn_series.json` reconciles to
+    `model_calls: 0` while the ledger holds N. Asserted on `_invocations`'
+    output, which is the value `_turn_spine` filters and the place the beat is
+    resolved.
+    """
+    from armtools.archive import _invocations           # noqa: PLC0415
+
+    invocations = _invocations([_call(0), _call(1, step_idx=1)])
+    assert [i["beat"] for i in invocations] == ["theorize", "theorize"]
+    assert all(i["beat"] is not None for i in invocations)

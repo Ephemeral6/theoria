@@ -414,3 +414,29 @@ def test_a_level_boundary_and_a_carried_seed_are_marked_on_the_row(arm_runs, tmp
     assert [r["level_boundary"] for r in rows] == [False, True, False]
     assert all(r["seeded_from_previous_leg"] for r in rows)
     assert c.campaign_series()["totals"]["level_boundaries"] == 1
+
+
+def test_a_leg_that_raises_is_charged_its_ceiling_not_zero(tmp_path):
+    """A leg that spends and then raises must not be booked at $0.00.
+
+    The desk settles each call against the shared pool as it goes, and `play()`
+    re-raises after releasing the reservation, so the campaign never sees a
+    summary. Booking 0.0 asserts the leg cost nothing, which lets the $60 and
+    $200 ceilings under-count by the full cost of every failure. Charged at the
+    leg's ceiling instead -- an upper bound, erring towards stopping early --
+    and labelled so it is not mistaken for a measurement.
+    """
+    class _Boom(camp.Campaign):
+        def run_leg(self, game_id, index, seed_books):
+            raise RuntimeError("transport died mid-leg")
+
+    c = _Boom(prompt_id="A3", out_dir=str(tmp_path), games=["g50t-5849a774"])
+    report = c.run(max_legs_per_game=1)
+
+    failed = [leg for leg in report["legs"] if leg.get("event") == "leg_failed"]
+    assert failed, "the failure was not recorded at all"
+    assert failed[0]["usd"] > 0.0
+    assert failed[0]["cost_accounting"]["governing_source"] == \
+        "leg-ceiling-upper-bound"
+    assert report["spent_usd"] > 0.0
+    assert report["by_game"]["g50t-5849a774"] > 0.0

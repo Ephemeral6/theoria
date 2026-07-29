@@ -256,6 +256,12 @@ class Campaign:
         return min(self.game_usd - self.by_game.get(game_id, 0.0),
                    self.campaign_usd - self.spent_usd)
 
+    def _leg_ceiling(self, game_id: str) -> float:
+        """The most one leg may cost. Also the upper bound charged when a leg
+        raises before it can report what it actually spent."""
+        return min(LEG_COST_CEILING_USD,
+                   max(0.0, self._game_headroom(game_id) - 1.0))
+
     def _check_campaign_budget(self) -> None:
         """The ceiling that ends everything. Checked before a leg *and* after
         one: a campaign whose last leg overran, and which then ran out of games
@@ -333,7 +339,7 @@ class Campaign:
         self._check_budget(game_id)
         slug = self._leg_slug(game_id, index)
         headroom = self._game_headroom(game_id)
-        ceiling = min(LEG_COST_CEILING_USD, max(0.0, headroom - 1.0))
+        ceiling = self._leg_ceiling(game_id)
         if ceiling <= 0:
             raise GameStopped(
                 "no headroom left for %s: $%.2f" % (game_id, headroom),
@@ -461,12 +467,34 @@ class Campaign:
                 # so `report()` and the figure pipeline see it, and counted as
                 # zero progress so a game that only ever raises still trips the
                 # zero-progress limit rather than retrying forever.
+                # A leg that raised may have spent most of its ceiling first
+                # -- the desk settles each call against the pool as it goes,
+                # and `play()` re-raises after releasing the reservation, so
+                # `summary` never comes back. Booking 0.0 here would assert
+                # "this cost nothing", which is false, and would let the $60
+                # and $200 ceilings under-count by the full cost of every
+                # failed leg.
+                #
+                # Charged at the leg's ceiling instead: an upper bound, in the
+                # direction that stops the campaign early rather than late, and
+                # labelled so nobody reads it as a measurement. The shared pool
+                # is unaffected either way -- it settled per call and is exact.
+                bound = self._leg_ceiling(game_id)
                 self.legs.append({
                     "index": index, "game_id": game_id, "event": "leg_failed",
                     "error": "%s: %s" % (type(exc).__name__, exc),
-                    "usd": 0.0,
+                    "usd": bound,
+                    "cost_accounting": {
+                        "governing_usd": bound,
+                        "governing_source": "leg-ceiling-upper-bound",
+                        "why": "the leg raised before reporting a cost; this "
+                               "is the most it could have spent, not what it "
+                               "did spend",
+                    },
                     "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                 })
+                self.spent_usd += bound
+                self.by_game[game_id] = self.by_game.get(game_id, 0.0) + bound
                 self.save()
                 self.zero_progress += 1
                 if self.zero_progress >= ZERO_PROGRESS_LIMIT:

@@ -37,7 +37,8 @@ import _bootstrap                                     # noqa: F401  (sys.path)
 
 from harness.arc import ArcThroughProxy, frames_of
 from harness.budget import Budget, BudgetExhausted
-from harness.modelcall import CostCeilingReached, ModelDesk
+from harness.modelcall import (AnonymityBreach, CostCeilingReached,
+                               ModelDesk)
 from world.frames import FrameStore, Step, grid_hash
 
 from . import certify, commit, plan as plan_beat, probe as probe_beat, theorize
@@ -492,6 +493,19 @@ class TheoriaArm:
                     step_idx=len(self.store.steps))
             except CostCeilingReached:
                 raise                                  # the run's honest end
+            except AnonymityBreach:
+                # Not a desk failure, and the handler below would have made it
+                # one -- recording it, continuing the turn, and spending the
+                # rest of the leg's budget on a run that is already
+                # inadmissible. `Theoria.md:353` is a hard rule; a run that
+                # tried to send the game id does not get to carry on measuring.
+                #
+                # This is the same shape as `CostCeilingReached` above and for
+                # the same reason: the broad handler exists so a timeout or an
+                # unusable reply does not end a run, and both of those are
+                # things the loop can recover from by gathering more evidence.
+                # A leaked id is not.
+                raise
             except Exception as exc:                   # noqa: BLE001
                 # A desk that times out, or returns something unusable, must
                 # not end the run. The manual stays as it was, the surprises

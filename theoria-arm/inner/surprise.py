@@ -151,7 +151,8 @@ class Register:
                  if r.get("event") == "model_call" and r.get("run_id") == run_id]
         beats: Dict[str, int] = {}
         for record in calls:
-            beat = record.get("beat") or "unknown"
+            from harness.modelcall import call_field  # noqa: PLC0415
+            beat = call_field(record, "beat") or "unknown"
             beats[beat] = beats.get(beat, 0) + 1
 
         illegal = {b: n for b, n in beats.items()

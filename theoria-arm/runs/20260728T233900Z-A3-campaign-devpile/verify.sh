@@ -93,71 +93,121 @@ case "$POOL" in
 esac
 
 echo "== gate 6: the negative controls -- each fix must be re-breakable =="
-SCRATCH="$(mktemp -d)"
-cp -r "$ARM" "$SCRATCH/arm" 2>/dev/null
-cd "$SCRATCH/arm" || exit 2
+#
+# These mutate the real tree in place and restore it, rather than working on a
+# copy. The first version of this gate copied the arm to a temp dir -- and every
+# control passed for the wrong reason, because a copied arm has no sibling
+# `proxy/` and `_bootstrap` cannot resolve it, so pytest errored on collection
+# whatever the mutation was. A gate written to catch green lights with nothing
+# behind them was one. That is recorded rather than quietly fixed, because the
+# failure mode is the interesting part: an inverted assertion (`if passes then
+# fail`) reads as strict but turns *every* infrastructure error into a pass.
+#
+# So each control now asserts BOTH directions: the test must be green before the
+# mutation and red after it. Green-before is what rules out the collection error.
+BEFORE6="$(sha256sum harness/modelcall.py harness/campaign.py inner/loop.py)"
+RESTORE=""
+restore_all() {
+  for pair in $RESTORE; do
+    dst="${pair%%:*}"; src="${pair##*:}"
+    [ -f "$src" ] && cp "$src" "$dst"
+  done
+}
+trap restore_all EXIT INT TERM
 
-# 6a. blocker A: the five non-canonical fields on model_call.
-python - <<'PY'
-import re
-p = "harness/modelcall.py"
+control() {
+  # control <label> <file> <test-selector> <python-mutation-file>
+  label="$1"; target="$2"; selector="$3"; mutation="$4"
+  backup="$(mktemp)"
+  cp "$target" "$backup"
+  RESTORE="$RESTORE $target:$backup"
+
+  if ! python -m pytest -q $selector >/tmp/a3-pre.txt 2>&1; then
+    fail "$label: the test is not green BEFORE the mutation (so red after proves nothing)"
+    tail -4 /tmp/a3-pre.txt
+    return
+  fi
+  python "$mutation" "$target" || { fail "$label: mutation failed to apply"; return; }
+  if python -m pytest -q $selector >/tmp/a3-post.txt 2>&1; then
+    fail "$label: the test stayed GREEN with the fix removed"
+  else
+    pass "$label"
+  fi
+  cp "$backup" "$target"
+}
+
+MUT="$(mktemp -d)"
+
+cat > "$MUT/canon.py" <<'PY'
+import sys
+p = sys.argv[1]
 s = open(p, encoding="utf-8").read()
-s = s.replace("""                  "elapsed_ms": elapsed_ms, "attempts": 1,
+old = """                  "elapsed_ms": elapsed_ms, "attempts": 1,
                   "forwarded": False, "stream": False},
-        )""",
-"""                  "elapsed_ms": elapsed_ms, "attempts": 1,
+        )"""
+new = """                  "elapsed_ms": elapsed_ms, "attempts": 1,
                   "forwarded": False, "stream": False},
             beat=beat, label=label, transport="claude-code-cli",
-            proxied=False, proxy_gap="re-broken by verify.sh gate 6a",
-        )""", 1)
-open(p, "w", encoding="utf-8", newline="\n").write(s)
+            proxied=False, proxy_gap="re-broken by verify.sh",
+        )"""
+assert old in s, "anchor not found"
+open(p, "w", encoding="utf-8").write(s.replace(old, new, 1))
 PY
-if python -m pytest -q tests/test_desk_gate.py -k canonical_model_call \
-     >/tmp/a3-g6a.txt 2>&1; then
-  fail "6a: re-breaking the canon fix did NOT turn its test red"
-else
-  pass "6a: canon regression test goes red when the fix is removed"
-fi
-cd "$ARM" || exit 2
-rm -rf "$SCRATCH"
 
-# 6b. the anonymity guard.
-SCRATCH="$(mktemp -d)"; cp -r "$ARM" "$SCRATCH/arm" 2>/dev/null
-cd "$SCRATCH/arm" || exit 2
-python - <<'PY'
-p = "harness/modelcall.py"
+cat > "$MUT/anon.py" <<'PY'
+import sys
+p = sys.argv[1]
 s = open(p, encoding="utf-8").read()
-s = s.replace("        leaked = sorted({s for s in self.forbid_in_prompt if s in prompt})",
-              "        leaked = []      # re-broken by verify.sh gate 6b", 1)
-open(p, "w", encoding="utf-8", newline="\n").write(s)
+old = "        leaked = sorted({s for s in self.forbid_in_prompt if s in prompt})"
+assert old in s, "anchor not found"
+open(p, "w", encoding="utf-8").write(
+    s.replace(old, "        leaked = []      # re-broken by verify.sh", 1))
 PY
-if python -m pytest -q tests/test_desk_gate.py -k "carrying_the_game_id" \
-     >/tmp/a3-g6b.txt 2>&1; then
-  fail "6b: disabling the anonymity guard did NOT turn its test red"
-else
-  pass "6b: anonymity test goes red when the guard is disabled"
-fi
-cd "$ARM" || exit 2
-rm -rf "$SCRATCH"
 
-# 6c. the leg-cost key.
-SCRATCH="$(mktemp -d)"; cp -r "$ARM" "$SCRATCH/arm" 2>/dev/null
-cd "$SCRATCH/arm" || exit 2
-python - <<'PY'
-p = "harness/campaign.py"
+cat > "$MUT/cost.py" <<'PY'
+import sys
+p = sys.argv[1]
 s = open(p, encoding="utf-8").read()
-s = s.replace('    cli = desk.get("cli_cost_usd")',
-              '    cli = desk.get("cost_usd")      # re-broken by gate 6c', 1)
-open(p, "w", encoding="utf-8", newline="\n").write(s)
+old = '    cli = desk.get("cli_cost_usd")'
+assert old in s, "anchor not found"
+open(p, "w", encoding="utf-8").write(
+    s.replace(old, '    cli = desk.get("cost_usd")   # re-broken', 1))
 PY
-if python -m pytest -q tests/test_campaign.py -k "leg_cost_reads_a_key" \
-     >/tmp/a3-g6c.txt 2>&1; then
-  fail "6c: restoring the wrong cost key did NOT turn its test red"
+
+cat > "$MUT/swallow.py" <<'PY'
+import sys
+p = sys.argv[1]
+s = open(p, encoding="utf-8").read()
+i = s.index("            except AnonymityBreach:")
+j = s.index("            except Exception as exc:", i)
+open(p, "w", encoding="utf-8").write(s[:i] + s[j:])
+PY
+
+control "6a: canon regression goes red when the five fields come back"         harness/modelcall.py         "tests/test_desk_gate.py -k canonical_model_call" "$MUT/canon.py"
+
+control "6b: anonymity test goes red when the guard is disabled"         harness/modelcall.py         "tests/test_desk_gate.py -k carrying_the_game_id" "$MUT/anon.py"
+
+control "6c: leg-cost test goes red when the wrong key is restored"         harness/campaign.py         "tests/test_campaign.py -k leg_cost_reads_a_key" "$MUT/cost.py"
+
+control "6d: breach test goes red when the loop swallows it again"         inner/loop.py         "tests/test_arm.py -k anonymity_breach_ends" "$MUT/swallow.py"
+
+restore_all
+rm -rf "$MUT"
+
+echo "== gate 7: the tree is exactly as it was before gate 6 =="
+# Against the pre-gate-6 hashes, NOT against HEAD: uncommitted work in progress
+# is legitimate, and comparing to HEAD would report it as a mutation leak.
+AFTER="$(sha256sum harness/modelcall.py harness/campaign.py inner/loop.py)"
+if [ "$AFTER" = "$BEFORE6" ]; then
+  pass "no mutation survived"
 else
-  pass "6c: leg-cost test goes red when the wrong key is restored"
+  fail "gate 6 left a mutation in the tree"
+  printf 'before:
+%s
+after:
+%s
+' "$BEFORE6" "$AFTER"
 fi
-cd "$ARM" || exit 2
-rm -rf "$SCRATCH"
 
 echo
 if [ "$FAILED" -eq 0 ]; then

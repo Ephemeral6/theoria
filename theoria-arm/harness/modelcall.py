@@ -97,6 +97,37 @@ NEUTRAL_PARENT = tempfile.gettempdir()
 PROVIDER = "anthropic-claude-code-cli"
 
 
+def call_field(record: Dict[str, Any], name: str) -> Any:
+    """Read `beat`/`label`/`transport` off a `model_call` record, either shape.
+
+    Defined here, beside the writer that decides the shape, because the two
+    must not drift: a reader that assumes one shape is a second definition of
+    the record format.
+
+    There are two shapes on disk and both are permanent:
+
+    * **Top-level** -- every `model_call` in the three archived P-8 runs. Those
+      predate `proxy/canon.py`, which closed the field set to ten names.
+    * **Inside `request`** -- everything written since. `canon.check` refuses
+      the top-level form outright, so this is now the only shape that can be
+      written at all.
+
+    Preferring `request` and falling back to top-level reads both. The archived
+    runs are committed artifacts that feed the figure registry, so dropping the
+    fallback would silently re-zero exactly the historical curves this arm has.
+
+    This function exists because moving the fields into `request` without it
+    broke five call sites at once -- constraint 8 flipped to `holds: false` on
+    every future run, and `_turn_spine` filtered on `beat == "theorize"` against
+    a `None`, emptying `turn_series.json`, which is the raw material for the
+    paper's bill-shape figure.
+    """
+    request = record.get("request")
+    if isinstance(request, dict) and request.get(name) is not None:
+        return request[name]
+    return record.get(name)
+
+
 class ModelError(RuntimeError):
     pass
 

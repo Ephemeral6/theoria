@@ -1062,3 +1062,55 @@ def test_a_campaign_leg_slug_carries_no_game(tmp_path):
     assert "g50t" not in slug
     assert "5849a774" not in slug
     assert slug.endswith("-leg01")
+
+
+def test_an_anonymity_breach_ends_the_run_instead_of_being_filed_as_a_desk_failure(
+        tmp_path):
+    """The defect this fix introduced, caught before it shipped.
+
+    `_main_loop` wraps theorize in `except Exception` so a desk that times out
+    or returns junk does not end the run: the manual stays, the surprises stay
+    pending, and the turn falls through to gathering more evidence. That is
+    right for the failures the loop can recover from by trying again.
+
+    `AnonymityBreach` is not one of them. Swallowed by that handler it would be
+    recorded as "the desk failed", the leg would keep playing, and the rest of
+    the budget would be spent on a run already inadmissible under
+    `Theoria.md:353`. The breach has to reach the caller, exactly as
+    `CostCeilingReached` does.
+
+    Driven through the real loop rather than asserted against the source: the
+    whole point is which handler catches it, and reading the file cannot tell
+    you that.
+    """
+    from harness.modelcall import AnonymityBreach       # noqa: PLC0415
+    from harness.run import play                        # noqa: PLC0415
+    from inner.loop import TheoriaArm                   # noqa: PLC0415
+    from proxy.mock.arc_mock import DEFAULT_KEY, MockArc    # noqa: PLC0415
+
+    game = "g50t-5849a774"
+    seen = {}
+
+    def factory(env_base, run):
+        arm = TheoriaArm(env_base=env_base, run=run, game_id=game,
+                         budget_actions=8, offline=True)
+
+        def boom(*a, **kw):
+            seen["called"] = seen.get("called", 0) + 1
+            raise AnonymityBreach("the prompt carries 'g50t'")
+
+        arm.desk.call = boom
+        # Force theorize to be reached: offline skips it, so re-arm the flag
+        # the loop consults and give it a surprise to act on.
+        arm.offline = False
+        arm.register.fire("replay_mismatch", "forced, so theorize is reached")
+        return arm
+
+    with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
+        with pytest.raises(AnonymityBreach):
+            play(game, "pytest-anon-" + os.path.basename(str(tmp_path)),
+                 factory, env_upstream=mock.base_url, env_key=DEFAULT_KEY,
+                 require_key=False,
+                 ledger_path=str(tmp_path / "ledger.jsonl"))
+
+    assert seen.get("called"), "the desk was never reached; the test proved nothing"
