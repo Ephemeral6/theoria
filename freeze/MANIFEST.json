@@ -183,7 +183,7 @@
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "engine-rig/engines",
-          "sha256": "889bb6f7141042adec2128737c5bc0309b4165ad80a1e715cb3d980258444aff",
+          "sha256": "6c6101f678034d9a78c58eb01584e29fa89d2f6993b1b16124c0be5367ea902f",
           "tracked": true
         },
         {
@@ -191,7 +191,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "engine-rig/STATUS.md",
-          "sha256": "68cff5fde1d5c1c653f746ab29412a205d74f63a921c6e0391921f7cf8fff6e6",
+          "sha256": "1af5bb26b0175a0f70ca98b8eb0a315c4063c7e31a6c5c5c4f31baab80fe3a97",
           "tracked": true
         },
         {
@@ -199,7 +199,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "engine-rig/ENGINE_TABLE.md",
-          "sha256": "1f839dafab9a8b12de04492e94a33f78b13ddb0e9f0d08bb54cd5c540888cca9",
+          "sha256": "5d078f16885a2b243428d75495ee29be323e24a3d4cf65a591b298d0003a2ddc",
           "tracked": true
         },
         {
@@ -300,7 +300,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "battery/METRICS.md",
-          "sha256": "0956bf68cbfebd8b0ab36365bda6beaf353bf7678cacd9a333fc0eaa9b2c7fd1",
+          "sha256": "c6861db536020501cf7319a399050a5257568cffbba2696504d53e4f0adc652b",
           "tracked": true
         },
         {
@@ -357,7 +357,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "proxy/variants.py",
-          "sha256": "18305dd00680295cec8530323f4d96e41f6f29f394d59b2dd6a7656e4fec8b76",
+          "sha256": "6aa0a2fac07e7b8c1d7207d76de2fd52537943dce12b88f27b02ebeb445744ec",
           "tracked": true
         },
         {
@@ -373,7 +373,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "worldgen/mutate.py",
-          "sha256": "510951065133eaca3cf63471ffda3f433606fb23a8b42321a1f3bd258185cc81",
+          "sha256": "6a998983245fa3599be15c8b7e6268cd601730be9ea6a9e100a02b9c1e3b33e8",
           "tracked": true
         },
         {
@@ -381,7 +381,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "worldgen/out/worlds/MUTATIONS.json",
-          "sha256": "3933dd226fcaaa06d1d72fc37ac8bda0ab23ca66a0d226c2e35ee085b1d74d81",
+          "sha256": "4f72250a878195222bc242da5fc0a7966ee26f30e62d6947e18c276fa09e54fb",
           "tracked": true
         },
         {
@@ -397,7 +397,7 @@
           "hashed_from": "git-blob",
           "kind": "dir",
           "path": "exam/artifacts/variant_specs",
-          "sha256": "daf912fd158c582c2be4a179abca9b881aa47b96f9f6a40d6773de7e6b6d0486",
+          "sha256": "e9889f81ffd95fef36629f9e210ba046fe35459e8347ed9c3f6cc88c5ad6059b",
           "tracked": true
         }
       ],
@@ -414,7 +414,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/STATS_RULES.md",
-          "sha256": "fe41213d6327b5681256ecb973ca3f207d1bd288ca162cdc23788ef3a06d8d09",
+          "sha256": "130c96663ba94a74da24c7d8c2e5430d111084a2a5abf1dbd0c0f2cc3a8d1b40",
           "tracked": true
         },
         {
@@ -439,7 +439,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/CLAIMS_TEXT.md",
-          "sha256": "5168da9ed32bf2ba613157bc6b59894543c79d20566038316d9d020f35a493f7",
+          "sha256": "0ded1cc4cf207b4d31056230f97c506cb5af7a82a3502cd0825c48b002c02027",
           "tracked": true
         }
       ],
@@ -505,7 +505,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/STATUS.md",
-          "sha256": "70347b0b2e7a5f3093d15f39c29af91dcffcb9d8f5eabb0a4663710a964d35d0",
+          "sha256": "c84bb9e07cf887f60aebd58e7e6aa04d078485a0dea9bb26339faa571fa77feb",
           "tracked": true
         },
         {
@@ -583,8 +583,8 @@
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
     "branch": "agent/s4-freeze",
-    "commit": "5427a78aebea67fd0a0437a05997e5e386feed97",
-    "dirty": true
+    "commit": "eaeddc14a67f8399d412b679d5a922e36434cea7",
+    "dirty": false
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
   "verdict": {

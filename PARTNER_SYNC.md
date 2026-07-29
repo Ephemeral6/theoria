@@ -1493,3 +1493,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：`bash freeze/verify.sh` → **exit 0**，十一个阶段全绿，含 `launch_gate.py --selftest 12/12`（双向，含「绿是可达的」一例）；第 11 阶段如实报 `NOTE launch gate is BLOCKED`：§9.2 / §9.11 / §9.14 三条未清，封存战役此刻不得花钱。**这不是失败而是本条目的正确终态**——工单要的是草案完整，不是冻结就绪，两者的判据不同，`verify.sh` 的出口语义也因此没有被动过。
 阻塞：无（本条目自身已完）。`PENDING_FIVE.md` 里的 `needs_human` 是**工单要求的产出格式**，不是本条目的阻塞——其中裁定二（封存堆 19 vs 21 局的预算与开跑局数）动的是钱，按章程归监控，本轨道不代拍。
 下一步：S4-freeze-complete 在板上等本条目解锁。真正的冻结是人的动作：三条 §9 前置条件清掉之前，`launch_gate.py` 会一直拒绝开跑，这正是它存在的意义。
+
+## [campaign] 2026-07-29T18:05:00Z S4C-manifest-drift
+状态：**领到 S4-freeze-complete 后第一件事是查现状，第一查就红：冻结清单已经和树对不上，而没有任何东西在看。** `freeze/build_manifest.py` 是专为治「手抄哈希表」而写的——它的 docstring 记着实测：某份手写草案**三十三个哈希里十九个**一天后就不对，两条判定整个翻转；它给的规矩是「清单从某个钉住的提交由 git 生成，树变了则 `verify` 失败」，并明写 `--verify` **is what belongs in a gate**。而 `grep build_manifest freeze/verify.sh` **零命中**：写好了、正确、有 `--verify`、在自己文档里点名说该进闸门，**没有任何闸门调它**。实跑 `--verify` → **exit 1 DRIFT**。重生成后逐叶对比 13 处变化：**12 个内容哈希过期**（entries 4/7/8/9/10/12），`generated_from.commit` `5427a78a`→`eaeddc14`，以及 `generated_from.dirty` **`true`→`false`**——最后这条自成一件事，**清单是在一棵脏树上生成的**，而脏树生成的清单无法从任何提交复现，「可从某提交复现」正是这份文件存在的全部意义；它当时就不成立，只是没人问。已重生成，并给 `verify.sh` 加**第 12 阶段**调 `--verify`。**判成硬失败而非 NOTE，与第 11 阶段有意不同**：第 11 阶段的 `BLOCKED` 是 NOTE，因为一条诚实地没清的 blocker 是关于**未完成**套件的**真**陈述；漂了的清单是关于**已完成**套件的**假**陈述，且假在「声称得更多」的方向上。
+测试：`bash freeze/verify.sh` → **exit 0**，十二阶段全绿（两条 NOTE）。负对照实测：把 `MANIFEST.json` 换回漂掉的那版，第 12 阶段 FAIL、脚本 exit 1；换回来 exit 0。**这是本轮第三次撞上同一个形状**（存在、正确、被测过、从没被调用）：上午在 theoria-arm 是 `_quota_with_recovered` 没接进 `build()`，A16 是 `launch_gate` 没接进花钱路径，这次是 `--verify` 没接进 `verify.sh`。三次都不是逻辑写错，是接线没接。
+阻塞：无。
+下一步：S4-freeze-complete 主体（13 项逐项钉到具体路径+版本、缺的标明缺什么谁的）仍未完——本轮先让清单变成真的，否则往一张对不上的表上加任何一项都没有意义。总览表 ⛔ 两项（5 引擎清单、12 预算表）与 ⚠ 八项照旧；`MANIFEST_DRAFT.md` 自记的待办 **H-1**（仓库根缺全局 `.gitattributes text=auto eol=lf`，工作树哈希跨 checkout 不可复现）仍开着，本轮走 git blob 哈希故不受影响，但冻结前要选一个。

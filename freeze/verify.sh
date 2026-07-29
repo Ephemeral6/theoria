@@ -780,6 +780,29 @@ for b in json.load(sys.stdin)["blockers"]:
 fi
 echo
 
+echo "[12] MANIFEST.json still describes this tree"
+
+# `build_manifest.py`'s own docstring says "--verify is what belongs in a gate",
+# and until this stage existed it was in no gate at all: the generator was
+# correct, tested, and never invoked, so the one file whose entire job is to say
+# "these exact bytes are what the campaign ran against" was free to drift.
+# It had. Twelve of its content hashes were stale and `generated_from.dirty` was
+# `true` -- a manifest generated from a dirty tree cannot be reproduced from any
+# commit, which is the property it exists to provide.
+#
+# This is a hard failure, not a note. Stage [11]'s BLOCKED is a note because a
+# blocker that is honestly outstanding is a true statement about an unfinished
+# kit. A drifted manifest is a *false* statement about a finished one, and it is
+# false in the direction of claiming more.
+bm_out="$(python "$HERE/build_manifest.py" --verify 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "build_manifest.py --verify: the hash table matches the tree it pins"
+else
+  bad "MANIFEST.json has drifted from the tree -- regenerate and read the diff"
+  printf '%s\n' "$bm_out" | sed 's/^/        /'
+fi
+echo
+
 # ------------------------------------------------------------------ verdict
 echo "=============================================================="
 if [ "$FAIL" -eq 0 ]; then
