@@ -1,0 +1,251 @@
+{
+  "by_class": {
+    "free": 4,
+    "memorised": 6,
+    "theory": 6
+  },
+  "by_rule": {
+    "blocked_by_wall": {
+      "free": 4
+    },
+    "teleport_twoway": {
+      "memorised": 2,
+      "theory": 2
+    },
+    "walk": {
+      "memorised": 2,
+      "theory": 2
+    },
+    "walk_through_cycler": {
+      "memorised": 2,
+      "theory": 2
+    }
+  },
+  "by_split": {
+    "heldout": {
+      "free": 2,
+      "theory": 6
+    },
+    "replay": {
+      "free": 2,
+      "memorised": 6
+    }
+  },
+  "feasible": true,
+  "items": [
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-000",
+      "rule": "walk",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-cycler-portal-lock-001",
+      "rule": "blocked_by_wall",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-002",
+      "rule": "walk_through_cycler",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-003",
+      "rule": "teleport_twoway",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-004",
+      "rule": "walk",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-005",
+      "rule": "walk",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-cycler-portal-lock-006",
+      "rule": "blocked_by_wall",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-cycler-portal-lock-007",
+      "rule": "blocked_by_wall",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-008",
+      "rule": "walk",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-cycler-portal-lock-009",
+      "rule": "blocked_by_wall",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-010",
+      "rule": "teleport_twoway",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-011",
+      "rule": "walk_through_cycler",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-012",
+      "rule": "teleport_twoway",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-013",
+      "rule": "walk_through_cycler",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-014",
+      "rule": "teleport_twoway",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-cycler-portal-lock-015",
+      "rule": "walk_through_cycler",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    }
+  ],
+  "n_items": 16,
+  "paper_id": "v2-heldout-t3-cycler-portal-lock",
+  "per_class": 2,
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+  "summary": {
+    "anomalies": [],
+    "barren_rules": [
+      "blocked_by_wall"
+    ],
+    "dead": 0,
+    "effective_size": 6,
+    "free": 4,
+    "memorised": 6,
+    "n_items": 16,
+    "theory": 6,
+    "theory_items": 6,
+    "theory_share": 0.375,
+    "zero_discrimination": 4,
+    "zero_discrimination_share": 0.25
+  },
+  "tier": 3,
+  "world_id": "t3-cycler-portal-lock"
+}
