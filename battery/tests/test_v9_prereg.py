@@ -126,6 +126,61 @@ def test_smuggled_ground_truth_in_notes_is_refused():
     assert any(v.startswith("C4") for v in cert["violations"])
 
 
+def test_no_attack_module_does_work_at_import_time():
+    """The one hole C3 cannot see, closed here instead of hoped about.
+
+    `check.py` reads the *builder's* source, so a module that computed a plan
+    at import time and had the builder merely lay the answer out would pass C3
+    while having done exactly the work the certificate exists to rule out.
+    Nothing in the delivered modules does this -- but "I looked and it was
+    fine" is the kind of assurance this package was written to replace, so it
+    is a check.
+
+    An attack module may contain imports of the two modules it needs, function
+    definitions, its docstring, and inert module-level constants — four of the
+    six delivered modules end with an `ATTACKS = [...]` list of their own
+    functions. Inert means the right-hand side calls nothing and loops nowhere,
+    which is the same standard C3 applies inside a builder.
+    """
+    import ast
+    import os
+
+    directory = os.path.join(os.path.dirname(os.path.dirname(
+        os.path.abspath(__file__))), "audit", "v9", "attacks")
+    allowed_imports = {"battery.model", "battery.audit.v9.attack"}
+    offences = []
+    for name in sorted(os.listdir(directory)):
+        if not name.endswith(".py") or name == "__init__.py":
+            continue
+        with open(os.path.join(directory, name), encoding="utf-8") as fh:
+            tree = ast.parse(fh.read())
+        for node in tree.body:
+            if isinstance(node, ast.ImportFrom):
+                if node.module not in allowed_imports:
+                    offences.append("%s: imports %s" % (name, node.module))
+            elif isinstance(node, ast.Import):
+                for alias in node.names:
+                    if alias.name not in allowed_imports:
+                        offences.append("%s: imports %s" % (name, alias.name))
+            elif isinstance(node, ast.FunctionDef):
+                continue
+            elif (isinstance(node, ast.Expr)
+                  and isinstance(node.value, ast.Constant)):
+                continue                      # the module docstring
+            elif isinstance(node, (ast.Assign, ast.AnnAssign)):
+                working = [n for n in ast.walk(node)
+                           if isinstance(n, (ast.Call, ast.While, ast.For))]
+                if working:
+                    offences.append(
+                        "%s: module-level constant at line %d evaluates "
+                        "something at import time" % (name, node.lineno))
+            else:
+                offences.append("%s: top-level %s at line %d -- an attack "
+                                "module may not run anything at import time"
+                                % (name, type(node).__name__, node.lineno))
+    assert not offences, offences
+
+
 @pytest.mark.parametrize("prediction", prereg.PREDICTIONS)
 def test_predictions_are_recorded_with_an_id(prediction):
     identifier, text = prediction

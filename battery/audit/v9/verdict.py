@@ -30,11 +30,6 @@ from battery.audit.v9.check import certificate
 from battery.metrics import REGISTRY, evaluate
 
 
-def _value(run) -> Dict[str, object]:
-    """One metric on one adversarial run, as plain data."""
-    return run
-
-
 _ATTACKS: Optional[Dict[str, List[Attack]]] = None
 _JUDGED: Dict[str, Dict[str, object]] = {}
 
