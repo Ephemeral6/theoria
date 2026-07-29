@@ -111,6 +111,33 @@ for g in GAMES:
     })
 
 
+# The M4 pilot and the ar25 snapshot.  Same class as the campaign logs and
+# recorded for the same reason: the rule is "committed or hashed, never
+# neither", and a rule applied to four of the twelve paid transcripts would not
+# be a rule.  Their JSON outputs (out/pilot_*.json) are already tracked.
+PILOT_LOGS = [
+    "campaign_ar25.log", "pilot_ar25.log", "pilot_g50t.log",
+    "pilot_g50t_sonnet.log", "pilot_sk48.log", "pilot_sk48_sonnet.log",
+    "pilot_tn36.log", "ar25_snapshot.log",
+]
+
+for name in PILOT_LOGS:
+    ENTRIES.append({
+        "path": "out/%s" % name,
+        "disposition": "hash-only",
+        "cost_bearing": "arc-api-spend",
+        "produced_by": "M4 pilot and phase3 launches, 2026-07-26..28",
+        "consumed_by": [],
+        "reason":
+            "Console transcript of a paid pilot run, excluded by the "
+            "out/*.log ignore rule that predates A14. The run's JSON output is "
+            "tracked under out/, so the transcript is a shadow of a record "
+            "that survives. Digest recorded so the exclusion is a decision "
+            "rather than a gap.",
+        "eol": "lf",
+    })
+
+
 def _sha256(path):
     h = hashlib.sha256()
     with open(path, "rb") as fh:
@@ -119,22 +146,58 @@ def _sha256(path):
     return h.hexdigest()
 
 
+def _previously_recorded():
+    """What the committed register already says, keyed by path.
+
+    A `hash-only` artefact is gitignored, so on a clean clone it is *absent by
+    design* -- that is the whole meaning of the disposition. Recomputing its
+    digest is then impossible, and refusing to build would make this script
+    runnable only on the one machine that still happens to hold the file.
+    So for an absent hash-only entry the digest is carried forward from the
+    committed register: it is a historical record of a file that existed, which
+    is exactly what the disposition promises and all it ever promised.
+
+    A `committed` entry is never carried forward. If it is absent, that is the
+    A14 failure recurring and the build must stop.
+    """
+    if not os.path.isfile(OUT):
+        return {}
+    try:
+        with open(OUT, encoding="utf-8") as fh:
+            return {r["path"]: r for r in json.load(fh)["artefacts"]}
+    except (OSError, ValueError, KeyError):
+        return {}
+
+
 def build():
+    previous = _previously_recorded()
     artefacts = []
-    missing = []
+    missing, carried = [], []
     for entry in ENTRIES:
         full = os.path.join(TERRITORY, entry["path"].replace("/", os.sep))
-        if not os.path.isfile(full):
+        row = dict(entry)
+        if os.path.isfile(full):
+            row["sha256"] = _sha256(full)
+            row["bytes"] = os.path.getsize(full)
+        elif (entry["disposition"] == "hash-only"
+              and entry["path"] in previous
+              and previous[entry["path"]].get("sha256")):
+            old = previous[entry["path"]]
+            row["sha256"] = old["sha256"]
+            row["bytes"] = old["bytes"]
+            carried.append(entry["path"])
+        else:
             missing.append(entry["path"])
             continue
-        row = dict(entry)
-        row["sha256"] = _sha256(full)
-        row["bytes"] = os.path.getsize(full)
         artefacts.append(row)
     if missing:
-        raise SystemExit("refusing to build: %d source file(s) absent, so their "
-                         "digests would be invented: %s"
-                         % (len(missing), ", ".join(missing)))
+        raise SystemExit("refusing to build: %d source file(s) absent with no "
+                         "recorded digest, so their digests would be invented: "
+                         "%s" % (len(missing), ", ".join(missing)))
+    if carried:
+        sys.stderr.write("note: carried %d hash-only digest(s) forward from the "
+                         "committed register (file absent here, as expected on "
+                         "a clone): %s\n" % (len(carried), ", ".join(carried)))
     return {
         "schema": "baseline-arms/cost-artefacts@1",
         "generated_by":

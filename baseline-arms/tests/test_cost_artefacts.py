@@ -141,7 +141,12 @@ def test_committed_campaign_json_bytes_survive_git():
             "%s is no longer CRLF; if it was deliberately re-written, the "
             "digests in COST_ARTEFACTS.json and battery's manifest must be "
             "re-pinned in the same commit" % rel)
-        blob = _git("show", "HEAD:%s" % rel).stdout
+        # "HEAD:./x" resolves against cwd; "HEAD:x" would resolve against the
+        # repository root and look for a top-level out/ that does not exist.
+        # `git show` emits the stored blob with no smudge filter, which is
+        # exactly the comparison wanted: bytes in the object store vs bytes on
+        # disk.
+        blob = _git("show", "HEAD:./%s" % rel).stdout
         assert blob == on_disk, (
             "%s: the committed blob differs from the working tree byte-for-"
             "byte -- the eol translation rule has been lost" % rel)

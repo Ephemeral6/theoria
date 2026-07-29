@@ -1,6 +1,17 @@
 {
   "artefacts": [
     {
+      "bytes": 415,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/ar25_snapshot.log",
+      "produced_by": "M4 pilot and phase3 launches, 2026-07-26..28",
+      "reason": "Console transcript of a paid pilot run, excluded by the out/*.log ignore rule that predates A14. The run's JSON output is tracked under out/, so the transcript is a shadow of a record that survives. Digest recorded so the exclusion is a decision rather than a gap.",
+      "sha256": "a5d7661c460142a68f562c776ff90d2f804ed5164239ae499806f7c1b20bc104"
+    },
+    {
       "bytes": 34229,
       "consumed_by": [],
       "cost_bearing": "arc-api-spend",
@@ -99,6 +110,83 @@
       "produced_by": "phase3 bare_cc S1 baseline-parity, 2026-07-27..28, dev pile x 4",
       "reason": "Console transcript of the paid run. .gitignore has excluded out/campaign/*.log since before A14 and that call stands: the log is a human-readable shadow of the ledger, which is committed. Recorded here so the exclusion is a decision with a digest behind it rather than a silent gap.",
       "sha256": "af9bda9bb4a88e930b9f4a4564ed06746782634518e9745044135e1884e32902"
+    },
+    {
+      "bytes": 3276,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/campaign_ar25.log",
+      "produced_by": "M4 pilot and phase3 launches, 2026-07-26..28",
+      "reason": "Console transcript of a paid pilot run, excluded by the out/*.log ignore rule that predates A14. The run's JSON output is tracked under out/, so the transcript is a shadow of a record that survives. Digest recorded so the exclusion is a decision rather than a gap.",
+      "sha256": "9ea92a4dc5275ed3d601ce6ed78cd96e03c732146cacf8a6ecf05f767c31b8b6"
+    },
+    {
+      "bytes": 4477,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/pilot_ar25.log",
+      "produced_by": "M4 pilot and phase3 launches, 2026-07-26..28",
+      "reason": "Console transcript of a paid pilot run, excluded by the out/*.log ignore rule that predates A14. The run's JSON output is tracked under out/, so the transcript is a shadow of a record that survives. Digest recorded so the exclusion is a decision rather than a gap.",
+      "sha256": "69ab429d24fed9c18138b8904231e852ec98f84f3ec3d20d1bfa635954630967"
+    },
+    {
+      "bytes": 4931,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/pilot_g50t.log",
+      "produced_by": "M4 pilot and phase3 launches, 2026-07-26..28",
+      "reason": "Console transcript of a paid pilot run, excluded by the out/*.log ignore rule that predates A14. The run's JSON output is tracked under out/, so the transcript is a shadow of a record that survives. Digest recorded so the exclusion is a decision rather than a gap.",
+      "sha256": "af5ceb00967e309b808be39e7d73a8ff8a915aebfc97b44d6ef7368aada1e742"
+    },
+    {
+      "bytes": 1903,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/pilot_g50t_sonnet.log",
+      "produced_by": "M4 pilot and phase3 launches, 2026-07-26..28",
+      "reason": "Console transcript of a paid pilot run, excluded by the out/*.log ignore rule that predates A14. The run's JSON output is tracked under out/, so the transcript is a shadow of a record that survives. Digest recorded so the exclusion is a decision rather than a gap.",
+      "sha256": "84279bbd279e583b4483ea2bd2410d302479809cdfc9f64f1d320467d7dbff10"
+    },
+    {
+      "bytes": 5191,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/pilot_sk48.log",
+      "produced_by": "M4 pilot and phase3 launches, 2026-07-26..28",
+      "reason": "Console transcript of a paid pilot run, excluded by the out/*.log ignore rule that predates A14. The run's JSON output is tracked under out/, so the transcript is a shadow of a record that survives. Digest recorded so the exclusion is a decision rather than a gap.",
+      "sha256": "60ec67d227d1eddc4169d75a3835d2e33a2612df960c2be74d133d67485e72e3"
+    },
+    {
+      "bytes": 1203,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/pilot_sk48_sonnet.log",
+      "produced_by": "M4 pilot and phase3 launches, 2026-07-26..28",
+      "reason": "Console transcript of a paid pilot run, excluded by the out/*.log ignore rule that predates A14. The run's JSON output is tracked under out/, so the transcript is a shadow of a record that survives. Digest recorded so the exclusion is a decision rather than a gap.",
+      "sha256": "545b40da2b227fc2adb6b78527e048726f693fd647769dc93f2d44b23948a851"
+    },
+    {
+      "bytes": 3562,
+      "consumed_by": [],
+      "cost_bearing": "arc-api-spend",
+      "disposition": "hash-only",
+      "eol": "lf",
+      "path": "out/pilot_tn36.log",
+      "produced_by": "M4 pilot and phase3 launches, 2026-07-26..28",
+      "reason": "Console transcript of a paid pilot run, excluded by the out/*.log ignore rule that predates A14. The run's JSON output is tracked under out/, so the transcript is a shadow of a record that survives. Digest recorded so the exclusion is a decision rather than a gap.",
+      "sha256": "9e1a22efa95229dfc0bd20b694868b758db0e1aeb074f9b4dfefee2485ccdffd"
     },
     {
       "bytes": 6267799,

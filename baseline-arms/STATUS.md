@@ -11,6 +11,7 @@
 | M4 试点 + 预算闸门 | `baseline-arms-m4-pilot-gate` | ✅ 达成 |
 | M5 方差包络战役 | `baseline-arms-m5-variance` | ⚠️ **闸门红，停在 1/4 局** |
 | M6 Schema 路 A 材料 | `baseline-arms-m6-path-a` | ✅ 达成 |
+| A14 花过钱的产物入库 | — | ✅ 达成（2026-07-29） |
 
 文档：[`AUDIT.md`](AUDIT.md)（第 0 步审计）·
 [`SCHEMA_LOCATE.md`](SCHEMA_LOCATE.md)（M3 结论）·
@@ -19,6 +20,61 @@
 [`INCIDENTS.md`](INCIDENTS.md)（事件）·
 [`TOUCHED_GAMES.md`](TOUCHED_GAMES.md)（触碰登记）·
 [`BUDGET_REPORT.md`](BUDGET_REPORT.md)（闸门，§9 是可执行的止损条件）
+
+---
+
+## 本轨道的规矩：花过钱的产物，要么入库，要么留哈希，**不许两样都没有**
+
+这条不是提醒，是可执行的：`COST_ARTEFACTS.json` 是它的登记表，
+`harness/cost_artefacts.py` 是裁决它的代码，`verify.py` 第三关会跑。
+
+```bash
+cd baseline-arms && python -m harness.cost_artefacts     # 单独看
+cd baseline-arms && python verify.py                     # 三关，含这一关
+```
+
+两种处置，差别在于登记表**承诺了什么**：
+
+* `committed` —— 载荷在 git 里。文件必须在、必须被跟踪、字节必须哈希到登记的值。
+  三样缺一即红。**一个被当作证据引用过、之后又被改动的产物，比从没入库更糟**。
+* `hash-only` —— 载荷刻意不入库（体积、或上游许可不允许转发）。哈希与出处就是记录。
+  文件**可以不在**，那正是这个处置买到的东西；但只要它在，就必须对得上。
+
+新增花钱的产物时，改 `runs/20260729T100000Z-a14/build_register.py` 里的策略字段
+再 `--write` 重新生成，**不要手改 `COST_ARTEFACTS.json`**——它是生成物，
+`--check` 会逐字节比对。
+
+### 这条规矩是怎么来的（A14，2026-07-29）
+
+`git ls-files baseline-arms/out/campaign` 当时是**空的**。四份裸 CC 全战役检查点
+（自报 $48.39，**实际全成本 $50.39**）连同它们的四份分片账本，躺在一台机器的
+工作树里没被跟踪，而**同时有五个领地在引用它们的 sha256 当证据**——
+`battery` 的 v3 MANIFEST、`figures/SOURCES.sha256`、
+`battery/artifacts/capability_spectrum.json`、`proxy/CANON_MIGRATION.md`、
+`proxy/runs/p9-shell-harden/`。一次 `git clean`，主表裸 CC 那一列就没有来源了。
+
+**先核对再入库**：四份检查点 + 四份账本共 8 个 sha256 与 battery 记的逐字节相等，
+没有「被消费之后又被改过」的情况，所以这是抢救，不是事件。
+
+**入库路上的坑，值得单独记一笔**：四份检查点在盘上是 **CRLF**（harness 在
+Windows 上用 Python 文本模式写的），而 battery 钉的哈希正是对这些 CRLF 字节取的。
+本领地 `.gitattributes` 有 `* text eol=lf`，直接 `git add` 会把它们规范化成 LF，
+于是**任何一次 clone 拿到的文件，哈希都不再等于已经被引用的那个值**——
+而且全程没有任何报错。所以加了 `out/campaign/*.json -text diff`，
+并用 `tests/test_cost_artefacts.py::test_committed_campaign_json_bytes_survive_git`
+把这条规则钉住：规则被删掉，测试就红。空白对照做过了——不加这条规则时
+blob 与磁盘的哈希确实不同，加上就相同。
+
+顺带解开一个死结：`verify.py` 此前把 `harness.campaign_status` 排除在关口之外，
+理由正是「它读 `out/campaign/`，而那是未跟踪的，干净检出上必红」。
+检查点入库之后这个理由不成立了，它现在是第三关的一部分。
+**这一点比抢救本身更值钱：干净检出上读不到的产物，还不算证据。**
+
+分片账本一并入库（55 MB 原始）——它们是主记录，且是那 $2.01 差额**唯一**的存活痕迹。
+体积不是理由：这些是重复的整数网格，gzip 压 50–76 倍，十二份文件实测让 pack
+从 72.56 MiB 长到 82.28 MiB。清单与逐条理由见
+[`runs/20260729T100000Z-a14/INVENTORY.md`](runs/20260729T100000Z-a14/INVENTORY.md)，
+账目见 [`RECONCILIATION.md`](runs/20260729T100000Z-a14/RECONCILIATION.md)。
 
 ---
 
@@ -83,6 +139,23 @@
 ---
 
 ## 缺口与阻塞
+
+### GAP-4（新，A14 发现）：战役重启会把已花的钱从账上抹掉
+
+四份检查点每份的 `episodes[]` 只列 12 个 run，而对应的分片账本里有 **14** 个。
+多出来的两个是**被放弃的前两次 harness 启动**：每份日志有三行 `campaign:` 头，
+每次启动都重新打印 `$0.00 of $<ceiling> spent`。**花费计数器在重启时归零**，
+那笔钱既没进 `cost_usd`，也没进预算上限的核算。四局合计 **$2.0071**。
+
+这次没有撞破闸门（四个上限合计 $164.93，都没接近），但它是记账管线的真缺陷，
+和 D-015 那个「关卡不重试」是同一类：**静默地少记**。
+
+A14 是抢救工单，只记录不修。修法应在 `harness/campaign.py` 的 resume 路径上
+累加而非重置，并补一个「账本 run_id 数 == episodes 数」的断言。
+数字与推导见 [`RECONCILIATION.md`](runs/20260729T100000Z-a14/RECONCILIATION.md)。
+
+**另外**：这四场战役当时**根本没有 `runs/<id>/MANIFEST.json`**，留痕正典没被遵守。
+A14 事后补了一份并标明是事后补的。
 
 ### GAP-3（新）：并发战役——本轨道当前有两套互不可见的闸门
 
@@ -171,6 +244,8 @@ python -m harness.run_campaign --game <dev-pile-id>
 python -m harness.run_campaign --gate-only           # 只重新裁决，不花钱
 python -m harness.audit_cells --game <dev-pile-id>   # 逐格账本自洽 + 对账 + 封存检查
 python -m harness.summarise_campaign                 # 方差包络
+python -m harness.campaign_status                    # 四份检查点（A14 入库后可离线读）
+python -m harness.cost_artefacts                     # 花过钱的产物是否都还在、字节是否没变
 
 # M6 Schema 路 A（白名单先行；--dry-run 只列清单，不下载）
 python -m harness.fetch_schema_traces --dry-run
