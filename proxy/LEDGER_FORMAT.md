@@ -98,9 +98,33 @@ published head:
   records from the *end* — the most attractive tamper, since it is the end of a
   run that went badly — breaks no link at all. Deleting from the middle or the
   front does break links.
-* **Duplicate `seq` from two processes.** `Ledger`'s lock is in-process, so two
-  processes appending to one file fork the chain. That shows up as FAIL, which
-  is right, but it is a durability failure rather than a forgery.
+* **Duplicate `seq` from two processes — closed 2026-07-29 (A10).** This used
+  to read: *"`Ledger`'s lock is in-process, so two processes appending to one
+  file fork the chain."* That was true and it happened: a 253-line ledger under
+  `theoria-arm/runs/pytest-test_the_shell_turns_end_to_en0/` still carries the
+  break, seq 137–143 each written twice, because two test processes overlapped.
+  The seed was taken once in `Ledger.__init__` and the lock did not span
+  seed→append, so a writer that opened mid-run continued from an already-stale
+  `seq`.
+
+  `Ledger` now takes an **OS-level lock on a sidecar file**
+  (`<ledger>.jsonl.lock`, `fcntl.flock` / `msvcrt.locking`, the same discipline
+  `spend_gate._PoolLock` has carried since INC-BA-003), and **re-derives
+  `seq`/`prev` from the bytes on disk inside that lock** immediately before
+  writing. It fails closed: no lock primitive, or a timeout, raises
+  `LedgerLockUnavailable` and writes nothing.
+
+  Two limits remain, and neither is a forgery either. A writer that does not go
+  through `Ledger` can still fork the file — the lock is cooperative, and
+  `baseline-arms/harness/ledger.py` writes its own v0 stream knowing nothing
+  about the sidecar. And a *hung* (not dead) holder makes other writers time out
+  and refuse; a dead one is reclaimed by the kernel on exit.
+
+  `proxy/tests/test_ledger_concurrency.py` holds this down with real spawned
+  processes. Its failing path is exercised, not assumed: with the lock and the
+  re-seed removed, 7 of its 10 tests go red, reproducing the poisoned file's
+  signature — every `seq` from the overlap onward written twice, no gaps and no
+  records lost.
 
 **Publishing the head is therefore not optional, and writing it is not
 publishing it.** `runner.play()` returns the record carrying `ledger_head`
@@ -187,19 +211,68 @@ this table because a record shape does not change under the same `v`, and
 because the mock and any future environment may supply it; on live traffic it is
 `null` and nothing should be built on it.
 
-### Score reconciliation obligation
+### Reconciliation obligation
 
-The score derived from `env_step` records must equal the score the API's
-scorecard reports. The **frozen scorer** (`proxy/scoring/`, see
-`proxy/SCORING.md`) computes both and any inequality is an incident, written as
-a §6 `incident` record of kind `score_mismatch`. `proxy/reconcile.py` runs the
-same battery rather than a second implementation of it: two implementations of
-one obligation drift, and the drift stays invisible until the day they disagree
-about a real run.
+**Amended 2026-07-29 (A10).** This section previously read: "the score derived
+from `env_step` records must equal the score the API's scorecard reports, and
+inequality is an incident." Against the live API that obligation **cannot be
+discharged in the direction it was written**, because the ledger side of the
+comparison has no numbers in it — see the note above §3's table, and
+INC-TA-002. A rule nobody can satisfy leaves the gate permanently red or, more
+often, quietly skipped, and this document is normative: leaving it stating an
+impossible obligation is itself a defect. The rule below is what
+`proxy/reconcile.py` performs, and every leg of it has a negative sample in
+`proxy/tests/test_reconcile.py` proving it can go red.
 
-An obligation that **cannot be discharged** — no scorecard was captured, so
-there is nothing to compare against — is `UNDETERMINED`, not `PASS`, and writes
-an `incident` of kind `score_unreconciled`. `baseline-arms` lost 22 of 23
+The obligation is keyed to **three quantities, each compared per record and per
+run, and each required to agree**:
+
+| leg | status of the quantity | compared |
+|---|---|---|
+| **actions** | **recorded** — one `env_step` per ARC command, `step_idx` monotonic from the RESET at `0` | the sequence against itself (duplicates, gaps, non-integers), *and* the scorecard's `total_actions` against the count of successful non-RESET commands |
+| **cost** | **derived, deliberately not recorded** (§5) — `usage` verbatim plus a `pricing_ref` naming the table and its hash | that the bill is still *derivable*: the named table exists and still hashes to the value the record pinned, and `run_end.model_calls` equals the `model_call` records on disk. No dollar figure is compared, because none is in the file |
+| **score, per run** | **recorded on the scorecard** — `POST /api/scorecard/close` returns `score`, and 32 real closed cards carry one | the **frozen scorer**'s battery (`proxy/scoring/`, see `proxy/SCORING.md`), run rather than reimplemented: two implementations of one obligation drift, and the drift stays invisible until the day they disagree about a real run |
+
+Any disagreement is an incident, written as a §6 `incident` record of kind
+`score_mismatch`. That kind's name is now narrower than what it records — it
+covers a failed reconciliation on any leg, and the record's `failing_legs` field
+says which. Renaming it would add a kind to `ledger.INCIDENT_KINDS`.
+
+**Two quantities are named here and deliberately not compared.** Naming them is
+the requirement; faking a comparison over them would be the defect.
+
+* **Per-step `score` is arm-self-reported and NOT cross-verifiable.** A live
+  command response carries no `score` field at all — its key set is
+  `action_input, available_actions, frame, full_reset, game_id, guid,
+  levels_completed, state, win_levels` (INC-TA-002, confirmed against 196
+  successful command responses in `arc-recon/data/recon_ledger.jsonl`, none of
+  which carries one). Whatever wrote the record is its only witness. It is
+  reported under a field name that says so and it does not vote on the verdict.
+  **This label is scoped to the per-step quantity only.** The per-run score on
+  the scorecard is a different quantity, it *is* cross-verifiable, and the leg
+  above keeps checking it — widening the label to "score" would discard a check
+  that works.
+* **Turn count is not reconcilable, because no turn index exists.**
+  `battery/INPUT_FORMAT.md` gap 5: "No turn index distinct from `step_idx`.
+  Still open upstream." `theoria-arm` holds its turn axis outside the ledger in
+  `turns.json` and rejoins it structurally with a stated `join_confidence`
+  because the join is not exact; `ablation-arm`'s count is in `run_report.json`;
+  `baseline-arms` has none at any level. The reconciler reports this as
+  `gaps.turns` with verdict `ABSENT`, and **it does not vote** — a gap in the
+  format is not a defect in the run being reconciled, and making it vote would
+  rebuild the permanently-red signal this amendment removes. **What would close
+  it:** an *optional* `turn_idx` on `env_step` and `model_call`. §8 bumps `v`
+  for a changed meaning or a new *required* field, and an optional one is
+  neither — `prev` (§2) is the precedent — so this can be added at `v` `1.0`.
+  Until an arm writes one, the leg stays `ABSENT`.
+
+**Four verdicts, and the fourth is the reason for the other three.**
+`PASS` (every voting leg agreed) / `FAIL` (a leg disagreed) / `INCOMPLETE`
+(nothing disagreed, but a voting leg had no evidence to work with) / `EMPTY`
+(no `env_step` records for the run). An obligation that **cannot be
+discharged** — no scorecard was captured, so there is nothing to compare
+against — is `UNDETERMINED` in the scorer and never `PASS` here, and writes an
+`incident` of kind `score_unreconciled`. `baseline-arms` lost 22 of 23
 scorecards to a transient close-404 and the loss was silent; silence is the
 failure mode this distinction exists to break.
 
@@ -207,6 +280,10 @@ The scorer's fingerprint (`{id, version, sha256, frozen_at}`) is recorded in
 `run_start` and in `run.json`, so every number can be traced to the rule that
 produced it. The score itself is **not** written into the ledger: it is a
 derived quantity and follows §5.
+
+**This amendment changes no field and no record shape**, so `v` stays `1.0` per
+§8: it changes which comparison the reconciler is obliged to perform, not what
+a record means or which fields it must carry.
 
 ## 4. `model_call`
 
@@ -276,7 +353,7 @@ rule keeps the append-only file honest when the derivation changes.
 | derived | from | by |
 |---|---|---|
 | cost in USD | `usage` + `pricing_ref` | `proxy/cost.py` |
-| score | `env_step.score` sequence | `proxy/reconcile.py` |
+| score | the scorecard, per run — **not** the `env_step.score` sequence, which is null on live traffic (§3, INC-TA-002) | `proxy/scoring/`, reconciled by `proxy/reconcile.py` |
 | any Phase 2 metric | the whole stream | the battery |
 
 The two exceptions are `level` / `level_boundary`, which are derived but *are*
