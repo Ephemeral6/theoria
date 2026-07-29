@@ -5,6 +5,7 @@
     "frame_collisions": [],
     "invariant_failures": [],
     "invariant_unverified": [],
+    "invariant_verdict_mismatch": [],
     "mean_reversibility": 0.9495,
     "rule_correspondence_failures": [],
     "solvability_intent_failures": [],

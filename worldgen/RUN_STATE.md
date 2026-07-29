@@ -724,3 +724,194 @@ coordinator's summary; the coordinator holds the verbatim text. What is on disk
 here is the reviewer's executable probes, under `adversarial/`. Every finding
 above was re-verified against those probes or re-measured directly rather than
 transcribed.
+
+---
+
+# V19 — "I could not check this" was being written as "this holds"
+
+`core/truth.py` computed the catalogue's invariant verdict as
+
+```python
+"invariants_all_hold": all(i.get("holds", True) for i in invariants),
+```
+
+and a prose-only invariant carries **no `holds` key at all**, so `.get`'s
+default reported it as holding. `build.py` promoted that to
+`invariant_failures: []` — the list the build gate consumes. Thirteen of the
+thirty-five shipped `ground_truth.json` files said `invariants_all_hold: true`
+while the `GROUND_TRUTH.md` written from the same dict, in the same function
+call, printed `prose only, unverified` about the same claim.
+
+**The shape is the part worth carrying forward.** The human-readable half of
+the artefact was honest throughout. Only the machine-read half lied — and the
+machine is what adjudicates. Anyone auditing the document designed to be
+audited would have seen the truth and had no reason to open the JSON.
+
+Run directory: `worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/`.
+Per-file regeneration evidence: its `FLIPS.md`. The sweep for other defaults
+pointing at good news: its `OPTIMISTIC-DEFAULTS.md`.
+
+## 1. Three classes replace the boolean
+
+`holds` / `violated` / `unverified`, a **total and disjoint** partition that
+sinks anything it does not recognise — a missing status, an unrecognised one, a
+row from a pre-V19 writer, a truthy-but-not-`True` value — to `unverified`.
+`invariants_all_hold` is true only when the last two lists are both empty, and
+`ground_truth.json` publishes the whole partition as `invariant_status` so a
+consumer wanting "no violations" asks for it by name rather than getting it by
+accident from a boolean claiming to mean more.
+
+A callable that ran on **zero** states or transitions is `unverified` too:
+`not violations` is vacuously true when nothing was measured, which is the same
+defect in a row that has a callable in it, where nobody would look.
+
+`invariant_failures` **kept its old meaning** (violated). Widening it to "not
+`invariants_all_hold`" was the one-character fix and is a different bug — it
+makes an unexercised claim indistinguishable from a broken world, and the work
+each calls for is not the same. `invariant_unverified` gates separately.
+
+## 2. The thirteen were verified, not waived
+
+The three-state alone turned the catalogue **red on thirteen worlds** (exit 1).
+That is the honest state and it is unshippable, and there were only two ways
+out: waive the gate for the three known claims — the same disease wearing an
+allowlist — or exercise them.
+
+All three (`latch_monotone`, `collection_is_monotone`,
+`tile_state_is_monotone`) are *transition* properties. Their mechanism modules
+said exactly that, in comments, and were right; `check(world, state)` sees one
+state. What was missing was a seam, so `check_invariants` grew
+`edge_check(world, prev, action, next)` over the reachable graph. All thirteen
+returned to `true` on 16 rows of 84–10616 measured transitions each. None was
+false.
+
+**A final delta of zero flips is not evidence that nothing was wrong**, and the
+run directory keeps stage 1 (thirteen red, exit 1) on disk for that reason. The
+load-bearing sentence is: thirteen shipped worlds asserted a claim no code had
+ever exercised; all thirteen have now been exercised.
+
+## 3. Negative controls, on process exit codes
+
+`tests/invariant_sandbox.py`, built on V16's precedent: copy the package, patch
+one well-formed invariant into `invariant_table`, run the real
+`python -m worldgen.build`. Thirteen cells; full table in the run directory's
+`RUN_STATE.md` and raw output in `evidence/05`.
+
+A prose-only invariant exits **1** naming `invariant_unverified` and *not*
+`invariant_failures`; a genuinely violated one exits **1** naming
+`invariant_failures` and *not* `invariant_unverified` — the pair that separates
+"unverified is refused" from "everything is refused". Two positive controls
+(a well-formed invariant that holds, on both seams) stay green.
+
+Four weakenings show the controls are awake. `pre_v19` restores the boolean and
+the prose-only invariant sails through again. `unverified_sinks_to_holds`
+reproduces the bug while leaving all three class names in the schema — the
+failure a three-way split invites, a third class that exists in the JSON and is
+unreachable in the code.
+
+**One unflattering cell, kept.** `boolean_default` reverts *only*
+`all_invariants_hold` and the build stays **red**: the honest conjunction is not
+what stops the defect at the gate, the separate `GATES` key is. Anyone who
+repairs only `truth.py` next time will have fixed the reporting alone. Pinned
+as `test_the_boolean_alone_is_not_what_catches_it`.
+
+## 4. The sweep — eight sites, four defects
+
+Two more of this exact shape, both repaired:
+
+* **`build.py`'s `gate_failures` read `totals.get(key, ())`**, so a manifest
+  that simply did not carry a gate's key cleared that gate in silence — a
+  missing measurement defaulting to the good news, one function from where the
+  bad value was consumed. Unreachable today, which is the argument *for* the
+  check: this territory's last two findings were both "computed, and nothing
+  exits on it".
+* **`to_markdown`'s `corr.get("agrees", True)`** rendered an unmeasured rule
+  correspondence as agreement — the mirror image, the *Markdown* being kinder
+  than reality.
+
+`mutate.py`'s `row.get("holds", True)` was dead behind a `verified` guard and
+was removed anyway. The semantic gap behind it is **not** closed:
+`claims_now_false` counts violations only, so a mutation turning a verified
+invariant into an unverified one is invisible to it. Closing that needs a new
+key in `MUTATIONS.json`, and `claims_now_false` is read by name from
+`exam/grading/rubrics_adaptation.py` and `exam/papers/adaptation.py` — another
+track's territory. Recorded, not done unilaterally.
+
+The judging criterion, which is the reusable part: **does this default feed a
+verdict?** Accumulators (`counts.get(k, 0) + 1`) and decoders
+(`blob.get("colors", {})`) do not. `qc/run_qc.py`'s `l12.get("l1_pass")` — no
+default, so missing reads as *not passed* — is what the rest of the tree should
+look like.
+
+## 5. Measurements
+
+| | before | after |
+|---|---|---|
+| `pytest worldgen -q` | 432 passed, 13 skipped | **514 passed, 13 skipped** |
+| `python -m worldgen.build --check` | exit 0 | exit **0**, byte-identical across interpreters |
+| `python -m worldgen.verify` | — | exit **0**, `green` |
+| ground truths asserting an unexercised claim | 13 of 35 | **0 of 35** |
+
+`INDEX.json` and `MUTATIONS.json` changed **additively only** — 41 and 31
+inserted lines, zero deletions — and `claims_now_false` is byte-identical for
+all fifteen mutants, so nothing downstream is re-signed.
+
+## 6. Encountered, recorded, not fixed
+
+`python -m worldgen.verify` rewrote eighteen committed artefacts under
+`out/qc/` and left one untracked file: the side effect V12 measured and
+registered. QC reads only `raw_trace.jsonl` (`qc/run_qc.py:81,170`), and V19
+modified no trace, spec, coverage or reversibility file, so none of it is
+attributable here. Reverted so the branch carries only its own change.
+Not ours to fix.
+
+## 7. What the adversarial pass changed
+
+80 mutants, **30 escapees** — the hardest review this territory has had. Full
+report verbatim in the run directory as `ADVERSARIAL-VERBATIM.md`, with the
+reviewer's own probes under `adversarial/`; every overturn is accounted for in
+place in that directory's `RUN_STATE.md`, original claims marked `[OVERTURNED]`
+rather than rewritten.
+
+Three attack lines failed and stand: the three-class partition itself, the
+violated/unverified separation (not over-corrected), and the flip arithmetic
+(the reviewer instrumented all three `edge_check`s and measured them firing —
+111, 94 and 43 times — and re-derived all 35 artefacts byte-for-byte).
+
+| | what it was |
+|---|---|
+| **F1** CRITICAL | replacing the two `except` bodies in `check_invariants` with a bare `continue` makes a check that raises on **all 24 states** report `states_checked: 24, verified: True, holds: True` — **this cell's own defect rebuilt inside the function written to prevent it**, both gates green. The docstring defended the `raise → violated` choice at length and nothing tested that the branch existed |
+| **F2** CRITICAL | `states_checked` came from `len(states)` *outside* the loop, so slicing the loop header left the artefact reporting evidence it never gathered. Seven escapees. **Stage 2's whole argument is those numbers** |
+| **F3** HIGH | `to_markdown` classified rows itself, by *truthiness* — the very thing `classify_invariants` refuses one function below. `{verified: 1, holds: 1}` was `unverified` in the JSON and printed `holds` on the page: **the line a human reads was the kinder one**, this cell's thesis inverted |
+| **F8** HIGH | after the repair **no gate read `invariants_all_hold`** — hard-coding it to `True` left the build green. The field the cell is named for, published in all 35 ground truths and all 35 `INDEX.json` rows. The load had been moved *off* it rather than onto it |
+| **F4** HIGH | the Markdown layer had no negative control at all: all 165 shipped bullets are `holds`, so the `**VIOLATED**` and `**unverified**` branches were never executed. Four escapees |
+| **F6/F9/F10** | `cert.get("blocking_entities") or []`; a `pytest.skip` standing in for a pass; the mutant half silently ungated under explicit world ids (20 of 35 worlds, including 5 of this cell's 13); nameless rows invisible to the partition test |
+| **F7** MEDIUM | the `boolean_default` control was an **observational no-op** — byte-identical process output to the unweakened run, so it passed whether or not the weakening applied. Its *conclusion* was true; the test had not established it |
+
+All 13 reconstructable escapees were replayed against the repaired suite:
+**13 red, 0 still escaping** (`evidence/11-escapee-replay.txt`).
+
+### Two things larger than this cell, registered rather than fixed
+
+**`--check` does not protect the committed artefacts.** `main()` rebuilds `OUT`
+*before* `check_determinism` diffs it, so under a mutation it compares mutated
+against mutated and reports byte-identical. `determinism_sandbox.py:12-16` had
+already written this down for V16. **The 35 committed artefacts are pinned by
+`git diff` and human attention, and by nothing else.**
+
+**`core/reversibility.py` has V19's disease at seven times the scale.**
+`deferred` and `unreachable` both stay out of `claim_disagreements`, which is
+the build gate. Independently re-measured: **90 of 218 published claims (41.3%)
+have never been checked; all 35/35 worlds carry at least one; `walk` is written
+as prose and recorded `deferred` in every world.** `claim_disagreements` is
+empty across the whole catalogue — the gate has never fired because the class
+that can trip it is empty. `truth.py:23` still says "the reversibility stamp is
+measured" and `README.md:118` reads the same way, so **here both halves are
+optimistic**, which is worse than the split V19 found. Companion item: 37 rules
+self-exempt from `declared_never_fires` via `cascade` / `clause`, declared by
+the rule and independently checked by nobody.
+
+Not repaired here — a repair seven times the size of the cell it rides in makes
+the acceptance line something nobody can review, which is the same reason RES-3
+gave for not fixing V19 inside V16. Proposal for the board:
+`runs/20260728T230307Z-V19-unverified-is-not-true/INBOX-PROPOSAL-20260729-reversibility-deferred-is-the-same-disease-at-7x-scale.md`.

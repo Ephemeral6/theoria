@@ -244,7 +244,42 @@ def classify_invariants(invariants: Sequence[Dict[str, Any]]) -> Dict[str, List[
             violated.append(name)
         else:
             unverified.append(name)
-    return {INV_HOLDS: holds, INV_VIOLATED: violated, INV_UNVERIFIED: unverified}
+    return _conserving({INV_HOLDS: holds, INV_VIOLATED: violated,
+                        INV_UNVERIFIED: unverified}, len(invariants))
+
+
+def _conserving(status: Dict[str, List[str]], expected: int) -> Dict[str, List[str]]:
+    """Return `status` if it accounts for exactly `expected` rows; else raise.
+
+    Conservation, checked rather than argued. The name-keyed partition test
+    cannot see a row with no `name` at all — such a row is filed under
+    `<unnamed>`, and two of them collapse to one entry under any set
+    comparison — so the property that actually has to hold is the **count**.
+
+    A separate function so that it can have a negative control of its own. A
+    check written inline can only be exercised by breaking the code around it,
+    which means in practice it is never exercised.
+    """
+    landed = sum(len(status[k]) for k in INV_STATUSES)
+    if landed != expected:
+        raise ValueError("classify_invariants lost %d of %d rows: %r"
+                         % (expected - landed, expected, status))
+    return status
+
+
+def _sole_class(status: Dict[str, List[str]]) -> str:
+    """The one class a single-row `classify_invariants` result landed in.
+
+    Raises if the partition put one row in none or several — which cannot
+    happen while `classify_invariants` stays exhaustive and disjoint, and is
+    worth failing loudly on if it ever stops being either, because every
+    renderer downstream would otherwise pick a class by accident.
+    """
+    landed = [k for k in INV_STATUSES if status[k]]
+    if len(landed) != 1:
+        raise ValueError("one invariant row landed in %d classes: %r"
+                         % (len(landed), status))
+    return landed[0]
 
 
 def all_invariants_hold(invariants: Sequence[Dict[str, Any]]) -> bool:
@@ -309,32 +344,44 @@ def check_invariants(world: GridWorld,
             results.append(row)
             continue
 
+        # Both counters are incremented **inside** their loop, from the call that
+        # actually happened.  They were written as `len(states)` and as a
+        # separately-maintained `edges` outside the body, which meant the number
+        # published in `ground_truth.json` described the input rather than the
+        # work: slice the iterable to one element and the artefact still
+        # reported twenty-six states checked.  That number is the entire
+        # argument of this cell's stage 2 ("84 to 10616 transitions, not a
+        # default"), so an unpinned count is the claim quietly evaporating.
         violations: List[Dict[str, Any]] = []
         evidence = 0
         if check is not None:
+            checked = 0
             for state in states:
                 try:
                     ok = bool(check(world, state))
                 except Exception as exc:
+                    checked += 1
                     violations.append({"state": list(state.key()), "error": repr(exc)})
                     break
+                checked += 1
                 if not ok:
                     violations.append({"state": list(state.key())})
                     if len(violations) >= 3:
                         break
-            row["states_checked"] = len(states)
-            evidence += len(states)
+            row["states_checked"] = checked
+            evidence += checked
 
         if edge_check is not None and len(violations) < 3:
             edges = 0
             for prev, action, nxt, _rule in world.transitions(states):
-                edges += 1
                 try:
                     ok = bool(edge_check(world, prev, action, nxt))
                 except Exception as exc:
+                    edges += 1
                     violations.append({"state": list(prev.key()), "action": action,
                                        "next": list(nxt.key()), "error": repr(exc)})
                     break
+                edges += 1
                 if not ok:
                     violations.append({"state": list(prev.key()), "action": action,
                                        "next": list(nxt.key())})
@@ -482,7 +529,20 @@ def to_markdown(truth: Dict[str, Any]) -> str:
                 lines.append("* `%s`: %s"
                              % (key, ", ".join("`%s`" % n for n in corr[key])))
 
+    # **One classifier, called twice — never two classifiers agreeing by habit.**
+    # This section used to decide each bullet for itself, with `if not
+    # inv.get("verified")` and `inv["holds"]` — *truthiness*, which is exactly
+    # what `classify_invariants` refuses and what
+    # `test_invariant_status.py::...truthy is not True` forbids one function
+    # further down. The two disagreed: a row `{verified: 1, holds: 1}` was
+    # `unverified` in the JSON and printed as `holds` here. That is this cell's
+    # own thesis violated in the direction it warns about hardest — the line a
+    # human reads was the more forgiving of the two.
+    #
+    # So the Markdown asks the same function the JSON asked, per row.
     status = truth.get("invariant_status") or classify_invariants(truth["invariants"])
+    per_row = [(inv, _sole_class(classify_invariants([inv])))
+               for inv in truth["invariants"]]
     lines += ["", "## Invariants", "",
               "%d hold, %d violated, %d unverified — `invariants_all_hold` is "
               "`%s`. **An unverified invariant is not a satisfied one**, so it "
@@ -492,20 +552,26 @@ def to_markdown(truth: Dict[str, Any]) -> str:
                  len(status[INV_UNVERIFIED]),
                  "true" if truth["invariants_all_hold"] else "false"),
               ""]
-    for inv in truth["invariants"]:
-        if not inv.get("verified"):
-            lines.append("* **%s** — %s  _(prose only, **unverified** — no "
-                         "callable check ran)_" % (inv["name"], inv["statement"]))
-        else:
-            scope = []
-            if "states_checked" in inv:
-                scope.append("%d reachable states" % inv["states_checked"])
-            if "transitions_checked" in inv:
-                scope.append("%d transitions" % inv["transitions_checked"])
-            lines.append("* **%s** — %s  _(checked on %s: %s)_"
+    for inv, klass in per_row:
+        if klass == INV_UNVERIFIED:
+            lines.append("* **%s** — %s  _(**unverified** — %s)_"
                          % (inv["name"], inv["statement"],
-                            " and ".join(scope) or "no states",
-                            "holds" if inv["holds"] else "**VIOLATED**"))
+                            inv.get("note", "no callable check ran")))
+            continue
+        scope = []
+        if "states_checked" in inv:
+            scope.append("%d reachable states" % inv["states_checked"])
+        if "transitions_checked" in inv:
+            scope.append("%d transitions" % inv["transitions_checked"])
+        # A verified row with no evidence count is a row whose artefact lost the
+        # number this cell's stage-2 argument rests on. Say that, rather than
+        # printing a reassuring dash: `"no states"` was the old fallback and it
+        # read as a rendering quirk instead of as missing evidence.
+        lines.append("* **%s** — %s  _(checked on %s: %s)_"
+                     % (inv["name"], inv["statement"],
+                        " and ".join(scope)
+                        or "**an unrecorded amount of evidence**",
+                        "holds" if klass == INV_HOLDS else "**VIOLATED**"))
 
     solve = truth["solvability"]
     lines += ["", "## Solvability", ""]
@@ -515,10 +581,22 @@ def to_markdown(truth: Dict[str, Any]) -> str:
     else:
         cert = solve["certificate"]
         lines.append("**Unsolvable.** %s" % cert["statement"])
-        blockers = cert.get("blocking_entities") or []
-        if blockers:
+        # `cert.get("blocking_entities") or []` collapsed two different facts
+        # into one silent page: "the blocker analysis ran and found none" and
+        # "the blocker analysis is not in this certificate". The same shape as
+        # the rest of this cell, in the same file — a missing measurement
+        # rendering as a clean result.
+        if "blocking_entities" not in cert:
             lines.append("")
-            for row in blockers:
+            lines.append("_This certificate carries no blocker analysis — no "
+                         "entity has been ruled in or out._")
+        elif not cert["blocking_entities"]:
+            lines.append("")
+            lines.append("_The blocker analysis ran and attributed the "
+                         "unsolvability to no single entity._")
+        else:
+            lines.append("")
+            for row in cert["blocking_entities"]:
                 lines.append("* `%s` at %r — %s" % (row["entity"]["kind"],
                                                     tuple(row["entity"]["cell"]),
                                                     row["verdict"]))

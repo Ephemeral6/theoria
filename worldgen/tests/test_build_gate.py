@@ -90,8 +90,16 @@ def test_a_gate_reports_every_offending_world():
 def test_the_shipped_catalogue_passes_its_own_gate():
     """The keys the synthetic manifests use are the keys `build_all` really emits."""
     path = os.path.join(support.OUT, "INDEX.json")
-    if not os.path.exists(path):
-        pytest.skip("no shipped INDEX.json — run `python -m worldgen.build`")
+    # Not a skip. `INDEX.json` is a committed artefact, so its absence is a
+    # broken checkout rather than an untried configuration — and a skipped test
+    # reads as a passed one in every summary line anyone will actually look at.
+    # This is the only test that checks the gate keys against the manifest the
+    # build really emits; letting it evaporate silently is how a gate keyed on a
+    # string nothing produces would survive the whole file.
+    assert os.path.exists(path), (
+        "no shipped INDEX.json at %s — this is the only test that holds the "
+        "gate keys against a real manifest, so it fails rather than skips. Run "
+        "`python -m worldgen.build`." % path)
     with open(path, encoding="utf-8") as handle:
         manifest = json.load(handle)
     for key in GATE_KEYS:

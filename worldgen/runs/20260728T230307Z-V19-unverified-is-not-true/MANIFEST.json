@@ -1,22 +1,32 @@
 {
   "base_commit": "9348fa4dcd108be8f537568d0a60f3b41ce15c71",
   "branch": "agent/v19-unverified-is-not-true",
+  "caveats": [
+    "`--check` does not protect the committed artefacts: main() rebuilds OUT before check_determinism diffs it, so under a mutation it compares mutated against mutated. The 35 committed artefacts are pinned by git diff and human attention only. (determinism_sandbox.py:12-16 recorded this for V16.)",
+    "core/reversibility.py: 90 of 218 published claims (41.3%) are `deferred` or `unreachable` and neither class can reach the build gate; all 35/35 worlds carry at least one. Registered, not fixed - see INBOX-PROPOSAL-20260729-*.md in this directory.",
+    "37 rules self-exempt from `declared_never_fires` via `cascade: True` / `clause: True`, declared by the rule and independently checked by nobody. Same proposal."
+  ],
   "cell": "V19",
   "files": [
     {
       "path": "worldgen/core/truth.py",
       "role": "source",
-      "sha256": "ab0a2c21455abc355997a2c3027fda1a500b0145f0eed2c2e440273701227be3"
+      "sha256": "eed61020922235f6c7fa638c03ddb6b4cae9597760dc31d42c71cebfbd2f5389"
     },
     {
       "path": "worldgen/build.py",
       "role": "source",
-      "sha256": "798f83a5c3d04cbf8d093a9b2c8edfd137e7a129a37419e5e6361448450aeb2c"
+      "sha256": "ed783dc1b75cf3ec24ffdea7a75ea270c1c26555ee946a5459508ec33404ca70"
     },
     {
       "path": "worldgen/mutate.py",
       "role": "source",
       "sha256": "6a998983245fa3599be15c8b7e6268cd601730be9ea6a9e100a02b9c1e3b33e8"
+    },
+    {
+      "path": "worldgen/RUN_STATE.md",
+      "role": "source",
+      "sha256": "9b02b27277a4c66bd594bac8ced92e8019b1404c42fea9458d2806412b8c3471"
     },
     {
       "path": "worldgen/mechanisms/base.py",
@@ -41,22 +51,117 @@
     {
       "path": "worldgen/tests/invariant_sandbox.py",
       "role": "source",
-      "sha256": "d0ea965238dbddf701f177956d54a9092603c17c69f18bfd860c64ea9e9a9c2e"
+      "sha256": "645c7c5b4e6b121671b573208d4891deb74e19e619c96a338e169bc06aceeef4"
     },
     {
       "path": "worldgen/tests/test_invariant_status.py",
       "role": "source",
-      "sha256": "f2e5705b7f62c33c20822f8389848388bdd7ee7896ea8d124ebc35d9cd3c126f"
+      "sha256": "b332c159f5293c5e63dab484abb84bbb8695bfcf98cd45f3a0585aa4315d9b76"
     },
     {
       "path": "worldgen/tests/test_invariant_gate.py",
       "role": "source",
-      "sha256": "690309c46e9744e0a9914b7625ff18d11aec98757b94c9dd0728bc5b930f07eb"
+      "sha256": "2cf43f43087c0da99e3c6837e096e9649867a2404a62ee9ec9f629e01354d66c"
     },
     {
       "path": "worldgen/tests/test_build_gate.py",
       "role": "source",
-      "sha256": "049660e4235ecc30f9c9575958d8ea9828970932adbb13ab224af8760ec8712f"
+      "sha256": "86ca9dbb03929c7c14b3bbd1e63a068d677986a050b9b91b31aa1586156ab009"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/ADVERSARIAL-VERBATIM.md",
+      "role": "narrative",
+      "sha256": "e7bf7c9aec3edbf5d36d603290a7a3ad365aaa068368ced9493634c190576d51"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/FLIPS.md",
+      "role": "narrative",
+      "sha256": "3e64317ca9e8f2e4fa547b07dda606e92bb8a4fcaf34dda1f839330be414eb42"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/INBOX-PROPOSAL-20260729-reversibility-deferred-is-the-same-disease-at-7x-scale.md",
+      "role": "narrative",
+      "sha256": "474803d73f523c97a0f1671120a97e71d62ec32f0b4a97fb92b7f390582f97c7"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/OPTIMISTIC-DEFAULTS.md",
+      "role": "narrative",
+      "sha256": "6fb457eaf2451efb5230a1e4e7fdb1904632c9bc375e6922b51cac3e3a207ca9"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/RUN_STATE.md",
+      "role": "narrative",
+      "sha256": "4ecc77b725e8c66f2c087c98450f9877deefbc591371d76e27b726f1800a0784"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/README.md",
+      "role": "adversarial",
+      "sha256": "5bf784c2b38a0811fa7c6496c42a7c4152525a7f947d2845d21989938cba9f24"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/batch2.py",
+      "role": "adversarial",
+      "sha256": "fdd0e8b60909bcab45129f44094b3b5ddfc62fd52b72099e7fb27053a8b7a003"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/drift.py",
+      "role": "adversarial",
+      "sha256": "d83b9f3d56cfa8c7e819046102fff57be3e7a6924bce418ae10fc2a349fd35a9"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/gen_mutants.py",
+      "role": "adversarial",
+      "sha256": "455f76e4d55f35962d83b3f747888ffce82e6a8effa9b45d50098802f2995547"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/harness.py",
+      "role": "adversarial",
+      "sha256": "4d359ecbffd619ec00c55fc87d2a498fdae44246aef5f06fff036daa08a95375"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/mutants.json",
+      "role": "adversarial",
+      "sha256": "853c9e8bc533a378567b8698e10da8cab52d4dc807a369bbaff19839a7a7de4c"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/mutants2.json",
+      "role": "adversarial",
+      "sha256": "fa44845ab866a96014bdc38a4886fbdf31d1b895485a5dec77c31fbdee07659d"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/probe_c12_exception_swallowed.py",
+      "role": "adversarial",
+      "sha256": "dbcda413b1ec0951e5155035421065dda79cd1c174181d80db9a9aaebabb3bb8"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/probe_edge_check_is_exercised.py",
+      "role": "adversarial",
+      "sha256": "1c7789638471bc16056d71e8b360dab22324857872fee35dea3ab9f90a446af6"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/probe_weakening_is_a_noop.py",
+      "role": "adversarial",
+      "sha256": "19b9aecb35c70d94eea769b504ec36f4cc5f242844c7971b6a7862d2591e9da6"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/results.json",
+      "role": "adversarial",
+      "sha256": "83305dc2a43dd549aa5c9179bdd0812bfe3f846ef2a8ac7b0547f69789e530cc"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/results2.json",
+      "role": "adversarial",
+      "sha256": "2e8caa0193ca9b6f150f389c31be6ec94c170babd92c85176eb041717d78e5b0"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/run.log",
+      "role": "adversarial",
+      "sha256": "24bb331bb179345b827bd936bf0034891a7a2509c7c9dbe54a2637b3d55a5782"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/run2.log",
+      "role": "adversarial",
+      "sha256": "e43a8f8d56ef03252a0856e23e47ac4249731816d8766b84b087157b755ac7da"
     },
     {
       "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/00-baseline-build.txt",
@@ -107,6 +212,31 @@
       "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/09-final-build-check-after-vacuity-fix.txt",
       "role": "evidence",
       "sha256": "528b0b4158270543f37ac28528e7238e84ef2ef238f5b6cbd05610aa19956c6f"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/10-negative-controls-after-review.txt",
+      "role": "evidence",
+      "sha256": "c58f0fbef03fccf163caf1adc948997b24a6c9775cd16157a5b6cd8cdb3c90ec"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/11-escapee-replay.txt",
+      "role": "evidence",
+      "sha256": "63ae81f430461776a77c8baafbb49e5f94b4303e0216f9a8c6f528e6ddd79e11"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/12-final-pytest.txt",
+      "role": "evidence",
+      "sha256": "4914d280396b92f9cdfaf053d4967f9321a19b59922f4216969c6b9dd0802f42"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/13-final-build-check.txt",
+      "role": "evidence",
+      "sha256": "669d7de9d3a6d0e751f43788d47447b2c0594c15a3a97352b12a489b49ea60ff"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/14-final-verify.txt",
+      "role": "evidence",
+      "sha256": "faf8c75a54aab1664644d9421592f98d158b4d04e7eb90209b33387a361699d9"
     },
     {
       "path": "worldgen/out/worlds/t1-cycler-gate/ground_truth.json",
@@ -426,7 +556,7 @@
     {
       "path": "worldgen/out/worlds/v-ce732813/GROUND_TRUTH.md",
       "role": "regenerated",
-      "sha256": "1da6d6714bae3e75b43cf15c8cbc70a82d44dbb7a598c3cc740dccca5ff14aa5"
+      "sha256": "e57f23c506ac9874b4d4b3d0347dd5dca7f99bdd89edb94f26bf4c56f50151a3"
     },
     {
       "path": "worldgen/out/worlds/v-d2c2b1b9/ground_truth.json",
@@ -457,22 +587,39 @@
       "path": "worldgen/out/worlds/v-efe43df1/GROUND_TRUTH.md",
       "role": "regenerated",
       "sha256": "fcbe1ca5565b3bb8a651298f7e69dc0319a01951fac662193ab5bf2d6f160023"
+    },
+    {
+      "path": "worldgen/out/worlds/INDEX.json",
+      "role": "regenerated",
+      "sha256": "cf0dc2446ca744b2521dc4946358fe98929f0125fbec13c4e318952d345067f8"
+    },
+    {
+      "path": "worldgen/out/worlds/MUTATIONS.json",
+      "role": "regenerated",
+      "sha256": "4f72250a878195222bc242da5fc0a7966ee26f30e62d6947e18c276fa09e54fb"
     }
   ],
   "lane": "verify",
   "measurements": {
+    "adversarial_escapees": 30,
+    "adversarial_mutants": 80,
     "build_check_determinism": "byte-identical across two interpreters",
     "build_exit": 0,
+    "edge_checked_rows": 16,
+    "escapees_replayed_against_the_repaired_suite": 13,
+    "escapees_still_escaping": 0,
     "files_with_a_holdless_invariant_before": 13,
     "flipped_true_to_false_in_the_final_tree": 0,
     "flipped_true_to_false_under_the_three_state_alone": 13,
     "ground_truth_files": 35,
-    "pytest": "512 passed, 13 skipped (was 432 passed, 13 skipped)",
+    "pytest": "580 passed, 13 skipped (was 432 passed, 13 skipped)",
+    "transitions_per_row_max": 10616,
+    "transitions_per_row_min": 84,
     "verify_exit": 0,
-    "why_zero_in_the_final_tree": "all 13 were resolved by verifying the claim, not by waiving the gate: latch_monotone / collection_is_monotone / tile_state_is_monotone now run as edge_checks over the reachable graph. Stage 1 (three-state only, 13 red) is preserved in evidence/01 and evidence/02 because the final 0 is not evidence of anything on its own."
+    "why_zero_in_the_final_tree": "all 13 were resolved by verifying the claim, not by waiving the gate. Stage 1 (three-state only, 13 red, build exit 1) is preserved in evidence/01 and evidence/02 because the final 0 is not evidence of anything on its own."
   },
   "prompt_id": "V19-unverified-is-not-true",
-  "summary": "invariants_all_hold was computed with all(i.get('holds', True) ...), so a prose-only invariant carrying no 'holds' key was read as holding. Replaced with a three-class partition (holds / violated / unverified) and a separate build gate; gave the three prose invariants real transition-level checks so the claims are verified rather than waived.",
+  "summary": "invariants_all_hold was computed with all(i.get('holds', True) ...), so a prose-only invariant carrying no 'holds' key was read as holding. Replaced with a three-class partition (holds / violated / unverified), two new build gates, and real transition-level checks for the three prose invariants. Revised after an 80-mutant adversarial review that found 30 escapees.",
   "territory": "worldgen",
   "utc": "2026-07-28T23:03:07Z"
 }

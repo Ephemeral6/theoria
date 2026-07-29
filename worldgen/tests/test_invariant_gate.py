@@ -32,6 +32,7 @@ from worldgen.tests import invariant_sandbox as ivs
 
 UNVERIFIED = ivs.UNVERIFIED_KEY
 VIOLATED = ivs.VIOLATED_KEY
+MISMATCH = ivs.MISMATCH_KEY
 
 
 @pytest.fixture(scope="session")
@@ -63,6 +64,20 @@ def _run(sandbox, scratch, injection=None, weakening=None):
     root = sandbox(injection, weakening)
     proc = ivs.run_build(root, scratch(label))
     return proc, ivs.text(proc), ivs.gate_lines(proc)
+
+
+def _run_with_artefacts(sandbox, scratch, injection=None, weakening=None):
+    """As `_run`, plus the `ground_truth.json` and Markdown the build wrote.
+
+    Needed wherever a weakening's effect does not reach the process — see
+    `invariant_sandbox.read_artefacts`.
+    """
+    label = "-".join(p for p in (injection, weakening) if p) or "clean"
+    root = sandbox(injection, weakening)
+    into = scratch(label)
+    proc = ivs.run_build(root, into)
+    blob, rendered = ivs.read_artefacts(into)
+    return proc, ivs.text(proc), ivs.gate_lines(proc), blob, rendered
 
 
 # --- the clean control ------------------------------------------------------
@@ -198,7 +213,71 @@ def test_the_boolean_alone_is_not_what_catches_it(sandbox, scratch):
     flattering one: the conjunction is *not* what stops the defect at the gate —
     the separate `GATES` key is. Anyone who repairs only `truth.py` next time
     will believe they have fixed this and will have fixed the reporting alone.
+
+    **The assertion is on the artefact, not the process.** An earlier version of
+    this test asserted only `returncode == 1` and the gate line — and this
+    weakening's process output is byte-identical to the unweakened run, so the
+    test passed whether or not the patch had applied. It was a control that
+    could not fail, in a file whose entire subject is controls that cannot fail.
+    `invariants_all_hold` inside the produced `ground_truth.json` is the one
+    thing the weakening actually moves.
     """
-    proc, out, lines = _run(sandbox, scratch, "prose_only", "boolean_default")
+    proc, out, lines, blob, _md = _run_with_artefacts(
+        sandbox, scratch, "prose_only", "boolean_default")
     assert proc.returncode == 1, out[-3000:]
     assert any(UNVERIFIED in line for line in lines), lines
+    assert blob["invariants_all_hold"] is True, (
+        "the weakening did not take effect — the reverted `.get(\"holds\", True)` "
+        "should report the prose-only invariant as holding in the artefact, so "
+        "this test was not measuring the weakening at all")
+    assert blob["invariant_status"]["unverified"] == ["v19_probe_prose_only"], blob
+    # ...and the artefact now contradicts itself, which is the shape the
+    # verdict-mismatch gate exists to catch.
+    assert any(MISMATCH in line for line in lines), (
+        "the boolean disagrees with its own partition and no gate said so: %s"
+        % (lines,))
+
+
+def test_an_unweakened_run_reports_the_boolean_honestly(sandbox, scratch):
+    """The control for the test above: without the weakening the same injection
+    produces `invariants_all_hold: false`, so the assertion there is measuring
+    the patch and not a constant."""
+    _proc, _out, _lines, blob, _md = _run_with_artefacts(
+        sandbox, scratch, "prose_only")
+    assert blob["invariants_all_hold"] is False, blob
+    assert blob["invariant_status"]["unverified"] == ["v19_probe_prose_only"], blob
+
+
+# --- F8: the boolean has to carry load, not merely be published -------------
+
+def test_hardcoding_the_published_boolean_is_caught(sandbox, scratch):
+    """`invariants_all_hold` is the field this cell is named for.
+
+    It is published in every `ground_truth.json` and every `INDEX.json` row and
+    is the only invariant field a naive downstream reads. After the first pass
+    of this repair, **no gate read it** — the two class lists did all the work —
+    so hard-coding it to `True` left the build green. The repair had moved the
+    load off the field instead of onto it, which is this territory's recurring
+    failure committed by the fix for it.
+    """
+    proc, out, lines, blob, _md = _run_with_artefacts(
+        sandbox, scratch, "prose_only", "hardcoded_true_and_no_unverified_gate")
+    assert blob["invariants_all_hold"] is True, (
+        "the weakening did not apply: %r" % blob.get("invariants_all_hold"))
+    assert blob["invariant_status"]["unverified"], blob
+    assert proc.returncode == 1, (
+        "the published boolean was a constant, contradicted its own partition, "
+        "and the build shipped:\n" + out[-3000:])
+    assert any(MISMATCH in line for line in lines), lines
+    assert not any(UNVERIFIED in line for line in lines), (
+        "this cell is supposed to isolate the verdict gate; the unverified gate "
+        "should have been removed by the weakening: %s" % (lines,))
+
+
+def test_the_verdict_gate_is_quiet_when_the_boolean_agrees(sandbox, scratch):
+    """It must not fire on every build, or it is noise rather than a gate."""
+    _proc, out, lines = _run(sandbox, scratch)
+    assert not any(MISMATCH in line for line in lines), out[-3000:]
+    _proc2, _out2, lines2 = _run(sandbox, scratch, "violated_state")
+    assert not any(MISMATCH in line for line in lines2), (
+        "a correctly-reported violation tripped the drift gate: %s" % (lines2,))

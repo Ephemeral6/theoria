@@ -55,6 +55,7 @@ catalogue, and a legitimate host because `invariant_table` gives *every* world
 `agent_unique` and `grid_shape` regardless of which mechanisms it binds.
 """
 
+import json
 import os
 import shutil
 import subprocess
@@ -80,9 +81,10 @@ WORLD = "t1-walk-maze"
 RED_BANNER = "BUILD GATE FAILED:"
 GREEN_BANNER = "build gate:"
 
-#: The two gate keys that must stay distinguishable.
+#: The gate keys that must stay distinguishable.
 UNVERIFIED_KEY = "invariant_unverified"
 VIOLATED_KEY = "invariant_failures"
+MISMATCH_KEY = "invariant_verdict_mismatch"
 
 
 class InjectionFailed(RuntimeError):
@@ -229,6 +231,18 @@ _GATE_ANCHOR = (
     "     \"cannot claim it holds; give it a `check` or an `edge_check`, or stop \"\n"
     "     \"declaring it\"),\n")
 
+#: The second gate V19 added.  `pre_v19` has to remove this one too, because
+#: pre-V19 had neither — and the first attempt at that weakening left it in
+#: place, whereupon the *verdict-mismatch* gate caught the reverted boolean
+#: disagreeing with the lists and the historical defect failed to reproduce.
+#: That was the new gate demonstrating its teeth by accident, and it is now
+#: `test_the_verdict_gate_catches_a_boolean_that_drifts` on purpose.
+_MISMATCH_GATE_ANCHOR = (
+    "    (\"invariant_verdict_mismatch\",\n"
+    "     \"`invariants_all_hold` disagrees with the three-class partition it summarises \"\n"
+    "     \"— the published boolean and the lists it is derived from have drifted, and \"\n"
+    "     \"the boolean is what every naive downstream reads\"),\n")
+
 _FAILURES_ANCHOR = (
     "            \"invariant_failures\": sorted(r[\"world_id\"] for r in rows\n"
     "                                         if r[\"invariants_violated\"]),\n")
@@ -249,6 +263,8 @@ WEAKENINGS: Dict[str, Tuple[str, Sequence[Tuple[str, str, str]]]] = {
         "unverified gate. This is the historical defect, restored.",
         [("core/truth.py", _ALL_HOLD_ANCHOR, _ALL_HOLD_PRE_V19),
          ("build.py", _GATE_ANCHOR, "    # V19 weakening: gate removed\n"),
+         ("build.py", _MISMATCH_GATE_ANCHOR,
+          "    # V19 weakening: verdict-mismatch gate removed\n"),
          ("build.py", _FAILURES_ANCHOR, _FAILURES_PRE_V19)],
     ),
     "boolean_default": (
@@ -266,6 +282,25 @@ WEAKENINGS: Dict[str, Tuple[str, Sequence[Tuple[str, str, str]]]] = {
         [("core/truth.py", _SINK_ANCHOR,
           "        else:\n"
           "            holds.append(name)   # V19 weakening: the sink is bypassed\n")],
+    ),
+    "all_hold_hardcoded_true": (
+        "`all_invariants_hold` always returns True. Before the verdict-mismatch "
+        "gate existed this was a **no-op on the exit code** — nothing read the "
+        "boolean any more, so the field this cell is named for could be a "
+        "constant and the build stayed green. Combined with "
+        "`drop_unverified_gate` it isolates that gate: the two lists are then "
+        "unpoliced and the boolean is the only thing left to catch the world.",
+        [("core/truth.py", _ALL_HOLD_ANCHOR,
+          "    return True   # V19 weakening: the published boolean is a constant\n")],
+    ),
+    "hardcoded_true_and_no_unverified_gate": (
+        "both of the above at once. The `invariant_unverified` gate is gone and "
+        "the boolean lies, so only `invariant_verdict_mismatch` can see the "
+        "prose-only invariant — which is the test that the boolean carries load "
+        "rather than merely being published.",
+        [("core/truth.py", _ALL_HOLD_ANCHOR,
+          "    return True   # V19 weakening: the published boolean is a constant\n"),
+         ("build.py", _GATE_ANCHOR, "    # V19 weakening: gate removed\n")],
     ),
     "drop_unverified_gate": (
         "the gate key is removed from `GATES` and nothing else changes. The "
@@ -318,6 +353,23 @@ def run_build(root: str, into: str,
     return subprocess.run(
         [sys.executable, "-m", "%s.build" % PACKAGE_NAME, "--into", into, world],
         cwd=root, env=_env(root), capture_output=True)
+
+
+def read_artefacts(into: str, world: str = WORLD) -> Tuple[Dict, str]:
+    """The `ground_truth.json` and `GROUND_TRUTH.md` the sandbox build produced.
+
+    Some weakenings do not move the exit code at all — `boolean_default` is
+    byte-identical to the unweakened run on stdout, rc and gate lines, because
+    the gate that catches the defect is a different one. A test that asserts
+    only on the process therefore passes whether or not the weakening applied,
+    which makes it a control that cannot fail. The artefact is where that
+    weakening's effect actually lands, so the test has to open it.
+    """
+    root = os.path.join(into, world)
+    with open(os.path.join(root, "ground_truth.json"), encoding="utf-8") as handle:
+        blob = json.load(handle)
+    with open(os.path.join(root, "GROUND_TRUTH.md"), encoding="utf-8") as handle:
+        return blob, handle.read()
 
 
 def text(proc: subprocess.CompletedProcess) -> str:

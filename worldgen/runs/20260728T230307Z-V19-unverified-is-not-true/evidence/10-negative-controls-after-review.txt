@@ -1,0 +1,190 @@
+==============================================================================
+injection=None                       weakening=None
+why:      clean control: nothing injected
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 0
+gate lines: (none — the build printed no BUILD GATE FAILED block)
+last lines of real output:
+      "variant_pairs": [],
+      "worlds": 1
+    }
+    build gate: 1 catalogue world(s) green — **the mutant half was not built or gated**, because explicit world ids were given; run without arguments to gate all 35
+
+==============================================================================
+injection=prose_only                 weakening=None
+why:      (a) prose-only invariant, key omitted
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 1
+gate lines:
+    t1-walk-maze             a declared invariant ships unverified — no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)
+last lines of real output:
+      "worlds": 1
+    }
+    BUILD GATE FAILED:
+      t1-walk-maze             a declared invariant ships unverified — no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)
+
+==============================================================================
+injection=prose_only_explicit_none   weakening=None
+why:      (a) prose-only invariant, check=None
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 1
+gate lines:
+    t1-walk-maze             a declared invariant ships unverified — no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)
+last lines of real output:
+      "worlds": 1
+    }
+    BUILD GATE FAILED:
+      t1-walk-maze             a declared invariant ships unverified — no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)
+
+==============================================================================
+injection=violated_state             weakening=None
+why:      (b) genuinely violated, single-state check
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 1
+gate lines:
+    t1-walk-maze             a declared invariant is violated on a reachable state (invariant_failures)
+last lines of real output:
+      "worlds": 1
+    }
+    BUILD GATE FAILED:
+      t1-walk-maze             a declared invariant is violated on a reachable state (invariant_failures)
+
+==============================================================================
+injection=violated_edge              weakening=None
+why:      (b) genuinely violated, edge_check
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 1
+gate lines:
+    t1-walk-maze             a declared invariant is violated on a reachable state (invariant_failures)
+last lines of real output:
+      "worlds": 1
+    }
+    BUILD GATE FAILED:
+      t1-walk-maze             a declared invariant is violated on a reachable state (invariant_failures)
+
+==============================================================================
+injection=holds_state                weakening=None
+why:      positive control: holds, single-state
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 0
+gate lines: (none — the build printed no BUILD GATE FAILED block)
+last lines of real output:
+      "variant_pairs": [],
+      "worlds": 1
+    }
+    build gate: 1 catalogue world(s) green — **the mutant half was not built or gated**, because explicit world ids were given; run without arguments to gate all 35
+
+==============================================================================
+injection=holds_edge                 weakening=None
+why:      positive control: holds, edge
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 0
+gate lines: (none — the build printed no BUILD GATE FAILED block)
+last lines of real output:
+      "variant_pairs": [],
+      "worlds": 1
+    }
+    build gate: 1 catalogue world(s) green — **the mutant half was not built or gated**, because explicit world ids were given; run without arguments to gate all 35
+
+==============================================================================
+injection=prose_only                 weakening=pre_v19
+why:      WEAKENED to the boolean: (a) must slip through
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 0
+gate lines: (none — the build printed no BUILD GATE FAILED block)
+last lines of real output:
+      "variant_pairs": [],
+      "worlds": 1
+    }
+    build gate: 1 catalogue world(s) green — **the mutant half was not built or gated**, because explicit world ids were given; run without arguments to gate all 35
+
+==============================================================================
+injection=prose_only_explicit_none   weakening=pre_v19
+why:      WEAKENED to the boolean: (a) slips
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 0
+gate lines: (none — the build printed no BUILD GATE FAILED block)
+last lines of real output:
+      "variant_pairs": [],
+      "worlds": 1
+    }
+    build gate: 1 catalogue world(s) green — **the mutant half was not built or gated**, because explicit world ids were given; run without arguments to gate all 35
+
+==============================================================================
+injection=violated_state             weakening=pre_v19
+why:      WEAKENED: the old gate still caught violations
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 1
+gate lines:
+    t1-walk-maze             a declared invariant is violated on a reachable state (invariant_failures)
+last lines of real output:
+      "worlds": 1
+    }
+    BUILD GATE FAILED:
+      t1-walk-maze             a declared invariant is violated on a reachable state (invariant_failures)
+
+==============================================================================
+injection=prose_only                 weakening=boolean_default
+why:      WEAKENED: only truth.py reverted
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 1
+gate lines:
+    t1-walk-maze             a declared invariant ships unverified — no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)
+    t1-walk-maze             `invariants_all_hold` disagrees with the three-class partition it summarises — the published boolean and the lists it is derived from have drifted, and the boolean is what every naive downstream reads (invariant_verdict_mismatch)
+last lines of real output:
+    }
+    BUILD GATE FAILED:
+      t1-walk-maze             a declared invariant ships unverified — no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)
+      t1-walk-maze             `invariants_all_hold` disagrees with the three-class partition it summarises — the published boolean and the lists it is derived from have drifted, and the boolean is what every naive downstream reads (invariant_verdict_mismatch)
+
+==============================================================================
+injection=prose_only                 weakening=unverified_sinks_to_holds
+why:      WEAKENED: the sink bypassed
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 0
+gate lines: (none — the build printed no BUILD GATE FAILED block)
+last lines of real output:
+      "variant_pairs": [],
+      "worlds": 1
+    }
+    build gate: 1 catalogue world(s) green — **the mutant half was not built or gated**, because explicit world ids were given; run without arguments to gate all 35
+
+==============================================================================
+injection=prose_only                 weakening=drop_unverified_gate
+why:      WEAKENED: gate key removed from GATES
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 0
+gate lines: (none — the build printed no BUILD GATE FAILED block)
+last lines of real output:
+      "variant_pairs": [],
+      "worlds": 1
+    }
+    build gate: 1 catalogue world(s) green — **the mutant half was not built or gated**, because explicit world ids were given; run without arguments to gate all 35
+
+==============================================================================
+injection=prose_only                 weakening=all_hold_hardcoded_true
+why:      F8 WEAKENED: the published boolean is a constant
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 1
+gate lines:
+    t1-walk-maze             a declared invariant ships unverified — no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)
+    t1-walk-maze             `invariants_all_hold` disagrees with the three-class partition it summarises — the published boolean and the lists it is derived from have drifted, and the boolean is what every naive downstream reads (invariant_verdict_mismatch)
+last lines of real output:
+    }
+    BUILD GATE FAILED:
+      t1-walk-maze             a declared invariant ships unverified — no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)
+      t1-walk-maze             `invariants_all_hold` disagrees with the three-class partition it summarises — the published boolean and the lists it is derived from have drifted, and the boolean is what every naive downstream reads (invariant_verdict_mismatch)
+
+==============================================================================
+injection=prose_only                 weakening=hardcoded_true_and_no_unverified_gate
+why:      F8 WEAKENED: boolean lies AND its gate removed -- only the verdict gate is left
+command:  python -m worldgen.build --into <tmp> t1-walk-maze
+EXIT CODE: 1
+gate lines:
+    t1-walk-maze             `invariants_all_hold` disagrees with the three-class partition it summarises — the published boolean and the lists it is derived from have drifted, and the boolean is what every naive downstream reads (invariant_verdict_mismatch)
+last lines of real output:
+      "worlds": 1
+    }
+    BUILD GATE FAILED:
+      t1-walk-maze             `invariants_all_hold` disagrees with the three-class partition it summarises — the published boolean and the lists it is derived from have drifted, and the boolean is what every naive downstream reads (invariant_verdict_mismatch)
+

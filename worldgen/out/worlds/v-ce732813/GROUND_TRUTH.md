@@ -35,6 +35,8 @@ A rule marked **cascade** fires inside `settle`, after the rule that caused it, 
 
 **Unsolvable.** the reachable set has 3 states and the agent occupies the goal cell (5, 7) in none of them
 
+_The blocker analysis ran and attributed the unsolvability to no single entity._
+
 ## Reversibility stamp (A0′ criterion)
 
 3 of 3 rules are re-witnessable (score 1.00).

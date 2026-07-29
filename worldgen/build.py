@@ -179,6 +179,21 @@ def build_all(root: str = OUT, ids: Optional[Sequence[str]] = None,
                                          if r["invariants_violated"]),
             "invariant_unverified": sorted(r["world_id"] for r in rows
                                            if r["invariants_unverified"]),
+            # `invariants_all_hold` is the field this cell is *named* for, it is
+            # published in all 35 ground truths and all 35 INDEX rows, and it is
+            # the only one a naive downstream reads. After the repair, no gate
+            # read it any more — the two lists above did all the work — so
+            # hard-coding it to `True` left the build green. That is this
+            # territory's recurring failure ("a verdict nothing exits on is a
+            # decoration") committed by the fix for it: the load was moved off
+            # the field instead of onto it.
+            #
+            # It is not re-derived here. It is *cross-checked* against the lists
+            # it must agree with, so the two cannot drift apart silently.
+            "invariant_verdict_mismatch": sorted(
+                r["world_id"] for r in rows
+                if r["invariants_all_hold"] != (not r["invariants_violated"]
+                                                and not r["invariants_unverified"])),
             "claim_disagreements": sorted(r["world_id"] for r in rows
                                           if r["claim_disagreements"]),
             "rule_correspondence_failures": sorted(
@@ -224,6 +239,10 @@ GATES = (
      "a declared invariant ships unverified — no callable check ran, so the world "
      "cannot claim it holds; give it a `check` or an `edge_check`, or stop "
      "declaring it"),
+    ("invariant_verdict_mismatch",
+     "`invariants_all_hold` disagrees with the three-class partition it summarises "
+     "— the published boolean and the lists it is derived from have drifted, and "
+     "the boolean is what every naive downstream reads"),
     ("claim_disagreements",
      "a mechanism's `reversible` claim contradicts the measured stamp"),
 )
@@ -384,9 +403,21 @@ def main() -> int:
         print("determinism: every artefact byte-identical across two builds "
               "in separate interpreters at different PYTHONHASHSEED")
     if not args.quiet:
-        print("build gate: %d catalogue world(s)%s green"
-              % (len(manifest["worlds"]),
-                 "" if ids is not None else " + %d mutant(s)" % len(mutants["worlds"])))
+        # **Say what was not evaluated.** With explicit world ids the mutant
+        # half is skipped entirely, and the banner used to report "N catalogue
+        # world(s) green" without mentioning it — so a green line covered 20 of
+        # the 35 worlds this repository ships and looked like all of them. Five
+        # of the thirteen worlds V19 was about are mutants. An unevaluated gate
+        # is not a passed one, and a banner that does not say which half it
+        # checked is the reporting version of the same mistake.
+        if ids is None:
+            print("build gate: %d catalogue world(s) + %d mutant(s) green"
+                  % (len(manifest["worlds"]), len(mutants["worlds"])))
+        else:
+            print("build gate: %d catalogue world(s) green — **the mutant half "
+                  "was not built or gated**, because explicit world ids were "
+                  "given; run without arguments to gate all 35"
+                  % len(manifest["worlds"]))
     return 0
 
 

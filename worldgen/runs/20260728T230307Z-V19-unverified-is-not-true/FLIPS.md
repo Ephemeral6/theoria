@@ -80,13 +80,28 @@ There were two ways out of a red catalogue, and only one of them is honest:
 Console: `evidence/03-stage2-edgecheck-build.txt` (exit **0**)
 Census: `evidence/04-stage2-flip-census.txt`
 
+**16 invariant rows across the 13 worlds** now carry a `transitions_checked`
+count (three worlds declare more than one of the three claims). Every one is
+`holds`; none is `violated`; none is `unverified`.
+
+| | rows | worlds | transitions per row |
+|---|---|---|---|
+| catalogue (`t*`) | 11 | 8 | 104 – 1744 |
+| mutants (`v-*`) | 5 | 5 | 84 – 10616 |
+| **total** | **16** | **13** | **84 – 10616** |
+
 | world | claim | verdict | evidence |
 |---|---|---|---|
 | `t1-switch-latch` | `latch_monotone` | holds | 104 transitions |
+| `t1-fragile-bridge` | `tile_state_is_monotone` | holds | 168 transitions |
+| `t1-tokens-lock` | `collection_is_monotone` | holds | 200 transitions |
+| `t2-cycler-lock` | `collection_is_monotone` | holds | 244 transitions |
+| `t2-lock-fragile` | `collection_is_monotone` | holds | 348 transitions |
+| `t2-lock-fragile` | `tile_state_is_monotone` | holds | 348 transitions |
 | `t3-latch-maze` | `latch_monotone` | holds | 1744 transitions |
 | `t3-latch-maze` | `collection_is_monotone` | holds | 1744 transitions |
 | `t3-latch-maze` | `tile_state_is_monotone` | holds | 1744 transitions |
-| ... | ... | holds | see each `ground_truth.json` |
+| ... | ... | holds | the per-row count is in each `ground_truth.json` |
 
 Every one of the 13 returned to `invariants_all_hold: true` **on a measured
 transition count**, not on a default. The `GROUND_TRUTH.md` line changed from
