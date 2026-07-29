@@ -1,0 +1,3968 @@
+{
+  "per_class": 2,
+  "question_type": "heldout",
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+  "totals": {
+    "anomalies": [],
+    "barren_rules_total": [
+      "blocked_by_block",
+      "blocked_by_door",
+      "blocked_by_wall",
+      "latch_already_set"
+    ],
+    "dead": 0,
+    "free": 97,
+    "items_total": 236,
+    "least_informative_worlds": [
+      "t2-gravity-push",
+      "t2-unsolvable-nodoor",
+      "t1-walk-maze",
+      "t1-push-corridor",
+      "t1-switch-toggle"
+    ],
+    "memorised": 70,
+    "reading_note": "`items` is not the size of the paper. 97 of 236 items are settled identically by an oracle, a memoriser and a theory-free bluffer, so they rank nobody; 69 ask for a world model. Quote the second number.",
+    "theory": 69,
+    "theory_share": 0.292373,
+    "theory_share_range": [
+      0.125,
+      0.375
+    ],
+    "worlds_with_no_theory_item": [],
+    "zero_discrimination_share": 0.411017,
+    "zero_discrimination_total": 97
+  },
+  "worlds": [
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 2,
+        "theory": 2
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 2
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 2
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-walk-maze-000",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-walk-maze-001",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-walk-maze-002",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-walk-maze-003",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-walk-maze-004",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-walk-maze-005",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-walk-maze-006",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-walk-maze-007",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 8,
+      "paper_id": "v2-heldout-t1-walk-maze",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 2,
+        "free": 4,
+        "memorised": 2,
+        "n_items": 8,
+        "theory": 2,
+        "theory_items": 2,
+        "theory_share": 0.25,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.5
+      },
+      "tier": 1,
+      "world_id": "t1-walk-maze"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 4,
+        "theory": 4
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "push": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 4
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 4
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-push-open-000",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-push-open-001",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-push-open-002",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-push-open-003",
+          "rule": "push",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-push-open-004",
+          "rule": "push",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-push-open-005",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-push-open-006",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-push-open-007",
+          "rule": "push",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-push-open-008",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-push-open-009",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-push-open-010",
+          "rule": "push",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-push-open-011",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 12,
+      "paper_id": "v2-heldout-t1-push-open",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 4,
+        "free": 4,
+        "memorised": 4,
+        "n_items": 12,
+        "theory": 4,
+        "theory_items": 4,
+        "theory_share": 0.333333,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.333333
+      },
+      "tier": 1,
+      "world_id": "t1-push-open"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 2,
+        "theory": 2
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 2
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 2
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-push-corridor-000",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-push-corridor-001",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-push-corridor-002",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-push-corridor-003",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-push-corridor-004",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-push-corridor-005",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-push-corridor-006",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-push-corridor-007",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 8,
+      "paper_id": "v2-heldout-t1-push-corridor",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 2,
+        "free": 4,
+        "memorised": 2,
+        "n_items": 8,
+        "theory": 2,
+        "theory_items": 2,
+        "theory_share": 0.25,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.5
+      },
+      "tier": 1,
+      "world_id": "t1-push-corridor"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 2,
+        "theory": 2
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 2
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 2
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-switch-toggle-000",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-switch-toggle-001",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-switch-toggle-002",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-switch-toggle-003",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-switch-toggle-004",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-switch-toggle-005",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-switch-toggle-006",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-switch-toggle-007",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 8,
+      "paper_id": "v2-heldout-t1-switch-toggle",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 2,
+        "free": 4,
+        "memorised": 2,
+        "n_items": 8,
+        "theory": 2,
+        "theory_items": 2,
+        "theory_share": 0.25,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.5
+      },
+      "tier": 1,
+      "world_id": "t1-switch-toggle"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 4,
+        "theory": 4
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "walk_through_door": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 4
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 4
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-switch-latch-000",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-switch-latch-001",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-switch-latch-002",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-switch-latch-003",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-switch-latch-004",
+          "rule": "walk_through_door",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-switch-latch-005",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-switch-latch-006",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-switch-latch-007",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-switch-latch-008",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-switch-latch-009",
+          "rule": "walk_through_door",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-switch-latch-010",
+          "rule": "walk_through_door",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-switch-latch-011",
+          "rule": "walk_through_door",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 12,
+      "paper_id": "v2-heldout-t1-switch-latch",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 4,
+        "free": 4,
+        "memorised": 4,
+        "n_items": 12,
+        "theory": 4,
+        "theory_items": 4,
+        "theory_share": 0.333333,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.333333
+      },
+      "tier": 1,
+      "world_id": "t1-switch-latch"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 2,
+        "theory": 2
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 2
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 2
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-portal-oneway-000",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-portal-oneway-001",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-portal-oneway-002",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-portal-oneway-003",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-portal-oneway-004",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-portal-oneway-005",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-portal-oneway-006",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-portal-oneway-007",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 8,
+      "paper_id": "v2-heldout-t1-portal-oneway",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 2,
+        "free": 4,
+        "memorised": 2,
+        "n_items": 8,
+        "theory": 2,
+        "theory_items": 2,
+        "theory_share": 0.25,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.5
+      },
+      "tier": 1,
+      "world_id": "t1-portal-oneway"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 2,
+        "theory": 2
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 2
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 2
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-cycler-gate-000",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-cycler-gate-001",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-cycler-gate-002",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-cycler-gate-003",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-cycler-gate-004",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-cycler-gate-005",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-cycler-gate-006",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-cycler-gate-007",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 8,
+      "paper_id": "v2-heldout-t1-cycler-gate",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 2,
+        "free": 4,
+        "memorised": 2,
+        "n_items": 8,
+        "theory": 2,
+        "theory_items": 2,
+        "theory_share": 0.25,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.5
+      },
+      "tier": 1,
+      "world_id": "t1-cycler-gate"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 4,
+        "theory": 4
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "collect_token": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 4
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 4
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-tokens-lock-000",
+          "rule": "collect_token",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-tokens-lock-001",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-tokens-lock-002",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-tokens-lock-003",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-tokens-lock-004",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-tokens-lock-005",
+          "rule": "collect_token",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-tokens-lock-006",
+          "rule": "collect_token",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-tokens-lock-007",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-tokens-lock-008",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-tokens-lock-009",
+          "rule": "collect_token",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-tokens-lock-010",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-tokens-lock-011",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 12,
+      "paper_id": "v2-heldout-t1-tokens-lock",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 4,
+        "free": 4,
+        "memorised": 4,
+        "n_items": 12,
+        "theory": 4,
+        "theory_items": 4,
+        "theory_share": 0.333333,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.333333
+      },
+      "tier": 1,
+      "world_id": "t1-tokens-lock"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 2,
+        "theory": 2
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 2
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 2
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-fragile-bridge-000",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-fragile-bridge-001",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t1-fragile-bridge-002",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-fragile-bridge-003",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-fragile-bridge-004",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t1-fragile-bridge-005",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-fragile-bridge-006",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t1-fragile-bridge-007",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 8,
+      "paper_id": "v2-heldout-t1-fragile-bridge",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 2,
+        "free": 4,
+        "memorised": 2,
+        "n_items": 8,
+        "theory": 2,
+        "theory_items": 2,
+        "theory_share": 0.25,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.5
+      },
+      "tier": 1,
+      "world_id": "t1-fragile-bridge"
+    },
+    {
+      "by_class": {
+        "free": 8,
+        "memorised": 8,
+        "theory": 8
+      },
+      "by_rule": {
+        "blocked_by_block": {
+          "free": 4
+        },
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "push": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "toggle_switch": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "walk_through_door": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 4,
+          "theory": 8
+        },
+        "replay": {
+          "free": 4,
+          "memorised": 8
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-switch-push-000",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-001",
+          "rule": "push",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-002",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-003",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-004",
+          "rule": "walk_through_door",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-005",
+          "rule": "walk_through_door",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-006",
+          "rule": "toggle_switch",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-007",
+          "rule": "toggle_switch",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-008",
+          "rule": "toggle_switch",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-009",
+          "rule": "push",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-switch-push-010",
+          "rule": "blocked_by_block",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-011",
+          "rule": "toggle_switch",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-012",
+          "rule": "push",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-switch-push-013",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-switch-push-014",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-015",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-switch-push-016",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-switch-push-017",
+          "rule": "blocked_by_block",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-018",
+          "rule": "walk_through_door",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-019",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-switch-push-020",
+          "rule": "blocked_by_block",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-switch-push-021",
+          "rule": "blocked_by_block",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-022",
+          "rule": "push",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-switch-push-023",
+          "rule": "walk_through_door",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 24,
+      "paper_id": "v2-heldout-t2-switch-push",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_block",
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 8,
+        "free": 8,
+        "memorised": 8,
+        "n_items": 24,
+        "theory": 8,
+        "theory_items": 8,
+        "theory_share": 0.333333,
+        "zero_discrimination": 8,
+        "zero_discrimination_share": 0.333333
+      },
+      "tier": 2,
+      "world_id": "t2-switch-push"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 2,
+        "theory": 2
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 2
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 2
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-portal-pair-000",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-portal-pair-001",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-portal-pair-002",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-portal-pair-003",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-portal-pair-004",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-portal-pair-005",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-portal-pair-006",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-portal-pair-007",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 8,
+      "paper_id": "v2-heldout-t2-portal-pair",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 2,
+        "free": 4,
+        "memorised": 2,
+        "n_items": 8,
+        "theory": 2,
+        "theory_items": 2,
+        "theory_share": 0.25,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.5
+      },
+      "tier": 2,
+      "world_id": "t2-portal-pair"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 2,
+        "theory": 2
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 2
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 2
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-portal-paired-000",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-portal-paired-001",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-portal-paired-002",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-portal-paired-003",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-portal-paired-004",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-portal-paired-005",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-portal-paired-006",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-portal-paired-007",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 8,
+      "paper_id": "v2-heldout-t2-portal-paired",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 2,
+        "free": 4,
+        "memorised": 2,
+        "n_items": 8,
+        "theory": 2,
+        "theory_items": 2,
+        "theory_share": 0.25,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.5
+      },
+      "tier": 2,
+      "world_id": "t2-portal-paired"
+    },
+    {
+      "by_class": {
+        "free": 5,
+        "memorised": 2,
+        "theory": 1
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "free": 1,
+          "memorised": 2,
+          "theory": 1
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 3,
+          "theory": 1
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 2
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-gravity-push-000",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-gravity-push-001",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-gravity-push-002",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-gravity-push-003",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-gravity-push-004",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-gravity-push-005",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-gravity-push-006",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-gravity-push-007",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 8,
+      "paper_id": "v2-heldout-t2-gravity-push",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 1,
+        "free": 5,
+        "memorised": 2,
+        "n_items": 8,
+        "theory": 1,
+        "theory_items": 1,
+        "theory_share": 0.125,
+        "zero_discrimination": 5,
+        "zero_discrimination_share": 0.625
+      },
+      "tier": 2,
+      "world_id": "t2-gravity-push"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 4,
+        "theory": 4
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "collect_token": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 4
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 4
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-lock-fragile-000",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-lock-fragile-001",
+          "rule": "collect_token",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-lock-fragile-002",
+          "rule": "collect_token",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-lock-fragile-003",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-lock-fragile-004",
+          "rule": "collect_token",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-lock-fragile-005",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-lock-fragile-006",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-lock-fragile-007",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-lock-fragile-008",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-lock-fragile-009",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-lock-fragile-010",
+          "rule": "collect_token",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-lock-fragile-011",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 12,
+      "paper_id": "v2-heldout-t2-lock-fragile",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 4,
+        "free": 4,
+        "memorised": 4,
+        "n_items": 12,
+        "theory": 4,
+        "theory_items": 4,
+        "theory_share": 0.333333,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.333333
+      },
+      "tier": 2,
+      "world_id": "t2-lock-fragile"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 4,
+        "theory": 4
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "walk_through_cycler": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 4
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 4
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-cycler-lock-000",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-cycler-lock-001",
+          "rule": "walk_through_cycler",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-cycler-lock-002",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-cycler-lock-003",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-cycler-lock-004",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-cycler-lock-005",
+          "rule": "walk_through_cycler",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-cycler-lock-006",
+          "rule": "walk_through_cycler",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-cycler-lock-007",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-cycler-lock-008",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-cycler-lock-009",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-cycler-lock-010",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-cycler-lock-011",
+          "rule": "walk_through_cycler",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 12,
+      "paper_id": "v2-heldout-t2-cycler-lock",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 4,
+        "free": 4,
+        "memorised": 4,
+        "n_items": 12,
+        "theory": 4,
+        "theory_items": 4,
+        "theory_share": 0.333333,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.333333
+      },
+      "tier": 2,
+      "world_id": "t2-cycler-lock"
+    },
+    {
+      "by_class": {
+        "free": 8,
+        "memorised": 2,
+        "theory": 2
+      },
+      "by_rule": {
+        "blocked_by_door": {
+          "free": 4
+        },
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 4,
+          "theory": 2
+        },
+        "replay": {
+          "free": 4,
+          "memorised": 2
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-unsolvable-nodoor-000",
+          "rule": "blocked_by_door",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-unsolvable-nodoor-001",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-unsolvable-nodoor-002",
+          "rule": "blocked_by_door",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-unsolvable-nodoor-003",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t2-unsolvable-nodoor-004",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-unsolvable-nodoor-005",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t2-unsolvable-nodoor-006",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-unsolvable-nodoor-007",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-unsolvable-nodoor-008",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-unsolvable-nodoor-009",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-unsolvable-nodoor-010",
+          "rule": "blocked_by_door",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t2-unsolvable-nodoor-011",
+          "rule": "blocked_by_door",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 12,
+      "paper_id": "v2-heldout-t2-unsolvable-nodoor",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_door",
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 2,
+        "free": 8,
+        "memorised": 2,
+        "n_items": 12,
+        "theory": 2,
+        "theory_items": 2,
+        "theory_share": 0.166667,
+        "zero_discrimination": 8,
+        "zero_discrimination_share": 0.666667
+      },
+      "tier": 2,
+      "world_id": "t2-unsolvable-nodoor"
+    },
+    {
+      "by_class": {
+        "free": 8,
+        "memorised": 8,
+        "theory": 8
+      },
+      "by_rule": {
+        "blocked_by_block": {
+          "free": 4
+        },
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "push": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "teleport_twoway": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "toggle_switch": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 4,
+          "theory": 8
+        },
+        "replay": {
+          "free": 4,
+          "memorised": 8
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-full-house-000",
+          "rule": "teleport_twoway",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-full-house-001",
+          "rule": "push",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-full-house-002",
+          "rule": "blocked_by_block",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-full-house-003",
+          "rule": "toggle_switch",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-full-house-004",
+          "rule": "blocked_by_block",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-full-house-005",
+          "rule": "toggle_switch",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-full-house-006",
+          "rule": "teleport_twoway",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-full-house-007",
+          "rule": "push",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-full-house-008",
+          "rule": "toggle_switch",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-full-house-009",
+          "rule": "teleport_twoway",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-full-house-010",
+          "rule": "toggle_switch",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-full-house-011",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-full-house-012",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-full-house-013",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-full-house-014",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-full-house-015",
+          "rule": "push",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-full-house-016",
+          "rule": "teleport_twoway",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-full-house-017",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-full-house-018",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-full-house-019",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-full-house-020",
+          "rule": "push",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-full-house-021",
+          "rule": "blocked_by_block",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-full-house-022",
+          "rule": "blocked_by_block",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-full-house-023",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 24,
+      "paper_id": "v2-heldout-t3-full-house",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_block",
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 8,
+        "free": 8,
+        "memorised": 8,
+        "n_items": 24,
+        "theory": 8,
+        "theory_items": 8,
+        "theory_share": 0.333333,
+        "zero_discrimination": 8,
+        "zero_discrimination_share": 0.333333
+      },
+      "tier": 3,
+      "world_id": "t3-full-house"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 2,
+        "theory": 2
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 2
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 2
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-gravity-fragile-000",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-gravity-fragile-001",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-gravity-fragile-002",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-gravity-fragile-003",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-gravity-fragile-004",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-gravity-fragile-005",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-gravity-fragile-006",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-gravity-fragile-007",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 8,
+      "paper_id": "v2-heldout-t3-gravity-fragile",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 2,
+        "free": 4,
+        "memorised": 2,
+        "n_items": 8,
+        "theory": 2,
+        "theory_items": 2,
+        "theory_share": 0.25,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.5
+      },
+      "tier": 3,
+      "world_id": "t3-gravity-fragile"
+    },
+    {
+      "by_class": {
+        "free": 4,
+        "memorised": 6,
+        "theory": 6
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "teleport_twoway": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "walk_through_cycler": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 2,
+          "theory": 6
+        },
+        "replay": {
+          "free": 2,
+          "memorised": 6
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-000",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-cycler-portal-lock-001",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-002",
+          "rule": "walk_through_cycler",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-003",
+          "rule": "teleport_twoway",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-004",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-005",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-cycler-portal-lock-006",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-cycler-portal-lock-007",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-008",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-cycler-portal-lock-009",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-010",
+          "rule": "teleport_twoway",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-011",
+          "rule": "walk_through_cycler",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-012",
+          "rule": "teleport_twoway",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-013",
+          "rule": "walk_through_cycler",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-014",
+          "rule": "teleport_twoway",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-cycler-portal-lock-015",
+          "rule": "walk_through_cycler",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 16,
+      "paper_id": "v2-heldout-t3-cycler-portal-lock",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall"
+        ],
+        "dead": 0,
+        "effective_size": 6,
+        "free": 4,
+        "memorised": 6,
+        "n_items": 16,
+        "theory": 6,
+        "theory_items": 6,
+        "theory_share": 0.375,
+        "zero_discrimination": 4,
+        "zero_discrimination_share": 0.25
+      },
+      "tier": 3,
+      "world_id": "t3-cycler-portal-lock"
+    },
+    {
+      "by_class": {
+        "free": 8,
+        "memorised": 6,
+        "theory": 6
+      },
+      "by_rule": {
+        "blocked_by_wall": {
+          "free": 4
+        },
+        "collect_token": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "latch_already_set": {
+          "free": 4
+        },
+        "walk": {
+          "memorised": 2,
+          "theory": 2
+        },
+        "walk_through_door": {
+          "memorised": 2,
+          "theory": 2
+        }
+      },
+      "by_split": {
+        "heldout": {
+          "free": 4,
+          "theory": 6
+        },
+        "replay": {
+          "free": 4,
+          "memorised": 6
+        }
+      },
+      "feasible": true,
+      "items": [
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-000",
+          "rule": "collect_token",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-latch-maze-001",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-002",
+          "rule": "walk_through_door",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-latch-maze-003",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-004",
+          "rule": "walk_through_door",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-005",
+          "rule": "walk_through_door",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-006",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-latch-maze-007",
+          "rule": "blocked_by_wall",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-008",
+          "rule": "collect_token",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-latch-maze-009",
+          "rule": "latch_already_set",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-010",
+          "rule": "collect_token",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-011",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-latch-maze-012",
+          "rule": "blocked_by_wall",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-013",
+          "rule": "walk",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-014",
+          "rule": "walk",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "memorised",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-015",
+          "rule": "walk_through_door",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-latch-maze-016",
+          "rule": "latch_already_set",
+          "split": "replay",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-latch-maze-017",
+          "rule": "latch_already_set",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "theory",
+          "frame_changes": true,
+          "item_id": "t3-latch-maze-018",
+          "rule": "collect_token",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "wrong",
+            "memoriser": "wrong",
+            "oracle": "correct"
+          }
+        },
+        {
+          "class": "free",
+          "frame_changes": false,
+          "item_id": "t3-latch-maze-019",
+          "rule": "latch_already_set",
+          "split": "heldout",
+          "verdicts": {
+            "bluffer": "correct",
+            "memoriser": "correct",
+            "oracle": "correct"
+          }
+        }
+      ],
+      "n_items": 20,
+      "paper_id": "v2-heldout-t3-latch-maze",
+      "per_class": 2,
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+      "summary": {
+        "anomalies": [],
+        "barren_rules": [
+          "blocked_by_wall",
+          "latch_already_set"
+        ],
+        "dead": 0,
+        "effective_size": 6,
+        "free": 8,
+        "memorised": 6,
+        "n_items": 20,
+        "theory": 6,
+        "theory_items": 6,
+        "theory_share": 0.3,
+        "zero_discrimination": 8,
+        "zero_discrimination_share": 0.4
+      },
+      "tier": 3,
+      "world_id": "t3-latch-maze"
+    }
+  ],
+  "worlds_offered": 20,
+  "worlds_profiled": 20
+}

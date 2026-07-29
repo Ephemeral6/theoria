@@ -500,6 +500,19 @@ def render(report: Dict[str, object]) -> str:
                 "instance follows from it."
                 % (row["instance"], row["fd_exit_code_before"],
                    row["fd_exit_code_after"]))
+        elif row["same_answer"] is False:
+            # Ahead of every other branch on purpose.  A refuted row with
+            # `before == after` used to land on "true theorems buy nothing",
+            # which asserts the soundness the verdict has just denied; the
+            # dividend branches all presume the theorems are true, so the
+            # refutation has to be read before any of them (D-034).
+            lines.append(
+                "* `%s` -- **not a dividend: the answer moved.**  Fast Downward "
+                "returned a different answer with the theorems in (%d -> %d "
+                "expansions), so at least one of them excludes a state the goal "
+                "was reachable from.  A saving bought by an unsound theorem is "
+                "not a saving, and no number on this row should be read as one."
+                % (row["instance"], before, after))
         elif before == 0 and row["fd_unsolvable_before"]:
             lines.append(
                 "* `%s` -- **the theorems had nothing to buy**: Fast Downward's "

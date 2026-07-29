@@ -119,6 +119,9 @@ This paper is that unit and nothing more. It reports the three acceptances, the
 battery's recompute — its third round, labelled `battery_version: "v2"` in
 `battery/artifacts/capability_spectrum.json` because both the reports and the
 artefacts count from zero — and, in §6, an early read on claim C3 that the mandate
-does not list as an acceptance at all. It reports no play, no
-baseline comparison of the framework's own arms, and
-no claim from the Phase 3 claim menu.
+does not list as an acceptance at all, and — in §8 and §9 — an examination
+instrument and the two live runs that opened the credential path. It reports **no
+play by the framework**: no framework arm played a game for a result in this
+paper. Two live runs did touch one development-pile game, and §9 reports what they
+cost. It reports no baseline comparison of the framework's own arms, and no claim
+from the Phase 3 claim menu.

@@ -8,6 +8,9 @@ came with it.
 
 from fractions import Fraction
 
+from dataclasses import replace
+from fractions import Fraction
+
 import pytest
 
 from common.jsonio import read_json
@@ -133,3 +136,52 @@ def test_the_document_is_self_contained(document):
                 "invariant", "obligations", "conclusion", "initial_potential"):
         assert key in document
     assert document["conclusion"].startswith("no goal state is reachable")
+
+
+# ------------------------------------- the conclusion is derived, not asserted
+
+def test_the_conclusion_is_not_stated_when_the_obligations_fail():
+    """`conclusion` was a literal written above the line that computes `verified`.
+
+    So a document whose obligations fail carried `verified: false` beside
+    `conclusion: "no goal state is reachable from X"` -- the verdict as a sibling
+    field of the headline it contradicts, which is the shape D-034 exists to
+    stop. Found by an adversarial review of the E16 fix, in a file that fix had
+    already edited.
+    """
+    goal = ["01000"]
+    graph = peg1d.build_graph(5, THEIRS, goal_states=goal)
+    certificate = solve_certificate(graph, THEIRS, goal_states=goal, bound=10000)
+    assert certificate is not None
+
+    # Break one weight so `inv_closed` genuinely fails on re-derivation.
+    broken = replace(certificate, weights=[Fraction(9)] + list(certificate.weights[1:]))
+    document = ce.build(broken, graph, claim_name="deliberately_broken")
+
+    assert document["verified"] is False
+    assert not document["conclusion"].startswith("no goal state is reachable")
+    assert "nothing follows" in document["conclusion"]
+    assert "inv_closed" in document["conclusion"]
+    assert ce.verify(document) != []
+
+
+def test_checked_over_says_what_was_actually_checked():
+    """It read "all move instances on the full state space" as a literal.
+
+    That is a producer assertion re-derived by nobody, and it is simply false for
+    a document built from a partial move list -- while `n_checked`, `verified`
+    and `verify()` all still agree with each other.
+    """
+    graph = peg1d.build_graph(4, "1110", goal_states=["0100"])
+    certificate = solve_certificate(graph, "1110", goal_states=["0100"])
+    assert certificate is not None
+    full = ce.build(certificate, graph, claim_name="full")
+    n = len(full["obligations"]["inv_closed"]["witnesses"])
+    assert full["obligations"]["inv_closed"]["checked_over"] == (
+        "the %d move instances this document lists" % n)
+
+    partial = replace(certificate, moves=list(certificate.moves[:2]))
+    thin = ce.build(partial, graph, claim_name="thin")
+    assert thin["obligations"]["inv_closed"]["checked_over"] == (
+        "the 2 move instances this document lists")
+    assert thin["obligations"]["inv_closed"]["n_checked"] == 2

@@ -103,6 +103,26 @@ def thin(metric_id: str, reason: str) -> Value:
     return Value(metric_id, None, "insufficient-data", reason)
 
 
+def unsound(metric_id: str, reason: str) -> Value:
+    """The record contradicts itself, so no number may be read off it.
+
+    Added by V9.  Six of the blind attacks did not fake a good score at all —
+    they printed an *impossible* one and the battery said `ok`: a "share" of
+    7.0 (K1), of 3.0 (K4), of 1000.0 (K8), of 6.0 (K12), of 1000.0 (M6), and a
+    first-use delay of −1000 steps (M1).  Each is a self-contradictory record,
+    and a metric that answers one is not measuring, it is transcribing.
+
+    Reported as `insufficient-data` rather than as a new status: the three
+    statuses are a contract the rest of the battery and its artefacts are
+    written against, and inventing a fourth to say "your input is broken"
+    would buy precision here at the cost of every consumer downstream.  The
+    reason string carries the distinction, and always starts `incoherent
+    record:` so it can be grepped apart from a genuine thinness.
+    """
+    return Value(metric_id, None, "insufficient-data",
+                 "incoherent record: " + reason)
+
+
 _NEED_REASONS = {
     "steps": "the run records no environment steps",
     "observations": "no step carries an observation to identify a state by",

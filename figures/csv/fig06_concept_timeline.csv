@@ -98,6 +98,10 @@ ledger,1,M2,,,no-proposal-ABSENT,,E-07,discharged,no candidate row: this entry a
 ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-07,discharged,expressivity gap logged (discharged),,,,,discharged
 ledger,7,post-M6,406d69f,2026-07-28T01:20:16Z,ledger-edited,,E-07,discharged,"theory-compiler: discharge the `conflict` obligation, and E-07 in the process",,,,,
 ledger,7,post-M6,85da550,2026-07-28T01:33:12Z,ledger-edited,,E-07,discharged,theory-compiler: close E-07 by giving the manual somewhere to say it,,,,,
+ledger,1,M2,,,no-proposal-ABSENT,,E-08,discharged,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-08,discharged,expressivity gap logged (discharged),,,,,discharged
+ledger,1,M2,,,no-proposal-ABSENT,,E-09,discharged,no candidate row: this entry adjudicates something the stream did not propose,,,,,
+ledger,2,M3,848d683,2026-07-27T17:02:02Z,ledger-logged,,E-09,discharged,expressivity gap logged (discharged),,,,,discharged
 Button,2,M3,,,compression-account-log,Button,O-04,admitted anyway,"log O-04 table: declaration 21 bits, script 29, baseline 12",-17,"pixel (THEORIZE_LOG O-04 table, never re-priced)",not reconciled with concept_accounts.json,,
 Cart,2,M3,,,compression-account-log,Cart,O-04,admitted anyway,"log O-04 table: declaration 21 bits, script 2169, baseline 5136",2967,"pixel (THEORIZE_LOG O-04 table, never re-priced)",not reconciled with concept_accounts.json,,
 Door,2,M3,,,compression-account-log,Door,O-04,admitted anyway,"log O-04 table: declaration 21 bits, script 25, baseline 12",-13,"pixel (THEORIZE_LOG O-04 table, never re-priced)",not reconciled with concept_accounts.json,,

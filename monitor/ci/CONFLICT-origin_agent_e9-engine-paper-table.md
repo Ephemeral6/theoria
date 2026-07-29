@@ -1,11 +1,18 @@
 # CONFLICT-origin_agent_e9-engine-paper-table.md
 branch: origin/agent/e9-engine-paper-table
-reason: tests red in engine-rig
+reason: verify gate red in engine-rig (verify.py)
 
 ```
-.......ss.................ss............................sssss........... [ 14%]
-............sss......................................................... [ 28%]
-................F
+[1/3] suite
+   FAIL  suite red (exit 1)
+.......ss.................ss............................sssss........... [ 13%]
+............sss......................................................... [ 27%]
+.....................F.................s................................ [ 40%]
+....ss.................................................................. [ 54%]
+........................................................................ [ 67%]
+........................................................................ [ 81%]
+..........................ssss...s.........s..s..s...........ssss....... [ 94%]
+...........................                                              [100%]
 ================================== FAILURES ===================================
 _____ test_the_table_is_current_and_every_fact_still_matches_its_artifact _____
 
@@ -34,6 +41,11 @@ engine_table: 3 fact(s) disagree with their artifacts:
 The table was NOT written. Re-read the run, then update the expectation.
 =========================== short test summary info ===========================
 FAILED tests/test_engine_table.py::test_the_table_is_current_and_every_fact_still_matches_its_artifact
-!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+[2/3] one real run -- eight engines end to end, offline
+   ok    wrote candidates.jsonl
+[3/3] artefact self-check
+
+engine-rig: RED (1 problem(s))
 
 ```

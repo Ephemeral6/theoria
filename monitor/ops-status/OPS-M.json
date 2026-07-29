@@ -1,7 +1,7 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-29T02:01:01Z",
- "cycle": 9,
+ "utc": "2026-07-29T03:56:16Z",
+ "cycle": 11,
  "state": "working",
- "note": "用户授权修 gates.py：bash 半边已由他人修好、我做了验证（5 个分支带 verify 闸门合入，分支 16→9）；仍红的是 .py 半边，三分支同夜撞上同一个缺失的调用契约，已补 gates.gate_env（cwd=领地 + 仓库根可 import），实测 rc=1→0 且四个既有闸门无回归。已推 09c65f1"
+ "note": "用户授权：ci_merge 合并成功后自动退休该分支的 flag（移入 archive 而非删除，含防同秒覆盖的计数器）。已推 4cd583a；自测四项全过，生产判据留给下轮：merge.log 出现 CLEARED 行且 monitor/ci/ 保持一 flag 一活分支"
 }

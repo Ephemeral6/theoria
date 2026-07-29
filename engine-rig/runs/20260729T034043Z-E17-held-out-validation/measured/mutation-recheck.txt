@@ -1,0 +1,9 @@
+# mutation re-check after E17's adversarial review: do the new tests kill the mutants that survived?
+# NONE = unmutated baseline. Command: MUT=<id> python -m pytest tests/test_heldout.py -q -p mutplug
+NONE  ................                                                         [100%]
+M1    FAILED tests/test_heldout.py::test_the_random_split_is_disjoint_total_and_the_right_size
+M2    FAILED tests/test_heldout.py::test_the_score_reads_the_heldout_side_and_not_the_train_side
+M9    FAILED tests/test_heldout.py::test_the_emit_gate_is_measured_on_the_graph_the_caller_would_hold
+M10   FAILED tests/test_heldout.py::test_the_fixture_c_gate_can_actually_fail - ass...
+M11   FAILED tests/test_heldout.py::test_admissibility_scoring_finds_a_planted_violation
+P6    FAILED tests/test_heldout.py::test_the_published_rate_probe_reads_delta_hit_not_value_hit

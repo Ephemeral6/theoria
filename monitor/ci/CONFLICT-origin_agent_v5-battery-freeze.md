@@ -1,17 +1,11 @@
 # CONFLICT-origin_agent_v5-battery-freeze.md
 branch: origin/agent/v5-battery-freeze
-reason: verify gate red in battery (verify.py)
+reason: merge conflict
 
 ```
-Traceback (most recent call last):
-  File "C:\Users\user\AppData\Local\Temp\ci-merge-rndg56lr\battery\verify.py", line 110, in <module>
-    raise SystemExit(main())
-                     ~~~~^^
-  File "C:\Users\user\AppData\Local\Temp\ci-merge-rndg56lr\battery\verify.py", line 104, in main
-    ok = gate() and ok
-         ~~~~^^
-  File "C:\Users\user\AppData\Local\Temp\ci-merge-rndg56lr\battery\verify.py", line 46, in gate_freeze
-    from battery import freeze
-ModuleNotFoundError: No module named 'battery'
+Auto-merging PARTNER_SYNC.md
+Auto-merging battery/verify.py
+CONFLICT (add/add): Merge conflict in battery/verify.py
+Automatic merge failed; fix conflicts and then commit the result.
 
 ```

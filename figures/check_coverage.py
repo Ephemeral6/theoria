@@ -118,24 +118,79 @@ def _theoria_dirs_with_cost() -> list[tuple[str, list, dict]]:
     return out
 
 
-def _partial_theoria_dirs() -> list[str]:
-    """Run directories carrying some of the members but not all.
+def _manifest_claims_spend(entry: str) -> bool | None:
+    """Did this run directory's own manifest say it billed anything?
 
-    The rule skips these, correctly -- half a run is not a run. But the *oracle*
-    must not skip them on the same predicate, or a run that landed with a cost
-    curve and a manifest still being written would be invisible to the rule and
-    to its auditor at once, with the floor still satisfied. None exist today;
-    the point is that the class is watched rather than that it is populated.
+    ``True`` it claims spend, ``False`` it claims none, ``None`` it makes no
+    claim either way (no ``cost`` block at all -- an ordinary work-run
+    directory, not a campaign leg). Unreadable counts as a claim: a manifest
+    nobody can parse is not evidence of innocence.
     """
-    partial: list[str] = []
+    path = _abs(f"{THEORIA_ROOT}/{entry}/MANIFEST.json")
+    if not os.path.isfile(path):
+        return None
+    try:
+        with open(path, encoding="utf-8") as fh:
+            manifest = json.load(fh)
+    except (OSError, ValueError):
+        return True
+    cost = manifest.get("cost")
+    if not isinstance(cost, dict):
+        return None
+    usd = cost.get("cli_reported_usd")
+    calls = cost.get("model_calls")
+    return bool(usd) or bool(calls)
+
+
+def _partial_theoria_dirs() -> tuple[list[str], list[str]]:
+    """``(failures, named)`` over run directories carrying some members, not all.
+
+    The rule skips these, correctly -- half a run is not a run. The oracle must
+    not skip them on the same predicate, or a run that landed with a cost curve
+    and a manifest still being written would be invisible to the rule and to its
+    auditor at once, with the floor still satisfied.
+
+    **But "some members, not all" is the wrong predicate for the failure**, and
+    on 2026-07-29 it was wrong twelve times out of twelve. Every directory it
+    flagged had a manifest and no cost curve for the same reason: there was
+    nothing to write. Seven carry no ``cost`` block at all -- they are ordinary
+    work-run directories (`a3-desk-gate`, `A11`, `E14-crash-is-not-a-finding`
+    and so on), not campaign legs. The other five are salvage and preflight
+    directories whose manifests state ``cli_reported_usd: 0.0`` and
+    ``model_calls: 0``. A probe with twelve false alarms and no true one does
+    not get read, and the case it exists for -- a *billing* run whose write was
+    interrupted -- was the case it could no longer distinguish.
+
+    So the failure now needs evidence, and the evidence is the run's own claim:
+    a directory fails when its manifest says money moved and no cost curve
+    stands beside it. The rest are still **named** -- which was always the
+    demand ("a half-written run must be named, not silently dropped by both") --
+    but naming and failing are separated, because they were never the same act.
+    """
+    failures: list[str] = []
+    named: list[str] = []
     for entry in _walk(THEORIA_ROOT):
         present = [
             m for m in THEORIA_MEMBERS if os.path.isfile(_abs(f"{THEORIA_ROOT}/{entry}/{m}"))
         ]
-        if present and len(present) != len(THEORIA_MEMBERS):
-            missing = [m for m in THEORIA_MEMBERS if m not in present]
-            partial.append(f"{entry} (has {', '.join(present)}; missing {', '.join(missing)})")
-    return partial
+        if not present or len(present) == len(THEORIA_MEMBERS):
+            continue
+        missing = [m for m in THEORIA_MEMBERS if m not in present]
+        shape = f"{entry} (has {', '.join(present)}; missing {', '.join(missing)})"
+        claims = _manifest_claims_spend(entry)
+        if claims:
+            failures.append(
+                f"theoria run directory {shape}: its own MANIFEST reports spend, and "
+                "the cost curve that spend would be recorded in is absent. The "
+                "discovery rule requires every member and so skips it, which means "
+                "neither the rule nor this probe would otherwise notice that a "
+                "billing run went missing from the plate."
+            )
+        else:
+            named.append(
+                f"{shape} -- {'no cost block; not a campaign leg' if claims is None else 'manifest states 0 model calls and $0.00'}"
+            )
+    return failures, named
 
 
 def _rollups_on_disk() -> dict[str, str]:
@@ -171,12 +226,8 @@ def check() -> list[str]:
     drawn = {c["run_id"]: c for c in curves}
 
     # --- 2. every cost-bearing theoria run is drawn or explained ----------
-    for entry in _partial_theoria_dirs():
-        failures.append(
-            f"theoria run directory {entry}: the discovery rule requires every member and "
-            "so skips it, which means neither the rule nor this probe would notice it. A "
-            "half-written run must be named, not silently dropped by both."
-        )
+    partial_failures, _named = _partial_theoria_dirs()
+    failures.extend(partial_failures)
     for entry, rows, manifest in _theoria_dirs_with_cost():
         slug = manifest.get("slug") or entry
         if slug in drawn:
@@ -241,6 +292,42 @@ def self_test() -> list[str]:
     the tree looked like at commit 98593a0.
     """
     problems: list[str] = []
+
+    # --- the spend-claim predicate, planted in memory ---------------------
+    # The partial-directory check no longer fires on shape, it fires on the
+    # run's own claim of spend. So the control for it plants that claim rather
+    # than a file: every partial directory on disk currently claims none, and
+    # one that claims some must fail. Done by substitution, not by writing into
+    # `theoria-arm/runs/` -- another track's tree is not a scratch pad, and a
+    # control that leaves debris is a control nobody runs twice.
+    real_claims = _manifest_claims_spend
+    partial_now, named_now = _partial_theoria_dirs()
+    if partial_now:
+        problems.append(
+            "the spend-claim control cannot be read: a partial theoria directory "
+            "is already failing, so a planted one proves nothing. Fix the real "
+            "one first."
+        )
+    elif not named_now:
+        problems.append(
+            "no partial theoria run directory exists to plant a spend claim on. "
+            "The control is unreachable; re-target it rather than deleting it."
+        )
+    else:
+        victim = named_now[0].split(" (")[0]
+        try:
+            globals()["_manifest_claims_spend"] = (
+                lambda entry: True if entry == victim else real_claims(entry))
+            planted, _ = _partial_theoria_dirs()
+            if not any(victim in line for line in planted):
+                problems.append(
+                    f"planted a spend claim on the partial directory {victim} and "
+                    "the coverage probe stayed silent: a billing run whose cost "
+                    "curve never landed would not be reported."
+                )
+        finally:
+            globals()["_manifest_claims_spend"] = real_claims
+
     rule_name = fig02.ROLLUP_RULE
     original_rules = sources.DISCOVERY
     original_found = dict(sources.DISCOVERED)
@@ -299,8 +386,12 @@ def main() -> int:
         for f in failures:
             print(f"COVERAGE: {f}")
         return 1
+    _, named = _partial_theoria_dirs()
+    for entry in named:
+        print(f"COVERAGE-NAMED: partial theoria run directory, not a failure: {entry}")
     print(
-        f"coverage ok: {n_theoria} billing theoria run(s) and {n_rollups} roll-up run_id(s) "
+        f"coverage ok: {n_theoria} billing theoria run(s), {len(named)} non-billing partial "
+        f"directory(ies) named above, and {n_rollups} roll-up run_id(s) "
         "found by walking the tree; every cost-bearing run drawn or explained, every "
         "outcome on disk on the plate, every shape absence carrying its reason."
     )

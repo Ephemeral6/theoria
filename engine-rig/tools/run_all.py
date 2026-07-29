@@ -186,11 +186,27 @@ def run_all(out_path: str = DEFAULT_OUT, deterministic: bool = False) -> Dict[st
     with open(sokoban.RING.path, "r", encoding="utf-8") as fh:
         ring_problem = parse_problem(fh.read())
     bundle = sokoban_probe.build()
+    # These theorems drive a *published* verdict -- `probe_frontier` emits
+    # `verdict: "unreachable"` rows, which D-022 calls a fact about the instance --
+    # and until E16 nothing on this path asked whether they were sound.  The gate
+    # at step 8 above is on OPEN4FAR; this is RING, a different instance, and
+    # `probe_frontier.design()` has no `report` parameter to read.  So the verdict
+    # is taken here, at the site that uses them, before they can prune anything.
+    ring_theorems = deadlock_carver.carve(
+        deadlock_carver.Task.build(soko_domain, ring_problem)
+    )
+    ring_report = deadlock_carver.pruning_report(soko_domain, ring_problem, ring_theorems)
+    if not ring_report.same_answer:
+        raise RuntimeError(
+            "RING deadlock theorems changed the instance's answer (%d -> %d "
+            "expansions, solved %r -> %r): they may not prune the probe planner, "
+            "whose reachability verdicts reach artifacts/candidates.jsonl."
+            % (ring_report.baseline.expansions, ring_report.pruned.expansions,
+               ring_report.baseline.solved, ring_report.pruned.solved)
+        )
     designed = probe_frontier.run_with_planner(
         bundle["hypotheses"], bundle["configurations"], soko_domain, ring_problem,
-        prune=deadlock_carver.pruner(deadlock_carver.carve(
-            deadlock_carver.Task.build(soko_domain, ring_problem)
-        )),
+        prune=deadlock_carver.pruner(ring_theorems),
         transitions=list(range(len(bundle["evidence"]))),
         out_path=out_path,
     )

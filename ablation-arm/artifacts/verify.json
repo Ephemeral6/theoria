@@ -115,7 +115,7 @@
       "claim": "a full run leaves every upstream tree byte-identical",
       "evidence": {
         "changed": [],
-        "files_hashed": 493
+        "files_hashed": 514
       },
       "holds": true,
       "name": "read-only"
@@ -175,12 +175,12 @@
           "pixels_checked": 14904
         }
       },
-      "status": "RECORDED -- no second arm has been run",
+      "status": "MEASURED (calibrate.py, A4b) -- holds=True. replay accuracy byte-equal to the full arm",
       "what": "replay accuracy, byte-equal to the full arm"
     },
     "P-2": {
       "numbers": null,
-      "status": "RECORDED -- and the instrument is missing, not just the comparison: nothing in this arm computes a held-out split. A4b needs one built before P-2 can be read.",
+      "status": "MEASURED (calibrate.py, A4b) -- holds=True. equal, but partly BY CONSTRUCTION: both arms hold the same manual, because this arm was handed a downgrade of the full arm's DSL rather than theorizing its own. What P-2 therefore establishes is that the incision did not damage the representation layer -- which is what it was pre-registered to test -- and NOT that this arm induces as good a manual. Anyone quoting these numbers as 'the ablated arm learns as well' is misquoting them.",
       "what": "behavioural / held-out accuracy, equal to the full arm"
     },
     "P-4": {
@@ -189,7 +189,7 @@
         "model_calls": 0,
         "usd": 0.0
       },
-      "status": "RECORDED -- and there is no cost instrument here either. The arm is offline, so its dollar cost is zero and the comparison 1.11 wants is about search and proof fuel, which nothing measures yet. A4b's largest gap.",
+      "status": "MEASURED (calibrate.py, A4b) -- holds=True. this arm is cheaper, not dearer",
       "what": "this arm is cheaper, not dearer"
     },
     "P-5(identical)": {
@@ -197,7 +197,7 @@
         "settled_by": "search",
         "verdict": "unsolvable"
       },
-      "status": "RECORDED -- the verdict and its settling are here; the equality needs the full arm",
+      "status": "MEASURED (calibrate.py, A4b) -- holds=True. the A0 verdict is identical to the full arm's, word for word",
       "what": "the A0 verdict is *identical* to the full arm's"
     }
   },

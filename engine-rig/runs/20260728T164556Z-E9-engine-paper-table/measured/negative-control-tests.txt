@@ -1,0 +1,4 @@
+=== NC6: the guard test must fail if ic3_pdr's boundary is written as measured ===
+FAILED tests/test_engine_table.py::test_a_boundary_that_was_never_measured_says_so_in_those_words
+pytest exit = 1 (expected non-zero)
+(table restored)

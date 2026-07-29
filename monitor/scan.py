@@ -904,7 +904,39 @@ def probe_needs_human():
                      for r, n, w in dead]}
 
 
+def probe_standing():
+    """常驻研究员的例行程序还在跳吗，上一跳做了什么决定。
+
+    这条探针的存在本身是个教训：`standing.py` 起会话的判断全在磁盘上，
+    而一个没人看的自动机制与一个坏掉的自动机制，在页面上长得一模一样。"""
+    log_path = rel("monitor", "standing.log")
+    task = "TheoriaStanding"
+    out = subprocess.run(["schtasks", "/Query", "/TN", task, "/FO", "LIST"],
+                         capture_output=True, text=True, encoding="utf-8",
+                         errors="replace")
+    registered = out.returncode == 0
+    if not exists("monitor/standing.log"):
+        return {"status": "risk" if not registered else "partial",
+                "detail": "例行任务 %s；**还没有跳过一次**（standing.log 不存在）。"
+                          % ("已注册" if registered else "**未注册**")}
+    lines = [l.strip() for l in
+             open(log_path, encoding="utf-8", errors="replace").read()
+             .splitlines() if l.strip()]
+    age = int((time.time() - os.path.getmtime(log_path)) / 60)
+    starts = [l for l in lines if " START " in l]
+    tail = lines[-4:]
+    stale = age > 40          # 周期 15 分钟，跳过两次就是坏了
+    return {"status": ("risk" if (stale or not registered) else "green"),
+            "detail": "例行任务 %s，上一跳 %d 分钟前；累计起过 %d 次常驻会话。"
+                      "最近：%s%s"
+                      % ("已注册" if registered else "**未注册**", age,
+                         len(starts), "；".join(t.split(" ", 1)[-1][:70]
+                                                for t in tail),
+                         "　→ **超过两个周期没跳，例行已停**" if stale else "")}
+
+
 PROBES = {
+    "standing": probe_standing,
     "credential_hygiene": probe_credential_hygiene,
     "needs_human": probe_needs_human,
     "offline_done": lambda: _offline_done(),

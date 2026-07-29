@@ -1,0 +1,282 @@
+# V18 · 三主终点的单独裁决
+
+`Theoria.md:373`（逐字冻结的统计裁决规则）：
+
+> **主终点限三个**——U3 达成率、判决题准确率(含特异度)、前载指数配对差；电池其余
+> 指标一律标探索性、不作确证主张，免多重比较稀释。
+
+工单问的是：**这三条的预测是否具体到能被证伪。**
+
+判据同 `REVIEW_TABLE.md` §0.3：**F1** 有已注册指标算得出；**F2** 写得出一个让它算
+错的取值；**F3** 在所述臂上能算出 `ok`。
+
+---
+
+## 主终点 1 · U3 达成率 —— **不可证伪**
+
+**判定：`battery/PREDICTIONS.md` 里没有关于 U3 达成率的任何一条预测。**
+
+`grep -n "U3" battery/PREDICTIONS.md` 返回空。全文四批次 87 条陈述，没有一条点名
+U3、点名达成率、或点名任何按局计的证明成功率。
+
+U3 的定义在 `Theoria.md:262`：四个排序问题里的第三个，**证得动吗**。
+`Theoria.md:359` 说 C1 是「Theoria 是唯一稳定达到 U3/U4 的框架」。
+
+**判据逐条：**
+
+* **F1 不过。** 电池 38 条指标里没有一条叫 U3 达成率，也没有一条是「按局计的
+  达成率」。最接近的两条是 K3（`theorem_count`）与 K10（`deadlock_theorems`），
+  两条都是**计数**，不是**率**；它们数的是一份说明书里有几条定理，不是几局里
+  证得动几局。分母不同，不是同一个量。
+* **F2 不过。** 没有预测，就没有能让它算错的取值。**写不出那个结果，就是不可
+  证伪，本表如实标，不替它补一个。**
+
+**替代品也不合格。** 就算退一步用 K3/K10 当代理：
+
+* 两条的预测都是 `theoria > 0，其余为 0`。这是**结构性**预测，只在「Theoria 一条
+  定理都没写出来」或「某个基线写出了一条」时算错。方向对得毫无风险。
+* 且两条**都被 V9 判为可刷**：K3「写一堆平凡定理，`0 = 0` 也是定理」，K10「灌一堆
+  平凡的 `prune ... => dead`」。K10 的辩护（Lean 证明义务，假的编译不过）是**电池
+  外部的**，`METRICS.md` 自己写明「the battery counts rather than checks」。
+* 因此**一条建立在 K3/K10 上的 U3 论断，即使方向对，也不构成证据。**
+
+### 落点断言 —— **[OVERTURNED]，而且这一条要单独致歉**
+
+> **[OVERTURNED · 第 1 版原文]** 「**落点在哪里（已独立查实）。** U3 达成率由 U
+> 阶梯打分器算，落点 `proxy/scoring/`，不在 `battery/` 内。」
+
+**「已独立查实」这五个字是假的。我没有查。** 我从
+`monitor/inbox/20260728T192000Z-W-252-...md` 里抄了那个落点，然后给它盖了一个我
+自己没做过的核实章。
+
+对抗复核实测：
+
+```
+$ grep -rn -i -E "U1|U2|U3|U4|ladder|attain|达成|证得|阶梯" proxy/
+（零命中）
+$ ls proxy/scoring/
+__init__.py  __main__.py  arc_v1.py  frozen.json
+```
+
+`proxy/SCORING.md:37-38` 明写它「publishes **the scorecard's own numbers**…
+does **not** reimplement the ARC-AGI-3 percentage」。**`proxy/scoring/` 里没有
+U 阶梯打分器。该打分器目前不存在。**
+
+**这是本轮最不该出错的地方，不淡化。** 一条假的核实声明比没有核实**更坏**：
+没有核实，下一个人还会去查；假的核实声明会让他不查。而这份文件的用途正是
+被抄进冻结说明书。
+
+**补记全仓唯一相关的方向预注册**：`ablation-arm/DESIGN.md:247` 的 **P-7
+「U 阶梯封顶 U2，是构造性的」**，机械化在 `ablation-arm/verify.py:176`
+（`u3_blocked = …`）。**它是单臂的构造性上限，不是达成率，没有分母**，因此不满足
+主终点的要求——但它存在，第 1 版说「没有任何一条」是过头的。
+
+另：`Theoria.md:357` 的退出条件门槛 `⟨k⟩` **至今未绑定**（`Theoria.md:383` 把它列进
+冻结时才定的五项），`theoria-arm/runs/20260728T233900Z-A3-campaign-devpile/
+EXIT_CONDITION.md:36-37` 独立记下「Theoria.md gives **no per-game rubric** for
+scoring U3」。
+
+`monitor/inbox/20260728T192000Z-W-252-...md` 在另一条工单线上独立得出「电池盖不住
+两个主终点」的同一结论。**那个结论本复核证实；它附带的落点断言，本复核不再背书。**
+
+**冻结前必须写下的一句话：冻结电池不等于冻结 U3 达成率。这条主终点从未被预注册
+过。**
+
+---
+
+## 主终点 2 · 判决题准确率（含特异度） —— **不可证伪**
+
+**判定：`battery/PREDICTIONS.md` 里没有关于判决题准确率的任何一条预测。**
+
+`grep -n "判决题\|specificity\|特异度" battery/PREDICTIONS.md` 返回空。文件里出现
+的 `verdict` 一律指电池自己的工序 1 判决（`discriminating` / `underpowered` /
+`no-data`），**与 `Theoria.md` 的判决题（不可解变体考题）无关**。这两个 `verdict`
+同名不同物，冻结文件里必须说清楚，否则读者会以为它被盖住了。
+
+**判据逐条 —— F2 一条已被推翻：**
+
+* **F1 不过。** 判决题准确率与特异度由考卷轨道算（`exam/grading/mark.py` 的
+  `confusion()`），**不是电池指标**，电池 38 条里没有它的 id。
+
+> **[OVERTURNED · 第 1 版原文]** 「**F2 不过。** 无预测，无反例。」
+
+**撤回。** 第 1 版自己写了「本复核只做了目录与关键词层面的检查，没有逐文件读」，
+对抗复核把那句免责兑现了：全量枚举 `exam/` 166 个文件、`proxy/` 68 个文件，
+**`exam/` 里有可执行的、带硬阻断的方向预注册**：
+
+* `exam/grading/calibration.py:33` —— 「The expectations below are
+  **pre-registered**: bands written down as part of the protocol, **not fitted to
+  what the fakes turned out to score**.」
+* `:130-131` —— `"verdict_bluffer_pair": ("the bluffer must show sensitivity 1.0
+  and specificity 0.0")`
+* `:286-292` —— 执行：`if sens != 1.0 or spec != 0.0: failures.append(...)`
+* `:39` —— 「**A failed calibration blocks real grading.**」`assert_calibrated`
+  raises，`exam.tools.run_exam` 在批改任何答卷之前调用它。
+
+**F2 明确成立**：反例不但写得出来，而且写成了一行断言，**算错就阻断真实评分**。
+`exam/DECISIONS.md:153`（D-EX-010，一条预注册 band 在首次接触时被证伪并被替换而非
+放宽）独立证明这些 band 确实先于数字。
+
+另一处：`ablation-arm/DESIGN.md:235` 的 `## 8 · 预注册(方向先于结果)` 下有 P-5
+（`:245`）、P-6（`:246`），`:256` 明确按 `Theoria.md:259` 的三类判决题组织
+「灵敏度与特异度一起打分」，`:280` 点名第 (iii) 类特异度失败的最坏形态。
+祖先关系已验（`DESIGN.md` 在 `5959a80`，`verify.json` 在 `b4b8425`，退出码 0）。
+
+**改判后的正确写法：**
+
+> **电池侧确认没有；`exam/` 侧存在方向预注册且带硬阻断，但其作用域是**标定四个
+> 合成假考生**（oracle / null / memoriser / bluffer）与**消融臂上两个手工展品**
+> （各 n=1），**不是主终点所要的跨臂准确率**；全仓不存在任何形如
+> `specificity > 0.9` 的数值门槛。**
+
+**这仍然不足以救回这个主终点**，但「无预测，无反例」是错的，必须改。
+
+**这一条有一层额外的结构性理由，且它是正当的**：电池是**被动**仪器（从轨迹读能力
+谱），判决题是**主动**考卷。按 `Theoria.md:405` 的两器分工，判决题本就不该住在电池
+里。**所以问题不是电池漏了它，而是它的方向预注册在哪里都没有。**
+
+`exam/` 目录下有 `DECISIONS.md` / `README.md` / `STATUS.md`，没有 `PREDICTIONS.md`
+一类的方向预注册文件。三类判决题（小空间不可解 / 大空间不可解 / 可解但难——测假
+阳性）的**灵敏度与特异度方向预测，本次复核在仓库里没有找到**。
+
+**这不是「找不到所以不存在」的断言**——`exam/` 不是本工单的领地，本复核只做了目录
+与关键词层面的检查，没有逐文件读。**登记为：battery 侧确认没有；exam 侧未找到，
+且本复核无权替它下结论。**
+
+**冻结前必须写下的一句话：三个主终点里，电池只盖住一个。含糊过去，Phase 4 就会有
+两个从未被预注册过的主终点。**
+
+---
+
+## 主终点 3 · 前载指数配对差（E2） —— **可证伪，但当前材料上不可判定；且它的反例
+判据已经在另一条梯度上被满足了**
+
+这是三条里唯一被预注册过的，而且被注册了**三次**（v0、v2、v2.1）。逐次裁决：
+
+### 3a. v0 的 E2 预测 — 可证伪，但**当前不可判定**，且**对应已断**
+
+> `E2 | frontload_index_25 | theoria > schema ≈ bare_cc | claim C2's signature,
+> and a Phase 4 primary endpoint.`
+
+* **F1 过。** E2 是注册指标。
+* **F2 过。** `theoria ≤ bare_cc` 即算错。写得出来。
+* **F3 不过。** 预测点名的 `schema` 是「带 replay 级世界模型的臂」，**该臂从不存在**
+  （v0 自己的「named way this could be wrong」第 1 条就是这个）。
+* **对应断了两处**：
+  1. **名指向了另一份实现**：`frontload_index_25` 在 `battery/metrics/economy.py`
+     里**一次也没出现过**（`git log -S` 对该文件返回空）；20 分钟后落地的电池实现
+     叫 `frontload_index`。但全仓搜下来，**这个名字是活的**——
+     `theoria-arm/armtools/archive.py:1067,1072`，跑战役那条臂写进
+     `turn_series.json` 的字段名就叫 `frontload_index_25`。
+
+     **于是 Phase 4 的这个主终点有两份实现、两个名字，而预注册点名的是非电池的
+     那一份。** 两份算术一致（archive.py 自称 mirrored，常数同值，
+     `theoria-arm/tests/test_turn_series.py` 把两边钉在一起），但报数纪律不一致：
+     不足 8 回合时电池拒答返 `None`，theoria-arm 照样填值；theoria-arm 出
+     `all_turns` / `billed_turns_only` **两条轴**而电池只有一条，v0 的预测没说是
+     哪一条；theoria-arm 没有 V9-D3 的未计价拒答。详见
+     `REVIEW_TABLE.md` §3a（含本复核对自己初判的一次更正）。
+  2. **口径两次变更**，都在这条预测之后：
+     * v1（`e82558b`）把回合轴从 model-call 顺序改为决策——`METRICS.md`
+       「Deviations」第 4 条；
+     * v2.1（`5f85971`）把头部从 `ceil(n × 0.25)` 改为插值，**并自己预测
+       「every published E2 value moves」，实测成立**。
+
+  **一条预测，其指标的名字从未存在、口径此后被改了两次，不能说仍与当前定义对应。
+  标注，不删除。**
+
+### 3b. v2 的 E2 预测 — **本文件写得最好的一条**，但**结局是 `no-data`**
+
+> `E2 | higher | no-effect | ... If E2 separates CC from Schema cleanly, E2 is
+> measuring capability rather than front-loading, and its status as C2's
+> signature is in trouble`
+
+* **F2 过，而且过得漂亮**：它**自己写下了反例**。这正是判据 0.3 要的东西——
+  「什么样的结果会让这条预测算错」有答案，且答案由预测作者自己给出。全文件 87 条
+  里只有约 8 条做到了这一点（X3、P2、E5、X6、M5、K8、K13、E2-v2）。
+* **F3 不过。** 实测 `battery/artifacts/discrimination_arms.json`：
+
+  ```
+  E2  verdict: "no-data"
+  note: "schema_repro scores 0 game(s) and bare_cc scores 4; 0 in common,
+         nothing to pair"
+  ```
+
+  上游语料不记成本，配不出一对。**预测「无效应」而实测「无数据」，不算命中。**
+  v2.1 自己也预注册了这个结局（「E2's process-1 verdict stays `no-data`」），并
+  说中了。
+
+* **而这条预测的反例，已经在另一条梯度上被满足了。** 实测
+  `battery/artifacts/discrimination.json`（模型阶梯 haiku → sonnet → opus，
+  harness 固定，**三个臂没有一个有理论**）：
+
+  ```
+  E2  cliffs_delta: 1.000   magnitude: large
+      sign_test: 4 wins / 0 losses / 0 ties   n_paired_games: 4
+      agrees_with_declared_direction: true
+      verdict: "underpowered"   (p = 0.125, 4 局够不到 0.05)
+  ```
+
+  **能力更强的模型前载得更多，4 局全胜，效应量满格，而这三个臂一个理论都没有。**
+
+  这个结果落盘于 `0be176c`（2026-07-28T02:33），是 v2 预注册 `19eafb2`
+  （14:20）的**严格祖先**（`git merge-base --is-ancestor` 退出码 0，已验）。
+  v0 的 commit message 更是白纸黑字：「If capability alone front-loads, claim C2's
+  signature is not specific to having one — and the front-load index is a
+  pre-registered primary endpoint.」
+
+  **v2 的封条段没有声明这一条。** 它声明了目录名分数泄漏与文件字节数，没声明这个。
+  登记为 `REVIEW_TABLE.md` O-4：**未声明的先验知识**。
+
+  两种读法都写下来，不替任何一种辩护：
+  * **不利**：明知「能力本身就前载」，仍把 E2 注册为 C2 的签名，且封条不提。
+  * **有利**：明知有反证仍注册一条会被打脸的预测，是更强的纪律而非更弱。
+
+  **但两种读法都不改变裁决**：E2 自己写下的反例——「若 E2 分开的是能力而不是前载，
+  它作为 C2 签名的地位就有麻烦」——**在模型阶梯上已经被满足了**。效应量满格，方向
+  一致，臂里没有理论。够不到 p<0.05 只是因为 4 局的功效上限是硬的，**这是没功效，
+  不是没效应**。
+
+### 3c. v2.1 的 E2 预测 — 全部成立，包括那条最不给自己留面子的
+
+四条全中，其中两条值得单独记：
+
+* 「**E2 不会回主表**」——插值治了长度伪影，治不了「一回合砸完全部账单」。
+  **预测一个 Phase 4 主终点在它自己的修法之后**仍然不安全，并说中了。
+* 「E2 的工序 1 判决保持 `no-data`」——说中了。
+
+**V9 随后独立复现了同一结论**：E2 可刷，且是 B14 主表 9 条里被降级的一条。
+
+### 3d. E2 的合并裁决
+
+| 问题 | 答 |
+|---|---|
+| 有预注册吗 | **有**，三次 |
+| 具体到能被证伪吗 | **v2 那条：能，且自带反例判据，是全文件标杆。v0 那条：能，但名从未存在、口径改过两次、所指的臂不存在** |
+| 当前材料上判定了吗 | **没有。**`no-data` — 上游不记成本，配不出一对 |
+| 反例被满足过吗 | **被满足了**，在模型阶梯上：d = 1.000、4/4、无理论臂 |
+| `Theoria.md` 要的是「配对差」吗 | **不是它现在的形式。** 三次预注册全部注册的是**序**，没有一条注册**配对差的量、n、或 α**。`Theoria.md:373` 要的是配对检验（符号检验 / Wilcoxon）下的配对差 |
+| 冻结时指向哪份实现 | **含糊。** 电池 `E2` 与 theoria-arm `frontload_index_25` 两份并存，预注册点名后者。冻结前必须裁一次 |
+| V9 状态 | **可刷**，且被 V9 从主表降级 |
+
+**冻结前必须写下的一句话：E2 是三个主终点里唯一被预注册的一个；它的预注册是序不是
+配对差；它当前的判决是 `no-data`；而它自己写下的反例已经在另一条梯度上被满足。**
+
+---
+
+## 合计
+
+| 主终点 | 电池里有 id | 有方向预注册 | 可证伪 | 当前可判定 | V9 状态 |
+|---|---|---|---|---|---|
+| U3 达成率 | **无** | **无**（唯一相关的是 `ablation-arm` P-7 的单臂构造性上限，非达成率） | **否**（F1、F2 均不过） | — | 代理 K3/K10 均可刷，**且 K10 在 a2 三个 run 上实测 = 0.0** |
+| 判决题准确率（含特异度） | **无** | **有，但不覆盖本终点**——`exam/grading/calibration.py` 的 band 管四个合成假考生，`ablation-arm` P-5/P-6 管两个 n=1 展品 | **否**（F1 不过；F2 在**假考生标定**这个较小的范围内成立） | — | — |
+| 前载指数配对差 | `E2` | 有，三次 | **是**（v2 那条自带反例） | **否**（`no-data`） | **可刷，已降级** |
+
+**三个主终点，没有一个有可被证伪的跨臂预测。** U3 与判决题在电池里连 id 都没有；
+E2 有预测、判不了、且反例已在模型阶梯上被满足。
+
+这不是把线放低。这是把线放在 `Theoria.md:373` 原处之后读出来的结果。
+
+**第 1 版在这一节犯了两个方向相反的错**，两个都记在上面：对判决题**指控过头**
+（说「无预测无反例」，实际 `exam/` 有带硬阻断的预注册），对 U3 **背书过头**
+（给一个自己没查过的落点盖了「已独立查实」的章）。**后者更严重。**

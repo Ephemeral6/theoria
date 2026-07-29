@@ -986,6 +986,36 @@ all leaves `refuted` **absent**, a passed verdict also leaves it absent, and onl
 a real refutation writes it. "Nobody asked" and "asked and passed" are both
 distinct from "asked and failed".
 
+**What an adversarial review of this decision then found, in the fix itself.**
+The first cut gated the heuristic row and left the invariant row beside it
+ungated — **the same defect one row over.** Both rows come from one weight
+vector; the invariant went out asserting `goal unreachable from 1110` with all
+three conditions `true`, next to a heuristic row whose counterexamples were a
+proof that `inv_closed` is false over the real move set. Two rows from one call,
+contradicting each other, nothing saying which wins.
+
+The repair is not another sibling check. `candidates()` re-derives the premises
+**from the graph** (`premises_against_graph`) and withholds both rows when they
+fail — `moves_raising_potential` recomputes `inv_closed` over every geometry the
+graph has, which is the one check the certificate's own inputs cannot perform.
+The invariant payload also publishes `holds` outright, because `conditions`
+alone does not say what it appears to: `all({}.values())` is `True`, so a
+consumer re-deriving the verdict from a never-checked certificate reads it as a
+pass. Four more instances of the shape came out of the same review and are fixed
+here: `interop/certificate_export.build` wrote `conclusion` as a literal *above*
+the line computing `verified`; its `checked_over` asserted "all move instances on
+the full state space" regardless of how many were listed; `tools/run_all.py`
+handed the RING deadlock theorems to the probe planner — whose reachability
+verdicts are published — with no verdict taken on that instance at all; and
+`tools/p13_fd_dividend.py` had no prose branch for `same_answer is False`, so a
+refuted row fell through to "the plan is N steps either way", which is the one
+thing it was not.
+
+That is the argument for the review, and it belongs in the decision: **a fix for
+"the verdict is not read" is exactly the kind of change that leaves a sibling
+unread.** Five of the six sites above are in files this work item had already
+opened.
+
 **The generalisation.** A computed verdict sitting next to the thing it judges,
 with no branch between them, is *indistinguishable from an uncomputed one* to
 every consumer. The work of checking is wasted precisely when it is most needed.
@@ -1023,7 +1053,7 @@ before this decision existed.
 | `lp_potential` `check_exactly` | the LP | `Certificate.moves`, from `moves_from_graph(graph)` |
 | `ic3_pdr` `check.py` | `pdr` | `System.transitions` |
 | `interop/certificate_export.verify` | — | the producer's own witness list |
-| `zero_space` `verify()` | the elimination | the trajectory the laws were fitted to |
+| `zero_space` `verify()` | — (it sits in the module it checks) | the trajectory the laws were fitted to |
 | `deadlock_carver` referee + `same_answer` | the carver's proof | `ground_actions` / `strip_static` |
 | `fd_adapter` `validate_plan` | `search` | `ground_actions` |
 
@@ -1082,3 +1112,26 @@ guarantee stays legible as the stronger thing it is.
 and its README, that "the ledger *is* the verifier". Its self-checks are circular
 and it says so. That is not a defect — it is the correct behaviour, and what
 separates it from the four sites corrected above is one sentence of prose.
+
+**Two earlier decisions are superseded on exactly one clause each.** This file is
+append-only, so they are corrected here rather than edited in place, and both are
+corrected only on the independence claim — everything else in them stands.
+
+* **D-010** reads "a separate executor … *code that shares nothing with the
+  search*". Read as **shares no search code**, it is true and remains the reason
+  the validator is worth having. Read as **shares nothing**, it is false:
+  `validate.py` and `search.py` both import `pddl.ground_actions`. The guarantee
+  is against frontier, ordering and duplicate-detection bugs; it is not against
+  grounder bugs.
+* **D-028** reads the deadlock carver's referee "exhausts the state space
+  *sharing nothing with the proof*". Its **method** shares nothing — forward BFS
+  and backward closure, no mutexes, no blocked-action argument. Its **grounding**
+  is the carver's own: `tests/test_deadlock_carver.py:127` builds it from
+  `strip_static(domain, problem, ground_actions(domain, problem))`. So a passing
+  theorem is certified dead over the atoms the search holds, which is the claim
+  the pruner needs, and not over the PDDL as written.
+
+Both were found by an adversarial review of *this* decision, which is the
+argument for running one: D-035 corrected six docstrings and left two decision
+entries asserting the sentences it had just falsified. A boundary written in one
+file and contradicted in another is not a boundary.
