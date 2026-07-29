@@ -139,21 +139,57 @@ def survey(now=None):
             "merged_ever": len(merged)}
 
 
+def unpushed_branches():
+    """Local agent branches with no counterpart on the remote, not yet on master.
+
+    `unmerged_branches()` enumerates `origin/agent/*`, so it can only ever see a
+    branch that reached the remote.  A branch that was never pushed is not
+    "waiting in the queue" -- it is not in the queue at all, and every probe
+    that reads the queue reports it as fine.  That is the strictly worse
+    failure, and it is the one the queue is structurally blind to.
+
+    Found the hard way: S16-silent-failure-hunt sat `done` on the board for
+    hours with its branch existing only in this checkout.  The board said
+    delivered, the merge log said nothing was waiting, and both were telling
+    the truth.
+    """
+    def sh(*a):
+        return subprocess.run(list(a), cwd=ROOT, capture_output=True, text=True,
+                              encoding="utf-8", errors="replace")
+    local = sh("git", "for-each-ref", "--format=%(refname:short)",
+               "refs/heads/agent").stdout.split()
+    remote = set(sh("git", "branch", "-r", "--list", "origin/agent/*",
+                    "--format=%(refname:short)").stdout.split())
+    todo = []
+    for b in local:
+        if "origin/" + b in remote:
+            continue                      # pushed; unmerged_branches() owns it
+        # No remote ref can mean two opposite things: never pushed, or merged
+        # and the remote branch deleted.  Only git can tell them apart.
+        if sh("git", "merge-base", "--is-ancestor", b,
+              "origin/master").returncode != 0:
+            todo.append(b)
+    return todo
+
+
 def done_not_on_master():
     """Board items marked done whose branch is not on master.
 
     The board's `done` means "pushed", and merging is a different machine. When
     the two diverge the score keeps climbing while master gains nothing.
+
+    Two ways to diverge, and they are not equally bad.  `queued` is the branch
+    the merge robot is chewing on; `unpushed` never reached the robot, so no
+    amount of waiting will fix it and no other probe will mention it.
     """
     done_dir = os.path.join(HERE, "board", "done")
     if not os.path.isdir(done_dir):
         return []
-    def sh(*a):
-        return subprocess.run(list(a), cwd=ROOT, capture_output=True, text=True,
-                              encoding="utf-8", errors="replace")
-    unmerged = set(unmerged_branches())
     # An item id maps to its branch by the fleet's own naming rule.
-    short = {b.replace("origin/agent/", ""): b for b in unmerged}
+    short = {b.replace("origin/agent/", ""): (b, "queued")
+             for b in unmerged_branches()}
+    for b in unpushed_branches():
+        short.setdefault(b.replace("agent/", ""), (b, "unpushed"))
     out = []
     for name in sorted(os.listdir(done_dir)):
         if not name.endswith(".md"):
@@ -161,7 +197,8 @@ def done_not_on_master():
         iid = name[:-3].split(".")[0]
         slug = iid.lower()
         if slug in short:
-            out.append({"item": iid, "branch": short[slug]})
+            branch, state = short[slug]
+            out.append({"item": iid, "branch": branch, "state": state})
     return out
 
 
@@ -173,6 +210,12 @@ def probe():
     if gap:
         bits.append("**%d 件板上已 done、分支却还没进 master**：%s"
                     % (len(gap), "、".join(g["item"] for g in gap[:5])))
+    # Called out separately: these are not slow, they are absent.  Folding them
+    # into the count above would let them wait behind a queue they never joined.
+    never = [g for g in gap if g["state"] == "unpushed"]
+    if never:
+        bits.append("其中 **%d 件根本没推上远端**（不是排队慢，是不在队里）：%s"
+                    % (len(never), "、".join(g["item"] for g in never[:5])))
     if s["blocked"]:
         reasons = "；".join("%s×%d" % (k, v)
                             for k, v in sorted(s["by_reason"].items(),
@@ -210,7 +253,7 @@ def main():
     if gap:
         print("\ndone on the board, absent from master (%d):" % len(gap))
         for g in gap:
-            print("  %-34s %s" % (g["item"], g["branch"]))
+            print("  %-34s %-46s %s" % (g["item"], g["branch"], g["state"]))
     return 0
 
 
