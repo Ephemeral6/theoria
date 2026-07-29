@@ -813,7 +813,37 @@ def check_uncited() -> tuple[bool, list[str]]:
 #: the reason. Keyed by (section, token). Same discipline as the other two
 #: adjudication tables: the reason prints on every run, and an entry that
 #: matches nothing fails as stale.
-ADJUDICATED_BARE: dict[tuple[str, str], str] = {}
+ADJUDICATED_BARE: dict[tuple[str, str], str] = {
+    ("02_framework.md", "playbook.dsl"):
+        "Names the *form*, not an instance: the parenthetical points at "
+        "`CONTRACTS/dsl_grammar_v0.1.md`, which itself uses the bare name for "
+        "the form (its four sentence types). The contrast is deliberate four "
+        "lines up, where the manual does get an instance and a scope -- "
+        "`cold-start-a0/theory/theory.dsl` for A0.",
+    ("02_framework.md", "THEORIZE_LOG.md"):
+        "Indefinite article, and the next sentence pluralises: 'written down "
+        "by the LLM in a THEORIZE_LOG.md' / 'Those logs are the primary "
+        "evidence'. It names the kind of file each arm keeps.",
+    ("10_adjudication.md", "ground_truth.json"):
+        "The token is what is being counted, not what is being cited: "
+        "'`worldgen/out/worlds/` holds 35 directories with a "
+        "`ground_truth.json`'. The directory carrying the claim is cited in "
+        "full; naming one of the 35 would be wrong here.",
+    ("11_limitations.md", "theory.dsl"):
+        "A claim about the v0.1 grammar era, so about every manual written "
+        "under it, and the tree bears that out: `a0-spike/theory/theory.dsl`, "
+        "`cold-start-a0/theory/theory.dsl` and `cold-start-a2/theory/theory.dsl` "
+        "each carry the same `frame persist` comment. No single instance is "
+        "meant.",
+    ("11_limitations.md", "THEORIZE_LOG.md"):
+        "The paragraph's scope is every arm at once -- it quotes A2's report "
+        "saying 'as in A0' and the battery's report on the Theoria arm -- so a "
+        "path-form rewrite would have to become a four-item list. This is the "
+        "weakest of the five rulings and is recorded as such: unlike the other "
+        "four it quotes no entry id, value or line, so there is no content hook "
+        "that would settle it. If a later draft attaches one, this becomes a "
+        "citation and the ruling should go.",
+}
 
 
 def scan_bare(sections=None, rulings=None):

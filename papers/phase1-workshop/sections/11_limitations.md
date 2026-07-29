@@ -176,7 +176,7 @@ Fast Downward.** Fast Downward *was* built and wired into A0/A0′ and agrees wi
 the stub on all three instances including the UNSAT variant, with no caller code
 changed (`cold-start-a0/BLOCKER_FAST_DOWNWARD.md`,
 `cold-start-a0/artifacts/fd_real.json`, `cold-start-a0/STATUS.md`) — but that is
-a separate conformance artefact. The reproducible pipeline (`run_all.py`,
+a separate conformance artefact. The reproducible pipeline (`cold-start-a0/run_all.py`,
 `prime.run_prime`) calls `solve(..., prefer="stub")` **on purpose**, so its
 checked-in artefacts stay byte-identical whether or not a planner is installed.
 §3.1's 12-step plan and every other planning figure in §3 are the stub's. The
@@ -190,7 +190,7 @@ an absolute path into a `.toolchain/` directory that is gitignored and not in th
 tree. Three of the repository's own statements about this disagree —
 `cold-start-a0/A0_REPORT.md` §5 and §6.5 say "still not connected", its §8 item 4
 says FD "could not be built (three failed compiler attempts)", and
-`BLOCKER_FAST_DOWNWARD.md` and `STATUS.md` record the successful install dated
+`BLOCKER_FAST_DOWNWARD.md` and `cold-start-a0/STATUS.md` record the successful install dated
 2026-07-28. The install is the latest. None of the three was edited, as no report
 in this repository is; where they disagree the paper cites all of them and says
 which is later.

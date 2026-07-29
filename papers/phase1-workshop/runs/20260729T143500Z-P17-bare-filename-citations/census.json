@@ -1,18 +1,6 @@
 {
  "occurrences": [
   {
-   "section": "00_abstract.md",
-   "line": 24,
-   "token": "PAPER.md",
-   "n_candidates": 1
-  },
-  {
-   "section": "00_abstract.md",
-   "line": 25,
-   "token": "assemble.py",
-   "n_candidates": 1
-  },
-  {
    "section": "01_intro.md",
    "line": 8,
    "token": "Theoria.md",
@@ -47,12 +35,6 @@
    "line": 108,
    "token": "Theoria.md",
    "n_candidates": 1
-  },
-  {
-   "section": "01_intro.md",
-   "line": 198,
-   "token": "THEORIZE_LOG.md",
-   "n_candidates": 6
   },
   {
    "section": "01_intro.md",
@@ -134,30 +116,6 @@
   },
   {
    "section": "03_a0.md",
-   "line": 8,
-   "token": "raw_trace.jsonl",
-   "n_candidates": 39
-  },
-  {
-   "section": "03_a0.md",
-   "line": 16,
-   "token": "THEORIZE_LOG.md",
-   "n_candidates": 6
-  },
-  {
-   "section": "03_a0.md",
-   "line": 38,
-   "token": "THEORIZE_LOG.md",
-   "n_candidates": 6
-  },
-  {
-   "section": "03_a0.md",
-   "line": 87,
-   "token": "THEORIZE_LOG.md",
-   "n_candidates": 6
-  },
-  {
-   "section": "03_a0.md",
    "line": 130,
    "token": "A0P_REPORT.md",
    "n_candidates": 1
@@ -236,21 +194,9 @@
   },
   {
    "section": "05_a2.md",
-   "line": 144,
-   "token": "probe.py",
-   "n_candidates": 5
-  },
-  {
-   "section": "05_a2.md",
    "line": 149,
    "token": "locate.py",
    "n_candidates": 1
-  },
-  {
-   "section": "05_a2.md",
-   "line": 150,
-   "token": "probe.py",
-   "n_candidates": 5
   },
   {
    "section": "05_a2.md",
@@ -281,12 +227,6 @@
    "line": 6,
    "token": "Theoria.md",
    "n_candidates": 1
-  },
-  {
-   "section": "06_a3_transfer.md",
-   "line": 81,
-   "token": "score_vs_truth.json",
-   "n_candidates": 3
   },
   {
    "section": "07_battery.md",
@@ -320,12 +260,6 @@
   },
   {
    "section": "07_battery.md",
-   "line": 595,
-   "token": "FINDINGS.md",
-   "n_candidates": 9
-  },
-  {
-   "section": "07_battery.md",
    "line": 643,
    "token": "CLAUDE.md",
    "n_candidates": 1
@@ -341,12 +275,6 @@
    "line": 93,
    "token": "Theoria.md",
    "n_candidates": 1
-  },
-  {
-   "section": "08_exam.md",
-   "line": 136,
-   "token": "leakage.json",
-   "n_candidates": 2
   },
   {
    "section": "10_adjudication.md",
@@ -499,18 +427,6 @@
    "n_candidates": 1
   },
   {
-   "section": "10_adjudication.md",
-   "line": 333,
-   "token": "dividend.json",
-   "n_candidates": 3
-  },
-  {
-   "section": "10_adjudication.md",
-   "line": 429,
-   "token": "MANIFEST.json",
-   "n_candidates": 124
-  },
-  {
    "section": "11_limitations.md",
    "line": 3,
    "token": "Theoria.md",
@@ -578,12 +494,6 @@
   },
   {
    "section": "11_limitations.md",
-   "line": 179,
-   "token": "run_all.py",
-   "n_candidates": 4
-  },
-  {
-   "section": "11_limitations.md",
    "line": 188,
    "token": "fd_real.json",
    "n_candidates": 1
@@ -593,12 +503,6 @@
    "line": 193,
    "token": "BLOCKER_FAST_DOWNWARD.md",
    "n_candidates": 1
-  },
-  {
-   "section": "11_limitations.md",
-   "line": 193,
-   "token": "STATUS.md",
-   "n_candidates": 9
   },
   {
    "section": "11_limitations.md",
@@ -662,22 +566,8 @@
   }
  ],
  "candidates": {
-  "PAPER.md": [
-   "papers/phase1-workshop/PAPER.md"
-  ],
-  "assemble.py": [
-   "papers/phase1-workshop/assemble.py"
-  ],
   "Theoria.md": [
    "Theoria.md"
-  ],
-  "THEORIZE_LOG.md": [
-   "a0-spike/THEORIZE_LOG.md",
-   "cold-start-a0/THEORIZE_LOG.md",
-   "cold-start-a0/prime/THEORIZE_LOG.md",
-   "cold-start-a2/THEORIZE_LOG.md",
-   "cold-start-a3/THEORIZE_LOG.md",
-   "theoria-arm/THEORIZE_LOG.md"
   ],
   "A0_REPORT.md": [
    "cold-start-a0/A0_REPORT.md"
@@ -699,46 +589,13 @@
    "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev08-after-theorize/playbook.dsl",
    "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev09-before-theorize/playbook.dsl"
   ],
-  "raw_trace.jsonl": [
-   "cold-start-a0/artifacts/raw_trace.jsonl",
-   "cold-start-a0/prime/artifacts/raw_trace.jsonl",
-   "cold-start-a0/prime/prime/artifacts/raw_trace.jsonl",
-   "cold-start-a2/artifacts/raw_trace.jsonl",
-   "worldgen/out/worlds/t1-cycler-gate/raw_trace.jsonl",
-   "worldgen/out/worlds/t1-fragile-bridge/raw_trace.jsonl",
-   "worldgen/out/worlds/t1-portal-oneway/raw_trace.jsonl",
-   "worldgen/out/worlds/t1-push-corridor/raw_trace.jsonl",
-   "worldgen/out/worlds/t1-push-open/raw_trace.jsonl",
-   "worldgen/out/worlds/t1-switch-latch/raw_trace.jsonl",
-   "worldgen/out/worlds/t1-switch-toggle/raw_trace.jsonl",
-   "worldgen/out/worlds/t1-tokens-lock/raw_trace.jsonl",
-   "worldgen/out/worlds/t1-walk-maze/raw_trace.jsonl",
-   "worldgen/out/worlds/t2-cycler-lock/raw_trace.jsonl",
-   "worldgen/out/worlds/t2-gravity-push/raw_trace.jsonl",
-   "worldgen/out/worlds/t2-lock-fragile/raw_trace.jsonl",
-   "worldgen/out/worlds/t2-portal-pair/raw_trace.jsonl",
-   "worldgen/out/worlds/t2-portal-paired/raw_trace.jsonl",
-   "worldgen/out/worlds/t2-switch-push/raw_trace.jsonl",
-   "worldgen/out/worlds/t2-unsolvable-nodoor/raw_trace.jsonl",
-   "worldgen/out/worlds/t3-cycler-portal-lock/raw_trace.jsonl",
-   "worldgen/out/worlds/t3-full-house/raw_trace.jsonl",
-   "worldgen/out/worlds/t3-gravity-fragile/raw_trace.jsonl",
-   "worldgen/out/worlds/t3-latch-maze/raw_trace.jsonl",
-   "worldgen/out/worlds/v-1383db02/raw_trace.jsonl",
-   "worldgen/out/worlds/v-29ace70e/raw_trace.jsonl",
-   "worldgen/out/worlds/v-379c937f/raw_trace.jsonl",
-   "worldgen/out/worlds/v-57cfb2b4/raw_trace.jsonl",
-   "worldgen/out/worlds/v-659c9594/raw_trace.jsonl",
-   "worldgen/out/worlds/v-7048ee5e/raw_trace.jsonl",
-   "worldgen/out/worlds/v-707a64ad/raw_trace.jsonl",
-   "worldgen/out/worlds/v-a3446614/raw_trace.jsonl",
-   "worldgen/out/worlds/v-ab7a7d57/raw_trace.jsonl",
-   "worldgen/out/worlds/v-bd2babb4/raw_trace.jsonl",
-   "worldgen/out/worlds/v-c52c42ed/raw_trace.jsonl",
-   "worldgen/out/worlds/v-ce732813/raw_trace.jsonl",
-   "worldgen/out/worlds/v-d2c2b1b9/raw_trace.jsonl",
-   "worldgen/out/worlds/v-eb4c5810/raw_trace.jsonl",
-   "worldgen/out/worlds/v-efe43df1/raw_trace.jsonl"
+  "THEORIZE_LOG.md": [
+   "a0-spike/THEORIZE_LOG.md",
+   "cold-start-a0/THEORIZE_LOG.md",
+   "cold-start-a0/prime/THEORIZE_LOG.md",
+   "cold-start-a2/THEORIZE_LOG.md",
+   "cold-start-a3/THEORIZE_LOG.md",
+   "theoria-arm/THEORIZE_LOG.md"
   ],
   "A0P_REPORT.md": [
    "cold-start-a0/prime/A0P_REPORT.md"
@@ -755,38 +612,11 @@
   "gen_lean.py": [
    "theory-compiler/src/theory_compiler/generators/gen_lean.py"
   ],
-  "probe.py": [
-   "arc-recon/cascade/probe.py",
-   "cold-start-a2/a2pipeline/probe.py",
-   "theoria-arm/inner/probe.py",
-   "theory-compiler/runs/20260728T102343Z-c7/compat/probe.py",
-   "verify-lab/negctl/probe.py"
-  ],
   "locate.py": [
    "cold-start-a2/a2pipeline/locate.py"
   ],
-  "score_vs_truth.json": [
-   "cold-start-a0/artifacts/score_vs_truth.json",
-   "cold-start-a3/artifacts/score_vs_truth.json",
-   "cold-start-a3/runs/p-17/score_vs_truth.json"
-  ],
-  "FINDINGS.md": [
-   "engine-rig/runs/20260729T072000Z-E13-engine-section-numbers/FINDINGS.md",
-   "exam/runs/20260728T151000Z-V7-exam-stress-fanout/FINDINGS.md",
-   "exam/runs/20260729T082000Z-V8-judge-trust-audit/FINDINGS.md",
-   "figures/runs/20260728T110000Z-P8-billshape-pipeline/FINDINGS.md",
-   "papers/phase1-workshop/runs/20260728T115500Z-P9/FINDINGS.md",
-   "papers/phase1-workshop/runs/20260728T151000Z-P11-battery-section-refresh/FINDINGS.md",
-   "papers/phase1-workshop/runs/20260729T111500Z-P15-capability-column/FINDINGS.md",
-   "theoria-arm/runs/20260728T210000Z-a3-level-boundary/FINDINGS.md",
-   "theoria-arm/runs/20260729T013000Z-A11/FINDINGS.md"
-  ],
   "mark.py": [
    "exam/grading/mark.py"
-  ],
-  "leakage.json": [
-   "exam/artifacts/leakage.json",
-   "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/leakage.json"
   ],
   "SURVEY-solver-status.md": [
    "papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/SURVEY-solver-status.md"
@@ -855,137 +685,6 @@
   "p13_fd_dividend.py": [
    "engine-rig/tools/p13_fd_dividend.py"
   ],
-  "dividend.json": [
-   "engine-rig/runs/20260728T072633Z-E2-fd-ladder-bench/dividend.json",
-   "engine-rig/runs/20260728T191530Z-E6-engine-dividend/dividend.json",
-   "engine-rig/runs/p13-fd-real/dividend.json"
-  ],
-  "MANIFEST.json": [
-   "a0-spike/runs/20260728T040057Z-c2/MANIFEST.json",
-   "ablation-arm/runs/20260728T130500Z-A4a-ablation-build/MANIFEST.json",
-   "ablation-arm/runs/20260728T153307Z-bus2-ablation-readonly/MANIFEST.json",
-   "ablation-arm/runs/20260728T153648Z-a4b-ablation-calibrate/MANIFEST.json",
-   "ablation-arm/runs/20260728T191437Z-A9-readonly-baseline/MANIFEST.json",
-   "arc-recon/runs/20260728T075047Z-S2-canary-schedule/MANIFEST.json",
-   "arc-recon/runs/20260728T092720Z-S5-phase1-close/MANIFEST.json",
-   "arc-recon/runs/20260728T150228Z-S10-invariant-on-resource/MANIFEST.json",
-   "arc-recon/runs/20260729T0630Z-S22-billing-qualification/MANIFEST.json",
-   "arc-recon/runs/P-11/MANIFEST.json",
-   "baseline-arms/runs/20260728T103135Z-a7/MANIFEST.json",
-   "baseline-arms/schema_traces/MANIFEST.json",
-   "battery/runs/20260728T061147Z-v3/MANIFEST.json",
-   "battery/runs/20260729T021247Z-V9-battery-gaming-audit/MANIFEST.json",
-   "battery/runs/20260729T025515Z-V18-battery-prereg-check/MANIFEST.json",
-   "battery/runs/P-14/MANIFEST.json",
-   "browser-ops/runs/MANIFEST.json",
-   "cold-start-a3/runs/20260728T1800Z-A6-transfer-protocol/MANIFEST.json",
-   "cold-start-a3/runs/p-17/MANIFEST.json",
-   "engine-rig/runs/20260728T072633Z-E2-fd-ladder-bench/MANIFEST.json",
-   "engine-rig/runs/20260728T141724Z-E5-cert-recheck/MANIFEST.json",
-   "engine-rig/runs/20260728T150713Z-E7-deadlock-claim-audit/MANIFEST.json",
-   "engine-rig/runs/20260728T150713Z-E7-deadlock-claim-audit/attacks/verify/admissible/MANIFEST.json",
-   "engine-rig/runs/20260728T164556Z-E9-engine-paper-table/MANIFEST.json",
-   "engine-rig/runs/20260728T191530Z-E6-engine-dividend/MANIFEST.json",
-   "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/MANIFEST.json",
-   "engine-rig/runs/20260729T020000Z-E16-verdict-must-gate/MANIFEST.json",
-   "engine-rig/runs/20260729T034043Z-E17-held-out-validation/MANIFEST.json",
-   "engine-rig/runs/20260729T044500Z-E15-solver-status-bit/MANIFEST.json",
-   "engine-rig/runs/20260729T072000Z-E13-engine-section-numbers/MANIFEST.json",
-   "engine-rig/runs/20260729T080000Z-C11-tool-failure-as-truth/MANIFEST.json",
-   "engine-rig/runs/20260729T143000Z-C10-unsolvable-proof-canon/MANIFEST.json",
-   "engine-rig/runs/20260729T160000Z-E19-merge-clean-but-broken/MANIFEST.json",
-   "exam/handover_bundles/tier1_manual/MANIFEST.json",
-   "exam/handover_bundles/tier2_manual_playbook/MANIFEST.json",
-   "exam/runs/20260728T090621Z-V2-exam-on-worldgen/MANIFEST.json",
-   "exam/runs/20260728T105500Z-V4-exam-selftest/MANIFEST.json",
-   "exam/runs/20260728T151000Z-V7-exam-stress-fanout/MANIFEST.json",
-   "exam/runs/20260728T202101Z-V11-handover-auto/MANIFEST.json",
-   "exam/runs/20260728T202540Z-V11-handover-auto-r2/MANIFEST.json",
-   "exam/runs/20260729T082000Z-V8-judge-trust-audit/MANIFEST.json",
-   "exam/runs/20260729T082000Z-V8-judge-trust-audit/probe/MANIFEST.json",
-   "exam/runs/p15-rehearsal-01/MANIFEST.json",
-   "figures/runs/20260728T082401Z-P4-figures/MANIFEST.json",
-   "figures/runs/20260728T110000Z-P8-billshape-pipeline/MANIFEST.json",
-   "figures/runs/20260729T012000Z-P13-figure-numbering/MANIFEST.json",
-   "figures/runs/20260729T060000Z-A12-cost-claim-sources/MANIFEST.json",
-   "fleet-study/runs/20260728T151500Z-S17/MANIFEST.json",
-   "fleet-study/runs/20260728T212800Z-S17/MANIFEST.json",
-   "fleet-study/runs/20260728T233850Z-S17/MANIFEST.json",
-   "fleetkit/runs/20260729T0230Z-S18/MANIFEST.json",
-   "freeze/MANIFEST.json",
-   "freeze/runs/20260728T090958Z-S4-freeze/MANIFEST.json",
-   "freeze/runs/20260729T142500Z-S4-N3-N4/MANIFEST.json",
-   "fuzzlab/runs/20260728T085448Z-E4-property-fuzz/MANIFEST.json",
-   "fuzzlab/runs/20260728T152000Z-V10-fuzz-mutation-power/MANIFEST.json",
-   "fuzzlab/runs/20260728T161127Z-V13-audit-the-published-surface/MANIFEST.json",
-   "monitor/runs/20260728T143255Z-S1-quota-auto-exit/MANIFEST.json",
-   "monitor/runs/20260728T145419Z-S12-quota-hold-tests/MANIFEST.json",
-   "monitor/runs/20260728T151500Z-S14-gates-for-all/MANIFEST.json",
-   "monitor/runs/20260728T193000Z-S13-verify-gate-enforced/MANIFEST.json",
-   "monitor/runs/20260729T0225Z-S25/MANIFEST.json",
-   "monitor/runs/20260729T0700Z-S21/MANIFEST.json",
-   "monitor/runs/20260729T0730Z-S26/MANIFEST.json",
-   "monitor/runs/20260729T0800Z-S19/MANIFEST.json",
-   "monitor/runs/20260729T0830Z-S16/MANIFEST.json",
-   "monitor/runs/20260729T0830Z-S20/MANIFEST.json",
-   "monitor/runs/20260729T1015Z-S27-release/MANIFEST.json",
-   "monitor/runs/20260729T1050Z-S28-claim-warns-on-existing-branch/MANIFEST.json",
-   "papers/phase1-workshop/runs/20260728T092517Z-P6/MANIFEST.json",
-   "papers/phase1-workshop/runs/20260728T102014Z-P7/MANIFEST.json",
-   "papers/phase1-workshop/runs/20260728T115500Z-P9/MANIFEST.json",
-   "papers/phase1-workshop/runs/20260728T151000Z-P11-battery-section-refresh/MANIFEST.json",
-   "papers/phase1-workshop/runs/20260728T173000Z-P12-paper-multi-review/MANIFEST.json",
-   "papers/phase1-workshop/runs/20260729T100500Z-P7-P14-battery-blind-round/MANIFEST.json",
-   "papers/phase1-workshop/runs/20260729T101500Z-P4-P16-e06-contradiction/MANIFEST.json",
-   "papers/phase1-workshop/runs/20260729T111500Z-P15-capability-column/MANIFEST.json",
-   "papers/phase1-workshop/runs/20260729T124600Z-P16-uncited-number-gate/MANIFEST.json",
-   "papers/phase1-workshop/runs/20260729T125500Z-P13-paper-intro-abstract/MANIFEST.json",
-   "papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/MANIFEST.json",
-   "proxy/runs/20260728T083000Z-s3/MANIFEST.json",
-   "proxy/runs/20260728T134112Z-S9-contract-change-protocol/MANIFEST.json",
-   "proxy/runs/20260728T151500Z-S15-ledger-hashchain/MANIFEST.json",
-   "proxy/runs/20260729T010000Z-A10/MANIFEST.json",
-   "proxy/runs/20260729T0615Z-S7-ledger-hashchain/MANIFEST.json",
-   "proxy/runs/20260729T1020Z-S27-credential/MANIFEST.json",
-   "proxy/runs/p9-shell-harden/MANIFEST.json",
-   "release/runs/20260728T140000Z-P5/MANIFEST.json",
-   "release/runs/20260728T150434Z-R2-release-licence/MANIFEST.json",
-   "release/runs/20260728T212958Z-S23/MANIFEST.json",
-   "release/runs/20260728T234923Z-S23/MANIFEST.json",
-   "theoria-arm/runs/20260728T012311Z-g50t-first-contact-aborted/MANIFEST.json",
-   "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage/MANIFEST.json",
-   "theoria-arm/runs/20260728T012311Z-g50t-first-contact-salvage2/MANIFEST.json",
-   "theoria-arm/runs/20260728T014402Z-g50t-first-contact-aborted/MANIFEST.json",
-   "theoria-arm/runs/20260728T014402Z-g50t-first-contact-salvage/MANIFEST.json",
-   "theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json",
-   "theoria-arm/runs/20260728T015354Z-g50t-first-contact-salvage/MANIFEST.json",
-   "theoria-arm/runs/20260728T141546Z-S8-provenance-backfill/MANIFEST.json",
-   "theoria-arm/runs/20260728T152910Z-a3-desk-gate/MANIFEST.json",
-   "theoria-arm/runs/20260728T152930Z-a3-turn-series/MANIFEST.json",
-   "theoria-arm/runs/20260728T210000Z-a3-level-boundary/MANIFEST.json",
-   "theoria-arm/runs/20260728T233900Z-A3-campaign-devpile/MANIFEST.json",
-   "theoria-arm/runs/20260728T233900Z-A3-campaign-devpile/rehearsal/MANIFEST.json",
-   "theoria-arm/runs/20260729T013000Z-A11/MANIFEST.json",
-   "theoria-arm/runs/20260729T080000Z-E14-crash-is-not-a-finding/MANIFEST.json",
-   "theoria-arm/runs/preflight-20260728T012031Z/MANIFEST.json",
-   "theoria-arm/runs/preflight-20260728T012057Z/MANIFEST.json",
-   "theory-compiler/handover_packages/a0-cart/MANIFEST.json",
-   "theory-compiler/handover_packages/a0-sokoban2/MANIFEST.json",
-   "theory-compiler/runs/20260728T080019Z-C4-deadlock-lean/MANIFEST.json",
-   "theory-compiler/runs/20260728T102343Z-c7/MANIFEST.json",
-   "theory-compiler/runs/20260728T134022Z-C8-handover-package/MANIFEST.json",
-   "theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary/MANIFEST.json",
-   "theory-compiler/runs/20260728T173400Z-C9-mover-identity/MANIFEST.json",
-   "verify-lab/runs/20260728T152000Z-V11-negative-control-census/MANIFEST.json",
-   "verify-lab/runs/20260729T041500Z-V14-standing-negative-control-probe/MANIFEST.json",
-   "verify-lab/runs/20260729T120000Z-V15-census-sampling-frame/MANIFEST.json",
-   "verify-lab/runs/20260729T180000Z-V17-pin-the-partial-verdict/MANIFEST.json",
-   "worldgen/runs/20260728T081713Z-C1-worldgen/MANIFEST.json",
-   "worldgen/runs/20260728T134933Z-C6-worldgen-mutate/MANIFEST.json",
-   "worldgen/runs/20260728T153030Z-V12-worldgen-gate-deaf/MANIFEST.json",
-   "worldgen/runs/20260728T172500Z-V16-determinism-has-no-caller/MANIFEST.json",
-   "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/MANIFEST.json"
-  ],
   "theory.dsl": [
    "a0-spike/theory/theory.dsl",
    "cold-start-a0/theory/theory.dsl",
@@ -1001,28 +700,11 @@
    "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev08-after-theorize/theory.dsl",
    "theoria-arm/runs/20260728T015354Z-g50t-first-contact/books/snapshots/rev09-before-theorize/theory.dsl"
   ],
-  "run_all.py": [
-   "cold-start-a0/run_all.py",
-   "cold-start-a2/run_all.py",
-   "cold-start-a3/run_all.py",
-   "engine-rig/tools/run_all.py"
-  ],
   "fd_real.json": [
    "cold-start-a0/artifacts/fd_real.json"
   ],
   "BLOCKER_FAST_DOWNWARD.md": [
    "cold-start-a0/BLOCKER_FAST_DOWNWARD.md"
-  ],
-  "STATUS.md": [
-   "ablation-arm/STATUS.md",
-   "baseline-arms/STATUS.md",
-   "battery/STATUS.md",
-   "cold-start-a0/STATUS.md",
-   "engine-rig/STATUS.md",
-   "exam/STATUS.md",
-   "proxy/STATUS.md",
-   "theoria-arm/STATUS.md",
-   "theory-compiler/STATUS.md"
   ]
  }
 }

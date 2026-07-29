@@ -346,7 +346,7 @@ Be precise about what was named, because the precision is the whole argument. R-
 names three **directions** — `press_up`, `press_down`, `press_right` — and one
 concrete configuration, "drive the Cart to (2,2) and push DOWN into an unpressed
 Button". It does not enumerate the coordinate pairs; the phrase "the three pairs
-R-05 named" appears in `THEORIZE_LOG.md`'s seal section, and `A0_REPORT.md` §2
+R-05 named" appears in `cold-start-a0/THEORIZE_LOG.md`'s seal section, and `A0_REPORT.md` §2
 makes the same gloss in different words — both written at M6 *after* the score
 existed, and this paper does not inherit either as if it were the
 pre-registration. The claim that survives is still the one
@@ -628,7 +628,7 @@ from the Phase 3 claim menu.
 A0 is a self-built world, not a benchmark task. `cold-start-a0/A0_REPORT.md` §1
 records what was built at each milestone: a 9×9 arena containing a Cart, a
 Button, a Door and a Portal, **59 reachable states**, walked by a deterministic
-explorer into a **276-frame** `raw_trace.jsonl` (M1). The world's ground truth
+explorer into a **276-frame** `cold-start-a0/artifacts/raw_trace.jsonl` (M1). The world's ground truth
 exists as a file and was sealed — `cold-start-a0/THEORIZE_LOG.md` stamps the
 first read at M6, after M4 and M5 were green — M5 being the unsolvable-variant
 milestone, not a planning stage.
@@ -636,7 +636,7 @@ milestone, not a planning stage.
 The pipeline over that trace is the framework's, run end to end: board
 extraction, then `mdl_segmenter`, multi-track CEGIS, `zero_space` and
 `probe_frontier`, producing **29 schema-valid candidates** (M2;
-`cold-start-a0/artifacts/candidates.jsonl`. `THEORIZE_LOG.md`'s Round 0 opens on
+`cold-start-a0/artifacts/candidates.jsonl`. `cold-start-a0/THEORIZE_LOG.md`'s Round 0 opens on
 28 — it counts the 28 it adjudicated, the 29th row being a `plan`); then LLM
 adjudication of every candidate into `cold-start-a0/theory/theory.dsl` — **3 objects, 7 rules,
 2 invariants, 1 pending theorem**, reasoning recorded in
@@ -658,7 +658,7 @@ is unflattering: the manual was revised **zero** times by certify, and every
 iteration that did happen was in the compiler.
 
 The eighteenth entry is worth a sentence, because an earlier draft of this
-figure counted it. `THEORIZE_LOG.md` records **no verdict** for probe P-03; the
+figure counted it. `cold-start-a0/THEORIZE_LOG.md` records **no verdict** for probe P-03; the
 figure marks it `verdict-absent` and does not count it as adjudicated, where the
 paper's own earlier figure script had filled the gap with the placeholder string
 `"see body"` and counted it eighteen. The count is seventeen. The disagreement,
@@ -707,7 +707,7 @@ vanishes and 87 appears, because the Cart stands constantly adjacent to the
 Button; the uniform-colour operator gave **3 tracks**. Script bits: **6511 vs
 4423**. The framework's own criterion picked the right operator with no thumb on
 the scale. (Those are the figures in `cold-start-a0/A0_REPORT.md` §3 and
-`THEORIZE_LOG.md` O-01. `cold-start-a0/artifacts/engines_report.json` has since
+`cold-start-a0/THEORIZE_LOG.md` O-01. `cold-start-a0/artifacts/engines_report.json` has since
 moved on — it now reports 5704 bits over 6 tracks, with 6511/90 demoted to
 `reidentification.*_before` — so the artefact and the report disagree, and the
 paper quotes the report the adjudication was actually made from.)
@@ -1232,13 +1232,13 @@ and the plate never shows the ledger's own 8/8 summary.
 
 Truth is the referee throughout and reaches the manual only as frames: `cold-start-a2/a2pipeline/refute.py`
 writes the world's solved episode out as a four-field trace, and the world is
-reached only through `probe.py`'s `Environment` — actions in, frames out. No
+reached only through `cold-start-a2/a2pipeline/probe.py`'s `Environment` — actions in, frames out. No
 theorizing step reads `cold-start-a2/artifacts/ground_truth.json`, and nothing reads
 `env._state`.
 
 That is the defensible form of the discipline, and it is weaker than the form
 `cold-start-a2/DECISIONS.md` D-A2-010 states. D-A2-010 says `locate.py` and
-`probe.py` "import no world module at all"; they do —
+`cold-start-a2/a2pipeline/probe.py` "import no world module at all"; they do —
 `cold-start-a2/a2pipeline/probe.py:59` is `from a2world import a2_world`, used to
 construct the `Environment` at line 108, and `locate.py:36` imports
 `a2world.ground_truth`, which pulls the world transitively. The isolation is
@@ -1450,7 +1450,7 @@ not a held-out split — A3 has no held-out set.
 
 **And the control scores the same.** The third row of that artefact is "the
 control arm's manual, induced from level 2's own sweep", and it is also right on
-**252 of 252** (`score_vs_truth.json`, `results[2]`, `cold-start-a3/theory/generated_l2_scratch/`).
+**252 of 252** (`cold-start-a3/artifacts/score_vs_truth.json`, `results[2]`, `cold-start-a3/theory/generated_l2_scratch/`).
 Earlier drafts of this section reported the carried manual's 252/252 and did not
 print the control's, which made an undiscriminating number look like the result.
 It is not: **on accuracy the two arms are tied at ceiling, and this measurement
@@ -2180,7 +2180,7 @@ compare capability rather than economics, raise the action budget first, and thi
 envelope knows nothing about the variance in that regime. The arithmetic behind it
 is in `theoria-arm/runs/20260728T210000Z-a3-level-boundary/`: the first level of
 `g50t` takes 78 successful actions against an authorised budget of 40 per level
-(`FINDINGS.md`; the a7 envelope's per-cell figure is 30). **Neither budget buys the
+(`theoria-arm/runs/20260728T210000Z-a3-level-boundary/FINDINGS.md`; the a7 envelope's per-cell figure is 30). **Neither budget buys the
 first level**, so the column is not a measurement that came back
 empty — it is a measurement that was never affordable.
 
@@ -2377,7 +2377,7 @@ section:
 > does not run, and it fails in the direction that looks like success.
 
 The repair added label derivation from the key, and it did not fully close the
-hole: `leakage.json` records `label_sets_checked: []` for the handover and
+hole: `exam/artifacts/leakage.json` records `label_sets_checked: []` for the handover and
 adaptation papers, so the positional and metadata checks still run on nothing for
 two of the four. The directory's own reading is the one we adopt — "the static
 checks are necessary and cheap, and the adversarial reader is the one that found
@@ -2984,7 +2984,7 @@ recorded in its place — and the retraction was carried into the digest with it
 reason: the retraction itself needs a record.
 
 **The retraction is itself incomplete.** A downstream worker re-opened it on a
-different mechanism: `dividend.json` is written by `json.dump` *before* the
+different mechanism: `engine-rig/runs/p13-fd-real/dividend.json` is written by `json.dump` *before* the
 human-readable renderer is called, so in the double-crash scenario the misleading
 field did reach the JSON artefact regardless; the `%d` crash protected only the
 prose. The repair therefore does not rely on the crash
@@ -3080,7 +3080,7 @@ list them. They are the primary evidence for six work items and for this section
 They are therefore cited here through byte-verbatim copies committed into this
 paper's run directory
 (`papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/`,
-with their origin and sha256 recorded in the run's `MANIFEST.json`), and the line
+with their origin and sha256 recorded in the run's `papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/MANIFEST.json`), and the line
 references in this section are line numbers in those copies. Citing a path that
 resolves on one laptop is the documentary form of the error this section is
 about: a claim whose support cannot be reached by the person reading the claim.
@@ -3293,7 +3293,7 @@ Fast Downward.** Fast Downward *was* built and wired into A0/A0′ and agrees wi
 the stub on all three instances including the UNSAT variant, with no caller code
 changed (`cold-start-a0/BLOCKER_FAST_DOWNWARD.md`,
 `cold-start-a0/artifacts/fd_real.json`, `cold-start-a0/STATUS.md`) — but that is
-a separate conformance artefact. The reproducible pipeline (`run_all.py`,
+a separate conformance artefact. The reproducible pipeline (`cold-start-a0/run_all.py`,
 `prime.run_prime`) calls `solve(..., prefer="stub")` **on purpose**, so its
 checked-in artefacts stay byte-identical whether or not a planner is installed.
 §3.1's 12-step plan and every other planning figure in §3 are the stub's. The
@@ -3307,7 +3307,7 @@ an absolute path into a `.toolchain/` directory that is gitignored and not in th
 tree. Three of the repository's own statements about this disagree —
 `cold-start-a0/A0_REPORT.md` §5 and §6.5 say "still not connected", its §8 item 4
 says FD "could not be built (three failed compiler attempts)", and
-`BLOCKER_FAST_DOWNWARD.md` and `STATUS.md` record the successful install dated
+`BLOCKER_FAST_DOWNWARD.md` and `cold-start-a0/STATUS.md` record the successful install dated
 2026-07-28. The install is the latest. None of the three was edited, as no report
 in this repository is; where they disagree the paper cites all of them and says
 which is later.

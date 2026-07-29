@@ -330,7 +330,7 @@ recorded in its place — and the retraction was carried into the digest with it
 reason: the retraction itself needs a record.
 
 **The retraction is itself incomplete.** A downstream worker re-opened it on a
-different mechanism: `dividend.json` is written by `json.dump` *before* the
+different mechanism: `engine-rig/runs/p13-fd-real/dividend.json` is written by `json.dump` *before* the
 human-readable renderer is called, so in the double-crash scenario the misleading
 field did reach the JSON artefact regardless; the `%d` crash protected only the
 prose. The repair therefore does not rely on the crash
@@ -426,7 +426,7 @@ list them. They are the primary evidence for six work items and for this section
 They are therefore cited here through byte-verbatim copies committed into this
 paper's run directory
 (`papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/`,
-with their origin and sha256 recorded in the run's `MANIFEST.json`), and the line
+with their origin and sha256 recorded in the run's `papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/MANIFEST.json`), and the line
 references in this section are line numbers in those copies. Citing a path that
 resolves on one laptop is the documentary form of the error this section is
 about: a claim whose support cannot be reached by the person reading the claim.

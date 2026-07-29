@@ -78,7 +78,7 @@ not a held-out split — A3 has no held-out set.
 
 **And the control scores the same.** The third row of that artefact is "the
 control arm's manual, induced from level 2's own sweep", and it is also right on
-**252 of 252** (`score_vs_truth.json`, `results[2]`, `cold-start-a3/theory/generated_l2_scratch/`).
+**252 of 252** (`cold-start-a3/artifacts/score_vs_truth.json`, `results[2]`, `cold-start-a3/theory/generated_l2_scratch/`).
 Earlier drafts of this section reported the carried manual's 252/252 and did not
 print the control's, which made an undiscriminating number look like the result.
 It is not: **on accuracy the two arms are tied at ceiling, and this measurement
