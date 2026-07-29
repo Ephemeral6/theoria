@@ -103,6 +103,32 @@ def test_a_path_shaped_token_is_not_satisfied_by_a_bare_identifier(tmp_path):
     assert len(flagged) == 1
 
 
+def test_non_zero_asserts_an_absence_not_a_quantity(tmp_path):
+    """"Three non-zero values exist" was flagged for the `zero` inside `non-`."""
+    flagged, _, _ = scan(
+        tmp_path, "Three non-zero values exist in the tree, all self-built.\n")
+    assert flagged == []
+    # ...but a bare `zero` still is a quantity.
+    flagged, _, _ = scan(tmp_path, "The count moved by zero across the arm.\n")
+    assert len(flagged) == 1
+
+
+def test_a_brace_citation_is_a_citation(tmp_path):
+    """Section 7 cites three sibling artefacts in one token; both checks were blind."""
+    flagged, _, _ = scan(
+        tmp_path,
+        "Three rows carry it — `ablation-arm/artifacts/{a0,a2}/episode.jsonl` "
+        "— each of 41 actions.\n")
+    assert flagged == []
+
+
+def test_brace_expansion_requires_every_sibling_to_resolve():
+    token = "ablation-arm/artifacts/{a0-base,a2-base,a2-charitable}/episode.jsonl"
+    assert len(vp.expand_braces(token)) == 3
+    assert vp.classify(token) == "ok"
+    assert vp.classify("ablation-arm/artifacts/{a0-base,nope}/episode.jsonl") == "BROKEN"
+
+
 # -------------------------------------------------------- the false positives
 
 NOT_CLAIMS = [

@@ -67,7 +67,12 @@ SECTIONS = HERE / "sections"
 # a plausible extension, or ends in a separator. This deliberately misses bare
 # filenames (`PAPER.md`) -- those are the 31 non-repo-relative citations
 # CITECHECK already counted, and they are a style finding, not a broken link.
-PATH_TOKEN = re.compile(r"`([A-Za-z0-9_.\-/]+/[A-Za-z0-9_.\-/]*)`")
+# `{a0-base,a2-base,a2-charitable}` is how section 7 cites three sibling
+# artefacts at once. Without braces and commas in the class the token does not
+# match at all, so the citation was invisible to this check -- it was neither ok
+# nor BROKEN, it simply was not there. Found by check E's triage, and it was
+# check B's blind spot first.
+PATH_TOKEN = re.compile(r"`([A-Za-z0-9_.\-/{},]+/[A-Za-z0-9_.\-/{},]*)`")
 
 # Tokens that look like paths but are not repository paths.
 NOT_A_PATH = re.compile(
@@ -131,9 +136,34 @@ def check_generated() -> tuple[bool, list[str]]:
     return False, notes
 
 
+BRACE = re.compile(r"\{([^{}]*)\}")
+
+
+def expand_braces(token: str) -> list[str]:
+    """`a/{x,y}/c.json` -> [`a/x/c.json`, `a/y/c.json`]; anything else unchanged.
+
+    A brace citation names several sibling artefacts, and it resolves only if
+    every one of them does -- which is the claim the prose is making when it
+    writes them that way.
+    """
+    m = BRACE.search(token)
+    if not m:
+        return [token]
+    out = []
+    for alt in m.group(1).split(","):
+        out.extend(expand_braces(token[:m.start()] + alt.strip() + token[m.end():]))
+    return out
+
+
 def classify(token: str) -> str:
     """ok / RULED / AMBIGUOUS / ELIDED / BROKEN / skip, for one cited path token."""
     if NOT_A_PATH.search(token):
+        return "skip"
+    if "{" in token or "}" in token:
+        verdicts = {classify(t) for t in expand_braces(token)}
+        for worst in ("BROKEN", "ELIDED", "AMBIGUOUS", "RULED", "ok"):
+            if worst in verdicts:
+                return worst
         return "skip"
     if token.startswith(".../") or "/.../" in token:
         # `.../MANIFEST.json` is a typographic elision, not a link. It still
@@ -295,7 +325,7 @@ EXEMPT_SECTIONS = {"00_abstract.md"}
 # 10 cites `SURVEY-solver-status.md:16`, which exists but not at a path a reader
 # resolves. That is a style finding B owns; calling it "uncited" would be false.
 # The trailing `:170-171` is a line anchor, not part of the name.
-CITE_TOKEN = re.compile(r"`([A-Za-z0-9_.\-/]+)(?::\d+(?:[-–]\d+)?)?`")
+CITE_TOKEN = re.compile(r"`([A-Za-z0-9_.\-/{},]+)(?::\d+(?:[-–]\d+)?)?`")
 ARTEFACT_SUFFIX = (
     ".md", ".json", ".jsonl", ".py", ".lean", ".dsl", ".bib",
     ".csv", ".svg", ".txt", ".toml", ".yaml", ".yml", ".sh",
@@ -346,8 +376,10 @@ DIGIT = re.compile(r"(?<![\w.])\d[\d  ]*(?:[  ]\d{3})*(?:\.\d+)?")
 # `zero` carries several of the paper's most important negative results
 # ("moved the unvalidated count by **zero**"). This is also the hole the item's
 # adversarial step names: writing 37 as "thirty-seven" must not buy an evasion.
+# `(?<!non-)` because "three non-zero values exist in the tree" asserts the
+# absence of a quantity, not one. The bare `\b` fired after the hyphen.
 WORDNUM = re.compile(
-    r"\b(?:zero|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|"
+    r"(?<!non-)\b(?:zero|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|"
     r"eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|"
     r"hundred|thousand|million)(?:-(?:one|two|three|four|five|six|seven|eight|"
     r"nine))?\b",
@@ -379,6 +411,17 @@ ADJUDICATED_UNCITED: dict[tuple[str, str], str] = {
         "quoting `cold-start-a0/THEORIZE_LOG.md` L-02. This block draws the "
         "empirical-regularity-versus-proof distinction from it and introduces "
         "no new measurement.",
+    ("07_battery.md", "every δ here is a multiple of 1/16"):
+        "δ is (#greater − #less) over the 4 × 4 cross-arm pairs "
+        "(`battery/audit/stats.py`), so the 1/16 grid and its reachable-value "
+        "count are arithmetic on the n = 4 stated in this same block. −0.562 "
+        "and −0.188 restate rows of §7.2's table, whose preamble cites "
+        "`battery/artifacts/discrimination_arms.json`.",
+    ("07_battery.md", "bill shape's distribution rests on 67 runs"):
+        "A one-sentence restatement of the E2 distribution established four "
+        "lines above, where it carries `battery/artifacts/capability_spectrum.json`, "
+        "set against the empty capability column §7.10a evidences from "
+        "`baseline-arms/runs/20260728T103135Z-a7/envelope.json`.",
 }
 
 
