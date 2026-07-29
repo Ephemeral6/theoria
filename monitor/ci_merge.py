@@ -119,6 +119,33 @@ def branch_tip(branch):
     return out.stdout.strip() if out.returncode == 0 else ""
 
 
+# Holding a branch is a claim that re-running it would reach the same verdict,
+# and that claim is only sound when the verdict was about the branch.
+#
+# `push rejected (race?)` is decided *after* every gate has already passed, by
+# whether master moved between building the worktree and pushing it.  It is a
+# fact about master, not about the branch, so the tip test -- which asks only
+# whether the branch changed -- answers a question nobody asked and parks work
+# that is already green.
+#
+# Measured rather than argued: `c10-unsolvable-proof-canon` was flagged this
+# way at 04:15Z, listed in every HELD line for six hours, and then merged on
+# the first retry with nothing about it changed; `s21-app-session-death` did
+# the same the following cycle.  Two for two.  Retrying a race is how a race is
+# won, and the retry is cheap compared to leaving finished work on the floor.
+#
+# Deliberately narrow: conflicts and red gates stay held, because those really
+# are properties of the branch and re-deriving them costs a worktree and a full
+# gate run.  The hold itself was worth having -- it replaced 169 retries and
+# 915 identical FLAG lines.  What was wrong was only which failures it covers.
+TRANSIENT_REASONS = ("push rejected",)
+
+
+def is_transient(reason):
+    """Did this verdict describe the world around the branch rather than it?"""
+    return any(t in (reason or "") for t in TRANSIENT_REASONS)
+
+
 def last_attempt(branch):
     """What the previous run already tried on this branch, or {} if none.
 
@@ -477,7 +504,8 @@ def main():
             # stale, and that retries immediately.  Skipping is therefore never
             # a way for a fixed branch to stay stuck.
             memo = last_attempt(b)
-            if memo.get("tip") and memo["tip"] == branch_tip(b):
+            if (memo.get("tip") and memo["tip"] == branch_tip(b)
+                    and not is_transient(memo.get("reason"))):
                 held.append((b, memo.get("reason", "?"),
                              memo.get("attempts", "?")))
                 continue
