@@ -285,13 +285,38 @@ def constraint_8(records: List[Dict[str, Any]], run_dir: str) -> Dict[str, Any]:
     # surprise. Stating it this way makes the check strictly stronger than
     # "calls > 0 and surprises == 0", which a long run would pass trivially.
     bootstrap = 1 if calls else 0
-    unexplained = max(0, len(calls) - bootstrap - len(surprises))
+
+    # A retired surprise did not cause a model call, so it must not licence
+    # one. `handled_by` records who closed a surprise; anything closed with
+    # `"retired: ..."` was closed *without* theorizing -- today only by a level
+    # boundary. Counting those in the denominator raises the ceiling on
+    # unexplained calls by one apiece, which is a false negative in exactly the
+    # direction that hides a violation of the arm's central claim: three
+    # boundaries retiring two surprises each would buy six free unexplained
+    # model calls with `holds` still True.
+    #
+    # This was found by an adversarial review while the boundary still retired
+    # surprises. It no longer does (`DECISIONS.md` D-A3-003), so nothing on the
+    # live path reaches this today -- but `Register.retire_pending` still
+    # exists, and an audit that miscounts in the lenient direction is worth
+    # fixing whether or not today's code path trips it. The retired ones are
+    # reported rather than dropped: "how many surprises died at a boundary" is
+    # itself a datum.
+    def _retired(item):
+        return str(item.get("handled_by") or "").startswith("retired:")
+
+    retired = [s for s in surprises if _retired(s)]
+    licensing = [s for s in surprises if not _retired(s)]
+    unexplained = max(0, len(calls) - bootstrap - len(licensing))
 
     return {
         "model_calls": len(calls),
         "calls_by_beat": beats,
         "surprises": len(surprises),
+        "surprises_licensing_a_call": len(licensing),
+        "surprises_retired": len(retired),
         "surprises_by_kind": _histogram(s.get("kind") for s in surprises),
+        "retired_by_kind": _histogram(s.get("kind") for s in retired),
         "calls_at_forbidden_beats": illegal,
         "bootstrap_calls_allowed": bootstrap,
         "calls_beyond_bootstrap": max(0, len(calls) - bootstrap),
@@ -302,6 +327,12 @@ def constraint_8(records: List[Dict[str, Any]], run_dir: str) -> Dict[str, Any]:
             "exists yet for the world to contradict; it is counted as the one "
             "permitted bootstrap call and every later call must be covered by "
             "a surprise."),
+        "retired_note": (
+            "a surprise closed with handled_by='retired: ...' was closed "
+            "without theorizing, so it licences no model call and is excluded "
+            "from the denominator. It is still counted in `surprises` and in "
+            "`surprises_by_kind`, because the seven counts are a record of "
+            "what the world did, not of what was paid for."),
         "note": ("probe design spent no model call: the frontier is computed by "
                  "probe_frontier, which is exact on a deterministic world. "
                  "Constraint 8 permits a call there; this run did not need one."),

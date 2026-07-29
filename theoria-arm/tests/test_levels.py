@@ -905,3 +905,75 @@ def test_winning_the_last_level_does_not_open_an_eighth(tmp_path):
     assert arm.levels.level == 2
     assert os.path.exists(arm.books.problem_path), (
         "a won game keeps the problem that describes the level it won on")
+
+
+def _surprises_file(run_dir, items):
+    os.makedirs(run_dir, exist_ok=True)
+    with open(os.path.join(run_dir, "surprises.jsonl"), "w",
+              encoding="utf-8", newline="\n") as fh:
+        for item in items:
+            fh.write(json.dumps(item, sort_keys=True) + "\n")
+    return run_dir
+
+
+def test_a_retired_surprise_does_not_licence_a_model_call(tmp_path):
+    """The adversarial case the old test never built.
+
+    `constraint_8` never read `handled_by`, so a surprise closed *without*
+    theorizing still raised the ceiling on unexplained calls by one. Three
+    boundaries retiring two each bought six free unexplained model calls with
+    `holds` still True -- a false negative in exactly the direction that hides
+    a violation of the arm's central claim.
+
+    The old pin (`assert audit["surprises"] == 3  # retired items still count`)
+    was run against a ledger with a single model call, where the leniency
+    cannot bite. This builds the case where it does.
+    """
+    from armtools.archive import constraint_8           # noqa: PLC0415
+
+    run_dir = str(tmp_path / "run")
+    _surprises_file(run_dir, [
+        {"seq": 1, "kind": "replay_mismatch", "handled_by": "theorize"},
+        {"seq": 2, "kind": "render_mismatch",
+         "handled_by": "retired: level boundary: level 1 -> 2"},
+        {"seq": 3, "kind": "proof_failure",
+         "handled_by": "retired: level boundary: level 2 -> 3"},
+    ])
+    # 1 bootstrap + 1 genuinely licensed call = 2 explained. The third and
+    # fourth are covered by nothing but the two retirements.
+    ledger = [{"event": "model_call", "run_id": "r", "beat": "theorize"}
+              for _ in range(4)]
+
+    report = constraint_8(ledger, run_dir)
+
+    assert report["surprises"] == 3, "all three stay in the seven counts"
+    assert report["surprises_retired"] == 2
+    assert report["surprises_licensing_a_call"] == 1
+    assert report["calls_not_covered_by_a_surprise"] == 2, (
+        "4 calls - 1 bootstrap - 1 licensing surprise = 2 unexplained; the two "
+        "retirements must not cover them")
+    assert report["holds"] is False, (
+        "this is the violation the leniency used to hide")
+    assert report["retired_by_kind"]["render_mismatch"] == 1
+    assert report["retired_by_kind"]["proof_failure"] == 1
+
+
+def test_retiring_nothing_leaves_the_audit_exactly_as_it_was(tmp_path):
+    """The fix must not make a run without retirements stricter."""
+    from armtools.archive import constraint_8           # noqa: PLC0415
+
+    run_dir = str(tmp_path / "run")
+    _surprises_file(run_dir, [
+        {"seq": 1, "kind": "replay_mismatch", "handled_by": "theorize"},
+        {"seq": 2, "kind": "render_mismatch", "handled_by": None},
+    ])
+    ledger = [{"event": "model_call", "run_id": "r", "beat": "theorize"}
+              for _ in range(3)]
+
+    report = constraint_8(ledger, run_dir)
+    assert report["surprises_retired"] == 0
+    assert report["surprises_licensing_a_call"] == 2, (
+        "a surprise still pending licences a call: it fired, and the desk is "
+        "what answers it")
+    assert report["calls_not_covered_by_a_surprise"] == 0
+    assert report["holds"] is True
