@@ -807,3 +807,43 @@ def test_salvage_survives_a_truncated_json_buffer(binding, pool):
         d.call("p", beat="theorize")
 
     assert spends(pool)[-1]["unpriced"] is True
+
+
+# ------------------- 8. a test may not bill the pool the fleet shares --------
+
+def test_reserving_against_the_tracked_pool_from_pytest_is_refused(caps):
+    """The guard, tested from inside the thing it guards against.
+
+    2 817 of the shared pool's 4 775 actions -- 59% -- were written by pytest:
+    ten `...:pytest-*` campaigns over two days, from tests that called `play()`
+    without a `spend_gate` and got the default, which is the real pool. Every
+    one spent $0.00, so the dollar column stayed clean and nothing looked
+    wrong; what was being consumed was the action ceiling, and a headroom
+    number that is 59% fiction is not a margin.
+
+    This test does what those did -- ask for the default gate while under
+    pytest -- and requires a refusal. `_scratch_policy` is the escape and the
+    other tests in this file use it.
+    """
+    from proxy.spend_gate import SpendGate             # noqa: PLC0415
+
+    with pytest.raises(spend_mod.SpendGateError) as caught:
+        spend_mod.open_binding("theoria-arm:test:g50t-5849a774:would-pollute",
+                               caps, gate=SpendGate())
+
+    assert "pytest" in str(caught.value)
+    assert "scratch" in str(caught.value)
+
+
+def test_the_guard_leaves_a_scratch_pool_alone(tmp_path, caps):
+    """The negative control. A guard that also refuses the correct pattern
+    would just be read as noise and routed around, which is how the original
+    default came to be relied on.
+    """
+    gate = SpendGate(_policy(tmp_path / "scratch.jsonl"))
+    binding = spend_mod.open_binding(
+        "theoria-arm:test:g50t-5849a774:owns-its-pool", caps, gate=gate,
+        expect_pool={"pool": gate.policy.pool,
+                     "ledger_abspath": os.path.abspath(gate.ledger_path)})
+    assert binding is not None
+    binding.release("done")

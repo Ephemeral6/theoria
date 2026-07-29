@@ -851,6 +851,46 @@ class SpendBinding:
         return out
 
 
+def _refuse_the_tracked_pool_under_pytest(gate: SpendGate) -> None:
+    """A test may not reserve against the pool the fleet actually spends from.
+
+    Not a hypothetical. 2 817 of the shared pool's 4 775 recorded actions --
+    59% -- were written by pytest: ten `...:pytest-*` campaigns between
+    2026-07-28T15:35Z and 2026-07-29T11:51Z, from tests that called `play()`
+    without a `spend_gate` and so silently got the default, which is the real
+    one. The dollars were $0.00 throughout, which is exactly why nobody caught
+    it; the action ceiling is what was being eaten, and a headroom figure that
+    is 59% fiction is not a safety margin.
+
+    `open_binding` already refuses `theoria:r-` derived campaign names for a
+    smaller version of this problem, so this is that guard's shape applied to
+    the larger one. The escape is the same as it is there: pass an explicit
+    scratch gate. `harness.run._scratch_policy` builds one, and every test that
+    needs a pool should use it -- a test's pool should be a file it owns and
+    deletes, not the one that decides whether the sealed confirmation run can
+    still afford to happen.
+    """
+    if not os.environ.get("PYTEST_CURRENT_TEST"):
+        return
+    try:
+        tracked = one_true_pool().get("ledger_abspath")
+        actual = gate.fingerprint().get("ledger_abspath")
+    except Exception:                                  # noqa: BLE001
+        # Never let the guard itself become the reason a run cannot start.
+        return
+    if not tracked or not actual:
+        return
+    if os.path.normcase(str(tracked)) != os.path.normcase(str(actual)):
+        return
+    raise SpendGateError(
+        "refusing to reserve against the tracked spend pool from inside "
+        "pytest (%s). This is how 59%% of the pool's action count became test "
+        "fiction: a test called through to the default gate, spent $0.00, and "
+        "nothing looked wrong. Build a scratch pool the test owns -- see "
+        "`harness.run._scratch_policy` -- and pass it as `spend_gate=`, with "
+        "`expect_pool=` naming it." % actual)
+
+
 def open_binding(campaign: str, caps: Caps, *,
                  holder: Optional[Dict[str, Any]] = None,
                  gate: Optional[SpendGate] = None,
@@ -876,6 +916,7 @@ def open_binding(campaign: str, caps: Caps, *,
             % (campaign,))
 
     gate = gate if gate is not None else SpendGate()
+    _refuse_the_tracked_pool_under_pytest(gate)
     fingerprint = assert_one_true_pool(gate, expect_pool)
 
     holder = dict(holder or {})

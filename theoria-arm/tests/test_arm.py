@@ -683,6 +683,24 @@ def test_the_colour_hint_is_read_off_the_object_declaration():
     assert found == {"Cart": 6, "Door": 5, "Ghost": None}
 
 
+
+def _own_pool(tmp_path):
+    """A spend pool this test owns, so the fleet's does not get billed.
+
+    `play()` defaults `spend_gate=None`, which resolves to the *real* pool --
+    the one every session shares and the one whose action ceiling decides
+    whether the sealed confirmation run can still afford to happen. Tests that
+    forgot this wrote 2 817 of its 4 775 actions. The dollars were $0.00, which
+    is why it went unnoticed for two days.
+    """
+    from harness import run as run_mod                 # noqa: PLC0415
+    from proxy.spend_gate import SpendGate             # noqa: PLC0415
+
+    policy = run_mod._scratch_policy(str(tmp_path / "scratch-pool.jsonl"))
+    gate = SpendGate(policy)
+    return gate, {"pool": policy.pool,
+                  "ledger_abspath": os.path.abspath(policy.ledger_path)}
+
 # --------------------------------------------------------- the whole shell
 def test_the_shell_turns_end_to_end_against_the_mock(tmp_path):
     """No key, no network, no model call, no quota -- and a full ledger."""
@@ -726,8 +744,10 @@ def test_the_shell_turns_end_to_end_against_the_mock(tmp_path):
                           budget_actions=6, offline=True)
 
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
+        gate, expect = _own_pool(tmp_path)
         summary = play(game, slug, factory, env_upstream=mock.base_url,
                        env_key=DEFAULT_KEY, require_key=False,
+                       spend_gate=gate, expect_pool=expect,
                        ledger_path=ledger_path)
 
     assert summary["budget"]["actions_ok"] == 6
@@ -767,8 +787,10 @@ def test_the_scorecard_action_count_matches_the_ledgers_successes(tmp_path):
                           budget_actions=4, offline=True)
 
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
+        gate, expect = _own_pool(tmp_path)
         summary = play(game, slug, factory, env_upstream=mock.base_url,
                        env_key=DEFAULT_KEY, require_key=False,
+                       spend_gate=gate, expect_pool=expect,
                        ledger_path=str(tmp_path / "ledger.jsonl"))
     assert summary["scorecard"]["total_actions"] == summary["budget"]["actions_ok"]
 
@@ -1108,9 +1130,10 @@ def test_an_anonymity_breach_ends_the_run_instead_of_being_filed_as_a_desk_failu
 
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
         with pytest.raises(AnonymityBreach):
+            gate, expect = _own_pool(tmp_path)
             play(game, "pytest-anon-" + os.path.basename(str(tmp_path)),
                  factory, env_upstream=mock.base_url, env_key=DEFAULT_KEY,
-                 require_key=False,
+                 require_key=False, spend_gate=gate, expect_pool=expect,
                  ledger_path=str(tmp_path / "ledger.jsonl"))
 
     assert seen.get("called"), "the desk was never reached; the test proved nothing"
