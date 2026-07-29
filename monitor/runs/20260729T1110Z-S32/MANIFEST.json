@@ -1,0 +1,14 @@
+{
+  "agent": "RES-4",
+  "base_commit": "96120db7",
+  "branch": "agent/s32-close-gate-gap",
+  "lane": "infra",
+  "prompt_id": "S32-S32-close-the-gate-gap",
+  "survey_after": {
+    "gated": 23,
+    "tests_only": 2,
+    "ungated": 0
+  },
+  "territory": "monitor",
+  "utc": "2026-07-29T11:03:19Z"
+}
