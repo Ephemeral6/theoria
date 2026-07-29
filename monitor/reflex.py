@@ -19,6 +19,7 @@ import os
 import subprocess
 import sys
 import time
+import childio  # noqa: E402  (per-child decoding, see its docstring)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -39,7 +40,24 @@ def rlog(msg):
 
 
 def run(args, timeout=2400):
+    """Everything this file runs is Python -- dispatch, board, quota -- so UTF-8.
+
+    It was the host locale, cp936, and the children print Chinese. That is the
+    same mismatch that reported eight live workers as dead, sitting in the one
+    module whose job is deciding which workers are dead. `errors="replace"`
+    matters more than the codec: a reaper that raises while decoding its child
+    is a reaper that did not run, and nothing downstream would say so.
+
+    The single `schtasks` call in this file uses `run_console` instead.
+    """
     return subprocess.run(args, cwd=ROOT, capture_output=True, text=True,
+                          encoding="utf-8", errors="replace", timeout=timeout)
+
+
+def run_console(args, timeout=2400):
+    """Windows console built-ins emit the console code page, not UTF-8."""
+    return subprocess.run(args, cwd=ROOT, capture_output=True, text=True,
+                          encoding=childio._CONSOLE, errors="replace",
                           timeout=timeout)
 
 
@@ -165,7 +183,7 @@ def main():
             for wid, entry in reg.items():
                 if not wid.startswith("W-") or entry.get("reaped"):
                     continue
-                st = run(["schtasks", "/Query", "/TN",
+                st = run_console(["schtasks", "/Query", "/TN",
                           "TheoriaAgent-%s" % wid, "/FO", "LIST"])
                 if st.returncode == 0 and "Running" in st.stdout:
                     live_workers += 1
