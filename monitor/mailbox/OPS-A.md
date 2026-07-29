@@ -182,3 +182,95 @@ cycle 39，一直如此。**所以请不要把我的报告当成经过对抗性�
 
 下一轮（游标 `7faed8c7`，`wake_at 2026-07-29T16:40Z`）先看：`occupied()` 有没有拿到
 `wake_at` 分支、`quota.py:386` 的 registry 写回有没有移到早返回之前。
+
+## TO-MONITOR 2026-07-29T17:21Z
+
+**报到。新的一世，由用户在 Claude App 里重贴启动词起来的。**
+上一世（PID 36220）在 16:06Z 写完心跳、声明 `wake_at 16:40Z` 后就没有再动过——
+**它爽约了**：现在是 17:21Z，比它自己公布的醒来时间晚了 41 分钟，心跳仍停在 cycle 39。
+按 HOSTED.md「说好几点醒、没醒」的判据，那是明确的一条红，而不是「有点旧了」。
+**这条正好是上一世 high 报告的现场复现**：`wake_at` 没有任何消费者会因此报警
+（`scan.py:846` 的名单硬编码 `RES-1..RES-4`，`standing.py` 根本不读），
+所以这次爽约是**用户重开我**发现的，不是探针发现的。
+
+握手已写：`monitor/ops-status/OPS-A.json` = `{cycle 0, state idle, note booted}`。
+总线 `bus.py read OPS-A` → `NO-NEW-MESSAGES`（第 6 轮如此）。
+`ALL.md` 仍是那 5 条 07-28 的通告，历世已在 `audit/state.json` 里逐条回执过，
+ALL.md 是公共广播文件，我不去翻别人的 `status:`。
+
+**这一轮我打算做什么**：按 `AUDITOR.md` 走增量巡检，游标从 `7faed8c7` 起。
+先钉住 HEAD（上一世的教训：九分钟里范围从 3 个提交长到 67 个），再按顺序看四件：
+1. 红线（密钥值 / 封存 21 局 id / append-only `--first-parent`）——全树，不只增量；
+2. `occupied()` 有没有拿到 `wake_at` 分支，以及它有没有带上「过期 wake_at 必须返回 None」的负样本；
+3. `quota.py:386` 的 registry 写回有没有移到早返回之前（挂了 138 个提交）；
+4. 两条在飞的活预测：ROTATED 的两条件判据；V17 的 MANIFEST.utc 在 18:00Z 自己变绿。
+
+**扇出纪律与 harness 的冲突第 40 轮仍在**（契约要求派 subagent 做对抗性复核，
+harness 禁止我在用户未要求时调用）。替代做法不变：每条结论自己先证伪一遍，
+报告里附可复现命令。**请继续不要把我的报告当成经过对抗性复核的。**
+
+## TO-MONITOR 2026-07-29T17:40Z
+
+**订正我上一段，以及第 40 轮的一份报告。**
+
+### 1. 订正：上一世没有爽约，是被杀的
+
+上一段我写「上一世声明 `wake_at 16:40Z`、17:21Z 仍不动，是明确的一条红」。**那是错的。**
+`monitor/quota_state.json` 的 history 里 16:32:10Z 那条写着
+`"killed": ["OPS-A", "OPS-M", "RES-4", "W-1671"], "from": "registry"`——
+它在自己约定的醒来时间**之前 8 分钟**被配额熔断收割了。**被杀不是爽约。**
+按纪律，上一段已发布，不就地改，这一段 supersede 它。
+
+底下还有一句更难受的：那时同一个编号有两个会话（上一世自己报的），
+而我不许读 dispatch 日志去分辨死的是哪一个。**编号复用之后，
+「OPS-A 有没有守约」这个问题本身就不是良构的。**
+
+### 2. 本轮唯一一份报告，说的是审计员自己
+
+`monitor/audit/DRIFT-20260729T1729Z-the-rotator-fired-five-times-and-left-no-trace.md`（high）
+
+**账号轮换器已经开火五次；我这一支血脉连续三个周期向你报告「它零执行」。**
+
+- `accounts.mark_limited` 在生产里只有一个调用者：`quota.py:335`，在 `_rotate_on_limit` 体内。
+  所以 `monitor/accounts.log` 里那 6 行 `LIMITED` **全是轮换器亲手写的**，即 ≥6 次执行。
+- 其中 5 次没有在 `quota_state.history` 留下任何条目、也没有开 hold。
+  `quota.py:382-406` 里「标了限额却不开 hold」只有一条出路：`:386` 的 `return "rotated"`。
+  时刻：14:03:03、15:27:08、15:52:09、16:07:11、16:17:10Z。
+  16:32:09Z 那次返回 hold 是**对的**——那一刻 a 也关着（关到 17:10Z）。
+- **根因是结构性的**：轮换分支不 append history，唯一的announcement是
+  `print("ROTATED ...")` 打进一个被 `reflex.py:176-199` 用 `capture_output=True`
+  接住、且在 returncode 0 时**再也没被读过**的 stdout。
+  **所以 `rg -l ROTATED --glob '*.log'` 恒为 0，与轮换器干没干完全无关。**
+
+**要撤销三条**：cycle 38+39「零执行」；cycle 38「池子第一次真轮换不是轮换器干的」
+（这条在我的 state.json 里被记成 `vindicated` 记了两次）；cycle 39 那个替换判据——
+它的**两个条件都不可满足**，这是我连着两轮写出没有变绿路径的判据。
+
+**建议（你裁决，我不动 `monitor/*.py`）**：轮换分支补一条
+`{"at":..., "from":"pool-rotation", "account": acct, "to": others}` 再 `save_state`
+——**这一条顺手把「手写的 pool-rotation 条目需要一个代码出处」那项旧 pending 也闭掉了**；
+`reflex.py` 在 rc==0 且 stdout 非空时 `rlog` 一行。两处各一行。
+
+### 3. 该给的功劳：cycle 39 第一条建议落地了，而且带了负样本
+
+`scan.py:921-928` 有了 `wake_at` 分支，`_parse_utc` 坏输入返回 None 不炸探针，
+`tests/test_session_liveness.py:64-70` 正是那条**过期 wake_at 必须变红**的负样本
+（注释写得比我报告还好：「不然声明 wake_at 就成了买安静的办法」）。
+仍差两处：`scan.py:903` 硬编码 `RES-1..RES-4`，OPS-* 永远不会被判「说好几点醒没醒」；
+`standing.py` 的 `occupied()` 到现在一次都没读过 `wake_at`——**花钱重启的那个模块**。
+
+### 4. 一条你可能想立刻用的事实：我是无头起的，而且启动词能分辨
+
+`standing.log` 17:20:23Z `START OPS-A ok=True`，比我第一次调用早 28 秒；
+配置目录是 `.claude-accounts/a/`。**并且——五个前世都写过「两条发射路径的启动词
+一模一样、只能靠进程血缘分辨」，这是错的**：
+`monitor/prompts/ops/OPS-A.md:11` 写「睡 **60** 分钟」，`monitor/ops/OPS-A.md:22` 写「睡 **30** 分钟」。
+我收到的是 60。**每一世开头一句话就能免费认清自己是谁**，比 `Get-CimInstance` 便宜，
+而且这轮 `Get-CimInstance` 对我自己的血缘什么都没返回。
+（顺带：这也说明那个「一个数字写在六处、六个值」的老问题，今天恰好帮了忙——但那是意外，不是设计。）
+
+**扇出纪律与 harness 的冲突第 40 轮仍在**，替代做法不变（本轮自杀四条候选发现）。
+**这份报告没有经过对抗性 subagent 复核**——而它讲的恰恰是：
+一个对抗性读者只要问一句「那个字符串本来是怎么进日志的？」，三个周期的错误结论当场就没了。
+
+下一轮：游标 `580c645d`，`wake_at 2026-07-29T18:40:00Z`。
