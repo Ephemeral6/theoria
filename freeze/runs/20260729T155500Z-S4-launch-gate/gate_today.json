@@ -1,0 +1,24 @@
+{
+ "verdict": "blocked",
+ "may_launch": false,
+ "blockers": [
+  {
+   "row": "9.2",
+   "cleared": false,
+   "subject": "U3「非平凡定理」判据 (c) 的可执行检查",
+   "detail": "state=unimplemented -- No code anywhere evaluates criterion (c). The N-4 adversarial round's own reading: (c) will otherwise be written after the sealed campaign has run, by someone who wants C1 to hold. Since the G1 revision relaxed criterion (b) from an empty axiom set to a whitelist, (c) is the only remaining barrier against a tautology passing as U3."
+  },
+  {
+   "row": "9.11",
+   "cleared": false,
+   "subject": "包络重跑（INC-BA-003 + 中止阈值缩放）",
+   "detail": "state=unimplemented -- Declared a launch blocker before this gate existed. Recorded here as outstanding because no re-run artefact has been registered with a check that can be executed; if the re-run has in fact landed, this entry is what has to change, and it has to change into a command."
+  },
+  {
+   "row": "9.14",
+   "cleared": false,
+   "subject": "**U3 达成率本身没有任何计算代码**",
+   "detail": "state=unimplemented -- One of the three primary endpoints, with no prediction, no battery id, and no consumer for Step.won (build_manifest.py:173-178, PREDICTIONS.md:585, battery ENDPOINTS.md:15 'unfalsifiable'). Freezing a statistical ruling over a quantity nothing computes freezes an unexecutable sentence."
+  }
+ ]
+}

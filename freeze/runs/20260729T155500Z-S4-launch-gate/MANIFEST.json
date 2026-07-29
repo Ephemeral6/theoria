@@ -1,0 +1,71 @@
+{
+ "prompt_id": "S4-freeze",
+ "branch": "agent/s4-freeze",
+ "base_commit": "7852ef305bc7c12254a9f15e9362db79b9813529",
+ "utc": "2026-07-29T15:55:00Z",
+ "author": "RES-1",
+ "cycle": 29,
+ "what": "STATS_RULES.md §9's three 开跑前置条件 rows had no executable enforcement anywhere on the tree. Added freeze/launch_gate.py -- a second, fail-closed gate answering only 'may the sealed campaign spend?' -- with a registry that clears a blocker on a demonstrated rejection of a known-bad artefact, not on a sentence. verify.sh gains stage 11: the gate's selftest is a hard failure, its verdict is a note (verify.sh must keep exiting 0 while ⛔ items stand -- that is its stated contract).",
+ "verdict_today": {
+  "may_launch": false,
+  "outstanding": [
+   "9.2",
+   "9.11",
+   "9.14"
+  ]
+ },
+ "selftest": "12/12, both directions (case 1 proves 'clear' is reachable)",
+ "real_file_probes": "R0-R4 in probe_out.txt; R4's first form was my own off-the-cuff criterion-(c) check, which the gate correctly rejected as non-discriminating",
+ "not_closed": [
+  "the gate is not yet called by any path that spends money -- wiring is theoria-arm territory, self-assigned as A16-launch-gate-wired",
+  "a purpose-built liar (a check that answers by filename) still passes; stated in the gate's docstring so nobody reads it as stronger than it is",
+  "#print axioms output is still compared to the whitelist by nothing (inherited from N-4, clears with 9.2)"
+ ],
+ "incident_self_reported": "merge commands ran in the main checkout instead of this worktree (a cd from an earlier call persisted). Net effect zero: the merge was a fast-forward OPS-M itself repeated a step later; the two files reset differed from master only by CRLF, verified byte-wise first; the 5 untracked files deleted were byte-identical to master's tracked versions. Reported on the bus.",
+ "files": [
+  {
+   "path": "freeze/launch_gate.py",
+   "sha256": "1074301bbf8637414237733c090f43a7d61139a2cfaae54b901708ef29eb0476"
+  },
+  {
+   "path": "freeze/launch_blockers.json",
+   "sha256": "551fa18294edf414672c5fdd11772b1a7cc506e64cce9df3d2e0a07647c0c786"
+  },
+  {
+   "path": "freeze/verify.sh",
+   "sha256": "c1fa658d7cc0c137fbf6bcef5ab7a1a514041f4708566beb7b317aff98bac146"
+  },
+  {
+   "path": "freeze/STATS_RULES.md",
+   "sha256": "b911d953f159038583cf24414dad6c59fd9fe83fe3996f7f0d33fb3c7e6cc8a9"
+  },
+  {
+   "path": "freeze/runs/20260729T155500Z-S4-launch-gate/verify.txt",
+   "sha256": "674ffc8268902369fe56c2394c38bdb10695e95737c840bda78d3099a01fc598"
+  },
+  {
+   "path": "freeze/runs/20260729T155500Z-S4-launch-gate/selftest.txt",
+   "sha256": "5acb89d27da7a849589a99c584dc1b50f1bd629e7bc1b00e61c68753fd07dd42"
+  },
+  {
+   "path": "freeze/runs/20260729T155500Z-S4-launch-gate/gate_today.json",
+   "sha256": "5544a9d9fb9619bc9377ebe4affff363f01da31f1ea2748308d6e08bd2301425"
+  },
+  {
+   "path": "freeze/runs/20260729T155500Z-S4-launch-gate/probe_real_bypasses.py",
+   "sha256": "8bc628f9540ca5653b222272cac9b30d232f4d33b89bcad73bb4230f01609921"
+  },
+  {
+   "path": "freeze/runs/20260729T155500Z-S4-launch-gate/probe_r4_clearing_path.py",
+   "sha256": "e82213595c808620bb08dbad5f140ce73f7c9b44ed298fe91bb555275be8cc81"
+  },
+  {
+   "path": "freeze/runs/20260729T155500Z-S4-launch-gate/probe_out.txt",
+   "sha256": "ee4be96344e866eccaad49474a0fae494daa661f3a8eb3afa6c201f4f8c5bf9d"
+  },
+  {
+   "path": "freeze/runs/20260729T155500Z-S4-launch-gate/RUN_STATE.md",
+   "sha256": "005b0167dd0d26db92586637956107291f745b4b0f3a6de7491e352abd40efef"
+  }
+ ]
+}

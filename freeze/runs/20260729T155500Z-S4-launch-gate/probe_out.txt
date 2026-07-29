@@ -1,0 +1,10 @@
+PASS  R0 real rules + real registry (today's true state)         want=blocked got=blocked
+PASS  R1 9.2 downgraded to needs_impl in the real table          want=blocked got=blocked
+PASS  R2 the 9.2 row deleted from the real table                 want=blocked got=blocked
+PASS  R3 all three 'implemented' by a check that accepts everything want=blocked got=blocked
+PASS  R4 my first off-the-cuff (c) check -- caught as non-discriminating want=blocked got=blocked
+
+PASS  R4 real rules + discriminating check on the REAL vacuous artefact  want=clear got=clear
+      §9.2   cleared=True  accepts cold-start-a3/theory/generated_l1, rejects cold-start-a3/theory/generated_l1_vacuous (exit 1)
+      §9.11  cleared=True  accepts cold-start-a3/theory/generated_l1, rejects cold-start-a3/theory/generated_l1_vacuous (exit 1)
+      §9.14  cleared=True  accepts cold-start-a3/theory/generated_l1, rejects cold-start-a3/theory/generated_l1_vacuous (exit 1)
