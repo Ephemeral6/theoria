@@ -235,19 +235,34 @@ but any aggregate read off that ledger inherits the incident.
 
 ### 10.5 The one thing this paper claims
 
+**We built an instrument for holding a world model as an explicit,
+machine-checkable theory, ran it end to end on small deterministic worlds we
+constructed ourselves, and then applied the same adversarial standard to our own
+measurements, where it did the most damage.** That is a claim about an artefact
+and a negative result about a measuring instrument. It is not a claim about world
+models.
+
+Itemised, and in the order a reader can check them:
+
 That the pipeline runs end to end on self-built deterministic worlds; that on
 those worlds a manual can be perfect on replay and wrong about the world in a way
 that was predicted in advance and later measured; that reversibility of a
-mechanism mattered more than breadth of trajectory in the one controlled
-comparison run; that a machine-checked impossibility can be produced whose
-weights crossed a data boundary between two independently developed tracks and
-whose empty axiom list is a check that has been made to fail on purpose; that the
+mechanism mattered more than breadth of trajectory in an A0/A0′ contrast which is
+**not** controlled — the two worlds differ in mechanism, rule count, state count
+and explorer budget at once, so the outcome is entailed by the construction (§3.3)
+— ; that a machine-checked impossibility can be produced whose weights crossed a
+data boundary between two sessions that do not import each other's code and whose
+empty axiom list is a check that has been made to fail on purpose; that the
 refutation loop closed on a false theorem in six recorded beats; and that a
 passive metrics battery over existing trajectories, once its anti-gaming register
 was made executable rather than written, contradicted 17 of its own register
 entries by demonstration — 14 of them defence claims
-(`battery/artifacts/gaming_audit.json`) — and found the exploration family's
-declared signature separating the specified gradient backwards.
+(`battery/artifacts/gaming_audit.json`) — found the exploration family's declared
+signature separating the specified gradient backwards, and, when re-attacked blind
+against criteria committed in advance, had 37 of its 38 metrics driven to their
+thresholds and its main table reduced to zero
+(`battery/runs/20260729T021247Z-V9-battery-gaming-audit/v9_gaming_audit.json`;
+§7.7 reports the earlier round, whose artefacts were frozen before this one).
 
 Everything else in `Theoria.md` — the ordering claim, the bill shape, transfer,
 the exam, the cost magnitude — is unevidenced here and is not claimed.

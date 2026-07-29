@@ -166,8 +166,17 @@ cache reads are **structurally zero** — not small, but a different quantity �
 because every model call is a fresh process in a fresh directory, which is the
 sealing decision working as designed (INC-TA-005).
 
-What the preflight does establish is narrow and worth having: the live chain
-runs end to end, the credential is injected in one place and the arm never holds
-it, the sealed pile is untouched by a check on the bytes rather than on the
-guard's self-report, and the whole thing cost zero billable actions. It is a
-statement about the apparatus, not about the framework.
+What the live runs establish is narrow and worth having, and it must be split
+across the two of them rather than fused into one. **The preflight** shows the
+live chain running end to end with the credential injected in one place and the
+arm never holding it, for **zero billable actions and zero dollars**
+(`theoria-arm/runs/preflight-20260728T012057Z/MANIFEST.json`) — but its manifest
+predates the byte-level sealing scan and carries only the counters, as §9.2 says.
+**The first-contact run** is the one whose manifest carries that scan
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`:
+`sealed_game_ids_found` empty, `sealed_pile_untouched` true, `cut_integrity`
+true), and it spent 7 successful actions and $6.32 in model calls. Neither run
+byte-verifies the "injected in one place" claim: §9.2 records that the archiver
+advertises that check in its docstring and does not implement it, and that the
+byte-scanning test runs against the mock. Both are statements about the
+apparatus, not about the framework.
