@@ -29,6 +29,8 @@ A rule marked **cascade** fires inside `settle`, after the rule that caused it, 
 
 ## Invariants
 
+3 hold, 0 violated, 0 unverified — `invariants_all_hold` is `true`. **An unverified invariant is not a satisfied one**, so it counts against that boolean exactly as a violation does; the two are kept in separate lists because they call for different work.
+
 * **agent_unique** — exactly one cell shows colour 6 at all times  _(checked on 17 reachable states: holds)_
 * **grid_shape** — every frame is 6 x 7  _(checked on 17 reachable states: holds)_
 * **door_presence_tracks_net** — a door shows colour 2 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise  _(checked on 17 reachable states: holds)_

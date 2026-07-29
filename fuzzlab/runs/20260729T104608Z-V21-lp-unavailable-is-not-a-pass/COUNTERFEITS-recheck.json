@@ -1,0 +1,45 @@
+{
+  "baseline": {
+    "elapsed_s": 21.1,
+    "failing_tests": [],
+    "id": "__none__",
+    "killed": false,
+    "n_failing": 0,
+    "returncode": 0,
+    "tail": [
+      "....................................................                     [100%]"
+    ]
+  },
+  "counterfeits": [
+    {
+      "description": "campaign.main stops exiting non-zero on unavailable",
+      "elapsed_s": 21.2,
+      "failing_tests": [
+        "fuzzlab\\tests\\test_solver_unavailable.py::test_the_campaign_exits_non_zero_when_a_tool_could_not_compute"
+      ],
+      "has_dedicated_test": false,
+      "id": "c-campaign-exit-ignores-unavailable",
+      "killed": true,
+      "misreading": "'gated' is true of a 25-world test and false of the artifact",
+      "n_failing": 1,
+      "returncode": 1,
+      "tail": [
+        "FAILED fuzzlab\\tests\\test_solver_unavailable.py::test_the_campaign_exits_non_zero_when_a_tool_could_not_compute"
+      ],
+      "target": "campaign.py"
+    }
+  ],
+  "gate": [
+    "fuzzlab/tests/test_solver_unavailable.py",
+    "fuzzlab/tests/test_finding_contract.py",
+    "fuzzlab/tests/test_battery.py::test_nothing_went_unjudged_because_a_tool_could_not_compute",
+    "fuzzlab/tests/test_battery.py::test_the_skip_breakdown_reconciles_with_the_skip_count",
+    "fuzzlab/tests/test_battery.py::test_many_skips_on_one_world_do_not_send_the_coverage_column_negative",
+    "fuzzlab/tests/test_battery.py::test_short_campaign_passes_the_gate_the_docstring_describes",
+    "fuzzlab/tests/test_battery.py::test_a_dead_lp_potential_shows_up_as_lost_coverage"
+  ],
+  "n_counterfeits": 1,
+  "n_survivors": 0,
+  "n_without_a_dedicated_test": 1,
+  "survivors": []
+}

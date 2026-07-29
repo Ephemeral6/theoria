@@ -50,8 +50,25 @@ STATE = os.path.join(HERE, "standing_state.json")
 #: 编号 → 赛道。与 board.LANE_OWNER 互为反表；两份定义会漂移，所以从那里读。
 import board as board_mod                                          # noqa: E402
 
-#: 同时最多几个常驻会话。四个全开会和无头工人抢同一个额度窗口。
-MAX_STANDING = 3
+#: 除四个赛道研究员之外，还要自动续命的常驻岗位。
+#
+#: 2026-07-29 裁决：八个 App 会话退休，其中两个岗位有独立价值、必须活下来，
+#: 另两个不必——`OPS-B`（浏览器专员）那条路已废；`OPS-R`（harness 回顾员）
+#: 的活由监控每轮的对抗性普查覆盖，不需要一个常驻会话空转。
+#:
+#: **`OPS-A` 是审计我自己的那一个，所以它最不能少。** 由被审计者来重启审计员
+#: 本身就别扭，但比没有审计员好；这一条写在这里，是为了让这个别扭是可见的。
+STANDING_OPS = {"OPS-A": "audit", "OPS-M": "merge"}
+
+#: 同时最多几个常驻会话。全开会和无头工人抢同一个额度窗口。
+#
+#: 用户 2026-07-29 定的数：四个赛道研究员 + OPS-M。OPS-A 仍在自动续命名单里，
+#: 但**排在最后拿名额**——六个全开正是今天 05:39 撞上 session limit 的规模，
+#: 四个工人在四秒内一起死。
+MAX_STANDING = 5
+
+#: 抢名额的顺序：研究员在前，合并裁判次之，审计员最后。
+STANDING_ORDER = ["RES-1", "RES-2", "RES-3", "RES-4", "OPS-M", "OPS-A"]
 
 #: 起会话的内存门槛。
 #
@@ -71,6 +88,13 @@ EVERY_MIN = 15
 
 #: 锁文件 / cycle 推进在这个时长内算「有人顶着这个编号」。
 LOCK_FRESH_MIN = 20
+
+#: 板上有这个编号的动作，多久之内算它还活着。比锁宽——一件活可以做很久才交付，
+#: 但一个会话在 90 分钟里对板一次动作都没有，就不该再被当成在岗。
+BOARD_ACTIVE_MIN = 90
+
+#: 板日志的路径（board.py 的同一份文件）。
+BOARD_LOG = os.path.join(HERE, "board", "board.log")
 
 
 def log(msg):
@@ -172,6 +196,35 @@ def occupied(agent, state):
     * mtime **不算**：一次 `git merge` 就能把死会话的 ops-status 摸新，
       今天下午就发生过（RES-2/RES-4 的 mtime 49 分钟，自报时刻却是几小时前）。
     """
+    # **板上的动作是最强的存活信号**，因为它是这个编号对共享状态造成的**后果**，
+    # 不是它对自己的**自述**：锁可以忘记刷新，cycle 可以停在原地，mtime 可以被
+    # 一次 merge 摸新，但 board.log 里一行 CLAIM/DONE 只可能由一个活着的会话写出来。
+    #
+    # 2026-07-29 实测：App 里的 RES-4 安静了三个多小时（锁 204 分钟、cycle 不动），
+    # 我据此判它已死并另起了一个无头 RES-4——**于是同一个编号有两个会话**，
+    # 同一件 S29 被独立做了两遍，产出两条互相冲突的分支。这是同号并发的第三次。
+    log_path = os.path.join(BOARD_LOG)
+    if os.path.exists(log_path):
+        try:
+            recent = 0.0
+            with open(log_path, encoding="utf-8", errors="replace") as fh:
+                for line in fh:
+                    if (" by %s" % agent) not in line:
+                        continue
+                    try:
+                        t = time.strptime(line.split(" ", 1)[0],
+                                          "%Y-%m-%dT%H:%M:%SZ")
+                    except Exception:
+                        continue
+                    import calendar
+                    recent = max(recent, calendar.timegm(t))
+            if recent:
+                age = (time.time() - recent) / 60.0
+                if age < BOARD_ACTIVE_MIN:
+                    return "board activity %.0f min ago" % age
+        except OSError:
+            pass
+
     lock = os.path.join(HERE, "ops-status", "%s.lock" % agent)
     if os.path.exists(lock):
         age = (time.time() - os.path.getmtime(lock)) / 60.0
@@ -212,6 +265,21 @@ def occupied(agent, state):
     return None
 
 
+def ops_work_for(agent):
+    """监督岗有没有事可做：**自它上次心跳以来，舰队动过没有。**
+
+    它们不领板上的活，所以拿 `candidates()` 当判据是错的——那会让一个审计员
+    在什么都没发生的夜里每十五分钟醒一次、读一圈仓库、烧掉一个窗口。
+    判据用板日志的推进：没有新的 CLAIM/DONE，就没有新的东西可审、可合。"""
+    unread = unread_count(agent)
+    path = os.path.join(HERE, "ops-status", "%s.json" % agent)
+    since = os.path.getmtime(path) if os.path.exists(path) else 0
+    moved = (os.path.exists(BOARD_LOG)
+             and os.path.getmtime(BOARD_LOG) > since)
+    return {"unread": unread, "held": 0, "claimable": 1 if moved else 0,
+            "any": bool(unread or moved)}
+
+
 def work_for(agent, lane):
     """这个编号现在有没有活。三个来源，任一非空即算有。"""
     unread = unread_count(agent)
@@ -231,13 +299,14 @@ def sweep(dry=False, only=None):
     held = quota_held()
     gb = free_gb()
     started = []
-    n_standing = sum(1 for a in board_mod.LANE_OWNER.values() if a in live)
+    lane_of = {a: l for l, a in board_mod.LANE_OWNER.items()}
+    roster = [(lane_of.get(a), a) for a in STANDING_ORDER]
+    n_standing = sum(1 for _l, a in roster if a in live)
 
-    for lane, agent in sorted(board_mod.LANE_OWNER.items(),
-                              key=lambda kv: kv[1]):
+    for lane, agent in roster:
         if only and agent != only:
             continue
-        w = work_for(agent, lane)
+        w = ops_work_for(agent) if agent in STANDING_OPS else work_for(agent, lane)
         age = board_mod.heartbeat_age(agent)
         busy = occupied(agent, state)     # 只调用一次：它会写状态
         why = None

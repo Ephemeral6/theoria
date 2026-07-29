@@ -1,0 +1,58 @@
+[
+ {
+  "mutant": "F16-latch-edge-check-returns-false",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": ")\r\r\nE         \r\nE       assert (1 == 0)\r\nE        +  where 1 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--check', 't3-latch-maze'], returncode=1...  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_determinism_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_clears_the_gate[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_is_byte_identical_across_the_two_seeds[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_moves_the_bytes_across_the_two_seeds[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_is_the_class_it_claims_to_be[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\n6 failed, 508 passed, 13 skipped in 21.50s\r\n",
+  "build_tail": "\r\nBUILD GATE FAILED:\r\n  t1-switch-latch          a declared invariant is violated on a reachable state (invariant_failures)\r\n  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-379c937f               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-d2c2b1b9               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-efe43df1               a declared invariant is violated on a reachable state (invariant_failures)\r\n"
+ },
+ {
+  "mutant": "F17-collection-edge-check-returns-false",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": ")\r\r\nE         \r\nE       assert (1 == 0)\r\nE        +  where 1 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--check', 't3-latch-maze'], returncode=1...  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_determinism_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_clears_the_gate[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_is_byte_identical_across_the_two_seeds[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_moves_the_bytes_across_the_two_seeds[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_is_the_class_it_claims_to_be[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\n6 failed, 508 passed, 13 skipped in 21.65s\r\n",
+  "build_tail": "\r\nBUILD GATE FAILED:\r\n  t1-tokens-lock           a declared invariant is violated on a reachable state (invariant_failures)\r\n  t2-cycler-lock           a declared invariant is violated on a reachable state (invariant_failures)\r\n  t2-lock-fragile          a declared invariant is violated on a reachable state (invariant_failures)\r\n  t3-cycler-portal-lock    a declared invariant is violated on a reachable state (invariant_failures)\r\n  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-29ace70e               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-bd2babb4               a declared invariant is violated on a reachable state (invariant_failures)\r\n"
+ },
+ {
+  "mutant": "F18-tile-edge-check-returns-false",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": ")\r\r\nE         \r\nE       assert (1 == 0)\r\nE        +  where 1 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--check', 't3-latch-maze'], returncode=1...  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_determinism_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_clears_the_gate[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_is_byte_identical_across_the_two_seeds[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_moves_the_bytes_across_the_two_seeds[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_is_the_class_it_claims_to_be[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\n6 failed, 508 passed, 13 skipped in 23.15s\r\n",
+  "build_tail": "\r\nBUILD GATE FAILED:\r\n  t1-fragile-bridge        a declared invariant is violated on a reachable state (invariant_failures)\r\n  t2-lock-fragile          a declared invariant is violated on a reachable state (invariant_failures)\r\n  t3-gravity-fragile       a declared invariant is violated on a reachable state (invariant_failures)\r\n  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\r\n"
+ },
+ {
+  "mutant": "C18-transitions-checked-key-omitted",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 29.20s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C19-edge-loop-half-the-transitions",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 29.02s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C20-state-loop-half-the-states",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 28.02s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E12-gates-tuple-emptied",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "ild', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_build_gate.py::test_the_named_gates_are_all_present\r\nFAILED worldgen/tests/test_build_gate.py::test_a_gate_reports_every_offending_world\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n8 failed, 494 passed, 15 skipped in 27.33s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "D08-markdown-invariant-section-dropped",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "ever_kinder_than_the_markdown[t2-portal-pair]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_json_verdict_is_never_kinder_than_the_markdown[t2-portal-paired]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_json_verdict_is_never_kinder_than_the_markdown[t2-gravity-push]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_json_verdict_is_never_kinder_than_the_markdown[t2-lock-fragile]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_json_verdict_is_never_kinder_than_the_markdown[t2-cycler-lock]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_json_verdict_is_never_kinder_than_the_markdown[t2-unsolvable-nodoor]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_json_verdict_is_never_kinder_than_the_markdown[t3-full-house]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_json_verdict_is_never_kinder_than_the_markdown[t3-gravity-fragile]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_json_verdict_is_never_kinder_than_the_markdown[t3-cycler-portal-lock]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_json_verdict_is_never_kinder_than_the_markdown[t3-latch-maze]\r\n20 failed, 494 passed, 13 skipped in 28.04s\r\n",
+  "build_tail": ""
+ }
+]

@@ -15,12 +15,23 @@
     8,
     9
   ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "agent_conserved",
+      "mouths_static"
+    ],
+    "unverified": [],
+    "violated": []
+  },
   "invariants": [
     {
       "holds": true,
       "name": "agent_unique",
       "statement": "exactly one cell shows colour 6 at all times",
       "states_checked": 26,
+      "status": "holds",
       "verified": true
     },
     {
@@ -28,6 +39,7 @@
       "name": "grid_shape",
       "statement": "every frame is 8 x 9",
       "states_checked": 26,
+      "status": "holds",
       "verified": true
     },
     {
@@ -35,6 +47,7 @@
       "name": "agent_conserved",
       "statement": "exactly one cell shows the agent at all times \u2014 a portal moves the agent, it never copies or deletes it",
       "states_checked": 26,
+      "status": "holds",
       "verified": true
     },
     {
@@ -42,6 +55,7 @@
       "name": "mouths_static",
       "statement": "each of the 1 portal mouth(s) shows colour 2 unless the agent is standing on it",
       "states_checked": 26,
+      "status": "holds",
       "verified": true
     }
   ],

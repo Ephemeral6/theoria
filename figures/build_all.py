@@ -5,9 +5,10 @@
 
 Environment overrides, used by ``verify.sh`` to build twice into separate trees:
 
-    FIGURES_OUT   where images go   (default figures/out)
-    FIGURES_CSV   where CSVs go     (default figures/csv)
-    FIGURES_SHA   where the source hash manifest goes (default figures/SOURCES.sha256)
+    FIGURES_OUT     where images go   (default figures/out)
+    FIGURES_CSV     where CSVs go     (default figures/csv)
+    FIGURES_SHA     where the source hash manifest goes (default figures/SOURCES.sha256)
+    FIGURES_PAPER   where the publication profile goes (default figures/paper)
 
 Every figure module exposes the same two names, and that is the whole contract:
 
@@ -32,6 +33,8 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 if _HERE not in sys.path:
     sys.path.insert(0, _HERE)
 
+import paper_index  # noqa: E402
+import paper_map  # noqa: E402
 import sources  # noqa: E402
 import theme  # noqa: E402
 
@@ -62,6 +65,18 @@ FIGURES: tuple[str, ...] = (
     "fig06_concept_timeline",
     "fig07_a0_vs_a0prime",
 )
+
+# A paper figure that names a plate this build does not produce is a citation
+# with nothing behind it -- "see Figure 4" pointing at a file that was never
+# written. `paper_map` cannot check this itself without importing this module
+# and closing an import cycle, so the check lives on this side of it, at import
+# time, where it fails the build rather than a later gate.
+_UNBUILT = sorted(set(paper_map.BY_PIPELINE) - set(FIGURES))
+if _UNBUILT:
+    raise RuntimeError(
+        f"paper_map declares figure(s) for plate(s) this build does not produce: "
+        f"{', '.join(_UNBUILT)}. Either add them to FIGURES or drop the paper entry."
+    )
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -98,8 +113,9 @@ def main(argv: list[str] | None = None) -> int:
         print(f"FAIL: unknown figure(s): {', '.join(unknown)}", file=sys.stderr)
         return 2
 
-    print(f"out : {theme.out_root()}")
-    print(f"csv : {theme.csv_root()}")
+    print(f"out  : {theme.out_root()}")
+    print(f"csv  : {theme.csv_root()}")
+    print(f"paper: {theme.paper_root()}")
     print()
 
     failures: list[str] = []
@@ -128,10 +144,25 @@ def main(argv: list[str] | None = None) -> int:
         for note in result.get("notes") or []:
             print(f"  note {note}")
         expected = len(theme.THEMES) * len(theme.FORMATS)
+        if paper_map.for_pipeline(name) is not None:
+            expected += len(theme.THEMES) * len(paper_map.PUB_FORMATS)
         if len(images) != expected:
             failures.append(name)
             print(f"  -> FAILED: expected {expected} images, got {len(images)}")
         print()
+
+    # The index and the captions hash the images, so they are written after
+    # every figure is on disk -- and only for a whole build. On `--only` the
+    # other plates' digests would be whatever the previous build left, and an
+    # index that is right about one figure and stale about five is worse than
+    # one that was not regenerated at all, because it looks current.
+    if args.only:
+        print("index/captions skipped: --only builds a partial tree, and a partially "
+              "regenerated index reads as a whole one.")
+    elif not failures:
+        written = paper_index.write_all()
+        for path in written:
+            print(f"paper index -> {os.path.relpath(path, _HERE)}")
 
     if not args.no_manifest:
         manifest = sources.write_manifest()

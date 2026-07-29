@@ -17,6 +17,7 @@ PARTNER_SYNC.md merges by union (.gitattributes) since it is append-only.
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -119,6 +120,33 @@ def branch_tip(branch):
     return out.stdout.strip() if out.returncode == 0 else ""
 
 
+# Holding a branch is a claim that re-running it would reach the same verdict,
+# and that claim is only sound when the verdict was about the branch.
+#
+# `push rejected (race?)` is decided *after* every gate has already passed, by
+# whether master moved between building the worktree and pushing it.  It is a
+# fact about master, not about the branch, so the tip test -- which asks only
+# whether the branch changed -- answers a question nobody asked and parks work
+# that is already green.
+#
+# Measured rather than argued: `c10-unsolvable-proof-canon` was flagged this
+# way at 04:15Z, listed in every HELD line for six hours, and then merged on
+# the first retry with nothing about it changed; `s21-app-session-death` did
+# the same the following cycle.  Two for two.  Retrying a race is how a race is
+# won, and the retry is cheap compared to leaving finished work on the floor.
+#
+# Deliberately narrow: conflicts and red gates stay held, because those really
+# are properties of the branch and re-deriving them costs a worktree and a full
+# gate run.  The hold itself was worth having -- it replaced 169 retries and
+# 915 identical FLAG lines.  What was wrong was only which failures it covers.
+TRANSIENT_REASONS = ("push rejected",)
+
+
+def is_transient(reason):
+    """Did this verdict describe the world around the branch rather than it?"""
+    return any(t in (reason or "") for t in TRANSIENT_REASONS)
+
+
 def last_attempt(branch):
     """What the previous run already tried on this branch, or {} if none.
 
@@ -140,6 +168,48 @@ def last_attempt(branch):
     except OSError:
         return {}
     return memo
+
+
+#: Lines worth surfacing out of a long gate transcript.
+_CAUSE = re.compile(
+    r"(FAILED|^E\s|Traceback|Error:|error:|assert |FAIL\b|"
+    r"ModuleNotFound|No such file|exited \d|red in )", re.M)
+
+#: How much of the transcript the flag keeps.
+_KEEP_TAIL = 2600
+_KEEP_CAUSE = 24
+
+
+def excerpt(detail):
+    """Keep the *cause*, not merely the end.
+
+    This was `detail[-4000:]`, and for a verbose gate the last 4000 characters
+    are the part after the failure -- so `r2-release-licence`'s flag is a wall
+    of `-- ok` notes ending in `VERIFY: RED`, with nothing anywhere in it that
+    says which step failed. The flag existed, was written every five minutes
+    for nineteen hours, and could not be acted on.
+
+    That is the same shape as the rest of this file's subject, one level up:
+    the instrument ran, produced output, and the output omitted the finding.
+    A record that cannot be acted on is not much better than no record, and it
+    is worse in one way -- it looks like one.
+
+    So the lines that name a cause are lifted to the top, and the tail is kept
+    after them for context.
+    """
+    if not detail:
+        return ""
+    lines = detail.splitlines()
+    causes = [l for l in lines if _CAUSE.search(l)]
+    tail = detail[-_KEEP_TAIL:]
+    if not causes:
+        return tail
+    picked = causes[:_KEEP_CAUSE]
+    head = "\n".join(l[:300] for l in picked)
+    more = ("\n... and %d more cause line(s)" % (len(causes) - len(picked))
+            if len(causes) > len(picked) else "")
+    return ("--- cause lines (lifted out of the transcript) ---\n%s%s\n"
+            "--- tail of the transcript ---\n%s" % (head, more, tail))
 
 
 def flag(branch, reason, detail, tip=None):
@@ -169,7 +239,7 @@ def flag(branch, reason, detail, tip=None):
         fh.write("# %s\nbranch: %s\nreason: %s\ntip: %s\n"
                  "first_seen: %s\nlast_seen: %s\nattempts: %s\n\n```\n%s\n```\n"
                  % (os.path.basename(path), branch, reason, tip or "",
-                    first_seen, stamp, attempts, detail[-4000:]))
+                    first_seen, stamp, attempts, excerpt(detail)))
     suffix = ""
     if attempts >= 3:
         # Three distinct tips have failed the same way.  Retrying is no longer
@@ -477,7 +547,8 @@ def main():
             # stale, and that retries immediately.  Skipping is therefore never
             # a way for a fixed branch to stay stuck.
             memo = last_attempt(b)
-            if memo.get("tip") and memo["tip"] == branch_tip(b):
+            if (memo.get("tip") and memo["tip"] == branch_tip(b)
+                    and not is_transient(memo.get("reason"))):
                 held.append((b, memo.get("reason", "?"),
                              memo.get("attempts", "?")))
                 continue

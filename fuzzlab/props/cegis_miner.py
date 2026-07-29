@@ -280,6 +280,7 @@ def frontier_is_complete_to_size(world: Any) -> List[finding.Finding]:
                 ENGINE, "frontier_is_complete_to_size", world,
                 "vocabulary of %d atoms at size %d is %d subsets, over budget"
                 % (len(vocabulary), size, combinations),
+                cause="frontier_size_over_budget",
                 rule=rule.name, vocabulary=len(vocabulary), size=size))
             continue
 
@@ -550,7 +551,8 @@ def effects_agree_with_the_evidence(world: Any) -> List[finding.Finding]:
             ENGINE, invariant, world,
             "the engine emitted transition indices %s with no corresponding "
             "frame pair, so the oracle cannot line its evidence up with the "
-            "engine's" % stray[:6], stray=stray[:6])]
+            "engine's" % stray[:6],
+            cause="evidence_not_alignable", stray=stray[:6])]
 
     subject = _mined_subject(world, transitions, invariant)
     if subject is not None:
@@ -613,6 +615,7 @@ def effects_agree_with_the_evidence(world: Any) -> List[finding.Finding]:
             "mover translation, so their effects were not judged: %s"
             % (len(unread), sum(len(r.support) for r in result.all_rules),
                refused.get(unread[0], "no reason recorded")),
+            cause="effects_not_readable_as_translation",
             unreadable=sorted(set(unread))[:6]))
     return out
 

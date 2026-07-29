@@ -452,3 +452,160 @@ was `blocked_<D>` rules saying nothing ever happens. Reporting them as evaluated
 was the same confusion this round removed from `props/lp_potential.py`, and
 applying the rule to one module and not the other would have been the harder
 thing to explain.
+
+---
+
+# V-21 · "the solver could not compute" was a silent non-failure
+
+Filed against **this battery**, not against an engine. No engine defect is
+alleged and none was found; `lp_potential` behaved correctly throughout.
+
+## T1 · `LpUnavailable` was caught nowhere, and the coverage column ran backwards
+
+E-15 (same day) stopped `engines.lp_potential` from collapsing HiGHS status 1, 3
+and 4 — iteration limit, unbounded relaxation, numerical difficulties — into the
+bare `(None, None)` that downstream reads as *no linear pagoda separates the goal
+from the start*. It raises `LpUnavailable` instead, so a resource limit cannot
+arrive at a caller wearing the costume of a geometric fact.
+
+`props/lp_potential.py` caught `CertificateError` in four places and
+`LpUnavailable` in **none**. So:
+
+1. the exception escaped to `finding.run_invariants` and became a `raised`;
+2. `invariant_worlds_evaluated` subtracts `skipped`, and **only** `skipped` — so
+   the world was counted as **evaluated**;
+3. `finding.failures()` returned `VIOLATED` alone, so nothing failed.
+
+Three independent silences, and the middle one is the worst. Measured on 12
+`jumpgraph` worlds, with the real `scipy.optimize.linprog` starved to
+`maxiter=0` (a genuine HiGHS status 1 — nothing stubbed):
+
+| run | violated | raised | skipped | `invariant_worlds_evaluated`, each of 4 |
+|---|---|---|---|---|
+| normal | 0 | 0 | 28 | **5** |
+| solver starved | 0 | 44 | 4 | **11** |
+
+**Blinding the solver more than doubled the coverage the battery reported.** The
+honest declines (`no_certificate`) are subtracted; the blind spots were not. A
+reader comparing two campaign artifacts would have read the starved one as the
+better-covered run.
+
+This is V-13's defect — "I could not check this" and "I checked and found
+nothing" reported as one number — at a new entrance, opened the same day the old
+one was closed.
+
+### Disposition
+
+`LpUnavailable` is a **`skipped`** with `cause="solver_unavailable"`, in a new
+cause-class **`unavailable`**.
+
+Not `violated`: an iteration limit is not the engine doing something it says it
+does not do. Filing it as a violation would accuse the engine of the one
+behaviour E-15 was written to produce, and would make the gate red for something
+no engine change can clear — `test_finding_contract.py` states the rule against
+that in its own words.
+
+Not a fourth `kind`: `Finding.kind` is read by `campaign.py`, `mutation.py`,
+`minimize.py` and the archive, every one of which branches on `SKIPPED` and
+treats everything else as evaluated. The *default* handling of an unrecognised
+fourth kind is "counted as evaluated" — the bug, reintroduced in every consumer
+not yet updated.
+
+`skipped` alone was not enough either, and that is why the taxonomy exists:
+`skipped` was one integer over "the engine correctly declined" and "nobody
+knows". Every skip now carries a required `cause`, every cause is declared in
+`finding.CAUSE_CLASS` as `declined` / `budget` / `unavailable`, and
+`campaign.json` publishes `invariant_worlds_unavailable`, `skips_by_cause` and
+`skips_by_cause_class` per invariant. A green tree must have zero `unavailable`
+(`tests/test_battery.py`) **and** `campaign.main` exits non-zero on one, so the
+number is **gated, not merely filed** — a skip class nobody asserts on is a skip
+class nobody reads. The second of those two gates was missing from the first cut
+while three docstrings claimed it existed; an adversarial pass caught it, and the
+finding is recorded in this run's `RUN_STATE.md` §8 because it is this item's own
+defect at one remove: prose wider than code, in the item about prose wider than
+code.
+
+`budget` is separated from `unavailable` deliberately. Both are facts about
+tooling rather than about the world, but a `SWEEP_BUDGET` decline is priced,
+routine and chosen in advance, and lumping it in would make the `unavailable`
+gate red on a green tree.
+
+## T2 · `failures()` — the prose was wider than the code, and had no callers
+
+The docstring said "violations and unexpected raises"; the body returned
+`VIOLATED`. **The function had zero callers anywhere in the repository**, which
+is the most dangerous arrangement of the three: nothing could observe the
+discrepancy, and the first person to import it would import the prose.
+
+The **code** moved, not the docstring. `raised` is `unexpected` by construction —
+every documented outcome in this battery is caught at its property and converted
+to a `skipped` with a cause, so an exception that reaches `raised` is one nobody
+wrote a policy for; the word "unexpected" was load-bearing and the body was
+ignoring it. It was also measured at zero across all six engines before the
+widening, so the gate could not go red for a documented outcome. And narrowing
+the prose instead would have written *a crashing property is not a failure* into
+the contract of the same battery whose `test_finding_contract.py` records an
+incident where a dead reporting path turned every violation into a `raised` while
+"0 violations" stayed true.
+
+It is now **called** — `test_battery.py::test_short_campaign_passes_the_gate_the_docstring_describes`
+— because aligning a docstring with a function nobody invokes fixes a sentence,
+not a gate.
+
+`skipped` is still not a failure. A world nobody judged is not a world the engine
+got wrong; that is the coverage column's question, and it has its own gate.
+
+## T3 · what the counterfeit table found
+
+19 counterfeits against the new machinery, run in fresh subprocesses against the
+V-21 gate set; results in
+`runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass/COUNTERFEITS.json`. The
+table is written against the code paths rather than read back off the test file:
+**10 of the 19 had no dedicated test written for them**, which is the point
+(C-11: N mutants matching N tests measures the tests).
+
+It ran twice — 17 rows, then 19 after an adversarial review added two — and
+**each pass produced exactly one survivor, neither predicted**:
+
+* `c-drop-the-outcome-payload` — file the skip, attribute it correctly, drop the
+  `LpOutcome` payload. Every count stays right; what is lost is telling status 1
+  (raise the budget) from 3 (the model is wrong) from 4 (go and look at the
+  arithmetic).
+* `c-campaign-exit-ignores-unavailable` — `campaign.main` stops exiting non-zero
+  on `unavailable`. This one exists because the review found the gate did not
+  reach the 500-world artifact, and the fix for *that* changed an exit code with
+  no test behind it — the same shape as the defect being closed, one layer up.
+
+Both are closed, and in both cases the closing test says in its own comment that
+it came *after* the survivor. Retro-fitting a test and presenting it as foresight
+is the failure this paragraph exists to avoid. Re-runs in
+`COUNTERFEITS-recheck.json`: killed.
+
+Both survivors were in the **reporting** layer. Every counterfeit against the
+catch, the classification and the taxonomy died at once; what survived twice was
+a defect in what the battery says about itself, which is this item's subject.
+
+The pre-registration named `c-relabel-as-no-certificate` as the one it expected
+to be hardest, on the grounds that a solver failure filed as the engine's own
+documented decline is identical in every column except `skips_by_cause`. **That
+prediction was wrong**, in the safe direction: two tests killed it, on both
+passes.
+
+## T4 · what an adversarial review overturned
+
+Fourteen findings, one a BLOCKER, none rejected; verbatim in that directory's
+`ADVERSARIAL.md`, dispositions in its `RUN_STATE.md` §7. The one that matters
+here: `invariant_worlds_evaluated` and `invariant_worlds_unavailable` counted
+skip **findings** while being published under names that say *worlds*. The two
+are equal only while no property files two skips for one world —
+`cegis_miner.frontier_is_complete_to_size` files one per rule, and with its
+budget forced low the coverage column read **−56 out of 12 worlds**, with the
+reconciliation test green on it because its second assertion was `x == x`. Both
+are fixed; the columns count distinct seeds now.
+
+That bug predates V-21 — the expression is V-13's — but V-21 replicated its shape
+into a new column and asserted "worlds" in a docstring, which is how it was
+found. The review also caught this item shipping, twice, the exact defect it
+exists to remove: three docstrings claiming "the suite fails on it" when only a
+25-world pytest run did, and a `minimize` help string documenting the inverse of
+what the code did.

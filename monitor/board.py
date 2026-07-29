@@ -23,6 +23,7 @@ Item front matter (first lines of each item file):
 
 import os
 import re
+import subprocess
 import sys
 import time
 
@@ -246,7 +247,87 @@ def held_by(worker):
                if f.endswith(".md") and f[:-3].split(".")[1] == worker)
 
 
+REPO = os.path.dirname(HERE)
+
+
+def _git(repo, *args):
+    """Run one read-only git command. Returns lines, or [] on any trouble.
+
+    Never raises and never propagates a non-zero exit. Everything below this
+    is advisory: a claim that failed because git was slow, missing, or in a
+    funny state would be a much worse bug than the one being fixed.
+    """
+    try:
+        out = subprocess.run(("git",) + args, cwd=repo,
+                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                             timeout=15)
+    except Exception:
+        return []
+    if out.returncode != 0:
+        return []
+    return out.stdout.decode("utf-8", "replace").splitlines()
+
+
+def prior_work(iid, repo=None):
+    """Lines warning that somebody may already have worked this item.
+
+    2026-07-29: S21 was done twice and S27 three times, by concurrent sessions
+    that each found a clean-looking item and started over. Both times the
+    evidence was already sitting in plain sight -- a branch named after the
+    item -- and nothing looked. One `git branch` is cheaper than a session.
+
+    Worktree directories are checked as well as branches, because the third
+    S27 copy was an **untracked** file inside a worktree: no branch, no commit,
+    nothing for a ref-based check to find, but the directory name was there.
+    """
+    repo = repo or REPO
+    slug = iid.lower()
+    seen, hits = set(), []
+    for line in _git(repo, "branch", "-a", "--list", "*%s*" % slug):
+        name = line.strip().lstrip("*+ ").strip()
+        if not name or "->" in name:            # skip the origin/HEAD alias
+            continue
+        short = name.split("remotes/origin/", 1)[-1]
+        if short in seen:                       # local and remote are one branch
+            continue
+        seen.add(short)
+        count = _git(repo, "rev-list", "--count", "master..%s" % name)
+        ahead = count[0].strip() if count else "?"
+        if ahead == "0":
+            # Nothing ahead of master means it is already merged, which is a
+            # different piece of news: not "someone is working on this" but
+            # "this is very likely already done". S21 read exactly like this
+            # an hour after it was delivered.
+            hits.append("  分支 %s（领先 master 0 个提交 —— **已并入，这件活很可能已经完成**）"
+                        % short)
+        else:
+            hits.append("  分支 %s（领先 master %s 个提交）" % (short, ahead))
+    wt = os.path.join(repo, ".worktrees")
+    for d in sorted(os.listdir(wt)) if os.path.isdir(wt) else []:
+        if slug in d.lower():
+            hits.append("  工作树 .worktrees/%s（可能有未提交、甚至未跟踪的半成品）" % d)
+    if not hits:
+        return []
+    # ASCII and Chinese only: this console is cp936, and U+26A0 (the obvious
+    # choice of warning glyph) is not in it. Printing one would raise
+    # UnicodeEncodeError *after* the item was already renamed into claimed/ --
+    # the agent would see a traceback and no item, while the board recorded a
+    # successful claim. Same locale that once reported eight live workers dead.
+    return (["", "注意：这件活可能已经有人做过或正在做："] + hits
+            + ["  先看它再决定**重做还是接续**。重做前请说明为什么不接续——",
+               "  半成品被静默丢弃过一次，代价是同一件事做了两遍。"])
+
+
 def cmd_claim(worker, lane=None):
+    # `--lane` 是**认领者自报的**，而带赛道的查询会跳过花钱守卫与预留守卫。
+    # 于是 `claim W-9999 --lane campaign` 能领走一件在真 API 上打的战役，
+    # 退出 0，board.log 记下的那行与一次被批准的花钱认领逐字不可区分
+    # （2026-07-29 对抗性普查抓到）。自报一个身份不该等于拥有它。
+    if lane and LANE_OWNER.get(lane) not in (None, worker):
+        if lane not in stale_lanes():
+            print("LANE-NOT-YOURS %s 属于 %s；它停摆时才对其他人开放。"
+                  % (lane, LANE_OWNER.get(lane)))
+            return 3
     if worker.startswith("RES-") and held_by(worker) >= HOLD_CAP:
         print("HOLD-CAP-REACHED 你手上已有 %d 件，先交付或 release 再领。"
               % HOLD_CAP)
@@ -270,6 +351,10 @@ def cmd_claim(worker, lane=None):
         note("CLAIM %s by %s" % (iid, worker))
         print("---8<--- item %s ---8<---" % iid)
         sys.stdout.write(open(dst, encoding="utf-8").read())
+        # Last, deliberately. The item body is long and this is the one line
+        # that has to survive being skimmed.
+        for line in prior_work(iid):
+            print(line)
         return 0
     if withheld:
         # Never a bare BOARD-EMPTY when something was hidden. Silently
@@ -388,9 +473,10 @@ STANDING_DEAD_MIN = STALE_MIN * 2
 def standing_verdict(agent, now=None):
     """Is this standing session dead? Returns (dead: bool, why: str).
 
-    Three conditions, and **all three** must hold. Each alone has an innocent
-    reading, which is exactly why the original sweep refused to touch standing
-    sessions at all:
+    Three conditions, and **all three** must hold -- and unlike the first
+    version of this function, all three are now actually implemented. Each
+    alone has an innocent reading, which is exactly why the original sweep
+    refused to touch standing sessions at all:
 
       * heartbeat older than two cycles -- but a session deep in one long task
         legitimately goes quiet for a while;
@@ -416,7 +502,8 @@ def standing_verdict(agent, now=None):
     if not os.path.exists(hb):
         return False, "no heartbeat file at all -- never started, not died"
     try:
-        age_min = (now - os.path.getmtime(hb)) / 60.0
+        hb_mtime = os.path.getmtime(hb)
+        age_min = (now - hb_mtime) / 60.0
     except OSError as exc:
         return False, "heartbeat unreadable (%s); refusing to guess" % exc
     if age_min < STANDING_DEAD_MIN:
@@ -437,8 +524,38 @@ def standing_verdict(agent, now=None):
         return False, ("URGENT is only %.0f min old -- not yet one cycle, it "
                        "may simply not have come round" % urgent_age)
 
-    return True, ("heartbeat %.0f min old (>%d), and an URGENT posted %.0f min "
-                  "ago (>%d) is still unread"
+    # The third condition, and the only *positive* evidence in the whole test.
+    # The other two are silences, and a silence is the absence of proof rather
+    # than proof of absence. Traffic on the outbound bus after the heartbeat is
+    # the session demonstrably doing something, so it overrides both.
+    #
+    # It was described in three places -- the commit message, this function's
+    # own docstring, and reflex.py's comment -- and implemented in none. Ten
+    # tests encoded the two-signal behaviour, so nothing could have caught the
+    # divergence: the tests agreed with the code against the documentation.
+    #
+    # It is not academic. At 18:52:20Z a claim was released 48 minutes after
+    # RES-3 wrote to its out.jsonl at 18:04:28Z, and the holder objected on the
+    # spot. This condition would have refused that release.
+    #
+    # Wired as a *refusal only*: it can keep a claim, never free one. That
+    # makes it impossible for this change to cause a wrongful release, which is
+    # the only failure here that costs anything irreversible.
+    out = os.path.join(HERE, "bus", agent, "out.jsonl")
+    try:
+        if os.path.exists(out) and os.path.getmtime(out) > hb_mtime:
+            spoke_min = (now - os.path.getmtime(out)) / 60.0
+            return False, ("bus out.jsonl was written %.0f min ago, after the "
+                           "heartbeat -- the session was demonstrably alive "
+                           "more recently than its own heartbeat says"
+                           % spoke_min)
+    except OSError:
+        # Unreadable is not evidence of death; fall through to the two silences
+        # only if they already convicted, which they have by this point.
+        pass
+
+    return True, ("heartbeat %.0f min old (>%d), an URGENT posted %.0f min ago "
+                  "(>%d) is still unread, and no bus traffic since the heartbeat"
                   % (age_min, STANDING_DEAD_MIN, urgent_age, STANDING_CYCLE_MIN))
 
 
@@ -457,8 +574,13 @@ def cmd_sweep(dry=False, include_standing=False):
 
     一次性工人被额度或崩溃打断后，claimed/ 里的认领永远挂着：板以为有人在做，
     领地被锁，新工人领不到活。判据保守——只清 W-* 前缀（一次性工人）且其
-    计划任务已不在运行的；App/常驻会话（APP-*/RES-*）一律不动，它们的存活
-    从任务表看不出来。"""
+    计划任务已不在运行的。
+
+    **App/常驻会话（APP-*/RES-*）默认仍然不动**，但 `--include-standing` 下
+    改由 `standing_verdict()` 判定：心跳陈旧 + URGENT 悬而未答 + 心跳之后没有
+    总线流量，三条同时成立才释放。这段话原本写着「一律不动」，而 S21 已经加了
+    那个模式——**文档比代码旧了一轮**，正是本函数所属那一类问题的元层版本，
+    所以在此对齐而不是留着。"""
     import subprocess
     out = subprocess.run(["schtasks", "/Query", "/FO", "CSV", "/NH"],
                          capture_output=True)

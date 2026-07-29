@@ -1,0 +1,44 @@
+{
+  "RES-1": {
+    "last_cycle": 24,
+    "last_cycle_epoch": 1785330003.17856,
+    "last_launch_epoch": 1785333810.5629334,
+    "last_launch_utc": "2026-07-29T14:03:30Z",
+    "reason": "unread=1 held=2 claimable=0"
+  },
+  "RES-2": {
+    "last_cycle": 14,
+    "last_cycle_epoch": 1785331803.605648,
+    "last_launch_epoch": 1785333855.6435525,
+    "last_launch_utc": "2026-07-29T14:04:15Z",
+    "reason": "unread=0 held=1 claimable=0"
+  },
+  "RES-3": {
+    "last_cycle": 49,
+    "last_cycle_epoch": 1785319580.4116993,
+    "last_launch_epoch": 1785319580.4890463,
+    "last_launch_utc": "2026-07-29T10:06:20Z",
+    "reason": "unread=0 held=0 claimable=1"
+  },
+  "RES-4": {
+    "last_cycle": 24,
+    "last_cycle_epoch": 1785329148.4146886,
+    "last_launch_epoch": 1785329148.5056977,
+    "last_launch_utc": "2026-07-29T12:45:48Z",
+    "reason": "unread=1 held=0 claimable=4"
+  },
+  "OPS-A": {
+    "last_cycle": 36,
+    "last_cycle_epoch": 1785331803.6185315,
+    "last_launch_epoch": 1785333945.801649,
+    "last_launch_utc": "2026-07-29T14:05:45Z",
+    "reason": "unread=0 held=0 claimable=1"
+  },
+  "OPS-M": {
+    "last_cycle": 15,
+    "last_cycle_epoch": 1785330903.3463511,
+    "last_launch_epoch": 1785333900.7269304,
+    "last_launch_utc": "2026-07-29T14:05:00Z",
+    "reason": "unread=0 held=0 claimable=1"
+  }
+}

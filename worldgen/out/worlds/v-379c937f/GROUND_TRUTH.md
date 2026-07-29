@@ -40,12 +40,14 @@ A rule marked **cascade** fires inside `settle`, after the rule that caused it, 
 
 ## Invariants
 
+8 hold, 0 violated, 0 unverified — `invariants_all_hold` is `true`. **An unverified invariant is not a satisfied one**, so it counts against that boolean exactly as a violation does; the two are kept in separate lists because they call for different work.
+
 * **agent_unique** — exactly one cell shows colour 6 at all times  _(checked on 2654 reachable states: holds)_
 * **grid_shape** — every frame is 9 x 10  _(checked on 2654 reachable states: holds)_
 * **block_count** — exactly 1 cell(s) show colour 2 at all times  _(checked on 2654 reachable states: holds)_
 * **blocks_disjoint** — no two blocks ever occupy the same cell  _(checked on 2654 reachable states: holds)_
 * **door_presence_tracks_net** — a door shows colour 5 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise  _(checked on 2654 reachable states: holds)_
-* **latch_monotone** — every latch switch's bit is monotone non-decreasing along every trajectory, and so is the aggregate bit of a net whose switches are all latches: once 1, never 0 again  _(prose only, unverified)_
+* **latch_monotone** — every latch switch's bit is monotone non-decreasing along every trajectory, and so is the aggregate bit of a net whose switches are all latches: once 1, never 0 again  _(checked on 10616 transitions: holds)_
 * **agent_conserved** — exactly one cell shows the agent at all times — a portal moves the agent, it never copies or deletes it  _(checked on 2654 reachable states: holds)_
 * **mouths_static** — each of the 2 portal mouth(s) shows colour 7 unless the agent is standing on it  _(checked on 2654 reachable states: holds)_
 

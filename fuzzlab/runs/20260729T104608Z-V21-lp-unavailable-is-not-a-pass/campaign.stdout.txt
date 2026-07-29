@@ -1,0 +1,21 @@
+campaign seed 0x00005eedc1e4f002, 500 worlds per engine, engine-rig 863e899d
+
+mdl_segmenter   gridworld      4 inv   500 worlds  violated=0    raised=0    skipped=0     unavail=0      1.7s
+cegis_miner     gridworld      6 inv   500 worlds  violated=0    raised=0    skipped=210   unavail=0    106.2s
+zero_space      parityworld    4 inv   500 worlds  violated=0    raised=0    skipped=0     unavail=0      1.4s
+lp_potential    jumpgraph      4 inv   500 worlds  violated=0    raised=0    skipped=932   unavail=0     44.0s
+fd_adapter      blockworld     3 inv   500 worlds  violated=0    raised=0    skipped=0     unavail=0      6.1s
+probe_frontier  hypset         5 inv   500 worlds  violated=0    raised=0    skipped=0     unavail=0      0.1s
+
+{
+  "generator_errors": 0,
+  "invariants": 26,
+  "raised": 0,
+  "skipped": 1142,
+  "unavailable": 0,
+  "violated": 0,
+  "worlds_checked": 3000
+}
+
+-> runs\20260729T104608Z-V21-lp-unavailable-is-not-a-pass\campaign\campaign.json
+campaign exit=0

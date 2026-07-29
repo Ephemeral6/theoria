@@ -124,7 +124,7 @@ The free half of the valve saw nothing. The static check reads the board, and
 neither control touches the board; Lean re-proved a domain that was still
 internally consistent. Only replay — which costs plan-length actions and arrives
 only *after* acting — could see that the transition function had changed. The
-report states the consequence plainly:
+report states the consequence plainly (`cold-start-a3/A3_REPORT.md` §5):
 
 > Carrying a domain to a new level buys a plan for zero actions and buys **no
 > free assurance that the plan is valid**; the assurance costs plan-length
@@ -151,9 +151,10 @@ not noise:
 > **how much of a manual is convention rather than content**, and it is most of
 > the surface.
 
-The blind arm also spent 5 theorize rounds to the cold start's 1, and the report
-records that two of those five — 40 % of its adjudication budget — went to
-toolchain conformance rather than to the world.
+The blind arm also spent 5 theorize rounds to the cold start's 1
+(`cold-start-a3/artifacts/bill_table.md`), and the report records that two of
+those five — 40 % of its adjudication budget — went to toolchain conformance
+rather than to the world (`cold-start-a3/A3_REPORT.md` §4).
 
 ### 6.5 What A3 does not show
 

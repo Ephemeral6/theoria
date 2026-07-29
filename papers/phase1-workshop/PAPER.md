@@ -69,11 +69,14 @@ good score by a run possessing none of the capability being measured**, and that
 demonstration, 14 of them claims that a metric had been defended**. A later round,
 in which six mutually invisible attackers worked from a stripped source tree
 against thresholds committed before any attack, raised the first number to **37 of
-38** and cut the table of metrics trusted to rank arms from nine to two; a sighted
-follow-up review removed the last two. Both rounds carry defects we state rather
-than bury — the adjudication rule was amended after the results were seen, and the
-mechanical check meant to certify that an attack did no real work rejected none of
-the 105 attacks it saw. A subsidiary finding is upstream of cheating altogether:
+38** and cut the table of metrics trusted to rank arms from nine to two. The last
+two did not fall to it: a **sighted** follow-up review took one, and the other was
+moved to a tier created for it afterwards, on the ground that a metric no attack
+can reach is not a metric that resisted one. The published table is now empty.
+Both rounds carry defects we state rather than bury — the adjudication rule was
+amended after the results were seen, and the mechanical check meant to certify
+that an attack did no real work rejected none of the attacks it saw, 105 in the
+blind phase and 112 in the delivered artefact. A subsidiary finding is upstream of cheating altogether:
 for any two manuals differing by one clause, the epistemic family contains a
 metric preferring each, so it cannot rank them at all.
 
@@ -106,19 +109,22 @@ true of its world and the other is not. The instrument cannot tell them apart an
 is not supposed to. That is a demonstration of a failure mode, not evidence about
 anything.
 
-The remaining sections report, without claiming: a theory carried unchanged to a
-second level of the same self-built world, which re-fits from one frame and wins
-with zero engine stages and zero adjudicated candidates while paying verification
-in full — both arms score 252/252 against the referee, so the saving is in what
-each cost and not in what either got right; an examination instrument whose leak
+The remaining sections report, without claiming: a **manual** carried unchanged to
+a second level of the same self-built world — the playbook's transfer is a design
+claim no code path in that experiment exercises — which re-fits from one frame plus
+three supplied level constants and wins with zero engine stages and zero
+adjudicated candidates while paying verification in full; both arms score 252/252
+against the referee, so what differs is what each arm structurally cost and not
+what either got right, and this experiment did not convert that into money; an examination instrument whose leak
 checker reports 1 790 probes with no hits and which nonetheless missed two real
 leaks an adversarial reader found, and three of whose four papers have never been
 sat; and two live runs against the real API on one development-pile game — a
 preflight that sent 18 commands for zero billable actions and zero dollars, and a
 first-contact run that spent seven actions and, by the provider's own arithmetic,
-$6.32 in model calls — our price table says $5.80 and the manifest records the
-disagreement — whose manifest carries the byte-level scan showing no sealed-pile
-game was touched.
+$6.32 in model calls, a figure this project's own price table re-derives as $5.80,
+a disagreement the manifest locates and prices to 84 % of its size (§9.4)
+— whose manifest carries the byte-level scan showing no sealed-pile game was
+touched.
 
 **What we do not claim.** No arm was run against another system's baseline, there
 is no language-model baseline anywhere in this paper, and the three arms of the
@@ -131,8 +137,8 @@ agent on another team's infrastructure, so every effect size there bundles
 capability with plumbing. Those effect sizes are unpaired, and on the one metric
 this paper bolds the paired test disagrees with them. The theorize step is a
 checked-in artefact rather than a measured language-model step, and every world is
-small enough for `decide` to enumerate. Transfer, the exam, the ordering claim and
-the cost magnitude are reported here and claimed nowhere. **The contribution is an
+small enough for `decide` to enumerate. Transfer, the exam, the ordering claim, the bill
+shape and the cost magnitude are reported here and claimed nowhere. **The contribution is an
 instrument, a demonstration artefact, and a negative result about our own
 measurements** — Phase 1 establishes that the instrument exists, that it produces
 the failure mode on demand, and that the loop closes on it — not a result about
@@ -665,8 +671,9 @@ against are in `papers/phase1-workshop/figures/PARITY.md`.
 loop as a whole.
 
 **`zero_space` recovered the Button↔Door dependency as a conservation law.**
-Handed 152 anonymous indicator bits, with no vocabulary for buttons or doors, it
-returned
+Handed 152 anonymous indicator bits (`cold-start-a0/A0_REPORT.md` §3;
+`cold-start-a0/artifacts/engines_report.json`, `zero_space.features`), with no
+vocabulary for buttons or doors, it returned
 
 ```
 [cell (3,2) shows 8]  +  [cell (4,5) shows 5]   ≡  1   (mod 2)
@@ -843,8 +850,9 @@ it. Adding four evidence levels that make "blocked while crossing" reachable gav
 **39,960 well-formed states across five levels, 0 mismatches**, at a cost of
 **1,966 actions instead of 341**.
 
-T-10 injected single-rule variants and measured detection latency. Latency tracks
-*firing frequency*, not the size of the change: `ghost` (walls stop being solid,
+`a0-spike/THEORIZE_LOG.md` T-10 injected single-rule variants and measured
+detection latency. Latency tracks *firing frequency*, not the size of the
+change: `ghost` (walls stop being solid,
 on a rule that fires nearly every action) is caught in **6 actions**; `nocross`
 is **never caught in 341 actions** on the level it was learned on, and in **6**
 elsewhere. The consequential one is `push1`, which flips the truth value of
@@ -1020,8 +1028,10 @@ E-06 by using the second method it already had".
 The reason recorded for the discharge is "the certificate covers what it covers,
 exhaustion closes the rest, each goal attributed to its method", and the compiler's
 own generator repeats it: the two proofs are "kept **separate and attributed**,
-because they are not the same argument". **The emitted artefact does not do that,
-and the generator concedes it a dozen lines further down.** In the development it
+because they are not the same argument"
+(`theory-compiler/src/theory_compiler/generators/gen_lean.py:722-724`). **The
+emitted artefact does not do that, and the same function concedes it at `:786`.**
+In the development it
 actually writes, `Goal` is `false` on every reachable state, `unsolvable` closes
 all five end states by exhaustion, and the certificate's contribution is a
 `potential` function with an `inv_all` lemma that `unsolvable` never invokes. The
@@ -1486,7 +1496,7 @@ The free half of the valve saw nothing. The static check reads the board, and
 neither control touches the board; Lean re-proved a domain that was still
 internally consistent. Only replay — which costs plan-length actions and arrives
 only *after* acting — could see that the transition function had changed. The
-report states the consequence plainly:
+report states the consequence plainly (`cold-start-a3/A3_REPORT.md` §5):
 
 > Carrying a domain to a new level buys a plan for zero actions and buys **no
 > free assurance that the plan is valid**; the assurance costs plan-length
@@ -1513,9 +1523,10 @@ not noise:
 > **how much of a manual is convention rather than content**, and it is most of
 > the surface.
 
-The blind arm also spent 5 theorize rounds to the cold start's 1, and the report
-records that two of those five — 40 % of its adjudication budget — went to
-toolchain conformance rather than to the world.
+The blind arm also spent 5 theorize rounds to the cold start's 1
+(`cold-start-a3/artifacts/bill_table.md`), and the report records that two of
+those five — 40 % of its adjudication budget — went to toolchain conformance
+rather than to the world (`cold-start-a3/A3_REPORT.md` §4).
 
 ### 6.5 What A3 does not show
 
@@ -1688,7 +1699,7 @@ metric losing twice as often as it wins. X2 sits in the same position. Whatever
 gradient's own paired test agreed.
 
 A second consequence of n = 4 per side: every δ here is a multiple of 1/16, so the
-table's −0.562 and −0.188 print three decimals onto a quantity with seventeen
+table's −0.562 and −0.188 print three decimals onto a quantity with thirty-three
 reachable values. §7.4 calls exactly that presentational overstatement out when K2
 does it over a denominator of three. It is the same error, in the table this
 section asks the reader to trust most.
@@ -1718,8 +1729,8 @@ the audit raises the warning automatically: "separates the gradient strongly
 resolved" (`battery/artifacts/discrimination_arms.json`, X3 `warning`).
 `battery/REPORT_V2.md` reads it as capability rather than noise: an arm that keeps
 clearing levels finds new states late, while an arm that dies on step three saw
-everything it will ever see in its first quarter. X2 fails its declared direction
-too, weakly and for the same reason. The design's story — once the manual closes
+everything it will ever see in its first quarter. X2 fails its declared
+direction too, weakly and for the same reason — and inherits the same objection. The design's story — once the manual closes
 there is nothing left to be surprised by — predicts the opposite curve, and the
 strongest available control arm produces the wrong sign.
 
@@ -2107,12 +2118,15 @@ being counted as a separate finding; and the two K-only clusters — {K10, K8} a
 near-identical manuals. The artefact does not flag that cluster by cluster, which
 is where this paper previously said it did: it carries one global `coverage_note`
 reading that the picture "reflects thin data, not twenty independent findings",
-and a `warning` on the cross-family cluster alone.
+and a `warning` on the cross-family cluster alone
+(`battery/artifacts/redundancy.json`, `coverage_note` against `clusters[*].warning`).
 
 A cluster count near the metric count is not reassuring, and the artefact refuses
-to let it read as thirty independent findings: **257 of 703 metric pairs share
+to let it read as thirty-two independent findings: **257 of 703 metric pairs share
 enough runs to correlate at all — the identical count as v1, after tripling the run
-count.** Adding 64 runs made no new pair comparable, because the un-comparability is
+count** (`battery/artifacts/redundancy.json`, `n_pairs_measured` of `n_pairs`;
+`n_clusters` 32). Adding 64 runs — 95 against v1's 31 (`battery/REPORT_V2.md`) —
+made no new pair comparable, because the un-comparability is
 structural rather than a sample-size problem: no run in the repository has both
 books and model calls.
 
@@ -2121,6 +2135,7 @@ books and model calls.
 | gap | why |
 |---|---|
 | **No metric has survived a blind attack** | added after §7.7a and now the largest gap in the list: the published main table is empty (`battery/METRICS.md`), so there is no metric the battery trusts to rank arms. The rows below were written when there were nine |
+| **Level completion, on the ARC corpus it reads** | no ARC run in these trajectories ever completed a level — see §7.10a. The exception is instructive rather than contrary: `a2-refutation`, a *self-built* world, is the one run in the battery that reaches a goal, and it is the only run on which P4 returns a value at all (`battery/artifacts/capability_spectrum.json`, `won: true`, 18 actions against an optimal of 18) |
 | **A theory-bearing control arm** | the real blocker, and v2 quantified it: adding an entire second control arm moved the unvalidated count by **zero**. 21 of 38 metrics — all of epistemic, all of mechanism, and P4 — have never been checked against any known gradient (`battery/artifacts/validation_material.json`), and no baseline can check them, because an arm with no books cannot be scored on the epistemic family |
 | **The economy family on any arm with a theory** | A0, a0-spike and A2 make no model calls, and the Schema corpus records no cost. Claim C2's signature has still never been computed where it would mean something |
 | **Arm separated from harness** | the Schema side is somebody else's agent on somebody else's infrastructure; P1, P5 and E4 are visibly the plumbing |
@@ -2128,6 +2143,70 @@ books and model calls.
 | **M3 cross-level transfer (claim C3)** | still no multi-level run, and M3 is additionally known to have no reachable value at all |
 | **P4 solution redundancy on a truthful trace** | needs ground truth *and* a solve attempt. A0 has the truth but its trace is a coverage walk; the ledger runs are solve attempts with no truth |
 | **Repair with a control** | unchanged and unfixable in principle: an arm with no manual cannot have a repair loop |
+
+### 7.10a The capability side of this corpus is empty, and it was never bought
+
+The gap row above is the one this section had been assuming away, so it is worth
+stating with its evidence rather than as an aside in §11.
+
+**No arm in this repository has completed a level.** `baseline-arms/ledger.jsonl`
+carries 560 rows and records `levels_completed` 0 throughout, and so does every
+other record in the tree that carries the field. The live run's scorecard says it
+four ways in one payload
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/run.json`):
+`total_levels_completed` 0, `total_environments_completed` 0, the environment's
+`completed` flag false, and a per-level action histogram reading
+`[7, 0, 0, 0, 0, 0, 0]` — every action of the run spent on level one. Those are
+four fields of one object, not four independent instruments, and the distinction
+is worth keeping because the temptation is to count them as corroboration.
+
+Three non-zero values exist in the tree, and all three are the ablation arm's
+self-built offline worlds rather than ARC games —
+`ablation-arm/artifacts/{a0-base,a2-base,a2-charitable}/episode.jsonl`, each with
+`card_id` null and `score` null, disqualified by their own records.
+
+The machine-readable witness is one field. `baseline-arms/runs/20260728T103135Z-a7/envelope.json`
+publishes a coefficient of variation for every metric it pooled;
+`pooled_cv.levels_completed` is **`null`**, sitting beside `usd_per_action`
+0.033244 and `http_per_action` 0.09574. Every economic quantity has a spread. This
+one has nothing to take a spread of.
+
+**The honest sentence is not "this quantity has no signal".** It is that the
+quantity was never purchased. `baseline-arms/BUDGET_REPORT.md` §12.2 makes the
+point with the qualifier that matters: 「在 30 动作预算下**任何重复数都不能让它变得
+可比**——n 修不好一个没有信号的指标」 — *under a 30-action budget*, no repetition
+count can make it comparable. The next clause names the remedy: if Phase 4 wants to
+compare capability rather than economics, raise the action budget first, and this
+envelope knows nothing about the variance in that regime. The arithmetic behind it
+is in `theoria-arm/runs/20260728T210000Z-a3-level-boundary/`: the first level of
+`g50t` takes 78 successful actions against an authorised budget of 40 per level
+(`FINDINGS.md`; the a7 envelope's per-cell figure is 30). **Neither budget buys the
+first level**, so the column is not a measurement that came back
+empty — it is a measurement that was never affordable.
+
+One thing this section deliberately does **not** do with that fact, because the
+temptation is obvious and the evidence refuses it: it does not pair the empty
+capability column against a full one. The natural candidate is the **cost**
+shape — E2 and E3 — and it will not carry the contrast, though not because it is
+empty. E2's median over the 67 of 80 `bare_cc` runs that return a value is 0.229
+against a construction null of exactly 0.250, with 53 of the 67 below it
+(`battery/artifacts/capability_spectrum.json`, `metrics.E2`; the null is the
+interpolated head defined in `battery/metrics/economy.py`): a real departure from flat, in the
+**back-loaded** direction, which is the opposite of the front-loading signature
+claim C2 predicts. It is a signal pointing the wrong way, not an absence. Across arms it is undefined rather than weak:
+E2's process-1 verdict is `no-data` with **zero** pairs, because the corpus records
+no cost on the other side (`battery/artifacts/discrimination_arms.json`, `metrics.E2`). And the one place E2 does separate, it separates *by
+model tier within one arm* — which is a capability gradient, the very thing §7.8
+already registers as the confound to break before Phase 4. The economy family is not uniformly empty, and §7.2's own
+table says so: **E4** separates the specified gradient at δ = −0.875 over four
+paired games with its direction holding, which is why §7.3 insists it did not
+collapse. The claim here is about the *cost* shape specifically, not the family.
+Writing "capability is empty but the bill shape is full" would trade one overclaim
+for another, and would
+introduce a cross-arm cost claim that §11 says this paper does not make.
+
+The difference worth reporting is that the bill shape's distribution rests on 67
+runs and the capability column rests on none.
 
 **What v3 needs, in order** (`battery/REPORT_V2.md`): fix or retire E2 before
 Phase 4, since a primary endpoint a crash can flatter is not a primary endpoint;
@@ -2201,7 +2280,8 @@ credible exhaustive search earns 40 % of it, and an *invalid* certificate
 short-circuits to zero with no fallback.
 
 The held-out rubric's refusal of per-cell credit is worth quoting, because it is
-the kind of scoring choice that silently manufactures a result:
+the kind of scoring choice that silently manufactures a result
+(`exam/grading/rubrics_heldout.py`):
 
 > on a 7x7 A0 board a typical transition changes two cells, so an examinee that
 > returns the input frame unchanged already scores 47/49 = 96 % under a
@@ -2284,7 +2364,9 @@ That number is worth almost nothing on its own, and the directory says why.
 yielded **17 of 17 claims with no board reasoning at all**, measured rather than
 estimated. And the held-out paper's world description published the dynamics in
 prose, taking a reader from 47.5 % to essentially full marks. Both are fixed
-(uniform point values; a world block that no longer states dynamics).
+(uniform point values; a world block that no longer states dynamics); both yields
+were confirmed against the answer key before anything was changed
+(`exam/DECISIONS.md` D-EX-011).
 
 The reason the static checks missed them is the most transferable thing in this
 section:
@@ -2539,7 +2621,30 @@ predates the byte-level sealing scan and carries only the counters, as §9.2 say
 **The first-contact run** is the one whose manifest carries that scan
 (`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`:
 `sealed_game_ids_found` empty, `sealed_pile_untouched` true, `cut_integrity`
-true), and it spent 7 successful actions and $6.32 in model calls. Neither run
+true), and it spent 7 successful actions and $6.32 in model calls.
+
+**And the two numbers for that spend disagree by 8.3 %.** The provider's own
+arithmetic reports **$6.317658**; this project's price table, re-deriving the same
+run from its recorded token usage, gives **$5.795338**
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`,
+`cost.cli_reported_usd` against `cost.from_price_table.usd_total`, with
+`cost.relative_delta` −0.0827). The manifest does not average them or pick one: it
+records the gap and names it a finding about `proxy/pricing/pricing_v1.json`
+rather than about the run.
+
+**And it largely explains it.** The same manifest's `cost.cache_ttl_diagnosis`
+identifies 116 470 cache-creation tokens written at the one-hour multiplier and
+priced at the five-minute one, worth `under_billed_usd` **0.436763** — **83.6 % of
+the $0.52 gap**
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`,
+`cost.cache_ttl_diagnosis` against `cost.delta_usd`). Correcting it takes the
+disagreement from 8.3 % to **1.35 %**, and
+the residual has no identified cause. So this is not an unexplained discrepancy
+between two accountings; it is a priced, located defect in one of them with a small
+remainder. **Every dollar figure in this paper is the provider's number**, which is
+the conservative choice here, since the project's own table reads low.
+
+Neither run
 byte-verifies the "injected in one place" claim: §9.2 records that the archiver
 advertises that check in its docstring and does not implement it, and that the
 byte-scanning test runs against the mock. Both are statements about the
@@ -2585,8 +2690,8 @@ The figures below are **each pass's own summary line**, not a re-count:
 | success signal read as truth | `SURVEY-success-as-truth.md` | ~105 points | 8 |
 
 **No total is published here, and no rate.** The obvious headline — around 340
-points examined, 56 judged unsafe — does not survive, and neither does any
-replacement assembled by adding these columns up. Four reasons, in increasing
+points examined, 48 judged unsafe — does not survive, and neither does any
+replacement assembled by adding these columns up, which gives 445 and 56. Four reasons, in increasing
 order of severity.
 
 First, **the passes did not use one ruler.** One states the criterion under which
@@ -2617,15 +2722,19 @@ audit issuing an affirmative claim must publish both the number of objects it
 claim when they differ. No pass meets its own criterion.
 
 Third, **the counts quoted downstream are not enumerations.** The "~45 legitimate
-exit-code readings" that reached the work items and the digests appears in no
-survey. The "~97 further legitimate usages" from the fourth pass is `105 − 8` —
-arithmetic residue, not a list.
+exit-code readings" that reached the work items and the digests
+(`monitor/inbox/archive/20260729T063000Z-RES-3-the-pattern-you-named-appears-three-more-times.md:168-169`)
+appears in no survey. The "~97 further legitimate usages" from the fourth pass
+(`monitor/inbox/archive/20260729T104500Z-RES-3-the-dual-exists-and-it-has-a-different-shape.md:100`)
+is `105 − 8` — arithmetic residue, not a list.
 
 Fourth, and decisively: **the passes overlap, and where they overlap they
 disagree.** `engine-rig/engines/lp_potential/potential.py:170-171` is graded
 安全 — safe — at `SURVEY-solver-status.md:308` and unsafe at
-`SURVEY-environment-as-semantics.md:77`. `probe_frontier/reach.py:94-99` is safe
-at `:290` and unsafe at `:80`. `cegis_miner/miner.py:323` is safe at `:339` and
+`SURVEY-environment-as-semantics.md:77`.
+`engine-rig/engines/probe_frontier/reach.py:94-99` is safe
+at `:290` and unsafe at `:80`.
+`engine-rig/engines/cegis_miner/miner.py:323` is safe at `:339` and
 mismeasured at `:131`. Any sum over the four passes therefore counts some sites
 twice, and counts at least three of them on both sides of the ledger at once.
 

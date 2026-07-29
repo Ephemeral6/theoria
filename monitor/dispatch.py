@@ -96,6 +96,17 @@ def save_registry(reg):
 
 
 def pid_alive(pidnum):
+    # pid 0 不是一个进程，它是「我们没问到 pid」。
+    #
+    # 而 `tasklist /FI "PID eq 0"` 会返回 System Idle Process 那一行，
+    # 于是子串判断命中，`pid_alive(0)` **恒为真**。任务表在本机不给 PID 字段，
+    # 抓取循环无声退回初始值 0——结果是 66 条注册项里 62 条读作「还在跑」，
+    # 死了一天的会话和活着的会话在纸面上逐字相同（2026-07-29 对抗性普查抓到）。
+    #
+    # 这条修复本身就是那种「补丁即缺陷」的例子：抓 pid 的那段代码**正是为了修
+    # `pid: 0`** 而加的，而它在本机的失败模式恰好是返回同一个 0。
+    if pidnum is None or pidnum <= 0:
+        return False
     if os.name == "nt":
         out = subprocess.run(["tasklist", "/FI", "PID eq %d" % pidnum, "/FO", "CSV"],
                              capture_output=True, text=True, encoding=childio._CONSOLE, errors="replace").stdout

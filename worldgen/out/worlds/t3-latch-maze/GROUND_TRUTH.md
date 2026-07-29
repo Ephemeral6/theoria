@@ -43,15 +43,17 @@ A rule marked **cascade** fires inside `settle`, after the rule that caused it, 
 
 ## Invariants
 
+9 hold, 0 violated, 0 unverified — `invariants_all_hold` is `true`. **An unverified invariant is not a satisfied one**, so it counts against that boolean exactly as a violation does; the two are kept in separate lists because they call for different work.
+
 * **agent_unique** — exactly one cell shows colour 6 at all times  _(checked on 436 reachable states: holds)_
 * **grid_shape** — every frame is 8 x 10  _(checked on 436 reachable states: holds)_
 * **door_presence_tracks_net** — a door shows colour 4 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise  _(checked on 436 reachable states: holds)_
-* **latch_monotone** — every latch switch's bit is monotone non-decreasing along every trajectory, and so is the aggregate bit of a net whose switches are all latches: once 1, never 0 again  _(prose only, unverified)_
+* **latch_monotone** — every latch switch's bit is monotone non-decreasing along every trajectory, and so is the aggregate bit of a net whose switches are all latches: once 1, never 0 again  _(checked on 1744 transitions: holds)_
 * **token_count** — the number of cells showing colour 5 equals the number of tokens not yet collected  _(checked on 436 reachable states: holds)_
-* **collection_is_monotone** — the number of collected tokens never decreases, so a lock that has opened never closes again  _(prose only, unverified)_
+* **collection_is_monotone** — the number of collected tokens never decreases, so a lock that has opened never closes again  _(checked on 1744 transitions: holds)_
 * **single_armed_tile** — at most one fragile tile is armed at any instant  _(checked on 436 reachable states: holds)_
 * **armed_tile_under_agent** — an armed fragile tile's cell is the agent's cell  _(checked on 436 reachable states: holds)_
-* **tile_state_is_monotone** — a fragile tile's state only ever rises, 0 -> 1 -> 2, so a collapsed tile is never crossed again  _(prose only, unverified)_
+* **tile_state_is_monotone** — a fragile tile's state only ever rises, 0 -> 1 -> 2, so a collapsed tile is never crossed again  _(checked on 1744 transitions: holds)_
 
 ## Solvability
 
