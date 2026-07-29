@@ -141,8 +141,8 @@ the audit raises the warning automatically: "separates the gradient strongly
 resolved" (`battery/artifacts/discrimination_arms.json`, X3 `warning`).
 `battery/REPORT_V2.md` reads it as capability rather than noise: an arm that keeps
 clearing levels finds new states late, while an arm that dies on step three saw
-everything it will ever see in its first quarter. X2 fails its declared direction
-too, weakly and for the same reason. The design's story — once the manual closes
+everything it will ever see in its first quarter. X2 fails its declared
+direction too, weakly and for the same reason — and inherits the same objection. The design's story — once the manual closes
 there is nothing left to be surprised by — predicts the opposite curve, and the
 strongest available control arm produces the wrong sign.
 
@@ -544,6 +544,7 @@ books and model calls.
 | gap | why |
 |---|---|
 | **No metric has survived a blind attack** | added after §7.7a and now the largest gap in the list: the published main table is empty (`battery/METRICS.md`), so there is no metric the battery trusts to rank arms. The rows below were written when there were nine |
+| **Level completion, on the ARC corpus it reads** | no ARC run in these trajectories ever completed a level — see §7.10a. The exception is instructive rather than contrary: `a2-refutation`, a *self-built* world, is the one run in the battery that reaches a goal, and it is the only run on which P4 returns a value at all (`battery/artifacts/capability_spectrum.json`, `won: true`, 18 actions against an optimal of 18) |
 | **A theory-bearing control arm** | the real blocker, and v2 quantified it: adding an entire second control arm moved the unvalidated count by **zero**. 21 of 38 metrics — all of epistemic, all of mechanism, and P4 — have never been checked against any known gradient (`battery/artifacts/validation_material.json`), and no baseline can check them, because an arm with no books cannot be scored on the epistemic family |
 | **The economy family on any arm with a theory** | A0, a0-spike and A2 make no model calls, and the Schema corpus records no cost. Claim C2's signature has still never been computed where it would mean something |
 | **Arm separated from harness** | the Schema side is somebody else's agent on somebody else's infrastructure; P1, P5 and E4 are visibly the plumbing |
@@ -551,6 +552,68 @@ books and model calls.
 | **M3 cross-level transfer (claim C3)** | still no multi-level run, and M3 is additionally known to have no reachable value at all |
 | **P4 solution redundancy on a truthful trace** | needs ground truth *and* a solve attempt. A0 has the truth but its trace is a coverage walk; the ledger runs are solve attempts with no truth |
 | **Repair with a control** | unchanged and unfixable in principle: an arm with no manual cannot have a repair loop |
+
+### 7.10a The capability side of this corpus is empty, and it was never bought
+
+The gap row above is the one this section had been assuming away, so it is worth
+stating with its evidence rather than as an aside in §11.
+
+**No arm in this repository has completed a level.** `baseline-arms/ledger.jsonl`
+carries 560 rows and records `levels_completed` 0 throughout, and so does every
+other record in the tree that carries the field. The live run's scorecard says it
+four ways in one payload
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/run.json`):
+`total_levels_completed` 0, `total_environments_completed` 0, the environment's
+`completed` flag false, and a per-level action histogram reading
+`[7, 0, 0, 0, 0, 0, 0]` — every action of the run spent on level one. Those are
+four fields of one object, not four independent instruments, and the distinction
+is worth keeping because the temptation is to count them as corroboration.
+
+Three non-zero values exist in the tree, and all three are the ablation arm's
+self-built offline worlds rather than ARC games —
+`ablation-arm/artifacts/{a0-base,a2-base,a2-charitable}/episode.jsonl`, each with
+`card_id` null and `score` null, disqualified by their own records.
+
+The machine-readable witness is one field. `baseline-arms/runs/20260728T103135Z-a7/envelope.json`
+publishes a coefficient of variation for every metric it pooled;
+`pooled_cv.levels_completed` is **`null`**, sitting beside `usd_per_action`
+0.033244 and `http_per_action` 0.09574. Every economic quantity has a spread. This
+one has nothing to take a spread of.
+
+**The honest sentence is not "this quantity has no signal".** It is that the
+quantity was never purchased. `baseline-arms/BUDGET_REPORT.md` §12.2 makes the
+point with the qualifier that matters: 「在 30 动作预算下**任何重复数都不能让它变得
+可比**——n 修不好一个没有信号的指标」 — *under a 30-action budget*, no repetition
+count can make it comparable. The next clause names the remedy: if Phase 4 wants to
+compare capability rather than economics, raise the action budget first, and this
+envelope knows nothing about the variance in that regime. The arithmetic behind it
+is in `theoria-arm/runs/20260728T210000Z-a3-level-boundary/`: the first level of
+`g50t` takes 78 successful actions against an authorised budget of 40 per level
+(`FINDINGS.md`; the a7 envelope's per-cell figure is 30). **Neither budget buys the
+first level**, so the column is not a measurement that came back
+empty — it is a measurement that was never affordable.
+
+One thing this section deliberately does **not** do with that fact, because the
+temptation is obvious and the evidence refuses it: it does not pair the empty
+capability column against a full one. The natural candidate is the **cost**
+shape — E2 and E3 — and it will not carry the contrast, though not because it is
+empty. E2's median over 67 `bare_cc` runs is 0.229 against a construction null of
+exactly 0.250, with 53 of the 67 below it: a real departure from flat, in the
+**back-loaded** direction, which is the opposite of the front-loading signature
+claim C2 predicts. It is a signal pointing the wrong way, not an absence. Across arms it is undefined rather than weak:
+E2's process-1 verdict is `no-data` with **zero** pairs, because the corpus records
+no cost on the other side. And the one place E2 does separate, it separates *by
+model tier within one arm* — which is a capability gradient, the very thing §7.8
+already registers as the confound to break before Phase 4. The economy family is not uniformly empty, and §7.2's own
+table says so: **E4** separates the specified gradient at δ = −0.875 over four
+paired games with its direction holding, which is why §7.3 insists it did not
+collapse. The claim here is about the *cost* shape specifically, not the family.
+Writing "capability is empty but the bill shape is full" would trade one overclaim
+for another, and would
+introduce a cross-arm cost claim that §11 says this paper does not make.
+
+The difference worth reporting is that the bill shape's distribution rests on 67
+runs and the capability column rests on none.
 
 **What v3 needs, in order** (`battery/REPORT_V2.md`): fix or retire E2 before
 Phase 4, since a primary endpoint a crash can flatter is not a primary endpoint;

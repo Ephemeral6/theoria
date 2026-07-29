@@ -67,11 +67,14 @@ good score by a run possessing none of the capability being measured**, and that
 demonstration, 14 of them claims that a metric had been defended**. A later round,
 in which six mutually invisible attackers worked from a stripped source tree
 against thresholds committed before any attack, raised the first number to **37 of
-38** and cut the table of metrics trusted to rank arms from nine to two; a sighted
-follow-up review removed the last two. Both rounds carry defects we state rather
-than bury — the adjudication rule was amended after the results were seen, and the
-mechanical check meant to certify that an attack did no real work rejected none of
-the 105 attacks it saw. A subsidiary finding is upstream of cheating altogether:
+38** and cut the table of metrics trusted to rank arms from nine to two. The last
+two did not fall to it: a **sighted** follow-up review took one, and the other was
+moved to a tier created for it afterwards, on the ground that a metric no attack
+can reach is not a metric that resisted one. The published table is now empty.
+Both rounds carry defects we state rather than bury — the adjudication rule was
+amended after the results were seen, and the mechanical check meant to certify
+that an attack did no real work rejected none of the attacks it saw, 105 in the
+blind phase and 112 in the delivered artefact. A subsidiary finding is upstream of cheating altogether:
 for any two manuals differing by one clause, the epistemic family contains a
 metric preferring each, so it cannot rank them at all.
 
@@ -104,19 +107,22 @@ true of its world and the other is not. The instrument cannot tell them apart an
 is not supposed to. That is a demonstration of a failure mode, not evidence about
 anything.
 
-The remaining sections report, without claiming: a theory carried unchanged to a
-second level of the same self-built world, which re-fits from one frame and wins
-with zero engine stages and zero adjudicated candidates while paying verification
-in full — both arms score 252/252 against the referee, so the saving is in what
-each cost and not in what either got right; an examination instrument whose leak
+The remaining sections report, without claiming: a **manual** carried unchanged to
+a second level of the same self-built world — the playbook's transfer is a design
+claim no code path in that experiment exercises — which re-fits from one frame plus
+three supplied level constants and wins with zero engine stages and zero
+adjudicated candidates while paying verification in full; both arms score 252/252
+against the referee, so what differs is what each arm structurally cost and not
+what either got right, and this experiment did not convert that into money; an examination instrument whose leak
 checker reports 1 790 probes with no hits and which nonetheless missed two real
 leaks an adversarial reader found, and three of whose four papers have never been
 sat; and two live runs against the real API on one development-pile game — a
 preflight that sent 18 commands for zero billable actions and zero dollars, and a
 first-contact run that spent seven actions and, by the provider's own arithmetic,
-$6.32 in model calls — our price table says $5.80 and the manifest records the
-disagreement — whose manifest carries the byte-level scan showing no sealed-pile
-game was touched.
+$6.32 in model calls, a figure this project's own price table re-derives as $5.80,
+a disagreement the manifest locates and prices to 84 % of its size (§9.4)
+— whose manifest carries the byte-level scan showing no sealed-pile game was
+touched.
 
 **What we do not claim.** No arm was run against another system's baseline, there
 is no language-model baseline anywhere in this paper, and the three arms of the
@@ -129,8 +135,8 @@ agent on another team's infrastructure, so every effect size there bundles
 capability with plumbing. Those effect sizes are unpaired, and on the one metric
 this paper bolds the paired test disagrees with them. The theorize step is a
 checked-in artefact rather than a measured language-model step, and every world is
-small enough for `decide` to enumerate. Transfer, the exam, the ordering claim and
-the cost magnitude are reported here and claimed nowhere. **The contribution is an
+small enough for `decide` to enumerate. Transfer, the exam, the ordering claim, the bill
+shape and the cost magnitude are reported here and claimed nowhere. **The contribution is an
 instrument, a demonstration artefact, and a negative result about our own
 measurements** — Phase 1 establishes that the instrument exists, that it produces
 the failure mode on demand, and that the loop closes on it — not a result about

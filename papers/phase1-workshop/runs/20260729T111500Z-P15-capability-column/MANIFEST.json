@@ -1,0 +1,75 @@
+{
+  "author": "RES-2",
+  "base_commit": "20733a4f",
+  "branch": "agent/p15-capability-column",
+  "branched_from": "agent/p7-p14-battery-section-blind-round, which is pushed and unmerged; both regenerate PAPER.md",
+  "files": [
+    {
+      "path": "papers/phase1-workshop/sections/00_abstract.md",
+      "sha256": "941b309cf2080d7d9fee7af807e2138c1db3f10302739169c6f357c86123bfdd"
+    },
+    {
+      "path": "papers/phase1-workshop/sections/07_battery.md",
+      "sha256": "3c0c40797169e4f4ee36f4d7afdc4fed43f62386f75211a80ec562d11328639c"
+    },
+    {
+      "path": "papers/phase1-workshop/sections/09_preflight.md",
+      "sha256": "75546a7b53674e4b1d7cf120f2567056353a964ae467dc9dba7d4daa307ceed9"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260729T111500Z-P15-capability-column/FINDINGS.md",
+      "sha256": "c461e3606b61d6534d0b0ea514ba8d556dd49ba383abc127d20a3622bc013a07"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260729T111500Z-P15-capability-column/RUN_STATE.md",
+      "sha256": "0856f04449bef5c0e8f1cc7488a1807a3107b0b7011093abce0f10486184aaaf"
+    }
+  ],
+  "passive": {
+    "api_calls": 0,
+    "game_spend_usd": 0.0,
+    "model_calls": 0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "P15-capability-column-has-no-signal",
+  "results": {
+    "refused": "the bill-shape contrast the item asked for: cross-arm E2 is no-data with zero pairs, within-arm it separates by model tier, and the paper disclaims cross-arm cost",
+    "task1": {
+      "delivered": "new 7.10a plus a gap row in 7.10",
+      "honest_claim": "the quantity was never purchased: 78 actions for level 1 of g50t against an authorised 40 per level",
+      "premise": "wrong twice: there is no capability column, and \"no signal\" drops the source's 30-action-budget qualifier",
+      "witness": "baseline-arms/runs/20260728T103135Z-a7/envelope.json pooled_cv.levels_completed = null"
+    },
+    "task2": {
+      "defects": [
+        "$5.80 existed only in the abstract, breaking the abstract's own stated rule; promoted into 9.4 with its artefact",
+        "\"a theory carried unchanged\" -> \"a manual\"; playbook transfer is a design claim no code path exercises",
+        "the blind round's last two metrics were not both taken by the sighted review; one was retiered"
+      ],
+      "live_defects_fixed": 3,
+      "premise": "stale against v0.3"
+    },
+    "task3": {
+      "outcome": "confirmation, not an edit",
+      "why": "P14 declined the blanket sweep and published the refusal in 10.6; E17 landed for 2 of 8 rows"
+    },
+    "task4": {
+      "defects_found": 8,
+      "in_text_written_today": 6,
+      "overclaiming_in_the_modest_direction": 5,
+      "sentences_deleted": 3,
+      "worst": "the first paragraph of 7.10a carried six quantities and no artefact path; two did not reproduce"
+    }
+  },
+  "status": "complete",
+  "territory": "papers",
+  "utc": "2026-07-29T11:15:00Z",
+  "verification": {
+    "build": "python papers/phase1-workshop/assemble.py",
+    "gate": "python papers/phase1-workshop/verify_paper.py",
+    "gate_limitation": "verify_paper checks that cited paths resolve; it cannot detect a quantity that cites nothing, which is the defect class this run hit",
+    "result": "PASS (4/4)"
+  },
+  "what": "The main table's capability column currently has no signal -- zero level completions anywhere -- and the paper must say that rather than leaving it as a number not yet filled in. Plus: clear the abstract's stale selling of transfer and the exam against the body's own disclaimer, and verify P14's verification-wording ruling actually reached the text."
+}

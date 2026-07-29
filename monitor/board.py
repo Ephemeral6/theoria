@@ -23,6 +23,7 @@ Item front matter (first lines of each item file):
 
 import os
 import re
+import subprocess
 import sys
 import time
 
@@ -246,6 +247,77 @@ def held_by(worker):
                if f.endswith(".md") and f[:-3].split(".")[1] == worker)
 
 
+REPO = os.path.dirname(HERE)
+
+
+def _git(repo, *args):
+    """Run one read-only git command. Returns lines, or [] on any trouble.
+
+    Never raises and never propagates a non-zero exit. Everything below this
+    is advisory: a claim that failed because git was slow, missing, or in a
+    funny state would be a much worse bug than the one being fixed.
+    """
+    try:
+        out = subprocess.run(("git",) + args, cwd=repo,
+                             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL,
+                             timeout=15)
+    except Exception:
+        return []
+    if out.returncode != 0:
+        return []
+    return out.stdout.decode("utf-8", "replace").splitlines()
+
+
+def prior_work(iid, repo=None):
+    """Lines warning that somebody may already have worked this item.
+
+    2026-07-29: S21 was done twice and S27 three times, by concurrent sessions
+    that each found a clean-looking item and started over. Both times the
+    evidence was already sitting in plain sight -- a branch named after the
+    item -- and nothing looked. One `git branch` is cheaper than a session.
+
+    Worktree directories are checked as well as branches, because the third
+    S27 copy was an **untracked** file inside a worktree: no branch, no commit,
+    nothing for a ref-based check to find, but the directory name was there.
+    """
+    repo = repo or REPO
+    slug = iid.lower()
+    seen, hits = set(), []
+    for line in _git(repo, "branch", "-a", "--list", "*%s*" % slug):
+        name = line.strip().lstrip("*+ ").strip()
+        if not name or "->" in name:            # skip the origin/HEAD alias
+            continue
+        short = name.split("remotes/origin/", 1)[-1]
+        if short in seen:                       # local and remote are one branch
+            continue
+        seen.add(short)
+        count = _git(repo, "rev-list", "--count", "master..%s" % name)
+        ahead = count[0].strip() if count else "?"
+        if ahead == "0":
+            # Nothing ahead of master means it is already merged, which is a
+            # different piece of news: not "someone is working on this" but
+            # "this is very likely already done". S21 read exactly like this
+            # an hour after it was delivered.
+            hits.append("  分支 %s（领先 master 0 个提交 —— **已并入，这件活很可能已经完成**）"
+                        % short)
+        else:
+            hits.append("  分支 %s（领先 master %s 个提交）" % (short, ahead))
+    wt = os.path.join(repo, ".worktrees")
+    for d in sorted(os.listdir(wt)) if os.path.isdir(wt) else []:
+        if slug in d.lower():
+            hits.append("  工作树 .worktrees/%s（可能有未提交、甚至未跟踪的半成品）" % d)
+    if not hits:
+        return []
+    # ASCII and Chinese only: this console is cp936, and U+26A0 (the obvious
+    # choice of warning glyph) is not in it. Printing one would raise
+    # UnicodeEncodeError *after* the item was already renamed into claimed/ --
+    # the agent would see a traceback and no item, while the board recorded a
+    # successful claim. Same locale that once reported eight live workers dead.
+    return (["", "注意：这件活可能已经有人做过或正在做："] + hits
+            + ["  先看它再决定**重做还是接续**。重做前请说明为什么不接续——",
+               "  半成品被静默丢弃过一次，代价是同一件事做了两遍。"])
+
+
 def cmd_claim(worker, lane=None):
     # `--lane` 是**认领者自报的**，而带赛道的查询会跳过花钱守卫与预留守卫。
     # 于是 `claim W-9999 --lane campaign` 能领走一件在真 API 上打的战役，
@@ -279,6 +351,10 @@ def cmd_claim(worker, lane=None):
         note("CLAIM %s by %s" % (iid, worker))
         print("---8<--- item %s ---8<---" % iid)
         sys.stdout.write(open(dst, encoding="utf-8").read())
+        # Last, deliberately. The item body is long and this is the one line
+        # that has to survive being skimmed.
+        for line in prior_work(iid):
+            print(line)
         return 0
     if withheld:
         # Never a bare BOARD-EMPTY when something was hidden. Silently

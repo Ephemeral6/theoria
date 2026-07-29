@@ -181,7 +181,27 @@ predates the byte-level sealing scan and carries only the counters, as §9.2 say
 **The first-contact run** is the one whose manifest carries that scan
 (`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`:
 `sealed_game_ids_found` empty, `sealed_pile_untouched` true, `cut_integrity`
-true), and it spent 7 successful actions and $6.32 in model calls. Neither run
+true), and it spent 7 successful actions and $6.32 in model calls.
+
+**And the two numbers for that spend disagree by 8.3 %.** The provider's own
+arithmetic reports **$6.317658**; this project's price table, re-deriving the same
+run from its recorded token usage, gives **$5.795338**
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`,
+`cost.cli_reported_usd` against `cost.from_price_table.usd_total`, with
+`cost.relative_delta` −0.0827). The manifest does not average them or pick one: it
+records the gap and names it a finding about `proxy/pricing/pricing_v1.json`
+rather than about the run.
+
+**And it largely explains it.** The same manifest's `cost.cache_ttl_diagnosis`
+identifies 116 470 cache-creation tokens written at the one-hour multiplier and
+priced at the five-minute one, worth `under_billed_usd` **0.436763** — **83.6 % of
+the $0.52 gap**. Correcting it takes the disagreement from 8.3 % to **1.35 %**, and
+the residual has no identified cause. So this is not an unexplained discrepancy
+between two accountings; it is a priced, located defect in one of them with a small
+remainder. **Every dollar figure in this paper is the provider's number**, which is
+the conservative choice here, since the project's own table reads low.
+
+Neither run
 byte-verifies the "injected in one place" claim: §9.2 records that the archiver
 advertises that check in its docstring and does not implement it, and that the
 byte-scanning test runs against the mock. Both are statements about the
