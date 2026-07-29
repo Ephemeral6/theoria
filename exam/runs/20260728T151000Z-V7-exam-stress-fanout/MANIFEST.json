@@ -60,7 +60,7 @@
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/flipcheck_control.txt",
-      "sha256": "cfb7fa4bdbe31f45e4a21414ce54c05a87051c8c34e5760afb79c04beb364b4a"
+      "sha256": "49b3e611b20ce97ad3bfaa7e04cd9b85c72351e868a005154df6e687b6a94a2e"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/flipcheck_race.py",
@@ -68,7 +68,7 @@
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/flipcheck_xpass.txt",
-      "sha256": "1721811e580bb074cdc9d2dcaf16d496caf8289f0141a887ca67d322621987e1"
+      "sha256": "5f97362a7e258989403876fc8a01c2d2d07a577e9435f98a2670754dacf4366a"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/hammer.py",
@@ -80,15 +80,15 @@
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/ps_new.json",
-      "sha256": "408660efd25b9d6df05430dfa8d2d5bf860c7176c2bf483b7d61e7b711c08a6c"
+      "sha256": "26ae87879774873b90e0dea621729f83af062c88ae8fae9c7ebd038ed0a7f0c9"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/pytest_under_race.txt",
-      "sha256": "4f733e54ba0825ef5c652b5566ac9ebaab85ed602776c715dbd4166428f9c42f"
+      "sha256": "461534711fd03eb7295fdac6cf11fcdb57996075a52ce2763c03d389b70bc646"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/pytest_under_race_2.txt",
-      "sha256": "d33ffead1234aac66b3d78aff7aca3d2a5f61ab0689cee4a1ad94162f1eedf55"
+      "sha256": "bcc6159cbb1deeceba26c077aafe46957f982fd7ad6fd2f88c51306f5b63372f"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race.py",
@@ -100,31 +100,31 @@
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w1.txt",
-      "sha256": "447ff021223b6943644de8e1e5063bedd55c54c4ad65ddf9c8ce3de7bb136da6"
+      "sha256": "b453e31b3024ee55860302c23e84c3218c0518ae580f2d802056c5fbd063e424"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w2.txt",
-      "sha256": "447ff021223b6943644de8e1e5063bedd55c54c4ad65ddf9c8ce3de7bb136da6"
+      "sha256": "b453e31b3024ee55860302c23e84c3218c0518ae580f2d802056c5fbd063e424"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w3.txt",
-      "sha256": "8437fd594ac6faf6a9b23dda6e5fa3d9567067c1e0881ed9e0adc628c9bbddbb"
+      "sha256": "64749ee76f8ab698c68f09e2165ad5244a29e8304ed862785fcd99aa22b83c38"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w4.txt",
-      "sha256": "8437fd594ac6faf6a9b23dda6e5fa3d9567067c1e0881ed9e0adc628c9bbddbb"
+      "sha256": "64749ee76f8ab698c68f09e2165ad5244a29e8304ed862785fcd99aa22b83c38"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w5.txt",
-      "sha256": "8437fd594ac6faf6a9b23dda6e5fa3d9567067c1e0881ed9e0adc628c9bbddbb"
+      "sha256": "64749ee76f8ab698c68f09e2165ad5244a29e8304ed862785fcd99aa22b83c38"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w6.txt",
-      "sha256": "8437fd594ac6faf6a9b23dda6e5fa3d9567067c1e0881ed9e0adc628c9bbddbb"
+      "sha256": "64749ee76f8ab698c68f09e2165ad5244a29e8304ed862785fcd99aa22b83c38"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/target.txt",
-      "sha256": "b06136d30238d4453c533d16d41a437717c0183c89b678c23d2b50b7eb104100"
+      "sha256": "633edfc8a96f85e0a689a73512546d9174071f94e294ce2e7d0a4fd3ddee9f84"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/v_recheck.py",
@@ -132,7 +132,7 @@
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/prior_sweep.json",
-      "sha256": "408660efd25b9d6df05430dfa8d2d5bf860c7176c2bf483b7d61e7b711c08a6c"
+      "sha256": "26ae87879774873b90e0dea621729f83af062c88ae8fae9c7ebd038ed0a7f0c9"
     },
     {
       "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/prior_sweep.py",
@@ -239,6 +239,7 @@
     "exercised_as_a_pytest_plugin": [
       "flipcheck.py (prints nothing as a script; transcripts flipcheck_control.txt / flipcheck_xpass.txt)"
     ],
+    "line_endings": "every file listed here is LF on disk, as exam/.gitattributes ('* text eol=lf') requires. The first pass of this manifest hashed CRLF bytes for 8 files written by shell redirect on Windows -- and prior_sweep.json had been carrying a CRLF hash since the original run -- so a fresh checkout would have failed the manifest's own verification. Normalised and rehashed.",
     "not_rerun": [
       "race.py",
       "race2.py",
