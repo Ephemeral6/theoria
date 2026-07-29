@@ -215,12 +215,28 @@ def rung_spend_gate(problems):
         fail(problems, "verify_spend.sh is gone; proxy's spend-gate checks "
                        "are no longer run by anything")
         return
-    bash = shutil.which("bash")
+    # Two things this must not do, both of which monitor/gates.py already
+    # learned the hard way and this stage managed to re-learn on its own:
+    #
+    #  * `shutil.which("bash")` finds WSL's bash on this machine -- a different
+    #    Linux with no `python`, where the gate dies at its first line;
+    #  * a Windows absolute path handed to any MSYS/WSL bash loses its
+    #    backslashes (`C:\Users\...` -> `C:Users...`), which is exactly how
+    #    this stage failed on its first CI run: exit 127, "No such file or
+    #    directory", reported as `verify gate red in proxy` -- the runner's
+    #    defect wearing the territory's name.
+    #
+    # So: name Git Bash explicitly, and pass a bare filename with `cwd` set so
+    # no absolute path reaches bash at all.
+    bash = next((c for c in (r"C:\Program Files\Git\bin\bash.exe",
+                             r"C:\Program Files\Git\usr\bin\bash.exe",
+                             r"C:\Program Files (x86)\Git\bin\bash.exe")
+                 if os.path.isfile(c)), None) or shutil.which("bash")
     if not bash:
         print("   note  no bash on PATH, so verify_spend.sh did NOT run -- "
               "this is not a pass, it is an unchecked area")
         return
-    r = sh([bash, script])
+    r = sh([bash, os.path.basename(script)])
     if r.returncode != 0:
         fail(problems, "verify_spend.sh exited %d\n%s"
              % (r.returncode, (r.stdout + r.stderr)[-3000:]))
