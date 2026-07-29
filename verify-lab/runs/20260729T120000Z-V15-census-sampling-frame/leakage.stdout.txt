@@ -1,0 +1,15 @@
+judged paths                    126
+named in a tracked file that also discusses negative controls: 29 (23%)
+  present rate, exposed         0.55
+  present rate, unexposed       0.34
+  pool                          0.39
+  one-sided binomial p          0.055
+top sources:
+  PARTNER_SYNC.md                                          9
+  papers/phase1-workshop/PAPER.md                          8
+  papers/phase1-workshop/CITECHECK.md                      4
+  monitor/inbox/archive/20260728T034833Z-OPS-R-optional-checks-fail-open.md 3
+  monitor/runs/20260728T143255Z-S1-quota-auto-exit/MANIFEST.json 3
+  engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/partials/deadlock-via-reachability.md 3
+  monitor/audit/DRIFT-20260728T1645Z-the-merge-queue-retries-forever-and-cannot-heal-itself.md 2
+  monitor/inbox/20260728T161500Z-opsm-adjudication-14-flags-gate-runner-broken.md 2

@@ -1,0 +1,185 @@
+{
+ "claims_audited": 14,
+ "claims_deliberately_out_of_population": [
+  {
+   "claim": "a0-spike certify_generated.replay_exact",
+   "depends_on": "gen_exec.compile_module(theory/theory.dsl) -- `certify_generated(module, episodes)` never sees `rules`",
+   "value_under_an_injected_mining_crash": true
+  },
+  {
+   "claim": "a0-spike held_out.exact",
+   "depends_on": "the same compiled module, enumerated against world/sokoban2.py; no mined rule is consulted",
+   "value_under_an_injected_mining_crash": true
+  },
+  {
+   "claim": "a0-spike levels[*].theorem.unsolvable",
+   "depends_on": "stages.unsolvability_certificate(level) -- takes only a Level and compares two parities; no rules, no search",
+   "value_under_an_injected_mining_crash": true
+  }
+ ],
+ "claims_that_carried_an_uncounted_crash": 0,
+ "committed_claims_audited": 13,
+ "committed_claims_exercised_by_this_rerun": 12,
+ "committed_claims_not_exercised": 1,
+ "crashes_observed_anywhere_in_this_rerun": 0,
+ "findings": [
+  {
+   "artifact": "runs/20260728T015354Z-g50t-first-contact/certify_reconstructed.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "theoria-arm certify constraint 9 (`unambiguous`)",
+   "committed_claim_detail": "no (state, action) among 8 x 1 admitted two rules",
+   "committed_claim_ok": true,
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_ok": true,
+   "rerun_pairs_checked": 8,
+   "rerun_pairs_nominal": 8
+  },
+  {
+   "artifact": "runs/20260728T015354Z-g50t-first-contact/certify_reconstructed.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "theoria-arm plan `unsat` / \"the whole reachable set was enumerated\"",
+   "committed_claim_detail": "the manual states no winning condition, so `is_goal` is `False` everywhere and no search can succeed. This is a gap in the manual, NOT a proof that the level is unsolvable -- constraint 6 forbids reading a failed search as an unsolvability claim.",
+   "committed_claim_ok": "no_goal_declared",
+   "committed_crash_count_field": null,
+   "not_exercised": true,
+   "note": "the archived manual declares no goal, so BFS never ran on this instance and no exhaustiveness claim was ever reached. NOT COUNTED as clean -- counted as not exercised.",
+   "rerun_crash_count": null,
+   "rerun_ok": "no_goal_declared"
+  },
+  {
+   "artifact": "(not previously published -- this instance is new here, added because the archived run never reaches BFS)",
+   "audits_a_committed_claim": false,
+   "carried_an_uncounted_crash": false,
+   "claim": "theoria-arm plan `unsat` / \"the whole reachable set (3 states) was enumerated\", worked example, unreachable goal, through plan() rather than the tier",
+   "committed_claim_detail": null,
+   "committed_claim_ok": "n/a -- no committed artifact makes this claim",
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_exhaustive": true,
+   "rerun_ok": "unsat",
+   "rerun_search_ceiling": {
+    "deadline_s": 120.0,
+    "node_cap": 120000
+   }
+  },
+  {
+   "artifact": "a0-spike/artifacts/a0_report.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "a0-spike mined rule set: each disjunctive effect class asserts \"this class admits no single conjunctive guard\"",
+   "committed_claim_detail": "no field in the committed report distinguishes NoSeparatingGuard from a crash; both produced the same rules",
+   "committed_claim_ok": "4 of 12 effect classes published as disjunctive",
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_no_separating_guard": 4,
+   "rerun_ok": true
+  },
+  {
+   "artifact": "a0-spike/artifacts/a0_report.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "a0-spike certify.replay_exact (replayed through the MINED rules)",
+   "committed_claim_detail": "1966 transitions",
+   "committed_claim_ok": true,
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_ok": true
+  },
+  {
+   "artifact": "a0-spike/artifacts/a0_report.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "a0-spike certify.exactly_one_successor (replayed through the MINED rules)",
+   "committed_claim_detail": "1966 transitions",
+   "committed_claim_ok": true,
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_ok": true
+  },
+  {
+   "artifact": "a0-spike/artifacts/adaptation.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "a0-spike adaptation repair[push1].replay_exact",
+   "committed_claim_detail": "3661 transitions re-mined after the variant was injected",
+   "committed_claim_ok": true,
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_ok": true
+  },
+  {
+   "artifact": "a0-spike/artifacts/adaptation.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "a0-spike adaptation repair[push1].exactly_one_successor",
+   "committed_claim_detail": "3661 transitions re-mined after the variant was injected",
+   "committed_claim_ok": true,
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_ok": true
+  },
+  {
+   "artifact": "a0-spike/artifacts/adaptation.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "a0-spike adaptation repair[push3].replay_exact",
+   "committed_claim_detail": "1478 transitions re-mined after the variant was injected",
+   "committed_claim_ok": true,
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_ok": true
+  },
+  {
+   "artifact": "a0-spike/artifacts/adaptation.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "a0-spike adaptation repair[push3].exactly_one_successor",
+   "committed_claim_detail": "1478 transitions re-mined after the variant was injected",
+   "committed_claim_ok": true,
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_ok": true
+  },
+  {
+   "artifact": "a0-spike/artifacts/adaptation.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "a0-spike adaptation repair[nocross].replay_exact",
+   "committed_claim_detail": "1753 transitions re-mined after the variant was injected",
+   "committed_claim_ok": true,
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_ok": true
+  },
+  {
+   "artifact": "a0-spike/artifacts/adaptation.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "a0-spike adaptation repair[nocross].exactly_one_successor",
+   "committed_claim_detail": "1753 transitions re-mined after the variant was injected",
+   "committed_claim_ok": true,
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_ok": true
+  },
+  {
+   "artifact": "a0-spike/artifacts/adaptation.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "a0-spike adaptation repair[ghost].replay_exact",
+   "committed_claim_detail": "1721 transitions re-mined after the variant was injected",
+   "committed_claim_ok": true,
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_ok": true
+  },
+  {
+   "artifact": "a0-spike/artifacts/adaptation.json",
+   "carried_an_uncounted_crash": false,
+   "claim": "a0-spike adaptation repair[ghost].exactly_one_successor",
+   "committed_claim_detail": "1721 transitions re-mined after the variant was injected",
+   "committed_claim_ok": true,
+   "committed_crash_count_field": null,
+   "rerun_crash_count": 0,
+   "rerun_ok": true
+  }
+ ],
+ "instance_sets": [
+  "theoria-arm/runs/20260728T015354Z-g50t-first-contact",
+  "theoria-arm worked example (BFS, unreachable goal)",
+  "a0-spike"
+ ],
+ "prompt_id": "E14-crash-is-not-a-finding",
+ "reading": "A claim is counted as carrying an uncounted crash only if the instrumented re-run OBSERVED a crash under it. A claim the re-run never reached is reported separately and is NOT folded into the clean column -- 'no crash was recorded' and 'no crash happened' are the two things this whole ticket exists to keep apart, and collapsing them here would be the same error one level up."
+}

@@ -1,0 +1,43 @@
+worldgen: the factory can cut controlled variant pairs, and nine things my own tests waved through
+
+C6. `worldgen/mutate.py`: a built world plus one rule-level edit produces a new
+world, a new measured truth, and a machine-readable description of the edit.
+Four families, fifteen instances, the same six files and the same build gates as
+any catalogue world.
+
+GAPS.md diagnosed the blockage as "semantics live in `interact()` bodies". That
+is true of push and mostly false of the rest -- `switch.mode`, `door.polarity`,
+`lock.k`, `cycler.open_phase`, `portal.dest` are all read out of `Entity.props`
+at the decision point. What was missing was not a parameterisation but a
+declaration of one, so `KNOBS` declares it and a test perturbs every entry and
+requires the world to move. Exactly one knob is new -- `flags.forbidden_action`,
+checked before the grid is consulted, inert for the twenty, whose artefacts are
+byte-identical either side of it.
+
+Detection latency is exact: BFS over the product of the two worlds, so it is a
+minimum over every strategy rather than over one walk, and null with the search
+exhausted means observationally equivalent. Collateral is exact, including a
+computed claim-to-rule dependency graph, which `ground_truth.json` does not have
+and GAPS.md names as missing. Repair cost is half-done and says so -- the real
+number needs a miner that can represent mechanism state, which is another
+territory, so `miner_measured` is null beside its blocker rather than
+approximated into looking like a measurement.
+
+Two adversarial reviewers with no stake in the code found nine defects. The one
+worth naming here: putting the mutants in `INDEX.json`, the roster
+`exam/guard.py` admits ids from and the obvious place for them, breaks five
+tests in `exam/` while all 412 of worldgen's own stayed green. They ship in
+`MUTATIONS.json -> roster` instead; admission is exam's call in exam's
+territory. Also, a mutant carried its base's `seed`, which is unique across the
+twenty, so the opaque handle identified its base exactly. Also, the ground truth
+for a forbidden-action world contradicted itself, because `rule_correspondence`
+compares rule names and is blind to prose.
+
+Two QC misses, both published rather than gated. `t2-switch-push` breaks the
+upstream miner exactly as `t2-lock-fragile` does -- C1's sample never drew it,
+so "one world exceeds the vocabulary" was the wrong picture. And forbidding one
+direction in `t1-walk-maze`, the only world the engine manual gets perfectly
+right, drops held-out accuracy from 1.000 to 0.667 in a world with no mechanisms
+in it at all.
+
+Co-Authored-By: Claude Opus 5 <noreply@anthropic.com>

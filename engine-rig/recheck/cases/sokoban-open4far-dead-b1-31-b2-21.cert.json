@@ -1,0 +1,37 @@
+{
+  "claim": "conditional_unsolvability",
+  "comment": "at(b1,c31) AND at(b2,c21) AND not-goal => dead (closure: deleting_actions_blocked)",
+  "kind": "dead_region",
+  "name": "sokoban-open4far-dead-b1-31-b2-21",
+  "predicate": [
+    "and",
+    [
+      "=",
+      [
+        "var",
+        "b1"
+      ],
+      [
+        "lit",
+        "3,1"
+      ]
+    ],
+    [
+      "=",
+      [
+        "var",
+        "b2"
+      ],
+      [
+        "lit",
+        "2,1"
+      ]
+    ]
+  ],
+  "produced_by": "engines/deadlock_carver (M9)",
+  "ruleset": {
+    "name": "sokoban-open4far",
+    "sha256": "d010d2b77220aea6120dd0d883227477c5c3822b9f1bd1989869d46acafc5c31"
+  },
+  "schema": "engine-rig/recheck/certificate-v1"
+}

@@ -1,0 +1,23 @@
+{
+  "t1-tokens-lock": {
+    "mover": null,
+    "operator": null,
+    "ran": true,
+    "rules": 0,
+    "tracks": null
+  },
+  "t1-walk-maze": {
+    "mover": null,
+    "operator": null,
+    "ran": true,
+    "rules": 0,
+    "tracks": null
+  },
+  "t2-lock-fragile": {
+    "mover": null,
+    "operator": null,
+    "ran": true,
+    "rules": 0,
+    "tracks": null
+  }
+}

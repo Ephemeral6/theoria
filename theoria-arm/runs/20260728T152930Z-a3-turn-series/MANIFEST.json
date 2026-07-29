@@ -1,0 +1,206 @@
+{
+ "base_commit": "dc9865a1b5edd432350d4a7bee4b218776e135d5",
+ "battery_check": {
+  "E1": {
+   "status": "ok",
+   "support": {
+    "calls": 5
+   },
+   "value": 6.317658
+  },
+  "E2": {
+   "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+   "status": "insufficient-data",
+   "value": null
+  },
+  "E3": {
+   "reason": "fewer than 8 turns; the same early-exit confound as E2",
+   "status": "insufficient-data",
+   "value": null
+  },
+  "Run.turn_costs()": [
+   3.626608,
+   2.69105
+  ],
+  "agrees_with_turn_series_billed_axis": true
+ },
+ "branch": "agent/a3-campaign-devpile",
+ "code": {
+  "added": [
+   "armtools/archive.py:turn_series / frontload_input / write_turn_series / _turn_spine / _invocations / _frontload / _cost_through",
+   "tests/test_turn_series.py (new file; tests/test_arm.py untouched)"
+  ],
+  "wired": "armtools.archive.build() now also writes runs/<slug>/turn_series.json"
+ },
+ "files": [
+  {
+   "path": "battery_check.g50t.json",
+   "sha256": "8d3620211331265630816fce24c18c754244e732284457c8e543fe7ddf0dff0d"
+  },
+  {
+   "path": "frontload_input.g50t.json",
+   "sha256": "3b938a8f0624a55b70be39794d4e8e8ec05ba72b1a6e25287e98b4742011b9d6"
+  },
+  {
+   "path": "turn_series.g50t.json",
+   "sha256": "3ff788cae17d961a8bea3772b245efdcf1d54c93c564ffaca0bebbe77eb4296f"
+  }
+ ],
+ "frontload": {
+  "all_turns": {
+   "frontload_index_25": 0.0,
+   "head_turns": 0.75,
+   "head_usd": 0.0,
+   "reason": "fewer than 8 turns; a short run is trivially front-loaded. The ratio is reported anyway because suppressing it hides the run's shape, but battery/metrics/economy.py will refuse it and that refusal is the operative reading.",
+   "status": "insufficient-data",
+   "turns": 3,
+   "usd_total": 6.317658
+  },
+  "billed_calls": 5,
+  "billed_turns_only": {
+   "frontload_index_25": 0.287021551,
+   "head_turns": 0.5,
+   "head_usd": 1.813304,
+   "reason": "fewer than 8 turns; a short run is trivially front-loaded. The ratio is reported anyway because suppressing it hides the run's shape, but battery/metrics/economy.py will refuse it and that refusal is the operative reading.",
+   "status": "insufficient-data",
+   "turns": 2,
+   "usd_total": 6.317658
+  },
+  "frontload_k": 0.25,
+  "min_turns_for_shape": 8,
+  "run_id": "r-b526769a14ef47e0",
+  "slug": "20260728T015354Z-g50t-first-contact",
+  "turn_costs": [
+   0,
+   3.626608,
+   2.69105
+  ],
+  "turn_costs_billed_only": [
+   3.626608,
+   2.69105
+  ],
+  "usd_total": 6.317658
+ },
+ "ground_truth_run": {
+  "reconciliation": {
+   "actions": {
+    "budget_actions_ok": 7,
+    "reconciles": true,
+    "sum_over_turns": 7
+   },
+   "model_calls": {
+    "in_ledger": 5,
+    "reconciles": true,
+    "sum_over_turns": 5
+   },
+   "surprises": {
+    "by_kind_in_surprises_jsonl": {
+     "execution_mismatch": 0,
+     "heuristic_miss": 0,
+     "probe_refutation": 0,
+     "proof_failure": 0,
+     "render_mismatch": 4,
+     "replay_mismatch": 4,
+     "search_timeout": 0
+    },
+    "by_kind_over_turns": {
+     "execution_mismatch": 0,
+     "heuristic_miss": 0,
+     "probe_refutation": 0,
+     "proof_failure": 0,
+     "render_mismatch": 4,
+     "replay_mismatch": 4,
+     "search_timeout": 0
+    },
+    "in_surprises_jsonl": 8,
+    "reconciles": true,
+    "sum_over_turns": 8
+   },
+   "usd": {
+    "delta_vs_desk": 0.0,
+    "reconciles": true,
+    "reported_by_the_desk": 6.317658,
+    "sum_over_model_call_records": 6.317658,
+    "sum_over_turns": 6.317658
+   }
+  },
+  "slug": "runs/20260728T015354Z-g50t-first-contact",
+  "totals": {
+   "actions": 7,
+   "billed_turns": 2,
+   "model_calls": 5,
+   "surprises": 8,
+   "turns": 3,
+   "usd": 6.317658
+  },
+  "turn_series_sha256": "3ff788cae17d961a8bea3772b245efdcf1d54c93c564ffaca0bebbe77eb4296f"
+ },
+ "join": {
+  "checks": [
+   {
+    "check": "theorize invocations per step index <= MAX_THEORIZE_PER_TURN",
+    "constant_source": "inner.loop.MAX_THEORIZE_PER_TURN",
+    "max_theorize_per_turn": 2,
+    "ok": true,
+    "violations": {}
+   },
+   {
+    "check": "step_idx never decreases across billed calls",
+    "ok": true
+   },
+   {
+    "budget": {
+     "actions_failed": 0,
+     "actions_left": 102,
+     "actions_ok": 7,
+     "ceiling_actions": 109,
+     "ceiling_commands": 3000,
+     "commands_sent": 40,
+     "http_amplification": 5.714,
+     "probe_actions": 0,
+     "reserve_for_probes": 0,
+     "resets": 1
+    },
+    "check": "len(store.steps) == resets + actions_ok + actions_failed",
+    "last_billed_step_idx": 7,
+    "ok": true,
+    "store_steps_after_the_last_billed_turn": 1,
+    "store_steps_at_end": 8
+   },
+   {
+    "actions_failed": 0,
+    "check": "actions_before can be inferred as step_idx - resets (requires actions_failed == 0)",
+    "ok": true,
+    "reason": null
+   },
+   {
+    "check": "the step-index progression admits exactly one turn decomposition",
+    "gaps": [],
+    "ok": true
+   },
+   {
+    "check": "every billed call falls inside the window its turn's ARC commands define -- the index join and the clock join agree",
+    "offenders": [],
+    "ok": true
+   },
+   {
+    "check": "actions_before recomputed from the ledger matches the value the turn recorded",
+    "offenders": [],
+    "ok": true
+   }
+  ],
+  "join_confidence": "exact-reconstructed",
+  "key": "theorize-invocation segmentation (label 'round1' restarts inside every theorize.run()) allocated to turns in order; cross-checked by step_idx == actions_before + resets + actions_failed_so_far",
+  "spine": "reconstructed from ledger step_idx (turns.json absent)"
+ },
+ "network": "none. offline analysis of already-recorded artefacts only. No API call, no spend.",
+ "prompt_id": "A3-campaign-devpile",
+ "status": "complete",
+ "task": "turn_series(run_dir): the turn-indexed join of cost, theorize rounds and the seven surprise counts -- raw material for figure 2 (bill shape).",
+ "tests": {
+  "file": "tests/test_turn_series.py",
+  "new_tests": 20,
+  "suite": "124 passed (python -m pytest from theoria-arm)"
+ },
+ "utc": "2026-07-28T15:29:30Z"
+}

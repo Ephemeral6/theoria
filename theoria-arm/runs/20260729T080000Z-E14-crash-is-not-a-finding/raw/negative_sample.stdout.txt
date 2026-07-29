@@ -1,0 +1,18 @@
+
+theoria-arm/inner/plan.py  _tier_bfs   [status / exhaustive]
+    control          unsat exhaustive=True crashes=0 states=3
+    POISONED         unsat_unsound exhaustive=False crashes=1 states=1   -> red? True
+    counting removed unsat exhaustive=True crashes=0 states=1   -> waved through? True
+
+theoria-arm/inner/certify.py  _ambiguity   [ok (constraint 9)]
+    control          ok=True crashes=0 1/1 pairs
+    POISONED         ok=False crashes=1 0/1 pairs   -> red? True
+    counting removed ok=True crashes=0 0/1 pairs   -> waved through? True
+
+a0-spike/pipeline/stages.py  mine   [all_guards_searched / disjunction_is_a_finding]
+    control          searched=True crashes=0 no_sep_guard=4 unsound_rules=0
+    POISONED         searched=False crashes=12 no_sep_guard=0 unsound_rules=17   -> red? True
+    counting removed searched=True crashes=0 no_sep_guard=0 unsound_rules=17   -> waved through? True
+
+all sites go red when poisoned:            True
+all sites wave it through without counting: True

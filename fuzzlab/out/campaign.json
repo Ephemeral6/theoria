@@ -1,17 +1,17 @@
 {
   "campaign_seed": "0x00005eedc1e4f002",
-  "engine_rig_head": "0b01f29",
+  "engine_rig_head": "18a5c90",
   "engines": [
     {
-      "elapsed_s": 1.67,
+      "elapsed_s": 0.2,
       "engine": "mdl_segmenter",
       "family": "gridworld",
       "generator_errors": [],
       "invariant_worlds_evaluated": {
-        "events_agree_with_tracks": 500,
-        "masks_follow_anchors": 500,
-        "masks_partition_the_foreground": 500,
-        "script_bits_identity": 500
+        "events_agree_with_tracks": 60,
+        "masks_follow_anchors": 60,
+        "masks_partition_the_foreground": 60,
+        "script_bits_identity": 60
       },
       "invariants": [
         "events_agree_with_tracks",
@@ -23,45 +23,49 @@
       "raised": 0,
       "skipped": 0,
       "violated": 0,
-      "worlds_checked": 500,
-      "worlds_generated": 500,
-      "worlds_requested": 500
+      "worlds_checked": 60,
+      "worlds_generated": 60,
+      "worlds_requested": 60
     },
     {
-      "elapsed_s": 55.32,
+      "elapsed_s": 10.52,
       "engine": "cegis_miner",
       "family": "gridworld",
       "generator_errors": [],
       "invariant_worlds_evaluated": {
-        "applicable_equals_support": 480,
-        "frontier_guards_are_consistent": 480,
-        "frontier_is_complete_to_size": 480,
-        "guards_partition_the_evidence": 480
+        "applicable_equals_support": 54,
+        "effects_agree_with_the_evidence": 54,
+        "frontier_guards_are_consistent": 54,
+        "frontier_is_complete_to_size": 54,
+        "guards_partition_the_evidence": 54,
+        "rules_fire_on_the_action_they_name": 54
       },
       "invariants": [
         "applicable_equals_support",
+        "effects_agree_with_the_evidence",
         "frontier_guards_are_consistent",
         "frontier_is_complete_to_size",
-        "guards_partition_the_evidence"
+        "guards_partition_the_evidence",
+        "rules_fire_on_the_action_they_name"
       ],
-      "n_invariants": 4,
+      "n_invariants": 6,
       "raised": 0,
-      "skipped": 80,
+      "skipped": 36,
       "violated": 0,
-      "worlds_checked": 500,
-      "worlds_generated": 500,
-      "worlds_requested": 500
+      "worlds_checked": 60,
+      "worlds_generated": 60,
+      "worlds_requested": 60
     },
     {
-      "elapsed_s": 1.43,
+      "elapsed_s": 0.18,
       "engine": "zero_space",
       "family": "parityworld",
       "generator_errors": [],
       "invariant_worlds_evaluated": {
-        "law_space_is_complete": 500,
-        "laws_hold_on_trajectory": 500,
-        "membership_agrees": 500,
-        "rank_nullity": 500
+        "law_space_is_complete": 60,
+        "laws_hold_on_trajectory": 60,
+        "membership_agrees": 60,
+        "rank_nullity": 60
       },
       "invariants": [
         "law_space_is_complete",
@@ -73,20 +77,20 @@
       "raised": 0,
       "skipped": 0,
       "violated": 0,
-      "worlds_checked": 500,
-      "worlds_generated": 500,
-      "worlds_requested": 500
+      "worlds_checked": 60,
+      "worlds_generated": 60,
+      "worlds_requested": 60
     },
     {
-      "elapsed_s": 43.2,
+      "elapsed_s": 4.85,
       "engine": "lp_potential",
       "family": "jumpgraph",
       "generator_errors": [],
       "invariant_worlds_evaluated": {
-        "certificate_implies_unreachable": 500,
-        "heuristic_is_admissible": 500,
-        "infinite_means_unreachable": 500,
-        "three_conditions_hold": 500
+        "certificate_implies_unreachable": 31,
+        "heuristic_is_admissible": 31,
+        "infinite_means_unreachable": 31,
+        "three_conditions_hold": 31
       },
       "invariants": [
         "certificate_implies_unreachable",
@@ -96,21 +100,21 @@
       ],
       "n_invariants": 4,
       "raised": 0,
-      "skipped": 0,
+      "skipped": 116,
       "violated": 0,
-      "worlds_checked": 500,
-      "worlds_generated": 500,
-      "worlds_requested": 500
+      "worlds_checked": 60,
+      "worlds_generated": 60,
+      "worlds_requested": 60
     },
     {
-      "elapsed_s": 6.15,
+      "elapsed_s": 0.91,
       "engine": "fd_adapter",
       "family": "blockworld",
       "generator_errors": [],
       "invariant_worlds_evaluated": {
-        "no_plan_means_unsolvable": 500,
-        "optimal_rungs_are_optimal": 500,
-        "plan_replays_to_the_goal": 500
+        "no_plan_means_unsolvable": 60,
+        "optimal_rungs_are_optimal": 60,
+        "plan_replays_to_the_goal": 60
       },
       "invariants": [
         "no_plan_means_unsolvable",
@@ -121,46 +125,48 @@
       "raised": 0,
       "skipped": 0,
       "violated": 0,
-      "worlds_checked": 500,
-      "worlds_generated": 500,
-      "worlds_requested": 500
+      "worlds_checked": 60,
+      "worlds_generated": 60,
+      "worlds_requested": 60
     },
     {
-      "elapsed_s": 0.13,
+      "elapsed_s": 0.01,
       "engine": "probe_frontier",
       "family": "hypset",
       "generator_errors": [],
       "invariant_worlds_evaluated": {
-        "entropy_matches_bruteforce": 500,
-        "partition_matches_truth": 500,
-        "ranking_is_sound": 500,
-        "splits_flag_is_honest": 500
+        "costs_are_the_world's": 60,
+        "entropy_matches_bruteforce": 60,
+        "partition_matches_truth": 60,
+        "ranking_is_sound": 60,
+        "splits_flag_is_honest": 60
       },
       "invariants": [
+        "costs_are_the_world's",
         "entropy_matches_bruteforce",
         "partition_matches_truth",
         "ranking_is_sound",
         "splits_flag_is_honest"
       ],
-      "n_invariants": 4,
+      "n_invariants": 5,
       "raised": 0,
       "skipped": 0,
       "violated": 0,
-      "worlds_checked": 500,
-      "worlds_generated": 500,
-      "worlds_requested": 500
+      "worlds_checked": 60,
+      "worlds_generated": 60,
+      "worlds_requested": 60
     }
   ],
   "prompt_id": "E4-property-fuzz",
   "raises_by_invariant": {},
   "totals": {
     "generator_errors": 0,
-    "invariants": 23,
+    "invariants": 26,
     "raised": 0,
-    "skipped": 80,
+    "skipped": 152,
     "violated": 0,
-    "worlds_checked": 3000
+    "worlds_checked": 360
   },
   "violations_by_invariant": {},
-  "worlds_per_engine": 500
+  "worlds_per_engine": 60
 }

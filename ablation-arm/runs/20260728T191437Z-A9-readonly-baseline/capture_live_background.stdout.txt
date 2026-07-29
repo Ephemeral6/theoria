@@ -1,0 +1,8 @@
+live tree: C:\Users\user\Desktop\theoria
+watched entries (28)
+baseline snapshot: 3025 files
+    2.0s window ->   0 path(s) moved, 0 on the hard list, 0 would survive the superseded criterion
+    5.0s window ->   0 path(s) moved, 0 on the hard list, 0 would survive the superseded criterion
+   15.0s window ->   0 path(s) moved, 0 on the hard list, 0 would survive the superseded criterion
+   30.0s window ->   4 path(s) moved, 1 on the hard list, 2 would survive the superseded criterion
+wrote 05-live-background-churn.json

@@ -1,0 +1,7 @@
+{
+  "schema": "engine-rig/recheck/certificate-v1",
+  "name": "A01-render-arity",
+  "kind": "inductive_invariant",
+  "claim": "unsolvable",
+  "predicate": ["lit"]
+}

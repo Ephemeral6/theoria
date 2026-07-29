@@ -1,0 +1,49 @@
+{
+  "action_seconds": 0.0,
+  "aligned": true,
+  "background": [],
+  "files_watched": 2433,
+  "hard_list": [
+    {
+      "pattern": "proxy/var/spend_gate.jsonl",
+      "why": "spend gate ledger: foreign write = spending out of control"
+    },
+    {
+      "pattern": "arc-recon/data/*.jsonl",
+      "why": "contamination/incident ledgers: foreign write = the pile-cut record tampered with"
+    },
+    {
+      "pattern": "CONTRACTS/**",
+      "why": "frozen v0.1 contracts: foreign write = a frozen contract routed around"
+    },
+    {
+      "pattern": "monitor/state.json",
+      "why": "monitor state: foreign write = the watcher edited by the watched"
+    },
+    {
+      "pattern": "**/ledger.jsonl",
+      "why": "per-territory ledger: the accounting a claim is later checked against"
+    },
+    {
+      "pattern": "baseline-arms/**/ledger.*.jsonl",
+      "why": "sharded ledgers: the form the ledgers actually take on this tree"
+    },
+    {
+      "pattern": "engine-rig/**/candidates.jsonl",
+      "why": "the frozen contract's append-only stream, which lives outside CONTRACTS/"
+    }
+  ],
+  "idle_floor_seconds": 2.0,
+  "idle_seconds": 2.522,
+  "idle_sleep": 2.0,
+  "makeup_seconds": 0.0,
+  "makeup_sleep": 0.0,
+  "observed": [],
+  "reported": [],
+  "reported_by_hard_list": [],
+  "run_seconds": 0.26,
+  "snapshot_seconds": 0.26,
+  "subtracted": [],
+  "unreadable": [],
+  "what": "empty-run control measured against a second empty run: both legs do nothing, so everything reported here is the concurrent fleet, and `reported` should be small"
+}

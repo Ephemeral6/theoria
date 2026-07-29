@@ -601,6 +601,193 @@ it and has it back.
 
 ---
 
+## D-028 · The rechecker derives the transition relation; nothing may hand it one
+
+**Context.** M9's certificates already have a checker each -- `ic3_pdr`'s
+`check.py` re-derives the three conditions and pointedly does not import `pdr`,
+and the deadlock carver's referee exhausts the state space sharing nothing with
+the proof. Both are handed the *engine's* object: `check.py` verifies against
+the `System` that `system.py::peg_system` built, from the same graph the search
+read. A transcription error there is invisible to both, and Lean cannot see it
+either -- Lean checks the manual, and the manual is what is in question.
+
+**Decision.** `recheck/` takes a rule set and a certificate as two files and
+derives everything else. The rule set declares finite variables with explicit
+domains; **the state space is the full Cartesian product of those domains**, and
+every edge is computed by grounding the rules over it. A rule set carrying
+`transitions`, `edges` or `states` is refused as a malformed input, and so is a
+certificate carrying `goal`, `init`, `constraint`, `states`, `transitions` or
+`rules` -- each by name, with the reason, rather than as a generic unknown key.
+Nothing in the package imports `engines/`, and a test enforces that.
+
+**Why.** The failure this is against is not an engine that lies; it is an engine
+and its checker being wrong together because they were built from one
+description. The only structural fix is to make the description an input that
+neither of them produced. Refusing the forbidden keys by name matters for the
+same reason: `goal` is a perfectly reasonable-looking thing for a certificate to
+carry, and a certificate that picks its own goal proves a different theorem than
+the one it claims.
+
+**What it cost.** A small expression language, because "the rules" has to be
+sayable in something. Roughly 300 lines, total and pure by construction: no
+`eval`, no recursion (a `def` may only call one declared before it, so recursion
+fails to resolve rather than being caught by a depth counter), and every world in
+the rig fits under a 10^6-state enumeration cap. It also means the rule sets
+under `cases/` are **transcriptions**, which is a real risk and is answered by
+anchors rather than by assertion -- see D-030.
+
+---
+
+## D-029 · A declared restriction of the state space is proved inductive, never believed
+
+**Context.** The sokoban deadlock theorems are false over the raw product of the
+declared domains and true over the states the grounded task can represent. A
+state with the player standing on a box is in the product, and from it a "dead"
+box in a corner can be pushed out: `at(b1,c12) AND at(b2,c13)` leaks if the
+player may occupy `c13`. The carver is right; it reasons over h^2-consistent
+states. So the rechecker needs the same restriction, and a rule set has to be
+able to say it.
+
+**Decision.** A rule set may declare a `constraint`, and the rechecker refuses to
+use it until it has shown, over the whole product, that it holds at every
+initial state and is closed under every action. Only then are the certificate's
+three conditions evaluated on the constrained subspace. `constraint_init` and
+`constraint_closed` are reported alongside the certificate's own conditions.
+
+**Why.** A declared restriction is exactly as dangerous as it sounds: it is the
+cheapest possible attack on this rechecker. Take A2's world rules, leave every
+rule intact, and add `constraint: cart != "6,4"` -- the escaping teleport now
+starts from a state that has been declared ill-formed, and the false theorem
+verifies. Proving the constraint inductive kills that attack at the root, because
+a constraint that excludes a state the rules can enter is not closed. The forgery
+is in the catalogue as `constrained-witness`, and it fails on
+`constraint_closed`. The soundness argument is the ordinary one: an inductive
+constraint holding at init contains every reachable state, so restricting a
+reachability claim to it changes nothing.
+
+**What an adversarial review corrected, and it is the interesting half.**
+"Restricting a reachability claim to it changes nothing" is true of the
+*reachability* claim and was quietly assumed to be true of the check. It is not.
+Both conditions of a dead region were being evaluated on `P and constraint`
+while the accepted claim was stated over `P`, so a reviewer built a region
+containing an outright winning state -- parked at a player/box collision the
+constraint excludes -- and it passed `goal_break`; and another where 286 of 496
+covered states carried no obligation at all, with nothing in the output saying
+so. Three changes:
+
+* **`goal_break` moved to the whole product.** It costs nothing there -- a
+  pattern that contradicts the goal contradicts it everywhere, and all 18 carver
+  theorems still pass -- and it kills the hidden-win region outright.
+* **Closure stays on the subspace**, because the sokoban pair deadlocks are
+  genuinely false over the raw product and moving it would reject them. What
+  changed is that the verdict now *counts* the states the predicate covers
+  outside the constraint and names the qualifier carrying them, in every report.
+  The genuine `open4far` pair theorems lean on it by 2 states each; saying so is
+  the difference between a qualified result and a silent one.
+* **The qualifier's premise is measured, not inferred.** `constraint_contains_reachable`
+  runs a breadth-first pass and checks that no reachable state lies outside the
+  constraint. It follows from the other two conditions; running it anyway costs
+  one pass and means a bug in the closure loop cannot quietly widen what
+  "well-formed" is allowed to hide.
+
+The claim a `dead_region` licenses is now written the way `deadlock_carver`
+writes it, qualifier included: *every reachable state* containing the pattern is
+dead.
+
+---
+
+## D-030 · The rule sets are transcriptions, and the anchors are outside the package
+
+**Context.** Nothing inside `recheck/` can tell you that `a2-world.rules.json`
+describes A2's world. If it does not, every verdict about it is about a world
+nobody has -- and the verdicts would look exactly as convincing.
+
+**Decision.** Every case carries an anchor: a number or an artefact published by
+someone else, for another purpose, before this package existed. A2's own
+recorded 18-action refutation is replayed through the generated rules and
+compared frame by frame on the rendered 9x9 (19/19). Lean's explicit 592-row
+`step` table inside `generated_holed/theory.lean` -- the file Lean compiled
+axiom-free -- is compared edge by edge against the relation derived here
+(592/592). The sokoban optima the fixture states by hand come back out of the
+derived relation (ring 1, open4 6, ringstuck unsolvable, open4far 11). So do the
+four peg configurations `fixtures/peg4.py` hand-verifies. A case with no anchor
+is refused at review, not at runtime.
+
+**Why.** The alternative -- parsing PDDL, Lean and the DSL directly -- trades a
+transcription risk for a parser-bug risk in three languages, and the parser would
+be this package's own code, which is the dependency the whole exercise is
+avoiding. Anchoring instead means the risk is bounded by artefacts that were
+already going to be there, and it is bounded *by measurement*: 592 edges and 19
+frames is not an argument, it is a count.
+
+**The limit, stated.** Two anchors need `cold-start-a2/` on the machine. That is
+the theory-compiler track's directory: this package reads it, writes nothing to
+it, and reports the anchors as **unavailable** rather than as passes when it is
+absent. A missing cross-check is a missing check.
+
+---
+
+## D-031 · A scope flag is not a check until the thing it guards is recompiled
+
+**Context.** `recheck`'s expression language says `["act"]` -- the action label --
+is legal only inside a rule guard. A certificate, a goal or a constraint denotes
+a *set of states*; one that reads the action is describing the rules. The rule
+was enforced by a `allow_action` flag on the compiling scope.
+
+**The defect an adversarial review found.** Compilation turns an expression into
+a closure, and `defs` were compiled once, with `allow_action=True`, for the
+guards. The state-reading scope was then built by reusing those *already
+compiled* closures and setting the flag to `False`. A closure does not
+re-consult the flag. So a rule set could write
+
+```json
+"defs":  [{"name": "peek", "params": [], "body": ["=", ["act"], ["lit", "jump(0,1,2)"]]}],
+"goal":  ["call", "peek"]
+```
+
+and the goal would read the action. At evaluation the state scope passes
+`action=None`, so the comparison is a constant `False`, the goal becomes
+unsatisfiable, and the world is trivially "unsolvable". Measured on `peg4-1101`,
+which is solvable in two moves: with the honest goal the catalogue's
+`claims-everything` certificate is REJECTed and the second opinion prints the
+two-action win; with the goal restated as `["call","peek"]` the same certificate
+is **ACCEPTed**, and the second opinion agrees, because it reads the same
+poisoned goal. Nothing on stdout hinted at it -- `render` printed the goal as
+`peek()`, and the report did not print the goal at all.
+
+**Decision.** Compile the defs **twice**, once per scope. The second compilation
+raises on any def that mentions the action, which is what the flag was always
+supposed to mean. Three smaller changes travel with it:
+
+* `compile_macros` extends the enclosing scope's macros instead of replacing
+  them, so a certificate can call the rule set's `free` -- which the docstring
+  had claimed all along and which had silently not been true. That is fixed
+  *after* the leak, deliberately: fixing it first would have made the leak
+  reachable from certificates too.
+* the verdict now prints the goal and the coverage counts, so a poisoned goal
+  has somewhere to be visible.
+* expression depth is capped at 64 by an iterative walk, and `render` and
+  `names_used` are total. They run on input that has not been compiled -- a
+  verdict summarises the certificate it is rejecting -- so `["lit"]` with no
+  argument used to raise `IndexError` from inside the rejection, and 900 nested
+  `and`s used to raise `RecursionError`, which is not a `ValueError` and escaped
+  every `except` around a load.
+
+**Why it matters more than the bug.** All of those crashes exited with Python's
+own status of 1, which this tool defines as REJECT. A caller reading the exit
+code could not tell a refused certificate from a checker that fell over. There
+is now an exit code 4 for "the recheck itself failed", and it is the same
+distinction D-024 had to make for Fast Downward: a proof and a shrug must not
+share a return value.
+
+**The general lesson, since this is the second time.** The reviewer also caught
+this package mid-edit, in a state where `obligations()` raised `NameError` on
+every input -- and reported, correctly, that it exited 1 and looked like a
+rejection. A guarantee enforced at construction time has to be re-established
+every time the constructed thing is reused, and a checker's failure mode has to
+be distinguishable from its verdict. Neither is a fact about expressions.
+
+---
 
 ## D-032 · The deadlock claim is conditioned on the proof system, not on the search
 
@@ -682,3 +869,53 @@ eight random seeds and under a larger PDB budget; `swap-passage`'s 454 -> 0 is a
 from 2,725,888 entries to 1,103,872, under the 2,000,000 default cap. An earlier
 draft quoted far8's `ipdb` 27 -> 24 as a dividend; it is one of these. The ipdb
 column is measured and reported, and is evidence for nothing.
+
+---
+
+## D-033 · The summary table reads verdicts; it does not re-derive them
+
+*(Numbered 033 after D-032, which `agent/e7-deadlock-claim-audit` takes.)*
+
+**Context.** E6 assembles one table -- *what is an engine worth?* -- out of three
+runs that measured three different things. `tools/engine_dividend_table.py` is
+that assembler and `ENGINE_DIVIDEND.md` is its output.
+
+**Decision.** The assembler reads measurements and, where an artefact carries a
+**verdict**, reads that verdict rather than recomputing an equivalent one. Its
+arithmetic is confined to percentages and totals over fields it read.
+
+**Why, concretely.** An earlier draft recomputed section C's optimality
+agreement. Four sokoban instances have no *known* optimum; the recomputation
+scored "no ground truth" as "disagreement", rendered **no** against `lmcut`,
+`ipdb` and the bundled BFS, and printed the sentence *"Every optimal rung agrees
+... (4 disagreements)"*. E2's `ladder.json` carries `agreement_ok: true` on all
+four and its own `LADDER.md` renders them `yes`. A false accusation that three
+admissible planners returned non-optimal plans, in the file whose whole purpose
+is to be quoted in a paper. Reading `verdicts.agreement_ok` gives 0.
+
+**The generalisation, which is the part worth keeping.** Three further defects in
+the same draft had one shape: a column reading a key that does not exist,
+rendering as a valid table full of `--`.
+
+| column | read | actual field |
+|---|---|---|
+| FD blind | `config` | `rung` |
+| plan | `plan_unchanged` | `plan_length_unchanged` |
+| pagoda region | `n_region` | `n_satisfying` |
+| tie-break dividend | `dividend_min` | `guards.<guard>.dividend_min_pct` |
+
+**A `--check` that re-renders and diffs cannot catch any of them.** It proves the
+file matches its renderer, never that the renderer reads the right field; a
+wrong-key column is perfectly stable and perfectly wrong. The plan column was the
+worst of the four, because `stub.get("plan_unchanged", True)` would have printed
+`unchanged` for a guard that changed the plan -- a soundness claim defaulting to
+true. So: **every summary column is pinned by a test that asserts a real measured
+number, plus a perturbation test that moves one field in a temp copy and requires
+exactly the matching cell to move.** Two fields that agree on today's data are
+indistinguishable to a transcription test; only perturbation separates them.
+
+**A related call: what the theorem count beside a planner row means.** It is the
+number proved, which is not the number that reached the planner -- the
+`singleton` guard expresses size-1 theorems only, 8 of 40 on `far7`. The table
+carries both, because a dividend attributed to 40 theorems that eight bought is
+the same class of error as the columns above, one layer up.

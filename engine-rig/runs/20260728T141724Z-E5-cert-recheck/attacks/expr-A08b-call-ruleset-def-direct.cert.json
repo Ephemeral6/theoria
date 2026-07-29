@@ -1,0 +1,14 @@
+{
+  "claim": "unsolvable",
+  "kind": "inductive_invariant",
+  "name": "A08b-call-ruleset-def-direct",
+  "predicate": [
+    "call",
+    "free",
+    [
+      "var",
+      "cart"
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

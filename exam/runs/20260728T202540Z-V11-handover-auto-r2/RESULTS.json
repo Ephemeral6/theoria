@@ -1,0 +1,4326 @@
+{
+  "bootstrap_over_examinees": {
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "excludes_zero": false,
+    "n_tier1": 3,
+    "n_tier2": 3,
+    "point": 0.0,
+    "resamples": 20000
+  },
+  "bootstrap_over_items": {
+    "ci95": [
+      0.0,
+      0.0
+    ],
+    "excludes_zero": false,
+    "n_items": 31,
+    "point": 0.0,
+    "resamples": 20000
+  },
+  "by_family": {
+    "level_data_vs_world_law": {
+      "delta": 0.0,
+      "tier1_manual": 1.0,
+      "tier2_manual_playbook": 1.0
+    },
+    "optimal_action": {
+      "delta": 0.0,
+      "tier1_manual": 1.0,
+      "tier2_manual_playbook": 1.0
+    },
+    "rule_justification": {
+      "delta": 0.0,
+      "tier1_manual": 1.0,
+      "tier2_manual_playbook": 1.0
+    },
+    "step_semantics": {
+      "delta": 0.0,
+      "tier1_manual": 1.0,
+      "tier2_manual_playbook": 1.0
+    }
+  },
+  "calibration": {
+    "bluffer": {
+      "awarded": 13.4,
+      "counts": {
+        "abstained": 0,
+        "correct": 7,
+        "unanswered": 0,
+        "wrong": 24
+      },
+      "fraction": 0.231034,
+      "possible": 58.0
+    },
+    "memoriser": {
+      "awarded": 32.1,
+      "counts": {
+        "abstained": 7,
+        "correct": 17,
+        "unanswered": 0,
+        "wrong": 7
+      },
+      "fraction": 0.553448,
+      "possible": 58.0
+    },
+    "null": {
+      "awarded": 0.0,
+      "counts": {
+        "abstained": 0,
+        "correct": 0,
+        "unanswered": 31,
+        "wrong": 0
+      },
+      "fraction": 0.0,
+      "possible": 58.0
+    },
+    "oracle": {
+      "awarded": 58.0,
+      "counts": {
+        "abstained": 0,
+        "correct": 31,
+        "unanswered": 0,
+        "wrong": 0
+      },
+      "fraction": 1.0,
+      "possible": 58.0
+    }
+  },
+  "conclusive": false,
+  "delta": 0.0,
+  "examinees": [
+    {
+      "awarded": 58.0,
+      "by_tag": {
+        "counterexample": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "level:cairn": {
+          "awarded": 4.0,
+          "fraction": 1.0,
+          "n": 2,
+          "possible": 4.0
+        },
+        "level:flume": {
+          "awarded": 6.0,
+          "fraction": 1.0,
+          "n": 3,
+          "possible": 6.0
+        },
+        "level:kiln": {
+          "awarded": 8.0,
+          "fraction": 1.0,
+          "n": 4,
+          "possible": 8.0
+        },
+        "level:stile": {
+          "awarded": 2.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 2.0
+        },
+        "level:warren": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 5,
+          "possible": 10.0
+        },
+        "level_data_vs_world_law": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 10,
+          "possible": 10.0
+        },
+        "optimal_action": {
+          "awarded": 16.0,
+          "fraction": 1.0,
+          "n": 8,
+          "possible": 16.0
+        },
+        "rule_justification": {
+          "awarded": 18.0,
+          "fraction": 1.0,
+          "n": 6,
+          "possible": 18.0
+        },
+        "step_semantics": {
+          "awarded": 14.0,
+          "fraction": 1.0,
+          "n": 7,
+          "possible": 14.0
+        },
+        "why:bump": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:colparity": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:frozen": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:mismatch": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:total": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        }
+      },
+      "counts": {
+        "abstained": 0,
+        "correct": 31,
+        "unanswered": 0,
+        "wrong": 0
+      },
+      "examinee_id": "reader-a1",
+      "fraction": 1.0,
+      "possible": 58.0,
+      "report": {
+        "awarded": 58.0,
+        "axes": {
+          "by_tag": {
+            "counterexample": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "level:cairn": {
+              "awarded": 4.0,
+              "fraction": 1.0,
+              "n": 2,
+              "possible": 4.0
+            },
+            "level:flume": {
+              "awarded": 6.0,
+              "fraction": 1.0,
+              "n": 3,
+              "possible": 6.0
+            },
+            "level:kiln": {
+              "awarded": 8.0,
+              "fraction": 1.0,
+              "n": 4,
+              "possible": 8.0
+            },
+            "level:stile": {
+              "awarded": 2.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 2.0
+            },
+            "level:warren": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 5,
+              "possible": 10.0
+            },
+            "level_data_vs_world_law": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 10,
+              "possible": 10.0
+            },
+            "optimal_action": {
+              "awarded": 16.0,
+              "fraction": 1.0,
+              "n": 8,
+              "possible": 16.0
+            },
+            "rule_justification": {
+              "awarded": 18.0,
+              "fraction": 1.0,
+              "n": 6,
+              "possible": 18.0
+            },
+            "step_semantics": {
+              "awarded": 14.0,
+              "fraction": 1.0,
+              "n": 7,
+              "possible": 14.0
+            },
+            "why:bump": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:colparity": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:frozen": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:mismatch": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:total": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            }
+          }
+        },
+        "counts": {
+          "abstained": 0,
+          "correct": 31,
+          "unanswered": 0,
+          "wrong": 0
+        },
+        "examinee_id": "reader-a1",
+        "fraction": 1.0,
+        "meta": {
+          "capabilities": [
+            "handover_bundle",
+            "manual"
+          ],
+          "rubric_digest_at_build": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_at_marking": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_matches": true,
+          "submission_meta": {
+            "cohort": "2",
+            "delivery": "one-file temp directory, prompt pasted nowhere else",
+            "tier": "tier1_manual",
+            "tools_self_report": "Read (only the TASK.md file named in the instructions); no other tool, file, command, or lookup was used."
+          },
+          "tier": "tier1_manual"
+        },
+        "paper_id": "v11-handover-a0",
+        "possible": 58.0,
+        "question_type": "handover",
+        "rubric_digest": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+        "schema": "exam/v0.1",
+        "scores": [
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,4); rule=push2"
+            },
+            "item_id": "v11-step-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,1); rule=blocked_box_landing"
+            },
+            "item_id": "v11-step-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(4,1); box=(5,5); rule=walk"
+            },
+            "item_id": "v11-step-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,1); box=(5,3); rule=walk"
+            },
+            "item_id": "v11-step-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(3,1); box=(5,5); rule=blocked_wall"
+            },
+            "item_id": "v11-step-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,4); box=(0,5); rule=blocked_box_crossing"
+            },
+            "item_id": "v11-step-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(1,0); box=(3,0); rule=push2"
+            },
+            "item_id": "v11-step-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-01",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-02",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-03",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-04",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-05",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-06",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-07",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-08",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-09",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-10",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=24",
+              "solvable": true
+            },
+            "item_id": "v11-opt-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=LEFT; plan_len=25",
+              "solvable": true
+            },
+            "item_id": "v11-opt-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=UP; plan_len=14",
+              "solvable": true
+            },
+            "item_id": "v11-opt-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=DOWN; plan_len=16",
+              "solvable": true
+            },
+            "item_id": "v11-opt-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 1,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=22",
+              "solvable": true
+            },
+            "item_id": "v11-opt-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=LEFT; plan_len=21",
+              "solvable": true
+            },
+            "item_id": "v11-opt-08",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 5,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_box_crossing+blocked_box_landing+blocked_wall+push2+walk",
+              "spurious": 0
+            },
+            "item_id": "v11-why-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 2,
+              "missing": [],
+              "partial": false,
+              "said": "goal_box_on_target+push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-02",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_wall",
+              "spurious": 0
+            },
+            "item_id": "v11-why-03",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-04",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-05",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "claim_holds_there": false,
+              "said": "level=cairn; player=(1,5); box=(0,5)",
+              "situation_legal": true
+            },
+            "item_id": "v11-why-ce-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.counterexample",
+            "verdict": "correct"
+          }
+        ]
+      },
+      "tier": "tier1_manual"
+    },
+    {
+      "awarded": 58.0,
+      "by_tag": {
+        "counterexample": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "level:cairn": {
+          "awarded": 4.0,
+          "fraction": 1.0,
+          "n": 2,
+          "possible": 4.0
+        },
+        "level:flume": {
+          "awarded": 6.0,
+          "fraction": 1.0,
+          "n": 3,
+          "possible": 6.0
+        },
+        "level:kiln": {
+          "awarded": 8.0,
+          "fraction": 1.0,
+          "n": 4,
+          "possible": 8.0
+        },
+        "level:stile": {
+          "awarded": 2.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 2.0
+        },
+        "level:warren": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 5,
+          "possible": 10.0
+        },
+        "level_data_vs_world_law": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 10,
+          "possible": 10.0
+        },
+        "optimal_action": {
+          "awarded": 16.0,
+          "fraction": 1.0,
+          "n": 8,
+          "possible": 16.0
+        },
+        "rule_justification": {
+          "awarded": 18.0,
+          "fraction": 1.0,
+          "n": 6,
+          "possible": 18.0
+        },
+        "step_semantics": {
+          "awarded": 14.0,
+          "fraction": 1.0,
+          "n": 7,
+          "possible": 14.0
+        },
+        "why:bump": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:colparity": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:frozen": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:mismatch": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:total": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        }
+      },
+      "counts": {
+        "abstained": 0,
+        "correct": 31,
+        "unanswered": 0,
+        "wrong": 0
+      },
+      "examinee_id": "reader-a2",
+      "fraction": 1.0,
+      "possible": 58.0,
+      "report": {
+        "awarded": 58.0,
+        "axes": {
+          "by_tag": {
+            "counterexample": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "level:cairn": {
+              "awarded": 4.0,
+              "fraction": 1.0,
+              "n": 2,
+              "possible": 4.0
+            },
+            "level:flume": {
+              "awarded": 6.0,
+              "fraction": 1.0,
+              "n": 3,
+              "possible": 6.0
+            },
+            "level:kiln": {
+              "awarded": 8.0,
+              "fraction": 1.0,
+              "n": 4,
+              "possible": 8.0
+            },
+            "level:stile": {
+              "awarded": 2.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 2.0
+            },
+            "level:warren": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 5,
+              "possible": 10.0
+            },
+            "level_data_vs_world_law": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 10,
+              "possible": 10.0
+            },
+            "optimal_action": {
+              "awarded": 16.0,
+              "fraction": 1.0,
+              "n": 8,
+              "possible": 16.0
+            },
+            "rule_justification": {
+              "awarded": 18.0,
+              "fraction": 1.0,
+              "n": 6,
+              "possible": 18.0
+            },
+            "step_semantics": {
+              "awarded": 14.0,
+              "fraction": 1.0,
+              "n": 7,
+              "possible": 14.0
+            },
+            "why:bump": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:colparity": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:frozen": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:mismatch": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:total": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            }
+          }
+        },
+        "counts": {
+          "abstained": 0,
+          "correct": 31,
+          "unanswered": 0,
+          "wrong": 0
+        },
+        "examinee_id": "reader-a2",
+        "fraction": 1.0,
+        "meta": {
+          "capabilities": [
+            "handover_bundle",
+            "manual"
+          ],
+          "rubric_digest_at_build": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_at_marking": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_matches": true,
+          "submission_meta": {
+            "cohort": "2",
+            "delivery": "one-file temp directory, prompt pasted nowhere else",
+            "tier": "tier1_manual",
+            "tools_self_report": "Read (only the TASK.md file named in the instruction); no other file, command, search, or network access."
+          },
+          "tier": "tier1_manual"
+        },
+        "paper_id": "v11-handover-a0",
+        "possible": 58.0,
+        "question_type": "handover",
+        "rubric_digest": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+        "schema": "exam/v0.1",
+        "scores": [
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,4); rule=push2"
+            },
+            "item_id": "v11-step-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,1); rule=blocked_box_landing"
+            },
+            "item_id": "v11-step-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(4,1); box=(5,5); rule=walk"
+            },
+            "item_id": "v11-step-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,1); box=(5,3); rule=walk"
+            },
+            "item_id": "v11-step-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(3,1); box=(5,5); rule=blocked_wall"
+            },
+            "item_id": "v11-step-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,4); box=(0,5); rule=blocked_box_crossing"
+            },
+            "item_id": "v11-step-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(1,0); box=(3,0); rule=push2"
+            },
+            "item_id": "v11-step-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-01",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-02",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-03",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-04",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-05",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-06",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-07",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-08",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-09",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-10",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=24",
+              "solvable": true
+            },
+            "item_id": "v11-opt-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=LEFT; plan_len=25",
+              "solvable": true
+            },
+            "item_id": "v11-opt-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=UP; plan_len=14",
+              "solvable": true
+            },
+            "item_id": "v11-opt-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=16",
+              "solvable": true
+            },
+            "item_id": "v11-opt-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 1,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=22",
+              "solvable": true
+            },
+            "item_id": "v11-opt-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=LEFT; plan_len=21",
+              "solvable": true
+            },
+            "item_id": "v11-opt-08",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 5,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_box_crossing+blocked_box_landing+blocked_wall+push2+walk",
+              "spurious": 0
+            },
+            "item_id": "v11-why-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 2,
+              "missing": [],
+              "partial": false,
+              "said": "goal_box_on_target+push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-02",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_wall",
+              "spurious": 0
+            },
+            "item_id": "v11-why-03",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-04",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-05",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "claim_holds_there": false,
+              "said": "level=flume; player=(0,1); box=(0,0)",
+              "situation_legal": true
+            },
+            "item_id": "v11-why-ce-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.counterexample",
+            "verdict": "correct"
+          }
+        ]
+      },
+      "tier": "tier1_manual"
+    },
+    {
+      "awarded": 58.0,
+      "by_tag": {
+        "counterexample": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "level:cairn": {
+          "awarded": 4.0,
+          "fraction": 1.0,
+          "n": 2,
+          "possible": 4.0
+        },
+        "level:flume": {
+          "awarded": 6.0,
+          "fraction": 1.0,
+          "n": 3,
+          "possible": 6.0
+        },
+        "level:kiln": {
+          "awarded": 8.0,
+          "fraction": 1.0,
+          "n": 4,
+          "possible": 8.0
+        },
+        "level:stile": {
+          "awarded": 2.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 2.0
+        },
+        "level:warren": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 5,
+          "possible": 10.0
+        },
+        "level_data_vs_world_law": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 10,
+          "possible": 10.0
+        },
+        "optimal_action": {
+          "awarded": 16.0,
+          "fraction": 1.0,
+          "n": 8,
+          "possible": 16.0
+        },
+        "rule_justification": {
+          "awarded": 18.0,
+          "fraction": 1.0,
+          "n": 6,
+          "possible": 18.0
+        },
+        "step_semantics": {
+          "awarded": 14.0,
+          "fraction": 1.0,
+          "n": 7,
+          "possible": 14.0
+        },
+        "why:bump": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:colparity": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:frozen": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:mismatch": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:total": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        }
+      },
+      "counts": {
+        "abstained": 0,
+        "correct": 31,
+        "unanswered": 0,
+        "wrong": 0
+      },
+      "examinee_id": "reader-a3",
+      "fraction": 1.0,
+      "possible": 58.0,
+      "report": {
+        "awarded": 58.0,
+        "axes": {
+          "by_tag": {
+            "counterexample": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "level:cairn": {
+              "awarded": 4.0,
+              "fraction": 1.0,
+              "n": 2,
+              "possible": 4.0
+            },
+            "level:flume": {
+              "awarded": 6.0,
+              "fraction": 1.0,
+              "n": 3,
+              "possible": 6.0
+            },
+            "level:kiln": {
+              "awarded": 8.0,
+              "fraction": 1.0,
+              "n": 4,
+              "possible": 8.0
+            },
+            "level:stile": {
+              "awarded": 2.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 2.0
+            },
+            "level:warren": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 5,
+              "possible": 10.0
+            },
+            "level_data_vs_world_law": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 10,
+              "possible": 10.0
+            },
+            "optimal_action": {
+              "awarded": 16.0,
+              "fraction": 1.0,
+              "n": 8,
+              "possible": 16.0
+            },
+            "rule_justification": {
+              "awarded": 18.0,
+              "fraction": 1.0,
+              "n": 6,
+              "possible": 18.0
+            },
+            "step_semantics": {
+              "awarded": 14.0,
+              "fraction": 1.0,
+              "n": 7,
+              "possible": 14.0
+            },
+            "why:bump": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:colparity": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:frozen": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:mismatch": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:total": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            }
+          }
+        },
+        "counts": {
+          "abstained": 0,
+          "correct": 31,
+          "unanswered": 0,
+          "wrong": 0
+        },
+        "examinee_id": "reader-a3",
+        "fraction": 1.0,
+        "meta": {
+          "capabilities": [
+            "handover_bundle",
+            "manual"
+          ],
+          "rubric_digest_at_build": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_at_marking": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_matches": true,
+          "submission_meta": {
+            "cohort": "2",
+            "delivery": "one-file temp directory, prompt pasted nowhere else",
+            "tier": "tier1_manual",
+            "tools_self_report": "Read - one call, on the TASK.md file named in the instructions; no other file, command, search, or network access."
+          },
+          "tier": "tier1_manual"
+        },
+        "paper_id": "v11-handover-a0",
+        "possible": 58.0,
+        "question_type": "handover",
+        "rubric_digest": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+        "schema": "exam/v0.1",
+        "scores": [
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,4); rule=push2"
+            },
+            "item_id": "v11-step-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,1); rule=blocked_box_landing"
+            },
+            "item_id": "v11-step-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(4,1); box=(5,5); rule=walk"
+            },
+            "item_id": "v11-step-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,1); box=(5,3); rule=walk"
+            },
+            "item_id": "v11-step-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(3,1); box=(5,5); rule=blocked_wall"
+            },
+            "item_id": "v11-step-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,4); box=(0,5); rule=blocked_box_crossing"
+            },
+            "item_id": "v11-step-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(1,0); box=(3,0); rule=push2"
+            },
+            "item_id": "v11-step-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-01",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-02",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-03",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-04",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-05",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-06",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-07",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-08",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-09",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-10",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=24",
+              "solvable": true
+            },
+            "item_id": "v11-opt-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=UP; plan_len=25",
+              "solvable": true
+            },
+            "item_id": "v11-opt-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=UP; plan_len=14",
+              "solvable": true
+            },
+            "item_id": "v11-opt-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=DOWN; plan_len=16",
+              "solvable": true
+            },
+            "item_id": "v11-opt-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 1,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=22",
+              "solvable": true
+            },
+            "item_id": "v11-opt-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=LEFT; plan_len=21",
+              "solvable": true
+            },
+            "item_id": "v11-opt-08",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 5,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_box_crossing+blocked_box_landing+blocked_wall+push2+walk",
+              "spurious": 0
+            },
+            "item_id": "v11-why-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 2,
+              "missing": [],
+              "partial": false,
+              "said": "goal_box_on_target+push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-02",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_wall",
+              "spurious": 0
+            },
+            "item_id": "v11-why-03",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-04",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-05",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "claim_holds_there": false,
+              "said": "level=cairn; player=(1,5); box=(0,5)",
+              "situation_legal": true
+            },
+            "item_id": "v11-why-ce-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.counterexample",
+            "verdict": "correct"
+          }
+        ]
+      },
+      "tier": "tier1_manual"
+    },
+    {
+      "awarded": 58.0,
+      "by_tag": {
+        "counterexample": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "level:cairn": {
+          "awarded": 4.0,
+          "fraction": 1.0,
+          "n": 2,
+          "possible": 4.0
+        },
+        "level:flume": {
+          "awarded": 6.0,
+          "fraction": 1.0,
+          "n": 3,
+          "possible": 6.0
+        },
+        "level:kiln": {
+          "awarded": 8.0,
+          "fraction": 1.0,
+          "n": 4,
+          "possible": 8.0
+        },
+        "level:stile": {
+          "awarded": 2.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 2.0
+        },
+        "level:warren": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 5,
+          "possible": 10.0
+        },
+        "level_data_vs_world_law": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 10,
+          "possible": 10.0
+        },
+        "optimal_action": {
+          "awarded": 16.0,
+          "fraction": 1.0,
+          "n": 8,
+          "possible": 16.0
+        },
+        "rule_justification": {
+          "awarded": 18.0,
+          "fraction": 1.0,
+          "n": 6,
+          "possible": 18.0
+        },
+        "step_semantics": {
+          "awarded": 14.0,
+          "fraction": 1.0,
+          "n": 7,
+          "possible": 14.0
+        },
+        "why:bump": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:colparity": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:frozen": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:mismatch": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:total": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        }
+      },
+      "counts": {
+        "abstained": 0,
+        "correct": 31,
+        "unanswered": 0,
+        "wrong": 0
+      },
+      "examinee_id": "reader-b1",
+      "fraction": 1.0,
+      "possible": 58.0,
+      "report": {
+        "awarded": 58.0,
+        "axes": {
+          "by_tag": {
+            "counterexample": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "level:cairn": {
+              "awarded": 4.0,
+              "fraction": 1.0,
+              "n": 2,
+              "possible": 4.0
+            },
+            "level:flume": {
+              "awarded": 6.0,
+              "fraction": 1.0,
+              "n": 3,
+              "possible": 6.0
+            },
+            "level:kiln": {
+              "awarded": 8.0,
+              "fraction": 1.0,
+              "n": 4,
+              "possible": 8.0
+            },
+            "level:stile": {
+              "awarded": 2.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 2.0
+            },
+            "level:warren": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 5,
+              "possible": 10.0
+            },
+            "level_data_vs_world_law": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 10,
+              "possible": 10.0
+            },
+            "optimal_action": {
+              "awarded": 16.0,
+              "fraction": 1.0,
+              "n": 8,
+              "possible": 16.0
+            },
+            "rule_justification": {
+              "awarded": 18.0,
+              "fraction": 1.0,
+              "n": 6,
+              "possible": 18.0
+            },
+            "step_semantics": {
+              "awarded": 14.0,
+              "fraction": 1.0,
+              "n": 7,
+              "possible": 14.0
+            },
+            "why:bump": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:colparity": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:frozen": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:mismatch": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:total": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            }
+          }
+        },
+        "counts": {
+          "abstained": 0,
+          "correct": 31,
+          "unanswered": 0,
+          "wrong": 0
+        },
+        "examinee_id": "reader-b1",
+        "fraction": 1.0,
+        "meta": {
+          "capabilities": [
+            "handover_bundle",
+            "manual",
+            "playbook"
+          ],
+          "rubric_digest_at_build": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_at_marking": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_matches": true,
+          "submission_meta": {
+            "cohort": "2",
+            "delivery": "one-file temp directory, prompt pasted nowhere else",
+            "tier": "tier2_manual_playbook",
+            "tools_self_report": "Read (once, on the TASK.md file named in the instruction) and nothing else."
+          },
+          "tier": "tier2_manual_playbook"
+        },
+        "paper_id": "v11-handover-a0",
+        "possible": 58.0,
+        "question_type": "handover",
+        "rubric_digest": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+        "schema": "exam/v0.1",
+        "scores": [
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,4); rule=push2"
+            },
+            "item_id": "v11-step-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,1); rule=blocked_box_landing"
+            },
+            "item_id": "v11-step-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(4,1); box=(5,5); rule=walk"
+            },
+            "item_id": "v11-step-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,1); box=(5,3); rule=walk"
+            },
+            "item_id": "v11-step-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(3,1); box=(5,5); rule=blocked_wall"
+            },
+            "item_id": "v11-step-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,4); box=(0,5); rule=blocked_box_crossing"
+            },
+            "item_id": "v11-step-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(1,0); box=(3,0); rule=push2"
+            },
+            "item_id": "v11-step-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-01",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-02",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-03",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-04",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-05",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-06",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-07",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-08",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-09",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-10",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=24",
+              "solvable": true
+            },
+            "item_id": "v11-opt-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=UP; plan_len=25",
+              "solvable": true
+            },
+            "item_id": "v11-opt-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=UP; plan_len=14",
+              "solvable": true
+            },
+            "item_id": "v11-opt-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=DOWN; plan_len=16",
+              "solvable": true
+            },
+            "item_id": "v11-opt-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 1,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=22",
+              "solvable": true
+            },
+            "item_id": "v11-opt-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=LEFT; plan_len=21",
+              "solvable": true
+            },
+            "item_id": "v11-opt-08",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 5,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_box_crossing+blocked_box_landing+blocked_wall+push2+walk",
+              "spurious": 0
+            },
+            "item_id": "v11-why-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 2,
+              "missing": [],
+              "partial": false,
+              "said": "goal_box_on_target+push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-02",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_wall",
+              "spurious": 0
+            },
+            "item_id": "v11-why-03",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-04",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-05",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "claim_holds_there": false,
+              "said": "level=cairn; player=(1,5); box=(0,5)",
+              "situation_legal": true
+            },
+            "item_id": "v11-why-ce-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.counterexample",
+            "verdict": "correct"
+          }
+        ]
+      },
+      "tier": "tier2_manual_playbook"
+    },
+    {
+      "awarded": 58.0,
+      "by_tag": {
+        "counterexample": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "level:cairn": {
+          "awarded": 4.0,
+          "fraction": 1.0,
+          "n": 2,
+          "possible": 4.0
+        },
+        "level:flume": {
+          "awarded": 6.0,
+          "fraction": 1.0,
+          "n": 3,
+          "possible": 6.0
+        },
+        "level:kiln": {
+          "awarded": 8.0,
+          "fraction": 1.0,
+          "n": 4,
+          "possible": 8.0
+        },
+        "level:stile": {
+          "awarded": 2.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 2.0
+        },
+        "level:warren": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 5,
+          "possible": 10.0
+        },
+        "level_data_vs_world_law": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 10,
+          "possible": 10.0
+        },
+        "optimal_action": {
+          "awarded": 16.0,
+          "fraction": 1.0,
+          "n": 8,
+          "possible": 16.0
+        },
+        "rule_justification": {
+          "awarded": 18.0,
+          "fraction": 1.0,
+          "n": 6,
+          "possible": 18.0
+        },
+        "step_semantics": {
+          "awarded": 14.0,
+          "fraction": 1.0,
+          "n": 7,
+          "possible": 14.0
+        },
+        "why:bump": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:colparity": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:frozen": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:mismatch": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:total": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        }
+      },
+      "counts": {
+        "abstained": 0,
+        "correct": 31,
+        "unanswered": 0,
+        "wrong": 0
+      },
+      "examinee_id": "reader-b2",
+      "fraction": 1.0,
+      "possible": 58.0,
+      "report": {
+        "awarded": 58.0,
+        "axes": {
+          "by_tag": {
+            "counterexample": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "level:cairn": {
+              "awarded": 4.0,
+              "fraction": 1.0,
+              "n": 2,
+              "possible": 4.0
+            },
+            "level:flume": {
+              "awarded": 6.0,
+              "fraction": 1.0,
+              "n": 3,
+              "possible": 6.0
+            },
+            "level:kiln": {
+              "awarded": 8.0,
+              "fraction": 1.0,
+              "n": 4,
+              "possible": 8.0
+            },
+            "level:stile": {
+              "awarded": 2.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 2.0
+            },
+            "level:warren": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 5,
+              "possible": 10.0
+            },
+            "level_data_vs_world_law": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 10,
+              "possible": 10.0
+            },
+            "optimal_action": {
+              "awarded": 16.0,
+              "fraction": 1.0,
+              "n": 8,
+              "possible": 16.0
+            },
+            "rule_justification": {
+              "awarded": 18.0,
+              "fraction": 1.0,
+              "n": 6,
+              "possible": 18.0
+            },
+            "step_semantics": {
+              "awarded": 14.0,
+              "fraction": 1.0,
+              "n": 7,
+              "possible": 14.0
+            },
+            "why:bump": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:colparity": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:frozen": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:mismatch": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:total": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            }
+          }
+        },
+        "counts": {
+          "abstained": 0,
+          "correct": 31,
+          "unanswered": 0,
+          "wrong": 0
+        },
+        "examinee_id": "reader-b2",
+        "fraction": 1.0,
+        "meta": {
+          "capabilities": [
+            "handover_bundle",
+            "manual",
+            "playbook"
+          ],
+          "rubric_digest_at_build": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_at_marking": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_matches": true,
+          "submission_meta": {
+            "cohort": "2",
+            "delivery": "one-file temp directory, prompt pasted nowhere else",
+            "tier": "tier2_manual_playbook",
+            "tools_self_report": "Read - one call, on the task file named in the instructions; nothing else."
+          },
+          "tier": "tier2_manual_playbook"
+        },
+        "paper_id": "v11-handover-a0",
+        "possible": 58.0,
+        "question_type": "handover",
+        "rubric_digest": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+        "schema": "exam/v0.1",
+        "scores": [
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,4); rule=push2"
+            },
+            "item_id": "v11-step-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,1); rule=blocked_box_landing"
+            },
+            "item_id": "v11-step-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(4,1); box=(5,5); rule=walk"
+            },
+            "item_id": "v11-step-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,1); box=(5,3); rule=walk"
+            },
+            "item_id": "v11-step-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(3,1); box=(5,5); rule=blocked_wall"
+            },
+            "item_id": "v11-step-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,4); box=(0,5); rule=blocked_box_crossing"
+            },
+            "item_id": "v11-step-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(1,0); box=(3,0); rule=push2"
+            },
+            "item_id": "v11-step-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-01",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-02",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-03",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-04",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-05",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-06",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-07",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-08",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-09",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-10",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=24",
+              "solvable": true
+            },
+            "item_id": "v11-opt-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=UP; plan_len=25",
+              "solvable": true
+            },
+            "item_id": "v11-opt-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=UP; plan_len=14",
+              "solvable": true
+            },
+            "item_id": "v11-opt-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=DOWN; plan_len=16",
+              "solvable": true
+            },
+            "item_id": "v11-opt-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 1,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=22",
+              "solvable": true
+            },
+            "item_id": "v11-opt-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=DOWN; plan_len=21",
+              "solvable": true
+            },
+            "item_id": "v11-opt-08",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 5,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_box_crossing+blocked_box_landing+blocked_wall+push2+walk",
+              "spurious": 0
+            },
+            "item_id": "v11-why-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 2,
+              "missing": [],
+              "partial": false,
+              "said": "goal_box_on_target+push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-02",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_wall",
+              "spurious": 0
+            },
+            "item_id": "v11-why-03",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-04",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-05",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "claim_holds_there": false,
+              "said": "level=kiln; player=(0,1); box=(0,0)",
+              "situation_legal": true
+            },
+            "item_id": "v11-why-ce-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.counterexample",
+            "verdict": "correct"
+          }
+        ]
+      },
+      "tier": "tier2_manual_playbook"
+    },
+    {
+      "awarded": 58.0,
+      "by_tag": {
+        "counterexample": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "level:cairn": {
+          "awarded": 4.0,
+          "fraction": 1.0,
+          "n": 2,
+          "possible": 4.0
+        },
+        "level:flume": {
+          "awarded": 6.0,
+          "fraction": 1.0,
+          "n": 3,
+          "possible": 6.0
+        },
+        "level:kiln": {
+          "awarded": 8.0,
+          "fraction": 1.0,
+          "n": 4,
+          "possible": 8.0
+        },
+        "level:stile": {
+          "awarded": 2.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 2.0
+        },
+        "level:warren": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 5,
+          "possible": 10.0
+        },
+        "level_data_vs_world_law": {
+          "awarded": 10.0,
+          "fraction": 1.0,
+          "n": 10,
+          "possible": 10.0
+        },
+        "optimal_action": {
+          "awarded": 16.0,
+          "fraction": 1.0,
+          "n": 8,
+          "possible": 16.0
+        },
+        "rule_justification": {
+          "awarded": 18.0,
+          "fraction": 1.0,
+          "n": 6,
+          "possible": 18.0
+        },
+        "step_semantics": {
+          "awarded": 14.0,
+          "fraction": 1.0,
+          "n": 7,
+          "possible": 14.0
+        },
+        "why:bump": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:colparity": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:frozen": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:mismatch": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        },
+        "why:total": {
+          "awarded": 3.0,
+          "fraction": 1.0,
+          "n": 1,
+          "possible": 3.0
+        }
+      },
+      "counts": {
+        "abstained": 0,
+        "correct": 31,
+        "unanswered": 0,
+        "wrong": 0
+      },
+      "examinee_id": "reader-b3",
+      "fraction": 1.0,
+      "possible": 58.0,
+      "report": {
+        "awarded": 58.0,
+        "axes": {
+          "by_tag": {
+            "counterexample": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "level:cairn": {
+              "awarded": 4.0,
+              "fraction": 1.0,
+              "n": 2,
+              "possible": 4.0
+            },
+            "level:flume": {
+              "awarded": 6.0,
+              "fraction": 1.0,
+              "n": 3,
+              "possible": 6.0
+            },
+            "level:kiln": {
+              "awarded": 8.0,
+              "fraction": 1.0,
+              "n": 4,
+              "possible": 8.0
+            },
+            "level:stile": {
+              "awarded": 2.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 2.0
+            },
+            "level:warren": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 5,
+              "possible": 10.0
+            },
+            "level_data_vs_world_law": {
+              "awarded": 10.0,
+              "fraction": 1.0,
+              "n": 10,
+              "possible": 10.0
+            },
+            "optimal_action": {
+              "awarded": 16.0,
+              "fraction": 1.0,
+              "n": 8,
+              "possible": 16.0
+            },
+            "rule_justification": {
+              "awarded": 18.0,
+              "fraction": 1.0,
+              "n": 6,
+              "possible": 18.0
+            },
+            "step_semantics": {
+              "awarded": 14.0,
+              "fraction": 1.0,
+              "n": 7,
+              "possible": 14.0
+            },
+            "why:bump": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:colparity": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:frozen": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:mismatch": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            },
+            "why:total": {
+              "awarded": 3.0,
+              "fraction": 1.0,
+              "n": 1,
+              "possible": 3.0
+            }
+          }
+        },
+        "counts": {
+          "abstained": 0,
+          "correct": 31,
+          "unanswered": 0,
+          "wrong": 0
+        },
+        "examinee_id": "reader-b3",
+        "fraction": 1.0,
+        "meta": {
+          "capabilities": [
+            "handover_bundle",
+            "manual",
+            "playbook"
+          ],
+          "rubric_digest_at_build": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_at_marking": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+          "rubric_digest_matches": true,
+          "submission_meta": {
+            "cohort": "2",
+            "delivery": "one-file temp directory, prompt pasted nowhere else",
+            "tier": "tier2_manual_playbook",
+            "tools_self_report": "Read (only the one permitted file B3/TASK.md); no other tool, file, command, or lookup."
+          },
+          "tier": "tier2_manual_playbook"
+        },
+        "paper_id": "v11-handover-a0",
+        "possible": 58.0,
+        "question_type": "handover",
+        "rubric_digest": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+        "schema": "exam/v0.1",
+        "scores": [
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,4); rule=push2"
+            },
+            "item_id": "v11-step-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,2); box=(0,1); rule=blocked_box_landing"
+            },
+            "item_id": "v11-step-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(4,1); box=(5,5); rule=walk"
+            },
+            "item_id": "v11-step-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,1); box=(5,3); rule=walk"
+            },
+            "item_id": "v11-step-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(3,1); box=(5,5); rule=blocked_wall"
+            },
+            "item_id": "v11-step-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(0,4); box=(0,5); rule=blocked_box_crossing"
+            },
+            "item_id": "v11-step-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "box_ok": true,
+              "player_ok": true,
+              "rule_ok": true,
+              "said": "player=(1,0); box=(3,0); rule=push2"
+            },
+            "item_id": "v11-step-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.step_semantics",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-01",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-02",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-03",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-04",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-05",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "level_data"
+            },
+            "item_id": "v11-name-06",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-07",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-08",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-09",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 1.0,
+            "detail": {
+              "said": "world_law"
+            },
+            "item_id": "v11-name-10",
+            "possible": 1.0,
+            "rubric_id": "handover_auto.name_class",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-01",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=24",
+              "solvable": true
+            },
+            "item_id": "v11-opt-02",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=UP; plan_len=25",
+              "solvable": true
+            },
+            "item_id": "v11-opt-03",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 0,
+              "plan_len_ok": true,
+              "said": "action=none; plan_len=none",
+              "solvable": false
+            },
+            "item_id": "v11-opt-04",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=UP; plan_len=14",
+              "solvable": true
+            },
+            "item_id": "v11-opt-05",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=DOWN; plan_len=16",
+              "solvable": true
+            },
+            "item_id": "v11-opt-06",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 1,
+              "plan_len_ok": true,
+              "said": "action=RIGHT; plan_len=22",
+              "solvable": true
+            },
+            "item_id": "v11-opt-07",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 2.0,
+            "detail": {
+              "action_ok": true,
+              "n_accepted": 2,
+              "plan_len_ok": true,
+              "said": "action=LEFT; plan_len=21",
+              "solvable": true
+            },
+            "item_id": "v11-opt-08",
+            "possible": 2.0,
+            "rubric_id": "handover_auto.optimal_action",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 5,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_box_crossing+blocked_box_landing+blocked_wall+push2+walk",
+              "spurious": 0
+            },
+            "item_id": "v11-why-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 2,
+              "missing": [],
+              "partial": false,
+              "said": "goal_box_on_target+push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-02",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "blocked_wall",
+              "spurious": 0
+            },
+            "item_id": "v11-why-03",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-04",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "hit": 1,
+              "missing": [],
+              "partial": false,
+              "said": "push2",
+              "spurious": 0
+            },
+            "item_id": "v11-why-05",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.rule_justification",
+            "verdict": "correct"
+          },
+          {
+            "awarded": 3.0,
+            "detail": {
+              "claim_holds_there": false,
+              "said": "level=cairn; player=(1,5); box=(0,5)",
+              "situation_legal": true
+            },
+            "item_id": "v11-why-ce-01",
+            "possible": 3.0,
+            "rubric_id": "handover_auto.counterexample",
+            "verdict": "correct"
+          }
+        ]
+      },
+      "tier": "tier2_manual_playbook"
+    }
+  ],
+  "grader_noise": {
+    "cosmetic_max_abs_delta_points": 0.0,
+    "note": "the marker's own inconsistency, in points. A tier difference smaller than this is the marker talking, not the tiers.",
+    "per_examinee": {
+      "reader-a1": {
+        "awarded": 58.0,
+        "cosmetic_delta": 0.0,
+        "repeat_delta": 0.0
+      },
+      "reader-a2": {
+        "awarded": 58.0,
+        "cosmetic_delta": 0.0,
+        "repeat_delta": 0.0
+      },
+      "reader-a3": {
+        "awarded": 58.0,
+        "cosmetic_delta": 0.0,
+        "repeat_delta": 0.0
+      },
+      "reader-b1": {
+        "awarded": 58.0,
+        "cosmetic_delta": 0.0,
+        "repeat_delta": 0.0
+      },
+      "reader-b2": {
+        "awarded": 58.0,
+        "cosmetic_delta": 0.0,
+        "repeat_delta": 0.0
+      },
+      "reader-b3": {
+        "awarded": 58.0,
+        "cosmetic_delta": 0.0,
+        "repeat_delta": 0.0
+      }
+    },
+    "repeat_max_abs_delta_points": 0.0
+  },
+  "key_sha256": "f21ee3d66ebc21ba04fb5693fd72e8871c60ff1ec7dfd34e9e3b16db318d6ff5",
+  "matches_preregistration": true,
+  "n_examinees": {
+    "tier1_manual": 3,
+    "tier2_manual_playbook": 3
+  },
+  "paper_id": "v11-handover-a0",
+  "per_item": {
+    "v11-name-01": {
+      "possible": [
+        1.0
+      ],
+      "tier1_manual": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tier2_manual_playbook": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "v11-name-02": {
+      "possible": [
+        1.0
+      ],
+      "tier1_manual": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tier2_manual_playbook": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "v11-name-03": {
+      "possible": [
+        1.0
+      ],
+      "tier1_manual": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tier2_manual_playbook": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "v11-name-04": {
+      "possible": [
+        1.0
+      ],
+      "tier1_manual": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tier2_manual_playbook": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "v11-name-05": {
+      "possible": [
+        1.0
+      ],
+      "tier1_manual": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tier2_manual_playbook": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "v11-name-06": {
+      "possible": [
+        1.0
+      ],
+      "tier1_manual": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tier2_manual_playbook": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "v11-name-07": {
+      "possible": [
+        1.0
+      ],
+      "tier1_manual": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tier2_manual_playbook": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "v11-name-08": {
+      "possible": [
+        1.0
+      ],
+      "tier1_manual": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tier2_manual_playbook": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "v11-name-09": {
+      "possible": [
+        1.0
+      ],
+      "tier1_manual": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tier2_manual_playbook": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "v11-name-10": {
+      "possible": [
+        1.0
+      ],
+      "tier1_manual": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "tier2_manual_playbook": [
+        1.0,
+        1.0,
+        1.0
+      ]
+    },
+    "v11-opt-01": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-opt-02": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-opt-03": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-opt-04": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-opt-05": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-opt-06": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-opt-07": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-opt-08": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-step-01": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-step-02": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-step-03": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-step-04": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-step-05": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-step-06": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-step-07": {
+      "possible": [
+        2.0
+      ],
+      "tier1_manual": [
+        2.0,
+        2.0,
+        2.0
+      ],
+      "tier2_manual_playbook": [
+        2.0,
+        2.0,
+        2.0
+      ]
+    },
+    "v11-why-01": {
+      "possible": [
+        3.0
+      ],
+      "tier1_manual": [
+        3.0,
+        3.0,
+        3.0
+      ],
+      "tier2_manual_playbook": [
+        3.0,
+        3.0,
+        3.0
+      ]
+    },
+    "v11-why-02": {
+      "possible": [
+        3.0
+      ],
+      "tier1_manual": [
+        3.0,
+        3.0,
+        3.0
+      ],
+      "tier2_manual_playbook": [
+        3.0,
+        3.0,
+        3.0
+      ]
+    },
+    "v11-why-03": {
+      "possible": [
+        3.0
+      ],
+      "tier1_manual": [
+        3.0,
+        3.0,
+        3.0
+      ],
+      "tier2_manual_playbook": [
+        3.0,
+        3.0,
+        3.0
+      ]
+    },
+    "v11-why-04": {
+      "possible": [
+        3.0
+      ],
+      "tier1_manual": [
+        3.0,
+        3.0,
+        3.0
+      ],
+      "tier2_manual_playbook": [
+        3.0,
+        3.0,
+        3.0
+      ]
+    },
+    "v11-why-05": {
+      "possible": [
+        3.0
+      ],
+      "tier1_manual": [
+        3.0,
+        3.0,
+        3.0
+      ],
+      "tier2_manual_playbook": [
+        3.0,
+        3.0,
+        3.0
+      ]
+    },
+    "v11-why-ce-01": {
+      "possible": [
+        3.0
+      ],
+      "tier1_manual": [
+        3.0,
+        3.0,
+        3.0
+      ],
+      "tier2_manual_playbook": [
+        3.0,
+        3.0,
+        3.0
+      ]
+    }
+  },
+  "prompt_id": "V11-handover-auto",
+  "rubric_digest": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+  "saturated": true,
+  "saturation_rule": "if either tier scores above 0.95 overall the sheet has saturated again and the delta carries no information, whatever its sign.",
+  "tier_means": {
+    "tier1_manual": 1.0,
+    "tier2_manual_playbook": 1.0
+  },
+  "verdict": "no conclusion: the difference does not clear its own error bars, or the sheet saturated. Reporting the point estimate as a finding would be the mistake V17 made."
+}

@@ -9,7 +9,7 @@
   "errors": [],
   "file": "theory\\generated\\theory.lean",
   "green": true,
-  "lean": "C:\\Users\\user\\Desktop\\theoria\\cold-start-a0\\.toolchain\\lean-4.9.0-windows\\bin\\lean.exe",
+  "lean": "C:\\Users\\user\\.elan\\bin\\lean.EXE",
   "output": [
     "'inv_all' does not depend on any axioms"
   ],

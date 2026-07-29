@@ -574,6 +574,18 @@
         "baseline_bits": 3096,
         "chosen": true,
         "events": 92,
+        "identity_repair": {
+          "applied": false,
+          "delta_bits": 0,
+          "n_swaps": 0,
+          "near_misses": [],
+          "occlusion_test_ran": true,
+          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape,not_occlusion)",
+          "priced_by": "not script length -- see module docstring",
+          "script_bits_after": 1741,
+          "script_bits_before": 1741,
+          "swaps": []
+        },
         "operator": "connected_components(4)",
         "ratio": 0.5623,
         "reidentification": {
@@ -593,6 +605,18 @@
         "baseline_bits": 3096,
         "chosen": false,
         "events": 92,
+        "identity_repair": {
+          "applied": false,
+          "delta_bits": 0,
+          "n_swaps": 0,
+          "near_misses": [],
+          "occlusion_test_ran": true,
+          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape,not_occlusion)",
+          "priced_by": "not script length -- see module docstring",
+          "script_bits_after": 1741,
+          "script_bits_before": 1741,
+          "swaps": []
+        },
         "operator": "connected_components(4)+uniform_color",
         "ratio": 0.5623,
         "reidentification": {
