@@ -104,11 +104,24 @@ narrower than the claim it licensed".
   `module.build()`; `heldout_worldgen` exposes `build_for(world_id, per_class)` and
   is not merely unlisted but **unreachable** through that path. But **a test
   written for exactly this leak already exists and is vacuous**:
-  `exam/tests/test_worldgen_papers.py:71` asserts the JSON-quoted `'"walk"'` is
-  absent from the sheet — and the sheet says `"rule:walk"`, so the quote delimiters
-  never match. Of 59 (world, rule) pairs, **56 pass on that string-quoting accident**;
-  only `push`, on three worlds, is genuinely covered by the test's `spec.json`
-  carve-out. The gate was pointed at this. It missed on a matcher bug.
+  `exam/tests/test_worldgen_papers.py:71`
+  (`test_the_sheet_names_no_rule_the_open_files_do_not_already_name`) asserts the
+  JSON-quoted `'"walk"'` is absent from the sheet — and the sheet says
+  `"rule:walk"`, so the quote delimiters never match. The gate was pointed at
+  this. It missed on a matcher bug.
+
+  **And the vacuity is worse than the figure this run first gave for it.** The
+  draft said "of 59 (world, rule) pairs, 56 pass on that string-quoting
+  accident". 59 is the count over *all twenty worlds* — but the test is
+  `@pytest.mark.parametrize("world_id", SAMPLE)` and `SAMPLE` is three worlds
+  (`t1-push-open`, `t2-switch-push`, `t3-full-house`). **The test as written
+  exercises 15 pairs, of which 12 are vacuous and 3 are the `push` carve-out: it
+  makes no non-vacuous assertion whatsoever, and it never looks at 17 of the 20
+  worlds at all.** The 56-of-59 figure describes a hypothetical extension of the
+  test to the whole catalogue, not the test in the repository, and it was
+  presented as the latter. Both audits are in
+  `adversarial/c1b_vacuity.py`; on all twenty worlds the numbers are 59 pairs, 56
+  vacuous, 3 carved out, 0 genuine passes, 0 that would fail.
 
 **And the consequence is larger than the draft allowed.** The draft said the leak
 "does not affect any number V2 or this run reports" — true, because no synthetic
@@ -119,7 +132,12 @@ about. Bolted onto §2's prior it is worth **+6.8 points and one further perfect
 world** with no world model added. A reader doing no reasoning at all is handed the
 answer to "does anything happen here".
 
-## 2 · A theory-free prior scores 1.000 on twelve of the twenty worlds
+## 2 · A cheap grid prior scores 1.000 on twelve of the twenty worlds
+
+*This section was headed "A **theory-free** prior" until the adversarial pass.
+The numbers below are unchanged and all of them reproduce byte-identically; the
+adjective was the error, and the corrections at the end of the section are what
+retired it.*
 
 Five of the twenty examiners independently wrote a variant of the same cheap
 strategy and reported it tying the oracle. Convergence from five isolated contexts
@@ -166,20 +184,46 @@ learn a rule, it brought one, and no instrument in the exam separates those.
 **Three corrections to how this run first stated that, all from the adversarial
 pass, all measured.**
 
-* *"That is the whole world model"* was false. **The legend is the load-bearing
-  half.** Strip `legend["agent"]` from the sheet the prior reads and it scores
-  **0.4110** — the bluffer floor to four figures; strip `legend["wall"]` and it
-  scores 0.4619. Every point above the floor is bought with the sheet's naming of
-  the agent and the wall, which in this framework's own vocabulary is the manual's
-  **object ontology**, handed to the examinee. The right claim is that *legend plus
-  eight lines* beats the paper, and that the legend is on the sheet by design.
+* *"That is the whole world model"* was false. **The legend is one load-bearing
+  half; the orientation convention is the other.** Strip `legend["agent"]` from
+  the sheet the prior reads and it scores **0.4110** — the bluffer floor to four
+  figures; strip `legend["wall"]` and it scores 0.4619; drop the legend entirely
+  and it is 0.4110 again. Not the whole legend, though: strip `legend["floor"]`
+  and the score is **0.8008 with the same twelve perfect worlds**, bit-identical
+  to baseline. Every point above the floor is bought with the sheet's
+  naming of the agent and the wall, which in this framework's own vocabulary is
+  the manual's **object ontology**, handed to the examinee. And the eight lines
+  are not neutral either: `DELTA` encodes "row index grows downward, column index
+  grows rightward, `UP` decrements the row". **Reverse `DELTA` (swap UP/DOWN and
+  LEFT/RIGHT) and the prior scores 0.2034; transpose it (make UP mean "column
+  minus one") and it scores 0.1017** — both far *below* the 0.411 floor a
+  constant "nothing happens" earns. A convention whose relabelling costs four
+  fifths of the score is not an absence of theory, it is a theory that was right.
+  The defensible claim is *legend plus orientation plus eight lines*, and the
+  first two came in from outside.
 * **The prior is exactly the catalogue's two modal rules, and nothing else.** Over
-  all 236 items it is right on every `walk`, `blocked_by_wall`, `walk_through_door`
-  and `walk_through_cycler` item, and **0 for 32** on `push`, `teleport_twoway`,
-  `toggle_switch` and the rest. `walk` and `blocked_by_wall` are 9 181 and 6 150
-  transitions catalogue-wide against ≤ 244 for anything else. "No per-world
-  constant" defends against parameter fitting; it does not defend against
-  hypothesis-class selection by twenty agents who had each already read a world.
+  all 236 items it takes every `blocked_by_wall` (80/80), `walk_through_door`
+  (12/12) and `walk_through_cycler` (8/8) item, **79 of 80** `walk` items and
+  **10 of 12** `collect_token` items, for **47 misses in 236**. Of those misses,
+  **44 fall in a zero set of six rules** on which it scores nothing at all:
+  `push` 0/12, `teleport_twoway` 0/8, `toggle_switch` 0/8, `blocked_by_block`
+  0/8, `blocked_by_door` 0/4, `latch_already_set` 0/4. `walk` and
+  `blocked_by_wall` are 9 181 and 6 150 transitions catalogue-wide against ≤ 244
+  for anything else. "No per-world constant" defends against parameter fitting;
+  it does not defend against hypothesis-class selection by twenty agents who had
+  each already read a world.
+
+  *This bullet said "right on every `walk` … item" and "**0 for 32** on `push`,
+  `teleport_twoway`, `toggle_switch` and the rest", and both halves were
+  measurably wrong.* `walk` is 79/80 — the single miss is
+  **`t2-gravity-push-006`**, and §6 already names its cause: that world files the
+  cascade transition `up_is_inert` under `walk`, so one `walk` item is not a walk.
+  The zero set is 44 items over six rules, not 32; and `collect_token`, squarely
+  inside "the rest", is **10/12, not 0** (the two misses are
+  `t1-tokens-lock-000` and `t3-latch-maze-018`; why those two and not the other
+  ten was not chased down here). Total misses are 47, not 32. An error that rounds the prior's failures
+  *down* flatters the very claim the bullet exists to puncture, which is the
+  direction a correction is least likely to be caught running.
 * **§2 and §3 are one finding counted twice.** Nine of the twelve perfect worlds
   contain no rule but `walk` and `blocked_by_wall`. So "a theory-free strategy
   scores 1.000 on twelve worlds" and "the rule the world is named for is the one
@@ -237,8 +281,12 @@ corrected figures are worse for the exam than the ones I first published, which 
 the direction an error of this kind least often runs.)
 
 The single most-repeated structural cause, found independently on world after
-world: **the rule the world is named for is the one rule its paper does not
-examine.** `t1-portal-oneway` never asks about a portal (1 trace witness, 1
+world — **at `per_class=2`, and it is a statement about the sampler's matched
+quota, not about the exam**: **the rule the world is named for is the one rule
+its paper does not examine.** (§2's third correction is the other half of this
+sentence: nine of the twelve worlds a cheap prior takes whole contain no rule but
+`walk` and `blocked_by_wall`, so that finding and this one are the same fact from
+two directions, and must not be counted twice.) `t1-portal-oneway` never asks about a portal (1 trace witness, 1
 held out, against a matched quota of 2). `t2-portal-pair` never asks about a
 portal (5 witnesses in trace, 1 held out). `t1-fragile-bridge` never asks about
 the bridge (`cross_fragile`: 0 in trace). `t1-switch-toggle` never asks about the
@@ -249,16 +297,27 @@ which is exactly the interesting one.
 
 ## 4 · Marker misjudgement, by question type
 
-Every examiner ran the same near-miss battery against `rubrics_heldout.py`. **No
-examiner found a case where the marker paid for an answer it should not have** —
-transposed grids, one-cell errors, ragged rows, short grids, out-of-palette
-colours and prose are all correctly `wrong`, and the per-world palette override
-works (the A0 rubric's hard-coded `{0,2,4,8}` would have rejected every generated
-frame; it does not). Both structural invariants hold on all twenty worlds: `null`
-scores `unanswered` everywhere and never `correct`; `oracle` is never marked
-`wrong`.
+**Scope first, because this run got the scope wrong.** What follows is a result
+about `exam/grading/rubrics_heldout.py` on twenty generated worlds. It was
+originally written up as though it held of the marker as a whole, and §4b shows
+that it does not.
 
-The defects are all in the **verdict label**, not the mark, and they converge:
+Every examiner ran the same near-miss battery against `rubrics_heldout.py`, and
+the synthesist re-ran it as one sweep: **11 712 probes over all 236 worldgen
+items** — ground truth in eight accepted wrappers, 21 spellings of silence, and
+per-item mutations of the truth (single-cell substitutions at three positions
+over the legal palette, transposed, rows reversed, columns reversed, a row
+dropped, a row duplicated). **No case was found where the marker paid for an
+answer it should not have**: 0 non-truth frames paid, 0 silences paid, 0 ground
+truths marked wrong. Transposed grids, one-cell errors, ragged rows, short grids,
+out-of-palette colours and prose are all correctly `wrong`, and the per-world
+palette override works (the A0 rubric's hard-coded `{0,2,4,8}` would have
+rejected every generated frame; it does not). Both structural invariants hold on
+all twenty worlds: `null` scores `unanswered` everywhere and never `correct`;
+`oracle` is never marked `wrong`.
+
+Within that scope the defects are all in the **verdict label**, not the mark, and
+they converge:
 
 * **Format failure is indistinguishable from a wrong prediction.** A submission
   with every frame exactly right but cells serialised as `"6"` or `6.0` scores
@@ -276,6 +335,61 @@ The defects are all in the **verdict label**, not the mark, and they converge:
   `abstained`** — `_is_abstention` uses an `is True` identity test and a
   four-string allowlist. "unsolvable" is among the words that fall through, which
   is the one word `Theoria.md` 1.11 most cares about an examinee being able to say.
+
+## 4b · Off that rubric the claim fails: the adaptation paper pays for an answer it calls unreadable
+
+The battery above was run against `rubrics_heldout.py`. Run the same silence set
+against the four hand-built papers and the invariant "silence is never paid"
+breaks on `adaptation`:
+
+| submission, on every item of the adaptation paper | scored |
+|---|---|
+| `[]` | **6.500 / 144** |
+| `"unsolvable"` | 12.000 / 144 |
+| `0` (and `False`, and the string `"None"`) | 1.000 / 144 |
+| `"__V4_GARBAGE__"`, `""`, `{}`, `None` | 0.000 / 144 |
+
+The paper is 60 items and 144 points; all 6.500 of the `[]` score lands on the
+six `adapt.collateral.v1` items.
+
+**The mechanism is `exam/grading/rubrics_adaptation.py::_read_set`.** Its first
+two lines are
+
+```python
+if isinstance(answer, dict):
+    value = answer.get(key)
+else:
+    value = answer                     # <- the whole answer, for EVERY key
+```
+
+`grade_collateral` calls it three times, for `rules_falsified`,
+`claims_to_reexamine` and `claims_now_false`. A non-dict answer therefore becomes
+the claimed value of all three at once, and `[]` normalises to the empty set — so
+a single `[]` asserts "no rule is falsified, no claim needs re-examining, no
+claim is now false" and collects `COLLATERAL_WEIGHTS` for each of the three
+wherever the truth is empty. That is the V4 defect this module was rewritten to
+kill, in a different function: the same illegible token read as a substantive
+assertion. `_read_claim` explicitly classes `[]` as `UNREADABLE`
+(`exam/tests/test_selftest.py:286` asserts it), so the marker refuses `[]` on the
+detect rubrics and pays for it on the collateral rubric, in the same submission.
+
+The verdict paper has a smaller version: `"unsolvable"` everywhere scores
+**9.000 of 34**. That one is arguable — `"unsolvable"` is a legible verdict that
+happens to be right on some items, and the paper's weighting is designed so that
+such a bluffer scores badly rather than not at all. `[]` is not arguable.
+
+**Not fixed here.** `_read_set` is on the marking path for numbers V4 has already
+published; changing its semantics moves calibrated figures, and that is its own
+work item, not a paragraph inside a measurement run. It is pinned instead by
+`exam/tests/test_selftest.py::test_the_bare_empty_list_is_not_paid_on_the_adaptation_paper`,
+marked `xfail(strict=True)` so that the day it is fixed the suite goes red and
+forces the artefacts behind it to be re-derived.
+
+Worth noting where the hole was: `test_a_submission_of_nothing_scores_nothing_on_every_paper`
+is parametrised `[st.GARBAGE, "", {}, None]`, and **`[]` is conspicuously absent**
+even though `test_an_illegible_answer_is_not_read_as_the_claim_never`, thirty
+lines earlier in the same file, lists `[]` among the illegible tokens. The one
+token the two tests disagree about is the one that pays.
 
 ## 5 · The three verdict classes
 
@@ -371,11 +485,17 @@ turned out to be too generous.
 
 ## 8 · What this run did not do
 
-* **It did not fix the leak.** `tags=(split,)` at `exam/papers/heldout_worldgen.py:204`
-  is a one-line change and `exam/model.py` already keeps `rule` on the key side
-  where `axes` reads it. It is left undone because a leak that has been in every
-  published number since V2 deserves its own item, with the V2 artefacts re-derived
-  behind it, rather than a quiet edit inside a measurement run.
+* **It did not fix the leak, and the fix is not the one line this section first
+  claimed.** `tags=(split,)` at `exam/papers/heldout_worldgen.py:204` is one line,
+  and `exam/model.py` already keeps `rule` on the key side where `axes` reads it —
+  but §1 measured what that line leaves behind: **16 items across 4 worlds still
+  trip the gate**, because the sheet also publishes `Paper.world`, whose `world_id`
+  `t1-walk-maze` contains the probe string `walk` and whose `families` contains
+  `push`. `world_id` cannot be dropped without breaking provenance, so a real fix
+  touches at least three places and has to *decide* something rather than delete
+  something. It is left undone because a leak that has been in every published
+  number since V2 deserves its own item, with the V2 artefacts re-derived behind
+  it, rather than a quiet edit inside a measurement run.
 * **It did not add the fourth voter**, for the reason the docstring gives: a voter
   that is itself a world model needs an argument for why it is the *right*
   baseline, and inventing that argument inside the run whose numbers it would

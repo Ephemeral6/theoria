@@ -1,0 +1,228 @@
+{
+  "strategy": "walk-or-wall; sheet fields only; no per-world constant",
+  "totals": {
+    "frame_changing_items": 139,
+    "frame_changing_items_taken_by_the_prior": 109,
+    "items_total": 236,
+    "perfect_worlds": [
+      "t1-walk-maze",
+      "t1-push-corridor",
+      "t1-switch-toggle",
+      "t1-switch-latch",
+      "t1-portal-oneway",
+      "t1-cycler-gate",
+      "t1-fragile-bridge",
+      "t2-portal-pair",
+      "t2-portal-paired",
+      "t2-lock-fragile",
+      "t2-cycler-lock",
+      "t3-gravity-fragile"
+    ],
+    "share_of_frame_changing_items_taken": 0.784173,
+    "worlds": 20,
+    "worlds_beating_their_bluffer_floor": 18,
+    "worlds_scoring_1.000": 12
+  },
+  "worlds": [
+    {
+      "bluffer_floor": 0.5,
+      "changed_items": 4,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 8,
+      "prior": 1.0,
+      "tier": 1,
+      "world_id": "t1-walk-maze"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "changed_items": 8,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 12,
+      "prior": 0.666667,
+      "tier": 1,
+      "world_id": "t1-push-open"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "changed_items": 4,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 8,
+      "prior": 1.0,
+      "tier": 1,
+      "world_id": "t1-push-corridor"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "changed_items": 4,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 8,
+      "prior": 1.0,
+      "tier": 1,
+      "world_id": "t1-switch-toggle"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "changed_items": 8,
+      "changed_taken": 8,
+      "gap": 0.0,
+      "items": 12,
+      "prior": 1.0,
+      "tier": 1,
+      "world_id": "t1-switch-latch"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "changed_items": 4,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 8,
+      "prior": 1.0,
+      "tier": 1,
+      "world_id": "t1-portal-oneway"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "changed_items": 4,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 8,
+      "prior": 1.0,
+      "tier": 1,
+      "world_id": "t1-cycler-gate"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "changed_items": 8,
+      "changed_taken": 7,
+      "gap": 0.166667,
+      "items": 12,
+      "prior": 0.916667,
+      "tier": 1,
+      "world_id": "t1-tokens-lock"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "changed_items": 4,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 8,
+      "prior": 1.0,
+      "tier": 1,
+      "world_id": "t1-fragile-bridge"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "changed_items": 16,
+      "changed_taken": 8,
+      "gap": 0.0,
+      "items": 24,
+      "prior": 0.5,
+      "tier": 2,
+      "world_id": "t2-switch-push"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "changed_items": 4,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 8,
+      "prior": 1.0,
+      "tier": 2,
+      "world_id": "t2-portal-pair"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "changed_items": 4,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 8,
+      "prior": 1.0,
+      "tier": 2,
+      "world_id": "t2-portal-paired"
+    },
+    {
+      "bluffer_floor": 0.625,
+      "changed_items": 3,
+      "changed_taken": 3,
+      "gap": 0.25,
+      "items": 8,
+      "prior": 0.875,
+      "tier": 2,
+      "world_id": "t2-gravity-push"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "changed_items": 8,
+      "changed_taken": 8,
+      "gap": 0.0,
+      "items": 12,
+      "prior": 1.0,
+      "tier": 2,
+      "world_id": "t2-lock-fragile"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "changed_items": 8,
+      "changed_taken": 8,
+      "gap": 0.0,
+      "items": 12,
+      "prior": 1.0,
+      "tier": 2,
+      "world_id": "t2-cycler-lock"
+    },
+    {
+      "bluffer_floor": 0.666667,
+      "changed_items": 4,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 12,
+      "prior": 0.666667,
+      "tier": 2,
+      "world_id": "t2-unsolvable-nodoor"
+    },
+    {
+      "bluffer_floor": 0.333333,
+      "changed_items": 16,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 24,
+      "prior": 0.333333,
+      "tier": 3,
+      "world_id": "t3-full-house"
+    },
+    {
+      "bluffer_floor": 0.5,
+      "changed_items": 4,
+      "changed_taken": 4,
+      "gap": 0.0,
+      "items": 8,
+      "prior": 1.0,
+      "tier": 3,
+      "world_id": "t3-gravity-fragile"
+    },
+    {
+      "bluffer_floor": 0.25,
+      "changed_items": 12,
+      "changed_taken": 8,
+      "gap": 0.0,
+      "items": 16,
+      "prior": 0.75,
+      "tier": 3,
+      "world_id": "t3-cycler-portal-lock"
+    },
+    {
+      "bluffer_floor": 0.4,
+      "changed_items": 12,
+      "changed_taken": 11,
+      "gap": 0.1,
+      "items": 20,
+      "prior": 0.75,
+      "tier": 3,
+      "world_id": "t3-latch-maze"
+    }
+  ]
+}
