@@ -1,0 +1,10 @@
+  [ok ] digit vocabulary: spelled-out numerals: caught
+  [ok ] structural class: metric/claim ids: caught
+  [ok ] structural class: grid coordinates: caught
+  [ok ] backticks stop hiding a digit: caught
+  [ok ] fenced code is scanned as prose: caught
+  [ok ] a citation leaks across a heading: caught
+  [ok ] the abstract exemption widens to everything: caught
+  [ok ] stale rulings stop gating: caught
+
+mutation_check: PASS -- 8/8 caught

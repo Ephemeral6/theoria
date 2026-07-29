@@ -1,0 +1,124 @@
+granularity=para      wordnums=off  units= 359  flagged=  33  (digit-bearing 33, word-only 0)
+granularity=para      wordnums=on   units= 359  flagged=  67  (digit-bearing 33, word-only 34)
+granularity=row       wordnums=off  units= 440  flagged=  66  (digit-bearing 66, word-only 0)
+granularity=row       wordnums=on   units= 440  flagged= 100  (digit-bearing 66, word-only 34)
+granularity=row+item  wordnums=off  units= 560  flagged=  90  (digit-bearing 90, word-only 0)
+granularity=row+item  wordnums=on   units= 560  flagged= 140  (digit-bearing 90, word-only 50)
+granularity=block     wordnums=off  units= 393  flagged=  38  (digit-bearing 38, word-only 0)
+granularity=block     wordnums=on   units= 393  flagged=  78  (digit-bearing 38, word-only 40)
+
+=== dump: granularity=block wordnums=off ===
+
+01_intro.md:128 [para] nums=['17'] words=[]
+    What survives all five is narrower than the headline and still worth having: a register whose entries are executable, and whose `succeeded` is read ba
+
+03_a0.md:50 [para] nums=['152'] words=[]
+    **`zero_space` recovered the Button↔Door dependency as a conservation law.** Handed 152 anonymous indicator bits, with no vocabulary for buttons or do
+
+03_a0.md:66 [para] nums=['275'] words=[]
+    The rule says *when* it happens; the law says *that it held on every one of the 275 transitions*. The distinction matters and §12.1's own table forbid
+
+03_a0.md:201 [para] nums=['2', '3', '0.991228', '1.0000'] words=[]
+    (`prime_report.json`, `run_b.certify_lean`.) The coverage probe caught it empirically: `push_onto_crate` has 2 firing states and neither is in the tra
+
+03_a0.md:229 [para] nums=['6', '341', '6'] words=[]
+    T-10 injected single-rule variants and measured detection latency. Latency tracks *firing frequency*, not the size of the change: `ghost` (walls stop 
+
+06_a3_transfer.md:106 [block] nums=['63', '34'] words=[]
+    unsolvable; reachable states drop from 63 to 34. * `a3-l2-rewired` — the B leg still fires but lands the Cart on a different
+
+06_a3_transfer.md:108 [para] nums=['15'] words=[]
+    cell. The level stays solvable, in 15 steps.
+
+06_a3_transfer.md:154 [para] nums=['5', '1', '40'] words=[]
+    The blind arm also spent 5 theorize rounds to the cold start's 1, and the report records that two of those five — 40 % of its adjudication budget — we
+
+06_a3_transfer.md:169 [block] nums=['100'] words=[]
+    two portal exits, handed to all three arms alike. Six of nine fields came from the frame; three did not. 3. **100 % sweep coverage is not realistic**,
+
+06_a3_transfer.md:175 [block] nums=['62', '63'] words=[]
+    stages, candidates, rounds and clauses. It does not count wall-clock or tokens, and the model calls behind the theorize step are the single largest te
+
+07_battery.md:113 [para] nums=['4', '1', '16', '0.562', '0.188'] words=[]
+    A second consequence of n = 4 per side: every δ here is a multiple of 1/16, so the table's −0.562 and −0.188 print three decimals onto a quantity with
+
+07_battery.md:318 [block] nums=['1.0', '12', '0.083', '1.000'] words=[]
+    1.0 was not a floor: one action against a 12-step plan scored 0.083, better than any solved run can score. `Step.won` was populated by the adapters an
+
+07_battery.md:427 [block] nums=['105', '105'] words=[]
+    the adjudication** — the derived half of the rule went and the judged half stayed. The round's own review says so. 4. **The poverty certificate reject
+
+07_battery.md:430 [block] nums=['112', '112'] words=[]
+    the blind phase and 112 of 112 in the delivered artefact, so it has no measured selectivity on the only data it has seen; it was written by the round'
+
+07_battery.md:448 [block] nums=['37'] words=[]
+    heading**: 这不是 37 个独立发现. One label-swapping convention satisfies X1, X2, X4, X5 and X6 at once — five metrics, one hole — and the report collapses the
+
+07_battery.md:527 [para] nums=['5'] words=[]
+    Retired is not deleted, only excluded from being counted as a separate finding; and the two K-only clusters — {K10, K8} and {K14, K5, K7}, three retir
+
+07_battery.md:596 [para] nums=['67', '0.229', '0.250', '53', '67', '1', '0.875'] words=[]
+    One thing this section deliberately does **not** do with that fact, because the temptation is obvious and the evidence refuses it: it does not pair th
+
+07_battery.md:615 [para] nums=['67'] words=[]
+    The difference worth reporting is that the bill shape's distribution rests on 67 runs and the capability column rests on none.
+
+08_exam.md:38 [block] nums=['7', '47', '49', '96'] words=[]
+    The held-out rubric's refusal of per-cell credit is worth quoting, because it is the kind of scoring choice that silently manufactures a result: > on 
+
+08_exam.md:66 [block] nums=['0.85', '5', '5', '0', '5', '1.0', '0.0'] words=[]
+    held-out half — a gap of 0.85 — and on the over-sampled `blocked_crossing` class it goes 5/5 to 0/5; * the verdict **bluffer** posts sensitivity 1.0 w
+
+08_exam.md:77 [para] nums=['46.0', '46.0', '1', '2'] words=[]
+    **Only one paper has been sat by a real subject.** Two fresh subagent readers, given a bundle and a sheet and nothing else, each scored 46.0/46.0 on t
+
+08_exam.md:95 [para] nums=['0.000'] words=[]
+    The exam has no cost instrument, so the quantity the framework actually predicts was not measured. We report the tier difference as **unmeasured**: th
+
+08_exam.md:117 [para] nums=['3.0', '2.0', '17', '17', '47.5'] words=[]
+    **Two real leaks shipped, and the cheater found both.** The verdict paper's `points` field encoded the answer — 3.0 for solvable, 2.0 for unsolvable —
+
+08_exam.md:124 [block] nums=['3', '4'] words=[]
+    The reason the static checks missed them is the most transferable thing in this section: > `answer_labels` was an *optional* hook on each paper module
+
+08_exam.md:152 [block] nums=['1'] words=[]
+    exist as machinery and as calibration runs. Nothing has sat them. * **n = 1 per handover tier**, on a saturated sheet. Nothing here supports a
+
+09_preflight.md:195 [para] nums=['116 470', '0.436763', '83.6', '0.52', '8.3', '1.35'] words=[]
+    **And it largely explains it.** The same manifest's `cost.cache_ttl_diagnosis` identifies 116 470 cache-creation tokens written at the one-hour multip
+
+10_adjudication.md:38 [para] nums=['340', '56'] words=[]
+    **No total is published here, and no rate.** The obvious headline — around 340 points examined, 56 judged unsafe — does not survive, and neither does 
+
+10_adjudication.md:57 [para] nums=['60', '51', '274', '376', '11', '367', '374', '10'] words=[]
+    Second, **the passes' own arithmetic does not close.** `SURVEY-solver-status.md:16` states a scan surface of ~60 points and then names more than seven
+
+10_adjudication.md:70 [para] nums=['45', '97', '105', '8'] words=[]
+    Third, **the counts quoted downstream are not enumerations.** The "~45 legitimate exit-code readings" that reached the work items and the digests appe
+
+10_adjudication.md:83 [para] nums=['340', '48', '85', '56', '85', '56'] words=[]
+    An earlier draft of this section replaced the disputed 340 / 48 with an enumerated 85 / 56 and called that the countable figure. It is not: the 85 omi
+
+10_adjudication.md:185 [block] nums=['51'] words=[]
+    A census that reports only positives leaves a reader unable to judge how strict the criterion was, so the negatives are published — per pass, and with
+
+10_adjudication.md:190 [block] nums=['11', '10', '28'] words=[]
+    status correctly, plus **11 backticked paths** across 10 files in its prose. * `SURVEY-environment-as-semantics.md:138-230` names **28 distinct Python
+
+10_adjudication.md:192 [block] nums=['20', '113', '134', '8', '7'] words=[]
+    as exemplars, and grades cap handling in a further 20-row table at `:113-134`. * `SURVEY-success-as-truth.md:43-79` names **8** exemplars — and files 
+
+10_adjudication.md:194 [block] nums=['7', '6'] words=[]
+    separately, under a heading warning that verified-but-not-independent is *the category most easily misread as safe*. Two of those 7 are defects this s
+
+10_adjudication.md:351 [block] nums=['1680', '92.9', '289', '26.4', '1408'] words=[]
+    1680 laws on withheld operations, against 92.9 % cell-local. * `lp_potential` — leave-one-geometry-out across 289 instances: **26.4 % of 1408
+
+10_adjudication.md:353 [para] nums=['58'] words=[]
+    certificates** still satisfy their closure condition on the withheld geometry, and **58 are outright false** against brute-force ground truth.
+
+10_adjudication.md:369 [block] nums=['13.1'] words=[]
+    The held-out code lives in a new top-level package that no engine imports. 3. **13.1 % is a dial, not a constant, and the table says so.** An equally
+
+10_adjudication.md:371 [block] nums=['35.3', '2.0', '66.7', '100.0'] words=[]
+    defensible one-fifth training split lands at **35.3 %**, and leaving two operations out at **2.0 %**. The table attributes the gap to the corpus's lin

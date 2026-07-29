@@ -1,0 +1,11 @@
+{
+  "prompt_id": "P16-P16-uncited-number-gate",
+  "branch": "agent/p16-uncited-number-gate",
+  "base_commit": "9bc8c8806840a1b0942df6dbb17bd5e5e999ed5e",
+  "utc": "2026-07-29T12:46:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "api_calls": 0,
+  "sealed_pile_contact": "none"
+}

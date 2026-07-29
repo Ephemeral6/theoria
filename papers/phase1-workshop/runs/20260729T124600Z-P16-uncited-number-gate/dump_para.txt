@@ -1,0 +1,116 @@
+granularity=para      wordnums=off  units= 359  flagged=  36  (digit-bearing 36, word-only 0)
+granularity=para      wordnums=on   units= 359  flagged=  67  (digit-bearing 36, word-only 31)
+granularity=row       wordnums=off  units= 440  flagged=  70  (digit-bearing 70, word-only 0)
+granularity=row       wordnums=on   units= 440  flagged= 101  (digit-bearing 70, word-only 31)
+granularity=row+item  wordnums=off  units= 560  flagged=  96  (digit-bearing 96, word-only 0)
+granularity=row+item  wordnums=on   units= 560  flagged= 142  (digit-bearing 96, word-only 46)
+
+=== dump: granularity=para wordnums=off ===
+
+01_intro.md:128 [para] nums=['17'] words=[]
+    What survives all five is narrower than the headline and still worth having: a register whose entries are executable, and whose `succeeded` is read ba
+
+01_intro.md:194 [para] nums=['2', '2'] words=[]
+    Be precise about what was named, because the precision is the whole argument. R-05 names three **directions** — `press_up`, `press_down`, `press_right
+
+03_a0.md:50 [para] nums=['152'] words=[]
+    **`zero_space` recovered the Button↔Door dependency as a conservation law.** Handed 152 anonymous indicator bits, with no vocabulary for buttons or do
+
+03_a0.md:66 [para] nums=['275'] words=[]
+    The rule says *when* it happens; the law says *that it held on every one of the 275 transitions*. The distinction matters and §12.1's own table forbid
+
+03_a0.md:112 [para] nums=['40', '233', '236', '99', '107', '228', '47', '233'] words=[]
+    | | A0 | A0′ | |---|---|---| | mechanism | Button, **latch** — pressable once | Switch, **toggle** — re-witnessable | | explorer | exhaustive | **trun
+
+03_a0.md:195 [para] nums=['2', '4', '2', '3'] words=[]
+    Two other mechanisms caught the seeded clause. The Lean transcription refused it as an internal inconsistency, before the world was consulted: > `Aren
+
+03_a0.md:201 [para] nums=['2', '3', '2', '3', '2', '4', '2', '3'] words=[]
+    (`prime_report.json`, `run_b.certify_lean`.) The coverage probe caught it empirically: `push_onto_crate` has 2 firing states and neither is in the tra
+
+03_a0.md:229 [para] nums=['6', '341', '6'] words=[]
+    T-10 injected single-rule variants and measured detection latency. Latency tracks *firing frequency*, not the size of the change: `ghost` (walls stop 
+
+05_a2.md:25 [para] nums=['9', '9', '175', '184'] words=[]
+    | | original A2 | what was run | |---|---|---| | the world | DC22, a sealed public game | a self-built 9×9 pushing world | | the holed model | ported 
+
+05_a2.md:217 [para] nums=['2', '7', '7', '1'] words=[]
+    * **`def Goal`** — `s.cart == Cell.c10`, the goal cell (2,7), against `s.cart == Cell.c34`, the sealed pocket (7,1). The two theorems are about differ
+
+06_a3_transfer.md:45 [para] nums=['347', '11', '0.032', '346', '10', '0.029', '1', '0'] words=[]
+    | line | L2 from scratch | L2 with books | ratio | |---|---|---|---| | world frames | 347 | **11** | 0.032 | | world actions | 346 | **10** | **0.029*
+
+06_a3_transfer.md:105 [para] nums=['63', '34', '15'] words=[]
+    * `a3-l2-oneway` — the portal's B→exit_b leg is deleted. The level becomes unsolvable; reachable states drop from 63 to 34. * `a3-l2-rewired` — the B 
+
+06_a3_transfer.md:114 [para] nums=['0', '0', '0', '0', '10', '10', '10', '10'] words=[]
+    | layer | `a3-l2-oneway` | `a3-l2-rewired` | |---|---|---| | first frame vs honest L2 | byte-identical | byte-identical | | static certify (frame 0, 0
+
+06_a3_transfer.md:154 [para] nums=['5', '1', '40'] words=[]
+    The blind arm also spent 5 theorize rounds to the cold start's 1, and the report records that two of those five — 40 % of its adjudication budget — we
+
+06_a3_transfer.md:163 [para] nums=['2', '3', '100', '4', '5', '62', '63', '6'] words=[]
+    1. **Levels, not games.** A3 says nothing about carrying a domain between games with different mechanics. Outside the containment condition — every gu
+
+07_battery.md:62 [para] nums=['1.000', '0.794', '1.015', '4', '8', '1.000', '0.155', '0.008'] words=[]
+    | id | family | Cliff's δ (CC → Schema) | median CC / Schema | direction held? | tier | Schema-side runs | |---|---|---|---|---|---|---| | P1 | planni
+
+07_battery.md:113 [para] nums=['4', '1', '16', '0.562', '0.188'] words=[]
+    A second consequence of n = 4 per side: every δ here is a multiple of 1/16, so the table's −0.562 and −0.188 print three decimals onto a quantity with
+
+07_battery.md:527 [para] nums=['5'] words=[]
+    Retired is not deleted, only excluded from being counted as a separate finding; and the two K-only clusters — {K10, K8} and {K14, K5, K7}, three retir
+
+07_battery.md:535 [para] nums=['257', '703', '64'] words=[]
+    A cluster count near the metric count is not reassuring, and the artefact refuses to let it read as thirty independent findings: **257 of 703 metric p
+
+07_battery.md:596 [para] nums=['67', '0.229', '0.250', '53', '67', '1', '0.875'] words=[]
+    One thing this section deliberately does **not** do with that fact, because the temptation is obvious and the evidence refuses it: it does not pair th
+
+07_battery.md:615 [para] nums=['67'] words=[]
+    The difference worth reporting is that the bill shape's distribution rests on 67 runs and the capability column rests on none.
+
+08_exam.md:38 [para] nums=['7', '47', '49', '96'] words=[]
+    The held-out rubric's refusal of per-cell credit is worth quoting, because it is the kind of scoring choice that silently manufactures a result: > on 
+
+08_exam.md:65 [para] nums=['1.00', '0.15', '0.85', '5', '5', '0', '5', '1.0'] words=[]
+    * the held-out **memoriser** scores 1.00 on the replay half and 0.15 on the held-out half — a gap of 0.85 — and on the over-sampled `blocked_crossing`
+
+08_exam.md:77 [para] nums=['46.0', '46.0', '1', '2'] words=[]
+    **Only one paper has been sat by a real subject.** Two fresh subagent readers, given a bundle and a sheet and nothing else, each scored 46.0/46.0 on t
+
+08_exam.md:95 [para] nums=['0.000'] words=[]
+    The exam has no cost instrument, so the quantity the framework actually predicts was not measured. We report the tier difference as **unmeasured**: th
+
+08_exam.md:117 [para] nums=['3.0', '2.0', '17', '17', '47.5'] words=[]
+    **Two real leaks shipped, and the cheater found both.** The verdict paper's `points` field encoded the answer — 3.0 for solvable, 2.0 for unsolvable —
+
+08_exam.md:124 [para] nums=['3', '4'] words=[]
+    The reason the static checks missed them is the most transferable thing in this section: > `answer_labels` was an *optional* hook on each paper module
+
+08_exam.md:151 [para] nums=['1'] words=[]
+    * **Three of four papers have no real result.** Held-out, adaptation and verdict exist as machinery and as calibration runs. Nothing has sat them. * *
+
+09_preflight.md:195 [para] nums=['116 470', '0.436763', '83.6', '0.52', '8.3', '1.35'] words=[]
+    **And it largely explains it.** The same manifest's `cost.cache_ttl_diagnosis` identifies 116 470 cache-creation tokens written at the one-hour multip
+
+10_adjudication.md:31 [para] nums=['60', '3', '40', '8', '240', '37', '105', '8'] words=[]
+    | Pass | File | Scan surface, as stated | Unsafe, as stated | |---|---|---|---| | solver status read as an answer | `SURVEY-solver-status.md` | ~60 po
+
+10_adjudication.md:38 [para] nums=['340', '56'] words=[]
+    **No total is published here, and no rate.** The obvious headline — around 340 points examined, 56 judged unsafe — does not survive, and neither does 
+
+10_adjudication.md:57 [para] nums=['60', '51', '274', '376', '11', '367', '374', '10'] words=[]
+    Second, **the passes' own arithmetic does not close.** `SURVEY-solver-status.md:16` states a scan surface of ~60 points and then names more than seven
+
+10_adjudication.md:70 [para] nums=['45', '97', '105', '8'] words=[]
+    Third, **the counts quoted downstream are not enumerations.** The "~45 legitimate exit-code readings" that reached the work items and the digests appe
+
+10_adjudication.md:83 [para] nums=['340', '48', '85', '56', '85', '56'] words=[]
+    An earlier draft of this section replaced the disputed 340 / 48 with an enumerated 85 / 56 and called that the countable figure. It is not: the 85 omi
+
+10_adjudication.md:189 [para] nums=['51', '11', '10', '28', '20', '113', '134', '8'] words=[]
+    * `SURVEY-solver-status.md:274-376` names **51 table rows** that read a solver status correctly, plus **11 backticked paths** across 10 files in its p
+
+10_adjudication.md:350 [para] nums=['13.1', '1680', '92.9', '289', '26.4', '1408', '58'] words=[]
+    * `zero_space` — leave-one-operation-out: a global hit rate of **13.1 %** across 1680 laws on withheld operations, against 92.9 % cell-local. * `lp_po

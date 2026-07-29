@@ -5,7 +5,7 @@ which has since moved. A report cannot fail a build. This is the executable half
 of the same rule, and it is meant to be run before every push that touches
 `papers/phase1-workshop/`.
 
-Four checks, each independently reported, exit code 1 if any fails:
+Five checks, each independently reported, exit code 1 if any fails:
 
   A. GENERATED   `PAPER.md` is byte-identical to `assemble.py`'s output from
                  `sections/*.md`. The header says "do not hand-edit"; this is the
@@ -25,9 +25,26 @@ Four checks, each independently reported, exit code 1 if any fails:
                  into a scratch tree and compare against `figures/data/*.json`.
   D. NOSECRET    No `.env` value, and nothing shaped like the ARC key, appears in
                  any file this directory publishes.
+  E. UNCITED     Every *quantitative* claim block in the body cites something.
+                 Check B asks "does this cited path resolve?", which means an
+                 assertion citing nothing at all is invisible to it: unreferenced
+                 and referenced-correctly are the same green. The paper's binding
+                 rule -- "every quantitative claim in the body carries the
+                 repo-relative path of the artefact it came from" -- therefore had
+                 no executor until this check, and P15 found the hole the
+                 expensive way, with a paragraph carrying six quantities, no
+                 paths, and two numbers that did not reproduce, while
+                 verify_paper reported PASS (4/4).
+
+                 What it proves is weaker than the rule, and the gap is stated
+                 rather than papered over: it proves that no quantitative block
+                 is *entirely* uncited. It does not check that a number matches
+                 the artefact beside it -- `CITECHECK.md` is the human audit that
+                 does that, and nothing here replaces it.
 
 Run:  python papers/phase1-workshop/verify_paper.py
       python papers/phase1-workshop/verify_paper.py --quiet   (verdict lines only)
+      python papers/phase1-workshop/verify_paper.py --explain-uncited  (E, verbose)
 
 No network, no API key, no model call, no game spend.
 """
@@ -258,11 +275,230 @@ def check_nosecret() -> tuple[bool, list[str]]:
     return True, notes
 
 
+# ---------------------------------------------------------------- E. UNCITED
+
+# The abstract is the paper's one declared exemption, stated in its own front
+# matter ("**The abstract is the one exemption, by convention**"), and it holds
+# only because every figure in it recurs, cited, in the body. Failing it would
+# put ~40 unfixable flags on every run, and a gate that is permanently red is a
+# gate somebody switches off -- which is how the rule would lose its executor a
+# second time.
+EXEMPT_SECTIONS = {"00_abstract.md"}
+
+# A citation, here, is a backticked token that *points at an artefact* -- it has
+# a directory separator, or a filename with an artefact extension. Whether the
+# pointer resolves is check B's question, deliberately not this one: B already
+# reports BROKEN and AMBIGUOUS, and folding that in would make one red mean two
+# unrelated defects. E asks only whether the author pointed at anything.
+#
+# The split matters for the bare-filename citations CITECHECK counted -- section
+# 10 cites `SURVEY-solver-status.md:16`, which exists but not at a path a reader
+# resolves. That is a style finding B owns; calling it "uncited" would be false.
+# The trailing `:170-171` is a line anchor, not part of the name.
+CITE_TOKEN = re.compile(r"`([A-Za-z0-9_.\-/]+)(?::\d+(?:[-–]\d+)?)?`")
+ARTEFACT_SUFFIX = (
+    ".md", ".json", ".jsonl", ".py", ".lean", ".dsl", ".bib",
+    ".csv", ".svg", ".txt", ".toml", ".yaml", ".yml", ".sh",
+)
+
+# Token classes that carry a digit without asserting a quantity. Each is named
+# and narrow rather than one permissive regex, on `engine-rig`'s rule for the
+# same problem: exempt by *class*, so widening the exemption is a line somebody
+# adds and can be argued with, not a quietly loosened character range.
+STRUCTURAL = (
+    ("section-ref", re.compile(r"§\s*\d+(?:\.\d+)*[a-z]?")),
+    ("section-word", re.compile(
+        r"\b(?:Sections?|Parts?|constraints?|steps?|beats?|rungs?|layers?|waves?)"
+        r"\s+\d+(?:\s*(?:,|and|to|[-–])\s*\d+)*", re.IGNORECASE)),
+    ("figure-ref", re.compile(r"\b(?:Figure|Fig\.|Table|Plate|Appendix)\s+\d+\b")),
+    ("phase-ref", re.compile(r"\bPhase\s+\d\b")),
+    ("arc-agi", re.compile(r"\bARC-AGI-\d\b")),
+    ("version", re.compile(r"\bv\d+(?:\.\d+)*\b")),
+    ("lean-version", re.compile(r"\bLean\s+\d+(?:\.\d+)*\b")),
+    ("timestamp", re.compile(r"\b20\d{6}T\d{6}Z\b")),
+    ("iso-date", re.compile(r"\b20\d\d-\d\d-\d\d\b")),
+    ("clock", re.compile(r"\b\d{1,2}:\d{2}(?::\d{2})?\b")),
+    ("commit-sha", re.compile(r"\b[0-9a-f]{7,40}\b")),
+    ("digest-elision", re.compile(r"\b[0-9a-f]{6,}…(?:[0-9a-f]+)?")),
+    # `E2`, `K12`, `P4`, `M3`, `X1`, `L1`, `C5`, `A0`, `T-10`, `D-B-011`,
+    # `INC-BA-001`, `F-11`, `R-05`, `W-1660`. Identifiers, not measurements.
+    ("id-code", re.compile(r"\b[A-Z]{1,4}(?:-[A-Z0-9]{1,4})*-?\d{1,4}[a-z′]?\b")),
+    ("milestone", re.compile(r"\bm[0-9]\b")),
+    # Grid cells and Lean tuples: (2, 4) is a position, not a measurement.
+    ("coordinate", re.compile(r"\(\s*-?\d+\s*,\s*-?\d+\s*\)")),
+    # `[7, 0, 0, 0, 0, 0, 0]`, `[-1, 1, 0, 1, -1]` -- quoted payloads.
+    ("vector", re.compile(r"\[\s*-?\d+(?:\s*,\s*-?\d+)+\s*\]")),
+    # `11011`, `00010` -- binary configuration labels in section 4.
+    ("bit-label", re.compile(r"\b[01]{5,}\b")),
+    ("complexity", re.compile(r"O\(\s*[0-9a-z^ⁿ²³]+\s*\)")),
+    ("superscript-pow", re.compile(r"\b\d+[⁰-₟²³¹]+")),
+    ("list-ordinal", re.compile(r"^\s*\d+\.\s", re.MULTILINE)),
+    ("frame-index", re.compile(r"\bt\s*=?\s*\d+\b")),
+)
+
+# Digits, including the paper's space-grouped thousands (`22 356`, `116 470`).
+DIGIT = re.compile(r"(?<![\w.])\d[\d  ]*(?:[  ]\d{3})*(?:\.\d+)?")
+
+# Spelled-out cardinals. `one`..`ten` are excluded: 608 of the 805 spelled-out
+# numbers in the sections are those words used as determiners ("one further
+# finding", "the two tracks"), so flagging them would bury the check in noise.
+# From `eleven` up, and `zero`, the word is almost always load-bearing -- and
+# `zero` carries several of the paper's most important negative results
+# ("moved the unvalidated count by **zero**"). This is also the hole the item's
+# adversarial step names: writing 37 as "thirty-seven" must not buy an evasion.
+WORDNUM = re.compile(
+    r"\b(?:zero|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|"
+    r"eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|"
+    r"hundred|thousand|million)(?:-(?:one|two|three|four|five|six|seven|eight|"
+    r"nine))?\b",
+    re.IGNORECASE,
+)
+
+# Chunks that continue the claim above them rather than starting a new one.
+CONTINUES = re.compile(r"^\s*(?:\||[-*+]\s|\d+\.\s|>)")
+
+#: Quantitative blocks that have been looked at and ruled not to need a path,
+#: each with the ruling. Keyed by (section, a verbatim anchor from the block) so
+#: that rewriting the claim retires its exemption and forces a fresh ruling --
+#: an exemption that outlives the sentence it was written for is an exemption
+#: nobody re-read.
+#:
+#: A block NOT in this table fails, because it is new and nobody has ruled on
+#: it. A block in it prints its ruling on every run. An entry that matches
+#: nothing also fails, as STALE: `figures/reconcile_cost.py`'s rule, that a
+#: declaration which has stopped being true is removed rather than left to
+#: excuse a regression that comes back the other way.
+ADJUDICATED_UNCITED: dict[tuple[str, str], str] = {}
+
+
+def _blocks(text: str):
+    """Yield (line_no, block_text) claim blocks.
+
+    A claim block is a blank-line-separated chunk, with any table, list or
+    blockquote chunk merged into the prose chunk above it. That is how this
+    paper cites: the sentence introducing a table carries the artefact path and
+    the rows carry the values. Scoring rows independently would flag ~70 of them
+    whose citation sits two lines up, and the adjudication table would become a
+    rubber stamp -- which is the failure mode this check is supposed to avoid,
+    not reproduce.
+    """
+    out: list[list] = []
+    chunk: list[str] = []
+    start = 1
+    in_fence = False
+    for i, line in enumerate(text.splitlines(), 1):
+        if line.strip().startswith("```"):
+            in_fence = not in_fence
+            continue
+        if in_fence:
+            continue
+        if not line.strip() or line.lstrip().startswith("#"):
+            if chunk:
+                _emit(out, start, chunk)
+                chunk = []
+            if line.lstrip().startswith("#"):
+                out.append(None)  # a heading breaks the merge chain
+            continue
+        if not chunk:
+            start = i
+        chunk.append(line)
+    if chunk:
+        _emit(out, start, chunk)
+    return [b for b in out if b is not None]
+
+
+def _emit(out: list, start: int, chunk: list[str]) -> None:
+    text = "\n".join(chunk)
+    if CONTINUES.match(chunk[0]) and out and out[-1] is not None:
+        out[-1][1] += "\n" + text
+        return
+    out.append([start, text])
+
+
+def _quantities(block: str) -> tuple[list[str], list[str]]:
+    """(digit tokens, spelled-out tokens) that are not citations or structure."""
+
+    def mark(m: re.Match) -> str:
+        token = m.group(1)
+        if "/" in token or token.lower().endswith(ARTEFACT_SUFFIX):
+            return " █CITE█ "
+        # A backticked *number* is still a quantity; backticks are not a
+        # citation, and letting them hide one would be a one-character evasion.
+        return " " if any(c.isalpha() for c in token) else f" {token} "
+
+    text = CITE_TOKEN.sub(mark, block)
+    for _name, rx in STRUCTURAL:
+        text = rx.sub(" ", text)
+    if "█CITE█" in text:
+        return [], []
+    return DIGIT.findall(text), WORDNUM.findall(text)
+
+
+def scan_uncited(sections=None, rulings=None):
+    """(flagged, hits, scanned) over a sections directory.
+
+    Split out from `check_uncited` so the negative control can drive it with a
+    scratch tree: a gate nobody has watched fail is a gate nobody has reason to
+    trust, and every other pin in this repository carries such a control.
+    """
+    sections = SECTIONS if sections is None else Path(sections)
+    rulings = ADJUDICATED_UNCITED if rulings is None else rulings
+    flagged: list[tuple[str, int, str, list[str], list[str]]] = []
+    hits: dict[tuple[str, str], int] = {k: 0 for k in rulings}
+    scanned = 0
+
+    for section in sorted(sections.glob("*.md")):
+        if section.name in EXEMPT_SECTIONS:
+            continue
+        for lineno, block in _blocks(section.read_text(encoding="utf-8")):
+            scanned += 1
+            nums, words = _quantities(block)
+            if not nums and not words:
+                continue
+            flat = " ".join(block.split())
+            ruled = next(
+                (k for k in rulings if k[0] == section.name and k[1] in flat), None
+            )
+            if ruled:
+                hits[ruled] += 1
+                continue
+            flagged.append((section.name, lineno, flat, nums, words))
+    return flagged, hits, scanned
+
+
+def check_uncited() -> tuple[bool, list[str]]:
+    """E. No quantitative claim block in the body cites nothing at all."""
+    notes: list[str] = []
+    flagged, hits, scanned = scan_uncited()
+    stale = [k for k, n in hits.items() if not n]
+    notes.append(
+        f"  {scanned} claim blocks scanned across {len(list(SECTIONS.glob('*.md'))) - len(EXEMPT_SECTIONS)} "
+        f"body sections: {len(flagged)} uncited, "
+        f"{len(ADJUDICATED_UNCITED) - len(stale)} ruled, {len(stale)} stale rulings"
+    )
+    for name, lineno, flat, nums, words in flagged:
+        tokens = ", ".join(nums[:6] + words[:3]) or "?"
+        notes.append(fail(
+            f"  UNCITED   {name}:{lineno} -- quantities [{tokens}] with no "
+            f"resolvable path anywhere in the block"))
+        notes.append(fail(f"            {flat[:140]}"))
+    for key, reason in ADJUDICATED_UNCITED.items():
+        if key in stale:
+            notes.append(fail(
+                f"  STALE     {key[0]} → {key[1]!r} matched no block. The claim it "
+                f"ruled on was rewritten or removed; drop the entry rather than "
+                f"leave it to excuse the next one."))
+        else:
+            notes.append(f"  ruled     {key[0]} ({hits[key]}×) -- {reason}")
+    return not (flagged or stale), notes
+
+
 CHECKS = [
     ("A GENERATED", "PAPER.md == assemble(sections/)", check_generated),
     ("B PATHS", "every cited path resolves, unambiguously", check_paths),
     ("C FIGDATA", "figure extractors are byte-deterministic", check_figdata),
     ("D NOSECRET", "no credential value in any published file", check_nosecret),
+    ("E UNCITED", "every quantitative claim block cites an artefact", check_uncited),
 ]
 
 
@@ -270,6 +506,12 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--quiet", action="store_true", help="verdict lines only")
     args = ap.parse_args()
+
+    # The sections quote δ, §, ↔ and Chinese. On a cp936 or cp1252 console the
+    # first such character in a finding raises UnicodeEncodeError, and a gate
+    # that crashes while printing what it caught is a gate that reports nothing.
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
     failures = []
     for tag, blurb, fn in CHECKS:
