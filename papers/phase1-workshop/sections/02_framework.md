@@ -44,7 +44,13 @@ The precise work is outsourced. Six engines carried the acceptances reported her
 `fd_adapter` (classical planning), `probe_frontier` (which experiment splits a
 guard frontier, priced in bits). Two more — `deadlock_carver` and `ic3_pdr` —
 were added at milestone M9 in response to gaps the A0 cold start named, and are
-not exercised by any result below.
+not exercised by any result below. `ic3_pdr` is the closer of the two: the
+compile chain's **consumer** side for its certificates is complete, and the
+**certificate exporter** is an `engine-rig` file that has not been written — the
+engine itself runs and emits candidate rows
+(`theory-compiler/STATUS.md`, delivery 9, "消费端完成；发射端……未写"). A
+consumer with nothing to consume still produces no result, which is why it stays
+on this side of the line.
 
 Engines emit **candidates**, never verdicts. The stream is append-only and every
 row's `status` is the literal string `"candidate"`
