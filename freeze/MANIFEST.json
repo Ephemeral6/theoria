@@ -414,7 +414,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/STATS_RULES.md",
-          "sha256": "a78988f5f553ccb7652cc8bb922ac43f1836fb74591f35e908e5a7188a5ff8fd",
+          "sha256": "fe41213d6327b5681256ecb973ca3f207d1bd288ca162cdc23788ef3a06d8d09",
           "tracked": true
         },
         {
@@ -439,7 +439,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/CLAIMS_TEXT.md",
-          "sha256": "ec2f2cac73985f3e48ee139747da3d34e79d94c44cd8fd1ac85f8534840d51b2",
+          "sha256": "5168da9ed32bf2ba613157bc6b59894543c79d20566038316d9d020f35a493f7",
           "tracked": true
         }
       ],
@@ -583,7 +583,7 @@
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
     "branch": "agent/s4-freeze",
-    "commit": "8e4f03a65b98a68098894f9040934a97507e9064",
+    "commit": "5427a78aebea67fd0a0437a05997e5e386feed97",
     "dirty": true
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
