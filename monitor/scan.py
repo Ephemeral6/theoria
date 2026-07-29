@@ -998,7 +998,51 @@ def probe_standing():
                          "　→ **超过两个周期没跳，例行已停**" if stale else "")}
 
 
+def probe_accounts():
+    """账号池：谁登录了、谁的窗口开着、下一个窗口几点重开。
+
+    没有这条探针，一个「已经轮换过去了」的池子和一个「两个账号都没登录、
+    全靠默认账号硬撑」的池子在页面上长得一模一样。"""
+    try:
+        sys.path.insert(0, HERE)
+        import accounts as _acct
+        rows = _acct.status()
+    except Exception as exc:
+        return {"status": "risk",
+                "detail": "账号池读不出来（%s）——**这不等于没问题**。"
+                          % type(exc).__name__}
+    if not rows:
+        return {"status": "partial",
+                "detail": "未配置账号池；全部会话跑在机器的默认登录上。"}
+    ready = [r for r in rows if r["login"] == "yes"]
+    open_now = [r for r in ready if r["window"] == "open"]
+    parts = []
+    for r in rows:
+        mark = {"yes": "已登录", "no": "**未登录**",
+                "unknown": "**登录态未知**"}[r["login"]]
+        win = {"open": "窗口开", "limited": "窗口关至 %s" % (r["limited_until"] or "?"),
+               "unknown": "**窗口态未知**"}[r["window"]]
+        parts.append("%s（%s）%s、%s，发车 %d 次、撞限 %d 次"
+                     % (r["id"], r["label"], mark, win,
+                        r["launches"], r["limits_seen"]))
+    if not ready:
+        return {"status": "risk",
+                "detail": "；".join(parts) +
+                          "　→ **一个账号都没登录**，轮换不会发生：撞限即全队停机。"
+                          "登录方法见 monitor/ACCOUNTS.md。"}
+    if not open_now:
+        return {"status": "risk",
+                "detail": "；".join(parts) + "　→ **所有已登录账号的窗口都关着**，"
+                                             "这才是真 HOLD。"}
+    return {"status": "green" if len(ready) >= 2 else "partial",
+            "detail": "；".join(parts) +
+                      ("　→ %d 个账号可用，撞限时会轮换而不是停机。" % len(open_now)
+                       if len(ready) >= 2 else
+                       "　→ 只有一个账号可用，撞限仍会整队停机。")}
+
+
 PROBES = {
+    "accounts": probe_accounts,
     "standing": probe_standing,
     "credential_hygiene": probe_credential_hygiene,
     "needs_human": probe_needs_human,
