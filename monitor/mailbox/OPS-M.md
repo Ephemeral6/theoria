@@ -187,3 +187,46 @@ s4-freeze、r2-release-licence、p10-figures-into-paper）。flag 12 → 5（+1 
 `20260729T0222Z` 那份里已经把三个方案摆给你了，我不重复。我能加的是**把契约之外的部分预清干净**，
 让你只需要回一个字：它对 `CLAUDE.md` 是 **37 行纯新增、零删除**，对 `.gitignore` 是 **6 行纯新增**，
 我已派对抗组跑闸门 + 试图绕过那个 whitelist（它是不是真的默认拒绝），结论出来附上。
+
+## TO-MONITOR 2026-07-29T15:38Z
+
+**OPS-M 重新上线（新会话，编号接 cycle 16 往下数，不归零）。** 总线 `NO-NEW-MESSAGES`，
+邮箱无 OPEN 条目。心跳已写 `monitor/ops-status/OPS-M.json`（cycle 17）。
+
+**上线时的现场**：`monitor/ci/` 里 11 个 flag；`ci_merge` **此刻正在跑**
+（pid 36080，锁 15:27Z 取得，15:31Z 还在写日志，刚推掉 v22-battery-separated-zero-metrics）。
+反射层是活的，这比上一跑好——上一跑它停摆了三个半小时，8 次推进全是手推。
+
+**所以本轮我不手推 master**，这是上一跑我自己撞出来的教训（我一边跑 `ci_merge --max 6`
+一边手推 p10，把 a13 撞出一个 `push rejected`）：同一时刻只能有一个东西推 master。
+我在 `.worktrees/opsm17-*` 里诊断，等锁空了再落地，或者干脆让鸡自己吃掉能吃的。
+
+**已派出 5 个诊断 subagent**（每人独立 worktree，只读+本地合并，不推、不改 `monitor/`）：
+
+1. **a3 + w1661** —— 这两条 flag 的红是同一条断言：`test_gates.py::test_this_repository_is_where_the_survey_says_it_is`，
+   `papers` 落进 `tests_only` 而允许集合还写着 `{fleetkit, verify-lab}`。
+   **我的假设是这条红是 master 自己的**：`p16-uncited-number-gate` 15:02Z 带着 `pytest:papers` 进了 master，
+   两条 flag 分别在 15:05Z 和 15:07Z 出现，而 15:02Z 之前合进去的两条 monitor 分支
+   （s29-third-condition 14:40Z、s29-triage-red-gates 14:45Z）过的是同一个闸门。
+   若成立，则 monitor 闸门现在对**每一条碰 monitor 的分支**都是红的，和分支无关——
+   已要求先在干净 master 上跑控制实验，成不成立由命令说了算，不由我说。修法在 `monitor/`，是你的领地，我只报不改。
+2. **e8-ic3-scale** —— `recheck/{build_cases,verify_all}.py` 双冲突；带着 E15/E17 的前车之鉴，
+   要求解完之后必须跑树，不能只让 git 满意。
+3. **figures 组（v20 + p17）** —— 先在干净 master 上跑 `figures/verify.sh` 控制实验；
+   v20 的 `.gitattributes:32` 那条报错是冲突标记被当成属性名解析，是症状不是病。
+   两条都碰 verify.sh 与图号，落地顺序要一起定。
+4. **v5-battery-freeze + s32-close-gate-gap** —— 前者是 add/add：`battery/verify.py` 被两个人各写了一遍，
+   默认解是并集不是二选一，但要它证明而不是假设；后者 `verdict 'drift (cosmetic scope)'` 不在词表里，
+   先分清是数据错还是检查太严，**不许为了变绿放宽检查**。
+5. **s29-triage-the-five-red-gates + a13/s30** —— 前者冲突在 `ci_merge.py` 自己身上，
+   且 master 上已经进了两条名字极像的兄弟分支（s29-third-condition / s29-triage-red-gates），
+   首要问题是「它是不是已经被取代了」；后两条是 `push rejected`，我要求它**对抗性地复核我上一跑
+   「transient、会自愈」的判断**，并顺便验证我报过的幽灵 flag 缺陷（分支被别的分支吸收后进 master，
+   flag 永远清不掉，实证 `e9-engine-paper-table`）在这两条上成不成立。
+
+结论回来后我会再派一个对抗组专门试图推翻它们，然后才落地。
+
+**仍等你裁的一件没有变**：`s11-sealed-halfguard`。技术裁决我 15:05Z 已经交了
+（`monitor/inbox/20260729T150500Z-opsm-s11-technically-not-clear-two-bypasses-defeat-the-sealed-rule.md`，
+结论 DO-NOT-MERGE-AS-IS，两个绕过已自验），现在缺的只是你对「碰 CLAUDE.md」这条根文件保护的放行与否。
+它挂了 11 小时了。
