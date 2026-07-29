@@ -1,6 +1,10 @@
 # CONFLICT-origin_agent_e9-engine-paper-table.md
 branch: origin/agent/e9-engine-paper-table
 reason: verify gate red in engine-rig (verify.py)
+tip: 139ed99cade1b3c9a84103e44cb3989e3b35a7b7
+first_seen: 2026-07-29T04:16:53Z
+last_seen: 2026-07-29T04:16:53Z
+attempts: 1
 
 ```
 [1/3] suite

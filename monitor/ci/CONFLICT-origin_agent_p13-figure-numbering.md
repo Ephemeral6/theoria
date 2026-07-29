@@ -1,6 +1,10 @@
 # CONFLICT-origin_agent_p13-figure-numbering.md
 branch: origin/agent/p13-figure-numbering
 reason: verify gate red in figures (verify.sh)
+tip: 72730d5bb4e88f6ef85559b19b77ceacc8fbaa23
+first_seen: 2026-07-29T04:18:41Z
+last_seen: 2026-07-29T04:18:41Z
+attempts: 1
 
 ```
 ashed)

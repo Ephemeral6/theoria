@@ -1,6 +1,10 @@
 # CONFLICT-origin_agent_r2-release-licence.md
 branch: origin/agent/r2-release-licence
 reason: verify gate red in release (verify.sh)
+tip: 526557adbf3427fc6421eb1e1ba47ef931b207c1
+first_seen: 2026-07-29T04:19:40Z
+last_seen: 2026-07-29T04:19:40Z
+attempts: 1
 
 ```
 , su15-1944f8ab, tr87-cd924810, tu93-0768757b, vc33-5430563c, wa30-ee6fef47 (source or prose; ids named here are constants and guards, not content)
@@ -14,17 +18,17 @@ reason: verify gate red in release (verify.sh)
   note          verify-lab/runs/20260728T152000Z-V11-negative-control-census/partials/exam-battery.md names bp35-0a0ad940 (source or prose; ids named here are constants and guards, not content)
   note          verify-lab/runs/20260728T152000Z-V11-negative-control-census/partials/proxy-arcrecon.md names dc22-fdcac232, ls20-9607627b, vc33-5430563c (source or prose; ids named here are constants and guards, not content)
 
-red lines: 0 credential violation(s), 0 sealed-pile violation(s), 0 file(s) this check could not read over 5336 tracked files.
+red lines: 0 credential violation(s), 0 sealed-pile violation(s), 0 file(s) this check could not read over 5349 tracked files.
 Both red lines clear. A release manifest may be generated from this tree.
 -- ok
 
 == every tracked file is classified
   note credential loaded for comparison only: 7171...05dd (len 36)
-  note 5336 of 5336 tracked file(s) scanned for the literal key
-red lines clear over 5336 tracked files
-  A   5069 file(s)     93.70 MB  self-built -> releasable
+  note 5349 of 5349 tracked file(s) scanned for the literal key
+red lines clear over 5349 tracked files
+  A   5082 file(s)     93.80 MB  self-built -> releasable
   B     53 file(s)     31.18 MB  api-derived-compilation -> needs-written-permission
-  C    213 file(s)     10.13 MB  derived-statistics -> releasable-flagged
+  C    213 file(s)     10.14 MB  derived-statistics -> releasable-flagged
   D      1 file(s)      0.04 MB  upstream-payload -> not-releasable
 
 dry run: nothing written

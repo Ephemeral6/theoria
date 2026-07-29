@@ -1,6 +1,10 @@
 # CONFLICT-origin_agent_p10-figures-into-paper.md
 branch: origin/agent/p10-figures-into-paper
 reason: merge conflict
+tip: 4720937f2b86506a5d3739a4ab5b07d0c73fb9d2
+first_seen: 2026-07-29T04:17:13Z
+last_seen: 2026-07-29T04:17:13Z
+attempts: 1
 
 ```
 Auto-merging PARTNER_SYNC.md
