@@ -35,10 +35,14 @@ and the classes are three rather than two:
   advance and can quote.  Expected to be non-zero.  The world is judgeable; we
   chose not to pay for it.
 * `unavailable` -- a tool did not compute: a solver limit, an unbounded
-  relaxation, numerical difficulties.  Nobody knows what the answer was.
-  Expected to be **zero**, and `tests/test_battery.py` fails the suite when it is
-  not, because a run with a non-zero `unavailable` did not measure what it says
-  it measured.
+  relaxation, numerical difficulties, an exact re-check that blew up.  Nobody
+  knows what the answer was.  Expected to be **zero**, and gated in two places
+  because a run with a non-zero `unavailable` did not measure what it says it
+  measured: `tests/test_battery.py` fails the suite on the short per-engine
+  campaign, and `campaign.main` exits non-zero, which is what carries it to the
+  500-world artifact and to `verify.py`.  An adversarial pass on V-21 found the
+  second half missing and this sentence claiming it anyway -- the item's own
+  defect, one level up.
 
 `budget` and `unavailable` are kept apart on purpose.  Both are facts about the
 tooling rather than the world, and lumping them would put a designed, routine,
@@ -86,7 +90,19 @@ CAUSE_CLASS: Dict[str, str] = {
     "feature_sweep_over_budget": BUDGET,
     # --- lp_potential
     "no_certificate": DECLINED,
-    "certificate_error": DECLINED,
+    # `unavailable`, not `declined`, and an adversarial pass on V-21 moved it.
+    # HiGHS returns status **0** here -- it says a certificate exists -- and the
+    # float weights then fail exact re-checking after `Fraction.limit_denominator`
+    # (D-007).  So nobody knows whether a linear pagoda exists for that
+    # configuration; the arithmetic broke.  That is verbatim this table's
+    # definition of `unavailable`, and it is not "the property had nothing to
+    # judge and that is the correct state of the world".  Being *documented*
+    # behaviour does not make it a fact about the configuration -- which is the
+    # same conflation `solver_unavailable` was split out to remove, sitting one
+    # `except` clause above it.  It reads 0 on the standing 500-world campaign,
+    # so this was latent rather than live: exactly how the `LpUnavailable` hole
+    # sat until E-15 made it reachable.
+    "certificate_error": UNAVAILABLE,
     "no_state_list": DECLINED,
     "sweep_budget": BUDGET,
     "bfs_budget": BUDGET,

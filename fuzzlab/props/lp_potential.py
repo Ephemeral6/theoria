@@ -181,13 +181,21 @@ def _skip_solver_unavailable(world: Any, invariant: str,
     accuse the engine of the one behaviour E-15 was written to produce.  It is
     `cause_class == "unavailable"` and not `"declined"`: `no_certificate` is the
     engine looking and correctly having nothing to say, this is nobody knowing.
-    `tests/test_battery.py` fails the suite on a non-zero `unavailable`, so the
-    number is gated rather than filed.
+    `tests/test_battery.py` fails the suite on a non-zero `unavailable` and
+    `campaign.main` exits non-zero on one, so the number is gated rather than
+    filed -- in the 25-world test *and* in the 500-world artifact.
     """
     outcome = getattr(exc, "outcome", None)
     data: Dict[str, Any] = {"error": str(exc)}
     if outcome is not None:
-        data.update(lp_status=outcome.status, solver_status=outcome.solver_status,
+        # `highs_status_word`, not `lp_status`: for the common case that string
+        # is "budget" (potential.py's word for HiGHS status 1), and fuzzlab has
+        # a *different* cause-class also called `budget` meaning "this battery
+        # chose not to pay".  A row reading {"cause_class": "unavailable",
+        # "lp_status": "budget"} puts two meanings of one word in one record,
+        # one of which is the class the record is deliberately not in.
+        data.update(highs_status_word=outcome.status,
+                    solver_status=outcome.solver_status,
                     solver_message=outcome.solver_message, decided=outcome.decided,
                     bound=outcome.bound, margin=outcome.margin)
     return [finding.skipped(

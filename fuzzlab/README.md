@@ -14,6 +14,14 @@ python -m fuzzlab.minimize --replay 0x… --family gridworld --engine mdl_segmen
 Results: [`BUGS.md`](BUGS.md). Raw: `out/campaign.json`, `out/seeds.jsonl`,
 `out/findings.jsonl`. Archived reproducers: `archive/`.
 
+**`out/` is a snapshot from whichever item last ran a campaign without `--out`,
+not a live artifact.** It currently predates V-21 and so carries neither
+`skips_by_cause` nor `invariant_worlds_unavailable`, and its `findings.jsonl`
+rows still keep `cause` inside `data`. A V-21-schema 500-world run is at
+`runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass/campaign/`. Regenerate
+`out/` deliberately or read the run directory; do not read `out/` as the current
+schema.
+
 ## The house rule
 
 **An oracle may not call the engine it judges.** Checking `zero_space` with
@@ -78,7 +86,11 @@ number rather than as a silent pass. Beside it, and not derivable from it,
 `invariant_worlds_unavailable` counts the worlds that went unjudged because a
 *tool* could not compute, and `skips_by_cause` gives the full breakdown; a
 `totals.unavailable` above zero means the run measured less than its coverage
-column claims, and the suite fails on it. Two of them decline often and for
+column claims, and both gates fail on it: `python -m pytest fuzzlab` on the short
+per-engine campaign, and `python -m fuzzlab.campaign` by exit code — which is
+consistent with that exit code being about the instrument rather than the
+reading, since a tool that did not compute is an instrument fault and not a
+finding. A *violation* still exits 0: that is the campaign's product. Two of them decline often and for
 stated reasons: `lp_potential`'s four evaluate 267 of 500, because the engine issues no
 certificate on 46.6% of `jumpgraph` worlds and every claim there is conditional
 on one; all six `cegis_miner` invariants evaluate 465 of 500, declining the

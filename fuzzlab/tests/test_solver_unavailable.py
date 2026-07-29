@@ -118,7 +118,7 @@ def test_a_starved_solver_is_attributable_not_merely_absent(starved_run):
                 if f.kind == finding.SKIPPED and f.cause == "solver_unavailable"]
     assert payloads
     for data in payloads:
-        assert data.get("lp_status") == "budget", data
+        assert data.get("highs_status_word") == "budget", data
         assert data.get("solver_status") == 1, data
         assert data.get("decided") is False, data
         assert "bound" in data and "margin" in data, data

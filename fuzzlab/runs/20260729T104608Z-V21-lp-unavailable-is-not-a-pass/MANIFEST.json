@@ -15,16 +15,31 @@
   "network": false,
   "sealed_pile_contact": false,
   "committed_artifacts_modified": [],
+  "deviations_from_preregistration": [
+    "CAUSE_CLASS ships three classes (declined / budget / unavailable) where the pre-registration named two; reason in RUN_STATE.md section 4",
+    "the counterfeit table grew from 17 to 19 rows after the adversarial review, and one survivor (c-drop-the-outcome-payload) was closed with an assertion written after it rather than before; both recorded in RUN_STATE.md section 5"
+  ],
+  "known_red_not_ours": {
+    "what": "python -m fuzzlab.verify exits 1; stage 3 runs engine-rig's own suite and 5 tests in engine-rig/tests/test_heldout.py fail with TypeError: Law.__init__() got an unexpected keyword argument 'scope_exhaustive'",
+    "cause": "a semantic merge conflict between E-15 and E-17: E-15 turned Law.scope_exhaustive from a dataclass field into a derived property, E-17's heldout harness still passes it to the constructor. Textually clean merge, different files.",
+    "evidence": "git diff --stat 92b140db HEAD -- engine-rig is empty; engine-rig alone reports 5 failed, 548 passed, 27 skipped; fuzzlab's own two verify stages are ok",
+    "disposition": "reported, not fixed -- fuzzlab never modifies engine-rig, and it is not this item's ticket. See RUN_STATE.md section 8."
+  },
   "artifacts": {
     "PREREGISTRATION.md": "the decision, the criteria T1-T8, and the argument for both sides of the failures() question; committed before the fix",
     "before_probe.py": "the pre-fix measurement, on unmodified fuzzlab",
     "before.json": "its result: starved 11 evaluated vs live 5",
     "before.stdout.txt": "raw stdout of the same",
-    "counterfeits.py": "17 injected defects against the new machinery",
+    "counterfeits.py": "19 injected defects against the new machinery (17 before the adversarial review, 2 added for defects it found)",
     "COUNTERFEITS.json": "which counterfeits the V-21 gate killed, and the survivors",
     "COUNTERFEITS.stdout.txt": "raw stdout of the same",
+    "COUNTERFEITS-recheck.json": "the one survivor of the first pass, re-run after it was closed",
     "campaign/": "a 500-world campaign under --out, so no committed artifact is touched",
-    "ADVERSARIAL.md": "the adversarial reviewer's report, verbatim",
+    "campaign.stdout.txt": "raw stdout and exit code of the same",
+    "PYTEST.stdout.txt": "python -m pytest fuzzlab -- output and exit code",
+    "VERIFY.stdout.txt": "python -m fuzzlab.verify -- output and exit code; see known_red_not_ours",
+    "ADVERSARIAL.md": "the adversarial reviewer's report, verbatim and unedited",
+    "adversarial/": "the reviewer's own scripts and artifacts, kept as its evidence",
     "RUN_STATE.md": "narrative, deviations from the pre-registration, and the disposition of every adversarial finding"
   }
 }

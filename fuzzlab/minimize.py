@@ -101,6 +101,21 @@ def search(engine: str, invariant: str, kind: str, pool: int,
     if cause:
         want = "%s.%s" % (want, cause)
 
+    def matches(f: finding.Finding) -> bool:
+        """`want` matches a signature exactly, or any cause under it.
+
+        The first cut of the V-21 cause axis made `signature()` four-part for a
+        skip while leaving `want` three-part unless `--cause` was passed, so
+        `--kind skipped` alone could never match anything: an adversarial pass
+        took 13 reproducers in 25 seeds to 0, and `main()` printed "no world
+        reproduced", which reads as *this skip never happens*.  A bare
+        `--kind skipped` now means "any cause", which is also what it meant
+        before the axis existed -- so the committed archive's three-part
+        signatures still re-derive.
+        """
+        signed = signature(f)
+        return signed == want or signed.startswith(want + ".")
+
     hits: List[Dict[str, Any]] = []
     scanned = 0
     for index in range(pool):
@@ -113,7 +128,7 @@ def search(engine: str, invariant: str, kind: str, pool: int,
         matching = [f for f in finding.run_invariants(engine, world,
                                                       module.INVARIANTS,
                                                       only=[invariant])
-                    if signature(f) == want]
+                    if matches(f)]
         if matching:
             hits.append({"seed": seed, "size": size_of(world), "world": world,
                          "index": index, "finding": matching[0]})
@@ -172,10 +187,11 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
     parser.add_argument("--engine", required=True)
     parser.add_argument("--invariant", required=True)
     parser.add_argument("--cause", default=None,
-                        help="for --kind skipped: which declared cause to "
-                             "reproduce (finding.CAUSE_CLASS). Skips of "
-                             "different causes are different events; without "
-                             "this the search draws from every pool at once.")
+                        help="for --kind skipped: narrow to one declared "
+                             "cause (finding.CAUSE_CLASS). Skips of different "
+                             "causes are different events with different "
+                             "reproducers; without this the search accepts any "
+                             "cause, which is the pre-V-21 behaviour.")
     parser.add_argument("--kind", default=finding.VIOLATED,
                         choices=(finding.VIOLATED, finding.RAISED, finding.SKIPPED))
     parser.add_argument("--pool", type=int, default=DEFAULT_POOL)

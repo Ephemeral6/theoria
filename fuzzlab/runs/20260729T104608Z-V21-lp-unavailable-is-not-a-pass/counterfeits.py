@@ -46,6 +46,7 @@ GATE = [
     "fuzzlab/tests/test_finding_contract.py",
     "fuzzlab/tests/test_battery.py::test_nothing_went_unjudged_because_a_tool_could_not_compute",
     "fuzzlab/tests/test_battery.py::test_the_skip_breakdown_reconciles_with_the_skip_count",
+    "fuzzlab/tests/test_battery.py::test_many_skips_on_one_world_do_not_send_the_coverage_column_negative",
     "fuzzlab/tests/test_battery.py::test_short_campaign_passes_the_gate_the_docstring_describes",
     "fuzzlab/tests/test_battery.py::test_a_dead_lp_potential_shows_up_as_lost_coverage",
 ]
@@ -279,6 +280,45 @@ def _evaluated_ignores_skips() -> None:
     campaign.run_engine = inflated
 
 
+def _worlds_columns_count_findings() -> None:
+    """The BLOCKER an adversarial pass found, restored.
+
+    `invariant_worlds_evaluated` / `invariant_worlds_unavailable` counted skip
+    *findings* rather than distinct seeds. Equal only while no property files two
+    skips for one world; `cegis_miner.frontier_is_complete_to_size` files one per
+    rule, and forcing its budget low enough produced `evaluated: -56` over 12
+    worlds. Added after the review, so it is a counterfeit for a defect that was
+    real rather than hypothetical.
+    """
+    campaign = _campaign()
+    finding = _finding()
+    original = campaign.run_engine
+
+    def by_findings(*a, **k):
+        result = original(*a, **k)
+        report = result["report"]
+        counts = {}
+        for f in result["findings"]:
+            if f.kind == finding.SKIPPED:
+                counts[f.invariant] = counts.get(f.invariant, 0) + 1
+        report["invariant_worlds_evaluated"] = {
+            name: report["worlds_requested"] - counts.get(name, 0)
+            for name in report["invariant_worlds_evaluated"]}
+        return result
+    campaign.run_engine = by_findings
+
+
+def _campaign_exit_ignores_unavailable() -> None:
+    """`campaign.main` stops exiting non-zero on `unavailable` — finding 5's half."""
+    campaign = _campaign()
+    original = campaign.main
+
+    def lenient(argv=None):
+        code = original(argv)
+        return 0 if code == 1 else code
+    campaign.main = lenient
+
+
 def _unavailable_counted_as_evaluated() -> None:
     """The exact V-21 defect, moved from the property into the report.
 
@@ -363,6 +403,14 @@ TABLE: List[Counterfeit] = [
                 "invariant_worlds_evaluated is the world count again",
                 "the pre-V-13 coverage column, restored",
                 _evaluated_ignores_skips, True),
+    Counterfeit("c-worlds-columns-count-findings", "campaign.py",
+                "the world columns subtract skip findings instead of seeds",
+                "a coverage column that has been observed at -56 out of 12",
+                _worlds_columns_count_findings, True),
+    Counterfeit("c-campaign-exit-ignores-unavailable", "campaign.py",
+                "campaign.main stops exiting non-zero on unavailable",
+                "'gated' is true of a 25-world test and false of the artifact",
+                _campaign_exit_ignores_unavailable, False),
     Counterfeit("c-unavailable-counted-as-evaluated", "campaign.py",
                 "the coverage column adds the unavailable skips back",
                 "V-21's defect, relocated from the property into the report",

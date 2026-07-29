@@ -90,10 +90,27 @@ def run_engine(engine: str, campaign_seed: int, n_worlds: int,
         by_invariant.setdefault(f.invariant, Counter())[f.kind] += 1
 
     invariants = sorted(module.INVARIANTS)
-    ran = {
-        name: n_worlds - by_invariant.get(name, Counter())[finding.SKIPPED]
-        for name in invariants
-    }
+
+    # --- worlds, counted as worlds
+    #
+    # These columns are named `..._worlds_...` and they must therefore count
+    # *worlds*, which means counting distinct seeds and not findings.  Until an
+    # adversarial pass on V-21 this subtracted the skip **finding** count, and
+    # the two are equal only if no invariant ever files two skips for one world.
+    # `props/cegis_miner.py:frontier_is_complete_to_size` files one per rule
+    # inside a loop, so they are not equal: forcing that budget low enough to
+    # fire produced `invariant_worlds_evaluated: -56` over 12 worlds. The
+    # arithmetic had been right since V-13 only because the one property that
+    # can file several skips per world had never been made to.
+    skipped_seeds: Dict[str, set] = {name: set() for name in invariants}
+    unavailable_seeds: Dict[str, set] = {name: set() for name in invariants}
+    for f in findings:
+        if f.kind != finding.SKIPPED:
+            continue
+        skipped_seeds.setdefault(f.invariant, set()).add(f.seed)
+        if f.cause_class == finding.UNAVAILABLE:
+            unavailable_seeds.setdefault(f.invariant, set()).add(f.seed)
+    ran = {name: n_worlds - len(skipped_seeds.get(name, ())) for name in invariants}
 
     # --- why the unevaluated worlds were unevaluated (V-21)
     #
@@ -105,8 +122,18 @@ def run_engine(engine: str, campaign_seed: int, n_worlds: int,
     # coverage.  So the breakdown is published per invariant, by cause and by
     # cause-class, and `invariant_worlds_unavailable` is lifted out as its own
     # column because it is the one that should always be zero.
+    #
+    # `skips_by_cause` and `skips_by_cause_class` count **findings** -- they are
+    # a breakdown of `skipped`, and their name says so. `invariant_worlds_*`
+    # count **worlds**. The two are equal whenever a property files at most one
+    # skip per world, which is true of everything except
+    # `cegis_miner.frontier_is_complete_to_size`, and relying on it silently is
+    # what produced a negative coverage column. `skip_worlds_by_cause_class` is
+    # published alongside so a reader can see where the two differ instead of
+    # assuming they do not.
     by_cause: Dict[str, Dict[str, int]] = {name: {} for name in invariants}
     by_cause_class: Dict[str, Dict[str, int]] = {name: {} for name in invariants}
+    class_seeds: Dict[str, Dict[str, set]] = {name: {} for name in invariants}
     for f in findings:
         if f.kind != finding.SKIPPED:
             continue
@@ -114,10 +141,10 @@ def run_engine(engine: str, campaign_seed: int, n_worlds: int,
         bucket[f.cause] = bucket.get(f.cause, 0) + 1
         klass = by_cause_class.setdefault(f.invariant, {})
         klass[f.cause_class] = klass.get(f.cause_class, 0) + 1
-    unavailable = {
-        name: by_cause_class.get(name, {}).get(finding.UNAVAILABLE, 0)
-        for name in invariants
-    }
+        class_seeds.setdefault(f.invariant, {}).setdefault(
+            f.cause_class, set()).add(f.seed)
+    unavailable = {name: len(unavailable_seeds.get(name, ()))
+                   for name in invariants}
 
     report = {
         "engine": engine,
@@ -134,10 +161,15 @@ def run_engine(engine: str, campaign_seed: int, n_worlds: int,
         "unavailable": sum(unavailable.values()),
         "invariant_worlds_evaluated": ran,
         "invariant_worlds_unavailable": unavailable,
+        "invariant_worlds_skipped": {name: len(skipped_seeds.get(name, ()))
+                                     for name in invariants},
         "skips_by_cause": {k: dict(sorted(v.items()))
                            for k, v in sorted(by_cause.items())},
         "skips_by_cause_class": {k: dict(sorted(v.items()))
                                  for k, v in sorted(by_cause_class.items())},
+        "skip_worlds_by_cause_class": {
+            k: {klass: len(seeds) for klass, seeds in sorted(v.items())}
+            for k, v in sorted(class_seeds.items())},
         "elapsed_s": round(time.time() - started, 2),
     }
     if not quiet:
@@ -236,9 +268,20 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         print("-> %s" % os.path.relpath(os.path.join(args.out, "campaign.json"), HERE))
 
     # A violation is the campaign's *product*, not its failure: "失败是战利品".
-    # The exit code is about whether the battery ran, so only a generator error
-    # — fuzzlab unable to build its own input — is a non-zero exit.
-    return 1 if summary["totals"]["generator_errors"] else 0
+    # The exit code is about whether the battery ran — about the instrument, not
+    # the reading — so a violation exits 0.
+    #
+    # `unavailable` is on the instrument side of that line and therefore exits
+    # non-zero (V-21). A world that went unjudged because a tool could not
+    # compute is not a reading at all: the campaign reports coverage it did not
+    # earn, and every downstream number is drawn from a smaller sample than it
+    # says. An adversarial pass found the previous arrangement — the number
+    # printed, nothing failing — reproducing this item's own defect at the level
+    # of the report: three docstrings claimed "the suite fails on it" and only a
+    # 25-world pytest run did, while the 500-world artifact anyone actually reads
+    # could carry `unavailable > 0` past a green `verify`.
+    totals = summary["totals"]
+    return 1 if (totals["generator_errors"] or totals["unavailable"]) else 0
 
 
 def _tally(findings: Iterable[finding.Finding]) -> Dict[str, int]:

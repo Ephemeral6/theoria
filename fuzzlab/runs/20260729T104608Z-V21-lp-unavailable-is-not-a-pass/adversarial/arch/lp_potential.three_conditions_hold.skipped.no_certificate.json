@@ -1,0 +1,64 @@
+{
+  "found": true,
+  "method": "minimisation by search over a pool of 25 seeds \u2014 the smallest world that reproduces this signature, NOT a proven minimum; worlds are pure functions of a seed so there is no parameter to shrink",
+  "rate": 0.52,
+  "replay": "python -m fuzzlab.minimize --replay 0xcf08227e47a1cac5 --family jumpgraph --engine lp_potential --invariant three_conditions_hold",
+  "reproducers": 13,
+  "scanned": 25,
+  "signature": "lp_potential.three_conditions_hold.skipped.no_certificate",
+  "smallest": {
+    "family": "jumpgraph",
+    "finding": {
+      "cause": "no_certificate",
+      "cause_class": "declined",
+      "data": {
+        "initial": "0110"
+      },
+      "detail": "the engine issued no certificate for this configuration, so there is no claim to check. Declining is permitted (sound but incomplete, DECISIONS.md D-014) and is often the *correct* answer here, since a goal may be genuinely reachable; either way this world was not judged by this invariant.",
+      "engine": "lp_potential",
+      "family": "jumpgraph",
+      "invariant": "three_conditions_hold",
+      "kind": "skipped",
+      "seed": 14918211691427777221,
+      "seed_hex": "0xcf08227e47a1cac5"
+    },
+    "fingerprint": "ca706d3288f33248ae6bd3e5221b3de9b7dc56b69eb8121f2285fe1a80543d6b",
+    "index": 16,
+    "seed": "0xcf08227e47a1cac5",
+    "seed_int": 14918211691427777221,
+    "size": 20,
+    "size_metric": "fuzzlab.minimize.size_of, family jumpgraph",
+    "spec": {
+      "goal_states": [
+        "0001"
+      ],
+      "initial": "0110",
+      "n_pos": 4,
+      "n_reachable": 3,
+      "seed": 14918211691427777221,
+      "solvable": true,
+      "triples": [
+        [
+          0,
+          1,
+          2
+        ],
+        [
+          1,
+          2,
+          3
+        ],
+        [
+          2,
+          1,
+          0
+        ],
+        [
+          3,
+          2,
+          1
+        ]
+      ]
+    }
+  }
+}

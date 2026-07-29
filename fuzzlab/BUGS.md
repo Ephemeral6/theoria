@@ -517,8 +517,13 @@ knows". Every skip now carries a required `cause`, every cause is declared in
 `finding.CAUSE_CLASS` as `declined` / `budget` / `unavailable`, and
 `campaign.json` publishes `invariant_worlds_unavailable`, `skips_by_cause` and
 `skips_by_cause_class` per invariant. A green tree must have zero `unavailable`
-(`tests/test_battery.py`), so the number is **gated, not merely filed** — a skip
-class nobody asserts on is a skip class nobody reads.
+(`tests/test_battery.py`) **and** `campaign.main` exits non-zero on one, so the
+number is **gated, not merely filed** — a skip class nobody asserts on is a skip
+class nobody reads. The second of those two gates was missing from the first cut
+while three docstrings claimed it existed; an adversarial pass caught it, and the
+finding is recorded in this run's `RUN_STATE.md` §8 because it is this item's own
+defect at one remove: prose wider than code, in the item about prose wider than
+code.
 
 `budget` is separated from `unavailable` deliberately. Both are facts about
 tooling rather than about the world, but a `SWEEP_BUDGET` decline is priced,
@@ -554,8 +559,21 @@ got wrong; that is the coverage column's question, and it has its own gate.
 
 17 counterfeits against the new machinery, run in fresh subprocesses against the
 V-21 gate set; results in
-`runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass/COUNTERFEITS.json`, and
-the survivors — with what each would let a reader believe — in that directory's
-`RUN_STATE.md`. The table is written against the code paths rather than read back
-off the test file: 8 of the 17 had no dedicated test written for them, which is
-the point (C-11: N mutants matching N tests measures the tests).
+`runs/20260729T104608Z-V21-lp-unavailable-is-not-a-pass/COUNTERFEITS.json`. The
+table is written against the code paths rather than read back off the test file:
+**9 of the 17 had no dedicated test written for them**, which is the point (C-11:
+N mutants matching N tests measures the tests).
+
+16 were killed. **One survived**: `c-drop-the-outcome-payload` — file the skip,
+attribute it correctly to the solver, and drop the `LpOutcome` payload. Every
+count stays right; what is lost is the ability to tell status 1 (raise the
+budget) from status 3 (the model is wrong) from status 4 (go and look at the
+arithmetic). It has since been closed, and the assertion that closes it says in
+its own comment that it came *after* the survivor rather than predicting it —
+retro-fitting a test and then presenting it as foresight is the failure this
+paragraph exists to avoid. Re-run in `COUNTERFEITS-recheck.json`: killed.
+
+The pre-registration named `c-relabel-as-no-certificate` as the one it expected
+to be hardest, on the grounds that a solver failure filed as the engine's own
+documented decline is identical in every column except `skips_by_cause`. **That
+prediction was wrong**, in the safe direction: two tests killed it.

@@ -109,6 +109,7 @@ def run_mutant(mutant: mut.Mutant, worlds: List[Any],
     inert_worlds = 0
     evaluated = 0
     confounded = 0
+    unavailable_worlds = 0
     started = time.time()
 
     for i, world in enumerate(worlds):
@@ -120,6 +121,20 @@ def run_mutant(mutant: mut.Mutant, worlds: List[Any],
             findings = module.check(world)
         if not any(r["changed"] for r in record):
             inert_worlds += 1
+            continue
+        # A world no invariant could judge because a *tool* did not compute is
+        # not a world this mutant survived (V-21). Before V-21 an `LpUnavailable`
+        # under a mutant surfaced as `raised_only` -- detection in the weak
+        # sense; afterwards it is a `skipped`, which `by_kind` below does not
+        # look at, so it would sit inside `worlds_evaluated` and print SURVIVED.
+        # That is `MUTATION.md`'s own rule -- "a mutant that pushes worlds into
+        # `skipped` has *unmeasured* them, not survived them" -- and nothing
+        # enforced it. No current mutant can raise `LpUnavailable`, so this
+        # changes no published number today; it is here so that the first one
+        # that can does not silently inflate the denominator.
+        if any(f.kind == finding.SKIPPED and f.cause_class == finding.UNAVAILABLE
+               for f in findings):
+            unavailable_worlds += 1
             continue
         evaluated += 1
         by_kind: Dict[str, set] = {finding.VIOLATED: set(), finding.RAISED: set()}
@@ -153,6 +168,11 @@ def run_mutant(mutant: mut.Mutant, worlds: List[Any],
         "worlds_evaluated": evaluated,
         "worlds_inert": inert_worlds,
         "worlds_confounded": confounded,
+        # Worlds dropped from the denominator because a tool could not compute
+        # on them. Reported rather than folded into `worlds_inert`: inert means
+        # the defect could not apply, this means it applied and nothing could be
+        # observed. They are different facts and only one is about the mutant.
+        "worlds_unavailable": unavailable_worlds,
         "killed": kills,
         "raised_only": {name: raised_only[name] for name in invariants},
         "worlds_to_first_kill": first_kill,
