@@ -114,13 +114,68 @@ def flag_path(branch):
                         "CONFLICT-%s.md" % branch.replace("/", "_"))
 
 
-def flag(branch, reason, detail):
+def branch_tip(branch):
+    out = sh(["git", "rev-parse", branch])
+    return out.stdout.strip() if out.returncode == 0 else ""
+
+
+def last_attempt(branch):
+    """What the previous run already tried on this branch, or {} if none.
+
+    Read back out of the flag file's own header, because that is the file that
+    already survives between runs and the one a human reads.
+    """
+    path = flag_path(branch)
+    if not os.path.exists(path):
+        return {}
+    memo = {}
+    try:
+        with open(path, encoding="utf-8") as fh:
+            for line in fh:
+                if line.startswith("```"):
+                    break
+                if ":" in line:
+                    k, _, v = line.partition(":")
+                    memo[k.strip().lstrip("# ")] = v.strip()
+    except OSError:
+        return {}
+    return memo
+
+
+def flag(branch, reason, detail, tip=None):
+    """Record a failure, keeping how long it has been failing and on what tip.
+
+    `tip` is the branch SHA the failure belongs to.  Without it every run
+    re-attempted every stuck branch and wrote the same line again: on the night
+    of 2026-07-28 that produced 915 FLAG lines over 24 branches, the same 21
+    strings every five minutes, while `MERGED` sat unchanged for hours.  A
+    failure that cannot change is not news the twentieth time, and printing it
+    anyway is what made a stalled queue look like a working one.
+
+    Keeping `first_seen` and `attempts` is the other half: the eighth failure
+    and the first were indistinguishable in the log, so nothing -- no probe, no
+    reader -- could react to a branch having been stuck for two hours.
+    """
     os.makedirs(CI_DIR, exist_ok=True)
+    prev = last_attempt(branch)
+    stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    first_seen = prev.get("first_seen") or stamp
+    try:
+        attempts = int(prev.get("attempts", "0")) + 1
+    except ValueError:
+        attempts = 1
     path = flag_path(branch)
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write("# %s\nbranch: %s\nreason: %s\n\n```\n%s\n```\n"
-                 % (os.path.basename(path), branch, reason, detail[-4000:]))
-    log_line("FLAG %s: %s" % (branch, reason))
+        fh.write("# %s\nbranch: %s\nreason: %s\ntip: %s\n"
+                 "first_seen: %s\nlast_seen: %s\nattempts: %s\n\n```\n%s\n```\n"
+                 % (os.path.basename(path), branch, reason, tip or "",
+                    first_seen, stamp, attempts, detail[-4000:]))
+    suffix = ""
+    if attempts >= 3:
+        # Three distinct tips have failed the same way.  Retrying is no longer
+        # the useful act; naming it for a human is.
+        suffix = "  [NEEDS-HUMAN: %d attempts since %s]" % (attempts, first_seen)
+    log_line("FLAG %s: %s%s" % (branch, reason, suffix))
 
 
 def clear_flag(branch):
@@ -241,6 +296,7 @@ def board_territories():
 
 
 def try_merge(branch):
+    tip = branch_tip(branch)
     dirs = touched_dirs(branch)
     known = KNOWN_DIRS | board_territories()
     unknown = {d for d in dirs
@@ -251,23 +307,23 @@ def try_merge(branch):
                              ".gitattributes"}
     if bad_root & {".env", "Theoria.md", "CLAUDE.md", "LICENSE"} or \
             (bad_root and any(f in ("piles.json",) for f in bad_root)):
-        flag(branch, "touches protected root files", str(sorted(bad_root)))
+        flag(branch, "touches protected root files", str(sorted(bad_root)), tip=tip)
         return False
     if unknown:
         flag(branch, "touches unknown territory (needs M-0 judgment)",
-             str(sorted(unknown)))
+             str(sorted(unknown)), tip=tip)
         return False
 
     wt = tempfile.mkdtemp(prefix="ci-merge-")
     try:
         r = sh(["git", "worktree", "add", "--detach", wt, "origin/master"])
         if r.returncode != 0:
-            flag(branch, "worktree add failed", r.stderr)
+            flag(branch, "worktree add failed", r.stderr, tip=tip)
             return False
         r = sh(["git", "merge", "--no-ff", "--no-edit", branch], cwd=wt)
         if r.returncode != 0:
             sh(["git", "merge", "--abort"], cwd=wt)
-            flag(branch, "merge conflict", r.stdout + r.stderr)
+            flag(branch, "merge conflict", r.stdout + r.stderr, tip=tip)
             return False
         ran, ungated = [], []
         for d in sorted(dirs):
@@ -292,7 +348,7 @@ def try_merge(branch):
                    extra_env=gates.gate_env(wt))
             if row["kind"] == "verify" and r.returncode != 0:
                 flag(branch, "verify gate red in %s (%s)" % (d, row["name"]),
-                     r.stdout + r.stderr)
+                     r.stdout + r.stderr, tip=tip)
                 return False
             if r.returncode == NO_TESTS_COLLECTED:
                 # The directory holds test_*.py and pytest still found nothing
@@ -303,11 +359,11 @@ def try_merge(branch):
                 # passed.
                 flag(branch, "test suite in %s collects nothing "
                              "(gate misconfigured, not a red suite)" % d,
-                     r.stdout + r.stderr)
+                     r.stdout + r.stderr, tip=tip)
                 return False
             if r.returncode != 0:
                 flag(branch, "tests red in %s" % d,
-                     (r.stdout + r.stderr))
+                     (r.stdout + r.stderr), tip=tip)
                 return False
             ran.append(gates.describe(row, d))
 
@@ -322,7 +378,7 @@ def try_merge(branch):
 
         r = sh(["git", "push", "origin", "HEAD:master"], cwd=wt)
         if r.returncode != 0:
-            flag(branch, "push rejected (race?)", r.stderr)
+            flag(branch, "push rejected (race?)", r.stderr, tip=tip)
             return False
         sh(["git", "push", "origin", "--delete",
             branch.replace("origin/", "")])
@@ -377,11 +433,35 @@ def main():
         return 0
     try:
         done = 0
+        held = []
         for b in todo:
             if done >= args.max:
                 break
+            # A branch whose tip has not moved since its last failure will fail
+            # the same way again.  Re-running it costs a worktree and a full
+            # test suite to re-derive a verdict already on disk, and -- worse --
+            # writes the identical FLAG line again, which is how 24 stuck
+            # branches produced 915 of them while nothing merged for hours.
+            #
+            # The condition is deliberately on the *tip*, not on the branch: a
+            # push of new work is exactly the event that makes the old verdict
+            # stale, and that retries immediately.  Skipping is therefore never
+            # a way for a fixed branch to stay stuck.
+            memo = last_attempt(b)
+            if memo.get("tip") and memo["tip"] == branch_tip(b):
+                held.append((b, memo.get("reason", "?"),
+                             memo.get("attempts", "?")))
+                continue
             if try_merge(b):
                 done += 1
+        if held:
+            # One line for the whole held set, so the log's growth tracks
+            # progress rather than the passage of time.
+            log_line("HELD %d unchanged since last verdict: %s"
+                     % (len(held),
+                        "; ".join("%s (%s, %sx)"
+                                  % (b.replace("origin/agent/", ""), r, n)
+                                  for b, r, n in held[:8])))
         # keep local master in step with origin so later merges see reality
         sh(["git", "pull", "--ff-only", "origin", "master"])
         return 0
