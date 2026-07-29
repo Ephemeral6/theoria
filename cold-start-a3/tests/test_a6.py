@@ -125,6 +125,55 @@ def test_tampering_with_a_carried_book_stops_the_run_before_frame_one():
     assert row["world_frames"] == 0
 
 
+def test_tampering_is_caught_when_this_test_does_the_tampering():
+    """The same claim as above, re-derived instead of read out of a file.
+
+    An adversarial pass made the fair criticism that most of this file asserts
+    what `run_a6.py` wrote about itself — `row["world_actions"] == 0` out of
+    JSON is evidence that one artefact agrees with another, not that the check
+    works.  So this one tampers, carries, and looks at what comes back.
+
+    It also exercises the branch the artefact cannot show: the pack is restored
+    afterwards and carried again, and must go back to winning.  A `check_books`
+    stuck at False would pass the first half and fail the second.
+    """
+    from a6carry import protocol
+    from a6carry.executors import WorldgenExecutor
+    from a6carry.pack import Pack
+
+    pack_dir = os.path.join(PACKS, "push-v1")
+    book = os.path.join(pack_dir, "domain.dsl")
+    with open(book, "r", encoding="utf-8") as handle:
+        original = handle.read()
+
+    scratch = os.path.join(RUN, "artifacts", "_test_tamper")
+    try:
+        with open(book, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(original + "\n# not written by the receiver\n")
+        tampered = protocol.carry(
+            Pack(pack_dir), WorldgenExecutor("t1-push-corridor"),
+            out_dir=os.path.join(scratch, "gen"), artefacts=scratch,
+            arm="test_tampered")
+        assert tampered["outcome"] == "pack_tampered"
+        assert tampered["bill"]["counts"]["world_actions"] == 0
+        assert tampered["bill"]["counts"]["world_frames"] == 0
+        assert tampered["pack_check"]["books"]["match"] is False
+    finally:
+        with open(book, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(original)
+
+    restored = protocol.carry(
+        Pack(pack_dir), WorldgenExecutor("t1-push-corridor"),
+        out_dir=os.path.join(scratch, "gen"), artefacts=scratch,
+        arm="test_restored")
+    assert restored["outcome"] == "win", (
+        "the restore did not restore, or check_books is stuck")
+    assert restored["pack_check"]["books"]["match"] is True
+
+    import shutil
+    shutil.rmtree(scratch, ignore_errors=True)
+
+
 def test_a_drifted_dependency_fingerprint_refuses():
     """The fingerprint has a reader, which is the only thing that makes it a check.
 
@@ -276,9 +325,20 @@ def test_the_patched_pddl_is_readable_by_the_planner_that_reads_it(arm):
 # --------------------------------------------------------------- the scoring pass
 
 def _scoring():
+    """Produce the artefact if it is absent rather than skip past it.
+
+    It used to skip, and an adversarial pass named the consequence: nothing in
+    the suite ran `a6carry.score`, so the three tests carrying the only real
+    evidence that the push mechanism is right passed **because the file happened
+    to be on disk**.  On a fresh checkout they would have skipped silently and
+    the suite would still have reported green.  The scorer takes under a second;
+    there is no reason for it to be optional.
+    """
     path = os.path.join(RUN, "scoring_push_manual.json")
     if not os.path.exists(path):
-        pytest.skip("scoring_push_manual.json absent — run `python -m a6carry.score`")
+        result = subprocess.run([sys.executable, "-m", "a6carry.score"],
+                                cwd=HERE, capture_output=True, text=True)
+        assert result.returncode == 0, result.stdout[-2000:] + result.stderr[-2000:]
     with open(path, encoding="utf-8") as handle:
         return json.load(handle)
 

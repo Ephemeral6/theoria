@@ -397,6 +397,12 @@
       "shove_up"
     ],
     "checked_and_wrong": [],
+    "distinct_transitions_by_world": {
+      "source_open": 2,
+      "transfer_corridor": 0
+    },
+    "distinct_transitions_exercising_any_unwitnessed_clause": 2,
+    "evidence_scale_note": "the six generalised clauses rest, in total, on 2 transitions out of the 256 checked -- all of them in the source world, none in the world the pack was carried to.  `exercising_transitions` counts clause-slots and is twice that, because a shove clause and its block clause share a guard and cannot fire apart.  The headline \"256 transitions checked\" is a statement about coverage of the state space, not about how much of it tests the part of the manual that was guessed.",
     "exercising_transitions": {
       "block_down": 1,
       "block_left": 0,
@@ -470,7 +476,7 @@
       "disagreement_sample": [],
       "disagreements": 0,
       "first_frame_agrees": true,
-      "first_frame_note": "the theorem `shove_is_relative_not_absolute` (domain.dsl:160) says an absolute reading of the shove would mis-render this world at frame 0; this is that check, and it passes only under the relative reading",
+      "first_frame_note": "frame 0 renders.  This tests the read-back, not any rule: the board and the object positions are derived from this frame, so no guard is evaluated.  The theorem is tested by the transitions --  and specifically by the corridor's one push, whose block sits in a different row and column from either witness",
       "grid": [
         5,
         7
@@ -486,6 +492,12 @@
       },
       "pack_slug": "source_open",
       "predictor": "runs/20260728T1800Z-A6-transfer-protocol/generated/source_open/theory.py",
+      "predictor_correspondence": {
+        "manual_sha256": "d1bf08b0b0b9099691f365e6f185bab2543c1364ded4dd2b1f85448641b764b1",
+        "note": "the graded predictor was recompiled from the manual this module parses and came out byte-identical, so the per-rule table is about the code in front of it",
+        "pack_books_intact": true,
+        "recompiled_byte_identical": true
+      },
       "reachable_states": 49,
       "readback_mismatches": 0,
       "rules": {
@@ -599,7 +611,10 @@
         }
       },
       "state_cap": 200000,
+      "transitions_accounted": true,
       "transitions_checked": 196,
+      "transitions_exercising_an_unwitnessed_clause": 2,
+      "unchecked_transitions": 0,
       "unreadable_states": 0,
       "world_id": "t1-push-open"
     },
@@ -610,7 +625,7 @@
       "disagreement_sample": [],
       "disagreements": 0,
       "first_frame_agrees": true,
-      "first_frame_note": "the theorem `shove_is_relative_not_absolute` (domain.dsl:160) says an absolute reading of the shove would mis-render this world at frame 0; this is that check, and it passes only under the relative reading",
+      "first_frame_note": "frame 0 renders.  This tests the read-back, not any rule: the board and the object positions are derived from this frame, so no guard is evaluated.  The theorem is tested by the transitions --  and specifically by the corridor's one push, whose block sits in a different row and column from either witness",
       "grid": [
         5,
         6
@@ -626,6 +641,12 @@
       },
       "pack_slug": "transfer_corridor",
       "predictor": "runs/20260728T1800Z-A6-transfer-protocol/generated/transfer_corridor/theory.py",
+      "predictor_correspondence": {
+        "manual_sha256": "d1bf08b0b0b9099691f365e6f185bab2543c1364ded4dd2b1f85448641b764b1",
+        "note": "the graded predictor was recompiled from the manual this module parses and came out byte-identical, so the per-rule table is about the code in front of it",
+        "pack_books_intact": true,
+        "recompiled_byte_identical": true
+      },
       "reachable_states": 15,
       "readback_mismatches": 0,
       "rules": {
@@ -739,7 +760,10 @@
         }
       },
       "state_cap": 200000,
+      "transitions_accounted": true,
       "transitions_checked": 60,
+      "transitions_exercising_an_unwitnessed_clause": 0,
+      "unchecked_transitions": 0,
       "unreadable_states": 0,
       "world_id": "t1-push-corridor"
     }

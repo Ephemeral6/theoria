@@ -4,8 +4,10 @@
     "a3_positive_control_still_wins": true,
     "drifted_fingerprint_refused": true,
     "green_carry_can_be_earned_on_a_wrong_world": true,
+    "negative_control_flags_are_one_fact_not_two": true,
     "none_claimed_a_win": true,
     "tampered_books_refused": true,
+    "transfer_evidence_is_indistinguishable_from_the_wrong_world_arm": true,
     "transfer_planned_before_acting": true,
     "transfer_relearned_nothing": true,
     "two_worldgen_worlds_end_to_end": true,
@@ -29,6 +31,18 @@
       },
       "dsl_clauses_written": 0,
       "engine_stages": 0,
+      "executed_actions": [
+        "LEFT",
+        "DOWN",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP"
+      ],
       "first_mismatch_kind": "render_mismatch",
       "lean": false,
       "lean_withheld_reason": null,
@@ -59,6 +73,18 @@
       },
       "dsl_clauses_written": 0,
       "engine_stages": 0,
+      "executed_actions": [
+        "LEFT",
+        "DOWN",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP"
+      ],
       "first_mismatch_kind": null,
       "lean": false,
       "lean_withheld_reason": null,
@@ -89,6 +115,18 @@
       },
       "dsl_clauses_written": 0,
       "engine_stages": 0,
+      "executed_actions": [
+        "LEFT",
+        "DOWN",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP",
+        "UP"
+      ],
       "first_mismatch_kind": "render_mismatch",
       "lean": false,
       "lean_withheld_reason": null,
@@ -119,6 +157,13 @@
       },
       "dsl_clauses_written": 0,
       "engine_stages": 0,
+      "executed_actions": [
+        "RIGHT",
+        "RIGHT",
+        "DOWN",
+        "RIGHT",
+        "UP"
+      ],
       "first_mismatch_kind": null,
       "lean": null,
       "lean_withheld_reason": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted.",
@@ -139,6 +184,7 @@
       "cost_to_first_plan": null,
       "dsl_clauses_written": 0,
       "engine_stages": 0,
+      "executed_actions": null,
       "first_mismatch_kind": null,
       "lean": null,
       "lean_withheld_reason": null,
@@ -169,6 +215,13 @@
       },
       "dsl_clauses_written": 0,
       "engine_stages": 0,
+      "executed_actions": [
+        "DOWN",
+        "DOWN",
+        "RIGHT",
+        "RIGHT",
+        "RIGHT"
+      ],
       "first_mismatch_kind": null,
       "lean": null,
       "lean_withheld_reason": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted.",
@@ -199,6 +252,13 @@
       },
       "dsl_clauses_written": 0,
       "engine_stages": 0,
+      "executed_actions": [
+        "DOWN",
+        "DOWN",
+        "RIGHT",
+        "RIGHT",
+        "RIGHT"
+      ],
       "first_mismatch_kind": null,
       "lean": null,
       "lean_withheld_reason": "D-A6-002: gen_lean_a0.build_axes admits only non-mover `_colour` and `_present` fields as state axes, so the position of Block is not in the Lean state type.  The file would compile green and axiom-free about a projection of this manual.  Withheld rather than emitted.",
@@ -229,6 +289,7 @@
       },
       "dsl_clauses_written": 0,
       "engine_stages": 0,
+      "executed_actions": null,
       "first_mismatch_kind": null,
       "lean": null,
       "lean_withheld_reason": null,
@@ -719,11 +780,11 @@
     "push-v1": {
       "books": {
         "domain": {
-          "bytes": 10413,
+          "bytes": 11157,
           "file": "domain.dsl",
           "laws": 3,
           "rules": 12,
-          "sha256": "86c7bcfb594d6aeb27f743bdcf551a2c2355fe6417ab80271c7a1a77ef3af4cc"
+          "sha256": "d1bf08b0b0b9099691f365e6f185bab2543c1364ded4dd2b1f85448641b764b1"
         },
         "playbook": {
           "bytes": 4194,

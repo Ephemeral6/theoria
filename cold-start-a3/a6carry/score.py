@@ -108,6 +108,8 @@ WORLDS: Tuple[Tuple[str, str], ...] = (
     ("transfer_corridor", "t1-push-corridor"),
 )
 
+WORLD_OF_SLUG: Dict[str, str] = dict(WORLDS)
+
 #: The world emits `UP/DOWN/LEFT/RIGHT`; the manual speaks `push(Cart, up)`.
 #: That naming is THEORIZE_LOG's adjudication and not the world's, which is why
 #: it is written down here as well as at `cold-start-a0/certify/replay.py:35`
@@ -135,6 +137,14 @@ RULE_ORDER: Tuple[str, ...] = (
 #: never taken here and exists so that a larger world produces a *labelled*
 #: partial measurement rather than an exception or a silent truncation.
 STATE_CAP = 200_000
+
+#: The six `ev: symmetry` clause names, needed inside the scoring loop before
+#: the verdict is assembled.  Derived from the file, not typed: `parse_evidence`
+#: cross-checks it against `RULE_ORDER` and fails loudly on drift.
+def _unwitnessed_clause_names():
+    evidence = parse_evidence(DOMAIN_DSL)
+    return frozenset(n for n in RULE_ORDER if not evidence[n]["witnessed"])
+
 
 #: Enough disagreements to diagnose a class of failure, few enough that the
 #: artefact stays readable.  `total_disagreements` is always the true count.
@@ -368,6 +378,74 @@ def _blank_rule_row() -> Dict[str, int]:
     }
 
 
+class ScoringMismatch(Exception):
+    """The predictor being graded did not come from the manual being read."""
+
+
+def check_predictor_came_from_the_manual(slug: str, theory_path: str
+                                         ) -> Dict[str, object]:
+    """Refuse to grade a predictor this manual did not produce.
+
+    The gap this closes was demonstrated, not theorised.  This module parses
+    `theory/push/domain.dsl` for the `[ev: …]` brackets and the header sentence,
+    and separately loads a *pre-compiled* `runs/…/generated/<slug>/theory.py` —
+    with nothing tying the two together.  An adversarial pass pointed the parse
+    at a manual whose `shove_up` guard had been rewritten to a different colour,
+    a different direction and a different effect, and the scorer still reported
+    `disagreements: 0` and attributed it to that manual.  Every headline number
+    in the artefact would have been about a book that produced none of the code.
+
+    The check is a recompile: the manual is compiled through the same path the
+    protocol used, into a temporary directory, and the result must be
+    byte-identical to the file about to be graded.  That is stronger than
+    hashing the pack's copy of the book, because it also catches a predictor
+    left behind by an older revision of the same manual.
+    """
+    import shutil
+    import tempfile
+
+    from a6carry import forms, rebuild
+    from a6carry.pack import Pack, sha256_file
+
+    pack = Pack(os.path.join(RUN_DIR, "packs", "push-v1"))
+    books = pack.check_books()
+    frame = os.path.join(RUN_DIR, "artifacts", "%s_frame0.json" % slug)
+    if not os.path.exists(theory_path):
+        raise ScoringMismatch(
+            "no predictor at %s -- run `python run_a6.py` first.  This is an "
+            "exception rather than a skip because a scorer that silently "
+            "grades nothing reports zero disagreements, which reads exactly "
+            "like a pass." % theory_path)
+
+    executor = WorldgenExecutor(WORLD_OF_SLUG[slug])
+    problem, _ = rebuild.rebuild_from_frame(
+        frame, pack.requires, dict(executor.constants()), WORLD_OF_SLUG[slug])
+    scratch = tempfile.mkdtemp(prefix="a6score-")
+    try:
+        forms.compile_forms(pack.domain_path, problem, scratch, pack.requires)
+        fresh = os.path.join(scratch, "theory.py")
+        same = sha256_file(fresh) == sha256_file(theory_path)
+    finally:
+        shutil.rmtree(scratch, ignore_errors=True)
+
+    manual_sha = sha256_file(DOMAIN_DSL)
+    if not (same and books["match"] and manual_sha == sha256_file(pack.domain_path)):
+        raise ScoringMismatch(
+            "the predictor at %s is not what `%s` compiles to (recompile "
+            "identical: %s; pack books intact: %s).  Refusing to grade it: the "
+            "numbers would be about a manual that produced none of this code."
+            % (theory_path, os.path.relpath(DOMAIN_DSL, ROOT), same,
+               books["match"]))
+    return {
+        "recompiled_byte_identical": same,
+        "pack_books_intact": books["match"],
+        "manual_sha256": manual_sha,
+        "note": ("the graded predictor was recompiled from the manual this "
+                 "module parses and came out byte-identical, so the per-rule "
+                 "table is about the code in front of it"),
+    }
+
+
 def score_world(slug: str, world_id: str) -> Dict[str, object]:
     """Every reachable transition of one world, graded against its predictor."""
     from worldgen.core.types import ACTIONS  # noqa: E402
@@ -375,6 +453,7 @@ def score_world(slug: str, world_id: str) -> Dict[str, object]:
     executor = WorldgenExecutor(world_id)
     world = executor._world          # the same object `execute()` drives; read-only
     theory_path = os.path.join(RUN_DIR, "generated", slug, "theory.py")
+    correspondence = check_predictor_came_from_the_manual(slug, theory_path)
     theory = load_theory(theory_path, "a6score_theory_%s" % slug)
 
     states, capped = reachable_states(world)
@@ -386,7 +465,10 @@ def score_world(slug: str, world_id: str) -> Dict[str, object]:
     agreements = 0
     readback_mismatches = 0
     unreadable_states = 0
+    unchecked_transitions = 0
     ambiguous = 0
+    unwitnessed_transitions = set()
+    unwitnessed_names = _unwitnessed_clause_names()
     # The two "no clause fired, and the world agrees nothing happened" tags, kept
     # out of the per-rule table but not out of the accounting: they are 61% of
     # the open world's transitions and dropping them would leave the totals
@@ -408,7 +490,15 @@ def score_world(slug: str, world_id: str) -> Dict[str, object]:
             # Cannot happen while `push`'s `block_count` invariant holds
             # (`mechanisms/push.py:125`), which is why it is counted rather than
             # asserted: an assertion here would delete the evidence that it did.
+            #
+            # The four transitions out of this state are not checked and must
+            # therefore not be counted as checked.  `unchecked_transitions`
+            # exists so that `transitions_checked == 4 * reachable_states` stays
+            # an identity a reader can verify rather than a sentence `method`
+            # asserts — an adversarial pass pointed out that the old `continue`
+            # made the two silently diverge.
             unreadable_states += 1
+            unchecked_transitions += len(ACTIONS)
             continue
         readback = theory.render(manual_state)
         if readback != pre_frame:
@@ -422,6 +512,17 @@ def score_world(slug: str, world_id: str) -> Dict[str, object]:
             act = ACTION_NAMES[action]
             fired = tuple(theory.fired(manual_state, act))
             required = clauses_required(world_rule, action)
+
+            # How many *transitions* put an unwitnessed clause to the test, as
+            # opposed to how many clause-slots those transitions fill.  The two
+            # differ by a factor of two and the difference is not incidental:
+            # `shove_d` and `block_d` compile to byte-identical guards (one
+            # event, two consequences -- `domain.dsl:135` and `:160`), so they
+            # can never fire apart.  Reporting "four clauses exercised once
+            # each" without this reads as four independent pieces of evidence.
+            # It is two.
+            if (set(fired) | set(required)) & unwitnessed_names:
+                unwitnessed_transitions.add((state.key(), action))
 
             try:
                 predicted = theory.render(theory.step(manual_state, act))
@@ -485,6 +586,7 @@ def score_world(slug: str, world_id: str) -> Dict[str, object]:
         "world_id": world_id,
         "pack_slug": slug,
         "predictor": os.path.relpath(theory_path, ROOT).replace(os.sep, "/"),
+        "predictor_correspondence": correspondence,
         "grid": list(theory.GRID),
         "reachable_states": len(states),
         "state_cap": STATE_CAP,
@@ -494,13 +596,28 @@ def score_world(slug: str, world_id: str) -> Dict[str, object]:
         "disagreements": total_disagreements,
         "readback_mismatches": readback_mismatches,
         "unreadable_states": unreadable_states,
+        "unchecked_transitions": unchecked_transitions,
+        "transitions_exercising_an_unwitnessed_clause":
+            len(unwitnessed_transitions),
+        "transitions_accounted": (checked + unchecked_transitions
+                                  == len(ACTIONS) * len(states)),
         "ambiguous_transitions": ambiguous,
         "first_frame_agrees": first_frame_agrees,
         "first_frame_note": (
-            "the theorem `shove_is_relative_not_absolute` (domain.dsl:160) says "
-            "an absolute reading of the shove would mis-render this world at "
-            "frame 0; this is that check, and it passes only under the relative "
-            "reading" if first_frame_agrees else
+            # This said the frame-0 check was the check of the theorem
+            # `shove_is_relative_not_absolute`, and "passes only under the
+            # relative reading".  Both halves were false, and an adversarial
+            # pass demonstrated it: `BOARD` and the object positions are
+            # *derived from this very frame* (`rebuild.py:12-13`), so no rule is
+            # evaluated here at all.  Rewriting the block effect to a literally
+            # absolute cell left `first_frame_agrees` True; only the transition
+            # scoring caught it.
+            "frame 0 renders.  This tests the read-back, not any rule: the "
+            "board and the object positions are derived from this frame, so no "
+            "guard is evaluated.  The theorem is tested by the transitions --  "
+            "and specifically by the corridor's one push, whose block sits in a "
+            "different row and column from either witness"
+            if first_frame_agrees else
             "frame 0 already disagrees: %s" % (first_reason or "render mismatch")),
         "no_clause_transitions": {
             "by_world_rule": dict(sorted(no_clause["by_world_rule"].items())),
@@ -558,6 +675,9 @@ def build_report() -> Dict[str, object]:
     wrong = sorted(n for n in unwitnessed if rules[n]["status"] == "checked_and_wrong")
 
     total_disagreements = sum(w["disagreements"] for w in worlds.values())
+    distinct_by_world = {slug: w["transitions_exercising_an_unwitnessed_clause"]
+                         for slug, w in sorted(worlds.items())}
+    distinct_unwitnessed = sum(distinct_by_world.values())
     total_transitions = sum(w["transitions_checked"] for w in worlds.values())
 
     verdict = {
@@ -589,6 +709,26 @@ def build_report() -> Dict[str, object]:
             "box has no broken contents, and the two lists are kept apart here so "
             "no reader can sum them.  A0′_REPORT §1 is what happens when they are "
             "summed."),
+        # The number that stops `exercising_transitions` from being read as
+        # four independent pieces of evidence.  `shove_d` and `block_d` compile
+        # to byte-identical guards -- one event, two consequences
+        # (`domain.dsl:135`, `:160`) -- so they cannot fire apart, and the four
+        # "exercised once each" counts come from **two** transitions, both in
+        # the source world.  An adversarial pass found this; the artefact said
+        # four before it did.
+        "distinct_transitions_exercising_any_unwitnessed_clause":
+            distinct_unwitnessed,
+        "distinct_transitions_by_world": distinct_by_world,
+        "evidence_scale_note": (
+            "the six generalised clauses rest, in total, on %d transitions out "
+            "of the %d checked -- all of them in the source world, none in the "
+            "world the pack was carried to.  `exercising_transitions` counts "
+            "clause-slots and is twice that, because a shove clause and its "
+            "block clause share a guard and cannot fire apart.  The headline "
+            "\"%d transitions checked\" is a statement about coverage of the "
+            "state space, not about how much of it tests the part of the manual "
+            "that was guessed."
+            % (distinct_unwitnessed, total_transitions, total_transitions)),
     }
 
     return {

@@ -117,7 +117,28 @@ def _local_import_closure(entry):
     driver and never gets imported by it is not a door into it.  So the closure
     is computed and the question is asked of whatever is in it.
     """
-    roots = {"a6carry": CARRY, "a3pipeline": os.path.join(HERE, "a3pipeline")}
+    roots = {
+        "a6carry": CARRY,
+        "a3pipeline": os.path.join(HERE, "a3pipeline"),
+        # The closure stopped at the track boundary until an adversarial pass
+        # walked past it.  That truncation was not conservative — it cut the
+        # graph at *exactly* the hop where a world enters:
+        #
+        #   a3pipeline/certify_a3.py:50  from certify import replay
+        #   cold-start-a0/certify/replay.py:33  from world.ground_truth import …
+        #   cold-start-a0/world/ground_truth.py:20  from world.a0_world import …
+        #
+        # so `world.a0_world` — a simulator with a hardcoded 9x9 level, a
+        # palette and a `GOAL_CELL` — is live in `sys.modules` the moment the
+        # driver is imported, and the test that certified the seal was built to
+        # stop one hop short of finding it.
+        "certify": os.path.join(REPO, "cold-start-a0", "certify"),
+        "world": os.path.join(REPO, "cold-start-a0", "world"),
+        "compile": os.path.join(REPO, "cold-start-a0", "compile"),
+        "pipeline": os.path.join(REPO, "cold-start-a0", "pipeline"),
+        "common": os.path.join(REPO, "engine-rig", "common"),
+        "engines": os.path.join(REPO, "engine-rig", "engines"),
+    }
     seen, queue = set(), [entry]
     while queue:
         path = queue.pop()
@@ -133,18 +154,93 @@ def _local_import_closure(entry):
     return seen
 
 
-def test_nothing_the_driver_imports_knows_a_world():
-    """The seal, stated as a property of the import graph rather than of a list.
+#: Modules on the driver's import closure that do know a world, each with the
+#: chain that puts it there.  This is a **quarantine list, not an allow-list**,
+#: and the difference is that every entry carries its chain and the test fails
+#: on anything not in it.  Its purpose is to make a known leak visible and to
+#: fire when a new one appears.
+#:
+#: A0's world arrives through the certifier and cannot be removed from here:
+#: `cold-start-a0/` belongs to the theory-compiler track and this one may not
+#: edit it (`CLAUDE.md`).  What can be said honestly is the narrower true thing
+#: — the world *under test* still arrives only as an `Executor`, which is what
+#: `test_no_world_under_test_is_reachable_from_the_driver` asserts.
+KNOWN_WORLD_LEAKS = {
+    "../cold-start-a0/world/a0_world.py":
+        "a6carry/protocol.py:43 -> a3pipeline/certify_a3.py:50 -> "
+        "cold-start-a0/certify/replay.py:33 -> world/ground_truth.py:20",
+    "../cold-start-a0/world/ground_truth.py":
+        "a6carry/protocol.py:43 -> a3pipeline/certify_a3.py:50 -> "
+        "cold-start-a0/certify/replay.py:33",
+    "../cold-start-a0/world/explorer.py":
+        "world/ground_truth.py:24",
+    # The hop itself.  `replay.py` is the certifier the protocol genuinely
+    # needs — `certify_a3.cheap` is steps 4 and 7 — and it reaches for
+    # `world.ground_truth.read_trace` to read a trace file.  Finding this one
+    # required walking past the track boundary too, which is the point.
+    "../cold-start-a0/certify/replay.py":
+        "a6carry/protocol.py:43 -> a3pipeline/certify_a3.py:50",
+}
 
-    If this fails, the fix is not to widen anything here — it is to ask why the
-    driver grew a second door.
+
+def test_the_only_worlds_the_driver_can_reach_are_the_ones_on_the_record():
+    """The seal, stated as what is true rather than as what would be nicer.
+
+    The earlier version of this test asserted that *nothing* the driver imports
+    knows a world, and that was false — provably, in one line:
+
+        python -c "import a6carry.protocol, sys; print('world.a0_world' in sys.modules)"
+        True
+
+    It passed only because the closure it walked stopped at the track boundary,
+    one hop before the leak.  A test engineered, however unintentionally, to
+    miss the thing it certifies is worse than no test: it converts an open
+    question into a settled one.
+
+    So the claim is now the narrow true one, and the leak is on the record with
+    its chain.
+    """
+    closure = _local_import_closure(os.path.join(CARRY, "protocol.py"))
+    knows = {}
+    for path in closure:
+        if any(word in _code_only(path) for word in FORBIDDEN):
+            rel = os.path.relpath(path, HERE).replace(os.sep, "/")
+            knows[rel] = True
+    unexpected = sorted(set(knows) - set(KNOWN_WORLD_LEAKS))
+    assert unexpected == [], (
+        "a world became reachable from the driver and is not on the record: %s"
+        % ", ".join(unexpected))
+
+
+def test_no_world_under_test_is_reachable_from_the_driver():
+    """The claim that does hold, and the one the design is actually about.
+
+    `worldgen` and `a3world` — the worlds a carry is *graded against* — arrive
+    only as an `Executor` argument.  A0's hardcoded level being live in the
+    certifier is a different fact: it is not a world any arm here is scored on,
+    and it cannot be used to answer a question about one.
     """
     closure = _local_import_closure(os.path.join(CARRY, "protocol.py"))
     knows = sorted(os.path.relpath(path, HERE).replace(os.sep, "/")
                    for path in closure
                    if any(word in _code_only(path)
                           for word in ("a3world", "worldgen", "GridWorld")))
-    assert knows == [], "the driver reaches a world through: %s" % ", ".join(knows)
+    assert knows == [], "the driver reaches a world under test: %s" % ", ".join(knows)
+
+
+def test_the_leak_is_real_and_the_record_is_not_stale():
+    """If A0's world stops being importable through the certifier, say so.
+
+    A quarantine entry that no longer corresponds to anything is the same defect
+    class as the hardcoded header count: a record that rots because nothing
+    rereads it.
+    """
+    import importlib
+    importlib.import_module("a6carry.protocol")
+    live = {name for name in sys.modules if name.split(".")[0] == "world"}
+    assert "world.a0_world" in live, (
+        "A0's world is no longer live after importing the driver — good news, "
+        "but KNOWN_WORLD_LEAKS now overstates the problem and should shrink")
 
 
 def test_the_modules_that_do_know_a_world_are_not_on_the_carry_path():

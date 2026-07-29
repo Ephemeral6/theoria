@@ -51,15 +51,28 @@
 # that is measured afterwards is a different object from a guess that is not.
 #
 # THE VERDICT, now that the file exists and not before: 256 transitions across
-# both worlds, zero disagreements — and that is a smaller result than it sounds.
-# Four of the six symmetry clauses were exercised by **exactly one transition
-# each**, all four in `t1-push-open` (the corridor's block sits in a one-wide row
-# and admits no vertical shove at all).  The other two — `shove_left` and
-# `block_left` — are exercised by **zero** transitions in either world: in the
-# open room the agent can never get to the block's right-hand side, and in the
-# corridor it cannot reach that side by construction.  They are unrefuted and
-# unvindicated, which is not the same as correct, and the artefact keeps the two
-# lists apart so nobody can add them up.
+# both worlds, zero disagreements — and that is a much smaller result than it
+# sounds, in two ways that an adversarial pass had to point out before this
+# paragraph said them.
+#
+# First: **the whole of the generalisation rests on two transitions.**  Not two
+# per clause — two, total, in the 256.  Four of the six symmetry clauses come
+# back `checked_and_right` with one exercising transition each, but `shove_d` and
+# `block_d` are byte-identical guards (one event, two consequences), so they
+# cannot fire apart and the four counts are the same two transitions counted
+# twice.  Both are in `t1-push-open`: the agent at (3,5) pushing UP, and at (1,5)
+# pushing DOWN.  **The world this manual was carried to contributes zero.**
+#
+# Second: the other two clauses — `shove_left` and `block_left` — are exercised
+# by **zero** transitions in either world.  In the open room the agent can never
+# get to the block's right-hand side; in the corridor it cannot reach that side
+# by construction.  They are unrefuted and unvindicated, which is not the same as
+# correct, and the artefact keeps `never_checked` and `checked_and_right` in
+# separate lists so nobody can add them up.
+#
+# So "256 transitions, zero disagreements" is a statement about coverage of the
+# state space, not about how much of it tests the part of the manual that was
+# guessed.  Both numbers are in the artefact; only one of them is the result.
 #
 # The alternative — four clauses instead of twelve, and a manual that is silent
 # about vertical shoves — is worse and not more honest: silence is not the same

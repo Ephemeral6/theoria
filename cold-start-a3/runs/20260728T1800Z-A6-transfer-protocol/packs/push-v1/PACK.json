@@ -1,11 +1,11 @@
 {
   "books": {
     "domain": {
-      "bytes": 10413,
+      "bytes": 11157,
       "file": "domain.dsl",
       "laws": 3,
       "rules": 12,
-      "sha256": "86c7bcfb594d6aeb27f743bdcf551a2c2355fe6417ab80271c7a1a77ef3af4cc"
+      "sha256": "d1bf08b0b0b9099691f365e6f185bab2543c1364ded4dd2b1f85448641b764b1"
     },
     "playbook": {
       "bytes": 4194,

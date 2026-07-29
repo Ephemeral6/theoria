@@ -155,25 +155,60 @@ promise:
    around the part it is wrong about.  Driven down `RIGHT RIGHT RIGHT` the same
    manual on the same world produces eight anomalies.  Both halves are in
    `a6_acceptance.json` and both are asserted in `tests/test_a6.py`.
-2. **The transfer world never exercises a shove.**  `t1-push-corridor`'s
-   optimal route walks around the block.  So the carry proves the domain
-   *renders, compiles, plans and predicts* a new layout at zero cost; it does
-   not, by itself, exercise the carried mechanism.  `a6carry/score.py` is what
-   does — 256 transitions, zero disagreements — and it had to be built for that
-   reason.
-3. **Two clauses are unrefuted and unvindicated.**  `shove_left` and
-   `block_left` are exercised by zero reachable transitions in either world:
-   neither layout lets the agent reach the block's right-hand side.  Four more
-   were exercised by exactly one transition each.  `scoring_push_manual.json`
-   keeps `never_checked` in a separate list from `checked_and_right` so the two
-   cannot be added up.
-4. **The mover must still be named `Cart`.**  `gen_pddl_a0.generate_pddl` looks
-   the mover up by that literal string (`:113`), and `compile_a3.bind_goal`
-   hard-codes it too.  `requires.mover` records the name so a receiver can read
-   it, but a pack calling its mover `Agent` would not compile to a planning
-   form.  The push manual names an agent `Cart` for this reason and says so at
-   `theory/push/domain.dsl:65-70`.  It is a naming coupling in another track's
-   generator, not something this item could fix.
+2. **The transfer world never exercises a shove, and the sharpest form of that
+   is a coincidence worth stating plainly.**  `t1-push-corridor`'s optimal route
+   walks around the block, so the transfer arm executed
+   `DOWN DOWN RIGHT RIGHT RIGHT` — **byte-identical to the actions the
+   wrong-world arm executed on `t1-cycler-gate`**, the arm this same file calls
+   a world the manual is wrong about.  The end-to-end evidence the transfer
+   produced is therefore not, by itself, distinguishable from the evidence
+   produced by carrying the same pack somewhere it does not belong.  A manual
+   that modelled the block as an immovable wall would have produced the same
+   plan and the same green replay.  `acceptance.transfer_evidence_is_
+   indistinguishable_from_the_wrong_world_arm` asserts it.
+
+   What the carry does establish: the domain *renders, rebuilds a problem from
+   one frame, compiles, plans and predicts every frame of* a new layout at zero
+   relearning cost.  `a6carry/score.py` is what establishes the rest, and it had
+   to be built for exactly this reason.
+3. **The whole generalisation rests on two transitions.**  Not two per clause —
+   two, in the 256.  `scoring_push_manual.json` reports four clauses
+   `checked_and_right` with one exercising transition each, but `shove_d` and
+   `block_d` compile to byte-identical guards and cannot fire apart, so those
+   four counts are the same two transitions counted twice.  Both are in
+   `t1-push-open`; the world the pack was carried to contributes **zero**.  The
+   remaining two clauses — `shove_left`, `block_left` — are exercised by zero
+   transitions in either world, because neither layout lets the agent reach the
+   block's right-hand side.  They are unrefuted and unvindicated, which is not
+   the same as correct, and `never_checked` is kept in a separate list from
+   `checked_and_right` so the two cannot be added up.
+
+   "256 transitions, zero disagreements" is a statement about coverage of the
+   state space, not about how much of it tests the part of the manual that was
+   guessed.
+4. **The mover must still be named `Cart`, and the failure is quieter than
+   "would not compile" suggests.**  Verified by renaming it and watching:
+
+   * `gen_pddl_a0.py:113` — `next(o for o in problem.objects if o.name ==
+     "Cart")` raises a bare `StopIteration` with no message.  Loud, but
+     uninformative.
+   * `compile_a3.bind_goal:125` builds `FieldAccess(obj="Cart", …)`
+     **unconditionally**, ignoring the pack's `mover`.  `forms.py:78` calls it
+     and then passes the correct `mover=` to `generate_python`, so `theory.py`
+     — the only predictor in the system — is emitted **silently, with a goal
+     about an object the manual does not contain**.
+   * `a3pipeline/plan.py:133-139` hard-codes both `state.Cart_pos` and the
+     action verb `("push", "Cart", direction)`.
+   * `pack.py:_mover` refuses a domain with more than one acted-on object but
+     never refuses one named anything else, and nothing in `build()` or
+     `carry()` validates the name.
+
+   `requires.mover` and `requires.action_vocabulary` are recorded in `PACK.json`
+   and **read by nothing on the carry path** — the same defect class as the
+   fingerprint that started this item, at smaller scale, inside the artefact
+   built to answer it.  The push manual names its agent `Cart` for this reason
+   and says so at `theory/push/domain.dsl:65-70`.  The coupling is in another
+   track's generator; the honest description of it is not.
 
 ## Defects this item opened
 
@@ -183,3 +218,63 @@ promise:
 | D-A6-002 | `gen_lean_a0.build_axes` admits only non-mover `_colour`/`_present` fields as state axes, so a second moving object's position is not in the Lean state type.  The pack withholds the Lean form rather than emit a green certificate about a projection of the manual. |
 | D-A6-003 | **A3's own `theory/playbook.dsl` does not parse** — line 81 writes `[ev: 2/2 levels, n=2 — indicative only]` where `_parse_prefer` accepts only `[ev: k/n]` — and A3 never found out, because A3 compiles its domain and never hands its playbook to a parser.  carrypack carries what parses and names the rest under `entries_unparsed`. |
 | D-A6-004…007 | `actions_spent` KeyError after the actions were spent; unpadded `wins` raising IndexError mid trace-write; `on_drift` treating any string but `"refuse"` as consent to spend on a drifted toolchain; `forms_emitted` listing forms the pack never authorised.  All four fixed here with tests. |
+
+## What was read, and when
+
+The push manual was adjudicated from `t1-push-open`'s `raw_trace.jsonl` and its
+`spec.json` legend, and its header says so.  `ground_truth.json`,
+`coverage.json` and `reversibility.json` are marked *scoring only* in
+`worldgen/README.md` and were not opened before the manual was written.
+
+They were opened afterwards, and by two different readers, both for scoring:
+
+* `a6carry/score.py` reads each world's per-transition rule tags, to check that
+  the manual's guards fire where the world's own rules say they should — the
+  difference between predicting the right frames and predicting them for the
+  right reasons.
+* RES-1 read `solvability.optimal_length` (5 for both worlds) to check the claim
+  "solved in the optimal number of actions" rather than assert it from the plan
+  it happened to get.  An independent BFS agrees.
+
+Reading the answer key to *grade* a manual that is already written and hashed is
+what the file is for.  Reading it to write one would not be, and the ordering is
+the whole difference; it is recorded here so the ordering is checkable rather
+than promised.
+
+## Corrections made after adversarial review (2026-07-29)
+
+Three independent adversarial passes were run before delivery.  They confirmed
+the four headline claims and refuted a fifth, and the fifth is the one worth
+recording here:
+
+**The sealing claim was false as written.**  This file and `protocol.py` both
+said that nothing the driver imports knows a world.  One line refutes it:
+
+```
+python -c "import a6carry.protocol, sys; print('world.a0_world' in sys.modules)"
+True
+```
+
+`cold-start-a0/world/a0_world.py` — a simulator with a hardcoded 9x9 level, a
+palette and a `GOAL_CELL` — arrives through `certify_a3 -> certify.replay ->
+world.ground_truth`.  The test that certified the seal passed only because the
+import closure it walked **stopped at the track boundary, one hop before the
+leak**.  A test that misses the thing it certifies is worse than no test: it
+converts an open question into a settled one.
+
+The claim is now the narrow true one — no world *under test* (`worldgen`,
+`a3world`) is reachable from the driver; those still arrive only as an
+`Executor` — and the A0 leak is on the record in `KNOWN_WORLD_LEAKS` with its
+import chain, with a test that fails if a new one appears and a second test that
+fails if the recorded one disappears.  `cold-start-a0/` belongs to the
+theory-compiler track, so the import cannot be removed from here.
+
+Also corrected: the scorer graded a predictor without checking the manual it
+parsed had produced it (demonstrated live — a mutated manual still scored zero
+disagreements); `first_frame_note` claimed the frame-0 check tested the
+relative-shove theorem when no rule is evaluated there at all; 22 orphan
+artefacts from a superseded arm naming were being hashed into `MANIFEST.json`,
+publishing two contradictory reports per wrong-mechanism world; and
+`scoring_push_manual.json` had no producer anywhere in the test suite, so the
+three tests carrying the only real evidence about the push mechanism passed
+because the file happened to be on disk.

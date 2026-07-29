@@ -144,6 +144,10 @@ def row(report):
         "first_mismatch_kind": first.get("kind") if isinstance(first, dict) else None,
         "lean": (report.get("certify_lean") or {}).get("green"),
         "lean_withheld_reason": (report.get("certify_lean") or {}).get("reason"),
+        # What the arm actually did in the world.  Recorded because two arms
+        # that report different things can have executed the same five actions,
+        # and in this run two of them do.
+        "executed_actions": (report.get("execution") or {}).get("actions"),
     }
 
 
@@ -302,6 +306,7 @@ def main():
 
     # ------------------------------------------------------------- the verdict
     by_arm = {r["arm"]: r for r in rows}
+    executed_actions = {r["arm"]: r["executed_actions"] for r in rows}
     carried = [by_arm["source_open"], by_arm["transfer_corridor"]]
     negatives = [by_arm["a3_l2_oneway"], by_arm["a3_l2_rewired"]]
 
@@ -336,7 +341,34 @@ def main():
             by_arm["wrong_world_t1_cycler_gate"]["outcome"] == "win"
             and by_arm["wrong_world_t1_cycler_gate"]["replay_certify_green"] is True
             and off_route["green"] is False,
+        # The sharpest form of the same limit, and the one an adversarial pass
+        # had to point out: the transfer arm's executed actions are *identical*
+        # to the wrong-world arm's.  Both walked `DOWN DOWN RIGHT RIGHT RIGHT`.
+        # So the end-to-end evidence the transfer produced is not, by itself,
+        # distinguishable from the evidence produced by carrying the same pack
+        # onto a world whose mechanism the manual does not model.
+        "transfer_evidence_is_indistinguishable_from_the_wrong_world_arm":
+            executed_actions["transfer_corridor"]
+            == executed_actions["wrong_world_t1_cycler_gate"],
     }
+    # `theorize_triggered is True` is not an independent check: `protocol.py`
+    # defines it as `not (replay.green and execution.win)` and `outcome == win`
+    # as exactly `execution.win and replay.green`, so it is a rename of the
+    # outcome.  It was asserted alongside `outcome != "win"` as though the two
+    # were two facts.  Kept out of `acceptance` and recorded here as the
+    # identity it is.
+    #
+    # It is an identity only among the arms that reach step 9.  The early-exit
+    # outcomes (`pack_tampered`, `dependency_drift`) set it False while being
+    # not-a-win, and that is right: nothing was learned about the world, so
+    # there is nothing to theorize about.  Stating the scope is the difference
+    # between recording an identity and asserting a false one — the first
+    # version of this line asserted it over every arm and came back False.
+    reached_replay = [r for r in rows
+                      if r["outcome"] in ("win", "replay_mismatch", "no_win")]
+    acceptance["negative_control_flags_are_one_fact_not_two"] = all(
+        (r["theorize_triggered"] is True) == (r["outcome"] != "win")
+        for r in reached_replay)
 
     verdict = {
         "protocol": "a6carry/1",
