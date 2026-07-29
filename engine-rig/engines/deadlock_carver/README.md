@@ -85,12 +85,22 @@ Plan length is unchanged in every row, which is the soundness check that matters
 operationally: an unsound theorem shows up here as a *changed answer*, not as a
 faster one.
 
-## Soundness, checked independently
+## Soundness, checked by a different method
 
 `tests/test_deadlock_carver.py` exhausts the reachable state space, computes by
 backward closure which states can still reach a goal, and asserts that no state
-matching any dead pattern is among them. That referee shares nothing with the
-proof or with the planner.
+matching any dead pattern is among them. The referee's *method* shares nothing
+with the proof — forward BFS and backward closure, no mutexes, no blocked-action
+argument — so a theorem that is wrong for the reason the proof is clever shows up
+here as a live state it covers. That is the check worth having.
+
+Its *grounding* is not independent. The referee is built from
+`strip_static(domain, problem, ground_actions(domain, problem))` — the carver's
+own reduction, the sharing `Task` discloses below. So a theorem that passes is
+certified dead over the atoms the search actually holds, which is exactly the
+claim the pruner needs, and not over the PDDL as written. A grounding that drops
+an action makes that action absent for the referee too, and neither of them will
+notice.
 
 ## Interface
 
@@ -157,6 +167,44 @@ the ones the proof had to discharge, empty for a corner. `evidence.coverage` is
 `evidence.coverage` is `<expansions the pruned search still needed>/<nodes the
 blind search generated>` — the account in the contract's own field, not only in
 the payload.
+
+## The account gates the theorems (D-034)
+
+`plan_length_unchanged` is a **verdict on the theorems**, not a statistic beside
+them: `false` means pruning changed the instance's answer, so at least one
+theorem excluded a state the goal was reachable from. Until E16 the emitter ran
+`carve -> pruning_report -> emit` with no branch in the middle, and published the
+refuted theorems next to the report refuting them.
+
+`candidates(..., on_refutation=...)` now decides:
+
+| | `invariant` rows | `plan` row |
+|---|---|---|
+| no report | emitted | absent |
+| verdict passed | emitted | no `refuted` key |
+| refuted, `"withhold"` (default) | **none emitted** | `refuted: true`, `invariants_withheld: <n>`, `on_refutation` |
+| refuted, `"mark"` | emitted, each with `refuted: true` + `refutation` | same, `invariants_withheld: 0` |
+
+The `refutation` object is machine-readable on purpose — `bench/dividend.py`
+reads fields, and a warning inside a `rendering` string is not a gate. The
+withheld **count** is published for the same reason: a refuted run that simply
+emitted nothing would be indistinguishable from a run that carved no theorems,
+and "nothing to report" is the wrong reading of a suppression.
+
+`refuted` is **absent**, never `false`, when no verdict was taken — "nobody
+asked" and "asked and passed" are different states, and both differ from "asked
+and failed". An unfinished comparison raises `UnfinishedComparison` out of
+`candidates()` rather than resolving either way.
+
+**The gate is one-directional, and the field name says so.** `false` proves
+unsoundness: the answer moved, so some theorem excluded a state the goal was
+reachable from. `true` proves nothing of the kind. An unsound theorem that
+happens to cut only states lying on *other* optimal plans of the same length
+leaves `solved` and `length` both untouched and passes. So a theorem that
+survives this gate is a theorem *not caught by this instance*, which is why the
+soundness evidence that matters is still the exhaustive referee above — and why
+`with_report=False` is not a bypass to be closed but an honest absence of
+verdict, recorded as `refuted` absent rather than as a pass.
 
 ## Provenance
 

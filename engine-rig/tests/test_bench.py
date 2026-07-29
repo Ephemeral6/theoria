@@ -14,6 +14,7 @@ import pytest
 
 from bench import compile_theorems, fdrun, instances as bench_instances, ladder
 from bench import dividend as bench_dividend
+from bench import report as bench_report
 from bench import toolchain
 from engines import deadlock_carver as dc
 from engines import fd_adapter
@@ -434,6 +435,485 @@ def test_the_indexed_guard_gets_the_pair_deadlocks_through_the_optimal_rung(tmp_
     fd_adapter.validate_plan(
         domain, problem, compile_theorems.to_original_plan(guarded.plan, "indexed"))
     assert guarded.translator["task_size"] > base.translator["task_size"]
+
+
+# ------------------------------------------------- the batch, and the zero row
+#
+# `open4` -- sixteen true theorems, 47 expansions before and 47 after -- is the
+# row DECISIONS D-020 argues the dividend table must contain, and for one whole
+# milestone it existed only in two hand-written documents (D-020 itself and
+# `engines/deadlock_carver/README.md`) and in no artifact anybody regenerates.
+# These tests are the guarantee that it cannot go missing again quietly: one that
+# it is measured, one that it is measured *first*, and one that it survives all
+# the way into the rendered Markdown.
+
+def test_the_batch_leads_with_the_committed_fixtures_and_open4_is_row_one(tmp_path):
+    rows = bench_dividend.batch(str(tmp_path / "instances"))
+    families = [family for family, _, _, _ in rows]
+    names = [level.name for _, level, _, _ in rows]
+
+    assert names[0] == "open4", names
+    assert names[1] == "open4far", names
+    assert families[:2] == ["committed", "committed"]
+    # The generated ladders still follow, in their own order.
+    assert names[2:] == ["far%d" % side for side in bench_dividend.FAR_SIDES] + \
+        ["ringstuck%d" % side for side in bench_dividend.RING_SIDES]
+
+
+def test_the_committed_rows_are_the_bytes_on_disk_not_a_re_render(tmp_path):
+    """`Level.problem_text()` would almost certainly agree. "Almost certainly" is
+    not a property this rig accepts about the input to a measurement."""
+    rows = bench_dividend.batch(str(tmp_path / "instances"))
+    for family, level, path, text in rows:
+        if family != "committed":
+            continue
+        assert path == level.path
+        with open(path, "r", encoding="utf-8") as fh:
+            assert text == fh.read()
+
+
+def test_the_batch_writes_nothing_into_the_committed_fixture_directory(tmp_path):
+    """The committed half of the batch is read; only the generated half is written."""
+    before = sorted(os.listdir(sokoban.DATA_DIR))
+    instance_dir = str(tmp_path / "instances")
+    bench_dividend.batch(instance_dir)
+    assert sorted(os.listdir(sokoban.DATA_DIR)) == before
+    written = sorted(os.listdir(instance_dir))
+    assert "sokoban_open4.pddl" not in written and "open4.pddl" not in written
+    assert "far4.pddl" in written
+
+
+def test_no_absolute_path_reaches_the_artifact(tmp_path):
+    """A published path must resolve on a machine that is not this one."""
+    out_dir = str(tmp_path / "run")
+    committed = bench_dividend._artifact_path(sokoban.OPEN4_PATH, out_dir)
+    assert committed == "fixtures/data/sokoban_open4.pddl"
+
+    generated = bench_dividend._artifact_path(
+        os.path.join(out_dir, "instances", "far4.pddl"), out_dir)
+    assert generated == "instances/far4.pddl"
+
+    for value in (committed, generated):
+        assert not os.path.isabs(value)
+        assert "\\" not in value and ":" not in value
+
+
+def test_open4_is_the_zero_row_47_expansions_before_and_after(tmp_path):
+    """D-020's number, re-derived rather than quoted.
+
+    The bundled rung is a deterministic breadth-first search, so this is an exact
+    equality and not a timing. If the carver, the encoding or the search changes
+    what `open4` costs, this fails and D-020 needs rewriting -- which is the point
+    of pinning it here rather than trusting the prose.
+    """
+    domain = fd_adapter.parse_domain(fd_adapter.read(sokoban.DOMAIN_PATH))
+    problem = fd_adapter.parse_problem(fd_adapter.read(sokoban.OPEN4_PATH))
+    theorems = dc.carve(dc.Task.build(domain, problem))
+    assert len(theorems) == 16
+
+    stub = bench_dividend.stub_dividend(domain, problem, theorems, repeats=1,
+                                        carve_seconds=0.5)
+    assert stub["expansions_before"] == 47
+    assert stub["expansions_after"] == 47
+    assert stub["states_pruned"] == 0
+    assert stub["plan_length_unchanged"] is True
+    assert stub["dividend_is_honest"] is True
+
+
+def test_the_zero_row_reaches_the_markdown_and_is_not_silently_dropped(tmp_path):
+    """The hole this run was opened to close: the number landed in the JSON and
+    never rendered. A zero row that no reader sees is a zero row nobody has."""
+    domain = fd_adapter.parse_domain(fd_adapter.read(sokoban.DOMAIN_PATH))
+    problem = fd_adapter.parse_problem(fd_adapter.read(sokoban.OPEN4_PATH))
+    theorems = dc.carve(dc.Task.build(domain, problem))
+    report = {
+        "form": "deadlock_dividend",
+        "claim_under_test": "x",
+        "repeats": 1,
+        "fast_downward": None,
+        "prior_audit": bench_dividend.E7_RECONCILIATION,
+        "results": [{
+            "instance": "open4", "family": "committed",
+            "cells": len(sokoban.OPEN4.floors()), "boxes": 2,
+            "n_theorems": len(theorems),
+            "n_singleton_theorems": sum(1 for t in theorems if t.size == 1),
+            "n_pair_theorems": sum(1 for t in theorems if t.size == 2),
+            "carve_seconds": 0.5,
+            "problem_path": "fixtures/data/sokoban_open4.pddl",
+            "stub": bench_dividend.stub_dividend(domain, problem, theorems,
+                                                 repeats=1, carve_seconds=0.5),
+            # The measured shape of `open4` on FD's blind control: a second
+            # witness to the same zero, from a search that is not this repo's.
+            "fd": [{
+                "instance": "open4", "guard": "singleton",
+                "rung": "fd-optimal/blind", "guard_size": {
+                    "theorems_expressed": 8, "theorems_total": 16},
+                "expansions_before": 49, "expansions_after": 49,
+                "task_size_before": 1029, "task_size_after": 869,
+                "plan_length_delta": 0, "dividend_is_honest": True,
+                "guard_refused": None,
+            }],
+        }],
+        "tiebreak_sensitivity": {"summary": [{
+            "instance": "open4", "tiebreaks": ["astar", "single", "goalcount"],
+            "baseline_min": 45, "baseline_max": 82, "baseline_spread_pct": 82.2,
+            "guards": {"singleton": {"ratio_min": 1.0, "ratio_max": 1.0,
+                                     "dividend_min_pct": 0.0,
+                                     "dividend_max_pct": 0.0,
+                                     "ratio_spread_points": 0.0}},
+        }]},
+    }
+    markdown = bench_report.dividend_markdown(report)
+
+    assert "### The zero row" in markdown
+    assert "**`open4`: 47 → 47 expansions**" in markdown
+    assert "D-020" in markdown
+    # The second witness and the tie-break survival, both from the JSON.
+    assert "`open4` under `singleton`, 49 → 49" in markdown
+    assert "the zero is not one ordering's accident" in markdown
+    # And the row itself is in the table above the callout, with both counts.
+    table = [line for line in markdown.splitlines()
+             if line.startswith("| `open4` | committed |")]
+    assert len(table) == 1, table
+    assert table[0].split("|")[6].strip() == "47"       # exp before
+    assert table[0].split("|")[7].strip() == "47"       # exp after
+
+
+def test_a_batch_with_no_zero_row_says_so_rather_than_saying_nothing():
+    """The failure mode is silence, so silence is what the renderer must not do."""
+    lines = bench_report._zero_row_section({"results": [{
+        "instance": "far4", "n_theorems": 16,
+        "stub": {"expansions_before": 808, "expansions_after": 571,
+                 "plan_length_unchanged": True},
+    }]})
+    assert any("No zero row in this batch" in line for line in lines)
+
+
+def _twin_entry(name, expansions_after=571, n_theorems=16):
+    return {
+        "instance": name, "family": "committed", "cells": 16, "boxes": 2,
+        "n_theorems": n_theorems, "n_singleton_theorems": 8,
+        "n_pair_theorems": n_theorems - 8, "carve_seconds": 0.07,
+        "stub": {"expansions_before": 808, "expansions_after": expansions_after,
+                 "states_pruned": 69, "plan_length_unchanged": True},
+        "fd": [{"guard": "singleton", "rung": "fd-optimal/blind",
+                "expansions_before": 837, "expansions_after": 610,
+                "task_size_before": 1029, "task_size_after": 869,
+                "plan_length_delta": 0, "guard_refused": None,
+                "replayed_on_original_domain": True,
+                "guarded": {"solved": True}}],
+    }
+
+
+def test_the_committed_fixture_and_its_generated_copy_must_measure_the_same():
+    """`far4` is *supposed* to be `open4far`. The dataclass test above asserts it
+    about two objects; this asserts it about two measurements."""
+    agreeing = {"results": [_twin_entry("open4far"), _twin_entry("far4")]}
+    assert bench_dividend.twin_failures(agreeing) == []
+
+    drifted = {"results": [_twin_entry("open4far"),
+                           _twin_entry("far4", expansions_after=570)]}
+    problems = bench_dividend.twin_failures(drifted)
+    assert len(problems) == 1
+    assert "same board" in problems[0] and "expansions_after" in problems[0]
+
+
+def test_a_drifted_generator_is_a_failure_of_the_run_not_a_footnote():
+    """It reaches `failures()`, which is what sets the run's exit code."""
+    drifted = {
+        "results": [_twin_entry("open4far"), _twin_entry("far4", n_theorems=15)],
+        "tiebreak_sensitivity": {"rows": []},
+    }
+    problems = bench_dividend.failures(drifted)
+    assert any("drifted from the committed fixture" in line for line in problems)
+
+
+def test_the_twin_verdict_renders_even_when_it_finds_nothing():
+    """A check reported only on failure cannot be told from a check nobody ran."""
+    markdown = bench_report.dividend_markdown({
+        "claim_under_test": "x", "results": [],
+        "structural_twins": {"pairs": [["open4far", "far4"]], "why": "w",
+                             "compared": "c", "agree": True, "problems": []},
+    })
+    assert "`open4far` ≡ `far4`" in markdown
+    assert "**Every structural column agrees.**" in markdown
+
+    broken = bench_report.dividend_markdown({
+        "claim_under_test": "x", "results": [],
+        "structural_twins": {"pairs": [["open4far", "far4"]], "why": "w",
+                             "compared": "c", "agree": False,
+                             "problems": ["open4far vs far4: boom"]},
+    })
+    assert "They do not agree" in broken
+    assert "* open4far vs far4: boom" in broken
+
+
+# ----------------------------------------------- the wall clock, with the carve
+
+def _measurement(search_seconds, wall_seconds, **kwargs):
+    return fdrun.FdMeasurement(
+        tier=backends.FD_OPTIMAL, config="astar(blind())", heuristic="blind",
+        search_seconds=search_seconds, wall_seconds=wall_seconds, **kwargs)
+
+
+def test_the_carve_is_charged_against_the_search_clock_not_the_driver():
+    """The end-to-end clock on this batch is ~150 ms of Python driver startup that
+    no theorem can touch. Charging a dividend against it would measure the driver.
+    """
+    base = _measurement(0.500, 1.000)
+    guarded = _measurement(0.400, 0.950)
+    clock = bench_dividend._wall_clock(base, guarded, carve_seconds=1.0)
+
+    assert clock["charged_against"] == "search_seconds"
+    assert clock["search_seconds_saved"] == pytest.approx(0.100)
+    assert clock["net_seconds_with_carving"] == pytest.approx(0.900)
+    assert clock["carving_is_repaid"] is False
+    # Both clocks are recorded; only one is the invoice. The end-to-end saving is
+    # half the search saving here, and if `net` were computed from it the answer
+    # would be 0.95 rather than 0.9 -- which is the confusion this test pins out.
+    assert clock["end_to_end_seconds_saved"] == pytest.approx(0.050)
+    assert clock["net_seconds_with_carving"] != pytest.approx(0.950)
+
+
+def test_the_invoice_is_repaid_when_the_search_saved_more_than_the_carve():
+    clock = bench_dividend._wall_clock(
+        _measurement(2.0, 3.0), _measurement(0.5, 1.5), carve_seconds=1.0)
+    assert clock["search_seconds_saved"] == pytest.approx(1.5)
+    assert clock["carving_is_repaid"] is True
+    assert clock["net_seconds_with_carving"] == pytest.approx(-0.5)
+    assert clock["solves_to_repay_carving"] == 1
+
+
+def test_solves_to_repay_rounds_up_because_a_partial_solve_repays_nothing():
+    clock = bench_dividend._wall_clock(
+        _measurement(1.000, 2.0), _measurement(0.997, 2.0), carve_seconds=1.0)
+    assert clock["search_seconds_saved"] == pytest.approx(0.003)
+    # 1.0 / 0.003 = 333.33 -- and 333 solves leave the carve unpaid.
+    assert clock["solves_to_repay_carving"] == 334
+
+
+def test_no_number_of_repeats_repays_a_carve_out_of_a_saving_that_is_not_positive():
+    """Zero and negative are different findings and neither is a repayment."""
+    flat = bench_dividend._wall_clock(
+        _measurement(0.5, 1.0), _measurement(0.5, 1.0), carve_seconds=1.0)
+    assert flat["search_seconds_saved"] == 0.0
+    assert flat["solves_to_repay_carving"] is None
+    assert flat["carving_is_repaid"] is False
+
+    slower = bench_dividend._wall_clock(
+        _measurement(0.5, 1.0), _measurement(0.7, 1.2), carve_seconds=1.0)
+    assert slower["search_seconds_saved"] == pytest.approx(-0.2)
+    assert slower["solves_to_repay_carving"] is None
+    assert slower["carving_is_repaid"] is False
+
+
+def test_a_refused_guard_has_no_clock_and_no_invented_dividend():
+    """FD refuses the `full` guard on the admissible rungs, so there is no search
+    time on the guarded side. A missing clock must stay missing."""
+    clock = bench_dividend._wall_clock(
+        _measurement(0.5, 1.0),
+        _measurement(None, 0.2, error="This configuration does not support axioms!"),
+        carve_seconds=1.0,
+    )
+    assert clock["search_seconds_after"] is None
+    assert clock["search_seconds_saved"] is None
+    assert clock["net_seconds_with_carving"] is None
+    assert clock["carving_is_repaid"] is None
+    assert clock["solves_to_repay_carving"] is None
+    # The end-to-end clock exists either way -- the process still ran.
+    assert clock["end_to_end_seconds_after"] == pytest.approx(0.2)
+
+
+def test_the_wall_clock_columns_all_reach_the_markdown():
+    row = {
+        "instance": "far4", "guard": "singleton", "rung": "fd-optimal/blind",
+        "guard_refused": None,
+        "wall_clock": bench_dividend._wall_clock(
+            _measurement(0.500, 1.000), _measurement(0.400, 0.950),
+            carve_seconds=1.0),
+    }
+    lines = bench_report._wall_clock_section({"results": [{"fd": [row]}]})
+    text = "\n".join(lines)
+    assert "search_seconds" in text                      # what it is charged against
+    assert "| `far4` | singleton | fd-optimal/blind |" in text
+    assert "+0.900" in text                              # net, sign kept
+    assert "| 10 |" in text                              # solves to repay
+    assert "No row repaid the carve" in text
+
+
+def test_the_bundled_rung_carries_the_same_invoice_as_the_fd_rows(tmp_path):
+    """Two engines' wall-clock verdicts must be readable side by side, not one in
+    a table and the other in a paragraph of narrative."""
+    domain, problem, _, _, theorems = sokoban_theorems(tmp_path)
+    stub = bench_dividend.stub_dividend(domain, problem, theorems, repeats=1,
+                                        carve_seconds=1.5)
+    timing = stub["timing"]
+    assert timing["carve_seconds"] == 1.5
+    assert set(timing) >= {"seconds_saved", "carve_seconds",
+                           "net_seconds_with_carving", "carving_is_repaid"}
+    # Arithmetic, not a clock comparison: the invoice must add up whatever the
+    # machine was doing at the time.
+    assert timing["net_seconds_with_carving"] == pytest.approx(
+        timing["carve_seconds"] - timing["seconds_saved"], abs=1e-6)
+    assert timing["carving_is_repaid"] == (
+        timing["seconds_saved"] >= timing["carve_seconds"])
+
+
+# ------------------------------------------------ tie-break sensitivity (G7/E7)
+
+def test_every_tiebreak_configuration_is_a_blind_search():
+    """The reconciliation with E7 that keeps this block from overclaiming.
+
+    E7 §7b withdrew the whole `astar(ipdb())` column as an artefact of iPDB's
+    pattern generation. If a tie-break configuration here ever grew a heuristic,
+    the spread it produced could be read as an admissible-heuristic dividend --
+    exactly the reading E7 forbids. So the block is blind, by test.
+    """
+    for _, search, _ in bench_dividend.TIEBREAKS:
+        assert "blind()" in search
+        assert "ipdb" not in search and "lmcut" not in search and "ff(" not in search
+    # ...and all three order primarily on the same admissible f.
+    assert bench_dividend.TIEBREAKS[0][1] == backends.FD_HEURISTICS["blind"]
+    for _, search, _ in bench_dividend.TIEBREAKS[1:]:
+        assert "sum([g(),blind()])" in search
+        assert "reopen_closed=true" in search
+
+
+def test_the_prior_audit_findings_are_data_and_all_of_them_render():
+    """A caveat that lives only in the Markdown is a caveat a reader of the JSON
+    never sees, and a caveat only in the JSON is one no reader sees at all."""
+    ids = {item["id"] for item in bench_dividend.E7_RECONCILIATION["findings"]}
+    assert ids == {"E7-ipdb-withdrawn", "E7-blind-band", "E7-lmcut-range",
+                   "E7-tiebreak-invariant"}
+
+    markdown = bench_report.dividend_markdown({
+        "claim_under_test": "x",
+        "prior_audit": bench_dividend.E7_RECONCILIATION,
+        "results": [],
+    })
+    for item in bench_dividend.E7_RECONCILIATION["findings"]:
+        assert item["id"] in markdown
+        assert item["finding"] in markdown
+    assert "DEADLOCK_CLAIM.md" in markdown
+    # The two numbers E7 corrected, in the file that would otherwise repeat E2's.
+    assert "-8.7% to -27.1%" in markdown
+    assert "0 to -153 expansions" in markdown
+
+
+def _tiebreak_rows():
+    """`far5`'s measured shape: the baseline moves by half, the ratio by little."""
+    return [
+        {"instance": "far5", "tiebreak": "astar", "search": "astar(blind())",
+         "note": "n", "expansions_before": 958, "plan_length_before": 13,
+         "error": None,
+         "guards": {"singleton": {"expansions_after": 872, "plan_length_after": 13,
+                                  "expansions_ratio": 0.9102, "error": None}}},
+        {"instance": "far5", "tiebreak": "single", "search": "eager(single(...))",
+         "note": "n", "expansions_before": 1479, "plan_length_before": 13,
+         "error": None,
+         "guards": {"singleton": {"expansions_after": 1287, "plan_length_after": 13,
+                                  "expansions_ratio": 0.8702, "error": None}}},
+    ]
+
+
+def test_tiebreak_summary_separates_the_baseline_spread_from_the_ratio_spread():
+    summary = bench_dividend.tiebreak_summary(_tiebreak_rows())
+    assert len(summary) == 1
+    entry = summary[0]
+    assert entry["baseline_min"] == 958 and entry["baseline_max"] == 1479
+    assert entry["baseline_spread_pct"] == pytest.approx(54.4, abs=0.1)
+
+    guard = entry["guards"]["singleton"]
+    assert guard["dividend_min_pct"] == pytest.approx(9.0, abs=0.1)
+    assert guard["dividend_max_pct"] == pytest.approx(13.0, abs=0.1)
+    # The whole point: the absolute count moved by 54 points and the dividend by 4.
+    assert guard["ratio_spread_points"] == pytest.approx(4.0, abs=0.1)
+    assert guard["ratio_spread_points"] < entry["baseline_spread_pct"]
+
+
+def test_a_tiebreak_that_moved_an_optimal_length_is_a_soundness_failure():
+    """All three configurations order on the same admissible f, so a length that
+    moves means either the `--search` string is not the search it claims or the
+    guard is unsound in a way only one node ordering exposes."""
+    rows = _tiebreak_rows()
+    rows[1]["guards"]["singleton"]["plan_length_after"] = 12
+    problems = bench_dividend.failures({
+        "results": [],
+        "tiebreak_sensitivity": {"rows": rows},
+    })
+    assert len(problems) == 1
+    assert "optimal length" in problems[0]
+    assert "far5/single/singleton" in problems[0]
+
+
+def test_a_tiebreak_run_that_did_not_answer_is_reported_not_skipped():
+    rows = _tiebreak_rows()
+    rows[0]["error"] = "no plan file and no proof (exit 34, rung fd-optimal)"
+    problems = bench_dividend.failures({
+        "results": [], "tiebreak_sensitivity": {"rows": rows}})
+    assert any("did not answer under this tie-break" in line for line in problems)
+
+
+def test_the_tiebreak_tables_reach_the_markdown_with_the_e7_qualifier():
+    rows = _tiebreak_rows()
+    markdown = bench_report.dividend_markdown({
+        "claim_under_test": "x",
+        "prior_audit": bench_dividend.E7_RECONCILIATION,
+        "results": [],
+        "tiebreak_sensitivity": {
+            "gap_closed": "E2 G7", "question": "instance or open list?",
+            "blind_only": "All three configurations are f = g + blind().",
+            "not_a_tiebreak_invariant": "needs f < C*",
+            "excluded": "the unsolvable family",
+            "timings_not_measured": "structural only",
+            "configurations": [{"tiebreak": k, "search": s, "note": n}
+                               for k, s, n in bench_dividend.TIEBREAKS],
+            "guards": ["singleton"],
+            "rows": rows,
+            "summary": bench_dividend.tiebreak_summary(rows),
+        },
+    })
+    assert "## Tie-break sensitivity" in markdown
+    assert "| `far5` | astar | 958 | 13 | 872 | 0.9102 |" in markdown
+    assert "| `far5` | single | 1479 | 13 | 1287 | 0.8702 |" in markdown
+    assert "54.4%" in markdown                     # the baseline spread
+    assert "| 4.0 |" in markdown                   # the ratio spread, in points
+    # E7's stronger instrument, named where the weaker one is reported.
+    assert "f < C*" in markdown
+    assert "weaker of the two instruments" in markdown
+
+
+@needs_fd
+def test_measure_search_and_measure_agree_on_the_configuration_they_share(tmp_path):
+    """`measure_search` builds its own argv, which is the one deliberate exception
+    to this package's "never measure what the adapter would not run" rule. The
+    exception is only safe while the two paths agree where they overlap, and
+    `astar(blind())` is where they overlap."""
+    _, _, _, path, _ = sokoban_theorems(tmp_path, side=4)
+    through_adapter = fdrun.measure(FD, sokoban.DOMAIN_PATH, path,
+                                    backends.FD_OPTIMAL, "blind")
+    verbatim = fdrun.measure_search(FD, sokoban.DOMAIN_PATH, path,
+                                    backends.FD_HEURISTICS["blind"])
+    assert verbatim.error is None, verbatim.error
+    assert verbatim.nodes["expanded"] == through_adapter.nodes["expanded"]
+    assert verbatim.plan_length == through_adapter.plan_length
+    assert verbatim.solved is through_adapter.solved
+
+
+@needs_fd
+def test_the_tiebreak_dependence_g7_reported_is_real_and_the_length_is_not(tmp_path):
+    """E2's G7, on the instance G7 quoted. The absolute count moves; the optimal
+    length does not, under any of the three. If FD ever made these three agree,
+    the tie-break block would be measuring nothing and this test says so."""
+    _, _, _, path, _ = sokoban_theorems(tmp_path, side=5)
+    counts, lengths = {}, set()
+    for key, search, _ in bench_dividend.TIEBREAKS:
+        record = fdrun.measure_search(FD, sokoban.DOMAIN_PATH, path, search)
+        assert record.error is None, (key, record.error)
+        counts[key] = record.nodes["expanded"]
+        lengths.add(record.plan_length)
+    assert len(lengths) == 1, lengths            # same optimum under every rule
+    assert len(set(counts.values())) > 1, counts  # different work to get there
 
 
 @needs_fd

@@ -29,6 +29,7 @@ import re
 import subprocess
 import sys
 import time
+import childio  # noqa: E402  (per-child decoding, see its docstring)
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -43,6 +44,33 @@ SIGNATURES = [
     r"429", r"insufficient.*credits",
 ]
 SIG_RE = re.compile("|".join(SIGNATURES))
+
+# 日志扫描专用的**强**签名（2026-07-29 加）。
+#
+# 上面那份弱签名表是给注册簿那条路用的：那条路先确认进程已死、分支没推，
+# 才去读它的最后几行，所以宽一点不会误伤。日志普扫没有那层前置条件，
+# 用同一份表就会把 agent **讨论**限额的散文当成限额本身——裸 `quota` 甚至
+# 匹配得上命令行里的 `quota.py`，于是每个跑过配额检查的工人都在给自己制造证据。
+#
+# 实测后果：`quota_state.json` 的 reset_hint 里存着的，是一句**否认**限额的话
+# （"chronologically impossible … the monitor already retracted this"），
+# 而舰队据此被冻。释放之后下一次心跳又会从同一行日志里重新检出，无限自锁。
+#
+# 方向是不对称的，所以判据往「不冻」偏：漏判一次真限额，代价是一次派单失败并
+# 立刻在日志里留下真签名；误判一次，代价是整支舰队停摆到下次人工介入。
+HARD_SIGNATURES = [
+    r"You've hit your (session|usage) limit",
+    r"(session|usage) limit\b.{0,40}resets?\s+\d",
+    r"Claude usage limit reached",
+    r"\"type\":\s*\"rate_limit_error\"",
+    r"credit balance is too low",
+    r"insufficient\s+credits",
+]
+HARD_RE = re.compile("|".join(HARD_SIGNATURES))
+
+# 一行里出现这些，说明它是**关于**限额的文字，不是限额本身。
+PROSE_MARKS = ("**", "`", "quota.py", "quota_state", "monitor/",
+               "retract", "撤回", "误判", "假阳")
 
 # Relaunch order when the window reopens: integration gate first, critical
 # path second, cheap probes, then the rest; standing services last.
@@ -154,14 +182,14 @@ def save_state(st):
 
 def pid_alive(pidnum):
     out = subprocess.run(["tasklist", "/FI", "PID eq %d" % pidnum, "/FO", "CSV"],
-                         capture_output=True, text=True).stdout
+                         capture_output=True, text=True, encoding=childio._CONSOLE, errors="replace").stdout
     return str(pidnum) in out
 
 
 def branch_pushed(pid_str):
     slug = "agent/" + pid_str.lower().replace("-", "")
     out = subprocess.run(["git", "branch", "-r", "--format=%(refname:short)"],
-                         cwd=ROOT, capture_output=True, text=True).stdout
+                         cwd=ROOT, capture_output=True, text=True, encoding="utf-8", errors="replace").stdout
     return any(slug in b for b in out.splitlines())
 
 
@@ -176,8 +204,76 @@ def quota_line(log_name):
     return None
 
 
+def _released_ts(st):
+    """上一次出闩的时刻（epoch）；从没出过闩就是 0。"""
+    best = 0.0
+    for key in ("auto_released_at", "resumed_at", "released_at"):
+        raw = st.get(key)
+        if not raw:
+            continue
+        try:
+            t = datetime.datetime.strptime(raw, "%Y-%m-%dT%H:%M:%SZ")
+            best = max(best, t.replace(
+                tzinfo=datetime.timezone.utc).timestamp())
+        except Exception:
+            continue
+    return best
+
+
+def scan_logs_for_limit(window_s=3600, since_ts=0.0, skip=()):
+    """直接扫最近的 dispatch 日志找限额签名。
+
+    只信注册簿会慢一拍：刚被限额打死的会话，注册簿的 reaped 还没写上，
+    check() 就报 normal——2026-07-29 心跳实测三个工人 4 秒内全死于
+    session limit，而探针仍报 normal。日志不会滞后，它是第一手证据。
+
+    两条约束，都是被实测逼出来的：
+
+    * `since_ts`——**上一次释放之后**写的日志才算数。否则那条打死会话的日志
+      在整个扫描窗口里一直在，闸门每跳一次就重新 hold 一次，
+      而按期限自动出闩的那条出口**永远走不到**：一次 hold 会变成永久 hold。
+    * `skip`——分支已经推上去的会话，它的日志不算现行证据。
+      那是注册簿判「不是限额打死」的同一份依据，两条路必须用同一把尺子。"""
+    if not os.path.isdir(LOGS):
+        return None
+    cutoff = max(time.time() - window_s, since_ts)
+    for name in sorted(os.listdir(LOGS), reverse=True):
+        if not name.endswith(".log"):
+            continue
+        if any(s and s in name for s in skip):
+            continue
+        path = os.path.join(LOGS, name)
+        if os.path.getmtime(path) < cutoff:
+            continue
+        try:
+            text = open(path, encoding="utf-8", errors="ignore").read()
+        except Exception:
+            continue
+        for raw in text.splitlines():
+            line = raw.strip()
+            if not line or len(line) > 300:
+                continue            # 真的 CLI 报错很短；长的是散文
+            if any(mark in line for mark in PROSE_MARKS):
+                continue            # 在讨论限额，不是撞上限额
+            if HARD_RE.search(line):
+                return line[:200]
+    return None
+
+
 def check():
+    # 日志普扫先跑，但**不许提前返回**：早退会跳过下面的注册簿清点，
+    # 于是 requeue 是空的——窗口重开后没有任何东西被重新排队，
+    # 一次 hold 就把那些会话永久丢了。这条早退是 2026-07-29 加日志普扫时
+    # 混进来的，四条测试当场变红，而 monitor 的闸门那时正好跑不起来
+    # （PATH 上的 bash 是 WSL 的），所以它红了一天没人看见。
     reg = load(os.path.join(LOGS, "registry.json"), {})
+    _st0 = load(STATE, {"mode": "normal", "requeue": [], "history": []})
+    # 已经在 hold 里就不再问日志：日志普扫的职责是**开**一次 hold，不是续。
+    # 续的判据只有一个——窗口重开没有——那是下面的期限出闩在管。
+    # 让打死会话的那行日志同时具备「开」和「续」的效力，等于把出闩焊死。
+    fresh = (None if _st0.get("mode") == "hold" else
+             scan_logs_for_limit(since_ts=_released_ts(_st0),
+                                 skip=[p for p in reg if branch_pushed(p)]))
     st = load(STATE, {"mode": "normal", "requeue": [], "history": []})
     hits = []
     for pid_str, entry in sorted(reg.items()):
@@ -192,17 +288,25 @@ def check():
             entry["reaped"] = "quota-requeued"
             if pid_str not in st["requeue"]:
                 st["requeue"].append(pid_str)
-    if hits:
-        st["mode"] = "hold"
-        st["detected_at"] = now_utc()
-        st["reset_hint"] = hits[0][1]
-        st["history"].append({"at": st["detected_at"],
-                              "killed": [h[0] for h in hits]})
-        json.dump(reg, open(os.path.join(LOGS, "registry.json"), "w",
-                            encoding="utf-8"), indent=2)
+    if hits or fresh:
+        already = st.get("mode") == "hold"
+        if not already:
+            st["mode"] = "hold"
+            st["detected_at"] = now_utc()
+            st["reset_hint"] = hits[0][1] if hits else fresh
+            st.setdefault("history", []).append(
+                {"at": st["detected_at"],
+                 "killed": [h[0] for h in hits],
+                 "from": "registry" if hits else "log-scan"})
+        if hits:
+            json.dump(reg, open(os.path.join(LOGS, "registry.json"), "w",
+                                encoding="utf-8"), indent=2)
         save_state(st)
-        print("HOLD — quota kills: %s" % ", ".join(h[0] for h in hits))
-        print("hint: %s" % st["reset_hint"])
+        if hits:
+            print("HOLD — quota kills: %s" % ", ".join(h[0] for h in hits))
+        else:
+            print("HOLD — 日志中的限额签名：%s" % fresh)
+        print("hint: %s" % st.get("reset_hint"))
         return 2
     if st.get("mode") != "normal":
         # No fresh kills and the deadline has passed: the window the hold was
@@ -271,7 +375,7 @@ def ping(if_due=False):
     import shutil
     claude = shutil.which("claude")
     proc = subprocess.run([claude, "-p", "reply with: ok", "--model", "haiku"],
-                          capture_output=True, text=True, timeout=120)
+                          capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=120)
     ok = proc.returncode == 0 and "ok" in proc.stdout.lower()
 
     # Reloaded *after* the call, not before: the call can take two minutes and

@@ -1,0 +1,597 @@
+{
+ "disk_only_hits": [
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.md\",\\n    \"pddl\": [\\n     \"C:\\\\Users\\\\u",
+   "needle": "g50t",
+   "offset": 497,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\domain.pddl\",\\n     \"C:\\\\Users\\\\user\\\\AppData",
+   "needle": "g50t",
+   "offset": 650,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\problem.pddl\"\\n    ],\\n    \"python\": \"C:\\\\User",
+   "needle": "g50t",
+   "offset": 791,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.py\"\\n   },\\n   \"lean_state_estimate\": n",
+   "needle": "g50t",
+   "offset": 948,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev02-after-theorize\",\\n   \"files\": [\\n    \"th",
+   "needle": "g50t",
+   "offset": 6103,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev01-before-theorize\",\\n   \"files\": [],\\n   \"",
+   "needle": "g50t",
+   "offset": 6408,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.md\",\\n    \"pddl\": [\\n     \"C:\\\\Users\\\\u",
+   "needle": "g50t",
+   "offset": 7027,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\domain.pddl\",\\n     \"C:\\\\Users\\\\user\\\\AppData",
+   "needle": "g50t",
+   "offset": 7180,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\problem.pddl\"\\n    ],\\n    \"python\": \"C:\\\\User",
+   "needle": "g50t",
+   "offset": 7321,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.py\"\\n   },\\n   \"lean_state_estimate\": n",
+   "needle": "g50t",
+   "offset": 7478,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev04-after-theorize\",\\n   \"files\": [\\n    \"th",
+   "needle": "g50t",
+   "offset": 12633,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev03-before-theorize\",\\n   \"files\": [\\n    \"t",
+   "needle": "g50t",
+   "offset": 12938,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.md\",\\n    \"pddl\": [\\n     \"C:\\\\Users\\\\u",
+   "needle": "g50t",
+   "offset": 13618,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\domain.pddl\",\\n     \"C:\\\\Users\\\\user\\\\AppData",
+   "needle": "g50t",
+   "offset": 13771,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\problem.pddl\"\\n    ],\\n    \"python\": \"C:\\\\User",
+   "needle": "g50t",
+   "offset": 13912,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.py\"\\n   },\\n   \"lean_state_estimate\": n",
+   "needle": "g50t",
+   "offset": 14069,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev06-after-theorize\",\\n   \"files\": [\\n    \"th",
+   "needle": "g50t",
+   "offset": 19228,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev05-before-theorize\",\\n   \"files\": [\\n    \"t",
+   "needle": "g50t",
+   "offset": 19533,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.md\",\\n    \"pddl\": [\\n     \"C:\\\\Users\\\\u",
+   "needle": "g50t",
+   "offset": 20213,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\domain.pddl\",\\n     \"C:\\\\Users\\\\user\\\\AppData",
+   "needle": "g50t",
+   "offset": 20366,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\problem.pddl\"\\n    ],\\n    \"python\": \"C:\\\\User",
+   "needle": "g50t",
+   "offset": 20507,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.py\"\\n   },\\n   \"lean_state_estimate\": n",
+   "needle": "g50t",
+   "offset": 20664,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev08-after-theorize\",\\n   \"files\": [\\n    \"th",
+   "needle": "g50t",
+   "offset": 25823,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev07-before-theorize\",\\n   \"files\": [\\n    \"t",
+   "needle": "g50t",
+   "offset": 26128,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.md\",\\n    \"pddl\": [\\n     \"C:\\\\Users\\\\u",
+   "needle": "g50t",
+   "offset": 26808,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\domain.pddl\",\\n     \"C:\\\\Users\\\\user\\\\AppData",
+   "needle": "g50t",
+   "offset": 26961,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\problem.pddl\"\\n    ],\\n    \"python\": \"C:\\\\User",
+   "needle": "g50t",
+   "offset": 27102,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.py\"\\n   },\\n   \"lean_state_estimate\": n",
+   "needle": "g50t",
+   "offset": 27259,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev10-after-theorize\",\\n   \"files\": [\\n    \"th",
+   "needle": "g50t",
+   "offset": 32420,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev09-before-theorize\",\\n   \"files\": [\\n    \"t",
+   "needle": "g50t",
+   "offset": 32726,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.md\",\\n    \"pddl\": [\\n     \"C:\\\\Users\\\\u",
+   "needle": "g50t",
+   "offset": 33406,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\domain.pddl\",\\n     \"C:\\\\Users\\\\user\\\\AppData",
+   "needle": "g50t",
+   "offset": 33559,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\problem.pddl\"\\n    ],\\n    \"python\": \"C:\\\\User",
+   "needle": "g50t",
+   "offset": 33700,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.py\"\\n   },\\n   \"lean_state_estimate\": n",
+   "needle": "g50t",
+   "offset": 33857,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev12-after-theorize\",\\n   \"files\": [\\n    \"th",
+   "needle": "g50t",
+   "offset": 39018,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev11-before-theorize\",\\n   \"files\": [\\n    \"t",
+   "needle": "g50t",
+   "offset": 39324,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.md\",\\n    \"pddl\": [\\n     \"C:\\\\Users\\\\u",
+   "needle": "g50t",
+   "offset": 40005,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\domain.pddl\",\\n     \"C:\\\\Users\\\\user\\\\AppData",
+   "needle": "g50t",
+   "offset": 40158,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\problem.pddl\"\\n    ],\\n    \"python\": \"C:\\\\User",
+   "needle": "g50t",
+   "offset": 40299,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.py\"\\n   },\\n   \"lean_state_estimate\": n",
+   "needle": "g50t",
+   "offset": 40456,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev14-after-theorize\",\\n   \"files\": [\\n    \"th",
+   "needle": "g50t",
+   "offset": 45617,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev13-before-theorize\",\\n   \"files\": [\\n    \"t",
+   "needle": "g50t",
+   "offset": 45923,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.md\",\\n    \"pddl\": [\\n     \"C:\\\\Users\\\\u",
+   "needle": "g50t",
+   "offset": 46604,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\domain.pddl\",\\n     \"C:\\\\Users\\\\user\\\\AppData",
+   "needle": "g50t",
+   "offset": 46757,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\problem.pddl\"\\n    ],\\n    \"python\": \"C:\\\\User",
+   "needle": "g50t",
+   "offset": 46898,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.py\"\\n   },\\n   \"lean_state_estimate\": n",
+   "needle": "g50t",
+   "offset": 47055,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev16-after-theorize\",\\n   \"files\": [\\n    \"th",
+   "needle": "g50t",
+   "offset": 52216,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev15-before-theorize\",\\n   \"files\": [\\n    \"t",
+   "needle": "g50t",
+   "offset": 52522,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.md\",\\n    \"pddl\": [\\n     \"C:\\\\Users\\\\u",
+   "needle": "g50t",
+   "offset": 53203,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\domain.pddl\",\\n     \"C:\\\\Users\\\\user\\\\AppData",
+   "needle": "g50t",
+   "offset": 53356,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\problem.pddl\"\\n    ],\\n    \"python\": \"C:\\\\User",
+   "needle": "g50t",
+   "offset": 53497,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.py\"\\n   },\\n   \"lean_state_estimate\": n",
+   "needle": "g50t",
+   "offset": 53654,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev18-after-theorize\",\\n   \"files\": [\\n    \"th",
+   "needle": "g50t",
+   "offset": 58820,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev17-before-theorize\",\\n   \"files\": [\\n    \"t",
+   "needle": "g50t",
+   "offset": 59126,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.md\",\\n    \"pddl\": [\\n     \"C:\\\\Users\\\\u",
+   "needle": "g50t",
+   "offset": 59807,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\domain.pddl\",\\n     \"C:\\\\Users\\\\user\\\\AppData",
+   "needle": "g50t",
+   "offset": 59960,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\problem.pddl\"\\n    ],\\n    \"python\": \"C:\\\\User",
+   "needle": "g50t",
+   "offset": 60101,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\generated\\\\theory.py\"\\n   },\\n   \"lean_state_estimate\": n",
+   "needle": "g50t",
+   "offset": 60258,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev20-after-theorize\",\\n   \"files\": [\\n    \"th",
+   "needle": "g50t",
+   "offset": 65424,
+   "where": "artifact:theorize.json"
+  },
+  {
+   "context": "ata\\\\Local\\\\Temp\\\\theoria-anon-probe-_ced_vrs\\\\runs\\\\20260729T000000Z-g50t-leg01\\\\books\\\\snapshots\\\\rev19-before-theorize\",\\n   \"files\": [\\n    \"t",
+   "needle": "g50t",
+   "offset": 65730,
+   "where": "artifact:theorize.json"
+  }
+ ],
+ "forced_error_hits": [
+  {
+   "context": "al\\\\\\\\Temp\\\\\\\\theoria-anon-probe-_ced_vrs\\\\\\\\runs\\\\\\\\20260729T000000Z-g50t-leg01-forced\\\\\\\\cand\\\"idates.jsonl'\",\\n    \"mine_ms\": 0,\\n    \"ms\": 0,\\n",
+   "needle": "g50t",
+   "offset": 12247,
+   "where": "forced-error prompt"
+  },
+  {
+   "context": "al\\\\\\\\Temp\\\\\\\\theoria-anon-probe-_ced_vrs\\\\\\\\runs\\\\\\\\20260729T000000Z-g50t-leg01-forced\\\\\\\\cand\\\"idates.jsonl'\\n\",\\n    \"track_id\": \"obj0\",\\n    \"",
+   "needle": "g50t",
+   "offset": 13402,
+   "where": "forced-error prompt"
+  },
+  {
+   "context": "al\\\\\\\\Temp\\\\\\\\theoria-anon-probe-_ced_vrs\\\\\\\\runs\\\\\\\\20260729T000000Z-g50t-leg01-forced\\\\\\\\cand\\\"idates.jsonl'\",\\n   \"traceback\": \"Traceback (mos",
+   "needle": "g50t",
+   "offset": 15140,
+   "where": "forced-error prompt"
+  },
+  {
+   "context": "al\\\\\\\\Temp\\\\\\\\theoria-anon-probe-_ced_vrs\\\\\\\\runs\\\\\\\\20260729T000000Z-g50t-leg01-forced\\\\\\\\cand\\\"idates.jsonl'\\n\"\\n  },\\n  \"candidates\": 0,\\n  \"cho",
+   "needle": "g50t",
+   "offset": 16192,
+   "where": "forced-error prompt"
+  },
+  {
+   "context": "al\\\\\\\\Temp\\\\\\\\theoria-anon-probe-_ced_vrs\\\\\\\\runs\\\\\\\\20260729T000000Z-g50t-leg01-forced\\\\\\\\cand\\\"idates.jsonl'\",\\n  \"features\": 6,\\n  \"ms\": 0,\\n  \"",
+   "needle": "g50t",
+   "offset": 18817,
+   "where": "forced-error prompt"
+  },
+  {
+   "context": "al\\\\\\\\Temp\\\\\\\\theoria-anon-probe-_ced_vrs\\\\\\\\runs\\\\\\\\20260729T000000Z-g50t-leg01-forced\\\\\\\\cand\\\"idates.jsonl'\\n\"\\n }\\n}\\n```\\n\\nThe full proposal st",
+   "needle": "g50t",
+   "offset": 19987,
+   "where": "forced-error prompt"
+  }
+ ],
+ "hits": [],
+ "ledger_only_hits": [
+  {
+   "context": " the shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495",
+   "needle": "g50t",
+   "offset": 928,
+   "where": "ledger model_call#1 everything except the prompt"
+  },
+  {
+   "context": "mpaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so the dollars are visible ",
+   "needle": "g50t",
+   "offset": 959,
+   "where": "ledger model_call#1 everything except the prompt"
+  },
+  {
+   "context": "shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so th",
+   "needle": "5849a774",
+   "offset": 933,
+   "where": "ledger model_call#1 everything except the prompt"
+  },
+  {
+   "context": " the shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495",
+   "needle": "g50t",
+   "offset": 928,
+   "where": "ledger model_call#2 everything except the prompt"
+  },
+  {
+   "context": "mpaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so the dollars are visible ",
+   "needle": "g50t",
+   "offset": 959,
+   "where": "ledger model_call#2 everything except the prompt"
+  },
+  {
+   "context": "shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so th",
+   "needle": "5849a774",
+   "offset": 933,
+   "where": "ledger model_call#2 everything except the prompt"
+  },
+  {
+   "context": " the shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495",
+   "needle": "g50t",
+   "offset": 928,
+   "where": "ledger model_call#3 everything except the prompt"
+  },
+  {
+   "context": "mpaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so the dollars are visible ",
+   "needle": "g50t",
+   "offset": 959,
+   "where": "ledger model_call#3 everything except the prompt"
+  },
+  {
+   "context": "shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so th",
+   "needle": "5849a774",
+   "offset": 933,
+   "where": "ledger model_call#3 everything except the prompt"
+  },
+  {
+   "context": " the shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495",
+   "needle": "g50t",
+   "offset": 928,
+   "where": "ledger model_call#4 everything except the prompt"
+  },
+  {
+   "context": "mpaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so the dollars are visible ",
+   "needle": "g50t",
+   "offset": 959,
+   "where": "ledger model_call#4 everything except the prompt"
+  },
+  {
+   "context": "shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so th",
+   "needle": "5849a774",
+   "offset": 933,
+   "where": "ledger model_call#4 everything except the prompt"
+  },
+  {
+   "context": " the shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495",
+   "needle": "g50t",
+   "offset": 928,
+   "where": "ledger model_call#5 everything except the prompt"
+  },
+  {
+   "context": "mpaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so the dollars are visible ",
+   "needle": "g50t",
+   "offset": 959,
+   "where": "ledger model_call#5 everything except the prompt"
+  },
+  {
+   "context": "shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so th",
+   "needle": "5849a774",
+   "offset": 933,
+   "where": "ledger model_call#5 everything except the prompt"
+  },
+  {
+   "context": " the shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495",
+   "needle": "g50t",
+   "offset": 928,
+   "where": "ledger model_call#6 everything except the prompt"
+  },
+  {
+   "context": "mpaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so the dollars are visible ",
+   "needle": "g50t",
+   "offset": 959,
+   "where": "ledger model_call#6 everything except the prompt"
+  },
+  {
+   "context": "shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so th",
+   "needle": "5849a774",
+   "offset": 933,
+   "where": "ledger model_call#6 everything except the prompt"
+  },
+  {
+   "context": " the shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495",
+   "needle": "g50t",
+   "offset": 928,
+   "where": "ledger model_call#7 everything except the prompt"
+  },
+  {
+   "context": "mpaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so the dollars are visible ",
+   "needle": "g50t",
+   "offset": 959,
+   "where": "ledger model_call#7 everything except the prompt"
+  },
+  {
+   "context": "shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so th",
+   "needle": "5849a774",
+   "offset": 933,
+   "where": "ledger model_call#7 everything except the prompt"
+  },
+  {
+   "context": " the shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495",
+   "needle": "g50t",
+   "offset": 928,
+   "where": "ledger model_call#8 everything except the prompt"
+  },
+  {
+   "context": "mpaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so the dollars are visible ",
+   "needle": "g50t",
+   "offset": 959,
+   "where": "ledger model_call#8 everything except the prompt"
+  },
+  {
+   "context": "shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so th",
+   "needle": "5849a774",
+   "offset": 933,
+   "where": "ledger model_call#8 everything except the prompt"
+  },
+  {
+   "context": " the shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495",
+   "needle": "g50t",
+   "offset": 928,
+   "where": "ledger model_call#9 everything except the prompt"
+  },
+  {
+   "context": "mpaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so the dollars are visible ",
+   "needle": "g50t",
+   "offset": 959,
+   "where": "ledger model_call#9 everything except the prompt"
+  },
+  {
+   "context": "shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so th",
+   "needle": "5849a774",
+   "offset": 933,
+   "where": "ledger model_call#9 everything except the prompt"
+  },
+  {
+   "context": " the shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495",
+   "needle": "g50t",
+   "offset": 929,
+   "where": "ledger model_call#10 everything except the prompt"
+  },
+  {
+   "context": "mpaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so the dollars are visible ",
+   "needle": "g50t",
+   "offset": 960,
+   "where": "ledger model_call#10 everything except the prompt"
+  },
+  {
+   "context": "shared pool (spend_gate campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T000000Z-g50t-leg01, reservation res-23c797b3ecd0495c), so th",
+   "needle": "5849a774",
+   "offset": 934,
+   "where": "ledger model_call#10 everything except the prompt"
+  }
+ ],
+ "needles": [
+  "g50t",
+  "5849a774",
+  "sk48",
+  "d8078629",
+  "tn36",
+  "ef4dde99",
+  "ar25",
+  "0c556536"
+ ],
+ "surprises_hits": [],
+ "tmp": "C:\\Users\\user\\AppData\\Local\\Temp\\theoria-anon-probe-_ced_vrs"
+}

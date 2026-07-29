@@ -1,0 +1,147 @@
+{
+  "by_class": {
+    "free": 4,
+    "memorised": 2,
+    "theory": 2
+  },
+  "by_rule": {
+    "blocked_by_wall": {
+      "free": 4
+    },
+    "walk": {
+      "memorised": 2,
+      "theory": 2
+    }
+  },
+  "by_split": {
+    "heldout": {
+      "free": 2,
+      "theory": 2
+    },
+    "replay": {
+      "free": 2,
+      "memorised": 2
+    }
+  },
+  "feasible": true,
+  "items": [
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-gravity-fragile-000",
+      "rule": "blocked_by_wall",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-gravity-fragile-001",
+      "rule": "walk",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-gravity-fragile-002",
+      "rule": "walk",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-gravity-fragile-003",
+      "rule": "blocked_by_wall",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-gravity-fragile-004",
+      "rule": "walk",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-gravity-fragile-005",
+      "rule": "blocked_by_wall",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-gravity-fragile-006",
+      "rule": "walk",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-gravity-fragile-007",
+      "rule": "blocked_by_wall",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    }
+  ],
+  "n_items": 8,
+  "paper_id": "v2-heldout-t3-gravity-fragile",
+  "per_class": 2,
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+  "summary": {
+    "anomalies": [],
+    "barren_rules": [
+      "blocked_by_wall"
+    ],
+    "dead": 0,
+    "effective_size": 2,
+    "free": 4,
+    "memorised": 2,
+    "n_items": 8,
+    "theory": 2,
+    "theory_items": 2,
+    "theory_share": 0.25,
+    "zero_discrimination": 4,
+    "zero_discrimination_share": 0.5
+  },
+  "tier": 3,
+  "world_id": "t3-gravity-fragile"
+}

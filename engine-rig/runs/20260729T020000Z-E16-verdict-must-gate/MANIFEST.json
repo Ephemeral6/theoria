@@ -1,0 +1,162 @@
+{
+  "prompt_id": "E16-verdict-must-gate",
+  "branch": "agent/e16-verdict-must-gate",
+  "base_commit": "31bea4664d75e8ec6b14e093e85633db7470aebf",
+  "utc": "2026-07-29T02:00:00Z",
+  "worker": "W-1650",
+  "territory": "engine-rig",
+  "cell": "E16",
+  "serves": [
+    "WP1",
+    "WP9"
+  ],
+  "api_calls": 0,
+  "network": false,
+  "sealed_pile_contact": "none",
+  "spend_usd": 0.0,
+  "what": "Two computed verdicts that were published beside the claims they judged now gate them; the six 'verified but not independently' sites are written down as a boundary rather than left as a promise.",
+  "changes": [
+    {
+      "site": "engines/lp_potential/potential.py",
+      "was": "Heuristic.as_json() carried the literal \"admissible\": True; the real check ran in admissibility_report and was attached afterwards by the caller under admissibility_check, which the headline never read.",
+      "now": "as_json(admissibility_check=None) derives both `admissible` and a new `admissible_basis` from entitlement(): certificate.holds AND no counterexample row. One expression, one site."
+    },
+    {
+      "site": "engines/lp_potential/__init__.py",
+      "was": "heuristic_payload[\"admissibility_check\"] = admissibility_report(...) bolted on after as_json().",
+      "now": "the report is passed into as_json(), so headline and evidence cannot drift."
+    },
+    {
+      "site": "engines/deadlock_carver/__init__.py",
+      "was": "candidates() emitted one invariant per theorem unconditionally; PruningReport.same_answer was serialised as plan_length_unchanged and published beside the theorems it falsified.",
+      "now": "refutation(report) is read before rows are built. Default on_refutation='withhold' emits no invariant rows; 'mark' emits them carrying machine-readable refuted/refutation. The plan account always carries refuted, invariants_withheld and on_refutation so a suppression is never silent."
+    },
+    {
+      "site": "DECISIONS.md",
+      "now": "D-034 (a computed verdict gates) and D-035 (the six shared-premise sites, tabulated)."
+    },
+    {
+      "site": "six overclaiming docstrings/READMEs",
+      "now": "interop/certificate_export.py, interop/README.md, engines/zero_space/README.md, engines/fd_adapter/validate.py, engines/fd_adapter/README.md, engines/deadlock_carver/README.md -- each now names the premise its checker shares with its producer. Prose only; no behaviour and no emitted artifact changed."
+    }
+  ],
+  "negative_samples": [
+    "tests/test_lp_potential.py::test_admissible_is_false_when_the_certificate_fails_its_own_recheck -- holds=False reaches the field.",
+    "tests/test_lp_potential.py::test_an_unchecked_certificate_is_not_admissible -- empty conditions is not a pass.",
+    "tests/test_lp_potential.py::test_a_counterexample_in_the_check_overrides_a_holding_certificate -- a certificate over 3 of peg4's 4 moves passes all three exact conditions and claims h=inf for two states that are 1 and 2 moves from the goal; the headline must read False.",
+    "tests/test_deadlock_carver.py::test_a_refuted_theorem_does_not_reach_the_candidate_stream -- only the plan account survives.",
+    "tests/test_deadlock_carver.py::test_the_mark_mode_ships_a_machine_readable_invalidation",
+    "tests/test_deadlock_carver.py::test_an_unfinished_comparison_neither_clears_nor_refutes -- UnfinishedComparison propagates rather than resolving either way."
+  ],
+  "verification": {
+    "suite": "python -m pytest -- 500 passed, 27 skipped, 0 failed",
+    "run_local": "python runs/20260729T020000Z-E16-verdict-must-gate/verify.py -- 35/35 ALL CHECKS PASS",
+    "artifact": "regenerated with `python -m tools.run_all --out artifacts/candidates.jsonl --deterministic --force`; 44 rows unchanged, one line differs (the lp_potential heuristic row gains admissible_basis)",
+    "fixtures": "python -m fixtures.generate_all leaves fixtures/ byte-identical",
+    "interop_certificates": "interop/certificates/*.json regenerated from their own producer; only `checked_over` differs"
+  },
+  "incident": {
+    "what": "The host disk was 100% full (3.2 MB free) at claim time. pytest raised OSError [Errno 28] and the partial write truncated the tracked fixture fixtures/data/sokoban_domain.pddl to 0 bytes.",
+    "so": "That first 'green' baseline was void. The fixture was restored with git checkout, regeneration confirmed byte-identical, and the baseline re-established before any change was measured.",
+    "reclaimed": "1475 __pycache__/.pytest_cache dirs under .worktrees (gitignored, regenerable) plus git worktree prune -- 3.2 MB free -> 8.8 GB. No tracked file and no other worktree's source was touched.",
+    "filed": "monitor/inbox/20260729T020500Z-W-1650-disk-full-blocks-every-worker.md"
+  },
+  "files": [
+    {
+      "path": "DECISIONS.md",
+      "sha256": "f45f5acfe50fecb9eb824214e1862dc74096ed3c94241daa8632270bca2c10bc"
+    },
+    {
+      "path": "artifacts/candidates.jsonl",
+      "sha256": "5113ad321f680af0133ae17e2a549a8c75edd90ebfbcd69d9cb076b86daded8a"
+    },
+    {
+      "path": "engines/deadlock_carver/README.md",
+      "sha256": "fc55c66eb0d482111893a4ca3e0dfab7fc481f93e34ae665cc8dcdf53708acba"
+    },
+    {
+      "path": "engines/deadlock_carver/__init__.py",
+      "sha256": "262b7698a69e8637c3e2577f118ff8ee4493df337519326f6d43a3dc0795259e"
+    },
+    {
+      "path": "engines/fd_adapter/README.md",
+      "sha256": "480336f9ebc3935790ae60daf2890101680f96cac5e0170c05c5d281b3d686a4"
+    },
+    {
+      "path": "engines/fd_adapter/validate.py",
+      "sha256": "4f8fccc0f4ffb9fdb76c189b6598186f307827086ebbd4103705db552fdd61d7"
+    },
+    {
+      "path": "engines/lp_potential/README.md",
+      "sha256": "72f98c142c6cfa74428fa1891c33b6fb1003cd1504c5814bcc187ffabe2cadd4"
+    },
+    {
+      "path": "engines/lp_potential/__init__.py",
+      "sha256": "8889beb77212b884f21b4c59860feac458a7f6805f9cf772b9b4c50d31af796d"
+    },
+    {
+      "path": "engines/lp_potential/potential.py",
+      "sha256": "a32d96699c94e97746341b9ea9b39e609b7e0fd4ebf6655d2ae93611c0bade68"
+    },
+    {
+      "path": "engines/zero_space/README.md",
+      "sha256": "db52c2c960f3cee9c016349eaa3dc07e192adf719180abeee86107547092dae9"
+    },
+    {
+      "path": "interop/README.md",
+      "sha256": "aba065396a3b56ad6030ab849a8161d023f6206a7debce1c8b7991dd1e8bd324"
+    },
+    {
+      "path": "interop/certificate_export.py",
+      "sha256": "294cf2b6bf0ce1cfea35516b148548fcbb3fd0ab823b906f001f5b8becf1dca2"
+    },
+    {
+      "path": "interop/certificates/pagoda_4_1110_to_0100.json",
+      "sha256": "df7433a69afb6225848a2eee319d0918aac0858f498beeb77c5fd4357b6cf87c"
+    },
+    {
+      "path": "runs/20260729T020000Z-E16-verdict-must-gate/verify.py",
+      "sha256": "d9b861976f525b4d0980a03324d0b2ba6b9b7979064c90ad147e181daa0b4029"
+    },
+    {
+      "path": "tests/test_deadlock_carver.py",
+      "sha256": "24605ed304ac53caec8b67e6a7371329cf8cb8093a6f54da3f319807e8869101"
+    },
+    {
+      "path": "tests/test_interop.py",
+      "sha256": "37413a3885e8999301d0d9e564d32475e91f8a59a68700eb97a04d415b37f72b"
+    },
+    {
+      "path": "tests/test_lp_potential.py",
+      "sha256": "2a9bb7cb18fe56e17bff90032a037595252a065a22d9c810161424f44bc2d42e"
+    },
+    {
+      "path": "tools/p13_fd_dividend.py",
+      "sha256": "c5b96833b7b7b87c2f4a3363d5776456ec4d05985fce62ee8ea4d3ead1099e28"
+    },
+    {
+      "path": "tools/run_all.py",
+      "sha256": "b2c9819eba2322beda6106d73ff16d59608bc17c03cfa190c22977185e71f33d"
+    }
+  ],
+  "files_note": "sha256 of the working tree at write time, LF-normalised on commit by .gitattributes; git show <commit> is the authority if the two ever disagree.",
+  "adversarial_review": {
+    "what": "An adversarial subagent was told to refute the fix, not confirm it. It found six real defects, five of them in files this work item had already opened. All six are fixed in the second round; nothing was deferred.",
+    "findings_fixed": [
+      "The invariant row was left ungated while the heuristic row was gated -- the same defect one row over. Both rows now gate on premises_against_graph, which re-derives inv_closed over every move geometry the GRAPH has.",
+      "admissibility_report scores h against graph['distance_to_goal'] while the heuristic is about certificate.goal_states, which run(..., goal_states=) lets a caller change. On a mismatch every row was a fabricated counterexample AND the gate was void exactly where the incomplete-move-list hazard lives. The check is now declined as 'not comparable' and the hazard is caught directly instead.",
+      "Certificate.as_json published `conditions` with no `holds`; all({}.values()) is True, so a never-checked certificate read as a pass. `holds` is now published.",
+      "interop/certificate_export.build wrote `conclusion` as a literal above the line computing `verified`, and `checked_over` claimed 'all move instances on the full state space' regardless of how many were listed. Both derived now.",
+      "tools/run_all.py handed the RING deadlock theorems to the probe planner -- whose reachability verdicts are published -- with no verdict taken on that instance. pruning_report now runs there and raises on refutation.",
+      "tools/p13_fd_dividend.py had no prose branch for same_answer is False, so a refuted row fell through to 'the plan is N steps either way'. Branch added, ahead of before==after so a refuted zero-dividend row cannot read as 'true theorems buy nothing'.",
+      "DECISIONS D-010 and D-028 still asserted the independence sentences D-035 falsified. Superseded in D-035 on exactly that clause."
+    ],
+    "findings_confirmed_not_defects": [
+      "same_answer is insufficient as a soundness test (423 alive-but-non-optimal states on open4far let an unsound theorem pass) -- already disclosed as one-directional in D-034 and the README; the review confirms the disclosure rather than refuting it.",
+      "with_report=False publishes ungated theorems -- a documented absence of verdict, no caller in the repo uses it.",
+      "The admissibility gate is COMPLETE on peg4, not a sample: 232,532 holding certificates swept, 202,512 genuinely inadmissible, 0 missed. The docstring understates it, conservatively.",
+      "D-035's [-4,4] exhaustive-search claim independently reproduced: 1,141 holding certificates on the complete move list, 0 counterexamples; 14,848 of 20,743 on 3-of-4 sub-lists."
+    ],
+    "correction_to_this_manifest": "An earlier revision claimed 'exit 0 with a truncated summary' was the disk-full signature. That is false and was verified false: pytest.ini sets addopts = -q, so a command-line -q makes -qq, which suppresses the summary on a healthy disk. The ENOSPC and the zero-byte fixture were real; the diagnostic rule inferred from them was not, and it had been published to monitor/inbox before it was checked."
+  }
+}

@@ -15,7 +15,7 @@ Two kinds of law come out of Fixture B and the engine labels them apart:
                 every representative of it is `(#Red) mod 2 = const`.
 """
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Sequence, Tuple
 
 from engines.zero_space import gf2
@@ -38,6 +38,11 @@ class Law:
     features: List[Feature]
     value: int
     scope: str                      # cell_local | global
+    # False when some cell's colour subsets were not enumerated exhaustively, so
+    # `scope == "global"` means "no cell-local explanation was searched for
+    # here", not "none exists" -- the difference between a law about the world
+    # and a law about the encoding.  Withheld from `as_json` for now; see there.
+    scope_exhaustive: bool = True
 
     @property
     def n_features(self) -> int:
@@ -68,6 +73,13 @@ class Law:
         return len({f.cell for f in self.features})
 
     def as_json(self) -> Dict[str, object]:
+        # `scope_exhaustive` is deliberately NOT in this payload yet.  It belongs
+        # there -- a reader of `scope: "global"` cannot otherwise tell a proved
+        # classification from an unsearched one -- but `artifacts/candidates.jsonl`
+        # is sha256-pinned in `release/MANIFEST.jsonl` and the candidate ids are
+        # content-addressed, so widening the payload re-hashes every zero_space
+        # row and invalidates a manifest this track does not own.  Filed for the
+        # release track rather than done unilaterally (C11).
         return {
             "form": "gf2_linear",
             "modulus": 2,
@@ -87,6 +99,13 @@ class ZeroSpaceResult:
     basis: List[int]
     difference_rank: int
     n_transitions: int
+    # Cells whose colour-subset enumeration hit `SUBSET_ENUMERATION_LIMIT`.
+    # Empty is the ordinary case and means every `scope` label is a proof.
+    truncated_cells: List[int] = field(default_factory=list)
+
+    @property
+    def scope_exhaustive(self) -> bool:
+        return not self.truncated_cells
 
     @property
     def n_features(self) -> int:
@@ -123,23 +142,39 @@ def encode(state: Sequence[str], features: Sequence[Feature]) -> int:
 
 # -------------------------------------------------------------------- driver
 
-def local_laws(basis: Sequence[int], features: Sequence[Feature]) -> List[int]:
+SUBSET_ENUMERATION_LIMIT = 8
+
+
+def local_laws(basis: Sequence[int], features: Sequence[Feature]
+               ) -> Tuple[List[int], List[int]]:
     """Laws whose support lies inside a single cell -- laws about the encoding.
 
     These are extracted first so that what remains is the part of the recovered
     space that says something about the *world*.  The null space basis that falls
     out of the elimination is arbitrary (it depends on which columns end up
     free), and left alone it mixes the two kinds together.
+
+    Returns `(found, truncated_cells)`.  A cell with more than
+    `SUBSET_ENUMERATION_LIMIT` colours is not enumerated exhaustively -- only its
+    singletons and its full set are tried -- so a cell-local law over, say, three
+    of eleven colours is missed there.  A missed cell-local law does not vanish:
+    it stays in the quotient and is published with `scope: "global"`, i.e. as a
+    law **about the world** rather than about the encoding.  That is a budget
+    deciding a classification, so the budget is returned rather than absorbed,
+    and `analyse` carries it into the result.  It is live, not hypothetical: a
+    ten-colour palette crosses the limit.
     """
     groups: Dict[int, List[int]] = {}
     for i, feature in enumerate(features):
         groups.setdefault(feature.cell, []).append(i)
 
     found: List[int] = []
+    truncated: List[int] = []
     for cell in sorted(groups):
         indices = groups[cell]
-        if len(indices) > 8:                       # keep the enumeration bounded
+        if len(indices) > SUBSET_ENUMERATION_LIMIT:   # keep the enumeration bounded
             subsets = [[i] for i in indices] + [indices]
+            truncated.append(cell)
         else:
             subsets = [
                 [indices[k] for k in range(len(indices)) if (mask >> k) & 1]
@@ -151,7 +186,7 @@ def local_laws(basis: Sequence[int], features: Sequence[Feature]) -> List[int]:
                 vector |= 1 << i
             if gf2.in_span(vector, basis) and not gf2.in_span(vector, found):
                 found.append(vector)
-    return found
+    return found, truncated
 
 
 def analyse(states: Sequence[Sequence[str]], colors: Sequence[str]) -> ZeroSpaceResult:
@@ -164,7 +199,7 @@ def analyse(states: Sequence[Sequence[str]], colors: Sequence[str]) -> ZeroSpace
 
     # Canonical presentation: the encoding's own laws first, then a
     # representative of each remaining dimension, reduced modulo them.
-    locals_ = local_laws(basis, features)
+    locals_, truncated_cells = local_laws(basis, features)
     globals_ = [
         gf2.reduce_modulo(vector, locals_)
         for vector in gf2.quotient_basis(sorted(basis), locals_)
@@ -179,6 +214,11 @@ def analyse(states: Sequence[Sequence[str]], colors: Sequence[str]) -> ZeroSpace
                     features=features,
                     value=gf2.dot(vector, encoded[0]),
                     scope=scope,
+                    # `global` is only a proved classification when every cell
+                    # was enumerated exhaustively.  Where it was not, the label
+                    # means "not found to be cell-local", which is weaker and
+                    # says so.
+                    scope_exhaustive=not truncated_cells,
                 )
             )
 
@@ -188,6 +228,7 @@ def analyse(states: Sequence[Sequence[str]], colors: Sequence[str]) -> ZeroSpace
         basis=sorted(locals_ + globals_),
         difference_rank=gf2.rank(differences),
         n_transitions=len(differences),
+        truncated_cells=truncated_cells,
     )
 
 

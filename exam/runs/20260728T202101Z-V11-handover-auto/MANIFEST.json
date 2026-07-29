@@ -1,0 +1,55 @@
+{
+  "api_calls": 0,
+  "base_commit": "eb73e4ab2d811c8649602c3b4f37937dad0253a9",
+  "branch": "agent/v11-handover-auto",
+  "files": [
+    {
+      "path": "exam/grading/registry.py",
+      "sha256": "d075e3ee7ff25ee9d9ccffeb0e5297887c7faa4eefb8d282181813b7390d5f9d"
+    },
+    {
+      "path": "exam/grading/rubrics_handover_auto.py",
+      "sha256": "35f517a3f9c3b5739222fe0f36ab861e4c7614d2fef6a75e5575cef2bb734ce2"
+    },
+    {
+      "path": "exam/papers/handover_auto.py",
+      "sha256": "0242ed873289936e47ef5fda4e66172e156b2b76668937223bdf5f80e8aa9c8c"
+    },
+    {
+      "path": "exam/runs/20260728T202101Z-V11-handover-auto/BLINDING.md",
+      "sha256": "04140280a4e68e35f1251594ddfa7428b8df8ff649efa143c205a50692c9dde2"
+    },
+    {
+      "path": "exam/runs/20260728T202101Z-V11-handover-auto/PREREGISTRATION.json",
+      "sha256": "0652857f975a2c39936f16d4a2dddbef4838601836e0fdb2982a2950e53e7b86"
+    },
+    {
+      "path": "exam/runs/20260728T202101Z-V11-handover-auto/prompts/tier1_manual.prompt.md",
+      "sha256": "6cac49d6e1a71090c6c581bda24e8d490d66076179edc51445ee3583462fdae5"
+    },
+    {
+      "path": "exam/runs/20260728T202101Z-V11-handover-auto/prompts/tier2_manual_playbook.prompt.md",
+      "sha256": "4a24454b46c8fa6998b52a5b551a9e8a2c94f2bbcde8c0cd94fec1065cda650f"
+    },
+    {
+      "path": "exam/runs/20260728T202101Z-V11-handover-auto/sheet.json",
+      "sha256": "edd3090583fbc3540ada63956710e0e276ca1cee2ad1cfb14abba0f0f6e8d4ad"
+    },
+    {
+      "path": "exam/tests/test_handover_auto.py",
+      "sha256": "b250d13916eb62a9a7adb423f163bfd01a270966606d7f379e9b787b07a86118"
+    },
+    {
+      "path": "exam/tools/run_handover_auto.py",
+      "sha256": "ed7badab095ea8919709c4d6bbfbf5790bb2cd7f1ad5b4be9b332c12354379bd"
+    }
+  ],
+  "network": "none; every build runs inside exam.guard.no_network()",
+  "prompt_id": "V11-handover-auto",
+  "run_id": "20260728T202101Z-V11-handover-auto",
+  "sealed_pile_contact": "none",
+  "territory": "exam",
+  "utc": "2026-07-28T20:21:01Z",
+  "what": "Theoria.md 1.11 layered handover test, automated: two bundle tiers, six fresh subagent readers, one frozen sheet and one frozen marking rule.",
+  "world_id": "a0"
+}

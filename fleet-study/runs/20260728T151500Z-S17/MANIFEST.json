@@ -1,0 +1,10 @@
+{
+  "prompt_id": "S17-fleet-evidence-capture",
+  "branch": "agent/s17-fleet-evidence-capture",
+  "base_commit": "7f6aa87",
+  "utc": "2026-07-28T15:15:00Z",
+  "agent": "RES-4",
+  "lane": "infra",
+  "territory": "fleet-study",
+  "state": "partial -- 3 of 5 data files harvested; human_actions and assembly pending"
+}

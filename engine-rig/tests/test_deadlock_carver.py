@@ -18,7 +18,7 @@ from engines import deadlock_carver as dc
 from engines.fd_adapter import search as fd_search
 from engines.fd_adapter.pddl import ground_actions, parse_domain, parse_problem
 from fixtures import sokoban
-from tools.validate_candidates import validate_file
+from tools.validate_candidates import validate_file, validate_rows
 
 
 @pytest.fixture(scope="module")
@@ -243,3 +243,115 @@ def test_the_carver_is_deterministic(domain):
     first = [t.rendering() for t in dc.carve(dc.Task.build(domain, problem))]
     second = [t.rendering() for t in dc.carve(dc.Task.build(domain, problem))]
     assert first == second == sorted(first, key=lambda r: (r.count("AND"), r))
+
+
+# ------------------------------------ the refutation gates what gets published
+
+def _refuted_report(problem_name="refuted", n_theorems=3):
+    """A report whose theorems changed the answer: solvable blind, unsolvable pruned.
+
+    That is `same_answer`'s falsifying case and the engine's own definition of an
+    unsound theorem -- a pruner that excluded a state the goal was reachable from.
+    """
+    baseline = fd_search.SearchResult(["a", "b", "c"], 100, 120, 0, 9, 500000, True)
+    pruned = fd_search.SearchResult(None, 40, 50, 30, 9, 500000, True)
+    report = dc.PruningReport(problem_name, n_theorems, baseline, pruned)
+    assert report.same_answer is False
+    return report
+
+
+def test_a_refuted_theorem_does_not_reach_the_candidate_stream(domain):
+    """E16's negative sample. Before this, it reached it -- beside its own refutation.
+
+    `carve -> pruning_report -> emit` had no `if` between the last two, so the
+    theorems and the report saying they are unsound went out side by side and
+    nothing said which one won.
+    """
+    problem = problem_of(sokoban.OPEN4)
+    task = dc.Task.build(domain, problem)
+    theorems = dc.carve(task)
+    assert theorems, "the fixture must carve something or this proves nothing"
+
+    rows = dc.candidates(theorems, task, report=_refuted_report(),
+                         timestamp="2026-07-27T00:00:00Z")
+    assert validate_rows(rows) == []
+    assert [r["kind"] for r in rows] == ["plan"], \
+        "a refuted run may publish its account, never its theorems"
+
+    account = rows[0]["payload"]
+    assert account["refuted"] is True
+    assert account["plan_length_unchanged"] is False
+    assert account["invariants_withheld"] == len(theorems)
+    assert account["on_refutation"] == "withhold"
+    assert account["refutation"]["refuted_by"] == "pruning_report.same_answer"
+
+
+def test_the_mark_mode_ships_a_machine_readable_invalidation(domain):
+    """The other branch E16 allows: keep the rows, but not as clean proposals.
+
+    The marker is a payload field, not a sentence inside `rendering` -- prose is
+    not a gate, and the consumer that has to honour this is `bench/dividend.py`,
+    which reads fields.
+    """
+    problem = problem_of(sokoban.OPEN4)
+    task = dc.Task.build(domain, problem)
+    theorems = dc.carve(task)
+
+    rows = dc.candidates(theorems, task, report=_refuted_report(),
+                         timestamp="2026-07-27T00:00:00Z", on_refutation="mark")
+    assert validate_rows(rows) == []
+    invariants = [r for r in rows if r["kind"] == "invariant"]
+    assert len(invariants) == len(theorems)
+    for row in invariants:
+        assert row["payload"]["refuted"] is True
+        assert row["payload"]["refutation"]["pruned_solved"] is False
+    assert [r for r in rows if r["kind"] == "plan"][0]["payload"]["invariants_withheld"] == 0
+
+
+def test_an_unrefuted_run_is_unchanged_and_says_nothing_about_refutation(domain):
+    """The gate must not stamp a verdict on runs that passed.
+
+    `refuted` absent is not the same as `refuted: false`, and neither is the same
+    as a run that took no verdict at all -- see the no-report case below.
+    """
+    problem = problem_of(sokoban.OPEN4)
+    task = dc.Task.build(domain, problem)
+    theorems = dc.carve(task)
+    report = dc.pruning_report(domain, problem, theorems)
+    assert report.same_answer is True
+
+    rows = dc.candidates(theorems, task, report=report,
+                         timestamp="2026-07-27T00:00:00Z")
+    assert len([r for r in rows if r["kind"] == "invariant"]) == len(theorems)
+    account = [r for r in rows if r["kind"] == "plan"][0]["payload"]
+    assert "refuted" not in account
+    assert "invariants_withheld" not in account
+
+    no_verdict = dc.candidates(theorems, task, timestamp="2026-07-27T00:00:00Z")
+    assert len(no_verdict) == len(theorems)
+    assert all("refuted" not in r["payload"] for r in no_verdict)
+
+
+def test_an_unfinished_comparison_neither_clears_nor_refutes(domain):
+    """A search that stopped must not be flattened into either verdict.
+
+    Withholding on it would file a soundness violation against the theorems on
+    the strength of a search that answered nothing; publishing them would clear
+    them on the same nothing.  So it raises, and the emitter does not catch it.
+    """
+    problem = problem_of(sokoban.OPEN4)
+    task = dc.Task.build(domain, problem)
+    theorems = dc.carve(task)
+    stopped = fd_search.SearchResult(None, 10, 10, 0, 3, 500000, False)
+    finished = fd_search.SearchResult(None, 10, 10, 0, 3, 500000, True)
+
+    with pytest.raises(dc.UnfinishedComparison):
+        dc.candidates(theorems, task,
+                      report=dc.PruningReport("p", 1, finished, stopped))
+
+
+def test_an_unknown_refutation_policy_is_refused(domain):
+    problem = problem_of(sokoban.OPEN4)
+    task = dc.Task.build(domain, problem)
+    with pytest.raises(ValueError):
+        dc.candidates([], task, on_refutation="publish-anyway")

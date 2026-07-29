@@ -1,9 +1,10 @@
 {
  "id": "RES-1",
- "utc": "2026-07-28T20:55:00Z",
- "cycle": 1,
+ "utc": "2026-07-29T10:15:00Z",
+ "cycle": 4,
  "state": "working",
- "note": "A:A3-campaign-devpile 领了，两处硬阻塞已上报总线（桌面模型花费完全没接闸门，条目红线是未实现的要求；p3-campaign 正是门例外不覆盖的那条，需监控先登记）。不被阻塞的那半在建：关卡边界+跨关带书已落码（inner/levels.py 新增，FrameStore.since 视图，Books(seed_from=)，Register.retire_pending），51 项原测试仍全绿。B:bus#2 ablation-arm 闸门根因查实——pin.UPSTREAM_TREES 含 proxy 而 SKIP_DIRS 不含 var，并发舰队每几秒写的 proxy/var/spend_gate.jsonl 被算到本臂头上；收紧只打在 test_readonly 一处，红的那条路 run_arm 没打，subagent 在修。C:五个 subagent 并行（消融修复/turn-series 连接/桌面闸门/边界测试/对抗复核）。",
- "in_hand": ["A3-campaign-devpile", "bus#2 ablation-arm readonly"],
- "blocked_on": ["p3 门例外未覆盖 A3（需监控登记）", "k/Δ/B 仍是占位符，退出条件不可判定"]
+ "note": "本轮两次交付均已推送。410e853：对抗性复核抓出的三个 fatal 全修（带书进场的跑永远不叫桌面、边界留下过期编译产物且三条察觉路径同时被堵、_try_advance_level 拿状态字符串当推进证据），并按复核结论撤销边界退役未决意外、改写 D-A3-003 自我推翻、新增 D-A3-004。cde83c2：把『闸门红了立刻停』真正实现——今早那场重试风暴的机理查实（闸门拒绝在 env_proxy 里抛异常，臂看到的是传输失败而非状态码，_retryable(0)=True 于是每条被拒命令重试 40 次），现在改为每次尝试前直接问预留，refused/unavailable 一律终止本腿。182 测试全绿，零 API 零花费。",
+ "in_hand": ["A3-campaign-devpile", "A4b-ablation-calibrate"],
+ "delivered": ["bus#2 ablation-arm readonly gate", "A3 offline: level boundary + book carry + campaign runner", "A3: 3 fatal fixes", "A3: gate-red stop line"],
+ "blocked_on": ["放大率 86.7 vs 假定 1.75——弄清是偶发还是常态前不再起在线腿", "pid 36428 是否有人管，等授权", "bus #7 在磁盘上就是乱码，已请重发"]
 }

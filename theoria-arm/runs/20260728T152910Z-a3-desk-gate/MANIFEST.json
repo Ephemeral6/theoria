@@ -1,0 +1,11 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "dc9865a1b5edd432350d4a7bee4b218776e135d5",
+  "utc": "2026-07-28T15:29:10Z",
+  "what": "Wire theoria-arm's desk model spend to proxy/spend_gate.py. Before this run the arm's dominant cost axis -- dollars spent by `claude -p` in harness/modelcall.py -- never touched the shared pool; only ARC actions were gated, server-side, by proxy/env_proxy.py.",
+  "offline": true,
+  "network_calls": 0,
+  "money_spent_usd": 0.0,
+  "files": []
+}

@@ -1,0 +1,1768 @@
+{
+  "counts": {
+    "IMPROVED": 0,
+    "NEW_GAP": 0,
+    "NEW_OK": 0,
+    "NOT_A_GATE": 0,
+    "PINNED_OK": 141,
+    "REGRESSION": 0,
+    "RETIRED": 0
+  },
+  "detector": "A-B",
+  "entry_points": 141,
+  "exit_code": 0,
+  "findings": [
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "track: engine-rig (its A0 cold start)",
+      "path": "a0-spike/pipeline/run_a0.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "track: engine-rig (its A0 cold start)",
+      "path": "a0-spike/probes/semantics_probe.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "track: engine-rig (its A0 cold start)",
+      "path": "a0-spike/runs/20260728T040057Z-c2/make_manifest.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 28,
+          "target": "ablation-arm/build_theory.py",
+          "test_file": "ablation-arm/tests/test_build_and_determinism.py",
+          "test_func": "test_the_check_notices_a_hand_edit",
+          "why": "assert <verdict> is False"
+        },
+        {
+          "lineno": 48,
+          "target": "ablation-arm/build_theory.py",
+          "test_file": "ablation-arm/tests/test_build_and_determinism.py",
+          "test_func": "test_the_check_notices_a_proof_marker_put_back",
+          "why": "assert <verdict> is False"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: arms",
+      "path": "ablation-arm/build_theory.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: arms",
+      "path": "ablation-arm/exhibits/e1_a0.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: arms",
+      "path": "ablation-arm/exhibits/e2_a2.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: arms",
+      "path": "ablation-arm/exhibits/e3_charitable.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 84,
+          "target": "ablation-arm/run_arm.py",
+          "test_file": "ablation-arm/tests/test_loop.py",
+          "test_func": "test_a_wrong_trace_turns_the_run_red_rather_than_plausible",
+          "why": "assert <verdict> is False"
+        },
+        {
+          "lineno": 104,
+          "target": "ablation-arm/run_arm.py",
+          "test_file": "ablation-arm/tests/test_loop.py",
+          "test_func": "test_the_sweep_is_reported_and_never_reaches_the_bus",
+          "why": "assert <verdict> is False"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: arms",
+      "path": "ablation-arm/run_arm.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "lane: arms",
+      "path": "ablation-arm/run_exhibits.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 73,
+          "target": "ablation-arm/verify.py",
+          "test_file": "ablation-arm/tests/test_verify.py",
+          "test_func": "test_a_missing_field_is_not_read_as_the_value_the_gate_wants",
+          "why": "assert <verdict> is False"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: arms",
+      "path": "ablation-arm/verify.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 122,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_the_complete_sweep_refuses_rather_than_quietly_truncating",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 142,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_without_truncation_the_same_prefix_would_read_incomplete",
+          "why": "assert ... == 'INCOMPLETE'"
+        },
+        {
+          "lineno": 159,
+          "target": "arc-recon/canary.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_plan_longer_than_the_spec_is_refused",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "shared ground -- the pile cut and the API access check",
+      "path": "arc-recon/canary.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 122,
+          "target": "arc-recon/canary_schedule.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_the_complete_sweep_refuses_rather_than_quietly_truncating",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 127,
+          "target": "arc-recon/canary_schedule.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_an_unknown_mode_is_an_error_not_a_default",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 246,
+          "target": "arc-recon/canary_schedule.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_sealed_target_is_refused_before_anything_is_planned",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "shared ground -- the pile cut and the API access check",
+      "path": "arc-recon/canary_schedule.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 419,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_sealed_id_in_a_request_is_a_touch",
+          "why": "assert <verdict> is False"
+        },
+        {
+          "lineno": 431,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_short_sealed_id_in_a_request_is_also_a_touch",
+          "why": "assert <verdict> is False"
+        },
+        {
+          "lineno": 446,
+          "target": "arc-recon/contamination.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_a_transport_failure_still_leaves_exactly_one_ledger_row",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "shared ground -- the pile cut and the API access check",
+      "path": "arc-recon/contamination.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "shared ground -- the pile cut and the API access check",
+      "path": "arc-recon/cut_piles.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 246,
+          "target": "arc-recon/precheck.py",
+          "test_file": "arc-recon/test_canary_schedule.py",
+          "test_func": "test_a_sealed_target_is_refused_before_anything_is_planned",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 124,
+          "target": "arc-recon/precheck.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_sealed_games_are_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 132,
+          "target": "arc-recon/precheck.py",
+          "test_file": "arc-recon/test_hygiene.py",
+          "test_func": "test_replay_refuses_a_sealed_target_before_spending",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "shared ground -- the pile cut and the API access check",
+      "path": "arc-recon/precheck.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "shared ground -- the pile cut and the API access check",
+      "path": "arc-recon/precheck_resume.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "shared ground -- the pile cut and the API access check",
+      "path": "arc-recon/redact_ledger.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "shared ground -- the pile cut and the API access check",
+      "path": "arc-recon/runs/20260728T150228Z-S10-invariant-on-resource/proposed/board_log_invariants.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "shared ground -- the pile cut and the API access check",
+      "path": "arc-recon/runs/20260728T150228Z-S10-invariant-on-resource/proposed/concurrency_invariants.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 222,
+          "target": "arc-recon/tools/ledger_invariants.py",
+          "test_file": "arc-recon/test_ledger_invariants.py",
+          "test_func": "test_malformed_lines_are_not_silently_clean",
+          "why": "assert <verdict> is False"
+        },
+        {
+          "lineno": 232,
+          "target": "arc-recon/tools/ledger_invariants.py",
+          "test_file": "arc-recon/test_ledger_invariants.py",
+          "test_func": "test_the_scanner_finds_a_planted_offender_on_disk",
+          "why": "assert <verdict> is False"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "shared ground -- the pile cut and the API access check",
+      "path": "arc-recon/tools/ledger_invariants.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/audit_cells.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 61,
+          "target": "baseline-arms/harness/audit_pool.py",
+          "test_file": "baseline-arms/tests/test_audit_pool.py",
+          "test_func": "test_a_short_action_count_is_caught",
+          "why": "assert not <verdict>"
+        },
+        {
+          "lineno": 76,
+          "target": "baseline-arms/harness/audit_pool.py",
+          "test_file": "baseline-arms/tests/test_audit_pool.py",
+          "test_func": "test_an_inflated_action_count_is_caught_too",
+          "why": "assert not <verdict>"
+        },
+        {
+          "lineno": 101,
+          "target": "baseline-arms/harness/audit_pool.py",
+          "test_file": "baseline-arms/tests/test_audit_pool.py",
+          "test_func": "test_disagreeing_dollars_are_caught",
+          "why": "assert any(... for ... in <findings>)"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/audit_pool.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 42,
+          "target": "baseline-arms/harness/bare_cc.py",
+          "test_file": "baseline-arms/tests/test_spend_binding.py",
+          "test_func": "test_play_refuses_without_a_binding",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/bare_cc.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/campaign.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/campaign_status.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 92,
+          "target": "baseline-arms/harness/fetch_schema_traces.py",
+          "test_file": "baseline-arms/tests/test_whitelist.py",
+          "test_func": "test_partition_refuses_to_return_a_sealed_path",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/fetch_schema_traces.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/merge_ledger.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/probe_action_variants.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/probe_api.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 253,
+          "target": "baseline-arms/harness/run_campaign.py",
+          "test_file": "baseline-arms/tests/test_spend_binding.py",
+          "test_func": "test_a_barrier_with_no_remediation_is_refused",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/run_campaign.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/run_pilot.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/summarise_campaign.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/summarise_pilot.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: arms",
+      "path": "baseline-arms/harness/transport_ab.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: arms",
+      "path": "baseline-arms/runs/20260728T103135Z-a7/await_quota.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "lane: exam / battery",
+      "path": "battery/run_battery.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/certify/fd_conformance.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 161,
+          "target": "cold-start-a0/certify/lean_check.py",
+          "test_file": "cold-start-a0/tests/test_a2_reported_defects.py",
+          "test_func": "test_lean_output_is_decoded_as_utf8_not_by_the_process_locale",
+          "why": "assert not <verdict>"
+        },
+        {
+          "lineno": 190,
+          "target": "cold-start-a0/certify/lean_check.py",
+          "test_file": "cold-start-a0/tests/test_a2_reported_defects.py",
+          "test_func": "test_undecodable_bytes_do_not_take_the_diagnostic_down",
+          "why": "assert not <verdict>"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/certify/lean_check.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 251,
+          "target": "cold-start-a0/certify/replay.py",
+          "test_file": "cold-start-a0/tests/test_a0.py",
+          "test_func": "test_mutants_are_caught",
+          "why": "assert not <verdict>"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/certify/replay.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/certify/score_vs_truth.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/compile/compile_a0.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/compile/problem.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/pipeline/concept_account.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/pipeline/engines_stage.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/pipeline/plan_stage.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/pipeline/unsolvable_variant.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/prime/run_prime.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/prime/world/ground_truth.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory. | Re-pinned 2026-07-29 from `present` to `absent`. The earlier `present` was a resolver defect, not a negative control: `ablation-arm/tests/test_exhibits.py` imports `exhibits.run_all`, four files in this repository are named `run_all.py`, and the tie-break handed the binding to cold-start-a0. Index.resolve now refuses an ambiguous import that shares no path prefix with the importer. Nothing changed in this territory; what changed is that the probe stopped crediting it with another lane's test.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/run_all.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (off limits to engine-rig)",
+      "path": "cold-start-a0/world/ground_truth.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2pipeline/certify_a2.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2pipeline/compile_a2.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2pipeline/concepts.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control. | Re-pinned 2026-07-29 from `present` to `absent`. The earlier `present` was a resolver defect, not a negative control: `ablation-arm/tests/test_exhibits.py` imports `exhibits.run_all`, four files in this repository are named `run_all.py`, and the tie-break handed the binding to cold-start-a0. Index.resolve now refuses an ambiguous import that shares no path prefix with the importer. Nothing changed in this territory; what changed is that the probe stopped crediting it with another lane's test.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2pipeline/engines.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2pipeline/exhibit.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2pipeline/ledger.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2pipeline/locate.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2pipeline/plan.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2pipeline/probe.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2pipeline/refute.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2pipeline/repair.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/a2world/ground_truth.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/run_all.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "track: theory-compiler (A2 cold start)",
+      "path": "cold-start-a2/tools/verify_readonly.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3pipeline/agreement.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3pipeline/bill.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3pipeline/certify_a3.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3pipeline/coldstart.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3pipeline/concepts.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3pipeline/engines.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3pipeline/negctl.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3pipeline/plan.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3pipeline/run_l1.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3pipeline/transfer.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3world/ground_truth.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/a3world/score.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/run_all.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/tools/archive_run.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "track: theory-compiler (A3 transfer)",
+      "path": "cold-start-a3/tools/verify_readonly.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "track: engine-rig",
+      "path": "engine-rig/bench/__main__.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "track: engine-rig",
+      "path": "engine-rig/bench/verify.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: engine-rig",
+      "path": "engine-rig/recheck/__main__.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: engine-rig",
+      "path": "engine-rig/recheck/build_cases.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: engine-rig",
+      "path": "engine-rig/recheck/verify_all.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "track: engine-rig",
+      "path": "engine-rig/runs/20260728T141724Z-E5-cert-recheck/manifest.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "track: engine-rig",
+      "path": "engine-rig/tools/p13_fd_dividend.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 317,
+          "target": "engine-rig/tools/run_all.py",
+          "test_file": "engine-rig/tests/test_integration.py",
+          "test_func": "test_the_cli_refuses_to_append_to_an_existing_file",
+          "why": "assert <exit code> == 2"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "track: engine-rig",
+      "path": "engine-rig/tools/run_all.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 282,
+          "target": "engine-rig/tools/validate_candidates.py",
+          "test_file": "engine-rig/tests/test_integration.py",
+          "test_func": "test_the_validator_rejects_malformed_rows",
+          "why": "assert any(... for ... in <findings>)"
+        },
+        {
+          "lineno": 289,
+          "target": "engine-rig/tools/validate_candidates.py",
+          "test_file": "engine-rig/tests/test_integration.py",
+          "test_func": "test_the_validator_reports_bad_json_and_blank_lines",
+          "why": "assert any(... for ... in <findings>)"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "track: engine-rig",
+      "path": "engine-rig/tools/validate_candidates.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: exam / battery",
+      "path": "exam/tools/archive_run.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "lane: exam / battery",
+      "path": "exam/tools/build_papers.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "lane: exam / battery",
+      "path": "exam/tools/run_exam.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 130,
+          "target": "exam/tools/run_matrix.py",
+          "test_file": "exam/tools/run_matrix.py",
+          "test_func": "calibrate",
+          "why": "in-tree self-test (problems.append)"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: exam / battery",
+      "path": "exam/tools/run_matrix.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "lane: exam / battery",
+      "path": "exam/tools/run_selftest.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "lane: exam / battery",
+      "path": "exam/verify.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: figures / release",
+      "path": "figures/build_all.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 230,
+          "target": "figures/check_coverage.py",
+          "test_file": "figures/check_coverage.py",
+          "test_func": "self_test",
+          "why": "in-tree self-test (problems.append)"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: figures / release",
+      "path": "figures/check_coverage.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: figures / release",
+      "path": "figures/manifest.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: worldgen",
+      "path": "fuzzlab/campaign.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: worldgen",
+      "path": "fuzzlab/minimize.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: worldgen",
+      "path": "fuzzlab/verify.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/_runner.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/assign.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/board.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/bus.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/ci_merge.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/dispatch.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/gates.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/quota.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/reflex.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/scan.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/tests/mutants.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: monitor",
+      "path": "monitor/verify.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: figures / release",
+      "path": "papers/phase1-workshop/figures/check_figure_parity.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 177,
+          "target": "proxy/reconcile.py",
+          "test_file": "proxy/tests/test_e2e.py",
+          "test_func": "test_reconciliation_catches_a_disagreement",
+          "why": "assert ... == 'FAIL'"
+        },
+        {
+          "lineno": 772,
+          "target": "proxy/reconcile.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red35_a_second_run_end_cannot_whitewash_a_mismatch",
+          "why": "assert ... == 'FAIL'"
+        },
+        {
+          "lineno": 791,
+          "target": "proxy/reconcile.py",
+          "test_file": "proxy/tests/test_redteam.py",
+          "test_func": "test_red36_non_integer_levels_do_not_vanish_from_the_derivation",
+          "why": "assert ... == 'FAIL'"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: proxy / spend gate",
+      "path": "proxy/reconcile.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 140,
+          "target": "proxy/replay.py",
+          "test_file": "proxy/tests/test_e2e.py",
+          "test_func": "test_a_tampered_ledger_makes_the_replay_fail",
+          "why": "assert ... == 'FAIL'"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: proxy / spend gate",
+      "path": "proxy/replay.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 140,
+          "target": "proxy/runner.py",
+          "test_file": "proxy/tests/test_e2e.py",
+          "test_func": "test_a_tampered_ledger_makes_the_replay_fail",
+          "why": "assert ... == 'FAIL'"
+        },
+        {
+          "lineno": 177,
+          "target": "proxy/runner.py",
+          "test_file": "proxy/tests/test_e2e.py",
+          "test_func": "test_reconciliation_catches_a_disagreement",
+          "why": "assert ... == 'FAIL'"
+        },
+        {
+          "lineno": 129,
+          "target": "proxy/runner.py",
+          "test_file": "proxy/tests/test_spend_gate_egress.py",
+          "test_func": "test_a_crashed_run_does_not_strand_the_pools_headroom",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: proxy / spend gate",
+      "path": "proxy/runner.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "not surveyed by V11; the criterion finds no negative control.",
+      "owner": "lane: proxy / spend gate",
+      "path": "proxy/scoring/__init__.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 198,
+          "target": "proxy/tools/replay_spotcheck.py",
+          "test_file": "proxy/tests/test_migration.py",
+          "test_func": "test_one_disagreeing_frame_fails_the_spot_check",
+          "why": "assert ... == 'FAIL'"
+        },
+        {
+          "lineno": 216,
+          "target": "proxy/tools/replay_spotcheck.py",
+          "test_file": "proxy/tests/test_migration.py",
+          "test_func": "test_one_session_alone_proves_nothing",
+          "why": "assert ... == 'INSUFFICIENT'"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: proxy / spend gate",
+      "path": "proxy/tools/replay_spotcheck.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 137,
+          "target": "proxy/tools/validate_ledger.py",
+          "test_file": "proxy/tests/test_canon.py",
+          "test_func": "test_the_validator_catches_a_forged_frame_hash",
+          "why": "assert any(... for ... in <findings>)"
+        },
+        {
+          "lineno": 152,
+          "target": "proxy/tools/validate_ledger.py",
+          "test_file": "proxy/tests/test_canon.py",
+          "test_func": "test_the_validator_catches_a_duplicated_seq",
+          "why": "assert any(... for ... in <findings>)"
+        },
+        {
+          "lineno": 159,
+          "target": "proxy/tools/validate_ledger.py",
+          "test_file": "proxy/tests/test_canon.py",
+          "test_func": "test_the_validator_catches_a_level_field_that_does_not_recompute",
+          "why": "assert any(... for ... in <findings>)"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: proxy / spend gate",
+      "path": "proxy/tools/validate_ledger.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: figures / release",
+      "path": "release/check_redlines.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: figures / release",
+      "path": "release/enumerate.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: figures / release",
+      "path": "release/reproduce.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: arms",
+      "path": "theoria-arm/armtools/preflight.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 199,
+          "target": "theory-compiler/src/theory_compiler/handover.py",
+          "test_file": "theory-compiler/tests/test_handover.py",
+          "test_func": "test_one_board_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 208,
+          "target": "theory-compiler/src/theory_compiler/handover.py",
+          "test_file": "theory-compiler/tests/test_handover.py",
+          "test_func": "test_an_undefined_primitive_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 230,
+          "target": "theory-compiler/src/theory_compiler/handover.py",
+          "test_file": "theory-compiler/tests/test_handover.py",
+          "test_func": "test_an_undeclared_event_meaning_is_refused",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "track: theory-compiler",
+      "path": "theory-compiler/src/theory_compiler/handover.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "track: theory-compiler",
+      "path": "theory-compiler/tools/build_deadlock_lean.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 199,
+          "target": "theory-compiler/tools/build_handover_packages.py",
+          "test_file": "theory-compiler/tests/test_handover.py",
+          "test_func": "test_one_board_is_refused",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "track: theory-compiler",
+      "path": "theory-compiler/tools/build_handover_packages.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "track: theory-compiler",
+      "path": "theory-compiler/tools/handover_exam.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "track: theory-compiler",
+      "path": "theory-compiler/tools/probe_mentions.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "track: theory-compiler",
+      "path": "theory-compiler/tools/refresh_manifest.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "track: theory-compiler",
+      "path": "theory-compiler/tools/transcribe_deadlock_certificates.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 115,
+          "target": "theory-compiler/tools/validate_candidates_v02.py",
+          "test_file": "theory-compiler/tests/test_validate_candidates_v02.py",
+          "test_func": "test_a_blank_line_is_a_malformed_stream",
+          "why": "assert any(... for ... in <findings>)"
+        },
+        {
+          "lineno": 277,
+          "target": "theory-compiler/tools/validate_candidates_v02.py",
+          "test_file": "theory-compiler/tests/test_validate_candidates_v02.py",
+          "test_func": "test_no_arguments_prints_a_usage_line",
+          "why": "assert <exit code> == 2"
+        },
+        {
+          "lineno": 281,
+          "target": "theory-compiler/tools/validate_candidates_v02.py",
+          "test_file": "theory-compiler/tests/test_validate_candidates_v02.py",
+          "test_func": "test_a_mistyped_flag_is_refused_rather_than_ignored",
+          "why": "assert <exit code> == 2"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "track: theory-compiler",
+      "path": "theory-compiler/tools/validate_candidates_v02.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 93,
+          "target": "theory-compiler/tools/verify_c4.py",
+          "test_file": "theory-compiler/tools/verify_c4.py",
+          "test_func": "control_source",
+          "why": "in-tree self-test (raise)"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "track: theory-compiler",
+      "path": "theory-compiler/tools/verify_c4.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "track: theory-compiler",
+      "path": "theory-compiler/tools/verify_c8.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "Hand-annotated. A measurement tool, not a gate: `main()` always returns 0 and only prints. The enumerator counts it because it ends in `raise SystemExit(main())`, and by V11's own taxonomy that makes it a dead gate -- the figures/manifest.py shape. Pinned absent and left absent.",
+      "owner": "lane: verify (RES-3) -- this probe's own territory",
+      "path": "verify-lab/negctl/calibrate.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 139,
+          "target": "verify-lab/negctl/probe.py",
+          "test_file": "verify-lab/negctl/tests/test_probe.py",
+          "test_func": "test_a_new_gate_without_a_negative_control_is_red",
+          "why": "assert <exit code> == 1"
+        },
+        {
+          "lineno": 158,
+          "target": "verify-lab/negctl/probe.py",
+          "test_file": "verify-lab/negctl/tests/test_probe.py",
+          "test_func": "test_positive_controls_alone_do_not_count",
+          "why": "assert <exit code> == 1"
+        },
+        {
+          "lineno": 165,
+          "target": "verify-lab/negctl/probe.py",
+          "test_file": "verify-lab/negctl/tests/test_probe.py",
+          "test_func": "test_a_negative_control_that_is_deleted_is_a_regression",
+          "why": "assert <exit code> == 1"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": "Hand-annotated. `present` via verify-lab/negctl/tests/test_probe.py, which plants a gate with no negative control and requires exit 1. A probe exempt from its own rule would be the 142nd case of the disease it looks for, so test_the_probe_is_subject_to_its_own_rule asserts this key exists.",
+      "owner": "lane: verify (RES-3) -- this probe's own territory",
+      "path": "verify-lab/negctl/probe.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 49,
+          "target": "worldgen/build.py",
+          "test_file": "worldgen/tests/test_build_gate.py",
+          "test_func": "test_each_gate_can_fail_on_its_own",
+          "why": "assert <complaint> in <findings>"
+        },
+        {
+          "lineno": 57,
+          "target": "worldgen/build.py",
+          "test_file": "worldgen/tests/test_build_gate.py",
+          "test_func": "test_every_gate_fails_together",
+          "why": "assert any(... for ... in <findings>)"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: worldgen",
+      "path": "worldgen/build.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 323,
+          "target": "worldgen/generate.py",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_with_a_stale_from_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 331,
+          "target": "worldgen/generate.py",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_on_an_undeclared_prop_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 338,
+          "target": "worldgen/generate.py",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_on_a_missing_entity_is_refused",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: worldgen",
+      "path": "worldgen/generate.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [
+        {
+          "lineno": 323,
+          "target": "worldgen/mutate.py",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_with_a_stale_from_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 331,
+          "target": "worldgen/mutate.py",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_on_an_undeclared_prop_is_refused",
+          "why": "pytest.raises"
+        },
+        {
+          "lineno": 338,
+          "target": "worldgen/mutate.py",
+          "test_file": "worldgen/tests/test_mutate.py",
+          "test_func": "test_an_operator_on_a_missing_entity_is_refused",
+          "why": "pytest.raises"
+        }
+      ],
+      "kind": "PINNED_OK",
+      "measured": "present",
+      "note": null,
+      "owner": "lane: worldgen",
+      "path": "worldgen/mutate.py",
+      "pinned": "present"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: worldgen",
+      "path": "worldgen/qc/diagnose_miner.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11's auditors credited this entry point with a negative control the criterion cannot see. Pinned absent so the probe is quiet about it; this is a KNOWN FALSE NEGATIVE of the criterion, not a gap in the territory.",
+      "owner": "lane: worldgen",
+      "path": "worldgen/qc/run_qc.py",
+      "pinned": "absent"
+    },
+    {
+      "evidence": [],
+      "kind": "PINNED_OK",
+      "measured": "absent",
+      "note": "V11 agrees: no executable demonstration that this can fail.",
+      "owner": "lane: worldgen",
+      "path": "worldgen/verify.py",
+      "pinned": "absent"
+    }
+  ],
+  "pin": "C:/Users/user/Desktop/theoria/.worktrees/v14-standing-negative-control-probe/verify-lab/negctl/KNOWN_GAPS.json",
+  "pinned": 141,
+  "red": [],
+  "root": "C:/Users/user/Desktop/theoria/.worktrees/v14-standing-negative-control-probe"
+}

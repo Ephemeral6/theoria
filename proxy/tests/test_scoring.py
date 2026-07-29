@@ -50,6 +50,33 @@ def test_an_edited_scorer_refuses_to_score(tmp_path):
         scoring.verify_frozen(frozen_path=path)
 
 
+def test_the_freeze_covers_the_scorer_s_imports_and_not_just_its_source(tmp_path):
+    """A scorer is not one file. S-12 delegates to `tools/validate_ledger.py`,
+    which consults `canon.py`, so a change in either moves what the scorer
+    returns while `arc_v1.py` hashes exactly as before -- the freeze reports all
+    clear and the number changes underneath it.
+
+    S9 is the first change to exercise that: additive-safety turned S-12 from
+    FAIL to PASS on a stream carrying an unlisted field, under an unchanged
+    `scorer_id`. Freezing the source of a rule whose behaviour lives partly in
+    its imports is a half-freeze, and a half-freeze reads as a whole one."""
+    record = scoring.load_frozen()["scorers"]["arc_v1"]
+    assert set(record["depends_on"]) == {"tools/validate_ledger.py", "canon.py"}
+    scoring.verify_frozen()                      # the real ones agree
+
+    frozen = copy.deepcopy(scoring.load_frozen())
+    frozen["scorers"]["arc_v1"]["depends_on"]["canon.py"] = "sha256:" + "0" * 64
+    path = str(tmp_path / "frozen.json")
+    with open(path, "w", encoding="utf-8", newline="") as fh:
+        json.dump(frozen, fh)
+    import shutil
+    shutil.copy(os.path.join(os.path.dirname(arc_v1.__file__), "arc_v1.py"),
+                str(tmp_path / "arc_v1.py"))
+
+    with pytest.raises(scoring.ScorerDriftError, match="source is unchanged"):
+        scoring.verify_frozen(frozen_path=path)
+
+
 def test_the_freeze_record_names_the_source_it_hashes():
     record = scoring.load_frozen()["scorers"]["arc_v1"]
     assert record["source"].endswith("arc_v1.py")

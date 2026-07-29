@@ -48,15 +48,44 @@ recorded `usage` and a hashed price table that has never been checked against
 a real bill. Recording both lets them be compared -- the first validation of
 `pricing_v1.json` against a provider's own arithmetic. They are compared in
 the run report; a disagreement is a finding about the price table.
+
+## The shared spend gate (A3-campaign-devpile)
+
+"Recorded but not proxied" accounted for the money in *this arm's* ledger and
+nowhere else. It did not, and could not, tell any other session on this machine
+that the money had gone: the single live g50t run spent $6.317658 against a
+$20 float held inside one Python process, and `proxy/spend_gate.py`'s report
+showed this arm's campaigns at $0.00. That is INC-BA-003's shape exactly.
+
+So every call in this file now brackets itself with the shared pool
+(`harness/spend.py`), and the gap that remains is the *transport* gap only:
+
+    check   -> before the subprocess starts, against a pre-authorised ceiling
+    spend
+    record  -> after, always: success, failure, timeout or empty reply
+
+There is no path through `call()` that starts a subprocess without a
+reservation. `spend=None` and no binding on the run raises `NoSpendBinding`
+rather than proceeding ungated, because a desk that spends when nobody claimed
+headroom is the defect this wiring exists to remove -- not a degraded mode of
+it.
+
+`cost_ceiling_usd` stays, and stays independent. Two ceilings is correct here:
+the arm-local one stops this run on its own account and is the one that should
+fire first; the pool's is there for the case where the arm-local one is wrong,
+absent, or the process is not the only one spending.
 """
 
 import json
+import math
 import os
 import shutil
 import subprocess
 import tempfile
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Sequence
+
+from harness.spend import NoSpendBinding, SpendBinding      # noqa: F401
 
 #: The CLI is started here, outside the repository, for baseline-arms' D-009
 #: reason: Claude Code walks parent directories looking for CLAUDE.md, and a
@@ -68,8 +97,52 @@ NEUTRAL_PARENT = tempfile.gettempdir()
 PROVIDER = "anthropic-claude-code-cli"
 
 
+def call_field(record: Dict[str, Any], name: str) -> Any:
+    """Read `beat`/`label`/`transport` off a `model_call` record, either shape.
+
+    Defined here, beside the writer that decides the shape, because the two
+    must not drift: a reader that assumes one shape is a second definition of
+    the record format.
+
+    There are two shapes on disk and both are permanent:
+
+    * **Top-level** -- every `model_call` in the three archived P-8 runs. Those
+      predate `proxy/canon.py`, which closed the field set to ten names.
+    * **Inside `request`** -- everything written since. `canon.check` refuses
+      the top-level form outright, so this is now the only shape that can be
+      written at all.
+
+    Preferring `request` and falling back to top-level reads both. The archived
+    runs are committed artifacts that feed the figure registry, so dropping the
+    fallback would silently re-zero exactly the historical curves this arm has.
+
+    This function exists because moving the fields into `request` without it
+    broke five call sites at once -- constraint 8 flipped to `holds: false` on
+    every future run, and `_turn_spine` filtered on `beat == "theorize"` against
+    a `None`, emptying `turn_series.json`, which is the raw material for the
+    paper's bill-shape figure.
+    """
+    request = record.get("request")
+    if isinstance(request, dict) and request.get(name) is not None:
+        return request[name]
+    return record.get(name)
+
+
 class ModelError(RuntimeError):
     pass
+
+
+class AnonymityBreach(RuntimeError):
+    """A prompt carried a game id.
+
+    Its own class rather than a `ModelError` because the two mean opposite
+    things to a caller. `inner/loop.py` catches desk failures and records them
+    as evidence to go back and theorize against -- which is right for a timeout
+    or an empty reply, and exactly wrong here. A leaked id is not something the
+    loop can learn from; it is a defect in the harness, and the run that
+    produced it is not admissible under `Theoria.md:353` whatever it goes on to
+    measure.
+    """
 
 
 class CostCeilingReached(RuntimeError):
@@ -110,16 +183,55 @@ class ModelDesk:
                  # (`inner/loop.py` records the failure and goes back for
                  # evidence), but a timeout still throws away a paid call.
                  timeout: int = 1800,
-                 transcript_dir: Optional[str] = None):
+                 spend: Optional[SpendBinding] = None,
+                 transcript_dir: Optional[str] = None,
+                 forbid_in_prompt: Sequence[str] = ()):
         self.run = run                                # proxy.ledger.RunLedger
         self.model = model
         self.pricing_ref = pricing_ref
         self.cost_ceiling_usd = cost_ceiling_usd
         self.timeout = timeout
+        #: The claim on the shared pool this desk spends under. Passed
+        #: explicitly where the caller has one; otherwise taken off the
+        #: `RunLedger`, which `harness/run.py:Run` attaches it to.
+        #:
+        #: The fallback is not a convenience. `inner/loop.py` builds the
+        #: ModelDesk and belongs to another agent, so reaching the binding
+        #: through the object that already brackets the run is what lets this
+        #: wiring land without editing that file. It is a fallback and not a
+        #: default: when neither is present `call()` raises, it does not spend.
+        self.spend = spend
         self.transcript_dir = transcript_dir
+        #: Substrings that may not appear in any prompt this desk sends.
+        #:
+        #: `Theoria.md:353` names four overfitting channels and seals each. The
+        #: fourth -- model priors, "公开游戏的攻略可能已在预训练语料里" -- cannot
+        #: be closed, only reduced, and the reduction is a hard rule stated in
+        #: those words: **硬规:游戏 ID 永不进模型上下文,全程匿名化**.
+        #:
+        #: Until A3 that rule held by omission. Nothing sanitised model-bound
+        #: text; `build_prompt` was clean only because nobody had ever wired an
+        #: id into it. An adversarial probe found the omission is not enough:
+        #: `world/adapt.py` records `{"error", "traceback"}` for any engine that
+        #: raises, `evidence_brief` dumps that report into the prompt, and an
+        #: `OSError` message carries the path it failed on -- which is under a
+        #: run directory whose slug used to embed the game stem. Forcing a
+        #: candidate-write failure put **six** occurrences of `g50t` inside a
+        #: 20,975-char prompt. Two more channels of the same shape are live but
+        #: dormant: `books.compile_all` stringifies write errors into
+        #: `compile_errors`, and Lean prefixes every diagnostic with the
+        #: absolute file path, which reaches the next prompt verbatim inside a
+        #: `proof_failure` payload.
+        #:
+        #: So the rule is enforced here instead, at the one place every prompt
+        #: passes through, and it is checked *before* the subprocess starts:
+        #: a leaked id is not something to discover in the transcript after
+        #: paying for the call.
+        self.forbid_in_prompt = tuple(s for s in forbid_in_prompt if s)
 
         self.calls = 0
         self.cli_cost_usd = 0.0
+        self.unpriced_calls = 0
         self.usage_total: Dict[str, int] = {}
         self.log: List[Dict[str, Any]] = []
 
@@ -130,11 +242,70 @@ class ModelDesk:
                 self.usage_total[key] = self.usage_total.get(key, 0) + value
 
     def summary(self) -> Dict[str, Any]:
-        return {"model": self.model, "calls": self.calls,
-                "cli_cost_usd": round(self.cli_cost_usd, 6),
-                "usage_total": dict(self.usage_total),
-                "cost_ceiling_usd": self.cost_ceiling_usd,
-                "beats": sorted({entry["beat"] for entry in self.log})}
+        out = {"model": self.model, "calls": self.calls,
+               "cli_cost_usd": round(self.cli_cost_usd, 6),
+               "usage_total": dict(self.usage_total),
+               "cost_ceiling_usd": self.cost_ceiling_usd,
+               "unpriced_calls": self.unpriced_calls,
+               "beats": sorted({entry["beat"] for entry in self.log})}
+        binding = self.spend or getattr(self.run, "spend_binding", None)
+        out["spend_gate"] = binding.describe() if binding is not None else None
+        return out
+
+    # -- the gate ----------------------------------------------------------
+    def binding(self) -> SpendBinding:
+        """The claim this desk spends under, or a refusal.
+
+        Refusing here rather than returning None is the whole wiring: an
+        ungated desk call is not a degraded mode, it is the defect.
+        """
+        binding = self.spend or getattr(self.run, "spend_binding", None)
+        if binding is None:
+            raise NoSpendBinding(
+                "this desk has no claim on the shared spend pool, so it may not "
+                "start a `claude -p` subprocess. Every desk call costs real "
+                "money on a bill shared with every other session on this "
+                "machine (the one live g50t run spent $6.317658, none of which "
+                "the pool could see). Open one with "
+                "`harness.spend.open_binding(...)` -- `harness/run.py:Run` does "
+                "it for a normal run and attaches it to the RunLedger.")
+        return binding
+
+    @staticmethod
+    def price_of(envelope: Dict[str, Any], usage: Dict[str, Any]):
+        """What one envelope cost, or None if it cannot be trusted to say.
+
+        None means "charge the pre-flight ceiling and flag it `unpriced`" --
+        `proxy/model_proxy.py:239,303`'s rule, because assuming a call cost
+        nothing is letting the provider decide whether it gets billed.
+
+        Two ways an envelope fails to price itself:
+
+        * `total_cost_usd` absent, null, or not a finite non-negative number;
+        * `total_cost_usd == 0.0` **and** the `usage` block is missing its token
+          counts. A genuinely free call is possible, but a zero with no tokens
+          behind it is the shape of a missing field, and a missing field must
+          not settle as $0.00.
+
+        A priced envelope whose `usage` block is merely incomplete is **not**
+        flagged unpriced: the price came from `total_cost_usd`, not from the
+        tokens, so the pool's dollar total is still exact. Flagging it would
+        turn that total into a lower bound and `UNPRICED_SPEND` would then
+        refuse every dollar in the shared pool, for every session, until a
+        human ran `price_unpriced()` -- the failure mode `spend_gate.py:860`
+        documents. The incompleteness is recorded in the spend detail instead.
+        """
+        raw = envelope.get("total_cost_usd")
+        if not isinstance(raw, (int, float)) or isinstance(raw, bool):
+            return None
+        value = float(raw)
+        if value != value or math.isinf(value) or value < 0:
+            return None
+        if value == 0.0 and not all(
+                isinstance((usage or {}).get(key), int)
+                for key in ("input_tokens", "output_tokens")):
+            return None
+        return value
 
     # -- the call ----------------------------------------------------------
     def call(self, prompt: str, *, beat: str, step_idx: Optional[int] = None,
@@ -152,24 +323,130 @@ class ModelDesk:
                 "spent $%.4f of a $%.2f ceiling over %d calls"
                 % (self.cli_cost_usd, self.cost_ceiling_usd, self.calls))
 
+        # Before the gate and before the subprocess: a prompt carrying the game
+        # id must not be sent, and finding out afterwards costs both the money
+        # and the run's admissibility as evidence.
+        leaked = sorted({s for s in self.forbid_in_prompt if s in prompt})
+        if leaked:
+            raise AnonymityBreach(
+                "the prompt carries %s, which Theoria.md:353 forbids ever "
+                "entering model context (硬规:游戏 ID 永不进模型上下文,"
+                "全程匿名化). Not sent, not charged. This is almost never a "
+                "hand-written id -- the usual source is an engine traceback or "
+                "a compiler error carrying an absolute path from a run "
+                "directory whose slug embeds the game stem, which reaches the "
+                "prompt through evidence_brief or a surprise payload. Give the "
+                "run a game-free slug rather than deleting the evidence."
+                % ", ".join(repr(s) for s in leaked))
+
         model = model or self.model
-        envelope, elapsed_ms, stderr = self._invoke(prompt, model)
+
+        # -- the gate ------------------------------------------------------
+        # Pre-authorised before the subprocess starts, against the GLOBAL pool
+        # sum rather than this process's counter. `check` refuses; it consumes
+        # nothing, so a generous per-call ceiling costs only an early refusal
+        # when the pool is nearly empty.
+        binding = self.binding()
+        detail = {"arm": "theoria", "run_id": getattr(self.run, "run_id", None),
+                  "beat": beat, "label": label, "model": model,
+                  "transport": "claude-code-cli", "call": self.calls + 1}
+        binding.check_model_call()
+
+        try:
+            envelope, elapsed_ms, stderr = self._invoke(prompt, model)
+        except BaseException:
+            # The subprocess may or may not have reached the provider -- a
+            # timeout is exactly the case where it did and the answer was
+            # thrown away. Charged at its ceiling and flagged unpriced either
+            # way, because the alternative is assuming it cost nothing, which
+            # lets the provider decide whether it gets billed.
+            self.calls += 1
+            self.unpriced_calls += 1
+            binding.record_model_call(
+                None, detail=dict(detail, outcome="raised_before_a_price",
+                                  why="the CLI raised before an envelope "
+                                      "carrying a price came back"))
+            raise
 
         usage = envelope.get("usage") or {}
         text = envelope.get("result") or ""
-        cli_cost = float(envelope.get("total_cost_usd") or 0.0)
+        priced = self.price_of(envelope, usage)
+        cli_cost = 0.0 if priced is None else priced
 
         self.calls += 1
         self.cli_cost_usd += cli_cost
+        if priced is None:
+            self.unpriced_calls += 1
         self._absorb_usage(usage)
+
+        # Settled before the ledger write and before the empty-reply raise
+        # below: a call that came back empty was still billed, and money that
+        # was spent is a fact whatever happens to the run afterwards.
+        charged = binding.record_model_call(
+            priced, detail=dict(
+                detail,
+                subtype=envelope.get("subtype"),
+                elapsed_ms=elapsed_ms,
+                usage_complete=all(isinstance(usage.get(key), int)
+                                   for key in ("input_tokens", "output_tokens")),
+                why=(None if priced is not None else
+                     "the CLI envelope carried no usable total_cost_usd, so the "
+                     "call is charged at its pre-flight ceiling")))
 
         # The request as *this arm* sent it. Named `prompt` rather than
         # `messages` so nobody mistakes it for the /v1/messages body: the CLI
         # wraps it in a system prompt this arm never sees.
+        # `invocation_idx` is this desk's own monotonic counter, and it is here
+        # rather than at the top level because `model_call` is a **closed**
+        # field set (`proxy/canon.py:64`, another track's file): a new top-level
+        # key would be refused by `canon.check`. `request` is passed verbatim,
+        # so this is the one place the arm may add its own vocabulary.
+        #
+        # The record already carries `call_idx` (assigned by
+        # `RunLedger._next_call`) and `step_idx`, so the cost curve can be
+        # joined to environment steps without reconstruction. Joining it to
+        # *inner-loop turns* needs the turn number, which only `inner/loop.py`
+        # knows and which it does not currently pass.
         request = {"transport": "claude-code-cli", "model": model,
                    "max_turns": max_turns, "prompt": prompt,
-                   "beat": beat, "label": label}
+                   "beat": beat, "label": label,
+                   "invocation_idx": self.calls,
+                   # Sealing provenance, per call. These were top-level kwargs
+                   # until A3; see the block comment below for why they moved
+                   # here and what it cost.
+                   "proxied": False,
+                   "proxy_gap":
+                       "model_proxy strips Authorization and no "
+                       "ANTHROPIC_API_KEY exists; see harness/modelcall.py and "
+                       "DECISIONS D-P8-002. The gap is transport-only: this "
+                       "call was checked and recorded against the shared pool "
+                       "(spend_gate campaign %s, reservation %s), so the "
+                       "dollars are visible to every other session even though "
+                       "the bytes did not cross the proxy."
+                       % (binding.reservation.campaign,
+                          binding.reservation.reservation_id)}
 
+        # These five -- beat, label, transport, proxied, proxy_gap -- used to be
+        # passed as top-level keyword arguments here, and `RunLedger.model_call`
+        # forwards `**extra` straight into `Ledger.append`, which runs
+        # `canon.check`. `canon.MODEL_CALL_FIELDS` is a closed set of ten names
+        # and contains none of them, so this call raised `NonCanonicalField` on
+        # every invocation that got as far as writing.
+        #
+        # It never showed up because `--mock` runs set `offline=True` and skip
+        # theorize entirely, so no test in this repo ever reached a completed
+        # model call. The archived P-8 ledgers do carry the five fields, because
+        # those runs predate `proxy/canon.py` landing; `modelcall.py` was edited
+        # afterwards without adapting.
+        #
+        # What made it expensive rather than merely wrong: the raise lands
+        # *after* `self.cli_cost_usd` is incremented and after
+        # `binding.record_model_call` has settled the charge against the shared
+        # pool. A live run therefore paid for the call, booked the money, and
+        # then died writing the record down -- for every model call, starting
+        # with the first. The comment forty lines above already said the field
+        # set was closed and that `request` is the one place this arm may add
+        # its own vocabulary. The code did the opposite of its own comment.
         self.run.model_call(
             provider=PROVIDER,
             model=model,
@@ -182,17 +459,13 @@ class ModelDesk:
                   "status": 200 if envelope.get("subtype") == "success" else 500,
                   "elapsed_ms": elapsed_ms, "attempts": 1,
                   "forwarded": False, "stream": False},
-            beat=beat,
-            label=label,
-            transport="claude-code-cli",
-            proxied=False,
-            proxy_gap="model_proxy strips Authorization and no ANTHROPIC_API_KEY "
-                      "exists; see harness/modelcall.py and DECISIONS D-P8-002",
         )
 
         entry = {"call": self.calls, "beat": beat, "label": label,
                  "model": model, "elapsed_ms": elapsed_ms,
                  "cli_cost_usd": cli_cost, "usage": usage,
+                 "gate_charged_usd": round(charged, 6),
+                 "gate_unpriced": priced is None,
                  "step_idx": step_idx, "chars_in": len(prompt),
                  "chars_out": len(text)}
         self.log.append(entry)

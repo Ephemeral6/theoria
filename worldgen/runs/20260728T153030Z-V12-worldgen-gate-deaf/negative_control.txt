@@ -1,0 +1,101 @@
+==============================================================================
+CASE: POSITIVE CONTROL ！ the pinned miss (stub exits 1, as run_qc does)
+expected exit 0
+------------------------------------------------------------------------------
+!! SELF-TEST: stage table and pin substituted from C:\Users\user\AppData\Local\Temp\tmpq_blw25d\SPEC.json
+[miss] IMPLANTED QC stage
+        stub stage wrote its verdict
+
+PINNED MISS (unchanged from worldgen/qc/KNOWN_MISS.json, whose `owner` field says whose work each red is): IMPLANTED QC stage
+VERDICT: library gates green; 1 QC stage(s) still missing their pre-registered bar, exactly as pinned. Exit 0 is the documented decision, NOT a QC pass ！ see worldgen/qc/KNOWN_MISS.json and RUN_STATE.md ′gaps.
+------------------------------------------------------------------------------
+ACTUAL EXIT: 0   [OK]
+
+==============================================================================
+CASE: a world that used to pass L1 starts raising
+expected exit 1
+------------------------------------------------------------------------------
+!! SELF-TEST: stage table and pin substituted from C:\Users\user\AppData\Local\Temp\tmpjdadwbm0\SPEC.json
+[FAIL] IMPLANTED QC stage
+        stub stage wrote its verdict
+    !!  worlds.w-good.L1_liveness: pinned true, measured false
+    !!  pinned in ..\..\..\..\AppData\Local\Temp\tmpjdadwbm0\PIN.json under stages.implanted
+
+FAILED: IMPLANTED QC stage
+------------------------------------------------------------------------------
+ACTUAL EXIT: 1   [OK]
+
+==============================================================================
+CASE: the stage reports success and writes a different verdict
+expected exit 1
+------------------------------------------------------------------------------
+!! SELF-TEST: stage table and pin substituted from C:\Users\user\AppData\Local\Temp\tmp0t62hlip\SPEC.json
+[FAIL] IMPLANTED QC stage
+        stub stage wrote its verdict
+    !!  family_verdict.all_L1: pinned false, measured true
+    !!  family_verdict.pass: pinned false, measured true
+    !!  pinned in ..\..\..\..\AppData\Local\Temp\tmp0t62hlip\PIN.json under stages.implanted
+
+FAILED: IMPLANTED QC stage
+------------------------------------------------------------------------------
+ACTUAL EXIT: 1   [OK]
+
+==============================================================================
+CASE: the red quietly went green ！ the pin is now a lie
+expected exit 1
+------------------------------------------------------------------------------
+!! SELF-TEST: stage table and pin substituted from C:\Users\user\AppData\Local\Temp\tmpk9hzdmcl\SPEC.json
+[FAIL] IMPLANTED QC stage
+        stub stage wrote its verdict
+    !!  worlds.w-raises.L1_liveness: pinned false, measured true
+    !!  worlds.w-raises.L3a_replay: pinned false, measured true
+    !!  pinned in ..\..\..\..\AppData\Local\Temp\tmpk9hzdmcl\PIN.json under stages.implanted
+
+FAILED: IMPLANTED QC stage
+------------------------------------------------------------------------------
+ACTUAL EXIT: 1   [OK]
+
+==============================================================================
+CASE: the failing world was dropped from the sample
+expected exit 1
+------------------------------------------------------------------------------
+!! SELF-TEST: stage table and pin substituted from C:\Users\user\AppData\Local\Temp\tmpxem6svl6\SPEC.json
+[FAIL] IMPLANTED QC stage
+        stub stage wrote its verdict
+    !!  worlds.w-raises: pinned row absent ！ the sample shrank
+    !!  pinned in ..\..\..\..\AppData\Local\Temp\tmpxem6svl6\PIN.json under stages.implanted
+
+FAILED: IMPLANTED QC stage
+------------------------------------------------------------------------------
+ACTUAL EXIT: 1   [OK]
+
+==============================================================================
+CASE: the stage died before writing (the pre-V12 blind spot)
+expected exit 1
+------------------------------------------------------------------------------
+!! SELF-TEST: stage table and pin substituted from C:\Users\user\AppData\Local\Temp\tmp3o4ya3pq\SPEC.json
+[FAIL] IMPLANTED QC stage
+        ImportError: no module named pipeline
+    !!  the stage wrote no verdict: C:\Users\user\AppData\Local\Temp\tmp3o4ya3pq\IMPLANT.json does not exist. A QC stage that cannot report is a failure, not a miss.
+    !!  pinned in ..\..\..\..\AppData\Local\Temp\tmp3o4ya3pq\PIN.json under stages.implanted
+
+FAILED: IMPLANTED QC stage
+------------------------------------------------------------------------------
+ACTUAL EXIT: 1   [OK]
+
+==============================================================================
+CASE: the stage died, and a CORRECT artifact from an earlier run is on disk
+expected exit 1
+------------------------------------------------------------------------------
+!! SELF-TEST: stage table and pin substituted from C:\Users\user\AppData\Local\Temp\tmp53w4ecnv\SPEC.json
+[FAIL] IMPLANTED QC stage
+        death after reading
+    !!  the stage did not rewrite C:\Users\user\AppData\Local\Temp\tmp53w4ecnv\IMPLANT.json during this run (mtime unchanged). run_qc writes its report on every completed run, so this is a stage that died before finishing ！ not a measured miss. Whatever is on disk is from an earlier run and says nothing about this one.
+    !!  pinned in ..\..\..\..\AppData\Local\Temp\tmp53w4ecnv\PIN.json under stages.implanted
+
+FAILED: IMPLANTED QC stage
+------------------------------------------------------------------------------
+ACTUAL EXIT: 1   [OK]
+
+==============================================================================
+7 case(s) behaved as required, 0 did not.

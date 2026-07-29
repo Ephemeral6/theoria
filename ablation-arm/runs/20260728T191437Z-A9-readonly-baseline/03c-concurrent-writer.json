@@ -1,0 +1,68 @@
+{
+  "action_seconds": 0.181,
+  "aligned": true,
+  "background": [
+    "a9-noise-31360.txt",
+    "a9-noise-31360/ledger.jsonl"
+  ],
+  "both_moved_during_the_empty_leg": true,
+  "files_watched": 2435,
+  "hard_list": [
+    {
+      "pattern": "proxy/var/spend_gate.jsonl",
+      "why": "spend gate ledger: foreign write = spending out of control"
+    },
+    {
+      "pattern": "arc-recon/data/*.jsonl",
+      "why": "contamination/incident ledgers: foreign write = the pile-cut record tampered with"
+    },
+    {
+      "pattern": "CONTRACTS/**",
+      "why": "frozen v0.1 contracts: foreign write = a frozen contract routed around"
+    },
+    {
+      "pattern": "monitor/state.json",
+      "why": "monitor state: foreign write = the watcher edited by the watched"
+    },
+    {
+      "pattern": "**/ledger.jsonl",
+      "why": "per-territory ledger: the accounting a claim is later checked against"
+    },
+    {
+      "pattern": "baseline-arms/**/ledger.*.jsonl",
+      "why": "sharded ledgers: the form the ledgers actually take on this tree"
+    },
+    {
+      "pattern": "engine-rig/**/candidates.jsonl",
+      "why": "the frozen contract's append-only stream, which lives outside CONTRACTS/"
+    }
+  ],
+  "hard_listed_path": "a9-noise-31360/ledger.jsonl",
+  "hard_listed_was_reported": true,
+  "hard_listed_was_subtracted": false,
+  "hard_rule_it_matches": "**/ledger.jsonl -- per-territory ledger: the accounting a claim is later checked against",
+  "idle_seconds": 2.544,
+  "idle_sleep": 2.0,
+  "makeup_seconds": 0.0,
+  "makeup_sleep": 0.0,
+  "observed": [
+    "a9-noise-31360.txt",
+    "a9-noise-31360/ledger.jsonl"
+  ],
+  "ordinary_path": "a9-noise-31360.txt",
+  "ordinary_was_reported": false,
+  "ordinary_was_subtracted": true,
+  "reported": [
+    "a9-noise-31360/ledger.jsonl"
+  ],
+  "reported_by_hard_list": [
+    "a9-noise-31360/ledger.jsonl"
+  ],
+  "run_seconds": 0.46,
+  "snapshot_seconds": 0.274,
+  "subtracted": [
+    "a9-noise-31360.txt"
+  ],
+  "unreadable": [],
+  "what": "a real concurrent writer touching two files across both legs: the only measurement in this directory where the empty-run subtraction actually runs"
+}

@@ -64,3 +64,1665 @@
 2026-07-28T15:27:41Z FLAG origin/agent/r2-release-licence: tests red in release
 2026-07-28T15:27:42Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
 2026-07-28T15:27:56Z MERGED origin/agent/s13-verify-gate-enforced (dirs: monitor; gates: monitor)
+2026-07-28T15:37:30Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T15:37:33Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T15:37:37Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T15:37:42Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T15:37:43Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T15:37:45Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T15:37:49Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T15:37:52Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T15:43:27Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T15:43:35Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T15:43:38Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T15:43:49Z MERGED origin/agent/p11-battery-section-refresh (dirs: PARTNER_SYNC.md,papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-28T15:43:53Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T15:43:53Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T15:43:56Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T15:44:01Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T15:44:04Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T15:47:26Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T15:47:34Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T15:47:41Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T15:47:45Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T15:47:46Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T15:47:48Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T15:47:53Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T15:47:57Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T15:53:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T15:53:29Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T15:53:32Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T15:53:38Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T15:53:39Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T15:53:41Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T15:53:43Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T15:53:46Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T15:58:20Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T15:58:26Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T15:58:29Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T15:58:33Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T15:58:33Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T15:58:36Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T15:58:39Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T15:58:42Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:03:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T16:03:30Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T16:03:36Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T16:03:39Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T16:03:40Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T16:03:42Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T16:03:44Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T16:03:47Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:04:34Z MERGED origin/agent/v10-fuzz-mutation-power (dirs: fuzzlab; gates: verify:fuzzlab(verify.py); a gate dirtied the worktree: fuzzlab/out/campaign.json,fuzzlab/out/findings.jsonl,fuzzlab/out/seeds.jsonl)
+2026-07-28T16:04:35Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:04:37Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T16:07:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T16:07:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T16:07:30Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T16:07:33Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T16:07:34Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T16:08:51Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T16:08:54Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T16:08:55Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:09:00Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T16:09:03Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T16:09:05Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:09:06Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:09:08Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T16:12:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T16:12:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T16:12:30Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T16:12:34Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T16:12:34Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T16:13:50Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T16:13:53Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T16:13:54Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:13:56Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T16:13:58Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T16:14:01Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:14:02Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:14:04Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T16:17:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T16:17:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T16:17:30Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T16:17:34Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T16:17:34Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T16:18:50Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T16:18:56Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T16:18:57Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:18:59Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T16:19:01Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T16:19:04Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:19:04Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:19:06Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T16:22:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T16:22:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T16:22:30Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T16:22:33Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T16:22:34Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T16:23:50Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T16:23:52Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T16:23:53Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:23:58Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T16:24:01Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T16:24:03Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:24:04Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:24:06Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T16:27:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T16:27:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T16:27:31Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T16:27:34Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T16:27:35Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T16:28:52Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T16:28:55Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T16:28:55Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:28:58Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T16:29:00Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T16:29:02Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:29:03Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:29:05Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T16:32:23Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T16:32:28Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T16:32:31Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T16:32:34Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T16:32:35Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T16:33:52Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T16:33:57Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T16:33:58Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:34:00Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T16:34:03Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T16:34:05Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:34:06Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:34:08Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T16:37:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T16:37:26Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T16:37:52Z MERGED origin/agent/e11-engine-crosscheck-deep (dirs: PARTNER_SYNC.md,engine-rig; gates: pytest:engine-rig)
+2026-07-28T16:37:55Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T16:37:58Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T16:37:58Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T16:39:14Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T16:39:18Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T16:39:18Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:39:20Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T16:39:23Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T16:39:26Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:39:26Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:39:28Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T16:42:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T16:42:29Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T16:42:34Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T16:42:37Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T16:42:37Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T16:43:54Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T16:43:57Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T16:43:58Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:44:00Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T16:44:03Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T16:44:05Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:44:05Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:44:08Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T16:52:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T16:52:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T16:52:30Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T16:52:34Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T16:52:34Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T16:53:51Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T16:53:58Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T16:53:58Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:54:04Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T16:54:06Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T16:54:09Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:54:09Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:54:11Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T16:54:12Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:57:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T16:57:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T16:57:30Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T16:57:34Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T16:57:34Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T16:58:52Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T16:58:55Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T16:58:55Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:59:00Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T16:59:03Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T16:59:06Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T16:59:06Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T16:59:08Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T16:59:09Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:02:13Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T17:02:18Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T17:02:21Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T17:02:25Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T17:02:25Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T17:03:43Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T17:03:46Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T17:03:46Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:03:50Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T17:03:52Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T17:03:55Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T17:03:55Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:03:57Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T17:03:57Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:07:15Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T17:07:19Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T17:07:22Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T17:07:25Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T17:07:25Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T17:08:42Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T17:08:45Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T17:08:46Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:08:51Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T17:08:53Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T17:08:56Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T17:08:56Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:08:58Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T17:08:58Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:12:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T17:12:28Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T17:12:31Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T17:12:35Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T17:12:35Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T17:13:55Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T17:13:58Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T17:13:59Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:14:01Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T17:14:04Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T17:14:06Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T17:14:07Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:14:09Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T17:14:09Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:14:09Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:17:26Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T17:17:31Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T17:17:34Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T17:17:38Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T17:17:38Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T17:18:54Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T17:18:57Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T17:18:58Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:19:00Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T17:19:03Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T17:19:05Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T17:19:06Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:19:08Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T17:19:08Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:19:08Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:22:20Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T17:22:26Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T17:22:29Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T17:22:33Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T17:22:33Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T17:23:49Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T17:23:52Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T17:23:52Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:23:55Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T17:23:57Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T17:24:00Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T17:24:00Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:24:02Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T17:24:03Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:24:03Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:27:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T17:27:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T17:28:26Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T17:28:29Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T17:28:33Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T17:28:33Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T17:29:49Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T17:29:52Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T17:29:52Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:29:55Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T17:29:57Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T17:30:00Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T17:30:00Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:30:02Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T17:30:03Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:30:03Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:32:24Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T17:32:31Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T17:33:31Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T17:33:34Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T17:33:38Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T17:33:38Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T17:34:55Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T17:34:58Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T17:34:58Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:35:01Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T17:35:05Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T17:35:08Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T17:35:08Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:35:10Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T17:35:11Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:35:11Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:37:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T17:37:29Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T17:38:29Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T17:38:32Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T17:38:36Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T17:38:36Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T17:39:53Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T17:39:56Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T17:39:57Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:39:59Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T17:40:02Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T17:40:05Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T17:40:05Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:40:07Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T17:40:08Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:40:08Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:42:23Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T17:42:31Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T17:43:31Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T17:43:34Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T17:43:37Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T17:43:38Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T17:44:57Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T17:45:00Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T17:45:01Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:45:03Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T17:45:06Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T17:45:08Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T17:45:09Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:45:11Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T17:45:11Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:45:11Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:47:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T17:47:29Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T17:48:29Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T17:48:32Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T17:48:36Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T17:48:36Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T17:49:53Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T17:49:56Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T17:49:57Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:49:59Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T17:50:02Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T17:50:05Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T17:50:05Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:50:08Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T17:50:08Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:50:08Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T17:57:28Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T17:57:38Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T17:58:40Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T17:58:43Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T17:58:47Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T17:58:47Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T18:00:10Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T18:00:15Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T18:00:16Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:00:18Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T18:00:26Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T18:00:29Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T18:00:30Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:00:33Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T18:00:33Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:00:33Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:00:33Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:07:30Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T18:07:40Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T18:08:18Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T18:10:19Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T18:10:22Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T18:10:54Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T18:10:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T18:20:14Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T18:20:20Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T18:20:21Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:20:23Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T18:20:27Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T18:20:30Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T18:20:31Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:20:33Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T18:20:34Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:20:34Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:20:34Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:20:36Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T18:22:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T18:22:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T18:22:44Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T18:23:47Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T18:23:50Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T18:23:53Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T18:23:54Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T18:25:10Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T18:25:13Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T18:25:13Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:25:16Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T18:25:18Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T18:25:22Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T18:25:23Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:25:25Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T18:25:26Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:25:26Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:25:26Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:25:28Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T18:27:20Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T18:27:28Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T18:27:39Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T18:28:37Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T18:28:40Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T18:28:43Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T18:28:44Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T18:29:59Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T18:30:02Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T18:30:03Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:30:05Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T18:30:08Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T18:30:11Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T18:30:11Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:30:13Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T18:30:14Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:30:14Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:30:14Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:30:16Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T18:32:20Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T18:32:26Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T18:32:36Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T18:33:36Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T18:33:38Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T18:33:42Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T18:33:42Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T18:34:58Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T18:35:01Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T18:35:02Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:35:04Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T18:35:07Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T18:35:09Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T18:35:10Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:35:12Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T18:35:12Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:35:12Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:35:13Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:35:15Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T18:37:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T18:37:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T18:37:37Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T18:38:36Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T18:38:39Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T18:38:44Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T18:38:44Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T18:39:59Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T18:40:02Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T18:40:03Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:40:05Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T18:40:08Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T18:40:10Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T18:40:11Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:40:13Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T18:40:14Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:40:14Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:40:14Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:40:16Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T18:42:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T18:42:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T18:42:41Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T18:43:41Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T18:43:44Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T18:43:47Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T18:43:47Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T18:45:04Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T18:45:07Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T18:45:07Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:45:09Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T18:45:12Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T18:45:14Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T18:45:15Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:45:17Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T18:45:17Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:45:17Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:45:17Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:45:19Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T18:47:23Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T18:47:28Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T18:47:39Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T18:48:38Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T18:48:41Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T18:48:44Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T18:48:44Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T18:50:00Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T18:50:03Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T18:50:04Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:50:06Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T18:50:09Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T18:50:12Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T18:50:12Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:50:15Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T18:50:15Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:50:15Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:50:15Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:50:18Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T18:52:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T18:52:28Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T18:52:40Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T18:53:41Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T18:53:44Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T18:53:47Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T18:53:47Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T18:55:05Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T18:55:08Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T18:55:08Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:55:11Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T18:55:13Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T18:55:16Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T18:55:16Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:55:18Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T18:55:19Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:55:19Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:55:19Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T18:55:21Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T18:57:26Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T18:57:33Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T18:57:51Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T18:58:53Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T18:58:56Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T18:59:01Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T18:59:01Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:00:25Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:00:28Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:00:28Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:00:31Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:00:34Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:00:37Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:00:37Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:00:39Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:00:40Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:00:40Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:00:40Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:00:42Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:02:26Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:02:32Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:02:44Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:03:43Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:03:46Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:03:49Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:03:50Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:05:07Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:05:11Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:05:11Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:05:14Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:05:17Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:05:19Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:05:20Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:05:22Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:05:23Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:05:23Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:05:23Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:05:25Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:07:26Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:07:35Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:07:47Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:08:49Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:08:52Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:08:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:08:56Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:10:16Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:10:23Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:10:24Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:10:26Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:10:29Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:10:35Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:10:35Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:10:38Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:10:38Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:10:39Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:10:39Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:10:41Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:10:42Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:12:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:12:29Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:12:41Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:12:45Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T19:13:44Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:13:47Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:13:50Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:13:51Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:15:07Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:15:10Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:15:11Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:15:13Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:15:15Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:15:18Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:15:19Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:15:21Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:15:21Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:15:22Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:15:22Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:15:24Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:15:24Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:17:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:17:27Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:17:40Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:17:43Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T19:18:44Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:18:47Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:18:51Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:18:51Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:20:19Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:20:22Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:20:23Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:20:25Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:20:28Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:20:30Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:20:31Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:20:33Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:20:33Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:20:33Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:20:34Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:20:36Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:20:36Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:22:23Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:22:30Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:22:41Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:22:45Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T19:23:46Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:23:49Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:23:52Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:23:53Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:25:12Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:25:15Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:25:15Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:25:17Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:25:23Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:25:25Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:25:26Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:25:28Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:25:29Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:25:29Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:25:29Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:25:34Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:25:34Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:27:23Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:27:29Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:27:42Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:27:46Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T19:28:46Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:28:49Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:28:52Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:28:53Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:30:09Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:30:12Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:30:13Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:30:15Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:30:18Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:30:21Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:30:22Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:30:24Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:30:24Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:30:24Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:30:24Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:30:27Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:30:27Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:32:23Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:32:28Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:32:40Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:32:44Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T19:33:44Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:33:47Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:33:50Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:33:51Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:35:09Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:35:12Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:35:12Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:35:15Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:35:17Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:35:20Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:35:20Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:35:22Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:35:22Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:35:22Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:35:23Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:35:25Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:35:25Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:37:24Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:37:30Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:37:42Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:37:46Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T19:38:46Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:38:49Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:38:52Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:38:53Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:40:11Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:40:14Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:40:15Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:40:17Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:40:20Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:40:24Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:40:25Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:40:27Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:40:28Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:40:28Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:40:28Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:40:30Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:40:31Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:42:29Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:42:37Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:42:48Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:42:52Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T19:43:52Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:43:54Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:43:57Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:43:58Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:45:16Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:45:21Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:45:22Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:45:24Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:45:26Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:45:29Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:45:30Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:45:32Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:45:33Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:45:33Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:45:33Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:45:35Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:45:36Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:47:23Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:47:29Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:47:41Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:47:45Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T19:48:46Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:48:48Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:48:51Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:48:52Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:50:11Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:50:14Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:50:15Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:50:17Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:50:20Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:50:23Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:50:24Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:50:26Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:50:26Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:50:26Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:50:26Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:50:28Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:50:29Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:50:31Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T19:52:23Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:52:28Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:52:39Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:52:43Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T19:53:43Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:53:45Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:53:48Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:53:49Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T19:55:05Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T19:55:08Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T19:55:09Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:55:11Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T19:55:13Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T19:55:16Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T19:55:16Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:55:18Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T19:55:19Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:55:19Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:55:19Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:55:21Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T19:55:22Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T19:55:24Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T19:57:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T19:57:27Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:57:30Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T19:57:40Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T19:57:44Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T19:58:43Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T19:58:46Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T19:58:49Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T19:58:50Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T20:00:05Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T20:00:08Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T20:00:09Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:00:11Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T20:00:15Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T20:00:17Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T20:00:18Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:00:20Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T20:00:21Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:00:21Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:00:21Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:00:23Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T20:00:24Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:00:26Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T20:02:24Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T20:02:30Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:02:34Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:02:46Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T20:02:51Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T20:03:51Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T20:03:57Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T20:04:00Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T20:04:01Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T20:05:16Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T20:05:21Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T20:05:22Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:05:24Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T20:05:26Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T20:05:29Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T20:05:29Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:05:31Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T20:05:31Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:05:32Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:05:32Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:05:34Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T20:05:34Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:05:36Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T20:07:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T20:07:28Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:07:30Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:07:41Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T20:07:45Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T20:08:44Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T20:08:47Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T20:08:50Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T20:08:50Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T20:10:06Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T20:10:09Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T20:10:10Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:10:12Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T20:10:15Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T20:10:17Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T20:10:18Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:10:20Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T20:10:21Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:10:21Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:10:21Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:10:23Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T20:10:23Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:10:27Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T20:12:23Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T20:12:29Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:12:32Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:12:42Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T20:12:46Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T20:13:45Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T20:13:48Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T20:13:51Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T20:13:52Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T20:15:07Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T20:15:10Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T20:15:11Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:15:13Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T20:15:16Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T20:15:18Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T20:15:19Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:15:21Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T20:15:22Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:15:22Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:15:22Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:15:24Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T20:15:24Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:15:27Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T20:17:24Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T20:17:29Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:17:32Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:17:43Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T20:17:46Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T20:18:46Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T20:18:48Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T20:18:51Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T20:18:52Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T20:20:07Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T20:20:11Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T20:20:12Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:20:14Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T20:20:17Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T20:20:20Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T20:20:20Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:20:22Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T20:20:23Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:20:23Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:20:23Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:20:25Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T20:20:26Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:20:28Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T20:22:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T20:22:28Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:22:31Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:22:42Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T20:23:09Z MERGED origin/agent/e6-engine-dividend-v2 (dirs: PARTNER_SYNC.md,engine-rig; gates: pytest:engine-rig)
+2026-07-28T20:23:13Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T20:24:15Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T20:24:18Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T20:24:22Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T20:24:22Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T20:25:41Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T20:25:44Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T20:25:45Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:25:47Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T20:25:50Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T20:25:53Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T20:25:53Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:25:56Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T20:25:56Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:25:56Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:25:56Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:25:58Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T20:25:59Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:26:01Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T20:32:22Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T20:32:27Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:32:30Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:32:41Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T20:32:45Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T20:33:47Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T20:33:50Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T20:33:53Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T20:33:54Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T20:35:12Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T20:35:16Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T20:35:17Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:35:19Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T20:35:25Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T20:35:28Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T20:35:29Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:35:31Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T20:35:32Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:35:32Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:35:32Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:35:35Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T20:35:35Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:35:38Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T20:37:25Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T20:37:31Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:37:35Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:37:46Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T20:37:50Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T20:38:52Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T20:38:56Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T20:39:04Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T20:39:05Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T20:40:26Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T20:40:29Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T20:40:30Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:40:32Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T20:40:35Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T20:40:39Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T20:40:40Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:40:42Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T20:40:43Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:40:43Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:40:43Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:40:49Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T20:40:50Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:40:52Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T20:42:28Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T20:42:33Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:42:36Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:42:48Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T20:42:52Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T20:43:54Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T20:43:57Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T20:44:00Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T20:44:01Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T20:45:19Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T20:45:22Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T20:45:22Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:45:25Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T20:45:27Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T20:45:30Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T20:45:31Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:45:33Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T20:45:34Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:45:34Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:45:34Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:45:36Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T20:45:36Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:45:39Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T20:47:25Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T20:47:30Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:47:33Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:47:45Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T20:47:48Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T20:48:51Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T20:48:53Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T20:48:56Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T20:48:57Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T20:50:18Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T20:50:21Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T20:50:22Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:50:24Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T20:50:28Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T20:50:32Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T20:50:33Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:50:35Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T20:50:36Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:50:36Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:50:36Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:50:38Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T20:50:39Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:50:41Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T20:52:24Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T20:52:30Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:52:33Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:52:44Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T20:52:48Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T20:53:49Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T20:53:52Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T20:53:56Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T20:53:56Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T20:55:14Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T20:55:17Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T20:55:18Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:55:20Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T20:55:23Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T20:55:25Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T20:55:26Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:55:28Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T20:55:28Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:55:28Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:55:29Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:55:31Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T20:55:31Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T20:55:33Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T20:57:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T20:57:27Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:57:30Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T20:57:41Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T20:57:45Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T20:58:46Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T20:58:49Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T20:58:52Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T20:58:52Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T21:00:10Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T21:00:13Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T21:00:14Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:00:17Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T21:00:20Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T21:00:23Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T21:00:24Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:00:26Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T21:00:27Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:00:27Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:00:27Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:00:29Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T21:00:30Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:00:32Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T21:02:17Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T21:02:23Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T21:02:29Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T21:02:40Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T21:02:44Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T21:03:45Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T21:03:48Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T21:03:51Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T21:03:52Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T21:05:08Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T21:05:11Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T21:05:12Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:05:14Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T21:05:17Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T21:05:20Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T21:08:50Z MERGED origin/agent/v11-handover-auto (dirs: PARTNER_SYNC.md,exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json,exam/artifacts/calibration.json,exam/artifacts/exam_summary.json,exam/artifacts/matrix/verdict_confusion.json,exam/artifacts/matrix/verdict_confusion.md,exam/artifacts/papers/p15-adaptation-a0.paper.json)
+2026-07-28T21:08:50Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:08:53Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T21:08:54Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:08:54Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:08:54Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:09:00Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T21:09:01Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:09:06Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T21:12:14Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T21:12:20Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T21:12:23Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T21:12:34Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T21:12:38Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T21:13:39Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T21:13:42Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T21:13:46Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T21:13:46Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T21:15:03Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T21:15:06Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T21:15:07Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:15:09Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T21:15:12Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T21:15:15Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T21:15:16Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:15:18Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T21:15:18Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:15:18Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:15:19Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:15:24Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T21:15:25Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:15:27Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T21:17:14Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T21:17:20Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T21:17:23Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T21:17:34Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T21:17:38Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T21:18:40Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T21:18:43Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T21:18:46Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T21:18:47Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T21:20:03Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T21:20:06Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T21:20:07Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:20:10Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T21:20:19Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T21:20:21Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T21:20:22Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:20:24Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T21:20:25Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:20:25Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:20:25Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:20:28Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T21:20:29Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:20:31Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T21:29:25Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T21:29:31Z FLAG origin/agent/a9-readonly-baseline: verify gate red in ablation-arm (verify.sh)
+2026-07-28T21:29:34Z FLAG origin/agent/bus2-ablation-readonly: verify gate red in ablation-arm (verify.sh)
+2026-07-28T21:29:45Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T21:29:49Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T21:30:54Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T21:30:57Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T21:31:00Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T21:31:01Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T21:32:26Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T21:32:29Z FLAG origin/agent/s15-ledger-hashchain: verify gate red in proxy (verify_spend.sh)
+2026-07-28T21:32:30Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:32:32Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T21:32:41Z FLAG origin/agent/s8-provenance-backfill: verify gate red in monitor (verify.sh)
+2026-07-28T21:32:44Z FLAG origin/agent/s9-contract-change-protocol: verify gate red in monitor (verify.sh)
+2026-07-28T21:32:45Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:32:47Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T21:32:48Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:32:48Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:32:48Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:32:50Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T21:32:51Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:32:53Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T21:42:21Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T21:42:52Z MERGED origin/agent/a9-readonly-baseline (dirs: PARTNER_SYNC.md,ablation-arm; gates: verify:ablation-arm(verify.sh); a gate dirtied the worktree: ablation-arm/artifacts/a0-base/episode.jsonl,ablation-arm/artifacts/a0-base/run_report.json,ablation-arm/artifacts/a0-no-button/run_report.json,ablation-arm/artifacts/a2-base/episode.jsonl,ablation-arm/artifacts/a2-base/run_report.json,ablation-arm/artifacts/a2-charitable/episode.jsonl)
+2026-07-28T21:42:55Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T21:43:13Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T21:43:17Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T21:44:19Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T21:44:22Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T21:44:26Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T21:44:27Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T21:45:56Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T21:47:09Z MERGED origin/agent/s15-ledger-hashchain (dirs: PARTNER_SYNC.md,proxy; gates: verify:proxy(verify_spend.sh))
+2026-07-28T21:52:26Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T21:52:29Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T21:52:49Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T21:53:25Z MERGED origin/agent/e14-crash-is-not-a-finding (dirs: PARTNER_SYNC.md,a0-spike,theoria-arm; gates: pytest:a0-spike,pytest:theoria-arm)
+2026-07-28T21:53:29Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T21:54:31Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T21:54:34Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T21:54:38Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T21:54:38Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T21:56:10Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T21:56:11Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:56:13Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T21:56:16Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T21:56:19Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T21:56:19Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:56:22Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T21:56:23Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:56:23Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:56:23Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:56:33Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T21:56:34Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T21:56:36Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T22:02:31Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T22:02:33Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T22:02:55Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T22:03:00Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T22:04:03Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T22:04:06Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T22:04:09Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T22:04:10Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T22:05:39Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T22:05:40Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:05:42Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T22:05:45Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T22:05:48Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T22:05:48Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:05:50Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T22:05:51Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:05:51Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:05:51Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:06:02Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T22:06:02Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:06:04Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T22:12:29Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T22:12:32Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T22:12:51Z FLAG origin/agent/c9-count-lock-vocabulary: verify gate red in monitor (verify.sh)
+2026-07-28T22:12:55Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T22:13:58Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T22:14:01Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T22:14:05Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T22:14:05Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T22:15:36Z FLAG origin/agent/s14-gates-for-all: verify gate red in monitor (verify.sh)
+2026-07-28T22:15:36Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:15:39Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T22:15:41Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T22:15:44Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T22:15:45Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:15:47Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T22:15:48Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:15:48Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:15:48Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:15:58Z FLAG origin/agent/v16-determinism-has-no-caller: verify gate red in monitor (verify.sh)
+2026-07-28T22:15:59Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:16:01Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T22:24:25Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T22:24:30Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T22:25:18Z MERGED origin/agent/c9-count-lock-vocabulary (dirs: PARTNER_SYNC.md,cold-start-a0,monitor,theory-compiler; gates: pytest:cold-start-a0,verify:monitor(verify.sh),pytest:theory-compiler)
+2026-07-28T22:25:22Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T22:26:24Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T22:26:27Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T22:26:30Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T22:26:31Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T22:26:33Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T22:26:34Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:26:39Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T22:26:42Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T22:26:45Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T22:26:46Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:26:48Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-28T22:26:48Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:26:48Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:26:49Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:28:43Z MERGED origin/agent/v16-determinism-has-no-caller (dirs: PARTNER_SYNC.md,monitor,worldgen; gates: verify:monitor(verify.sh),verify:worldgen(verify.py); a gate dirtied the worktree: worldgen/out/qc/QC.json,worldgen/out/qc/t1-portal-oneway/candidates.jsonl,worldgen/out/qc/t1-portal-oneway/engines_report.json,worldgen/out/qc/t1-switch-latch/candidates.jsonl,worldgen/out/qc/t1-switch-latch/engines_report.json,worldgen/out/qc/t1-switch-toggle/candidates.jsonl)
+2026-07-28T22:34:28Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T22:34:30Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T22:34:34Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T22:35:36Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T22:35:39Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T22:35:42Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T22:35:43Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T22:35:45Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T22:35:46Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:35:48Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T22:35:50Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T22:35:53Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T22:35:54Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:35:56Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T22:35:56Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:35:56Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:35:56Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:35:56Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:35:59Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T22:44:27Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T22:44:30Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T22:44:33Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T22:45:34Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T22:45:40Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T22:45:43Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T22:45:44Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T22:45:46Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T22:45:47Z FLAG origin/agent/s17-fleet-evidence-capture: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:45:49Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T22:45:51Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T22:45:54Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T22:45:55Z FLAG origin/agent/v11-negative-control-census: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:45:57Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T22:45:57Z FLAG origin/agent/v13-audit-the-published-surface: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:45:57Z FLAG origin/agent/v14-standing-negative-control-probe: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:45:57Z FLAG origin/agent/v15-census-sampling-frame: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:45:57Z FLAG origin/agent/v17-pin-the-partial-verdict: touches unknown territory (needs M-0 judgment)
+2026-07-28T22:46:00Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T22:51:45Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T22:51:48Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T22:51:52Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T22:52:59Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T22:53:03Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T22:53:07Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T22:53:07Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T22:53:10Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T22:53:18Z MERGED origin/agent/s17-fleet-evidence-capture (dirs: fleet-study; gates: none; NO GATE, MERGED UNCHECKED: fleet-study)
+2026-07-28T22:53:21Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T22:53:24Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T22:53:27Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T22:53:35Z MERGED origin/agent/v11-negative-control-census (dirs: PARTNER_SYNC.md,verify-lab; gates: none; NO GATE, MERGED UNCHECKED: verify-lab)
+2026-07-28T22:53:38Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T22:55:04Z FLAG origin/agent/v13-audit-the-published-surface: verify gate red in monitor (verify.sh)
+2026-07-28T22:55:13Z MERGED origin/agent/v14-standing-negative-control-probe (dirs: PARTNER_SYNC.md,verify-lab; gates: pytest:verify-lab)
+2026-07-28T22:55:29Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T22:55:32Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T22:55:40Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T22:56:41Z FLAG origin/agent/e9-engine-paper-table: verify gate red in fuzzlab (verify.py)
+2026-07-28T22:56:44Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T22:56:48Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T22:56:48Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T22:56:51Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T22:56:53Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T22:56:56Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T22:56:59Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T22:57:02Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T22:58:30Z MERGED origin/agent/v13-audit-the-published-surface (dirs: PARTNER_SYNC.md,arc-recon,baseline-arms,engine-rig,fleet-study,fuzzlab,monitor,papers,release; gates: verify:arc-recon(verify.sh),pytest:baseline-arms,pytest:engine-rig,verify:fuzzlab(verify.py),verify:monitor(verify.sh); NO GATE, MERGED UNCHECKED: fleet-study,papers,release; a gate dirtied the worktree: arc-recon/data/claim_set.json,fuzzlab/out/campaign.json)
+2026-07-28T22:59:51Z MERGED origin/agent/v15-census-sampling-frame (dirs: PARTNER_SYNC.md,browser-ops,engine-rig,fuzzlab,monitor,verify-lab; gates: pytest:engine-rig,verify:fuzzlab(verify.py),verify:monitor(verify.sh),pytest:verify-lab; NO GATE, MERGED UNCHECKED: browser-ops; a gate dirtied the worktree: fuzzlab/out/campaign.json)
+2026-07-28T23:00:09Z MERGED origin/agent/v17-pin-the-partial-verdict (dirs: PARTNER_SYNC.md,browser-ops,monitor,verify-lab; gates: verify:monitor(verify.sh),pytest:verify-lab; NO GATE, MERGED UNCHECKED: browser-ops)
+2026-07-28T23:00:12Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:04:29Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:04:32Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:05:00Z MERGED origin/agent/c11-tool-failure-as-truth (dirs: PARTNER_SYNC.md,engine-rig; gates: pytest:engine-rig)
+2026-07-28T23:05:04Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:05:13Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:05:16Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:05:19Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:05:20Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:05:25Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:05:28Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:05:31Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:05:34Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:05:36Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:05:39Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:14:27Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:14:30Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:14:34Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:14:44Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:14:47Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:14:50Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:14:51Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:14:53Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:14:56Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:14:59Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:15:01Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:15:04Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:15:07Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:19:28Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:19:31Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:19:35Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:19:45Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:19:48Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:19:51Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:19:52Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:19:54Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:19:57Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:19:59Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:20:02Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:20:10Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:20:13Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:29:27Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:29:30Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:29:33Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:29:43Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:29:46Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:29:49Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:29:50Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:29:52Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:29:55Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:29:58Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:30:00Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:30:03Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:30:06Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:34:29Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:34:33Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:34:38Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:34:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:34:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:34:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:34:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:34:59Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:35:02Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:35:05Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:35:08Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:35:11Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:35:14Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:39:33Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:39:36Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:39:40Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:39:51Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:39:55Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:39:59Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:40:00Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:40:03Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:40:06Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:40:10Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:40:14Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:40:17Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:40:21Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:44:34Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:44:38Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:44:42Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:44:54Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:44:58Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:45:02Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:45:03Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:45:05Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:45:10Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:45:14Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:45:18Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:45:22Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:45:29Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:47:38Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:47:42Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:47:49Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:48:05Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:48:09Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:48:14Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:48:15Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:48:21Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:48:25Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:48:29Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:48:33Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:48:36Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:48:39Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:54:32Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:54:35Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:54:39Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:54:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:54:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:54:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:54:56Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:54:59Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:55:02Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:55:05Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:55:08Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:55:12Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:55:15Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:59:34Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:59:37Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:59:41Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:59:50Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:59:54Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:59:57Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:59:58Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:00:02Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:00:11Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-29T00:00:14Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-29T00:00:17Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-29T00:00:20Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-29T00:00:23Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T00:09:31Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:09:34Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:09:38Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:09:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:09:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:09:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:09:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:09:58Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:10:00Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-29T00:10:03Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-29T00:10:07Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-29T00:10:10Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-29T00:10:13Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T00:14:31Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:14:34Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:14:38Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:14:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:14:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:14:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:14:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:14:58Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:15:15Z MERGED origin/agent/s17-fleet-evidence-capture (dirs: PARTNER_SYNC.md,fleet-study; gates: verify:fleet-study(verify.py))
+2026-07-29T00:15:17Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-29T00:15:20Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-29T00:15:23Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-29T00:15:26Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-29T00:15:29Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T00:19:32Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:19:35Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:19:39Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:19:49Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:19:52Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:19:56Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:19:57Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:19:59Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:20:02Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-29T00:20:05Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-29T00:20:08Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-29T00:20:11Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-29T00:20:14Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T00:25:10Z MERGED origin/agent/a3-campaign-devpile (dirs: PARTNER_SYNC.md,monitor,theoria-arm; gates: verify:monitor(verify.sh),pytest:theoria-arm)
+2026-07-29T00:25:13Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:25:19Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:25:23Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:25:33Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:25:36Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:25:40Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:25:40Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:25:43Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:26:00Z MERGED origin/agent/s17-fleet-evidence-capture (dirs: PARTNER_SYNC.md,fleet-study; gates: verify:fleet-study(verify.py))
+2026-07-29T00:34:32Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:34:35Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:34:39Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:34:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:34:52Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:34:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:34:56Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:34:58Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:35:15Z MERGED origin/agent/s17-fleet-evidence-capture (dirs: PARTNER_SYNC.md,fleet-study; gates: verify:fleet-study(verify.py))
+2026-07-29T00:36:06Z MERGED origin/agent/s23-unreadable-is-not-clean (dirs: PARTNER_SYNC.md,arc-recon,monitor,release; gates: verify:arc-recon(verify.sh),verify:monitor(verify.sh),verify:release(verify.sh); a gate dirtied the worktree: arc-recon/data/claim_set.json)
+2026-07-29T00:45:01Z MERGED origin/agent/a4a-ablation-build (dirs: ablation-arm; gates: verify:ablation-arm(verify.sh); a gate dirtied the worktree: ablation-arm/artifacts/a0-base/episode.jsonl,ablation-arm/artifacts/a2-base/episode.jsonl,ablation-arm/artifacts/a2-charitable/episode.jsonl)
+2026-07-29T00:45:04Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:45:44Z MERGED origin/agent/e7-deadlock-claim-audit (dirs: PARTNER_SYNC.md,engine-rig; gates: pytest:engine-rig)
+2026-07-29T00:50:08Z MERGED origin/agent/bus2-ablation-readonly (dirs: ablation-arm; gates: verify:ablation-arm(verify.sh); a gate dirtied the worktree: ablation-arm/artifacts/a0-base/episode.jsonl,ablation-arm/artifacts/a2-base/episode.jsonl,ablation-arm/artifacts/a2-charitable/episode.jsonl)
+2026-07-29T00:50:35Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:50:39Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:51:09Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T00:51:10Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:54:18Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T00:54:58Z MERGED origin/agent/s5-phase1-close (dirs: PARTNER_SYNC.md,arc-recon; gates: verify:arc-recon(verify.sh); a gate dirtied the worktree: arc-recon/data/claim_set.json)
+2026-07-29T00:59:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:59:52Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:00:15Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T01:00:16Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:03:11Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T01:04:36Z MERGED origin/agent/s8-provenance-backfill (dirs: PARTNER_SYNC.md,monitor,theoria-arm; gates: verify:monitor(verify.sh),pytest:theoria-arm)
+2026-07-29T01:05:55Z MERGED origin/agent/s9-contract-change-protocol (dirs: PARTNER_SYNC.md,monitor,proxy; gates: verify:monitor(verify.sh),verify:proxy(verify_contract.sh))
+2026-07-29T01:14:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:14:53Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:15:15Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T01:15:16Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:18:05Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T01:18:10Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-29T01:18:14Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T01:24:30Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:24:51Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:24:56Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:25:18Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T01:25:19Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:28:19Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T01:28:24Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-29T01:28:28Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T01:34:33Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:35:04Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:35:10Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:35:39Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T01:35:40Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:35:57Z FLAG origin/agent/s14-gates-for-all: verify gate red in a0-spike (verify.py)
+2026-07-29T01:36:02Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-29T01:36:07Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T01:42:56Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:44:47Z MERGED origin/agent/a11-bypass-attempts-explained (dirs: theoria-arm; gates: pytest:theoria-arm)
+2026-07-29T01:45:14Z MERGED origin/agent/a7-envelope-finish (dirs: PARTNER_SYNC.md,baseline-arms; gates: pytest:baseline-arms)
+2026-07-29T01:52:40Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:54:06Z MERGED origin/agent/a11-bypass-attempts-explained (dirs: PARTNER_SYNC.md,theoria-arm; gates: pytest:theoria-arm)
+2026-07-29T01:55:33Z FLAG origin/agent/a3-campaign-devpile: tests red in theoria-arm
+2026-07-29T01:55:45Z MERGED origin/agent/a7-envelope-finish (dirs: PARTNER_SYNC.md,baseline-arms; gates: pytest:baseline-arms)
+2026-07-29T01:57:39Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:59:03Z FLAG origin/agent/a3-campaign-devpile: tests red in theoria-arm
+2026-07-29T01:59:25Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:59:29Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:59:38Z MERGED origin/agent/p12-paper-multi-review (dirs: papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T02:00:02Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:00:03Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:02:58Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T02:04:58Z MERGED origin/agent/v12-worldgen-gate-deaf (dirs: worldgen; gates: verify:worldgen(verify.py); a gate dirtied the worktree: worldgen/out/qc/t1-portal-oneway/candidates.jsonl,worldgen/out/qc/t1-portal-oneway/engines_report.json,worldgen/out/qc/t1-switch-latch/candidates.jsonl,worldgen/out/qc/t1-switch-latch/engines_report.json,worldgen/out/qc/t1-switch-toggle/candidates.jsonl,worldgen/out/qc/t1-switch-toggle/engines_report.json)
+2026-07-29T02:07:32Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:08:53Z FLAG origin/agent/a3-campaign-devpile: tests red in theoria-arm
+2026-07-29T02:09:34Z MERGED origin/agent/e16-verdict-must-gate (dirs: PARTNER_SYNC.md,engine-rig; gates: pytest:engine-rig)
+2026-07-29T02:09:56Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T02:10:01Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:10:53Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:11:17Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:11:18Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:14:08Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T02:14:34Z MERGED origin/agent/s16-silent-failure-hunt (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh))
+2026-07-29T02:17:33Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:18:57Z FLAG origin/agent/a3-campaign-devpile: tests red in theoria-arm
+2026-07-29T02:19:18Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T02:19:22Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:20:08Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:20:32Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:20:33Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:26:59Z MERGED origin/agent/s14-gates-for-all (dirs: PARTNER_SYNC.md,a0-spike,baseline-arms,battery,cold-start-a0,cold-start-a2,cold-start-a3,engine-rig,monitor,proxy,theoria-arm,theory-compiler; gates: verify:a0-spike(verify.py),verify:baseline-arms(verify.py),verify:battery(verify.py),verify:cold-start-a0(verify.py),verify:cold-start-a2(verify.py),verify:cold-start-a3(verify.py),verify:engine-rig(verify.py),verify:monitor(verify.sh),verify:proxy(verify.py),verify:theoria-arm(verify.py),verify:theory-compiler(verify.py); a gate dirtied the worktree: a0-spike/artifacts/a0_report.json,cold-start-a2/artifacts/candidates_history.jsonl,cold-start-a2/artifacts/candidates_probed.jsonl,cold-start-a2/artifacts/engines_report.json,cold-start-a2/artifacts/engines_report_history.json,cold-start-a2/artifacts/engines_report_probed.json)
+2026-07-29T02:27:13Z MERGED origin/agent/s18-fleetkit-extract (dirs: fleetkit; gates: pytest:fleetkit)
+2026-07-29T02:32:31Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:32:58Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T02:33:42Z MERGED origin/agent/e16-verdict-must-gate (dirs: PARTNER_SYNC.md,engine-rig; gates: verify:engine-rig(verify.py))
+2026-07-29T02:33:46Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T02:34:24Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T02:34:28Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:34:37Z MERGED origin/agent/p12-paper-multi-review (dirs: PARTNER_SYNC.md,papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T02:37:31Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:37:58Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T02:38:02Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T02:38:39Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T02:38:44Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:39:28Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:39:50Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:39:51Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:40:24Z MERGED origin/agent/s22-access-check-close (dirs: arc-recon; gates: verify:arc-recon(verify.sh); a gate dirtied the worktree: arc-recon/data/claim_set.json)
+2026-07-29T02:40:28Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T02:40:32Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T02:40:36Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T02:44:11Z MERGED origin/agent/v7-exam-stress-fanout (dirs: PARTNER_SYNC.md,exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json,exam/artifacts/calibration.json,exam/artifacts/exam_summary.json,exam/artifacts/matrix/verdict_confusion.json,exam/artifacts/matrix/verdict_confusion.md,exam/artifacts/papers/p15-adaptation-a0.paper.json)
+2026-07-29T02:47:30Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:47:57Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T02:48:01Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T02:48:39Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T02:48:43Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:49:29Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:49:52Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:49:53Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:49:56Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T02:50:00Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T02:50:04Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T02:54:31Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:54:58Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T02:55:02Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T02:55:40Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T02:55:44Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:56:28Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:56:52Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:56:53Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:56:56Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T02:57:00Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T02:57:04Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T02:57:28Z MERGED origin/agent/v9-battery-gaming-audit (dirs: PARTNER_SYNC.md,battery; gates: verify:battery(verify.py))
+2026-07-29T03:03:52Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:04:19Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:04:23Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:05:01Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:05:05Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:05:51Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:06:14Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:06:15Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:06:18Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:06:22Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:06:26Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:13:33Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:14:00Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:14:04Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:14:43Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:14:48Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:15:32Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:15:55Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:15:56Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:15:59Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:16:03Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:16:08Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:20:10Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T03:27:35Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:28:02Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:28:06Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:28:43Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:28:47Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:29:32Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:29:54Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:29:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:29:58Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:30:02Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:30:06Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:34:08Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T03:37:26Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:37:53Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:37:57Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:38:35Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:38:39Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:39:24Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:39:46Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:39:47Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:39:50Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:45:40Z FLAG origin/agent/v18-battery-prereg-check: verify gate red in monitor (verify.sh)
+2026-07-29T03:45:45Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:45:49Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:49:50Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T03:52:33Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:53:01Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:53:05Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:53:49Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:53:54Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:54:58Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:55:23Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:55:24Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:55:28Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T04:02:32Z FLAG origin/agent/v18-battery-prereg-check: verify gate red in monitor (verify.sh)
+2026-07-29T04:02:37Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T04:02:41Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T04:07:49Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T04:12:54Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T04:14:01Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)

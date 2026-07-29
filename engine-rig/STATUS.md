@@ -68,10 +68,12 @@ in `PARTNER_SYNC.md`.
 
 ## Test suite
 
-309 passed, 9 skipped on a machine with no Fast Downward build. The skips are
-all FD's: the cross-rung agreement checks and the ladder bench rows, which need
-a real planner by definition. Everything else — including the whole driver
-protocol and the certificate rechecker — runs on any machine.
+483 passed, 27 skipped on a machine with no Fast Downward build (count taken
+after E5/E6 and E7 merged; the pre-merge figure was 309 passed, 9 skipped). The
+skips are all FD's: the cross-rung agreement checks, the ladder bench rows and
+the audit's real-planner crosschecks, which need a real planner by definition.
+Everything else — including the whole driver protocol and the certificate
+rechecker — runs on any machine.
 
 ## The dividend, re-measured on a planner that knows nothing about this rig
 
@@ -228,6 +230,110 @@ the suite fails if it ever starts being caught.
 Two anchors need `cold-start-a2/` on the machine. This package reads that
 directory and writes nothing to it; when it is absent the anchors are reported
 **unavailable**, never as passes.
+
+## What a proved deadlock is worth to a planner, and what the claim should say (E7)
+
+E2 found that Theoria 1.9's *每证一个死锁，规划器同时提速* fails on a real
+planner. E7 audits that finding: replicates it, attacks it, and answers the
+question it left open. Full account, with a suggested wording for the design
+document, in [`DEADLOCK_CLAIM.md`](DEADLOCK_CLAIM.md); measurements in
+`runs/20260728T150713Z-E7-deadlock-claim-audit/`; `python -m audit --out <dir>`
+to re-run, `python -m audit.verify <dir>` to check.
+
+**All nine of E2's rows replicate to the expansion**, and the ladder extends to
+`far10`: blind saves 1279 / 1918 / 2415 expansions at far8/9/10, `lmcut` saves 1
+at each. The `ipdb` column is reported and is evidence for nothing -- see below.
+The blind dividend is steady only on this family (8.7%-27.1% across far4..far10);
+across instances generally it runs 0% (`stub-wall`, `rnd0013`) to 100%
+(`rnd0021`), so an earlier draft's "steady 10-27%" was wrong at both ends.
+
+**The pruner is connected and the prize was not small.** The guard takes far6
+from 312 ground actions to 296 at both the rig's grounder and FD's own
+translator, 16 removed and 0 added; 69 firings and 237 states cut on `far4`, plan
+unchanged; an independent walk that never consults the pruner puts 17-49% of the
+reachable space in the dead region.
+
+**The mechanism.** Three sets over the whole reachable space:
+
+| | reachable | truly dead | **delete-relaxation dead** | theorem dead | theorems the relaxation misses |
+|---|---|---|---|---|---|
+| `far4` | 3342 | 2904 | **2904** | 1624 | **0** |
+| `far5` | 13774 | 10687 | **10687** | 4508 | **0** |
+| `far6` | 42803 | 29776 | **29776** | 9928 | **0** |
+
+On this family the delete relaxation FD computes *before search begins* is
+exactly the true dead set, and the theorems are a strict subset of it. far4 is
+verified exhaustively against the real planner -- 0 disagreements in 3342 states
+-- and the one-state crosscheck of the Python relaxation against FD's translator
+stands at 116/116 across five geometries and two encodings.
+
+**Three things the adversarial pass broke, all of which improved the result.**
+
+* *"Not one state, at any size"* is false: `rnd0021` has eleven, verified against
+  FD, and there `astar(lmcut())` goes 33 -> 0. But a width-1 theorem can escape
+  the relaxation only if its pattern atom is a goal atom, which forces the
+  instance to be unsolvable -- so for the 8 **singleton** theorems the guard
+  carries, the zero on `far{N}` was a **theorem about that family, not a
+  measurement**. `far{N}` is majority width-2 and that half remains a measurement
+  at far4/5/6. The real boundary is **h^2 (the carver's mutexes) versus h^1 (FD's
+  pre-search test)**.
+* *"The dividend is zero because the information is redundant, not because it is
+  unused"* is withdrawn as a false exclusive. `astar(lmcut())` does save
+  expansions -- up to 153, tie-break-invariantly -- and where containment holds
+  it is not by pruning: every state the guard removes was already an lmcut dead
+  end. Deleting the dead push operators makes the relaxation *harder*, raising h
+  on **live** states -- but that mechanism is isolated on one instance
+  (`hunt0021` h(init) 15 -> 18) and merely consistent with the other three, whose
+  h(init) does not move. A third mechanism nobody had named, exhibited once.
+* *`ipdb` is not a usable instrument* at this effect size. `far9` 78 -> 30 dies
+  under 2 of 8 seeds and under a bigger PDB budget; `swap-passage` 454 -> 0 is a
+  `pdb_max_size` artefact. An earlier draft quoted far8's 27 -> 24 as a dividend.
+
+**What this moves.** The boundary is not "which search you use" and not merely
+"whether the relaxation covers the region", but **whether the theorems prove more
+than the planner's own pre-search relaxation** -- cheap to test in advance.
+§1.9's frequency argument and the theorems' role as proof obligations are
+untouched; the unconditional speed clause is what needs conditioning.
+
+## What an engine is worth, assembled for the paper (E6)
+
+`ENGINE_DIVIDEND.md`, built by `python -m tools.engine_dividend_table` from three
+artefacts, with `--check` to fail if it goes stale. Measurements in
+`runs/20260728T191530Z-E6-engine-dividend/`.
+
+Two thirds of E6's brief was already done and is **cited, not re-run**: E2
+measured the deadlock dividend and the three-rung ladder, E7 audited the
+dividend to destruction. What E6 added:
+
+* **Pagoda certificates are no longer unrechecked.** E5 left `lp_potential`
+  uncovered and said so; the only checker for those certificates imported the
+  producing engine and trusted the producer's own witness list. `recheck/` now
+  has a fourth condition shape that grounds the move set from the declared
+  geometry and **refuses** an `obligations` key as input. 4 certificates, all
+  ACCEPT; 3 have producer documents and all 3 differentials agree; 11 new
+  forgeries, all as declared. The fourth case, `keyed-gate`, exists because a
+  naive checker false-rejects it -- its only potential-raising move needs two
+  keys and every two-key state is already outside the region.
+* **The zero row.** `open4`: 16 true theorems, **47 expansions before and 47
+  after**, pruner fired 0 times. D-020 argued this row is the informative one and
+  it existed in no regenerable artefact. The theorems are sound and the hook is
+  connected; there is no dead region on the path this search takes.
+* Wall clock charged against `search_seconds` rather than the ~150 ms driver
+  clock, with carving on the invoice -- **0 of 6 rows that ran a search repay the
+  carve** -- and a tie-break sweep closing E2's gap G7.
+
+**The rule the assembler now states, and why** (D-033): it reads verdicts rather
+than re-deriving them. A draft that recomputed section C's optimality agreement
+scored "no known optimum" as "disagreement" and rendered **no** against three
+admissible planners. Three further defects had one shape -- a column reading a
+key that does not exist and rendering as a valid table full of `--`. A
+re-render-and-diff `--check` catches none of them; only a test pinning a real
+number does, and the suite now pins several plus perturbation tests.
+
+**Do not quote the §A table on its own.** Both its columns are heuristic-free
+controls, the `ipdb` column is E7-demoted to *measured, not evidence*, and the
+guard is a choice with a sign -- the `indexed` encoding makes `far5` blind go
+958 -> 1159, a 21% loss.
 
 ## Convergence interface (post-M8)
 

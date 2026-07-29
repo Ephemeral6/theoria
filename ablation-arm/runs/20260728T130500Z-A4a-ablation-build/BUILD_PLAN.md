@@ -628,3 +628,65 @@ comparison needs a second arm and that is A4b.
 Next: **step 7, the documents** — `README.md`, `DECISIONS.md`, `RUN_STATE.md`,
 and the STATUS.md corrections this run has accumulated: three source claims that
 are now true, one blocker that does not apply, and one exhibit that expired.
+
+* `2026-07-28T19:00Z` — **step 7 done: the documents. A4a is complete.**
+
+  `README.md`, `DECISIONS.md`, `RUN_STATE.md` written; `STATUS.md` corrected by
+  **appending a superseding section**, leaving `W-1611`'s text standing. It was
+  accurate when written, and a reader who saw the earlier version can now see
+  exactly which four statements changed and why. `DESIGN.md` and `ablcore/` are
+  P-18's and remain byte-unmodified, which is the same discipline `W-1611`
+  applied when it preserved them.
+
+  ### The four STATUS statements this run superseded
+
+  | was | now |
+  |---|---|
+  | *What is missing* — nine items | all built; the table is empty |
+  | *Three claims in the source that are not true yet* | all three true; P-18's source needed no edit, only the tests it named |
+  | *The blocker that outlives this file* | does not apply to the code as written — `ledger_abl.ARM` is `theoria`, which is in `ARMS`; `theoria_ablate` is metadata; three ledgers PASS |
+  | *the A4 ticket asks to demonstrate that the arm believes an A2-type false theorem* | **it does**, and P-18's qualification of the ticket's premise is confirmed and sharpened |
+
+  `ledger_abl.py:25`'s dangling note stands unchanged: no request to register
+  `theoria_ablate` has been posted to PARTNER_SYNC. Still true, still not this
+  item's to post.
+
+  ### DECISIONS.md and a citation with nothing behind it
+
+  P-18 never wrote `DECISIONS.md`, but two lines of P-18's source cite it and
+  one names **D-AB-004**. That entry is **reconstructed from the source that
+  cites it**, quoting P-18's own reasoning rather than inventing a rationale,
+  and it is labelled as reconstructed. A4a's own calls start at **D-AB-010**,
+  leaving the gap for anything else of P-18's that turns out to be recoverable
+  from the code.
+
+  ### One more reproducibility wart, found while hashing the manifest
+
+  `run_report.json` flip-flopped in git depending on **which directory the run
+  was launched from**: `certify.replay` records its `theory` path with
+  `os.path.relpath` against the *current working directory*, and the report is
+  checked in. The determinism harness already normalised it for comparison, but
+  the committed file still changed. Now normalised in the arm's own report —
+  the only place it can be, without editing another track's code — so
+  `artifacts/a0-base/run_report.json` reads `artifacts/a0-base/theory.py`
+  whether the run came from the repo root or from `ablation-arm/`. Verified from
+  both.
+
+## A4a is done
+
+`bash ablation-arm/verify.sh` → **GREEN**. 56 tests. Five worlds, three
+exhibits, ten assertions, five numbers recorded for A4b. Zero API calls, zero
+network, zero dollars, zero sealed-pile contact, and zero bytes written into any
+upstream tree — the last checked by hashing 386 files across six trees either
+side of every full run.
+
+What A4a hands to A4b, in one place:
+
+1. **four predictions to compare**, of which **two have no instrument yet** —
+   nothing here computes a held-out split (P-2) or a search-and-proof fuel
+   account (P-4);
+2. **E3's other half** — no live construction makes a planner return UNSAT on a
+   manual that is correct *and* executable, because D-A2-006 was closed
+   upstream;
+3. **the standing limit**, to be printed beside every conclusion: two self-built
+   offline worlds demonstrate a **mechanism**, not an effect size on ARC.

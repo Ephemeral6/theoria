@@ -1,0 +1,1906 @@
+{
+  "configs": [
+    "astar(blind())",
+    "astar(lmcut())",
+    "astar(ipdb())"
+  ],
+  "coverage": [
+    {
+      "instance": "far4",
+      "n_reachable": 3342,
+      "n_relaxation_dead": 2904,
+      "n_relaxation_dead_outside_theorems": 1280,
+      "n_theorem_dead": 1624,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_truly_dead": 2904,
+      "n_truly_dead_neither_detects": 0,
+      "relaxation_dead_within_truly_dead": true,
+      "theorem_dead_within_relaxation_dead": true,
+      "theorem_dead_within_truly_dead": true
+    },
+    {
+      "instance": "far5",
+      "n_reachable": 13774,
+      "n_relaxation_dead": 10687,
+      "n_relaxation_dead_outside_theorems": 6179,
+      "n_theorem_dead": 4508,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_truly_dead": 10687,
+      "n_truly_dead_neither_detects": 0,
+      "relaxation_dead_within_truly_dead": true,
+      "theorem_dead_within_relaxation_dead": true,
+      "theorem_dead_within_truly_dead": true
+    },
+    {
+      "instance": "far6",
+      "n_reachable": 42803,
+      "n_relaxation_dead": 29776,
+      "n_relaxation_dead_outside_theorems": 19848,
+      "n_theorem_dead": 9928,
+      "n_theorem_dead_outside_relaxation": 0,
+      "n_truly_dead": 29776,
+      "n_truly_dead_neither_detects": 0,
+      "relaxation_dead_within_truly_dead": true,
+      "theorem_dead_within_relaxation_dead": true,
+      "theorem_dead_within_truly_dead": true
+    }
+  ],
+  "dead_starts": [
+    {
+      "closure_kinds": [
+        "no_deleting_action"
+      ],
+      "guarded": {
+        "singleton": [
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "blind",
+            "initial_h": "blind=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner4-singleton-blind.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.9e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner4-singleton-lmcut.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 4.9e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner4-singleton-ipdb.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.2e-05,
+            "solved": false,
+            "translator_facts": 4
+          }
+        ]
+      },
+      "instance": "deadstart-corner4",
+      "kind": "corner4",
+      "theorems": 6,
+      "theorems_covering_the_initial_state": [
+        "at(b1,c11) AND not-goal => dead"
+      ],
+      "unguarded": [
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "blind",
+          "initial_h": "blind=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner4-blind-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.3e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "lmcut",
+          "initial_h": "lmcut=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner4-lmcut-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 4.4e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "ipdb",
+          "initial_h": "cpdbs=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner4-ipdb-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.4e-05,
+          "solved": false,
+          "translator_facts": 4
+        }
+      ]
+    },
+    {
+      "closure_kinds": [
+        "deleting_actions_blocked"
+      ],
+      "guarded": {
+        "singleton": [
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "blind",
+            "initial_h": "blind=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair4-singleton-blind.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.4e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair4-singleton-lmcut.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.8e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair4-singleton-ipdb.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3e-05,
+            "solved": false,
+            "translator_facts": 4
+          }
+        ]
+      },
+      "instance": "deadstart-pair4",
+      "kind": "pair4",
+      "theorems": 2,
+      "theorems_covering_the_initial_state": [
+        "at(b1,c12) AND not-goal => dead",
+        "at(b2,c13) AND not-goal => dead"
+      ],
+      "unguarded": [
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "blind",
+          "initial_h": "blind=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair4-blind-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.5e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "lmcut",
+          "initial_h": "lmcut=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair4-lmcut-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 4.5e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "ipdb",
+          "initial_h": "cpdbs=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair4-ipdb-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.5e-05,
+          "solved": false,
+          "translator_facts": 4
+        }
+      ]
+    },
+    {
+      "closure_kinds": [],
+      "guarded": {
+        "full": [
+          {
+            "error": null,
+            "evaluated": 405,
+            "expanded": 279,
+            "generated": 805,
+            "heuristic": "blind",
+            "initial_h": "blind=1",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-full-blind.log",
+            "plan_length": 11,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.00065,
+            "solved": true,
+            "translator_facts": 967
+          },
+          {
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): 1948 KB] Search code revision: 7120aa0\n[t=0.000247s, 1960 KB] reading input...\n[t=0.001443s, 2188 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+            "evaluated": null,
+            "expanded": null,
+            "generated": null,
+            "heuristic": "lmcut",
+            "initial_h": null,
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-full-lmcut.log",
+            "plan_length": null,
+            "proved_unsolvable": false,
+            "returncode": 34,
+            "search_seconds": null,
+            "solved": false,
+            "translator_facts": 967
+          },
+          {
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.002962s, 2852 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+            "evaluated": null,
+            "expanded": null,
+            "generated": null,
+            "heuristic": "ipdb",
+            "initial_h": null,
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-full-ipdb.log",
+            "plan_length": null,
+            "proved_unsolvable": false,
+            "returncode": 34,
+            "search_seconds": null,
+            "solved": false,
+            "translator_facts": 967
+          }
+        ],
+        "indexed": [
+          {
+            "error": null,
+            "evaluated": 391,
+            "expanded": 267,
+            "generated": 773,
+            "heuristic": "blind",
+            "initial_h": "blind=1",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-indexed-blind.log",
+            "plan_length": 11,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.00045,
+            "solved": true,
+            "translator_facts": 3697
+          },
+          {
+            "error": null,
+            "evaluated": 39,
+            "expanded": 18,
+            "generated": 54,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=9",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-indexed-lmcut.log",
+            "plan_length": 11,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.001213,
+            "solved": true,
+            "translator_facts": 3697
+          },
+          {
+            "error": null,
+            "evaluated": 27,
+            "expanded": 12,
+            "generated": 33,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=11",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-indexed-ipdb.log",
+            "plan_length": 11,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.000133,
+            "solved": true,
+            "translator_facts": 3697
+          }
+        ],
+        "singleton": [
+          {
+            "error": null,
+            "evaluated": 407,
+            "expanded": 276,
+            "generated": 796,
+            "heuristic": "blind",
+            "initial_h": "blind=1",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-singleton-blind.log",
+            "plan_length": 11,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.000709,
+            "solved": true,
+            "translator_facts": 869
+          },
+          {
+            "error": null,
+            "evaluated": 47,
+            "expanded": 21,
+            "generated": 64,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=9",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-singleton-lmcut.log",
+            "plan_length": 11,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.000713,
+            "solved": true,
+            "translator_facts": 869
+          },
+          {
+            "error": null,
+            "evaluated": 27,
+            "expanded": 12,
+            "generated": 33,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=11",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-singleton-ipdb.log",
+            "plan_length": 11,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.000136,
+            "solved": true,
+            "translator_facts": 869
+          }
+        ]
+      },
+      "instance": "alive-pair4",
+      "kind": "pair4",
+      "theorems": 15,
+      "theorems_covering_the_initial_state": [],
+      "unguarded": [
+        {
+          "error": null,
+          "evaluated": 525,
+          "expanded": 329,
+          "generated": 970,
+          "heuristic": "blind",
+          "initial_h": "blind=1",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-blind-plain.log",
+          "plan_length": 11,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.000621,
+          "solved": true,
+          "translator_facts": 1029
+        },
+        {
+          "error": null,
+          "evaluated": 47,
+          "expanded": 21,
+          "generated": 64,
+          "heuristic": "lmcut",
+          "initial_h": "lmcut=9",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-lmcut-plain.log",
+          "plan_length": 11,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.000776,
+          "solved": true,
+          "translator_facts": 1029
+        },
+        {
+          "error": null,
+          "evaluated": 27,
+          "expanded": 12,
+          "generated": 33,
+          "heuristic": "ipdb",
+          "initial_h": "cpdbs=11",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair4-ipdb-plain.log",
+          "plan_length": 11,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.000132,
+          "solved": true,
+          "translator_facts": 1029
+        }
+      ]
+    },
+    {
+      "closure_kinds": [
+        "no_deleting_action"
+      ],
+      "guarded": {
+        "singleton": [
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "blind",
+            "initial_h": "blind=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner5-singleton-blind.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.7e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner5-singleton-lmcut.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 4.4e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner5-singleton-ipdb.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.7e-05,
+            "solved": false,
+            "translator_facts": 4
+          }
+        ]
+      },
+      "instance": "deadstart-corner5",
+      "kind": "corner5",
+      "theorems": 6,
+      "theorems_covering_the_initial_state": [
+        "at(b1,c11) AND not-goal => dead"
+      ],
+      "unguarded": [
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "blind",
+          "initial_h": "blind=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner5-blind-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.1e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "lmcut",
+          "initial_h": "lmcut=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner5-lmcut-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 4.2e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "ipdb",
+          "initial_h": "cpdbs=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner5-ipdb-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.5e-05,
+          "solved": false,
+          "translator_facts": 4
+        }
+      ]
+    },
+    {
+      "closure_kinds": [
+        "deleting_actions_blocked"
+      ],
+      "guarded": {
+        "singleton": [
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "blind",
+            "initial_h": "blind=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair5-singleton-blind.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.7e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair5-singleton-lmcut.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 4.5e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair5-singleton-ipdb.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.6e-05,
+            "solved": false,
+            "translator_facts": 4
+          }
+        ]
+      },
+      "instance": "deadstart-pair5",
+      "kind": "pair5",
+      "theorems": 2,
+      "theorems_covering_the_initial_state": [
+        "at(b1,c12) AND not-goal => dead",
+        "at(b2,c13) AND not-goal => dead"
+      ],
+      "unguarded": [
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "blind",
+          "initial_h": "blind=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair5-blind-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.7e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "lmcut",
+          "initial_h": "lmcut=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair5-lmcut-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.7e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "ipdb",
+          "initial_h": "cpdbs=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair5-ipdb-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.6e-05,
+          "solved": false,
+          "translator_facts": 4
+        }
+      ]
+    },
+    {
+      "closure_kinds": [],
+      "guarded": {
+        "full": [
+          {
+            "error": null,
+            "evaluated": 2723,
+            "expanded": 1913,
+            "generated": 6221,
+            "heuristic": "blind",
+            "initial_h": "blind=1",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-full-blind.log",
+            "plan_length": 16,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.004698,
+            "solved": true,
+            "translator_facts": 1838
+          },
+          {
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): 1984 KB] Search code revision: 7120aa0\n[t=0.000235s, 1984 KB] reading input...\n[t=0.002485s, 2380 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+            "evaluated": null,
+            "expanded": null,
+            "generated": null,
+            "heuristic": "lmcut",
+            "initial_h": null,
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-full-lmcut.log",
+            "plan_length": null,
+            "proved_unsolvable": false,
+            "returncode": 34,
+            "search_seconds": null,
+            "solved": false,
+            "translator_facts": 1838
+          },
+          {
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.003842s, 2888 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+            "evaluated": null,
+            "expanded": null,
+            "generated": null,
+            "heuristic": "ipdb",
+            "initial_h": null,
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-full-ipdb.log",
+            "plan_length": null,
+            "proved_unsolvable": false,
+            "returncode": 34,
+            "search_seconds": null,
+            "solved": false,
+            "translator_facts": 1838
+          }
+        ],
+        "indexed": [
+          {
+            "error": null,
+            "evaluated": 2484,
+            "expanded": 1710,
+            "generated": 5542,
+            "heuristic": "blind",
+            "initial_h": "blind=1",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-indexed-blind.log",
+            "plan_length": 16,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.002558,
+            "solved": true,
+            "translator_facts": 11759
+          },
+          {
+            "error": null,
+            "evaluated": 119,
+            "expanded": 59,
+            "generated": 193,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=11",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-indexed-lmcut.log",
+            "plan_length": 16,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.01208,
+            "solved": true,
+            "translator_facts": 11759
+          },
+          {
+            "error": null,
+            "evaluated": 45,
+            "expanded": 17,
+            "generated": 55,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=16",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-indexed-ipdb.log",
+            "plan_length": 16,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.000196,
+            "solved": true,
+            "translator_facts": 11759
+          }
+        ],
+        "singleton": [
+          {
+            "error": null,
+            "evaluated": 2575,
+            "expanded": 1779,
+            "generated": 5776,
+            "heuristic": "blind",
+            "initial_h": "blind=1",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-singleton-blind.log",
+            "plan_length": 16,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.00251,
+            "solved": true,
+            "translator_facts": 1655
+          },
+          {
+            "error": null,
+            "evaluated": 87,
+            "expanded": 41,
+            "generated": 136,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=13",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-singleton-lmcut.log",
+            "plan_length": 16,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.002278,
+            "solved": true,
+            "translator_facts": 1655
+          },
+          {
+            "error": null,
+            "evaluated": 42,
+            "expanded": 17,
+            "generated": 52,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=16",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-singleton-ipdb.log",
+            "plan_length": 16,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.000205,
+            "solved": true,
+            "translator_facts": 1655
+          }
+        ]
+      },
+      "instance": "alive-pair5",
+      "kind": "pair5",
+      "theorems": 23,
+      "theorems_covering_the_initial_state": [],
+      "unguarded": [
+        {
+          "error": null,
+          "evaluated": 3174,
+          "expanded": 2129,
+          "generated": 6958,
+          "heuristic": "blind",
+          "initial_h": "blind=1",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-blind-plain.log",
+          "plan_length": 16,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.003054,
+          "solved": true,
+          "translator_facts": 1815
+        },
+        {
+          "error": null,
+          "evaluated": 87,
+          "expanded": 41,
+          "generated": 136,
+          "heuristic": "lmcut",
+          "initial_h": "lmcut=13",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-lmcut-plain.log",
+          "plan_length": 16,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.002535,
+          "solved": true,
+          "translator_facts": 1815
+        },
+        {
+          "error": null,
+          "evaluated": 42,
+          "expanded": 17,
+          "generated": 52,
+          "heuristic": "ipdb",
+          "initial_h": "cpdbs=16",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair5-ipdb-plain.log",
+          "plan_length": 16,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.000197,
+          "solved": true,
+          "translator_facts": 1815
+        }
+      ]
+    },
+    {
+      "closure_kinds": [
+        "no_deleting_action"
+      ],
+      "guarded": {
+        "singleton": [
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "blind",
+            "initial_h": "blind=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner6-singleton-blind.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.4e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner6-singleton-lmcut.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 8.7e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner6-singleton-ipdb.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.7e-05,
+            "solved": false,
+            "translator_facts": 4
+          }
+        ]
+      },
+      "instance": "deadstart-corner6",
+      "kind": "corner6",
+      "theorems": 6,
+      "theorems_covering_the_initial_state": [
+        "at(b1,c11) AND not-goal => dead"
+      ],
+      "unguarded": [
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "blind",
+          "initial_h": "blind=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner6-blind-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 5e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "lmcut",
+          "initial_h": "lmcut=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner6-lmcut-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 4.1e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "ipdb",
+          "initial_h": "cpdbs=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-corner6-ipdb-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.2e-05,
+          "solved": false,
+          "translator_facts": 4
+        }
+      ]
+    },
+    {
+      "closure_kinds": [
+        "deleting_actions_blocked"
+      ],
+      "guarded": {
+        "singleton": [
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "blind",
+            "initial_h": "blind=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair6-singleton-blind.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.8e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair6-singleton-lmcut.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 4.2e-05,
+            "solved": false,
+            "translator_facts": 4
+          },
+          {
+            "error": null,
+            "evaluated": 1,
+            "expanded": 0,
+            "generated": 0,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=infinity",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair6-singleton-ipdb.log",
+            "plan_length": null,
+            "proved_unsolvable": true,
+            "returncode": 12,
+            "search_seconds": 3.5e-05,
+            "solved": false,
+            "translator_facts": 4
+          }
+        ]
+      },
+      "instance": "deadstart-pair6",
+      "kind": "pair6",
+      "theorems": 2,
+      "theorems_covering_the_initial_state": [
+        "at(b1,c12) AND not-goal => dead",
+        "at(b2,c13) AND not-goal => dead"
+      ],
+      "unguarded": [
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "blind",
+          "initial_h": "blind=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair6-blind-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 4e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "lmcut",
+          "initial_h": "lmcut=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair6-lmcut-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.9e-05,
+          "solved": false,
+          "translator_facts": 4
+        },
+        {
+          "error": null,
+          "evaluated": 1,
+          "expanded": 0,
+          "generated": 0,
+          "heuristic": "ipdb",
+          "initial_h": "cpdbs=infinity",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-deadstart-pair6-ipdb-plain.log",
+          "plan_length": null,
+          "proved_unsolvable": true,
+          "returncode": 12,
+          "search_seconds": 3.4e-05,
+          "solved": false,
+          "translator_facts": 4
+        }
+      ]
+    },
+    {
+      "closure_kinds": [],
+      "guarded": {
+        "full": [
+          {
+            "error": null,
+            "evaluated": 10830,
+            "expanded": 8090,
+            "generated": 27523,
+            "heuristic": "blind",
+            "initial_h": "blind=1",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-full-blind.log",
+            "plan_length": 21,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.01994,
+            "solved": true,
+            "translator_facts": 2916
+          },
+          {
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): 1968 KB] Search code revision: 7120aa0\n[t=0.000247s, 1968 KB] reading input...\n[t=0.003446s, 2552 KB] done reading input!\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+            "evaluated": null,
+            "expanded": null,
+            "generated": null,
+            "heuristic": "lmcut",
+            "initial_h": null,
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-full-lmcut.log",
+            "plan_length": null,
+            "proved_unsolvable": false,
+            "returncode": 34,
+            "search_seconds": null,
+            "solved": false,
+            "translator_facts": 2916
+          },
+          {
+            "error": "no plan file and no proof (exit 34, rung fd-optimal): g canonical PDB heuristic...\n[t=0.004874s, 2952 KB] Generating patterns using: hill climbing pattern collection generator\nRemove intermediate file output.sas\nsearch exit code: 34\n\nDriver aborting after search\nThis configuration does not support axioms!\nTerminating.\nTried to use unsupported feature.\n",
+            "evaluated": null,
+            "expanded": null,
+            "generated": null,
+            "heuristic": "ipdb",
+            "initial_h": null,
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-full-ipdb.log",
+            "plan_length": null,
+            "proved_unsolvable": false,
+            "returncode": 34,
+            "search_seconds": null,
+            "solved": false,
+            "translator_facts": 2916
+          }
+        ],
+        "indexed": [
+          {
+            "error": null,
+            "evaluated": 9484,
+            "expanded": 6933,
+            "generated": 23594,
+            "heuristic": "blind",
+            "initial_h": "blind=1",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-indexed-blind.log",
+            "plan_length": 21,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.009931,
+            "solved": true,
+            "translator_facts": 25681
+          },
+          {
+            "error": null,
+            "evaluated": 256,
+            "expanded": 125,
+            "generated": 432,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=16",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-indexed-lmcut.log",
+            "plan_length": 21,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.06895,
+            "solved": true,
+            "translator_facts": 25681
+          },
+          {
+            "error": null,
+            "evaluated": 59,
+            "expanded": 22,
+            "generated": 75,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=21",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-indexed-ipdb.log",
+            "plan_length": 21,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.000234,
+            "solved": true,
+            "translator_facts": 25681
+          }
+        ],
+        "singleton": [
+          {
+            "error": null,
+            "evaluated": 10974,
+            "expanded": 8198,
+            "generated": 27905,
+            "heuristic": "blind",
+            "initial_h": "blind=1",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-singleton-blind.log",
+            "plan_length": 21,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.01152,
+            "solved": true,
+            "translator_facts": 2653
+          },
+          {
+            "error": null,
+            "evaluated": 173,
+            "expanded": 88,
+            "generated": 300,
+            "heuristic": "lmcut",
+            "initial_h": "lmcut=17",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-singleton-lmcut.log",
+            "plan_length": 21,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.008313,
+            "solved": true,
+            "translator_facts": 2653
+          },
+          {
+            "error": null,
+            "evaluated": 57,
+            "expanded": 22,
+            "generated": 70,
+            "heuristic": "ipdb",
+            "initial_h": "cpdbs=21",
+            "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-singleton-ipdb.log",
+            "plan_length": 21,
+            "proved_unsolvable": false,
+            "returncode": 0,
+            "search_seconds": 0.000274,
+            "solved": true,
+            "translator_facts": 2653
+          }
+        ]
+      },
+      "instance": "alive-pair6",
+      "kind": "pair6",
+      "theorems": 31,
+      "theorems_covering_the_initial_state": [],
+      "unguarded": [
+        {
+          "error": null,
+          "evaluated": 12868,
+          "expanded": 9535,
+          "generated": 32548,
+          "heuristic": "blind",
+          "initial_h": "blind=1",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-blind-plain.log",
+          "plan_length": 21,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.013078,
+          "solved": true,
+          "translator_facts": 2813
+        },
+        {
+          "error": null,
+          "evaluated": 173,
+          "expanded": 88,
+          "generated": 300,
+          "heuristic": "lmcut",
+          "initial_h": "lmcut=17",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-lmcut-plain.log",
+          "plan_length": 21,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.008974,
+          "solved": true,
+          "translator_facts": 2813
+        },
+        {
+          "error": null,
+          "evaluated": 57,
+          "expanded": 22,
+          "generated": 70,
+          "heuristic": "ipdb",
+          "initial_h": "cpdbs=21",
+          "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\D-alive-pair6-ipdb-plain.log",
+          "plan_length": 21,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.000228,
+          "solved": true,
+          "translator_facts": 2813
+        }
+      ]
+    }
+  ],
+  "fast_downward": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p13\\engine-rig\\.toolchain\\downward\\fast-downward.py",
+  "relaxation_vs_fd": {
+    "n_agree": 16,
+    "n_checked": 16,
+    "rows": [
+      {
+        "agree": true,
+        "fd_translator_dead": false,
+        "python_relaxation_dead": false,
+        "state": 0
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": true,
+        "python_relaxation_dead": true,
+        "state": 208
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": true,
+        "python_relaxation_dead": true,
+        "state": 416
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": true,
+        "python_relaxation_dead": true,
+        "state": 624
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": false,
+        "python_relaxation_dead": false,
+        "state": 832
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": true,
+        "python_relaxation_dead": true,
+        "state": 1040
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": true,
+        "python_relaxation_dead": true,
+        "state": 1248
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": true,
+        "python_relaxation_dead": true,
+        "state": 1456
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": true,
+        "python_relaxation_dead": true,
+        "state": 1664
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": false,
+        "python_relaxation_dead": false,
+        "state": 1872
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": true,
+        "python_relaxation_dead": true,
+        "state": 2080
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": false,
+        "python_relaxation_dead": false,
+        "state": 2288
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": true,
+        "python_relaxation_dead": true,
+        "state": 2496
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": true,
+        "python_relaxation_dead": true,
+        "state": 2704
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": true,
+        "python_relaxation_dead": true,
+        "state": 2912
+      },
+      {
+        "agree": true,
+        "fd_translator_dead": false,
+        "python_relaxation_dead": false,
+        "state": 3120
+      }
+    ]
+  },
+  "replication": [
+    {
+      "after": {
+        "error": null,
+        "evaluated": 789,
+        "expanded": 610,
+        "generated": 1737,
+        "heuristic": "blind",
+        "initial_h": "blind=1",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far4-blind-after.log",
+        "plan_length": 11,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.000969,
+        "solved": true,
+        "translator_facts": 869
+      },
+      "before": {
+        "error": null,
+        "evaluated": 1167,
+        "expanded": 837,
+        "generated": 2453,
+        "heuristic": "blind",
+        "initial_h": "blind=1",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far4-blind-before.log",
+        "plan_length": 11,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.001202,
+        "solved": true,
+        "translator_facts": 1029
+      },
+      "config": "astar(blind())",
+      "dividend": 0.2712,
+      "guard": "singleton",
+      "instance": "far4",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 16
+    },
+    {
+      "after": {
+        "error": null,
+        "evaluated": 45,
+        "expanded": 22,
+        "generated": 64,
+        "heuristic": "lmcut",
+        "initial_h": "lmcut=7",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far4-lmcut-after.log",
+        "plan_length": 11,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.000831,
+        "solved": true,
+        "translator_facts": 869
+      },
+      "before": {
+        "error": null,
+        "evaluated": 49,
+        "expanded": 23,
+        "generated": 68,
+        "heuristic": "lmcut",
+        "initial_h": "lmcut=7",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far4-lmcut-before.log",
+        "plan_length": 11,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.000811,
+        "solved": true,
+        "translator_facts": 1029
+      },
+      "config": "astar(lmcut())",
+      "dividend": 0.0435,
+      "guard": "singleton",
+      "instance": "far4",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 16
+    },
+    {
+      "after": {
+        "error": null,
+        "evaluated": 28,
+        "expanded": 12,
+        "generated": 34,
+        "heuristic": "ipdb",
+        "initial_h": "cpdbs=11",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far4-ipdb-after.log",
+        "plan_length": 11,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.000156,
+        "solved": true,
+        "translator_facts": 869
+      },
+      "before": {
+        "error": null,
+        "evaluated": 29,
+        "expanded": 12,
+        "generated": 35,
+        "heuristic": "ipdb",
+        "initial_h": "cpdbs=11",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far4-ipdb-before.log",
+        "plan_length": 11,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.000144,
+        "solved": true,
+        "translator_facts": 1029
+      },
+      "config": "astar(ipdb())",
+      "dividend": 0.0,
+      "guard": "singleton",
+      "instance": "far4",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 16
+    },
+    {
+      "after": {
+        "error": null,
+        "evaluated": 4083,
+        "expanded": 2762,
+        "generated": 9424,
+        "heuristic": "blind",
+        "initial_h": "blind=1",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far6-blind-after.log",
+        "plan_length": 17,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.004454,
+        "solved": true,
+        "translator_facts": 2653
+      },
+      "before": {
+        "error": null,
+        "evaluated": 4652,
+        "expanded": 3070,
+        "generated": 10488,
+        "heuristic": "blind",
+        "initial_h": "blind=1",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far6-blind-before.log",
+        "plan_length": 17,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.005014,
+        "solved": true,
+        "translator_facts": 2813
+      },
+      "config": "astar(blind())",
+      "dividend": 0.1003,
+      "guard": "singleton",
+      "instance": "far6",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 32
+    },
+    {
+      "after": {
+        "error": null,
+        "evaluated": 92,
+        "expanded": 47,
+        "generated": 164,
+        "heuristic": "lmcut",
+        "initial_h": "lmcut=13",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far6-lmcut-after.log",
+        "plan_length": 17,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.00426,
+        "solved": true,
+        "translator_facts": 2653
+      },
+      "before": {
+        "error": null,
+        "evaluated": 92,
+        "expanded": 47,
+        "generated": 164,
+        "heuristic": "lmcut",
+        "initial_h": "lmcut=13",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far6-lmcut-before.log",
+        "plan_length": 17,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.004505,
+        "solved": true,
+        "translator_facts": 2813
+      },
+      "config": "astar(lmcut())",
+      "dividend": 0.0,
+      "guard": "singleton",
+      "instance": "far6",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 32
+    },
+    {
+      "after": {
+        "error": null,
+        "evaluated": 43,
+        "expanded": 18,
+        "generated": 55,
+        "heuristic": "ipdb",
+        "initial_h": "cpdbs=17",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far6-ipdb-after.log",
+        "plan_length": 17,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.000208,
+        "solved": true,
+        "translator_facts": 2653
+      },
+      "before": {
+        "error": null,
+        "evaluated": 43,
+        "expanded": 18,
+        "generated": 55,
+        "heuristic": "ipdb",
+        "initial_h": "cpdbs=17",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far6-ipdb-before.log",
+        "plan_length": 17,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.000283,
+        "solved": true,
+        "translator_facts": 2813
+      },
+      "config": "astar(ipdb())",
+      "dividend": 0.0,
+      "guard": "singleton",
+      "instance": "far6",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 32
+    },
+    {
+      "after": {
+        "error": null,
+        "evaluated": 9270,
+        "expanded": 6365,
+        "generated": 22476,
+        "heuristic": "blind",
+        "initial_h": "blind=1",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far7-blind-after.log",
+        "plan_length": 20,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.010215,
+        "solved": true,
+        "translator_facts": 3863
+      },
+      "before": {
+        "error": null,
+        "evaluated": 10595,
+        "expanded": 7196,
+        "generated": 25420,
+        "heuristic": "blind",
+        "initial_h": "blind=1",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far7-blind-before.log",
+        "plan_length": 20,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.012496,
+        "solved": true,
+        "translator_facts": 4023
+      },
+      "config": "astar(blind())",
+      "dividend": 0.1155,
+      "guard": "singleton",
+      "instance": "far7",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 40
+    },
+    {
+      "after": {
+        "error": null,
+        "evaluated": 127,
+        "expanded": 68,
+        "generated": 238,
+        "heuristic": "lmcut",
+        "initial_h": "lmcut=16",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far7-lmcut-after.log",
+        "plan_length": 20,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.008274,
+        "solved": true,
+        "translator_facts": 3863
+      },
+      "before": {
+        "error": null,
+        "evaluated": 130,
+        "expanded": 69,
+        "generated": 241,
+        "heuristic": "lmcut",
+        "initial_h": "lmcut=16",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far7-lmcut-before.log",
+        "plan_length": 20,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.00861,
+        "solved": true,
+        "translator_facts": 4023
+      },
+      "config": "astar(lmcut())",
+      "dividend": 0.0145,
+      "guard": "singleton",
+      "instance": "far7",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 40
+    },
+    {
+      "after": {
+        "error": null,
+        "evaluated": 56,
+        "expanded": 21,
+        "generated": 69,
+        "heuristic": "ipdb",
+        "initial_h": "cpdbs=20",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far7-ipdb-after.log",
+        "plan_length": 20,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.000978,
+        "solved": true,
+        "translator_facts": 3863
+      },
+      "before": {
+        "error": null,
+        "evaluated": 56,
+        "expanded": 21,
+        "generated": 69,
+        "heuristic": "ipdb",
+        "initial_h": "cpdbs=20",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far7-ipdb-before.log",
+        "plan_length": 20,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.001172,
+        "solved": true,
+        "translator_facts": 4023
+      },
+      "config": "astar(ipdb())",
+      "dividend": 0.0,
+      "guard": "singleton",
+      "instance": "far7",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 40
+    }
+  ],
+  "seconds": 122.2,
+  "size_ladder": [
+    {
+      "after": {
+        "error": null,
+        "evaluated": 15676,
+        "expanded": 10799,
+        "generated": 38915,
+        "heuristic": "blind",
+        "initial_h": "blind=1",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far8-blind-after.log",
+        "plan_length": 23,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.019395,
+        "solved": true,
+        "translator_facts": 5285
+      },
+      "before": {
+        "error": null,
+        "evaluated": 17637,
+        "expanded": 12078,
+        "generated": 43558,
+        "heuristic": "blind",
+        "initial_h": "blind=1",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far8-blind-before.log",
+        "plan_length": 23,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.02091,
+        "solved": true,
+        "translator_facts": 5445
+      },
+      "config": "astar(blind())",
+      "dividend": 0.1059,
+      "guard": "singleton",
+      "instance": "far8",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 48
+    },
+    {
+      "after": {
+        "error": null,
+        "evaluated": 146,
+        "expanded": 83,
+        "generated": 296,
+        "heuristic": "lmcut",
+        "initial_h": "lmcut=19",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far8-lmcut-after.log",
+        "plan_length": 23,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.014266,
+        "solved": true,
+        "translator_facts": 5285
+      },
+      "before": {
+        "error": null,
+        "evaluated": 149,
+        "expanded": 84,
+        "generated": 299,
+        "heuristic": "lmcut",
+        "initial_h": "lmcut=19",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far8-lmcut-before.log",
+        "plan_length": 23,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.014697,
+        "solved": true,
+        "translator_facts": 5445
+      },
+      "config": "astar(lmcut())",
+      "dividend": 0.0119,
+      "guard": "singleton",
+      "instance": "far8",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 48
+    },
+    {
+      "after": {
+        "error": null,
+        "evaluated": 65,
+        "expanded": 24,
+        "generated": 80,
+        "heuristic": "ipdb",
+        "initial_h": "cpdbs=23",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far8-ipdb-after.log",
+        "plan_length": 23,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.000353,
+        "solved": true,
+        "translator_facts": 5285
+      },
+      "before": {
+        "error": null,
+        "evaluated": 72,
+        "expanded": 27,
+        "generated": 90,
+        "heuristic": "ipdb",
+        "initial_h": "cpdbs=23",
+        "log": "runs\\20260728T150713Z-E7-deadlock-claim-audit\\logs\\R-far8-ipdb-before.log",
+        "plan_length": 23,
+        "proved_unsolvable": false,
+        "returncode": 0,
+        "search_seconds": 0.000406,
+        "solved": true,
+        "translator_facts": 5445
+      },
+      "config": "astar(ipdb())",
+      "dividend": 0.1111,
+      "guard": "singleton",
+      "instance": "far8",
+      "plan_unchanged": true,
+      "theorems_carried": 8,
+      "theorems_total": 48
+    }
+  ],
+  "wiring": [
+    {
+      "blind_expansions": 808,
+      "dead_fraction_of_reachable": 0.4859,
+      "dead_reachable_states": 1624,
+      "engine_reported_pruned": 69,
+      "instance": "far4",
+      "plan_unchanged": true,
+      "pruned_expansions": 571,
+      "pruner_calls": 815,
+      "pruner_fired": 69,
+      "reachable_states": 3342,
+      "states_cut": 237,
+      "theorems": 16
+    },
+    {
+      "blind_expansions": 3152,
+      "dead_fraction_of_reachable": 0.2319,
+      "dead_reachable_states": 9928,
+      "engine_reported_pruned": 78,
+      "instance": "far6",
+      "plan_unchanged": true,
+      "pruned_expansions": 2788,
+      "pruner_calls": 4227,
+      "pruner_fired": 78,
+      "reachable_states": 42803,
+      "states_cut": 364,
+      "theorems": 32
+    },
+    {
+      "blind_expansions": 8003,
+      "dead_fraction_of_reachable": 0.1718,
+      "dead_reachable_states": 18988,
+      "engine_reported_pruned": 100,
+      "instance": "far7",
+      "plan_unchanged": true,
+      "pruned_expansions": 7041,
+      "pruner_calls": 10312,
+      "pruner_fired": 100,
+      "reachable_states": 110494,
+      "states_cut": 962,
+      "theorems": 40
+    }
+  ]
+}

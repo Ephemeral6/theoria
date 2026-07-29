@@ -1,7 +1,8 @@
 # Certifying a world theory against something other than its own past
 
-### Phase 1 of Theoria: four offline acceptances, a passive metrics battery,
-### an examination instrument, and a live run that spent nothing
+### Phase 1 of Theoria: three offline acceptances and a transfer result, a
+### passive metrics battery, an examination instrument, and a live run that
+### spent nothing
 
 **⟨AUTHOR PLACEHOLDER⟩**
 ⟨AFFILIATION PLACEHOLDER⟩ · ⟨CONTACT PLACEHOLDER⟩
@@ -53,7 +54,9 @@ playbook saying how to win — compiled to four co-derived forms and certified i
 two layers: full-history replay at the pixel, and declared laws discharged in
 Lean with the axiom list inspected.
 
-Phase 1 is offline: four acceptances on self-built deterministic worlds, a
+Phase 1 is offline: three acceptances on self-built deterministic worlds — the
+three `Theoria.md` Part 2 names, A0, A1 and A2 — plus a fourth section reporting
+an early read on claim C3 that the mandate does not list as an acceptance, a
 metrics battery recomputed over trajectories that already existed, an examination
 instrument, and one live run that spent nothing. Eight results.
 **(1)** On a 9×9 self-built world, the induced manual replays 276/276 frames and
@@ -85,16 +88,18 @@ supposed to.
 **(5)** A metrics battery recomputed over 95 runs across five arms at zero new
 spend, whose harshest reader is its own audit: 34 of 38 executable exploits still
 score a metric at or near its best value while possessing none of the capability
-it claims to measure, 17 of its written defence claims were contradicted by their
-own demonstration, and the exploration family's declared signature separates the
+it claims to measure, 17 of its written register entries — 14 of them defence
+claims — were contradicted by their own demonstration, and the exploration
+family's declared signature separates the
 one gradient the design specifies *backwards*. No metric on this pilot can reach
 significance in any case — a two-sided sign test over four paired games has a
 smallest attainable *p* of 0.125.
 
 **(6)** A theory carried unchanged to a second level of the same game re-fits from a single
 frame and wins with zero engine stages, zero adjudicated candidates and zero
-theorize rounds, at 252/252 against the referee — while the verification work is
-paid in full and at the same rate. Two perturbed levels, each breaking a
+theorize rounds — while the verification work is paid in full and at the same
+rate. It scores 252/252 against the referee, and so does the from-scratch control,
+so the saving is in what each arm cost and not in what either got right. Two perturbed levels, each breaking a
 mechanism the carried theory does not know about, were both caught, and both were
 caught only *after* acting: the free static layer passed them and returned the
 same plan. **(7)** An examination instrument with four question types, a marker

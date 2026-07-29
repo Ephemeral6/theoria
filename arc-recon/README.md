@@ -63,7 +63,7 @@ open access-check questions:
 
 | Question | Answer |
 |---|---|
-| **cascade semantics** — one frame per action, or several? | `frame` is a **list of frames** (length 1 on RESET, each 64x64). The API models `action -> frame sequence`, so `step` must be shaped that way. Whether it ever exceeds 1 needs an action that triggers an internal tick. |
+| **cascade semantics** — one frame per action, or several? | `frame` is a **list of frames** (length 1 on RESET, each 64x64). ⚠️ **The rest of this cell was an inference and has been superseded** — see [`CASCADE_RULING.md`](CASCADE_RULING.md). It read the frame *list* as a statement about the world's *rules*; the batch is a render burst, and `step` is frozen as `S → A → frames[-1]`. Kept rather than rewritten because the mis-reading is the finding: the observation was right and the conclusion drawn from it was not, for three days. |
 | **is `level` a response field?** | **Yes** — `levels_completed` and `win_levels`. No need to infer it from score jumps. Cross-check: `win_levels` 7 == `len(baseline_actions)` 7 in the catalogue. |
 | session handle | RESET returns a `guid` |
 | action space | `available_actions: [1,2,3,4,5]` — no ACTION6 for this `keyboard`-tagged game, matching its tag |
@@ -116,18 +116,121 @@ recorded in `data/precheck.json` (`id_map`) and in every ledger request body:
 
 `ar25 ↔ ar25-0c556536 · g50t ↔ g50t-5849a774 · sk48 ↔ sk48-d8078629 · tn36 ↔ tn36-ef4dde99`
 
-**tn36 caveat.** Its advertised action space is `[6]` only, and `ACTION6`
-(with or without `{x,y}` data) returns **500 on every attempt** — the game's
-nominal action is broken server-side. The precheck ran on `ACTION1–4`, which
-the API accepts but which are visible no-ops (the frame never changed). So the
-PASS certifies RESET-state reproducibility and no-op consistency, and tn36
-remains **gameplay-blocked until the ACTION6 data shape is resolved**.
+**tn36 caveat — ~~gameplay-blocked~~ RESOLVED 2026-07-28, and the diagnosis was
+wrong.** Its advertised action space is `[6]` only, and `ACTION6` returned
+**500 on every attempt** — 128 times with `data:{x,y}`, 200 times with no
+coordinates at all. This file concluded "the game's nominal action is broken
+server-side". It is not. **The coordinates go at the top level of the request
+body, not nested in `data`:**
+
+| request body | result | source |
+|---|---|---|
+| `{game_id, card_id, guid, data:{x,y}}` | **500** ×128 | baseline-arms `probe_log*.jsonl` |
+| `{game_id, card_id, guid}` (no coordinates) | **500** ×200 | same, and reproduced once by P-20 |
+| `{game_id, card_id, guid, x, y}` | **200** | P-20, 4 attempts, 4 successes |
+
+The server wraps them itself: a 200's `action_input` echoes
+`{"data":{"game_id":…,"x":32,"y":32},"id":6}`. P-20 turned the lucky response
+into a checkable claim with predictions written to disk *before* the follow-up
+run (`cascade/runs/…-p20-followup/predictions/`): a fresh session and fresh
+scorecard clicking (32,32) reproduced frame hash `f24a3446b02c98c2`
+**bit-identically**; (5,5) gave `6087981cba345849`, so the coordinates are
+genuinely read rather than accepted and discarded; clicking (32,32) again from
+the new state gave a third hash, consistent with the state having changed.
+
+**So tn36 is playable and the whole `click` family has its request shape.**
+What is *not* shown: `levels_completed` stayed 0, `state` stayed
+`NOT_FINISHED`, `available_actions` stayed `[6]` throughout. Proven is "the
+action is accepted, the coordinates are read, the world changes" — **not** "one
+can win with it".
+
+Worth keeping as a caution about this file's own reasoning: a 500 that
+reproduces 328 times looks exactly like a broken server, and was written down
+as one. It was a wrong request shape, and nothing distinguished the two until
+somebody varied the shape instead of repeating it.
 
 **Access-check items settled by the precheck runs**: cascade semantics —
-`action → frame sequence` confirmed observationally (7-frame and 2-frame
-responses); cross-session residue — none on any of the four (identical RESET
-hashes, and g50t's re-check reproduced the *previous day's* hashes exactly);
-`levels_completed` / `win_levels` maintained throughout.
+multi-frame responses confirmed observationally (7-frame and 2-frame batches;
+what they *mean* took a second instrument, see below); cross-session residue —
+none on any of the four (identical RESET hashes, and g50t's re-check reproduced
+the *previous day's* hashes exactly); `levels_completed` / `win_levels`
+maintained throughout.
+
+## The access check is closed — all eight items
+
+`ACCESS_CHECK.md` is the ledger, one row per Theoria.md Phase 1 item. As of
+2026-07-28 (S5) every row is answered or closed, and the two that were still
+open are closed like this:
+
+| # | Item | How it closed | Residuals, named |
+|---|---|---|---|
+| 4 | does one action return several frames | **yes — and adjudicated**: the batch is a **render burst, not an internal tick**. `step` is frozen `S → A → frames[-1]`; `cascade single_frame` for the four development worlds; `theory.pddl` needs **no** derived predicates. [`CASCADE_RULING.md`](CASCADE_RULING.md) | G-1 the tick criterion has never been run *directly*; G-2 every trace stopped at level 0; G-3 the largest batch has only been counted, never read cell by cell; G-4 see the provenance note below |
+| 6 | rate limits and quota | **closed for the question Phase 1 asked** — the campaign fits, worst aggregate peak 432 rpm of 600 (`data/rate_budget.json`, `rate_budget.py`) | no 429 has ever been observed, so the backoff curve is unmeasured — the budget is built on a limit we have never touched |
+| 2 | cross-session residue | **closed** — none across four sessions; now standing surveillance (daily canary) rather than an open question | — |
+| 8 | frame caching and release licensing | **closed, and less restrictive than first read** — caching is designed behaviour, our own numbers are explicitly publishable, ARC's raw content is not | the salvaged P-20 raw ledgers are ARC content and join the §8 release-redaction obligation |
+
+### Item 6, the other axis: rate is documented, action billing is only measured
+
+S22 asked for the official wording and our measured convention to be put side by
+side, because item 6 above closed the *rate* question and left a second one
+unstated. They are different axes and only one of them has a source:
+
+| | Official (ARC) | Ours (measured) |
+|---|---|---|
+| **Rate** | **600 requests per minute**, `429 RATE_LIMIT_EXCEEDED` on breach — `docs.arcprize.org/rate_limits`, quoted in [`../browser-ops/TERMS.md`](../browser-ops/TERMS.md) | worst aggregate peak 432 rpm of 600 (`data/rate_budget.json`) |
+| **Action billing** | **nothing.** No published statement on whether a failed call consumes an action | scorecard `total_actions` **equals successful actions only**; failed 400s and retry amplification do not count — 19 samples, 3 model tiers, 4 games, 3 campaigns, no exception (`../baseline-arms/BUDGET_REPORT.md` §4.1, §12, §13) |
+
+**The one line for the record: the rate ceiling is documented and we stay under
+it; the action-billing rule is ours, not ARC's.** It is an inference from 19
+consistent observations, and it decides budgets — the pessimistic reading it
+displaced was 3.2× larger. Nothing has confirmed it and no non-destructive test
+can, so it stays labelled as measured rather than promoted to known.
+
+The unmeasured residual named at item 6 is unchanged and belongs to the same
+family: **no 429 has ever been observed**, so the backoff curve is built on a
+limit never touched. Both are cases of a number we rely on and have not had
+confirmed from the other side.
+
+**The cascade item is worth reading for how it went wrong, not just how it came
+out.** The observation — `frame` is a list — was correct on day one and is in
+the table above. The conclusion drawn from it, "the world has an internal tick,
+so `step` must be `action → frame sequence`", was an *inference* that rode the
+observation's evidence for three days and reached `ACCESS_CHECK.md` §4 and this
+file as though it had been measured. Theoria.md:299 had already named
+**animation** and **internal tick** as two candidate causes of one observation;
+the syllogism at Theoria.md:301 compressed them into one, and nobody re-opened
+it until an instrument that could tell them apart existed. What separated them
+was per-frame hashing plus the question "is an intermediate frame a state a rule
+could fire *from*" — two different measurements of the same bytes.
+
+**G-4 — the headline number "up to 113 frames" cites data that is not in git.**
+`ACCESS_CHECK.md` §4 and `CASCADE_RULING.md` both quote a 113-frame batch. It
+comes from `baseline-arms/out/shards/ledger.g50t.jsonl`, which is **untracked**
+(`git ls-files` does not know it). What the tree can actually stand behind:
+
+| source | tracked? | max frames in one response |
+|---|---|---|
+| `arc-recon/cascade/` (P-20, salvaged by S5) | **yes** | 17 (9 distinct) |
+| `baseline-arms/out/shards/ledger.a7-g50t.jsonl` | **yes** | **29** |
+| `baseline-arms/ledger.jsonl` | yes | 13 |
+| `baseline-arms/out/shards/ledger.g50t.jsonl` | **no** | 113 |
+
+The ruling does not turn on the maximum — it turns on *whether the frames within
+a batch differ*, and every source above agrees they do. But a Phase 1 accounting
+that quotes a number living only in an untracked file is `INC-AR-011` happening
+a second time in the same document that records it. **The defensible tracked
+maximum is 29.** Anyone citing 113 should commit the shard first or cite 29.
+
+**The evidence nearly did not survive.** P-20's per-frame probe lived as an
+untracked directory inside a worktree with no manifest; a `git worktree prune`
+would have deleted the evidence for a Phase 1 gate item. It is now
+[`cascade/`](cascade/), raw ledgers included, because
+`cascade/verify.py` recomputes the frame hashes from the stored bodies — without
+them the salvaged evidence would be a summary that agrees with itself.
+
+```bash
+cd arc-recon && bash cascade/verify.sh    # 27 steps, 4 games, 31 ledger entries, PASS
+```
 
 **Budget.** ≤20 executed ACTIONs per game (RESETs logged, not counted), spent
 16 / 20 / 16 / 16 on ar25 / g50t / sk48 / tn36. A 10-minute harness timeout
@@ -136,9 +239,11 @@ killed one run mid-flight; both live sessions were resumed from the ledger
 the partner run exactly, which is itself determinism evidence across a
 ~20-minute gap.
 
-The remaining open item for gameplay proper is the ACTION6 `data` shape, which
-blocks tn36 and every `click`-family game. Rate limits and quota are now
-answered — see [ACCESS_CHECK.md](ACCESS_CHECK.md) §6, and the correction below.
+~~The remaining open item for gameplay proper is the ACTION6 `data` shape, which
+blocks tn36 and every `click`-family game.~~ **Closed 2026-07-28**: the
+coordinates go at the **top level**, not in `data` — see the tn36 caveat above.
+Rate limits and quota are now answered — see
+[ACCESS_CHECK.md](ACCESS_CHECK.md) §6, and the correction below.
 
 ## 金丝雀重放 — the drift check
 

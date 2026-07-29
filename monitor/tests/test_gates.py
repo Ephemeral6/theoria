@@ -34,7 +34,14 @@ def test_a_territory_that_ships_a_gate_is_read_as_gated(tmp_path):
     (tmp_path / "t" / "verify.sh").write_text("#!/bin/sh\nexit 0\n")
     row = gates.gate_for(str(tmp_path), "t")
     assert row["kind"] == "verify" and row["canonical"] is True
-    assert row["cmd"][0] == "bash"
+    # 旧断言是 `row["cmd"][0] == "bash"`——它断的是那个字符串，而**字符串一直是对的**：
+    # PATH 上的 bash 是 WSL 的（另一个 Linux，没有 python），Windows 绝对路径里的
+    # 反斜杠又被它当成转义吃掉。于是 8 条已交付分支被判成 verify gate red，
+    # 而这条测试全程绿着（2026-07-29）。所以现在断的是**它跑得起来**。
+    import subprocess
+    r = subprocess.run(row["cmd"], cwd=str(tmp_path / "t"),
+                       capture_output=True, text=True, timeout=120)
+    assert r.returncode == 0, (row["cmd"], r.stdout, r.stderr)
 
 
 def test_verify_py_counts_and_runs_under_this_interpreter(tmp_path):
@@ -102,9 +109,31 @@ def test_this_repository_is_where_the_survey_says_it_is():
     survey = gates.survey(ROOT)
     assert "monitor" in survey["gated"], (
         "the rig that enforces gates must have one; it did not until S13")
-    assert set(survey["ungated"]) <= {"CONTRACTS", "browser-ops", "papers",
-                                      "release"}, survey["ungated"]
-    assert "proxy" in survey["non_canonical"]
+    # fleet-study 是 2026-07-29 新落地的领地，尚无闸门——按上面那条规矩，
+    # 更新这个集合的同时要说明：它的闸门由 S17-fleet-evidence-capture 负责补，
+    # 补上之后这条测试会再红一次，那是对的。
+    #
+    # S14 在此同样自报：十一个领地各得了一个三段式 verify.py，盘面从 6 个有闸门
+    # 变成 17 个，`tests_only` 因此清零。
+    # 2026-07-29 收紧：`fleet-study`（S17 补上）与 `release` 都已自带闸门，
+    # 所以它们从这个集合里**移除**——按上面那条规矩，收紧同样要说出来，
+    # 否则下一个人会以为这两块地还敞着。
+    assert set(survey["ungated"]) <= {"CONTRACTS", "browser-ops",
+                                      "papers"}, survey["ungated"]
+    # S14 cleared `tests_only` completely; anything in it now is a territory
+    # that arrived afterwards and still owes a gate.  Naming them one by one is
+    # the point -- an unexpected name here means a gate was deleted, which the
+    # blanket `not survey["tests_only"]` I first wrote could not distinguish
+    # from an ordinary new arrival.
+    # `fleetkit` 是 S18 抽出来的新领地，有测试、还没有闸门——按 S13 它欠一个。
+    assert set(survey["tests_only"]) <= {"verify-lab",
+                                         "fleetkit"}, survey["tests_only"]
+    # `proxy` 本来是「非规范名闸门」的样板（`verify_spend.sh`）。S14 给了它一个
+    # 规范的 `verify.py`，而规范名优先——于是 `verify_spend.sh` 会**从此不再在合并
+    # 时被跑到**。这条断言之所以能松，唯一的理由是 `proxy/verify.py` 把它接成了
+    # 自己的一段；否则这就是加了一道闸门、悄悄关掉另一道。
+    assert "proxy" not in survey["non_canonical"]
+    assert survey["rows"]["proxy"]["name"] == "verify.py"
 
 
 def test_describe_makes_an_ungated_merge_readable():

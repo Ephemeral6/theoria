@@ -1,0 +1,195 @@
+{
+ "control": {
+  "account": {
+   "all_guards_searched": true,
+   "classes_no_separating_guard": 4,
+   "classes_with_single_conjunction": 8,
+   "crash_sample_cap": 8,
+   "crashes": [],
+   "crashes_by_type": {},
+   "disjunction_is_a_finding": true,
+   "effect_classes": 12,
+   "no_separating_guard": [
+    {
+     "action": "DOWN",
+     "detail": "no literal separates transition 59 from the positives",
+     "effect": "((0, 0), (0, 0))",
+     "transitions_in_class": 7
+    },
+    {
+     "action": "LEFT",
+     "detail": "no literal separates transition 17 from the positives",
+     "effect": "((0, 0), (0, 0))",
+     "transitions_in_class": 7
+    },
+    {
+     "action": "RIGHT",
+     "detail": "no literal separates transition 104 from the positives",
+     "effect": "((0, 0), (0, 0))",
+     "transitions_in_class": 7
+    },
+    {
+     "action": "UP",
+     "detail": "no literal separates transition 110 from the positives",
+     "effect": "((0, 0), (0, 0))",
+     "transitions_in_class": 7
+    }
+   ],
+   "note": "`NoSeparatingGuard` is the miner's designed verdict that an effect class admits no single conjunctive guard, and a disjunction learned after it is a claim about the world. Any other exception is a crash: the disjunction learned after it says nothing about the world, and every rule it produced carries `unsound_after_crash: true`.",
+   "synthesis_crashes": 0
+  },
+  "n_rules": 17,
+  "n_unsound": 0
+ },
+ "counting_removed": {
+  "account": {
+   "all_guards_searched": true,
+   "classes_no_separating_guard": 0,
+   "classes_with_single_conjunction": 0,
+   "crash_sample_cap": 8,
+   "crashes": [],
+   "crashes_by_type": {},
+   "disjunction_is_a_finding": true,
+   "effect_classes": 12,
+   "no_separating_guard": [],
+   "note": "`NoSeparatingGuard` is the miner's designed verdict that an effect class admits no single conjunctive guard, and a disjunction learned after it is a claim about the world. Any other exception is a crash: the disjunction learned after it says nothing about the world, and every rule it produced carries `unsound_after_crash: true`.",
+   "synthesis_crashes": 0
+  },
+  "n_rules": 17,
+  "n_unsound": 17,
+  "sample_rule": {
+   "action": "DOWN",
+   "coverage": "2/2",
+   "disjunctive_because": "synthesis_crashed",
+   "effect": {
+    "box_delta": [
+     0,
+     0
+    ],
+    "player_delta": [
+     0,
+     0
+    ]
+   },
+   "frontier": [],
+   "guard": [
+    "!ahead_free(LEFT)",
+    "act==DOWN",
+    "ahead_on_board(RIGHT)",
+    "box_beyond_free(LEFT)"
+   ],
+   "name": "blocked_DOWN_1",
+   "support": [
+    15,
+    31
+   ],
+   "unsound_after_crash": true
+  }
+ },
+ "counting_removed_raises": 12,
+ "poisoned": {
+  "account": {
+   "all_guards_searched": false,
+   "classes_no_separating_guard": 0,
+   "classes_with_single_conjunction": 0,
+   "crash_sample_cap": 8,
+   "crashes": [
+    {
+     "action": "DOWN",
+     "effect": "((0, 0), (0, 0))",
+     "message": "injected: synthesis fell over",
+     "transitions_in_class": 7,
+     "type": "Boom"
+    },
+    {
+     "action": "DOWN",
+     "effect": "((1, 0), (0, 0))",
+     "message": "injected: synthesis fell over",
+     "transitions_in_class": 56,
+     "type": "Boom"
+    },
+    {
+     "action": "DOWN",
+     "effect": "((1, 0), (2, 0))",
+     "message": "injected: synthesis fell over",
+     "transitions_in_class": 12,
+     "type": "Boom"
+    },
+    {
+     "action": "LEFT",
+     "effect": "((0, -1), (0, -2))",
+     "message": "injected: synthesis fell over",
+     "transitions_in_class": 19,
+     "type": "Boom"
+    },
+    {
+     "action": "LEFT",
+     "effect": "((0, -1), (0, 0))",
+     "message": "injected: synthesis fell over",
+     "transitions_in_class": 101,
+     "type": "Boom"
+    },
+    {
+     "action": "LEFT",
+     "effect": "((0, 0), (0, 0))",
+     "message": "injected: synthesis fell over",
+     "transitions_in_class": 7,
+     "type": "Boom"
+    },
+    {
+     "action": "RIGHT",
+     "effect": "((0, 0), (0, 0))",
+     "message": "injected: synthesis fell over",
+     "transitions_in_class": 7,
+     "type": "Boom"
+    },
+    {
+     "action": "RIGHT",
+     "effect": "((0, 1), (0, 0))",
+     "message": "injected: synthesis fell over",
+     "transitions_in_class": 40,
+     "type": "Boom"
+    }
+   ],
+   "crashes_by_type": {
+    "Boom": 12
+   },
+   "disjunction_is_a_finding": false,
+   "effect_classes": 12,
+   "no_separating_guard": [],
+   "note": "`NoSeparatingGuard` is the miner's designed verdict that an effect class admits no single conjunctive guard, and a disjunction learned after it is a claim about the world. Any other exception is a crash: the disjunction learned after it says nothing about the world, and every rule it produced carries `unsound_after_crash: true`.",
+   "synthesis_crashes": 12
+  },
+  "n_rules": 17,
+  "n_unsound": 17,
+  "sample_rule": {
+   "action": "DOWN",
+   "coverage": "2/2",
+   "disjunctive_because": "synthesis_crashed",
+   "effect": {
+    "box_delta": [
+     0,
+     0
+    ],
+    "player_delta": [
+     0,
+     0
+    ]
+   },
+   "frontier": [],
+   "guard": [
+    "!ahead_free(LEFT)",
+    "act==DOWN",
+    "ahead_on_board(RIGHT)",
+    "box_beyond_free(LEFT)"
+   ],
+   "name": "blocked_DOWN_1",
+   "support": [
+    15,
+    31
+   ],
+   "unsound_after_crash": true
+  }
+ },
+ "poisoned_raises": 12
+}

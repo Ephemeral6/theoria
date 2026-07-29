@@ -1,0 +1,85 @@
+{
+ "amended": [
+  {
+   "check_only": true,
+   "slug": "20260728T012311Z-g50t-first-contact-aborted"
+  },
+  {
+   "check_only": true,
+   "slug": "20260728T014402Z-g50t-first-contact-aborted"
+  },
+  {
+   "check_only": true,
+   "slug": "20260728T015354Z-g50t-first-contact"
+  },
+  {
+   "check_only": true,
+   "slug": "preflight-20260728T012057Z"
+  }
+ ],
+ "created": [
+  {
+   "base_commit": null,
+   "check_only": true,
+   "kind": "salvage",
+   "missing": [
+    "base_commit"
+   ],
+   "prompt_id": "P-8",
+   "provenance": "incomplete",
+   "slug": "20260728T012311Z-g50t-first-contact-salvage",
+   "utc": "2026-07-28T01:41:53.107Z"
+  },
+  {
+   "base_commit": null,
+   "check_only": true,
+   "kind": "salvage",
+   "missing": [
+    "base_commit"
+   ],
+   "prompt_id": "P-8",
+   "provenance": "incomplete",
+   "slug": "20260728T012311Z-g50t-first-contact-salvage2",
+   "utc": "2026-07-28T01:42:28.703Z"
+  },
+  {
+   "base_commit": "0f62cf6614ab57004a0973592326fcafe77ad489",
+   "check_only": true,
+   "kind": "salvage",
+   "missing": [],
+   "prompt_id": "P-8",
+   "provenance": "complete",
+   "slug": "20260728T014402Z-g50t-first-contact-salvage",
+   "utc": "2026-07-28T01:53:24.338Z"
+  },
+  {
+   "base_commit": "9ba0786a787926838baf858c14a701602d9b0942",
+   "check_only": true,
+   "kind": "salvage",
+   "missing": [],
+   "prompt_id": "P-8",
+   "provenance": "complete",
+   "slug": "20260728T015354Z-g50t-first-contact-salvage",
+   "utc": "2026-07-28T02:41:04.399Z"
+  },
+  {
+   "base_commit": null,
+   "check_only": true,
+   "kind": "preflight",
+   "missing": [
+    "base_commit",
+    "branch"
+   ],
+   "prompt_id": "P-8",
+   "provenance": "incomplete",
+   "slug": "preflight-20260728T012031Z",
+   "utc": "2026-07-28T01:20:31.387Z"
+  }
+ ],
+ "skipped": [
+  {
+   "slug": "20260728T141546Z-S8-provenance-backfill",
+   "why": "no ledger, but a manifest: a tooling or repair pass that touched no environment. It has its own manifest and there is nothing to derive"
+  }
+ ]
+}

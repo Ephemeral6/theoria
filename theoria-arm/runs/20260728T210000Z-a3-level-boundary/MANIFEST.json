@@ -1,0 +1,21 @@
+{
+ "prompt_id": "A3-campaign-devpile",
+ "branch": "agent/a3-campaign-devpile",
+ "base_commit": "dc9865a1b5edd432350d4a7bee4b218776e135d5",
+ "utc": "2026-07-28T21:00:00Z",
+ "author": "RES-1",
+ "what": "Level-boundary handling and book carry-over: the mechanism C3's transfer claim needs before any level-to-level campaign can be run.",
+ "changed": [
+  "inner/levels.py (new): LevelLog, boundary detection on levels_completed increase",
+  "world/frames.py: FrameStore.since(start) trajectory view",
+  "inner/books.py: Books(root, seed_from=) carries theory.dsl + playbook.dsl, hashes them into CARRIED.json",
+  "inner/surprise.py: Register.retire_pending(reason)",
+  "inner/loop.py: boundary detection in _record, _on_level_boundary, _level_store/_frames_this_level, beats routed to the level view, levels.jsonl, summary().levels",
+  "DECISIONS.md: D-A3-001..003"
+ ],
+ "offline": true,
+ "api_calls": 0,
+ "usd": 0.0,
+ "tests": "51 pre-existing tests still pass; new coverage in tests/test_levels.py",
+ "open_question": "Whether ARC signals a level completion in-band (levels_completed increments) or as state=WIN. If WIN, loop._terminal() ends the run at level 1 and this mechanism is unreachable until _terminal is changed. Under adversarial review against real recorded g50t traffic."
+}

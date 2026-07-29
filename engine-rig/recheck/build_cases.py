@@ -6,11 +6,22 @@ generator is data-driven: the boards are literals, everything else follows from
 them.  Output is byte-stable -- `python -m recheck.build_cases --check` fails if
 a committed case has drifted from what the generator says it should be.
 
-Four worlds:
+Six worlds:
 
-* **peg4** -- Fixture C, two starts.  `0111` is the unsolvable configuration
+* **peg4** -- Fixture C, four starts.  `0111` is the unsolvable configuration
   `ic3_pdr` returns an invariant for (STATUS.md, M9); `1101` is the solvable one
-  it correctly refuses, and is here so a forged invariant has somewhere to fail.
+  it correctly refuses, and is here so a forged invariant has somewhere to fail;
+  `1110` is the one `lp_potential` found a pagoda for.
+* **peg5** -- the 5-cell board theory-compiler's fixture uses, from `11011`,
+  once per target cell.  Two rule sets rather than one because the two pagoda
+  certificates differ only in the goal, and `interop/README.md`'s finding is
+  precisely that the two targets are separately provable and their disjunction
+  is not.
+* **keyed-gate** -- three flags and one guarded rule, written for this package
+  rather than transcribed.  It is the exhibit for the pagoda obligation being
+  quantified over moves *legal from the region*: its only potential-raising move
+  cannot fire below the bound, so a checker that reads deltas straight off the
+  geometry rejects a sound certificate.
 * **a2-holed** -- the A2 exhibit's manual: the 9x9 pushing world with the
   teleport rule deleted.  This is the rule set the Lean file
   `cold-start-a2/theory/generated_holed/theory.lean` proves `unsolvable` over,
@@ -77,41 +88,68 @@ def dump(path: str, payload: dict) -> str:
 PEG_N = 4
 PEG_GOAL = "0100"
 
+# The board size only ever appears in prose, and prose is what the committed
+# bytes are made of, so it is a table rather than an f-string.
+PEG_SIZE_WORD = {4: "four", 5: "five"}
 
-def peg_moves() -> List[Tuple[int, int, int]]:
+# One anchor per board: a number somebody else published about that world,
+# outside this package and before it.
+PEG_HAND_VERIFIED = {
+    4: "peg4.py's docstring: 1110, 0111 and 1011 are unsolvable; 1101 solves "
+       "in 2 moves",
+    5: "interop/README.md: 11011 reaches only {00111, 11100, 01001, 10010}, "
+       "bottoming out at two pegs, so no single-peg goal is reachable from it",
+}
+
+PEG_WORLD = {
+    4: "engine-rig/fixtures/peg4.py",
+    5: "engine-rig/interop/peg1d.py, whose 4-cell board is tested against the "
+       "frozen fixtures/peg4",
+}
+
+
+def peg_moves(n: int = PEG_N) -> List[Tuple[int, int, int]]:
     """Every jump the geometry allows, as (src, over, dst)."""
     out = []
-    for i in range(PEG_N):
+    for i in range(n):
         for step in (1, -1):
             over, dst = i + step, i + 2 * step
-            if 0 <= dst < PEG_N:
+            if 0 <= dst < n:
                 out.append((i, over, dst))
     return sorted(out, key=lambda m: (m[0], m[2]))
 
 
-def peg_ruleset(start: str) -> dict:
-    moves = peg_moves()
+def peg_ruleset(start: str, goal: str = PEG_GOAL,
+                name: Optional[str] = None) -> dict:
+    """A 1D peg board of any size, named for its start unless two share one.
+
+    The 5-cell board carries two rule sets from one start, because the pagoda
+    certificates `lp_potential` produced for it differ only in which cell the
+    last peg has to land on -- and that difference is the whole finding in
+    `interop/README.md`, so the two goals must not be allowed to share a file.
+    """
+    n = len(start)
+    moves = peg_moves(n)
     return {
         "schema": RULESET_SCHEMA,
-        "name": "peg4-%s" % start,
-        "comment": "Fixture C, 1D peg solitaire on four positions, started at "
+        "name": name or "peg%d-%s" % (n, start),
+        "comment": "Fixture C, 1D peg solitaire on %s positions, started at "
                    "%s. A move jumps a peg over a neighbouring peg into an "
-                   "empty hole and removes the jumped peg." % start,
+                   "empty hole and removes the jumped peg." % (PEG_SIZE_WORD[n], start),
         "provenance": {
-            "world": "engine-rig/fixtures/peg4.py",
-            "goal": "exactly one peg, at position 1 (state %s)" % PEG_GOAL,
-            "hand_verified": "peg4.py's docstring: 1110, 0111 and 1011 are "
-                             "unsolvable; 1101 solves in 2 moves",
+            "world": PEG_WORLD[n],
+            "goal": "exactly one peg, at position %d (state %s)" % (goal.index("1"), goal),
+            "hand_verified": PEG_HAND_VERIFIED[n],
         },
         "variables": [
             {"name": "pos%d" % i, "domain": [0, 1],
              "comment": "1 if position %d holds a peg" % i}
-            for i in range(PEG_N)
+            for i in range(n)
         ],
         "actions": ["jump(%d,%d,%d)" % move for move in moves],
-        "init": {"pos%d" % i: int(start[i]) for i in range(PEG_N)},
+        "init": {"pos%d" % i: int(start[i]) for i in range(n)},
         "goal": ["and"] + [
-            eq(var("pos%d" % i), lit(int(PEG_GOAL[i]))) for i in range(PEG_N)
+            eq(var("pos%d" % i), lit(int(goal[i]))) for i in range(n)
         ],
         "rules": [
             {
@@ -151,6 +189,135 @@ def peg_ic3_certificate() -> dict:
         "predicate": ["and",
                       ["or", eq(var("pos1"), lit(0)), eq(var("pos2"), lit(1))],
                       ["or", eq(var("pos1"), lit(1)), eq(var("pos2"), lit(0))]],
+    }
+
+
+# =================================================== pagoda (lp_potential)
+
+# Transcribed from `engine-rig/interop/certificates/*.json`, which
+# `interop/certificate_export.py` wrote out of `lp_potential`'s LP solution.
+# Four numbers each: the weights, the bound, the start and the target cell.
+#
+# Nothing else is transcribed.  The move set, the state space and the goal come
+# from the rule set named alongside, and are grounded here; the producer's own
+# `obligations` block -- which lists every move instance with its delta already
+# evaluated -- is not read by this package at all.  `anchors.py` compares that
+# block against the derived relation once, as a differential, where a
+# disagreement is a finding rather than a rejection.
+#
+#  (case, rule set, weights, bound, producer document)
+PAGODA_CLAIMS: Tuple[Tuple[str, str, Tuple[int, ...], int, str], ...] = (
+    ("peg4-1110-pagoda", "peg4-1110", (-1, 1, 0, 1), 0,
+     "pagoda_4_1110_to_0100.json"),
+    ("peg5-11011-to-01000-pagoda", "peg5-11011-to-01000", (-1, 1, 0, 1, -1), 0,
+     "pagoda_5_11011_to_01000.json"),
+    ("peg5-11011-to-00010-pagoda", "peg5-11011-to-00010", (-1, 1, 0, 1, -1), 0,
+     "pagoda_5_11011_to_00010.json"),
+)
+
+
+def pagoda_certificate(name: str, ruleset_name: str, weights: Sequence[int],
+                       bound: int, document: str) -> dict:
+    """A pagoda as this package states one: weights, a bound, and no more.
+
+    There is no `predicate` and no `obligations`.  The set of states is
+    `potential(s) <= bound`, derived; the obligations are the rechecker's to
+    discharge, from the rule set's own geometry.
+    """
+    return {
+        "schema": CERTIFICATE_SCHEMA,
+        "name": name,
+        "kind": "potential_bound",
+        "claim": "unsolvable",
+        "produced_by": "engines/lp_potential (M6), exported by "
+                       "interop/certificate_export.py",
+        "comment": "I(s) := potential(s) <= %d, where potential sums w over the "
+                   "occupied positions. The pagoda obligation is that no legal "
+                   "move raises the potential and that every goal state exceeds "
+                   "the bound." % bound,
+        "provenance": {
+            "document": "engine-rig/interop/certificates/%s" % document,
+            "solved_by": "engines/lp_potential, exact rationals scaled to "
+                         "integers by the LCM of their denominators",
+            "transcribed": "weights and bound only; the move set, the state "
+                           "space and the goal are re-derived from the rule set",
+        },
+        "ruleset": {"name": ruleset_name},
+        "occupied": 1,
+        "bound": bound,
+        "weights": {"pos%d" % i: int(w) for i, w in enumerate(weights)},
+    }
+
+
+# ------------------------------------------------------------- keyed-gate
+
+def keyed_gate_ruleset() -> dict:
+    """A world where the only potential-raising move cannot fire below the bound.
+
+    This is not a world anybody plays; it is the smallest exhibit of a
+    distinction the pagoda obligation turns on.  `open_gate` raises the
+    potential by 5, and its guard needs both keys held -- but any state holding
+    both keys already has potential 2, over the bound of 0, so the move is not
+    legal from anywhere the invariant admits.  The certificate is therefore
+    genuinely inductive, and a checker that reads `delta > 0` off the geometry
+    without asking where the move can fire from rejects it.
+
+    The earlier draft of this rechecker did exactly that, so the exhibit is
+    carried as a case and asserted as a test rather than described in a comment.
+    Nothing sets either key, so the world is unsolvable for a reason the second
+    opinion can confirm on its own.
+    """
+    return {
+        "schema": RULESET_SCHEMA,
+        "name": "keyed-gate",
+        "comment": "Three 0/1 flags and one guarded rule. The prize is behind a "
+                   "gate needing both keys, and no rule ever grants a key.",
+        "provenance": {
+            "world": "written for this package, not transcribed from one",
+            "purpose": "the pagoda obligation is `no *legal* move raises the "
+                       "potential`; here the only raising move is legal from no "
+                       "state under the bound, so checking the geometry instead "
+                       "of the region false-rejects a sound certificate",
+            "unsolvable_because": "no rule writes keyA or keyB, so the gate's "
+                                  "guard never holds on any reachable state",
+        },
+        "variables": [
+            {"name": "keyA", "domain": [0, 1], "comment": "1 if the first key is held"},
+            {"name": "keyB", "domain": [0, 1], "comment": "1 if the second key is held"},
+            {"name": "prize", "domain": [0, 1], "comment": "1 once the gate is open"},
+        ],
+        "actions": ["open"],
+        "init": {"keyA": 0, "keyB": 0, "prize": 0},
+        "goal": eq(var("prize"), lit(1)),
+        "rules": [
+            {
+                "name": "open_gate",
+                "action": "open",
+                "guard": ["and", eq(var("keyA"), lit(1)), eq(var("keyB"), lit(1))],
+                "effects": {"prize": lit(1)},
+                "owns": ["prize"],
+            },
+        ],
+    }
+
+
+def keyed_gate_certificate() -> dict:
+    return {
+        "schema": CERTIFICATE_SCHEMA,
+        "name": "keyed-gate-pagoda",
+        "kind": "potential_bound",
+        "claim": "unsolvable",
+        "produced_by": "written by hand for this package",
+        "comment": "w = {keyA: 1, keyB: 1, prize: 5}, bound 0. The region is the "
+                   "single state {0,0,0}; `open` does not fire there, so the "
+                   "potential never rises from it. Over the whole product it "
+                   "does -- {1,1,0} -open-> {1,1,1} gains 5 -- and that state is "
+                   "over the bound, which is exactly why the obligation is "
+                   "quantified over legal moves from the region.",
+        "ruleset": {"name": "keyed-gate"},
+        "occupied": 1,
+        "bound": 0,
+        "weights": {"keyA": 1, "keyB": 1, "prize": 5},
     }
 
 
@@ -575,6 +742,15 @@ def all_cases() -> Dict[str, dict]:
         "peg4-1101.rules.json": peg_ruleset("1101"),
         "peg4-1110.rules.json": peg_ruleset("1110"),
         "peg4-0111-ic3.cert.json": peg_ic3_certificate(),
+        # The 5-cell board theory-compiler's fixture uses. Two rule sets, one
+        # start, two targets: `interop/README.md`'s finding is that the pagoda
+        # exists for cells 1 and 3 and for no disjunction of them.
+        "peg5-11011-to-01000.rules.json": peg_ruleset(
+            "11011", goal="01000", name="peg5-11011-to-01000"),
+        "peg5-11011-to-00010.rules.json": peg_ruleset(
+            "11011", goal="00010", name="peg5-11011-to-00010"),
+        "keyed-gate.rules.json": keyed_gate_ruleset(),
+        "keyed-gate-pagoda.cert.json": keyed_gate_certificate(),
         "a2-holed.rules.json": a2_ruleset(with_teleport=False),
         "a2-world.rules.json": a2_ruleset(with_teleport=True),
         "a2-right-room-locked.cert.json": a2_certificate(),
@@ -597,6 +773,9 @@ def all_cases() -> Dict[str, dict]:
             (("b1", (2, 2)), ("b2", (3, 3))),
             (("b1", (4, 2)), ("b2", (1, 3)))),
     }
+    for name, ruleset_name, weights, bound, document in PAGODA_CLAIMS:
+        cases["%s.cert.json" % name] = pagoda_certificate(
+            name, ruleset_name, weights, bound, document)
     for pattern in RINGSTUCK_THEOREMS:
         cert = deadlock_certificate("sokoban-ringstuck", pattern, "no_deleting_action")
         cases["%s.cert.json" % cert["name"]] = cert

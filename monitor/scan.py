@@ -14,6 +14,7 @@ Read-only with respect to the tracks: this writes only inside `monitor/`.
 """
 
 import argparse
+import calendar
 import html
 import json
 import os
@@ -515,7 +516,7 @@ def probe_scheduled_tasks():
     for name, role in want.items():
         out = subprocess.run(["schtasks", "/Query", "/TN", name, "/FO", "LIST"],
                              capture_output=True, text=True,
-                 encoding="utf-8", errors="replace")
+                             encoding="utf-8", errors="replace")
         if out.returncode != 0:
             rows.append("%s **未注册**（%s）" % (name, role))
             bad.append(name)
@@ -544,6 +545,111 @@ def probe_spec_freshness():
     return {"status": status,
             "detail": "spec.py 落后 %d 个提交 / %d 次合并（判断陈旧到 %s 就该重扫）。"
                       % (n, m, "risk" if n >= 40 else "partial 档")}
+
+
+#: Below this the machine is one pytest away from failing a merge for a reason
+#: that has nothing to do with the branch.  Set from the observed event: at
+#: 9.1 GB free, a0-spike's gate died with `OSError: [Errno 28] No space left on
+#: device` and the flag read "verify gate red in a0-spike".
+DISK_RISK_GB = 12.0
+DISK_PARTIAL_GB = 25.0
+
+
+def probe_disk_headroom():
+    """磁盘余量与 worktree 存量 —— 资源耗尽会伪装成别人的缺陷。
+
+    2026-07-29：115 个 worktree（71 个早已合并）把磁盘吃到 99%，
+    第一个症状是 a0-spike 的闸门报红 `No space left on device`，
+    合并日志上写的是「verify gate red in a0-spike」——**仪器怪罪了被测对象**。
+    没有量表的资源，耗尽时总是在别处报错。
+    """
+    import shutil as _shutil
+    try:
+        total, _used, free = _shutil.disk_usage(ROOT)
+    except OSError as exc:
+        return {"status": "risk", "detail": "读不到磁盘用量：%s" % exc}
+    free_gb, total_gb = free / (1024 ** 3), total / (1024 ** 3)
+
+    wt = 0
+    try:
+        out = subprocess.run(["git", "worktree", "list", "--porcelain"],
+                             cwd=ROOT, capture_output=True, text=True,
+                             encoding="utf-8", errors="replace")
+        wt = sum(1 for l in out.stdout.splitlines() if l.startswith("worktree "))
+    except Exception:
+        wt = -1
+
+    tail = ("%d 个 worktree 在册；`python monitor/reap_worktrees.py` 看哪些已完工"
+            % wt) if wt >= 0 else "worktree 数量读不到"
+    if free_gb < DISK_RISK_GB:
+        return {"status": "risk",
+                "detail": "**磁盘仅剩 %.1f GB / %.0f GB**——这个水位上任何一次"
+                          "合并都可能因为跑不动而报成某个领地的闸门红。%s"
+                          % (free_gb, total_gb, tail)}
+    if free_gb < DISK_PARTIAL_GB:
+        return {"status": "partial",
+                "detail": "磁盘剩 %.1f GB / %.0f GB，接近会开始伪装成闸门失败的"
+                          "水位。%s" % (free_gb, total_gb, tail)}
+    return {"status": "green",
+            "detail": "磁盘剩 %.1f GB / %.0f GB；%s" % (free_gb, total_gb, tail)}
+
+
+def probe_clock_sanity():
+    """心跳自报的 utc 不得晚于机器当前 UTC —— 时钟不可能超前。
+
+    存活判断用的是文件 mtime（agent 伪造不了），所以掉线检测本身是可靠的。
+    但心跳里那个**手打的** `utc` 字段从来没有任何东西校验过，于是它可以随便漂：
+    2026-07-28T15:47Z 那一刻，RES-1 的心跳写着 20:55Z，RES-2/3/4 写着 16:0x–16:4xZ
+    ——全都晚于当时仓库里最新的提交，也就是这些时刻还没到。
+
+    危险在方向：一个只会向前跑的自报时间，让**掉线的会话看起来比实际更新鲜**。
+    这是纯算术，没有任何借口不检查。
+    """
+    import glob as _glob
+    now = time.time()
+    ahead, drifted, unreadable = [], [], []
+    for path in sorted(_glob.glob(rel("monitor", "ops-status", "*.json"))):
+        name = os.path.basename(path)[:-5]
+        try:
+            data = json.load(open(path, encoding="utf-8"))
+        except Exception as exc:
+            unreadable.append("%s（%s）" % (name, str(exc)[:40]))
+            continue
+        stamp = data.get("utc")
+        if not isinstance(stamp, str):
+            unreadable.append("%s（没有 utc 字段）" % name)
+            continue
+        try:
+            claimed = calendar.timegm(time.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ"))
+        except ValueError:
+            unreadable.append("%s（utc 不是 ISO8601Z：%r）" % (name, stamp[:30]))
+            continue
+        # 60s of slack: writing the stamp and closing the file are not atomic.
+        if claimed > now + 60:
+            ahead.append("%s 自报 %s，超前 %.0f 分钟"
+                         % (name, stamp, (claimed - now) / 60))
+            continue
+        mtime = os.path.getmtime(path)
+        if abs(claimed - mtime) > 3600:
+            drifted.append("%s 自报 %s，与文件 mtime 差 %.0f 分钟"
+                           % (name, stamp, abs(claimed - mtime) / 60))
+    if ahead:
+        return {"status": "risk",
+                "detail": "**%d 份心跳自报的时间还没到**：%s。时钟不可能超前，"
+                          "所以这些是手打的；危险在方向——只会向前跑的自报时间"
+                          "让掉线看起来比实际新鲜。取值请用 "
+                          "`date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ`。"
+                          % (len(ahead), "；".join(ahead[:4]))}
+    if unreadable:
+        return {"status": "risk",
+                "detail": "**%d 份心跳的 utc 读不出来**：%s。读不出不等于没问题。"
+                          % (len(unreadable), "；".join(unreadable[:4]))}
+    if drifted:
+        return {"status": "partial",
+                "detail": "%d 份心跳自报时间与文件 mtime 相差超过一小时：%s。"
+                          % (len(drifted), "；".join(drifted[:4]))}
+    return {"status": "green",
+            "detail": "心跳自报时间全部不晚于机器 UTC，且与文件 mtime 一致。"}
 
 
 def probe_verify_gates():
@@ -789,7 +895,39 @@ def probe_needs_human():
                      for r, n, w in dead]}
 
 
+def probe_standing():
+    """常驻研究员的例行程序还在跳吗，上一跳做了什么决定。
+
+    这条探针的存在本身是个教训：`standing.py` 起会话的判断全在磁盘上，
+    而一个没人看的自动机制与一个坏掉的自动机制，在页面上长得一模一样。"""
+    log_path = rel("monitor", "standing.log")
+    task = "TheoriaStanding"
+    out = subprocess.run(["schtasks", "/Query", "/TN", task, "/FO", "LIST"],
+                         capture_output=True, text=True, encoding="utf-8",
+                         errors="replace")
+    registered = out.returncode == 0
+    if not exists("monitor/standing.log"):
+        return {"status": "risk" if not registered else "partial",
+                "detail": "例行任务 %s；**还没有跳过一次**（standing.log 不存在）。"
+                          % ("已注册" if registered else "**未注册**")}
+    lines = [l.strip() for l in
+             open(log_path, encoding="utf-8", errors="replace").read()
+             .splitlines() if l.strip()]
+    age = int((time.time() - os.path.getmtime(log_path)) / 60)
+    starts = [l for l in lines if " START " in l]
+    tail = lines[-4:]
+    stale = age > 40          # 周期 15 分钟，跳过两次就是坏了
+    return {"status": ("risk" if (stale or not registered) else "green"),
+            "detail": "例行任务 %s，上一跳 %d 分钟前；累计起过 %d 次常驻会话。"
+                      "最近：%s%s"
+                      % ("已注册" if registered else "**未注册**", age,
+                         len(starts), "；".join(t.split(" ", 1)[-1][:70]
+                                                for t in tail),
+                         "　→ **超过两个周期没跳，例行已停**" if stale else "")}
+
+
 PROBES = {
+    "standing": probe_standing,
     "credential_hygiene": probe_credential_hygiene,
     "needs_human": probe_needs_human,
     "offline_done": lambda: _offline_done(),
@@ -799,6 +937,8 @@ PROBES = {
     "supply": lambda: _supply(),
     "spec_freshness": probe_spec_freshness,
     "verify_gates": probe_verify_gates,
+    "disk_headroom": probe_disk_headroom,
+    "clock_sanity": probe_clock_sanity,
     "scheduled_tasks": probe_scheduled_tasks,
     "append_only": probe_append_only,
     "ops_duty": probe_ops_duty,
@@ -1254,8 +1394,14 @@ def render(state, refresh=None):
     def pid_alive_win(pidnum):
         out = subprocess.run(["tasklist", "/FI", "PID eq %d" % pidnum,
                               "/FO", "CSV"], capture_output=True,
-                             text=True).stdout
-        return str(pidnum) in out
+                             text=True, encoding="utf-8",
+                             errors="replace").stdout
+        # tasklist 说的是 GBK。PYTHONIOENCODING=utf-8 一设，解码就在
+        # reader 线程里炸掉——而线程里的异常不会往上抛，它只是让
+        # .stdout 变成 None，调用点于是把 None 当输出读。
+        # 闸门报的那句 "argument of type NoneType is not iterable"
+        # 整条链就在这里（2026-07-29）。
+        return str(pidnum) in (out or "")
 
     fleet = []
     for pid in ls.get("in_flight", []):

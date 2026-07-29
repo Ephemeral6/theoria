@@ -7,6 +7,40 @@ The three conditions are the Lean skeleton of Theoria 1.10(a), unchanged:
     inv_closed  it survives every rule, from every state satisfying it
     goal_break  no state satisfying it is a goal state
 
+Three certificate kinds fill those three slots differently:
+
+    kind                 starts               survives            excludes
+    inductive_invariant  inv_init             inv_closed          goal_break
+    dead_region          region_nonempty      region_closed       goal_break
+    potential_bound      potential_init  potential_nonincreasing  goal_break
+
+**The pagoda shape (`potential_bound`) and what it is careful about.**  The set
+of states is not written down; it is `potential(s) <= bound`, where the
+potential sums the certificate's declared weights over the variables holding the
+declared occupied value.  The middle obligation is then arithmetic rather than
+set-theoretic -- *no legal move raises the potential* -- which is strictly
+stronger than closure and is the statement `lp_potential` actually solves an LP
+for.
+
+Two things about it are deliberate, and both are ways of not repeating a
+mistake that was live in an earlier draft of this checker:
+
+* **The moves come from the rule set, never from the certificate.**  The
+  producer's exported document lists every move instance with its delta already
+  computed, and `interop/certificate_export.py::verify` iterates that list; a
+  document that omits an inconvenient instance passes it.  Here the relation is
+  grounded from the declared rules over the product of the declared domains,
+  exactly as it is for the other two kinds, and the certificate schema refuses
+  an `obligations` key outright.
+* **The obligation is checked from the region, not from the whole product.**
+  "No legal move raises the potential" quantifies over moves that are legal from
+  a state the invariant admits.  Checking every move instance regardless -- as
+  the earlier draft did, straight off the geometry -- is a different and
+  stronger claim, and it **false-rejects** genuinely inductive certificates
+  whose potential-raising moves cannot fire below the bound.  `keyed-gate` in
+  `cases/` is exactly such a world, and it is carried so that the difference is
+  a test rather than a paragraph.
+
 `goal_break` is evaluated over the **whole** product, not over the subspace the
 rule set's constraint carves out.  It costs nothing to do so -- a predicate that
 contradicts the goal contradicts it everywhere -- and evaluating it on the
@@ -197,6 +231,20 @@ def shortest_plan(ruleset: RuleSet) -> Optional[List[str]]:
     return plan if found else None
 
 
+def reachable_states(ruleset: RuleSet) -> List[tuple]:
+    """Every state reachable from init over the derived relation, in space order.
+
+    Exposed for the anchors, for the same reason `shortest_plan` is: the size
+    and membership of the reachable set is a number other people have published
+    about these worlds -- `interop/README.md` names all five states peg-5
+    `11011` can reach -- and a transcription that disagrees with it should be
+    found in the fixture rather than inside a verdict.
+    """
+    states = ruleset.states()
+    rows = ruleset.transitions()
+    return [states[i] for i in sorted(_reachable(ruleset, states, rows))]
+
+
 def recheck(ruleset: RuleSet, certificate: Certificate,
             max_witnesses: int = MAX_WITNESSES) -> Verdict:
     """Re-derive the three conditions from the rule set and the certificate."""
@@ -282,10 +330,12 @@ def recheck(ruleset: RuleSet, certificate: Certificate,
     region = [i for i in range(len(states)) if satisfies[i] and inside[i]]
 
     closed_bad: List[str] = []
+    n_escaping = 0
     for i in region:
         for a, action in enumerate(ruleset.actions):
             target = rows[i][a]
             if target < 0 or not satisfies[target]:
+                n_escaping += 1
                 if len(closed_bad) < max_witnesses:
                     closed_bad.append(
                         "%s -%s-> %s escapes"
@@ -293,33 +343,105 @@ def recheck(ruleset: RuleSet, certificate: Certificate,
                            ruleset.render_state(states[target]) if target >= 0
                            else "<off-domain>"))
 
-    goal_bad = [ruleset.render_state(states[i]) for i in range(len(states))
-                if is_goal[i] and satisfies[i]][:max_witnesses]
+    # Counted before it is sliced.  Three of this function's obligations used to
+    # be `not <a list truncated to max_witnesses>`, which makes a *display*
+    # budget decide a certificate: at `max_witnesses=0` the lists are empty
+    # whatever the states do, and `inv_closed`, `goal_break` and
+    # `potential_nonincreasing` all report True on a certificate nobody checked.
+    # The verdict now reads the counters, which no budget touches, and the lists
+    # are only ever shown.
+    goal_bad_all = [ruleset.render_state(states[i]) for i in range(len(states))
+                    if is_goal[i] and satisfies[i]]
+    n_goal_bad = len(goal_bad_all)
+    goal_bad = goal_bad_all[:max_witnesses]
+
+    extra_stats: Dict[str, object] = {}
 
     if certificate.kind == "inductive_invariant":
         init_bad = [ruleset.render_state(state) for state in ruleset.init
                     if not satisfies[index_of[state]]]
         verdict.conditions["inv_init"] = not init_bad
-        verdict.conditions["inv_closed"] = not closed_bad
-        verdict.conditions["goal_break"] = not goal_bad
+        verdict.conditions["inv_closed"] = n_escaping == 0
+        verdict.conditions["goal_break"] = n_goal_bad == 0
         if init_bad:
             verdict.witnesses["inv_init"] = init_bad[:max_witnesses]
+        if closed_bad:
+            verdict.witnesses["inv_closed"] = closed_bad
+        sources = [index_of[state] for state in ruleset.init]
+    elif certificate.kind == "potential_bound":
+        # The pagoda.  `satisfies` is already `potential(s) <= bound`, so the
+        # first and third conditions are the ordinary ones evaluated on a
+        # derived set; only the middle one is new, and it is the arithmetic
+        # statement rather than the set-theoretic one: no move *legal from a
+        # state the bound admits* may raise the potential.
+        #
+        # The counters below are named for what they count.  The draft this was
+        # salvaged from reused one `n_transitions_checked` field across two
+        # certificate schemas, where it meant legal transitions in one and move
+        # instances in the other, and a reader of the report could not tell
+        # which number they had been handed.
+        potential = certificate.potential(ruleset)
+        values = [potential(state) for state in states]
+        raising: List[str] = []
+        n_raising = 0
+        n_potential_checks = 0
+        for i in region:
+            for a, action in enumerate(ruleset.actions):
+                target = rows[i][a]
+                n_potential_checks += 1
+                if target < 0:
+                    continue          # `effects_in_domain` already refused this
+                delta = values[target] - values[i]
+                if delta > 0:
+                    n_raising += 1
+                    if len(raising) < max_witnesses:
+                        raising.append(
+                            "%s -%s-> %s raises the potential by %d (%d -> %d)"
+                            % (ruleset.render_state(states[i]), action,
+                               ruleset.render_state(states[target]), delta,
+                               values[i], values[target]))
+        init_bad = [
+            "%s has potential %d, over the declared bound %d"
+            % (ruleset.render_state(state), values[index_of[state]], certificate.bound)
+            for state in ruleset.init if not satisfies[index_of[state]]
+        ]
+        goal_bad_all = [
+            "%s is a goal state with potential %d, which does not exceed the "
+            "bound %d" % (ruleset.render_state(states[i]), values[i], certificate.bound)
+            for i in range(len(states)) if is_goal[i] and satisfies[i]
+        ]
+        n_goal_bad = len(goal_bad_all)
+        goal_bad = goal_bad_all[:max_witnesses]
+        verdict.conditions["potential_init"] = not init_bad
+        verdict.conditions["potential_nonincreasing"] = n_raising == 0
+        verdict.conditions["goal_break"] = n_goal_bad == 0
+        if init_bad:
+            verdict.witnesses["potential_init"] = init_bad[:max_witnesses]
+        if raising:
+            verdict.witnesses["potential_nonincreasing"] = raising
+        extra_stats = {
+            "potential_bound": certificate.bound,
+            "potential_at_init": [values[index_of[state]] for state in ruleset.init],
+            "potential_min": min(values),
+            "potential_max": max(values),
+            "n_potential_checks": n_potential_checks,
+            "n_raising_transitions": n_raising,
+        }
         sources = [index_of[state] for state in ruleset.init]
     else:
         verdict.conditions["region_nonempty"] = bool(region)
-        verdict.conditions["region_closed"] = not closed_bad
-        verdict.conditions["goal_break"] = not goal_bad
+        verdict.conditions["region_closed"] = n_escaping == 0
+        verdict.conditions["goal_break"] = n_goal_bad == 0
         if not region:
             verdict.witnesses["region_nonempty"] = [
                 "no state in the declared space satisfies the pattern; a region "
                 "with no members is closed and goal-free for free, and licenses "
                 "nothing about any state the world can be in"
             ]
+        if closed_bad:
+            verdict.witnesses["region_closed"] = closed_bad
         sources = list(region)
 
-    if closed_bad:
-        key = "inv_closed" if certificate.kind == "inductive_invariant" else "region_closed"
-        verdict.witnesses[key] = closed_bad
     if goal_bad:
         verdict.witnesses["goal_break"] = goal_bad
 
@@ -337,7 +459,9 @@ def recheck(ruleset: RuleSet, certificate: Certificate,
                                       if satisfies[i] and i in reachable),
         "n_goal_states": sum(1 for flag in is_goal if flag),
         "n_transitions": len(states) * len(ruleset.actions),
+        "n_escaping_transitions": n_escaping,
     }
+    verdict.stats.update(extra_stats)
 
     # What the constraint costs, said out loud.  Closure is checked on the
     # constrained subspace -- it has to be, or the sokoban pair deadlocks would

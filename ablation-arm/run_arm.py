@@ -229,7 +229,7 @@ def run_world(spec: WorldRun, out_root: Optional[str] = None) -> Dict[str, Any]:
 
     # -- 2. certify (cheap layer only; the expensive one is the cut) ----------
     theory_py = os.path.join(out_dir, "theory.py")
-    cheap = certify_abl.cheap(theory_py, trace_path)
+    cheap = _stable_paths(certify_abl.cheap(theory_py, trace_path))
     certify_abl.report_surprises(bus, cheap, beat="certify")
     beats["certify"] = {
         "layers_run": ["cheap"],
@@ -243,7 +243,7 @@ def run_world(spec: WorldRun, out_root: Optional[str] = None) -> Dict[str, Any]:
     # -- 2b. the sweep: a referee-side second opinion that never reaches the bus
     if spec.sweep_trace:
         sweep_path = os.path.join(REPO, spec.sweep_trace)
-        sweep = certify_abl.cheap(theory_py, sweep_path)
+        sweep = _stable_paths(certify_abl.cheap(theory_py, sweep_path))
         beats["certify"]["sweep"] = {
             "trace": spec.sweep_trace,
             "trace_sha256": sha256_file(sweep_path),
@@ -311,6 +311,27 @@ def run_world(spec: WorldRun, out_root: Optional[str] = None) -> Dict[str, Any]:
                                         else None)
     report["ledger"] = _write_ledger(spec, world, plan_report, out_dir)
     _write(os.path.join(out_dir, "run_report.json"), report)
+    return report
+
+
+
+def _stable_paths(report: Dict[str, Any]) -> Dict[str, Any]:
+    """Rewrite the cheap layer's `theory` path so the artefact does not depend
+    on where the run was launched from.
+
+    `certify.replay` records it with `os.path.relpath(theory_py)` -- relative to
+    the **current working directory** -- so the same run launched from the repo
+    root and from `ablation-arm/` writes two different files. That is a real
+    reproducibility wart rather than a cosmetic one: the report is checked in,
+    so it flips back and forth in git depending on who ran it and from where.
+    Normalised here, in this arm's own report, which is the only place it can be
+    normalised without editing another track's code.
+    """
+    theory = report.get("theory")
+    if isinstance(theory, str):
+        report = dict(report)
+        report["theory"] = os.path.relpath(
+            os.path.abspath(theory), HERE).replace("\\", "/")
     return report
 
 
@@ -421,6 +442,23 @@ def _write(path: str, payload: Any) -> str:
     return path
 
 
+#: The ledger fields two runs of the same inputs are allowed to disagree on.
+#:
+#: `ts` is the wall clock, and `proxy.ledger` is right to write it: a ledger is
+#: a record of an event and an event happened at a time.
+#:
+#: `prev` is **not a second exemption**. It arrived with proxy's S15 hash chain
+#: (`proxy/runs/20260728T151500Z-S15-ledger-hashchain/`) and is defined as
+#: `sha256` over the *bytes of the previous line* -- a line that carries `ts`.
+#: So `prev` is `ts` propagated through the chain, and it cannot match across
+#: two runs unless the clock does. Granting it silently would be exactly the
+#: unexamined exemption this module's `determinism()` docstring warns about, so
+#: it is not granted silently: `_chain_verdict` below re-walks each file's chain
+#: byte-wise and `determinism()` records the verdict. The field is exempt from
+#: the cross-run *comparison*; it is not exempt from being *checked*.
+LEDGER_CLOCK_FIELDS = ("ts", "prev")
+
+
 def _ledger_lines_modulo_ts(path: str) -> List[str]:
     out: List[str] = []
     with open(path, encoding="utf-8") as handle:
@@ -428,9 +466,25 @@ def _ledger_lines_modulo_ts(path: str) -> List[str]:
             if not line.strip():
                 continue
             record = json.loads(line)
-            record.pop("ts", None)
+            for field in LEDGER_CLOCK_FIELDS:
+                record.pop(field, None)
             out.append(json.dumps(record, sort_keys=True, ensure_ascii=False))
     return out
+
+
+def _chain_verdict(path: str) -> str:
+    """Walk one ledger's hash chain byte-wise; upstream's verifier, not a copy.
+
+    Re-implementing the walk here would let this arm's idea of the chain drift
+    away from the one that writes it, and then a green here would mean nothing.
+    If the verifier is not importable the verdict says so rather than passing --
+    an absent check must not read as a passed one.
+    """
+    try:
+        from proxy.tools import verify_chain
+    except Exception as exc:                                  # pragma: no cover
+        return "UNAVAILABLE (%s)" % type(exc).__name__
+    return verify_chain.verify(path).get("verdict")
 
 
 def determinism(keys: Optional[List[str]] = None) -> Dict[str, Any]:
@@ -481,6 +535,7 @@ def determinism(keys: Optional[List[str]] = None) -> Dict[str, Any]:
     exempt: List[str] = []
     names: List[str] = []
     skipped: List[str] = []
+    chains: Dict[str, str] = {}
     for dirpath, dirs, files in os.walk(roots[0]):
         # `__pycache__` holds the interpreter's own bytecode for the generated
         # `theory.py`, which embeds a source mtime. It is a side effect of
@@ -496,10 +551,23 @@ def determinism(keys: Optional[List[str]] = None) -> Dict[str, Any]:
                 continue
             if name.endswith(".jsonl"):
                 if _ledger_lines_modulo_ts(first) != _ledger_lines_modulo_ts(second):
-                    differences.append("%s: differs in a field other than `ts`"
-                                       % relative)
+                    differences.append("%s: differs in a field other than %s"
+                                       % (relative,
+                                          " / ".join("`%s`" % f
+                                                     for f in LEDGER_CLOCK_FIELDS)))
                 else:
                     exempt.append(relative.replace("\\", "/"))
+                # `prev` is excused from the comparison above, so it is paid for
+                # here: both copies must be an intact chain. A ledger that
+                # differs only in its clock but has a broken chain is a defect
+                # this loop would otherwise wave through.
+                for run_no, copy in enumerate((first, second), start=1):
+                    verdict = _chain_verdict(copy)
+                    chains["run%d/%s" % (run_no,
+                                         relative.replace("\\", "/"))] = verdict
+                    if verdict != "PASS":
+                        differences.append("%s: ledger hash chain is %s"
+                                           % (relative, verdict))
                 continue
             if normalised(first, roots[0]) != normalised(second, roots[1]):
                 differences.append("%s: differs between two runs, and not only "
@@ -512,11 +580,18 @@ def determinism(keys: Optional[List[str]] = None) -> Dict[str, Any]:
         "files_compared": sorted(names),
         "n_files": len(names),
         "ledgers_compared_modulo_ts": sorted(exempt),
-        "exempt_field": "ts",
+        "exempt_field": list(LEDGER_CLOCK_FIELDS),
         "exempt_because": ("proxy.ledger stamps every record with a wall clock. "
                            "A ledger is a record of an event, so the field is "
                            "right there; it is named here rather than silently "
-                           "tolerated."),
+                           "tolerated. `prev` is not a second exemption: proxy's "
+                           "S15 hash chain defines it as sha256 over the bytes "
+                           "of the previous line, and that line carries `ts`, so "
+                           "it is the same clock reaching one record further. It "
+                           "is excused from the cross-run comparison and paid "
+                           "for by `ledger_chains` below, which re-walks every "
+                           "copy with proxy's own verifier."),
+        "ledger_chains": dict(sorted(chains.items())),
         "normalised": "the output root, because the two runs are given "
                       "different ones and a report that records where it wrote "
                       "is right to differ",

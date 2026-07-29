@@ -1,0 +1,24 @@
+{
+ "E1": {
+  "status": "ok",
+  "support": {
+   "calls": 5
+  },
+  "value": 6.317658
+ },
+ "E2": {
+  "reason": "fewer than 8 turns; a short run is trivially front-loaded",
+  "status": "insufficient-data",
+  "value": null
+ },
+ "E3": {
+  "reason": "fewer than 8 turns; the same early-exit confound as E2",
+  "status": "insufficient-data",
+  "value": null
+ },
+ "Run.turn_costs()": [
+  3.626608,
+  2.69105
+ ],
+ "agrees_with_turn_series_billed_axis": true
+}

@@ -1,0 +1,91 @@
+{
+  "version": "0.1",
+  "_what": "Inputs to the campaign rate budget Theoria.md:299 asks for. Declared here rather than recomputed from the ledger on every run, so the budget is deterministic and a change to it is a diff somebody has to justify. `rate_budget.py --measure` recomputes the measured inputs from the tracked data files and reports drift against these declarations; verify.sh runs it.",
+  "limit": {
+    "requests_per_minute": 600,
+    "source": "docs.arcprize.org/rate_limits.md, quoted in ACCESS_CHECK.md §6 and browser-ops/TERMS.md:31",
+    "breach": "HTTP 429 RATE_LIMIT_EXCEEDED, then progressively longer backoff",
+    "observed_breaches": 0,
+    "_observed_breaches": "Zero 429s in 3,736 logged requests across arc-recon/data/recon_ledger.jsonl (1231), baseline-arms/ledger.jsonl (560) and baseline-arms/probe_log.jsonl (1945), audited 2026-07-28 under S5. The gate has never been seen to close. Everything below is therefore a bound derived from the documented number, not a calibration against observed behaviour -- see ACCESS_CHECK.md §6d's residual."
+  },
+  "measured": {
+    "rtt_min_s": 0.558,
+    "rtt_p50_s": 0.879,
+    "_rtt": "min and median of elapsed_ms over 1231 requests in data/recon_ledger.jsonl (2026-07-28). rtt_min is the one that matters: it is the fastest a single process can possibly issue back-to-back requests, so it sets the worst-case rate.",
+    "attempts_per_command_post_cookie": 1.0,
+    "attempts_per_command_pre_cookie": 9.5,
+    "_attempts": "post: 20 commands / 20 HTTP and 16/16 on the two cookie-jar sweeps in data/canary_runs.jsonl (INC-007a). pre: 190 HTTP / 20 commands on the paired cookie-less sweep."
+  },
+  "worker_shapes": [
+    {
+      "id": "llm-arm",
+      "what": "An arm that calls a model between actions. The model call, not the API, sets the pace.",
+      "think_s": 5.0,
+      "_think_s": "Deliberately optimistic. baseline-arms measured wall clocks implying far longer per action (S1: 4,227 attempted actions in 45.8 h on haiku). A smaller think time makes the rate WORSE, so 5 s is the conservative direction for a rate budget.",
+      "attempts_per_command": 1.0
+    },
+    {
+      "id": "prefix-replay",
+      "what": "Prefix-replay teleport (Theoria.md:299's 前缀重放传送) and any scripted replay: fast-forward a known action prefix to reach a state. No model call between actions, so it runs at transport speed. This is the shape the rate limit is actually about.",
+      "think_s": 0.0,
+      "attempts_per_command": 1.0
+    },
+    {
+      "id": "retry-storm",
+      "what": "One process stuck in the full retry envelope, the shape ACCESS_CHECK §6 named as the danger. Rate is set by the backoff schedule, which is imported from precheck.py rather than restated here.",
+      "think_s": 0.0,
+      "attempts_per_command": 40.0,
+      "envelope": "action"
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "phase3-s1",
+      "what": "Theoria.md:299's arithmetic: 三臂 × 局数 × 回合. Three model tiers over the 4-game development pile to official baseline action counts.",
+      "source": "baseline-arms/BUDGET_REPORT.md §3.2",
+      "worker": "llm-arm",
+      "concurrency": 4,
+      "_concurrency": "BUDGET_REPORT quotes 178.7 h serial / 44.7 h four-way, i.e. the plan of record is 4 processes.",
+      "total_commands": 15623
+    },
+    {
+      "id": "phase3-s2",
+      "what": "Same, at 2× baseline action counts.",
+      "source": "baseline-arms/BUDGET_REPORT.md §3.3",
+      "worker": "llm-arm",
+      "concurrency": 4,
+      "total_commands": 31247
+    },
+    {
+      "id": "probe-and-replay",
+      "what": "Theoria.md:299's other two terms: 戳探 + 前缀重放传送. Scripted, think-free, and therefore the fastest thing this project runs.",
+      "source": "shape from probe_stickiness.py and canary.py; volume is a planning figure, not a measurement",
+      "worker": "prefix-replay",
+      "concurrency": 4,
+      "total_commands": 3014,
+      "_total_commands": "one full prefix replay of the development pile's 3014 baseline actions (BUDGET_REPORT §3.1)"
+    },
+    {
+      "id": "canary-daily",
+      "what": "The standing canary sweep. Included because the spend gate does not currently anticipate it (ACCESS_CHECK.md §'What S2 did not do') and a rate budget that omits the one recurring spender is the same omission in a second place.",
+      "source": "data/canary_schedule.json, profile quick",
+      "worker": "prefix-replay",
+      "concurrency": 1,
+      "total_commands": 16
+    },
+    {
+      "id": "inc-ba-003",
+      "what": "The collision that actually happened: two sessions, four processes, cookie-less transport, retrying hard. Reconstructed to check whether the limit was ever genuinely in danger -- ACCESS_CHECK §6 asserted it was.",
+      "source": "baseline-arms/INCIDENTS.md INC-BA-003",
+      "worker": "retry-storm",
+      "concurrency": 4,
+      "total_commands": 2600
+    }
+  ],
+  "policy": {
+    "warn_fraction": 0.5,
+    "_warn_fraction": "Report AMBER at half the documented limit. There is no Retry-After header and no RateLimit-* header to steer by (ACCESS_CHECK §6), so a client that reaches the limit finds out by being throttled. Half is the margin for a number nobody can observe approaching.",
+    "max_concurrency_declared": 4,
+    "_max_concurrency_declared": "The plan of record. `rate_budget.py` also reports the concurrency at which each shape would breach, which is the number an operator actually needs."
+  }
+}

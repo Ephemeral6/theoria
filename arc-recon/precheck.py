@@ -75,6 +75,16 @@ BUDGET_PER_GAME = 20
 # rides out ~3 minutes.
 RESET_ATTEMPTS = 40
 ACTION_ATTEMPTS = 40
+# The backoff schedule itself, named rather than written at the call sites. It
+# used to be four magic numbers repeated in two modules, which was harmless
+# while nothing read them -- but `rate_budget.py` computes this track's request
+# rate *from* the schedule, and a rate budget derived from a stale copy of the
+# envelope is worse than none. Delay before attempt k+1 is
+# `min(base * (k + 1), cap)` seconds.
+RESET_DELAY_BASE = 0.5
+RESET_DELAY_CAP = 5.0
+ACTION_DELAY_BASE = 0.4
+ACTION_DELAY_CAP = 5.0
 # After this many consecutive failures, drop the ALB routing cookies so the
 # next attempt is a fresh replica draw. See send_command's REDRAW note.
 REDRAW_EVERY = 5
@@ -208,7 +218,8 @@ def play_once(client: ArcClient, game_id: str, card_id: str,
     status, opening, reset_stats = send_command(
         client, "/api/cmd/RESET", {"game_id": game_id, "card_id": card_id},
         note="precheck RESET %s %s" % (game_id, label),
-        attempts=RESET_ATTEMPTS, delay_base=0.5, delay_cap=5.0)
+        attempts=RESET_ATTEMPTS,
+        delay_base=RESET_DELAY_BASE, delay_cap=RESET_DELAY_CAP)
     if status != 200 or not isinstance(opening, dict):
         return {"reset_failed": True, "reset_status": status,
                 "reset_attempts": reset_stats["attempts"],
@@ -236,7 +247,8 @@ def play_once(client: ArcClient, game_id: str, card_id: str,
             client, "/api/cmd/ACTION%d" % action,
             {"game_id": game_id, "card_id": card_id, "guid": guid},
             note="precheck ACTION%d #%d %s %s" % (action, index, game_id, label),
-            attempts=ACTION_ATTEMPTS, delay_cap=5.0)
+            attempts=ACTION_ATTEMPTS,
+            delay_base=ACTION_DELAY_BASE, delay_cap=ACTION_DELAY_CAP)
         http_calls += stats["attempts"]
         if status != 200 or not isinstance(response, dict):
             steps.append({"action": "ACTION%d" % action,

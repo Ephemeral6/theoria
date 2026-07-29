@@ -1,0 +1,77 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\fixtures\data\sokoban_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\instances\deadstart-pair5.pddl' --sas-file output.sas
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Parsing: [0.000s CPU, 0.002s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
+Preparing model... [0.000s CPU, 0.000s wall-clock]
+Generated 20 rules.
+Computing model... [0.000s CPU, 0.004s wall-clock]
+291 relevant atoms
+528 auxiliary atoms
+819 final queue length
+936 total queue pushes
+Completing instantiation... [0.000s CPU, 0.001s wall-clock]
+Instantiating: [0.000s CPU, 0.006s wall-clock]
+No relaxed solution! Generating unsolvable task...
+Translator variables: 1
+Translator derived variables: 0
+Translator facts: 2
+Translator goal facts: 1
+Translator mutex groups: 0
+Translator total mutex groups size: 0
+Translator operators: 0
+Translator axioms: 0
+Translator task size: 4
+warning: could not determine peak memory
+Writing output... [0.000s CPU, 0.005s wall-clock]
+Done! [0.000s CPU, 0.013s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(blind())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpa8e3mqvc\sas_plan' < output.sas
+[t=0.000157s, 1884 KB] Search code revision: 7120aa0
+[t=0.000255s, 1884 KB] reading input...
+[t=0.000360s, 1956 KB] done reading input!
+[t=0.001731s, 2516 KB] Initializing blind search heuristic...
+[t=0.001763s, 2516 KB] Building successor generator... done!
+[t=0.001775s, 2516 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.001777s, 2516 KB] time for successor generation creation: 0.000004s
+[t=0.001783s, 2516 KB] Variables: 1
+[t=0.001787s, 2516 KB] FactPairs: 2
+[t=0.001789s, 2516 KB] Bytes per state: 4
+[t=0.001799s, 2516 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.001818s, 2540 KB] Initial state is a dead end.
+[t=0.001821s, 2540 KB] Initial heuristic value for blind: infinity
+[t=0.001824s, 2540 KB] pruning method: none
+[t=0.001828s, 2540 KB] Completely explored state space -- no solution!
+[t=0.001832s, 2540 KB] Actual search time: 0.000006s
+[t=0.001835s, 2540 KB] Expanded 0 state(s).
+[t=0.001835s, 2540 KB] Reopened 0 state(s).
+[t=0.001835s, 2540 KB] Evaluated 1 state(s).
+[t=0.001835s, 2540 KB] Evaluations: 1
+[t=0.001835s, 2540 KB] Generated 0 state(s).
+[t=0.001835s, 2540 KB] Dead ends: 0 state(s).
+[t=0.001835s, 2540 KB] Number of registered states: 1
+[t=0.001835s, 2540 KB] Int hash set load factor: 1/1 = 1.000000
+[t=0.001835s, 2540 KB] Int hash set resizes: 0
+[t=0.001835s, 2540 KB] Search time: 0.000037s
+[t=0.001835s, 2540 KB] Total time: 0.001835s
+Search stopped without finding a solution.
+Remove intermediate file output.sas
+search exit code: 12
+
+Driver aborting after search

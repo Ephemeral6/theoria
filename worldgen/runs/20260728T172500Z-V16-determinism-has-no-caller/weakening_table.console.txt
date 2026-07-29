@@ -1,0 +1,18 @@
+mechanism_order    none             MIXED  25/30  crashes=0  GROUND_TRUTH.md,ground_truth.json,reversibility.json
+mechanism_order    shared_hashseed  MISSED 0/10  crashes=0  
+mechanism_order    size_only        MISSED 0/10  crashes=0  
+mechanism_order    no_diff          MISSED 0/10  crashes=0  
+hash_order_wide    none             RED    30/30  crashes=0  coverage.json
+hash_order_wide    shared_hashseed  MISSED 0/10  crashes=0  
+hash_order_wide    size_only        MISSED 0/10  crashes=0  
+hash_order_wide    no_diff          MISSED 0/10  crashes=0  
+unseeded_rng       none             RED    30/30  crashes=0  coverage.json
+unseeded_rng       shared_hashseed  RED    10/10  crashes=0  coverage.json
+unseeded_rng       size_only        MIXED  5/10  crashes=0  coverage.json
+unseeded_rng       no_diff          MISSED 0/10  crashes=0  
+wall_clock         none             RED    30/30  crashes=0  coverage.json
+wall_clock         shared_hashseed  RED    10/10  crashes=0  coverage.json
+wall_clock         size_only        MISSED 0/10  crashes=0  
+wall_clock         no_diff          MISSED 0/10  crashes=0  
+
+wrote weakening_table.md / .json

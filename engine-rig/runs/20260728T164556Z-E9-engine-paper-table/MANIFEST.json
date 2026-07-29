@@ -1,0 +1,71 @@
+{
+  "prompt_id": "E9-engine-paper-table",
+  "branch": "agent/e9-engine-paper-table",
+  "base_commit": "05a21bd",
+  "utc": "2026-07-28T16:45:56Z",
+  "author": "RES-3 / verify lane",
+  "lane": "verify",
+  "territory": "engine-rig",
+  "method": "collect the eight processes' numbers into the paper's §3 table; every cell probed out of an artifact under runs/ by a regeneration script that exits non-zero on drift; one adversarial audit dispatched against the result",
+  "utc_note": "the run id is this machine's true UTC. It sorts BEFORE 20260729T000000Z-E11-engine-crosscheck-deep, which it depends on, because E11 stamped itself with the local date rather than UTC. Recorded rather than smoothed over.",
+  "deliverables": [
+    "engine-rig/ENGINE_TABLE.md",
+    "engine-rig/tools/engine_table.py",
+    "engine-rig/tests/test_engine_table.py"
+  ],
+  "files": [
+    {
+      "path": "engine-rig/ENGINE_TABLE.md",
+      "sha256": "a57e7310b5fbba3b6d7346b0333d96ebdce2033daa8abfe44dea544204d47b5b",
+      "bytes": 49811
+    },
+    {
+      "path": "engine-rig/tools/engine_table.py",
+      "sha256": "d46a851582bcd38398155d0e7bc080606a5d3a36abb92a687226545ee4195e22",
+      "bytes": 64341
+    },
+    {
+      "path": "engine-rig/tests/test_engine_table.py",
+      "sha256": "eb7c57084efba67687ab37cce68308cf92bb210049aa3e3ac2f8bfae64664bea",
+      "bytes": 4590
+    }
+  ],
+  "processes_tabulated": 8,
+  "facts_probed": 143,
+  "artifacts_read": 19,
+  "boundary_cells_unmeasured": 1,
+  "boundary_cells_partially_unmeasured": 6,
+  "regeneration_byte_stable": true,
+  "regeneration_sha256_run1": "a57e7310b5fbba3b6d7346b0333d96ebdce2033daa8abfe44dea544204d47b5b",
+  "regeneration_sha256_run2": "a57e7310b5fbba3b6d7346b0333d96ebdce2033daa8abfe44dea544204d47b5b",
+  "negative_controls_passed": 7,
+  "suite": "319 passed, 9 skipped (4 of them added by this item)",
+  "engine_rig_code_bytes_changed": 0,
+  "engines_modified": 0,
+  "api_calls": 0,
+  "network": false,
+  "cost_usd": 0.0,
+  "sealed_pile_contact": "none",
+  "runs_consumed": [
+    "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep",
+    "engine-rig/runs/20260728T072633Z-E2-fd-ladder-bench",
+    "engine-rig/runs/20260728T141724Z-E5-cert-recheck",
+    "engine-rig/runs/p13-fd-real",
+    "fuzzlab/runs/20260728T152000Z-V10-fuzz-mutation-power",
+    "theoria-arm/runs/20260728T015354Z-g50t-first-contact"
+  ],
+  "adversarial_review": {
+    "report": "ADVERSARIAL-table-audit.md",
+    "outcome": "ADVERSARIAL-outcome.md",
+    "sampled_numbers": 8,
+    "sampled_numbers_correct": 8,
+    "sentences_fully_clean": 0,
+    "sentences_overturned": 2,
+    "scope_or_denominator_switches": 4,
+    "unmeasured_written_as_measured": 1,
+    "measured_written_as_unmeasured": 0,
+    "generator_defects_found": 3,
+    "findings_accepted": "all",
+    "findings_disputed": 0
+  }
+}
