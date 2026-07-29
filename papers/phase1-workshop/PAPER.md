@@ -1028,8 +1028,10 @@ E-06 by using the second method it already had".
 The reason recorded for the discharge is "the certificate covers what it covers,
 exhaustion closes the rest, each goal attributed to its method", and the compiler's
 own generator repeats it: the two proofs are "kept **separate and attributed**,
-because they are not the same argument". **The emitted artefact does not do that,
-and the generator concedes it a dozen lines further down.** In the development it
+because they are not the same argument"
+(`theory-compiler/src/theory_compiler/generators/gen_lean.py:722-724`). **The
+emitted artefact does not do that, and the same function concedes it at `:786`.**
+In the development it
 actually writes, `Goal` is `false` on every reachable state, `unsolvable` closes
 all five end states by exhaustion, and the certificate's contribution is a
 `potential` function with an `inv_all` lemma that `unsolvable` never invokes. The
@@ -2278,7 +2280,8 @@ credible exhaustive search earns 40 % of it, and an *invalid* certificate
 short-circuits to zero with no fallback.
 
 The held-out rubric's refusal of per-cell credit is worth quoting, because it is
-the kind of scoring choice that silently manufactures a result:
+the kind of scoring choice that silently manufactures a result
+(`exam/grading/rubrics_heldout.py`):
 
 > on a 7x7 A0 board a typical transition changes two cells, so an examinee that
 > returns the input frame unchanged already scores 47/49 = 96 % under a
@@ -2361,7 +2364,9 @@ That number is worth almost nothing on its own, and the directory says why.
 yielded **17 of 17 claims with no board reasoning at all**, measured rather than
 estimated. And the held-out paper's world description published the dynamics in
 prose, taking a reader from 47.5 % to essentially full marks. Both are fixed
-(uniform point values; a world block that no longer states dynamics).
+(uniform point values; a world block that no longer states dynamics); both yields
+were confirmed against the answer key before anything was changed
+(`exam/DECISIONS.md` D-EX-011).
 
 The reason the static checks missed them is the most transferable thing in this
 section:
@@ -2630,7 +2635,10 @@ rather than about the run.
 **And it largely explains it.** The same manifest's `cost.cache_ttl_diagnosis`
 identifies 116 470 cache-creation tokens written at the one-hour multiplier and
 priced at the five-minute one, worth `under_billed_usd` **0.436763** — **83.6 % of
-the $0.52 gap**. Correcting it takes the disagreement from 8.3 % to **1.35 %**, and
+the $0.52 gap**
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`,
+`cost.cache_ttl_diagnosis` against `cost.delta_usd`). Correcting it takes the
+disagreement from 8.3 % to **1.35 %**, and
 the residual has no identified cause. So this is not an unexplained discrepancy
 between two accountings; it is a priced, located defect in one of them with a small
 remainder. **Every dollar figure in this paper is the provider's number**, which is
@@ -2682,8 +2690,8 @@ The figures below are **each pass's own summary line**, not a re-count:
 | success signal read as truth | `SURVEY-success-as-truth.md` | ~105 points | 8 |
 
 **No total is published here, and no rate.** The obvious headline — around 340
-points examined, 56 judged unsafe — does not survive, and neither does any
-replacement assembled by adding these columns up. Four reasons, in increasing
+points examined, 48 judged unsafe — does not survive, and neither does any
+replacement assembled by adding these columns up, which gives 445 and 56. Four reasons, in increasing
 order of severity.
 
 First, **the passes did not use one ruler.** One states the criterion under which
@@ -2714,9 +2722,11 @@ audit issuing an affirmative claim must publish both the number of objects it
 claim when they differ. No pass meets its own criterion.
 
 Third, **the counts quoted downstream are not enumerations.** The "~45 legitimate
-exit-code readings" that reached the work items and the digests appears in no
-survey. The "~97 further legitimate usages" from the fourth pass is `105 − 8` —
-arithmetic residue, not a list.
+exit-code readings" that reached the work items and the digests
+(`monitor/inbox/archive/20260729T063000Z-RES-3-the-pattern-you-named-appears-three-more-times.md:168-169`)
+appears in no survey. The "~97 further legitimate usages" from the fourth pass
+(`monitor/inbox/archive/20260729T104500Z-RES-3-the-dual-exists-and-it-has-a-different-shape.md:100`)
+is `105 − 8` — arithmetic residue, not a list.
 
 Fourth, and decisively: **the passes overlap, and where they overlap they
 disagree.** `engine-rig/engines/lp_potential/potential.py:170-171` is graded

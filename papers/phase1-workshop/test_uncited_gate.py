@@ -122,6 +122,26 @@ def test_a_brace_citation_is_a_citation(tmp_path):
     assert flagged == []
 
 
+def test_a_ratio_does_not_cite_itself(tmp_path):
+    """`233/236` has a slash. Without the NOT_A_PATH guard it was its own path."""
+    flagged, _, _ = scan(tmp_path, "Coverage held at `233/236` on the second arm.\n")
+    assert len(flagged) == 1, "a backticked fraction cleared its own block"
+
+
+def test_an_invented_filename_is_not_a_citation(tmp_path):
+    """Check B skips bare filenames by design, so E is the only reader there."""
+    flagged, _, _ = scan(
+        tmp_path, "The arm reached 41 cells (`ledger_summary.jsonl`).\n")
+    assert len(flagged) == 1, "a plausible name for a file that does not exist"
+
+
+def test_a_real_bare_filename_still_cites(tmp_path):
+    """The counterpart: the paper's dominant idiom must keep working."""
+    flagged, _, _ = scan(
+        tmp_path, "The arm reached 41 cells (`THEORIZE_LOG.md`).\n")
+    assert flagged == []
+
+
 def test_brace_expansion_requires_every_sibling_to_resolve():
     token = "ablation-arm/artifacts/{a0-base,a2-base,a2-charitable}/episode.jsonl"
     assert len(vp.expand_braces(token)) == 3
@@ -156,7 +176,10 @@ def test_structure_is_not_a_claim(tmp_path, body):
 
 # ------------------------------------------------------- the adjudication table
 
-RULING = ("07_body.md", "a multiple of 1/16")
+# Long enough to clear MIN_ANCHOR. An 18-character anchor read fine here and
+# would have been rejected in the real table, which is the wrong way round for
+# a fixture: the control must obey the rule it is controlling.
+RULING = ("07_body.md", "is a multiple of 1/16 at this n")
 
 
 def test_a_ruling_silences_its_block_and_only_its_block(tmp_path):
@@ -215,6 +238,38 @@ def test_an_uncited_block_fails_the_check(monkeypatch, tmp_path):
     passed, notes = _verdict(monkeypatch, tmp_path, "It reached 41 cells.\n", {})
     assert not passed
     assert any("UNCITED" in n for n in notes)
+
+
+# --------------------------------------------------- the two escape hatches
+# Both were found by the adversarial pass, both were closed, and neither was
+# pinned. A closed hatch with no control on it is a hatch that reopens on the
+# next refactor with nothing to notice.
+
+def test_a_short_anchor_cannot_silence_the_paper(monkeypatch, tmp_path):
+    """The one-character ruling: `" "` is in every block, so it ruled them all."""
+    passed, notes = _verdict(
+        monkeypatch, tmp_path,
+        "It reached 41 cells.\n\nThe register drove 37 of 38 metrics.\n",
+        {("07_body.md", " "): "arithmetic on the cited n"})
+    assert not passed, "a one-space anchor silenced every block and passed"
+    assert any("ANCHOR" in n for n in notes)
+
+
+def test_an_unbalanced_fence_fails_the_check(monkeypatch, tmp_path):
+    """Everything after an unclosed ``` is skipped as code, claims included."""
+    passed, notes = _verdict(
+        monkeypatch, tmp_path,
+        "```\nsome sample output\n\nIt reached 41 cells.\n", {})
+    assert not passed
+    assert any("FENCE" in n for n in notes)
+
+
+def test_a_balanced_fence_is_still_skipped(monkeypatch, tmp_path):
+    """The fence check must not turn legitimate code blocks into claims."""
+    passed, _ = _verdict(
+        monkeypatch, tmp_path,
+        "```\nledger.jsonl: 41 cells, 939 actions\n```\n", {})
+    assert passed, "a properly closed code block is not a quantitative claim"
 
 
 # ------------------------------------------------------------- block assembly

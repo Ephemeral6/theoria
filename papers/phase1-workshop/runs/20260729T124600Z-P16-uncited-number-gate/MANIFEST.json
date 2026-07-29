@@ -7,5 +7,32 @@
   "lane": "paper",
   "territory": "papers",
   "api_calls": 0,
-  "sealed_pile_contact": "none"
+  "sealed_pile_contact": "none",
+  "files": [
+    {
+      "path": "papers/phase1-workshop/verify_paper.py",
+      "sha256": "755fe93c3a324b67ba64e3091551a2a30dcd33a7a934aafa4a7bd8037de4fe56"
+    },
+    {
+      "path": "papers/phase1-workshop/test_uncited_gate.py",
+      "sha256": "4219444dc029cd84f3571d24c8d096d03bdf7dc616c6dc3697efe41578b7fa84"
+    },
+    {
+      "path": "papers/phase1-workshop/PAPER.md",
+      "sha256": "cb5ca369a7317937684dcda09ee3f299b6cf6d95db7b5e6f004212079e49918e"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260729T124600Z-P16-uncited-number-gate/mutation_check.py",
+      "sha256": "f25d0e7e656553c6edbdb6ab16d6ca7bfbf583e19e889b27c818959e18389f9b"
+    }
+  ],
+  "result": {
+    "verify_paper": "PASS 5/5",
+    "test_uncited_gate": "45 passed",
+    "mutation_check": "12/12 caught",
+    "blocks_scanned": 327,
+    "uncited": 0,
+    "ruled": 8,
+    "stale": 0
+  }
 }

@@ -52,6 +52,7 @@ No network, no API key, no model call, no game spend.
 from __future__ import annotations
 
 import argparse
+import os
 import re
 import shutil
 import subprocess
@@ -338,7 +339,8 @@ ARTEFACT_SUFFIX = (
 STRUCTURAL = (
     ("section-ref", re.compile(r"§\s*\d+(?:\.\d+)*[a-z]?")),
     ("section-word", re.compile(
-        r"\b(?:Sections?|Parts?|constraints?|steps?|beats?|rungs?|layers?|waves?)"
+        r"\b(?:Sections?|Parts?|constraints?|steps?|beats?|rungs?|layers?|waves?"
+        r"|checks?|passes|rounds?|items?|levels?)"
         r"\s+\d+(?:\s*(?:,|and|to|[-–])\s*\d+)*", re.IGNORECASE)),
     ("figure-ref", re.compile(r"\b(?:Figure|Fig\.|Table|Plate|Appendix)\s+\d+\b")),
     ("phase-ref", re.compile(r"\bPhase\s+\d\b")),
@@ -348,7 +350,9 @@ STRUCTURAL = (
     ("timestamp", re.compile(r"\b20\d{6}T\d{6}Z\b")),
     ("iso-date", re.compile(r"\b20\d\d-\d\d-\d\d\b")),
     ("clock", re.compile(r"\b\d{1,2}:\d{2}(?::\d{2})?\b")),
-    ("commit-sha", re.compile(r"\b[0-9a-f]{7,40}\b")),
+    # At least one a-f, or the class eats any 7-digit quantity -- "1750000
+    # cache tokens" was read as a commit hash and vanished.
+    ("commit-sha", re.compile(r"\b(?=[0-9a-f]{7,40}\b)[0-9a-f]*[a-f][0-9a-f]*\b")),
     ("digest-elision", re.compile(r"\b[0-9a-f]{6,}…(?:[0-9a-f]+)?")),
     # `E2`, `K12`, `P4`, `M3`, `X1`, `L1`, `C5`, `A0`, `T-10`, `D-B-011`,
     # `INC-BA-001`, `F-11`, `R-05`, `W-1660`. Identifiers, not measurements.
@@ -358,8 +362,9 @@ STRUCTURAL = (
     ("coordinate", re.compile(r"\(\s*-?\d+\s*,\s*-?\d+\s*\)")),
     # `[7, 0, 0, 0, 0, 0, 0]`, `[-1, 1, 0, 1, -1]` -- quoted payloads.
     ("vector", re.compile(r"\[\s*-?\d+(?:\s*,\s*-?\d+)+\s*\]")),
-    # `11011`, `00010` -- binary configuration labels in section 4.
-    ("bit-label", re.compile(r"\b[01]{5,}\b")),
+    # Binary configuration labels (`11011`) are exempted in `_mark_citations`,
+    # where the backticks that make them labels are still visible. As a bare
+    # STRUCTURAL class it also ate "a hard cap of 10000 actions".
     ("complexity", re.compile(r"O\(\s*[0-9a-z^ⁿ²³]+\s*\)")),
     ("superscript-pow", re.compile(r"\b\d+[⁰-₟²³¹]+")),
     ("list-ordinal", re.compile(r"^\s*\d+\.\s", re.MULTILINE)),
@@ -382,7 +387,13 @@ WORDNUM = re.compile(
     r"(?<!non-)\b(?:zero|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|"
     r"eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety|"
     r"hundred|thousand|million)(?:-(?:one|two|three|four|five|six|seven|eight|"
-    r"nine))?\b",
+    r"nine))?\b"
+    # Magnitude language is a quantitative claim without a numeral, and it is
+    # the natural register for an unfalsifiable improvement: "twice the ground,
+    # an order of magnitude cheaper". A gate that only reads digits reads none
+    # of it.
+    r"|\b(?:twice|thrice|dozen|halved|doubled|tripled|quadrupled|"
+    r"\w+fold|orders? of magnitude)\b",
     re.IGNORECASE,
 )
 
@@ -422,6 +433,26 @@ ADJUDICATED_UNCITED: dict[tuple[str, str], str] = {
         "lines above, where it carries `battery/artifacts/capability_spectrum.json`, "
         "set against the empty capability column §7.10a evidences from "
         "`baseline-arms/runs/20260728T103135Z-a7/envelope.json`.",
+    ("08_exam.md", "the 0.000 that could be computed from two"):
+        "The arithmetic this paragraph explicitly declines to report as a "
+        "measurement. Both artefacts it would be computed from are cited one "
+        "block above, and each records `tier2_minus_tier1` as null rather than "
+        "a delta; a path here would point at a number the paper is refusing.",
+    ("08_exam.md", "**n = 1 per handover tier**, on a saturated"):
+        "Restates the sample size of the handover result cited one block above "
+        "(one report per tier, both named there). This bullet list is the "
+        "section's statement of what the exam does not establish.",
+    ("10_adjudication.md", "around 340 points examined, 48 judged unsafe"):
+        "The headline is quoted in order to be refused, and the four numbered "
+        "reasons that follow are the argument that no aggregate over these "
+        "passes exists. Every row of the table two blocks above carries its own "
+        "survey file. Attaching provenance would dignify a number the section "
+        "declines to publish.",
+    ("10_adjudication.md", "the disputed 340 / 48 with an enumerated"):
+        "Two aggregates named in order to retract them -- one the census's, one "
+        "this section's own superseded draft -- both sums over the per-pass "
+        "table above, where each row carries its survey file. Nothing in this "
+        "block is asserted as a count of anything.",
 }
 
 
@@ -469,16 +500,50 @@ def _emit(out: list, start: int, chunk: list[str]) -> None:
     out.append([start, text])
 
 
+_BASENAMES: set[str] | None = None
+
+
+def _basename_exists(token: str) -> bool:
+    """Is there a file by this name anywhere in the tree?
+
+    A bare filename is the paper's dominant citation idiom and check B skips it
+    by design, so `(`ledger_summary.jsonl`)` -- a plausible name for a file that
+    does not exist -- was a citation *nobody* checked: E accepted the suffix and
+    B never saw the token. This is the weakest test that still costs an inventor
+    something, and it is free: all 34 distinct bare filenames the sections cite
+    exist by basename.
+    """
+    global _BASENAMES
+    if _BASENAMES is None:
+        skip = {".git", "__pycache__", ".worktrees", ".toolchain", "node_modules"}
+        _BASENAMES = set()
+        for path, dirs, files in os.walk(ROOT):
+            dirs[:] = [d for d in dirs if d not in skip]
+            _BASENAMES.update(files)
+    return token.rsplit("/", 1)[-1] in _BASENAMES
+
+
 def _mark_citations(block: str) -> str:
     """Replace artefact pointers with a sentinel and strip structural tokens."""
 
     def mark(m: re.Match) -> str:
         token = m.group(1)
-        if "/" in token or token.lower().endswith(ARTEFACT_SUFFIX):
-            return " █CITE█ "
+        # `233/236` has a slash and is a ratio, not a path. Check B already
+        # knows this (NOT_A_PATH); without the same exclusion here a backticked
+        # fraction cited *itself* as its own provenance and cleared the block.
+        if not NOT_A_PATH.search(token):
+            if "/" in token:
+                return " █CITE█ "
+            if token.lower().endswith(ARTEFACT_SUFFIX) and _basename_exists(token):
+                return " █CITE█ "
+        if any(c.isalpha() for c in token):
+            return " "
+        # `11011` is a configuration label; the backticks are what make it one.
+        if re.fullmatch(r"[01]{5,}", token):
+            return " "
         # A backticked *number* is still a quantity; backticks are not a
         # citation, and letting them hide one would be a one-character evasion.
-        return " " if any(c.isalpha() for c in token) else f" {token} "
+        return f" {token} "
 
     text = CITE_TOKEN.sub(mark, block)
     for _name, rx in STRUCTURAL:
@@ -556,11 +621,41 @@ def scan_uncited(sections=None, rulings=None):
     return flagged, hits, scanned
 
 
+#: An anchor shorter than this is not identifying a claim, it is matching prose.
+#: The adversarial pass turned the whole check green with a one-space anchor:
+#: `" "` is in every block, so one entry silenced the paper and reported no
+#: stale rulings. The four live anchors are 34-47 characters, so the floor is
+#: free -- but the escape hatch was one character wide and nothing said so.
+MIN_ANCHOR = 24
+
+
 def check_uncited() -> tuple[bool, list[str]]:
     """E. No quantitative claim block in the body cites nothing at all."""
     notes: list[str] = []
     flagged, hits, scanned = scan_uncited()
     stale = [k for k, n in hits.items() if not n]
+
+    for key in ADJUDICATED_UNCITED:
+        if len(key[1]) < MIN_ANCHOR:
+            notes.append(fail(
+                f"  ANCHOR    {key[0]} → {key[1]!r} is {len(key[1])} characters. "
+                f"An anchor under {MIN_ANCHOR} matches prose rather than a claim, "
+                f"and silences blocks nobody ruled on."))
+            stale.append(key)
+    for section in sorted(SECTIONS.glob("*.md")):
+        # Count fences with the block splitter's own predicate. `count("\n```")`
+        # misses a fence on line 1 -- which inverted the verdict exactly: a
+        # balanced section opening with a fence failed, and an unbalanced one
+        # opening with a fence passed.
+        fences = sum(
+            1 for line in section.read_text(encoding="utf-8").splitlines()
+            if line.strip().startswith("```"))
+        if fences % 2:
+            notes.append(fail(
+                f"  FENCE     {section.name} has an odd number of ``` lines. "
+                f"Everything after the unclosed one is skipped as code, so a "
+                f"claim can hide behind it."))
+            stale.append((section.name, "unbalanced fence"))
     notes.append(
         f"  {scanned} claim blocks scanned across {len(list(SECTIONS.glob('*.md'))) - len(EXEMPT_SECTIONS)} "
         f"body sections: {len(flagged)} uncited, "
