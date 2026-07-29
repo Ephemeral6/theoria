@@ -1,0 +1,3147 @@
+{
+  "disagreements_with_b14": [
+    {
+      "b14_tier": "main",
+      "metric": "E2",
+      "n_landed": 2,
+      "v9_gameable": true,
+      "v9_tier": "reference",
+      "why": ""
+    },
+    {
+      "b14_tier": "main",
+      "metric": "E3",
+      "n_landed": 2,
+      "v9_gameable": true,
+      "v9_tier": "reference",
+      "why": ""
+    },
+    {
+      "b14_tier": "main",
+      "metric": "K11",
+      "n_landed": 2,
+      "v9_gameable": true,
+      "v9_tier": "reference",
+      "why": ""
+    },
+    {
+      "b14_tier": "main",
+      "metric": "K12",
+      "n_landed": 3,
+      "v9_gameable": true,
+      "v9_tier": "reference",
+      "why": ""
+    },
+    {
+      "b14_tier": "main",
+      "metric": "K7",
+      "n_landed": 2,
+      "v9_gameable": true,
+      "v9_tier": "reference",
+      "why": ""
+    },
+    {
+      "b14_tier": "main",
+      "metric": "M6",
+      "n_landed": 1,
+      "v9_gameable": true,
+      "v9_tier": "reference",
+      "why": ""
+    },
+    {
+      "b14_tier": "main",
+      "metric": "P3",
+      "n_landed": 3,
+      "v9_gameable": true,
+      "v9_tier": "reference",
+      "why": ""
+    },
+    {
+      "b14_tier": "main",
+      "metric": "P4",
+      "n_landed": 3,
+      "v9_gameable": true,
+      "v9_tier": "reference",
+      "why": ""
+    }
+  ],
+  "predictions": [
+    {
+      "id": "V9-P1",
+      "text": "at least 3 of the 9 current main-table metrics fall to a blind attack (main = E2 E3 K7 K11 K12 M3 M6 P3 P4)"
+    },
+    {
+      "id": "V9-P2",
+      "text": "the blind attacks disagree with battery/audit/exploits/ on at least 5 metrics"
+    },
+    {
+      "id": "V9-P3",
+      "text": "K12 falls: beats_required is fixed at 6 but the beat list comes from the source, so six closed beats can simply be asserted"
+    },
+    {
+      "id": "V9-P4",
+      "text": "M3 and K7 come back not-gameable for want of computability rather than for robustness"
+    },
+    {
+      "id": "V9-P5",
+      "text": "P4's `won` gate stops the old attack and not a new one: `won` is a bool on Step and can be set"
+    }
+  ],
+  "prompt_id": "V9-battery-gaming-audit",
+  "verdict": {
+    "demoted_by_v9": [
+      "E2",
+      "E3",
+      "K11",
+      "K12",
+      "K7",
+      "M6",
+      "P3",
+      "P4"
+    ],
+    "gameable": [
+      "E1",
+      "E2",
+      "E3",
+      "E4",
+      "E5",
+      "E6",
+      "E7",
+      "K1",
+      "K10",
+      "K11",
+      "K12",
+      "K13",
+      "K14",
+      "K2",
+      "K3",
+      "K4",
+      "K5",
+      "K6",
+      "K7",
+      "K8",
+      "K9",
+      "M1",
+      "M2",
+      "M4",
+      "M5",
+      "M6",
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "X1",
+      "X2",
+      "X3",
+      "X4",
+      "X5",
+      "X6"
+    ],
+    "gameable_but_held": [
+      "E1",
+      "E4",
+      "E5",
+      "E6",
+      "E7",
+      "K1",
+      "K10",
+      "K13",
+      "K14",
+      "K2",
+      "K3",
+      "K4",
+      "K5",
+      "K6",
+      "K8",
+      "K9",
+      "M1",
+      "M2",
+      "M4",
+      "M5",
+      "P1",
+      "P2",
+      "P5",
+      "X1",
+      "X2",
+      "X3",
+      "X4",
+      "X5",
+      "X6"
+    ],
+    "main": [
+      "E1",
+      "M3"
+    ],
+    "metrics": {
+      "E1": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": false,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "benign_window": "E1 is harmless only read as a boolean -- 'this run was billed at all' -- never as a magnitude compared between arms.",
+            "certificate": {
+              "builder": "build_E1_dial_high",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E1 is whatever number I write in cost_usd; identical run shape, 12 calls either way, values 3000.0 vs 0.0012 (factor 2.5e6)",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_E1_dial_low",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 0.0012,
+            "metric": "E1",
+            "name": "dial",
+            "rationale": "Writing a cost field is a deliberate act, so no agent lands here by accident; but nothing in the metric ties cost_usd to tokens, model, or work, so the field is a free parameter.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 3000.0
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "Same as above: only 'was anything billed', and only when every call is known to carry a price.",
+            "certificate": {
+              "builder": "build_E1_unbilled_high",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "Two runs with byte-identical token usage (200 calls, 20k input tokens each) report 100.0 vs 0.5 because cost_usd=None is summed as zero, not as missing",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_E1_unbilled_low",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "insufficient-data",
+            "low_value": null,
+            "metric": "E1",
+            "name": "unbilled-tail",
+            "rationale": "Harnesses routinely fail to attach a price to some responses (cache hits, streamed calls, retried calls, a provider that omits usage on error), and `c.cost_usd or 0.0` silently reads 'unpriced' as 'free' -- so an arm with a lossy billing logger looks cheap without doing anything.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": false,
+            "target": null,
+            "value": 100.0
+          }
+        ],
+        "defence": {
+          "defence": "an unpriced model call is not a free one: the economy family refuses a partial bill instead of reading `cost_usd or 0.0`",
+          "defence_id": "D3",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 2,
+        "n_landed": 1,
+        "prior_tier": "main",
+        "r2_satisfied": true,
+        "v9_tier": "main"
+      },
+      "E2": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E2_batched_turn_zero",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E2 = 0.973 with spend that never front-loads at all -- 30 equal calls are simply all labelled turn=0, so the bucketing does the work",
+            "direction": "higher",
+            "metric": "E2",
+            "name": "batched-turn-label",
+            "rationale": "turn is a harness label, not a fact about the world: any wrapper that batches sub-agent or tool-loop calls under one outer turn collapses arbitrarily much spend into bucket 0, and E2 rewards the labelling convention rather than the arm.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 0.973387097
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E2_first_turn_bill",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E2 = 1.0 on a run that spends everything on turn 0 and then logs 39 turns costing exactly nothing",
+            "direction": "higher",
+            "metric": "E2",
+            "name": "first-turn-bill",
+            "rationale": "Any harness that bills a single large system-prompt call up front and then runs a cheap scripted loop produces exactly this shape; 'front-loaded' is a cost-timestamp pattern, not evidence that understanding happened in turn 0.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E2_unbilled_tail",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E2 = 1.0 on a run whose 40 turns all burn 30k input tokens, because only the first three carry a price at all",
+            "direction": "higher",
+            "metric": "E2",
+            "name": "unbilled-tail",
+            "rationale": "A billing logger that drops out partway (token refresh, provider omitting usage after the first N responses) turns a flat spend profile into a perfect front-load; the metric cannot distinguish 'stopped spending' from 'stopped logging'.",
+            "reason": "incoherent record: 37 of 40 model calls carry no price; the shape of a bill cannot be read from a partial bill",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.95,
+            "value": null
+          }
+        ],
+        "defence": {
+          "defence": "an unpriced model call is not a free one: the economy family refuses a partial bill instead of reading `cost_usd or 0.0`",
+          "defence_id": "D3",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 2,
+        "prior_tier": "main",
+        "r2_satisfied": true,
+        "v9_tier": "reference"
+      },
+      "E3": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E3_batched_turn_zero",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E3 = 0.0244 on a perfectly flat spend profile -- all 400 calls cost exactly $1.00; 360 of them are merely labelled turn=0",
+            "direction": "lower",
+            "metric": "E3",
+            "name": "batched-turn-label",
+            "rationale": "turn is a harness label. A wrapper that batches its tool loop under one outer turn early on and one call per turn later produces this; the cost curve is uniform, so E3 is reporting the logging convention, not when the bill settled. Note the 8-turn floor does bite: the same trick with 100 calls collapsed to 6 turns and E3 refused with 'fewer than 8 turns'.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.05,
+            "value": 0.024390244
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E3_first_turn_bill",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E3 = 0.01 -- 90% of the bill lands by turn 1 of 100, because turns 2..100 cost zero",
+            "direction": "lower",
+            "metric": "E3",
+            "name": "first-turn-bill",
+            "rationale": "Identical shape to the E2 attack and just as easy to produce by accident: one expensive setup call plus a long free loop. E3 also *improves* the more idle turns you pad on, so a run that stalls looks better converged than one that works.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.05,
+            "value": 0.01
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E3_padded_tail",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E3 = 0.005 on 400 uniformly expensive turns of which only the first two are priced",
+            "direction": "lower",
+            "metric": "E3",
+            "name": "padded-unbilled-tail",
+            "rationale": "Combines the two free levers: unpriced calls read as free, and the denominator is the number of turns you logged. Logging more turns strictly lowers E3, so verbosity is scored as economy.",
+            "reason": "incoherent record: 398 of 400 model calls carry no price; the shape of a bill cannot be read from a partial bill",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.05,
+            "value": null
+          }
+        ],
+        "defence": {
+          "defence": "an unpriced model call is not a free one: the economy family refuses a partial bill instead of reading `cost_usd or 0.0`",
+          "defence_id": "D3",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 2,
+        "prior_tier": "main",
+        "r2_satisfied": true,
+        "v9_tier": "reference"
+      },
+      "E4": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E4_sawtooth_context",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E4 ~ 0.0 on a 20k-100k sawtooth: periodic compaction defeats both fits equally",
+            "direction": "lower",
+            "metric": "E4",
+            "name": "compaction-sawtooth",
+            "rationale": "Auto-compaction every N turns is standard harness behaviour and destroys any polynomial trend, so an arm gets the target score from its wrapper's memory policy rather than its own discipline.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E4_linear_context",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E4 ~ 0.0 on context that grows without bound (4k -> 122k tokens), as long as it grows in a straight line",
+            "direction": "lower",
+            "metric": "E4",
+            "name": "exactly-linear-context",
+            "rationale": "A fixed-size transcript append per turn -- the default of almost every chat harness -- is exactly linear, so unbounded context growth is invisible to E4; the metric measures curvature, not size.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E4_flat_context",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E4 = 0.0 on a run that pins 120k context tokens on every one of 60 turns -- the worst possible context hygiene scores perfectly",
+            "direction": "lower",
+            "metric": "E4",
+            "name": "flat-context",
+            "rationale": "An arm that stuffs the whole context window from turn one and never grows (because it cannot) has zero variance, r2() short-circuits to 0.0 for both fits, and the difference is 0.0; saturating the window is common and is scored as ideal.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "E5": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_E5_cheap_flail",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E5 = 0.0 -- one nanocent call, 2000 identical no-op actions that never change the state key",
+            "direction": "lower",
+            "metric": "E5",
+            "name": "cheap-flail",
+            "rationale": "Declaring a 1e-9 price is deliberate. But it shows the metric has no floor: 'successful' means only `not failed`, so the denominator counts actions no one checked, and nothing requires the cost to be commensurate with them.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E5_step_spam",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E5 = 0.000025 on a realistic $5.00 bill, purely by emitting 200000 cycling no-op actions",
+            "direction": "lower",
+            "metric": "E5",
+            "name": "step-spam",
+            "rationale": "Any arm with a cheap action channel -- a bulk/batched env API, a scripted sweep, a retry loop that re-issues the same move -- inflates the denominator for free, and E5 reads thrashing as efficiency.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 2.5e-05
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E5_unbilled_calls",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E5 = 0.0 on 500 calls of 40k input tokens each, because 499 of them carry cost_usd=None",
+            "direction": "lower",
+            "metric": "E5",
+            "name": "unbilled-calls",
+            "rationale": "Same lossy-billing failure as E1/E2 but on the ratio: the numerator is recorded cost while the denominator is recorded actions, and only one of the two is required to be complete (the `cost` capability passes on a single priced call).",
+            "reason": "incoherent record: 499 of 500 model calls carry no price, and an unpriced call is not a free one",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.001,
+            "value": null
+          }
+        ],
+        "defence": {
+          "defence": "an unpriced model call is not a free one: the economy family refuses a partial bill instead of reading `cost_usd or 0.0`",
+          "defence_id": "D3",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 2,
+        "prior_tier": "reference",
+        "r2_satisfied": true,
+        "v9_tier": "reference"
+      },
+      "E6": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "Only trustworthy when support['steps'] equals the run's total step count; otherwise it is a sample of unknown provenance.",
+            "certificate": {
+              "builder": "build_E6_unlogged_majority",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E6 = 3000.0 vs 2.0 from a single annotated step out of a thousand",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_E6_unlogged_majority_low",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 2.0,
+            "metric": "E6",
+            "name": "partial-logging",
+            "rationale": "The mean is taken over steps that carry the field, not over all steps, so a partially-instrumented adapter reports the retry behaviour of whichever steps happened to be instrumented and calls it the run's mean.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 3000.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "Harmless only as a same-session infrastructure check: E6 near 1.0 means the step log and the HTTP log agree; any other reading is about the network, not the arm.",
+            "certificate": {
+              "builder": "build_E6_high_retry",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E6 = 500.0 vs 1.0 on runs whose agent behaviour is byte-identical",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_E6_low_retry",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 1.0,
+            "metric": "E6",
+            "name": "retry-dial",
+            "rationale": "http_tries is a property of the transport layer -- retry policy, backoff config, a flaky proxy -- not of the agent; changing one client constant moves E6 by orders of magnitude with no change in play.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 500.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 2,
+        "n_landed": 2,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "E7": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E7_sawtooth_prompt",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E7 ~ 0.0 on a periodic 50k-320k prompt sawtooth",
+            "direction": "lower",
+            "metric": "E7",
+            "name": "compaction-sawtooth",
+            "rationale": "A wrapper that truncates or re-summarises on a fixed cadence produces a periodic signal that neither polynomial explains, so both R^2 collapse together and the difference vanishes.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E7_linear_prompt",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E7 ~ 0.0 on prompts that grow 20k -> 728k chars in a straight line",
+            "direction": "lower",
+            "metric": "E7",
+            "name": "exactly-linear-prompt",
+            "rationale": "Appending a fixed-size block of re-read material per turn is linear by construction; E7 only penalises acceleration, so the metric is blind to a 36x blow-up in what the arm re-reads.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_E7_flat_prompt",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "E7 = 0.0 while re-reading a 400000-character prompt on every one of 60 turns",
+            "direction": "lower",
+            "metric": "E7",
+            "name": "flat-prompt",
+            "rationale": "Re-sending a maximal fixed prompt every turn is the laziest possible context policy and has zero variance, so r2() returns 0.0 for both fits and the difference is 0.0.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "K1": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_K1_bulk",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K1 = 1.0 with a 39960-pair denominator that no step in the run supports",
+            "direction": "higher",
+            "metric": "K1",
+            "name": "bulk",
+            "rationale": "Nothing in the run cross-checks replay_pairs against len(steps), but writing a five-digit denominator with an empty steps list is a deliberate act, not a default a harness falls into.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K1_hollow",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K1 = 1.0 from a Theory carrying two integers and a run with no steps",
+            "direction": "higher",
+            "metric": "K1",
+            "name": "hollow",
+            "rationale": "A harness that writes replay_pairs/replay_agree from its own self-check emits 1/1 whenever the manual has exactly one rule and one transition to test it on; an arm that crashed after its first transition lands here without trying.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K1_overrun",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K1 = 7.0 -- a 'share' above 1, status ok, no complaint",
+            "direction": "higher",
+            "metric": "K1",
+            "name": "overrun",
+            "rationale": "Double-counting is a classic off-by-one in a replay loop that increments agree per matched field but pairs per transition, so a real harness can emit agree > pairs by accident.",
+            "reason": "incoherent record: 7 agreements over 1 replay pairs",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.95,
+            "value": null
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_ALL_sweep",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "one 20-line Run clears K1 K2 K3 K4 K5 K6 K13 simultaneously",
+            "direction": "higher",
+            "metric": "K1",
+            "name": "sweep-all-seven",
+            "rationale": "No metric in this family cross-checks any other, and none of them reads run.steps or run.calls, so the seven scores are seven independent fields of a single self-report.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          }
+        ],
+        "defence": {
+          "defence": "a value declared unit=\"share\" may not exceed one, and a numerator may not exceed its denominator; such a record is refused as incoherent rather than reported as excellent",
+          "defence_id": "D1",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 4,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": true,
+        "v9_tier": "reference"
+      },
+      "K10": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K10_counter",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K10 = 1000000 'machine-checked proofs' declared by an integer, with proven=False everywhere (there are no clauses at all)",
+            "direction": "higher",
+            "metric": "K10",
+            "name": "counter",
+            "rationale": "the word 'machine-checked' lives only in the docstring; a counter incremented once per dead-end region enumerated by a reachability sweep -- not once per checked proof -- crosses 100 on any non-trivial grid, which is the ordinary way this field gets wired up.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 100.0,
+            "value": 1000000.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_K10_dressed",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K10 = 4096 alongside 4096 clauses of kind 'theorem' every one of which has proven=False",
+            "direction": "higher",
+            "metric": "K10",
+            "name": "dressed",
+            "rationale": "K10 reads the integer and never looks at Clause.proven, which is the field that would encode 'machine-checked'; laying out 4096 unproven theorem clauses to match the counter is a deliberate dressing step, so this variant is not something a rig does by accident.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 100.0,
+            "value": 4096.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 2,
+        "n_landed": 2,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "K11": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "K11 is a safe axis for K5/K6 only if revisions are counted per adjudicated manual change and every concept's admitted_revision indexes into that same sequence; used as a raw count it is a commit-frequency measurement.",
+            "certificate": {
+              "builder": "build_K11_chatty",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K11 = 1000 vs 1 for the same ten concepts; only the write granularity of the manual differs",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_K11_quiet",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 1.0,
+            "metric": "K11",
+            "name": "bookkeeping",
+            "rationale": "a harness that bumps the revision counter on every file write gets 1000, one that rewrites the manual once per episode gets 1; nothing about the theory changed, so the 'coarse axis' of the concept-birth timeline is a property of the writer, not of the learning.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 1000.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "0 revisions on a non-empty concept list should read as a broken writer, not as a stable manual; K11 cannot tell those apart.",
+            "certificate": {
+              "builder": "build_K11_hundred",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K11 = 100 vs 0 on two empty theories -- the metric never checks that anything was revised",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_K11_zero",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 0.0,
+            "metric": "K11",
+            "name": "empty",
+            "rationale": "K11 has no thin() branch, so an arm that keeps a Theory object but never populates it still gets a numeric answer; a crashed or stubbed theory-writer therefore lands on the 0 end without any signal that the number is vacuous.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 100.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 2,
+        "n_landed": 2,
+        "prior_tier": "main",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "K12": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K12_clause_tag",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K12 = 1.0 (6/6 beats closed) on a repair episode that spent zero environment actions; the evidence guard is satisfied by the string 'c0'",
+            "direction": "higher",
+            "metric": "K12",
+            "name": "clause-tag",
+            "rationale": "the guard asks for repair_actions OR env_actions OR changed_clause, and changed_clause is a free-text field a summariser fills in from the clause it *intended* to touch; any pipeline that records the target clause before doing the work passes the guard for free.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K12_one_env_action",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K12 = 1.0 across 40 episodes, 240/240 beats, on a total budget of 40 environment actions (one per episode)",
+            "direction": "higher",
+            "metric": "K12",
+            "name": "one-env-action",
+            "rationale": "Repair.env_actions is a sum over beats, so a single action anywhere in the episode unlocks the whole six-beat claim; a harness that always takes one confirmatory step after editing the theory clears the guard on every episode without the beats meaning anything.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_K12_short_requirement",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K12 = 6.0 -- the episode declares its own denominator, so a 'share' exceeds 1",
+            "direction": "higher",
+            "metric": "K12",
+            "name": "short-requirement",
+            "rationale": "beats_required is per-episode and self-declared, and the metric divides by the sum of it without checking it against the six named beats; setting it to 1 is a deliberate act, so this is not an accident, but it shows K12's denominator is under the measured party's control.",
+            "reason": "incoherent record: 6 closed beats against a declared requirement of 1",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.95,
+            "value": null
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_K12_whitespace",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K12 = 1.0 where the entire evidence that a repair happened is the string ' '",
+            "direction": "higher",
+            "metric": "K12",
+            "name": "whitespace",
+            "rationale": "the guard is `not (r.repair_actions or r.env_actions or r.changed_clause)`, a truthiness test, so it separates 'unset' from 'set to anything at all' rather than 'no work' from 'work'; a space is not something a rig writes by accident, but it bounds how much the guard can possibly be asking for.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          }
+        ],
+        "defence": {
+          "defence": "a value declared unit=\"share\" may not exceed one, and a numerator may not exceed its denominator; such a record is refused as incoherent rather than reported as excellent",
+          "defence_id": "D1",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 4,
+        "n_landed": 3,
+        "prior_tier": "main",
+        "r2_satisfied": true,
+        "v9_tier": "reference"
+      },
+      "K13": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K13_empty_repair",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K13 = 0.0 from a Repair with no beats, no detection, no changed clause",
+            "direction": "lower",
+            "metric": "K13",
+            "name": "empty-repair",
+            "rationale": "repair_actions defaults to None, which falls through to env_actions, which sums an empty beat list to 0; any episode logged before its beats are written scores a perfect zero.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_K13_inflated_baseline",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K13 = 1e-06 by writing a large baseline_actions rather than a small repair",
+            "direction": "lower",
+            "metric": "K13",
+            "name": "inflated-baseline",
+            "rationale": "baseline_actions is a free integer never reconciled against len(run.steps); making the denominator large is the cheapest lever but it takes a deliberate choice of number.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 1e-06
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K13_selective_annotation",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K13 = 0.0 averaged over one episode while a 500000-action repair sits in run.repairs, silently skipped",
+            "direction": "lower",
+            "metric": "K13",
+            "name": "selective-annotation",
+            "rationale": "`if not base or spent is None: continue` drops any episode missing a baseline, and the hardest repairs are exactly the ones whose pre-repair cost nobody managed to reconstruct.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K13_zero_declared",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K13 = 0.0 with all six beats closed and every one of them costing 0 environment actions",
+            "direction": "lower",
+            "metric": "K13",
+            "name": "zero-declared",
+            "rationale": "A repair carried out purely by editing the manual -- no re-probing of the world -- genuinely costs zero environment actions, which is exactly the unverified repair the ratio should have penalised.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 4,
+        "n_landed": 4,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "K14": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K14_censor",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K14 = 4096 bits over a manual of 512 concepts, 511 of which carry no compression account at all (support reports concepts=1)",
+            "direction": "higher",
+            "metric": "K14",
+            "name": "censor",
+            "rationale": "K14 filters to concepts whose compression_bits is not None, so the worst-case statistic is taken over the self-selected subset the estimator succeeded on; an estimator that gives up on exactly the concepts that compress badly produces this shape as its normal output.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 1000.0,
+            "value": 4096.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_K14_floor",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K14 = 1024 bits with all 256 concepts annotated -- a constant written into every concept passes the worst-case test",
+            "direction": "higher",
+            "metric": "K14",
+            "name": "floor",
+            "rationale": "a constant per-concept credit is what a stubbed or table-driven estimator emits, but writing 1024 into 256 records is a choice; it matters because K14 is a min and a min over a constant is maximally robust to the very outlier-hunting the metric exists for.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 1000.0,
+            "value": 1024.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K14_single",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K14 = 1000000 bits from a manual containing exactly one concept",
+            "direction": "higher",
+            "metric": "K14",
+            "name": "single",
+            "rationale": "a minimum over one element is that element, and the natural unit bug -- reporting the total encoded size of the corpus rather than the delta the concept bought -- is off by orders of magnitude in the favourable direction, so the 1000-bit threshold is cleared by a rounding convention rather than by compression.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 1000.0,
+            "value": 1000000.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "K2": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_K2_adversarial_three",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K2 = 1.0 with frame literally set to '3 adversarial gaps' -- the case the code's own thin() text says is incomparable",
+            "direction": "higher",
+            "metric": "K2",
+            "name": "adversarial-three",
+            "rationale": "The metric documents this exact failure in its refusal message and then returns ok anyway; choosing a three-pair held-out set and labelling it honestly is a choice an author makes, not a default.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K2_frame_string",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K2 = 1.0 on 1 held-out pair; the sampling-frame guard is satisfied by any truthy string",
+            "direction": "higher",
+            "metric": "K2",
+            "name": "frame-string",
+            "rationale": "held_out_frame is free text with no vocabulary and no comparison to the run, so any harness that fills the field at all -- even with a constant label -- clears the guard.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K2_self_dealt",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K2 = 1.0 on 200 pairs the run itself both selected and graded",
+            "direction": "higher",
+            "metric": "K2",
+            "name": "self-dealt",
+            "rationale": "Held-out pairs and their grades come from the same writer as the manual, so a harness that generates negatives from the manual's own rules will agree with itself on every one of them.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          }
+        ],
+        "defence": {
+          "defence": "a value declared unit=\"share\" may not exceed one, and a numerator may not exceed its denominator; such a record is refused as incoherent rather than reported as excellent",
+          "defence_id": "D1",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": true,
+        "v9_tier": "reference"
+      },
+      "K3": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K3_duplicates",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K3 = 250 from 250 byte-identical clauses (same name, same kind)",
+            "direction": "higher",
+            "metric": "K3",
+            "name": "duplicates",
+            "rationale": "Append-only theory files plus a re-run loop duplicate clauses routinely; nothing in theorem_count() collapses by name.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 100.0,
+            "value": 250.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K3_hundred",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K3 = 120 from 120 Clause records whose only content is kind='invariant'",
+            "direction": "higher",
+            "metric": "K3",
+            "name": "hundred",
+            "rationale": "The count keys off a string field with no proof, evidence or uniqueness requirement, so any template that emits one clause per observed object type inflates it linearly in world size.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 100.0,
+            "value": 120.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_K3_pending",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K3 = 150 where every clause says proven=False, probe_pending=True, evidence_transitions=0",
+            "direction": "higher",
+            "metric": "K3",
+            "name": "pending",
+            "rationale": "The clause fields that would contradict the claim are all present in the model and all ignored by the metric; setting them to their most damning values on purpose is an attack, not an accident.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 100.0,
+            "value": 150.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "K4": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K4_over_covered",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K4 = 3.0 -- a 'share' of three, status ok",
+            "direction": "higher",
+            "metric": "K4",
+            "name": "over-covered",
+            "rationale": "Counting matched transitions across repeated visits to the same state while sizing the denominator by distinct states is an easy bookkeeping slip that pushes num past den.",
+            "reason": "incoherent record: clause(s) o0, o1, o2, o3, o4, o5, o6, o7, o8, o9 claim more witnesses than the coverage denominator admits",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.95,
+            "value": null
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K4_single_annotated",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K4 = 1.0 computed over 1 clause while 200 clauses carry no coverage at all",
+            "direction": "higher",
+            "metric": "K4",
+            "name": "single-annotated",
+            "rationale": "The unannotated count is reported in support but never folded into the value, so any pipeline that annotates only the clauses it measured -- the normal case -- reports the mean of its easiest few.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K4_unit_fractions",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K4 = 1.0 from 60 clauses each covered by exactly 1 of 1 transitions",
+            "direction": "higher",
+            "metric": "K4",
+            "name": "unit-fractions",
+            "rationale": "A denominator floor is absent, and a clause mined from a single witnessed transition naturally has coverage 1/1, so a miner run on a short trace produces this shape by default.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          }
+        ],
+        "defence": {
+          "defence": "a value declared unit=\"share\" may not exceed one, and a numerator may not exceed its denominator; such a record is refused as incoherent rather than reported as excellent",
+          "defence_id": "D1",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 2,
+        "prior_tier": "reference",
+        "r2_satisfied": true,
+        "v9_tier": "reference"
+      },
+      "K5": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K5_alphabet",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K5 = 140 from 140 Concept records that carry a name and nothing else",
+            "direction": "higher",
+            "metric": "K5",
+            "name": "alphabet",
+            "rationale": "len(concepts) has no admission test beyond existence, so a segmenter that emits one concept per distinct sprite or colour crosses 100 on a mid-size grid without any of them being used.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 100.0,
+            "value": 140.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K5_duplicates",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K5 = 110 where all 110 concepts have the identical name 'thing'",
+            "direction": "higher",
+            "metric": "K5",
+            "name": "duplicates",
+            "rationale": "The word table is a list, not a set; a revision loop that re-admits the same concept each pass grows it monotonically.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 100.0,
+            "value": 110.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 2,
+        "n_landed": 2,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "K6": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_K6_inflated",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K6 = 1000000.0 bits/concept from three integers nobody recomputed",
+            "direction": "higher",
+            "metric": "K6",
+            "name": "inflated",
+            "rationale": "compression_bits is taken on trust with no upper bound tied to the size of the trace it supposedly compresses, but writing 10^6 is a declaration, not a rounding error.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 1000.0,
+            "value": 1000000.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K6_mean_hides",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K6 = 399808.0 bits/concept while 24 of the 25 concepts have negative gain",
+            "direction": "higher",
+            "metric": "K6",
+            "name": "mean-hides",
+            "rationale": "A mean over a heavy-tailed quantity is dominated by its largest term; one genuinely good abstraction plus a long tail of failed ones is the expected shape of real concept mining.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 1000.0,
+            "value": 399808.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K6_thin_denominator",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K6 = 5000.0 'per admitted concept' over a denominator of 1 while K5 counts 100 admitted concepts",
+            "direction": "higher",
+            "metric": "K6",
+            "name": "thin-denominator",
+            "rationale": "The gains list silently drops concepts with compression_bits=None, so a pipeline that only bothers to cost the concepts it is proud of gets a mean over its own shortlist while K5 counts the whole table.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 1000.0,
+            "value": 5000.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "K7": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "K7 is only a sanity check on K6 if the same estimator, with a fixed sign convention, annotated every concept in the run; a K7 of 0 next to a K5 of 1000 should read as 'unaudited', not 'clean'.",
+            "certificate": {
+              "builder": "build_K7_sign_high",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K7 = 1000 vs 0 on two manuals with the identical 1000 concepts; only the sign of a declared integer differs",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_K7_sign_low",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 0.0,
+            "metric": "K7",
+            "name": "sign",
+            "rationale": "compression_bits is whatever the arm's own estimator wrote down; a sign convention (cost-of-encoding vs. bits-saved) flipped once in that estimator moves every concept across the boundary at the same time, which is exactly the 1000-vs-0 swing here.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 1000.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "K7 is harmless only when read together with its own support field of_concepts and with K5: 0 of 1 accounted concepts is not the same reading as 0 of 400.",
+            "certificate": {
+              "builder": "build_K7_silence_high",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K7 = 400 vs 0 on manuals of the same size; the low one simply declines to compute 399 of the 400 accounts",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_K7_silence_low",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 0.0,
+            "metric": "K7",
+            "name": "silence",
+            "rationale": "an estimator that raises or times out on hard concepts and leaves compression_bits=None produces exactly the low run, so the arm with the *worst* compression tooling reports the cleanest diagnostic; that is an ordinary failure mode of an optional annotation, not sabotage.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 400.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 2,
+        "n_landed": 2,
+        "prior_tier": "main",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "K8": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_K8_bulk",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K8 = 1.0 at a million designed probes, with 50 clauses still flagged probe_pending and none proven",
+            "direction": "higher",
+            "metric": "K8",
+            "name": "bulk",
+            "rationale": "K8 never consults the clause table, so probe_pending clauses sitting unresolved next to a perfect executable rate raise no objection; declaring the two counters equal at any scale requires deliberately writing both, which is why this one is not accidental.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K8_one_probe",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K8 = 1.0 from a theory that designed exactly one probe and ran it",
+            "direction": "higher",
+            "metric": "K8",
+            "name": "one-probe",
+            "rationale": "the denominator is proposals, so the cheapest way to a perfect ratio is to propose almost nothing; any harness that only registers a probe design at the moment it dispatches it records designed==executable by construction and can never score below 1.0.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K8_overflow",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K8 = 1000.0 -- a 'share' with no upper clamp; executable is allowed to exceed designed",
+            "direction": "higher",
+            "metric": "K8",
+            "name": "overflow",
+            "rationale": "a counter that increments once per probe *execution* while designs are counted per distinct template (retries, re-runs across levels) exceeds 1.0 without anybody intending it, and the metric prints the ratio anyway, so a share silently becomes an unbounded score.",
+            "reason": "incoherent record: 1000 executable probes out of 1 designed",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.95,
+            "value": null
+          }
+        ],
+        "defence": {
+          "defence": "a value declared unit=\"share\" may not exceed one, and a numerator may not exceed its denominator; such a record is refused as incoherent rather than reported as excellent",
+          "defence_id": "D1",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 2,
+        "prior_tier": "reference",
+        "r2_satisfied": true,
+        "v9_tier": "reference"
+      },
+      "K9": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K9_counter",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K9 = 100000 from a theory whose every other field is empty: no concepts, no clauses, no revisions",
+            "direction": "higher",
+            "metric": "K9",
+            "name": "counter",
+            "rationale": "playbook_entries is a self-reported integer with no object behind it, so a template that emits one 'prefer action a in state s' line per observed transition reaches six figures on a single long trace while containing no ordering, pruning or heuristic knowledge at all.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 100.0,
+            "value": 100000.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_K9_transcription",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "K9 = 512 with 512 matching one-transition 'preference' clauses, so the count survives a cross-check against the clause table",
+            "direction": "higher",
+            "metric": "K9",
+            "name": "transcription",
+            "rationale": "each clause is a single memorised transition with coverage 1/1, which is what a rule miner emits when it fails to generalise; the playbook is then a transcript of the trace and K9 measures trace length, not policy.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 100.0,
+            "value": 512.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 2,
+        "n_landed": 2,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "M1": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_M1_precognition",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M1 = -1000.0; the metric accepts a delay that is physically impossible and ranks it best",
+            "direction": "lower",
+            "metric": "M1",
+            "name": "precognition",
+            "rationale": "No clamp at zero and no ordering assertion. Any pipeline that resolves first_seen from a level-entry event and first_used from an action log with different index origins (0-based vs 1-based, or per-level vs global) will emit negative delays silently.",
+            "reason": "incoherent record: mechanism(s) recorded as first used before first seen (minimum delay -1000)",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.001,
+            "value": null
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_M1_same_step",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M1 = 0.0 from a single hand-written annotation; the run has 3 steps and no mechanism use in them",
+            "direction": "lower",
+            "metric": "M1",
+            "name": "same-step",
+            "rationale": "The metric reads only run.truth.mechanisms and never cross-checks the step list, so the number is a property of the annotation file, not the run. An annotator who writes first_used=first_seen because that is the step where they noticed the mechanism produces this by convention, not by luck.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_M1_saturate",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M1 = 0.0 with a large n (used=60) so the support looks well-evidenced",
+            "direction": "lower",
+            "metric": "M1",
+            "name": "saturate",
+            "rationale": "Structurally different from same-step: it attacks the support field rather than the value. A reader who sanity-checks 'is this mean built on enough mechanisms?' sees used=60 and is reassured by fabricated breadth.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_M1_survivorship",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M1 = 0.0 (perfect) on a run that used 1 of 100 mechanisms; M2 = 0.01 on the same run",
+            "direction": "lower",
+            "metric": "M1",
+            "name": "survivorship",
+            "rationale": "_delays() `continue`s past every mechanism with first_used None, so the mean is conditioned on success. An arm that learns one easy mechanism instantly and never grasps the other ninety-nine scores a perfect M1 with no intent to cheat; this is the normal shape of a weak run, not a contrived one.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          }
+        ],
+        "defence": {
+          "defence": "a first-use or detection delay may not be negative; a mechanism used before it was visible is two counters with different origins, not a fast arm",
+          "defence_id": "D2",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 4,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": true,
+        "v9_tier": "reference"
+      },
+      "M2": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_MALL_sweep",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "one 12-step run hits M1=0.0, M2=1.0, M4=0.0, M5=1.0, M6=1.0 simultaneously",
+            "direction": "higher",
+            "metric": "M2",
+            "name": "all-family-sweep",
+            "rationale": "The whole mechanism family is a function of two sidecar structures (Truth and the Repair list) that the arm supplies about itself; the 12 steps are decoration. There is no consistency check between the family's five live metrics, so one record satisfies all of them at once.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_M2_never_seen",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M2 = 1.0 over 200 mechanisms that the run never observed becoming visible",
+            "direction": "higher",
+            "metric": "M2",
+            "name": "never-seen",
+            "rationale": "M2 tests only `first_used is not None`; it does not require first_seen, does not require the mechanism to appear in steps, and does not bound first_used by the run length. Structurally different from `single`: it inflates the numerator and denominator together rather than shrinking them.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_M2_single",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M2 = 1.0 from a one-element denominator",
+            "direction": "higher",
+            "metric": "M2",
+            "name": "single",
+            "rationale": "The denominator is len(mechanisms), which the run itself supplies. Any game whose annotator only bothered to write down the one mechanism the arm obviously used gets 1.0; sparse annotation and perfect uptake are the same number here.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_M2_zero_step_run",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M2 = 1.0 on a run whose steps list is empty -- the arm never acted",
+            "direction": "higher",
+            "metric": "M2",
+            "name": "zero-step-run",
+            "rationale": "M2's `needs` are ('truth','mechanisms') only, so the metric never asks whether the run has steps. A harness that crashes after writing its truth sidecar but before flushing the trajectory produces exactly this record.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 4,
+        "n_landed": 4,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "M3": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": false,
+        "attacks": [
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_M3_one_level",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M3 refuses on the other branch too: insufficient-data, value None",
+            "direction": "lower",
+            "metric": "M3",
+            "name": "one-level",
+            "rationale": "Both branches of the function terminate in thin(); confirms the stub rather than a data problem on my side.",
+            "reason": "the run never reached a second level; transfer cannot be measured within one level",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.001,
+            "value": null
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_M3_two_levels",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M3 refuses: insufficient-data, value None, even with two levels and cross-level annotation",
+            "direction": "lower",
+            "metric": "M3",
+            "name": "two-levels",
+            "rationale": "Not an accident of my data -- the body has no ok() path at all. Reported as a failed attack.",
+            "reason": "multi-level runs exist but the cross-level annotation schema is not yet defined; see STATUS.md",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.001,
+            "value": null
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": false,
+        "n_attacks": 2,
+        "n_landed": 0,
+        "note": "attacked and not broken; see each attack's `reason` for the guard that refused it",
+        "prior_tier": "main",
+        "r2_satisfied": false,
+        "v9_tier": "main"
+      },
+      "M4": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_M4_blind_but_instant",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M4 = 0.0 while support says undetected_on_own_level=40 -- the manual noticed nothing, instantly",
+            "direction": "lower",
+            "metric": "M4",
+            "name": "blind-but-instant",
+            "rationale": "notes['earliest_detection'] outranks the detected flag (it is read first and detected is only a fallback), so a post-hoc 'when could it in principle have known?' annotation overwrites the actual detection record. The contradiction survives into the support dict, which is the tell.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_M4_instant",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M4 = 0.0 from one self-reported detection_actions=0",
+            "direction": "lower",
+            "metric": "M4",
+            "name": "instant",
+            "rationale": "detection_actions is a self-report by the arm being scored, and 0 is the natural value when a harness initialises the counter and the detection is recognised on the same tick it is logged, i.e. an off-by-one in the instrumentation, not a lie.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.001,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_M4_negative",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M4 = -500.0; no lower bound, so 'better than instantaneous' is expressible",
+            "direction": "lower",
+            "metric": "M4",
+            "name": "negative",
+            "rationale": "The delay is a difference of two action indices somewhere upstream; if the change-injection index and the detection index come from different counters (pre-injection baseline vs post-injection episode), the subtraction goes negative on its own.",
+            "reason": "incoherent record: detection recorded before the change was injected (minimum -500 actions)",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": 0.001,
+            "value": null
+          }
+        ],
+        "defence": {
+          "defence": "a first-use or detection delay may not be negative; a mechanism used before it was visible is two counters with different origins, not a fast arm",
+          "defence_id": "D2",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 2,
+        "prior_tier": "reference",
+        "r2_satisfied": true,
+        "v9_tier": "reference"
+      },
+      "M5": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_M5_bulk",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M5 = 1.0 over 500 episodes with zero beats, zero detection_actions and zero theorems",
+            "direction": "higher",
+            "metric": "M5",
+            "name": "bulk",
+            "rationale": "Structurally different from one-detected: it defeats the obvious patch 'require a decent sample size'. Every other field on the Repair record is empty and the metric still returns a perfect score with episodes=500.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_M5_one_detected",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M5 = 1.0 from a single boolean the scored arm sets itself",
+            "direction": "higher",
+            "metric": "M5",
+            "name": "one-detected",
+            "rationale": "detected is an unverified flag; nothing in the metric compares it against beats, clauses or steps. A harness whose default for `detected` is True (or which sets it when it writes the episode at all) yields 1.0 for every arm.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 2,
+        "n_landed": 2,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "M6": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "Harmless only as a strict-zero check: M6 == 0.0 across episodes tells you no repair touched anything downstream. Any non-zero magnitude is uninterpretable without knowing what the reporter counted as a theorem.",
+            "certificate": {
+              "builder": "build_M6_high",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M6 = 1.0 vs 0.05 -- a factor of 20 -- from two runs identical except for two integers",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_M6_low",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 0.05,
+            "metric": "M6",
+            "name": "dial",
+            "rationale": "Both numerator and denominator are declared by the arm and are never reconciled with theory.clauses or theory.deadlock_theorems. How many theorems a manual 'had before' depends entirely on whether the implementation counts clauses, proven clauses, or derived corollaries -- a naming choice moves this diagnostic by an order of magnitude.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": false,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "benign_window": "A reader using M6 to sanity-check another metric should first assert 0 <= value <= 1; the code never does.",
+            "certificate": {
+              "builder": "build_M6_unbounded",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "M6 = 1000.0 vs 0.0 -- a 'share' with unit `share` that exceeds 1 by three orders of magnitude",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_M6_zero",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 0.0,
+            "metric": "M6",
+            "name": "unbounded",
+            "rationale": "Structurally different from `dial`: it breaks the unit rather than the magnitude. There is no min(1.0, ...) and no assertion that invalidated_theorems <= theorems_before, so the declared unit `share` is not enforced anywhere.",
+            "reason": "incoherent record: episode(s) ep01 invalidate more theorems than the manual held",
+            "status": "insufficient-data",
+            "succeeded": false,
+            "target": null,
+            "value": null
+          }
+        ],
+        "defence": {
+          "defence": "a value declared unit=\"share\" may not exceed one, and a numerator may not exceed its denominator; such a record is refused as incoherent rather than reported as excellent",
+          "defence_id": "D1",
+          "implemented": true
+        },
+        "defended_by_v9": true,
+        "gameable": true,
+        "n_attacks": 2,
+        "n_landed": 1,
+        "prior_tier": "main",
+        "r2_satisfied": true,
+        "v9_tier": "reference"
+      },
+      "P1": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_P1_failure_free_by_omission",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P1 = 60.0 even though every model call is marked is_error=True",
+            "direction": "higher",
+            "metric": "P1",
+            "name": "failure-free-by-omission",
+            "rationale": "P1 counts len(run.calls), not successful calls, and counts steps the logger chose to write; a harness that drops rejected actions before logging turns a broken run into a high score by omission alone.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 50.0,
+            "value": 60.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_P1_noop_saturation",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P1 = 100.0 while every action is the identical no-op leaving state unchanged",
+            "direction": "higher",
+            "metric": "P1",
+            "name": "noop-saturation",
+            "rationale": "A polling/keep-alive loop or a stuck controller that re-issues the same action until a timeout logs hundreds of non-failing steps against a handful of prompts; nothing in P1 asks whether the state moved.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 50.0,
+            "value": 100.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_P1_one_call_batch",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P1 = 5000.0 from a single model call that emits one batched macro",
+            "direction": "higher",
+            "metric": "P1",
+            "name": "one-call-batch",
+            "rationale": "Any harness that lets the model emit a list of actions per turn, or that replays a recorded macro after one prompt, produces exactly this shape without anyone trying to game it.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 50.0,
+            "value": 5000.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "P2": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_P2_boundary_lie",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P2 = 200.0 because the half-way boundary is read off a self-reported step_idx",
+            "direction": "higher",
+            "metric": "P2",
+            "name": "boundary-lie",
+            "rationale": "Harnesses commonly stamp step_idx as 'the step this call was made before', so every planning call in a plan-then-execute agent legitimately carries step_idx=0; that alone puts the whole run in the second half.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 10.0,
+            "value": 200.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_P2_late_success",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P2 = 100.0 from four honestly-tied calls, all of them made in the first four steps",
+            "direction": "higher",
+            "metric": "P2",
+            "name": "late-success",
+            "rationale": "If the model is only consulted while it is failing and the harness then runs an unattended scripted tail, every successful step lands after the boundary; no lie about step_idx is needed, only that calls stop early.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 10.0,
+            "value": 100.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": false,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_P2_proportional_floor",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P2 stays near zero on the proportional branch no matter how many steps are laid out",
+            "direction": "higher",
+            "metric": "P2",
+            "name": "proportional-floor",
+            "rationale": "This is a deliberate probe of the fallback branch rather than a score attack; the proportional split defines first/second from the same constant rate, so only integer-floor slack (bounded well under 1) leaks.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": false,
+            "target": 10.0,
+            "value": 0.5
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 2,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "P3": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_P3_counter_keys",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P3 = 0.0 while the agent repeats one no-op action 500 times",
+            "direction": "lower",
+            "metric": "P3",
+            "name": "counter-keys",
+            "rationale": "State keys are routinely hashed from a frame that embeds a step counter, score, or timestamp; any such key makes every state unique and P3 identically zero for free.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.05,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_P3_sparse_observations",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P3 = 0.0 from a four-step run that dies immediately, on a single window",
+            "direction": "lower",
+            "metric": "P3",
+            "name": "sparse-observations",
+            "rationale": "A run that crashes after three steps clears the len(keys) >= 3 gate with exactly one window and reports the best possible backtrack rate; early termination is the single most common way real runs end.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.05,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_P3_three_cycle",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P3 = 0.0 on a run that cycles A->B->C->A forever and makes no progress",
+            "direction": "lower",
+            "metric": "P3",
+            "name": "three-cycle",
+            "rationale": "The window compares keys[i+1] with keys[i-1], so it only detects period-2 oscillation; a stuck agent whose loop has any other period scores a perfect zero, and three-move loops are common in grid worlds.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.05,
+            "value": 0.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "main",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "P4": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_P4_failed_steps_are_free",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P4 = 0.05 after 10000 failed actions, against an honest optimal of 20",
+            "direction": "lower",
+            "metric": "P4",
+            "name": "failed-steps-are-free",
+            "rationale": "P4 divides len(run.ok_steps) by optimal, so any action the environment rejects is free; a brute-force agent whose illegal moves bounce off the rules looks more efficient than optimal without deceiving anyone.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 1.0,
+            "value": 0.05
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_P4_inflated_optimal",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P4 = 0.001 because the denominator is read from the run's own Truth record",
+            "direction": "lower",
+            "metric": "P4",
+            "name": "inflated-optimal",
+            "rationale": "No harness accidentally writes optimal_steps=1000 for a one-step win; this is a pure trust attack showing P4's 'ground truth' is run-supplied and unverified by the metric.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 1.0,
+            "value": 0.001
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_P4_won_but_failed",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P4 = 0.0 -- a perfect-and-then-some score from zero successful actions",
+            "direction": "lower",
+            "metric": "P4",
+            "name": "won-but-failed",
+            "rationale": "won and failed are independent flags on Step, and a terminal transition that both wins and errors (win detected on a call the harness marks failed, e.g. a timeout on the final ACK) empties ok_steps entirely.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 1.0,
+            "value": 0.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "main",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "P5": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "Harmless only if P5 is read alongside a fixed, documented definition of 'failed' from the same adapter; across adapters it ranks nothing.",
+            "certificate": {
+              "builder": "build_P5_all_failed",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "P5 = 1.0 vs 0.005 on runs with identical actions and identical state keys",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_P5_none_failed",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 0.005,
+            "metric": "P5",
+            "name": "flag-only",
+            "rationale": "The two runs differ only in a boolean the logger sets; harnesses disagree on whether a rejected action is a failed step or simply not a step, so the same behaviour lands anywhere on this axis depending on the adapter.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 1.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 1,
+        "n_landed": 1,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "X1": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X1_counter_in_key",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X1 = 0.0 while the board hash is literally constant across all 300 steps",
+            "direction": "lower",
+            "metric": "X1",
+            "name": "counter-in-key",
+            "rationale": "Harnesses routinely build a state key by serialising the whole observation record, and observation records routinely carry a step index, frame counter or timestamp. One such field makes every state unique and drives X1 to 0 with no exploration whatsoever.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.05,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X1_early_exit",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X1 = 0.0 from a two-step run that crashed before doing anything",
+            "direction": "lower",
+            "metric": "X1",
+            "name": "early-exit",
+            "rationale": "A run that dies after two steps clears the len(seen) < 2 guard by exactly one step and then scores perfectly; crash-early runs are the most common junk record in any batch harness.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.05,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_X1_fresh_labels",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X1 = 0.0 over 300 steps that press one button and relabel the screen each time",
+            "direction": "lower",
+            "metric": "X1",
+            "name": "fresh-labels",
+            "rationale": "Minting a brand-new label every step is a deliberate choice here, but it costs nothing: the metric consumes the arm's own naming of state and has no way to notice 300 identical presses.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.05,
+            "value": 0.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "X2": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X2_failed_curtain",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X2 = 1.0 on a 300-step run of which 297 steps were rejected spam",
+            "direction": "higher",
+            "metric": "X2",
+            "name": "failed-curtain",
+            "rationale": "_transition_keys drops failed steps entirely, so a run that spent 99% of its budget being refused is scored only on the three steps that landed -- an arm that mostly fails looks maximally exploratory.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X2_fresh_actions",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X2 = 1.0 from a single frozen state and 300 never-repeated action names",
+            "direction": "higher",
+            "metric": "X2",
+            "name": "fresh-actions",
+            "rationale": "Agents that emit parameterised actions (click at x,y; type <string>) almost never repeat an action string verbatim, so the transition set is novel by construction even when the world does not move.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X2_fresh_states",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X2 = 1.0 on 300 repetitions of a single action",
+            "direction": "higher",
+            "metric": "X2",
+            "name": "fresh-states",
+            "rationale": "The key is prev_state|action and only one of the two halves has to vary. Any harness whose state key is even slightly noisy -- a frame counter, an animation phase, an RNG seed echoed in the observation -- gets X2 = 1.0 while pressing the same button forever.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "X3": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X3_explore_then_jam",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X3 = 1.0 for a run that dies in an infinite loop over its whole second half",
+            "direction": "higher",
+            "metric": "X3",
+            "name": "explore-then-jam",
+            "rationale": "Explore-then-get-stuck is the single most common real trajectory shape, and X3 pays it the maximum score: the metric rewards the last quarter being *empty* of novelty, which is exactly what being stuck looks like. This is an inversion, not just a fill.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.9,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X3_minimum_length",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X3 = 1.0 from eight steps, the smallest run the guard admits",
+            "direction": "higher",
+            "metric": "X3",
+            "name": "minimum-length",
+            "rationale": "quarter = len(keys)//4 = 2 here, so the whole statistic rests on four transitions; short truncated runs land on the extreme values of X3 constantly and there is no sample-size floor beyond eight.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.9,
+            "value": 1.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 2,
+        "n_landed": 2,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "X4": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X4_dilute_the_stall",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X4 = 0.04 for a run that ends in a real 50-step dead stall",
+            "direction": "lower",
+            "metric": "X4",
+            "name": "dilute-the-stall",
+            "rationale": "The streak is normalised by run length, so cheap high-volume stepping buys immunity: a harness that batches many micro-actions per decision inflates the denominator without inflating the stall.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.05,
+            "value": 0.04
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X4_no_streak",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X4 = 0.0 on 300 identical presses relabelled as 300 states",
+            "direction": "lower",
+            "metric": "X4",
+            "name": "no-streak",
+            "rationale": "Same mechanism as X1: X4 reads the arm's own state labels, so any monotone field in the observation record (tick, frame, score, elapsed ms) makes the no-progress streak structurally unreachable.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.05,
+            "value": 0.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X4_sawtooth",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X4 = 0.003... while the arm bounces between one hub and one-shot side states",
+            "direction": "lower",
+            "metric": "X4",
+            "name": "sawtooth",
+            "rationale": "`current = 0` resets on *any* new label, so a single novel state between repeats truncates the streak. Agents that return to a menu or home screen between probes produce exactly this sawtooth.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.05,
+            "value": 0.003333333
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 3,
+        "n_landed": 3,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "X5": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "benign_window": "X5 is harmless only as a floor check -- 'this run saw more than a handful of distinct states' -- and only when state_key is a hash of a canonicalised environment frame produced by the harness, never by the arm.",
+            "certificate": {
+              "builder": "build_X5_high",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X5 = 500 vs 1 from two runs that take the identical 500 actions",
+            "direction": "neutral",
+            "low_certificate": {
+              "builder": "build_X5_low",
+              "ok": true,
+              "violations": []
+            },
+            "low_status": "ok",
+            "low_value": 1.0,
+            "metric": "X5",
+            "name": "label-dial",
+            "rationale": "The two runs differ only in the naming convention of state_key, not in behaviour; whether a harness hashes the raw frame or a canonicalised one swings this diagnostic by 500x with no change to the agent.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": null,
+            "value": 500.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 1,
+        "n_landed": 1,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      },
+      "X6": {
+        "R1_promotion_refused": false,
+        "accidental_if_gameable": true,
+        "attacks": [
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": false,
+            "certificate": {
+              "builder": "build_X6_family_sweep",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "one poverty-certified run clears the X1/X2/X4/X6 thresholds simultaneously",
+            "direction": "higher",
+            "metric": "X6",
+            "name": "family-sweep",
+            "rationale": "Deliberately constructed, but it shows the family shares a single point of failure rather than four: all of X1, X2, X4 and X6 read only arm-supplied strings, so one relabelling convention satisfies all of them at once and the four metrics are not independent evidence.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X6_round_robin",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X6 = 1.0 on 200 consecutive failures with a fresh action name each time",
+            "direction": "higher",
+            "metric": "X6",
+            "name": "round-robin",
+            "rationale": "A scripted sweep over an action list -- the standard fallback when an agent has no idea what to do -- changes action after every refusal by construction, so the least adaptive possible policy maxes the metric.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X6_single_window",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X6 = 1.0 decided by exactly one of 400 steps",
+            "direction": "higher",
+            "metric": "X6",
+            "name": "single-window",
+            "rationale": "The `windows == 0` guard is the only sample floor, so one lucky failure early in a long run fixes the metric at 1.0; near-flawless runs with a single stumble are common and will be scored on that stumble alone.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          },
+          {
+            "S1_metric_answered": true,
+            "S2_reached_target": true,
+            "S3_poverty_certified": true,
+            "accidental": true,
+            "certificate": {
+              "builder": "build_X6_two_stroke",
+              "ok": true,
+              "violations": []
+            },
+            "claim": "X6 = 1.0 from a two-symbol ABAB oscillation that ignores every refusal",
+            "direction": "higher",
+            "metric": "X6",
+            "name": "two-stroke",
+            "rationale": "X6 only compares consecutive action strings for inequality; a period-2 loop satisfies that on every window while demonstrably learning nothing, since it re-issues the refused action two steps later.",
+            "reason": "",
+            "status": "ok",
+            "succeeded": true,
+            "target": 0.95,
+            "value": 1.0
+          }
+        ],
+        "defence": null,
+        "defended_by_v9": false,
+        "gameable": true,
+        "n_attacks": 4,
+        "n_landed": 4,
+        "prior_tier": "reference",
+        "r2_satisfied": false,
+        "v9_tier": "reference"
+      }
+    },
+    "n_attacked": 38,
+    "n_attacks": 105,
+    "n_metrics": 38,
+    "not_gameable": [
+      "M3"
+    ],
+    "prereg_targets": {
+      "E1": null,
+      "E2": 0.95,
+      "E3": 0.05,
+      "E4": 0.001,
+      "E5": 0.001,
+      "E6": null,
+      "E7": 0.001,
+      "K1": 0.95,
+      "K10": 100.0,
+      "K11": null,
+      "K12": 0.95,
+      "K13": 0.001,
+      "K14": 1000.0,
+      "K2": 0.95,
+      "K3": 100.0,
+      "K4": 0.95,
+      "K5": 100.0,
+      "K6": 1000.0,
+      "K7": null,
+      "K8": 0.95,
+      "K9": 100.0,
+      "M1": 0.001,
+      "M2": 0.95,
+      "M3": 0.001,
+      "M4": 0.001,
+      "M5": 0.95,
+      "M6": null,
+      "P1": 50.0,
+      "P2": 10.0,
+      "P3": 0.05,
+      "P4": 1.0,
+      "P5": null,
+      "X1": 0.05,
+      "X2": 0.95,
+      "X3": 0.9,
+      "X4": 0.05,
+      "X5": null,
+      "X6": 0.95
+    },
+    "reference": [
+      "E2",
+      "E3",
+      "E4",
+      "E5",
+      "E6",
+      "E7",
+      "K1",
+      "K10",
+      "K11",
+      "K12",
+      "K13",
+      "K14",
+      "K2",
+      "K3",
+      "K4",
+      "K5",
+      "K6",
+      "K7",
+      "K8",
+      "K9",
+      "M1",
+      "M2",
+      "M4",
+      "M5",
+      "M6",
+      "P1",
+      "P2",
+      "P3",
+      "P4",
+      "P5",
+      "X1",
+      "X2",
+      "X3",
+      "X4",
+      "X5",
+      "X6"
+    ],
+    "rule": "S1 metric answered AND S2 reached the pre-registered target AND S3 poverty certificate passed -> gameable. gameable AND accidental AND NOT defended -> reference. R1: V9 never promotes on silence. R2: a defence that would promote needs more attack variants than tests.",
+    "unattacked": []
+  }
+}

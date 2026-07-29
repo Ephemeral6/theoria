@@ -1,0 +1,70 @@
+{
+  "base_commit": "520dc5dda90eefd93c6c2afbe2b03db5b0745e49",
+  "branch": "agent/v9-battery-gaming-audit",
+  "files": [
+    {
+      "path": "battery/PREREG_V9.md",
+      "sha256": "0f64c57a85cf41b4083c228e23e373a4aaba5e99ebfa73b2cf247b989c29e500"
+    },
+    {
+      "path": "battery/BLINDING.md",
+      "sha256": "8821a7e054e3a181e5651ca87e7d18730f34594678993abf9850ec69b6b6009a"
+    },
+    {
+      "path": "battery/audit/v9/prereg.py",
+      "sha256": "0cf1a4a74b2e30f1f5b011796472dd497607cd200fb11a6365e022ec2f18f5ab"
+    },
+    {
+      "path": "battery/audit/v9/check.py",
+      "sha256": "8f86fe9086e3fe1669eb641501d1825324e427752026a2ba928fc0cd000d5e88"
+    },
+    {
+      "path": "battery/audit/v9/attack.py",
+      "sha256": "1c098265a04e4c31a0a31a9ba2d0de6d8ed850423a0c54947e445a2ab058eb73"
+    },
+    {
+      "path": "battery/audit/v9/verdict.py",
+      "sha256": "80a6d00cc7ee569d8f9c77d310fa9790480c3a20dcc9c75c951412f997419bc0"
+    },
+    {
+      "path": "battery/audit/v9/run.py",
+      "sha256": "26dddb1ae54a208eb93e2b05d657c1bb41b082b58645eb088be91f47809db900"
+    },
+    {
+      "path": "battery/audit/v9/attacks/__init__.py",
+      "sha256": "4c608249a9860edda1752be0684ac2dc4c8253b6e8b6af5046c3eaab54d087c5"
+    },
+    {
+      "path": "battery/audit/v9/attacks/a1.py",
+      "sha256": "bfef834ec7883a5a6b901b2be171f1aebf7189b451198f1ba9e66b410a5eea90"
+    },
+    {
+      "path": "battery/audit/v9/attacks/a2.py",
+      "sha256": "dba36c6e9bf186c8cdf9301dae5ea389c805deea3a39a956e2c9cf47111e7aa8"
+    },
+    {
+      "path": "battery/audit/v9/attacks/a3.py",
+      "sha256": "bc8bfb45c070f94d64a0be2881319c9cdf68f46762453c8aef6f4560dda2f02b"
+    },
+    {
+      "path": "battery/audit/v9/attacks/a4.py",
+      "sha256": "773a1b2864b89b8148a8a36a45488b04189b53001b6c62558b9ba4b382701cbb"
+    },
+    {
+      "path": "battery/audit/v9/attacks/a5.py",
+      "sha256": "74a575f4596e7a3ce9d3973e80c14c4a37f6d26f3da3bc775b1de1ed205f3a9a"
+    },
+    {
+      "path": "battery/audit/v9/attacks/a6.py",
+      "sha256": "00b2d4140625d64c258ba3b8904058d7eb230ea2b26e5004bff17d0db93a3d63"
+    },
+    {
+      "path": "battery/runs/20260729T021247Z-V9-battery-gaming-audit/v9_gaming_audit.json",
+      "sha256": "e098ef223b061095bba32b96043b01cc91612a8617ad34017781ec75a570e9b1"
+    }
+  ],
+  "prereg_commit": "9892d23caf72436c8ce8eefaa9ef59bfc2b03cc8",
+  "prompt_id": "V9-battery-gaming-audit",
+  "python": "3.13.13",
+  "utc": "20260729T021247Z"
+}
