@@ -15,12 +15,23 @@
     6,
     7
   ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "phase_in_range",
+      "color_reads_phase"
+    ],
+    "unverified": [],
+    "violated": []
+  },
   "invariants": [
     {
       "holds": true,
       "name": "agent_unique",
       "statement": "exactly one cell shows colour 6 at all times",
       "states_checked": 41,
+      "status": "holds",
       "verified": true
     },
     {
@@ -28,6 +39,7 @@
       "name": "grid_shape",
       "statement": "every frame is 6 x 7",
       "states_checked": 41,
+      "status": "holds",
       "verified": true
     },
     {
@@ -35,6 +47,7 @@
       "name": "phase_in_range",
       "statement": "every cycler's phase stays in range(k)",
       "states_checked": 41,
+      "status": "holds",
       "verified": true
     },
     {
@@ -42,6 +55,7 @@
       "name": "color_reads_phase",
       "statement": "the colour of a cycler cell determines its phase, except where the agent covers it",
       "states_checked": 41,
+      "status": "holds",
       "verified": true
     }
   ],

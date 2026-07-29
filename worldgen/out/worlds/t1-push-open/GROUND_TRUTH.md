@@ -28,6 +28,8 @@ A rule marked **cascade** fires inside `settle`, after the rule that caused it, 
 
 ## Invariants
 
+4 hold, 0 violated, 0 unverified — `invariants_all_hold` is `true`. **An unverified invariant is not a satisfied one**, so it counts against that boolean exactly as a violation does; the two are kept in separate lists because they call for different work.
+
 * **agent_unique** — exactly one cell shows colour 6 at all times  _(checked on 49 reachable states: holds)_
 * **grid_shape** — every frame is 5 x 7  _(checked on 49 reachable states: holds)_
 * **block_count** — exactly 1 cell(s) show colour 2 at all times  _(checked on 49 reachable states: holds)_

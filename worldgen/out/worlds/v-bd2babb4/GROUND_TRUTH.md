@@ -38,6 +38,8 @@ A rule marked **cascade** fires inside `settle`, after the rule that caused it, 
 
 ## Invariants
 
+8 hold, 0 violated, 0 unverified — `invariants_all_hold` is `true`. **An unverified invariant is not a satisfied one**, so it counts against that boolean exactly as a violation does; the two are kept in separate lists because they call for different work.
+
 * **agent_unique** — exactly one cell shows colour 6 at all times  _(checked on 387 reachable states: holds)_
 * **grid_shape** — every frame is 8 x 10  _(checked on 387 reachable states: holds)_
 * **phase_in_range** — every cycler's phase stays in range(k)  _(checked on 387 reachable states: holds)_
@@ -45,7 +47,7 @@ A rule marked **cascade** fires inside `settle`, after the rule that caused it, 
 * **agent_conserved** — exactly one cell shows the agent at all times — a portal moves the agent, it never copies or deletes it  _(checked on 387 reachable states: holds)_
 * **mouths_static** — each of the 2 portal mouth(s) shows colour 2 unless the agent is standing on it  _(checked on 387 reachable states: holds)_
 * **token_count** — the number of cells showing colour 3 equals the number of tokens not yet collected  _(checked on 387 reachable states: holds)_
-* **collection_is_monotone** — the number of collected tokens never decreases, so a lock that has opened never closes again  _(prose only, unverified)_
+* **collection_is_monotone** — the number of collected tokens never decreases, so a lock that has opened never closes again  _(checked on 1548 transitions: holds)_
 
 ## Solvability
 

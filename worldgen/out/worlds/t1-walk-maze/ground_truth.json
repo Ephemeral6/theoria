@@ -15,12 +15,21 @@
     7,
     9
   ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape"
+    ],
+    "unverified": [],
+    "violated": []
+  },
   "invariants": [
     {
       "holds": true,
       "name": "agent_unique",
       "statement": "exactly one cell shows colour 6 at all times",
       "states_checked": 24,
+      "status": "holds",
       "verified": true
     },
     {
@@ -28,6 +37,7 @@
       "name": "grid_shape",
       "statement": "every frame is 7 x 9",
       "states_checked": 24,
+      "status": "holds",
       "verified": true
     }
   ],

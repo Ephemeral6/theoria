@@ -50,7 +50,7 @@ Nothing below spends a dollar or opens a socket to the internet.
 cd proxy && python -m pytest              # the suite
 cd .. && python -m proxy.runner --mock    # one full game through both proxies
 python -m proxy.replay    --run-id <run> --mock   # re-run it; compare frame hashes
-python -m proxy.reconcile --run-id <run>          # ledger score vs scorecard score
+python -m proxy.reconcile --run-id <run>          # actions x cost x per-run score
 python -m proxy.cost                              # usage x a versioned price table
 python -m proxy.scoring   --run-id <run>          # the frozen scorer's verdict
 python -m proxy.scoring   --verify-only           # what is frozen, and its hash

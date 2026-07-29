@@ -96,10 +96,31 @@ def main():
         header = "你的工人号是 `%s`（board.py 的所有命令都用它）。\n\n" % pid_str
         text = header + text
     claude = shutil.which("claude")
+
+    # 账号在**会话真正启动的那一刻**选，不在建计划任务的时候选：
+    # 两者之间可能隔了很久，而中间那个窗口可能已经关了。
+    # 选不出账号时**回落到机器的默认登录**（不设 CLAUDE_CONFIG_DIR），
+    # 并把这件事写进日志头——这是一个具名、可见的回落，不是一个安静的默认值。
+    # 账号池没配好之前，舰队照常在原账号上跑，不会因为新机制没就绪而停摆。
+    env = dict(os.environ)
+    acct = None
+    try:
+        sys.path.insert(0, HERE)
+        import accounts as _acct
+        acct = _acct.pick(pid_str)
+        if acct:
+            env.update(_acct.env_for(acct))
+            _acct.note_launch(acct, pid_str)
+    except Exception as exc:               # 账号池坏了不该拖垮启动
+        record_exit(pid_str, {"account_error": "%r" % (exc,)})
+
     t0 = time.time()
     log = open(log_path, "a", encoding="utf-8")
     err = open(log_path + ".err", "a", encoding="utf-8")
-    log.write("=== runner start %s model=%s ===\n" % (pid_str, model))
+    # 账号写进日志头。**没有这一位，撞了限额也不知道该关哪个账号的窗口**——
+    # 轮换器会冤枉错账号，然后把好账号一起停掉。
+    log.write("=== runner start %s model=%s account=%s ===\n"
+              % (pid_str, model, acct or "default(no-pool)"))
     log.flush()
     try:
         # The prompt goes in on STDIN, never as an argv string: under Task
@@ -108,7 +129,7 @@ def main():
         proc = subprocess.run(
             [claude, "-p", "--model", model,
              "--dangerously-skip-permissions"],
-            cwd=ROOT, stdout=log, stderr=err,
+            cwd=ROOT, stdout=log, stderr=err, env=env,
             input=text.encode("utf-8"))
         code = proc.returncode
     except Exception as exc:

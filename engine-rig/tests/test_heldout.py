@@ -276,3 +276,24 @@ def test_a_probe_over_an_empty_bucket_raises_rather_than_returning_zero():
 
     with pytest.raises(engine_table.ProbeError):
         engine_table._rate_suffix("nothing/", "")({"zero_space": {"splits": {}}})
+
+
+def test_scope_exhaustive_is_derived_and_cannot_be_set_by_a_caller():
+    """E19: E15 made this a property; E17's fit was still passing it as a kwarg.
+
+    The two branches merged without a textual conflict because neither touched
+    the other's lines, and nothing in the rig runs the merged tree.  The nail is
+    here rather than in the engine's own tests because the caller is what broke.
+    """
+    from engines.zero_space.zerospace import Law
+
+    with pytest.raises(TypeError):
+        Law(vector=1, features=["x"], value=0, scope="global",
+            scope_exhaustive=True)
+
+    # And the derivation itself, so a future field rename cannot quietly invert
+    # it: exhaustive means *no* cell was truncated.
+    assert Law(vector=1, features=["x"], value=0, scope="global",
+               truncated_cells=()).scope_exhaustive is True
+    assert Law(vector=1, features=["x"], value=0, scope="global",
+               truncated_cells=(3,)).scope_exhaustive is False

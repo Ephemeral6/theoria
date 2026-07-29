@@ -1,0 +1,108 @@
+{
+  "checks": [
+    {
+      "detail": "truncated_cells=[0, 1]",
+      "name": "the fixture really crosses the enumeration limit",
+      "passed": true
+    },
+    {
+      "detail": "11 row(s) at n2-candidates-10colour.jsonl",
+      "name": "the run emitted candidate rows to read back",
+      "passed": true
+    },
+    {
+      "detail": "0 row(s) still claim it",
+      "name": "no emitted payload claims scope == 'global'",
+      "passed": true
+    },
+    {
+      "detail": "[]",
+      "name": "nor any scope word a `'global' in scope` reader would accept",
+      "passed": true
+    },
+    {
+      "detail": "9 payload(s) with scope='undetermined'",
+      "name": "the quotient representatives are published, under the degraded word",
+      "passed": true
+    },
+    {
+      "detail": "missing []",
+      "name": "every degraded payload carries the budget keys",
+      "passed": true
+    },
+    {
+      "detail": "0 payload(s) with a wrong or absent budget",
+      "name": "and the budget it carries is the one that actually bit",
+      "passed": true
+    },
+    {
+      "detail": "run truncated [0, 1]",
+      "name": "every degraded payload names the cells that went unenumerated",
+      "passed": true
+    },
+    {
+      "detail": "truncated_cells=[]",
+      "name": "under the limit nothing is truncated",
+      "passed": true
+    },
+    {
+      "detail": "scopes={'cell_local': 2, 'global': 1}",
+      "name": "and `global` is still emitted where it was proved",
+      "passed": true
+    },
+    {
+      "detail": "keys on an exhaustive row would re-hash a pinned artifact",
+      "name": "an exhaustive row carries no degradation keys",
+      "passed": true
+    }
+  ],
+  "control": "N2",
+  "entry_point": "engines.zero_space.run",
+  "exit_code": 0,
+  "failures": [],
+  "item": "E15-solver-status-bit",
+  "observed": {
+    "degraded_example": {
+      "error": "over budget: cell-local enumeration capped at 8 colours per cell; cells [0, 1] were searched only for singletons and their full set",
+      "scope": "undetermined",
+      "scope_note": "scope is 'undetermined', not 'global': a cell-local explanation for this law may exist in cells [0, 1] and was not searched for. The law itself is unaffected -- it holds on the trajectory either way -- but whether it is a fact about the world or about the encoding is undecided here.",
+      "scope_proved": false,
+      "subset_enumeration_limit": 8,
+      "truncated_cells": [
+        0,
+        1
+      ]
+    },
+    "n_degraded": 9,
+    "n_rows": 11,
+    "palette_size": 10,
+    "scope_counts": {
+      "cell_local": 2,
+      "undetermined": 9
+    },
+    "small_scope_counts": {
+      "cell_local": 2,
+      "global": 1
+    },
+    "small_truncated_cells": [],
+    "subset_enumeration_limit": 8,
+    "truncated_cells": [
+      0,
+      1
+    ]
+  },
+  "palette": [
+    "a",
+    "b",
+    "c",
+    "d",
+    "e",
+    "f",
+    "g",
+    "h",
+    "i",
+    "j"
+  ],
+  "property": "a truncated colour enumeration may not publish a law as global",
+  "verdict": "hold"
+}

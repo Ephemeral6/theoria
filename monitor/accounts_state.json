@@ -1,0 +1,13 @@
+{
+  "a": {
+    "last_launch": "2026-07-29T14:05:46Z",
+    "last_launch_pid": "OPS-A",
+    "launches": 4
+  },
+  "b": {
+    "hint": "You've hit your session limit \u00b7 resets 11pm (Asia/Shanghai)",
+    "limited_at": "2026-07-29T14:03:03Z",
+    "limited_until": "2026-07-29T15:00:00Z",
+    "limits_seen": 1
+  }
+}

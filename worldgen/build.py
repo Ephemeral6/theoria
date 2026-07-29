@@ -101,7 +101,13 @@ def build_world(spec: WorldSpec, root: str,
         # accurate one because the old one reads as a defect report and is not.
         "rules_never_witnessed": sorted(coverage["rules_never_witnessed"]),
         "rules_with_uncovered_pairs": sorted(coverage["rules_never_witnessed"]),
+        # Three fields, not one boolean.  `invariants_all_hold` is the honest
+        # conjunction (nothing violated *and* nothing unverified); the two lists
+        # keep the classes apart so the gate below can refuse both without
+        # calling them the same thing.
         "invariants_all_hold": truth_blob["invariants_all_hold"],
+        "invariants_violated": list(truth_blob["invariant_status"]["violated"]),
+        "invariants_unverified": list(truth_blob["invariant_status"]["unverified"]),
         "solvable": solve["solvable"],
         "optimal_length": solve.get("optimal_length"),
         "win_in_trace": bool(coverage["win_frames"]),
@@ -163,8 +169,31 @@ def build_all(root: str = OUT, ids: Optional[Sequence[str]] = None,
             "unsolvable": sorted(r["world_id"] for r in rows if not r["solvable"]),
             "mean_reversibility": round(
                 sum(r["reversibility_score"] for r in rows) / max(1, len(rows)), 4),
+            # `invariant_failures` keeps its old meaning — a *violated*
+            # invariant — rather than being widened to "not all_hold".  Widening
+            # it would have been the one-character fix and would have merged two
+            # different defects under one name: a violated invariant is a broken
+            # world, an unverified one is an unexercised claim, and the repair
+            # for each is different.  They gate separately, below.
             "invariant_failures": sorted(r["world_id"] for r in rows
-                                         if not r["invariants_all_hold"]),
+                                         if r["invariants_violated"]),
+            "invariant_unverified": sorted(r["world_id"] for r in rows
+                                           if r["invariants_unverified"]),
+            # `invariants_all_hold` is the field this cell is *named* for, it is
+            # published in all 35 ground truths and all 35 INDEX rows, and it is
+            # the only one a naive downstream reads. After the repair, no gate
+            # read it any more — the two lists above did all the work — so
+            # hard-coding it to `True` left the build green. That is this
+            # territory's recurring failure ("a verdict nothing exits on is a
+            # decoration") committed by the fix for it: the load was moved off
+            # the field instead of onto it.
+            #
+            # It is not re-derived here. It is *cross-checked* against the lists
+            # it must agree with, so the two cannot drift apart silently.
+            "invariant_verdict_mismatch": sorted(
+                r["world_id"] for r in rows
+                if r["invariants_all_hold"] != (not r["invariants_violated"]
+                                                and not r["invariants_unverified"])),
             "claim_disagreements": sorted(r["world_id"] for r in rows
                                           if r["claim_disagreements"]),
             "rule_correspondence_failures": sorted(
@@ -206,6 +235,14 @@ GATES = (
     ("rule_correspondence_failures",
      "a declared primary rule never fires, or a fired tag is undeclared"),
     ("invariant_failures", "a declared invariant is violated on a reachable state"),
+    ("invariant_unverified",
+     "a declared invariant ships unverified — no callable check ran, so the world "
+     "cannot claim it holds; give it a `check` or an `edge_check`, or stop "
+     "declaring it"),
+    ("invariant_verdict_mismatch",
+     "`invariants_all_hold` disagrees with the three-class partition it summarises "
+     "— the published boolean and the lists it is derived from have drifted, and "
+     "the boolean is what every naive downstream reads"),
     ("claim_disagreements",
      "a mechanism's `reversible` claim contradicts the measured stamp"),
 )
@@ -219,11 +256,26 @@ def gate_failures(manifest: Dict[str, Any]) -> List[str]:
     `claim_disagreements` and one with a violated invariant, and because the
     noise was constant nobody could have told a real disagreement from it. A
     measurement nothing can fail is a decoration.
+
+    **A missing key is a failure, not a pass.** This loop used to read
+    `totals.get(key, ())`, so a manifest that simply did not carry a gate's key
+    cleared that gate in silence — the same shape as V19's
+    `.get("holds", True)`, one function away from it, and with the same
+    direction: the default pointed at the good news. Nothing in this repository
+    currently produces such a manifest, which is exactly why it would have gone
+    unnoticed if something started to; `test_build_gate.py` already checks that
+    the *shipped* manifest carries every key, and that check cannot see a
+    manifest produced anywhere else.
     """
     out: List[str] = []
     totals = manifest["totals"]
     for key, why in GATES:
-        for world_id in totals.get(key, ()):
+        if key not in totals:
+            out.append("%-24s gate could not be evaluated: the manifest carries "
+                       "no `%s` key, and an unevaluated gate is not a passed one"
+                       % ("<manifest>", key))
+            continue
+        for world_id in totals[key]:
             out.append("%-24s %s (%s)" % (world_id, why, key))
     return out
 
@@ -351,9 +403,21 @@ def main() -> int:
         print("determinism: every artefact byte-identical across two builds "
               "in separate interpreters at different PYTHONHASHSEED")
     if not args.quiet:
-        print("build gate: %d catalogue world(s)%s green"
-              % (len(manifest["worlds"]),
-                 "" if ids is not None else " + %d mutant(s)" % len(mutants["worlds"])))
+        # **Say what was not evaluated.** With explicit world ids the mutant
+        # half is skipped entirely, and the banner used to report "N catalogue
+        # world(s) green" without mentioning it — so a green line covered 20 of
+        # the 35 worlds this repository ships and looked like all of them. Five
+        # of the thirteen worlds V19 was about are mutants. An unevaluated gate
+        # is not a passed one, and a banner that does not say which half it
+        # checked is the reporting version of the same mistake.
+        if ids is None:
+            print("build gate: %d catalogue world(s) + %d mutant(s) green"
+                  % (len(manifest["worlds"]), len(mutants["worlds"])))
+        else:
+            print("build gate: %d catalogue world(s) green — **the mutant half "
+                  "was not built or gated**, because explicit world ids were "
+                  "given; run without arguments to gate all 35"
+                  % len(manifest["worlds"]))
     return 0
 
 
