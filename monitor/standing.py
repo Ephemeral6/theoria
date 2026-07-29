@@ -299,17 +299,38 @@ def ops_work_for(agent):
             "any": bool(unread or moved)}
 
 
+#: `claimable` 的第三个值：**板查过了，但没查出来**。
+#: 不是 0（板是空的），也不是正数（板上有活）。
+CLAIMABLE_UNKNOWN = -1
+
+
 def work_for(agent, lane):
-    """这个编号现在有没有活。三个来源，任一非空即算有。"""
+    """这个编号现在有没有活。三个来源，任一非空即算有。
+
+    `claimable` 有三个值，不是两个：正数是「板上有这么多活」，`0` 是
+    「查过了，板上没活」，`CLAIMABLE_UNKNOWN`(-1) 是「查都没查成」。
+    在 2026-07-29 的普查之前这里只有两个值——板查询崩溃被 `except Exception`
+    写成 `0`，于是渲染出来是「无活可做」。那**比真空板更安静**：真空板至少会
+    发 `SUPPLY-LOW:0`，而那条告警自己也裹在同一个 `except: pass` 里。
+    实测两者当时的返回值完全相等（`work_for` 的字典逐字节相同），
+    见 `runs/20260729T2035Z-S28/EVIDENCE-3-standing-reflex.md`。
+
+    **-1 不当作「有活」也不当作「没活」**：`any` 只在真的量到活时为真，
+    而 `sweep` 为 -1 留了单独一条 skip 理由。这是刻意的——
+    把「测不到」算成「有活」会让一个板坏掉的夜里每一跳都起一个花钱的会话，
+    而那个会话读的是同一块坏板；算成「没活」就是这个 bug 本身。
+    所以第三个值走第三条路：不起会话，但在日志里留一条自己的记录。"""
     unread = unread_count(agent)
     held = sum(1 for f in os.listdir(board_mod.CLAIMED)
                if f.endswith(".%s.md" % agent))
     try:
         claimable = len(board_mod.candidates(lane))
-    except Exception:
-        claimable = 0
+    except Exception as exc:                    # noqa: BLE001 -- reported below
+        claimable = CLAIMABLE_UNKNOWN
+        log("BOARD-QUERY-FAILED lane=%s agent=%s %s: %s"
+            % (lane, agent, type(exc).__name__, exc))
     return {"unread": unread, "held": held, "claimable": claimable,
-            "any": bool(unread or held or claimable)}
+            "any": bool(unread or held or claimable > 0)}
 
 
 def sweep(dry=False, only=None):
@@ -340,6 +361,10 @@ def sweep(dry=False, only=None):
                    % (gb, HEADROOM_GB, PER_SESSION_GB))
         elif n_standing >= MAX_STANDING:
             why = "standing cap %d reached" % MAX_STANDING
+        elif w["claimable"] == CLAIMABLE_UNKNOWN:
+            # 第三个值必须走第三条路。旧代码在这里印「no work」——
+            # 一句关于板的断言，而板恰恰是刚才没读成的那个东西。
+            why = "BOARD-QUERY-FAILED: claimable unknown, not claiming it is zero"
         elif not w["any"]:
             why = "no work (unread=0 held=0 claimable=0)"
         else:
@@ -361,6 +386,11 @@ def sweep(dry=False, only=None):
             continue
 
         import dispatch
+        # S28：`via_task` 现在返回状态字符串而不是布尔——"running" /
+        # "died-on-arrival(...)" / "declined" / "state-unknown"。
+        # **注意 `if ok:` 对任何非空字符串都为真**，所以这里必须显式比较，
+        # 否则「起来了然后立刻死了」会被记成一次成功启动，
+        # 也就是这次要修的那个假信号原封不动地换了个位置。
         ok = dispatch.via_task(agent, os.path.join("ops", "%s.md" % agent))
         state.setdefault(agent, {})["last_launch_epoch"] = time.time()
         state[agent]["last_launch_utc"] = time.strftime(
@@ -370,8 +400,27 @@ def sweep(dry=False, only=None):
         save_state(state)
         log("START %s (lane=%s) ok=%s [unread=%d held=%d claimable=%d]"
             % (agent, lane, ok, w["unread"], w["held"], w["claimable"]))
-        if ok:
+        # ADV-2/D13：**上一版把三件事挂在同一个谓词上，这是一次真的回归，
+        # 而且是本次修复自己引入的。** `n_standing`（上限记账）和 45 秒错峰
+        # 一起被移进了 `if ok == "running":`，于是任何一个**读状态失败**
+        # ——`state-unknown`、一次 `/Query` 抖动导致的 `died-on-arrival(gone)`、
+        # 或者 8 秒的 `LAUNCH_SETTLE_S` 内还没翻到 Running——都会把两道安全阀
+        # 同时摘掉。实测（六人名册，MAX_STANDING=5）：
+        #
+        #   via_task -> running          launches=5 staggers=5 cap-refusals=1
+        #   via_task -> state-unknown    launches=6 staggers=0 cap-refusals=0
+        #
+        # 六个一起无错峰，正是 standing.py:65-68 记下的 05:39 撞 session limit
+        # 的那个规模。而此时 `schtasks /Run` **已经把会话起起来了**——摘掉阀门
+        # 的理由是「我不确定它活着」，后果是「再多起一个」。
+        #
+        # 两个谓词，两件事，不许再合并：
+        #   * 调度器收下了（`!= "declined"`）→ 会话已经生出来了 → 记账 + 错峰；
+        #   * 状态确实是 running → 研究员真的起来了 → 才算一次成功启动。
+        # 旧的布尔 `ok` 恰好是前者，本次修复把它换成了后者，而正确做法是两者都留。
+        if ok == "running":
             started.append(agent)
+        if ok != "declined":
             n_standing += 1
             time.sleep(45)       # 错峰：同时起会互相踩额度与内存
 
