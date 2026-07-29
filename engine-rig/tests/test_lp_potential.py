@@ -284,9 +284,13 @@ def test_a_counterexample_in_the_check_overrides_a_holding_certificate(graph):
     assert payload["admissible_basis"]["certificate_holds"] is True
     assert payload["admissible_basis"]["counterexamples"] == counterexamples
 
-    # ...and end to end through the emitter, which is where it reaches an artefact.
+    # ...and end to end through the emitter, which is where it reaches an
+    # artefact.  The default there is to withhold both rows outright, so the
+    # marked form is what carries the verdict into a payload.
+    assert lp_potential.candidates(certificate, heuristic, graph,
+                                   timestamp="2026-07-27T00:00:00Z") == []
     rows = lp_potential.candidates(certificate, heuristic, graph,
-                                   timestamp="2026-07-27T00:00:00Z")
+                                   timestamp="2026-07-27T00:00:00Z", on_unsound="mark")
     assert validate_rows(rows) == []
     assert rows[1]["payload"]["admissible"] is False
 
@@ -315,3 +319,91 @@ def test_the_headline_and_the_evidence_come_from_one_expression(solved, graph):
         assert payload["admissible"] == expected
         seen.add(payload["admissible"])
     assert seen == {True, False}, "the spread must exercise both verdicts"
+
+
+# --------------------------------- the premises are checked against the graph
+
+def test_the_invariant_row_is_gated_too_not_just_the_heuristic(graph):
+    """The first cut of E16 gated one of the two rows. That was the same defect.
+
+    Both rows come from one weight vector. Gating only the heuristic left the
+    invariant going out as `goal unreachable from 1110` with all three conditions
+    `true`, beside a heuristic row whose counterexamples prove `inv_closed` is
+    false over the real move set -- two rows contradicting each other, nothing
+    saying which wins. Found by an adversarial review of the fix, not by the fix.
+    """
+    certificate = _certificate_missing_one_move(graph)
+    heuristic = lp_potential.heuristic_from(certificate)
+    assert certificate.holds is True                    # the premise it was checked on
+
+    assert lp_potential.candidates(certificate, heuristic, graph,
+                                   timestamp="2026-07-27T00:00:00Z") == []
+
+    rows = lp_potential.candidates(certificate, heuristic, graph,
+                                   timestamp="2026-07-27T00:00:00Z", on_unsound="mark")
+    assert validate_rows(rows) == []
+    assert [row["payload"]["unsound"] for row in rows] == [True, True]
+    assert rows[0]["payload"]["holds"] is False
+    assert rows[1]["payload"]["admissible"] is False
+
+
+def test_the_premise_check_asks_the_graph_not_the_certificate(graph):
+    """`check_exactly` cannot catch a move missing from the list it iterates.
+
+    So the emitter recomputes `inv_closed` over every geometry the graph has --
+    the one check the certificate's own inputs structurally cannot perform.
+    """
+    certificate = _certificate_missing_one_move(graph)
+    check = lp_potential.premises_against_graph(certificate, graph)
+    assert check["move_list_complete"] is False
+    assert check["missing_moves"] == [DROPPED_MOVE]
+    assert check["moves_raising_potential"] == [DROPPED_MOVE]
+    assert check["sound_over_graph"] is False
+
+    honest, _ = lp_potential.run(graph, UNSOLVABLE)
+    clean = lp_potential.premises_against_graph(honest, graph)
+    assert clean["sound_over_graph"] is True
+    assert clean["missing_moves"] == [] and clean["moves_raising_potential"] == []
+
+
+def test_conditions_alone_cannot_be_read_as_a_verdict(solved, graph):
+    """`all({}.values())` is True, so the payload has to publish `holds` itself."""
+    certificate, _ = solved
+    unchecked = replace(certificate, conditions={})
+    assert all(unchecked.as_json()["conditions"].values()) is True   # the trap
+    assert unchecked.as_json()["holds"] is False                    # the verdict
+
+
+def test_a_foreign_goal_set_is_not_scored_against_the_graphs_distances(graph):
+    """`run(..., goal_states=[...])` is supported; the empirical check is not.
+
+    `admissibility_report` measures h against `graph["distance_to_goal"]`, which
+    is the distance to the *graph's* goals. On a certificate about another set
+    those distances answer a different question, and every row it produces is a
+    fabricated counterexample -- a provably admissible heuristic published as
+    inadmissible. So the check is declined rather than mis-scored.
+    """
+    certificate, heuristic = lp_potential.run(graph, "0111", goal_states=["1010"])
+    assert certificate is not None
+    rows = lp_potential.candidates(certificate, heuristic, graph,
+                                   timestamp="2026-07-27T00:00:00Z")
+    assert validate_rows(rows) == []
+    payload = rows[1]["payload"]
+    assert payload["admissible"] is True
+    assert "not comparable" in payload["admissible_basis"]["empirical_check"]
+    assert "admissibility_check" not in payload
+    assert payload["premise_check"]["goal_states_match_graph"] is False
+
+
+def test_an_empty_report_is_vacuous_not_a_pass(solved):
+    """`not []` is True. "No state was examined" must not read as "all passed"."""
+    _, heuristic = solved
+    basis = heuristic.as_json([])["admissible_basis"]
+    assert "vacuous" in basis["empirical_check"]
+    assert basis["counterexamples"] == []
+
+
+def test_an_unknown_unsound_policy_is_refused(solved, graph):
+    certificate, heuristic = solved
+    with pytest.raises(ValueError):
+        lp_potential.candidates(certificate, heuristic, graph, on_unsound="ship-it")

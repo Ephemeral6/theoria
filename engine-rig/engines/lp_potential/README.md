@@ -129,14 +129,50 @@ the check passed into it — one expression, so the headline and the evidence
 cannot drift apart. `admissible_basis` shows the working: which half licenced the
 verdict, and which rows refuted it.
 
-Two things the derivation does *not* claim. The proof half is
-`certificate.holds`, the exact rational re-check — and that re-check iterates the
-move list the producer handed it, so it is silent about a move geometry missing
-from that list (D-035, site 1). The empirical half is a **sample** against known
-shortest paths, so it can only ever subtract: rows that all say `admissible` do
-not prove admissibility, but one row that says otherwise settles it. An
-`admissibility_check` omitted entirely leaves `empirical_check: "not run"` in the
-basis rather than being scored as a pass.
+The proof half is `certificate.holds`, the exact rational re-check. The empirical
+half is a **sample** against known shortest paths, so it can only ever subtract:
+rows that all say `admissible` do not prove admissibility, but one row that says
+otherwise settles it. An `admissibility_check` omitted leaves
+`empirical_check: "not run"`, and an *empty* one leaves `"vacuous"` — neither is
+scored as a pass, because `not []` is True and "no state was examined" must not
+read as "every state passed".
+
+## Both rows are gated on the premises, not just the heuristic
+
+`check_exactly` iterates `certificate.moves`, so a move geometry missing from
+that list is unconstrained in the LP **and** unexamined in the re-check (D-035,
+site 1). No amount of sampling fixes that reliably, so `candidates()` re-derives
+the premises from the graph instead:
+
+```json
+"premise_check": {
+  "move_list_complete": true, "missing_moves": [],
+  "moves_raising_potential": [],
+  "goal_states_match_graph": true,
+  "certificate_goal_states": ["0100"], "graph_goal_states": ["0100"],
+  "sound_over_graph": true
+}
+```
+
+`moves_raising_potential` is `inv_closed` recomputed over **every** geometry the
+graph has — the check the certificate's own inputs structurally cannot perform.
+When `sound_over_graph` is false, `on_unsound="withhold"` (the default) emits
+**neither row**; `"mark"` emits both carrying `unsound: true`.
+
+Gating one row and not the other was the first cut of this fix, and it was the
+same defect one row over: the invariant went out asserting `goal unreachable from
+1110` with all three conditions `true`, beside a heuristic row whose
+counterexamples were a proof that `inv_closed` is false over the real move set.
+The invariant payload now also publishes `holds` outright, because `conditions`
+alone does not say what it looks like it says — `all({}.values())` is `True`, so a
+consumer re-deriving the verdict from an unchecked certificate reads "never
+checked" as "passed".
+
+`run(..., goal_states=[...])` is supported and unaffected: a certificate about
+other goals proves what it says. What it does not license is scoring `h` against
+`graph["distance_to_goal"]`, which measures the distance to a *different* set —
+on a mismatch every row of the report is a fabricated counterexample, so the
+empirical check is declined (`"not comparable"`) rather than run and mis-scored.
 
 ## API
 

@@ -117,7 +117,8 @@ def build(certificate: Certificate, graph: Dict[str, Any],
                 # and re-derived by nobody: the move set is not cross-checked
                 # against `graph` here, and `verify()` below reads this list
                 # rather than regenerating it.
-                "checked_over": "all move instances on the full state space",
+                "checked_over": "the %d move instances this document lists"
+                                % len(move_obligations),
                 "n_checked": len(move_obligations),
                 "witnesses": move_obligations,
                 "holds": all(o["holds"] for o in move_obligations),
@@ -128,10 +129,22 @@ def build(certificate: Certificate, graph: Dict[str, Any],
                 "holds": all(o["holds"] for o in goal_obligations),
             },
         },
-        "conclusion": "no goal state is reachable from %s" % initial,
     }
     document["verified"] = all(
         section["holds"] for section in document["obligations"].values()
+    )
+    # Written after `verified`, and from it.  It was a literal above the line
+    # that computes the verdict, so a document whose obligations fail carried
+    # `verified: false` beside `conclusion: "no goal state is reachable from X"`
+    # -- the verdict as a sibling field of the headline it contradicts, which is
+    # the shape D-034 exists to stop.  The conclusion is what the obligations
+    # license, so it is derived from them or it is not stated.
+    document["conclusion"] = (
+        "no goal state is reachable from %s" % initial if document["verified"]
+        else "nothing follows: %s obligation(s) are not discharged by this document"
+             % ", ".join(sorted(name for name, section
+                                in document["obligations"].items()
+                                if not section["holds"]))
     )
     return document
 
