@@ -45,11 +45,15 @@
 **同样是已定死的**，且 `BUDGET_REPORT.md` §1 明确记着
 「工单要 3–5 局；开发堆一共只有 4 局，全取」。**建议直接填掉。**
 
-**⚠ 一条必须随之更新的事实**：`CLAUDE.md` 现在写着
-「no game has been played … all 25 are registered `never_audited`」，
-**这已经不成立**——开发堆 4 局全部升到 `trajectories_reviewed`
-（`baseline-arms/TOUCHED_GAMES.md`），且 `arc-recon/README.md` 另记
-INC-BA-001 的 9 局封存污染。冻结清单若照抄那句话就会写出假话。
+**✅ 缺 P5-2a 已消解（2026-07-29 复核，S4-freeze-complete）**：本条原文是
+「`CLAUDE.md` 现在写着「no game has been played … all 25 are registered
+`never_audited`」，**这已经不成立**」。`CLAUDE.md` 已经改过来了——现写
+「**Status (2026-07-28):** the development pile has been played — all four games
+are registered `trajectories_reviewed` in `arc-recon/data/contamination_log.jsonl`」，
+并同时记了 INC-BA-001 的 9 局封存污染与 F-11 把 claim 集裁到 19。
+**冻结清单照抄它不再会写出假话。** 留着本条是因为它指出的风险仍然真实：
+清单会照抄 `CLAUDE.md`，所以那份文件的过期陈述会变成冻结包里的假陈述——
+这一次是它先被修好了，不是这条检查没必要。
 
 ---
 
@@ -114,7 +118,8 @@ INC-BA-001 的 9 局封存污染。冻结清单若照抄那句话就会写出假
 `Theoria.md:368` 的规则是「方差小则 n=1 可辩护，**否则** n=2」。
 方差不是小，是**未知**；「否则」涵盖未知。**n = 2。**
 
-**⚠ 附带的硬条款**：n=2 **不替代**包络本身的修复。
+**⚠ 见 13-c（附带的硬条款，此处重述，缺口本身声明在
+`MANIFEST_DRAFT.md`）**：n=2 **不替代**包络本身的修复。
 `BUDGET_REPORT.md` §11.5 的两件事（INC-BA-003 跨会话闸门、中止阈值随预算缩放）
 修好并重跑包络之前，**关于臂方差的任何数值主张不许进论文**，
 且 97.9% 的死亡率会让 §7 的「作废重跑」事实上变成无限重跑。

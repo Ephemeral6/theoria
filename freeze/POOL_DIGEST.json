@@ -1,0 +1,97 @@
+{
+  "actions": 5190,
+  "actions_test_like": 3308,
+  "by_campaign_nonzero": {
+    "phase3-unit-price-recheck": {
+      "actions": 33,
+      "lines": 63,
+      "unpriced_usd": 0.0,
+      "usd": 1.3595
+    },
+    "phase3-unit-price-remeasure": {
+      "actions": 487,
+      "lines": 659,
+      "unpriced_usd": 0.0,
+      "usd": 19.8332
+    },
+    "phase3-variance-envelope": {
+      "actions": 504,
+      "lines": 773,
+      "unpriced_usd": 0.0,
+      "usd": 10.5364
+    },
+    "phase3-variance-envelope-quota-probe": {
+      "actions": 0,
+      "lines": 1,
+      "unpriced_usd": 0.0,
+      "usd": 0.0201
+    },
+    "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2": {
+      "actions": 15,
+      "lines": 19,
+      "unpriced_usd": 4.0,
+      "usd": 4.3932
+    }
+  },
+  "by_model": {
+    "claude-haiku-4-5-20251001": {
+      "calls": 306,
+      "max": 4.0,
+      "mean": 0.053232,
+      "median": 0.036804,
+      "min": 0.0,
+      "usd": 16.2891
+    },
+    "claude-opus-5": {
+      "calls": 70,
+      "max": 0.125015,
+      "mean": 0.1168,
+      "median": 0.115574,
+      "min": 0.111983,
+      "usd": 8.176
+    },
+    "claude-sonnet-5": {
+      "calls": 102,
+      "max": 0.244602,
+      "mean": 0.114286,
+      "median": 0.111818,
+      "min": 0.088163,
+      "usd": 11.6572
+    },
+    "mock-model-1": {
+      "calls": 28,
+      "max": 0.0,
+      "mean": 0.0,
+      "median": 0.0,
+      "min": 0.0,
+      "usd": 0.0
+    }
+  },
+  "format": "theoria/freeze-pool-digest/1",
+  "kinds": {
+    "release": 2280,
+    "reserve": 2280,
+    "spend": 7314
+  },
+  "pool_lines": 11874,
+  "pool_max_seq": 11874,
+  "pool_path": "proxy/var/spend_gate.jsonl",
+  "pool_sha256": "8b02a32413b7615eb168bd7339837fba3e02335dec23cbec39e6044f796fbb18",
+  "price_corrections": [],
+  "redaction": "allow-list; holder/pid/host, reservation_id, policy_sha256 and all detail payloads are not copied",
+  "unpriced": [
+    {
+      "actions": 0,
+      "beat": "theorize",
+      "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2",
+      "model": "claude-haiku-4-5-20251001",
+      "outcome": "raised_before_a_price",
+      "seq": 7418,
+      "usd": 4.0,
+      "why": "the CLI raised before an envelope carrying a price came back"
+    }
+  ],
+  "usd": 36.1423,
+  "usd_measured": 32.1423,
+  "why": "proxy/var/spend_gate.jsonl is gitignored (proxy/.gitignore:3) and cannot be hashed into freeze/MANIFEST.json. This digest is the tracked, redacted stand-in the budget table cites."
+}

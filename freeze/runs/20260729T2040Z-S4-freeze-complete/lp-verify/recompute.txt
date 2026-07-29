@@ -1,0 +1,12 @@
+cases                                    2422
+silent                                   1014
+errors                                   0
+certificates                             1408
+inv_closed still holds on withheld geom  372  (26.4 %)
+FALSE vs BFS over COMPLETE move set      58  (4.1 %)
+FALSE vs BFS over REDUCED move set       0  <-- the handed system
+emitted when gated on the REDUCED graph  1408
+  of which false vs complete move set    58
+emitted when gated on the COMPLETE graph 0
+
+certificates false-over-complete but TRUE-over-reduced: 58

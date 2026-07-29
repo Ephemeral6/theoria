@@ -1,0 +1,53 @@
+{
+  "api_calls": 0,
+  "base_commit": "5822e5e5c4c87e42f834ddca76f3af56eee3e7b6",
+  "branch": "agent/s4-freeze",
+  "evidence_read_not_modified": [
+    "freeze/STATS_RULES.md",
+    "freeze/n_feasibility.py",
+    "freeze/MANIFEST_DRAFT.md",
+    "freeze/VARIANCE_BASIS.md",
+    "freeze/verify.sh",
+    "freeze/launch_blockers.json",
+    "monitor/CHARTER.md",
+    "Theoria.md:368",
+    "baseline-arms/harness/bare_cc.py",
+    "baseline-arms/harness/campaign.py",
+    "baseline-arms/DECISIONS.md (D-016)",
+    "baseline-arms/out/campaign/campaign_{ar25,g50t,sk48,tn36}.json",
+    "baseline-arms/out/campaign_cells.jsonl",
+    "baseline-arms/out/shards/ledger.*.jsonl",
+    "baseline-arms/runs/20260728T103135Z-a7/envelope.json"
+  ],
+  "files": [
+    {
+      "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/adversarial/REFUTATION.md",
+      "sha256": "252a61521096843a0317dee09101708776cdb583bb6cfdd416435fdfc2e31e81"
+    },
+    {
+      "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/adversarial/mutant_floors.py",
+      "sha256": "bff8336e912997245c5c356ccb53c515fd31b1854cb0ef9b64e3300307e08fa7"
+    },
+    {
+      "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/adversarial/recompute.txt",
+      "sha256": "a6eb1cce684ed7bf55f50145e3ebce93e73b20b9f06bf10456d5fbdd07450bf8"
+    }
+  ],
+  "headline": "q=47/48 is the product of an abort rule deleted by D-016; today's bare_cc.py would record 0/48 api_unusable on the same actions (max consecutive failure run = 5 < CONSECUTIVE_FAILURE_ABORT = 10). A second tracked basis gives 0/9.",
+  "network_calls": 0,
+  "prompt_id": "S4-freeze-complete/adversarial-review-of-5.7",
+  "role": "adversarial reviewer for RES-1; targets STATS_RULES.md 5.7, n_feasibility.py, MANIFEST_DRAFT.md gap 13-b",
+  "sealed_pile_files_read": 0,
+  "utc": "2026-07-29T20:40:00Z",
+  "verdicts": {
+    "A_q_is_the_wrong_rate": "REFUTED",
+    "B_event_compounded": "NEEDS-REWRITE",
+    "C_reason_three_residual": "NEEDS-REWRITE",
+    "D_14_of_19_floor": "SURVIVES",
+    "E_correlation_direction": "SURVIVES at n=2; NEEDS-REWRITE for n>=3",
+    "F_arithmetic_and_gate": "NEEDS-REWRITE",
+    "G_motivated_reasoning": "REFUTED",
+    "H_gap_13b_ruling": "NEEDS-REWRITE"
+  },
+  "wrote_only_inside": "freeze/runs/20260729T2040Z-S4-freeze-complete/adversarial"
+}

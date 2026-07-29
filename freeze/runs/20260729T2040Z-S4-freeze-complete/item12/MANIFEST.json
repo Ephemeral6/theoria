@@ -1,0 +1,46 @@
+{
+  "base_commit": "5822e5e5c4c87e42f834ddca76f3af56eee3e7b6",
+  "branch": "agent/s4-freeze",
+  "files": [
+    {
+      "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/item12/NOTES_FOR_RES1.md",
+      "sha256": "6b2ecce8b03fe9e6db80bdfe032a2ba57e96b0cbeaae642839f8899c0871e8e5"
+    },
+    {
+      "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/item12/RUN_STATE.md",
+      "sha256": "49980b5984198c549258e386ef4a79cd7b513d830cdf3853c09b3faa1edb6f02"
+    },
+    {
+      "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/item12/probe_1h_cache.py",
+      "sha256": "a280899dbbdbfbc4eba54f1f7d6fe467038fffdc71dd4ddd3ad1bcf639dfc338"
+    },
+    {
+      "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/item12/probe_checks.py",
+      "sha256": "05d952db069db5598878442a64d46687779110967f819fc0c842f4648207cd02"
+    },
+    {
+      "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/item12/probe_ledgers.py",
+      "sha256": "a595defb028cd6ae6a65114ebe970d5be2c452dc4b2b2aefa66c06733820df7d"
+    },
+    {
+      "path": "freeze/BUDGET_TABLE.json",
+      "sha256": "d0e18b6e974b0256e793f9b0b8e9836909aa7037856ba6828271faa18cba7d53"
+    },
+    {
+      "path": "freeze/BUDGET_TABLE.md",
+      "sha256": "3d77224495b9eb89ab3cb015319e9d1b5e0894177f656a953e3cf0fcf21b7342"
+    },
+    {
+      "path": "freeze/POOL_DIGEST.json",
+      "sha256": "af6661a3c26810036df6ba79c2206fbec1189b3dd9c012bb695e53d4db5d7dbd"
+    },
+    {
+      "path": "freeze/build_budget_table.py",
+      "sha256": "a2da0d4baaabab7e5f732e4698a39cbf8cba89a0a6d766da47eb04298379112b"
+    }
+  ],
+  "note": "the spend-gate pool (proxy/var/spend_gate.jsonl) is gitignored and is NOT hashed here; its digest of record is freeze/POOL_DIGEST.json",
+  "prompt_id": "S4-freeze-complete/item12",
+  "utc": "2026-07-29T20:40:00Z",
+  "what": "freeze list item 12 (预算表): freeze/BUDGET_TABLE.md + its generator"
+}

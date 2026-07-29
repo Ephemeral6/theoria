@@ -1,0 +1,50 @@
+{
+  "prompt_id": "S4-freeze-complete/lp-verify",
+  "branch": "agent/s4-freeze",
+  "base_commit": "5822e5e5c4c87e42f834ddca76f3af56eee3e7b6",
+  "utc": "2026-07-30T00:00:00Z",
+  "purpose": "Refutation attempt against the reported lp_potential soundness finding before it enters freeze/ENGINE_MANIFEST.md.",
+  "network_calls": 0,
+  "sealed_pile_contact": "none",
+  "writes_outside_this_directory": "none",
+  "engine_rig_treated_as": "read-only (tests run with -p no:cacheprovider)",
+  "inputs_read": [
+    {"path": "engine-rig/engines/lp_potential/potential.py", "sha256_prefix": "dff44f53a751b0fa"},
+    {"path": "engine-rig/engines/lp_potential/__init__.py", "sha256_prefix": "f800825380d50196"},
+    {"path": "engine-rig/heldout/lp_potential_heldout.py", "sha256_prefix": "0f94526cbb210175"},
+    {"path": "engine-rig/heldout/peg.py", "sha256_prefix": "73ddf453f64aea7e"},
+    {"path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/results.json", "sha256_prefix": "4c4e2d941842ea7b"},
+    {"path": "engine-rig/runs/20260729T034043Z-E17-held-out-validation/CORRECTIONS.md", "sha256_prefix": "96f16c81d8dfc272"}
+  ],
+  "files": [
+    {"name": "VERDICT.md", "role": "the deliverable"},
+    {"name": "witness_check.py", "role": "independent hand-check of the peg4 witness (own BFS, own exact re-check)"},
+    {"name": "witness_check.txt", "role": "raw output"},
+    {"name": "recompute.py", "role": "independent recompute of E17 L-L1 plus the crux test (BFS over the reduced move set)"},
+    {"name": "recompute.txt", "role": "raw output"},
+    {"name": "recompute.json", "role": "counters and the 58 witnesses"}
+  ],
+  "headline_results": {
+    "witness_reproduces": true,
+    "certificates": 1408,
+    "false_vs_complete_move_set": 58,
+    "false_vs_reduced_move_set_the_handed_system": 0,
+    "inv_closed_on_withheld_geometry": 372,
+    "emitted_gated_on_reduced_graph": 1408,
+    "emitted_gated_on_complete_graph": 0,
+    "arm_call_sites_reaching_lp_potential": 0,
+    "consumers_reading_sound_over_graph_outside_the_engine": 0,
+    "pytest": "43 passed (tests/test_lp_potential.py tests/test_heldout.py)"
+  },
+  "verdicts": {
+    "witness_point3": "ESTABLISHED",
+    "crux_point2_as_engine_soundness_defect": "REFUTED",
+    "crux_point2_as_claim_scoping_and_field_naming_defect": "ESTABLISHED",
+    "emit_gate_point4_counts": "ESTABLISHED",
+    "emit_gate_point4_interpretation": "NARROWER-THAN-CLAIMED",
+    "arm_point5_as_stated": "REFUTED",
+    "arm_point5_conditional_form": "ESTABLISHED",
+    "numbers": "ESTABLISHED",
+    "bound_and_farkas_point6": "ESTABLISHED, 'hard-coded' NARROWER-THAN-CLAIMED"
+  }
+}

@@ -803,6 +803,68 @@ else
 fi
 echo
 
+echo "[13] cell yield vs <n>, and the floors are sealed (STATS_RULES.md 5.7)"
+
+# 5.7's first version was wrong, and the way it was wrong is why this stage is
+# shaped like this.  It took 47/48 for an "infrastructure death rate", compounded
+# it, and concluded <n> buys nothing -- but that 47/48 was the hit rate of an
+# abort constant that D-016 has since deleted from the code, and a second tracked
+# measurement (0/9, post-fix) was sitting in the same tree unread.  Same-day
+# adversarial review refuted it; the section now states the conditional and names
+# what is still undefined ("this cell yielded an observation").
+#
+# So the gate checks two things the prose cannot:
+#   * both directions of the conclusion -- if the optimistic measurement stops
+#     clearing the floor, or the pessimistic one starts clearing it, 5.7's
+#     premise moved and the stage goes red to force a rewrite;
+#   * that the PRE-REGISTERED floors have not been edited.  The first version
+#     claimed FLOORS and EXPECTED were sealed together; that claim was false --
+#     verify() hardcoded 14, so moving the floor to 10 stayed green and printed
+#     10/19's threshold under the 14/19 label.  The floors now carry a digest.
+nf_out="$(python "$HERE/n_feasibility.py" --verify 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "n_feasibility.py --verify: 5.7's thresholds recompute, both measurements land where the section says, floors seal intact"
+else
+  bad "5.7's arithmetic, its premise, or the pre-registered floors moved"
+  printf '%s\n' "$nf_out" | sed 's/^/        /'
+fi
+
+# Negative control, aimed at the exact hole the adversarial round demonstrated:
+# move the pre-registered claim-tier floor from 14 to 10 and require a red.  The
+# old negative control perturbed a prose-vs-arithmetic constant instead, which is
+# why it could not see a floor being edited.
+nf_tmp="$(mktemp -d)"
+sed 's/"claim-14\/19": (14, CLAIM_CELLS)/"claim-14\/19": (10, CLAIM_CELLS)/' \
+    "$HERE/n_feasibility.py" > "$nf_tmp/n_feasibility.py"
+if python "$nf_tmp/n_feasibility.py" --verify >/dev/null 2>&1; then
+  bad "negative control did not fire: the pre-registered floor 14 -> 10 stayed green"
+else
+  ok "negative control fires: editing the pre-registered floor 14 -> 10 turns this stage red"
+fi
+rm -rf "$nf_tmp"
+echo
+
+echo "[14] every gap in the kit names who fixes it, where, and how it clears"
+
+# The board item's own criterion for "committable" is: each of the thirteen is
+# either pinned to a path + version, or explicitly marked 缺，由谁在哪补.  Stages
+# 1/2/12 enforce the first half.  This is the second half, and it was the half
+# nothing checked: the kit stated its gaps well and almost never said who owned
+# one, so a gap could ride to the freeze commit as a known issue with no owner.
+#
+# residuals.py refuses four things: a gap declared without a code (untrackable),
+# one code declared twice (「it is fixed」 then has two answers), an entry with no
+# owner / no landing path / no executable clearing condition, and any
+# disagreement with launch_blockers.json about which gaps block the launch.
+res_out="$(python "$HERE/residuals.py" --verify 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "residuals.py --verify: every gap carries an owner, a landing path and a clearing condition"
+else
+  bad "a gap in the kit has no owner, no landing path, or a duplicated code"
+  printf '%s\n' "$res_out" | sed 's/^/        /'
+fi
+echo
+
 # ------------------------------------------------------------------ verdict
 echo "=============================================================="
 if [ "$FAIL" -eq 0 ]; then

@@ -1,0 +1,72 @@
+{
+ "prompt_id": "S4-freeze-complete/endpoints-wording-audit",
+ "branch": "agent/s4-freeze",
+ "base_commit": "5822e5e5c4c87e42f834ddca76f3af56eee3e7b6",
+ "utc": "2026-07-29T20:40:00Z",
+ "kind": "audit_plus_gate",
+ "worker": "RES-1 subagent",
+ "item": "Theoria.md:373 (主终点限三个) x Theoria.md:379 (逐字对照) -- the three endpoints' wording, held in two files that must agree",
+ "produced": [
+  "freeze/runs/20260729T2040Z-S4-freeze-complete/endpoints/WORDING_AUDIT.md",
+  "freeze/runs/20260729T2040Z-S4-freeze-complete/endpoints/verify_sh_stage16.snippet.sh",
+  "freeze/runs/20260729T2040Z-S4-freeze-complete/endpoints/run_stage16_standalone.sh",
+  "freeze/runs/20260729T2040Z-S4-freeze-complete/endpoints/stage16-dryrun.txt"
+ ],
+ "gate_snippet": "freeze/runs/20260729T2040Z-S4-freeze-complete/endpoints/verify_sh_stage16.snippet.sh (stage [16]; RES-1 wires it)",
+ "not_edited": [
+  "freeze/verify.sh -- other subagents are in this worktree; RES-1 does all wiring",
+  "freeze/STATS_RULES.md, freeze/CLAIMS_TEXT.md -- read-only to this run; every proposed fix is a quoted snippet, not an edit",
+  "exam/**, battery/** -- read-only"
+ ],
+ "findings": {
+  "divergences": "13 ranked (D1..D13); 11 are hard, i.e. they change which number gets published",
+  "worst": "endpoint 2 (adjudication-question accuracy) states no denominator and no clean-tier replication in EITHER file; CLAIMS_TEXT.md C4 contains no 19, no 12, no claim/clean tier at all",
+  "fourth_endpoint": "CLAIMS_TEXT.md:160-162 makes `theoria - ablation` a conjunct of C2's 成立版 while STATS_RULES.md:380-383 leaves it needs_human/exploratory (§9.8) -- family would be 4, breaking Theoria.md:373",
+  "arithmetic": "the clean-tier replication of endpoint 2 needs >=7 pairs to reach Holm-adjusted alpha (2*0.5^7=0.0156<0.0167); clean games in the frozen codepoint prefix are 2 at m=5, 4 at m=10, 5 at m=12, 7 only at m=14, so <m> >= 14 is an unstated precondition",
+  "rule_vs_code": "STATS_RULES.md:265 pre-registers 弃权计错; exam/grading/mark.py:125-130 and :167-168 keep abstentions OUT of both denominators and exam/DECISIONS.md D-EX-015 records that as the right call -- the seal on 只答有把握的题 has no implementation",
+  "no_total_order": "exam/grading/mark.py:155-156 returns None for an empty denominator, so an all-abstain arm has specificity None, and None is not < <S_min>: the one-vote veto cannot fire",
+  "scalar_cannot_discriminate": "exam/STATUS.md:53-56 and exam/DECISIONS.md:371-374 -- memoriser and cheater-v4 report the pooled pair 1.000/1.000, identical to ground truth, so BA = 1.000; the drafts pin only `bluffer` as the mandatory negative control and never name `memoriser`",
+  "most_gameable": "endpoint 2, because it is the only one of the three that can be computed end to end today, its one-vote veto has neither a value nor an aggregation level nor a total order, and its sample size <m> is still open",
+  "cheapest_rescue": "abstain on the class (iii) items you are unsure of -- the named implementation drops them from the specificity denominator; cost zero, no number changed and no word re-read"
+ },
+ "gate_result": {
+  "probes": 27,
+  "pass": 14,
+  "hard_fail": 11,
+  "soft_note": 1,
+  "crossref_note": 1,
+  "negative_controls": [
+   {
+    "mutation": "CLAIMS_TEXT.md BA formula (灵敏度 + 特异度)/2 -> /3",
+    "probe": "E2/scalar",
+    "fires": true
+   },
+   {
+    "mutation": "CLAIMS_TEXT.md C1 成立版 ⟨X_obs/19⟩ -> ⟨X_obs/21⟩",
+    "probe": "E1/unit",
+    "fires": true
+   }
+  ],
+  "caveat": "control 2's mutation is also caught by stage [8] (its DETECT branch /21([^0-9]|$) matches /21⟩, verified); what stage [8] cannot see is an ABSENT denominator, which is what E2/unit and E2/tier are"
+ },
+ "files": [
+  {
+   "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/endpoints/WORDING_AUDIT.md",
+   "sha256": "bc01f7a85818402ac073d5f0c2ff09a59ae222385f1867014354f91c02606a0e"
+  },
+  {
+   "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/endpoints/verify_sh_stage16.snippet.sh",
+   "sha256": "5f986b38a91afcb7c24edc89556911c12fc6359e7b6c41ca1834d82e3c324d9c"
+  },
+  {
+   "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/endpoints/run_stage16_standalone.sh",
+   "sha256": "c812abe44d10cf5114caa9cb40fb9315672eda771456c9f4a304d219a095fdee"
+  },
+  {
+   "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/endpoints/stage16-dryrun.txt",
+   "sha256": "586a4a5b7d496b39b9f0c148378d15cb5104c267fa0db2ff85a5ff6cf2ff32b9"
+  }
+ ],
+ "why": "verify.sh stage 10 exists because one criterion of one endpoint diverged between the two files: adjudicate by the whitelist, publish by the empty set. This run asks what else is in that shape and finds eleven more, then proposes the generalised gate with a firing negative control.",
+ "zero_api": "no network call, no billed action, no dollar; no sealed-pile game played, inspected or read about -- only claim_set.json ids and counts."
+}

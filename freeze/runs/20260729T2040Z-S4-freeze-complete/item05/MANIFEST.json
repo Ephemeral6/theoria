@@ -1,0 +1,63 @@
+{
+ "prompt_id": "S4-freeze-complete/item05",
+ "branch": "agent/s4-freeze",
+ "base_commit": "5822e5e5c4c87e42f834ddca76f3af56eee3e7b6",
+ "utc": "2026-07-29T20:40:00Z",
+ "kind": "artifact_plus_gate",
+ "worker": "RES-1 subagent",
+ "item": "Theoria.md:368 freeze list item 5 -- 引擎清单与版本",
+ "produced": [
+  "freeze/ENGINE_MANIFEST.md",
+  "freeze/build_engine_manifest.py"
+ ],
+ "gate_snippet": "freeze/runs/20260729T2040Z-S4-freeze-complete/item05/verify_sh_stage15.snippet.sh (stage [15]; RES-1 wires it)",
+ "not_edited": [
+  "freeze/verify.sh -- another subagent is in this worktree",
+  "engine-rig/** -- read-only to this run",
+  "freeze/build_manifest.py ITEMS[5] and freeze/MANIFEST.json -- shared; the exact suggested replacement is in NOTES.md section 9"
+ ],
+ "findings": {
+  "roster": "8 packages, not 6; the 6 is the frozen enum in engine-rig/common/candidates.py:27-34",
+  "enum_collision": "deadlock_carver -> ENGINE=fd_adapter (:43); ic3_pdr -> ENGINE=lp_potential (:51); both verified",
+  "producer_field": "26 of 44 committed candidate rows carry no payload.producer, so D-018's 'never absent' is false against the artefact it defends",
+  "versions": "0 engine version strings in 175 tracked .py/.toml/.cfg at HEAD; 6 of 8 packages have moved since their own milestone tag",
+  "engine_table": "engine-rig/ENGINE_TABLE.md already exists and is the roster; pinning it is necessary and not sufficient",
+  "suite": "554 passed, 27 skipped, 581 collected, no FD build; CLAUDE.md's '3 tests skip' and '150 tests pass' are both stale"
+ },
+ "files": [
+  {
+   "path": "freeze/ENGINE_MANIFEST.md",
+   "sha256": "6e3cbe8f41f61ffa5c1a4ec2158b7f2610206e596845b6719c0babe69959bc65"
+  },
+  {
+   "path": "freeze/build_engine_manifest.py",
+   "sha256": "65a11d897fb66263c72c1bca4def1650679e91eea2d7887ca4e54a6fffa5be6f"
+  },
+  {
+   "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/item05/NOTES.md",
+   "sha256": "bb5281c992e5715424620fabee799d79b3ab1e200f0f7e366e04e4703328e317"
+  },
+  {
+   "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/item05/negative-control.txt",
+   "sha256": "6e66481f6a24a495b909f0dfd866cdb49aa0164fed889b282fa1705592d5abbb"
+  },
+  {
+   "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/item05/stage15-dryrun.txt",
+   "sha256": "ec14af5914ab6c3b9c78d3c8fbffe798f7ada3b5af68290876e7e042133484ca"
+  },
+  {
+   "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/item05/pytest-no-fd.txt",
+   "sha256": "d709935f9630b0653d292eb91a8a073613c1bf720a854634d704790524bb143e"
+  },
+  {
+   "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/item05/verify_sh_stage15.snippet.sh",
+   "sha256": "fed01cce4e9d302c279e75366783cf66542a6bb9ef9c243a5cac76523674a28b"
+  },
+  {
+   "path": "freeze/runs/20260729T2040Z-S4-freeze-complete/item05/ENGINE_MANIFEST.baseline.md",
+   "sha256": "6e3cbe8f41f61ffa5c1a4ec2158b7f2610206e596845b6719c0babe69959bc65"
+  }
+ ],
+ "why": "Item 5 was the only one of the thirteen with no landing spot at all (MANIFEST_DRAFT.md 5-a). Every version cell is a recorded gap with an owner and a landing path rather than an invented value.",
+ "zero_api": "no network call, no billed action, no dollar; no sealed-pile game read."
+}
