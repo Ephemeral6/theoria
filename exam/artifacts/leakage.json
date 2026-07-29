@@ -166,8 +166,7 @@
     {
       "label_sets_checked": [
         "board_size_class",
-        "class",
-        "search_credible"
+        "class"
       ],
       "metadata_fields_checked": [
         "points",
@@ -243,36 +242,6 @@
             "\"large_unsolvable\"": 1152.25,
             "\"small_unsolvable\"": 682.4,
             "\"solvable_hard\"": 925.75
-          }
-        },
-        "search_credible": {
-          "chance_baseline": 0.588235,
-          "chance_label": "true",
-          "clustered_by_answer": false,
-          "example_ids_by_answer": {
-            "false": [
-              "vq-0ffc3cd33f",
-              "vq-2986ed8ffc",
-              "vq-6150a6eeb7",
-              "vq-6bab2f307c"
-            ],
-            "true": [
-              "vq-1015eb0bb1",
-              "vq-17af763cab",
-              "vq-1881c8c383",
-              "vq-82f568ca11"
-            ]
-          },
-          "label_counts": {
-            "false": 7,
-            "true": 10
-          },
-          "n": 17,
-          "order_runs": 7,
-          "order_runs_max": 17,
-          "sheet_length_mean_by_answer": {
-            "false": 1126.286,
-            "true": 754.3
           }
         }
       },

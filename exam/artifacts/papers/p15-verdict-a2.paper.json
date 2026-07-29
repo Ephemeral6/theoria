@@ -849,8 +849,8 @@
   "n_items": 17,
   "paper_id": "p15-verdict-a2",
   "question_type": "verdict",
-  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
-  "rubric_module_digest": "6961340614174a3fc41d32dbc7145239106846d5321b83df8adbca0529ce102a",
+  "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2",
+  "rubric_module_digest": "1371d0be014bc34fdfee03d0bcd5fc3936518b3a37fc2c4d0b39e05bc82f116f",
   "schema": "exam/v0.1",
   "total_points": 34.0,
   "world": {

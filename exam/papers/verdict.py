@@ -1458,8 +1458,20 @@ def axes(report: Any, key_doc: Dict[str, Any], submission: Any) -> Dict[str, Any
         1 for s in report.scores
         if s.verdict == "correct" and truth_of.get(s.item_id, {}).get("claim") == "unsolvable")
 
+    # The pair, per board-size stratum. The class taxonomy is one-to-one with
+    # the answer -- classes (i) and (ii) hold only unsolvable items and class
+    # (iii) only solvable ones -- so no class cell can hold both rates and the
+    # pair exists only pooled, which is the reading D-EX-015 shows cannot
+    # separate ground truth from a reader who never saw a board.
+    # `board_size_class` cross-cuts the answer (small 5/5, large 4/3) and splits
+    # on the very distinction classes (i) and (ii) were invented to draw.
+    # D-EX-024.
+    from ..grading.confusion_matrix import per_class_confusion
+
     return {
         "confusion": confusion(report, key_doc, positive="unsolvable"),
+        "confusion_by_board_size": per_class_confusion(
+            report, key_doc, positive="unsolvable")["by_board_size"],
         "reason_quality": {
             "counts": dict(sorted(reasons.items())),
             "certified_share_of_correct_unsolvable": (

@@ -120,12 +120,14 @@
               "abstained_on_positive": 0,
               "fn": 0,
               "fp": 4,
-              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate. An answer that was never submitted, or that the rubric could not read a claim out of, is `unclassified` and is neither an abstention nor a classification.",
               "positive_class": "solvable",
               "sensitivity": 1.0,
               "specificity": 0.0,
               "tn": 0,
-              "tp": 2
+              "tp": 2,
+              "unclassified_on_negative": 0,
+              "unclassified_on_positive": 0
             },
             "repair": {
               "budget_exact": 0,
@@ -265,12 +267,14 @@
               "abstained_on_positive": 0,
               "fn": 2,
               "fp": 0,
-              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate. An answer that was never submitted, or that the rubric could not read a claim out of, is `unclassified` and is neither an abstention nor a classification.",
               "positive_class": "solvable",
               "sensitivity": 0.0,
               "specificity": 1.0,
               "tn": 4,
-              "tp": 0
+              "tp": 0,
+              "unclassified_on_negative": 0,
+              "unclassified_on_positive": 0
             },
             "repair": {
               "budget_exact": 0,
@@ -409,16 +413,18 @@
               "undetectable_items": 1
             },
             "mismatch_verdict": {
-              "abstained_on_negative": 4,
-              "abstained_on_positive": 2,
+              "abstained_on_negative": 0,
+              "abstained_on_positive": 0,
               "fn": 0,
               "fp": 0,
-              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate. An answer that was never submitted, or that the rubric could not read a claim out of, is `unclassified` and is neither an abstention nor a classification.",
               "positive_class": "solvable",
               "sensitivity": null,
               "specificity": null,
               "tn": 0,
-              "tp": 0
+              "tp": 0,
+              "unclassified_on_negative": 4,
+              "unclassified_on_positive": 2
             },
             "repair": {
               "budget_exact": 0,
@@ -558,12 +564,14 @@
               "abstained_on_positive": 0,
               "fn": 0,
               "fp": 0,
-              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate. An answer that was never submitted, or that the rubric could not read a claim out of, is `unclassified` and is neither an abstention nor a classification.",
               "positive_class": "solvable",
               "sensitivity": 1.0,
               "specificity": 1.0,
               "tn": 4,
-              "tp": 2
+              "tp": 2,
+              "unclassified_on_negative": 0,
+              "unclassified_on_positive": 0
             },
             "repair": {
               "budget_exact": 12,
@@ -597,7 +605,7 @@
       "n_items": 60,
       "paper_id": "p15-adaptation-a0",
       "question_type": "adaptation",
-      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091"
+      "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2"
     },
     "handover": {
       "calibrated": true,
@@ -864,7 +872,7 @@
       "n_items": 29,
       "paper_id": "p15-handover-a0",
       "question_type": "handover",
-      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091"
+      "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2"
     },
     "heldout": {
       "calibrated": true,
@@ -1589,7 +1597,7 @@
       "n_items": 80,
       "paper_id": "p15-heldout-a0",
       "question_type": "heldout",
-      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091"
+      "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2"
     },
     "verdict": {
       "calibrated": true,
@@ -1651,12 +1659,54 @@
               "abstained_on_positive": 0,
               "fn": 0,
               "fp": 8,
-              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate. An answer that was never submitted, or that the rubric could not read a claim out of, is `unclassified` and is neither an abstention nor a classification.",
               "positive_class": "unsolvable",
               "sensitivity": 1.0,
               "specificity": 0.0,
               "tn": 0,
-              "tp": 9
+              "tp": 9,
+              "unclassified_on_negative": 0,
+              "unclassified_on_positive": 0
+            },
+            "confusion_by_board_size": {
+              "large": {
+                "abstained_on_negative": 0,
+                "abstained_on_positive": 0,
+                "coverage_negative": 1.0,
+                "coverage_positive": 1.0,
+                "fn": 0,
+                "fp": 3,
+                "illegible_on_negative": 0,
+                "illegible_on_positive": 0,
+                "n": 7,
+                "n_negative": 3,
+                "n_positive": 4,
+                "sensitivity": 1.0,
+                "specificity": 0.0,
+                "tn": 0,
+                "tp": 4,
+                "unanswered_on_negative": 0,
+                "unanswered_on_positive": 0
+              },
+              "small": {
+                "abstained_on_negative": 0,
+                "abstained_on_positive": 0,
+                "coverage_negative": 1.0,
+                "coverage_positive": 1.0,
+                "fn": 0,
+                "fp": 5,
+                "illegible_on_negative": 0,
+                "illegible_on_positive": 0,
+                "n": 10,
+                "n_negative": 5,
+                "n_positive": 5,
+                "sensitivity": 1.0,
+                "specificity": 0.0,
+                "tn": 0,
+                "tp": 5,
+                "unanswered_on_negative": 0,
+                "unanswered_on_positive": 0
+              }
             },
             "reason_quality": {
               "certified_share_of_correct_unsolvable": 0.0,
@@ -1730,16 +1780,58 @@
               }
             },
             "confusion": {
-              "abstained_on_negative": 3,
-              "abstained_on_positive": 4,
+              "abstained_on_negative": 0,
+              "abstained_on_positive": 0,
               "fn": 0,
               "fp": 0,
-              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate. An answer that was never submitted, or that the rubric could not read a claim out of, is `unclassified` and is neither an abstention nor a classification.",
               "positive_class": "unsolvable",
               "sensitivity": 1.0,
               "specificity": 1.0,
               "tn": 5,
-              "tp": 5
+              "tp": 5,
+              "unclassified_on_negative": 3,
+              "unclassified_on_positive": 4
+            },
+            "confusion_by_board_size": {
+              "large": {
+                "abstained_on_negative": 0,
+                "abstained_on_positive": 0,
+                "coverage_negative": 0.0,
+                "coverage_positive": 0.0,
+                "fn": 0,
+                "fp": 0,
+                "illegible_on_negative": 0,
+                "illegible_on_positive": 0,
+                "n": 7,
+                "n_negative": 3,
+                "n_positive": 4,
+                "sensitivity": null,
+                "specificity": null,
+                "tn": 0,
+                "tp": 0,
+                "unanswered_on_negative": 3,
+                "unanswered_on_positive": 4
+              },
+              "small": {
+                "abstained_on_negative": 0,
+                "abstained_on_positive": 0,
+                "coverage_negative": 1.0,
+                "coverage_positive": 1.0,
+                "fn": 0,
+                "fp": 0,
+                "illegible_on_negative": 0,
+                "illegible_on_positive": 0,
+                "n": 10,
+                "n_negative": 5,
+                "n_positive": 5,
+                "sensitivity": 1.0,
+                "specificity": 1.0,
+                "tn": 5,
+                "tp": 5,
+                "unanswered_on_negative": 0,
+                "unanswered_on_positive": 0
+              }
             },
             "reason_quality": {
               "certified_share_of_correct_unsolvable": 1.0,
@@ -1815,16 +1907,58 @@
               }
             },
             "confusion": {
-              "abstained_on_negative": 8,
-              "abstained_on_positive": 9,
+              "abstained_on_negative": 0,
+              "abstained_on_positive": 0,
               "fn": 0,
               "fp": 0,
-              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate. An answer that was never submitted, or that the rubric could not read a claim out of, is `unclassified` and is neither an abstention nor a classification.",
               "positive_class": "unsolvable",
               "sensitivity": null,
               "specificity": null,
               "tn": 0,
-              "tp": 0
+              "tp": 0,
+              "unclassified_on_negative": 8,
+              "unclassified_on_positive": 9
+            },
+            "confusion_by_board_size": {
+              "large": {
+                "abstained_on_negative": 0,
+                "abstained_on_positive": 0,
+                "coverage_negative": 0.0,
+                "coverage_positive": 0.0,
+                "fn": 0,
+                "fp": 0,
+                "illegible_on_negative": 0,
+                "illegible_on_positive": 0,
+                "n": 7,
+                "n_negative": 3,
+                "n_positive": 4,
+                "sensitivity": null,
+                "specificity": null,
+                "tn": 0,
+                "tp": 0,
+                "unanswered_on_negative": 3,
+                "unanswered_on_positive": 4
+              },
+              "small": {
+                "abstained_on_negative": 0,
+                "abstained_on_positive": 0,
+                "coverage_negative": 0.0,
+                "coverage_positive": 0.0,
+                "fn": 0,
+                "fp": 0,
+                "illegible_on_negative": 0,
+                "illegible_on_positive": 0,
+                "n": 10,
+                "n_negative": 5,
+                "n_positive": 5,
+                "sensitivity": null,
+                "specificity": null,
+                "tn": 0,
+                "tp": 0,
+                "unanswered_on_negative": 5,
+                "unanswered_on_positive": 5
+              }
             },
             "reason_quality": {
               "certified_share_of_correct_unsolvable": null,
@@ -1902,12 +2036,54 @@
               "abstained_on_positive": 0,
               "fn": 0,
               "fp": 0,
-              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate.",
+              "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate. An answer that was never submitted, or that the rubric could not read a claim out of, is `unclassified` and is neither an abstention nor a classification.",
               "positive_class": "unsolvable",
               "sensitivity": 1.0,
               "specificity": 1.0,
               "tn": 8,
-              "tp": 9
+              "tp": 9,
+              "unclassified_on_negative": 0,
+              "unclassified_on_positive": 0
+            },
+            "confusion_by_board_size": {
+              "large": {
+                "abstained_on_negative": 0,
+                "abstained_on_positive": 0,
+                "coverage_negative": 1.0,
+                "coverage_positive": 1.0,
+                "fn": 0,
+                "fp": 0,
+                "illegible_on_negative": 0,
+                "illegible_on_positive": 0,
+                "n": 7,
+                "n_negative": 3,
+                "n_positive": 4,
+                "sensitivity": 1.0,
+                "specificity": 1.0,
+                "tn": 3,
+                "tp": 4,
+                "unanswered_on_negative": 0,
+                "unanswered_on_positive": 0
+              },
+              "small": {
+                "abstained_on_negative": 0,
+                "abstained_on_positive": 0,
+                "coverage_negative": 1.0,
+                "coverage_positive": 1.0,
+                "fn": 0,
+                "fp": 0,
+                "illegible_on_negative": 0,
+                "illegible_on_positive": 0,
+                "n": 10,
+                "n_negative": 5,
+                "n_positive": 5,
+                "sensitivity": 1.0,
+                "specificity": 1.0,
+                "tn": 5,
+                "tp": 5,
+                "unanswered_on_negative": 0,
+                "unanswered_on_positive": 0
+              }
             },
             "reason_quality": {
               "certified_share_of_correct_unsolvable": 1.0,
@@ -1931,14 +2107,81 @@
           "why": "ground truth must be accepted in full"
         },
         "structural": {
+          "answer_shape_probes": {
+            "abstainer": {
+              "awarded": 0.0,
+              "counts": {
+                "abstained": 17,
+                "correct": 0,
+                "unanswered": 0,
+                "wrong": 0
+              },
+              "expected": 0.0
+            },
+            "forged_certificate": {
+              "awarded": 17.0,
+              "counts": {
+                "abstained": 0,
+                "correct": 17,
+                "unanswered": 0,
+                "wrong": 0
+              },
+              "expected": 17.0
+            },
+            "illegible": {
+              "awarded": 0.0,
+              "counts": {
+                "abstained": 0,
+                "correct": 0,
+                "unanswered": 0,
+                "wrong": 17
+              },
+              "expected": 0.0
+            },
+            "searcher": {
+              "awarded": 20.6,
+              "counts": {
+                "abstained": 0,
+                "correct": 17,
+                "unanswered": 0,
+                "wrong": 0
+              },
+              "expected": 20.6
+            },
+            "wrong_claim_with_reason": {
+              "awarded": 0.0,
+              "counts": {
+                "abstained": 0,
+                "correct": 0,
+                "unanswered": 0,
+                "wrong": 17
+              },
+              "expected": 0.0
+            }
+          },
+          "bluffer_pair_by_board_size": {
+            "large": [
+              1.0,
+              0.0
+            ],
+            "small": [
+              1.0,
+              0.0
+            ]
+          },
           "bluffer_sensitivity": 1.0,
-          "bluffer_specificity": 0.0
+          "bluffer_specificity": 0.0,
+          "verdict_weights": {
+            "justification": 0.5,
+            "search_credit": 0.4,
+            "verdict": 0.5
+          }
         }
       },
       "n_items": 17,
       "paper_id": "p15-verdict-a2",
       "question_type": "verdict",
-      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091"
+      "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2"
     }
   },
   "pre_registered": {
@@ -2007,7 +2250,7 @@
       "why": "ground truth must be accepted in full"
     }
   },
-  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+  "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2",
   "structural_expectations": {
     "heldout_replay_gap": "the memoriser's replay score must exceed its held-out score by a wide margin, or the paper is not testing rules",
     "null_all_unanswered": "every item of a null submission is `unanswered`",

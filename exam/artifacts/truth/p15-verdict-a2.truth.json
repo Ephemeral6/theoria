@@ -31,6 +31,7 @@
           "enumerated": 55,
           "exhaustive_feasible": true,
           "lower_bound": 55,
+          "positional_states": 55,
           "truncated": false
         },
         "weights": {
@@ -57,7 +58,8 @@
           "UP",
           "RIGHT"
         ],
-        "witness_length": 18
+        "witness_length": 18,
+        "witness_source": "search"
       }
     },
     {
@@ -75,7 +77,7 @@
         "class": "solvable_hard",
         "level_blob": "{\"button\":null,\"door\":null,\"forbidden\":[],\"goal\":[5,60],\"level_id\":\"lattice\",\"lost_cells\":[[6,10],[6,20],[6,30]],\"portal\":null,\"portal_dest\":null,\"remap\":{},\"require_all_switches\":true,\"rows\":[\"##############################################################\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"#S...........................................................#\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"##.###########################################################\",\"#...........................................................G#\",\"#............................................................#\",\"##############################################################\"],\"start\":[2,1],\"step_limit\":null,\"switches\":[[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[1,10],[1,11],[1,12],[1,13],[1,14],[1,15],[1,16],[1,17],[1,18],[1,19],[1,20],[1,21],[1,22],[1,23],[1,24],[1,25],[1,26],[1,27],[1,28],[1,29],[1,30],[1,31],[1,32],[1,33],[1,34],[1,35],[1,36],[1,37],[1,38],[1,39],[1,40],[1,41],[1,42],[1,43],[1,44],[1,45],[1,46],[1,47],[1,48],[1,49],[1,50],[1,51],[1,52],[1,53],[1,54],[1,55],[1,56],[1,57],[1,58],[1,59],[1,60],[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[3,11],[3,12],[3,13],[3,14],[3,15],[3,16],[3,17],[3,18],[3,19],[3,20],[3,21],[3,22],[3,23],[3,24],[3,25],[3,26],[3,27],[3,28],[3,29],[3,30],[3,31],[3,32],[3,33],[3,34],[3,35],[3,36],[3,37],[3,38],[3,39],[3,40],[3,41],[3,42],[3,43],[3,44],[3,45],[3,46],[3,47],[3,48],[3,49],[3,50],[3,51],[3,52],[3,53],[3,54],[3,55],[3,56],[3,57],[3,58],[3,59],[3,60]],\"win_score_required\":1}",
         "note": "the lattice's hazards are in the goal room's back row and the bridge at (4,2) is untouched",
-        "search_credible": false,
+        "search_credible": true,
         "spec": {
           "operators": [
             "observation_loss"
@@ -93,6 +95,8 @@
           "exhaustive_feasible": false,
           "lower_bound": 1329227995784915872903807060280344576,
           "m": 120,
+          "positional_states": 298,
+          "quotient_note": "`lower_bound` is a bound on the raw (cart, button, latch mask) product space, which is what a naive forward enumerator walks. A solver that notices latching is monotone and gates no geometry searches the (cart, button) quotient instead, and that has 298 reachable states. So `exhaustive_feasible: False` means *naive* enumeration is out of reach; it does not mean no complete search answers this level.",
           "truncated": false
         },
         "weights": {
@@ -517,7 +521,8 @@
           "RIGHT",
           "RIGHT"
         ],
-        "witness_length": 416
+        "witness_length": 416,
+        "witness_source": "construction"
       }
     },
     {
@@ -535,7 +540,7 @@
         "class": "large_unsolvable",
         "level_blob": "{\"button\":null,\"door\":null,\"forbidden\":[],\"goal\":[2,200],\"level_id\":\"spindle\",\"lost_cells\":[],\"portal\":null,\"portal_dest\":null,\"remap\":{},\"require_all_switches\":true,\"rows\":[\"##########################################################################################################################################################################################################\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"#S......................................................................................................................................................................................................G#\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"##########################################################################################################################################################################################################\"],\"start\":[2,1],\"step_limit\":150,\"switches\":[[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[1,10],[1,11],[1,12],[1,13],[1,14],[1,15],[1,16],[1,17],[1,18],[1,19],[1,20],[1,21],[1,22],[1,23],[1,24],[1,25],[1,26],[1,27],[1,28],[1,29],[1,30],[1,31],[1,32],[1,33],[1,34],[1,35],[1,36],[1,37],[1,38],[1,39],[1,40],[1,41],[1,42],[1,43],[1,44],[1,45],[1,46],[1,47],[1,48],[1,49],[1,50],[1,51],[1,52],[1,53],[1,54],[1,55],[1,56],[1,57],[1,58],[1,59],[1,60],[1,61],[1,62],[1,63],[1,64],[1,65],[1,66],[1,67],[1,68],[1,69],[1,70],[1,71],[1,72],[1,73],[1,74],[1,75],[1,76],[1,77],[1,78],[1,79],[1,80],[1,81],[1,82],[1,83],[1,84],[1,85],[1,86],[1,87],[1,88],[1,89],[1,90],[1,91],[1,92],[1,93],[1,94],[1,95],[1,96],[1,97],[1,98],[1,99],[1,100],[1,101],[1,102],[1,103],[1,104],[1,105],[1,106],[1,107],[1,108],[1,109],[1,110],[1,111],[1,112],[1,113],[1,114],[1,115],[1,116],[1,117],[1,118],[1,119],[1,120],[1,121],[1,122],[1,123],[1,124],[1,125],[1,126],[1,127],[1,128],[1,129],[1,130],[1,131],[1,132],[1,133],[1,134],[1,135],[1,136],[1,137],[1,138],[1,139],[1,140],[1,141],[1,142],[1,143],[1,144],[1,145],[1,146],[1,147],[1,148],[1,149],[1,150],[1,151],[1,152],[1,153],[1,154],[1,155],[1,156],[1,157],[1,158],[1,159],[1,160],[1,161],[1,162],[1,163],[1,164],[1,165],[1,166],[1,167],[1,168],[1,169],[1,170],[1,171],[1,172],[1,173],[1,174],[1,175],[1,176],[1,177],[1,178],[1,179],[1,180],[1,181],[1,182],[1,183],[1,184],[1,185],[1,186],[1,187],[1,188],[1,189],[1,190],[1,191],[1,192],[1,193],[1,194],[1,195],[1,196],[1,197],[1,198],[1,199],[1,200],[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[3,11],[3,12],[3,13],[3,14],[3,15],[3,16],[3,17],[3,18],[3,19],[3,20],[3,21],[3,22],[3,23],[3,24],[3,25],[3,26],[3,27],[3,28],[3,29],[3,30],[3,31],[3,32],[3,33],[3,34],[3,35],[3,36],[3,37],[3,38],[3,39],[3,40],[3,41],[3,42],[3,43],[3,44],[3,45],[3,46],[3,47],[3,48],[3,49],[3,50],[3,51],[3,52],[3,53],[3,54],[3,55],[3,56],[3,57],[3,58],[3,59],[3,60],[3,61],[3,62],[3,63],[3,64],[3,65],[3,66],[3,67],[3,68],[3,69],[3,70],[3,71],[3,72],[3,73],[3,74],[3,75],[3,76],[3,77],[3,78],[3,79],[3,80],[3,81],[3,82],[3,83],[3,84],[3,85],[3,86],[3,87],[3,88],[3,89],[3,90],[3,91],[3,92],[3,93],[3,94],[3,95],[3,96],[3,97],[3,98],[3,99],[3,100],[3,101],[3,102],[3,103],[3,104],[3,105],[3,106],[3,107],[3,108],[3,109],[3,110],[3,111],[3,112],[3,113],[3,114],[3,115],[3,116],[3,117],[3,118],[3,119],[3,120],[3,121],[3,122],[3,123],[3,124],[3,125],[3,126],[3,127],[3,128],[3,129],[3,130],[3,131],[3,132],[3,133],[3,134],[3,135],[3,136],[3,137],[3,138],[3,139],[3,140],[3,141],[3,142],[3,143],[3,144],[3,145],[3,146],[3,147],[3,148],[3,149],[3,150],[3,151],[3,152],[3,153],[3,154],[3,155],[3,156],[3,157],[3,158],[3,159],[3,160],[3,161],[3,162],[3,163],[3,164],[3,165],[3,166],[3,167],[3,168],[3,169],[3,170],[3,171],[3,172],[3,173],[3,174],[3,175],[3,176],[3,177],[3,178],[3,179],[3,180],[3,181],[3,182],[3,183],[3,184],[3,185],[3,186],[3,187],[3,188],[3,189],[3,190],[3,191],[3,192],[3,193],[3,194],[3,195],[3,196],[3,197],[3,198],[3,199],[3,200]],\"win_score_required\":1}",
         "note": "the spindle's goal is 199 commands away at best and the budget is 150",
-        "search_credible": false,
+        "search_credible": true,
         "spec": {
           "operators": [
             "step_limit"
@@ -553,6 +558,8 @@
           "exhaustive_feasible": false,
           "lower_bound": 1152921504606846976,
           "m": 60,
+          "positional_states": 600,
+          "quotient_note": "`lower_bound` is a bound on the raw (cart, button, latch mask) product space, which is what a naive forward enumerator walks. A solver that notices latching is monotone and gates no geometry searches the (cart, button) quotient instead, and that has 600 reachable states. So `exhaustive_feasible: False` means *naive* enumeration is out of reach; it does not mean no complete search answers this level.",
           "truncated": false
         },
         "weights": {
@@ -560,7 +567,8 @@
           "verdict": 0.5
         },
         "witness": null,
-        "witness_length": null
+        "witness_length": null,
+        "witness_source": null
       }
     },
     {
@@ -594,6 +602,7 @@
           "enumerated": 55,
           "exhaustive_feasible": true,
           "lower_bound": 55,
+          "positional_states": 55,
           "truncated": false
         },
         "weights": {
@@ -620,7 +629,8 @@
           "UP",
           "RIGHT"
         ],
-        "witness_length": 18
+        "witness_length": 18,
+        "witness_source": "search"
       }
     },
     {
@@ -638,14 +648,14 @@
         "class": "large_unsolvable",
         "level_blob": "{\"button\":null,\"door\":null,\"forbidden\":[\"LEFT\"],\"goal\":[2,1],\"level_id\":\"orchard\",\"lost_cells\":[],\"portal\":null,\"portal_dest\":null,\"remap\":{},\"require_all_switches\":true,\"rows\":[\"##############################################################\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"#GS..........................................................#\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"##############################################################\"],\"start\":[2,2],\"step_limit\":null,\"switches\":[[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[1,10],[1,11],[1,12],[1,13],[1,14],[1,15],[1,16],[1,17],[1,18],[1,19],[1,20],[1,21],[1,22],[1,23],[1,24],[1,25],[1,26],[1,27],[1,28],[1,29],[1,30],[1,31],[1,32],[1,33],[1,34],[1,35],[1,36],[1,37],[1,38],[1,39],[1,40],[1,41],[1,42],[1,43],[1,44],[1,45],[1,46],[1,47],[1,48],[1,49],[1,50],[1,51],[1,52],[1,53],[1,54],[1,55],[1,56],[1,57],[1,58],[1,59],[1,60],[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[3,11],[3,12],[3,13],[3,14],[3,15],[3,16],[3,17],[3,18],[3,19],[3,20],[3,21],[3,22],[3,23],[3,24],[3,25],[3,26],[3,27],[3,28],[3,29],[3,30],[3,31],[3,32],[3,33],[3,34],[3,35],[3,36],[3,37],[3,38],[3,39],[3,40],[3,41],[3,42],[3,43],[3,44],[3,45],[3,46],[3,47],[3,48],[3,49],[3,50],[3,51],[3,52],[3,53],[3,54],[3,55],[3,56],[3,57],[3,58],[3,59],[3,60]],\"win_score_required\":1}",
         "note": "with LEFT forbidden the orchard cart's column is non-decreasing and the goal is to its left",
-        "search_credible": false,
+        "search_credible": true,
         "spec": {
           "operators": [
             "forbid_action"
           ],
           "spec_file": "exam/artifacts/variant_specs/a2var-ii4-orchard-noleft.json",
-          "spec_file_sha256": "38574559d39fcf802f7b05ed6bbe0802e0b4b9d126523a94a6e1f9433f3424aa",
-          "spec_sha256": "sha256:01a6bf0ff8aac559e46adb735a9148068f1fd0024979609bd4c0efd382c42304",
+          "spec_file_sha256": "88387889e7c0d702e510765b4ebfc68c526860cf99b39d28027bb92c3453c47e",
+          "spec_sha256": "sha256:8379e3ad5bfe33a8ccb72793f73bb7656ca06ed7d99465eca1b403c3f8da942c",
           "variant_id": "a2var-ii4-orchard-noleft"
         },
         "state_space": {
@@ -656,6 +666,8 @@
           "exhaustive_feasible": false,
           "lower_bound": 332306998946228968225951765070086144,
           "m": 118,
+          "positional_states": 177,
+          "quotient_note": "`lower_bound` is a bound on the raw (cart, button, latch mask) product space, which is what a naive forward enumerator walks. A solver that notices latching is monotone and gates no geometry searches the (cart, button) quotient instead, and that has 177 reachable states. So `exhaustive_feasible: False` means *naive* enumeration is out of reach; it does not mean no complete search answers this level.",
           "truncated": false
         },
         "weights": {
@@ -663,7 +675,8 @@
           "verdict": 0.5
         },
         "witness": null,
-        "witness_length": null
+        "witness_length": null,
+        "witness_source": null
       }
     },
     {
@@ -697,6 +710,7 @@
           "enumerated": 20,
           "exhaustive_feasible": true,
           "lower_bound": 20,
+          "positional_states": 20,
           "truncated": false
         },
         "weights": {
@@ -704,7 +718,8 @@
           "verdict": 0.5
         },
         "witness": null,
-        "witness_length": null
+        "witness_length": null,
+        "witness_source": null
       }
     },
     {
@@ -739,6 +754,7 @@
           "enumerated": 14,
           "exhaustive_feasible": true,
           "lower_bound": 14,
+          "positional_states": 14,
           "truncated": false
         },
         "weights": {
@@ -746,7 +762,8 @@
           "verdict": 0.5
         },
         "witness": null,
-        "witness_length": null
+        "witness_length": null,
+        "witness_source": null
       }
     },
     {
@@ -759,7 +776,7 @@
       ],
       "truth": {
         "board_size_class": "small",
-        "certificate_blob": "{\"goal_value\":[1,6],\"initial_value\":[1,1],\"invariant\":\"cart_region\",\"kind\":\"invariant\"}",
+        "certificate_blob": "{\"goal_value\":[1,6],\"initial_value\":[1,3],\"invariant\":\"cart_region\",\"kind\":\"invariant\"}",
         "claim": "unsolvable",
         "class": "small_unsolvable",
         "level_blob": "{\"button\":[1,1],\"door\":[6,4],\"forbidden\":[\"DOWN\"],\"goal\":[2,7],\"level_id\":\"atrium\",\"lost_cells\":[],\"portal\":[7,4],\"portal_dest\":[7,6],\"remap\":{},\"require_all_switches\":false,\"rows\":[\"#########\",\"#B#..#..#\",\"#....#.G#\",\"#....#..#\",\"#....#..#\",\"#S...#..#\",\"##..D#..#\",\"#.##P#X.#\",\"#########\"],\"start\":[5,1],\"step_limit\":null,\"switches\":[],\"win_score_required\":1}",
@@ -780,6 +797,7 @@
           "enumerated": 24,
           "exhaustive_feasible": true,
           "lower_bound": 24,
+          "positional_states": 24,
           "truncated": false
         },
         "weights": {
@@ -787,7 +805,8 @@
           "verdict": 0.5
         },
         "witness": null,
-        "witness_length": null
+        "witness_length": null,
+        "witness_source": null
       }
     },
     {
@@ -822,6 +841,7 @@
           "enumerated": 99,
           "exhaustive_feasible": true,
           "lower_bound": 99,
+          "positional_states": 99,
           "truncated": false
         },
         "weights": {
@@ -928,7 +948,8 @@
           "LEFT",
           "LEFT"
         ],
-        "witness_length": 98
+        "witness_length": 98,
+        "witness_source": "search"
       }
     },
     {
@@ -962,6 +983,7 @@
           "enumerated": 7,
           "exhaustive_feasible": true,
           "lower_bound": 7,
+          "positional_states": 7,
           "truncated": false
         },
         "weights": {
@@ -969,7 +991,8 @@
           "verdict": 0.5
         },
         "witness": null,
-        "witness_length": null
+        "witness_length": null,
+        "witness_source": null
       }
     },
     {
@@ -987,14 +1010,14 @@
         "class": "solvable_hard",
         "level_blob": "{\"button\":null,\"door\":null,\"forbidden\":[],\"goal\":[5,60],\"level_id\":\"lattice\",\"lost_cells\":[],\"portal\":null,\"portal_dest\":null,\"remap\":{},\"require_all_switches\":true,\"rows\":[\"##############################################################\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"#S...........................................................#\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"##.###########################################################\",\"#...........................................................G#\",\"#............................................................#\",\"##############################################################\"],\"start\":[2,1],\"step_limit\":456,\"switches\":[[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[1,10],[1,11],[1,12],[1,13],[1,14],[1,15],[1,16],[1,17],[1,18],[1,19],[1,20],[1,21],[1,22],[1,23],[1,24],[1,25],[1,26],[1,27],[1,28],[1,29],[1,30],[1,31],[1,32],[1,33],[1,34],[1,35],[1,36],[1,37],[1,38],[1,39],[1,40],[1,41],[1,42],[1,43],[1,44],[1,45],[1,46],[1,47],[1,48],[1,49],[1,50],[1,51],[1,52],[1,53],[1,54],[1,55],[1,56],[1,57],[1,58],[1,59],[1,60],[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[3,11],[3,12],[3,13],[3,14],[3,15],[3,16],[3,17],[3,18],[3,19],[3,20],[3,21],[3,22],[3,23],[3,24],[3,25],[3,26],[3,27],[3,28],[3,29],[3,30],[3,31],[3,32],[3,33],[3,34],[3,35],[3,36],[3,37],[3,38],[3,39],[3,40],[3,41],[3,42],[3,43],[3,44],[3,45],[3,46],[3,47],[3,48],[3,49],[3,50],[3,51],[3,52],[3,53],[3,54],[3,55],[3,56],[3,57],[3,58],[3,59],[3,60]],\"win_score_required\":1}",
         "note": "a constructed sweep visits every lattice switch and reaches the goal in 416 commands, inside the budget of 456",
-        "search_credible": false,
+        "search_credible": true,
         "spec": {
           "operators": [
             "step_limit"
           ],
           "spec_file": "exam/artifacts/variant_specs/a2var-iii7-lattice-roomy.json",
-          "spec_file_sha256": "95eda41d5480fb25409c4510b2768b07ada47268bd9fd9fc821c89b3c0118c1f",
-          "spec_sha256": "sha256:3cad94ff7362b42390580bd59d33eeb48a1a1a0fb0e4500240d6cd4590347d07",
+          "spec_file_sha256": "deebfccd93832f94b5cc6d08f253bf441a4eb5f965207a4f7e3d1dadfc87e381",
+          "spec_sha256": "sha256:2e68677a3b9cdd51a689252c512c0fd2157f8acaa78cf2514f7083fd802519bb",
           "variant_id": "a2var-iii7-lattice-roomy"
         },
         "state_space": {
@@ -1005,6 +1028,8 @@
           "exhaustive_feasible": false,
           "lower_bound": 1329227995784915872903807060280344576,
           "m": 120,
+          "positional_states": 301,
+          "quotient_note": "`lower_bound` is a bound on the raw (cart, button, latch mask) product space, which is what a naive forward enumerator walks. A solver that notices latching is monotone and gates no geometry searches the (cart, button) quotient instead, and that has 301 reachable states. So `exhaustive_feasible: False` means *naive* enumeration is out of reach; it does not mean no complete search answers this level.",
           "truncated": false
         },
         "weights": {
@@ -1429,7 +1454,8 @@
           "RIGHT",
           "RIGHT"
         ],
-        "witness_length": 416
+        "witness_length": 416,
+        "witness_source": "construction"
       }
     },
     {
@@ -1447,7 +1473,7 @@
         "class": "large_unsolvable",
         "level_blob": "{\"button\":null,\"door\":null,\"forbidden\":[],\"goal\":[5,60],\"level_id\":\"gantry\",\"lost_cells\":[],\"portal\":null,\"portal_dest\":null,\"remap\":{\"LEFT\":\"RIGHT\",\"RIGHT\":\"LEFT\"},\"require_all_switches\":true,\"rows\":[\"##############################################################\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"#S...........................................................#\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"##############################################################\",\"#...........................................................G#\",\"#............................................................#\",\"##############################################################\"],\"start\":[2,1],\"step_limit\":null,\"switches\":[[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[1,10],[1,11],[1,12],[1,13],[1,14],[1,15],[1,16],[1,17],[1,18],[1,19],[1,20],[1,21],[1,22],[1,23],[1,24],[1,25],[1,26],[1,27],[1,28],[1,29],[1,30],[1,31],[1,32],[1,33],[1,34],[1,35],[1,36],[1,37],[1,38],[1,39],[1,40],[1,41],[1,42],[1,43],[1,44],[1,45],[1,46],[1,47],[1,48],[1,49],[1,50],[1,51],[1,52],[1,53],[1,54],[1,55],[1,56],[1,57],[1,58],[1,59],[1,60],[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[3,11],[3,12],[3,13],[3,14],[3,15],[3,16],[3,17],[3,18],[3,19],[3,20],[3,21],[3,22],[3,23],[3,24],[3,25],[3,26],[3,27],[3,28],[3,29],[3,30],[3,31],[3,32],[3,33],[3,34],[3,35],[3,36],[3,37],[3,38],[3,39],[3,40],[3,41],[3,42],[3,43],[3,44],[3,45],[3,46],[3,47],[3,48],[3,49],[3,50],[3,51],[3,52],[3,53],[3,54],[3,55],[3,56],[3,57],[3,58],[3,59],[3,60]],\"win_score_required\":1}",
         "note": "the gantry's goal room is a component of its own behind a solid separator row",
-        "search_credible": false,
+        "search_credible": true,
         "spec": {
           "operators": [
             "remap_action",
@@ -1466,6 +1492,8 @@
           "exhaustive_feasible": false,
           "lower_bound": 1329227995784915872903807060280344576,
           "m": 120,
+          "positional_states": 180,
+          "quotient_note": "`lower_bound` is a bound on the raw (cart, button, latch mask) product space, which is what a naive forward enumerator walks. A solver that notices latching is monotone and gates no geometry searches the (cart, button) quotient instead, and that has 180 reachable states. So `exhaustive_feasible: False` means *naive* enumeration is out of reach; it does not mean no complete search answers this level.",
           "truncated": false
         },
         "weights": {
@@ -1473,7 +1501,8 @@
           "verdict": 0.5
         },
         "witness": null,
-        "witness_length": null
+        "witness_length": null,
+        "witness_source": null
       }
     },
     {
@@ -1491,15 +1520,15 @@
         "class": "solvable_hard",
         "level_blob": "{\"button\":null,\"door\":null,\"forbidden\":[],\"goal\":[5,60],\"level_id\":\"lattice\",\"lost_cells\":[],\"portal\":null,\"portal_dest\":null,\"remap\":{\"LEFT\":\"RIGHT\",\"RIGHT\":\"LEFT\"},\"require_all_switches\":true,\"rows\":[\"##############################################################\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"#S...........................................................#\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"##.###########################################################\",\"#...........................................................G#\",\"#............................................................#\",\"##############################################################\"],\"start\":[2,1],\"step_limit\":null,\"switches\":[[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[1,10],[1,11],[1,12],[1,13],[1,14],[1,15],[1,16],[1,17],[1,18],[1,19],[1,20],[1,21],[1,22],[1,23],[1,24],[1,25],[1,26],[1,27],[1,28],[1,29],[1,30],[1,31],[1,32],[1,33],[1,34],[1,35],[1,36],[1,37],[1,38],[1,39],[1,40],[1,41],[1,42],[1,43],[1,44],[1,45],[1,46],[1,47],[1,48],[1,49],[1,50],[1,51],[1,52],[1,53],[1,54],[1,55],[1,56],[1,57],[1,58],[1,59],[1,60],[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[3,11],[3,12],[3,13],[3,14],[3,15],[3,16],[3,17],[3,18],[3,19],[3,20],[3,21],[3,22],[3,23],[3,24],[3,25],[3,26],[3,27],[3,28],[3,29],[3,30],[3,31],[3,32],[3,33],[3,34],[3,35],[3,36],[3,37],[3,38],[3,39],[3,40],[3,41],[3,42],[3,43],[3,44],[3,45],[3,46],[3,47],[3,48],[3,49],[3,50],[3,51],[3,52],[3,53],[3,54],[3,55],[3,56],[3,57],[3,58],[3,59],[3,60]],\"win_score_required\":1}",
         "note": "the lattice's bridge is open and a relabelling preserves solvability",
-        "search_credible": false,
+        "search_credible": true,
         "spec": {
           "operators": [
             "remap_action",
             "remap_action"
           ],
           "spec_file": "exam/artifacts/variant_specs/a2var-iii8-lattice-swap.json",
-          "spec_file_sha256": "3e93efc36a6fde5f4b5967d82f9eb0998807d7cc355c3358768e6ac9568ad13c",
-          "spec_sha256": "sha256:00972053065772da926c5393a56d629cf043be36d6288261ee22d048ec5b9a28",
+          "spec_file_sha256": "949276cd0f33fd6fa727774e50fc404f47f1059250fb481b9ce08929eec9c706",
+          "spec_sha256": "sha256:591fb87a016c5d4756fdd7da3f69e77f4797d010b6df45238d73ac59c4cf36c7",
           "variant_id": "a2var-iii8-lattice-swap"
         },
         "state_space": {
@@ -1510,6 +1539,8 @@
           "exhaustive_feasible": false,
           "lower_bound": 1329227995784915872903807060280344576,
           "m": 120,
+          "positional_states": 301,
+          "quotient_note": "`lower_bound` is a bound on the raw (cart, button, latch mask) product space, which is what a naive forward enumerator walks. A solver that notices latching is monotone and gates no geometry searches the (cart, button) quotient instead, and that has 301 reachable states. So `exhaustive_feasible: False` means *naive* enumeration is out of reach; it does not mean no complete search answers this level.",
           "truncated": false
         },
         "weights": {
@@ -1934,7 +1965,8 @@
           "LEFT",
           "LEFT"
         ],
-        "witness_length": 416
+        "witness_length": 416,
+        "witness_source": "construction"
       }
     },
     {
@@ -1952,7 +1984,7 @@
         "class": "large_unsolvable",
         "level_blob": "{\"button\":null,\"door\":null,\"forbidden\":[],\"goal\":[5,60],\"level_id\":\"lattice\",\"lost_cells\":[[4,2]],\"portal\":null,\"portal_dest\":null,\"remap\":{},\"require_all_switches\":true,\"rows\":[\"##############################################################\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"#S...........................................................#\",\"#ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss#\",\"##.###########################################################\",\"#...........................................................G#\",\"#............................................................#\",\"##############################################################\"],\"start\":[2,1],\"step_limit\":null,\"switches\":[[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7],[1,8],[1,9],[1,10],[1,11],[1,12],[1,13],[1,14],[1,15],[1,16],[1,17],[1,18],[1,19],[1,20],[1,21],[1,22],[1,23],[1,24],[1,25],[1,26],[1,27],[1,28],[1,29],[1,30],[1,31],[1,32],[1,33],[1,34],[1,35],[1,36],[1,37],[1,38],[1,39],[1,40],[1,41],[1,42],[1,43],[1,44],[1,45],[1,46],[1,47],[1,48],[1,49],[1,50],[1,51],[1,52],[1,53],[1,54],[1,55],[1,56],[1,57],[1,58],[1,59],[1,60],[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,7],[3,8],[3,9],[3,10],[3,11],[3,12],[3,13],[3,14],[3,15],[3,16],[3,17],[3,18],[3,19],[3,20],[3,21],[3,22],[3,23],[3,24],[3,25],[3,26],[3,27],[3,28],[3,29],[3,30],[3,31],[3,32],[3,33],[3,34],[3,35],[3,36],[3,37],[3,38],[3,39],[3,40],[3,41],[3,42],[3,43],[3,44],[3,45],[3,46],[3,47],[3,48],[3,49],[3,50],[3,51],[3,52],[3,53],[3,54],[3,55],[3,56],[3,57],[3,58],[3,59],[3,60]],\"win_score_required\":1}",
         "note": "(4,2) is the lattice's only bridge to the goal room and the wrapper declares a loss on it",
-        "search_credible": false,
+        "search_credible": true,
         "spec": {
           "operators": [
             "observation_loss"
@@ -1970,6 +2002,8 @@
           "exhaustive_feasible": false,
           "lower_bound": 1329227995784915872903807060280344576,
           "m": 120,
+          "positional_states": 180,
+          "quotient_note": "`lower_bound` is a bound on the raw (cart, button, latch mask) product space, which is what a naive forward enumerator walks. A solver that notices latching is monotone and gates no geometry searches the (cart, button) quotient instead, and that has 180 reachable states. So `exhaustive_feasible: False` means *naive* enumeration is out of reach; it does not mean no complete search answers this level.",
           "truncated": false
         },
         "weights": {
@@ -1977,7 +2011,8 @@
           "verdict": 0.5
         },
         "witness": null,
-        "witness_length": null
+        "witness_length": null,
+        "witness_source": null
       }
     },
     {
@@ -2001,8 +2036,8 @@
             "observation_loss"
           ],
           "spec_file": "exam/artifacts/variant_specs/a2var-iii3-atrium-offpath.json",
-          "spec_file_sha256": "17ae239f1449b434fb8a478698920a061698a5aab1f196a5102b2248274ecd2d",
-          "spec_sha256": "sha256:05264c072225f35e111032067e91be475a5a4a939ba32529e13957741816bd00",
+          "spec_file_sha256": "3b111fa268555a9032c0d6a9b55961ad36dcde52f6d13062dece264f1427730f",
+          "spec_sha256": "sha256:db7439c2e4e890e4b2dfbf2e2db66e4dc89c148ea8227ab2470d8ad1ff669076",
           "variant_id": "a2var-iii3-atrium-offpath"
         },
         "state_space": {
@@ -2011,6 +2046,7 @@
           "enumerated": 49,
           "exhaustive_feasible": true,
           "lower_bound": 49,
+          "positional_states": 49,
           "truncated": false
         },
         "weights": {
@@ -2037,7 +2073,8 @@
           "UP",
           "RIGHT"
         ],
-        "witness_length": 18
+        "witness_length": 18,
+        "witness_source": "search"
       }
     },
     {
@@ -2071,6 +2108,7 @@
           "enumerated": 31,
           "exhaustive_feasible": true,
           "lower_bound": 31,
+          "positional_states": 55,
           "truncated": false
         },
         "weights": {
@@ -2078,7 +2116,8 @@
           "verdict": 0.5
         },
         "witness": null,
-        "witness_length": null
+        "witness_length": null,
+        "witness_source": null
       }
     },
     {
@@ -2112,6 +2151,7 @@
           "enumerated": 55,
           "exhaustive_feasible": true,
           "lower_bound": 55,
+          "positional_states": 55,
           "truncated": false
         },
         "weights": {
@@ -2138,7 +2178,8 @@
           "UP",
           "RIGHT"
         ],
-        "witness_length": 18
+        "witness_length": 18,
+        "witness_source": "search"
       }
     }
   ],
@@ -2168,15 +2209,15 @@
       "a2var-ii1-gantry-sealed": "sha256:489046d7d0c629032015e056f1290aba0f086c7635233b7d08387e57828d757f",
       "a2var-ii2-lattice-bridge": "sha256:ad62c6230009d26410ceb3a0cd82047ae4e838f248cf45e3324dd1e1b62ae976",
       "a2var-ii3-spindle-budget": "sha256:3d3b156f3e251b3cdeff02207c92de81fb005fd9f961f3f7ce4cb077f5a98c63",
-      "a2var-ii4-orchard-noleft": "sha256:01a6bf0ff8aac559e46adb735a9148068f1fd0024979609bd4c0efd382c42304",
+      "a2var-ii4-orchard-noleft": "sha256:8379e3ad5bfe33a8ccb72793f73bb7656ca06ed7d99465eca1b403c3f8da942c",
       "a2var-iii1-meander-swap": "sha256:3ec6790360c93d540696f03ea9ebf2734290e6899f2076013e3237301e63496a",
       "a2var-iii2-atrium-roomy": "sha256:3d34b8d5a6d3e1e4c9ef894b5e16cddfabe4c5d5b22f3f00adab603e9780652d",
-      "a2var-iii3-atrium-offpath": "sha256:05264c072225f35e111032067e91be475a5a4a939ba32529e13957741816bd00",
+      "a2var-iii3-atrium-offpath": "sha256:db7439c2e4e890e4b2dfbf2e2db66e4dc89c148ea8227ab2470d8ad1ff669076",
       "a2var-iii4-atrium-noleft": "sha256:df38b2251c34f2e2ab923b4ac7f0977f19d66f9afc1f522050841376a96b5f50",
       "a2var-iii5-atrium-tighten": "sha256:51fcae46287822a50c36586e2435511dd9b8c3c65857e38d7a9336f4260dcdb6",
       "a2var-iii6-lattice-safe": "sha256:a3673d031bd07f038290714fc73e9c98bca6c8868b35dcdff1948936307b83f7",
-      "a2var-iii7-lattice-roomy": "sha256:3cad94ff7362b42390580bd59d33eeb48a1a1a0fb0e4500240d6cd4590347d07",
-      "a2var-iii8-lattice-swap": "sha256:00972053065772da926c5393a56d629cf043be36d6288261ee22d048ec5b9a28"
+      "a2var-iii7-lattice-roomy": "sha256:2e68677a3b9cdd51a689252c512c0fd2157f8acaa78cf2514f7083fd802519bb",
+      "a2var-iii8-lattice-swap": "sha256:591fb87a016c5d4756fdd7da3f69e77f4797d010b6df45238d73ac59c4cf36c7"
     },
     "specs": [
       "a2var-i1-atrium-nodown",
@@ -2201,6 +2242,6 @@
   },
   "paper_id": "p15-verdict-a2",
   "question_type": "verdict",
-  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+  "rubric_digest": "5727861272803ffb2d0ed9a35aa08cf9d83109a74e092a9ebe107e77699213b2",
   "schema": "exam/v0.1"
 }

@@ -204,7 +204,8 @@ def calibrate_one(question_type: str) -> Dict[str, Any]:
         results[mode] = entry
 
     # -- the two type-specific structural checks ---------------------------
-    extra = _type_specific(question_type, results)
+    extra = _type_specific(question_type, results, paper=paper, key_doc=key_doc,
+                           axes_fn=axes_fn)
     failures.extend(extra["failures"])
     results["structural"] = extra["checks"]
 
@@ -219,7 +220,100 @@ def calibrate_one(question_type: str) -> Dict[str, Any]:
     }
 
 
-def _type_specific(question_type: str, results: Dict[str, Any]) -> Dict[str, Any]:
+#: The verdict sheet's `INSTRUCTIONS` advertise five answer shapes.  The four
+#: fakes submit three of them, and the seven mutants of `selftest.py` are all
+#: derived from the oracle's answers, so they inherit the same three.  These are
+#: the two the apparatus never sees, plus the two failure shapes that ride on
+#: them.  Each expectation below is **arithmetic over the paper's own points and
+#: the rubric's own constants** rather than a band -- D-EX-012's rule, and the
+#: reason there is no number fitted to a first reading anywhere in here.
+#:
+#: Measured cost of not having these (D-EX-026): of fourteen faults injected into
+#: the verdict rubric by an adversarial audit, thirteen passed `assert_calibrated`
+#: and twelve passed all seven mutants.  Two -- "score the reason half even when
+#: the claim is wrong" and "believe an invariant certificate's values instead of
+#: re-deriving them, on large boards only" -- were caught by nothing at all:
+#: not the gate, not the mutants, not 73 tests.  Both live on answer shapes no
+#: fake submitted.
+_VERDICT_PROBES = ("abstainer", "illegible", "searcher", "wrong_claim_with_reason",
+                   "forged_certificate")
+
+
+def _verdict_probe_answers(kind: str, key_doc: Dict[str, Any]) -> Dict[str, Any]:
+    answers: Dict[str, Any] = {}
+    for entry in key_doc["items"]:
+        claim = entry["truth"]["claim"]
+        if kind == "abstainer":
+            answers[entry["item_id"]] = {"claim": "abstain"}
+        elif kind == "illegible":
+            # A well-formed object with no `claim` key: what a broken serialiser
+            # emits.  Must be `wrong` and must pay nothing.
+            answers[entry["item_id"]] = {"verdict": claim}
+        elif kind == "searcher":
+            answers[entry["item_id"]] = {"claim": claim,
+                                         "reason": "exhaustive_search"}
+        elif kind == "forged_certificate":
+            # Right claim, legal certificate kind, fabricated numbers. The
+            # module's thesis is that "the examinee's arithmetic is checked,
+            # never believed"; this is the submission that tests it, and no
+            # fake and no mutant makes it -- the mutants are all derived from
+            # the oracle's answers, which are true.
+            answers[entry["item_id"]] = {
+                "claim": claim,
+                "certificate": {"kind": "invariant", "invariant": "cart_region",
+                                "initial_value": [0, 0], "goal_value": [0, 1]}}
+        else:                                   # wrong_claim_with_reason
+            flipped = "solvable" if claim == "unsolvable" else "unsolvable"
+            answers[entry["item_id"]] = {"claim": flipped,
+                                         "reason": "exhaustive_search",
+                                         "witness": ["UP"],
+                                         "certificate": {"kind": "cut_set",
+                                                         "cells": [[0, 0]]}}
+    return answers
+
+
+#: The verdict rubric's split, **pre-registered here rather than imported from
+#: there**.  The first draft of `_verdict_probe_expectation` read
+#: `rubrics_verdict.SEARCH_CREDIT`, and so the expectation moved with the
+#: constant: injecting `SEARCH_CREDIT = 1.0` -- "I searched it all" paid in full,
+#: which destroys the one ordering class (i) exists to create -- changed the
+#: marker and the check together and the gate stayed green.  A check that reads
+#: its expectation out of the code it is checking is not a check.  These are
+#: protocol numbers; moving one is a deliberate edit a reviewer sees, which is
+#: the same argument D-EX-016 makes for the protocol digest.
+VERDICT_WEIGHTS = {"verdict": 0.5, "justification": 0.5, "search_credit": 0.4}
+
+
+def _verdict_probe_expectation(kind: str, key_doc: Dict[str, Any]) -> float:
+    """What the marker must award, computed rather than observed."""
+    VERDICT_WEIGHT = VERDICT_WEIGHTS["verdict"]
+    JUSTIFICATION_WEIGHT = VERDICT_WEIGHTS["justification"]
+    SEARCH_CREDIT = VERDICT_WEIGHTS["search_credit"]
+
+    if kind in ("abstainer", "illegible", "wrong_claim_with_reason"):
+        return 0.0
+    total = 0.0
+    for entry in key_doc["items"]:
+        points = float(entry["points"])
+        truth = entry["truth"]
+        awarded = points * VERDICT_WEIGHT           # the claim is right
+        if kind == "forged_certificate":
+            # Every number in it is re-derived from the level, so the reason
+            # half is refused on every item and the claim half is all there is.
+            total += awarded
+            continue
+        if truth["claim"] == "unsolvable" and truth.get("search_credible"):
+            awarded += points * JUSTIFICATION_WEIGHT * SEARCH_CREDIT
+        # A right `solvable` with no witness earns the claim only, and a search
+        # claim on a level too big to search earns the claim only.
+        total += awarded
+    return total
+
+
+def _type_specific(question_type: str, results: Dict[str, Any], *,
+                   paper: Optional[Paper] = None,
+                   key_doc: Optional[Dict[str, Any]] = None,
+                   axes_fn: Optional[Any] = None) -> Dict[str, Any]:
     checks: Dict[str, Any] = {}
     failures: List[str] = []
 
@@ -290,6 +384,97 @@ def _type_specific(question_type: str, results: Dict[str, Any]) -> Dict[str, Any
                 "to everything must catch every unsolvable case and no solvable "
                 "one -- if it does not, the confusion matrix is not reading the "
                 "answers it thinks it is." % (sens, spec))
+
+        # The pair, per board-size stratum, and not only pooled. The class split
+        # cannot state it -- the three classes partition the paper by answer, so
+        # one denominator is empty in every class cell -- and pooled is where
+        # D-EX-015 argues it means least. `board_size_class` cross-cuts the
+        # answer, so the bluffer's signature must appear in each stratum on its
+        # own. Strictly stronger than the pooled assertion above and independent
+        # of how many items of each class the paper happens to carry. D-EX-024.
+        strata = axes.get("confusion_by_board_size") or {}
+        checks["bluffer_pair_by_board_size"] = {
+            k: (v.get("sensitivity"), v.get("specificity"))
+            for k, v in sorted(strata.items())}
+        if not strata:
+            failures.append(
+                "verdict: the bluffer's report carries no per-stratum pair. The "
+                "pooled pair is the one number D-EX-015 shows cannot separate "
+                "ground truth from a reader who never saw a board.")
+        for stratum, cell in sorted(strata.items()):
+            if (cell.get("sensitivity"), cell.get("specificity")) != (1.0, 0.0):
+                failures.append(
+                    "verdict: on %s boards the bluffer shows %s / %s, not "
+                    "1.0 / 0.0. 敢说不可解的框架必须在可解题上闭嘴 has to hold "
+                    "inside each stratum, not only after pooling them."
+                    % (stratum, cell.get("sensitivity"), cell.get("specificity")))
+
+        # The weights the probes' arithmetic assumes, checked against the ones
+        # the marker actually uses. Without this the two could drift apart
+        # silently in the safe-looking direction: the probes would keep passing
+        # while measuring a different rubric.
+        from . import rubrics_verdict as _rv
+
+        live = {"verdict": _rv.VERDICT_WEIGHT,
+                "justification": _rv.JUSTIFICATION_WEIGHT,
+                "search_credit": _rv.SEARCH_CREDIT}
+        checks["verdict_weights"] = live
+        for name, expected_weight in sorted(VERDICT_WEIGHTS.items()):
+            if abs(live[name] - expected_weight) > 1e-9:
+                failures.append(
+                    "verdict: the rubric's %s weight is %g, and the protocol "
+                    "pre-registers %g. Half the item is the claim and half is "
+                    "the reason, and a search is worth %g of a reason -- those "
+                    "three numbers are what makes a certificate beat 'I looked "
+                    "everywhere', which is the whole of class (i)."
+                    % (name, live[name], expected_weight,
+                       VERDICT_WEIGHTS["search_credit"]))
+
+        # The answer shapes no fake submits. D-EX-026.
+        if key_doc is not None:
+            probes: Dict[str, Any] = {}
+            for kind in _VERDICT_PROBES:
+                answers = _verdict_probe_answers(kind, key_doc)
+                report = mark(key_doc, Submission(
+                    examinee_id="probe-%s" % kind, paper_id=key_doc["paper_id"],
+                    answers=answers, capabilities=("answers",),
+                    meta={"probe": kind}), axes_fn=axes_fn)
+                expected = _verdict_probe_expectation(kind, key_doc)
+                counts = {v: sum(1 for s in report.scores if s.verdict == v)
+                          for v in ("correct", "wrong", "abstained", "unanswered")}
+                probes[kind] = {"awarded": report.awarded, "expected": expected,
+                                "counts": counts}
+                if abs(report.awarded - expected) > 1e-9:
+                    failures.append(
+                        "verdict/%s: the marker awarded %.4f where arithmetic "
+                        "over the paper's points says %.4f. This probe exists "
+                        "because no calibration fake submits this answer shape, "
+                        "so nothing else in the protocol looks at the branch it "
+                        "takes." % (kind, report.awarded, expected))
+                if kind == "abstainer" and counts["abstained"] != len(report.scores):
+                    failures.append(
+                        "verdict/abstainer: %d of %d items are not `abstained`. "
+                        "A framework that will say 'unsolvable' has to be able "
+                        "to say nothing, and the marker has to record that it "
+                        "did -- an abstention read as a claim is worth 9 of 34 "
+                        "on this paper."
+                        % (len(report.scores) - counts["abstained"],
+                           len(report.scores)))
+                if kind == "illegible" and counts["wrong"] != len(report.scores):
+                    failures.append(
+                        "verdict/illegible: %d of %d unreadable answers are not "
+                        "`wrong`. An answer nobody can read is not an "
+                        "abstention and not a missing submission; recording it "
+                        "as either lets a broken serialiser look like restraint."
+                        % (len(report.scores) - counts["wrong"], len(report.scores)))
+                if kind == "wrong_claim_with_reason" and counts["wrong"] != len(report.scores):
+                    failures.append(
+                        "verdict/wrong_claim_with_reason: %d of %d items are "
+                        "not `wrong`. The reason half must be unreachable when "
+                        "the claim is wrong, or a confidently mistaken examinee "
+                        "is paid for a well-formed argument for a falsehood."
+                        % (len(report.scores) - counts["wrong"], len(report.scores)))
+            checks["answer_shape_probes"] = probes
 
     if question_type == "adaptation":
         axes = results.get("memoriser", {}).get("axes", {})

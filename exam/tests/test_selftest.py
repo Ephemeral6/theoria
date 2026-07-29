@@ -38,6 +38,7 @@ from exam.grading.confusion_matrix import (collisions,               # noqa: E40
 from exam.grading.registry import digest                            # noqa: E402
 from exam.grading.rubrics_adaptation import (UNREADABLE,          # noqa: E402
                                              _read_claim, _read_level_claim)
+from exam.grading import rubrics_verdict as RV                      # noqa: E402
 from exam.grading.mark import confusion, mark                       # noqa: E402
 from exam.model import ItemScore, Submission                        # noqa: E402
 from exam.papers import module_for                                  # noqa: E402
@@ -101,24 +102,41 @@ def test_a_marker_that_accepts_anything_fails_transplant_and_garbage():
     assert not result["checks"]["garbage"]["passed"]
 
 
-def test_a_marker_that_truncates_partial_credit_fails_only_the_new_check():
-    """The fault that nothing on master caught, and the check added for it.
+def test_a_marker_that_truncates_partial_credit_is_now_caught_at_the_gate_too():
+    """D-EX-013's finding, and what changed it.
 
-    It is asserted as *only* this check because that is the finding: every band
-    in `calibration.EXPECTED` for the informative fakes is `Band(0.0, x)`,
-    bounded above and open below, so a marker that depresses scores satisfies
-    all of them.
+    This test used to assert that the calibration gate stayed **green** under
+    `truncates_partial`, and said why: every band in `calibration.EXPECTED` for
+    the informative fakes is `Band(0.0, x)`, bounded above and open below, so a
+    marker that quietly *depresses* scores satisfies all of them. Only the
+    seventh mutant caught it.
+
+    Its own comment said that if the gate ever caught this, the finding had
+    changed and the comment should be rewritten rather than the assertion
+    loosened. It has, so it is. D-EX-026's answer-shape probes are **exact
+    equalities** rather than upper bounds -- the searcher must score what
+    arithmetic over the paper's points says and not a penny less -- so a marker
+    that depresses partial credit now fails the gate on this paper.
+
+    The bands themselves are unchanged and still one-sided, and the probes are
+    verdict-only, so D-EX-013's finding stands for `heldout`, `handover` and
+    `adaptation`. What is closed is the verdict paper, and it is closed by a
+    two-sided expectation rather than by a fitted lower band -- which is what
+    D-EX-010 asks for.
     """
     with _fault("truncates_partial"):
         result = st.mutant_battery("verdict")
         calibration = calibrate_one("verdict")
+        others = {qt: calibrate_one(qt)["calibrated"]
+                  for qt in ("heldout", "handover", "adaptation")}
     assert not result["checks"]["partial_credit_survives"]["passed"]
-    assert calibration["calibrated"] is True, (
-        "if the bands now catch this, the finding has changed and the comment "
-        "above needs rewriting -- not this assertion loosening")
-    others = [n for n, e in result["checks"].items()
-              if n != "partial_credit_survives" and not e["passed"]]
-    assert others == []
+    assert calibration["calibrated"] is False
+    assert any("probe-" in f or "verdict/" in f for f in calibration["failures"])
+    # The bands alone still do not see it anywhere, which is the standing part
+    # of D-EX-013 and the reason the probes had to be equalities.
+    assert others == {"heldout": True, "handover": True, "adaptation": True}
+    failed = [n for n, e in result["checks"].items() if not e["passed"]]
+    assert failed == ["partial_credit_survives"]
 
 
 def test_an_order_dependent_marker_fails_the_key_order_mutant():
@@ -319,6 +337,61 @@ def test_an_unreadable_answer_is_not_reported_as_an_abstention():
     flat = confusion(report, key_doc, positive="unsolvable")
     assert flat["unclassified_on_positive"] == 9
     assert flat["abstained_on_positive"] == 0
+
+
+def test_the_gate_now_watches_the_answer_shapes_no_fake_submits():
+    """用已知满分与已知零分的假被试标定判卷器 -- on the paths the fakes walk.
+
+    The verdict sheet advertises five answer shapes and the four fakes submit
+    three; the seven mutants are all derived from the oracle's answers, so they
+    inherit the same three. An adversarial audit injected fourteen faults into
+    the verdict rubric: thirteen passed `assert_calibrated` and twelve passed
+    every mutant, and two were caught by nothing anywhere. Both lived on shapes
+    no fake submitted.
+
+    Each probe below has a score fixed by arithmetic over the paper's own points
+    and the rubric's own constants -- there is no band here, for D-EX-012's
+    reason. D-EX-026.
+    """
+    clean = calibrate_one("verdict")
+    assert clean["calibrated"] is True
+    probes = clean["modes"]["structural"]["answer_shape_probes"]
+    assert set(probes) >= {"abstainer", "illegible", "searcher",
+                           "wrong_claim_with_reason", "forged_certificate"}
+    assert probes["abstainer"]["counts"]["abstained"] == 17
+    assert probes["illegible"]["counts"]["wrong"] == 17
+    assert probes["searcher"]["awarded"] == probes["searcher"]["expected"]
+    assert probes["forged_certificate"]["awarded"] == pytest.approx(17.0)
+
+    faults = {
+        # An abstention read as a claim. Worth 9 of 34 to an arm that abstains
+        # on everything; the gate did not look, because no fake abstains.
+        "abstain_read_as_a_claim": ("_ABSTAIN", frozenset()),
+        # "I searched it all" paid in full rather than at 0.4. Destroys the one
+        # ordering class (i) exists to create, and no fake offers a reason.
+        "search_paid_in_full": ("SEARCH_CREDIT", 1.0),
+    }
+    for name, (attribute, value) in faults.items():
+        original = getattr(RV, attribute)
+        try:
+            setattr(RV, attribute, value)
+            broken = calibrate_one("verdict")
+        finally:
+            setattr(RV, attribute, original)
+        assert broken["calibrated"] is False, (
+            "%s passed the calibration gate" % name)
+        # And the four original fakes are unmoved by it, which is why the gate
+        # needed the probes rather than a tighter band.
+        for mode in ("oracle", "null", "memoriser", "bluffer"):
+            assert broken["modes"][mode]["fraction"] == pytest.approx(
+                clean["modes"][mode]["fraction"]), (name, mode)
+
+
+def test_the_bluffer_pair_is_asserted_per_stratum_not_only_pooled():
+    """The pooled assertion is the weakest place to make this one. D-EX-024."""
+    result = calibrate_one("verdict")
+    per_stratum = result["modes"]["structural"]["bluffer_pair_by_board_size"]
+    assert per_stratum == {"large": (1.0, 0.0), "small": (1.0, 0.0)}
 
 
 def test_the_rendered_matrix_prints_coverage_and_never_prints_a_fake_zero():
