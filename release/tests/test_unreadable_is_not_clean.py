@@ -363,6 +363,152 @@ def test_a_binary_stream_opening_like_json_is_still_undetermined(repo):
     assert "dump.bin" in needs_human[0]
 
 
+# --------------------------------------------- one fixture per declared marker
+# Every violation fixture above this line uses `frame`. All nine of them. A
+# fixture set that exercises one marker cannot tell a checker that tests all of
+# them from a checker that tests only that one -- and for a long time this was
+# the second kind: `PAYLOAD_MARKERS` declared seven fields and
+# `_records_pairing_sealed_with_payload` carried its own literal testing three,
+# of which only two were in the constant. A record pairing a sealed id with a
+# scorecard body went out under the note "NO record pairs a sealed id with
+# payload -- checked record by record, not by co-occurrence", which is a stronger
+# sentence than the code behind it.
+
+
+#: One representative value per declared marker. Values are synthetic and the
+#: game id in every fixture below is `_sealed_id()` read from the cut -- no real
+#: sealed material is written anywhere, only real sealed *ids*, which the module
+#: docstring is the authority on: naming one in order to keep it out is not
+#: contact with it.
+PAYLOAD_BY_FIELD = {
+    "frame": [[1, 2], [3, 4]],
+    "frames": [[[1, 2], [3, 4]]],
+    "action_input": {"id": 4, "x": 3, "y": 7},
+    "available_actions": ["ACTION1", "ACTION6"],
+    # False, not True, on purpose: `full_reset` was tested with truthiness before
+    # this, and a reset command sent for a sealed game is payload whichever way
+    # the flag points.
+    "full_reset": False,
+    "guid": "00000000-fake-0000-guid-000000000000",
+    "scorecard": {"score": 3, "won": False, "actions": 41},
+    "state": "NOT_FINISHED",
+}
+
+
+def test_the_fixture_set_covers_every_declared_marker():
+    """The guard on the guard. A marker added to the constant with no fixture
+    beside it is how the coverage gap above was invisible for as long as it was:
+    nothing in the suite could tell the declared list from the tested one."""
+    assert set(PAYLOAD_BY_FIELD) == set(redlines.PAYLOAD_FIELDS), (
+        "a payload marker was declared or removed without a fixture to match"
+    )
+
+
+@pytest.mark.parametrize("field", redlines.PAYLOAD_FIELDS)
+def test_every_declared_payload_marker_pairs_as_a_violation(repo, field):
+    """Each declared marker, one file, one record. `scorecard` is the case named
+    in the work order; `state`, `guid`, `available_actions` and `full_reset` went
+    untested with it, and each of these five fails against the old literal."""
+    _add(repo, f"leak_{field}.jsonl",
+         json.dumps({"game_id": _sealed_id(), field: PAYLOAD_BY_FIELD[field]}) + "\n")
+
+    violations, needs_human, notes = redlines.check_sealed(redlines._tracked())
+
+    assert len(violations) == 1, (field, violations)
+    assert f"leak_{field}.jsonl" in violations[0]
+    assert needs_human == []
+    assert not any(f"leak_{field}.jsonl" in n and "NO record pairs" in n for n in notes), (
+        "the file was cleared by the self-congratulating note instead"
+    )
+
+
+def test_a_scorecard_body_beside_a_sealed_id_is_material_not_a_mention(repo):
+    """THE case from the work order, spelled out rather than parametrised.
+
+    Scores, action counts and a win flag for a sealed game are results *from*
+    playing it. Before this, `_records_pairing_sealed_with_payload` tested
+    `("frame", "frames", "action_input")` and nothing else, so this record was
+    filed under the mentions -- with the sentence claiming a record-by-record
+    verdict printed over it.
+    """
+    _add(repo, "scores.jsonl",
+         json.dumps({"game_id": _sealed_id(),
+                     "scorecard": {"score": 7, "won": True, "actions": 133}}) + "\n")
+
+    violations, _h, notes = redlines.check_sealed(redlines._tracked())
+
+    assert len(violations) == 1, violations
+    assert "scores.jsonl" in violations[0]
+    assert not any("scores.jsonl" in n for n in notes)
+
+
+def test_a_sealed_id_inside_the_payload_itself_pairs_without_a_sibling_id(repo):
+    """A scorecard keyed by game id names no `game_id` field beside it. The id is
+    *in* the payload, which is the same pairing seen from the other side."""
+    _add(repo, "cards.jsonl",
+         json.dumps({"scorecard": {"cards": {_sealed_id(): {"score": 2}}}}) + "\n")
+
+    violations, _h, _n = redlines.check_sealed(redlines._tracked())
+
+    assert len(violations) == 1, violations
+    assert "cards.jsonl" in violations[0]
+
+
+def test_a_declared_marker_with_no_value_is_a_schema_not_a_board(repo):
+    """The other direction, and the reason the old literal tested truthiness at
+    all: a null `frame` field is the shape of a record, not a picture of a sealed
+    board, and a documented schema that names the game it documents is a
+    mention."""
+    _add(repo, "schema.jsonl",
+         json.dumps({"game_id": _sealed_id(), "frame": None, "scorecard": {},
+                     "state": "", "available_actions": []}) + "\n")
+
+    violations, needs_human, notes = redlines.check_sealed(redlines._tracked())
+
+    assert violations == [] and needs_human == [], (violations, needs_human)
+    assert any("schema.jsonl" in n for n in notes)
+
+
+def test_a_marker_and_a_sealed_id_at_opposite_ends_of_a_document_is_not_a_pairing(repo):
+    """The false red that widening the marker set walks straight into, and the
+    reason `_pairings` reads identifying fields rather than whole subtrees.
+
+    A whole-document `.json` parses as exactly ONE record, so a record-level
+    pairing test degrades into file-level co-occurrence for it -- the failure
+    this check's own comment records as its "second wrong answer: eleven
+    violations, none of them real". This is `monitor/state.json`, reduced: an
+    agent's `state: "idle"` in one branch, a sealed id quoted in a board listing
+    in another. Testing the constant without this fix turned that file, and
+    `arc-recon/data/recon_findings.json`, into violations.
+    """
+    _add(repo, "monitor_state.json",
+         json.dumps({
+             "board": {"listing": f"R3 · release classifier · {_sealed_id()} stays out"},
+             "agents": {"ops": [{"name": "m", "state": "idle", "outputs": 3}]},
+         }) + "\n")
+
+    violations, needs_human, notes = redlines.check_sealed(redlines._tracked())
+
+    assert violations == [] and needs_human == [], (violations, needs_human)
+    assert any("monitor_state.json" in n for n in notes)
+
+
+def test_the_payload_test_reads_the_constant_rather_than_a_copy(repo, monkeypatch):
+    """Asserted by substitution, in the style of the enumerator test above.
+
+    Agreeing with `PAYLOAD_MARKERS` today proves nothing: the literal that was
+    just removed agreed with it on two fields for its whole life. Emptying the
+    constant must silence the check, or the list has been re-typed somewhere.
+    """
+    _add(repo, "leak.jsonl",
+         json.dumps({"game_id": _sealed_id(), "scorecard": {"score": 1}}) + "\n")
+    assert len(redlines.check_sealed(redlines._tracked())[0]) == 1
+
+    monkeypatch.setattr(redlines, "PAYLOAD_FIELDS", ())
+    violations, _h, _n = redlines.check_sealed(redlines._tracked())
+    assert violations == [], "the payload fields are declared in more than one place"
+
+
 # ------------------------------------------------------------- the exit codes
 # `verify.sh`-style callers read nothing but these.
 

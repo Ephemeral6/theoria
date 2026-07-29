@@ -113,8 +113,21 @@ PILES = "arc-recon/data/piles.json"
 #: failure this repository hit twice on 2026-07-28 in `figures/` alone -- the
 #: list ages, the directory does not. So the severity is decided by a **rule**
 #: over what the file carries, and the allow-list is gone.
+#:
+#: This constant was declared and then not used. `_records_pairing_sealed_with_payload`
+#: carried its own literal -- `("frame", "frames", "action_input")` -- so five of
+#: the seven fields named here were never tested by anything, and a record pairing
+#: a sealed id with a scorecard, a state transition, a guid, an action list or a
+#: reset flag was filed as a *mention* under the note "NO record pairs a sealed id
+#: with payload -- checked record by record". The claim was two fields wider than
+#: the check. The literal is gone; this is the only list.
+#:
+#: `"frames"` is here because that literal had it and this constant did not.
+#: Substituting the constant without it would have closed a hole by opening a
+#: smaller one -- the plural is what a multi-frame reset response is keyed on.
 PAYLOAD_MARKERS: tuple[bytes, ...] = (
     b'"frame"',
+    b'"frames"',
     b'"action_input"',
     b'"available_actions"',
     b'"full_reset"',
@@ -122,6 +135,10 @@ PAYLOAD_MARKERS: tuple[bytes, ...] = (
     b'"scorecard"',
     b'"state"',
 )
+
+#: The same list as record keys. Derived, never re-typed: the two spellings of one
+#: list is how the literal came to disagree with the constant in the first place.
+PAYLOAD_FIELDS: tuple[str, ...] = tuple(m.decode().strip('"') for m in PAYLOAD_MARKERS)
 
 
 #: Byte-order marks for encodings in which a UTF-8 substring search finds
@@ -392,6 +409,78 @@ def _walk(obj):
             yield from _walk(v)
 
 
+def _filled(value) -> bool:
+    """Is this marker field filled in, or merely declared?
+
+    ``None`` / ``""`` / ``[]`` / ``{}`` is a schema, not a picture of a sealed
+    board. The old literal said this with truthiness -- ``d.get("frame")`` -- and
+    truthiness is a slightly different test whose difference is an entire marker:
+    ``"full_reset": false`` is a command sent to the environment about one
+    specific game, and ``bool(False)`` files it as a field that is not there.
+    """
+    return value is not None and value != "" and value != [] and value != {}
+
+
+def _named_in_own_fields(node: dict, sealed_ids: list[str]) -> set[str]:
+    """Sealed ids named in this dict's OWN scalar fields.
+
+    A record says which game it is about in a field beside the payload --
+    ``game_id``, ``guid``, a session handle -- not at the far end of a sibling
+    subtree. Scalars only, deliberately: including nested containers would make
+    every ancestor "about" every id anywhere beneath it, and for a whole-document
+    ``.json`` the outermost ancestor is the file, which is co-occurrence again.
+    """
+    flat = {k: v for k, v in node.items() if not isinstance(v, (dict, list))}
+    return {g for g in sealed_ids if g in json.dumps(flat, default=str)}
+
+
+def _walk_scoped(obj, sealed_ids: list[str], inherited: frozenset[str] = frozenset()):
+    """``(dict_node, ids_this_node_is_about)`` for every dict, ids inherited down.
+
+    ``_walk`` yields the nodes; this yields the nodes *with the question of which
+    sealed game each one is about already answered*, which is the part the old
+    code got by searching the whole record.
+    """
+    if isinstance(obj, dict):
+        here = inherited | _named_in_own_fields(obj, sealed_ids)
+        yield obj, here
+        for v in obj.values():
+            yield from _walk_scoped(v, sealed_ids, here)
+    elif isinstance(obj, list):
+        for v in obj:
+            yield from _walk_scoped(v, sealed_ids, inherited)
+
+
+def _pairings(rec, sealed_ids: list[str]) -> list[tuple[str, str]]:
+    """``(marker_field, game_id)`` for every payload in ``rec`` tied to a sealed game.
+
+    Tied how, exactly, is the whole content of this function. A marker field
+    counts as belonging to a sealed game when the id is either **inside the
+    payload itself** (a scorecard keyed by game id names no sibling `game_id`) or
+    **in the identifying fields of the node that carries it, or of an ancestor**
+    (`{"game_id": X, "response": {"frame": ...}}` -- the frame's own node names
+    nothing).
+
+    Anything looser is the co-occurrence test this check has already been wrong
+    with once. Record-level pairing reads as record-by-record only while records
+    are small; a whole-document `.json` parses as exactly ONE record, so
+    "record by record" silently degrades into "somewhere in this file" -- and
+    `monitor/state.json` pairs an agent's `state: "idle"` with a sealed id four
+    levels away under `board.listing`. Widening the marker set to the constant
+    without also tightening this made that document, and `recon_findings.json`'s
+    `scorecard: {"error": ...}`, into violations: two false reds, both of them
+    files this module's own comments already name as legitimate mentions.
+    """
+    out: list[tuple[str, str]] = []
+    for node, in_scope in _walk_scoped(rec, sealed_ids):
+        for field in PAYLOAD_FIELDS:
+            if field not in node or not _filled(node[field]):
+                continue
+            inside = {g for g in sealed_ids if g in json.dumps(node[field], default=str)}
+            out.extend((field, g) for g in sorted(in_scope | inside))
+    return out
+
+
 def _records_pairing_sealed_with_payload(
     path: str, sealed_hits: list[str], jsonl: bool
 ) -> tuple[list[str] | None, str | None]:
@@ -402,23 +491,24 @@ def _records_pairing_sealed_with_payload(
     so it said the second, and the caller printed "NO record pairs a sealed id
     with payload -- checked record by record" about a file it had never parsed.
 
-    ``frame`` must be non-empty: a schema with a null ``frame`` field is a shape,
-    not a picture of a sealed board.
+    The fields that count as payload are ``PAYLOAD_MARKERS`` and nothing else.
+    This function used to carry its own literal instead, testing three fields
+    against a constant that declared seven, so the note above was printed over
+    records pairing a sealed id with a scorecard, a state, a guid, an action list
+    or a reset flag.
     """
     records, why = read_json_records(path, jsonl)
     if records is None:
         return None, why
     bad: list[str] = []
     for i, rec in enumerate(records):
-        blob = json.dumps(rec)
-        ids = [g for g in sealed_hits if g in blob]
-        if not ids:
+        blob = json.dumps(rec, default=str)
+        if not any(g in blob for g in sealed_hits):
             continue
-        carries = any(
-            d.get(k) for d in _walk(rec) for k in ("frame", "frames", "action_input")
-        )
-        if carries:
-            bad.append(f"record {i} -> {ids[0]}")
+        paired = _pairings(rec, sealed_hits)
+        if paired:
+            field, game = paired[0]
+            bad.append(f"record {i} -> {game} ({field})")
     return bad, None
 
 

@@ -116,13 +116,88 @@ def _sha256(path: str) -> tuple[str, int]:
     return h.hexdigest(), size
 
 
+class PileCutUnreadable(RuntimeError):
+    """The cut file is not the shape this reader expects, so nothing was read.
+
+    Raised, never warned. Every classification below `classify`'s first branch is
+    a statement about which ARC games a file names, and with no ids to look for
+    the only statement it can make is "none" -- for every file, in the permissive
+    direction. A classifier that cannot read its own id list must not produce a
+    verdict at all.
+    """
+
+
+def _cut_pile(piles: dict, *keys: str) -> list[str]:
+    """One pile out of the cut file, as game ids. Same reader as `check_sealed`.
+
+    Entries are strings today and may be objects tomorrow; both spellings are
+    accepted, and an entry that yields no id is dropped here so the caller's
+    count comparison sees the shortfall.
+    """
+    entries: list = []
+    for key in keys:
+        if key in piles:
+            entries = piles[key] or []
+            break
+    ids = [g if isinstance(g, str) else g.get("game_id", "") for g in entries]
+    return [g for g in ids if g]
+
+
 def _arc_game_ids() -> list[str]:
-    with open(_abs("arc-recon/data/piles.json"), encoding="utf-8") as fh:
+    """Every ARC game id in the cut. Refuses rather than returning a short list.
+
+    This used to be `piles.get("strata", {})` and a comprehension, and the
+    combination has no failure mode: a missing or renamed key is swallowed into
+    an empty dict, the comprehension over an empty dict is a legal empty list,
+    and `classify` then finds no game id in any file and falls through to
+    **class A / releasable** with the evidence "no ARC game id appears in this
+    file" -- a positive claim, on a tree nothing was searched for. Measured on
+    this repository at base 7852ef3: 37 files B -> A and 247 files C -> A, all
+    of them into the class that ships.
+
+    `check_redlines.check_sealed` already carries this guard, and the comment
+    beside it records what the missing version did: it "scanned 2817 files with
+    an empty id list and then printed `Both red lines clear`". The guard went
+    into one of the two id readers and not the other, which is the drift this
+    package keeps paying for -- so this one is written to the same shape.
+
+    The cross-check is between two independent statements the cut file makes
+    about itself: `strata` partitions the public set by tag family, and
+    `dev_pile` / `sealed_pile` partition the same set by the cut. They must
+    describe the same games. Comparing the *sets* rather than only the counts is
+    deliberate -- a renamed id keeps the count and changes the answer.
+    """
+    with open(_abs(redlines.PILES), encoding="utf-8") as fh:
         piles = json.load(fh)
+
+    dev = _cut_pile(piles, "dev", "dev_pile")
+    sealed = _cut_pile(piles, "sealed", "sealed_pile")
+    if not dev or not sealed:
+        raise PileCutUnreadable(
+            f"{redlines.PILES} yielded {len(dev)} development and {len(sealed)} sealed "
+            "game id(s); the cut this enumerator classifies against is unreadable, so NO "
+            "file has been classified. This is a refusal, not a finding: with an empty id "
+            "list every tracked file classifies as A / releasable on the evidence that no "
+            "ARC game id appears in it."
+        )
+
     ids: list[str] = []
     for family in piles.get("strata", {}).values():
-        ids.extend(family)
-    return sorted(set(ids))
+        ids.extend(g if isinstance(g, str) else g.get("game_id", "") for g in family)
+    ids = sorted({g for g in ids if g})
+
+    cut = sorted(set(dev) | set(sealed))
+    if len(ids) != len(dev) + len(sealed) or ids != cut:
+        raise PileCutUnreadable(
+            f"{redlines.PILES} is not the shape this reader expects: its strata yield "
+            f"{len(ids)} game id(s) while the cut declares {len(dev)} development + "
+            f"{len(sealed)} sealed = {len(dev) + len(sealed)}"
+            + (f" (differing on {', '.join(sorted(set(ids) ^ set(cut)))})"
+               if set(ids) ^ set(cut) else "")
+            + ". The id list this enumerator classifies against DID NOT LOAD, and every "
+            "file it would have ruled on is unclassified rather than releasable."
+        )
+    return ids
 
 
 def classify(rel: str, blob: bytes, game_ids: list[str]) -> dict:
@@ -143,7 +218,20 @@ def classify(rel: str, blob: bytes, game_ids: list[str]) -> dict:
     # withheld from a release on the grounds that they mention the header they
     # exist to set. Mention is not material; that distinction has now been the
     # answer three times in this directory.
-    if rel.endswith((".json", ".jsonl")):
+    #
+    # `json_shaped`, not `rel.endswith((".json", ".jsonl"))`. The suffix test was
+    # this enumerator's third wrong answer and it is the one that reads as an
+    # assertion: identical bytes were class B named `.jsonl` and class C named
+    # `.log`, and the class C branch does not merely decline to rule -- it states
+    # that the ids in the file are "constants, guards or narrative" carrying "no
+    # environment payload", about a file no parser had opened. `check_redlines`
+    # grew `json_shaped` to close exactly this hole, and its docstring says the
+    # judgement now lives in one place and "both files call it". This file was the
+    # one that did not, so the sentence was true of the module and false of the
+    # package.
+    structured, jsonl = redlines.json_shaped(rel, blob)
+
+    if structured:
         for marker in API_TRANSACTION_MARKERS:
             if marker in blob:
                 return {
@@ -157,14 +245,14 @@ def classify(rel: str, blob: bytes, game_ids: list[str]) -> dict:
     if not named:
         return {"class": "A", "evidence": "no ARC game id appears in this file"}
 
-    if not rel.endswith((".json", ".jsonl")):
+    if not structured:
         return {
             "class": "C",
             "evidence": f"names ARC game(s) {', '.join(named)} in source or prose; ids used as "
             "constants, guards or narrative carry no environment payload",
         }
 
-    verdict = _records_pairing(_abs(rel), named, rel.endswith(".jsonl"))
+    verdict = _records_pairing(_abs(rel), named, jsonl)
     if verdict is None:
         return {
             "class": "?",
