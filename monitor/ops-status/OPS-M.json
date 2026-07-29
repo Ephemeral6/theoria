@@ -1,7 +1,7 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-29T10:09:55Z",
- "cycle": 12,
+ "utc": "2026-07-29T10:56:56Z",
+ "cycle": 13,
  "state": "working",
- "note": "flag 退休已在生产确认（3 条 CLEARED、零鬼影）。新发现：HELD 只看分支 tip，而 push rejected 只取决于 master——c10 全绿却被扣 6 小时，我按裁判职责重试当场合入；v5-verdict 重试后正确转为真冲突。13 个 flag 已逐条裁决，见 inbox 20260729T100824Z"
+ "note": "s21 因 push rejected 被扣、我重试当场合入（连续两轮两例，均零修改）；hold 补丁仍未落地，我按裁判职责每轮手工重试该类。零鬼影。新报：S29 三条分支中两条同改 monitor/ci_merge.py，第四次重复派单，且这次撞在合并机器本身上"
 }
