@@ -89,10 +89,25 @@ GAME_USD = 60.0
 LEG_USD_CAP = 25.0
 ACTIONS_PER_LEVEL = 40
 
-#: `plan_caps` computes `usd_cap = cost_ceiling_usd + MODEL_CALL_CEILING_USD`,
-#: so the per-leg cost ceiling has to leave room for that last call to land on
-#: top of a full ceiling. 20 + 4 = 24, under the $25 per-reservation limit.
-LEG_COST_CEILING_USD = LEG_USD_CAP - spend_mod.MODEL_CALL_CEILING_USD - 1.0
+#: The model this campaign's desk runs. Named here because the leg's
+#: reservation is sized from it.
+CAMPAIGN_MODEL = "claude-opus-5"
+
+#: `plan_caps` computes `usd_cap = cost_ceiling_usd + <one model call>`, so the
+#: per-leg cost ceiling has to leave room for that last call to land on top of
+#: a full ceiling.
+#:
+#: Sized from the ceiling for the model actually in use, not from the flat
+#: `MODEL_CALL_CEILING_USD`. Those were the same number until the ceiling grew
+#: a model term; now opus-5 is $5.00, because at the observed $0.0024676/s a
+#: call that runs the full 1800s timeout costs $4.44 and the old $4.00 could
+#: not cover the one case it was charged for. Leaving this at 4 would size the
+#: reservation below what a single `check_model_call` can ask for, which shows
+#: up as a leg tripping near its own cap rather than as anything legible.
+#: 19 + 5 = 24, still under the $25 per-reservation limit.
+LEG_COST_CEILING_USD = (LEG_USD_CAP
+                        - spend_mod.model_call_ceiling_for(CAMPAIGN_MODEL)
+                        - 1.0)
 
 #: Legs in a row that may make no progress before the campaign gives up.
 ZERO_PROGRESS_LIMIT = 3

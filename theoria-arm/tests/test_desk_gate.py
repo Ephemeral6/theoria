@@ -40,7 +40,7 @@ from proxy.spend_gate import SpendGate, SpendPolicy   # noqa: E402
 
 from harness import run as run_mod                    # noqa: E402
 from harness import spend as spend_mod                # noqa: E402
-from harness.modelcall import ModelDesk               # noqa: E402
+from harness.modelcall import ModelDesk, ModelError               # noqa: E402
 
 
 # ------------------------------------------------------------------ fixtures
@@ -847,3 +847,68 @@ def test_the_guard_leaves_a_scratch_pool_alone(tmp_path, caps):
                      "ledger_abspath": os.path.abspath(gate.ledger_path)})
     assert binding is not None
     binding.release("done")
+
+
+# --------------------- 9. the ceiling has to actually be a ceiling -----------
+
+def test_every_model_ceiling_covers_a_call_that_runs_to_the_timeout():
+    """`proxy/cost.py:93`: "a ceiling that is sometimes too low is not a
+    ceiling."
+
+    The flat $4.00 failed that standard in the single scenario that uses it.
+    The ceiling is what an unpriced call is charged, and a call becomes
+    unpriced by raising -- of which the commonest cause is the 1800s timeout.
+    At the observed opus-5 rate of $0.0024676/s a call that runs the full
+    timeout costs $4.44, so the number charged for it was $0.44 short of the
+    only case it existed to cover.
+
+    Asserted as arithmetic rather than as a remembered figure, so that moving
+    the timeout or re-measuring a rate re-checks the ceilings instead of
+    silently invalidating them.
+    """
+    for model, rate in spend_mod.OBSERVED_USD_PER_SECOND.items():
+        implied = rate * spend_mod.MODEL_CALL_TIMEOUT_S
+        ceiling = spend_mod.model_call_ceiling_for(model)
+        assert ceiling >= implied, (
+            "%s: ceiling $%.4f is below the $%.4f a call running the full "
+            "%ds timeout would cost" % (model, ceiling, implied,
+                                        spend_mod.MODEL_CALL_TIMEOUT_S))
+
+
+def test_the_dated_model_id_the_cli_reports_resolves_to_a_ceiling():
+    """The CLI reports `claude-haiku-4-5-20251001`; the price table carries
+    only `claude-haiku-4-5`. That gap is why 5 797 recorded calls cannot be
+    priced by `proxy/cost.py`. Fixing the table belongs to another track, but
+    this arm must not inherit the gap: the dated id has to resolve here, and to
+    the same number as the bare one.
+    """
+    assert (spend_mod.model_call_ceiling_for("claude-haiku-4-5-20251001")
+            == spend_mod.model_call_ceiling_for("claude-haiku-4-5")
+            == 1.25)
+    # And an unknown model gets the most conservative number available, not the
+    # cheapest: no measurement is the case to be most careful about.
+    assert (spend_mod.model_call_ceiling_for("some-model-released-tomorrow")
+            == max(spend_mod.MODEL_CALL_CEILINGS_USD.values()))
+
+
+def test_a_haiku_call_that_goes_unpriced_is_not_charged_the_opus_ceiling(
+        binding, pool):
+    """The row that blocked the whole fleet, as a test.
+
+    seq 7418 is a haiku call booked at $4.00 -- 27x its own settled siblings in
+    the same run ($0.114256 / $0.146292 / $0.132608). `price_unpriced` can only
+    add, so that overstatement is permanent. Charging the right tier is the
+    only point at which it can be prevented.
+    """
+    run = FakeRun()
+    run.spend_binding = binding
+    d = desk(run, raises=ModelError("claude -p timed out after 1800s"))
+    d.model = "claude-haiku-4-5-20251001"
+
+    with pytest.raises(ModelError):
+        d.call("p", beat="theorize")
+
+    last = spends(pool)[-1]
+    assert last["unpriced"] is True
+    assert last["usd"] == 1.25, "a haiku call must not be charged opus money"
+    assert last["usd"] < 4.00

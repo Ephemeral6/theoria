@@ -80,6 +80,7 @@ nothing.
 
 import math
 import os
+import re
 import sys
 import time
 from typing import Any, Dict, Optional
@@ -210,6 +211,85 @@ def assert_one_true_pool(gate: SpendGate,
 #: nearly empty, and it is the amount charged for a call that comes back
 #: unpriced.
 MODEL_CALL_CEILING_USD = 4.00
+
+#: How long one desk call may run before `_invoke` gives up, in seconds. Kept
+#: here beside the ceilings because the two are arithmetically linked: a call
+#: that runs to the timeout is *the* case that raises and is charged its
+#: ceiling, so a ceiling below `timeout x spend-rate` is a ceiling that the
+#: only scenario using it can breach.
+MODEL_CALL_TIMEOUT_S = 1800
+
+#: Observed dollars per second of wall clock, per model, from live desk runs.
+#: opus-5: `runs/20260728T015354Z-g50t-first-contact/desk_log.json`, worst of
+#: five calls -- $1.489011 over 603 414 ms. haiku: the three settled calls of
+#: `runs/20260729T0035Z-a3-desk-live-proof2`, worst $0.146292 over 241 344 ms.
+#: Rates rather than totals, because the ceiling has to bound a call that runs
+#: to the timeout and no observed call has yet done so.
+OBSERVED_USD_PER_SECOND = {
+    "claude-opus-5": 0.0024676,
+    "claude-haiku-4-5": 0.000606,
+}
+
+#: The pre-flight ceiling for one desk call, **per model**.
+#:
+#: `MODEL_CALL_CEILING_USD` above is a flat $4.00 with no model term, and
+#: `ModelDesk` accepts a per-call `model` override, so the same constant was
+#: being applied to every tier. It is wrong in both directions at once:
+#:
+#: * **27x too high for haiku.** The one blind row in the shared pool is a
+#:   haiku call charged $4.00; its three siblings in the same run, same beat,
+#:   same model settled at $0.114256 / $0.146292 / $0.132608.
+#: * **Too low for an opus timeout.** At the observed 0.0024676 $/s, a call that
+#:   runs the full 1800 s costs **$4.44** -- and running to the timeout is
+#:   precisely the case that raises and gets charged this number.
+#:   `proxy/cost.py:93` states the standard being failed: *"this is a ceiling,
+#:   and a ceiling that is sometimes too low is not a ceiling."*
+#:
+#: Each entry is `max(timeout x observed rate, 4x observed worst call)`, rounded
+#: up. Unknown models fall back to the largest known ceiling rather than to the
+#: old flat value: an unrecognised model is the case with no measurement behind
+#: it, and that is the one place to be most, not least, conservative.
+#:
+#: **A tension worth naming rather than smoothing over**, because one number is
+#: doing two jobs with opposite optima. As *pre-flight headroom* it wants to be
+#: generous -- `check()` verifies headroom exists and consumes nothing, so a
+#: loose ceiling costs only an early refusal on a nearly-empty pool. As the
+#: *amount charged for an unpriced call* it wants to be accurate, because that
+#: charge lands in an append-only ledger and `price_unpriced` can only add to
+#: it, never net it off. Sizing to the worst case serves the first job and
+#: overstates the second. Splitting them is a real option and is not taken here
+#: unilaterally: it changes what the pool reports as spent, which is the
+#: monitor's to rule on.
+MODEL_CALL_CEILINGS_USD = {
+    "claude-opus-5":   5.00,       # 1800s x 0.0024676 = 4.44
+    "claude-opus-4-8": 5.00,       # same list price as opus-5
+    "claude-fable-5": 10.00,       # output $50/M, 2x opus
+    "claude-mythos-5": 10.00,
+    "claude-sonnet-5": 3.00,       # output $15/M, 0.6x opus
+    "claude-haiku-4-5": 1.25,      # 1800s x 0.000606 = 1.09
+}
+
+
+def model_call_ceiling_for(model: Optional[str],
+                           default: Optional[float] = None) -> float:
+    """The pre-flight ceiling for one call to `model`.
+
+    Strips a dated suffix (`claude-haiku-4-5-20251001` -> `claude-haiku-4-5`)
+    because that is the form the CLI actually reports, and the one form the
+    repo's own price table does not carry -- the gap that leaves 5 797 recorded
+    calls unpriceable by `proxy/cost.py`. Resolving it here does not fix that;
+    it only stops this arm from inheriting it.
+    """
+    known = dict(MODEL_CALL_CEILINGS_USD)
+    if isinstance(model, str):
+        if model in known:
+            return known[model]
+        stripped = re.sub(r"-\d{8}$", "", model)
+        if stripped in known:
+            return known[stripped]
+    if default is not None:
+        return float(default)
+    return max(known.values())
 
 #: **Borrowed, not measured on this arm.** The comment that used to stand here
 #: said 1.75 was "measured post-cookie-fix" and that
@@ -777,18 +857,40 @@ class SpendBinding:
         self.actions_charged += n
 
     # -- desk dollars ------------------------------------------------------
-    def check_model_call(self, usd: Optional[float] = None) -> None:
+    def ceiling_for_model(self, model: Optional[str] = None) -> float:
+        """What one call to `model` is pre-authorised for.
+
+        The per-model table governs when it knows the model, and
+        `self.model_call_ceiling_usd` is the fallback for one it does not.
+        Not a floor under the table, which is what this did first and which
+        quietly defeated the whole change: the binding's default is $4.00, so
+        `max(default, table)` kept charging haiku calls the opus figure --
+        exactly the defect being fixed.
+
+        The table wins because it is measurement-derived and the binding's
+        number is a policy default. A caller wanting a genuinely tighter cap
+        has `caps.usd_cap` and `cost_ceiling_usd`, both of which still bind and
+        neither of which this touches.
+        """
+        if model is None:
+            return self.model_call_ceiling_usd
+        return model_call_ceiling_for(model,
+                                      default=self.model_call_ceiling_usd)
+
+    def check_model_call(self, usd: Optional[float] = None, *,
+                         model: Optional[str] = None) -> None:
         """Before `claude -p` starts. Raises to refuse; consumes nothing."""
         self._refuse_if_tripped()
         self.heartbeat()
-        amount = self.model_call_ceiling_usd if usd is None else float(usd)
+        amount = self.ceiling_for_model(model) if usd is None else float(usd)
         try:
             self.gate.check(self.reservation, usd=amount, actions=0)
         except SpendGateTripped as exc:
             raise self._latch(exc)
 
     def record_model_call(self, usd: Optional[float], *,
-                          detail: Optional[Dict[str, Any]] = None) -> float:
+                          detail: Optional[Dict[str, Any]] = None,
+                          model: Optional[str] = None) -> float:
         """Settle one desk call. Returns the amount actually charged.
 
         `usd is None` means the CLI envelope carried no usable price. That call
@@ -807,7 +909,13 @@ class SpendBinding:
         itself into an incident.
         """
         unpriced = usd is None
-        amount = self.model_call_ceiling_usd if unpriced else float(usd)
+        # Charged at the ceiling for *this model*, not a flat constant. The one
+        # blind row in the shared pool is a haiku call booked at the opus
+        # figure, 27x its own settled siblings, and that overstatement can
+        # never be netted off: `price_unpriced` only adds.
+        if model is None and detail:
+            model = detail.get("model")
+        amount = self.ceiling_for_model(model) if unpriced else float(usd)
         try:
             self.gate.record(self.reservation, usd=amount, actions=0,
                              unpriced=unpriced, detail=detail or {})

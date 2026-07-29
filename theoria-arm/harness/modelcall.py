@@ -375,7 +375,7 @@ class ModelDesk:
         detail = {"arm": "theoria", "run_id": getattr(self.run, "run_id", None),
                   "beat": beat, "label": label, "model": model,
                   "transport": "claude-code-cli", "call": self.calls + 1}
-        binding.check_model_call()
+        binding.check_model_call(model=model)
 
         try:
             envelope, elapsed_ms, stderr = self._invoke(prompt, model)
