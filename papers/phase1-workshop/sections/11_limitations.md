@@ -114,7 +114,8 @@ plainly:
 The consequence is visible in the battery: `battery/REPORT_V0.md` records that
 "A0 ran engines and hand adjudication with no LLM in the loop, so it has no model
 calls", which is why **every economy metric is `not-applicable` on the Theoria
-arm**. The adjudication records in `THEORIZE_LOG.md` are genuine and were written
+arm**. The adjudication records in `cold-start-a0/THEORIZE_LOG.md` and
+`cold-start-a2/THEORIZE_LOG.md` are genuine and were written
 before the scores existed, but nothing here measures a prompted theorize step
 inside a harness, and no number in this paper should be read as one.
 
@@ -177,7 +178,8 @@ the stub on all three instances including the UNSAT variant, with no caller code
 changed (`cold-start-a0/BLOCKER_FAST_DOWNWARD.md`,
 `cold-start-a0/artifacts/fd_real.json`, `cold-start-a0/STATUS.md`) — but that is
 a separate conformance artefact. The reproducible pipeline (`cold-start-a0/run_all.py`,
-`prime.run_prime`) calls `solve(..., prefer="stub")` **on purpose**, so its
+`prime.run_prime`) plans through `cold-start-a0/pipeline/plan_stage.py:59`,
+which calls `solve(..., prefer="stub")` **on purpose**, so its
 checked-in artefacts stay byte-identical whether or not a planner is installed.
 §3.1's 12-step plan and every other planning figure in §3 are the stub's. The
 stub is length-optimal for unit costs, so SAT/UNSAT verdicts and plan lengths are

@@ -1,7 +1,7 @@
 [PASS] A GENERATED -- PAPER.md == assemble(sections/)
-  13 sections, 35171 words, byte-identical
+  13 sections, 35181 words, byte-identical
 [PASS] B PATHS -- every cited path resolves, unambiguously
-  217 distinct path citations: 207 ok, 10 ambiguous-but-ruled, 0 ambiguous-unruled, 0 elided, 0 broken
+  220 distinct path citations: 210 ok, 10 ambiguous-but-ruled, 0 ambiguous-unruled, 0 elided, 0 broken
   ruled     figures/csv/fig05_a2_repair_loop.csv -- repo-root figure pipeline; the local figures/ is the witness (figures/PARITY.md)
   ruled     figures/csv/fig06_concept_timeline.csv -- repo-root figure pipeline; the local figures/ is the witness (figures/PARITY.md)
   ruled     figures/csv/fig07_a0_vs_a0prime.csv -- repo-root figure pipeline; the local figures/ is the witness (figures/PARITY.md)
@@ -29,11 +29,10 @@
   ruled     09_preflight.md (1×) -- A section title. `zero quota` names the thing the section is about -- a run staged so that no step could cost anything -- and 9.4 is where the spend is reported and carries the manifest. A title is not the place the claim is established.
   ruled     10_adjudication.md (1×) -- Two aggregates named in order to retract them -- one the census's, one this section's own superseded draft -- both sums over the per-pass table above, where each row carries its survey file. Nothing in this block is asserted as a count of anything.
 [PASS] F BARE -- no citation is an ambiguous bare filename
-  94 bare-filename citations: 0 ambiguous, 5 ruled, 0 stale rulings
+  93 bare-filename citations: 0 ambiguous, 4 ruled, 0 stale rulings
   ruled     02_framework.md `THEORIZE_LOG.md` (1x) -- Indefinite article, and the next sentence pluralises: 'written down by the LLM in a THEORIZE_LOG.md' / 'Those logs are the primary evidence'. It names the kind of file each arm keeps.
   ruled     02_framework.md `playbook.dsl` (1x) -- Names the *form*, not an instance: the parenthetical points at `CONTRACTS/dsl_grammar_v0.1.md`, which itself uses the bare name for the form (its four sentence types). The contrast is deliberate four lines up, where the manual does get an instance and a scope -- `cold-start-a0/theory/theory.dsl` for A0.
   ruled     10_adjudication.md `ground_truth.json` (1x) -- The token is what is being counted, not what is being cited: '`worldgen/out/worlds/` holds 35 directories with a `ground_truth.json`'. The directory carrying the claim is cited in full; naming one of the 35 would be wrong here.
-  ruled     11_limitations.md `THEORIZE_LOG.md` (1x) -- The paragraph's scope is every arm at once -- it quotes A2's report saying 'as in A0' and the battery's report on the Theoria arm -- so a path-form rewrite would have to become a four-item list. This is the weakest of the five rulings and is recorded as such: unlike the other four it quotes no entry id, value or line, so there is no content hook that would settle it. If a later draft attaches one, this becomes a citation and the ruling should go.
-  ruled     11_limitations.md `theory.dsl` (1x) -- A claim about the v0.1 grammar era, so about every manual written under it, and the tree bears that out: `a0-spike/theory/theory.dsl`, `cold-start-a0/theory/theory.dsl` and `cold-start-a2/theory/theory.dsl` each carry the same `frame persist` comment. No single instance is meant.
+  ruled     11_limitations.md `theory.dsl` (1x) -- A claim about the v0.1 grammar era, so about every manual written under it, and no single instance is meant. Ten `.dsl` files across four arms carry the comment this sentence is about; the two the section is discussing are `cold-start-a0/theory/theory.dsl:25` and `cold-start-a2/theory/theory.dsl:26`. (An earlier version of this ruling also named `a0-spike/theory/theory.dsl`, which carries the keyword bare and no comment at all -- a ruling whose stated evidence was false, and nothing here would have caught that.)
 
 verify_paper: PASS (6/6)

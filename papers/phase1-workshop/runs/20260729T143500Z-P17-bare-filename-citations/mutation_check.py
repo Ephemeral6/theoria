@@ -27,9 +27,9 @@ SUITE = PAPER / "test_bare_gate.py"
 #: (name, verbatim fragment of verify_paper.py, replacement that breaks it)
 MUTATIONS = [
     ("ambiguity stops being an error",
-     "                if n <= 1:", "                if False:"),
+     "                    if n == 1:", "                    if n >= 1:"),
     ("every bare filename is waved through",
-     "                if n <= 1:", "                if True:"),
+     "                    if n == 1:", "                    if True:"),
     ("the check stops gating on what it flagged",
      "    return not flagged and not stale, notes",
      "    return True, notes"),
@@ -49,11 +49,21 @@ MUTATIONS = [
      "        for lineno, line in enumerate(",
      "        for lineno, line in enumerate("),
     ("a path counts as a bare filename",
-     '                if "/" in token or not token.lower().endswith(ARTEFACT_SUFFIX):',
-     '                if not token.lower().endswith(ARTEFACT_SUFFIX):'),
+     '                if "/" in raw:', "                if False:"),
     ("worktrees come back into the candidate set",
      '    ".git", "__pycache__", ".worktrees", ".toolchain", "node_modules",',
      '    ".git", "__pycache__", ".toolchain", "node_modules",'),
+    # Round two: the guards the second adversarial pass forced.
+    ("a name matching nothing goes green again",
+     "                    if n == 1:", "                    if n <= 1:"),
+    ("a ruling may cover a whole section",
+     "        if n > 1:\n            notes.append(fail(\n"
+     '                f"  BROAD     {key[0]} `{key[1]}` is ruled generic but appears "',
+     "        if False:\n            notes.append(fail(\n"
+     '                f"  BROAD     {key[0]} `{key[1]}` is ruled generic but appears "'),
+    ("sibling notation evades again",
+     "                for token in _split_siblings(raw):",
+     "                for token in [raw]:"),
     ("the check stops printing its rulings",
      '            notes.append(f"  ruled     {key[0]} `{key[1]}` ({n}x) -- {ADJUDICATED_BARE[key]}")',
      "            pass"),

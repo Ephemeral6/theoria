@@ -546,7 +546,8 @@ row's `status` is the literal string `"candidate"`
 the manual, and why, is written down by the LLM in a `THEORIZE_LOG.md` — one
 entry per proposal, with its evidence and its cost. Those logs are the primary
 evidence for most of what follows, and they were written before the scores
-existed.
+existed (`a0-spike/THEORIZE_LOG.md`, `cold-start-a0/THEORIZE_LOG.md`,
+`cold-start-a2/THEORIZE_LOG.md`, `cold-start-a3/THEORIZE_LOG.md`).
 
 The division has teeth in both directions. `a0-spike/THEORIZE_LOG.md` T-6
 records the adjudicator proposing a conservation law — the box never changes
@@ -707,7 +708,7 @@ vanishes and 87 appears, because the Cart stands constantly adjacent to the
 Button; the uniform-colour operator gave **3 tracks**. Script bits: **6511 vs
 4423**. The framework's own criterion picked the right operator with no thumb on
 the scale. (Those are the figures in `cold-start-a0/A0_REPORT.md` §3 and
-`cold-start-a0/THEORIZE_LOG.md` O-01. `cold-start-a0/artifacts/engines_report.json` has since
+`cold-start-a0/THEORIZE_LOG.md` D-A0-007. `cold-start-a0/artifacts/engines_report.json` has since
 moved on — it now reports 5704 bits over 6 tracks, with 6511/90 demoted to
 `reidentification.*_before` — so the artefact and the report disagree, and the
 paper quotes the report the adjudication was actually made from.)
@@ -1240,7 +1241,7 @@ That is the defensible form of the discipline, and it is weaker than the form
 `cold-start-a2/DECISIONS.md` D-A2-010 states. D-A2-010 says `locate.py` and
 `cold-start-a2/a2pipeline/probe.py` "import no world module at all"; they do —
 `cold-start-a2/a2pipeline/probe.py:59` is `from a2world import a2_world`, used to
-construct the `Environment` at line 108, and `locate.py:36` imports
+construct the `Environment` at lines 108-109, and `locate.py:36` imports
 `a2world.ground_truth`, which pulls the world transitively. The isolation is
 enforced by what those modules are *allowed to call*, not by the import graph,
 and the paper states it that way.
@@ -3231,7 +3232,8 @@ plainly:
 The consequence is visible in the battery: `battery/REPORT_V0.md` records that
 "A0 ran engines and hand adjudication with no LLM in the loop, so it has no model
 calls", which is why **every economy metric is `not-applicable` on the Theoria
-arm**. The adjudication records in `THEORIZE_LOG.md` are genuine and were written
+arm**. The adjudication records in `cold-start-a0/THEORIZE_LOG.md` and
+`cold-start-a2/THEORIZE_LOG.md` are genuine and were written
 before the scores existed, but nothing here measures a prompted theorize step
 inside a harness, and no number in this paper should be read as one.
 
@@ -3294,7 +3296,8 @@ the stub on all three instances including the UNSAT variant, with no caller code
 changed (`cold-start-a0/BLOCKER_FAST_DOWNWARD.md`,
 `cold-start-a0/artifacts/fd_real.json`, `cold-start-a0/STATUS.md`) — but that is
 a separate conformance artefact. The reproducible pipeline (`cold-start-a0/run_all.py`,
-`prime.run_prime`) calls `solve(..., prefer="stub")` **on purpose**, so its
+`prime.run_prime`) plans through `cold-start-a0/pipeline/plan_stage.py:59`,
+which calls `solve(..., prefer="stub")` **on purpose**, so its
 checked-in artefacts stay byte-identical whether or not a planner is installed.
 §3.1's 12-step plan and every other planning figure in §3 are the stub's. The
 stub is length-optimal for unit costs, so SAT/UNSAT verdicts and plan lengths are

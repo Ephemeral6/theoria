@@ -149,6 +149,60 @@ def test_an_ambiguous_citation_fails_the_check(monkeypatch, tmp_path):
     assert any("AMBIGUOUS" in n for n in notes)
 
 
+# ------------------------------------------- what the second adversary broke
+
+def test_a_name_matching_nothing_fails(tmp_path):
+    """Zero candidates is worse than many, and it used to be the green case.
+
+    `ledger_summary.jsonl` is the example `_basename_exists`'s own docstring
+    gives as the motivating hole. B skips it for having no `/`; E only catches
+    it when the block also carries a quantity. A non-quantitative sentence
+    citing it was read by nobody.
+    """
+    assert vp._candidates("ledger_summary.jsonl") == []
+    flagged, _, _ = scan(tmp_path, "The consolidated ledger is `ledger_summary.jsonl`.\n")
+    assert len(flagged) == 1
+    assert flagged[0][3] == 0
+
+
+def test_the_wrong_case_is_not_a_citation(tmp_path):
+    """NTFS is case-insensitive, `_candidates` is not, and casing is what
+    authors get wrong -- so `Status.md` opened any of the nine real STATUS.md
+    for the author and matched none of them for the check."""
+    flagged, _, _ = scan(tmp_path, "The run is in `Status.md`.\n")
+    assert len(flagged) == 1
+
+
+@pytest.mark.parametrize("body,n", [
+    ("See `{" + AMBIGUOUS + "}`.\n", 1),
+    (f"See `{AMBIGUOUS},DECISIONS.md`.\n", 2),
+])
+def test_sibling_notation_does_not_evade(tmp_path, body, n):
+    """Section 7 cites siblings as `{a0-base,a2-base}`, so this is the paper's
+    own idiom with the directory removed -- one keystroke, not a contrivance."""
+    flagged, _, seen = scan(tmp_path, body)
+    assert seen == n and flagged, f"slipped past check F:\n{body}"
+
+
+def test_a_ruling_cannot_cover_a_whole_section(monkeypatch, tmp_path):
+    """The guard check E has as MIN_ANCHOR + BROAD, which F was ported without.
+
+    A ruling here has no text anchor, so one entry silences every use of the
+    token in the section -- including uses written after it was ruled.
+    """
+    body = (
+        f"The kind of file each arm keeps is a `{AMBIGUOUS}`.\n\n"
+        f"The seal stamp is in `{AMBIGUOUS}` at line 412.\n\n"
+        f"A claim nobody ruled on: `{AMBIGUOUS}` gives 6511 bits.\n"
+    )
+    (tmp_path / "07_body.md").write_text(body, encoding="utf-8")
+    monkeypatch.setattr(vp, "SECTIONS", tmp_path)
+    monkeypatch.setattr(vp, "ADJUDICATED_BARE", {RULING: "names a kind"})
+    passed, notes = vp.check_bare()
+    assert not passed, "one ruling silenced three sentences, two of them specific"
+    assert any("BROAD" in n for n in notes)
+
+
 # ------------------------------------------------------------ the candidate set
 
 def test_worktrees_are_not_candidates():

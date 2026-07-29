@@ -6,6 +6,9 @@
   [ok ] the abstract exemption widens to everything: caught
   [ok ] a path counts as a bare filename: caught
   [ok ] worktrees come back into the candidate set: caught
+  [ok ] a name matching nothing goes green again: caught
+  [ok ] a ruling may cover a whole section: caught
+  [ok ] sibling notation evades again: caught
   [ok ] the check stops printing its rulings: caught
 
-mutation_check: PASS -- 9/9 caught
+mutation_check: PASS -- 12/12 caught
