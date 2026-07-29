@@ -60,24 +60,48 @@ def per_class_confusion(report: Any, key_doc: Dict[str, Any], *,
     this is a referee-side reading of a paper the examinee saw unlabelled.
     """
     truth_of = {e["item_id"]: e["truth"] for e in key_doc["items"]}
+    # See `mark.confusion`: a claim outside the paper's own answer alphabet is
+    # not a negative classification, it is not a classification. D-EX-027.
+    alphabet = {t.get("claim") or t.get("label") for t in truth_of.values()}
+    alphabet.discard(None)
     buckets: Dict[str, List[Any]] = {}
+    strata: Dict[str, List[Any]] = {}
     for score in report.scores:
-        klass = truth_of.get(score.item_id, {}).get("class", "unclassified")
-        buckets.setdefault(klass, []).append(score)
+        truth = truth_of.get(score.item_id, {})
+        buckets.setdefault(truth.get("class", "unclassified"), []).append(score)
+        strata.setdefault(truth.get("board_size_class", "unstratified"),
+                          []).append(score)
 
     def tally(scores: Sequence[Any]) -> Dict[str, Any]:
         tp = fp = tn = fn = 0
         abstain_pos = abstain_neg = 0
+        illegible_pos = illegible_neg = 0
+        missing_pos = missing_neg = 0
         for score in scores:
             truth = truth_of.get(score.item_id, {})
             actual = truth.get("claim") or truth.get("label")
             is_positive = (actual == positive)
             said = score.detail.get("said")
-            if score.verdict == "abstained" or said in (None, "abstain", "unknown"):
-                if is_positive:
-                    abstain_pos += 1
-                else:
-                    abstain_neg += 1
+            # Three different ways not to have classified an item, and they used
+            # to be one. The old condition was `score.verdict == "abstained" or
+            # said in (None, "abstain", "unknown")`, and `grade_verdict` returns
+            # verdict `wrong` with `said = None` for an answer it cannot parse --
+            # so an unreadable submission was reported as an abstention, and an
+            # examinee that submitted garbage on four items printed the identical
+            # row to one that honestly declined them. D-EX-006 introduced the
+            # abstention column precisely so an abstention could not be confused
+            # with anything else; the column was carrying the confusion.
+            if score.verdict == "unanswered":
+                missing_pos += is_positive
+                missing_neg += not is_positive
+                continue
+            if score.verdict == "abstained" or said in ("abstain", "unknown"):
+                abstain_pos += is_positive
+                abstain_neg += not is_positive
+                continue
+            if said is None or said not in alphabet:
+                illegible_pos += is_positive
+                illegible_neg += not is_positive
                 continue
             said_positive = (said == positive)
             if is_positive and said_positive:
@@ -88,12 +112,17 @@ def per_class_confusion(report: Any, key_doc: Dict[str, Any], *,
                 fp += 1
             else:
                 tn += 1
-        n_pos, n_neg = tp + fn + abstain_pos, tn + fp + abstain_neg
+        n_pos = tp + fn + abstain_pos + illegible_pos + missing_pos
+        n_neg = tn + fp + abstain_neg + illegible_neg + missing_neg
         cell: Dict[str, Any] = {
             "n": len(scores), "n_positive": n_pos, "n_negative": n_neg,
             "tp": tp, "fp": fp, "tn": tn, "fn": fn,
             "abstained_on_positive": abstain_pos,
             "abstained_on_negative": abstain_neg,
+            "illegible_on_positive": illegible_pos,
+            "illegible_on_negative": illegible_neg,
+            "unanswered_on_positive": missing_pos,
+            "unanswered_on_negative": missing_neg,
             "sensitivity": _rate(tp, tp + fn),
             "specificity": _rate(tn, tn + fp),
             # A rate computed over answered items only is inflated by
@@ -124,9 +153,25 @@ def per_class_confusion(report: Any, key_doc: Dict[str, Any], *,
         "positive_class": positive,
         "overall": tally(report.scores),
         "by_class": {k: tally(v) for k, v in sorted(buckets.items())},
+        # The class split cannot report a pair, and that is structural rather
+        # than a property of any examinee: the three classes partition the paper
+        # *by answer* (9 unsolvable in (i)+(ii), 8 solvable in (iii)), so one of
+        # the two denominators is empty in every cell. The renderer has always
+        # said so in its footer; what follows from it is that the pair the
+        # protocol asks for appears nowhere except pooled, and D-EX-015 is the
+        # argument that pooled is where it means least.
+        #
+        # `board_size_class` cross-cuts the answer -- small 5 unsolvable / 5
+        # solvable, large 4 / 3 -- and splits on exactly the distinction classes
+        # (i) and (ii) were invented to draw: whether exhaustive search was
+        # available. So both rates are defined in both strata, and the bluffer's
+        # signature (1.000, 0.000) lands in a single cell instead of being
+        # joined across two rows with disjoint item sets. D-EX-024.
+        "by_board_size": {k: tally(v) for k, v in sorted(strata.items())},
         "note": "Sensitivity and specificity are reported side by side and "
                 "never combined. An abstention counts toward neither rate and "
-                "is carried in its own column.",
+                "is carried in its own column -- as are an unreadable answer "
+                "and an unsubmitted one, which are three different things.",
     }
 
 
@@ -222,7 +267,12 @@ def render_matrix(matrix: Dict[str, Any]) -> str:
     lines.append("Sizes: " + ", ".join("`%s` %d" % (k, v)
                                        for k, v in matrix["class_sizes"].items()))
     lines.append("")
+    strata = sorted({s for row in matrix["examinees"].values()
+                     for s in row["split"].get("by_board_size", {})})
     header = ["examinee", "score", "sens (pooled)", "spec (pooled)"]
+    for stratum in strata:
+        header.append("sens · %s board" % stratum)
+        header.append("spec · %s board" % stratum)
     for klass in classes:
         header.append("sens · %s" % klass)
         header.append("spec · %s" % klass)
@@ -246,6 +296,10 @@ def render_matrix(matrix: Dict[str, Any]) -> str:
         pooled = row["split"]["overall"]
         cells = [("`%s`" % mode), "%.4f" % row["fraction"],
                  cell(pooled, "sensitivity"), cell(pooled, "specificity")]
+        for stratum in strata:
+            entry = row["split"].get("by_board_size", {}).get(stratum, {})
+            cells.append(cell(entry, "sensitivity"))
+            cells.append(cell(entry, "specificity"))
         for klass in classes:
             entry = row["split"]["by_class"].get(klass, {})
             cells.append(cell(entry, "sensitivity"))
@@ -263,6 +317,16 @@ def render_matrix(matrix: Dict[str, Any]) -> str:
                  "there; class (iii) holds no unsolvable items, so sensitivity "
                  "is undefined there. An arm cannot fail a test it was never "
                  "given, and writing those cells as `0.000` would say it had.")
+    lines.append("")
+    lines.append("**Which is why the board-size columns are here.** The three "
+                 "classes partition this paper by answer, so no class cell ever "
+                 "holds both rates and 灵敏度与特异度分开报 is satisfied only "
+                 "in the pooled column — the one D-EX-015 argues means least. "
+                 "`board_size_class` cross-cuts the answer (small 5 unsolvable "
+                 "/ 5 solvable, large 4 / 3) and splits on the same distinction "
+                 "classes (i) and (ii) were invented to draw, so a bluffer's "
+                 "`1.000 / 0.000` appears in one cell per stratum rather than "
+                 "having to be joined across two rows of disjoint items.")
 
     twins = collisions(matrix)
     if twins:
@@ -296,6 +360,11 @@ def collisions(matrix: Dict[str, Any]) -> List[Any]:
                  row["split"]["overall"]["specificity"]]
         for klass in sorted(matrix["class_sizes"]):
             entry = row["split"]["by_class"].get(klass, {})
+            cells.extend([entry.get("sensitivity"), entry.get("specificity"),
+                          entry.get("coverage_positive"),
+                          entry.get("coverage_negative")])
+        for stratum in sorted(row["split"].get("by_board_size", {})):
+            entry = row["split"]["by_board_size"][stratum]
             cells.extend([entry.get("sensitivity"), entry.get("specificity"),
                           entry.get("coverage_positive"),
                           entry.get("coverage_negative")])

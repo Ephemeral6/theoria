@@ -38,7 +38,9 @@ from exam.grading.confusion_matrix import (collisions,               # noqa: E40
 from exam.grading.registry import digest                            # noqa: E402
 from exam.grading.rubrics_adaptation import (UNREADABLE,          # noqa: E402
                                              _read_claim, _read_level_claim)
-from exam.model import ItemScore                                    # noqa: E402
+from exam.grading import rubrics_verdict as RV                      # noqa: E402
+from exam.grading.mark import confusion, mark                       # noqa: E402
+from exam.model import ItemScore, Submission                        # noqa: E402
 from exam.papers import module_for                                  # noqa: E402
 
 ALL_TYPES = ("heldout", "handover", "adaptation", "verdict")
@@ -100,24 +102,41 @@ def test_a_marker_that_accepts_anything_fails_transplant_and_garbage():
     assert not result["checks"]["garbage"]["passed"]
 
 
-def test_a_marker_that_truncates_partial_credit_fails_only_the_new_check():
-    """The fault that nothing on master caught, and the check added for it.
+def test_a_marker_that_truncates_partial_credit_is_now_caught_at_the_gate_too():
+    """D-EX-013's finding, and what changed it.
 
-    It is asserted as *only* this check because that is the finding: every band
-    in `calibration.EXPECTED` for the informative fakes is `Band(0.0, x)`,
-    bounded above and open below, so a marker that depresses scores satisfies
-    all of them.
+    This test used to assert that the calibration gate stayed **green** under
+    `truncates_partial`, and said why: every band in `calibration.EXPECTED` for
+    the informative fakes is `Band(0.0, x)`, bounded above and open below, so a
+    marker that quietly *depresses* scores satisfies all of them. Only the
+    seventh mutant caught it.
+
+    Its own comment said that if the gate ever caught this, the finding had
+    changed and the comment should be rewritten rather than the assertion
+    loosened. It has, so it is. D-EX-026's answer-shape probes are **exact
+    equalities** rather than upper bounds -- the searcher must score what
+    arithmetic over the paper's points says and not a penny less -- so a marker
+    that depresses partial credit now fails the gate on this paper.
+
+    The bands themselves are unchanged and still one-sided, and the probes are
+    verdict-only, so D-EX-013's finding stands for `heldout`, `handover` and
+    `adaptation`. What is closed is the verdict paper, and it is closed by a
+    two-sided expectation rather than by a fitted lower band -- which is what
+    D-EX-010 asks for.
     """
     with _fault("truncates_partial"):
         result = st.mutant_battery("verdict")
         calibration = calibrate_one("verdict")
+        others = {qt: calibrate_one(qt)["calibrated"]
+                  for qt in ("heldout", "handover", "adaptation")}
     assert not result["checks"]["partial_credit_survives"]["passed"]
-    assert calibration["calibrated"] is True, (
-        "if the bands now catch this, the finding has changed and the comment "
-        "above needs rewriting -- not this assertion loosening")
-    others = [n for n, e in result["checks"].items()
-              if n != "partial_credit_survives" and not e["passed"]]
-    assert others == []
+    assert calibration["calibrated"] is False
+    assert any("probe-" in f or "verdict/" in f for f in calibration["failures"])
+    # The bands alone still do not see it anywhere, which is the standing part
+    # of D-EX-013 and the reason the probes had to be equalities.
+    assert others == {"heldout": True, "handover": True, "adaptation": True}
+    failed = [n for n, e in result["checks"].items() if not e["passed"]]
+    assert failed == ["partial_credit_survives"]
 
 
 def test_an_order_dependent_marker_fails_the_key_order_mutant():
@@ -207,10 +226,18 @@ def test_the_split_separates_the_memoriser_from_ground_truth():
     """The argument for splitting the pair, as a measurement rather than a claim.
 
     Pooled, the memoriser is numerically identical to the oracle -- sensitivity
-    1.0 and specificity 1.0 -- while scoring 0.5882.  It abstains on all four
-    large-space items, and abstentions stay out of the denominator, so the
-    pooled rate is computed over the classes it happens to be good at.  Only the
-    split and the coverage figure show it.
+    1.0 and specificity 1.0 -- while scoring 0.5882.  It never answers any of the
+    four large-space items, and an unanswered item stays out of the denominator,
+    so the pooled rate is computed over the classes it happens to be good at.
+    Only the split and the coverage figure show it.
+
+    This docstring used to say it *abstains* on those four, and the assertion
+    below used to check `abstained_on_positive == 4`.  Both were wrong in the
+    same way the code was: `reference_answers` skips the item entirely, so it is
+    `unanswered`, and the old confusion counter folded unanswered, abstained and
+    unreadable into one column.  The memoriser declines to submit; it does not
+    say "I cannot tell".  Those are different arms and the table now says so.
+    D-EX-025.
     """
     matrix = verdict_matrix()
     oracle = matrix["examinees"]["oracle"]
@@ -222,7 +249,9 @@ def test_the_split_separates_the_memoriser_from_ground_truth():
 
     large = memoriser["split"]["by_class"]["large_unsolvable"]
     assert large["n_positive"] == 4
-    assert large["abstained_on_positive"] == 4
+    assert large["unanswered_on_positive"] == 4
+    assert large["abstained_on_positive"] == 0
+    assert large["illegible_on_positive"] == 0
     assert large["sensitivity"] is None
     assert large["coverage_positive"] == 0.0
 
@@ -238,6 +267,185 @@ def test_the_bluffer_signature_survives_the_split():
     assert bluffer["overall"]["specificity"] == 0.0
     assert bluffer["by_class"]["solvable_hard"]["specificity"] == 0.0
     assert bluffer["by_class"]["solvable_hard"]["coverage_negative"] == 1.0
+
+
+def test_the_pair_appears_in_one_cell_only_under_the_board_size_split():
+    """敢说不可解的框架必须在可解题上闭嘴, in a single cell rather than across rows.
+
+    The three classes partition the paper by answer, so every class cell has an
+    empty denominator on one side and the pair the protocol asks for exists only
+    pooled.  `board_size_class` cross-cuts the answer, so both rates are defined
+    in both strata -- and the bluffer's signature is printed twice, once per
+    stratum, instead of having to be assembled from two rows whose item sets do
+    not overlap.  D-EX-024.
+    """
+    matrix = verdict_matrix()
+
+    # The premise: no class cell holds both rates, for any examinee.
+    for row in matrix["examinees"].values():
+        for cell in row["split"]["by_class"].values():
+            assert cell["n_positive"] == 0 or cell["n_negative"] == 0
+
+    strata = matrix["examinees"]["oracle"]["split"]["by_board_size"]
+    assert set(strata) == {"small", "large"}
+    assert (strata["small"]["n_positive"], strata["small"]["n_negative"]) == (5, 5)
+    assert (strata["large"]["n_positive"], strata["large"]["n_negative"]) == (4, 3)
+    for cell in strata.values():
+        assert cell["sensitivity"] == 1.0 and cell["specificity"] == 1.0
+
+    bluffer = matrix["examinees"]["bluffer"]["split"]["by_board_size"]
+    for stratum, cell in sorted(bluffer.items()):
+        assert (cell["sensitivity"], cell["specificity"]) == (1.0, 0.0), stratum
+        assert cell["coverage_positive"] == cell["coverage_negative"] == 1.0
+
+    # And the memoriser's emptiness on the large boards is one cell, in both
+    # directions at once, rather than a `1.000` in each of two class rows.
+    large = matrix["examinees"]["memoriser"]["split"]["by_board_size"]["large"]
+    assert large["sensitivity"] is None and large["specificity"] is None
+    assert large["coverage_positive"] == large["coverage_negative"] == 0.0
+
+    text = render_matrix(matrix)
+    assert "sens · small board" in text and "spec · large board" in text
+
+
+def test_an_unreadable_answer_is_not_reported_as_an_abstention():
+    """D-EX-006 gave the abstention its own column so it could not be confused.
+
+    `grade_verdict` returns verdict `wrong` with `said = None` for an answer it
+    cannot parse, and both confusion functions branched on `said in (None, ...)`
+    -- so the column introduced to prevent the confusion was carrying it.  An
+    examinee that submits garbage printed the row of one that honestly declined.
+    D-EX-025.
+    """
+    module = module_for("verdict")
+    paper = module.build()
+    key_doc = paper.key(digest())
+    garbage = {item.item_id: {"verdict": "solvable"} for item in paper.items}
+    report = mark(key_doc, Submission("probe-garbage", paper.paper_id, garbage,
+                                      capabilities=("answers",)),
+                  axes_fn=getattr(module, "axes", None))
+
+    assert report.fraction == 0.0
+    assert all(s.verdict == "wrong" for s in report.scores)
+
+    pooled = per_class_confusion(report, key_doc)["overall"]
+    assert pooled["illegible_on_positive"] == 9
+    assert pooled["illegible_on_negative"] == 8
+    assert pooled["abstained_on_positive"] == pooled["abstained_on_negative"] == 0
+    assert pooled["unanswered_on_positive"] == pooled["unanswered_on_negative"] == 0
+
+    flat = confusion(report, key_doc, positive="unsolvable")
+    assert flat["unclassified_on_positive"] == 9
+    assert flat["abstained_on_positive"] == 0
+    assert flat["unanswered_on_positive"] == 0
+
+
+def test_a_claim_outside_the_answer_alphabet_earns_no_specificity():
+    """`{"claim": "I do not know"}` used to be a *negative* classification.
+
+    Both confusion functions treated "anything that is not the positive label"
+    as the negative label, so a submission of gibberish on every item scored
+    specificity **1.000** -- better than the bluffer's 0.000 -- for having
+    classified nothing. `_ABSTAIN` is a five-word closed set and does not
+    contain the most natural English phrasing of an abstention, so this was not
+    an exotic input. Found by an adversarial review of this run. D-EX-027.
+    """
+    module = module_for("verdict")
+    paper = module.build()
+    key_doc = paper.key(digest())
+    for phrasing in ("I do not know", "banana"):
+        answers = {item.item_id: {"claim": phrasing} for item in paper.items}
+        report = mark(key_doc, Submission("probe-%s" % phrasing, paper.paper_id,
+                                          answers, capabilities=("answers",)),
+                      axes_fn=getattr(module, "axes", None))
+        assert report.fraction == 0.0
+        flat = confusion(report, key_doc, positive="unsolvable")
+        assert flat["specificity"] is None, phrasing
+        assert flat["sensitivity"] is None, phrasing
+        assert flat["tn"] == flat["fn"] == 0, phrasing
+        assert flat["unclassified_on_positive"] == 9
+        assert flat["unclassified_on_negative"] == 8
+
+
+def test_the_pooled_row_separates_silence_from_garble():
+    """The three-way split has to reach `mark.confusion`, not only the matrix.
+
+    The pooled cell is what `axes()` publishes, what the renderer prints first,
+    and what the calibration gate reads. The first version of this fix landed
+    only in `confusion_matrix.tally`, so `null` and an all-unreadable submission
+    still printed identical pooled rows. D-EX-027.
+    """
+    module = module_for("verdict")
+    paper = module.build()
+    key_doc = paper.key(digest())
+
+    silent = mark(key_doc, Submission("probe-null", paper.paper_id, {}),
+                  axes_fn=getattr(module, "axes", None))
+    garbled = mark(key_doc, Submission(
+        "probe-garble", paper.paper_id,
+        {i.item_id: {"verdict": "solvable"} for i in paper.items},
+        capabilities=("answers",)), axes_fn=getattr(module, "axes", None))
+
+    a = confusion(silent, key_doc, positive="unsolvable")
+    b = confusion(garbled, key_doc, positive="unsolvable")
+    assert (a["unanswered_on_positive"], a["unclassified_on_positive"]) == (9, 0)
+    assert (b["unanswered_on_positive"], b["unclassified_on_positive"]) == (0, 9)
+    assert a != b
+
+
+def test_the_gate_now_watches_the_answer_shapes_no_fake_submits():
+    """用已知满分与已知零分的假被试标定判卷器 -- on the paths the fakes walk.
+
+    The verdict sheet advertises five answer shapes and the four fakes submit
+    three; the seven mutants are all derived from the oracle's answers, so they
+    inherit the same three. An adversarial audit injected fourteen faults into
+    the verdict rubric: thirteen passed `assert_calibrated` and twelve passed
+    every mutant, and two were caught by nothing anywhere. Both lived on shapes
+    no fake submitted.
+
+    Each probe below has a score fixed by arithmetic over the paper's own points
+    and the rubric's own constants -- there is no band here, for D-EX-012's
+    reason. D-EX-026.
+    """
+    clean = calibrate_one("verdict")
+    assert clean["calibrated"] is True
+    probes = clean["modes"]["structural"]["answer_shape_probes"]
+    assert set(probes) >= {"abstainer", "illegible", "searcher",
+                           "wrong_claim_with_reason", "forged_certificate"}
+    assert probes["abstainer"]["counts"]["abstained"] == 17
+    assert probes["illegible"]["counts"]["wrong"] == 17
+    assert probes["searcher"]["awarded"] == probes["searcher"]["expected"]
+    assert probes["forged_certificate"]["awarded"] == pytest.approx(17.0)
+
+    faults = {
+        # An abstention read as a claim. Worth 9 of 34 to an arm that abstains
+        # on everything; the gate did not look, because no fake abstains.
+        "abstain_read_as_a_claim": ("_ABSTAIN", frozenset()),
+        # "I searched it all" paid in full rather than at 0.4. Destroys the one
+        # ordering class (i) exists to create, and no fake offers a reason.
+        "search_paid_in_full": ("SEARCH_CREDIT", 1.0),
+    }
+    for name, (attribute, value) in faults.items():
+        original = getattr(RV, attribute)
+        try:
+            setattr(RV, attribute, value)
+            broken = calibrate_one("verdict")
+        finally:
+            setattr(RV, attribute, original)
+        assert broken["calibrated"] is False, (
+            "%s passed the calibration gate" % name)
+        # And the four original fakes are unmoved by it, which is why the gate
+        # needed the probes rather than a tighter band.
+        for mode in ("oracle", "null", "memoriser", "bluffer"):
+            assert broken["modes"][mode]["fraction"] == pytest.approx(
+                clean["modes"][mode]["fraction"]), (name, mode)
+
+
+def test_the_bluffer_pair_is_asserted_per_stratum_not_only_pooled():
+    """The pooled assertion is the weakest place to make this one. D-EX-024."""
+    result = calibrate_one("verdict")
+    per_stratum = result["modes"]["structural"]["bluffer_pair_by_board_size"]
+    assert per_stratum == {"large": (1.0, 0.0), "small": (1.0, 0.0)}
 
 
 def test_the_rendered_matrix_prints_coverage_and_never_prints_a_fake_zero():
