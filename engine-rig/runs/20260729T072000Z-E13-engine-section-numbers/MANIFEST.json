@@ -1,0 +1,134 @@
+{
+  "adversarial_pass": {
+    "all_addressed": true,
+    "blocking": [
+      "the provenance split published as 68/108 is 71/108",
+      "the fd_adapter cell said the bench 'counts that as neither' -- the bench has a third clock, fd_total_seconds, on all 51 rows, and it is exactly where the disputed time sits"
+    ],
+    "findings_returned": 17,
+    "other_material": [
+      "the rc-2 fix did not reach the case it was written for: main() probes before it renders, so a partial checkout still skipped -- fixed with render_selfcheck(), which runs first and reads no artifact",
+      "'false in both directions' is wrong: no row falls below the band, it fails upward twice",
+      "'181 appears in no artifact' is literally false (E2 RUN_STATE.md:38 has 181.8 for another row); the finding survives, the absolute did not",
+      "'above every instance this rig generates' is contradicted two sentences earlier in its own cell by gripper-10",
+      "the header claimed every number is probed from under runs/; 12 of 180 are not",
+      "the hand-written 'Runs referenced' footer omitted E17, the second largest source -- now generated from the probes",
+      "six new derived statistics had no test of the derivation, only the value tripwire -- now checked for rung-filter completeness, clock nesting, and outlier extremality",
+      "_fd_crossover returned the first hit in file order, not the first by size -- now sorted",
+      "removing the STATUS.md probes deleted the last tripwire on prose this run declares false -- STATUS.md's fd bullet corrected in the same pass",
+      "the module docstring's exit-code contract did not list rc 2",
+      "'two of the twenty-one artifacts live outside engine-rig/' -- it is six of twenty-two"
+    ]
+  },
+  "author": "RES-3",
+  "base_commit": "32f078c20221d3cd783d0bb7b5e34d6c1e5c2b59",
+  "branch": "agent/e13-engine-section-numbers",
+  "engines_changed_bytes": 0,
+  "files": [
+    {
+      "path": "engine-rig/ENGINE_TABLE.md",
+      "sha256": "5d078f16885a2b243428d75495ee29be323e24a3d4cf65a591b298d0003a2ddc"
+    },
+    {
+      "path": "engine-rig/tools/engine_table.py",
+      "sha256": "7124d7c77adac50fb228510f1fb7c90f49fd25f5cbee7408078d8ca77fb0a2af"
+    },
+    {
+      "path": "engine-rig/tests/test_engine_table.py",
+      "sha256": "b063e4a60324634af8f251d909e658dc99b7d653c11d64554661f287f0586ac2"
+    },
+    {
+      "path": "engine-rig/STATUS.md",
+      "sha256": "1af5bb26b0175a0f70ca98b8eb0a315c4063c7e31a6c5c5c4f31baab80fe3a97"
+    },
+    {
+      "path": "engine-rig/runs/20260729T072000Z-E13-engine-section-numbers/FINDINGS.md",
+      "sha256": "4401c37127799d4e875e2dd407fcc907d700b3986851b4fab5f01d74360bac4c"
+    }
+  ],
+  "findings": [
+    {
+      "fixed": "widened the class AND added _ANY_BRACE, a matcher that knows nothing about fact keys, re-read over sub()'s own output",
+      "id": "E13-F1",
+      "severity": "published",
+      "what": "three {fact.key} placeholders were published verbatim in rows 2 and 3 of ENGINE_TABLE.md",
+      "why_uncaught": "_PLACEHOLDER was [a-z0-9_.]+ and exactly those three keys carry a capital letter, so sub()'s unknown-key guard was unreachable for them, --check compared one unsubstituted table against another and reported 'is current', and the test that hunts bare numerals held a second copy of the same narrow pattern"
+    },
+    {
+      "fixed": "PlaceholderError -> rc 2, and the test asserts rc != 2 before rc == 0",
+      "id": "E13-F2",
+      "severity": "process",
+      "what": "the negative control for F1 made the suite SKIP rather than FAIL",
+      "why": "main() reports every ProbeError as exit 3 and the test skips on 3, correctly, for artifacts that live outside engine-rig/; a rendering fault reproduces everywhere and is not that"
+    },
+    {
+      "evidence": "ladder.json sokoban-far6/fd-optimal/lmcut is search 4.1 ms, wall 187.3 ms; E2 RUN_STATE.md says 183.2 for another repeat",
+      "fixed": "computed from ladder.json",
+      "id": "E13-F3",
+      "severity": "published",
+      "what": "fd.search_share published '4.1 ms of a 181 ms bill'; 181 appears in no artifact",
+      "why_uncaught": "the fact was a regex against engine-rig/STATUS.md, so the drift check compared prose to prose"
+    },
+    {
+      "evidence": "over 51 timed FD rungs: median wall 163.3 ms and median search share 0.2 %, but gripper-10/lmcut is 502.9 ms of 666.2 (75.5 % search) and sokoban-far6/ipdb is 1796.8 ms wall with 0.2 ms of search -- ipdb builds a pattern database and the bench's two-way split counts it as neither startup nor search",
+      "fixed": "the row now publishes the median with both counterexamples attached, all five figures computed",
+      "id": "E13-F4",
+      "severity": "published",
+      "what": "the fd_adapter row's claim 'every FD row sits between 140 and 260 ms almost regardless of instance' is false in both directions"
+    },
+    {
+      "fixed": "re-pointed at the artifact; the value was right by luck",
+      "id": "E13-F5",
+      "severity": "provenance",
+      "what": "dl.m9_ringstuck was quoted from STATUS.md prose though p13-fd-real/dividend.json has carried stub_expansions_before/after = 44/22 all along"
+    },
+    {
+      "disposition": "recorded, not repaired: deciding which execution E2's narrative describes is E2's to answer. No fact reads RUN_STATE.md, so the drift is contained to that run's prose.",
+      "id": "E13-F6",
+      "severity": "reported-not-fixed",
+      "what": "E2's hand-written RUN_STATE.md timing table disagrees with its own machine-generated LADDER.md/ladder.json on every shared cell (far6, gripper-08, gripper-10), a systematic few-percent offset",
+      "why_it_matters": "consistent with a different bench execution, not a different repeat -- ladder.json stores one timing per rung and no per-repeat data, so 'a different repeat' is supported by no artifact"
+    }
+  ],
+  "lane": "verify",
+  "new_experiments": 0,
+  "passive": {
+    "api_calls": 0,
+    "cost_usd": 0.0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "E13-engine-section-numbers",
+  "provenance_audit": {
+    "json_or_jsonl_artifact": {
+      "after": 71,
+      "before": 62
+    },
+    "narrative_outside_any_run": {
+      "after": 1,
+      "before": 5
+    },
+    "note": "the first draft of this block said 68/108; the adversarial pass recomputed both columns from the two versions of FACTS and found 71/108. A transposition that preserved the total, in the audit whose thesis is that unre-derived numbers are the problem.",
+    "remaining": "fd.never_fuzzed = 'stub-bfs' (fuzzlab/MUTATION.md) -- a label naming which rung a code path forces, not a measurement",
+    "text_report_or_log_inside_a_run": {
+      "after": 108,
+      "before": 107
+    },
+    "total_facts": {
+      "after": 180,
+      "before": 174
+    }
+  },
+  "suite": "525 passed, 27 skipped",
+  "table": {
+    "artifacts_read": 22,
+    "facts_after": 180,
+    "facts_before": 174,
+    "facts_under_a_runs_directory": 168,
+    "largest_single_source": "engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep supplies 87 of 180; its harnesses are not committed",
+    "regeneration_byte_stable": true,
+    "sha256": "5d078f16885a2b243428d75495ee29be323e24a3d4cf65a591b298d0003a2ddc"
+  },
+  "territory": "engine-rig",
+  "utc": "2026-07-29T07:20:00Z"
+}
