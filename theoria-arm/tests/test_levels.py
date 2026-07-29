@@ -433,28 +433,43 @@ def test_the_boundary_snapshots_the_pair_and_drops_the_problem(tmp_path):
     assert arm.books.playbook == "# none\n"
 
 
-def test_pending_surprises_are_retired_at_the_boundary_with_a_reason(tmp_path):
-    """A surprise is the only thing that calls the desk. One fired against a
-    trajectory that no longer exists would buy an adjudication of evidence the
-    arm cannot show."""
+def test_pending_surprises_survive_the_boundary(tmp_path):
+    """A boundary makes the desk look *again*, not look away.
+
+    This pinned the opposite until an adversarial review took the cost
+    argument apart. Retiring was justified by "a surprise is the only thing
+    that calls the desk, so carrying stale ones buys pointless calls" -- but
+    `need` is a boolean and `Register.handled` closes *all* pending surprises
+    in one call, so one pending surprise costs exactly what three do. Retiring
+    bought nothing, and emptying `pending` was one of three things that
+    together left a run unable to notice its own manual had gone stale (see
+    `test_a_carried_manual_that_cannot_be_loaded_fires_a_surprise`).
+
+    So the contract is now: they stay pending, and the boundary records how
+    many crossed it.
+    """
     arm, _ = _armed_at_a_boundary(tmp_path)
 
-    assert arm.register.pending == []
-    retired = arm.turns[-1]["level_boundary"]["retired_surprises"]
-    assert retired["retired"] == 2
-    assert retired["kinds"] == ["render_mismatch", "replay_mismatch"]
-    assert "level boundary: level 1 -> 2" in retired["reason"]
+    assert len(arm.register.pending) == 2, (
+        "surprises fired on level 1 must still be pending on level 2")
+    assert arm.turns[-1]["level_boundary"]["pending_surprises_carried"] == 2
     for item in arm.register.items:
-        assert item.handled_by.startswith("retired: level boundary")
-    # Retired, not deleted.
+        assert item.handled_by is None
     assert arm.register.summary()["total"] == 2
+    assert arm.register.summary()["unhandled"] == 2
 
 
 def test_the_boundary_appends_a_turn_and_names_the_beat(tmp_path):
     arm, step = _armed_at_a_boundary(tmp_path)
     entry = arm.turns[-1]
     assert entry["beat"] == "level"
-    assert entry["turn"] == 4
+    # Not the bare turn number. `archive._turn_spine` keys turn rows by id and
+    # backfills a missing `actions_before` from the previous turn, resolving
+    # ties to the highest index -- so a boundary row sharing turn 4's id would
+    # take ownership of turn 4's ARC commands and leave the real turn an empty
+    # window. Distinct key, and `actions_before` carried rather than inferred.
+    assert entry["turn"] == "4-boundary"
+    assert entry["actions_before"] == arm.budget.actions_ok
     assert entry["detail"] == "level 1 complete"
     assert entry["level_boundary"]["from_level"] == 1
     assert entry["level_boundary"]["step_idx"] == step.step_idx
@@ -707,4 +722,186 @@ def test_a_boundary_run_keeps_its_surprise_account_on_disk(tmp_path):
     assert report["surprises"] == 2
     assert report["holds"] is True
     assert arm.summary()["surprises"]["total"] == 2
-    assert arm.summary()["surprises"]["unhandled"] == 0
+    # Still pending: the boundary no longer closes them. See
+    # `test_pending_surprises_survive_the_boundary`.
+    assert arm.summary()["surprises"]["unhandled"] == 2
+
+
+def test_a_carried_manual_that_cannot_be_loaded_fires_a_surprise(tmp_path):
+    """The failure this pins was reproduced end to end before it was fixed.
+
+    A run seeded with carried books has a non-empty `theory.dsl` and no
+    `generated/theory.py` -- the compiled forms deliberately do not travel, they
+    are re-derived. Before the fix, nothing noticed:
+
+    * `certify.cheap` returns early on a failed predictor load, and a failed
+      load is not one of the seven surprises, so nothing fired;
+    * the theorize predicate reads `(not theory.strip()) or pending`, and theory
+      is non-empty *because the carry succeeded*, so it was False forever;
+    * no theorize means no compile, which means no predictor, which means no
+      plan -- the run spent its whole budget on round-robin exploration with
+      books it never opened, and reported `model_calls: 0, surprises: 0,
+      constraint_8: holds`. A green tick on a dead run.
+
+    The inversion is what made it dangerous: carrying *nothing* worked, carrying
+    *something* bricked the run -- so it fired exactly when transfer was being
+    claimed.
+    """
+    previous = Books(str(tmp_path / "level1-books"))
+    previous.write(theory="semantics:\n  frame persist\n",
+                   playbook="goal:\n  reach exit\n")
+
+    seeded = Books(str(tmp_path / "level2-books"), seed_from=previous.root)
+    assert seeded.theory.strip(), "the carry must have succeeded"
+    assert os.listdir(seeded.generated) == [], "the compiled forms do not travel"
+    namespace, error = seeded.load_predictor()
+    assert namespace is None and error, "and so the predictor cannot load"
+
+    arm = _arm(tmp_path / "run", seed_books=previous.root)
+    assert arm.books.theory.strip()
+
+    record = {}
+    arm._theorize_and_certify(record)
+
+    kinds = [item.kind for item in arm.register.items]
+    assert "replay_mismatch" in kinds, (
+        "a manual with no executable form must be visible in the seven counts, "
+        "not just as a string in record['predictor']: %s" % kinds)
+    fired = [i for i in arm.register.items if i.kind == "replay_mismatch"][0]
+    assert "no executable form" in fired.detail
+    assert fired.payload["carried"] is True
+
+    # Fired once per level, not once per turn: a surprise per turn would make
+    # the register's seven counts a function of turn count rather than of what
+    # the world did.
+    before = len(arm.register.items)
+    arm._theorize_and_certify({})
+    assert len(arm.register.items) == before
+
+
+def test_the_boundary_drops_the_compiled_forms_with_the_problem(tmp_path):
+    """`load_predictor` reads `generated/theory.py` with no freshness check, and
+    `compile_all` skips `gen_python` when there is no problem -- so a later
+    compile does not even overwrite it. Dropping level N's problem without
+    dropping the forms derived from it hands level N+1 a predictor whose
+    `initial_state()` is level N's board, which `plan` then searches from and
+    `commit` fires into a board it has never seen."""
+    arm, _ = _armed_at_a_boundary(tmp_path)
+    assert not os.path.exists(arm.books.problem_path)
+    assert os.path.isdir(arm.books.generated)
+    assert os.listdir(arm.books.generated) == [], (
+        "level N's compiled predictor must not survive into level N+1")
+
+
+def test_certify_runs_again_on_a_new_level(tmp_path):
+    """It used to ask `if not self.certify_reports` -- has certify *ever* run --
+    which is the same question only while a run has one level. From level 2 on
+    that list is never empty again, so certify never ran again at all, and the
+    manual was never checked against the board it was actually being used on."""
+    arm = _arm(tmp_path)
+    _feed(arm, G0, levels_completed=0, action="RESET")
+    _feed(arm, G0, levels_completed=0)
+
+    # Level 1 certified. The old predicate is now permanently satisfied.
+    arm.certify_reports.append({"checks": {}, "green": True})
+    assert arm._certified_this_level()
+
+    _feed(arm, G1, levels_completed=1, action="ACTION2")   # the boundary
+
+    assert arm.certify_reports, "the report from level 1 is still on the list"
+    assert not arm._certified_this_level(), (
+        "the boundary must re-arm certify: 'has it ever run' is the wrong "
+        "question from level 2 on")
+
+
+def test_a_reset_that_returns_this_levels_own_board_is_not_an_advance(tmp_path):
+    """`arc-recon/ACCESS_CHECK.md:24-25`, verified by precheck on all four
+    development-pile games: RESET returns `full_reset: false` and resets to the
+    level the session is on. So a RESET-after-WIN that hands back the same board
+    has restarted the level, not advanced it -- and an earlier version accepted
+    exactly that as proof of advance, because it only compared state strings.
+    That would have written a level completion that did not happen into the
+    series behind the paper's figure."""
+    arm = _arm(tmp_path)
+    sent = []
+
+    def fake_reset():
+        sent.append("RESET")
+        return 200, _envelope(G0, levels_completed=0)    # the same board back
+
+    arm.arc.reset = fake_reset
+    arm.arc.win_levels = 7
+    _feed(arm, G0, levels_completed=0, action="RESET")
+    _feed(arm, G0, levels_completed=0)
+    arm.last_envelope = _envelope(G0, levels_completed=0, state="WIN")
+
+    assert arm._try_advance_level() is False
+    assert arm.outcome == "level_advance_unknown"
+    assert "does not advance one" in arm.stopped_because
+    assert arm.levels.completed == 0, "no boundary may be recorded"
+    assert arm.levels.starts == [0]
+
+    probe = arm.levels.reset_probes[-1]
+    assert probe["verdict"] == "same board: RESET restarted this level"
+    assert probe["reset_frame_hash"] == probe["level_opening_hash"]
+
+
+def test_a_reset_that_returns_a_different_board_is_an_advance(tmp_path):
+    arm = _arm(tmp_path)
+    arm.arc.reset = lambda: (200, _envelope(G1, levels_completed=0))
+    arm.arc.win_levels = 7
+    _feed(arm, G0, levels_completed=0, action="RESET")
+    _feed(arm, G0, levels_completed=0)
+    arm.last_envelope = _envelope(G0, levels_completed=0, state="WIN")
+
+    assert arm._try_advance_level() is True
+    assert arm.levels.completed == 1
+    assert arm.levels.events[-1]["signal"] == "win_then_reset"
+    assert arm.levels.reset_probes[-1]["verdict"] == (
+        "new board: WIN was the level signal")
+
+
+def test_the_advance_budget_is_per_boundary_not_per_run(tmp_path):
+    """It was never reset on success, so a run that advanced twice stopped at
+    the third boundary with `level_advance_unknown` -- immediately after
+    advancing twice. g50t has seven levels."""
+    arm = _arm(tmp_path)
+    arm.arc.win_levels = 7
+    _feed(arm, G0, levels_completed=0, action="RESET")
+
+    # Three successful advances in a row. With a run-lifetime budget of 2 the
+    # third returns False; with a per-boundary budget every one succeeds.
+    for completed in (1, 2, 3):
+        arm.arc.reset = (lambda c: lambda: (200, _envelope(G1, levels_completed=c)))(completed)
+        arm.last_envelope = _envelope(G0, levels_completed=completed - 1,
+                                      state="WIN")
+        assert arm._try_advance_level() is True, (
+            "advance %d failed: the budget is spent per boundary, and a "
+            "seven-level game crosses six of them" % completed)
+        assert arm.levels.advance_attempts == 0
+    assert arm.levels.completed == 3
+
+
+def test_winning_the_last_level_does_not_open_an_eighth(tmp_path):
+    """If the API increments to `win_levels` *and* sets WIN on the final level
+    -- which is what this repo's own mock does -- a boundary here would snapshot
+    `level7-complete`, drop `problem.json` and the compiled forms, and report
+    level 8 of a 7-level game. A winning run would delete the artefacts that say
+    how it won."""
+    arm = _arm(tmp_path)
+    arm.arc.win_levels = 3
+    _feed(arm, G0, levels_completed=0, action="RESET")
+    arm.books.write(theory="semantics:\n  frame persist\n")
+    arm.books.write_problem({"board": []})
+
+    _feed(arm, G1, levels_completed=1, action="ACTION2")     # a real boundary
+    assert arm.levels.completed == 1 and len(arm.levels.events) == 1
+
+    arm.books.write_problem({"board": []})
+    _feed(arm, G0, levels_completed=3, action="ACTION3")     # the game is won
+    assert arm.levels.completed == 3
+    assert arm.levels.finished is True
+    assert len(arm.levels.events) == 1, "no boundary into a level that is not"
+    assert arm.levels.level == 2
+    assert os.path.exists(arm.books.problem_path), (
+        "a won game keeps the problem that describes the level it won on")

@@ -301,93 +301,65 @@ byte-identity by sha256 rather than by inspection. "The manual that played level
 than a sentence in a report — which is the only form in which C3's transfer
 claim can appear in the paper.
 
-## D-A3-003 · Surprises pending at a boundary are retired, not carried
+## D-A3-003 · Surprises pending at a boundary are carried, not retired
 
-`Register.retire_pending` marks them `handled_by = "retired: <reason>"`. They
-were fired against a trajectory the arm can no longer show, and carrying them
-would spend a model call adjudicating evidence that no longer exists. Retiring
-is not deleting: the items stay in the register, so `counts()` is unchanged, all
-seven kinds still report (a zero is a measurement), and the constraint-8 audit
-still adds up. What changes is only who closed them — which is itself a datum,
-since "how many surprises died at a boundary rather than being theorized" is a
-number the bill-shape figure can use.
+**Superseded within the same branch, before merge.** The first version of this
+decision retired them: `Register.retire_pending` marked them
+`handled_by = "retired: <reason>"` on the argument that a surprise fired against
+a trajectory the arm can no longer show would buy a model call adjudicating
+evidence that no longer exists.
 
-## D-A3-004 · The arm's own vocabulary rides inside `request`, not beside it
+An adversarial pass took the argument apart, and it does not survive contact
+with the loop. `need` in `_theorize_and_certify` is a *boolean*, and
+`Register.handled` closes **all** pending surprises in one call -- so one
+pending surprise costs exactly what three do. Retiring bought nothing
+measurable.
 
-`RunLedger.model_call` forwards `**extra` into `Ledger.append`, and
-`canon.MODEL_CALL_FIELDS` is a closed set of ten names. `ModelDesk.call` was
-passing five more — `beat`, `label`, `transport`, `proxied`, `proxy_gap` — as
-top-level keyword arguments, so every completed model call raised
-`NonCanonicalField`.
+It was also load-bearing in the wrong direction. Emptying `pending` was one of
+three mechanisms that, together, left a run unable to notice its own manual had
+gone stale: the evidence gate was re-armed (so theorize was skipped), certify's
+guards asked "has certify ever run" rather than "has it run on this level" (so
+certify never ran again at all), and `pending` was empty (so `need` was False).
+With all three closed at once, an arm could play out its entire remaining budget
+on round-robin exploration with a dead book, zero model calls, and a green
+`constraint_8` -- a perfect tick on a dead run.
 
-Two repairs were possible. Widen `canon.py` to admit the five, or move them
-inside `request`, which the ledger passes verbatim. Widening was rejected: the
-closed set is another track's file, and the refusal message states the reason
-the set exists — *"The battery reads two shapes without branching; an extra
-field is a branch."* A field added for one arm's convenience is a branch every
-downstream reader inherits forever.
+So: pending surprises **cross the boundary untouched**, and the event records
+how many did (`pending_surprises_carried`). A boundary should make the desk look
+*again*, not look away. `Register.retire_pending` remains, unused by the loop:
+its accounting is still worth having correct, and a caller may yet want it.
 
-So they ride inside `request`. That is not a workaround; `request` is defined as
-what this arm sent, and `modelcall.py`'s own comment already said it is the one
-place the arm may add its own vocabulary. The record stays one of the two
-shapes, the sealing provenance D-P8-002 requires survives, and `step_idx` stays
-top-level because it is canonical and the cost curve joins on it.
+The related defect is worth recording next to it, because it is the one that
+cost real money to find in principle: `armtools/archive.constraint_8` never
+reads `handled_by`, so a retired surprise *raised the ceiling* on unexplained
+model calls by one. Three boundaries retiring two each bought six free
+unexplained calls with `holds` still True -- a false negative in exactly the
+direction that hides a violation of the arm's central claim. That is now moot on
+this code path and is still an open defect in the audit itself.
 
-What this cost, recorded because it is the whole reason the defect mattered:
-the raise landed *after* `cli_cost_usd` was incremented and after
-`binding.record_model_call` had settled the charge. The money was spent and
-booked, and then the run died writing it down — on the first theorize call and
-every one after, with `inner/loop.py` swallowing it as an ordinary desk failure.
-A campaign at full budget would have produced no manual at all.
+## D-A3-004 · A level advance is proved by the board, not by a state string
 
-## D-A3-005 · The game id is kept out of the model by construction, at two ends
+`_try_advance_level` sends RESET after a `WIN` that the roster says is not the
+last level, and then compares the returned frame's `grid_hash` against this
+level's opening frame. Identical means the level did **not** advance.
 
-`Theoria.md:353` states it as a hard rule: 游戏 ID 永不进模型上下文,全程匿名化.
-The arm satisfied it on every unconditional path and had no anonymiser anywhere
-— it was clean because nobody had wired an id in, not because anything stopped
-them. An adversarial probe showed omission is not enough: an engine that raises
-puts its traceback into `evidence_brief`, an `OSError` message carries the path
-it failed on, and the run slug embedded the game stem. Six occurrences of `g50t`
-landed inside a real 20,975-char prompt.
+The first version compared `state != "WIN"` and would have been wrong on the
+likeliest path. `arc-recon/ACCESS_CHECK.md:24-25`, verified by precheck on all
+four development-pile games, records that `POST /api/cmd/RESET` returns
+`full_reset: false` and that RESET resets to *the level the session is on*. So
+RESET-after-WIN most likely restarts the same level and returns `NOT_FINISHED`
+-- which the state check passes. The arm would have recorded a level completion
+that never happened, cut the trajectory, and fed a fabricated boundary into the
+series behind the paper's figure. A fabricated level completion in a figure is
+worse than stopping.
 
-Closed at the source and at the backstop, deliberately both:
+The frame comparison is a real measurement rather than an inference because
+`ACCESS_CHECK.md` §2 establishes RESET frames are byte-identical across six
+replays in four sessions. Whichever way it goes, the arm records what it saw
+under `levels.reset_probes` -- this branch is the first thing in the repository
+that will ever observe a level completion, and it should come back with data.
 
-* **Source** — a leg slug is `<utc>-leg<nn>`, with no game in it. Nothing that
-  stringifies a path can pick the id up, including the two channels not yet
-  triggered (`books.compile_all`'s write errors, and Lean's absolute-path
-  diagnostics reaching the next prompt inside a `proof_failure` payload).
-* **Backstop** — `ModelDesk.forbid_in_prompt`, checked at the single point every
-  prompt passes through, and checked *before* the subprocess starts so a leak
-  costs neither money nor the run's admissibility.
-
-Fixing only the source would leave the rule holding by convention again, one
-refactor away from the same defect. Fixing only the backstop would turn a
-recoverable formatting accident into a dead run.
-
-`AnonymityBreach` is its own exception class rather than a `ModelError`, because
-`inner/loop.py` catches desk failures and feeds them back as evidence to
-theorize against. That is right for a timeout and wrong here: a leaked id is a
-defect in the harness, not something the loop can learn from, and a run that
-sent one is inadmissible under the rule whatever it goes on to measure.
-
-## D-A3-006 · The campaign axis is dense; the leg axis is not
-
-`campaign_series()` carries two ordinals per row. `turn` is the leg's own,
-restarting whenever a leg dies and a new one begins. `campaign_turn` is dense
-across the whole campaign.
-
-C2 predicts 前重后轻 — front-heavy, then light, tending to zero after
-convergence. Read off the leg axis, a campaign of several short legs would show
-the cost restarting its climb at every interruption, which is the *shape C2
-predicts*, produced entirely by the bookkeeping. Both are kept so the artefact
-and the claim can be told apart; the campaign axis is the one the claim is about.
-
-The front-load index is not computed here. It is E2 in
-`battery/metrics/economy.py` and one of Phase 4's three primary endpoints, and
-a second implementation of a primary endpoint is a second definition of it.
-This module assembles E2's input and stops.
-
-Legs that produced no series are kept as rows-less entries carrying their error,
-never dropped. A campaign that paid for a leg which yielded nothing is not the
-same object as a campaign with fewer legs, and concatenation is exactly where
-that distinction disappears silently.
+The advance budget is spent **per boundary, not per run**: it was never reset on
+success, so a run that advanced twice stopped at the third boundary reporting
+`level_advance_unknown` immediately after advancing twice. g50t has seven
+levels.

@@ -30,6 +30,7 @@ cheapest possible: no model calls at all.
 
 import json
 import os
+import shutil
 import time
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
@@ -167,6 +168,14 @@ class TheoriaArm:
         #: script can say which turn it happened on.
         self.current_turn = 0
 
+        #: How many certify reports existed when the current level began.
+        #: `certify` asks "have I run *on this level*", not "have I ever run".
+        self._certify_reports_at_level_start = 0
+
+        #: The level whose unusable manual has already been reported, so the
+        #: surprise fires once per level rather than once per turn.
+        self._unusable_manual_reported: Optional[int] = None
+
         self.desk_failures: List[Dict[str, Any]] = []
         self.turns: List[Dict[str, Any]] = []
         self.theorize_reports: List[Dict[str, Any]] = []
@@ -206,7 +215,15 @@ class TheoriaArm:
         event = self.levels.observe(
             levels_completed=step.levels_completed,
             step_idx=step.step_idx, action=action,
-            turn=self.current_turn, actions_spent=self.budget.actions_ok)
+            turn=self.current_turn, actions_spent=self.budget.actions_ok,
+            # The last level has no level after it. If the API increments the
+            # counter to `win_levels` *and* sets WIN on the final level -- which
+            # is exactly what this repo's own mock does -- then without this
+            # the arm fires a boundary into a level that does not exist: it
+            # snapshots `level7-complete`, drops the problem and the compiled
+            # forms, and cuts `starts`. A *winning* run would end with no
+            # `problem.json` and a `levels.level` of 8 for a 7-level game.
+            final_level=self.arc.win_levels)
         if event is not None:
             self._on_level_boundary(event)
         return added
@@ -229,40 +246,61 @@ class TheoriaArm:
         return self.store.since(self.levels.start)
 
     def _on_level_boundary(self, event: Dict[str, Any]) -> None:
-        """The domain travels; the problem, the trajectory and the pending
-        surprises do not.
-
-        Four things happen, and the third is the one that matters:
+        """The domain travels. The problem, the trajectory and every *derived*
+        form of the manual do not.
 
         1. The pair is snapshotted under the level it just finished, so the
            concept-birth timeline has a mark at the boundary. Transfer is a
            claim about *these two files* being unchanged across it.
-        2. `problem.json` is dropped. It described level N's board and would
+        2. `problem.json` is dropped: it described level N's board and would
            otherwise be handed to the planner as level N+1's.
-        3. **Empirical surprises pending at the boundary are retired.** They
-           were fired against a trajectory that no longer exists, and a
-           surprise is the only thing that calls the desk -- carrying them
-           across would spend opus money adjudicating evidence the arm can no
-           longer show. They are retired with a reason rather than dropped
-           silently, so the seven counts still add up (`constraint 8`).
-        4. The evidence gate is re-armed: the new level has zero frames, so
-           the desk is not called until the quota of new transitions arrives.
+        3. **`generated/` is dropped with it.** This is the one that bites.
+           `load_predictor` reads `generated/theory.py` off disk with no
+           freshness check, and `compile_all` skips `gen_python` when there is
+           no problem -- so a later compile does not even overwrite it. Level
+           N+1 would load level N's compiled predictor, whose `initial_state()`
+           bakes in level N's board, and `plan` would search from that state
+           and hand the script to `commit` to fire into a board it has never
+           seen. Dropping the problem without dropping the forms derived from
+           it leaves exactly that inconsistency.
+        4. The evidence gate is re-armed, and certify is re-armed with it: the
+           new level has no frames yet, and `certify` has not run *on this
+           level* however many times it ran on the last one.
+
+        **Pending surprises are deliberately NOT retired.** An earlier version
+        did retire them, on the theory that a surprise fired against a vanished
+        trajectory would buy a pointless model call. An adversarial review
+        showed the reasoning does not survive contact with the loop: `need` is
+        a boolean and `Register.handled` closes *all* pending surprises in one
+        call, so one pending surprise costs exactly what three do -- retiring
+        bought nothing measurable. Worse, it was load-bearing in the wrong
+        direction: emptying `pending` was one of three things that together
+        left a run unable to notice its own manual had gone stale, and the arm
+        would play out its whole budget on round-robin exploration with a dead
+        book and a green `constraint_8`. A boundary should make the desk look
+        *again*, not look away. See `DECISIONS.md` D-A3-003.
         """
         self.books.snapshot("level%d-complete" % event["from_level"])
+        for path in (self.books.problem_path,):
+            try:
+                if os.path.exists(path):
+                    os.remove(path)
+            except OSError:                            # noqa: BLE001
+                pass
         try:
-            if os.path.exists(self.books.problem_path):
-                os.remove(self.books.problem_path)
+            if os.path.isdir(self.books.generated):
+                shutil.rmtree(self.books.generated)
+            os.makedirs(self.books.generated, exist_ok=True)
         except OSError:                                # noqa: BLE001
             pass
-        retired = self.register.retire_pending(
-            "level boundary: level %d -> %d; the trajectory these were fired "
-            "against is not this level's" % (event["from_level"],
-                                             event["to_level"]))
-        event["retired_surprises"] = retired
+        event["pending_surprises_carried"] = len(self.register.pending)
         self._frames_at_last_theorize = -1
-        self.turns.append({"turn": self.current_turn, "beat": "level",
+        self._certify_reports_at_level_start = len(self.certify_reports)
+        self.turns.append({"turn": "%s-boundary" % self.current_turn,
+                           "beat": "level",
                            "detail": "level %d complete" % event["from_level"],
                            "level_boundary": event,
+                           "actions_before": self.budget.actions_ok,
                            "actions_spent": self.budget.actions_ok})
         self._write_run_state()
 
@@ -302,9 +340,31 @@ class TheoriaArm:
         saying so is more useful than guessing: see `LEVEL_SIGNAL_UNKNOWN`. The
         arm sends RESET -- the only command that could plausibly start the next
         level -- and then *checks whether the world actually moved* instead of
-        assuming it did. If it did not, the run stops with a reason that names
-        the unknown, so the first real level completion becomes a measurement
-        of the API's semantics rather than an infinite loop or a silent hang.
+        assuming it did.
+
+        **What "moved" means, and why a state string will not do.** An earlier
+        version accepted `state != "WIN"` as proof of advance. That is wrong,
+        and this repo had already settled it:
+        `arc-recon/ACCESS_CHECK.md:24-25`, verified by precheck on all four
+        development-pile games, records that `POST /api/cmd/RESET` returns
+        `full_reset: false` and that **RESET is a level reset -- the level it
+        resets to is the one the session is on**. So the likeliest outcome of
+        RESET-after-WIN is a restart of the *same* level, returning
+        `NOT_FINISHED` -- which the state check passes. The arm would then have
+        recorded a level completion that did not happen, cut `starts`, and fed
+        a fabricated boundary into the series behind the paper's figure. A
+        fabricated level completion in a figure is the worst outcome available
+        here, worse than stopping.
+
+        So the test is the board itself. `ACCESS_CHECK.md` §2 establishes that
+        RESET frames are byte-identical across six replays in four sessions, so
+        comparing the returned frame against this level's opening frame is a
+        real measurement rather than an inference. Identical means the level
+        did not advance.
+
+        Either way the arm comes back with data: this branch is the first thing
+        in the repository that will ever observe a level completion, and it
+        records what it saw under `levels.reset_probe`.
         """
         self.levels.advance_attempts += 1
         if self.levels.advance_attempts > MAX_LEVEL_ADVANCE_ATTEMPTS:
@@ -316,8 +376,11 @@ class TheoriaArm:
             return False
 
         before_completed = self.levels.completed
+        opening = self._level_store().grids
+        opening_hash = grid_hash(opening[0]) if opening else None
+
         status, envelope = self.arc.reset()
-        self._record("RESET", status, envelope, note="advance level")
+        step = self._record("RESET", status, envelope, note="advance level")
         if status != 200:
             self.stopped_because = ("RESET after a level WIN returned %s"
                                     % status)
@@ -325,21 +388,54 @@ class TheoriaArm:
             return False
 
         state = (self.last_envelope or {}).get("state")
+        reset_hash = grid_hash(step.grid) if step.grid is not None else None
+        probe = {"attempt": self.levels.advance_attempts,
+                 "state_after_reset": state,
+                 "level_opening_hash": opening_hash,
+                 "reset_frame_hash": reset_hash,
+                 "counter_moved": self.levels.completed > before_completed}
+        self.levels.reset_probes.append(probe)
+
         if self.levels.completed > before_completed:
             # `_record` already saw the counter move and fired the boundary.
+            # The budget is per boundary, not per run: a 7-level game needs to
+            # do this six times.
+            self.levels.advance_attempts = 0
+            probe["verdict"] = "counter moved"
             return True
-        if state and state != "WIN":
-            # The world moved on without moving the counter: the WIN *was* the
-            # signal. Record the boundary through the same door so `starts`
-            # stays authoritative.
+
+        if reset_hash is not None and reset_hash == opening_hash:
+            # Measured, not inferred: RESET handed back this level's opening
+            # board. That is `ACCESS_CHECK.md`'s `full_reset: false` observed
+            # from inside the arm, and it means RESET is not an advance
+            # mechanism.
+            probe["verdict"] = "same board: RESET restarted this level"
+            self.stopped_because = (
+                "the world reported WIN, and RESET returned this level's own "
+                "opening board (frame hash %s) -- RESET restarts a level, it "
+                "does not advance one. ACCESS_CHECK.md said full_reset:false; "
+                "this is that, measured from inside the arm."
+                % (reset_hash or "?")[:12])
+            self.outcome = "level_advance_unknown"
+            return False
+
+        if state and state != "WIN" and reset_hash != opening_hash:
+            # A different board *and* a state that moved on. The WIN was the
+            # level signal and RESET started the next one. Record the boundary
+            # through the same door so `starts` stays authoritative.
+            probe["verdict"] = "new board: WIN was the level signal"
             event = self.levels.force(
                 signal="win_then_reset",
                 step_idx=len(self.store.steps) - 1,
-                note="state went WIN -> %s after RESET; the counter did not "
-                     "move, so WIN was the level signal" % state,
+                note="state went WIN -> %s after RESET and the board changed "
+                     "(%s -> %s); the counter did not move, so WIN was the "
+                     "level signal"
+                     % (state, (opening_hash or "?")[:12],
+                        (reset_hash or "?")[:12]),
                 turn=self.current_turn,
                 actions_spent=self.budget.actions_ok)
             self._on_level_boundary(event)
+            self.levels.advance_attempts = 0
             return True
 
         self.stopped_because = (
@@ -458,6 +554,8 @@ class TheoriaArm:
         # differently-worded manual against identical data at full price. What
         # the loop needs then is more world. So the turn falls through to probe
         # and the manual stays red until evidence arrives that could change it.
+        self._notice_unusable_manual()
+
         new_frames = self._frames_this_level() - self._frames_at_last_theorize
         if (self.books.theory.strip()
                 and new_frames < MIN_NEW_FRAMES_BETWEEN_THEORIZE
@@ -467,7 +565,7 @@ class TheoriaArm:
                 "since the last call (want %d). Going to get more."
                 % (len(self.register.pending), new_frames,
                    MIN_NEW_FRAMES_BETWEEN_THEORIZE))
-            if not self.certify_reports:
+            if not self._certified_this_level():
                 record["certify"] = _certify_line(self._certify())
             return
 
@@ -541,8 +639,63 @@ class TheoriaArm:
 
         if rounds:
             self._frames_at_last_theorize = self._frames_this_level()
-        if not self.certify_reports and self.books.theory.strip():
+        if not self._certified_this_level() and self.books.theory.strip():
             record["certify"] = _certify_line(self._certify())
+
+    def _certified_this_level(self) -> bool:
+        """Has certify run since the current level began?
+
+        It used to ask `if not self.certify_reports` -- has certify *ever*
+        run -- which is the same question only while a run has one level. From
+        level 2 on, that list is never empty again and **certify never runs
+        again at all**: the manual is never checked against the board it is
+        actually being used on. The counter is reset at each boundary.
+        """
+        return len(self.certify_reports) > self._certify_reports_at_level_start
+
+    def _notice_unusable_manual(self) -> None:
+        """A manual with no loadable executable form disagrees with the world.
+
+        This exists because of a failure that was reproduced end to end: a run
+        seeded with carried books has a non-empty `theory.dsl` but no
+        `generated/theory.py` (the compiled forms deliberately do not travel --
+        they are re-derived). `certify.cheap` returns early on a failed
+        predictor load, and **a failed load is not one of the seven
+        surprises**, so nothing fires. The theorize predicate then reads
+        `(not theory.strip()) or pending` -- theory is non-empty *because the
+        carry succeeded*, pending is empty -- and is False forever. No
+        theorize, so no compile, so no predictor, so no plan: the run spends
+        its entire budget on round-robin exploration with books it never
+        opened, and reports `model_calls: 0, surprises: 0, constraint_8: holds`.
+        A green tick on a dead run.
+
+        The inversion is what makes it dangerous: carrying *nothing* works
+        (empty theory opens the predicate), carrying *something* bricks it --
+        so it fires exactly when transfer is being claimed.
+
+        `replay_mismatch` is the honest kind. The cheap certify layer *is*
+        replay, and a manual that cannot be executed is a manual that cannot be
+        replayed against the record; the empirical family is the one that
+        revises `theory.dsl`, which is the book at fault. Firing it rather than
+        just widening the predicate means the condition appears in the
+        seven-count series instead of silently steering control flow.
+        """
+        if not self.books.theory.strip():
+            return                                     # nothing to be stale
+        namespace, error = self.books.load_predictor()
+        if namespace is not None:
+            return
+        if self._unusable_manual_reported == self.levels.level:
+            return                                     # once per level
+        self._unusable_manual_reported = self.levels.level
+        self.register.fire(
+            "replay_mismatch",
+            "the manual has no executable form: %s" % error,
+            step_idx=len(self.store.steps) - 1,
+            payload={"beat": "certify", "level": self.levels.level,
+                     "carried": bool(self.books.carried),
+                     "why": "theory.dsl is non-empty but generated/theory.py "
+                            "could not be loaded, so nothing can replay it"})
 
     def _certify(self) -> Dict[str, Any]:
         compiled = (self.theorize_reports[-1].get("_compiled")
@@ -584,12 +737,20 @@ class TheoriaArm:
             state = _roll_forward(namespace, self._level_store())
             manual_actions = [("key", a) for a in legal]
             try:
+                # The witnesses a candidate claims must be the transitions the
+                # engine was actually shown. `state` is rolled forward over
+                # this level only, so quoting the whole run's step count here
+                # would put level-1 transitions behind a level-2 candidate --
+                # in `candidates.jsonl`, which is append-only and governed by a
+                # frozen contract. Global step indices are kept as identifiers
+                # (they address the run's trace); the *range* is the level's.
+                level_steps = len(self._level_store())
                 design = probe_beat.design(
                     namespace, state, manual_actions,
                     out_path=self.candidates_path,
-                    transitions=list(range(len(self.store.steps))),
-                    coverage="%d/%d" % (len(self.store.steps),
-                                        len(self.store.steps)))
+                    transitions=list(range(self.levels.start,
+                                           len(self.store.steps))),
+                    coverage="%d/%d" % (level_steps, level_steps))
             except Exception as exc:                   # noqa: BLE001
                 design = {"error": "%s: %s" % (type(exc).__name__, exc)}
             best = (design or {}).get("best")
