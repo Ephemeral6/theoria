@@ -1,12 +1,12 @@
 {
  "budget": {
-  "actions_failed": 0,
-  "actions_left": 8,
-  "actions_ok": 4,
+  "actions_failed": 47,
+  "actions_left": 3,
+  "actions_ok": 9,
   "ceiling_actions": 12,
   "ceiling_commands": 2000,
-  "commands_sent": 54,
-  "http_amplification": 13.5,
+  "commands_sent": 2000,
+  "http_amplification": 222.222,
   "probe_actions": 0,
   "reserve_for_probes": 0,
   "resets": 1
@@ -60,7 +60,10 @@
    "released": false,
    "renewals": 0,
    "reservation_id": "res-ba3529484ce241cc",
-   "tripped": null,
+   "tripped": {
+    "message": "1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+    "rule": "UNPRICED_SPEND"
+   },
    "unpriced_calls": 0,
    "usd_cap": 18.0,
    "usd_charged": 0.0
@@ -68,7 +71,7 @@
   "unpriced_calls": 0,
   "usage_total": {}
  },
- "elapsed_s": 203.3,
+ "elapsed_s": 10308.3,
  "levels": {
   "boundaries": 0,
   "events": [],
@@ -78,9 +81,9 @@
    0
   ]
  },
- "outcome": "not_started",
- "steps": 4,
- "stopped_because": "",
+ "outcome": "budget_exhausted",
+ "steps": 57,
+ "stopped_because": "budget: HTTP command ceiling reached: 2000 commands sent. Retry waves, not actions, are what got us here.",
  "surprises": {
   "by_family": {
    "computational": 0,

@@ -1,0 +1,68 @@
+{
+ "games": [
+  "g50t-5849a774"
+ ],
+ "legs": [
+  {
+   "carried": null,
+   "game_id": "g50t-5849a774",
+   "outcome": "spend_gate_tripped",
+   "rows": 1,
+   "seeded": false,
+   "slug": "20260729T105729Z-leg01",
+   "usd": 0.0
+  }
+ ],
+ "prompt_id": "A3-campaign-devpile",
+ "reading": "campaign_turn is the axis for C2's \u524d\u91cd\u540e\u8f7b claim. The front-load index over it is E2 in battery/metrics/economy.py and is deliberately not recomputed here. A leg with rows 0 and an error spent money and produced no series; it is not the same as a campaign with fewer legs.",
+ "rows": [
+  {
+   "actions_before": 0,
+   "actions_before_recorded": null,
+   "actions_taken": 5,
+   "beats": [],
+   "call_idx": [],
+   "campaign_turn": 1,
+   "elapsed_s": null,
+   "game_id": "g50t-5849a774",
+   "http_commands": 34,
+   "leg_index": 1,
+   "leg_slug": "20260729T105729Z-leg01",
+   "level_boundary": false,
+   "model_calls": 0,
+   "seeded_from_previous_leg": false,
+   "step_idx": null,
+   "surprise_by_family": {
+    "computational": 0,
+    "empirical": 0
+   },
+   "surprise_counts": {
+    "execution_mismatch": 0,
+    "heuristic_miss": 0,
+    "probe_refutation": 0,
+    "proof_failure": 0,
+    "render_mismatch": 0,
+    "replay_mismatch": 0,
+    "search_timeout": 0
+   },
+   "surprise_seqs": [],
+   "surprise_total": 0,
+   "theorize_rounds": 0,
+   "turn": 0,
+   "turn_source": "turns.json",
+   "usd": 0,
+   "usd_cumulative": 0.0,
+   "usd_share": 0.0,
+   "wall_clock_s": null
+  }
+ ],
+ "schema": "theoria-campaign-series/v1",
+ "totals": {
+  "legs_recorded": 1,
+  "legs_with_rows": 1,
+  "level_boundaries": 0,
+  "turns": 1,
+  "usd": 0.0
+ },
+ "utc": "2026-07-29T11:00:12Z"
+}

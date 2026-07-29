@@ -1,0 +1,27 @@
+{
+ "base_commit": null,
+ "branch": null,
+ "budget": {
+  "actions_per_level": 40,
+  "campaign_usd": 200.0,
+  "game_usd": 60.0,
+  "leg_usd_cap": 25.0
+ },
+ "games": [
+  "g50t-5849a774"
+ ],
+ "legs": [
+  {
+   "game_id": "g50t-5849a774",
+   "outcome": "spend_gate_tripped",
+   "slug": "20260729T105729Z-leg01",
+   "usd": 0.0
+  }
+ ],
+ "model": "claude-opus-5",
+ "offline": false,
+ "prompt_id": "A3-campaign-devpile",
+ "spent_usd": 0.0,
+ "stopped": null,
+ "utc": "2026-07-29T10:57:29Z"
+}

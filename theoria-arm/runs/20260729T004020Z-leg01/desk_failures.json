@@ -1,0 +1,210 @@
+[
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 6
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 7
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 8
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 9
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 10
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 11
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 12
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 13
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 14
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 15
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 16
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 17
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 18
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 19
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 20
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 21
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 22
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 23
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 24
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 25
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 26
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 27
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 28
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 29
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 30
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 31
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 32
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 33
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 34
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 35
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 36
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 37
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 38
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 39
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 40
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 41
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 42
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 43
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 44
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 45
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 46
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 47
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 48
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 49
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 50
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 51
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 52
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 53
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 54
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 55
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 56
+ },
+ {
+  "error": "SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+  "step_idx": 57
+ }
+]

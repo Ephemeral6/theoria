@@ -1,0 +1,75 @@
+{
+ "budget": {
+  "actions_per_level": 40,
+  "campaign_usd": 200.0,
+  "game_usd": 60.0,
+  "leg_usd_cap": 25.0
+ },
+ "by_game": {
+  "g50t-5849a774": 0.0
+ },
+ "elapsed_s": 162.9,
+ "games": [
+  "g50t-5849a774"
+ ],
+ "legs": [
+  {
+   "actions_ok": 5,
+   "books_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T105729Z-leg01\\books",
+   "campaign": "theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T105729Z-leg01",
+   "carried": null,
+   "cost_accounting": {
+    "cli_cost_usd": 0.0,
+    "gate_absent": false,
+    "gate_usd_charged": 0.0,
+    "governing_source": "gate",
+    "governing_usd": 0.0
+   },
+   "game_id": "g50t-5849a774",
+   "index": 1,
+   "levels": {
+    "boundaries": 0,
+    "events": [],
+    "finished": false,
+    "level": 1,
+    "levels_completed": 0,
+    "reset_probes": [],
+    "starts": [
+     0
+    ]
+   },
+   "outcome": "spend_gate_tripped",
+   "run_dir": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\a3-campaign-devpile\\theoria-arm\\runs\\20260729T105729Z-leg01",
+   "seed_books": null,
+   "slug": "20260729T105729Z-leg01",
+   "stopped_because": "the shared spend pool refused another request, so this leg stops here rather than retrying into the ceiling: SpendGateTripped: 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4.0000 against a number it knows is too small. Add the model to proxy/pricing/, then account for the missing dollars with SpendGate.price_unpriced(). Action-only spend is unaffected: actions are counted by the request, not by a price table.",
+   "surprises": {
+    "by_family": {
+     "computational": 0,
+     "empirical": 0
+    },
+    "by_kind": {
+     "execution_mismatch": 0,
+     "heuristic_miss": 0,
+     "probe_refutation": 0,
+     "proof_failure": 0,
+     "render_mismatch": 0,
+     "replay_mismatch": 0,
+     "search_timeout": 0
+    },
+    "total": 0,
+    "unhandled": 0
+   },
+   "theorize_rounds": 0,
+   "turn_series_error": null,
+   "usd": 0.0,
+   "utc": "2026-07-29T11:00:12Z"
+  }
+ ],
+ "levels_completed": 0,
+ "prompt_id": "A3-campaign-devpile",
+ "spent_usd": 0.0,
+ "stopped": null,
+ "utc": "2026-07-29T11:00:12Z",
+ "zero_progress_streak": 1
+}
