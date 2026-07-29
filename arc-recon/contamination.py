@@ -85,6 +85,76 @@ MATERIAL_LEVEL = "mechanics_disclosed"
 # Call records kept by other tracks. Read-only, and scanned only to make the
 # "zero sealed contact" claim cover the places campaigns actually run -- this
 # directory's own ledger does not.
+import sealed as sealed_mod
+
+CALL_FIELDS = ("url", "request_body", "request_headers", "method", "final_url")
+EPISODE_FIELDS = ("game_id", "game", "games")
+SUMMARY_FIELDS = ("kind",)
+
+CALL = "call"
+EPISODE = "episode"
+SUMMARY = "summary"
+UNRECOGNISED = "unrecognised"
+
+
+def record_shape(entry: Dict[str, Any]) -> str:
+    """Which kind of record is this, and therefore how should it be read?
+
+    Three shapes exist in the files this module scans, and before A13 the reader
+    knew only the first:
+
+    * `call` -- an HTTP record: `url`, `request_body`, `request_headers`.
+      `arc-recon/data/recon_ledger.jsonl` and most of
+      `baseline-arms/probe_log.jsonl`.
+    * `episode` -- a gameplay record carrying a top-level `game_id`. All 560
+      lines of `baseline-arms/ledger.jsonl`. **Addressing a game is what playing
+      one means**, so the id here is a contact, not a mention; reading these as
+      "no request body, nothing to see" is exactly how 560 records audited
+      themselves clean.
+    * `summary` -- a probe's own aggregate output, keyed by `kind` with no call
+      fields. Fifteen lines of `probe_log.jsonl`. These are derived *from*
+      responses, so an id in one is a listing, on the same reasoning that keeps
+      `GET /api/games` from scoring 21 contacts.
+
+    Anything else is `unrecognised`, and the caller must treat that as *not
+    audited*. Adding a shape here is how you make a new kind of record
+    auditable; the one thing that must never happen again is a record shape
+    passing through unread and being counted towards a clean verdict.
+    """
+    keys = set(entry)
+    if keys & set(CALL_FIELDS):
+        return CALL
+    if keys & set(EPISODE_FIELDS):
+        return EPISODE
+    if keys & set(SUMMARY_FIELDS):
+        return SUMMARY
+    return UNRECOGNISED
+
+
+def request_and_response(entry: Dict[str, Any], shape: str):
+    """The two halves of a record: what we sent, and what came back.
+
+    The split is the module's oldest and most load-bearing distinction --
+    contact versus listing -- and it now has to be made for three shapes rather
+    than one. For an `episode` record the id itself is the request half: you
+    cannot take a step in a game without naming it.
+    """
+    if shape == CALL:
+        # `game_id` at the top level of an HTTP record is still something we
+        # addressed, and `record_shape` resolves CALL before EPISODE, so it has
+        # to be picked up here or a record carrying both would lose it.
+        return ([entry.get("url"), entry.get("final_url"),
+                 entry.get("request_body"), entry.get("request_headers")]
+                + [entry.get(key) for key in EPISODE_FIELDS],
+                [entry.get("response_body"), entry.get("response_summary")])
+    if shape == EPISODE:
+        return ([entry.get(key) for key in EPISODE_FIELDS],
+                [entry.get(key) for key in
+                 ("frame", "state", "available_actions", "response_body")])
+    # A summary is wholly derived from responses; nothing in it was sent.
+    return ([], [entry])
+
+
 OTHER_LEDGERS = [
     os.path.join(HERE, os.pardir, "baseline-arms", "ledger.jsonl"),
     os.path.join(HERE, os.pardir, "baseline-arms", "probe_log.jsonl"),
@@ -128,6 +198,23 @@ def sealed_api_contacts(ledger_path: str = None) -> Dict[str, Any]:
     The response side is still counted, separately and labelled, because
     "we never even saw the id" and "we saw it listed and did not call it" are
     different facts and should not be made to look alike.
+
+    **A13: this function read three fields and called every other shape clean.**
+    It extracted `url`, `request_body` and `response_body`, and
+    `baseline-arms/ledger.jsonl` has none of them -- its 560 records carry a
+    top-level `game_id` and nothing else this reader knew. So `sent` was empty
+    on every line, `contacts` was empty, and the guard below (`present and not
+    unreadable`) saw a file that existed and parsed and returned `clean: True`.
+    "560 calls, sealed ADDRESSED: NONE" was printed, and `claim_set.json`
+    recorded it. The green light was constructed, not found.
+
+    Two changes. Every record is now **classified into a shape** before it is
+    read, and a record matching none of them is `unreadable` -- not checked is
+    not clean, which is the whole rule this module exists to enforce. And the
+    request side is scanned by `sealed.hits`, the one criterion, which searches
+    the *whole* payload for the full id or a whole-token stem rather than
+    looking inside two named keys; that is what makes the bare stem
+    `cascade/probe.py` writes into `tags` visible to an audit for the first time.
     """
     ledger_path = ledger_path or os.path.join(DATA_DIR, "recon_ledger.jsonl")
     sealed = piles()["sealed_pile"]
@@ -135,6 +222,7 @@ def sealed_api_contacts(ledger_path: str = None) -> Dict[str, Any]:
     contacts: Dict[str, List[str]] = {}
     listed: Dict[str, int] = {}
     unreadable: List[str] = []
+    shapes: Dict[str, int] = {}
     lines = 0
     present = os.path.exists(ledger_path)
     if present:
@@ -160,25 +248,51 @@ def sealed_api_contacts(ledger_path: str = None) -> Dict[str, Any]:
             if not isinstance(entry, dict):
                 unreadable.append("line %d: not a JSON object" % i)
                 continue
+            shape = record_shape(entry)
+            shapes[shape] = shapes.get(shape, 0) + 1
+            if shape == UNRECOGNISED:
+                # The one branch this whole work order is about. A record whose
+                # every field is unknown to this reader has not been audited,
+                # and an audit that cannot read a record must not vote on it.
+                unreadable.append(
+                    "line %d: no field this audit knows how to read (keys: %s)"
+                    % (i, ", ".join(sorted(entry)[:8]) or "none"))
+                continue
             url = str(entry.get("url", ""))
-            body = entry.get("request_body")
-            # Exact-match the id fields we actually send, then substring-scan the
-            # URL: an id can reach the server either way.
-            sent = set()
-            if isinstance(body, dict):
-                for key in ("game_id", "game"):
-                    value = body.get(key)
-                    if isinstance(value, str):
-                        sent.add(value)
-            for game_id in sealed:
-                stem = game_id.split("-")[0]
-                if game_id in sent or stem in sent or game_id in url:
-                    contacts.setdefault(game_id, []).append(
-                        "%s %s" % (entry.get("method"), url))
-            response = json.dumps(entry.get("response_body"), ensure_ascii=False)
-            for game_id in sealed:
-                if game_id in response:
-                    listed[game_id] = listed.get(game_id, 0) + 1
+            request, response = request_and_response(entry, shape)
+            sent = sealed_mod.hits_in_any(request, sealed)
+            back = sealed_mod.hits_in_any(response, sealed)
+            for game_id, why in sent.items():
+                contacts.setdefault(game_id, []).append(
+                    "%s %s [%s, %s record]"
+                    % (entry.get("method") or shape, url or "-", why, shape))
+            for game_id in back:
+                listed[game_id] = listed.get(game_id, 0) + 1
+
+            # Recognising a record's SHAPE is not the same as reading all of it,
+            # and the difference is the bug this work order is about, one level
+            # down. `request_and_response` names the fields each shape keeps its
+            # ids in; a sealed id sitting in some *other* field of an otherwise
+            # familiar record -- an operator note, a new key a writer added last
+            # week -- was extracted by neither half and voted clean.
+            #
+            # So the whole record is scanned too, and anything found that
+            # neither half accounts for is counted as a CONTACT. Fail closed:
+            # the response-side carve-out exists because `GET /api/games`
+            # provably lists all 25, and no such argument is available for a
+            # field nobody has classified. Teaching `request_and_response` about
+            # the field is how you make it a listing again.
+            for game_id, why in sealed_mod.hits(entry, sealed).items():
+                if game_id in sent or game_id in back:
+                    continue
+                where = sorted(
+                    key for key in entry
+                    if sealed_mod.hits({key: entry[key]}, [game_id])
+                )
+                contacts.setdefault(game_id, []).append(
+                    "%s %s [%s, in unclassified field(s) %s of a %s record]"
+                    % (entry.get("method") or shape, url or "-", why,
+                       ", ".join(where) or "?", shape))
     return {
         "ledger_lines": lines,
         "definition": ("contact = sealed id in the request url or request body; "
@@ -200,6 +314,8 @@ def sealed_api_contacts(ledger_path: str = None) -> Dict[str, Any]:
                            "21 sealed ids appear in read-only responses; that is "
                            "the catalogue the cut was made from"),
         "short_id_stems_checked": sorted(short),
+        "record_shapes": dict(sorted(shapes.items())),
+        "criterion": sealed_mod.CRITERION,
     }
 
 
@@ -298,6 +414,30 @@ def register_coverage() -> Dict[str, Any]:
                 "of %s" % (i, entry.get("game_id"), entry["claims"],
                            "/".join(CLAIM_STATES)))
         good.append(entry)
+
+    # A13: an entry whose game_id is not in the cut used to vanish silently.
+    # `current_register` skipped it with a bare `continue` -- no counter, no
+    # complaint -- so writing `ls20` where `ls20-9607627b` belonged deleted that
+    # game's quarantine registration, the register fell back to its
+    # `in_claim_set` / `never_audited` default, and the claim set went 19 -> 20
+    # with the gate fully green and `problems` empty. The check lives here
+    # rather than in `current_register` because this is the only function whose
+    # complaints reach `gate()`, and a problem nothing gates on is a comment.
+    known = set(piles()["dev_pile"]) | set(piles()["sealed_pile"])
+    for entry in good:
+        game_id = entry["game_id"]
+        if game_id in known:
+            continue
+        problems.append(
+            "contamination log registers %r, which is in neither pile. The cut "
+            "names games by their full id, so this registration applies to "
+            "nothing and the game it was meant for keeps its never_audited "
+            "default -- a dropped quarantine reads as an unexamined game, not "
+            "as a missing one. Nearest ids in the cut: %s"
+            % (game_id, ", ".join(sorted(
+                other for other in known
+                if other.split("-")[0] == str(game_id).split("-")[0]) or ["none"])))
+
     return {"present": True, "lines": lines, "problems": problems, "entries": good}
 
 
@@ -331,6 +471,9 @@ def current_register() -> Dict[str, Dict[str, Any]]:
     for entry in entries():
         game_id = entry["game_id"]
         if game_id not in register:
+            # Still skipped -- an id outside the cut has no row to update -- but
+            # no longer silently: `register_coverage` raises it as a problem and
+            # `gate()` turns it red. See the note there.
             continue
         register[game_id] = {
             "level": entry["level"],
@@ -518,8 +661,14 @@ def main(argv: List[str]) -> int:
             print("  ledger audit: %-40s NOT AUDITED (%s)"
                   % (label, "absent" if not report.get("present") else "unreadable"))
         else:
-            print("  ledger audit: %-40s %5d calls, sealed ADDRESSED: %s"
-                  % (label, report["ledger_lines"],
+            # A13: say what was actually read, not "calls". Every one of the 560
+            # lines in baseline-arms/ledger.jsonl printed as a "call" while the
+            # reader was extracting HTTP fields none of them has; a reader of
+            # this table could not tell an audited record from a skipped one.
+            shapes = ", ".join("%d %s" % (n, kind) for kind, n
+                               in sorted(report.get("record_shapes", {}).items()))
+            print("  ledger audit: %-40s %5d records (%s), sealed ADDRESSED: %s"
+                  % (label, report["ledger_lines"], shapes or "no records",
                      "NONE" if report["clean"]
                      else ", ".join(report["sealed_games_contacted"])))
 
