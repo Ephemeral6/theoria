@@ -193,8 +193,16 @@
   "tool": "armtools/backfill.py"
  },
  "quota": {
+  "agree": true,
   "billed_actions_from_ledger": 9,
-  "billed_actions_from_scorecard": null,
+  "billed_actions_from_scorecard": [
+   9
+  ],
+  "billed_actions_from_scorecard_via": {
+   "card_id": "2ec0e679-6b92-475e-890c-a3f63d21e14c",
+   "closed_by": "20260729T004020Z-leg01-salvage#r-2c977116ab0e4382",
+   "why": "this run never made the closing call itself, so the count is read out of the ledger of the run that did. It is still this run's card and this run's actions -- the card carries this run's `run_id` in `opaque`."
+  },
   "env_steps": 104,
   "model_calls": 0,
   "resets": 1
@@ -212,11 +220,13 @@
  "run_id": "r-6a6b85703f6f43e4",
  "scorecard_recovered_by": {
   "card_id": "2ec0e679-6b92-475e-890c-a3f63d21e14c",
+  "closed_by": "20260729T004020Z-leg01-salvage#r-2c977116ab0e4382",
+  "closed_by_run_id": "r-2c977116ab0e4382",
   "score": 0.0,
   "slug": "20260729T004020Z-leg01-salvage",
   "total_actions": 9,
   "total_levels_completed": 0,
-  "why": "this run died before it could close its own scorecard, so `archive.py` recorded `scorecard: null`. The card was closed afterwards by the salvage run named here, whose ledger holds the API's own count. The number was never lost, only unreachable from this file."
+  "why": "this run died before it could close its own scorecard, so `archive.py` recorded `scorecard: null`. The card was closed afterwards by the run named in `closed_by`, whose ledger holds the API's own count. The number was never lost, only unreachable from this file."
  },
  "scorecards_opened_and_never_closed": [],
  "scorecards_recovered": [],

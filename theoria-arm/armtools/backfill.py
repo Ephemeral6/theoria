@@ -153,6 +153,20 @@ def recovered_scorecards(records: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     a salvage has none of, so the number was in the archive and unreachable
     from it.
     """
+    return [card for _, card in recovered_scorecards_with_closer(records)]
+
+
+def recovered_scorecards_with_closer(
+        records: List[Dict[str, Any]]) -> List[tuple]:
+    """As `recovered_scorecards`, but keeps *which run* did the closing.
+
+    A ledger is a file, not a run: `runs/a3-gate-mock/ledger.jsonl` holds three
+    of them. `recovered_scorecards` is handed the whole file, so the identity of
+    the run that closed a card -- which the record itself carries -- was being
+    dropped on the floor, and every pointer built from it could only name a
+    directory. In a single-run ledger the two coincide, which is why the archive
+    never showed it.
+    """
     out = []
     for record in records:
         http = record.get("http") or {}
@@ -160,7 +174,7 @@ def recovered_scorecards(records: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             continue
         response = record.get("response")
         if isinstance(response, dict) and response.get("card_id"):
-            out.append(response)
+            out.append((record.get("run_id"), response))
     return out
 
 
@@ -262,6 +276,47 @@ def quota(records: List[Dict[str, Any]],
                            "salvage did not itself spend. See `parent_run`.")
     else:
         out["billed_actions_from_scorecard"] = None
+    return out
+
+
+def _quota_with_recovered(out: Dict[str, Any],
+                          recovered_by: Optional[Dict[str, Any]]
+                          ) -> Dict[str, Any]:
+    """Put the recovered count in the field whose job is to report it.
+
+    `quota()` only ever sees the run's own records, so a run that died before
+    closing its card gets `billed_actions_from_scorecard: null` -- and that null
+    is the wrong answer, not merely an incomplete one. The API does hold a count
+    for this run: the card was opened by it and stamped with its `run_id`; a
+    salvage merely made the closing call. Leaving the null meant a reader of the
+    `quota` block alone saw nothing where the number was, and had to know to go
+    look in `scorecard_recovered_by`.
+
+    The number is filled in, never silently: `..._via` says whose ledger it was
+    read out of, so this can never be mistaken for a run that closed its own
+    card, and `agree` now reconciles the two sides at manifest level rather than
+    only archive-wide.
+    """
+    if out.get("billed_actions_from_scorecard") is not None or not recovered_by:
+        return out
+    total = recovered_by.get("total_actions")
+    if total is None:
+        return out
+    out["billed_actions_from_scorecard"] = [total]
+    out["billed_actions_from_scorecard_via"] = {
+        "closed_by": recovered_by.get("closed_by") or recovered_by.get("slug"),
+        "card_id": recovered_by.get("card_id"),
+        "why": ("this run never made the closing call itself, so the count is "
+                "read out of the ledger of the run that did. It is still this "
+                "run's card and this run's actions -- the card carries this "
+                "run's `run_id` in `opaque`."),
+    }
+    out["agree"] = (total == out["billed_actions_from_ledger"])
+    if not out["agree"]:
+        out["note"] = ("the ledger and the API disagree about how many actions "
+                       "this run was billed, and here that IS a finding: the "
+                       "card is this run's own, so the two sides are counting "
+                       "the same thing.")
     return out
 
 
@@ -521,7 +576,7 @@ def build(slug: str, *, runs_root: Optional[str] = None,
         "outcome": end.get("outcome"),
         "elapsed_s": end.get("elapsed_s"),
         "note_at_run_start": start.get("note"),
-        "quota": quota(mine, closed),
+        "quota": _quota_with_recovered(quota(mine, closed), recovered_by),
         "scorecards_recovered": closed,
         "scorecards_opened_and_never_closed": orphans,
         "parent_run": parent_of(slug, closed, runs_root),
@@ -838,18 +893,24 @@ def _scorecard_recovered_elsewhere(run_id: Optional[str], runs_root: str,
         ledger = os.path.join(runs_root, name, "ledger.jsonl")
         if not os.path.exists(ledger):
             continue
-        for card in recovered_scorecards(read_ledger(ledger)):
+        for closer, card in recovered_scorecards_with_closer(read_ledger(ledger)):
             if (card.get("opaque") or {}).get("run_id") == run_id:
                 return {
                     "slug": name,
+                    # The directory alone is not an address when the ledger
+                    # holds more than one run. `closed_by_run_id` is the run
+                    # that actually made the close call; `closed_by` is the
+                    # pointer a reader should follow.
+                    "closed_by_run_id": closer,
+                    "closed_by": ("%s#%s" % (name, closer) if closer else name),
                     "card_id": card.get("card_id"),
                     "total_actions": card.get("total_actions"),
                     "total_levels_completed": card.get("total_levels_completed"),
                     "score": card.get("score"),
                     "why": ("this run died before it could close its own "
                             "scorecard, so `archive.py` recorded `scorecard: "
-                            "null`. The card was closed afterwards by the "
-                            "salvage run named here, whose ledger holds the "
+                            "null`. The card was closed afterwards by the run "
+                            "named in `closed_by`, whose ledger holds the "
                             "API's own count. The number was never lost, only "
                             "unreachable from this file."),
                 }

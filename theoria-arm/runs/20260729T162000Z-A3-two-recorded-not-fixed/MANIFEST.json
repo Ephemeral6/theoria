@@ -1,0 +1,13 @@
+{
+ "base_commit": "a772adc0195a2bf6fd6eda027e37503281b0d233",
+ "branch": "agent/a3-campaign-devpile",
+ "clock_note": "Local time here is UTC+08; this dir is stamped in true UTC. The directory name (162000Z) is when the work started under cycle 30; the `utc` below is when it was finished and committed under cycle 31, after the session that started it died.",
+ "cycle": 31,
+ "files": [],
+ "kind": "process_record",
+ "prompt_id": "A3-campaign-devpile",
+ "utc": "2026-07-29T17:38:15Z",
+ "why": "the two defects the provenance repair recorded but did not fix: leg01's quota block reported `billed_actions_from_scorecard: null` while the API's count of 9 sat one field away, and the recovery pointer named a directory rather than the run that made the closing call. Both fixed, seven tests, and the archive re-derived byte-stable.",
+ "worker": "RES-1",
+ "zero_api": "no network call, no billed action, no dollar. The archive was re-derived from ledgers already on disk."
+}

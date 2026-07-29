@@ -146,11 +146,13 @@
  "scorecard": null,
  "scorecard_recovered_by": {
   "card_id": "4e3041e8-6469-42b5-b5c5-4ca5ca310624",
+  "closed_by": "20260728T014402Z-g50t-first-contact-salvage#r-db60fc1fb9a84190",
+  "closed_by_run_id": "r-db60fc1fb9a84190",
   "score": 0.0,
   "slug": "20260728T014402Z-g50t-first-contact-salvage",
   "total_actions": 6,
   "total_levels_completed": 0,
-  "why": "this run died before it could close its own scorecard, so `archive.py` recorded `scorecard: null`. The card was closed afterwards by the salvage run named here, whose ledger holds the API's own count. The number was never lost, only unreachable from this file."
+  "why": "this run died before it could close its own scorecard, so `archive.py` recorded `scorecard: null`. The card was closed afterwards by the run named in `closed_by`, whose ledger holds the API's own count. The number was never lost, only unreachable from this file."
  },
  "sealing": {
   "by_kind": {},
