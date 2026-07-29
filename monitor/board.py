@@ -4,6 +4,16 @@
     python monitor/board.py claim <worker-id>     # atomically take the top item
     python monitor/board.py done <id> <worker>    # mark delivered
     python monitor/board.py release <id> <worker> # give it back (with reason)
+    python monitor/board.py reconcile [--fix]     # delivered work that came back
+
+`reconcile` exists because board state is a set of **tracked files** and every
+verb here is an `os.rename`. A merge from a branch based before a `done`
+restores `items/<id>.md`, git having no way to see that a file in a *different*
+directory means the work is finished — and the item is then handed out again.
+E8-ic3-scale was delivered once and re-claimed four times that way. So `done/`
+is authoritative: `claim` will not offer a delivered id, `sweep` will not put
+one back on the shelf, and `list` prints a RESURRECTED section when it finds
+any.
 
 Why a board: one-shot sessions cost a launch per item and go stale between
 items. A long-lived worker claims an item, delivers it, and claims the next —
@@ -118,6 +128,56 @@ def done_ids():
     return {f.split(".")[0] for f in os.listdir(DONE)}
 
 
+def delivered_map():
+    """``{id: deliverer}`` for everything in ``done/``.
+
+    ``done_ids()`` already existed and was used for **one** thing: resolving
+    another item's ``deps``. Nothing ever asked whether *this* item was already
+    delivered, which is the gap S34 is about.
+    """
+    out = {}
+    for f in sorted(os.listdir(DONE)):
+        if not f.endswith(".md"):
+            continue
+        parts = f[:-3].split(".")
+        out.setdefault(parts[0], parts[1] if len(parts) >= 2 else "?")
+    return out
+
+
+def resurrected():
+    """Ids that are in ``done/`` **and** back on the shelf or under claim.
+
+    Board state is a set of **tracked files**, and all three of this module's
+    verbs are `os.rename`. Nothing here is wrong on its own. What goes wrong is
+    the interaction with git: a merge from a branch whose base predates the
+    `done` sees "a file the other side has and I do not" and restores
+    `items/<id>.md`. It cannot see "this work is finished" -- that fact lives in
+    a *different* directory, and a three-way merge has no rule relating them.
+
+    Measured on 2026-07-29: `E8-ic3-scale` was delivered by W-1660 at 12:16:28Z
+    and then claimed **four more times** (W-1671 at 15:08, an accidental
+    `--help` at 15:54, W-130 at 15:59), swept back to the shelf after each, and
+    at the time this was written it sat in `items/`, `claimed/` and `done/`
+    simultaneously. `A13-sealed-audit-reads-the-wrong-fields` was in `claimed/`
+    and `done/` at once. Nothing errored, nothing printed a warning, and
+    `list` showed the item as ordinary available work: every one of those
+    workers spent a launch and a context redoing something already on a branch.
+
+    Returns ``{id: {"deliverer": w, "in_items": bool, "claimed_by": w or None}}``.
+    """
+    delivered = delivered_map()
+    claimed = claimed_map()
+    shelf = {item_id(f) for f in os.listdir(ITEMS) if f.endswith(".md")}
+    out = {}
+    for iid, deliverer in delivered.items():
+        in_items = iid in shelf
+        by = claimed.get(iid)
+        if in_items or by:
+            out[iid] = {"deliverer": deliverer, "in_items": in_items,
+                        "claimed_by": by}
+    return out
+
+
 def claimed_map():
     out = {}
     for f in os.listdir(CLAIMED):
@@ -145,6 +205,15 @@ def candidates(lane=None):
             continue
         m = meta(os.path.join(ITEMS, f))
         iid = item_id(f)
+        # Already delivered. `ready` was read three lines up and used only to
+        # resolve *other* items' deps -- the same set, never asked about the
+        # item in front of it. An id on the shelf with a `done/` record is not
+        # available work, it is a merge artefact, and offering it costs a whole
+        # session. This is a hard skip and `cmd_claim` prints what it skipped:
+        # a silently withheld item is the trap this board already fell into
+        # once (board-empty-is-misleading).
+        if iid in ready:
+            continue
         blocked = [d for d in m["deps"] if d not in ready]
         if blocked:
             continue
@@ -233,6 +302,9 @@ def cmd_list():
         print("=== claimed ===")
         for iid, worker in sorted(cm.items()):
             print("  %-28s by %s" % (iid, worker))
+    # Before `done`, not after. The done list is 116 lines long and this is the
+    # section a reader has to not scroll past.
+    _warn_resurrected()
     if os.listdir(DONE):
         print("=== done (%d) ===" % len(os.listdir(DONE)))
         for f in sorted(os.listdir(DONE)):
@@ -366,7 +438,73 @@ def cmd_claim(worker, lane=None):
               % (len(withheld), ", ".join(sorted(withheld)[:6])))
     else:
         print("BOARD-EMPTY")
+    _warn_resurrected()
     return 3
+
+
+def _warn_resurrected():
+    """Print delivered ids that are back on the shelf, if any.
+
+    Deliberately printed on the *empty* path as well as by `list`. A worker
+    that gets BOARD-EMPTY while three finished items sit in `items/` is looking
+    at a board that is lying to it in the reassuring direction, and it is the
+    one party with a reason to say so.
+    """
+    res = resurrected()
+    if not res:
+        return
+    print("RESURRECTED %d 件已交付却又回到板上（跑 `board.py reconcile --fix`）："
+          % len(res))
+    for iid, st in sorted(res.items()):
+        where = []
+        if st["in_items"]:
+            where.append("items/")
+        if st["claimed_by"]:
+            where.append("claimed/ by %s" % st["claimed_by"])
+        print("  %-32s done by %-8s 现在还在 %s"
+              % (iid, st["deliverer"], " + ".join(where)))
+
+
+def cmd_reconcile(fix=False):
+    """Report -- or with ``--fix``, resolve -- ids that are in two places at once.
+
+    `done/` is authoritative. That is not a preference, it is the only choice
+    that is safe in both directions: treating the shelf as authoritative would
+    re-open finished work, while treating `done/` as authoritative can at worst
+    discard a claim on work that is already delivered.
+
+    Default is report-only. A board-repair tool that mutates by default is one
+    nobody runs on a board they care about, and this one has to be runnable
+    after every merge.
+    """
+    res = resurrected()
+    if not res:
+        print("RECONCILE-CLEAN 三个目录没有交集")
+        return 0
+    print("%d 件已交付却仍在板上：" % len(res))
+    removed = 0
+    for iid, st in sorted(res.items()):
+        targets = []
+        if st["in_items"]:
+            targets.append(os.path.join(ITEMS, "%s.md" % iid))
+        if st["claimed_by"]:
+            targets.append(os.path.join(CLAIMED, "%s.%s.md"
+                                        % (iid, st["claimed_by"])))
+        for path in targets:
+            rel = os.path.relpath(path, BOARD).replace("\\", "/")
+            if not fix:
+                print("  would remove %-52s (done by %s)" % (rel, st["deliverer"]))
+                continue
+            os.remove(path)
+            removed += 1
+            print("  removed      %-52s (done by %s)" % (rel, st["deliverer"]))
+            note("RECONCILE %s removed %s (already delivered by %s)"
+                 % (iid, rel, st["deliverer"]))
+    if not fix:
+        print("报告模式，什么也没动。加 --fix 才执行。")
+        return 1
+    print("清掉 %d 个残留。done/ 是权威。" % removed)
+    return 0
 
 
 def cmd_done(iid, worker):
@@ -609,6 +747,16 @@ def cmd_sweep(dry=False, include_standing=False):
             continue
         else:
             why = "scheduled task is no longer running"
+        # Sweep is the second way a delivered item gets back onto the shelf,
+        # and the more damaging one, because it looks like housekeeping. The
+        # claim it is releasing is itself a merge artefact -- E8-ic3-scale was
+        # swept back to `items/` three separate times *after* W-1660 delivered
+        # it, and each sweep looked exactly like the honest ones around it.
+        # Freeing an orphaned claim is right; re-offering finished work is not.
+        if iid in done_ids():
+            kept.append((iid, worker, "已交付（done/ 里有记录）——不放回货架，"
+                                      "跑 `board.py reconcile --fix` 清掉这条认领"))
+            continue
         freed.append((iid, worker, why))
         if not dry:
             dst = os.path.join(ITEMS, "%s.md" % iid)
@@ -649,6 +797,8 @@ def main():
         return cmd_done(a[1], a[2])
     if a[0] == "release":
         return cmd_release(a[1], a[2], " ".join(a[3:]) or "unstated")
+    if a[0] == "reconcile":
+        return cmd_reconcile(fix="--fix" in a)
     print(__doc__)
     return 1
 

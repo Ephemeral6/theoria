@@ -212,11 +212,55 @@ def _fields(out_dir: str, survey: Dict[str, Any]) -> Tuple[str, int, str]:
                                   % len(REQUIRED_STATE_FIELDS))
 
 
+def _board_states_disjoint() -> Tuple[str, int, str]:
+    """No id may be in `done/` and also on the shelf or under claim.
+
+    This is a **post-merge** check by nature, which is why it lives in the gate
+    and not only in `board.py`. Board state is a set of tracked files; a merge
+    from a branch based before a `done` restores `items/<id>.md`, because git
+    compares trees and cannot see that a file in a *different* directory means
+    the work is finished. No verb in `board.py` runs during a merge, so no
+    guard inside `board.py` can be the whole answer -- something has to look at
+    the result afterwards.
+
+    Measured on 2026-07-29: `E8-ic3-scale` was delivered by W-1660 at 12:16:28Z
+    and re-claimed four times after that, sitting in `items/`, `claimed/` and
+    `done/` at once. Nothing errored. `list` showed it as ordinary available
+    work, and each of those workers spent a launch redoing a delivered item.
+
+    Red, not a warning: the cost is a whole session per occurrence and the fix
+    is one command (`board.py reconcile --fix`).
+    """
+    sys.path.insert(0, HERE)
+    import board                                          # noqa: PLC0415
+
+    res = board.resurrected()
+    if not res:
+        return ("board states disjoint", 0,
+                "no id is in done/ and on the shelf at the same time "
+                "(%d delivered, %d claimed)"
+                % (len(board.done_ids()), len(board.claimed_map())))
+    lines = ["%d delivered item(s) are back on the board -- a merge resurrected "
+             "them. Run `python monitor/board.py reconcile --fix`." % len(res)]
+    for iid, st in sorted(res.items()):
+        where = []
+        if st["in_items"]:
+            where.append("items/")
+        if st["claimed_by"]:
+            where.append("claimed/ by %s" % st["claimed_by"])
+        lines.append("  %-34s delivered by %-8s still in %s"
+                     % (iid, st["deliverer"], " + ".join(where)))
+    return "board states disjoint", 1, "\n".join(lines)
+
+
 def verify() -> Dict[str, Any]:
     out_dir = tempfile.mkdtemp(prefix="monitor-verify-")
     stages: List[Dict[str, Any]] = []
 
     label, code, detail = _tests()
+    stages.append({"stage": label, "returncode": code, "detail": detail[-2000:]})
+
+    label, code, detail = _board_states_disjoint()
     stages.append({"stage": label, "returncode": code, "detail": detail[-2000:]})
 
     label, code, detail, survey = _real_run(out_dir)
