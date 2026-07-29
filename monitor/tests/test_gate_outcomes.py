@@ -130,6 +130,11 @@ def test_shell_gate_without_bash_is_broken_not_skipped(tmp_path, monkeypatch):
     """
     root = _repo(tmp_path)
     _territory(root, "shellgate", {"verify.sh": "exit 0\n"})
+    # `_runner` picks the interpreter, so the absence has to be injected
+    # there: master replaced the PATH lookup with explicit Git Bash
+    # candidates, and patching `shutil.which` alone stopped meaning anything
+    # while this test went on passing.
+    monkeypatch.setattr(gates, "_bash", lambda: "bash")
     monkeypatch.setattr(gates.shutil, "which", lambda *_a, **_k: None)
     outcome, detail = gates.run(root, "shellgate")
     assert outcome == "broken", detail

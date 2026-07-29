@@ -306,14 +306,24 @@ def run(root: str, territory: str, timeout: int = DEFAULT_TIMEOUT,
         return "absent", row["why"]
 
     cmd = list(row["cmd"])
-    if cmd and cmd[0] == "bash":
-        bash = shutil.which("bash")
-        if not bash:
-            # The tempting behaviour -- skip it and merge on -- is the exact
-            # shape this module exists to refuse.
-            return "broken", ("%s/%s is a shell script and no bash is on PATH"
-                              % (territory, row["name"]))
-        cmd[0] = bash
+    if row["kind"] == "verify" and (row["name"] or "").endswith(".sh"):
+        # `_runner` already picked an interpreter; the question here is whether
+        # that interpreter exists.  It resolves to a literal "bash" only when
+        # none of the Git Bash candidates were found, in which case it is a
+        # bare PATH lookup that may resolve to nothing -- or, worse, to WSL's
+        # bash, which is a different Linux with no `python`.
+        #
+        # The tempting behaviour -- skip it and merge on -- is the exact shape
+        # this module exists to refuse.  A gate that cannot start is `broken`,
+        # never a pass, and never the territory's fault: reporting it as "red"
+        # is what put eight delivered branches in a five-minute reflag loop.
+        runner = cmd[0]
+        if runner == "bash" and not shutil.which("bash"):
+            return "broken", ("%s/%s is a shell script and no bash could be "
+                              "found" % (territory, row["name"]))
+        if runner != "bash" and not os.path.isfile(runner):
+            return "broken", ("%s/%s needs %s, which is not on this machine"
+                              % (territory, row["name"], runner))
 
     before = _dirt(root, territory) if check_dirt else None
     cwd = os.path.join(root, territory)
