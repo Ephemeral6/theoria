@@ -63,9 +63,16 @@ DECIDED_STATUSES = (CERTIFIED, NO_LINEAR_PAGODA)
 
 STATUS_MEANINGS: Dict[str, str] = {
     CERTIFIED: "weights found and re-checked in exact rationals",
+    # The hedge is in the payload, not only in the write-up.  An adversarial
+    # review found this string was the one unqualified existence claim that
+    # reached an emitted artifact while the "floating point, no Farkas dual"
+    # caveat lived only in Markdown -- i.e. exactly the shape this item exists
+    # to remove, one level up: a solver's word wearing the costume of a proof.
     NO_LINEAR_PAGODA: (
-        "HiGHS proved the LP infeasible: no weight function of this shape "
-        "exists with |w_i| <= bound"
+        "HiGHS reported the LP infeasible in floating point, so no weight "
+        "function of this shape was found with |w_i| <= bound; no exact "
+        "rational infeasibility certificate (Farkas dual) is produced, so this "
+        "is the solver's verdict, not a proof of non-existence"
     ),
     BUDGET: "HiGHS hit its iteration limit; feasibility was not decided",
     UNBOUNDED: "the relaxation was unbounded; feasibility was not decided",
@@ -203,11 +210,18 @@ class LpOutcome:
 
     @property
     def no_linear_pagoda(self) -> bool:
-        """True only where HiGHS *proved* the LP infeasible.
+        """True only where HiGHS *reported* the LP infeasible -- status 2.
 
         This is the predicate the whole item exists for.  A caller must never
         reconstruct it as `certificate is None`: that expression is also true
         for an iteration limit.
+
+        "Reported", not "proved".  The reading is floating point and no exact
+        rational infeasibility certificate (Farkas dual) is produced, so this is
+        the solver's verdict about the LP -- attributable, which is the whole
+        point, but not a proof that no such weight function exists.  E11 §7 said
+        the same about the same 638 worlds; separating status 2 from status 1
+        does not upgrade it, and the word here should not imply otherwise.
         """
         return self.status == NO_LINEAR_PAGODA
 

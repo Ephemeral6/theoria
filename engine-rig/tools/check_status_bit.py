@@ -38,6 +38,7 @@ import json
 import os
 import sys
 import tempfile
+import traceback
 from typing import Any, Dict, List, Sequence, Tuple
 
 HERE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -264,10 +265,47 @@ def control_truncated_scope() -> Dict[str, Any]:
 
 CONTROLS = (control_iteration_limit, control_truncated_scope)
 
+#: Names in the same order as `CONTROLS`, so a control that dies before it can
+#: name itself still appears in the report under the right heading.
+CONTROL_NAMES = ("N1-iteration-limit-is-not-an-infeasibility",
+                 "N2-truncated-enumeration-is-not-a-global-law")
+
+
+def _guarded(control, name: str) -> Dict[str, Any]:
+    """Run one control; an exception is a FAILED verdict, not a traceback.
+
+    Found by an adversarial review of E15 and fixed rather than filed.  Under a
+    reverted engine `control_iteration_limit` died on `AttributeError:
+    'Certificate' object has no attribute 'status'` -- which does exit non-zero,
+    so the *gate* was still red, but two things were wrong with it.  An operator
+    saw a stack trace instead of `FAILED N1-...`, so the tool's own reporting
+    path -- the thing being trusted to describe a regression -- was never
+    exercised by the case it exists for.  And `main` built the report list
+    eagerly, so N1 crashing meant **N2 never ran**: a simultaneous `zero_space`
+    regression would have been invisible behind an unrelated `lp_potential` one.
+
+    A check whose failure mode is "the harness explodes" reports the fact that
+    something is broken and nothing about what.  That is a smaller version of
+    this item's own complaint, in the instrument rather than in the engine.
+    """
+    try:
+        return control()
+    except Exception as exc:                       # noqa: BLE001 -- deliberate
+        return {
+            "control": name,
+            "entry_points": [],
+            "failures": ["the control could not complete: %s: %s"
+                         % (type(exc).__name__, exc)],
+            "raised": "%s: %s" % (type(exc).__name__, exc),
+            "traceback": traceback.format_exc(),
+            "held": False,
+        }
+
 
 def main(argv: Sequence[str]) -> int:
     as_json = "--json" in argv[1:]
-    reports = [control() for control in CONTROLS]
+    reports = [_guarded(control, name)
+               for control, name in zip(CONTROLS, CONTROL_NAMES)]
     if as_json:
         print(json.dumps({"controls": reports,
                           "held": all(r["held"] for r in reports)},

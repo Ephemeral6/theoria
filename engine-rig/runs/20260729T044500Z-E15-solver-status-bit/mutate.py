@@ -192,6 +192,38 @@ LEGACY = [sys.executable, "-m", "pytest", "tests/test_tool_failure_is_not_truth.
           "-x", "--no-header", "-p", "no:cacheprovider"]
 
 
+def _stamp():
+    """The tree this battery was actually run against.
+
+    An adversarial review of E15 caught `MUTATION.json` reporting a survivor
+    (`M30`) of an engine that had since been fixed: the artifact was three
+    minutes older than `potential.py` and nothing on its face said so, so a
+    reader trusting the machine-readable file over the prose got a wrong answer
+    about the code they were about to merge.  A mutation report is a statement
+    about a specific tree; if it does not name the tree it cannot be checked for
+    staleness, which is this item's own complaint wearing a different hat.
+    """
+    def _git(*args):
+        try:
+            done = subprocess.run(["git", *args], cwd=ENGINE_RIG,
+                                  capture_output=True, text=True)
+            return done.stdout.strip() if done.returncode == 0 else None
+        except OSError:                                  # pragma: no cover
+            return None
+
+    dirty = _git("status", "--porcelain", "engines", "tools", "tests")
+    return {
+        "head": _git("rev-parse", "HEAD"),
+        "head_subject": _git("log", "-1", "--format=%s"),
+        "engines_tools_tests_dirty": bool(dirty),
+        "dirty_paths": [line[2:].strip()
+                        for line in (dirty or "").splitlines()],
+        "note": "if `head` is not the commit you are reviewing, or "
+                "`engines_tools_tests_dirty` is true, these counts describe a "
+                "different tree than the one you are about to merge",
+    }
+
+
 def _run(command):
     done = subprocess.run(command, cwd=ENGINE_RIG, capture_output=True, text=True)
     return done.returncode, (done.stdout + done.stderr)[-1200:]
@@ -256,6 +288,7 @@ def main():
     survived = [r for r in results if r["outcome"] == "survived"]
     stray = [r for r in results if r["outcome"] not in ("killed", "survived")]
     report = {
+        "tree": _stamp(),
         "mutants": len(MUTANTS),
         "killed": len(killed),
         "survived": len(survived),
