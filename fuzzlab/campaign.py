@@ -94,6 +94,31 @@ def run_engine(engine: str, campaign_seed: int, n_worlds: int,
         name: n_worlds - by_invariant.get(name, Counter())[finding.SKIPPED]
         for name in invariants
     }
+
+    # --- why the unevaluated worlds were unevaluated (V-21)
+    #
+    # `invariant_worlds_evaluated` says how many worlds an invariant judged.  It
+    # cannot say *why* it judged the rest -- and the two reasons point opposite
+    # ways.  "The engine looked and correctly declined" is the battery working;
+    # "HiGHS ran out of iterations" is nobody knowing.  Summed into one `skipped`
+    # they cancel, which is how a solver failure spent one release looking like
+    # coverage.  So the breakdown is published per invariant, by cause and by
+    # cause-class, and `invariant_worlds_unavailable` is lifted out as its own
+    # column because it is the one that should always be zero.
+    by_cause: Dict[str, Dict[str, int]] = {name: {} for name in invariants}
+    by_cause_class: Dict[str, Dict[str, int]] = {name: {} for name in invariants}
+    for f in findings:
+        if f.kind != finding.SKIPPED:
+            continue
+        bucket = by_cause.setdefault(f.invariant, {})
+        bucket[f.cause] = bucket.get(f.cause, 0) + 1
+        klass = by_cause_class.setdefault(f.invariant, {})
+        klass[f.cause_class] = klass.get(f.cause_class, 0) + 1
+    unavailable = {
+        name: by_cause_class.get(name, {}).get(finding.UNAVAILABLE, 0)
+        for name in invariants
+    }
+
     report = {
         "engine": engine,
         "family": family,
@@ -106,14 +131,21 @@ def run_engine(engine: str, campaign_seed: int, n_worlds: int,
         "violated": kinds[finding.VIOLATED],
         "raised": kinds[finding.RAISED],
         "skipped": kinds[finding.SKIPPED],
+        "unavailable": sum(unavailable.values()),
         "invariant_worlds_evaluated": ran,
+        "invariant_worlds_unavailable": unavailable,
+        "skips_by_cause": {k: dict(sorted(v.items()))
+                           for k, v in sorted(by_cause.items())},
+        "skips_by_cause_class": {k: dict(sorted(v.items()))
+                                 for k, v in sorted(by_cause_class.items())},
         "elapsed_s": round(time.time() - started, 2),
     }
     if not quiet:
         print("%-15s %-12s %3d inv  %4d worlds  violated=%-4d raised=%-4d "
-              "skipped=%-5d %5.1fs"
+              "skipped=%-5d unavail=%-4d %5.1fs"
               % (engine, family, len(invariants), checked, report["violated"],
-                 report["raised"], report["skipped"], report["elapsed_s"]),
+                 report["raised"], report["skipped"], report["unavailable"],
+                 report["elapsed_s"]),
               flush=True)
     return {"report": report, "findings": findings, "rows": rows}
 
@@ -169,10 +201,17 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
             "violated": len(violated),
             "raised": len(raised),
             "skipped": sum(r["skipped"] for r in reports),
+            # The number this item exists to make readable: worlds that went
+            # unjudged because a tool could not compute.  It is not `skipped`
+            # (most skips are the engine correctly declining) and it is not zero
+            # by construction -- when it is non-zero the run measured less than
+            # it claims to, and `tests/test_battery.py` fails on it.
+            "unavailable": sum(r["unavailable"] for r in reports),
             "generator_errors": sum(len(r["generator_errors"]) for r in reports),
         },
         "violations_by_invariant": _tally(violated),
         "raises_by_invariant": _tally(raised),
+        "skips_by_cause": _tally_causes(all_findings),
     }
     with open(os.path.join(args.out, "campaign.json"), "w",
               encoding="utf-8", newline="\n") as handle:
@@ -204,6 +243,19 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
 
 def _tally(findings: Iterable[finding.Finding]) -> Dict[str, int]:
     counter = Counter("%s.%s" % (f.engine, f.invariant) for f in findings)
+    return dict(sorted(counter.items()))
+
+
+def _tally_causes(findings: Iterable[finding.Finding]) -> Dict[str, int]:
+    """`{engine.invariant.cause: n}` over every skip, cause-class first.
+
+    Keyed by class so the file sorts the interesting rows together: every
+    `unavailable.*` line is a world nobody judged and nobody can attribute, and
+    scanning for the prefix is the whole audit.
+    """
+    counter = Counter(
+        "%s.%s.%s.%s" % (f.cause_class, f.engine, f.invariant, f.cause)
+        for f in findings if f.kind == finding.SKIPPED)
     return dict(sorted(counter.items()))
 
 

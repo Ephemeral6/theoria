@@ -42,6 +42,78 @@ def test_short_campaign_finds_no_violation(engine):
     assert not result["report"]["generator_errors"]
 
 
+@pytest.mark.parametrize("engine", ENGINES)
+def test_short_campaign_passes_the_gate_the_docstring_describes(engine):
+    """`finding.failures()` wired up, which until V-21 it never was.
+
+    It had **zero callers** — a function whose docstring claimed "violations and
+    unexpected raises" and whose body returned violations, imported by nobody, so
+    the discrepancy could not be observed from any test. Widening the body fixes
+    the sentence; calling it is what makes the sentence load-bearing.
+
+    This is strictly stronger than the test above: a property that *crashes* has
+    established nothing, and `test_finding_contract.py` records an incident where
+    a dead reporting path turned every violation into a `raised` while the
+    headline "0 violations" stayed true. That headline would not survive this.
+    """
+    result = campaign.run_engine(engine, SEED, WORLDS, quiet=True)
+    bad = finding.failures(result["findings"])
+    assert not bad, "\n".join(str(f) for f in bad[:5])
+
+
+@pytest.mark.parametrize("engine", ENGINES)
+def test_nothing_went_unjudged_because_a_tool_could_not_compute(engine):
+    """A clean tree must have zero `unavailable`, and this is where it is gated.
+
+    The answer to "did you just move the problem into another bucket". Filing
+    `LpUnavailable` as `skipped` is only honest if somebody reads the skips, and
+    a number in an artifact that nothing asserts on is a number nobody reads. So
+    the `unavailable` class — a tool did not compute, nobody knows the answer —
+    is required to be empty here.
+
+    **Pre-registered as able to fail for a non-defect.** If HiGHS hits numerical
+    difficulties on some future world, this goes red and no engine change will
+    clear it. That is intended: the run did not measure what it claims to have
+    measured, and the correct response is to look at the toolchain, not to relax
+    the assertion. It is deliberately *not* a `violated` — the engine is accused
+    of nothing — which is why it is a separate test with its own message.
+
+    `declined` and `budget` skips are untouched by this: the engine correctly
+    having nothing to say, and this battery declining to pay for a sweep, are
+    both expected to be non-zero and neither is a gap in what was measured.
+    """
+    result = campaign.run_engine(engine, SEED, WORLDS, quiet=True)
+    report = result["report"]
+    unavailable = report["invariant_worlds_unavailable"]
+    assert not any(unavailable.values()), (
+        "%s: %r world(s) went unjudged because a tool could not compute -- "
+        "%s. The coverage this run reports was not earned."
+        % (engine, {k: v for k, v in unavailable.items() if v},
+           [str(f) for f in result["findings"]
+            if f.kind == finding.SKIPPED
+            and f.cause_class == finding.UNAVAILABLE][:3]))
+    assert report["unavailable"] == 0
+
+
+@pytest.mark.parametrize("engine", ENGINES)
+def test_the_skip_breakdown_reconciles_with_the_skip_count(engine):
+    """`skips_by_cause` must account for every skip, not most of them.
+
+    Without this the breakdown could drift from the total and the `unavailable`
+    row could read 0 because a cause stopped being counted rather than because
+    nothing was unavailable — which is the same silence one level up.
+    """
+    result = campaign.run_engine(engine, SEED, WORLDS, quiet=True)
+    report = result["report"]
+    by_cause = sum(n for row in report["skips_by_cause"].values()
+                   for n in row.values())
+    by_class = sum(n for row in report["skips_by_cause_class"].values()
+                   for n in row.values())
+    assert by_cause == report["skipped"] == by_class
+    for name, row in report["skips_by_cause"].items():
+        assert sum(row.values()) == WORLDS - report["invariant_worlds_evaluated"][name]
+
+
 # ------------------------------------------------------------- the seed table
 
 @pytest.mark.parametrize("family", FAMILIES)

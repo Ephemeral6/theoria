@@ -74,8 +74,12 @@ green campaign for as long as it existed.
 **Coverage is reported per invariant and it is not the world count.**
 `campaign.json`'s `invariant_worlds_evaluated` subtracts the worlds an invariant
 filed a `skipped` on, so an invariant that declines is visible as a smaller
-number rather than as a silent pass. Two of them decline often and for stated
-reasons: `lp_potential`'s four evaluate 267 of 500, because the engine issues no
+number rather than as a silent pass. Beside it, and not derivable from it,
+`invariant_worlds_unavailable` counts the worlds that went unjudged because a
+*tool* could not compute, and `skips_by_cause` gives the full breakdown; a
+`totals.unavailable` above zero means the run measured less than its coverage
+column claims, and the suite fails on it. Two of them decline often and for
+stated reasons: `lp_potential`'s four evaluate 267 of 500, because the engine issues no
 certificate on 46.6% of `jumpgraph` worlds and every claim there is conditional
 on one; all six `cegis_miner` invariants evaluate 465 of 500, declining the
 worlds where the object that was mined cannot be established as the mover.
@@ -89,12 +93,47 @@ and that is the failure mode this battery is most exposed to.
 ## Three kinds of result, kept apart
 
 `props/finding.py`: `violated` (the engine did something it says it does not),
-`raised` (an exception where an answer was expected), `skipped` (the property
-could not be evaluated here, **with the reason**). They are counted separately
-because a campaign that silently drops the worlds its oracle cannot handle
-reports coverage it did not earn. Documented outcomes — `NoSeparatingGuard`,
-`CertificateError`, `PddlError`, an unminable segmentation — are `skipped`, not
-failures.
+`raised` (an exception escaped the property), `skipped` (the property could not
+be evaluated here, **with the reason and a declared cause**). They are counted
+separately because a campaign that silently drops the worlds its oracle cannot
+handle reports coverage it did not earn. Documented outcomes —
+`NoSeparatingGuard`, `CertificateError`, `PddlError`, `LpUnavailable`, an
+unminable segmentation — are `skipped`, not failures.
+
+`finding.failures()` is the gate, and it is **`violated` + `raised`**. Every
+documented outcome is caught at its property and converted to a `skipped` with a
+cause, so what reaches `raised` is by construction an exception nobody wrote a
+policy for. Until V-21 the docstring said exactly that and the body returned
+`violated` alone — the prose was the wider of the two, which is the direction
+that misleads, and the function had no callers at all, so nothing could observe
+the gap. The body moved rather than the prose; see `props/finding.py:failures`.
+
+### `skipped` is three columns, not one
+
+A skip records **why**, and the why is classified:
+
+| class | meaning | expected |
+|---|---|---|
+| `declined` | a fact about the configuration or the evidence — the property had nothing to judge, and that is correct | large (`lp_potential` declines on ~47% of `jumpgraph`) |
+| `budget` | *this battery* declined, on a cost threshold it chose in advance and can quote | non-zero |
+| `unavailable` | a tool did not compute — a solver limit, an unbounded relaxation, numerical difficulties. Nobody knows the answer | **zero**, and gated |
+
+The taxonomy is `finding.CAUSE_CLASS`; `cause` is a **required** keyword on
+`finding.skipped()` and an undeclared one is a `ValueError`, so a new way for a
+world to go unjudged cannot be added without appearing in a diff.
+
+This exists because `lp_potential` had two of them in one integer. E-15 made the
+engine raise `LpUnavailable` for HiGHS status 1/3/4 rather than collapse them
+into the `(None, None)` that reads as *no linear pagoda exists* — and `props/`
+caught `CertificateError` in four places and `LpUnavailable` in none, so the
+refusal escaped as a `raised`, and `invariant_worlds_evaluated` (which subtracts
+`skipped`, and only `skipped`) counted the world as **evaluated**. Measured on
+12 worlds with HiGHS starved to `maxiter=0`: the four invariants reported **11**
+worlds evaluated each, against **5** with the solver running normally. Blinding
+the battery raised the coverage it claimed, because honest declines are
+subtracted and blind spots were not. `tests/test_solver_unavailable.py` is that
+experiment, kept as a regression, and it drives the real solver into a real
+iteration limit rather than stubbing a result object.
 
 ## Seeds and replay
 
