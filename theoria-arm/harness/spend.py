@@ -105,6 +105,8 @@ __all__ = [
     "SpendGateUnavailable",
     "MODEL_CALL_CEILING_USD", "HTTP_PER_COMMAND", "RETRY_SAFETY",
     "FIXED_COMMANDS", "DEFAULT_ENV_MAX_ATTEMPTS",
+    "OUTBOUND_PER_ACTION", "OUTBOUND_TAIL_SAFETY", "FIXED_OUTBOUND",
+    "ENV_OUTBOUND_PER_ARM_COMMAND",
 ]
 
 
@@ -237,6 +239,21 @@ MODEL_CALL_CEILING_USD = 4.00
 #: for another buys nothing but a fresh false comment. What is fixed here is the
 #: provenance, and `HTTP_PER_COMMAND_IS_VALIDATED` below, which makes every
 #: reservation carry the fact that its sizing constant is borrowed.
+#:
+#: **Retired from the sizing path, 2026-07-29.** `plan_caps` no longer consumes
+#: it; `OUTBOUND_PER_ACTION` below does. It is kept, with its provenance and its
+#: `IS_VALIDATED = False`, because the record of *why a constant was untrustable*
+#: is the durable part -- deleting it would leave the next session free to
+#: re-borrow the same cell from INC-011.
+#:
+#: The refusal quoted above was right about its own evidence and wrong about the
+#: conclusion, for one reason: `commands_sent/actions_ok` is not the quantity the
+#: pool charges. The "empty space between 1.25 and 5.714" is the space between
+#: the **mock** runs and the **live** ones, in a ratio that also counts attempts
+#: which never opened a socket. Measured in the pool's own unit -- outbound
+#: requests -- and over live legs only, there is no gap: every live leg lands
+#: between 5.1 and 16.8, and the pooled ratio sits inside that range rather than
+#: being interpolated into it. See `OUTBOUND_PER_ACTION`.
 HTTP_PER_COMMAND = 1.75
 
 #: Whether `HTTP_PER_COMMAND` has ever been measured on *this* arm's transport,
@@ -253,17 +270,171 @@ HTTP_PER_COMMAND_PROVENANCE = (
 #: the retry envelope (`arc.ACTION_ATTEMPTS = 40`) means the tail is long, and a
 #: cap sized to the mean would trip `RESERVATION_ACTION_CAP` mid-run -- which
 #: stops the run, correctly, but for the wrong reason.
+#:
+#: **Retired from the sizing path, 2026-07-29**, superseded by
+#: `OUTBOUND_TAIL_SAFETY`, which is the same idea sized from this arm's observed
+#: leg-to-leg dispersion instead of chosen.
 RETRY_SAFETY = 1.5
 
 #: Commands a run makes that are not ACTIONs: open scorecard, RESET, close
 #: scorecard. Counted because they are outbound ARC requests, and the pool's
 #: unit is the request.
+#:
+#: **Retired from the sizing path, 2026-07-29**, superseded by
+#: `FIXED_OUTBOUND`. It was wrong on its own terms and in a way the ledgers show
+#: plainly: each of those three is not one request but a *wave*. RESET runs under
+#: `arc.RESET_ATTEMPTS = 40` and cost 1, 5, 8, 9 and 18 outbound requests on the
+#: five live legs; `close_scorecard` runs under `tries=40` and cost 2, 6, 8 and
+#: 10. Three was the count of the endpoints, not the cost of reaching them.
 FIXED_COMMANDS = 3
 
 #: `harness/run.py`'s `env_max_attempts`. Each arm-level attempt becomes up to
 #: this many *outbound* requests inside the env proxy's own retry envelope, and
 #: the pool counts outbound requests.
+#:
+#: It is still passed, still real, and still recorded -- but it is **no longer a
+#: factor in the sizing**, and that is the substance of the 2026-07-29 fix. See
+#: `ENV_OUTBOUND_PER_ARM_COMMAND` for the measurement that removed it.
 DEFAULT_ENV_MAX_ATTEMPTS = 3
+
+# -- what the pool actually charges, measured on this arm ---------------------
+#
+# Everything above this line sizes a reservation in *arm-level attempts* and
+# then converts. Everything below sizes it directly in the unit the pool bills:
+# one outbound ARC HTTP request. The conversion was where the arithmetic went
+# wrong, so the conversion is gone.
+#
+# ## Where the numbers come from
+#
+# Two independent ledgers, cross-checked against each other:
+#
+# * the run ledgers, `runs/<id>/ledger.jsonl`. An `env_step` or `env_meta` is
+#   written only after `_forward` returns, and `http.attempts` is
+#   `SpendPermit.attempts_made` -- the sockets that really opened. A request the
+#   gate refused raises inside `permit.check()` *before* `attempts_made += 1`
+#   (`proxy/forward.py:118-119`), so it writes no record and is counted nowhere.
+#   That is why these files can be summed without re-importing the retry storm.
+# * the pool ledger, `proxy/var/spend_gate.jsonl`, summed per campaign.
+#
+# Where both exist they agree exactly: 105/105 on
+# `20260729T004020Z-leg01`, 15/15 on `0035Z-a3-desk-live-proof2`, 7/7 on
+# `0030Z-a3-desk-live-proof`. The three 2026-07-28 live legs predate the pool
+# ledger's first record (09:26Z that day), so for those the run ledger is the
+# only witness -- which is acceptable precisely because the agreement is exact
+# everywhere both are available.
+#
+# ## The four live legs
+#
+# Only legs whose `env_upstream` is `three.arcprize.org` are used. The mock legs
+# (`127.0.0.1`) answer 200 first time and their ratios, 1.25-1.5, describe a
+# fixture rather than a transport.
+#
+#     leg                                     ACTION out  ACTION 200   ratio
+#     20260728T012311Z-g50t-first-contact-abo         84           5   16.800
+#     20260728T014402Z-g50t-first-contact-abo         36           6    6.000
+#     20260728T015354Z-g50t-first-contact             36           7    5.143
+#     20260729T004020Z-leg01                          95           9   10.556
+#     ------------------------------------------------------------------------
+#     pooled                                         251          27    9.296
+#
+# All four ran the same transport: `git diff 606c5820 cde83c28 --
+# harness/arc.py` touches only the spend-gate stop and `close_scorecard`'s
+# `tries`; `_retryable`, `ACTION_ATTEMPTS`, `RESET_ATTEMPTS` and the backoff are
+# untouched. So the four are comparable, and pooling them is a sum of like with
+# like rather than an average over regimes.
+
+#: Outbound ARC HTTP requests per **successful ACTION**, ACTIONs only.
+#:
+#: 251 / 27 = 9.296, from the table above. Rounded down to 9.3 rather than up,
+#: because the tail is handled by `OUTBOUND_TAIL_SAFETY` and not by nudging the
+#: central estimate.
+#:
+#: This is the number the pool charges, in the pool's unit, on this arm's
+#: transport. It is not `commands_sent/actions_ok`: that ratio counts arm-level
+#: attempts, including ones refused before the wire, and on
+#: `20260729T004020Z-leg01` it read 222.222 for a leg whose transport managed
+#: 10.556.
+#:
+#: **What it is a measurement of, and what it is not.** All 27 successful
+#: actions are on one game (`g50t-5849a774`) and all four legs were dominated by
+#: the same upstream failure -- a `400 game <id> not found` wave that
+#: `arc._retryable` treats as retryable, so each successful ACTION is preceded by
+#: a burst of 400s. If that wave is an upstream pathology rather than the steady
+#: state, the true ratio for a healthy session is nearer 1.1 and this
+#: over-reserves by ~8x. Over-reserving is the cheap direction: `release()`
+#: returns the unspent hold, so the only cost is headroom held from concurrent
+#: sessions for the length of the lease. Under-reserving cost leg01 its run.
+OUTBOUND_PER_ACTION = 9.3
+OUTBOUND_PER_ACTION_IS_VALIDATED = True
+OUTBOUND_PER_ACTION_PROVENANCE = (
+    "251 outbound ACTION requests / 27 successful ACTIONs, pooled over the four "
+    "live legs in runs/ whose env_upstream is three.arcprize.org "
+    "(20260728T012311Z, 20260728T014402Z, 20260728T015354Z, "
+    "20260729T004020Z-leg01). Numerator is the sum of http.attempts over "
+    "env_step records with http.forwarded=true; denominator is env_step records "
+    "with an ACTION name and status 200. Cross-checked against "
+    "proxy/var/spend_gate.jsonl, which agrees exactly (105/105) on the one leg "
+    "both cover. Per-leg ratios 16.8 / 6.0 / 5.143 / 10.556.")
+
+#: Slack over `OUTBOUND_PER_ACTION`, sized from the observed dispersion rather
+#: than chosen.
+#:
+#: The pooled ratio is a mean over 27 actions; a cap sized to a mean trips
+#: `RESERVATION_ACTION_CAP` on any leg worse than average, which stops the leg
+#: correctly but for the wrong reason. The worst *leg* observed is 16.8, which is
+#: 1.81x the pooled 9.296. 2.0 is that rounded up, and it puts the per-action
+#: allowance at 18.6 -- 1.11x the worst leg this arm has ever run.
+#:
+#: It is not sized to the worst *action*: single 400 waves of 22 and 30 outbound
+#: requests appear in the ledgers, but a 40-action leg averages over 40 of them,
+#: and reserving 30/action would claim 1200 requests for one leg.
+#:
+#: n = 4. This is a dispersion estimate from four samples and is stated as such.
+OUTBOUND_TAIL_SAFETY = 2.0
+
+#: Outbound requests a leg spends that do not scale with the action budget:
+#: `open_scorecard` (1, never observed to retry), the RESET wave, and the
+#: `close_scorecard` wave.
+#:
+#: Observed live, in outbound requests:
+#:
+#:     open    1 on every leg, always attempts=1
+#:     RESET   1, 5, 8, 9, 18       (worst: preflight-20260728T012057Z)
+#:     close   2, 6, 8, 10          (worst: ...012311Z-salvage2, 9x404 then 200)
+#:
+#: 36 = 1 + 20 + 15, each rounded up past its worst observation. The close
+#: allowance matters more than its size suggests: `close_scorecard` calls `_post`
+#: directly, so it never consults `Budget` or `SpendBinding` -- but every attempt
+#: still enters the proxy and is still charged. If the cap binds before the close,
+#: the proxy refuses, `_post` sees a transport failure, all 40 tries fail, and
+#: **the scorecard's score is lost**, because it exists only in a successful
+#: close response (`arc.close_scorecard`, D-015). A fixed budget too small to pay
+#: for the close does not merely truncate the leg; it discards its result.
+FIXED_OUTBOUND = 36
+
+#: Outbound requests per arm-level command that reaches the proxy.
+#:
+#: **Measured: 326 / 325 = 1.0031**, over every live-upstream run in `runs/`
+#: (sum of `http.attempts` divided by the count of forwarded `env_step` +
+#: `env_meta` records). One request in 325 was retried once. The env proxy's
+#: envelope is real -- `forward.forward` can open `max_attempts` sockets under a
+#: single permit -- but it fires on `RETRY_STATUSES = {429, 500, 502, 503, 504}`
+#: and transport errors only, and this arm's failure mode is a **400**, which
+#: `forward` breaks out of on the first attempt.
+#:
+#: It is recorded and **not multiplied in**, for two reasons:
+#:
+#: * `OUTBOUND_PER_ACTION` is already measured in outbound requests, so whatever
+#:   proxy retries happened are inside its numerator. Multiplying by it again
+#:   would be the double-count this change removes.
+#: * The old formula multiplied by `env_max_attempts = 3`, the envelope's
+#:   *ceiling*, as though it were its mean. Applying a worst case as a mean, on
+#:   top of a `RETRY_SAFETY` that was also a worst-case pad, is not conservatism;
+#:   it is an unfalsifiable number.
+#:
+#: If the upstream ever starts rate-limiting this arm, this is the measurement
+#: that stops being 1.0 and the one to re-derive first.
+ENV_OUTBOUND_PER_ARM_COMMAND = 1.0031
 
 #: Slack over the declared wall clock when sizing the lease, and the hard stop.
 #: An expired lease cannot be renewed, so the lease is sized to outlive the run
@@ -317,32 +488,59 @@ def plan_caps(*, actions: int, commands: int,
       `budget.command()` once per attempt inside its 40-attempt envelope, so
       this counts tries, not successes.
 
-    Neither is an outbound request, because each arm-level attempt enters the
-    env proxy, which has its own retry envelope (`env_max_attempts`, 3 in
-    `harness/run.py`) and opens a real socket per attempt inside it. So::
+    Neither is an outbound request. So the cap is sized in outbound requests
+    directly, from a ratio measured in outbound requests::
 
-        arm_attempts  = FIXED_COMMANDS + ceil(actions x 1.75 x 1.5)
-        arm_attempts  = min(arm_attempts, commands)      # Budget.commands stops first
-        action_cap    = arm_attempts x env_max_attempts
-        hard_bound    = commands x env_max_attempts      # nothing can exceed this
+        action_cap = FIXED_OUTBOUND + ceil(actions x 9.3 x 2.0)
+        action_cap = min(action_cap, commands x env_max_attempts)
+        hard_bound = commands x env_max_attempts      # the arm cannot exceed it
 
-    Worked, for the defaults `harness/run.py` ships (`--budget 12`,
-    `--commands 2000`, `env_max_attempts=3`)::
+    Worked, for the level this arm is authorised for (40 successful actions)::
 
-        3 + ceil(12 x 1.75 x 1.5) = 3 + 32 = 35 arm attempts
-        35 x 3                    = 105 outbound requests reserved
+        36 + ceil(40 x 9.3 x 2.0) = 36 + 744 = 780 outbound requests reserved
 
-    and for the P-8 live shape (`actions=120`)::
+    and for the defaults `harness/run.py` ships (`--budget 12`)::
 
-        3 + ceil(120 x 1.75 x 1.5) = 3 + 315 = 318
-        318 x 3                    = 954 outbound requests reserved
+        36 + ceil(12 x 9.3 x 2.0) = 36 + 224 = 260
 
-    The 1.75 is measured (`Budget.as_json()["http_amplification"]`,
-    post-cookie-fix); 1.5 covers the tail, because `arc.ACTION_ATTEMPTS = 40`
-    means one stubborn 400 wave can cost forty attempts on its own and a cap
-    sized to the mean would trip mid-run. `hard_bound` is the only number here
-    that is a *bound* rather than an estimate: `Budget.commands` raises before
-    the (n+1)th attempt, so no run can exceed it however badly the retries go.
+    ### Why there is no `x env_max_attempts` any more
+
+    Until 2026-07-29 the last line of that sum was `x env_max_attempts`, and it
+    was the reason a leg authorised for 40 actions could not spend 40.
+
+    One arm-level command genuinely *can* charge the pool more than once:
+    `env_proxy._forward` mints one permit (`usd=0.0, actions=1`) and hands it to
+    `forward.forward`, which increments `permit.attempts_made` once per socket,
+    and `_charge` records `actions=permit.attempts_made`. So the two ratios --
+    arm attempts per action, and outbound per arm attempt -- are different
+    quantities and both are real. The old formula was not wrong to compose them.
+
+    It was wrong about their values, in opposite directions, and the errors did
+    not cancel:
+
+    * it used `env_max_attempts = 3`, the envelope's **ceiling**, as its mean.
+      The measured mean is `ENV_OUTBOUND_PER_ARM_COMMAND = 1.0031` -- one retry
+      in 325 live requests -- because the envelope fires on 429/5xx/transport and
+      this arm's failure mode is a 400.
+    * it used `HTTP_PER_COMMAND = 1.75` for arm attempts per action, where the
+      measured figure is ~9.3.
+
+    Product reserved: `1.75 x 1.5 x 3 = 7.875` outbound per action. True figure:
+    9.296. `runs/20260729T004020Z-leg01` is that arithmetic, executed: it
+    declared 12 actions, was given 105 outbound, spent 1 on the scorecard and 9
+    on the RESET wave, and had 95 left -- `95 / 9.296 = 10.2` actions' worth. It
+    stopped at 9.
+
+    So the fix is not to delete a factor but to measure the composite once, in
+    the unit the pool bills, and to stop applying a worst case as a mean on top
+    of a safety margin that was already a worst case.
+
+    `hard_bound` is the only number here that is a *bound* rather than an
+    estimate: `Budget.commands` raises before the (n+1)th attempt, so no run can
+    exceed it however badly the retries go. It is very nearly true --
+    `close_scorecard` calls `_post` directly and so spends up to 40 more outbound
+    requests without touching `Budget`. That gap is 120 requests against a 6000
+    bound, and it is paid for inside `FIXED_OUTBOUND` rather than pretended away.
 
     ## Dollars
 
@@ -375,13 +573,11 @@ def plan_caps(*, actions: int, commands: int,
         raise SpendGateError("a planned budget is not negative "
                              "(actions=%r commands=%r)" % (actions, commands))
 
-    arm_attempts = FIXED_COMMANDS + math.ceil(actions * HTTP_PER_COMMAND * RETRY_SAFETY)
-    capped_by_commands = arm_attempts > commands
-    arm_attempts = min(arm_attempts, commands) if commands else arm_attempts
+    planned = FIXED_OUTBOUND + math.ceil(
+        actions * OUTBOUND_PER_ACTION * OUTBOUND_TAIL_SAFETY)
     hard_bound = commands * env_max_attempts
-    action_cap = arm_attempts * env_max_attempts
-    if commands:
-        action_cap = min(action_cap, hard_bound)
+    capped_by_commands = bool(commands) and planned > hard_bound
+    action_cap = min(planned, hard_bound) if commands else planned
 
     ceiling = 0.0 if cost_ceiling_usd is None else float(cost_ceiling_usd)
     usd_cap = ceiling + float(model_call_ceiling_usd)
@@ -392,13 +588,32 @@ def plan_caps(*, actions: int, commands: int,
         "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
         "actions_budget": actions,
         "commands_ceiling": commands,
+
+        # The sizing, in the pool's own unit.
+        "outbound_per_action": OUTBOUND_PER_ACTION,
+        "outbound_per_action_is_validated": OUTBOUND_PER_ACTION_IS_VALIDATED,
+        "outbound_per_action_provenance": OUTBOUND_PER_ACTION_PROVENANCE,
+        "outbound_tail_safety": OUTBOUND_TAIL_SAFETY,
+        "fixed_outbound": FIXED_OUTBOUND,
+        "action_cap_planned": planned,
+
+        # Recorded, not multiplied in. `env_max_attempts` is the env proxy's
+        # retry ceiling and is still passed to it; the measured mean it actually
+        # delivers is `env_outbound_per_arm_command`. Sizing on the ceiling is
+        # what this plan stopped doing on 2026-07-29.
+        "env_max_attempts": env_max_attempts,
+        "env_outbound_per_arm_command_measured": ENV_OUTBOUND_PER_ARM_COMMAND,
+
+        # Retired from the sizing path on 2026-07-29 and kept so that a plan
+        # record still names the constant it used to be sized on, and still says
+        # that constant was never validated here. See their comments above.
         "http_per_command": HTTP_PER_COMMAND,
         "http_per_command_is_validated": HTTP_PER_COMMAND_IS_VALIDATED,
         "http_per_command_provenance": HTTP_PER_COMMAND_PROVENANCE,
+        "http_per_command_retired_from_sizing": True,
         "retry_safety": RETRY_SAFETY,
         "fixed_commands": FIXED_COMMANDS,
-        "env_max_attempts": env_max_attempts,
-        "arm_attempts_planned": arm_attempts,
+
         "arm_attempts_capped_by_commands_ceiling": capped_by_commands,
         "action_cap_hard_bound": hard_bound,
         "action_cap": action_cap,

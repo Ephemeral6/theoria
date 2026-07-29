@@ -473,15 +473,19 @@ def test_the_budget_is_computed_before_it_is_spent():
     """The arithmetic, worked, for the two shapes this arm actually runs."""
     twelve = spend_mod.plan_caps(actions=12, commands=2000,
                                  cost_ceiling_usd=20.0, require_headroom=False)
-    # 3 fixed + ceil(12 x 1.75 x 1.5) = 3 + 32 = 35 arm attempts; x3 = 105
-    assert twelve.arithmetic["arm_attempts_planned"] == 35
-    assert twelve.action_cap == 105
+    # 36 fixed + ceil(12 x 9.3 x 2.0) = 36 + 224 = 260 outbound requests.
+    # Was `3 + ceil(12 x 1.75 x 1.5) = 35 arm attempts; x3 = 105` until
+    # 2026-07-29; `runs/20260729T004020Z-leg01` is that 105, and it bound at 9
+    # of the 12 actions it was sized for. See `tests/test_cap_sizing.py` for why
+    # the constants moved and `harness/spend.py:plan_caps` for the derivation.
+    assert twelve.arithmetic["action_cap_planned"] == 260
+    assert twelve.action_cap == 260
     assert twelve.usd_cap == 24.0                     # $20 ceiling + one call
 
     live = spend_mod.plan_caps(actions=120, commands=2000,
                                cost_ceiling_usd=20.0, require_headroom=False)
-    # 3 + ceil(120 x 1.75 x 1.5) = 3 + 315 = 318; x3 = 954
-    assert live.action_cap == 954
+    # 36 + ceil(120 x 9.3 x 2.0) = 36 + 2232 = 2268
+    assert live.action_cap == 2268
     assert live.arithmetic["action_cap_hard_bound"] == 6000
 
 
@@ -535,7 +539,7 @@ def test_planning_refuses_when_the_pool_has_no_actions_left(tmp_path):
     with pytest.raises(spend_mod.InsufficientHeadroom) as exc:
         spend_mod.plan_caps(actions=120, commands=2000, cost_ceiling_usd=1.0,
                             gate=gate)
-    assert "954 actions requested > 40 free" in str(exc.value)
+    assert "2268 actions requested > 40 free" in str(exc.value)
 
 
 # ------------------------------------------------------------------- the lease
