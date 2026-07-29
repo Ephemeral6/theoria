@@ -43,18 +43,52 @@ step() {
 # defect S23 was opened about, so it is the one this gate refuses to repeat.
 step "red-line negative controls" python -m pytest -q
 
-# `--mode verify` rather than the strict default: this script must be runnable by
-# someone checking a release they were handed, who has no `.env` because the
-# credential was never theirs and never shipped. The strict `generate` path is
-# exercised by `enumerate.py` below, which always runs the check in generate mode
-# and refuses to write a manifest if it cannot run.
-step "red lines clear, and every tracked file was actually read" \
-    python check_redlines.py --mode verify
+# The mode is chosen by whether a credential is actually reachable, not fixed.
+#
+# This step used to pass `--mode verify` unconditionally, and that is this work
+# order's own sentence turned on its own gate: in `verify` mode a missing key is
+# reported NOT APPLICABLE with no violation and no needs_human, so on any
+# checkout without `.env` the release gate came back green having not run half of
+# what it gates. Where the key IS reachable -- this repository -- the strict mode
+# must be the one that runs, or the strict path is never exercised at all.
+#
+# Where it is genuinely absent, `verify` is still correct: a stranger checking a
+# release they were handed has no key to search the tree for, and telling them
+# their clean checkout is dirty would be a lie in the other direction. But it is
+# announced rather than silent, because a gate is allowed to skip a check and is
+# not allowed to skip it quietly.
+# Asked of the reader, not of the filesystem. `[ -f ../.env ]` was the first
+# form and it is wrong inside a worktree: `arc-recon/client.py` resolves the
+# MAIN checkout's `.env`, so the file is absent right here and the key is
+# reachable anyway. The only honest question is whether `load_api_key()` returns.
+# The path is relative because this script has already cd'd to its own
+# directory: interpolating "$HERE" produced a POSIX `/c/...` path that the
+# Windows interpreter cannot resolve, so the probe failed on the one machine
+# where the key is definitely present and silently chose the lenient mode --
+# a check that skipped itself while reporting on the skip. Exactly the shape.
+if python -c "
+import sys, os
+sys.path.insert(0, os.path.join(os.pardir, 'arc-recon'))
+from client import load_api_key
+load_api_key()
+" >/dev/null 2>&1; then
+    MODE=generate
+else
+    MODE=verify
+    echo
+    echo "!! No .env is reachable, so the credential red line CANNOT run."
+    echo "!! Falling back to --mode verify. This gate is about to report on the"
+    echo "!! sealed-pile red line only. That is the right answer when checking a"
+    echo "!! release you were handed; it is NOT a check of a tree you are about"
+    echo "!! to publish from."
+fi
+step "red lines clear, and every tracked file was actually read (--mode $MODE)" \
+    python check_redlines.py --mode "$MODE"
 
 # Non-zero if any tracked file lands in class `?`/needs_human, because the
 # manifest asserts a licence class for every tracked file and cannot assert one
 # for a file it could not read.
-step "every tracked file is classified" python enumerate.py --dry-run --mode verify
+step "every tracked file is classified" python enumerate.py --dry-run --mode "$MODE"
 
 step "no checklist item rests on an unclassified file" python checklist.py --dry-run
 

@@ -259,7 +259,8 @@ def register_coverage() -> Dict[str, Any]:
     except (OSError, UnicodeDecodeError) as exc:
         problems.append("contamination log could not be read: %s: %s"
                         % (type(exc).__name__, exc))
-        return {"present": True, "lines": 0, "problems": problems}
+        return {"present": True, "lines": 0, "problems": problems, "entries": []}
+    good: List[Dict[str, Any]] = []
     for i, line in enumerate(raw.splitlines(), 1):
         line = line.strip()
         if not line:
@@ -296,32 +297,26 @@ def register_coverage() -> Dict[str, Any]:
                 "contamination log line %d registers %s with claims %r, which is not one "
                 "of %s" % (i, entry.get("game_id"), entry["claims"],
                            "/".join(CLAIM_STATES)))
-    return {"present": True, "lines": lines, "problems": problems}
+        good.append(entry)
+    return {"present": True, "lines": lines, "problems": problems, "entries": good}
 
 
 def entries() -> List[Dict[str, Any]]:
-    """Parseable registrations only. Unparseable ones are reported by
-    `register_coverage()`, which `gate()` reads -- they are skipped here rather
-    than raised so that a broken log is still inspectable, exactly as the module
-    docstring promises, without that tolerance becoming a clean verdict."""
-    if not os.path.exists(LOG_PATH):
-        return []
-    out = []
-    try:
-        raw = open(LOG_PATH, encoding="utf-8").read()
-    except (OSError, UnicodeDecodeError):
-        return out
-    for line in raw.splitlines():
-        line = line.strip()
-        if not line:
-            continue
-        try:
-            entry = json.loads(line)
-        except ValueError:
-            continue
-        if isinstance(entry, dict) and "game_id" in entry and "level" in entry:
-            out.append(entry)
-    return out
+    """Parseable registrations only, read through `register_coverage()`.
+
+    This function and `register_coverage()` were briefly two loops over the same
+    file inside the same module -- one collecting rows, one collecting
+    complaints, each with its own `open`, its own exception tuple and its own
+    idea of what makes a line usable. That is precisely the arrangement this
+    whole work order is about ("两份实现一定会漂移"), reintroduced by the fix for
+    it: the moment one of them learned to reject an unrecognised `level`, the
+    other would have kept feeding that row to the register.
+
+    One read, one set of rules, two views of the result. Unparseable lines are
+    skipped here and reported there, so a broken log stays inspectable -- as the
+    module docstring promises -- without that tolerance becoming a clean verdict.
+    """
+    return register_coverage().get("entries", [])
 
 
 def current_register() -> Dict[str, Dict[str, Any]]:

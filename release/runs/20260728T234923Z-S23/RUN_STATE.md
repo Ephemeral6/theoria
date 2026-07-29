@@ -92,7 +92,7 @@ that fires on honesty is a gate somebody switches off.
 Both halves have negative **and** positive controls; a gate that has never been
 seen to go red proves nothing, and one that goes red at everything proves less.
 
-`release/tests/test_unreadable_is_not_clean.py` (15 tests) builds a throwaway
+`release/tests/test_unreadable_is_not_clean.py` (27 tests) builds a throwaway
 git repository under `tmp_path` for each case, so the real `git ls-files` path
 is exercised rather than a hand-supplied list. Nothing undecodable is planted in
 this repository: the alternative is committing undecodable bytes into a tree
@@ -105,17 +105,19 @@ them — `read_bytes` opens `"rb"`, so it never sees a decode error. An
 for a file that also names a sealed game. That is exactly line 207's path, and
 exactly the file where the confusion is most expensive.
 
-`arc-recon/test_contamination_gate.py` (16 tests) replays the real contamination
+`arc-recon/test_contamination_gate.py` (20 tests) replays the real contamination
 log into `tmp_path` and appends one planted row, so a plant is judged against the
 real register rather than a universe built to contain it. Nothing writes to
 `arc-recon/data/`; `main()` is called without `--json`.
 
 ## Step 4 — before and after, on the same input
 
-`replicate.py` in this directory. For each scenario it obtains **`master`'s copy
-of the module** via `git show`, writes it beside its real sibling (both modules
-resolve `REPO_ROOT`/`DATA_DIR` from `__file__`, so a temp-directory copy would
-take a different branch), and runs old and new over identical planted input.
+`replicate.py` in this directory. For each scenario it obtains **the pre-fix copy
+of the module** via `git show bac8282:<path>`, writes it beside its real sibling
+(both modules resolve `REPO_ROOT`/`DATA_DIR` from `__file__`, so a
+temp-directory copy would take a different branch), and runs old and new over
+identical planted input. The ref is a hash and not `master` for a reason given
+in Step 7.
 
 | check | planted input | before | after |
 |---|---|---|---|
@@ -146,6 +148,60 @@ Two entry points changed exit behaviour, which anything scripting them will see:
 `release/CHECKLIST.md` is unchanged on this tree — the tally line gained an
 `undetermined` field, and it is regenerated only by an explicit non-dry run.
 
+## Step 6 — the adversarial pass, which turned over nine things
+
+A subagent was given the finished branch and asked to **refute** it, not to
+review it. It could not refute the headline claim, and it checked that the hard
+way: it mutated the source four ways — `read_json_records` back to `([], reason)`,
+`read_bytes` back to `(b"", reason)` with the old `len(paths)` note and
+suffix-only sniffing, `status_of` back to no `?` branch, and `gate()` stripped
+back to the piles hash — and confirmed each mutation kills the tests that claim
+it. It also confirmed no caller elsewhere in the repository breaks on the
+widened three-value returns.
+
+It then turned over **nine defects, five of them introduced by this branch.**
+All are fixed, and the two worst are worth writing down because both are this
+work order's own disease reappearing inside its own fix:
+
+* **`size: None` crashed the very refusal this branch added.** `build()` emitted
+  it for an unreadable file; both consumers sum that field; `checklist.report`
+  died on a `TypeError` *before* it could return UNDETERMINED. So the branch
+  replaced a wrong answer with a traceback. The test that covered the verdict
+  hand-built a row shape `build()` never produces — **a negative control aimed
+  slightly to the left of the thing it was guarding**, which is why 18 green
+  tests could not see it. The test now drives the real row through both readers.
+* **`enumerate.main` printed the `?` count and returned 0**, while
+  `release/verify.sh` asserted the opposite in a comment I had written two hours
+  earlier. Reachable without any unreadable file at all: an unparseable `.json`
+  naming a *dev-pile* id is invisible to `check_sealed`, which scans only sealed
+  ids, so nothing upstream aborts.
+
+Three more of mine: `checklist` inspected only rows some pattern matched, so an
+unclassified file no item covers left it green; `json_shaped`'s first-byte test
+was defeated by a UTF-8 BOM or one comment line; and `CHECKLIST.md` was left
+stale by the tally field I added, so the generator no longer matched its own
+artefact.
+
+Three pre-existing, same disease: an unrecognised `level` fails open through
+`order.get(level, 0)` → `never_audited` (the module fixed this exact shape once
+for `claims`, and it survived in the field beside it); `--json` wrote
+`claim_set.json` *before* the gate ran, so `verify.sh`'s own step overwrote the
+tracked artefact with a reassuring fabrication and only then returned 1; and both
+red lines are UTF-8 byte searches, so a UTF-16 file opens, counts as scanned, and
+can never match — which this branch made worse before better by adding an
+explicit "N of N scanned" claim on top of it.
+
+And two of my assertions could not fail: `scan_surface_self_discovered is False`
+read back a literal, and `enum.redlines is redlines` holds because the import is
+at module scope. Both now assert what they were standing in for.
+
+**The lesson worth keeping.** Every one of the five I introduced was in the
+*downstream* of the fix, not the fix. The readers were right the first time; what
+was wrong was what happened to their new third answer once it left them. A change
+that adds a verdict has to be chased to every consumer of that verdict, and
+"tests pass" does not do the chasing — three of the five were covered by tests
+that were aimed just beside them.
+
 ## Gaps — stated, not hidden
 
 1. **`arc-recon/tools/ledger_invariants.py` has the same disease and was not
@@ -171,11 +227,92 @@ Two entry points changed exit behaviour, which anything scripting them will see:
 5. The credential half of `check_redlines` still reports **per-file** skips only
    as `needs_human`; it does not distinguish a file that is unreadable from one
    that is absent from the working tree. Both block, so nothing passes wrongly.
+6. **`release/verify.sh` step 4 quotes a manifest step 3 did not produce.**
+   `checklist.py` reads whatever `release/MANIFEST.jsonl` is on disk, while
+   `enumerate.py --dry-run` writes nothing, so the checklist step can be
+   answering about an older tree. The composite still catches a newly unreadable
+   file — step 3 exits non-zero first — but the two steps are not looking at the
+   same thing, and the step's own title implies they are.
+7. **`piles.json` is read by an unguarded `open` in three files**
+   (`check_redlines`, `enumerate`, `contamination`), and `checklist.load()`
+   parses `MANIFEST.jsonl` bare. The cut file being unreadable is arguably the
+   most consequential instance of this item's subject in the repository, and all
+   of them answer it with a traceback. Left alone on purpose: a traceback exits
+   non-zero and is therefore not the defect class here — "could not check"
+   reported as "clean" — but it is the obvious next work order.
+8. `main()` in `contamination.py` computes `claim_set()` for the table and
+   `gate()` recomputes it. They agree because the files are read twice with no
+   write in between, so "the table and the exit code cannot disagree" is true by
+   recomputation rather than by construction.
+
+## Step 7 — a second reviewer, on a different question
+
+The adversarial pass above asked "is this broken". A second subagent was asked
+the different question "was the work order actually satisfied", requirement by
+requirement. It graded two of four **PARTIALLY MET** and found seven gaps the
+delivery had not admitted. The important ones:
+
+* **`replicate.py` had a fuse in it.** `BASE_REF` defaulted to `master`. The
+  moment this branch lands, `git show master:release/check_redlines.py` returns
+  the *fixed* file, "before" stops reporting clean, the assertion fires, and
+  `release/verify.sh` — which runs this script on every green run — is
+  permanently RED for a reason that has nothing to do with the tree. Worse, the
+  captures were written *before* the assertion, so the first post-merge run
+  would have overwritten `before/*.txt` with after-content on its way to
+  failing: the gate destroying the archive it exists to protect. Now pinned to
+  the hash `bac8282`, and unexpected output goes to `unexpected/` while the
+  archive is left alone. Both halves are demonstrated by running the script with
+  `S23_BASE_REF=HEAD`.
+* **The reader I unified had split again inside `contamination.py`.**
+  `register_coverage()` and `entries()` were two loops over the same file in the
+  same module, each with its own `open`, its own exception tuple and its own
+  idea of a usable line — the exact arrangement this work order forbids,
+  reintroduced by the fix for it. One read now, two views of the result.
+* **`release/verify.sh` ran the credential red line in the one mode that can
+  skip itself and still exit 0.** It passed `--mode verify` unconditionally, so
+  on any checkout without a credential the new release gate reported green
+  having not run half of what it gates — this work order's own sentence, turned
+  on its own gate. The mode is now chosen by asking `load_api_key()` whether it
+  returns, and the fallback is announced in five loud lines rather than
+  inferred. (The first version of that probe tested `[ -f ../.env ]`, which is
+  wrong inside a worktree — `client.py` resolves the main checkout's `.env`, so
+  the probe failed on the one machine where the key is definitely present and
+  silently chose the lenient mode. Same shape again, three levels down.)
+* **`MANIFEST.json` was stale**: written mid-run, and three later commits changed
+  files it hashed. **And its zero-contact sentence was false as worded** — the
+  archived captures do contain sealed ids, because they are the stdout of checks
+  whose job is to name the ids they keep out. That is a mention and not
+  material, so the constraint held; the claim did not. Both corrected, and the
+  code/output distinction is now drawn explicitly rather than elided.
+* **Requirement 4 had a `before/` with no `after/`** for the full-tree run. The
+  pre-fix full-tree capture in the earlier run directory was taken at a
+  different base over 2817 files and is comparable to nothing now. `replicate.py`
+  gained a third scenario that runs *both* versions over the real tree in one
+  run: both exit 0 over the same 3069 files, which is the other half of the
+  claim — the stricter check does not redden a healthy tree.
+
+Two of its findings I did not act on, deliberately:
+
+* `piles.json` is read by an unguarded `open` in three files, and
+  `checklist.load()` parses `MANIFEST.jsonl` bare. These raise rather than
+  returning a verdict — a traceback is a loud non-zero exit, which is not the
+  defect class this item is about ("no finding" reported as clean). Worth doing,
+  not worth doing under this item's name.
+* `verify.sh` step 4 grades `checklist.py` against whatever `MANIFEST.jsonl` is
+  on disk, while step 3 runs `enumerate.py --dry-run` and writes nothing. The
+  composite still catches a newly unreadable file, because step 3 exits non-zero
+  first — but the checklist step is quoting a manifest that may predate the tree.
+  Recorded as gap 6 below rather than papered over.
 
 ## Ledger
 
-* Zero API calls. Zero sealed-pile contact: sealed ids are read from
-  `piles.json` at runtime and never written into a new tracked file.
-* `bash release/verify.sh` → VERIFY: green (5 steps).
-* `cd arc-recon && python -m pytest -q` → 127 passed.
-* `cd release && python -m pytest -q` → 15 passed.
+* Zero API calls. Zero sealed-pile contact. Sealed ids are read from
+  `piles.json` at runtime and are not hardcoded in any source or test added
+  here; they **do** appear in the archived run captures, which are the verbatim
+  stdout of checks whose job is to name them. Mention, not material — see
+  `MANIFEST.json`'s `sealed_pile_contact` block, which states this precisely
+  after an earlier version of it stated something simpler and untrue.
+* `bash release/verify.sh` → VERIFY: green (5 steps, `--mode generate`).
+* `bash arc-recon/verify.sh` → VERIFY: green.
+* `cd arc-recon && python -m pytest -q` → 131 passed.
+* `cd release && python -m pytest -q` → 27 passed.

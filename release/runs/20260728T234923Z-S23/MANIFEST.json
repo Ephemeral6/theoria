@@ -12,25 +12,67 @@
   "territory": "release",
   "cross_territory_note": "arc-recon/contamination.py and arc-recon/test_contamination_gate.py are outside the release territory. The work order names contamination.py:338 explicitly as one of the two sites to fix, so the board item is the authorisation; arc-recon is shared ground rather than another track's directory. No other track's files were touched.",
   "api_calls": 0,
-  "sealed_pile_contact": "none. Sealed game ids are read from arc-recon/data/piles.json at runtime rather than written into any new file; no sealed game was played, inspected or read about.",
+  "sealed_pile_contact": {
+    "verdict": "none",
+    "code_and_tests": "No sealed game id is hardcoded in any source or test file added here. They are read from arc-recon/data/piles.json at runtime, so nothing new in this branch names a sealed game as a constant.",
+    "captured_output": "The archived run captures under runs/*/{before,after}/*.txt DO contain sealed game ids -- they are the verbatim stdout of checks whose job is to name the ids they are keeping out. This is a mention, not material: no frame, no action, no score, no state. check_redlines' own record-by-record rule clears them, and it is the rule the release gate applies to every tracked file including these. An earlier version of this manifest claimed no sealed id was written into any new tracked file, which was false as worded; an adversarial audit caught it. The constraint is satisfied; the sentence was not accurate.",
+    "played_or_inspected": "none. No sealed game was played, inspected, or read about."
+  },
   "gates": {
-    "release": "bash release/verify.sh -> VERIFY: green (new; the territory was UNGATED before this run)",
-    "arc-recon": "cd arc-recon && python -m pytest -q -> 127 passed"
+    "release": "bash release/verify.sh -> VERIFY: green, 5 steps (new; the territory was UNGATED before this run). Runs --mode generate where a credential is reachable, --mode verify with a loud banner where it is not.",
+    "arc-recon": "cd arc-recon && bash verify.sh -> VERIFY: green",
+    "tests": "release 27 passed; arc-recon 131 passed"
   },
   "files": [
-    {"path": "release/check_redlines.py", "sha256": "ba2adddfd680e29b81a2e8d2d282976ffb597140a3022b03eb7d5ff63bb8ef52"},
-    {"path": "release/enumerate.py", "sha256": "f7e4392affbcfc60f9d9085c3b5e6f21afda5ee405d53c479ffe57a448df3b02"},
-    {"path": "release/checklist.py", "sha256": "ef597cdec79cc07452c4a68d204a70bafc9cedf30ef4fb103b99776e2c8bf118"},
-    {"path": "release/verify.sh", "sha256": "5398453e18f44e22c7fa85a0503aaaf305647fe55d9bfeeaebd5299b9aaf3890"},
-    {"path": "release/tests/test_unreadable_is_not_clean.py", "sha256": "6009bf4350989993e49543bf0f6489ac8ddbc42e770a939364e5ebc17518939d"},
-    {"path": "arc-recon/contamination.py", "sha256": "8af2737d12d39088c8e9e46757d76401812e4a1a53c1a20995fbbfd4dcdebbd7"},
-    {"path": "arc-recon/test_contamination_gate.py", "sha256": "aa45fd71c745ced2d830370d3195026a38f91b260bc8929e217364d017bca2db"},
-    {"path": "release/runs/20260728T234923Z-S23/replicate.py", "sha256": "aef4df8d998c46ecb11c82a3ed91d19ba04a2ab6db93a4e9ae5907d2e378b043"}
+    {
+      "path": "release/check_redlines.py",
+      "sha256": "df67ca413390579ac100995bb5687480c11bcbd4a75826b40ad8b65cd24ffd47"
+    },
+    {
+      "path": "release/enumerate.py",
+      "sha256": "e7a082128bdb4ebd8de7f98feb5cea2488440933fd2095bcdf6d7d53412fd346"
+    },
+    {
+      "path": "release/checklist.py",
+      "sha256": "6fcdef648e0c1e6d982e2d93d15e171e9b04868e29588338f71e8956805053e6"
+    },
+    {
+      "path": "release/verify.sh",
+      "sha256": "0b931aee733f501e4fdd254db12fb208985d5d51ae53172f83d065e60d919ab3"
+    },
+    {
+      "path": "release/tests/test_unreadable_is_not_clean.py",
+      "sha256": "47181e0ba61607e61bf1ef779fc57613f25cbacabdbae3d082bce61e1e554f73"
+    },
+    {
+      "path": "arc-recon/contamination.py",
+      "sha256": "42729afa391dc18b0da615f8057c99065d1938b1afc15c1e53f1028a8e4c90af"
+    },
+    {
+      "path": "arc-recon/test_contamination_gate.py",
+      "sha256": "700ab29e925ce70cc217f0f7f656c121e280a9dcb789ac137ebc2c630129ba12"
+    },
+    {
+      "path": "release/runs/20260728T234923Z-S23/replicate.py",
+      "sha256": "f9cf99d91c98e4862f5b9b2396366c4fd291994b77c44889c5fc8ab1593f8b7c"
+    }
   ],
+  "files_note": "Hashes are of the final state of this run. An earlier version of this manifest was written mid-run and three later commits changed files it hashed without updating it; an adversarial audit caught that too. If these hashes and the tree disagree, the tree is right and this file is stale -- check `git log` for commits after the one that last touched it.",
   "before_after": {
     "generator": "release/runs/20260728T234923Z-S23/replicate.py",
-    "method": "The same planted inputs are run through `git show master:<path>` of each module and through the working-tree version. The old copy is imported beside its real sibling because both modules resolve REPO_ROOT/DATA_DIR from __file__.",
-    "check_redlines": {"before": 0, "after": 2},
-    "contamination": {"before": 0, "after": 1}
+    "method": "The same inputs are run through `git show bac8282:<path>` of each module and through the working-tree version. The old copy is imported beside its real sibling because both modules resolve REPO_ROOT/DATA_DIR from __file__. BASE_REF is pinned by hash, not to `master`: with a branch name, the first run after this lands would compare the fix against itself, fail, and turn the release gate permanently red.",
+    "planted_check_redlines": {
+      "before": 0,
+      "after": 2
+    },
+    "planted_contamination": {
+      "before": 0,
+      "after": 1
+    },
+    "full_tree_check_redlines": {
+      "before": 0,
+      "after": 0,
+      "note": "Both clean over the same 3071 tracked files, which is the other half of the claim: the stricter check does not redden a healthy tree. The `after` summary line additionally states coverage ('0 file(s) this check could not read'), which the old one could not say. This pair is a DATED MEASUREMENT and is not regenerated by verify.sh: the count it reports includes the two files it is written into, so rerunning always disagrees with the copy on disk by exactly the number of files it just wrote. Regenerate deliberately with `replicate.py --full-tree`; the planted scenarios above are the reproducible check."
+    }
   }
 }

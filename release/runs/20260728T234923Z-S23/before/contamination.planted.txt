@@ -1,4 +1,4 @@
-# before: arc-recon/contamination.py at master
+# before: arc-recon/contamination.py at bac8282
 # input: the real contamination log plus one planted record
 #   bp35-0a0ad940 registered with claims='quarantined' (a typo:
 #   not one of CLAIM_STATES, so it is in no settled bucket)

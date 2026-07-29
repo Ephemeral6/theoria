@@ -46,7 +46,20 @@ RELEASE_DIR = os.path.join(REPO_ROOT, "release")
 ARC_DIR = os.path.join(REPO_ROOT, "arc-recon")
 PILES = os.path.join(ARC_DIR, "data", "piles.json")
 
-BASE_REF = os.environ.get("S23_BASE_REF", "master")
+#: The commit this work started from, pinned by hash and NOT by branch name.
+#:
+#: This was `master` for its first few hours, which is a bug with a fuse in it.
+#: `verify.sh` runs this script on every green run; the moment the branch lands,
+#: `git show master:release/check_redlines.py` returns the **fixed** file, "before"
+#: stops reporting clean, the assertion at the bottom of `main()` fires, and the
+#: release gate is permanently RED for a reason that has nothing to do with the
+#: tree. And because the captures are written before that assertion runs, the
+#: first post-merge verify would have overwritten `before/*.txt` with
+#: after-content first: the gate destroying the archive it exists to protect,
+#: and then failing.
+#:
+#: A hash cannot move. `bac8282` is the base recorded in MANIFEST.json.
+BASE_REF = os.environ.get("S23_BASE_REF", "bac8282")
 
 UNDECODABLE = b"\x80\x81\xfe\xff"
 
@@ -147,7 +160,7 @@ def build_planted_tree() -> str:
     return root
 
 
-def scenario_redlines(out_dir: str) -> list[str]:
+def scenario_redlines(captures: list) -> list[str]:
     tree = build_planted_tree()
     summary = []
     try:
@@ -167,17 +180,16 @@ def scenario_redlines(out_dir: str) -> list[str]:
                     module.REPO_ROOT = tree
                     text, code = run_capture(module.main, ["--mode", "verify"])
                     module.REPO_ROOT = real_root
-            path = os.path.join(out_dir, label, "check_redlines.planted.txt")
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-            with open(path, "w", encoding="utf-8", newline="\n") as fh:
-                fh.write(f"# {label}: release/check_redlines.py at "
-                         f"{BASE_REF if label == 'before' else 'this working tree'}\n")
-                fh.write("# input: a throwaway git repo containing\n")
-                fh.write("#   corrupt.jsonl  -- names a sealed game, invalid UTF-8\n")
-                fh.write("#   vanished.md    -- tracked by git, deleted from the tree\n")
-                fh.write("# <TMP> stands in for this run's temp directory.\n\n")
-                fh.write(scrub(text, tree))
-                fh.write(f"\nexit code: {code}\n")
+            header = (
+                f"# {label}: release/check_redlines.py at "
+                f"{BASE_REF if label == 'before' else 'this working tree'}\n"
+                "# input: a throwaway git repo containing\n"
+                "#   corrupt.jsonl  -- names a sealed game, invalid UTF-8\n"
+                "#   vanished.md    -- tracked by git, deleted from the tree\n"
+                "# <TMP> stands in for this run's temp directory.\n\n"
+            )
+            captures.append((os.path.join(label, "check_redlines.planted.txt"),
+                             header + scrub(text, tree) + f"\nexit code: {code}\n"))
             summary.append(f"check_redlines {label}: exit {code}")
     finally:
         shutil.rmtree(tree, ignore_errors=True)
@@ -187,7 +199,7 @@ def scenario_redlines(out_dir: str) -> list[str]:
 # --------------------------------------------------------------- scenario two
 
 
-def scenario_contamination(out_dir: str) -> list[str]:
+def scenario_contamination(captures: list) -> list[str]:
     """Two plants at once: a NEEDS ADJUDICATION record, and a deleted ledger."""
     sys.path.insert(0, ARC_DIR)
     import contamination as new_module  # noqa: PLC0415
@@ -225,18 +237,17 @@ def scenario_contamination(out_dir: str) -> list[str]:
                                  "_s23_old_contamination") as module:
                     _point_at(module)
                     text, code = run_capture(module.main, [])
-            path = os.path.join(out_dir, label, "contamination.planted.txt")
-            os.makedirs(os.path.dirname(path), exist_ok=True)
-            with open(path, "w", encoding="utf-8", newline="\n") as fh:
-                fh.write(f"# {label}: arc-recon/contamination.py at "
-                         f"{BASE_REF if label == 'before' else 'this working tree'}\n")
-                fh.write("# input: the real contamination log plus one planted record\n")
-                fh.write(f"#   {game} registered with claims='quarantined' (a typo:\n")
-                fh.write("#   not one of CLAIM_STATES, so it is in no settled bucket)\n")
-                fh.write("# and a DATA_DIR with no recon_ledger.jsonl in it at all.\n")
-                fh.write("# <TMP> stands in for this run's temp directory.\n\n")
-                fh.write(scrub(text, data))
-                fh.write(f"\nexit code: {code}\n")
+            header = (
+                f"# {label}: arc-recon/contamination.py at "
+                f"{BASE_REF if label == 'before' else 'this working tree'}\n"
+                "# input: the real contamination log plus one planted record\n"
+                f"#   {game} registered with claims='quarantined' (a typo:\n"
+                "#   not one of CLAIM_STATES, so it is in no settled bucket)\n"
+                "# and a DATA_DIR with no recon_ledger.jsonl in it at all.\n"
+                "# <TMP> stands in for this run's temp directory.\n\n"
+            )
+            captures.append((os.path.join(label, "contamination.planted.txt"),
+                             header + scrub(text, data) + f"\nexit code: {code}\n"))
             summary.append(f"contamination {label}: exit {code}")
     finally:
         shutil.rmtree(data, ignore_errors=True)
@@ -246,29 +257,106 @@ def scenario_contamination(out_dir: str) -> list[str]:
     return summary
 
 
+def scenario_full_tree(captures: list) -> list[str]:
+    """Both versions over the REAL tree, unplanted, in the same run.
+
+    The planted scenarios show the defect. This one shows the other half of the
+    claim, which is just as load-bearing and much easier to skip: that on a tree
+    where nothing is wrong, the stricter checks say exactly what the old ones
+    said. A gate that reddens on a healthy repository is one somebody switches
+    off, and then the planted evidence above protects nothing.
+
+    An earlier run directory holds a pre-fix full-tree capture with no `after/`
+    beside it. It is not comparable to anything now -- it was taken at a
+    different base over 2817 tracked files, and the tree holds more than that
+    today -- so this pairs the two over one tree at one moment instead.
+
+    Only the tail is archived. The full output names every file that mentions a
+    sealed id, which is hundreds of lines that say the same thing.
+    """
+    summary = []
+    sys.path.insert(0, RELEASE_DIR)
+    import check_redlines as new_module  # noqa: PLC0415
+
+    for label in ("before", "after"):
+        if label == "after":
+            text, code = run_capture(new_module.main, ["--mode", "verify"])
+        else:
+            with old_version("release/check_redlines.py",
+                             "_s23_old_redlines_full") as module:
+                text, code = run_capture(module.main, ["--mode", "verify"])
+        tail = "\n".join(text.strip().splitlines()[-6:])
+        captures.append((
+            os.path.join(label, "check_redlines.full_tree.txt"),
+            f"# {label}: release/check_redlines.py at "
+            f"{BASE_REF if label == 'before' else 'this working tree'}\n"
+            "# input: the real tree, nothing planted. Tail only -- the full output\n"
+            "#   names every file that mentions a sealed id, which is hundreds of\n"
+            "#   lines all saying the same thing.\n"
+            "# A DATED MEASUREMENT, not a reproducible check: the tracked-file count\n"
+            "#   below includes this very file, so rerunning gives a larger number.\n"
+            "#   Regenerate deliberately with `replicate.py --full-tree`.\n\n"
+            + tail + f"\n\nexit code: {code}\n"))
+        summary.append(f"full tree {label}: exit {code}")
+    return summary
+
+
 def main() -> int:
-    out_dir = HERE
+    captures: list[tuple[str, str]] = []
     lines = []
-    lines += scenario_redlines(out_dir)
-    lines += scenario_contamination(out_dir)
+    lines += scenario_redlines(captures)
+    lines += scenario_contamination(captures)
+    # Off by default, and that is not laziness. This capture reports the number
+    # of tracked files, and archiving it under `runs/` ADDS tracked files -- so
+    # rerunning it always disagrees with the copy on disk, by exactly the number
+    # of files it just wrote. `verify.sh` runs this script on every green run, so
+    # leaving it on would dirty the tree forever and teach a reader to ignore the
+    # diff. The planted scenarios above are the reproducible check; this pair is
+    # a dated measurement, regenerated deliberately with --full-tree.
+    full = scenario_full_tree(captures) if "--full-tree" in sys.argv else []
     print(f"base ref: {BASE_REF}")
-    for line in lines:
+    for line in lines + full:
         print("  " + line)
-    print(f"\nwrote before/ and after/ under {os.path.relpath(out_dir, REPO_ROOT)}")
+
+    # The full-tree pair is evidence, not a trigger: both sides must be 0,
+    # because the tree is healthy and the whole point is that the fix does not
+    # change that. If either side is non-zero, something in the tree wants
+    # looking at and this script should not be the thing that says so.
+    if any(not v.endswith("0") for v in full):
+        print("\nNOTE: the full-tree run is not clean on one side. That is a fact about "
+              "the tree, not about this archive; read the capture.")
 
     verdicts = dict(
         (part.rsplit(":", 1)[0].strip(), part.rsplit(" ", 1)[1]) for part in lines
     )
-    # The point of the archive, asserted rather than left for a reader to notice.
+    # The point of the archive, asserted rather than left for a reader to notice
+    # -- and asserted BEFORE anything is written. Writing first meant that a run
+    # which no longer demonstrates the claim would overwrite `before/*.txt` with
+    # after-content on its way to reporting the failure: the check destroying the
+    # evidence it exists to protect. Unexpected output goes to `unexpected/`, so
+    # it is still there to read and the archive is still there to compare it to.
     bad = [k for k, v in verdicts.items() if k.endswith("before") and v != "0"]
+    if not bad:
+        bad = [k for k, v in verdicts.items() if k.endswith("after") and v == "0"]
     if bad:
-        print(f"\nUNEXPECTED: {bad} did not report clean before the fix; "
-              "the archived diff does not demonstrate what it claims.")
+        for rel, body in captures:
+            path = os.path.join(HERE, "unexpected", rel)
+            os.makedirs(os.path.dirname(path), exist_ok=True)
+            with open(path, "w", encoding="utf-8", newline="\n") as fh:
+                fh.write(body)
+        print(f"\nUNEXPECTED: {bad} -- the archived diff no longer demonstrates what it "
+              f"claims. The archive under {os.path.relpath(HERE, REPO_ROOT)} was NOT "
+              "overwritten; this run's output is in unexpected/ beside it.")
+        print(f"If this is the post-merge run, S23_BASE_REF is {BASE_REF} and the fix is "
+              "presumably in it; that ref is meant to be the pre-fix commit.")
         return 1
-    bad = [k for k, v in verdicts.items() if k.endswith("after") and v == "0"]
-    if bad:
-        print(f"\nUNEXPECTED: {bad} still reports clean after the fix.")
-        return 1
+
+    for rel, body in captures:
+        path = os.path.join(HERE, rel)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(body)
+    print(f"\nwrote before/ and after/ under {os.path.relpath(HERE, REPO_ROOT)}")
     print("\nBefore: both checks reported CLEAN on inputs they could not read.")
     print("After:  both report the failure and exit non-zero.")
     return 0

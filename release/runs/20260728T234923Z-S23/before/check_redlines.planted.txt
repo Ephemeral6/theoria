@@ -1,4 +1,4 @@
-# before: release/check_redlines.py at master
+# before: release/check_redlines.py at bac8282
 # input: a throwaway git repo containing
 #   corrupt.jsonl  -- names a sealed game, invalid UTF-8
 #   vanished.md    -- tracked by git, deleted from the tree
