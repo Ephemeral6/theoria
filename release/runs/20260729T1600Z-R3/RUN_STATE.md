@@ -147,3 +147,66 @@ The three `?` rows were put to an independent reviewer with the instruction to
 routing a `.pdf` to `?` for failing a JSON parse is an abstention or a category
 error that will get blanket-exempted by the next person to meet it. Its findings
 are recorded in `ADVERSARIAL.md` beside this file.
+
+---
+
+# Round two — the review was right, and the fix had the item's own disease
+
+Everything above describes round one. An independent reviewer, instructed to
+**refute** rather than check, overturned it. `ADVERSARIAL.md` is the full
+account; `DISTRIBUTION.round2.md` and `MANIFEST.round2.json` are the second
+census. The short version is three findings, and what makes them worth writing
+down is that all three are **this item's own diagnosis, reproduced one level up
+by the fix itself**:
+
+1. **`enumerate.PAYLOAD_KEYS` stayed a four-field literal** beside the
+   `check_redlines` constant this branch had just widened to eight. The guard
+   went into one of the two readers — defect 1, verbatim. **Eight files moved
+   C → B once fixed, every one of them a real ARC scorecard response body**
+   (`card_id`, `environments[].id`, per-run `guid`s), all of them shipping as
+   `releasable-flagged` under the sentence *"no record pairs an id with
+   environment payload."*
+2. **`unsearchable_encoding` was wired into `check_redlines` and not here** —
+   same function, three lines from the id search. Five records of
+   `{"game_id": "<dev id>", "frame": [[…]]}` written as UTF-16 classified
+   **A / releasable** on the evidence *"no ARC game id appears in this file"*:
+   this work order's title sentence, printed over a blind comparison.
+3. **The `?` rows named a reason nobody had checked.** `_records_pairing`
+   returned a bare `None` and `classify` invented *"could not be parsed as
+   JSON"* — false for every row it was ever printed over, since all three take
+   `json_shaped`'s first early return at `blob.decode("utf-8-sig")`.
+
+A fourth change followed from the second: `_records_pairing`'s own test was
+record-level co-occurrence, which `check_redlines._pairings` had been rewritten
+**on this same branch** to stop doing. It now shares that scoping — which is why
+eight files move and not the eleven the reviewer measured: widening the field
+list moves eleven, and scoping holds three back. Both directions are needed.
+
+Tests: **71 passed**, from 57 after round one and 46 at base. 10 of the 14 added
+in round two fail on the unfixed tree; the other 4 are positive controls.
+`verify.sh` is still **RED**, on the same three rows, now naming the real reason.
+
+## The one finding that was not fixed here
+
+The same figure is tracked as `.png` (class **A**), `.svg` (class **C**) and
+`.pdf` (class **?**), and the id is an axis tick label in both text formats.
+Round one raised that family from two inconsistent classes to three. Worse,
+`release/` has **no adjudication path at all**, so a `?` row is red until someone
+edits code rather than red until someone rules — a standing invitation to switch
+the gate off and take the true reds with it.
+
+That is new machinery, not a default fix, and it needs its own negative samples
+(a ruling pinned to a stale sha256 must not carry to changed bytes; a ruling must
+not overturn class D). Raised as board item **`R4-ruling-path-for-undetermined`**.
+The shortcut — using `_review_note` to make the PDFs class C with a visible doubt
+— is refused in that item's text, because it turns *"cannot read it"* back into
+*"ship it, flagged"*, which is what R3 exists to stop.
+
+## The standing lesson
+
+The reviewer's sharpest finding is not any one defect. It is that **sharing a
+function is not the same as sharing a rule.** `json_shaped`'s docstring states a
+precondition — `check_sealed` only reaches it for a file that already matched an
+id in its raw bytes — and `enumerate.classify` violates it, because it calls the
+two in the opposite order. Reusing a function without re-reading what it assumes
+is the same failure this item is named for, one level up.
