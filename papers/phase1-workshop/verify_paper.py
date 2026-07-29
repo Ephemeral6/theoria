@@ -585,7 +585,32 @@ def _emit(out: list, start: int, chunk: list[str]) -> None:
     out.append([start, text])
 
 
-_BASENAMES: set[str] | None = None
+_BASENAMES: dict[str, list[str]] | None = None
+
+#: Directories that are not the published tree: other agents' checkouts, build
+#: output, caches. A basename that is "ambiguous" only because it also appears
+#: in a sibling worktree is not ambiguous to a reader of the repository.
+_WALK_SKIP = {
+    ".git", "__pycache__", ".worktrees", ".toolchain", "node_modules",
+    ".claude", ".pytest_cache", ".venv", "node_modules", ".mypy_cache",
+}
+
+
+def _candidates(token: str) -> list[str]:
+    """Every repo-relative path whose basename is this token.
+
+    Check F needs the count, `_basename_exists` needs only whether it is
+    non-empty, and walking the tree twice for that was silly.
+    """
+    global _BASENAMES
+    if _BASENAMES is None:
+        _BASENAMES = {}
+        for path, dirs, files in os.walk(ROOT):
+            dirs[:] = [d for d in dirs if d not in _WALK_SKIP]
+            for f in files:
+                rel = os.path.relpath(os.path.join(path, f), ROOT)
+                _BASENAMES.setdefault(f, []).append(rel.replace("\\", "/"))
+    return _BASENAMES.get(token.rsplit("/", 1)[-1], [])
 
 
 def _basename_exists(token: str) -> bool:
@@ -596,16 +621,10 @@ def _basename_exists(token: str) -> bool:
     does not exist -- was a citation *nobody* checked: E accepted the suffix and
     B never saw the token. This is the weakest test that still costs an inventor
     something, and it is free: all 34 distinct bare filenames the sections cite
-    exist by basename.
+    exist by basename. Check F is the stronger test on the same tokens: existing
+    is not the same as being findable.
     """
-    global _BASENAMES
-    if _BASENAMES is None:
-        skip = {".git", "__pycache__", ".worktrees", ".toolchain", "node_modules"}
-        _BASENAMES = set()
-        for path, dirs, files in os.walk(ROOT):
-            dirs[:] = [d for d in dirs if d not in skip]
-            _BASENAMES.update(files)
-    return token.rsplit("/", 1)[-1] in _BASENAMES
+    return bool(_candidates(token))
 
 
 def _mark_citations(block: str) -> str:
@@ -790,12 +809,82 @@ def check_uncited() -> tuple[bool, list[str]]:
     return not (flagged or stale), notes
 
 
+#: Bare filenames that name a *kind* of file rather than one artefact, each with
+#: the reason. Keyed by (section, token). Same discipline as the other two
+#: adjudication tables: the reason prints on every run, and an entry that
+#: matches nothing fails as stale.
+ADJUDICATED_BARE: dict[tuple[str, str], str] = {}
+
+
+def scan_bare(sections=None, rulings=None):
+    """Bare-filename citations in the body, with how many files could be meant.
+
+    Check B skips a token without a `/` by design -- it checks that cited
+    *paths* resolve, and a bare filename is not a path. Check E accepts one if
+    the basename exists anywhere in the tree. So `STATUS.md` is a citation that
+    neither check really reads, and the paper's own rule says every citation is
+    repo-relative. This is the executor for that half of the rule.
+
+    A bare filename with exactly one candidate in the tree is *locatable*, which
+    is what the rule is protecting, so it passes. The check is about ambiguity:
+    `MANIFEST.json` matches 124 files and points a reader at none of them.
+    """
+    sections = SECTIONS if sections is None else sections
+    rulings = ADJUDICATED_BARE if rulings is None else rulings
+    hits = {k: 0 for k in rulings}
+    flagged, seen = [], 0
+    for section in sorted(Path(sections).glob("*.md")):
+        if section.name in EXEMPT_SECTIONS:
+            continue
+        for lineno, line in enumerate(
+                section.read_text(encoding="utf-8").splitlines(), 1):
+            for m in CITE_TOKEN.finditer(line):
+                token = m.group(1)
+                if "/" in token or not token.lower().endswith(ARTEFACT_SUFFIX):
+                    continue
+                seen += 1
+                n = len(_candidates(token))
+                if n <= 1:
+                    continue
+                key = (section.name, token)
+                if key in hits:
+                    hits[key] += 1
+                    continue
+                flagged.append((section.name, lineno, token, n))
+    return flagged, hits, seen
+
+
+def check_bare() -> tuple[bool, list[str]]:
+    """F. No body citation is a bare filename that could mean several files."""
+    notes: list[str] = []
+    flagged, hits, seen = scan_bare()
+    stale = [k for k, n in hits.items() if not n]
+    notes.append(
+        f"  {seen} bare-filename citations: {len(flagged)} ambiguous, "
+        f"{len(ADJUDICATED_BARE) - len(stale)} ruled, {len(stale)} stale rulings")
+    for name, lineno, token, n in flagged:
+        notes.append(fail(
+            f"  AMBIGUOUS {name}:{lineno} -- `{token}` matches {n} files in the "
+            f"tree, so it points a reader at none of them. Cite the "
+            f"repo-relative path, or rule it."))
+    for key, n in sorted(hits.items()):
+        if n:
+            notes.append(f"  ruled     {key[0]} `{key[1]}` ({n}x) -- {ADJUDICATED_BARE[key]}")
+    for key in stale:
+        notes.append(fail(
+            f"  STALE     {key[0]} `{key[1]}` is ruled and no longer appears. "
+            f"A ruling that excuses nothing is removed, not left to excuse a "
+            f"regression that comes back the other way."))
+    return not flagged and not stale, notes
+
+
 CHECKS = [
     ("A GENERATED", "PAPER.md == assemble(sections/)", check_generated),
     ("B PATHS", "every cited path resolves, unambiguously", check_paths),
     ("C FIGDATA", "figure extractors are byte-deterministic", check_figdata),
     ("D NOSECRET", "no credential value in any published file", check_nosecret),
     ("E UNCITED", "every quantitative claim block cites an artefact", check_uncited),
+    ("F BARE", "no citation is an ambiguous bare filename", check_bare),
 ]
 
 

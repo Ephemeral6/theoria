@@ -1,0 +1,17 @@
+{
+  "prompt_id": "P17-P17-bare-filename-citations",
+  "branch": "agent/p17-bare-filename-citations",
+  "base_commit": "bb06b8d9969726997c4e6968b121d2026f44135f",
+  "utc": "2026-07-29T14:35:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "census": {
+    "occurrences": 110,
+    "distinct": 34,
+    "ambiguous_tokens": 13,
+    "ambiguous_occurrences": 19
+  }
+}
