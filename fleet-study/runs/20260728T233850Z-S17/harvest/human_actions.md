@@ -21,7 +21,7 @@ state,HANDOFF,CHARTER,spec.py,agents.py,board/board.log,mailbox,inbox,audit,ops,
 res,ops-status,dispatch-logs}`; all 8 `monitor/bus/*/{in,out}.jsonl` read as raw
 UTF-8 (bus.py stdout is mojibake here); `browser-ops/`; `baseline-arms/
 {BUDGET_REPORT,INCIDENTS}.md`; `cold-start-a0/DECISIONS.md`; `arc-recon/`;
-existing `fleet-study/data/*.jsonl`; and the four user-memory files under
+`fleet-study/data/*.jsonl`; and the four user-memory files under
 `~/.claude/projects/.../memory/` — leads only, outside the repo, not citable.
 
 **Provenance rule:** an app session (`APP-*`, `OPS-*`, `RES-*`) has no entry in
@@ -33,8 +33,7 @@ paste. Every `W-*` board worker **does** have a dispatch log, so none are human.
 1. **The true number of pastes.** The 9 launch rows cover ~19 individual pastes,
    but the monitor's reincarnation discipline (restart every ~3 h against a 5 h
    quota window, `HANDOFF.md`) implies further 「继续」 pastes over 32 h that leave
-   no trace — commits do not record which session wrote them. **The launch count
-   is a floor, not a total.**
+   no trace. **The launch count is a floor, not a total.**
 2. Whether H-08's $103 approval was a sentence or a paste (the tree pins the
    8-minute window, not the form); whether H-17 was a human ask at all
    (confidence low; caveat says so).
@@ -47,17 +46,16 @@ paste. Every `W-*` board worker **does** have a dispatch log, so none are human.
   otherwise. `monitor/loop_state.json:notes.launch-root-causes` and commit
   `cbd5d34` credit the whole three-layer fix (consent flag, settings.local
   defaultMode, `_runner.py --dangerously-skip-permissions`) to the monitor.
-  `.claude/settings.local.json` is neither tracked nor in this worktree.
 - **B-1 browser ops** is two events, both in: H-12 (extension) and H-13 (OAuth).
 - **`monitor/worker.cmd` windows.** Three files say extra capacity is added *by the
-  user* opening terminal workers. Every `W-*` id in `board.log` has a dispatch log,
-  so the mechanism was built and, so far as the record shows, never used by a
-  human. That is a counter-evidence row, not a human-action row.
+  user* opening terminal workers; every `W-*` id in `board.log` has a dispatch log,
+  so the mechanism was built and never used by a human. Counter-evidence, not a
+  human action.
 - **Never-performed asks:** registering `TheoriaServe` as administrator (raised 3
   cycles, worked around); the `team@arcprize.org` letter (drafted, unsent); the R2
-  release-licence application; finding which account owns the `.env` key.
-- **The 4-hour gate stoppage** (16:37Z–22:18Z), escalated to the user twice by the
-  auditor — commit `cbf3535` shows the monitor applied the fix itself.
+  release-licence application; finding which account owns the `.env` key. Also the
+  4-hour gate stoppage (16:37Z–22:18Z), escalated to the user twice by the auditor
+  — commit `cbf3535` shows the monitor applied the fix itself.
 - **Agent-authored "approvals" phrased as the user's:** `BUDGET_REPORT.md`'s
   「批准已到（工单 P-7）」 is the monitor's own ticket. H-08 is kept because it
   predates P-7; the P-7 relay is H-09, a paste.
