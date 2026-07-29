@@ -60,15 +60,32 @@ def _stage(label: str, argv: List[str]) -> Tuple[str, int]:
 
 
 def _run_stages() -> List[Tuple[str, int]]:
+    """The stages, in the order the dependency between them requires.
+
+    **`pytest` runs last, and that is the fix rather than a preference.** It
+    used to run second, before `run_arm` -- so the suite judged the *previous*
+    invocation's `artifacts/`, and the gate could never see its own tests fail
+    on its own output. A red left on disk by run N was carried into run N+1's
+    verdict, and a fault introduced in run N could not turn run N red at all.
+    `verify()` then reads those same artefacts, so the ordering also decides
+    whether the assertions below describe the run that just happened.
+
+    Nothing depends on the old order: `build_theory --check` is a pure check and
+    stays first because everything downstream reads the built theory;
+    `run_arm`, `run_arm --twice` and `run_exhibits` each compute their paths
+    from their own `__file__` and share no state with the suite; and the suite
+    re-runs the arm itself where it needs to, so it never depended on `pytest`
+    preceding the drivers.
+    """
     py = sys.executable
     return [
         _stage("build_theory --check", [py, os.path.join(HERE, "build_theory.py"),
                                         "--check"]),
-        _stage("pytest", [py, "-m", "pytest", "-q", "-p", "no:cacheprovider",
-                          os.path.join(HERE, "tests")]),
         _stage("run_arm", [py, os.path.join(HERE, "run_arm.py")]),
         _stage("run_arm --twice", [py, os.path.join(HERE, "run_arm.py"), "--twice"]),
         _stage("run_exhibits", [py, os.path.join(HERE, "run_exhibits.py")]),
+        _stage("pytest", [py, "-m", "pytest", "-q", "-p", "no:cacheprovider",
+                          os.path.join(HERE, "tests")]),
     ]
 
 
