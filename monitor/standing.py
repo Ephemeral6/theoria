@@ -72,6 +72,13 @@ EVERY_MIN = 15
 #: 锁文件 / cycle 推进在这个时长内算「有人顶着这个编号」。
 LOCK_FRESH_MIN = 20
 
+#: 板上有这个编号的动作，多久之内算它还活着。比锁宽——一件活可以做很久才交付，
+#: 但一个会话在 90 分钟里对板一次动作都没有，就不该再被当成在岗。
+BOARD_ACTIVE_MIN = 90
+
+#: 板日志的路径（board.py 的同一份文件）。
+BOARD_LOG = os.path.join(HERE, "board", "board.log")
+
 
 def log(msg):
     stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
@@ -172,6 +179,35 @@ def occupied(agent, state):
     * mtime **不算**：一次 `git merge` 就能把死会话的 ops-status 摸新，
       今天下午就发生过（RES-2/RES-4 的 mtime 49 分钟，自报时刻却是几小时前）。
     """
+    # **板上的动作是最强的存活信号**，因为它是这个编号对共享状态造成的**后果**，
+    # 不是它对自己的**自述**：锁可以忘记刷新，cycle 可以停在原地，mtime 可以被
+    # 一次 merge 摸新，但 board.log 里一行 CLAIM/DONE 只可能由一个活着的会话写出来。
+    #
+    # 2026-07-29 实测：App 里的 RES-4 安静了三个多小时（锁 204 分钟、cycle 不动），
+    # 我据此判它已死并另起了一个无头 RES-4——**于是同一个编号有两个会话**，
+    # 同一件 S29 被独立做了两遍，产出两条互相冲突的分支。这是同号并发的第三次。
+    log_path = os.path.join(BOARD_LOG)
+    if os.path.exists(log_path):
+        try:
+            recent = 0.0
+            with open(log_path, encoding="utf-8", errors="replace") as fh:
+                for line in fh:
+                    if (" by %s" % agent) not in line:
+                        continue
+                    try:
+                        t = time.strptime(line.split(" ", 1)[0],
+                                          "%Y-%m-%dT%H:%M:%SZ")
+                    except Exception:
+                        continue
+                    import calendar
+                    recent = max(recent, calendar.timegm(t))
+            if recent:
+                age = (time.time() - recent) / 60.0
+                if age < BOARD_ACTIVE_MIN:
+                    return "board activity %.0f min ago" % age
+        except OSError:
+            pass
+
     lock = os.path.join(HERE, "ops-status", "%s.lock" % agent)
     if os.path.exists(lock):
         age = (time.time() - os.path.getmtime(lock)) / 60.0
