@@ -1,0 +1,48 @@
+{
+  "barriers": [
+    {
+      "adjudicated_through_run_id": "bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8",
+      "barrier_id": "BAR-001",
+      "remediations": [
+        "proxy/spend_gate.py: a cross-session, fail-closed register of one pool, one lock, one sum. Closes INC-BA-003 and BUDGET_REPORT section 11.5 item 1.",
+        "baseline-arms/harness/spend.py + arc_client + bare_cc: this track's spending path now goes through that gate. Before this, the pool showed $0.0000 against every baseline-arms campaign that had ever run.",
+        "baseline-arms/harness/bare_cc.py D-016: the cumulative absolute abort becomes two rules -- 10 consecutive failures (api_unusable, a constraint that did not previously exist) and max(10, budget) cumulative (failure_grind, a result about the arm). Closes BUDGET_REPORT section 11.5 item 2."
+      ],
+      "utc": "2026-07-28T00:00:00Z"
+    }
+  ],
+  "caps": {
+    "action_success_floor": 0.35,
+    "campaign_usd": 50.0,
+    "cell_cost_multiple": 3.0,
+    "compute_seconds": 72000,
+    "consecutive_dead": 2,
+    "elapsed_seconds": 28800,
+    "http_per_action": 20.0,
+    "tier_usd": {
+      "claude-haiku-4-5-20251001": 20.0,
+      "claude-opus-5": 30.0,
+      "claude-sonnet-5": 30.0
+    }
+  },
+  "evaluated_at": "2026-07-28T15:45:04Z",
+  "g4_judges_cells": 1,
+  "state": "green",
+  "totals": {
+    "action_success_rate": 1.0,
+    "actions_failed": 0,
+    "actions_ok": 30,
+    "cells": 1,
+    "compute_seconds": 1458.3,
+    "cost_by_tier": {
+      "claude-haiku-4-5-20251001": 1.3595
+    },
+    "cost_usd": 1.3595,
+    "elapsed_seconds": 1457.4,
+    "elapsed_seconds_all_cells": 1457.4,
+    "http_calls": 30,
+    "http_per_action": 1.0,
+    "usd_per_action": 0.0453
+  },
+  "tripped": []
+}
