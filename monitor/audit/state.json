@@ -1,18 +1,16 @@
 {
-  "cycle": 28,
-  "utc": "2026-07-29T00:57Z",
-  "last_audited_commit": "540801a",
-  "range_this_cycle": "3791067..540801a (137 files)",
+  "cycle": 29,
+  "utc": "2026-07-29T01:32Z",
+  "last_audited_commit": "16fed97",
+  "range_this_cycle": "540801a..16fed97",
   "mode": "incremental",
   "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "纪律漂移": "主线 append-only 删除 1→2。64157c1（merge s17）改写了 08:15 已发布的 S17 段落一行；作者在 c8df18c 声明 while it is still a branch draft，而 s17 今晚被 ci_merge 合了四次、无任何回写，**从分支上无法知道自己是否已发布**。真第三次，但根因是规矩不可知而非违纪。",
-    "探针": "probe_append_only 首次因真实越线报红——从 cycle 2 的「出生即红」到 cycle 15 改 --first-parent，这条链走完了。",
-    "封存复核": "release/runs/…-S23/ 那批含封存 ID 的文件是红线检查器的 before/after 与 planted 缺陷输出，属负样本形态，非接触。fleet-study/data/counterevidence.jsonl 引的是 ls20/ft09 的隔离状态。"
+    "对账（本轮主项）": "监控 7b8d3d9 自述逐条核实：A3-campaign 花费 usd=4.3932（自报 $4.39）；账本总额 31.7492→36.1423 差额 4.3931，两条独立算法互证；全账本 21 个封存 ID 零命中，唯一游戏 id 是 g50t；proxy/var/ledger.jsonl 107 行 arm 只有 mock_arm(74)+replay(33)、真实臂 0 —— 自述三条全部属实。",
+    "队列": "阻塞 13→8，merge conflict 9→2，S24 起作用。",
+    "值得点名": "W-1640 认领战役后停下来问而非照 generic_ok 开跑——没有任何机器强制它停，它自己停的。"
   },
-  "reports_this_cycle": [
-    "DRIFT-20260729T0056Z-the-append-only-rule-is-unknowable-from-a-branch.md"
-  ],
+  "reports_this_cycle": [],
   "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
   "pending_on_monitor": [
     "优先合并 v15-census-sampling-frame 与 v11-negative-control-census（已有裁决建立在其上）；合不进则至少把 MATRIX_V15.md / NEGATIVE_CONTROL.md / KNOWN_GAPS.json 取到 master",
