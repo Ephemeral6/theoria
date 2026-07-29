@@ -76,8 +76,8 @@
     "sha256": "42ad458baee90878a336b5635be4ed36ede18058796acf5f3db314d707d787b1"
    },
    "cost_curve.json": {
-    "present": false,
-    "sha256": null
+    "present": true,
+    "sha256": "37517e5f3dc66819f61f5a7bb8ace1921282415f10551d2defa5c3eb0985b570"
    },
    "desk_log.json": {
     "present": true,

@@ -21,8 +21,12 @@
   "holds": true,
   "model_calls": 0,
   "note": "probe design spent no model call: the frontier is computed by probe_frontier, which is exact on a deterministic world. Constraint 8 permits a call there; this run did not need one.",
+  "retired_by_kind": {},
+  "retired_note": "a surprise closed with handled_by='retired: ...' was closed without theorizing, so it licences no model call and is excluded from the denominator. It is still counted in `surprises` and in `surprises_by_kind`, because the seven counts are a record of what the world did, not of what was paid for.",
   "surprises": 0,
-  "surprises_by_kind": {}
+  "surprises_by_kind": {},
+  "surprises_licensing_a_call": 0,
+  "surprises_retired": 0
  },
  "cost": {
   "cache_ttl_diagnosis": {

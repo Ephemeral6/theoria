@@ -1,11 +1,11 @@
 {
  "arm": "theoria",
  "arm_version": {
-  "files": 25,
-  "sha256": "b972042e62cc87faf3f96f8ee68073503e849e03b465106fa54343c102a8ac56"
+  "files": 40,
+  "sha256": "4e190e643b6ac77aa043e15c85e5ac1c7c400a03694ff4267a3ce855e2bcab6f"
  },
- "base_commit": "9ba0786a787926838baf858c14a701602d9b0942",
- "branch": "agent/p8-theoria-arm",
+ "base_commit": null,
+ "branch": null,
  "classification": {
   "archive_material": true,
   "kind": "salvage",
@@ -58,11 +58,11 @@
   "usage_total": {},
   "verdict": "nothing to compare: the CLI reported no cost (an offline or cached run)"
  },
- "elapsed_s": 11.1,
+ "elapsed_s": 4.9,
  "files": [
   {
    "path": "ledger.jsonl",
-   "sha256": "c13bae5c6a5363b0383bfa9b5696d5ee6fa89d1db197d6ac0e9397065475e26c"
+   "sha256": "9c08a593bdb1d2d2a463903d2ff02394bacfe357419639f1b09092911d74e8a7"
   }
  ],
  "game_id": "g50t-5849a774",
@@ -84,36 +84,40 @@
  "note_at_run_start": "salvage: closing an orphaned scorecard",
  "outcome": "salvage",
  "parent_run": {
-  "card_id": "e8389453-bb38-473a-9ff2-d18e3268c4cc",
-  "parent_billed_actions_from_ledger": 7,
-  "parent_billed_actions_from_scorecard": 7,
+  "card_id": "2ec0e679-6b92-475e-890c-a3f63d21e14c",
+  "parent_billed_actions_from_ledger": 9,
+  "parent_billed_actions_from_scorecard": 9,
   "parent_ledger_carries_that_run_id": true,
-  "parent_run_id_from_scorecard_opaque": "r-b526769a14ef47e0",
-  "parent_slug_from_naming": "20260728T015354Z-g50t-first-contact",
+  "parent_run_id_from_scorecard_opaque": "r-6a6b85703f6f43e4",
+  "parent_slug_from_naming": "20260729T004020Z-leg01",
   "prompt_id_from_scorecard_opaque": "P-8",
   "reconciles": true
  },
  "prompt_id": "P-8",
  "provenance": {
   "arm_version_lookup": {
-   "arm_sha256": "b972042e62cc87faf3f96f8ee68073503e849e03b465106fa54343c102a8ac56",
-   "commits": [
-    "9ba0786a787926838baf858c14a701602d9b0942"
-   ],
-   "detail": "exactly one commit reachable from any ref carries this arm_version",
-   "earliest_commit": "9ba0786a787926838baf858c14a701602d9b0942",
-   "relation_to_the_run": {
-    "claim": "this run's arm sources were byte-identical to the tree held by this commit. The commit was created 285 s after the run started, so it is not 'the commit the run ran from' -- it is the commit whose tree the run's files match.",
-    "commit_committed_unix": 1785206749,
-    "commit_minus_run_start_s": 285,
-    "run_started_unix": 1785206464
-   },
-   "verdict": "matched"
+   "arm_sha256": "4e190e643b6ac77aa043e15c85e5ac1c7c400a03694ff4267a3ce855e2bcab6f",
+   "commits": [],
+   "detail": "no commit reachable from any ref carries this arm_version, so the run executed against a working tree that was never committed in that state. The run is therefore not reproducible from git alone. (Commits reachable only from the reflog, or dangling, are outside this scan.)",
+   "verdict": "no_match",
+   "window": {
+    "first_commit_after": {
+     "arm_sha256": "592e4ace848c743697c8f4a295f5ec1289f1ecbccec05b07dea232720ec1a677",
+     "commit": "4fa378dea133f9e2a930914247666f17520bd3fc",
+     "files": 37,
+     "unix": 1785329564
+    },
+    "last_commit_before": {
+     "arm_sha256": "592e4ace848c743697c8f4a295f5ec1289f1ecbccec05b07dea232720ec1a677",
+     "commit": "6a67ec4bd29d914040a4a929e66f40ba1f581f11",
+     "files": 37,
+     "unix": 1785329026
+    },
+    "note": "the run happened between these two commits; its arm_version matches neither, so its sources were uncommitted edits somewhere inside that window"
+   }
   },
   "derived_from": {
    "arm_version": "ledger run_start.arm_version",
-   "base_commit": "armtools.armversion: the arm_version this run recorded is reconstructed from exactly one commit's tree",
-   "branch": "inherited from the parent run '20260728T015354Z-g50t-first-contact''s manifest, written in the same session; no ledger records a branch",
    "game_id": "ledger run_start.game_id",
    "guard": "ledger run_start.guard",
    "prompt_id": "scorecard opaque.prompt_id, read back from the API",
@@ -122,28 +126,33 @@
    "upstream_pin": "ledger run_start.upstream_pin (NOT the working tree)",
    "utc": "ledger run_start.ts"
   },
-  "missing": [],
+  "missing": [
+   {
+    "field": "base_commit",
+    "why": "the arm_version this run recorded (4e190e643b6a, 40 files) is reconstructed by no commit reachable from any ref: the run executed against uncommitted working-tree edits. The commits it fell between are given under `arm_version_lookup.window`; the exact sources are not recoverable from git."
+   },
+   {
+    "field": "branch",
+    "why": "no ledger record carries a branch name and there is no parent run whose contemporaneous manifest recorded one. `git branch --contains` was considered and rejected: it answers which branches hold the commit today, which changes as unrelated work is pushed."
+   }
+  ],
   "mode": "backfill",
   "notes": [
    {
     "field": "run.json / summary",
     "why": "this run never reached `_finish()`, so no `run.json` was written. `outcome` and `elapsed_s` are taken from the ledger's `run_end` record instead, which carries them; `budget` and `world` were only ever in the summary and are absent. Nothing required by CLAUDE.md is affected."
-   },
-   {
-    "field": "branch",
-    "why": "no ledger record carries a branch name -- the arm never writes one -- so this is inherited, not recorded. The source is named in `derived_from.branch`. It is not a statement this run made about itself."
    }
   ],
   "prompt_id_of_the_backfill": "S8-provenance-backfill",
   "rule": "every field is derived from this run's own records or from git; nothing is read from the working tree the backfill ran on, and nothing is inferred that the evidence does not carry",
-  "status": "complete",
+  "status": "incomplete",
   "tool": "armtools/backfill.py"
  },
  "quota": {
   "agree": false,
   "billed_actions_from_ledger": 0,
   "billed_actions_from_scorecard": [
-   7
+   9
   ],
   "env_steps": 0,
   "model_calls": 0,
@@ -160,14 +169,14 @@
   "score_reconciliation_detail": "no `score` field appears in any live ARC command response, so the ledger-derived score LEDGER_FORMAT.md \u00a73 asks for cannot be computed. This is a property of the environment, not a failure of the run, and it means the \u00a73 obligation is UNDISCHARGEABLE as written against this API. It is reported, not waived.",
   "successful_actions": 0
  },
- "run_id": "r-11ff3399696143b5",
+ "run_id": "r-2c977116ab0e4382",
  "scorecards_opened_and_never_closed": [],
  "scorecards_recovered": [
   {
-   "card_id": "e8389453-bb38-473a-9ff2-d18e3268c4cc",
+   "card_id": "2ec0e679-6b92-475e-890c-a3f63d21e14c",
    "environments": [
     {
-     "actions": 7,
+     "actions": 9,
      "completed": false,
      "id": "g50t-5849a774",
      "level_count": 7,
@@ -175,11 +184,11 @@
      "resets": 0,
      "runs": [
       {
-       "actions": 7,
+       "actions": 9,
        "completed": false,
-       "guid": "33dd5ef3-07a8-4bf2-af3f-bd8ff1b27af0",
+       "guid": "d8b48647-b0aa-4b63-a80c-1b744c6849ab",
        "level_actions": [
-        7,
+        9,
         0,
         0,
         0,
@@ -216,7 +225,7 @@
    ],
    "opaque": {
     "prompt_id": "P-8",
-    "run_id": "r-b526769a14ef47e0"
+    "run_id": "r-6a6b85703f6f43e4"
    },
    "score": 0.0,
    "tags": [
@@ -227,7 +236,7 @@
    ],
    "tags_scores": [
     {
-     "actions": 7,
+     "actions": 9,
      "id": "keyboard",
      "levels_completed": 0,
      "number_of_environments": 1,
@@ -235,7 +244,7 @@
      "score": 0.0
     }
    ],
-   "total_actions": 7,
+   "total_actions": 9,
    "total_environments": 1,
    "total_environments_completed": 0,
    "total_levels": 7,
@@ -243,44 +252,46 @@
   }
  ],
  "sealing": {
-  "by_kind": {},
+  "by_kind": {
+   "credential_in_body": 3
+  },
   "bypass_attempts": 0,
-  "credential_in_body": 0,
+  "credential_in_body": 3,
   "cut_integrity": true,
   "game_ids_anywhere_in_the_records": [
    "g50t-5849a774"
   ],
   "guard_blocks": 0,
-  "incidents": 0,
+  "incidents": 3,
   "redacted_markers": 0,
   "sealed_game_ids_found": [],
   "sealed_pile_requests": 0,
   "sealed_pile_untouched": true
  },
- "slug": "20260728T015354Z-g50t-first-contact-salvage",
+ "slug": "20260729T004020Z-leg01-salvage",
  "upstream_pin": {
-  "CONTRACTS/candidates_schema.md": "2006cd073090672b37a315d86d2caacbdbf92e00346279bdc5c69623f1b15221",
-  "arc-recon/data/piles.json": "f2ef44d100caee9075b9c52b6c2694d9bb47d628702e0c1911655eb9f9790826",
-  "engine-rig/common/candidates.py": "34868b1135b9ff2854156bc1960ead01963bca093905a4bf8fea2c966fdc78cc",
-  "engine-rig/engines/cegis_miner/__init__.py": "96db3a7e28f51216a456cde75555d56a747dfbc9259028add4d596bdcdc86d30",
-  "engine-rig/engines/mdl_segmenter/__init__.py": "5f90cf0186655797f472d7c455eaa550ac7c22a477ec1b3a7193854a16a0212e",
-  "engine-rig/engines/probe_frontier/__init__.py": "f25e012f355231ba0802edf0653b5c76c27895ba856754e1c1fb58a4b455fad8",
-  "engine-rig/engines/zero_space/__init__.py": "b367d04cd2e29a0d5070d717dc7aaf50d9e5b0d86bfea542250279db201f418b",
-  "engine-rig/tools/validate_candidates.py": "c4791d53674b56950c603c75ca7caa5e4a63a9c295698c2932b329a15eb0dfc4",
-  "proxy/LEDGER_FORMAT.md": "e923ab33815ccf775ee7b894a9fd4fb08766a9be23337fb08066a6080a2293e1",
-  "proxy/cost.py": "174b83f54efc4abb3c60194e92c86c6fda3c95ab1d27c469a55f1aaacb4b0faf",
-  "proxy/env_proxy.py": "cd50c59c6beb7827f0e0bb197126c65d5f5dc171074d7426d6ebf9ef5f8a3c8a",
-  "proxy/forward.py": "896c13c889ff9965eb57bcca747fc066fd97341dbaac8640752020543b2458d9",
-  "proxy/guard.py": "a8b613c4db0fafef431517f20819c1a321e6c2497a17acf5ef3f190210d728ab",
-  "proxy/ledger.py": "b694f0c6457c37c4799d7e41bb8ad848248091b04bfb9849738bdcde65912342",
-  "proxy/model_proxy.py": "717a8885156c8a202a27895fe19d53160824f1dee8de0886d7ccb20ae0d98ca2",
-  "proxy/pricing/pricing_v1.json": "ed81118ae10b3a07c14288a48d33c404d48bf6853c0303a26457f6e736334e9a",
-  "proxy/redact.py": "31962e6c4b00445faddddb8ef1a963761fbad5ccc173cc7e0d5dd4f574809ff9",
-  "theory-compiler/src/theory_compiler/generators/gen_lean.py": "c4aaac04cf414f4154e8283ba80677e7d165d5e1d3d1cc54275cfd0b43b24873",
-  "theory-compiler/src/theory_compiler/generators/gen_markdown.py": "25ea38352ea90c2f88b8b72e142f1679abffa6d407ace0d13c455ac126dde53d",
-  "theory-compiler/src/theory_compiler/generators/gen_pddl.py": "5e5c4191ccb6900430274a1e8c9de3d0b898beacf49b127286c4d9ca9d599675",
-  "theory-compiler/src/theory_compiler/generators/gen_python.py": "0e599dfc7f579245663ded9bc15db884694e0c7a56bcad2a3d86c8a25aa010d4",
-  "theory-compiler/src/theory_compiler/parser/theory_parser.py": "9deba600ff17bdf19efe829816e0d9c8713600e621a480b3866214fdcf7dda5a"
+  "CONTRACTS/candidates_schema.md": "<redacted:key-shaped>",
+  "arc-recon/data/piles.json": "<redacted:key-shaped>",
+  "engine-rig/common/candidates.py": "<redacted:key-shaped>",
+  "engine-rig/engines/cegis_miner/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/mdl_segmenter/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/probe_frontier/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/engines/zero_space/__init__.py": "<redacted:key-shaped>",
+  "engine-rig/tools/validate_candidates.py": "<redacted:key-shaped>",
+  "proxy/LEDGER_FORMAT.md": "<redacted:key-shaped>",
+  "proxy/cost.py": "<redacted:key-shaped>",
+  "proxy/env_proxy.py": "<redacted:key-shaped>",
+  "proxy/forward.py": "<redacted:key-shaped>",
+  "proxy/guard.py": "<redacted:key-shaped>",
+  "proxy/ledger.py": "<redacted:key-shaped>",
+  "proxy/model_proxy.py": "<redacted:key-shaped>",
+  "proxy/pricing/pricing_v1.json": "<redacted:key-shaped>",
+  "proxy/redact.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_lean.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_markdown.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_pddl.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/generators/gen_python.py": "<redacted:key-shaped>",
+  "theory-compiler/src/theory_compiler/parser/theory_parser.py": "<redacted:key-shaped>"
  },
- "utc": "2026-07-28T02:41:04.399Z"
+ "utc": "2026-07-29T12:51:52.350Z"
 }

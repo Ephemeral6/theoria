@@ -484,6 +484,21 @@ def build(slug: str, *, runs_root: Optional[str] = None,
     orphans = [c["card_id"] for c in opened
                if c["card_id"] not in {s.get("card_id") for s in closed}]
 
+    # A card this run did not close itself may still have been closed by a
+    # salvage. `amend_payload` already looks for that; `build` did not, so a
+    # run whose manifest is *created* here -- which is every run that died
+    # before writing one, i.e. exactly the runs a salvage exists for -- kept
+    # claiming its card was lost no matter how many times it was recovered.
+    # `20260729T004020Z-leg01` is the case that found it: the salvage read the
+    # API's own count of 9 back, and the leg's manifest went on saying "no run
+    # -- this one or any other in the archive -- ever closed it", which was by
+    # then a false statement in the file whose job is to be the account.
+    recovered_by = _scorecard_recovered_elsewhere(run_id, runs_root, slug)
+    if recovered_by and recovered_by.get("card_id") in orphans:
+        orphans = [c for c in orphans if c != recovered_by["card_id"]]
+    else:
+        recovered_by = None
+
     manifest: Dict[str, Any] = {
         # CLAUDE.md's four required fields come first and every one of them is
         # either a derived value or an explicit null with a reason in
@@ -527,6 +542,8 @@ def build(slug: str, *, runs_root: Optional[str] = None,
             "the archive -- ever closed it. The API's own count of what it was "
             "billed was therefore never read back, and cannot be, offline. The "
             "ledger's own count stands unconfirmed; see `quota`.")
+    if recovered_by:
+        manifest["scorecard_recovered_by"] = recovered_by
     return manifest
 
 
@@ -585,6 +602,13 @@ def prompt_id_of(records: List[Dict[str, Any]], slug: str,
             return {"value": value,
                     "source": "scorecard opaque.prompt_id, read back from the API"}
 
+    campaign = _campaign_prompt_id(records)
+    if campaign:
+        return {"value": campaign,
+                "source": ("the `prompt_id` field of "
+                           "`run_start.spend_gate.campaign`, written by the "
+                           "reservation at run start")}
+
     for opened in opened_scorecards(records):
         tags = (opened.get("request") or {}).get("tags") or []
         for tag in tags:
@@ -609,6 +633,38 @@ def prompt_id_of(records: List[Dict[str, Any]], slug: str,
                                            "run closed that run's scorecard"
                                            % name)}
     return {"value": None, "source": None}
+
+
+CAMPAIGN_FIELDS = 4          # arm : prompt_id : game_id : slug
+
+
+def _campaign_prompt_id(records: List[Dict[str, Any]]) -> Optional[str]:
+    """The prompt id out of the spend reservation's campaign string.
+
+    `run_start.spend_gate.campaign` is `arm:prompt_id:game_id:slug` -- the
+    string the spend gate books every reservation against. Two runs needed
+    this: `20260729T004020Z-leg01` and `20260729T105729Z-leg01` both died
+    before closing a card, so sources 1 and 3 had nothing, and source 4 (the
+    `p8` tag) answered "P-8" -- the arm's generic tag, not the item the legs
+    were run for, which is `A3-campaign-devpile`. A backfilled manifest that
+    files a campaign leg under the wrong prompt is worse than one that admits
+    it does not know.
+
+    Ranked below `opaque.prompt_id` because that one survived a round trip
+    through the API and this one did not, and above the tag because a tag is a
+    label whereas this is the identity the money was actually booked under.
+    Parsed strictly: anything that is not exactly four colon-separated
+    non-empty fields is not a campaign string this function understands, and
+    it declines rather than guessing which field is the prompt.
+    """
+    campaign = ((_run_start(records).get("spend_gate") or {})
+                .get("campaign"))
+    if not isinstance(campaign, str):
+        return None
+    fields = campaign.split(":")
+    if len(fields) != CAMPAIGN_FIELDS or not all(f.strip() for f in fields):
+        return None
+    return fields[1].strip()
 
 
 def _sha256(path: str) -> Optional[str]:
