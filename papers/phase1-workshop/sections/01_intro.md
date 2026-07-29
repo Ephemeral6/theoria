@@ -326,5 +326,8 @@ against another system's baseline; §6's three arms are all ours. Every world he
 is small enough for `decide` to enumerate, so the certification layer has not been
 tested at a scale where enumeration fails.
 
+Section 10 reports one measurement that is neither a contribution above nor a
+limitation below: a census of whether the engines-propose/LLM-adjudicates
+division of §2.2 is enforced in the implementation, in both directions.
 Section 11 collects the rest of the limitations; none of them is discovered there
 for the first time, because each acceptance report already states its own.

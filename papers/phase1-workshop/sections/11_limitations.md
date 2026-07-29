@@ -159,7 +159,10 @@ by this evidence.
 **`lp_potential` is sound but incomplete.** It never certifies a solvable
 configuration, but some genuinely unsolvable ones admit no linear pagoda
 (`engine-rig/DECISIONS.md` D-014, `engine-rig/interop/README.md`; the phrasing is
-`CLAUDE.md`'s). E-06 is that caveat arriving in practice.
+`CLAUDE.md`'s). E-06 is that caveat arriving in practice. §10.2 and §10.5 report
+a second, separate defect in the same engine — until recently it could not tell
+an iteration cap from infeasibility — and the incompleteness rate it publishes
+rests on a reviewer's re-derivation.
 
 **Every planning number in this paper came from the bundled BFS stub, not from
 Fast Downward.** Fast Downward *was* built and wired into A0/A0′ and agrees with
@@ -193,7 +196,9 @@ wins, and the goal is confirmed empirically afterwards rather than derived
 (`cold-start-a0/A0_REPORT.md` §6.4). A wrong backend is indistinguishable, from
 inside the loop, from a wrong manual — and one of those bugs manufactured a
 *false* UNSAT, which under constraint 6 would have triggered a certificate
-obligation for a theorem that is false. The four-co-derived-forms design is meant
+obligation for a theorem that is false. §10 is the systematic form of that
+observation: a census of every place a tool's failure state is read as a fact
+about the world. The four-co-derived-forms design is meant
 to make that drift visible; here it took a human reading the plan output.
 
 ### 11.4 What the battery cannot yet certify
