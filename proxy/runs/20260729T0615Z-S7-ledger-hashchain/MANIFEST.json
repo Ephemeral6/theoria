@@ -1,0 +1,10 @@
+{
+  "agent": "RES-4",
+  "base_commit": "1be7fb2",
+  "branch": "agent/s7-ledger-hashchain",
+  "lane": "infra",
+  "prompt_id": "S7-ledger-hashchain",
+  "state": "S7 is a duplicate of S15 -- the chain shipped 2026-07-28 (cd94e19). Re-scoped to the gap that was real: three documents still asserted it was unbuilt, and the chain ran in no gate.",
+  "territory": "proxy",
+  "utc": "2026-07-29T06:15:00Z"
+}

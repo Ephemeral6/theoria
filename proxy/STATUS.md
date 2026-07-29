@@ -1,9 +1,15 @@
 # `/proxy/` — status
 
-**S9 delivered: the canon is additive-safe, the five fields P-8 was already
-writing are canonical, and a change that narrows the shared contract can no
-longer arrive on another track unannounced.** 295 tests pass. Nothing here has
-spent a dollar or reached the internet.
+**S15 delivered: the ledger is a hash chain — each record carries the digest of
+the line before it, `tools/verify_chain.py` re-derives the whole chain, and
+editing a landed record is now detectable. The half that is not done is the one
+that matters most: publishing the head outside the file is still discipline, not
+a gate (see RED-40).** 323 tests pass. Nothing here has spent a dollar or
+reached the internet.
+
+Previously: S9 made the canon additive-safe, made canonical the five fields P-8
+was already writing, and stopped a change that narrows the shared contract from
+arriving on another track unannounced.
 
 Previously: P-9 delivered the frozen scorer, the canon guard, a red team that
 landed 29 attacks and now lands none, and the first real data point behind
@@ -103,19 +109,26 @@ games; this is the first.
   One of the two surprises this file used to predict has been spent offline:
   the scorecard's shape is now known from 32 real cards and the mock returns it.
   The other — RESET's cross-session semantics — is still modelled optimistically.
-* **The ledger is self-consistent, not authenticated (D-024).** The red team's
-  sharpest finding has no local fix: every check is the file against itself, so
-  a careful enough forger writing canonical records reconciles clean. P-9 raised
-  the price — the frame hash must hash its own frames, `seq` must be dense and
-  unique, one run is one arm, the card's totals must add up, the canon validator
-  runs on the audit path — but a price is not a proof. The structural answer is
-  a hash chain with the head published outside the file, proposed in
-  `monitor/inbox/20260728T2200Z-proxy-ledger-hash-chain.md`. It is **cheaper
-  than D-024 first said**: with `prev` optional the format stays at `v1.0`, so
-  no version bump and no coordination with the other arms — the compulsion
-  comes from the published head, not from the field being required. The
-  deadline is the first live run rather than Phase 4, because a chain is
-  evidence only for records written after it exists.
+* **The ledger is chained but the head is not yet compulsorily published
+  (D-024, RED-40).** The chain itself **landed** in S15 (`cd94e19`,
+  2026-07-28): every record carries `prev`, the digest of the preceding line's
+  bytes as written, assigned inside the same lock as `seq`; `prev` is in the
+  envelope so a caller cannot set it; `proxy/tools/verify_chain.py` re-derives
+  the whole chain independently and 28 tests in `tests/test_chain.py` each
+  perform a real edit and require red. That closes tampering *within* the file:
+  edit, delete, insert, swap, truncate-from-the-front are all caught.
+  What it does **not** yet close is the half RED-40 actually turns on. A chain
+  an attacker can rewrite end to end proves nothing, so the evidence is the
+  head recorded somewhere they cannot reach — and publishing it is still
+  documented rather than enforced. `runner.py` writes `ledger_head` into the
+  per-run record, whose default location is `proxy/var/runs/`, and `var/` is
+  gitignored: **the default path publishes nothing.** Until a gate checks a
+  run's published head against a tracked manifest, "the head is published" is a
+  discipline, and `test_the_runners_default_head_location_is_gitignored` exists
+  precisely because the discipline is easy to skip. Two limits are permanent
+  and not defects: rewriting the whole chain is undetectable without a
+  published head, and the chain proves record order, never that the records
+  describe anything that happened.
 * **Three guard limits, stated rather than implied (D-022, D-023).** The
   value-join that catches an id split across two fields depends on key order;
   base64 is chased one level; a secret the writer has never seen and that does
