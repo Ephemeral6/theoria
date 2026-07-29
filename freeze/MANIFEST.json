@@ -212,19 +212,19 @@
         },
         {
           "files": 1,
-          "hashed_from": "worktree",
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/ENGINE_MANIFEST.md",
           "sha256": "6ce103f9022c65b36ca103360e25b7b51ccb6a11ade15c8cb7d1cc8cffc99d1f",
-          "tracked": false
+          "tracked": true
         },
         {
           "files": 1,
-          "hashed_from": "worktree",
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/build_engine_manifest.py",
           "sha256": "39e1197233e081473b471317505324f2c4c510cee5bc8148644287a91b904754",
-          "tracked": false
+          "tracked": true
         }
       ],
       "status": "partial"
@@ -430,7 +430,7 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/STATS_RULES.md",
-          "sha256": "130c96663ba94a74da24c7d8c2e5430d111084a2a5abf1dbd0c0f2cc3a8d1b40",
+          "sha256": "05e56246b905ea3bd308a47338a0eacf66eefa59d3c0625b085aa9b80b293a46",
           "tracked": true
         },
         {
@@ -561,16 +561,16 @@
           "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/STATS_RULES.md",
-          "sha256": "130c96663ba94a74da24c7d8c2e5430d111084a2a5abf1dbd0c0f2cc3a8d1b40",
+          "sha256": "05e56246b905ea3bd308a47338a0eacf66eefa59d3c0625b085aa9b80b293a46",
           "tracked": true
         },
         {
           "files": 1,
-          "hashed_from": "worktree",
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/VARIANCE_BASIS.md",
           "sha256": "943b0655f7a0744d59247e050424dab5ad349d7d8e8fccc7d84c0ef64bab3a56",
-          "tracked": false
+          "tracked": true
         }
       ],
       "status": "partial"
@@ -631,8 +631,8 @@
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
     "branch": "agent/s4-freeze",
-    "commit": "5822e5e5c4c87e42f834ddca76f3af56eee3e7b6",
-    "dirty": true
+    "commit": "d4fb6d727a5614bb07a585fb3da669b680f9eb70",
+    "dirty": false
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
   "verdict": {
