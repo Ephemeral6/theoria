@@ -1,9 +1,25 @@
-"""An independent plan validator.
+"""A replay validator: independent of the search, not of the grounding.
 
-Deliberately does *not* import `search`: it re-grounds the actions it needs and
-applies them itself, so a bug in the search's successor generation (a forgotten
-delete effect, say) cannot validate itself.  The only code shared with the
-planner is the parser.  See DECISIONS.md D-010.
+Deliberately does *not* import `search`.  It replays the plan itself, so a bug
+in the search's frontier, ordering or duplicate detection cannot certify its own
+output -- and `__init__.py` calls this on every rung of the ladder, including a
+plan handed back by a real Fast Downward, whose frontier is not ours at all.
+That is the part worth keeping: no planner here grades its own answer.
+
+The shared premise is `pddl.ground_actions`, which this module and `search` both
+import.  That is not merely the parser.  `ground_actions` filters on static
+preconditions while it instantiates, and so decides which action instances could
+ever fire, with which effects -- it is the successor-generation layer.  A
+forgotten delete effect *there* is invisible here, because the replay steps
+through the same instances the search stepped through.  So a plan passing this
+is a plan whose steps are legal under the shared grounding, not one legal under
+the PDDL as written.
+
+The gap runs the other way too.  For a plan produced outside this rig, a
+grounding disagreement surfaces as `"is not a ground action"` below: a false
+reject of a sound plan, not a false accept of an unsound one.
+
+See DECISIONS.md D-010 and D-035.
 """
 
 from typing import Dict, List, Sequence, Set, Tuple

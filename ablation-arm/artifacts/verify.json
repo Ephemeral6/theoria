@@ -1,0 +1,228 @@
+{
+  "assertions": [
+    {
+      "claim": "seven surprise kinds become six; `proof_failure` is impossible by construction, not by convention",
+      "evidence": {
+        "available": 6,
+        "in_taxonomy": 7,
+        "removed": [
+          "proof_failure"
+        ]
+      },
+      "holds": true,
+      "name": "P-3"
+    },
+    {
+      "claim": "the A0 verdict is correct -- `unsolvable` on a world that really is. The other half of P-5, *identical to the full arm*, is A4b's.",
+      "evidence": {
+        "constructive_ground": "the Door is the only opening in the dividing wall, and the only rule that removes it (door_opens_left) tests for the But",
+        "settled_by": "search",
+        "verdict": "unsolvable"
+      },
+      "holds": true,
+      "name": "P-5(correct)"
+    },
+    {
+      "claim": "on A2 the false theorem is believed: UNSAT settles bare, the bus stays empty, the loop does not turn, and nothing distinguishes it from a true impossibility",
+      "evidence": {
+        "decision_fields_identical": "10/10",
+        "loop_turns": false,
+        "surprises": 0,
+        "verdict": "unsolvable",
+        "world_really_solvable": true
+      },
+      "holds": true,
+      "name": "P-6"
+    },
+    {
+      "claim": "the U ladder caps at U2, constructively: U1 and U2 are attained, U3 is unreachable because nothing can admit an obligation, and U4 is unreachable because nothing can produce a refutation to repair from",
+      "evidence": {
+        "U1_replay_green_on_every_manual": true,
+        "U2_three_forms_emitted_and_every_manual_parses": true,
+        "U3_blocked": {
+          "certificates_owed": 0,
+          "expensive_layer": "omitted, and raises if called",
+          "theorems_surviving_the_cut": 0
+        },
+        "U4_blocked": {
+          "directed_probes_scheduled": 0,
+          "loops_turned": [],
+          "note": "the repair machinery is intact -- E2's charity control localises correctly when handed a counterexample. U4 is out of reach because the refutation never arrives, not because repair is broken."
+        },
+        "worlds_where_a_certificate_could_be_owed": [
+          "a0-no-button",
+          "a2-holed"
+        ],
+        "worlds_where_the_question_does_not_arise": [
+          "a0-base",
+          "a2-base",
+          "a2-charitable"
+        ]
+      },
+      "holds": true,
+      "name": "P-7"
+    },
+    {
+      "claim": "directed probes: every deleted theorem is one probe target that no longer has a subject",
+      "evidence": {
+        "not_applicable_on": [
+          "a0-base",
+          "a2-base",
+          "a2-charitable"
+        ],
+        "probes_scheduled_where_the_full_arm_would_have_scheduled_them": {
+          "a0-no-button": 0,
+          "a2-holed": 0
+        },
+        "targets_removed": 4,
+        "theorems": [
+          "press_is_direction_free",
+          "unsolvable_no_button",
+          "teleport_is_colour_triggered",
+          "right_room_locked"
+        ]
+      },
+      "holds": true,
+      "name": "shadow-1"
+    },
+    {
+      "claim": "dependency-driven re-proof: the same count, because it is the same cut -- there is nothing left to invalidate",
+      "evidence": {
+        "entries": 4
+      },
+      "holds": true,
+      "name": "shadow-2"
+    },
+    {
+      "claim": "`ArenaEscape` fires only during Lean generation, and no Lean form is emitted",
+      "evidence": {
+        "forms_emitted": 3,
+        "forms_in_full_arm": 4,
+        "omitted": "theory.lean"
+      },
+      "holds": true,
+      "name": "shadow-3"
+    },
+    {
+      "claim": "`proof_failure` is gone -- the same fact as P-3, counted here as a shadow because §6 lists it as one",
+      "evidence": {
+        "kinds_available": 6
+      },
+      "holds": true,
+      "name": "shadow-4"
+    },
+    {
+      "claim": "a full run leaves every upstream tree byte-identical",
+      "evidence": {
+        "changed": [],
+        "files_hashed": 493
+      },
+      "holds": true,
+      "name": "read-only"
+    },
+    {
+      "claim": "the pre-registered pixel counts hold. This is not P-1 -- P-1 is an equality with the full arm -- but the counts are a fingerprint of which record was replayed, and getting them right is a precondition for A4b's comparison meaning anything",
+      "evidence": {
+        "a0-base": 22356,
+        "a2-base": 20088,
+        "a2-charitable": 20088,
+        "a2-holed": 14904
+      },
+      "holds": true,
+      "name": "P-1(counts)"
+    }
+  ],
+  "failed_assertions": [],
+  "failed_stages": [],
+  "green": true,
+  "recorded_for_a4b": {
+    "E3": {
+      "numbers": {
+        "holds": true,
+        "pddl_byte_identical_with_patch_on_and_off": {
+          "domain.pddl": true,
+          "problem.pddl": true
+        }
+      },
+      "status": "NOT CONSTRUCTIBLE -- reported as a pre-registered falsifier (DESIGN.md §10 item 3), not as a missing deliverable. See artifacts/exhibits.json.",
+      "what": "the charitable exhibit"
+    },
+    "P-1": {
+      "numbers": {
+        "a0-base": {
+          "anomalies": [],
+          "green": true,
+          "pixels_checked": 22356
+        },
+        "a0-no-button": {
+          "anomalies": [],
+          "green": true,
+          "pixels_checked": 9072
+        },
+        "a2-base": {
+          "anomalies": [],
+          "green": true,
+          "pixels_checked": 20088
+        },
+        "a2-charitable": {
+          "anomalies": [],
+          "green": true,
+          "pixels_checked": 20088
+        },
+        "a2-holed": {
+          "anomalies": [],
+          "green": true,
+          "pixels_checked": 14904
+        }
+      },
+      "status": "RECORDED -- no second arm has been run",
+      "what": "replay accuracy, byte-equal to the full arm"
+    },
+    "P-2": {
+      "numbers": null,
+      "status": "RECORDED -- and the instrument is missing, not just the comparison: nothing in this arm computes a held-out split. A4b needs one built before P-2 can be read.",
+      "what": "behavioural / held-out accuracy, equal to the full arm"
+    },
+    "P-4": {
+      "numbers": {
+        "api_calls": 0,
+        "model_calls": 0,
+        "usd": 0.0
+      },
+      "status": "RECORDED -- and there is no cost instrument here either. The arm is offline, so its dollar cost is zero and the comparison 1.11 wants is about search and proof fuel, which nothing measures yet. A4b's largest gap.",
+      "what": "this arm is cheaper, not dearer"
+    },
+    "P-5(identical)": {
+      "numbers": {
+        "settled_by": "search",
+        "verdict": "unsolvable"
+      },
+      "status": "RECORDED -- the verdict and its settling are here; the equality needs the full arm",
+      "what": "the A0 verdict is *identical* to the full arm's"
+    }
+  },
+  "scope": "implementation only. Four of the seven pre-registered predictions are comparisons against an arm that has not been run; they are recorded, never asserted, and cannot turn this gate red.",
+  "stages": [
+    {
+      "returncode": 0,
+      "stage": "build_theory --check"
+    },
+    {
+      "returncode": 0,
+      "stage": "run_arm"
+    },
+    {
+      "returncode": 0,
+      "stage": "run_arm --twice"
+    },
+    {
+      "returncode": 0,
+      "stage": "run_exhibits"
+    },
+    {
+      "returncode": 0,
+      "stage": "pytest"
+    }
+  ],
+  "what": "ablation-arm completion gate (A4a)"
+}

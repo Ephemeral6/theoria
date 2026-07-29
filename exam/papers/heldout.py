@@ -158,8 +158,28 @@ Cell = Tuple[int, int]
 LEGEND = {"empty": sokoban2.EMPTY, "player": sokoban2.PLAYER,
           "box": sokoban2.BOX, "wall": sokoban2.WALL}
 
+#: The genre name used to be the first four words of this string -- "A0 is a
+#: sokoban variant" -- while `world.description`, two fields later on the same
+#: sheet, said "its dynamics are what this paper asks about and are deliberately
+#: not stated here". The sheet contradicted itself, and the cheater subagent
+#: V4-exam-selftest sent at the *fixed* sheet opened its report with it: naming a
+#: canonical puzzle genre hands the transition function to any reader carrying
+#: the prior, which is every reader.
+#:
+#: Measured, the leak's yield was **negative**, which is the part worth keeping
+#: in mind. A0's push slides the box **two** cells (a0-spike's T-9, `push2`);
+#: vanilla sokoban slides it one. The cheater took the genre name, predicted
+#: one-cell pushes on six items at confidence 0.97, and scored **0 of 6** --
+#: while scoring 9 of 9 on the edge-blocked items, which need no dynamics at
+#: all. So the wording did not leak answers; it primed a wrong one.
+#:
+#: It is removed anyway, and the reason is not cheating. This paper exists to
+#: ask whether a theory learned `push2` from evidence instead of assuming
+#: push-one from a prior. A sheet that names a genre whose rules differ from the
+#: world's is not a neutral question with a harmless hint in it -- it is an
+#: undeclared second experiment, and nobody registered it.
 INSTRUCTIONS = (
-    "A0 is a sokoban variant. Each item gives the geometry of a board, the "
+    "Each item gives the geometry of a board, the "
     "rendered frame before an action, and the action. Predict the rendered "
     "frame after that action.\n\n"
     "Cell codes are in `legend`. Walls never move. Exactly one player and "

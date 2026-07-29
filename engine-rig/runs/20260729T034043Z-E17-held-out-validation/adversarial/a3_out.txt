@@ -1,0 +1,73 @@
+{
+  "instances": 289,
+  "cases": 2422,
+  "silent": 1014,
+  "errors": 0,
+  "certificates": 1408,
+  "inv_closed_hits": 372,
+  "inv_rate_pct": "26.4",
+  "false_certificates": 58,
+  "emit_gate_let_through_FULL_graph": 0,
+  "emit_gate_let_through_REDUCED_graph": 1408,
+  "caught_by_raised_potential": 1036,
+  "heldout_admissibility_violations": 1778,
+  "baseline_certificates": 105,
+  "baseline_silent": 184,
+  "baseline_false": 0,
+  "baseline_states_tested": 506,
+  "baseline_violations": 0,
+  "vacuous_geometry_holdouts": 0,
+  "peg4_0100_0011_witness": [
+    [
+      3,
+      2,
+      1
+    ],
+    [
+      "0",
+      "1/2",
+      "-1/2",
+      "0"
+    ]
+  ]
+}
+
+--- results.json ---
+{
+  "corpus": {
+    "family": "pegN",
+    "held_out_cases": 2422,
+    "instances": 289,
+    "n_positions": [
+      4,
+      5,
+      6,
+      7
+    ]
+  },
+  "held_out_L1": {
+    "cases": 2422,
+    "cases_with_admissibility_violations": 742,
+    "caught_by_raised_potential_too": 1036,
+    "certificates": 1408,
+    "emit_gate_let_through": 0,
+    "emit_gate_withheld": 1408,
+    "errors": 0,
+    "false_certificate_rate_pct": "4.1",
+    "false_certificates": 58,
+    "heldout_admissibility_violations": 1778,
+    "heldout_inv_closed_hits": 372,
+    "heldout_inv_closed_rate_pct": "26.4",
+    "silent": 1014
+  },
+  "baseline": {
+    "admissibility_violations_L2": 0,
+    "certificates": 105,
+    "errors": 0,
+    "false_certificates": 0,
+    "instances": 289,
+    "instances_with_violations": 0,
+    "silent": 184,
+    "states_tested_L2": 506
+  }
+}

@@ -1,0 +1,235 @@
+{
+  "by_kind": {
+    "name_class": {
+      "abstain": 0,
+      "right": 16,
+      "unanswered": 0,
+      "unparsed": 0,
+      "wrong": 0
+    },
+    "optimal_action": {
+      "abstain": 0,
+      "right": 4,
+      "unanswered": 0,
+      "unparsed": 0,
+      "wrong": 0
+    },
+    "step_semantics": {
+      "abstain": 0,
+      "right": 9,
+      "unanswered": 0,
+      "unparsed": 0,
+      "wrong": 0
+    }
+  },
+  "failed": [],
+  "fraction": 1.0,
+  "items": 29,
+  "package": "a0-sokoban2",
+  "right": 29,
+  "scores": [
+    {
+      "given": "Box_pos=(3,3); Player_pos=(4,3); rule=walk",
+      "item_id": "step-crossing-up-9b876e60",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,3); Player_pos=(4,3); rule=walk (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,3); Player_pos=(4,3); rule=blocked_box_crossing",
+      "item_id": "step-crossing-up-22d90dd9",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,3); Player_pos=(4,3); rule=blocked_box_crossing (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,3); Player_pos=(4,3); rule=blocked_wall",
+      "item_id": "step-crossing-up-c91810ef",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,3); Player_pos=(4,3); rule=blocked_wall (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,5); Player_pos=(3,3); rule=push2",
+      "item_id": "step-crossing-up-0bf0c56e",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,5); Player_pos=(3,3); rule=push2 (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,5); Player_pos=(3,4); rule=blocked_box_landing",
+      "item_id": "step-crossing-up-4bead192",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,5); Player_pos=(3,4); rule=blocked_box_landing (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,3); Player_pos=(2,5); rule=walk",
+      "item_id": "step-match-82f98383",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,3); Player_pos=(2,5); rule=walk (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,3); Player_pos=(2,5); rule=blocked_wall",
+      "item_id": "step-match-f9af048a",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,3); Player_pos=(2,5); rule=blocked_wall (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,1); Player_pos=(3,3); rule=push2",
+      "item_id": "step-match-824d2481",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,1); Player_pos=(3,3); rule=push2 (state ok, rule ok)"
+    },
+    {
+      "given": "Box_pos=(3,1); Player_pos=(3,2); rule=blocked_box_landing",
+      "item_id": "step-match-9bad5455",
+      "kind": "step_semantics",
+      "verdict": "right",
+      "why": "expected Box_pos=(3,1); Player_pos=(3,2); rule=blocked_box_landing (state ok, rule ok)"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-action_vocabulary",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-direction_vocabulary",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-effect_of_blocked_box_crossing",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-effect_of_blocked_box_landing",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-effect_of_blocked_box_on_wall",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-effect_of_blocked_wall",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-effect_of_push2",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-effect_of_walk",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-goal_form",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "level_data",
+      "item_id": "name-landmark_target",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected level_data"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-rule_names",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-semantics_cascade",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-semantics_conflict",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "world_law",
+      "item_id": "name-semantics_frame",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected world_law"
+    },
+    {
+      "given": "level_data",
+      "item_id": "name-start_Player_pos",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected level_data"
+    },
+    {
+      "given": "level_data",
+      "item_id": "name-wall_cells",
+      "kind": "name_class",
+      "verdict": "right",
+      "why": "expected level_data"
+    },
+    {
+      "given": "move(Player, right)",
+      "item_id": "opt-crossing-up-bdbe1a3c",
+      "kind": "optimal_action",
+      "verdict": "right",
+      "why": "accepted: move(Player, right)"
+    },
+    {
+      "given": "move(Player, up)",
+      "item_id": "opt-crossing-up-f46f71d5",
+      "kind": "optimal_action",
+      "verdict": "right",
+      "why": "accepted: move(Player, up)"
+    },
+    {
+      "given": "move(Player, left)",
+      "item_id": "opt-match-11813757",
+      "kind": "optimal_action",
+      "verdict": "right",
+      "why": "accepted: move(Player, left)"
+    },
+    {
+      "given": "move(Player, down)",
+      "item_id": "opt-match-b37722fd",
+      "kind": "optimal_action",
+      "verdict": "right",
+      "why": "accepted: move(Player, down), move(Player, left)"
+    }
+  ]
+}

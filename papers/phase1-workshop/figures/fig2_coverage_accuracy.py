@@ -1,4 +1,16 @@
-"""Figure 2 — A0 vs A0-prime: coverage against accuracy.
+"""SUPERSEDED AS A SOURCE (P9). Kept as the witness, not as the figure.
+
+The paper's figures are now built by the repository's deterministic pipeline at
+``figures/`` -- see ``papers/phase1-workshop/figures/PARITY.md`` and OUTLINE.md.
+This script is retained because it is an *independent* second computation of the
+same numbers, and a second opinion is the only instrument that can catch a first
+one being wrong. ``check_figure_parity.py`` runs it against the pipeline.
+
+Do not cite this file from a section. It is not the figure any more.
+
+--- original docstring follows ---
+
+Figure 2 — A0 vs A0-prime: coverage against accuracy.
 
 The paper's headline contrast. Two cold starts: an irreversible latch becomes a
 reversible toggle, and the trajectory budget is cut on purpose in the second run.

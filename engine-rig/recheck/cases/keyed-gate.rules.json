@@ -1,0 +1,95 @@
+{
+  "actions": [
+    "open"
+  ],
+  "comment": "Three 0/1 flags and one guarded rule. The prize is behind a gate needing both keys, and no rule ever grants a key.",
+  "goal": [
+    "=",
+    [
+      "var",
+      "prize"
+    ],
+    [
+      "lit",
+      1
+    ]
+  ],
+  "init": {
+    "keyA": 0,
+    "keyB": 0,
+    "prize": 0
+  },
+  "name": "keyed-gate",
+  "provenance": {
+    "purpose": "the pagoda obligation is `no *legal* move raises the potential`; here the only raising move is legal from no state under the bound, so checking the geometry instead of the region false-rejects a sound certificate",
+    "unsolvable_because": "no rule writes keyA or keyB, so the gate's guard never holds on any reachable state",
+    "world": "written for this package, not transcribed from one"
+  },
+  "rules": [
+    {
+      "action": "open",
+      "effects": {
+        "prize": [
+          "lit",
+          1
+        ]
+      },
+      "guard": [
+        "and",
+        [
+          "=",
+          [
+            "var",
+            "keyA"
+          ],
+          [
+            "lit",
+            1
+          ]
+        ],
+        [
+          "=",
+          [
+            "var",
+            "keyB"
+          ],
+          [
+            "lit",
+            1
+          ]
+        ]
+      ],
+      "name": "open_gate",
+      "owns": [
+        "prize"
+      ]
+    }
+  ],
+  "schema": "engine-rig/recheck/ruleset-v1",
+  "variables": [
+    {
+      "comment": "1 if the first key is held",
+      "domain": [
+        0,
+        1
+      ],
+      "name": "keyA"
+    },
+    {
+      "comment": "1 if the second key is held",
+      "domain": [
+        0,
+        1
+      ],
+      "name": "keyB"
+    },
+    {
+      "comment": "1 once the gate is open",
+      "domain": [
+        0,
+        1
+      ],
+      "name": "prize"
+    }
+  ]
+}

@@ -1,0 +1,144 @@
+{
+  "verdict": "CONFIRMED -- n_theorem_dead_outside_relaxation = 11 on rnd0021, settled against real Fast Downward",
+  "claim_under_test": {
+    "source": "engine-rig/DEADLOCK_CLAIM.md section 3",
+    "wording": "There is not one state, at any size, that a theorem detects and the relaxation misses.",
+    "scope_as_measured": "far4 / far5 / far6 only",
+    "status": "false as a statement about this sokoban encoding; true of the far{N} family, and provably so (see structural_signature)",
+    "note": "DEADLOCK_CLAIM.md section 6 already flags this number as 'a measurement, not a theorem' and section 7 was the hunt that produced this instance."
+  },
+  "instance": {
+    "name": "rnd0021",
+    "generator": "attacks/a3_family.py random_level, seed 20260728, 22nd accepted level",
+    "board_file": "attacks/work/a3/rnd0021/rnd0021.pddl",
+    "generator_reproduces_board_file_byte_for_byte": true,
+    "art": ["######", "#...##", "#..#.#", "#....#", "#....#", "######"],
+    "player": "c34",
+    "boxes": {"b1": "c42", "b2": "c12"},
+    "goals": {"b1": "c41", "b2": "c11"},
+    "free_cells": 14,
+    "solvable": false
+  },
+  "reported_vs_verified": {
+    "n_reachable": {"reported": 92, "verified": 92, "agree": true},
+    "n_goal_states": {"reported": 0, "verified": 0, "agree": true},
+    "n_truly_dead": {"reported": 92, "verified": 92, "agree": true},
+    "n_relaxation_dead": {"reported": 59, "verified": 59, "agree": true},
+    "n_theorem_dead": {"reported": 70, "verified": 70, "agree": true},
+    "n_theorem_dead_outside_relaxation": {"reported": 11, "verified": 11, "agree": true},
+    "n_relaxation_dead_outside_theorems": {"verified": 0},
+    "n_truly_dead_neither_detects": {"verified": 22},
+    "theorems": {
+      "reported": 3,
+      "verified": 3,
+      "all_width_1_no_deleting_action": true,
+      "list": [
+        "at(b1,c41) AND not-goal => dead",
+        "at(b1,c44) AND not-goal => dead",
+        "at(b2,c13) AND not-goal => dead"
+      ]
+    },
+    "every_reported_number_reproduces_exactly": true
+  },
+  "soundness": {
+    "theorem_dead_subset_of_truly_dead_on_rnd0021": true,
+    "n_theorem_dead_not_truly_dead_on_rnd0021": 0,
+    "per_theorem": {
+      "at(b1,c41)": {"covers": 23, "all_truly_dead": true, "outside_relaxation": 11},
+      "at(b1,c44)": {"covers": 23, "all_truly_dead": true, "outside_relaxation": 0},
+      "at(b2,c13)": {"covers": 48, "all_truly_dead": true, "outside_relaxation": 0}
+    },
+    "caveat": "the soundness test is VACUOUS on rnd0021: all 92 reachable states are truly dead, so no theorem could fail it there. Soundness was therefore re-tested on instances that are solvable.",
+    "non_vacuous_soundness_evidence": {
+      "a3_sweep": "42 instances analysed (attacks/verify/sweep_soundness.json), 0 unsound; 3 of them solvable with a non-vacuous test (stub-wall 148 states / 42 theorem-dead, rnd0013 680 states / 361 theorem-dead, tee 0 theorems)",
+      "audit_far_family": "claim_audit.json coverage rows: far4/far5/far6, all solvable, 3342/13774/42803 reachable states, theorem_dead_within_truly_dead = true on all three"
+    },
+    "conclusion": "the counterexample is NOT a carver bug. The three theorems are sound; the states really are dead and the relaxation really does miss them."
+  },
+  "witnesses": {
+    "count": 11,
+    "state_ids": [8, 11, 12, 15, 16, 17, 18, 23, 24, 32, 33],
+    "shape": "b1 on c41 (its own goal, the bottom-left corner), b2 on c12, player on any of the 11 cells it can occupy",
+    "why_exactly_11": "14 free cells minus c41 (b1) minus c12 (b2) minus c13, which the player can never reach while b2 sits on c12",
+    "all_covered_by": "at(b1,c41) AND not-goal => dead"
+  },
+  "fast_downward": {
+    "executable": "C:/Users/user/Desktop/theoria/.worktrees/p13/engine-rig/.toolchain/downward/fast-downward.py",
+    "one_state_problems": "attacks/verify/rnd0021/problems/rnd0021-s????.pddl",
+    "logs": "attacks/verify/rnd0021/fd-logs/",
+    "witnesses": {
+      "translator_printed_No_relaxed_solution": "0 of 11",
+      "astar_hmax_initial_h": "finite on all 11 (3,4,5,5,5,6,7,7,8,8,9)",
+      "astar_lmcut_initial_h": "finite on all 11 (same values)",
+      "astar_blind_exhausted_without_a_plan": "11 of 11, 23 expansions each, exit 12",
+      "translator_task_size": 297
+    },
+    "controls": {
+      "s0019_and_s0022_theorem_dead_and_python_relaxation_dead": "translator printed 'No relaxed solution! Generating unsolvable task...', hmax and lmcut initial h = infinity, 0 expansions -- so the instrument does distinguish the two cases",
+      "s0000_initial_state": "relaxation alive (hmax h=8, lmcut h=10), blind expands 92 and proves unsolvable"
+    },
+    "conclusion": "FD's own delete relaxation calls all 11 witness states ALIVE while the states are genuinely unsolvable. This is not an artefact of the audit's Python relaxation."
+  },
+  "mechanism": {
+    "reviewer_account": "pushing b2 c12->c13 ADDS clear c12 without removing at b2 c12, letting the relaxation walk through the phantom-clear c12",
+    "correction": "the push never adds `clear ?from` -- it deletes it. What (push c11 c12 c13 b2 right) adds is `at-player c12`: the player steps onto the cell the box is (still) on.",
+    "load_bearing_drops_measured": {
+      "full_delete_relaxation": "goal reached",
+      "deletes_of_`at`_restored": "goal NOT reached -- so `at b2 c12` surviving its own push is load-bearing",
+      "deletes_of_`clear`_restored": "goal NOT reached -- so `clear c13` surviving the push is load-bearing",
+      "deletes_of_`at-player`_restored": "goal reached -- at-player deletes are NOT load-bearing",
+      "no_relaxation": "goal NOT reached (the state is truly dead)"
+    },
+    "justification_chain": [
+      "(at b2 c11) <- (push c13 c12 c11 b2 left), which needs at-player c13, at b2 c12, clear c11",
+      "(at-player c13) <- (move c12 c13 right), which needs at-player c12 and clear c13",
+      "(at-player c12) <- (push c11 c12 c13 b2 right), which needs at-player c11, at b2 c12, clear c13",
+      "so one push does all the cheating at once: it adds at-player c12 while its deletes of `at b2 c12` and `clear c13` are dropped, and the player then walks into the dead-end c13 and pushes the box the other way"
+    ],
+    "artefact": "attacks/verify/rnd0021/mechanism.json"
+  },
+  "structural_signature": {
+    "proved_for": "width-1 `no_deleting_action` theorems on this sokoban encoding (which is what all three of rnd0021's theorems are)",
+    "step_1": "A pattern {at(b,c)} with n_deleting_actions = 0 means grounding left no push instance with (?b=b, ?from=c) at all. In the delete relaxation from a state containing at(b,c), no atom at(b,c') with c' != c can ever be added, because every push that adds one needs some at(b,y) that is not there and can only itself come from a push of b.",
+    "step_2": "Therefore, if the goal requires at(b,g) with g != c, the relaxation is dead too. A theorem can escape the relaxation ONLY IF c = g, i.e. the pattern atom IS a goal atom -- a box frozen on its own goal.",
+    "step_3": "But `excludes_goal` then has to find a mutex between at(b,g) and some goal atom, and it cannot be at(b,g) itself (that atom is h^2-possible, it holds in a reachable state). So the mutex must be with a DIFFERENT goal atom -- which means h^2 has proved the goal conjunction inconsistent, i.e. h^2 has proved the whole instance unsolvable.",
+    "conclusion": "The real gap is h^2 vs h^1. The carver proves goal-exclusion with an h^2 pairwise-reachability fixpoint (deadlock_carver/mutex.py); Fast Downward's translator settles a task before search with h^1 delete-relaxation reachability. A carver theorem beats the translator exactly on instances h^2 proves unsolvable but h^1 does not -- and there it beats it only through the one theorem whose pattern is a goal atom.",
+    "rnd0021_confirms_it": {
+      "at(b2,c11)_h2_reachable": false,
+      "so_h2_alone_proves_rnd0021_unsolvable": true,
+      "but_h1_does_not": "FD's translator built a 373-fact task and blind had to expand all 92 states",
+      "only_theorem_whose_pattern_is_a_goal_atom": "at(b1,c41) -- and it is the only one with witnesses (11); the other two have 0"
+    },
+    "geometry_that_makes_h1_fail_here": "a dead-end cell d (c13) whose only free neighbour is the box's cell f (c12), with the box's goal g (c11) on the opposite side of f. Truly: pushing f->g needs the player on d, and the player can only reach d through f, which the box occupies. Relaxed: the push f->d puts the player on f while the box stays on f and d stays clear, so the player walks f->d and pushes f->g.",
+    "can_it_arise_in_far_N": {
+      "answer": "no, and not by luck -- it is impossible",
+      "reason_1": "far{N} is solvable, so h^2 cannot prove its goal conjunction inconsistent, so by step_3 no theorem can have a goal atom as its pattern; every far{N} theorem is at(b, non-goal frozen corner), and by step_2 every such theorem is inside the relaxation. n_theorem_dead_outside_relaxation = 0 on far{N} is therefore a THEOREM about that family, not a measurement.",
+      "reason_2": "far{N} is an open N x N room with no interior walls, so it has no degree-1 free cell for the relaxation's dead-end cheat to exploit, and its goals are edge cells rather than the frozen corners.",
+      "implication": "the audit's section 3 table could never have found this, at any size."
+    },
+    "empirical_check": "attacks/verify/sweep_soundness.json -- 42 instances of the a3 family analysed; rnd0021 is the ONLY one with witnesses. door-swap is also h^2-unsolvable with a live relaxation on 47 states, but none of its 11 theorem patterns is a goal atom, so it has 0 witnesses -- exactly what step_2/step_3 predict."
+  },
+  "what_the_dividend_actually_is": {
+    "source": "attacks/a3_random.json, the sole HIT in the 60-instance random sweep",
+    "rnd0021_astar_lmcut": {"unguarded_expansions": 33, "singleton_guarded_expansions": 0},
+    "rnd0021_astar_blind": {"unguarded_expansions": 92, "singleton_guarded_expansions": 0},
+    "rnd0021_astar_ipdb": {"unguarded_expansions": 0, "singleton_guarded_expansions": 0, "note": "ipdb already returns h=infinity at the initial state, so it needs no help"},
+    "reading": "the guard collapses the guarded task at translate time (task size 373 -> 4, operators 42 -> 0), so lmcut goes 33 -> 0 expansions. This is a real, non-zero dividend on an admissible heuristic -- the only one in the whole a3 sweep."
+  },
+  "honest_caveats": [
+    "rnd0021 is unsolvable from its initial state. The 11 witnesses are reachable, genuinely dead, and missed by FD's relaxation, so the counterexample is real -- but it is not the 'interaction deadlock inside a solvable instance' case section 4 hoped for. Here the theorem is a whole-instance unsolvability certificate wearing a deadlock's clothes.",
+    "Because every state of rnd0021 is truly dead, this instance can never test carver soundness. That was checked elsewhere (42-instance sweep plus the audit's own far4/5/6 rows).",
+    "All three theorems are width-1 `no_deleting_action`. The structural argument above is proved for that class only; a width-2 `deleting_actions_blocked` theorem could in principle escape the relaxation by another route, and nothing here rules that out or in.",
+    "One domain, one encoding, one planner -- the same caveats DEADLOCK_CLAIM.md section 6 already carries."
+  ],
+  "suggested_correction_to_DEADLOCK_CLAIM_md": {
+    "section_3_bullet_2": "replace 'There is not one state, at any size, that a theorem detects and the relaxation misses' with 'On the far{N} family there is not one such state at any size -- and that is provable, not just measured: far{N} is solvable, so every theorem's pattern atom is a box frozen off its own goal, which starves the relaxation of a goal atom too. The equality breaks on instances h^2 proves unsolvable and h^1 does not; attacks/verify/rnd0021 exhibits 11 such states, confirmed against Fast Downward.'",
+    "section_6_bullet_4": "the sentence 'A geometry where a carver theorem beats the relaxation would not contradict anything above -- it would be the boundary case section 4 says to look for' can now be closed: it exists, it is rnd0021, and the condition is h^2-provable unsolvability that h^1 misses."
+  },
+  "artefacts": {
+    "recompute": "attacks/verify/rnd0021/recompute.json (+ recompute.py, states.json)",
+    "fd": "attacks/verify/rnd0021/fd_check.json (+ fd_check.py, fd-logs/, problems/)",
+    "mechanism": "attacks/verify/rnd0021/mechanism.json (+ mechanism.py)",
+    "sweep": "attacks/verify/sweep_soundness.json (+ sweep_soundness.py, sweep_soundness.txt)"
+  }
+}

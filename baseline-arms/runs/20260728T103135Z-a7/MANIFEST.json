@@ -1,0 +1,28 @@
+{
+  "base_commit": "979e0bce5766c28f5a13bddfc84521616609fe10",
+  "branch": "agent/a7-envelope-finish",
+  "campaigns": [
+    "phase3-variance-envelope",
+    "phase3-unit-price-remeasure",
+    "phase3-unit-price-recheck"
+  ],
+  "prompt_id": "A7-envelope-finish",
+  "scope": "variance envelope: g50t / sk48 / tn36 x 3 repeats, haiku tier, 30-action budget; ar25 keeps its degraded annotation and is not re-run",
+  "scope_delivered": [
+    "ticket A7: variance envelope g50t/sk48/tn36 x 3 repeats, haiku, 30-action budget; ar25 kept degraded and not re-run; envelope table and the n Phase 4 needs",
+    "follow-on (direct instruction, outside the ticket): BUDGET_REPORT section 2.1 re-measured on the jar for all three tiers",
+    "follow-on: section 3 extrapolations and section 6 recommendations re-run on the measured multipliers",
+    "follow-on: the $/model-call rise investigated to a cause (section 14)"
+  ],
+  "spend_usd": {
+    "envelope": 10.5364,
+    "quota_probe": 0.0201,
+    "smoke": 0.0,
+    "track_total_including_pilot": 41.57,
+    "unit_price_recheck": 1.3595,
+    "unit_price_remeasure": 19.8332
+  },
+  "territory": "baseline-arms",
+  "utc": "2026-07-28T10:31:36Z",
+  "worker": "APP-A7"
+}

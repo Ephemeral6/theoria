@@ -365,3 +365,27 @@ cd theory-compiler && python -m pytest        # 83 passed（含 8 项真 Lean �
 ```
 
 `lean` 不在 PATH 时，8 项 Lean 编译测试自动跳过，其余 75 项照常。
+
+## C7 — `mentions` 有定义了（2026-07-28）
+
+`CONTRACTS/dsl_grammar_v0.3.md`。由 `a0-spike/THEORIZE_LOG.md` 表达力台账 **X-1**
+与 **X-5** 逼出来。v0.2 用 `mentions` 定义 `frame persist` 却从未定义 `mentions`；
+三种读法互不等价。取「编译效果」读法的外延，但把那本字典从后端搬进说明书：
+`writes(r)` 由 `events:` 声明确定（`writes { … }` 子句或 v0.3 公布的封闭默认表），
+两者都没有就报错，后端逐规则被校验。`free(c)` 排除掉声明位置在语法上就是 `c` 的对象。
+
+理由与代价：D-TC-029（读法与权威方向）、D-TC-030（`free`，及它的三处后果）、
+D-TC-031（`gen_pddl` 达不到这条义务，记账并钉住，不在本轮修）。
+
+两个数字，各在自己的分母里复现，然后都归零：X-1 的 **376**（off-wall 39,960 对）、
+X-5 的 **52**（on-wall 7,080 对）；修好之后全 47,040 对上 0 个不符、0 个无规则开火、
+从没有两条同时开火。跑法与留痕：`theory-compiler/runs/20260728T102343Z-c7/`。
+
+```bash
+cd theory-compiler && python -m pytest                       # 319 passed, 1 skipped
+bash theory-compiler/runs/20260728T102343Z-c7/verify.sh      # 套件 + 两个数字 + 十份说明书
+```
+
+未关事项在契约 §9：`writes` 是中途站（终点是事件**体**，写集从体里导出、无从漂移；
+v0.3 之后 `frame persist` 有定义了、`step` 仍然没有）；「成员必须是参数」在写集随状态
+变化时失效（连推）。

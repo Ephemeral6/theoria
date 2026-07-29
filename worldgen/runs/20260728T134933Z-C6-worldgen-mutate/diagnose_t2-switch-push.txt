@@ -1,0 +1,49 @@
+﻿world t2-switch-push: 191 frames, 190 transitions, 4 tracks, 128 atoms
+
+FAILS  track=obj0 action=LEFT effect=('move', 0, -1, None)  (36 positives)
+  NoSeparatingGuard: no literal separates transition 168 from the positives
+  negative t=168 action=LEFT
+  positive t=11 action=LEFT
+  every atom in the vocabulary agrees on both: False
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 3  negative=126000001
+    row 3  positive=106250001
+    row 5  negative=140000001
+    row 5  positive=130000001
+
+FAILS  track=obj0 action=RIGHT effect=('move', 0, 1, None)  (42 positives)
+  NoSeparatingGuard: no literal separates transition 20 from the positives
+  negative t=20 action=RIGHT
+  positive t=9 action=RIGHT
+  every atom in the vocabulary agrees on both: False
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 3  negative=106250001
+    row 3  positive=162050001
+
+FAILS  track=obj1 action=LEFT effect=('none', 0, 0, None)  (48 positives)
+  NoSeparatingGuard: no literal separates transition 164 from the positives
+  negative t=164 action=LEFT
+  positive t=5 action=LEFT
+  every atom in the vocabulary agrees on both: False
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 3  negative=100260001
+    row 3  positive=102050001
+    row 4  negative=101111101
+    row 4  positive=161111101
+    row 5  negative=140000001
+    row 5  positive=130000001
+
+FAILS  track=obj1 action=RIGHT effect=('none', 0, 0, None)  (52 positives)
+  NoSeparatingGuard: no literal separates transition 9 from the positives
+  negative t=9 action=RIGHT
+  positive t=6 action=RIGHT
+  every atom in the vocabulary agrees on both: False
+  their frames are identical: False
+  VERDICT: the VOCABULARY is short — the frames differ but no atom sees the difference
+    row 3  negative=162050001
+    row 3  positive=102050001
+    row 4  negative=101111101
+    row 4  positive=161111101

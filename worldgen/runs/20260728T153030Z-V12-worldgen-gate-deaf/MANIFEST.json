@@ -1,0 +1,94 @@
+{
+  "author": "RES-3 executor",
+  "base_commit": "77e9216dc3b75a50e4c788d0c671da81c720f9f6",
+  "branch": "agent/v12-worldgen-gate-deaf",
+  "files": [
+    {
+      "path": "worldgen/verify.py",
+      "sha256": "bc19b63c31f166bf77355c5aeffd2f9eb754ada182ee19404040b470c5920a31"
+    },
+    {
+      "path": "worldgen/qc/gate.py",
+      "sha256": "447dd26b9faa716fa54eb6d17bd7088a9e9e28bde4400d54b778433d34dab1a3"
+    },
+    {
+      "path": "worldgen/qc/KNOWN_MISS.json",
+      "sha256": "6580317d4009ba8a2c49f6e84fb556be07856eabc60ed14469be36f8a660331f"
+    },
+    {
+      "path": "worldgen/tests/test_verify_qc_gate.py",
+      "sha256": "f6f494393a82fbfcdf4a8f625ba59e410bf636ddc47afdef1e6cc59eff7b064e"
+    },
+    {
+      "path": "worldgen/README.md",
+      "sha256": "52977dff348675dacd8e92efc56e39390311b4f84bdaacdce575352f447f7691"
+    },
+    {
+      "path": "worldgen/RUN_STATE.md",
+      "sha256": "089878866ed75e463ab9f0fddf24fe35b60edee251326c3b70b1a2bb5cb8c592"
+    },
+    {
+      "path": "worldgen/runs/20260728T153030Z-V12-worldgen-gate-deaf/JUDGMENT.md",
+      "sha256": "81cc22bbb65a7e7022d56c628faa295b21d7f55ff1bce23b60db40c4effc3790"
+    },
+    {
+      "path": "worldgen/runs/20260728T153030Z-V12-worldgen-gate-deaf/show_negative_control.py",
+      "sha256": "145b8dc68c8a93d3de8d954f690a2c60081ca4e68bdb87dabe0bc76da7447934"
+    },
+    {
+      "path": "worldgen/runs/20260728T153030Z-V12-worldgen-gate-deaf/verify_before.txt",
+      "sha256": "75b377f17c62d569d9f1e8190e458587c79aa1bc127f22dbc3905e58079f2a96"
+    },
+    {
+      "path": "worldgen/runs/20260728T153030Z-V12-worldgen-gate-deaf/verify_after.txt",
+      "sha256": "cc0873e5908b3c070bfe26f751d55ac506caac478f23fa159ef24323989d4360"
+    },
+    {
+      "path": "worldgen/runs/20260728T153030Z-V12-worldgen-gate-deaf/pytest_before.txt",
+      "sha256": "66440510e21149eb89308304c8da4437003baa58641768dbe4c3baa89b37da30"
+    },
+    {
+      "path": "worldgen/runs/20260728T153030Z-V12-worldgen-gate-deaf/pytest_after.txt",
+      "sha256": "6d2b3a19a13850dc1af17b48dec6d3b1ed5b93d224f035a5ab49d8a8a4ac77a0"
+    },
+    {
+      "path": "worldgen/runs/20260728T153030Z-V12-worldgen-gate-deaf/negative_control.txt",
+      "sha256": "db69a39ed420bbcb6f1024ddf13d4bab997653b7a5c89f588827b12f673513fc"
+    },
+    {
+      "path": "worldgen/runs/20260728T153030Z-V12-worldgen-gate-deaf/mutation_check.txt",
+      "sha256": "c038fa70218f8bca24bab53505b3504afc5ff9e3653ecac79e1912bff2cc0670"
+    },
+    {
+      "path": "worldgen/runs/20260728T153030Z-V12-worldgen-gate-deaf/out_dirtied_by_verify.diff",
+      "sha256": "b0438f1f05d4c1aa22d435b6bd58a267a8853eb671e9ba24774697e85d351ff3"
+    }
+  ],
+  "finding": "gating=False on both QC stages is deliberate and documented; the defect is that a crashed stage and a measured miss were the same signal, that nothing pinned the miss, and that the final line was the bare token 'green'",
+  "lane": "verify",
+  "measured": {
+    "mutation_check": "with pre-V12 semantics restored: 1/7 behaved, 6 implanted reds exited 0; 6 of 13 tests failed",
+    "negative_control": "7/7 cases behaved as required (1 positive control exit 0, 6 implanted reds exit 1)",
+    "pytest_after": "425 passed, 13 skipped, exit 0",
+    "pytest_before": "412 passed, 13 skipped, exit 0",
+    "verify_after": {
+      "exit": 0,
+      "last_line_is_bare_green": false,
+      "qc_family_pass": false,
+      "qc_mutants_pass": false
+    },
+    "verify_before": {
+      "exit": 0,
+      "last_line": "green",
+      "qc_family_pass": false,
+      "qc_mutants_pass": false
+    }
+  },
+  "narrative": "worldgen/RUN_STATE.md, section 'RUN_STATE \u2014 V12-worldgen-gate-deaf'; judgment in JUDGMENT.md",
+  "network": "none",
+  "prompt_id": "V12-worldgen-gate-deaf",
+  "resolution": "pinned known miss (worldgen/qc/KNOWN_MISS.json) + deviation gate (worldgen/qc/gate.py) + negative control (worldgen/tests/test_verify_qc_gate.py); no pre-registered bar altered",
+  "sealed_pile_contact": "none",
+  "territory": "worldgen",
+  "utc": "2026-07-28T15:30:30Z"
+}

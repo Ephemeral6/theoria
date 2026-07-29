@@ -1,0 +1,208 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a3\rnd0011\indexed\sokoban_guarded_indexed_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a3\rnd0011\indexed\rnd0011_guarded_indexed.pddl' --sas-file output.sas
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Parsing: [0.000s CPU, 0.003s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.003s wall-clock]
+Preparing model... [0.016s CPU, 0.004s wall-clock]
+Generated 103 rules.
+Computing model... [0.000s CPU, 0.041s wall-clock]
+1046 relevant atoms
+12419 auxiliary atoms
+13465 final queue length
+14305 total queue pushes
+Completing instantiation... [0.016s CPU, 0.009s wall-clock]
+Instantiating: [0.031s CPU, 0.061s wall-clock]
+Computing fact groups...
+Finding invariants...
+7 initial candidates
+Finding invariants: [0.000s CPU, 0.003s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.001s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+35 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.000s CPU, 0.006s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Processing axioms: [0.016s CPU, 0.002s wall-clock]
+Translating task: [3.078s CPU, 3.248s wall-clock]
+274596 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+34744 operators removed
+0 axioms removed
+15 propositions removed
+Detecting unreachable propositions: [2.188s CPU, 2.271s wall-clock]
+Reordering and filtering variables...
+39 of 39 variables necessary.
+35 of 39 mutex groups necessary.
+102610 of 102610 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.703s CPU, 0.708s wall-clock]
+Translator variables: 39
+Translator derived variables: 0
+Translator facts: 199
+Translator goal facts: 3
+Translator mutex groups: 35
+Translator total mutex groups size: 164
+Translator operators: 102610
+Translator axioms: 0
+Translator task size: 1128327
+warning: could not determine peak memory
+Writing output... [1.203s CPU, 1.387s wall-clock]
+Done! [7.250s CPU, 7.727s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(ipdb())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpdtgs7rdc\sas_plan' < output.sas
+[t=0.000109s, 1852 KB] Search code revision: 7120aa0
+[t=0.000188s, 1884 KB] reading input...
+[t=8.595226s, 42956 KB] done reading input!
+[t=8.596987s, 43216 KB] Initializing canonical PDB heuristic...
+[t=8.597003s, 43216 KB] Generating patterns using: hill climbing pattern collection generator
+[t=8.666331s, 49396 KB] Done calculating initial pattern collection: 0.069341s
+[t=8.666372s, 49396 KB] Average operator cost: 1.000000
+[t=8.667321s, 49396 KB] Building causal graph... done!
+[t=11.088839s, 55060 KB] Done calculating initial candidate PDBs
+[t=11.138746s, 58444 KB] found a better pattern with improvement 148
+[t=12.501421s, 64520 KB] found a better pattern with improvement 994
+[t=14.505321s, 93572 KB] found a better pattern with improvement 999
+[t=14.534830s, 93572 KB] Improvement below threshold. Stop hill climbing.
+[t=14.534865s, 93572 KB] Hill climbing iterations: 4
+[t=14.534870s, 93572 KB] Hill climbing generated patterns: 173
+[t=14.534873s, 93572 KB] Hill climbing rejected patterns: 129
+[t=14.534876s, 93572 KB] Hill climbing maximum PDB size: 1076320
+[t=14.534880s, 93572 KB] Hill climbing time: 5.868510s
+[t=14.539845s, 93572 KB] hill climbing pattern collection generator number of patterns: 6
+[t=14.539881s, 93572 KB] hill climbing pattern collection generator total PDB size: 1112254
+[t=14.539886s, 93572 KB] hill climbing pattern collection generator computation time: 5.942832s
+[t=14.539894s, 93572 KB] Running dominance pruning...
+[t=14.539903s, 93572 KB] Pruned 3 of 4 pattern cliques
+[t=14.539907s, 93572 KB] Pruned 5 of 6 PDBs
+[t=14.539909s, 93572 KB] Dominance pruning took 0.000012s
+[t=14.539925s, 93572 KB] Canonical PDB heuristic number of patterns: 1
+[t=14.539931s, 93572 KB] Canonical PDB heuristic total PDB size: 1076320
+[t=14.539934s, 93572 KB] Canonical PDB heuristic computation time: 5.942938s
+[t=14.539979s, 93572 KB] Building successor generator... done!
+[t=14.576310s, 93572 KB] peak memory difference for successor generator creation: 0 KB
+[t=14.576324s, 93572 KB] time for successor generation creation: 0.036309s
+[t=14.576944s, 93572 KB] Variables: 39
+[t=14.576962s, 93572 KB] FactPairs: 199
+[t=14.576966s, 93572 KB] Bytes per state: 8
+[t=14.576983s, 93572 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=14.577006s, 93572 KB] New best heuristic value for cpdbs: 22
+[t=14.577010s, 93572 KB] g=0, 1 evaluated, 0 expanded
+[t=14.577013s, 93572 KB] f = 22, 1 evaluated, 0 expanded
+[t=14.577021s, 93572 KB] Initial heuristic value for cpdbs: 22
+[t=14.577025s, 93572 KB] pruning method: none
+[t=14.577037s, 93572 KB] New best heuristic value for cpdbs: 21
+[t=14.577040s, 93572 KB] g=1, 2 evaluated, 1 expanded
+[t=14.577051s, 93572 KB] New best heuristic value for cpdbs: 20
+[t=14.577055s, 93572 KB] g=2, 6 evaluated, 2 expanded
+[t=14.577062s, 93572 KB] New best heuristic value for cpdbs: 19
+[t=14.577065s, 93572 KB] g=3, 8 evaluated, 3 expanded
+[t=14.577075s, 93572 KB] New best heuristic value for cpdbs: 18
+[t=14.577077s, 93572 KB] g=4, 11 evaluated, 4 expanded
+[t=14.577087s, 93572 KB] New best heuristic value for cpdbs: 17
+[t=14.577091s, 93572 KB] g=5, 15 evaluated, 5 expanded
+[t=14.577099s, 93572 KB] New best heuristic value for cpdbs: 16
+[t=14.577103s, 93572 KB] g=6, 18 evaluated, 6 expanded
+[t=14.577110s, 93572 KB] New best heuristic value for cpdbs: 15
+[t=14.577112s, 93572 KB] g=7, 21 evaluated, 7 expanded
+[t=14.577119s, 93572 KB] New best heuristic value for cpdbs: 14
+[t=14.577122s, 93572 KB] g=8, 23 evaluated, 8 expanded
+[t=14.577129s, 93572 KB] New best heuristic value for cpdbs: 13
+[t=14.577148s, 93572 KB] g=9, 26 evaluated, 9 expanded
+[t=14.577180s, 93572 KB] New best heuristic value for cpdbs: 12
+[t=14.577188s, 93572 KB] g=10, 28 evaluated, 10 expanded
+[t=14.577203s, 93572 KB] New best heuristic value for cpdbs: 11
+[t=14.577214s, 93572 KB] g=11, 30 evaluated, 11 expanded
+[t=14.577222s, 93572 KB] New best heuristic value for cpdbs: 10
+[t=14.577231s, 93572 KB] g=12, 31 evaluated, 12 expanded
+[t=14.577251s, 93572 KB] New best heuristic value for cpdbs: 9
+[t=14.577262s, 93572 KB] g=13, 33 evaluated, 13 expanded
+[t=14.577282s, 93572 KB] New best heuristic value for cpdbs: 8
+[t=14.577287s, 93572 KB] g=14, 36 evaluated, 14 expanded
+[t=14.577297s, 93572 KB] New best heuristic value for cpdbs: 7
+[t=14.577302s, 93572 KB] g=15, 39 evaluated, 15 expanded
+[t=14.577312s, 93572 KB] New best heuristic value for cpdbs: 6
+[t=14.577314s, 93572 KB] g=16, 41 evaluated, 16 expanded
+[t=14.577324s, 93572 KB] New best heuristic value for cpdbs: 5
+[t=14.577328s, 93572 KB] g=17, 44 evaluated, 17 expanded
+[t=14.577333s, 93572 KB] New best heuristic value for cpdbs: 4
+[t=14.577337s, 93572 KB] g=18, 45 evaluated, 18 expanded
+[t=14.577346s, 93572 KB] New best heuristic value for cpdbs: 3
+[t=14.577349s, 93572 KB] g=19, 48 evaluated, 19 expanded
+[t=14.577357s, 93572 KB] New best heuristic value for cpdbs: 2
+[t=14.577361s, 93572 KB] g=20, 51 evaluated, 20 expanded
+[t=14.577371s, 93572 KB] New best heuristic value for cpdbs: 1
+[t=14.577374s, 93572 KB] g=21, 54 evaluated, 21 expanded
+[t=14.577384s, 93572 KB] New best heuristic value for cpdbs: 0
+[t=14.577389s, 93572 KB] g=22, 59 evaluated, 22 expanded
+[t=14.577392s, 93572 KB] Solution found!
+[t=14.577397s, 93572 KB] Actual search time: 0.000371s
+move c41 c42 right (1)
+move c42 c43 right (1)
+move c43 c44 right (1)
+push-pair0 c44 c34 c24 b3 up (1)
+push-pair4 c34 c24 c14 b3 up b1 c13 b1 c15 b2 c13 b2 c15 (1)
+push-pair2 c24 c25 c26 b1 right b2 c36 b3 c36 (1)
+move c25 c15 up (1)
+push-pair4 c15 c14 c13 b3 left b1 c12 b1 c14 b2 c12 b2 c14 (1)
+push-pair2 c14 c13 c12 b3 left b1 c13 b2 c13 (1)
+move c13 c14 right (1)
+move c14 c15 right (1)
+move c15 c16 right (1)
+push-pair4 c16 c26 c36 b1 down b2 c26 b2 c46 b3 c26 b3 c46 (1)
+push-pair4 c26 c36 c46 b1 down b2 c36 b2 c56 b3 c36 b3 c56 (1)
+push-pair2 c36 c46 c56 b1 down b2 c46 b3 c46 (1)
+push-pair4 c46 c56 c66 b1 down b2 c56 b2 c65 b3 c56 b3 c65 (1)
+move c56 c46 up (1)
+push-pair0 c46 c45 c44 b2 left (1)
+move c45 c35 up (1)
+move c35 c34 left (1)
+push-pair0 c34 c44 c54 b2 down (1)
+push-pair4 c44 c54 c64 b2 down b1 c63 b1 c65 b3 c63 b3 c65 (1)
+[t=14.577402s, 93572 KB] Plan length: 22 step(s).
+[t=14.577402s, 93572 KB] Plan cost: 22
+[t=14.577402s, 93572 KB] Expanded 23 state(s).
+[t=14.577402s, 93572 KB] Reopened 0 state(s).
+[t=14.577402s, 93572 KB] Evaluated 59 state(s).
+[t=14.577402s, 93572 KB] Evaluations: 59
+[t=14.577402s, 93572 KB] Generated 68 state(s).
+[t=14.577402s, 93572 KB] Dead ends: 1 state(s).
+[t=14.577402s, 93572 KB] Expanded until last jump: 0 state(s).
+[t=14.577402s, 93572 KB] Reopened until last jump: 0 state(s).
+[t=14.577402s, 93572 KB] Evaluated until last jump: 1 state(s).
+[t=14.577402s, 93572 KB] Generated until last jump: 0 state(s).
+[t=14.577402s, 93572 KB] Number of registered states: 59
+[t=14.577402s, 93572 KB] Int hash set load factor: 59/64 = 0.921875
+[t=14.577402s, 93572 KB] Int hash set resizes: 6
+[t=14.577402s, 93572 KB] Search time: 0.000421s
+[t=14.577402s, 93572 KB] Total time: 14.577402s
+Solution found.
+Remove intermediate file output.sas
+search exit code: 0
+

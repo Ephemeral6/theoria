@@ -1,0 +1,1456 @@
+{
+  "instructions": "You are a fresh reader of one framework's deliverable. You have been given a\nbundle of documents and this sheet, and nothing else: no repository, no source\ncode beyond what the bundle contains, no record of anyone playing this world, no\nearlier conversation. Everything you are entitled to use is in the bundle or in\nthe item itself.\n\nThe world is a grid world. The bundle says how it behaves. Each item that needs\none carries the geometry of a board and, where relevant, where the Player and\nthe Box are standing. Take the situation from the item, never from an earlier\nitem: every item stands alone.\n\nP=Player  B=Box  #=wall  T=target cell  .=empty. Row 0 is the top row, column 0 the left column. If two of these share a cell the earlier letter is drawn, so the target is still the cell named in `target` even when it is not visible.\n\nFour kinds of question appear, distinguished by each item's `kind` field.\n\n  kind = \"step_semantics\"\n      One action is taken from the given situation. Say what the situation is\n      afterwards and which clause of the manual accounts for it.\n      Answer grammar, exactly:\n          player=(row,col); box=(row,col); rule=<name>\n      All three fields, in any order, separated by semicolons. `<name>` is one\n      of: walk | push2 | blocked_wall | blocked_box_crossing | blocked_box_landing\n      All three fields must be right; two out of three scores nothing.\n\n  kind = \"name_class\"\n      A name is pointed at. Say whether it is something each individual board\n      supplies (`level_data`) or something the world fixes once for every board\n      (`world_law`). Whether the name appears in the manual is not the question.\n      Answer grammar, exactly one word: level_data | world_law\n\n  kind = \"optimal_action\"\n      Answer grammar, exactly:\n          action=<A>; plan_len=<n>\n      `<A>` names an action that begins a shortest sequence of actions ending\n      with the Box on the target cell, and `<n>` is how many actions that\n      shortest sequence contains. Where several actions begin some shortest\n      sequence, any one of them is accepted; you do not have to find them all.\n      `<A>` is one of: UP | DOWN | LEFT | RIGHT | none\n      If the Box can never reach the target from the situation given, answer\n      `action=none; plan_len=none`. The two halves are marked separately and are\n      worth half the item each.\n\n  kind = \"rule_justification\"\n      A claim about this world is stated, together with a list of the manual's\n      clauses. Name every listed clause the claim's truth depends on, and no\n      others.\n      Answer grammar, exactly:\n          rests_on=<clause>+<clause>+...\n      Depends on means: the claim's truth uses **what that clause does** -- the\n      `then` half of it, the change it makes. A clause whose effect changes\n      nothing the claim is about does not belong in your answer, even if a\n      differently written clause in its place would have broken the claim. Order\n      does not matter and a repeated name is counted once.\n      Every clause you name that belongs earns; every clause you name that does\n      not belong costs the same amount. Naming all of them is not a strategy.\n      The full set is worth the whole item.\n\n  kind = \"counterexample\"\n      A sentence from the manual is quoted and you are asked for a situation at\n      which it is false.\n      Answer grammar, exactly:\n          level=<board id>; player=(row,col); box=(row,col)\n      The board id must be one of the boards the item lists. The situation must\n      be legal on that board. It is marked by recomputing the quoted sentence at\n      the situation you name.\n\nAny item may instead be answered `abstain`. An abstention scores nothing and is\nrecorded as an abstention, not as a wrong answer; a guess that turns out wrong is\nrecorded as a wrong answer. An answer that is not a sentence of the grammar above\nscores nothing and the parse failure is recorded. `abstain` and `none` are not\nthe same word: `none` is a claim about the world, `abstain` is a claim about you.\n\nSubmit a single JSON object whose keys are exactly the `item_id` values on this\nsheet -- every one of them, none omitted, none invented -- and whose values are\nanswer strings. Nothing else: no commentary, no reasoning, no extra keys.",
+  "items": [
+    {
+      "action": "RIGHT",
+      "board": [
+        ".PB....",
+        ".......",
+        ".....#.",
+        "#....T.",
+        "...##..",
+        "...#...",
+        ".#....."
+      ],
+      "item_id": "v11-step-01",
+      "kind": "step_semantics",
+      "level": {
+        "height": 7,
+        "level_id": "kiln",
+        "target": [
+          3,
+          5
+        ],
+        "walls": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            6,
+            1
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action RIGHT. Give the situation after the action and the clause that accounts for it.",
+      "state": {
+        "box": [
+          0,
+          2
+        ],
+        "player": [
+          0,
+          1
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:kiln"
+      ]
+    },
+    {
+      "action": "LEFT",
+      "board": [
+        ".BP.....",
+        ".##..#..",
+        "....#..#",
+        ".......#",
+        "..T.....",
+        "........",
+        "........",
+        "........"
+      ],
+      "item_id": "v11-step-02",
+      "kind": "step_semantics",
+      "level": {
+        "height": 8,
+        "level_id": "warren",
+        "target": [
+          4,
+          2
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "width": 8
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action LEFT. Give the situation after the action and the clause that accounts for it.",
+      "state": {
+        "box": [
+          0,
+          1
+        ],
+        "player": [
+          0,
+          2
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:warren"
+      ]
+    },
+    {
+      "action": "DOWN",
+      "board": [
+        "........",
+        ".......#",
+        ".#.....#",
+        ".P......",
+        "..#.#...",
+        ".....B..",
+        "..##.#..",
+        ".....T.."
+      ],
+      "item_id": "v11-step-03",
+      "kind": "step_semantics",
+      "level": {
+        "height": 8,
+        "level_id": "flume",
+        "target": [
+          7,
+          5
+        ],
+        "walls": [
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            5
+          ]
+        ],
+        "width": 8
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action DOWN. Give the situation after the action and the clause that accounts for it.",
+      "state": {
+        "box": [
+          5,
+          5
+        ],
+        "player": [
+          3,
+          1
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:flume"
+      ]
+    },
+    {
+      "action": "RIGHT",
+      "board": [
+        "P.......",
+        ".##..#..",
+        "....#..#",
+        ".......#",
+        "..T.....",
+        "...B....",
+        "........",
+        "........"
+      ],
+      "item_id": "v11-step-04",
+      "kind": "step_semantics",
+      "level": {
+        "height": 8,
+        "level_id": "warren",
+        "target": [
+          4,
+          2
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "width": 8
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action RIGHT. Give the situation after the action and the clause that accounts for it.",
+      "state": {
+        "box": [
+          5,
+          3
+        ],
+        "player": [
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:warren"
+      ]
+    },
+    {
+      "action": "LEFT",
+      "board": [
+        ".......",
+        ".......",
+        ".....#.",
+        "#P...T.",
+        "...##..",
+        "...#.B.",
+        ".#....."
+      ],
+      "item_id": "v11-step-05",
+      "kind": "step_semantics",
+      "level": {
+        "height": 7,
+        "level_id": "kiln",
+        "target": [
+          3,
+          5
+        ],
+        "walls": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            6,
+            1
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action LEFT. Give the situation after the action and the clause that accounts for it.",
+      "state": {
+        "box": [
+          5,
+          5
+        ],
+        "player": [
+          3,
+          1
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:kiln"
+      ]
+    },
+    {
+      "action": "RIGHT",
+      "board": [
+        "..#.PB",
+        "......",
+        ".T.##.",
+        "...##.",
+        ".....#",
+        "....#."
+      ],
+      "item_id": "v11-step-06",
+      "kind": "step_semantics",
+      "level": {
+        "height": 6,
+        "level_id": "cairn",
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            0,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            4
+          ]
+        ],
+        "width": 6
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action RIGHT. Give the situation after the action and the clause that accounts for it.",
+      "state": {
+        "box": [
+          0,
+          5
+        ],
+        "player": [
+          0,
+          4
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:cairn"
+      ]
+    },
+    {
+      "action": "DOWN",
+      "board": [
+        "P.......",
+        "B##..#..",
+        "....#..#",
+        ".......#",
+        "..T.....",
+        "........",
+        "........",
+        "........"
+      ],
+      "item_id": "v11-step-07",
+      "kind": "step_semantics",
+      "level": {
+        "height": 8,
+        "level_id": "warren",
+        "target": [
+          4,
+          2
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "width": 8
+      },
+      "points": 2.0,
+      "prompt": "The Player takes the action DOWN. Give the situation after the action and the clause that accounts for it.",
+      "state": {
+        "box": [
+          1,
+          0
+        ],
+        "player": [
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "step_semantics",
+        "level:warren"
+      ]
+    },
+    {
+      "definition": "the cell the Box occupies before any action is taken",
+      "item_id": "v11-name-01",
+      "kind": "name_class",
+      "name": "start_box",
+      "points": 1.0,
+      "prompt": "Is `start_box` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "a name introduced in the manual's `events:` section",
+      "item_id": "v11-name-02",
+      "kind": "name_class",
+      "name": "slid",
+      "points": 1.0,
+      "prompt": "Is `slid` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "the name written in the manual's `goal:` clause",
+      "item_id": "v11-name-03",
+      "kind": "name_class",
+      "name": "target",
+      "points": 1.0,
+      "prompt": "Is `target` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "the number of rows a board has",
+      "item_id": "v11-name-04",
+      "kind": "name_class",
+      "name": "height",
+      "points": 1.0,
+      "prompt": "Is `height` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "a name used inside rule guards, applied to an object and a direction",
+      "item_id": "v11-name-05",
+      "kind": "name_class",
+      "name": "beyond",
+      "points": 1.0,
+      "prompt": "Is `beyond` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "the cells of one board that are not on the board's floor",
+      "item_id": "v11-name-06",
+      "kind": "name_class",
+      "name": "walls",
+      "points": 1.0,
+      "prompt": "Is `walls` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "a name introduced in the manual's `laws:` section",
+      "item_id": "v11-name-07",
+      "kind": "name_class",
+      "name": "box_col_parity",
+      "points": 1.0,
+      "prompt": "Is `box_col_parity` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "a name introduced in the manual's `rules:` section",
+      "item_id": "v11-name-08",
+      "kind": "name_class",
+      "name": "push2",
+      "points": 1.0,
+      "prompt": "Is `push2` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "a name used inside rule guards, applied to a cell",
+      "item_id": "v11-name-09",
+      "kind": "name_class",
+      "name": "free",
+      "points": 1.0,
+      "prompt": "Is `free` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "definition": "a name introduced in the manual's `rules:` section",
+      "item_id": "v11-name-10",
+      "kind": "name_class",
+      "name": "blocked_box_landing",
+      "points": 1.0,
+      "prompt": "Is `blocked_box_landing` supplied by each individual board, or fixed by the world for every board?",
+      "tags": [
+        "level_data_vs_world_law"
+      ]
+    },
+    {
+      "board": [
+        ".....B.",
+        "..#....",
+        "P..#...",
+        ".#.....",
+        ".#..T..",
+        ".....#."
+      ],
+      "item_id": "v11-opt-01",
+      "kind": "optimal_action",
+      "level": {
+        "height": 6,
+        "level_id": "stile",
+        "target": [
+          4,
+          4
+        ],
+        "walls": [
+          [
+            1,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            3,
+            1
+          ],
+          [
+            4,
+            1
+          ],
+          [
+            5,
+            5
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "Name an action that begins a shortest sequence of actions ending with the Box on the target cell, and the length of that shortest sequence. If there is no such sequence, answer `action=none; plan_len=none`.",
+      "state": {
+        "box": [
+          0,
+          5
+        ],
+        "player": [
+          2,
+          0
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:stile",
+        "dead"
+      ]
+    },
+    {
+      "board": [
+        "P.......",
+        ".......#",
+        ".#.....#",
+        "...B....",
+        "..#.#...",
+        "........",
+        "..##.#..",
+        ".....T.."
+      ],
+      "item_id": "v11-opt-02",
+      "kind": "optimal_action",
+      "level": {
+        "height": 8,
+        "level_id": "flume",
+        "target": [
+          7,
+          5
+        ],
+        "walls": [
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            5
+          ]
+        ],
+        "width": 8
+      },
+      "points": 2.0,
+      "prompt": "Name an action that begins a shortest sequence of actions ending with the Box on the target cell, and the length of that shortest sequence. If there is no such sequence, answer `action=none; plan_len=none`.",
+      "state": {
+        "box": [
+          3,
+          3
+        ],
+        "player": [
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:flume",
+        "solvable"
+      ]
+    },
+    {
+      "board": [
+        "........",
+        ".##..#..",
+        "....#.B#",
+        ".......#",
+        "..T.....",
+        "........",
+        ".......P",
+        "........"
+      ],
+      "item_id": "v11-opt-03",
+      "kind": "optimal_action",
+      "level": {
+        "height": 8,
+        "level_id": "warren",
+        "target": [
+          4,
+          2
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "width": 8
+      },
+      "points": 2.0,
+      "prompt": "Name an action that begins a shortest sequence of actions ending with the Box on the target cell, and the length of that shortest sequence. If there is no such sequence, answer `action=none; plan_len=none`.",
+      "state": {
+        "box": [
+          2,
+          6
+        ],
+        "player": [
+          6,
+          7
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:warren",
+        "solvable"
+      ]
+    },
+    {
+      "board": [
+        "..#..B",
+        ".....P",
+        ".T.##.",
+        "...##.",
+        ".....#",
+        "....#."
+      ],
+      "item_id": "v11-opt-04",
+      "kind": "optimal_action",
+      "level": {
+        "height": 6,
+        "level_id": "cairn",
+        "target": [
+          2,
+          1
+        ],
+        "walls": [
+          [
+            0,
+            2
+          ],
+          [
+            2,
+            3
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            3,
+            3
+          ],
+          [
+            3,
+            4
+          ],
+          [
+            4,
+            5
+          ],
+          [
+            5,
+            4
+          ]
+        ],
+        "width": 6
+      },
+      "points": 2.0,
+      "prompt": "Name an action that begins a shortest sequence of actions ending with the Box on the target cell, and the length of that shortest sequence. If there is no such sequence, answer `action=none; plan_len=none`.",
+      "state": {
+        "box": [
+          0,
+          5
+        ],
+        "player": [
+          1,
+          5
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:cairn",
+        "dead"
+      ]
+    },
+    {
+      "board": [
+        ".......",
+        "...B...",
+        ".....#.",
+        "#....T.",
+        "...##..",
+        "...#...",
+        ".#....P"
+      ],
+      "item_id": "v11-opt-05",
+      "kind": "optimal_action",
+      "level": {
+        "height": 7,
+        "level_id": "kiln",
+        "target": [
+          3,
+          5
+        ],
+        "walls": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            6,
+            1
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "Name an action that begins a shortest sequence of actions ending with the Box on the target cell, and the length of that shortest sequence. If there is no such sequence, answer `action=none; plan_len=none`.",
+      "state": {
+        "box": [
+          1,
+          3
+        ],
+        "player": [
+          6,
+          6
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:kiln",
+        "solvable"
+      ]
+    },
+    {
+      "board": [
+        "P.......",
+        ".##..#..",
+        "....#..#",
+        ".......#",
+        "..T...B.",
+        "........",
+        "........",
+        "........"
+      ],
+      "item_id": "v11-opt-06",
+      "kind": "optimal_action",
+      "level": {
+        "height": 8,
+        "level_id": "warren",
+        "target": [
+          4,
+          2
+        ],
+        "walls": [
+          [
+            1,
+            1
+          ],
+          [
+            1,
+            2
+          ],
+          [
+            1,
+            5
+          ],
+          [
+            2,
+            4
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            3,
+            7
+          ]
+        ],
+        "width": 8
+      },
+      "points": 2.0,
+      "prompt": "Name an action that begins a shortest sequence of actions ending with the Box on the target cell, and the length of that shortest sequence. If there is no such sequence, answer `action=none; plan_len=none`.",
+      "state": {
+        "box": [
+          4,
+          6
+        ],
+        "player": [
+          0,
+          0
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:warren",
+        "solvable"
+      ]
+    },
+    {
+      "board": [
+        "........",
+        ".......#",
+        ".#.....#",
+        ".P......",
+        "..#.#...",
+        ".....B..",
+        "..##.#..",
+        ".....T.."
+      ],
+      "item_id": "v11-opt-07",
+      "kind": "optimal_action",
+      "level": {
+        "height": 8,
+        "level_id": "flume",
+        "target": [
+          7,
+          5
+        ],
+        "walls": [
+          [
+            1,
+            7
+          ],
+          [
+            2,
+            1
+          ],
+          [
+            2,
+            7
+          ],
+          [
+            4,
+            2
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            6,
+            2
+          ],
+          [
+            6,
+            3
+          ],
+          [
+            6,
+            5
+          ]
+        ],
+        "width": 8
+      },
+      "points": 2.0,
+      "prompt": "Name an action that begins a shortest sequence of actions ending with the Box on the target cell, and the length of that shortest sequence. If there is no such sequence, answer `action=none; plan_len=none`.",
+      "state": {
+        "box": [
+          5,
+          5
+        ],
+        "player": [
+          3,
+          1
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:flume",
+        "solvable"
+      ]
+    },
+    {
+      "board": [
+        ".....P.",
+        ".......",
+        ".....#.",
+        "#B...T.",
+        "...##..",
+        "...#...",
+        ".#....."
+      ],
+      "item_id": "v11-opt-08",
+      "kind": "optimal_action",
+      "level": {
+        "height": 7,
+        "level_id": "kiln",
+        "target": [
+          3,
+          5
+        ],
+        "walls": [
+          [
+            2,
+            5
+          ],
+          [
+            3,
+            0
+          ],
+          [
+            4,
+            3
+          ],
+          [
+            4,
+            4
+          ],
+          [
+            5,
+            3
+          ],
+          [
+            6,
+            1
+          ]
+        ],
+        "width": 7
+      },
+      "points": 2.0,
+      "prompt": "Name an action that begins a shortest sequence of actions ending with the Box on the target cell, and the length of that shortest sequence. If there is no such sequence, answer `action=none; plan_len=none`.",
+      "state": {
+        "box": [
+          3,
+          1
+        ],
+        "player": [
+          0,
+          5
+        ]
+      },
+      "tags": [
+        "optimal_action",
+        "level:kiln",
+        "solvable"
+      ]
+    },
+    {
+      "candidates": [
+        "walk",
+        "push2",
+        "blocked_wall",
+        "blocked_box_crossing",
+        "blocked_box_landing",
+        "goal_box_on_target"
+      ],
+      "claim": "For every situation and every action there is at least one clause of the manual that says what happens.",
+      "item_id": "v11-why-01",
+      "kind": "rule_justification",
+      "points": 3.0,
+      "prompt": "Which of the listed clauses does this claim's truth depend on? Name every one that does and no others.",
+      "tags": [
+        "rule_justification",
+        "why:total"
+      ]
+    },
+    {
+      "candidates": [
+        "walk",
+        "push2",
+        "blocked_wall",
+        "blocked_box_crossing",
+        "blocked_box_landing",
+        "goal_box_on_target"
+      ],
+      "claim": "On a board whose target cell has a different column parity from the cell the Box starts on, the game can never be won.",
+      "item_id": "v11-why-02",
+      "kind": "rule_justification",
+      "points": 3.0,
+      "prompt": "Which of the listed clauses does this claim's truth depend on? Name every one that does and no others.",
+      "tags": [
+        "rule_justification",
+        "why:mismatch"
+      ]
+    },
+    {
+      "candidates": [
+        "walk",
+        "push2",
+        "blocked_wall",
+        "blocked_box_crossing",
+        "blocked_box_landing"
+      ],
+      "claim": "A Player standing beside a wall, with no Box between, told to move into that wall, is in exactly the situation it was in before.",
+      "item_id": "v11-why-03",
+      "kind": "rule_justification",
+      "points": 3.0,
+      "prompt": "Which of the listed clauses does this claim's truth depend on? Name every one that does and no others.",
+      "tags": [
+        "rule_justification",
+        "why:bump"
+      ]
+    },
+    {
+      "candidates": [
+        "walk",
+        "push2",
+        "blocked_wall",
+        "blocked_box_crossing",
+        "blocked_box_landing"
+      ],
+      "claim": "Whatever the Player is told to do, the column the Box stands in keeps the parity it had before the action (odd stays odd, even stays even).",
+      "item_id": "v11-why-04",
+      "kind": "rule_justification",
+      "points": 3.0,
+      "prompt": "Which of the listed clauses does this claim's truth depend on? Name every one that does and no others.",
+      "tags": [
+        "rule_justification",
+        "why:colparity"
+      ]
+    },
+    {
+      "candidates": [
+        "walk",
+        "push2",
+        "blocked_wall",
+        "blocked_box_crossing",
+        "blocked_box_landing"
+      ],
+      "claim": "If the Box stands where no direction admits a push -- for every direction either the cell the Box would cross or the cell it would land on is not free, or the cell the Player would have to stand on is off the board or a wall -- then the Box will never move again, whatever the Player does.",
+      "item_id": "v11-why-05",
+      "kind": "rule_justification",
+      "points": 3.0,
+      "prompt": "Which of the listed clauses does this claim's truth depend on? Name every one that does and no others.",
+      "tags": [
+        "rule_justification",
+        "why:frozen"
+      ]
+    },
+    {
+      "candidate_boards": {
+        "cairn": {
+          "board": [
+            "..#..B",
+            ".....P",
+            ".T.##.",
+            "...##.",
+            ".....#",
+            "....#."
+          ],
+          "height": 6,
+          "walls": [
+            [
+              0,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              3,
+              3
+            ],
+            [
+              3,
+              4
+            ],
+            [
+              4,
+              5
+            ],
+            [
+              5,
+              4
+            ]
+          ],
+          "width": 6
+        },
+        "flume": {
+          "board": [
+            "........",
+            ".......#",
+            ".#.....#",
+            ".P......",
+            "..#.#...",
+            ".....B..",
+            "..##.#..",
+            ".....T.."
+          ],
+          "height": 8,
+          "walls": [
+            [
+              1,
+              7
+            ],
+            [
+              2,
+              1
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              4,
+              2
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              6,
+              2
+            ],
+            [
+              6,
+              3
+            ],
+            [
+              6,
+              5
+            ]
+          ],
+          "width": 8
+        },
+        "kiln": {
+          "board": [
+            ".....P.",
+            ".......",
+            ".....#.",
+            "#B...T.",
+            "...##..",
+            "...#...",
+            ".#....."
+          ],
+          "height": 7,
+          "walls": [
+            [
+              2,
+              5
+            ],
+            [
+              3,
+              0
+            ],
+            [
+              4,
+              3
+            ],
+            [
+              4,
+              4
+            ],
+            [
+              5,
+              3
+            ],
+            [
+              6,
+              1
+            ]
+          ],
+          "width": 7
+        },
+        "stile": {
+          "board": [
+            ".....B.",
+            "..#....",
+            "P..#...",
+            ".#.....",
+            ".#..T..",
+            ".....#."
+          ],
+          "height": 6,
+          "walls": [
+            [
+              1,
+              2
+            ],
+            [
+              2,
+              3
+            ],
+            [
+              3,
+              1
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              5
+            ]
+          ],
+          "width": 7
+        },
+        "warren": {
+          "board": [
+            "........",
+            ".##..#..",
+            "....#.B#",
+            ".......#",
+            "..T.....",
+            "........",
+            ".......P",
+            "........"
+          ],
+          "height": 8,
+          "walls": [
+            [
+              1,
+              1
+            ],
+            [
+              1,
+              2
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              2,
+              4
+            ],
+            [
+              2,
+              7
+            ],
+            [
+              3,
+              7
+            ]
+          ],
+          "width": 8
+        }
+      },
+      "item_id": "v11-why-ce-01",
+      "kind": "counterexample",
+      "points": 3.0,
+      "prompt": "Give a legal situation on one of these boards at which the quoted sentence is false.",
+      "quoted": "The manual's `laws:` section contains the line\n    invariant box_row_parity (Box.pos.row) mod 2 = 1 [status: proven]\nwhich asserts that the row the Box stands in is always odd. Name a situation, on one of the boards listed in this item, at which that assertion is false. A situation is legal when both cells are on the board, neither is a wall, and the Player is not standing on the Box.",
+      "tags": [
+        "rule_justification",
+        "counterexample"
+      ]
+    }
+  ],
+  "n_items": 31,
+  "paper_id": "v11-handover-a0",
+  "question_type": "handover",
+  "rubric_digest": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+  "rubric_module_digest": "35f517a3f9c3b5739222fe0f36ab861e4c7614d2fef6a75e5575cef2bb734ce2",
+  "schema": "exam/v0.1",
+  "total_points": 58.0,
+  "world": {
+    "cut_version": "v1",
+    "dev_pile": [
+      "ar25-0c556536",
+      "g50t-5849a774",
+      "sk48-d8078629",
+      "tn36-ef4dde99"
+    ],
+    "generated_worlds_available": 20,
+    "n_sealed": 21,
+    "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
+    "synthetic_worlds": [
+      "a0",
+      "a0-prime",
+      "a2"
+    ],
+    "world_id": "a0"
+  }
+}

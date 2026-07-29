@@ -1,0 +1,355 @@
+{
+  "by_class": {
+    "free": 8,
+    "memorised": 8,
+    "theory": 8
+  },
+  "by_rule": {
+    "blocked_by_block": {
+      "free": 4
+    },
+    "blocked_by_wall": {
+      "free": 4
+    },
+    "push": {
+      "memorised": 2,
+      "theory": 2
+    },
+    "toggle_switch": {
+      "memorised": 2,
+      "theory": 2
+    },
+    "walk": {
+      "memorised": 2,
+      "theory": 2
+    },
+    "walk_through_door": {
+      "memorised": 2,
+      "theory": 2
+    }
+  },
+  "by_split": {
+    "heldout": {
+      "free": 4,
+      "theory": 8
+    },
+    "replay": {
+      "free": 4,
+      "memorised": 8
+    }
+  },
+  "feasible": true,
+  "items": [
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t2-switch-push-000",
+      "rule": "blocked_by_wall",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-001",
+      "rule": "push",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-002",
+      "rule": "walk",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-003",
+      "rule": "walk",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-004",
+      "rule": "walk_through_door",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-005",
+      "rule": "walk_through_door",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-006",
+      "rule": "toggle_switch",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-007",
+      "rule": "toggle_switch",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-008",
+      "rule": "toggle_switch",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-009",
+      "rule": "push",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t2-switch-push-010",
+      "rule": "blocked_by_block",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-011",
+      "rule": "toggle_switch",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-012",
+      "rule": "push",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t2-switch-push-013",
+      "rule": "blocked_by_wall",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t2-switch-push-014",
+      "rule": "blocked_by_wall",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-015",
+      "rule": "walk",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t2-switch-push-016",
+      "rule": "blocked_by_wall",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t2-switch-push-017",
+      "rule": "blocked_by_block",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-018",
+      "rule": "walk_through_door",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-019",
+      "rule": "walk",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t2-switch-push-020",
+      "rule": "blocked_by_block",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t2-switch-push-021",
+      "rule": "blocked_by_block",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-022",
+      "rule": "push",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t2-switch-push-023",
+      "rule": "walk_through_door",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    }
+  ],
+  "n_items": 24,
+  "paper_id": "v2-heldout-t2-switch-push",
+  "per_class": 2,
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+  "summary": {
+    "anomalies": [],
+    "barren_rules": [
+      "blocked_by_block",
+      "blocked_by_wall"
+    ],
+    "dead": 0,
+    "effective_size": 8,
+    "free": 8,
+    "memorised": 8,
+    "n_items": 24,
+    "theory": 8,
+    "theory_items": 8,
+    "theory_share": 0.333333,
+    "zero_discrimination": 8,
+    "zero_discrimination_share": 0.333333
+  },
+  "tier": 2,
+  "world_id": "t2-switch-push"
+}

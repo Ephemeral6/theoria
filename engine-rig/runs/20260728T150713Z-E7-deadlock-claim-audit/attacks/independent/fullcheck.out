@@ -1,0 +1,29 @@
+0/3342  relax_disagree=0  truth_vs_relax_disagree=0
+200/3342  relax_disagree=0  truth_vs_relax_disagree=0
+400/3342  relax_disagree=0  truth_vs_relax_disagree=0
+600/3342  relax_disagree=0  truth_vs_relax_disagree=0
+800/3342  relax_disagree=0  truth_vs_relax_disagree=0
+1000/3342  relax_disagree=0  truth_vs_relax_disagree=0
+1200/3342  relax_disagree=0  truth_vs_relax_disagree=0
+1400/3342  relax_disagree=0  truth_vs_relax_disagree=0
+1600/3342  relax_disagree=0  truth_vs_relax_disagree=0
+1800/3342  relax_disagree=0  truth_vs_relax_disagree=0
+2000/3342  relax_disagree=0  truth_vs_relax_disagree=0
+2200/3342  relax_disagree=0  truth_vs_relax_disagree=0
+2400/3342  relax_disagree=0  truth_vs_relax_disagree=0
+2600/3342  relax_disagree=0  truth_vs_relax_disagree=0
+2800/3342  relax_disagree=0  truth_vs_relax_disagree=0
+3000/3342  relax_disagree=0  truth_vs_relax_disagree=0
+3200/3342  relax_disagree=0  truth_vs_relax_disagree=0
+{
+  "fd_truly_dead_differs_from_fd_relaxation_dead": [],
+  "n_checked": 3342,
+  "n_fd_relaxation_dead": 2904,
+  "n_fd_relaxation_dead_outside_fd_truly_dead": 0,
+  "n_fd_truly_dead_by_blind_search": 2904,
+  "n_fd_truly_dead_outside_fd_relaxation": 0,
+  "n_python_relaxation_dead": 2904,
+  "n_theorem_dead": 1624,
+  "n_theorem_dead_outside_fd_relaxation": 0,
+  "python_relaxation_disagrees_with_fd": []
+}

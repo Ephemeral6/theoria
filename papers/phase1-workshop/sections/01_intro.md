@@ -18,9 +18,10 @@ transition function, it agrees on **233 of 236** reachable (state, action) pairs
 never have contained, and on those three its accuracy is **0.000**
 (`cold-start-a0/artifacts/score_vs_truth.json`, field `held_out.accuracy`). The
 metrics battery, recomputing over the same trajectory, reports the same manual at
-**K4 evidence coverage = 1.000 and K2 held-out accuracy = 0.000**
-(`battery/REPORT_V0.md`), and draws the consequence for measurement rather than
-for A0:
+**K4 evidence coverage = 1.000 and K2 held-out accuracy = 0.000** — K4 over 7
+annotated clauses, K2 over 3 pairs with 0 agreements, unchanged from v0 to v2
+(`battery/artifacts/capability_spectrum.json`, run `a0-base`) — and draws the
+consequence for measurement rather than for A0:
 
 > Evidence coverage rewards precisely the caution that held-out accuracy
 > punishes. A battery reporting K4 alone would show a flawless manual.
@@ -108,19 +109,20 @@ Scoped to what was actually run:
    loop that closes it** — 打脸 (refute) → 定位 (locate) → 戳探 (probe) → 修订
    (revise) → 重证 (re-certify) → 解出 (solve), each beat settled by an artefact
    (`cold-start-a2/artifacts/loop_ledger.json`: 8 beats, 8 pass, 0 fail).
-4. **A metrics battery recomputed over trajectories that already existed** — 26
-   runs, 4 development-pile games, 2 arms, at zero new game spend and zero model
-   calls (`battery/REPORT_V0.md`) — with directional predictions pre-registered
-   before the first recompute, including a seal declaration marking which A0
-   predictions are post-dictions (`battery/PREDICTIONS.md`).
+4. **A metrics battery recomputed over trajectories that already existed** — 95
+   runs, 5 arms, 4 development-pile games, 38 metrics, at zero new game spend and
+   zero model calls (`battery/artifacts/capability_spectrum.json`;
+   `battery/REPORT_V2.md`) — with directional predictions pre-registered before
+   each recompute, including a seal declaration marking which A0 predictions are
+   post-dictions (`battery/PREDICTIONS.md`).
 
 **Scope limit, stated here rather than deferred.** Every pipeline result in this
 paper — A0, A0′, A1, A2 — was produced offline, on small deterministic worlds
 this project built itself; no game was played for it and no network was touched
 (`cold-start-a2/A2_REPORT.md` §7). The battery is passive: it recomputes over
 trajectories that already existed and spends nothing new
-(`battery/REPORT_V0.md`). No sealed-pile game was played or read for any result
-here — though §7.1 records that the sealed pile is nonetheless no longer clean,
+(`battery/REPORT_V2.md`). No sealed-pile game was played or read for any result
+here — though §10.1 records that the sealed pile is nonetheless no longer clean,
 for reasons that have nothing to do with this paper's experiments. And the
 theorize step is not a measured language-model step: the manuals are checked in
 as artefacts, written by hand from engine output, so

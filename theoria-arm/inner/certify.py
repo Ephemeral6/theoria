@@ -31,6 +31,19 @@ with an LP certificate, so on this world the expensive layer is usually not
 refusals fired and why; this file reports whether a Lean file exists, whether
 `lean` is on PATH, and what came back. An unavailable proof layer is a gap to
 report, never a green tick to award.
+
+**A crash is not a finding (E14).** The constraint-9 sweep used to swallow
+every non-`AmbiguousTransition` exception with a bare `pass`, then report
+`ok: true` and "no (state, action) among N x M admitted two rules". Two things
+were wrong with that sentence at once. `N x M` is the *nominal* product, not
+the number of pairs actually adjudicated -- a pair whose `step` crashed was
+counted into the claimed coverage and never judged -- and the generated `step`
+is documented total, so a crash there is a defect rather than an inapplicable
+action. The arithmetic therefore ran backwards: the more the predictor crashed,
+the more pairs got skipped, the cleaner the certificate came out. The sweep now
+counts crashes, reports `pairs_checked` alongside `pairs_nominal`, records
+`AMBIGUITY_SAMPLE_CAP` positively, and refuses `ok: true` while the crash count
+is non-zero.
 """
 
 import os
@@ -45,9 +58,68 @@ from world.frames import Grid, diff_cells
 #: report when it bites.
 AMBIGUITY_SAMPLE_CAP = 400
 
+#: Verbatim crash messages kept in the artifact. The count is never capped.
+CRASH_SAMPLE_CAP = 8
+
+
+class _NoAmbiguityClassDeclared(Exception):
+    """Stand-in for a missing `AmbiguousTransition`, and it is never raised.
+
+    E14 (adversarial review, correction 10). The default used to be `Exception`,
+    which turns `except ambiguous` into `except Exception` and files **every**
+    crash as a constraint-9 clash -- an assertion that two rules claimed one
+    object, i.e. a finding about the world, manufactured out of a bug. It also
+    left `pairs_checked` above `pairs_nominal` with a crash count of zero.
+    A class nothing raises means a manual without a declared ambiguity type
+    simply has no ambiguity to find, and its crashes stay crashes.
+    """
+
 
 class CertifyReport(dict):
     pass
+
+
+class StepCrashLog:
+    """Exceptions out of the generated `step`, counted, typed and located.
+
+    Emitted whether or not it is empty, for the same reason `plan.py` does: a
+    printed zero is evidence, an absent one is indistinguishable from a check
+    that never looked.
+    """
+
+    def __init__(self, site: str) -> None:
+        self.site = site
+        self.count = 0
+        self.by_type: Dict[str, int] = {}
+        self.by_phase: Dict[str, int] = {}
+        self.samples: List[Dict[str, Any]] = []
+
+    def record(self, exc: BaseException, *, phase: str,
+               detail: Optional[Dict[str, Any]] = None) -> None:
+        self.count += 1
+        kind = type(exc).__name__
+        self.by_type[kind] = self.by_type.get(kind, 0) + 1
+        self.by_phase[phase] = self.by_phase.get(phase, 0) + 1
+        if len(self.samples) < CRASH_SAMPLE_CAP:
+            entry = {"type": kind, "message": str(exc)[:400], "phase": phase}
+            entry.update(detail or {})
+            self.samples.append(entry)
+
+    def as_json(self) -> Dict[str, Any]:
+        return {
+            "site": self.site,
+            "count": self.count,
+            "by_type": dict(sorted(self.by_type.items())),
+            "by_phase": dict(sorted(self.by_phase.items())),
+            "samples": self.samples,
+            "sample_cap": CRASH_SAMPLE_CAP,
+            "note": ("`step` is documented total and its only declared "
+                     "exception, AmbiguousTransition, is a constraint-9 "
+                     "violation which is counted as a clash rather than here. "
+                     "Anything counted here is a bug in the compiled manual, "
+                     "and each one removed a pair from adjudication while "
+                     "leaving it inside the nominal coverage."),
+        }
 
 
 def cheap(books, store, action_of) -> CertifyReport:
@@ -63,7 +135,7 @@ def cheap(books, store, action_of) -> CertifyReport:
     render = namespace["render"]
     step = namespace["step"]
     initial_state = namespace["initial_state"]
-    ambiguous = namespace.get("AmbiguousTransition", Exception)
+    ambiguous = namespace.get("AmbiguousTransition", _NoAmbiguityClassDeclared)
 
     observed = store.grids
     if not observed:
@@ -176,45 +248,101 @@ def cheap(books, store, action_of) -> CertifyReport:
 
 def _ambiguity(namespace, store, action_of) -> Dict[str, Any]:
     """Drive the visited states through every declared action."""
-    ambiguous = namespace.get("AmbiguousTransition", Exception)
+    ambiguous = namespace.get("AmbiguousTransition", _NoAmbiguityClassDeclared)
     step = namespace["step"]
     initial_state = namespace["initial_state"]
     actions = list(namespace.get("ACTIONS") or [])
+    crashes = StepCrashLog("certify._ambiguity: step(state, action)")
     if not actions:
         return {"ok": True, "scope": "sampled", "states": 0, "actions": 0,
+                "pairs_nominal": 0, "pairs_checked": 0,
+                "sample_cap": AMBIGUITY_SAMPLE_CAP,
+                "step_crashes": crashes.as_json(),
                 "detail": "the manual declares no actions, so no pair of rules "
                           "can claim one object"}
 
     # Reconstruct the visited states by replaying; a state the manual never
     # reaches cannot be checked from here, which is exactly why this is sampled.
     states = [initial_state()]
-    for arc_action in store.actions[:AMBIGUITY_SAMPLE_CAP]:
+    replay_truncated = False
+    for i, arc_action in enumerate(store.actions[:AMBIGUITY_SAMPLE_CAP]):
         if arc_action is None:
             break
         try:
             states.append(step(states[-1], action_of(arc_action)))
-        except Exception:                              # noqa: BLE001
+        except Exception as exc:                       # noqa: BLE001
+            # E14: was a bare `break`. It still breaks -- carrying on from a
+            # state the manual could not produce would be worse -- but the
+            # truncation is now on the record instead of shortening the sweep
+            # in silence.
+            crashes.record(exc, phase="reconstruct",
+                           detail={"at_action_index": i,
+                                   "arc_action": str(arc_action)})
+            replay_truncated = True
             break
 
+    swept = states[:AMBIGUITY_SAMPLE_CAP]
     clashes = []
-    for state in states[:AMBIGUITY_SAMPLE_CAP]:
+    pairs_checked = 0
+    for state in swept:
         for action in actions:
             try:
                 step(state, action)
             except ambiguous as exc:                   # noqa: B902
                 clashes.append({"action": list(action), "detail": str(exc)})
-            except Exception:                          # noqa: BLE001
-                pass
-    return {
-        "ok": not clashes,
+            except Exception as exc:                   # noqa: BLE001
+                # E14: was a bare `pass`. The pair stayed inside the claimed
+                # denominator and was never judged.
+                crashes.record(exc, phase="sweep",
+                               detail={"action": list(action)})
+                continue
+            pairs_checked += 1
+
+    # The denominator is the number of states actually swept, not `len(states)`
+    # -- the old detail line reported the latter, which could exceed the former
+    # by one once the cap bit (initial state + 400 replayed).
+    pairs_nominal = len(swept) * len(actions)
+    out: Dict[str, Any] = {
         "scope": "sampled",
-        "states": len(states),
+        "states": len(swept),
+        "states_reconstructed": len(states),
         "actions": len(actions),
+        "sample_cap": AMBIGUITY_SAMPLE_CAP,
+        "cap_reached": len(states) > AMBIGUITY_SAMPLE_CAP,
+        "replay_truncated_by_crash": replay_truncated,
+        "pairs_nominal": pairs_nominal,
+        "pairs_checked": pairs_checked + len(clashes),
         "clashes": clashes[:12],
-        "detail": ("no (state, action) among %d x %d admitted two rules"
-                   % (len(states), len(actions)) if not clashes else
-                   "%d ambiguous transitions found" % len(clashes)),
+        "n_clashes": len(clashes),
+        "step_crashes": crashes.as_json(),
     }
+    if crashes.count:
+        out["ok"] = False
+        out["error"] = ("step raised %d time(s) (%s); %d of %d (state, action) "
+                        "pairs went unadjudicated"
+                        % (crashes.count,
+                           ", ".join("%s x%d" % (k, v)
+                                     for k, v in sorted(crashes.by_type.items())),
+                           pairs_nominal - out["pairs_checked"], pairs_nominal))
+        out["detail"] = (
+            "constraint 9 is NOT certified: %d of %d (state, action) pairs were "
+            "adjudicated and %d call(s) to `step` raised. `step` is documented "
+            "total, so a crash is a defect in the compiled manual, and a pair "
+            "that crashed is a pair on which ambiguity was never decided -- "
+            "counting it inside the coverage would let a crashier manual look "
+            "cleaner. %s"
+            % (out["pairs_checked"], pairs_nominal, crashes.count,
+               "%d ambiguous transitions were also found." % len(clashes)
+               if clashes else "No ambiguity was found among the pairs that "
+                               "did run, which settles nothing about the rest."))
+        return out
+    out["ok"] = not clashes
+    out["detail"] = (
+        "no (state, action) among %d x %d admitted two rules, and all %d pairs "
+        "were adjudicated -- no call to `step` raised"
+        % (len(swept), len(actions), pairs_nominal) if not clashes else
+        "%d ambiguous transitions found" % len(clashes))
+    return out
 
 
 def expensive(books, compile_result: Dict[str, Any]) -> CertifyReport:

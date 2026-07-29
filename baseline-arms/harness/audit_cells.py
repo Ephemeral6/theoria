@@ -81,6 +81,23 @@ def scorecard_for(run_id: str, probes) -> Optional[Dict[str, Any]]:
     return close or snapshot
 
 
+def reached_api(step: Dict[str, Any]) -> bool:
+    """Did this step actually put a request on the wire?
+
+    Inferred from `http_status` rather than asserted by a field, because the
+    ledger is append-only and the records that first needed this distinction
+    were already written. A failed step that carries an HTTP status was refused
+    by the server; one that carries none -- a GIVE UP, an unparseable reply --
+    never got that far. `reached_api` is honoured when a writer supplies it, so
+    newer records can state it instead of being read for it.
+    """
+    if "reached_api" in step:
+        return bool(step["reached_api"])
+    if not step.get("failed"):
+        return True
+    return step.get("http_status") is not None
+
+
 def audit_run(cell: Dict[str, Any], records, probes) -> Dict[str, Any]:
     run_id = cell.get("run_id")
     steps = [r for r in records if r.get("run_id") == run_id and "frame" in r]
@@ -91,14 +108,24 @@ def audit_run(cell: Dict[str, Any], records, probes) -> Dict[str, Any]:
     actions = [s for s in steps if s.get("action") != "RESET"]
     ok = [s for s in actions if not s.get("failed")]
     failed = [s for s in actions if s.get("failed")]
+    # `failed` covers two different events that share one flag, and reading
+    # them as one made this audit report a false discrepancy on the first cell
+    # where the model chose to stop. A refused action is the server saying no;
+    # a GIVE UP or an unparseable reply never reached the server at all. Both
+    # are written with `failed=True` and a null frame, because both produced no
+    # frame (D-006) -- but only the first is what `actions_failed` counts, and
+    # only the first says anything about the API.
+    refused = [s for s in failed if reached_api(s)]
+    stops = [s for s in failed if not reached_api(s)]
 
     # 1. counts
     if len(ok) != (cell.get("actions_ok") or 0):
         findings.append("actions_ok: summary %s, ledger %s"
                         % (cell.get("actions_ok"), len(ok)))
-    if len(failed) != (cell.get("actions_failed") or 0):
-        findings.append("actions_failed: summary %s, ledger %s"
-                        % (cell.get("actions_failed"), len(failed)))
+    if len(refused) != (cell.get("actions_failed") or 0):
+        findings.append("actions_failed: summary %s, ledger %s (server-refused "
+                        "actions; %d non-action stop(s) counted separately)"
+                        % (cell.get("actions_failed"), len(refused), len(stops)))
     if len(calls) != (cell.get("model_calls") or 0):
         findings.append("model_calls: summary %s, ledger %s"
                         % (cell.get("model_calls"), len(calls)))
@@ -135,13 +162,14 @@ def audit_run(cell: Dict[str, Any], records, probes) -> Dict[str, Any]:
         if ca is not None:
             if ca == len(ok):
                 recon["verdict"] = "matches successful actions only"
-            elif ca == len(ok) + len(failed):
-                recon["verdict"] = "matches successful + failed"
+            elif ca == len(ok) + len(refused):
+                recon["verdict"] = "matches successful + refused"
             elif card.get("_source") == "open_card_snapshot" and ca <= len(ok):
                 recon["verdict"] = ("snapshot taken mid-episode (%d of %d actions); "
                                     "consistent, not final" % (ca, len(ok)))
             else:
-                recon["verdict"] = "MISMATCH: card %s vs ledger ok=%d failed=%d" % (ca, len(ok), len(failed))
+                recon["verdict"] = ("MISMATCH: card %s vs ledger ok=%d refused=%d "
+                                    "stops=%d" % (ca, len(ok), len(refused), len(stops)))
                 findings.append(recon["verdict"])
         if card.get("total_levels_completed") is not None \
                 and card["total_levels_completed"] != (cell.get("levels_completed") or 0) \
@@ -153,7 +181,8 @@ def audit_run(cell: Dict[str, Any], records, probes) -> Dict[str, Any]:
 
     return {"run_id": run_id, "game_id": cell.get("game_id"), "repeat": cell.get("repeat"),
             "outcome": cell.get("outcome"), "ledger_steps": len(steps),
-            "ledger_actions_ok": len(ok), "ledger_actions_failed": len(failed),
+            "ledger_actions_ok": len(ok), "ledger_actions_failed": len(refused),
+            "ledger_non_action_stops": len(stops),
             "ledger_model_calls": len(calls), "ledger_cost_usd": round(ledger_cost, 4),
             "reconciliation": recon, "findings": findings}
 

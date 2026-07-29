@@ -1,0 +1,10 @@
+runs           48 (4 games, arms: bare_cc, theoria_a0, theoria_a0_spike, theoria_a2)
+campaigns      m4-pilot, phase3-unit-price-recheck, phase3-unit-price-remeasure, phase3-variance-envelope, unlabelled
+metrics        38 registered, 681 computed values
+main table     
+reference      E1, E2, E3, E4, E5, E6, E7, K1, K10, K11, K12, K13, K14, K2, K3, K4, K5, K6, K7, K8, K9, M1, M2, M3, M4, M5, M6, P1, P2, P3, P4, P5, X1, X2, X3, X4, X5, X6
+process 1      bare_cc (weaker) vs schema_repro (stronger), paired by game | schema arm available: False | 0 of 38 metrics pair on >=2 games
+arm contrast   7 of 38 metrics have data on both sides
+unvalidated    21 metrics never computed on a control arm: K1, K10, K11, K12, K13, K14, K2, K3, K4, K5, K6, K7, K8, K9, M1, M2, M3, M4, M5, M6, P4
+power          a two-sided sign test needs 6 non-tied paired games to be able to reach p<0.05 at all; the pilot has 4
+artefacts      battery/runs/20260729T025515Z-V18-battery-prereg-check/recompute

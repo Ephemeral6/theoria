@@ -1,0 +1,9 @@
+{
+  "claim": "unsolvable",
+  "kind": "inductive_invariant",
+  "name": "A09-universal-invariant",
+  "predicate": [
+    "and"
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

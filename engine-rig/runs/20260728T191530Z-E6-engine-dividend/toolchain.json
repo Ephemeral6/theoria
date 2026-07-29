@@ -1,0 +1,27 @@
+{
+  "available": true,
+  "driver": "C:/Users/user/Desktop/theoria/.worktrees/p13/engine-rig/.toolchain/downward/fast-downward.py",
+  "why_not_in_the_repository": ".toolchain/ is gitignored by design (~1.6 GB of compiler, planner and build tree). See P-13.",
+  "reproducibility_gap": "Every Fast Downward number in this run came from a binary that is not tracked by git and cannot be rebuilt from the repository alone. The repo's byte-reproducibility requirement does not cover them. What replaces it is the hash, commit and build command below: a rebuild that hashes differently is a question a reader can raise.",
+  "toolchain_manifest": "engine-rig/runs/p13-fd-real/TOOLCHAIN_MANIFEST.md",
+  "toolchain_manifest_present": true,
+  "build_command": "cmake -G Ninja -S src -B builds/release -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER=<mingw64>/bin/gcc.exe -DCMAKE_CXX_COMPILER=<mingw64>/bin/g++.exe -DCMAKE_EXE_LINKER_FLAGS=\"-static\" && cmake --build builds/release",
+  "expected": {
+    "binary_sha256": "645671ae40d825478a043a9f94c856dc6130a11c166b3393837c153c5020aee1",
+    "fd_commit": "7120aa01704bfe8e3b9b92c062a4f775bc89c7bd",
+    "fd_version": "Fast Downward 24.06+",
+    "compiler": "winlibs mingw-w64 GCC 16.1.0 (UCRT, posix threads, SEH, r3)"
+  },
+  "reported_version": "Fast Downward 24.06+",
+  "reported_revision": "7120aa0",
+  "binary": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\p13\\engine-rig\\.toolchain\\downward\\builds\\release\\bin\\downward.exe",
+  "binary_sha256": "645671ae40d825478a043a9f94c856dc6130a11c166b3393837c153c5020aee1",
+  "binary_bytes": 280538976,
+  "matches_p13_manifest": true,
+  "notes": [],
+  "checks_against_p13": {
+    "binary_sha256": true,
+    "fd_commit": true,
+    "fd_version": true
+  }
+}

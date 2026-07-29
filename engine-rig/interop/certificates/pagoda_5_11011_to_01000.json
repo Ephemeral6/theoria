@@ -22,7 +22,7 @@
       ]
     },
     "inv_closed": {
-      "checked_over": "all move instances on the full state space",
+      "checked_over": "the 6 move instances this document lists",
       "holds": true,
       "n_checked": 6,
       "statement": "every legal move has delta <= 0",

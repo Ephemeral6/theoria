@@ -361,9 +361,129 @@ Things the world said that `dsl_grammar_v0.1` cannot.
 | E-05 | a weight function over cells for a pagoda invariant | the vector lives in the problem instance (M5) | same as E-04 |
 | E-06 | a proof method for goals no linear pagoda covers | **discharged** — the certificate covers what it covers, exhaustion closes the rest, each goal attributed to its method | see below |
 | E-07 | saying that two live instances of one type never share a cell | **discharged** — `unique` on a field (`dsl_grammar_v0.2` revision item 12) | see below |
+| E-08 | a guard that counts (`count(Token, present = false) >= k`) — the count-lock gate | **discharged** — one rung, in the guard language; see below | the rung below it is a quantifier and it is deliberately not taken |
+| E-09 | putting a *named track* in a *place*: "the object I am about to step onto is **that** one" (`faces(T,D)`) — the miner vocabulary, not the grammar | **discharged** — one rung, mover-relative, one step; see below | 2 bits per repaired transition paid in the segmentation script, and the pass that pays them is the one place the pipeline does not adjudicate by compression |
 
 E-03 is the one to fix first: a manual whose default behaviour is a comment is
 not a manual.
+
+### E-08, in full — the widening, and the world that did *not* force it
+
+**What was wanted.** `worldgen`'s `t2-lock-fragile` has a gate that becomes
+passable once three tokens have been picked up, and picking a token up only makes
+it stop being drawn. A manual for that world has to write
+
+    rule gate_opens
+      when act=open(Gate) and count(Token, present = false) >= 3 then vanished(Gate)
+
+and under v0.3 it could not. Not for the reason one would guess: `>=` was already
+legal in a guard, and so was the shape of the call. `count` was implemented
+**once, inline in the goal compiler, reachable only under `=`**, and a guard that
+mentioned it reached `unknown predicate 'count'`. The widening is therefore
+mostly a lifting: one `_count_expr`, shared by the goal and the guard, so that a
+manual cannot count one way when it predicts and another way when it decides it
+has won.
+
+**One rung, and the rung is named.** The condition is a single
+`<field> = <value>` test over the declared instances of one type. No quantifier,
+no nested count, no counting of cells. Each of those is refused with its own
+message and each refusal has a test. A `forall` is the next rung and it needs its
+own forcing world; C9's work order says so and this entry is the reason to hold
+to it.
+
+**A correction the lifting exposed.** `count(<Type>)` with no condition used to
+compile to a literal `1` per declared instance — a constant. So `count(Door)`
+stayed 1 after the Door vanished, and the A0 manual's own `door_latch` invariant
+(`count(Button, 8) + count(Door) = 1`) is false as written on any state where the
+Door is gone. Nothing caught it because invariants are never compiled and no
+shipped **goal** exercised a vanish. It now counts present instances.
+
+**The world that forced this is not the world it fixes, and that is the point of
+having a ledger.** The upstream report
+(`monitor/inbox/archive/20260728T093000Z-W-1610-…`) and the C9 work order both
+concluded that `t2-lock-fragile` fails to mine because the relational vocabulary
+cannot count. Measured before building on it: a counting atom separates **zero**
+of the 276 transition pairs the miner is stuck on, and the argument closes rather
+than merely failing — a colour-cardinality atom is a function of the frame's
+colour histogram, and all 276 stuck pairs have identical histograms. The real
+cause is that `multi_miner.mover_track` selects a *token* as the mover on any
+world with consumables, because the segmenter hands the agent's identity to a
+vanishing object; every positional atom is then anchored on something that never
+moves. Evidence and four standalone probes:
+`theory-compiler/runs/20260728T142307Z-C9-count-lock-vocabulary/FINDING_premise.md`.
+
+So this entry's provenance is the **grammar**, not the miner: a hand-written
+manual for a count-lock world cannot state its own gate rule, which is true
+whatever any engine can propose, and is checked by
+`theory-compiler/tests/fixtures/countlock_theory.dsl` compiling and predicting
+the threshold correctly at 0, 1, 2 and 3 tokens. The miner's counting atom ships
+alongside it with its measured benefit recorded as **zero on the only world that
+asked for it** — see that run's `RUN_STATE.md`, which is where a widening that
+did not pay belongs rather than in a footnote.
+
+### E-09, in full — the vocabulary knew about tracks and about places, never both
+
+**Which world forced it.** `worldgen`'s `t2-lock-fragile`, transition 31 — the
+same world as E-08, and that is not a coincidence but it *is* a different gap.
+E-08 was cut from a misattribution: the miner was stuck because a token had been
+handed the agent's identity, not because it could not count. With the
+segmentation repaired (`cold-start-a0/pipeline/identity_swap.py`) the world goes
+from **19 failing mining groups to one**, and that one is real:
+
+    FAILS  track=obj1 action=RIGHT effect=('none',0,0,None)  (23 positives)
+    NoSeparatingGuard: no literal separates transition 31 from the positives
+
+**What v1 could not say.** The rule is "this token does nothing when the agent
+presses RIGHT", and the transition it must exclude is the one where the agent,
+standing directly to its left, steps onto it and eats it. `a0_relational_v1` was
+relational about *colours and strips*, and indexed by *track*, but it had no atom
+that put a named track in a place:
+
+| atom | why it cannot separate t=31 |
+|---|---|
+| `tcolor(RIGHT)==2` | "the cell ahead is a token" — also true at t=71, where the agent eats a **different** token and obj1 does nothing. Violates 1 positive. |
+| `at(1,2)` | reads the mover's own anchor; the agent stands there again at t=59 and t=69, after obj1 is gone. Violates 2 positives. |
+| `present(obj1)` / `color(obj1)==2` | indexed by track but blind to where it is. True at t=31. |
+| `count(k)>=t` | reads the frame, not a relation. `count(0)` is 19 at t=31 and ranges 19–22 over the positives, so t=31 sits **inside** the positives' range on every colour. |
+
+Measured rather than argued, and adversarially: of the 120 atoms in the
+vocabulary at the time, **0** are true on all 23 positives and false at t=31; only
+19 hold on all the positives and all 19 also hold at t=31. The conjunction of all
+19 — the strongest guard the vocabulary can build for this rule — still admits
+t=31. So no conjunction of *any* size works, and the failure is expressivity
+rather than CEGIS search order. Probe:
+`theory-compiler/runs/20260728T173400Z-C9-mover-identity/probes/09_adversarial_no_atom_separates.py`.
+
+**What was added.** One atom. `faces(T,D)` — *track T's anchor is where the
+mover's anchor would be after one step in direction D*. Four limits, each with a
+test: one step only (distance is not a parameter); mover-relative only (no
+relation between two non-mover tracks); anchors, not body overlap (that is the
+touching-objects gap and is its own row); and only `(track, direction)` pairs the
+trajectory actually exhibited, since a pair that is never true is a constant.
+
+**What it cost.** Nothing, in the currency that matters here: ten atom kinds
+still fit in four bits, so unlike E-08 no existing atom was re-priced. `faces` is
+priced at `2 * (_TRACK_BITS + _DIR_BITS)` = 8 bits of payload — the same payload
+as `at(r,c)`, by the published rule that an identity literal costs twice a
+predicate. At the predicate price it would have been the cheapest atom in the
+vocabulary while being the most instance-bound one, and it would have displaced
+`tcolor` in guards with no need of it. Every mined guard in the tree is unchanged
+across the widening; exactly one new guard uses the new atom, and it is the rule
+that forced it:
+
+    obj1, RIGHT, nothing happens   <-   !faces(obj1,RIGHT) and act==RIGHT
+
+**What it did not fix, said plainly.** `t2-lock-fragile` now passes L1, L2 and
+L3a (replay 110/110, render 287/287) and mines 36 rules. Its held-out accuracy is
+**0.497**, and the reason is visible in the rule the lock produces: the gate
+opens exactly once, so CEGIS separates that single witness with the cheapest
+conjunction available (`!clear(strip(RIGHT)) and !present(obj1) and act==RIGHT
+and free(strip(LEFT))`) rather than with a count. **`count` appears in no mined
+guard on this world even now.** E-08's miner-side atom therefore has its measured
+benefit at zero for the second time, on the world that asked for it, under
+correct tracking — which is the cleaner test W-1252 could not run. That is
+recorded here rather than argued away; the DSL-side half of E-08 is untouched by
+it, because a hand-written manual still has to be able to state the gate.
 
 ### E-06, in full — one proposition, two methods
 

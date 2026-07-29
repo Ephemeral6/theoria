@@ -17,6 +17,9 @@
 #   6. the committed tree matches a fresh build -- a stale committed figure
 #      cannot hide behind a green determinism check
 #   7. no figure script reads a path that sources.py does not declare
+#   8. everything on disk that the figures are supposed to draw is reaching
+#      them -- and the probe that says so is shown failing on the tree it was
+#      written for
 #
 # Runs every gate and reports all failures, rather than stopping at the first,
 # except where a later gate cannot mean anything without an earlier one.
@@ -185,6 +188,51 @@ sys.exit(1 if hits else 0)
     sed 's/^/    /' "$SCRATCH/undeclared.txt" | head -10 >&2
 else
     say "ok  (every read goes through sources.py)"
+fi
+
+# ---------------------------------------------------------------------------
+step "8. coverage: everything on disk reaches the figure"
+# ---------------------------------------------------------------------------
+# Gates 1-7 are all satisfied by a figure that quietly omits data. P8 found two
+# such omissions in a tree that was green on every one of them: two tracked
+# roll-ups the figure never read, and a fourth theoria run directory nobody had
+# added to the tuple. check_coverage.py walks the tree itself and asks whether
+# what is on disk reached the picture.
+#
+# The self-test runs FIRST and is not optional. It reconstructs the pre-P8 tree
+# and requires the probe to fail on it; a coverage probe that cannot be shown
+# failing is a green light with nothing behind it.
+if ! "$PYTHON" check_coverage.py --self-test > "$SCRATCH/coverage.selftest.txt" 2>&1; then
+    fail "the coverage probe's negative control did not fire:"
+    sed 's/^/    /' "$SCRATCH/coverage.selftest.txt" | head -20 >&2
+else
+    say "ok  (negative control fires)"
+fi
+if ! "$PYTHON" check_coverage.py > "$SCRATCH/coverage.txt" 2>&1; then
+    fail "data on disk is not reaching the figures:"
+    sed 's/^/    /' "$SCRATCH/coverage.txt" | head -20 >&2
+else
+    say "ok  ($(tail -n 2 "$SCRATCH/coverage.txt" | tr '\n' ' ' | sed 's/  */ /g'))"
+fi
+
+# ---------------------------------------------------------------------------
+say "== 9. the cross-arm cost claim reconciles, and the check is shown refusing =="
+# ---------------------------------------------------------------------------
+# `cost x actions`, over the same declared sources fig02 reads, computed four
+# independent ways. The negative control runs FIRST: a reconciliation that has
+# never been seen to refuse cannot be read as agreement.
+if "$PYTHON" reconcile_cost.py --selftest > "$SCRATCH/reconcile.selftest.txt" 2>&1; then
+    say "ok  (negative control fires: planted cost and action mismatches both refused)"
+else
+    fail "the reconciliation's negative control did not fire:"
+    sed 's/^/    /' "$SCRATCH/reconcile.selftest.txt" | head -20 >&2
+fi
+if "$PYTHON" reconcile_cost.py > "$SCRATCH/reconcile.txt" 2>&1; then
+    say "ok  ($(grep -E '^ +(AGREE|UNCORROBORATED|DISAGREE)' "$SCRATCH/reconcile.txt" | tr -s ' ' | paste -sd' ' -))"
+    grep -E "^  KNOWN DEFECT|^  STALE DECLARATION" "$SCRATCH/reconcile.txt" | sed "s/^/    /" || true
+else
+    fail "the arms do not agree on what a run cost or what it accomplished:"
+    sed 's/^/    /' "$SCRATCH/reconcile.txt" | head -20 >&2
 fi
 
 # ---------------------------------------------------------------------------

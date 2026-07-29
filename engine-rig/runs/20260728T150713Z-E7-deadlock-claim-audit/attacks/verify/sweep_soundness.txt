@@ -1,0 +1,88 @@
+behind               over 2000 states
+door-swap            solv=False reach=  1230 thm=  810 relax= 1183 true=  1230 outside=  0 unsound=0 h2unsolv=True
+far8-midplayer       over 2000 states
+four-tight           over 2000 states
+pillar               solv=False reach=   322 thm=  194 relax=  322 true=   322 outside=  0 unsound=0 h2unsolv=True
+stub-wall            solv=True  reach=   148 thm=   42 relax=  105 true=   105 outside=  0 unsound=0 h2unsolv=False
+swap-passage         over 2000 states
+swap-passage-strip   over 2000 states
+tee                  solv=True  reach=    14 thm=    0 relax=    0 true=     0 outside=  0 unsound=0 h2unsolv=False
+three-far            over 2000 states
+three-far8           over 2000 states
+rnd0000              solv=False reach=    64 thm=   64 relax=   64 true=    64 outside=  0 unsound=0 h2unsolv=True
+rnd0001              solv=False reach=    49 thm=   49 relax=   49 true=    49 outside=  0 unsound=0 h2unsolv=True
+rnd0002              solv=False reach=    13 thm=   13 relax=   13 true=    13 outside=  0 unsound=0 h2unsolv=True
+rnd0003              over 2000 states
+rnd0004              over 2000 states
+rnd0005              solv=False reach=   444 thm=  444 relax=  444 true=   444 outside=  0 unsound=0 h2unsolv=True
+rnd0006              solv=False reach=    12 thm=   12 relax=   12 true=    12 outside=  0 unsound=0 h2unsolv=True
+rnd0007              solv=False reach=    21 thm=   21 relax=   21 true=    21 outside=  0 unsound=0 h2unsolv=True
+rnd0008              solv=False reach=     1 thm=    1 relax=    1 true=     1 outside=  0 unsound=0 h2unsolv=True
+rnd0009              solv=False reach=  1749 thm= 1749 relax= 1749 true=  1749 outside=  0 unsound=0 h2unsolv=True
+rnd0010              over 2000 states
+rnd0011              over 2000 states
+rnd0012              over 2000 states
+rnd0013              solv=True  reach=   680 thm=  361 relax=  495 true=   495 outside=  0 unsound=0 h2unsolv=False
+rnd0014              solv=False reach=   537 thm=  537 relax=  537 true=   537 outside=  0 unsound=0 h2unsolv=True
+rnd0015              solv=False reach=   204 thm=  204 relax=  204 true=   204 outside=  0 unsound=0 h2unsolv=True
+rnd0016              solv=False reach=    19 thm=   19 relax=   19 true=    19 outside=  0 unsound=0 h2unsolv=True
+rnd0017              solv=False reach=   968 thm=  611 relax=  968 true=   968 outside=  0 unsound=0 h2unsolv=True
+rnd0018              solv=False reach=    13 thm=   13 relax=   13 true=    13 outside=  0 unsound=0 h2unsolv=True
+rnd0019              solv=False reach=   192 thm=  192 relax=  192 true=   192 outside=  0 unsound=0 h2unsolv=True
+rnd0020              solv=False reach=   440 thm=  440 relax=  440 true=   440 outside=  0 unsound=0 h2unsolv=True
+rnd0021              solv=False reach=    92 thm=   70 relax=   59 true=    92 outside= 11 unsound=0 h2unsolv=True  <<< OUTSIDE RELAXATION
+rnd0022              solv=False reach=    12 thm=   12 relax=   12 true=    12 outside=  0 unsound=0 h2unsolv=True
+rnd0023              solv=False reach=    11 thm=   11 relax=   11 true=    11 outside=  0 unsound=0 h2unsolv=True
+rnd0024              over 2000 states
+rnd0025              over 2000 states
+rnd0026              solv=False reach=  1524 thm= 1456 relax= 1524 true=  1524 outside=  0 unsound=0 h2unsolv=True
+rnd0027              over 2000 states
+rnd0028              solv=False reach=    42 thm=   42 relax=   42 true=    42 outside=  0 unsound=0 h2unsolv=True
+rnd0029              solv=False reach=    58 thm=   58 relax=   58 true=    58 outside=  0 unsound=0 h2unsolv=True
+rnd0030              solv=False reach=    21 thm=   21 relax=   21 true=    21 outside=  0 unsound=0 h2unsolv=True
+rnd0031              solv=False reach=    24 thm=   24 relax=   24 true=    24 outside=  0 unsound=0 h2unsolv=True
+rnd0032              solv=False reach=   128 thm=  128 relax=  128 true=   128 outside=  0 unsound=0 h2unsolv=True
+rnd0033              solv=False reach=     1 thm=    1 relax=    1 true=     1 outside=  0 unsound=0 h2unsolv=True
+rnd0034              over 2000 states
+rnd0035              over 2000 states
+rnd0036              over 2000 states
+rnd0037              over 2000 states
+rnd0038              over 2000 states
+rnd0039              solv=False reach=   552 thm=  552 relax=  552 true=   552 outside=  0 unsound=0 h2unsolv=True
+rnd0040              solv=False reach=    70 thm=   70 relax=   70 true=    70 outside=  0 unsound=0 h2unsolv=True
+rnd0041              over 2000 states
+rnd0042              solv=False reach=    23 thm=   23 relax=   23 true=    23 outside=  0 unsound=0 h2unsolv=True
+rnd0043              over 2000 states
+rnd0044              solv=False reach=    62 thm=   42 relax=   62 true=    62 outside=  0 unsound=0 h2unsolv=True
+rnd0045              solv=False reach=   115 thm=  115 relax=  115 true=   115 outside=  0 unsound=0 h2unsolv=True
+rnd0046              solv=False reach=    39 thm=   31 relax=   39 true=    39 outside=  0 unsound=0 h2unsolv=True
+rnd0047              solv=False reach=    30 thm=   30 relax=   30 true=    30 outside=  0 unsound=0 h2unsolv=True
+rnd0048              solv=False reach=   461 thm=  461 relax=  461 true=   461 outside=  0 unsound=0 h2unsolv=True
+rnd0049              over 2000 states
+rnd0050              solv=False reach=    12 thm=   12 relax=   12 true=    12 outside=  0 unsound=0 h2unsolv=True
+rnd0051              solv=False reach=    35 thm=   35 relax=   35 true=    35 outside=  0 unsound=0 h2unsolv=True
+rnd0052              over 2000 states
+rnd0053              over 2000 states
+rnd0054              over 2000 states
+rnd0055              solv=False reach=    32 thm=   32 relax=   32 true=    32 outside=  0 unsound=0 h2unsolv=True
+rnd0056              over 2000 states
+rnd0057              solv=False reach=   968 thm=  611 relax=  968 true=   968 outside=  0 unsound=0 h2unsolv=True
+rnd0058              over 2000 states
+rnd0059              over 2000 states
+
+{
+ "n_instances_analysed": 42,
+ "n_unsound": 0,
+ "instances_with_witnesses": [
+  "rnd0021"
+ ],
+ "n_solvable": 3,
+ "n_unsolvable": 39,
+ "n_with_nonvacuous_soundness_test": 3,
+ "n_h2_proves_unsolvable": 39,
+ "instances_h2_unsolvable_but_relaxation_alive_somewhere": [
+  "door-swap",
+  "rnd0021"
+ ]
+}
+wrote C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\verify\sweep_soundness.json

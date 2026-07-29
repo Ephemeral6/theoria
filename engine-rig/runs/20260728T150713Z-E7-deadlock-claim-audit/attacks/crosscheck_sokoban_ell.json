@@ -1,0 +1,176 @@
+{
+  "domain": "sokoban_domain.pddl",
+  "instance": "ell",
+  "kind": "sokoban",
+  "n_agree": 16,
+  "n_checked": 16,
+  "n_python_alive_fd_dead": 0,
+  "n_python_dead_fd_alive": 0,
+  "n_python_relaxation_dead": 241,
+  "n_reachable": 286,
+  "n_theorem_dead": 226,
+  "n_theorem_dead_outside_relaxation": 0,
+  "n_truly_dead": 286,
+  "rows": [
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 0
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 5
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 7
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 11
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 36
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 47
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 80
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 81
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 105
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 119
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 122
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": false,
+      "python_relaxation_dead": false,
+      "state": 144
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 161
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 194
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 225
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 255
+    }
+  ]
+}

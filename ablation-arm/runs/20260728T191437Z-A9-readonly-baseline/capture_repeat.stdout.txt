@@ -1,0 +1,16 @@
+trial  0: background=0 observed=0 reported=0 aligned=True
+trial  1: background=0 observed=0 reported=0 aligned=True
+trial  2: background=0 observed=0 reported=0 aligned=True
+trial  3: background=0 observed=0 reported=0 aligned=True
+trial  4: background=0 observed=0 reported=0 aligned=True
+trial  5: background=0 observed=0 reported=0 aligned=True
+trial  6: background=0 observed=0 reported=0 aligned=True
+trial  7: background=0 observed=0 reported=0 aligned=True
+trial  8: background=0 observed=0 reported=0 aligned=True
+trial  9: background=0 observed=0 reported=0 aligned=True
+trial 10: background=0 observed=0 reported=0 aligned=True
+trial 11: background=0 observed=0 reported=0 aligned=True
+
+0/12 trials red; paths ever reported: []
+wrote 07-repeat-trials.json
+EXIT=0

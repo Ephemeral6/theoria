@@ -1,0 +1,43 @@
+{
+  "budget": 190,
+  "coverage": "186/1548",
+  "coverage_fraction": 0.1202,
+  "covered_pairs": 186,
+  "frames": 191,
+  "reachable_states": 387,
+  "rules_never_witnessed": {
+    "advance_cycler": 10,
+    "blocked_by_lock": 22,
+    "blocked_by_wall": 561,
+    "collect_token": 19,
+    "teleport_twoway": 54,
+    "walk": 680,
+    "walk_through_cycler": 7,
+    "walk_through_lock": 9
+  },
+  "rules_witnessed": {
+    "advance_cycler": 2,
+    "blocked_by_lock": 1,
+    "blocked_by_wall": 58,
+    "collect_token": 1,
+    "teleport_twoway": 18,
+    "walk": 109,
+    "walk_through_cycler": 1
+  },
+  "state_action_pairs": 1548,
+  "transitions": 190,
+  "win_frames": [
+    5,
+    6,
+    28,
+    29,
+    58,
+    59,
+    81,
+    82,
+    111,
+    112,
+    134,
+    135
+  ]
+}

@@ -71,35 +71,70 @@ PLAN_LENGTH = re.compile(r"Plan length: (\d+) step\(s\)\.")
 
 @dataclass
 class FdRun:
-    """One Fast Downward invocation, reduced to what an experiment reads."""
+    """One Fast Downward invocation, reduced to what an experiment reads.
+
+    `unsolvable` means **proved unsolvable**, adjudicated by
+    `backends.proves_unsolvable`; it is never `True` because the process merely
+    stopped.  `answered` is the separate bit every consumer here has to read
+    first: a run that neither produced a plan nor proved unsolvability said
+    nothing about the instance, and `False`/`None` in the other fields is the
+    absence of an answer, not a negative one.
+    """
 
     config: str
+    rung: str
     exit_code: int
     expansions: Optional[int]
     plan_length: Optional[int]
     plan: Optional[List[str]]
     unsolvable: bool
+    exhausted_reported: bool
+
+    @property
+    def answered(self) -> bool:
+        """Did this run settle the instance either way?"""
+        return self.plan is not None or self.unsolvable
 
     def as_json(self) -> Dict[str, object]:
         return {
             "config": self.config,
+            "rung": self.rung,
             "exit_code": self.exit_code,
             "expansions": self.expansions,
             "plan_length": self.plan_length,
             "unsolvable": self.unsolvable,
+            "answered": self.answered,
+            # The evidence the unsolvability verdict rests on, recorded so a
+            # reader of the artefact can re-apply `proves_unsolvable` without
+            # the log.  The published p13 artefact predates this field, which is
+            # why its three exit-12 rows could only be reconciled indirectly.
+            "exhausted_reported": self.exhausted_reported,
         }
 
 
 def run_fd(executable: str, domain_path: str, problem_path: str,
            search_config: str = BLIND, alias: Optional[str] = None,
-           timeout: int = 600) -> FdRun:
+           timeout: int = 600, rung: Optional[str] = None) -> FdRun:
     """Call FD and read back the node account as well as the plan.
 
     `backends.run_fast_downward` deliberately returns only the plan -- callers of
     `solve()` have no business reading a planner's log.  An experiment about node
     counts is exactly the caller that does, so it invokes FD itself rather than
     widening the adapter's contract for one measurement.
+
+    Reading the log is where that licence stops.  Whether the run *proved* the
+    instance unsolvable is decided by `backends.proves_unsolvable`, not by this
+    module: exit 12 is FD's code for both "I explored everything and there is
+    nothing" and "I gave up", and only the rung plus FD's own
+    "Completely explored state space" separates them (`backends.py`'s constants
+    block, measured against the installed build).  `rung` defaults to the
+    conservative reading -- anything this function cannot vouch for as a
+    complete, unbounded search is treated as the satisficing rung, on which
+    `proves_unsolvable` refuses exit 12 outright.
     """
+    if rung is None:
+        rung = (backends.FD_OPTIMAL if alias is None and search_config == BLIND
+                else backends.FD_SATISFICING)
     with tempfile.TemporaryDirectory() as workdir:
         plan_path = os.path.join(workdir, "sas_plan")
         command = [executable, "--plan-file", plan_path]
@@ -109,8 +144,14 @@ def run_fd(executable: str, domain_path: str, problem_path: str,
             command += [domain_path, problem_path, "--search", search_config]
         if executable.endswith(".py"):
             command = [sys.executable] + command
+        # `encoding=` is pinned: `text=True` alone decodes with the locale
+        # codec, and on a cp936 machine a UnicodeDecodeError is raised inside
+        # subprocess's reader thread -- neither an OSError nor a
+        # SubprocessError, so it escapes as a bare crash and destroys the log
+        # this function then has to adjudicate.
         done = subprocess.run(command, cwd=workdir, capture_output=True,
-                              text=True, timeout=timeout)
+                              text=True, encoding="utf-8", errors="replace",
+                              timeout=timeout)
         log = done.stdout + done.stderr
         expanded = EXPANDED.findall(log)
         length = PLAN_LENGTH.findall(log)
@@ -120,14 +161,46 @@ def run_fd(executable: str, domain_path: str, problem_path: str,
                 plan = backends.parse_sas_plan(fh.read())
         return FdRun(
             config=alias or search_config,
+            rung=rung,
             exit_code=done.returncode,
             # A portfolio prints one account per iteration; the last is the one
             # that answered.  Blind search prints exactly one.
             expansions=int(expanded[-1]) if expanded else None,
             plan_length=int(length[-1]) if length else (len(plan) if plan else None),
             plan=plan,
-            unsolvable=done.returncode == 12,
+            unsolvable=backends.proves_unsolvable(rung, done.returncode, log),
+            exhausted_reported=backends.FD_EXHAUSTED in log,
         )
+
+
+def same_answer(before: FdRun, after: FdRun) -> Optional[bool]:
+    """Did the guard leave this instance's answer alone?  `None` = nobody knows.
+
+    This is the gate on "the deadlock theorems did not change the instance", so
+    it is a named function rather than an expression inline in the row: the
+    guard that makes it three-valued has to be somewhere a test can reach
+    without a planner installed.  Two failed runs have `plan_length is None` and
+    `unsolvable is False` on both sides, so the plain conjunction is True and a
+    row that measured nothing publishes itself as a passing control.
+    """
+    if not (before.answered and after.answered):
+        return None
+    return (before.plan_length == after.plan_length
+            and before.unsolvable == after.unsolvable)
+
+
+def backends_agree(stub_unsolvable: bool, stub_length: Optional[int],
+                   fd: FdRun) -> Optional[bool]:
+    """Do the stub and Fast Downward give the same answer?  `None` = FD gave none.
+
+    `fd.unsolvable` is False both when FD found a plan and when FD fell over, so
+    comparing it to the stub's verdict without this guard files a cross-backend
+    disagreement against a backend that never spoke.
+    """
+    if not fd.answered:
+        return None
+    return (stub_unsolvable == fd.unsolvable
+            and (stub_unsolvable or stub_length == fd.plan_length))
 
 
 # --------------------------------------------------- compiling theorems away
@@ -314,8 +387,11 @@ def deadlock_dividend(executable: str) -> List[Dict[str, object]]:
             "fd_plan_after": after.plan_length,
             "fd_unsolvable_before": before.unsolvable,
             "fd_unsolvable_after": after.unsolvable,
-            "same_answer": (before.plan_length == after.plan_length
-                            and before.unsolvable == after.unsolvable),
+            "fd_answered_before": before.answered,
+            "fd_answered_after": after.answered,
+            "fd_exit_code_before": before.exit_code,
+            "fd_exit_code_after": after.exit_code,
+            "same_answer": same_answer(before, after),
             "stub_expansions_before": stub_before,
             "stub_expansions_after": stub_after,
         })
@@ -365,8 +441,7 @@ def cross_check(executable: str) -> List[Dict[str, object]]:
         fd = run_fd(executable, domain_path, problem_path, BLIND)
 
         stub_length = None if stub.plan is None else len(stub.plan)
-        agree = ((stub.plan is None) == fd.unsolvable
-                 and (stub.plan is None or stub_length == fd.plan_length))
+        agree = backends_agree(stub.plan is None, stub_length, fd)
         rows.append({
             "instance": name,
             "status": "ran",
@@ -375,6 +450,9 @@ def cross_check(executable: str) -> List[Dict[str, object]]:
             "stub_expansions": stub.expansions,
             "fd_plan_length": fd.plan_length,
             "fd_unsolvable": fd.unsolvable,
+            "fd_answered": fd.answered,
+            "fd_rung": fd.rung,
+            "fd_exhausted_reported": fd.exhausted_reported,
             "fd_expansions": fd.expansions,
             "fd_exit_code": fd.exit_code,
             "agree": agree,
@@ -397,17 +475,45 @@ def render(report: Dict[str, object]) -> str:
         saved = "n/a"
         if isinstance(before, int) and isinstance(after, int) and before:
             saved = "%d (%.1f%%)" % (before - after, 100.0 * (before - after) / before)
+        # Three values, because `same_answer` has three.  A run that did not
+        # answer renders as `n/a`, never as `yes`.
+        same = {True: "yes", False: "**NO**", None: "n/a — no answer"}[row["same_answer"]]
         lines.append("| `%s` | %d (%d) | %s -> %s | %s | %d -> %d | %s |" % (
             row["instance"], row["theorems"], row["theorems_encoded"],
             before, after, saved,
             row["stub_expansions_before"], row["stub_expansions_after"],
-            "yes" if row["same_answer"] else "**NO**"))
+            same))
 
     lines += ["", "### What the numbers say", ""]
     for row in report["deadlock_dividend"]:
         before, after = row["fd_expansions_before"], row["fd_expansions_after"]
         stub_before, stub_after = row["stub_expansions_before"], row["stub_expansions_after"]
-        if before == 0 and row["fd_unsolvable_before"]:
+        if row["same_answer"] is None:
+            # No prose about an instance neither run settled.  The earlier
+            # version reached the `before == after` branch on `None == None` and
+            # crashed there on `"%d" % None`; a loud crash was the only thing
+            # keeping a fabricated negative result out of the report.
+            lines.append(
+                "* `%s` -- **no result**: Fast Downward exited %s before the "
+                "guard and %s after, and at least one of those runs neither "
+                "produced a plan nor proved unsolvability.  Nothing about this "
+                "instance follows from it."
+                % (row["instance"], row["fd_exit_code_before"],
+                   row["fd_exit_code_after"]))
+        elif row["same_answer"] is False:
+            # Ahead of every other branch on purpose.  A refuted row with
+            # `before == after` used to land on "true theorems buy nothing",
+            # which asserts the soundness the verdict has just denied; the
+            # dividend branches all presume the theorems are true, so the
+            # refutation has to be read before any of them (D-034).
+            lines.append(
+                "* `%s` -- **not a dividend: the answer moved.**  Fast Downward "
+                "returned a different answer with the theorems in (%d -> %d "
+                "expansions), so at least one of them excludes a state the goal "
+                "was reachable from.  A saving bought by an unsound theorem is "
+                "not a saving, and no number on this row should be read as one."
+                % (row["instance"], before, after))
+        elif before == 0 and row["fd_unsolvable_before"]:
             lines.append(
                 "* `%s` -- **the theorems had nothing to buy**: Fast Downward's "
                 "translator settles this instance by relaxed reachability before "
@@ -439,9 +545,15 @@ def render(report: Dict[str, object]) -> str:
             lines.append("| `%s` | absent | absent | n/a |" % row["instance"])
             continue
         stub = "UNSAT" if row["stub_unsolvable"] else "%s steps" % row["stub_plan_length"]
-        fd = "UNSAT" if row["fd_unsolvable"] else "%s steps" % row["fd_plan_length"]
+        if not row["fd_answered"]:
+            fd = "no answer (exit %s)" % row["fd_exit_code"]
+        elif row["fd_unsolvable"]:
+            fd = "UNSAT"
+        else:
+            fd = "%s steps" % row["fd_plan_length"]
+        agreement = {True: "yes", False: "**NO**", None: "n/a — no answer"}[row["agree"]]
         lines.append("| `%s` | %s | %s | %s |" % (
-            row["instance"], stub, fd, "yes" if row["agree"] else "**NO**"))
+            row["instance"], stub, fd, agreement))
     return "\n".join(lines) + "\n"
 
 

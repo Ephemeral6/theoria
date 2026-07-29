@@ -1,0 +1,9 @@
+# Regenerated on every run of reconcile.py / negative_sample.py: compiled books,
+# the ledger-rebuilt trace, and the two subprocess drivers. Derived bytes, not
+# evidence -- the JSON reports and stdout captures beside them are the evidence.
+raw/theoria-arm-replay/
+raw/theoria-arm-bfs/
+raw/negative-*/
+raw/_a0_driver.py
+raw/_a0_negative_driver.py
+__pycache__/

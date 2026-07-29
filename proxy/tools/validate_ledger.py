@@ -12,7 +12,11 @@ sense:
   * **the envelope** -- `v`, `event`, `seq`, `ts`, `run_id`, `arm`, right types.
     A reader must reject a version it does not know rather than guess (§8).
   * **the field sets** -- via `proxy/canon.py`, the same code the writer uses.
-    One registry, two directions.
+    One registry, two directions. A field §3/§4 does not list is a **notice**,
+    not a problem: it does not change the verdict, and the record is still
+    checked for everything else. A reader that fails a whole stream over a
+    field it could simply ignore is the read-side spelling of INC-TA-006, and
+    it would land on the frozen scorer, which calls this from S-12.
   * **`seq` is dense and unique** -- §2 says gaps are impossible and duplicates
     mean a corrupt file. A duplicated `seq` is also what an appended forgery
     looks like when someone tries to make a later record replace an earlier one.
@@ -30,7 +34,7 @@ sense:
 import argparse
 import json
 import sys
-from typing import Any, Dict, List
+from typing import Any, Dict, List, Optional
 
 from .. import LEDGER_VERSION
 from ..canon import ENVELOPE, NonCanonicalField, check
@@ -38,14 +42,23 @@ from ..ledger import ARMS, EVENTS, frame_hash
 
 
 def validate_records(records: List[Dict[str, Any]],
-                     subset: bool = False) -> List[Dict[str, Any]]:
-    """Judge a stream against the canon.
+                     subset: bool = False,
+                     notices: Optional[List[Dict[str, Any]]] = None
+                     ) -> List[Dict[str, Any]]:
+    """Judge a stream against the canon. Returns the problems, and problems
+    only: an empty list is a clean stream.
 
     `subset=True` for one run pulled out of a file that holds many. `seq` is
     dense over the *file*, so a per-run slice legitimately has gaps and
     checking density on it would report a corrupt file on a clean one.
     Duplicates are still an error either way -- a repeated `seq` is a forgery
     signature whether or not you are looking at the whole file.
+
+    `notices` collects the non-fatal observations -- currently just fields the
+    format does not list -- for a caller that wants to report them. It is a
+    separate list rather than a `severity` key on `problems` so that the very
+    common `assert validate_records(...) == []` keeps meaning what it meant,
+    and so no caller can turn a notice into a failure by forgetting to filter.
     """
     problems: List[Dict[str, Any]] = []
 
@@ -94,8 +107,19 @@ def validate_records(records: List[Dict[str, Any]],
             seen_seq[seq] = lineno
 
         payload = {k: v for k, v in record.items() if k not in ENVELOPE}
+
+        def note(_event: str, names: List[str], message: str,
+                 _lineno: int = lineno) -> None:
+            if notices is not None:
+                notices.append({"line": _lineno, "kind": "unknown_field",
+                                "fields": names, "detail": message})
+
+        # A caller that asked for notices gets them there; one that did not
+        # gets the `UnknownField` warning every other caller gets, rather than
+        # silence. Silence is what made the field sets divergent in the first
+        # place.
         try:
-            check(event, payload)
+            check(event, payload, on_unknown=note if notices is not None else None)
         except NonCanonicalField as exc:
             bad(lineno, "non_canonical", str(exc))
             continue
@@ -143,9 +167,11 @@ def validate_file(path: str) -> Dict[str, Any]:
             except json.JSONDecodeError as exc:
                 malformed.append({"line": lineno, "kind": "not_json",
                                   "detail": str(exc)})
-    problems = malformed + validate_records(records)
+    notices: List[Dict[str, Any]] = []
+    problems = malformed + validate_records(records, notices=notices)
     return {"path": path, "records": len(records),
-            "problems": problems, "verdict": "PASS" if not problems else "FAIL"}
+            "problems": problems, "notices": notices,
+            "verdict": "PASS" if not problems else "FAIL"}
 
 
 def main(argv=None) -> int:
@@ -159,14 +185,24 @@ def main(argv=None) -> int:
     if args.json:
         print(json.dumps(report, indent=2, sort_keys=True))
     else:
-        print("%s: %s (%d records, %d problem(s))"
+        print("%s: %s (%d records, %d problem(s), %d notice(s))"
               % (report["path"], report["verdict"], report["records"],
-                 len(report["problems"])))
+                 len(report["problems"]), len(report["notices"])))
         for problem in report["problems"][:args.limit]:
             print("  line %s  %s: %s"
                   % (problem["line"], problem["kind"], problem["detail"]))
         if len(report["problems"]) > args.limit:
             print("  ... %d more" % (len(report["problems"]) - args.limit))
+        # Notices are summarised by field rather than listed per line: a stream
+        # that writes an unlisted field writes it on every record of that
+        # shape, so the per-line form is thousands of copies of one fact.
+        counts: Dict[str, int] = {}
+        for notice in report["notices"]:
+            for name in notice["fields"]:
+                counts[name] = counts.get(name, 0) + 1
+        for name in sorted(counts):
+            print("  notice  unknown_field %r on %d record(s) -- kept, not "
+                  "refused (proxy/CONTRACT_CHANGES.md)" % (name, counts[name]))
     return 0 if report["verdict"] == "PASS" else 1
 
 

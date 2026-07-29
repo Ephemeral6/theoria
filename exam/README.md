@@ -16,9 +16,11 @@ checks and the marker are all proven; the only new work when a sealed game is
 finally opened is that game's own justification.
 
 ```bash
+python -m exam.verify                  # the whole territory, one command
 python -m exam.tools.build_papers      # set the papers; split sheet from key
 python -m exam.tools.run_exam          # calibrate the marker, then mark
-python -m pytest exam/tests -q         # 157 tests
+python -m exam.tools.run_selftest      # test the marker between its endpoints
+python -m pytest exam/tests -q         # 287 tests
 python -m exam.tools.archive_run <id>  # runs/<id>/MANIFEST.json
 ```
 
@@ -112,6 +114,27 @@ are mixed across boards so board identity carries no signal.
   witness plan. A framework with a taste for unsolvability proofs gets caught
   here or nowhere.
 
+**The pair is split by class, and never quoted alone.**
+[`artifacts/matrix/verdict_confusion.md`](artifacts/matrix/verdict_confusion.md)
+is one row per examinee, one column pair per class, each cell `rate (answered /
+class size)`. Three separate reasons, all of them measurements:
+
+* an arm that aces class (i) and cannot touch class (ii) reports the **same**
+  pooled sensitivity as an arm that reasons — the split is what tells "I
+  enumerated it" from "I proved it", which is why they are separate classes;
+* abstentions stay out of the denominator (correctly — an abstention is not a
+  wrong answer), so the rate alone is inflated by them. The memoriser reports
+  sensitivity **1.000** while having answered **0 of 4** large-space items;
+* an empty denominator prints `--`, never `0.000`. Class (i) holds no solvable
+  items, so specificity there is undefined rather than failed.
+
+And the result that settles the matter: with the cheater subagent on the matrix
+as a row, `oracle` and `cheater-v4` are **identical in every cell** — 1.000 and
+1.000 throughout, full coverage — and differ only in the score. A reader handed
+the sheet and nothing else is indistinguishable from ground truth on the pair.
+The matrix computes and prints its own collisions rather than leaving that to
+the reader's eye. D-EX-015.
+
 The certificate checker is a **closed grammar** with exact key sets, and every
 number in a submitted certificate is re-derived from the level. A checker that
 accepts free text is not a checker. It refuses, among others, a certificate
@@ -152,6 +175,40 @@ One pre-registered band **failed on first contact** and was replaced rather than
 widened. The reasoning is in [`DECISIONS.md`](DECISIONS.md) D-EX-010, including
 the hole that remains.
 
+### …and then tested between the two numbers it is pinned at
+
+`oracle == 1.0` and `null == 0.0` are exact, and they are **endpoints**. A
+marker can be exact at both and arbitrary in between, and nothing above would
+notice. [`grading/selftest.py`](grading/selftest.py) attacks the middle from two
+directions.
+
+**Seven mutants, each with a score predicted by arithmetic rather than
+judgement** — there is not a band anywhere in the module, because a band is what
+you write when the expectation depends on item mix and none of these do.
+Dropping a set of answers must cost exactly what those items were awarded;
+dropping one answer must move one item's mark and no other's; reversing the
+key's item order must move none; an answer that is ground truth for a *different*
+item must not earn full marks; structured nonsense must pay zero.
+
+That last one found a live defect the first time it ran. The adaptation rubric
+read any answer it could not parse as the substantive claim `never` — and on
+`v-a0-03`, the one variant undetectable on its base level, `never` **is** the
+truth. A submission containing nothing scored 1.600 of 144, all of it on the
+item that exists to ask whether an examinee can tell "the change is invisible
+from here" from "I did not look". D-EX-014.
+
+**Eight faults injected into the marker on purpose**, each a way markers
+actually fail: pay for silence, reject truth, mark on the item id instead of the
+answer, blend a pair that must stay split, inflate or truncate partial credit.
+The output is a matrix of fault × check, read the same way as the leakage table:
+**the zeros are the finding.** On the first run `truncates_partial` was caught by
+nothing at all — every band for the informative fakes is `Band(0.0, x)`, bounded
+above and open below, so a marker that quietly *depresses* scores satisfied all
+of them. D-EX-013.
+
+A second digest, `protocol_digest()`, covers `mark.py` and `calibration.py` and
+is pinned by a test, so a quietly widened band is now an edit a reviewer sees.
+
 ## Red lines
 
 * **The paper and the answer key are never in the same file.** `Item.paper` and
@@ -162,6 +219,15 @@ the hole that remains.
   papers), structural key disjointness, positional independence, **metadata
   independence**, and a **cheater subagent** handed the sheet alone and told to
   extract answers from it.
+
+  **A cheater's claims are scored against the key before they are believed.**
+  Two passes have now run, and each failed in a different direction: the verdict
+  cheater *under*-predicted itself (13.8 forecast, **17 of 17** measured, worth
+  0.5000 on the rubric because it submitted no certificate anywhere), while the
+  held-out cheater was *most* confident — 0.97 — on six claims that were **all
+  wrong**, because the leak it found handed it a prior (vanilla sokoban) that is
+  false of A0, whose push slides the box two cells. A confirmed leak can have
+  negative yield. An unverified cheater is just another confident agent.
 
   The static checks test the leaks we imagined; the cheater tests the rest, and
   on the first run **it was the cheater that found both real leaks**. The verdict
@@ -193,6 +259,9 @@ the hole that remains.
 | `leakage.py` | the three static checks and the cheater brief |
 | `papers/` | the four question types |
 | `grading/` | rubric registry (source-hashed), marker, calibration |
+| `grading/selftest.py` | the mutants, the injected faults, the detection matrix |
+| `grading/confusion_matrix.py` | the pair, split by class, with coverage |
+| `verify.py` | one command that decides whether the territory is green |
 | `handover_bundles/` | the two delivery tiers, self-contained |
 | `artifacts/papers/` | sheets — safe to hand out |
 | `artifacts/truth/` | keys — **referee only** |

@@ -1,0 +1,353 @@
+[
+  {
+    "boxes": 2,
+    "carve_seconds": 3.158,
+    "cells": 64,
+    "instance": "far8",
+    "n_pair": 40,
+    "n_singleton": 8,
+    "n_theorems": 48,
+    "problem_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e7-deadlock-claim\\engine-rig\\runs\\20260728T150713Z-E7-deadlock-claim-audit\\attacks\\work\\a2\\far8\\far8.pddl",
+    "rows": [
+      {
+        "after": {
+          "config": "astar(blind())",
+          "error": null,
+          "evaluated": 15676,
+          "expanded": 10799,
+          "generated": 38915,
+          "operators": 592,
+          "plan_length": 23,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.019425,
+          "solved": true,
+          "task_size": 5285,
+          "wall_seconds": 0.242
+        },
+        "before": {
+          "config": "astar(blind())",
+          "error": null,
+          "evaluated": 17637,
+          "expanded": 12078,
+          "generated": 43558,
+          "operators": 608,
+          "plan_length": 23,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.021474,
+          "solved": true,
+          "task_size": 5445,
+          "wall_seconds": 0.236
+        },
+        "guard": "singleton",
+        "replayed_on_original_domain": true,
+        "rung": "blind"
+      },
+      {
+        "after": {
+          "config": "astar(lmcut())",
+          "error": null,
+          "evaluated": 146,
+          "expanded": 83,
+          "generated": 296,
+          "operators": 592,
+          "plan_length": 23,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.014203,
+          "solved": true,
+          "task_size": 5285,
+          "wall_seconds": 0.229
+        },
+        "before": {
+          "config": "astar(lmcut())",
+          "error": null,
+          "evaluated": 149,
+          "expanded": 84,
+          "generated": 299,
+          "operators": 608,
+          "plan_length": 23,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.015126,
+          "solved": true,
+          "task_size": 5445,
+          "wall_seconds": 0.229
+        },
+        "guard": "singleton",
+        "replayed_on_original_domain": true,
+        "rung": "lmcut"
+      },
+      {
+        "after": {
+          "config": "astar(ipdb())",
+          "error": null,
+          "evaluated": 65,
+          "expanded": 24,
+          "generated": 80,
+          "operators": 592,
+          "plan_length": 23,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.000439,
+          "solved": true,
+          "task_size": 5285,
+          "wall_seconds": 8.194
+        },
+        "before": {
+          "config": "astar(ipdb())",
+          "error": null,
+          "evaluated": 72,
+          "expanded": 27,
+          "generated": 90,
+          "operators": 608,
+          "plan_length": 23,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.00042,
+          "solved": true,
+          "task_size": 5445,
+          "wall_seconds": 3.913
+        },
+        "guard": "singleton",
+        "replayed_on_original_domain": true,
+        "rung": "ipdb"
+      }
+    ]
+  },
+  {
+    "boxes": 2,
+    "carve_seconds": 7.22,
+    "cells": 81,
+    "instance": "far9",
+    "n_pair": 48,
+    "n_singleton": 8,
+    "n_theorems": 56,
+    "problem_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e7-deadlock-claim\\engine-rig\\runs\\20260728T150713Z-E7-deadlock-claim-audit\\attacks\\work\\a2\\far9\\far9.pddl",
+    "rows": [
+      {
+        "after": {
+          "config": "astar(blind())",
+          "error": null,
+          "evaluated": 24938,
+          "expanded": 17354,
+          "generated": 63490,
+          "operators": 776,
+          "plan_length": 26,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.034326,
+          "solved": true,
+          "task_size": 6919,
+          "wall_seconds": 0.267
+        },
+        "before": {
+          "config": "astar(blind())",
+          "error": null,
+          "evaluated": 27753,
+          "expanded": 19272,
+          "generated": 70514,
+          "operators": 792,
+          "plan_length": 26,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.036304,
+          "solved": true,
+          "task_size": 7079,
+          "wall_seconds": 0.272
+        },
+        "guard": "singleton",
+        "replayed_on_original_domain": true,
+        "rung": "blind"
+      },
+      {
+        "after": {
+          "config": "astar(lmcut())",
+          "error": null,
+          "evaluated": 167,
+          "expanded": 101,
+          "generated": 363,
+          "operators": 776,
+          "plan_length": 26,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.024969,
+          "solved": true,
+          "task_size": 6919,
+          "wall_seconds": 0.262
+        },
+        "before": {
+          "config": "astar(lmcut())",
+          "error": null,
+          "evaluated": 170,
+          "expanded": 102,
+          "generated": 366,
+          "operators": 792,
+          "plan_length": 26,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.025202,
+          "solved": true,
+          "task_size": 7079,
+          "wall_seconds": 0.267
+        },
+        "guard": "singleton",
+        "replayed_on_original_domain": true,
+        "rung": "lmcut"
+      },
+      {
+        "after": {
+          "config": "astar(ipdb())",
+          "error": null,
+          "evaluated": 80,
+          "expanded": 30,
+          "generated": 100,
+          "operators": 776,
+          "plan_length": 26,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.000426,
+          "solved": true,
+          "task_size": 6919,
+          "wall_seconds": 11.435
+        },
+        "before": {
+          "config": "astar(ipdb())",
+          "error": null,
+          "evaluated": 131,
+          "expanded": 78,
+          "generated": 284,
+          "operators": 792,
+          "plan_length": 26,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.000665,
+          "solved": true,
+          "task_size": 7079,
+          "wall_seconds": 3.442
+        },
+        "guard": "singleton",
+        "replayed_on_original_domain": true,
+        "rung": "ipdb"
+      }
+    ]
+  },
+  {
+    "boxes": 2,
+    "carve_seconds": 12.331,
+    "cells": 100,
+    "instance": "far10",
+    "n_pair": 56,
+    "n_singleton": 8,
+    "n_theorems": 64,
+    "problem_path": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e7-deadlock-claim\\engine-rig\\runs\\20260728T150713Z-E7-deadlock-claim-audit\\attacks\\work\\a2\\far10\\far10.pddl",
+    "rows": [
+      {
+        "after": {
+          "config": "astar(blind())",
+          "error": null,
+          "evaluated": 35876,
+          "expanded": 25215,
+          "generated": 93177,
+          "operators": 984,
+          "plan_length": 29,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.05616,
+          "solved": true,
+          "task_size": 8765,
+          "wall_seconds": 0.309
+        },
+        "before": {
+          "config": "astar(blind())",
+          "error": null,
+          "evaluated": 39366,
+          "expanded": 27630,
+          "generated": 102117,
+          "operators": 1000,
+          "plan_length": 29,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.05927,
+          "solved": true,
+          "task_size": 8925,
+          "wall_seconds": 0.317
+        },
+        "guard": "singleton",
+        "replayed_on_original_domain": true,
+        "rung": "blind"
+      },
+      {
+        "after": {
+          "config": "astar(lmcut())",
+          "error": null,
+          "evaluated": 190,
+          "expanded": 121,
+          "generated": 439,
+          "operators": 984,
+          "plan_length": 29,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.037577,
+          "solved": true,
+          "task_size": 8765,
+          "wall_seconds": 0.291
+        },
+        "before": {
+          "config": "astar(lmcut())",
+          "error": null,
+          "evaluated": 193,
+          "expanded": 122,
+          "generated": 442,
+          "operators": 1000,
+          "plan_length": 29,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.039544,
+          "solved": true,
+          "task_size": 8925,
+          "wall_seconds": 0.299
+        },
+        "guard": "singleton",
+        "replayed_on_original_domain": true,
+        "rung": "lmcut"
+      },
+      {
+        "after": {
+          "config": "astar(ipdb())",
+          "error": null,
+          "evaluated": 149,
+          "expanded": 93,
+          "generated": 341,
+          "operators": 984,
+          "plan_length": 29,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.000621,
+          "solved": true,
+          "task_size": 8765,
+          "wall_seconds": 9.266
+        },
+        "before": {
+          "config": "astar(ipdb())",
+          "error": null,
+          "evaluated": 150,
+          "expanded": 93,
+          "generated": 342,
+          "operators": 1000,
+          "plan_length": 29,
+          "proved_unsolvable": false,
+          "returncode": 0,
+          "search_seconds": 0.000768,
+          "solved": true,
+          "task_size": 8925,
+          "wall_seconds": 9.204
+        },
+        "guard": "singleton",
+        "replayed_on_original_domain": true,
+        "rung": "ipdb"
+      }
+    ]
+  }
+]

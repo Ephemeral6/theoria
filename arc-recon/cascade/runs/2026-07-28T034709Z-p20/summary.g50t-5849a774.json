@@ -1,0 +1,570 @@
+{
+  "actions_executed": 7,
+  "available_actions": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "card_id": "276f6885-9d62-453c-98fc-6adc0e850608",
+  "cascade": {
+    "max_frames": 17,
+    "multi_frame_batches_all_identical": 0,
+    "multi_frame_batches_with_internal_change": 5,
+    "responses_with_multiple_frames": 5
+  },
+  "cookies_enabled": true,
+  "cookies_held": [
+    "AWSALBAPP-0",
+    "AWSALBAPP-1",
+    "AWSALBAPP-2",
+    "AWSALBAPP-3",
+    "GAMESESSION"
+  ],
+  "finished": "2026-07-28T03:52:35Z",
+  "game_id": "g50t-5849a774",
+  "guid_present": true,
+  "http_calls": 8,
+  "prompt_id": "P-20",
+  "sequence": [
+    [
+      1,
+      null
+    ],
+    [
+      2,
+      null
+    ],
+    [
+      2,
+      null
+    ],
+    [
+      3,
+      null
+    ],
+    [
+      4,
+      null
+    ],
+    [
+      5,
+      null
+    ],
+    [
+      2,
+      null
+    ]
+  ],
+  "started": "2026-07-28T03:52:26Z",
+  "steps": [
+    {
+      "action": "RESET",
+      "action_id": null,
+      "attempts": 1,
+      "available_actions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "batch_hash": "801726dc499f3f52",
+      "data": null,
+      "distinct_frames": 1,
+      "expected_batch_hash": "801726dc499f3f52",
+      "first_equals_prev_last": null,
+      "frame_hashes": [
+        "f79ab0e9d856fdf8"
+      ],
+      "full_reset": false,
+      "game_id": "g50t-5849a774",
+      "http_status": 200,
+      "intra_batch_changes": 0,
+      "levels_completed": 0,
+      "matches_expected": true,
+      "n_frames": 1,
+      "seq": 0,
+      "shapes": [
+        [
+          64,
+          64
+        ]
+      ],
+      "state": "NOT_FINISHED",
+      "t": "2026-07-28T03:52:28Z",
+      "win_levels": 7
+    },
+    {
+      "action": "ACTION1",
+      "action_id": 1,
+      "attempts": 1,
+      "available_actions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "batch_hash": "801726dc499f3f52",
+      "data": null,
+      "distinct_frames": 1,
+      "expected_batch_hash": "801726dc499f3f52",
+      "first_equals_prev_last": true,
+      "frame_hashes": [
+        "f79ab0e9d856fdf8"
+      ],
+      "full_reset": false,
+      "game_id": "g50t-5849a774",
+      "http_status": 200,
+      "intra_batch_changes": 0,
+      "levels_completed": 0,
+      "matches_expected": true,
+      "n_frames": 1,
+      "seq": 1,
+      "shapes": [
+        [
+          64,
+          64
+        ]
+      ],
+      "state": "NOT_FINISHED",
+      "t": "2026-07-28T03:52:29Z",
+      "win_levels": 7
+    },
+    {
+      "action": "ACTION2",
+      "action_id": 2,
+      "attempts": 1,
+      "available_actions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "batch_hash": "e665977d6ad439ff",
+      "data": null,
+      "distinct_frames": 7,
+      "expected_batch_hash": "e665977d6ad439ff",
+      "first_equals_prev_last": false,
+      "frame_hashes": [
+        "77123df1f65d9149",
+        "91f1aa66dd8cd080",
+        "461d286ecb63cb56",
+        "fbc64be81ba98eb9",
+        "128f15c5ed23b0e7",
+        "d6c5cdbe3fde8770",
+        "c9321e6cf1e0bb6d"
+      ],
+      "full_reset": false,
+      "game_id": "g50t-5849a774",
+      "http_status": 200,
+      "intra_batch_changes": 6,
+      "levels_completed": 0,
+      "matches_expected": true,
+      "n_frames": 7,
+      "seq": 2,
+      "shapes": [
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ]
+      ],
+      "state": "NOT_FINISHED",
+      "t": "2026-07-28T03:52:30Z",
+      "win_levels": 7
+    },
+    {
+      "action": "ACTION2",
+      "action_id": 2,
+      "attempts": 1,
+      "available_actions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "batch_hash": "bc6ca17f398938ae",
+      "data": null,
+      "distinct_frames": 7,
+      "expected_batch_hash": null,
+      "first_equals_prev_last": true,
+      "frame_hashes": [
+        "c9321e6cf1e0bb6d",
+        "e484d4d088b1cce9",
+        "b1edcfbc4a1d1fb6",
+        "7c227fe4133b6165",
+        "a3f7a9aa0590aca2",
+        "7e995114ee908fe7",
+        "af558d8480bf933f"
+      ],
+      "full_reset": false,
+      "game_id": "g50t-5849a774",
+      "http_status": 200,
+      "intra_batch_changes": 6,
+      "levels_completed": 0,
+      "matches_expected": null,
+      "n_frames": 7,
+      "seq": 3,
+      "shapes": [
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ]
+      ],
+      "state": "NOT_FINISHED",
+      "t": "2026-07-28T03:52:31Z",
+      "win_levels": 7
+    },
+    {
+      "action": "ACTION3",
+      "action_id": 3,
+      "attempts": 1,
+      "available_actions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "batch_hash": "c096e647784b61a4",
+      "data": null,
+      "distinct_frames": 1,
+      "expected_batch_hash": null,
+      "first_equals_prev_last": false,
+      "frame_hashes": [
+        "c00d6d2db9f4a689"
+      ],
+      "full_reset": false,
+      "game_id": "g50t-5849a774",
+      "http_status": 200,
+      "intra_batch_changes": 0,
+      "levels_completed": 0,
+      "matches_expected": null,
+      "n_frames": 1,
+      "seq": 4,
+      "shapes": [
+        [
+          64,
+          64
+        ]
+      ],
+      "state": "NOT_FINISHED",
+      "t": "2026-07-28T03:52:31Z",
+      "win_levels": 7
+    },
+    {
+      "action": "ACTION4",
+      "action_id": 4,
+      "attempts": 1,
+      "available_actions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "batch_hash": "c60846a1838f1522",
+      "data": null,
+      "distinct_frames": 7,
+      "expected_batch_hash": null,
+      "first_equals_prev_last": true,
+      "frame_hashes": [
+        "c00d6d2db9f4a689",
+        "7406e6960abb479e",
+        "03dc5cfad1d770f3",
+        "2be5e364a5a1ed7a",
+        "1f3ec212d12979f6",
+        "d720a65b472a826e",
+        "14303bbefe72f4c0"
+      ],
+      "full_reset": false,
+      "game_id": "g50t-5849a774",
+      "http_status": 200,
+      "intra_batch_changes": 6,
+      "levels_completed": 0,
+      "matches_expected": null,
+      "n_frames": 7,
+      "seq": 5,
+      "shapes": [
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ]
+      ],
+      "state": "NOT_FINISHED",
+      "t": "2026-07-28T03:52:32Z",
+      "win_levels": 7
+    },
+    {
+      "action": "ACTION5",
+      "action_id": 5,
+      "attempts": 1,
+      "available_actions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "batch_hash": "51c0087a79570b58",
+      "data": null,
+      "distinct_frames": 8,
+      "expected_batch_hash": null,
+      "first_equals_prev_last": false,
+      "frame_hashes": [
+        "1465a1dc5b721c14",
+        "1465a1dc5b721c14",
+        "1465a1dc5b721c14",
+        "1465a1dc5b721c14",
+        "e93e1cad585a0f10",
+        "e93e1cad585a0f10",
+        "e93e1cad585a0f10",
+        "e93e1cad585a0f10",
+        "14be221d9f8c0a5b",
+        "14be221d9f8c0a5b",
+        "14be221d9f8c0a5b",
+        "14be221d9f8c0a5b",
+        "0e1cd0b30fbb12b3",
+        "45d295566c516cfa",
+        "43b63386ad00040a",
+        "dc23b60086243891",
+        "2a3bc6a0d9bbddb4"
+      ],
+      "full_reset": false,
+      "game_id": "g50t-5849a774",
+      "http_status": 200,
+      "intra_batch_changes": 7,
+      "levels_completed": 0,
+      "matches_expected": null,
+      "n_frames": 17,
+      "seq": 6,
+      "shapes": [
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ]
+      ],
+      "state": "NOT_FINISHED",
+      "t": "2026-07-28T03:52:34Z",
+      "win_levels": 7
+    },
+    {
+      "action": "ACTION2",
+      "action_id": 2,
+      "attempts": 1,
+      "available_actions": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "batch_hash": "0e18852dfd37730b",
+      "data": null,
+      "distinct_frames": 9,
+      "expected_batch_hash": null,
+      "first_equals_prev_last": true,
+      "frame_hashes": [
+        "2a3bc6a0d9bbddb4",
+        "0034e94dc833898d",
+        "636fad44d60cfa0c",
+        "da416e11a82ae8e7",
+        "538ad51bf1552484",
+        "be491ecb6ee67f55",
+        "2579f424be5e5b2c",
+        "c2d772ab6cc980b9",
+        "af3bb95d3135e37c"
+      ],
+      "full_reset": false,
+      "game_id": "g50t-5849a774",
+      "http_status": 200,
+      "intra_batch_changes": 8,
+      "levels_completed": 0,
+      "matches_expected": null,
+      "n_frames": 9,
+      "seq": 7,
+      "shapes": [
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ],
+        [
+          64,
+          64
+        ]
+      ],
+      "state": "NOT_FINISHED",
+      "t": "2026-07-28T03:52:35Z",
+      "win_levels": 7
+    }
+  ],
+  "win_levels": 7
+}

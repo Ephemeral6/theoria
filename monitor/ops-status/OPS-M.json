@@ -1,7 +1,7 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-28T08:01:50Z",
- "cycle": 2,
+ "utc": "2026-07-29T03:56:16Z",
+ "cycle": 11,
  "state": "working",
- "note": "三个分支已手动合入（含 C2-semantics-migrate），全量门 9 目录首次全绿；但 TheoriaReflex 虽已启用仍每轮 UnboundLocalError 崩溃，ci_merge 仍无自动驱动，详见 inbox 20260728T075952Z"
+ "note": "用户授权：ci_merge 合并成功后自动退休该分支的 flag（移入 archive 而非删除，含防同秒覆盖的计数器）。已推 4cd583a；自测四项全过，生产判据留给下轮：merge.log 出现 CLEARED 行且 monitor/ci/ 保持一 flag 一活分支"
 }

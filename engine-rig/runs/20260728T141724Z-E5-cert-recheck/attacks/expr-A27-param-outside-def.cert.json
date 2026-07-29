@@ -1,0 +1,17 @@
+{
+  "claim": "unsolvable",
+  "kind": "inductive_invariant",
+  "name": "A27",
+  "predicate": [
+    "=",
+    [
+      "param",
+      "x"
+    ],
+    [
+      "lit",
+      0
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

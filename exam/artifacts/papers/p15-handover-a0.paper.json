@@ -1089,7 +1089,7 @@
   "n_items": 29,
   "paper_id": "p15-handover-a0",
   "question_type": "handover",
-  "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697",
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
   "rubric_module_digest": "fc35ef2bd43941ca83956fb8a50ae4851fa59630387993856c29974cc06f2c5b",
   "schema": "exam/v0.1",
   "total_points": 46.0,
@@ -1101,6 +1101,7 @@
       "sk48-d8078629",
       "tn36-ef4dde99"
     ],
+    "generated_worlds_available": 20,
     "n_sealed": 21,
     "piles_sha256": "3feca53e5ede695cfa46ae994cb95fd6b43abb9d97295e8c87e6302b41bbc19a",
     "synthetic_worlds": [

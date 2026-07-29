@@ -1,0 +1,895 @@
+{
+  "actions": [
+    "move-down",
+    "move-left",
+    "move-right",
+    "move-up",
+    "push-down",
+    "push-left",
+    "push-right",
+    "push-up"
+  ],
+  "comment": "Fixture D's sokoban level sokoban-ringstuck, as finite-domain variables rather than grounded STRIPS.",
+  "constraint": [
+    "and",
+    [
+      "!=",
+      [
+        "var",
+        "player"
+      ],
+      [
+        "var",
+        "b1"
+      ]
+    ]
+  ],
+  "defs": [
+    {
+      "body": [
+        "and",
+        [
+          "!=",
+          [
+            "param",
+            "x"
+          ],
+          [
+            "lit",
+            "none"
+          ]
+        ],
+        [
+          "!=",
+          [
+            "param",
+            "x"
+          ],
+          [
+            "var",
+            "player"
+          ]
+        ],
+        [
+          "!=",
+          [
+            "param",
+            "x"
+          ],
+          [
+            "var",
+            "b1"
+          ]
+        ]
+      ],
+      "comment": "a real floor cell holding neither the player nor a box",
+      "name": "clear",
+      "params": [
+        "x"
+      ]
+    }
+  ],
+  "goal": [
+    "and",
+    [
+      "=",
+      [
+        "var",
+        "b1"
+      ],
+      [
+        "lit",
+        "3,1"
+      ]
+    ]
+  ],
+  "init": {
+    "b1": "1,2",
+    "player": "1,1"
+  },
+  "name": "sokoban-ringstuck",
+  "provenance": {
+    "encoding": "one variable per movable thing; the PDDL's `clear` fluent becomes the derived predicate `clear`, and the at-most-one-thing-per-cell fact the grounded task gets from its mutexes becomes the declared constraint, which this rechecker proves inductive rather than assuming.",
+    "grid": [
+      "######",
+      "#....#",
+      "#.##.#",
+      "#.##.#",
+      "#....#",
+      "######"
+    ],
+    "world": "engine-rig/fixtures/sokoban.py"
+  },
+  "rules": [
+    {
+      "action": "move-down",
+      "comment": "PDDL `move`: at-player ?from, clear ?to, adj ?from ?to ?d",
+      "effects": {
+        "player": [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "down"
+          ]
+        ]
+      },
+      "guard": [
+        "call",
+        "clear",
+        [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "down"
+          ]
+        ]
+      ],
+      "name": "move_down",
+      "owns": [
+        "player"
+      ]
+    },
+    {
+      "action": "move-left",
+      "comment": "PDDL `move`: at-player ?from, clear ?to, adj ?from ?to ?d",
+      "effects": {
+        "player": [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "left"
+          ]
+        ]
+      },
+      "guard": [
+        "call",
+        "clear",
+        [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "left"
+          ]
+        ]
+      ],
+      "name": "move_left",
+      "owns": [
+        "player"
+      ]
+    },
+    {
+      "action": "move-right",
+      "comment": "PDDL `move`: at-player ?from, clear ?to, adj ?from ?to ?d",
+      "effects": {
+        "player": [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "right"
+          ]
+        ]
+      },
+      "guard": [
+        "call",
+        "clear",
+        [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "right"
+          ]
+        ]
+      ],
+      "name": "move_right",
+      "owns": [
+        "player"
+      ]
+    },
+    {
+      "action": "move-up",
+      "comment": "PDDL `move`: at-player ?from, clear ?to, adj ?from ?to ?d",
+      "effects": {
+        "player": [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "up"
+          ]
+        ]
+      },
+      "guard": [
+        "call",
+        "clear",
+        [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "up"
+          ]
+        ]
+      ],
+      "name": "move_up",
+      "owns": [
+        "player"
+      ]
+    },
+    {
+      "action": "push-down",
+      "comment": "PDDL `push`: at-player ?p, at ?b ?from, clear ?to, adj ?p ?from ?d, adj ?from ?to ?d",
+      "effects": {
+        "b1": [
+          "if",
+          [
+            "=",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "down"
+              ]
+            ],
+            [
+              "var",
+              "b1"
+            ]
+          ],
+          [
+            "table",
+            "nb",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "down"
+              ]
+            ],
+            [
+              "lit",
+              "down"
+            ]
+          ],
+          [
+            "var",
+            "b1"
+          ]
+        ],
+        "player": [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "down"
+          ]
+        ]
+      },
+      "guard": [
+        "and",
+        [
+          "or",
+          [
+            "=",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "down"
+              ]
+            ],
+            [
+              "var",
+              "b1"
+            ]
+          ]
+        ],
+        [
+          "call",
+          "clear",
+          [
+            "table",
+            "nb",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "down"
+              ]
+            ],
+            [
+              "lit",
+              "down"
+            ]
+          ]
+        ]
+      ],
+      "name": "push_down",
+      "owns": [
+        "b1",
+        "player"
+      ]
+    },
+    {
+      "action": "push-left",
+      "comment": "PDDL `push`: at-player ?p, at ?b ?from, clear ?to, adj ?p ?from ?d, adj ?from ?to ?d",
+      "effects": {
+        "b1": [
+          "if",
+          [
+            "=",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "left"
+              ]
+            ],
+            [
+              "var",
+              "b1"
+            ]
+          ],
+          [
+            "table",
+            "nb",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "left"
+              ]
+            ],
+            [
+              "lit",
+              "left"
+            ]
+          ],
+          [
+            "var",
+            "b1"
+          ]
+        ],
+        "player": [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "left"
+          ]
+        ]
+      },
+      "guard": [
+        "and",
+        [
+          "or",
+          [
+            "=",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "left"
+              ]
+            ],
+            [
+              "var",
+              "b1"
+            ]
+          ]
+        ],
+        [
+          "call",
+          "clear",
+          [
+            "table",
+            "nb",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "left"
+              ]
+            ],
+            [
+              "lit",
+              "left"
+            ]
+          ]
+        ]
+      ],
+      "name": "push_left",
+      "owns": [
+        "b1",
+        "player"
+      ]
+    },
+    {
+      "action": "push-right",
+      "comment": "PDDL `push`: at-player ?p, at ?b ?from, clear ?to, adj ?p ?from ?d, adj ?from ?to ?d",
+      "effects": {
+        "b1": [
+          "if",
+          [
+            "=",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "right"
+              ]
+            ],
+            [
+              "var",
+              "b1"
+            ]
+          ],
+          [
+            "table",
+            "nb",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "right"
+              ]
+            ],
+            [
+              "lit",
+              "right"
+            ]
+          ],
+          [
+            "var",
+            "b1"
+          ]
+        ],
+        "player": [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "right"
+          ]
+        ]
+      },
+      "guard": [
+        "and",
+        [
+          "or",
+          [
+            "=",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "right"
+              ]
+            ],
+            [
+              "var",
+              "b1"
+            ]
+          ]
+        ],
+        [
+          "call",
+          "clear",
+          [
+            "table",
+            "nb",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "right"
+              ]
+            ],
+            [
+              "lit",
+              "right"
+            ]
+          ]
+        ]
+      ],
+      "name": "push_right",
+      "owns": [
+        "b1",
+        "player"
+      ]
+    },
+    {
+      "action": "push-up",
+      "comment": "PDDL `push`: at-player ?p, at ?b ?from, clear ?to, adj ?p ?from ?d, adj ?from ?to ?d",
+      "effects": {
+        "b1": [
+          "if",
+          [
+            "=",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "up"
+              ]
+            ],
+            [
+              "var",
+              "b1"
+            ]
+          ],
+          [
+            "table",
+            "nb",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "up"
+              ]
+            ],
+            [
+              "lit",
+              "up"
+            ]
+          ],
+          [
+            "var",
+            "b1"
+          ]
+        ],
+        "player": [
+          "table",
+          "nb",
+          [
+            "var",
+            "player"
+          ],
+          [
+            "lit",
+            "up"
+          ]
+        ]
+      },
+      "guard": [
+        "and",
+        [
+          "or",
+          [
+            "=",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "up"
+              ]
+            ],
+            [
+              "var",
+              "b1"
+            ]
+          ]
+        ],
+        [
+          "call",
+          "clear",
+          [
+            "table",
+            "nb",
+            [
+              "table",
+              "nb",
+              [
+                "var",
+                "player"
+              ],
+              [
+                "lit",
+                "up"
+              ]
+            ],
+            [
+              "lit",
+              "up"
+            ]
+          ]
+        ]
+      ],
+      "name": "push_up",
+      "owns": [
+        "b1",
+        "player"
+      ]
+    }
+  ],
+  "schema": "engine-rig/recheck/ruleset-v1",
+  "tables": {
+    "nb": {
+      "arity": 2,
+      "comment": "the floor neighbour, or `none` at a wall",
+      "default": "none",
+      "entries": [
+        [
+          "1,1",
+          "down",
+          "2,1"
+        ],
+        [
+          "1,1",
+          "right",
+          "1,2"
+        ],
+        [
+          "1,2",
+          "left",
+          "1,1"
+        ],
+        [
+          "1,2",
+          "right",
+          "1,3"
+        ],
+        [
+          "1,3",
+          "left",
+          "1,2"
+        ],
+        [
+          "1,3",
+          "right",
+          "1,4"
+        ],
+        [
+          "1,4",
+          "down",
+          "2,4"
+        ],
+        [
+          "1,4",
+          "left",
+          "1,3"
+        ],
+        [
+          "2,1",
+          "down",
+          "3,1"
+        ],
+        [
+          "2,1",
+          "up",
+          "1,1"
+        ],
+        [
+          "2,4",
+          "down",
+          "3,4"
+        ],
+        [
+          "2,4",
+          "up",
+          "1,4"
+        ],
+        [
+          "3,1",
+          "down",
+          "4,1"
+        ],
+        [
+          "3,1",
+          "up",
+          "2,1"
+        ],
+        [
+          "3,4",
+          "down",
+          "4,4"
+        ],
+        [
+          "3,4",
+          "up",
+          "2,4"
+        ],
+        [
+          "4,1",
+          "right",
+          "4,2"
+        ],
+        [
+          "4,1",
+          "up",
+          "3,1"
+        ],
+        [
+          "4,2",
+          "left",
+          "4,1"
+        ],
+        [
+          "4,2",
+          "right",
+          "4,3"
+        ],
+        [
+          "4,3",
+          "left",
+          "4,2"
+        ],
+        [
+          "4,3",
+          "right",
+          "4,4"
+        ],
+        [
+          "4,4",
+          "left",
+          "4,3"
+        ],
+        [
+          "4,4",
+          "up",
+          "3,4"
+        ]
+      ]
+    }
+  },
+  "variables": [
+    {
+      "domain": [
+        "1,1",
+        "1,2",
+        "1,3",
+        "1,4",
+        "2,1",
+        "2,4",
+        "3,1",
+        "3,4",
+        "4,1",
+        "4,2",
+        "4,3",
+        "4,4"
+      ],
+      "name": "player"
+    },
+    {
+      "domain": [
+        "1,1",
+        "1,2",
+        "1,3",
+        "1,4",
+        "2,1",
+        "2,4",
+        "3,1",
+        "3,4",
+        "4,1",
+        "4,2",
+        "4,3",
+        "4,4"
+      ],
+      "name": "b1"
+    }
+  ]
+}

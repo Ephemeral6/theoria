@@ -597,7 +597,7 @@
       "n_items": 60,
       "paper_id": "p15-adaptation-a0",
       "question_type": "adaptation",
-      "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697"
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091"
     },
     "handover": {
       "calibrated": true,
@@ -607,7 +607,7 @@
           "awarded": 15.0,
           "axes": {
             "answers_submitted": 29,
-            "author_baseline_form": "checked-in",
+            "author_baseline_form": "compiled",
             "author_baseline_fraction": 1.0,
             "by_tag": {
               "level:corridor": {
@@ -671,7 +671,7 @@
           "awarded": 33.0,
           "axes": {
             "answers_submitted": 29,
-            "author_baseline_form": "checked-in",
+            "author_baseline_form": "compiled",
             "author_baseline_fraction": 1.0,
             "by_tag": {
               "level:corridor": {
@@ -735,7 +735,7 @@
           "awarded": 0.0,
           "axes": {
             "answers_submitted": 0,
-            "author_baseline_form": "checked-in",
+            "author_baseline_form": "compiled",
             "author_baseline_fraction": 1.0,
             "by_tag": {
               "level:corridor": {
@@ -799,7 +799,7 @@
           "awarded": 46.0,
           "axes": {
             "answers_submitted": 29,
-            "author_baseline_form": "checked-in",
+            "author_baseline_form": "compiled",
             "author_baseline_fraction": 1.0,
             "by_tag": {
               "level:corridor": {
@@ -864,7 +864,7 @@
       "n_items": 29,
       "paper_id": "p15-handover-a0",
       "question_type": "handover",
-      "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697"
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091"
     },
     "heldout": {
       "calibrated": true,
@@ -1589,7 +1589,7 @@
       "n_items": 80,
       "paper_id": "p15-heldout-a0",
       "question_type": "heldout",
-      "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697"
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091"
     },
     "verdict": {
       "calibrated": true,
@@ -1938,7 +1938,7 @@
       "n_items": 17,
       "paper_id": "p15-verdict-a2",
       "question_type": "verdict",
-      "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697"
+      "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091"
     }
   },
   "pre_registered": {
@@ -2007,7 +2007,7 @@
       "why": "ground truth must be accepted in full"
     }
   },
-  "rubric_digest": "f7793742d96fd659e33dda6db73c21c9da53aaa933c44fdf533904640406c697",
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
   "structural_expectations": {
     "heldout_replay_gap": "the memoriser's replay score must exceed its held-out score by a wide margin, or the paper is not testing rules",
     "null_all_unanswered": "every item of a null submission is `unanswered`",

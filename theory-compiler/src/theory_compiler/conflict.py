@@ -92,57 +92,41 @@ from .parser.ast_nodes import (
     ActionMatch, Comparison, Expr, FieldAccess, FuncCall, GuardAction,
     GuardPredicate, NameRef, NumberLit, RuleDecl, TupleLit, VarRef,
 )
+from .writes import DEFAULT_WRITE_SETS, WriteSets, WritesError
 
 
 class ConflictError(Exception):
     """The manual declares a conflict policy it does not satisfy."""
 
 
-# Which event names claim which of their arguments. Kept here rather than
-# imported from a backend because the obligation is a property of the manual,
-# not of one compilation of it — but it must not drift from what the backends
-# actually mutate, so `test_conflict.py` pins the two tables against each other.
+# "Claims" and "mentions" are one notion, and as of v0.3 there is one module
+# that decides it: `theory_compiler.writes`. This name is kept as an alias
+# because it is what the table was called while it lived here, and because a
+# reader arriving from v0.2's §"Discharging `conflict`" will look for it.
 #
-# **Unknown events fail closed.** Guessing "one object, the first argument"
-# would under-approximate the claimed set for any future two-object event, and
-# an under-approximated claim set silently skips the pair that needed checking.
-CLAIMED_ARGS: Dict[Tuple[str, int], Tuple[int, ...]] = {
-    ("moved", 2): (0,),
-    ("jumped", 2): (0,),
-    ("teleported", 2): (0,),
-    ("jumped", 3): (0, 1),          # the mover and the peg it jumps over
-    ("recolored", 2): (0,),
-    ("vanished", 1): (0,),
-    ("appeared", 1): (0,),
-    ("removed", 1): (0,),
-    ("stayed", 1): (0,),
-}
+# The obligation is a property of the *manual* — v0.3 makes the `events:`
+# declaration the authority and the backends the things checked against it —
+# so `claimed_objects` takes the manual's write sets rather than consulting a
+# table of its own. Ledger X-1 is the entry that forced the move: while the
+# table lived in a backend, `frame persist` was true only relative to a
+# dictionary the manual could not see.
+CLAIMED_ARGS = DEFAULT_WRITE_SETS
 
 
-def claimed_objects(rule: RuleDecl) -> Set[str]:
-    """The instances this rule's event mutates."""
-    event = rule.event
-    if not isinstance(event, FuncCall) or not event.args:
-        raise ConflictError(
-            "rule %r has no object-shaped event, so which object it claims "
-            "cannot be determined and `conflict` cannot be discharged for it"
-            % (rule.name,))
-    key = (event.name, len(event.args))
-    if key not in CLAIMED_ARGS:
-        raise ConflictError(
-            "rule %r fires %s/%d, which this checker has no claim table for. "
-            "Add it to `CLAIMED_ARGS`: assuming it claims only its first "
-            "argument would skip exactly the pairs a two-object event creates."
-            % (rule.name, event.name, len(event.args)))
-    out = set()
-    for index in CLAIMED_ARGS[key]:
-        arg = event.args[index]
-        if not isinstance(arg, NameRef):
-            raise ConflictError(
-                "rule %r claims a non-object at argument %d of %s"
-                % (rule.name, index, event.name))
-        out.add(arg.name)
-    return out
+def claimed_objects(rule: RuleDecl, writes: Optional[WriteSets] = None) -> Set[str]:
+    """The instances this rule's event mutates — v0.3's `writes(r)`.
+
+    `writes` carries the manual's own `events:` declarations. Omitting it falls
+    back to v0.3's published default table alone, which is what a caller holding
+    a bare rule with no manual around it gets. **Unknown events still fail
+    closed**: guessing "one object, the first argument" under-approximates the
+    claimed set for any two-object event, and an under-approximated claim set
+    silently skips exactly the pair that needed checking.
+    """
+    try:
+        return (writes or WriteSets()).of_rule(rule)
+    except WritesError as exc:
+        raise ConflictError(str(exc)) from exc
 
 
 # ------------------------------------------------------------- guard analysis
@@ -173,7 +157,10 @@ def _key(expr: Expr) -> str:
         if expr.name in SPATIAL_AS_TOWARD and len(expr.args) == 1:
             return "c:toward(%s,n:%s)" % (_key(expr.args[0]),
                                           SPATIAL_AS_TOWARD[expr.name])
-        return "c:%s(%s)" % (expr.name, ",".join(_key(a) for a in expr.args))
+        # `ahead(o, d)` is `toward(o, d)` under the name A0 uses; two spellings
+        # of one cell must get one key or two guards about it never line up.
+        name = "toward" if expr.name == "ahead" else expr.name
+        return "c:%s(%s)" % (name, ",".join(_key(a) for a in expr.args))
     if isinstance(expr, TupleLit):
         return "t:(%s)" % ",".join(_key(e) for e in expr.elements)
     if isinstance(expr, Comparison):
@@ -225,6 +212,40 @@ def _offboard_terms(rule: RuleDecl) -> Set[str]:
             for side, other in ((expr.right, expr.left), (expr.left, expr.right)):
                 if isinstance(side, NameRef) and side.name == "wall":
                     out.add(_key(other))
+    return out
+
+
+def _occupancy_terms(rule: RuleDecl, uniq: "Uniqueness") -> Dict[str, Set[str]]:
+    """cell key -> instances a positive `<inst>.pos = <cell>` clause puts there.
+
+    Only instances that are *always* on the frame count. An object with an
+    `alive`/`present` observation can be absent, and an absent object paints
+    nothing, so pinning it to a cell does not make that cell non-free.
+
+    Restricted to the `<inst>.pos` spelling on purpose: a bare `NameRef` is
+    ambiguous between an instance and a landmark, and a disjointness rule that
+    guesses wrong there would report a *proof* where there is none. This
+    function is only ever allowed to under-report.
+    """
+    out: Dict[str, Set[str]] = {}
+    # `uniq is None`, not `not uniq`: `Uniqueness.__bool__` reports whether any
+    # field is declared `unique`, and this function needs no such declaration —
+    # only the instance/type map and which types can be absent.
+    if uniq is None or not uniq.instance_type:
+        return out
+    for clause in rule.guard.clauses:
+        if not isinstance(clause, GuardPredicate) or clause.negated:
+            continue
+        expr = clause.expr
+        if not isinstance(expr, Comparison) or expr.op != "=":
+            continue
+        for side, other in ((expr.left, expr.right), (expr.right, expr.left)):
+            if not (isinstance(side, FieldAccess) and side.field_name == "pos"):
+                continue
+            type_name = uniq.instance_type.get(side.obj)
+            if type_name is None or uniq.has_aliveness.get(type_name, False):
+                continue
+            out.setdefault(_key(other), set()).add(side.obj)
     return out
 
 
@@ -295,15 +316,42 @@ def _placements(rule: RuleDecl, uniq: "Uniqueness") -> Dict[str, Set[str]]:
     return out
 
 
+def _self_excluding(expr) -> bool:
+    """Does `free(expr)` name its cell *through an object* (v0.3, ledger X-5)?
+
+    Such an occurrence excludes that object from its own occupancy test, so it
+    is no longer "this cell renders as background" — it is "this cell renders as
+    background once the asker is lifted off it". Two `free` clauses over one
+    cell can then disagree, and every disjointness rule that reads `free(t)` as
+    a claim about `t` alone stops being sound over it.
+
+    Over-reports on purpose: a bare `NameRef` may be a landmark (`free(portal_exit)`,
+    which excludes nothing) and this cannot tell without the level. Over-reporting
+    costs a proof; under-reporting would *claim* one. No manual in this repository
+    writes `free(<landmark>)`, so the cost is currently zero.
+    """
+    return isinstance(expr, NameRef) or (
+        isinstance(expr, FieldAccess) and expr.field_name == "pos")
+
+
 def _free_terms(rule: RuleDecl) -> Set[str]:
-    """Terms a positive `free(t)` clause demands be background-coloured."""
+    """Terms a positive `free(t)` clause demands be background-coloured.
+
+    Self-excluding occurrences get a **separate key namespace**, so they never
+    line up with a `colored(t, c)` or `t = wall` clause over the same syntactic
+    term. Without that, `free(Cart.pos)` and `colored(Cart.pos, 2)` — which both
+    hold whenever the Cart is alone on its cell — would be reported *proved
+    disjoint*, and a false proof in a soundness-critical checker is worse than
+    no proof.
+    """
     out = set()
     for clause in rule.guard.clauses:
         if not isinstance(clause, GuardPredicate) or clause.negated:
             continue
         expr = clause.expr
         if isinstance(expr, FuncCall) and expr.name == "free" and len(expr.args) == 1:
-            out.add(_key(expr.args[0]))
+            key = _key(expr.args[0])
+            out.add("self:" + key if _self_excluding(expr.args[0]) else key)
     return out
 
 
@@ -370,6 +418,30 @@ def disjointness_reason(a: RuleDecl, b: RuleDecl, background: int = 0,
             return ("the %s requires free(%s) and the %s requires the same "
                     "cell to be `wall`, i.e. off the board — a cell that is "
                     "not on the board is not free" % (order[0], term, order[1]))
+
+    # `free(t)` is "t renders as background", and an always-present object
+    # standing on `t` renders its own colour there. So `free(t)` and
+    # `<inst>.pos = t` are a contradiction. This is the syntactic route
+    # a0-spike's THEORIZE_LOG T-11c takes for the A0 world — `free(c)` implies
+    # `c != Box.pos` — and it is what separates `walk` from `push2` without
+    # falling back to an exhaustive sweep. It needs the wide reading of `slid`
+    # to matter at all: under the narrow one those two rules share no claimed
+    # object and the pair is never examined (ledger X-1).
+    # `uniq is not None`, **not** `if uniq:` — `Uniqueness.__bool__` is false
+    # when no field is declared `unique`, and this rule needs none of that. It
+    # reads `instance_type` and `has_aliveness` only. Guarding it with the
+    # truthiness test silently switched it off for exactly the manual it was
+    # written for: A0 declares no `unique` field, so the walk/push2 pair stayed
+    # undischarged while the code that discharges it sat one line away.
+    if uniq is not None:
+        for free_side, occ_side, order in ((a, b, ("first", "second")),
+                                           (b, a, ("second", "first"))):
+            occupied = _occupancy_terms(occ_side, uniq)
+            for term in sorted(_free_terms(free_side) & set(occupied)):
+                who = sorted(occupied[term])[0]
+                return ("the %s requires free(%s) and the %s puts %s on that "
+                        "same cell; %s is always on the frame, so the cell is "
+                        "not background" % (order[0], term, order[1], who, who))
 
     # E-07. Two guards that each pin a *different* live instance of one type to
     # the same value of a `unique` field cannot both hold. This is what lets a
@@ -460,13 +532,19 @@ class ConflictReport:
 
 def check_conflict(rules: Sequence[RuleDecl], semantics,
                    background: int = 0, strict: bool = True,
-                   uniq: Optional["Uniqueness"] = None) -> ConflictReport:
+                   uniq: Optional["Uniqueness"] = None,
+                   writes: Optional[WriteSets] = None) -> ConflictReport:
     """Discharge the declared `conflict` policy, or raise `ConflictError`.
 
     `rules` must be **ground** — the IR's rules, after `forall` expansion. A
     schema's guards mention variables, and two groundings of one schema are
     exactly the pairs most likely to collide, so checking before grounding
     would check the wrong thing.
+
+    `writes` carries the manual's `events:` declarations (v0.3, ledger X-1).
+    Without it the pass sees only the published default table, which is right
+    for a v0.2 manual and wrong for any manual that declares a compound event —
+    reading `slid` by its name alone ranges the obligation over too few pairs.
     """
     report = ConflictReport(semantics.conflict)
 
@@ -494,7 +572,7 @@ def check_conflict(rules: Sequence[RuleDecl], semantics,
     unclaimable: List[Tuple[str, str]] = []
     for rule in rules:
         try:
-            claims[rule.name] = claimed_objects(rule)
+            claims[rule.name] = claimed_objects(rule, writes)
         except ConflictError as exc:
             if strict:
                 raise

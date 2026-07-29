@@ -1,0 +1,142 @@
+{
+  "task": "guarded",
+  "trace": [
+    {
+      "step": 0,
+      "added": "clear:c28",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c28"
+      ],
+      "expanded": 630,
+      "initial_h": "11"
+    },
+    {
+      "step": 1,
+      "added": "clear:c26",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c28",
+        "clear:c26"
+      ],
+      "expanded": 606,
+      "initial_h": "13"
+    },
+    {
+      "step": 2,
+      "added": "clear:c38",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c28",
+        "clear:c26",
+        "clear:c38"
+      ],
+      "expanded": 584,
+      "initial_h": "15"
+    },
+    {
+      "step": 3,
+      "added": "clear:c36",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c28",
+        "clear:c26",
+        "clear:c38",
+        "clear:c36"
+      ],
+      "expanded": 542,
+      "initial_h": "15"
+    },
+    {
+      "step": 4,
+      "added": "clear:c46",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c28",
+        "clear:c26",
+        "clear:c38",
+        "clear:c36",
+        "clear:c46"
+      ],
+      "expanded": 542,
+      "initial_h": "17"
+    },
+    {
+      "step": 5,
+      "added": "clear:c48",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c28",
+        "clear:c26",
+        "clear:c38",
+        "clear:c36",
+        "clear:c46",
+        "clear:c48"
+      ],
+      "expanded": 454,
+      "initial_h": "29"
+    },
+    {
+      "step": 6,
+      "added": "clear:c47",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c28",
+        "clear:c26",
+        "clear:c38",
+        "clear:c36",
+        "clear:c46",
+        "clear:c48",
+        "clear:c47"
+      ],
+      "expanded": 454,
+      "initial_h": "37"
+    },
+    {
+      "step": 7,
+      "added": "clear:c27",
+      "pattern": [
+        "box:b1",
+        "box:b2",
+        "player",
+        "clear:c28",
+        "clear:c26",
+        "clear:c38",
+        "clear:c36",
+        "clear:c46",
+        "clear:c48",
+        "clear:c47",
+        "clear:c27"
+      ],
+      "expanded": 0,
+      "initial_h": "infinity"
+    }
+  ],
+  "final_pattern": [
+    "box:b1",
+    "box:b2",
+    "player",
+    "clear:c28",
+    "clear:c26",
+    "clear:c38",
+    "clear:c36",
+    "clear:c46",
+    "clear:c48",
+    "clear:c47",
+    "clear:c27"
+  ]
+}
