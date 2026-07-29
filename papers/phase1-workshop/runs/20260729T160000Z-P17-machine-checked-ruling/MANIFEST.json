@@ -1,0 +1,52 @@
+{
+  "prompt_id": "P17-P17-machine-checked-ruling",
+  "branch": "agent/p17-machine-checked-ruling",
+  "base_commit": "78c76bdfed4b183cee462ac0f59699418c1eefe4",
+  "utc": "2026-07-29T16:00:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "ruling": {
+    "subject": "sections/05_a2.md §5.2 item 3 -- \"The isomorphism is machine-checked, clause by clause\"",
+    "options_argued": ["keep", "qualify", "delete"],
+    "verdict": "delete the claim, keep the ledger, label every row",
+    "qualify_rejected_because": "it fixes the adjective and keeps the noun; a softened overclaim survives review, which is the failure mode this repository has already seen twice on this exact sentence",
+    "prior_rounds_that_declined_to_rule": ["P12 review-d-hostile 1.7 (LANDS)", "P15 FINDINGS.md"]
+  },
+  "measured": {
+    "rows": 6,
+    "kind_lean": 1,
+    "kind_artefact": 4,
+    "kind_episode": 1,
+    "clauses_refuted": 0,
+    "artefacts_missing": 0,
+    "row_level_mismatches_repaired": 4,
+    "diff_changed_lines": 52,
+    "diff_hunks_unified": 7,
+    "diff_hunks_plain": 15
+  },
+  "files": [
+    {
+      "path": "papers/phase1-workshop/sections/05_a2.md",
+      "sha256": "16577a73784a26df61ee84a87a071852c6d906791f417654f2f40c978457d0ef"
+    },
+    {
+      "path": "papers/phase1-workshop/PAPER.md",
+      "sha256": "2f44b5d1b15b74af5af6a9852face303fb721fbbea95fa40d6b56b2d2095815c"
+    },
+    {
+      "path": "papers/phase1-workshop/OPEN_ITEMS.md",
+      "sha256": "9f9ce87cd0c0a12947b46acf8331f6956c4317cdfb94844da759a0ad493e1f92"
+    }
+  ],
+  "result": {
+    "verify_paper": "PASS 6/6",
+    "opened": ["OPEN_ITEMS C12", "OPEN_ITEMS B5"],
+    "closed": ["OPEN_ITEMS C13"],
+    "self_supplied_followup": "P18-P18-certificate-verb-ruling",
+    "factcheck_rounds": 2,
+    "adversarial_rounds": 1
+  }
+}
