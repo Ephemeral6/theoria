@@ -18,6 +18,15 @@ unsolvable variant whose unsolvability follows from the construction.
 truth, and ground truth comes from construction, not from running the variant
 and seeing what happened. `Variant.load` refuses a spec without one.
 
+One of the five is not game-agnostic, and the record now says so.
+`win_tighten` tests `score_at_least`, and a game that reports no score fails
+that test at every value -- so on such a game it does not tighten the win
+condition, it removes it. The rewrite stays (the other direction would hand a
+scoreless game the tightened win outright), but "the score was absent" and "the
+score was short" are written down as the different events they are, and a
+`degenerate` bit marks the first. See D-032, and
+`tools/check_variant_degeneracy.py`, which is what reads the bit.
+
 Every rewrite here is a pure function of (spec, session counters, response), so
 a variant run replays exactly like an unmodified one.
 """

@@ -1,0 +1,349 @@
+== M01 proxy/variants.py (revert the split entirely: absent and below collapse back together)
+        assert absent["state"] == below["state"] == "NOT_FINISHED"
+        assert applied_absent["reason"] == REASON_ABSENT
+>       assert applied_below["reason"] == REASON_BELOW
+E       AssertionError: assert 'score_absent' == 'score_below'
+E         
+E         - score_below
+E         + score_absent
+
+proxy\tests\test_variant_degeneracy.py:134: AssertionError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M02 proxy/variants.py (the bit is written, but always false)
+            {"frame": [[[0]]], "state": "WIN", "score": 3})
+    
+        assert absent["state"] == below["state"] == "NOT_FINISHED"
+        assert applied_absent["reason"] == REASON_ABSENT
+        assert applied_below["reason"] == REASON_BELOW
+>       assert applied_absent["degenerate"] is True
+E       assert False is True
+
+proxy\tests\test_variant_degeneracy.py:135: AssertionError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M03 proxy/variants.py (the bit is written, but always true -- every shortfall looks degenerate)
+    
+        assert absent["state"] == below["state"] == "NOT_FINISHED"
+        assert applied_absent["reason"] == REASON_ABSENT
+        assert applied_below["reason"] == REASON_BELOW
+        assert applied_absent["degenerate"] is True
+>       assert applied_below["degenerate"] is False
+E       assert True is False
+
+proxy\tests\test_variant_degeneracy.py:136: AssertionError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M04 proxy/variants.py (absent is labelled as a shortfall)
+    
+        assert absent["state"] == below["state"] == "NOT_FINISHED"
+>       assert applied_absent["reason"] == REASON_ABSENT
+E       AssertionError: assert 'score_below' == 'score_absent'
+E         
+E         - score_absent
+E         + score_below
+
+proxy\tests\test_variant_degeneracy.py:133: AssertionError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M05 proxy/variants.py (a shortfall is labelled absent)
+        assert absent["state"] == below["state"] == "NOT_FINISHED"
+        assert applied_absent["reason"] == REASON_ABSENT
+>       assert applied_below["reason"] == REASON_BELOW
+E       AssertionError: assert 'score_absent' == 'score_below'
+E         
+E         - score_below
+E         + score_absent
+
+proxy\tests\test_variant_degeneracy.py:134: AssertionError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M06 proxy/variants.py (drop the bit from the record altogether)
+    
+        assert absent["state"] == below["state"] == "NOT_FINISHED"
+        assert applied_absent["reason"] == REASON_ABSENT
+        assert applied_below["reason"] == REASON_BELOW
+>       assert applied_absent["degenerate"] is True
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       KeyError: 'degenerate'
+
+proxy\tests\test_variant_degeneracy.py:135: KeyError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M07 proxy/variants.py (the counter never moves, so the incident never fires)
+        runtime = VariantRuntime(_variant(2, "t-unit"))
+        first = runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})[1]
+        second = runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})[1]
+    
+>       assert first["note"] == DEGENERATE_NOTE and first["occurrence"] == 1
+               ^^^^^^^^^^^^^
+E       KeyError: 'note'
+
+proxy\tests\test_variant_degeneracy.py:167: KeyError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_only_the_first_absent_rewrite_carries_the_sentence
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M08 proxy/variants.py (off-by-one on the surviving comparison)
+        runtime = VariantRuntime(_variant(4, "t-unit"))
+        body, applied = runtime.after({"frame": [[[0]]], "state": "WIN", "score": 4})
+>       assert body["state"] == "WIN" and applied is None
+E       AssertionError: assert ('NOT_FINISHED' == 'WIN'
+E         
+E         - WIN
+E         + NOT_FINISHED)
+
+proxy\tests\test_variant_degeneracy.py:156: AssertionError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_a_sufficient_score_is_still_left_alone
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M09 proxy/variants.py (the dangerous inverse: an absent score now *passes* the tightened win)
+                    if self.degenerate_wins == 1:
+                        record["note"] = DEGENERATE_NOTE
+                        self.first_degenerate = dict(record)
+                    applied.append(record)
+>               elif have < needed:
+                     ^^^^^^^^^^^^^
+E               TypeError: '<' not supported between instances of 'NoneType' and 'int'
+
+proxy\variants.py:294: TypeError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_absent_and_below_are_not_the_same_record
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M10 proxy/variants.py (no rewrite is ever the first, so nothing is ever loud)
+        runtime = VariantRuntime(_variant(2, "t-unit"))
+        first = runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})[1]
+        second = runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})[1]
+    
+>       assert first["note"] == DEGENERATE_NOTE and first["occurrence"] == 1
+               ^^^^^^^^^^^^^
+E       KeyError: 'note'
+
+proxy\tests\test_variant_degeneracy.py:167: KeyError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_only_the_first_absent_rewrite_carries_the_sentence
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M11 proxy/variants.py (every rewrite is the first: the sentence on every record)
+        runtime = VariantRuntime(_variant(2, "t-unit"))
+        first = runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})[1]
+        second = runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})[1]
+    
+        assert first["note"] == DEGENERATE_NOTE and first["occurrence"] == 1
+>       assert "note" not in second and second["occurrence"] == 2
+E       AssertionError: assert ('note' not in {'degenerate': True, 'effect': 'WIN rewritten to NOT_FINISHED', 'note': 'this game reported no score, so `score_at_lea...tocol question, answerable without playing it; answer it before using win_tighten on that game.', 'occurrence': 2, ...})
+
+proxy\tests\test_variant_degeneracy.py:168: AssertionError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_only_the_first_absent_rewrite_carries_the_sentence
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M12 proxy/variants.py (the occurrence index is frozen)
+        runtime = VariantRuntime(_variant(2, "t-unit"))
+        first = runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})[1]
+        second = runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})[1]
+    
+        assert first["note"] == DEGENERATE_NOTE and first["occurrence"] == 1
+>       assert "note" not in second and second["occurrence"] == 2
+E       AssertionError: assert ('note' not in {'degenerate': True, 'effect': 'WIN rewritten to NOT_FINISHED', 'occurrence': 1, 'op': 'win_tighten', ...} and 1 == 2)
+
+proxy\tests\test_variant_degeneracy.py:168: AssertionError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_only_the_first_absent_rewrite_carries_the_sentence
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M13 proxy/variants.py (first_degenerate starts non-None, so 'nothing degenerate happened' is unsayable)
+        runtime = VariantRuntime(_variant(4, "t-unit"))
+        runtime.after({"frame": [[[0]]], "state": "WIN", "score": 0})
+        runtime.after({"frame": [[[0]]], "state": "WIN", "score": 3})
+        assert runtime.degenerate_wins == 0
+>       assert runtime.first_degenerate is None
+E       assert {} is None
+E        +  where {} = <proxy.variants.VariantRuntime object at 0x00000150EECA09D0>.first_degenerate
+
+proxy\tests\test_variant_degeneracy.py:179: AssertionError
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_variant_degeneracy.py::test_a_shortfall_never_counts_as_a_degeneracy
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M14 proxy/variants.py (wording only -- EXPECTED TO SURVIVE; nothing should assert on the capital)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M14-fux1_h1w\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M15 proxy/tools/check_variant_degeneracy.py (a false bit now counts as degenerate)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M15-ks44vofw\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M16 proxy/tools/check_variant_degeneracy.py (the guard flags every win_tighten record, degenerate or not)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M16-6juqpdh8\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M17 proxy/tools/check_variant_degeneracy.py (the guard flags any operator that carries the key)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M17-bx897b3u\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M18 proxy/tools/check_variant_degeneracy.py (the guard reports but never exits non-zero -- the decoration failure)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M18-63jj33xn\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M19 proxy/tools/check_variant_degeneracy.py (R-V22's machine-readable half stops saying the item is ineligible)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M19-dzzycypr\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M20 proxy/tools/check_variant_degeneracy.py (nested applied records stop being unwrapped)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M20-xbgs98xk\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M21 proxy/tools/check_variant_degeneracy.py (the verdict is hard-coded green)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M21-wf4rhfcx\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M22 proxy/env_proxy.py (the incident consumer is never called)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M22-cd9yaxhm\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M23 proxy/env_proxy.py (the incident fires on the wrong edge -- once, before anything degenerated)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M23-qx46pgdu\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M24 proxy/env_proxy.py (the once-per-session guard is removed: one incident per WIN)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M24-9lezfxyd\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!
+
+== M25 proxy/mock/arc_mock.py (the scoreless world quietly starts scoring: the negative control's own fixture)
+        The second — file against `EXPECTED_PILES_SHA256`, a constant in this
+        module — catches an edit made *with* re-signing, which the first cannot,
+        because a document that certifies itself certifies nothing.
+        """
+>       with open(path, encoding="utf-8") as fh:
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       FileNotFoundError: [Errno 2] No such file or directory: 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M25-e0lm_1aj\\arc-recon\\data\\piles.json'
+
+proxy\guard.py:87: FileNotFoundError
+=========================== short test summary info ===========================
+ERROR proxy\tests\test_variant_degeneracy.py::test_a_scoreless_session_marks_every_rewrite
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!

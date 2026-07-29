@@ -695,3 +695,132 @@ The half this directory cannot do for itself is the importer's:
 INC-TA-006, and it is the same shape as the `upstream_pin` finding — a pin that
 is written and never compared documents an incident afterwards rather than
 preventing one.
+
+---
+
+*Below: V22, from the sealed drill's §4 finding.*
+
+## D-032 · `win_tighten` on a scoreless game: the bit, not the refusal and not the warning
+
+`exam/SEALED_DRILL.md` §4 ran the frozen operator library against a world it was
+not designed for. Four of the five operators survived; `win_tighten` did not.
+A worldgen trace carries `{t, frame, action, win}` and no score, so `score` is
+always `None`, and `after()` read `have is None` and `have < needed` as the same
+condition. On such a game `win_tighten` rewrote **every** `WIN` to
+`NOT_FINISHED` at **every** requirement value. It did not tighten the win
+condition; it removed it.
+
+The conservative reading stays. Treating an absent score as satisfying
+`score_at_least` would let a game that never reports a score win a tightened
+variant outright, which is the worse of the two errors by a wide margin. What is
+wrong is that the collapse was silent: the `applied` record an absent score
+produced was byte-identical in shape to the one an honest shortfall produced,
+so nothing downstream could tell a variant whose claim followed from its
+construction from one whose claim followed from an accident of the protocol.
+
+**Three ways to stop being silent were available, and this is why the third one
+was taken.**
+
+*Refuse.* Wrong side of D-030, and for exactly D-030's reason. `after()` runs on
+a response that has already been paid for and received; a refusal there cannot
+un-send the request, it can only destroy the evidence that the rewrite happened.
+INC-TA-006 is the invoice for that manoeuvre. There is a place where refusal is
+right — declining to *start* a `win_tighten` run against a game not known to
+report a score — but that is a precondition check at run setup with knowledge
+the wrapper does not have at response time, and it is stated below as a Phase 4
+obligation rather than pretended into the runtime.
+
+*Warn.* A stderr line is not in the artefact. Python dedups a repeated warning
+to one line, the record is what survives the session, and this repository has
+already paid for the difference: D-030 kept `Ledger.unknown_fields` precisely
+because "the tally is the only complete trace". A warning would have made the
+collapse audible for as long as somebody was watching the terminal, which is
+not the failure mode — the failure mode is a variant claim read six weeks later
+from a ledger.
+
+*The bit.* `applied` now carries `reason` (`score_absent` / `score_below`),
+`degenerate` (bool), `occurrence`, and, on the first absent-driven rewrite of a
+session, `note` — the sentence, so a human meets the argument and not only a
+boolean. `VariantRuntime` counts them in `degenerate_wins` and keeps the first
+in `first_degenerate`.
+
+**A bit with no reader is decoration, so it has two readers.** D-031 already
+says it: a rule with no detector is prose. So —
+
+* `env_proxy` records one `variant_degenerate` incident per session, written
+  after the `env_step` it refers to, so it always points at a record that
+  already exists. Once per session and not once per WIN: a scoreless game
+  rewrites every WIN identically and a per-WIN incident buries the first under
+  copies of itself.
+* `proxy/tools/check_variant_degeneracy.py` reads any ledger and **exits 2**.
+  It reads the marker and nothing else — it does not re-derive degeneracy from
+  `score: null`, and that restraint is load-bearing: strip the marker and the
+  tool passes the same stream, which is what makes the marker rather than a
+  lucky second signal the thing that catches this.
+* `verify.py` gains rung 5, which plays a game built to trip the guard and
+  requires a refusal, then strips the markers from that same ledger and requires
+  a pass. A rung that could only ever be green is decoration one level up: the
+  acceptance run on rung 3 carries no variant, so a guard pointed at it would
+  pass without ever having fired.
+
+**The negative control runs on both kinds of session.** `tests/
+test_variant_degeneracy.py` plays two whole runs: a scoreless one, and a scoring
+one whose requirement is set above anything the game can reach so that
+`win_tighten` fires for a genuine shortfall. The scoreless run is refused, then
+passed with the marker stripped. The scoring run is passed, then refused with a
+single marker forged into it. Checking only the first pair would leave open that
+the guard reacts to the session rather than to the defect (D-014).
+
+**The mock gained a `scoreless=True` mode** because the claim is about what a
+session leaves in a ledger, and a hand-built response body cannot show that. It
+is off by default: the mock's job is to look like the live API, and the live API
+scores.
+
+### The certificate grammar: no fourth form, and the rule that replaces it
+
+The drill's §4 consequence 2 is that `invariant`, `cut_set` and `counting`
+cannot express "the win condition is unsatisfiable because the game reports no
+score", so ground truth itself cannot earn the reason half of that item and the
+oracle's ceiling is 0.95 rather than 1.0.
+
+**Judgement: do not add a fourth form.** Not primarily because `exam/` is
+another territory — that constrains where the rule can be *enforced*, not what
+the right answer is. The reason is that the other three certificates are
+arguments about the world: the board, the command alphabet, what the arm can
+reach. "This game reports no score" is a fact about the **protocol**, and one
+the wrapper learns by looking, not by arguing. A fourth form would let a
+certificate earn reason-credit for restating a property of the measuring
+instrument, and the exam would then be grading arms on how well they discover
+defects in the exam. Worse, it would make the degenerate construction
+*legitimate*: once there is a form for it, a variant whose unsolvability comes
+from a missing score becomes a well-formed exam item, and the library's one
+non-game-agnostic operator acquires a certificate that makes it look
+game-agnostic.
+
+The right treatment is that these variants are **not exam items at all**. A
+`win_tighten` whose verdict came from an absent score does not test anything
+about the game; it tests whether the harness noticed. So:
+
+> **Rule R-V22.** A `win_tighten` variant whose run produced any degenerate
+> rewrite does not count toward the reason score, and its unsolvability may not
+> be cited as following from its construction. The verdict is not thereby
+> wrong — the variant really is unwinnable — but the *reason* is the protocol,
+> not the board, and the reason is what is being scored.
+
+The executable half lives on this side of the boundary, which is the half
+`proxy/` can actually guarantee: `check_variant_degeneracy.py --json` reports
+`exam_eligible: false` for such a variant and exits 2, so the fact reaches a
+grader in a form that costs something to ignore, and `verify.py` rung 5 keeps
+the detector itself honest. What `proxy/` cannot do is make `exam/`'s scorer
+subtract the item; that is one line for whoever owns the rubric, and until it
+is written the 0.95 ceiling stays a *named* cap rather than a mystery — which
+was the drill's actual complaint.
+
+### For Phase 4
+
+**Whether a game reports a score is a protocol question, not a mechanics
+question, and it is answerable without breaking the seal.** So it must be
+answered *before* `win_tighten` is used against a sealed game — a variant built
+on an unchecked assumption there produces an unsolvable item whose
+justification is false, and the only thing that would reveal it is the incident
+this decision added. Check first; the incident is the backstop, not the plan.

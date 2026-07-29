@@ -61,6 +61,7 @@ stream, a file someone edited:
 
 ```bash
 python -m proxy.tools.validate_ledger  <path>              # judge it against the canon
+python -m proxy.tools.check_variant_degeneracy <path>      # did win_tighten abolish the win? (exit 2)
 python -m proxy.tools.upgrade_ledger   <v0> -o <canon>     # lift baseline-arms v0
 python -m proxy.tools.replay_spotcheck --canon <canon> --game ar25-0c556536
 ```
