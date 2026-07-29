@@ -1,6 +1,15 @@
 {
+  "control": {
+    "exit": 0,
+    "file": "proxy/variants.py",
+    "id": "M00",
+    "last_line": ".....................................................                    [100%]",
+    "seconds": 24.1,
+    "verdict": "SURVIVED",
+    "why": "control: no mutation at all; must NOT be killed"
+  },
   "expected_survivor": "M14",
-  "killed": 25,
+  "killed": 22,
   "mutants": 25,
   "not_applied": 0,
   "results": [
@@ -9,7 +18,7 @@
       "file": "proxy/variants.py",
       "id": "M01",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 1.4,
+      "seconds": 1.0,
       "verdict": "killed",
       "why": "revert the split entirely: absent and below collapse back together"
     },
@@ -45,7 +54,7 @@
       "file": "proxy/variants.py",
       "id": "M05",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 1.0,
+      "seconds": 0.9,
       "verdict": "killed",
       "why": "a shortfall is labelled absent"
     },
@@ -54,7 +63,7 @@
       "file": "proxy/variants.py",
       "id": "M06",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 0.9,
+      "seconds": 1.0,
       "verdict": "killed",
       "why": "drop the bit from the record altogether"
     },
@@ -63,7 +72,7 @@
       "file": "proxy/variants.py",
       "id": "M07",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 0.9,
+      "seconds": 1.0,
       "verdict": "killed",
       "why": "the counter never moves, so the incident never fires"
     },
@@ -72,7 +81,7 @@
       "file": "proxy/variants.py",
       "id": "M08",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 0.9,
+      "seconds": 1.0,
       "verdict": "killed",
       "why": "off-by-one on the surviving comparison"
     },
@@ -81,7 +90,7 @@
       "file": "proxy/variants.py",
       "id": "M09",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 1.1,
+      "seconds": 0.9,
       "verdict": "killed",
       "why": "the dangerous inverse: an absent score now *passes* the tightened win"
     },
@@ -99,7 +108,7 @@
       "file": "proxy/variants.py",
       "id": "M11",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 0.9,
+      "seconds": 1.0,
       "verdict": "killed",
       "why": "every rewrite is the first: the sentence on every record"
     },
@@ -117,17 +126,17 @@
       "file": "proxy/variants.py",
       "id": "M13",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 0.9,
+      "seconds": 1.0,
       "verdict": "killed",
       "why": "first_degenerate starts non-None, so 'nothing degenerate happened' is unsayable"
     },
     {
-      "exit": 1,
+      "exit": 0,
       "file": "proxy/variants.py",
       "id": "M14",
-      "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 2.0,
-      "verdict": "killed",
+      "last_line": ".....................................................                    [100%]",
+      "seconds": 24.4,
+      "verdict": "SURVIVED",
       "why": "wording only -- EXPECTED TO SURVIVE; nothing should assert on the capital"
     },
     {
@@ -135,7 +144,7 @@
       "file": "proxy/tools/check_variant_degeneracy.py",
       "id": "M15",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 2.0,
+      "seconds": 7.9,
       "verdict": "killed",
       "why": "a false bit now counts as degenerate"
     },
@@ -144,17 +153,17 @@
       "file": "proxy/tools/check_variant_degeneracy.py",
       "id": "M16",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 2.0,
+      "seconds": 4.1,
       "verdict": "killed",
       "why": "the guard flags every win_tighten record, degenerate or not"
     },
     {
-      "exit": 1,
+      "exit": 0,
       "file": "proxy/tools/check_variant_degeneracy.py",
       "id": "M17",
-      "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 2.0,
-      "verdict": "killed",
+      "last_line": ".....................................................                    [100%]",
+      "seconds": 24.0,
+      "verdict": "SURVIVED",
       "why": "the guard flags any operator that carries the key"
     },
     {
@@ -162,7 +171,7 @@
       "file": "proxy/tools/check_variant_degeneracy.py",
       "id": "M18",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 2.1,
+      "seconds": 6.7,
       "verdict": "killed",
       "why": "the guard reports but never exits non-zero -- the decoration failure"
     },
@@ -171,7 +180,7 @@
       "file": "proxy/tools/check_variant_degeneracy.py",
       "id": "M19",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 2.1,
+      "seconds": 3.5,
       "verdict": "killed",
       "why": "R-V22's machine-readable half stops saying the item is ineligible"
     },
@@ -180,7 +189,7 @@
       "file": "proxy/tools/check_variant_degeneracy.py",
       "id": "M20",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 2.0,
+      "seconds": 7.5,
       "verdict": "killed",
       "why": "nested applied records stop being unwrapped"
     },
@@ -189,7 +198,7 @@
       "file": "proxy/tools/check_variant_degeneracy.py",
       "id": "M21",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 2.0,
+      "seconds": 4.5,
       "verdict": "killed",
       "why": "the verdict is hard-coded green"
     },
@@ -198,7 +207,7 @@
       "file": "proxy/env_proxy.py",
       "id": "M22",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 2.0,
+      "seconds": 3.8,
       "verdict": "killed",
       "why": "the incident consumer is never called"
     },
@@ -207,17 +216,17 @@
       "file": "proxy/env_proxy.py",
       "id": "M23",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 1.9,
+      "seconds": 4.2,
       "verdict": "killed",
       "why": "the incident fires on the wrong edge -- once, before anything degenerated"
     },
     {
-      "exit": 1,
+      "exit": 0,
       "file": "proxy/env_proxy.py",
       "id": "M24",
-      "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 2.0,
-      "verdict": "killed",
+      "last_line": ".....................................................                    [100%]",
+      "seconds": 24.0,
+      "verdict": "SURVIVED",
       "why": "the once-per-session guard is removed: one incident per WIN"
     },
     {
@@ -225,10 +234,10 @@
       "file": "proxy/mock/arc_mock.py",
       "id": "M25",
       "last_line": "!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!",
-      "seconds": 2.0,
+      "seconds": 2.8,
       "verdict": "killed",
       "why": "the scoreless world quietly starts scoring: the negative control's own fixture"
     }
   ],
-  "survived": 0
+  "survived": 3
 }

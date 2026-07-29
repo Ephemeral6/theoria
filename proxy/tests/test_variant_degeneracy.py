@@ -22,6 +22,7 @@ guard that might be reacting to the session rather than to the defect.
 import contextlib
 import copy
 import json
+import types
 
 import pytest
 
@@ -299,6 +300,43 @@ def test_the_guard_exits_zero_on_a_scoring_stream(tmp_path, scoring_run):
 
 def test_the_guard_reports_an_unreadable_path_rather_than_passing_it(tmp_path):
     assert check_main([str(tmp_path / "nope.jsonl")]) == 1
+
+
+def test_the_guard_only_speaks_for_win_tighten():
+    """Written because a mutant survived: dropping the `op` filter changed no
+    test. `degenerate` is a `win_tighten` word -- R-V22 excludes a *win_tighten*
+    variant from the reason score -- so a guard that refused any record
+    carrying the key would be refusing on someone else's behalf."""
+    record = {"seq": 3, "event": "env_step", "variant": {
+        "variant_id": "t-other", "spec_sha256": "sha256:x",
+        "applied": {"op": "observation_loss", "cell": [1, 1], "value": 2,
+                    "degenerate": True}}}
+    assert scan_records([record])["verdict"] == "PASS"
+
+
+def test_the_incident_is_written_once_even_if_the_edge_is_seen_twice():
+    """Also written because a mutant survived. `degenerate_wins != 1` already
+    fires once per session in a single-threaded run, so the `degeneracy_reported`
+    set looks redundant -- it is not: two commands for the same game can be in
+    flight at once (`ThreadingHTTPServer`), and both would see the counter at 1.
+    Calling the notifier twice is the deterministic stand-in for that race."""
+    from proxy import env_proxy as ep
+
+    runtime = VariantRuntime(_variant(2, "t-race"))
+    runtime.after({"frame": [[[0]]], "state": "WIN", "score": None})
+    assert runtime.degenerate_wins == 1
+
+    written = []
+    stub = types.SimpleNamespace(
+        state=ep._State(),
+        cfg=types.SimpleNamespace(
+            variant=runtime.variant,
+            run=types.SimpleNamespace(
+                incident=lambda kind, detail, **fields: written.append(kind))))
+
+    ep._Handler._note_degeneracy(stub, runtime, "g-1")
+    ep._Handler._note_degeneracy(stub, runtime, "g-1")
+    assert written == ["variant_degenerate"]
 
 
 def test_the_guard_sees_a_marker_nested_under_multiple():
