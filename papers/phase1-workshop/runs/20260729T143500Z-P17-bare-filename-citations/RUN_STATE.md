@@ -44,11 +44,13 @@ Worst offenders: `MANIFEST.json` 125 candidates, `ground_truth.json` 41,
 `raw_trace.jsonl` 39, `playbook.dsl` 15, `theory.dsl` 13, `STATUS.md` 9,
 `FINDINGS.md` 9, `THEORIZE_LOG.md` 6 (cited 6 times).
 
-## The 19, decided on content
+## The 19
 
-Every one was settled by something only one candidate has — an entry id, a
-quoted value, a field name, a line count — never by which directory looked
-right. **14 resolved, 5 generic, 0 unresolved.**
+**14 resolved, 5 generic, 0 unresolved.** Most were settled by something only
+one candidate has — an entry id, a quoted value, a field name, a line count.
+Not all: two were settled by convention, and saying "every one was decided on
+content" (as an earlier commit message here did) is not true of those two. They
+are named below.
 
 The ones worth naming, because they show the method:
 
@@ -64,7 +66,9 @@ The ones worth naming, because they show the method:
 * `THEORIZE_LOG.md` ×4 → `cold-start-a0/THEORIZE_LOG.md`, each by its own quoted
   content: "the three pairs R-05 named" appears in that file and nowhere else;
   Round 0 "opens on 28"; P-03 has no bold verdict there while A2's P-03 *does*
-  have one; O-01 carries the 6511/4423 operator table.
+  have one; the 6511/4423 operator table is in that log and no other. (The
+  *file* was right. The **entry id beside it was not** -- see the adversarial
+  pass below.)
 
 **Two rest on something weaker than content, and are recorded rather than
 smoothed over:**
@@ -83,16 +87,15 @@ the LLM in a `THEORIZE_LOG.md`", "35 directories with a `ground_truth.json`",
 `playbook.dsl` as the *form* the frozen grammar defines. They are ruled in
 `ADJUDICATED_BARE`, reasons printed on every run.
 
-One of the five is marked in the table as the weak one. `11_limitations.md`'s
-`THEORIZE_LOG.md` quotes no entry id, value or line, so there is no content hook
-that would settle it either way; the ruling says exactly that rather than
-implying a confidence it does not have, and names what would retire it.
+**One of the five did not survive the adversarial pass and is now a citation,
+leaving 4.** It was flagged in the table at the time as the weak one, on the
+grounds that no content hook existed — and that was itself wrong. See below.
 
 ## The controls, which went red first
 
-`test_bare_gate.py` — 15 negative controls. `mutation_check.py` breaks check F
-nine ways and asserts the suite goes red for each. **It caught 5 of 9 on its
-first run**, and all four failures were worth having:
+`test_bare_gate.py` — 20 negative controls. `mutation_check.py` breaks check F
+twelve ways and asserts the suite goes red for each. The first nine **caught
+only 5 of 9**, and all four failures were worth having:
 
 * **"stale rulings stop gating" SLIPPED** — `check_uncited` has a
   byte-identical `stale = [...]` line and comes *first* in the file, so
@@ -116,15 +119,88 @@ candidate set: ~90 checkouts of this same repository live under `.worktrees/`,
 and counting them would make every filename in the paper ambiguous — the check
 would be measuring the agent's scratch space rather than the published tree.
 
+## The second adversarial pass, which overturned three of my own judgements
+
+Eleven of the fourteen resolutions held under content re-verification. Three did
+not, and **two of the three were published sentences**, not gate internals.
+
+**The anchor was wrong, and I had already blessed it.** `03_a0.md` and
+`PROVENANCE.md` both cite the segmentation table as `THEORIZE_LOG.md` **O-01**.
+It is not O-01: the block names itself at `cold-start-a0/THEORIZE_LOG.md:86` —
+"Recorded as **D-A0-007**" — and is followed by `### O-04`. Following O-01 lands
+a reader on a one-line entry about naming `obj0` the Button. `OPEN_ITEMS` B4 said
+"O-03, should be O-01"; earlier the same day I checked it, agreed, and marked it
+closed. **The third answer is the right one.** Fixed in all three places.
+
+This is the shape of F's deepest gap, and it is now in the docstring: **check F
+resolves which file a citation means, and nothing resolves the anchor inside
+it.** The rewrite made the file findable and left a reader pointed at the wrong
+entry within it.
+
+**A cited file that does not contain the claim.** `11_limitations` said the
+reproducible pipeline "(`run_all.py`, `prime.run_prime`) calls
+`solve(..., prefer="stub")`". Neither file contains `solve` or `prefer`; the call
+is at `cold-start-a0/pipeline/plan_stage.py:59`. The previous commit **conceded
+this in its message** while the published sentence still asserted it — a
+concession in a git log is not a correction to the paper. Now cited properly.
+
+**A ruling whose stated evidence was false.** The `theory.dsl` ruling claimed
+three files carry the same `frame persist` comment. `a0-spike/theory/theory.dsl`
+carries the keyword bare with no comment at all. Ten other `.dsl` files do carry
+it, so the generic conclusion survives — but on a basis I had not checked, and
+**nothing in the table would ever have caught the false reason.**
+
+**One ruling retired rather than defended.** `11_limitations`' `THEORIZE_LOG.md`
+was ruled generic because "a path rewrite would have to become a four-item list"
+and "no content hook exists". The paragraph names **two** arms, not four, and
+"written before the scores existed" *is* the ground-truth-seal claim this paper
+already sources twice elsewhere. It is now a two-path citation. **5 rulings → 4.**
+
+Two smaller corrections: `probe.py` constructs the `Environment` at **108-109**,
+not 108; and `02_framework`'s seal clause ("Those logs … written before the
+scores existed") carried no provenance at all and now names its four logs.
+
+### What it broke in check F
+
+* **The two guards I ported the table without.** Check E has `MIN_ANCHOR` and
+  `BROAD` because a ruling that silences more than the claim it was written for
+  is as dangerous as one that silences nothing. F's table is keyed
+  `(section, token)` with **no text anchor**, so one entry silenced a scratch
+  section holding one generic mention and three specific ones — the last brand
+  new. F now fails on `hits > 1`.
+* **`n == 0` was green.** A bare name matching *nothing* is an invented
+  citation, and it was the one case **nobody** read: B skips it for having no
+  `/`, E only sees it beside a quantity. `ledger_summary.jsonl` — the example
+  `_basename_exists`'s own docstring gives as the motivating hole — passed. Now
+  a separate `ABSENT` verdict. Case is part of this: NTFS is case-insensitive
+  and `_candidates` is not, so `Status.md` opened any of nine files for the
+  author and matched none for the check.
+* **Sibling notation evaded**, in the paper's own idiom: `` `{STATUS.md}` `` and
+  `` `STATUS.md,DECISIONS.md` ``. §7 already cites siblings as
+  `{a0-base,a2-base}`, so this is one keystroke away.
+
+Three of the twelve F mutations came back **PATTERN NOT FOUND** on the next run —
+my own re-indent had drifted them. Third instance of that failure mode today.
+
+### The gap worth stating plainly
+
+**Uniqueness is not findability, and it is the proxy this check is built on.**
+§10 cites four `SURVEY-*.md` bare; each is unique, so F passes all four — while
+**§10.7 itself says those files exist only as untracked files in a machine-local
+worktree, on a branch that was never pushed.** F calls the paper's least
+resolvable citations locatable, and would call a contextually-resolved one
+ambiguous. Five further gaps are in the docstring, each reproduced against the
+live scanner.
+
 ## Verification
 
 ```
 verify_paper.py             PASS (6/6)
-                            F: 94 bare citations, 0 ambiguous, 5 ruled, 0 stale
-                            B: 217 path citations, 0 broken   (was 213)
-test_bare_gate.py           15 passed
+                            F: 93 bare citations, 0 ambiguous, 4 ruled, 0 stale
+                            B: 220 path citations, 0 broken   (was 213)
+test_bare_gate.py           20 passed
 test_uncited_gate.py        62 passed
-mutation_check.py (F)       PASS — 9/9 caught
+mutation_check.py (F)       PASS — 12/12 caught
 mutation_check.py (E)       PASS — 21/21 caught, unchanged by the shared walk
 ```
 
