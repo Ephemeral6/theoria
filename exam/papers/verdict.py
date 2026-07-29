@@ -431,6 +431,30 @@ def subset_lower_bound(level: Level) -> Dict[str, Any]:
         if level.step_limit is not None and cost > level.step_limit:
             break
         m = index
+
+    # The premise the construction rests on, checked rather than assumed.
+    #
+    # "Dip into any subset and come back" is only realisable for *arbitrary*
+    # subsets if the m dip sources lie on one contiguous lane the cart can walk
+    # along without latching anything it did not choose and without dying. The
+    # code checked each dip in isolation and never checked the travel between
+    # them, so on a corridor whose own cells are switches the reachable masks
+    # are the m prefixes rather than the 2^m subsets -- and `subset_lower_bound`
+    # returned 2^60 for a level with 1,830 reachable states. Worse, `comb_open`
+    # plus an `observation_loss` on the corridor -- a shipped constructor and a
+    # shipped operator -- produced 2^60 against a true 29,791, and `_large_space`
+    # stamped `exhaustive_feasible: False` on it. Repro in this run's
+    # `verify_checker_claims.py`. D-EX-021.
+    sources = [_dip_source(level, reach, switch) for _d, switch in candidates[:m]]
+    problems = _lane_problems(level, [s for s in sources if s is not None])
+    if m and (len(sources) != m or problems):
+        raise AssertionError(
+            "%s: the 2^m family is not demonstrated on this board -- %s. The "
+            "bound counts each dip in isolation; it is only a bound when the "
+            "dip sources lie on one switch-free, hazard-free lane, because "
+            "otherwise walking between two dips latches switches the subset did "
+            "not choose and the 2^m states are not distinct reachable states."
+            % (level.level_id, "; ".join(problems) or "a dip source vanished"))
     return {
         "m": m,
         "dippable_switches": len(candidates),
@@ -444,6 +468,106 @@ def subset_lower_bound(level: Level) -> Dict[str, Any]:
                          "unbounded" if level.step_limit is None
                          else str(level.step_limit), m, m, m, 2 ** m)),
     }
+
+
+def _dip_source(level: Level, reach: Dict[Tuple[int, int], List[str]],
+                switch: Tuple[int, int]) -> Optional[Tuple[int, int]]:
+    """The corridor cell the bound's construction dips into `switch` from.
+
+    Same rule `subset_lower_bound` uses to decide a switch is dippable, kept in
+    step with it by reading the same `reach`.  Returned so the lane the cart
+    walks between dips can be checked, which is the premise the bound was
+    asserting rather than testing.
+    """
+    best: Optional[Tuple[int, Tuple[int, int]]] = None
+    for command in level.commands():
+        action = level.world_action(command)
+        dr, dc = DELTA[action]
+        source = (switch[0] - dr, switch[1] - dc)
+        if source == switch or not _passable(level, source) or source not in reach:
+            continue
+        back = OPPOSITE[action]
+        if back not in level.effective_actions():
+            continue
+        landed, _ = level.step(source, False, action)
+        if landed != switch:
+            continue
+        returned, _ = level.step(switch, False, back)
+        if returned != source:
+            continue
+        distance = len(reach[source])
+        if best is None or distance < best[0]:
+            best = (distance, source)
+    return None if best is None else best[1]
+
+
+def _lane_problems(level: Level,
+                   sources: Sequence[Tuple[int, int]]) -> List[str]:
+    """Is there one lane along which every dip can be taken independently?
+
+    The 2^m family is realisable for *arbitrary* subsets only if the cart can
+    travel from one dip source to the next without latching anything the subset
+    did not choose and without dying.  One contiguous, switch-free, hazard-free
+    row or column is the sufficient condition, and it is the one the comb
+    construction actually provides.  Anything else and the reachable masks are
+    not the 2^m subsets -- on a corridor whose own cells are switches they are
+    the m prefixes, which is m+1 masks rather than 2^m.
+    """
+    problems: List[str] = []
+    if not sources:
+        return problems
+    rows = {cell[0] for cell in sources}
+    cols = {cell[1] for cell in sources}
+    if len(rows) == 1:
+        row = next(iter(rows))
+        lane = [(row, c) for c in range(min(cols), max(cols) + 1)]
+    elif len(cols) == 1:
+        col = next(iter(cols))
+        lane = [(r, col) for r in range(min(rows), max(rows) + 1)]
+    else:
+        return ["the dip sources do not lie on one row or one column (rows %s, "
+                "columns %s), so travelling between two dips is not a straight "
+                "walk and may latch switches the subset did not choose"
+                % (sorted(rows), sorted(cols))]
+    for cell in lane:
+        if not _passable(level, cell):
+            problems.append("the lane cell %s is not walkable" % (list(cell),))
+        elif cell in level.switch_index:
+            problems.append("the lane cell %s is itself a latching switch, so "
+                            "walking past it latches a switch the subset did "
+                            "not choose" % (list(cell),))
+    return problems[:4]
+
+
+def positional_states(level: Level) -> int:
+    """How many `(cart, button pressed)` states are actually reachable.
+
+    The quotient a competent solver searches, as against the raw product space
+    `enumerate_states` walks.  On a comb level latching is monotone and gates no
+    geometry, so every non-full latch mask at a position behaves alike and this
+    is the space that decides the question.
+
+    It is recorded on every item because the difference between the two numbers
+    is the honest content of class (ii): `lower_bound` says a *naive* enumerator
+    cannot finish, and this says what an enumerator that quotients has to do
+    instead.  The paper used to publish only the first and let the rubric tell
+    an examinee that had searched the second that its search was impossible.
+    D-EX-022.
+    """
+    start = (level.start, False)
+    seen = {start}
+    frontier = [start]
+    while frontier:
+        nxt_frontier: List[Tuple[Tuple[int, int], bool]] = []
+        for cart, pressed in frontier:
+            for command in level.commands():
+                state = level.step(cart, pressed, level.world_action(command))
+                if state[0] in level.lost_cells or state in seen:
+                    continue
+                seen.add(state)
+                nxt_frontier.append(state)
+        frontier = nxt_frontier
+    return len(seen)
 
 
 # ============================================================ spec emission
@@ -593,6 +717,7 @@ def _small_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
         "cap": result["cap"],
         "truncated": False,
         "lower_bound": result["states"],
+        "positional_states": positional_states(Level(level_doc)),
         "arithmetic": ("forward enumeration in command space terminated at %d "
                        "states, under the cap of %d" % (result["states"], result["cap"])),
     }
@@ -606,6 +731,7 @@ def _large_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
             "a class (ii) item; enumeration is not out of reach and the question "
             "does not test what it claims to"
             % (level_doc["level_id"], bound["lower_bound"], LARGE_SPACE_THRESHOLD))
+    quotient = positional_states(Level(level_doc))
     return {
         "exhaustive_feasible": False,
         "enumerated": None,
@@ -614,7 +740,18 @@ def _large_space(level_doc: Dict[str, Any]) -> Dict[str, Any]:
         "lower_bound": bound["lower_bound"],
         "m": bound["m"],
         "dippable_switches": bound["dippable_switches"],
+        "positional_states": quotient,
         "arithmetic": bound["arithmetic"],
+        # Published beside the bound rather than instead of it, because the two
+        # say different true things and the paper needs both. D-EX-022.
+        "quotient_note": (
+            "`lower_bound` is a bound on the raw (cart, button, latch mask) "
+            "product space, which is what a naive forward enumerator walks. A "
+            "solver that notices latching is monotone and gates no geometry "
+            "searches the (cart, button) quotient instead, and that has %d "
+            "reachable states. So `exhaustive_feasible: False` means *naive* "
+            "enumeration is out of reach; it does not mean no complete search "
+            "answers this level." % quotient),
     }
 
 

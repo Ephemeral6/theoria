@@ -84,6 +84,17 @@ ignored.  Over-approximating is the only safe direction -- it can make a truly
 unsolvable level look solvable (the certificate is then refused, which is a
 false negative and costs the examinee points) but it can never make a solvable
 level look unsolvable, which would hand out points for a false theorem.
+
+**That paragraph was false when it was written, and the reason is worth keeping.**
+The graph was built by a *second* implementation of the transition function, and
+the two disagreed in three places -- an absent `portal_dest`, a `portal_dest`
+inside a wall, and a cell that is both the door and the portal.  In each,
+`Level.step` moved the cart and `_neighbours` dropped the edge, so the graph was
+an under-approximation exactly where it mattered and `cart_region` and `cut_set`
+certificates for **solvable** levels were accepted and paid in full.  A
+docstring claiming soundness is not soundness.  There is now one transition
+function; `_neighbours` asks it; and `Level.wellformed_problems` catches at build
+time the field combinations that made the disagreement reachable.  D-EX-020.
 """
 
 from __future__ import annotations
@@ -177,14 +188,30 @@ class Level:
     def passable(self, cell: Cell) -> bool:
         """Cells the cart could conceivably occupy, generously.
 
-        Door open, button walkable, hazards ignored.  Only the portal entry is
-        excluded, and for a reason that is not generosity: a teleport moves the
-        cart *through* that cell, so it is never occupied and treating it as a
-        resting place would let a cut set claim a cell no path ever stands on.
+        Door open, hazards ignored.  Two cells are excluded, and neither
+        exclusion is generosity -- both are cells `step` will never return, so
+        admitting them would let a cut set claim a cell no path ever stands on:
+
+        * the **portal entry**, because a teleport moves the cart *through* it;
+        * the **button**, because stepping into B latches the button and leaves
+          the cart where it was.  `step` says so at line 205 and always has.
+
+        The button used to be admitted, which cost nothing while `_neighbours`
+        was a separate implementation that yielded it as a neighbour.  Once
+        `_neighbours` began asking `step`, the button became a node with no
+        edges -- its own singleton component -- and since `components` names a
+        component by its lexicographically smallest cell, the atrium's start
+        representative moved from the button at [1,1] to [1,3] and the shipped
+        `a2var-i1` certificate was refused.  The separation was never in doubt;
+        the *name* of the component changed.  Excluding the button is what makes
+        the node set mean "cells the cart can rest on", which is what both
+        `cut_set` and `cart_region` have always assumed it meant.
         """
         if not self.in_bounds(cell) or self.is_wall(cell):
             return False
         if self.portal is not None and cell == self.portal:
+            return False
+        if self.button is not None and cell == self.button:
             return False
         return True
 
@@ -221,6 +248,61 @@ class Level:
                 return False
         # The level awards one point on victory; `win_tighten` raises the bar.
         return 1 >= self.win_score_required
+
+    # -- well-formedness --------------------------------------------------
+    def wellformed_problems(self) -> List[str]:
+        """Ways this level's fields describe a world `step` will model wrongly.
+
+        Not called from the marker: a rubric must mark whatever it is handed,
+        and refusing to mark a malformed level would turn a builder's mistake
+        into an examinee's zero.  It is called from the *builder*'s self-check,
+        where a malformed level is caught before anyone sits the paper.
+
+        Every entry here is a shape that produced an accepted-but-false
+        certificate before `_neighbours` was made to delegate to `step`.  The
+        delegation is what makes the checker sound; this is the second line, and
+        it is the one that will matter in Phase 4, when a level is transcribed
+        from a sealed game rather than written here.  `_level()` in the paper
+        builder defaults `portal_dest` to `None`, so "portal set, destination
+        forgotten" is inside the level shape rather than outside it.
+        """
+        problems: List[str] = []
+        if self.portal is not None:
+            if self.portal_dest is None:
+                problems.append(
+                    "portal is set at %s but portal_dest is None; `step` then "
+                    "returns the portal cell itself, so the cart rests on P -- "
+                    "which the board's legend says never happens"
+                    % (list(self.portal),))
+            else:
+                if not self.in_bounds(self.portal_dest):
+                    problems.append("portal_dest %s is off the board"
+                                    % (list(self.portal_dest),))
+                elif self.is_wall(self.portal_dest):
+                    problems.append(
+                        "portal_dest %s is a wall cell; `step` parks the cart "
+                        "inside the wall and lets it walk out again"
+                        % (list(self.portal_dest),))
+                if self.portal_dest == self.portal:
+                    problems.append("portal_dest is the portal cell itself")
+            if self.door is not None and self.door == self.portal:
+                problems.append(
+                    "door and portal are the same cell %s; `step` tests the "
+                    "door first and the portal never fires, so any reader of "
+                    "the two fields models a different world"
+                    % (list(self.portal),))
+            if self.portal == self.start:
+                problems.append("the cart starts on the portal cell")
+        if self.button is not None and self.button == self.door:
+            problems.append("button and door are the same cell; the button "
+                            "branch of `step` wins and the door never opens")
+        if not self.in_bounds(self.start) or self.is_wall(self.start):
+            problems.append("the start cell %s is not a floor cell"
+                            % (list(self.start),))
+        if not self.in_bounds(self.goal) or self.is_wall(self.goal):
+            problems.append("the goal cell %s is not a floor cell"
+                            % (list(self.goal),))
+        return problems
 
 
 def _cell(value: Any) -> Cell:
@@ -283,18 +365,30 @@ def replay(level: Level, commands: Sequence[Any]) -> Dict[str, Any]:
 # --------------------------------------------------- the relaxed graph
 
 def _neighbours(level: Level, cell: Cell, actions: Iterable[str]) -> Iterable[Cell]:
+    """Where one command can put the cart, **asked of `Level.step` itself**.
+
+    This used to be a second implementation of the transition function, and the
+    two drifted in the way second implementations do.  `step` sends the cart to
+    ``portal_dest or target`` with no check that the destination exists or is
+    passable; this function dropped the edge whenever `portal_dest` was absent
+    or unwalkable.  `step` tests the door *before* the portal; this function had
+    no door branch at all.  Wherever they disagreed, `step` moved the cart and
+    the graph did not -- so `relaxed_edges` was not an over-approximation, and a
+    `cart_region` or `cut_set` certificate for a **solvable** level was accepted
+    and paid in full.  Three reproductions are in this run's
+    `verify_checker_claims.py`; the cheapest needs no malformed field at all,
+    only a cell that is both the door and the portal.
+
+    An over-approximating graph that fails *closed* is not an over-approximation.
+    So there is now one transition function and this asks it.  `pressed=True` is
+    the only relaxation left, and it is the intended one: the door is treated as
+    already open, which can only add edges.
+    """
     for action in actions:
-        dr, dc = DELTA[action]
-        target = (cell[0] + dr, cell[1] + dc)
-        if not level.in_bounds(target) or level.is_wall(target):
-            continue
-        if level.portal is not None and target == level.portal:
-            dest = level.portal_dest
-            if dest is not None and level.passable(dest):
-                yield dest
-            continue
-        if level.passable(target):
-            yield target
+        target, _ = level.step(cell, True, action)
+        if target == cell:
+            continue                    # blocked move, or a button press
+        yield target
 
 
 def relaxed_edges(level: Level, *, blocked: frozenset = frozenset()) -> Dict[Cell, Set[Cell]]:
@@ -306,18 +400,32 @@ def relaxed_edges(level: Level, *, blocked: frozenset = frozenset()) -> Dict[Cel
     the undirected closure only adds edges, so a separation in this graph is a
     separation in the real one.  The converse fails, and that asymmetry is the
     price of a certificate that costs O(cells x actions) instead of O(states).
+
+    The node set is a **closure**, not a filter.  Seeding from the passable cells
+    and then following `step` means a cell the transition function can actually
+    reach is in the graph even when `passable()` would have refused it -- a
+    teleport destination inside a wall, say.  Filtering the successors instead
+    was the shape of the unsoundness described on `_neighbours`: a cell the cart
+    can stand on but the graph does not know about is a cell no certificate can
+    be refused on account of.
     """
     actions = level.effective_actions()
     graph: Dict[Cell, Set[Cell]] = {}
+    stack: List[Cell] = []
     for cell in level.cells():
-        if not level.passable(cell) or cell in blocked:
-            continue
-        graph.setdefault(cell, set())
+        if level.passable(cell) and cell not in blocked:
+            graph[cell] = set()
+            stack.append(cell)
+    while stack:
+        cell = stack.pop()
         for nxt in _neighbours(level, cell, actions):
             if nxt in blocked:
                 continue
+            if nxt not in graph:
+                graph[nxt] = set()
+                stack.append(nxt)
             graph[cell].add(nxt)
-            graph.setdefault(nxt, set()).add(cell)
+            graph[nxt].add(cell)
     return graph
 
 
@@ -523,6 +631,21 @@ def _check_cut_set(cert: Dict[str, Any], level: Level) -> Dict[str, Any]:
         return _no("cut_set",
                    "%s are not declared hazards by this variant, so cutting "
                    "them is a claim about a different level" % outside)
+    # The goal has to be a cell of this board *before* anything is cut, or the
+    # separation is vacuous: `rep` would simply not contain it and the old code
+    # read that absence as success. Any hazard at all then bought a full-marks
+    # "cut set" that cut nothing -- which is how the door/portal reproduction in
+    # this run's `verify_checker_claims.py` was paid 2.0 of 2.0.
+    if level.goal in parsed:
+        return _no("cut_set", "the goal cell is itself named as a cut cell; that "
+                              "is a claim about the goal, not a separation")
+    if level.goal not in components(relaxed_edges(level)):
+        return _no("cut_set",
+                   "the goal is not a cell this board's transition function "
+                   "reaches at all, so removing %s is not the reason the level "
+                   "is unsolvable -- the certificate names the wrong argument"
+                   % [list(c) for c in parsed])
+
     graph = relaxed_edges(level, blocked=frozenset(parsed))
     rep = components(graph)
     if level.start not in rep:
