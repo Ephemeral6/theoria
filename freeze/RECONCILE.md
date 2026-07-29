@@ -125,14 +125,45 @@ P-22 `STATS_RULES.md:276-278` 写 `baseline-arms/out/campaign/` 的 48 集是
 >   四种失效模式都实测过会红（含「被换成真正的包络重跑」这一种，
 >   即 §5.2 原先误信的那个），不是没人看过的报警器。
 
-### 三、陈旧扫描
+### 三、陈旧扫描 —— ✅ 本轮已修（RES-1 派出的 subagent，2026-07-29）
 
-* **`ablation-arm/` 现在存在**（`DESIGN.md`、`verify.sh`、`ablcore/` 九个模块，
+- [x] **`ablation-arm/` 现在存在**（`DESIGN.md`、`verify.sh`、`ablcore/` 九个模块，
   `agent/p18-ablation-arm` 已合并）。P-22 的 附A-1、C2 限制二、C5 约束二
-  全都假设它不存在，其中 A-1 直接写「没有消融臂，C5 与 C2 的切分做不出来」——**已经解决了**。
-* `PREDICTIONS.md` 是 **603 行四批**，不是 P-22 写的「v0 L1-130 + v1 L131-240」。
-* 两份稿的 base commit 都已过期，冻结时必须重取。
-* S4 的 `PENDING_FIVE.md` **从来没写过**，它自己却链了十一次——这些链接在 S4 树里全是死的。
+  全都假设它不存在，其中 A-1 直接写「没有消融臂，C5 与 C2 的切分做不出来」——~~**已经解决了**~~。
+  **已修，但上面那句「已经解决了」是本清单自己的一处过头话，一并订正。**
+  臂确实建成并标定了（74 tests，`verify.sh` GREEN），刀口有论证（U2|U3 边界，只切一刀）。
+  但它**只有离线形态**：`ablation-arm/STATUS.md` 记着 `ablcore/` 无 harness、
+  无环境回路、无模型掌台、无 HTTP、不读 API key；`REPORT.md` §3(c) 记着
+  **两臂的美元列都是 `NOT MEASURED`**，§7 限制 5 逐字说这一列 "cannot be filled offline"。
+  于是**分开算**：**C2 的封锁解除**（切分工具到位，`theoria − 消融臂` 原理上可测），
+  **C5 的封锁没有解除**（成本切分要的数一个都没有，且离线拿不到）。
+  三处已改：`MANIFEST_DRAFT.md` 附 A-1 → A-1′ + 展开、`CLAIMS_TEXT.md` C2 限制二
+  与 C5 硬约束二（并改了 C5 不成立版的 ⟨原因逐条⟩）、`PENDING_FIVE.md` 附 A + 展开。
+- [x] `PREDICTIONS.md` 是 **603 行四批**，不是 P-22 写的「v0 L1-130 + v1 L131-240」。
+  **已修**（`MANIFEST_DRAFT.md` 8-d，含四批行号表）。两处补正：
+  ① P-22 写的**当时是对的**——`25eee107` 上那个 blob 正好 240 行两批，是基准过期不是笔误；
+  ② 追加是真 append，**v0 正文一字未动**，所以 `PREDICTIONS.md:78`（`CLAIMS_TEXT.md:86`、
+  `STATS_RULES.md:172`）与 `:122-127`（`STATS_RULES.md:202`）的行号锚点**全部仍然有效**，
+  已逐段比对确认，无需改动。
+- [x] 两份稿的 base commit 都已过期，冻结时必须重取。
+  **已修**（`MANIFEST_DRAFT.md` 开头）：`25eee107` 改写成显式占位
+  `⟨FREEZE_COMMIT — 待重取⟩`，八张哈希表的表头一律加 `@25eee107（过期占位）`，
+  页脚同步。**没有编造新哈希。** 复核实数：**31 个哈希里 17 个已与 master 不符**，
+  `battery/` 一族全部过期。
+- [x] S4 的 `PENDING_FIVE.md` **从来没写过**，它自己却链了十一次——这些链接在 S4 树里全是死的。
+  **已核，结论要改两处。** ① 数目不是十一：`*.s4draft.md` 里共 **13 处引用**
+  （17 次字符串命中，其中 4 处是 `[PENDING_FIVE.md](PENDING_FIVE.md)` 双计）——
+  `STATS_RULES.s4draft.md` 7 处、`CLAIMS_TEXT.s4draft.md` 3 处、`MANIFEST_DRAFT.s4draft.md` 3 处。
+  ② **文件级的死链已经不存在**（`freeze/PENDING_FIVE.md` 来自 P-22，4 条相对链接都指得到），
+  但**有三处指到了没有对应内容的地方**，移植时会踩：
+  `STATS_RULES.s4draft.md:227` 的 ⟨g⟩、`CLAIMS_TEXT.s4draft.md:198-199` 的 ⟨g⟩、
+  `STATS_RULES.s4draft.md:170` 的 `T_min` —— **P-22 的 `PENDING_FIVE.md` 里没有这两样**
+  （已 grep 确认），所以它们是**指向存在文件里不存在小节**的引用。
+  另有 `MANIFEST_DRAFT.s4draft.md:31` 说 ⟨n⟩「MISSING·被别的活挡住，见 PENDING_FIVE.md」，
+  而 P-22 的 `PENDING_FIVE.md` §4.1 **已裁定 n = 2**——链接通，内容相反。
+  **未改任何 `*.s4draft.md`**（它们是移植底本，改了就毁了比对面），
+  记在此处由 G7/G10 的移植人处理：**移植 ⟨g⟩ 与 `T_min` 时必须同时在
+  `PENDING_FIVE.md` 里给它们开小节，否则移植完链接照样落空。**
 
 ## 从 S4 移植回来的清单（按价值排序，逐条勾掉）
 

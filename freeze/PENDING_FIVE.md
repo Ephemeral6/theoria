@@ -218,12 +218,40 @@ k 是 **Phase 3 开发堆**的退出条件（4 局），
 
 | # | 事 | 为什么挡冻结 | 出处 |
 |---|---|---|---|
-| A | **消融臂不存在** | `Theoria.md:376` 称它「必设」「活命臂」。没有它，C2 的「工程省 vs 理解省」与 C5 的切分都做不出来 | 分支与 master 逐字节相同；`ablation-arm/` 是空目录 |
+| A | ~~**消融臂不存在**~~ → **消融臂已建成，但无线上形态**（2026-07-29 复扫，见表下） | 起草时属实，现已不属实。臂在树上并已标定，**C2 的切分工具到位**；但两臂的美元列都是 `NOT MEASURED`，离线补不上，**C5 的成本切分仍然挡冻结** | `ablation-arm/{DESIGN,REPORT,STATUS}.md`；旧证据「分支与 master 逐字节相同、`ablation-arm/` 是空目录」**已作废** |
 | B | **U3 达成率没有任何实现** | 它是三个主终点之一，全仓没有对应指标，`Step.won` 无人消费 | `MANIFEST_DRAFT.md` ⛔ 8-a |
 | C | **⟨n⟩ 的依据 untracked** | `baseline-arms/out/campaign/` 的 48 个 episode 不在 git 里；不可哈希 = 不能进预注册 | `git ls-files` 返回 0 |
 | D | **Theoria 臂的规划器未钉版** | `theoria-arm/inner/plan.py:112` 不传 `prefer=`，规划器档位取决于跑它那台机器的 `$FAST_DOWNWARD` | `MANIFEST_DRAFT.md` ⚠ 7-a |
+
+**A 的现状展开（2026-07-29 复扫，RES-3）。**
+`ablation-arm/` 已随 `p18-ablation-arm` → `a4a-ablation-build` → `a4b-ablation-calibrate`
+进入 master：`DESIGN.md`（刀口切在 U2|U3 边界，只切一刀）、`REPORT.md`（标定）、
+`ablcore/` 九个模块、74 tests、`bash ablation-arm/verify.sh` → GREEN exit 0。
+**降级而非解除**，三条理由，逐条有出处：
+
+1. `REPORT.md` §3(c)：全臂与消融臂的**美元列都是 `NOT MEASURED`**，
+   「Reporting `$0 vs $0` would be true and carry no information」。
+2. `REPORT.md` §7 限制 5：这一列 "cannot be filled offline"，
+   要填必须让两臂跑同一局线上游戏，而「this arm has no harness for it」。
+   `STATUS.md` 说得更死：`ablcore/` 里无 harness、无环境回路、无模型掌台、
+   无 HTTP、不读 API key；工单 `A4-ablation-online` 已**退回看板、无人认领**。
+3. `REPORT.md` §7 限制 1–2：两个自建离线世界、零 API、零封存堆接触，
+   标定的是**机制**不是效应量；且两臂**按设计共用一份说明书**，
+   所以 A0 的分数与重放相等**部分是构造性的**，
+   引用 0.987288 为「消融臂学得一样好」是误引（`calibration.json:predictions[P-2].caveat`）。
+
+**还有一处一行的阻塞**：`proxy/ledger.py:36` 的 `ARMS`
+= `{bare_cc, schema_repro, theoria, probe, replay, mock_arm}`，
+**没有 `theoria_ablate`**（`ablation-arm/DECISIONS.md` D-AB-004）。
+这属于 proxy 轨道的领地，消融臂自己不能改。
+（顺带订正一处：`ablation-arm/STATUS.md` 说这会「写入时不报错、事后才炸」。
+现在只有构造器不报错——`RunLedger.__init__` 确实不校验——但
+`Ledger.append` 在 `:204` 已经硬拒 `unknown arm %r; register it in ledger.ARMS`，
+所以**第一条记录就会抛**，一个字节都写不出去。结论不变、且更硬：
+消融臂在名字注册之前根本写不了账本。）
 
 ---
 
 *起草：engine-rig 轨道，工单 P-22，2026-07-28。*
 *复算脚本：`freeze/runs/2026-07-28T1200Z-p22/{envelope_stats,budget_calc,thresholds}.py`。*
+*陈旧扫描复核：2026-07-29，RES-3（`RECONCILE.md` §三 必修三）。*
