@@ -56,6 +56,14 @@ WHAT THE WORLD SAID THAT THE GRAMMAR COULD NOT (expressivity ledger)
          cost  : the domain/problem boundary is real but unwritten; a reader of `theory.dsl` alone cannot tell which names are level data
   E-05   wanted: a weight function over cells for a pagoda invariant
          cost  : same as E-04
+  E-06   wanted: a proof method for goals no linear pagoda covers
+         cost  : see below
+  E-07   wanted: saying that two live instances of one type never share a cell
+         cost  : see below
+  E-08   wanted: a guard that counts (`count(Token, present = false) >= k`) — the count-lock gate
+         cost  : the rung below it is a quantifier and it is deliberately not taken
+  E-09   wanted: putting a *named track* in a *place*: "the object I am about to step onto is **that** one" (`faces(T,D)`) — the miner vocabulary, not the grammar
+         cost  : 2 bits per repaired transition paid in the segmentation script, and the pass that pays them is the one place the pipeline does not adjudicate by compression
 
 ------------------------------------------------------------------------------
 The A0 manual was revised zero times by certify: both certify layers went green against revision 1. The iterations that did happen were in the compiler, not in the manual.

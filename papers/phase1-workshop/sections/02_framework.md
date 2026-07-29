@@ -1,7 +1,7 @@
 ## 2 · The framework, in the amount this paper needs
 
 The full design is `Theoria.md`. This section carries only the parts the Phase 1
-results are unintelligible without; §11 places the whole thing against its
+results are unintelligible without; §12 places the whole thing against its
 neighbours.
 
 ### 2.1 Two books, and what each answers

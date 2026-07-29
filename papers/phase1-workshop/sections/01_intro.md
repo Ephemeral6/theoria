@@ -34,7 +34,7 @@ against it. `Theoria.md` §3.1 reports that line reaching **98.98 %**. Two
 qualifications travel with that figure and this paper carries both. It is a *game
 score*, not a replay-fidelity figure — replay is the verification regime, not the
 thing measured. And it is self-reported on a project page rather than in a paper,
-against a public set whose composition our sources do not state, so §11.1 treats
+against a public set whose composition our sources do not state, so §12.1 treats
 it as prior work's own summary and not as a measurement of ours.
 
 Read the three waves together and what each of them upgrades is the same thing:
@@ -301,7 +301,7 @@ Scoped to what was actually run:
    elsewhere in this draft is true of neither number by itself.
 
 Sections 6, 8 and 9 report a transfer result, an examination instrument and two
-live API runs. They are reported and not claimed; §10.5 says why.
+live API runs. They are reported and not claimed; §11.5 says why.
 
 ### 1.6 What this paper does not claim
 
@@ -315,7 +315,7 @@ and no network was touched (`cold-start-a2/A2_REPORT.md` §7 for A2;
 self-built world and not a game). The battery is passive: it
 recomputes over trajectories that already existed and spends nothing new
 (`battery/REPORT_V2.md`). No sealed-pile game was played or read for any result
-here — though §10.1 records that the sealed pile is nonetheless no longer clean,
+here — though §11.1 records that the sealed pile is nonetheless no longer clean,
 for reasons unconnected to this paper's experiments.
 
 The theorize step is not a measured language-model step: the manuals are checked in
@@ -326,5 +326,8 @@ against another system's baseline; §6's three arms are all ours. Every world he
 is small enough for `decide` to enumerate, so the certification layer has not been
 tested at a scale where enumeration fails.
 
-Section 10 collects the rest of the limitations; none of them is discovered there
+Section 10 reports one measurement that is neither a contribution above nor a
+limitation below: a census of whether the engines-propose/LLM-adjudicates
+division of §2.2 is enforced in the implementation, in both directions.
+Section 11 collects the rest of the limitations; none of them is discovered there
 for the first time, because each acceptance report already states its own.

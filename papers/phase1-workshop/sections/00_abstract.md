@@ -37,7 +37,7 @@
 **ARC-AGI-3 drops an agent into a small game it has never seen** — a 64×64 grid,
 sixteen colours, deterministic rules, the rules hidden — and lets it do two
 things: act, and look. The strongest reported result on it, self-reported on a
-project page rather than in a paper (§11.1), makes the world model an editable,
+project page rather than in a paper (§12.1), makes the world model an editable,
 executable program and verifies that program by replaying the entire recorded
 history against it. But a model that replays its own history perfectly can still
 be bankrupt as an account of the world, and the error is invisible to precisely

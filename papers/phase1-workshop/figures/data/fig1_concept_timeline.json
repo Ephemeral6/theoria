@@ -166,6 +166,30 @@
       "id": "E-05",
       "wanted": "a weight function over cells for a pagoda invariant",
       "worked_around_by": "the vector lives in the problem instance (M5)"
+    },
+    {
+      "cost": "see below",
+      "id": "E-06",
+      "wanted": "a proof method for goals no linear pagoda covers",
+      "worked_around_by": "**discharged** — the certificate covers what it covers, exhaustion closes the rest, each goal attributed to its method"
+    },
+    {
+      "cost": "see below",
+      "id": "E-07",
+      "wanted": "saying that two live instances of one type never share a cell",
+      "worked_around_by": "**discharged** — `unique` on a field (`dsl_grammar_v0.2` revision item 12)"
+    },
+    {
+      "cost": "the rung below it is a quantifier and it is deliberately not taken",
+      "id": "E-08",
+      "wanted": "a guard that counts (`count(Token, present = false) >= k`) — the count-lock gate",
+      "worked_around_by": "**discharged** — one rung, in the guard language; see below"
+    },
+    {
+      "cost": "2 bits per repaired transition paid in the segmentation script, and the pass that pays them is the one place the pipeline does not adjudicate by compression",
+      "id": "E-09",
+      "wanted": "putting a *named track* in a *place*: \"the object I am about to step onto is **that** one\" (`faces(T,D)`) — the miner vocabulary, not the grammar",
+      "worked_around_by": "**discharged** — one rung, mover-relative, one step; see below"
     }
   ],
   "revisions": [

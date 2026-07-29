@@ -1,4 +1,4 @@
-## 11 · Related work
+## 12 · Related work
 
 Every citation in this section was cross-verified against two independent sources
 before it was written, and a record that could not be confirmed twice was dropped
@@ -8,7 +8,7 @@ per line below, together with an adversarial re-check over a sample of the set.
 The bibliography is `papers/phase1-workshop/references.bib`. Where a work has no
 citable venue — and several here do not — it is cited as what it is.
 
-### 11.1 Three waves, and the thing they kept upgrading
+### 12.1 Three waves, and the thing they kept upgrading
 
 `Theoria.md` §3.1 reads the world-model literature as three waves and argues that
 what each wave actually upgraded was neither the architecture nor the score but the
@@ -67,7 +67,7 @@ already experienced". "True of everything" — conservation laws, unsolvability 
 what neither carries, and §1.3 of `Theoria.md` gives the structural reason: replay
 catches a rule written *wrong*, never a rule left *out*.
 
-### 11.2 Where this sits, one neighbour at a time
+### 12.2 Where this sits, one neighbour at a time
 
 **Certificates and admissible heuristics in planning.** This is the literature
 anchor for 证书与启发同源 — certificate and heuristic are the same object. An
@@ -214,7 +214,7 @@ no original to be checked against, only the world. **This paper runs no LLM-base
 prover.** Every Lean obligation reported here is discharged by ordinary Lean
 checking, and no result depends on neural proof search.
 
-### 11.3 What the neighbours own that this paper re-illustrates
+### 12.3 What the neighbours own that this paper re-illustrates
 
 An adversarial review of an earlier draft (`papers/phase1-workshop/REVIEW.md`,
 issue 14) found that several of this paper's framings restate results the
