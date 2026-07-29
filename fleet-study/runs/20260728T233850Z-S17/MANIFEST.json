@@ -36,8 +36,8 @@
     },
     {
       "path": "fleet-study/EVIDENCE.md",
-      "sha256": "a8470b59c4f8d23ae7c126efc2daba60ef6ee47a00475a28116a98f400cc8b7b",
-      "bytes": 30147
+      "sha256": "4827ed618b1de6b113ef425d76d83d9dd846a75315e42d1a373e289106e60576",
+      "bytes": 31546
     },
     {
       "path": "fleet-study/IDEA.md",
@@ -46,8 +46,8 @@
     },
     {
       "path": "fleet-study/data/assembly.jsonl",
-      "sha256": "6dd2be2a905bb93ce8763b891960fdc5833dbbcffb6fce932aef756f23d8df27",
-      "bytes": 34335
+      "sha256": "87076a97cd4b7860dfa20e3fc55e604ff2037315df45d7259b0bcb852969a593",
+      "bytes": 37556
     },
     {
       "path": "fleet-study/data/bus.jsonl",
@@ -86,15 +86,15 @@
     },
     {
       "path": "fleet-study/data/README.md",
-      "sha256": "b004071413e968350f4fd24572d7434957e641f32764f13ae7571604aabaf587",
+      "sha256": "d275f89c65bede331c487ea695d615edeb41eb75737af043393e7e51087b7298",
       "bytes": 7298
     }
   ],
-  "head_at_close": "ed98a22985328013acbf181358e88816c7058fbd",
+  "head_at_close": "c8df18c1848e4582fb49b6f8a043dc714b3fde86",
   "verify": {
     "cmd": "python fleet-study/verify.py",
     "result": "GREEN",
-    "rows": 473,
+    "rows": 474,
     "unresolvable_citations": 0,
     "selftest": "14 injected defects, 13 rejected, 1 baseline accepted, 2 warning paths"
   },
