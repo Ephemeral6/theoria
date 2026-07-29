@@ -95,6 +95,31 @@ def _runner(path: str) -> List[str]:
     return [_bash(), path.replace("\\", "/")]
 
 
+def gate_env(root: str) -> Dict[str, str]:
+    """The environment a gate is entitled to assume.
+
+    A `verify.py` that imports its own territory -- `from battery import
+    freeze`, `from worldgen.qc import gate` -- is run with `cwd` *inside* that
+    territory, so the repository root is not on `sys.path` and the import dies
+    before the gate does anything.  Two branches hit this the same night in two
+    different territories (`v5-battery-freeze`, `v12-worldgen-gate-deaf`, and
+    `s14` again in `a0-spike`), which is the signature of a missing contract
+    rather than three mistakes: the runner never said where a gate runs from,
+    so every author guessed, and the ones who guessed `python -m` from the root
+    were failed by the ones who wrote the runner.
+
+    So the contract is stated here and provided here: **a gate runs with `cwd`
+    at its own territory and the repository root importable.**  It is the same
+    lesson as the bash line above -- a gate that cannot start is reported as
+    the territory failing its own check, which is a lie in the direction that
+    looks like a verdict.
+    """
+    env = dict(os.environ)
+    existing = env.get("PYTHONPATH")
+    env["PYTHONPATH"] = root + (os.pathsep + existing if existing else "")
+    return env
+
+
 def find_gate(root: str, directory: str) -> Optional[Dict[str, Any]]:
     """The territory's own gate, or None.  Canonical names first."""
     base = os.path.join(root, directory)

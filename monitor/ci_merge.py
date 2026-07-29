@@ -88,12 +88,14 @@ def gate_for(worktree, directory):
     return gates.gate_for(worktree, directory)
 
 
-def sh(args, cwd=ROOT, timeout=1800):
+def sh(args, cwd=ROOT, timeout=1800, extra_env=None):
     # 子进程的 stdout 在这里是管道，Windows 上 Python 于是按 cp936 编码，
     # 闸门只要打印一个非 GBK 字符就死于 UnicodeEncodeError——而 ci_merge
     # 把它记成「verify gate red」。monitor 自己的闸门就是这么红的。
     # 这仓库已经为 GBK/UTF-8 付过四次账，所以在唯一的出口处钉死。
     env = dict(os.environ, PYTHONIOENCODING="utf-8", PYTHONUTF8="1")
+    if extra_env:
+        env.update(extra_env)
     return subprocess.run(args, cwd=cwd, capture_output=True, text=True,
                           encoding="utf-8", errors="replace",
                           timeout=timeout, env=env)
@@ -236,7 +238,13 @@ def try_merge(branch):
                     ungated.append(d)
                 continue
             cmd = row["cmd"]
-            r = sh(cmd, cwd=os.path.join(wt, d), timeout=1800)
+            # A gate runs at its own territory with the merged tree's root
+            # importable -- see gates.gate_env. Without it a verify.py that
+            # imports its own package dies before the gate runs, and that is
+            # recorded as the territory failing its check rather than as the
+            # runner never having said where a gate runs from.
+            r = sh(cmd, cwd=os.path.join(wt, d), timeout=1800,
+                   extra_env=gates.gate_env(wt))
             if row["kind"] == "verify" and r.returncode != 0:
                 flag(branch, "verify gate red in %s (%s)" % (d, row["name"]),
                      r.stdout + r.stderr)
