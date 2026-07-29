@@ -1,0 +1,9 @@
+{
+  "author": "RES-4",
+  "base_commit": "7d9ebb10902cfe24d892be8bfbfa8c8178f8c232",
+  "branch": "agent/s28-claim-warns-on-existing-branch",
+  "prompt_id": "S28-claim-warns-on-existing-branch",
+  "spend": "none",
+  "territory": "monitor",
+  "utc": "2026-07-29T10:50:00Z"
+}
