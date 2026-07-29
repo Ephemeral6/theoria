@@ -1,0 +1,15 @@
+{
+  "base_game": "t1-walk-maze",
+  "base_level": "t1-walk-maze",
+  "claim": "unsolvable",
+  "justification": "The same row invariant reached by a different operator. After the remap the four commands perform UP, UP, LEFT and RIGHT: the alphabet still has four commands, and the board is untouched, but no command performs DOWN any more. The row can never increase, and the goal is four rows below the start. This variant matters because it is the case where a remap is not a relabelling -- it is non-injective, and the action it collides onto is the one the route needed.",
+  "notes": "sealed drill (V6-exam-on-sealed-dryrun); worldgen world standing in for a sealed game. Zero API, zero sealed contact.",
+  "operators": [
+    {
+      "from": "DOWN",
+      "op": "remap_action",
+      "to": "UP"
+    }
+  ],
+  "variant_id": "drill-walk-remap-down-to-up"
+}

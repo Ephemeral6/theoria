@@ -1,0 +1,15 @@
+{
+  "base_game": "t1-walk-maze",
+  "base_level": "t1-walk-maze",
+  "claim": "solvable",
+  "justification": "Also non-injective, also loses a command, and does not bite: the route down column 1 and along row 5 never issues LEFT, so removing LEFT from the alphabet costs nothing. The pair with walk-remap-down-to-up is the point -- 'the variant destroyed an action' is not on its own a reason to answer unsolvable, and an arm that reasons from the operator's shape rather than the board gets exactly one of these two right.",
+  "notes": "sealed drill (V6-exam-on-sealed-dryrun); worldgen world standing in for a sealed game. Zero API, zero sealed contact.",
+  "operators": [
+    {
+      "from": "LEFT",
+      "op": "remap_action",
+      "to": "RIGHT"
+    }
+  ],
+  "variant_id": "drill-walk-remap-left-to-right"
+}
