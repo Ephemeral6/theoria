@@ -1,0 +1,15 @@
+{
+  "prompt_id": "V5-verdict-three-types",
+  "branch": "agent/v5-verdict-three-types",
+  "base_commit": "31bea4664d75e8ec6b14e093e85633db7470aebf",
+  "utc": "20260729T020000Z",
+  "worker": "W-1652",
+  "territory": "exam",
+  "baseline": {
+    "suite": "python -m pytest exam/tests -q",
+    "result": "321 passed",
+    "at_base_commit": true
+  },
+  "scope_note": "The item's four acceptance clauses (three classes in a self-built world family, constructive grounds per item, calibration by known-full/known-zero fakes, sensitivity and specificity reported separately) were already delivered by P-15 and V4 on `p15-verdict-a2`. V5's work is therefore adversarial: test whether the delivered instrument actually holds, and close what does not. Gaps carried into this run are STATUS.md open weaknesses 4, 5, 6, 13, 14 and D-EX-015.",
+  "files": []
+}
