@@ -128,17 +128,28 @@ def meta(path):
         # S28（顺带抓到的）：`\s*` 跨行，所以一个**空**的 `lane:` 会把下一行的第一个
         # 非空白 token 吃进来当值——实测 `lane:` 后面跟着标题行时解析出 `"#"`。
         # 于是一个写坏了的字段静默变成一个**看起来合理**的值，正是本条目的病症：
-        # 「没写」和「写了这个」编码成同一个东西。`[^\S\n]*` 只吃行内空白。
-        m = re.search(r"^%s:[^\S\n]*(\S+)" % key, head, re.M)
+        # 「没写」和「写了这个」编码成同一个东西。
+        #
+        # ADV-1/D4：这里原来是 `[^\S\n]*`，它只挡住 `\n`，而 `str.splitlines`
+        # 认作换行的还有 U+000B/000C/0085/2028/2029 —— 那五个字符仍然是「行内
+        # 空白」，于是同一个借下一行的缺陷对它们原样存活。`[ \t]*` 是唯一没有
+        # 这条尾巴的写法：字段值前面合法的东西只有空格和制表符。
+        m = re.search(r"^%s:[ \t]*(\S+)" % key, head, re.M)
         if m:
             out[key] = int(m.group(1)) if key == "priority" else m.group(1)
     # To end of line, not `\S+`: this one is a comma-separated list, and the
     # single-token pattern would silently keep only the first releaser --
     # re-offering the item to everyone after them.
-    m = re.search(r"^%s:\s*(.+)$" % RELEASED_BY, head, re.M)
+    #
+    # ADV-1/D1：这两条是上一版**漏掉**的。六个单 token 的键修好了，紧接着两行
+    # 的 `deps:` 和 `released_by:` 还留着跨行的 `\s*`，而它们的后果比 `lane` 更重：
+    # 一个空的 `deps:` 借来下一行，变成一个**永远不可能被满足**的依赖，条目从此
+    # 不可领，而板上给出的解释（`waits on lane: infra`）指着一件不存在的事。
+    # 空的 `released_by:` 则把 `lane: infra` 解析成两个「交回过此条目的工人」。
+    m = re.search(r"^%s:[ \t]*(.+)$" % RELEASED_BY, head, re.M)
     if m:
         out[RELEASED_BY] = m.group(1).strip()
-    m = re.search(r"^deps:\s*(.+)$", head, re.M)
+    m = re.search(r"^deps:[ \t]*(.+)$", head, re.M)
     if m:
         out["deps"] = [d.strip() for d in m.group(1).split(",")
                        if d.strip() and d.strip().lower() != "none"]
@@ -668,7 +679,22 @@ def _record_release(path, worker, reason):
         text = open(path, encoding="utf-8").read()
     except OSError:
         return
-    m = re.search(r"^%s:\s*(.+)$" % RELEASED_BY, text, re.M)
+    # 本条与 `meta()` 里那两条是同一个缺陷，但**写侧的后果重得多**，
+    # 而 ADV-1 只点了读侧的两条，这一条是顺着第四个出现点找到的：
+    # 跨行的 `\s*` 在一个**空** `released_by:` 上借走下一行，而这里紧接着
+    # 用 `text[:m.start()] + line + text[m.end():]` 把匹配段**改写掉**——
+    # 于是 `lane: infra` 这一行不是被读错，是被**吃掉**。实测：
+    #
+    #   released_by:            ->  released_by: lane: infra, RES-4
+    #   lane: infra                 （`lane` 变成 ''，`released_by` 变成
+    #   deps: none                   {'lane:', 'infra', 'RES-4'}）
+    #
+    # 失败方向：条目丢了赛道，于是赛道守卫不再护着它，一件本该留给某个常驻
+    # 研究员的活变成通用工人可领——活从赛道里静默漏出去。
+    #
+    # `(.*)` 而不是 `(.+)`：空值也要**匹配上**，这样这一行是被整体重写的，
+    # 而不是留着空行再往前插一行第二个 `released_by:`。
+    m = re.search(r"^%s:[ \t]*(.*)$" % RELEASED_BY, text, re.M)
     prior = [w.strip() for w in m.group(1).split(",") if w.strip()] if m else []
     if worker not in prior:
         prior.append(worker)
@@ -681,6 +707,12 @@ def _record_release(path, worker, reason):
         lines = text.split("\n")
         cut = 0
         for i, l in enumerate(lines):
+            # 这里的 `^\w+:\s` 也要求冒号后**有**空白，所以一个空字段（`lane:`）
+            # 不被算作前言。**查过，是不可达的**：下面的 `elif` 只在空行上 break，
+            # 一个不匹配的非空行只是被跳过，于是 `cut` 在三种构造下都仍然落在
+            # 前言之内（`lane:` 居中 cut=4/4、居末 3/4、独一 0/1，`meta()` 三种
+            # 都读得到插入行）。改法写不出一个修复前必红的测试，所以**不改**——
+            # 这一条记在这里，免得下一世重新怀疑一遍。
             if re.match(r"^\w+:\s", l):
                 cut = i + 1
             elif l.strip() == "":

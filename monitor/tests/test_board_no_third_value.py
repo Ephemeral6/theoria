@@ -270,3 +270,141 @@ def test_an_empty_metadata_field_does_not_borrow_the_next_line(tmp_path):
 
     assert m["lane"] == "", "an empty field must stay empty, got %r" % m["lane"]
     assert m["territory"] == "t1", "NEGATIVE CONTROL: real values still parse"
+
+
+def test_empty_deps_does_not_borrow_the_next_line(tmp_path):
+    r"""ADV-1/D1. The fix above was applied to the six single-token keys and
+    **not** to `deps:` / `released_by:`, two lines below, which kept the
+    cross-line `\s*`.
+
+    `deps` is the worse of the two: the borrowed token becomes a dependency that
+    can never be satisfied, so the item is unclaimable forever -- and the board
+    explains it with `waits on lane: infra`, naming a dependency that does not
+    exist. Withheld work plus a fabricated cause for it.
+    """
+    p = tmp_path / "x.md"
+    p.write_text("priority: 1\nterritory: t1\ndeps:\nlane: infra\n\n# X-1\n",
+                 encoding="utf-8")
+
+    m = board.meta(str(p))
+
+    assert m["deps"] == [], "an empty deps: must stay empty, got %r" % m["deps"]
+    assert m["lane"] == "infra", "NEGATIVE CONTROL: the next line is untouched"
+
+
+def test_empty_released_by_does_not_borrow_the_next_line(tmp_path):
+    """ADV-1/D1, the other half. An empty `released_by:` parsed the following
+    `lane: infra` into **two** workers, `{'lane:', 'infra'}` -- and `cmd_claim`
+    withholds any item whose `released_by` contains the asking worker. A worker
+    literally named `infra` would have been refused an item nobody handed back.
+    """
+    p = tmp_path / "x.md"
+    p.write_text("priority: 1\nterritory: t1\nreleased_by:\nlane: infra\n\n# X-1\n",
+                 encoding="utf-8")
+
+    m = board.meta(str(p))
+
+    assert board.released_by(m) == set(), (
+        "an empty released_by: must name nobody, got %r" % board.released_by(m))
+    assert m["lane"] == "infra", "NEGATIVE CONTROL: the next line is untouched"
+
+
+@pytest.mark.parametrize("sep", ["\v", "\f", "\x85", "\u2028", "\u2029"])
+def test_exotic_line_separators_do_not_borrow_either(tmp_path, sep):
+    r"""ADV-1/D4. `[^\S\n]*` excludes only `\n`, but `str.splitlines` -- which is
+    what every human and every other reader of these files treats as the line
+    rule -- also breaks on U+000B/000C/0085/2028/2029. Those five stayed
+    "in-line whitespace" to the regex, so the borrow survived for them.
+
+    This is not hypothetical prettiness: these files are written by LLM sessions,
+    and U+2028 is a character an LLM emits. `[ \t]*` has no such tail.
+    """
+    p = tmp_path / "x.md"
+    p.write_text("priority: 1\nterritory: t1\nlane:%s# X-1\ndeps: none\n" % sep,
+                 encoding="utf-8")
+
+    m = board.meta(str(p))
+
+    assert m["lane"] == "", (
+        "lane: followed by %r borrowed %r" % (sep, m["lane"]))
+    assert m["territory"] == "t1", "NEGATIVE CONTROL: real values still parse"
+
+
+def test_recording_a_release_does_not_eat_the_next_front_matter_line(tmp_path):
+    r"""Found by following the *fourth* occurrence of the same regex, which ADV-1
+    did not reach: `_record_release` had the cross-line `\s*` too, and on the
+    **write** side it does not merely misread the borrowed line -- it rewrites
+    `text[m.start():m.end()]`, so the borrowed `lane: infra` is *consumed*.
+
+    Measured before the fix:
+
+        released_by:          ->   released_by: lane: infra, RES-4
+        lane: infra                (lane becomes '', released_by becomes
+        deps: none                  {'lane:', 'infra', 'RES-4'})
+
+    Failure direction, and it is the reassuring one: the item loses its lane, so
+    the lane guard stops protecting it and an item reserved for a standing
+    researcher becomes claimable by any generic worker. Work leaks out of a lane
+    silently, and the item file still looks well-formed afterwards.
+    """
+    p = tmp_path / "X-1.md"
+    p.write_text("priority: 1\nterritory: monitor\nreleased_by:\n"
+                 "lane: infra\ndeps: none\n\n# X-1\n", encoding="utf-8")
+
+    board._record_release(str(p), "RES-4", "no spend authority")
+
+    m = board.meta(str(p))
+    assert m["lane"] == "infra", (
+        "the release ate the lane line: lane=%r" % m["lane"])
+    assert board.released_by(m) == {"RES-4"}, (
+        "released_by picked up debris: %r" % board.released_by(m))
+
+
+def test_recording_a_release_still_appends_to_a_real_releaser_list(tmp_path):
+    """NEGATIVE CONTROL for the test above: the load-bearing behaviour of
+    `_record_release` -- accumulating releasers instead of overwriting the last
+    one -- has to survive the fix. Widening the group to `(.*)` so an empty value
+    matches could just as easily have dropped `prior`, which would pass the test
+    above and quietly break the reason the function exists.
+    """
+    p = tmp_path / "X-1.md"
+    p.write_text("priority: 1\nterritory: monitor\nreleased_by: RES-1\n"
+                 "lane: infra\ndeps: none\n\n# X-1\n", encoding="utf-8")
+
+    board._record_release(str(p), "RES-4", "no spend authority")
+
+    m = board.meta(str(p))
+    assert board.released_by(m) == {"RES-1", "RES-4"}, (
+        "an earlier releaser was lost: %r" % board.released_by(m))
+    assert m["lane"] == "infra", "NEGATIVE CONTROL: lane still intact"
+
+
+def test_the_insert_branch_lands_inside_the_front_matter(tmp_path):
+    r"""Not a negative control, and labelled so on purpose.
+
+    `_record_release`'s insert branch scans front matter with `^\w+:\s`, which
+    requires whitespace after the colon and so does not recognise an empty
+    `lane:`. That looks like a third instance of this item's disease, but it is
+    **unreachable**: the `elif` only breaks on a blank line, so a non-matching
+    non-blank line is skipped rather than ending the scan, and `cut` still lands
+    inside the front matter in all three constructions (`lane:` in the middle,
+    last, or alone). No pre-fix-red test can be written for it, so the pattern
+    was left alone -- see the comment at that line.
+
+    What this test does is pin the property that made it unreachable, so a later
+    tightening of the `elif` cannot quietly make it reachable again.
+    """
+    for body in ("priority: 1\nterritory: monitor\nlane:\ndeps: none\n\n# X-1\n",
+                 "priority: 1\nterritory: monitor\ndeps: none\nlane:\n\n# X-1\n",
+                 "lane:\n\n# X-1\n"):
+        p = tmp_path / "X-1.md"
+        p.write_text(body, encoding="utf-8")
+
+        board._record_release(str(p), "RES-4", "reason")
+
+        head = p.read_text(encoding="utf-8").split("\n")
+        assert "released_by: RES-4" in head[:head.index("")], (
+            "released_by landed outside the front matter for %r: %r"
+            % (body, head))
+        assert board.released_by(board.meta(str(p))) == {"RES-4"}, (
+            "meta() cannot see the inserted line for %r" % body)

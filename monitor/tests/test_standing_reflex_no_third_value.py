@@ -254,3 +254,101 @@ def test_reflex_and_standing_still_import_and_compile():
                            capture_output=True, text=True,
                            encoding="utf-8", errors="replace")
         assert r.returncode == 0, r.stderr
+
+
+def _drive_sweep(monkeypatch, tmp_path, status):
+    """Run `standing.sweep()` with everything but the launch bookkeeping stubbed.
+
+    Returns `(launches, staggers)` -- how many times `via_task` was called, and
+    how many 45s staggers were taken. Nothing real is launched and nothing
+    sleeps: `via_task` and `time.sleep` are both replaced.
+    """
+    import dispatch
+
+    launches, staggers = [], []
+    monkeypatch.setattr(dispatch, "via_task",
+                        lambda a, p: (launches.append(a), status)[1])
+    monkeypatch.setattr(standing.time, "sleep", lambda s: staggers.append(s))
+    # Every gate ahead of the launch says "go", so the only thing under test is
+    # what happens *after* the scheduler has been handed the launch.
+    monkeypatch.setattr(standing, "running_tasks", lambda: set())
+    monkeypatch.setattr(standing, "quota_held", lambda: False)
+    monkeypatch.setattr(standing, "free_gb", lambda: 999.0)
+    monkeypatch.setattr(standing, "occupied", lambda a, s: None)
+    monkeypatch.setattr(standing, "load_state", lambda: {})
+    monkeypatch.setattr(standing, "save_state", lambda s: None)
+    monkeypatch.setattr(standing, "log", lambda m: None)
+    monkeypatch.setattr(standing, "work_for",
+                        lambda a, l: {"unread": 1, "held": 0, "claimable": 1,
+                                      "any": True})
+    monkeypatch.setattr(standing, "ops_work_for",
+                        lambda a: {"unread": 1, "held": 0, "claimable": 1,
+                                   "any": True})
+    monkeypatch.setattr(standing.board_mod, "heartbeat_age", lambda a: 999)
+
+    standing.sweep()
+    return len(launches), len(staggers)
+
+
+def test_a_launch_the_scheduler_accepted_is_counted_even_if_its_health_is_unknown(
+        monkeypatch, tmp_path):
+    """ADV-2/D13, and the regression was introduced by this item's own first
+    commit: `n_standing += 1` and the 45s stagger were moved inside
+    `if ok == "running":` together with `started.append`.
+
+    `schtasks /Run` has already spawned the session by the time the status is
+    read, so a *status read* failure -- `state-unknown`, a `/Query` blip giving
+    `died-on-arrival(gone)`, or a task that has not flipped to Running inside
+    `LAUNCH_SETTLE_S` -- took the standing cap and the stagger off at once. The
+    reason for removing the safeties was "I am not sure it is alive"; the effect
+    was "launch one more".
+
+    Six at once with no stagger is the configuration `standing.py` blames for the
+    05:39 session limit, so this fails in the expensive direction.
+    """
+    n_agents = len(standing.STANDING_ORDER)
+    assert standing.MAX_STANDING < n_agents, (
+        "fixture assumes the roster can exceed the cap (%d agents, cap %d)"
+        % (n_agents, standing.MAX_STANDING))
+
+    for status in ("state-unknown", "died-on-arrival(Ready)",
+                   "died-on-arrival(gone)"):
+        launches, staggers = _drive_sweep(monkeypatch, tmp_path, status)
+
+        assert launches <= standing.MAX_STANDING, (
+            "status %r launched %d sessions past the cap of %d"
+            % (status, launches, standing.MAX_STANDING))
+        assert staggers == launches, (
+            "status %r took %d staggers for %d launches -- every accepted "
+            "launch must be spaced" % (status, staggers, launches))
+
+
+def test_a_declined_launch_is_not_counted_and_not_staggered(monkeypatch, tmp_path):
+    """NEGATIVE CONTROL for the test above, and the reason the predicate is
+    `!= "declined"` rather than "always".
+
+    `declined` is the one status that means the scheduler *refused* -- no session
+    exists. Charging it against the cap would starve the roster on a broken
+    scheduler, and sleeping 45s per refusal would stretch a no-op sweep to
+    minutes. If this ever passes by counting declines, the fix has over-corrected
+    into the opposite silent failure.
+    """
+    launches, staggers = _drive_sweep(monkeypatch, tmp_path, "declined")
+
+    assert launches == len(standing.STANDING_ORDER), (
+        "a declined launch must not consume the cap: %d attempts for %d agents"
+        % (launches, len(standing.STANDING_ORDER)))
+    assert staggers == 0, "a refused launch must not stagger (%d)" % staggers
+
+
+def test_a_running_launch_is_both_counted_and_reported_started(monkeypatch,
+                                                               tmp_path):
+    """NEGATIVE CONTROL: the healthy path keeps both meanings. `running` must
+    still be capped and staggered *and* still be the only status that counts as
+    a successful start -- the distinction the first commit was right to draw.
+    """
+    launches, staggers = _drive_sweep(monkeypatch, tmp_path, "running")
+
+    assert launches == standing.MAX_STANDING, (
+        "the cap must still bind on healthy launches: %d" % launches)
+    assert staggers == launches, "healthy launches must still stagger"

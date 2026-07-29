@@ -400,8 +400,27 @@ def sweep(dry=False, only=None):
         save_state(state)
         log("START %s (lane=%s) ok=%s [unread=%d held=%d claimable=%d]"
             % (agent, lane, ok, w["unread"], w["held"], w["claimable"]))
+        # ADV-2/D13：**上一版把三件事挂在同一个谓词上，这是一次真的回归，
+        # 而且是本次修复自己引入的。** `n_standing`（上限记账）和 45 秒错峰
+        # 一起被移进了 `if ok == "running":`，于是任何一个**读状态失败**
+        # ——`state-unknown`、一次 `/Query` 抖动导致的 `died-on-arrival(gone)`、
+        # 或者 8 秒的 `LAUNCH_SETTLE_S` 内还没翻到 Running——都会把两道安全阀
+        # 同时摘掉。实测（六人名册，MAX_STANDING=5）：
+        #
+        #   via_task -> running          launches=5 staggers=5 cap-refusals=1
+        #   via_task -> state-unknown    launches=6 staggers=0 cap-refusals=0
+        #
+        # 六个一起无错峰，正是 standing.py:65-68 记下的 05:39 撞 session limit
+        # 的那个规模。而此时 `schtasks /Run` **已经把会话起起来了**——摘掉阀门
+        # 的理由是「我不确定它活着」，后果是「再多起一个」。
+        #
+        # 两个谓词，两件事，不许再合并：
+        #   * 调度器收下了（`!= "declined"`）→ 会话已经生出来了 → 记账 + 错峰；
+        #   * 状态确实是 running → 研究员真的起来了 → 才算一次成功启动。
+        # 旧的布尔 `ok` 恰好是前者，本次修复把它换成了后者，而正确做法是两者都留。
         if ok == "running":
             started.append(agent)
+        if ok != "declined":
             n_standing += 1
             time.sleep(45)       # 错峰：同时起会互相踩额度与内存
 
