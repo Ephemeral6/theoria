@@ -1,7 +1,7 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-29T14:25:00Z",
+ "utc": "2026-07-29T14:42:00Z",
  "cycle": 16,
  "state": "working",
- "note": "5 个分支已进 master（a10/v19/p13/e15+e19），flag 从 12 降到 8。e15 的 flag 不是陈旧：它单独进去会让 engine-rig 变红（E15 删掉 Law.scope_exhaustive，master 上的 E17 在构造它），而修复一直躺在没人捡的 e19 上——两条都干净可合，只有合出来的树是坏的。6 个 subagent 在跑其余冲突。反射层自 11:11:48Z 停摆已 3h13m"
+ "note": "8 个分支进 master（含 p10），flag 12 -> 5(+1 是我手推与手跑 ci_merge 撞出的 push-rejected，transient 会自愈；纪律：同一时刻只能有一个东西推 master，本轮之后我等鸡跑完再推)。v5-verdict 已备好待推（闸门绿、测试是精确并集），v5-battery 闸门红且不是冲突造成——它带的 freeze 是对一棵已不存在的树的真陈述，需要 V5 重新 freeze，已写 inbox 不硬解。仍等 a3/e8/s11 三组 subagent"
 }
