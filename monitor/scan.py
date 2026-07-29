@@ -197,21 +197,50 @@ def probe_a0_state():
                          ", ".join(missing) or "无")}
 
 
+# The two tracks meet at exactly one place and name it the same way on both
+# sides: `engine-rig/interop/certificate_export.py:95` stamps the schema, and
+# `theory-compiler/src/theory_compiler/certificate.py:38` pins it to read the
+# file. Either token is a real handshake; the bare word "certificate" is not.
+A1_SCHEMA = "lp_potential/pagoda_certificate@"
+A1_INTEROP_DIR = "interop/certificates"
+
+
 def probe_a1_state():
     bridge = exists("engine-rig/interop/certificate_export.py")
+    # The handshake is the schema id both sides name -- `certificate_export.py`
+    # stamps it, and a consumer has to know it to read the file. The old test
+    # was the bare word "certificate" anywhere under theory-compiler, which the
+    # Lean proofs satisfy in prose comments ("the certificate's pattern: ...").
+    # Once the criterion decides something, a token that a comment can supply is
+    # not a criterion; replacing a gate that never opens with one that opens on
+    # a word is the worse trade of the two.
     consumed = False
     tc = rel("theory-compiler")
     for base, dirs, files in os.walk(tc):
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+        # `runs/` holds artefacts of past runs, not the track's source. A
+        # certificate quoted in a run log is evidence something happened once,
+        # not evidence the bridge is wired up now.
+        if "runs" in os.path.relpath(base, tc).split(os.sep):
+            continue
         for name in files:
             if name.endswith((".py", ".lean")):
                 try:
-                    if "certificate" in open(os.path.join(base, name),
-                                             encoding="utf-8", errors="ignore").read():
-                        consumed = True
+                    text = open(os.path.join(base, name),
+                                encoding="utf-8", errors="ignore").read()
                 except Exception:
-                    pass
-    return {"status": "partial",
+                    continue
+                if A1_SCHEMA in text or A1_INTEROP_DIR in text:
+                    consumed = True
+    # Both halves were computed, formatted into `detail`, and then discarded --
+    # the return was an unconditional `partial`, so this gate could neither open
+    # nor close no matter what the tree looked like. A gate that cannot close is
+    # a gate that gets stepped over, and this one was: Theoria.md 305 makes an
+    # all-green Phase 1 the precondition for spending game money, and money was
+    # spent across it at 9/16. The criterion now decides.
+    status = "green" if (bridge and consumed) else (
+        "partial" if (bridge or consumed) else "risk")
+    return {"status": status,
             "detail": "engine-rig 侧证书导出：%s；theory-compiler 侧消费：%s。"
                       "两半接通前，A1 仍是彩排而非验收。"
                       % ("已建" if bridge else "未建", "已接" if consumed else "**未接**")}
