@@ -99,8 +99,9 @@ smallest attainable *p* of 0.125.
 
 **(6)** A theory carried unchanged to a second level of the same game re-fits from a single
 frame and wins with zero engine stages, zero adjudicated candidates and zero
-theorize rounds, at 252/252 against the referee — while the verification work is
-paid in full and at the same rate. Two perturbed levels, each breaking a
+theorize rounds — while the verification work is paid in full and at the same
+rate. It scores 252/252 against the referee, and so does the from-scratch control,
+so the saving is in what each arm cost and not in what either got right. Two perturbed levels, each breaking a
 mechanism the carried theory does not know about, were both caught, and both were
 caught only *after* acting: the free static layer passed them and returned the
 same plan. **(7)** An examination instrument with four question types, a marker
@@ -855,11 +856,19 @@ What is gained is not nothing. §1.3's claim is *constructive* — about what
 past-facing checking can and cannot see, not about one game — so a self-built
 world can strengthen it three ways (`cold-start-a2/A2_REPORT.md` §1):
 
-1. **The history is near-exhaustive.** It covers **163 of the 164** reachable
-   (state, action) pairs with the Cart in the left room, omitting exactly the pair
-   that fires the deleted rule — `cart=(6,4) pressed=1 act=DOWN`
-   (`cold-start-a2/artifacts/trace_summary.json`). The defect survives near-total
-   evidence; it is not a coverage failure.
+1. **The history is near-exhaustive within its scope, and the scope is half the
+   world.** It covers **163 of the 164** reachable (state, action) pairs with the
+   Cart in the left room, omitting exactly the pair that fires the deleted rule —
+   `cart=(6,4) pressed=1 act=DOWN`. That denominator is the artefact's own, and the
+   artefact also records the full sweep at **220 of 220** pairs over *every*
+   reachable state, so the history is **163 of 220 — 74 %** of the world, not 99 %
+   of it (`cold-start-a2/artifacts/trace_summary.json`, `history_trace.scope`
+   against `raw_trace.scope`). Both readings are in the same file and the smaller
+   denominator is the one that flatters. The claim that survives is the narrow one:
+   *within the region the history covers, coverage is near-total and the defect
+   still survives* — so this particular defect is not a coverage failure. It is not
+   evidence that near-total coverage of a whole world would have caught it, and an
+   earlier draft of this paragraph let "near-total evidence" carry that weight.
 2. **The history is a prefix of the sweep, not a separate experiment.**
    `history_trace = raw_trace[0 .. portal_transition]`, the cut index found from
    the frames' geometry as the single non-adjacent Cart move (ibid.,
@@ -1159,8 +1168,23 @@ an empty axiom list.
 Scored against the referee's copy, the **carried** manual is right on 252 of 252
 reachable (state, action) pairs of a level it never explored
 (`cold-start-a3/artifacts/score_vs_truth.json`). This is every reachable pair,
-not a held-out split — A3 has no held-out set, and the file's own framing is the
-honest one:
+not a held-out split — A3 has no held-out set.
+
+**And the control scores the same.** The third row of that artefact is "the
+control arm's manual, induced from level 2's own sweep", and it is also right on
+**252 of 252** (`score_vs_truth.json`, `results[2]`, `theory/generated_l2_scratch/`).
+Earlier drafts of this section reported the carried manual's 252/252 and did not
+print the control's, which made an undiscriminating number look like the result.
+It is not: **on accuracy the two arms are tied at ceiling, and this measurement
+cannot separate transfer from induction at all.** Both manuals are right about
+level 2; what differs is what each cost to obtain, which is §6.2's bill and is the
+only place the transfer claim can live. A ceiling that both arms reach is a
+property of the level — 252 pairs of a small deterministic world — rather than
+evidence about carrying books, and reporting one arm's ceiling alone was the kind
+of one-sided denominator this paper spends §7 criticising in someone else's
+instrument.
+
+The file's own framing of what the score means is still the honest one:
 
 > Replay against a trajectory answers "is the manual consistent with what I
 > saw". This answers "is the manual right".
@@ -1330,7 +1354,8 @@ returned, and most of it is unflattering to the instrument.
 `Theoria.md` Phase 2 process 1 names a particular contrast: bare Claude Code
 against Schema. v0 and v1 could not run it and substituted the model ladder within
 `bare_cc`, which `battery/DECISIONS.md` D-B-004 argues is the weaker comparison.
-v2 runs the specified one, pairing `bare_cc` against `schema_repro` **by game**,
+v2 runs the specified one, pairing `bare_cc` against `schema_repro` **by game** in
+its sign test — though not, as §7.2a explains, in the effect sizes,
 which controls for the world (`battery/artifacts/discrimination_arms.json`).
 
 The arm is **8 runs** — 4 development-pile games × 2 upstream collections — of
@@ -1371,6 +1396,39 @@ describes the battery's state better than the table does:
 > **P3 is the only metric in the battery that is both in the main table and
 > validated on the specified gradient.**
 > — `battery/REPORT_V2.md`
+
+### 7.2a The effect sizes are not paired, and on P3 the two statistics disagree
+
+The sentence above is the battery's own summary and this paper carried it, but the
+metric it rests on does not survive a look at how its two numbers are computed.
+
+**Cliff's δ is an unpaired statistic.** `battery/audit/stats.py`'s `cliffs_delta`
+is `P(high > low) − P(high < low)` over *all* cross-arm pairs of the four per-game
+values; it never matches a game against itself. Only the sign test pairs. So
+"pairing by game, which controls for the world" is true of the column the table
+does not ask you to read and false of the column it does — §7.2 above tells the
+reader the effect sizes "are the only thing in it anyone should read", and those
+are precisely the numbers the pairing does not reach.
+
+**On P3 the two statistics point opposite ways.** Its δ of −0.375 is recorded with
+`agrees_with_declared_direction: true`, while its paired sign test over the same
+four games is **1 win, 2 losses, 1 tie, p = 1.0**
+(`battery/artifacts/discrimination_arms.json`, `metrics.P3`). The unpaired
+comparison says the direction held; the paired one, on the same data, has the
+metric losing twice as often as it wins. X2 sits in the same position. Whatever
+"validated on the specified gradient" means for P3, it cannot mean that the
+gradient's own paired test agreed.
+
+A second consequence of n = 4 per side: every δ here is a multiple of 1/16, so the
+table's −0.562 and −0.188 print three decimals onto a quantity with seventeen
+reachable values. §7.4 calls exactly that presentational overstatement out when K2
+does it over a denominator of three. It is the same error, in the table this
+section asks the reader to trust most.
+
+None of this makes the effect sizes worthless — they are the only cross-arm signal
+the pilot has. It makes the sentence above an overstatement, and it means the
+battery's flagship claim about P3 rests on a distinction between two of its own
+statistics that neither the report nor, until now, this paper had drawn.
 
 The main table holds nine metrics — E2, E3, K7, K11, K12, M3, M6, P3, P4
 (`battery/artifacts/gaming_audit.json`, `main`). Of the eight with a real
@@ -1638,9 +1696,26 @@ every retirement carries its ρ, its shared-run count and its reason into
 `battery/audit/REDUNDANCY.md`.
 
 v2 finds **32 clusters over 38 metrics and retires 5 into representatives** — E7
-into E4 (70 shared runs), X4 into X1 (87), K14 and K7 into K5 (5 each), K8 into K10
+into E4 (70 shared runs), X4 into X1 (87), **K14 and K7 into K5** (5 each), K8 into K10
 (5) — with exactly one cross-family cluster, {K6, X1, X4}
-(`battery/artifacts/redundancy.json`). Retired is not deleted, only excluded from
+(`battery/artifacts/redundancy.json`).
+
+**One of those five retirements is a metric this paper also lists in the main
+table, and the two artefacts do not know about each other.** K7 is retired into K5
+by process 3 at ρ = 1.000 over 5 shared runs, and it is simultaneously one of the
+nine metrics process 4 leaves in the main table — `battery/artifacts/redundancy.json`
+`eliminated` and `battery/artifacts/gaming_audit.json` `main` both say so, and §7.7
+above prints K7 among the nine without noticing. Neither process is wrong on its own
+terms: the anti-gaming audit asks whether a metric can be cheated and the
+de-redundancy pass asks whether it says anything a representative does not, and a
+metric can pass the first while failing the second. But nothing downstream
+reconciles them, so **the main table as published contains a metric the battery has
+already retired**, and a reader assembling "the nine metrics worth reporting" gets
+one that process 3 says is K5 under another name. On five shared runs across
+near-identical manuals, which is the evidence base the same subsection warns is too
+thin to be evidence.
+
+Retired is not deleted, only excluded from
 being counted as a separate finding; and the two K-only clusters — {K10, K8} and
 {K14, K5, K7}, three retirements between them — rest on 5 shared runs across
 near-identical manuals. The artefact does not flag that cluster by cluster, which

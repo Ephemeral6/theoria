@@ -97,8 +97,9 @@ smallest attainable *p* of 0.125.
 
 **(6)** A theory carried unchanged to a second level of the same game re-fits from a single
 frame and wins with zero engine stages, zero adjudicated candidates and zero
-theorize rounds, at 252/252 against the referee — while the verification work is
-paid in full and at the same rate. Two perturbed levels, each breaking a
+theorize rounds — while the verification work is paid in full and at the same
+rate. It scores 252/252 against the referee, and so does the from-scratch control,
+so the saving is in what each arm cost and not in what either got right. Two perturbed levels, each breaking a
 mechanism the carried theory does not know about, were both caught, and both were
 caught only *after* acting: the free static layer passed them and returned the
 same plan. **(7)** An examination instrument with four question types, a marker

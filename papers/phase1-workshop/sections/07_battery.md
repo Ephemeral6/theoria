@@ -45,7 +45,8 @@ returned, and most of it is unflattering to the instrument.
 `Theoria.md` Phase 2 process 1 names a particular contrast: bare Claude Code
 against Schema. v0 and v1 could not run it and substituted the model ladder within
 `bare_cc`, which `battery/DECISIONS.md` D-B-004 argues is the weaker comparison.
-v2 runs the specified one, pairing `bare_cc` against `schema_repro` **by game**,
+v2 runs the specified one, pairing `bare_cc` against `schema_repro` **by game** in
+its sign test — though not, as §7.2a explains, in the effect sizes,
 which controls for the world (`battery/artifacts/discrimination_arms.json`).
 
 The arm is **8 runs** — 4 development-pile games × 2 upstream collections — of
@@ -86,6 +87,39 @@ describes the battery's state better than the table does:
 > **P3 is the only metric in the battery that is both in the main table and
 > validated on the specified gradient.**
 > — `battery/REPORT_V2.md`
+
+### 7.2a The effect sizes are not paired, and on P3 the two statistics disagree
+
+The sentence above is the battery's own summary and this paper carried it, but the
+metric it rests on does not survive a look at how its two numbers are computed.
+
+**Cliff's δ is an unpaired statistic.** `battery/audit/stats.py`'s `cliffs_delta`
+is `P(high > low) − P(high < low)` over *all* cross-arm pairs of the four per-game
+values; it never matches a game against itself. Only the sign test pairs. So
+"pairing by game, which controls for the world" is true of the column the table
+does not ask you to read and false of the column it does — §7.2 above tells the
+reader the effect sizes "are the only thing in it anyone should read", and those
+are precisely the numbers the pairing does not reach.
+
+**On P3 the two statistics point opposite ways.** Its δ of −0.375 is recorded with
+`agrees_with_declared_direction: true`, while its paired sign test over the same
+four games is **1 win, 2 losses, 1 tie, p = 1.0**
+(`battery/artifacts/discrimination_arms.json`, `metrics.P3`). The unpaired
+comparison says the direction held; the paired one, on the same data, has the
+metric losing twice as often as it wins. X2 sits in the same position. Whatever
+"validated on the specified gradient" means for P3, it cannot mean that the
+gradient's own paired test agreed.
+
+A second consequence of n = 4 per side: every δ here is a multiple of 1/16, so the
+table's −0.562 and −0.188 print three decimals onto a quantity with seventeen
+reachable values. §7.4 calls exactly that presentational overstatement out when K2
+does it over a denominator of three. It is the same error, in the table this
+section asks the reader to trust most.
+
+None of this makes the effect sizes worthless — they are the only cross-arm signal
+the pilot has. It makes the sentence above an overstatement, and it means the
+battery's flagship claim about P3 rests on a distinction between two of its own
+statistics that neither the report nor, until now, this paper had drawn.
 
 The main table holds nine metrics — E2, E3, K7, K11, K12, M3, M6, P3, P4
 (`battery/artifacts/gaming_audit.json`, `main`). Of the eight with a real
@@ -353,9 +387,26 @@ every retirement carries its ρ, its shared-run count and its reason into
 `battery/audit/REDUNDANCY.md`.
 
 v2 finds **32 clusters over 38 metrics and retires 5 into representatives** — E7
-into E4 (70 shared runs), X4 into X1 (87), K14 and K7 into K5 (5 each), K8 into K10
+into E4 (70 shared runs), X4 into X1 (87), **K14 and K7 into K5** (5 each), K8 into K10
 (5) — with exactly one cross-family cluster, {K6, X1, X4}
-(`battery/artifacts/redundancy.json`). Retired is not deleted, only excluded from
+(`battery/artifacts/redundancy.json`).
+
+**One of those five retirements is a metric this paper also lists in the main
+table, and the two artefacts do not know about each other.** K7 is retired into K5
+by process 3 at ρ = 1.000 over 5 shared runs, and it is simultaneously one of the
+nine metrics process 4 leaves in the main table — `battery/artifacts/redundancy.json`
+`eliminated` and `battery/artifacts/gaming_audit.json` `main` both say so, and §7.7
+above prints K7 among the nine without noticing. Neither process is wrong on its own
+terms: the anti-gaming audit asks whether a metric can be cheated and the
+de-redundancy pass asks whether it says anything a representative does not, and a
+metric can pass the first while failing the second. But nothing downstream
+reconciles them, so **the main table as published contains a metric the battery has
+already retired**, and a reader assembling "the nine metrics worth reporting" gets
+one that process 3 says is K5 under another name. On five shared runs across
+near-identical manuals, which is the evidence base the same subsection warns is too
+thin to be evidence.
+
+Retired is not deleted, only excluded from
 being counted as a separate finding; and the two K-only clusters — {K10, K8} and
 {K14, K5, K7}, three retirements between them — rest on 5 shared runs across
 near-identical manuals. The artefact does not flag that cluster by cluster, which
