@@ -789,6 +789,89 @@ be distinguishable from its verdict. Neither is a fact about expressions.
 
 ---
 
+## D-032 · The deadlock claim is conditioned on the proof system, not on the search
+
+*(Numbered 032, not 028: the `agent/e5-cert-recheck` branch takes D-028 through
+D-031 and was pushed first. Two branches numbering into the same file is a
+collision waiting to happen, and leaving a gap is cheaper than renumbering a
+cross-reference later.)*
+
+**Context.** E2 measured Theoria 1.9's promise that every proved deadlock speeds
+the planner up, found the speed-up half false against a real Fast Downward, and
+explained it: *a proved deadlock is a substitute for a heuristic, not an addition
+to one.* E7's brief was to check that finding before it hardened into a clause in
+the design document.
+
+**What the audit found, and what the attack on it then found.** The numbers
+replicate exactly -- all nine rows, to the expansion. E2's explanation does not
+survive: over the whole reachable space of the `far{N}` family the delete
+relaxation Fast Downward computes before search is *equal* to the true dead set
+(2904/2904 at far4, 10687/10687 at far5, 29776/29776 at far6), and the carver's
+theorems are a strict subset of it. The theorems are not competing with the
+heuristic; they are information the planner already had for free.
+
+E7's own first draft then claimed two things the adversarial pass broke, and the
+breakages are the reason this decision reads as it does:
+
+* **"Not one state, at any size, that a theorem detects and the relaxation
+  misses"** is false. `rnd0021` has eleven, verified against real Fast Downward,
+  and there the pruning dividend is total (`astar(lmcut())` 33 -> 0). More useful
+  than the counterexample is the structural argument it forced: a width-1 theorem
+  can escape the relaxation only if its pattern atom *is* a goal atom, which
+  requires h^2 to have proved the goal conjunction inconsistent, which means the
+  instance is unsolvable. `far{N}` is solvable, so for the 8 **singleton**
+  theorems the guard carries the zero was a **theorem about that family rather
+  than a measurement**. The argument does not reach the width-2 majority, which
+  stays a measurement at far4/5/6. The boundary is **h^2 versus h^1** -- the
+  carver proves with h^2 mutexes, FD's pre-search deadness test is h^1.
+* **"The dividend is zero because the information is redundant, not because it is
+  unused"** is a false exclusive and is withdrawn. A compiled guard is a domain
+  transformation, not a per-state filter, so containment does not entail a zero
+  dividend -- and it does not deliver one: `astar(lmcut())` saves up to 153
+  expansions, tie-break-invariantly. It saves them by a third mechanism neither
+  word names. Every state the guard removes was already an lmcut dead end,
+  evaluated and never expanded; what deleting the dead push operators does is
+  make the delete relaxation *harder*, raising h on **live** states. That last
+  step is isolated on exactly one instance (`hunt0021` h(init) 15 -> 18); on the
+  other three that save expansions, h(init) does not move, so the mechanism is
+  exhibited once rather than established four times.
+
+**Decision.** The claim in `DEADLOCK_CLAIM.md` is conditioned on **whether the
+theorems' proof system is stronger than the planner's own pre-search
+relaxation**, not on which search is running and not merely on whether the
+relaxation covers the region. Suggested wording is offered there; Theoria.md is
+not edited, which is the monitor's call and was the ticket's instruction.
+
+**Why that conditioning rather than the flat negative.** "Deadlock theorems do
+not speed planners up" is wrong twice: it forbids the `rnd0021` case where a
+theorem beats the relaxation, and it hides the small real lmcut effect.
+Conditioning says what was measured, says what would have to hold for the promise
+to be true, and hands the next person a test instead of a verdict. The test is
+cheap and runs before the planner does: compute both sets and compare, which is
+`audit.claim.coverage`.
+
+**A prediction this decision cost, and the explanation that also failed.**
+`audit/deadstart.py` was built expecting the two theorem kinds to split -- corner
+deadlocks fall out of grounding and should survive a relaxation, pair deadlocks
+need h^2 mutexes and should not. They do not split. The first draft explained that
+by `clear` being false on a box's cell and never coming back; a reviewer
+re-encoded sokoban with `occupied` instead and the relaxation still found all
+2904 dead states on far4 with occupancy information removed. What is load-bearing
+is **static push geometry**, not the `clear` fluent. Both the prediction and the
+wrong explanation are kept beside their refutations, because a prediction deleted
+after it fails is a prediction nobody made.
+
+**One instrument ruled inadmissible.** `astar(ipdb())` expansion counts are not
+usable evidence at this effect size. `far9`'s 78 -> 30 vanishes under two of
+eight random seeds and under a larger PDB budget; `swap-passage`'s 454 -> 0 is a
+`pdb_max_size` effect -- iPDB's winning projection returns h = infinity on the
+*unguarded* task too, and the guard's whole contribution is shrinking that PDB
+from 2,725,888 entries to 1,103,872, under the 2,000,000 default cap. An earlier
+draft quoted far8's `ipdb` 27 -> 24 as a dividend; it is one of these. The ipdb
+column is measured and reported, and is evidence for nothing.
+
+---
+
 ## D-033 · The summary table reads verdicts; it does not re-derive them
 
 *(Numbered 033 after D-032, which `agent/e7-deadlock-claim-audit` takes.)*
@@ -836,3 +919,219 @@ number proved, which is not the number that reached the planner -- the
 `singleton` guard expresses size-1 theorems only, 8 of 40 on `far7`. The table
 carries both, because a dividend attributed to 40 theorems that eight bought is
 the same class of error as the columns above, one layer up.
+
+---
+
+## D-034 · A verdict that is computed is a verdict that gates
+
+*(Numbered 034 after D-033. E16, `agent/e16-verdict-must-gate`.)*
+
+**Context.** RES-3's dual census walked ~105 judgement points and called 8
+unsafe. The shape it found is not the one the phrase "unverified claim" leads you
+to expect. In every one of the 8, **the check had been written, and it ran, and
+it was right.** What was missing was the `if`. The verdict landed in a sibling
+field of the artefact and the headline field did not read it.
+
+Two instances, both fixed here.
+
+**`lp_potential`'s heuristic payload.** `"admissible": True` was a literal in the
+dict. The genuine check — h against the true shortest path on every state with a
+finite one — was computed by `admissibility_report` and attached *afterwards*, by
+the caller, under `admissibility_check`. So the two could not agree or disagree;
+one was a constant. A `Heuristic` built on a certificate that fails its own exact
+rational re-check published itself as admissible, and so did one whose
+`conditions` were empty because nobody had checked it at all.
+
+**Decision.** `Heuristic.as_json(admissibility_check=None)` takes the check as an
+argument and derives both `admissible` and `admissible_basis` from it; the caller
+no longer bolts the check on afterwards. The licence is `certificate.holds` — the
+exact re-check of `inv_closed` is *literally* the premise the bound
+`h = min_g ceil((pot(s) - pot(g)) / M)` rests on — conjoined with the empirical
+rows, which can only ever subtract, since a sample refutes but does not prove.
+
+**`deadlock_carver`'s emitter.** `carve() -> pruning_report() -> emit()` ran with
+no branch between the second and the third. `PruningReport.same_answer` asks a
+question that can falsify a theorem operationally — *did pruning change the
+instance's answer?* — and its value was serialised as `plan_length_unchanged` and
+published **beside the theorems it had just falsified.** A reader received a
+theorem and a report saying that theorem is unsound, side by side, with nothing
+in the stream saying which one wins.
+
+The gate this installs is **one-directional, and deliberately not more.**
+`same_answer == False` proves unsoundness. `True` proves nothing: an unsound
+theorem cutting only states that lie on other optimal plans of the same length
+moves neither `solved` nor `length`. So this gate withholds what it catches and
+makes no claim about what it passes — the soundness evidence remains the
+exhaustive referee in `tests/`, with the grounding caveat D-035 records against
+it. Writing the gate as though passing it were a clearance would have reproduced
+the defect being fixed, one level up.
+
+**Decision.** `candidates()` reads the verdict before it builds rows. Refuted
+theorems are **withheld** by default; `on_refutation="mark"` emits them carrying
+a machine-readable `refuted: true` and a `refutation` object instead. Either way
+the `plan` account carries `refuted`, `invariants_withheld` and `on_refutation`,
+so a suppressed run is distinguishable from a run that carved nothing — silent
+truncation would read as "all clear", which is the same defect one layer up.
+
+**Why the marker is a field and not a sentence.** The consumer that has to honour
+this is `bench/dividend.py:868`, and it reads fields. A `rendering` string saying
+"but this theorem was refuted" is not a gate; it is a hope about who is reading.
+
+**What is deliberately *not* collapsed.** `same_answer` raises
+`UnfinishedComparison` when either search stopped, and `candidates()` does not
+catch it. Withholding on an unfinished search would file a soundness violation
+against a theorem on the strength of a search that answered nothing; publishing
+would clear it on the same nothing. Three states, three behaviours: no report at
+all leaves `refuted` **absent**, a passed verdict also leaves it absent, and only
+a real refutation writes it. "Nobody asked" and "asked and passed" are both
+distinct from "asked and failed".
+
+**What an adversarial review of this decision then found, in the fix itself.**
+The first cut gated the heuristic row and left the invariant row beside it
+ungated — **the same defect one row over.** Both rows come from one weight
+vector; the invariant went out asserting `goal unreachable from 1110` with all
+three conditions `true`, next to a heuristic row whose counterexamples were a
+proof that `inv_closed` is false over the real move set. Two rows from one call,
+contradicting each other, nothing saying which wins.
+
+The repair is not another sibling check. `candidates()` re-derives the premises
+**from the graph** (`premises_against_graph`) and withholds both rows when they
+fail — `moves_raising_potential` recomputes `inv_closed` over every geometry the
+graph has, which is the one check the certificate's own inputs cannot perform.
+The invariant payload also publishes `holds` outright, because `conditions`
+alone does not say what it appears to: `all({}.values())` is `True`, so a
+consumer re-deriving the verdict from a never-checked certificate reads it as a
+pass. Four more instances of the shape came out of the same review and are fixed
+here: `interop/certificate_export.build` wrote `conclusion` as a literal *above*
+the line computing `verified`; its `checked_over` asserted "all move instances on
+the full state space" regardless of how many were listed; `tools/run_all.py`
+handed the RING deadlock theorems to the probe planner — whose reachability
+verdicts are published — with no verdict taken on that instance at all; and
+`tools/p13_fd_dividend.py` had no prose branch for `same_answer is False`, so a
+refuted row fell through to "the plan is N steps either way", which is the one
+thing it was not.
+
+That is the argument for the review, and it belongs in the decision: **a fix for
+"the verdict is not read" is exactly the kind of change that leaves a sibling
+unread.** Five of the six sites above are in files this work item had already
+opened.
+
+**The generalisation.** A computed verdict sitting next to the thing it judges,
+with no branch between them, is *indistinguishable from an uncomputed one* to
+every consumer. The work of checking is wasted precisely when it is most needed.
+So: **the site that publishes a claim is the site that must read its verdict** —
+not a caller upstream, not a reviewer downstream. `tools/run_all.py:152` did
+check `report.same_answer` and raise — but it checked *after* `dc.run(...)` had
+already written the refuted theorems to disk. A gate behind the write is not a
+gate.
+
+---
+
+## D-035 · "Verified" and "verified by something independent" are two claims
+
+*(E16 item 3. The wording task RES-3 filed separately, because this cell is the
+one most easily read as safe.)*
+
+**Context.** RES-3's §4 promised six places that are "verified but not
+independently" and named three; the remaining three were found by walking the
+same question through the other engines. All six are listed below. **None of them
+is a missing check.** Every one has a checker that runs, and most were
+deliberately built not to import the producer — which is real work and really
+does buy something. What none of them buys is what the surrounding prose claimed.
+
+**The distinction.** A checker that re-derives a conclusion from the **same
+premise** the producer used is evidence about the producer's *arithmetic*. It is
+not evidence about the *world*. Independence has to be traced to the premises,
+not to the import graph — two oracles that agree are one piece of evidence when
+they share a premise, and `CROSSCHECK.md:31` had written that sentence down
+before this decision existed.
+
+**The six, with the shared premise named.**
+
+| site | verifier does not import | but shares |
+|---|---|---|
+| `lp_potential` `check_exactly` | the LP | `Certificate.moves`, from `moves_from_graph(graph)` |
+| `ic3_pdr` `check.py` | `pdr` | `System.transitions` |
+| `interop/certificate_export.verify` | — | the producer's own witness list |
+| `zero_space` `verify()` | — (it sits in the module it checks) | the trajectory the laws were fitted to |
+| `deadlock_carver` referee + `same_answer` | the carver's proof | `ground_actions` / `strip_static` |
+| `fd_adapter` `validate_plan` | `search` | `ground_actions` |
+
+**What follows, concretely.** `check_exactly` iterating `certificate.moves` means
+a move geometry missing from that list is *unconstrained in the LP and unexamined
+in the re-check at once*. This is not hypothetical:
+`tests/test_lp_potential.py` now carries a certificate over three of peg4's four
+moves that passes all three conditions exactly and yields `h = inf` — a per-state
+unsolvability claim — for two states that are one and two moves from the goal.
+Exhaustive search over integer weights in [-4,4] finds **no such vector against
+the complete move list**, which is the cleanest available statement of where the
+soundness actually lives: in the completeness of the enumeration, not in the
+arithmetic.
+
+`zero_space`'s gap is sharp in a different way: a vector in the null space of the
+observed differences is constant on the observed trajectory *by construction*, so
+`verify()` is close to a tautology and its `AssertionError` close to unreachable.
+
+`interop/certificate_export.verify` is the only one exploitable by omission
+rather than by error — it iterates the witnesses the producer chose to list, so a
+document that leaves out an inconvenient move instance passes with an empty
+finding list.
+
+**Decision.** The wording is separated everywhere it appears, and the docstrings
+that claimed more than they had are corrected in this commit rather than
+annotated. Specifically: `validate.py`'s "the only code shared with the planner
+is the parser" was false (`ground_actions` is shared and is not the parser);
+`interop/README.md`'s "recomputes everything from the document's own contents"
+names the defect as though it were the remedy; `zero_space/README.md`'s
+"independent check" is independent of the elimination, not of the evidence; and
+`deadlock_carver/README.md`'s "that referee shares nothing with the proof or with
+the planner" is contradicted by the referee's own construction — while
+`carve.py:139-143` had disclosed the sharing honestly all along, which is why the
+README is the layer that was fixed.
+
+**A correction this forces on E16's own premise.** The work item opens with good
+news: `fd_adapter/__init__.py:140` calls `validate_plan()` unconditionally and
+`validate.py` pointedly does not import `search`, so "the solver returned a plan,
+therefore it is solvable" does not happen here. **The unconditional call is
+true and verified.** The *structural* half is one function weaker than
+advertised: validator and searcher share `ground_actions`, so a wrong add/delete
+effect or a wrongly-admitted instance in the grounder corrupts both identically.
+The claim survives against search bugs, which is what it was aimed at, and does
+not survive against grounder bugs, which it was written as though it covered.
+
+**What is *not* being claimed.** These six are not defects to be repaired by
+making every checker independent; for most of them that is the same work as
+writing the engine twice. `recheck/` is the one place in the rig that pays that
+price in full — it grounds moves from the rule set, refuses a certificate
+carrying its own `transitions`, imports no `engines/`, and adds a second opinion
+(a plain reachability BFS) sharing nothing with the three conditions. The
+decision here is that **everywhere else says what it is**, so `recheck/`'s
+guarantee stays legible as the stronger thing it is.
+
+**A contrast worth keeping.** `cegis_miner` states outright, in both `miner.py:3`
+and its README, that "the ledger *is* the verifier". Its self-checks are circular
+and it says so. That is not a defect — it is the correct behaviour, and what
+separates it from the four sites corrected above is one sentence of prose.
+
+**Two earlier decisions are superseded on exactly one clause each.** This file is
+append-only, so they are corrected here rather than edited in place, and both are
+corrected only on the independence claim — everything else in them stands.
+
+* **D-010** reads "a separate executor … *code that shares nothing with the
+  search*". Read as **shares no search code**, it is true and remains the reason
+  the validator is worth having. Read as **shares nothing**, it is false:
+  `validate.py` and `search.py` both import `pddl.ground_actions`. The guarantee
+  is against frontier, ordering and duplicate-detection bugs; it is not against
+  grounder bugs.
+* **D-028** reads the deadlock carver's referee "exhausts the state space
+  *sharing nothing with the proof*". Its **method** shares nothing — forward BFS
+  and backward closure, no mutexes, no blocked-action argument. Its **grounding**
+  is the carver's own: `tests/test_deadlock_carver.py:127` builds it from
+  `strip_static(domain, problem, ground_actions(domain, problem))`. So a passing
+  theorem is certified dead over the atoms the search holds, which is the claim
+  the pruner needs, and not over the PDDL as written.
+
+Both were found by an adversarial review of *this* decision, which is the
+argument for running one: D-035 corrected six docstrings and left two decision
+entries asserting the sentences it had just falsified. A boundary written in one
+file and contradicted in another is not a boundary.

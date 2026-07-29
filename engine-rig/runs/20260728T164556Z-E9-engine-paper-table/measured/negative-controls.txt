@@ -1,0 +1,33 @@
+Negative controls: the generator's 'no' must reach the exit code.
+
+=== NC1: a fact disagrees with its artifact (expect 1) ===
+engine_table: 1 fact(s) disagree with their artifacts:
+  lp.incomplete: artifact says '639 / 2189 = 29.2 %', table expects '999 / 999 = 99.9 %'
+      at engine-rig/runs/20260729T000000Z-E11-engine-crosscheck-deep/partials/lp_potential-via-exhaustive.md :: /incompleteness rate is \*\*(639 / 2189 = 29\.2 %)/
+
+The table was NOT written. Re-read the run, then update the expectation.
+exit = 1
+
+=== NC2: an artifact is missing (expect 3) ===
+engine_table: PROBE FAILED: missing artifact: engine-rig/runs/does-not-exist/NOPE.md
+exit = 3
+
+=== NC3: the committed table is stale, --check (expect 1) ===
+engine_table: ENGINE_TABLE.md is stale; re-run without --check
+exit = 1
+(restored)
+
+=== NC4: the table cites a fact that does not exist (expect 3) ===
+engine_table: PROBE FAILED: table references unknown fact 'no.such.fact'
+exit = 3
+
+=== NC5: a row is given an empty boundary cell (expect 3) ===
+engine_table: PROBE FAILED: row `ic3_pdr` has an empty boundary cell
+exit = 3
+
+=== NC7: a multi-file probe loses one of its files (expect 3, not 1) ===
+    -- added after an adversarial audit found these probes read five files
+       through a bare read_text(), so a missing one exited 1 as an
+       uncaught FileNotFoundError instead of 3.
+engine_table: PROBE FAILED: missing artifact: fuzzlab/out/mutation.does_not_exist.json
+exit = 3

@@ -1,0 +1,11 @@
+{
+  "agent": "RES-4",
+  "base_commit": "156018f",
+  "branch": "agent/s18-fleetkit-extract",
+  "lane": "infra",
+  "prompt_id": "S18-fleetkit-extract",
+  "state": "partial -- coordination core ported and accepted with process workers; dispatch/reflex/quota/assign/ci_merge not ported; live-agent acceptance outstanding",
+  "territory": "fleetkit",
+  "utc": "2026-07-29T02:08:00Z",
+  "utc_note": "first written as 02:30Z, which had not happened yet. Third instance this session of the same error the clock_sanity probe was added to catch -- and one the probe does not see, because it reads monitor/ops-status/*.json and nothing else."
+}

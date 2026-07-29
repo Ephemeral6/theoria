@@ -68,10 +68,12 @@ in `PARTNER_SYNC.md`.
 
 ## Test suite
 
-309 passed, 9 skipped on a machine with no Fast Downward build. The skips are
-all FD's: the cross-rung agreement checks and the ladder bench rows, which need
-a real planner by definition. Everything else — including the whole driver
-protocol and the certificate rechecker — runs on any machine.
+483 passed, 27 skipped on a machine with no Fast Downward build (count taken
+after E5/E6 and E7 merged; the pre-merge figure was 309 passed, 9 skipped). The
+skips are all FD's: the cross-rung agreement checks, the ladder bench rows and
+the audit's real-planner crosschecks, which need a real planner by definition.
+Everything else — including the whole driver protocol and the certificate
+rechecker — runs on any machine.
 
 ## The dividend, re-measured on a planner that knows nothing about this rig
 
@@ -112,15 +114,27 @@ UNSAT the bundled search found. `runs/p13-fd-real/DIVIDEND.md`.
 closed-form optimum and the sokoban fixtures extended by size. Full numbers in
 `runs/20260728T072633Z-E2-fd-ladder-bench/`.
 
-* **Fast Downward's cost here is startup, not search.** Every FD row on the batch
-  sits between 140 and 260 ms almost regardless of instance; on `sokoban-far6`
-  the search itself is 4.1 ms of a 181 ms bill. The crossover against the bundled
-  rung is at `gripper-08`, ~10^4 stub expansions. Every instance this rig
-  currently generates is below it, so **D-025's determinism pin costs nothing in
-  speed today.**
-* **`ipdb` never pays on this batch**: `sokoban-far6` 1794 ms end to end against
-  `lmcut`'s 181 ms, for 18 expansions against 47. Its pattern databases are built
-  before it searches.
+* **Fast Downward's cost here is startup, not search — on the typical row.**
+  (E13 corrected the three numbers in this bullet against `ladder.json`; they had
+  been written from a different bench execution and one of them was in no
+  artifact at all. `ENGINE_TABLE.md`'s `fd_adapter` row is now the probed
+  version and this paragraph is downstream of it, not the other way round.)
+  Driver startup — subprocess wall minus FD's own total — is the tight quantity:
+  144.5 to 181.2 ms, median 154.9, across all 51 timed FD rungs. The median rung
+  spends 0.2 % of its 163.3 ms wall inside search, and on `sokoban-far6` the
+  lmcut search is 4.1 ms of a 187.3 ms bill — **not the 181 ms this bullet used
+  to say, which appears in no artifact for that row.** The claim fails upward
+  twice: search dominates on `gripper-10`/lmcut (502.9 ms of 666.2), and the
+  slowest row is neither startup nor search. The crossover against the bundled
+  rung is at `gripper-08`, ~10^4 stub expansions. Every instance the *engines*
+  in this rig currently generate is below it — the bench's own gripper ladder
+  runs past it — so **D-025's determinism pin costs nothing in speed today.**
+* **`ipdb` never pays on this batch**: `sokoban-far6` 1796.8 ms end to end
+  against `lmcut`'s 187.3 ms, for 18 expansions against 47. Its pattern
+  databases are built before it searches, and the bench's middle clock says so
+  rather than leaving it to inference: `fd_total` is 1615.6 ms of that 1796.8,
+  and the run's log records 1.621222 s in the hill-climbing pattern-collection
+  generator.
 * **LAMA's first plan reaches 3.4x the optimum** (`open4far`: 37 against 11) while
   being the only rung that scales — 43 expansions at `gripper-10` where `lmcut`
   expands 66,176. `plan.optimal = False` there is load-bearing.
@@ -228,6 +242,70 @@ the suite fails if it ever starts being caught.
 Two anchors need `cold-start-a2/` on the machine. This package reads that
 directory and writes nothing to it; when it is absent the anchors are reported
 **unavailable**, never as passes.
+
+## What a proved deadlock is worth to a planner, and what the claim should say (E7)
+
+E2 found that Theoria 1.9's *每证一个死锁，规划器同时提速* fails on a real
+planner. E7 audits that finding: replicates it, attacks it, and answers the
+question it left open. Full account, with a suggested wording for the design
+document, in [`DEADLOCK_CLAIM.md`](DEADLOCK_CLAIM.md); measurements in
+`runs/20260728T150713Z-E7-deadlock-claim-audit/`; `python -m audit --out <dir>`
+to re-run, `python -m audit.verify <dir>` to check.
+
+**All nine of E2's rows replicate to the expansion**, and the ladder extends to
+`far10`: blind saves 1279 / 1918 / 2415 expansions at far8/9/10, `lmcut` saves 1
+at each. The `ipdb` column is reported and is evidence for nothing -- see below.
+The blind dividend is steady only on this family (8.7%-27.1% across far4..far10);
+across instances generally it runs 0% (`stub-wall`, `rnd0013`) to 100%
+(`rnd0021`), so an earlier draft's "steady 10-27%" was wrong at both ends.
+
+**The pruner is connected and the prize was not small.** The guard takes far6
+from 312 ground actions to 296 at both the rig's grounder and FD's own
+translator, 16 removed and 0 added; 69 firings and 237 states cut on `far4`, plan
+unchanged; an independent walk that never consults the pruner puts 17-49% of the
+reachable space in the dead region.
+
+**The mechanism.** Three sets over the whole reachable space:
+
+| | reachable | truly dead | **delete-relaxation dead** | theorem dead | theorems the relaxation misses |
+|---|---|---|---|---|---|
+| `far4` | 3342 | 2904 | **2904** | 1624 | **0** |
+| `far5` | 13774 | 10687 | **10687** | 4508 | **0** |
+| `far6` | 42803 | 29776 | **29776** | 9928 | **0** |
+
+On this family the delete relaxation FD computes *before search begins* is
+exactly the true dead set, and the theorems are a strict subset of it. far4 is
+verified exhaustively against the real planner -- 0 disagreements in 3342 states
+-- and the one-state crosscheck of the Python relaxation against FD's translator
+stands at 116/116 across five geometries and two encodings.
+
+**Three things the adversarial pass broke, all of which improved the result.**
+
+* *"Not one state, at any size"* is false: `rnd0021` has eleven, verified against
+  FD, and there `astar(lmcut())` goes 33 -> 0. But a width-1 theorem can escape
+  the relaxation only if its pattern atom is a goal atom, which forces the
+  instance to be unsolvable -- so for the 8 **singleton** theorems the guard
+  carries, the zero on `far{N}` was a **theorem about that family, not a
+  measurement**. `far{N}` is majority width-2 and that half remains a measurement
+  at far4/5/6. The real boundary is **h^2 (the carver's mutexes) versus h^1 (FD's
+  pre-search test)**.
+* *"The dividend is zero because the information is redundant, not because it is
+  unused"* is withdrawn as a false exclusive. `astar(lmcut())` does save
+  expansions -- up to 153, tie-break-invariantly -- and where containment holds
+  it is not by pruning: every state the guard removes was already an lmcut dead
+  end. Deleting the dead push operators makes the relaxation *harder*, raising h
+  on **live** states -- but that mechanism is isolated on one instance
+  (`hunt0021` h(init) 15 -> 18) and merely consistent with the other three, whose
+  h(init) does not move. A third mechanism nobody had named, exhibited once.
+* *`ipdb` is not a usable instrument* at this effect size. `far9` 78 -> 30 dies
+  under 2 of 8 seeds and under a bigger PDB budget; `swap-passage` 454 -> 0 is a
+  `pdb_max_size` artefact. An earlier draft quoted far8's 27 -> 24 as a dividend.
+
+**What this moves.** The boundary is not "which search you use" and not merely
+"whether the relaxation covers the region", but **whether the theorems prove more
+than the planner's own pre-search relaxation** -- cheap to test in advance.
+§1.9's frequency argument and the theorems' role as proof obligations are
+untouched; the unconditional speed clause is what needs conditioning.
 
 ## What an engine is worth, assembled for the paper (E6)
 

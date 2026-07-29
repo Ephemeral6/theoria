@@ -1,0 +1,1187 @@
+{
+  "SOUNDNESS_theorem_dead_minus_truly_dead": [],
+  "board_file": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e7-deadlock-claim\\engine-rig\\runs\\20260728T150713Z-E7-deadlock-claim-audit\\attacks\\work\\a3\\rnd0021\\rnd0021.pddl",
+  "cross_check": {
+    "relaxation_agrees_with_independent": true,
+    "theorem_dead_agrees_with_independent": true,
+    "truly_dead_agrees_with_independent": true
+  },
+  "generator_found": true,
+  "generator_reproduces_board_file": true,
+  "h2": {
+    "goal_atom_h2_reachable": {
+      "at(b1,c41)": true,
+      "at(b2,c11)": false
+    },
+    "goal_atoms": [
+      "at(b1,c41)",
+      "at(b2,c11)"
+    ],
+    "goal_pair_h2_copossible": {
+      "at(b1,c41) & at(b2,c11)": false
+    },
+    "n_pairs": 417,
+    "n_singles": 33
+  },
+  "initial_state": {
+    "relaxation_dead": false,
+    "render": {
+      "boxes": {
+        "b1": "c42",
+        "b2": "c12"
+      },
+      "clear": [
+        "c11",
+        "c13",
+        "c21",
+        "c22",
+        "c24",
+        "c31",
+        "c32",
+        "c33",
+        "c41",
+        "c43",
+        "c44"
+      ],
+      "player": "c34"
+    },
+    "theorem_dead": false,
+    "truly_dead": true
+  },
+  "n_goal_states": 0,
+  "n_ground_actions": 76,
+  "n_pair": 0,
+  "n_reachable": 92,
+  "n_relaxation_dead": 59,
+  "n_relaxation_dead_outside_theorems": 0,
+  "n_singleton": 3,
+  "n_theorem_dead": 70,
+  "n_theorem_dead_outside_relaxation": 11,
+  "n_theorems": 3,
+  "n_truly_dead": 92,
+  "n_truly_dead_neither_detects": 22,
+  "per_theorem": [
+    {
+      "all_covered_are_truly_dead": true,
+      "closure": "no_deleting_action",
+      "covered_outside_relaxation_ids": [
+        8,
+        11,
+        12,
+        15,
+        16,
+        17,
+        18,
+        23,
+        24,
+        32,
+        33
+      ],
+      "goal_conflict": {
+        "goal_atom": "at(b2,c11)",
+        "pattern_atom": "at(b1,c41)",
+        "why": "mutex: the two can never hold in the same reachable state"
+      },
+      "n_covered_not_truly_dead": 0,
+      "n_covered_outside_relaxation": 11,
+      "n_covered_reachable_states": 23,
+      "rendering": "at(b1,c41) AND not-goal => dead",
+      "size": 1
+    },
+    {
+      "all_covered_are_truly_dead": true,
+      "closure": "no_deleting_action",
+      "covered_outside_relaxation_ids": [],
+      "goal_conflict": {
+        "goal_atom": "at(b1,c41)",
+        "pattern_atom": "at(b1,c44)",
+        "why": "mutex: the two can never hold in the same reachable state"
+      },
+      "n_covered_not_truly_dead": 0,
+      "n_covered_outside_relaxation": 0,
+      "n_covered_reachable_states": 23,
+      "rendering": "at(b1,c44) AND not-goal => dead",
+      "size": 1
+    },
+    {
+      "all_covered_are_truly_dead": true,
+      "closure": "no_deleting_action",
+      "covered_outside_relaxation_ids": [],
+      "goal_conflict": {
+        "goal_atom": "at(b2,c11)",
+        "pattern_atom": "at(b2,c13)",
+        "why": "mutex: the two can never hold in the same reachable state"
+      },
+      "n_covered_not_truly_dead": 0,
+      "n_covered_outside_relaxation": 0,
+      "n_covered_reachable_states": 48,
+      "rendering": "at(b2,c13) AND not-goal => dead",
+      "size": 1
+    }
+  ],
+  "relaxation_dead_within_truly_dead": true,
+  "theorem_dead_within_relaxation_dead": false,
+  "theorem_dead_within_truly_dead": true,
+  "theorems": [
+    {
+      "blocked_actions": [],
+      "claim": "every reachable state containing at(b1,c41) is dead",
+      "closure": "no_deleting_action",
+      "form": "conditional_unsolvability",
+      "goal_conflict": {
+        "goal_atom": "at(b2,c11)",
+        "pattern_atom": "at(b1,c41)",
+        "why": "mutex: the two can never hold in the same reachable state"
+      },
+      "n_deleting_actions": 0,
+      "pattern": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ]
+      ],
+      "pattern_text": "at(b1,c41)",
+      "rendering": "at(b1,c41) AND not-goal => dead",
+      "size": 1
+    },
+    {
+      "blocked_actions": [],
+      "claim": "every reachable state containing at(b1,c44) is dead",
+      "closure": "no_deleting_action",
+      "form": "conditional_unsolvability",
+      "goal_conflict": {
+        "goal_atom": "at(b1,c41)",
+        "pattern_atom": "at(b1,c44)",
+        "why": "mutex: the two can never hold in the same reachable state"
+      },
+      "n_deleting_actions": 0,
+      "pattern": [
+        [
+          "at",
+          "b1",
+          "c44"
+        ]
+      ],
+      "pattern_text": "at(b1,c44)",
+      "rendering": "at(b1,c44) AND not-goal => dead",
+      "size": 1
+    },
+    {
+      "blocked_actions": [],
+      "claim": "every reachable state containing at(b2,c13) is dead",
+      "closure": "no_deleting_action",
+      "form": "conditional_unsolvability",
+      "goal_conflict": {
+        "goal_atom": "at(b2,c11)",
+        "pattern_atom": "at(b2,c13)",
+        "why": "mutex: the two can never hold in the same reachable state"
+      },
+      "n_deleting_actions": 0,
+      "pattern": [
+        [
+          "at",
+          "b2",
+          "c13"
+        ]
+      ],
+      "pattern_text": "at(b2,c13)",
+      "rendering": "at(b2,c13) AND not-goal => dead",
+      "size": 1
+    }
+  ],
+  "witness_state_ids": [
+    8,
+    11,
+    12,
+    15,
+    16,
+    17,
+    18,
+    23,
+    24,
+    32,
+    33
+  ],
+  "witnesses": [
+    {
+      "atoms": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "at-player",
+          "c42"
+        ],
+        [
+          "clear",
+          "c11"
+        ],
+        [
+          "clear",
+          "c13"
+        ],
+        [
+          "clear",
+          "c21"
+        ],
+        [
+          "clear",
+          "c22"
+        ],
+        [
+          "clear",
+          "c24"
+        ],
+        [
+          "clear",
+          "c31"
+        ],
+        [
+          "clear",
+          "c32"
+        ],
+        [
+          "clear",
+          "c33"
+        ],
+        [
+          "clear",
+          "c34"
+        ],
+        [
+          "clear",
+          "c43"
+        ],
+        [
+          "clear",
+          "c44"
+        ]
+      ],
+      "id": 8,
+      "relaxation_dead_independent": false,
+      "relaxation_dead_python": false,
+      "state": {
+        "boxes": {
+          "b1": "c41",
+          "b2": "c12"
+        },
+        "clear": [
+          "c11",
+          "c13",
+          "c21",
+          "c22",
+          "c24",
+          "c31",
+          "c32",
+          "c33",
+          "c34",
+          "c43",
+          "c44"
+        ],
+        "player": "c42"
+      },
+      "theorems_covering": [
+        "at(b1,c41) AND not-goal => dead"
+      ],
+      "truly_dead": true
+    },
+    {
+      "atoms": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "at-player",
+          "c32"
+        ],
+        [
+          "clear",
+          "c11"
+        ],
+        [
+          "clear",
+          "c13"
+        ],
+        [
+          "clear",
+          "c21"
+        ],
+        [
+          "clear",
+          "c22"
+        ],
+        [
+          "clear",
+          "c24"
+        ],
+        [
+          "clear",
+          "c31"
+        ],
+        [
+          "clear",
+          "c33"
+        ],
+        [
+          "clear",
+          "c34"
+        ],
+        [
+          "clear",
+          "c42"
+        ],
+        [
+          "clear",
+          "c43"
+        ],
+        [
+          "clear",
+          "c44"
+        ]
+      ],
+      "id": 11,
+      "relaxation_dead_independent": false,
+      "relaxation_dead_python": false,
+      "state": {
+        "boxes": {
+          "b1": "c41",
+          "b2": "c12"
+        },
+        "clear": [
+          "c11",
+          "c13",
+          "c21",
+          "c22",
+          "c24",
+          "c31",
+          "c33",
+          "c34",
+          "c42",
+          "c43",
+          "c44"
+        ],
+        "player": "c32"
+      },
+      "theorems_covering": [
+        "at(b1,c41) AND not-goal => dead"
+      ],
+      "truly_dead": true
+    },
+    {
+      "atoms": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "at-player",
+          "c43"
+        ],
+        [
+          "clear",
+          "c11"
+        ],
+        [
+          "clear",
+          "c13"
+        ],
+        [
+          "clear",
+          "c21"
+        ],
+        [
+          "clear",
+          "c22"
+        ],
+        [
+          "clear",
+          "c24"
+        ],
+        [
+          "clear",
+          "c31"
+        ],
+        [
+          "clear",
+          "c32"
+        ],
+        [
+          "clear",
+          "c33"
+        ],
+        [
+          "clear",
+          "c34"
+        ],
+        [
+          "clear",
+          "c42"
+        ],
+        [
+          "clear",
+          "c44"
+        ]
+      ],
+      "id": 12,
+      "relaxation_dead_independent": false,
+      "relaxation_dead_python": false,
+      "state": {
+        "boxes": {
+          "b1": "c41",
+          "b2": "c12"
+        },
+        "clear": [
+          "c11",
+          "c13",
+          "c21",
+          "c22",
+          "c24",
+          "c31",
+          "c32",
+          "c33",
+          "c34",
+          "c42",
+          "c44"
+        ],
+        "player": "c43"
+      },
+      "theorems_covering": [
+        "at(b1,c41) AND not-goal => dead"
+      ],
+      "truly_dead": true
+    },
+    {
+      "atoms": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "at-player",
+          "c22"
+        ],
+        [
+          "clear",
+          "c11"
+        ],
+        [
+          "clear",
+          "c13"
+        ],
+        [
+          "clear",
+          "c21"
+        ],
+        [
+          "clear",
+          "c24"
+        ],
+        [
+          "clear",
+          "c31"
+        ],
+        [
+          "clear",
+          "c32"
+        ],
+        [
+          "clear",
+          "c33"
+        ],
+        [
+          "clear",
+          "c34"
+        ],
+        [
+          "clear",
+          "c42"
+        ],
+        [
+          "clear",
+          "c43"
+        ],
+        [
+          "clear",
+          "c44"
+        ]
+      ],
+      "id": 15,
+      "relaxation_dead_independent": false,
+      "relaxation_dead_python": false,
+      "state": {
+        "boxes": {
+          "b1": "c41",
+          "b2": "c12"
+        },
+        "clear": [
+          "c11",
+          "c13",
+          "c21",
+          "c24",
+          "c31",
+          "c32",
+          "c33",
+          "c34",
+          "c42",
+          "c43",
+          "c44"
+        ],
+        "player": "c22"
+      },
+      "theorems_covering": [
+        "at(b1,c41) AND not-goal => dead"
+      ],
+      "truly_dead": true
+    },
+    {
+      "atoms": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "at-player",
+          "c31"
+        ],
+        [
+          "clear",
+          "c11"
+        ],
+        [
+          "clear",
+          "c13"
+        ],
+        [
+          "clear",
+          "c21"
+        ],
+        [
+          "clear",
+          "c22"
+        ],
+        [
+          "clear",
+          "c24"
+        ],
+        [
+          "clear",
+          "c32"
+        ],
+        [
+          "clear",
+          "c33"
+        ],
+        [
+          "clear",
+          "c34"
+        ],
+        [
+          "clear",
+          "c42"
+        ],
+        [
+          "clear",
+          "c43"
+        ],
+        [
+          "clear",
+          "c44"
+        ]
+      ],
+      "id": 16,
+      "relaxation_dead_independent": false,
+      "relaxation_dead_python": false,
+      "state": {
+        "boxes": {
+          "b1": "c41",
+          "b2": "c12"
+        },
+        "clear": [
+          "c11",
+          "c13",
+          "c21",
+          "c22",
+          "c24",
+          "c32",
+          "c33",
+          "c34",
+          "c42",
+          "c43",
+          "c44"
+        ],
+        "player": "c31"
+      },
+      "theorems_covering": [
+        "at(b1,c41) AND not-goal => dead"
+      ],
+      "truly_dead": true
+    },
+    {
+      "atoms": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "at-player",
+          "c33"
+        ],
+        [
+          "clear",
+          "c11"
+        ],
+        [
+          "clear",
+          "c13"
+        ],
+        [
+          "clear",
+          "c21"
+        ],
+        [
+          "clear",
+          "c22"
+        ],
+        [
+          "clear",
+          "c24"
+        ],
+        [
+          "clear",
+          "c31"
+        ],
+        [
+          "clear",
+          "c32"
+        ],
+        [
+          "clear",
+          "c34"
+        ],
+        [
+          "clear",
+          "c42"
+        ],
+        [
+          "clear",
+          "c43"
+        ],
+        [
+          "clear",
+          "c44"
+        ]
+      ],
+      "id": 17,
+      "relaxation_dead_independent": false,
+      "relaxation_dead_python": false,
+      "state": {
+        "boxes": {
+          "b1": "c41",
+          "b2": "c12"
+        },
+        "clear": [
+          "c11",
+          "c13",
+          "c21",
+          "c22",
+          "c24",
+          "c31",
+          "c32",
+          "c34",
+          "c42",
+          "c43",
+          "c44"
+        ],
+        "player": "c33"
+      },
+      "theorems_covering": [
+        "at(b1,c41) AND not-goal => dead"
+      ],
+      "truly_dead": true
+    },
+    {
+      "atoms": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "at-player",
+          "c44"
+        ],
+        [
+          "clear",
+          "c11"
+        ],
+        [
+          "clear",
+          "c13"
+        ],
+        [
+          "clear",
+          "c21"
+        ],
+        [
+          "clear",
+          "c22"
+        ],
+        [
+          "clear",
+          "c24"
+        ],
+        [
+          "clear",
+          "c31"
+        ],
+        [
+          "clear",
+          "c32"
+        ],
+        [
+          "clear",
+          "c33"
+        ],
+        [
+          "clear",
+          "c34"
+        ],
+        [
+          "clear",
+          "c42"
+        ],
+        [
+          "clear",
+          "c43"
+        ]
+      ],
+      "id": 18,
+      "relaxation_dead_independent": false,
+      "relaxation_dead_python": false,
+      "state": {
+        "boxes": {
+          "b1": "c41",
+          "b2": "c12"
+        },
+        "clear": [
+          "c11",
+          "c13",
+          "c21",
+          "c22",
+          "c24",
+          "c31",
+          "c32",
+          "c33",
+          "c34",
+          "c42",
+          "c43"
+        ],
+        "player": "c44"
+      },
+      "theorems_covering": [
+        "at(b1,c41) AND not-goal => dead"
+      ],
+      "truly_dead": true
+    },
+    {
+      "atoms": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "at-player",
+          "c21"
+        ],
+        [
+          "clear",
+          "c11"
+        ],
+        [
+          "clear",
+          "c13"
+        ],
+        [
+          "clear",
+          "c22"
+        ],
+        [
+          "clear",
+          "c24"
+        ],
+        [
+          "clear",
+          "c31"
+        ],
+        [
+          "clear",
+          "c32"
+        ],
+        [
+          "clear",
+          "c33"
+        ],
+        [
+          "clear",
+          "c34"
+        ],
+        [
+          "clear",
+          "c42"
+        ],
+        [
+          "clear",
+          "c43"
+        ],
+        [
+          "clear",
+          "c44"
+        ]
+      ],
+      "id": 23,
+      "relaxation_dead_independent": false,
+      "relaxation_dead_python": false,
+      "state": {
+        "boxes": {
+          "b1": "c41",
+          "b2": "c12"
+        },
+        "clear": [
+          "c11",
+          "c13",
+          "c22",
+          "c24",
+          "c31",
+          "c32",
+          "c33",
+          "c34",
+          "c42",
+          "c43",
+          "c44"
+        ],
+        "player": "c21"
+      },
+      "theorems_covering": [
+        "at(b1,c41) AND not-goal => dead"
+      ],
+      "truly_dead": true
+    },
+    {
+      "atoms": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "at-player",
+          "c34"
+        ],
+        [
+          "clear",
+          "c11"
+        ],
+        [
+          "clear",
+          "c13"
+        ],
+        [
+          "clear",
+          "c21"
+        ],
+        [
+          "clear",
+          "c22"
+        ],
+        [
+          "clear",
+          "c24"
+        ],
+        [
+          "clear",
+          "c31"
+        ],
+        [
+          "clear",
+          "c32"
+        ],
+        [
+          "clear",
+          "c33"
+        ],
+        [
+          "clear",
+          "c42"
+        ],
+        [
+          "clear",
+          "c43"
+        ],
+        [
+          "clear",
+          "c44"
+        ]
+      ],
+      "id": 24,
+      "relaxation_dead_independent": false,
+      "relaxation_dead_python": false,
+      "state": {
+        "boxes": {
+          "b1": "c41",
+          "b2": "c12"
+        },
+        "clear": [
+          "c11",
+          "c13",
+          "c21",
+          "c22",
+          "c24",
+          "c31",
+          "c32",
+          "c33",
+          "c42",
+          "c43",
+          "c44"
+        ],
+        "player": "c34"
+      },
+      "theorems_covering": [
+        "at(b1,c41) AND not-goal => dead"
+      ],
+      "truly_dead": true
+    },
+    {
+      "atoms": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "at-player",
+          "c11"
+        ],
+        [
+          "clear",
+          "c13"
+        ],
+        [
+          "clear",
+          "c21"
+        ],
+        [
+          "clear",
+          "c22"
+        ],
+        [
+          "clear",
+          "c24"
+        ],
+        [
+          "clear",
+          "c31"
+        ],
+        [
+          "clear",
+          "c32"
+        ],
+        [
+          "clear",
+          "c33"
+        ],
+        [
+          "clear",
+          "c34"
+        ],
+        [
+          "clear",
+          "c42"
+        ],
+        [
+          "clear",
+          "c43"
+        ],
+        [
+          "clear",
+          "c44"
+        ]
+      ],
+      "id": 32,
+      "relaxation_dead_independent": false,
+      "relaxation_dead_python": false,
+      "state": {
+        "boxes": {
+          "b1": "c41",
+          "b2": "c12"
+        },
+        "clear": [
+          "c13",
+          "c21",
+          "c22",
+          "c24",
+          "c31",
+          "c32",
+          "c33",
+          "c34",
+          "c42",
+          "c43",
+          "c44"
+        ],
+        "player": "c11"
+      },
+      "theorems_covering": [
+        "at(b1,c41) AND not-goal => dead"
+      ],
+      "truly_dead": true
+    },
+    {
+      "atoms": [
+        [
+          "at",
+          "b1",
+          "c41"
+        ],
+        [
+          "at",
+          "b2",
+          "c12"
+        ],
+        [
+          "at-player",
+          "c24"
+        ],
+        [
+          "clear",
+          "c11"
+        ],
+        [
+          "clear",
+          "c13"
+        ],
+        [
+          "clear",
+          "c21"
+        ],
+        [
+          "clear",
+          "c22"
+        ],
+        [
+          "clear",
+          "c31"
+        ],
+        [
+          "clear",
+          "c32"
+        ],
+        [
+          "clear",
+          "c33"
+        ],
+        [
+          "clear",
+          "c34"
+        ],
+        [
+          "clear",
+          "c42"
+        ],
+        [
+          "clear",
+          "c43"
+        ],
+        [
+          "clear",
+          "c44"
+        ]
+      ],
+      "id": 33,
+      "relaxation_dead_independent": false,
+      "relaxation_dead_python": false,
+      "state": {
+        "boxes": {
+          "b1": "c41",
+          "b2": "c12"
+        },
+        "clear": [
+          "c11",
+          "c13",
+          "c21",
+          "c22",
+          "c31",
+          "c32",
+          "c33",
+          "c34",
+          "c42",
+          "c43",
+          "c44"
+        ],
+        "player": "c24"
+      },
+      "theorems_covering": [
+        "at(b1,c41) AND not-goal => dead"
+      ],
+      "truly_dead": true
+    }
+  ]
+}

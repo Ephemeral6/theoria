@@ -36,15 +36,16 @@ this paper is the Phase-1-sized cut of it, not the main paper.
 | 7 | The metrics battery, recomputed over existing trajectories | `sections/07_battery.md` | `battery/REPORT_V2.md`; `battery/PREDICTIONS.md`; `battery/artifacts/*.json`; `battery/REPORT_V0.md` and `battery/REPORT_V1.md` for the v0/v1 statements the section still quotes |
 | 8 | The exam — four question types, and what the grader cannot see | `sections/08_exam.md` | `exam/` |
 | 9 | The preflight — a real credential path with nothing spent | `sections/09_preflight.md` | `theoria-arm/`; `proxy/`; `arc-recon/` |
-| 10 | Limitations and honesty clauses | `sections/10_limitations.md` | `Theoria.md` §3.2 item 8; every report's "what this does not show" |
-| 11 | Related work — six lines, with a bibliography | `sections/11_related.md` | `Theoria.md` §3.1 and §3.2 item 7; verification traces in `papers/phase1-workshop/runs/20260728T102014Z-P7/` |
+| 10 | Does the adjudication surface exist? A census of the implementation | `sections/10_adjudication.md` | the four census reports, preserved verbatim at `papers/phase1-workshop/runs/20260729T140000Z-P14-honesty-section/inputs-verbatim/`; `engine-rig/ENGINE_TABLE.md`; the engine sources they name |
+| 11 | Limitations and honesty clauses | `sections/11_limitations.md` | `Theoria.md` §3.2 item 8; every report's "what this does not show" |
+| 12 | Related work — six lines, with a bibliography | `sections/12_related.md` | `Theoria.md` §3.1 and §3.2 item 7; verification traces in `papers/phase1-workshop/runs/20260728T102014Z-P7/` |
 
-§11 grew from one paragraph to six lines at P7, which is the fix REVIEW issue 14
+§12 grew from one paragraph to six lines at P7, which is the fix REVIEW issue 14
 asks for. A sixth red line binds it and only it:
 
 6. **A bibliographic record that could not be cross-verified against two
    independent sources is not cited.** Not softened, not hedged — absent. Every
-   record in §11 carries a trace in
+   record in §12 carries a trace in
    `papers/phase1-workshop/runs/20260728T102014Z-P7/search-traces/` naming the two
    sources and what each confirmed, and a 20 % adversarial re-check was run over
    the set. Where a system has no citable venue — Schema, Sora, several prover

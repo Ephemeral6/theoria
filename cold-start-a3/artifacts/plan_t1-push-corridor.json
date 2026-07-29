@@ -1,0 +1,61 @@
+{
+  "actions": [
+    "(step-down c1-1 c2-1)",
+    "(step-down c2-1 c3-1)",
+    "(step-right c3-1 c3-2)",
+    "(step-right c3-2 c3-3)",
+    "(step-right c3-3 c3-4)"
+  ],
+  "backend": "stub-bfs",
+  "directions": [
+    "down",
+    "down",
+    "right",
+    "right",
+    "right"
+  ],
+  "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/transfer_corridor/domain.pddl",
+  "green": true,
+  "length": 5,
+  "manual_final_cell": [
+    3,
+    4
+  ],
+  "manual_reaches_goal": true,
+  "manual_trail": [
+    [
+      1,
+      1
+    ],
+    [
+      2,
+      1
+    ],
+    [
+      3,
+      1
+    ],
+    [
+      3,
+      2
+    ],
+    [
+      3,
+      3
+    ],
+    [
+      3,
+      4
+    ]
+  ],
+  "name": "t1-push-corridor",
+  "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/transfer_corridor/problem.pddl",
+  "status": "SAT",
+  "world_actions": [
+    "DOWN",
+    "DOWN",
+    "RIGHT",
+    "RIGHT",
+    "RIGHT"
+  ]
+}

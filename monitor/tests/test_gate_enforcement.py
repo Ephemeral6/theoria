@@ -52,8 +52,13 @@ def test_a_verify_script_supersedes_the_test_suite(tmp_path):
 
 def test_the_merge_log_line_names_gated_and_ungated_separately():
     """The shape of the line, built the way `try_merge` builds it."""
+    # The `pytest` rung is built from a synthetic row rather than from a real
+    # territory.  S14 gave every territory that had a suite its own verify
+    # script, so there is currently no tests-only territory left to name here --
+    # and a test that silently stopped exercising one of the three kinds because
+    # the tree moved under it is the failure this whole module is about.
     ran = [gates.describe(gates.gate_for(ROOT, "exam"), "exam"),
-           gates.describe(gates.gate_for(ROOT, "engine-rig"), "engine-rig")]
+           gates.describe({"kind": "pytest"}, "engine-rig")]
     ungated = ["papers"]
     parts = ["MERGED b (dirs: exam,engine-rig,papers; gates: %s" % ",".join(ran)]
     parts.append("; NO GATE, MERGED UNCHECKED: %s" % ",".join(ungated))

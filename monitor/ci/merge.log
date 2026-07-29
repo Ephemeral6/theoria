@@ -1354,3 +1354,473 @@
 2026-07-28T22:59:51Z MERGED origin/agent/v15-census-sampling-frame (dirs: PARTNER_SYNC.md,browser-ops,engine-rig,fuzzlab,monitor,verify-lab; gates: pytest:engine-rig,verify:fuzzlab(verify.py),verify:monitor(verify.sh),pytest:verify-lab; NO GATE, MERGED UNCHECKED: browser-ops; a gate dirtied the worktree: fuzzlab/out/campaign.json)
 2026-07-28T23:00:09Z MERGED origin/agent/v17-pin-the-partial-verdict (dirs: PARTNER_SYNC.md,browser-ops,monitor,verify-lab; gates: verify:monitor(verify.sh),pytest:verify-lab; NO GATE, MERGED UNCHECKED: browser-ops)
 2026-07-28T23:00:12Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:04:29Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:04:32Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:05:00Z MERGED origin/agent/c11-tool-failure-as-truth (dirs: PARTNER_SYNC.md,engine-rig; gates: pytest:engine-rig)
+2026-07-28T23:05:04Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:05:13Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:05:16Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:05:19Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:05:20Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:05:25Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:05:28Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:05:31Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:05:34Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:05:36Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:05:39Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:14:27Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:14:30Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:14:34Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:14:44Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:14:47Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:14:50Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:14:51Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:14:53Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:14:56Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:14:59Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:15:01Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:15:04Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:15:07Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:19:28Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:19:31Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:19:35Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:19:45Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:19:48Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:19:51Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:19:52Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:19:54Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:19:57Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:19:59Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:20:02Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:20:10Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:20:13Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:29:27Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:29:30Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:29:33Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:29:43Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:29:46Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:29:49Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:29:50Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:29:52Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:29:55Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:29:58Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:30:00Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:30:03Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:30:06Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:34:29Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:34:33Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:34:38Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:34:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:34:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:34:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:34:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:34:59Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:35:02Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:35:05Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:35:08Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:35:11Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:35:14Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:39:33Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:39:36Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:39:40Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:39:51Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:39:55Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:39:59Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:40:00Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:40:03Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:40:06Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:40:10Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:40:14Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:40:17Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:40:21Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:44:34Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:44:38Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:44:42Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:44:54Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:44:58Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:45:02Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:45:03Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:45:05Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:45:10Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:45:14Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:45:18Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:45:22Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:45:29Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:47:38Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:47:42Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:47:49Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:48:05Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:48:09Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:48:14Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:48:15Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:48:21Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:48:25Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:48:29Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:48:33Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:48:36Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:48:39Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:54:32Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:54:35Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:54:39Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:54:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:54:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:54:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:54:56Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-28T23:54:59Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-28T23:55:02Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-28T23:55:05Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-28T23:55:08Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-28T23:55:12Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-28T23:55:15Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-28T23:59:34Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-28T23:59:37Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-28T23:59:41Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-28T23:59:50Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-28T23:59:54Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-28T23:59:57Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-28T23:59:58Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:00:02Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:00:11Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-29T00:00:14Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-29T00:00:17Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-29T00:00:20Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-29T00:00:23Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T00:09:31Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:09:34Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:09:38Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:09:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:09:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:09:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:09:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:09:58Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:10:00Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-29T00:10:03Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-29T00:10:07Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-29T00:10:10Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-29T00:10:13Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T00:14:31Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:14:34Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:14:38Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:14:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:14:51Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:14:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:14:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:14:58Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:15:15Z MERGED origin/agent/s17-fleet-evidence-capture (dirs: PARTNER_SYNC.md,fleet-study; gates: verify:fleet-study(verify.py))
+2026-07-29T00:15:17Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-29T00:15:20Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-29T00:15:23Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-29T00:15:26Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-29T00:15:29Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T00:19:32Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:19:35Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:19:39Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:19:49Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:19:52Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:19:56Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:19:57Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:19:59Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:20:02Z FLAG origin/agent/s5-phase1-close: merge conflict
+2026-07-29T00:20:05Z FLAG origin/agent/s8-provenance-backfill: merge conflict
+2026-07-29T00:20:08Z FLAG origin/agent/s9-contract-change-protocol: merge conflict
+2026-07-29T00:20:11Z FLAG origin/agent/v12-worldgen-gate-deaf: merge conflict
+2026-07-29T00:20:14Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T00:25:10Z MERGED origin/agent/a3-campaign-devpile (dirs: PARTNER_SYNC.md,monitor,theoria-arm; gates: verify:monitor(verify.sh),pytest:theoria-arm)
+2026-07-29T00:25:13Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:25:19Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:25:23Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:25:33Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:25:36Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:25:40Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:25:40Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:25:43Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:26:00Z MERGED origin/agent/s17-fleet-evidence-capture (dirs: PARTNER_SYNC.md,fleet-study; gates: verify:fleet-study(verify.py))
+2026-07-29T00:34:32Z FLAG origin/agent/a4a-ablation-build: merge conflict
+2026-07-29T00:34:35Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:34:39Z FLAG origin/agent/e7-deadlock-claim-audit: merge conflict
+2026-07-29T00:34:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:34:52Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:34:55Z FLAG origin/agent/r2-release-licence: tests red in release
+2026-07-29T00:34:56Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:34:58Z FLAG origin/agent/s14-gates-for-all: merge conflict
+2026-07-29T00:35:15Z MERGED origin/agent/s17-fleet-evidence-capture (dirs: PARTNER_SYNC.md,fleet-study; gates: verify:fleet-study(verify.py))
+2026-07-29T00:36:06Z MERGED origin/agent/s23-unreadable-is-not-clean (dirs: PARTNER_SYNC.md,arc-recon,monitor,release; gates: verify:arc-recon(verify.sh),verify:monitor(verify.sh),verify:release(verify.sh); a gate dirtied the worktree: arc-recon/data/claim_set.json)
+2026-07-29T00:45:01Z MERGED origin/agent/a4a-ablation-build (dirs: ablation-arm; gates: verify:ablation-arm(verify.sh); a gate dirtied the worktree: ablation-arm/artifacts/a0-base/episode.jsonl,ablation-arm/artifacts/a2-base/episode.jsonl,ablation-arm/artifacts/a2-charitable/episode.jsonl)
+2026-07-29T00:45:04Z FLAG origin/agent/bus2-ablation-readonly: merge conflict
+2026-07-29T00:45:44Z MERGED origin/agent/e7-deadlock-claim-audit (dirs: PARTNER_SYNC.md,engine-rig; gates: pytest:engine-rig)
+2026-07-29T00:50:08Z MERGED origin/agent/bus2-ablation-readonly (dirs: ablation-arm; gates: verify:ablation-arm(verify.sh); a gate dirtied the worktree: ablation-arm/artifacts/a0-base/episode.jsonl,ablation-arm/artifacts/a2-base/episode.jsonl,ablation-arm/artifacts/a2-charitable/episode.jsonl)
+2026-07-29T00:50:35Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:50:39Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T00:51:09Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T00:51:10Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T00:54:18Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T00:54:58Z MERGED origin/agent/s5-phase1-close (dirs: PARTNER_SYNC.md,arc-recon; gates: verify:arc-recon(verify.sh); a gate dirtied the worktree: arc-recon/data/claim_set.json)
+2026-07-29T00:59:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T00:59:52Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:00:15Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T01:00:16Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:03:11Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T01:04:36Z MERGED origin/agent/s8-provenance-backfill (dirs: PARTNER_SYNC.md,monitor,theoria-arm; gates: verify:monitor(verify.sh),pytest:theoria-arm)
+2026-07-29T01:05:55Z MERGED origin/agent/s9-contract-change-protocol (dirs: PARTNER_SYNC.md,monitor,proxy; gates: verify:monitor(verify.sh),verify:proxy(verify_contract.sh))
+2026-07-29T01:14:48Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:14:53Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:15:15Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T01:15:16Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:18:05Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T01:18:10Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-29T01:18:14Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T01:24:30Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:24:51Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:24:56Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:25:18Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T01:25:19Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:28:19Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T01:28:24Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-29T01:28:28Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T01:34:33Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:35:04Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:35:10Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:35:39Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T01:35:40Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T01:35:57Z FLAG origin/agent/s14-gates-for-all: verify gate red in a0-spike (verify.py)
+2026-07-29T01:36:02Z FLAG origin/agent/v12-worldgen-gate-deaf: verify gate red in worldgen (verify.py)
+2026-07-29T01:36:07Z FLAG origin/agent/v5-battery-freeze: verify gate red in battery (verify.py)
+2026-07-29T01:42:56Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:44:47Z MERGED origin/agent/a11-bypass-attempts-explained (dirs: theoria-arm; gates: pytest:theoria-arm)
+2026-07-29T01:45:14Z MERGED origin/agent/a7-envelope-finish (dirs: PARTNER_SYNC.md,baseline-arms; gates: pytest:baseline-arms)
+2026-07-29T01:52:40Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:54:06Z MERGED origin/agent/a11-bypass-attempts-explained (dirs: PARTNER_SYNC.md,theoria-arm; gates: pytest:theoria-arm)
+2026-07-29T01:55:33Z FLAG origin/agent/a3-campaign-devpile: tests red in theoria-arm
+2026-07-29T01:55:45Z MERGED origin/agent/a7-envelope-finish (dirs: PARTNER_SYNC.md,baseline-arms; gates: pytest:baseline-arms)
+2026-07-29T01:57:39Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T01:59:03Z FLAG origin/agent/a3-campaign-devpile: tests red in theoria-arm
+2026-07-29T01:59:25Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T01:59:29Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T01:59:38Z MERGED origin/agent/p12-paper-multi-review (dirs: papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T02:00:02Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:00:03Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:02:58Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T02:04:58Z MERGED origin/agent/v12-worldgen-gate-deaf (dirs: worldgen; gates: verify:worldgen(verify.py); a gate dirtied the worktree: worldgen/out/qc/t1-portal-oneway/candidates.jsonl,worldgen/out/qc/t1-portal-oneway/engines_report.json,worldgen/out/qc/t1-switch-latch/candidates.jsonl,worldgen/out/qc/t1-switch-latch/engines_report.json,worldgen/out/qc/t1-switch-toggle/candidates.jsonl,worldgen/out/qc/t1-switch-toggle/engines_report.json)
+2026-07-29T02:07:32Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:08:53Z FLAG origin/agent/a3-campaign-devpile: tests red in theoria-arm
+2026-07-29T02:09:34Z MERGED origin/agent/e16-verdict-must-gate (dirs: PARTNER_SYNC.md,engine-rig; gates: pytest:engine-rig)
+2026-07-29T02:09:56Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T02:10:01Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:10:53Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:11:17Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:11:18Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:14:08Z FLAG origin/agent/s14-gates-for-all: verify gate red in proxy (verify.py)
+2026-07-29T02:14:34Z MERGED origin/agent/s16-silent-failure-hunt (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh))
+2026-07-29T02:17:33Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:18:57Z FLAG origin/agent/a3-campaign-devpile: tests red in theoria-arm
+2026-07-29T02:19:18Z FLAG origin/agent/e9-engine-paper-table: tests red in engine-rig
+2026-07-29T02:19:22Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:20:08Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:20:32Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:20:33Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:26:59Z MERGED origin/agent/s14-gates-for-all (dirs: PARTNER_SYNC.md,a0-spike,baseline-arms,battery,cold-start-a0,cold-start-a2,cold-start-a3,engine-rig,monitor,proxy,theoria-arm,theory-compiler; gates: verify:a0-spike(verify.py),verify:baseline-arms(verify.py),verify:battery(verify.py),verify:cold-start-a0(verify.py),verify:cold-start-a2(verify.py),verify:cold-start-a3(verify.py),verify:engine-rig(verify.py),verify:monitor(verify.sh),verify:proxy(verify.py),verify:theoria-arm(verify.py),verify:theory-compiler(verify.py); a gate dirtied the worktree: a0-spike/artifacts/a0_report.json,cold-start-a2/artifacts/candidates_history.jsonl,cold-start-a2/artifacts/candidates_probed.jsonl,cold-start-a2/artifacts/engines_report.json,cold-start-a2/artifacts/engines_report_history.json,cold-start-a2/artifacts/engines_report_probed.json)
+2026-07-29T02:27:13Z MERGED origin/agent/s18-fleetkit-extract (dirs: fleetkit; gates: pytest:fleetkit)
+2026-07-29T02:32:31Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:32:58Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T02:33:42Z MERGED origin/agent/e16-verdict-must-gate (dirs: PARTNER_SYNC.md,engine-rig; gates: verify:engine-rig(verify.py))
+2026-07-29T02:33:46Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T02:34:24Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T02:34:28Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:34:37Z MERGED origin/agent/p12-paper-multi-review (dirs: PARTNER_SYNC.md,papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T02:37:31Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:37:58Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T02:38:02Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T02:38:39Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T02:38:44Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:39:28Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:39:50Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:39:51Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:40:24Z MERGED origin/agent/s22-access-check-close (dirs: arc-recon; gates: verify:arc-recon(verify.sh); a gate dirtied the worktree: arc-recon/data/claim_set.json)
+2026-07-29T02:40:28Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T02:40:32Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T02:40:36Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T02:44:11Z MERGED origin/agent/v7-exam-stress-fanout (dirs: PARTNER_SYNC.md,exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json,exam/artifacts/calibration.json,exam/artifacts/exam_summary.json,exam/artifacts/matrix/verdict_confusion.json,exam/artifacts/matrix/verdict_confusion.md,exam/artifacts/papers/p15-adaptation-a0.paper.json)
+2026-07-29T02:47:30Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:47:57Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T02:48:01Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T02:48:39Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T02:48:43Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:49:29Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:49:52Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:49:53Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:49:56Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T02:50:00Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T02:50:04Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T02:54:31Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T02:54:58Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T02:55:02Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T02:55:40Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T02:55:44Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T02:56:28Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T02:56:52Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T02:56:53Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T02:56:56Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T02:57:00Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T02:57:04Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T02:57:28Z MERGED origin/agent/v9-battery-gaming-audit (dirs: PARTNER_SYNC.md,battery; gates: verify:battery(verify.py))
+2026-07-29T03:03:52Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:04:19Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:04:23Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:05:01Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:05:05Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:05:51Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:06:14Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:06:15Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:06:18Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:06:22Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:06:26Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:13:33Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:14:00Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:14:04Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:14:43Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:14:48Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:15:32Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:15:55Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:15:56Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:15:59Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:16:03Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:16:08Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:20:10Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T03:27:35Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:28:02Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:28:06Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:28:43Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:28:47Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:29:32Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:29:54Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:29:55Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:29:58Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:30:02Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:30:06Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:34:08Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T03:37:26Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:37:53Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:37:57Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:38:35Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:38:39Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:39:24Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:39:46Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:39:47Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:39:50Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T03:45:40Z FLAG origin/agent/v18-battery-prereg-check: verify gate red in monitor (verify.sh)
+2026-07-29T03:45:45Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T03:45:49Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T03:49:50Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T03:52:33Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T03:53:01Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T03:53:05Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T03:53:49Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T03:53:54Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T03:54:58Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T03:55:23Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T03:55:24Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T03:55:28Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T04:02:32Z FLAG origin/agent/v18-battery-prereg-check: verify gate red in monitor (verify.sh)
+2026-07-29T04:02:37Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T04:02:41Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T04:07:49Z FLAG origin/agent/v5-verdict-three-types: verify gate red in monitor (verify.sh)
+2026-07-29T04:12:54Z FLAG origin/agent/a10-shared-ledger-real-arms: merge conflict
+2026-07-29T04:14:01Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)
+2026-07-29T04:15:23Z FLAG origin/agent/c10-unsolvable-proof-canon: push rejected (race?)
+2026-07-29T04:15:47Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T04:16:53Z FLAG origin/agent/e9-engine-paper-table: verify gate red in engine-rig (verify.py)
+2026-07-29T04:17:13Z FLAG origin/agent/p10-figures-into-paper: merge conflict
+2026-07-29T04:18:41Z FLAG origin/agent/p13-figure-numbering: verify gate red in figures (verify.sh)
+2026-07-29T04:19:40Z FLAG origin/agent/r2-release-licence: verify gate red in release (verify.sh)
+2026-07-29T04:19:41Z FLAG origin/agent/s11-sealed-halfguard: touches protected root files
+2026-07-29T04:19:45Z FLAG origin/agent/s25-probe-the-merge-queue: merge conflict
+2026-07-29T04:32:56Z MERGED origin/agent/v18-battery-prereg-check (dirs: PARTNER_SYNC.md,a0-spike,arc-recon,baseline-arms,battery,cold-start-a0,cold-start-a2,cold-start-a3,engine-rig,exam,fleetkit,monitor,papers,proxy,theoria-arm,theory-compiler,worldgen; gates: verify:a0-spike(verify.py),verify:arc-recon(verify.sh),verify:baseline-arms(verify.py),verify:battery(verify.py),verify:cold-start-a0(verify.py),verify:cold-start-a2(verify.py),verify:cold-start-a3(verify.py),verify:engine-rig(verify.py),verify:exam(verify.py),pytest:fleetkit,verify:monitor(verify.sh),verify:proxy(verify.py),verify:theoria-arm(verify.py),verify:theory-compiler(verify.py),verify:worldgen(verify.py); NO GATE, MERGED UNCHECKED: papers; a gate dirtied the worktree: a0-spike/artifacts/a0_report.json,arc-recon/data/claim_set.json,cold-start-a2/artifacts/candidates_history.jsonl,cold-start-a2/artifacts/candidates_probed.jsonl,cold-start-a2/artifacts/engines_report.json,cold-start-a2/artifacts/engines_report_history.json)
+2026-07-29T04:32:56Z CLEARED flag for origin/agent/v18-battery-prereg-check (merged)
+2026-07-29T04:33:01Z FLAG origin/agent/v19-unverified-is-not-true: merge conflict
+2026-07-29T04:33:05Z FLAG origin/agent/v5-battery-freeze: merge conflict
+2026-07-29T04:37:14Z FLAG origin/agent/v5-verdict-three-types: push rejected (race?)
+2026-07-29T04:44:10Z MERGED origin/agent/e17-held-out-validation (dirs: PARTNER_SYNC.md,engine-rig; gates: verify:engine-rig(verify.py))
+2026-07-29T04:44:11Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 1x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e8-ic3-scale (merge conflict, 1x); e9-engine-paper-table (verify gate red in engine-rig (verify.py), 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T04:47:32Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 1x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x); s11-sealed-halfguard (touches protected root files, 1x)
+2026-07-29T04:53:34Z FLAG origin/agent/a4b-ablation-calibrate: verify gate red in ablation-arm (verify.sh)
+2026-07-29T04:53:36Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 1x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x); s11-sealed-halfguard (touches protected root files, 1x)
+2026-07-29T04:57:56Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 1x); a4b-ablation-calibrate (verify gate red in ablation-arm (verify.sh), 1x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T05:03:40Z MERGED origin/agent/a4b-ablation-calibrate (dirs: ablation-arm; gates: verify:ablation-arm(verify.sh); a gate dirtied the worktree: ablation-arm/artifacts/a0-base/episode.jsonl,ablation-arm/artifacts/a2-base/episode.jsonl,ablation-arm/artifacts/a2-charitable/episode.jsonl,ablation-arm/artifacts/run_all.json,ablation-arm/artifacts/verify.json)
+2026-07-29T05:03:40Z CLEARED flag for origin/agent/a4b-ablation-calibrate (merged)
+2026-07-29T05:03:42Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 1x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x); s11-sealed-halfguard (touches protected root files, 1x)
+2026-07-29T05:07:57Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 1x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x); s11-sealed-halfguard (touches protected root files, 1x)
+2026-07-29T05:12:55Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 1x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x); s11-sealed-halfguard (touches protected root files, 1x)
+2026-07-29T05:18:50Z MERGED origin/agent/a12-cost-claim-sources (dirs: PARTNER_SYNC.md,figures; gates: verify:figures(verify.sh))
+2026-07-29T05:18:51Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in monitor (verify.sh), 1x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x); s11-sealed-halfguard (touches protected root files, 1x)
+2026-07-29T05:25:48Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)
+2026-07-29T05:26:29Z FLAG origin/agent/e15-solver-status-bit: verify gate red in engine-rig (verify.py)
+2026-07-29T05:26:31Z HELD 11 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x); s11-sealed-halfguard (touches protected root files, 1x); s25-probe-the-merge-queue (merge conflict, 1x)
+2026-07-29T05:33:59Z MERGED origin/agent/a4b-ablation-calibrate (dirs: PARTNER_SYNC.md,ablation-arm; gates: verify:ablation-arm(verify.sh); a gate dirtied the worktree: ablation-arm/artifacts/a0-base/episode.jsonl,ablation-arm/artifacts/a2-base/episode.jsonl,ablation-arm/artifacts/a2-charitable/episode.jsonl,ablation-arm/artifacts/run_all.json)
+2026-07-29T05:34:00Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T05:38:22Z MERGED origin/agent/p13-paper-intro-abstract (dirs: PARTNER_SYNC.md,papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T05:38:24Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T05:43:11Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T05:48:06Z MERGED origin/agent/s16-silent-failure-hunt (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh))
+2026-07-29T05:48:07Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T05:52:48Z MERGED origin/agent/p14-honesty-section-res2 (dirs: papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T05:53:24Z MERGED origin/agent/s25-probe-the-merge-queue (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh))
+2026-07-29T05:53:24Z CLEARED flag for origin/agent/s25-probe-the-merge-queue (merged)
+2026-07-29T05:53:25Z HELD 9 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T05:58:16Z MERGED origin/agent/s25-probe-the-merge-queue (dirs: monitor; gates: verify:monitor(verify.sh))
+2026-07-29T05:58:17Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T06:02:33Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T06:08:43Z MERGED origin/agent/s22-access-check-close (dirs: PARTNER_SYNC.md,arc-recon; gates: verify:arc-recon(verify.sh); a gate dirtied the worktree: arc-recon/data/claim_set.json)
+2026-07-29T06:11:09Z MERGED origin/agent/s7-ledger-hashchain (dirs: PARTNER_SYNC.md,proxy; gates: verify:proxy(verify.py))
+2026-07-29T06:11:10Z HELD 9 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T06:18:16Z MERGED origin/agent/s25-probe-the-merge-queue (dirs: monitor; gates: verify:monitor(verify.sh))
+2026-07-29T06:18:17Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T06:24:45Z MERGED origin/agent/s7-ledger-hashchain (dirs: PARTNER_SYNC.md,proxy; gates: verify:proxy(verify.py))
+2026-07-29T06:24:47Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T06:28:21Z MERGED origin/agent/s26-phase1-gate-must-decide (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T06:28:22Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T06:32:34Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T06:38:44Z MERGED origin/agent/s19-session-liveness (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T06:38:45Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T06:43:41Z MERGED origin/agent/s20-gate-negative-sample (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T06:43:42Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T06:47:33Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T06:52:31Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T07:01:18Z MERGED origin/agent/v7-exam-stress-fanout (dirs: PARTNER_SYNC.md,exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json,exam/artifacts/calibration.json,exam/artifacts/exam_summary.json,exam/artifacts/matrix/verdict_confusion.json,exam/artifacts/matrix/verdict_confusion.md,exam/artifacts/papers/p15-adaptation-a0.paper.json)
+2026-07-29T07:01:19Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T07:07:31Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T07:12:31Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T07:17:41Z MERGED origin/agent/p14-honesty-section-res2 (dirs: PARTNER_SYNC.md,papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T07:17:42Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T07:22:31Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T07:27:51Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T07:34:35Z MERGED origin/agent/a6-transfer-protocol (dirs: PARTNER_SYNC.md,cold-start-a3,monitor; gates: verify:cold-start-a3(verify.py),verify:monitor(verify.sh); a gate dirtied the worktree: cold-start-a3/artifacts/arm_l1_cold_start.json,cold-start-a3/artifacts/arm_l2_from_scratch.json,cold-start-a3/artifacts/arm_l2_transfer.json,cold-start-a3/artifacts/arm_l2neg.json,cold-start-a3/artifacts/arm_l2rew.json,cold-start-a3/artifacts/candidates_l1.jsonl)
+2026-07-29T07:35:30Z MERGED origin/agent/e13-engine-section-numbers (dirs: PARTNER_SYNC.md,engine-rig; gates: verify:engine-rig(verify.py))
+2026-07-29T07:35:31Z HELD 3 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x)
+2026-07-29T07:43:26Z MERGED origin/agent/p22-freeze-kit (dirs: freeze; gates: verify:freeze(verify.sh))
+2026-07-29T07:43:30Z FLAG origin/agent/s4-freeze: merge conflict
+2026-07-29T07:43:31Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T07:53:14Z FLAG origin/agent/s4-freeze: merge conflict
+2026-07-29T07:53:15Z HELD 12 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T07:58:12Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T08:03:32Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T08:12:19Z MERGED origin/agent/v8-judge-trust-audit (dirs: PARTNER_SYNC.md,exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json,exam/artifacts/calibration.json,exam/artifacts/exam_summary.json,exam/artifacts/matrix/verdict_confusion.json,exam/artifacts/matrix/verdict_confusion.md,exam/artifacts/papers/p15-adaptation-a0.paper.json)
+2026-07-29T08:12:20Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T08:23:34Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T08:33:33Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T08:38:30Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T08:43:32Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T08:48:31Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T08:58:53Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T09:08:51Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T09:13:54Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T09:23:51Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T09:28:51Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T09:33:51Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T09:38:51Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T09:43:51Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T09:48:52Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T09:53:51Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T09:58:51Z HELD 13 unchanged since last verdict: a10-shared-ledger-real-arms (merge conflict, 1x); a3-campaign-devpile (verify gate red in theoria-arm (verify.py), 2x); c10-unsolvable-proof-canon (push rejected (race?), 1x); e15-solver-status-bit (verify gate red in engine-rig (verify.py), 1x); e8-ic3-scale (merge conflict, 1x); p10-figures-into-paper (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); r2-release-licence (verify gate red in release (verify.sh), 1x)
+2026-07-29T10:08:05Z MERGED origin/agent/c10-unsolvable-proof-canon (dirs: PARTNER_SYNC.md,engine-rig; gates: verify:engine-rig(verify.py))
+2026-07-29T10:08:05Z CLEARED flag for origin/agent/c10-unsolvable-proof-canon (merged)
+2026-07-29T10:08:11Z FLAG origin/agent/v5-verdict-three-types: merge conflict

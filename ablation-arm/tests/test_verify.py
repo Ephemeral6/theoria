@@ -14,9 +14,16 @@ import os
 
 import pytest
 
-import verify
+from _armimport import arm_module
 
 ARM = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+#: Loaded by path, not by name. A plain ``import verify`` resolves to
+#: ``cold-start-a2/verify.py``: ``_bootstrap`` puts the upstream roots ahead of
+#: this arm on ``sys.path``, and S14 (127edab) gave eleven territories a
+#: top-level ``verify.py`` seventy-five minutes after these tests were written.
+#: ``tests/test_no_shadow.py`` is the guard that fails when that set grows.
+verify = arm_module("verify")
 
 
 @pytest.fixture(scope="module")
@@ -101,18 +108,57 @@ def test_a_recorded_number_can_never_turn_the_gate_red(artefacts):
         assert name not in asserted, (
             "%s is both recorded and asserted; one of them is wrong" % name)
     for name, entry in recorded.items():
-        assert entry["status"].startswith(("RECORDED", "NOT CONSTRUCTIBLE"))
+        # "MEASURED" joined the vocabulary when A4b built the instruments A4a
+        # recorded the absence of. What must not change is the *place* these
+        # live: measured or not, they are in the recorded half, and nothing in
+        # this dict is allowed to reach `_assertions` and turn the gate red.
+        assert entry["status"].startswith(
+            ("RECORDED", "MEASURED", "NOT CONSTRUCTIBLE"))
         assert entry["what"]
 
 
-def test_the_recorded_half_names_the_instruments_that_do_not_exist(artefacts):
-    """P-2 and P-4 are not merely uncompared -- nothing in this arm measures
-    them at all. A4b reading `RECORDED` and expecting numbers would lose a day
-    finding that out."""
+def test_the_recorded_half_says_which_state_it_is_actually_in(artefacts):
+    """A4a's version of this test asserted that P-2 and P-4 name instruments
+    that do not exist. They existed as of A4b (`calibrate.py`), so that
+    assertion had become a demand that the gate keep saying something false --
+    a reader of a `verify.json` dated today would have got the pre-A4b story.
+
+    What is asserted now is the property that outlives either state: the status
+    tells you which one you are in, and it never claims a measurement without a
+    verdict behind it.
+    """
     recorded = verify._recorded(*artefacts[:2])
+    calibration = verify._calibration()
+
+    for name in ("P-2", "P-4"):
+        status = recorded[name]["status"]
+        if name in calibration:
+            assert status.startswith("MEASURED"), (
+                f"{name} has a calibration prediction on disk but the gate "
+                "still reports it as unmeasured")
+            assert "holds=" in status, (
+                "a measurement without a verdict is a number nobody adjudicated")
+        else:
+            assert status.startswith("RECORDED")
+            assert "instrument" in status, (
+                "when the instrument is missing the gate has to say so; "
+                "'uncompared' and 'unmeasurable' are different states and A4b "
+                "would lose a day on the difference")
+
+
+def test_the_gate_does_not_invent_a_measurement_when_calibration_is_absent(artefacts):
+    """The other direction, which is the one that would let a lie through."""
+    run_all, exhibits = artefacts[:2]
+    real = verify._calibration
+    try:
+        verify._calibration = lambda: {}
+        recorded = verify._recorded(run_all, exhibits)
+    finally:
+        verify._calibration = real
+    for name in ("P-1", "P-2", "P-4", "P-5(identical)"):
+        assert recorded[name]["status"].startswith("RECORDED"), (
+            f"{name} reported as measured with no calibration on disk")
     assert recorded["P-2"]["numbers"] is None
-    assert "nothing in this arm computes" in recorded["P-2"]["status"]
-    assert "no cost instrument" in recorded["P-4"]["status"]
 
 
 def test_the_gate_reports_e3_without_failing_on_it(artefacts):

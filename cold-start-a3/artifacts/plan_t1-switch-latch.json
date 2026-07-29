@@ -1,0 +1,8 @@
+{
+  "backend": null,
+  "domain": "runs/20260728T1800Z-A6-transfer-protocol/generated/wrong_world_t1_switch_latch/domain.pddl",
+  "name": "t1-switch-latch",
+  "note": "no plan exists under this manual \u2014 constraint 6 forbids stopping here; a certificate is owed",
+  "problem": "runs/20260728T1800Z-A6-transfer-protocol/generated/wrong_world_t1_switch_latch/problem.pddl",
+  "status": "UNSAT"
+}

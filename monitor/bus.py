@@ -78,6 +78,22 @@ def cmd_send(agent, kind, body, ref=None):
     return 0
 
 
+# An instruction is delivered when it is acted on, not when it is displayed.
+# `notice` is informational and needs no receipt; these three do.
+ACK_REQUIRED = ("order", "urgent", "question")
+
+
+def acked_seqs(agent):
+    """Which instructions this agent has actually answered.
+
+    Already on disk: every `ack` in out.jsonl carries the seq it answers. The
+    cursor simply never consulted it.
+    """
+    _in, out, _c, _u = paths(agent)
+    return {int(r["ref"]) for r in read_jsonl(out)
+            if r.get("kind") == "ack" and r.get("ref") is not None}
+
+
 def cmd_read(agent, mark=True):
     inbox, _out, cursor, urgent = paths(agent)
     rows = read_jsonl(inbox)
@@ -88,11 +104,26 @@ def cmd_read(agent, mark=True):
         except Exception:
             last = 0
     unread = [r for r in rows if r["seq"] > last]
+    # The session-boundary hole: `read` advanced the cursor past everything it
+    # printed, so an instruction read by a session that then died -- context
+    # exhausted, quota, closed tab -- was already behind the cursor when the
+    # next session started. It was never refused and never answered; it just
+    # stopped existing. Nothing reported it, because from the bus's side it had
+    # been delivered.
+    #
+    # So the cursor no longer decides alone. An instruction that requires a
+    # receipt and has none is re-offered, however old it is, until it is acked.
+    acked = acked_seqs(agent)
+    backlog = [r for r in rows
+               if r["seq"] <= last and r["kind"] in ACK_REQUIRED
+               and r["seq"] not in acked]
     urgent_first = [r for r in unread if r["kind"] == "urgent"] + \
                    [r for r in unread if r["kind"] != "urgent"]
-    if not urgent_first:
+    if not urgent_first and not backlog:
         print("NO-NEW-MESSAGES")
-    for r in urgent_first:
+    if backlog:
+        print("=== 上一世读过但从未回执的 %d 条（重发，直到 ack 为止）===" % len(backlog))
+    for r in backlog + urgent_first:
         print("--- #%d [%s] %s" % (r["seq"], r["kind"], r["ts"]))
         print(r["body"])
         if r.get("ref"):

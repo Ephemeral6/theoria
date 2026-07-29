@@ -1,0 +1,63 @@
+............................F.....                                       [100%]
+================================== FAILURES ===================================
+______ test_a_submission_of_nothing_scores_nothing_on_every_paper[None] _______
+
+nothing = None
+
+    @pytest.mark.parametrize("nothing", [st.GARBAGE, "", {}, None])
+    def test_a_submission_of_nothing_scores_nothing_on_every_paper(nothing):
+        """The regression, at the amount that shipped.
+    
+        Before the fix this scored 1.600 of 144 on `adaptation`, all of it on the
+        two `v-a0-03.detect` items -- the one variant that is undetectable on its
+        base level, where `never` is the truth.  The other three papers scored
+        0.000, which is why nothing had ever caught it.
+        """
+        for question_type in ALL_TYPES:
+>           module, paper, key_doc, oracle = st._oracle_setup(question_type)
+                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+exam\tests\test_selftest.py:318: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+exam\grading\selftest.py:93: in _oracle_setup
+    paper = module.build()
+            ^^^^^^^^^^^^^^
+exam\papers\verdict.py:985: in build
+    spec = _emit_spec(_spec(
+exam\papers\verdict.py:479: in _emit_spec
+    loaded = Variant.load(path)
+             ^^^^^^^^^^^^^^^^^^
+proxy\variants.py:108: in load
+    return cls(json.load(fh), source=path)
+               ^^^^^^^^^^^^^
+D:\Miniforge3\Lib\json\__init__.py:298: in load
+    return loads(fp.read(),
+D:\Miniforge3\Lib\json\__init__.py:352: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Miniforge3\Lib\json\decoder.py:345: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <json.decoder.JSONDecoder object at 0x000001F6ED9A3620>, s = '', idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+>           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+D:\Miniforge3\Lib\json\decoder.py:363: JSONDecodeError
+=========================== short test summary info ===========================
+FAILED exam\tests\test_selftest.py::test_a_submission_of_nothing_scores_nothing_on_every_paper[None]
+1 failed, 33 passed in 60.02s (0:01:00)

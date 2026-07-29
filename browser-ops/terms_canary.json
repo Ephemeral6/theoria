@@ -24,6 +24,31 @@
         "no_republish": true,
         "sys_retrieve": true,
         "no_automated": true
+      },
+      "fnv1a64_2026-07-29T11:11Z": "4370730efed5e7e5",
+      "chunk_hashes_v1": {
+        "chunk_chars": 2000,
+        "taken_utc": "2026-07-29T11:11Z",
+        "hashes": [
+          "a6649dd08eeaa2f9",
+          "e82fd81f2f5a259c",
+          "1d9bd915b176b84d",
+          "4757859ae860a886",
+          "01b5ffeade546ee4",
+          "2bcbaabc2fdfeaa3",
+          "47b23a05fa06c6e7",
+          "cc6cf1ba656832d0",
+          "5d716ea0de605358",
+          "f4fbdb5efab31144",
+          "993885f240c004fb",
+          "99ef1be91f676f54",
+          "07b7da7123efc903",
+          "9d2821033017a163",
+          "d5adc677a072c743",
+          "52c752f4dba1cc7c",
+          "f4ab9e1db4d68b03",
+          "3544208960e995ad"
+        ]
       }
     },
     {
@@ -40,6 +65,24 @@
         "replays_any_task": true,
         "tools_opt_in": true,
         "public_demo_harder": true
+      },
+      "fnv1a64_2026-07-29T11:11Z": "b8f98f52c80f91db",
+      "chunk_hashes_v1": {
+        "chunk_chars": 2000,
+        "taken_utc": "2026-07-29T11:11Z",
+        "hashes": [
+          "cddf1a8d2ff424b9",
+          "90c71a5c6981d05c",
+          "6b0e82c589a9efe8",
+          "f63d5a1c3fbab8fa",
+          "c39ca773e242c38b",
+          "4630446c1323b377",
+          "7366b549cb69a5eb",
+          "c98a07a910405b4d",
+          "b40853831a321bd4",
+          "5306e6f64f1f0f51",
+          "cea603d5bbcbd95b"
+        ]
       }
     },
     {
@@ -54,6 +97,21 @@
         "no_sla": true,
         "err_429": true,
         "increase_subject": true
+      },
+      "fnv1a64_2026-07-29T11:11Z": "0eefa5686cb9b930",
+      "norm_len_2026-07-29T11:11Z": 1301,
+      "chunk_hashes_v1": {
+        "chunk_chars": 200,
+        "taken_utc": "2026-07-29T11:11Z",
+        "hashes": [
+          "3c7e426fe035e727",
+          "aeb6729e78b32f46",
+          "9601e77adbe8cd1f",
+          "cfc4b3369ee47be7",
+          "247d3d6fe2701bb4",
+          "ceaca8ff8e93a0e3",
+          "d928d891e91baeb6"
+        ]
       }
     },
     {
@@ -67,6 +125,21 @@
         "no_key_local": true,
         "capped_600": true,
         "fps": true
+      },
+      "fnv1a64_2026-07-29T11:11Z": "372433b444f7198d",
+      "norm_len_2026-07-29T11:11Z": 1342,
+      "chunk_hashes_v1": {
+        "chunk_chars": 200,
+        "taken_utc": "2026-07-29T11:11Z",
+        "hashes": [
+          "a0b1813e5decc0e0",
+          "e32a5d065c8c4cd0",
+          "7058b80c024afd03",
+          "7e418ea015a868b7",
+          "6a9705043a49c08a",
+          "10beac37b60b0a80",
+          "fc6cd0291220772b"
+        ]
       }
     }
   ],
@@ -80,7 +153,13 @@
       "utc": "2026-07-28T19:44Z",
       "verdict": "NO-DRIFT",
       "note": "第二次巡检（基线后 +7h16m）。四页哈希与基线逐位相等，ToS last_updated 仍是 June 03, 2024，18 个语义锚点全部为真；ToS 与 Testing Policy 的 raw_len 仍是 35206 / 20924。订正上一条的一个数：基线那条写『14 个锚点』是漏数了 local_vs_online 的 4 个，实际是 18；『全部为真』这个结论不变。旧条目按追加式纪律不改，订正记在这里。"
+    },
+    {
+      "utc": "2026-07-29T11:11Z",
+      "verdict": "DRIFT (cosmetic scope)",
+      "note": "第三次巡检。两个 arcprize.org 页（ToS / Testing Policy）哈希与 raw_len 逐位不变；**两个 docs.arcprize.org 页都变了**：rate_limits 6313205d368881e9→0eefa5686cb9b930（归一化字数 1364→1301，−63），local-vs-online d7a9ceff336d1752→372433b444f7198d（1379→1342，−37）。**18 个语义锚点全部仍为真，600 RPM 与本地模式三条声明逐字仍在**，所以本仓没有任何结论失去依据。变化范围判为装饰性/页面外壳，但**无法证实**——这正是本轮给 canary 加分块哈希的原因，见 _chunk_hashes_why。两页同向变短且同为 Mintlify 托管，倾向于平台侧改版而非 ARC 改条款，但这是推测，不是证据。"
     }
   ],
-  "_a_correction_worth_recording": "首次归一化后的字数（35124 / 20806）比 TERMS.md 记的（35206 / 20924）短，看着像漂移，其实是本文件引入的空白归一化所致。为免后人误判，raw_len 与 norm_len 两个口径都记，并已用 raw_len 复核过：没有漂移。这正是『看着像信号的其实是量具变了』那一类，登记在此。"
+  "_a_correction_worth_recording": "首次归一化后的字数（35124 / 20806）比 TERMS.md 记的（35206 / 20924）短，看着像漂移，其实是本文件引入的空白归一化所致。为免后人误判，raw_len 与 norm_len 两个口径都记，并已用 raw_len 复核过：没有漂移。这正是『看着像信号的其实是量具变了』那一类，登记在此。",
+  "_chunk_hashes_why": "cycle 12 新增。上一版只存整页哈希，结果第一次真漂移发生时它只能说『变了』，说不出变在哪——两个 docs 页各短了 63 和 37 个字符，而我无法定位，因为文本没存也不该存（存 ARC 的正文进被跟踪文件，正是 TERMS.md §2.2 自己判定需要书面许可的那件事）。分块哈希是折中：把归一化正文按定长切块逐块哈希，下次能指出是第几块变了，而哈希不可重构出正文。与 arc-recon 存帧哈希不存帧是同一条原理。大页用 2000 字符块（定位到节），小页用 200 字符块（定位到句群）。"
 }

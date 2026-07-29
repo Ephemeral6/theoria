@@ -47,6 +47,23 @@ def resolve(pid_str):
                         __import__("datetime").timezone.utc
                     ).strftime("%Y%m%dT%H%M%SZ"))),
                 "opus")
+    if pid_str.startswith(("RES-", "OPS-")):
+        # 常驻研究员此前**只能由人在 Claude App 里点开**，于是它们死于上下文时，
+        # 整条赛道就停到用户下次注意到为止——2026-07-29 实测停了十一小时，
+        # 而板上那条赛道的活一件也动不了。
+        #
+        # 但「常驻」需要的不是常驻**进程**，是常驻**身份 + 磁盘状态**：
+        # 认领记在板上、心跳记在 ops-status、游标记在 bus、半成品记在 runs/。
+        # 这正是留痕正典存在的理由。所以同一份契约也能无头启动，
+        # 重启后的会话捡起的是自己前一世的盘面，而不是从零开始。
+        # sweep 只清 W-*，所以 RES-* 重启后仍然持有它自己的认领——这是对的。
+        return (os.path.join(prompts, "ops", "%s.md" % pid_str),
+                os.path.join(HERE, "dispatch-logs", "%s-%s.log" % (
+                    pid_str,
+                    __import__("datetime").datetime.now(
+                        __import__("datetime").timezone.utc
+                    ).strftime("%Y%m%dT%H%M%SZ"))),
+                "opus")
     match = None
     for name in sorted(os.listdir(prompts)):
         if not name.endswith(".md"):

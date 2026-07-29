@@ -1,0 +1,3705 @@
+{
+ "adaptation": {
+  "examinees": {
+   "\"I don't know\"": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "' ' (single space)": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'' (empty string)": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'-'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'.'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'0'": {
+    "awarded": 1.0,
+    "by_rubric": {
+     "adapt.detect.v1": {
+      "awarded": 1.0,
+      "n": 30,
+      "paid_items": [
+       [
+        "v-a0-01.detect.crossing_UP",
+        0.25,
+        "wrong"
+       ],
+       [
+        "v-a0-03.detect.crossing_UP",
+        0.25,
+        "wrong"
+       ],
+       [
+        "v-a0-06.detect.match",
+        0.25,
+        "wrong"
+       ],
+       [
+        "v-a0-06.detect.crossing_LEFT",
+        0.25,
+        "wrong"
+       ]
+      ],
+      "possible": 30.0
+     }
+    },
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'?'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'False'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'N/A'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'None' (string)": {
+    "awarded": 1.0,
+    "by_rubric": {
+     "adapt.detect.v1": {
+      "awarded": 1.0,
+      "n": 30,
+      "paid_items": [
+       [
+        "v-a0-03.detect.match",
+        1.0,
+        "correct"
+       ]
+      ],
+      "possible": 30.0
+     }
+    },
+    "possible": 144.0,
+    "verdicts": {
+     "correct": 1,
+     "wrong": 59
+    }
+   },
+   "'TODO'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'[]' (string)": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'\\n'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'abstain'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "abstained": 60
+    }
+   },
+   "'empty'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'error'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'false'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'impossible'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'n/a'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'nan'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'nil'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'no answer'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'no'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'none'": {
+    "awarded": 1.0,
+    "by_rubric": {
+     "adapt.detect.v1": {
+      "awarded": 1.0,
+      "n": 30,
+      "paid_items": [
+       [
+        "v-a0-03.detect.match",
+        1.0,
+        "correct"
+       ]
+      ],
+      "possible": 30.0
+     }
+    },
+    "possible": 144.0,
+    "verdicts": {
+     "correct": 1,
+     "wrong": 59
+    }
+   },
+   "'nothing'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'null'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'null' json-ish 'null\\n'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'pass'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'skip'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'undefined'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'unknown'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "abstained": 60
+    }
+   },
+   "'unsat'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'unsolvable'": {
+    "awarded": 12.0,
+    "by_rubric": {
+     "adapt.collateral.v1": {
+      "awarded": 12.0,
+      "n": 6,
+      "paid_items": [
+       [
+        "v-a0-01.collateral",
+        3.0,
+        "wrong"
+       ],
+       [
+        "v-a0-03.collateral",
+        3.0,
+        "wrong"
+       ],
+       [
+        "v-a0-04.collateral",
+        3.0,
+        "wrong"
+       ],
+       [
+        "v-a0-06.collateral",
+        3.0,
+        "wrong"
+       ]
+      ],
+      "possible": 60.0
+     }
+    },
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'unsolvable' upper 'UNSOLVABLE'": {
+    "awarded": 12.0,
+    "by_rubric": {
+     "adapt.collateral.v1": {
+      "awarded": 12.0,
+      "n": 6,
+      "paid_items": [
+       [
+        "v-a0-01.collateral",
+        3.0,
+        "wrong"
+       ],
+       [
+        "v-a0-03.collateral",
+        3.0,
+        "wrong"
+       ],
+       [
+        "v-a0-04.collateral",
+        3.0,
+        "wrong"
+       ],
+       [
+        "v-a0-06.collateral",
+        3.0,
+        "wrong"
+       ]
+      ],
+      "possible": 60.0
+     }
+    },
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'{}' (string)": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "'\u4e0d\u77e5\u9053'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "()->[] tuple ()": {
+    "awarded": 6.5,
+    "by_rubric": {
+     "adapt.collateral.v1": {
+      "awarded": 6.5,
+      "n": 6,
+      "paid_items": [
+       [
+        "v-a0-03.collateral",
+        2.5,
+        "wrong"
+       ],
+       [
+        "v-a0-06.collateral",
+        4.0,
+        "wrong"
+       ]
+      ],
+      "possible": 60.0
+     }
+    },
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "-1": {
+    "awarded": 1.0,
+    "by_rubric": {
+     "adapt.detect.v1": {
+      "awarded": 1.0,
+      "n": 30,
+      "paid_items": [
+       [
+        "v-a0-01.detect.crossing_UP",
+        0.25,
+        "wrong"
+       ],
+       [
+        "v-a0-03.detect.crossing_UP",
+        0.25,
+        "wrong"
+       ],
+       [
+        "v-a0-06.detect.match",
+        0.25,
+        "wrong"
+       ],
+       [
+        "v-a0-06.detect.crossing_LEFT",
+        0.25,
+        "wrong"
+       ]
+      ],
+      "possible": 30.0
+     }
+    },
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "0 (int)": {
+    "awarded": 1.0,
+    "by_rubric": {
+     "adapt.detect.v1": {
+      "awarded": 1.0,
+      "n": 30,
+      "paid_items": [
+       [
+        "v-a0-01.detect.crossing_UP",
+        0.25,
+        "wrong"
+       ],
+       [
+        "v-a0-03.detect.crossing_UP",
+        0.25,
+        "wrong"
+       ],
+       [
+        "v-a0-06.detect.match",
+        0.25,
+        "wrong"
+       ],
+       [
+        "v-a0-06.detect.crossing_LEFT",
+        0.25,
+        "wrong"
+       ]
+      ],
+      "possible": 30.0
+     }
+    },
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "0.0 (float)": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "False": {
+    "awarded": 1.0,
+    "by_rubric": {
+     "adapt.detect.v1": {
+      "awarded": 1.0,
+      "n": 30,
+      "paid_items": [
+       [
+        "v-a0-03.detect.match",
+        1.0,
+        "correct"
+       ]
+      ],
+      "possible": 30.0
+     }
+    },
+    "possible": 144.0,
+    "verdicts": {
+     "correct": 1,
+     "wrong": 59
+    }
+   },
+   "GARBAGE '__V4_GARBAGE__'": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "None": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "ORACLE": {
+    "awarded": 144.0,
+    "by_rubric": {
+     "adapt.collateral.v1": {
+      "awarded": 60.0,
+      "n": 6,
+      "paid_items": [
+       [
+        "v-a0-01.collateral",
+        10.0,
+        "correct"
+       ],
+       [
+        "v-a0-02.collateral",
+        10.0,
+        "correct"
+       ],
+       [
+        "v-a0-03.collateral",
+        10.0,
+        "correct"
+       ],
+       [
+        "v-a0-04.collateral",
+        10.0,
+        "correct"
+       ],
+       [
+        "v-a0-05.collateral",
+        10.0,
+        "correct"
+       ],
+       [
+        "v-a0-06.collateral",
+        10.0,
+        "correct"
+       ]
+      ],
+      "possible": 60.0
+     },
+     "adapt.describe.v1": {
+      "awarded": 18.0,
+      "n": 6,
+      "paid_items": [
+       [
+        "v-a0-01.describe",
+        3.0,
+        "correct"
+       ],
+       [
+        "v-a0-02.describe",
+        3.0,
+        "correct"
+       ],
+       [
+        "v-a0-03.describe",
+        3.0,
+        "correct"
+       ],
+       [
+        "v-a0-04.describe",
+        3.0,
+        "correct"
+       ],
+       [
+        "v-a0-05.describe",
+        3.0,
+        "correct"
+       ],
+       [
+        "v-a0-06.describe",
+        3.0,
+        "correct"
+       ]
+      ],
+      "possible": 18.0
+     },
+     "adapt.detect.v1": {
+      "awarded": 30.0,
+      "n": 30,
+      "paid_items": [
+       [
+        "v-a0-01.detect.match",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-01.detect.crossing_DOWN",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-01.detect.crossing_LEFT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-01.detect.crossing_RIGHT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-01.detect.crossing_UP",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-02.detect.match",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-02.detect.crossing_DOWN",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-02.detect.crossing_LEFT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-02.detect.crossing_RIGHT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-02.detect.crossing_UP",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-03.detect.match",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-03.detect.crossing_DOWN",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-03.detect.crossing_LEFT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-03.detect.crossing_RIGHT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-03.detect.crossing_UP",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-04.detect.match",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-04.detect.crossing_DOWN",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-04.detect.crossing_LEFT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-04.detect.crossing_RIGHT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-04.detect.crossing_UP",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-05.detect.match",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-05.detect.crossing_DOWN",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-05.detect.crossing_LEFT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-05.detect.crossing_RIGHT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-05.detect.crossing_UP",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-06.detect.match",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-06.detect.crossing_DOWN",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-06.detect.crossing_LEFT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-06.detect.crossing_RIGHT",
+        1.0,
+        "correct"
+       ],
+       [
+        "v-a0-06.detect.crossing_UP",
+        1.0,
+        "correct"
+       ]
+      ],
+      "possible": 30.0
+     },
+     "adapt.detect_cross.v1": {
+      "awarded": 18.0,
+      "n": 6,
+      "paid_items": [
+       [
+        "v-a0-01.detect.across",
+        3.0,
+        "correct"
+       ],
+       [
+        "v-a0-02.detect.across",
+        3.0,
+        "correct"
+       ],
+       [
+        "v-a0-03.detect.across",
+        3.0,
+        "correct"
+       ],
+       [
+        "v-a0-04.detect.across",
+        3.0,
+        "correct"
+       ],
+       [
+        "v-a0-05.detect.across",
+        3.0,
+        "correct"
+       ],
+       [
+        "v-a0-06.detect.across",
+        3.0,
+        "correct"
+       ]
+      ],
+      "possible": 18.0
+     },
+     "adapt.repair.v1": {
+      "awarded": 18.0,
+      "n": 12,
+      "paid_items": [
+       [
+        "v-a0-01.repair.narrow",
+        1.5,
+        "correct"
+       ],
+       [
+        "v-a0-01.repair.wide",
+        1.5,
+        "correct"
+       ],
+       [
+        "v-a0-02.repair.narrow",
+        1.5,
+        "correct"
+       ],
+       [
+        "v-a0-02.repair.wide",
+        1.5,
+        "correct"
+       ],
+       [
+        "v-a0-03.repair.narrow",
+        1.5,
+        "correct"
+       ],
+       [
+        "v-a0-03.repair.wide",
+        1.5,
+        "correct"
+       ],
+       [
+        "v-a0-04.repair.narrow",
+        1.5,
+        "correct"
+       ],
+       [
+        "v-a0-04.repair.wide",
+        1.5,
+        "correct"
+       ],
+       [
+        "v-a0-05.repair.narrow",
+        1.5,
+        "correct"
+       ],
+       [
+        "v-a0-05.repair.wide",
+        1.5,
+        "correct"
+       ],
+       [
+        "v-a0-06.repair.narrow",
+        1.5,
+        "correct"
+       ],
+       [
+        "v-a0-06.repair.wide",
+        1.5,
+        "correct"
+       ]
+      ],
+      "possible": 18.0
+     }
+    },
+    "missing_items": [],
+    "n_answers": 60,
+    "possible": 144.0,
+    "underpaid_items": [],
+    "verdicts": {
+     "correct": 60
+    }
+   },
+   "True": {
+    "awarded": 1.0,
+    "by_rubric": {
+     "adapt.detect.v1": {
+      "awarded": 1.0,
+      "n": 30,
+      "paid_items": [
+       [
+        "v-a0-03.detect.match",
+        1.0,
+        "correct"
+       ]
+      ],
+      "possible": 30.0
+     }
+    },
+    "possible": 144.0,
+    "verdicts": {
+     "correct": 1,
+     "wrong": 59
+    }
+   },
+   "['']": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "[None]": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "[[[]]]": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "[[], []]": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "[[]] (empty list nested)": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "[] (empty list)": {
+    "awarded": 6.5,
+    "by_rubric": {
+     "adapt.collateral.v1": {
+      "awarded": 6.5,
+      "n": 6,
+      "paid_items": [
+       [
+        "v-a0-03.collateral",
+        2.5,
+        "wrong"
+       ],
+       [
+        "v-a0-06.collateral",
+        4.0,
+        "wrong"
+       ]
+      ],
+      "possible": 60.0
+     }
+    },
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "[] * (list of one empty dict) [{}]": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "{'': ''}": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "{'abstain': True}": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "abstained": 60
+    }
+   },
+   "{'answer': ''}": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "{'answer': None}": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "{'answer': []}": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "{'said': None}": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "{} (empty dict)": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   },
+   "{} nested {'a': {}}": {
+    "awarded": 0.0,
+    "possible": 144.0,
+    "verdicts": {
+     "wrong": 60
+    }
+   }
+  },
+  "in_builders": true,
+  "n_items": 60,
+  "paper_id": "p15-adaptation-a0"
+ },
+ "handover": {
+  "examinees": {
+   "\"I don't know\"": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "' ' (single space)": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'' (empty string)": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'-'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'.'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'0'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'?'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'False'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'N/A'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'None' (string)": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'TODO'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'[]' (string)": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'\\n'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'abstain'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "abstained": 29
+    }
+   },
+   "'empty'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'error'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'false'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'impossible'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'n/a'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'nan'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'nil'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'no answer'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'no'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'none'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'nothing'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'null'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'null' json-ish 'null\\n'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'pass'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'skip'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'undefined'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'unknown'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'unsat'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'unsolvable'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'unsolvable' upper 'UNSOLVABLE'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'{}' (string)": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "'\u4e0d\u77e5\u9053'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "()->[] tuple ()": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "-1": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "0 (int)": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "0.0 (float)": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "False": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "GARBAGE '__V4_GARBAGE__'": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "None": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "ORACLE": {
+    "awarded": 46.0,
+    "by_rubric": {
+     "handover.name_class": {
+      "awarded": 12.0,
+      "n": 12,
+      "paid_items": [
+       [
+        "hv-name-01",
+        1.0,
+        "correct"
+       ],
+       [
+        "hv-name-02",
+        1.0,
+        "correct"
+       ],
+       [
+        "hv-name-03",
+        1.0,
+        "correct"
+       ],
+       [
+        "hv-name-04",
+        1.0,
+        "correct"
+       ],
+       [
+        "hv-name-05",
+        1.0,
+        "correct"
+       ],
+       [
+        "hv-name-06",
+        1.0,
+        "correct"
+       ],
+       [
+        "hv-name-07",
+        1.0,
+        "correct"
+       ],
+       [
+        "hv-name-08",
+        1.0,
+        "correct"
+       ],
+       [
+        "hv-name-09",
+        1.0,
+        "correct"
+       ],
+       [
+        "hv-name-10",
+        1.0,
+        "correct"
+       ],
+       [
+        "hv-name-11",
+        1.0,
+        "correct"
+       ],
+       [
+        "hv-name-12",
+        1.0,
+        "correct"
+       ]
+      ],
+      "possible": 12.0
+     },
+     "handover.optimal_action": {
+      "awarded": 12.0,
+      "n": 6,
+      "paid_items": [
+       [
+        "hv-opt-01",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-opt-02",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-opt-03",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-opt-04",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-opt-05",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-opt-06",
+        2.0,
+        "correct"
+       ]
+      ],
+      "possible": 12.0
+     },
+     "handover.step_semantics": {
+      "awarded": 22.0,
+      "n": 11,
+      "paid_items": [
+       [
+        "hv-step-01",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-step-02",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-step-03",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-step-04",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-step-05",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-step-06",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-step-07",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-step-08",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-step-09",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-step-10",
+        2.0,
+        "correct"
+       ],
+       [
+        "hv-step-11",
+        2.0,
+        "correct"
+       ]
+      ],
+      "possible": 22.0
+     }
+    },
+    "missing_items": [],
+    "n_answers": 29,
+    "possible": 46.0,
+    "underpaid_items": [],
+    "verdicts": {
+     "correct": 29
+    }
+   },
+   "True": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "['']": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "[None]": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "[[[]]]": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "[[], []]": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "[[]] (empty list nested)": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "[] (empty list)": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "[] * (list of one empty dict) [{}]": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "{'': ''}": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "{'abstain': True}": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "{'answer': ''}": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "{'answer': None}": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "{'answer': []}": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "{'said': None}": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "{} (empty dict)": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   },
+   "{} nested {'a': {}}": {
+    "awarded": 0.0,
+    "possible": 46.0,
+    "verdicts": {
+     "wrong": 29
+    }
+   }
+  },
+  "in_builders": true,
+  "n_items": 29,
+  "paper_id": "p15-handover-a0"
+ },
+ "handover_auto": {
+  "examinees": {
+   "\"I don't know\"": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "' ' (single space)": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'' (empty string)": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'-'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'.'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'0'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'?'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'False'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'N/A'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'None' (string)": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'TODO'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'[]' (string)": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'\\n'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'abstain'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "abstained": 31
+    }
+   },
+   "'empty'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'error'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'false'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'impossible'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'n/a'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'nan'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'nil'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'no answer'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'no'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'none'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'nothing'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'null'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'null' json-ish 'null\\n'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'pass'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'skip'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'undefined'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'unknown'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'unsat'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'unsolvable'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'unsolvable' upper 'UNSOLVABLE'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'{}' (string)": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "'\u4e0d\u77e5\u9053'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "()->[] tuple ()": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "-1": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "0 (int)": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "0.0 (float)": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "False": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "GARBAGE '__V4_GARBAGE__'": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "None": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "ORACLE": {
+    "awarded": 58.0,
+    "by_rubric": {
+     "handover_auto.counterexample": {
+      "awarded": 3.0,
+      "n": 1,
+      "paid_items": [
+       [
+        "v11-why-ce-01",
+        3.0,
+        "correct"
+       ]
+      ],
+      "possible": 3.0
+     },
+     "handover_auto.name_class": {
+      "awarded": 10.0,
+      "n": 10,
+      "paid_items": [
+       [
+        "v11-name-01",
+        1.0,
+        "correct"
+       ],
+       [
+        "v11-name-02",
+        1.0,
+        "correct"
+       ],
+       [
+        "v11-name-03",
+        1.0,
+        "correct"
+       ],
+       [
+        "v11-name-04",
+        1.0,
+        "correct"
+       ],
+       [
+        "v11-name-05",
+        1.0,
+        "correct"
+       ],
+       [
+        "v11-name-06",
+        1.0,
+        "correct"
+       ],
+       [
+        "v11-name-07",
+        1.0,
+        "correct"
+       ],
+       [
+        "v11-name-08",
+        1.0,
+        "correct"
+       ],
+       [
+        "v11-name-09",
+        1.0,
+        "correct"
+       ],
+       [
+        "v11-name-10",
+        1.0,
+        "correct"
+       ]
+      ],
+      "possible": 10.0
+     },
+     "handover_auto.optimal_action": {
+      "awarded": 16.0,
+      "n": 8,
+      "paid_items": [
+       [
+        "v11-opt-01",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-opt-02",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-opt-03",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-opt-04",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-opt-05",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-opt-06",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-opt-07",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-opt-08",
+        2.0,
+        "correct"
+       ]
+      ],
+      "possible": 16.0
+     },
+     "handover_auto.rule_justification": {
+      "awarded": 15.0,
+      "n": 5,
+      "paid_items": [
+       [
+        "v11-why-01",
+        3.0,
+        "correct"
+       ],
+       [
+        "v11-why-02",
+        3.0,
+        "correct"
+       ],
+       [
+        "v11-why-03",
+        3.0,
+        "correct"
+       ],
+       [
+        "v11-why-04",
+        3.0,
+        "correct"
+       ],
+       [
+        "v11-why-05",
+        3.0,
+        "correct"
+       ]
+      ],
+      "possible": 15.0
+     },
+     "handover_auto.step_semantics": {
+      "awarded": 14.0,
+      "n": 7,
+      "paid_items": [
+       [
+        "v11-step-01",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-step-02",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-step-03",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-step-04",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-step-05",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-step-06",
+        2.0,
+        "correct"
+       ],
+       [
+        "v11-step-07",
+        2.0,
+        "correct"
+       ]
+      ],
+      "possible": 14.0
+     }
+    },
+    "missing_items": [],
+    "n_answers": 31,
+    "possible": 58.0,
+    "underpaid_items": [],
+    "verdicts": {
+     "correct": 31
+    }
+   },
+   "True": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "['']": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "[None]": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "[[[]]]": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "[[], []]": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "[[]] (empty list nested)": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "[] (empty list)": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "[] * (list of one empty dict) [{}]": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "{'': ''}": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "{'abstain': True}": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "{'answer': ''}": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "{'answer': None}": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "{'answer': []}": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "{'said': None}": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "{} (empty dict)": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   },
+   "{} nested {'a': {}}": {
+    "awarded": 0.0,
+    "possible": 58.0,
+    "verdicts": {
+     "wrong": 31
+    }
+   }
+  },
+  "in_builders": false,
+  "n_items": 31,
+  "paper_id": "v11-handover-a0"
+ },
+ "heldout": {
+  "examinees": {
+   "\"I don't know\"": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "' ' (single space)": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'' (empty string)": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'-'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'.'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'0'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'?'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'False'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'N/A'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'None' (string)": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'TODO'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'[]' (string)": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'\\n'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'abstain'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "abstained": 80
+    }
+   },
+   "'empty'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'error'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'false'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'impossible'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'n/a'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'nan'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'nil'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'no answer'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'no'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'none'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'nothing'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'null'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'null' json-ish 'null\\n'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'pass'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'skip'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'undefined'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'unknown'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "abstained": 80
+    }
+   },
+   "'unsat'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'unsolvable'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'unsolvable' upper 'UNSOLVABLE'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'{}' (string)": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "'\u4e0d\u77e5\u9053'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "()->[] tuple ()": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "-1": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "0 (int)": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "0.0 (float)": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "False": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "GARBAGE '__V4_GARBAGE__'": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "None": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "unanswered": 80
+    }
+   },
+   "ORACLE": {
+    "awarded": 80.0,
+    "by_rubric": {
+     "heldout.frame_exact": {
+      "awarded": 80.0,
+      "n": 80,
+      "paid_items": [
+       [
+        "a0h-000",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-001",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-002",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-003",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-004",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-005",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-006",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-007",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-008",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-009",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-010",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-011",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-012",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-013",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-014",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-015",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-016",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-017",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-018",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-019",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-020",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-021",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-022",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-023",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-024",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-025",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-026",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-027",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-028",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-029",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-030",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-031",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-032",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-033",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-034",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-035",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-036",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-037",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-038",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-039",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-040",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-041",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-042",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-043",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-044",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-045",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-046",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-047",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-048",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-049",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-050",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-051",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-052",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-053",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-054",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-055",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-056",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-057",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-058",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-059",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-060",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-061",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-062",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-063",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-064",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-065",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-066",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-067",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-068",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-069",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-070",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-071",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-072",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-073",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-074",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-075",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-076",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-077",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-078",
+        1.0,
+        "correct"
+       ],
+       [
+        "a0h-079",
+        1.0,
+        "correct"
+       ]
+      ],
+      "possible": 80.0
+     }
+    },
+    "missing_items": [],
+    "n_answers": 80,
+    "possible": 80.0,
+    "underpaid_items": [],
+    "verdicts": {
+     "correct": 80
+    }
+   },
+   "True": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "['']": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "[None]": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "[[[]]]": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "[[], []]": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "[[]] (empty list nested)": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "[] (empty list)": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "[] * (list of one empty dict) [{}]": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "{'': ''}": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "{'abstain': True}": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "abstained": 80
+    }
+   },
+   "{'answer': ''}": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "{'answer': None}": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "{'answer': []}": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "{'said': None}": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "{} (empty dict)": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   },
+   "{} nested {'a': {}}": {
+    "awarded": 0.0,
+    "possible": 80.0,
+    "verdicts": {
+     "wrong": 80
+    }
+   }
+  },
+  "in_builders": true,
+  "n_items": 80,
+  "paper_id": "p15-heldout-a0"
+ },
+ "verdict": {
+  "examinees": {
+   "\"I don't know\"": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "' ' (single space)": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'' (empty string)": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'-'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'.'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'0'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'?'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'False'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'N/A'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'None' (string)": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'TODO'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'[]' (string)": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'\\n'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'abstain'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "abstained": 17
+    }
+   },
+   "'empty'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'error'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'false'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'impossible'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'n/a'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'nan'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'nil'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'no answer'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'no'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'none'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'nothing'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'null'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'null' json-ish 'null\\n'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'pass'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'skip'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'undefined'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'unknown'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "abstained": 17
+    }
+   },
+   "'unsat'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'unsolvable'": {
+    "awarded": 9.0,
+    "by_rubric": {
+     "verdict.a2.claim_and_certificate": {
+      "awarded": 9.0,
+      "n": 17,
+      "paid_items": [
+       [
+        "vq-ee54166153",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-2986ed8ffc",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-82f568ca11",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-9725fbebf0",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-17af763cab",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-1015eb0bb1",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-721d09813c",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-6150a6eeb7",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-8ff1c690ad",
+        1.0,
+        "correct"
+       ]
+      ],
+      "possible": 34.0
+     }
+    },
+    "possible": 34.0,
+    "verdicts": {
+     "correct": 9,
+     "wrong": 8
+    }
+   },
+   "'unsolvable' upper 'UNSOLVABLE'": {
+    "awarded": 9.0,
+    "by_rubric": {
+     "verdict.a2.claim_and_certificate": {
+      "awarded": 9.0,
+      "n": 17,
+      "paid_items": [
+       [
+        "vq-ee54166153",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-2986ed8ffc",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-82f568ca11",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-9725fbebf0",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-17af763cab",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-1015eb0bb1",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-721d09813c",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-6150a6eeb7",
+        1.0,
+        "correct"
+       ],
+       [
+        "vq-8ff1c690ad",
+        1.0,
+        "correct"
+       ]
+      ],
+      "possible": 34.0
+     }
+    },
+    "possible": 34.0,
+    "verdicts": {
+     "correct": 9,
+     "wrong": 8
+    }
+   },
+   "'{}' (string)": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "'\u4e0d\u77e5\u9053'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "()->[] tuple ()": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "-1": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "0 (int)": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "0.0 (float)": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "False": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "GARBAGE '__V4_GARBAGE__'": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "None": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "ORACLE": {
+    "awarded": 34.0,
+    "by_rubric": {
+     "verdict.a2.claim_and_certificate": {
+      "awarded": 34.0,
+      "n": 17,
+      "paid_items": [
+       [
+        "vq-1881c8c383",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-0ffc3cd33f",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-ee54166153",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-c480b494f3",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-2986ed8ffc",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-82f568ca11",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-9725fbebf0",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-17af763cab",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-9e0aefdf80",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-1015eb0bb1",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-6bab2f307c",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-721d09813c",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-8c4f14b152",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-6150a6eeb7",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-e6ae49645d",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-8ff1c690ad",
+        2.0,
+        "correct"
+       ],
+       [
+        "vq-abe007cdfa",
+        2.0,
+        "correct"
+       ]
+      ],
+      "possible": 34.0
+     }
+    },
+    "missing_items": [],
+    "n_answers": 17,
+    "possible": 34.0,
+    "underpaid_items": [],
+    "verdicts": {
+     "correct": 17
+    }
+   },
+   "True": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "['']": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "[None]": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "[[[]]]": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "[[], []]": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "[[]] (empty list nested)": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "[] (empty list)": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "[] * (list of one empty dict) [{}]": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "{'': ''}": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "{'abstain': True}": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "{'answer': ''}": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "{'answer': None}": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "{'answer': []}": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "{'said': None}": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "{} (empty dict)": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   },
+   "{} nested {'a': {}}": {
+    "awarded": 0.0,
+    "possible": 34.0,
+    "verdicts": {
+     "wrong": 17
+    }
+   }
+  },
+  "in_builders": true,
+  "n_items": 17,
+  "paper_id": "p15-verdict-a2"
+ }
+}

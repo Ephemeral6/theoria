@@ -74,8 +74,23 @@ an empty axiom list.
 Scored against the referee's copy, the **carried** manual is right on 252 of 252
 reachable (state, action) pairs of a level it never explored
 (`cold-start-a3/artifacts/score_vs_truth.json`). This is every reachable pair,
-not a held-out split — A3 has no held-out set, and the file's own framing is the
-honest one:
+not a held-out split — A3 has no held-out set.
+
+**And the control scores the same.** The third row of that artefact is "the
+control arm's manual, induced from level 2's own sweep", and it is also right on
+**252 of 252** (`score_vs_truth.json`, `results[2]`, `cold-start-a3/theory/generated_l2_scratch/`).
+Earlier drafts of this section reported the carried manual's 252/252 and did not
+print the control's, which made an undiscriminating number look like the result.
+It is not: **on accuracy the two arms are tied at ceiling, and this measurement
+cannot separate transfer from induction at all.** Both manuals are right about
+level 2; what differs is what each cost to obtain, which is §6.2's bill and is the
+only place the transfer claim can live. A ceiling that both arms reach is a
+property of the level — 252 pairs of a small deterministic world — rather than
+evidence about carrying books, and reporting one arm's ceiling alone was the kind
+of one-sided denominator this paper spends §7 criticising in someone else's
+instrument.
+
+The file's own framing of what the score means is still the honest one:
 
 > Replay against a trajectory answers "is the manual consistent with what I
 > saw". This answers "is the manual right".

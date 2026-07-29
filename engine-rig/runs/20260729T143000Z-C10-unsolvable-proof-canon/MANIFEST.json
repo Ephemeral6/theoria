@@ -1,0 +1,20 @@
+{
+  "prompt_id": "C10-unsolvable-proof-canon",
+  "branch": "agent/c10-unsolvable-proof-canon",
+  "base_commit": "origin/master",
+  "utc": "2026-07-29T14:30:00Z",
+  "author": "RES-3",
+  "lane": "verify",
+  "territory": "cold-start-a0 (adjudicated: DO NOT TOUCH -- see monitor ruling)",
+  "code_bytes_changed": 0,
+  "coverage": {
+    "item_1_adopt_the_canon": "done by C11-tool-failure-as-truth",
+    "item_2_repo_wide_grep": "done by E11 SURVEY reports; monitor ruled no redo",
+    "item_3_negative_sample": "done by C11; verified present on master by RES-3"
+  },
+  "cold_start_a0_bytes_changed": 0,
+  "api_calls": 0,
+  "network": false,
+  "cost_usd": 0.0,
+  "sealed_pile_contact": "none"
+}

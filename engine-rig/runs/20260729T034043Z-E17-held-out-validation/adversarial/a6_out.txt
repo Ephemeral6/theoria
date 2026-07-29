@@ -1,0 +1,14 @@
+== registered cut (one geometry withheld), disaggregated per n ==
+  n=4  geometries=4   cases=80    silent=16    certs=64    inv_closed=31.2 %   false=6
+  n=5  geometries=6   cases=270   silent=68    certs=202   inv_closed=31.7 %   false=8
+  n=6  geometries=8   cases=672   silent=286   certs=386   inv_closed=23.8 %   false=26
+  n=7  geometries=10  cases=1400  silent=644   certs=756   inv_closed=25.9 %   false=18
+
+== leave-TWO-geometries-out, n in {4,5} ==
+  cases=795 silent=80 certs=715  inv_closed on BOTH withheld=8.5 %  false=52
+
+== hold out by STATE: is it a hold-out at all for this engine? ==
+  dropping one state's outgoing edges leaves the LP's constraint set UNCHANGED in 1024 of 1024 cases (100.0 %)
+  -- where the constraint set is unchanged the LP, the certificate and
+     every metric are bit-identical, so a state-level hold-out is
+     vacuous for this engine by construction.

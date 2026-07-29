@@ -1,0 +1,177 @@
+$ D:\Miniforge3\python.exe C:/Users/user/Desktop/theoria/.worktrees/p13/engine-rig/.toolchain/downward/fast-downward.py --plan-file C:\Users\user\AppData\Local\Temp\e7verify7wb45b91\sas_plan C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\fixtures\data\sokoban_domain.pddl C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a5\swap\swap-passage.pddl --search astar(cpdbs(patterns=manual_patterns([[23,24,0,9],[23,24,0,8],[23,24,0,10],[23,24,0,2],[23,24,0,1],[23,24,0,18],[23,24,0,11],[23,24,0,19],[23,24,0,3],[23,24,0,12],[23,24,0,13],[23,24,0,5],[23,24,0,20],[23,24,0,17],[23,24,0,21],[23,24,0,6],[23,24,0,4],[23,24,0,14],[23,24,0,15],[23,24,0,16],[23,24,0,7],[23,24,9,8],[23,24,9,10],[23,24,9,2],[23,24,9,1],[23,24,9,18],[23,24,9,11],[23,24,9,19],[23,24,9,3],[23,24,9,12],[23,24,9,13],[23,24,9,5],[23,24,9,20],[23,24,9,17],[23,24,9,21],[23,24,9,6],[23,24,9,4],[23,24,9,14],[23,24,9,15],[23,24,9,16],[23,24,9,7],[23,24,8,10],[23,24,8,2],[23,24,8,1],[23,24,8,18],[23,24,8,11],[23,24,8,19],[23,24,8,3],[23,24,8,12],[23,24,8,13],[23,24,8,5],[23,24,8,20],[23,24,8,17],[23,24,8,21],[23,24,8,6],[23,24,8,4],[23,24,8,14],[23,24,8,15],[23,24,8,16],[23,24,8,7],[23,24,10,2],[23,24,10,1],[23,24,10,18],[23,24,10,11],[23,24,10,19],[23,24,10,3],[23,24,10,12],[23,24,10,13],[23,24,10,5],[23,24,10,20],[23,24,10,17],[23,24,10,21],[23,24,10,6],[23,24,10,4],[23,24,10,14],[23,24,10,15],[23,24,10,16],[23,24,10,7],[23,24,2,1],[23,24,2,18],[23,24,2,11],[23,24,2,19],[23,24,2,3],[23,24,2,12],[23,24,2,13],[23,24,2,5],[23,24,2,20],[23,24,2,17],[23,24,2,21],[23,24,2,6],[23,24,2,4],[23,24,2,14],[23,24,2,15],[23,24,2,16],[23,24,2,7],[23,24,1,18],[23,24,1,11],[23,24,1,19],[23,24,1,3],[23,24,1,12],[23,24,1,13],[23,24,1,5],[23,24,1,20],[23,24,1,17],[23,24,1,21],[23,24,1,6],[23,24,1,4],[23,24,1,14],[23,24,1,15],[23,24,1,16],[23,24,1,7],[23,24,18,11],[23,24,18,19],[23,24,18,3],[23,24,18,12],[23,24,18,13],[23,24,18,5],[23,24,18,20],[23,24,18,17],[23,24,18,21],[23,24,18,6],[23,24,18,4],[23,24,18,14],[23,24,18,15],[23,24,18,16],[23,24,18,7],[23,24,11,19],[23,24,11,3],[23,24,11,12],[23,24,11,13],[23,24,11,5],[23,24,11,20],[23,24,11,17],[23,24,11,21],[23,24,11,6],[23,24,11,4],[23,24,11,14],[23,24,11,15],[23,24,11,16],[23,24,11,7],[23,24,19,3],[23,24,19,12],[23,24,19,13],[23,24,19,5],[23,24,19,20],[23,24,19,17],[23,24,19,21],[23,24,19,6],[23,24,19,4],[23,24,19,14],[23,24,19,15],[23,24,19,16],[23,24,19,7],[23,24,3,12],[23,24,3,13],[23,24,3,5],[23,24,3,20],[23,24,3,17],[23,24,3,21],[23,24,3,6],[23,24,3,4],[23,24,3,14],[23,24,3,15],[23,24,3,16],[23,24,3,7],[23,24,12,13],[23,24,12,5],[23,24,12,20],[23,24,12,17],[23,24,12,21],[23,24,12,6],[23,24,12,4],[23,24,12,14],[23,24,12,15],[23,24,12,16],[23,24,12,7],[23,24,13,5],[23,24,13,20],[23,24,13,17],[23,24,13,21],[23,24,13,6],[23,24,13,4],[23,24,13,14],[23,24,13,15],[23,24,13,16],[23,24,13,7],[23,24,5,20],[23,24,5,17],[23,24,5,21],[23,24,5,6],[23,24,5,4],[23,24,5,14],[23,24,5,15],[23,24,5,16],[23,24,5,7],[23,24,20,17],[23,24,20,21],[23,24,20,6],[23,24,20,4],[23,24,20,14],[23,24,20,15],[23,24,20,16],[23,24,20,7],[23,24,17,21],[23,24,17,6],[23,24,17,4],[23,24,17,14],[23,24,17,15],[23,24,17,16],[23,24,17,7],[23,24,21,6],[23,24,21,4],[23,24,21,14],[23,24,21,15],[23,24,21,16],[23,24,21,7],[23,24,6,4],[23,24,6,14],[23,24,6,15],[23,24,6,16],[23,24,6,7],[23,24,4,14],[23,24,4,15],[23,24,4,16],[23,24,4,7],[23,24,14,15],[23,24,14,16],[23,24,14,7],[23,24,15,16],[23,24,15,7],[23,24,16,7]])))
+
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\fixtures\data\sokoban_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a5\swap\swap-passage.pddl' --sas-file output.sas
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Parsing: [0.000s CPU, 0.002s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
+Preparing model... [0.000s CPU, 0.000s wall-clock]
+Generated 20 rules.
+Computing model... [0.016s CPU, 0.005s wall-clock]
+597 relevant atoms
+888 auxiliary atoms
+1485 final queue length
+1755 total queue pushes
+Completing instantiation... [0.000s CPU, 0.002s wall-clock]
+Instantiating: [0.016s CPU, 0.008s wall-clock]
+Computing fact groups...
+Finding invariants...
+7 initial candidates
+Finding invariants: [0.000s CPU, 0.001s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.001s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+54 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.000s CPU, 0.003s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Processing axioms: [0.000s CPU, 0.000s wall-clock]
+Translating task: [0.000s CPU, 0.002s wall-clock]
+204 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+67 propositions removed
+Detecting unreachable propositions: [0.000s CPU, 0.001s wall-clock]
+Reordering and filtering variables...
+25 of 25 variables necessary.
+22 of 25 mutex groups necessary.
+132 of 132 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.000s CPU, 0.001s wall-clock]
+Translator variables: 25
+Translator derived variables: 0
+Translator facts: 110
+Translator goal facts: 2
+Translator mutex groups: 22
+Translator total mutex groups size: 88
+Translator operators: 132
+Translator axioms: 0
+Translator task size: 1233
+warning: could not determine peak memory
+Writing output... [0.000s CPU, 0.009s wall-clock]
+Done! [0.016s CPU, 0.027s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(cpdbs(patterns=manual_patterns([[23,24,0,9],[23,24,0,8],[23,24,0,10],[23,24,0,2],[23,24,0,1],[23,24,0,18],[23,24,0,11],[23,24,0,19],[23,24,0,3],[23,24,0,12],[23,24,0,13],[23,24,0,5],[23,24,0,20],[23,24,0,17],[23,24,0,21],[23,24,0,6],[23,24,0,4],[23,24,0,14],[23,24,0,15],[23,24,0,16],[23,24,0,7],[23,24,9,8],[23,24,9,10],[23,24,9,2],[23,24,9,1],[23,24,9,18],[23,24,9,11],[23,24,9,19],[23,24,9,3],[23,24,9,12],[23,24,9,13],[23,24,9,5],[23,24,9,20],[23,24,9,17],[23,24,9,21],[23,24,9,6],[23,24,9,4],[23,24,9,14],[23,24,9,15],[23,24,9,16],[23,24,9,7],[23,24,8,10],[23,24,8,2],[23,24,8,1],[23,24,8,18],[23,24,8,11],[23,24,8,19],[23,24,8,3],[23,24,8,12],[23,24,8,13],[23,24,8,5],[23,24,8,20],[23,24,8,17],[23,24,8,21],[23,24,8,6],[23,24,8,4],[23,24,8,14],[23,24,8,15],[23,24,8,16],[23,24,8,7],[23,24,10,2],[23,24,10,1],[23,24,10,18],[23,24,10,11],[23,24,10,19],[23,24,10,3],[23,24,10,12],[23,24,10,13],[23,24,10,5],[23,24,10,20],[23,24,10,17],[23,24,10,21],[23,24,10,6],[23,24,10,4],[23,24,10,14],[23,24,10,15],[23,24,10,16],[23,24,10,7],[23,24,2,1],[23,24,2,18],[23,24,2,11],[23,24,2,19],[23,24,2,3],[23,24,2,12],[23,24,2,13],[23,24,2,5],[23,24,2,20],[23,24,2,17],[23,24,2,21],[23,24,2,6],[23,24,2,4],[23,24,2,14],[23,24,2,15],[23,24,2,16],[23,24,2,7],[23,24,1,18],[23,24,1,11],[23,24,1,19],[23,24,1,3],[23,24,1,12],[23,24,1,13],[23,24,1,5],[23,24,1,20],[23,24,1,17],[23,24,1,21],[23,24,1,6],[23,24,1,4],[23,24,1,14],[23,24,1,15],[23,24,1,16],[23,24,1,7],[23,24,18,11],[23,24,18,19],[23,24,18,3],[23,24,18,12],[23,24,18,13],[23,24,18,5],[23,24,18,20],[23,24,18,17],[23,24,18,21],[23,24,18,6],[23,24,18,4],[23,24,18,14],[23,24,18,15],[23,24,18,16],[23,24,18,7],[23,24,11,19],[23,24,11,3],[23,24,11,12],[23,24,11,13],[23,24,11,5],[23,24,11,20],[23,24,11,17],[23,24,11,21],[23,24,11,6],[23,24,11,4],[23,24,11,14],[23,24,11,15],[23,24,11,16],[23,24,11,7],[23,24,19,3],[23,24,19,12],[23,24,19,13],[23,24,19,5],[23,24,19,20],[23,24,19,17],[23,24,19,21],[23,24,19,6],[23,24,19,4],[23,24,19,14],[23,24,19,15],[23,24,19,16],[23,24,19,7],[23,24,3,12],[23,24,3,13],[23,24,3,5],[23,24,3,20],[23,24,3,17],[23,24,3,21],[23,24,3,6],[23,24,3,4],[23,24,3,14],[23,24,3,15],[23,24,3,16],[23,24,3,7],[23,24,12,13],[23,24,12,5],[23,24,12,20],[23,24,12,17],[23,24,12,21],[23,24,12,6],[23,24,12,4],[23,24,12,14],[23,24,12,15],[23,24,12,16],[23,24,12,7],[23,24,13,5],[23,24,13,20],[23,24,13,17],[23,24,13,21],[23,24,13,6],[23,24,13,4],[23,24,13,14],[23,24,13,15],[23,24,13,16],[23,24,13,7],[23,24,5,20],[23,24,5,17],[23,24,5,21],[23,24,5,6],[23,24,5,4],[23,24,5,14],[23,24,5,15],[23,24,5,16],[23,24,5,7],[23,24,20,17],[23,24,20,21],[23,24,20,6],[23,24,20,4],[23,24,20,14],[23,24,20,15],[23,24,20,16],[23,24,20,7],[23,24,17,21],[23,24,17,6],[23,24,17,4],[23,24,17,14],[23,24,17,15],[23,24,17,16],[23,24,17,7],[23,24,21,6],[23,24,21,4],[23,24,21,14],[23,24,21,15],[23,24,21,16],[23,24,21,7],[23,24,6,4],[23,24,6,14],[23,24,6,15],[23,24,6,16],[23,24,6,7],[23,24,4,14],[23,24,4,15],[23,24,4,16],[23,24,4,7],[23,24,14,15],[23,24,14,16],[23,24,14,7],[23,24,15,16],[23,24,15,7],[23,24,16,7]])))' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\e7verify7wb45b91\sas_plan' < output.sas
+[t=0.000162s, 1984 KB] Search code revision: 7120aa0
+[t=0.000258s, 1984 KB] reading input...
+[t=0.001674s, 2264 KB] done reading input!
+[t=0.008789s, 3372 KB] Initializing canonical PDB heuristic...
+[t=0.008804s, 3372 KB] Generating patterns using: manual pattern collection generator
+[t=0.008810s, 3372 KB] Manual pattern collection: [[23, 24, 0, 9], [23, 24, 0, 8], [23, 24, 0, 10], [23, 24, 0, 2], [23, 24, 0, 1], [23, 24, 0, 18], [23, 24, 0, 11], [23, 24, 0, 19], [23, 24, 0, 3], [23, 24, 0, 12], [23, 24, 0, 13], [23, 24, 0, 5], [23, 24, 0, 20], [23, 24, 0, 17], [23, 24, 0, 21], [23, 24, 0, 6], [23, 24, 0, 4], [23, 24, 0, 14], [23, 24, 0, 15], [23, 24, 0, 16], [23, 24, 0, 7], [23, 24, 9, 8], [23, 24, 9, 10], [23, 24, 9, 2], [23, 24, 9, 1], [23, 24, 9, 18], [23, 24, 9, 11], [23, 24, 9, 19], [23, 24, 9, 3], [23, 24, 9, 12], [23, 24, 9, 13], [23, 24, 9, 5], [23, 24, 9, 20], [23, 24, 9, 17], [23, 24, 9, 21], [23, 24, 9, 6], [23, 24, 9, 4], [23, 24, 9, 14], [23, 24, 9, 15], [23, 24, 9, 16], [23, 24, 9, 7], [23, 24, 8, 10], [23, 24, 8, 2], [23, 24, 8, 1], [23, 24, 8, 18], [23, 24, 8, 11], [23, 24, 8, 19], [23, 24, 8, 3], [23, 24, 8, 12], [23, 24, 8, 13], [23, 24, 8, 5], [23, 24, 8, 20], [23, 24, 8, 17], [23, 24, 8, 21], [23, 24, 8, 6], [23, 24, 8, 4], [23, 24, 8, 14], [23, 24, 8, 15], [23, 24, 8, 16], [23, 24, 8, 7], [23, 24, 10, 2], [23, 24, 10, 1], [23, 24, 10, 18], [23, 24, 10, 11], [23, 24, 10, 19], [23, 24, 10, 3], [23, 24, 10, 12], [23, 24, 10, 13], [23, 24, 10, 5], [23, 24, 10, 20], [23, 24, 10, 17], [23, 24, 10, 21], [23, 24, 10, 6], [23, 24, 10, 4], [23, 24, 10, 14], [23, 24, 10, 15], [23, 24, 10, 16], [23, 24, 10, 7], [23, 24, 2, 1], [23, 24, 2, 18], [23, 24, 2, 11], [23, 24, 2, 19], [23, 24, 2, 3], [23, 24, 2, 12], [23, 24, 2, 13], [23, 24, 2, 5], [23, 24, 2, 20], [23, 24, 2, 17], [23, 24, 2, 21], [23, 24, 2, 6], [23, 24, 2, 4], [23, 24, 2, 14], [23, 24, 2, 15], [23, 24, 2, 16], [23, 24, 2, 7], [23, 24, 1, 18], [23, 24, 1, 11], [23, 24, 1, 19], [23, 24, 1, 3], [23, 24, 1, 12], [23, 24, 1, 13], [23, 24, 1, 5], [23, 24, 1, 20], [23, 24, 1, 17], [23, 24, 1, 21], [23, 24, 1, 6], [23, 24, 1, 4], [23, 24, 1, 14], [23, 24, 1, 15], [23, 24, 1, 16], [23, 24, 1, 7], [23, 24, 18, 11], [23, 24, 18, 19], [23, 24, 18, 3], [23, 24, 18, 12], [23, 24, 18, 13], [23, 24, 18, 5], [23, 24, 18, 20], [23, 24, 18, 17], [23, 24, 18, 21], [23, 24, 18, 6], [23, 24, 18, 4], [23, 24, 18, 14], [23, 24, 18, 15], [23, 24, 18, 16], [23, 24, 18, 7], [23, 24, 11, 19], [23, 24, 11, 3], [23, 24, 11, 12], [23, 24, 11, 13], [23, 24, 11, 5], [23, 24, 11, 20], [23, 24, 11, 17], [23, 24, 11, 21], [23, 24, 11, 6], [23, 24, 11, 4], [23, 24, 11, 14], [23, 24, 11, 15], [23, 24, 11, 16], [23, 24, 11, 7], [23, 24, 19, 3], [23, 24, 19, 12], [23, 24, 19, 13], [23, 24, 19, 5], [23, 24, 19, 20], [23, 24, 19, 17], [23, 24, 19, 21], [23, 24, 19, 6], [23, 24, 19, 4], [23, 24, 19, 14], [23, 24, 19, 15], [23, 24, 19, 16], [23, 24, 19, 7], [23, 24, 3, 12], [23, 24, 3, 13], [23, 24, 3, 5], [23, 24, 3, 20], [23, 24, 3, 17], [23, 24, 3, 21], [23, 24, 3, 6], [23, 24, 3, 4], [23, 24, 3, 14], [23, 24, 3, 15], [23, 24, 3, 16], [23, 24, 3, 7], [23, 24, 12, 13], [23, 24, 12, 5], [23, 24, 12, 20], [23, 24, 12, 17], [23, 24, 12, 21], [23, 24, 12, 6], [23, 24, 12, 4], [23, 24, 12, 14], [23, 24, 12, 15], [23, 24, 12, 16], [23, 24, 12, 7], [23, 24, 13, 5], [23, 24, 13, 20], [23, 24, 13, 17], [23, 24, 13, 21], [23, 24, 13, 6], [23, 24, 13, 4], [23, 24, 13, 14], [23, 24, 13, 15], [23, 24, 13, 16], [23, 24, 13, 7], [23, 24, 5, 20], [23, 24, 5, 17], [23, 24, 5, 21], [23, 24, 5, 6], [23, 24, 5, 4], [23, 24, 5, 14], [23, 24, 5, 15], [23, 24, 5, 16], [23, 24, 5, 7], [23, 24, 20, 17], [23, 24, 20, 21], [23, 24, 20, 6], [23, 24, 20, 4], [23, 24, 20, 14], [23, 24, 20, 15], [23, 24, 20, 16], [23, 24, 20, 7], [23, 24, 17, 21], [23, 24, 17, 6], [23, 24, 17, 4], [23, 24, 17, 14], [23, 24, 17, 15], [23, 24, 17, 16], [23, 24, 17, 7], [23, 24, 21, 6], [23, 24, 21, 4], [23, 24, 21, 14], [23, 24, 21, 15], [23, 24, 21, 16], [23, 24, 21, 7], [23, 24, 6, 4], [23, 24, 6, 14], [23, 24, 6, 15], [23, 24, 6, 16], [23, 24, 6, 7], [23, 24, 4, 14], [23, 24, 4, 15], [23, 24, 4, 16], [23, 24, 4, 7], [23, 24, 14, 15], [23, 24, 14, 16], [23, 24, 14, 7], [23, 24, 15, 16], [23, 24, 15, 7], [23, 24, 16, 7]]
+[t=0.008912s, 3372 KB] manual pattern collection generator number of patterns: 231
+[t=0.008915s, 3372 KB] manual pattern collection generator total PDB size: 447216
+[t=0.008920s, 3372 KB] manual pattern collection generator computation time: 0.000101s
+[t=0.008927s, 3372 KB] Computing PDBs for pattern collection...
+[t=0.025899s, 4976 KB] Done computing PDBs for pattern collection: 0.016984s
+[t=0.025922s, 4976 KB] Computing pattern cliques for pattern collection...
+[t=0.026067s, 4976 KB] Done computing pattern cliques for pattern collection: 0.000147s
+[t=0.026075s, 4976 KB] Running dominance pruning...
+[t=0.026231s, 4976 KB] Pruned 0 of 231 pattern cliques
+[t=0.026239s, 4976 KB] Pruned 0 of 231 PDBs
+[t=0.026243s, 4976 KB] Dominance pruning took 0.000166s
+[t=0.026247s, 4976 KB] Canonical PDB heuristic number of patterns: 231
+[t=0.026251s, 4976 KB] Canonical PDB heuristic total PDB size: 447216
+[t=0.026255s, 4976 KB] Canonical PDB heuristic computation time: 0.017458s
+[t=0.026297s, 4976 KB] Building successor generator... done!
+[t=0.026359s, 4976 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.026362s, 4976 KB] time for successor generation creation: 0.000053s
+[t=0.026367s, 4976 KB] Variables: 25
+[t=0.026370s, 4976 KB] FactPairs: 110
+[t=0.026372s, 4976 KB] Bytes per state: 8
+[t=0.026387s, 4976 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.026416s, 4976 KB] New best heuristic value for cpdbs: 4
+[t=0.026420s, 4976 KB] g=0, 1 evaluated, 0 expanded
+[t=0.026426s, 4976 KB] f = 4, 1 evaluated, 0 expanded
+[t=0.026435s, 4976 KB] Initial heuristic value for cpdbs: 4
+[t=0.026439s, 4976 KB] pruning method: none
+[t=0.026453s, 4976 KB] f = 5, 4 evaluated, 1 expanded
+[t=0.026472s, 4976 KB] New best heuristic value for cpdbs: 3
+[t=0.026476s, 4976 KB] g=2, 8 evaluated, 3 expanded
+[t=0.026496s, 4976 KB] New best heuristic value for cpdbs: 2
+[t=0.026499s, 4976 KB] g=3, 12 evaluated, 4 expanded
+[t=0.026510s, 4976 KB] f = 6, 15 evaluated, 6 expanded
+[t=0.026535s, 4976 KB] f = 7, 23 evaluated, 12 expanded
+[t=0.026561s, 4976 KB] f = 8, 29 evaluated, 20 expanded
+[t=0.026579s, 4976 KB] f = 9, 34 evaluated, 26 expanded
+[t=0.026593s, 4976 KB] f = 10, 38 evaluated, 31 expanded
+[t=0.026618s, 4976 KB] f = 11, 45 evaluated, 36 expanded
+[t=0.026628s, 4976 KB] f = 12, 47 evaluated, 39 expanded
+[t=0.026657s, 4976 KB] f = 13, 60 evaluated, 46 expanded
+[t=0.026690s, 4976 KB] f = 14, 68 evaluated, 54 expanded
+[t=0.026732s, 4976 KB] f = 15, 81 evaluated, 62 expanded
+[t=0.026776s, 4976 KB] f = 16, 98 evaluated, 76 expanded
+[t=0.026807s, 4976 KB] f = 17, 107 evaluated, 87 expanded
+[t=0.026842s, 4976 KB] f = 18, 118 evaluated, 97 expanded
+[t=0.026866s, 4976 KB] f = 19, 126 evaluated, 107 expanded
+[t=0.026934s, 5012 KB] f = 20, 145 evaluated, 121 expanded
+[t=0.026981s, 5012 KB] f = 21, 163 evaluated, 137 expanded
+[t=0.027030s, 5012 KB] f = 22, 183 evaluated, 151 expanded
+[t=0.027123s, 5012 KB] f = 23, 218 evaluated, 177 expanded
+[t=0.027184s, 5012 KB] f = 24, 243 evaluated, 200 expanded
+[t=0.027209s, 5012 KB] New best heuristic value for cpdbs: 1
+[t=0.027213s, 5012 KB] g=23, 250 evaluated, 204 expanded
+[t=0.027312s, 5084 KB] f = 25, 280 evaluated, 228 expanded
+[t=0.027419s, 5084 KB] f = 26, 324 evaluated, 265 expanded
+[t=0.027501s, 5084 KB] f = 27, 358 evaluated, 299 expanded
+[t=0.027604s, 5084 KB] f = 28, 402 evaluated, 340 expanded
+[t=0.027720s, 5084 KB] f = 29, 450 evaluated, 383 expanded
+[t=0.027826s, 5084 KB] f = 30, 492 evaluated, 424 expanded
+[t=0.027953s, 5084 KB] f = 31, 535 evaluated, 464 expanded
+[t=0.028044s, 5084 KB] f = 32, 571 evaluated, 501 expanded
+[t=0.028117s, 5084 KB] f = 33, 599 evaluated, 533 expanded
+[t=0.028181s, 5084 KB] f = 34, 625 evaluated, 561 expanded
+[t=0.028238s, 5084 KB] f = 35, 647 evaluated, 584 expanded
+[t=0.028272s, 5084 KB] f = 36, 659 evaluated, 600 expanded
+[t=0.028304s, 5084 KB] f = 37, 670 evaluated, 615 expanded
+[t=0.028322s, 5084 KB] f = 38, 675 evaluated, 623 expanded
+[t=0.028335s, 5084 KB] f = 39, 678 evaluated, 628 expanded
+[t=0.028339s, 5084 KB] Completely explored state space -- no solution!
+[t=0.028342s, 5084 KB] Actual search time: 0.001902s
+[t=0.028346s, 5084 KB] Expanded 630 state(s).
+[t=0.028346s, 5084 KB] Reopened 0 state(s).
+[t=0.028346s, 5084 KB] Evaluated 678 state(s).
+[t=0.028346s, 5084 KB] Evaluations: 678
+[t=0.028346s, 5084 KB] Generated 1664 state(s).
+[t=0.028346s, 5084 KB] Dead ends: 48 state(s).
+[t=0.028346s, 5084 KB] Expanded until last jump: 628 state(s).
+[t=0.028346s, 5084 KB] Reopened until last jump: 0 state(s).
+[t=0.028346s, 5084 KB] Evaluated until last jump: 678 state(s).
+[t=0.028346s, 5084 KB] Generated until last jump: 1661 state(s).
+[t=0.028346s, 5084 KB] Number of registered states: 678
+[t=0.028346s, 5084 KB] Int hash set load factor: 678/1024 = 0.662109
+[t=0.028346s, 5084 KB] Int hash set resizes: 10
+[t=0.028346s, 5084 KB] Search time: 0.001962s
+[t=0.028346s, 5084 KB] Total time: 0.028346s
+Search stopped without finding a solution.
+Remove intermediate file output.sas
+search exit code: 12
+
+Driver aborting after search
+

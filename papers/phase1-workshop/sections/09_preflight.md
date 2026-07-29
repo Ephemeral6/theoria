@@ -1,11 +1,16 @@
-## 9 · The preflight — every link in the live chain, for zero quota
+## 9 · The live chain — a preflight for zero quota, and the first-contact run
 
 Everything reported so far is offline. Phase 3 is not, and the step between them
 is the one where a framework quietly stops being closed: the arm acquires a
 credential, the credential acquires a network, and the record of what happened
-becomes something the arm itself wrote. This section reports the run that
-exercised that chain **before** any of it could cost anything, and — as much as
-it reports the result — what the run does *not* establish.
+becomes something the arm itself wrote. **Two** runs exercised that chain and this
+section reports both, because no single run establishes all of it: the
+**preflight**, which ran the whole sequence **before** any of it could cost
+anything, and the **first-contact run**, which spent quota on one development-pile
+game and is the one whose manifest carries the byte-level sealing scan. Most of
+what follows is about the preflight; §9.4 says which claims belong to which run.
+As much as it reports the result, this section reports what the runs do *not*
+establish.
 
 ### 9.1 The trick, and the sequence
 
@@ -32,7 +37,8 @@ scorecard close that needed two tries — 404, then 200.
 witness: `total_actions: 0`, `actions: 0`, `level_actions: [0,0,0,0,0,0,0]`,
 `score: 0.0`. The arm's reconciliation agrees — `successful_actions: 0` over 18
 `env_steps` — and the cost block records `model_calls: 0`, `usd: 0.0`
-(`.../MANIFEST.json`, `.../run.json`).
+(`theoria-arm/runs/preflight-20260728T012057Z/MANIFEST.json`,
+`theoria-arm/runs/preflight-20260728T012057Z/run.json`).
 
 The run also produced three findings that only a live chain can produce, and
 they are the reason a dry run against a mock would not have substituted:
@@ -100,7 +106,7 @@ credibility comes from an adversarial pass by an independent context — 46
 attacks, **29 of which landed on first contact**, four rated critical, all 46 now
 blocked and resident in the suite (`proxy/REDTEAM.md`, `proxy/STATUS.md`).
 
-### 9.3 Four things this run does not establish
+### 9.3 Four things the preflight does not establish
 
 The gap between what the shell is designed to guarantee and what this run
 demonstrates is wide enough to be worth enumerating.
@@ -166,8 +172,37 @@ cache reads are **structurally zero** — not small, but a different quantity �
 because every model call is a fresh process in a fresh directory, which is the
 sealing decision working as designed (INC-TA-005).
 
-What the preflight does establish is narrow and worth having: the live chain
-runs end to end, the credential is injected in one place and the arm never holds
-it, the sealed pile is untouched by a check on the bytes rather than on the
-guard's self-report, and the whole thing cost zero billable actions. It is a
-statement about the apparatus, not about the framework.
+What the live runs establish is narrow and worth having, and it must be split
+across the two of them rather than fused into one. **The preflight** shows the
+live chain running end to end with the credential injected in one place and the
+arm never holding it, for **zero billable actions and zero dollars**
+(`theoria-arm/runs/preflight-20260728T012057Z/MANIFEST.json`) — but its manifest
+predates the byte-level sealing scan and carries only the counters, as §9.2 says.
+**The first-contact run** is the one whose manifest carries that scan
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`:
+`sealed_game_ids_found` empty, `sealed_pile_untouched` true, `cut_integrity`
+true), and it spent 7 successful actions and $6.32 in model calls.
+
+**And the two numbers for that spend disagree by 8.3 %.** The provider's own
+arithmetic reports **$6.317658**; this project's price table, re-deriving the same
+run from its recorded token usage, gives **$5.795338**
+(`theoria-arm/runs/20260728T015354Z-g50t-first-contact/MANIFEST.json`,
+`cost.cli_reported_usd` against `cost.from_price_table.usd_total`, with
+`cost.relative_delta` −0.0827). The manifest does not average them or pick one: it
+records the gap and names it a finding about `proxy/pricing/pricing_v1.json`
+rather than about the run.
+
+**And it largely explains it.** The same manifest's `cost.cache_ttl_diagnosis`
+identifies 116 470 cache-creation tokens written at the one-hour multiplier and
+priced at the five-minute one, worth `under_billed_usd` **0.436763** — **83.6 % of
+the $0.52 gap**. Correcting it takes the disagreement from 8.3 % to **1.35 %**, and
+the residual has no identified cause. So this is not an unexplained discrepancy
+between two accountings; it is a priced, located defect in one of them with a small
+remainder. **Every dollar figure in this paper is the provider's number**, which is
+the conservative choice here, since the project's own table reads low.
+
+Neither run
+byte-verifies the "injected in one place" claim: §9.2 records that the archiver
+advertises that check in its docstring and does not implement it, and that the
+byte-scanning test runs against the mock. Both are statements about the
+apparatus, not about the framework.

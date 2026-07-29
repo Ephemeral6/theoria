@@ -18,7 +18,7 @@ pairs, by name and for the right reason, before the score existed.
 
 from __future__ import annotations
 
-from battery.metrics import metric, ok, thin
+from battery.metrics import metric, ok, thin, unsound
 from battery.model import Run
 
 THEOREM_KINDS = ("invariant", "theorem")
@@ -32,6 +32,12 @@ def replay_accuracy(run: Run):
     pairs, agree = run.theory.replay_pairs, run.theory.replay_agree
     if not pairs:
         return thin("K1", "no replay score recorded for this run")
+    # V9-D1. A share is not a free-floating number: agreeing on more pairs
+    # than exist is a bookkeeping bug, and the blind audit printed K1 = 7.0
+    # with `status="ok"` and `unit="share"` to prove nothing checked.
+    if agree is None or agree < 0 or agree > pairs:
+        return unsound("K1", "%r agreements over %r replay pairs" % (agree,
+                                                                     pairs))
     return ok("K1", agree / pairs, agree=agree, pairs=pairs)
 
 
@@ -66,6 +72,9 @@ def held_out_accuracy(run: Run):
                           "a denominator of 3 adversarial gaps and one of "
                           "39960 exhaustive cases are different quantities "
                           "sharing a name")
+    if agree is None or agree < 0 or agree > pairs:
+        return unsound("K2", "%r agreements over %r held-out pairs"
+                             % (agree, pairs))
     return ok("K2", agree / pairs, agree=agree, pairs=pairs,
               frame=run.theory.held_out_frame)
 
@@ -88,6 +97,12 @@ def evidence_coverage(run: Run):
                  if c.coverage_num is not None and c.coverage_den]
     if not annotated:
         return thin("K4", "no clause carries a coverage annotation")
+    # V9-D1. `coverage_num=9, coverage_den=3` scored 3.0 as a "share".
+    broken = sorted(c.name for c in annotated
+                    if c.coverage_num < 0 or c.coverage_num > c.coverage_den)
+    if broken:
+        return unsound("K4", "clause(s) %s claim more witnesses than the "
+                             "coverage denominator admits" % ", ".join(broken))
     ratios = [c.coverage_num / c.coverage_den for c in annotated]
     return ok("K4", sum(ratios) / len(ratios), annotated=len(annotated),
               unannotated=len(clauses) - len(annotated),
@@ -150,6 +165,10 @@ def probe_executable_rate(run: Run):
     designed = run.theory.probes_designed
     if not designed:
         return thin("K8", "no probes were designed")
+    executable = run.theory.probes_executable
+    if executable is None or executable < 0 or executable > designed:
+        return unsound("K8", "%r executable probes out of %r designed"
+                             % (executable, designed))
     return ok("K8", run.theory.probes_executable / designed,
               executable=run.theory.probes_executable, designed=designed)
 
@@ -242,6 +261,14 @@ def repair_loop_closure(run: Run):
     required = sum(r.beats_required for r in run.repairs)
     if not required:
         return thin("K12", "no repair episode declares a beat requirement")
+    # V9-D1. `beats_required` is the *arm's* declaration of what a repair loop
+    # consists of, and six closed beats against a declared requirement of one
+    # scored 6.0 -- a "share" larger than the whole. The register's defence
+    # ("beats_required is fixed at six by Theoria.md, and the adapter sets it")
+    # is true of the adapters in this repository and false of the metric.
+    if closed > required:
+        return unsound("K12", "%d closed beats against a declared requirement "
+                              "of %d" % (closed, required))
     return ok("K12", closed / required, closed=closed, required=required,
               episodes=len(run.repairs),
               per_episode={r.episode_id: "%d/%d" % (r.beats_closed,

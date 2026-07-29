@@ -107,6 +107,12 @@ class Certificate:
             "margin": str(self.margin),
             "max_decrease": str(self.max_decrease),
             "conditions": dict(self.conditions),
+            # Published because `conditions` alone does not say what it looks like
+            # it says: `all({}.values())` is True, so a consumer re-deriving the
+            # verdict from the dict reads "never checked" as "passed".  `holds`
+            # special-cases the empty dict (D-034); the payload has to carry the
+            # verdict, not the ingredients of one.
+            "holds": self.holds,
             "claim": "goal unreachable from %s" % self.initial,
             "rendering": (
                 "potential(s) = sum of w over occupied cells; every legal move leaves "
@@ -285,22 +291,117 @@ class Heuristic:
             best = min(best, math.ceil(Fraction(required) / self.max_decrease))
         return float(best)
 
-    def as_json(self) -> Dict[str, object]:
+    def entitlement(self, admissibility_check: Optional[Sequence[Dict[str, object]]]
+                    = None) -> Dict[str, object]:
+        """What actually licenses calling this heuristic admissible, itemised.
+
+        The bound is `h(s) = min_g ceil((potential(s) - potential(g)) / M)`, and
+        the argument for it is: every legal move leaves the potential
+        non-increasing and drops it by at most `M`, so k moves cannot close a gap
+        wider than `k*M`.  That argument is exactly the certificate's
+        `inv_closed` condition plus `M`'s definition -- which means the licence is
+        `certificate.holds`, the exact rational re-check, and **not** the author's
+        confidence.  A certificate whose `conditions` are empty has not been
+        re-checked at all and `holds` is false for that reason too.
+
+        `admissibility_check`, when the caller has one, is the empirical half:
+        h against the true shortest path on every state with a finite one.  It is
+        a sample, not a proof, so it can only ever *subtract* -- a single row with
+        `admissible: false` is a counterexample and settles the matter.
+        """
+        proved = self.certificate.holds
+        rows = list(admissibility_check) if admissibility_check is not None else None
+        counterexamples: List[Dict[str, object]] = []
+        if rows is None:
+            sampled: Optional[bool] = None
+            summary = "not run"
+        elif not rows:
+            # An empty report is not a clean report.  `admissibility_report`
+            # returns [] on any graph where no state has a finite distance to a
+            # goal, and `not []` is True -- so scoring it as a pass would make
+            # "no state was examined" indistinguishable from "every state
+            # passed", which is the defect this whole payload is about.
+            sampled = None
+            summary = "vacuous -- no state has a finite distance to a goal"
+        else:
+            counterexamples = [r for r in rows if not r.get("admissible")]
+            sampled = not counterexamples
+            summary = "%d state(s), %d counterexample(s)" % (len(rows), len(counterexamples))
         return {
+            "certificate_holds": proved,
+            "certificate_conditions": dict(self.certificate.conditions),
+            "empirical_check": summary,
+            "counterexamples": counterexamples,
+            "admissible": bool(proved) and (sampled is not False),
+        }
+
+    def as_json(self, admissibility_check: Optional[Sequence[Dict[str, object]]] = None
+                ) -> Dict[str, object]:
+        """The payload.  `admissible` is derived here and nowhere else.
+
+        It used to be the literal `True`, sitting beside an `admissibility_check`
+        the headline never read -- so a heuristic built on a certificate that
+        fails its own exact re-check still published `"admissible": true`.  The
+        headline and the evidence are now computed by one expression, in one
+        place, because two sites that agree on today's data are exactly what
+        D-033 found drifting apart.
+        """
+        basis = self.entitlement(admissibility_check)
+        payload: Dict[str, object] = {
             "form": "potential_lower_bound",
             "weights": [str(w) for w in self.certificate.weights],
             "max_decrease": str(self.max_decrease),
             "goal_states": list(self.certificate.goal_states),
             "formula": "h(s) = min_g ceil((potential(s) - potential(g)) / M), "
                        "infinite when potential(s) < potential(g)",
-            "admissible": True,
+            "admissible": basis["admissible"],
+            "admissible_basis": basis,
             "rendering": "at least ceil((potential(s) - potential(goal)) / %s) moves remain"
                          % self.max_decrease,
         }
+        if admissibility_check is not None:
+            payload["admissibility_check"] = list(admissibility_check)
+        return payload
 
 
 def heuristic_from(certificate: Certificate) -> Heuristic:
     return Heuristic(certificate=certificate, max_decrease=certificate.max_decrease)
+
+
+def premises_against_graph(certificate: "Certificate", graph: Dict[str, object]
+                           ) -> Dict[str, object]:
+    """Re-derive the certificate's premises from the graph, not from the certificate.
+
+    D-035 site 1: `check_exactly` iterates `certificate.moves`, so a move geometry
+    missing from that list is unconstrained in the LP and unexamined in the
+    re-check at once.  Every condition can pass over a truncated list while a
+    dropped move raises the potential and the claim is simply false.
+
+    So this asks the graph instead.  `moves_raising_potential` is `inv_closed`
+    recomputed over **every** geometry the graph has, which is the check
+    `check_exactly` cannot perform on its own inputs.
+
+    The goal comparison is reported, not judged: `run(..., goal_states=[...])` is
+    a supported call and a certificate about other goals proves what it says.
+    What it does *not* license is scoring `h` against `graph["distance_to_goal"]`,
+    which measures the distance to a different set -- see `admissibility_report`.
+    """
+    graph_moves = moves_from_graph(graph)
+    listed = {move.name() for move in certificate.moves}
+    missing = [m.name() for m in graph_moves if m.name() not in listed]
+    raising = [m.name() for m in graph_moves
+               if m.delta(certificate.weights) > 0]
+    graph_goals = sorted(graph["goal_states"])          # type: ignore[index]
+    cert_goals = sorted(certificate.goal_states)
+    return {
+        "move_list_complete": not missing,
+        "missing_moves": missing,
+        "moves_raising_potential": raising,
+        "goal_states_match_graph": cert_goals == graph_goals,
+        "certificate_goal_states": cert_goals,
+        "graph_goal_states": graph_goals,
+        "sound_over_graph": not missing and not raising,
+    }
 
 
 def admissibility_report(heuristic: Heuristic, graph: Dict[str, object]

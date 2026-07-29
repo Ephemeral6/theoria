@@ -1,0 +1,303 @@
+{
+  "by_class": {
+    "free": 8,
+    "memorised": 6,
+    "theory": 6
+  },
+  "by_rule": {
+    "blocked_by_wall": {
+      "free": 4
+    },
+    "collect_token": {
+      "memorised": 2,
+      "theory": 2
+    },
+    "latch_already_set": {
+      "free": 4
+    },
+    "walk": {
+      "memorised": 2,
+      "theory": 2
+    },
+    "walk_through_door": {
+      "memorised": 2,
+      "theory": 2
+    }
+  },
+  "by_split": {
+    "heldout": {
+      "free": 4,
+      "theory": 6
+    },
+    "replay": {
+      "free": 4,
+      "memorised": 6
+    }
+  },
+  "feasible": true,
+  "items": [
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-000",
+      "rule": "collect_token",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-latch-maze-001",
+      "rule": "blocked_by_wall",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-002",
+      "rule": "walk_through_door",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-latch-maze-003",
+      "rule": "blocked_by_wall",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-004",
+      "rule": "walk_through_door",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-005",
+      "rule": "walk_through_door",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-006",
+      "rule": "walk",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-latch-maze-007",
+      "rule": "blocked_by_wall",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-008",
+      "rule": "collect_token",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-latch-maze-009",
+      "rule": "latch_already_set",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-010",
+      "rule": "collect_token",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-011",
+      "rule": "walk",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-latch-maze-012",
+      "rule": "blocked_by_wall",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-013",
+      "rule": "walk",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-014",
+      "rule": "walk",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "memorised",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-015",
+      "rule": "walk_through_door",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-latch-maze-016",
+      "rule": "latch_already_set",
+      "split": "replay",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-latch-maze-017",
+      "rule": "latch_already_set",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "theory",
+      "frame_changes": true,
+      "item_id": "t3-latch-maze-018",
+      "rule": "collect_token",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "wrong",
+        "memoriser": "wrong",
+        "oracle": "correct"
+      }
+    },
+    {
+      "class": "free",
+      "frame_changes": false,
+      "item_id": "t3-latch-maze-019",
+      "rule": "latch_already_set",
+      "split": "heldout",
+      "verdicts": {
+        "bluffer": "correct",
+        "memoriser": "correct",
+        "oracle": "correct"
+      }
+    }
+  ],
+  "n_items": 20,
+  "paper_id": "v2-heldout-t3-latch-maze",
+  "per_class": 2,
+  "rubric_digest": "e06bdf52e6f5e100008960582dcd931f06d9242bb1fb02edc01b4e81d71cb091",
+  "summary": {
+    "anomalies": [],
+    "barren_rules": [
+      "blocked_by_wall",
+      "latch_already_set"
+    ],
+    "dead": 0,
+    "effective_size": 6,
+    "free": 8,
+    "memorised": 6,
+    "n_items": 20,
+    "theory": 6,
+    "theory_items": 6,
+    "theory_share": 0.3,
+    "zero_discrimination": 8,
+    "zero_discrimination_share": 0.4
+  },
+  "tier": 3,
+  "world_id": "t3-latch-maze"
+}

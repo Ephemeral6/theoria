@@ -133,6 +133,51 @@
  },
  "outcome": "stopped_for_archive",
  "prompt_id": "P-8",
+ "provenance": {
+  "arm_version_lookup": {
+   "arm_sha256": "c61e8d48e31871a4d10644143c50f1e6eeb11516763e27eefa1454c374a517ec",
+   "commits": [
+    "0f62cf6614ab57004a0973592326fcafe77ad489"
+   ],
+   "detail": "exactly one commit reachable from any ref carries this arm_version",
+   "earliest_commit": "0f62cf6614ab57004a0973592326fcafe77ad489",
+   "relation_to_the_run": {
+    "claim": "this run's arm sources were byte-identical to the tree held by this commit. The commit was created 21 s after the run started, so it is not 'the commit the run ran from' -- it is the commit whose tree the run's files match.",
+    "commit_committed_unix": 1785203656,
+    "commit_minus_run_start_s": 21,
+    "run_started_unix": 1785203635
+   },
+   "verdict": "matched"
+  },
+  "base_commit_check": {
+   "base_commit_in_this_manifest": "578ef7b66eb236d3c6671cfa0412379791897651",
+   "base_commit_the_arm_version_reconstructs": "0f62cf6614ab57004a0973592326fcafe77ad489",
+   "detail": "the commit recorded here is NOT the one whose tree hashes to this run's recorded arm_version. `archive.py` wrote `git rev-parse HEAD` at the moment the manifest was generated, which is after the run. The derived commit is the one whose tree the run's sources match byte for byte -- note that it may have been created during or just after the run, so it is the reproducible tree rather than a commit the run was launched from. See `arm_version_lookup.relation_to_the_run`.",
+   "verdict": "DISAGREE"
+  },
+  "derived_from": {
+   "arm_version": "ledger run_start.arm_version",
+   "base_commit": "armtools.armversion: the arm_version this run recorded is reconstructed from exactly one commit's tree",
+   "game_id": "ledger run_start.game_id",
+   "guard": "ledger run_start.guard",
+   "reconciliation / cost / constraint_8 / sealing": "armtools.archive, over this run's own ledger records",
+   "run_id": "ledger run_start.run_id",
+   "upstream_pin": "ledger run_start.upstream_pin (NOT the working tree)",
+   "utc": "ledger run_start.ts"
+  },
+  "missing": [
+   {
+    "field": "base_commit (reproducible)",
+    "why": "the commit recorded here is NOT the one whose tree hashes to this run's recorded arm_version. `archive.py` wrote `git rev-parse HEAD` at the moment the manifest was generated, which is after the run. The derived commit is the one whose tree the run's sources match byte for byte -- note that it may have been created during or just after the run, so it is the reproducible tree rather than a commit the run was launched from. See `arm_version_lookup.relation_to_the_run`."
+   }
+  ],
+  "mode": "amend",
+  "notes": [],
+  "prompt_id_of_the_backfill": "S8-provenance-backfill",
+  "rule": "this manifest was written by `armtools/archive.py` at the end of its run and is left exactly as it was. Only the fields below are added.",
+  "status": "incomplete",
+  "tool": "armtools/backfill.py"
+ },
  "reconciliation": {
   "actions_agree": true,
   "env_steps": 40,
@@ -286,5 +331,6 @@
   "theory-compiler/src/theory_compiler/generators/gen_python.py": "0e599dfc7f579245663ded9bc15db884694e0c7a56bcad2a3d86c8a25aa010d4",
   "theory-compiler/src/theory_compiler/parser/theory_parser.py": "9deba600ff17bdf19efe829816e0d9c8713600e621a480b3866214fdcf7dda5a"
  },
+ "utc": "2026-07-28T01:53:55.061Z",
  "world": null
 }

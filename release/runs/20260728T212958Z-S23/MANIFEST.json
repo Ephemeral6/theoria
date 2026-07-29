@@ -1,0 +1,16 @@
+{
+  "prompt_id": "S23-unreadable-is-not-clean",
+  "branch": "agent/s23-unreadable-is-not-clean",
+  "base_commit": "29f41ea4028464592e56bcc0a7d81862b7f3221b",
+  "utc": "2026-07-28T21:29:58Z",
+  "worker": "W-1631",
+  "territory": "release",
+  "cross_territory_edits": [
+    "arc-recon/contamination.py",
+    "arc-recon/test_contamination_gate.py"
+  ],
+  "cross_territory_reason": "The item names arc-recon/contamination.py:338 and arc-recon/verify.sh:53 explicitly as half of the defect. Fixing only the release/ half would leave the machine-readable gate saying clean while the human-readable table says otherwise -- which is the whole finding. verify.sh itself is NOT touched, per the item: the sending end is what is repaired.",
+  "api_calls": 0,
+  "sealed_pile_contact": "none -- every check in this run is offline and reads only tracked files and the cut file",
+  "files": []
+}

@@ -1,0 +1,289 @@
+{
+  "adversarial_pass": {
+    "claims_attacked": 4,
+    "corrections_applied": [
+      "236 not 160",
+      "residue 16 not 30, 14 worlds not 12",
+      "barren set is quota-dependent",
+      "the prior is legend-fed, not theory-free",
+      "sections 2 and 3 were one finding counted twice",
+      "tags=(split,) is not a one-line fix",
+      "a test written for the leak is vacuous"
+    ],
+    "refuted_or_overstated": 2,
+    "survived": 2,
+    "tool_defects_fixed": [
+      "main() exited 0 on a dead item",
+      "a test named for a bluffer comparison it never made"
+    ]
+  },
+  "author": "RES-2",
+  "base_commit": "8d4237346a93275609f277f62998df0d4ba1d439",
+  "branch": "agent/v7-exam-stress-fanout",
+  "continued_by": "RES-3",
+  "files": [
+    {
+      "path": "exam/artifacts/matrix/discrimination_worldgen.json",
+      "sha256": "6df7574f0c48fa936724b56007354f4aed8c1feb823b3d8c4fe69ed43975b46b"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/ADVERSARIAL.md",
+      "sha256": "2f3b86a8653016e4eecacee1e44068c1bf6cbcb029beee25a51ed0714ec65d07"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/FINDINGS.md",
+      "sha256": "a81b5e054bbff60de3d862d4671c3fe90c60ec191e3fdb79710500bf4da6ed40"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/RUN_STATE.md",
+      "sha256": "a71535d209c9d79abdb19b25d1e0fffe459c69889b5ca9e54995edced762580f"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/c1_leak.py",
+      "sha256": "9e16611ce366c9c0ccae072cbe358e0944348a85b09ef06254685e2625414784"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/c1b_vacuity.py",
+      "sha256": "2d35a088ab2e2b44c6e35ecb3fff62e99d014fd57db479767c676f607ae022e3"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/c2_ablate.py",
+      "sha256": "c32c57e636158db3a31b9e6deafadd5370375eb6e5562dcb00aa52f23ffdd46c"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/c4_marker.py",
+      "sha256": "dc414a95fb54e0ed3b1f2aadd8175f746d70a578745559f033f9c3ab9f17fcc9"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/flipcheck.py",
+      "sha256": "eae97d3b23bec6380390627f92c878bab7d70d0065ed40d2f841b353b4f31d20"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/flipcheck_control.txt",
+      "sha256": "49b3e611b20ce97ad3bfaa7e04cd9b85c72351e868a005154df6e687b6a94a2e"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/flipcheck_race.py",
+      "sha256": "ee3779dcf057ab01501f08ae85128df011cdf9af88fa43c142c1e3d2333c8d62"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/flipcheck_xpass.txt",
+      "sha256": "5f97362a7e258989403876fc8a01c2d2d07a577e9435f98a2670754dacf4366a"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/hammer.py",
+      "sha256": "bdf2b4b88b5693163a0af61eca632205c89421fc55be53951a62b3095b4b35cf"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/heldout_worldgen.regenerated.json",
+      "sha256": "c528730297d1a7e3bb2de06428049148fccacf67b1d17f951ca698724083f8a5"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/ps_new.json",
+      "sha256": "26ae87879774873b90e0dea621729f83af062c88ae8fae9c7ebd038ed0a7f0c9"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/pytest_under_race.txt",
+      "sha256": "461534711fd03eb7295fdac6cf11fcdb57996075a52ce2763c03d389b70bc646"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/pytest_under_race_2.txt",
+      "sha256": "bcc6159cbb1deeceba26c077aafe46957f982fd7ad6fd2f88c51306f5b63372f"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race.py",
+      "sha256": "41be95f53d70f9138674b99b90d99a3c88096c3558ce3f31499e0106f08446bc"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race2.py",
+      "sha256": "0570b3a22f08f9fb390e9d321af08d7ade014e353556328aa149daac8239e73c"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w1.txt",
+      "sha256": "b453e31b3024ee55860302c23e84c3218c0518ae580f2d802056c5fbd063e424"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w2.txt",
+      "sha256": "b453e31b3024ee55860302c23e84c3218c0518ae580f2d802056c5fbd063e424"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w3.txt",
+      "sha256": "64749ee76f8ab698c68f09e2165ad5244a29e8304ed862785fcd99aa22b83c38"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w4.txt",
+      "sha256": "64749ee76f8ab698c68f09e2165ad5244a29e8304ed862785fcd99aa22b83c38"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w5.txt",
+      "sha256": "64749ee76f8ab698c68f09e2165ad5244a29e8304ed862785fcd99aa22b83c38"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/race_w6.txt",
+      "sha256": "64749ee76f8ab698c68f09e2165ad5244a29e8304ed862785fcd99aa22b83c38"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/target.txt",
+      "sha256": "633edfc8a96f85e0a689a73512546d9174071f94e294ce2e7d0a4fd3ddee9f84"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/adversarial/v_recheck.py",
+      "sha256": "8cf84c13030596c7faa333a218d542c26209894dcf68c4119ad0c90ff0712c88"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/prior_sweep.json",
+      "sha256": "26ae87879774873b90e0dea621729f83af062c88ae8fae9c7ebd038ed0a7f0c9"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/prior_sweep.py",
+      "sha256": "0efdab871aa006fa0d06469fa3c014ff35dabc79610e1c3c7a91ed67a46436b6"
+    },
+    {
+      "path": "exam/runs/20260728T151000Z-V7-exam-stress-fanout/worlds/INDEX.md",
+      "sha256": "fcefbb2c4a7c40b82049818244467c0e1474646e94f088da100ce700ff0ac0c5"
+    },
+    {
+      "path": "exam/tests/test_discrimination.py",
+      "sha256": "9086469db7c36a6b68d7bf702ae29a6826bacc83ee75159206e5ccc1d039a4bf"
+    },
+    {
+      "path": "exam/tools/discrimination.py",
+      "sha256": "05b40d435f2dc508e5a822f8df82c58e9f0b4bd7b879ff1e7cd0bd432621193c"
+    }
+  ],
+  "passive": {
+    "api_calls": 0,
+    "game_spend_usd": 0.0,
+    "model_calls_on_any_generation_path": 0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "V7-exam-stress-fanout",
+  "results": {
+    "discrimination": {
+      "anomalies": [],
+      "barren_rules": [
+        "blocked_by_block",
+        "blocked_by_door",
+        "blocked_by_wall",
+        "latch_already_set"
+      ],
+      "barren_rules_are_quota_dependent": {
+        "note": "barrenness is derivable from the rule table; membership of the reported set is a property of the quota",
+        "per_class_1": 5,
+        "per_class_2": 4,
+        "per_class_3": 2,
+        "per_class_4": 1,
+        "stasis_rules_in_catalogue": 7
+      },
+      "dead": 0,
+      "free": 97,
+      "memorised": 70,
+      "theory": 69,
+      "zero_discrimination_share": 0.411017
+    },
+    "identity_class_is_f_split_framechanges": {
+      "items_checked": 236,
+      "violations": 0
+    },
+    "leakage": {
+      "a_test_written_for_this_leak_is_vacuous": "exam/tests/test_worldgen_papers.py:71 asserts the JSON-quoted '\"walk\"' is absent; the sheet says \"rule:walk\", so 56 of 59 (world, rule) pairs pass on the quote delimiters",
+      "cause": "heldout_worldgen absent from exam/papers/__init__.py BUILDERS; check_paper never reaches it",
+      "fixed_here": false,
+      "items_hitting_own_probe": 236,
+      "minimal_fix_is_not_one_line": "setting tags=(split,) still leaves 16 items across 4 worlds refused, via world_id and families which the sheet also publishes",
+      "note": "an earlier draft said 160; that was 20 worlds x the 8 findings LeakageError prints via findings[:8]",
+      "of": 20,
+      "of_items": 236,
+      "worlds_refused_by_check_paper": 20
+    },
+    "theory_free_prior": {
+      "frame_changing_items_taken": 109,
+      "is_not_theory_free": {
+        "bluffer_floor": 0.411,
+        "note": "every point above the floor is bought with the sheet naming the agent and the wall",
+        "score_without_legend_agent": 0.411,
+        "score_without_legend_wall": 0.4619
+      },
+      "of": 139,
+      "residue_after_the_prior": {
+        "note": "an earlier draft said 30 and twelve; 30 was 139-109, a different quantity",
+        "of": 69,
+        "theory_items_left": 16,
+        "worlds_with_zero_residue": 14
+      },
+      "share": 0.784173,
+      "worlds_beating_bluffer_floor": 18,
+      "worlds_scoring_1.000": 12
+    },
+    "true_matrix": {
+      "items": 236,
+      "of": 4,
+      "question_types_portable_to_generated_worlds": 1,
+      "why": "three of four builders take no world argument; blockers recorded in V2 GAPS.md",
+      "worlds": 20
+    },
+    "verdict_classes": {
+      "generated_worlds_carrying_a_verdict_item": 0,
+      "reason": "largest generated world 2654 states vs LARGE_SPACE_THRESHOLD 1e12; one unsolvable world of twenty against nine needed"
+    }
+  },
+  "reverification": {
+    "artifacts_dirtied": 0,
+    "by": "RES-3",
+    "corrections_to_the_attacking_scripts": [
+      "c2_ablate.py:46 compares a 6dp-rounded fraction against an unrounded floor -> reports beats_floor 19; the published 18 (prior_sweep.py:100) is right",
+      "legend['floor'] is not load-bearing: removing it is bit-identical to baseline (0.8008, 12 perfect worlds)",
+      "flipcheck.py prints nothing as a script, flips one of the two strict xfails not both, and had no recorded invocation recipe"
+    ],
+    "exercised_as_a_pytest_plugin": [
+      "flipcheck.py (prints nothing as a script; transcripts flipcheck_control.txt / flipcheck_xpass.txt)"
+    ],
+    "line_endings": "every file listed here is LF on disk, as exam/.gitattributes ('* text eol=lf') requires. The first pass of this manifest hashed CRLF bytes for 8 files written by shell redirect on Windows -- and prior_sweep.json had been carrying a CRLF hash since the original run -- so a fresh checkout would have failed the manifest's own verification. Normalised and rehashed.",
+    "not_rerun": [
+      "race.py",
+      "race2.py",
+      "hammer.py (they write into the shared tracked exam/artifacts/variant_specs/ for minutes; their saved transcripts are quoted instead)",
+      "exam/tools/discrimination.py (the free/memorised/theory partition has only ever been computed by the tool that reports it -- the largest gap still owed)"
+    ],
+    "published_numbers_moved": 0,
+    "review_of_ADVERSARIAL.md": {
+      "all_fixed": true,
+      "blocking": 1,
+      "blocking_defect": "FINDINGS.md section 8 still called the leak fix 'a one-line change', the claim section 1 had retired; corrected to the measured 16 items across 4 worlds",
+      "defects_returned": 12,
+      "other_material_fixes": [
+        "residue stated as 30 -> 16; the fall is 69 -> 16 (30 = 139-109, frame-changing items, a different quantity)",
+        "claim 3's '41% survived' downgraded to 'not independently attacked' -- no script re-implements the partition",
+        "the section-2/section-3 double-count was named in FINDINGS s2 only; s3 now cross-references it",
+        "legend['floor'] finding was a misread of existing output, not a yield of the re-run -- relabelled",
+        "flipcheck recipe had no transcript; both now saved and hashed",
+        "'five' silence payments where the block below listed six"
+      ]
+    },
+    "scripts_rerun": [
+      "c1_leak.py",
+      "c1b_vacuity.py",
+      "c2_ablate.py",
+      "prior_sweep.py",
+      "c4_marker.py",
+      "v_recheck.py",
+      "flipcheck_race.py"
+    ],
+    "suite": "308 passed, 2 xfailed in 106.66s",
+    "utc": "2026-07-29T06:15:18Z",
+    "why": "V7 was released when RES-2's session died; RES-3 re-claimed it 2026-07-29T04:48:57Z and re-ran every adversarial script rather than quoting the first run"
+  },
+  "status": "complete",
+  "territory": "exam",
+  "tests": {
+    "added_this_run": 21,
+    "failed": 0,
+    "passed": 308,
+    "suite": "python -m pytest exam/tests -q",
+    "unexplained": "one earlier full run reported 11 failed / 297 passed in test_selftest.py; not reproduced in four subsequent runs; cause not established; recorded in RUN_STATE.md"
+  },
+  "utc": "2026-07-28T15:10:00Z",
+  "what": "Full-matrix exam stress: four question types over every world the world factory produces, one independent subagent per world. Deliverables are grader misjudgement by question type (calibrated with known-perfect and known-zero synthetic examinees), zero-discrimination items, and sensitivity/specificity reported separately for the three verdict types.",
+  "worktree": ".worktrees/v7-exam-stress-fanout"
+}

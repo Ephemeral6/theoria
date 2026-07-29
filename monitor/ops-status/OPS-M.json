@@ -1,7 +1,7 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-28T17:08:05Z",
- "cycle": 8,
- "state": "blocked",
- "note": "根因找到并实测：verify.sh 闸门一直由 WSL 的 Linux bash 执行（非 Git Bash），一行可修且已验证 rc=0；订正 cycle 7 的归因，我自己提的三个修法均被实测证伪。队列仍全堵 14 flag/14 分支，三个 agent 独立确认而无人有权修。已归档陈旧 flag a7。见 inbox 20260728T170640Z"
+ "utc": "2026-07-29T10:56:56Z",
+ "cycle": 13,
+ "state": "working",
+ "note": "s21 因 push rejected 被扣、我重试当场合入（连续两轮两例，均零修改）；hold 补丁仍未落地，我按裁判职责每轮手工重试该类。零鬼影。新报：S29 三条分支中两条同改 monitor/ci_merge.py，第四次重复派单，且这次撞在合并机器本身上"
 }

@@ -172,7 +172,7 @@
         "effect": {
           "type": "none"
         },
-        "frontier_size": 22,
+        "frontier_size": 23,
         "guard": [
           "!clear(strip(RIGHT))",
           "act==RIGHT"
@@ -239,7 +239,7 @@
         "effect": {
           "type": "vanish"
         },
-        "frontier_size": 32,
+        "frontier_size": 69,
         "guard": [
           "tcolor(DOWN)==2"
         ],
@@ -253,7 +253,7 @@
           "to": 3,
           "type": "recolor"
         },
-        "frontier_size": 32,
+        "frontier_size": 69,
         "guard": [
           "tcolor(DOWN)==2"
         ],
@@ -372,7 +372,7 @@
         "effect": {
           "type": "vanish"
         },
-        "frontier_size": 32,
+        "frontier_size": 69,
         "guard": [
           "tcolor(DOWN)==2"
         ],
@@ -448,7 +448,7 @@
         "track": "obj3"
       }
     ],
-    "vocabulary_size": 90
+    "vocabulary_size": 106
   },
   "probes": [
     {
@@ -589,7 +589,7 @@
       "action": "RIGHT",
       "at_transition": 2,
       "coverage": "1/1",
-      "entropy_bits": 0.976021,
+      "entropy_bits": 0.965636,
       "frontier": [
         [
           "!clear(strip(RIGHT))",
@@ -695,13 +695,18 @@
           "!at(4,2)",
           "act==RIGHT",
           "tcolor(DOWN)==1"
+        ],
+        [
+          "!faces(obj2,LEFT)",
+          "act==RIGHT",
+          "tcolor(DOWN)==1"
         ]
       ],
       "mover_anchor": [
         3,
         2
       ],
-      "n_hypotheses": 22,
+      "n_hypotheses": 23,
       "partition": {
         "fires": [
           "obj0_still_RIGHT_11",
@@ -725,6 +730,7 @@
           "obj0_still_RIGHT_2",
           "obj0_still_RIGHT_20",
           "obj0_still_RIGHT_21",
+          "obj0_still_RIGHT_22",
           "obj0_still_RIGHT_3",
           "obj0_still_RIGHT_4",
           "obj0_still_RIGHT_9"
@@ -736,15 +742,15 @@
     {
       "action": "DOWN",
       "construction": {
-        "direction": "LEFT",
+        "direction": "DOWN",
         "mover_anchor": [
-          1,
+          4,
           2
         ],
         "painted_color": 2
       },
       "coverage": "1/1",
-      "entropy_bits": 0.988699,
+      "entropy_bits": 0.999848,
       "frontier": [
         [
           "tcolor(DOWN)==2"
@@ -822,6 +828,54 @@
           "present(obj3)"
         ],
         [
+          "faces(obj2,DOWN)",
+          "present(obj1)"
+        ],
+        [
+          "faces(obj2,DOWN)",
+          "present(obj3)"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "count(2)>=1"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "count(4)>=1"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "count(4)>=2"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "count(2)>=1"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "count(4)>=1"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "count(4)>=2"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "!count(0)>=14"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "!count(0)>=15"
+        ],
+        [
+          "!count(0)>=14",
+          "!free(strip(LEFT))"
+        ],
+        [
+          "!count(0)>=15",
+          "!free(strip(LEFT))"
+        ],
+        [
           "color(obj1)==4",
           "tcolor(LEFT)==1"
         ],
@@ -866,17 +920,118 @@
           "color(obj3)==4"
         ],
         [
+          "color(obj1)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "color(obj2)==2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "color(obj3)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "count(2)>=1",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "count(4)>=1",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "count(4)>=2",
+          "tcolor(LEFT)==1"
+        ],
+        [
           "!color(obj2)==3",
           "at(3,1)"
         ],
         [
+          "!color(obj2)==3",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=14",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!count(0)>=15",
+          "tcolor(LEFT)==1"
+        ],
+        [
           "!tcolor(DOWN)==3",
           "at(3,1)"
+        ],
+        [
+          "!tcolor(DOWN)==3",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "count(2)>=1"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "count(4)>=1"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "count(4)>=2"
+        ],
+        [
+          "!count(0)>=14",
+          "!tcolor(LEFT)==0"
+        ],
+        [
+          "!count(0)>=15",
+          "!tcolor(LEFT)==0"
+        ],
+        [
+          "at(3,1)",
+          "count(2)>=1"
+        ],
+        [
+          "at(3,1)",
+          "count(4)>=1"
+        ],
+        [
+          "at(3,1)",
+          "count(4)>=2"
+        ],
+        [
+          "count(2)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "count(4)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "count(4)>=2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=14",
+          "at(3,1)"
+        ],
+        [
+          "!count(0)>=14",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=15",
+          "at(3,1)"
+        ],
+        [
+          "!count(0)>=15",
+          "faces(obj2,DOWN)"
         ]
       ],
-      "n_hypotheses": 32,
+      "n_hypotheses": 69,
       "partition": {
         "fires": [
+          "obj1_vanish_DOWN_0",
           "obj1_vanish_DOWN_1",
           "obj1_vanish_DOWN_10",
           "obj1_vanish_DOWN_11",
@@ -886,31 +1041,67 @@
           "obj1_vanish_DOWN_15",
           "obj1_vanish_DOWN_16",
           "obj1_vanish_DOWN_2",
+          "obj1_vanish_DOWN_21",
+          "obj1_vanish_DOWN_22",
           "obj1_vanish_DOWN_23",
           "obj1_vanish_DOWN_24",
           "obj1_vanish_DOWN_25",
           "obj1_vanish_DOWN_26",
+          "obj1_vanish_DOWN_27",
+          "obj1_vanish_DOWN_28",
+          "obj1_vanish_DOWN_29",
           "obj1_vanish_DOWN_3",
+          "obj1_vanish_DOWN_30",
+          "obj1_vanish_DOWN_35",
+          "obj1_vanish_DOWN_36",
+          "obj1_vanish_DOWN_37",
+          "obj1_vanish_DOWN_38",
           "obj1_vanish_DOWN_4",
+          "obj1_vanish_DOWN_54",
+          "obj1_vanish_DOWN_55",
+          "obj1_vanish_DOWN_56",
+          "obj1_vanish_DOWN_57",
+          "obj1_vanish_DOWN_58",
           "obj1_vanish_DOWN_7",
           "obj1_vanish_DOWN_8",
           "obj1_vanish_DOWN_9"
         ],
         "silent": [
-          "obj1_vanish_DOWN_0",
           "obj1_vanish_DOWN_17",
           "obj1_vanish_DOWN_18",
           "obj1_vanish_DOWN_19",
           "obj1_vanish_DOWN_20",
-          "obj1_vanish_DOWN_21",
-          "obj1_vanish_DOWN_22",
-          "obj1_vanish_DOWN_27",
-          "obj1_vanish_DOWN_28",
-          "obj1_vanish_DOWN_29",
-          "obj1_vanish_DOWN_30",
           "obj1_vanish_DOWN_31",
+          "obj1_vanish_DOWN_32",
+          "obj1_vanish_DOWN_33",
+          "obj1_vanish_DOWN_34",
+          "obj1_vanish_DOWN_39",
+          "obj1_vanish_DOWN_40",
+          "obj1_vanish_DOWN_41",
+          "obj1_vanish_DOWN_42",
+          "obj1_vanish_DOWN_43",
+          "obj1_vanish_DOWN_44",
+          "obj1_vanish_DOWN_45",
+          "obj1_vanish_DOWN_46",
+          "obj1_vanish_DOWN_47",
+          "obj1_vanish_DOWN_48",
+          "obj1_vanish_DOWN_49",
           "obj1_vanish_DOWN_5",
-          "obj1_vanish_DOWN_6"
+          "obj1_vanish_DOWN_50",
+          "obj1_vanish_DOWN_51",
+          "obj1_vanish_DOWN_52",
+          "obj1_vanish_DOWN_53",
+          "obj1_vanish_DOWN_59",
+          "obj1_vanish_DOWN_6",
+          "obj1_vanish_DOWN_60",
+          "obj1_vanish_DOWN_61",
+          "obj1_vanish_DOWN_62",
+          "obj1_vanish_DOWN_63",
+          "obj1_vanish_DOWN_64",
+          "obj1_vanish_DOWN_65",
+          "obj1_vanish_DOWN_66",
+          "obj1_vanish_DOWN_67",
+          "obj1_vanish_DOWN_68"
         ]
       },
       "rule": "obj1_vanish_DOWN",
@@ -920,15 +1111,15 @@
     {
       "action": "DOWN",
       "construction": {
-        "direction": "LEFT",
+        "direction": "DOWN",
         "mover_anchor": [
-          1,
+          4,
           2
         ],
         "painted_color": 2
       },
       "coverage": "1/1",
-      "entropy_bits": 0.988699,
+      "entropy_bits": 0.999848,
       "frontier": [
         [
           "tcolor(DOWN)==2"
@@ -1006,6 +1197,54 @@
           "present(obj3)"
         ],
         [
+          "faces(obj2,DOWN)",
+          "present(obj1)"
+        ],
+        [
+          "faces(obj2,DOWN)",
+          "present(obj3)"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "count(2)>=1"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "count(4)>=1"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "count(4)>=2"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "count(2)>=1"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "count(4)>=1"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "count(4)>=2"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "!count(0)>=14"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "!count(0)>=15"
+        ],
+        [
+          "!count(0)>=14",
+          "!free(strip(LEFT))"
+        ],
+        [
+          "!count(0)>=15",
+          "!free(strip(LEFT))"
+        ],
+        [
           "color(obj1)==4",
           "tcolor(LEFT)==1"
         ],
@@ -1050,17 +1289,118 @@
           "color(obj3)==4"
         ],
         [
+          "color(obj1)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "color(obj2)==2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "color(obj3)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "count(2)>=1",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "count(4)>=1",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "count(4)>=2",
+          "tcolor(LEFT)==1"
+        ],
+        [
           "!color(obj2)==3",
           "at(3,1)"
         ],
         [
+          "!color(obj2)==3",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=14",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!count(0)>=15",
+          "tcolor(LEFT)==1"
+        ],
+        [
           "!tcolor(DOWN)==3",
           "at(3,1)"
+        ],
+        [
+          "!tcolor(DOWN)==3",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "count(2)>=1"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "count(4)>=1"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "count(4)>=2"
+        ],
+        [
+          "!count(0)>=14",
+          "!tcolor(LEFT)==0"
+        ],
+        [
+          "!count(0)>=15",
+          "!tcolor(LEFT)==0"
+        ],
+        [
+          "at(3,1)",
+          "count(2)>=1"
+        ],
+        [
+          "at(3,1)",
+          "count(4)>=1"
+        ],
+        [
+          "at(3,1)",
+          "count(4)>=2"
+        ],
+        [
+          "count(2)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "count(4)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "count(4)>=2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=14",
+          "at(3,1)"
+        ],
+        [
+          "!count(0)>=14",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=15",
+          "at(3,1)"
+        ],
+        [
+          "!count(0)>=15",
+          "faces(obj2,DOWN)"
         ]
       ],
-      "n_hypotheses": 32,
+      "n_hypotheses": 69,
       "partition": {
         "fires": [
+          "obj2_recolor3_DOWN_0",
           "obj2_recolor3_DOWN_1",
           "obj2_recolor3_DOWN_10",
           "obj2_recolor3_DOWN_11",
@@ -1070,31 +1410,67 @@
           "obj2_recolor3_DOWN_15",
           "obj2_recolor3_DOWN_16",
           "obj2_recolor3_DOWN_2",
+          "obj2_recolor3_DOWN_21",
+          "obj2_recolor3_DOWN_22",
           "obj2_recolor3_DOWN_23",
           "obj2_recolor3_DOWN_24",
           "obj2_recolor3_DOWN_25",
           "obj2_recolor3_DOWN_26",
+          "obj2_recolor3_DOWN_27",
+          "obj2_recolor3_DOWN_28",
+          "obj2_recolor3_DOWN_29",
           "obj2_recolor3_DOWN_3",
+          "obj2_recolor3_DOWN_30",
+          "obj2_recolor3_DOWN_35",
+          "obj2_recolor3_DOWN_36",
+          "obj2_recolor3_DOWN_37",
+          "obj2_recolor3_DOWN_38",
           "obj2_recolor3_DOWN_4",
+          "obj2_recolor3_DOWN_54",
+          "obj2_recolor3_DOWN_55",
+          "obj2_recolor3_DOWN_56",
+          "obj2_recolor3_DOWN_57",
+          "obj2_recolor3_DOWN_58",
           "obj2_recolor3_DOWN_7",
           "obj2_recolor3_DOWN_8",
           "obj2_recolor3_DOWN_9"
         ],
         "silent": [
-          "obj2_recolor3_DOWN_0",
           "obj2_recolor3_DOWN_17",
           "obj2_recolor3_DOWN_18",
           "obj2_recolor3_DOWN_19",
           "obj2_recolor3_DOWN_20",
-          "obj2_recolor3_DOWN_21",
-          "obj2_recolor3_DOWN_22",
-          "obj2_recolor3_DOWN_27",
-          "obj2_recolor3_DOWN_28",
-          "obj2_recolor3_DOWN_29",
-          "obj2_recolor3_DOWN_30",
           "obj2_recolor3_DOWN_31",
+          "obj2_recolor3_DOWN_32",
+          "obj2_recolor3_DOWN_33",
+          "obj2_recolor3_DOWN_34",
+          "obj2_recolor3_DOWN_39",
+          "obj2_recolor3_DOWN_40",
+          "obj2_recolor3_DOWN_41",
+          "obj2_recolor3_DOWN_42",
+          "obj2_recolor3_DOWN_43",
+          "obj2_recolor3_DOWN_44",
+          "obj2_recolor3_DOWN_45",
+          "obj2_recolor3_DOWN_46",
+          "obj2_recolor3_DOWN_47",
+          "obj2_recolor3_DOWN_48",
+          "obj2_recolor3_DOWN_49",
           "obj2_recolor3_DOWN_5",
-          "obj2_recolor3_DOWN_6"
+          "obj2_recolor3_DOWN_50",
+          "obj2_recolor3_DOWN_51",
+          "obj2_recolor3_DOWN_52",
+          "obj2_recolor3_DOWN_53",
+          "obj2_recolor3_DOWN_59",
+          "obj2_recolor3_DOWN_6",
+          "obj2_recolor3_DOWN_60",
+          "obj2_recolor3_DOWN_61",
+          "obj2_recolor3_DOWN_62",
+          "obj2_recolor3_DOWN_63",
+          "obj2_recolor3_DOWN_64",
+          "obj2_recolor3_DOWN_65",
+          "obj2_recolor3_DOWN_66",
+          "obj2_recolor3_DOWN_67",
+          "obj2_recolor3_DOWN_68"
         ]
       },
       "rule": "obj2_recolor3_DOWN",
@@ -1104,15 +1480,15 @@
     {
       "action": "DOWN",
       "construction": {
-        "direction": "LEFT",
+        "direction": "DOWN",
         "mover_anchor": [
-          1,
+          4,
           2
         ],
         "painted_color": 2
       },
       "coverage": "1/1",
-      "entropy_bits": 0.988699,
+      "entropy_bits": 0.999848,
       "frontier": [
         [
           "tcolor(DOWN)==2"
@@ -1190,6 +1566,54 @@
           "present(obj3)"
         ],
         [
+          "faces(obj2,DOWN)",
+          "present(obj1)"
+        ],
+        [
+          "faces(obj2,DOWN)",
+          "present(obj3)"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "count(2)>=1"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "count(4)>=1"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "count(4)>=2"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "count(2)>=1"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "count(4)>=1"
+        ],
+        [
+          "!free(strip(LEFT))",
+          "count(4)>=2"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "!count(0)>=14"
+        ],
+        [
+          "!clear(strip(LEFT))",
+          "!count(0)>=15"
+        ],
+        [
+          "!count(0)>=14",
+          "!free(strip(LEFT))"
+        ],
+        [
+          "!count(0)>=15",
+          "!free(strip(LEFT))"
+        ],
+        [
           "color(obj1)==4",
           "tcolor(LEFT)==1"
         ],
@@ -1234,17 +1658,118 @@
           "color(obj3)==4"
         ],
         [
+          "color(obj1)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "color(obj2)==2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "color(obj3)==4",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "count(2)>=1",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "count(4)>=1",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "count(4)>=2",
+          "tcolor(LEFT)==1"
+        ],
+        [
           "!color(obj2)==3",
           "at(3,1)"
         ],
         [
+          "!color(obj2)==3",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=14",
+          "tcolor(LEFT)==1"
+        ],
+        [
+          "!count(0)>=15",
+          "tcolor(LEFT)==1"
+        ],
+        [
           "!tcolor(DOWN)==3",
           "at(3,1)"
+        ],
+        [
+          "!tcolor(DOWN)==3",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "count(2)>=1"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "count(4)>=1"
+        ],
+        [
+          "!tcolor(LEFT)==0",
+          "count(4)>=2"
+        ],
+        [
+          "!count(0)>=14",
+          "!tcolor(LEFT)==0"
+        ],
+        [
+          "!count(0)>=15",
+          "!tcolor(LEFT)==0"
+        ],
+        [
+          "at(3,1)",
+          "count(2)>=1"
+        ],
+        [
+          "at(3,1)",
+          "count(4)>=1"
+        ],
+        [
+          "at(3,1)",
+          "count(4)>=2"
+        ],
+        [
+          "count(2)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "count(4)>=1",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "count(4)>=2",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=14",
+          "at(3,1)"
+        ],
+        [
+          "!count(0)>=14",
+          "faces(obj2,DOWN)"
+        ],
+        [
+          "!count(0)>=15",
+          "at(3,1)"
+        ],
+        [
+          "!count(0)>=15",
+          "faces(obj2,DOWN)"
         ]
       ],
-      "n_hypotheses": 32,
+      "n_hypotheses": 69,
       "partition": {
         "fires": [
+          "obj3_vanish_DOWN_0",
           "obj3_vanish_DOWN_1",
           "obj3_vanish_DOWN_10",
           "obj3_vanish_DOWN_11",
@@ -1254,31 +1779,67 @@
           "obj3_vanish_DOWN_15",
           "obj3_vanish_DOWN_16",
           "obj3_vanish_DOWN_2",
+          "obj3_vanish_DOWN_21",
+          "obj3_vanish_DOWN_22",
           "obj3_vanish_DOWN_23",
           "obj3_vanish_DOWN_24",
           "obj3_vanish_DOWN_25",
           "obj3_vanish_DOWN_26",
+          "obj3_vanish_DOWN_27",
+          "obj3_vanish_DOWN_28",
+          "obj3_vanish_DOWN_29",
           "obj3_vanish_DOWN_3",
+          "obj3_vanish_DOWN_30",
+          "obj3_vanish_DOWN_35",
+          "obj3_vanish_DOWN_36",
+          "obj3_vanish_DOWN_37",
+          "obj3_vanish_DOWN_38",
           "obj3_vanish_DOWN_4",
+          "obj3_vanish_DOWN_54",
+          "obj3_vanish_DOWN_55",
+          "obj3_vanish_DOWN_56",
+          "obj3_vanish_DOWN_57",
+          "obj3_vanish_DOWN_58",
           "obj3_vanish_DOWN_7",
           "obj3_vanish_DOWN_8",
           "obj3_vanish_DOWN_9"
         ],
         "silent": [
-          "obj3_vanish_DOWN_0",
           "obj3_vanish_DOWN_17",
           "obj3_vanish_DOWN_18",
           "obj3_vanish_DOWN_19",
           "obj3_vanish_DOWN_20",
-          "obj3_vanish_DOWN_21",
-          "obj3_vanish_DOWN_22",
-          "obj3_vanish_DOWN_27",
-          "obj3_vanish_DOWN_28",
-          "obj3_vanish_DOWN_29",
-          "obj3_vanish_DOWN_30",
           "obj3_vanish_DOWN_31",
+          "obj3_vanish_DOWN_32",
+          "obj3_vanish_DOWN_33",
+          "obj3_vanish_DOWN_34",
+          "obj3_vanish_DOWN_39",
+          "obj3_vanish_DOWN_40",
+          "obj3_vanish_DOWN_41",
+          "obj3_vanish_DOWN_42",
+          "obj3_vanish_DOWN_43",
+          "obj3_vanish_DOWN_44",
+          "obj3_vanish_DOWN_45",
+          "obj3_vanish_DOWN_46",
+          "obj3_vanish_DOWN_47",
+          "obj3_vanish_DOWN_48",
+          "obj3_vanish_DOWN_49",
           "obj3_vanish_DOWN_5",
-          "obj3_vanish_DOWN_6"
+          "obj3_vanish_DOWN_50",
+          "obj3_vanish_DOWN_51",
+          "obj3_vanish_DOWN_52",
+          "obj3_vanish_DOWN_53",
+          "obj3_vanish_DOWN_59",
+          "obj3_vanish_DOWN_6",
+          "obj3_vanish_DOWN_60",
+          "obj3_vanish_DOWN_61",
+          "obj3_vanish_DOWN_62",
+          "obj3_vanish_DOWN_63",
+          "obj3_vanish_DOWN_64",
+          "obj3_vanish_DOWN_65",
+          "obj3_vanish_DOWN_66",
+          "obj3_vanish_DOWN_67",
+          "obj3_vanish_DOWN_68"
         ]
       },
       "rule": "obj3_vanish_DOWN",
@@ -1300,6 +1861,31 @@
         "baseline_bits": 690,
         "chosen": true,
         "events": 24,
+        "identity_repair": {
+          "applied": false,
+          "delta_bits": 0,
+          "n_swaps": 0,
+          "near_misses": [
+            {
+              "eaten": "obj2",
+              "mover": "obj1",
+              "t": 4,
+              "why": "recolour is not this track's whole body in the vanishing track's colour"
+            },
+            {
+              "eaten": "obj2",
+              "mover": "obj3",
+              "t": 4,
+              "why": "recolour is not this track's whole body in the vanishing track's colour"
+            }
+          ],
+          "occlusion_test_ran": true,
+          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape,not_occlusion)",
+          "priced_by": "not script length -- see module docstring",
+          "script_bits_after": 534,
+          "script_bits_before": 534,
+          "swaps": []
+        },
         "operator": "connected_components(4)+uniform_color",
         "ratio": 0.7739,
         "reidentification": {
@@ -1319,8 +1905,20 @@
         "baseline_bits": 690,
         "chosen": false,
         "events": 45,
+        "identity_repair": {
+          "applied": false,
+          "delta_bits": 0,
+          "n_swaps": 0,
+          "near_misses": [],
+          "occlusion_test_ran": true,
+          "operator": "identity_swap_repair(adjacent,full_recolor,same_shape,not_occlusion)",
+          "priced_by": "not script length -- see module docstring",
+          "script_bits_after": 872,
+          "script_bits_before": 872,
+          "swaps": []
+        },
         "operator": "connected_components(4)",
-        "ratio": 1.0841,
+        "ratio": 1.0275,
         "reidentification": {
           "applied": true,
           "merged": [
@@ -1378,13 +1976,13 @@
             }
           ],
           "operator": "template_match+disjoint_lifetime",
-          "saved_bits": 124,
-          "script_bits_after": 748,
+          "saved_bits": 163,
+          "script_bits_after": 709,
           "script_bits_before": 872,
           "tracks_after": 7,
           "tracks_before": 20
         },
-        "script_bits": 748,
+        "script_bits": 709,
         "tracks": 7
       }
     ],

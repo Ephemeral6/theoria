@@ -14,6 +14,7 @@ Read-only with respect to the tracks: this writes only inside `monitor/`.
 """
 
 import argparse
+import calendar
 import html
 import json
 import os
@@ -196,21 +197,50 @@ def probe_a0_state():
                          ", ".join(missing) or "无")}
 
 
+# The two tracks meet at exactly one place and name it the same way on both
+# sides: `engine-rig/interop/certificate_export.py:95` stamps the schema, and
+# `theory-compiler/src/theory_compiler/certificate.py:38` pins it to read the
+# file. Either token is a real handshake; the bare word "certificate" is not.
+A1_SCHEMA = "lp_potential/pagoda_certificate@"
+A1_INTEROP_DIR = "interop/certificates"
+
+
 def probe_a1_state():
     bridge = exists("engine-rig/interop/certificate_export.py")
+    # The handshake is the schema id both sides name -- `certificate_export.py`
+    # stamps it, and a consumer has to know it to read the file. The old test
+    # was the bare word "certificate" anywhere under theory-compiler, which the
+    # Lean proofs satisfy in prose comments ("the certificate's pattern: ...").
+    # Once the criterion decides something, a token that a comment can supply is
+    # not a criterion; replacing a gate that never opens with one that opens on
+    # a word is the worse trade of the two.
     consumed = False
     tc = rel("theory-compiler")
     for base, dirs, files in os.walk(tc):
         dirs[:] = [d for d in dirs if d not in SKIP_DIRS]
+        # `runs/` holds artefacts of past runs, not the track's source. A
+        # certificate quoted in a run log is evidence something happened once,
+        # not evidence the bridge is wired up now.
+        if "runs" in os.path.relpath(base, tc).split(os.sep):
+            continue
         for name in files:
             if name.endswith((".py", ".lean")):
                 try:
-                    if "certificate" in open(os.path.join(base, name),
-                                             encoding="utf-8", errors="ignore").read():
-                        consumed = True
+                    text = open(os.path.join(base, name),
+                                encoding="utf-8", errors="ignore").read()
                 except Exception:
-                    pass
-    return {"status": "partial",
+                    continue
+                if A1_SCHEMA in text or A1_INTEROP_DIR in text:
+                    consumed = True
+    # Both halves were computed, formatted into `detail`, and then discarded --
+    # the return was an unconditional `partial`, so this gate could neither open
+    # nor close no matter what the tree looked like. A gate that cannot close is
+    # a gate that gets stepped over, and this one was: Theoria.md 305 makes an
+    # all-green Phase 1 the precondition for spending game money, and money was
+    # spent across it at 9/16. The criterion now decides.
+    status = "green" if (bridge and consumed) else (
+        "partial" if (bridge or consumed) else "risk")
+    return {"status": status,
             "detail": "engine-rig 侧证书导出：%s；theory-compiler 侧消费：%s。"
                       "两半接通前，A1 仍是彩排而非验收。"
                       % ("已建" if bridge else "未建", "已接" if consumed else "**未接**")}
@@ -546,6 +576,120 @@ def probe_spec_freshness():
                       % (n, m, "risk" if n >= 40 else "partial 档")}
 
 
+#: Below this the machine is one pytest away from failing a merge for a reason
+#: that has nothing to do with the branch.  Set from the observed event: at
+#: 9.1 GB free, a0-spike's gate died with `OSError: [Errno 28] No space left on
+#: device` and the flag read "verify gate red in a0-spike".
+DISK_RISK_GB = 12.0
+DISK_PARTIAL_GB = 25.0
+
+
+def probe_disk_headroom():
+    """磁盘余量与 worktree 存量 —— 资源耗尽会伪装成别人的缺陷。
+
+    2026-07-29：115 个 worktree（71 个早已合并）把磁盘吃到 99%，
+    第一个症状是 a0-spike 的闸门报红 `No space left on device`，
+    合并日志上写的是「verify gate red in a0-spike」——**仪器怪罪了被测对象**。
+    没有量表的资源，耗尽时总是在别处报错。
+    """
+    import shutil as _shutil
+    try:
+        total, _used, free = _shutil.disk_usage(ROOT)
+    except OSError as exc:
+        return {"status": "risk", "detail": "读不到磁盘用量：%s" % exc}
+    free_gb, total_gb = free / (1024 ** 3), total / (1024 ** 3)
+
+    wt = 0
+    try:
+        out = subprocess.run(["git", "worktree", "list", "--porcelain"],
+                             cwd=ROOT, capture_output=True, text=True,
+                             encoding="utf-8", errors="replace")
+        wt = sum(1 for l in out.stdout.splitlines() if l.startswith("worktree "))
+    except Exception:
+        wt = -1
+
+    tail = ("%d 个 worktree 在册；`python monitor/reap_worktrees.py` 看哪些已完工"
+            % wt) if wt >= 0 else "worktree 数量读不到"
+    if free_gb < DISK_RISK_GB:
+        return {"status": "risk",
+                "detail": "**磁盘仅剩 %.1f GB / %.0f GB**——这个水位上任何一次"
+                          "合并都可能因为跑不动而报成某个领地的闸门红。%s"
+                          % (free_gb, total_gb, tail)}
+    if free_gb < DISK_PARTIAL_GB:
+        return {"status": "partial",
+                "detail": "磁盘剩 %.1f GB / %.0f GB，接近会开始伪装成闸门失败的"
+                          "水位。%s" % (free_gb, total_gb, tail)}
+    return {"status": "green",
+            "detail": "磁盘剩 %.1f GB / %.0f GB；%s" % (free_gb, total_gb, tail)}
+
+
+def probe_clock_sanity():
+    """心跳自报的 utc 不得晚于机器当前 UTC —— 时钟不可能超前。
+
+    存活判断用的是文件 mtime（agent 伪造不了），所以掉线检测本身是可靠的。
+    但心跳里那个**手打的** `utc` 字段从来没有任何东西校验过，于是它可以随便漂：
+    2026-07-28T15:47Z 那一刻，RES-1 的心跳写着 20:55Z，RES-2/3/4 写着 16:0x–16:4xZ
+    ——全都晚于当时仓库里最新的提交，也就是这些时刻还没到。
+
+    危险在方向：一个只会向前跑的自报时间，让**掉线的会话看起来比实际更新鲜**。
+    这是纯算术，没有任何借口不检查。
+    """
+    import glob as _glob
+    now = time.time()
+    ahead, drifted, unreadable = [], [], []
+    for path in sorted(_glob.glob(rel("monitor", "ops-status", "*.json"))):
+        name = os.path.basename(path)[:-5]
+        try:
+            data = json.load(open(path, encoding="utf-8"))
+        except Exception as exc:
+            unreadable.append("%s（%s）" % (name, str(exc)[:40]))
+            continue
+        stamp = data.get("utc")
+        if not isinstance(stamp, str):
+            unreadable.append("%s（没有 utc 字段）" % name)
+            continue
+        try:
+            claimed = calendar.timegm(time.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ"))
+        except ValueError:
+            unreadable.append("%s（utc 不是 ISO8601Z：%r）" % (name, stamp[:30]))
+            continue
+        # 60s of slack: writing the stamp and closing the file are not atomic.
+        if claimed > now + 60:
+            ahead.append("%s 自报 %s，超前 %.0f 分钟"
+                         % (name, stamp, (claimed - now) / 60))
+            continue
+        mtime = os.path.getmtime(path)
+        if abs(claimed - mtime) > 3600:
+            drifted.append("%s 自报 %s，与文件 mtime 差 %.0f 分钟"
+                           % (name, stamp, abs(claimed - mtime) / 60))
+    if ahead:
+        return {"status": "risk",
+                "detail": "**%d 份心跳自报的时间还没到**：%s。时钟不可能超前，"
+                          "所以这些是手打的；危险在方向——只会向前跑的自报时间"
+                          "让掉线看起来比实际新鲜。取值请用 "
+                          "`date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ`。"
+                          % (len(ahead), "；".join(ahead[:4]))}
+    if unreadable:
+        return {"status": "risk",
+                "detail": "**%d 份心跳的 utc 读不出来**：%s。读不出不等于没问题。"
+                          % (len(unreadable), "；".join(unreadable[:4]))}
+    if drifted:
+        return {"status": "partial",
+                "detail": "%d 份心跳自报时间与文件 mtime 相差超过一小时：%s。"
+                          % (len(drifted), "；".join(drifted[:4]))}
+    return {"status": "green",
+            "detail": "心跳自报时间全部不晚于机器 UTC，且与文件 mtime 一致。"}
+
+
+def _merge_queue_probe():
+    """合并队列 —— 二十一个探针里没有一个读过 merge.log（S25）。
+
+    五条已交付分支自 2026-07-28 15:22 起每十分钟被重新 FLAG 一次、堵了十小时，
+    而盘面上完全看不见：合并失败**不产生任何人会看的信号**。
+    """
+    import mergequeue
+    return mergequeue.probe()
+
 def probe_verify_gates():
     """收工闸门：**「声称有却没有」与「本来就没有」是两回事**，分开报。
 
@@ -681,29 +825,63 @@ def _bus_probe():
             "detail": "%d 个会话在线，指令全部已读并回执。" % seen_ok}
 
 
+def _parse_utc(stamp):
+    """`2026-07-29T07:45:00Z` -> epoch seconds, or None if it is not that.
+
+    None rather than an exception: a malformed `wake_at` must fall back to the
+    old staleness rule, not take the probe down. A liveness check that dies on
+    bad input reports nothing about anybody.
+    """
+    try:
+        return calendar.timegm(time.strptime(str(stamp), "%Y-%m-%dT%H:%M:%SZ"))
+    except Exception:
+        return None
+
+
 def _self_driving():
     """常驻研究员是否在自转 —— 用户不该需要触发它们。
 
     判据是心跳的推进：cycle 在涨、note 在变、age 不超过一个循环周期。
     停在那里等人的会话，心跳会定格——这正是用户今天观察到的现象。"""
     import time as _t
-    rows = []
+    rows, bad = [], []
     for rid in ("RES-1", "RES-2", "RES-3", "RES-4"):
         path = "monitor/ops-status/%s.json" % rid
         if not exists(path):
-            rows.append("%s 未启动" % rid)
+            # Was `continue` with the verdict decided by a substring search over
+            # the display strings -- so a researcher who never started at all
+            # left no "疑似停下" anywhere and the probe reported green. Never
+            # started and running fine were the same colour.
+            rows.append("%s 未启动（无心跳文件）" % rid)
+            bad.append(rid)
             continue
         d = read_json(path, {}) or {}
         age = int((_t.time() - os.path.getmtime(rel(path))) / 60)
+        # S19: asleep and closed look identical from outside -- a timestamp has
+        # no power to tell them apart, and OPS-R sleeping 12 hours was read as
+        # dropped. A session that plans to sleep says when it will be back, and
+        # the two states stop sharing a signature: before `wake_at` a silence is
+        # scheduled; after it, the silence is the session failing to keep its
+        # own appointment, which is a louder fact than merely being stale.
+        wake_at = d.get("wake_at")
+        due = _parse_utc(wake_at) if wake_at else None
         stalled = age > 45          # 一轮活再长也该在 45 分钟内写一次心跳
+        if due is not None and _t.time() < due:
+            state = "按计划睡到 %s" % wake_at
+        elif due is not None and stalled:
+            state = "**说好 %s 醒，没醒**" % wake_at
+            bad.append(rid)
+        elif stalled:
+            state = "**疑似停下等人**"
+            bad.append(rid)
+        else:
+            state = ""
         rows.append("%s 第%s轮 %s（%d 分钟前）%s"
-                    % (rid, d.get("cycle"), d.get("state"), age,
-                       "**疑似停下等人**" if stalled else ""))
-    stalled_any = any("疑似停下" in r for r in rows)
-    return {"status": "risk" if stalled_any else "green",
+                    % (rid, d.get("cycle"), d.get("state"), age, state))
+    return {"status": "risk" if bad else "green",
             "detail": "； ".join(rows) +
-                      ("　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。"
-                       if stalled_any else "")}
+                      ("　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。（%s）"
+                       % "、".join(bad) if bad else "")}
 
 
 def _offline_done():
@@ -789,7 +967,39 @@ def probe_needs_human():
                      for r, n, w in dead]}
 
 
+def probe_standing():
+    """常驻研究员的例行程序还在跳吗，上一跳做了什么决定。
+
+    这条探针的存在本身是个教训：`standing.py` 起会话的判断全在磁盘上，
+    而一个没人看的自动机制与一个坏掉的自动机制，在页面上长得一模一样。"""
+    log_path = rel("monitor", "standing.log")
+    task = "TheoriaStanding"
+    out = subprocess.run(["schtasks", "/Query", "/TN", task, "/FO", "LIST"],
+                         capture_output=True, text=True, encoding="utf-8",
+                         errors="replace")
+    registered = out.returncode == 0
+    if not exists("monitor/standing.log"):
+        return {"status": "risk" if not registered else "partial",
+                "detail": "例行任务 %s；**还没有跳过一次**（standing.log 不存在）。"
+                          % ("已注册" if registered else "**未注册**")}
+    lines = [l.strip() for l in
+             open(log_path, encoding="utf-8", errors="replace").read()
+             .splitlines() if l.strip()]
+    age = int((time.time() - os.path.getmtime(log_path)) / 60)
+    starts = [l for l in lines if " START " in l]
+    tail = lines[-4:]
+    stale = age > 40          # 周期 15 分钟，跳过两次就是坏了
+    return {"status": ("risk" if (stale or not registered) else "green"),
+            "detail": "例行任务 %s，上一跳 %d 分钟前；累计起过 %d 次常驻会话。"
+                      "最近：%s%s"
+                      % ("已注册" if registered else "**未注册**", age,
+                         len(starts), "；".join(t.split(" ", 1)[-1][:70]
+                                                for t in tail),
+                         "　→ **超过两个周期没跳，例行已停**" if stale else "")}
+
+
 PROBES = {
+    "standing": probe_standing,
     "credential_hygiene": probe_credential_hygiene,
     "needs_human": probe_needs_human,
     "offline_done": lambda: _offline_done(),
@@ -799,6 +1009,9 @@ PROBES = {
     "supply": lambda: _supply(),
     "spec_freshness": probe_spec_freshness,
     "verify_gates": probe_verify_gates,
+    "disk_headroom": probe_disk_headroom,
+    "clock_sanity": probe_clock_sanity,
+    "merge_queue": _merge_queue_probe,
     "scheduled_tasks": probe_scheduled_tasks,
     "append_only": probe_append_only,
     "ops_duty": probe_ops_duty,
@@ -1823,28 +2036,78 @@ footer{margin-top:50px;padding-top:18px;border-top:1px solid var(--line);
 
 # ---------------------------------------------------------------- main
 
+# How good a verdict is, worst first. Only used to tell an upgrade from a
+# downgrade -- nothing here ranks `unprobed`, which is not a verdict.
+_VERDICT_RANK = {"risk": 0, "missing": 1, "amber": 2, "partial": 3, "green": 4}
+
+
+def _reconcile(item, probe_result, overrides):
+    """Combine a hand-written status with its probe's, and record the disagreement.
+
+    The old rule was `probe wins unless the hand-written value is risk`, applied
+    silently. That let a probe covering *part* of an item promote the whole item:
+    `p1-seal-test` is the conjunction "no credential inside the arm" AND "egress
+    that bypasses the two proxies must fail", its hand-written status is
+    `partial` with a note saying the red-team surface is unverified, and
+    `credential_hygiene` -- which never attempts an egress bypass -- returned
+    green and won. That is a green cell on the board for a test nobody ran.
+
+    So: a probe may always **downgrade** (evidence of a problem beats optimism),
+    but it may only **upgrade** when it covers the whole item. Partial coverage
+    is declared per item by `probe_scope: "partial"`, because only the item's
+    author knows what the probe left out.
+
+    Either way the disagreement is recorded rather than resolved in silence --
+    the old override left no trace that a hand-written verdict had been replaced.
+    """
+    hand, probed = item["status"], probe_result["status"]
+    if hand == "risk":
+        keep, why = hand, "hand-written risk is never overridden by a probe"
+    elif _VERDICT_RANK.get(probed, 9) < _VERDICT_RANK.get(hand, 9):
+        keep, why = probed, "probe downgraded"
+    elif item.get("probe_scope") == "partial":
+        keep, why = hand, ("probe covers only part of this item, so it may not "
+                           "upgrade it")
+    else:
+        keep, why = probed, "probe upgraded"
+    if keep != probed or hand != probed:
+        overrides.append({"item": item["id"], "probe": item["probe"],
+                          "hand": hand, "probe_said": probed,
+                          "kept": keep, "why": why})
+    return keep
+
+
 def build(with_tests=False, out_dir=None):
     metrics = collect_metrics(with_tests)
 
     probe_results = {name: fn() for name, fn in PROBES.items()}
 
+
     phases = []
-    p1_green = p1_total = 0
+    p1_green = p1_total = p1_unprobed = 0
+    overrides = []
     for ph in spec.PHASES:
         items = []
         for it in ph["items"]:
             st, note = it["status"], it["note"]
-            if it.get("probe") and it["probe"] in probe_results:
+            probed = bool(it.get("probe") and it["probe"] in probe_results)
+            if probed:
                 pr = probe_results[it["probe"]]
-                st = pr["status"] if it["status"] not in ("risk",) else it["status"]
+                st = _reconcile(it, pr, overrides)
                 note = note + "  〔本次扫描：" + pr["detail"] + "〕"
-            items.append(dict(it, _status=st, _note=note))
+            else:
+                # S26 item 3: an item nothing checks must say so. Left silent,
+                # a hand-written `green` with no probe behind it is
+                # indistinguishable on the board from one a machine confirmed.
+                note = note + "  〔无探针：本项无任何机器检查，状态为人工断言〕"
+            items.append(dict(it, _status=st, _note=note, _probed=probed))
         counts = {}
         for i in items:
             counts[i["_status"]] = counts.get(i["_status"], 0) + 1
         if ph["id"] == "p1":
             p1_total = len(items)
             p1_green = counts.get("green", 0)
+            p1_unprobed = sum(1 for i in items if not i["_probed"])
         phases.append(dict(ph, items=items, _counts=counts))
 
     def counts_of(items, key="status"):
@@ -1869,6 +2132,13 @@ def build(with_tests=False, out_dir=None):
                            key=lambda f: ["blocking", "high", "medium", "low",
                                           "info"].index(f["severity"])),
         "p1_green": p1_green, "p1_total": p1_total,
+        # S26: the headline was one number over a list length, with no
+        # record of which items a machine had actually checked. 11 of the
+        # 16 have no probe at all, and several of those are hand-written
+        # green -- indistinguishable on the board from a confirmed one.
+        "p1_unprobed": p1_unprobed,
+        "verdict_overrides": overrides,
+
         "eng_green": sum(1 for e in spec.ENGINES if e["status"] == "green"),
         "con_green": sum(1 for c in spec.CONSTRAINTS if c["status"] == "green"),
         "blocking_findings": sum(1 for f in spec.FINDINGS if f["severity"] == "blocking"),
@@ -1936,6 +2206,12 @@ def main():
         build.refresh = max(args.watch, 15)
     while True:
         state = build(args.tests)
+        if state["p1_unprobed"]:
+            print("    Phase 1: %d/%d 项无任何机器检查，其状态是人工断言"
+                  % (state["p1_unprobed"], state["p1_total"]))
+        for o in state["verdict_overrides"]:
+            print("    裁决分歧 %s：手写 %s / 探针 %s → 取 %s（%s）"
+                  % (o["item"], o["hand"], o["probe_said"], o["kept"], o["why"]))
         print("[%s] monitor/index.html written — Phase 1: %d/%d green"
               % (state["generated_at"], state["p1_green"], state["p1_total"]))
         if not args.watch:

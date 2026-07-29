@@ -57,12 +57,12 @@ said plainly rather than left implicit.
 |---|---|---|---|
 | 7 | §5.3 — "diff the files and the deletion is the whole diff" is false | **W** | header 13 → 45 lines, all coverage annotations rewritten, `events:` loses `jumped`, `laws:` swaps a theorem. Delete the sentence or state what else moved |
 | 8 | §3.3 — the "controlled contrast" changes more than one variable, and the abstract says so while §3.3 denies it | **W** | 7 vs 21 rules, 59 vs 57 states, 236 vs 228 pairs, Button vs Switch. The body is now honest; the abstract is not. **Writing closes the contradiction; it does not make the contrast controlled** — a genuinely single-variable A0/A0′ pair would be an `X`, and is not proposed |
-| 9 | §3.2 vs §11.2 — `zero_space` described two incompatible ways | **W** | empirical null space over observed transitions vs symbolically computed Petri invariants. It reads **data, not rules**. Fixed on the §11 side by P7; the §3.2 side still needs a matching pass |
+| 9 | §3.2 vs §12.2 — `zero_space` described two incompatible ways | **W** | empirical null space over observed transitions vs symbolically computed Petri invariants. It reads **data, not rules**. Fixed on the §11 side by P7; the §3.2 side still needs a matching pass |
 | 10 | §4 — "independently developed track" and "independent adversarial review" oversell the setup | **W** | two sessions on one repo sharing one `CLAUDE.md`. Defence in depth, not independent replication. Say that |
 | 11 | §7.3 / §7.5 — two "findings" entailed by their definitions | **W** | E5 is a price list by construction; the K4/K2 tension is partly definitional with `0.000` quoted to three decimals over **n = 3**. The abstract should carry the n. §7 already separates "found by running the instrument" from "deducible without data" — keep that distinction through the v2 rewrite |
-| 12 | §10.3 — the Fast Downward paragraph implies A0/A0′ results ran on FD; they did not | **W** | |
+| 12 | §11.3 — the Fast Downward paragraph implies A0/A0′ results ran on FD; they did not | **W** | |
 | 13 | reproducibility — `CITECHECK.md` does not exist | — | **struck**: it exists |
-| 14 | novelty — where the paper is re-illustrating, and where the related work is missing | **W** | **this is P7's own deliverable.** Five uncited priors: Angluin's L\* reset assumption; FSM conformance testing (Chow, Vasilevskii); version spaces (Mitchell); information-gain experiment design; specification validity (De Millo–Lipton–Perlis). The §11 rewrite fills them. The other half of the issue — "prediction perfect, understanding broken is setup, not finding" and "this is engineering, not a result" — is a **re-scoping of the abstract**, still open |
+| 14 | novelty — where the paper is re-illustrating, and where the related work is missing | **W** | **this is P7's own deliverable.** Five uncited priors: Angluin's L\* reset assumption; FSM conformance testing (Chow, Vasilevskii); version spaces (Mitchell); information-gain experiment design; specification validity (De Millo–Lipton–Perlis). The §12 rewrite fills them. The other half of the issue — "prediction perfect, understanding broken is setup, not finding" and "this is engineering, not a result" — is a **re-scoping of the abstract**, still open |
 | 15 | §7.6 — a Phase 4 conclusion drawn in a Phase 1 paper | **W** | soften "C2's evidence weakens by however much of the effect capability explains" to "a confound to separate before Phase 4 freezes". Handled in the v2 rewrite of §7 |
 
 ## C · The "Numbers checked" table — every non-`match` verdict
@@ -104,7 +104,7 @@ where the file says "M4 and M5" · §3.3 labels the explorer "exhaustive" one ro
 above quoting 99 % coverage · §3.3 renders 233/236 as "99 %" and "98.73 %" one
 line apart · §3.5's "the other track" has no antecedent · §2.2 omits
 `deadlock_carver` · §3.5's a0-spike corroboration is about reachability, not
-reversibility · §10.1 cites the ARC determinism precheck without putting 9/9, 3/3,
+reversibility · §11.1 cites the ARC determinism precheck without putting 9/9, 3/3,
 9/9, 9/9 in the sentence · the abstract drops "unplanned" from the Lean catch ·
 typography, mixed `·` and `—`, 重证 glossed two ways.
 

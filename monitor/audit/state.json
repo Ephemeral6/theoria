@@ -1,17 +1,17 @@
 {
-  "cycle": 25,
-  "utc": "2026-07-28T23:21Z",
-  "last_audited_commit": "2c067e2",
-  "range_this_cycle": "cd92cc9..2c067e2",
+  "cycle": 35,
+  "utc": "2026-07-29T10:06Z",
+  "last_audited_commit": "de90ba90",
+  "range_this_cycle": "43b29a5..de90ba90 (34 commits, 102 files)",
   "mode": "incremental",
   "channel": "总线：周期开头 bus.py read OPS-A。本轮无新消息，已 say 一条（合并队列停摆）",
   "covered": {
-    "闭环": "verify-lab 已在 master（cycle 20 解除）；unknown territory 6→0（911ec8e）；阻塞 19→13，merge conflict 9 为最大项。",
-    "流程漂移（新）": "55 个 run 目录中 6 个 UTC 戳在未来（最远 18.7h），V15/V17 的 MANIFEST.utc 抄了同一假值。戳全是整点/一刻钟，形状像编的而非读错时区。与 cycle 10 的「9 份缺 utc」并案：同一字段两种坏法。",
-    "纪律": "红线复核干净。"
+    "HELD 生产验证（用户点名）": "53 条 HELD，最近 09:58:51Z。前后各 6 小时：改动前 FLAG 462/29 分支/HELD 0/MERGED 35；改动后 FLAG 6/5 分支/HELD 53/MERGED 22。FLAG 行 462→6 约 77 倍。逐 flag 文件比对：14 个 tip 未变（扣得对），0 个 tip 已变仍卡着——hold 能松开在生产上验到了。限定：MERGED 35→22，我认为是积压清完而非 hold 所致，但分不干净，如实记。",
+    "监控自身漂移（我的责任）": "a7-envelope-finish 回并 master（fec3f106/98b89780）使 master 一等父路径拐进该分支，64157c1 与 87a1e63 双双离开 first-parent（仍 reachable from master），计数 3→1，probe_append_only 转绿而两条越线一条未修。**--first-parent 是我 cycle 15 力主的，我用它否掉了监控原本的 SHA 豁免表——那个方向才是对的。**",
+    "纪律": "区间 102 文件，封存 ID 仅 PARTNER_SYNC 污染登记，密钥零命中，battery/PREDICTIONS.md +95 纯追加。"
   },
   "reports_this_cycle": [
-    "DRIFT-20260728T2320Z-six-runs-are-dated-in-the-future.md"
+    "DRIFT-20260729T1006Z-first-parent-lost-two-adjudicated-crossings.md"
   ],
   "attribution_note": "合并队列停摆由 OPS-M（0a67080）先发现并根因定位，OPS-B（1176d3a）也提过『不会变的失败被无限重试』。本轮报告明确不重复它们的诊断，只补两件：重试规模的量化，与权限图上的死结拓扑。跨会话发现要点名归属，别把别人的诊断算成自己的。",
   "pending_on_monitor": [
@@ -33,7 +33,9 @@
   "false_positives_i_caught_myself": [
     "proxy/verify_spend.sh『无失败路径』——实为 fail=1 累积 + 末行 exit $fail。别再报。",
     "总线消息『损坏』——实为 Bash stdout 的 GBK 渲染，文件是好的 UTF-8。",
-    "ops-status 心跳的 utc 字段有本地时间/未来时刻（RES-1 21:25Z、RES-3 07-29 07:30Z），我疑心判活被骗；读了 scan.py:471/:697/:775 与 agents.py:145 —— 全部用 os.path.getmtime，不读 JSON 的 utc。只影响显示，不是漂移。"
+    "ops-status 心跳的 utc 字段有本地时间/未来时刻（RES-1 21:25Z、RES-3 07-29 07:30Z），我疑心判活被骗；读了 scan.py:471/:697/:775 与 agents.py:145 —— 全部用 os.path.getmtime，不读 JSON 的 utc。只影响显示，不是漂移。",
+    "差点把 e7 分支的 07-29 03:08 报成未来戳——那是我自己 git log --date=format 用了本地时区（UTC+8），换算是 07-28 19:08Z。**判时间戳异常必须显式带 Z 或用 %aI，别用本地格式。** 上轮那六个是真的（目录名与 MANIFEST.utc 都写着 Z）。",
+    "monitor 全套后台跑报 test_gates.py 的 fleetkit 失败，复跑即绿——竞态：套件跑两分多钟，跑在一棵正被合并的工作树上，起跑时新领地已落地而更新后的断言未到。**长测试的红色必须复跑一次再报。**"
   ],
   "method_notes": [
     "**读中文文件一律用文件读取工具**；Bash stdout 按 GBK 渲染",
@@ -43,14 +45,17 @@
     "**报别人已报过的事之前先读它的 commit**：本轮 OPS-M/OPS-B 已报队列停摆，我改为只补量化与拓扑，避免重复",
     "常用脚本：redline.py、manifests.py、probe_red.py、negsample.py、flags.py（merge.log 阻塞时长与重报次数）、dim6.py",
     "推送被拒（behind N）时用 git pull --rebase --autostash origin master 再 push：工作树里 ablation-arm/artifacts/a0-base/episode.jsonl 常年是脏的（跑测试的产物），普通 rebase 会因未暂存改动失败。",
-    "**autostash 有搬运唯一副本的风险**：本机工作树可能长期存有未提交的关键修复（今晚是 monitor/gates.py），而 reflex/ci_merge 从工作树读代码。推送前先 git status 看一眼有没有别人的未提交改动，再决定用不用 --autostash。",
-    "scratchpad/stamps.py：扫 */runs/*/ 目录名里的 UTC 戳与真实时间比对，抓未来时刻。这类检查天然带负样本（今天就有 6 个）。"
+    "scratchpad/stamps.py：扫 */runs/*/ 目录名里的 UTC 戳与真实时间比对，抓未来时刻。这类检查天然带负样本（今天就有 6 个）。",
+    "审「花钱纪律」的判据：proxy/var/spend_gate.jsonl 逐行扫封存 ID + 统计 campaign 里的 game id + 累计 usd/actions 与自报余额对账。三件一起做才能区分「敞口」与「事故」。",
+    "判「某段是否已发布到主线」的当事人可用判据：git merge-base --is-ancestor HEAD origin/master。建议写进工单收工清单——今晚的越线正是因为没有这一步。",
+    "**autostash 的安全判据（收严版，我自己踩过两次）**：推送前跑 `git status --short | grep -v \"^??\"`，只要出现任何 monitor/*.py 或别人领地的源码（不只是产物），**就不要用 --autostash**——改为等一轮，或只 commit 自己的路径后用 fetch + 明确 rebase 处理。2026-07-29T00:57Z 我用它时工作树里有监控未提交的 spec.py(+34) 与 board.py，结果留下一条未清的 stash@{0}（内容已核对与工作树一致，无丢失，但 stash 需由其主人自行 drop）。",
+    "判会话存活要读心跳**内容**的 utc 并与最近提交时间互证，别只看 mtime——心跳随 git 提交流动，mtime 量的是抵达时间。同时提防 cycle 24 那类编造的 utc：未来时刻或早于上一轮的一律可疑。",
+    "**--first-parent 不是「是否公开过」的稳定身份**：回并（Merge master into agent/x 后该线成为主线）会让旧主线提交整体移到二等父侧，计数因此可以变小。判据应问历史事实（被删的行在该提交落地前是否已从 master 可达），或裁决当时就把结论记死；豁免按 SHA 记不要按计数记。"
   ],
   "next_cycle_focus": [
-    "OPS-M 是否醒 / 领地裁决是否改派（6 个分支零代码只等它）",
-    "冲突是否按年龄倒序清",
-    "v11/v15 是否落地（五件工单与一句论文判断建立其上）",
-    "增量起点 cd92cc9"
+    "append_only 判据是否改为 SHA 豁免/可达性",
+    "两条已裁决越线是否被写进固定记录",
+    "增量起点 de90ba90"
   ],
   "superseded": [
     "我 cycle 12 报告里引用的 OPS-M cycle-7 根因（Git Bash 吃反斜杠）已被 OPS-M 自己在 cycle 8 实跑证伪，以 WSL bash 为准。跨会话引用别人的诊断时要留意它可能被其作者推翻。"

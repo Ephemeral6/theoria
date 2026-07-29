@@ -47,10 +47,20 @@ missing) and the recovered space claims *nothing more* (nothing extra). Any
 representative of the coset passes; an unrelated vector such as "cell 0 is red"
 fails.
 
-Soundness has an independent check on top: `verify()` re-evaluates every reported
-law directly against the trajectory rather than trusting the elimination. And a
-world that breaks the law (a single-cell flip) does not yield it — the engine can
-say no.
+Soundness has a check on top, and it is worth being exact about its reach.
+`verify()` re-evaluates every reported law directly against the trajectory rather
+than trusting the elimination, so a bug between the null space and the presented
+basis — a mis-reduced quotient representative, a `value` read off the wrong state
+— shows up as a law that does not hold. That is what it is for, and it is cheap.
+
+It is independent of the *elimination*, not of the *evidence*. The shared premise
+is `states`: `verify()` re-encodes the same trajectory the laws were fitted to,
+and by the GF(2) construction a null-space vector is constant on the observed
+differences by definition, so on that path the check is near-tautological and its
+failure is close to unreachable. It says the reported laws hold on this
+trajectory — not that they are laws of the world. The evidence for that is
+separate, and it is the negative case: a world that breaks the law (a single-cell
+flip) does not yield it — the engine can say no.
 
 ## Payload shape — `kind: "invariant"` (stable)
 

@@ -6,9 +6,13 @@ module. Corrections are new `incident` records.
 Every record goes through `redact.VAULT.scrub()` on its way to disk, so a
 credential cannot reach the file even if an arm put one in a request body.
 
-Every record is also checked against `proxy/canon.py` first, so a field the
-format does not define never reaches disk at all (F-16: this file is the
-canon).
+Every record is also checked against `proxy/canon.py` first, so a spelling the
+format forbids never reaches disk at all (F-16: this file is the canon). A
+field the format merely does not *mention* is a different case and is written:
+the writer runs after the request has been sent, so refusing a record cannot
+un-send it, and the one time this module refused one it discarded a reply that
+had already cost $2.695 (INC-TA-006). Those fields are counted in
+`Ledger.unknown_fields` so a run can report them; see `proxy/CONTRACT_CHANGES.md`.
 """
 
 import hashlib
@@ -16,6 +20,7 @@ import json
 import os
 import threading
 import time
+import warnings
 from typing import Any, Dict, List, Optional
 
 from . import LEDGER_VERSION
@@ -162,15 +167,49 @@ class Ledger:
         self.path = path
         os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
         self._lock = _lock_for(path)
+        #: `"<event>.<field>" -> count` for every field written to one of the
+        #: two shapes that §3/§4 does not list. A warning on stderr is seen by
+        #: whoever is watching at the time; this is seen by the run report.
+        #: Empty is the normal state and the interesting one is non-empty.
+        self.unknown_fields: Dict[str, int] = {}
         with self._lock:
             self._seq, self._prev = _tail_state(path)
+
+    def _note_unknown(self, event: str, names: List[str], message: str) -> None:
+        """Say it out loud, and *never* let saying it stop the write.
+
+        `canon.check`'s default is `warnings.warn`, which is right for a
+        validator and wrong here: a warning is an exception whenever the
+        ambient filter says `error` -- `python -W error`, `PYTHONWARNINGS=error`,
+        a hardened CI runner, or a `simplefilter("error")` left on by something
+        earlier in the process. On this path that would raise inside the writer,
+        after the request has been sent and the provider has been paid, and an
+        arm's `except Exception` would record "the desk failed" and discard the
+        reply. That is INC-TA-006 exactly, rebuilt out of the warning that was
+        supposed to replace it. So the warning is emitted defensively and the
+        tally, which cannot raise, is the durable half.
+        """
+        with self._lock:
+            for name in names:
+                key = "%s.%s" % (event, name)
+                self.unknown_fields[key] = self.unknown_fields.get(key, 0) + 1
+        try:
+            warnings.warn(message, canon.UnknownField, stacklevel=4)
+        except Exception:                       # noqa: BLE001 -- see docstring
+            pass
 
     def append(self, event: str, run_id: str, arm: str, **fields: Any) -> Dict[str, Any]:
         if event not in EVENTS:
             raise ValueError("unknown event %r (LEDGER_FORMAT.md §3, §4, §6)" % event)
         if arm not in ARMS:
+            # Still a hard refusal, and the reason it is not the after-the-money
+            # refusal D-030 argues against: `arm` and `event` are fixed when the
+            # RunLedger is constructed, so a wrong one fails on the run's very
+            # first record -- before any request is sent and any dollar is spent.
+            # A refusal that fires in the first second of a run is a typo caught;
+            # a refusal that fires on record 40 is evidence destroyed.
             raise ValueError("unknown arm %r; register it in ledger.ARMS" % (arm,))
-        canon.check(event, fields)
+        unknown = canon.check(event, fields, on_unknown=self._note_unknown)
         if event == "env_step":
             # The writer computes this itself on every normal path; a caller
             # that supplies one has to supply the right one. A frame_hash that
@@ -196,6 +235,15 @@ class Ledger:
             # model output; an arm putting a key in a *prompt* still raises a
             # `credential_in_body` incident at the proxy.
             clean = scrub_keyish(clean)
+        elif unknown:
+            # ...but the exemption is for `request` and `response`, which §4
+            # *requires* verbatim. A field the format has never heard of
+            # carries no such requirement, and additive-safe must not quietly
+            # widen a hole the exemption was never drawn around: before S9 an
+            # unlisted field on a model_call could not reach disk at all.
+            clean = dict(clean)
+            for name in unknown:
+                clean[name] = scrub_keyish({name: clean[name]})[name]
         record.update(clean)
         with self._lock:
             self._seq += 1
@@ -305,6 +353,17 @@ class RunLedger:
 
     def _append(self, event: str, **fields: Any) -> Dict[str, Any]:
         return self.ledger.append(event, self.run_id, self.arm, **fields)
+
+    @property
+    def unknown_fields(self) -> Dict[str, int]:
+        """Fields written to the two shapes that §3/§4 does not list.
+
+        Counted per *file*, not per run: one `Ledger` can hold many runs, and
+        the tally is the writer's. In the normal case -- one run, one file --
+        the distinction does not arise, and when it does, over-reporting is the
+        safe direction for a notice.
+        """
+        return dict(self.ledger.unknown_fields)
 
     # -- the two shapes ----------------------------------------------------
     def env_step(self, game_id: str, action: Dict[str, Any],

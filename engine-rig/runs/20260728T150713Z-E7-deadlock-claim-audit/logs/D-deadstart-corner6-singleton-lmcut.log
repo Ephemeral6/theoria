@@ -1,0 +1,77 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\instances\guarded\sokoban_guarded_singleton_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\instances\guarded\deadstart-corner6_guarded_singleton.pddl' --sas-file output.sas
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Parsing: [0.000s CPU, 0.002s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
+Preparing model... [0.000s CPU, 0.000s wall-clock]
+Generated 20 rules.
+Computing model... [0.000s CPU, 0.005s wall-clock]
+566 relevant atoms
+898 auxiliary atoms
+1464 final queue length
+1902 total queue pushes
+Completing instantiation... [0.016s CPU, 0.003s wall-clock]
+Instantiating: [0.016s CPU, 0.011s wall-clock]
+No relaxed solution! Generating unsolvable task...
+Translator variables: 1
+Translator derived variables: 0
+Translator facts: 2
+Translator goal facts: 1
+Translator mutex groups: 0
+Translator total mutex groups size: 0
+Translator operators: 0
+Translator axioms: 0
+Translator task size: 4
+warning: could not determine peak memory
+Writing output... [0.000s CPU, 0.006s wall-clock]
+Done! [0.016s CPU, 0.019s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(lmcut())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpw8buadln\sas_plan' < output.sas
+[t=0.000521s, 1940 KB] Search code revision: 7120aa0
+[t=0.000639s, 1940 KB] reading input...
+[t=0.000782s, 1940 KB] done reading input!
+[t=0.002628s, 2480 KB] Initializing landmark cut heuristic...
+[t=0.002678s, 2480 KB] Building successor generator... done!
+[t=0.002695s, 2480 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.002698s, 2480 KB] time for successor generation creation: 0.000007s
+[t=0.002705s, 2480 KB] Variables: 1
+[t=0.002711s, 2480 KB] FactPairs: 2
+[t=0.002715s, 2480 KB] Bytes per state: 4
+[t=0.002733s, 2488 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.002788s, 2512 KB] Initial state is a dead end.
+[t=0.002802s, 2512 KB] Initial heuristic value for lmcut: infinity
+[t=0.002805s, 2512 KB] pruning method: none
+[t=0.002810s, 2512 KB] Completely explored state space -- no solution!
+[t=0.002814s, 2512 KB] Actual search time: 0.000007s
+[t=0.002818s, 2512 KB] Expanded 0 state(s).
+[t=0.002818s, 2512 KB] Reopened 0 state(s).
+[t=0.002818s, 2512 KB] Evaluated 1 state(s).
+[t=0.002818s, 2512 KB] Evaluations: 1
+[t=0.002818s, 2512 KB] Generated 0 state(s).
+[t=0.002818s, 2512 KB] Dead ends: 0 state(s).
+[t=0.002818s, 2512 KB] Number of registered states: 1
+[t=0.002818s, 2512 KB] Int hash set load factor: 1/1 = 1.000000
+[t=0.002818s, 2512 KB] Int hash set resizes: 0
+[t=0.002818s, 2512 KB] Search time: 0.000087s
+[t=0.002818s, 2512 KB] Total time: 0.002818s
+Search stopped without finding a solution.
+Remove intermediate file output.sas
+search exit code: 12
+
+Driver aborting after search

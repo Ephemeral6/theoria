@@ -1,0 +1,627 @@
+{
+  "paper_id": "p15-verdict-a2",
+  "rubric_digest": "63ce1eabcc3209ee45aa8b81734788dc7479940946cabb96cbcc0a14ad0f4545",
+  "n_items": 17,
+  "total_points": 34.0,
+  "abstain_tokens": [
+    "abstain",
+    "no_verdict",
+    "unknown",
+    "unsure"
+  ],
+  "search_reasons": [
+    "complete_search",
+    "enumeration",
+    "exhaustive_search",
+    "searched_whole_space"
+  ],
+  "verdict_weight": 0.5,
+  "justification_weight": 0.5,
+  "truth_census": {
+    "solvable": {
+      "n": 8,
+      "points": 16.0
+    },
+    "unsolvable": {
+      "n": 9,
+      "points": 18.0
+    },
+    "abstain": {
+      "n": 0,
+      "points": 0.0
+    }
+  },
+  "item_class_census": {
+    "large_unsolvable": 4,
+    "small_unsolvable": 5,
+    "solvable_hard": 8
+  },
+  "constant_totals": {
+    "solvable": {
+      "awarded": 8.0,
+      "possible": 34.0,
+      "fraction": 0.235294
+    },
+    "unsolvable": {
+      "awarded": 9.0,
+      "possible": 34.0,
+      "fraction": 0.264706
+    },
+    "abstain": {
+      "awarded": 0.0,
+      "possible": 34.0,
+      "fraction": 0.0
+    }
+  },
+  "matrix_3x3": {
+    "solvable": {
+      "solvable": {
+        "n_items": 8,
+        "n_paid": 8,
+        "n_refused": 0,
+        "awarded": 8.0,
+        "possible": 16.0,
+        "awarded_over_possible": 0.5,
+        "verdicts": [
+          "correct"
+        ],
+        "paid_items": [
+          "vq-0ffc3cd33f",
+          "vq-1881c8c383",
+          "vq-6bab2f307c",
+          "vq-8c4f14b152",
+          "vq-9e0aefdf80",
+          "vq-abe007cdfa",
+          "vq-c480b494f3",
+          "vq-e6ae49645d"
+        ]
+      },
+      "unsolvable": {
+        "n_items": 8,
+        "n_paid": 0,
+        "n_refused": 8,
+        "awarded": 0.0,
+        "possible": 16.0,
+        "awarded_over_possible": 0.0,
+        "verdicts": [
+          "wrong"
+        ],
+        "paid_items": []
+      },
+      "abstain": {
+        "n_items": 8,
+        "n_paid": 0,
+        "n_refused": 8,
+        "awarded": 0.0,
+        "possible": 16.0,
+        "awarded_over_possible": 0.0,
+        "verdicts": [
+          "abstained"
+        ],
+        "paid_items": []
+      }
+    },
+    "unsolvable": {
+      "solvable": {
+        "n_items": 9,
+        "n_paid": 0,
+        "n_refused": 9,
+        "awarded": 0.0,
+        "possible": 18.0,
+        "awarded_over_possible": 0.0,
+        "verdicts": [
+          "wrong"
+        ],
+        "paid_items": []
+      },
+      "unsolvable": {
+        "n_items": 9,
+        "n_paid": 9,
+        "n_refused": 0,
+        "awarded": 9.0,
+        "possible": 18.0,
+        "awarded_over_possible": 0.5,
+        "verdicts": [
+          "correct"
+        ],
+        "paid_items": [
+          "vq-1015eb0bb1",
+          "vq-17af763cab",
+          "vq-2986ed8ffc",
+          "vq-6150a6eeb7",
+          "vq-721d09813c",
+          "vq-82f568ca11",
+          "vq-8ff1c690ad",
+          "vq-9725fbebf0",
+          "vq-ee54166153"
+        ]
+      },
+      "abstain": {
+        "n_items": 9,
+        "n_paid": 0,
+        "n_refused": 9,
+        "awarded": 0.0,
+        "possible": 18.0,
+        "awarded_over_possible": 0.0,
+        "verdicts": [
+          "abstained"
+        ],
+        "paid_items": []
+      }
+    },
+    "abstain": {
+      "solvable": {
+        "n_items": 0,
+        "n_paid": 0,
+        "n_refused": 0,
+        "awarded": 0,
+        "possible": 0,
+        "awarded_over_possible": null,
+        "verdicts": [],
+        "paid_items": []
+      },
+      "unsolvable": {
+        "n_items": 0,
+        "n_paid": 0,
+        "n_refused": 0,
+        "awarded": 0,
+        "possible": 0,
+        "awarded_over_possible": null,
+        "verdicts": [],
+        "paid_items": []
+      },
+      "abstain": {
+        "n_items": 0,
+        "n_paid": 0,
+        "n_refused": 0,
+        "awarded": 0,
+        "possible": 0,
+        "awarded_over_possible": null,
+        "verdicts": [],
+        "paid_items": []
+      }
+    }
+  },
+  "per_class_rates": {
+    "solvable": {
+      "sensitivity_items": {
+        "num": 8,
+        "den": 8,
+        "rate": 1.0,
+        "undefined_because": null
+      },
+      "sensitivity_points": {
+        "awarded": 8.0,
+        "possible": 16.0,
+        "rate": 0.5
+      },
+      "specificity_items": {
+        "num": 9,
+        "den": 9,
+        "rate": 1.0
+      },
+      "specificity_points_leaked": {
+        "awarded": 0.0,
+        "possible": 18.0,
+        "leak_rate": 0.0
+      }
+    },
+    "unsolvable": {
+      "sensitivity_items": {
+        "num": 9,
+        "den": 9,
+        "rate": 1.0,
+        "undefined_because": null
+      },
+      "sensitivity_points": {
+        "awarded": 9.0,
+        "possible": 18.0,
+        "rate": 0.5
+      },
+      "specificity_items": {
+        "num": 8,
+        "den": 8,
+        "rate": 1.0
+      },
+      "specificity_points_leaked": {
+        "awarded": 0.0,
+        "possible": 16.0,
+        "leak_rate": 0.0
+      }
+    },
+    "abstain": {
+      "sensitivity_items": {
+        "num": 0,
+        "den": 0,
+        "rate": null,
+        "undefined_because": "no item on this paper has ground truth 'abstain'; the denominator is empty, so the cell is null and not zero"
+      },
+      "sensitivity_points": {
+        "awarded": 0,
+        "possible": 0,
+        "rate": null
+      },
+      "specificity_items": {
+        "num": 17,
+        "den": 17,
+        "rate": 1.0
+      },
+      "specificity_points_leaked": {
+        "awarded": 0.0,
+        "possible": 34.0,
+        "leak_rate": 0.0
+      }
+    }
+  },
+  "constant_unsolvable_items": [
+    {
+      "item_id": "vq-0ffc3cd33f",
+      "truth_claim": "solvable",
+      "item_class": "solvable_hard",
+      "level_id": "lattice",
+      "variant_id": "a2var-iii6-lattice-safe",
+      "points": 2.0,
+      "awarded": 0.0,
+      "verdict": "wrong",
+      "reason": "none",
+      "verdict_points": 0.0,
+      "reason_points": 0.0,
+      "search_credible": false,
+      "state_space_lower_bound": 1329227995784915872903807060280344576
+    },
+    {
+      "item_id": "vq-1015eb0bb1",
+      "truth_claim": "unsolvable",
+      "item_class": "small_unsolvable",
+      "level_id": "updraft",
+      "variant_id": "a2var-i2-updraft-noup",
+      "points": 2.0,
+      "awarded": 1.0,
+      "verdict": "correct",
+      "reason": "none",
+      "verdict_points": 1.0,
+      "reason_points": 0.0,
+      "search_credible": true,
+      "state_space_lower_bound": 7
+    },
+    {
+      "item_id": "vq-17af763cab",
+      "truth_claim": "unsolvable",
+      "item_class": "small_unsolvable",
+      "level_id": "atrium",
+      "variant_id": "a2var-i1-atrium-nodown",
+      "points": 2.0,
+      "awarded": 1.0,
+      "verdict": "correct",
+      "reason": "none",
+      "verdict_points": 1.0,
+      "reason_points": 0.0,
+      "search_credible": true,
+      "state_space_lower_bound": 24
+    },
+    {
+      "item_id": "vq-1881c8c383",
+      "truth_claim": "solvable",
+      "item_class": "solvable_hard",
+      "level_id": "atrium",
+      "variant_id": "a2var-iii4-atrium-noleft",
+      "points": 2.0,
+      "awarded": 0.0,
+      "verdict": "wrong",
+      "reason": "none",
+      "verdict_points": 0.0,
+      "reason_points": 0.0,
+      "search_credible": true,
+      "state_space_lower_bound": 55
+    },
+    {
+      "item_id": "vq-2986ed8ffc",
+      "truth_claim": "unsolvable",
+      "item_class": "large_unsolvable",
+      "level_id": "orchard",
+      "variant_id": "a2var-ii4-orchard-noleft",
+      "points": 2.0,
+      "awarded": 1.0,
+      "verdict": "correct",
+      "reason": "none",
+      "verdict_points": 1.0,
+      "reason_points": 0.0,
+      "search_credible": false,
+      "state_space_lower_bound": 332306998946228968225951765070086144
+    },
+    {
+      "item_id": "vq-6150a6eeb7",
+      "truth_claim": "unsolvable",
+      "item_class": "large_unsolvable",
+      "level_id": "lattice",
+      "variant_id": "a2var-ii2-lattice-bridge",
+      "points": 2.0,
+      "awarded": 1.0,
+      "verdict": "correct",
+      "reason": "none",
+      "verdict_points": 1.0,
+      "reason_points": 0.0,
+      "search_credible": false,
+      "state_space_lower_bound": 1329227995784915872903807060280344576
+    },
+    {
+      "item_id": "vq-6bab2f307c",
+      "truth_claim": "solvable",
+      "item_class": "solvable_hard",
+      "level_id": "lattice",
+      "variant_id": "a2var-iii7-lattice-roomy",
+      "points": 2.0,
+      "awarded": 0.0,
+      "verdict": "wrong",
+      "reason": "none",
+      "verdict_points": 0.0,
+      "reason_points": 0.0,
+      "search_credible": false,
+      "state_space_lower_bound": 1329227995784915872903807060280344576
+    },
+    {
+      "item_id": "vq-721d09813c",
+      "truth_claim": "unsolvable",
+      "item_class": "large_unsolvable",
+      "level_id": "gantry",
+      "variant_id": "a2var-ii1-gantry-sealed",
+      "points": 2.0,
+      "awarded": 1.0,
+      "verdict": "correct",
+      "reason": "none",
+      "verdict_points": 1.0,
+      "reason_points": 0.0,
+      "search_credible": false,
+      "state_space_lower_bound": 1329227995784915872903807060280344576
+    },
+    {
+      "item_id": "vq-82f568ca11",
+      "truth_claim": "unsolvable",
+      "item_class": "small_unsolvable",
+      "level_id": "cistern",
+      "variant_id": "a2var-i3-cistern-cut",
+      "points": 2.0,
+      "awarded": 1.0,
+      "verdict": "correct",
+      "reason": "none",
+      "verdict_points": 1.0,
+      "reason_points": 0.0,
+      "search_credible": true,
+      "state_space_lower_bound": 20
+    },
+    {
+      "item_id": "vq-8c4f14b152",
+      "truth_claim": "solvable",
+      "item_class": "solvable_hard",
+      "level_id": "lattice",
+      "variant_id": "a2var-iii8-lattice-swap",
+      "points": 2.0,
+      "awarded": 0.0,
+      "verdict": "wrong",
+      "reason": "none",
+      "verdict_points": 0.0,
+      "reason_points": 0.0,
+      "search_credible": false,
+      "state_space_lower_bound": 1329227995784915872903807060280344576
+    },
+    {
+      "item_id": "vq-8ff1c690ad",
+      "truth_claim": "unsolvable",
+      "item_class": "small_unsolvable",
+      "level_id": "atrium",
+      "variant_id": "a2var-i4-atrium-budget",
+      "points": 2.0,
+      "awarded": 1.0,
+      "verdict": "correct",
+      "reason": "none",
+      "verdict_points": 1.0,
+      "reason_points": 0.0,
+      "search_credible": true,
+      "state_space_lower_bound": 31
+    },
+    {
+      "item_id": "vq-9725fbebf0",
+      "truth_claim": "unsolvable",
+      "item_class": "small_unsolvable",
+      "level_id": "quarry",
+      "variant_id": "a2var-i5-quarry-swap",
+      "points": 2.0,
+      "awarded": 1.0,
+      "verdict": "correct",
+      "reason": "none",
+      "verdict_points": 1.0,
+      "reason_points": 0.0,
+      "search_credible": true,
+      "state_space_lower_bound": 14
+    },
+    {
+      "item_id": "vq-9e0aefdf80",
+      "truth_claim": "solvable",
+      "item_class": "solvable_hard",
+      "level_id": "meander",
+      "variant_id": "a2var-iii1-meander-swap",
+      "points": 2.0,
+      "awarded": 0.0,
+      "verdict": "wrong",
+      "reason": "none",
+      "verdict_points": 0.0,
+      "reason_points": 0.0,
+      "search_credible": true,
+      "state_space_lower_bound": 99
+    },
+    {
+      "item_id": "vq-abe007cdfa",
+      "truth_claim": "solvable",
+      "item_class": "solvable_hard",
+      "level_id": "atrium",
+      "variant_id": "a2var-iii2-atrium-roomy",
+      "points": 2.0,
+      "awarded": 0.0,
+      "verdict": "wrong",
+      "reason": "none",
+      "verdict_points": 0.0,
+      "reason_points": 0.0,
+      "search_credible": true,
+      "state_space_lower_bound": 55
+    },
+    {
+      "item_id": "vq-c480b494f3",
+      "truth_claim": "solvable",
+      "item_class": "solvable_hard",
+      "level_id": "atrium",
+      "variant_id": "a2var-iii5-atrium-tighten",
+      "points": 2.0,
+      "awarded": 0.0,
+      "verdict": "wrong",
+      "reason": "none",
+      "verdict_points": 0.0,
+      "reason_points": 0.0,
+      "search_credible": true,
+      "state_space_lower_bound": 55
+    },
+    {
+      "item_id": "vq-e6ae49645d",
+      "truth_claim": "solvable",
+      "item_class": "solvable_hard",
+      "level_id": "atrium",
+      "variant_id": "a2var-iii3-atrium-offpath",
+      "points": 2.0,
+      "awarded": 0.0,
+      "verdict": "wrong",
+      "reason": "none",
+      "verdict_points": 0.0,
+      "reason_points": 0.0,
+      "search_credible": true,
+      "state_space_lower_bound": 49
+    },
+    {
+      "item_id": "vq-ee54166153",
+      "truth_claim": "unsolvable",
+      "item_class": "large_unsolvable",
+      "level_id": "spindle",
+      "variant_id": "a2var-ii3-spindle-budget",
+      "points": 2.0,
+      "awarded": 1.0,
+      "verdict": "correct",
+      "reason": "none",
+      "verdict_points": 1.0,
+      "reason_points": 0.0,
+      "search_credible": false,
+      "state_space_lower_bound": 1152921504606846976
+    }
+  ],
+  "constant_unsolvable_summary": {
+    "awarded": 9.0,
+    "possible": 34.0,
+    "paid_items": 9,
+    "paid_all_are_genuinely_unsolvable": true,
+    "reason_points_total": 0.0,
+    "by_item_class": {
+      "large_unsolvable": {
+        "n": 4,
+        "awarded": 4.0,
+        "possible": 8.0
+      },
+      "small_unsolvable": {
+        "n": 5,
+        "awarded": 5.0,
+        "possible": 10.0
+      },
+      "solvable_hard": {
+        "n": 8,
+        "awarded": 0.0,
+        "possible": 16.0
+      }
+    }
+  },
+  "shipped_per_class_confusion_for_bluffer": {
+    "positive_class": "unsolvable",
+    "overall": {
+      "n": 17,
+      "n_positive": 9,
+      "n_negative": 8,
+      "tp": 9,
+      "fp": 8,
+      "tn": 0,
+      "fn": 0,
+      "abstained_on_positive": 0,
+      "abstained_on_negative": 0,
+      "sensitivity": 1.0,
+      "specificity": 0.0,
+      "coverage_positive": 1.0,
+      "coverage_negative": 1.0
+    },
+    "by_class": {
+      "large_unsolvable": {
+        "n": 4,
+        "n_positive": 4,
+        "n_negative": 0,
+        "tp": 4,
+        "fp": 0,
+        "tn": 0,
+        "fn": 0,
+        "abstained_on_positive": 0,
+        "abstained_on_negative": 0,
+        "sensitivity": 1.0,
+        "specificity": null,
+        "coverage_positive": 1.0,
+        "coverage_negative": null,
+        "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given."
+      },
+      "small_unsolvable": {
+        "n": 5,
+        "n_positive": 5,
+        "n_negative": 0,
+        "tp": 5,
+        "fp": 0,
+        "tn": 0,
+        "fn": 0,
+        "abstained_on_positive": 0,
+        "abstained_on_negative": 0,
+        "sensitivity": 1.0,
+        "specificity": null,
+        "coverage_positive": 1.0,
+        "coverage_negative": null,
+        "specificity_undefined_because": "this class contains only unsolvable items, so specificity has an empty denominator. The cell is empty, not zero -- an arm cannot fail a test it was never given."
+      },
+      "solvable_hard": {
+        "n": 8,
+        "n_positive": 0,
+        "n_negative": 8,
+        "tp": 0,
+        "fp": 8,
+        "tn": 0,
+        "fn": 0,
+        "abstained_on_positive": 0,
+        "abstained_on_negative": 0,
+        "sensitivity": null,
+        "specificity": 0.0,
+        "coverage_positive": null,
+        "coverage_negative": 1.0,
+        "sensitivity_undefined_because": "this class contains no unsolvable items, so there is nothing to be sensitive to. The cell is empty, not zero."
+      }
+    },
+    "note": "Sensitivity and specificity are reported side by side and never combined. An abstention counts toward neither rate and is carried in its own column."
+  },
+  "shipped_axes_confusion_for_bluffer": {
+    "positive_class": "unsolvable",
+    "tp": 9,
+    "fp": 8,
+    "tn": 0,
+    "fn": 0,
+    "abstained_on_positive": 0,
+    "abstained_on_negative": 0,
+    "sensitivity": 1.0,
+    "specificity": 0.0,
+    "note": "Sensitivity counts abstentions as neither -- an abstention is not a wrong answer, but it is not a right one either, so it is reported separately rather than folded into a rate."
+  },
+  "reference_bluffer": {
+    "awarded": 9.0,
+    "possible": 34.0,
+    "identical_to_const_unsolvable": true
+  },
+  "reference_oracle": {
+    "awarded": 34.0,
+    "possible": 34.0
+  }
+}

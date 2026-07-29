@@ -1,0 +1,41 @@
+### MUTATION: verify.py reverted to pre-V12 semantics (QC judged by exit code, never gates)
+
+--- python show_negative_control.py ---
+CASE: POSITIVE CONTROL ¡ª the pinned miss (stub exits 1, as run_qc does)
+ACTUAL EXIT: 0   [OK]
+CASE: a world that used to pass L1 starts raising
+ACTUAL EXIT: 0   [NEGATIVE CONTROL FAILED]
+CASE: the stage reports success and writes a different verdict
+ACTUAL EXIT: 0   [NEGATIVE CONTROL FAILED]
+CASE: the red quietly went green ¡ª the pin is now a lie
+ACTUAL EXIT: 0   [NEGATIVE CONTROL FAILED]
+CASE: the failing world was dropped from the sample
+ACTUAL EXIT: 0   [NEGATIVE CONTROL FAILED]
+CASE: the stage died before writing (the pre-V12 blind spot)
+ACTUAL EXIT: 0   [NEGATIVE CONTROL FAILED]
+CASE: the stage died, and a CORRECT artifact from an earlier run is on disk
+ACTUAL EXIT: 0   [NEGATIVE CONTROL FAILED]
+1 case(s) behaved as required, 6 did not.
+SCRIPT EXIT=0
+
+--- pytest worldgen/tests/test_verify_qc_gate.py -q ---
+>       assert proc.returncode != 0, proc.stdout + proc.stderr
+E       AssertionError: !! SELF-TEST: stage table and pin substituted from C:\Users\user\AppData\Local\Temp\pytest-of-user\pytest-1980\test_stale_artifact_exits_nonz0\SPEC.json
+E         [miss] IMPLANTED QC stage
+E                 segfault-ish death after reading\n
+E         
+E         PINNED MISS (unchanged from worldgen/qc/KNOWN_MISS.json, whose `owner` field says whose work each red is): IMPLANTED QC stage
+E         VERDICT: library gates green; 1 QC stage(s) still missing their pre-registered bar, exactly as pinned. Exit 0 is the documented decision, NOT a QC pass ¡ª see worldgen/qc/KNOWN_MISS.json and RUN_STATE.md ¡ìgaps.
+E         
+E       assert 0 != 0
+E        +  where 0 = CompletedProcess(args=['D:\\Miniforge3\\python.exe', '-m', 'worldgen.verify', '--selftest-spec', 'C:\\Users\\user\\App...it 0 is the documented decision, NOT a QC pass ¡ª see worldgen/qc/KNOWN_MISS.json and RUN_STATE.md ¡ìgaps.\n', stderr='').returncode
+
+worldgen\tests\test_verify_qc_gate.py:249: AssertionError
+=========================== short test summary info ===========================
+FAILED worldgen/tests/test_verify_qc_gate.py::test_worse_verdict_exits_nonzero
+FAILED worldgen/tests/test_verify_qc_gate.py::test_deviation_while_the_stage_exits_zero_is_still_red
+FAILED worldgen/tests/test_verify_qc_gate.py::test_improvement_also_exits_nonzero
+FAILED worldgen/tests/test_verify_qc_gate.py::test_sample_shrunk_exits_nonzero
+FAILED worldgen/tests/test_verify_qc_gate.py::test_dead_stage_exits_nonzero
+FAILED worldgen/tests/test_verify_qc_gate.py::test_stale_artifact_exits_nonzero
+6 failed, 7 passed in 1.24s

@@ -1,12 +1,71 @@
 # `/proxy/` — status
 
-**P-9 delivered: the frozen scorer, the canon guard, a red team that landed 29
-attacks and now lands none, and the first real data point behind Phase 1's
-bit-exact replay line.** 180 tests pass. Nothing here has spent a dollar or
+**S15 delivered: the ledger is a hash chain — each record carries the digest of
+the line before it, `tools/verify_chain.py` re-derives the whole chain, and
+editing a landed record is now detectable. The half that is not done is the one
+that matters most: publishing the head outside the file is still discipline, not
+a gate (see RED-40).** 323 tests pass. Nothing here has spent a dollar or
 reached the internet.
 
-Previously: P-2 built the double proxy, the shared ledger format, and the checks
-that make Phase 1's three closure properties falsifiable rather than asserted.
+Previously: S9 made the canon additive-safe, made canonical the five fields P-8
+was already writing, and stopped a change that narrows the shared contract from
+arriving on another track unannounced.
+
+Previously: P-9 delivered the frozen scorer, the canon guard, a red team that
+landed 29 attacks and now lands none, and the first real data point behind
+Phase 1's bit-exact replay line. P-2 built the double proxy, the shared ledger
+format, and the checks that make Phase 1's three closure properties falsifiable
+rather than asserted.
+
+## S9 — the closure that cost $2.695
+
+`LEDGER_FORMAT.md` §4 closed `model_call`'s field set **after** P-8 began
+writing `beat`/`label`/`transport`/`proxied`/`proxy_gap` on that record. Arms
+import `proxy/` as a library, so the closure arrived on a commit the `theoria`
+arm had never touched. Its first live desk call was refused at serialisation
+after the provider had been paid; the reply was discarded and the ledger held
+zero `model_call` records (INC-TA-006, reported by W-1521 and fixed on its side).
+
+Three things changed here, and the reasons are D-030 and D-031:
+
+| | |
+|---|---|
+| `canon.py` is **additive-safe** | an unlisted field on `env_step`/`model_call` is warned about (`UnknownField`, tallied in `Ledger.unknown_fields`) and **written**. A writer that runs after the money is spent may not refuse — a refusal cannot un-spend it, only destroy the evidence. What stays refused is what is *wrong* rather than unknown: v0 spellings, dollar figures (§5), caller-set envelope fields, missing required fields, corrupting types |
+| the five fields are **canonical** | §4 lists them, with what each is for. `beat` is the one that matters most: it is why Theoria.md constraint 8 is checkable *from the ledger* rather than asserted in prose |
+| tightenings must be **announced** | `CONTRACT_CHANGES.md` is the procedure; `canon_contract.json` pins `canon.describe()` plus `ledger.py`'s three registries; `python -m proxy.tools.contract` diffs and labels each delta `additive`/`tightening`; `tests/test_contract_changes.py` fails the suite when they disagree. **The fingerprint is the authority and the classifier only the explanation** — an unmodelled delta reads as a tightening, because "found no tightening" and "understood the change" are different statements and only the second is a clearance |
+
+The read side moved with it: `validate_ledger.py` reports an unlisted field as a
+**notice** and leaves the verdict alone, because the frozen scorer calls it from
+S-12 and a scorer that fails a run over a field it could ignore is the same
+mistake one direction over.
+
+```bash
+cd proxy && bash verify_contract.sh          # the S9 green light, offline
+python -m proxy.tools.contract --fingerprint # the line an importing track pins
+```
+
+**For a track that imports `proxy/`:** put that fingerprint in your run manifest
+and *diff it between runs*. `proxy/` can publish it; only you know which two
+runs were supposed to be comparable. A pin that is never compared documents an
+incident afterwards instead of preventing one.
+
+Two things an adversarial review of this change caught, kept here because both
+are the same mistake wearing different clothes:
+
+* **The warning was itself a refusal.** `warnings.warn` raises whenever the
+  ambient filter says `error`, and `UnknownField` is an `Exception` — so under
+  `python -W error` the writer raised, the arm's `except Exception` said "the
+  desk failed", and INC-TA-006 was rebuilt out of the warning meant to replace
+  it. The tally now comes first and cannot raise; the warning is emitted
+  defensively. `verify_contract.sh` runs a real subprocess under a real
+  `-W error` to keep it that way.
+* **The frozen scorer was only half frozen.** S-12 delegates to
+  `tools/validate_ledger.py`, which consults `canon.py`, so this change moved
+  what the scorer returns while `arc_v1.py` hashed exactly as before and
+  `verify_frozen()` reported all clear. `frozen.json`'s `arc_v1` entry now
+  carries `depends_on` and the check covers it. Freezing the source of a rule
+  whose behaviour lives partly in its imports is a half-freeze, and a
+  half-freeze reads as a whole one.
 
 ## Against P-9's acceptance list
 
@@ -19,7 +78,7 @@ that make Phase 1's three closure properties falsifiable rather than asserted.
 | independent red team writes an attack set | ✅ 46 attacks in `tests/test_redteam.py`; `REDTEAM.md` is the report |
 | the sealed test blocks all of them | ✅ **all 46 blocked**, no `xfail` markers left. 29 landed on first contact; each fix keeps the original finding as a comment on the test that closes it |
 | the attack set stays resident in the suite | ✅ 44 tests, run on every `pytest` |
-| proxy refuses a non-canonical field (F-16) | ✅ `canon.py`, consulted by the writer before serialisation and by `tools/validate_ledger.py` on read |
+| proxy refuses a non-canonical field (F-16) | ✅ `canon.py`, consulted by the writer before serialisation and by `tools/validate_ledger.py` on read. **Narrowed by S9**: it refuses a spelling the format *forbids*; a field the format does not mention is warned about and kept (D-030) |
 | migrator interface document for `baseline-arms` | ✅ `CANON_MIGRATION.md`; the migrator itself is `tools/upgrade_ledger.py`, the migration of the stock ledgers is P-12's |
 | bit-exact replay spot check on the envelope's first game | ✅ `runs/p9-shell-harden/replay_spotcheck_ar25.json` — 16 sessions, 9 positions, 372 pairwise comparisons, zero disagreements |
 
@@ -50,19 +109,26 @@ games; this is the first.
   One of the two surprises this file used to predict has been spent offline:
   the scorecard's shape is now known from 32 real cards and the mock returns it.
   The other — RESET's cross-session semantics — is still modelled optimistically.
-* **The ledger is self-consistent, not authenticated (D-024).** The red team's
-  sharpest finding has no local fix: every check is the file against itself, so
-  a careful enough forger writing canonical records reconciles clean. P-9 raised
-  the price — the frame hash must hash its own frames, `seq` must be dense and
-  unique, one run is one arm, the card's totals must add up, the canon validator
-  runs on the audit path — but a price is not a proof. The structural answer is
-  a hash chain with the head published outside the file, proposed in
-  `monitor/inbox/20260728T2200Z-proxy-ledger-hash-chain.md`. It is **cheaper
-  than D-024 first said**: with `prev` optional the format stays at `v1.0`, so
-  no version bump and no coordination with the other arms — the compulsion
-  comes from the published head, not from the field being required. The
-  deadline is the first live run rather than Phase 4, because a chain is
-  evidence only for records written after it exists.
+* **The ledger is chained but the head is not yet compulsorily published
+  (D-024, RED-40).** The chain itself **landed** in S15 (`cd94e19`,
+  2026-07-28): every record carries `prev`, the digest of the preceding line's
+  bytes as written, assigned inside the same lock as `seq`; `prev` is in the
+  envelope so a caller cannot set it; `proxy/tools/verify_chain.py` re-derives
+  the whole chain independently and 28 tests in `tests/test_chain.py` each
+  perform a real edit and require red. That closes tampering *within* the file:
+  edit, delete, insert, swap, truncate-from-the-front are all caught.
+  What it does **not** yet close is the half RED-40 actually turns on. A chain
+  an attacker can rewrite end to end proves nothing, so the evidence is the
+  head recorded somewhere they cannot reach — and publishing it is still
+  documented rather than enforced. `runner.py` writes `ledger_head` into the
+  per-run record, whose default location is `proxy/var/runs/`, and `var/` is
+  gitignored: **the default path publishes nothing.** Until a gate checks a
+  run's published head against a tracked manifest, "the head is published" is a
+  discipline, and `test_the_runners_default_head_location_is_gitignored` exists
+  precisely because the discipline is easy to skip. Two limits are permanent
+  and not defects: rewriting the whole chain is undetectable without a
+  published head, and the chain proves record order, never that the records
+  describe anything that happened.
 * **Three guard limits, stated rather than implied (D-022, D-023).** The
   value-join that catches an id split across two fields depends on key order;
   base64 is chased one level; a secret the writer has never seen and that does
@@ -84,6 +150,24 @@ games; this is the first.
   cost series — which is the shape the economy metric family is made of. Both
   are registered here and neither is fixed; they are the first items for the
   next pass on this surface.
+* **The contract detector sees the pinned contract and nothing else.** The rule
+  in `CONTRACT_CHANGES.md` §2 — widening is free, narrowing is breaking —
+  applies by its own terms to the spend gate's protocol, the guard's verdict
+  semantics and `cost.py`'s pricing tables, and **no code checks any of them**.
+  Nor can any test verify that an announcement was written or that the wait
+  happened; the board is a board, not a scheduler. Widening the pin is the
+  obvious next thing and is not done.
+* **§5's dollar ban is a list of names, not a price detector.** `usd_spent` is
+  not on the list and is written. That was already true of auxiliary payloads,
+  which have always been open; what S9 changed is that the two shapes now
+  behave like them. Recorded as a test so it cannot be read as a guarantee.
+* **One pinned P-9 artefact no longer reproduces.** `validate_file`'s report
+  gained a `notices` key, so the output hashed in
+  `runs/p9-shell-harden/MANIFEST.json` differs. Nothing recomputes
+  `proxy/runs/*` hashes, so this would have failed silently and only for
+  whoever tried to reproduce P-9. Left as documented drift: rewriting a past
+  run's manifest to match a later format is the manoeuvre `CANON_MIGRATION.md`
+  §7 declines for the same reason.
 
 ## Where the credential lives
 
@@ -92,3 +176,29 @@ in any tracked file here. Since P-9 the protection runs in both directions: a
 credential cannot reach the ledger, and a credential an upstream reflects back
 cannot reach the arm either — that leak used to leave the ledger clean, so it
 was unrecorded as well as unstopped.
+
+## `credential_in_body` 的误报率已测（S27，2026-07-29）
+
+审计把这条列在「还不能证实」是对的：判断真伪要读请求体，而读请求体本身有风险。
+`proxy/tools/triage_credential_incidents.py` 用不读内容的办法把它结了——
+每个命中片段只导出形状元信息与 sha256，真伪靠
+`sha256(片段) == sha256(活钥匙)` 判定，两边都不需要把值显示出来。
+
+测量（主 checkout + 全部 worktree，1033 个 `.jsonl`）：
+
+* `credential_in_body` incident **2439 条**，其中 `detail` 的互异取值 **1 个**
+  ——不是 2439 个发现，是同一条判断被记了 2439 次；
+* 启发式全语料命中 394,352 次，**哈希命中活钥匙的：0**；
+* 成因：检测器的 UUID 分支匹配到代理自己放进请求体的 `guid` / `card_id`
+  （二者实测都是标准 UUID），而每个 ACTION 请求体都带 `guid`。
+
+**误报率实测为 100%（2439/2439），真泄漏 0。**
+
+`redact.py:258-262` 的注释早就写明这个误报是设计时接受的代价，
+而那个取向（宁可误报）依然正确。变的是量：2439 条同源误报会让人关掉告警，
+而那正是真泄漏溜过去的方式。
+
+**收紧应改调用侧，不要改 `looks_like_credential`**：`env_proxy` 抬 incident 前
+排除「命中片段恰好等于本次会话自己的 `guid`/`card_id`」——拿代理自己刚发出去的值
+去比，不可能把真钥匙判成良性。**本轮未实施**，理由与判据见
+`proxy/runs/20260729T1020Z-S27-credential/FINDING.md`。

@@ -168,3 +168,86 @@
 2026-07-28T21:52:15Z CLAIM C11-tool-failure-as-truth by RES-3
 2026-07-28T22:59:54Z DONE C11-tool-failure-as-truth by RES-3
 2026-07-28T23:00:14Z CLAIM V19-unverified-is-not-true by RES-3
+2026-07-28T23:36:46Z CLAIM A3-campaign-devpile by W-1640
+2026-07-28T23:37:29Z CLAIM S17-fleet-evidence-capture by W-1641
+2026-07-28T23:38:14Z CLAIM S23-unreadable-is-not-clean by W-1642
+2026-07-29T00:21:01Z DONE S23-unreadable-is-not-clean by W-1642
+2026-07-29T00:24:43Z RELEASE A3-campaign-devpile by W-1640 (offline work delivered and pushed (branch agent/a3-campaign-devpile, 4 money-wasting defects fixed, verify.sh 7 gates green, 170 tests); live campaign BLOCKED on spend authority -- Theoria.md:305 gate is 9/16 and CHARTER.md:24 grants campaign-lane spend to RES-1 only; ruling requested in monitor/inbox/20260729T002000Z-W-1640-a3-spend-proposal.md)
+2026-07-29T00:24:50Z CLAIM A3-campaign-devpile by W-1640
+2026-07-29T00:27:06Z DONE S17-fleet-evidence-capture by W-1641
+2026-07-29T00:27:12Z CLAIM S24-merge-conflict-drain by W-1641
+2026-07-29T00:47:02Z SWEEP A3-campaign-devpile released (worker W-1640 gone)
+2026-07-29T00:52:21Z DONE S24-merge-conflict-drain by W-1641
+2026-07-29T00:52:21Z CLAIM A10-shared-ledger-real-arms by W-1641
+2026-07-29T01:25:20Z DONE A10-shared-ledger-real-arms by W-1641
+2026-07-29T01:25:20Z CLAIM A11-bypass-attempts-explained by W-1641
+2026-07-29T01:33:42Z CLAIM E16-verdict-must-gate by W-1650
+2026-07-29T01:34:24Z CLAIM P12-paper-multi-review by W-1651
+2026-07-29T01:35:09Z CLAIM V5-verdict-three-types by W-1652
+2026-07-29T01:38:22Z CLAIM S16-silent-failure-hunt by RES-4
+2026-07-29T01:38:22Z CLAIM S18-fleetkit-extract by RES-4
+2026-07-29T01:38:22Z CLAIM S22-access-check-close by RES-4
+2026-07-29T01:41:13Z DONE V19-unverified-is-not-true by RES-3
+2026-07-29T01:41:31Z CLAIM V9-battery-gaming-audit by RES-3
+2026-07-29T01:48:57Z DONE A11-bypass-attempts-explained by W-1641
+2026-07-29T01:50:57Z CLAIM P13-P13-figure-numbering-and-plates by RES-2
+2026-07-29T01:57:02Z SWEEP P12-paper-multi-review released (worker W-1651 gone)
+2026-07-29T02:00:28Z DONE S16-silent-failure-hunt by RES-4
+2026-07-29T02:02:04Z DONE P13-P13-figure-numbering-and-plates by RES-2
+2026-07-29T02:02:04Z CLAIM P12-paper-multi-review by RES-2
+2026-07-29T02:03:54Z RELEASE S22-access-check-close by RES-4 (第(2)项已交付并推送(agent/s22-access-check-close);第(1)项全量跨会话残留需真实API调用,按CHARTER仅RES-1可花钱,已写inbox请裁决改派)
+2026-07-29T02:09:15Z CLAIM S25-probe-the-merge-queue by RES-4
+2026-07-29T02:09:15Z CLAIM S22-access-check-close by RES-4
+2026-07-29T02:09:37Z RELEASE S22-access-check-close by RES-4 (文档半已交付agent/s22-access-check-close;剩余全量跨会话残留需真实API,按CHARTER仅RES-1可花钱,见inbox/20260729T0210Z。请改派RES-1或标注为其保留,否则我每轮都会再领到它)
+2026-07-29T02:20:24Z DONE P12-paper-multi-review by RES-2
+2026-07-29T02:21:15Z CLAIM P13-paper-intro-abstract by RES-2
+2026-07-29T02:28:45Z DONE E16-verdict-must-gate by W-1650
+2026-07-29T02:28:50Z CLAIM E8-ic3-scale by W-1650
+2026-07-29T02:51:07Z DONE V9-battery-gaming-audit by RES-3
+2026-07-29T02:51:30Z CLAIM V18-battery-prereg-check by RES-3
+2026-07-29T02:52:01Z SWEEP E8-ic3-scale released (worker W-1650 gone)
+2026-07-29T03:09:03Z DONE V5-verdict-three-types by W-1652
+2026-07-29T03:09:07Z CLAIM A12-cost-claim-sources by W-1652
+2026-07-29T03:27:02Z SWEEP A12-cost-claim-sources released (worker W-1652 gone)
+2026-07-29T03:34:57Z DONE V18-battery-prereg-check by RES-3
+2026-07-29T03:35:20Z CLAIM E17-held-out-validation by RES-3
+2026-07-29T04:34:51Z DONE E17-held-out-validation by RES-3
+2026-07-29T04:35:12Z CLAIM E12-adopt-the-unsolvable-canon by RES-3
+2026-07-29T04:35:51Z DONE E12-adopt-the-unsolvable-canon by RES-3
+2026-07-29T04:35:51Z CLAIM E15-solver-status-bit by RES-3
+2026-07-29T04:46:23Z CLAIM A3-campaign-devpile by RES-1
+2026-07-29T04:46:27Z CLAIM A12-cost-claim-sources by RES-1
+2026-07-29T04:47:53Z DONE C10-unsolvable-proof-canon by RES-3
+2026-07-29T04:48:57Z CLAIM V7-exam-stress-fanout by RES-3
+2026-07-29T04:51:55Z CLAIM A4b-ablation-calibrate by RES-1
+2026-07-29T05:16:57Z DONE A12-cost-claim-sources by RES-1
+2026-07-29T05:21:05Z DONE E15-solver-status-bit by RES-3
+2026-07-29T05:27:41Z DONE A4b-ablation-calibrate by RES-1
+2026-07-29T05:27:55Z CLAIM A6-transfer-protocol by RES-1
+2026-07-29T05:34:10Z DONE P13-paper-intro-abstract by RES-2
+2026-07-29T05:34:25Z CLAIM P14-honesty-section by RES-2
+2026-07-29T05:46:15Z DONE S18-fleetkit-extract by RES-4
+2026-07-29T05:46:32Z CLAIM S22-access-check-close by RES-4
+2026-07-29T05:46:32Z CLAIM S7-ledger-hashchain by RES-4
+2026-07-29T06:05:16Z DONE S7-ledger-hashchain by RES-4
+2026-07-29T06:08:52Z RELEASE S22-access-check-close by RES-4 (第(2)项已交付(efc98c6+963e2ad,含来源自己写下的两句限定);第(1)项要真实API调用,CHARTER只允许RES-1花钱。这是第三次交回,请改派RES-1或加deps,不要再扫回可领列表——详见 monitor/inbox/20260729T0635Z-RES-4-s22-third-release.md)
+2026-07-29T06:09:03Z CLAIM S22-access-check-close by RES-4
+2026-07-29T06:10:52Z DONE S25-probe-the-merge-queue by RES-4
+2026-07-29T06:11:23Z CLAIM S26-phase1-gate-must-decide by RES-4
+2026-07-29T06:17:08Z CLAIM E13-engine-section-numbers by RES-3
+2026-07-29T06:26:48Z DONE S26-phase1-gate-must-decide by RES-4
+2026-07-29T06:27:24Z CLAIM S19-session-liveness by RES-4
+2026-07-29T06:34:07Z DONE S19-session-liveness by RES-4
+2026-07-29T06:34:07Z CLAIM S20-gate-negative-sample by RES-4
+2026-07-29T06:39:24Z DONE S20-gate-negative-sample by RES-4
+2026-07-29T06:47:54Z CLAIM P7-P14-battery-section-blind-round by RES-2
+2026-07-29T06:55:14Z DONE V7-exam-stress-fanout by RES-3
+2026-07-29T07:14:01Z CLAIM S4-freeze by RES-1
+2026-07-29T07:14:49Z DONE P14-honesty-section by RES-2
+2026-07-29T07:29:24Z DONE E13-engine-section-numbers by RES-3
+2026-07-29T07:29:40Z CLAIM V8-judge-trust-audit by RES-3
+2026-07-29T07:30:58Z DONE A6-transfer-protocol by RES-1
+2026-07-29T08:07:04Z DONE V8-judge-trust-audit by RES-3
+2026-07-29T10:04:37Z CLAIM S21-app-session-death by RES-4
+2026-07-29T10:07:00Z CLAIM P4-P16-e06-contradiction by RES-2
+2026-07-29T10:07:27Z CLAIM V6-exam-on-sealed-dryrun by RES-3

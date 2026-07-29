@@ -372,6 +372,20 @@ def _demonstrated() -> Dict[str, object]:
         return {}
 
 
+def _v9() -> Dict[str, object]:
+    """The blind round's demotions, or nothing if it cannot be built.
+
+    Same lazy-and-forgiving shape as `_demonstrated()`: a broken attack module
+    degrades this to the sighted evidence rather than taking the whole
+    recompute down.
+    """
+    try:
+        from battery.audit.v9.verdict import v9_demotions
+        return v9_demotions()
+    except Exception:            # pragma: no cover - defensive
+        return {}
+
+
 def tier_of(metric_id: str) -> str:
     """`main` or `reference` — decided by demonstration where one exists.
 
@@ -383,6 +397,17 @@ def tier_of(metric_id: str) -> str:
     and they win. The prose entry is kept beside them so the disagreement stays
     visible rather than being edited away.
     """
+    # V9 (blind round) outranks both. `battery/audit/exploits/` was written in
+    # the same tree as this register, whose every entry names the hole and the
+    # defence, so a sighted attacker could be reading the answer off the page;
+    # `battery/BLINDING.md` records what V9's attackers were and were not
+    # given. Where the blind round landed a poverty-certified attack that this
+    # battery does not defend, that is the newer and the harder evidence, and
+    # it decides. It only ever demotes: `PREREG_V9.md` R1 refuses to promote a
+    # metric on the strength of nobody having thought of an attack.
+    if metric_id in _v9():
+        return "reference"
+
     exploit = _demonstrated().get(metric_id)
     if exploit is not None:
         return exploit.proposed_tier
@@ -392,6 +417,20 @@ def tier_of(metric_id: str) -> str:
     if entry.get("accidental") and not entry.get("defended"):
         return "reference"
     return "main"
+
+
+def tier_before_v9(metric_id: str) -> str:
+    """What B14's sighted round alone concluded.
+
+    `tier_of` now consults the blind round first, which is right for every
+    consumer — but it makes "what did we think before V9?" unaskable, and that
+    is the comparison the whole exercise is for.  Kept as a separate entry
+    point so the two audits can be diffed rather than merged.
+    """
+    exploit = _demonstrated().get(metric_id)
+    if exploit is not None:
+        return exploit.proposed_tier
+    return _register_tier(metric_id)
 
 
 def _register_tier(metric_id: str) -> str:

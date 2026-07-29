@@ -82,6 +82,56 @@
  },
  "outcome": null,
  "prompt_id": "P-8",
+ "provenance": {
+  "arm_version_lookup": {
+   "arm_sha256": "6f820af14167ed60fd82278da67f0ba15c909568e4326c3b72629873cdb900b5",
+   "commits": [
+    "e3ce4ee1e02af5eed18a32e13b22dec69c9a6ebe"
+   ],
+   "detail": "exactly one commit reachable from any ref carries this arm_version",
+   "earliest_commit": "e3ce4ee1e02af5eed18a32e13b22dec69c9a6ebe",
+   "relation_to_the_run": {
+    "claim": "this run's arm sources were byte-identical to the tree held by this commit. The commit was created 57 s after the run started, so it is not 'the commit the run ran from' -- it is the commit whose tree the run's files match.",
+    "commit_committed_unix": 1785203099,
+    "commit_minus_run_start_s": 57,
+    "run_started_unix": 1785203042
+   },
+   "verdict": "matched"
+  },
+  "base_commit_check": {
+   "base_commit_in_this_manifest": "0f62cf6614ab57004a0973592326fcafe77ad489",
+   "base_commit_the_arm_version_reconstructs": "e3ce4ee1e02af5eed18a32e13b22dec69c9a6ebe",
+   "detail": "the commit recorded here is NOT the one whose tree hashes to this run's recorded arm_version. `archive.py` wrote `git rev-parse HEAD` at the moment the manifest was generated, which is after the run. The derived commit is the one whose tree the run's sources match byte for byte -- note that it may have been created during or just after the run, so it is the reproducible tree rather than a commit the run was launched from. See `arm_version_lookup.relation_to_the_run`.",
+   "verdict": "DISAGREE"
+  },
+  "derived_from": {
+   "arm_version": "ledger run_start.arm_version",
+   "base_commit": "armtools.armversion: the arm_version this run recorded is reconstructed from exactly one commit's tree",
+   "game_id": "ledger run_start.game_id",
+   "guard": "ledger run_start.guard",
+   "reconciliation / cost / constraint_8 / sealing": "armtools.archive, over this run's own ledger records",
+   "run_id": "ledger run_start.run_id",
+   "upstream_pin": "ledger run_start.upstream_pin (NOT the working tree)",
+   "utc": "ledger run_start.ts"
+  },
+  "missing": [
+   {
+    "field": "base_commit (reproducible)",
+    "why": "the commit recorded here is NOT the one whose tree hashes to this run's recorded arm_version. `archive.py` wrote `git rev-parse HEAD` at the moment the manifest was generated, which is after the run. The derived commit is the one whose tree the run's sources match byte for byte -- note that it may have been created during or just after the run, so it is the reproducible tree rather than a commit the run was launched from. See `arm_version_lookup.relation_to_the_run`."
+   }
+  ],
+  "mode": "amend",
+  "notes": [
+   {
+    "field": "run.json / summary",
+    "why": "this run never reached `_finish()`, so no `run.json` was written. `outcome` and `elapsed_s` are taken from the ledger's `run_end` record instead, which carries them; `budget` and `world` were only ever in the summary and are absent. Nothing required by CLAUDE.md is affected."
+   }
+  ],
+  "prompt_id_of_the_backfill": "S8-provenance-backfill",
+  "rule": "this manifest was written by `armtools/archive.py` at the end of its run and is left exactly as it was. Only the fields below are added.",
+  "status": "incomplete",
+  "tool": "armtools/backfill.py"
+ },
  "reconciliation": {
   "env_steps": 44,
   "env_steps_ok": 7,
@@ -94,6 +144,14 @@
  },
  "run_id": null,
  "scorecard": null,
+ "scorecard_recovered_by": {
+  "card_id": "4e3041e8-6469-42b5-b5c5-4ca5ca310624",
+  "score": 0.0,
+  "slug": "20260728T014402Z-g50t-first-contact-salvage",
+  "total_actions": 6,
+  "total_levels_completed": 0,
+  "why": "this run died before it could close its own scorecard, so `archive.py` recorded `scorecard: null`. The card was closed afterwards by the salvage run named here, whose ledger holds the API's own count. The number was never lost, only unreachable from this file."
+ },
  "sealing": {
   "by_kind": {},
   "bypass_attempts": 0,
@@ -138,5 +196,6 @@
   "theory-compiler/src/theory_compiler/generators/gen_python.py": "0e599dfc7f579245663ded9bc15db884694e0c7a56bcad2a3d86c8a25aa010d4",
   "theory-compiler/src/theory_compiler/parser/theory_parser.py": "9deba600ff17bdf19efe829816e0d9c8713600e621a480b3866214fdcf7dda5a"
  },
+ "utc": "2026-07-28T01:44:02.435Z",
  "world": null
 }

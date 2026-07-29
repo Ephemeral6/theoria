@@ -1,0 +1,9 @@
+{
+  "prompt_id": "E7-attack-verify-admissible-counterexamples",
+  "branch": "agent/e7-deadlock-claim-audit",
+  "base_commit": "2a30f7ae5a9d27f1058409bb9d811eae543421af",
+  "utc": "2026-07-28T18:13:58Z",
+  "fast_downward": "24.06+ rev 7120aa0 (.worktrees/p13/engine-rig/.toolchain/downward)",
+  "scope": "verifies the ipdb rows (far9 78->30, swap-passage 454->0) and the lmcut rows (three-far8, hunt0021/0037/0070) against DEADLOCK_CLAIM.md's '0-3 expansions'.",
+  "writes": "nothing outside this directory; all instances read from ../../work/"
+}
