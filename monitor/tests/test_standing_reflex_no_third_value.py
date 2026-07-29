@@ -135,19 +135,21 @@ def test_the_skip_reason_survives_a_cp936_console():
 # --------------------------------------------------------------------------
 
 def _merge_events(returncode, stdout="", stderr=""):
-    """Replay reflex's ci_merge step against a synthetic result."""
+    """Ask **reflex's own** ci_merge step what it reports for a child result.
+
+    ADV-2/D12: this helper used to be a re-implementation of those eight lines,
+    so the two tests below never called `reflex` at all and passed against the
+    pre-fix `reflex.py` verbatim -- the fix's only real coverage was a source grep
+    for the string `"merge:EXIT-"`. A test that owns a copy of the code under test
+    cannot fail when that code changes. `reflex.merge_events` was extracted from
+    the loop for exactly this reason; only the synthetic child result is built
+    here now.
+    """
     class R:
         pass
     r = R()
     r.returncode, r.stdout, r.stderr = returncode, stdout, stderr
-    events = []
-    merged = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
-    flagged = [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
-    events += merged + flagged
-    if r.returncode != 0:
-        first = ((r.stderr or "").strip().splitlines() or [""])[0]
-        events.append("merge:EXIT-%d %s" % (r.returncode, first[:120]))
-    return events
+    return reflex.merge_events(r)
 
 
 def test_a_crashed_merger_no_longer_reads_as_a_clean_no_op():
@@ -168,6 +170,41 @@ def test_a_successful_merge_is_unchanged():
     """NEGATIVE CONTROL: the happy path's events must be exactly as before."""
     assert _merge_events(0, stdout="MERGED agent/foo\nFLAG agent/bar\n") == [
         "MERGED agent/foo", "FLAG agent/bar"]
+
+
+def test_the_ci_merge_step_is_not_reimplemented_anywhere(monkeypatch):
+    """The guard that keeps ADV-2/D12 from coming back.
+
+    The two tests above are honest about what they cover only as long as they
+    call the shipped code. Their pre-fix red is an `AttributeError` -- the fix
+    was an *extraction*, so there is no pre-fix symbol to behave differently, and
+    this is deliberately **not** claimed as a behavioural negative control. What
+    makes them meaningful is that the logic now exists in exactly one place; so
+    that is what gets pinned here.
+
+    Driving `reflex.main()` end to end would be the real behavioural test, and it
+    is refused on purpose: that tick launches paid sessions.
+    """
+    # Assembled rather than written out: the first draft of this test put the
+    # literal in its own assertion message, so the file matched itself and the
+    # check went red on nothing. A source scan that trips over its own text is
+    # the false-red twin of this item's disease -- worth one line to avoid.
+    needle = 'startswith("' + 'MERGED")'
+
+    src = open(os.path.join(HERE, "reflex.py"), encoding="utf-8").read()
+    loop = src[src.index("def main("):]
+    assert "merge_events(r)" in loop, (
+        "the loop no longer calls merge_events -- the inline copy is back")
+    assert needle not in loop, (
+        "the ci_merge scrape was re-inlined into the loop; the function and the "
+        "loop can now disagree, which is the shape D12 caught")
+    assert src.count(needle) == 1, (
+        "the scrape appears %d times in reflex.py; it must exist once, in "
+        "merge_events" % src.count(needle))
+
+    this_file = open(os.path.abspath(__file__), encoding="utf-8").read()
+    assert needle not in this_file, (
+        "the test file has its own copy of the code under test again")
 
 
 def test_the_real_ci_merge_has_no_deliberate_nonzero_exit():

@@ -345,8 +345,25 @@ def test_standing_compares_the_status_explicitly():
 
 
 def test_the_new_lines_survive_a_cp936_console():
+    """ADV-2/D11: this was a `for` over a conditional with no counter, so **zero
+    matches meant zero assertions** -- it passed against the pre-fix `dispatch.py`
+    and `_runner.py`, where none of these lines exist yet, and renaming the status
+    string would have left it green forever.
+
+    A source scan that silently matches nothing is the purest form of the thing
+    this whole item is about: a check that cannot go red, reporting success.
+    """
+    matched = 0
     for mod in ("dispatch.py", "_runner.py"):
         src = open(os.path.join(HERE, mod), encoding="utf-8").read()
         for line in src.splitlines():
             if "died-on-arrival" in line or "not on PATH" in line:
-                line.encode("cp936")
+                line.encode("cp936")    # must not raise
+                matched += 1
+
+    # Both strings are load-bearing status vocabulary: `died-on-arrival` is the
+    # third value this item added, `not on PATH` is the missing-CLI guard.
+    assert matched >= 2, (
+        "the cp936 scan matched %d lines; the status strings it is meant to "
+        "protect have been renamed or removed, so it was checking nothing"
+        % matched)

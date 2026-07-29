@@ -159,8 +159,16 @@ def test_the_new_partition_survives_a_cp936_console(rig, capsys):
     rig.item("READY-1", territory="shared")
     rig.claim("HOLDER-1", "RES-1", territory="shared")
 
-    for line in _list(capsys).splitlines():
-        line.encode("cp936")
+    lines = _list(capsys).splitlines()
+
+    for line in lines:
+        line.encode("cp936")        # must not raise
+    # The sibling of ADV-2/D11: a `for` with no floor passes loudest when the
+    # thing it iterates is empty. A board that printed nothing at all would have
+    # satisfied every encode above.
+    assert len(lines) >= 3, (
+        "cmd_list printed %d lines; with an item on the shelf and one claimed "
+        "there is nothing to encode, so this checked nothing" % len(lines))
 
 
 # ---------------------------------------------------------------- finding 4

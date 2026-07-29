@@ -74,6 +74,36 @@ def save_loop(state):
     os.replace(tmp, LOOP)
 
 
+def merge_events(r):
+    """What the ci_merge step of the loop reports, given the child's result.
+
+    S28: only stdout used to be read, so a crashed merger, a merger killed
+    mid-run, and a clean no-op were **the same observation** -- all three logged
+    `quiet`. Measured: exits 0/1/3 all produced `events=[]`
+    (EVIDENCE-3-standing-reflex.md).
+
+    Alarming on non-zero is safe rather than cry-wolf: `ci_merge.py` has no
+    `sys.exit` anywhere, and a conflict or a red gate is reported as a `FLAG`
+    line on stdout, not as a status. So non-zero means the *merger* broke, not
+    that a merge was declined -- `test_the_real_ci_merge_has_no_deliberate_
+    nonzero_exit` fails if that ever stops being true.
+
+    **This lives in a function only so that a test can reach it.** ADV-2/D13
+    caught the previous arrangement: the logic was inline in `main()`'s loop and
+    unreachable from a test, so the two tests that claimed to cover it exercised
+    a re-implementation of these eight lines *inside the test file* and passed
+    against the pre-fix `reflex.py` verbatim. A test that owns a copy of the code
+    under test cannot fail when the code changes, which makes it exactly the kind
+    of always-green check this whole item is about.
+    """
+    out = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
+    out += [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
+    if r.returncode != 0:
+        first = ((r.stderr or "").strip().splitlines() or [""])[0]
+        out.append("merge:EXIT-%d %s" % (r.returncode, first[:120]))
+    return out
+
+
 def main():
     if os.path.exists(LOCK):
         if time.time() - os.path.getmtime(LOCK) < 1500:
@@ -319,21 +349,7 @@ def main():
         if True:
             r = run([sys.executable, os.path.join(HERE, "ci_merge.py")],
                     timeout=3600)
-            merged = [l for l in r.stdout.splitlines() if l.startswith("MERGED")]
-            flagged = [l for l in r.stdout.splitlines() if l.startswith("FLAG")]
-            events += merged + flagged
-            # S28: only stdout used to be read, so a crashed merger, a merger
-            # killed mid-run, and a clean no-op were **the same observation** --
-            # all three logged `quiet`. Measured: exits 0/1/3 all produced
-            # events=[] (EVIDENCE-3-standing-reflex.md).
-            #
-            # This is safe to alarm on rather than cry-wolf: ci_merge.py has no
-            # `sys.exit` anywhere, and a conflict or red gate is reported as a
-            # FLAG file on stdout, not as a status. So non-zero means the
-            # *merger* broke, not that a merge was declined.
-            if r.returncode != 0:
-                first = ((r.stderr or "").strip().splitlines() or [""])[0]
-                events.append("merge:EXIT-%d %s" % (r.returncode, first[:120]))
+            events += merge_events(r)
 
         # 4b. supply alarm — authoring items needs judgment, so reflex cannot
         # refill the board itself; what it can do is make a dry board loud
