@@ -1,0 +1,10 @@
+{
+  "agent": "RES-4",
+  "base_commit": "4b9ade0",
+  "branch": "agent/s22-access-check-close",
+  "lane": "infra",
+  "prompt_id": "S22-access-check-close",
+  "state": "sub-item (2) closed earlier (efc98c6); this run adds the two qualifications BUDGET_REPORT.md 4.1 states and the README's row was too short to carry. Sub-item (1) still needs live API calls -- CHARTER reserves spending to RES-1, third release.",
+  "territory": "arc-recon",
+  "utc": "2026-07-29T06:30:00Z"
+}
