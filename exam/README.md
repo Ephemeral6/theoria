@@ -20,7 +20,7 @@ python -m exam.verify                  # the whole territory, one command
 python -m exam.tools.build_papers      # set the papers; split sheet from key
 python -m exam.tools.run_exam          # calibrate the marker, then mark
 python -m exam.tools.run_selftest      # test the marker between its endpoints
-python -m pytest exam/tests -q         # 287 tests
+python -m pytest exam/tests -q         # 334 tests
 python -m exam.tools.archive_run <id>  # runs/<id>/MANIFEST.json
 ```
 
@@ -114,6 +114,23 @@ are mixed across boards so board identity carries no signal.
   witness plan. A framework with a taste for unsolvability proofs gets caught
   here or nowhere.
 
+**The class (ii) premise is weaker than its name.** `lower_bound` is a true
+statement about the raw `(cart, button, latch mask)` product space, which is
+what a naive enumerator walks. It is not a statement about what a complete
+search costs: latching is monotone and gates no geometry, so the space that
+decides the question is the `(cart, button)` quotient, and that is **180, 180,
+600 and 177** states on the four class (ii) items. The paper publishes both
+numbers and derives `search_credible` from the second, because the rubric used
+to read the first and tell an examinee that had honestly searched that its
+search was impossible. What survives is the ordering, which is what the class is
+for: a certificate is worth 1.0 of the reason and a search 0.4, everywhere.
+D-EX-022, and `STATUS.md` open weakness 27.
+
+**Every solvable item says where its witness came from.** Five of the eight are
+breadth-first search output and three are constructions. A plan that replays and
+wins proves solvability however it was found, but on a paper whose premise is
+由构造即知答案 the key has to say which. D-EX-023.
+
 **The pair is split by class, and never quoted alone.**
 [`artifacts/matrix/verdict_confusion.md`](artifacts/matrix/verdict_confusion.md)
 is one row per examinee, one column pair per class, each cell `rate (answered /
@@ -128,6 +145,25 @@ class size)`. Three separate reasons, all of them measurements:
 * an empty denominator prints `--`, never `0.000`. Class (i) holds no solvable
   items, so specificity there is undefined rather than failed.
 
+**And that last point is worse than it looks, which is why there is a second
+split.** The three classes partition the paper *by answer* — 9 unsolvable in (i)
+and (ii), 8 solvable in (iii) — so one denominator is empty in **every** class
+cell and the pair the protocol asks for appears nowhere except pooled, which is
+the reading D-EX-015 exists to say means least. `board_size_class` cross-cuts
+the answer (small 5/5, large 4/3) and splits on exactly the distinction classes
+(i) and (ii) were invented to draw. Under it the bluffer's signature is
+`(1.000, 0.000)` in **one cell, per stratum**, instead of assembled from two
+rows whose item sets do not overlap; and the memoriser's `large (--, --)` at
+`0/4` and `0/3` says in one place that it has never answered a large board in
+either direction. `calibration` asserts the bluffer's pair per stratum rather
+than pooled. D-EX-024.
+
+**Not answering has three forms and they are three columns.** *Did not submit*,
+*declined*, and *submitted something unreadable* were one counter, and it was
+the counter D-EX-006 introduced so that an abstention could not be confused with
+anything else. An examinee whose every answer was unparseable printed the
+identical row to `null`, which submitted nothing. D-EX-025.
+
 And the result that settles the matter: with the cheater subagent on the matrix
 as a row, `oracle` and `cheater-v4` are **identical in every cell** — 1.000 and
 1.000 throughout, full coverage — and differ only in the score. A reader handed
@@ -139,7 +175,16 @@ The certificate checker is a **closed grammar** with exact key sets, and every
 number in a submitted certificate is re-derived from the level. A checker that
 accepts free text is not a checker. It refuses, among others, a certificate
 whose stated values are *true* but whose direction is wrong, and every attempt
-to transplant a valid certificate onto a different item.
+to transplant a valid certificate onto a different item (144 transplants tried,
+0 accepted).
+
+**It also used to accept certificates for levels that were solvable.** The graph
+the checker separates components in was a *second* implementation of
+`Level.step`, and the two disagreed about the teleport and the door — so an
+over-approximation that was supposed to fail open failed closed, and a
+`cart_region` or `cut_set` proof of a false theorem was paid 2.0 of 2.0. There
+is one transition function now and the graph asks it. Reproductions and the fuzz
+that bounds the blast radius: D-EX-020 and the V5 run directory.
 
 Every item carries a **constructive justification** in
 [`proxy/variants.py`](../proxy/variants.py)'s spec format, emitted to
@@ -166,6 +211,16 @@ known scores run first, against **pre-registered bands**, and
 `oracle == 1.0` and `null == 0.0` are exact and follow from construction: a
 marker that rejects ground truth depresses every real score, and a marker that
 pays for silence inflates every one of them.
+
+**They also calibrate only the paths those two fakes walk, and that is two of
+the marker's eleven outcomes.** Fourteen faults injected into the verdict
+rubric: thirteen passed this gate, twelve passed all seven mutants, two were
+caught by nothing anywhere, and all four fractions above were bit-identical
+under every one. The sheet advertises five answer shapes and the fakes submit
+three; the mutants inherit those three because they are derived from the oracle.
+Five **answer-shape probes** now run at the gate — abstain, unreadable, search,
+wrong-claim-with-a-reason, forged certificate — each with a score fixed by
+arithmetic over the paper's own points rather than by a band. D-EX-026.
 
 The **verdict bluffer shows sensitivity 1.0 and specificity 0.0** — the
 signature the protocol demands be visible. It answers "unsolvable" to everything,

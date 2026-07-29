@@ -1,15 +1,119 @@
 {
-  "prompt_id": "V5-verdict-three-types",
-  "branch": "agent/v5-verdict-three-types",
   "base_commit": "31bea4664d75e8ec6b14e093e85633db7470aebf",
-  "utc": "20260729T020000Z",
-  "worker": "W-1652",
-  "territory": "exam",
   "baseline": {
-    "suite": "python -m pytest exam/tests -q",
+    "at_base_commit": true,
     "result": "321 passed",
-    "at_base_commit": true
+    "suite": "python -m pytest exam/tests -q"
+  },
+  "branch": "agent/v5-verdict-three-types",
+  "files": [
+    {
+      "path": "FINDINGS.md",
+      "sha256": "8069be345191c43d9816963bc6dec98313eed7d06f23fdbb8a7f7834e1a3ad7f"
+    },
+    {
+      "path": "PLAN.md",
+      "sha256": "51b283fd413a52270fd9ff1e5e3da2e5ab292e79853d15f010e3c35b6287d06c"
+    },
+    {
+      "path": "RUN_STATE.md",
+      "sha256": "f1251e6b027d905768b963e2f83d337433d7ede58364af053be799f5d9a61b4f"
+    },
+    {
+      "path": "append_sync.py",
+      "sha256": "a7e0fc6286f6e4919ced056855d43d0aa6fb3f778b49b3925257a4e3db7cfe34"
+    },
+    {
+      "path": "multiplicity_lift.txt",
+      "sha256": "90b770ff344ae90a084a141135b76756c5827b0c8f5a7d31dc8e79532cc2e081"
+    },
+    {
+      "path": "probe_multiplicity_threshold.py",
+      "sha256": "eb699af3be95fea38553a0e48c652a8a23941f195d0398a2b3b8eb3c7372c9a0"
+    },
+    {
+      "path": "probe_pair_by_stratum.py",
+      "sha256": "40fdedc70dbe1285341efa18fe5992fa1c9116fe1330b387c608d5101bdeb516"
+    },
+    {
+      "path": "seal_manifest.py",
+      "sha256": "72abb7543ab4e460035c82289c020cbbf26919d6b91bc28d0d814c71ac541ee5"
+    },
+    {
+      "path": "verify_checker_claims.py",
+      "sha256": "48ea5cd0fc47d7f4ebd1a4e4ca7becc390941ba897eda09f2004d2fba3af1dd3"
+    },
+    {
+      "path": "verify_leak_claims.py",
+      "sha256": "fd4ec841ce5a94d4ff871642524a75a160da1de73bf6cadd5732b872e91fb200"
+    },
+    {
+      "path": "write_inbox.py",
+      "sha256": "c89df4e762fd1a1554ce4d7b0a9fbf1af3851928f55ecf91e3b51a4ae2cecaf4"
+    },
+    {
+      "path": "exam/grading/rubrics_verdict.py",
+      "sha256": "1371d0be014bc34fdfee03d0bcd5fc3936518b3a37fc2c4d0b39e05bc82f116f"
+    },
+    {
+      "path": "exam/grading/confusion_matrix.py",
+      "sha256": "98cd09c81a7fafb9c1ab38feb1ac7d8abdf3e54a471e5037728c699e89402dcb"
+    },
+    {
+      "path": "exam/grading/calibration.py",
+      "sha256": "6b36545ddc0d4a7b486b53d8e600adb023134fc173d6d64454a930547a839839"
+    },
+    {
+      "path": "exam/grading/mark.py",
+      "sha256": "00c5d347edac8f997ecf8f6d94edc24043bfd036a9b8b9737f34ddb1230e23a9"
+    },
+    {
+      "path": "exam/papers/verdict.py",
+      "sha256": "d586db54c1d3a55edc3ffb8ed85bda99f202376193f8400b97055605ef9cae68"
+    },
+    {
+      "path": "exam/tests/test_verdict.py",
+      "sha256": "708dfe78bed6d7498e0ceb73a44f630554fb56bd6267e7dff38743fccc750c07"
+    },
+    {
+      "path": "exam/tests/test_selftest.py",
+      "sha256": "920e11402a057e92bfa10a737a27ffd095025b0ce7c42c9c843ae54005a48075"
+    }
+  ],
+  "prompt_id": "V5-verdict-three-types",
+  "result": {
+    "api_calls": 0,
+    "decisions_added": [
+      "D-EX-020",
+      "D-EX-021",
+      "D-EX-022",
+      "D-EX-023",
+      "D-EX-024",
+      "D-EX-025",
+      "D-EX-026"
+    ],
+    "determinism": "byte-identical across PYTHONHASHSEED 7 and 99",
+    "network": "none; exam.guard.no_network() holds over the suite",
+    "sealed_pile_contact": "none",
+    "status_weaknesses_added": [
+      20,
+      21,
+      22,
+      23,
+      24,
+      25,
+      26,
+      27
+    ],
+    "status_weaknesses_closed": [
+      4,
+      6
+    ],
+    "suite": "334 passed (321 at base commit)",
+    "verify": "GREEN"
   },
   "scope_note": "The item's four acceptance clauses (three classes in a self-built world family, constructive grounds per item, calibration by known-full/known-zero fakes, sensitivity and specificity reported separately) were already delivered by P-15 and V4 on `p15-verdict-a2`. V5's work is therefore adversarial: test whether the delivered instrument actually holds, and close what does not. Gaps carried into this run are STATUS.md open weaknesses 4, 5, 6, 13, 14 and D-EX-015.",
-  "files": []
+  "territory": "exam",
+  "utc": "20260729T020000Z",
+  "worker": "W-1652"
 }

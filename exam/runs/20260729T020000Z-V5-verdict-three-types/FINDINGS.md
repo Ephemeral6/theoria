@@ -209,3 +209,38 @@ D-EX-011 found value→answer. D-EX-018 found token→answer, inside a value tha
 unique for an unrelated reason. This is **multiplicity→answer**: no value
 predicts anything, and how many times a value occurs predicts a great deal. No
 checker in `leakage.py` computes a bucket-size feature at all.
+
+### F-2d — and the threshold a checker would need, measured rather than guessed
+
+Not implemented here (see `RUN_STATE.md`, "what this run did NOT do"), but the
+number a future implementer needs is measured, because D-EX-011 records that
+`metadata_hits` needed three exclusions added in response to false positives
+found while wiring it up: *a checker that cries wolf gets switched off, which is
+the same failure as a checker that never runs.*
+
+`probe_multiplicity_threshold.py` prints, for every sheet-visible field of every
+paper, the accuracy of predicting the answer from "is this value unique on the
+sheet". Full output in `multiplicity_lift.txt`. The separation is clean:
+
+```
+=== verdict / label=claim  n=17 floor=0.5294 ===
+  lift=+0.2353 acc=0.7647  level_id     unique={unsolvable:6, solvable:1} repeated={solvable:7, unsolvable:3}
+  lift=+0.1765 acc=0.7059  board.grid   unique={solvable:3, unsolvable:7} repeated={solvable:5, unsolvable:2}
+  lift=+0.1765 acc=0.7059  board        (the same feature, one level up)
+  lift=+0.0588 acc=0.5882  commands
+  lift=+0.0000 acc=0.5294  hazards, budget, ...
+```
+
+and on the other papers, where no such leak is claimed, the largest lift any
+field produces is **+0.0250** (`heldout`, `frame_before`, on both the `split` and
+`level_name` labels). So the two real offenders sit at +0.24 and +0.18, the
+verdict paper's next field at +0.06, and the entire innocent population of three
+other papers under +0.03. A threshold anywhere in +0.10 to +0.15 flags exactly
+`level_id` and `board.grid` and nothing else in the repository.
+
+Note also what the same run shows about the **existing** check: at
+`metadata_hits`' tolerance of 0.90, `level_id`'s multi-item bucket rate is 0.70
+and `board.height`'s is 0.75. **Widening `METADATA_FIELDS` to include content
+fields would not have caught this leak**, because it is not a value→answer map
+with near-certainty; it is a derived feature of the value's frequency. The check
+that is missing is a different check, not a longer list.
