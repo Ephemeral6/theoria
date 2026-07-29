@@ -262,6 +262,40 @@ class Campaign:
         return min(LEG_COST_CEILING_USD,
                    max(0.0, self._game_headroom(game_id) - 1.0))
 
+    def _failed_leg_cost(self, game_id: str):
+        """What a leg that raised actually cost, asked of the authority.
+
+        The first version of this charged the leg's whole ceiling on the
+        reasoning that an upper bound errs safely. It does -- but it is wildly
+        wrong for the commonest failure by far, which is a leg that dies
+        *before it spends anything*: the first live attempt here failed on a
+        missing credential and was booked at $14.00 having made zero calls.
+        A ceiling charge on a leg that never started does not err safely, it
+        just makes the accounts fiction in the other direction.
+
+        The shared pool settles every model call as it happens and is keyed by
+        the leg's own campaign name, so it already knows the exact figure.
+        Ask it. Fall back to the ceiling only when it cannot answer, which is
+        the one case where an upper bound really is the best available.
+        """
+        in_flight = getattr(self, "_in_flight", None)
+        if in_flight:
+            try:
+                gate = self.spend_gate or spend_mod.SpendGate()
+                totals = gate.totals()
+                data = (totals.as_json() if hasattr(totals, "as_json")
+                        else dict(totals.__dict__))
+                entry = (data.get("campaigns") or {}).get(
+                    in_flight["campaign"])
+                if entry is not None:
+                    return float(entry.get("usd") or 0.0), "gate-settled"
+                # The pool knows every campaign that ever spent. Absent means
+                # this leg never reached a billable call.
+                return 0.0, "gate-settled-never-spent"
+            except Exception:                          # noqa: BLE001
+                pass
+        return self._leg_ceiling(game_id), "leg-ceiling-upper-bound"
+
     def _check_campaign_budget(self) -> None:
         """The ceiling that ends everything. Checked before a leg *and* after
         one: a campaign whose last leg overran, and which then ran out of games
@@ -352,6 +386,10 @@ class Campaign:
             gate=self.spend_gate)
         campaign_name = spend_mod.campaign_name(
             prompt_id=self.prompt_id, game_id=game_id, slug=slug)
+        # So the failure path can ask the gate what this leg actually cost
+        # instead of guessing. Set before `play()`, cleared by a clean return.
+        self._in_flight = {"campaign": campaign_name, "slug": slug,
+                           "ceiling": ceiling}
 
         def factory(env_base, run):
             return TheoriaArm(env_base=env_base, run=run, game_id=game_id,
@@ -479,17 +517,18 @@ class Campaign:
                 # direction that stops the campaign early rather than late, and
                 # labelled so nobody reads it as a measurement. The shared pool
                 # is unaffected either way -- it settled per call and is exact.
-                bound = self._leg_ceiling(game_id)
+                bound, source = self._failed_leg_cost(game_id)
                 self.legs.append({
                     "index": index, "game_id": game_id, "event": "leg_failed",
                     "error": "%s: %s" % (type(exc).__name__, exc),
                     "usd": bound,
                     "cost_accounting": {
                         "governing_usd": bound,
-                        "governing_source": "leg-ceiling-upper-bound",
-                        "why": "the leg raised before reporting a cost; this "
-                               "is the most it could have spent, not what it "
-                               "did spend",
+                        "governing_source": source,
+                        "why": "the leg raised before returning a summary; "
+                               "this figure comes from the shared pool where "
+                               "the pool could answer, and from the leg's "
+                               "ceiling where it could not",
                     },
                     "utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                 })

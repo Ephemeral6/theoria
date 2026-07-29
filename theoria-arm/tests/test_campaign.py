@@ -440,3 +440,32 @@ def test_a_leg_that_raises_is_charged_its_ceiling_not_zero(tmp_path):
         "leg-ceiling-upper-bound"
     assert report["spent_usd"] > 0.0
     assert report["by_game"]["g50t-5849a774"] > 0.0
+
+
+def test_a_leg_that_died_before_spending_is_not_charged_a_ceiling(tmp_path):
+    """The case that actually happened, on the first live attempt.
+
+    The leg raised on a missing credential having made zero model calls, and
+    the first version of this accounting booked it at the full $14 leg ceiling.
+    An upper bound errs safely for a leg that died halfway; for one that never
+    started it is simply a fabricated number, and it would have eaten a quarter
+    of the campaign's budget on a run that did nothing.
+
+    The shared pool settles per call and is keyed by the leg's campaign name,
+    so it knows the true figure. Absent from the pool means never billed.
+    """
+    class _Boom(camp.Campaign):
+        def run_leg(self, game_id, index, seed_books):
+            # As the real one does: name the campaign, then fail.
+            self._in_flight = {"campaign": "theoria-arm:test:never-billed",
+                               "slug": "s", "ceiling": 14.0}
+            raise RuntimeError("ARC_API_KEY is not set")
+
+    c = _Boom(prompt_id="A3", out_dir=str(tmp_path), games=["g50t-5849a774"])
+    report = c.run(max_legs_per_game=1)
+
+    failed = [l for l in report["legs"] if l.get("event") == "leg_failed"][0]
+    assert failed["usd"] == 0.0
+    assert failed["cost_accounting"]["governing_source"] == \
+        "gate-settled-never-spent"
+    assert report["spent_usd"] == 0.0
