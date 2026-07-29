@@ -623,62 +623,117 @@ def probe_disk_headroom():
             "detail": "磁盘剩 %.1f GB / %.0f GB；%s" % (free_gb, total_gb, tail)}
 
 
-def probe_clock_sanity():
-    """心跳自报的 utc 不得晚于机器当前 UTC —— 时钟不可能超前。
+def _stamps_to_check():
+    """(label, path, claimed-utc-string) for every hand-typed timestamp on disk.
 
-    存活判断用的是文件 mtime（agent 伪造不了），所以掉线检测本身是可靠的。
-    但心跳里那个**手打的** `utc` 字段从来没有任何东西校验过，于是它可以随便漂：
-    2026-07-28T15:47Z 那一刻，RES-1 的心跳写着 20:55Z，RES-2/3/4 写着 16:0x–16:4xZ
-    ——全都晚于当时仓库里最新的提交，也就是这些时刻还没到。
+    Three sources, because the first version of this probe checked one. It
+    checked the heartbeats -- the instance I had noticed -- and then I wrote the
+    same error twice more in the same session, into a PARTNER_SYNC paragraph
+    header and a run MANIFEST, and it saw neither.
 
-    危险在方向：一个只会向前跑的自报时间，让**掉线的会话看起来比实际更新鲜**。
-    这是纯算术，没有任何借口不检查。
+    That is "fixed one instance, believed I had fixed the class": the probe's
+    scope was pinned to its first sample. The class is *any UTC a human typed*,
+    and the repository has exactly these three kinds.
     """
     import glob as _glob
-    now = time.time()
-    ahead, drifted, unreadable = [], [], []
+    out = []
     for path in sorted(_glob.glob(rel("monitor", "ops-status", "*.json"))):
         name = os.path.basename(path)[:-5]
         try:
             data = json.load(open(path, encoding="utf-8"))
         except Exception as exc:
-            unreadable.append("%s（%s）" % (name, str(exc)[:40]))
+            out.append(("heartbeat %s" % name, path, None, str(exc)[:40]))
             continue
-        stamp = data.get("utc")
+        out.append(("heartbeat %s" % name, path, data.get("utc"), None))
+
+    for path in sorted(_glob.glob(rel("*", "runs", "*", "MANIFEST.json"))):
+        label = "manifest %s" % os.path.basename(os.path.dirname(path))
+        try:
+            data = json.load(open(path, encoding="utf-8"))
+        except Exception as exc:
+            out.append((label, path, None, str(exc)[:40]))
+            continue
+        # A manifest without `utc` is provenance's problem, not this probe's --
+        # `provenance_scan` already reports it, and two probes shouting about
+        # one fact is how both get ignored.
+        if data.get("utc") is not None:
+            out.append((label, path, data.get("utc"), None))
+
+    sync = rel("PARTNER_SYNC.md")
+    if os.path.exists(sync):
+        try:
+            text = open(sync, encoding="utf-8", errors="replace").read()
+        except OSError:
+            text = ""
+        for m in re.finditer(r"^##\s+\[[^\]]+\]\s+(\S+)", text, re.M):
+            out.append(("PARTNER_SYNC %s" % m.group(1), sync, m.group(1), None))
+    return out
+
+
+def probe_clock_sanity():
+    """手打的 UTC 不得晚于机器当前 UTC —— 时钟不可能超前。
+
+    存活判断用的是文件 mtime（agent 伪造不了），所以掉线检测本身是可靠的。
+    但**手打的**时间戳从来没有任何东西校验过：2026-07-28T15:47Z 那一刻，
+    RES-1 的心跳写着 20:55Z，RES-2/3/4 写着 16:0x–16:4xZ——全都还没到。
+
+    危险在方向：一个只会向前跑的自报时间，让**掉线的会话看起来比实际更新鲜**，
+    也让一份留痕看起来比它实际的更新。这是纯算术，没有任何借口不检查。
+
+    **作用域**：心跳、`runs/*/MANIFEST.json`、`PARTNER_SYNC.md` 的段落头。
+    第一版只查心跳，然后写它的人在同一个会话里又把另外两种各写错一次——
+    一个探针的作用域若被它的第一个样本框死，它会漏掉同一类的其余部分。
+    """
+    now = time.time()
+    ahead, drifted, unreadable = [], [], []
+    for label, path, stamp, err in _stamps_to_check():
+        if err is not None:
+            unreadable.append("%s（%s）" % (label, err))
+            continue
         if not isinstance(stamp, str):
-            unreadable.append("%s（没有 utc 字段）" % name)
+            unreadable.append("%s（没有 utc 字段）" % label)
             continue
         try:
             claimed = calendar.timegm(time.strptime(stamp, "%Y-%m-%dT%H:%M:%SZ"))
         except ValueError:
-            unreadable.append("%s（utc 不是 ISO8601Z：%r）" % (name, stamp[:30]))
-            continue
+            try:
+                claimed = calendar.timegm(time.strptime(stamp, "%Y-%m-%dT%H:%MZ"))
+            except ValueError:
+                unreadable.append("%s（不是 ISO8601Z：%r）" % (label, stamp[:30]))
+                continue
         # 60s of slack: writing the stamp and closing the file are not atomic.
         if claimed > now + 60:
             ahead.append("%s 自报 %s，超前 %.0f 分钟"
-                         % (name, stamp, (claimed - now) / 60))
+                         % (label, stamp, (claimed - now) / 60))
             continue
-        mtime = os.path.getmtime(path)
+        try:
+            mtime = os.path.getmtime(path)
+        except OSError:
+            continue
+        # PARTNER_SYNC is append-only, so its old paragraphs are legitimately
+        # far older than the file; only the future check applies to them.
+        if label.startswith("PARTNER_SYNC"):
+            continue
         if abs(claimed - mtime) > 3600:
             drifted.append("%s 自报 %s，与文件 mtime 差 %.0f 分钟"
-                           % (name, stamp, abs(claimed - mtime) / 60))
+                           % (label, stamp, abs(claimed - mtime) / 60))
     if ahead:
         return {"status": "risk",
-                "detail": "**%d 份心跳自报的时间还没到**：%s。时钟不可能超前，"
+                "detail": "**%d 处手打的时间还没到**：%s。时钟不可能超前，"
                           "所以这些是手打的；危险在方向——只会向前跑的自报时间"
-                          "让掉线看起来比实际新鲜。取值请用 "
-                          "`date -u +%%Y-%%m-%%dT%%H:%%M:%%SZ`。"
+                          "让掉线看起来比实际新鲜、让留痕看起来比实际更新。"
+                          "取值请用 date -u。"
                           % (len(ahead), "；".join(ahead[:4]))}
     if unreadable:
         return {"status": "risk",
-                "detail": "**%d 份心跳的 utc 读不出来**：%s。读不出不等于没问题。"
+                "detail": "**%d 处时间戳读不出来**：%s。读不出不等于没问题。"
                           % (len(unreadable), "；".join(unreadable[:4]))}
     if drifted:
         return {"status": "partial",
-                "detail": "%d 份心跳自报时间与文件 mtime 相差超过一小时：%s。"
+                "detail": "%d 处自报时间与文件 mtime 相差超过一小时：%s。"
                           % (len(drifted), "；".join(drifted[:4]))}
     return {"status": "green",
-            "detail": "心跳自报时间全部不晚于机器 UTC，且与文件 mtime 一致。"}
+            "detail": "心跳、run 留痕与 PARTNER_SYNC 段落头的时间全部不晚于机器 UTC。"}
 
 
 def _merge_queue_probe():
