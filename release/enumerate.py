@@ -450,6 +450,11 @@ def _review_note(rel: str, blob: bytes, cls: str) -> str | None:
     )
 
 
+#: The builtin, bound once under a name this module cannot shadow. See the call
+#: site in `load_rulings` for why.
+_numbered = enumerate
+
+
 class RulingRefused(RuntimeError):
     """A line in `RULINGS.jsonl` is not a ruling this enumerator will honour.
 
@@ -489,8 +494,14 @@ def load_rulings(path: str | None = None) -> dict[tuple[str, str], dict]:
     out: dict[tuple[str, str], dict] = {}
     if not os.path.exists(src):
         return out
+    # `_numbered`, not the builtin, because this module is *named* `enumerate`.
+    # It resolves correctly today only because the module never binds its own
+    # name, and one `import enumerate` anywhere in this file -- or a test doing
+    # `enum.enumerate = ...` -- would turn a line counter into a self-reference.
+    # A gate whose error messages point at the wrong line is a gate that sends
+    # the next person to fix the wrong thing.
     with open(src, encoding="utf-8") as fh:
-        for n, line in enumerate(fh, 1):
+        for n, line in _numbered(fh, 1):
             line = line.strip()
             if not line or line.startswith("#"):
                 continue
@@ -555,7 +566,10 @@ def build(paths: list[str], rulings: dict | None = None) -> list[dict]:
                     "verdict": CLASSES["?"][1],
                     "evidence": f"tracked, but this enumerator could not read it ({why}); "
                     "its licence class is undetermined. It is listed rather than dropped "
-                    "because a file missing from the manifest is a file nobody rules on.",
+                    "because a file missing from the manifest is a file nobody rules on. "
+                    "No ruling can settle this row: the bytes could not be read, so there "
+                    "is no content hash to rule against. Make the file readable, or stop "
+                    "tracking it.",
                 }
             )
             continue
@@ -605,6 +619,17 @@ def _apply_ruling(row: dict, rulings: dict) -> None:
     """
     if row["class"] != "?":
         return
+    if row["sha256"] is None:
+        # A file `read_bytes` could not open gets `sha256: None`, so no ruling
+        # can ever key it. That is the right answer -- you cannot sign for bytes
+        # you were unable to read -- but it is only the right answer if it is
+        # *said*, and it was not: the row looked exactly like a ruleable one and
+        # the next person to write a ruling for it would have watched the ruling
+        # do nothing, with no explanation anywhere. Now the row says so.
+        row["evidence"] += (" No ruling can settle this row: the bytes could not "
+                            "be read, so there is no content hash to rule against. "
+                            "Make the file readable, or stop tracking it.")
+        return
     ruling = rulings.get((row["path"], row["sha256"]))
     if ruling is None:
         return
@@ -622,17 +647,46 @@ def _apply_ruling(row: dict, rulings: dict) -> None:
 
 
 def stale_rulings(rows: list[dict], rulings: dict) -> list[str]:
-    """Rulings whose path is still tracked but whose bytes have changed.
+    """Every ruling that matched nothing, and why it matched nothing.
 
     Reported, not applied and not silently dropped. "Nobody has ruled on this"
     and "somebody ruled on the version before this one" are different
     situations, and only the second is one signature away from resolved.
+
+    Three ways a ruling can miss, and the first version of this function
+    reported only the first -- which meant the two silent ones were exactly the
+    mistakes a person would make by hand:
+
+    * **the bytes changed** -- path still tracked, different hash;
+    * **the path is gone** -- the file was deleted or renamed, and the ruling
+      quietly evaporated. This is the same situation the function exists for,
+      one step further along;
+    * **the path never existed** -- a typo. A mistyped *hash* was caught by the
+      first case; a mistyped *path* matched nothing, was reported nowhere, and
+      left the gate red for a reason the operator was never told.
+
+    A signature that fails to land has to make a noise. That is the whole
+    argument for this file existing rather than an allow-list.
     """
-    by_path: dict[str, str] = {r["path"]: r["sha256"] for r in rows if r["sha256"]}
+    by_path: dict[str, str | None] = {r["path"]: r["sha256"] for r in rows}
     out = []
     for (path, sha), ruling in sorted(rulings.items()):
-        current = by_path.get(path)
-        if current is not None and current != sha:
+        if path not in by_path:
+            out.append(
+                "%s: ruled class %s by %s, but no such file is tracked. Either it "
+                "was deleted or renamed after the ruling, or the path is a typo. "
+                "The ruling applies to nothing."
+                % (path, ruling["class"], ruling["ruled_by"]))
+            continue
+        current = by_path[path]
+        if current is None:
+            out.append(
+                "%s: ruled class %s by %s against sha256 %s, but this enumerator "
+                "cannot read the file, so it has no hash to match. The ruling "
+                "applies to nothing."
+                % (path, ruling["class"], ruling["ruled_by"], sha[:12]))
+            continue
+        if current != sha:
             out.append(
                 "%s: ruled class %s by %s against sha256 %s, but the file is now "
                 "%s. The ruling does NOT apply -- it was about bytes that are no "

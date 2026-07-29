@@ -134,3 +134,69 @@ the three; what is undetermined is a licence class.
   are to stop tracking a binary the release cannot read, or to regenerate it in
   a readable form. That argument is in `RULINGS_PROPOSED.md` beside the proposal
   it undercuts, on purpose.
+
+## Measured end to end, then unsigned again
+
+`verify.with-demo-rulings.txt` in this directory is a **demonstration, not a
+signature**: three rulings were appended with `ruled_by:
+"DEMONSTRATION-NOT-A-SIGNATURE"`, `verify.sh` was run, and the file was restored
+from git. The result:
+
+```
+== every tracked file is classified
+  note 3 file(s) carry a human ruling where this enumerator abstained:
+-- ok
+VERIFY: green
+```
+
+`verify.unsigned.txt` is the state that actually ships: **`VERIFY: RED`**, the
+same three `?` rows, four of five sections green. Both are archived so the claim
+"signing three lines clears it" is checkable rather than asserted.
+
+## What an adversarial pass on this feature found, and what came of it
+
+The tests were written by an agent told to attack the implementation, not to
+document it. Four criticisms, all fair:
+
+1. **An unreadable file could never be ruled on, and nothing said so.** A file
+   `read_bytes` cannot open gets `sha256: None`, so `_apply_ruling` looks up
+   `(path, None)` — which no valid ruling can key. That is the *right* answer
+   (nobody can sign for bytes they were unable to read), but the row was
+   indistinguishable from a ruleable one, and the next person to write a ruling
+   for it would have watched it silently do nothing. **The row now says so**, in
+   the evidence, and a ruling written for it anyway is reported as a miss.
+2. **`stale_rulings` was silent about a ruling whose path is gone** — the same
+   situation it exists for, one step further along.
+3. **A typo'd path was inert and unreported.** A mistyped *hash* was caught
+   (path matches, hash differs); a mistyped *path* matched nothing, was reported
+   nowhere, and left the gate red for a reason nobody was told. **2 and 3 are
+   now one report**: `stale_rulings` names every ruling that matched nothing and
+   which of the three ways it missed. A signature that fails to land has to make
+   a noise — that is the argument for a rulings file over an allow-list, and a
+   silent miss gives it up.
+4. **`load_rulings` called the builtin `enumerate()` from inside a module named
+   `enumerate`.** It resolves today only because the module never binds its own
+   name. Bound once as `_numbered`, with a test that shadows `enum.enumerate`
+   and asserts the error still names the right line — the line number is the
+   only thing telling an operator which line of a signed file is malformed.
+
+**96 tests pass** in `release/tests`, from 71 at R3's delivery. Every one of the
+21 the adversary wrote was measured by mutating the specific line it claims to
+pin and confirming the test goes red; no mutation passed silently.
+
+## One incident during this run, recorded because it nearly cost work
+
+An agent measuring a negative control ran `git stash push release/enumerate.py`
+in this worktree at the moment a concurrent process committed the R4 work. The
+stash had nothing to save and created no entry, so the following `git stash pop`
+popped an **unrelated autostash** belonging to another process, spraying conflict
+markers across `monitor/` and `ablation-arm/`. The pop conflicted, so the stash
+entry was retained and nothing was lost; the worktree was reset and every
+remaining measurement was taken by in-place mutation instead.
+
+The lesson is not "do not use stash". It is that **`git stash push <path>` with
+no changes to save is silently a no-op, and the paired `pop` then acts on
+somebody else's entry** — a two-command idiom that is safe alone and unsafe in a
+tree several processes are working in. In-place mutation is the better tool for
+measuring a negative control anyway: the failure is attributable to a specific
+line rather than to a diff.
