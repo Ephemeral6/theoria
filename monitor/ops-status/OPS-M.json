@@ -1,7 +1,7 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-29T14:42:00Z",
+ "utc": "2026-07-29T15:00:00Z",
  "cycle": 16,
  "state": "working",
- "note": "8 个分支进 master（含 p10），flag 12 -> 5(+1 是我手推与手跑 ci_merge 撞出的 push-rejected，transient 会自愈；纪律：同一时刻只能有一个东西推 master，本轮之后我等鸡跑完再推)。v5-verdict 已备好待推（闸门绿、测试是精确并集），v5-battery 闸门红且不是冲突造成——它带的 freeze 是对一棵已不存在的树的真陈述，需要 V5 重新 freeze，已写 inbox 不硬解。仍等 a3/e8/s11 三组 subagent"
+ "note": "s11 技术裁决已出：DO-NOT-MERGE-AS-IS。对抗组 70 次绕过里 68 次被拒，2 次成功且是同一个缺陷（segments() 的注释剥离到文本结尾而非行尾；引号在识别注释前被剥掉，于是字面量 # 变成注释标记）——第 4 条封存兜底被同一招破掉，裸写 deny_sealed 的命令加个 echo \"#\" ; 前缀就变 allow。我自己复现了两例。一个提交可修，已写 inbox + 总线。手推的分支等 ci_merge 放锁再推（不再两边同时推 master）"
 }

@@ -1850,3 +1850,13 @@
 2026-07-29T14:49:02Z MERGED origin/agent/s31-fleetkit-gate (dirs: fleetkit; gates: verify:fleetkit(verify.py))
 2026-07-29T14:49:11Z FLAG origin/agent/s32-close-gate-gap: verify gate red in browser-ops (verify.py)
 2026-07-29T14:49:19Z FLAG origin/agent/v20-figures-pipeline-red: merge conflict
+2026-07-29T14:53:12Z MERGED origin/agent/v21-lp-unavailable-is-not-a-pass (dirs: PARTNER_SYNC.md,engine-rig,fuzzlab; gates: verify:engine-rig(verify.py),verify:fuzzlab(verify.py); a gate dirtied the worktree: fuzzlab/out/campaign.json,fuzzlab/out/findings.jsonl)
+2026-07-29T14:56:27Z MERGED origin/agent/v22-wintighten-absent-vs-below (dirs: PARTNER_SYNC.md,proxy; gates: verify:proxy(verify.py))
+2026-07-29T15:01:40Z MERGED origin/agent/v6-exam-on-sealed-dryrun (dirs: PARTNER_SYNC.md,exam; gates: verify:exam(verify.py); a gate dirtied the worktree: exam/artifacts/build_manifest.json,exam/artifacts/calibration.json,exam/artifacts/exam_summary.json,exam/artifacts/matrix/verdict_confusion.json,exam/artifacts/matrix/verdict_confusion.md,exam/artifacts/papers/p15-adaptation-a0.paper.json)
+2026-07-29T15:02:51Z MERGED origin/agent/p16-uncited-number-gate (dirs: PARTNER_SYNC.md,papers; gates: pytest:papers)
+2026-07-29T15:05:53Z FLAG origin/agent/w1661-board-half-tracked: verify gate red in monitor (verify.sh)
+2026-07-29T15:07:43Z FLAG origin/agent/a3-campaign-devpile: verify gate red in monitor (verify.sh)  [NEEDS-HUMAN: 4 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T15:07:59Z FLAG origin/agent/e8-ic3-scale: merge conflict
+2026-07-29T15:08:24Z MERGED origin/agent/s4-freeze (dirs: PARTNER_SYNC.md,freeze; gates: verify:freeze(verify.sh))
+2026-07-29T15:08:26Z HELD 3 unchanged since last verdict: s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); v5-verdict-three-types (merge conflict, 2x)
+2026-07-29T15:09:16Z CLEARED-BY-OPS-M v5-verdict-three-types: the conflict was two appends at EOF that git could not align, nothing substantive. Master's side was V7's strict xfail; the branch's side of the hunk was empty because its ten tests had already auto-merged higher up. Test count is the exact union -- base 39 / master 40 / branch 49 / merged 50, nothing dropped. Full suite on the merged tree: 359 passed, 2 xfailed. Gate DRIFT exam + DRIFT monitor, both non-blocking and both regenerating their own artefacts.
