@@ -13,5 +13,85 @@
     "why_it_blocks_A10": "This item points three arms at ONE ledger. Today two concurrent writers already fork it; three would make the corruption more likely, not less. The fix must land before the arms are rewired, or A10 makes the problem worse.",
     "fix_pattern_already_in_repo": "proxy/spend_gate.py:201 _PoolLock takes an OS-level lock (fcntl/msvcrt) on a sidecar file, added because INC-BA-003's writers were four separate OS processes. The ledger needs the same discipline plus re-seeding inside the lock."
   },
-  "files": []
+  "files": [
+    {
+      "path": "proxy/ledger.py",
+      "sha256": "c08ead25e2cf265cb32f3e23c4ba99ca5aacde5a9ee8407a413d61d95b8e840d",
+      "bytes": 26288
+    },
+    {
+      "path": "proxy/reconcile.py",
+      "sha256": "bef11737a950a4c0f0469d3065f0b3aa798a88b831ceaab53885d0cdbaf107ae",
+      "bytes": 25258
+    },
+    {
+      "path": "proxy/LEDGER_FORMAT.md",
+      "sha256": "57e7f48395c042dced33ff314bffacca96327e5096f8eed6cc02d076fdd53ecb",
+      "bytes": 26120
+    },
+    {
+      "path": "proxy/README.md",
+      "sha256": "b43a3cba1d43689de9c819bc899c6f3346a99ff04436520949282280f5e30a36",
+      "bytes": 7995
+    },
+    {
+      "path": "proxy/tests/test_ledger_concurrency.py",
+      "sha256": "63df72edb875d3526f37edb2e9c400fb32a5cc8753b23549b85b0ec63cd745bc",
+      "bytes": 12746
+    },
+    {
+      "path": "proxy/tests/test_reconcile.py",
+      "sha256": "5d30f36a2a7a2b34a59b39d192035e6a988632c6e1d64ba44af793622bd9533d",
+      "bytes": 17469
+    },
+    {
+      "path": "proxy/runs/20260729T010000Z-A10/SCOPE.md",
+      "sha256": "160ba077a32d5191c9ceae9ac5d59eddbb51bd91f1400168786f351f917117ef",
+      "bytes": 6413
+    },
+    {
+      "path": "proxy/runs/20260729T010000Z-A10/RUN_STATE.md",
+      "sha256": "b82c49dfbecca0f4796da9e159d5eadd4a4ca25c70a82ffe435d510df606032d",
+      "bytes": 7622
+    },
+    {
+      "path": "proxy/runs/20260729T010000Z-A10/demo_three_arms.py",
+      "sha256": "8174774df15375ad3b58b2c4c99f0e347e97e46e1a29b3ec7f5a1c32835a0d0e",
+      "bytes": 5714
+    },
+    {
+      "path": "proxy/runs/20260729T010000Z-A10/demo_output.txt",
+      "sha256": "4a49f833b379381296b0ff3929d777ca9d67d33c645ab11c858dc97bf455ae6c",
+      "bytes": 1840
+    }
+  ],
+  "verify": {
+    "suite": "python -m pytest proxy -> 315 passed",
+    "gate": "proxy/verify_spend.sh -> VERIFY: green",
+    "failing_path_proven": "disabled the lock+reseed in ledger.py by hand; 7 of 10 concurrency tests went red with the poisoned file's signature; restored -> 10/10 green",
+    "rechecked_by": "W-1641 directly, not taken from subagent reports"
+  },
+  "demonstration": {
+    "before": {
+      "records": 107,
+      "by_arm": {
+        "mock_arm": 74,
+        "replay": 33
+      },
+      "real_arm_records": 0
+    },
+    "after": {
+      "records": 42,
+      "by_arm": {
+        "theoria": 14,
+        "bare_cc": 14,
+        "schema_repro": 14
+      },
+      "duplicate_seq": 0,
+      "verify_chain": "PASS",
+      "processes": 3
+    },
+    "scope": "ledger identities of three arms driven by a script; NOT the three real arms running their own loops -- that is cross-territory"
+  },
+  "head_at_close": "1ed5a6408367501d1e2f4fd6253bd8df80037112"
 }
