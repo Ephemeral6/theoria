@@ -1,0 +1,17 @@
+{
+ "prompt_id": "R2-release-licence",
+ "slug": "20260728T150434Z-R2-release-licence",
+ "branch": "agent/r2-release-licence",
+ "base_commit": "8d4237346a93275609f277f62998df0d4ba1d439",
+ "utc": "2026-07-28T15:04:35Z",
+ "worker": "W-1412",
+ "kind": "release-kit pass; no network, no API, no model call",
+ "quota": {"actions": 0, "http_commands": 0, "model_calls": 0, "usd": 0.0},
+ "results": {"ships": 1930, "held_back": 20, "tests": "5 passed"},
+ "deliverables": {
+  "1-licence-filter": "release/bundle.py + release/BUNDLE.jsonl + release/FRAME_HASHES.jsonl",
+  "2-licence-posture": "already existed from P5-release; extended with the bundle section and needs_human",
+  "3-openness-draft": "release/OPENNESS_STATEMENT.md"
+ },
+ "outputs": ["RUN_STATE.md", "bundle.txt", "pytest.txt"]
+}

@@ -1,0 +1,9 @@
+{
+  "agent": "RES-4",
+  "base_commit": "7d9ebb10",
+  "branch": "agent/s29-triage-red-gates",
+  "lane": "infra",
+  "prompt_id": "S29-S29-triage-the-five-red-gates",
+  "territory": "monitor",
+  "utc": "2026-07-29T10:41:35Z"
+}

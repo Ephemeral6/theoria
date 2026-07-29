@@ -1,0 +1,13 @@
+== M00 proxy/variants.py (control: no mutation at all; must NOT be killed)
+            "tracked the head really is published there, and runner.py's comment "
+            "plus D-029 need updating to say so")
+E       AssertionError: proxy/var/runs is NO LONGER gitignored -- if run records are now tracked the head really is published there, and runner.py's comment plus D-029 need updating to say so
+E       assert 128 == 0
+E        +  where 128 = CompletedProcess(args=['git', 'check-ignore', '-q', 'C:\\Users\\user\\AppData\\Local\\Temp\\mutant-M00-kribj1g5\\proxy\\var\\runs\\probe.json'], returncode=128).returncode
+
+proxy\tests\test_chain.py:310: AssertionError
+---------------------------- Captured stderr call -----------------------------
+fatal: not a git repository (or any of the parent directories): .git
+=========================== short test summary info ===========================
+FAILED proxy\tests\test_chain.py::test_the_runners_default_head_location_is_gitignored
+!!!!!!!!!!!!!!!!!!!!!!!!!! stopping after 1 failures !!!!!!!!!!!!!!!!!!!!!!!!!!

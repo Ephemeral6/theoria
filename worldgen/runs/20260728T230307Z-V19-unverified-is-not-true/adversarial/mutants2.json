@@ -1,0 +1,82 @@
+[
+ {
+  "name": "F16-latch-edge-check-returns-false",
+  "edits": [
+   [
+    "mechanisms/switch_door.py",
+    "            def latch_monotone(world, prev, _action, nxt) -> bool:\n                mine_ = world.mine(self)\n",
+    "            def latch_monotone(world, prev, _action, nxt) -> bool:\n                return False\n                mine_ = world.mine(self)\n"
+   ]
+  ]
+ },
+ {
+  "name": "F17-collection-edge-check-returns-false",
+  "edits": [
+   [
+    "mechanisms/count_lock.py",
+    "        def collection_monotone(world, prev, _action, nxt) -> bool:\n            before = world.view(self, prev)\n",
+    "        def collection_monotone(world, prev, _action, nxt) -> bool:\n            return False\n            before = world.view(self, prev)\n"
+   ]
+  ]
+ },
+ {
+  "name": "F18-tile-edge-check-returns-false",
+  "edits": [
+   [
+    "mechanisms/consumable.py",
+    "        def tile_monotone(world, prev, action, nxt) -> bool:\n",
+    "        def tile_monotone(world, prev, action, nxt) -> bool:\n            return False\n"
+   ]
+  ]
+ },
+ {
+  "name": "C18-transitions-checked-key-omitted",
+  "edits": [
+   [
+    "core/truth.py",
+    "            row[\"transitions_checked\"] = edges\n",
+    "            pass\n"
+   ]
+  ]
+ },
+ {
+  "name": "C19-edge-loop-half-the-transitions",
+  "edits": [
+   [
+    "core/truth.py",
+    "            for prev, action, nxt, _rule in world.transitions(states):\n",
+    "            for prev, action, nxt, _rule in list(world.transitions(states))[::2]:\n"
+   ]
+  ]
+ },
+ {
+  "name": "C20-state-loop-half-the-states",
+  "edits": [
+   [
+    "core/truth.py",
+    "            for state in states:\n",
+    "            for state in states[::2]:\n"
+   ]
+  ]
+ },
+ {
+  "name": "E12-gates-tuple-emptied",
+  "edits": [
+   [
+    "build.py",
+    "def gate_failures(manifest: Dict[str, Any]) -> List[str]:\n",
+    "GATES = ()\n\n\ndef gate_failures(manifest: Dict[str, Any]) -> List[str]:\n"
+   ]
+  ]
+ },
+ {
+  "name": "D08-markdown-invariant-section-dropped",
+  "edits": [
+   [
+    "core/truth.py",
+    "    for inv in truth[\"invariants\"]:\n        if not inv.get(\"verified\"):\n",
+    "    for inv in []:\n        if not inv.get(\"verified\"):\n"
+   ]
+  ]
+ }
+]

@@ -50,7 +50,7 @@ Nothing below spends a dollar or opens a socket to the internet.
 cd proxy && python -m pytest              # the suite
 cd .. && python -m proxy.runner --mock    # one full game through both proxies
 python -m proxy.replay    --run-id <run> --mock   # re-run it; compare frame hashes
-python -m proxy.reconcile --run-id <run>          # ledger score vs scorecard score
+python -m proxy.reconcile --run-id <run>          # actions x cost x per-run score
 python -m proxy.cost                              # usage x a versioned price table
 python -m proxy.scoring   --run-id <run>          # the frozen scorer's verdict
 python -m proxy.scoring   --verify-only           # what is frozen, and its hash
@@ -61,6 +61,7 @@ stream, a file someone edited:
 
 ```bash
 python -m proxy.tools.validate_ledger  <path>              # judge it against the canon
+python -m proxy.tools.check_variant_degeneracy <path>      # did win_tighten abolish the win? (exit 2)
 python -m proxy.tools.upgrade_ledger   <v0> -o <canon>     # lift baseline-arms v0
 python -m proxy.tools.replay_spotcheck --canon <canon> --game ar25-0c556536
 ```

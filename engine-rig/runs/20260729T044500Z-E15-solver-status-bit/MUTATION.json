@@ -1,0 +1,463 @@
+{
+  "killed": 28,
+  "killed_only_by_controls": [],
+  "killed_only_by_suite": [
+    "M06-unknown-status-defaults-to-infeasible",
+    "M14-outcome-hardcodes-the-default-bound",
+    "M17-downgraded-word-contains-global",
+    "M20-error-text-stops-naming-the-budget",
+    "M28-artifact-hardcodes-the-infeasible-code",
+    "M30-success-status-disagreement-ignored",
+    "M31-disagreement-guard-only-one-way"
+  ],
+  "killed_only_by_the_older_c11_file": [
+    "M02-solve_certificate-collapses-to-none"
+  ],
+  "mutants": 31,
+  "not_applied": 0,
+  "not_applied_ids": [],
+  "results": [
+    {
+      "controls_exit": 1,
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - lp_potential.run returned (None, None) under an iteration limit instead of refusing; a caller cannot tell this from 'no pagoda exists'\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
+      "file": "engines/lp_potential/__init__.py",
+      "id": "M01-run-collapses-to-none",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the public pair entry stops branching by name and reads `certificate is None` instead -- the original defect, in new field names",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M02-solve_certificate-collapses-to-none",
+      "killed_by": [
+        "tests/test_tool_failure_is_not_truth.py"
+      ],
+      "legacy_exit": 1,
+      "note": "the narrow wrapper folds every undecided outcome back into None",
+      "outcome": "killed",
+      "suite_exit": 0
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - an iteration limit was reported as 'no linear pagoda exists'\n       - an undecided outcome reports decided=True\n       - artifact status is 'no_linear_pagoda', expected 'budget'\n       - artifact claims no_linear_pagoda=True on an iteration limit\n       - artifact claims decided=True\n       - lp_potential.run returned (None, None) under an iteration limit instead of refusing; a caller cannot tell this from 'no pagoda exists'\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M03-status-1-reads-as-infeasible",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py",
+        "tests/test_tool_failure_is_not_truth.py"
+      ],
+      "legacy_exit": 1,
+      "note": "an iteration limit is classified as a geometric fact",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M04-status-3-reads-as-infeasible",
+      "killed_by": [
+        "tests/test_solver_status_bit.py",
+        "tests/test_tool_failure_is_not_truth.py"
+      ],
+      "legacy_exit": 1,
+      "note": "an unbounded relaxation is classified as a geometric fact",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M05-status-4-reads-as-infeasible",
+      "killed_by": [
+        "tests/test_solver_status_bit.py",
+        "tests/test_tool_failure_is_not_truth.py"
+      ],
+      "legacy_exit": 1,
+      "note": "numerical difficulties are classified as a geometric fact",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M06-unknown-status-defaults-to-infeasible",
+      "killed_by": [
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "a status nobody has seen is read as a proof",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - an iteration limit was reported as 'no linear pagoda exists'\n       - artifact claims no_linear_pagoda=True on an iteration limit\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M07-no_linear_pagoda-reconstructed-from-none",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the predicate is re-derived from the absent certificate",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - an undecided outcome reports decided=True\n       - artifact claims decided=True\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M08-everything-is-decided",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "`decided` stops discriminating",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - artifact claims decided=True\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M09-artifact-always-decided",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the published artifact overstates what the run decided",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - artifact claims no_linear_pagoda=True on an iteration limit\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M10-artifact-always-claims-no-pagoda",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the published artifact asserts the verdict unconditionally",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "raction(1, 1), Fraction(0, 1), Fraction(0, 1)], initial='00101100', goal_states=['00010100'], moves=[Move(src=0, over=2, dst=4), Move(src=1, over=4, dst=7), Move(src=2, over=3, dst=4), Move(src=3, over=4, dst=5), Move(src=3, over=5, dst=7), Move(src=4, over=2, dst=0), Move(src=5, over=3, dst=1), Move(src=6, over=4, dst=2), Move(src=7, over=5, dst=3)], margin=Fraction(1, 1), conditions={'inv_init': True, 'inv_closed': True, 'goal_break': True}), Heuristic(certificate=Certificate(weights=[Fraction(0, 1), Fraction(0, 1), Fraction(0, 1), Fraction(1, 1), Fraction(0, 1), Fraction(1, 1), Fraction(0, 1), Fraction(0, 1)], initial='00101100', goal_states=['00010100'], moves=[Move(src=0, over=2, dst=4), Move(src=1, over=4, dst=7), Move(src=2, over=3, dst=4), Move(src=3, over=4, dst=5), Move(src=3, over=5, dst=7), Move(src=4, over=2, dst=0), Move(src=5, over=3, dst=1), Move(src=6, over=4, dst=2), Move(src=7, over=5, dst=3)], margin=Fraction(1, 1), conditions={'inv_init': True, 'inv_closed': True, 'goal_break': True}), max_decrease=Fraction(2, 1))) under an iteration limit instead of refusing; a caller cannot tell this from 'no pagoda exists'\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M11-solver-options-dropped",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the caller cannot reach the real solver's budget -- N1's premise",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - the control could not complete: FileNotFoundError: [Errno 2] No such file or directory: 'C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\Temp\\\\tmpgvjyodbk\\\\outcome.json'\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
+      "file": "engines/lp_potential/__init__.py",
+      "id": "M12-outcome-sidecar-not-written",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the status exists in memory and nowhere a reader can see it",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - the control could not complete: TypeError: not all arguments converted during string formatting\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M13-scope_of_claim-drops-the-box",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the boxed claim stops saying it is boxed",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M14-outcome-hardcodes-the-default-bound",
+      "killed_by": [
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the bound travelling with the verdict stops being the bound used",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - LpUnavailable carries no outcome\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M15-exception-loses-the-outcome",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "a caller catching the refusal cannot learn which status fired",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "HELD   N1-iteration-limit-is-not-an-infeasibility\nFAILED N2-truncated-enumeration-is-not-a-global-law\n       - 9 law(s) published scope='global' from a truncated enumeration\n       - no law was downgraded, so the run published nothing that could have been wrong -- check the fixture before believing this\n       - the run-level record counts proved-global laws in a truncated run\n",
+      "file": "engines/zero_space/zerospace.py",
+      "id": "M16-quotient-always-global",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the truncated enumeration goes back to claiming the world",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/zero_space/zerospace.py",
+      "id": "M17-downgraded-word-contains-global",
+      "killed_by": [
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "a consumer testing `'global' in scope` resurrects the claim",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "ly in the engine\n       - a downgraded law claims scope_proved=None\n       - a downgraded law names no truncated cell\n       - a downgraded law omits 'scope_proved'; the budget has to be in the product, not only in the engine\n       - a downgraded law omits 'subset_enumeration_limit'; the budget has to be in the product, not only in the engine\n       - a downgraded law omits 'truncated_cells'; the budget has to be in the product, not only in the engine\n       - a downgraded law omits 'error'; the budget has to be in the product, not only in the engine\n       - a downgraded law claims scope_proved=None\n       - a downgraded law names no truncated cell\n       - a downgraded law omits 'scope_proved'; the budget has to be in the product, not only in the engine\n       - a downgraded law omits 'subset_enumeration_limit'; the budget has to be in the product, not only in the engine\n       - a downgraded law omits 'truncated_cells'; the budget has to be in the product, not only in the engine\n       - a downgraded law omits 'error'; the budget has to be in the product, not only in the engine\n       - a downgraded law claims scope_proved=None\n       - a downgraded law names no truncated cell\n",
+      "file": "engines/zero_space/zerospace.py",
+      "id": "M18-degradation-keys-never-emitted",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the downgrade happens but never reaches the product",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "HELD   N1-iteration-limit-is-not-an-infeasibility\nFAILED N2-truncated-enumeration-is-not-a-global-law\n       - a downgraded law claims scope_proved=True\n       - a downgraded law claims scope_proved=True\n       - a downgraded law claims scope_proved=True\n       - a downgraded law claims scope_proved=True\n       - a downgraded law claims scope_proved=True\n       - a downgraded law claims scope_proved=True\n       - a downgraded law claims scope_proved=True\n       - a downgraded law claims scope_proved=True\n       - a downgraded law claims scope_proved=True\n",
+      "file": "engines/zero_space/zerospace.py",
+      "id": "M19-scope_proved-true-on-a-downgrade",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the payload contradicts its own label",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/zero_space/zerospace.py",
+      "id": "M20-error-text-stops-naming-the-budget",
+      "killed_by": [
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the ladder-shaped `over budget` marker disappears",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "HELD   N1-iteration-limit-is-not-an-infeasibility\nFAILED N2-truncated-enumeration-is-not-a-global-law\n       - premise lost: this palette no longer crosses SUBSET_ENUMERATION_LIMIT=8, so nothing here is being tested\n       - 9 law(s) published scope='global' from a truncated enumeration\n       - no law was downgraded, so the run published nothing that could have been wrong -- check the fixture before believing this\n       - the run-level record carries no error for a truncated enumeration\n       - the run-level record counts proved-global laws in a truncated run\n",
+      "file": "engines/zero_space/zerospace.py",
+      "id": "M21-truncation-not-recorded",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py",
+        "tests/test_tool_failure_is_not_truth.py"
+      ],
+      "legacy_exit": 1,
+      "note": "the cap fires and leaves no trace -- the original silent degradation",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "HELD   N1-iteration-limit-is-not-an-infeasibility\nFAILED N2-truncated-enumeration-is-not-a-global-law\n       - premise lost: this palette no longer crosses SUBSET_ENUMERATION_LIMIT=100, so nothing here is being tested\n       - 9 law(s) published scope='global' from a truncated enumeration\n       - no law was downgraded, so the run published nothing that could have been wrong -- check the fixture before believing this\n       - the run-level record carries no error for a truncated enumeration\n       - the run-level record counts proved-global laws in a truncated run\n",
+      "file": "engines/zero_space/zerospace.py",
+      "id": "M22-limit-raised-out-of-reach",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "N2's premise: no palette crosses the cap any more",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "HELD   N1-iteration-limit-is-not-an-infeasibility\nFAILED N2-truncated-enumeration-is-not-a-global-law\n       - the run-level record carries no error for a truncated enumeration\n",
+      "file": "engines/zero_space/zerospace.py",
+      "id": "M23-run-record-never-errors",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the run-level degradation record goes quiet",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "HELD   N1-iteration-limit-is-not-an-infeasibility\nFAILED N2-truncated-enumeration-is-not-a-global-law\n       - the run-level record counts proved-global laws in a truncated run\n",
+      "file": "engines/zero_space/zerospace.py",
+      "id": "M24-global_laws-includes-the-undetermined",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the accessor re-promotes what the label demoted",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 1,
+      "controls_tail": "FAILED N1-iteration-limit-is-not-an-infeasibility\n       - an undecided outcome reports decided=True\n       - artifact claims decided=True\nHELD   N2-truncated-enumeration-is-not-a-global-law\n",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M26-budget-counted-as-decided",
+      "killed_by": [
+        "tools.check_status_bit",
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the set of outcomes that say something about the configuration quietly grows to include a resource limit",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M27-budget-meaning-reads-as-a-verdict",
+      "killed_by": [],
+      "legacy_exit": 0,
+      "note": "the prose a human reads contradicts the status word beside it",
+      "outcome": "survived",
+      "suite_exit": 0
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M28-artifact-hardcodes-the-infeasible-code",
+      "killed_by": [
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the integer a reader would check the word against is faked",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/zero_space/zerospace.py",
+      "id": "M29-cell-local-word-renamed",
+      "killed_by": [],
+      "legacy_exit": 0,
+      "note": "the other scope word changes under consumers that filter on it",
+      "outcome": "survived",
+      "suite_exit": 0
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M30-success-status-disagreement-ignored",
+      "killed_by": [
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "a linprog result whose `success` and `status` disagree is classified anyway instead of refusing",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/lp_potential/potential.py",
+      "id": "M31-disagreement-guard-only-one-way",
+      "killed_by": [
+        "tests/test_solver_status_bit.py"
+      ],
+      "legacy_exit": 0,
+      "note": "the guard is narrowed back to the direction that was noticed first: `status == 0` with `success` false would then mint a Certificate out of whatever the failed solve left in `result.x`",
+      "outcome": "killed",
+      "suite_exit": 1
+    },
+    {
+      "controls_exit": 0,
+      "controls_tail": "",
+      "file": "engines/zero_space/zerospace.py",
+      "id": "M25-degradation-keys-gated-on-the-run-not-the-label",
+      "killed_by": [],
+      "legacy_exit": 0,
+      "note": "cell-local rows in a truncated run also carry the degradation -- the design alternative, expected to survive",
+      "outcome": "survived",
+      "suite_exit": 0
+    }
+  ],
+  "survived": 3,
+  "survivors": [
+    {
+      "id": "M27-budget-meaning-reads-as-a-verdict",
+      "note": "the prose a human reads contradicts the status word beside it"
+    },
+    {
+      "id": "M29-cell-local-word-renamed",
+      "note": "the other scope word changes under consumers that filter on it"
+    },
+    {
+      "id": "M25-degradation-keys-gated-on-the-run-not-the-label",
+      "note": "cell-local rows in a truncated run also carry the degradation -- the design alternative, expected to survive"
+    }
+  ],
+  "tree": {
+    "dirty_paths": [],
+    "engines_tools_tests_dirty": false,
+    "head": "af884509a7067a5419b851dbed814b56ff685fcb",
+    "head_subject": "E15: fixes the adversarial review required, in the instrument and in the payload",
+    "note": "if `head` is not the commit you are reviewing, or `engines_tools_tests_dirty` is true, these counts describe a different tree than the one you are about to merge"
+  },
+  "wall_seconds": 188.7
+}

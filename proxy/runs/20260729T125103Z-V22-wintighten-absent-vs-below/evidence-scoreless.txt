@@ -1,0 +1,24 @@
+SCORELESS SESSION -- the world reports no score
+===============================================
+
+env_step records carrying a win_tighten rewrite: 33 of 127
+
+  seq 59   {"degenerate": true, "effect": "WIN rewritten to NOT_FINISHED", "note": "this game reported no score, so `score_at_least` is unsatisfiable at every value: the win condition was not tightened, it was abolished. Reading an absent score as a shortfall is deliberate -- the other direction would let a game that never reports a score win a tightened variant outright -- but the variant's claim no longer 
+  seq 62   {"degenerate": true, "effect": "WIN rewritten to NOT_FINISHED", "occurrence": 2, "op": "win_tighten", "reason": "score_absent", "require_score": 2, "score": null}
+  seq 64   {"degenerate": true, "effect": "WIN rewritten to NOT_FINISHED", "occurrence": 3, "op": "win_tighten", "reason": "score_absent", "require_score": 2, "score": null}
+  ... 30 more, identical but for `occurrence`
+
+variant_degenerate incidents: 1
+  {"game_id": "ar25-0c556536", "kind": "variant_degenerate", "reason": "score_absent", "require_score": 2, "seq": 60, "variant_id": "t-absent"}
+
+$ python -m proxy.tools.check_variant_degeneracy <ledger>
+C:\Users\user\AppData\Local\Temp\v22-evidence-24378q8a\scoreless.jsonl: REFUSED (127 records, 62 carrying a variant, 33 degenerate rewrite(s), 0 unreadable line(s))
+  seq 59  variant t-absent  require_score=2  reason=score_absent
+    this game reported no score, so `score_at_least` is unsatisfiable at every value: the win condition was not tightened, it was abolished. Reading an absent score as a shortfall is deliberate -- the other direction would let a game that never reports a score win a tightened variant outright -- but the variant's claim no longer follows from the construction it names. Whether a game reports a score is a protocol question, answerable without playing it; answer it before using win_tighten on that game.
+  seq 62  variant t-absent  require_score=2  reason=score_absent
+  seq 64  variant t-absent  require_score=2  reason=score_absent
+  seq 66  variant t-absent  require_score=2  reason=score_absent
+  seq 68  variant t-absent  require_score=2  reason=score_absent
+  ... 28 more
+  R-V22  variant t-absent is not exam-eligible: its verdict came from an abolished win condition, not a tightened one, so it does not count toward the reason score
+exit=2

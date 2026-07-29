@@ -1,0 +1,14 @@
+{
+  "base_game": "t1-walk-maze",
+  "base_level": "t1-walk-maze",
+  "claim": "unsolvable",
+  "justification": "t1-walk-maze has no mechanisms at all, so the agent's row changes only by the command it issues: UP decreases it by one, DOWN increases it by one, LEFT and RIGHT leave it alone. Forbidding DOWN removes the only command that can increase the row. The agent starts on row 1 and the goal is on row 5, so the row would have to increase by four and cannot increase at all. Unsolvable by construction, with no reference to the board's walls.",
+  "notes": "sealed drill (V6-exam-on-sealed-dryrun); worldgen world standing in for a sealed game. Zero API, zero sealed contact.",
+  "operators": [
+    {
+      "action": "DOWN",
+      "op": "forbid_action"
+    }
+  ],
+  "variant_id": "drill-walk-forbid-down"
+}

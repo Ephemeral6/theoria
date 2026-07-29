@@ -17,6 +17,7 @@ PARTNER_SYNC.md merges by union (.gitattributes) since it is append-only.
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -119,6 +120,44 @@ def branch_tip(branch):
     return out.stdout.strip() if out.returncode == 0 else ""
 
 
+# Holding a branch is a claim that re-running it would reach the same verdict,
+# and that claim is only sound when the verdict was about the branch.
+#
+# `push rejected (race?)` is decided *after* every gate has already passed, by
+# whether master moved between building the worktree and pushing it.  It is a
+# fact about master, not about the branch, so the tip test -- which asks only
+# whether the branch changed -- answers a question nobody asked and parks work
+# that is already green.
+#
+# Measured rather than argued: `c10-unsolvable-proof-canon` was flagged this
+# way at 04:15Z, listed in every HELD line for six hours, and then merged on
+# the first retry with nothing about it changed; `s21-app-session-death` did
+# the same the following cycle.  Two for two.  Retrying a race is how a race is
+# won, and the retry is cheap compared to leaving finished work on the floor.
+#
+# Deliberately narrow: conflicts and red gates stay held, because those really
+# are properties of the branch and re-deriving them costs a worktree and a full
+# gate run.  The hold itself was worth having -- it replaced 169 retries and
+# 915 identical FLAG lines.  What was wrong was only which failures it covers.
+#
+# Two other reasons belong to the same kind and were added when this landed
+# next to S29: `worktree add failed` is a fact about the disk and `... timed
+# out` is a fact about the machine's load.  Neither was caused by the branch,
+# so neither can be cleared by it -- the same deadlock, differently worded.
+# The matching is case-insensitive because the reason strings this rig writes
+# are sentences, not tokens ("verify gate timed out in engine-rig").
+#
+# Widening the set is only safe because the retries are now capped; see
+# `TRANSIENT_RETRY_CAP` below.  Unbounded retry is what wrote the 915 lines.
+TRANSIENT_REASONS = ("push rejected", "worktree add failed", "timed out")
+
+
+def is_transient(reason):
+    """Did this verdict describe the world around the branch rather than it?"""
+    low = (reason or "").lower()
+    return any(t in low for t in TRANSIENT_REASONS)
+
+
 def last_attempt(branch):
     """What the previous run already tried on this branch, or {} if none.
 
@@ -140,29 +179,6 @@ def last_attempt(branch):
     except OSError:
         return {}
     return memo
-
-
-#: Failures that are not properties of the branch. Everything else -- a merge
-#: conflict, a red gate, protected root files -- is a verdict about the code,
-#: and re-running it on an unchanged tip only re-derives the same answer.
-#:
-#: These are different in kind: nothing about the branch caused them and
-#: therefore nothing about the branch can clear them. Holding them on an
-#: unchanged tip is a deadlock with no exit, because the hold is waiting for a
-#: push that has no reason to come.
-#:
-#: Measured on 2026-07-29: `c10-unsolvable-proof-canon` lost a push race at
-#: 04:15:23Z on tip `984f7b11`, which never moved. It was then printed in HELD
-#: every five minutes for **5 h 53 min with zero retries**, and merged the
-#: moment something finally re-ran it. `s21-app-session-death` was sitting in
-#: the same state when this was written.
-TRANSIENT_REASONS = ("push rejected", "worktree add failed", "timed out")
-
-
-def is_transient(reason):
-    """Was this failure about the world rather than about the branch?"""
-    low = (reason or "").lower()
-    return any(t in low for t in TRANSIENT_REASONS)
 
 
 #: How many times a transient failure is retried before it is held like any
@@ -279,6 +295,48 @@ def sweep_stale_flags(todo):
     return retired
 
 
+#: Lines worth surfacing out of a long gate transcript.
+_CAUSE = re.compile(
+    r"(FAILED|^E\s|Traceback|Error:|error:|assert |FAIL\b|"
+    r"ModuleNotFound|No such file|exited \d|red in )", re.M)
+
+#: How much of the transcript the flag keeps.
+_KEEP_TAIL = 2600
+_KEEP_CAUSE = 24
+
+
+def excerpt(detail):
+    """Keep the *cause*, not merely the end.
+
+    This was `detail[-4000:]`, and for a verbose gate the last 4000 characters
+    are the part after the failure -- so `r2-release-licence`'s flag is a wall
+    of `-- ok` notes ending in `VERIFY: RED`, with nothing anywhere in it that
+    says which step failed. The flag existed, was written every five minutes
+    for nineteen hours, and could not be acted on.
+
+    That is the same shape as the rest of this file's subject, one level up:
+    the instrument ran, produced output, and the output omitted the finding.
+    A record that cannot be acted on is not much better than no record, and it
+    is worse in one way -- it looks like one.
+
+    So the lines that name a cause are lifted to the top, and the tail is kept
+    after them for context.
+    """
+    if not detail:
+        return ""
+    lines = detail.splitlines()
+    causes = [l for l in lines if _CAUSE.search(l)]
+    tail = detail[-_KEEP_TAIL:]
+    if not causes:
+        return tail
+    picked = causes[:_KEEP_CAUSE]
+    head = "\n".join(l[:300] for l in picked)
+    more = ("\n... and %d more cause line(s)" % (len(causes) - len(picked))
+            if len(causes) > len(picked) else "")
+    return ("--- cause lines (lifted out of the transcript) ---\n%s%s\n"
+            "--- tail of the transcript ---\n%s" % (head, more, tail))
+
+
 def flag(branch, reason, detail, tip=None):
     """Record a failure, keeping how long it has been failing and on what tip.
 
@@ -307,7 +365,7 @@ def flag(branch, reason, detail, tip=None):
                  "first_seen: %s\nlast_seen: %s\nattempts: %s\n\n```\n%s\n```\n"
                  % (os.path.basename(path), branch, reason, tip or "",
                     branch_tip("origin/master"),
-                    first_seen, stamp, attempts, detail[-4000:]))
+                    first_seen, stamp, attempts, excerpt(detail)))
     suffix = ""
     if attempts >= 3:
         # Three distinct tips have failed the same way.  Retrying is no longer
@@ -619,6 +677,10 @@ def main():
             # stale, and that retries immediately.  Skipping is therefore never
             # a way for a fixed branch to stay stuck.
             memo = last_attempt(b)
+            # `should_hold` is the one copy of this rule -- it subsumes the
+            # inline tip-and-not-transient test that used to stand here, and
+            # adds the base check and the retry cap.  The tests call the same
+            # function, so the two cannot drift.
             if should_hold(memo, branch_tip(b), branch_tip("origin/master")):
                 held.append((b, memo.get("reason", "?"),
                              memo.get("attempts", "?")))

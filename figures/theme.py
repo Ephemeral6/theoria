@@ -1,18 +1,29 @@
 """Shared style and deterministic output for every P-21 paper figure.
 
-Two jobs, and nothing else belongs in here:
+Three jobs, and nothing else belongs in here:
 
 1. **Style.** One accessible palette, two themes (``light``/``dark``), applied
    identically by every figure so the paper's plates read as one system.
 2. **Determinism.** Every knob that would otherwise let matplotlib stamp a
    timestamp, salt an element id, or reach for a system font is pinned. Two
    runs over the same inputs must produce byte-identical SVG and PNG.
+3. **Two output profiles from one figure** (P10). ``out/`` is the screen
+   profile the pipeline has always written. ``paper/`` is the publication
+   profile: 300 dpi, a vector PDF, and a filename a citation resolves to
+   (``figure3_a2_repair_loop`` rather than ``fig05_a2_repair_loop``).
+
+   Both come off the **same in-memory ``Figure``**, in one pass, and that is the
+   point of doing it here rather than as a post-build copy step. A copy is a
+   second artefact that can drift from the first; two writes of one object
+   cannot. ``verify.sh`` gate 10 asserts the two SVGs are byte-identical, which
+   is the checkable form of "the paper shows the plate the pipeline built".
 
 Import surface:
 
     from theme import PALETTE, THEMES, apply_theme, save, series_colour, ...
 
-Nothing here reads data and nothing here writes outside ``figures/out``.
+Nothing here reads a *data* source; it imports ``paper_map`` for the number-to-
+plate join and writes only under ``figures/``.
 """
 
 from __future__ import annotations
@@ -20,9 +31,16 @@ from __future__ import annotations
 import io
 import os
 import re
+import sys
 from typing import Iterable, Sequence
 
 import matplotlib
+
+_MODULE_DIR = os.path.dirname(os.path.abspath(__file__))
+if _MODULE_DIR not in sys.path:
+    sys.path.insert(0, _MODULE_DIR)
+
+import paper_map  # noqa: E402  (pure registry; no matplotlib, no data reads)
 
 matplotlib.use("Agg")  # no display, no backend-dependent rasterisation
 
@@ -52,6 +70,18 @@ _SVG_METADATA = {
 }
 
 _PNG_METADATA = {"Software": PNG_SOFTWARE}
+
+#: PDF metadata. ``CreationDate: None`` is the PDF backend's equivalent of the
+#: SVG ``Date`` suppression above -- matplotlib otherwise writes wall-clock into
+#: ``/CreationDate`` and every rebuild differs. ``Producer`` and ``Creator``
+#: default to the matplotlib version string, so they are pinned for the same
+#: reason ``PNG_SOFTWARE`` is: an upgrade must not change the bytes of an
+#: unchanged figure.
+_PDF_METADATA = {
+    "CreationDate": None,
+    "Producer": PNG_SOFTWARE,
+    "Creator": PNG_SOFTWARE,
+}
 
 THEMES: tuple[str, ...] = ("light", "dark")
 FORMATS: tuple[str, ...] = ("svg", "png")
@@ -245,6 +275,23 @@ FONT_FAMILY = "DejaVu Sans"
 
 BASE_FONT_SIZE = 9.0
 
+#: How many draws ``_freeze_layout`` will spend reaching a stable layout, and
+#: how still the axes must be to count as settled.
+#:
+#: Constrained layout converges *geometrically*, not exactly: each pass moves
+#: the axes by roughly a quarter of the previous pass's movement, so the
+#: positions approach a limit and never land on it. Only one of the six plates
+#: (fig03) happens to reach a bit-exact fixed point at all. Requiring exact
+#: equality therefore fails five figures out of six, which is how this constant
+#: acquired a tolerance rather than being written as ``==``.
+#:
+#: ``1e-6`` is in figure fraction. The widest plate here is 17.4 in; at the
+#: publication profile's 300 dpi that is 5220 px, so the tolerance is 0.005 px
+#: -- three orders of magnitude below anything a renderer can express. The cap
+#: is reached by no current figure (the slowest, fig05, settles in 8).
+LAYOUT_MAX_PASSES = 20
+LAYOUT_TOLERANCE = 1e-6
+
 
 def apply_theme(theme: str) -> dict:
     """Reset rcParams and apply ``theme``. Returns that theme's palette."""
@@ -341,6 +388,17 @@ def csv_root() -> str:
     return os.environ.get("FIGURES_CSV") or os.path.join(_HERE, "csv")
 
 
+def paper_root() -> str:
+    """Where the publication profile is written. ``FIGURES_PAPER`` overrides.
+
+    Overridable for the same reason the other two are: ``verify.sh`` builds
+    twice into scratch trees and diffs them, and a profile that could only ever
+    be written to one location would be exempt from the determinism gate --
+    which is precisely the exemption a new output format does not deserve.
+    """
+    return os.environ.get("FIGURES_PAPER") or os.path.join(_HERE, "paper")
+
+
 #: matplotlib's ``_make_id`` emits ``<letter><10 hex>``: ``p…`` for clips,
 #: ``h…`` for hatches, ``m…`` for markers.
 _MPL_ID = re.compile(r'id="([a-z][0-9a-f]{10})"')
@@ -376,32 +434,162 @@ def _canonicalise_svg_ids(svg: str) -> str:
     return svg
 
 
-def save(fig, name: str, theme: str) -> list[str]:
-    """Write ``fig`` as SVG and PNG under ``out/<theme>/``.
+def _write_one(fig, path: str, fmt: str, *, dpi: int | None = None) -> None:
+    """One artefact, with the deterministic writer this format needs.
 
-    Returns the paths written, in a fixed order. Closes the figure.
+    Split out of ``save`` when the publication profile arrived: the SVG
+    newline-and-id handling below is not something to have in two places, and a
+    second copy is how the screen profile and the paper profile would come to
+    disagree about what the same figure looks like.
     """
+    metadata = {"svg": _SVG_METADATA, "png": _PNG_METADATA, "pdf": _PDF_METADATA}[fmt]
+    kwargs = {"format": fmt, "metadata": metadata}
+    if dpi is not None:
+        kwargs["dpi"] = dpi
+    if fmt == "svg":
+        # SVG is text, and matplotlib writes it through a text-mode handle,
+        # so on Windows it lands with CRLF and on Linux with LF -- the same
+        # figure, different bytes, on the one check this pipeline exists to
+        # pass. `.gitattributes` pins `*.svg text eol=lf`, so a fresh
+        # checkout holds LF and a Windows rebuild would produce CRLF and
+        # fail verify.sh gate 6 with no defect to find. Pin the newline at
+        # the writer instead of hoping git and the platform agree.
+        buf = io.StringIO()
+        fig.savefig(buf, **kwargs)
+        with open(path, "w", encoding="utf-8", newline="\n") as fh:
+            fh.write(_canonicalise_svg_ids(buf.getvalue()))
+    else:
+        fig.savefig(path, **kwargs)
+
+
+def _save_publication(fig, name: str, theme: str) -> list[str]:
+    """The publication profile for ``name``, or ``[]`` if it is not a paper plate.
+
+    An unpublished plate is a legal state -- a figure can exist in the pipeline
+    before the paper cites it -- so this returns empty rather than raising. The
+    inverse (a paper number with no plate) is *not* legal and cannot happen
+    here: ``paper_map`` is keyed by pipeline name, and ``build_all`` checks that
+    every declared paper figure names a plate it actually builds.
+    """
+    entry = paper_map.for_pipeline(name)
+    if entry is None:
+        return []
+    directory = os.path.join(paper_root(), theme)
+    os.makedirs(directory, exist_ok=True)
+    written = []
+    for fmt in paper_map.PUB_FORMATS:
+        path = os.path.join(directory, f"{entry.pub_name}.{fmt}")
+        _write_one(fig, path, fmt, dpi=paper_map.PUB_DPI if fmt == "png" else None)
+        written.append(path)
+    return written
+
+
+def _freeze_layout(fig) -> None:
+    """Solve constrained layout once, then pin it for every subsequent render.
+
+    ``figure.constrained_layout.use`` is on, and the layout engine re-solves on
+    **every** ``savefig``. The solve depends on text extents, text extents are
+    measured in pixels, and pixels depend on dpi -- so the same figure saved at
+    two dpis lands its axes in two slightly different places.
+
+    That is not a P10 problem; it has been true since P-21 and it is why gate 10
+    fired the first time it was run. ``out/<theme>/x.svg`` and
+    ``out/<theme>/x.png`` are **already** two different geometries of one plate
+    in the committed tree. Both builds produce the difference identically, so
+    gate 3 was green over it -- the "deterministically wrong" class
+    ``README.md`` warns about, found by a gate written for something else.
+
+    Two details of the reference draw are load-bearing, and both were found by
+    getting them wrong and looking at the plate:
+
+    * **The dpi.** Drawing at ``figure.dpi`` (100) rather than ``savefig.dpi``
+      (200) visibly wrecked fig03 -- the heatmap lost width and the five arm
+      headers collided into ``bare_ccschema_repro``.
+    * **The iteration count.** Constrained layout does not settle in one draw.
+      The committed plates were solved by *two* draws, because the old code
+      saved twice and each ``savefig`` re-solved. A single draw froze a
+      half-converged layout that was visibly wrong on fig03.
+
+    So this draws until the axes stop moving, within ``LAYOUT_TOLERANCE``, and
+    raises if they never do. A layout frozen at an arbitrary iteration is
+    deterministic and wrong -- the class of defect that survives gate 3 exactly
+    because both builds get it identically.
+    """
+    original = fig.dpi
+    try:
+        fig.set_dpi(matplotlib.rcParams["savefig.dpi"])
+        _unfeed_wrapped_text(fig)
+        previous: list[tuple[float, ...]] | None = None
+        for _ in range(LAYOUT_MAX_PASSES):
+            fig.canvas.draw()
+            current = [tuple(ax.get_position().bounds) for ax in fig.axes]
+            if previous is not None and _max_move(current, previous) < LAYOUT_TOLERANCE:
+                fig.set_layout_engine("none")
+                return
+            previous = current
+        raise RuntimeError(
+            f"constrained layout was still moving after {LAYOUT_MAX_PASSES} "
+            f"passes (tolerance {LAYOUT_TOLERANCE}); freezing it here would ship "
+            "a half-solved geometry that two builds would agree on and a reader "
+            "would not."
+        )
+    finally:
+        fig.set_dpi(original)
+
+
+def _unfeed_wrapped_text(fig) -> None:
+    """Take ``wrap=True`` text out of the layout it depends on.
+
+    A wrapped text's extent is a **function of** the width available to it, and
+    constrained layout sizes the axes from the extents of what they contain. Put
+    the two together and you have a feedback loop, which is precisely what
+    ``fig07_a0_vs_a0prime`` was in: it did not oscillate and it did not
+    converge, it *drifted* -- both side margins growing by 0.0048 of the figure
+    on every single pass, forever. Drawn twice it is 0.0096 narrower than drawn
+    once, and the committed tree holds an SVG solved by one pass beside a PNG
+    solved by two. That is a ~25 px disagreement between two files that are
+    meant to be the same picture.
+
+    Excluding the text is the fix rather than a workaround: it breaks the cycle
+    at the arm that should never have been in it. These texts are all
+    hand-placed in space their figure already reserves -- ``theme.caveat`` sits
+    in the figure's bottom corner, fig07's banner has a dedicated ``axis("off")``
+    panel with its own ``height_ratios`` entry -- so the layout engine measuring
+    them a second time was double-counting to begin with.
+
+    Found while making the two output profiles share one layout: the drift is
+    older than P10, and being deterministic it was invisible to gate 3.
+    """
+    for holder in (*fig.axes, fig):
+        for text in holder.texts:
+            if text.get_wrap():
+                text.set_in_layout(False)
+
+
+def _max_move(a, b) -> float:
+    """Largest single coordinate change between two layout solutions."""
+    return max(
+        (abs(x - y) for box_a, box_b in zip(a, b) for x, y in zip(box_a, box_b)),
+        default=0.0,
+    )
+
+
+def save(fig, name: str, theme: str) -> list[str]:
+    """Write ``fig`` in both profiles: ``out/<theme>/`` and ``paper/<theme>/``.
+
+    Returns the paths written, in a fixed order -- the screen profile first, so
+    a caller that slices the first two still gets what it always got. Closes the
+    figure.
+    """
+    _freeze_layout(fig)
     directory = os.path.join(out_root(), theme)
     os.makedirs(directory, exist_ok=True)
     written = []
     for fmt in FORMATS:
         path = os.path.join(directory, f"{name}.{fmt}")
-        metadata = _SVG_METADATA if fmt == "svg" else _PNG_METADATA
-        if fmt == "svg":
-            # SVG is text, and matplotlib writes it through a text-mode handle,
-            # so on Windows it lands with CRLF and on Linux with LF -- the same
-            # figure, different bytes, on the one check this pipeline exists to
-            # pass. `.gitattributes` pins `*.svg text eol=lf`, so a fresh
-            # checkout holds LF and a Windows rebuild would produce CRLF and
-            # fail verify.sh gate 6 with no defect to find. Pin the newline at
-            # the writer instead of hoping git and the platform agree.
-            buf = io.StringIO()
-            fig.savefig(buf, format=fmt, metadata=metadata)
-            with open(path, "w", encoding="utf-8", newline="\n") as fh:
-                fh.write(_canonicalise_svg_ids(buf.getvalue()))
-        else:
-            fig.savefig(path, format=fmt, metadata=metadata)
+        _write_one(fig, path, fmt)
         written.append(path)
+    written.extend(_save_publication(fig, name, theme))
     plt.close(fig)
     return written
 

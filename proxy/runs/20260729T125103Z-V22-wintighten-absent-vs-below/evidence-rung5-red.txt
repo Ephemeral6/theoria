@@ -1,0 +1,17 @@
+verify.py rung 5, deliberately broken two ways
+==============================================
+
+-- unmodified (the shipped guard)
+   problems: 0
+
+-- neutered  (guard always exits 0)
+   problems: 1
+   a win_tighten against a scoreless world was not refused (exit 0): C:\Users\user\AppData\Local\Temp\rung5-scratch-pyijuy68\ledger_degenerate.jsonl: REFUSED (87 records, 42 carrying a variant, 13 degenerate rewrite(s), 0 unreadable line(s))
+
+-- paranoid  (guard always exits 2)
+   problems: 1
+   with the marker removed the guard still refused (exit 2) -- it is not the marker that catches this
+
+unmodified=0 neutered=1 paranoid=1
+
+A rung that only ever prints ok would show 0 0 0.

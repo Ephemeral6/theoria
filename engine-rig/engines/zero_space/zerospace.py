@@ -30,6 +30,19 @@ class Feature:
         return "%s@%d" % (self.color, self.cell)
 
 
+#: The three things `scope` can say.  `undetermined` is not a third *kind* of
+#: law -- it is the same quotient representative `global` names, reported under a
+#: different word because the search that would have justified `global` was cut
+#: short.  A distinct word rather than a flag beside `global`, so that a consumer
+#: filtering `scope == "global"` gets fewer laws instead of an unproved one, and
+#: so the weakening cannot be lost by a reader who does not know to look for the
+#: flag (E15).  No substring of `global`, deliberately: `"global" in scope` must
+#: not resurrect it either.
+CELL_LOCAL = "cell_local"
+GLOBAL = "global"
+UNDETERMINED = "undetermined"
+
+
 @dataclass
 class Law:
     """One linear conservation law: sum of the selected features, mod 2."""
@@ -37,12 +50,17 @@ class Law:
     vector: int
     features: List[Feature]
     value: int
-    scope: str                      # cell_local | global
-    # False when some cell's colour subsets were not enumerated exhaustively, so
-    # `scope == "global"` means "no cell-local explanation was searched for
-    # here", not "none exists" -- the difference between a law about the world
-    # and a law about the encoding.  Withheld from `as_json` for now; see there.
-    scope_exhaustive: bool = True
+    scope: str                      # cell_local | global | undetermined
+    # Cells whose colour subsets were not enumerated exhaustively.  Non-empty
+    # means a cell-local explanation may exist and was never searched for, which
+    # is why such a law is published as `undetermined` rather than `global` --
+    # the difference between a law about the world and a law about the encoding.
+    truncated_cells: Tuple[int, ...] = ()
+    subset_enumeration_limit: Optional[int] = None
+
+    @property
+    def scope_exhaustive(self) -> bool:
+        return not self.truncated_cells
 
     @property
     def n_features(self) -> int:
@@ -73,14 +91,19 @@ class Law:
         return len({f.cell for f in self.features})
 
     def as_json(self) -> Dict[str, object]:
-        # `scope_exhaustive` is deliberately NOT in this payload yet.  It belongs
-        # there -- a reader of `scope: "global"` cannot otherwise tell a proved
-        # classification from an unsearched one -- but `artifacts/candidates.jsonl`
-        # is sha256-pinned in `release/MANIFEST.jsonl` and the candidate ids are
-        # content-addressed, so widening the payload re-hashes every zero_space
-        # row and invalidates a manifest this track does not own.  Filed for the
-        # release track rather than done unilaterally (C11).
-        return {
+        # The degradation keys below are emitted **only** on a truncated row, and
+        # that restriction is load-bearing rather than tidy: `artifacts/
+        # candidates.jsonl` is sha256-pinned in `release/MANIFEST.jsonl` and the
+        # candidate ids are content-addressed, so a key added to every row
+        # re-hashes every zero_space candidate and invalidates a manifest this
+        # track does not own.  An exhaustively-enumerated row is byte-identical
+        # to what it was before E15; a truncated one -- which no checked-in
+        # artifact contains, all of them being 2-colour -- carries the budget on
+        # its face.  Shape borrowed from `bench/ladder.py`'s over-budget rung,
+        # which writes `proved_unsolvable: False` *and* an `error` naming the
+        # limit rather than dropping the row: the cap is recorded positively, in
+        # the product, where a reader who never opens this file will meet it.
+        payload: Dict[str, object] = {
             "form": "gf2_linear",
             "modulus": 2,
             "features": [{"cell": f.cell, "color": f.color} for f in self.features],
@@ -90,6 +113,32 @@ class Law:
             "scope": self.scope,
             "rendering": self.rendering(),
         }
+        #
+        # Gated on the *label*, not on `scope_exhaustive`.  Every law of a
+        # truncated run carries `scope_exhaustive is False` -- that is C11's
+        # reading and it is kept -- but a `cell_local` law was **found** in the
+        # span, and the budget cut short the searching, not the finding.  Its
+        # claim is unweakened, so its payload is unchanged; only the quotient
+        # representatives, whose classification is exactly what went unsearched,
+        # carry the degradation.
+        if self.scope == UNDETERMINED:
+            payload["scope_proved"] = False
+            payload["subset_enumeration_limit"] = self.subset_enumeration_limit
+            payload["truncated_cells"] = list(self.truncated_cells)
+            payload["error"] = (
+                "over budget: cell-local enumeration capped at %s colours per "
+                "cell; cells %s were searched only for singletons and their full "
+                "set" % (self.subset_enumeration_limit, list(self.truncated_cells))
+            )
+            payload["scope_note"] = (
+                "scope is %r, not %r: a cell-local explanation for this law may "
+                "exist in cells %s and was not searched for. The law itself is "
+                "unaffected -- it holds on the trajectory either way -- but "
+                "whether it is a fact about the world or about the encoding is "
+                "undecided here."
+                % (UNDETERMINED, GLOBAL, list(self.truncated_cells))
+            )
+        return payload
 
 
 @dataclass
@@ -116,10 +165,45 @@ class ZeroSpaceResult:
         return len(self.basis)
 
     def global_laws(self) -> List[Law]:
-        return [law for law in self.laws if law.scope == "global"]
+        """Laws proved to span cells.  Empty when the enumeration was truncated.
+
+        Not "every law that is not cell-local": where a cell went unenumerated,
+        the quotient representatives come back as `undetermined` and are found
+        through `undetermined_laws`.  A caller that wants both should say so.
+        """
+        return [law for law in self.laws if law.scope == GLOBAL]
 
     def cell_local_laws(self) -> List[Law]:
-        return [law for law in self.laws if law.scope == "cell_local"]
+        return [law for law in self.laws if law.scope == CELL_LOCAL]
+
+    def undetermined_laws(self) -> List[Law]:
+        """Quotient representatives whose classification the budget cut short."""
+        return [law for law in self.laws if law.scope == UNDETERMINED]
+
+    def as_json(self) -> Dict[str, object]:
+        """The run's own degradation record, independent of any single law."""
+        return {
+            "form": "zero_space_run",
+            "n_features": self.n_features,
+            "dimension": self.dimension,
+            "difference_rank": self.difference_rank,
+            "n_transitions": self.n_transitions,
+            "subset_enumeration_limit": SUBSET_ENUMERATION_LIMIT,
+            "truncated_cells": list(self.truncated_cells),
+            "scope_exhaustive": self.scope_exhaustive,
+            "scope_counts": {
+                CELL_LOCAL: len(self.cell_local_laws()),
+                GLOBAL: len(self.global_laws()),
+                UNDETERMINED: len(self.undetermined_laws()),
+            },
+            "error": None if self.scope_exhaustive else (
+                "over budget: cell-local enumeration capped at %d colours per "
+                "cell; cells %s not enumerated exhaustively, so %d law(s) are "
+                "reported as %r rather than %r"
+                % (SUBSET_ENUMERATION_LIMIT, list(self.truncated_cells),
+                   len(self.undetermined_laws()), UNDETERMINED, GLOBAL)
+            ),
+        }
 
     def contains(self, vector: int) -> bool:
         """Is this vector one of the conservation laws the evidence supports?"""
@@ -158,11 +242,13 @@ def local_laws(basis: Sequence[int], features: Sequence[Feature]
     `SUBSET_ENUMERATION_LIMIT` colours is not enumerated exhaustively -- only its
     singletons and its full set are tried -- so a cell-local law over, say, three
     of eleven colours is missed there.  A missed cell-local law does not vanish:
-    it stays in the quotient and is published with `scope: "global"`, i.e. as a
-    law **about the world** rather than about the encoding.  That is a budget
-    deciding a classification, so the budget is returned rather than absorbed,
-    and `analyse` carries it into the result.  It is live, not hypothetical: a
-    ten-colour palette crosses the limit.
+    it stays in the quotient, and until E15 it was published with
+    `scope: "global"`, i.e. as a law **about the world** rather than about the
+    encoding.  That was a budget deciding a classification.  The budget is
+    returned rather than absorbed, `analyse` carries it into the result, and the
+    affected representatives are now labelled `undetermined` and carry the cap
+    in their own payload.  It is live, not hypothetical: a ten-colour palette
+    crosses the limit.
     """
     groups: Dict[int, List[int]] = {}
     for i, feature in enumerate(features):
@@ -205,8 +291,16 @@ def analyse(states: Sequence[Sequence[str]], colors: Sequence[str]) -> ZeroSpace
         for vector in gf2.quotient_basis(sorted(basis), locals_)
     ]
 
+    # `global` is only a proved classification when every cell was enumerated
+    # exhaustively.  Where it was not, the quotient representatives are not
+    # promoted to a claim about the world at all -- they go out as
+    # `undetermined`, carrying the cells and the cap that put them there.  The
+    # cell-local ones are unaffected: those were *found* in the span, and
+    # finding is not what the budget cut short.
+    quotient_scope = GLOBAL if not truncated_cells else UNDETERMINED
+
     laws: List[Law] = []
-    for scope, vectors in (("cell_local", locals_), ("global", globals_)):
+    for scope, vectors in ((CELL_LOCAL, locals_), (quotient_scope, globals_)):
         for vector in vectors:
             laws.append(
                 Law(
@@ -214,11 +308,8 @@ def analyse(states: Sequence[Sequence[str]], colors: Sequence[str]) -> ZeroSpace
                     features=features,
                     value=gf2.dot(vector, encoded[0]),
                     scope=scope,
-                    # `global` is only a proved classification when every cell
-                    # was enumerated exhaustively.  Where it was not, the label
-                    # means "not found to be cell-local", which is weaker and
-                    # says so.
-                    scope_exhaustive=not truncated_cells,
+                    truncated_cells=tuple(truncated_cells),
+                    subset_enumeration_limit=SUBSET_ENUMERATION_LIMIT,
                 )
             )
 

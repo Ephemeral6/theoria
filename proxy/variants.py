@@ -18,6 +18,15 @@ unsolvable variant whose unsolvability follows from the construction.
 truth, and ground truth comes from construction, not from running the variant
 and seeing what happened. `Variant.load` refuses a spec without one.
 
+One of the five is not game-agnostic, and the record now says so.
+`win_tighten` tests `score_at_least`, and a game that reports no score fails
+that test at every value -- so on such a game it does not tighten the win
+condition, it removes it. The rewrite stays (the other direction would hand a
+scoreless game the tightened win outright), but "the score was absent" and "the
+score was short" are written down as the different events they are, and a
+`degenerate` bit marks the first. See D-032, and
+`tools/check_variant_degeneracy.py`, which is what reads the bit.
+
 Every rewrite here is a pure function of (spec, session counters, response), so
 a variant run replays exactly like an unmodified one.
 """
@@ -25,6 +34,7 @@ a variant run replays exactly like an unmodified one.
 import glob
 import json
 import os
+import threading
 from typing import Any, Dict, List, Optional
 
 from .ledger import canonical, sha256
@@ -35,6 +45,22 @@ LEGAL_OPERATORS = ("forbid_action", "remap_action", "step_limit",
                    "observation_loss", "win_tighten")
 
 CLAIMS = ("solvable", "unsolvable", "unchanged")
+
+#: Why a `win_tighten` rewrote a WIN. The two are not the same event and the
+#: record does not let them look the same (D-032).
+REASON_BELOW = "score_below"      # the game scored, and scored short
+REASON_ABSENT = "score_absent"    # the game reported no score at all
+
+#: Carried on the first absent-driven rewrite of a session, so that a human
+#: reading the ledger meets the sentence and not only the boolean.
+DEGENERATE_NOTE = (
+    "this game reported no score, so `score_at_least` is unsatisfiable at every "
+    "value: the win condition was not tightened, it was abolished. Reading an "
+    "absent score as a shortfall is deliberate -- the other direction would let "
+    "a game that never reports a score win a tightened variant outright -- but "
+    "the variant's claim no longer follows from the construction it names. "
+    "Whether a game reports a score is a protocol question, answerable without "
+    "playing it; answer it before using win_tighten on that game.")
 
 
 class VariantSpecError(ValueError):
@@ -174,6 +200,20 @@ class VariantRuntime:
         self.commands = 0          # commands since the last RESET, RESET excluded
         self.last_body: Optional[Dict[str, Any]] = None
         self.dead = False          # a step_limit or observation_loss has fired
+        #: How many WINs `win_tighten` rewrote because the game reported no
+        #: score at all. Non-zero means this session's win_tighten did not
+        #: tighten anything -- it removed the win condition (D-032).
+        self.degenerate_wins = 0
+        self.first_degenerate: Optional[Dict[str, Any]] = None
+        #: The first one, not yet handed to a consumer. `take_first_degenerate`
+        #: is the only way to clear it.
+        self._degeneracy_unreported = False
+        #: Guards the three fields above and nothing else. `env_proxy` serves
+        #: on a `ThreadingHTTPServer`, so two commands for one game share this
+        #: runtime; an adversarial pass showed that a consumer deciding "am I
+        #: the first?" by re-reading `degenerate_wins` loses the incident
+        #: entirely when both rewrites land before either consumer looks.
+        self._degeneracy_lock = threading.Lock()
 
     def _ops(self, kind: str):
         if self.variant is None:
@@ -244,11 +284,34 @@ class VariantRuntime:
             if body.get("state") == "WIN":
                 needed = op["require"]["value"]
                 have = body.get("score")
-                if have is None or have < needed:
+                if have is None:
+                    # "Absent" is read as "below" -- see DEGENERATE_NOTE for why
+                    # that direction is the safe one -- but it is recorded as a
+                    # different thing, because it is a different thing.
+                    body = dict(body)
+                    body["state"] = "NOT_FINISHED"
+                    with self._degeneracy_lock:
+                        self.degenerate_wins += 1
+                        occurrence = self.degenerate_wins
+                    record = {"op": "win_tighten", "require_score": needed,
+                              "score": None,
+                              "reason": REASON_ABSENT,
+                              "degenerate": True,
+                              "occurrence": occurrence,
+                              "effect": "WIN rewritten to NOT_FINISHED"}
+                    if occurrence == 1:
+                        record["note"] = DEGENERATE_NOTE
+                        with self._degeneracy_lock:
+                            self.first_degenerate = dict(record)
+                            self._degeneracy_unreported = True
+                    applied.append(record)
+                elif have < needed:
                     body = dict(body)
                     body["state"] = "NOT_FINISHED"
                     applied.append({"op": "win_tighten", "require_score": needed,
                                     "score": have,
+                                    "reason": REASON_BELOW,
+                                    "degenerate": False,
                                     "effect": "WIN rewritten to NOT_FINISHED"})
 
         self.last_body = body
@@ -256,6 +319,25 @@ class VariantRuntime:
             return body, None
         return body, (applied[0] if len(applied) == 1 else {"op": "multiple",
                                                             "applied": applied})
+
+    def take_first_degenerate(self) -> Optional[Dict[str, Any]]:
+        """The first degenerate rewrite of this session, handed out **once**.
+
+        A consumer must not decide "am I the first?" by reading
+        `degenerate_wins`, because by the time it looks the counter may have
+        moved past 1 -- two commands for one game are in flight on a
+        `ThreadingHTTPServer` and both responses can be rewritten before either
+        handler reaches its notifier. An adversarial pass drove exactly that
+        interleaving and the incident was written **zero** times, which is the
+        failure this ticket exists to remove, reproduced one layer up. So the
+        claim is moved into the runtime, where the state is: this returns the
+        record to the first caller and `None` to every caller after it.
+        """
+        with self._degeneracy_lock:
+            if not self._degeneracy_unreported:
+                return None
+            self._degeneracy_unreported = False
+            return self.first_degenerate
 
     # -- synthetic bodies --------------------------------------------------
     def _unchanged_body(self) -> Dict[str, Any]:

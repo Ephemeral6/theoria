@@ -26,11 +26,13 @@
       "E15-solver-status-bit",
       "E16-verdict-must-gate",
       "E17-held-out-validation",
+      "E19-merge-clean-but-broken",
       "E2-fd-ladder-bench",
       "E4-property-fuzz",
       "E5-cert-recheck",
       "E6-engine-dividend",
       "E7-deadlock-claim-audit",
+      "E8-ic3-scale",
       "E9-engine-paper-table",
       "P10-figures-into-paper",
       "P11-battery-section-refresh",
@@ -38,9 +40,13 @@
       "P13-P13-figure-numbering-and-plates",
       "P13-paper-intro-abstract",
       "P14-honesty-section",
+      "P15-capability-column-has-no-signal",
+      "P16-P16-uncited-number-gate",
+      "P4-P16-e06-contradiction",
       "P4-figures",
       "P5-release",
       "P6-paper-assembly",
+      "P7-P14-battery-section-blind-round",
       "P7-paper-section7",
       "P8-billshape-pipeline",
       "P9-paper-to-submittable",
@@ -58,11 +64,20 @@
       "S19-session-liveness",
       "S2-canary-schedule",
       "S20-gate-negative-sample",
+      "S21-app-session-death",
       "S23-unreadable-is-not-clean",
       "S24-merge-conflict-drain",
       "S25-probe-the-merge-queue",
       "S26-phase1-gate-must-decide",
+      "S27-S27-release-must-stick",
+      "S27-credential-in-body-triage",
+      "S28-S28-claim-warns-on-existing-branch",
+      "S29-S29-third-condition-and-lock-ignore",
+      "S29-S29-triage-the-five-red-gates",
       "S3-spend-gate",
+      "S30-S30-clock-sanity-widen",
+      "S31-S31-fleetkit-gate",
+      "S32-S32-close-the-gate-gap",
       "S5-phase1-close",
       "S6-merge-gate-509",
       "S7-ledger-hashchain",
@@ -80,10 +95,14 @@
       "V18-battery-prereg-check",
       "V19-unverified-is-not-true",
       "V2-exam-on-worldgen",
+      "V20-figures-pipeline-red",
+      "V21-lp-unavailable-is-not-a-pass",
       "V3-battery-discrimination",
       "V4-exam-selftest",
       "V5-battery-freeze",
       "V5-verdict-three-types",
+      "V6-V22-wintighten-absent-vs-below",
+      "V6-exam-on-sealed-dryrun",
       "V7-exam-stress-fanout",
       "V8-judge-trust-audit",
       "V9-battery-gaming-audit"
@@ -114,11 +133,13 @@
       "E15-solver-status-bit",
       "E16-verdict-must-gate",
       "E17-held-out-validation",
+      "E19-merge-clean-but-broken",
       "给专业规划器的三档性能定价",
       "用 500 个随机世界轰炸六个引擎找 bug",
       "证书独立复核器（不靠 Lean 一条路）",
       "量化引擎改进带来的实际红利",
       "E7-deadlock-claim-audit",
+      "E8-ic3-scale",
       "引擎章节的论文表格",
       "把图正式接进论文正文",
       "P11-battery-section-refresh",
@@ -126,9 +147,13 @@
       "P13-P13-figure-numbering-and-plates",
       "P13-paper-intro-abstract",
       "P14-honesty-section",
+      "P15-capability-column-has-no-signal",
+      "P16-P16-uncited-number-gate",
+      "P4-P16-e06-contradiction",
       "论文figures：把数据变成可复现的图",
       "释出包：陌生人一条命令复跑全部结果",
       "把各处结果组装成论文正文",
+      "P7-P14-battery-section-blind-round",
       "论文第 7 节：相关工作",
       "把论文「账单形状」图接上真数据管线",
       "把论文推进到可投稿",
@@ -146,11 +171,20 @@
       "S19-session-liveness",
       "把「金丝雀重放」做成每天自动跑的体检",
       "S20-gate-negative-sample",
+      "S21-app-session-death",
       "S23-unreadable-is-not-clean",
       "S24-merge-conflict-drain",
       "S25-probe-the-merge-queue",
       "S26-phase1-gate-must-decide",
+      "S27-S27-release-must-stick",
+      "S27-credential-in-body-triage",
+      "S28-S28-claim-warns-on-existing-branch",
+      "S29-S29-third-condition-and-lock-ignore",
+      "S29-S29-triage-the-five-red-gates",
       "造出花钱的闸门（多个 AI 共用一份预算不再各算各的）",
+      "S30-S30-clock-sanity-widen",
+      "S31-S31-fleetkit-gate",
+      "S32-S32-close-the-gate-gap",
       "Phase 1 收口：把地基验收单清干净",
       "补上合并门的漏洞（六个目录 509 个测试从未跑过）",
       "账本哈希链（让账本不可篡改）",
@@ -168,10 +202,14 @@
       "V18-battery-prereg-check",
       "V19-unverified-is-not-true",
       "让考卷跑在新造的 20 个练习世界上",
+      "V20-figures-pipeline-red",
+      "V21-lp-unavailable-is-not-a-pass",
       "指标体系首次区分两组 AI 的能力差",
       "考卷自检 + 出三类判决题（验判卷的人对不对）",
       "V5-battery-freeze",
       "V5-verdict-three-types",
+      "V6-V22-wintighten-absent-vs-below",
+      "封存考卷的干跑演练",
       "V7-exam-stress-fanout",
       "V8-judge-trust-audit",
       "V9-battery-gaming-audit"
@@ -180,16 +218,11 @@
       "A10-shared-ledger-real-arms",
       "A11-bypass-attempts-explained",
       "A12-cost-claim-sources",
-      "把对照版 AI 真正建起来",
       "对照版 AI 的离线标定",
       "跨关迁移协议：把学到的知识带去下一关",
-      "补齐对照组的成绩数据",
       "A9-readonly-baseline",
       "C10-unsolvable-proof-canon",
       "C11-tool-failure-as-truth",
-      "语法 v0.3：把散落的提法收进契约",
-      "移交测试包：让陌生 agent 只读两本书就能接手",
-      "语法补计数锁词汇",
       "E10-engine-crosscheck",
       "E11-engine-crosscheck-deep",
       "E12-adopt-the-unsolvable-canon",
@@ -198,24 +231,20 @@
       "E15-solver-status-bit",
       "E16-verdict-must-gate",
       "E17-held-out-validation",
+      "E19-merge-clean-but-broken",
       "证书独立复核器（不靠 Lean 一条路）",
+      "E8-ic3-scale",
       "引擎章节的论文表格",
-      "把图正式接进论文正文",
-      "P11-battery-section-refresh",
       "P12-paper-multi-review",
       "P13-P13-figure-numbering-and-plates",
       "P13-paper-intro-abstract",
       "P14-honesty-section",
-      "释出包：陌生人一条命令复跑全部结果",
-      "论文第 7 节：相关工作",
-      "把论文「账单形状」图接上真数据管线",
-      "把论文推进到可投稿",
+      "P15-capability-column-has-no-signal",
+      "P16-P16-uncited-number-gate",
+      "P4-P16-e06-contradiction",
+      "P7-P14-battery-section-blind-round",
       "释出许可条款落地",
-      "让配额熔断器学会自己开闩",
       "S10-invariant-on-resource",
-      "S11-sealed-halfguard",
-      "熔断器的全链路测试",
-      "S13-verify-gate-enforced",
       "S14-gates-for-all",
       "S15-ledger-hashchain",
       "S16-silent-failure-hunt",
@@ -223,14 +252,20 @@
       "S18-fleetkit-extract",
       "S19-session-liveness",
       "S20-gate-negative-sample",
+      "S21-app-session-death",
       "S23-unreadable-is-not-clean",
       "S24-merge-conflict-drain",
       "S25-probe-the-merge-queue",
       "S26-phase1-gate-must-decide",
-      "补上合并门的漏洞（六个目录 509 个测试从未跑过）",
+      "S27-S27-release-must-stick",
+      "S27-credential-in-body-triage",
+      "S28-S28-claim-warns-on-existing-branch",
+      "S29-S29-third-condition-and-lock-ignore",
+      "S29-S29-triage-the-five-red-gates",
+      "S30-S30-clock-sanity-widen",
+      "S31-S31-fleetkit-gate",
+      "S32-S32-close-the-gate-gap",
       "账本哈希链（让账本不可篡改）",
-      "S8-provenance-backfill",
-      "契约变更协议：改契约要走什么流程",
       "V10-fuzz-mutation-power",
       "V11-handover-auto",
       "V11-negative-control-census",
@@ -242,106 +277,112 @@
       "V17-pin-the-partial-verdict",
       "V18-battery-prereg-check",
       "V19-unverified-is-not-true",
-      "考卷自检 + 出三类判决题（验判卷的人对不对）",
-      "V5-battery-freeze",
+      "V20-figures-pipeline-red",
+      "V21-lp-unavailable-is-not-a-pass",
       "V5-verdict-three-types",
+      "V6-V22-wintighten-absent-vs-below",
+      "封存考卷的干跑演练",
       "V7-exam-stress-fanout",
       "V8-judge-trust-audit",
       "V9-battery-gaming-audit"
     ],
     "in_progress_plain": [
+      "A13-sealed-audit-reads-the-wrong-fields",
+      "A14-campaign-json-untracked",
+      "A15-ablation-calibration-uncommitted",
       "起草大考前要封存的规则包",
-      "P7-P14-battery-section-blind-round",
-      "S22-access-check-close"
+      "P17-P17-bare-filename-citations",
+      "V21-leakage-gate-token-level",
+      "V22-battery-separated-zero-metrics"
     ],
     "ops": [
       {
-        "age_min": 319,
-        "cycle": 33,
+        "age_min": 19,
+        "cycle": 37,
         "id": "OPS-A",
         "kind": "ops",
         "name": "漂移审计员",
-        "note": "cycle 33: verified the hold in production rather than assuming. 12 of 13 flag files now carry tip/first_seen/attempts; the two branches flagged twice were pre-change format then first tipped attempt, and their live tips now match, so the next sweep holds them. HELD count of 0 is the expected one-time transition; next cycle checks it actually appears.",
-        "outputs": 34,
+        "note": "cycle 37 done (headless, started by standing.py 14:05:45Z -- proved by process ancestry). Range 9bc8c880..ad778386, 3 commits. Two reports, both on the new account pool: (high) quota.py's rotation success path returns at :386 before the registry write-back at :398, so `reaped` never lands on disk; reap persists only `exited` and :371 skips only `quota-requeued`, so the same stale hit recurs every 5-min tick, re-firing mark_limited and rolling the reopen deadline forward -- one old log line can hold an account shut indefinitely, and its requeue is never drained because resume() is reachable only from reflex.py:161's returncode==2. Zero tests cover the rotator. (medium) the pool ledger's only entry is hand-written: 0 of 228 dispatch logs carry account=b, `pool-rotation` exists in no code path, and b has no launches key at all. Red lines clean: 0 key hits in 5648 tracked files, 0 sealed ids in 1155 added lines, 0 append-only deletions. **Withdrew my own cycle-36 claim that MAX_STANDING was the only thing preventing an OPS-A twin** -- `agent in live` fires 49 times in standing.log, twice for OPS-A. Settled a question pending since cycle 35: a0-spike/verify.sh is dead (absent, 10 references, one in monitor/METHOD.md). **PUSH PENDING**: committed locally (183424af, bc1f875b) but master is 20 behind and the merge is blocked by OPS-M's staged renames in monitor/ci/archive/ -- my own rule says wait a round rather than stash another agent's in-flight work. Delivery is unaffected: the bus is local files and monitor has already read the report. Retry the push first thing next cycle. Sleeping 1800s per monitor/ops/OPS-A.md.",
+        "outputs": 33,
         "role": "每小时巡一遍全仓，专抓「说了没做」和「已经变绿却还报红」",
         "state": "idle"
       },
       {
-        "age_min": 787,
-        "cycle": 10,
+        "age_min": 147,
+        "cycle": 13,
         "id": "OPS-B",
         "kind": "ops",
         "name": "浏览器专员",
-        "note": "空转一轮，本职无活：总线空、邮箱无 OPEN、条款巡检按天未到期（上次 19:44Z NO-DRIFT）。两件挂人手的事没动（发信、.env key 归属账户）。观察一条不另开消息：未合并分支已从 14 涨到 23，S11 仍在其中（20:44Z 仍原样重报），封存护栏第 5 小时不在主线上",
-        "outputs": 0,
+        "note": "总线空、邮箱无 OPEN、与 origin 同步。本轮只做一件事：把 OPS-M 10:08Z 的 hold 裁决与我 cycle 11 的升级路径洞对上——两者互补不重叠（它让该重试的重试，我让只能等人裁决的浮出水面），S11 正落在第二类且已躺约 21 小时。条款巡检昨日刚跑，按天未到期",
+        "outputs": 3,
         "role": "需要真浏览器和登录态的活：官方条款、账户核查",
         "state": "idle"
       },
       {
-        "age_min": 359,
-        "cycle": 11,
+        "age_min": 4,
+        "cycle": 16,
         "id": "OPS-M",
         "kind": "ops",
         "name": "合并裁判",
-        "note": "用户授权：ci_merge 合并成功后自动退休该分支的 flag（移入 archive 而非删除，含防同秒覆盖的计数器）。已推 4cd583a；自测四项全过，生产判据留给下轮：merge.log 出现 CLEARED 行且 monitor/ci/ 保持一 flag 一活分支",
-        "outputs": 6,
+        "note": "8 个分支进 master（含 p10），flag 12 -> 5(+1 是我手推与手跑 ci_merge 撞出的 push-rejected，transient 会自愈；纪律：同一时刻只能有一个东西推 master，本轮之后我等鸡跑完再推)。v5-verdict 已备好待推（闸门绿、测试是精确并集），v5-battery 闸门红且不是冲突造成——它带的 freeze 是对一棵已不存在的树的真陈述，需要 V5 重新 freeze，已写 inbox 不硬解。仍等 a3/e8/s11 三组 subagent",
+        "outputs": 14,
         "role": "脚本合不动的冲突由它裁决；顺利合并早已自动化",
         "state": "working"
       },
       {
-        "age_min": 236,
+        "age_min": 266,
         "cycle": 3,
         "id": "OPS-R",
         "kind": "ops",
         "name": "回顾员",
         "note": "cycle 3 done: 4 mining shards + 1 adversary, all completed. 3 proposals filed. HEADLINE IS AGAINST MYSELF: my cycle-2 bus message labelled APP-V3/battery as LIVE when it had been DONE 6h earlier (board.log:139, 19:00:28Z) -- observed 15:44Z, published 01:40Z, never re-read. OPS-A did the same shape at cycle 32. Retrospective latency now exceeds fleet state-change rate (19 CLAIMs in 4h), so any 'current state' claim from a long-cycle agent is structurally stale; proposed fix is re-verify-before-publish. My UNTESTED instance-vs-class hypothesis: REFUTED by its own merge-base criterion -- 25/35 links pass ancestry but 21 of those explicitly CITE the prior fix, only 4 (11%) match 'did not know', zero chains have >=2; 8 class-level artifacts did land; and a blanket encoding fix is provably harmful (childio doctrine). Sole survivor: line endings, 19 per-dir .gitattributes, root file exists with one unrelated line, fix is one line. Case 5: adversary stopped an overcorrection -- it belongs to E16's verdict-not-gated family, NOT to RES-3's tool-failure-as-truth family; my original separation was half right. Retracted a number I quoted (lp_potential 638/639 is about box bound; source says 639/639 status 2). Unexploded list rechecked: 11/13 real+live, 1 fixed 14min after filing, 1 (pid substring collision) I had misread. LIVE NOW: RES-1 died 05:38:39Z and RES-3 died 05:31:23Z, both still advertising working, holding 3 unsweepable claims; worker auto-supply 100% dead 8h (252 fail / 0 spawn, no diagnostics); sealed-pile probe sees 17% of request bodies and cannot match short names (no breach found); unauthorised live-API leg spent against g50t while monitor's own ruling said do not spend. ADDENDUM (re-verified 05:58Z, per the rule this cycle proposes): RES-2 ALSO died 05:51:29Z, after my shards ran -- three of four standing research sessions dead in this cycle (RES-3 05:31Z, RES-1 05:38Z, RES-2 05:51Z), all still advertising working, holding 4 unsweepable claims. claimed/ now 7 not 6: RES-4 re-claimed S22 exactly as it predicted when releasing it. Sleeping 14400s.",
-        "outputs": 8,
+        "outputs": 9,
         "role": "从所有痕迹里挖跨轨道重复出现的失败模式",
         "state": "idle"
       }
     ],
     "standing": [
       {
-        "age_min": 124,
-        "cycle": 14,
+        "age_min": 19,
+        "cycle": 26,
         "id": "RES-1",
         "kind": "standing",
         "name": "在线战役研究员",
-        "note": "S4 推进到 950c739（已推）。合并计划落盘 freeze/RECONCILE.md（15 条移植清单 + 5 条待人拍板 + 3 条必修），这份文件本身就是防第四次重写的保险。必修一已完成代码部分：分母不是 21 是 19（F-11 隔离两局），且 claim_set.json 自己的规则要求每个确证统计量对 12 局干净层再报一遍、分歧时以弱者为准——两稿都没实现。freeze/tiers.py 从名册推导三层与全部阈值，--verify 拦住任何再硬编码 21 的脚本。实质变化：C1『稳定』下限 11/21→10/19，CI 越过 0.45 的 x 14/21→14/19；符号检验 k≥7 不变（它是关于不一致对数不是局数）。仍待：散文里的 21 与三层报告条款、必修二（48 集来历 P-22 记反了）、必修三（消融臂已存在）。",
-        "outputs": 8,
+        "note": "对抗性复核推翻了我自己刚 push 的那一版 S4，这是本轮最重要的事。我在 CLAIMS_TEXT 写的「全仓没有任何一条『我们的定理会拉进几条公理』的实测数据」是假的：theory-compiler/STATUS.md:14-23 有#print axioms 实测表（死锁证书跨 28,672 状态九条全空、ic3 四条全空、algebraic 一条 propext），a0-spike 的 a0_report.json 记 unsolvable/inv_closed 各 [propext, Quot.sound]，还有三条测试主动断言 Classical.choice 不出现——都早于我的修订一天，且方向相反：空集那道门当时正在被我们自己跨过去。故白名单收窄为实测必需的两条，Classical.choice 退出放行行（它是三条里唯一无实测支持、唯一带语义分量的），并逐字保留被撤回的那条理由——一条被撤回的预注册理由本身是预注册的一部分。另修正一处推论错误（经典重言式 Classical.em 在空集版下不过 (b)、在上一版白名单下过）与一处可控杠杆（(c) 跑不动分两种，只有『局太大』算缺格，『定理写成查不了的形状』算未达成）。A3 的代码复核同样判了拦发布，尚未 push。另记一次瞬时事件：一次 master 合并期间本文件被短暂回滚到 cycle 15 的旧版本，随后恢复——监控若恰在那一刻采样会读到十轮前的心跳。",
+        "outputs": 11,
         "role": "常驻推进：Theoria 臂在真 API 上跑出结果（论文最大缺口）",
         "state": "working"
       },
       {
-        "age_min": 160,
-        "cycle": 11,
+        "age_min": 3,
+        "cycle": 21,
         "id": "RES-2",
         "kind": "standing",
         "name": "论文与释出研究员",
-        "note": "P14 DELIVERED, pushed, done. Paper has a new 10 (adjudication census); limitations->11, related->12. The adversarial round refused my own replacement number: the enumerated 85/56 I put in place of the census's 340/48 is the same error one level down -- 85 omits the largest pass's positives, 56 sums the summary lines the section had just impeached, and the passes disagree with each other about three sites that end up on both sides of the ledger. Section now publishes per-pass figures and NO aggregate. Also overturned: 'the error always runs toward good news' (24 rows run the other way), the a0-spike repair does not reach the published artefact that 3.5 cites, and the census's independence claim is cut because the surveying lane wrote the repairs it reports. verify_paper 2/4 -> 4/4, including three broken citations I did not cause. Now on P7-P14-battery-section-blind-round, which is blocked on an unmerged branch (agent/p13-paper-intro-abstract).",
-        "outputs": 6,
+        "note": "P17 triage committed (8a56976e): 14 of 19 resolved by content evidence -> full paths, 5 ruled generic, 0 unresolved. verify_paper PASS 6/6, 217 path citations 0 broken, 76 tests. OPEN_ITEMS B1/B3/B4 closed. Adversarial pass on check F + attempt to overturn the 19 judgements is running.",
+        "outputs": 9,
         "role": "常驻推进：把已有结果写成能投出去的论文与释出包",
         "state": "working"
       },
       {
-        "age_min": 107,
-        "cycle": 49,
+        "age_min": 20,
+        "cycle": 63,
         "id": "RES-3",
         "kind": "standing",
         "name": "验证与考卷研究员",
-        "note": "本世上下文将满，已写交接 monitor/inbox/20260729T091000Z-RES-3-handoff.md。本世交付三件（V7 cb6893e / E13 e06d271 / V8 afff84c5），均已 push + board done，均经对抗审稿。手上零件在推，板上 V6-exam-on-sealed-dryrun 给 verify 赛道留着未领——动它前先读封存堆纪律。",
-        "outputs": 8,
+        "note": "交接已先写盘: monitor/inbox/20260729T1150Z-RES-3-handoff.md(不等上下文满才写)。本世交付 V20(24b631f4)+V6(a1181670), V21-leakage 改动全在盘上、352 passed/2 xfailed、exam.verify GREEN, 只差对抗审稿回收后提交。已从对抗方脚本名反查出我自己两条真缺陷并修掉: 退化子集的 continue 会跳过同字段的 token 检查; floor=max(...) 把 per-subset 修正赋回 per-group 值, 会让 token 检查与后续字段一起变钝。",
+        "outputs": 12,
         "role": "常驻推进：凭什么相信这些数字——考卷、电池、引擎交叉验证",
-        "state": "idle"
+        "state": "working"
       },
       {
-        "age_min": 195,
-        "cycle": 16,
+        "age_min": 20,
+        "cycle": 25,
         "id": "RES-4",
         "kind": "standing",
         "name": "基础设施研究员",
-        "note": "本轮交付 S25/S7(+自我订正)/S26/S19/S20。S20 基线:19 个已设闸门里 18 个 decorative(从没人故意弄红过),机制+METHOD.md 已落,余下四个闸门在别人领地未越界。手上仅剩 S22(卡 CHARTER 花钱权限,已第三次交回并写 inbox)。上下文接近满。",
-        "outputs": 4,
+        "note": "新一世接上 cycle24。已刷新锁(前一世的锁停了90min)。开工发现: 我 10:43-11:04Z push 的五支(S29x3/S31/S32)至今 NOT-merged, 而 ci/merge.log 最后一条是 11:13Z、master 却在 12:39Z 动过——合并队列疑似停摆。先查这个,这正是本赛道的悄悄失败。",
+        "outputs": 11,
         "role": "常驻推进：这台机器本身可不可信——闸门、留痕、释出、防悄悄失败",
         "state": "working"
       }
@@ -419,16 +460,20 @@
           "P13-P13-figure-numbering-and-plates",
           "P13-paper-intro-abstract",
           "P14-honesty-section",
+          "P15-capability-column-has-no-signal",
+          "P16-P16-uncited-number-gate",
+          "P4-P16-e06-contradiction",
           "释出包：陌生人一条命令复跑全部结果",
+          "P7-P14-battery-section-blind-round",
           "把论文「账单形状」图接上真数据管线",
           "把论文推进到可投稿"
         ],
         "id": "RES-2",
         "kind": "worker",
         "name": "手动会话",
-        "now": "P7-P14-battery-section-blind-round",
+        "now": "P17-P17-bare-filename-citations",
         "orphan": false,
-        "outputs": 8,
+        "outputs": 12,
         "running": true
       },
       {
@@ -443,6 +488,7 @@
           "E14-crash-is-not-a-finding",
           "E15-solver-status-bit",
           "E17-held-out-validation",
+          "E19-merge-clean-but-broken",
           "引擎章节的论文表格",
           "V10-fuzz-mutation-power",
           "V11-handover-auto",
@@ -455,6 +501,10 @@
           "V17-pin-the-partial-verdict",
           "V18-battery-prereg-check",
           "V19-unverified-is-not-true",
+          "V20-figures-pipeline-red",
+          "V21-lp-unavailable-is-not-a-pass",
+          "封存考卷的干跑演练",
+          "V6-V22-wintighten-absent-vs-below",
           "V7-exam-stress-fanout",
           "V8-judge-trust-audit",
           "V9-battery-gaming-audit"
@@ -462,10 +512,10 @@
         "id": "RES-3",
         "kind": "worker",
         "name": "手动会话",
-        "now": null,
+        "now": "V21-leakage-gate-token-level",
         "orphan": false,
-        "outputs": 25,
-        "running": false
+        "outputs": 30,
+        "running": true
       },
       {
         "finished": [
@@ -475,16 +525,25 @@
           "S18-fleetkit-extract",
           "S19-session-liveness",
           "S20-gate-negative-sample",
+          "S21-app-session-death",
           "S25-probe-the-merge-queue",
           "S26-phase1-gate-must-decide",
+          "S27-credential-in-body-triage",
+          "S27-S27-release-must-stick",
+          "S28-S28-claim-warns-on-existing-branch",
+          "S29-S29-third-condition-and-lock-ignore",
+          "S29-S29-triage-the-five-red-gates",
+          "S30-S30-clock-sanity-widen",
+          "S31-S31-fleetkit-gate",
+          "S32-S32-close-the-gate-gap",
           "账本哈希链（让账本不可篡改）"
         ],
         "id": "RES-4",
         "kind": "worker",
         "name": "手动会话",
-        "now": "S22-access-check-close",
+        "now": "A13-sealed-audit-reads-the-wrong-fields",
         "orphan": false,
-        "outputs": 9,
+        "outputs": 18,
         "running": true
       },
       {
@@ -718,6 +777,48 @@
       },
       {
         "finished": [
+          "E8-ic3-scale"
+        ],
+        "id": "W-1660",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": null,
+        "orphan": false,
+        "outputs": 1,
+        "running": false
+      },
+      {
+        "finished": [],
+        "id": "W-1670",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "A14-campaign-json-untracked",
+        "orphan": false,
+        "outputs": 0,
+        "running": true
+      },
+      {
+        "finished": [],
+        "id": "W-1671",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "V22-battery-separated-zero-metrics",
+        "orphan": false,
+        "outputs": 0,
+        "running": true
+      },
+      {
+        "finished": [],
+        "id": "W-1672",
+        "kind": "worker",
+        "name": "研究工人",
+        "now": "A15-ablation-calibration-uncommitted",
+        "orphan": false,
+        "outputs": 0,
+        "running": true
+      },
+      {
+        "finished": [
           "V5-battery-freeze"
         ],
         "id": "W-252",
@@ -730,13 +831,13 @@
       }
     ]
   },
-  "blocking_findings": 3,
+  "blocking_findings": 4,
   "board": {
     "available": 5,
     "blocked": 1,
-    "claimed": 4,
-    "done": 86,
-    "listing": "=== available (ͨ�ù��˿��� 5) ===\n  p2  S21-app-session-death        cell=S21 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  P4-P16-e06-contradiction     cell=P4  territory=papers         lane:paper������ͣ�ڣ��ѽ�⣩\n  p3  V6-exam-on-sealed-dryrun     cell=V4  territory=exam           lane:verify������ͣ�ڣ��ѽ�⣩\n  p3  S27-S27-release-must-stick   cell=S27 territory=monitor        lane:infra������ͣ�ڣ��ѽ�⣩\n  p3  E8-ic3-scale                 cell=E2  territory=engine-rig     unlaned\n=== blocked ===\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A3-campaign-devpile          by RES-1\n  P7-P14-battery-section-blind-round by RES-2\n  S22-access-check-close       by RES-4\n  S4-freeze                    by RES-1\n=== done (86) ===\n  A10-shared-ledger-real-arms.W-1641\n  A11-bypass-attempts-explained.W-1641\n  A12-cost-claim-sources.RES-1\n  A4-ablation-online.superseded-by-A4a\n  A4a-ablation-build.RES-1\n  A4b-ablation-calibrate.RES-1\n  A6-transfer-protocol.RES-1\n  A7-envelope-finish.APP-A7\n  A9-readonly-baseline.RES-3\n  C1-worldgen.W-1610\n  C10-unsolvable-proof-canon.RES-3\n  C11-tool-failure-as-truth.RES-3\n  C4-deadlock-lean.W-1541\n  C6-worldgen-mutate.W-1251\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  C9-count-lock-vocabulary.W-131\n  E10-engine-crosscheck.RES-3\n  E11-engine-crosscheck-deep.RES-3\n  E12-adopt-the-unsolvable-canon.RES-3\n  E13-engine-section-numbers.RES-3\n  E14-crash-is-not-a-finding.RES-3\n  E15-solver-status-bit.RES-3\n  E16-verdict-must-gate.W-1650\n  E17-held-out-validation.RES-3\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  E5-cert-recheck.W-1411\n  E6-engine-dividend.W-130\n  E7-deadlock-claim-audit.W-130\n  E9-engine-paper-table.RES-3\n  P10-figures-into-paper.W-1253\n  P11-battery-section-refresh.RES-2\n  P12-paper-multi-review.RES-2\n  P13-P13-figure-numbering-and-plates.RES-2\n  P13-paper-intro-abstract.RES-2\n  P14-honesty-section.RES-2\n  P4-figures.W-1611\n  P5-release.RES-2\n  P6-paper-assembly.W-1610\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  R2-release-licence.W-1412\n  S1-quota-auto-exit.W-1250\n  S10-invariant-on-resource.W-1251\n  S11-sealed-halfguard.W-1410\n  S12-quota-hold-tests.W-1412\n  S13-verify-gate-enforced.RES-1\n  S14-gates-for-all.RES-4\n  S15-ledger-hashchain.RES-4\n  S16-silent-failure-hunt.RES-4\n  S17-fleet-evidence-capture.W-1641\n  S18-fleetkit-extract.RES-4\n  S19-session-liveness.RES-4\n  S2-canary-schedule.W-1540\n  S20-gate-negative-sample.RES-4\n  S23-unreadable-is-not-clean.W-1642\n  S24-merge-conflict-drain.W-1641\n  S25-probe-the-merge-queue.RES-4\n  S26-phase1-gate-must-decide.RES-4\n  S3-spend-gate.W-1540\n  S5-phase1-close.W-1250\n  S6-merge-gate-509.superseded-by-derived-gate\n  S7-ledger-hashchain.RES-4\n  S8-provenance-backfill.W-1412\n  S9-contract-change-protocol.W-1250\n  V10-fuzz-mutation-power.RES-3\n  V11-handover-auto.RES-3\n  V11-negative-control-census.RES-3\n  V12-worldgen-gate-deaf.RES-3\n  V13-audit-the-published-surface.RES-3\n  V14-standing-negative-control-probe.RES-3\n  V15-census-sampling-frame.RES-3\n  V16-determinism-has-no-caller.RES-3\n  V17-pin-the-partial-verdict.RES-3\n  V18-battery-prereg-check.RES-3\n  V19-unverified-is-not-true.RES-3\n  V2-exam-on-worldgen.W-1540\n  V3-battery-discrimination.APP-V3\n  V4-exam-selftest.RES-1\n  V5-battery-freeze.W-252\n  V5-verdict-three-types.W-1652\n  V7-exam-stress-fanout.RES-3\n  V8-judge-trust-audit.RES-3\n  V9-battery-gaming-audit.RES-3"
+    "claimed": 8,
+    "done": 105,
+    "listing": "=== available (ͨ�ù��˿��� 1) ===\n  p3  E8-ic3-scale                 cell=E2  territory=engine-rig     unlaned\n=== reserved�����������������о�Ա���� 4�� ===\n  p1  E18-survey-numbers-reproducible lane=verify   owner=RES-3(20����ǰ) territory=engine-rig\n  p1  R3-release-classifier-defaults lane=infra    owner=RES-4(20����ǰ) territory=release\n  p1  S29-measurement-missing-is-not-zero lane=infra    owner=RES-4(20����ǰ) territory=proxy\n  p2  S28-no-third-value-in-the-monitor lane=infra    owner=RES-4(20����ǰ) territory=monitor\n=== blocked ===\n  S4-freeze-complete           waits on S4-freeze\n=== claimed ===\n  A13-sealed-audit-reads-the-wrong-fields by RES-4\n  A14-campaign-json-untracked  by W-1670\n  A15-ablation-calibration-uncommitted by W-1672\n  A3-campaign-devpile          by RES-1\n  P17-P17-bare-filename-citations by RES-2\n  S4-freeze                    by RES-1\n  V21-leakage-gate-token-level by RES-3\n  V22-battery-separated-zero-metrics by W-1671\n=== done (105) ===\n  A10-shared-ledger-real-arms.W-1641\n  A11-bypass-attempts-explained.W-1641\n  A12-cost-claim-sources.RES-1\n  A4-ablation-online.superseded-by-A4a\n  A4a-ablation-build.RES-1\n  A4b-ablation-calibrate.RES-1\n  A6-transfer-protocol.RES-1\n  A7-envelope-finish.APP-A7\n  A9-readonly-baseline.RES-3\n  C1-worldgen.W-1610\n  C10-unsolvable-proof-canon.RES-3\n  C11-tool-failure-as-truth.RES-3\n  C4-deadlock-lean.W-1541\n  C6-worldgen-mutate.W-1251\n  C7-dsl-v03-mentions.APP-C7\n  C8-handover-package.W-1252\n  C9-count-lock-vocabulary.W-131\n  E10-engine-crosscheck.RES-3\n  E11-engine-crosscheck-deep.RES-3\n  E12-adopt-the-unsolvable-canon.RES-3\n  E13-engine-section-numbers.RES-3\n  E14-crash-is-not-a-finding.RES-3\n  E15-solver-status-bit.RES-3\n  E16-verdict-must-gate.W-1650\n  E17-held-out-validation.RES-3\n  E19-merge-clean-but-broken.RES-3\n  E2-fd-ladder-bench.W-1520\n  E4-property-fuzz.W-1610\n  E5-cert-recheck.W-1411\n  E6-engine-dividend.W-130\n  E7-deadlock-claim-audit.W-130\n  E8-ic3-scale.W-1660\n  E9-engine-paper-table.RES-3\n  P10-figures-into-paper.W-1253\n  P11-battery-section-refresh.RES-2\n  P12-paper-multi-review.RES-2\n  P13-P13-figure-numbering-and-plates.RES-2\n  P13-paper-intro-abstract.RES-2\n  P14-honesty-section.RES-2\n  P15-capability-column-has-no-signal.RES-2\n  P16-P16-uncited-number-gate.RES-2\n  P4-P16-e06-contradiction.RES-2\n  P4-figures.W-1611\n  P5-release.RES-2\n  P6-paper-assembly.W-1610\n  P7-P14-battery-section-blind-round.RES-2\n  P7-paper-section7.APP-P7\n  P8-billshape-pipeline.RES-2\n  P9-paper-to-submittable.RES-2\n  R2-release-licence.W-1412\n  S1-quota-auto-exit.W-1250\n  S10-invariant-on-resource.W-1251\n  S11-sealed-halfguard.W-1410\n  S12-quota-hold-tests.W-1412\n  S13-verify-gate-enforced.RES-1\n  S14-gates-for-all.RES-4\n  S15-ledger-hashchain.RES-4\n  S16-silent-failure-hunt.RES-4\n  S17-fleet-evidence-capture.W-1641\n  S18-fleetkit-extract.RES-4\n  S19-session-liveness.RES-4\n  S2-canary-schedule.W-1540\n  S20-gate-negative-sample.RES-4\n  S21-app-session-death.RES-4\n  S23-unreadable-is-not-clean.W-1642\n  S24-merge-conflict-drain.W-1641\n  S25-probe-the-merge-queue.RES-4\n  S26-phase1-gate-must-decide.RES-4\n  S27-S27-release-must-stick.RES-4\n  S27-credential-in-body-triage.RES-4\n  S28-S28-claim-warns-on-existing-branch.RES-4\n  S29-S29-third-condition-and-lock-ignore.RES-4\n  S29-S29-triage-the-five-red-gates.RES-4\n  S3-spend-gate.W-1540\n  S30-S30-clock-sanity-widen.RES-4\n  S31-S31-fleetkit-gate.RES-4\n  S32-S32-close-the-gate-gap.RES-4\n  S5-phase1-close.W-1250\n  S6-merge-gate-509.superseded-by-derived-gate\n  S7-ledger-hashchain.RES-4\n  S8-provenance-backfill.W-1412\n  S9-contract-change-protocol.W-1250\n  V10-fuzz-mutation-power.RES-3\n  V11-handover-auto.RES-3\n  V11-negative-control-census.RES-3\n  V12-worldgen-gate-deaf.RES-3\n  V13-audit-the-published-surface.RES-3\n  V14-standing-negative-control-probe.RES-3\n  V15-census-sampling-frame.RES-3\n  V16-determinism-has-no-caller.RES-3\n  V17-pin-the-partial-verdict.RES-3\n  V18-battery-prereg-check.RES-3\n  V19-unverified-is-not-true.RES-3\n  V2-exam-on-worldgen.W-1540\n  V20-figures-pipeline-red.RES-3\n  V21-lp-unavailable-is-not-a-pass.RES-3\n  V3-battery-discrimination.APP-V3\n  V4-exam-selftest.RES-1\n  V5-battery-freeze.W-252\n  V5-verdict-three-types.W-1652\n  V6-V22-wintighten-absent-vs-below.RES-3\n  V6-exam-on-sealed-dryrun.RES-3\n  V7-exam-stress-fanout.RES-3\n  V8-judge-trust-audit.RES-3\n  V9-battery-gaming-audit.RES-3"
   },
   "con_green": 1,
   "constraints": [
@@ -890,6 +991,13 @@
       "title": "十三个 agent 的独立审计：监控高估约 11.5 个百分点，50.0 → 38.6【已裁决·监控代行：数字已改】"
     },
     {
+      "action": "【已裁决·监控代行 2026-07-29】(1) 四处当场修并跑过：`pid_alive` 加 pid<=0 守卫且 quota 改为引用同一份实现；reflex 认「正在运行」（中文控制台里 `\"Running\"` 一次也没命中过，于是 live_workers 恒 0、补员循环每跳按满员拉人）；reflex 读不到内存改为 0.0 并发 `mem-unreadable` 事件（原为默认 99GB 的 fail-open）；`--lane` 自报身份不再能绕过花钱守卫（`claim W-9999 --lane campaign` 此前可领走真 API 战役且日志与批准过的认领逐字相同）。(2) 其余上板四件：A13-sealed-audit-reads-the-wrong-fields（p1，封存守门人）、S29-measurement-missing-is-not-zero（proxy 的三处「量不到=0」）、R3-release-classifier-defaults（释出分类器的默认值全指向可发布）、S28-no-third-value-in-the-monitor（监控自己剩下的 11 处）。(3) 全体要求：**逐条修、逐条配阴性样本，不许打包成一次「已全部加固」**——本仓 20 道闸门里 19 道从没被证明能变红，而普查的第二层结论正是「出问题最多的是补丁本身」。",
+      "body": "57 个 agent 的对抗性普查（每条候选都由一名默认认为它错的复核员反驳过）留下 28 条。**它们全是同一件事的不同写法**：计数器的默认是 0（无活可做／无违规／板见底），布尔的默认是 True（还活着／干净／没被禁用／未超支），集合的默认是空（无欠回执／无越界分支），异常处理的默认是 `pass`。**没有一处区分「我看了，是零」和「我没看成」。**\n\n最重的三条：`dispatch.pid_alive(0)` **恒为真**（tasklist 会返回 System Idle Process 那一行），而任务表在本机不给 PID 字段、抓取循环无声退回 0——66 条注册项里 62 条读作「还在跑」；`arc-recon/contamination.py:163` 用 HTTP 账本的字段去读只有 `game_id` 的 episode 账本，于是 560 条记录读出零接触并印成「sealed ADDRESSED: NONE」，**而这个绿灯已经落进 `claim_set.json`**；`release/enumerate.py:123` 的空 id 列表让 33 个 B→A、223 个 C→A 全部滑向「可发布」。\n\n**第二层规律更刺眼：出问题最多的是补丁本身。** dispatch 的 pid 抓取**正是为了修 `pid: 0`** 而加的，它在本机的失败模式是返回同一个 0；`check_redlines` 建了 `json_shaped` 按字节判类，`enumerate` 没接上；`check_sealed` 补了 piles 形状守卫，`_arc_game_ids` 没补；`bus.py` 声明了 `ACK_REQUIRED`，两个消费端各自手打了缩水的元组。**修复恢复了症状，同时让问题看上去已被处理。**",
+      "id": "F-21",
+      "severity": "blocking",
+      "title": "这个代码库没有第三个值：28 处「测不到」被写成了「测了，没问题」【已裁决·监控代行：四处当场修，其余四件上板】"
+    },
+    {
       "action": "【已裁决·监控代行 2026-07-28】采纳。Theoria.md 三处增补：开发堆选局优先可逆机制、变体/改规则考题含可逆性维度、1.8 探索目的补一句『看什么能再看一次』。依据：A0 与 A0′ 的对照是本仓库目前证据力最强的受控实验。修订派下一批提示词执行（基准文件条款级增补，留 diff 审查）。",
       "body": "A0′（cold-start-a0/prime）的对照实验：A0 看到 99% 的状态-动作对，说明书仍带三处错；A0′ 只看 47%，说明书 100% 准确、13 条可执行探针、零未测规则。变量不是看了多少，是**看到的东西能否再看一次**——不可逆机关（闩锁）把任何探索量都封了顶。\n\n这直接影响 Theoria.md 的三处：开发堆选局准则（优先可逆机制多的局）、变体设计（『改规则适应题』应含可逆性维度）、以及 1.8 对探索目的的表述。",
       "id": "F-12",
@@ -1023,7 +1131,7 @@
       "title": "凭据卫生干净，封存堆零接触 —— 两条硬纪律都守住了"
     }
   ],
-  "generated_at": "2026-07-29 17:55:31",
+  "generated_at": "2026-07-29 22:45:52",
   "grid": {
     "A1": {
       "active": [
@@ -1097,8 +1205,8 @@
       "active": [
         "P-13"
       ],
-      "note": "八引擎出货、510 测试收集；但 ENGINE_TABLE 不在 master，E11 四缺陷在 master 健在",
-      "pct": 85
+      "note": "ENGINE_TABLE.md 已在 master 且边界列非空；lp_potential 的 admissible 改为读 admissibility_check",
+      "pct": 92
     },
     "E3": {
       "active": [],
@@ -1124,8 +1232,8 @@
       "active": [
         "P-23"
       ],
-      "note": "12 节非占位 23667 词；但两份审计只覆盖半篇，五视角评审给 Reject",
-      "pct": 76
+      "note": "P14 的诚实措辞已落进 PAPER.md（master 上可见 self-consistent 口径）",
+      "pct": 80
     },
     "P3": {
       "active": [
@@ -1852,6 +1960,52 @@
         }
       },
       "ts": "2026-07-29 10:05:56"
+    },
+    {
+      "findings": {
+        "blocking": 4,
+        "high": 7,
+        "info": 7,
+        "low": 3,
+        "medium": 2
+      },
+      "paper_progress": 38.6,
+      "progress": 42.5,
+      "sections": {
+        "Claim 菜单": {
+          "blocked": 2,
+          "missing": 2,
+          "partial": 1
+        },
+        "Phase 1 · 封闭系统": {
+          "green": 9,
+          "partial": 7
+        },
+        "Phase 2 · 指标电池": {
+          "green": 1,
+          "partial": 2
+        },
+        "Phase 3 · 框架迭代（开发堆）": {
+          "missing": 2,
+          "partial": 3,
+          "risk": 1
+        },
+        "Phase 4 · 确证（封存堆）": {
+          "missing": 5,
+          "partial": 1
+        },
+        "十条强制约束": {
+          "green": 1,
+          "missing": 2,
+          "partial": 5,
+          "risk": 2
+        },
+        "车间八工序": {
+          "green": 7,
+          "partial": 2
+        }
+      },
+      "ts": "2026-07-29 19:07:33"
     }
   ],
   "iteration_loop": [
@@ -2081,88 +2235,53 @@
       "tn36-ef4dde99"
     ],
     "dirty": [
-      "blation-arm/artifacts/a0-base/episode.jsonl",
-      "ablation-arm/artifacts/a2-base/episode.jsonl",
-      "ablation-arm/artifacts/a2-charitable/episode.jsonl",
-      "ablation-arm/artifacts/run_all.json",
-      "ablation-arm/artifacts/verify.json",
-      "arc-recon/data/claim_set.json",
+      "xam/artifacts/build_manifest.json",
+      "exam/artifacts/calibration.json",
+      "exam/artifacts/exam_summary.json",
+      "exam/artifacts/matrix/verdict_confusion.json",
+      "exam/artifacts/matrix/verdict_confusion.md",
+      "exam/artifacts/papers/p15-adaptation-a0.paper.json",
+      "exam/artifacts/papers/p15-handover-a0.paper.json",
+      "exam/artifacts/papers/p15-heldout-a0.paper.json",
+      "exam/artifacts/papers/p15-verdict-a2.paper.json",
+      "exam/artifacts/selftest.json",
+      "exam/artifacts/truth/p15-adaptation-a0.truth.json",
+      "exam/artifacts/truth/p15-handover-a0.truth.json",
+      "exam/artifacts/truth/p15-heldout-a0.truth.json",
+      "exam/artifacts/truth/p15-verdict-a2.truth.json",
+      "monitor/accounts_state.json",
       "monitor/board/board.log",
-      "monitor/board/claimed/C10-unsolvable-proof-canon.RES-3.md",
-      "monitor/board/claimed/E17-held-out-validation.RES-3.md",
-      "monitor/board/claimed/P13-paper-intro-abstract.RES-2.md",
-      "monitor/board/claimed/S18-fleetkit-extract.RES-4.md",
-      "monitor/board/claimed/S25-probe-the-merge-queue.RES-4.md",
-      "monitor/board/items/A12-cost-claim-sources.md",
-      "monitor/board/items/A3-campaign-devpile.md",
-      "monitor/board/items/A4b-ablation-calibrate.md",
-      "monitor/board/items/A6-transfer-protocol.md",
-      "monitor/board/items/E12-adopt-the-unsolvable-canon.md",
-      "monitor/board/items/E13-engine-section-numbers.md",
-      "monitor/board/items/E15-solver-status-bit.md",
-      "monitor/board/items/P14-honesty-section.md",
-      "monitor/board/items/S19-session-liveness.md",
-      "monitor/board/items/S20-gate-negative-sample.md",
-      "monitor/board/items/S22-access-check-close.md",
-      "monitor/board/items/S26-phase1-gate-must-decide.md",
-      "monitor/board/items/S4-freeze.md",
-      "monitor/board/items/S7-ledger-hashchain.md",
-      "monitor/board/items/V7-exam-stress-fanout.md",
-      "monitor/board/items/V8-judge-trust-audit.md",
-      "monitor/bus/OPS-A/cursor.json",
-      "monitor/bus/OPS-R/out.jsonl",
+      "monitor/board/items/A13-sealed-audit-reads-the-wrong-fields.md",
+      "monitor/board/items/E18-survey-numbers-reproducible.md",
+      "monitor/board/items/V21-leakage-gate-token-level.md",
+      "monitor/board/items/V6-V22-wintighten-absent-vs-below.md",
       "monitor/bus/RES-1/cursor.json",
       "monitor/bus/RES-1/out.jsonl",
       "monitor/bus/RES-2/cursor.json",
       "monitor/bus/RES-2/out.jsonl",
-      "monitor/bus/RES-3/cursor.json",
       "monitor/bus/RES-3/out.jsonl",
       "monitor/bus/RES-4/cursor.json",
       "monitor/bus/RES-4/out.jsonl",
-      "monitor/ci/CONFLICT-origin_agent_a3-campaign-devpile.md",
-      "monitor/ci/CONFLICT-origin_agent_e8-ic3-scale.md",
-      "monitor/ci/CONFLICT-origin_agent_e9-engine-paper-table.md",
       "monitor/ci/CONFLICT-origin_agent_p10-figures-into-paper.md",
-      "monitor/ci/CONFLICT-origin_agent_p13-figure-numbering.md",
       "monitor/ci/CONFLICT-origin_agent_r2-release-licence.md",
-      "monitor/ci/CONFLICT-origin_agent_s11-sealed-halfguard.md",
-      "monitor/ci/CONFLICT-origin_agent_s25-probe-the-merge-queue.md",
-      "monitor/ci/CONFLICT-origin_agent_v18-battery-prereg-check.md",
-      "monitor/ci/CONFLICT-origin_agent_v19-unverified-is-not-true.md",
-      "monitor/ci/CONFLICT-origin_agent_v5-battery-freeze.md",
-      "monitor/ci/CONFLICT-origin_agent_v5-verdict-three-types.md",
-      "monitor/ci/merge.lock",
+      "monitor/ci/CONFLICT-origin_agent_s4-freeze.md",
       "monitor/ci/merge.log",
+      "monitor/history.jsonl",
       "monitor/index.html",
+      "monitor/mailbox/OPS-M.md",
       "monitor/mailbox/RES-1.md",
-      "monitor/mailbox/RES-2.md",
+      "monitor/ops-status/OPS-A.json",
+      "monitor/ops-status/OPS-M.json",
       "monitor/ops-status/RES-1.json",
       "monitor/ops-status/RES-2.json",
       "monitor/ops-status/RES-3.json",
       "monitor/ops-status/RES-4.json",
-      "monitor/quota_state.json",
       "monitor/reflex.lock",
       "monitor/reflex.log",
+      "monitor/spec.py",
       "monitor/standing.log",
+      "monitor/standing_state.json",
       "monitor/state.json",
-      "papers/phase1-workshop/figures/fig1_concept_timeline.txt",
-      "worldgen/out/qc/t1-portal-oneway/candidates.jsonl",
-      "worldgen/out/qc/t1-portal-oneway/engines_report.json",
-      "worldgen/out/qc/t1-switch-latch/candidates.jsonl",
-      "worldgen/out/qc/t1-switch-latch/engines_report.json",
-      "worldgen/out/qc/t1-switch-toggle/candidates.jsonl",
-      "worldgen/out/qc/t1-switch-toggle/engines_report.json",
-      "worldgen/out/qc/t1-walk-maze/candidates.jsonl",
-      "worldgen/out/qc/t1-walk-maze/engines_report.json",
-      "worldgen/out/qc/t2-lock-fragile/candidates.jsonl",
-      "worldgen/out/qc/t2-switch-push/candidates.jsonl",
-      "worldgen/out/qc/v-707a64ad/candidates.jsonl",
-      "worldgen/out/qc/v-707a64ad/engines_report.json",
-      "worldgen/out/qc/v-a3446614/candidates.jsonl",
-      "worldgen/out/qc/v-a3446614/engines_report.json",
-      "worldgen/out/qc/v-ce732813/candidates.jsonl",
-      "worldgen/out/qc/v-ce732813/engines_report.json",
-      "worldgen/out/qc/v-efe43df1/candidates.jsonl",
       ".claude/",
       "\"C\\357\\200\\272UsersuserDesktoptheoriamonitorpermtest.txt\"",
       "baseline-arms/out/campaign/",
@@ -2174,10 +2293,7 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/A3-campaign-devpile.RES-1.md",
-      "monitor/board/claimed/P7-P14-battery-section-blind-round.RES-2.md",
-      "monitor/board/claimed/S22-access-check-close.RES-4.md",
-      "monitor/board/claimed/S4-freeze.RES-1.md",
+      "monitor/board/claimed/",
       "monitor/board/done/A12-cost-claim-sources.RES-1.md",
       "monitor/board/done/A4b-ablation-calibrate.RES-1.md",
       "monitor/board/done/A6-transfer-protocol.RES-1.md",
@@ -2186,47 +2302,82 @@
       "monitor/board/done/E13-engine-section-numbers.RES-3.md",
       "monitor/board/done/E15-solver-status-bit.RES-3.md",
       "monitor/board/done/E17-held-out-validation.RES-3.md",
+      "monitor/board/done/E19-merge-clean-but-broken.RES-3.md",
+      "monitor/board/done/E8-ic3-scale.W-1660.md",
       "monitor/board/done/P13-paper-intro-abstract.RES-2.md",
       "monitor/board/done/P14-honesty-section.RES-2.md",
+      "monitor/board/done/P15-capability-column-has-no-signal.RES-2.md",
+      "monitor/board/done/P16-P16-uncited-number-gate.RES-2.md",
+      "monitor/board/done/P4-P16-e06-contradiction.RES-2.md",
+      "monitor/board/done/P7-P14-battery-section-blind-round.RES-2.md",
       "monitor/board/done/S18-fleetkit-extract.RES-4.md",
       "monitor/board/done/S19-session-liveness.RES-4.md",
       "monitor/board/done/S20-gate-negative-sample.RES-4.md",
+      "monitor/board/done/S21-app-session-death.RES-4.md",
       "monitor/board/done/S25-probe-the-merge-queue.RES-4.md",
       "monitor/board/done/S26-phase1-gate-must-decide.RES-4.md",
+      "monitor/board/done/S27-S27-release-must-stick.RES-4.md",
+      "monitor/board/done/S27-credential-in-body-triage.RES-4.md",
+      "monitor/board/done/S28-S28-claim-warns-on-existing-branch.RES-4.md",
+      "monitor/board/done/S29-S29-third-condition-and-lock-ignore.RES-4.md",
+      "monitor/board/done/S29-S29-triage-the-five-red-gates.RES-4.md",
+      "monitor/board/done/S30-S30-clock-sanity-widen.RES-4.md",
+      "monitor/board/done/S31-S31-fleetkit-gate.RES-4.md",
+      "monitor/board/done/S32-S32-close-the-gate-gap.RES-4.md",
       "monitor/board/done/S7-ledger-hashchain.RES-4.md",
+      "monitor/board/done/V20-figures-pipeline-red.RES-3.md",
+      "monitor/board/done/V21-lp-unavailable-is-not-a-pass.RES-3.md",
+      "monitor/board/done/V6-V22-wintighten-absent-vs-below.RES-3.md",
+      "monitor/board/done/V6-exam-on-sealed-dryrun.RES-3.md",
       "monitor/board/done/V7-exam-stress-fanout.RES-3.md",
       "monitor/board/done/V8-judge-trust-audit.RES-3.md",
-      "monitor/board/items/P4-P16-e06-contradiction.md",
-      "monitor/board/items/S27-S27-release-must-stick.md",
-      "monitor/ci/CONFLICT-origin_agent_c10-unsolvable-proof-canon.md",
-      "monitor/ci/CONFLICT-origin_agent_e15-solver-status-bit.md",
-      "monitor/ci/CONFLICT-origin_agent_s4-freeze.md",
-      "monitor/ci/archive/CONFLICT-origin_agent_a4b-ablation-calibrate.20260729T050340Z.md",
-      "monitor/ci/archive/CONFLICT-origin_agent_s25-probe-the-merge-queue.20260729T055324Z.md",
-      "monitor/ci/archive/CONFLICT-origin_agent_v18-battery-prereg-check.20260729T043256Z.md",
+      "monitor/board/items/P17-P17-machine-checked-ruling.md",
+      "monitor/ci/CONFLICT-origin_agent_a13-sealed-audit-reads-the-wrong-fields.md",
+      "monitor/ci/archive/CONFLICT-origin_agent_p10-figures-into-paper.cleared-20260729T143700Z.md",
+      "monitor/ci/archive/CONFLICT-origin_agent_r2-release-licence.cleared-20260729T142755Z.md",
+      "monitor/ci/archive/CONFLICT-origin_agent_s4-freeze.cleared-20260729T142755Z.md",
+      "monitor/ci/merge.lock",
       "monitor/inbox/20260729T0545Z-RES-1-e5-cost-per-action-counts-the-reset.md",
       "monitor/inbox/20260729T0546Z-RES-1-figures-pins-another-tracks-living-document.md",
       "monitor/inbox/20260729T0555Z-RES-1-the-dollar-model-is-not-fine-and-the-zero-proves-nothing.md",
       "monitor/inbox/20260729T0635Z-RES-4-s22-third-release.md",
       "monitor/inbox/20260729T071500Z-RES-1-a3-playbook-does-not-parse.md",
       "monitor/inbox/20260729T091000Z-RES-3-handoff.md",
+      "monitor/inbox/20260729T101500Z-OPS-R-nothing-in-the-harness-observes-the-monitor.md",
+      "monitor/inbox/20260729T101800Z-OPS-R-this-cycle-found-nothing-new-and-two-of-my-last-three-were-rediscoveries.md",
+      "monitor/inbox/20260729T102000Z-RES-2-fig06-docstring-count.md",
+      "monitor/inbox/20260729T103323Z-W-1661-board-state-is-half-tracked-and-git-resurrects-claimed-items.md",
+      "monitor/inbox/20260729T104429Z-W-1661-correction-and-the-board-command-run-from-a-worktree-writes-to-a-private-board.md",
+      "monitor/inbox/20260729T110500Z-RES-2-i-edited-master-working-tree.md",
+      "monitor/inbox/20260729T1120Z-RES-3-proposal-V24-exam-verify-repairs-staleness.md",
+      "monitor/inbox/20260729T1145Z-RES-3-two-findings-outside-my-territory.md",
+      "monitor/inbox/20260729T1150Z-RES-3-handoff.md",
+      "monitor/inbox/20260729T121500Z-RES-2-verify-paper-cannot-see-an-uncited-number.md",
+      "monitor/inbox/20260729T1310Z-RES-1-merge-queue-silent.md",
+      "monitor/inbox/20260729T133000Z-W-1660-e8-ic3-bounds-touches-a-paper-sentence.md",
+      "monitor/inbox/20260729T1440Z-RES-1-worktree-cwd-green-on-the-wrong-tree.md",
+      "monitor/inbox/20260729T145500Z-opsm-release-manifest-covers-a-third-of-the-tree.md",
+      "monitor/inbox/20260729T153000Z-RES-3-e15-and-e17-merge-clean-but-do-not-run.md",
+      "monitor/inbox/20260729T160000Z-W-1660-e8-the-null-space-half-does-not-hold.md",
+      "monitor/inbox/20260729T1950Z-RES-1-price-unpriced-holes.md",
+      "monitor/ops-status/OPS-A.lock",
       "monitor/ops-status/RES-1.lock",
       "monitor/ops-status/RES-2.lock",
       "monitor/ops-status/RES-3.lock",
       "monitor/ops-status/RES-4.lock",
-      "monitor/standing_state.json",
+      "scratchpad/",
       "theoria-arm/runs/pytest-count-test_the_scorecard_action_coun0/",
       "theoria-arm/runs/pytest-test_the_shell_turns_end_to_en0/",
       "worldgen/out/qc/t2-lock-fragile/engines_report.json"
     ],
     "engine_candidates": 44,
     "git_branch": "master",
-    "git_head": "de90ba90 OPS-R: re-verify before closing caught a third standing session dying mid-cycle",
+    "git_head": "0d6d4ea4 OPS-M cycle 16: the poison and the antidote were lying side by side in the queue",
     "incidents": 18,
     "piles_sha": "3feca53e5ede695c",
     "sealed_count": 21,
-    "sync_entries": 158,
-    "sync_last": "2026-07-29T05:40:00Z",
+    "sync_entries": 180,
+    "sync_last": "2026-07-29T01:25:00Z",
     "tests": {},
     "untracked": [
       ".claude/",
@@ -2240,10 +2391,7 @@
       "baseline-arms/out/shards/probe_log.g50t.jsonl",
       "baseline-arms/out/shards/probe_log.sk48.jsonl",
       "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "monitor/board/claimed/A3-campaign-devpile.RES-1.md",
-      "monitor/board/claimed/P7-P14-battery-section-blind-round.RES-2.md",
-      "monitor/board/claimed/S22-access-check-close.RES-4.md",
-      "monitor/board/claimed/S4-freeze.RES-1.md",
+      "monitor/board/claimed/",
       "monitor/board/done/A12-cost-claim-sources.RES-1.md",
       "monitor/board/done/A4b-ablation-calibrate.RES-1.md",
       "monitor/board/done/A6-transfer-protocol.RES-1.md",
@@ -2252,35 +2400,70 @@
       "monitor/board/done/E13-engine-section-numbers.RES-3.md",
       "monitor/board/done/E15-solver-status-bit.RES-3.md",
       "monitor/board/done/E17-held-out-validation.RES-3.md",
+      "monitor/board/done/E19-merge-clean-but-broken.RES-3.md",
+      "monitor/board/done/E8-ic3-scale.W-1660.md",
       "monitor/board/done/P13-paper-intro-abstract.RES-2.md",
       "monitor/board/done/P14-honesty-section.RES-2.md",
+      "monitor/board/done/P15-capability-column-has-no-signal.RES-2.md",
+      "monitor/board/done/P16-P16-uncited-number-gate.RES-2.md",
+      "monitor/board/done/P4-P16-e06-contradiction.RES-2.md",
+      "monitor/board/done/P7-P14-battery-section-blind-round.RES-2.md",
       "monitor/board/done/S18-fleetkit-extract.RES-4.md",
       "monitor/board/done/S19-session-liveness.RES-4.md",
       "monitor/board/done/S20-gate-negative-sample.RES-4.md",
+      "monitor/board/done/S21-app-session-death.RES-4.md",
       "monitor/board/done/S25-probe-the-merge-queue.RES-4.md",
       "monitor/board/done/S26-phase1-gate-must-decide.RES-4.md",
+      "monitor/board/done/S27-S27-release-must-stick.RES-4.md",
+      "monitor/board/done/S27-credential-in-body-triage.RES-4.md",
+      "monitor/board/done/S28-S28-claim-warns-on-existing-branch.RES-4.md",
+      "monitor/board/done/S29-S29-third-condition-and-lock-ignore.RES-4.md",
+      "monitor/board/done/S29-S29-triage-the-five-red-gates.RES-4.md",
+      "monitor/board/done/S30-S30-clock-sanity-widen.RES-4.md",
+      "monitor/board/done/S31-S31-fleetkit-gate.RES-4.md",
+      "monitor/board/done/S32-S32-close-the-gate-gap.RES-4.md",
       "monitor/board/done/S7-ledger-hashchain.RES-4.md",
+      "monitor/board/done/V20-figures-pipeline-red.RES-3.md",
+      "monitor/board/done/V21-lp-unavailable-is-not-a-pass.RES-3.md",
+      "monitor/board/done/V6-V22-wintighten-absent-vs-below.RES-3.md",
+      "monitor/board/done/V6-exam-on-sealed-dryrun.RES-3.md",
       "monitor/board/done/V7-exam-stress-fanout.RES-3.md",
       "monitor/board/done/V8-judge-trust-audit.RES-3.md",
-      "monitor/board/items/P4-P16-e06-contradiction.md",
-      "monitor/board/items/S27-S27-release-must-stick.md",
-      "monitor/ci/CONFLICT-origin_agent_c10-unsolvable-proof-canon.md",
-      "monitor/ci/CONFLICT-origin_agent_e15-solver-status-bit.md",
-      "monitor/ci/CONFLICT-origin_agent_s4-freeze.md",
-      "monitor/ci/archive/CONFLICT-origin_agent_a4b-ablation-calibrate.20260729T050340Z.md",
-      "monitor/ci/archive/CONFLICT-origin_agent_s25-probe-the-merge-queue.20260729T055324Z.md",
-      "monitor/ci/archive/CONFLICT-origin_agent_v18-battery-prereg-check.20260729T043256Z.md",
+      "monitor/board/items/P17-P17-machine-checked-ruling.md",
+      "monitor/ci/CONFLICT-origin_agent_a13-sealed-audit-reads-the-wrong-fields.md",
+      "monitor/ci/archive/CONFLICT-origin_agent_p10-figures-into-paper.cleared-20260729T143700Z.md",
+      "monitor/ci/archive/CONFLICT-origin_agent_r2-release-licence.cleared-20260729T142755Z.md",
+      "monitor/ci/archive/CONFLICT-origin_agent_s4-freeze.cleared-20260729T142755Z.md",
+      "monitor/ci/merge.lock",
       "monitor/inbox/20260729T0545Z-RES-1-e5-cost-per-action-counts-the-reset.md",
       "monitor/inbox/20260729T0546Z-RES-1-figures-pins-another-tracks-living-document.md",
       "monitor/inbox/20260729T0555Z-RES-1-the-dollar-model-is-not-fine-and-the-zero-proves-nothing.md",
       "monitor/inbox/20260729T0635Z-RES-4-s22-third-release.md",
       "monitor/inbox/20260729T071500Z-RES-1-a3-playbook-does-not-parse.md",
       "monitor/inbox/20260729T091000Z-RES-3-handoff.md",
+      "monitor/inbox/20260729T101500Z-OPS-R-nothing-in-the-harness-observes-the-monitor.md",
+      "monitor/inbox/20260729T101800Z-OPS-R-this-cycle-found-nothing-new-and-two-of-my-last-three-were-rediscoveries.md",
+      "monitor/inbox/20260729T102000Z-RES-2-fig06-docstring-count.md",
+      "monitor/inbox/20260729T103323Z-W-1661-board-state-is-half-tracked-and-git-resurrects-claimed-items.md",
+      "monitor/inbox/20260729T104429Z-W-1661-correction-and-the-board-command-run-from-a-worktree-writes-to-a-private-board.md",
+      "monitor/inbox/20260729T110500Z-RES-2-i-edited-master-working-tree.md",
+      "monitor/inbox/20260729T1120Z-RES-3-proposal-V24-exam-verify-repairs-staleness.md",
+      "monitor/inbox/20260729T1145Z-RES-3-two-findings-outside-my-territory.md",
+      "monitor/inbox/20260729T1150Z-RES-3-handoff.md",
+      "monitor/inbox/20260729T121500Z-RES-2-verify-paper-cannot-see-an-uncited-number.md",
+      "monitor/inbox/20260729T1310Z-RES-1-merge-queue-silent.md",
+      "monitor/inbox/20260729T133000Z-W-1660-e8-ic3-bounds-touches-a-paper-sentence.md",
+      "monitor/inbox/20260729T1440Z-RES-1-worktree-cwd-green-on-the-wrong-tree.md",
+      "monitor/inbox/20260729T145500Z-opsm-release-manifest-covers-a-third-of-the-tree.md",
+      "monitor/inbox/20260729T153000Z-RES-3-e15-and-e17-merge-clean-but-do-not-run.md",
+      "monitor/inbox/20260729T160000Z-W-1660-e8-the-null-space-half-does-not-hold.md",
+      "monitor/inbox/20260729T1950Z-RES-1-price-unpriced-holes.md",
+      "monitor/ops-status/OPS-A.lock",
       "monitor/ops-status/RES-1.lock",
       "monitor/ops-status/RES-2.lock",
       "monitor/ops-status/RES-3.lock",
       "monitor/ops-status/RES-4.lock",
-      "monitor/standing_state.json",
+      "scratchpad/",
       "theoria-arm/runs/pytest-count-test_the_scorecard_action_coun0/",
       "theoria-arm/runs/pytest-test_the_shell_turns_end_to_en0/",
       "worldgen/out/qc/t2-lock-fragile/engines_report.json"
@@ -2288,12 +2471,13 @@
   },
   "p1_green": 9,
   "p1_total": 16,
+  "p1_unprobed": 11,
   "paper_plan": [
     {
       "evidence": "六引擎 + M9 + FD 三档定价 + 500 世界 23 不变量零违规；世界工厂 20 世界；契约 v0.3；A0/A0′/A1/A2/A3 五件离线验收全绿",
       "id": "WP1",
       "name": "框架本体与离线验收",
-      "pct": 87,
+      "pct": 89,
       "scale": "对标：Schema 的 world_model.py 方法论一节。我们：DSL+四形态+六/八引擎+A0/A0′/A1/A2 四件离线验收",
       "slot": "§3 框架 · 图5 DC22案例 · 图6 概念时间线",
       "weight": 0.15
@@ -2365,7 +2549,7 @@
       "evidence": "PAPER.md 2512 行成稿，含引文核查、评审分诊、待办清单；五视角评审在跑",
       "id": "WP9",
       "name": "论文写作（workshop 文 → 主文）",
-      "pct": 62,
+      "pct": 65,
       "scale": "Phase 1 结 workshop 文（P-16 在跑）→ Phase 3 结案例研究 → 主文",
       "slot": "全文（3.2 的八节骨架）",
       "weight": 0.05
@@ -2380,7 +2564,7 @@
       "weight": 0.03
     }
   ],
-  "paper_progress": 38.6,
+  "paper_progress": 39.0,
   "phases": [
     {
       "_counts": {
@@ -2392,7 +2576,8 @@
       "id": "p1",
       "items": [
         {
-          "_note": "proxy/ 已落地（env_proxy + guard + ledger + runner + replay + mock 测试），密钥只在代理内注入，封存护栏在代理层拒绝（含短 ID）。监控下轮独立复跑其密封测试。",
+          "_note": "proxy/ 已落地（env_proxy + guard + ledger + runner + replay + mock 测试），密钥只在代理内注入，封存护栏在代理层拒绝（含短 ID）。监控下轮独立复跑其密封测试。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "green",
           "blocks": [
             "p1-seal-test",
@@ -2406,7 +2591,8 @@
           "status": "green"
         },
         {
-          "_note": "proxy/model_proxy.py + pricing/ 版本化价目表落地；baseline 的 usage 已逐字入账。C2 的仪表存在了；约束 8 从此可测。",
+          "_note": "proxy/model_proxy.py + pricing/ 版本化价目表落地；baseline 的 usage 已逐字入账。C2 的仪表存在了；约束 8 从此可测。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "green",
           "blocks": [
             "c2"
@@ -2418,7 +2604,8 @@
           "status": "green"
         },
         {
-          "_note": "proxy/variants.py 起架（包裹合法集）。构造性依据登记与考卷出题流程未接。",
+          "_note": "proxy/variants.py 起架（包裹合法集）。构造性依据登记与考卷出题流程未接。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 1 · 自下而上五层 (2)",
           "id": "p1-variant",
@@ -2427,7 +2614,8 @@
           "status": "partial"
         },
         {
-          "_note": "proxy/runner.py + LEDGER_FORMAT.md + replay.py 落地。F-16 拼写分歧已裁决以 proxy 为正典，baseline 账本待迁移。",
+          "_note": "proxy/runner.py + LEDGER_FORMAT.md + replay.py 落地。F-16 拼写分歧已裁决以 proxy 为正典，baseline 账本待迁移。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "green",
           "clause": "Phase 1 · 自下而上五层 (4)",
           "id": "p1-runner",
@@ -2436,7 +2624,8 @@
           "status": "green"
         },
         {
-          "_note": "proxy/reconcile.py 对账器落地，baseline 用它实测出配额口径（失败 400 不计费，4 样本恒等）。冻结打分器本体未接 → P-9。",
+          "_note": "proxy/reconcile.py 对账器落地，baseline 用它实测出配额口径（失败 400 不计费，4 样本恒等）。冻结打分器本体未接 → P-9。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 1 · 自下而上五层 (5)、验收单",
           "id": "p1-scorer",
@@ -2446,6 +2635,7 @@
         },
         {
           "_note": "开发堆 4 局全部 PASS（重试包络盖过 1–3 分钟的波浪式瞬时故障；每局 ≤20 动作）。INC-001/002 正式改判（INC-001b/002a/005）。  〔本次扫描：逐局判决：ar25=PASS； g50t=PASS； sk48=PASS； tn36=PASS。全 PASS。〕",
+          "_probed": true,
           "_status": "green",
           "clause": "Phase 1 验收单",
           "id": "p1-determinism",
@@ -2455,7 +2645,8 @@
           "status": "green"
         },
         {
-          "_note": "已结：级联语义（frame 是帧列表）、level 为响应字段、guid、动作空间、首帧跨会话可复现、金丝雀基线；**帧缓存与释出许可条款已由 OPS-B 查实**（browser-ops/TERMS.md §2）：本地缓存/落盘是官方设计的一部分，无需额外许可；**再释出需书面许可且默认禁止**（ToS 原文 without our express prior written permission）。未结：全量跨会话残留、速率配额的官方口径。",
+          "_note": "已结：级联语义（frame 是帧列表）、level 为响应字段、guid、动作空间、首帧跨会话可复现、金丝雀基线；**帧缓存与释出许可条款已由 OPS-B 查实**（browser-ops/TERMS.md §2）：本地缓存/落盘是官方设计的一部分，无需额外许可；**再释出需书面许可且默认禁止**（ToS 原文 without our express prior written permission）。未结：全量跨会话残留、速率配额的官方口径。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 1 · 一件接入核查",
           "id": "p1-access",
@@ -2464,7 +2655,8 @@
           "status": "partial"
         },
         {
-          "_note": "结构上已裁决：API 返回帧列表，step 必须建模『动作→帧序列』。但『它是否真的会超过 1 帧』仍未观测；而 A0 的 D-A0-004 反向选了『一动作一帧』，两者需要合流。",
+          "_note": "结构上已裁决：API 返回帧列表，step 必须建模『动作→帧序列』。但『它是否真的会超过 1 帧』仍未观测；而 A0 的 D-A0-004 反向选了『一动作一帧』，两者需要合流。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 1 · 一件轨迹作业",
           "id": "p1-cascade",
@@ -2474,6 +2666,7 @@
         },
         {
           "_note": "piles.json 哈希锁定，API 层零接触；INC-001 已改判（开发堆 4 局可玩）；F-11 已落账：claim_set.json 为 19，ls20/ft09 隔离，9 局登记在册。  〔本次扫描：封存堆 21 局零接触（已核对 3187 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99〕",
+          "_probed": true,
           "_status": "green",
           "clause": "Phase 1 · 一刀切堆",
           "id": "p1-cut",
@@ -2484,17 +2677,20 @@
         },
         {
           "_note": "全环冷启动跑通：感知→挖掘→裁决→四形态→certify 双层→plan→赢，外加 no-button 变体的 Lean 不可解证书。A0『证活』。留下的洞（press 方向泛化不可证、零可执行探针）见 F-05/F-09。  〔本次扫描：A0 阶段件 10/10 落盘；候选 invariant×2, object_hypothesis×3, plan×1, rule_hypothesis×23。缺：无〕",
+          "_probed": true,
           "_status": "green",
           "clause": "Phase 1 · 三件离线验收",
           "id": "p1-a0",
           "label": "A0 冷启动 spike（自建世界，第一优先）",
           "note": "全环冷启动跑通：感知→挖掘→裁决→四形态→certify 双层→plan→赢，外加 no-button 变体的 Lean 不可解证书。A0『证活』。留下的洞（press 方向泛化不可证、零可执行探针）见 F-05/F-09。",
           "probe": "a0_state",
+          "probe_scope": "partial",
           "status": "green"
         },
         {
           "_note": "真 A1 达成并经对抗式复核 CONFIRMED：LP 权重经证书文件过数据边界，Lean 势函数归纳、空公理集。复核揪出的使能条件缺口已修；权重手抄限制登记 E-06 → P-10。  〔本次扫描：engine-rig 侧证书导出：已建；theory-compiler 侧消费：已接。两半接通前，A1 仍是彩排而非验收。〕",
-          "_status": "partial",
+          "_probed": true,
+          "_status": "green",
           "clause": "Phase 1 · 三件离线验收",
           "id": "p1-a1",
           "label": "A1 孔明棋：LP 解出 pagoda → Lean 验封闭引理",
@@ -2503,7 +2699,8 @@
           "status": "green"
         },
         {
-          "_note": "cold-start-a2 完成：假定理展品 + 打脸→修订→重证全回路，A2_REPORT 在树上；顺带报出两条编译器缺陷 → P-10。",
+          "_note": "cold-start-a2 完成：假定理展品 + 打脸→修订→重证全回路，A2_REPORT 在树上；顺带报出两条编译器缺陷 → P-10。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "green",
           "clause": "Phase 1 · 三件离线验收；INC-004",
           "id": "p1-a2",
@@ -2512,7 +2709,8 @@
           "status": "green"
         },
         {
-          "_note": "LP / CEGIS / FD 三例俱过。FD 24.06+ 已真接入（P-13），三级梯子stub-bfs / fd-optimal / fd-satisficing；`.toolchain/` 按设计不入库，未装机器上退回 BFS 桩并跳过 3 个测试，属预期而非缺陷。",
+          "_note": "LP / CEGIS / FD 三例俱过。FD 24.06+ 已真接入（P-13），三级梯子stub-bfs / fd-optimal / fd-satisficing；`.toolchain/` 按设计不入库，未装机器上退回 BFS 桩并跳过 3 个测试，属预期而非缺陷。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "green",
           "clause": "Phase 1 验收单",
           "id": "p1-engines",
@@ -2522,16 +2720,19 @@
         },
         {
           "_note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。  〔本次扫描：无泄漏。密钥另有 2 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env, .worktrees/wt-p8/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。〕",
-          "_status": "green",
+          "_probed": true,
+          "_status": "partial",
           "clause": "Phase 1 验收单",
           "id": "p1-seal-test",
           "label": "密封测试（臂内无凭据；绕开双代理的出网必须失败）",
           "note": "proxy/tests 自带密封与护栏测试；监控尚未独立复跑，红队攻击面（绕代理出网、臂内摸密钥）未验 → P-9。凭据卫生干净：密钥只在 .env（本监视器每轮复验）。",
           "probe": "credential_hygiene",
+          "probe_scope": "partial",
           "status": "partial"
         },
         {
-          "_note": "proxy/replay.py 就位；对真在线局账本的 2 局抽检待包络数据迁入正典格式后执行 → P-9。",
+          "_note": "proxy/replay.py 就位；对真在线局账本的 2 局抽检待包络数据迁入正典格式后执行 → P-9。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 1 验收单",
           "id": "p1-replay-audit",
@@ -2540,7 +2741,8 @@
           "status": "partial"
         },
         {
-          "_note": "同壳的物理载体（双代理）已在：裸 CC 臂真跑过（试点+包络首局）。Schema 臂 = 路 A 上游轨迹直读（F-13 裁决）。**Theoria 臂是三臂中唯一还不存在的** → P-8，当前关键路径。",
+          "_note": "同壳的物理载体（双代理）已在：裸 CC 臂真跑过（试点+包络首局）。Schema 臂 = 路 A 上游轨迹直读（F-13 裁决）。**Theoria 臂是三臂中唯一还不存在的** → P-8，当前关键路径。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 1 验收单、第二部分总纪律",
           "id": "p1-same-shell",
@@ -2561,7 +2763,8 @@
       "id": "p2",
       "items": [
         {
-          "_note": "battery v0 落地：五族指标 + METRICS.md + 首份 REPORT_V0，夹具 = A0 / A0′ / 裸 CC 试点账本。",
+          "_note": "battery v0 落地：五族指标 + METRICS.md + 首份 REPORT_V0，夹具 = A0 / A0′ / 裸 CC 试点账本。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "green",
           "clause": "Phase 2 · 候选指标族",
           "id": "p2-battery",
@@ -2570,7 +2773,8 @@
           "status": "green"
         },
         {
-          "_note": "PREDICTIONS.md（预注册）与 audit/ 在树上；区分力工序仍等 Schema 路 A 材料与更多 CC 轨迹。",
+          "_note": "PREDICTIONS.md（预注册）与 audit/ 在树上；区分力工序仍等 Schema 路 A 材料与更多 CC 轨迹。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 2 · 电池自身要先受审",
           "id": "p2-audit",
@@ -2579,7 +2783,8 @@
           "status": "partial"
         },
         {
-          "_note": "裸 CC 开发堆轨迹开始产生（sk48 大量、g50t 少量，见 baseline-arms/TOUCHED_GAMES.md）；Theoria 侧有 A0/A0′ 离线轨迹。Schema 复现桶不可能（GAP-1），替代是路 A：上游释出的开发堆 4 局轨迹直读（Theoria.md:311 许可），尚未拉取。",
+          "_note": "裸 CC 开发堆轨迹开始产生（sk48 大量、g50t 少量，见 baseline-arms/TOUCHED_GAMES.md）；Theoria 侧有 A0/A0′ 离线轨迹。Schema 复现桶不可能（GAP-1），替代是路 A：上游释出的开发堆 4 局轨迹直读（Theoria.md:311 许可），尚未拉取。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 2 · 材料",
           "id": "p2-material",
@@ -2601,7 +2806,8 @@
       "id": "p3",
       "items": [
         {
-          "_note": "七种意外目前在任何代码里都没有被计数。A0 的 THEORIZE_LOG 手写记录了 2 次廉价层迭代 —— 这是『重放失配』计数的雏形，但没有机器读得出的形态。",
+          "_note": "七种意外目前在任何代码里都没有被计数。A0 的 THEORIZE_LOG 手写记录了 2 次廉价层迭代 —— 这是『重放失配』计数的雏形，但没有机器读得出的形态。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "missing",
           "clause": "Phase 3 · 记分板",
           "id": "p3-scoreboard",
@@ -2610,7 +2816,8 @@
           "status": "missing"
         },
         {
-          "_note": "A0 自建世界这条防线已经立起来了（且被真用了）。但『提示词 diff 审查』与『游戏 ID 匿名化』没有机制，只有意图。",
+          "_note": "A0 自建世界这条防线已经立起来了（且被真用了）。但『提示词 diff 审查』与『游戏 ID 匿名化』没有机制，只有意图。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 3 · 过拟合四条通道",
           "id": "p3-prompt-hygiene",
@@ -2619,7 +2826,8 @@
           "status": "partial"
         },
         {
-          "_note": "A0 已产出五条真实条目（E-01..E-05），但它们埋在 THEORIZE_LOG.md 里。Theoria.md 要求这是一份公开台账 —— 应提升为独立的被跟踪文件。",
+          "_note": "A0 已产出五条真实条目（E-01..E-05），但它们埋在 THEORIZE_LOG.md 里。Theoria.md 要求这是一份公开台账 —— 应提升为独立的被跟踪文件。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 3 失败分类学 · 表达力不够；1.8 诚实条款",
           "id": "p3-expressivity",
@@ -2628,7 +2836,8 @@
           "status": "partial"
         },
         {
-          "_note": "如实登记，不追认合规。事实：p3-envelope 已实花 $2.53 跑 ar25×haiku×3，而 Phase 1 当时 16 项中 6 项绿。**例外依据**：方差包络是 Phase 4 定重复数 n 的前置，且花费受预算闸门硬约束（G4 实际开火并拦停在 1/4 局）。**代价**：这批数据是在并发负载下测得的，单价不可与试点直接比较（INC-BA-003）。**规矩**：此后任何跨门花费必须先在此登记一条，再动手。",
+          "_note": "如实登记，不追认合规。事实：p3-envelope 已实花 $2.53 跑 ar25×haiku×3，而 Phase 1 当时 16 项中 6 项绿。**例外依据**：方差包络是 Phase 4 定重复数 n 的前置，且花费受预算闸门硬约束（G4 实际开火并拦停在 1/4 局）。**代价**：这批数据是在并发负载下测得的，单价不可与试点直接比较（INC-BA-003）。**规矩**：此后任何跨门花费必须先在此登记一条，再动手。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "risk",
           "clause": "Theoria.md:305「全绿才准烧游戏钱」；OPS-A DRIFT 2026-07-28",
           "id": "p3-gate-exception",
@@ -2637,7 +2846,8 @@
           "status": "risk"
         },
         {
-          "_note": "ar25×haiku×3 已跑并被预算闸门 G4（连续死格，真实劣化）拦停，1/4 局，$2.53。F-15 裁决：ar25 记 degraded 不追，其余 3 局继续 → P-12。",
+          "_note": "ar25×haiku×3 已跑并被预算闸门 G4（连续死格，真实劣化）拦停，1/4 局，$2.53。F-15 裁决：ar25 记 degraded 不追，其余 3 局继续 → P-12。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 3 · 经济",
           "id": "p3-envelope",
@@ -2646,7 +2856,8 @@
           "status": "partial"
         },
         {
-          "_note": "整个 Phase 3 的主体。退出条件（U3 达成 ≥k 局 + 分数落 Δ 内 + 账单形状可见，或预算 B 顶到）里的 k/Δ/B 也还没定。",
+          "_note": "整个 Phase 3 的主体。退出条件（U3 达成 ≥k 局 + 分数落 Δ 内 + 账单形状可见，或预算 B 顶到）里的 k/Δ/B 也还没定。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "missing",
           "clause": "Phase 3 · 一次迭代的形状 / 退出条件",
           "id": "p3-campaign",
@@ -2667,7 +2878,8 @@
       "id": "p4",
       "items": [
         {
-          "_note": "十三项里目前只有『引擎清单与版本』接近可冻结。",
+          "_note": "十三项里目前只有『引擎清单与版本』接近可冻结。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "missing",
           "clause": "Phase 4 · 冻结清单",
           "id": "p4-freeze",
@@ -2676,7 +2888,8 @@
           "status": "missing"
         },
         {
-          "_note": "Theoria.md 称它是『活命臂』—— 把谁都能抄的工程省从 claim 里切出去。没有它，主表的每一个数字都会被『你只是发了 diff』一拳打回。",
+          "_note": "Theoria.md 称它是『活命臂』—— 把谁都能抄的工程省从 claim 里切出去。没有它，主表的每一个数字都会被『你只是发了 diff』一拳打回。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "missing",
           "clause": "Phase 4 · 必设消融臂",
           "id": "p4-ablation",
@@ -2685,7 +2898,8 @@
           "status": "missing"
         },
         {
-          "_note": "已定：公开集 N=25、开发堆 4 局。未定：模型配对版本串、预算 B 与 Δ/k/m/n、目标会议与死线。",
+          "_note": "已定：公开集 N=25、开发堆 4 局。未定：模型配对版本串、预算 B 与 Δ/k/m/n、目标会议与死线。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "partial",
           "clause": "Phase 4 · 冻结前待定五项",
           "id": "p4-pending",
@@ -2694,7 +2908,8 @@
           "status": "partial"
         },
         {
-          "_note": "全项目的确证主体。逐局单元 = 三臂各 n 局 + 消融臂，逐局跑完即打分入库。前提是 Phase 1 全绿与冻结清单提交。",
+          "_note": "全项目的确证主体。逐局单元 = 三臂各 n 局 + 消融臂，逐局跑完即打分入库。前提是 Phase 1 全绿与冻结清单提交。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "missing",
           "clause": "Phase 4 · 封存战役怎么跑",
           "id": "p4-campaign",
@@ -2703,7 +2918,8 @@
           "status": "missing"
         },
         {
-          "_note": "m 局在主表跑完之后才允许研究并构造变体；分层移交可随主表同跑。",
+          "_note": "m 局在主表跑完之后才允许研究并构造变体；分层移交可随主表同跑。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "missing",
           "clause": "Phase 4 · 考卷的时序死结",
           "id": "p4-exam",
@@ -2712,7 +2928,8 @@
           "status": "missing"
         },
         {
-          "_note": "含三级止损交付：Phase 1 结 workshop 文、Phase 3 结案例研究、Phase 4 结主论文。",
+          "_note": "含三级止损交付：Phase 1 结 workshop 文、Phase 3 结案例研究、Phase 4 结主论文。  〔无探针：本项无任何机器检查，状态为人工断言〕",
+          "_probed": false,
           "_status": "missing",
           "clause": "Phase 4 · 裁决与释出 / 阶段交付物",
           "id": "p4-release",
@@ -2731,7 +2948,11 @@
     },
     "a1_state": {
       "detail": "engine-rig 侧证书导出：已建；theory-compiler 侧消费：已接。两半接通前，A1 仍是彩排而非验收。",
-      "status": "partial"
+      "status": "green"
+    },
+    "accounts": {
+      "detail": "a（max20-a）已登录、窗口开，发车 7 次、撞限 0 次；b（max20-b）已登录、窗口关至 2026-07-29T15:00:00Z，发车 0 次、撞限 1 次　→ 1 个账号可用，撞限时会轮换而不是停机。",
+      "status": "green"
     },
     "append_only": {
       "detail": "4 个追加式文件无新增删除（1 行历史删除已裁决豁免：同窗口自我订正）。",
@@ -2742,12 +2963,12 @@
       "status": "green"
     },
     "clock_sanity": {
-      "detail": "**3 份心跳的 utc 读不出来**：OPS-A（utc 不是 ISO8601Z：'2026-07-29T04:35Z'）；OPS-B（utc 不是 ISO8601Z：'2026-07-28T20:47Z'）；RES-2（utc 不是 ISO8601Z：'2026-07-29T16:15Z'）。读不出不等于没问题。",
+      "detail": "**1 份心跳自报的时间还没到**：RES-1 自报 2026-07-29T15:05:00Z，超前 22 分钟。时钟不可能超前，所以这些是手打的；危险在方向——只会向前跑的自报时间让掉线看起来比实际新鲜。取值请用 `date -u +%Y-%m-%dT%H:%M:%SZ`。",
       "status": "risk"
     },
     "conflict_scan": {
-      "detail": "三类检查全空：无冲突标记、无未合并路径、近 40 个提交无跨领地改动。",
-      "status": "green"
+      "detail": "跨领地提交（一个 commit 改了多个轨道 —— 领地纪律被破）：c94a6a3f OPS-B cycle 12: 条款巡检首次检出漂移，canary 随即升级为分块哈希（browser-ops+monitor）",
+      "status": "risk"
     },
     "credential_hygiene": {
       "detail": "无泄漏。密钥另有 2 处工作副本，均在 gitignore 内（.claude/worktrees/p11-arc-hygiene/.env, .worktrees/wt-p8/.env）——副本可见但不算泄漏（CLAUDE.md 红线只管被跟踪文件）。",
@@ -2758,8 +2979,8 @@
       "status": "green"
     },
     "disk_headroom": {
-      "detail": "磁盘剩 15.5 GB / 474 GB，接近会开始伪装成闸门失败的水位。67 个 worktree 在册；`python monitor/reap_worktrees.py` 看哪些已完工",
-      "status": "partial"
+      "detail": "磁盘剩 87.3 GB / 474 GB；114 个 worktree 在册；`python monitor/reap_worktrees.py` 看哪些已完工",
+      "status": "green"
     },
     "dispatch_board": {
       "detail": "派单已由工作板取代（见 supply 探针），本探针不再适用。",
@@ -2768,93 +2989,54 @@
       "status": "green"
     },
     "inbox": {
-      "detail": "待裁决提案 68 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T134112Z-W-1250-importing-tracks-should-pin-and-diff-the-contract-fingerprint.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md, 20260728T142000Z-W-1251-open-spec-json-carries-the-verdict-and-most-of-the-rule-set.md, 20260728T142100Z-W-1251-t2-switch-push-also-breaks-the-miner-and-a-forbidden-action-is-unlearnable.md, 20260728T143000Z-W-1253-p10-territory-and-a-latent-render-defect.md, 20260728T143836Z-opsm-reflex-stalls-are-invisible.md, 20260728T145500Z-W-1252-handover-package-found-four-generator-defects.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md, 20260728T1500Z-W-1412-open-scorecard-and-e3-runs.md, 20260728T1500Z-W-1412-s12-audit-two-doors-without-exits.md, 20260728T150200Z-W-1411-cert-recheck-findings.md, 20260728T151000Z-W-1250-board-done-is-not-idempotent-on-windows-and-it-locks-territories.md, 20260728T151500Z-W-1251-the-concurrency-gate-is-blind-right-now-24-agents-and-6gb-free.md, 20260728T151500Z-W-1252-count-lock-is-a-tracking-bug-not-a-vocabulary-gap.md, 20260728T151500Z-W-1253-v6-released-with-design.md, 20260728T1520Z-W-1412-self-report-master-push.md, 20260728T152500Z-W-1250-two-phase1-items-can-go-green-and-their-notes-are-stale.md, 20260728T153030Z-RES-3-worldgen-qc-gate-pinned.md, 20260728T153500Z-RES-3-figures-verify-is-red-on-master.md, 20260728T154500Z-RES-3-sealed-contact-audit-cannot-fail.md, 20260728T154800Z-RES-4-two-live-silent-failures.md, 20260728T160000Z-RES-2-p5-done-and-two-findings-for-other-territories.md, 20260728T161500Z-opsm-adjudication-14-flags-gate-runner-broken.md, 20260728T164500Z-RES-2-upstream-defects-battery-and-exam.md, 20260728T170640Z-opsm-the-verify-gate-runs-under-wsl.md, 20260728T171500Z-RES-3-correction-sealed-audit-and-the-bigger-hole.md, 20260728T175900Z-V16-determinism-definition-gap.md, 20260728T180000Z-W-131-the-segmenter-prefers-teleporting-identity-to-moving-a-body.md, 20260728T183000Z-W-131-board-empty-for-a-generic-worker-with-28-items-on-it.md, 20260728T191500Z-W-250-app-v3-was-alive-a-liveness-verdict-refuted-five-minutes-later.md, 20260728T192000Z-W-252-freeze-list-cannot-cover-two-of-three-primary-endpoints.md, 20260728T194500Z-RES-1-four-territories-still-ungated.md, 20260728T194500Z-W-252-addendum-board-state-moved-while-i-worked.md, 20260728T204349Z-W-1622-supply-low-zero-is-the-guard-measuring-itself.md, 20260728T204718Z-W-1620-the-jam-is-not-the-lane-guard-eight-branches-die-on-a-backslash.md, 20260728T205239Z-W-1621-the-board-reads-empty-for-a-different-reason-than-you-wrote-down.md, 20260728T212000Z-RES-1-relpath-determinism.md, 20260729T000500Z-W-1641-board-issues-territories-the-merge-bot-rejects.md, 20260729T001500Z-W-1640-ledger-writer-forks-under-two-processes.md, 20260729T005500Z-W-1641-s24-merge-conflict-drain.md, 20260729T012000Z-W-1641-a10-ticket-premises-do-not-hold.md, 20260729T013000Z-RES-2-figures-red-and-paper-side-figure-work.md, 20260729T013700Z-OPS-R-five-cases-are-three-mechanisms-and-half-your-premise-is-false.md, 20260729T013737Z-W-1651-disk-hit-zero-free.md, 20260729T014500Z-OPS-R-what-else-a-session-swap-silently-inherits-or-loses.md, 20260729T014500Z-RES-3-e11-crosscheck-findings-for-engine-rig.md, 20260729T014500Z-W-1641-a11-three-findings-heavier-than-the-66.md, 20260729T020500Z-W-1650-disk-full-blocks-every-worker.md, 20260729T0210Z-RES-4-s22-residue-needs-res1.md, 20260729T021500Z-RES-3-cegis-lifted-rules-and-the-missing-object-binding.md, 20260729T0222Z-RES-4-s11-protected-root-vs-contract-change.md, 20260729T024000Z-W-1650-e16-three-corrections-to-the-ticket.md, 20260729T024500Z-RES-2-pile-digest-three-hashes.md, 20260729T024500Z-W-130-deadlock-claim-wording-for-1.9.md, 20260729T041500Z-W-130-e6-engine-dividend-done.md, 20260729T0545Z-RES-1-e5-cost-per-action-counts-the-reset.md, 20260729T0546Z-RES-1-figures-pins-another-tracks-living-document.md, 20260729T055400Z-OPS-R-my-live-was-six-hours-stale-and-three-more-corrections-to-cycle-2.md, 20260729T0555Z-RES-1-the-dollar-model-is-not-fine-and-the-zero-proves-nothing.md, 20260729T055600Z-OPS-R-the-sealed-pile-probe-sees-17-percent-of-the-evidence.md, 20260729T055800Z-OPS-R-worker-supply-has-been-dead-for-eight-hours-and-nothing-said-so.md, 20260729T0635Z-RES-4-s22-third-release.md, 20260729T071500Z-RES-1-a3-playbook-does-not-parse.md, 20260729T091000Z-RES-3-handoff.md, 20260729T094500Z-RES-1-INCIDENT-leg01-retry-storm.md, 20260729T124500Z-RES-3-reversibility-deferred-is-the-same-disease-at-7x-scale.md",
+      "detail": "待裁决提案 94 份：20260728T111500Z-RES-2-p8-two-hand-written-lists-had-fallen-behind-their-directories.md, 20260728T134112Z-W-1250-importing-tracks-should-pin-and-diff-the-contract-fingerprint.md, 20260728T141324Z-W-1410-s11-landed-and-three-items-left-undone.md, 20260728T142000Z-W-1250-s1-is-already-closed-except-the-one-part-that-spends-money.md, 20260728T142000Z-W-1251-open-spec-json-carries-the-verdict-and-most-of-the-rule-set.md, 20260728T142100Z-W-1251-t2-switch-push-also-breaks-the-miner-and-a-forbidden-action-is-unlearnable.md, 20260728T143000Z-W-1253-p10-territory-and-a-latent-render-defect.md, 20260728T143836Z-opsm-reflex-stalls-are-invisible.md, 20260728T145500Z-W-1252-handover-package-found-four-generator-defects.md, 20260728T150000Z-RES-2-p8-broke-the-figures-build-and-p5-found-it.md, 20260728T1500Z-W-1412-open-scorecard-and-e3-runs.md, 20260728T1500Z-W-1412-s12-audit-two-doors-without-exits.md, 20260728T150200Z-W-1411-cert-recheck-findings.md, 20260728T151000Z-W-1250-board-done-is-not-idempotent-on-windows-and-it-locks-territories.md, 20260728T151500Z-W-1251-the-concurrency-gate-is-blind-right-now-24-agents-and-6gb-free.md, 20260728T151500Z-W-1252-count-lock-is-a-tracking-bug-not-a-vocabulary-gap.md, 20260728T151500Z-W-1253-v6-released-with-design.md, 20260728T1520Z-W-1412-self-report-master-push.md, 20260728T152500Z-W-1250-two-phase1-items-can-go-green-and-their-notes-are-stale.md, 20260728T153030Z-RES-3-worldgen-qc-gate-pinned.md, 20260728T153500Z-RES-3-figures-verify-is-red-on-master.md, 20260728T154500Z-RES-3-sealed-contact-audit-cannot-fail.md, 20260728T154800Z-RES-4-two-live-silent-failures.md, 20260728T160000Z-RES-2-p5-done-and-two-findings-for-other-territories.md, 20260728T161500Z-opsm-adjudication-14-flags-gate-runner-broken.md, 20260728T164500Z-RES-2-upstream-defects-battery-and-exam.md, 20260728T170640Z-opsm-the-verify-gate-runs-under-wsl.md, 20260728T171500Z-RES-3-correction-sealed-audit-and-the-bigger-hole.md, 20260728T175900Z-V16-determinism-definition-gap.md, 20260728T180000Z-W-131-the-segmenter-prefers-teleporting-identity-to-moving-a-body.md, 20260728T183000Z-W-131-board-empty-for-a-generic-worker-with-28-items-on-it.md, 20260728T191500Z-W-250-app-v3-was-alive-a-liveness-verdict-refuted-five-minutes-later.md, 20260728T192000Z-W-252-freeze-list-cannot-cover-two-of-three-primary-endpoints.md, 20260728T194500Z-RES-1-four-territories-still-ungated.md, 20260728T194500Z-W-252-addendum-board-state-moved-while-i-worked.md, 20260728T204349Z-W-1622-supply-low-zero-is-the-guard-measuring-itself.md, 20260728T204718Z-W-1620-the-jam-is-not-the-lane-guard-eight-branches-die-on-a-backslash.md, 20260728T205239Z-W-1621-the-board-reads-empty-for-a-different-reason-than-you-wrote-down.md, 20260728T212000Z-RES-1-relpath-determinism.md, 20260729T000500Z-W-1641-board-issues-territories-the-merge-bot-rejects.md, 20260729T001500Z-W-1640-ledger-writer-forks-under-two-processes.md, 20260729T005500Z-W-1641-s24-merge-conflict-drain.md, 20260729T012000Z-W-1641-a10-ticket-premises-do-not-hold.md, 20260729T013000Z-RES-2-figures-red-and-paper-side-figure-work.md, 20260729T013700Z-OPS-R-five-cases-are-three-mechanisms-and-half-your-premise-is-false.md, 20260729T013737Z-W-1651-disk-hit-zero-free.md, 20260729T014500Z-OPS-R-what-else-a-session-swap-silently-inherits-or-loses.md, 20260729T014500Z-RES-3-e11-crosscheck-findings-for-engine-rig.md, 20260729T014500Z-W-1641-a11-three-findings-heavier-than-the-66.md, 20260729T020500Z-W-1650-disk-full-blocks-every-worker.md, 20260729T0210Z-RES-4-s22-residue-needs-res1.md, 20260729T021500Z-RES-3-cegis-lifted-rules-and-the-missing-object-binding.md, 20260729T0222Z-RES-4-s11-protected-root-vs-contract-change.md, 20260729T024000Z-W-1650-e16-three-corrections-to-the-ticket.md, 20260729T024500Z-RES-2-pile-digest-three-hashes.md, 20260729T024500Z-W-130-deadlock-claim-wording-for-1.9.md, 20260729T041500Z-W-130-e6-engine-dividend-done.md, 20260729T0545Z-RES-1-e5-cost-per-action-counts-the-reset.md, 20260729T0546Z-RES-1-figures-pins-another-tracks-living-document.md, 20260729T055400Z-OPS-R-my-live-was-six-hours-stale-and-three-more-corrections-to-cycle-2.md, 20260729T0555Z-RES-1-the-dollar-model-is-not-fine-and-the-zero-proves-nothing.md, 20260729T055600Z-OPS-R-the-sealed-pile-probe-sees-17-percent-of-the-evidence.md, 20260729T055800Z-OPS-R-worker-supply-has-been-dead-for-eight-hours-and-nothing-said-so.md, 20260729T0635Z-RES-4-s22-third-release.md, 20260729T071500Z-RES-1-a3-playbook-does-not-parse.md, 20260729T091000Z-RES-3-handoff.md, 20260729T094500Z-RES-1-INCIDENT-leg01-retry-storm.md, 20260729T100824Z-opsm-adjudication-and-the-hold-that-parks-green-work.md, 20260729T101500Z-OPS-R-nothing-in-the-harness-observes-the-monitor.md, 20260729T1015Z-RES-4-two-sessions-under-one-number.md, 20260729T101800Z-OPS-R-this-cycle-found-nothing-new-and-two-of-my-last-three-were-rediscoveries.md, 20260729T102000Z-RES-2-fig06-docstring-count.md, 20260729T103323Z-W-1661-board-state-is-half-tracked-and-git-resurrects-claimed-items.md, 20260729T1035Z-RES-4-s21-gate-is-decorative-and-the-good-criterion-already-existed.md, 20260729T1040Z-RES-4-the-fleet-is-doing-each-item-two-or-three-times.md, 20260729T104429Z-W-1661-correction-and-the-board-command-run-from-a-worktree-writes-to-a-private-board.md, 20260729T1045Z-RES-4-s22-runbook-the-remainder-is-one-command-not-a-build.md, 20260729T110500Z-RES-2-i-edited-master-working-tree.md, 20260729T1105Z-RES-4-correction-my-top-recommendation-would-have-freed-a-live-session.md, 20260729T1110Z-RES-4-two-independent-s29-branches-exist.md, 20260729T1120Z-RES-3-proposal-V24-exam-verify-repairs-staleness.md, 20260729T1145Z-RES-3-two-findings-outside-my-territory.md, 20260729T1150Z-RES-3-handoff.md, 20260729T121500Z-RES-2-verify-paper-cannot-see-an-uncited-number.md, 20260729T124500Z-RES-3-reversibility-deferred-is-the-same-disease-at-7x-scale.md, 20260729T1310Z-RES-1-merge-queue-silent.md, 20260729T131500Z-opsm-absorbed-branches-keep-their-flags-forever.md, 20260729T133000Z-W-1660-e8-ic3-bounds-touches-a-paper-sentence.md, 20260729T1440Z-RES-1-worktree-cwd-green-on-the-wrong-tree.md, 20260729T145000Z-opsm-v5-battery-freeze-needs-a-refreeze-not-a-merge.md, 20260729T145500Z-opsm-release-manifest-covers-a-third-of-the-tree.md, 20260729T153000Z-RES-3-e15-and-e17-merge-clean-but-do-not-run.md, 20260729T160000Z-W-1660-e8-the-null-space-half-does-not-hold.md, 20260729T1950Z-RES-1-price-unpriced-holes.md",
       "status": "partial"
     },
-    "needs_human": {
-      "detail": "需要你重开的会话：OPS-A 漂移审计员（318 分钟没心跳）； OPS-B 浏览器专员（786 分钟没心跳）； OPS-M 合并裁判（358 分钟没心跳）； RES-1 在线战役研究员（123 分钟没心跳）； RES-2 论文与释出研究员（159 分钟没心跳）； RES-3 验证与考卷研究员（106 分钟没心跳）； RES-4 基础设施研究员（194 分钟没心跳）",
-      "rows": [
-        {
-          "id": "OPS-A",
-          "name": "漂移审计员",
-          "prompt": "monitor/prompts/ops/OPS-A.md",
-          "why": "318 分钟没心跳"
-        },
-        {
-          "id": "OPS-B",
-          "name": "浏览器专员",
-          "prompt": "monitor/prompts/ops/OPS-B.md",
-          "why": "786 分钟没心跳"
-        },
-        {
-          "id": "OPS-M",
-          "name": "合并裁判",
-          "prompt": "monitor/prompts/ops/OPS-M.md",
-          "why": "358 分钟没心跳"
-        },
-        {
-          "id": "RES-1",
-          "name": "在线战役研究员",
-          "prompt": "monitor/prompts/ops/RES-1.md",
-          "why": "123 分钟没心跳"
-        },
-        {
-          "id": "RES-2",
-          "name": "论文与释出研究员",
-          "prompt": "monitor/prompts/ops/RES-2.md",
-          "why": "159 分钟没心跳"
-        },
-        {
-          "id": "RES-3",
-          "name": "验证与考卷研究员",
-          "prompt": "monitor/prompts/ops/RES-3.md",
-          "why": "106 分钟没心跳"
-        },
-        {
-          "id": "RES-4",
-          "name": "基础设施研究员",
-          "prompt": "monitor/prompts/ops/RES-4.md",
-          "why": "194 分钟没心跳"
-        }
-      ],
+    "merge_queue": {
+      "detail": "**合并队列最久的一条卡了 1400 分钟**（18 条待合、7 条被 flag）：merge conflict×3；push rejected×1；verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 3 attempts since 2026-07-29T04:14:01Z]×1；touches protected root files×1。**7 件板上已 done、分支却还没进 master**：E8-ic3-scale、S11-sealed-halfguard、V20-figures-pipeline-red、V21-lp-unavailable-is-not-a-pass、V5-battery-freeze。",
       "status": "risk"
     },
+    "needs_human": {
+      "detail": "六个 App 会话全部在岗，无需你出手。",
+      "rows": [],
+      "status": "green"
+    },
     "offline_done": {
-      "detail": "离线还差 5 格：E2 引擎验证(85%)、C1 编译链(75%)、C2 离线验收(80%)、V1 指标电池(85%)、V2 考卷(70%)。战役线已获授权可先行，不必等齐。",
+      "detail": "离线还差 5 格：E2 引擎验证(92%)、C1 编译链(75%)、C2 离线验收(80%)、V1 指标电池(85%)、V2 考卷(70%)。战役线已获授权可先行，不必等齐。",
       "status": "partial"
     },
     "ops_duty": {
-      "detail": "**2 条 TO-MONITOR 待监控回复**。 OPS-A 第33轮 idle（318 分钟前）； OPS-B 第10轮 idle（786 分钟前）； OPS-M 第11轮 working（358 分钟前）； OPS-R 第3轮 idle（235 分钟前）",
+      "detail": "**7 条 TO-MONITOR 待监控回复**。 OPS-A 第37轮 idle（17 分钟前）； OPS-B 第13轮 idle（145 分钟前）； OPS-M 第16轮 working（1 分钟前）； OPS-R 第3轮 idle（263 分钟前）",
       "rows": [
         {
-          "age_min": 318,
-          "cycle": 33,
+          "age_min": 17,
+          "cycle": 37,
           "id": "OPS-A",
           "name": "漂移审计员",
-          "note": "cycle 33: verified the hold in production rather than assuming. 12 of 13 flag files now carry tip/first_seen/attempts; the two branches flagged twice were pre-change format then first tipped attempt, and their live tips now match, so the next sweep holds them. HELD count of 0 is the expected one-time transition; next cycle checks it actually appears.",
+          "note": "cycle 37 done (headless, started by standing.py 14:05:45Z -- proved by process ancestry). Range 9bc8c880..ad778386, 3 commits. Two reports, both on the new account pool: (high) quota.py's rotation success path returns at :386 before the registry write-back at :398, so `reaped` never lands on disk; reap persists only `exited` and :371 skips only `quota-requeued`, so the same stale hit recurs every 5-min tick, re-firing mark_limited and rolling the reopen deadline forward -- one old log line can hold an account shut indefinitely, and its requeue is never drained because resume() is reachable only from reflex.py:161's returncode==2. Zero tests cover the rotator. (medium) the pool ledger's only entry is hand-written: 0 of 228 dispatch logs carry account=b, `pool-rotation` exists in no code path, and b has no launches key at all. Red lines clean: 0 key hits in 5648 tracked files, 0 sealed ids in 1155 added lines, 0 append-only deletions. **Withdrew my own cycle-36 claim that MAX_STANDING was the only thing preventing an OPS-A twin** -- `agent in live` fires 49 times in standing.log, twice for OPS-A. Settled a question pending since cycle 35: a0-spike/verify.sh is dead (absent, 10 references, one in monitor/METHOD.md). **PUSH PENDING**: committed locally (183424af, bc1f875b) but master is 20 behind and the merge is blocked by OPS-M's staged renames in monitor/ci/archive/ -- my own rule says wait a round rather than stash another agent's in-flight work. Delivery is unaffected: the bus is local files and monitor has already read the report. Retry the push first thing next cycle. Sleeping 1800s per monitor/ops/OPS-A.md.",
           "state": "idle",
-          "status": "risk"
+          "status": "green"
         },
         {
-          "age_min": 786,
-          "cycle": 10,
+          "age_min": 145,
+          "cycle": 13,
           "id": "OPS-B",
           "name": "浏览器专员",
-          "note": "空转一轮，本职无活：总线空、邮箱无 OPEN、条款巡检按天未到期（上次 19:44Z NO-DRIFT）。两件挂人手的事没动（发信、.env key 归属账户）。观察一条不另开消息：未合并分支已从 14 涨到 23，S11 仍在其中（20:44Z 仍原样重报），封存护栏第 5 小时不在主线上",
+          "note": "总线空、邮箱无 OPEN、与 origin 同步。本轮只做一件事：把 OPS-M 10:08Z 的 hold 裁决与我 cycle 11 的升级路径洞对上——两者互补不重叠（它让该重试的重试，我让只能等人裁决的浮出水面），S11 正落在第二类且已躺约 21 小时。条款巡检昨日刚跑，按天未到期",
           "state": "idle",
-          "status": "risk"
+          "status": "green"
         },
         {
-          "age_min": 358,
-          "cycle": 11,
+          "age_min": 1,
+          "cycle": 16,
           "id": "OPS-M",
           "name": "合并裁判",
-          "note": "用户授权：ci_merge 合并成功后自动退休该分支的 flag（移入 archive 而非删除，含防同秒覆盖的计数器）。已推 4cd583a；自测四项全过，生产判据留给下轮：merge.log 出现 CLEARED 行且 monitor/ci/ 保持一 flag 一活分支",
+          "note": "8 个分支进 master（含 p10），flag 12 -> 5(+1 是我手推与手跑 ci_merge 撞出的 push-rejected，transient 会自愈；纪律：同一时刻只能有一个东西推 master，本轮之后我等鸡跑完再推)。v5-verdict 已备好待推（闸门绿、测试是精确并集），v5-battery 闸门红且不是冲突造成——它带的 freeze 是对一棵已不存在的树的真陈述，需要 V5 重新 freeze，已写 inbox 不硬解。仍等 a3/e8/s11 三组 subagent",
           "state": "working",
-          "status": "risk"
+          "status": "green"
         },
         {
-          "age_min": 235,
+          "age_min": 263,
           "cycle": 3,
           "id": "OPS-R",
           "name": "回顾员",
@@ -2863,15 +3045,15 @@
           "status": "green"
         }
       ],
-      "status": "risk",
-      "to_monitor": 2
+      "status": "partial",
+      "to_monitor": 7
     },
     "pile_integrity": {
       "detail": "封存堆 21 局零接触（已核对 3187 条请求体）；开发堆已接触 4 局：ar25-0c556536, g50t-5849a774, sk48-d8078629, tn36-ef4dde99",
       "status": "green"
     },
     "provenance_scan": {
-      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：5 个 run（正典 4，**无留痕 1**），最新 20260728T191437Z-A9-readonly-baseline； arc-recon：4 个 run（正典 4），最新 P-11； baseline-arms：1 个 run（正典 1），最新 20260728T103135Z-a7； battery：4 个 run（正典 4），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：1 个 run（正典 1），最新 p-17； engine-rig：10 个 run（正典 9，非正典 1(md)），最新 p13-fd-real； exam：6 个 run（正典 6），最新 p15-rehearsal-01； figures：4 个 run（正典 3，**无留痕 1**），最新 20260729T060000Z-A12-cost-claim-sources； fleet-study：3 个 run（正典 3），最新 20260728T233850Z-S17； fleetkit：1 个 run（正典 1），最新 20260729T0230Z-S18； fuzzlab：3 个 run（正典 3），最新 20260728T161127Z-V13-audit-the-published-surface； proxy：4 个 run（正典 4），最新 p9-shell-harden； release：3 个 run（正典 3），最新 20260728T234923Z-S23； theoria-arm：22 个 run（正典 16，**无留痕 6**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：6 个 run（正典 5，**无留痕 1**），最新 P-10； verify-lab：4 个 run（正典 4），最新 20260729T180000Z-V17-pin-the-partial-verdict； worldgen：4 个 run（正典 4），最新 20260728T172500Z-V16-determinism-has-no-caller。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, papers。",
+      "detail": "已建档：a0-spike：1 个 run（正典 1），最新 20260728T040057Z-c2； ablation-arm：5 个 run（正典 4，**无留痕 1**），最新 20260728T191437Z-A9-readonly-baseline； arc-recon：5 个 run（正典 5），最新 P-11； baseline-arms：1 个 run（正典 1），最新 20260728T103135Z-a7； battery：4 个 run（正典 4），最新 P-14； browser-ops：0 个 run（正典 0），最新 —； cold-start-a3：2 个 run（正典 2），最新 p-17； engine-rig：12 个 run（正典 11，非正典 1(md)），最新 p13-fd-real； exam：7 个 run（正典 7），最新 p15-rehearsal-01； figures：4 个 run（正典 3，**无留痕 1**），最新 20260729T060000Z-A12-cost-claim-sources； fleet-study：3 个 run（正典 3），最新 20260728T233850Z-S17； fleetkit：1 个 run（正典 1），最新 20260729T0230Z-S18； freeze：1 个 run（正典 0，**无留痕 1**），最新 2026-07-28T1200Z-p22； fuzzlab：3 个 run（正典 3），最新 20260728T161127Z-V13-audit-the-published-surface； proxy：7 个 run（正典 7），最新 p9-shell-harden； release：3 个 run（正典 3），最新 20260728T234923Z-S23； theoria-arm：22 个 run（正典 16，**无留痕 6**），最新 pytest-test_the_shell_turns_end_to_en0； theory-compiler：6 个 run（正典 5，**无留痕 1**），最新 P-10； verify-lab：4 个 run（正典 4），最新 20260729T180000Z-V17-pin-the-partial-verdict； worldgen：4 个 run（正典 4），最新 20260728T172500Z-V16-determinism-has-no-caller。尚无 runs/ 档案的产物领地（留痕规则的欠账，分支制第一批起逐个清偿）：cold-start-a0, cold-start-a2, papers。",
       "status": "partial"
     },
     "scheduled_tasks": {
@@ -2879,27 +3061,27 @@
       "status": "risk"
     },
     "self_driving": {
-      "detail": "RES-1 第14轮 working（123 分钟前）**疑似停下等人**； RES-2 第11轮 working（159 分钟前）**疑似停下等人**； RES-3 第49轮 idle（106 分钟前）**疑似停下等人**； RES-4 第16轮 working（194 分钟前）**疑似停下等人**　→ 已发 urgent 催醒；若仍不动，说明会话已死，需重开。",
-      "status": "risk"
+      "detail": "RES-1 第26轮 working（16 分钟前）； RES-2 第21轮 working（0 分钟前）； RES-3 第63轮 working（17 分钟前）； RES-4 第25轮 working（17 分钟前）",
+      "status": "green"
     },
     "spec_freshness": {
-      "detail": "spec.py 落后 85 个提交 / 20 次合并（判断陈旧到 risk 就该重扫）。",
-      "status": "risk"
+      "detail": "spec.py 落后 31 个提交 / 9 次合并（判断陈旧到 partial 档 就该重扫）。",
+      "status": "partial"
     },
     "spend": {
-      "detail": "开发堆战役包 $200，已花 **$36.14**，剩 $163.86（9511 条记账）；分战役：arc-recon-canary-quick $0.00、mock_arm:r-45bad196843c4e7c $0.00、phase3-unit-price-recheck $1.36、phase3-unit-price-remeasure $19.83",
+      "detail": "开发堆战役包 $200，已花 **$36.14**，剩 $163.86（11102 条记账）；分战役：arc-recon-canary-quick $0.00、mock_arm:r-45bad196843c4e7c $0.00、phase3-unit-price-recheck $1.36、phase3-unit-price-remeasure $19.83",
       "status": "green"
     },
     "standing": {
-      "detail": "例行任务 已注册，上一跳 8 分钟前；累计起过 7 次常驻会话。最近：skip RES-2: cycle advanced to 11 [unread=0 held=1 claimable=1 hb=150mi；skip RES-3: cycle advanced to 49 [unread=0 held=0 claimable=1 hb=97min；skip RES-4: cycle advanced to 16 [unread=0 held=1 claimable=2 hb=185mi；nothing to start",
+      "detail": "例行任务 已注册，上一跳 10 分钟前；累计起过 30 次常驻会话。最近：skip RES-4: cycle advanced to 25 (5 min ago) [unread=0 held=1 claimabl；skip OPS-M: already running (scheduled task) [unread=0 held=0 claimabl；skip OPS-A: already running (scheduled task) [unread=0 held=0 claimabl；nothing to start",
       "status": "green"
     },
     "supply": {
-      "detail": "板上 5 件可领、4 件在做，供货充足。",
+      "detail": "板上 5 件可领、8 件在做，供货充足。",
       "status": "green"
     },
     "verify_gates": {
-      "detail": "工单声称的 4 个 verify 脚本全部在树上；但**3 个领地合并时无人检查**：CONTRACTS、browser-ops、papers。领地 24：自带闸门 19、仅测试套件 2、**无闸门 3**。这不是有人食言——是从来没人要求过，ci_merge 现在每次把它打进 merge.log。",
+      "detail": "工单声称的 6 个 verify 脚本全部在树上；但**3 个领地合并时无人检查**：CONTRACTS、browser-ops、papers。领地 25：自带闸门 20、仅测试套件 2、**无闸门 3**。这不是有人食言——是从来没人要求过，ci_merge 现在每次把它打进 merge.log。",
       "status": "amber"
     }
   },
@@ -2989,6 +3171,16 @@
         "partial": 1
       },
       "name": "Claim 菜单"
+    }
+  ],
+  "verdict_overrides": [
+    {
+      "hand": "partial",
+      "item": "p1-seal-test",
+      "kept": "partial",
+      "probe": "credential_hygiene",
+      "probe_said": "green",
+      "why": "probe covers only part of this item, so it may not upgrade it"
     }
   ]
 }

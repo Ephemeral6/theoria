@@ -15,12 +15,24 @@
     7,
     9
   ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "nothing_rests_on_a_free_cell",
+      "block_count",
+      "blocks_disjoint"
+    ],
+    "unverified": [],
+    "violated": []
+  },
   "invariants": [
     {
       "holds": true,
       "name": "agent_unique",
       "statement": "exactly one cell shows colour 6 at all times",
       "states_checked": 35,
+      "status": "holds",
       "verified": true
     },
     {
@@ -28,6 +40,7 @@
       "name": "grid_shape",
       "statement": "every frame is 7 x 9",
       "states_checked": 35,
+      "status": "holds",
       "verified": true
     },
     {
@@ -35,6 +48,7 @@
       "name": "nothing_rests_on_a_free_cell",
       "statement": "no movable has a free cell below it, and the agent has no cell below it that it could be deposited on \u2014 every state a reader can observe is a settle fixpoint, so there is nowhere left to fall",
       "states_checked": 35,
+      "status": "holds",
       "verified": true
     },
     {
@@ -42,6 +56,7 @@
       "name": "block_count",
       "statement": "exactly 1 cell(s) show colour 2 at all times",
       "states_checked": 35,
+      "status": "holds",
       "verified": true
     },
     {
@@ -49,6 +64,7 @@
       "name": "blocks_disjoint",
       "statement": "no two blocks ever occupy the same cell",
       "states_checked": 35,
+      "status": "holds",
       "verified": true
     }
   ],

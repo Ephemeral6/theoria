@@ -1,7 +1,7 @@
 {
  "id": "OPS-M",
- "utc": "2026-07-29T10:09:55Z",
- "cycle": 12,
+ "utc": "2026-07-29T14:25:00Z",
+ "cycle": 16,
  "state": "working",
- "note": "flag 退休已在生产确认（3 条 CLEARED、零鬼影）。新发现：HELD 只看分支 tip，而 push rejected 只取决于 master——c10 全绿却被扣 6 小时，我按裁判职责重试当场合入；v5-verdict 重试后正确转为真冲突。13 个 flag 已逐条裁决，见 inbox 20260729T100824Z"
+ "note": "5 个分支已进 master（a10/v19/p13/e15+e19），flag 从 12 降到 8。e15 的 flag 不是陈旧：它单独进去会让 engine-rig 变红（E15 删掉 Law.scope_exhaustive，master 上的 E17 在构造它），而修复一直躺在没人捡的 e19 上——两条都干净可合，只有合出来的树是坏的。6 个 subagent 在跑其余冲突。反射层自 11:11:48Z 停摆已 3h13m"
 }

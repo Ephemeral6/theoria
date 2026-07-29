@@ -677,6 +677,44 @@ FINDINGS = [
                   "没有钱在动，不需要人介入——**审计员在正确的方向上把急迫性说大了**。",
     },
     {
+        "id": "F-21",
+        "severity": "blocking",
+        "title": "这个代码库没有第三个值：28 处「测不到」被写成了「测了，没问题」"
+                 "【已裁决·监控代行：四处当场修，其余四件上板】",
+        "body": "57 个 agent 的对抗性普查（每条候选都由一名默认认为它错的复核员反驳过）"
+                "留下 28 条。**它们全是同一件事的不同写法**：计数器的默认是 0"
+                "（无活可做／无违规／板见底），布尔的默认是 True（还活着／干净／"
+                "没被禁用／未超支），集合的默认是空（无欠回执／无越界分支），"
+                "异常处理的默认是 `pass`。**没有一处区分「我看了，是零」和「我没看成」。**\n\n"
+                "最重的三条：`dispatch.pid_alive(0)` **恒为真**"
+                "（tasklist 会返回 System Idle Process 那一行），而任务表在本机不给 "
+                "PID 字段、抓取循环无声退回 0——66 条注册项里 62 条读作「还在跑」；"
+                "`arc-recon/contamination.py:163` 用 HTTP 账本的字段去读只有 `game_id` "
+                "的 episode 账本，于是 560 条记录读出零接触并印成「sealed ADDRESSED: NONE」，"
+                "**而这个绿灯已经落进 `claim_set.json`**；`release/enumerate.py:123` 的空 id "
+                "列表让 33 个 B→A、223 个 C→A 全部滑向「可发布」。\n\n"
+                "**第二层规律更刺眼：出问题最多的是补丁本身。** dispatch 的 pid 抓取"
+                "**正是为了修 `pid: 0`** 而加的，它在本机的失败模式是返回同一个 0；"
+                "`check_redlines` 建了 `json_shaped` 按字节判类，`enumerate` 没接上；"
+                "`check_sealed` 补了 piles 形状守卫，`_arc_game_ids` 没补；"
+                "`bus.py` 声明了 `ACK_REQUIRED`，两个消费端各自手打了缩水的元组。"
+                "**修复恢复了症状，同时让问题看上去已被处理。**",
+        "action": "【已裁决·监控代行 2026-07-29】(1) 四处当场修并跑过："
+                  "`pid_alive` 加 pid<=0 守卫且 quota 改为引用同一份实现；"
+                  "reflex 认「正在运行」（中文控制台里 `\"Running\"` 一次也没命中过，"
+                  "于是 live_workers 恒 0、补员循环每跳按满员拉人）；"
+                  "reflex 读不到内存改为 0.0 并发 `mem-unreadable` 事件（原为默认 99GB 的 fail-open）；"
+                  "`--lane` 自报身份不再能绕过花钱守卫（`claim W-9999 --lane campaign` "
+                  "此前可领走真 API 战役且日志与批准过的认领逐字相同）。"
+                  "(2) 其余上板四件：A13-sealed-audit-reads-the-wrong-fields（p1，封存守门人）、"
+                  "S29-measurement-missing-is-not-zero（proxy 的三处「量不到=0」）、"
+                  "R3-release-classifier-defaults（释出分类器的默认值全指向可发布）、"
+                  "S28-no-third-value-in-the-monitor（监控自己剩下的 11 处）。"
+                  "(3) 全体要求：**逐条修、逐条配阴性样本，不许打包成一次「已全部加固」**——"
+                  "本仓 20 道闸门里 19 道从没被证明能变红，而普查的第二层结论正是"
+                  "「出问题最多的是补丁本身」。",
+    },
+    {
         "id": "F-01",
         "severity": "info",
         "title": "【已裁决 2026-07-28：出路 (b)】A2 与切堆纪律的冲突",
@@ -1088,7 +1126,7 @@ ITERATION_LOOP = [
 # --------------------------------------------------------------------------
 
 PAPER_PLAN = [
-    {"id": "WP1", "name": "框架本体与离线验收", "weight": 0.15, "pct": 87,
+    {"id": "WP1", "name": "框架本体与离线验收", "weight": 0.15, "pct": 89,
      "slot": "§3 框架 · 图5 DC22案例 · 图6 概念时间线",
      "scale": "对标：Schema 的 world_model.py 方法论一节。我们：DSL+四形态+六/八引擎+A0/A0′/A1/A2 四件离线验收",
      "evidence": "六引擎 + M9 + FD 三档定价 + 500 世界 23 不变量零违规；世界工厂 20 世界；契约 v0.3；A0/A0′/A1/A2/A3 五件离线验收全绿"},
@@ -1120,7 +1158,7 @@ PAPER_PLAN = [
      "slot": "§5 统计口径 · 双结局文本",
      "scale": "三主终点（U3 达成率/判决题准确率/前载指数）+ Wilcoxon 配对 + n 由包络方差定",
      "evidence": "冻结包起草 + Phase 1 收口交付；统计规则草案在盘"},
-    {"id": "WP9", "name": "论文写作（workshop 文 → 主文）", "weight": 0.05, "pct": 62,
+    {"id": "WP9", "name": "论文写作（workshop 文 → 主文）", "weight": 0.05, "pct": 65,
      "slot": "全文（3.2 的八节骨架）",
      "scale": "Phase 1 结 workshop 文（P-16 在跑）→ Phase 3 结案例研究 → 主文",
      "evidence": "PAPER.md 2512 行成稿，含引文核查、评审分诊、待办清单；五视角评审在跑"},
@@ -1149,7 +1187,7 @@ GRID_ROWS = [
 
 GRID = {
     "E1": {"pct": 100, "note": "六引擎全绿 + 500 世界性质轰炸零违规", "active": ["E1-property-fuzz", ]},
-    "E2": {"pct": 85, "note": "八引擎出货、510 测试收集；但 ENGINE_TABLE 不在 master，E11 四缺陷在 master 健在", "active": ["P-13"]},
+    "E2": {"pct": 92, "note": "ENGINE_TABLE.md 已在 master 且边界列非空；lp_potential 的 admissible 改为读 admissibility_check", "active": ["P-13"]},
     "E3": {"pct": 25,  "note": "引擎在线供货（经 theoria-arm 调用）", "active": []},
     "E4": {"pct": 0,  "note": "封存战役中的引擎供给", "active": []},
     "E5": {"pct": 45, "note": "MANIFEST 中 engines/ 40 文件全 class A releasable；306 哈希 match / 18 stale", "active": []},
@@ -1179,7 +1217,7 @@ GRID = {
     "V5": {"pct": 55, "note": "build_all 今天必然非零退出（EXPECTED_IDS 止于 E-07）；50 源哈希 13 条已漂移", "active": ["P-21"]},
 
     "P1": {"pct": 85, "note": "方法论与骨架", "active": []},
-    "P2": {"pct": 76, "note": "12 节非占位 23667 词；但两份审计只覆盖半篇，五视角评审给 Reject", "active": ["P-23"]},
+    "P2": {"pct": 80, "note": "P14 的诚实措辞已落进 PAPER.md（master 上可见 self-consistent 口径）", "active": ["P-23"]},
     "P3": {"pct": 35, "note": "四样材料三样是离线的，第四样不在正文；线上只有 preflight 与一局首触", "active": ["P3-case-study", ]},
     "P4": {"pct": 15, "note": "预注册包不存在；k/Δ/B 由监控在工单里暂定——工单里的决定不是预注册", "active": []},
     "P5": {"pct": 55, "note": "release/ + 复现脚本 + 许可条款", "active": ["P-19"]},

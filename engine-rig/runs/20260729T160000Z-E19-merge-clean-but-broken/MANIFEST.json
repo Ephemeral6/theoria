@@ -1,0 +1,17 @@
+{
+  "prompt_id": "E19-merge-clean-but-broken",
+  "branch": "agent/e19-merge-clean-but-broken",
+  "base_commit": "origin/master + origin/agent/e15-solver-status-bit",
+  "utc": "2026-07-29T16:00:00Z",
+  "author": "RES-3",
+  "lane": "verify",
+  "territory": "engine-rig",
+  "defect": "E15 made Law.scope_exhaustive a derived property; E17's heldout/zero_space_heldout.py:82 still passed it as a constructor kwarg. Textual merge is clean because neither branch touched the other's lines.",
+  "fix": "pass truncated_cells=tuple(truncated); local_laws already returns the truncated cell indices, so the derived value is bit-identical and *which* cells were truncated is now preserved",
+  "call_sites_repo_wide": 1,
+  "non_vacuity": "reverting the one-line fix turns test_heldout red; restoring turns it green (both runs recorded in EVIDENCE.txt)",
+  "api_calls": 0,
+  "network": false,
+  "cost_usd": 0.0,
+  "sealed_pile_contact": "none"
+}

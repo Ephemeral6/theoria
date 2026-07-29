@@ -1,0 +1,96 @@
+{
+  "checks": [
+    {
+      "detail": "solver_status=1 (want 1); 'Iteration limit reached. (HiGHS Status 14: model_status is Iteration limit reached; primal_status is Infeasible)'",
+      "name": "the budgeted call really reached a HiGHS iteration limit",
+      "passed": true
+    },
+    {
+      "detail": "got 'LpOutcome'",
+      "name": "the engine hands back a structured outcome, not a bare value",
+      "passed": true
+    },
+    {
+      "detail": "status='budget'",
+      "name": "its status word names the budget",
+      "passed": true
+    },
+    {
+      "detail": "status='budget' no_linear_pagoda=False",
+      "name": "it is NOT no_linear_pagoda",
+      "passed": true
+    },
+    {
+      "detail": "decided=False",
+      "name": "decided is false",
+      "passed": true
+    },
+    {
+      "detail": "LpUnavailable: lp_potential declines to answer: budget (HiGHS hit its iteration limit; feasibility was not decided). HiGHS status 1; Iteration limit reached. (HiGHS Status 14: model_status is Iteration limit reached; primal_status is Infeasible). No claim about 0111 follows.",
+      "name": "the public entry refuses instead of returning (None, None)",
+      "passed": true
+    },
+    {
+      "detail": "exception.outcome.status='budget'",
+      "name": "the refusal carries the specific status word",
+      "passed": true
+    },
+    {
+      "detail": "status='no_linear_pagoda'",
+      "name": "unbudgeted, the SAME configuration is a proved infeasibility",
+      "passed": true
+    },
+    {
+      "detail": "run(...) -> (None, None)",
+      "name": "and (None, None) is still what that returns",
+      "passed": true
+    },
+    {
+      "detail": "keys=['bound', 'decided', 'form', 'margin', 'meaning', 'no_linear_pagoda', 'scope_of_claim', 'solver', 'solver_message', 'solver_status', 'status']",
+      "name": "the engine wrote a sidecar a consumer can read the classification off",
+      "passed": true
+    },
+    {
+      "detail": "{\"decided\": false, \"no_linear_pagoda\": false, \"solver_status\": 1, \"status\": \"budget\"}",
+      "name": "and the sidecar says budget, undecided",
+      "passed": true
+    }
+  ],
+  "control": "N1",
+  "exit_code": 0,
+  "failures": [],
+  "fixture": "fixtures/data/peg4_graph.json",
+  "initial": "0111",
+  "item": "E15-solver-status-bit",
+  "observed": {
+    "baseline_run_returned": "(None, None)",
+    "baseline_solver_status": null,
+    "baseline_status": "no_linear_pagoda",
+    "decided": false,
+    "no_linear_pagoda": false,
+    "outcome_type": "LpOutcome",
+    "run_raised": "LpUnavailable: lp_potential declines to answer: budget (HiGHS hit its iteration limit; feasibility was not decided). HiGHS status 1; Iteration limit reached. (HiGHS Status 14: model_status is Iteration limit reached; primal_status is Infeasible). No claim about 0111 follows.",
+    "run_raised_status": "budget",
+    "sidecar": {
+      "bound": 10,
+      "decided": false,
+      "form": "lp_outcome",
+      "margin": 1,
+      "meaning": "HiGHS hit its iteration limit; feasibility was not decided",
+      "no_linear_pagoda": false,
+      "scope_of_claim": "linear pagodas with |w_i| <= 10 and goal margin >= 1; weights outside the box are not examined",
+      "solver": "scipy.optimize.linprog (HiGHS)",
+      "solver_message": "Iteration limit reached. (HiGHS Status 14: model_status is Iteration limit reached; primal_status is Infeasible)",
+      "solver_status": 1,
+      "status": "budget"
+    },
+    "solver_status": 1,
+    "status": "budget"
+  },
+  "property": "a real HiGHS iteration limit is not an infeasibility",
+  "solver_is_real": "scipy.optimize._linprog.linprog",
+  "solver_options": {
+    "maxiter": 0
+  },
+  "verdict": "hold"
+}

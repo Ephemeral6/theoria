@@ -79,7 +79,7 @@ def fit(encoded: Sequence[int], features: Sequence[Feature],
             laws.append(
                 Law(vector=vector, features=list(features),
                     value=gf2.dot(vector, encoded[0]), scope=scope,
-                    scope_exhaustive=not truncated)
+                    truncated_cells=tuple(truncated))
             )
     return laws, sorted(locals_ + globals_)
 

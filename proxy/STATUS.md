@@ -176,3 +176,29 @@ in any tracked file here. Since P-9 the protection runs in both directions: a
 credential cannot reach the ledger, and a credential an upstream reflects back
 cannot reach the arm either — that leak used to leave the ledger clean, so it
 was unrecorded as well as unstopped.
+
+## `credential_in_body` 的误报率已测（S27，2026-07-29）
+
+审计把这条列在「还不能证实」是对的：判断真伪要读请求体，而读请求体本身有风险。
+`proxy/tools/triage_credential_incidents.py` 用不读内容的办法把它结了——
+每个命中片段只导出形状元信息与 sha256，真伪靠
+`sha256(片段) == sha256(活钥匙)` 判定，两边都不需要把值显示出来。
+
+测量（主 checkout + 全部 worktree，1033 个 `.jsonl`）：
+
+* `credential_in_body` incident **2439 条**，其中 `detail` 的互异取值 **1 个**
+  ——不是 2439 个发现，是同一条判断被记了 2439 次；
+* 启发式全语料命中 394,352 次，**哈希命中活钥匙的：0**；
+* 成因：检测器的 UUID 分支匹配到代理自己放进请求体的 `guid` / `card_id`
+  （二者实测都是标准 UUID），而每个 ACTION 请求体都带 `guid`。
+
+**误报率实测为 100%（2439/2439），真泄漏 0。**
+
+`redact.py:258-262` 的注释早就写明这个误报是设计时接受的代价，
+而那个取向（宁可误报）依然正确。变的是量：2439 条同源误报会让人关掉告警，
+而那正是真泄漏溜过去的方式。
+
+**收紧应改调用侧，不要改 `looks_like_credential`**：`env_proxy` 抬 incident 前
+排除「命中片段恰好等于本次会话自己的 `guid`/`card_id`」——拿代理自己刚发出去的值
+去比，不可能把真钥匙判成良性。**本轮未实施**，理由与判据见
+`proxy/runs/20260729T1020Z-S27-credential/FINDING.md`。

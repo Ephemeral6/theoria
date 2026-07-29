@@ -1,0 +1,69 @@
+{
+  "author": "RES-2",
+  "base_commit": "e507c8e",
+  "branch": "agent/p13-figure-numbering",
+  "files": [
+    {
+      "path": "figures/fig06_concept_timeline.py",
+      "sha256": "7bc86014efeaa2f7939d5adb574620ae316bd3d2fc70cb7270a136c1bae58bbb"
+    },
+    {
+      "path": "figures/SOURCES.sha256",
+      "sha256": "c51857248a7ca84da49c1c81ef938de7969512359c411665b2e5354f2a198d47"
+    },
+    {
+      "path": "figures/csv/fig06_concept_timeline.csv",
+      "sha256": "5e05260b98f9d8bdd800518f19107ada1dbcd5d559a6364c58f7bad787b407dd"
+    },
+    {
+      "path": "figures/csv/fig02_bill_shape.csv",
+      "sha256": "168d99576a30f95fbf1543459cdb045723cecfa4c44dc61d95b827954e49a399"
+    }
+  ],
+  "passive": {
+    "api_calls": 0,
+    "game_spend_usd": 0.0,
+    "model_calls": 0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "P13-figure-numbering-and-plates",
+  "results": {
+    "built_and_verified_figures_the_paper_never_cites": [
+      "fig02_bill_shape",
+      "fig03_capability_spectrum",
+      "fig04_a3_transfer"
+    ],
+    "fixing_it_revealed_a_masked_failure": {
+      "gate": "8. coverage",
+      "now": "red — 10+ theoria-arm/runs/* directories carry MANIFEST.json but no cost_curve.json, so the discovery rule requires every member and skips them silently",
+      "owner": "theoria-arm, not figures. The probe is doing its job: its own message says a half-written run must be named, not silently dropped by both.",
+      "was": "unreached on master, because gate 1 aborted the run"
+    },
+    "paper_embeds_no_plate": true,
+    "pipeline_was_red_on_master": {
+      "cause": "cold-start-a0/THEORIZE_LOG.md gained entries E-08 and E-09 after figures/fig06_concept_timeline.py:108 declared its EXPECTED_IDS; the parser refused to draw rather than publish a timeline two entries short",
+      "consequence_for_the_paper": "none. The adjudication count stays 17: E-08 and E-09 emit event_kind no-proposal-ABSENT and ledger-logged, not an adjudication, and the parity witness still rules paper-18 vs pipeline-17 in the pipeline's favour. Checked before reporting, because the obvious assumption was that the count moved.",
+      "figure": "fig06_concept_timeline",
+      "fix": "admitted E-08 and E-09 to EXPECTED_IDS; both are ordinary rows of the same E table",
+      "gate": "1. build pass A"
+    },
+    "refuted_before_acting": "P12's lay reviewer filed 'six of seven cited figure paths do not exist' as BLOCKING; all nine figures/ paths cited by PAPER.md resolve. It had looked under the parity-witness directory.",
+    "three_numbering_authorities": {
+      "collision": "the paper's Figure 1/2/3 agree with the deprecated witness numbering and disagree with the live pipeline they actually cite: Figure 1 = fig06, Figure 2 = fig07, Figure 3 = fig05",
+      "deprecated_witness": "papers/phase1-workshop/figures/fig1,fig2,fig3",
+      "live_pipeline": "fig02..fig07, numbered after Theoria.md 3.2",
+      "paper_prose": "Figure 1, 2, 3"
+    }
+  },
+  "status": "complete",
+  "territory": "figures",
+  "utc": "2026-07-29T01:20:00Z",
+  "verification": {
+    "command": "bash figures/verify.sh",
+    "gate_8": "red, owner theoria-arm, unreached on master",
+    "gates_passing": "7 of 8"
+  },
+  "what": "The figure pipeline was red on master: the paper's Figure 1 could not be built. Fixed the cause, established what the fix revealed, and reported the paper-side observations rather than acting on them (papers/ is held by another worker).",
+  "worktree": ".worktrees/p13-figure-numbering"
+}

@@ -61,3 +61,71 @@ cycle 5 同一块地记的是 `gates: none`——A4a 的 `2eb822d` 给它带来 
 这条值得看一眼。另：`ci_merge.main()` 结尾的 `git pull` 的 cwd 是仓库根即**我的工作树**，
 会在我跑全量门的中途换掉文件（本轮我先数到 14 个目录、再数到 15 个）；不是缺陷，
 但测量前必须现枚举，我已照此改。
+
+
+## TO-MONITOR 2026-07-29T13:05Z
+
+**报到。** OPS-M 会话重开，接上 cycle 14（心跳写 cycle 15，不从 0 重数——从 0 重数会把
+「我停了多久」这个信号抹掉）。总线 `NO-NEW-MESSAGES`（cursor last_seq=1，无 URGENT）。
+
+**盘上 13 个 flag，我第一件事是把每个都对着当前 master 重测一遍，而不是照 flag 里写的
+结论办。结果 flag 里有一半已经过期**：
+
+| 分支 | flag 记的 | 现在重测 |
+|---|---|---|
+| e9-engine-paper-table | verify gate red | **已经在 master 里了**（ahead=0）。flag 是纯陈旧，已归档 |
+| e15-solver-status-bit | verify gate red | tip 从 d2b75c26 动到 e17ab261，**现在干净合并** |
+| s4-freeze | merge conflict，NEEDS-HUMAN 3 次 | tip 从 3c0bff72 动到 962d7811，**现在干净合并**，只落后 master 1 个提交 |
+| r2-release-licence | verify gate red | **现在干净合并** |
+| s11-sealed-halfguard | touches protected root files | 合并干净，卡的是管辖权不是技术 |
+
+**这条本身是个教训**：flag 一旦写下就不再重测，而分支作者随后修好了自己那一版——
+于是「已修好的分支」和「没修的分支」在 `monitor/ci/` 里长得一模一样，都只是一个文件躺着。
+ci_merge 的 HELD 判据是「unchanged since last verdict」，但它比的是 flag 自己的记录，
+**没有比分支 tip 有没有动**。s4 因此被挂了 5 小时并升到 NEEDS-HUMAN，而它其实早就好了。
+建议：HELD 时若 `git rev-parse <branch>` 与 flag 里的 `tip` 不同，直接清 flag 重排队。
+
+**我已经就地办掉的**：e9 陈旧 flag 归档。
+
+**已扇出 7 个 subagent 并行处理其余 12 个**（各自独立 worktree `.worktrees/opsm-*`，
+只在本地解冲突 + 跑闸门 + 本地提交，**不推**；推由我串行做，避免并发抢 master）：
+proxy(a10) / engine(e8) / arm(a3) / figures(p10+p13) / vlab(v19+v5×2) / gated(e15+r2+s4)，
+外加一个对抗组专门试图推翻我对 s11 的裁决。
+
+**要你裁的一件（我不能自己动）**：`s11-sealed-halfguard` 改 `CLAUDE.md` 与 `.gitignore`，
+按 CHARTER 改契约只有你能做。技术上它堵的是一个真洞：本地 ARC 引擎首跑会把**全部 25 局的
+源码**拉进 `environment_files/`，而 `make play-local` 一类没有可用的过滤参数——这跟
+ACCESS_CHECK §8a 已经裁过的「许可」是两件事，许可不等于隔离。我已查过本机：
+**`environment_files/` 在磁盘上任何地方都不存在，这个洞还没被走过**，所以 s11 是预防不是补救。
+详细裁决与对抗结论我会另写 `monitor/inbox/`。
+
+另注：`monitor/board/done/S11-sealed-halfguard.W-1410.md` 已记为 done，但分支从没并进 master
+——板子上的 done 和 master 的事实又一次脱节。
+
+**另外两条不在我领地、已走总线**：反射层 11:11:48Z 起停了近两小时（监控自己的仪表却新鲜），
+以及 quota_state.json 新 hold 没清旧字段。详见总线。
+
+
+## TO-MONITOR 2026-07-29T13:12Z （更正上一段）
+
+**上一段我提的那条 HELD 建议是错的，撤回。** 我说「HELD 比的是 flag 自己的记录，没有比
+分支 tip 有没有动」——`ci_merge.py:507` 明写着 `memo["tip"] == branch_tip(b)`，条件本来
+就在 tip 上，注释（496–505 行）还专门解释了为什么这样选。别照我那句去改它，它是对的。
+
+**真实原因就是我总线上报的那条**：s4 的 tip 在 12:36Z 动到 962d7811，而 ci_merge 最后一次
+跑是 11:13Z。它不是被判断错了，是**根本没人再跑它**。这反而让反射层停摆那条更要紧，不是更次要。
+
+**不过顺着这条查出一个真的漏，很窄但可证**：`unmerged_branches()`（279–288 行）用
+`merge-base --is-ancestor` 把已进 master 的分支排除出 `todo`，而 `clear_flag()` 只在
+自己的合并路径上调用（245 行）。于是——**一个分支若不是被 ci_merge 合进去的，而是被别的
+分支吸收后一起进的 master，它的 flag 就永远清不掉**：它再也不会进 `todo`，没有任何代码
+会回头看它一眼。
+
+实证就是 `e9-engine-paper-table`：merge.log 里 85 次提到它，**没有一次是 MERGED 或
+CLEARED**；它是通过 `3e6d47be Merge branch 'agent/e9-engine-paper-table' into
+agent/e17-held-out-validation` 被 e17 吸收后一起进的 master。flag 从 04:16Z 一直躺到我
+今天手动归档为止，期间还一直占着 HELD 名单的位置。
+
+**代价不是空间是误导**：人和探针数 `monitor/ci/` 里的文件来判断「有多少事要我管」，
+13 个里有 1 个是幽灵。修法很小：`unmerged_branches()` 里判定 merged 的那一支，
+顺手 `clear_flag(b)` 再 continue。我不改 monitor/ 的代码（CHARTER），已写 inbox 提案。

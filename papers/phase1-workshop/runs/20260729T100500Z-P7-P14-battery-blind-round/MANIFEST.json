@@ -1,0 +1,64 @@
+{
+  "added_from_the_independent_check": [
+    "accidental is the only author-asserted field left after the collapse",
+    "37 of 38 is not 37 findings -- one convention satisfies five exploration metrics",
+    "battery/artifacts/gaming_audit.json still records a main table of nine, contradicting the shipped conclusion"
+  ],
+  "author": "RES-2",
+  "base_commit": "c1a60420",
+  "blind_round": {
+    "M3": "retiered to undetermined by a tier created after the round",
+    "attackers": 6,
+    "attacks": 105,
+    "landed": 91,
+    "main_table_after_blind": [
+      "E1",
+      "M3"
+    ],
+    "main_table_now": [],
+    "metrics_at_threshold": 37,
+    "of": 38,
+    "sighted_followup": {
+      "attacks": 7,
+      "landed": 4,
+      "took": "E1"
+    },
+    "source": "battery/runs/20260729T021247Z-V9-battery-gaming-audit/v9_gaming_audit.json; blind-only counts from the run directory as first written"
+  },
+  "branch": "agent/p7-p14-battery-section-blind-round",
+  "corrections_to_my_own_draft": [
+    "dropped the 51-of-91 producer-side count: no artefact carries it",
+    "the nine-to-two count now carries its date; re-run today the blind round demotes eight",
+    "the strong/medium/weak grading is prose only, and its nine are not the nine demoted"
+  ],
+  "declared_territory_on_the_board": "battery",
+  "files": [
+    {
+      "path": "papers/phase1-workshop/sections/07_battery.md",
+      "sha256": "eb551bd865cc349fe3713efe7dd39be7c790b37393f6c9b2410ed72a76dc7b39"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260729T100500Z-P7-P14-battery-blind-round/RUN_STATE.md",
+      "sha256": "d576ec210dbccf3c220fa866d0321cbebf8ae5e97650498b2e934a954c393f61"
+    }
+  ],
+  "limit_dropped_deliberately": "the eleven hard-coded exploits: right count, already mitigated, and a first-round finding not a blind-round one",
+  "passive": {
+    "api_calls": 0,
+    "game_spend_usd": 0.0,
+    "model_calls": 0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "P7-P14-battery-section-blind-round",
+  "status": "complete",
+  "territory": "papers",
+  "territory_mislabel_note": "the item declares battery; the deliverable is papers/phase1-workshop/sections/07_battery.md",
+  "utc": "2026-07-29T10:05:00Z",
+  "verification": {
+    "build": "python papers/phase1-workshop/assemble.py",
+    "gate": "python papers/phase1-workshop/verify_paper.py",
+    "result": "PASS (4/4)"
+  },
+  "what": "Re-derive section 7.7 and its knock-ons against the battery blind pre-registered anti-gaming round, from artefacts only."
+}

@@ -1,1 +1,1 @@
-2026-07-29T10:06Z cycle=34 audited_to=de90ba90 reports=1 (medium; HELD verified 462->6)
+2026-07-29T14:30Z cycle=37 audited_to=ad778386 reports=2 (high: the account rotator's success path forgets which sessions it handled -- registry write-back skipped, so one stale log line can hold an account shut indefinitely and its requeue is never drained; medium: the pool ledger's only entry is hand-written and attributed to an account with 0 launches)

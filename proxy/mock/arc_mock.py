@@ -111,10 +111,18 @@ def _parse(rows: List[str]) -> Tuple[List[List[int]], Tuple[int, int]]:
 class Session:
     """One RESET's worth of world state. Pure function of the actions applied."""
 
-    def __init__(self, guid: str, game_id: str, card_id: Optional[str]):
+    def __init__(self, guid: str, game_id: str, card_id: Optional[str],
+                 scoreless: bool = False):
         self.guid = guid
         self.game_id = game_id
         self.card_id = card_id
+        #: A world that keeps no score reports `score: null` on every command.
+        #: Off by default -- the mock's whole point is to look like the live
+        #: API, which does score. It exists because V22 needed a *session*, not
+        #: a hand-built body, to show what `win_tighten` does to such a game:
+        #: the defect is in what the proxy records over a whole run, and a
+        #: single synthetic response cannot show that.
+        self.scoreless = scoreless
         self.level = 0
         self.levels_completed = 0
         self.actions = 0
@@ -171,7 +179,7 @@ class Session:
             "card_id": self.card_id,
             "frame": [self.render()],
             "state": self.state,
-            "score": self.levels_completed,
+            "score": None if self.scoreless else self.levels_completed,
             "levels_completed": self.levels_completed,
             "action_counter": self.actions,
             "available_actions": list(AVAILABLE_ACTIONS),
@@ -182,9 +190,11 @@ class Session:
 class World:
     """All sessions and scorecards. Deterministic given the command sequence."""
 
-    def __init__(self, api_key: str = DEFAULT_KEY, games: Optional[List[str]] = None):
+    def __init__(self, api_key: str = DEFAULT_KEY, games: Optional[List[str]] = None,
+                 scoreless: bool = False):
         self.api_key = api_key
         self.games = games or [DEFAULT_GAME]
+        self.scoreless = scoreless
         self.lock = threading.Lock()
         self.sessions: Dict[str, Session] = {}
         self.cards: Dict[str, Dict[str, Any]] = {}
@@ -297,7 +307,7 @@ class World:
         with self.lock:
             self._resets += 1
             guid = "guid-" + self._digest("guid", game_id, card_id, self._resets)
-            session = Session(guid, game_id, card_id)
+            session = Session(guid, game_id, card_id, scoreless=self.scoreless)
             self.sessions[guid] = session
             card = self.cards.get(card_id or "")
             if card is not None:
@@ -387,8 +397,8 @@ class _Handler(BaseHTTPRequestHandler):
 
 class MockArc:
     def __init__(self, api_key: str = DEFAULT_KEY, games: Optional[List[str]] = None,
-                 host: str = "127.0.0.1", port: int = 0):
-        self.world = World(api_key=api_key, games=games)
+                 host: str = "127.0.0.1", port: int = 0, scoreless: bool = False):
+        self.world = World(api_key=api_key, games=games, scoreless=scoreless)
         self.httpd = ThreadingHTTPServer((host, port), _Handler)
         self.httpd.world = self.world                              # type: ignore[attr-defined]
         self.httpd.daemon_threads = True

@@ -18,7 +18,7 @@ from typing import Any, Dict, Optional
 from .env_proxy import EnvProxy, EnvProxyConfig
 from .guard import SealedPileGuard
 from .ledger import Ledger, RunLedger, canonical, sha256
-from .tools import verify_chain
+from .tools import check_variant_degeneracy, verify_chain
 from .model_proxy import ModelProxy, ModelProxyConfig
 from .paths import LEDGER_PATH, RUNS_DIR, UPSTREAM_ARC, UPSTREAM_MODEL
 from .spend_gate import default_campaign, default_gate
@@ -162,6 +162,28 @@ def _run_game(game_id: str, *,
                                 "failed_checks": score_report["failed_checks"],
                                 "undetermined_checks":
                                     score_report["undetermined_checks"]}
+
+    # R-V22, applied to this run's own ledger rather than left as a command
+    # somebody might type. A `win_tighten` against a game that reports no score
+    # does not tighten the win condition, it removes it -- so the run's verdict
+    # is still valid but its *reason* is the protocol rather than the board,
+    # and the item does not count toward the reason score. An adversarial pass
+    # observed that nothing obliged anyone to run the detector on a real run,
+    # which made the rule a command wearing a JSON key; this is the line that
+    # makes it fire by itself.
+    #
+    # Recorded, not raised. By the time this runs the game has been played and
+    # the money is spent; refusing here would destroy the evidence rather than
+    # prevent anything, which is D-030 exactly.
+    degeneracy = check_variant_degeneracy.scan_file(ledger_path)
+    record["variant_degeneracy"] = {
+        "verdict": degeneracy["verdict"],
+        "degenerate_rewrites": len(degeneracy["findings"]),
+        "variant_records": degeneracy["variant_records"],
+        "skipped_lines": degeneracy["skipped_lines"],
+        "exam_eligible": all(v["exam_eligible"] for v in degeneracy["variants"]),
+        "rule": "R-V22 (proxy/DECISIONS.md D-032)",
+    }
 
     # D-024 / RED-40.  The chain inside the ledger only makes tampering
     # *evident*; on its own it stops nobody from rewriting the whole file and

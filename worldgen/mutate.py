@@ -1139,8 +1139,20 @@ def describe(edit: Edit, base_trace_dir: str = OUT) -> Dict[str, Any]:
     base_inv = {row["name"]: row for row in truth.check_invariants(base, base_states)}
     mutant_inv = {row["name"]: row
                   for row in truth.check_invariants(mutant, mutant_states)}
-    now_false = sorted(name for name, row in mutant_inv.items()
-                       if row.get("verified") and not row.get("holds", True))
+    # Explicit `status`, not `row.get("holds", True)`.  The default was already
+    # unreachable behind the `verified` guard, so this changes no value — but it
+    # is the V19 shape verbatim, and leaving one copy of it in the tree invites
+    # the next reader to copy the idiom rather than the reasoning.
+    #
+    # The **semantic** gap it hid is worth stating and is deliberately not
+    # closed here: `claims_now_false` is violations only, so a mutation that
+    # turns a *verified* invariant into an unverified one is invisible to it.
+    # `claims_now_false` is read by name from `exam/grading/rubrics_adaptation.py`
+    # and `exam/papers/adaptation.py`, which are another track's territory;
+    # widening it here would silently change what those grade.  Recorded in
+    # `runs/*-V19-unverified-is-not-true/`.
+    mutant_status = truth.classify_invariants(mutant_inv.values())
+    now_false = sorted(mutant_status[truth.INV_VIOLATED])
     claims_added = sorted(set(mutant_inv) - set(base_inv))
     claims_removed = sorted(set(base_inv) - set(mutant_inv))
 
