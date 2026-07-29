@@ -28,8 +28,11 @@ def candidates(certificate: Certificate, heuristic: Heuristic,
     invariant_payload = certificate.as_json()
     invariant_payload["move_instances"] = [m.name() for m in certificate.moves]
 
-    heuristic_payload = heuristic.as_json()
-    heuristic_payload["admissibility_check"] = admissibility_report(heuristic, graph)
+    # The check is handed *into* the payload builder rather than bolted on after
+    # it: `as_json` derives the `admissible` headline from this very list, so the
+    # two cannot disagree.  Attaching it afterwards is what let the headline be a
+    # literal for as long as it was.
+    heuristic_payload = heuristic.as_json(admissibility_report(heuristic, graph))
 
     return [
         make_candidate(

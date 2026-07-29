@@ -1,0 +1,126 @@
+{
+  "prompt_id": "E16-verdict-must-gate",
+  "branch": "agent/e16-verdict-must-gate",
+  "base_commit": "31bea4664d75e8ec6b14e093e85633db7470aebf",
+  "utc": "2026-07-29T02:00:00Z",
+  "worker": "W-1650",
+  "territory": "engine-rig",
+  "cell": "E16",
+  "serves": [
+    "WP1",
+    "WP9"
+  ],
+  "api_calls": 0,
+  "network": false,
+  "sealed_pile_contact": "none",
+  "spend_usd": 0.0,
+  "what": "Two computed verdicts that were published beside the claims they judged now gate them; the six 'verified but not independently' sites are written down as a boundary rather than left as a promise.",
+  "changes": [
+    {
+      "site": "engines/lp_potential/potential.py",
+      "was": "Heuristic.as_json() carried the literal \"admissible\": True; the real check ran in admissibility_report and was attached afterwards by the caller under admissibility_check, which the headline never read.",
+      "now": "as_json(admissibility_check=None) derives both `admissible` and a new `admissible_basis` from entitlement(): certificate.holds AND no counterexample row. One expression, one site."
+    },
+    {
+      "site": "engines/lp_potential/__init__.py",
+      "was": "heuristic_payload[\"admissibility_check\"] = admissibility_report(...) bolted on after as_json().",
+      "now": "the report is passed into as_json(), so headline and evidence cannot drift."
+    },
+    {
+      "site": "engines/deadlock_carver/__init__.py",
+      "was": "candidates() emitted one invariant per theorem unconditionally; PruningReport.same_answer was serialised as plan_length_unchanged and published beside the theorems it falsified.",
+      "now": "refutation(report) is read before rows are built. Default on_refutation='withhold' emits no invariant rows; 'mark' emits them carrying machine-readable refuted/refutation. The plan account always carries refuted, invariants_withheld and on_refutation so a suppression is never silent."
+    },
+    {
+      "site": "DECISIONS.md",
+      "now": "D-034 (a computed verdict gates) and D-035 (the six shared-premise sites, tabulated)."
+    },
+    {
+      "site": "six overclaiming docstrings/READMEs",
+      "now": "interop/certificate_export.py, interop/README.md, engines/zero_space/README.md, engines/fd_adapter/validate.py, engines/fd_adapter/README.md, engines/deadlock_carver/README.md -- each now names the premise its checker shares with its producer. Prose only; no behaviour and no emitted artifact changed."
+    }
+  ],
+  "negative_samples": [
+    "tests/test_lp_potential.py::test_admissible_is_false_when_the_certificate_fails_its_own_recheck -- holds=False reaches the field.",
+    "tests/test_lp_potential.py::test_an_unchecked_certificate_is_not_admissible -- empty conditions is not a pass.",
+    "tests/test_lp_potential.py::test_a_counterexample_in_the_check_overrides_a_holding_certificate -- a certificate over 3 of peg4's 4 moves passes all three exact conditions and claims h=inf for two states that are 1 and 2 moves from the goal; the headline must read False.",
+    "tests/test_deadlock_carver.py::test_a_refuted_theorem_does_not_reach_the_candidate_stream -- only the plan account survives.",
+    "tests/test_deadlock_carver.py::test_the_mark_mode_ships_a_machine_readable_invalidation",
+    "tests/test_deadlock_carver.py::test_an_unfinished_comparison_neither_clears_nor_refutes -- UnfinishedComparison propagates rather than resolving either way."
+  ],
+  "verification": {
+    "suite": "python -m pytest -- 492 passed, 27 skipped, 0 failed",
+    "run_local": "python runs/20260729T020000Z-E16-verdict-must-gate/verify.py -- 29/29 ALL CHECKS PASS",
+    "artifact": "regenerated with `python -m tools.run_all --out artifacts/candidates.jsonl --deterministic --force`; 44 rows unchanged, one line differs (the lp_potential heuristic row gains admissible_basis)",
+    "fixtures": "python -m fixtures.generate_all leaves fixtures/ byte-identical"
+  },
+  "incident": {
+    "what": "The host disk was 100% full (3.2 MB free) at claim time. The first pytest run exited 0 with a truncated summary and silently truncated the tracked fixture fixtures/data/sokoban_domain.pddl to 0 bytes.",
+    "so": "That first 'green' baseline was void. The fixture was restored with git checkout, regeneration confirmed byte-identical, and the baseline re-established before any change was measured.",
+    "reclaimed": "1475 __pycache__/.pytest_cache dirs under .worktrees (gitignored, regenerable) plus git worktree prune -- 3.2 MB free -> 8.8 GB. No tracked file and no other worktree's source was touched.",
+    "filed": "monitor/inbox/20260729T020500Z-W-1650-disk-full-blocks-every-worker.md"
+  },
+  "files": [
+    {
+      "path": "engines/lp_potential/potential.py",
+      "sha256": "5c5ed6a653320c5ce04c662afa05e01960d11853334edce0cbe895409712aee2"
+    },
+    {
+      "path": "engines/lp_potential/__init__.py",
+      "sha256": "babbf2ddd719a42ca0a35340b54db29e2ed633106702ad9850e76cc02c12a685"
+    },
+    {
+      "path": "engines/lp_potential/README.md",
+      "sha256": "7886dcd7e7068550f3d9ed1820611af62cc135d62b7ab351786dfe30bb0b899e"
+    },
+    {
+      "path": "engines/deadlock_carver/__init__.py",
+      "sha256": "262b7698a69e8637c3e2577f118ff8ee4493df337519326f6d43a3dc0795259e"
+    },
+    {
+      "path": "engines/deadlock_carver/README.md",
+      "sha256": "4fa8a89775fe93fa9f1dc375eebba53478da154a9f28017afe879dc98a6db39b"
+    },
+    {
+      "path": "engines/fd_adapter/validate.py",
+      "sha256": "4f8fccc0f4ffb9fdb76c189b6598186f307827086ebbd4103705db552fdd61d7"
+    },
+    {
+      "path": "engines/fd_adapter/README.md",
+      "sha256": "480336f9ebc3935790ae60daf2890101680f96cac5e0170c05c5d281b3d686a4"
+    },
+    {
+      "path": "engines/zero_space/README.md",
+      "sha256": "db52c2c960f3cee9c016349eaa3dc07e192adf719180abeee86107547092dae9"
+    },
+    {
+      "path": "interop/certificate_export.py",
+      "sha256": "f1e3f2964f7b1caa0b382e85f1a4dbb39b8c39b4079f26a56234803a6d205922"
+    },
+    {
+      "path": "interop/README.md",
+      "sha256": "aba065396a3b56ad6030ab849a8161d023f6206a7debce1c8b7991dd1e8bd324"
+    },
+    {
+      "path": "tests/test_lp_potential.py",
+      "sha256": "b0586961657215395d1a9090a0814dff0059a60859a8192d397fe32632b818f4"
+    },
+    {
+      "path": "tests/test_deadlock_carver.py",
+      "sha256": "24605ed304ac53caec8b67e6a7371329cf8cb8093a6f54da3f319807e8869101"
+    },
+    {
+      "path": "DECISIONS.md",
+      "sha256": "e8b4a7941767a4e5cd6d1b20d31f76ceb4121da7bc9520064fb8fecaf3564936"
+    },
+    {
+      "path": "artifacts/candidates.jsonl",
+      "sha256": "b74576fa5faec90d27922ae11a719d6fef785db54bff9a118d3bf86f784f90d9"
+    },
+    {
+      "path": "runs/20260729T020000Z-E16-verdict-must-gate/verify.py",
+      "sha256": "b1f18be273a0e52a80ae9a94a6cb443477017b8283174c21520a1b9525d4e92a"
+    }
+  ],
+  "files_note": "sha256 of the working tree at write time, LF-normalised on commit by .gitattributes; git show <commit> is the authority if the two ever disagree."
+}

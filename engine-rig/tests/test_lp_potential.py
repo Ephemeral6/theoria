@@ -1,6 +1,7 @@
 """M5 acceptance: pagoda weights that certify unsolvability and bound the search."""
 
 import math
+from dataclasses import replace
 from fractions import Fraction
 
 import pytest
@@ -193,3 +194,124 @@ def test_the_certificate_and_the_heuristic_share_one_weight_vector(solved, graph
         certificate, heuristic, graph, timestamp="2026-07-27T00:00:00Z"
     )
     assert rows[0]["payload"]["weights"] == rows[1]["payload"]["weights"]
+
+
+# ------------------------------------------------- the headline reads the check
+
+#: A certificate that passes all three exact conditions and is still wrong about
+#: the world, because one legal move was never in the list it was checked
+#: against.  `jump(3,2,1)` is dropped; the remaining three are non-increasing
+#: under these weights, so `check_exactly` returns True three times over.  Found
+#: by exhaustive search over integer weights in [-4,4]: with the *complete* move
+#: list there is no such vector, which is the point -- the gap is the shared
+#: premise, not the arithmetic.  See DECISIONS.md D-035, site 1.
+DROPPED_MOVE = "jump(3,2,1)"
+HOLES_WEIGHTS = [-4, 0, -4, -4]
+
+
+def _certificate_missing_one_move(graph):
+    moves = [m for m in moves_from_graph(graph) if m.name() != DROPPED_MOVE]
+    assert len(moves) == 3
+    certificate = lp_potential.Certificate(
+        weights=[Fraction(w) for w in HOLES_WEIGHTS],
+        initial=UNSOLVABLE,
+        goal_states=list(graph["goal_states"]),
+        moves=moves,
+        margin=Fraction(1),
+    )
+    certificate.conditions = lp_potential.check_exactly(certificate)
+    return certificate
+
+
+def test_admissible_is_false_when_the_certificate_fails_its_own_recheck(solved):
+    """The negative sample E16 asks for: `holds=False` must reach the headline.
+
+    `"admissible": True` used to be a literal in the payload, so this certificate
+    -- which fails the exact rational re-check its own admissibility argument
+    rests on -- published itself as admissible anyway.
+    """
+    certificate, heuristic = solved
+    broken = replace(certificate, conditions={
+        "inv_init": True, "inv_closed": False, "goal_break": True,
+    })
+    assert broken.holds is False
+
+    payload = lp_potential.Heuristic(
+        certificate=broken, max_decrease=heuristic.max_decrease
+    ).as_json()
+    assert payload["admissible"] is False
+    assert payload["admissible_basis"]["certificate_holds"] is False
+
+
+def test_an_unchecked_certificate_is_not_admissible(solved):
+    """Empty `conditions` means nobody ran the check -- not that it passed."""
+    certificate, heuristic = solved
+    unchecked = replace(certificate, conditions={})
+    assert unchecked.holds is False
+    payload = lp_potential.Heuristic(
+        certificate=unchecked, max_decrease=heuristic.max_decrease
+    ).as_json()
+    assert payload["admissible"] is False
+
+
+def test_a_counterexample_in_the_check_overrides_a_holding_certificate(graph):
+    """The empirical half can only subtract, and here it has to.
+
+    This certificate `holds` -- all three conditions, exact, over the rationals --
+    and the heuristic built from it says `h = inf` for two states that are one
+    and two moves from the goal.  `h = inf` is a per-state *unsolvability* claim,
+    so the payload's old literal published a false unsolvability claim as
+    admissible.  What went wrong is not the arithmetic: it is that
+    `check_exactly` iterates the move list the producer handed it, so a move
+    missing from that list is unconstrained in the LP and unexamined in the
+    re-check at once.
+    """
+    certificate = _certificate_missing_one_move(graph)
+    assert certificate.holds is True
+    assert certificate.conditions == {
+        "inv_init": True, "inv_closed": True, "goal_break": True,
+    }
+
+    heuristic = lp_potential.heuristic_from(certificate)
+    report = lp_potential.admissibility_report(heuristic, graph)
+    counterexamples = [r for r in report if not r["admissible"]]
+    assert [r["state"] for r in counterexamples] == ["0011", "1101"]
+    assert all(math.isinf(r["h"]) for r in counterexamples)
+    assert [r["true_distance"] for r in counterexamples] == [1, 2]
+
+    payload = heuristic.as_json(report)
+    assert payload["admissible"] is False
+    assert payload["admissible_basis"]["certificate_holds"] is True
+    assert payload["admissible_basis"]["counterexamples"] == counterexamples
+
+    # ...and end to end through the emitter, which is where it reaches an artefact.
+    rows = lp_potential.candidates(certificate, heuristic, graph,
+                                   timestamp="2026-07-27T00:00:00Z")
+    assert validate_rows(rows) == []
+    assert rows[1]["payload"]["admissible"] is False
+
+
+def test_the_headline_and_the_evidence_come_from_one_expression(solved, graph):
+    """No payload may carry `admissible: true` beside a check that disagrees.
+
+    D-033's finding, applied here: two sites computing the same verdict is the
+    defect, so this asserts the invariant over a spread of certificates rather
+    than pinning the implementation.
+    """
+    certificate, heuristic = solved
+    variants = [
+        certificate,
+        _certificate_missing_one_move(graph),
+        replace(certificate, conditions={"inv_init": True, "inv_closed": False,
+                                         "goal_break": True}),
+        replace(certificate, conditions={}),
+    ]
+    seen = set()
+    for variant in variants:
+        h = lp_potential.heuristic_from(variant)
+        report = lp_potential.admissibility_report(h, graph)
+        payload = h.as_json(report)
+        expected = variant.holds and all(r["admissible"] for r in report)
+        assert payload["admissible"] == expected
+        seen.add(payload["admissible"])
+    assert seen == {True, False}, "the spread must exercise both verdicts"

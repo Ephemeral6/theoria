@@ -919,3 +919,166 @@ number proved, which is not the number that reached the planner -- the
 `singleton` guard expresses size-1 theorems only, 8 of 40 on `far7`. The table
 carries both, because a dividend attributed to 40 theorems that eight bought is
 the same class of error as the columns above, one layer up.
+
+---
+
+## D-034 · A verdict that is computed is a verdict that gates
+
+*(Numbered 034 after D-033. E16, `agent/e16-verdict-must-gate`.)*
+
+**Context.** RES-3's dual census walked ~105 judgement points and called 8
+unsafe. The shape it found is not the one the phrase "unverified claim" leads you
+to expect. In every one of the 8, **the check had been written, and it ran, and
+it was right.** What was missing was the `if`. The verdict landed in a sibling
+field of the artefact and the headline field did not read it.
+
+Two instances, both fixed here.
+
+**`lp_potential`'s heuristic payload.** `"admissible": True` was a literal in the
+dict. The genuine check — h against the true shortest path on every state with a
+finite one — was computed by `admissibility_report` and attached *afterwards*, by
+the caller, under `admissibility_check`. So the two could not agree or disagree;
+one was a constant. A `Heuristic` built on a certificate that fails its own exact
+rational re-check published itself as admissible, and so did one whose
+`conditions` were empty because nobody had checked it at all.
+
+**Decision.** `Heuristic.as_json(admissibility_check=None)` takes the check as an
+argument and derives both `admissible` and `admissible_basis` from it; the caller
+no longer bolts the check on afterwards. The licence is `certificate.holds` — the
+exact re-check of `inv_closed` is *literally* the premise the bound
+`h = min_g ceil((pot(s) - pot(g)) / M)` rests on — conjoined with the empirical
+rows, which can only ever subtract, since a sample refutes but does not prove.
+
+**`deadlock_carver`'s emitter.** `carve() -> pruning_report() -> emit()` ran with
+no branch between the second and the third. `PruningReport.same_answer` asks a
+question that can falsify a theorem operationally — *did pruning change the
+instance's answer?* — and its value was serialised as `plan_length_unchanged` and
+published **beside the theorems it had just falsified.** A reader received a
+theorem and a report saying that theorem is unsound, side by side, with nothing
+in the stream saying which one wins.
+
+The gate this installs is **one-directional, and deliberately not more.**
+`same_answer == False` proves unsoundness. `True` proves nothing: an unsound
+theorem cutting only states that lie on other optimal plans of the same length
+moves neither `solved` nor `length`. So this gate withholds what it catches and
+makes no claim about what it passes — the soundness evidence remains the
+exhaustive referee in `tests/`, with the grounding caveat D-035 records against
+it. Writing the gate as though passing it were a clearance would have reproduced
+the defect being fixed, one level up.
+
+**Decision.** `candidates()` reads the verdict before it builds rows. Refuted
+theorems are **withheld** by default; `on_refutation="mark"` emits them carrying
+a machine-readable `refuted: true` and a `refutation` object instead. Either way
+the `plan` account carries `refuted`, `invariants_withheld` and `on_refutation`,
+so a suppressed run is distinguishable from a run that carved nothing — silent
+truncation would read as "all clear", which is the same defect one layer up.
+
+**Why the marker is a field and not a sentence.** The consumer that has to honour
+this is `bench/dividend.py:868`, and it reads fields. A `rendering` string saying
+"but this theorem was refuted" is not a gate; it is a hope about who is reading.
+
+**What is deliberately *not* collapsed.** `same_answer` raises
+`UnfinishedComparison` when either search stopped, and `candidates()` does not
+catch it. Withholding on an unfinished search would file a soundness violation
+against a theorem on the strength of a search that answered nothing; publishing
+would clear it on the same nothing. Three states, three behaviours: no report at
+all leaves `refuted` **absent**, a passed verdict also leaves it absent, and only
+a real refutation writes it. "Nobody asked" and "asked and passed" are both
+distinct from "asked and failed".
+
+**The generalisation.** A computed verdict sitting next to the thing it judges,
+with no branch between them, is *indistinguishable from an uncomputed one* to
+every consumer. The work of checking is wasted precisely when it is most needed.
+So: **the site that publishes a claim is the site that must read its verdict** —
+not a caller upstream, not a reviewer downstream. `tools/run_all.py:152` did
+check `report.same_answer` and raise — but it checked *after* `dc.run(...)` had
+already written the refuted theorems to disk. A gate behind the write is not a
+gate.
+
+---
+
+## D-035 · "Verified" and "verified by something independent" are two claims
+
+*(E16 item 3. The wording task RES-3 filed separately, because this cell is the
+one most easily read as safe.)*
+
+**Context.** RES-3's §4 promised six places that are "verified but not
+independently" and named three; the remaining three were found by walking the
+same question through the other engines. All six are listed below. **None of them
+is a missing check.** Every one has a checker that runs, and most were
+deliberately built not to import the producer — which is real work and really
+does buy something. What none of them buys is what the surrounding prose claimed.
+
+**The distinction.** A checker that re-derives a conclusion from the **same
+premise** the producer used is evidence about the producer's *arithmetic*. It is
+not evidence about the *world*. Independence has to be traced to the premises,
+not to the import graph — two oracles that agree are one piece of evidence when
+they share a premise, and `CROSSCHECK.md:31` had written that sentence down
+before this decision existed.
+
+**The six, with the shared premise named.**
+
+| site | verifier does not import | but shares |
+|---|---|---|
+| `lp_potential` `check_exactly` | the LP | `Certificate.moves`, from `moves_from_graph(graph)` |
+| `ic3_pdr` `check.py` | `pdr` | `System.transitions` |
+| `interop/certificate_export.verify` | — | the producer's own witness list |
+| `zero_space` `verify()` | the elimination | the trajectory the laws were fitted to |
+| `deadlock_carver` referee + `same_answer` | the carver's proof | `ground_actions` / `strip_static` |
+| `fd_adapter` `validate_plan` | `search` | `ground_actions` |
+
+**What follows, concretely.** `check_exactly` iterating `certificate.moves` means
+a move geometry missing from that list is *unconstrained in the LP and unexamined
+in the re-check at once*. This is not hypothetical:
+`tests/test_lp_potential.py` now carries a certificate over three of peg4's four
+moves that passes all three conditions exactly and yields `h = inf` — a per-state
+unsolvability claim — for two states that are one and two moves from the goal.
+Exhaustive search over integer weights in [-4,4] finds **no such vector against
+the complete move list**, which is the cleanest available statement of where the
+soundness actually lives: in the completeness of the enumeration, not in the
+arithmetic.
+
+`zero_space`'s gap is sharp in a different way: a vector in the null space of the
+observed differences is constant on the observed trajectory *by construction*, so
+`verify()` is close to a tautology and its `AssertionError` close to unreachable.
+
+`interop/certificate_export.verify` is the only one exploitable by omission
+rather than by error — it iterates the witnesses the producer chose to list, so a
+document that leaves out an inconvenient move instance passes with an empty
+finding list.
+
+**Decision.** The wording is separated everywhere it appears, and the docstrings
+that claimed more than they had are corrected in this commit rather than
+annotated. Specifically: `validate.py`'s "the only code shared with the planner
+is the parser" was false (`ground_actions` is shared and is not the parser);
+`interop/README.md`'s "recomputes everything from the document's own contents"
+names the defect as though it were the remedy; `zero_space/README.md`'s
+"independent check" is independent of the elimination, not of the evidence; and
+`deadlock_carver/README.md`'s "that referee shares nothing with the proof or with
+the planner" is contradicted by the referee's own construction — while
+`carve.py:139-143` had disclosed the sharing honestly all along, which is why the
+README is the layer that was fixed.
+
+**A correction this forces on E16's own premise.** The work item opens with good
+news: `fd_adapter/__init__.py:140` calls `validate_plan()` unconditionally and
+`validate.py` pointedly does not import `search`, so "the solver returned a plan,
+therefore it is solvable" does not happen here. **The unconditional call is
+true and verified.** The *structural* half is one function weaker than
+advertised: validator and searcher share `ground_actions`, so a wrong add/delete
+effect or a wrongly-admitted instance in the grounder corrupts both identically.
+The claim survives against search bugs, which is what it was aimed at, and does
+not survive against grounder bugs, which it was written as though it covered.
+
+**What is *not* being claimed.** These six are not defects to be repaired by
+making every checker independent; for most of them that is the same work as
+writing the engine twice. `recheck/` is the one place in the rig that pays that
+price in full — it grounds moves from the rule set, refuses a certificate
+carrying its own `transitions`, imports no `engines/`, and adds a second opinion
+(a plain reachability BFS) sharing nothing with the three conditions. The
+decision here is that **everywhere else says what it is**, so `recheck/`'s
+guarantee stays legible as the stronger thing it is.
+
+**A contrast worth keeping.** `cegis_miner` states outright, in both `miner.py:3`
+and its README, that "the ledger *is* the verifier". Its self-checks are circular
+and it says so. That is not a defect — it is the correct behaviour, and what
+separates it from the four sites corrected above is one sentence of prose.

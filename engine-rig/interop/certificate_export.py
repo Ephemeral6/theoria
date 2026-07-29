@@ -50,11 +50,17 @@ def _potential(weights: Sequence[int], state: str) -> int:
 
 def build(certificate: Certificate, graph: Dict[str, Any],
           claim_name: str = "unsolvable") -> Dict[str, Any]:
-    """A self-contained, independently checkable certificate document.
+    """A certificate document carrying the arithmetic for every obligation.
 
-    Every obligation carries its own witnesses, so a checker never has to re-derive
-    anything: the move constraints are listed with both sides evaluated, and the
-    goal-breaking condition is listed per goal state.
+    Every obligation carries its own witnesses -- the move constraints with both
+    sides evaluated, the goal-breaking condition per goal state -- so a checker
+    can redo the sums without an LP solver, and Lean can manipulate integers.
+
+    What the document does not carry is a reason to believe its own move list is
+    complete. The witnesses are whatever `certificate.moves` held; nothing here
+    ties them back to `graph`, which is read only for `n_pos`. A checker that
+    wants closure under the *rules* rather than over a list has to ground the
+    moves itself -- `recheck/verify.py` does, and says why in its docstring.
     """
     weights = to_integer_weights(certificate.weights)
     initial = certificate.initial
@@ -100,10 +106,17 @@ def build(certificate: Certificate, graph: Dict[str, Any],
             "inv_init": {
                 "statement": "potential(initial) <= %d" % bound,
                 "value": bound,
+                # A literal, not a test: `bound` *is* potential(initial), so
+                # this reads "x <= x". It is here for the Lean skeleton's third
+                # slot, and an importer should treat it as shape, not evidence.
                 "holds": True,
             },
             "inv_closed": {
                 "statement": "every legal move has delta <= 0",
+                # An assertion about `certificate.moves`, made by the producer
+                # and re-derived by nobody: the move set is not cross-checked
+                # against `graph` here, and `verify()` below reads this list
+                # rather than regenerating it.
                 "checked_over": "all move instances on the full state space",
                 "n_checked": len(move_obligations),
                 "witnesses": move_obligations,
@@ -124,10 +137,20 @@ def build(certificate: Certificate, graph: Dict[str, Any],
 
 
 def verify(document: Dict[str, Any]) -> List[str]:
-    """Re-check a certificate document from its own contents, in integers.
+    """Re-check a certificate document's arithmetic, in integers.
 
-    An importer should be able to run this without trusting the producer, so it
-    recomputes rather than reading the `holds` flags.
+    Recomputing rather than reading the `holds` flags catches a producer whose
+    sums are wrong -- a mis-scaled weight, a stale `initial_potential`, a goal
+    that no longer breaks the bound. That is worth having, and the tampering
+    tests exercise it.
+
+    It does not catch a producer whose premises are wrong. The move witnesses
+    iterated below are the document's own list, and this function never sees the
+    rule set, so a document that omits an inconvenient move instance returns
+    `[]`. Passing entitles a reader to "the stated obligations are discharged
+    over the stated moves" -- not "the invariant is closed under the rules".
+    `recheck/verify.py` is the checker without that gap: it grounds the move
+    relation from the declared rules and refuses an `obligations` key outright.
     """
     errors: List[str] = []
     weights = document["weights_integer"]
