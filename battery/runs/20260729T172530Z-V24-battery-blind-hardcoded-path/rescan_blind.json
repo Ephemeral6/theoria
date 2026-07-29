@@ -15,6 +15,7 @@
     }
   },
   "files": 12,
+  "files_read": 10,
   "literals_with_digits": {
     "battery/__init__.py": [
       "0.1.0"

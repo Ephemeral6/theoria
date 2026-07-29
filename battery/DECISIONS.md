@@ -375,7 +375,8 @@ worktree has a HEAD and a HEAD moves.
 Blinding happened at `9892d23c` — prereg, poverty certificate and blinding, all
 in one commit, before any attack. The branch then ran on to `0d586b6f`, and
 `520dc5dd` in between added the three defences the attacks had just provoked.
-Rebuilding from the path today produces 5 of 12 files differing from what the
+Rebuilding from the path today produces 5 of the 10 files it reads differing
+from what the
 attackers saw, and puts `unsound(` — recorded in `BLINDING.md` §3 item 8 as a
 **zero-hit** term — into the blind 13 times. Nothing about that failure is
 visible from outside: the tree builds, the attacks run, a verdict comes out.

@@ -21,8 +21,10 @@ That commit is the one that introduced, together, `PREREG_V9.md`, `BLINDING.md`,
 `make_blind.py`, `check.py` and `attack.py` — matching `BLINDING.md` §preamble
 ("写在攻击开始之前，与 `PREREG_V9.md` 同一个 commit").
 
-Between `9892d23c` and the worktree's current HEAD `0d586b6f`, five of the ten
-files in `make_blind.COPY` changed:
+Between `9892d23c` and the worktree's current HEAD `0d586b6f`, **five of the ten
+files read from the source** changed (`COPY`'s 8 plus `check.py` and
+`attack.py`; the two package shims are written empty, not read, so the drift
+denominator is 10 and not the 12 files written):
 
 ```
 $ git diff --stat 9892d23c 0d586b6f -- battery/__init__.py battery/model.py \

@@ -119,8 +119,12 @@ def scan(texts, patterns):
 def main():
     repo = mb.repo_root(ROOT)
     sha, tree = mb.contents_at(mb.BLIND_REF, repo)
+    # `files` counts what is written; `files_read` counts what is read from the
+    # ref.  The two package shims are written empty, so drift is measured
+    # against the second -- 5 of 10, not 5 of 12.
     report = {"pinned_ref": mb.BLIND_REF, "pinned_commit": sha,
-              "python": "%d.%d" % sys.version_info[:2], "files": len(tree)}
+              "python": "%d.%d" % sys.version_info[:2], "files": len(tree),
+              "files_read": len(mb.COPY) + len(mb.PROTOCOL)}
     bad = []
 
     # --- determinism -------------------------------------------------------
@@ -232,7 +236,8 @@ def main():
 def _render(report, bad):
     yield "V9 blinding re-run"
     yield "  pinned ref       %s" % report["pinned_commit"][:12]
-    yield "  files rebuilt    %d" % report["files"]
+    yield "  files rebuilt    %d written (%d read from the ref, 2 empty shims)" % (
+        report["files"], report["files_read"])
     yield "  deterministic    %s" % ("yes" if report["deterministic"] else "NO")
     yield "  scan A (tree)    %s" % ("clean -- no post-attack vocabulary"
                                      if not report["scan_a_violations"]
@@ -247,8 +252,8 @@ def _render(report, bad):
     d = report["drift"]
     if isinstance(d, dict):
         yield "  drift vs the old hardcoded path:"
-        yield "    %d of %d blinded files would have differed" % (
-            len(d["files_differing"]), report["files"])
+        yield "    %d of %d files read from the ref would have differed" % (
+            len(d["files_differing"]), report["files_read"])
         for rel in d["files_differing"]:
             yield "      %s" % rel
         yield "    it would have leaked: %s" % (

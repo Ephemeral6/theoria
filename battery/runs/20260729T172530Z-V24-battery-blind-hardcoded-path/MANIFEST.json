@@ -1,4 +1,5 @@
 {
+  "adversarial_review": "central claim survived; 3 corrections absorbed (drift denominator 10 not 12; --out default inside repo now gitignored + warned; sha-only narrowing declared)",
   "api_calls": 0,
   "base_commit": "580c645d120b81ce12fe6bd0917fe51100e9e873",
   "blind_ref": "9892d23caf72436c8ce8eefaa9ef59bfc2b03cc8",
@@ -7,11 +8,11 @@
   "files": [
     {
       "path": "battery/audit/v9/make_blind.py",
-      "sha256": "49f63673c996db9f960951349af70823d3e3d0ec6135c5599461460dfd3b43ab"
+      "sha256": "bd9a9fcead5cc07336f3a12992228a37be8f39fabd7553b1f3db3e614034e411"
     },
     {
       "path": "battery/audit/v9/BLIND_DIGESTS.json",
-      "sha256": "3d3f0bfdde31fc981dc58f38cbea32e2831f2005be99064e66a9f1bfdbb354b0"
+      "sha256": "6c57412f6311abf1a99f508e078caefdfc31287ea062f66b7b2cc6265fb256ba"
     },
     {
       "path": "battery/tests/test_v9_blinding.py",
@@ -19,31 +20,39 @@
     },
     {
       "path": "battery/BLINDING.md",
-      "sha256": "e1762bc1d3e945c523bfec5995dedffd8c1667768072ec6f7823ee3be95f2e3e"
+      "sha256": "756cd668b538c8336e683e20b86778d5aa828247bc9aa8f81162eeccc8407770"
     },
     {
       "path": "battery/DECISIONS.md",
-      "sha256": "7eef90b646d79f997d82d9ae4a0b59409a36f0819f2d34e0445ae0c808c2dbe2"
+      "sha256": "05e73be716746d35826cb04d3d6d19eda63a55fd6d61770271f10b2a8b020ae3"
     },
     {
       "path": "battery/STATUS.md",
-      "sha256": "e5c3987ded86e32411c96cd334c30b85cee10eeddc137f18c65b470070bca7f7"
+      "sha256": "c31edf7c070cc8263f5278533c39b701eaee61f7a953a74efd47a6ff7a6feca0"
+    },
+    {
+      "path": "battery/.gitignore",
+      "sha256": "e6afc029c058ae1fd2087c32b601a88ea055b0a912db9b6ae6b43a1c597ded01"
     },
     {
       "path": "battery/runs/20260729T172530Z-V24-battery-blind-hardcoded-path/rescan_blind.py",
-      "sha256": "3cfbfb12cea07d3ad13491f9f415885d61e6376320f99258e9ca9046eebfbc23"
+      "sha256": "90abd0ce078a8d384f5f3aba4e2f860b2885658fc8a350d89f6a85d5045292dc"
     },
     {
       "path": "battery/runs/20260729T172530Z-V24-battery-blind-hardcoded-path/rescan_blind.json",
-      "sha256": "0156c9fd1823858add14213f92f24ce3473459f7fbd1d2016cf6acf83384a353"
+      "sha256": "ee942ded40870bec5fe9bdb7c5a9a19e8873cdec376a0efa68f64b0bae4a7e9a"
     },
     {
       "path": "battery/runs/20260729T172530Z-V24-battery-blind-hardcoded-path/RUN_STATE.md",
-      "sha256": "9572074ce40e6c6117477622bd03f6a99a8d045deeadd8ae92ce17d7618e293e"
+      "sha256": "3d6b5e442ed40eafd45265930157efac7401b143863b3a6c5f51fe9164eede9e"
     },
     {
       "path": "battery/runs/20260729T172530Z-V24-battery-blind-hardcoded-path/FINDINGS.md",
-      "sha256": "d7ec6762c17c6d51dd812fb711cb90e053cff22c18dd3434a9c7df6ac99224c5"
+      "sha256": "f0607bb8a3eb0ab4fdf17b04cf712f7f60213682372ccb6a6477e2860e8ed200"
+    },
+    {
+      "path": "monitor/inbox/20260729T172530Z-W-1682-v9-worktree-now-deletable.md",
+      "sha256": "f0371ad73d60916a02c820727eb5a037d552b5653fb17b9be4c544cac6c7ffbf"
     }
   ],
   "prompt_id": "V24-battery-blind-hardcoded-path",

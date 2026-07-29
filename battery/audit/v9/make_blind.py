@@ -268,6 +268,20 @@ def main(argv=None):
     if not args.names:
         ap.error("no attacker names given; nothing to build")
 
+    # BLINDING.md §1: the attackers' copies lived outside the repository, so an
+    # attacker session could not wander out of its tree and into `gaming.py`.
+    # Building inside the repo is fine for checking the digests -- the tests do
+    # exactly that -- but handing an attacker a directory under the work tree
+    # would quietly undo the isolation §1 claims.  Warn rather than refuse: the
+    # legitimate in-repo use is real, and `.gitignore` already stops the output
+    # from being committed by accident.
+    out = os.path.abspath(args.out)
+    if out.startswith(os.path.abspath(repo) + os.sep):
+        print("WARNING: --out is inside the work tree (%s). BLINDING.md section 1 "
+              "puts the attackers' trees outside the repository; if these are for "
+              "an attacker rather than a digest check, point --out elsewhere."
+              % os.path.relpath(out, repo).replace(os.sep, "/"), file=sys.stderr)
+
     trees = {}
     for name in args.names:
         trees[name] = build(os.path.join(args.out, name), sha, repo)
