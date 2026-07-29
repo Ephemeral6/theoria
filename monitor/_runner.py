@@ -20,17 +20,74 @@ ROOT = os.path.dirname(HERE)
 EXITS = os.path.join(HERE, "dispatch-logs", "exits.json")
 
 
+#: 写账本失败时留一行的地方。见 S28：`except Exception: pass` 是对的
+#: （观测不该带走会话），但它不该**连失败本身也一起吞掉**。
+EXITS_FAIL = os.path.join(HERE, "dispatch-logs", "exits-write-failures.log")
+
+
+def _note_failure(pid_str, problem):
+    """最后一道：连这一步也失败就真的只能放弃了。"""
+    try:
+        stamp = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        with open(EXITS_FAIL, "a", encoding="utf-8", newline="\n") as fh:
+            fh.write("%s %s %s\n" % (stamp, pid_str, problem))
+    except Exception:
+        pass
+
+
+def load_exits(raw):
+    """把账本文本解析成 (数据, 说明)。**解析不出来不返回空账本。**
+
+    返回 `(None, 原因)` 表示救不回来——调用方必须据此**隔离**旧文件而不是覆盖它，
+    因为一整天的死因史比当下这一条记录值钱得多。
+    `(数据, 原因)` 且原因非空表示只救回了前缀。
+    """
+    try:
+        data = json.loads(raw)
+        return (data, None) if isinstance(data, dict) else (None, "not an object")
+    except Exception as exc:
+        first = "%s: %s" % (type(exc).__name__, exc)
+    try:
+        # 尾部被并发写者截断/追加过：前缀往往是一个完整的对象。
+        data, end = json.JSONDecoder().raw_decode(raw)
+        if isinstance(data, dict):
+            return data, ("recovered valid prefix, discarded %d trailing bytes "
+                          "(%s)" % (len(raw) - end, first))
+    except Exception:
+        pass
+    return None, first
+
+
 def record_exit(pid_str, info):
+    problem = None
     try:
         data = {}
         if os.path.exists(EXITS):
-            data = json.load(open(EXITS, encoding="utf-8"))
+            raw = open(EXITS, encoding="utf-8").read()
+            data, problem = load_exits(raw)
+            if data is None:
+                # 救不回来就隔离，别覆盖：宁可丢这一条，不丢一整天的死因史。
+                quarantine = "%s.corrupt-%s" % (
+                    EXITS, time.strftime("%Y%m%dT%H%M%SZ", time.gmtime()))
+                os.replace(EXITS, quarantine)
+                problem = "%s; quarantined as %s" % (
+                    problem, os.path.basename(quarantine))
+                data = {}
         data.setdefault(pid_str, []).append(info)
-        tmp = EXITS + ".tmp"
-        json.dump(data, open(tmp, "w", encoding="utf-8"), indent=2)
+        # **每个写者一个临时名。** 旧代码所有会话共用 `exits.json.tmp`，
+        # 于是两个同时退出的会话各自以 "w" 打开同一个路径、在各自的偏移上写，
+        # 产出「一个完整对象 + 另一个对象的尾巴」。2026-07-29T15:59:01Z
+        # 真的发生了一次，此后 4.9 小时里 62 个会话退出、一条也没记上——
+        # 因为解析失败被上面那句 `except: pass` 吞了。文件头写着
+        # "own file, no registry race"，而这个 race 是它和自己的。
+        tmp = "%s.%d.tmp" % (EXITS, os.getpid())
+        with open(tmp, "w", encoding="utf-8") as fh:
+            json.dump(data, fh, indent=2)
         os.replace(tmp, EXITS)
-    except Exception:
-        pass  # observability must never take the session down with it
+    except Exception as exc:
+        problem = "%s: %s" % (type(exc).__name__, exc)
+    if problem:
+        _note_failure(pid_str, problem)
 
 
 def resolve(pid_str):
@@ -96,6 +153,25 @@ def main():
         header = "你的工人号是 `%s`（board.py 的所有命令都用它）。\n\n" % pid_str
         text = header + text
     claude = shutil.which("claude")
+    if not claude:
+        # `dispatch.py` 早就有这道守卫，这里一直没有。缺 CLI 时旧路径会一路走到
+        # `subprocess.run([None, ...])` 抛 TypeError，被下面那个兜底的
+        # `except Exception` 收成一句 "runner exception: TypeError(...)"
+        # 加 `code=-1`——**一次环境缺失被记成了一次普通的会话失败**，
+        # 而这两件事该由完全不同的人去修。给它自己的名字和自己的退出码。
+        msg = "claude CLI not on PATH (shutil.which returned None)"
+        with open(log_path, "a", encoding="utf-8") as fh:
+            fh.write("=== runner abort %s: %s ===\n" % (pid_str, msg))
+        record_exit(pid_str, {"code": 127, "seconds": 0,
+                              "log": os.path.basename(log_path),
+                              "error": msg,
+                              "ended": time.strftime("%Y-%m-%dT%H:%M:%SZ",
+                                                     time.gmtime())})
+        print(msg, file=sys.stderr)
+        # `sys.exit`, not `return`: `__main__` calls `main()` and throws the
+        # return value away, so a `return 127` would have exited 0 -- the same
+        # class of bug this item is about, one level down.
+        sys.exit(127)
 
     # 账号在**会话真正启动的那一刻**选，不在建计划任务的时候选：
     # 两者之间可能隔了很久，而中间那个窗口可能已经关了。

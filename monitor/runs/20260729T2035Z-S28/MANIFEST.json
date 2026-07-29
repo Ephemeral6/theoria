@@ -1,0 +1,12 @@
+{
+  "prompt_id": "S28-no-third-value-in-the-monitor",
+  "branch": "agent/s28-no-third-value-in-the-monitor",
+  "base_commit": "5a997ef897c7871b54e66fe42be33ba27ef5483d",
+  "utc": "2026-07-29T20:35:06Z",
+  "owner": "RES-4",
+  "lane": "infra",
+  "territory": "monitor",
+  "api_cost": "zero -- no LLM calls, no game API, no network",
+  "sealed_pile_contact": "none",
+  "scope": "the 11 numbered remaining findings of the 2026-07-29 adversarial survey"
+}
