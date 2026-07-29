@@ -1,0 +1,60 @@
+{
+  "prompt_id": "P17-P17-bare-filename-citations",
+  "branch": "agent/p17-bare-filename-citations",
+  "base_commit": "bb06b8d9969726997c4e6968b121d2026f44135f",
+  "utc": "2026-07-29T14:35:00Z",
+  "agent": "RES-2",
+  "lane": "paper",
+  "territory": "papers",
+  "api_calls": 0,
+  "sealed_pile_contact": "none",
+  "census": {
+    "occurrences": 110,
+    "distinct": 34,
+    "ambiguous_tokens": 13,
+    "ambiguous_occurrences": 19
+  },
+  "files": [
+    {
+      "path": "papers/phase1-workshop/verify_paper.py",
+      "sha256": "373c0a2427b6bde7c7c3fe4cd4d15f82225aef7c3431b56391a2ea86b694a54c"
+    },
+    {
+      "path": "papers/phase1-workshop/test_bare_gate.py",
+      "sha256": "3b78942d6dd2abe02dd213df5943bef2387f7c111afd4ff627c7ed1eb28015ed"
+    },
+    {
+      "path": "papers/phase1-workshop/PAPER.md",
+      "sha256": "5439b03913a82fade500d18070569d2cff11201f11c3e1ca6215fd8ef7ee9ff5"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260729T143500Z-P17-bare-filename-citations/census.py",
+      "sha256": "9de74b0b5b526c86d972f248e0a321b8a7936a77f9597ab870f2b97758ce9a9a"
+    },
+    {
+      "path": "papers/phase1-workshop/runs/20260729T143500Z-P17-bare-filename-citations/mutation_check.py",
+      "sha256": "f5242f3774f418e2c2a927d6e7670860c614b07394a629d393c778460bf2774b"
+    }
+  ],
+  "result": {
+    "verify_paper": "PASS 6/6",
+    "test_bare_gate": "20 passed",
+    "test_uncited_gate": "62 passed",
+    "mutation_check_F": "12/12 caught",
+    "mutation_check_E": "21/21 caught",
+    "bare_citations": 93,
+    "ambiguous": 0,
+    "ruled": 4,
+    "stale": 0,
+    "path_citations": 220,
+    "broken_paths": 0,
+    "triage": {
+      "resolved": 14,
+      "generic_ruled": 4,
+      "generic_retired_to_citation": 1,
+      "unresolved": 0
+    },
+    "adversarial_passes": 1,
+    "own_judgements_overturned": 3
+  }
+}
