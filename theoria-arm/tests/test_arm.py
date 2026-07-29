@@ -693,6 +693,33 @@ def test_the_shell_turns_end_to_end_against_the_mock(tmp_path):
 
     game = "g50t-5849a774"
     slug = "pytest-" + os.path.basename(str(tmp_path))
+    # The ledger goes in `tmp_path`, which this test owns, rather than in the
+    # run directory, which it does not.
+    #
+    # It used to land in `runs/<slug>/ledger.jsonl`, and because `tmp_path`'s
+    # basename is stable across pytest invocations, every run of this test on
+    # this machine appended to one file forever. That was deliberate -- the old
+    # comment here called cross-run accumulation "the property being relied on"
+    # -- and it made the assertion below a claim about an artefact with no
+    # owner, unbounded lifetime, and no exclusivity.
+    #
+    # It broke exactly as that description predicts. On 2026-07-28T23:39:49Z two
+    # pytest processes ran this test concurrently on one checkout; `Ledger`
+    # seeds `seq` once in `__init__` under an in-process lock only, so the
+    # second writer resumed from a tail the first had already moved past. Seven
+    # `seq` values were issued twice and the `prev` chain forked. No record was
+    # lost, but `verify_chain` and `validate_ledger` both go FAIL, and the file
+    # is gitignored and append-only -- so the failure was permanent and no code
+    # change could clear it. The suite was green exactly once per clean checkout
+    # and red on this machine forever after.
+    #
+    # Giving the test its own file makes the whole-file assertion true by
+    # construction and removes the poison pill. It does NOT fix the writer:
+    # `Ledger` still cannot be shared by two processes, which is a `proxy/`
+    # defect and is filed there. Cross-run continuation on a shared file is a
+    # ledger property and is tested in `proxy/tests/test_ledger.py`, over a file
+    # that test owns.
+    ledger_path = str(tmp_path / "ledger.jsonl")
 
     def factory(env_base, run):
         return TheoriaArm(env_base=env_base, run=run, game_id=game,
@@ -700,17 +727,16 @@ def test_the_shell_turns_end_to_end_against_the_mock(tmp_path):
 
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
         summary = play(game, slug, factory, env_upstream=mock.base_url,
-                       env_key=DEFAULT_KEY, require_key=False)
+                       env_key=DEFAULT_KEY, require_key=False,
+                       ledger_path=ledger_path)
 
     assert summary["budget"]["actions_ok"] == 6
     assert summary["model_calls"] == 0                 # offline: zero calls
     assert summary["scorecard"]["total_actions"] == 6
 
-    run_dir = os.path.join(ARM, "runs", slug)
-    everything = read_ledger(os.path.join(run_dir, "ledger.jsonl"))
+    everything = read_ledger(ledger_path)
     # LEDGER_FORMAT.md §1: one file holds many runs, `run_id` partitions it and
-    # `seq` orders it. The file is append-only, so re-running this test adds a
-    # run rather than replacing one -- which is the property being relied on.
+    # `seq` orders it.
     records = [r for r in everything if r["run_id"] == summary["run_id"]]
     events = [r["event"] for r in records]
     assert events[0] == "run_start" and events[-1] == "run_end"
@@ -742,7 +768,8 @@ def test_the_scorecard_action_count_matches_the_ledgers_successes(tmp_path):
 
     with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
         summary = play(game, slug, factory, env_upstream=mock.base_url,
-                       env_key=DEFAULT_KEY, require_key=False)
+                       env_key=DEFAULT_KEY, require_key=False,
+                       ledger_path=str(tmp_path / "ledger.jsonl"))
     assert summary["scorecard"]["total_actions"] == summary["budget"]["actions_ok"]
 
 
@@ -987,3 +1014,103 @@ def test_a_manual_without_a_declared_ambiguity_type_files_crashes_as_crashes(
         "a crash was filed as an ambiguity -- a finding about the world")
     assert report["pairs_checked"] <= report["pairs_nominal"]
     assert report["ok"] is False
+
+
+def test_the_arms_desk_is_armed_against_the_game_id(tmp_path):
+    """The wiring, not the mechanism.
+
+    `test_desk_gate.py` proves `ModelDesk` refuses a prompt carrying the game
+    id. That is worth nothing if `inner/loop.py` builds the desk without arming
+    it, which is exactly the kind of gap that let the rule hold "by omission"
+    in the first place. So: build the arm the way `play()` does and look at the
+    desk it actually made.
+
+    Both spellings must be present. The stem is the half that leaks -- it is
+    what a run slug embeds and therefore what an absolute path in an engine
+    traceback carries into the prompt.
+    """
+    from inner.loop import TheoriaArm                   # noqa: PLC0415
+    from proxy.ledger import Ledger, RunLedger          # noqa: PLC0415
+
+    class _Run:
+        def __init__(self, d):
+            self.dir = str(d)
+            self.run_id = "r-wiring"
+            self.run = RunLedger(Ledger(str(d / "l.jsonl")), "r-wiring",
+                                 "theoria", game_id="g50t-5849a774")
+            self.spend_binding = None
+
+    arm = TheoriaArm(env_base="http://127.0.0.1:1", run=_Run(tmp_path),
+                     game_id="g50t-5849a774", budget_actions=1, offline=True)
+
+    assert "g50t-5849a774" in arm.desk.forbid_in_prompt
+    assert "g50t" in arm.desk.forbid_in_prompt
+
+
+def test_a_campaign_leg_slug_carries_no_game(tmp_path):
+    """The other half of the same rule, at the source.
+
+    The guard is a backstop. The fix is that the id never enters a path, so it
+    cannot be picked up by a traceback, a compiler error or a Lean diagnostic
+    that this arm has not thought of.
+    """
+    from harness import campaign as camp                # noqa: PLC0415
+
+    c = camp.Campaign(prompt_id="A3-campaign-devpile", out_dir=str(tmp_path),
+                      games=["g50t-5849a774"])
+    slug = c._leg_slug("g50t-5849a774", 1)
+    assert "g50t" not in slug
+    assert "5849a774" not in slug
+    assert slug.endswith("-leg01")
+
+
+def test_an_anonymity_breach_ends_the_run_instead_of_being_filed_as_a_desk_failure(
+        tmp_path):
+    """The defect this fix introduced, caught before it shipped.
+
+    `_main_loop` wraps theorize in `except Exception` so a desk that times out
+    or returns junk does not end the run: the manual stays, the surprises stay
+    pending, and the turn falls through to gathering more evidence. That is
+    right for the failures the loop can recover from by trying again.
+
+    `AnonymityBreach` is not one of them. Swallowed by that handler it would be
+    recorded as "the desk failed", the leg would keep playing, and the rest of
+    the budget would be spent on a run already inadmissible under
+    `Theoria.md:353`. The breach has to reach the caller, exactly as
+    `CostCeilingReached` does.
+
+    Driven through the real loop rather than asserted against the source: the
+    whole point is which handler catches it, and reading the file cannot tell
+    you that.
+    """
+    from harness.modelcall import AnonymityBreach       # noqa: PLC0415
+    from harness.run import play                        # noqa: PLC0415
+    from inner.loop import TheoriaArm                   # noqa: PLC0415
+    from proxy.mock.arc_mock import DEFAULT_KEY, MockArc    # noqa: PLC0415
+
+    game = "g50t-5849a774"
+    seen = {}
+
+    def factory(env_base, run):
+        arm = TheoriaArm(env_base=env_base, run=run, game_id=game,
+                         budget_actions=8, offline=True)
+
+        def boom(*a, **kw):
+            seen["called"] = seen.get("called", 0) + 1
+            raise AnonymityBreach("the prompt carries 'g50t'")
+
+        arm.desk.call = boom
+        # Force theorize to be reached: offline skips it, so re-arm the flag
+        # the loop consults and give it a surprise to act on.
+        arm.offline = False
+        arm.register.fire("replay_mismatch", "forced, so theorize is reached")
+        return arm
+
+    with MockArc(api_key=DEFAULT_KEY, games=[game]) as mock:
+        with pytest.raises(AnonymityBreach):
+            play(game, "pytest-anon-" + os.path.basename(str(tmp_path)),
+                 factory, env_upstream=mock.base_url, env_key=DEFAULT_KEY,
+                 require_key=False,
+                 ledger_path=str(tmp_path / "ledger.jsonl"))
+
+    assert seen.get("called"), "the desk was never reached; the test proved nothing"

@@ -35,6 +35,8 @@ if __package__ in (None, ""):
 
 import _bootstrap                                     # noqa: F401  (sys.path)
 
+from harness.modelcall import call_field
+
 from proxy.ledger import read_ledger
 
 
@@ -264,8 +266,8 @@ def constraint_8(records: List[Dict[str, Any]], run_dir: str) -> Dict[str, Any]:
     calls = [r for r in records if r.get("event") == "model_call"]
     beats: Dict[str, int] = {}
     for record in calls:
-        beats[record.get("beat") or "unknown"] = \
-            beats.get(record.get("beat") or "unknown", 0) + 1
+        beat = call_field(record, "beat") or "unknown"
+        beats[beat] = beats.get(beat, 0) + 1
     illegal = {b: n for b, n in beats.items()
                if b not in ("theorize", "probe_design")}
 
@@ -316,8 +318,8 @@ def cost_curve(records: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         out.append({
             "call_idx": record.get("call_idx"),
             "step_idx": record.get("step_idx"),
-            "beat": record.get("beat"),
-            "label": record.get("label"),
+            "beat": call_field(record, "beat"),
+            "label": call_field(record, "label"),
             "model": record.get("model"),
             "usd": (response.get("total_cost_usd")
                     if isinstance(response, dict) else None),
@@ -327,11 +329,733 @@ def cost_curve(records: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return out
 
 
+# ---------------------------------------------------------------------------
+# The turn series: the join nobody was performing.
+#
+# Three writers record the three quantities figure 2 ("bill shape") needs, and
+# none of them shares an index with the others:
+#
+#   * `harness/modelcall.py` writes one `model_call` per billed invocation,
+#     keyed by `call_idx` and stamped with `step_idx`;
+#   * `inner/loop.py` appends one record per turn to `turns.json`, keyed by
+#     `turn` and carrying `actions_before` (= `budget.actions_ok`);
+#   * `inner/surprise.py` writes one line per surprise to `surprises.jsonl`,
+#     stamped with a *frame* index (often `None`) and a wall-clock `ts`.
+#
+# `turn_series()` is the join. What follows is the reasoning it rests on,
+# written down because a join that is only in someone's head is a join that
+# will be silently wrong later.
+#
+# **The bridge between the two integer indexes is arithmetic and exact.**
+# `loop.py` passes `step_idx=len(self.store.steps)` into every theorize call,
+# and `FrameStore` gains exactly one step per `arc.act()` -- successful or not,
+# RESET included, because `_record` runs whatever the status was.
+# `harness/budget.py` counts those same commands into three disjoint
+# counters. Therefore, at any instant:
+#
+#     len(store.steps) == resets + actions_ok + actions_failed
+#
+# and since `record["actions_before"]` is `budget.actions_ok` sampled at the
+# top of the turn, a turn's theorize calls carry
+#
+#     step_idx == actions_before + resets_so_far + actions_failed_so_far
+#
+# `resets_so_far` is constant through the main loop (RESET happens once, in
+# `play()`, before it). `actions_failed_so_far` is *not* recorded per turn, so
+# the identity is only closed-form when a run failed no action at all. That is
+# why the arithmetic bridge is used as a **check** and not as the allocator.
+#
+# **The allocator is structural.** `inner/theorize.py` labels its calls
+# `"round%d" % (attempt + 1)`, and that counter restarts inside every
+# `theorize.run()`. So a call labelled `round1` is the first billed attempt of
+# a fresh theorize *invocation*, and one invocation is exactly one increment of
+# `record["theorize_rounds"]`. Segmenting the call list at each `round1`
+# recovers the invocations; handing them to turns in order, `theorize_rounds`
+# at a time, recovers the turns -- using two fields written by two different
+# modules that agree only if the join is right.
+#
+# **Within a turn `step_idx` cannot move.** `_theorize_and_certify` sends no
+# ARC command between rounds; certify only replays. And **between turns it
+# must move**, because every main-loop turn ends in `_commit` or
+# `_probe_or_explore` and both send at least one command, which `_record`
+# counts even when it fails. Constant-within / increasing-between is therefore
+# a property the join must exhibit, and it is asserted rather than assumed.
+#
+# **Surprises join by time, not by index.** A surprise's own `step_idx` is a
+# frame ordinal (`None` for render mismatches), so it cannot address a turn.
+# But every surprise is stamped when it fires, and turns are contiguous
+# intervals of wall clock, so containment decides it. The one weakness is
+# resolution: `Surprise.ts` is truncated to the second while ledger stamps
+# carry milliseconds, so a surprise landing inside a second that straddles a
+# turn boundary is genuinely ambiguous. Those are counted and reported rather
+# than assigned quietly.
+# ---------------------------------------------------------------------------
+
+#: The seven kinds, imported rather than re-listed. `inner/surprise.py` holds
+#: the position that a zero is a measurement and not an absence, and every row
+#: this module emits carries all seven keys for the same reason.
+try:
+    from inner.surprise import COMPUTATIONAL, EMPIRICAL, KINDS
+except Exception:                                      # noqa: BLE001
+    EMPIRICAL = ("replay_mismatch", "render_mismatch", "proof_failure",
+                 "probe_refutation", "execution_mismatch")
+    COMPUTATIONAL = ("search_timeout", "heuristic_miss")
+    KINDS = EMPIRICAL + COMPUTATIONAL
+
+#: `inner/loop.py`'s ceiling on theorize invocations per turn. Imported when it
+#: can be (a stale copy here would silently weaken the structural check) and
+#: defaulted otherwise; which of the two happened is recorded in the join block.
+_MAX_THEORIZE_SOURCE = "inner.loop.MAX_THEORIZE_PER_TURN"
+try:
+    from inner.loop import MAX_THEORIZE_PER_TURN
+except Exception:                                      # noqa: BLE001
+    MAX_THEORIZE_PER_TURN = 2
+    _MAX_THEORIZE_SOURCE = "fallback (inner.loop not importable)"
+
+#: `battery/metrics/economy.py`'s constants, mirrored so this module can emit
+#: the metric's input and its own reading of it without importing the battery.
+FRONTLOAD_K = 0.25
+MIN_TURNS_FOR_SHAPE = 8
+
+
+def _zero_counts() -> Dict[str, int]:
+    """All seven kinds at zero. Never a partial dict, never an empty one."""
+    return {kind: 0 for kind in KINDS}
+
+
+def _sha256_file(path: str):
+    import hashlib                                     # noqa: PLC0415
+    try:
+        with open(path, "rb") as fh:
+            return hashlib.sha256(fh.read()).hexdigest()
+    except OSError:
+        return None
+
+
+def _read_json(path: str):
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return json.load(fh)
+    except (OSError, ValueError):
+        return None
+
+
+def _read_jsonl(path: str) -> List[Dict[str, Any]]:
+    try:
+        with open(path, encoding="utf-8") as fh:
+            return [json.loads(line) for line in fh if line.strip()]
+    except (OSError, ValueError):
+        return []
+
+
+def _epoch(stamp: Optional[str]) -> Optional[float]:
+    """ISO8601 `...Z` -> epoch seconds. Both resolutions the arm writes."""
+    if not stamp or not isinstance(stamp, str):
+        return None
+    from datetime import datetime                      # noqa: PLC0415
+    try:
+        return datetime.fromisoformat(stamp.replace("Z", "+00:00")).timestamp()
+    except ValueError:
+        return None
+
+
+def _call_usd(record: Dict[str, Any]) -> float:
+    response = record.get("response") or {}
+    if isinstance(response, dict):
+        return float(response.get("total_cost_usd") or 0.0)
+    return 0.0
+
+
+def _invocations(calls: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
+    """Segment billed calls into desk *invocations*.
+
+    A new invocation starts at every `round1` label -- `inner/theorize.py`
+    restarts its attempt counter inside each `theorize.run()` -- and also
+    whenever the beat or the step index moves, which no retry of one
+    invocation can do.
+    """
+    out: List[Dict[str, Any]] = []
+    for record in calls:
+        label = call_field(record, "label") or ""
+        fresh = (
+            not out
+            or label in ("", "round1")
+            or record.get("step_idx") != out[-1]["step_idx"]
+            or call_field(record, "beat") != out[-1]["beat"])
+        if fresh:
+            out.append({"beat": call_field(record, "beat"),
+                        "step_idx": record.get("step_idx"),
+                        "calls": [record]})
+        else:
+            out[-1]["calls"].append(record)
+    for inv in out:
+        inv["usd"] = sum(_call_usd(c) for c in inv["calls"])
+        inv["call_idx"] = [c.get("call_idx") for c in inv["calls"]]
+        first = inv["calls"][0]
+        end = _epoch(first.get("ts"))
+        elapsed = (first.get("http") or {}).get("elapsed_ms")
+        inv["started_at"] = (end - (float(elapsed) / 1000.0)
+                             if end is not None and elapsed else end)
+        inv["ended_at"] = _epoch(inv["calls"][-1].get("ts"))
+    return out
+
+
 def _histogram(values) -> Dict[str, int]:
     out: Dict[str, int] = {}
     for value in values:
         out[str(value)] = out.get(str(value), 0) + 1
     return out
+
+
+def _turn_spine(turns_json, invocations, budget) -> Dict[str, Any]:
+    """Decide what the turns were, and say how confident that is.
+
+    Two modes, and the difference between them is not cosmetic.
+
+    * `turns.json` present: `inner/loop.py` itself recorded the turns, so the
+      spine is read rather than inferred and the invocations are dealt out
+      `theorize_rounds` at a time.
+    * `turns.json` absent -- which is what a run killed before `_save_all()`
+      looks like, including the only live run this arm has -- the spine is
+      reconstructed from the step index. That is exact **only** where the step
+      index advances by one between consecutive billed turns: a gap of *k*
+      could equally be one turn that committed a *k*-step plan or *k-1* turns
+      whose theorize the evidence gate skipped. Those two readings are not
+      distinguishable from the ledger and the ambiguity is reported, not
+      resolved by preference.
+    """
+    checks: List[Dict[str, Any]] = []
+    theorize = [i for i in invocations if i["beat"] == "theorize"]
+
+    # -- the structural invariants, checked before anything is allocated ----
+    by_step: Dict[Any, int] = {}
+    for inv in theorize:
+        by_step[inv["step_idx"]] = by_step.get(inv["step_idx"], 0) + 1
+    over = {s: n for s, n in by_step.items() if n > MAX_THEORIZE_PER_TURN}
+    checks.append({
+        "check": "theorize invocations per step index <= MAX_THEORIZE_PER_TURN",
+        "max_theorize_per_turn": MAX_THEORIZE_PER_TURN,
+        "constant_source": _MAX_THEORIZE_SOURCE,
+        "violations": {str(k): v for k, v in sorted(over.items(), key=str)},
+        "ok": not over})
+    seen = [i["step_idx"] for i in theorize if i["step_idx"] is not None]
+    monotone = all(a <= b for a, b in zip(seen, seen[1:]))
+    checks.append({"check": "step_idx never decreases across billed calls",
+                   "ok": bool(monotone)})
+
+    if turns_json:
+        rows: List[Dict[str, Any]] = []
+        queue = list(theorize)
+        for record in turns_json:
+            want = int(record.get("theorize_rounds") or 0)
+            taken, queue = queue[:want], queue[want:]
+            steps = {i["step_idx"] for i in taken}
+            if len(steps) > 1:
+                checks.append({
+                    "check": "step_idx constant within turn %s"
+                             % record.get("turn"),
+                    "ok": False, "saw": sorted(steps, key=str)})
+            rows.append({"turn": record.get("turn"),
+                         "actions_before": record.get("actions_before"),
+                         "elapsed_s": record.get("elapsed_s"),
+                         "theorize_rounds": want,
+                         "step_idx": (sorted(steps, key=str)[0] if steps
+                                      else None),
+                         "invocations": taken,
+                         "from": "turns.json"})
+        checks.append({
+            "check": "every billed theorize invocation was claimed by a turn",
+            "ok": not queue, "unclaimed": [i["call_idx"] for i in queue]})
+
+        # The arithmetic bridge, usable only when nothing failed: without a
+        # per-turn `actions_failed` the offset between the two indexes is not
+        # closed-form. Reported either way so a reader can see which.
+        failed = int((budget or {}).get("actions_failed") or 0)
+        resets = int((budget or {}).get("resets") or 0)
+        if failed == 0:
+            bad = [r for r in rows
+                   if r["step_idx"] is not None
+                   and r["actions_before"] is not None
+                   and r["step_idx"] != r["actions_before"] + resets]
+            checks.append({
+                "check": "step_idx == actions_before + resets (run failed no "
+                         "action, so the identity is closed-form)",
+                "resets": resets, "ok": not bad,
+                "offenders": [r["turn"] for r in bad]})
+        else:
+            checks.append({
+                "check": "step_idx == actions_before + resets + "
+                         "actions_failed_so_far",
+                "ok": None,
+                "reason": "the run failed %d action(s) and no turn record "
+                          "carries a running failed-action count, so the "
+                          "offset is not closed-form per turn. The structural "
+                          "allocation stands on its own; this cross-check "
+                          "cannot be run." % failed})
+        confidence = ("exact" if all(c.get("ok") is not False for c in checks)
+                      else "degraded")
+        return {"rows": rows, "checks": checks, "join_confidence": confidence,
+                "spine": "turns.json"}
+
+    # -- reconstruction ----------------------------------------------------
+    groups: List[Dict[str, Any]] = []
+    for inv in invocations:
+        if groups and inv["step_idx"] == groups[-1]["step_idx"]:
+            groups[-1]["invocations"].append(inv)
+        else:
+            groups.append({"step_idx": inv["step_idx"], "invocations": [inv]})
+
+    resets = int((budget or {}).get("resets") or 0)
+    gaps: List[Dict[str, Any]] = []
+    for before, after in zip(groups, groups[1:]):
+        if before["step_idx"] is None or after["step_idx"] is None:
+            continue
+        gap = after["step_idx"] - before["step_idx"]
+        if gap != 1:
+            gaps.append({"between_step_idx": [before["step_idx"],
+                                              after["step_idx"]],
+                         "store_steps_between": gap,
+                         "readings": "one turn committing %d actions, or up to "
+                                     "%d turn(s) whose theorize the evidence "
+                                     "gate skipped" % (gap, max(gap - 1, 0))})
+
+    # The tail: store steps recorded after the last billed turn's theorize.
+    total_steps = (resets
+                   + int((budget or {}).get("actions_ok") or 0)
+                   + int((budget or {}).get("actions_failed") or 0))
+    tail = None
+    if groups and groups[-1]["step_idx"] is not None:
+        tail = total_steps - groups[-1]["step_idx"]
+    checks.append({
+        "check": "len(store.steps) == resets + actions_ok + actions_failed",
+        "store_steps_at_end": total_steps, "budget": budget,
+        "last_billed_step_idx": (groups[-1]["step_idx"] if groups else None),
+        "store_steps_after_the_last_billed_turn": tail,
+        "ok": True if tail is None else tail >= 0})
+
+    rows = []
+    # Turn 0 is the opening sweep: `loop.py` appends it to `self.turns` with
+    # `turn: 0` and it spends no model call by construction.
+    rows.append({"turn": 0, "actions_before": 0, "elapsed_s": None,
+                 "theorize_rounds": 0, "step_idx": None, "invocations": [],
+                 "from": "reconstructed (opening sweep)"})
+    for n, group in enumerate(groups, start=1):
+        rows.append({
+            "turn": n,
+            "actions_before": (group["step_idx"] - resets
+                               if group["step_idx"] is not None else None),
+            "elapsed_s": None,
+            "theorize_rounds": sum(1 for i in group["invocations"]
+                                   if i["beat"] == "theorize"),
+            "step_idx": group["step_idx"],
+            "invocations": group["invocations"],
+            "from": "reconstructed (step_idx grouping)"})
+
+    # With no turn record to read `actions_before` from, the reconstruction
+    # infers it as `step_idx - resets`. That is only the successful-action
+    # count if nothing failed; a failed action also advances the store index
+    # and would shift every inferred `actions_before` by one.
+    failed = int((budget or {}).get("actions_failed") or 0)
+    checks.append({
+        "check": "actions_before can be inferred as step_idx - resets "
+                 "(requires actions_failed == 0)",
+        "actions_failed": failed, "ok": failed == 0,
+        "reason": None if failed == 0 else
+                  "%d failed action(s) also advanced the store index, so the "
+                  "inferred actions_before is a lower bound, not the value "
+                  "the turn would have recorded" % failed})
+
+    trailing = (tail is not None and tail > 1)
+    ambiguous = bool(gaps) or trailing or failed > 0
+    if trailing:
+        gaps.append({"after_the_last_billed_turn": True,
+                     "store_steps_after": tail,
+                     "readings": "the run may have taken up to %d further "
+                                 "turn(s) that spent no model call and are "
+                                 "therefore invisible in the cost curve"
+                                 % max(tail - 1, 0)})
+    checks.append({
+        "check": "the step-index progression admits exactly one turn "
+                 "decomposition",
+        "ok": not ambiguous, "gaps": gaps})
+    confidence = ("ambiguous-reconstructed" if ambiguous
+                  else "exact-reconstructed")
+    if any(c.get("ok") is False for c in checks[:2]):
+        confidence = "degraded"
+    return {"rows": rows, "checks": checks, "join_confidence": confidence,
+            "spine": "reconstructed from ledger step_idx (turns.json absent)"}
+
+
+def turn_series(run_dir: str, *, records: Optional[List[Dict[str, Any]]] = None
+                ) -> Dict[str, Any]:
+    """One row per turn: cost, theorize rounds and all seven surprise counts.
+
+    The raw material for figure 2 and the input `battery/metrics/economy.py`'s
+    `frontload_index` needs. Writes nothing; `write_turn_series()` does that.
+    """
+    run_json = _read_json(os.path.join(run_dir, "run.json")) or {}
+    summary = run_json.get("summary") or {}
+    run_id = summary.get("run_id") or run_json.get("run_id")
+
+    ledger_path = os.path.join(run_dir, "ledger.jsonl")
+    if records is None:
+        records = read_ledger(ledger_path) if os.path.exists(ledger_path) else []
+    mine = ([r for r in records if r.get("run_id") == run_id]
+            if run_id else list(records))
+
+    calls = sorted((r for r in mine if r.get("event") == "model_call"),
+                   key=lambda r: (r.get("call_idx") if r.get("call_idx")
+                                  is not None else 0, r.get("seq") or 0))
+    invocations = _invocations(calls)
+
+    run_state = _read_json(os.path.join(run_dir, "RUN_STATE.json")) or {}
+    budget = summary.get("budget") or run_state.get("budget") or {}
+    turns_json = _read_json(os.path.join(run_dir, "turns.json"))
+    if not isinstance(turns_json, list):
+        turns_json = None
+
+    spine = _turn_spine(turns_json, invocations, budget)
+
+    # -- allocate the ARC commands by index, not by clock -------------------
+    #
+    # `actions_before` is `budget.actions_ok` sampled at the top of the turn,
+    # so turn *i* owns the successful actions numbered `[ab[i], ab[i+1])`, and
+    # the failed retries that preceded each of them belong to the same turn
+    # because the retry loop runs inside one `arc.act()`. Walking the ledger in
+    # order and cutting on that counter is exact and needs no timestamps --
+    # which matters, because a turn whose theorize the evidence gate skipped
+    # spends no model call and therefore has no clock of its own to be placed
+    # by. An earlier draft of this function forward-filled such a turn's start
+    # from its predecessor, which gave it an empty window and quietly handed
+    # its actions to the following turn.
+    ab: List[int] = []
+    for i, row in enumerate(spine["rows"]):
+        value = row.get("actions_before")
+        if value is None:
+            value = 0 if i == 0 else ab[-1]
+        ab.append(int(value))
+
+    steps = [r for r in mine if r.get("event") == "env_step"]
+    owner: Dict[int, int] = {}
+    done = 0
+    for pos, step in enumerate(steps):
+        turn_of = 0
+        for i in range(len(ab)):
+            if done >= ab[i]:
+                turn_of = i
+        owner[pos] = turn_of
+        http = (step.get("http") or {}).get("status")
+        if http == 200 and (step.get("action") or {}).get("name") != "RESET":
+            done += 1
+
+    # -- the surprise window, bounded by owned commands ---------------------
+    #
+    # A surprise is stamped when it fires and carries no turn of its own (its
+    # `step_idx` is a frame ordinal, `None` for a render mismatch). Turns are
+    # contiguous in wall clock and each one ends with its last ARC command, so
+    # turn *i* owns `(last command of turn i-1, last command of turn i]`, with
+    # the final turn open-ended so a run killed mid-turn keeps its surprises.
+    t0 = next((_epoch(r.get("ts")) for r in mine
+               if r.get("event") == "run_start"), None)
+    last_cmd: Dict[int, Optional[float]] = {}
+    for pos, step in enumerate(steps):
+        when = _epoch(step.get("ts"))
+        if when is not None:
+            last_cmd[owner[pos]] = when
+    edges: List[Optional[float]] = []
+    running_edge = t0
+    for i in range(len(spine["rows"])):
+        running_edge = last_cmd.get(i, running_edge)
+        edges.append(running_edge)
+
+    def window(i):
+        lo = edges[i - 1] if i > 0 else None
+        hi = edges[i] if i < len(edges) - 1 else None
+        return lo, hi
+
+    surprises = _read_jsonl(os.path.join(run_dir, "surprises.jsonl"))
+
+    ambiguous_surprises = 0
+    stray_calls: List[Any] = []
+    rows: List[Dict[str, Any]] = []
+    running_usd = 0.0
+    running_actions = 0
+    for i, row in enumerate(spine["rows"]):
+        lo, hi = window(i)
+
+        def inside(stamp, lo=lo, hi=hi):
+            when = _epoch(stamp)
+            if when is None:
+                return False
+            return ((lo is None or when > lo)
+                    and (hi is None or when <= hi))
+
+        mine_steps = [s for pos, s in enumerate(steps) if owner[pos] == i]
+        ok_steps = [s for s in mine_steps
+                    if (s.get("http") or {}).get("status") == 200]
+        actions = [s for s in ok_steps
+                   if (s.get("action") or {}).get("name") != "RESET"]
+
+        counts = _zero_counts()
+        seqs: List[Any] = []
+        for surprise in surprises:
+            if not inside(surprise.get("ts")):
+                continue
+            kind = surprise.get("kind")
+            if kind in counts:
+                counts[kind] += 1
+            seqs.append(surprise.get("seq"))
+            when = _epoch(surprise.get("ts"))
+            # `Surprise.ts` is second-resolution; a boundary inside that second
+            # cannot be adjudicated from the record.
+            for edge in (lo, hi):
+                if edge is not None and when is not None and abs(when - edge) < 1.0:
+                    ambiguous_surprises += 1
+                    break
+
+        usd = sum(inv["usd"] for inv in row["invocations"])
+        running_usd += usd
+        calls_here = [c for inv in row["invocations"] for c in inv["calls"]]
+
+        # Consistency: a turn's own billed calls must fall inside the window
+        # its commands define. Cheap to check and it is the one place the
+        # index join and the clock join can be caught disagreeing.
+        strays = [c.get("call_idx") for c in calls_here
+                  if not inside(c.get("ts"))]
+        if strays:
+            stray_calls.extend(strays)
+
+        began = (row["invocations"][0]["started_at"]
+                 if row["invocations"] else lo)
+        rows.append({
+            "turn": row["turn"],
+            "step_idx": row["step_idx"],
+            "actions_before": running_actions,
+            "actions_before_recorded": row.get("actions_before"),
+            "actions_taken": len(actions),
+            "http_commands": len(mine_steps),
+            "elapsed_s": row.get("elapsed_s"),
+            "wall_clock_s": (round(began - t0, 3)
+                             if began is not None and t0 is not None else None),
+            "theorize_rounds": row["theorize_rounds"],
+            "model_calls": len(calls_here),
+            "call_idx": [c.get("call_idx") for c in calls_here],
+            "beats": sorted({inv["beat"] for inv in row["invocations"]
+                             if inv["beat"]}),
+            "usd": round(usd, 9),
+            "usd_cumulative": round(running_usd, 9),
+            "surprise_counts": counts,
+            "surprise_total": sum(counts.values()),
+            "surprise_by_family": {
+                "empirical": sum(counts[k] for k in EMPIRICAL),
+                "computational": sum(counts[k] for k in COMPUTATIONAL)},
+            "surprise_seqs": seqs,
+            "turn_source": row["from"],
+        })
+        running_actions += len(actions)
+
+    total_usd = sum(r["usd"] for r in rows)
+    for row in rows:
+        row["usd_share"] = (round(row["usd"] / total_usd, 9)
+                            if total_usd > 0 else 0.0)
+
+    # -- reconciliation ----------------------------------------------------
+    desk = summary.get("desk") or run_state.get("desk") or {}
+    reported = desk.get("cli_cost_usd")
+    ledger_total = sum(_call_usd(c) for c in calls)
+    every = _zero_counts()
+    for surprise in surprises:
+        if surprise.get("kind") in every:
+            every[surprise["kind"]] += 1
+    joined = _zero_counts()
+    for row in rows:
+        for kind, n in row["surprise_counts"].items():
+            joined[kind] += n
+
+    recon = {
+        "usd": {
+            "sum_over_turns": round(total_usd, 9),
+            "sum_over_model_call_records": round(ledger_total, 9),
+            "reported_by_the_desk": reported,
+            "delta_vs_desk": (round(total_usd - reported, 9)
+                              if isinstance(reported, (int, float)) else None),
+            "reconciles": (isinstance(reported, (int, float))
+                           and abs(total_usd - reported) < 1e-9),
+        },
+        "surprises": {
+            "sum_over_turns": sum(joined.values()),
+            "in_surprises_jsonl": len(surprises),
+            "by_kind_over_turns": joined,
+            "by_kind_in_surprises_jsonl": every,
+            "reconciles": joined == every,
+        },
+        "model_calls": {
+            "sum_over_turns": sum(r["model_calls"] for r in rows),
+            "in_ledger": len(calls),
+            "reconciles": sum(r["model_calls"] for r in rows) == len(calls),
+        },
+        "actions": {
+            "sum_over_turns": sum(r["actions_taken"] for r in rows),
+            "budget_actions_ok": budget.get("actions_ok"),
+            "reconciles": (sum(r["actions_taken"] for r in rows)
+                           == budget.get("actions_ok")),
+        },
+    }
+
+    # The two checks that can only be run once the rows exist, and the final
+    # confidence. A join that failed a check reports `degraded` even if the
+    # spine itself was authoritative -- the point of the checks is that they
+    # can lower the claim, not decorate it.
+    after = [
+        {"check": "every billed call falls inside the window its turn's ARC "
+                  "commands define -- the index join and the clock join agree",
+         "ok": not stray_calls, "offenders": stray_calls},
+        {"check": "actions_before recomputed from the ledger matches the "
+                  "value the turn recorded",
+         "ok": all(r["actions_before_recorded"] is None
+                   or r["actions_before_recorded"] == r["actions_before"]
+                   for r in rows),
+         "offenders": [r["turn"] for r in rows
+                       if r["actions_before_recorded"] is not None
+                       and r["actions_before_recorded"] != r["actions_before"]]},
+    ]
+    checks = spine["checks"] + after
+    # Only these two can lower the verdict. The spine's own checks have already
+    # been folded into its label -- an ambiguous reconstruction is *reported*
+    # as `ambiguous-reconstructed`, and collapsing that into `degraded` would
+    # throw away the distinction between "the decomposition is not unique" and
+    # "the join contradicted itself".
+    confidence = spine["join_confidence"]
+    if any(c.get("ok") is False for c in after):
+        confidence = "degraded"
+
+    sources = {}
+    for name in ("ledger.jsonl", "turns.json", "surprises.jsonl",
+                 "cost_curve.json", "run.json", "RUN_STATE.json",
+                 "desk_log.json", "theorize.json"):
+        path = os.path.join(run_dir, name)
+        present = os.path.exists(path)
+        sources[name] = {"present": present,
+                         "sha256": _sha256_file(path) if present else None}
+
+    return {
+        "schema": "theoria-arm/turn_series v1",
+        "run_id": run_id,
+        "game_id": summary.get("game_id"),
+        "slug": os.path.basename(os.path.normpath(run_dir)),
+        "join": {
+            "key": "theorize-invocation segmentation (label 'round1' restarts "
+                   "inside every theorize.run()) allocated to turns in order; "
+                   "cross-checked by step_idx == actions_before + resets + "
+                   "actions_failed_so_far",
+            "spine": spine["spine"],
+            "join_confidence": confidence,
+            "surprise_join": "wall-clock containment in the turn's window; "
+                             "a surprise's own step_idx is a frame ordinal and "
+                             "cannot address a turn",
+            "surprises_within_1s_of_a_turn_boundary": ambiguous_surprises,
+            "billed_calls_outside_their_own_turn_window": stray_calls,
+            "checks": checks,
+        },
+        "totals": {
+            "turns": len(rows),
+            "billed_turns": sum(1 for r in rows if r["model_calls"]),
+            "model_calls": len(calls),
+            "usd": round(total_usd, 9),
+            "surprises": sum(joined.values()),
+            "actions": sum(r["actions_taken"] for r in rows),
+        },
+        "reconciliation": recon,
+        "provenance": {"run_dir": os.path.basename(os.path.normpath(run_dir)),
+                       "sources": sources},
+        "rows": rows,
+    }
+
+
+def frontload_input(doc: Dict[str, Any]) -> Dict[str, Any]:
+    """Reduce a turn series to the axis `frontload_index` reads.
+
+    Two series, deliberately, because they are not the same claim.
+
+    `turn_costs` is every turn, zero-cost ones included: a turn whose theorize
+    the evidence gate skipped is a real decision that cost nothing, and it is
+    the *point* of the gate. `turn_costs_billed_only` drops them, which is what
+    `battery.model.Run.turn_costs()` does by construction -- it buckets billed
+    calls by `turn`, so a turn with no call cannot appear in it.
+
+    That difference is a finding about the metric's input, not a preference:
+    E2 is registered on a `Run`, and a `Run` assembled from the ledger cannot
+    see the free turns. Both numbers are emitted so the gap is visible.
+    """
+    rows = doc["rows"]
+    every = [r["usd"] for r in rows]
+    billed = [r["usd"] for r in rows if r["model_calls"]]
+    return {
+        "run_id": doc.get("run_id"),
+        "slug": doc.get("slug"),
+        "frontload_k": FRONTLOAD_K,
+        "min_turns_for_shape": MIN_TURNS_FOR_SHAPE,
+        "turn_costs": [round(v, 9) for v in every],
+        "turn_costs_billed_only": [round(v, 9) for v in billed],
+        "usd_total": round(sum(every), 9),
+        "billed_calls": doc["totals"]["model_calls"],
+        "all_turns": _frontload(every),
+        "billed_turns_only": _frontload(billed),
+    }
+
+
+def _cost_through(costs: List[float], mark: float) -> float:
+    """`battery/metrics/economy.py:_cost_through`, mirrored.
+
+    Whole turns up to `floor(mark)` plus the matching fraction of the turn the
+    mark lands inside. Duplicated rather than imported so this arm can emit and
+    check its own figure without depending on the battery being importable;
+    `tests/test_turn_series.py` pins the two against each other.
+    """
+    whole = int(mark)
+    head = sum(costs[:whole])
+    remainder = mark - whole
+    if remainder > 0 and whole < len(costs):
+        head += costs[whole] * remainder
+    return head
+
+
+def _frontload(costs: List[float]) -> Dict[str, Any]:
+    total = sum(costs)
+    out: Dict[str, Any] = {"turns": len(costs), "usd_total": round(total, 9)}
+    if total <= 0:
+        out["status"] = "insufficient-data"
+        out["reason"] = "total cost is zero"
+        out["frontload_index_25"] = None
+        return out
+    head = _cost_through(costs, len(costs) * FRONTLOAD_K)
+    out["head_turns"] = round(len(costs) * FRONTLOAD_K, 9)
+    out["head_usd"] = round(head, 9)
+    out["frontload_index_25"] = round(head / total, 9)
+    if len(costs) < MIN_TURNS_FOR_SHAPE:
+        out["status"] = "insufficient-data"
+        out["reason"] = ("fewer than %d turns; a short run is trivially "
+                         "front-loaded. The ratio is reported anyway because "
+                         "suppressing it hides the run's shape, but "
+                         "battery/metrics/economy.py will refuse it and that "
+                         "refusal is the operative reading."
+                         % MIN_TURNS_FOR_SHAPE)
+    else:
+        out["status"] = "ok"
+    return out
+
+
+def write_turn_series(run_dir: str, *,
+                      records: Optional[List[Dict[str, Any]]] = None
+                      ) -> Dict[str, Any]:
+    """`turn_series()` plus its metric input, on disk, byte-stably."""
+    doc = turn_series(run_dir, records=records)
+    doc["frontload_input"] = frontload_input(doc)
+    with open(os.path.join(run_dir, "turn_series.json"), "w",
+              encoding="utf-8", newline="\n") as fh:
+        json.dump(doc, fh, indent=1, sort_keys=True, default=str)
+        fh.write("\n")
+    return doc
 
 
 def build(slug: str, *, prompt_id: str = "P-8") -> Dict[str, Any]:
@@ -401,6 +1125,16 @@ def build(slug: str, *, prompt_id: str = "P-8") -> Dict[str, Any]:
               encoding="utf-8", newline="\n") as fh:
         json.dump(cost_curve(mine), fh, indent=1, sort_keys=True, default=str)
         fh.write("\n")
+    # The turn-indexed join. `cost_curve.json` is indexed by call, `turns.json`
+    # by turn and `surprises.jsonl` by ARC command; figure 2 needs all three on
+    # one axis and this is where they meet.
+    series = write_turn_series(run_dir, records=mine)
+    manifest["turn_series"] = {
+        "join_confidence": series["join"]["join_confidence"],
+        "totals": series["totals"],
+        "reconciliation": series["reconciliation"],
+        "frontload_input": series["frontload_input"],
+    }
     return manifest
 
 
