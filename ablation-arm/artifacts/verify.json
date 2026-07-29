@@ -115,7 +115,7 @@
       "claim": "a full run leaves every upstream tree byte-identical",
       "evidence": {
         "changed": [],
-        "files_hashed": 512
+        "files_hashed": 484
       },
       "holds": true,
       "name": "read-only"
@@ -133,10 +133,8 @@
     }
   ],
   "failed_assertions": [],
-  "failed_stages": [
-    "pytest"
-  ],
-  "green": false,
+  "failed_stages": [],
+  "green": true,
   "recorded_for_a4b": {
     "E3": {
       "numbers": {
@@ -210,7 +208,7 @@
       "stage": "build_theory --check"
     },
     {
-      "returncode": 1,
+      "returncode": 0,
       "stage": "pytest"
     },
     {

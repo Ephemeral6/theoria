@@ -24,7 +24,7 @@
         "green": true,
         "pixels_checked": 20088,
         "pixels_unexplained": 0,
-        "theory": "artifacts\\a2-base\\theory.py",
+        "theory": "artifacts/a2-base/theory.py",
         "trace": "raw_trace.jsonl",
         "transitions": 247
       }
