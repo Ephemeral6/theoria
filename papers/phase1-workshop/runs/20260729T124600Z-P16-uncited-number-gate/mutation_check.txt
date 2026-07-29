@@ -10,5 +10,14 @@
   [ok ] an invented filename counts as a citation: caught
   [ok ] the anchor floor stops holding: caught
   [ok ] an unclosed fence stops being an error: caught
+  [ok ] a line anchor hides a path from check B: caught
+  [ok ] a ruling may silence several blocks: caught
+  [ok ] a unit turns a measurement into a name: caught
+  [ok ] leading-dot decimals go invisible: caught
+  [ok ] the binary-label exemption widens back: caught
+  [ok ] frame-index eats numbers after contractions: caught
+  [ok ] a heading is never scanned: caught
+  [ok ] a heading's own number becomes a quantity: caught
+  [ok ] fractions and multipliers stop being quantities: caught
 
-mutation_check: PASS -- 12/12 caught
+mutation_check: PASS -- 21/21 caught

@@ -77,8 +77,10 @@ is `105 − 8` — arithmetic residue, not a list.
 Fourth, and decisively: **the passes overlap, and where they overlap they
 disagree.** `engine-rig/engines/lp_potential/potential.py:170-171` is graded
 安全 — safe — at `SURVEY-solver-status.md:308` and unsafe at
-`SURVEY-environment-as-semantics.md:77`. `probe_frontier/reach.py:94-99` is safe
-at `:290` and unsafe at `:80`. `cegis_miner/miner.py:323` is safe at `:339` and
+`SURVEY-environment-as-semantics.md:77`.
+`engine-rig/engines/probe_frontier/reach.py:94-99` is safe
+at `:290` and unsafe at `:80`.
+`engine-rig/engines/cegis_miner/miner.py:323` is safe at `:339` and
 mismeasured at `:131`. Any sum over the four passes therefore counts some sites
 twice, and counts at least three of them on both sides of the ledger at once.
 

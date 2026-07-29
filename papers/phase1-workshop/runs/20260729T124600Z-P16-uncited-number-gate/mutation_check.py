@@ -58,6 +58,30 @@ MUTATIONS = [
      "if len(key[1]) < MIN_ANCHOR:", "if False:"),
     ("an unclosed fence stops being an error",
      "if fences % 2:", "if False:"),
+    # Round two. Six more the second adversarial pass landed, each pinned by a
+    # test in `test_uncited_gate.py` and mutated here so the pin is watched.
+    ("a line anchor hides a path from check B",
+     r"[A-Za-z0-9_.\-/{},]*?)(?::\d+(?:[-–]\d+)?)?`",
+     r"[A-Za-z0-9_.\-/{},]*)`"),
+    ("a ruling may silence several blocks",
+     "        if n > 1:", "        if False:"),
+    ("a unit turns a measurement into a name",
+     "if MEASURED.fullmatch(token):", "if False:"),
+    ("leading-dot decimals go invisible",
+     r'r"\.\d+(?![\w.])"', 'r"ZZNOPE"'),
+    ("the binary-label exemption widens back",
+     r're.fullmatch(r"[01]{5}", token)', r're.fullmatch(r"[01]{5,}", token)'),
+    ("frame-index eats numbers after contractions",
+     r"""(?<![\w'’])t\s*=\s*\d+\b""", r"\bt\s*=?\s*\d+\b"),
+    ("a heading is never scanned",
+     "                    out.append([i, head])", "                    pass"),
+    ("a heading's own number becomes a quantity",
+     r'HEADNUM = re.compile(r"^\s*#+\s*\d+(?:\.\d+)*[a-z]?\s*")',
+     r'HEADNUM = re.compile(r"^\s*#+\s*")'),
+    ("fractions and multipliers stop being quantities",
+     'r"|\\b(?:a half|halves|a third|two thirds|a quarter|three quarters|"\n'
+     '    r"doubles?|triples?|a factor of)\\b",',
+     'r"|\\b(?:ZZNOPE)\\b",'),
 ]
 
 

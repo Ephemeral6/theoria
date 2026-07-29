@@ -97,6 +97,112 @@ def test_evasions(tmp_path, body):
     assert len(flagged) == 1, f"slipped past check E:\n{body}"
 
 
+# The second adversarial pass. Each of these was an observed `flagged == []`
+# against a sentence carrying a real measurement.
+
+ROUND_TWO = [
+    pytest.param(
+        "The cross-arm effect is .562 against a null of .188 (p = .003).\n",
+        id="leading-dot decimal"),
+    pytest.param(
+        "Median wall-clock fell from `41s` to `12s`, and memory held at `1.4GB`.\n",
+        id="unit-suffixed value in backticks"),
+    pytest.param(
+        "The context budget was `1000000` tokens per arm.\n",
+        id="power of ten is all noughts and ones"),
+    pytest.param(
+        "Each arm ran under a cap of `100000` actions.\n",
+        id="six-bit round number"),
+    pytest.param(
+        "The regression wasn't 40 percent by the end of the sweep.\n",
+        id="contraction read as a frame index"),
+]
+
+
+@pytest.mark.parametrize("body", ROUND_TWO)
+def test_round_two_evasions(tmp_path, body):
+    flagged, _, _ = scan(tmp_path, body)
+    assert len(flagged) == 1, f"slipped past check E:\n{body}"
+
+
+def test_a_result_in_a_heading_is_scanned(tmp_path):
+    """Headings were `continue`d past without their text ever being emitted."""
+    flagged, _, _ = scan(
+        tmp_path, "## Repair recovers 38 percent of failed arms\n\nIt does.\n")
+    assert len(flagged) == 1, "a result stated in a heading was never looked at"
+
+
+def test_a_headings_own_number_is_not_a_quantity(tmp_path):
+    """Scanning headings must not flag all 87 of them for being numbered."""
+    flagged, _, _ = scan(tmp_path, "### 7.2a The effect sizes are not paired\n")
+    assert flagged == []
+
+
+def test_a_cited_heading_passes(tmp_path):
+    flagged, _, _ = scan(
+        tmp_path, "## Repair recovers 38 % (`battery/artifacts/gaming_audit.json`)\n")
+    assert flagged == []
+
+
+FRACTIONS = [
+    pytest.param("The bill fell by a factor of three across the sweep.\n",
+                 id="factor of"),
+    pytest.param("Coverage was double the baseline on every arm.\n", id="double"),
+    pytest.param("A third of the sealed games were quarantined.\n", id="a third"),
+    pytest.param("Latency was halved and the arm count doubled.\n", id="halved"),
+]
+
+
+@pytest.mark.parametrize("body", FRACTIONS)
+def test_fractions_and_multipliers_are_quantities(tmp_path, body):
+    """The register a result slides into when it has no artefact."""
+    flagged, _, _ = scan(tmp_path, body)
+    assert len(flagged) == 1, f"slipped past check E:\n{body}"
+
+
+def test_a_five_bit_label_is_still_not_a_quantity(tmp_path):
+    """The counterpart to the round-number fix: real labels must stay exempt."""
+    flagged, _, _ = scan(
+        tmp_path, "The board `11011` reaches `00001`, `00010` and `01000`.\n")
+    assert flagged == []
+
+
+def test_backticked_ten_thousand_is_a_known_residual(tmp_path):
+    """A limit, pinned so that it is a decision and not a surprise.
+
+    `10000` is a genuine five-cell board label in this paper *and* a plausible
+    action cap, and inside backticks the check cannot tell them apart. The
+    exemption is kept, because dropping it would flag five real labels to catch
+    one hypothetical cap. Write the cap unbackticked -- that form is caught, as
+    the second assertion pins.
+    """
+    flagged, _, _ = scan(tmp_path, "Each arm ran under a cap of `10000` actions.\n")
+    assert flagged == [], "if this now fires, the residual is closed -- delete this test"
+    flagged, _, _ = scan(tmp_path, "Each arm ran under a cap of 10000 actions.\n")
+    assert len(flagged) == 1
+
+
+def test_a_line_anchor_does_not_hide_a_path_from_check_b(tmp_path):
+    """E accepts any path-shaped token; B is what resolves it. B could not see
+    a line-anchored one at all, so `foo.md:3` was checked by neither."""
+    assert vp.PATH_TOKEN.findall("(`no/such/dir/thing.md:3`)") == [
+        "no/such/dir/thing.md"]
+    assert vp.classify("no/such/dir/thing.md") == "BROKEN"
+    # ...and the anchor is dropped, not treated as part of the path.
+    assert vp.PATH_TOKEN.findall("(`papers/phase1-workshop/verify_paper.py:12-14`)") == [
+        "papers/phase1-workshop/verify_paper.py"]
+
+
+def test_a_broad_ruling_cannot_silence_several_blocks(monkeypatch, tmp_path):
+    """MIN_ANCHOR guards length, not genericity. A 47-character anchor of
+    boilerplate silenced three distinct uncited blocks and reported nothing."""
+    anchor = "the numbers in this paragraph come from the run"
+    body = "".join(f"It reached {n} cells, {anchor}.\n\n" for n in (41, 42, 43))
+    passed, notes = _verdict(monkeypatch, tmp_path, body, {("07_body.md", anchor): "x"})
+    assert not passed, "one ruling silenced three blocks and passed"
+    assert any("BROAD" in n for n in notes)
+
+
 def test_a_path_shaped_token_is_not_satisfied_by_a_bare_identifier(tmp_path):
     """`Step.won` points at a field, not an artefact, and must not count."""
     flagged, _, _ = scan(tmp_path, "`Step.won` is populated on 41 of 46 runs.\n")
@@ -327,3 +433,23 @@ def test_a_heading_breaks_the_merge_chain(tmp_path):
     )
     flagged, _, _ = scan(tmp_path, body)
     assert len(flagged) == 1, "a citation must not leak across a heading"
+
+
+def test_a_numbers_only_heading_still_breaks_the_chain(tmp_path):
+    """The case the sentinel is still load-bearing for.
+
+    Since headings are emitted as blocks, a heading with text stands between
+    the sections by itself. A heading that is *only* a number strips to nothing
+    and emits no block, so the chain break is the only thing left.
+    """
+    body = (
+        "Tabulated in `cold-start-a0/prime/A0P_REPORT.md`:\n"
+        "\n"
+        "### 3.2\n"
+        "\n"
+        "| metric | value |\n"
+        "|---|---|\n"
+        "| coverage | 233/236 |\n"
+    )
+    flagged, _, _ = scan(tmp_path, body)
+    assert len(flagged) == 1, "a citation leaked across a bare numbered heading"

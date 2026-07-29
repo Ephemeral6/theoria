@@ -42,6 +42,31 @@ Five checks, each independently reported, exit code 1 if any fails:
                  the artefact beside it -- `CITECHECK.md` is the human audit that
                  does that, and nothing here replaces it.
 
+                 Known gaps, from two adversarial passes. These are decisions,
+                 not oversights; each was reproduced against the live scanner
+                 and left open on purpose:
+
+                   * **Any real path satisfies the block.** A claim cited with
+                     a path that has nothing to do with it passes. This is the
+                     "weaker than the rule" gap above, in its sharpest form.
+                   * **A block, not a sentence.** One path and six unrelated
+                     numbers in one paragraph passes. Sentence granularity
+                     flags every subordinate clause and gets the gate switched
+                     off, which is worse.
+                   * **Balanced code fences are skipped.** Claims pasted as
+                     tool output are not read -- and, mirror image, a path
+                     cited only inside a repro command does not count for the
+                     prose around it.
+                   * **The continuation merge is unbounded.** A list or table
+                     inherits a citation from any distance above it, so long as
+                     no heading intervenes.
+                   * **`one`..`ten` are not quantities.** 608 of the 805
+                     spelled-out numbers in the sections are determiners; the
+                     fraction and multiplier vocabulary is covered, the bare
+                     small cardinals are not.
+                   * **`section-word` ranges are greedy.** "Steps 3 to 4200"
+                     exempts 4200 as part of a step range.
+
 Run:  python papers/phase1-workshop/verify_paper.py
       python papers/phase1-workshop/verify_paper.py --quiet   (verdict lines only)
       python papers/phase1-workshop/verify_paper.py --explain-uncited  (E, verbose)
@@ -73,7 +98,13 @@ SECTIONS = HERE / "sections"
 # match at all, so the citation was invisible to this check -- it was neither ok
 # nor BROKEN, it simply was not there. Found by check E's triage, and it was
 # check B's blind spot first.
-PATH_TOKEN = re.compile(r"`([A-Za-z0-9_.\-/{},]+/[A-Za-z0-9_.\-/{},]*)`")
+# The `:722-724` tail is optional and dropped, exactly as in CITE_TOKEN. Without
+# it check B did not match a line-anchored citation *at all* -- and a path B never
+# matches is a path B never resolves, so `no/such/dir/thing.md:3` was accepted by
+# check E and called broken by nobody. Adding a line number to a citation was a
+# way to stop it being checked.
+PATH_TOKEN = re.compile(
+    r"`([A-Za-z0-9_.\-/{},]+/[A-Za-z0-9_.\-/{},]*?)(?::\d+(?:[-–]\d+)?)?`")
 
 # Tokens that look like paths but are not repository paths.
 NOT_A_PATH = re.compile(
@@ -330,6 +361,12 @@ CITE_TOKEN = re.compile(r"`([A-Za-z0-9_.\-/{},]+)(?::\d+(?:[-–]\d+)?)?`")
 ARTEFACT_SUFFIX = (
     ".md", ".json", ".jsonl", ".py", ".lean", ".dsl", ".bib",
     ".csv", ".svg", ".txt", ".toml", ".yaml", ".yml", ".sh",
+    # A citation of a real artefact type that was not on this list did not read
+    # as a citation, so a properly-cited claim was flagged. A gate with false
+    # positives is a gate that gets switched off, and these are all real kinds
+    # of artefact in this tree. Widening still costs the inventor something:
+    # `_basename_exists` requires the file to be there.
+    ".log", ".png", ".pdf", ".tex", ".tsv", ".ipynb", ".pddl", ".lock",
 )
 
 # Token classes that carry a digit without asserting a quantity. Each is named
@@ -368,11 +405,24 @@ STRUCTURAL = (
     ("complexity", re.compile(r"O\(\s*[0-9a-z^ⁿ²³]+\s*\)")),
     ("superscript-pow", re.compile(r"\b\d+[⁰-₟²³¹]+")),
     ("list-ordinal", re.compile(r"^\s*\d+\.\s", re.MULTILINE)),
-    ("frame-index", re.compile(r"\bt\s*=?\s*\d+\b")),
+    # `(?<![\w'’])` and a required `=`: the bare `\b` matched the `t` in a
+    # contraction, so "the regression wasn't 40 percent" was read as frame
+    # index 40 and disappeared. `t 40` was never the notation anyway; `t=40` is.
+    ("frame-index", re.compile(r"(?<![\w'’])t\s*=\s*\d+\b")),
 )
 
 # Digits, including the paper's space-grouped thousands (`22 356`, `116 470`).
-DIGIT = re.compile(r"(?<![\w.])\d[\d  ]*(?:[  ]\d{3})*(?:\.\d+)?")
+DIGIT = re.compile(
+    # A leading-dot decimal is a quantity and was unreachable: the `(?<![\w.])`
+    # lookbehind blocked the digit after the dot, and every later digit was
+    # blocked by the digit before it. `.562` and `p = .003` are the standard
+    # way to write an effect size, so that whole register was invisible.
+    r"\.\d+(?![\w.])"
+    r"|(?<![\w.])\d[\d  ]*(?:[  ]\d{3})*(?:\.\d+)?")
+
+#: A number carrying a unit: `41s`, `1.4GB`, `4.7x`, `3pp`. Alphanumeric, so
+#: `_mark_citations`'s name branch used to erase it whole.
+MEASURED = re.compile(r"\d+(?:\.\d+)?\s?[A-Za-z%]{1,4}")
 
 # Spelled-out cardinals. `one`..`ten` are excluded: 608 of the 805 spelled-out
 # numbers in the sections are those words used as determiners ("one further
@@ -393,12 +443,22 @@ WORDNUM = re.compile(
     # an order of magnitude cheaper". A gate that only reads digits reads none
     # of it.
     r"|\b(?:twice|thrice|dozen|halved|doubled|tripled|quadrupled|"
-    r"\w+fold|orders? of magnitude)\b",
+    r"\w+fold|orders? of magnitude)\b"
+    # Fractions and multipliers are the register a result slides into when it
+    # has no artefact: "the bill fell by a factor of three", "half of them did
+    # so without a repair pass", "coverage was double the baseline". None of it
+    # contains a digit, and none of it was read. Free on the current draft --
+    # this vocabulary adds zero flags to the 12 body sections.
+    r"|\b(?:a half|halves|a third|two thirds|a quarter|three quarters|"
+    r"doubles?|triples?|a factor of)\b",
     re.IGNORECASE,
 )
 
 # Chunks that continue the claim above them rather than starting a new one.
 CONTINUES = re.compile(r"^\s*(?:\||[-*+]\s|\d+\.\s|>)")
+
+#: `### 7.2a `, `## 10 ` -- a heading's own number, which is structure.
+HEADNUM = re.compile(r"^\s*#+\s*\d+(?:\.\d+)*[a-z]?\s*")
 
 #: Quantitative blocks that have been looked at and ruled not to need a path,
 #: each with the ruling. Keyed by (section, a verbatim anchor from the block) so
@@ -448,6 +508,18 @@ ADJUDICATED_UNCITED: dict[tuple[str, str], str] = {
         "passes exists. Every row of the table two blocks above carries its own "
         "survey file. Attaching provenance would dignify a number the section "
         "declines to publish.",
+    ("07_battery.md", "and the main table moved twice"):
+        "A heading, summarising the two moves the block below states and cites: "
+        "19 -> 6 on demonstration and 6 -> 9 after four defences "
+        "(`battery/artifacts/gaming_audit.json`, with the intermediate 6 "
+        "attributed to `battery/REPORT_V2.md`). Twice is scoped to this "
+        "subsection; the further 9 -> 2 -> 0 is 7.7a's blind round and is "
+        "counted there, which is why a reader tallying both sections gets four.",
+    ("09_preflight.md", "a preflight for zero quota"):
+        "A section title. `zero quota` names the thing the section is about -- a "
+        "run staged so that no step could cost anything -- and 9.4 is where the "
+        "spend is reported and carries the manifest. A title is not the place "
+        "the claim is established.",
     ("10_adjudication.md", "the disputed 340 / 48 with an enumerated"):
         "Two aggregates named in order to retract them -- one the census's, one "
         "this section's own superseded draft -- both sums over the per-pass "
@@ -482,6 +554,19 @@ def _blocks(text: str):
                 _emit(out, start, chunk)
                 chunk = []
             if line.lstrip().startswith("#"):
+                # A heading is scored as a block of its own. It used to be
+                # `continue`d past without its text ever being emitted, so
+                # "## Repair recovers 38 percent of failed arms" was a result
+                # stated where nothing looked. Its own section number is
+                # stripped first: `### 7.2a ...` is structure, and leaving it
+                # in flagged all 87 headings on the count of being numbered.
+                head = HEADNUM.sub("", line).strip()
+                if head:
+                    out.append([i, head])
+                # The trailing sentinel still matters when a heading is *only*
+                # a number, because then there is no heading block to stand
+                # between the sections and a table would inherit the last
+                # section's citation.
                 out.append(None)  # a heading breaks the merge chain
             continue
         if not chunk:
@@ -536,10 +621,24 @@ def _mark_citations(block: str) -> str:
                 return " █CITE█ "
             if token.lower().endswith(ARTEFACT_SUFFIX) and _basename_exists(token):
                 return " █CITE█ "
+        # A backticked token with letters in it is a name -- `cost.delta_usd`,
+        # `stub-bfs`, `Step.won` -- and names are not quantities. But a
+        # *measurement with a unit* is also alphanumeric, and this branch was
+        # deleting it outright: `41s`, `1.4GB`, `4.7x`, `3pp` all vanished, and
+        # backticked values are one of the paper's own idioms.
+        if MEASURED.fullmatch(token):
+            return f" {token} "
         if any(c.isalpha() for c in token):
             return " "
         # `11011` is a configuration label; the backticks are what make it one.
-        if re.fullmatch(r"[01]{5,}", token):
+        # Exactly five, because the A0 board is five cells and every label the
+        # sections carry is five wide (`00001` `00010` `00100` `01000` `10000`
+        # `11011`). `{5,}` also exempted `100000` and `1000000` -- powers of ten
+        # are all 0s and 1s, and they are exactly the context-budget numbers this
+        # paper quotes. Residual, stated because it cannot be fixed here:
+        # `10000` is a genuine label on this board, so a backticked ten thousand
+        # is indistinguishable from it. Write that one unbackticked.
+        if re.fullmatch(r"[01]{5}", token):
             return " "
         # A backticked *number* is still a quantity; backticks are not a
         # citation, and letting them hide one would be a one-character evasion.
@@ -624,7 +723,7 @@ def scan_uncited(sections=None, rulings=None):
 #: An anchor shorter than this is not identifying a claim, it is matching prose.
 #: The adversarial pass turned the whole check green with a one-space anchor:
 #: `" "` is in every block, so one entry silenced the paper and reported no
-#: stale rulings. The four live anchors are 34-47 characters, so the floor is
+#: stale rulings. The eight live anchors are 34-47 characters, so the floor is
 #: free -- but the escape hatch was one character wide and nothing said so.
 MIN_ANCHOR = 24
 
@@ -634,6 +733,19 @@ def check_uncited() -> tuple[bool, list[str]]:
     notes: list[str] = []
     flagged, hits, scanned = scan_uncited()
     stale = [k for k, n in hits.items() if not n]
+
+    # A ruling that silences more than one block is as wrong as one that
+    # silences none, and the length floor does not catch it: the adversarial
+    # pass silenced three distinct uncited blocks with a 47-character anchor
+    # ("the numbers in this paragraph come from the run") and reported nothing
+    # stale. A ruling is written about *a* claim, so it must match one.
+    for key, n in hits.items():
+        if n > 1:
+            notes.append(fail(
+                f"  BROAD     {key[0]} → {key[1]!r} matches {n} blocks. "
+                f"A ruling is written about one claim; matching several means it "
+                f"is silencing blocks nobody ruled on."))
+            stale.append(key)
 
     for key in ADJUDICATED_UNCITED:
         if len(key[1]) < MIN_ANCHOR:

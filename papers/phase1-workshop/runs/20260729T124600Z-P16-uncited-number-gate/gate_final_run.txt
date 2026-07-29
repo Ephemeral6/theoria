@@ -1,7 +1,7 @@
 [PASS] A GENERATED -- PAPER.md == assemble(sections/)
   13 sections, 35171 words, byte-identical
 [PASS] B PATHS -- every cited path resolves, unambiguously
-  207 distinct path citations: 197 ok, 10 ambiguous-but-ruled, 0 ambiguous-unruled, 0 elided, 0 broken
+  213 distinct path citations: 203 ok, 10 ambiguous-but-ruled, 0 ambiguous-unruled, 0 elided, 0 broken
   ruled     figures/csv/fig05_a2_repair_loop.csv -- repo-root figure pipeline; the local figures/ is the witness (figures/PARITY.md)
   ruled     figures/csv/fig06_concept_timeline.csv -- repo-root figure pipeline; the local figures/ is the witness (figures/PARITY.md)
   ruled     figures/csv/fig07_a0_vs_a0prime.csv -- repo-root figure pipeline; the local figures/ is the witness (figures/PARITY.md)
@@ -17,7 +17,7 @@
 [PASS] D NOSECRET -- no credential value in any published file
   no .env present to check against (nothing to leak)
 [PASS] E UNCITED -- every quantitative claim block cites an artefact
-  327 claim blocks scanned across 12 body sections: 0 uncited, 8 ruled, 0 stale rulings
+  414 claim blocks scanned across 12 body sections: 0 uncited, 10 ruled, 0 stale rulings
   ruled     01_intro.md (1×) -- §1.2 states and cites this same contradicted-entry count (`battery/artifacts/gaming_audit.json`, `n_disagreements`), and the frozen-baseline paragraph below records that a rerun now gives 19. A summary sentence repeating the path would be noise, not provenance.
   ruled     03_a0.md (1×) -- The support count is stated and cited two lines above, in the block quoting `cold-start-a0/THEORIZE_LOG.md` L-02. This block draws the empirical-regularity-versus-proof distinction from it and introduces no new measurement.
   ruled     07_battery.md (1×) -- δ is (#greater − #less) over the 4 × 4 cross-arm pairs (`battery/audit/stats.py`), so the 1/16 grid and its reachable-value count are arithmetic on the n = 4 stated in this same block. −0.562 and −0.188 restate rows of §7.2's table, whose preamble cites `battery/artifacts/discrimination_arms.json`.
@@ -25,6 +25,8 @@
   ruled     08_exam.md (1×) -- The arithmetic this paragraph explicitly declines to report as a measurement. Both artefacts it would be computed from are cited one block above, and each records `tier2_minus_tier1` as null rather than a delta; a path here would point at a number the paper is refusing.
   ruled     08_exam.md (1×) -- Restates the sample size of the handover result cited one block above (one report per tier, both named there). This bullet list is the section's statement of what the exam does not establish.
   ruled     10_adjudication.md (1×) -- The headline is quoted in order to be refused, and the four numbered reasons that follow are the argument that no aggregate over these passes exists. Every row of the table two blocks above carries its own survey file. Attaching provenance would dignify a number the section declines to publish.
+  ruled     07_battery.md (1×) -- A heading, summarising the two moves the block below states and cites: 19 -> 6 on demonstration and 6 -> 9 after four defences (`battery/artifacts/gaming_audit.json`, with the intermediate 6 attributed to `battery/REPORT_V2.md`). Twice is scoped to this subsection; the further 9 -> 2 -> 0 is 7.7a's blind round and is counted there, which is why a reader tallying both sections gets four.
+  ruled     09_preflight.md (1×) -- A section title. `zero quota` names the thing the section is about -- a run staged so that no step could cost anything -- and 9.4 is where the spend is reported and carries the manifest. A title is not the place the claim is established.
   ruled     10_adjudication.md (1×) -- Two aggregates named in order to retract them -- one the census's, one this section's own superseded draft -- both sums over the per-pass table above, where each row carries its survey file. Nothing in this block is asserted as a count of anything.
 
 verify_paper: PASS (5/5)
