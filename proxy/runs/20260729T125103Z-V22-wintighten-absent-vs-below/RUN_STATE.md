@@ -153,6 +153,28 @@ ancestry.
 
 ## Two things found on the way that are not this ticket
 
+## The mutation matrix, as it finally stands
+
+33 mutants over six files (`variants.py` 16, the guard 10, `env_proxy.py` 3,
+`runner.py` 2, `verify.py` 1, the mock 1), each run against the **whole** suite,
+after a control (`M00`, a no-op mutation) that must survive and does.
+
+**31 killed. 2 survivors, and both were named in advance:**
+
+* `M14` — a capitalisation change inside `DEGENERATE_NOTE`. Nothing asserts on
+  the note character-by-character and nothing should.
+* `M33` — `verify.py`'s stripper stops recursing. `verify.py` rung 5 catches
+  this and pytest does not, which is exactly why it was written down as an
+  expected survivor rather than discovered as one. It is a real coverage
+  boundary, not a defect: the rung is in the merge gate.
+
+Predicting both is the point. A harness whose only possible output is "all
+killed" cannot distinguish a strong suite from a lucky one, and this one has now
+produced false kills (the first run), true kills, a failing control (when the
+test surface widened), and two predicted survivors.
+
+## Two things found on the way that are not this ticket
+
 **The mutation harness's first run was worthless and said the opposite.** It
 reported 25 kills out of 25. Every one was false: the harness copied `proxy/`
 into a temp tree but not `arc-recon/data/piles.json`, which `proxy/paths.py`
