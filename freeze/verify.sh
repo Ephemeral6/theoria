@@ -188,15 +188,48 @@ for f in files:
 dead = sum(1 for e in eps if e["outcome"] in
            {"api_unusable", "model_error", "harness_error", "no_reset_window"})
 lv = sum(1 for e in eps if e["levels_completed"] > 0)
-print("%d %.3f %.3f %d" % (len(eps), st.mean(ratios), dead / len(eps), lv))
+
+# Provenance, not just arithmetic. STATS_RULES.md 5.2 first described this
+# batch as a later, cleaner envelope re-run; it is in fact the S1 campaign that
+# was the contention source in INC-BA-003, started 109s BEFORE the envelope.
+# The arithmetic below is unchanged by that -- which is the whole problem: this
+# stage stayed green while measuring something other than what the prose said
+# it was measuring. So the identity of the data is now asserted too, and a
+# batch that stops matching the description turns this stage red rather than
+# silently re-blessing the old conclusion.
+docs = [json.load(open(f, encoding="utf-8")) for f in files]
+scen = {d.get("scenario") for d in docs}
+started = {d.get("started") for d in docs}
+status = {d.get("status") for d in docs}
+prov = "OK"
+if scen != {"S1 baseline-parity"}:
+    prov = "SCENARIO:%s" % ("|".join(sorted(str(s) for s in scen)))
+elif len(started) != 1:
+    prov = "STARTED-SPLIT:%d" % len(started)
+elif sorted(started)[0] >= "2026-07-27T18:21:25Z":
+    prov = "NOT-BEFORE-ENVELOPE:%s" % sorted(started)[0]
+elif status != {"episode_limit_hit"}:
+    prov = "STATUS:%s" % ("|".join(sorted(str(s) for s in status)))
+print("%d %.3f %.3f %d %s" % (len(eps), st.mean(ratios), dead / len(eps), lv, prov))
 PY
 )"
   if [ "$out" = "NODATA" ] || [ -z "$out" ]; then
     note "envelope present but unreadable"
   else
     set -- $out
-    N="$1"; RATIO="$2"; DEATH="$3"; WINS="$4"
+    N="$1"; RATIO="$2"; DEATH="$3"; WINS="$4"; PROV="$5"
     echo "        episodes=$N  negbinom obs/pred=$RATIO  infra-death=$DEATH  U3-wins=$WINS"
+    echo "        provenance=$PROV"
+    # Identity before arithmetic: 5.2's reading of these numbers depends on
+    # this batch being the S1 contention source, not a clean envelope re-run.
+    case "$PROV" in
+      OK) ok "provenance matches STATS_RULES.md 5.2 (S1 baseline-parity, pre-envelope, episode_limit_hit)" ;;
+      NOT-BEFORE-ENVELOPE:*) bad "this batch no longer predates the envelope ($PROV) -- 5.2's contention finding must be redone" ;;
+      SCENARIO:*) bad "scenario is not S1 baseline-parity ($PROV) -- 5.2 describes a different dataset" ;;
+      STARTED-SPLIT:*) bad "the four games no longer share one start ($PROV) -- they are not one campaign, so 5.3's leave-one-out may be live again" ;;
+      STATUS:*) bad "status is not episode_limit_hit ($PROV) -- '12 consecutive episodes, not 12 repeats' may no longer hold" ;;
+      *) bad "unrecognised provenance verdict: $PROV" ;;
+    esac
     # the ruling rests on these three; if any moves, STATS_RULES.md §5 must be redone
     awk -v r="$RATIO" 'BEGIN{exit !(r > 0.80 && r < 1.25)}' \
       && ok "variance still explained by the abort rule (obs/pred=$RATIO)" \
@@ -209,6 +242,419 @@ PY
       || note "$WINS episode(s) now reach a level -- §5.2 finding one must be redone"
   fi
 fi
+echo
+
+# ------------------------------- 8. the 19-vs-21 correction must not grow back
+# `freeze/tiers.py --verify` guards two .py files against a hardcoded `N = 21`.
+# It cannot see prose -- and prose is where the wrong denominator actually
+# lived: after the code was fixed on 2026-07-29, twenty lines across the four
+# drafts still read 21, including the analysis-unit table, the Clopper-Pearson
+# calibration table, and a "分母恒 21" sitting six sections away from a "/19".
+# This stage is the missing half of that gate (RECONCILE N-1).
+#
+# WHAT IS DETECTED: `21` in the shapes a *count of analysis units* takes --
+#   X/21 and 21/X fractions, `21 局`, `21 对`, `21 格`, `n=21`, `恒 21`,
+#   a sentence pairing 分母 with 21, `封存堆 21`, `sealed ... 21`, `m ≤ 21`.
+# Hashes (`5f21d674…`), line refs (`:121-123`), timestamps (`18:21:25Z`),
+# `0.021` and `$1.2184` are not counts and are deliberately not matched.
+#
+# WHAT IS ALLOWED: an explicit allowlist, keyed on the TEXT of the line rather
+# than its number (numbers move; these files grow every session).  Every entry
+# says why that particular 21 is correct or why it is knowingly still open.
+# Anything else fails.  If you are about to add an entry to make this green,
+# read the reason column of the neighbours first -- "21" is right only when the
+# sentence is about the sealed pile as an object, never when it is a
+# denominator.
+#
+# SCOPE: the four frozen drafts only.  RECONCILE.md is a worklist that quotes
+# the wrong numbers on purpose, and the *.s4draft.md files are the untouched
+# porting source -- scanning either would make the stage red for being honest.
+echo "[8] 19-vs-21: no frozen draft uses 21 as an analysis-unit count"
+
+# NOTE on the regex: no negated bracket may contain a multibyte character here.
+# grep runs byte-oriented, so `[^。]` becomes "not one of the three bytes of 。",
+# and E3/80 are bytes that 「 」 ， are all built from -- `分母[^。]*21` silently
+# stopped matching at the first quote mark.  Bounded `.{0,60}` instead: a byte
+# window, no character classes, no locale surprises.
+DETECT='/21([^0-9]|$)|21/[0-9]|21 ?(局|对|格|个)|[nN] ?= ?21|恒 ?21|分母.{0,60}21|21.{0,60}分母|封存堆的? ?21|sealed.{0,20}21|[≤<] ?21'
+
+# file | substring that must appear in the line | why this 21 is legitimate
+ALLOW=(
+"MANIFEST_DRAFT.md|含封存堆 21 局 / 14,121 基线动作|budget arithmetic: how many games get RUN, kept as the UPPER BOUND. Not the statistical denominator. RES-1 recommends running 19; monitor confirms the budget line (RECONCILE ruling 2, PENDING_FIVE 4.2.1)."
+"STATS_RULES.md|封存堆有 21 局，但|(a) states the sealed pile size in order to say the denominator is NOT it."
+"STATS_RULES.md|sealed n=21 只作描述|(a) the tier definition itself -- sealed is descriptive-only by construction."
+"STATS_RULES.md|也不需要 21 局封存游戏来确证|(a) the sealed pile as a resource ('you need not spend the pile to show this'), not a denominator."
+"STATS_RULES.md|sealed 层 n=21 只作描述|(a) same tier definition, stated again in 1.2 where the three tiers are set out."
+"STATS_RULES.md|达成 14 在 n=21 下的 CI 下界是|(a) recomputation of P-22's OLD table, quoted to show it was wrong at its own n."
+"STATS_RULES.md|必修一把分母从 21 改成 19|(a) the correction's own record of what it changed."
+"STATS_RULES.md|是 n=21 下的值（21/3 = 7|(a) the superseded integer threshold, kept so the change is auditable."
+"STATS_RULES.md|原条款作废|(a) names the SUPERSEDED ⟨m⟩ source (sealed_pile) in order to record what was wrong and why. The operative rule is the line above it and draws from claim_set; stage 9 enforces that."
+"CLAIMS_TEXT.md|不是封存堆的 21|(a) names 21 in order to reject it as the denominator."
+"PENDING_FIVE.md|\`sealed_pile\` 21 = 25 自洽|(a) the pile cut's own arithmetic, 4 + 21 = 25 public games."
+"PENDING_FIVE.md|封存堆 21 局，官方基线动作合计|budget denominator = games run; carries the caveat immediately below it."
+"PENDING_FIVE.md|这个 21 是「要跑多少局」|(a) the caveat that distinguishes games-run from the statistical denominator."
+"PENDING_FIVE.md|跑满 21 局、只在 19 局上主张|(a) same caveat, spelling out that the two counts need not be equal."
+"PENDING_FIVE.md|上表按 21 局算|(a) same caveat, stating the direction of the resulting bias."
+"PENDING_FIVE.md|原条款的抽取源是|(a) same superseded ⟨m⟩ source, recorded so the correction is auditable. The operative rule two lines above draws from claim_set; stage 9 enforces that."
+)
+
+hits="$(cd "$HERE" && grep -nE "$DETECT" \
+        MANIFEST_DRAFT.md STATS_RULES.md CLAIMS_TEXT.md PENDING_FIVE.md 2>/dev/null)"
+used=""
+n21=0
+if [ -n "$hits" ]; then
+  while IFS= read -r hit; do
+    [ -z "$hit" ] && continue
+    hfile="${hit%%:*}"; rest="${hit#*:}"
+    hline="${rest%%:*}"; htext="${rest#*:}"
+    allowed=0
+    idx=0
+    for entry in "${ALLOW[@]}"; do
+      idx=$((idx+1))
+      afile="${entry%%|*}"; tail="${entry#*|}"; apat="${tail%%|*}"
+      [ "$afile" = "$hfile" ] || continue
+      case "$htext" in
+        *"$apat"*) allowed=1; used="$used $idx"; break ;;
+      esac
+    done
+    if [ "$allowed" -eq 0 ]; then
+      bad "$hfile:$hline uses 21 as a count -- the claim set is 19 (F-11). Line: $htext"
+      n21=$((n21+1))
+    fi
+  done <<EOF
+$hits
+EOF
+fi
+[ "$n21" -eq 0 ] && ok "no unexplained 21 in the four drafts (${#ALLOW[@]} allowlisted, each with a reason)"
+
+# A stale allowlist entry is a silent hole: it stops covering anything and
+# nobody notices.  Report the ones that matched nothing.
+idx=0
+for entry in "${ALLOW[@]}"; do
+  idx=$((idx+1))
+  case " $used " in
+    *" $idx "*) ;;
+    *) afile="${entry%%|*}"; tail="${entry#*|}"; apat="${tail%%|*}"
+       note "allowlist entry ${idx} matched nothing and can be deleted: $afile -- $apat" ;;
+  esac
+done
+
+# The other direction: the corrected numbers must actually be present.  A file
+# with no 21 and no 19 would pass the check above while saying nothing.
+for want in "19" "12"; do
+  if grep -q "claim 层 ${want}\|n = ${want}\|n=${want}\|/${want}" "$S"; then
+    ok "STATS_RULES.md still carries the n=${want} tier"
+  else
+    bad "STATS_RULES.md no longer mentions the n=${want} tier -- the correction is gone"
+  fi
+done
+
+# And the code-side half of the same gate, so both halves fail together.
+if python "$HERE/tiers.py" --verify >/dev/null 2>&1; then
+  ok "freeze/tiers.py --verify (claim set still 21/19/12, no script hardcodes it)"
+else
+  bad "freeze/tiers.py --verify failed -- run it for the reason"
+fi
+echo
+
+# ---------------------------- 9. the ⟨m⟩ exam subset is drawn from the 19
+# Stage 8 catches a *denominator* that reads 21.  This stage catches something
+# stage 8 cannot see: a pre-registered SELECTION RULE whose source list is the
+# sealed 21.  That rule was in both drafts (RECONCILE N-2) and it did not merely
+# risk picking a quarantined game -- under its own ordering it picked ft09 at
+# m>=5 and ls20 at m>=9, deterministically.  A result on either is uninterpretable
+# in both directions ("never seen" is false for them), so a rule that can select
+# one is a defect in the rule.
+#
+# WHAT THIS ENFORCES, and why each half is here:
+#   1. the rule, EXECUTED: for every legal m the prefix must avoid `quarantined`.
+#   2. a NEGATIVE CONTROL: the superseded sealed-pile rule must still be shown to
+#      select them.  Without it, check 1 could pass by testing nothing.
+#   3. the prose: every line carrying the draw clause `取前 ⟨m⟩ 局` must name
+#      `claim_set` and must not mention sealed or 21 -- so putting the rule back
+#      on the sealed pile turns this red, in either file.
+#   4. the bound: every `m ≤ N` in the two files must read 19.
+#   5. the ORDER TABLE printed in STATS_RULES.md is recomputed and compared row
+#      by row, so the published list cannot drift from the rule that made it.
+echo "[9] the ⟨m⟩ exam-subset rule draws from the claim-set 19, never the sealed 21"
+CS="$HERE/../arc-recon/data/claim_set.json"
+PL="$HERE/../arc-recon/data/piles.json"
+if [ ! -s "$CS" ] || [ ! -s "$PL" ]; then
+  bad "claim_set.json / piles.json not readable from the freeze kit ($CS)"
+else
+  m_out="$(python - "$CS" "$PL" "$S" "$P" <<'PY' 2>&1
+import json, re, sys
+
+# The drafts are Chinese and the draw clause itself contains ⟨m⟩, so this
+# script's own diagnostics are not ASCII.  On Windows the default stdout
+# codec is gbk and every message below would die on U+27E8 -- which would
+# have shown up as "stage 9 did not run cleanly", i.e. a red gate for an
+# encoding reason rather than a content one.  Pin UTF-8.
+sys.stdout.reconfigure(encoding="utf-8")
+
+cs_path, pl_path, s_path, p_path = sys.argv[1:5]
+cs = json.load(open(cs_path, encoding="utf-8"))
+pl = json.load(open(pl_path, encoding="utf-8"))
+
+claim = cs["claim_set"]
+quar = set(cs["quarantined"])
+sens = set(cs.get("retained_with_sensitivity_analysis", []))
+
+# THE RULE, executable: claim_set, sorted by game_id code point, first m.
+order = sorted(claim)
+
+# 1. the guarantee, checked at every legal m rather than argued
+hits = [m for m in range(1, len(order) + 1) if set(order[:m]) & quar]
+if hits:
+    print("FAIL the rule selects a quarantined game at m=%s" % hits[:3])
+elif len(order) != 19 or set(order) != set(claim) or (set(order) & quar):
+    print("FAIL claim_set changed shape: |claim|=%d overlap=%s"
+          % (len(order), sorted(set(order) & quar)))
+else:
+    print("PASS rule selects no quarantined game at any m in 1..19 (quarantined: %s)"
+          % ", ".join(sorted(quar)))
+
+# 2. negative control -- the superseded rule must still be shown to be wrong
+sealed = sorted(pl["sealed_pile"])
+pos = {g: sealed.index(g) + 1 for g in sorted(quar) if g in sealed}
+if len(pos) == len(quar) and pos:
+    print("PASS negative control holds: the old sealed-pile rule selects %s"
+          % ", ".join("%s at m>=%d" % (g, i) for g, i in sorted(pos.items(), key=lambda kv: kv[1])))
+else:
+    print("FAIL negative control broke: quarantined games missing from sealed_pile (%r) "
+          "-- this stage would then be testing nothing" % pos)
+
+# 3. the prose: the draw clause must name its source, in both files
+DRAW = "取前 ⟨m⟩ 局"          # 取前 ⟨m⟩ 局
+for name, path in (("STATS_RULES.md", s_path), ("PENDING_FIVE.md", p_path)):
+    text = open(path, encoding="utf-8").read()
+    lines = [l.strip() for l in text.split("\n") if DRAW in l]
+    if not lines:
+        print("FAIL %s: the ⟨m⟩ draw clause is gone -- the rule must stay stated verbatim" % name)
+        continue
+    clean = True
+    for l in lines:
+        if "claim_set" not in l:
+            print("FAIL %s: draw clause does not name claim_set: %s" % (name, l)); clean = False
+        if "sealed" in l or "21" in l:
+            print("FAIL %s: draw clause is back on the sealed pile: %s" % (name, l)); clean = False
+    if clean:
+        print("PASS %s: %d draw clause(s), every one sourced from claim_set" % (name, len(lines)))
+
+# 4. the bound
+bounds = set()
+for name, path in (("STATS_RULES.md", s_path), ("PENDING_FIVE.md", p_path)):
+    text = open(path, encoding="utf-8").read()
+    for n in re.findall(r"m\s*[≤<=]+\s*(\d+)", text):
+        bounds.add((name, n))
+wrong = sorted(b for b in bounds if b[1] != "19")
+if wrong:
+    print("FAIL the ⟨m⟩ bound is not 19: %s" % wrong)
+elif bounds:
+    print("PASS the ⟨m⟩ bound reads m ≤ 19 in %d place(s)" % len(bounds))
+else:
+    print("FAIL no ⟨m⟩ bound is stated in either file")
+
+# 5. the published order table vs the rule that produced it
+stats = open(s_path, encoding="utf-8").read()
+blk = re.search(r"M-ORDER:BEGIN(.*?)M-ORDER:END", stats, re.S)
+if not blk:
+    print("FAIL STATS_RULES.md: the generated ⟨m⟩ order block (M-ORDER) is missing")
+else:
+    got = re.findall(r"^\s*>?\s*(\d+)\s+([0-9a-z]{4}-[0-9a-f]{8})\s*$", blk.group(1), re.M)
+    want = [(str(i + 1), g) for i, g in enumerate(order)]
+    if got == want:
+        print("PASS the published order table matches the rule, all %d rows" % len(want))
+    else:
+        diff = next((i for i in range(max(len(got), len(want)))
+                     if got[i:i + 1] != want[i:i + 1]), None)
+        print("FAIL order table drifted from the rule: doc has %d rows, rule has %d, "
+              "first difference at row %s (doc=%s rule=%s)"
+              % (len(got), len(want), None if diff is None else diff + 1,
+                 got[diff:diff + 1], want[diff:diff + 1]))
+
+# 6. the exposure skew of the prefix is a property of the rule, so it is
+#    recomputed rather than trusted -- the disclosure must not go stale.
+want_s = "M-EXPOSURE: prefix5=%d/5 prefix10=%d/10" % (
+    sum(1 for g in order[:5] if g in sens), sum(1 for g in order[:10] if g in sens))
+if want_s in stats:
+    print("PASS prefix exposure disclosure is present and current (%s)" % want_s)
+else:
+    print("FAIL STATS_RULES.md must carry the sentinel '%s' -- recomputed from the rule" % want_s)
+PY
+)"
+  while IFS= read -r line; do
+    case "$line" in
+      "PASS "*) ok "${line#PASS }" ;;
+      "FAIL "*) bad "${line#FAIL }" ;;
+      "") ;;
+      *) bad "stage 9 did not run cleanly: $line" ;;
+    esac
+  done <<EOF
+$m_out
+EOF
+fi
+echo
+
+# ------------- 10. the U3 axiom criterion: one rule, stated the same in both
+# RECONCILE N-4.  `STATS_RULES.md` §1.2 judges U3 criterion (b) by the G1
+# axiom WHITELIST; `CLAIMS_TEXT.md`'s C1 verbatim text said 空公理集 (empty
+# axiom set).  Both files claim to be the verbatim text of the SAME endpoint,
+# and they were incompatible: judge by the whitelist, publish by the empty set,
+# and the published sentence is false -- while wording rule 1 ("a claim may
+# come only from CLAIMS_TEXT.md") is broken in the direction nobody notices.
+#
+# Stage 9 guards a pre-registered SELECTION rule.  This stage guards a
+# pre-registered ACCEPTANCE criterion against the same failure mode: two
+# copies of one rule drifting apart.
+#
+# WHAT THIS ENFORCES:
+#   1. neither verbatim block in C1 states the superseded empty-axiom-set
+#      criterion (the amendment record above them may quote it -- that is
+#      prose, not a claim, and is deliberately out of scope);
+#   2. the 成立版 block names the whitelist in full -- all three allowed
+#      axioms AND both never-allowed ones, so it cannot be relaxed by
+#      quietly dropping `sorryAx` from the published sentence;
+#   3. STATS_RULES.md §1.2 still carries the same five names, so the two
+#      files cannot drift by one side forgetting the list;
+#   4. §9.2 (non-triviality check) and §9.14 (U3 has no implementation) are
+#      typed 开跑前置条件, not needs_impl.  This is the price of item 2:
+#      criterion (b) was relaxed, so criterion (c) is now the ONLY thing
+#      standing between a vacuous theorem and a counted U3 -- and a vacuous
+#      theorem is the case (b) scores most cleanly, since it uses the fewest
+#      axioms.  Relaxing (b) without hardening (c) leaves the endpoint easier
+#      to game than before the amendment;
+#   5. a NEGATIVE CONTROL: checks 1-2 are re-run against a mutated copy that
+#      restores the old wording, and must go red on it.  Without this the
+#      stage could pass by matching nothing.
+echo "[10] U3 criterion (b): CLAIMS_TEXT.md and STATS_RULES.md state one rule"
+g1_out="$(python - "$C" "$S" <<'PY' 2>&1
+import re, sys
+sys.stdout.reconfigure(encoding="utf-8")
+
+c_path, s_path = sys.argv[1:3]
+claims = open(c_path, encoding="utf-8").read()
+stats  = open(s_path, encoding="utf-8").read()
+
+ALLOWED  = ["propext", "Quot.sound", "Classical.choice"]
+REFUSED  = ["sorryAx", "ofReduceBool"]
+SUPERSEDED = ["公理集为空", "空公理集", "公理集非空"]
+
+def verbatim_blocks(text):
+    """The '> ' quote blocks under C1's 成立版/不成立版 headings, by name."""
+    out = {}
+    for name in ("成立版", "不成立版"):
+        m = re.search(r"^### %s（逐字）\s*$(.*?)(?=^###|\Z)" % name,
+                      text, re.M | re.S)
+        if m is None:
+            continue
+        out[name] = "\n".join(l for l in m.group(1).split("\n")
+                              if l.lstrip().startswith(">"))
+    return out
+
+def audit(text, label):
+    """Returns a list of complaints.  Empty list == the criterion is aligned."""
+    bad = []
+    blocks = verbatim_blocks(text)
+    for name in ("成立版", "不成立版"):
+        if name not in blocks:
+            bad.append("%s: C1 has no %s（逐字）block" % (label, name))
+            continue
+        for s in SUPERSEDED:
+            if s in blocks[name]:
+                bad.append("%s: C1 %s still states the superseded criterion %r"
+                           % (label, name, s))
+    hold = blocks.get("成立版", "")
+    for a in ALLOWED + REFUSED:
+        if a not in hold:
+            bad.append("%s: C1 成立版 does not name %r from the G1 whitelist" % (label, a))
+    return bad
+
+# 1 + 2 -- the live file
+live = audit(claims, "CLAIMS_TEXT.md")
+for b in live:
+    print("FAIL " + b)
+if not live:
+    print("PASS C1's two verbatim blocks state the G1 whitelist, not the empty axiom set")
+
+# 3 -- the other copy of the same rule.  Scoped to the whitelist TABLE, not to
+#      §1.2 at large: the surrounding prose argues about these axioms and names
+#      every one of them in passing, so a substring search over the section
+#      stays green even after the operative table is gutted.  The disposition
+#      each axiom receives is what has to match, so that is what is read.
+sec = re.search(r"### 1\.2(.*?)(?=^## |\Z)", stats, re.M | re.S)
+if not sec:
+    print("FAIL STATS_RULES.md: §1.2 not found -- criterion (b) has no home")
+else:
+    rows = [l for l in sec.group(1).split("\n") if "放行" in l and l.count("|") >= 3]
+    passes = [l for l in rows if "永不放行" not in l]
+    refuses = [l for l in rows if "永不放行" in l]
+    drift = []
+    for a in ALLOWED:
+        if not any(a in l for l in passes):
+            drift.append("%s is no longer on the 放行 row" % a)
+    for a in REFUSED:
+        if not any(a in l for l in refuses):
+            drift.append("%s is no longer on a 永不放行 row" % a)
+        if any(a in l for l in passes):
+            drift.append("%s has been moved onto the 放行 row" % a)
+    # The whitelist is CLOSED: the prose promises that adding an axiom after
+    # the freeze is an incident, and this is the executable half of that
+    # promise.  Checking only that the three are present would let a fourth
+    # be appended silently -- which is the cheapest way to relax criterion (b)
+    # without touching a single sentence anyone reads.
+    for l in passes:
+        cell = l.split("|")[2] if l.count("|") >= 3 else ""
+        extra = [n for n in re.findall(r"`([A-Za-z][\w.]*)`", cell)
+                 if n not in ALLOWED]
+        if extra:
+            drift.append("the 放行 row has grown: %s is not in the frozen "
+                         "whitelist (adding one is an incident, not an edit)"
+                         % ", ".join(sorted(set(extra))))
+    if drift:
+        print("FAIL STATS_RULES.md §1.2 whitelist table drifted: %s" % "; ".join(drift))
+    else:
+        print("PASS STATS_RULES.md §1.2 whitelist table gives all five axioms "
+              "the same disposition C1 publishes")
+
+# 4 -- the price of the relaxation
+for row, what in (("9.2", "non-triviality check (criterion c)"),
+                  ("9.14", "U3 has no implementation")):
+    line = next((l for l in stats.split("\n")
+                 if l.startswith("| %s |" % row)), None)
+    if line is None:
+        print("FAIL STATS_RULES.md §9: row %s is gone -- %s was a launch blocker" % (row, what))
+    elif "开跑前置条件" not in line:
+        print("FAIL STATS_RULES.md §%s downgraded: %s is no longer a launch blocker"
+              % (row, what))
+    else:
+        print("PASS §%s is a launch blocker (%s)" % (row, what))
+
+# 5 -- negative control: put the old wording back, the audit must catch it
+mutant = claims.replace(
+    "> `#print axioms` 只报告预注册白名单内公理（`propext` / `Quot.sound` / `Classical.choice`；\n"
+    "> `sorryAx` 与 `Lean.ofReduceBool` 永不放行）且通过非平凡性检查的定理，",
+    "> 公理集为空且通过非平凡性检查的定理，")
+if mutant == claims:
+    print("FAIL negative control could not be built: the 成立版 whitelist sentence "
+          "is not where this stage expects it -- the check may be scanning nothing")
+elif not audit(mutant, "mutant"):
+    print("FAIL negative control did not fire: restoring 空公理集 in C1 still passes "
+          "-- this stage is testing nothing")
+else:
+    print("PASS negative control fires: restoring 空公理集 in C1 turns this stage red")
+PY
+)"
+while IFS= read -r line; do
+  case "$line" in
+    "PASS "*) ok "${line#PASS }" ;;
+    "FAIL "*) bad "${line#FAIL }" ;;
+    "") ;;
+    *) bad "stage 10 did not run cleanly: $line" ;;
+  esac
+done <<EOF
+$g1_out
+EOF
 echo
 
 # ------------------------------------------------------------------ verdict

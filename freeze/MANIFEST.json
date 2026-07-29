@@ -1,0 +1,602 @@
+{
+  "entries": [
+    {
+      "absent": [],
+      "n": 1,
+      "name": "内环代码",
+      "note": "No `__version__` and no tag in the `theoria-arm` namespace, so the only handle is the commit. The ablation arm's loop is a separate implementation that the thirteen do not name and Theoria.md:376 makes mandatory; hashed here rather than left to be noticed later.",
+      "paths": [
+        {
+          "files": 11,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "theoria-arm/inner",
+          "sha256": "35d91ad8c7edab8b53a18f84d1e82241ad756f8474eab476c3cdc0387831a2d0",
+          "tracked": true
+        },
+        {
+          "files": 7,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "theoria-arm/harness",
+          "sha256": "e9adbd87d4c282da061755565ea6bfa1e0e98f529701d585facdaf25976b4f6e",
+          "tracked": true
+        },
+        {
+          "files": 3,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "theoria-arm/world",
+          "sha256": "e1b554957eb3cb25820bf331330f58d001ed773f118b8d712f6a61005f76cabe",
+          "tracked": true
+        },
+        {
+          "files": 8,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "theoria-arm/armtools",
+          "sha256": "89b81fec05557f76040a30148c101c43df172c8d6abbd9c3376c10aeeb41bdcb",
+          "tracked": true
+        },
+        {
+          "files": 10,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "ablation-arm/ablcore",
+          "sha256": "921263481d14b3f31c2dbdbc4a9e53afe84c3153e626cd394d8c50dd8e9bdced",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "ablation-arm/run_arm.py",
+          "sha256": "e9dee7101250d9cf35f08f3410d343f0008af9a0b6e6a507c8fe176c14d386f1",
+          "tracked": true
+        }
+      ],
+      "status": "partial"
+    },
+    {
+      "absent": [],
+      "n": 2,
+      "name": "DSL 语法版本（两本书）",
+      "note": "**v0.3 is current and the campaign should compile against it** -- it is the version the running validator implements (`theory_parser.py:296,328`, `writes.py:25-26`) and its additions-only property is tested. v0.2 and v0.3 both carry `Effective: 2026-07-28`, so that field cannot discriminate them and the manifest pins the blob instead. Three places still name v0.2 and have not been told: `grammar_card.py:5`, `theory_parser.py:35,77`, `CLAUDE.md:64`. Also: v0.2 says it is 'frozen at the tag that carries this line' and **that tag does not exist** -- the theory-compiler track has cut none. v0.3 inherits the same dangling reference verbatim. `theory_grammar.lark` is a dead file and is excluded on purpose (its own header says it is not the parser in use).",
+      "paths": [
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "CONTRACTS/dsl_grammar_v0.1.md",
+          "sha256": "995ebd3be6692d81ca727dc5deda4f29bdbc39762611a3e8bebbbbd7138e5723",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "CONTRACTS/dsl_grammar_v0.2.md",
+          "sha256": "7f135a42958cbfe547ef1d3f8a4fa1a8e042f71f8b36a5525c7be02e733aa1b8",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "CONTRACTS/dsl_grammar_v0.3.md",
+          "sha256": "1254c3f900aa1b9491e44fc7f74dcdd7ec3291accb4d6823802cbf136e367877",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "theory-compiler/src/theory_compiler/parser/theory_parser.py",
+          "sha256": "5b8a18795ea95df481636ef54561db93c5f529d221f7d31969268547f71528c8",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "theory-compiler/src/theory_compiler/parser/playbook_parser.py",
+          "sha256": "c30328c7a4a208c378443d57bac3f5d909242e70542af65a3057521371f1f684",
+          "tracked": true
+        }
+      ],
+      "status": "partial"
+    },
+    {
+      "absent": [],
+      "n": 3,
+      "name": "生成器",
+      "note": "Reading (a), the compiler back-ends: the freeze list's neighbours trace the DSL->four-forms chain. `worldgen/` is a *world* generator and is hashed under item 9, where its mutation operators actually belong. `pyproject.toml` says 0.1.0; `gen_pddl.py:5` still cites the v0.1 contract, two versions behind.",
+      "paths": [
+        {
+          "files": 6,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "theory-compiler/src/theory_compiler/generators",
+          "sha256": "7f0496937dad618fab41286cf2ae6e9872b08def86934cc3b48f1a093521f2f6",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "theory-compiler/pyproject.toml",
+          "sha256": "164d00c7f832fbbba3f67e996ca81433b0f5a5df6e8210a8bd05aa58498c2fa0",
+          "tracked": true
+        },
+        {
+          "files": 7,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "cold-start-a0/compile",
+          "sha256": "505edc3820976f5aff360b5d34ebd49eebdb3c5bf792fd745521d80243960b8b",
+          "tracked": true
+        }
+      ],
+      "status": "partial"
+    },
+    {
+      "absent": [],
+      "n": 4,
+      "name": "提示词",
+      "note": "There is no `prompts/` directory: the live prompts are string constants (`theorize.py:122 PREAMBLE`, `:169 OUTPUT_CONTRACT`, `:204 build_prompt`, `grammar_card.py:16 CARD`). Hashing the whole module is therefore coarser than the item asks -- an unrelated edit to `theorize.py` moves the hash. No `PROMPT_VERSION` exists anywhere. Theoria.md:353 requires prompts to carry no game-specific content; that has been *measured* clean once, by hand, and there is no automated check.",
+      "paths": [
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "theoria-arm/inner/theorize.py",
+          "sha256": "db4a2ea600780002af1f006e996eb04764b6610689d5d64b1d3cadf04955305c",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "theoria-arm/inner/grammar_card.py",
+          "sha256": "8948db017aae36d4a9f2c4b44447e8d5b3e0628fae89beed08bbe7a1f7c1dccd",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "baseline-arms/harness/bare_cc.py",
+          "sha256": "f1432f849cff44d9a3d3de2c646f61491a22d67289f40b097c0064137217a6fb",
+          "tracked": true
+        }
+      ],
+      "status": "partial"
+    },
+    {
+      "absent": [],
+      "n": 5,
+      "name": "引擎清单与版本",
+      "note": "**There is no engine manifest file.** The roster exists only as prose in STATUS.md. Eight engines are on disk; `CLAUDE.md:51` still says six (Theoria.md never enumerates them -- the 'six' is CLAUDE.md's claim, and earlier drafts mis-cited it). Worse for a manifest: two engines report someone else's name -- `deadlock_carver/__init__.py:43` sets `ENGINE = \"fd_adapter\"` and `ic3_pdr/__init__.py:51` sets `ENGINE = \"lp_potential\"` (D-018, the frozen enum), so 'eight engines, eight tags' cannot be read off the enum by any consumer.",
+      "paths": [
+        {
+          "files": 40,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "engine-rig/engines",
+          "sha256": "889bb6f7141042adec2128737c5bc0309b4165ad80a1e715cb3d980258444aff",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "engine-rig/STATUS.md",
+          "sha256": "68cff5fde1d5c1c653f746ab29412a205d74f63a921c6e0391921f7cf8fff6e6",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "engine-rig/ENGINE_TABLE.md",
+          "sha256": "1f839dafab9a8b12de04492e94a33f78b13ddb0e9f0d08bb54cd5c540888cca9",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "engine-rig/artifacts/candidates.jsonl",
+          "sha256": "5113ad321f680af0133ae17e2a549a8c75edd90ebfbcd69d9cb076b86daded8a",
+          "tracked": true
+        }
+      ],
+      "status": "blocked"
+    },
+    {
+      "absent": [],
+      "n": 6,
+      "name": "戳探策略",
+      "note": "No policy document exists. The strategy lives as docstrings in two packages on two tracks that do not import each other and may already have diverged; hashing both does not reconcile them.",
+      "paths": [
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "theoria-arm/inner/probe.py",
+          "sha256": "ff865c048534dace302888907d065399ab66537862489d7861eee19471fdd5cf",
+          "tracked": true
+        },
+        {
+          "files": 6,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "engine-rig/engines/probe_frontier",
+          "sha256": "6295d9e06265624af9bb20a6963f6e42af38d19f4ff58e1779b67fd3b031a2a6",
+          "tracked": true
+        }
+      ],
+      "status": "blocked"
+    },
+    {
+      "absent": [],
+      "n": 7,
+      "name": "规划器配置",
+      "note": "**No configuration file exists** -- every knob is a source literal. FD is built and connected, but two holes are on the record and both bite a frozen campaign: no LP solver (CMake could not find Cplex, which disables `lp_potential` and any seq-opt config), and FD time/memory caps cannot be enforced on Windows (`preexec_fn` raises). `theoria-arm`'s planner call passes no `prefer=`, so which rung of the ladder runs depends on the environment rather than on anything hashed here.",
+      "paths": [
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "theoria-arm/inner/plan.py",
+          "sha256": "e73f204a26b76e9306b5879731e36176e9e6e388e60279d3a804446b88e22f7a",
+          "tracked": true
+        },
+        {
+          "files": 9,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "engine-rig/engines/fd_adapter",
+          "sha256": "03977d444b02012416f9d51796d6030c14536f2410340ddf08591c57148af6e0",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "engine-rig/bench/ladder.py",
+          "sha256": "9c700f4de210536866a7256738381d728663f93061547ca56d0312634efedcb8",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "engine-rig/runs/p13-fd-real/TOOLCHAIN_MANIFEST.md",
+          "sha256": "9f8ff996a86cc7c07144cd09ce688d762c8dd4738772b92a1f1de51f8b9c1303",
+          "tracked": true
+        }
+      ],
+      "status": "blocked"
+    },
+    {
+      "absent": [
+        "battery/BATTERY_V1.md"
+      ],
+      "n": 8,
+      "name": "指标电池 v1",
+      "note": "`battery/BATTERY_V1.md` is the artefact that claims to *be* this item and **it is not on master** -- it lives on the unmerged branch `agent/v5-battery-freeze` with a parked merge conflict. Four version strings disagree (`METRICS.md:1` v1, `run_battery.py:290` v2, `__init__.py:8` 0.1.0, `PREDICTIONS.md` v2.1); the ruling on that branch is 'freeze the SHA, not the label', which this manifest follows by construction. Two independent gaps remain open: 0 of 38 metrics passed discrimination, and **U3 achievement rate -- a primary endpoint -- has no prediction and no battery id** (`PREDICTIONS.md:585`, corroborated at `battery/runs/…V18…/ENDPOINTS.md:15`, which calls it unfalsifiable).",
+      "paths": [
+        {
+          "files": 6,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "battery/metrics",
+          "sha256": "b047810afaed822178e6d55f3ebb321ecbcde500313809627ce5ed0fc60074fa",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "battery/METRICS.md",
+          "sha256": "0956bf68cbfebd8b0ab36365bda6beaf353bf7678cacd9a333fc0eaa9b2c7fd1",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "battery/PREDICTIONS.md",
+          "sha256": "b6050f7a47fdcd8a7c6c96fa1d238791dfd0d20f51de50b042e2082b5abd4085",
+          "tracked": true
+        },
+        {
+          "files": 29,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "battery/audit",
+          "sha256": "1a7604907a274c5bd7bd72a74b548985dac063d1637a1dab8c6b70f56ba857e8",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "battery/run_battery.py",
+          "sha256": "42ecdd0c8e6eafc8e997524ad4a309dff553569e2b206d807cd63b3d28af2244",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "battery/PREREG_V9.md",
+          "sha256": "cf7d327168fa751a9a8d60814fd3854911f829b26e280d3e47659765d5bf37a9",
+          "tracked": true
+        },
+        {
+          "files": 0,
+          "hashed_from": null,
+          "kind": "absent",
+          "path": "battery/BATTERY_V1.md",
+          "sha256": null,
+          "tracked": false
+        }
+      ],
+      "status": "blocked"
+    },
+    {
+      "absent": [],
+      "n": 9,
+      "name": "变体算子库",
+      "note": "**Three disjoint operator algebras, not one and not two.** (a) `proxy/variants.py:34 LEGAL_OPERATORS` -- the wrapper-legal set, no version; (b) `worldgen/mutate.py` + `MUTATIONS.json`, `schema_version: worldgen/mutations/v0.2` -- **the only one carrying a version string**, and it defines a `flags[\"forbidden_action\"]` that is the same concept as (a)'s `forbid_action` in an unrelated algebra; (c) `exam/papers/adaptation.py:153 _VARIANT_GRID`, `exam/v0.1`. All three are hashed separately here. Which one the campaign freezes is a human ruling this file does not make.",
+      "paths": [
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "proxy/variants.py",
+          "sha256": "18305dd00680295cec8530323f4d96e41f6f29f394d59b2dd6a7656e4fec8b76",
+          "tracked": true
+        },
+        {
+          "files": 4,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "proxy/variants",
+          "sha256": "ec4e4baeaec969bfab694a3c46b615fb67257655272b05e4f4c801d17598c6ab",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "worldgen/mutate.py",
+          "sha256": "510951065133eaca3cf63471ffda3f433606fb23a8b42321a1f3bd258185cc81",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "worldgen/out/worlds/MUTATIONS.json",
+          "sha256": "3933dd226fcaaa06d1d72fc37ac8bda0ab23ca66a0d226c2e35ee085b1d74d81",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "exam/papers/adaptation.py",
+          "sha256": "edd35fdf8a4ec7e1bf5e53708e01af494563a54a6dfa9650bc3a7030b206ed4a",
+          "tracked": true
+        },
+        {
+          "files": 17,
+          "hashed_from": "git-blob",
+          "kind": "dir",
+          "path": "exam/artifacts/variant_specs",
+          "sha256": "daf912fd158c582c2be4a179abca9b881aa47b96f9f6a40d6773de7e6b6d0486",
+          "tracked": true
+        }
+      ],
+      "status": "partial"
+    },
+    {
+      "absent": [],
+      "n": 10,
+      "name": "统计裁决规则",
+      "note": "The rules are written (this kit) and the machinery exists (`stats.py` implements the sign test and Wilcoxon deterministically, no scipy). **They are not wired to each other**: the three endpoint definitions in STATS_RULES.md do not correspond to any function in `stats.py`, and no test proves the two compute the same thing. Until this kit is on master the rules are one `rm -rf .worktrees/` from nonexistent, which is how both earlier drafts of them were nearly lost.",
+      "paths": [
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "freeze/STATS_RULES.md",
+          "sha256": "fe41213d6327b5681256ecb973ca3f207d1bd288ca162cdc23788ef3a06d8d09",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "battery/audit/stats.py",
+          "sha256": "c6715761f70e2ed5eebe8352984a3af0be713ab5cad0970435d329286aefc0c5",
+          "tracked": true
+        }
+      ],
+      "status": "partial"
+    },
+    {
+      "absent": [],
+      "n": 11,
+      "name": "claim 逐字文本与双结局",
+      "note": "This kit. Note that `arc-recon/data/claim_set.json` is a false friend and holds no claims -- it is the 19-game sealed-pile roster after F-11's quarantine. Theoria.md:359-364 has the C1-C5 menu only, not verbatim text and not the two outcomes.",
+      "paths": [
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "freeze/CLAIMS_TEXT.md",
+          "sha256": "5168da9ed32bf2ba613157bc6b59894543c79d20566038316d9d020f35a493f7",
+          "tracked": true
+        }
+      ],
+      "status": "partial"
+    },
+    {
+      "absent": [],
+      "n": 12,
+      "name": "预算表",
+      "note": "The price table is real and versioned (`table: pricing_v1`, `effective: 2026-07-28`, referenced by hash from every ledger entry). The three numbers Theoria.md:377 actually asks to freeze -- $/game hard cap, total games, stop-loss -- are still written as ⟨…⟩. See PENDING_FIVE.md.",
+      "paths": [
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "proxy/pricing/pricing_v1.json",
+          "sha256": "ed81118ae10b3a07c14288a48d33c404d48bf6853c0303a26457f6e736334e9a",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "proxy/cost.py",
+          "sha256": "3d6782fa7dcf060de994f6e33c001f5866447bccdb6fd23b0a7476c7ec90544d",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "theoria-arm/harness/budget.py",
+          "sha256": "171a38934cae1ce325a03c79e90a114551f632acaf835a201548190a29f62904",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "baseline-arms/BUDGET_REPORT.md",
+          "sha256": "5678a00b92dff5303d5f4df69a7bbd1aea35106c644538d5f5540df387234236",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "baseline-arms/out/campaign_gate.json",
+          "sha256": "a822a120b66a25ece98eaa4af07fa343e5f22f57365fe4c3263882f13c9b137e",
+          "tracked": true
+        }
+      ],
+      "status": "blocked"
+    },
+    {
+      "absent": [],
+      "n": 13,
+      "name": "每格重复数 ⟨n⟩",
+      "note": "**No value exists anywhere on master**, and this is blocked upstream rather than by paperwork: the variance campaign that would decide it is gated red at 1 game of 4 (`STATUS.md:12`), all three cells `api_unusable`, $2.5275 spent. `DECISIONS.md:176` states the trap plainly -- using an n=2 sample to choose n is circular -- and `:188` says ⟨n⟩ must be remeasured. Two tags STATUS.md names against its own rows do not exist in `git tag`: `baseline-arms-m5-variance` and `baseline-arms-m6-path-a`. Any earlier draft that recorded 'n = 2, ruled' was citing an unmerged file and is withdrawn.",
+      "paths": [
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "baseline-arms/STATUS.md",
+          "sha256": "70347b0b2e7a5f3093d15f39c29af91dcffcb9d8f5eabb0a4663710a964d35d0",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "baseline-arms/DECISIONS.md",
+          "sha256": "ae2b7189625e90d18051a204878ad63fd11440960619ffff04c9756899969621",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "baseline-arms/out/campaign_cells.jsonl",
+          "sha256": "ebe6396e3cd3a1960b4d86bb7a71eb90da7b3d030504ed9f23f9adc43fecc54a",
+          "tracked": true
+        }
+      ],
+      "status": "blocked"
+    },
+    {
+      "absent": [
+        "arc-recon/data/campaign_freeze.json"
+      ],
+      "n": "X-1",
+      "name": "campaign_freeze.json（清单外，但缺得最响）",
+      "note": "Absent from disk and from git, and read by `arc-recon/canary.py:71` and `baseline-arms/harness/transport_ab.py:53`. `release/CHECKLIST.md:89` already records that a reader handed this release would find no frozen campaign roster. Neither earlier draft names it.",
+      "paths": [
+        {
+          "files": 0,
+          "hashed_from": null,
+          "kind": "absent",
+          "path": "arc-recon/data/campaign_freeze.json",
+          "sha256": null,
+          "tracked": false
+        }
+      ],
+      "status": "blocked"
+    },
+    {
+      "absent": [],
+      "n": "X-2",
+      "name": "外部工具链（不在仓库里，因此只能记指纹）",
+      "note": "`.toolchain/` is gitignored: the Fast Downward binary is not in the repository and cannot be rebuilt from it, so the manifest pins its recorded sha256 and nothing more. **There is no Python dependency lock anywhere in the tree** -- no requirements.txt, no poetry.lock, no uv.lock, no environment export. A manifest claiming 全部哈希 has no pin on the interpreter or the libraries it ran under.",
+      "paths": [
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "engine-rig/runs/p13-fd-real/TOOLCHAIN_MANIFEST.md",
+          "sha256": "9f8ff996a86cc7c07144cd09ce688d762c8dd4738772b92a1f1de51f8b9c1303",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "theory-compiler/lean/lean-toolchain",
+          "sha256": "780c5b3424b12629ebe77451eda1ac2a2079bc7b81b6fa37969892afb8d32c0e",
+          "tracked": true
+        },
+        {
+          "files": 1,
+          "hashed_from": "git-blob",
+          "kind": "file",
+          "path": "theory-compiler/lean/lake-manifest.json",
+          "sha256": "298b15a47f408a8d968b276819c2f8dae9e20e63add143da9319b6fdff5758db",
+          "tracked": true
+        }
+      ],
+      "status": "partial"
+    }
+  ],
+  "format": "theoria/freeze-manifest/1",
+  "generated_from": {
+    "branch": "agent/s4-freeze",
+    "commit": "5427a78aebea67fd0a0437a05997e5e386feed97",
+    "dirty": true
+  },
+  "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
+  "verdict": {
+    "absent_paths": [
+      "arc-recon/data/campaign_freeze.json",
+      "battery/BATTERY_V1.md"
+    ],
+    "blocked": 7,
+    "freeze_ready": false,
+    "items": 13,
+    "partial": 8,
+    "ready": 0,
+    "statement": "0 of the 13 freeze-list items are ready. The campaign may not start until every one is: `Theoria.md:368` requires the list committed and hashed *before the first game*, and an item that is `partial` is one whose bytes can still change without anybody noticing."
+  }
+}

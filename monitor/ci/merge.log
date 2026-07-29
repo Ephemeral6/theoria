@@ -1824,3 +1824,18 @@
 2026-07-29T10:08:05Z MERGED origin/agent/c10-unsolvable-proof-canon (dirs: PARTNER_SYNC.md,engine-rig; gates: verify:engine-rig(verify.py))
 2026-07-29T10:08:05Z CLEARED flag for origin/agent/c10-unsolvable-proof-canon (merged)
 2026-07-29T10:08:11Z FLAG origin/agent/v5-verdict-three-types: merge conflict
+2026-07-29T10:24:30Z FLAG origin/agent/s21-app-session-death: push rejected (race?)
+2026-07-29T10:25:44Z MERGED origin/agent/s27-release-must-stick (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T10:29:35Z FLAG origin/agent/a3-campaign-devpile: verify gate red in theoria-arm (verify.py)  [NEEDS-HUMAN: 3 attempts since 2026-07-29T04:14:01Z]
+2026-07-29T10:29:44Z FLAG origin/agent/s4-freeze: merge conflict  [NEEDS-HUMAN: 3 attempts since 2026-07-29T07:43:30Z]
+2026-07-29T10:29:45Z HELD 10 unchanged since last verdict: p10-figures-into-paper (merge conflict, 1x); r2-release-licence (verify gate red in release (verify.sh), 1x); s11-sealed-halfguard (touches protected root files, 1x); v5-battery-freeze (merge conflict, 1x); a10-shared-ledger-real-arms (merge conflict, 1x); p13-figure-numbering (verify gate red in figures (verify.sh), 1x); e8-ic3-scale (merge conflict, 1x); v19-unverified-is-not-true (merge conflict, 1x)
+2026-07-29T10:42:58Z MERGED origin/agent/p7-p14-battery-section-blind-round (dirs: PARTNER_SYNC.md,papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T10:44:09Z MERGED origin/agent/res4-audit-reports (dirs: monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T10:56:07Z MERGED origin/agent/s21-app-session-death (dirs: ; gates: none)
+2026-07-29T10:56:07Z CLEARED flag for origin/agent/s21-app-session-death (merged)
+2026-07-29T11:01:28Z MERGED origin/agent/res4-audit-reports (dirs: monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/index.html,monitor/state.json)
+2026-07-29T11:04:05Z MERGED origin/agent/s27-credential-triage (dirs: proxy; gates: verify:proxy(verify.py))
+2026-07-29T11:12:21Z MERGED origin/agent/p15-capability-column (dirs: PARTNER_SYNC.md,papers; gates: none; NO GATE, MERGED UNCHECKED: papers)
+2026-07-29T11:13:25Z MERGED origin/agent/s28-claim-warns-on-existing-branch (dirs: PARTNER_SYNC.md,monitor; gates: verify:monitor(verify.sh); a gate dirtied the worktree: monitor/history.jsonl,monitor/index.html,monitor/state.json)
+2026-07-29T14:19:43Z CLEARED-BY-OPS-M flags for a10-shared-ledger-real-arms, v19-unverified-is-not-true, p13-figure-numbering (merged to master by hand: the conflict resolutions were made in a previous session's worktrees and ci_merge cannot reproduce them)
+2026-07-29T14:24:26Z CLEARED-BY-OPS-M e15-solver-status-bit: merged to master together with origin/agent/e19-merge-clean-but-broken. e15 alone turns engine-rig RED against master -- it removes Law.scope_exhaustive, which heldout/zero_space_heldout.py (E17, already on master) constructs. Neither branch touches the other's lines, so the pair merges without a textual conflict and only the merged tree is broken. e19 already carried the fix and had never been picked up. Gate on the combined tree: OK verify:engine-rig(verify.py).
