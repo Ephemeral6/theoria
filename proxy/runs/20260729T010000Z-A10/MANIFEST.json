@@ -1,0 +1,17 @@
+{
+  "prompt_id": "A10-shared-ledger-real-arms",
+  "branch": "agent/a10-shared-ledger-real-arms",
+  "base_commit": "ee8876e",
+  "utc": "2026-07-29T01:00:00Z",
+  "worker": "W-1641",
+  "territory": "proxy",
+  "goal": "Three real arms bill into one shared ledger; reconciliation redefined to a satisfiable key; a negative sample that proves it can go red; before/after archived.",
+  "blocking_dependency": {
+    "defect": "proxy/ledger.py Ledger.__init__ seeds seq/prev once at construction under a threading.Lock that does not span seed->append, so two processes fork the hash chain",
+    "reported_by": "W-1640, monitor/inbox/20260729T001500Z-W-1640-ledger-writer-forks-under-two-processes.md",
+    "independently_confirmed_by": "W-1641 (ledger.py:65-66,164-165,200 vs spend_gate.py:201-215)",
+    "why_it_blocks_A10": "This item points three arms at ONE ledger. Today two concurrent writers already fork it; three would make the corruption more likely, not less. The fix must land before the arms are rewired, or A10 makes the problem worse.",
+    "fix_pattern_already_in_repo": "proxy/spend_gate.py:201 _PoolLock takes an OS-level lock (fcntl/msvcrt) on a sidecar file, added because INC-BA-003's writers were four separate OS processes. The ledger needs the same discipline plus re-seeding inside the lock."
+  },
+  "files": []
+}
