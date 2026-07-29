@@ -1,11 +1,11 @@
 {
   "bar": "worldgen/qc/PREREGISTERED.md",
   "family_verdict": {
-    "L3b_passed": 0,
+    "L3b_passed": 1,
     "L3b_required": 2,
-    "all_L1": false,
-    "all_L2": false,
-    "all_L3a": false,
+    "all_L1": true,
+    "all_L2": true,
+    "all_L3a": true,
     "pass": false
   },
   "held_out_bar": 0.9,
@@ -437,35 +437,120 @@
     "t2-lock-fragile": {
       "l1_l2": {
         "candidates": "worldgen/out/qc/t2-lock-fragile/candidates.jsonl",
-        "error": "NoSeparatingGuard: no literal separates transition 1 from the positives",
-        "live": false,
-        "trace": "worldgen/out/worlds/t2-lock-fragile/raw_trace.jsonl"
+        "executable_probes": 6,
+        "explains_every_transition": {
+          "obj0": true,
+          "obj1": true,
+          "obj2": true,
+          "obj3": true,
+          "obj4": true
+        },
+        "frames": 111,
+        "global_laws": 2,
+        "l1_pass": true,
+        "l2_pass": true,
+        "live": true,
+        "mover": "obj0",
+        "mutually_exclusive": {
+          "obj0": true,
+          "obj1": true,
+          "obj2": true,
+          "obj3": true,
+          "obj4": true
+        },
+        "probes": 13,
+        "rules_mined": 36,
+        "schema_output": "OK   worldgen/out/qc/t2-lock-fragile/candidates.jsonl (49 rows)",
+        "schema_valid": true,
+        "trace": "worldgen/out/worlds/t2-lock-fragile/raw_trace.jsonl",
+        "tracks": 5,
+        "transitions": 110
       },
       "l3": {
-        "error": "NoSeparatingGuard: no literal separates transition 1 from the positives",
+        "budget": 110,
+        "exhaustive_transitions": 286,
         "guard_conflicts": {
-          "held_out": null,
-          "replay": null
+          "held_out": 0,
+          "replay": 0
         },
         "held_out": {
-          "accuracy": null,
-          "agree": 0,
-          "total": 0
+          "accuracy": 0.98773,
+          "agree": 161,
+          "total": 163
         },
-        "misses": [],
-        "render_self_check_ok": null,
+        "misses": [
+          {
+            "action": "UP",
+            "agent": [
+              4,
+              7
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_still_UP",
+              "obj1": "obj1_still_UP",
+              "obj2": "obj2_still_UP",
+              "obj3": "obj3_still_UP",
+              "obj4": "obj4_still_UP",
+              "obj5": "obj5_still_UP"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1,
+              "obj4": 1,
+              "obj5": 1
+            },
+            "t": 182,
+            "true_rule": "cross_fragile"
+          },
+          {
+            "action": "DOWN",
+            "agent": [
+              3,
+              7
+            ],
+            "bucket": "held_out",
+            "fired": {
+              "obj0": "obj0_step_DOWN",
+              "obj1": "obj1_still_DOWN",
+              "obj2": "obj2_still_DOWN",
+              "obj3": "obj3_still_DOWN",
+              "obj4": "obj4_still_DOWN",
+              "obj5": "obj5_still_DOWN"
+            },
+            "n_matching_guards": {
+              "obj0": 1,
+              "obj1": 1,
+              "obj2": 1,
+              "obj3": 1,
+              "obj4": 1,
+              "obj5": 1
+            },
+            "t": 183,
+            "true_rule": "walk"
+          }
+        ],
+        "mover": "obj0",
+        "prefix_matches_shipped_trace": true,
+        "reachable_states": 87,
+        "render_self_check": "287/287",
+        "render_self_check_ok": true,
         "replay": {
-          "accuracy": null,
-          "agree": 0,
-          "total": 0
-        }
+          "accuracy": 1.0,
+          "agree": 110,
+          "total": 110
+        },
+        "rules_mined": 32,
+        "tracks": 6
       },
       "verdict": {
-        "L1_liveness": false,
-        "L2_structure": false,
-        "L3a_replay": false,
-        "L3b_held_out": false,
-        "L3b_value": null,
+        "L1_liveness": true,
+        "L2_structure": true,
+        "L3a_replay": true,
+        "L3b_held_out": true,
+        "L3b_value": 0.98773,
         "held_out_bar": 0.9
       }
     }
