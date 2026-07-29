@@ -1632,6 +1632,56 @@
       "severity": "freeze_blocker",
       "state": "open",
       "statement": "Theoria 臂与它自己的消融臂跑的是两套不同的编译后端（Theoria 臂调 `theory-compiler/.../generators/`，消融臂调 `cold-start-a0/compile/`），那是第二刀，而 `ablation-arm/DESIGN.md:29-30` 依 `Theoria.md:280` 只许切一刀，且这第二刀正落在 C2 依赖的那个对比上；文中「建议列为上线前置条件」，但它既不在 `STATS_RULES.md` §9 也不在 `freeze/launch_blockers.json` 里。（本 id 由本次抽取铸造，文中无编号。）"
+    },
+    {
+      "clears_when": "与 §9.15 同一个条件：电池侧存在并已哈希一个 `abstain_as_wrong` 折算层（三种出口一律计入对应真值一侧的错误格，使 tp+fn 与 tn+fp 恒等于该类题数），或 `exam` 轨道改掉 `mark.confusion` 的语义并 supersede D-EX-015；freeze/launch_blockers.json 的 9.15 条目 state=implemented 且带命令模板与两个靶子，python freeze/launch_gate.py 对该行报 clear。",
+      "code": "LB-9.15",
+      "declared_at": "freeze/STATS_RULES.md:379",
+      "kind": "fix_code",
+      "landing": {
+        "exists_at_head": null,
+        "path": "exam/grading/mark.py"
+      },
+      "launch_blocker_row": "9.15",
+      "owner": {
+        "doc_says": null,
+        "territory": "exam",
+        "who": "exam 轨道（改语义）或 W-* build lane（折算层，不花钱）",
+        "why": "纯代码，不花 API 钱；但语义之争要 exam 轨道点头，故两条路都留着"
+      },
+      "paths": [
+        "exam/grading/mark.py",
+        "freeze/STATS_RULES.md"
+      ],
+      "same_defect_as": "9.15",
+      "severity": "launch_blocker",
+      "state": "open",
+      "statement": "预注册的「弃权计错」与它点名的实现方向相反：`exam/grading/mark.py` 把弃权（`:125-130`）、未提交（`:120-124`）、不可读（`:131-144`）三种都排除在 tp/fp/tn/fn 之外，`exam/DECISIONS.md` D-EX-015 还把相反语义记为正确决定；且 `_rate`（`:155-156`）在空分母返回 `None`，而 `None < ⟨S_min⟩` 无定义，使特异度地板这道一票否决在结构上可以不触发。于是「对没把握的第 iii 类题弃权」这条救援读法代价为零——不改一个数、不重读一个词。"
+    },
+    {
+      "clears_when": "与 §9.16 同一个条件：两个必跑阴性对照在任何封存局开跑前跑过并落盘哈希（`bluffer` 必判不成立、`memoriser` 必不得判成立），且按类拆分裁决与第 (ii) 类 `coverage_positive` ≥ ⟨c_min⟩ 的不可结论出口已实现；freeze/launch_blockers.json 的 9.16 条目 state=implemented 且带命令模板与两个靶子，python freeze/launch_gate.py 对该行报 clear。",
+      "code": "LB-9.16",
+      "declared_at": "freeze/STATS_RULES.md:424",
+      "kind": "fix_code",
+      "landing": {
+        "exists_at_head": null,
+        "path": "exam/grading/confusion_matrix.py"
+      },
+      "launch_blocker_row": "9.16",
+      "owner": {
+        "doc_says": null,
+        "territory": "exam",
+        "who": "exam 轨道 / W-* build lane",
+        "why": "纯代码与对照跑，不花 API 钱；⟨c_min⟩ 的取值仍是 needs_human（§9）"
+      },
+      "paths": [
+        "exam/grading/confusion_matrix.py",
+        "freeze/STATS_RULES.md"
+      ],
+      "same_defect_as": "9.16",
+      "severity": "launch_blocker",
+      "state": "open",
+      "statement": "主终点标量（判决半的 BA）分不出背诵与理解：memoriser 的 pooled 对是灵敏度 1.000 / 特异度 1.000，与真值逐位相同（`exam/DECISIONS.md:371-374`），而它在 4/4 道大空间题上全部弃权，故 BA = 1.000；`oracle` 与 `cheater-v4` 在按类拆分表的每一格都相同、只差总分（`exam/STATUS.md:53-56`），而 §2.2 恰恰把总分降级为探索性。这不是措辞可被钻，是措辞被正确执行反而给出错误结论。"
     }
   ]
 }

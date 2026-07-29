@@ -43,6 +43,20 @@ import re
 import subprocess
 import sys
 
+# Every entry printed here is Chinese prose carrying ⟨…⟩ placeholders.  On a
+# CJK-locale Windows console -- and equally down a pipe, which is how
+# verify.sh calls this -- stdout defaults to GBK, which has no U+27E8, so the
+# FAILURE listing died with UnicodeEncodeError partway through.  The effect was
+# nasty in a specific way: --verify still exited non-zero, so verify.sh's stage
+# [14] went red honestly, but the reason it printed was a traceback instead of
+# the offending rows.  A gate that cannot say what is wrong is a gate you learn
+# to ignore.  Same fix as build_budget_table.py:958 and launch_gate.py.
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
 TABLE = os.path.join(HERE, "RESIDUALS.json")

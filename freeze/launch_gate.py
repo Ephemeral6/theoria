@@ -71,6 +71,21 @@ import re
 import subprocess
 import sys
 
+# The rows this gate prints are quoted from STATS_RULES.md, which is Chinese
+# prose full of ⟨…⟩ placeholders.  On a CJK-locale Windows console stdout
+# defaults to GBK, which has no U+27E8, so printing a blocker's reason raised
+# UnicodeEncodeError and the gate died with a traceback -- exit 1 from the
+# interpreter, not the exit 2 this gate promises when it cannot evaluate
+# itself, and no verdict at all.  A gate that crashes on the text of the thing
+# it is gating is worse than one that says no.  Same fix as
+# build_budget_table.py:958.  (Found 2026-07-29 registering §9.15/§9.16, whose
+# clears_when carries a ⟨c_min⟩.)
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):  # already-wrapped or non-reconfigurable
+        pass
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 RULES = os.path.join(HERE, "STATS_RULES.md")
