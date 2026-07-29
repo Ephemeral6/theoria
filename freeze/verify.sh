@@ -280,7 +280,7 @@ DETECT='/21([^0-9]|$)|21/[0-9]|21 ?(局|对|格|个)|[nN] ?= ?21|恒 ?21|分母.
 
 # file | substring that must appear in the line | why this 21 is legitimate
 ALLOW=(
-"MANIFEST_DRAFT.md|含封存堆 21 局 / 14,121 基线动作|budget arithmetic: how many games get RUN. Not the statistical denominator. Open, see PENDING_FIVE 4.2."
+"MANIFEST_DRAFT.md|含封存堆 21 局 / 14,121 基线动作|budget arithmetic: how many games get RUN, kept as the UPPER BOUND. Not the statistical denominator. RES-1 recommends running 19; monitor confirms the budget line (RECONCILE ruling 2, PENDING_FIVE 4.2.1)."
 "STATS_RULES.md|封存堆有 21 局，但|(a) states the sealed pile size in order to say the denominator is NOT it."
 "STATS_RULES.md|sealed n=21 只作描述|(a) the tier definition itself -- sealed is descriptive-only by construction."
 "STATS_RULES.md|也不需要 21 局封存游戏来确证|(a) the sealed pile as a resource ('you need not spend the pile to show this'), not a denominator."
@@ -288,14 +288,14 @@ ALLOW=(
 "STATS_RULES.md|达成 14 在 n=21 下的 CI 下界是|(a) recomputation of P-22's OLD table, quoted to show it was wrong at its own n."
 "STATS_RULES.md|必修一把分母从 21 改成 19|(a) the correction's own record of what it changed."
 "STATS_RULES.md|是 n=21 下的值（21/3 = 7|(a) the superseded integer threshold, kept so the change is auditable."
-"STATS_RULES.md|按 \`piles.json\` 里 sealed 21 局的|OPEN, RECONCILE N-2: the ⟨m⟩ exam-subset rule still selects from the sealed 21 and so can select a quarantined game. Known wrong, tracked, NOT fixed here."
+"STATS_RULES.md|原条款作废|(a) names the SUPERSEDED ⟨m⟩ source (sealed_pile) in order to record what was wrong and why. The operative rule is the line above it and draws from claim_set; stage 9 enforces that."
 "CLAIMS_TEXT.md|不是封存堆的 21|(a) names 21 in order to reject it as the denominator."
 "PENDING_FIVE.md|\`sealed_pile\` 21 = 25 自洽|(a) the pile cut's own arithmetic, 4 + 21 = 25 public games."
 "PENDING_FIVE.md|封存堆 21 局，官方基线动作合计|budget denominator = games run; carries the caveat immediately below it."
 "PENDING_FIVE.md|这个 21 是「要跑多少局」|(a) the caveat that distinguishes games-run from the statistical denominator."
 "PENDING_FIVE.md|跑满 21 局、只在 19 局上主张|(a) same caveat, spelling out that the two counts need not be equal."
 "PENDING_FIVE.md|上表按 21 局算|(a) same caveat, stating the direction of the resulting bias."
-"PENDING_FIVE.md|约束是 m ≤ 21|OPEN, RECONCILE N-2: same ⟨m⟩ bound. Must become 19 when N-2 is done."
+"PENDING_FIVE.md|原条款的抽取源是|(a) same superseded ⟨m⟩ source, recorded so the correction is auditable. The operative rule two lines above draws from claim_set; stage 9 enforces that."
 )
 
 hits="$(cd "$HERE" && grep -nE "$DETECT" \
@@ -354,6 +354,145 @@ if python "$HERE/tiers.py" --verify >/dev/null 2>&1; then
   ok "freeze/tiers.py --verify (claim set still 21/19/12, no script hardcodes it)"
 else
   bad "freeze/tiers.py --verify failed -- run it for the reason"
+fi
+echo
+
+# ---------------------------- 9. the ⟨m⟩ exam subset is drawn from the 19
+# Stage 8 catches a *denominator* that reads 21.  This stage catches something
+# stage 8 cannot see: a pre-registered SELECTION RULE whose source list is the
+# sealed 21.  That rule was in both drafts (RECONCILE N-2) and it did not merely
+# risk picking a quarantined game -- under its own ordering it picked ft09 at
+# m>=5 and ls20 at m>=9, deterministically.  A result on either is uninterpretable
+# in both directions ("never seen" is false for them), so a rule that can select
+# one is a defect in the rule.
+#
+# WHAT THIS ENFORCES, and why each half is here:
+#   1. the rule, EXECUTED: for every legal m the prefix must avoid `quarantined`.
+#   2. a NEGATIVE CONTROL: the superseded sealed-pile rule must still be shown to
+#      select them.  Without it, check 1 could pass by testing nothing.
+#   3. the prose: every line carrying the draw clause `取前 ⟨m⟩ 局` must name
+#      `claim_set` and must not mention sealed or 21 -- so putting the rule back
+#      on the sealed pile turns this red, in either file.
+#   4. the bound: every `m ≤ N` in the two files must read 19.
+#   5. the ORDER TABLE printed in STATS_RULES.md is recomputed and compared row
+#      by row, so the published list cannot drift from the rule that made it.
+echo "[9] the ⟨m⟩ exam-subset rule draws from the claim-set 19, never the sealed 21"
+CS="$HERE/../arc-recon/data/claim_set.json"
+PL="$HERE/../arc-recon/data/piles.json"
+if [ ! -s "$CS" ] || [ ! -s "$PL" ]; then
+  bad "claim_set.json / piles.json not readable from the freeze kit ($CS)"
+else
+  m_out="$(python - "$CS" "$PL" "$S" "$P" <<'PY' 2>&1
+import json, re, sys
+
+# The drafts are Chinese and the draw clause itself contains ⟨m⟩, so this
+# script's own diagnostics are not ASCII.  On Windows the default stdout
+# codec is gbk and every message below would die on U+27E8 -- which would
+# have shown up as "stage 9 did not run cleanly", i.e. a red gate for an
+# encoding reason rather than a content one.  Pin UTF-8.
+sys.stdout.reconfigure(encoding="utf-8")
+
+cs_path, pl_path, s_path, p_path = sys.argv[1:5]
+cs = json.load(open(cs_path, encoding="utf-8"))
+pl = json.load(open(pl_path, encoding="utf-8"))
+
+claim = cs["claim_set"]
+quar = set(cs["quarantined"])
+sens = set(cs.get("retained_with_sensitivity_analysis", []))
+
+# THE RULE, executable: claim_set, sorted by game_id code point, first m.
+order = sorted(claim)
+
+# 1. the guarantee, checked at every legal m rather than argued
+hits = [m for m in range(1, len(order) + 1) if set(order[:m]) & quar]
+if hits:
+    print("FAIL the rule selects a quarantined game at m=%s" % hits[:3])
+elif len(order) != 19 or set(order) != set(claim) or (set(order) & quar):
+    print("FAIL claim_set changed shape: |claim|=%d overlap=%s"
+          % (len(order), sorted(set(order) & quar)))
+else:
+    print("PASS rule selects no quarantined game at any m in 1..19 (quarantined: %s)"
+          % ", ".join(sorted(quar)))
+
+# 2. negative control -- the superseded rule must still be shown to be wrong
+sealed = sorted(pl["sealed_pile"])
+pos = {g: sealed.index(g) + 1 for g in sorted(quar) if g in sealed}
+if len(pos) == len(quar) and pos:
+    print("PASS negative control holds: the old sealed-pile rule selects %s"
+          % ", ".join("%s at m>=%d" % (g, i) for g, i in sorted(pos.items(), key=lambda kv: kv[1])))
+else:
+    print("FAIL negative control broke: quarantined games missing from sealed_pile (%r) "
+          "-- this stage would then be testing nothing" % pos)
+
+# 3. the prose: the draw clause must name its source, in both files
+DRAW = "取前 ⟨m⟩ 局"          # 取前 ⟨m⟩ 局
+for name, path in (("STATS_RULES.md", s_path), ("PENDING_FIVE.md", p_path)):
+    text = open(path, encoding="utf-8").read()
+    lines = [l.strip() for l in text.split("\n") if DRAW in l]
+    if not lines:
+        print("FAIL %s: the ⟨m⟩ draw clause is gone -- the rule must stay stated verbatim" % name)
+        continue
+    clean = True
+    for l in lines:
+        if "claim_set" not in l:
+            print("FAIL %s: draw clause does not name claim_set: %s" % (name, l)); clean = False
+        if "sealed" in l or "21" in l:
+            print("FAIL %s: draw clause is back on the sealed pile: %s" % (name, l)); clean = False
+    if clean:
+        print("PASS %s: %d draw clause(s), every one sourced from claim_set" % (name, len(lines)))
+
+# 4. the bound
+bounds = set()
+for name, path in (("STATS_RULES.md", s_path), ("PENDING_FIVE.md", p_path)):
+    text = open(path, encoding="utf-8").read()
+    for n in re.findall(r"m\s*[≤<=]+\s*(\d+)", text):
+        bounds.add((name, n))
+wrong = sorted(b for b in bounds if b[1] != "19")
+if wrong:
+    print("FAIL the ⟨m⟩ bound is not 19: %s" % wrong)
+elif bounds:
+    print("PASS the ⟨m⟩ bound reads m ≤ 19 in %d place(s)" % len(bounds))
+else:
+    print("FAIL no ⟨m⟩ bound is stated in either file")
+
+# 5. the published order table vs the rule that produced it
+stats = open(s_path, encoding="utf-8").read()
+blk = re.search(r"M-ORDER:BEGIN(.*?)M-ORDER:END", stats, re.S)
+if not blk:
+    print("FAIL STATS_RULES.md: the generated ⟨m⟩ order block (M-ORDER) is missing")
+else:
+    got = re.findall(r"^\s*>?\s*(\d+)\s+([0-9a-z]{4}-[0-9a-f]{8})\s*$", blk.group(1), re.M)
+    want = [(str(i + 1), g) for i, g in enumerate(order)]
+    if got == want:
+        print("PASS the published order table matches the rule, all %d rows" % len(want))
+    else:
+        diff = next((i for i in range(max(len(got), len(want)))
+                     if got[i:i + 1] != want[i:i + 1]), None)
+        print("FAIL order table drifted from the rule: doc has %d rows, rule has %d, "
+              "first difference at row %s (doc=%s rule=%s)"
+              % (len(got), len(want), None if diff is None else diff + 1,
+                 got[diff:diff + 1], want[diff:diff + 1]))
+
+# 6. the exposure skew of the prefix is a property of the rule, so it is
+#    recomputed rather than trusted -- the disclosure must not go stale.
+want_s = "M-EXPOSURE: prefix5=%d/5 prefix10=%d/10" % (
+    sum(1 for g in order[:5] if g in sens), sum(1 for g in order[:10] if g in sens))
+if want_s in stats:
+    print("PASS prefix exposure disclosure is present and current (%s)" % want_s)
+else:
+    print("FAIL STATS_RULES.md must carry the sentinel '%s' -- recomputed from the rule" % want_s)
+PY
+)"
+  while IFS= read -r line; do
+    case "$line" in
+      "PASS "*) ok "${line#PASS }" ;;
+      "FAIL "*) bad "${line#FAIL }" ;;
+      "") ;;
+      *) bad "stage 9 did not run cleanly: $line" ;;
+    esac
+  done <<EOF
+$m_out
+EOF
 fi
 echo
 
