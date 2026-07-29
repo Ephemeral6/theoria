@@ -645,6 +645,52 @@ _deleting_actions/locked_actions/closure 一个都不参与义务重算，只�
 测试：`bash figures/verify.sh` 七道闸门全绿——两遍构建逐字节相同、源哈希未变、**已提交树等于新构建**（防陈旧图藏在绿灯后）、24 图 + 6 CSV 齐备、且无图脚本绕过 `sources.py` 直接读盘（第 7 道是本轮新增，用 AST 判定而非正则——正则版第一个「发现」是 docstring 里的「never ``open()``」）。零 API、零模型调用、零网络、零花费，故未触发花费闸门；封存堆零接触，图只读自建世界与开发堆四局，`fig03` 把切堆 sha256 从 battery 自己的 provenance 里盖在图面上。
 阻塞：无。四处上游漂移已报监控、**均不在本领地故未擅动**：`arm_contrast.json` 已过期；`battery/README.md:25` 仍称 V1 是「当前重算结果」、`METRICS.md` 标题仍是 v1；`cold-start-a0/THEORIZE_LOG.md` 的 O-04 压缩账（Cart +2967/Button −17/Door −13，像素基线）与 `artifacts/concept_accounts.json`（+2125/−5/−1，责任完备基线，`7cc02a9` 重新计价）不一致且日志从未更新，图 6 用 JSON、标明基线、把两套数都写进 CSV；`A3_REPORT.md` 的头条「347 → 10」跨了两条计量线（347 是 from-scratch 的 `world_frames`，10 是 transfer 的 `world_actions`），「332 → 0」是跨关卡的，图 4 两个都不画，改画同关同线的 347→11 / 346→10。
 下一步：**给所有画图的人一条**——确定性闸门证明的是可复现，不是正确。本轮图全部建绿之后，我自己写的图面注释 `$0.9025 ... against $0.1459` 被 matplotlib 当 mathtext 解析，渲染成斜体 `0.9025...against0.1459`，美元符号消失、两个数字连在一起；**它是确定性地错，两遍构建字节相同，第 3 道闸门全程绿灯，diff 里也看不出来**。已加 `theme.check_no_mathtext()` 撞上即 raise。同一类还抓到两个：matplotlib 用文本模式句柄写 SVG，本机出 CRLF、Linux 出 LF，而 `.gitattributes` 存 LF——干净检出后在 Windows 重建会挂第 6 道闸门却无缺陷可查（已在写入端钉死 newline）；`svg.hashsalt` 钉不住被**路径**裁剪的图元 id，matplotlib 对它取的是 `id(clippath)` 即内存地址，一张图里有一个 id 在两遍构建之间变了（已在 `theme.save` 里把生成 id 规范化成稳定序列）。**每一张图都渲染出来看过**，六张里有两张的排版问题是任何闸门都不会提的。
+
+## [arc-recon] 2026-07-28T14:39:45Z S5-phase1-close
+
+状态：Phase 1 验收单里属于本领地的两项收口，**两项均可转绿**：「接入核查各项已入账」
+（`ACCESS_CHECK.md` 八项全部答复或关闭，逐项带命名残留）与「级联语义已裁决」
+（`arc-recon/CASCADE_RULING.md`）。本轮**零 API 调用**，动作预算 ≤10 花费 0。
+
+**级联语义的裁决，两条轨道都请引用它而不要复述**（`arc-recon/CASCADE_RULING.md`）：
+多帧批次是**渲染爆发，不是内部 tick**。`step` 冻结为 `S → A → frames[-1]`；四个开发局
+`cascade single_frame`；`theory.pddl` **不需要** derived predicates（Theoria.md:301 的
+附属问题）；**`cold-start-a0` 的 D-A0-004 无需修订**——`cascade` 是逐世界的事实，A0 与
+ARC-AGI-3 是两个世界，两份声明从来不冲突，冲突的表象来自把 API 的帧**列表**读成关于 A0
+**规则**的陈述；engine-rig 的 T-11c 在 47,040 个 (state, action) 对上独立得出同一结论，
+判据相同。**两条轨道一直是一致的，需要裁决的只有 ARC 这一侧。** 对两条轨道的唯一硬要求：
+**`n_frames` 不是可选元数据**——任何取 `frames[-1]` 的消费者都要记下自己丢弃了几帧。
+
+**值得两条轨道都看一眼的，是它怎么错的。** 观测（`frame` 是列表）第一天就对；由它推出的
+「世界有内部 tick」是**推论**，却挂着观测的证据在仓库里走了三天，进了 `ACCESS_CHECK.md`
+和 `README.md`。Theoria.md:299 原本就把**动画**与**内部 tick** 并列为同一观测的两个候选
+成因、只说 API 答案解决**一半**；Theoria.md:301 把它压成了三段论，然后三段论被当成发现
+引用。分开它们靠的不是更多帧，而是另一种测量：逐帧哈希，加上「中间帧是不是一个规则能从它
+开火的状态」。裁决带**可反驳条件**，且是 Phase 3 的**必做项**：每次预测与观测不符时记录
+「重放到静止是否就能预测出该观测」，计数器非零则该世界是 `multi_frame`、裁决作废。
+三个明说的缺口：G-1 判据从未被直接跑过；G-2 所有轨迹止于 level 0；G-3 那个 113 帧的批次
+只被数过、从没逐格看过。已登记 `INC-AR-010`。
+
+测试：`bash arc-recon/verify.sh` → **VERIFY: green**；`bash arc-recon/cascade/verify.sh`
+→ **PASS**（27 步、4 局、31 条账本、22 个动作、零失败）。封存堆零接触。
+
+阻塞：无。但登记一条**流程事故 `INC-AR-011`（高）**：P-20 的逐帧探针数据——一个 Phase 1
+门禁项的**唯一**证据——此前只存在于 `.worktrees/wt-p20/` 的一个未跟踪目录里，没有
+MANIFEST、没有 RUN_STATE，一次 `git worktree prune` 就会删掉它。而本条目的**前一个工人
+W-5200 又在上一层重复了同一个失败**：它把数据抢救出来、写完裁决，然后（时间上与 09:35Z
+那次冻住六个工人的 session-limit 吻合）被杀，**全部未提交**，在 worktree 里躺了五小时。
+我 22:40Z 领到同一条目时发现它还在，**先验证、再原样单独提交、然后才往上加**。
+教训不是「要整洁」：同一条目上两个独立工人都写出了正确的东西，又都离「它不存在」只差一条
+命令。**磁盘只有在它是一条分支的时候才是记忆。** 残留：没有任何东西在扫「主人已死但工作
+未提交」的 worktree。
+
+下一步：三条不在本领地、只登记不动手——(1) `theoria-arm/inner/grammar_card.py:23-25` 仍
+从**后端能力**推出**逐世界事实**（把 `cascade single_frame` 标注为「Python 后端唯一能编译
+的值」），这是 `dsl_grammar_v0.2.md:335-340` 明文禁止的；它现在 advertise 的值恰好是对的，
+所以这是修**理由**最省事的时刻（W-5200 已报 monitor inbox）。(2) 速率项闭在一条**从未被
+触碰过的上限**上：战役放得下（峰值 432 rpm / 600），但从未观测到 429，退避曲线未测。
+(3) 裁决自己写下的 G-1/G-2/G-3 三个缺口本轮一个也没关，它们要的是 Phase 3 的数据和一次
+逐格阅读。
 ## [fuzzlab] 2026-07-28T10:20:00Z E4-property-fuzz · 500 个随机世界 × 六引擎 × 23 条不变量：零违例，而**真正的发现是语料本身**
 状态：`fuzzlab/` 落地：五族参数化随机世界（每个都是 64 位种子的纯函数，种子表 `out/seeds.jsonl` 可逐行复演，指纹对不上会当场报出来而不是让某条性质神秘地翻转）+ 六台引擎各 ≥3 条不变量（实际 4/4/4/4/3/4 = 23 条）+ 战役驱动 + 失败最小化归档。**最终跑：每引擎 500 个世界、合计 3000 个世界、0 违例、0 非预期异常、80 条 skipped（全部同一个有据可查的原因）**，战役种子 `0x00005eedc1e4f002`，被测树 engine-rig `0b01f29`。**全程没有改 engine-rig 一个字节**——`rig.py` 只把它放上 `sys.path`，缺陷写 `fuzzlab/BUGS.md` 并在此知会。立身之本是 `oracles/__init__.py` 那条继承下来的家规：**判官不得调用它所审的引擎**。用 `zero_space.verify` 去验 `zero_space` 只能证明该模块自洽，回答的不是那个问题；所以 `oracles/gf2.py` 是另写的一套位集高斯消元，`oracles/search.py` 是另写的 BFS、STRIPS 重放与熵计算。**但这次真正值钱的不是那个零，是语料**：第一轮战役也是全绿的，而它一文不值。对生成器做的对抗性审计（`runs/…/GENERATOR_AUDIT.md`）实测出两条要命的：(1) **`gridworld` 根本不可能生成障碍物**——`_place_obstacles` 要求「没有任何可达的 mover 位置落进障碍物的 halo」，可 mover 恰恰是在 strip 里含障碍物格时才被挡住、也就是恰好相邻的那一刻，于是该条件等价于「障碍物不可达」，而 ≥5×5 网格里 ≤4 格的障碍物永远做不到这件事：实测**五个战役种子下 3200 个世界零障碍物**，每次请求都在 24 次注定失败的 BFS 后被丢弃。后果不是美观问题——`mdl_segmenter` 的连通分量器与二部匹配轨道器**完全没被跑到**，而 `cegis_miner` 的守卫语言塌缩了：没有障碍物，`clear(strip(D))` 这一合取永远不吃劲，任何守卫只需要 bounds 那一半就能分开。**一次全绿的 500 世界战役，对这两台引擎什么也没证明。** 判据已改成本该如此的正向条件（障碍物必须**被见证**：某个可达锚点真的被它挡住），分割器现在看到 **1–23 条轨道**。(2) **`jumpgraph` 大面积退化**：`initial` 与 `goal_states` 从全部 2ⁿ 个位串里均匀抽，不看几何也不看彼此——52.5% 的初始态**一步合法动作都没有**，87.5% 可达态 ≤4，真正可解的只有 3%，而 `lp_potential` 发出的 70 张证书里**有 43 张是在只有一个状态的可达集上发的**。现已改为从「有合法动作」的态里抽 initial、从「棋子数严格更少」的态里抽目标，但**不**按可解性筛选——「不可解但非平凡」正是这台引擎存在的理由，筛掉它等于把被试删了。另两条（`blockworld` 14.7% 的世界第 0 步就已达成、`hypset` 28.5% 的预算花在没有任何动作能分裂的味道上）也已调好。相对地，**真值全部诚实**：五族携带的 ground truth 逐条独立重算，零不符，包括 `jumpgraph` 的 `distance_to_goal` 表——它正是 `lp_potential.admissibility_report` 的输入，错了就会变成引擎自己验自己。
 测试：`python -m fuzzlab.verify` 绿（预言机与战役测试 56 项 + 六引擎冒烟战役 + **engine-rig 自己的套件**，252 passed / 3 skipped，跳过的是没装 FD 的三项）。`python -m fuzzlab.campaign` 是常设的 500 世界战役。留了一份 `fuzzlab/tests/test_oracles.py` 专门钉预言机，因为**这套电池最可能的产出是冤枉好人**，而它开工头两个产出正是两次冤案，两次被告都完全正确、两次都是靠看第一条 finding 而不是看计数抓出来的：`probe_frontier.entropy_matches_bruteforce` 报了 120/120 违例——预言机在数**类的大小**，而引擎求和的是 `Hypothesis.weight`，`hypset` 偏偏抽非均匀权重；`fd_adapter.plan_replays_to_the_goal` 报了 13 条「计划跑不动」——预言机拿 `GroundAction.text` 当键，那是个绑定方法不是属性，于是它一个动作都认不出来。第三个预言机缺陷（size 度量对五族里的两族返回 0，会让最小化器永远随便排序）是被 `test_size_metric_is_defined_for_every_family` 抓的，不是被眼睛。
