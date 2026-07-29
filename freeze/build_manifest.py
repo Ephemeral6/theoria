@@ -290,19 +290,68 @@ def sha256_file(path):
     return digest.hexdigest()
 
 
+def sha256_tracked(rel):
+    """sha256 of what git *stores*, not of what is on this disk.
+
+    This distinction is the difference between a manifest that reproduces on
+    another machine and one that only describes this one.  The repository has no
+    root `.gitattributes` beyond a single `merge=union` line, and on this
+    checkout `CONTRACTS/dsl_grammar_v0.2.md` and `v0.3.md` are **CRLF on disk**
+    while `v0.1.md` is LF.  Hashing disk bytes would therefore bake one
+    developer's `core.autocrlf` into the freeze manifest, and the failure mode
+    is the worst available: every hash would differ on a fresh clone, so the
+    verify step would go red for a tree that is in fact identical, and whoever
+    hit that would quite reasonably start regenerating the manifest to make it
+    green.
+
+    So tracked files are hashed from the blob.  Untracked files are hashed from
+    disk -- there is nothing else to hash -- and marked, because an untracked
+    input to a freeze manifest is itself a finding.
+    """
+    blob = subprocess.run(("git", "show", "HEAD:%s" % rel), cwd=REPO,
+                          capture_output=True)
+    if blob.returncode != 0:
+        return None
+    return hashlib.sha256(blob.stdout).hexdigest()
+
+
+def _tracked_files_under(rel):
+    listing = git("ls-files", "-z", "--", rel)
+    if listing is None:
+        return []
+    return sorted(p for p in listing.split("\0") if p)
+
+
 def hash_path(rel):
-    """`(kind, sha256, file count)` for a file or a directory.
+    """`(kind, sha256, file count, source)` for a file or a directory.
 
     A directory is hashed as the sorted list of `relative path + sha256` of
     every file under it, so the result changes if a file is added, removed,
     renamed or edited.  `git`'s own tree hash would be cheaper and is not used:
-    it covers only tracked files, and several of the things this manifest must
-    pin are generated artefacts whose tracked-ness is itself in dispute.
+    it is a sha1 over a format that also encodes mode bits, and this manifest
+    wants a content hash a reader can reproduce with `sha256sum`.
     """
     full = os.path.join(REPO, rel.replace("/", os.sep))
+    tracked = _tracked_files_under(rel)
+
     if os.path.isfile(full):
-        return "file", sha256_file(full), 1
+        if tracked == [rel]:
+            digest = sha256_tracked(rel)
+            if digest is not None:
+                return "file", digest, 1, "git-blob"
+        return "file", sha256_file(full), 1, "worktree"
+
     if os.path.isdir(full):
+        if tracked:
+            digest = hashlib.sha256()
+            for path in tracked:
+                blob = sha256_tracked(path)
+                if blob is None:                      # staged but not committed
+                    blob = sha256_file(os.path.join(REPO,
+                                                    path.replace("/", os.sep)))
+                digest.update(path.encode("utf-8"))
+                digest.update(blob.encode("ascii"))
+            return "dir", digest.hexdigest(), len(tracked), "git-blob"
         digest = hashlib.sha256()
         count = 0
         for base, dirs, files in os.walk(full):
@@ -314,8 +363,9 @@ def hash_path(rel):
                 digest.update(key.encode("utf-8"))
                 digest.update(sha256_file(path).encode("ascii"))
                 count += 1
-        return "dir", digest.hexdigest(), count
-    return "absent", None, 0
+        return "dir", digest.hexdigest(), count, "worktree"
+
+    return "absent", None, 0, None
 
 
 def build():
@@ -323,9 +373,9 @@ def build():
     for item in ITEMS + EXTRA:
         paths = []
         for rel in item["paths"]:
-            kind, digest, count = hash_path(rel)
+            kind, digest, count, source = hash_path(rel)
             paths.append({"path": rel, "kind": kind, "sha256": digest,
-                          "files": count,
+                          "files": count, "hashed_from": source,
                           "tracked": bool(git("ls-files", "--error-unmatch", rel))})
         missing = [p["path"] for p in paths if p["kind"] == "absent"]
         entries.append({

@@ -8,41 +8,47 @@
       "paths": [
         {
           "files": 11,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/inner",
-          "sha256": "a7662e80b6b2f03bd6d5a1474fd60da0b45566f78f13c06e6fe0574c86478dc0",
+          "sha256": "35d91ad8c7edab8b53a18f84d1e82241ad756f8474eab476c3cdc0387831a2d0",
           "tracked": true
         },
         {
           "files": 7,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/harness",
-          "sha256": "92fdddb887a1964f179334496e09ecca1469d216a11bfd675d59e4850ccd8db4",
+          "sha256": "e9adbd87d4c282da061755565ea6bfa1e0e98f529701d585facdaf25976b4f6e",
           "tracked": true
         },
         {
           "files": 3,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/world",
-          "sha256": "75d74fdaa11b5c60decd6b07e11c52df76e03c637c00607ff24ac4c51d0be173",
+          "sha256": "e1b554957eb3cb25820bf331330f58d001ed773f118b8d712f6a61005f76cabe",
           "tracked": true
         },
         {
           "files": 8,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theoria-arm/armtools",
-          "sha256": "8973017ba555fdc2f5b925905af95d152656322434932b957c3e157be0edf090",
+          "sha256": "89b81fec05557f76040a30148c101c43df172c8d6abbd9c3376c10aeeb41bdcb",
           "tracked": true
         },
         {
           "files": 10,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "ablation-arm/ablcore",
-          "sha256": "9e3ce6f7b8da38ea701e864747f38251f94c3b10b3d48b821608b8e8d8e10464",
+          "sha256": "921263481d14b3f31c2dbdbc4a9e53afe84c3153e626cd394d8c50dd8e9bdced",
           "tracked": true
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "ablation-arm/run_arm.py",
           "sha256": "e9dee7101250d9cf35f08f3410d343f0008af9a0b6e6a507c8fe176c14d386f1",
@@ -59,27 +65,31 @@
       "paths": [
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "CONTRACTS/dsl_grammar_v0.1.md",
-          "sha256": "7c04314b0d253e1ef51042a26a3c0811b5d21718aa6e5940d683f3e08dc832aa",
+          "sha256": "995ebd3be6692d81ca727dc5deda4f29bdbc39762611a3e8bebbbbd7138e5723",
           "tracked": true
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "CONTRACTS/dsl_grammar_v0.2.md",
-          "sha256": "fb1c7f74f69de2b6399f720cb745373c3abce84458669e87a07e22defc3968e7",
+          "sha256": "7f135a42958cbfe547ef1d3f8a4fa1a8e042f71f8b36a5525c7be02e733aa1b8",
           "tracked": true
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "CONTRACTS/dsl_grammar_v0.3.md",
-          "sha256": "91959cfa8bb5dbbd6f606ae740a71c726f09d3cfdf084ef2e15bdfdba4a84348",
+          "sha256": "1254c3f900aa1b9491e44fc7f74dcdd7ec3291accb4d6823802cbf136e367877",
           "tracked": true
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "theory-compiler/src/theory_compiler/parser/theory_parser.py",
           "sha256": "5b8a18795ea95df481636ef54561db93c5f529d221f7d31969268547f71528c8",
@@ -87,6 +97,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "theory-compiler/src/theory_compiler/parser/playbook_parser.py",
           "sha256": "c30328c7a4a208c378443d57bac3f5d909242e70542af65a3057521371f1f684",
@@ -103,13 +114,15 @@
       "paths": [
         {
           "files": 6,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "theory-compiler/src/theory_compiler/generators",
-          "sha256": "4c82f669a7611461cac0861ddad1533344f142a81f85c7c717a775b1bb50a9e8",
+          "sha256": "7f0496937dad618fab41286cf2ae6e9872b08def86934cc3b48f1a093521f2f6",
           "tracked": true
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "theory-compiler/pyproject.toml",
           "sha256": "164d00c7f832fbbba3f67e996ca81433b0f5a5df6e8210a8bd05aa58498c2fa0",
@@ -117,9 +130,10 @@
         },
         {
           "files": 7,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "cold-start-a0/compile",
-          "sha256": "3793fbf7b1240b83bb7c8c5ca73c6c45ce9f0a6795946b7b3f651a62d257f39f",
+          "sha256": "505edc3820976f5aff360b5d34ebd49eebdb3c5bf792fd745521d80243960b8b",
           "tracked": true
         }
       ],
@@ -133,6 +147,7 @@
       "paths": [
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/inner/theorize.py",
           "sha256": "db4a2ea600780002af1f006e996eb04764b6610689d5d64b1d3cadf04955305c",
@@ -140,6 +155,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/inner/grammar_card.py",
           "sha256": "8948db017aae36d4a9f2c4b44447e8d5b3e0628fae89beed08bbe7a1f7c1dccd",
@@ -147,6 +163,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/harness/bare_cc.py",
           "sha256": "f1432f849cff44d9a3d3de2c646f61491a22d67289f40b097c0064137217a6fb",
@@ -163,13 +180,15 @@
       "paths": [
         {
           "files": 40,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "engine-rig/engines",
-          "sha256": "c968a29ef09d97a388c78b149c85e5241b73d66b60573c9266df9ec71c955427",
+          "sha256": "889bb6f7141042adec2128737c5bc0309b4165ad80a1e715cb3d980258444aff",
           "tracked": true
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "engine-rig/STATUS.md",
           "sha256": "68cff5fde1d5c1c653f746ab29412a205d74f63a921c6e0391921f7cf8fff6e6",
@@ -177,6 +196,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "engine-rig/ENGINE_TABLE.md",
           "sha256": "1f839dafab9a8b12de04492e94a33f78b13ddb0e9f0d08bb54cd5c540888cca9",
@@ -184,6 +204,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "engine-rig/artifacts/candidates.jsonl",
           "sha256": "5113ad321f680af0133ae17e2a549a8c75edd90ebfbcd69d9cb076b86daded8a",
@@ -200,6 +221,7 @@
       "paths": [
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/inner/probe.py",
           "sha256": "ff865c048534dace302888907d065399ab66537862489d7861eee19471fdd5cf",
@@ -207,9 +229,10 @@
         },
         {
           "files": 6,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "engine-rig/engines/probe_frontier",
-          "sha256": "9a14876606cbf0d98d5d19d45988f2f0af0e4db32fd9f2b75c47e456df50d53e",
+          "sha256": "6295d9e06265624af9bb20a6963f6e42af38d19f4ff58e1779b67fd3b031a2a6",
           "tracked": true
         }
       ],
@@ -223,6 +246,7 @@
       "paths": [
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/inner/plan.py",
           "sha256": "e73f204a26b76e9306b5879731e36176e9e6e388e60279d3a804446b88e22f7a",
@@ -230,13 +254,15 @@
         },
         {
           "files": 9,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "engine-rig/engines/fd_adapter",
-          "sha256": "4a2a853bd3ddad7d536a9d746ef6788094adf5a89854364602aaa2e232122347",
+          "sha256": "03977d444b02012416f9d51796d6030c14536f2410340ddf08591c57148af6e0",
           "tracked": true
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "engine-rig/bench/ladder.py",
           "sha256": "9c700f4de210536866a7256738381d728663f93061547ca56d0312634efedcb8",
@@ -244,6 +270,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "engine-rig/runs/p13-fd-real/TOOLCHAIN_MANIFEST.md",
           "sha256": "9f8ff996a86cc7c07144cd09ce688d762c8dd4738772b92a1f1de51f8b9c1303",
@@ -262,13 +289,15 @@
       "paths": [
         {
           "files": 6,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "battery/metrics",
-          "sha256": "8e505067f4c42246524b74f70a0fe9a4b07f8c213d801d21d5c9d6feb576e773",
+          "sha256": "b047810afaed822178e6d55f3ebb321ecbcde500313809627ce5ed0fc60074fa",
           "tracked": true
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "battery/METRICS.md",
           "sha256": "0956bf68cbfebd8b0ab36365bda6beaf353bf7678cacd9a333fc0eaa9b2c7fd1",
@@ -276,6 +305,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "battery/PREDICTIONS.md",
           "sha256": "b6050f7a47fdcd8a7c6c96fa1d238791dfd0d20f51de50b042e2082b5abd4085",
@@ -283,13 +313,15 @@
         },
         {
           "files": 29,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "battery/audit",
-          "sha256": "752eb6de7f266b444883483e911aef311b8dfb359e1f0e53fb1db197eb9a2439",
+          "sha256": "1a7604907a274c5bd7bd72a74b548985dac063d1637a1dab8c6b70f56ba857e8",
           "tracked": true
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "battery/run_battery.py",
           "sha256": "42ecdd0c8e6eafc8e997524ad4a309dff553569e2b206d807cd63b3d28af2244",
@@ -297,6 +329,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "battery/PREREG_V9.md",
           "sha256": "cf7d327168fa751a9a8d60814fd3854911f829b26e280d3e47659765d5bf37a9",
@@ -304,6 +337,7 @@
         },
         {
           "files": 0,
+          "hashed_from": null,
           "kind": "absent",
           "path": "battery/BATTERY_V1.md",
           "sha256": null,
@@ -320,6 +354,7 @@
       "paths": [
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "proxy/variants.py",
           "sha256": "18305dd00680295cec8530323f4d96e41f6f29f394d59b2dd6a7656e4fec8b76",
@@ -327,13 +362,15 @@
         },
         {
           "files": 4,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "proxy/variants",
-          "sha256": "76f680c818fed7ac12a20e4e8188ccc5cf753cbc6e6e2ff9ca1c6be1f98e727e",
+          "sha256": "ec4e4baeaec969bfab694a3c46b615fb67257655272b05e4f4c801d17598c6ab",
           "tracked": true
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "worldgen/mutate.py",
           "sha256": "510951065133eaca3cf63471ffda3f433606fb23a8b42321a1f3bd258185cc81",
@@ -341,6 +378,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "worldgen/out/worlds/MUTATIONS.json",
           "sha256": "3933dd226fcaaa06d1d72fc37ac8bda0ab23ca66a0d226c2e35ee085b1d74d81",
@@ -348,6 +386,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "exam/papers/adaptation.py",
           "sha256": "edd35fdf8a4ec7e1bf5e53708e01af494563a54a6dfa9650bc3a7030b206ed4a",
@@ -355,9 +394,10 @@
         },
         {
           "files": 17,
+          "hashed_from": "git-blob",
           "kind": "dir",
           "path": "exam/artifacts/variant_specs",
-          "sha256": "a4b372fa3e3c13f6c93a9c62d905ae99f438d2142f4acbd44119aa4dbf402823",
+          "sha256": "daf912fd158c582c2be4a179abca9b881aa47b96f9f6a40d6773de7e6b6d0486",
           "tracked": true
         }
       ],
@@ -371,6 +411,7 @@
       "paths": [
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/STATS_RULES.md",
           "sha256": "a78988f5f553ccb7652cc8bb922ac43f1836fb74591f35e908e5a7188a5ff8fd",
@@ -378,6 +419,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "battery/audit/stats.py",
           "sha256": "c6715761f70e2ed5eebe8352984a3af0be713ab5cad0970435d329286aefc0c5",
@@ -394,6 +436,7 @@
       "paths": [
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "freeze/CLAIMS_TEXT.md",
           "sha256": "ec2f2cac73985f3e48ee139747da3d34e79d94c44cd8fd1ac85f8534840d51b2",
@@ -410,6 +453,7 @@
       "paths": [
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "proxy/pricing/pricing_v1.json",
           "sha256": "ed81118ae10b3a07c14288a48d33c404d48bf6853c0303a26457f6e736334e9a",
@@ -417,6 +461,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "proxy/cost.py",
           "sha256": "3d6782fa7dcf060de994f6e33c001f5866447bccdb6fd23b0a7476c7ec90544d",
@@ -424,6 +469,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "theoria-arm/harness/budget.py",
           "sha256": "171a38934cae1ce325a03c79e90a114551f632acaf835a201548190a29f62904",
@@ -431,6 +477,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/BUDGET_REPORT.md",
           "sha256": "5678a00b92dff5303d5f4df69a7bbd1aea35106c644538d5f5540df387234236",
@@ -438,6 +485,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/out/campaign_gate.json",
           "sha256": "a822a120b66a25ece98eaa4af07fa343e5f22f57365fe4c3263882f13c9b137e",
@@ -454,6 +502,7 @@
       "paths": [
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/STATUS.md",
           "sha256": "70347b0b2e7a5f3093d15f39c29af91dcffcb9d8f5eabb0a4663710a964d35d0",
@@ -461,6 +510,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/DECISIONS.md",
           "sha256": "ae2b7189625e90d18051a204878ad63fd11440960619ffff04c9756899969621",
@@ -468,6 +518,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "baseline-arms/out/campaign_cells.jsonl",
           "sha256": "ebe6396e3cd3a1960b4d86bb7a71eb90da7b3d030504ed9f23f9adc43fecc54a",
@@ -486,6 +537,7 @@
       "paths": [
         {
           "files": 0,
+          "hashed_from": null,
           "kind": "absent",
           "path": "arc-recon/data/campaign_freeze.json",
           "sha256": null,
@@ -502,6 +554,7 @@
       "paths": [
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "engine-rig/runs/p13-fd-real/TOOLCHAIN_MANIFEST.md",
           "sha256": "9f8ff996a86cc7c07144cd09ce688d762c8dd4738772b92a1f1de51f8b9c1303",
@@ -509,6 +562,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "theory-compiler/lean/lean-toolchain",
           "sha256": "780c5b3424b12629ebe77451eda1ac2a2079bc7b81b6fa37969892afb8d32c0e",
@@ -516,6 +570,7 @@
         },
         {
           "files": 1,
+          "hashed_from": "git-blob",
           "kind": "file",
           "path": "theory-compiler/lean/lake-manifest.json",
           "sha256": "298b15a47f408a8d968b276819c2f8dae9e20e63add143da9319b6fdff5758db",
@@ -528,7 +583,7 @@
   "format": "theoria/freeze-manifest/1",
   "generated_from": {
     "branch": "agent/s4-freeze",
-    "commit": "efc82875f4bb6344d7ebfd02656fcee3d0506537",
+    "commit": "165926882d51a1067ed936536f2eedd859651a4a",
     "dirty": true
   },
   "source": "Theoria.md:368 冻结清单（13 项）+ 两项清单外补录",
