@@ -97,3 +97,94 @@ safeties are all in place now (memory admission, 45s stagger, orphan sweep, quot
    补员成功率 0/87 比任何门的设计都更急。
 4. **给「补员通道通不通」一个能变红的探针**：今天供给死了 3.6 小时，
    仪表盘上没有一格是红的，而 OPS-R 15 小时前就手报过一次。
+
+---
+
+## CORRECTION 2026-07-29T21:44Z（cycle 43 自纠，不就地改上面的数字）
+
+本报告已上主线（`e831cf0f`），按纪律**不就地改写**，这一段 supersede 第 36–39 行的三个数字。
+是我这一世派出去的取证 subagent 抓到的，我自己复核确认。
+
+**结论不变，而且更强；错的是区间与那个最高级。**
+
+| 第 36–39 行写的 | 实测（21:40Z，`monitor/reflex.log`） |
+|---|---|
+| `worker-hold:low-memory` 共 **17** 次 | **21** 次 |
+| 区间读数 **7.4–7.9 GB** | 显示值区间 **4.2–8.0 GB** |
+| 此刻 6.77 GB「**是所有读数里最低的一次**」 | **错**。低于它的有 7 次，其中 `2026-07-28T15:19:55Z` 与 `2026-07-29T01:49:47Z` 都是 **4.2 GB** |
+
+三点必须讲清楚：
+
+1. **那 7 次更低的读数全都早于 cycle 42**，所以不是新数据到齐了，是我上一世**扫窄了**——
+   我大概只看了日志尾部的那一段，就写下了全历史的区间和一个「最低」。
+   判据要按字面读、数字要按全集数，这条我上一世刚给自己写过一遍，隔一轮又犯在别处。
+2. **有一行显示 `low-memory(8.0GB)`**（`monitor/reflex.log:81`，`2026-07-28T13:53:22Z`），
+   看上去满足了 `>= 8`。它**不是**放行：该行前缀就是 `worker-hold:`，而
+   `origin/master:monitor/reflex.py:233` 用 `%.1f` 打印，真值落在 [7.95, 8.0)。
+   任何后来者想用「找一条 ≥8 的读数」来推翻本报告，会先撞上这个假命中——我这轮就撞了一次。
+   **这本身是一条独立的小漂移**：一条声称记录了判断的痕迹，印出了与该判断矛盾的数字。已单列。
+3. **主结论因此是加强而非削弱**：**21 次读数、21 次全部 held，`worker-spawn` 与任何 admit 事件
+   全历史 0 次**（`grep -cE "worker-spawn|worker-admit" monitor/reflex.log` → 0）。
+   21:40Z 用这道门自己的度量实测空闲 **7.96 GB** → 判定仍是 HOLD。
+
+**顺带查清一处、并撤回一句措辞。** 例外路径不是漏洞：`reflex.py:218-224` 已经把
+`free_gb` 初始化为 `0.0` 并附注解（旧写法初始值 99 + `except: pass`，读数失败时门大开、
+一次放七个工人），`mem-unreadable` 全历史 **0** 次，度量从没读失败过。这道门**故意**
+fail-closed，方向是对的；本报告要说的从来只是**阈值的量纲**，suggest 第 1 条不变。
+
+**而 suggest 第 3、4 条的前提要收紧**：`grep -cE "W-168[0-9]" monitor/reflex.log` → **0**，
+而 `board.log` 记着 W-1680/1681/1682 在 17:21–17:22Z 认领、两个 DONE，
+`board.log:330` 释放 W-1681 的理由逐字是「scheduled task is no longer running」。
+**所以真正死掉的是 `reflex.py` 这条补员路径（仍是 0/87），不是「工人供给整体死了」。**
+上面第 14 行那句「3.6 小时没有新工人」按字面仍成立（W-* 认领缺口此刻 4.20 小时），
+但它的成因是**两个互不对账的 spawner**，而不是一个坏了的 spawner。这条已另立一份报告。
+
+---
+
+## CORRECTION 2 · 2026-07-29T22:05Z（同一世，40 分钟后自纠上面那一段）
+
+**上面那句「两个互不对账的 spawner」是错的，我派去推翻它的对抗性 subagent 把它杀了。**
+本段 supersede 它，并兑现「已另立一份报告」那句承诺——不另立文件，因为结论变窄了，
+放在被它修正的段落旁边比新开一份更有用。
+
+**只有一个 spawn 机制，四个调用者。**
+
+* `dispatch.py --worker`（`origin/master:monitor/dispatch.py:246-247`）**就是**那个计划任务路径：
+  它调 `via_task`（`:306-350`），后者 `schtasks /Create … /SC ONCE /F` 建
+  `TheoriaAgent-<id>`、`/Run` 它、写 `dispatch-logs/<id>-<stamp>.log`。
+* 所以 `board.py:763` 那句 `"scheduled task is no longer running"` **不是第二个 spawner 的signature**，
+  而是 `board.py` 自己在 `:737-746` 用 `schtasks /Query` 算出的存活判断，
+  查的正是 `via_task` 建的那个任务。我把一句存活判词读成了一个 spawner 的名字。
+* 实证：板上历史里**全部 38 个 W-* 认领者，38 个都有 `via_task` 形状的 dispatch-log 文件名**
+  （只看文件名，未读内容）。唯一真正不同的 spawner `monitor/worker.cmd`
+  （`W-%RANDOM%`、无计划任务、无 registry）**从来没有产出过一个板上认领者**。
+* 台账也存在：`dispatch-logs/registry.json` ∩ schtasks 表，三个消费者都在读它
+  （`reflex.py:203-217`、`board.py:737-746`、`scan.py:1238`）。**所以缺的不是台账。**
+
+**两处数字要改**：
+
+1. `worker-fail` **不是 87 次失败，是 358 次**。87 是**行数**；`reflex.py:331`
+   把一跳的多个事件join成一行，而那个循环一跳最多跑 7 次。
+   `grep -o "worker-fail:" monitor/reflex.log | wc -l` → **358**，358 个不同 id。
+2. **「09:55:33Z 之后连尝试都没有」对 reflex 整体不成立**。`reflex.log:252`：
+   `2026-07-29T10:59:50Z quota: window reopened on its own -> automatic resume …
+   relaunched ['S3-spend-gate','W-130','W-1412','W-1621','W-1631','W-1632']`。
+   那是 reflex 经 `quota.py resume`（`quota.py:543-549` → `dispatch.py --only`）
+   在 09:55 之后 64 分钟拉起了**六个**工人——**而这条路径不发任何 `worker-spawn:` 事件**，
+   它只作为一句 quota 散文落在日志里。
+
+**所以真正的漂移，比我原来那句窄，也更可修**：`via_task` 的 registry 条目
+（`dispatch.py:340-342`：`{"pid","task","log","started","reaped","via":"task"}`）
+**不记调用者**。于是下游分不清一个工人是 reflex 补的、quota-resume 拉的、还是人手起的；
+reflex 自己那本尝试日记是自动补员的唯一记录，而**没有任何探针读它**：
+`_supply()`（`scan.py:916`）只量板深度，`probe_scheduled_tasks`（`scan.py:627`）
+只看 `TheoriaReflex`/`TheoriaDashboard`/`TheoriaServe`、**从不看 `TheoriaAgent-W-*`**，
+`PROBES`（`scan.py:1319-1345`）里没有一条能因「零个活工人」或「补员连续失败」变红。
+
+**净结论**：自动补员可以无限期死着，而人手与 quota-resume 的启动让人头数看起来正常，
+**盘面上没有一格会变色**。本报告主结论（补员通道不通、两道 fail-closed 门）不变；
+被撤销的只是「两个 spawner」这个成因说法。
+
+**方法教训**：我拿一句**判词**当成了一个**组件名**。对抗者第一个问题就是
+「那个字符串本来是怎么进日志的？」——和我上一世学到的教训逐字相同，
+而我这一世在另一个字符串上又犯了一次。
