@@ -11,3 +11,14 @@ __pycache__/
 *.pyc
 
 .pytest_cache/
+
+# One leg's candidate stream is 201 MB -- 19 486 candidates averaging 10 KB
+# each, from 20260729T004020Z-leg01. GitHub refuses anything over 100 MB, so
+# this file cannot be pushed and the branch carrying it cannot either.
+#
+# Excluded by path rather than by a blanket `runs/*/candidates.jsonl`, because
+# the stream is normally worth tracking and eighteen of them already are (the
+# next largest is 18.8 MB). The size is the anomaly, not the artefact: a
+# 10 KB mean candidate is a signal about what the miner is emitting, and it is
+# filed as such rather than being quietly dropped here.
+runs/20260729T004020Z-leg01/candidates.jsonl
