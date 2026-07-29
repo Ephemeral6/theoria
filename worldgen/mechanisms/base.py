@@ -200,8 +200,22 @@ class Mechanism:
         return []
 
     def invariants(self, spec: WorldSpec, mine: Tuple[Entity, ...]) -> List[Dict[str, Any]]:
-        """One dict per invariant: `name`, `statement`, and `check` — a callable
-        `(world, state) -> bool` exercised over the whole reachable set."""
+        """One dict per invariant: `name`, `statement`, and one of two callables.
+
+        * `check(world, state) -> bool` — a predicate on a single state,
+          exercised over the whole reachable set;
+        * `edge_check(world, prev, action, next) -> bool` — a predicate on a
+          single **transition**, exercised over the whole reachable graph. This
+          is what a monotonicity claim needs, and its absence is what let three
+          of them ship as prose.
+
+        An invariant with neither is recorded `unverified` and **fails the build
+        gate**. Declaring a claim nobody exercises used to be free, because
+        `invariants_all_hold` defaulted a missing verdict to `True`; it is not
+        free now. If a claim cannot be expressed as either callable, do not
+        declare it here — say it in `reversibility`'s prose notes, which nothing
+        reads as a verdict.
+        """
         return []
 
     def reversibility(self, spec: WorldSpec, mine: Tuple[Entity, ...]) -> List[Dict[str, Any]]:

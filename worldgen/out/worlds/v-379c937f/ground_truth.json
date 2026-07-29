@@ -15,12 +15,27 @@
     9,
     10
   ],
+  "invariant_status": {
+    "holds": [
+      "agent_unique",
+      "grid_shape",
+      "block_count",
+      "blocks_disjoint",
+      "door_presence_tracks_net",
+      "latch_monotone",
+      "agent_conserved",
+      "mouths_static"
+    ],
+    "unverified": [],
+    "violated": []
+  },
   "invariants": [
     {
       "holds": true,
       "name": "agent_unique",
       "statement": "exactly one cell shows colour 6 at all times",
       "states_checked": 2654,
+      "status": "holds",
       "verified": true
     },
     {
@@ -28,6 +43,7 @@
       "name": "grid_shape",
       "statement": "every frame is 9 x 10",
       "states_checked": 2654,
+      "status": "holds",
       "verified": true
     },
     {
@@ -35,6 +51,7 @@
       "name": "block_count",
       "statement": "exactly 1 cell(s) show colour 2 at all times",
       "states_checked": 2654,
+      "status": "holds",
       "verified": true
     },
     {
@@ -42,6 +59,7 @@
       "name": "blocks_disjoint",
       "statement": "no two blocks ever occupy the same cell",
       "states_checked": 2654,
+      "status": "holds",
       "verified": true
     },
     {
@@ -49,19 +67,23 @@
       "name": "door_presence_tracks_net",
       "statement": "a door shows colour 5 exactly when its net's aggregate bit does not match its polarity, and shows nothing of its own otherwise",
       "states_checked": 2654,
+      "status": "holds",
       "verified": true
     },
     {
+      "holds": true,
       "name": "latch_monotone",
-      "note": "prose only \u2014 not checkable on a single state",
       "statement": "every latch switch's bit is monotone non-decreasing along every trajectory, and so is the aggregate bit of a net whose switches are all latches: once 1, never 0 again",
-      "verified": false
+      "status": "holds",
+      "transitions_checked": 10616,
+      "verified": true
     },
     {
       "holds": true,
       "name": "agent_conserved",
       "statement": "exactly one cell shows the agent at all times \u2014 a portal moves the agent, it never copies or deletes it",
       "states_checked": 2654,
+      "status": "holds",
       "verified": true
     },
     {
@@ -69,6 +91,7 @@
       "name": "mouths_static",
       "statement": "each of the 2 portal mouth(s) shows colour 7 unless the agent is standing on it",
       "states_checked": 2654,
+      "status": "holds",
       "verified": true
     }
   ],

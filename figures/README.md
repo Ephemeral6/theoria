@@ -1,22 +1,59 @@
 # figures/ — the paper plates, and the pipeline that guarantees them
 
 Six figures for the Phase-1 write-up. Each is produced by one deterministic
-script, through a CSV intermediate layer, into two themes and two formats.
+script, through a CSV intermediate layer, into **two output profiles**: the
+screen profile the pipeline has always written, and the publication profile the
+paper cites.
 
 ```
-data on disk  ──►  extract  ──►  figures/csv/<fig>.csv  ──►  render  ──►  out/{light,dark}/<fig>.{svg,png}
-   (read-only)                      (the audit surface)
+data on disk ─► extract ─► figures/csv/<fig>.csv ─► render ─┬─► out/{light,dark}/<fig>.{svg,png}          200 dpi
+  (read-only)                 (the audit surface)           └─► paper/{light,dark}/figureN_<slug>.{pdf,png,svg}  300 dpi
 ```
+
+Both profiles come off the **same in-memory figure in one pass**, so they cannot
+drift apart; gate 10 checks the SVGs are byte-identical rather than trusting it.
 
 ## Build
 
 ```bash
-python figures/build_all.py               # all six, into figures/{csv,out}
+python figures/build_all.py               # all six, both profiles, index, captions
 python figures/build_all.py --list        # the fixed build order
 python figures/build_all.py --only fig03_capability_spectrum
 bash    figures/verify.sh                 # the gate: build twice, diff, check
 python  figures/manifest.py --run-dir figures/runs/<UTC>-<id> --prompt-id <id> --worker <who>
 ```
+
+## The paper's numbering, and why it is a second view
+
+The paper cites **Figure 1…6**, numbered by order of first citation. The plates
+are named `fig02`…`fig07`, numbered after `Theoria.md` §3.2's figure list. The
+two have never agreed and there is no reason they should — §3.2 is a list of
+pictures the project wants; the paper is a document with a reading order.
+
+`paper_map.py` is the join, and it is the only place the join lives:
+
+| paper | § | plate |
+|---|---|---|
+| Figure 1 | §3 | `fig06_concept_timeline` |
+| Figure 2 | §3 | `fig07_a0_vs_a0prime` |
+| Figure 3 | §5 | `fig05_a2_repair_loop` |
+| Figure 4 | §6 | `fig04_a3_transfer` |
+| Figure 5 | §7 | `fig03_capability_spectrum` |
+| Figure 6 | §7 | `fig02_bill_shape` |
+
+The plates are **not** renamed: `build_all.FIGURES`, `check_coverage.py`,
+`SOURCES.md`, `PLAN.md` and every `Source.figures` tuple key on those slugs.
+
+`figures/paper/` also carries two generated things a submission needs:
+
+* `INDEX.md` / `index.json` — number → generator → every data source → sha256.
+* `captions/figureN.md` — a paper-ready caption block and, below it, the
+  provenance behind it. Both are **derived**, from `sources.py` and
+  `paper_map.py`; reword a caption in `paper_map.py`, never in the output.
+
+A plate with a declared source missing is marked `pending` in the index and its
+caption, naming what is absent. Figure 6 is the live case: the four envelope
+ledger shards are untracked in `master`.
 
 `verify.sh` is the thing to run before committing. It builds everything twice
 into separate trees and requires the results to be **byte-identical**, checks

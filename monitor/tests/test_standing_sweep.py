@@ -179,3 +179,68 @@ def test_the_two_thresholds_come_from_one_number():
     """A second copy of "how long is too long" drifts from the first."""
     assert board.STANDING_CYCLE_MIN == board.STALE_MIN
     assert board.STANDING_DEAD_MIN == board.STALE_MIN * 2
+
+
+# ------------------------------------- the third condition, finally implemented
+
+def _bus_out(home, agent, age_min):
+    d = home / "bus" / agent
+    d.mkdir(parents=True, exist_ok=True)
+    p = d / "out.jsonl"
+    p.write_text('{"said": "still here"}\n', encoding="utf-8")
+    when = time.time() - age_min * 60
+    os.utime(p, (when, when))
+    return p
+
+
+def test_bus_traffic_after_the_heartbeat_keeps_the_claim(tmp_path, monkeypatch):
+    """The only *positive* liveness evidence in the whole test.
+
+    The other two conditions are silences, and a silence is the absence of
+    proof rather than proof of absence. Traffic on the outbound bus after the
+    heartbeat is the session demonstrably doing something.
+
+    It was described in three places and implemented in none, and the ten tests
+    written alongside it all encoded the two-signal behaviour -- so the suite
+    agreed with the code against the documentation and nothing could catch it.
+
+    Not academic: a claim was released at 18:52:20Z, 48 minutes after RES-3
+    wrote to its out.jsonl at 18:04:28Z, and the holder objected on the spot.
+    """
+    home = _fleet(tmp_path, monkeypatch)
+    _heartbeat(home, "RES-9", age_min=200)
+    _urgent(home, "RES-9", age_min=120)
+    _bus_out(home, "RES-9", age_min=48)          # after the heartbeat
+    dead, why = board.standing_verdict("RES-9")
+    assert not dead, why
+    assert "out.jsonl" in why
+
+
+def test_bus_traffic_before_the_heartbeat_does_not_save_it(tmp_path, monkeypatch):
+    """Only traffic *newer* than the heartbeat is evidence.
+
+    Otherwise any session that ever spoke would be permanently immortal.
+    """
+    home = _fleet(tmp_path, monkeypatch)
+    _bus_out(home, "RES-9", age_min=400)         # long before
+    _heartbeat(home, "RES-9", age_min=200)
+    _urgent(home, "RES-9", age_min=120)
+    dead, why = board.standing_verdict("RES-9")
+    assert dead, why
+    assert "no bus traffic since the heartbeat" in why
+
+
+def test_the_third_condition_can_only_refuse_never_release(tmp_path, monkeypatch):
+    """Wired as a refusal only, so it cannot cause a wrongful release.
+
+    A live session freed of its claim puts two agents in one territory. This
+    condition can only ever move a verdict from dead to alive, which makes that
+    outcome unreachable by this change.
+    """
+    home = _fleet(tmp_path, monkeypatch)
+    _heartbeat(home, "RES-9", age_min=3)         # alive by condition one
+    _bus_out(home, "RES-9", age_min=1)
+    assert not board.standing_verdict("RES-9")[0]
+    # removing the traffic must not flip anything to dead
+    os.remove(str(home / "bus" / "RES-9" / "out.jsonl"))
+    assert not board.standing_verdict("RES-9")[0]
