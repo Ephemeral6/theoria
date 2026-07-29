@@ -169,6 +169,28 @@ open are closed like this:
 | 2 | cross-session residue | **closed** — none across four sessions; now standing surveillance (daily canary) rather than an open question | — |
 | 8 | frame caching and release licensing | **closed, and less restrictive than first read** — caching is designed behaviour, our own numbers are explicitly publishable, ARC's raw content is not | the salvaged P-20 raw ledgers are ARC content and join the §8 release-redaction obligation |
 
+### Item 6, the other axis: rate is documented, action billing is only measured
+
+S22 asked for the official wording and our measured convention to be put side by
+side, because item 6 above closed the *rate* question and left a second one
+unstated. They are different axes and only one of them has a source:
+
+| | Official (ARC) | Ours (measured) |
+|---|---|---|
+| **Rate** | **600 requests per minute**, `429 RATE_LIMIT_EXCEEDED` on breach — `docs.arcprize.org/rate_limits`, quoted in [`../browser-ops/TERMS.md`](../browser-ops/TERMS.md) | worst aggregate peak 432 rpm of 600 (`data/rate_budget.json`) |
+| **Action billing** | **nothing.** No published statement on whether a failed call consumes an action | scorecard `total_actions` **equals successful actions only**; failed 400s and retry amplification do not count — 19 samples, 3 model tiers, 4 games, 3 campaigns, no exception (`../baseline-arms/BUDGET_REPORT.md` §4.1, §12, §13) |
+
+**The one line for the record: the rate ceiling is documented and we stay under
+it; the action-billing rule is ours, not ARC's.** It is an inference from 19
+consistent observations, and it decides budgets — the pessimistic reading it
+displaced was 3.2× larger. Nothing has confirmed it and no non-destructive test
+can, so it stays labelled as measured rather than promoted to known.
+
+The unmeasured residual named at item 6 is unchanged and belongs to the same
+family: **no 429 has ever been observed**, so the backoff curve is built on a
+limit never touched. Both are cases of a number we rely on and have not had
+confirmed from the other side.
+
 **The cascade item is worth reading for how it went wrong, not just how it came
 out.** The observation — `frame` is a list — was correct on day one and is in
 the table above. The conclusion drawn from it, "the world has an internal tick,
