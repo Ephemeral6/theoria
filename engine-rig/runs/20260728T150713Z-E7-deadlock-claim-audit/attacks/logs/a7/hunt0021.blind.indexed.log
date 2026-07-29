@@ -1,0 +1,209 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a7\hunt0021\indexed\sokoban_guarded_indexed_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a7\hunt0021\indexed\hunt0021_guarded_indexed.pddl' --sas-file output.sas
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Parsing: [0.000s CPU, 0.118s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
+Preparing model... [0.016s CPU, 0.001s wall-clock]
+Generated 56 rules.
+Computing model... [0.000s CPU, 0.008s wall-clock]
+423 relevant atoms
+1886 auxiliary atoms
+2309 final queue length
+2584 total queue pushes
+Completing instantiation... [0.000s CPU, 0.002s wall-clock]
+Instantiating: [0.016s CPU, 0.013s wall-clock]
+Computing fact groups...
+Finding invariants...
+7 initial candidates
+Finding invariants: [0.000s CPU, 0.003s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.000s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+21 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.000s CPU, 0.004s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Processing axioms: [0.016s CPU, 0.000s wall-clock]
+Translating task: [0.016s CPU, 0.009s wall-clock]
+996 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+143 operators removed
+0 axioms removed
+14 propositions removed
+Detecting unreachable propositions: [0.000s CPU, 0.005s wall-clock]
+Reordering and filtering variables...
+24 of 24 variables necessary.
+21 of 24 mutex groups necessary.
+385 of 385 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.016s CPU, 0.002s wall-clock]
+Translator variables: 24
+Translator derived variables: 0
+Translator facts: 92
+Translator goal facts: 2
+Translator mutex groups: 21
+Translator total mutex groups size: 71
+Translator operators: 385
+Translator axioms: 0
+Translator task size: 3767
+warning: could not determine peak memory
+Writing output... [0.000s CPU, 0.014s wall-clock]
+Done! [0.047s CPU, 0.165s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(blind())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpzr1vltep\sas_plan' < output.sas
+[t=0.000109s, 1892 KB] Search code revision: 7120aa0
+[t=0.000189s, 1892 KB] reading input...
+[t=0.003942s, 2584 KB] done reading input!
+[t=0.012020s, 2940 KB] Initializing blind search heuristic...
+[t=0.012065s, 2940 KB] Building successor generator... done!
+[t=0.012268s, 3028 KB] peak memory difference for successor generator creation: 88 KB
+[t=0.012276s, 3028 KB] time for successor generation creation: 0.000186s
+[t=0.012283s, 3028 KB] Variables: 24
+[t=0.012288s, 3028 KB] FactPairs: 92
+[t=0.012290s, 3028 KB] Bytes per state: 8
+[t=0.012298s, 3028 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.012313s, 3028 KB] New best heuristic value for blind: 1
+[t=0.012316s, 3028 KB] g=0, 1 evaluated, 0 expanded
+[t=0.012321s, 3028 KB] f = 1, 1 evaluated, 0 expanded
+[t=0.012332s, 3040 KB] Initial heuristic value for blind: 1
+[t=0.012335s, 3040 KB] pruning method: none
+[t=0.012346s, 3040 KB] f = 2, 4 evaluated, 1 expanded
+[t=0.012358s, 3040 KB] f = 3, 9 evaluated, 4 expanded
+[t=0.012368s, 3040 KB] f = 4, 13 evaluated, 9 expanded
+[t=0.012376s, 3040 KB] f = 5, 16 evaluated, 13 expanded
+[t=0.012383s, 3040 KB] f = 6, 18 evaluated, 16 expanded
+[t=0.012388s, 3040 KB] f = 7, 19 evaluated, 18 expanded
+[t=0.012392s, 3040 KB] f = 8, 20 evaluated, 19 expanded
+[t=0.012397s, 3040 KB] f = 9, 24 evaluated, 20 expanded
+[t=0.012408s, 3040 KB] f = 10, 32 evaluated, 24 expanded
+[t=0.012485s, 3040 KB] f = 11, 47 evaluated, 32 expanded
+[t=0.012511s, 3040 KB] f = 12, 69 evaluated, 47 expanded
+[t=0.012542s, 3040 KB] f = 13, 99 evaluated, 69 expanded
+[t=0.012584s, 3040 KB] f = 14, 136 evaluated, 99 expanded
+[t=0.012633s, 3040 KB] f = 15, 184 evaluated, 136 expanded
+[t=0.012686s, 3040 KB] f = 16, 235 evaluated, 184 expanded
+[t=0.012764s, 3040 KB] f = 17, 310 evaluated, 235 expanded
+[t=0.012845s, 3040 KB] f = 18, 386 evaluated, 310 expanded
+[t=0.012931s, 3040 KB] f = 19, 476 evaluated, 386 expanded
+[t=0.013050s, 3052 KB] f = 20, 570 evaluated, 476 expanded
+[t=0.013155s, 3052 KB] f = 21, 680 evaluated, 570 expanded
+[t=0.013275s, 3052 KB] f = 22, 792 evaluated, 680 expanded
+[t=0.013397s, 3052 KB] f = 23, 916 evaluated, 792 expanded
+[t=0.013568s, 3084 KB] f = 24, 1035 evaluated, 916 expanded
+[t=0.013699s, 3084 KB] f = 25, 1167 evaluated, 1035 expanded
+[t=0.013832s, 3084 KB] f = 26, 1294 evaluated, 1167 expanded
+[t=0.013964s, 3084 KB] f = 27, 1423 evaluated, 1294 expanded
+[t=0.014089s, 3084 KB] f = 28, 1537 evaluated, 1423 expanded
+[t=0.014210s, 3084 KB] f = 29, 1661 evaluated, 1537 expanded
+[t=0.014326s, 3084 KB] f = 30, 1764 evaluated, 1661 expanded
+[t=0.014433s, 3084 KB] f = 31, 1862 evaluated, 1764 expanded
+[t=0.014598s, 3120 KB] f = 32, 1950 evaluated, 1862 expanded
+[t=0.014705s, 3132 KB] f = 33, 2054 evaluated, 1950 expanded
+[t=0.014812s, 3132 KB] f = 34, 2156 evaluated, 2054 expanded
+[t=0.014922s, 3132 KB] f = 35, 2272 evaluated, 2156 expanded
+[t=0.015045s, 3132 KB] f = 36, 2395 evaluated, 2272 expanded
+[t=0.015185s, 3132 KB] f = 37, 2535 evaluated, 2395 expanded
+[t=0.015327s, 3144 KB] f = 38, 2660 evaluated, 2535 expanded
+[t=0.015458s, 3144 KB] f = 39, 2788 evaluated, 2660 expanded
+[t=0.015578s, 3144 KB] f = 40, 2886 evaluated, 2788 expanded
+[t=0.015678s, 3144 KB] f = 41, 2977 evaluated, 2886 expanded
+[t=0.015821s, 3144 KB] f = 42, 3043 evaluated, 2977 expanded
+[t=0.015947s, 3156 KB] f = 43, 3113 evaluated, 3043 expanded
+[t=0.016067s, 3156 KB] f = 44, 3176 evaluated, 3113 expanded
+[t=0.016154s, 3156 KB] f = 45, 3229 evaluated, 3176 expanded
+[t=0.016170s, 3156 KB] New best heuristic value for blind: 0
+[t=0.016176s, 3156 KB] g=45, 3234 evaluated, 3184 expanded
+[t=0.016181s, 3156 KB] Solution found!
+[t=0.016188s, 3156 KB] Actual search time: 0.003852s
+move c22 c12 up (1)
+move c12 c13 right (1)
+move c13 c14 right (1)
+move c14 c15 right (1)
+move c15 c25 down (1)
+move c25 c35 down (1)
+push-pair0 c35 c34 c33 b2 left (1)
+push-pair0 c34 c33 c32 b2 left (1)
+move c33 c43 down (1)
+move c43 c42 left (1)
+move c42 c41 left (1)
+move c41 c31 up (1)
+move c31 c21 up (1)
+move c21 c22 right (1)
+push-pair0 c22 c32 c42 b2 down (1)
+move c32 c31 left (1)
+move c31 c41 down (1)
+push-pair0 c41 c42 c43 b2 right (1)
+push-pair0 c42 c43 c44 b2 right (1)
+move c43 c42 left (1)
+move c42 c32 up (1)
+move c32 c22 up (1)
+move c22 c12 up (1)
+move c12 c13 right (1)
+move c13 c14 right (1)
+push-pair0 c14 c24 c34 b1 down (1)
+move c24 c25 right (1)
+move c25 c35 down (1)
+push-pair0 c35 c34 c33 b1 left (1)
+push-pair1 c34 c44 c54 b2 down b1 c44 (1)
+move c44 c34 up (1)
+push-pair0 c34 c33 c32 b1 left (1)
+move c33 c43 down (1)
+move c43 c42 left (1)
+move c42 c41 left (1)
+move c41 c31 up (1)
+move c31 c21 up (1)
+move c21 c22 right (1)
+push-pair0 c22 c32 c42 b1 down (1)
+move c32 c31 left (1)
+move c31 c41 down (1)
+push-pair0 c41 c42 c43 b1 right (1)
+move c42 c32 up (1)
+move c32 c33 right (1)
+push-pair0 c33 c43 c53 b1 down (1)
+[t=0.016194s, 3156 KB] Plan length: 45 step(s).
+[t=0.016194s, 3156 KB] Plan cost: 45
+[t=0.016194s, 3156 KB] Expanded 3185 state(s).
+[t=0.016194s, 3156 KB] Reopened 0 state(s).
+[t=0.016194s, 3156 KB] Evaluated 3235 state(s).
+[t=0.016194s, 3156 KB] Evaluations: 3235
+[t=0.016194s, 3156 KB] Generated 8563 state(s).
+[t=0.016194s, 3156 KB] Dead ends: 0 state(s).
+[t=0.016194s, 3156 KB] Expanded until last jump: 3176 state(s).
+[t=0.016194s, 3156 KB] Reopened until last jump: 0 state(s).
+[t=0.016194s, 3156 KB] Evaluated until last jump: 3229 state(s).
+[t=0.016194s, 3156 KB] Generated until last jump: 8543 state(s).
+[t=0.016194s, 3156 KB] Number of registered states: 3235
+[t=0.016194s, 3156 KB] Int hash set load factor: 3235/4096 = 0.789795
+[t=0.016194s, 3156 KB] Int hash set resizes: 12
+[t=0.016194s, 3156 KB] Search time: 0.003897s
+[t=0.016194s, 3156 KB] Total time: 0.016194s
+Solution found.
+Remove intermediate file output.sas
+search exit code: 0
+

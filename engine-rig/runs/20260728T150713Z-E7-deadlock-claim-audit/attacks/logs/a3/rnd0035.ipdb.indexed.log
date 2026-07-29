@@ -1,0 +1,89 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a3\rnd0035\indexed\sokoban_guarded_indexed_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a3\rnd0035\indexed\rnd0035_guarded_indexed.pddl' --sas-file output.sas
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Parsing: [0.000s CPU, 0.002s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.002s wall-clock]
+Preparing model... [0.000s CPU, 0.001s wall-clock]
+Generated 56 rules.
+Computing model... [0.016s CPU, 0.008s wall-clock]
+499 relevant atoms
+2162 auxiliary atoms
+2661 final queue length
+2922 total queue pushes
+Completing instantiation... [0.000s CPU, 0.002s wall-clock]
+Instantiating: [0.016s CPU, 0.013s wall-clock]
+No relaxed solution! Generating unsolvable task...
+Translator variables: 1
+Translator derived variables: 0
+Translator facts: 2
+Translator goal facts: 1
+Translator mutex groups: 0
+Translator total mutex groups size: 0
+Translator operators: 0
+Translator axioms: 0
+Translator task size: 4
+warning: could not determine peak memory
+Writing output... [0.000s CPU, 0.006s wall-clock]
+Done! [0.016s CPU, 0.021s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(ipdb())' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\tmpj0w6u_9y\sas_plan' < output.sas
+[t=0.000111s, 1900 KB] Search code revision: 7120aa0
+[t=0.000193s, 1900 KB] reading input...
+[t=0.000257s, 1936 KB] done reading input!
+[t=0.001298s, 2520 KB] Initializing canonical PDB heuristic...
+[t=0.001308s, 2520 KB] Generating patterns using: hill climbing pattern collection generator
+[t=0.001322s, 2520 KB] Done calculating initial pattern collection: 0.000011s
+[t=0.001330s, 2520 KB] hill climbing pattern collection generator number of patterns: 1
+[t=0.001333s, 2520 KB] hill climbing pattern collection generator total PDB size: 2
+[t=0.001336s, 2520 KB] hill climbing pattern collection generator computation time: 0.000018s
+[t=0.001340s, 2520 KB] Running dominance pruning...
+[t=0.001344s, 2520 KB] Pruned 0 of 1 pattern cliques
+[t=0.001346s, 2520 KB] Pruned 0 of 1 PDBs
+[t=0.001348s, 2532 KB] Dominance pruning took 0.000007s
+[t=0.001352s, 2532 KB] Canonical PDB heuristic number of patterns: 1
+[t=0.001354s, 2532 KB] Canonical PDB heuristic total PDB size: 2
+[t=0.001356s, 2532 KB] Canonical PDB heuristic computation time: 0.000054s
+[t=0.001370s, 2532 KB] Building successor generator... done!
+[t=0.001379s, 2532 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.001382s, 2532 KB] time for successor generation creation: 0.000002s
+[t=0.001387s, 2532 KB] Variables: 1
+[t=0.001391s, 2532 KB] FactPairs: 2
+[t=0.001395s, 2532 KB] Bytes per state: 4
+[t=0.001403s, 2536 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.001420s, 2560 KB] Initial state is a dead end.
+[t=0.001422s, 2560 KB] Initial heuristic value for cpdbs: infinity
+[t=0.001425s, 2560 KB] pruning method: none
+[t=0.001428s, 2560 KB] Completely explored state space -- no solution!
+[t=0.001430s, 2560 KB] Actual search time: 0.000004s
+[t=0.001433s, 2560 KB] Expanded 0 state(s).
+[t=0.001433s, 2560 KB] Reopened 0 state(s).
+[t=0.001433s, 2560 KB] Evaluated 1 state(s).
+[t=0.001433s, 2560 KB] Evaluations: 1
+[t=0.001433s, 2560 KB] Generated 0 state(s).
+[t=0.001433s, 2560 KB] Dead ends: 0 state(s).
+[t=0.001433s, 2560 KB] Number of registered states: 1
+[t=0.001433s, 2560 KB] Int hash set load factor: 1/1 = 1.000000
+[t=0.001433s, 2560 KB] Int hash set resizes: 0
+[t=0.001433s, 2560 KB] Search time: 0.000031s
+[t=0.001433s, 2560 KB] Total time: 0.001433s
+Search stopped without finding a solution.
+Remove intermediate file output.sas
+search exit code: 12
+
+Driver aborting after search

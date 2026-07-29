@@ -789,6 +789,89 @@ be distinguishable from its verdict. Neither is a fact about expressions.
 
 ---
 
+## D-032 · The deadlock claim is conditioned on the proof system, not on the search
+
+*(Numbered 032, not 028: the `agent/e5-cert-recheck` branch takes D-028 through
+D-031 and was pushed first. Two branches numbering into the same file is a
+collision waiting to happen, and leaving a gap is cheaper than renumbering a
+cross-reference later.)*
+
+**Context.** E2 measured Theoria 1.9's promise that every proved deadlock speeds
+the planner up, found the speed-up half false against a real Fast Downward, and
+explained it: *a proved deadlock is a substitute for a heuristic, not an addition
+to one.* E7's brief was to check that finding before it hardened into a clause in
+the design document.
+
+**What the audit found, and what the attack on it then found.** The numbers
+replicate exactly -- all nine rows, to the expansion. E2's explanation does not
+survive: over the whole reachable space of the `far{N}` family the delete
+relaxation Fast Downward computes before search is *equal* to the true dead set
+(2904/2904 at far4, 10687/10687 at far5, 29776/29776 at far6), and the carver's
+theorems are a strict subset of it. The theorems are not competing with the
+heuristic; they are information the planner already had for free.
+
+E7's own first draft then claimed two things the adversarial pass broke, and the
+breakages are the reason this decision reads as it does:
+
+* **"Not one state, at any size, that a theorem detects and the relaxation
+  misses"** is false. `rnd0021` has eleven, verified against real Fast Downward,
+  and there the pruning dividend is total (`astar(lmcut())` 33 -> 0). More useful
+  than the counterexample is the structural argument it forced: a width-1 theorem
+  can escape the relaxation only if its pattern atom *is* a goal atom, which
+  requires h^2 to have proved the goal conjunction inconsistent, which means the
+  instance is unsolvable. `far{N}` is solvable, so for the 8 **singleton**
+  theorems the guard carries the zero was a **theorem about that family rather
+  than a measurement**. The argument does not reach the width-2 majority, which
+  stays a measurement at far4/5/6. The boundary is **h^2 versus h^1** -- the
+  carver proves with h^2 mutexes, FD's pre-search deadness test is h^1.
+* **"The dividend is zero because the information is redundant, not because it is
+  unused"** is a false exclusive and is withdrawn. A compiled guard is a domain
+  transformation, not a per-state filter, so containment does not entail a zero
+  dividend -- and it does not deliver one: `astar(lmcut())` saves up to 153
+  expansions, tie-break-invariantly. It saves them by a third mechanism neither
+  word names. Every state the guard removes was already an lmcut dead end,
+  evaluated and never expanded; what deleting the dead push operators does is
+  make the delete relaxation *harder*, raising h on **live** states. That last
+  step is isolated on exactly one instance (`hunt0021` h(init) 15 -> 18); on the
+  other three that save expansions, h(init) does not move, so the mechanism is
+  exhibited once rather than established four times.
+
+**Decision.** The claim in `DEADLOCK_CLAIM.md` is conditioned on **whether the
+theorems' proof system is stronger than the planner's own pre-search
+relaxation**, not on which search is running and not merely on whether the
+relaxation covers the region. Suggested wording is offered there; Theoria.md is
+not edited, which is the monitor's call and was the ticket's instruction.
+
+**Why that conditioning rather than the flat negative.** "Deadlock theorems do
+not speed planners up" is wrong twice: it forbids the `rnd0021` case where a
+theorem beats the relaxation, and it hides the small real lmcut effect.
+Conditioning says what was measured, says what would have to hold for the promise
+to be true, and hands the next person a test instead of a verdict. The test is
+cheap and runs before the planner does: compute both sets and compare, which is
+`audit.claim.coverage`.
+
+**A prediction this decision cost, and the explanation that also failed.**
+`audit/deadstart.py` was built expecting the two theorem kinds to split -- corner
+deadlocks fall out of grounding and should survive a relaxation, pair deadlocks
+need h^2 mutexes and should not. They do not split. The first draft explained that
+by `clear` being false on a box's cell and never coming back; a reviewer
+re-encoded sokoban with `occupied` instead and the relaxation still found all
+2904 dead states on far4 with occupancy information removed. What is load-bearing
+is **static push geometry**, not the `clear` fluent. Both the prediction and the
+wrong explanation are kept beside their refutations, because a prediction deleted
+after it fails is a prediction nobody made.
+
+**One instrument ruled inadmissible.** `astar(ipdb())` expansion counts are not
+usable evidence at this effect size. `far9`'s 78 -> 30 vanishes under two of
+eight random seeds and under a larger PDB budget; `swap-passage`'s 454 -> 0 is a
+`pdb_max_size` effect -- iPDB's winning projection returns h = infinity on the
+*unguarded* task too, and the guard's whole contribution is shrinking that PDB
+from 2,725,888 entries to 1,103,872, under the 2,000,000 default cap. An earlier
+draft quoted far8's `ipdb` 27 -> 24 as a dividend; it is one of these. The ipdb
+column is measured and reported, and is evidence for nothing.
+
+---
+
 ## D-033 · The summary table reads verdicts; it does not re-derive them
 
 *(Numbered 033 after D-032, which `agent/e7-deadlock-claim-audit` takes.)*

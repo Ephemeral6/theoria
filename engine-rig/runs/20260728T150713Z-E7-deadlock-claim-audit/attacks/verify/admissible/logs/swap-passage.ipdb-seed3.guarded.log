@@ -1,0 +1,145 @@
+$ D:\Miniforge3\python.exe C:/Users/user/Desktop/theoria/.worktrees/p13/engine-rig/.toolchain/downward/fast-downward.py --plan-file C:\Users\user\AppData\Local\Temp\e7verifylnvx0ks2\sas_plan C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a5\swap\singleton\sokoban_guarded_singleton_domain.pddl C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a5\swap\singleton\swap-passage_guarded_singleton.pddl --search astar(ipdb(random_seed=3))
+
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running translator.
+INFO     translator stdin: None
+INFO     translator time limit: None
+INFO     translator memory limit: None
+INFO     translator command line string: 'D:\Miniforge3\python.exe' -m translate 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a5\swap\singleton\sokoban_guarded_singleton_domain.pddl' 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\work\a5\swap\singleton\swap-passage_guarded_singleton.pddl' --sas-file output.sas
+Warning! SIGXCPU is not available on your platform. This means that the planner cannot be gracefully terminated when using a time limit, which, however, is probably supported on your platform anyway.
+Parsing...
+Parsing: [0.000s CPU, 0.002s wall-clock]
+Normalizing task... [0.000s CPU, 0.000s wall-clock]
+Instantiating...
+Generating Datalog program... [0.000s CPU, 0.000s wall-clock]
+Normalizing Datalog program...
+Normalizing Datalog program: [0.000s CPU, 0.001s wall-clock]
+Preparing model... [0.000s CPU, 0.000s wall-clock]
+Generated 20 rules.
+Computing model... [0.000s CPU, 0.005s wall-clock]
+613 relevant atoms
+888 auxiliary atoms
+1501 final queue length
+1771 total queue pushes
+Completing instantiation... [0.000s CPU, 0.002s wall-clock]
+Instantiating: [0.000s CPU, 0.008s wall-clock]
+Computing fact groups...
+Finding invariants...
+7 initial candidates
+Finding invariants: [0.000s CPU, 0.001s wall-clock]
+Checking invariant weight... [0.000s CPU, 0.000s wall-clock]
+Instantiating groups... [0.000s CPU, 0.001s wall-clock]
+Collecting mutex groups... [0.000s CPU, 0.000s wall-clock]
+Choosing groups...
+54 uncovered facts
+Choosing groups: [0.000s CPU, 0.000s wall-clock]
+Building translation key... [0.000s CPU, 0.000s wall-clock]
+Computing fact groups: [0.000s CPU, 0.003s wall-clock]
+Building STRIPS to SAS dictionary... [0.000s CPU, 0.000s wall-clock]
+Building dictionary for full mutex groups... [0.000s CPU, 0.000s wall-clock]
+Building mutex information...
+Building mutex information: [0.000s CPU, 0.000s wall-clock]
+Translating task...
+Processing axioms...
+Simplifying axioms... [0.000s CPU, 0.000s wall-clock]
+Translator axioms removed by simplifying: 0
+Processing axioms: [0.000s CPU, 0.000s wall-clock]
+Translating task: [0.016s CPU, 0.002s wall-clock]
+172 effect conditions simplified
+0 implied preconditions added
+Detecting unreachable propositions...
+0 operators removed
+0 axioms removed
+83 propositions removed
+Detecting unreachable propositions: [0.000s CPU, 0.001s wall-clock]
+Reordering and filtering variables...
+25 of 25 variables necessary.
+22 of 25 mutex groups necessary.
+116 of 116 operators necessary.
+0 of 0 axiom rules necessary.
+Reordering and filtering variables: [0.000s CPU, 0.001s wall-clock]
+Translator variables: 25
+Translator derived variables: 0
+Translator facts: 94
+Translator goal facts: 2
+Translator mutex groups: 22
+Translator total mutex groups size: 72
+Translator operators: 116
+Translator axioms: 0
+Translator task size: 1057
+warning: could not determine peak memory
+Writing output... [0.000s CPU, 0.009s wall-clock]
+Done! [0.016s CPU, 0.025s wall-clock]
+translate exit code: 0
+
+INFO     Running search (release).
+INFO     search stdin: output.sas
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(ipdb(random_seed=3))' --internal-plan-file 'C:\Users\user\AppData\Local\Temp\e7verifylnvx0ks2\sas_plan' < output.sas
+[t=0.000153s, 1960 KB] Search code revision: 7120aa0
+[t=0.000242s, 1960 KB] reading input...
+[t=0.001472s, 2192 KB] done reading input!
+[t=0.002820s, 2872 KB] Initializing canonical PDB heuristic...
+[t=0.002829s, 2872 KB] Generating patterns using: hill climbing pattern collection generator
+[t=0.002904s, 2872 KB] Done calculating initial pattern collection: 0.000073s
+[t=0.002914s, 2872 KB] Average operator cost: 1.000000
+[t=0.002920s, 2872 KB] Building causal graph... done!
+[t=0.003715s, 2952 KB] Done calculating initial candidate PDBs
+[t=0.006732s, 3180 KB] found a better pattern with improvement 959
+[t=0.013270s, 3320 KB] found a better pattern with improvement 755
+[t=0.025783s, 4128 KB] found a better pattern with improvement 582
+[t=0.043307s, 5560 KB] found a better pattern with improvement 931
+[t=0.074120s, 8392 KB] found a better pattern with improvement 1000
+[t=0.108513s, 13652 KB] found a better pattern with improvement 571
+[t=0.159681s, 23396 KB] found a better pattern with improvement 851
+[t=0.238878s, 41952 KB] found a better pattern with improvement 997
+[t=0.366219s, 76612 KB] found a better pattern with improvement 890
+[t=0.560629s, 141716 KB] found a better pattern with improvement 1000
+[t=0.560666s, 141716 KB] Initial state is a dead end. Stop hill climbing.
+[t=0.560670s, 141716 KB] Hill climbing iterations: 11
+[t=0.560673s, 141716 KB] Hill climbing generated patterns: 201
+[t=0.560676s, 141716 KB] Hill climbing rejected patterns: 40
+[t=0.560681s, 141716 KB] Hill climbing maximum PDB size: 1103872
+[t=0.560683s, 141716 KB] Hill climbing time: 0.557771s
+[t=0.566383s, 141716 KB] hill climbing pattern collection generator number of patterns: 12
+[t=0.566403s, 141716 KB] hill climbing pattern collection generator total PDB size: 2203768
+[t=0.566408s, 141716 KB] hill climbing pattern collection generator computation time: 0.563548s
+[t=0.566415s, 141716 KB] Running dominance pruning...
+[t=0.566420s, 141716 KB] Pruned 10 of 11 pattern cliques
+[t=0.566423s, 141716 KB] Pruned 11 of 12 PDBs
+[t=0.566425s, 141716 KB] Dominance pruning took 0.000009s
+[t=0.566675s, 141716 KB] Canonical PDB heuristic number of patterns: 1
+[t=0.566684s, 141716 KB] Canonical PDB heuristic total PDB size: 1103872
+[t=0.566686s, 141716 KB] Canonical PDB heuristic computation time: 0.563855s
+[t=0.566720s, 141716 KB] Building successor generator... done!
+[t=0.566776s, 141716 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.566779s, 141716 KB] time for successor generation creation: 0.000048s
+[t=0.566785s, 141716 KB] Variables: 25
+[t=0.566788s, 141716 KB] FactPairs: 94
+[t=0.566791s, 141716 KB] Bytes per state: 8
+[t=0.566800s, 141716 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.566816s, 141716 KB] Initial state is a dead end.
+[t=0.566820s, 141716 KB] Initial heuristic value for cpdbs: infinity
+[t=0.566822s, 141716 KB] pruning method: none
+[t=0.566827s, 141716 KB] Completely explored state space -- no solution!
+[t=0.566829s, 141716 KB] Actual search time: 0.000005s
+[t=0.566833s, 141716 KB] Expanded 0 state(s).
+[t=0.566833s, 141716 KB] Reopened 0 state(s).
+[t=0.566833s, 141716 KB] Evaluated 1 state(s).
+[t=0.566833s, 141716 KB] Evaluations: 1
+[t=0.566833s, 141716 KB] Generated 0 state(s).
+[t=0.566833s, 141716 KB] Dead ends: 0 state(s).
+[t=0.566833s, 141716 KB] Number of registered states: 1
+[t=0.566833s, 141716 KB] Int hash set load factor: 1/1 = 1.000000
+[t=0.566833s, 141716 KB] Int hash set resizes: 0
+[t=0.566833s, 141716 KB] Search time: 0.000034s
+[t=0.566833s, 141716 KB] Total time: 0.566833s
+Search stopped without finding a solution.
+Remove intermediate file output.sas
+search exit code: 12
+
+Driver aborting after search
+

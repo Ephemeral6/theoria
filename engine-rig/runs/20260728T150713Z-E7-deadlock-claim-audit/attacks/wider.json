@@ -1,0 +1,58 @@
+[
+  {
+    "boxes": 3,
+    "counterexample_states": [],
+    "example_wide_theorems": [
+      "at(b1,c11) AND at(b2,c12) AND at(b3,c13) AND not-goal => dead",
+      "at(b1,c11) AND at(b2,c13) AND at(b3,c12) AND not-goal => dead",
+      "at(b1,c12) AND at(b2,c11) AND at(b3,c13) AND not-goal => dead",
+      "at(b1,c13) AND at(b2,c11) AND at(b3,c12) AND not-goal => dead",
+      "at(b1,c12) AND at(b2,c13) AND at(b3,c11) AND not-goal => dead",
+      "at(b1,c13) AND at(b2,c12) AND at(b3,c11) AND not-goal => dead"
+    ],
+    "instance": "three-b",
+    "n_narrow_dead": 1502,
+    "n_narrow_theorems": 18,
+    "n_reachable": 1572,
+    "n_truly_dead": 1572,
+    "n_wide_only_dead": 0,
+    "n_wide_only_not_truly_dead": 0,
+    "n_wide_only_relaxation_alive": 0,
+    "n_wide_theorems": 36,
+    "unsound_states": [],
+    "wide_kinds": [
+      "deleting_actions_blocked"
+    ],
+    "wide_widths": [
+      3
+    ]
+  },
+  {
+    "boxes": 3,
+    "counterexample_states": [],
+    "example_wide_theorems": [
+      "at(b1,c11) AND at(b2,c12) AND at(b3,c13) AND not-goal => dead",
+      "at(b1,c11) AND at(b2,c13) AND at(b3,c12) AND not-goal => dead",
+      "at(b1,c12) AND at(b2,c11) AND at(b3,c13) AND not-goal => dead",
+      "at(b1,c13) AND at(b2,c11) AND at(b3,c12) AND not-goal => dead",
+      "at(b1,c12) AND at(b2,c13) AND at(b3,c11) AND not-goal => dead",
+      "at(b1,c13) AND at(b2,c12) AND at(b3,c11) AND not-goal => dead"
+    ],
+    "instance": "three-c",
+    "n_narrow_dead": 29344,
+    "n_narrow_theorems": 35,
+    "n_reachable": 42987,
+    "n_truly_dead": 41436,
+    "n_wide_only_dead": 0,
+    "n_wide_only_not_truly_dead": 0,
+    "n_wide_only_relaxation_alive": 0,
+    "n_wide_theorems": 72,
+    "unsound_states": [],
+    "wide_kinds": [
+      "deleting_actions_blocked"
+    ],
+    "wide_widths": [
+      3
+    ]
+  }
+]
