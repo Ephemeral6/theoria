@@ -1,0 +1,14 @@
+{
+  "base_game": "t1-walk-maze",
+  "base_level": "t1-walk-maze",
+  "claim": "solvable",
+  "justification": "The mirror of walk-forbid-down, and the reason it is here: the same operator on the same board, one command over. The route DOWN DOWN DOWN DOWN RIGHT RIGHT RIGHT RIGHT RIGHT RIGHT walks down column 1 and then along row 5, and issues no UP, so forbidding UP leaves it intact. Solvable, witnessed by construction. A framework that says unsolvable here is producing a false alarm.",
+  "notes": "sealed drill (V6-exam-on-sealed-dryrun); worldgen world standing in for a sealed game. Zero API, zero sealed contact.",
+  "operators": [
+    {
+      "action": "UP",
+      "op": "forbid_action"
+    }
+  ],
+  "variant_id": "drill-walk-forbid-up"
+}

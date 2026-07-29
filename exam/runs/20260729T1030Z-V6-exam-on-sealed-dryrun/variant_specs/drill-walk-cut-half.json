@@ -1,0 +1,20 @@
+{
+  "base_game": "t1-walk-maze",
+  "base_level": "t1-walk-maze",
+  "claim": "solvable",
+  "justification": "Half of walk-cut-row-four's cut, and therefore not a cut. With (4,1) lethal the column-1 descent is closed, but the second crossing at (4,7) is untouched and the route through row 1 columns 5-7, column 7 down, and row 5 leftward still reaches the goal. An incomplete separation proves nothing, and this item is the specificity test for that: the reasoning shape is identical to the item above and the answer is opposite.",
+  "notes": "sealed drill (V6-exam-on-sealed-dryrun); worldgen world standing in for a sealed game. Zero API, zero sealed contact.",
+  "operators": [
+    {
+      "cells": [
+        [
+          4,
+          1
+        ]
+      ],
+      "op": "observation_loss",
+      "value": 6
+    }
+  ],
+  "variant_id": "drill-walk-cut-half"
+}
