@@ -205,6 +205,7 @@ Append-only. Newest last.
 | C-003 | 2026-07-28 | `canon.describe()` renames `closed_shapes` → `shapes`; **`closed_shapes` is kept as a deprecated alias** and may be removed no earlier than 2026-08-11, under §3 | tightening, in its window | this file; PARTNER_SYNC `contract-notice` |
 | C-004 | 2026-07-28 | the pinned contract gains `events`/`arms`/`incident_kinds`; `validate_file`'s report gains `notices`; `frozen.json`'s `arc_v1` entry gains `depends_on` | additive | n/a |
 | C-005 | 2026-07-29 | `canon.ENVELOPE` gains `prev`, the ledger's hash chain link (S15, D-029): the writer owns it and **a caller that sets it is now refused** | tightening | no — see below |
+| C-006 | 2026-07-29 | `INCIDENT_KINDS` gains `variant_degenerate`; `win_tighten`'s `applied` record gains `reason`, `degenerate`, `occurrence` and (once per session) `note` (V22, D-032) | additive | n/a |
 
 C-005 is the first change this document caught rather than governed, and the
 honest reading is that it was not announced. It landed on the mainline with S15

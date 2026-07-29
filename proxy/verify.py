@@ -2,7 +2,7 @@
 
     cd proxy && python verify.py
 
-Four rungs, and the territory is finished only if all four are green:
+Five rungs, and the territory is finished only if all five are green:
 
   1. the suite passes;
   2. `verify_spend.sh` passes -- proxy's previous gate, kept (see below);
@@ -11,6 +11,8 @@ Four rungs, and the territory is finished only if all four are green:
   4. the ledger that run produced carries the envelope `LEDGER_FORMAT.md` v1.0
      requires on every record, its `seq` is dense from 1, and it passes the
      format's own executable checker.
+  5. the `win_tighten` degeneracy guard refuses a run built to trip it, and
+     passes that same run once the marker is removed (V22, D-032).
 
 Rung 2 exists because of how `gates.py` chooses: the canonical `verify.py`
 supersedes any other `verify*` script, so the moment this file was added,
@@ -134,7 +136,7 @@ def fail(problems, message):
 
 
 def rung_tests(problems):
-    print("[1/4] suite")
+    print("[1/5] suite")
     # No `-q`: pytest.ini already sets it, and a second one suppresses the
     # summary line this prints.
     r = sh([sys.executable, "-m", "pytest"])
@@ -195,6 +197,53 @@ with MockArc(api_key=ARC_KEY, games=[DEFAULT_GAME]) as arc, \
 sys.stdout.write("RUN_ID " + record["run_id"] + "\n")
 '''
 
+#: Rung 5's run. The same play, against a world that reports no score, behind a
+#: `win_tighten`. Written as a second script rather than a flag on the first
+#: because rung 3's run is the *acceptance* run and must stay an ordinary game.
+PLAY_SCORELESS = r'''
+import functools, os, sys
+repo, scratch = sys.argv[1], sys.argv[2]
+sys.path.insert(0, repo)
+
+from proxy import scoring
+from proxy.spend_gate import SpendGate, SpendPolicy, set_default_gate
+
+scoring.score_run = functools.partial(scoring.score_run,
+                                      scores_dir=os.path.join(scratch, "scores"))
+set_default_gate(SpendGate(SpendPolicy({
+    "v": "1.0", "pool": "verify-scratch-degenerate",
+    "usd_ceiling": 1000.0, "action_ceiling": 100000,
+    "ledger": os.path.join(scratch, "spend_gate_degenerate.jsonl"),
+    "default_ttl_seconds": 3600, "lock_timeout_seconds": 30.0,
+    "default_run_caps": {"usd": 5.0, "actions": 600},
+}, source=None)))
+
+from proxy.runner import run_game
+from proxy.variants import Variant
+from proxy.mock.arc_mock import DEFAULT_GAME, DEFAULT_KEY as ARC_KEY, MockArc
+from proxy.mock.model_mock import DEFAULT_KEY as MODEL_KEY, MockProvider
+
+variant = Variant({
+    "variant_id": "verify-degenerate", "base_game": DEFAULT_GAME,
+    "claim": "unsolvable",
+    "operators": [{"op": "win_tighten",
+                   "require": {"kind": "score_at_least", "value": 2}}],
+    "justification": "The server's win is kept and a score floor is added on "
+                     "top of it, so the tightened win is a strict subset.",
+})
+
+with MockArc(api_key=ARC_KEY, games=[DEFAULT_GAME], scoreless=True) as arc, \
+        MockProvider(api_key=MODEL_KEY) as provider:
+    record = run_game(DEFAULT_GAME, arm="mock_arm", budget=40,
+                      env_upstream=arc.base_url,
+                      model_upstream=provider.base_url,
+                      env_key=ARC_KEY, model_key=MODEL_KEY,
+                      require_keys=False, variant=variant,
+                      ledger_path=os.path.join(scratch, "ledger_degenerate.jsonl"),
+                      runs_dir=os.path.join(scratch, "runs_degenerate"))
+sys.stdout.write("RUN_ID " + record["run_id"] + "\n")
+'''
+
 
 def rung_spend_gate(problems):
     """Run `verify_spend.sh`, which this file superseded as proxy's gate.
@@ -209,7 +258,7 @@ def rung_spend_gate(problems):
     either.  But absent is said out loud rather than skipped, because "could
     not run" reading as "passed" is the whole subject.
     """
-    print("[2/4] the spend gate (verify_spend.sh, superseded but not dropped)")
+    print("[2/5] the spend gate (verify_spend.sh, superseded but not dropped)")
     script = os.path.join(HERE, "verify_spend.sh")
     if not os.path.isfile(script):
         fail(problems, "verify_spend.sh is gone; proxy's spend-gate checks "
@@ -245,7 +294,7 @@ def rung_spend_gate(problems):
 
 
 def rung_real_run(problems, scratch, ledger_path):
-    print("[3/4] one real run -- one game through both proxies, offline mocks, "
+    print("[3/5] one real run -- one game through both proxies, offline mocks, "
           "no key, no cost")
     r = sh([sys.executable, "-", REPO, scratch], cwd=REPO, stdin=PLAY)
     if r.returncode != 0:
@@ -273,7 +322,7 @@ def _load_ledger(problems, ledger_path):
 
 
 def rung_artifact_fields(problems, scratch, ledger_path):
-    print("[4/4] artefact self-check")
+    print("[4/5] artefact self-check")
     records = _load_ledger(problems, ledger_path)
 
     if len(records) < MIN_RECORDS:
@@ -400,6 +449,64 @@ def _var_snapshot():
     return found
 
 
+def rung_degeneracy_guard(problems, scratch):
+    """The V22 guard, exercised on a run built to trip it -- and on the same
+    run with the marker taken out.
+
+    A rung that could only ever be green is decoration, which is what a
+    degeneracy check on rung 3's ledger would have been: that run carries no
+    variant, so the guard would pass it without ever having fired. So this
+    plays a *second*, deliberately degenerate game -- a `win_tighten` against a
+    world that reports no score -- and requires the guard to refuse it. Then it
+    strips the `degenerate` markers and requires the guard to pass the very same
+    stream, because a guard that refuses either way is not reading the marker
+    and the marker is then load-bearing for nothing (D-032).
+    """
+    print("[5/5] the win_tighten degeneracy guard, in both directions")
+    ledger_path = os.path.join(scratch, "ledger_degenerate.jsonl")
+    r = sh([sys.executable, "-", REPO, scratch], cwd=REPO, stdin=PLAY_SCORELESS)
+    if r.returncode != 0 or not os.path.exists(ledger_path):
+        fail(problems, "the scoreless variant run exited %d and left %s\n%s"
+             % (r.returncode, "a ledger" if os.path.exists(ledger_path) else "none",
+                (r.stdout + r.stderr)[-3000:]))
+        return
+
+    guard = [sys.executable, "-m", "proxy.tools.check_variant_degeneracy"]
+    refused = sh(guard + [ledger_path], cwd=REPO)
+    if refused.returncode != 2:
+        fail(problems, "a win_tighten against a scoreless world was not refused "
+                       "(exit %d): %s" % (refused.returncode,
+                                          (refused.stdout + refused.stderr)[-2000:]))
+        return
+
+    stripped_path = os.path.join(scratch, "ledger_degenerate_unmarked.jsonl")
+    stripped = 0
+    with open(ledger_path, encoding="utf-8") as src, \
+            open(stripped_path, "w", encoding="utf-8") as dst:
+        for line in src:
+            if not line.strip():
+                continue
+            record = json.loads(line)
+            applied = (record.get("variant") or {}).get("applied")
+            if isinstance(applied, dict) and applied.pop("degenerate", None) is not None:
+                stripped += 1
+            dst.write(json.dumps(record, sort_keys=True) + "\n")
+    if stripped == 0:
+        fail(problems, "the degenerate run carried no `degenerate` marker at all "
+                       "-- the guard above refused it for some other reason")
+        return
+
+    passed = sh(guard + [stripped_path], cwd=REPO)
+    if passed.returncode != 0:
+        fail(problems, "with the marker removed the guard still refused (exit %d) "
+                       "-- it is not the marker that catches this"
+             % passed.returncode)
+        return
+
+    print("   ok    refused the marked stream (exit 2), passed it unmarked "
+          "(%d marker(s) removed)" % stripped)
+
+
 def main():
     # The other half of the encoding problem.  Children are told to emit UTF-8
     # and decoded as UTF-8; this end has to be able to *print* what came back.
@@ -418,6 +525,7 @@ def main():
         rung_spend_gate(problems)
         if rung_real_run(problems, scratch, ledger_path):
             rung_artifact_fields(problems, scratch, ledger_path)
+        rung_degeneracy_guard(problems, scratch)
         leak = var_leak(before)
         if leak:
             print("   note  %s" % leak)
@@ -428,7 +536,7 @@ def main():
     if problems:
         print("proxy: RED (%d problem(s))" % len(problems))
         return 1
-    print("proxy: green -- suite, one real run, artefact fields")
+    print("proxy: green -- suite, one real run, artefact fields, degeneracy guard")
     return 0
 
 

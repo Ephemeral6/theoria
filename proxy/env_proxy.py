@@ -37,7 +37,8 @@ from .paths import LEDGER_PATH, UPSTREAM_ARC
 from .redact import VAULT, looks_like_credential, read_secret, scrub_outbound
 from .spend_gate import (Reservation, SpendGate, SpendGateError,
                          attach_reservation, default_campaign, default_gate)
-from .variants import Refusal, Variant, VariantRuntime, _Remap
+from .variants import (DEGENERATE_NOTE, Refusal, Variant, VariantRuntime,
+                       _Remap)
 
 COMMAND = re.compile(r"^/api/cmd/(RESET|ACTION([1-9][0-9]?))/?$")
 
@@ -110,6 +111,9 @@ class _State:
         #: a command that names only a session has to be attributable to a game.
         self.session_games: Dict[str, str] = {}
         self.runtimes: Dict[str, VariantRuntime] = {}
+        #: game_ids whose `win_tighten` degeneracy has already been recorded as
+        #: an incident. One per session, not one per WIN.
+        self.degeneracy_reported: set = set()
         self.commands = 0
         self.meta_calls = 0
         self.denials = 0
@@ -455,7 +459,34 @@ class _Handler(BaseHTTPRequestHandler):
             response=rest,
             http=http,
         )
+        self._note_degeneracy(runtime, game_id)
         self._respond(status if status > 0 else 502, response_body)
+
+    def _note_degeneracy(self, runtime: VariantRuntime, game_id: str) -> None:
+        """Once per session, when `win_tighten` first rewrote a WIN because the
+        game reported no score at all.
+
+        The `degenerate` bit on the `applied` record is the decision (D-032);
+        this is one of the two things that read it. It is written after the
+        `env_step` it refers to, so the incident always points at a record that
+        already exists, and it fires once because a scoreless game produces the
+        same rewrite on every WIN and a per-WIN incident would bury the first
+        one under copies of itself."""
+        if runtime.degenerate_wins != 1 or game_id in self.state.degeneracy_reported:
+            return
+        with self.state.lock:
+            if game_id in self.state.degeneracy_reported:
+                return
+            self.state.degeneracy_reported.add(game_id)
+            self.state.incidents += 1
+        first = runtime.first_degenerate or {}
+        self.cfg.run.incident(
+            "variant_degenerate",
+            first.get("note") or DEGENERATE_NOTE,
+            game_id=game_id,
+            variant_id=(self.cfg.variant.variant_id if self.cfg.variant else None),
+            require_score=first.get("require_score"),
+            reason=first.get("reason"))
 
     def _meta(self, method: str, path: str, query: str, body: Any, raw: bytes) -> None:
         """Everything that is not a game command: scorecard open/close, the game

@@ -36,6 +36,22 @@ LEGAL_OPERATORS = ("forbid_action", "remap_action", "step_limit",
 
 CLAIMS = ("solvable", "unsolvable", "unchanged")
 
+#: Why a `win_tighten` rewrote a WIN. The two are not the same event and the
+#: record does not let them look the same (D-032).
+REASON_BELOW = "score_below"      # the game scored, and scored short
+REASON_ABSENT = "score_absent"    # the game reported no score at all
+
+#: Carried on the first absent-driven rewrite of a session, so that a human
+#: reading the ledger meets the sentence and not only the boolean.
+DEGENERATE_NOTE = (
+    "this game reported no score, so `score_at_least` is unsatisfiable at every "
+    "value: the win condition was not tightened, it was abolished. Reading an "
+    "absent score as a shortfall is deliberate -- the other direction would let "
+    "a game that never reports a score win a tightened variant outright -- but "
+    "the variant's claim no longer follows from the construction it names. "
+    "Whether a game reports a score is a protocol question, answerable without "
+    "playing it; answer it before using win_tighten on that game.")
+
 
 class VariantSpecError(ValueError):
     pass
@@ -174,6 +190,11 @@ class VariantRuntime:
         self.commands = 0          # commands since the last RESET, RESET excluded
         self.last_body: Optional[Dict[str, Any]] = None
         self.dead = False          # a step_limit or observation_loss has fired
+        #: How many WINs `win_tighten` rewrote because the game reported no
+        #: score at all. Non-zero means this session's win_tighten did not
+        #: tighten anything -- it removed the win condition (D-032).
+        self.degenerate_wins = 0
+        self.first_degenerate: Optional[Dict[str, Any]] = None
 
     def _ops(self, kind: str):
         if self.variant is None:
@@ -244,11 +265,30 @@ class VariantRuntime:
             if body.get("state") == "WIN":
                 needed = op["require"]["value"]
                 have = body.get("score")
-                if have is None or have < needed:
+                if have is None:
+                    # "Absent" is read as "below" -- see DEGENERATE_NOTE for why
+                    # that direction is the safe one -- but it is recorded as a
+                    # different thing, because it is a different thing.
+                    body = dict(body)
+                    body["state"] = "NOT_FINISHED"
+                    self.degenerate_wins += 1
+                    record = {"op": "win_tighten", "require_score": needed,
+                              "score": None,
+                              "reason": REASON_ABSENT,
+                              "degenerate": True,
+                              "occurrence": self.degenerate_wins,
+                              "effect": "WIN rewritten to NOT_FINISHED"}
+                    if self.degenerate_wins == 1:
+                        record["note"] = DEGENERATE_NOTE
+                        self.first_degenerate = dict(record)
+                    applied.append(record)
+                elif have < needed:
                     body = dict(body)
                     body["state"] = "NOT_FINISHED"
                     applied.append({"op": "win_tighten", "require_score": needed,
                                     "score": have,
+                                    "reason": REASON_BELOW,
+                                    "degenerate": False,
                                     "effect": "WIN rewritten to NOT_FINISHED"})
 
         self.last_body = body
