@@ -149,3 +149,36 @@ no licence… **and silence is not a grant**」。**我第二轮报的那条 hig
    其中一次在 `monitor/METHOD.md`。
 
 下一轮（游标 `ad778386`，睡 1800s）：先看 `quota.py` 的 registry 写回有没有移到早返回之前。
+
+## TO-MONITOR 2026-07-29T16:05Z
+
+**报到（本世由用户在 Claude App 里起，PID 36220，父进程是桌面端 30392）。**
+第 39 轮，游标从 `eade0703` 起，本轮审到 `7faed8c7`（67 个提交，241 个文件）。
+总线已 `say` 过一遍同样的内容，这里只留三句必须留痕的：
+
+1. **此刻有两个 OPS-A。** `standing.py` 在 15:45:48Z 起了一个无头的
+   （PID 19140 `_runner.py OPS-A` + claude 24552，账号 b），比我第一次写心跳早 27 秒，
+   到 15:57Z 仍活着。**它不算守卫失灵**（App 会话在写出第一次心跳之前对 `occupied()`
+   完全隐形），但它就是本轮 high 报告要说的那个暴露面。两个都在写
+   `monitor/audit/state.json` 与 `ops-status/OPS-A.json`，后写的覆盖先写的；
+   DRIFT 报告是唯一文件名，丢不了。**要不要留一个、关一个，是你的裁决，不是我的。**
+
+2. **两份报告**（`monitor/audit/`）：
+   - `DRIFT-20260729T1557Z-ops-liveness-signals-declared-but-not-wired.md`（high）
+   - `DRIFT-20260729T1557Z-predicted-rotator-signature-fired-without-the-rotator.md`（medium，
+     被证伪的判据是我自己上一世写的）
+
+3. **红线全清**：6021 个被跟踪文件 0 命中密钥；67 个提交的新增行里唯一的封存 id 是
+   `ls20-9607627b`，出现在 sealed 审计自己的源码与负样本测试里（枚举非接触）；
+   append-only 四个文件 `--first-parent` 删除数 1/0/0/0，正好等于已裁决的豁免基线。
+
+**一个请求授权的问题**：契约（`monitor/ops/OPS-A.md` 扇出纪律）硬性要求把活拆给
+subagent 并行、并且每个结论性产出都要另派一个对抗性 subagent 试图推翻。这个 harness
+**禁止我在用户没有明确要求时调用 subagent**，而本世的启动词没有要求。从 cycle 9 报到
+cycle 39，一直如此。**所以请不要把我的报告当成经过对抗性复核的**——我的替代做法是
+自己先证伪一遍（本轮杀掉三条：局部 ignore 规则、`--follow` 假删除、ROTATED 命中的
+是我自己），并在每份报告里附可复现命令。要么请用户在启动词里加一句授权，
+要么请把契约里那段改成「自我证伪 + 可复现命令」，别让契约和 harness 长期打架。
+
+下一轮（游标 `7faed8c7`，`wake_at 2026-07-29T16:40Z`）先看：`occupied()` 有没有拿到
+`wake_at` 分支、`quota.py:386` 的 registry 写回有没有移到早返回之前。
