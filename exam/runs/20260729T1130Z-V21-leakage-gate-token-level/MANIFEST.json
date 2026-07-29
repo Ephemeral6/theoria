@@ -1,0 +1,140 @@
+{
+  "adversarial": {
+    "false_positive_rate": {
+      "exhaustive_balanced": {
+        "n12": 0.0064,
+        "n4": 0.2,
+        "n5": 0.08,
+        "n6": 0.0357,
+        "n8": 0.0081
+      },
+      "permutation_null": {
+        "other_11_label_fields": 0.0,
+        "p15-adaptation-a0/exact_on_heldout": 0.013,
+        "v11-handover-a0/solvable": 0.117
+      }
+    },
+    "mutation_table": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/MUTATION_TABLE.txt",
+    "note": "The subagent died before writing a report, leaving twelve scripts and no conclusions; all twelve were re-run and adjudicated. It overturned two of the first pass's own tests and one of its fixes.",
+    "probes_rerun": 12,
+    "raw_output": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/PROBE_OUTPUT.txt",
+    "report": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/ADVERSARIAL.md"
+  },
+  "audit_result": {
+    "hits": 0,
+    "label_sets_after": {
+      "p15-adaptation-a0": 3,
+      "p15-handover-a0": 1,
+      "p15-heldout-a0": 2,
+      "p15-verdict-a2": 4
+    },
+    "label_sets_before": {
+      "p15-adaptation-a0": 0,
+      "p15-handover-a0": 0,
+      "p15-heldout-a0": 2,
+      "p15-verdict-a2": 3
+    },
+    "note": "All four clean under both nets. Two derived no label set at all before, so their metadata check ran on zero of their 89 items. p15-verdict-a2 derives four and scores none of them -- all three original metadata fields are constant on it -- which the report now states outright instead of printing as an ordinary green.",
+    "papers_audited": 4
+  },
+  "base_commit": "c94a6a3fda6a8bf0a88567cf121667eff3258951",
+  "branch": "agent/v21-leakage-gate-token-level",
+  "files": [
+    {
+      "path": "exam/STATUS.md",
+      "sha256": "8343245a47604aa9dd1b2ad0028ff95492a831ec06f2e2257e6a3a48d8dc397b"
+    },
+    {
+      "path": "exam/artifacts/leakage.json",
+      "sha256": "984cc26d8a96d9c86b10340644018ee42a82f3f6234f9dc1c3fbe499550d019a"
+    },
+    {
+      "path": "exam/leakage.py",
+      "sha256": "f8cb115b7ab776c628ebf68286f335f9c84c4a511ad61acb51f08238ade3bc2f"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/RUN_STATE.md",
+      "sha256": "9ee02668d9a0de80568c7fc982fc7b1ed275210f400d730d4e9cdaf0043373c7"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/ADVERSARIAL.md",
+      "sha256": "4dc8a4d7e96f85397a6fd3b68f81442a34bb5a780a3dad5d5769a586e03903a7"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/MUTATION_TABLE.txt",
+      "sha256": "5bdb1885b3b0576a96a81a0f50db6d25f522ceeffb4531723897d276476feafa"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/PROBE_OUTPUT.txt",
+      "sha256": "28936ffec1d75c0a13d627e88293eecc4a62be69b16241da8c62efa951a33b3b"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a10_mutation_test.py",
+      "sha256": "eb8581615cc69975747bab74ac8cc397c3518e74c60c4d34a12c96d07f75a914"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a11_test_quality.py",
+      "sha256": "219b9cfe62ab693c61ccfdc268d7586da2b5727ac681db4c1a13f13a4f4edfb4"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a12_independent_audit.py",
+      "sha256": "95cc55b2c8b06e15e1e79ce9dcba340fb1a49bdca23a9fa9c7408a1c0285bbd7"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a1_continue_kills_token_check.py",
+      "sha256": "b8ed56256ceb1c1fa5bb890b2812afeb76f3c051a0b8b0e44784a7966beb04d4"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a2_real_papers_instrument.py",
+      "sha256": "fd8af8f18290824533e4b57241eb6c20810278ed61145e6912692812eabeb9f3"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a3_what_the_skip_hid.py",
+      "sha256": "cb7cc11eb3d6a4e730b87a5a75572e5eefc3f35dec4952eec01178d9b8d7f294"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a4_label_sets_before_after.py",
+      "sha256": "885faaaa60f3b5bd1a504e180aed1f009b24b240c1336a475668f4d44c3b158c"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a5_metadata_fields_coverage.py",
+      "sha256": "21e3b41482f6d70eff1285c3289e0546b727e3ae1cd23dd19f064024de519feb"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a6_misses.py",
+      "sha256": "bf7e7a9e45f4561adc565b33bc3fde840d137725ed4a39b4be896d380e3d638a"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a7_floor_contamination.py",
+      "sha256": "4a21a51ca473d7322942c8d2b2002a0f75d120c0756f157f754c3b2720cfc6a1"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a8_false_positive_rate.py",
+      "sha256": "bb0189a0101b1eb5b88529979f01f5f85b2c62381e5a401f7129a783cef3cd3f"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/adversarial/a9_permutation_null.py",
+      "sha256": "2abf3ad8bcb5b11efa3d290d3b9defb87bd4e4d43d49b44daefa968d79859027"
+    },
+    {
+      "path": "exam/runs/20260729T1130Z-V21-leakage-gate-token-level/write_manifest.py",
+      "sha256": "d31752e22cc6f94a5aa4a5ddcf1c161eff579a861cb198ed29d466e1e1d2b33c"
+    },
+    {
+      "path": "exam/tests/test_leakage_tokens.py",
+      "sha256": "4d61e444d3b018835de0b4b9ee03ae499a0e32f176155c424664cfefaaaa276e"
+    }
+  ],
+  "passive": {
+    "api_calls": 0,
+    "game_spend_usd": 0.0,
+    "network": 0,
+    "sealed_pile_reads": 0
+  },
+  "prompt_id": "V21-leakage-gate-token-level",
+  "python": "3.13.13",
+  "run_id": "20260729T1130Z-V21-leakage-gate-token-level",
+  "tests": "pytest exam/tests/test_leakage_tokens.py -q (20 passed); pytest exam/tests -q (363 passed, 2 xfailed); python -m exam.verify (GREEN); adversarial/a10_mutation_test.py (23 mutations x 20 tests, every mutation caught by >=1 test)",
+  "utc": "2026-07-29T18:17:10Z",
+  "worktree_dirty": true
+}
