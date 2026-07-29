@@ -534,9 +534,25 @@ CITED_LINES = [
     ("baseline-arms/runs/20260728T103135Z-a7/THEORIA_ARM_COST.md", 52, "1.0935"),
     ("monitor/board/claimed/A3-campaign-devpile.RES-1.md", 54, "B = $60"),
     ("freeze/STATS_RULES.md", 26, "bare_cc"),
-    ("freeze/STATS_RULES.md", 712, "⟨n⟩ = 2"),
-    ("freeze/STATS_RULES.md", 777, "0.78"),
-    ("freeze/STATS_RULES.md", 791, "0.513"),
+    # Re-anchored 2026-07-29 (RES-1, E-WORDING).  Two of these three were never
+    # valid: `git show d4fb6d72:freeze/STATS_RULES.md | sed -n 777p` (the commit
+    # that ADDED them) is not the 0.78 line, and 791 is not the 0.513 line --
+    # they were computed against a draft whose §5.7 rewrite shifted before it was
+    # committed.  So --verify has been red since the moment these landed, and
+    # nobody saw it, because this generator is not called from verify.sh.  It is
+    # now, as stage [15b].
+    # These three move whenever STATS_RULES.md is edited, and it is edited
+    # often.  That is the gate working as designed -- a quoted number must still
+    # be where the quote says -- but it means the anchors have to be recomputed
+    # with the edit, not later.  Reproducible one-liner, run from the repo root:
+    #
+    #   python -c "ls=open('freeze/STATS_RULES.md',encoding='utf-8').read().split(chr(10));    #   [print(repr(n),[i+1 for i,l in enumerate(ls) if n in l][:3]) for n in ('⟨n⟩ = 2','0.78','0.513')]"
+    #
+    # Take the FIRST hit in each case: each is the §5.5 ruling / §5.7 arithmetic
+    # statement, and the later hits are the block quotes that restate it.
+    ("freeze/STATS_RULES.md", 953, "⟨n⟩ = 2"),
+    ("freeze/STATS_RULES.md", 956, "0.78"),
+    ("freeze/STATS_RULES.md", 1046, "0.513"),
 ]
 
 #: Files and sections the Markdown cites that are being written by other hands.

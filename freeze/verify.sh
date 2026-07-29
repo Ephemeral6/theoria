@@ -951,12 +951,190 @@ echo
 # that reason (弃权计错 is stated in STATS_RULES.md and contradicted by
 # exam/grading/mark.py; the specificity floor has no total order once _rate
 # returns None; the BA scalar cannot separate `memoriser` from ground truth).
+# FOUR THINGS AN ADVERSARIAL PASS PROVED IT STILL CANNOT DO (2026-07-29).  Cite
+# these wherever this stage's green is cited:
+#   1. It is a CO-PRESENCE gate, not a consistency gate.  Every SCOPED probe is
+#      a presence grep, so negating a rule while keeping its token stays green.
+#      Five such one-line edits were demonstrated.  The NEGATION guard below
+#      closes those five and is a blacklist -- incomplete by construction.
+#   2. Six of fifteen SCOPED probes use whole-file scope, so their "both files"
+#      requirement can be met by CLAIMS_TEXT.md quoting STATS_RULES.md rather
+#      than by CLAIMS_TEXT.md stating the rule in its own right.
+#   3. `E1/hardc` ("硬下限7") is satisfied only by §5's calibration table and
+#      §9's pending-decisions table -- endpoint 1's clean-tier hard floor is not
+#      stated in §1 at all.  Worse, IDENT hard-requires 硬下限10/硬下限7 in both
+#      files, so this stage now ENFORCES the continued prominence of a number
+#      §1.3 has ruled must never be used as a pass line.  Unresolved.
+#   4. It compares file to file and is blind to a contradiction WITHIN one file.
+#      §2.2.1's ⟨m⟩ ruling had to be propagated to §0 and §4.1.0 by hand.
 # Those need a rule/implementation gate, not a wording gate.  A `memoriser`
 # probe is included below as the cheapest available proxy: the drafts name
 # `bluffer` as the mandatory negative control and never name the arm that
 # actually beats this endpoint.
 # ============================================================================
-echo "[16] one endpoint, one wording: the three primary endpoints agree across the two files"
+# READY TO PASTE into freeze/verify.sh, after stage [14] and before the
+# "# ------------------------------------------------------------------ verdict"
+# block.  RES-1 owns the wiring; this subagent did not edit verify.sh -- several
+# subagents share this worktree.
+#
+# STAGE NUMBER: [15].  [13] = n_feasibility, [14] = residuals, and
+# endpoints/verify_sh_stage16.snippet.sh already reserves [16] for the
+# one-endpoint-one-wording audit.  Requires $HERE, ok, bad, note -- all already
+# defined in verify.sh.  Nothing else is introduced.
+#
+# ---------------------------------------------------------------------------
+# WHAT IT GUARDS, AND WHY
+# ---------------------------------------------------------------------------
+# Stage [12] exists because build_manifest.py's own docstring said "--verify is
+# what belongs in a gate" and it was in no gate at all: the generator was
+# correct, tested and never invoked, so MANIFEST.json was free to drift -- and
+# it had, by twelve stale hashes.
+#
+# `freeze/build_engine_manifest.py` (freeze item 5) and
+# `freeze/build_budget_table.py` (freeze item 12) each carry the same `--verify`
+# mode, each says so in its own docstring in the same words, and as of this
+# writing verify.sh mentions NEITHER file anywhere.  Two gates built and left
+# unwired.  So `ENGINE_MANIFEST.md`, `BUDGET_TABLE.md` and `BUDGET_TABLE.json`
+# had exactly the freedom to drift from their generators that stage [12] takes
+# away from `MANIFEST.json`, and for the budget table the drift is worse than
+# stale: its totals are sums over append-only ledgers, so the moment a run
+# spends, a stale table overstates the remaining headroom -- the direction that
+# authorises a campaign which cannot finish.
+#
+# The disposition is stage [12]'s, unchanged: a drifted generated artefact is a
+# FALSE statement about finished work, in the direction of claiming more, so it
+# is a hard failure and not a note.
+#
+# ---------------------------------------------------------------------------
+# WHAT THIS STAGE CANNOT SEE -- read this before trusting a green
+# ---------------------------------------------------------------------------
+#  * The generator is the single source of BOTH sides of each comparison.
+#    Delete a caveat from build_engine_manifest.py's ROSTER, regenerate, and
+#    --verify is green again while the manifest says strictly less than it did.
+#    Neither half of this stage can see that.  The three published-file greps in
+#    item05/verify_sh_stage15.snippet.sh (roster is 8 packages, the D-018 enum
+#    collision is still disclosed, the ⛔ 5-b version gap is still stated) are
+#    the counterweight and are NOT reproduced here -- keep them, do not choose
+#    between the two snippets.
+#  * The budget table's `pool` half reads `proxy/var/spend_gate.jsonl`, which is
+#    gitignored and grows with every proxied call.  A red from 15b therefore
+#    does not distinguish "somebody hand-edited the table" from "the balance
+#    moved since it was last regenerated"; only reading the printed section list
+#    does.  That is by design (the generator's docstring calls a moved balance
+#    "the one event that must invalidate a frozen budget table"), but it means
+#    15b goes red on its own after any spend, with no edit anywhere.
+#  * Neither half checks that the numbers are RIGHT, only that they still
+#    recompute.  A citation that has drifted is caught (15b prints CITATION
+#    DRIFT); a citation that was wrong when it was written is not.
+#  * Cost: ~20 s.  Three `build_engine_manifest.py` runs (~5.5 s each: the
+#    check, plus two for the control) and one `build_budget_table.py` run
+#    (~8 s).  Both are read-only in --verify mode; neither writes to the tree.
+#
+# ---------------------------------------------------------------------------
+# EXPECTED DISPOSITION ON FIRST PASTE: 15a GREEN, 15b RED.
+# ---------------------------------------------------------------------------
+# Measured in this worktree, HEAD 3b0dd342, 2026-07-30.  verify.sh is GREEN
+# today (DRAFT COMPLETE, 0 failures, 2 notes); pasting this stage as written
+# flips it to DRAFT INCOMPLETE on one failure.  The three causes of 15b's red,
+# all recorded in endpoints/stage15-evidence.txt, are:
+#   1. the pool moved: 11,874 -> 12,154 lines, 5,190 -> 5,296 actions.  $0.00 of
+#      new money, but the action headroom really did shrink, and the table still
+#      publishes the old figure.
+#   2. the generated block in BUDGET_TABLE.md is stale for the same reason.
+#   3. CITATION DRIFT on freeze/STATS_RULES.md:777 and :791 -- STATS_RULES.md
+#      has been edited under build_budget_table.py's CITED_LINES and the two
+#      line numbers now point at the wrong lines ("0.78" moved 777 -> 770,
+#      "0.513" moved 791 -> 805).  That one is a genuine defect in the tree and
+#      is not fixed by regenerating.
+# 1 and 2 clear by `python freeze/build_budget_table.py`; 3 needs the two line
+# numbers in CITED_LINES corrected first, or it comes straight back.
+# ============================================================================
+echo "[15] the other two generated artefacts still describe their sources"
+
+# --- 15a · ENGINE_MANIFEST.md (freeze item 5) -------------------------------
+em_out="$(python "$HERE/build_engine_manifest.py" --verify 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "build_engine_manifest.py --verify: ENGINE_MANIFEST.md still pins the tree it describes"
+else
+  bad "ENGINE_MANIFEST.md has drifted from the tree -- regenerate and read the diff"
+  printf '%s\n' "$em_out" | sed 's/^/        /'
+fi
+
+# Negative control for 15a, in stage [13]'s pattern: mutate a COPY outside the
+# repo and require a red.  It cannot be stage [13]'s mechanism verbatim, because
+# n_feasibility.py is pure arithmetic with no paths, while this generator pins
+# HERE/REPO to its own __file__ and shells out to git in REPO -- drop a bare copy
+# in $TMPDIR and it dies for want of a repository, which would make a red prove
+# nothing.  So the copy keeps HERE pointing at the real freeze/ (REPO, sys.path
+# and every git call stay correct) and only the ARTEFACT path is redirected.  The
+# two `python -c os.getcwd()` lines exist because a sed replacement string is not
+# path-mangled by MSYS: on Git Bash $HERE is /c/... and Python cannot open that.
+#
+# The unmutated copy is run FIRST and must reproduce the green above.  Without
+# that, a botched sed would break the copy, the mutated run would exit non-zero
+# for the wrong reason, and the control would report "fires" while testing
+# nothing.
+em_tmp="$(mktemp -d)"
+em_here="$(cd "$HERE" && python -c 'import os; print(os.getcwd().replace(os.sep, "/"))')"
+em_dest="$(cd "$em_tmp" && python -c 'import os; print(os.getcwd().replace(os.sep, "/"))')"
+sed -e "s|^HERE = os.path.dirname(os.path.abspath(__file__))\$|HERE = r\"$em_here\"|" \
+    -e "s|^OUT = os.path.join(HERE, \"ENGINE_MANIFEST.md\")\$|OUT = r\"$em_dest/ENGINE_MANIFEST.md\"|" \
+    "$HERE/build_engine_manifest.py" > "$em_tmp/build_engine_manifest.py"
+cp "$HERE/ENGINE_MANIFEST.md" "$em_tmp/ENGINE_MANIFEST.md"
+if python "$em_tmp/build_engine_manifest.py" --verify >/dev/null 2>&1; then
+  sed 's|^tree [0-9a-f]*  engine-rig/engines$|tree 0000000000000000000000000000000000000000  engine-rig/engines|' \
+      "$HERE/ENGINE_MANIFEST.md" > "$em_tmp/ENGINE_MANIFEST.md"
+  if python "$em_tmp/build_engine_manifest.py" --verify >/dev/null 2>&1; then
+    bad "negative control did not fire: zeroing the engine-rig/engines tree hash in a copy stayed green"
+  else
+    ok "negative control fires: zeroing one pinned hash in a copy of ENGINE_MANIFEST.md turns this stage red"
+  fi
+else
+  note "negative control not run: the relocated copy does not reproduce 15a's own verdict, so a red from it would prove nothing about the real manifest"
+fi
+rm -rf "$em_tmp"
+
+# --- 15b · BUDGET_TABLE.{json,md} (freeze item 12) --------------------------
+bt_out="$(python "$HERE/build_budget_table.py" --verify 2>&1)"
+if [ $? -eq 0 ]; then
+  ok "build_budget_table.py --verify: BUDGET_TABLE.{json,md} still recompute from the ledgers"
+else
+  bad "BUDGET_TABLE.{json,md} no longer recompute from the ledgers -- regenerate and read the diff"
+  printf '%s\n' "$bt_out" | sed 's/^/        /'
+fi
+
+# Negative control for 15b, same relocation shape as 15a.  When this stage was
+# drafted 15b was RED, so no exit-code control could be built -- a control that
+# demands non-zero from an already-non-zero check passes whatever it mutates.
+# 15b is green as of 2026-07-29 (two CITED_LINES anchors re-pointed, artefact
+# regenerated), so the control is now real.  It mutates the BALANCE, because a
+# stale balance is the specific failure this half exists to catch.
+bt_tmp="$(mktemp -d)"
+bt_here="$(cd "$HERE" && python -c 'import os; print(os.getcwd().replace(os.sep, "/"))')"
+bt_dest="$(cd "$bt_tmp" && python -c 'import os; print(os.getcwd().replace(os.sep, "/"))')"
+sed -e "s|^HERE = os.path.dirname(os.path.abspath(__file__))\$|HERE = r\"$bt_here\"|"     -e "s|^OUT_JSON = os.path.join(HERE, \"BUDGET_TABLE.json\")\$|OUT_JSON = r\"$bt_dest/BUDGET_TABLE.json\"|"     -e "s|^OUT_MD = os.path.join(HERE, \"BUDGET_TABLE.md\")\$|OUT_MD = r\"$bt_dest/BUDGET_TABLE.md\"|"     "$HERE/build_budget_table.py" > "$bt_tmp/build_budget_table.py"
+cp "$HERE/BUDGET_TABLE.json" "$HERE/BUDGET_TABLE.md" "$bt_tmp/"
+if python "$bt_tmp/build_budget_table.py" --verify >/dev/null 2>&1; then
+  python - "$bt_tmp/BUDGET_TABLE.json" <<'MUT'
+import json, sys
+p = sys.argv[1]
+d = json.load(open(p, encoding="utf-8"))
+d["balance"]["remaining_measured_usd"] = 999.99   # the sealed table suddenly "fits"
+json.dump(d, open(p, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+MUT
+  if python "$bt_tmp/build_budget_table.py" --verify >/dev/null 2>&1; then
+    bad "negative control did not fire: forging the remaining balance in a copy of BUDGET_TABLE.json stayed green"
+  else
+    ok "negative control fires: forging remaining_measured_usd in a copy of BUDGET_TABLE.json turns this stage red"
+  fi
+else
+  note "negative control not run: the relocated copy does not reproduce 15b's own verdict, so a red from it would prove nothing about the real budget table"
+fi
+rm -rf "$bt_tmp"
+echo
+
+# ============================================================================
+echo "[16] one endpoint, one wording: each pinned rule is STATED in both files"
 ep_out="$(python - "$C" "$S" <<'PY' 2>&1
 import re, sys
 sys.stdout.reconfigure(encoding="utf-8")
@@ -971,7 +1149,18 @@ def norm(t):
     return re.sub(r"[ \t ]+", "", t)
 
 def section(text, start, end):
-    m = re.search(start + r".*?(?=" + end + r"|\Z)", text, re.M | re.S)
+    """The span from `start` up to `end`.
+
+    Returns None if EITHER anchor is missing.  Falling back to end-of-file when only the
+    END anchor is gone is what makes this dangerous: the scope silently grows to
+    the end of the file and probes start passing on text from other sections --
+    demote `## 4.` to `###` and S3 swallows §4-§10, so E3/tier passes on the
+    `clean 层 12` in §5's calibration table with §3's own clause deleted.  A
+    scope that cannot be located is reported as scope/<id> below, never as a
+    pass."""
+    if not re.search(start, text, re.M) or not re.search(end, text, re.M):
+        return None
+    m = re.search(start + r".*?(?=" + end + r")", text, re.M | re.S)
     return m.group(0) if m else None
 
 # --- IDENT: the same string, in both files ---------------------------------
@@ -1040,7 +1229,11 @@ SCOPED = [
     ("E3/tier",  "E3", "the clean-tier replication", "hard",
      ("S3", r"clean层12"), ("C2", r"clean层12"), ""),
     ("E3/thin",  "E3", "the `thin` disposition", "hard",
-     ("*", r"thin"), ("*", r"thin"),
+     # NOT a bare `thin`: STATS_RULES.md §2.3.1 quotes D-EX-015's English
+     # "abstains on everything it cannot do", and every*thin*g satisfied the
+     # S-side of this probe while §3.2's whole thin/void rule was deleted.
+     # Both files write the metric value as a code span, so require that.
+     ("*", r"`thin`"), ("*", r"`thin`"),
      "C2 成立版 reports a median 在 claim 层 19 局上, but the test runs on "
      "19 minus thin minus void"),
     ("*/sign",   "*",  "the sign-test fallback", "hard",
@@ -1053,6 +1246,9 @@ SCOPED = [
      "outcome version; CLAIMS_TEXT.md has no third block and its mechanical "
      "procedure has two branches"),
 ]
+
+NEGATION_COUNT = [None] * 5   # kept in step with NEGATIONS below
+
 
 def audit(claims, stats):
     """-> (failed_ids, messages).  Messages are (level, text)."""
@@ -1108,6 +1304,28 @@ def audit(claims, stats):
             msgs.append((sev, "%s %s: stated in NEITHER file (%s / %s)%s"
                               % (ep, what, ss, cs, tail)))
 
+    # --- NEGATION GUARD ------------------------------------------------
+    # Every SCOPED probe above is a PRESENCE grep, so a one-line edit that
+    # negates a rule while keeping its token stays green: an adversarial pass
+    # on 2026-07-29 demonstrated five such edits, each leaving the two files
+    # directly contradicting each other on a primary endpoint.  This is a
+    # blacklist and therefore INCOMPLETE by construction -- it closes the five
+    # demonstrated bypasses.  The general defect is stated in WHAT IT CANNOT DO.
+    NEGATIONS = [
+        (r"配对数不是⟨m⟩对", "the pairing count for endpoint 2 is negated"),
+        (r"clean层12局上不必再报|不必在clean层", "the clean-tier replication is negated"),
+        (r"不采用弃权计错|弃权不计错", "弃权计错 is negated"),
+        (r"不设不可结论版|没有不可结论版", "the mandatory inconclusive block is negated"),
+        (r"不是全局合计|聚合口径=逐局平均", "the micro-average aggregation is negated"),
+    ]
+    for pat, what in NEGATIONS:
+        for label, body in (("STATS_RULES.md", NS), ("CLAIMS_TEXT.md", NC)):
+            if re.search(pat, body):
+                failed.add("neg/" + pat[:12])
+                msgs.append(("FAIL", "%s negates a rule this stage guards (%s) -- a "
+                                     "presence probe cannot see this, which is why the "
+                                     "negation guard exists" % (label, what)))
+
     # Bespoke 1: one quantity may not carry two statuses.  `theoria − 消融臂` is
     # needs_human/exploratory in §3.2 and a load-bearing conjunct of C2's
     # 成立版.  If it is claim-bearing there, the family is 4, not 3.
@@ -1127,13 +1345,16 @@ def audit(claims, stats):
     # all, that block must mark it exploratory / non-evidential, AND §3.2 must
     # have ruled its status.  Otherwise it is a FOURTH primary endpoint
     # (Theoria.md:373 says three) or a verbatim claim resting on an untested one.
-    if "消融臂" in hold and not re.search(r"探索性|不构成", hold):
+    if "消融臂" in hold and not re.search(r"不构成本条主张的证据", hold):
         failed.add("E3/ablstatus")
         msgs.append(("FAIL", "E3 `theoria − 消融臂` appears in C2's 成立版 without being "
                              "marked 探索性 / 不构成……证据 -- the verbatim claim rests on "
                              "it, making it a FOURTH primary endpoint (Theoria.md:373 "
                              "says three) or a claim no test backs"))
-    if "消融臂" in hold and not re.search(r"探索性", s3):
+    # NOT a bare `探索性`: §3 uses that word five times for unrelated reasons
+    # (e.g. `E2 降级为探索性`), so the check passed while §3.2 declared the
+    # ablation arm a FOURTH primary endpoint.  Require the ruling itself.
+    if "消融臂" in hold and not re.search(r"裁定：探索性", s3):
         failed.add("E3/ablstatus")
         msgs.append(("FAIL", "E3 `theoria − 消融臂` is reported in C2's 成立版 but "
                              "STATS_RULES.md §3.2 never rules its status -- one quantity "
@@ -1162,7 +1383,7 @@ for ep, label in (("E1", "U3 attainment rate"),
                   ("E3", "front-loading index paired difference")):
     if not any(f.startswith(ep + "/") for f in base_failed):
         print("PASS %s (%s): defining sentence, scalar, unit, test, direction and "
-              "pass line agree across both files" % (ep, label))
+              "pass line are each STATED in both files" % (ep, label))
 
 # --- negative control ------------------------------------------------------
 # Without this the stage could pass by matching nothing.  Two mutations, one
@@ -1195,9 +1416,16 @@ for pid, what, old, new in NEG:
 
 hard = sum(1 for lvl, _ in base_msgs if lvl in ("FAIL", "hard"))
 soft = sum(1 for lvl, _ in base_msgs if lvl == "soft")
-print("NOTE one-endpoint-one-wording: %d hard divergence(s), %d soft, out of %d probes "
-      "(see endpoints/WORDING_AUDIT.md for the ranked list and the proposed fixes)"
-      % (hard, soft, len(IDENT) + len(SCOPED)))
+# The count is stated as "checks", not "probes", and includes what actually
+# runs: the probe table, the six scope locations, three bespoke checks and the
+# negation guard.  The earlier wording said "27 probes" while executing ~38
+# things, which flattered the coverage of a green.
+_checks = len(IDENT) + len(SCOPED) + 6 + 3 + len(NEGATION_COUNT)
+print("NOTE one-endpoint-one-wording: %d hard divergence(s), %d soft, over %d checks "
+      "-- a green means each pinned rule is STATED in both files, NOT that the two "
+      "files agree (see WHAT IT CANNOT DO in this stage's header, and "
+      "endpoints/WORDING_AUDIT.md for the ranked list)"
+      % (hard, soft, _checks))
 PY
 )"
 while IFS= read -r line; do
