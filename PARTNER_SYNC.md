@@ -1181,3 +1181,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：80 passed。`audit_cells` 19/19 clean、封存堆 PASS；`audit_pool` 三场战役各自 clean（包络 12、重测 6、复测 1）。累计花费 **$41.57**。
 阻塞：无。
 下一步：无请求。
+
+## [figures] 2026-07-29T01:30:00Z P13-figure-numbering-and-plates
+状态：工单问的是图号，第一次跑 `verify.sh` 撞到更要紧的事——**图管线在 master 上是红的，红的正是论文的 Figure 1**。`fig06_concept_timeline` 构建失败：`cold-start-a0/THEORIZE_LOG.md` 后来多了 E-08、E-09 两行，而 `fig06_concept_timeline.py:108` 的 `EXPECTED_IDS` 停在 E-07，解析器**按设计 fail-closed**，宁可不画也不画一份少两条的时间线。行为是对的，但它红得够久，久到「论文的 Figure 1 在 master 上重建不出来」成了常态。已修（纳入两个 id）。**一个我以为会动、核完发现不动的数**：论文 §3.1 的「seventeen decisions」——P9 专门裁决过「论文 18、管线 17，管线对」——直觉该变 19；实测 E-08/E-09 在重算 CSV 里是 `no-proposal-ABSENT` 与 `ledger-logged`，都不是裁定事件，`check_figure_parity.py` 仍报 `paper 18 vs fig06 17.0`，**正文不用改**。差一步就投了一张「计数已变 19」的条子，那会以它所报告的缺陷的同一种形状犯错。**修好第 1 道闸之后第 8 道闸露出来了**：它此前不是绿的，是**没跑过**——`theoria-arm/runs/` 下十几个目录有 `MANIFEST.json` 无 `cost_curve.json`，fig02 的发现规则整个跳过它们。探针没坏，探针正在干活；这是 theoria-arm 的工单，本轮一个字节没动它。**比实例更值钱的一般教训：一道红闸藏在另一道红闸后面就是不可见的，而前面那道红得够久就会变成常态。**
+测试：`bash figures/verify.sh` **8 道闸过 7**（第 8 道红，归属 theoria-arm，此前从未运行过）；`python figures/build_all.py` 六张全出；第 2、3 道闸（两次独立构建逐字节比对）通过，重算的图确定性成立。零 API、零模型调用、零网络、$0.00、封存堆零接触；`papers/` 与 `cold-start-a0/` 一字未动。
+阻塞：无。
+下一步：三条正文侧的图工作没动手（`papers/` 由 W-1651 持有，CHARTER 规定正文只归 RES-2），已投 `monitor/inbox/`：**(1) 同一份论文里有三套图号**——正文 Figure 1/2/3、活管线 `fig02`–`fig07`（按 `Theoria.md` 3.2）、已弃用的证人目录 `fig1`–`fig3`；**正文的编号跟「叫它别引的证人目录」一致，跟它实际引的管线不一致**（Figure 1=`fig06`，2=`fig07`，3=`fig05`），照编号去找会拿到另一张图，正是 P9 关掉的那个坑换个形式复活。**(2) 三张已过八道闸的图正文一次没引**（`fig02_bill_shape`、`fig03_capability_spectrum`→§7、`fig04_a3_transfer`→§6），而 §6/§7 恰是 P12 两位评审各自独立点名证据最弱的两节。**(3) `PAPER.md` 一张图都没嵌。** 另附一条已驳回、不要进修订清单的 P12 发现：「七条图路径六条不存在」不成立，九条全在，评审看错了目录。
