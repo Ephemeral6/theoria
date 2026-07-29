@@ -29,8 +29,11 @@ baseline that `positional_report` computes.
 
 from __future__ import annotations
 
+import itertools
 import re
 from collections import Counter
+from functools import lru_cache
+from math import comb
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Set, Tuple
 
 from .model import Item, LeakageError, Paper, canonical
@@ -259,23 +262,78 @@ def metadata_hits(paper: Paper, answer_of: Dict[str, str], *,
 
 
 def metadata_scan(paper: Paper, answer_of: Dict[str, str], *,
-                  tolerance: float = 0.90
-                  ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+                  tolerance: float = 0.90, with_cuts: bool = False
+                  ) -> Tuple[Any, ...]:
     """Both halves of the metadata check in one pass: hits, and what went unscored.
 
     `metadata_hits` and `metadata_coverage` are the two projections of this, and
     they are projections rather than two traversals on purpose -- a caller that
     wants the verdict *and* the coverage (`check_paper` does) must not be able to
     obtain them from two walks that could disagree.
+
+    `with_cuts=True` adds a third member: what the multiplicity apparatus has to
+    say about this scan *whether or not anything fired* -- the cuts tried, the
+    family-wise rate they carry, and each group's power. It is a flag rather than a
+    third always-returned value only because two callers already unpack the pair;
+    it is not optional information, and `check_paper` always asks for it. Attaching
+    those numbers to findings alone published nothing on a clean paper, and every
+    paper we ship is clean.
+
+    **Scope of the multiplicity correction, stated because it is not total.** One
+    call covers one answer key, so `p_fire_familywise_in_label_set` pays for every
+    cut tried under that key and no more. `check_paper` calls this once per label
+    set it derives -- up to four on the shipped papers -- and those are further
+    chances to fire that no number here pays for. The count of label sets is
+    already in `report["label_sets_checked"]`, so the remaining layer is bounded
+    and visible rather than hidden; what is not honest is calling a partial
+    correction "the" correction, which is why both scopes are named in the key.
     """
     hits: List[Dict[str, Any]] = []
     unscored: List[Dict[str, Any]] = []
+    # Every cut tried anywhere under this answer key, so the multiplicity a
+    # finding is charged for is not just its own field's. Keyed by (field, cut),
+    # because the same cut of the same items tested through two different fields
+    # really is two chances to fire, while the same cut reached twice through one
+    # field -- a token and its complement -- is one. (V25)
+    cuts: Dict[Tuple[str, Tuple[str, ...]], float] = {}
     for group in _by_answer_alphabet(paper, answer_of):
-        group_hits, group_unscored = _metadata_hits_within(
+        group_hits, group_unscored, group_cuts = _metadata_hits_within(
             group, answer_of, tolerance)
         hits.extend(group_hits)
         unscored.extend(group_unscored)
-    return hits, unscored
+        cuts.update(group_cuts)
+
+    # The correction one level out. Without this the published rate would pay for
+    # the cuts tried on one field of one answer-alphabet group and stay silent
+    # about the rest of the same scan -- a partial correction wearing the name of
+    # the correction, which is worse than none because it reads as complete.
+    # Small on the shipped papers (2, 3, 2 and 0 cuts per paper against 1-3 per
+    # field group), and published anyway: the number is what makes it checkable
+    # that it is small.
+    survives = 1.0
+    for probability in cuts.values():
+        survives *= (1.0 - probability)
+    familywise = 1.0 - survives
+    for hit in hits:
+        if "token" not in hit:
+            continue
+        hit["cuts_tried_in_label_set"] = len(cuts)
+        hit["p_fire_familywise_in_label_set"] = round(familywise, 6)
+        # Judged at the widest scope this traversal can see. A reader who is
+        # told a red is strong must not have to re-derive the correction to find
+        # out it was strong only against part of the search.
+        hit["weak_evidence"] = familywise >= ALPHA
+    if not with_cuts:
+        return hits, unscored
+    return hits, unscored, {           # type: ignore[return-value]
+        "cuts_tried_in_label_set": len(cuts),
+        "p_fire_familywise_in_label_set": round(familywise, 6),
+        "cuts": sorted("%s:%s" % (field, "|".join(cut))
+                       for field, cut in cuts),
+        "group_power": [group_power(
+            Counter(answer_of[i.item_id] for i in group), tolerance)
+            for group in _by_answer_alphabet(paper, answer_of)],
+    }
 
 
 def metadata_coverage(paper: Paper, answer_of: Dict[str, str], *,
@@ -303,7 +361,9 @@ def _by_answer_alphabet(paper: Paper, answer_of: Dict[str, str]
 
 def _metadata_hits_within(labelled: List[Item], answer_of: Dict[str, str],
                           tolerance: float
-                          ) -> Tuple[List[Dict[str, Any]], List[Dict[str, Any]]]:
+                          ) -> Tuple[List[Dict[str, Any]],
+                                     List[Dict[str, Any]],
+                                     Dict[Tuple[str, Tuple[str, ...]], float]]:
     # An unscorable *group* is the same defect one level up, so it is recorded
     # rather than returned as an empty pair. Two of these in a row and a paper's
     # metadata check has examined nothing while reporting the same green as a
@@ -311,16 +371,19 @@ def _metadata_hits_within(labelled: List[Item], answer_of: Dict[str, str],
     if len(labelled) < 4:
         # too few to distinguish a key from a coincidence
         return [], [{"field": None, "group_items": len(labelled),
-                     "declined": "fewer than 4 labelled items", "scored_values": 0}]
+                     "declined": "fewer than 4 labelled items",
+                     "scored_values": 0}], {}
     alphabet = {answer_of[i.item_id] for i in labelled}
     if len(alphabet) < 2:
         return [], [{"field": None, "group_items": len(labelled),
-                     "declined": "one possible answer", "scored_values": 0}]
+                     "declined": "one possible answer",
+                     "scored_values": 0}], {}
     majority = Counter(answer_of[i.item_id] for i in labelled).most_common(1)[0][1]
     floor = majority / len(labelled)
 
     findings: List[Dict[str, Any]] = []
     declined: List[Dict[str, Any]] = []
+    cuts: Dict[Tuple[str, Tuple[str, ...]], float] = {}
     for field_name in METADATA_FIELDS:
         buckets: Dict[str, Counter] = {}
         for item in labelled:
@@ -344,7 +407,22 @@ def _metadata_hits_within(labelled: List[Item], answer_of: Dict[str, str],
             declined.append({
                 "field": field_name, "scored_values": 0,
                 "declined": "absent" if not buckets else "constant"})
-            continue
+            if not buckets:
+                # Absent on every item: there is nothing to tokenise, so the token
+                # pass has nothing to say and skipping it hides nothing.
+                declined.append({
+                    "field": field_name,
+                    "declined": "single-holder tokens are not scorable",
+                    "single_holder_tokens": 0, "constant_tokens": 0,
+                    "scored_tokens": 0})
+                continue
+            # A constant whole value was previously `continue`d here on the
+            # argument that its tokens must be constant too. That argument is one
+            # `canonical()` away from being wrong -- two raw values can canonicalise
+            # alike and tokenise differently -- and "the check did not run because
+            # someone proved it need not" is the exact shape this file keeps being
+            # bitten by. So the token pass runs, and if there is genuinely nothing
+            # it reports nothing at a cost of one pass over a constant field.
         # Score only on buckets holding more than one item. A field that takes a
         # different value on every item -- an id, or a per-variant tag -- fits
         # the answers perfectly and predicts nothing, because there is no second
@@ -412,9 +490,30 @@ def _metadata_hits_within(labelled: List[Item], answer_of: Dict[str, str],
         # answer? A token must sit on at least two items to be scored, for the
         # same reason a value must -- one item is an identifier, not a rule --
         # and a token on every item predicts nothing and is skipped.
-        findings.extend(_token_hits_within(labelled, answer_of, tolerance,
-                                           field_name, floor))
-    return findings, declined
+        token_findings, token_declined, field_cuts = _token_hits_within(
+            labelled, answer_of, tolerance, field_name, floor)
+        findings.extend(token_findings)
+        declined.extend(token_declined)
+        cuts.update(field_cuts)
+        # What the single-holder guard costs on this field, always, not only
+        # when something was skipped. A coverage number that appears only when
+        # it is bad is a coverage number nobody calibrates against. (V25)
+        # Emitted unconditionally. The first pass wrote the comment above and then
+        # guarded the record with `if coverage["single_holder"]:`, so a field that
+        # scored three tokens and skipped none said nothing at all -- which is the
+        # very thing the comment forbids, three lines under it. Two of the four
+        # shipped papers published no token coverage whatsoever because of it.
+        coverage = single_holder_coverage(labelled, answer_of, field_name)
+        declined.append({
+            "field": field_name,
+            "declined": "single-holder tokens are not scorable",
+            "single_holder_tokens": coverage["single_holder"],
+            "constant_tokens": coverage["constant"],
+            # Not `scored_values`: that key belongs to the whole-value check above
+            # and a reader summing it would silently under-count. (V25)
+            "scored_tokens": coverage["scored"],
+        })
+    return findings, declined, cuts
 
 
 #: Tokens shorter than this are punctuation and stopword noise, not labels.
@@ -437,38 +536,445 @@ def field_tokens(value: Any) -> Set[str]:
     return {t for t in _TOKEN_SPLIT.split(text) if len(t) >= MIN_TOKEN}
 
 
+#: A token test may fire on noise no more often than this, after the group's
+#: multiplicity is paid for. Above it the gate cannot tell a leak from luck, and
+#: firing anyway would be a coin toss wearing a verdict's clothes.
+#:
+#: 0.05 is conventional rather than derived, and the consequence is stated in the
+#: report rather than buried: a group small enough that no token can clear this
+#: is recorded as **untestable**, not as clean. That distinction is the whole of
+#: V21 restated one level down -- "nothing fired" and "nothing could have fired"
+#: print the same and mean opposite things.
+ALPHA = 0.05
+
+#: The name a pooled single-holder cut is reported under. Angle brackets because
+#: `_TOKEN_SPLIT` eats them, so no literal token from a paper can ever collide
+#: with it -- a derived finding that could be mistaken for a token someone wrote
+#: would send a reader looking for a string that is not there.
+PRIVATE_MARKER_CUT = "<private-marker>"
+
+
+def _fires(best: int, n: int, tolerance: float, floor: float) -> bool:
+    """The gate's own firing predicate, in terms of the two class maxima.
+
+    Written once and shared by the counter and its oracle, so that neither can
+    drift from `_token_hits_within`'s threshold while still looking correct: a
+    false-positive rate computed against a *different* threshold than the one
+    that fires is worse than no rate at all, because it reads as a calibration.
+
+    One mutation of this line is unkillable and that is not a coverage gap: dropping
+    the `1e-9` changes nothing *here*, because `best` is an integer and `floor` is
+    `max(sizes)/n` over the same denominator, so `best/n > floor` already means
+    `best > max(sizes)`. Measured across 7548 configurations with no change in the
+    count. The slack is load-bearing only in the whole-value path, where the rate is
+    over the scored subset and the floor over the whole group -- different
+    denominators, hence a real float comparison. Written down so the next person to
+    run a mutation report does not go looking for a test that cannot exist.
+    """
+    rate = best / n
+    return rate > tolerance and rate > floor + 1e-9
+
+
+def _fire_count_bruteforce(sizes: Sequence[int], k: int,
+                           tolerance: float) -> int:
+    """Every split of the k carriers across answer classes, literally.
+
+    Exponential in the number of answer classes -- prod(s_i + 1) splits, of
+    which all but a thin shell are discarded for having the wrong total. Kept,
+    and never called by the gate, because `_fire_count`'s pruning is only
+    trustworthy if something this obvious agrees with it everywhere it can be
+    run at all (`test_the_fast_count_agrees_with_the_oracle_everywhere`).
+    """
+    n = sum(sizes)
+    floor = max(sizes) / n
+    hits = 0
+    for split in itertools.product(*[range(s + 1) for s in sizes]):
+        if sum(split) != k:
+            continue
+        ways = 1
+        for size, take in zip(sizes, split):
+            ways *= comb(size, take)
+        best = max(split) + max(s - t for s, t in zip(sizes, split))
+        if _fires(best, n, tolerance, floor):
+            hits += ways
+    return hits
+
+
+def _fire_count(sizes: Sequence[int], k: int, tolerance: float) -> int:
+    """The same count, over states instead of splits.
+
+    Which split of the carriers occurred does not matter to the predicate --
+    only the largest carrier class and the largest non-carrier class do. So the
+    classes are consumed one at a time carrying `(taken, max_with, max_without)`
+    and nothing else, and any state whose most optimistic completion still
+    cannot fire is dropped on the spot.
+
+    This is not an optimisation looking for a problem. The literal enumeration
+    is exponential in the number of *answer classes*, and it is the answer
+    classes we do not control: an exam whose answers are integers (`plan_len`)
+    or short strings has as many classes as it has distinct answers. Measured on
+    the shipped set, `_fire_count_bruteforce` takes 0.4s on the largest real
+    group (6 classes, n=80) and 15s on a synthetic 8-class one; at 12 classes it
+    does not finish. A gate slow enough to be switched off is a gate that is not
+    there, which is the failure mode this whole lane exists to catch, so the
+    pruning is part of the check rather than a footnote about it.
+    """
+    n = sum(sizes)
+    floor = max(sizes) / n
+    # Biggest classes first: they pin `max_without` high early, so the optimistic
+    # bound below starts discarding states in the first few layers instead of the
+    # last.
+    sizes = sorted(sizes, reverse=True)
+    m = len(sizes)
+    suffix_max = [0] * (m + 1)
+    suffix_sum = [0] * (m + 1)
+    for i in range(m - 1, -1, -1):
+        suffix_max[i] = max(sizes[i], suffix_max[i + 1])
+        suffix_sum[i] = sizes[i] + suffix_sum[i + 1]
+
+    states: Dict[Tuple[int, int, int], int] = {(0, 0, 0): 1}
+    for i, size in enumerate(sizes):
+        reachable = suffix_max[i + 1]
+        nxt: Dict[Tuple[int, int, int], int] = {}
+        for (taken, max_with, max_without), ways in states.items():
+            lo = max(0, k - taken - suffix_sum[i + 1])
+            for take in range(lo, min(size, k - taken) + 1):
+                got = taken + take
+                with_ = take if take > max_with else max_with
+                left = size - take
+                without = left if left > max_without else max_without
+                # Upper bound on each maximum over every way the remaining
+                # classes could split -- a bound on the sum, hence sound to
+                # prune on even where the two are not achievable together.
+                if not _fires(max(with_, min(k - got, reachable))
+                              + max(without, reachable),
+                              n, tolerance, floor):
+                    continue
+                key = (got, with_, without)
+                nxt[key] = nxt.get(key, 0) + ways * comb(size, take)
+        states = nxt
+
+    return sum(ways for (taken, with_, without), ways in states.items()
+               if taken == k and _fires(with_ + without, n, tolerance, floor))
+
+
+def token_fire_probability(label_counts: Dict[str, int], k: int,
+                           tolerance: float = 0.90) -> float:
+    """P(this gate fires on a token carried by k items) when nothing leaks.
+
+    The null is the gate's own conditioning: the answers are what they are, and
+    the k carriers are an arbitrary k-subset of the group. Counted exactly over
+    how the carriers can split across answer classes -- the multivariate
+    hypergeometric -- rather than sampled.
+
+    Exact rather than sampled on purpose. V21 measured this by shuffling labels
+    2000 times, which put a seed (`random.Random(20260729)`) and a Monte-Carlo
+    error bar between the reader and the number, and made every published rate a
+    function of the order in which papers happened to be scanned. The count here
+    is closed-form, so it is: same answer, no seed, byte-reproducible.
+
+    Not to be confused with "how surprising is this token" -- that conditions on
+    the rate observed, and on a clean paper it is 1.0 by construction. This one
+    conditions on the *threshold*, and is the false-positive rate.
+    """
+    sizes = tuple(sorted((label_counts[c] for c in label_counts), reverse=True))
+    n = sum(sizes)
+    if n == 0 or not 0 < k < n:
+        return 0.0
+    return _cached_fire_probability(sizes, k, tolerance)
+
+
+@lru_cache(maxsize=4096)
+def _cached_fire_probability(sizes: Tuple[int, ...], k: int,
+                            tolerance: float) -> float:
+    """Memoised because the same group is asked the same question many times.
+
+    `check_paper` scans each answer-alphabet group once per metadata field and once
+    per label set, and `group_power` sweeps every k on the same group -- so the
+    unmemoised call count is roughly `fields x label_sets x n`. Keyed on the sorted
+    sizes, which is exactly what the count depends on: the class *names* cannot
+    change the answer, and normalising here rather than at the call site is what
+    lets two different fields share one entry.
+
+    A cache is only safe because the function is pure and deterministic, which is
+    the same property that made the exact count worth having in the first place.
+    """
+    # p(k) == p(n - k): complementing a k-subset swaps `max_with` and
+    # `max_without`, and the predicate reads only their sum. So half the range is
+    # the whole range, which also halves `group_power`. Measured over 45,470
+    # (k, n-k) pairs with no asymmetry, and pinned by
+    # `test_a_cut_and_its_complement_have_the_same_null`.
+    n = sum(sizes)
+    k = min(k, n - k)
+    return _fire_count(sizes, k, tolerance) / comb(n, k)
+
+
+def group_power(label_counts: Dict[str, int],
+                tolerance: float = 0.90) -> Dict[str, Any]:
+    """The strongest evidence this group could produce, over every possible token.
+
+    `ALPHA`'s docstring promises that a group too small for any token to clear it
+    is recorded as *untestable* rather than clean. Nothing computed that, so the
+    promise was prose: on a paper with no hits the report said "no hits" and left
+    a reader to assume the check had power it may not have had. That is V21's
+    defect verbatim, one level in -- and this time inside V25's own fix, which is
+    where it was found.
+
+    So: minimise the false-positive rate over the carrier counts a cut could have,
+    **k = 1 .. n-1**. The minimum is the best case available to *anything* the check
+    can test in this group, leak or luck. If even that does not clear alpha, no red
+    from this group can ever be strong evidence, and the honest word for the group
+    is untestable.
+
+    k = 1 is in the range, and the first version left it out on the grounds that a
+    single-holder token is never scored. That was true of *tokens* and false of the
+    check: the pooled private-marker cut can hold one item, and on the M5 fixture it
+    does and it fires. Excluding it understated the power of exactly the groups this
+    function exists to describe.
+
+    Cheap because it depends only on the answer counts, not on the field, so it is
+    computed once per answer-alphabet group rather than once per token; and the
+    sweep runs to n//2 only, since complementing a cut swaps the two maxima and the
+    predicate reads their sum.
+    """
+    n = sum(label_counts.values())
+    best = 1.0
+    best_k = None
+    for k in range(1, n // 2 + 1):
+        probability = token_fire_probability(label_counts, k, tolerance)
+        # A k at which nothing can fire is not a stronger test, it is no test.
+        if probability <= 0.0:
+            continue
+        if probability < best:
+            best, best_k = probability, k
+    if best_k is None:
+        # No cut of any size can trip the threshold here. Not "clean" and not
+        # "weak" -- the check cannot speak about this group at all.
+        return {"n": n, "best_p_fire": None, "best_k": None,
+                "untestable_at_alpha": True, "can_fire_at_all": False}
+    return {"n": n,
+            # Six *significant* digits, not six decimals. Rounding a genuine
+            # 1.5e-27 to 0.0 would print it identically to the impossible case
+            # above, whose `best_p_fire` is `None` -- and "vanishingly unlikely" and
+            # "cannot happen" printing alike is the exact confusion this whole
+            # function was added to end.
+            "best_p_fire": float("%.6g" % best), "best_k": best_k,
+            "untestable_at_alpha": best >= ALPHA, "can_fire_at_all": True}
+
+
+def _partition_key(held: Set[str], universe: Set[str]) -> Tuple[str, ...]:
+    """A token and its complement cut the group the same way.
+
+    The multiplicity a correction must pay for is the number of distinct *cuts*,
+    not the number of tokens. Measured on the shipped papers, the difference is
+    not cosmetic: `p15-adaptation-a0`/`exact_on_heldout` scores four tokens --
+    `tags:narrow`, `tags:wide`, `item_id:narrow`, `item_id:wide` -- which are one
+    single cut wearing four names, because `narrow` and `wide` are complements
+    and `item_id` repeats `tags` item for item. Charging four tests for one
+    inflates the correction fourfold on exactly the papers we ship.
+    """
+    return min(tuple(sorted(held)), tuple(sorted(universe - held)))
+
+
 def _token_hits_within(labelled: List[Item], answer_of: Dict[str, str],
                        tolerance: float, field_name: str,
-                       floor: float) -> List[Dict[str, Any]]:
+                       floor: float
+                       ) -> Tuple[List[Dict[str, Any]],
+                                  List[Dict[str, Any]],
+                                  Dict[Tuple[str, Tuple[str, ...]], float]]:
     n = len(labelled)
     carriers: Dict[str, List[Item]] = {}
     for item in labelled:
         for token in field_tokens(item.sheet_side().get(field_name)):
             carriers.setdefault(token, []).append(item)
 
-    findings: List[Dict[str, Any]] = []
-    for token, holders in sorted(carriers.items()):
-        if len(holders) < 2 or len(holders) == n:
-            continue        # an identifier, or a constant: neither is a rule
-        held = {i.item_id for i in holders}
-        with_token = Counter(answer_of[i.item_id] for i in holders)
+    counts = Counter(answer_of[i.item_id] for i in labelled)
+    universe = {i.item_id for i in labelled}
+
+    # Two passes, because the correction for a token depends on how many other
+    # cuts were tried beside it, which is not known until they have all been
+    # collected. Scoring and correcting in one pass would charge each token only
+    # for the tokens sorted before it.
+    def score(held: Set[str]) -> Tuple[int, float]:
+        with_token = Counter(answer_of[i] for i in held)
         without = Counter(answer_of[i.item_id] for i in labelled
                           if i.item_id not in held)
         correct = (with_token.most_common(1)[0][1]
                    + without.most_common(1)[0][1])
-        rate = correct / n
-        if rate > tolerance and rate > floor + 1e-9:
-            findings.append({
-                "field": field_name,
-                "token": token,
-                "predicts": round(rate, 6),
-                "majority_floor": round(floor, 6),
-                "n": n,
-                "carried_by": len(holders),
-                "with_token": dict(with_token),
-                "without_token": dict(without),
-            })
-    return findings
+        return correct, token_fire_probability(counts, len(held), tolerance)
+
+    scored: List[Tuple[str, Set[str], int, float]] = []
+    for token, holders in sorted(carriers.items()):
+        if len(holders) < 2 or len(holders) == n:
+            # An identifier, or a constant: neither states a rule *as a token*.
+            # What that costs is reported by `single_holder_coverage`, and the
+            # part of it that is recoverable is recovered by the pooled cut below.
+            continue
+        held = {i.item_id for i in holders}
+        correct, p_fire = score(held)
+        scored.append((token, held, correct, p_fire))
+
+    # --- the private markers, pooled into one cut ------------------------
+    #
+    # V25's first pass ruled the single-holder gap unclosable, and an adversarial
+    # review refuted it. The proof was sound and the conclusion drawn from it was
+    # not: a token on one item is unscorable *as a token* -- all its statistics
+    # are functions of its carrier alone, so `ridge` on the one `dead` item and
+    # `tag07` on that same item are identical digit for digit -- but that is a
+    # statement about per-token rules, not about this check. The field's whole
+    # carrier map separates them, and this function already has it.
+    #
+    # So the question is asked once for the field instead of once per token:
+    # **does carrying a private marker in this field predict the answer?** One
+    # cut, one test, and the two cases fall on opposite sides of it by arithmetic
+    # rather than by taste:
+    #
+    #   * a real leak marks a few items       -> k < n, scorable, fires if it predicts;
+    #   * an identifier family marks every one -> k == n, dropped by the same
+    #     constant guard the tokens use, because an enumeration predicts nothing.
+    #
+    # This is not hypothetical. On `v11-handover-a0`/`solvable` the two `false`
+    # items are exactly the two whose `level:` name occurs once (`stile`, `cairn`)
+    # while every `true` item shares its level name with another -- so "is my
+    # level name unique on this sheet?" answers the paper 8 of 8, at an exact
+    # false-positive rate of 0.0357. The shipped gate scored none of it: each
+    # `level:` token sits on one or two items, and `flume` at k=2 scores exactly
+    # the majority floor.
+    #
+    # Known evasion, stated rather than papered over: padding every item with a
+    # decoy private marker pushes k to n and silences this. That is measured in
+    # `runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/b5_pooled_private_cut.py`
+    # along with the rule that survives it (deviation from the field's modal
+    # private-marker count), which is not shipped here -- it is a second design
+    # decision, and V25 already learned what happens when two go into one diff.
+    private = {holders[0].item_id for holders in carriers.values()
+               if len(holders) == 1}
+    if 0 < len(private) < n:
+        correct, p_fire = score(private)
+        scored.append((PRIVATE_MARKER_CUT, private, correct, p_fire))
+
+    # Family-wise over the distinct cuts: P(at least one of them fires on noise).
+    cuts: Dict[Tuple[str, ...], float] = {}
+    for _token, held, _correct, p_fire in scored:
+        cuts.setdefault(_partition_key(held, universe), p_fire)
+    survives = 1.0
+    for p_fire in cuts.values():
+        survives *= (1.0 - p_fire)
+    familywise = 1.0 - survives
+
+    findings: List[Dict[str, Any]] = []
+    declined: List[Dict[str, Any]] = []
+    for token, held, correct, p_fire in scored:
+        # `_fires`, not a second spelling of it. Its docstring claims the counter
+        # and the gate "cannot drift" because they share this predicate -- and until
+        # V25's adversarial pass this line wrote the comparison out inline instead,
+        # so the promise was a copy rather than a call. Two mutations of `_fires`
+        # (`>=` for `>`, and dropping the 1e-9) survived all 66 tests in this area,
+        # and the `>=` one matters: 9/10, 72/80 and every multiple of ten land
+        # exactly on the double 0.90, so on the largest real group the published
+        # false-positive rate would have been computed against a threshold the gate
+        # does not fire on. Pinned by
+        # `test_the_published_rate_and_the_gate_agree_on_the_exact_tie`.
+        if not _fires(correct, n, tolerance, floor):
+            continue
+        # The correction is published, NOT applied as a suppressor. V25 built it
+        # as a gate first and measured what that costs: at n=6 with three cuts
+        # tried it silences `test_a_degenerate_whole_value_subset_does_not_
+        # disable_the_token_check`, a leak V21 planted on purpose and a human
+        # can see by eye. The arithmetic is right -- such a token does arise by
+        # chance 18.7% of the time at that size -- but the conclusion drawn from
+        # it would be wrong, because of what this gate *does* when it fires.
+        #
+        # STATUS.md already fixed those semantics: firing means "stop and let a
+        # human adjudicate", not "leak proven". Under those semantics a false
+        # alarm costs one person one look, and a miss costs a published paper
+        # built on a leaked exam. Trading the second for the first is a bad
+        # trade at any alpha, and the item's own warning -- treat one side only
+        # and the gate ends up either crying wolf or playing dead -- is exactly
+        # what applying this would have done. So every red carries the number
+        # that says what it is worth, and a reader who wants to discount a weak
+        # one can; the gate does not discount it for them.
+        findings.append({
+            "field": field_name,
+            "token": token,
+            "predicts": round(correct / n, 6),
+            "majority_floor": round(floor, 6),
+            "n": n,
+            "carried_by": len(held),
+            "with_token": dict(Counter(answer_of[i] for i in held)),
+            "without_token": dict(Counter(answer_of[i.item_id] for i in labelled
+                                          if i.item_id not in held)),
+            # Which items the cut holds. On the pooled cut the "token" is derived
+            # rather than literal, so without this a reader cannot check it.
+            "carrier_ids": sorted(held),
+            # Published with every red, because "the gate went off" is not a
+            # number and a reader is entitled to know what it is worth. V21 put
+            # this in prose in STATUS.md; prose does not travel with the finding.
+            "p_fire": round(p_fire, 6),
+            # Named for their scope, because an unqualified "familywise" would be
+            # read as covering the whole scan and this one covers one field of one
+            # answer-alphabet group. `metadata_scan` adds the wider pair
+            # (`..._in_label_set`) and sets `weak_evidence` from that.
+            "p_fire_familywise_in_field": round(familywise, 6),
+            "cuts_tried_in_field": len(cuts),
+            # The one-word form of the same thing, so that a red which noise
+            # could plausibly have produced cannot be quoted as if it could not.
+            # Overwritten one level out, at the wider scope; the value here is
+            # what this field alone would say, and is never the last word.
+            "weak_evidence": familywise >= ALPHA,
+        })
+    return findings, declined, {(field_name, cut): p
+                                for cut, p in cuts.items()}
+
+
+def single_holder_coverage(labelled: List[Item], answer_of: Dict[str, str],
+                           field_name: str) -> Dict[str, Any]:
+    """How many of a field's tokens are not scorable one at a time, and why not.
+
+    A token carried by exactly one item is not scorable **as a token**. Every
+    statistic available for it -- the in-sample rate, a leave-one-out accuracy,
+    an exact p -- is a function of *which item it sits on* and nothing else, so a
+    real leak (`ridge`, on the one item whose answer is `dead`) and a bookkeeping
+    identifier (`tag07`, on that same item) are identical digit for digit, and no
+    per-token rule can fire on the first while staying silent on the second.
+    Measured across three such rules -- the shipped one, a12's leave-one-out
+    framework, and the exact test -- in
+    `runs/20260729T1820Z-V25-leakage-loo-and-multiplicity/b2_three_rules_on_fixtures.py`.
+
+    **That is a statement about per-token rules, and V25's first pass wrongly read
+    it as a statement about this check.** An adversarial review refuted the wider
+    claim by building the counterexample: the field's *whole carrier map* does
+    separate the pair, because one private token in a field is an anomaly while
+    twelve are an enumeration. `_token_hits_within` now pools a field's private
+    markers into a single cut and scores that, which fires on the leak and is
+    dropped as a constant on the identifier family. The first thing it found was a
+    real leak in `v11-handover-a0` that the shipped gate scored none of.
+
+    So the guard on individual tokens stays -- it is right about tokens -- and
+    what this function reports is how much of the field is out of reach of the
+    per-token question, on the honest denominator. On the four shipped papers,
+    counting distinct (field, token) pairs, 97 of 106 are single-holder (91.5%).
+    An earlier number, 237 of 261, is wrong to quote for the shipped set and is
+    kept here so it can be traced rather than silently dropped: it counts
+    (paper, label set, group, field, token) *scan slots* across five papers --
+    `v11-handover-a0` included, along with its declared label set, and a paper
+    scanned under two label sets contributes its tokens twice. On the same slot
+    basis the four shipped papers are 219 of 230, and over derived label sets
+    only, five papers are 228 of 247 (`b5_pooled_private_cut.py`, section 4, which
+    prints all four denominators side by side). Every ratio is 90-95%, which is
+    why the mis-scoping survived a pass: the percentage was insensitive to the
+    unit, and nobody was checking the unit.
+    """
+    n = len(labelled)
+    carriers: Dict[str, List[Item]] = {}
+    for item in labelled:
+        for token in field_tokens(item.sheet_side().get(field_name)):
+            carriers.setdefault(token, []).append(item)
+    singles = sorted(t for t, h in carriers.items() if len(h) == 1)
+    constants = sorted(t for t, h in carriers.items() if len(h) == n)
+    return {"field": field_name, "tokens": len(carriers),
+            "single_holder": len(singles), "constant": len(constants),
+            "scored": len(carriers) - len(singles) - len(constants)}
 
 
 def _group_ids(paper: Paper, answer_of: Dict[str, str]) -> Dict[str, List[str]]:
@@ -521,18 +1027,41 @@ def check_paper(paper: Paper, sheet: Dict[str, Any], *,
         label_sets["<declared>"] = answer_of
 
     unscored: Dict[str, List[Dict[str, Any]]] = {}
+    # What the multiplicity apparatus would have to say about this scan whether or
+    # not anything fired. Attached to findings only, it publishes nothing at all on
+    # a clean paper -- and every paper we ship is clean, so V25's whole correction
+    # was invisible in the artefact. That is V21's defect verbatim ("no hits" and
+    # "no power" printing the same), reproduced inside V25's own fix, and it is the
+    # second time this exact shape has been caught in this file.
+    multiplicity: Dict[str, Any] = {}
     for source, labels in sorted(label_sets.items()):
         # Not `hits`: that name is taken by the per-item probe result above, and
         # this file is the wrong place to make a reader check which one is meant.
-        metadata_findings, declined = metadata_scan(paper, labels)
+        metadata_findings, declined, scan_cuts = metadata_scan(
+            paper, labels, with_cuts=True)
         for hit in metadata_findings:
             findings.append({"check": "metadata", "label_source": source, **hit})
         if declined:
             unscored[source] = declined
+        multiplicity[source] = scan_cuts
 
     if findings:
-        raise LeakageError(
-            "%s leaks its own answers: %s" % (paper.paper_id, findings[:8]))
+        # Sliced per class rather than off the front. Metadata findings are
+        # appended after every probe and structural one, so a plain `findings[:8]`
+        # truncates them away on any paper with eight probe hits -- taking `p_fire`
+        # and `weak_evidence` with them, exactly when a human is being summoned to
+        # adjudicate and needs to know what the red is worth.
+        metadata_findings = [f for f in findings if f.get("check") == "metadata"]
+        others = [f for f in findings if f.get("check") != "metadata"]
+        error = LeakageError(
+            "%s leaks its own answers: %s"
+            % (paper.paper_id, others[:4] + metadata_findings[:4]))
+        # The message is prose; these are the same findings as data, so a caller
+        # that wants to adjudicate does not have to parse an f-string.
+        error.findings = findings
+        error.multiplicity = multiplicity
+        error.metadata_unscored = unscored
+        raise error
 
     report: Dict[str, Any] = {
         "paper_id": paper.paper_id,
@@ -552,6 +1081,13 @@ def check_paper(paper: Paper, sheet: Dict[str, Any], *,
     # shipped artefact still could not be read. (V21)
     if unscored:
         report["metadata_unscored"] = unscored
+    # Published on every paper, findings or none: how many distinct cuts the token
+    # check tried under each answer key, the family-wise rate that many tests
+    # carries, and -- per answer-alphabet group -- the strongest evidence any token
+    # could have produced there. The last is what separates "nothing fired" from
+    # "nothing could have fired", which is the whole of V21 restated at the level of
+    # the statistic. (V25)
+    report["metadata_multiplicity"] = multiplicity
     # The declared label is *the* answer, so its positional report keeps the
     # top-level key it has always had. Labels we derived ourselves are a wider
     # net and sit beside it, so that adding the net did not silently change the

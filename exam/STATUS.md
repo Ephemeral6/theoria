@@ -553,3 +553,228 @@ not "leak proven". But **the number ships with the gate**. If `v11-handover-a0`'
 chance it is coincidence, and that the next step is to re-run
 `a9_permutation_null.py`. A multiplicity correction for small n is left as separate
 work.
+
+## V25 — the two debts V21 measured, and the ruling that had to be withdrawn
+
+Prompt `V2-V25-leakage-loo-and-multiplicity`, branch
+`agent/v25-leakage-loo-and-multiplicity`, based on V21 rather than master because
+it changes the functions V21 wrote.
+
+V21 left two numbers with no treatment: tokens carried by exactly one item are
+never scored, and small groups clear the tolerance by luck. They pull in opposite
+directions, which is why the item required both at once.
+
+**The multiplicity correction is exact, published, and not applied.** The
+false-positive rate is now computed in closed form for every token the gate scores
+— P(this rule fires on a token carried by k of n items | nothing leaks), counted
+over how the carriers can split across answer classes. Exact rather than sampled on
+purpose: V21's 0.117 came from 2000 shuffles under a seed, and a seed between the
+reader and the number makes every published rate a function of the order in which
+papers happened to be scanned. The exact count reproduces V21's sampled figure
+(0.1034 against 0.117, inside Monte-Carlo error) with no RNG at all, and it is
+charged for multiplicity at two scopes — the cuts tried on one field of one answer
+group, and every cut tried under the whole answer key — both named in the key
+rather than left to be assumed. A token and its complement are one cut, not two;
+`p15-adaptation-a0` scores four token names that are a single cut, and counting
+names would over-correct fourfold on a paper we ship.
+
+It is **published, not applied**, and the measurement behind that decision is kept
+executable: applying it as a suppressor at alpha 0.05 silences a leak V21 planted
+at n=6 that a human sees by eye, because at that size with three cuts tried the
+family-wise rate really is 0.187. Firing means "stop and let a human adjudicate",
+so a false alarm costs one look and a miss costs a published paper. Every red now
+carries what it is worth; the gate does not discount it for the reader.
+
+**Exactness cannot be bought with unbounded time, which took measuring.** The
+literal enumeration is exponential in the number of *answer classes* — the one
+dimension an exam does not control, since an exam answered in integers has as many
+classes as it has distinct answers. Measured: 0.46s at six classes, 14.7s at eight,
+unfinished at twelve. The count is now a pruned state collapse over
+`(taken, max_with, max_without)`, verified against the literal enumeration on 2130
+configurations at six tolerances — including 0.875, an exact float tie at n=8 —
+with zero disagreements, and on cases with counts as large as 6.4e19. Twenty answer
+classes over 200 items now returns instantly. A gate slow enough to be switched off
+is a gate that is not there.
+
+**A green gate now says how much it never looked at, and whether it could have
+spoken at all.** `ALPHA`'s own docstring promised that a group too small for any
+token to clear it is recorded as *untestable* rather than clean, and nothing
+computed that — so `group_power` now minimises the false-positive rate over every
+carrier count a token could have, and a group whose best case cannot clear alpha is
+named. Coverage of the single-holder guard is reported on every field, always, not
+only when something was skipped: a coverage number that appears only when it is bad
+is one nobody calibrates against.
+
+### The ruling V25 shipped first was wrong, and the adversarial pass brought a counterexample
+
+V25's first pass concluded that the single-holder blind spot **cannot** be closed,
+and proved it: every statistic available for a token on one item is a function of
+its carrier alone, so a real leak (`ridge` on the one `dead` item) and a
+bookkeeping identifier (`tag07` on the same item) are identical digit for digit,
+and no rule can fire on one while staying silent on the other. Three rules were
+measured agreeing on exactly that pair.
+
+The proof is correct and the conclusion drawn from it was not. The proof quantifies
+over rules reading **one token's** carrier set; `_token_hits_within` holds the whole
+field's carrier map, which is strictly more, and it separates the pair: one private
+token in a field is an anomaly, twelve are an enumeration. So the question is asked
+once per field instead of once per token — *does carrying a private marker here
+predict the answer?* — and the two cases fall on opposite sides of it by
+arithmetic: a leak marks a few items and is scored, an identifier family marks
+every item and is dropped by the constant guard that was already there. The known
+evasion is stated rather than hidden: padding every item with a decoy marker pushes
+the cut to k = n and silences it, and the rule that survives that (deviation from
+the field's modal private-marker count) is measured and deliberately not shipped,
+because it is a second design decision.
+
+Two more of the first pass's claims went with it. `237 of 261` was the wrong unit
+twice over — it counts scan slots across five papers, double-counting any paper
+scanned under two label sets — and the honest figure for the four shipped papers is
+**97 of 106 distinct (field, token) pairs, 91.5%**; all four denominators are
+printed side by side in `b5_pooled_private_cut.py`, because every one of them lands
+between 90% and 95%, so the percentage was insensitive to the unit and nobody was
+checking the unit. And "relaxing the guard would cry wolf" had never been measured:
+measured, it is **zero** — 0 of 228 single-holder tokens across five papers would
+fire if scored individually, because at k = 1 the rate is `(1 + max_without)/n` and
+the most skewed real group only reaches 0.875. The guard stays because the
+statistic cannot tell a leak from an id at k = 1, not because removing it would be
+noisy. The wording is corrected where the guard lives.
+
+### The first thing the new rule did was find a real leak in a paper already voided once for a leak
+
+`v11-handover-a0`'s eight `optimal_action` items sit on `warren`, `flume` and
+`kiln` twice each — all solvable — and on `stile` and `cairn` once each, which are
+exactly the two dead boards. So "does my `level:` name occur only once on this
+sheet" answers `solvable` **8 of 8**, at an exact false-positive rate of 0.0357.
+The shipped gate scored none of it: each `level:` token sits on one or two items,
+and `flume` at k = 2 lands exactly on the majority floor.
+
+This paper's first build was voided for printing `dead` in `tags`
+(`runs/20260728T202101Z-V11-handover-auto/VOIDED.md`) and re-run as `-r2` on the
+belief that it was then clean. `-r2`'s `sheet.json` carries this channel, and its
+six examinees all answered `none` on exactly these two items while disagreeing with
+each other on the solvable ones — so that run cannot distinguish reasoning from
+reading the tag distribution. Its `by_family.optimal_action` delta is 0.0 and
+`conclusive` is false, so no paper claim rests on it, but the honesty section owes
+this a line.
+
+**The paper is not repaired here.** The repair is found and verified — a second
+solvable state on each of `stile` and `cairn` (both 6-row boards, longest solution
+11 actions; `('stile', (5,0), (2,4))` and `('cairn', (3,5), (4,1))`, after which
+every level appears twice and the gate passes under every derived label set) — and
+it is written down as `BALANCED_EXTRA_CASES` so nobody searches for it twice.
+Applying it would silently turn `-r2` into results for a paper that no longer
+exists, with nothing on the record saying its numbers were produced while the leak
+was live. The repository's own precedent is that the fix and the void notice travel
+together, and ruling on a sat run is not a leak checker's business. So the leak is
+**pinned** by `test_the_sheet_carries_exactly_one_known_leak_and_no_other` — not an
+xfail, which would switch the check off for this paper and reproduce the whole
+family of defects V19–V25 chased — and the two collateral tests use the verified
+balanced variant so the key-freezing mechanism stays exercised. Filed for repair
+and adjudication as one item.
+
+### The finding that outranks everything else V25 did: two of the four papers have no working token check
+
+`group_power` was written to keep `ALPHA`'s promise -- a group too small for any
+token to clear alpha is *untestable*, not clean -- and then, in the first pass, was
+called from nowhere. An audit caught that (V21's defect, third instance in this
+file, this time inside V25's own fix), and wiring it into `check_paper` produced the
+number that matters most in this item:
+
+**Six of the ten (paper, label set) groups on the shipped set cannot fire at all.**
+Not "did not fire" -- *cannot*, for any token, on any paper content.
+
+```
+p15-heldout-a0    / event             n=80  classes=6  ceiling 0.800   CANNOT FIRE
+p15-heldout-a0    / level_name        n=80  classes=5  ceiling 0.525   CANNOT FIRE
+p15-handover-a0   / rule              n=11  classes=5  ceiling 0.545   CANNOT FIRE
+p15-verdict-a2    / class             n=17  classes=3  ceiling 0.941   CANNOT FIRE
+p15-verdict-a2    / witness_length    n=8   classes=3  ceiling 1.000   cannot clear alpha
+p15-adaptation-a0 / label, verdict    n=6   classes=2  ceiling 1.333   cannot clear alpha
+```
+
+The cause is that the rule's statistic is two-class-shaped:
+`(largest carrier class + largest non-carrier class) / n`, whose ceiling with m
+answer classes is `2 * largest / n` -- roughly `2/m` when the classes are anything
+like balanced, and so below the 0.90 tolerance as soon as m >= 3. `p15-heldout-a0`
+is the 80-item paper and **both** its label sets are in this state; `p15-handover-a0`
+has one label set and it is too.
+
+So V21's headline -- "all four papers derive label sets and all four come back
+clean, so the papers were in fact clean; what was missing was the looking" -- is
+half true and half the same illusion one level down. Two of the four were looked at
+by a statistic that could not have reported anything. `check_paper` now publishes
+`metadata_multiplicity` on every paper, findings or none, carrying the cuts tried,
+the family-wise rate and each group's `can_fire_at_all` / `untestable_at_alpha`, and
+`test_a_multi_class_group_cannot_fire_and_the_report_says_so` fails if anyone quotes
+those greens as evidence again.
+
+**Not fixed here.** A statistic that works for m > 2 (one-vs-rest per class with its
+own exact null, or an information-theoretic score) is a new judgement about what
+counts as a leak, and this item has already learned what happens when two of those
+share a diff. Filed.
+
+**Open weaknesses this item leaves, in one place:**
+
+1. The multi-class statistic above -- 6 of 10 groups untestable. Filed.
+2. `v11-handover-a0`'s real leak, pinned not repaired, together with the ruling on
+   `-r2`, whose numbers were produced while it was live. Filed.
+3. The pooled private-marker cut is evaded by padding every item with a decoy
+   marker; the rule that survives that is measured in `b5` and not shipped.
+4. The multiplicity correction is charged per answer key, not across the label sets
+   of one paper -- up to four of them -- so the published family-wise rate is still
+   a floor. The count of label sets is in `label_sets_checked`, so the gap is
+   bounded and visible, and `metadata_scan`'s docstring says so.
+5. Nothing downstream consumes any of this: `papers/…/PAPER.md` §8.3 reads
+   `leakage.json` only for item and probe counts, and still asserts
+   `label_sets_checked: []` for handover and adaptation, which V21 falsified. That
+   text is the paper track's to change, not this one's.
+
+### What the other two adversarial reviewers found, all of it in V25's own work
+
+Three reviewers, three real findings, none of them a re-read. The counter itself
+survived **1,170,339 differential configurations** across three implementations
+(the fast count, this module's oracle, and a reviewer's independently written
+k-subset enumerator, so the oracle was itself checked) with zero disagreements --
+including the exact float ties, tolerances below the majority floor, NaN and
+infinity, zero-size classes, and `k` out of range. What it did find:
+
+* **`_fires`' promise was a copy, not a call.** Its docstring says the counter and
+  the gate cannot drift because they share the predicate; `_token_hits_within` wrote
+  the comparison out inline instead. Two mutations of `_fires` survived all 66 tests
+  in this area, because the counter and its oracle both route through it and move
+  together, so the agreement test is structurally blind. The `>=` survivor matters:
+  9/10, 18/20, 36/40 and 72/80 are all *exactly* the double 0.90, so the tolerance
+  sits on a reachable tie on any group whose size is a multiple of ten -- n=80
+  included -- and under that mutant the published rate moves off zero while the gate
+  still does not fire. The gate now calls `_fires`, and
+  `test_the_published_rate_and_the_gate_agree_on_the_exact_tie` kills the mutant.
+  Dropping the `1e-9` is an *equivalent* mutant inside `_fires` (integer `best` over
+  the same denominator as the floor; 7548 configurations, no change) and that is now
+  written down, so nobody hunts for a test that cannot exist.
+* **`group_power` swept from k=2**, on the reasoning that single-holder tokens are
+  never scored -- true of tokens, false of the check, since the pooled cut can hold
+  one item and does on the M5 fixture. It understated the power of exactly the
+  groups it exists to describe. It also had no memoisation and did not use
+  `p(k) == p(n-k)`, costing seconds per group at a few hundred items, times four
+  label sets. Fixed: k from 1, `lru_cache` keyed on the sorted class sizes, sweep to
+  n//2, and the complement symmetry the family-wise product silently rides on is now
+  a test rather than an assumption.
+* **`group_power` was dead code**, and the multiplicity keys lived only on findings
+  so a clean paper published none of them -- V21's defect, third instance in this
+  file, both times inside the fix meant to end it. Also: the coverage record was
+  guarded by `if coverage["single_holder"]:`, so a field that scored three tokens and
+  skipped none said nothing at all, which is what the comment three lines above it
+  forbids -- two of the four shipped papers published no token coverage because of
+  it. And `findings[:8]` truncated metadata findings out of the exception message,
+  losing `p_fire` and `weak_evidence` at the exact moment a human is summoned to
+  adjudicate. All three fixed; the exception now carries `findings`, `multiplicity`
+  and `metadata_unscored` as attributes rather than only as an f-string.
+
+**One process note, because it cost a verification run.** A reviewer instructed to
+write only under `/tmp` mutated `exam/leakage.py` in place to run its mutation test,
+restoring it 65 seconds later, and disclosed this when asked. One full-suite run of
+mine executed against a mutated threshold. The final verification therefore hashes
+`leakage.py` before and after and asserts it did not change. The general rule worth
+keeping: a subagent reviewing a file the main session is mid-delivery on must return
+findings only, and the main session does every write.

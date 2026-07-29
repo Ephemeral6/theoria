@@ -121,6 +121,15 @@ def test_a_token_on_one_item_is_an_identifier_not_a_rule():
     answer `live` and the one `dead` item is the sole carrier of `ridge`, so the
     token would score a perfect 1.000 against a 0.917 floor -- the guard is the
     only thing standing between this fixture and a hit.
+
+    **Amended by V25, and the amendment is the point.** This test used to assert
+    `metadata_hits(...) == []` on this fixture, and that assertion was wrong -- its
+    own docstring calls `ridge` a real leak two paragraphs up. The guard is right
+    about *tokens* and V21 read it as a licence to report nothing at all, so the
+    test froze a miss. V25's pooled cut asks the question once per field instead of
+    once per token ("does carrying a private marker here predict the answer?") and
+    that question this fixture answers 12 of 12. So: no *token* finding for
+    `ridge`, and a `<private-marker>` finding that catches it.
     """
     answer_of = lambda i: "dead" if i == 0 else "live"         # noqa: E731
     paper = _paper(lambda i: ("verdict", "level:%02d" % i)
@@ -135,7 +144,32 @@ def test_a_token_on_one_item_is_an_identifier_not_a_rule():
     assert rate == pytest.approx(1.0) and rate > floor > 0.9, (
         "fixture no longer makes the single-holder guard load-bearing")
 
-    assert leakage.metadata_hits(paper, labels) == []
+    hits = leakage.metadata_hits(paper, labels)
+    assert [h for h in hits if h.get("token") == "ridge"] == [], (
+        "a token on one item was scored as a token; then every id is a leak")
+    pooled = [h for h in hits if h.get("token") == leakage.PRIVATE_MARKER_CUT]
+    assert len(pooled) == 1, (
+        "the leak this fixture plants went unreported, which is what V21 froze")
+    assert pooled[0]["carrier_ids"] == ["q00"]
+    assert pooled[0]["predicts"] == pytest.approx(1.0)
+
+
+def test_an_identifier_family_is_a_constant_not_a_leak():
+    """The other side of the pooled cut, which is what makes it safe.
+
+    Same shape, but every item carries its own private marker (`mark000`..) rather
+    than one item carrying `ridge`. Pooling then holds all twelve items, and a cut
+    that holds everything predicts nothing -- dropped by the same constant guard
+    the individual tokens use. So an exam that numbers its items does not go red,
+    and that is arithmetic rather than a special case.
+
+    `level:%02d` will not do here: `%02d` is two characters and `MIN_TOKEN` drops
+    it, so those markers never reach the carrier map at all. A guard that is never
+    exercised by the fixture meant to exercise it is V21's defect over again.
+    """
+    answer_of = lambda i: "dead" if i == 0 else "live"          # noqa: E731
+    paper = _paper(lambda i: ("verdict", "mark%03d" % i), answer_of, n=12)
+    assert leakage.metadata_hits(paper, _labels(paper)) == []
 
 
 # -- the singleton half ----------------------------------------------------
