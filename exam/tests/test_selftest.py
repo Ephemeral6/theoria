@@ -322,6 +322,39 @@ def test_a_submission_of_nothing_scores_nothing_on_every_paper(nothing):
         assert report.awarded == 0.0, (question_type, nothing, report.awarded)
 
 
+# ---- negative control: an UNFIXED defect, pinned so it cannot change quietly
+
+@pytest.mark.xfail(strict=True, reason=(
+    "UNFIXED DEFECT, pinned deliberately: rubrics_adaptation._read_set uses the "
+    "whole answer as the value of every set-valued key when the answer is not a "
+    "dict, so a bare [] asserts the empty set for rules_falsified, "
+    "claims_to_reexamine and claims_now_false at once and is paid 6.500 of 144 "
+    "on adapt.collateral.v1. NOT fixed here: _read_set is on the marking path "
+    "for V4's published calibration numbers, so changing its semantics moves "
+    "them and needs its own item. Written up in "
+    "exam/runs/20260728T151000Z-V7-exam-stress-fanout/ADVERSARIAL.md (claim 4) "
+    "and FINDINGS.md section 4b. strict=True on purpose: the day _read_set is "
+    "fixed this XPASSes, the suite goes red, and whoever fixed it is forced to "
+    "re-derive the artefacts that quote the old number."))
+def test_the_bare_empty_list_is_not_paid_on_the_adaptation_paper():
+    """`[]` is illegible, and the marker says so itself -- on the other rubric.
+
+    `test_an_illegible_answer_is_not_read_as_the_claim_never` above lists `[]`
+    among the tokens `_read_claim` must call UNREADABLE, and it does.  Thirty
+    lines further down, `test_a_submission_of_nothing_scores_nothing_on_every_paper`
+    is parametrised `[GARBAGE, "", {}, None]` -- and `[]` is conspicuously
+    absent from that list.  The one token the two tests disagree about is the
+    one the collateral rubric pays for.  This test is the missing parameter,
+    written separately rather than added to the list so that the xfail marks the
+    defect and not the other four tokens, which are all correctly worth nothing.
+    """
+    for question_type in ALL_TYPES:
+        module, paper, key_doc, oracle = st._oracle_setup(question_type)
+        report = st._mark(key_doc, {item_id: [] for item_id in oracle},
+                          "empty-list", getattr(module, "axes", None))
+        assert report.awarded == 0.0, (question_type, report.awarded)
+
+
 def test_the_undetectable_variant_no_longer_pays_an_empty_submission():
     module, paper, key_doc, oracle = st._oracle_setup("adaptation")
     report = st._mark(key_doc, {i: {} for i in oracle}, "empty",

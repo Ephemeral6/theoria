@@ -1,0 +1,66 @@
+.................................F                                       [100%]
+================================== FAILURES ===================================
+__________ test_no_sheet_names_the_genre_of_the_world_it_asks_about ___________
+
+    def test_no_sheet_names_the_genre_of_the_world_it_asks_about():
+        """The leak V4's cheater found on the held-out sheet, pinned.
+    
+        `instructions` opened with "A0 is a sokoban variant" while
+        `world.description` on the same sheet said the dynamics "are deliberately
+        not stated here". Naming a canonical puzzle genre states them.
+    
+        The list is the genres whose names would give A0 or A2 away. It is short on
+        purpose: a probe that matches everything gets switched off (leakage.py says
+        so about three-character probes), and this one only has to catch the
+        wording that actually shipped and its nearest neighbours.
+        """
+        from exam.model import canonical
+        from exam.papers import BUILDERS
+    
+        genres = ("sokoban", "sokob¨¢n", "boulder dash", "rush hour", "15-puzzle",
+                  "sliding block", "warehouse keeper", "‚}Žì·¬")
+        for question_type in BUILDERS:
+>           paper = module_for(question_type).build()
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+exam\tests\test_selftest.py:422: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+exam\papers\verdict.py:761: in build
+    spec = _emit_spec(_spec(
+exam\papers\verdict.py:479: in _emit_spec
+    loaded = Variant.load(path)
+             ^^^^^^^^^^^^^^^^^^
+proxy\variants.py:108: in load
+    return cls(json.load(fh), source=path)
+               ^^^^^^^^^^^^^
+D:\Miniforge3\Lib\json\__init__.py:298: in load
+    return loads(fp.read(),
+D:\Miniforge3\Lib\json\__init__.py:352: in loads
+    return _default_decoder.decode(s)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+D:\Miniforge3\Lib\json\decoder.py:345: in decode
+    obj, end = self.raw_decode(s, idx=_w(s, 0).end())
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _
+
+self = <json.decoder.JSONDecoder object at 0x00000200877E3620>, s = '', idx = 0
+
+    def raw_decode(self, s, idx=0):
+        """Decode a JSON document from ``s`` (a ``str`` beginning with
+        a JSON document) and return a 2-tuple of the Python
+        representation and the index in ``s`` where the document ended.
+    
+        This can be used to decode a JSON document from a string that may
+        have extraneous data at the end.
+    
+        """
+        try:
+            obj, end = self.scan_once(s, idx)
+        except StopIteration as err:
+>           raise JSONDecodeError("Expecting value", s, err.value) from None
+E           json.decoder.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+
+D:\Miniforge3\Lib\json\decoder.py:363: JSONDecodeError
+=========================== short test summary info ===========================
+FAILED exam\tests\test_selftest.py::test_no_sheet_names_the_genre_of_the_world_it_asks_about
+1 failed, 33 passed in 60.15s (0:01:00)

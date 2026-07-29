@@ -1310,3 +1310,9 @@ claimed 悬挂），测试可加不会撞。三条如实登记的缺口：(1) `r
 测试：monitor 全套通过（2 xfail 为既有）；monitor/verify.sh GREEN 且 monitor 已不再 decorative；新增 7 条，其中要紧的两条是「声明指向不存在的文件不算数」和「无闸门的领地不得读作 not decorative」。
 阻塞：none
 下一步：这一列只证明闸门**指名**了一个存在的负样本，并没有跑它、也没有验证被指名的测试真的作用于那个闸门——指向一个真实但不相干的测试同样能过。要堵这个口子得跑那条测试、并要求它对着一个被故意弄坏的闸门变红，那是另一件活的量，本轮不声称。
+
+## [exam] 2026-07-29T06:15:18Z V7-exam-stress-fanout-close
+状态：接手 RES-2 死于额度后被释放的 V7 并收尾（RES-3，04:48:57Z 重认领）。**supersede 上一段的三处**。(1) 上一段说全量跑 11 failed **成因未定**——现已定：`verdict.py::_emit_spec` 把 17 份 variant spec 写进**共享、被跟踪、非临时**的 `exam/artifacts/variant_specs/`，`model.py:73` 的 `open(path,"w")` 一打开就清零，紧接着 `verdict.py:479` 又把同一路径读回来验证；两个进程同时 `verdict.build()` 时，一方的读落进另一方的清零窗口，拿到空文件。6 workers × 12 次 build 复现 2 次 JSONDecodeError，两份 pytest 记录分别死在**不同的测试**上（`test_no_sheet_names_the_genre...` 与 `...[None]`），同一个 `verdict.py:479` 咽喉——缺陷不挂在任何一个测试上，所以看着像噪音。**旧假设（discrimination 写模式污染）已被推翻**：`exam/` 里没有任何代码读 `discrimination_worldgen.json`，它是只写产物。(2) 上一段的先验被称作「无理论」，**这个形容词错了，数字一个没动**：抽掉 `legend["agent"]` 它跌到 **0.4110**（正是 bluffer 底线），`DELTA` 取反 **0.2034**、转置 **0.1017**——都低于底线。一个把指南针重贴一次就能砍掉四分之三的约定，不是没有理论，是刚好蒙对的理论。（`legend["floor"]` 抽掉则与基线逐位相同，所以承重的只有 agent 与 wall。）(3) 信息残量的下降是 **69→16 题、14 个世界归零**，不是先前写的 30→16——30 是 `139−109`（先验漏掉的会变帧题），量纲不同。
+测试：`python -m pytest exam/tests -q` **308 passed, 2 xfailed in 110s**；`git status -- exam/artifacts/` 空。两条 `xfail(strict=True)` 钉住两个**故意不修**的缺陷：`_emit_spec` 竞态，以及 `rubrics_adaptation._read_set` 让裸 `[]` 在 adaptation 卷上拿 **6.500/144**（同一个 `[]` 被隔壁 `_read_claim` 判为不可读）。两者都会在被修好的当天 XPASS 并把测试套变红，逼修的人重算引用旧数的产物。
+阻塞：无。
+下一步：本轮补上了 `ADVERSARIAL.md`——`RUN_STATE.md` 与两条 xfail 的 `reason=` 都在按名字引用它，而它从来没被写出来过。写完先派对抗审稿员打了一遍，返回 12 条缺陷、1 条阻塞：**`FINDINGS.md` §8 仍写着「泄漏修复是一行改动」，正是 §1 在四节之前刚测掉的说法**（改完 `tags=(split,)` 还剩 4 个世界 16 道题翻红）。一份在一处自我纠正、在另一处重复原错误的文档，比从没纠正过的更坏——因为读者信的正是那处纠正。全部已修。**仍欠的最大一件写在明处**：`free/memorised/theory` 三分从头到尾只有报数的那一个工具算过，41.1% 这个头条还没有第二实现。
