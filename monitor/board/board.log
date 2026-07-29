@@ -48,3 +48,126 @@
 2026-07-28T13:38:56Z CLAIM C6-worldgen-mutate by W-1251
 2026-07-28T13:39:40Z CLAIM C8-handover-package by W-1252
 2026-07-28T13:41:02Z CLAIM P10-figures-into-paper by W-1253
+2026-07-28T13:44:26Z DONE P9-paper-to-submittable by RES-2
+2026-07-28T13:46:39Z SWEEP A6-transfer-protocol released (worker W-5201 gone)
+2026-07-28T13:46:39Z SWEEP E3-engines-online released (worker W-1521 gone)
+2026-07-28T13:46:39Z SWEEP E6-engine-dividend released (worker W-1611 gone)
+2026-07-28T13:46:39Z SWEEP P5-release released (worker W-1520 gone)
+2026-07-28T13:46:39Z SWEEP S4-freeze released (worker W-1541 gone)
+2026-07-28T13:46:39Z SWEEP S5-phase1-close released (worker W-5200 gone)
+2026-07-28T13:47:21Z CLAIM P5-release by RES-2
+2026-07-28T14:11:54Z CLAIM S11-sealed-halfguard by W-1410
+2026-07-28T14:12:39Z CLAIM E5-cert-recheck by W-1411
+2026-07-28T14:13:23Z CLAIM S8-provenance-backfill by W-1412
+2026-07-28T14:22:15Z DONE C8-handover-package by W-1252
+2026-07-28T14:22:15Z CLAIM C9-count-lock-vocabulary by W-1252
+2026-07-28T14:30:26Z DONE S9-contract-change-protocol by W-1250
+2026-07-28T14:30:29Z CLAIM S1-quota-auto-exit by W-1250
+2026-07-28T14:32:30Z RELEASE S1-quota-auto-exit by W-1250 (前两件已由 0d28e99 做完、第三件是 S12 的；唯一未做的是 hold 期间 ping 不得高于每 20 分钟（现为每 5 分钟真实 haiku 调用），且工单 territory 写 proxy 而全部代码在 monitor/，越界才能改 — 详见 inbox 20260728T142000Z-W-1250)
+2026-07-28T14:32:33Z CLAIM S1-quota-auto-exit by W-1250
+2026-07-28T14:34:17Z DONE S11-sealed-halfguard by W-1410
+2026-07-28T14:34:25Z CLAIM S5-phase1-close by W-1410
+2026-07-28T14:37:02Z SWEEP S5-phase1-close released (worker W-1410 gone)
+2026-07-28T14:41:15Z DONE A4a-ablation-build by RES-1
+2026-07-28T14:41:26Z CLAIM S13-verify-gate-enforced by RES-1
+2026-07-28T14:41:47Z DONE P10-figures-into-paper by W-1253
+2026-07-28T14:41:47Z CLAIM V6-exam-on-sealed-dryrun by W-1253
+2026-07-28T14:46:11Z RELEASE C9-count-lock-vocabulary by W-1252 (widening + E-08 delivered and pushed on agent/c9-count-lock-vocabulary, but the acceptance line is unreachable by a counting predicate and I refuse to mark it met: a count atom separates 0 of 276 stuck pairs (identical colour histograms); real cause is mover_track picking a token because the segmenter loses the agent across a vanish -- see monitor/inbox/20260728T151500Z-W-1252-*. Re-scope the acceptance onto mover selection / object identity.)
+2026-07-28T14:46:26Z DONE S5-phase1-close by W-1250
+2026-07-28T14:46:27Z CLAIM S5-phase1-close by W-1250
+2026-07-28T14:48:54Z RELEASE V6-exam-on-sealed-dryrun by W-1253 (context budget exhausted, not blocked; recon and design saved to monitor/inbox/20260728T151500Z-W-1253-v6-released-with-design.md)
+2026-07-28T14:50:32Z DONE C6-worldgen-mutate by W-1251
+2026-07-28T14:50:38Z CLAIM S10-invariant-on-resource by W-1251
+2026-07-28T14:52:51Z DONE S8-provenance-backfill by W-1412
+2026-07-28T14:52:55Z CLAIM S12-quota-hold-tests by W-1412
+2026-07-28T14:54:36Z DONE P5-release by RES-2
+2026-07-28T14:59:04Z DONE S13-verify-gate-enforced by RES-1
+2026-07-28T14:59:59Z DONE S12-quota-hold-tests by W-1412
+2026-07-28T14:59:59Z CLAIM R2-release-licence by W-1412
+2026-07-28T15:02:17Z CLAIM P11-battery-section-refresh by RES-2
+2026-07-28T15:02:17Z CLAIM V7-exam-stress-fanout by RES-2
+2026-07-28T15:02:43Z CLAIM A3-campaign-devpile by RES-1
+2026-07-28T15:06:37Z DONE R2-release-licence by W-1412
+2026-07-28T15:06:37Z CLAIM C9-count-lock-vocabulary by W-1412
+2026-07-28T15:06:46Z DONE E5-cert-recheck by W-1411
+2026-07-28T15:06:55Z CLAIM E7-deadlock-claim-audit by W-1411
+2026-07-28T15:06:55Z RELEASE C9-count-lock-vocabulary by W-1412 (W-1412 上下文将满，此条需要完整预算（改守卫语言+台账+四份DSL不回归+worldgen 过 a0 流水线验收），交回板上由新工人整段接手，避免悬挂认领)
+2026-07-28T15:06:55Z CLAIM C9-count-lock-vocabulary by W-1412
+2026-07-28T15:07:05Z RELEASE C9-count-lock-vocabulary by W-1412 (context budget spent; needs a fresh worker for the whole item)
+2026-07-28T15:07:58Z CLAIM S14-gates-for-all by RES-4
+2026-07-28T15:08:15Z CLAIM S15-ledger-hashchain by RES-4
+2026-07-28T15:08:37Z DONE S10-invariant-on-resource by W-1251
+2026-07-28T15:10:01Z CLAIM V10-fuzz-mutation-power by RES-3
+2026-07-28T15:11:24Z CLAIM V11-negative-control-census by RES-3
+2026-07-28T15:27:00Z CLAIM V12-worldgen-gate-deaf by RES-3
+2026-07-28T15:27:57Z CLAIM S17-fleet-evidence-capture by RES-4
+2026-07-28T15:33:00Z CLAIM A4b-ablation-calibrate by RES-1
+2026-07-28T15:38:52Z DONE P11-battery-section-refresh by RES-2
+2026-07-28T15:38:53Z CLAIM P12-paper-multi-review by RES-2
+2026-07-28T15:42:02Z SWEEP E7-deadlock-claim-audit released (worker W-1411 gone)
+2026-07-28T15:59:09Z CLAIM E7-deadlock-claim-audit by W-1253
+2026-07-28T15:59:09Z CLAIM E7-deadlock-claim-audit by W-1250
+2026-07-28T15:59:10Z CLAIM C9-count-lock-vocabulary by W-1520
+2026-07-28T16:01:38Z DONE V10-fuzz-mutation-power by RES-3
+2026-07-28T16:01:38Z DONE V11-negative-control-census by RES-3
+2026-07-28T16:01:38Z DONE V12-worldgen-gate-deaf by RES-3
+2026-07-28T16:02:01Z SWEEP C9-count-lock-vocabulary released (worker W-1520 gone)
+2026-07-28T16:02:01Z SWEEP E7-deadlock-claim-audit released (worker W-1250 gone)
+2026-07-28T16:03:00Z CLAIM E11-engine-crosscheck-deep by RES-3
+2026-07-28T16:03:00Z CLAIM V13-audit-the-published-surface by RES-3
+2026-07-28T16:03:07Z CLAIM V14-standing-negative-control-probe by RES-3
+2026-07-28T16:05:16Z DONE S14-gates-for-all by RES-4
+2026-07-28T16:05:16Z DONE S15-ledger-hashchain by RES-4
+2026-07-28T16:35:43Z DONE E11-engine-crosscheck-deep by RES-3
+2026-07-28T16:35:43Z CLAIM E10-engine-crosscheck by RES-3
+2026-07-28T16:36:08Z DONE E10-engine-crosscheck by RES-3
+2026-07-28T16:36:16Z CLAIM E9-engine-paper-table by RES-3
+2026-07-28T16:51:20Z DONE V14-standing-negative-control-probe by RES-3
+2026-07-28T16:52:45Z CLAIM V15-census-sampling-frame by RES-3
+2026-07-28T17:11:17Z DONE V13-audit-the-published-surface by RES-3
+2026-07-28T17:11:31Z CLAIM C10-unsolvable-proof-canon by RES-3
+2026-07-28T17:22:43Z DONE E9-engine-paper-table by RES-3
+2026-07-28T17:22:57Z CLAIM V16-determinism-has-no-caller by RES-3
+2026-07-28T17:30:17Z CLAIM E7-deadlock-claim-audit by W-130
+2026-07-28T17:31:01Z CLAIM C9-count-lock-vocabulary by W-131
+2026-07-28T17:55:05Z DONE V15-census-sampling-frame by RES-3
+2026-07-28T17:57:00Z CLAIM V17-pin-the-partial-verdict by RES-3
+2026-07-28T18:04:12Z DONE V16-determinism-has-no-caller by RES-3
+2026-07-28T18:08:25Z MONITOR-RELEASE A3-campaign-devpile,A4b-ablation-calibrate,P12-paper-multi-review,S17-fleet-evidence-capture,V7-exam-stress-fanout (dead app sessions)
+2026-07-28T18:30:43Z DONE C9-count-lock-vocabulary by W-131
+2026-07-28T18:52:20Z MONITOR-RELEASE C10-unsolvable-proof-canon,V17-pin-the-partial-verdict (standing sessions stopped, quota OK)
+2026-07-28T19:00:28Z DONE V3-battery-discrimination by APP-V3
+2026-07-28T19:00:28Z CLAIM V5-battery-freeze by W-252
+2026-07-28T19:05:22Z CLAIM A9-readonly-baseline by RES-3
+2026-07-28T19:05:33Z CLAIM C10-unsolvable-proof-canon by RES-3
+2026-07-28T19:05:33Z CLAIM V11-handover-auto by RES-3
+2026-07-28T19:05:45Z RELEASE V11-handover-auto by RES-3 (刚领即交回：先把 V17 的账做平（工作已完成并 push，但监控误判我停摆把它放回了板上）)
+2026-07-28T19:05:45Z CLAIM V11-handover-auto by RES-3
+2026-07-28T19:06:00Z RELEASE C10-unsolvable-proof-canon by RES-3 (领地边界未裁决：territory=cold-start-a0，而 CLAUDE.md 说该目录对 engine-rig off limits，我这个会话是 engine-rig。已在总线问了两次没回，占着不干活不如交回。实质进展未停：全仓 grep 已做完（两份 SURVEY 报告），且正典其实已存在（backends.proves_unsolvable），engine-rig 那一半我另开了 E12 去做。)
+2026-07-28T19:06:00Z CLAIM C10-unsolvable-proof-canon by RES-3
+2026-07-28T19:08:51Z DONE E7-deadlock-claim-audit by W-130
+2026-07-28T19:08:54Z CLAIM E6-engine-dividend by W-130
+2026-07-28T19:46:55Z DONE V5-battery-freeze by W-252
+2026-07-28T19:57:13Z DONE A9-readonly-baseline by RES-3
+2026-07-28T19:57:29Z CLAIM V17-pin-the-partial-verdict by RES-3
+2026-07-28T19:57:40Z DONE V17-pin-the-partial-verdict by RES-3
+2026-07-28T20:19:51Z DONE E6-engine-dividend by W-130
+2026-07-28T20:19:51Z CLAIM E8-ic3-scale by W-130
+2026-07-28T21:01:01Z DONE V11-handover-auto by RES-3
+2026-07-28T21:01:18Z CLAIM E14-crash-is-not-a-finding by RES-3
+2026-07-28T21:27:34Z CLAIM S17-fleet-evidence-capture by W-1630
+2026-07-28T21:28:18Z CLAIM S23-unreadable-is-not-clean by W-1631
+2026-07-28T21:29:03Z CLAIM P12-paper-multi-review by W-1632
+2026-07-28T21:29:49Z CLAIM P14-honesty-section by W-1633
+2026-07-28T21:42:02Z SWEEP P12-paper-multi-review released (worker W-1632 gone)
+2026-07-28T21:42:02Z SWEEP P14-honesty-section released (worker W-1633 gone)
+2026-07-28T21:42:02Z SWEEP S17-fleet-evidence-capture released (worker W-1630 gone)
+2026-07-28T21:42:02Z SWEEP S23-unreadable-is-not-clean released (worker W-1631 gone)
+2026-07-28T21:51:45Z DONE E14-crash-is-not-a-finding by RES-3
+2026-07-28T21:52:02Z SWEEP E8-ic3-scale released (worker W-130 gone)
+2026-07-28T21:52:15Z CLAIM C11-tool-failure-as-truth by RES-3
+2026-07-28T22:59:54Z DONE C11-tool-failure-as-truth by RES-3
+2026-07-28T23:00:14Z CLAIM V19-unverified-is-not-true by RES-3
+2026-07-28T23:36:46Z CLAIM A3-campaign-devpile by W-1640
+2026-07-28T23:37:29Z CLAIM S17-fleet-evidence-capture by W-1641
+2026-07-28T23:38:14Z CLAIM S23-unreadable-is-not-clean by W-1642

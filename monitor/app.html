@@ -173,8 +173,7 @@ function render(s){
       const fresh = o.age_min != null && o.age_min < 180;
       return `<div class="crew ${fresh ? "" : "risk"}">
         <span class="badge ops">${esc(o.id.replace("OPS-",""))}</span>
-        <div class="cbody"><b>${esc(o.name)}</b><em>${esc(o.role)}</em>
-          <div class="agnote">${esc(o.note || "")}</div></div>
+        <div class="cbody"><b>${esc(o.name)}</b><em>${esc(o.role)}</em></div>
         <span class="cst">${o.age_min==null ? "未启动"
           : "第 "+o.cycle+" 轮 · "+o.outputs+" 份产出<br>"+o.age_min+" 分钟前"}</span>
       </div>`;
@@ -187,8 +186,7 @@ function render(s){
         const fresh = r.age_min != null && r.age_min < 120;
         return `<div class="crew ${fresh ? "" : "risk"}">
           <span class="badge">${esc(r.id.replace("RES-","R"))}</span>
-          <div class="cbody"><b>${esc(r.name)}</b><em>${esc(r.role)}</em>
-            <div class="agnote">${esc(r.note || "")}</div></div>
+          <div class="cbody"><b>${esc(r.name)}</b><em>${esc(r.role)}</em></div>
           <span class="cst">${r.age_min==null ? "未启动"
             : "第 "+r.cycle+" 轮<br>"+r.age_min+" 分钟前"}</span></div>`;
       }).join("") + "</div>";
@@ -198,13 +196,14 @@ function render(s){
   h += `<h2>研究员正在做的事 <span class="note">— 自己从任务板领活，做完接着领；
     额度停机时暂停，复工后从磁盘接着干</span></h2>
     <div class="fleet">` + busy.map(w => `
-      <div class="crew ${w.running ? "" : "done"}">
-        <span class="dot2 ${w.running ? "run" : "stop"}"></span>
+      <div class="crew ${w.orphan ? "risk" : (w.running ? "" : "done")}">
+        <span class="dot2 ${w.orphan ? "stop" : (w.running ? "run" : "stop")}"></span>
         <div class="cbody"><b>${esc(w.now)}</b>
           <em>${w.finished.length
             ? "这位之前交付过：" + w.finished.map(esc).join("　·　")
             : "这是它的第一件活"}</em></div>
-        <span class="cst">${w.running ? "进行中" : "已停"}</span>
+        <span class="cst">${w.orphan ? "无人在做<br>（已交回板上）"
+          : (w.running ? "进行中" : "已停")}</span>
       </div>`).join("") + "</div>";
   if (idle.length) {
     const past = idle.flatMap(w => w.finished);
@@ -212,13 +211,30 @@ function render(s){
       past.length ? "（他们此前交付了 " + past.length + " 件）" : ""}。</p>`;
   }
 
-  h += `<h2>已经做完的事 <span class="note">— 全部合进主线并通过测试</span></h2>
+  const today = ag.delivered_today || [];
+  if (today.length) {
+    h += `<h2>今天交付的 <span class="note">— 最近 24 小时合进主线的</span></h2>
+      <ul class="wins">` + today.map(d => `<li>${esc(d)}</li>`).join("") + "</ul>";
+  }
+  h += `<h2>累计做完的事 <span class="note">— 全部合进主线并通过测试</span></h2>
     <ul class="wins">` + delivered.map(d => `<li>${esc(d)}</li>`).join("") + "</ul>";
 
-  h += "<h2>需要你决定</h2>";
-  h += needs.length
-    ? needs.map(f => `<div class="needs"><b>${esc(f.title)}</b><p>${md(f.action)}</p></div>`).join("")
-    : `<p class="allclear">✓ 没有需要你出手的事——该决定的我已经代你决定了，出问题会出现在这里。</p>`;
+  const nh = s.probes?.needs_human || {};
+  const restarts = nh.rows || [];
+  h += "<h2>今天需要你做的事</h2>";
+  if (restarts.length) {
+    h += restarts.map(r => `<div class="needs"><b>重开 ${esc(r.id)} · ${esc(r.name)}</b>
+      <p>${esc(r.why)}。在 Claude App 开一个新会话，粘贴
+      <code>${esc(r.prompt)}</code> 的内容即可；它会自己接上进度。</p></div>`).join("");
+  }
+  if (needs.length) {
+    h += needs.map(f => `<div class="needs"><b>${esc(f.title)}</b>
+      <p>${md(f.action)}</p></div>`).join("");
+  }
+  if (!restarts.length && !needs.length) {
+    h += `<p class="allclear">✓ 今天什么都不用做。会话自愈、额度自恢复、合并自动跑、
+      供货由我补——出问题才会出现在这里。</p>`;
+  }
 
   h += `<h2>细节 <span class="note">— 专业视图，日常不用看</span></h2>`;
   h += `<details class="fold"><summary>研究地图（六个方向 × 五个阶段）</summary>

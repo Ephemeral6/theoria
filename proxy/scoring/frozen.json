@@ -3,10 +3,13 @@
   "scorers": {
     "arc_v1": {
       "depends_on": {
-        "canon.py": "sha256:0b6f2dbd5064d40f8f119f6ae88d318e4abb2d329eaddcf46e79e9236b886fba",
+        "canon.py": "sha256:135f2f0cfcab4488277aeb7f351adeaec1dec90dd887a2cab6a2c13ffb684da4",
         "tools/validate_ledger.py": "sha256:1114d35d8acbf9c5d069b82fbdb832b5ff8ef5cb90a190240c031c5430f597de"
       },
       "depends_on_note": "S-12 delegates to tools/validate_ledger.py, which consults canon.py, so the scorer's answers live partly in these two files. Added 2026-07-28 by S9 after additive-safety changed S-12's verdict on an unlisted field while arc_v1.py hashed exactly as before. The entry's own `sha256` and `version` are untouched: no run in the corpus changes its number, because no writer could produce such a stream until now. Re-freezing these hashes is a deliberate act -- see proxy/CONTRACT_CHANGES.md.",
+      "depends_on_refreezes": [
+        "2026-07-29, canon.py -> sha256:135f2f0c..., on merging S15 (the ledger hash chain) into S9. canon.ENVELOPE gained `prev`; C-005 in proxy/CONTRACT_CHANGES.md. `sha256` and `version` are again untouched and no run in the corpus changes its number: every ledger already scored was written without `prev`, and canon.check reaches the envelope branch only for a record that carries the field, so the added name cannot alter a verdict on a stream that predates it. On a stream that does carry it the verdict is also unchanged -- before this it was an unlisted field, which S9 made a notice rather than a failure. The mechanism is doing its job here rather than being worked around: it fired, and this line is the deliberate act it demanded."
+      ],
       "frozen_at": "2026-07-28",
       "frozen_by": "P-9 (agent/p9-shell-harden)",
       "hash_note": "sha256 over the source with newlines normalised to LF",

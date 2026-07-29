@@ -20,7 +20,7 @@ arm had never touched. Its first live desk call was refused at serialisation
 after the provider had been paid; the reply was discarded and the ledger held
 zero `model_call` records (INC-TA-006, reported by W-1521 and fixed on its side).
 
-Three things changed here, and the reasons are D-029 and D-030:
+Three things changed here, and the reasons are D-030 and D-031:
 
 | | |
 |---|---|
@@ -72,7 +72,7 @@ are the same mistake wearing different clothes:
 | independent red team writes an attack set | ✅ 46 attacks in `tests/test_redteam.py`; `REDTEAM.md` is the report |
 | the sealed test blocks all of them | ✅ **all 46 blocked**, no `xfail` markers left. 29 landed on first contact; each fix keeps the original finding as a comment on the test that closes it |
 | the attack set stays resident in the suite | ✅ 44 tests, run on every `pytest` |
-| proxy refuses a non-canonical field (F-16) | ✅ `canon.py`, consulted by the writer before serialisation and by `tools/validate_ledger.py` on read. **Narrowed by S9**: it refuses a spelling the format *forbids*; a field the format does not mention is warned about and kept (D-029) |
+| proxy refuses a non-canonical field (F-16) | ✅ `canon.py`, consulted by the writer before serialisation and by `tools/validate_ledger.py` on read. **Narrowed by S9**: it refuses a spelling the format *forbids*; a field the format does not mention is warned about and kept (D-030) |
 | migrator interface document for `baseline-arms` | ✅ `CANON_MIGRATION.md`; the migrator itself is `tools/upgrade_ledger.py`, the migration of the stock ledgers is P-12's |
 | bit-exact replay spot check on the envelope's first game | ✅ `runs/p9-shell-harden/replay_spotcheck_ar25.json` — 16 sessions, 9 positions, 372 pairwise comparisons, zero disagreements |
 

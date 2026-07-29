@@ -1,0 +1,154 @@
+{
+  "all_hold": false,
+  "exhibits": {
+    "E1": {
+      "class": "(i) small-space unsolvable -- exhaustive search is feasible",
+      "exhibit": "E1",
+      "holds": true,
+      "testimony": "判决相同,理由蒸发. The ablated arm reaches the same verdict as the full arm and the verdict is right, so nothing measured at the verdict can separate the two arms -- an evaluation that scores answers would report this ablation as having cost nothing. What separates them is the column next to it: the full arm's `#print axioms` report with an empty axiom list, against this arm's `certificate: None, certificate_owed: False`. The verdict is the same sentence with nothing behind it.",
+      "the_reason": {
+        "ablated_arm_certificate": null,
+        "ablated_arm_certificate_owed": false,
+        "ablated_arm_directed_probes": 0,
+        "distinguishes_proof_from_exhaustion": false,
+        "full_arm_certificate": [
+          {
+            "axioms": [],
+            "name": "unsolvable"
+          }
+        ],
+        "full_arm_certificate_source": "cold-start-a0/artifacts/unsolvable_report.json",
+        "full_arm_would": "owe a certificate (constraint 6) and probe the theorem's `depends:` clauses (constraint 7) before settling"
+      },
+      "verdict": {
+        "ablated_arm": "unsolvable",
+        "constructive_ground": "the Door is the only opening in the dividing wall, and the only rule that removes it (door_opens_left) tests for the Button's colour; with no Button in the instance that guard can never hold, so the goal room is unreachable by construction",
+        "is_correct": true,
+        "settled_by": "search"
+      },
+      "world": "a0-no-button"
+    },
+    "E2": {
+      "charity_control": {
+        "checks": {
+          "mispredicted_step": true,
+          "misread_board": false,
+          "wrong_goal_test": false
+        },
+        "culprits": [
+          "mispredicted_step"
+        ],
+        "given": "the world's solved episode, free: cold-start-a2/artifacts/solved_episode.jsonl",
+        "localised": true,
+        "n_step_diffs": 1,
+        "path_length": 18,
+        "reading": "handed the counterexample, the ablated arm localises correctly. So the ablation did not remove the ability to repair -- it removed the thing that would have *produced* the counterexample. The repair machinery is intact and idle, and it is idle because the certificate obligation that schedules the probe was cut.",
+        "upstream_files_changed": [],
+        "upstream_unchanged": true
+      },
+      "class": "(iii) the specificity failure -- `unsolvable` on a solvable level",
+      "evidence": "cold-start-a2/artifacts/history_trace.jsonl",
+      "exhibit": "E2",
+      "holds": true,
+      "manual": "a2_holed.dsl -- the teleport rule is missing",
+      "on_its_own_evidence": {
+        "anomaly_kinds": [],
+        "cheap_layer_green": true,
+        "frames": 184,
+        "pixels_checked": 14904
+      },
+      "testimony": "照信不误. The manual is green on every frame of its own evidence, the planner says UNSAT, this arm settles it bare, and a solvable level is archived as impossible. Nothing is broken and nothing complains -- which is the finding. The repair machinery still works when it is handed a counterexample (see `charity_control`); what was cut is the obligation that would have gone and got one.",
+      "the_loop": {
+        "surprises": 0,
+        "turns": false,
+        "why": "the plan came back UNSAT and this arm settles it bare (C-4). No certificate is owed (constraint 6, cut), so there is no theorem, no `depends:` clause, and no directed probe (constraint 7, shadow 1) -- nothing exists that could put a refutation on the bus. THIS IS THE FINDING, not a quiet success: the verdict is archived unexamined whether it is true or false, and the arm cannot tell which."
+      },
+      "the_sweep": {
+        "anomalies": 44,
+        "green": false,
+        "reaches_the_bus": false,
+        "trace": "cold-start-a2/artifacts/raw_trace.jsonl",
+        "why_not": "this arm never had this record. Its manual was theorized from `cold-start-a2/artifacts/history_trace.jsonl`, and a surprise the arm could not have had is not a surprise -- putting it on the bus would turn the loop on the referee's knowledge and destroy the exhibit. It is reported because the size of the gap between the two readings IS the measurement: green on the evidence, red on the sweep."
+      },
+      "the_world": {
+        "really_solvable": true,
+        "so_the_verdict_is": "FALSE",
+        "witness_length": 18
+      },
+      "verdict": {
+        "ablated_arm": "unsolvable",
+        "certificate_owed": false,
+        "directed_probes_scheduled": 0,
+        "settled": true,
+        "settled_by": "search"
+      },
+      "world": "a2-holed"
+    },
+    "E3": {
+      "class": "the adversarial-review control, not a verdict class",
+      "constructible": false,
+      "designed_construction": "complete manual + `pddl_addressable(enabled=False)` -> UNSAT -> hand it the solution path -> three checks green, culprits == []",
+      "exhibit": "E3",
+      "falsifier": "DESIGN.md §10 item 3 pre-registers `E3 的三查没有全绿` as a falsifier requiring §9's argument to be withdrawn. What is refuted is narrower: not the reading of D-A2-006 but its continued existence. The workaround it needed is now dead code.",
+      "holds": false,
+      "measurements": {
+        "M1_workaround_is_a_noop": {
+          "holds": true,
+          "pddl_byte_identical_with_patch_on_and_off": {
+            "domain.pddl": true,
+            "problem.pddl": true
+          }
+        },
+        "M2_why": {
+          "cell_objects_named_in_problem_pddl": 38,
+          "cells_in_derived_arena": 37,
+          "portal_entry_grounded_without_the_patch": true,
+          "reading": "the generator emits cell objects from something wider than `prob.arena`, so the Portal entry cell is an object with the patch off. D-A2-006's gap is closed upstream and `compile_abl.pddl_addressable` is dead code on this input."
+        },
+        "M3_complete_manual_full_evidence": {
+          "holds": true,
+          "plans": {
+            "patched": {
+              "length": 18,
+              "status": "SAT",
+              "teleport_in_plan": true
+            },
+            "unpatched": {
+              "length": 18,
+              "status": "SAT",
+              "teleport_in_plan": true
+            }
+          },
+          "reading": "SAT with the patch on and off, teleport in the plan both times. The construction E3 asked for cannot start."
+        },
+        "M4_complete_manual_truncated_evidence": {
+          "cheap_layer": {
+            "frames": 184,
+            "green": true,
+            "pixels_checked": 14904
+          },
+          "locate": null,
+          "locate_raised": "KeyError: 'portal_exit'",
+          "plan_status": "UNSAT",
+          "reading": "a manual with nothing wrong with it, green on its own evidence, declared impossible -- but `locate` cannot answer, because the manual is not executable on the witness path: the `portal_exit` landmark is derived from evidence that stops before that cell is ever seen."
+        },
+        "M5_empty_culprit_set": {
+          "but_the_plan_was": "SAT",
+          "checks": {
+            "mispredicted_step": false,
+            "misread_board": false,
+            "wrong_goal_test": false
+          },
+          "culprits": [],
+          "n_step_diffs": 0,
+          "reading": "the three-way does come back empty on the complete manual -- correctly, because nothing is wrong with it. There is no false impossibility for the empty set to be empty about, so this is not E3's testimony either."
+        }
+      },
+      "what_is_lost": "E3's other half: a clean demonstration that a planner's UNSAT can be a fact about the encoding rather than about the world, which is what makes Theoria.md:43's three-way non-exhaustive without a proof. M4 is weaker evidence for it and is recorded as a gap for A4b rather than presented as E3.",
+      "what_survives": "the point E3 defended is measured in `e2_a2.charity_control`: handed the world's solved episode, the ablated arm localises the holed manual correctly (`culprits = ['mispredicted_step']`, one step). The reviewer's punch -- 你没给它反例,当然它修不好 -- is answered on the exhibit it threatens."
+    }
+  },
+  "not_holding": [
+    "E3"
+  ]
+}

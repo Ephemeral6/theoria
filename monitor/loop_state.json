@@ -52,7 +52,11 @@
     "user_task_routing": "用户交给监控的任务一律下发，不自己做：研究类 → `python monitor/assign.py research <cell> <territory> \"<标题>\" --id <短名> --body \"...\"` 落工作板，研究员自助领取；运维类（审计/合并/浏览器/回顾）→ `python monitor/assign.py ops OPS-X \"<指令>\"` 落邮箱，对应运维下周期读到并回执。监控自己只做三件不可下发的事：判断（spec 裁决/论文口径）、下发本身、以及对 agent 报告的裁决。紧急用 --urgent 置顶。领地冲突在下发时即被工作板挡住。",
     "standing_researchers": "ADOPTED 2026-07-28: RES-* standing researchers hold a lane and stay in it (contract monitor/res/<ID>.md, re-read each cycle; heartbeat monitor/ops-status/<ID>.json). Laned board items belong to their lane; generic W-* workers take unlaned items only. Both guards are now two-sided in board.py -- the original leak let a generic worker strip a lane bare.",
     "agent_view": "monitor/agents.py renders per-agent plain-language cards on the dashboard from git + board + heartbeats only (isolation contract holds).",
-    "commit_hygiene": "monitor NEVER uses `git add -A` again: OPS-M caught commit 18384e2 sweeping its half-edited ci_merge.py onto master mid-edit. The monitor commits explicit paths only (spec.py, scan.py, state.json, board/, mailbox/, audit/, HANDOFF, loop_state), and never a file another session may be editing. When in doubt, `git status` first and name the paths."
+    "commit_hygiene": "monitor NEVER uses `git add -A` again: OPS-M caught commit 18384e2 sweeping its half-edited ci_merge.py onto master mid-edit. The monitor commits explicit paths only (spec.py, scan.py, state.json, board/, mailbox/, audit/, HANDOFF, loop_state), and never a file another session may be editing. When in doubt, `git status` first and name the paths.",
+    "dispatch_authority": "用户 2026-07-28 授予监控全部 agent 调用权：起停、扩缩、换赛道、改上限、直接下发，一律不必先问。行使原则：供需比驱动（板上可领 > 在跑工人数即扩，反之收）；硬约束只有三条——空闲内存 >8GB、配额窗口开、领地互斥；越界只在两处回到用户：要花的钱超出既有预算闸门，或需要人类身份（登录/付款/验证码）。",
+    "scaling_policy": "headless workers: reflex keeps up to 7 alive, actual target = min(WORKER_MAX, available board items), gated on >8GB free RAM and quota OPEN; app sessions are never spawned by the monitor (no API), only requested from the user when one dies",
+    "spend_authority": "用户 2026-07-28 授权：离线收工即可直接启动烧钱与墙钟的工作，唯一约束是账号额度，其余一律通过。监控据此设额度包并直接下发，不再逐次请示。开发堆战役包 $200 / 单局 $60 / 单次 reserve ≤$25，由 RES-1 独占支用。**监控仍守住的一道门**：封存战役（WP6）在冻结清单提交前不开跑——那不是钱的问题，是主张成立与否的问题，跨门即claim作废；若要提前跨，按既定口径记为一次有意识的例外。",
+    "quota_pacing": "账号额度是唯一真约束且为共享池：常驻研究员分批 reserve、每关回报实际花费；监控每次心跳看 spend_gate 账本与 quota 状态，剩余不足时先保 RES-1 的战役线，其余赛道降为纯 token 工作（它们本来就零 API 花费）"
   },
   "heartbeat_count": 0,
   "notes": {

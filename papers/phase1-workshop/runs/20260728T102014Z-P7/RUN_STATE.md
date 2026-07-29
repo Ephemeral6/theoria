@@ -179,3 +179,168 @@ resolution, catalogue and proceedings lookups.
    which still says "battery v1" against a registry of 38.
 4. **`sections/10_limitations.md`'s subsection numbers**, and a sweep for the
    cross-references that now point at the wrong §7.
+
+---
+
+## Addendum — the §10 numbering, and the sweep that came with it
+
+Follow-up pass, same branch. The defect logged above as "found and not fixed" is
+now fixed, and fixing it turned up more than numbering.
+
+**The headings.** `sections/10_limitations.md` numbered its subsections 7.1–7.5,
+because the P6 renumber changed only the `## n ·` line. They are now 10.1–10.5.
+`PAPER.md` has no duplicate section number left: 1 … 11, subsections contiguous.
+
+**The sweep.** Every `§n.m` in `sections/` was machine-enumerated and then read
+one at a time, because the mechanical part cannot do the only judgement that
+matters here — **most `§n.m` in this paper point at *another file's* sections**
+(`cold-start-a0/A0_REPORT.md` §6.3, `Theoria.md` §1.8, and so on), and those must
+not be touched. Five internal references were stale:
+
+| where | said | meant | now |
+|---|---|---|---|
+| `01_intro.md` | §7.1 | limitations | §10.1 |
+| `02_framework.md` | §8 | related work | §11 |
+| `03_a0.md` | §8.1 | the three-waves table | §11.1 |
+| `10_limitations.md` ×2 | §6 | the battery | §7 |
+
+Three more were internal-looking and were not: `05_a2.md`'s three bare "§1.4"
+references mean `Theoria.md` §1.4, the three-way narrowing — verified by reading
+`Theoria.md` §1.4 rather than assumed — and now carry the attribution the rest of
+that section already used.
+
+**What the sweep found that was not numbering, and is the more useful half.**
+A restatement is a cross-reference too, and it goes stale the same way:
+
+* the abstract's draft note still read "**§7 is known stale**: the battery was
+  rebuilt from v0 to v2 … and it carries a standing note saying so rather than a
+  repair". That stopped being true earlier in this same run. Rewritten to v0.3,
+  recording what actually changed and dropping "bibliography unfilled" with it.
+* **§10.4 restated the battery's v0 figures** — "24 of 29" — beside a §7 that now
+  reports v2. Re-derived against the artefacts: **31 of 38** ranked verdicts are
+  `underpowered` or `no-data` on *each* pass, with 7 direction-less diagnostics
+  in each case (`discrimination.json`, `discrimination_arms.json`).
+* §10.4 also still said "there is no Schema arm and there may never be". There
+  **is** one; what does not exist is a *reproduction*. Corrected, and the
+  distinction stated, since it is exactly the conflation `battery/DECISIONS.md`
+  D-B-019 was written about.
+* §1's contribution list still advertised "26 runs, 4 games, 2 arms" against
+  `battery/REPORT_V0.md`. Now 95 runs, 5 arms, 38 metrics, cited to the artefact.
+* §1's K4/K2 figures were cited to `REPORT_V0.md`; they are unchanged in v2, so
+  they now cite `capability_spectrum.json` with the denominators inline. The two
+  remaining `REPORT_V0.md` citations in §1 and §10 are **quotations** of that
+  report's own words and stay attributed to it — that is the same rule §7 follows.
+
+**One thing deliberately not chased.** `Theoria.md §1.7–§1.9` trips the range
+check, because the checker strips the file reference and the range's tail
+survives. It is external and correct. The check is left noisy rather than tuned
+until it goes quiet, which is the failure mode the exam section spends a page on.
+
+## Second addendum — the numbers §7's re-derivation orphaned elsewhere
+
+The sweep above looked at section *references*. This pass looked at the numbers,
+on the principle that re-deriving one section silently invalidates every other
+section that restated it. Six places had gone stale, and two of them were claims
+a referee would have been right to call dishonest.
+
+**In the abstract.**
+
+* The battery result claimed the pass "immediately found **three** of its own
+  metrics measuring something other than what they claim". That was v0's finding.
+  v2's audit is far harsher and the sentence was understating it: **34 of 38
+  executable exploits still land, 17 written defence claims were contradicted by
+  their own demonstration**, and X3 — the exploration family's declared signature
+  — separates the specified gradient backwards.
+* **The load-bearing one.** The honesty paragraph said the comparative effect
+  sizes "are across a model ladder within one control arm". Under v2 that is
+  false: the primary pass is CC vs Schema, **two** control arms paired by game.
+  Rewritten to say exactly that, keeping the claim that actually matters — none
+  of it is across the framework's own arms — and adding the confound the artefact
+  itself declares, that the Schema side is another team's agent on another team's
+  infrastructure.
+* A numbering defect found while editing: the abstract promised "Seven results"
+  and listed eight things, because the battery paragraph had lost its number.
+  Numbered **(5)**, the rest shifted, and the count is now **Eight**. Nothing
+  outside the abstract referenced the result numbers, so the renumber was safe.
+* Its own word count, which this run had just changed. ~22 600 → ~23 000.
+
+**In §1.** The contribution list still advertised "26 runs, 4 games, 2 arms"
+against `battery/REPORT_V0.md`. Now 95 runs, 5 arms, 38 metrics, cited to
+`capability_spectrum.json`.
+
+**In §2.** "It reports the three acceptances and the battery's *first* recompute."
+It is the third. Also tightened "no baseline comparison" to "no baseline
+comparison *of the framework's own arms*", since v2 does compare two control arms
+and the unqualified form is now the same overclaim as the abstract's.
+
+**In §10.5.** The closing summary repeated the "three of its own metrics" figure.
+Replaced with what v2 actually supports.
+
+**In `PROVENANCE.md`.** The whole §7 block indexed v0 and has been re-derived —
+scope, the specified gradient, X3, P1's two-pass disagreement, E2 on both passes,
+the executable audit, de-redundancy, the unvalidated count. **Two rows were
+deleted rather than updated**, which is the more interesting half: the *X5
+cross-check* row indexed a claim that left §7 entirely once REVIEW showed both
+counts descend from the same explorer, and the per-model dollar and median figures
+under E5 and E2 index aggregates §7 no longer cites. An index row for a claim the
+paper no longer makes is worse than no row. Its source-disagreement entry on the
+discriminative verdicts was also re-derived: 24-of-29 → **31 of 38 on each pass**,
+and two internal references in it (§7.3, §7.2) were the limitations section's old
+numbers and are now §10.3 and §10.2.
+
+**What stays pointing at v0, deliberately.** Three `battery/REPORT_V0.md`
+citations survive in §1, §10 and `PROVENANCE.md`. Each is a **quotation of that
+report's own words** or a statement only that report makes — the K4/K2 blockquote,
+the "no LLM in the loop" line, and ρ = −0.83, which no artefact carries. That is
+the same rule §7 follows: a report's statement is attributed to the report, and is
+not silently re-badged as a v2 measurement.
+
+**A check that now exists.** A short script re-run at the end greps the assembled
+`PAPER.md` for both the v2 figures and the v0 ones. The three surviving hits for
+"26 runs / 2 arms / 29 metrics" are all inside §7.1's own sentence describing what
+v0 *was*, which is the one place they belong.
+
+## Third addendum — §10's remaining v0 citations, and what checking them found
+
+Asked to verify the three `battery/REPORT_V0.md` citations §10 still carries.
+All three are sound. Checking them turned up two defects in **§7**, which is the
+useful part.
+
+**The three citations, checked.**
+
+1. **§10.3's quotation** — "A0 ran engines and hand adjudication with no LLM in the
+   loop, so it has no model calls". Verbatim at `battery/REPORT_V0.md:114`,
+   including the sentence that follows it. ✅
+2. **The claim it supports** — "every economy metric is `not-applicable` on the
+   Theoria arm". Re-derived at v2 rather than taken on trust: all 7 economy
+   metrics across all three Theoria arms are `not-applicable`, 49 slots, no
+   exceptions. ✅ Still exactly true.
+3. **§10.1(a)'s "the battery's economy family is `not-applicable` on the Theoria
+   arm"** — same check, same result. ✅
+
+**What the check found in §7.** Counting economy statuses per arm showed the
+Schema arm with **4 `ok` slots** where the family was supposed to be empty. Two
+things followed.
+
+* **`battery/REPORT_V2.md` says flatly that "the economy family collapsed to
+  `no-data`", and its own process-1 table contradicts it** — E4 sits there at
+  δ = −0.875 over 4 paired games. The report is right about the six cost-bearing
+  metrics and wrong as stated: **E4 is a curvature fit over context tokens**, and
+  its `needs` field asks for `model_calls`, not for a price, so it survives a
+  corpus with no cost field. §7.3 now states the exception and
+  `PROVENANCE.md`'s disagreements table records it. Precedence rule applied as
+  written — artefacts beat prose reports, and the report is not edited.
+* **The larger one: three of the eight rankable metrics rest on half the arm.**
+  The Schema side is two upstream collections of four games each, and only the
+  Claude-side one records model calls — 197, 279, 288, 564 against the Codex-side
+  collection's four zeros. P1, P2 and E4 all divide by model calls, so their
+  Schema side is 4 runs of 8, and their effect sizes compare bare Claude Code
+  against **one vendor's** upstream agent. The other five rankable metrics use all
+  8. Nothing in the source reports separates these two cases, and §7.2's table
+  presented all eight rows as if they rested on the same material. The table now
+  carries a **Schema-side runs** column and the paragraph under it says what the
+  split means: a confound beyond the arm-and-harness bundle the artefact already
+  declares.
+
+That second finding is this paper's own, not a restatement — it came out of
+checking a citation that turned out to be fine.

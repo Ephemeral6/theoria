@@ -1,0 +1,3 @@
+ticks=127 gaps min/median/max = 42.0 / 300.0 / 15578.0 s
+residual false-red probability per run: 0.02262
+wrote 06-periodic-writer-residual.json

@@ -32,9 +32,61 @@ import time
 import uuid
 from typing import Any, Dict, List, Optional, Tuple
 
-from . import arc_client, ledger
+from . import arc_client, ledger, spend
 
 PROVIDER = "anthropic-claude-code-cli"
+
+# -- when an episode gives up, and why it is two rules and not one -----------
+#
+# It was one rule -- `actions_failed >= 10`, cumulative -- and BUDGET_REPORT
+# section 11.2 is the post-mortem on what that cost. Three ar25 cells came back
+# `api_unusable` with **exactly ten** failures each, standard deviation zero,
+# because at a 30-action budget and a ~0.6 action success rate a cell expects
+# about twelve failures and must therefore hit an absolute ten. The verdict
+# `api_unusable` was, in that configuration, guaranteed by construction rather
+# than earned by the API. The pilot never saw it only because a 20-action budget
+# at 0.713 lands on five to seven.
+#
+# Section 7 of the same document had described this rule, in prose, as "abort
+# after ten *consecutive* action failures". That sentence was wrong about the
+# code -- and it was right about what the rule should be. "The API is unusable"
+# is a claim about failures arriving back to back; scattered failures across a
+# long episode are a claim about the *arm*, and collapsing the two is what made
+# the ar25 cells unreadable.
+#
+# So the single rule becomes two, with two different outcome names:
+#
+#   * CONSECUTIVE_FAILURE_ABORT -- ten in a row, nothing in between. This is
+#     `api_unusable`, and it is a constraint that did not previously exist:
+#     scattered failures never reset a cumulative counter, so nothing was
+#     watching for a run of them.
+#   * cumulative_failure_cap(budget) -- scales with the budget it is judging,
+#     so it can no longer fire purely because the budget grew. Its outcome is
+#     `failure_grind`, deliberately NOT `api_unusable`: a cell that spent its
+#     whole budget and failed a lot of actions is a *result about the arm*, and
+#     recording it as an API fault is how a real measurement gets thrown away.
+#
+# BUDGET_REPORT section 11.3 wrote down the one move that must not be made here:
+# raising the threshold so the gate goes green. The test it set is whether a
+# real signal gets silenced, so, explicitly: the degradation those cells
+# measured -- success 0.595, http/action 9.66, $/action +68% -- is measured by
+# G5, G3 and G2, and every one of them is untouched and still armed. What is
+# removed is an absolute constant that did not scale with the quantity it
+# judged. What is added is a rule that catches the thing the old one was
+# believed to catch. See DECISIONS.md D-016.
+CONSECUTIVE_FAILURE_ABORT = 10
+
+
+def cumulative_failure_cap(budget: int) -> int:
+    """How many total failed actions an episode tolerates before it is a grind.
+
+    `max(10, budget)`: never stricter than the old constant, and it scales, so
+    raising the action budget can no longer manufacture the abort by itself. The
+    money is bounded elsewhere and by tighter things -- the campaign's G2 caps
+    one cell at 3x its tier's pilot unit price, and the shared spend gate caps
+    the pool -- so this rule does not have to be the one holding the wallet.
+    """
+    return max(10, int(budget))
 
 MODEL_TIERS = {
     "cheap": "claude-haiku-4-5-20251001",
@@ -228,14 +280,28 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
          client: Optional[arc_client.ArcClient] = None,
          action_retries: int = 8, model_retries: int = 3,
          cost_ceiling: Optional[float] = None, on_step=None,
-         verbose: bool = True) -> Dict[str, Any]:
+         verbose: bool = True,
+         spend_binding: Optional["spend.SpendBinding"] = None) -> Dict[str, Any]:
     """`cost_ceiling` aborts mid-episode. This matters: the full run gives one
     episode a budget of up to 1070 actions, so a ceiling checked only between
     episodes would not be checked for eleven hours. `on_step(summary)` is
     called after every step so the caller can checkpoint at the same cadence.
+
+    `spend_binding` is a live claim on the shared pool (`harness/spend.py`) and
+    is required, not optional: an episode spends on both axes the pool counts --
+    ARC requests through the client, dollars through `claude -p` -- and neither
+    goes through the proxy that the gate was already wired to.
     """
     """One episode: one game, one model. Returns the run summary."""
-    client = client or arc_client.ArcClient()
+    if spend_binding is None:
+        spend_binding = getattr(client, "spend", None)
+    if spend_binding is None:
+        raise spend.NoSpendBinding(
+            "bare_cc.play needs a claim on the shared spend pool: it spends "
+            "ARC actions and model dollars, and both are counted by "
+            "proxy/spend_gate.py. Open one with "
+            "harness.spend.open_binding(campaign, usd_cap, action_cap).")
+    client = client or arc_client.ArcClient(spend_binding=spend_binding)
     client.assert_playable(game_id)                     # fails closed on sealed
     run_id = "bare_cc-%s-%s-%s" % (game_id.split("-")[0], model, uuid.uuid4().hex[:8])
 
@@ -254,7 +320,19 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
         "cache_read_tokens": 0, "cache_creation_tokens": 0,
         "levels_completed": 0, "win_levels": None, "final_state": None,
         "outcome": "unknown", "reset_attempts": 0,
+        # The longest run of back-to-back refusals seen in this episode. Kept
+        # even when it never reaches the abort, because "were the failures
+        # bunched or scattered?" is the question that separates a broken API
+        # from a floundering arm, and the old cumulative counter could not
+        # answer it for any of the cells it killed.
+        "actions_failed_consecutive_max": 0,
+        "abort_rules": {
+            "consecutive_failures": CONSECUTIVE_FAILURE_ABORT,
+            "cumulative_failures": cumulative_failure_cap(budget),
+        },
+        "spend": None,
     }
+    consecutive_failures = 0
 
     body, reset_attempts = reset_with_retry(client, game_id, card_id)
     summary["reset_attempts"] = reset_attempts
@@ -300,14 +378,31 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
             env = None
             last_model_error = None
             for attempt in range(model_retries):
+                # Pre-authorised before the subprocess starts, so the pool is
+                # asked before the money moves rather than told after. A retry
+                # is a fresh call and a fresh charge; it gets its own check.
+                spend_binding.check_model_call()
                 try:
                     env = call_model(prompt, model, sandbox)
                 except ModelError as exc:
                     last_model_error, env = str(exc), None
+                    # No envelope means no `total_cost_usd`. A `claude -p` that
+                    # died before returning one may still have been billed, so
+                    # this is settled as unpriced rather than as zero -- the
+                    # pool's dollar figure becomes a stated lower bound instead
+                    # of a quiet understatement.
+                    spend_binding.record_model_call(
+                        None, detail={"run_id": run_id, "step_idx": step_idx,
+                                      "model": model, "error": str(exc)[:200]})
                 else:
                     usage = env.get("usage") or {}
+                    raw_cost = env.get("total_cost_usd")
+                    spend_binding.record_model_call(
+                        float(raw_cost) if raw_cost is not None else None,
+                        detail={"run_id": run_id, "step_idx": step_idx,
+                                "model": model, "is_error": bool(env.get("is_error"))})
                     summary["model_calls"] += 1
-                    summary["cost_usd"] += float(env.get("total_cost_usd") or 0.0)
+                    summary["cost_usd"] += float(raw_cost or 0.0)
                     summary["input_tokens"] += int(usage.get("input_tokens") or 0)
                     summary["output_tokens"] += int(usage.get("output_tokens") or 0)
                     summary["cache_read_tokens"] += int(usage.get("cache_read_input_tokens") or 0)
@@ -336,8 +431,16 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
                 history.append("step %d: %s -> stopping" % (step_idx, note))
                 summary["outcome"] = "gave_up" if note == "gave up" else "unparseable_reply"
                 summary["stop_note"] = note
+                # `failed=True` because the step produced no frame (D-006), and
+                # `reached_api=False` because it produced no request either. The
+                # two were indistinguishable in the record until an audit of the
+                # first `gave_up` cells read one as the other and reported a
+                # discrepancy that was not there. Older records are still read
+                # correctly -- `audit_cells.reached_api` infers it from the
+                # absence of an http_status -- but a reader should not have to.
                 ledger.env_step(game_id, run_id, "bare_cc", model, note, None,
-                                step_idx, failed=True, reason=note)
+                                step_idx, failed=True, reason=note,
+                                reached_api=False)
                 break
 
             request_body: Dict[str, Any] = {"game_id": game_id, "card_id": card_id,
@@ -352,6 +455,9 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
 
             if status != 200 or not isinstance(rb, dict):
                 summary["actions_failed"] += 1
+                consecutive_failures += 1
+                summary["actions_failed_consecutive_max"] = max(
+                    summary["actions_failed_consecutive_max"], consecutive_failures)
                 msg = rb.get("message") if isinstance(rb, dict) else str(rb)[:120]
                 # D-006: record the failure, do not smooth it away.
                 ledger.env_step(game_id, run_id, "bare_cc", model,
@@ -361,11 +467,25 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
                 history.append("step %d: ACTION %d -> refused by server (%s)"
                                % (step_idx, action_id, status))
                 change = "action was refused; frame unchanged"
-                if summary["actions_failed"] >= 10:
+                if consecutive_failures >= CONSECUTIVE_FAILURE_ABORT:
+                    # Back to back, nothing succeeding in between. This is the
+                    # claim `api_unusable` was always supposed to make.
                     summary["outcome"] = "api_unusable"
+                    summary["stop_note"] = ("%d consecutive action failures"
+                                            % consecutive_failures)
+                    break
+                if summary["actions_failed"] >= cumulative_failure_cap(budget):
+                    # Scattered, not bunched: the arm is failing a lot, which is
+                    # a finding about the arm and is recorded as one.
+                    summary["outcome"] = "failure_grind"
+                    summary["stop_note"] = (
+                        "%d cumulative action failures at a %d-action budget "
+                        "(longest run %d)" % (summary["actions_failed"], budget,
+                                              summary["actions_failed_consecutive_max"]))
                     break
                 continue
 
+            consecutive_failures = 0
             summary["actions_ok"] += 1
             guid = rb.get("guid", guid)
             new_frame = rb["frame"][-1]
@@ -403,12 +523,36 @@ def play(game_id: str, model: str, budget: int, card_id: Optional[str] = None,
                 break
         else:
             summary["outcome"] = "budget_exhausted"
+    except spend.SpendGateError as exc:
+        # The pool said no. That is a correct stop, not a harness fault, and it
+        # gets its own outcome so it is never read as one: an episode killed by
+        # the budget tells you nothing about the API or about the arm, and
+        # filing it under `harness_error` would put it in G4's dead-cell streak
+        # where it would look like evidence of degradation.
+        summary["outcome"] = "spend_gate_tripped"
+        summary["error"] = "%s: %s" % (type(exc).__name__, exc)
+        summary["spend_gate_rule"] = getattr(exc, "rule", None)
     finally:
         if own_card:
-            client.close_scorecard(card_id)
+            try:
+                client.close_scorecard(card_id)
+            except spend.SpendGateError as exc:
+                # Closing costs actions, and if the pool is exhausted it cannot
+                # be paid for. D-015: a card that is never closed can never be
+                # re-fetched, so this run's authoritative scores are gone for
+                # good. Recorded rather than swallowed -- losing the data is
+                # survivable, not knowing it was lost is not.
+                ledger.probe("scorecard_close_refused_by_spend_gate", {
+                    "card_id": card_id, "run_id": run_id,
+                    "rule": getattr(exc, "rule", None), "error": str(exc)[:300],
+                    "consequence": "no authoritative scores for this run; a "
+                                   "closed-card fetch is impossible after the fact",
+                })
+                summary["scorecard_close_refused"] = True
 
     summary["ended"] = ledger.utcnow()
     summary["card_id"] = card_id
+    summary["spend"] = spend_binding.describe()
     summary["http_amplification"] = (
         round(summary["http_calls_gameplay"] / summary["actions_ok"], 2)
         if summary["actions_ok"] else None)

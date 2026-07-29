@@ -1,0 +1,33 @@
+{
+  "claim": "unsolvable",
+  "kind": "inductive_invariant",
+  "name": "A28",
+  "predicate": [
+    "table",
+    "t",
+    [
+      "var",
+      "pos0"
+    ],
+    [
+      "var",
+      "pos1"
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1",
+  "tables": {
+    "t": {
+      "arity": 1,
+      "entries": [
+        [
+          0,
+          true
+        ],
+        [
+          1,
+          true
+        ]
+      ]
+    }
+  }
+}

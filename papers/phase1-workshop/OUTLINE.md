@@ -57,13 +57,25 @@ Sections 6, 8 and 9 are the v0.2 additions; the renumbering map from v0.1, which
 too — they are audit records of a state the draft was in, and are not edited to
 match the state it is in now.
 
-Figures: `figures/` — data extraction is a script, styling is later.
+Figures: the repository's deterministic pipeline at **`figures/`** (repo root) —
+not this directory. Each plate is built by one script through a CSV audit layer
+from a hashed source registry, and `figures/verify.sh` holds eight gates over it
+(two builds byte-identical, committed tree equal to a fresh build, every source
+hash unchanged, no undeclared read, and a coverage probe). Styling lives in
+`figures/theme.py` and nowhere else.
 
-| fig | content | data script |
-|---|---|---|
-| 1 | concept-birth timeline, with triggers | `figures/fig1_concept_timeline.py` |
-| 2 | A0 vs A0′ coverage × accuracy | `figures/fig2_coverage_accuracy.py` |
-| 3 | A2 打脸→重证 ledger flow | `figures/fig3_loop_ledger.py` |
+| fig | content | built by | plate | numbers |
+|---|---|---|---|---|
+| 1 | concept-birth timeline, with triggers | `figures/fig06_concept_timeline.py` | `figures/out/{light,dark}/fig06_concept_timeline.{svg,png}` | `figures/csv/fig06_concept_timeline.csv` |
+| 2 | A0 vs A0′ coverage × accuracy | `figures/fig07_a0_vs_a0prime.py` | `figures/out/{light,dark}/fig07_a0_vs_a0prime.{svg,png}` | `figures/csv/fig07_a0_vs_a0prime.csv` |
+| 3 | A2 打脸→重证 ledger flow | `figures/fig05_a2_repair_loop.py` | `figures/out/{light,dark}/fig05_a2_repair_loop.{svg,png}` | `figures/csv/fig05_a2_repair_loop.csv` |
+
+`papers/phase1-workshop/figures/` held a **second implementation** of these same
+three figures. It is no longer the source; it is kept as the witness, and
+`check_figure_parity.py` there makes the two answer the same questions. What
+that comparison found — twelve agreements, one disagreement about what counts as
+evidence, and one miscount the paper had been carrying — is in
+`papers/phase1-workshop/figures/PARITY.md`.
 
 ## House style
 

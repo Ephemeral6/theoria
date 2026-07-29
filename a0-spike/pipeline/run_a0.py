@@ -68,14 +68,33 @@ def run() -> Dict[str, Any]:
     }
 
     # 3. mine
-    rules = stages.mine(transitions)
+    # E14: the account travels with the rule set. `n_rules` and the guards below
+    # cannot distinguish a world that is genuinely disjunctive from a miner that
+    # fell over, so the thing that can is published beside them.
+    rules, mine_account = stages.mine_with_account(transitions)
     report["mine"] = {
         "n_rules": len(rules),
         "rules": [r.as_json() for r in sorted(rules, key=lambda r: r.name)],
+        "account": mine_account.as_json(),
+        "synthesis_crashes": len(mine_account.crashes),
+        "all_guards_searched": mine_account.all_guards_searched,
+        "n_rules_unsound_after_crash": sum(1 for r in rules
+                                           if r.unsound_after_crash),
     }
 
-    # 4. certify -- full-history replay through the rules alone
-    certificate = stages.certify(rules, transitions)
+    # 4. certify -- full-history replay through the rules alone.
+    # The account goes in because these claims are ABOUT the mined rules: a
+    # crash artefact that replays exactly is still a crash artefact. The three
+    # blocks that follow (4b, 4c, 4d) deliberately do NOT take the account --
+    # `certify_generated`, `held_out` and the Lean stage all predict through
+    # `theory_exec.py` compiled from `theory/theory.dsl`, never through `rules`,
+    # so gating them on a mining crash would be a false attribution: it would
+    # report a defect at a site that has none. Checked, not assumed --
+    # `certify_generated(module, episodes)` and the held-out loop take a
+    # compiled module, and `unsolvability_certificate(level)` takes only a
+    # level. (Adversarial review, correction 6, partially declined with this
+    # reason.)
+    certificate = stages.certify(rules, transitions, mine_account)
     report["certify"] = certificate
 
     # 4b. certify through the EXECUTABLE FORM compiled from theory.dsl.
@@ -210,10 +229,22 @@ def main() -> int:
     p = report["perceive"]
     print("  perceive  %d objects (%d move, %d settle into the board); %d vs %d bits"
           % (p["tracks"], p["movers"], p["board"], p["script_bits"], p["baseline_bits"]))
-    print("  mine      %d rules" % report["mine"]["n_rules"])
-    for rule in report["mine"]["rules"]:
-        print("              %-16s %-8s %s"
-              % (rule["name"], rule["coverage"], " and ".join(rule["guard"])))
+    m = report["mine"]
+    print("  mine      %d rules; synthesis crashes=%d; all_guards_searched=%s"
+          % (m["n_rules"], m["synthesis_crashes"], m["all_guards_searched"]))
+    if not m["all_guards_searched"]:
+        print("            !! %d rule(s) are disjunctive because synthesis "
+              "CRASHED, not because the class needs a disjunction:"
+              % m["n_rules_unsound_after_crash"])
+        for crash in m["account"]["crashes"][:8]:
+            print("               %s on action %s: %s"
+                  % (crash.get("type"), crash.get("action"),
+                     str(crash.get("message"))[:90]))
+    for rule in m["rules"]:
+        print("              %-16s %-8s %s%s"
+              % (rule["name"], rule["coverage"], " and ".join(rule["guard"]),
+                 "   <-- UNSOUND (synthesis crashed)"
+                 if rule["unsound_after_crash"] else ""))
     c = report["certify"]
     print("  certify   %d transitions replayed; exactly-one-successor=%s, exact=%s"
           % (c["transitions"], c["exactly_one_successor"], c["replay_exact"]))
@@ -246,6 +277,10 @@ def main() -> int:
     print("-" * 72)
     grading = report["grading"]
     ok = (all(x["agrees"] for x in grading.values())
+          # E14: a run whose miner crashed does not get to be green, however
+          # well the rules it happened to emit replay. The crash count is a
+          # conjunct of the verdict, not a footnote under it.
+          and report["mine"]["all_guards_searched"]
           and report["certify"]["replay_exact"]
           and report["certify_generated"]["replay_exact"]
           and report["held_out"]["exact"]

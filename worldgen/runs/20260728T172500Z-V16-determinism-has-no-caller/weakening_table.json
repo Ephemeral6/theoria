@@ -1,0 +1,2412 @@
+{
+  "hash_order_wide/no_diff": {
+    "artefacts": [],
+    "comparison_build_crashes": 0,
+    "red": 0,
+    "runs": [
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "1"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "2"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "3"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "4"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "5"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "6"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "7"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "8"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "9"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "MISSED"
+  },
+  "hash_order_wide/none": {
+    "artefacts": [
+      "coverage.json"
+    ],
+    "comparison_build_crashes": 0,
+    "red": 30,
+    "runs": [
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "1"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "2"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "3"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "4"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "5"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "6"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "7"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "8"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "9"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "10"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "11"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "12"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "13"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "14"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "15"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "16"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "17"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "18"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "19"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "20"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "21"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "22"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "23"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "24"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "25"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "26"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "27"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "28"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "29"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "30"
+      }
+    ],
+    "total": 30,
+    "verdict": "RED"
+  },
+  "hash_order_wide/shared_hashseed": {
+    "artefacts": [],
+    "comparison_build_crashes": 0,
+    "red": 0,
+    "runs": [
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "1"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "2"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "3"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "4"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "5"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "6"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "7"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "8"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "9"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "MISSED"
+  },
+  "hash_order_wide/size_only": {
+    "artefacts": [],
+    "comparison_build_crashes": 0,
+    "red": 0,
+    "runs": [
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "1"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "2"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "3"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "4"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "5"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "6"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "7"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "8"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "9"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "MISSED"
+  },
+  "mechanism_order/no_diff": {
+    "artefacts": [],
+    "comparison_build_crashes": 0,
+    "red": 0,
+    "runs": [
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "1"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "2"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "3"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "4"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "5"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "6"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "7"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "8"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "9"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "MISSED"
+  },
+  "mechanism_order/none": {
+    "artefacts": [
+      "GROUND_TRUTH.md",
+      "ground_truth.json",
+      "reversibility.json"
+    ],
+    "comparison_build_crashes": 0,
+    "red": 25,
+    "runs": [
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "1"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "2"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "3"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "4"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "5"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "6"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "7"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "8"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "9"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "10"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "11"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "12"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "13"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "14"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "15"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "16"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "17"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "18"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "19"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "20"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "21"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "22"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "23"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "24"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "25"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "26"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "27"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "28"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "29"
+      },
+      {
+        "artefacts": [
+          "GROUND_TRUTH.md",
+          "ground_truth.json",
+          "reversibility.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "30"
+      }
+    ],
+    "total": 30,
+    "verdict": "MIXED"
+  },
+  "mechanism_order/shared_hashseed": {
+    "artefacts": [],
+    "comparison_build_crashes": 0,
+    "red": 0,
+    "runs": [
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "1"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "2"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "3"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "4"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "5"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "6"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "7"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "8"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "9"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "MISSED"
+  },
+  "mechanism_order/size_only": {
+    "artefacts": [],
+    "comparison_build_crashes": 0,
+    "red": 0,
+    "runs": [
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "1"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "2"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "3"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "4"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "5"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "6"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "7"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "8"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "9"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "MISSED"
+  },
+  "unseeded_rng/no_diff": {
+    "artefacts": [],
+    "comparison_build_crashes": 0,
+    "red": 0,
+    "runs": [
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "1"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "2"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "3"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "4"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "5"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "6"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "7"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "8"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "9"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "MISSED"
+  },
+  "unseeded_rng/none": {
+    "artefacts": [
+      "coverage.json"
+    ],
+    "comparison_build_crashes": 0,
+    "red": 30,
+    "runs": [
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "1"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "2"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "3"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "4"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "5"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "6"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "7"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "8"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "9"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "10"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "11"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "12"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "13"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "14"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "15"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "16"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "17"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "18"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "19"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "20"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "21"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "22"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "23"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "24"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "25"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "26"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "27"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "28"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "29"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "30"
+      }
+    ],
+    "total": 30,
+    "verdict": "RED"
+  },
+  "unseeded_rng/shared_hashseed": {
+    "artefacts": [
+      "coverage.json"
+    ],
+    "comparison_build_crashes": 0,
+    "red": 10,
+    "runs": [
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "1"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "2"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "3"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "4"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "5"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "6"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "7"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "8"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "9"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "RED"
+  },
+  "unseeded_rng/size_only": {
+    "artefacts": [
+      "coverage.json"
+    ],
+    "comparison_build_crashes": 0,
+    "red": 5,
+    "runs": [
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "1"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "2"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "3"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "4"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "5"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "6"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "7"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "8"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "9"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "MIXED"
+  },
+  "wall_clock/no_diff": {
+    "artefacts": [],
+    "comparison_build_crashes": 0,
+    "red": 0,
+    "runs": [
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "1"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "2"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "3"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "4"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "5"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "6"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "7"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "8"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "9"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "MISSED"
+  },
+  "wall_clock/none": {
+    "artefacts": [
+      "coverage.json"
+    ],
+    "comparison_build_crashes": 0,
+    "red": 30,
+    "runs": [
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "1"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "2"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "3"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "4"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "5"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "6"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "7"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "8"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "9"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "10"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "11"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "12"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "13"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "14"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "15"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "16"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "17"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "18"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "19"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "20"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "21"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "22"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "23"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "24"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "25"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "26"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "27"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "28"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "29"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "30"
+      }
+    ],
+    "total": 30,
+    "verdict": "RED"
+  },
+  "wall_clock/shared_hashseed": {
+    "artefacts": [
+      "coverage.json"
+    ],
+    "comparison_build_crashes": 0,
+    "red": 10,
+    "runs": [
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "1"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "2"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "3"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "4"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "5"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "6"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "7"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "8"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "9"
+      },
+      {
+        "artefacts": [
+          "coverage.json"
+        ],
+        "banner": true,
+        "comparison_build_crashed": false,
+        "red": true,
+        "returncode": 1,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "RED"
+  },
+  "wall_clock/size_only": {
+    "artefacts": [],
+    "comparison_build_crashes": 0,
+    "red": 0,
+    "runs": [
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "1"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "2"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "3"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "4"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "5"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "6"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "7"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "8"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "9"
+      },
+      {
+        "artefacts": [],
+        "banner": false,
+        "comparison_build_crashed": false,
+        "red": false,
+        "returncode": 0,
+        "seed": "10"
+      }
+    ],
+    "total": 10,
+    "verdict": "MISSED"
+  }
+}

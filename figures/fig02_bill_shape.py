@@ -752,6 +752,7 @@ def extract() -> tuple[list[dict], dict, list[str]]:
 
     arm_provenance: set[str] = set()
     arm_disagreements: list[str] = []
+    zero_cost: list[str] = []
     curves: list[dict] = []
     for rid in sorted(per_turn, key=lambda r: (meta[r]["game_id"], meta[r]["model"], r)):
         arm, provenance = arm_for(rid)
@@ -761,8 +762,27 @@ def extract() -> tuple[list[dict], dict, list[str]]:
 
         turns = sorted(per_turn[rid])
         total = sum(per_turn[rid][t] for t in turns)
-        if total <= 0.0:
-            raise ValueError(f"{rid}: total cost is {total!r}; cannot normalise a run that spent nothing")
+        if total < 0.0:
+            raise ValueError(
+                f"{rid}: total cost is {total!r}. A negative bill is not an absence, it is a "
+                "corrupt ledger, and this plate will not draw a shape over it."
+            )
+        if total == 0.0:
+            # Billed nothing. Not a crash, and not a zero-cost curve either: a run
+            # with no bill has no shape, exactly like the runs a few lines above
+            # that have env_step rows and no model_call rows. Drawn as absent,
+            # named in the notes.
+            #
+            # This raised until P8's discovery rules widened the input set. The
+            # old hand-written four-name tuple never saw the *tracked*
+            # `ledger.a7*.jsonl` shards, one of which is a smoke test whose run
+            # billed nothing; the rule picks up every shard matching the pattern,
+            # which is what it is for, and the build then died on a run that is
+            # perfectly legitimate. Found by `release/reproduce.py` re-running the
+            # figures build against the manifest -- which is the entire argument
+            # for that step existing.
+            zero_cost.append(rid)
+            continue
         max_turn = turns[-1]
         rollup = rollups.get(rid)
         outcome = rollup["outcome"] if rollup is not None else None
@@ -810,6 +830,13 @@ def extract() -> tuple[list[dict], dict, list[str]]:
             }
         )
 
+    if zero_cost:
+        notes.append(
+            f"{len(zero_cost)} run(s) have model_call rows that sum to exactly 0.00 USD "
+            f"({', '.join(sorted(zero_cost))}): billed nothing, so no curve and no "
+            "zero-cost curve either -- a run with no bill has no shape. A NEGATIVE total "
+            "still stops the build, because that is a corrupt ledger rather than an absence."
+        )
     notes.append(
         "arm derived from " + " and ".join(sorted(arm_provenance))
         + " (model_call rows carry no arm field; env_step rows do)."

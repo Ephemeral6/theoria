@@ -1,0 +1,17 @@
+{
+  "backend": null,
+  "certificate": null,
+  "certificate_owed": false,
+  "directed_probes_scheduled": 0,
+  "distinguishes_proof_from_exhaustion": false,
+  "domain": "domain.pddl",
+  "full_arm_would": "owe a certificate (constraint 6) and probe the theorem's `depends:` clauses (constraint 7) before settling",
+  "name": "a0-no-button",
+  "note": "no plan exists under this manual.  This arm has no constraint 6: the verdict is final as it stands.  No certificate is owed, no invariant is sought, no directed probe is scheduled, and nothing is placed on the surprise bus -- so the loop does not turn.  DESIGN.md \u00a77.3.",
+  "problem": "problem.pddl",
+  "settled": true,
+  "settled_by": "search",
+  "status": "UNSAT",
+  "unsat_evidence": "no plan exists for a0-no-button",
+  "verdict": "unsolvable"
+}

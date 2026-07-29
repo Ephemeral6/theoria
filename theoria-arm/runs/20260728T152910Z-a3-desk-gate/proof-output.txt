@@ -1,0 +1,27 @@
+== phase A: one priced call, one that raises, and then the stop ==
+A1 the manual, revised
+A2 raised, and still charged: claude -p timed out after 1800s
+A3 refused before it started: UNPRICED_SPEND -- 1 call(s) in this pool could not be priced, so the pool's dollar total is a lower bound and this gate would be checking $4
+   pool: {"actions_spent": 9, "unpriced_calls": 1, "usd_spent": 5.489011} 
+
+== phase B: an envelope with no price is charged its ceiling ==
+B1 answered, but the envelope forgot to say what it cost
+   pool: {"actions_spent": 0, "unpriced_calls": 1, "usd_spent": 4.0}
+{
+  "action_cap": 57,
+  "action_cap_hard_bound": 6000,
+  "actions_budget": 6,
+  "arm_attempts_capped_by_commands_ceiling": false,
+  "arm_attempts_planned": 19,
+  "commands_ceiling": 2000,
+  "cost_ceiling_usd": 20.0,
+  "env_max_attempts": 3,
+  "fixed_commands": 3,
+  "http_per_command": 1.75,
+  "model_call_ceiling_usd": 4.0,
+  "retry_safety": 1.5,
+  "ttl_seconds": 11700.0,
+  "unit": "one action = one outbound ARC HTTP request (spend_policy.json)",
+  "usd_cap": 24.0,
+  "wall_clock_s": 10800.0
+}

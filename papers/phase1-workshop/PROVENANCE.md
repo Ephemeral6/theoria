@@ -24,7 +24,7 @@ written, the paper cites both and says which is later; no report was edited.
 | the three missed pairs | Button from above, below, right | ibid. → `base.held_out.examples`; predicted at `cold-start-a0/THEORIZE_LOG.md` R-05 |
 | ground-truth seal | first read at M6 | `cold-start-a0/THEORIZE_LOG.md` §Ground-truth seal; `score_vs_truth.json` → `seal` |
 | the seal's hole | same instance built and adjudicated | `cold-start-a0/THEORIZE_LOG.md` preamble; `cold-start-a0/A0_REPORT.md` §6.3 |
-| K4 = 1.000, K2 = 0.000 | same manual, same recompute | `battery/REPORT_V0.md`; `battery/artifacts/capability_spectrum.json` |
+| K4 = 1.000, K2 = 0.000 | same manual, same recompute; K4 over 7 annotated clauses, K2 over 3 pairs with 0 agreements, unchanged from v0 to v2 | `battery/artifacts/capability_spectrum.json`, run `a0-base`. §1's blockquote is `battery/REPORT_V0.md`'s own wording and stays attributed to it |
 | A2's two Lean files | identical in generator, tactic, dependency surface and axiom list — **not** identical but for the weight table; see the disagreements table | `cold-start-a2/theory/generated_holed/theory.lean`, `…/generated_repaired/theory.lean` |
 | the refuting episode | 18 actions, win on frame 18 | `cold-start-a2/artifacts/refutation.json`, `solved_episode.jsonl` |
 
@@ -113,17 +113,37 @@ written, the paper cites both and says which is later; no report was edited.
 
 ## §7 — the battery
 
+**Re-derived at P7 against `battery_version: "v2"`.** The rows below replaced a
+block that indexed v0 — 26 runs, 2 arms, 29 metrics — after §7 was rewritten.
+Every value here is read from an artefact; the two rows that are a *report's*
+statement rather than an artefact's say so, because that is the distinction this
+index exists to keep.
+
 | claim | value | source |
 |---|---|---|
-| scope of the recompute | 26 runs, 4 games, 2 arms | `battery/REPORT_V0.md`; `battery/artifacts/capability_spectrum.json` |
-| smallest attainable p | 0.125 at 4 paired games; floor is 6 | `battery/artifacts/discrimination.json` |
-| P1 confound | δ = −1.000; haiku 0.96 vs opus 0.52 actions/call; 28–45 % step failure | `battery/artifacts/capability_spectrum.json`, `discrimination.json` — the paper uses the artefact's aggregates, not `REPORT_V0.md`'s 0.97 / 27 % |
-| P1 ↔ failure-rate correlation | ρ = −0.83 | `battery/REPORT_V0.md`; `battery/STATUS.md` W-4. **No artefact carries it** — the one battery number in the paper that cannot be re-derived from `battery/artifacts/` |
-| E5 as a price list | δ = +1.000; $0.031 / $0.124 / $0.279 per action | `battery/REPORT_V0.md`; `battery/artifacts/capability_spectrum.json` |
-| E2 front-load confound | haiku 0.20, sonnet 0.25, opus 0.28; δ = +1.000 | ibid. |
-| de-redundancy | 2 clusters at \|ρ\| ≥ 0.9; 27 clusters from 29 metrics; ρ = 0.916, 0.909 | `battery/artifacts/redundancy.json` |
-| the pre-registration's seal | K1, K2, K7, K8 on A0 marked `[seen]` | `battery/PREDICTIONS.md` |
-| X5 cross-check | 59 distinct states, agreeing with a differently-computed count | `battery/artifacts/capability_spectrum.json`; `cold-start-a0/artifacts/trace_summary.json` |
+| scope of the recompute | 95 runs, 5 arms, 4 games, 38 metrics, 1 433 computed values | `battery/artifacts/capability_spectrum.json` (`battery_version: "v2"`) |
+| the specified gradient | CC vs Schema paired by game; 10 of 38 metrics pair, 8 rankable, every verdict `underpowered` | `battery/artifacts/discrimination_arms.json` |
+| smallest attainable p | 0.125 at 4 non-tied paired games — but **0.25 for P3, X2 and X3**, which each lose a game to a tie and fall to `sign_test.n: 3`; floor is 6 non-tied pairs | `battery/artifacts/discrimination_arms.json`, top-level `power` and per-metric `sign_test.min_attainable_p` |
+| X3 separates backwards | δ = −0.562 against a declared `higher` direction; wrong-direction warning raised automatically | `battery/artifacts/discrimination_arms.json`, X3 `warning` |
+| P1 reads opposite on the two passes | δ = **−0.750** on the model ladder, δ = **+1.000** on the specified gradient | `battery/artifacts/discrimination.json`; `battery/artifacts/discrimination_arms.json`. The artefact's own `role` field says the disagreement is information rather than noise |
+| P1 ↔ failure-rate correlation | ρ = −0.83 | `battery/REPORT_V0.md`; `battery/STATUS.md` W-4. **No artefact carries this value** — it is quoted as a v0 statement, not a v2 measurement. v2 re-measures the same pair at **ρ = −0.899 over 82 shared runs** (`battery/artifacts/redundancy.json`, `matrix`), so the finding survived re-measurement even though the number cannot be reproduced. It is not the paper's only report-only battery figure: the pre-registration scoreboard, the 27–45 % pilot failure band, and the main table's intermediate 6 are the others, each marked as such in its own row or in §7 |
+| E5 as a price list | δ = +1.000 on the model ladder, flagged wrong-direction | `battery/artifacts/discrimination.json` |
+| E2 front-load confound | δ = +1.000 in the declared direction, 4 wins of 4 paired games, p = 0.125 against a floor of 0.125 | `battery/artifacts/discrimination.json`, E2 `sign_test` |
+| E2 on the specified gradient | `no-data` — the Schema corpus records no cost under any spelling, so **zero** E2 pairs can form | `battery/artifacts/discrimination_arms.json`, E2 |
+| K4 / K2 on `a0-base` | 1.000 over 7 annotated clauses; 0.000 over 3 pairs, 0 agreements | `battery/artifacts/capability_spectrum.json`, run `a0-base` |
+| the executable anti-gaming audit | 38 exploits, 34 still land, 17 register entries contradicted; main table 9, reference 29 | `battery/artifacts/gaming_audit.json` |
+| de-redundancy | 32 clusters over 38 metrics, 5 retired into representatives, 1 cross-family cluster; 257 of 703 pairs measurable | `battery/artifacts/redundancy.json` |
+| never validated on any gradient | 21 of 38 — all epistemic, all mechanism, and P4 | `battery/artifacts/validation_material.json`, `n_unvalidated` |
+| the pre-registration's seal | K1, K2, K7, K8 (v0 seal) and K14 (v1 table) on A0 marked `[seen]` — five in all | `battery/PREDICTIONS.md` |
+| the v2 pre-registration scoreboard | 7 hits / 11 misses of 18 read strictly; 11 of 18 honouring the registered conditional | `battery/REPORT_V2.md` — a report's statement, not an artefact's |
+
+**Two rows were deleted rather than updated.** The v0 index carried an *X5
+cross-check* row ("59 distinct states, agreeing with a differently-computed
+count"); `papers/phase1-workshop/REVIEW.md` showed both counts descend from
+`cold-start-a0/world/explorer.py`, so the claim left §7 instead of being repaired,
+and an index row for a claim the paper no longer makes would be worse than none.
+The per-model dollar figures under *E5* and the per-model medians under *E2* went
+the same way — §7 now cites the effect sizes and not those aggregates.
 
 ## §9 — the preflight
 
@@ -173,12 +193,14 @@ written, the paper cites both and says which is later; no report was edited.
 
 | topic | the two sources | what the paper does |
 |---|---|---|
+| whether the economy family collapsed | `battery/REPORT_V2.md` says "the economy family collapsed to `no-data`"; the same report's own process-1 table lists **E4** at δ = −0.875 over 4 paired games, and `battery/artifacts/discrimination_arms.json` agrees | **follows the artefacts.** Four of seven economy metrics resolved to `no-data` — E2, E3, E5, E7. E1 and E6 are direction-less diagnostics returned `not-ranked`, and E4 is `underpowered` at δ = −0.875 over 4 paired games, because it is a curvature fit over *context tokens* and its `needs` field asks for `model_calls` rather than a price. §7.3 states the exception; the report is not edited |
+| how much of the Schema arm backs each metric | nothing in the source reports distinguishes them; `battery/artifacts/capability_spectrum.json` shows the Codex-side collection recording `model_calls: 0` on all four runs while the Claude-side records 197–564 | **follows the artefact, and adds a column.** P1, P2 and E4 divide by model calls, so their Schema side rests on **4 of 8** runs — one vendor's collection — where the other five rankable metrics use all 8. §7.2's table carries this per row; it is a confound beyond the arm-and-harness bundle the artefact already declares |
 | the two A2 Lean files | `cold-start-a2/A2_REPORT.md` §4 and `DECISIONS.md` D-A2-005 say they "differ in their weight table and in nothing else"; `diff` of the two files shows 52 changed lines, including `def Goal` (`c10` vs `c34`) and four `step` entries (`c31` vs `c35`) | **follows the files.** §5.6 corrects the report explicitly and states what the correction costs the exhibit. The report is not edited |
-| the discriminative verdicts | `battery/REPORT_V0.md` says "every discriminative verdict"; `battery/artifacts/discrimination.json` has three verdict values — 11 `underpowered`, 13 `no-data`, 5 `not-ranked` | **follows the artefact.** §6.4 and §7.4 say "every ranked metric", 24 of 29 |
+| the discriminative verdicts | `battery/REPORT_V0.md` says "every discriminative verdict"; the artefacts have three verdict values, not two. At v2: 13 `underpowered`, 18 `no-data`, 7 `not-ranked` on the model ladder, and 8 / 23 / 7 on the specified gradient (`battery/artifacts/discrimination.json`, `discrimination_arms.json`) | **follows the artefacts.** §7.2 and §10.4 say "every *ranked* metric", 31 of 38 on each pass. The v0 form of this row read "24 of 29" and was re-derived at P7 |
 | A0's segmentation figures | `A0_REPORT.md` §3 and `THEORIZE_LOG.md` O-01 give 6511 bits / 90 tracks; `cold-start-a0/artifacts/engines_report.json` now gives 5704 / 6, with the older pair under `reidentification.*_before` | **follows the report**, because that is the account the adjudication was made from; §3.2 states the disagreement |
-| A2's revision count | no file in the tree states one; `loop_ledger.json`'s L4 beat records `re_derivable_from_grown_evidence: true` and no number | §7.3 says so, and marks "one revision" for A2 as the paper's reading of the ledger rather than a citable figure |
+| A2's revision count | no file in the tree states one; `loop_ledger.json`'s L4 beat records `re_derivable_from_grown_evidence: true` and no number | §10.3 says so, and marks "one revision" for A2 as the paper's reading of the ledger rather than a citable figure |
 | A0's candidate count | `THEORIZE_LOG.md` Round 0 says 28; `cold-start-a0/artifacts/candidates.jsonl` has 29 rows | **follows the artefact** (29), and §3.1 explains the gap: the 29th row is a `plan` the log did not adjudicate |
 | Fast Downward connectivity | `cold-start-a0/A0_REPORT.md` §5/§6.5 says "still not connected"; `cold-start-a0/BLOCKER_FAST_DOWNWARD.md` and `STATUS.md` record it as connected on 2026-07-28 | cites both, states which is later, and does not edit the report (§7.3) |
-| whether any game has been played | `CLAUDE.md` says no game has been played and all 25 are `never_audited`; `baseline-arms/TOUCHED_GAMES.md` records all four development-pile games at `trajectories_reviewed` | follows the ledger and corrects `CLAUDE.md` explicitly (§7.2) |
+| whether any game has been played | `CLAUDE.md` says no game has been played and all 25 are `never_audited`; `baseline-arms/TOUCHED_GAMES.md` records all four development-pile games at `trajectories_reviewed` | follows the ledger and corrects `CLAUDE.md` explicitly (§10.2) |
 | the exhibit theorem's name | `cold-start-a2/artifacts/refutation.json` names it `right_room_locked` with `lean_target: "unsolvable"`; `A2_REPORT.md` §2/§4 uses `unsolvable` throughout | follows the report's Lean-level name and records the discrepancy here |
 | the pile hash | `CLAUDE.md` publishes `3feca53e…` as if it were a file hash; the file itself hashes to `d3140eff…` | reports the battery's finding (D-B-011): the cut is intact, only the description misleads |

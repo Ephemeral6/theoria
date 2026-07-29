@@ -204,6 +204,25 @@ Append-only. Newest last.
 | C-002 | 2026-07-28 | the two shapes stop being closed: an unlisted field on `env_step`/`model_call` is warned about and written, not refused | widening | n/a |
 | C-003 | 2026-07-28 | `canon.describe()` renames `closed_shapes` → `shapes`; **`closed_shapes` is kept as a deprecated alias** and may be removed no earlier than 2026-08-11, under §3 | tightening, in its window | this file; PARTNER_SYNC `contract-notice` |
 | C-004 | 2026-07-28 | the pinned contract gains `events`/`arms`/`incident_kinds`; `validate_file`'s report gains `notices`; `frozen.json`'s `arc_v1` entry gains `depends_on` | additive | n/a |
+| C-005 | 2026-07-29 | `canon.ENVELOPE` gains `prev`, the ledger's hash chain link (S15, D-029): the writer owns it and **a caller that sets it is now refused** | tightening | no — see below |
+
+C-005 is the first change this document caught rather than governed, and the
+honest reading is that it was not announced. It landed on the mainline with S15
+while this file was still unmerged on `agent/s9-contract-change-protocol`, so §3
+was not available to the session that made it; the first thing that ran the
+detector was the merge, which is exactly the moment §4 says the question should
+be put. It is re-pinned rather than reverted for three reasons, in order of
+weight: the refusal **fails closed** — a caller who could set `prev` could forge
+the chain, which is the whole property RED-40 asks for, so the strict side is
+the correct side; no caller in this repository writes `prev` (it is assigned
+inside `Ledger.append` under the `seq` lock), so the compatibility window §3
+would have demanded has nobody in it; and reverting a tamper-evidence mechanism
+to enforce a protocol about announcing tamper-evidence mechanisms would be the
+procedure eating the thing it protects. What is owed is the announcement, and it
+is owed *forward*: `python -m proxy.tools.contract --fingerprint` moves with this
+merge, so any track diffing the fingerprint between two runs will see it — which
+is the effect the announcement exists to produce. The verdict a reader should
+take from this row is that the detector worked and the wait did not.
 
 C-003 is the small one deliberately. Renaming a key in a published dictionary is
 about as minor as a breaking change gets, and it is the exact size of change

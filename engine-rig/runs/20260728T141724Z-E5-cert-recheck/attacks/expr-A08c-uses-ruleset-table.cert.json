@@ -1,0 +1,21 @@
+{
+  "claim": "unsolvable",
+  "kind": "inductive_invariant",
+  "name": "A08c-uses-ruleset-table",
+  "predicate": [
+    "=",
+    [
+      "table",
+      "board",
+      [
+        "var",
+        "cart"
+      ]
+    ],
+    [
+      "lit",
+      0
+    ]
+  ],
+  "schema": "engine-rig/recheck/certificate-v1"
+}

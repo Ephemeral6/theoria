@@ -40,7 +40,7 @@ and `tools/validate_ledger.py` refuses one on read (F-16). A field the format
 merely does not *mention* is kept, with a warning: the writer runs after the
 request has been sent, so refusing a record cannot un-send it — the one time
 this refused one, it discarded a reply that had already cost $2.695
-(`CONTRACT_CHANGES.md`, D-029).
+(`CONTRACT_CHANGES.md`, D-030).
 
 ## Run it
 

@@ -1,0 +1,19 @@
+﻿[ok  ] catalogue build + determinism
+[ok  ] library properties
+[miss] QC: three worlds through cold-start-a0
+           L1=True L2=True L3a=True(1.0) L3b=False(0.895833)  conflicts={"held_out": 0, "replay": 0}  render=80/80
+        == t2-lock-fragile
+           L1=False L2=False L3a=False(None) L3b=False(None)  conflicts={"held_out": null, "replay": null}  render=-  ERROR: NoSeparatingGuard: no literal separates transition 1 from the positives
+        
+        family verdict: {"L3b_passed": 0, "L3b_required": 2, "all_L1": false, "all_L2": false, "all_L3a": false, "pass": false}
+        -> out\qc\QC.json
+[miss] QC: four mutants through cold-start-a0, against their bases
+           L1=False L2=False L3a=False  held_out=None (base None, delta None)  ERROR: NoSeparatingGuard: no literal separates transition 95 from the positives
+        == v-a3446614 (base t1-portal-oneway)
+           L1=True L2=True L3a=True  held_out=0.586207 (base 0.548387, delta 0.03782)
+        
+        mutant verdict: {"failed": ["v-efe43df1"], "pass": false, "passed": ["v-707a64ad", "v-a3446614", "v-ce732813"], "sampled": 4}
+        -> out\qc\QC_MUTANTS.json
+
+MEASURED MISS (not a defect, see RUN_STATE.md §gaps): QC: three worlds through cold-start-a0, QC: four mutants through cold-start-a0, against their bases
+green

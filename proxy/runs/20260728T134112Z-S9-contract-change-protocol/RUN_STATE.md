@@ -17,7 +17,7 @@ desk 调用付了 **$2.695**，写账本时被拒，回复被丢弃，`model_cal
 
 ## 做了什么
 
-### 1. `canon.py` 改为加法安全（D-029）
+### 1. `canon.py` 改为加法安全（D-030）
 
 未列出的字段**告警并保留**，不再拒收。理由不是「宽容一点」，而是：**账本记录是
 事后写的**——写手看到 `model_call` 时请求已经发出、钱已经花掉。拒收无法把钱退
@@ -66,7 +66,7 @@ desk 调用付了 **$2.695**，写账本时被拒，回复被丢弃，`model_cal
 
 可选字段，不 bump `v`（§8：只有加**必填**字段才 bump）。
 
-### 3. `CONTRACT_CHANGES.md` + 机械半边（D-030）
+### 3. `CONTRACT_CHANGES.md` + 机械半边（D-031）
 
 规则一句话：**加宽免费，收紧是破坏性变更**，必须先在 PARTNER_SYNC 发
 `contract-notice` 通告、等一个周期、给兼容窗口（窗口期内旧写法**告警而非拒收**）。
@@ -222,7 +222,7 @@ proxy/runner.py                      run.json 写 unknown_ledger_fields
 proxy/LEDGER_FORMAT.md               §4 五字段+类型 + §6 加法安全 + §7 前提失效 + §8 非对称
 proxy/CANON_MIGRATION.md             §4/§6 与新行为对齐（对 baseline-arms 是加宽）
 proxy/README.md, proxy/STATUS.md     同上
-proxy/DECISIONS.md                   D-029, D-030
+proxy/DECISIONS.md                   D-030, D-031
 proxy/tests/test_canon.py            两条「拒收」改写为「保留 + 告警」，另新增 14 条
 proxy/tests/test_contract_changes.py 新：20 条
 proxy/tests/test_scoring.py          +1：依赖漂移让冻结开火
@@ -230,3 +230,29 @@ proxy/tests/test_e2e.py              +1：干净跑的 unknown_ledger_fields 为
 proxy/verify_contract.sh             新：绿灯脚本，九步
 monitor/inbox/…-W-1250-…             提案：各臂钉指纹并逐跑比对
 ```
+
+## 并入 S15（2026-07-29，W-1641）
+
+交付后 `agent/s15-ledger-hashchain` 先落 mainline，`ci_merge` 每五分钟重报同一处
+冲突。把 `origin/master`（`64157c1c`）合进本分支，两处真冲突，都是「两边各自在同一
+位置追加」：
+
+* `proxy/DECISIONS.md` —— 两边都写了 D-029。已发布的一侧（链）保号，本分支两条
+  顺延为 **D-030 / D-031**，并同步 `canon.py` / `ledger.py` / `README.md` /
+  `STATUS.md` / `CANON_MIGRATION.md` 与本文件里的引用。两侧条目一条不删。
+* `proxy/runner.py` —— 两边各给 `record` 加一个键。**两个都留**：先 `ledger_head`
+  （链的判决，读盘上的字节），后 `unknown_ledger_fields`（本跑写了什么，读内存里的
+  `RunLedger`）。两者互不可推导，注释里写明了。
+
+合并顺带触发本分支自己装的两个探测器，都按文档的办法重钉、没有放宽：
+
+* `python -m proxy.tools.contract` 报 **TIGHTENING**（`ENVELOPE` 多了 `prev`）。
+  按 §3 第 4 步 `--update` 重钉，并在 §5 记 **C-005**，其中写明这次收紧没有走通告
+  ——它在本文件还没进 mainline 时就落了地——以及为什么重钉而不是回退：拒收的方向
+  是**收紧**（能设 `prev` 的调用方就能伪造链），且仓库里没有任何调用方写 `prev`。
+* `scoring.verify_frozen` 的 `depends_on` 因 `canon.py` 改动开火。重冻 canon.py 的
+  哈希，`sha256`/`version` 不动；语料里没有一跑改数（既有账本都没有 `prev`）。
+  重冻的理由与算式写进 `frozen.json` 的 `depends_on_refreezes`。
+
+门禁：`bash proxy/verify_contract.sh` → VERIFY OK（九步全绿，proxy 全套 323 passed）；
+另跑 `bash proxy/verify_spend.sh` → VERIFY: green。全程离线，无 API 调用，无花费。

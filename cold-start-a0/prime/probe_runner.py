@@ -309,5 +309,12 @@ def _atom(name: str):
         return atoms_a0.Atom("color", (head[len("color("):-1], int(value)), negated)
     if body.startswith("present("):
         return atoms_a0.Atom("present", body[len("present("):-1], negated)
+    if body.startswith("count("):
+        head, value = body.split(">=")
+        return atoms_a0.Atom("count", (int(head[len("count("):-1]), int(value)),
+                             negated)
+    if body.startswith("faces("):
+        track, direction = body[len("faces("):-1].split(",")
+        return atoms_a0.Atom("faces", (track, direction), negated)
     kind, rest = body.split("(strip(")
     return atoms_a0.Atom(kind, rest[:-2], negated)

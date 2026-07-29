@@ -1,0 +1,1222 @@
+{
+  "exhibits": {
+    "available": true,
+    "fields": {
+      "certificate_owed": {
+        "E1_a0_no_button": false,
+        "E2_a2_holed": false,
+        "same": true
+      },
+      "cheap_layer_green": {
+        "E1_a0_no_button": true,
+        "E2_a2_holed": true,
+        "same": true
+      },
+      "directed_probes_scheduled": {
+        "E1_a0_no_button": 0,
+        "E2_a2_holed": 0,
+        "same": true
+      },
+      "distinguishes_proof_from_exhaustion": {
+        "E1_a0_no_button": false,
+        "E2_a2_holed": false,
+        "same": true
+      },
+      "loop_turns": {
+        "E1_a0_no_button": false,
+        "E2_a2_holed": false,
+        "same": true
+      },
+      "settled": {
+        "E1_a0_no_button": true,
+        "E2_a2_holed": true,
+        "same": true
+      },
+      "settled_by": {
+        "E1_a0_no_button": "search",
+        "E2_a2_holed": "search",
+        "same": true
+      },
+      "surprises_on_the_bus": {
+        "E1_a0_no_button": 0,
+        "E2_a2_holed": 0,
+        "same": true
+      },
+      "theorize_owed": {
+        "E1_a0_no_button": false,
+        "E2_a2_holed": false,
+        "same": true
+      },
+      "verdict": {
+        "E1_a0_no_button": "unsolvable",
+        "E2_a2_holed": "unsolvable",
+        "same": true
+      }
+    },
+    "ground_truth": {
+      "a0-no-button": {
+        "really_solvable": false,
+        "so_the_verdict_unsolvable_is": "TRUE",
+        "why": "the Button is absent, so the Door never opens and the goal cell is unreachable"
+      },
+      "a2-holed": {
+        "really_solvable": true,
+        "so_the_verdict_unsolvable_is": "FALSE",
+        "why": "the world has the teleport rule and the goal is reachable in 18 moves; the manual is missing it"
+      }
+    },
+    "indistinguishable": true,
+    "n_fields": 10,
+    "n_identical": 10,
+    "reading": "E1's world is really unsolvable and E2's is really solvable, so one of these two verdicts is true and the other is false. Every decision-carrying field this arm records is the same for both. Nothing here is a bug: the fields are identical because the cut removed the only machinery whose output would have differed -- the certificate obligation and the directed probes it schedules. That is P-6, and it is also the ticket's question answered: the arm believes the false theorem, and nothing in it notices."
+  },
+  "is_full_run": true,
+  "loop_turned_on": [],
+  "pre_registered_failures": [],
+  "pre_registered_holds": true,
+  "surprise_kinds_available_to_this_arm": 6,
+  "surprise_kinds_in_taxonomy": 7,
+  "upstream_files_changed": [
+    "proxy/var/spend_gate.jsonl"
+  ],
+  "upstream_trees_hashed": 512,
+  "upstream_unchanged": false,
+  "what": "ablation-arm end-to-end run (A4a step 3)",
+  "worlds": {
+    "a0-base": {
+      "beats": {
+        "certify": {
+          "layer_omitted": "expensive",
+          "layers_run": [
+            "cheap"
+          ],
+          "omitted_because": "constraint 6 is the cut; `certify_abl.expensive` raises ObligationCut and nothing calls it",
+          "pre_registered": {
+            "anomaly_kinds": [],
+            "expected_frames": 276,
+            "expected_pixels": 22356,
+            "failures": [],
+            "green": true,
+            "holds": true,
+            "observed_frames": 276,
+            "observed_pixels": 22356,
+            "source": "DESIGN.md §8 P-1"
+          },
+          "report": {
+            "anomalies": [],
+            "anomaly_kinds": [],
+            "frames": 276,
+            "green": true,
+            "pixels_checked": 22356,
+            "pixels_unexplained": 0,
+            "theory": "artifacts\\a0-base\\theory.py",
+            "trace": "raw_trace.jsonl",
+            "transitions": 275
+          }
+        },
+        "commit": {
+          "committed": true,
+          "execution_mismatches": [],
+          "why_not": null,
+          "world_reaches_goal": true
+        },
+        "compile": {
+          "domain.pddl": 1839,
+          "forms_emitted": 3,
+          "forms_in_full_arm": 4,
+          "omitted_because": "constraint 1's proof form is a proof obligation; this arm has none (DESIGN.md §4 C-1).  ArenaEscape goes with it (§6 shadow 3).",
+          "pddl_addressability_patch": true,
+          "pddl_cells_added": [
+            [
+              7,
+              3
+            ]
+          ],
+          "problem.json": 2566,
+          "problem.pddl": 4041,
+          "theory.lean": null,
+          "theory.md": 2580,
+          "theory.py": 8318
+        },
+        "loop_gate": {
+          "bus": {
+            "ablated": true,
+            "count": 0,
+            "kinds_available_to_this_arm": 6,
+            "kinds_in_taxonomy": 7,
+            "kinds_removed_by_the_cut": [
+              "proof_failure"
+            ],
+            "surprises": [],
+            "turns_the_loop": false
+          },
+          "derived_not_arranged": "the repair beats are not deleted from a step table; they are reached iff the bus is non-empty, and what can reach the bus is what the incision decides (DESIGN.md §7.2, §7.3)",
+          "rule": "Theoria.md:233 -- 有意外才回 theorize. One line, both arms: `if bus.turns_the_loop()`",
+          "turns_the_loop": false
+        },
+        "plan": {
+          "actions": [
+            "(push-right c5-1 c5-2)",
+            "(push-right c5-2 c5-3)",
+            "(push-up c5-3 c4-3)",
+            "(push-up c4-3 c3-3)",
+            "(press-left c3-3 c3-2 c4-5)",
+            "(push-down c3-3 c4-3)",
+            "(push-right c4-3 c4-4)",
+            "(push-right c4-4 c4-5)",
+            "(push-right c4-5 c4-6)",
+            "(push-right c4-6 c4-7)",
+            "(push-up c4-7 c3-7)",
+            "(push-up c3-7 c2-7)"
+          ],
+          "backend": "stub-bfs",
+          "directions": [
+            "right",
+            "right",
+            "up",
+            "up",
+            "left",
+            "down",
+            "right",
+            "right",
+            "right",
+            "right",
+            "up",
+            "up"
+          ],
+          "domain": "domain.pddl",
+          "execution_mismatches": [],
+          "green": true,
+          "length": 12,
+          "manual_reaches_goal": true,
+          "name": "a0-base",
+          "problem": "problem.pddl",
+          "settled_by": "witness",
+          "status": "SAT",
+          "world_reaches_goal": true
+        },
+        "theorize": {
+          "entered": false,
+          "owed": false,
+          "why_not_owed": "the cheap layer found no anomaly and the committed plan matched prediction. A silent loop here is the framework working as designed -- 无意外时 plan/commit 静默运转,免费 (Theoria.md:233)."
+        }
+      },
+      "exhibit": null,
+      "ledger": {
+        "outcome": "WIN",
+        "steps": 13,
+        "written": "ablation-arm/artifacts/a0-base/episode.jsonl"
+      },
+      "manual": "ablation-arm/theory/a0_base.dsl",
+      "manual_sha256": "f472a5a8123a8293cd3bc70ab2624cebd6b9786759e7f8c5459b2a75636b18b3",
+      "note": "the solvable A0 world. P-1/P-2 read accuracy off this run and P-5 reads its verdict.",
+      "settled": null,
+      "surprises": {
+        "ablated": true,
+        "count": 0,
+        "kinds_available_to_this_arm": 6,
+        "kinds_in_taxonomy": 7,
+        "kinds_removed_by_the_cut": [
+          "proof_failure"
+        ],
+        "surprises": [],
+        "turns_the_loop": false
+      },
+      "trace": "cold-start-a0/artifacts/raw_trace.jsonl",
+      "trace_sha256": "8597ef68d492ac208b3924e0a8e681a9de67fbe41d1857ced513194e6fbf885a",
+      "trace_source": "read, never re-explored: a different trace would be a second difference between the arms and P-1/P-2 could not be settled (DESIGN.md §5)",
+      "verdict": "solvable",
+      "world": "a0-base"
+    },
+    "a0-no-button": {
+      "beats": {
+        "certify": {
+          "layer_omitted": "expensive",
+          "layers_run": [
+            "cheap"
+          ],
+          "omitted_because": "constraint 6 is the cut; `certify_abl.expensive` raises ObligationCut and nothing calls it",
+          "pre_registered": {
+            "anomaly_kinds": [],
+            "expected_frames": null,
+            "expected_pixels": null,
+            "failures": [],
+            "green": true,
+            "holds": true,
+            "observed_frames": 112,
+            "observed_pixels": 9072,
+            "source": "DESIGN.md §8 P-1"
+          },
+          "report": {
+            "anomalies": [],
+            "anomaly_kinds": [],
+            "frames": 112,
+            "green": true,
+            "pixels_checked": 9072,
+            "pixels_unexplained": 0,
+            "theory": "artifacts\\a0-no-button\\theory.py",
+            "trace": "raw_trace_no_button.jsonl",
+            "transitions": 111
+          }
+        },
+        "commit": {
+          "committed": false,
+          "execution_mismatches": null,
+          "why_not": "the plan came back UNSAT, so there is nothing to commit",
+          "world_reaches_goal": null
+        },
+        "compile": {
+          "domain.pddl": 1510,
+          "forms_emitted": 3,
+          "forms_in_full_arm": 4,
+          "omitted_because": "constraint 1's proof form is a proof obligation; this arm has none (DESIGN.md §4 C-1).  ArenaEscape goes with it (§6 shadow 3).",
+          "pddl_addressability_patch": true,
+          "pddl_cells_added": [
+            [
+              7,
+              3
+            ]
+          ],
+          "problem.json": 2285,
+          "problem.pddl": 3927,
+          "theory.lean": null,
+          "theory.md": 1956,
+          "theory.py": 6594
+        },
+        "loop_gate": {
+          "bus": {
+            "ablated": true,
+            "count": 0,
+            "kinds_available_to_this_arm": 6,
+            "kinds_in_taxonomy": 7,
+            "kinds_removed_by_the_cut": [
+              "proof_failure"
+            ],
+            "surprises": [],
+            "turns_the_loop": false
+          },
+          "derived_not_arranged": "the repair beats are not deleted from a step table; they are reached iff the bus is non-empty, and what can reach the bus is what the incision decides (DESIGN.md §7.2, §7.3)",
+          "rule": "Theoria.md:233 -- 有意外才回 theorize. One line, both arms: `if bus.turns_the_loop()`",
+          "turns_the_loop": false
+        },
+        "plan": {
+          "backend": null,
+          "certificate": null,
+          "certificate_owed": false,
+          "directed_probes_scheduled": 0,
+          "distinguishes_proof_from_exhaustion": false,
+          "domain": "domain.pddl",
+          "full_arm_would": "owe a certificate (constraint 6) and probe the theorem's `depends:` clauses (constraint 7) before settling",
+          "name": "a0-no-button",
+          "note": "no plan exists under this manual.  This arm has no constraint 6: the verdict is final as it stands.  No certificate is owed, no invariant is sought, no directed probe is scheduled, and nothing is placed on the surprise bus -- so the loop does not turn.  DESIGN.md §7.3.",
+          "problem": "problem.pddl",
+          "settled": true,
+          "settled_by": "search",
+          "status": "UNSAT",
+          "unsat_evidence": "no plan exists for a0-no-button",
+          "verdict": "unsolvable"
+        },
+        "theorize": {
+          "entered": false,
+          "owed": false,
+          "why_not_owed": "the plan came back UNSAT and this arm settles it bare (C-4). No certificate is owed (constraint 6, cut), so there is no theorem, no `depends:` clause, and no directed probe (constraint 7, shadow 1) -- nothing exists that could put a refutation on the bus. THIS IS THE FINDING, not a quiet success: the verdict is archived unexamined whether it is true or false, and the arm cannot tell which."
+        }
+      },
+      "exhibit": "E1",
+      "ledger": {
+        "why": "no plan, so no episode: unsolvable",
+        "written": null
+      },
+      "manual": "ablation-arm/theory/a0_no_button.dsl",
+      "manual_sha256": "00a23468c56a7eddab65ef1e2df74990a5ff460875abc7ed5c1df7705d8425b7",
+      "note": "A0 with no Button: genuinely unsolvable, and the manual said so truthfully until the cut deleted `unsolvable_no_button`. The verdict should be right and the reason should be bare search.",
+      "settled": true,
+      "surprises": {
+        "ablated": true,
+        "count": 0,
+        "kinds_available_to_this_arm": 6,
+        "kinds_in_taxonomy": 7,
+        "kinds_removed_by_the_cut": [
+          "proof_failure"
+        ],
+        "surprises": [],
+        "turns_the_loop": false
+      },
+      "trace": "cold-start-a0/artifacts/raw_trace_no_button.jsonl",
+      "trace_sha256": "c443d29b8cf021c543cffa51106495b6baedf69e65d2ec4e9180b70d59682216",
+      "trace_source": "read, never re-explored: a different trace would be a second difference between the arms and P-1/P-2 could not be settled (DESIGN.md §5)",
+      "verdict": "unsolvable",
+      "world": "a0-no-button"
+    },
+    "a2-base": {
+      "beats": {
+        "certify": {
+          "layer_omitted": "expensive",
+          "layers_run": [
+            "cheap"
+          ],
+          "omitted_because": "constraint 6 is the cut; `certify_abl.expensive` raises ObligationCut and nothing calls it",
+          "pre_registered": {
+            "anomaly_kinds": [],
+            "expected_frames": 248,
+            "expected_pixels": 20088,
+            "failures": [],
+            "green": true,
+            "holds": true,
+            "observed_frames": 248,
+            "observed_pixels": 20088,
+            "source": "DESIGN.md §8 P-1"
+          },
+          "report": {
+            "anomalies": [],
+            "anomaly_kinds": [],
+            "frames": 248,
+            "green": true,
+            "pixels_checked": 20088,
+            "pixels_unexplained": 0,
+            "theory": "artifacts\\a2-base\\theory.py",
+            "trace": "raw_trace.jsonl",
+            "transitions": 247
+          }
+        },
+        "commit": {
+          "committed": true,
+          "execution_mismatches": [],
+          "why_not": null,
+          "world_reaches_goal": true
+        },
+        "compile": {
+          "domain.pddl": 1833,
+          "forms_emitted": 3,
+          "forms_in_full_arm": 4,
+          "omitted_because": "constraint 1's proof form is a proof obligation; this arm has none (DESIGN.md §4 C-1).  ArenaEscape goes with it (§6 shadow 3).",
+          "pddl_addressability_patch": true,
+          "pddl_cells_added": [
+            [
+              7,
+              4
+            ]
+          ],
+          "problem.json": 2536,
+          "problem.pddl": 3764,
+          "theory.lean": null,
+          "theory.md": 2582,
+          "theory.py": 8283
+        },
+        "loop_gate": {
+          "bus": {
+            "ablated": true,
+            "count": 0,
+            "kinds_available_to_this_arm": 6,
+            "kinds_in_taxonomy": 7,
+            "kinds_removed_by_the_cut": [
+              "proof_failure"
+            ],
+            "surprises": [],
+            "turns_the_loop": false
+          },
+          "derived_not_arranged": "the repair beats are not deleted from a step table; they are reached iff the bus is non-empty, and what can reach the bus is what the incision decides (DESIGN.md §7.2, §7.3)",
+          "rule": "Theoria.md:233 -- 有意外才回 theorize. One line, both arms: `if bus.turns_the_loop()`",
+          "turns_the_loop": false
+        },
+        "plan": {
+          "actions": [
+            "(push-up c5-1 c4-1)",
+            "(push-up c4-1 c3-1)",
+            "(push-up c3-1 c2-1)",
+            "(press-up c2-1 c1-1 c6-4)",
+            "(push-down c2-1 c3-1)",
+            "(push-down c3-1 c4-1)",
+            "(push-down c4-1 c5-1)",
+            "(push-right c5-1 c5-2)",
+            "(push-down c5-2 c6-2)",
+            "(push-right c6-2 c6-3)",
+            "(push-right c6-3 c6-4)",
+            "(teleport-down c6-4 c7-4 c7-6)",
+            "(push-right c7-6 c7-7)",
+            "(push-up c7-7 c6-7)",
+            "(push-up c6-7 c5-7)",
+            "(push-up c5-7 c4-7)",
+            "(push-up c4-7 c3-7)",
+            "(push-up c3-7 c2-7)"
+          ],
+          "backend": "stub-bfs",
+          "directions": [
+            "up",
+            "up",
+            "up",
+            "up",
+            "down",
+            "down",
+            "down",
+            "right",
+            "down",
+            "right",
+            "right",
+            "down",
+            "right",
+            "up",
+            "up",
+            "up",
+            "up",
+            "up"
+          ],
+          "domain": "domain.pddl",
+          "execution_mismatches": [],
+          "green": true,
+          "length": 18,
+          "manual_reaches_goal": true,
+          "name": "a2-base",
+          "problem": "problem.pddl",
+          "settled_by": "witness",
+          "status": "SAT",
+          "world_reaches_goal": true
+        },
+        "theorize": {
+          "entered": false,
+          "owed": false,
+          "why_not_owed": "the cheap layer found no anomaly and the committed plan matched prediction. A silent loop here is the framework working as designed -- 无意外时 plan/commit 静默运转,免费 (Theoria.md:233)."
+        }
+      },
+      "exhibit": null,
+      "ledger": {
+        "outcome": "WIN",
+        "steps": 19,
+        "written": "ablation-arm/artifacts/a2-base/episode.jsonl"
+      },
+      "manual": "ablation-arm/theory/a2_base.dsl",
+      "manual_sha256": "09e2ce1fc8d06eadc89a9ce8dad61488d90470186cabd9aad3d6074de458f80a",
+      "note": "the A2 world with its teleport rule intact.",
+      "settled": null,
+      "surprises": {
+        "ablated": true,
+        "count": 0,
+        "kinds_available_to_this_arm": 6,
+        "kinds_in_taxonomy": 7,
+        "kinds_removed_by_the_cut": [
+          "proof_failure"
+        ],
+        "surprises": [],
+        "turns_the_loop": false
+      },
+      "trace": "cold-start-a2/artifacts/raw_trace.jsonl",
+      "trace_sha256": "2cc840908260978e46a9ab5028bba0ed7e8b1788aa668d738e173ac18ef52116",
+      "trace_source": "read, never re-explored: a different trace would be a second difference between the arms and P-1/P-2 could not be settled (DESIGN.md §5)",
+      "verdict": "solvable",
+      "world": "a2-base"
+    },
+    "a2-charitable": {
+      "beats": {
+        "certify": {
+          "layer_omitted": "expensive",
+          "layers_run": [
+            "cheap"
+          ],
+          "omitted_because": "constraint 6 is the cut; `certify_abl.expensive` raises ObligationCut and nothing calls it",
+          "pre_registered": {
+            "anomaly_kinds": [],
+            "expected_frames": 248,
+            "expected_pixels": 20088,
+            "failures": [],
+            "green": true,
+            "holds": true,
+            "observed_frames": 248,
+            "observed_pixels": 20088,
+            "source": "DESIGN.md §8 P-1"
+          },
+          "report": {
+            "anomalies": [],
+            "anomaly_kinds": [],
+            "frames": 248,
+            "green": true,
+            "pixels_checked": 20088,
+            "pixels_unexplained": 0,
+            "theory": "artifacts\\a2-charitable\\theory.py",
+            "trace": "raw_trace.jsonl",
+            "transitions": 247
+          }
+        },
+        "commit": {
+          "committed": true,
+          "execution_mismatches": [],
+          "why_not": null,
+          "world_reaches_goal": true
+        },
+        "compile": {
+          "domain.pddl": 1833,
+          "forms_emitted": 3,
+          "forms_in_full_arm": 4,
+          "omitted_because": "constraint 1's proof form is a proof obligation; this arm has none (DESIGN.md §4 C-1).  ArenaEscape goes with it (§6 shadow 3).",
+          "pddl_addressability_patch": false,
+          "pddl_cells_added": [],
+          "problem.json": 2542,
+          "problem.pddl": 3770,
+          "theory.lean": null,
+          "theory.md": 2582,
+          "theory.py": 8283
+        },
+        "loop_gate": {
+          "bus": {
+            "ablated": true,
+            "count": 0,
+            "kinds_available_to_this_arm": 6,
+            "kinds_in_taxonomy": 7,
+            "kinds_removed_by_the_cut": [
+              "proof_failure"
+            ],
+            "surprises": [],
+            "turns_the_loop": false
+          },
+          "derived_not_arranged": "the repair beats are not deleted from a step table; they are reached iff the bus is non-empty, and what can reach the bus is what the incision decides (DESIGN.md §7.2, §7.3)",
+          "rule": "Theoria.md:233 -- 有意外才回 theorize. One line, both arms: `if bus.turns_the_loop()`",
+          "turns_the_loop": false
+        },
+        "plan": {
+          "actions": [
+            "(push-up c5-1 c4-1)",
+            "(push-up c4-1 c3-1)",
+            "(push-up c3-1 c2-1)",
+            "(press-up c2-1 c1-1 c6-4)",
+            "(push-down c2-1 c3-1)",
+            "(push-down c3-1 c4-1)",
+            "(push-down c4-1 c5-1)",
+            "(push-right c5-1 c5-2)",
+            "(push-down c5-2 c6-2)",
+            "(push-right c6-2 c6-3)",
+            "(push-right c6-3 c6-4)",
+            "(teleport-down c6-4 c7-4 c7-6)",
+            "(push-right c7-6 c7-7)",
+            "(push-up c7-7 c6-7)",
+            "(push-up c6-7 c5-7)",
+            "(push-up c5-7 c4-7)",
+            "(push-up c4-7 c3-7)",
+            "(push-up c3-7 c2-7)"
+          ],
+          "backend": "stub-bfs",
+          "directions": [
+            "up",
+            "up",
+            "up",
+            "up",
+            "down",
+            "down",
+            "down",
+            "right",
+            "down",
+            "right",
+            "right",
+            "down",
+            "right",
+            "up",
+            "up",
+            "up",
+            "up",
+            "up"
+          ],
+          "domain": "domain.pddl",
+          "execution_mismatches": [],
+          "green": true,
+          "length": 18,
+          "manual_reaches_goal": true,
+          "name": "a2-charitable",
+          "problem": "problem.pddl",
+          "settled_by": "witness",
+          "status": "SAT",
+          "world_reaches_goal": true
+        },
+        "theorize": {
+          "entered": false,
+          "owed": false,
+          "why_not_owed": "the cheap layer found no anomaly and the committed plan matched prediction. A silent loop here is the framework working as designed -- 无意外时 plan/commit 静默运转,免费 (Theoria.md:233)."
+        }
+      },
+      "exhibit": null,
+      "ledger": {
+        "outcome": "WIN",
+        "steps": 19,
+        "written": "ablation-arm/artifacts/a2-charitable/episode.jsonl"
+      },
+      "manual": "ablation-arm/theory/a2_base.dsl",
+      "manual_sha256": "09e2ce1fc8d06eadc89a9ce8dad61488d90470186cabd9aad3d6074de458f80a",
+      "note": "the CHARITABLE variant, and the only world here whose manual is not at fault: `a2_base`, teleport rule present, steps correct, cheap layer green over all 248 frames, compiled with D-A2-006's workaround switched off (`addressable=False`). DESIGN.md §E3 expected the PDDL backend to fail to ground `teleport-down`'s `?p - markedcell` and the planner to return UNSAT on a manual with nothing wrong with it. **It does not.** The planner returns SAT with the workaround on and off, and the emitted PDDL is byte-identical either way: the gap D-A2-006 described was closed upstream, so `pddl_addressable` is now dead code on this input. This world is therefore E3's *material* and not E3, which is why it carries no exhibit tag -- `exhibits/e3_charitable.py` owns the finding and reports the designed construction as no longer constructible.",
+      "settled": null,
+      "surprises": {
+        "ablated": true,
+        "count": 0,
+        "kinds_available_to_this_arm": 6,
+        "kinds_in_taxonomy": 7,
+        "kinds_removed_by_the_cut": [
+          "proof_failure"
+        ],
+        "surprises": [],
+        "turns_the_loop": false
+      },
+      "trace": "cold-start-a2/artifacts/raw_trace.jsonl",
+      "trace_sha256": "2cc840908260978e46a9ab5028bba0ed7e8b1788aa668d738e173ac18ef52116",
+      "trace_source": "read, never re-explored: a different trace would be a second difference between the arms and P-1/P-2 could not be settled (DESIGN.md §5)",
+      "verdict": "solvable",
+      "world": "a2-charitable"
+    },
+    "a2-holed": {
+      "beats": {
+        "certify": {
+          "layer_omitted": "expensive",
+          "layers_run": [
+            "cheap"
+          ],
+          "omitted_because": "constraint 6 is the cut; `certify_abl.expensive` raises ObligationCut and nothing calls it",
+          "pre_registered": {
+            "anomaly_kinds": [],
+            "expected_frames": 184,
+            "expected_pixels": 14904,
+            "failures": [],
+            "green": true,
+            "holds": true,
+            "observed_frames": 184,
+            "observed_pixels": 14904,
+            "source": "DESIGN.md §8 P-1"
+          },
+          "report": {
+            "anomalies": [],
+            "anomaly_kinds": [],
+            "frames": 184,
+            "green": true,
+            "pixels_checked": 14904,
+            "pixels_unexplained": 0,
+            "theory": "artifacts\\a2-holed\\theory.py",
+            "trace": "history_trace.jsonl",
+            "transitions": 183
+          },
+          "sweep": {
+            "reaches_the_bus": false,
+            "report": {
+              "anomalies": [
+                {
+                  "cell": [
+                    6,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 184,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 184,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 184,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 185,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 185,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 185,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 186,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 186,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 186,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 187,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 187,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 187,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 188,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 188,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 188,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 189,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 189,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 189,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    5,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 190,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 190,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 190,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 191,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 191,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 191,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    5,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 192,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 192,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 192,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    5,
+                    2
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 193,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 193,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    6,
+                    6
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 193,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    5,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 194,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    6,
+                    7
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 194,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    6,
+                    7
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 194,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    3
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 195,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 195,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 195,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    6,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 196,
+                  "world": 0
+                },
+                {
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 0,
+                  "t": 196,
+                  "world": 6
+                },
+                {
+                  "board": 0,
+                  "cell": [
+                    7,
+                    7
+                  ],
+                  "kind": "unowned_pixel",
+                  "t": 196,
+                  "world": 6
+                },
+                {
+                  "cell": [
+                    5,
+                    4
+                  ],
+                  "kind": "render_mismatch",
+                  "manual": 6,
+                  "t": 197,
+                  "world": 0
+                },
+                {
+                  "kind": "goal_mismatch",
+                  "manual": false,
+                  "t": 230,
+                  "world": true
+                },
+                {
+                  "kind": "goal_mismatch",
+                  "manual": false,
+                  "t": 233,
+                  "world": true
+                },
+                {
+                  "kind": "goal_mismatch",
+                  "manual": false,
+                  "t": 240,
+                  "world": true
+                },
+                {
+                  "kind": "goal_mismatch",
+                  "manual": false,
+                  "t": 241,
+                  "world": true
+                }
+              ],
+              "anomaly_kinds": [
+                "goal_mismatch",
+                "render_mismatch",
+                "unowned_pixel"
+              ],
+              "frames": 248,
+              "green": false,
+              "pixels_checked": 20088,
+              "pixels_unexplained": 128,
+              "theory": "artifacts\\a2-holed\\theory.py",
+              "trace": "raw_trace.jsonl",
+              "transitions": 247
+            },
+            "trace": "cold-start-a2/artifacts/raw_trace.jsonl",
+            "trace_sha256": "2cc840908260978e46a9ab5028bba0ed7e8b1788aa668d738e173ac18ef52116",
+            "why_not": "this arm never had this record. Its manual was theorized from `cold-start-a2/artifacts/history_trace.jsonl`, and a surprise the arm could not have had is not a surprise -- putting it on the bus would turn the loop on the referee's knowledge and destroy the exhibit. It is reported because the size of the gap between the two readings IS the measurement: green on the evidence, red on the sweep."
+          }
+        },
+        "commit": {
+          "committed": false,
+          "execution_mismatches": null,
+          "why_not": "the plan came back UNSAT, so there is nothing to commit",
+          "world_reaches_goal": null
+        },
+        "compile": {
+          "domain.pddl": 1611,
+          "forms_emitted": 3,
+          "forms_in_full_arm": 4,
+          "omitted_because": "constraint 1's proof form is a proof obligation; this arm has none (DESIGN.md §4 C-1).  ArenaEscape goes with it (§6 shadow 3).",
+          "pddl_addressability_patch": true,
+          "pddl_cells_added": [],
+          "problem.json": 2476,
+          "problem.pddl": 3672,
+          "theory.lean": null,
+          "theory.md": 2363,
+          "theory.py": 7831
+        },
+        "loop_gate": {
+          "bus": {
+            "ablated": true,
+            "count": 0,
+            "kinds_available_to_this_arm": 6,
+            "kinds_in_taxonomy": 7,
+            "kinds_removed_by_the_cut": [
+              "proof_failure"
+            ],
+            "surprises": [],
+            "turns_the_loop": false
+          },
+          "derived_not_arranged": "the repair beats are not deleted from a step table; they are reached iff the bus is non-empty, and what can reach the bus is what the incision decides (DESIGN.md §7.2, §7.3)",
+          "rule": "Theoria.md:233 -- 有意外才回 theorize. One line, both arms: `if bus.turns_the_loop()`",
+          "turns_the_loop": false
+        },
+        "plan": {
+          "backend": null,
+          "certificate": null,
+          "certificate_owed": false,
+          "directed_probes_scheduled": 0,
+          "distinguishes_proof_from_exhaustion": false,
+          "domain": "domain.pddl",
+          "full_arm_would": "owe a certificate (constraint 6) and probe the theorem's `depends:` clauses (constraint 7) before settling",
+          "name": "a2-holed",
+          "note": "no plan exists under this manual.  This arm has no constraint 6: the verdict is final as it stands.  No certificate is owed, no invariant is sought, no directed probe is scheduled, and nothing is placed on the surprise bus -- so the loop does not turn.  DESIGN.md §7.3.",
+          "problem": "problem.pddl",
+          "settled": true,
+          "settled_by": "search",
+          "status": "UNSAT",
+          "unsat_evidence": "no plan exists for a2-holed",
+          "verdict": "unsolvable"
+        },
+        "theorize": {
+          "entered": false,
+          "owed": false,
+          "why_not_owed": "the plan came back UNSAT and this arm settles it bare (C-4). No certificate is owed (constraint 6, cut), so there is no theorem, no `depends:` clause, and no directed probe (constraint 7, shadow 1) -- nothing exists that could put a refutation on the bus. THIS IS THE FINDING, not a quiet success: the verdict is archived unexamined whether it is true or false, and the arm cannot tell which."
+        }
+      },
+      "exhibit": "E2",
+      "ledger": {
+        "why": "no plan, so no episode: unsolvable",
+        "written": null
+      },
+      "manual": "ablation-arm/theory/a2_holed.dsl",
+      "manual_sha256": "3c12f651f4022702ce3572fa0577aae324b40ea9a9bf79474c73700f749fe9bb",
+      "note": "**the ticket's exhibit**: the manual is missing the teleport rule, so it derives `unsolvable` for a world that is solvable. Its evidence is `history_trace.jsonl`, the record that stops at the portal transition -- on which the cheap layer is green, so the hole is invisible to everything this arm still has. The world passed to `commit` is the REAL one; `a2_abl.manual_world()` is deliberately not used, because the point is that the arm never finds out.",
+      "settled": true,
+      "surprises": {
+        "ablated": true,
+        "count": 0,
+        "kinds_available_to_this_arm": 6,
+        "kinds_in_taxonomy": 7,
+        "kinds_removed_by_the_cut": [
+          "proof_failure"
+        ],
+        "surprises": [],
+        "turns_the_loop": false
+      },
+      "trace": "cold-start-a2/artifacts/history_trace.jsonl",
+      "trace_sha256": "dcee955f2359775b67593d438352c92a37e9362592856785e80b105f10b143fd",
+      "trace_source": "read, never re-explored: a different trace would be a second difference between the arms and P-1/P-2 could not be settled (DESIGN.md §5)",
+      "verdict": "unsolvable",
+      "world": "a2-holed"
+    }
+  }
+}

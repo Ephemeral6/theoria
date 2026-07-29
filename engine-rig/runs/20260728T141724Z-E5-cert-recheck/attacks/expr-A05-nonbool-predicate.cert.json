@@ -1,0 +1,7 @@
+{
+  "schema": "engine-rig/recheck/certificate-v1",
+  "name": "A05-nonbool-predicate",
+  "kind": "inductive_invariant",
+  "claim": "unsolvable",
+  "predicate": ["if", ["=", ["var", "pos0"], ["lit", 0]], ["lit", true], ["lit", 7]]
+}

@@ -1,0 +1,15 @@
+{
+  "prompt_id": "A3-campaign-devpile",
+  "branch": "agent/a3-campaign-devpile",
+  "base_commit": "6dccf95a906325aef44d4057cd49491e9d9e4e44",
+  "utc": "2026-07-28T23:39:00Z",
+  "worker": "W-1640",
+  "inherits_from": {
+    "holder": "RES-1",
+    "died": "2026-07-29T02:0xZ (session quota)",
+    "inherited_as_commit": "4565c46",
+    "note": "RES-1 left its campaign work uncommitted in the worktree; committed verbatim before any edit so this run's diff is attributable."
+  },
+  "clock_note": "Local time here is UTC+08. True UTC at run start is 2026-07-28T23:39Z, NOT 2026-07-29T07:39Z. Several sibling run dirs are future-dated because a prior session stamped local time as UTC (see master commit bac8282, 'six runs are dated in the future'). This dir uses true UTC.",
+  "files": []
+}

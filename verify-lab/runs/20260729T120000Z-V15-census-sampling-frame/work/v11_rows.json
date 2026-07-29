@@ -1,0 +1,1551 @@
+[
+ {
+  "i": 0,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`engine-rig/tools/validate_candidates.py`",
+  "paths": [
+   "engine-rig/tools/validate_candidates.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 1,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`engine-rig/tools/run_all.py`",
+  "paths": [
+   "engine-rig/tools/run_all.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(实测/读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 2,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`engine-rig/bench/__main__.py`（`python -m bench`）",
+  "paths": [
+   "engine-rig/bench/__main__.py",
+   "python -m bench"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 3,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`engine-rig/tools/p13_fd_dividend.py`",
+  "paths": [
+   "engine-rig/tools/p13_fd_dividend.py"
+  ],
+  "can_red": "部分(实测)",
+  "has_negctl": "否",
+  "exit_honest": "否(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 4,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`engine-rig` `python -m pytest`（150+ 例）",
+  "paths": [
+   "engine-rig",
+   "python -m pytest"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 5,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`engine-rig/fixtures/generate_all.py`（+cart_world/pair_flip/peg4/sokoban）",
+  "paths": [
+   "engine-rig/fixtures/generate_all.py"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "不适用",
+  "exit_honest": "不适用",
+  "strength": "读码"
+ },
+ {
+  "i": 6,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/tools/verify_c4.py`",
+  "paths": [
+   "theory-compiler/tools/verify_c4.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 7,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/tools/verify_c8.py`",
+  "paths": [
+   "theory-compiler/tools/verify_c8.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 8,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/runs/20260728T102343Z-c7/verify.sh`",
+  "paths": [
+   "theory-compiler/runs/20260728T102343Z-c7/verify.sh"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 9,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/tools/probe_mentions.py`",
+  "paths": [
+   "theory-compiler/tools/probe_mentions.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 10,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/tools/validate_candidates_v02.py`",
+  "paths": [
+   "theory-compiler/tools/validate_candidates_v02.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 11,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/tools/refresh_manifest.py --check`",
+  "paths": [
+   "theory-compiler/tools/refresh_manifest.py --check"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "否",
+  "exit_honest": "是(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 12,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/tools/transcribe_deadlock_certificates.py`",
+  "paths": [
+   "theory-compiler/tools/transcribe_deadlock_certificates.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 13,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/tools/build_handover_packages.py --check`",
+  "paths": [
+   "theory-compiler/tools/build_handover_packages.py --check"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 14,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/tools/handover_exam.py mark`",
+  "paths": [
+   "theory-compiler/tools/handover_exam.py mark"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "否",
+  "exit_honest": "是(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 15,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler` `python -m pytest`（364 例）",
+  "paths": [
+   "theory-compiler",
+   "python -m pytest"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 16,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/conftest.py`（`THEORIA_REQUIRE_LEAN=1`）",
+  "paths": [
+   "theory-compiler/conftest.py",
+   "THEORIA_REQUIRE_LEAN=1"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "否",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 17,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/tools/build_deadlock_lean.py`",
+  "paths": [
+   "theory-compiler/tools/build_deadlock_lean.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 18,
+  "territory": "engine-rig/theory-compiler",
+  "entry_raw": "`theory-compiler/src/theory_compiler/handover.py`（`python -m theory_compiler.handover`）",
+  "paths": [
+   "theory-compiler/src/theory_compiler/handover.py",
+   "python -m theory_compiler.handover"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "部分(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 19,
+  "territory": "exam/battery",
+  "entry_raw": "`exam/verify.py`（五阶段总闸）",
+  "paths": [
+   "exam/verify.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 20,
+  "territory": "exam/battery",
+  "entry_raw": "`exam/tools/build_papers.py`（漏题闸）",
+  "paths": [
+   "exam/tools/build_papers.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测+读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 21,
+  "territory": "exam/battery",
+  "entry_raw": "`exam/leakage.py::check_paper`（四检合一）",
+  "paths": [
+   "exam/leakage.py::check_paper"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 22,
+  "territory": "exam/battery",
+  "entry_raw": "`exam/tools/run_exam.py --calibrate`（判卷器标定闸）",
+  "paths": [
+   "exam/tools/run_exam.py --calibrate"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 23,
+  "territory": "exam/battery",
+  "entry_raw": "`exam/grading/calibration.py::assert_calibrated`",
+  "paths": [
+   "exam/grading/calibration.py::assert_calibrated"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 24,
+  "territory": "exam/battery",
+  "entry_raw": "`exam/tools/run_selftest.py`（变异体+故障注入）",
+  "paths": [
+   "exam/tools/run_selftest.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(实测+读码)",
+  "exit_honest": "部分(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 25,
+  "territory": "exam/battery",
+  "entry_raw": "`exam/grading/selftest.py`（变异体电池 / FAULTS）",
+  "paths": [
+   "exam/grading/selftest.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 26,
+  "territory": "exam/battery",
+  "entry_raw": "`exam/tools/run_matrix.py`（20 世界判卷矩阵）",
+  "paths": [
+   "exam/tools/run_matrix.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "部分(实测)",
+  "exit_honest": "否(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 27,
+  "territory": "exam/battery",
+  "entry_raw": "`exam/guard.py`（零网络 / 封存堆 / 合成世界）",
+  "paths": [
+   "exam/guard.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 28,
+  "territory": "exam/battery",
+  "entry_raw": "`exam/tools/archive_run.py`",
+  "paths": [
+   "exam/tools/archive_run.py"
+  ],
+  "can_red": "部分(读码)",
+  "has_negctl": "否",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 29,
+  "territory": "exam/battery",
+  "entry_raw": "`pytest exam/tests`（287 项）",
+  "paths": [
+   "pytest exam/tests"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 30,
+  "territory": "exam/battery",
+  "entry_raw": "`exam/verify.py::_determinism`（两解释器字节一致）",
+  "paths": [
+   "exam/verify.py::_determinism"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "否",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 31,
+  "territory": "exam/battery",
+  "entry_raw": "`battery/run_battery.py`",
+  "paths": [
+   "battery/run_battery.py"
+  ],
+  "can_red": "部分(实测)",
+  "has_negctl": "部分(实测)",
+  "exit_honest": "部分(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 32,
+  "territory": "exam/battery",
+  "entry_raw": "`battery/guard.py`（封存堆 + 切分完整性）",
+  "paths": [
+   "battery/guard.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测+读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 33,
+  "territory": "exam/battery",
+  "entry_raw": "`pytest battery/tests`（214 项）",
+  "paths": [
+   "pytest battery/tests"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 34,
+  "territory": "exam/battery",
+  "entry_raw": "`battery/docs.py`（`__main__`）",
+  "paths": [
+   "battery/docs.py",
+   "__main__"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "不适用",
+  "exit_honest": "不适用",
+  "strength": "读码"
+ },
+ {
+  "i": 35,
+  "territory": "exam/battery",
+  "entry_raw": "`battery/metrics/*`（判分正确性）",
+  "paths": [
+   "battery/metrics/*"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "不适用",
+  "strength": "读码"
+ },
+ {
+  "i": 36,
+  "territory": "exam/battery",
+  "entry_raw": "`battery/audit/{gaming,validation,discriminate,contrast,redundancy}.py`",
+  "paths": [
+   "battery/audit/{gaming,validation,discriminate,contrast,redundancy}.py"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "不适用",
+  "exit_honest": "不适用",
+  "strength": "读码"
+ },
+ {
+  "i": 37,
+  "territory": "exam/battery",
+  "entry_raw": "battery 的「一条命令总闸」",
+  "paths": [],
+  "can_red": "—",
+  "has_negctl": "—",
+  "exit_honest": "—",
+  "strength": "—"
+ },
+ {
+  "i": 38,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`worldgen/verify.py`",
+  "paths": [
+   "worldgen/verify.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "否(实测)",
+  "exit_honest": "部分(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 39,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`worldgen/build.py --check`（出厂闸 `gate_failures`）",
+  "paths": [
+   "worldgen/build.py --check",
+   "gate_failures"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 40,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`worldgen/build.py::check_determinism`",
+  "paths": [
+   "worldgen/build.py::check_determinism"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 41,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`worldgen/mutate.py::mutation_gate_failures`（MUTATION GATE）",
+  "paths": [
+   "worldgen/mutate.py::mutation_gate_failures"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 42,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`worldgen/qc/run_qc.py`（三世界 QC 闸）",
+  "paths": [
+   "worldgen/qc/run_qc.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 43,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`worldgen/qc/run_qc.py --mutants`（预注册变异体套件）",
+  "paths": [
+   "worldgen/qc/run_qc.py --mutants"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "部分(实测)",
+  "exit_honest": "是(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 44,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`worldgen/tests` pytest（425 项，verify 的 gating 阶段）",
+  "paths": [
+   "worldgen/tests"
+  ],
+  "can_red": "是(实测，全绿)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是",
+  "strength": "混合"
+ },
+ {
+  "i": 45,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`worldgen/qc/diagnose_miner.py`",
+  "paths": [
+   "worldgen/qc/diagnose_miner.py"
+  ],
+  "can_red": "—",
+  "has_negctl": "—",
+  "exit_honest": "—",
+  "strength": "—"
+ },
+ {
+  "i": 46,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`fuzzlab/verify.py`",
+  "paths": [
+   "fuzzlab/verify.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 47,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`fuzzlab/campaign.py`",
+  "paths": [
+   "fuzzlab/campaign.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "部分(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 48,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`fuzzlab/tests/test_battery.py::test_short_campaign_finds_no_violation`",
+  "paths": [
+   "fuzzlab/tests/test_battery.py::test_short_campaign_finds_no_violation"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "否(实测+读码)",
+  "exit_honest": "是",
+  "strength": "混合"
+ },
+ {
+  "i": 49,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`fuzzlab/tests/test_oracles.py`",
+  "paths": [
+   "fuzzlab/tests/test_oracles.py"
+  ],
+  "can_red": "是",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是",
+  "strength": "读码"
+ },
+ {
+  "i": 50,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`fuzzlab/tests/test_battery.py::test_distinct_indices_give_distinct_worlds`",
+  "paths": [
+   "fuzzlab/tests/test_battery.py::test_distinct_indices_give_distinct_worlds"
+  ],
+  "can_red": "是",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是",
+  "strength": "读码"
+ },
+ {
+  "i": 51,
+  "territory": "worldgen/fuzzlab",
+  "entry_raw": "`fuzzlab/minimize.py`",
+  "paths": [
+   "fuzzlab/minimize.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "否",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 52,
+  "territory": "figures/release",
+  "entry_raw": "`figures/verify.sh`",
+  "paths": [
+   "figures/verify.sh"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "部分(实测)",
+  "exit_honest": "是(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 53,
+  "territory": "figures/release",
+  "entry_raw": "`figures/build_all.py`",
+  "paths": [
+   "figures/build_all.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 54,
+  "territory": "figures/release",
+  "entry_raw": "`figures/check_coverage.py`（默认）",
+  "paths": [
+   "figures/check_coverage.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 55,
+  "territory": "figures/release",
+  "entry_raw": "`figures/check_coverage.py --self-test`",
+  "paths": [
+   "figures/check_coverage.py --self-test"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "是(实测，它本身就是负控)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 56,
+  "territory": "figures/release",
+  "entry_raw": "`figures/manifest.py`",
+  "paths": [
+   "figures/manifest.py"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "否",
+  "exit_honest": "不适用",
+  "strength": "读码"
+ },
+ {
+  "i": 57,
+  "territory": "figures/release",
+  "entry_raw": "`release/check_redlines.py`（`--mode generate` 默认 / `verify`）",
+  "paths": [
+   "release/check_redlines.py",
+   "--mode generate",
+   "verify"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(读码+实测绿路径)",
+  "strength": "混合"
+ },
+ {
+  "i": 58,
+  "territory": "figures/release",
+  "entry_raw": "`release/enumerate.py --dry-run`",
+  "paths": [
+   "release/enumerate.py --dry-run"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(读码；本树未触发红路径)",
+  "strength": "读码"
+ },
+ {
+  "i": 59,
+  "territory": "figures/release",
+  "entry_raw": "`release/checklist.py --dry-run`",
+  "paths": [
+   "release/checklist.py --dry-run"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "否",
+  "exit_honest": "不适用（永远绿）",
+  "strength": "读码"
+ },
+ {
+  "i": 60,
+  "territory": "figures/release",
+  "entry_raw": "`release/reproduce.py`（默认 / `--all` / `--list` / `--dry-run`）",
+  "paths": [
+   "release/reproduce.py",
+   "--all",
+   "--list",
+   "--dry-run"
+  ],
+  "can_red": "否(实测)",
+  "has_negctl": "否",
+  "exit_honest": "否(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 61,
+  "territory": "figures/release",
+  "entry_raw": "`release/bundle.py --check`",
+  "paths": [
+   "release/bundle.py --check"
+  ],
+  "can_red": "不适用",
+  "has_negctl": "不适用",
+  "exit_honest": "不适用",
+  "strength": "—"
+ },
+ {
+  "i": 62,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/guard.py` SealedPileGuard（封存护栏）",
+  "paths": [
+   "proxy/guard.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "不适用（库；代理侧映射 403）",
+  "strength": "实测"
+ },
+ {
+  "i": 63,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/guard.py` `load_piles` 切分完整性（钉死 sha256）",
+  "paths": [
+   "proxy/guard.py",
+   "load_piles"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "不适用（raise `PilesIntegrityError`）",
+  "strength": "实测"
+ },
+ {
+  "i": 64,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/env_proxy.py` 请求闸（403 + `guard_block` + incident + 空帧 env_step）",
+  "paths": [
+   "proxy/env_proxy.py",
+   "guard_block"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "不适用（HTTP 403，非进程）",
+  "strength": "实测"
+ },
+ {
+  "i": 65,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/model_proxy.py` 提示词里的封存 ID",
+  "paths": [
+   "proxy/model_proxy.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "不适用",
+  "strength": "实测"
+ },
+ {
+  "i": 66,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/mock/arm_mock.py` `assert_sealed`（arm 持凭证即拒启动）",
+  "paths": [
+   "proxy/mock/arm_mock.py",
+   "assert_sealed"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "不适用（raise `NotSealedError`）",
+  "strength": "实测"
+ },
+ {
+  "i": 67,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/redact.py` Vault / `scrub_outbound`（密钥密封）",
+  "paths": [
+   "proxy/redact.py",
+   "scrub_outbound"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "不适用",
+  "strength": "实测"
+ },
+ {
+  "i": 68,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/ledger.py` + `proxy/canon.py` 写入端拒绝（非规范字段 / 成本禁令 / frame_hash）",
+  "paths": [
+   "proxy/ledger.py",
+   "proxy/canon.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "不适用（raise，且不落盘）",
+  "strength": "实测"
+ },
+ {
+  "i": 69,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/tools/validate_ledger.py`（账本校验）",
+  "paths": [
+   "proxy/tools/validate_ledger.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 70,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/reconcile.py`（对账义务）",
+  "paths": [
+   "proxy/reconcile.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "部分(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 71,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/scoring/`（冻结计分器 S-0..S-12 + 自哈希）",
+  "paths": [
+   "proxy/scoring/"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 72,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/replay.py`（replay 审计）",
+  "paths": [
+   "proxy/replay.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 73,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/tools/replay_spotcheck.py`",
+  "paths": [
+   "proxy/tools/replay_spotcheck.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 74,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/spend_gate.py` SpendGate（花费闸 / 配额闸，reserve+check+record）",
+  "paths": [
+   "proxy/spend_gate.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "不适用（raise `SpendGateTripped` / `Unavailable` / `NoReservation`）",
+  "strength": "实测"
+ },
+ {
+  "i": 75,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/spend_gate.py` `__main__`（池子报表）",
+  "paths": [
+   "proxy/spend_gate.py",
+   "__main__"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "否",
+  "exit_honest": "否",
+  "strength": "读码"
+ },
+ {
+  "i": 76,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/verify_spend.sh`",
+  "paths": [
+   "proxy/verify_spend.sh"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 77,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/tools/upgrade_ledger.py`",
+  "paths": [
+   "proxy/tools/upgrade_ledger.py"
+  ],
+  "can_red": "部分(读码)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "部分",
+  "strength": "读码"
+ },
+ {
+  "i": 78,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`proxy/cost.py`、`proxy/runner.py`",
+  "paths": [
+   "proxy/cost.py",
+   "proxy/runner.py"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "不适用",
+  "exit_honest": "不适用（非闸门）",
+  "strength": "读码"
+ },
+ {
+  "i": 79,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/precheck.py` `assert_playable`（封存护栏）",
+  "paths": [
+   "arc-recon/precheck.py",
+   "assert_playable"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 80,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/canary.py` `compare`（漂移仪表）",
+  "paths": [
+   "arc-recon/canary.py",
+   "compare"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "不适用（库）",
+  "strength": "实测"
+ },
+ {
+  "i": 81,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/canary.py check-freeze`",
+  "paths": [
+   "arc-recon/canary.py check-freeze"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 82,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/canary.py` `INVOCATION_CAP`（配额闸）",
+  "paths": [
+   "arc-recon/canary.py",
+   "INVOCATION_CAP"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 83,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/canary_schedule.py`（排程 + 闸门映射）",
+  "paths": [
+   "arc-recon/canary_schedule.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "是(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 84,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/contamination.py` `verify_piles_hash`",
+  "paths": [
+   "arc-recon/contamination.py",
+   "verify_piles_hash"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "部分（只在好文件上跑通）",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 85,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/contamination.py` `sealed_api_contacts`（封存接触审计）",
+  "paths": [
+   "arc-recon/contamination.py",
+   "sealed_api_contacts"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "否(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 86,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/contamination.py` `claim_set` 的 `needs_adjudication`",
+  "paths": [
+   "arc-recon/contamination.py",
+   "claim_set",
+   "needs_adjudication"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "否(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 87,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/verify.sh`（arc-recon 绿灯）",
+  "paths": [
+   "arc-recon/verify.sh"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "部分",
+  "exit_honest": "部分(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 88,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/redact_ledger.py --check`（凭证/cookie 值落盘检查）",
+  "paths": [
+   "arc-recon/redact_ledger.py --check"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "否",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 89,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/client.py` 密钥密封（`_record` 里 `X-API-Key`→`<redacted>`）",
+  "paths": [
+   "arc-recon/client.py",
+   "_record",
+   "X-API-Key",
+   "<redacted>"
+  ],
+  "can_red": "部分(读码)",
+  "has_negctl": "否",
+  "exit_honest": "不适用",
+  "strength": "读码"
+ },
+ {
+  "i": 90,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/client.py` `load_api_key`（缺失即拒）",
+  "paths": [
+   "arc-recon/client.py",
+   "load_api_key"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(实测)",
+  "exit_honest": "不适用（raise）",
+  "strength": "实测"
+ },
+ {
+  "i": 91,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/cut_piles.py`（拒绝二次切分）",
+  "paths": [
+   "arc-recon/cut_piles.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "否",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 92,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/precheck.py` `main`",
+  "paths": [
+   "arc-recon/precheck.py",
+   "main"
+  ],
+  "can_red": "部分(读码)",
+  "has_negctl": "不适用",
+  "exit_honest": "否(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 93,
+  "territory": "proxy/arc-recon",
+  "entry_raw": "`arc-recon/recon.py`、`arc-recon/probe_stickiness.py`、`arc-recon/precheck_resume.py`",
+  "paths": [
+   "arc-recon/recon.py",
+   "arc-recon/probe_stickiness.py",
+   "arc-recon/precheck_resume.py"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "不适用",
+  "exit_honest": "不适用（采集脚本，非闸门）",
+  "strength": "读码"
+ },
+ {
+  "i": 94,
+  "territory": "arms",
+  "entry_raw": "`theoria-arm/harness/run.py`（`python -m harness.run`）",
+  "paths": [
+   "theoria-arm/harness/run.py",
+   "python -m harness.run"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "否(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 95,
+  "territory": "arms",
+  "entry_raw": "`theoria-arm/armtools/archive.py`（收工闸：对账 + 约束 8 + 成本双算 + 封存检查）",
+  "paths": [
+   "theoria-arm/armtools/archive.py"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "否(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 96,
+  "territory": "arms",
+  "entry_raw": "`theoria-arm/armtools/preflight.py`",
+  "paths": [
+   "theoria-arm/armtools/preflight.py"
+  ],
+  "can_red": "是(读码)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 97,
+  "territory": "arms",
+  "entry_raw": "`theoria-arm/armtools/salvage.py` / `theoria-arm/armtools/timeline.py`",
+  "paths": [
+   "theoria-arm/armtools/salvage.py",
+   "theoria-arm/armtools/timeline.py"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "否",
+  "exit_honest": "否(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 98,
+  "territory": "arms",
+  "entry_raw": "`theoria-arm` pytest（`tests/test_arm.py`，51 项，纯离线）",
+  "paths": [
+   "theoria-arm",
+   "tests/test_arm.py"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 99,
+  "territory": "arms",
+  "entry_raw": "`ablation-arm/verify.sh` → `ablation-arm/verify.py`（完工闸）",
+  "paths": [
+   "ablation-arm/verify.sh",
+   "ablation-arm/verify.py"
+  ],
+  "can_red": "是(实测走绿；红路径读码 `verify.py:361`)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码+实测绿)",
+  "strength": "混合"
+ },
+ {
+  "i": 100,
+  "territory": "arms",
+  "entry_raw": "`ablation-arm/build_theory.py --check`（生成物 vs 上游重切）",
+  "paths": [
+   "ablation-arm/build_theory.py --check"
+  ],
+  "can_red": "是(读码 `build_theory.py:340`)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 101,
+  "territory": "arms",
+  "entry_raw": "`ablation-arm/run_arm.py`（预注册像素数 + 上游只读钉）",
+  "paths": [
+   "ablation-arm/run_arm.py"
+  ],
+  "can_red": "是(读码 `run_arm.py:714`)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 102,
+  "territory": "arms",
+  "entry_raw": "`ablation-arm/run_arm.py --twice`（两轮复跑比对）",
+  "paths": [
+   "ablation-arm/run_arm.py --twice"
+  ],
+  "can_red": "是(读码 `run_arm.py:678`)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 103,
+  "territory": "arms",
+  "entry_raw": "`ablation-arm/run_exhibits.py`",
+  "paths": [
+   "ablation-arm/run_exhibits.py"
+  ],
+  "can_red": "否(实测)",
+  "has_negctl": "是(读码，双向钉住)",
+  "exit_honest": "否(实测，且是刻意的)",
+  "strength": "混合"
+ },
+ {
+  "i": 104,
+  "territory": "arms",
+  "entry_raw": "`baseline-arms/harness/audit_cells.py`（逐格账本审计 + 封存检查）",
+  "paths": [
+   "baseline-arms/harness/audit_cells.py"
+  ],
+  "can_red": "是(读码 `audit_cells.py:236` / `:280`)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(实测走绿+读码)",
+  "strength": "混合"
+ },
+ {
+  "i": 105,
+  "territory": "arms",
+  "entry_raw": "`baseline-arms/harness/audit_pool.py`（花费池对账）",
+  "paths": [
+   "baseline-arms/harness/audit_pool.py"
+  ],
+  "can_red": "是(读码 `audit_pool.py:284`)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 106,
+  "territory": "arms",
+  "entry_raw": "`baseline-arms/harness/merge_ledger.py --check`",
+  "paths": [
+   "baseline-arms/harness/merge_ledger.py --check"
+  ],
+  "can_red": "是(读码 `merge_ledger.py:91`)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 107,
+  "territory": "arms",
+  "entry_raw": "`baseline-arms/harness/run_campaign.py --gate-only`（战役闸）",
+  "paths": [
+   "baseline-arms/harness/run_campaign.py --gate-only"
+  ],
+  "can_red": "是(读码 `run_campaign.py:487`)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(读码，红=退出码 3)",
+  "strength": "读码"
+ },
+ {
+  "i": 108,
+  "territory": "arms",
+  "entry_raw": "`baseline-arms/harness/transport_ab.py::assert_not_frozen`（跨轨冻结闸）",
+  "paths": [
+   "baseline-arms/harness/transport_ab.py::assert_not_frozen"
+  ],
+  "can_red": "是(读码 `transport_ab.py:72` `raise SystemExit(str)` → 退出 1)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 109,
+  "territory": "arms",
+  "entry_raw": "`baseline-arms/harness/campaign.py` / `run_campaign.py`（活体战役）",
+  "paths": [
+   "baseline-arms/harness/campaign.py",
+   "run_campaign.py"
+  ],
+  "can_red": "是(读码，拒跑路径 `return 2`)",
+  "has_negctl": "否",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 110,
+  "territory": "arms",
+  "entry_raw": "`baseline-arms` pytest（75 项，全部用 `tmp_path` 私有花费池）",
+  "paths": [
+   "baseline-arms",
+   "tmp_path"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 111,
+  "territory": "arms",
+  "entry_raw": "`cold-start-a0/run_all.py`（九步 + schema 校验）",
+  "paths": [
+   "cold-start-a0/run_all.py"
+  ],
+  "can_red": "是(实测走绿；红路径读码 `run_all.py:97`)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码+实测绿)",
+  "strength": "混合"
+ },
+ {
+  "i": 112,
+  "territory": "arms",
+  "entry_raw": "`cold-start-a0/certify/score_vs_truth.py`（M6 对裁判打分）",
+  "paths": [
+   "cold-start-a0/certify/score_vs_truth.py"
+  ],
+  "can_red": "否(读码)",
+  "has_negctl": "否",
+  "exit_honest": "否(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 113,
+  "territory": "arms",
+  "entry_raw": "`cold-start-a0/certify/fd_conformance.py`",
+  "paths": [
+   "cold-start-a0/certify/fd_conformance.py"
+  ],
+  "can_red": "是(读码 `:211` `:225`；缺 FD 时 `sys.exit(12)`)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 114,
+  "territory": "arms",
+  "entry_raw": "`cold-start-a0` pytest（56 项）",
+  "paths": [
+   "cold-start-a0"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 115,
+  "territory": "arms",
+  "entry_raw": "`cold-start-a2/run_all.py`（13 步 + schema 校验）",
+  "paths": [
+   "cold-start-a2/run_all.py"
+  ],
+  "can_red": "是(实测走绿；红路径读码 `run_all.py:105`)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(读码+实测绿)",
+  "strength": "混合"
+ },
+ {
+  "i": 116,
+  "territory": "arms",
+  "entry_raw": "`cold-start-a2/tools/verify_readonly.py`（上游树只读）",
+  "paths": [
+   "cold-start-a2/tools/verify_readonly.py"
+  ],
+  "can_red": "是(读码 `:79`)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 117,
+  "territory": "arms",
+  "entry_raw": "`cold-start-a2` pytest（44 项）",
+  "paths": [
+   "cold-start-a2"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 118,
+  "territory": "arms",
+  "entry_raw": "`cold-start-a3/run_all.py`（七段，含第 5 段负控）",
+  "paths": [
+   "cold-start-a3/run_all.py"
+  ],
+  "can_red": "否(实测)",
+  "has_negctl": "是（负控本身存在）",
+  "exit_honest": "否(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 119,
+  "territory": "arms",
+  "entry_raw": "`cold-start-a3/a3pipeline/negctl.py`（两组负控本体）",
+  "paths": [
+   "cold-start-a3/a3pipeline/negctl.py"
+  ],
+  "can_red": "是(读码 `negctl.py:153`)",
+  "has_negctl": "是（它就是负控）",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 120,
+  "territory": "arms",
+  "entry_raw": "`cold-start-a3/tools/verify_readonly.py`",
+  "paths": [
+   "cold-start-a3/tools/verify_readonly.py"
+  ],
+  "can_red": "是(读码 `:89`)",
+  "has_negctl": "否(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 121,
+  "territory": "arms",
+  "entry_raw": "`cold-start-a3` pytest（47 项）",
+  "paths": [
+   "cold-start-a3"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ },
+ {
+  "i": 122,
+  "territory": "arms",
+  "entry_raw": "`a0-spike/pipeline/run_a0.py`",
+  "paths": [
+   "a0-spike/pipeline/run_a0.py"
+  ],
+  "can_red": "是(读码 `run_a0.py:262`)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 123,
+  "territory": "arms",
+  "entry_raw": "`a0-spike/runs/20260728T040057Z-c2/make_manifest.py --verify`",
+  "paths": [
+   "a0-spike/runs/20260728T040057Z-c2/make_manifest.py --verify"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是（实测演示 + 文档记载曾真抓到 7/19）",
+  "exit_honest": "是(实测)",
+  "strength": "实测"
+ },
+ {
+  "i": 124,
+  "territory": "arms",
+  "entry_raw": "`a0-spike/probes/semantics_probe.py`",
+  "paths": [
+   "a0-spike/probes/semantics_probe.py"
+  ],
+  "can_red": "是(读码 `:467`；未知事件 `raise SystemExit` `:97`)",
+  "has_negctl": "部分(读码)",
+  "exit_honest": "是(读码)",
+  "strength": "读码"
+ },
+ {
+  "i": 125,
+  "territory": "arms",
+  "entry_raw": "`a0-spike` pytest（44 项）",
+  "paths": [
+   "a0-spike"
+  ],
+  "can_red": "是(实测)",
+  "has_negctl": "是(读码)",
+  "exit_honest": "是(实测)",
+  "strength": "混合"
+ }
+]

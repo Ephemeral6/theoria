@@ -156,7 +156,7 @@ spent may not refuse — refusing cannot un-spend it, only destroy the evidence.
 Such a field is now warned about (`canon.UnknownField`, counted in
 `Ledger.unknown_fields`) and written, and `validate_ledger.py` reports it as a
 **notice** that leaves the verdict alone. The reasoning is `proxy/DECISIONS.md`
-D-029; the rule for changing this contract again is `proxy/CONTRACT_CHANGES.md`.
+D-030; the rule for changing this contract again is `proxy/CONTRACT_CHANGES.md`.
 
 For this migrator that is a widening and nothing you do changes: a lifted stream
 that was canonical before is canonical now.

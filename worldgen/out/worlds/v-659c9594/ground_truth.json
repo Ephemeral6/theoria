@@ -1,0 +1,250 @@
+{
+  "actions": [
+    "UP",
+    "DOWN",
+    "LEFT",
+    "RIGHT"
+  ],
+  "frame_determines_state": {
+    "collisions": [],
+    "distinct_frames": 39,
+    "injective": true,
+    "states": 39
+  },
+  "grid": [
+    6,
+    7
+  ],
+  "invariants": [
+    {
+      "holds": true,
+      "name": "agent_unique",
+      "statement": "exactly one cell shows colour 6 at all times",
+      "states_checked": 39,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "grid_shape",
+      "statement": "every frame is 6 x 7",
+      "states_checked": 39,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "phase_in_range",
+      "statement": "every cycler's phase stays in range(k)",
+      "states_checked": 39,
+      "verified": true
+    },
+    {
+      "holds": true,
+      "name": "color_reads_phase",
+      "statement": "the colour of a cycler cell determines its phase, except where the agent covers it",
+      "states_checked": 39,
+      "verified": true
+    }
+  ],
+  "invariants_all_hold": true,
+  "palette": {
+    "agent": 6,
+    "cycler": 2,
+    "cycler_1": 3,
+    "cycler_2": 4,
+    "floor": 0,
+    "wall": 1
+  },
+  "reversibility": {
+    "claim_disagreements": [],
+    "claims": [
+      {
+        "axis": "reversible",
+        "claimed": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+        "rule": "walk",
+        "verdict": "deferred"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "blocked_by_wall",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "reversible",
+        "claimed": true,
+        "measured": -1,
+        "re_witnessable": true,
+        "reversible": true,
+        "rule": "walk_through_cycler",
+        "verdict": "agrees"
+      },
+      {
+        "axis": "re_witnessable",
+        "claimed": "conditional \u2014 the advance fires only from a shut phase, so a second witness needs a route that returns the agent to one; measured per world",
+        "measured": 1,
+        "re_witnessable": false,
+        "reversible": true,
+        "rule": "advance_cycler",
+        "verdict": "deferred"
+      }
+    ],
+    "components": 2,
+    "reachable_states": 39,
+    "reversibility_score": 0.75,
+    "rules": {
+      "advance_cycler": {
+        "firing_states": 4,
+        "firing_transitions": 4,
+        "max_witnesses": 1,
+        "re_witnessable": false,
+        "single_witness": true
+      },
+      "blocked_by_wall": {
+        "firing_states": 28,
+        "firing_transitions": 36,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk": {
+        "firing_states": 39,
+        "firing_transitions": 112,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      },
+      "walk_through_cycler": {
+        "firing_states": 4,
+        "firing_transitions": 4,
+        "max_witnesses": -1,
+        "re_witnessable": true,
+        "single_witness": false
+      }
+    },
+    "rules_re_witnessable": 3,
+    "rules_single_witness": [
+      "advance_cycler"
+    ],
+    "rules_total": 4
+  },
+  "rule_correspondence": {
+    "agrees": true,
+    "cascade": [],
+    "declared": [
+      "advance_cycler",
+      "blocked_by_wall",
+      "walk",
+      "walk_through_cycler"
+    ],
+    "declared_duplicates": [],
+    "declared_never_fires": [],
+    "dormant_clauses": [],
+    "fired": [
+      "advance_cycler",
+      "blocked_by_wall",
+      "walk",
+      "walk_through_cycler"
+    ],
+    "fired_undeclared": []
+  },
+  "rules": [
+    {
+      "name": "walk",
+      "reversible": "conditional \u2014 reversible on open floor, not across a one-way edge",
+      "then": "the agent moves one cell in direction D",
+      "when": "act=D and the target cell is inside the grid, is not a wall, and no mechanism claims it"
+    },
+    {
+      "name": "blocked_by_wall",
+      "reversible": true,
+      "then": "nothing changes",
+      "when": "act=D and the target cell is outside the grid or is a wall"
+    },
+    {
+      "name": "walk_through_cycler",
+      "reversible": true,
+      "then": "the agent enters the cell and the phase does not change",
+      "when": "act=D and the target cell holds a cycler whose phase equals its open phase"
+    },
+    {
+      "name": "advance_cycler",
+      "re_witnessable": "conditional \u2014 the advance fires only from a shut phase, so a second witness needs a route that returns the agent to one; measured per world",
+      "reversible": true,
+      "then": "the agent does not move and the cycler's phase becomes (phase + 1) mod k",
+      "when": "act=D and the target cell holds a cycler whose phase is not its open phase"
+    }
+  ],
+  "solvability": {
+    "agent_cells": 20,
+    "goal": [
+      4,
+      5
+    ],
+    "optimal_length": 5,
+    "optimal_plan": [
+      "DOWN",
+      "DOWN",
+      "RIGHT",
+      "RIGHT",
+      "RIGHT"
+    ],
+    "reachable_states": 39,
+    "solvable": true,
+    "world_id": "v-659c9594"
+  },
+  "spec": {
+    "agent_start": [
+      2,
+      2
+    ],
+    "colors": {
+      "cycler": 2,
+      "cycler_1": 3,
+      "cycler_2": 4
+    },
+    "entities": [
+      {
+        "cell": [
+          2,
+          4
+        ],
+        "kind": "cycler",
+        "props": {
+          "k": 3,
+          "open_phase": 2,
+          "phase0": 1
+        }
+      }
+    ],
+    "families": [
+      "color_cycle"
+    ],
+    "flags": {},
+    "goal": [
+      4,
+      5
+    ],
+    "intended_solvable": null,
+    "layout": [
+      "#######",
+      "#.....#",
+      "#.....#",
+      "#.....#",
+      "#.....#",
+      "#######"
+    ],
+    "notes": "",
+    "seed": 0,
+    "tier": 1,
+    "variant_delta": "",
+    "variant_of": null,
+    "world_id": "v-659c9594"
+  },
+  "world_id": "v-659c9594"
+}

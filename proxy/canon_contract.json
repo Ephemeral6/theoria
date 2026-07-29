@@ -114,6 +114,7 @@
     "envelope": [
       "arm",
       "event",
+      "prev",
       "run_id",
       "seq",
       "ts",
@@ -208,6 +209,6 @@
       }
     }
   },
-  "fingerprint": "sha256:9420fd0fc27d6c2e963d910f611653d2abe62fd35291b7b9bbdf2cd6f9921f35",
+  "fingerprint": "sha256:6b406c87a5de1c6e750fbfb4ce93b7317f24e4d36037f71d9dd4807ce7fb244d",
   "note": "The shared ledger contract, pinned. Regenerate with `python -m proxy.tools.contract --update`, and read proxy/CONTRACT_CHANGES.md before you do -- a diff here that narrows what the proxies accept is a breaking change for every track that imports proxy/ as a library."
 }

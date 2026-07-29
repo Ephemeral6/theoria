@@ -1,0 +1,222 @@
+
+=== shared spend pool (before tn36-ef4dde99) ===
+  spent $7.4096 / $214.90   353 / 24000 actions   (0 live reservation(s))
+    arc-recon-canary-quick             $  0.0000       0 actions
+    phase3-variance-envelope           $  7.3895     270 actions
+    phase3-variance-envelope-quota-probe $  0.0201       0 actions
+    phase3-variance-envelope-smoke     $  0.0000       3 actions
+    theoria:r-1d7be54ff37f4e17         $  0.0000       7 actions
+    theoria:r-395ddce163d04d83         $  0.0000       7 actions
+    theoria:r-40ef6ffc39d84c57         $  0.0000       9 actions
+    theoria:r-4307c9242d3c417c         $  0.0000       9 actions
+    theoria:r-6a8d7f6e02fc44fb         $  0.0000       9 actions
+    theoria:r-98a5453a69634dac         $  0.0000       7 actions
+    theoria:r-99fbca5b0d054fe3         $  0.0000       7 actions
+    theoria:r-c81d26e0ebe74ca8         $  0.0000       7 actions
+    theoria:r-e01eedd33c9f4daf         $  0.0000       9 actions
+    theoria:r-ed85ff1e396a4ef0         $  0.0000       9 actions
+=== tn36-ef4dde99 x claude-haiku-4-5-20251001 x 3 repeats (budget 30) ===
+  [rep 1] claude-haiku-4-5-20251001 -> gave_up (23 ok / 5 failed, longest fail run 2, $1.0127, 1001s)
+  [rep 3] claude-haiku-4-5-20251001 -> budget_exhausted (24 ok / 6 failed, longest fail run 2, $1.0393, 1026s)
+  [rep 2] claude-haiku-4-5-20251001 -> gave_up (24 ok / 5 failed, longest fail run 2, $1.0948, 1109s)
+
+=== budget gate: GREEN ===
+  cells 12 | $13.0639 | ok 286 / failed 55 | http 902 | elapsed 1.2 h | compute 3.8 h
+  $/action 0.0457 | http/action 3.15 | success 0.839
+  tier claude-haiku-4-5-20251001    $13.0639 / cap $20.00
+  BARRIER BAR-001 (2026-07-28T00:00:00Z): G4 judges the 9 cell(s) after bare_cc-ar25-claude-haiku-4-5-20251001-0d8cdab8
+
+=== shared spend pool (after tn36-ef4dde99) ===
+  spent $10.5564 / $214.90   587 / 24000 actions   (0 live reservation(s))
+    arc-recon-canary-quick             $  0.0000       0 actions
+    phase3-variance-envelope           $ 10.5364     504 actions
+    phase3-variance-envelope-quota-probe $  0.0201       0 actions
+    phase3-variance-envelope-smoke     $  0.0000       3 actions
+    theoria:r-1d7be54ff37f4e17         $  0.0000       7 actions
+    theoria:r-395ddce163d04d83         $  0.0000       7 actions
+    theoria:r-40ef6ffc39d84c57         $  0.0000       9 actions
+    theoria:r-4307c9242d3c417c         $  0.0000       9 actions
+    theoria:r-6a8d7f6e02fc44fb         $  0.0000       9 actions
+    theoria:r-98a5453a69634dac         $  0.0000       7 actions
+    theoria:r-99fbca5b0d054fe3         $  0.0000       7 actions
+    theoria:r-c81d26e0ebe74ca8         $  0.0000       7 actions
+    theoria:r-e01eedd33c9f4daf         $  0.0000       9 actions
+    theoria:r-ed85ff1e396a4ef0         $  0.0000       9 actions
+[
+  {
+    "abort_rules": {
+      "consecutive_failures": 10,
+      "cumulative_failures": 30
+    },
+    "actions_failed": 5,
+    "actions_failed_consecutive_max": 2,
+    "actions_ok": 23,
+    "arm": "bare_cc",
+    "budget": 30,
+    "cache_creation_tokens": 299477,
+    "cache_read_tokens": 707745,
+    "campaign": "phase3-variance-envelope",
+    "card_id": "9e149e65-4791-48fc-8401-0e8e90ee2dfc",
+    "cell_caps": {
+      "actions": 639,
+      "usd": 3.078
+    },
+    "cost_usd": 1.0126804999999999,
+    "ended": "2026-07-28T13:31:30Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "tn36-ef4dde99",
+    "http_amplification": 3.35,
+    "http_calls_gameplay": 77,
+    "input_tokens": 290,
+    "levels_completed": 0,
+    "model": "claude-haiku-4-5-20251001",
+    "model_calls": 29,
+    "outcome": "gave_up",
+    "output_tokens": 54207,
+    "repeat": 1,
+    "reset_attempts": 1,
+    "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-54a86b1b",
+    "spend": {
+      "action_cap": 639,
+      "actions_charged": 80,
+      "campaign": "phase3-variance-envelope",
+      "model_calls_charged": 29,
+      "pool": {
+        "action_ceiling": 24000,
+        "gate_version": "1.0",
+        "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+        "ledger_path": "../../proxy/var/spend_gate.jsonl",
+        "policy_path": "proxy/spend_policy.json",
+        "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+        "pool": "theoria-shared-2026-07",
+        "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+        "usd_ceiling": 214.9
+      },
+      "reservation_id": "res-5058a348d1af468f",
+      "unpriced_calls": 0,
+      "usd_cap": 3.078,
+      "usd_charged": 1.01268
+    },
+    "started": "2026-07-28T13:14:49Z",
+    "stop_note": "gave up",
+    "wall_seconds": 1001.1,
+    "win_levels": 7
+  },
+  {
+    "abort_rules": {
+      "consecutive_failures": 10,
+      "cumulative_failures": 30
+    },
+    "actions_failed": 5,
+    "actions_failed_consecutive_max": 2,
+    "actions_ok": 24,
+    "arm": "bare_cc",
+    "budget": 30,
+    "cache_creation_tokens": 309749,
+    "cache_read_tokens": 732150,
+    "campaign": "phase3-variance-envelope",
+    "card_id": "5fd5afb8-0269-4c1c-9996-ce3f00aebcb3",
+    "cell_caps": {
+      "actions": 639,
+      "usd": 3.078
+    },
+    "cost_usd": 1.0948499999999999,
+    "ended": "2026-07-28T13:33:18Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "tn36-ef4dde99",
+    "http_amplification": 2.96,
+    "http_calls_gameplay": 71,
+    "input_tokens": 300,
+    "levels_completed": 0,
+    "model": "claude-haiku-4-5-20251001",
+    "model_calls": 30,
+    "outcome": "gave_up",
+    "output_tokens": 66028,
+    "repeat": 2,
+    "reset_attempts": 1,
+    "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-041aca5a",
+    "spend": {
+      "action_cap": 639,
+      "actions_charged": 74,
+      "campaign": "phase3-variance-envelope",
+      "model_calls_charged": 30,
+      "pool": {
+        "action_ceiling": 24000,
+        "gate_version": "1.0",
+        "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+        "ledger_path": "../../proxy/var/spend_gate.jsonl",
+        "policy_path": "proxy/spend_policy.json",
+        "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+        "pool": "theoria-shared-2026-07",
+        "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+        "usd_ceiling": 214.9
+      },
+      "reservation_id": "res-e161d2d93abc410b",
+      "unpriced_calls": 0,
+      "usd_cap": 3.078,
+      "usd_charged": 1.09485
+    },
+    "started": "2026-07-28T13:14:50Z",
+    "stop_note": "gave up",
+    "wall_seconds": 1109.0,
+    "win_levels": 7
+  },
+  {
+    "abort_rules": {
+      "consecutive_failures": 10,
+      "cumulative_failures": 30
+    },
+    "actions_failed": 6,
+    "actions_failed_consecutive_max": 2,
+    "actions_ok": 24,
+    "arm": "bare_cc",
+    "budget": 30,
+    "cache_creation_tokens": 309534,
+    "cache_read_tokens": 732150,
+    "campaign": "phase3-variance-envelope",
+    "card_id": "bf40f68f-ede7-4be6-809a-0cd1ab85515d",
+    "cell_caps": {
+      "actions": 639,
+      "usd": 3.078
+    },
+    "cost_usd": 1.039319,
+    "ended": "2026-07-28T13:31:55Z",
+    "final_state": "NOT_FINISHED",
+    "game_id": "tn36-ef4dde99",
+    "http_amplification": 3.21,
+    "http_calls_gameplay": 77,
+    "input_tokens": 300,
+    "levels_completed": 0,
+    "model": "claude-haiku-4-5-20251001",
+    "model_calls": 30,
+    "outcome": "budget_exhausted",
+    "output_tokens": 54548,
+    "repeat": 3,
+    "reset_attempts": 1,
+    "run_id": "bare_cc-tn36-claude-haiku-4-5-20251001-72c36e10",
+    "spend": {
+      "action_cap": 639,
+      "actions_charged": 80,
+      "campaign": "phase3-variance-envelope",
+      "model_calls_charged": 30,
+      "pool": {
+        "action_ceiling": 24000,
+        "gate_version": "1.0",
+        "ledger_abspath": "C:\\Users\\user\\Desktop\\theoria\\proxy\\var\\spend_gate.jsonl",
+        "ledger_path": "../../proxy/var/spend_gate.jsonl",
+        "policy_path": "proxy/spend_policy.json",
+        "policy_sha256": "732778326d64436586f944853f1f0db46d50639ad71a5ac0499d8c4827ec1572",
+        "pool": "theoria-shared-2026-07",
+        "pool_root": "C:\\Users\\user\\Desktop\\theoria",
+        "usd_ceiling": 214.9
+      },
+      "reservation_id": "res-498f27ea75e549b5",
+      "unpriced_calls": 0,
+      "usd_cap": 3.078,
+      "usd_charged": 1.039319
+    },
+    "started": "2026-07-28T13:14:50Z",
+    "wall_seconds": 1026.2,
+    "win_levels": 7
+  }
+]

@@ -120,6 +120,45 @@ def _last_seq(path: str) -> int:
     return last
 
 
+def line_hash(line: bytes) -> str:
+    """The chain link: sha256 over one line's bytes as written, no terminator.
+
+    Deliberately over *bytes*, not over a re-serialised record.  A verifier
+    that re-canonicalises before hashing is really checking that today's
+    `canonical()` agrees with the one that wrote the file -- so the day that
+    function's behaviour changes, every ledger ever written goes red at once
+    and the alarm means nothing.  Hashing the bytes on disk asks the only
+    question worth asking: are these the bytes that were written?
+    """
+    return sha256(line)
+
+
+def _tail_state(path: str) -> "tuple[int, Optional[str]]":
+    """`(last seq, hash of the last line)` -- what a new writer must resume from.
+
+    Read in binary in one pass, because the chain hashes bytes and decoding
+    then re-encoding would be a second chance to disagree with the file.
+    """
+    if not os.path.exists(path):
+        return 0, None
+    last_seq, last_line = 0, None
+    with open(path, "rb") as fh:
+        for raw in fh:
+            stripped = raw.rstrip(b"\r\n")
+            if not stripped.strip():
+                continue
+            last_line = stripped
+            try:
+                last_seq = max(last_seq,
+                               int(json.loads(stripped.decode("utf-8")).get("seq", 0)))
+            except (ValueError, AttributeError, UnicodeDecodeError):
+                # An unreadable line still occupies its place in the chain
+                # (RED-44: one bad line must not destroy the whole ledger), so
+                # it is kept as the predecessor even though its seq is unknown.
+                continue
+    return last_seq, (line_hash(last_line) if last_line is not None else None)
+
+
 class Ledger:
     """One ledger file. Thread-safe; `seq` is assigned under the lock so it is
     dense and monotonic even with several proxy threads writing."""
@@ -134,7 +173,7 @@ class Ledger:
         #: Empty is the normal state and the interesting one is non-empty.
         self.unknown_fields: Dict[str, int] = {}
         with self._lock:
-            self._seq = _last_seq(path)
+            self._seq, self._prev = _tail_state(path)
 
     def _note_unknown(self, event: str, names: List[str], message: str) -> None:
         """Say it out loud, and *never* let saying it stop the write.
@@ -164,7 +203,7 @@ class Ledger:
             raise ValueError("unknown event %r (LEDGER_FORMAT.md §3, §4, §6)" % event)
         if arm not in ARMS:
             # Still a hard refusal, and the reason it is not the after-the-money
-            # refusal D-029 argues against: `arm` and `event` are fixed when the
+            # refusal D-030 argues against: `arm` and `event` are fixed when the
             # RunLedger is constructed, so a wrong one fails on the run's very
             # first record -- before any request is sent and any dollar is spent.
             # A refusal that fires in the first second of a run is a typo caught;
@@ -210,10 +249,18 @@ class Ledger:
             self._seq += 1
             record["seq"] = self._seq
             record["ts"] = utcnow()
+            # The chain link, set under the same lock that assigns `seq` so the
+            # two can never disagree about the order records were written in.
+            # The first record of a file carries `null`: there is nothing
+            # before it, and saying so explicitly distinguishes "start of
+            # chain" from "chain field forgotten".
+            record["prev"] = self._prev
             line = canonical(record)
+            blob = line.encode("utf-8")
             with open(self.path, "a", encoding="utf-8", newline="") as fh:
                 fh.write(line)
                 fh.write("\n")
+            self._prev = line_hash(blob)
         return record
 
     # -- reading -----------------------------------------------------------
