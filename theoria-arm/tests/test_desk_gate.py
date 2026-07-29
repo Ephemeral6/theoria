@@ -704,3 +704,106 @@ def test_the_guard_does_not_fire_on_an_ordinary_prompt(tmp_path, binding):
 def pool_of(binding):
     """The gate behind a binding, for asserting nothing was charged."""
     return binding.gate
+
+
+# ------------------------- 7. a raised call that still printed a price -------
+
+def test_a_timeout_that_printed_its_price_is_priced_not_blinded(binding, pool):
+    """The timeout is the dominant producer of blind rows, and it is also the
+    case most likely to have printed one: the CLI runs with
+    `--output-format json`, so a partial envelope carrying `total_cost_usd`
+    may be sitting in the buffer when the clock runs out.
+
+    The old code discarded `TimeoutExpired.stdout` outright, so the one call
+    that most needed a price threw away the only evidence that could supply
+    one -- and each such row then refuses every dollar in the shared pool, for
+    every session, until a human files a correction by hand. Salvaging it is
+    worth much more than the flag: `unpriced` is supposed to mean the recorded
+    figure is not the measured one, and here it is measured.
+    """
+    from harness.modelcall import ModelError
+    err = ModelError("claude -p timed out after 1800s")
+    err.partial_stdout = json.dumps(
+        {"total_cost_usd": 0.137, "result": "",
+         "usage": {"input_tokens": 11, "output_tokens": 4096}})
+
+    run = FakeRun()
+    run.spend_binding = binding
+    d = desk(run, raises=err)
+
+    with pytest.raises(ModelError, match="timed out"):
+        d.call("p", beat="theorize")
+
+    last = spends(pool)[-1]
+    assert last["unpriced"] is False and last["usd"] == 0.137
+    assert last["detail"]["outcome"] == "raised_after_a_price"
+    assert d.unpriced_calls == 0
+
+
+def test_a_raised_call_that_printed_nothing_stays_blind(binding, pool):
+    """The negative control, and the actual 2026-07-29 incident.
+
+    That CLI printed nothing at all -- it raised 145ms after the previous call
+    settled, with an empty stdout, having never reached the provider. Salvage
+    must not invent a price for it: an empty buffer is not evidence of a free
+    call, and settling one at $0.00 would let the provider decide afterwards
+    whether it gets billed. Nothing to salvage stays nothing to salvage.
+    """
+    from harness.modelcall import ModelError
+    err = ModelError("unparseable CLI output: ")
+    err.partial_stdout = ""
+
+    run = FakeRun()
+    run.spend_binding = binding
+    d = desk(run, raises=err)
+
+    with pytest.raises(ModelError):
+        d.call("p", beat="theorize")
+
+    last = spends(pool)[-1]
+    assert last["unpriced"] is True
+    assert last["usd"] == spend_mod.MODEL_CALL_CEILING_USD
+    assert last["detail"]["outcome"] == "raised_before_a_price"
+
+
+def test_salvage_holds_partial_output_to_the_same_bar_as_a_whole_envelope(
+        binding, pool):
+    """A bare zero with no tokens behind it is the shape of a missing field,
+    and `price_of` already refuses to settle one. Salvage reuses `price_of`
+    rather than reimplementing the bar, so a truncated buffer cannot sneak a
+    $0.00 settlement past a check a complete envelope would have failed.
+    """
+    from harness.modelcall import ModelError
+    err = ModelError("claude -p timed out after 1800s")
+    err.partial_stdout = json.dumps({"total_cost_usd": 0.0, "usage": {}})
+
+    run = FakeRun()
+    run.spend_binding = binding
+    d = desk(run, raises=err)
+
+    with pytest.raises(ModelError):
+        d.call("p", beat="theorize")
+
+    last = spends(pool)[-1]
+    assert last["unpriced"] is True
+    assert last["usd"] == spend_mod.MODEL_CALL_CEILING_USD
+
+
+def test_salvage_survives_a_truncated_json_buffer(binding, pool):
+    """Half a JSON document is the likeliest shape of a killed process's
+    stdout. It must fall through to blind rather than raising out of the
+    error path -- an exception thrown while handling an exception would lose
+    the original failure and leave the pool unrecorded.
+    """
+    from harness.modelcall import ModelError
+    err = ModelError("claude -p timed out after 1800s")
+    err.partial_stdout = '{"total_cost_usd": 0.13, "usa'
+
+    run = FakeRun()
+    run.spend_binding = binding
+    d = desk(run, raises=err)
+
+    with pytest.raises(ModelError, match="timed out"):
+        d.call("p", beat="theorize")
+
+    assert spends(pool)[-1]["unpriced"] is True

@@ -271,6 +271,31 @@ class ModelDesk:
                 "it for a normal run and attaches it to the RunLedger.")
         return binding
 
+    def _salvage_price(self, exc: BaseException):
+        """A price out of a raised call's partial output, or None.
+
+        Deliberately narrow. It reuses `price_of`, so a partial envelope has to
+        clear exactly the same bar a complete one does -- a finite non-negative
+        `total_cost_usd`, and not a bare zero with no tokens behind it. Anything
+        less and this returns None and the call stays blind, which is the safe
+        direction: inventing a price here would settle a call the provider may
+        yet bill.
+
+        The 2026-07-29 blind row is the case this cannot help with and should
+        not pretend to: that CLI printed nothing at all, 145ms after the
+        previous call settled. Nothing to salvage is still nothing to salvage.
+        """
+        partial = getattr(exc, "partial_stdout", "")
+        if not partial or not partial.strip():
+            return None
+        try:
+            envelope = json.loads(partial)
+        except (json.JSONDecodeError, TypeError, ValueError):
+            return None
+        if not isinstance(envelope, dict):
+            return None
+        return self.price_of(envelope, envelope.get("usage") or {})
+
     @staticmethod
     def price_of(envelope: Dict[str, Any], usage: Dict[str, Any]):
         """What one envelope cost, or None if it cannot be trusted to say.
@@ -354,18 +379,36 @@ class ModelDesk:
 
         try:
             envelope, elapsed_ms, stderr = self._invoke(prompt, model)
-        except BaseException:
+        except BaseException as exc:
             # The subprocess may or may not have reached the provider -- a
             # timeout is exactly the case where it did and the answer was
-            # thrown away. Charged at its ceiling and flagged unpriced either
-            # way, because the alternative is assuming it cost nothing, which
-            # lets the provider decide whether it gets billed.
+            # thrown away. Charged at its ceiling and flagged unpriced when
+            # nothing says otherwise, because the alternative is assuming it
+            # cost nothing, which lets the provider decide whether it gets
+            # billed.
+            #
+            # But look first. A raised call may still have printed a partial
+            # envelope carrying `total_cost_usd`, and one blind row in the
+            # shared pool refuses every dollar for every session until someone
+            # files a correction by hand -- so a price that can be salvaged is
+            # worth far more than the flag is. When one is found the call is
+            # priced, not blind: the rule is that `unpriced` means the recorded
+            # figure is not the measured one, and here it is.
             self.calls += 1
-            self.unpriced_calls += 1
-            binding.record_model_call(
-                None, detail=dict(detail, outcome="raised_before_a_price",
-                                  why="the CLI raised before an envelope "
-                                      "carrying a price came back"))
+            salvaged = self._salvage_price(exc)
+            if salvaged is None:
+                self.unpriced_calls += 1
+                binding.record_model_call(
+                    None, detail=dict(detail, outcome="raised_before_a_price",
+                                      why="the CLI raised before an envelope "
+                                          "carrying a price came back"))
+            else:
+                self.cli_cost_usd += salvaged
+                binding.record_model_call(
+                    salvaged,
+                    detail=dict(detail, outcome="raised_after_a_price",
+                                why="the CLI raised, but its partial output "
+                                    "carried a usable total_cost_usd"))
             raise
 
         usage = envelope.get("usage") or {}
@@ -514,15 +557,28 @@ class ModelDesk:
                                       capture_output=True, text=True,
                                       encoding="utf-8", errors="replace",
                                       timeout=self.timeout)
-            except subprocess.TimeoutExpired:
-                raise ModelError("claude -p timed out after %ds" % self.timeout)
+            except subprocess.TimeoutExpired as exc:
+                # Keep whatever the CLI managed to print. The timeout is the
+                # dominant producer of unpriced rows, and the CLI runs with
+                # `--output-format json`, so a partial envelope carrying
+                # `total_cost_usd` is exactly what may be sitting in this
+                # buffer. Discarding it threw away the only evidence that
+                # could price the one call that most needs pricing.
+                partial = exc.stdout
+                if isinstance(partial, bytes):
+                    partial = partial.decode("utf-8", "replace")
+                err = ModelError("claude -p timed out after %ds" % self.timeout)
+                err.partial_stdout = partial or ""
+                raise err
         elapsed_ms = int((time.time() - started) * 1000)
 
         try:
             envelope = json.loads(proc.stdout)
         except json.JSONDecodeError:
-            raise ModelError("unparseable CLI output: %s"
+            err = ModelError("unparseable CLI output: %s"
                              % (proc.stdout or proc.stderr or "")[:400])
+            err.partial_stdout = proc.stdout or ""
+            raise err
         return envelope, elapsed_ms, proc.stderr
 
     def _write_transcript(self, entry: Dict[str, Any], prompt: str,
