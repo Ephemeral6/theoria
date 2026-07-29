@@ -1,0 +1,18 @@
+{
+  "prompt_id": "A12-cost-claim-sources",
+  "branch": "agent/a12-cost-claim-sources",
+  "base_commit": "c1151d0173695f3ad0071167343e190b841e8f9e",
+  "utc": "20260729T060000Z",
+  "worker": "W-1652",
+  "territory": "figures",
+  "baseline": {
+    "command": "bash figures/verify.sh",
+    "result": "RED at the base commit, before any change of this run",
+    "failure": "fig06_concept_timeline: ValueError: THEORIZE_LOG.md: entry ids do not match the declared set. unexpected=['E-08', 'E-09'] missing=[]",
+    "cause": "a0-spike/THEORIZE_LOG.md grew two entries; figures/fig06_concept_timeline.py pins EXPECTED_IDS as a closed tuple and raises on an id outside it -- which is that parser's documented and intended behaviour, not a bug in it",
+    "attributable_to_this_run": false,
+    "evidence": "the worktree was created from master and `git status --porcelain` was empty when the failure reproduced"
+  },
+  "scope_note": "A12 pins the chain the paper's cross-arm cost claim actually depends on: the sources figure 2 reads, a cross-arm reconciliation in cost x actions over those sources, a negative sample, and an honest statement of where the four sources fall short. Explicitly NOT the merged three-arm ledger of A10, which was withdrawn.",
+  "files": []
+}
