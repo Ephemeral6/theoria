@@ -1,0 +1,136 @@
+{
+  "domain": "sokoban_domain.pddl",
+  "instance": "three-b",
+  "kind": "sokoban",
+  "n_agree": 12,
+  "n_checked": 12,
+  "n_python_alive_fd_dead": 0,
+  "n_python_dead_fd_alive": 0,
+  "n_python_relaxation_dead": 1572,
+  "n_reachable": 1572,
+  "n_theorem_dead": 1502,
+  "n_theorem_dead_outside_relaxation": 0,
+  "n_truly_dead": 1572,
+  "rows": [
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 0
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 131
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 262
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 393
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 524
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 655
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 786
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 917
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 1048
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 1179
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 1310
+    },
+    {
+      "agree": true,
+      "fd_error": "",
+      "fd_proved_unsolvable": true,
+      "fd_returncode": 12,
+      "fd_solved": false,
+      "fd_translator_dead": true,
+      "python_relaxation_dead": true,
+      "state": 1441
+    }
+  ]
+}

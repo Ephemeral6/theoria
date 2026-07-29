@@ -1,0 +1,16 @@
+# after: release/check_redlines.py at this working tree
+# input: the real tree, nothing planted. Tail only -- the full output
+#   names every file that mentions a sealed id, which is hundreds of
+#   lines all saying the same thing.
+# A DATED MEASUREMENT, not a reproducible check: the tracked-file count
+#   below includes this very file, so rerunning gives a larger number.
+#   Regenerate deliberately with `replicate.py --full-tree`.
+
+  note          verify-lab/runs/20260728T152000Z-V11-negative-control-census/CENSUS_TABLE.md names bp35-0a0ad940, ls20-9607627b, vc33-5430563c (source or prose; ids named here are constants and guards, not content)
+  note          verify-lab/runs/20260728T152000Z-V11-negative-control-census/partials/exam-battery.md names bp35-0a0ad940 (source or prose; ids named here are constants and guards, not content)
+  note          verify-lab/runs/20260728T152000Z-V11-negative-control-census/partials/proxy-arcrecon.md names dc22-fdcac232, ls20-9607627b, vc33-5430563c (source or prose; ids named here are constants and guards, not content)
+
+red lines: 0 credential violation(s), 0 sealed-pile violation(s), 0 file(s) this check could not read over 3071 tracked files.
+Both red lines clear. A release manifest may be generated from this tree.
+
+exit code: 0

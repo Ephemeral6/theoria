@@ -1,0 +1,957 @@
+{
+  "board": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e7-deadlock-claim\\engine-rig\\runs\\20260728T150713Z-E7-deadlock-claim-audit\\attacks\\work\\a3\\rnd0021\\rnd0021.pddl",
+  "domain": "C:\\Users\\user\\Desktop\\theoria\\.worktrees\\e7-deadlock-claim\\engine-rig\\fixtures\\data\\sokoban_domain.pddl",
+  "fast_downward": "C:/Users/user/Desktop/theoria/.worktrees/p13/engine-rig/.toolchain/downward/fast-downward.py",
+  "n_witnesses": 11,
+  "relaxed_cheat_trace_for_first_witness": {
+    "achiever_of_each_goal_atom": {
+      "(at b1 c41)": null,
+      "(at b2 c11)": "(push c13 c12 c11 b2 left)"
+    },
+    "goal_reached": true,
+    "trace": [
+      [
+        "(move c42 c32 up)",
+        [
+          [
+            "at-player",
+            "c32"
+          ],
+          [
+            "clear",
+            "c42"
+          ]
+        ]
+      ],
+      [
+        "(move c42 c43 right)",
+        [
+          [
+            "at-player",
+            "c43"
+          ]
+        ]
+      ],
+      [
+        "(move c43 c33 up)",
+        [
+          [
+            "at-player",
+            "c33"
+          ]
+        ]
+      ],
+      [
+        "(move c43 c44 right)",
+        [
+          [
+            "at-player",
+            "c44"
+          ]
+        ]
+      ],
+      [
+        "(move c44 c34 up)",
+        [
+          [
+            "at-player",
+            "c34"
+          ]
+        ]
+      ],
+      [
+        "(move c32 c22 up)",
+        [
+          [
+            "at-player",
+            "c22"
+          ]
+        ]
+      ],
+      [
+        "(move c32 c31 left)",
+        [
+          [
+            "at-player",
+            "c31"
+          ]
+        ]
+      ],
+      [
+        "(move c34 c24 up)",
+        [
+          [
+            "at-player",
+            "c24"
+          ]
+        ]
+      ],
+      [
+        "(move c22 c21 left)",
+        [
+          [
+            "at-player",
+            "c21"
+          ]
+        ]
+      ],
+      [
+        "(move c21 c11 up)",
+        [
+          [
+            "at-player",
+            "c11"
+          ]
+        ]
+      ],
+      [
+        "(push c11 c12 c13 b2 right)",
+        [
+          [
+            "at-player",
+            "c12"
+          ],
+          [
+            "at",
+            "b2",
+            "c13"
+          ]
+        ]
+      ],
+      [
+        "(move c12 c11 left)",
+        [
+          [
+            "clear",
+            "c12"
+          ]
+        ]
+      ],
+      [
+        "(move c12 c13 right)",
+        [
+          [
+            "at-player",
+            "c13"
+          ]
+        ]
+      ],
+      [
+        "(push c13 c12 c11 b2 left)",
+        [
+          [
+            "at",
+            "b2",
+            "c11"
+          ]
+        ]
+      ]
+    ]
+  },
+  "rows": [
+    {
+      "boxes": {
+        "b1": "c41",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 23,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0008-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 11,
+          "initial_h": "7",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0008-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 11,
+          "initial_h": "7",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0008-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "witness",
+      "player": "c42",
+      "problem": "problems\\rnd0021-s0008.pddl",
+      "python_relaxation_dead": false,
+      "state": 8,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c41",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 23,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0011-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 11,
+          "initial_h": "6",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0011-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 11,
+          "initial_h": "6",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0011-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "witness",
+      "player": "c32",
+      "problem": "problems\\rnd0021-s0011.pddl",
+      "python_relaxation_dead": false,
+      "state": 11,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c41",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 23,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0012-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 11,
+          "initial_h": "8",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0012-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 11,
+          "initial_h": "8",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0012-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "witness",
+      "player": "c43",
+      "problem": "problems\\rnd0021-s0012.pddl",
+      "python_relaxation_dead": false,
+      "state": 12,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c41",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 23,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0015-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 11,
+          "initial_h": "5",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0015-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 11,
+          "initial_h": "5",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0015-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "witness",
+      "player": "c22",
+      "problem": "problems\\rnd0021-s0015.pddl",
+      "python_relaxation_dead": false,
+      "state": 15,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c41",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 23,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0016-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 11,
+          "initial_h": "5",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0016-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 11,
+          "initial_h": "5",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0016-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "witness",
+      "player": "c31",
+      "problem": "problems\\rnd0021-s0016.pddl",
+      "python_relaxation_dead": false,
+      "state": 16,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c41",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 23,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0017-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 11,
+          "initial_h": "7",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0017-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 11,
+          "initial_h": "7",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0017-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "witness",
+      "player": "c33",
+      "problem": "problems\\rnd0021-s0017.pddl",
+      "python_relaxation_dead": false,
+      "state": 17,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c41",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 23,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0018-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 11,
+          "initial_h": "9",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0018-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 11,
+          "initial_h": "9",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0018-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "witness",
+      "player": "c44",
+      "problem": "problems\\rnd0021-s0018.pddl",
+      "python_relaxation_dead": false,
+      "state": 18,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c41",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 23,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0023-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 11,
+          "initial_h": "4",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0023-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 11,
+          "initial_h": "4",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0023-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "witness",
+      "player": "c21",
+      "problem": "problems\\rnd0021-s0023.pddl",
+      "python_relaxation_dead": false,
+      "state": 23,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c41",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 23,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0024-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 11,
+          "initial_h": "8",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0024-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 11,
+          "initial_h": "8",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0024-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "witness",
+      "player": "c34",
+      "problem": "problems\\rnd0021-s0024.pddl",
+      "python_relaxation_dead": false,
+      "state": 24,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c41",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 23,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0032-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 11,
+          "initial_h": "3",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0032-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 11,
+          "initial_h": "3",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0032-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "witness",
+      "player": "c11",
+      "problem": "problems\\rnd0021-s0032.pddl",
+      "python_relaxation_dead": false,
+      "state": 32,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c41",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 23,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0033-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 11,
+          "initial_h": "9",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0033-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 11,
+          "initial_h": "9",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0033-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 34,
+          "translator_task_size": 297,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "witness",
+      "player": "c24",
+      "problem": "problems\\rnd0021-s0033.pddl",
+      "python_relaxation_dead": false,
+      "state": 33,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c42",
+        "b2": "c13"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 0,
+          "initial_h": "infinity",
+          "initial_h_infinite": true,
+          "log": "fd-logs\\s0019-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": true,
+          "translator_operators": 0,
+          "translator_task_size": 4,
+          "translator_unsolvable_task": true
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 0,
+          "initial_h": "infinity",
+          "initial_h_infinite": true,
+          "log": "fd-logs\\s0019-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": true,
+          "translator_operators": 0,
+          "translator_task_size": 4,
+          "translator_unsolvable_task": true
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 0,
+          "initial_h": "infinity",
+          "initial_h_infinite": true,
+          "log": "fd-logs\\s0019-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": true,
+          "translator_operators": 0,
+          "translator_task_size": 4,
+          "translator_unsolvable_task": true
+        }
+      },
+      "group": "control-relaxation-dead",
+      "player": "c12",
+      "problem": "problems\\rnd0021-s0019.pddl",
+      "python_relaxation_dead": true,
+      "state": 19,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c44",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 0,
+          "initial_h": "infinity",
+          "initial_h_infinite": true,
+          "log": "fd-logs\\s0022-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": true,
+          "translator_operators": 0,
+          "translator_task_size": 4,
+          "translator_unsolvable_task": true
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 0,
+          "initial_h": "infinity",
+          "initial_h_infinite": true,
+          "log": "fd-logs\\s0022-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": true,
+          "translator_operators": 0,
+          "translator_task_size": 4,
+          "translator_unsolvable_task": true
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 0,
+          "initial_h": "infinity",
+          "initial_h_infinite": true,
+          "log": "fd-logs\\s0022-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": true,
+          "translator_operators": 0,
+          "translator_task_size": 4,
+          "translator_unsolvable_task": true
+        }
+      },
+      "group": "control-relaxation-dead",
+      "player": "c43",
+      "problem": "problems\\rnd0021-s0022.pddl",
+      "python_relaxation_dead": true,
+      "state": 22,
+      "theorem_dead": true
+    },
+    {
+      "boxes": {
+        "b1": "c42",
+        "b2": "c12"
+      },
+      "fd": {
+        "blind": {
+          "config": "astar(blind())",
+          "expanded": 92,
+          "initial_h": "1",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0000-blind.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 42,
+          "translator_task_size": 373,
+          "translator_unsolvable_task": false
+        },
+        "hmax": {
+          "config": "astar(hmax())",
+          "expanded": 33,
+          "initial_h": "8",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0000-hmax.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 42,
+          "translator_task_size": 373,
+          "translator_unsolvable_task": false
+        },
+        "lmcut": {
+          "config": "astar(lmcut())",
+          "expanded": 33,
+          "initial_h": "10",
+          "initial_h_infinite": false,
+          "log": "fd-logs\\s0000-lmcut.log",
+          "returncode": 12,
+          "search_exhausted": true,
+          "solution_found": false,
+          "translator_no_relaxed_solution": false,
+          "translator_operators": 42,
+          "translator_task_size": 373,
+          "translator_unsolvable_task": false
+        }
+      },
+      "group": "control-initial-state",
+      "player": "c34",
+      "problem": "problems\\rnd0021-s0000.pddl",
+      "python_relaxation_dead": false,
+      "state": 0,
+      "theorem_dead": false
+    }
+  ],
+  "summary": {
+    "controls_fd_translator_called_relaxation_dead": 2,
+    "witnesses_blind_proved_unsolvable": 11,
+    "witnesses_fd_translator_called_relaxation_dead": 0,
+    "witnesses_hmax_infinite": 0,
+    "witnesses_lmcut_infinite": 0
+  },
+  "witness_ids": [
+    8,
+    11,
+    12,
+    15,
+    16,
+    17,
+    18,
+    23,
+    24,
+    32,
+    33
+  ]
+}

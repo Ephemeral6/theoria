@@ -24,7 +24,7 @@
         "green": true,
         "pixels_checked": 14904,
         "pixels_unexplained": 0,
-        "theory": "ablation-arm\\artifacts\\a2-holed\\theory.py",
+        "theory": "artifacts/a2-holed/theory.py",
         "trace": "history_trace.jsonl",
         "transitions": 183
       },
@@ -466,7 +466,7 @@
           "green": false,
           "pixels_checked": 20088,
           "pixels_unexplained": 128,
-          "theory": "ablation-arm\\artifacts\\a2-holed\\theory.py",
+          "theory": "artifacts/a2-holed/theory.py",
           "trace": "raw_trace.jsonl",
           "transitions": 247
         },

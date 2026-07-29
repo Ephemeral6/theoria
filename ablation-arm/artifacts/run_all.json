@@ -77,7 +77,7 @@
   "surprise_kinds_available_to_this_arm": 6,
   "surprise_kinds_in_taxonomy": 7,
   "upstream_files_changed": [],
-  "upstream_trees_hashed": 468,
+  "upstream_trees_hashed": 484,
   "upstream_unchanged": true,
   "what": "ablation-arm end-to-end run (A4a step 3)",
   "worlds": {
@@ -107,7 +107,7 @@
             "green": true,
             "pixels_checked": 22356,
             "pixels_unexplained": 0,
-            "theory": "ablation-arm\\artifacts\\a0-base\\theory.py",
+            "theory": "artifacts/a0-base/theory.py",
             "trace": "raw_trace.jsonl",
             "transitions": 275
           }
@@ -252,7 +252,7 @@
             "green": true,
             "pixels_checked": 9072,
             "pixels_unexplained": 0,
-            "theory": "ablation-arm\\artifacts\\a0-no-button\\theory.py",
+            "theory": "artifacts/a0-no-button/theory.py",
             "trace": "raw_trace_no_button.jsonl",
             "transitions": 111
           }
@@ -372,7 +372,7 @@
             "green": true,
             "pixels_checked": 20088,
             "pixels_unexplained": 0,
-            "theory": "ablation-arm\\artifacts\\a2-base\\theory.py",
+            "theory": "artifacts/a2-base/theory.py",
             "trace": "raw_trace.jsonl",
             "transitions": 247
           }
@@ -529,7 +529,7 @@
             "green": true,
             "pixels_checked": 20088,
             "pixels_unexplained": 0,
-            "theory": "ablation-arm\\artifacts\\a2-charitable\\theory.py",
+            "theory": "artifacts/a2-charitable/theory.py",
             "trace": "raw_trace.jsonl",
             "transitions": 247
           }
@@ -681,7 +681,7 @@
             "green": true,
             "pixels_checked": 14904,
             "pixels_unexplained": 0,
-            "theory": "ablation-arm\\artifacts\\a2-holed\\theory.py",
+            "theory": "artifacts/a2-holed/theory.py",
             "trace": "history_trace.jsonl",
             "transitions": 183
           },
@@ -1123,7 +1123,7 @@
               "green": false,
               "pixels_checked": 20088,
               "pixels_unexplained": 128,
-              "theory": "ablation-arm\\artifacts\\a2-holed\\theory.py",
+              "theory": "artifacts/a2-holed/theory.py",
               "trace": "raw_trace.jsonl",
               "transitions": 247
             },

@@ -115,7 +115,7 @@
       "claim": "a full run leaves every upstream tree byte-identical",
       "evidence": {
         "changed": [],
-        "files_hashed": 468
+        "files_hashed": 484
       },
       "holds": true,
       "name": "read-only"
@@ -209,6 +209,10 @@
     },
     {
       "returncode": 0,
+      "stage": "pytest"
+    },
+    {
+      "returncode": 0,
       "stage": "run_arm"
     },
     {
@@ -218,10 +222,6 @@
     {
       "returncode": 0,
       "stage": "run_exhibits"
-    },
-    {
-      "returncode": 0,
-      "stage": "pytest"
     }
   ],
   "what": "ablation-arm completion gate (A4a)"

@@ -1,0 +1,128 @@
+INFO     planner time limit: None
+INFO     planner memory limit: None
+
+INFO     Running search (release).
+INFO     search stdin: 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-00329.sas'
+INFO     search time limit: None
+INFO     search memory limit: None
+INFO     search command line string: 'C:\Users\user\Desktop\theoria\.worktrees\p13\engine-rig\.toolchain\downward\builds\release\bin\downward.exe' --search 'astar(ipdb())' --internal-plan-file 'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-00329-ipdb.plan' < ''"'"'C:\Users\user\Desktop\theoria\.worktrees\e7-deadlock-claim\engine-rig\runs\20260728T150713Z-E7-deadlock-claim-audit\attacks\independent\work\far4-00329.sas'"'"''
+[t=0.000162s, 1980 KB] Search code revision: 7120aa0
+[t=0.000254s, 1980 KB] reading input...
+[t=0.001502s, 2208 KB] done reading input!
+[t=0.002939s, 2808 KB] Initializing canonical PDB heuristic...
+[t=0.002951s, 2808 KB] Generating patterns using: hill climbing pattern collection generator
+[t=0.003025s, 2816 KB] Done calculating initial pattern collection: 0.000072s
+[t=0.003035s, 2816 KB] Average operator cost: 1.000000
+[t=0.003040s, 2816 KB] Building causal graph... done!
+[t=0.003818s, 2908 KB] Done calculating initial candidate PDBs
+[t=0.007059s, 3152 KB] found a better pattern with improvement 869
+[t=0.012426s, 3252 KB] found a better pattern with improvement 873
+[t=0.020930s, 3808 KB] found a better pattern with improvement 612
+[t=0.033452s, 4848 KB] found a better pattern with improvement 505
+[t=0.051271s, 6704 KB] found a better pattern with improvement 949
+[t=0.073953s, 10092 KB] found a better pattern with improvement 14
+[t=0.108679s, 16300 KB] found a better pattern with improvement 41
+[t=0.154337s, 27792 KB] found a better pattern with improvement 960
+[t=0.228107s, 48356 KB] found a better pattern with improvement 21
+[t=0.345979s, 85596 KB] found a better pattern with improvement 11
+[t=0.362930s, 85596 KB] Improvement below threshold. Stop hill climbing.
+[t=0.362942s, 85596 KB] Hill climbing iterations: 11
+[t=0.362945s, 85596 KB] Hill climbing generated patterns: 151
+[t=0.362947s, 85596 KB] Hill climbing rejected patterns: 40
+[t=0.362949s, 85596 KB] Hill climbing maximum PDB size: 1048576
+[t=0.362952s, 85596 KB] Hill climbing time: 0.359919s
+[t=0.368233s, 85596 KB] hill climbing pattern collection generator number of patterns: 12
+[t=0.368244s, 85596 KB] hill climbing pattern collection generator total PDB size: 2093344
+[t=0.368247s, 85596 KB] hill climbing pattern collection generator computation time: 0.365276s
+[t=0.368253s, 85596 KB] Running dominance pruning...
+[t=0.368259s, 85596 KB] Pruned 10 of 11 pattern cliques
+[t=0.368264s, 85596 KB] Pruned 11 of 12 PDBs
+[t=0.368266s, 85596 KB] Dominance pruning took 0.000011s
+[t=0.368515s, 85596 KB] Canonical PDB heuristic number of patterns: 1
+[t=0.368521s, 85596 KB] Canonical PDB heuristic total PDB size: 1048576
+[t=0.368524s, 85596 KB] Canonical PDB heuristic computation time: 0.365576s
+[t=0.368557s, 85596 KB] Building successor generator... done!
+[t=0.368609s, 85596 KB] peak memory difference for successor generator creation: 0 KB
+[t=0.368611s, 85596 KB] time for successor generation creation: 0.000044s
+[t=0.368617s, 85596 KB] Variables: 19
+[t=0.368619s, 85596 KB] FactPairs: 80
+[t=0.368622s, 85596 KB] Bytes per state: 4
+[t=0.368630s, 85596 KB] Conducting best first search with reopening closed nodes, (real) bound = 2147483647
+[t=0.368646s, 85596 KB] New best heuristic value for cpdbs: 17
+[t=0.368650s, 85596 KB] g=0, 1 evaluated, 0 expanded
+[t=0.368653s, 85596 KB] f = 17, 1 evaluated, 0 expanded
+[t=0.368659s, 85596 KB] Initial heuristic value for cpdbs: 17
+[t=0.368663s, 85596 KB] pruning method: none
+[t=0.368671s, 85596 KB] New best heuristic value for cpdbs: 16
+[t=0.368675s, 85596 KB] g=1, 2 evaluated, 1 expanded
+[t=0.368680s, 85596 KB] New best heuristic value for cpdbs: 15
+[t=0.368683s, 85596 KB] g=2, 4 evaluated, 2 expanded
+[t=0.368688s, 85596 KB] New best heuristic value for cpdbs: 14
+[t=0.368690s, 85596 KB] g=3, 6 evaluated, 3 expanded
+[t=0.368694s, 85596 KB] New best heuristic value for cpdbs: 13
+[t=0.368697s, 85596 KB] g=4, 7 evaluated, 4 expanded
+[t=0.368702s, 85596 KB] New best heuristic value for cpdbs: 12
+[t=0.368705s, 85596 KB] g=5, 9 evaluated, 5 expanded
+[t=0.368709s, 85596 KB] New best heuristic value for cpdbs: 11
+[t=0.368711s, 85596 KB] g=6, 10 evaluated, 6 expanded
+[t=0.368719s, 85596 KB] New best heuristic value for cpdbs: 10
+[t=0.368722s, 85596 KB] g=7, 15 evaluated, 7 expanded
+[t=0.368728s, 85596 KB] New best heuristic value for cpdbs: 9
+[t=0.368731s, 85596 KB] g=8, 17 evaluated, 8 expanded
+[t=0.368735s, 85596 KB] New best heuristic value for cpdbs: 8
+[t=0.368738s, 85596 KB] g=9, 19 evaluated, 9 expanded
+[t=0.368744s, 85596 KB] New best heuristic value for cpdbs: 7
+[t=0.368747s, 85596 KB] g=10, 23 evaluated, 10 expanded
+[t=0.368751s, 85596 KB] New best heuristic value for cpdbs: 6
+[t=0.368754s, 85596 KB] g=11, 24 evaluated, 11 expanded
+[t=0.368759s, 85596 KB] New best heuristic value for cpdbs: 5
+[t=0.368765s, 85596 KB] g=12, 25 evaluated, 12 expanded
+[t=0.368769s, 85596 KB] New best heuristic value for cpdbs: 4
+[t=0.368771s, 85596 KB] g=13, 26 evaluated, 13 expanded
+[t=0.368777s, 85596 KB] New best heuristic value for cpdbs: 3
+[t=0.368780s, 85596 KB] g=14, 29 evaluated, 14 expanded
+[t=0.368783s, 85596 KB] New best heuristic value for cpdbs: 2
+[t=0.368786s, 85596 KB] g=15, 30 evaluated, 15 expanded
+[t=0.368795s, 85596 KB] New best heuristic value for cpdbs: 1
+[t=0.368798s, 85596 KB] g=16, 35 evaluated, 16 expanded
+[t=0.368804s, 85596 KB] New best heuristic value for cpdbs: 0
+[t=0.368808s, 85596 KB] g=17, 39 evaluated, 17 expanded
+[t=0.368811s, 85596 KB] Solution found!
+[t=0.368814s, 85596 KB] Actual search time: 0.000150s
+move c11 c12 right (1)
+move c12 c13 right (1)
+move c13 c14 right (1)
+move c14 c24 down (1)
+push c24 c23 c22 b1 left (1)
+move c23 c13 up (1)
+move c13 c12 left (1)
+push c12 c22 c32 b1 down (1)
+move c22 c21 left (1)
+move c21 c31 down (1)
+move c31 c41 down (1)
+move c41 c42 right (1)
+move c42 c43 right (1)
+push c43 c33 c23 b2 up (1)
+push c33 c23 c13 b2 up (1)
+move c23 c22 left (1)
+push c22 c32 c42 b1 down (1)
+[t=0.368819s, 85596 KB] Plan length: 17 step(s).
+[t=0.368819s, 85596 KB] Plan cost: 17
+[t=0.368819s, 85596 KB] Expanded 18 state(s).
+[t=0.368819s, 85596 KB] Reopened 0 state(s).
+[t=0.368819s, 85596 KB] Evaluated 39 state(s).
+[t=0.368819s, 85596 KB] Evaluations: 39
+[t=0.368819s, 85596 KB] Generated 50 state(s).
+[t=0.368819s, 85596 KB] Dead ends: 3 state(s).
+[t=0.368819s, 85596 KB] Expanded until last jump: 0 state(s).
+[t=0.368819s, 85596 KB] Reopened until last jump: 0 state(s).
+[t=0.368819s, 85596 KB] Evaluated until last jump: 1 state(s).
+[t=0.368819s, 85596 KB] Generated until last jump: 0 state(s).
+[t=0.368819s, 85596 KB] Number of registered states: 39
+[t=0.368819s, 85596 KB] Int hash set load factor: 39/64 = 0.609375
+[t=0.368819s, 85596 KB] Int hash set resizes: 6
+[t=0.368819s, 85596 KB] Search time: 0.000190s
+[t=0.368819s, 85596 KB] Total time: 0.368819s
+Solution found.
+search exit code: 0
+
