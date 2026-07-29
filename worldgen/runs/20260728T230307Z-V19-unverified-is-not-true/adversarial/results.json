@@ -1,0 +1,506 @@
+[
+ {
+  "mutant": "A01-holds-key-optimistic-default",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "ied'\r\nE         Use -v to get more diff\r\n\r\nworldgen\\tests\\test_invariant_status.py:82: AssertionError\r\n_______ test_no_adversarial_row_is_ever_counted_as_holding_by_accident ________\r\n\r\n    def test_no_adversarial_row_is_ever_counted_as_holding_by_accident():\r\n        \"\"\"The single sentence this whole cell is about.\r\n    \r\n        Of the thirteen rows above, exactly one is well-formed enough to hold. If a\r\n        future edit widens the `holds` branch, this fails before anything else does.\r\n        \"\"\"\r\n        status = truth.classify_invariants([row for row, _e, _w in ROWS])\r\n>       assert status[HOLDS] == [\"a\"], status[HOLDS]\r\nE       AssertionError: ['a', 'f']\r\nE       assert ['a', 'f'] == ['a']\r\nE         \r\nE         Left contains one more item: 'f'\r\nE         Use -v to get more diff\r\n\r\nworldgen\\tests\\test_invariant_status.py:92: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[f]\r\nFAILED worldgen/tests/test_invariant_status.py::test_no_adversarial_row_is_ever_counted_as_holding_by_accident\r\n2 failed, 512 passed, 13 skipped in 27.01s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "A02-holds-ignores-status",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "ied'\r\nE         Use -v to get more diff\r\n\r\nworldgen\\tests\\test_invariant_status.py:82: AssertionError\r\n_______ test_no_adversarial_row_is_ever_counted_as_holding_by_accident ________\r\n\r\n    def test_no_adversarial_row_is_ever_counted_as_holding_by_accident():\r\n        \"\"\"The single sentence this whole cell is about.\r\n    \r\n        Of the thirteen rows above, exactly one is well-formed enough to hold. If a\r\n        future edit widens the `holds` branch, this fails before anything else does.\r\n        \"\"\"\r\n        status = truth.classify_invariants([row for row, _e, _w in ROWS])\r\n>       assert status[HOLDS] == [\"a\"], status[HOLDS]\r\nE       AssertionError: ['a', 'j']\r\nE       assert ['a', 'j'] == ['a']\r\nE         \r\nE         Left contains one more item: 'j'\r\nE         Use -v to get more diff\r\n\r\nworldgen\\tests\\test_invariant_status.py:92: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[j]\r\nFAILED worldgen/tests/test_invariant_status.py::test_no_adversarial_row_is_ever_counted_as_holding_by_accident\r\n2 failed, 512 passed, 13 skipped in 27.07s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "A03-holds-ignores-verified",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "ied'\r\nE         Use -v to get more diff\r\n\r\nworldgen\\tests\\test_invariant_status.py:82: AssertionError\r\n_______ test_no_adversarial_row_is_ever_counted_as_holding_by_accident ________\r\n\r\n    def test_no_adversarial_row_is_ever_counted_as_holding_by_accident():\r\n        \"\"\"The single sentence this whole cell is about.\r\n    \r\n        Of the thirteen rows above, exactly one is well-formed enough to hold. If a\r\n        future edit widens the `holds` branch, this fails before anything else does.\r\n        \"\"\"\r\n        status = truth.classify_invariants([row for row, _e, _w in ROWS])\r\n>       assert status[HOLDS] == [\"a\"], status[HOLDS]\r\nE       AssertionError: ['a', 'g']\r\nE       assert ['a', 'g'] == ['a']\r\nE         \r\nE         Left contains one more item: 'g'\r\nE         Use -v to get more diff\r\n\r\nworldgen\\tests\\test_invariant_status.py:92: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[g]\r\nFAILED worldgen/tests/test_invariant_status.py::test_no_adversarial_row_is_ever_counted_as_holding_by_accident\r\n2 failed, 512 passed, 13 skipped in 27.02s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "A04-truthy-not-identity",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "ial_row_is_ever_counted_as_holding_by_accident ________\r\n\r\n    def test_no_adversarial_row_is_ever_counted_as_holding_by_accident():\r\n        \"\"\"The single sentence this whole cell is about.\r\n    \r\n        Of the thirteen rows above, exactly one is well-formed enough to hold. If a\r\n        future edit widens the `holds` branch, this fails before anything else does.\r\n        \"\"\"\r\n        status = truth.classify_invariants([row for row, _e, _w in ROWS])\r\n>       assert status[HOLDS] == [\"a\"], status[HOLDS]\r\nE       AssertionError: ['a', 'k', 'l']\r\nE       assert ['a', 'k', 'l'] == ['a']\r\nE         \r\nE         Left contains 2 more items, first extra item: 'k'\r\nE         Use -v to get more diff\r\n\r\nworldgen\\tests\\test_invariant_status.py:92: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[k]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[l]\r\nFAILED worldgen/tests/test_invariant_status.py::test_no_adversarial_row_is_ever_counted_as_holding_by_accident\r\n3 failed, 511 passed, 13 skipped in 27.05s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "A05-sink-to-holds",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "l_row_lands_where_it_should[c]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[d]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[e]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[f]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[g]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[j]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[k]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[l]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[m]\r\nFAILED worldgen/tests/test_invariant_status.py::test_no_adversarial_row_is_ever_counted_as_holding_by_accident\r\nFAILED worldgen/tests/test_invariant_status.py::test_all_hold_is_not_merely_the_absence_of_violations\r\nFAILED worldgen/tests/test_invariant_status.py::test_a_check_that_ran_on_nothing_is_unverified_not_holding\r\n16 failed, 498 passed, 13 skipped in 27.18s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "A06-sink-to-violated",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "test_bypassing_the_unverified_sink_reproduces_the_bug\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_gate_key_is_what_exits_not_merely_what_is_reported\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[c]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[d]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[e]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[f]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[g]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[j]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[k]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[l]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[m]\r\n14 failed, 500 passed, 13 skipped in 27.08s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "A07-drop-status-violated-clause",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "=============================\r\n_____________ test_each_adversarial_row_lands_where_it_should[i] ______________\r\n\r\nrow = {'name': 'i', 'status': 'violated', 'verified': False}\r\nexpected = 'violated'\r\nwhy = 'an unverified row that nevertheless declares a violation'\r\n\r\n    @pytest.mark.parametrize(\"row,expected,why\", ROWS,\r\n                             ids=[r[0][\"name\"] for r in ROWS])\r\n    def test_each_adversarial_row_lands_where_it_should(row, expected, why):\r\n        status = truth.classify_invariants([row])\r\n        landed = [k for k in truth.INV_STATUSES if status[k]]\r\n>       assert landed == [expected], \"%s: %s -> %s\" % (row[\"name\"], why, landed)\r\nE       AssertionError: i: an unverified row that nevertheless declares a violation -> ['unverified']\r\nE       assert ['unverified'] == ['violated']\r\nE         \r\nE         At index 0 diff: 'unverified' != 'violated'\r\nE         Use -v to get more diff\r\n\r\nworldgen\\tests\\test_invariant_status.py:82: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[i]\r\n1 failed, 513 passed, 13 skipped in 27.43s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "A08-drop-verified-violated-clause",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "===\r\n_____________ test_each_adversarial_row_lands_where_it_should[h] ______________\r\n\r\nrow = {'holds': False, 'name': 'h', 'status': 'holds', 'verified': True}\r\nexpected = 'violated'\r\nwhy = 'says holds and does not hold \u2014 believed on the pessimistic side'\r\n\r\n    @pytest.mark.parametrize(\"row,expected,why\", ROWS,\r\n                             ids=[r[0][\"name\"] for r in ROWS])\r\n    def test_each_adversarial_row_lands_where_it_should(row, expected, why):\r\n        status = truth.classify_invariants([row])\r\n        landed = [k for k in truth.INV_STATUSES if status[k]]\r\n>       assert landed == [expected], \"%s: %s -> %s\" % (row[\"name\"], why, landed)\r\nE       AssertionError: h: says holds and does not hold \u2014 believed on the pessimistic side -> ['unverified']\r\nE       assert ['unverified'] == ['violated']\r\nE         \r\nE         At index 0 diff: 'unverified' != 'violated'\r\nE         Use -v to get more diff\r\n\r\nworldgen\\tests\\test_invariant_status.py:82: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[h]\r\n1 failed, 513 passed, 13 skipped in 27.32s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "A09-nameless-rows-vanish",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 27.21s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "A10-unverified-list-emptied-at-return",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "test_each_adversarial_row_lands_where_it_should[c]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[d]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[e]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[f]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[g]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[j]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[k]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[l]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[m]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_three_classes_partition_the_input\r\nFAILED worldgen/tests/test_invariant_status.py::test_all_hold_is_not_merely_the_absence_of_violations\r\nFAILED worldgen/tests/test_invariant_status.py::test_a_check_that_ran_on_nothing_is_unverified_not_holding\r\n15 failed, 499 passed, 13 skipped in 27.34s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "A11-violated-list-emptied-at-return",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": ": a row escaped the partition, or was counted twice: {'holds': ['a'], 'violated': [], 'unverified': ['c', 'd', 'e', 'f', 'g', 'j', 'k', 'l', 'm']}\r\nE       assert ['a', 'c', 'd...'f', 'g', ...] == ['a', 'b', 'c...'e', 'f', ...]\r\nE         \r\nE         At index 1 diff: 'c' != 'b'\r\nE         Right contains 3 more items, first extra item: 'k'\r\nE         Use -v to get more diff\r\n\r\nworldgen\\tests\\test_invariant_status.py:100: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[b]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[h]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[i]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_three_classes_partition_the_input\r\n6 failed, 508 passed, 13 skipped in 27.34s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "A12-violated-and-unverified-swapped",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "y::test_each_adversarial_row_lands_where_it_should[b]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[c]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[d]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[e]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[f]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[g]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[h]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[i]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[j]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[k]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[l]\r\nFAILED worldgen/tests/test_invariant_status.py::test_each_adversarial_row_lands_where_it_should[m]\r\n18 failed, 496 passed, 13 skipped in 27.30s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "B01-all-hold-ignores-unverified",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "bject at 0x000001A7C5634BC0>()\r\nE        +      where <built-in method values of dict object at 0x000001A7C5634BC0> = {'agent_unique': {'name': 'agent_unique', 'note': 'a check is declared but ran on no states and no transitions, so not... was measured \u2014 vacuously unfalsified is not verified', 'statement': 'every frame is 7 x 9', 'states_checked': 0, ...}}.values\r\n\r\nworldgen\\tests\\test_invariant_status.py:131: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\nFAILED worldgen/tests/test_invariant_status.py::test_all_hold_is_not_merely_the_absence_of_violations\r\nFAILED worldgen/tests/test_invariant_status.py::test_a_check_that_ran_on_nothing_is_unverified_not_holding\r\n6 failed, 508 passed, 13 skipped in 27.26s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "B02-all-hold-ignores-violated",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "              \"patch %r could not be applied: its anchor occurs %d times in \"\r\n                    \"%s (expected exactly 1). The source moved under this file; \"\r\n                    \"re-anchor it rather than letting the control become a no-op.\"\r\n                    % (self.name, found, relpath))\r\nE               worldgen.tests.invariant_sandbox.InjectionFailed: patch 'weakening:boolean_default' could not be applied: its anchor occurs 0 times in core/truth.py (expected exactly 1). The source moved under this file; re-anchor it rather than letting the control become a no-op.\r\n\r\nworldgen\\tests\\invariant_sandbox.py:114: InjectionFailed\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n4 failed, 510 passed, 13 skipped in 27.36s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "B03-all-hold-always-true",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "bject at 0x0000020E7733E5C0>()\r\nE        +      where <built-in method values of dict object at 0x0000020E7733E5C0> = {'agent_unique': {'name': 'agent_unique', 'note': 'a check is declared but ran on no states and no transitions, so not... was measured \u2014 vacuously unfalsified is not verified', 'statement': 'every frame is 7 x 9', 'states_checked': 0, ...}}.values\r\n\r\nworldgen\\tests\\test_invariant_status.py:131: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\nFAILED worldgen/tests/test_invariant_status.py::test_all_hold_is_not_merely_the_absence_of_violations\r\nFAILED worldgen/tests/test_invariant_status.py::test_a_check_that_ran_on_nothing_is_unverified_not_holding\r\n6 failed, 508 passed, 13 skipped in 27.27s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C01-prose-branch-reports-holds",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "y\": 1.0,\r\r\nE           \"rule_correspondence_failures\": [],\r\r\nE           \"solvability_intent_failures\": [],\r\r\nE           \"tiers\": {\r\r\nE             \"1\": 1,\r\r\nE             \"2\": 0,\r\r\nE             \"3\": 0\r\r\nE           },\r\r\nE           \"unsolvable\": [],\r\r\nE           \"variant_pairs\": [],\r\r\nE           \"worlds\": 1\r\r\nE         }\r\r\nE         build gate: 1 catalogue world(s) green\r\r\nE         \r\nE       assert 0 == 1\r\nE        +  where 0 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n3 failed, 511 passed, 13 skipped in 28.02s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C02-prose-branch-drops-status-stamp",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 26.93s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C03-vacuity-guard-disabled",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "a callable that never executed.\r\n    \r\n        `not violations` is vacuously true when there were no states to violate\r\n        anything on, which is `.get(\"holds\", True)` again \u2014 this time in a row that\r\n        *has* a callable, where nobody would think to look. Reachable through\r\n        `mutate.py`, which hands `check_invariants` an explicit state list.\r\n        \"\"\"\r\n        world = support.world(\"t1-walk-maze\")\r\n        rows = {r[\"name\"]: r for r in truth.check_invariants(world, [])}\r\n        assert rows, \"no invariants were produced at all\"\r\n        for name, row in rows.items():\r\n>           assert row[\"status\"] == UNVERIFIED, (\r\n                \"%s reported %r on zero states\" % (name, row[\"status\"]))\r\nE           AssertionError: agent_unique reported 'holds' on zero states\r\nE           assert 'holds' == 'unverified'\r\nE             \r\nE             - unverified\r\nE             + holds\r\n\r\nworldgen\\tests\\test_invariant_status.py:128: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_status.py::test_a_check_that_ran_on_nothing_is_unverified_not_holding\r\n1 failed, 513 passed, 13 skipped in 26.89s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C04-vacuity-guard-states-only",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": "[unseeded_rng]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[wall_clock]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-hash_order_wide]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[no_diff-unseeded_rng]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_an_unpatched_sandbox_builds_green\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_well_formed_invariant_that_holds_is_not_refused[holds_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_well_formed_invariant_that_holds_is_not_refused[holds_edge]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_same_invariants_do_verify_on_a_real_state_set\r\n25 failed, 489 passed, 13 skipped in 19.20s\r\n",
+  "build_tail": "declaring it (invariant_unverified)\r\n  v-ab7a7d57               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-bd2babb4               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-c52c42ed               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-ce732813               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-d2c2b1b9               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-eb4c5810               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-efe43df1               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n"
+ },
+ {
+  "mutant": "C05-vacuity-guard-edges-not-counted",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": "e', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...not claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:127: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_clears_the_gate[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_is_byte_identical_across_the_two_seeds[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_moves_the_bytes_across_the_two_seeds[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_is_the_class_it_claims_to_be[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_well_formed_invariant_that_holds_is_not_refused[holds_edge]\r\n7 failed, 507 passed, 13 skipped in 20.26s\r\n",
+  "build_tail": "declaring it (invariant_unverified)\r\n  t3-gravity-fragile       a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  t3-latch-maze            a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-29ace70e               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-379c937f               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-bd2babb4               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-d2c2b1b9               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-efe43df1               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n"
+ },
+ {
+  "mutant": "C06-edge-check-never-runs",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": "_check`, or stop declaring it (invariant_unverified)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:127: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_clears_the_gate[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_is_byte_identical_across_the_two_seeds[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_moves_the_bytes_across_the_two_seeds[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_is_the_class_it_claims_to_be[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_well_formed_invariant_that_holds_is_not_refused[holds_edge]\r\n8 failed, 506 passed, 13 skipped in 20.11s\r\n",
+  "build_tail": "declaring it (invariant_unverified)\r\n  t3-gravity-fragile       a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  t3-latch-maze            a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-29ace70e               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-379c937f               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-bd2babb4               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-d2c2b1b9               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-efe43df1               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n"
+ },
+ {
+  "mutant": "C07-edge-loop-first-transition-only",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 27.07s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C08-state-loop-first-state-only",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 26.46s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C09-holds-hardcoded-true",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": ")\r\r\nE         \r\r\nE         {\r\r\nE           \"claim_disagreements\": [],\r\r\nE           \"frame_collisions\": [],\r\r\nE           \"invariant_failures\": [],\r\r\nE           \"invariant_unverified\": [],\r\r\nE           \"mean_reversibility\": 1.0,\r\r\nE           \"rule_correspondence_failures\": [],\r\r\nE           \"solvability_intent_failures\": [],\r\r\nE           \"tiers\": {\r\r\nE             \"1\": 1,\r\r\nE             \"2\": 0,\r\r\nE             \"3\": 0\r\r\nE           },\r\r\nE           \"unsolvable\": [],\r\r\nE           \"variant_pairs\": [],\r\r\nE           \"worlds\": 1\r\r\nE         }\r\r\nE         build gate: 1 catalogue world(s) green\r\r\nE         \r\nE       assert 0 == 1\r\nE        +  where 0 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:158: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\n1 failed, 513 passed, 13 skipped in 27.50s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C10-status-hardcoded-holds",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 27.53s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C11-status-hardcoded-violated",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": "s_the_injection_past[shared_hashseed-mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-hash_order_wide]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[no_diff-unseeded_rng]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_an_unpatched_sandbox_builds_green\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_well_formed_invariant_that_holds_is_not_refused[holds_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_well_formed_invariant_that_holds_is_not_refused[holds_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_bypassing_the_unverified_sink_reproduces_the_bug\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_gate_key_is_what_exits_not_merely_what_is_reported\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_same_invariants_do_verify_on_a_real_state_set\r\n27 failed, 487 passed, 13 skipped in 19.64s\r\n",
+  "build_tail": "nt is violated on a reachable state (invariant_failures)\r\n  v-29ace70e               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-379c937f               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-57cfb2b4               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-659c9594               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-7048ee5e               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-707a64ad               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-a3446614               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-ab7a7d57               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-bd2babb4               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-c52c42ed               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-ce732813               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-d2c2b1b9               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-eb4c5810               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-efe43df1               a declared invariant is violated on a reachable state (invariant_failures)\r\n"
+ },
+ {
+  "mutant": "C12-check-exception-swallowed",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 27.39s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C13-edge-exception-swallowed",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 27.51s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C14-states-checked-misreported",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 27.35s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C15-transitions-checked-misreported",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 27.35s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "C16-verified-stamp-false",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": "[unseeded_rng]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[wall_clock]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-hash_order_wide]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[no_diff-unseeded_rng]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_an_unpatched_sandbox_builds_green\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_well_formed_invariant_that_holds_is_not_refused[holds_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_well_formed_invariant_that_holds_is_not_refused[holds_edge]\r\nFAILED worldgen/tests/test_invariant_status.py::test_the_same_invariants_do_verify_on_a_real_state_set\r\n25 failed, 489 passed, 13 skipped in 19.50s\r\n",
+  "build_tail": "declaring it (invariant_unverified)\r\n  v-ab7a7d57               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-bd2babb4               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-c52c42ed               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-ce732813               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-d2c2b1b9               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-eb4c5810               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-efe43df1               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n"
+ },
+ {
+  "mutant": "C17-edge-violations-not-recorded",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "       {\r\r\nE           \"claim_disagreements\": [],\r\r\nE           \"frame_collisions\": [],\r\r\nE           \"invariant_failures\": [],\r\r\nE           \"invariant_unverified\": [],\r\r\nE           \"mean_reversibility\": 1.0,\r\r\nE           \"rule_correspondence_failures\": [],\r\r\nE           \"solvability_intent_failures\": [],\r\r\nE           \"tiers\": {\r\r\nE             \"1\": 1,\r\r\nE             \"2\": 0,\r\r\nE             \"3\": 0\r\r\nE           },\r\r\nE           \"unsolvable\": [],\r\r\nE           \"variant_pairs\": [],\r\r\nE           \"worlds\": 1\r\r\nE         }\r\r\nE         build gate: 1 catalogue world(s) green\r\r\nE         \r\nE       assert 0 == 1\r\nE        +  where 0 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:112: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\n1 failed, 513 passed, 13 skipped in 27.65s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "D01-ground-truth-all-hold-true",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": ")\r\r\nE         \r\r\nE         {\r\r\nE           \"claim_disagreements\": [],\r\r\nE           \"frame_collisions\": [],\r\r\nE           \"invariant_failures\": [],\r\r\nE           \"invariant_unverified\": [],\r\r\nE           \"mean_reversibility\": 1.0,\r\r\nE           \"rule_correspondence_failures\": [],\r\r\nE           \"solvability_intent_failures\": [],\r\r\nE           \"tiers\": {\r\r\nE             \"1\": 1,\r\r\nE             \"2\": 0,\r\r\nE             \"3\": 0\r\r\nE           },\r\r\nE           \"unsolvable\": [],\r\r\nE           \"variant_pairs\": [],\r\r\nE           \"worlds\": 1\r\r\nE         }\r\r\nE         build gate: 1 catalogue world(s) green\r\r\nE         \r\nE       assert 0 == 1\r\nE        +  where 0 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:158: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\n1 failed, 513 passed, 13 skipped in 29.10s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "D02-ground-truth-status-emptied",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "ble\": [],\r\r\nE           \"variant_pairs\": [],\r\r\nE           \"worlds\": 1\r\r\nE         }\r\r\nE         build gate: 1 catalogue world(s) green\r\r\nE         \r\nE       assert 0 == 1\r\nE        +  where 0 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n5 failed, 509 passed, 13 skipped in 29.02s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "D03-markdown-unverified-marker-removed",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 28.97s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "D04-markdown-violated-marker-removed",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 28.49s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "D05-markdown-summary-always-true",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 28.78s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "D06-markdown-rulecorr-and-not-or",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "\r\n                rule[\"name\"], rule[\"when\"], rule[\"then\"], rule.get(\"reversible\", \"\u2014\"),\r\n                stamp_cell))\r\n        # `corr.get(\"agrees\", True)` was the same shape as the defect this cell is\r\n        # named for: a missing verdict read as a good one, so a `truth` dict with no\r\n        # `rule_correspondence` \u2014 or one carrying the block but not the verdict \u2014\r\n        # rendered a clean Markdown page.  The Markdown is the half a human audits,\r\n        # so \"we did not measure it\" has to look different from \"it agreed\".\r\n        if \"rule_correspondence\" not in truth and \"agrees\" not in corr:\r\n            lines += [\"\", \"**Rule correspondence was not measured for this world**, \"\r\n                          \"so nothing below should be read as agreement.\"]\r\n>       elif not corr[\"agrees\"]:\r\n                 ^^^^^^^^^^^^^^\r\nE       KeyError: 'agrees'\r\n\r\nworldgen\\core\\truth.py:478: KeyError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_status.py::test_an_unmeasured_rule_correspondence_does_not_render_as_agreement[blob0-the block is present but carries no verdict]\r\n1 failed, 513 passed, 13 skipped in 28.78s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "D07-markdown-omits-unverified-bullets",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 28.50s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E01-row-violated-emptied",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": ": [],\r\r\nE           \"invariant_unverified\": [],\r\r\nE           \"mean_reversibility\": 1.0,\r\r\nE           \"rule_correspondence_failures\": [],\r\r\nE           \"solvability_intent_failures\": [],\r\r\nE           \"tiers\": {\r\r\nE             \"1\": 1,\r\r\nE             \"2\": 0,\r\r\nE             \"3\": 0\r\r\nE           },\r\r\nE           \"unsolvable\": [],\r\r\nE           \"variant_pairs\": [],\r\r\nE           \"worlds\": 1\r\r\nE         }\r\r\nE         build gate: 1 catalogue world(s) green\r\r\nE         \r\nE       assert 0 == 1\r\nE        +  where 0 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:112: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\n2 failed, 512 passed, 13 skipped in 28.18s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E02-row-unverified-emptied",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "y\": 1.0,\r\r\nE           \"rule_correspondence_failures\": [],\r\r\nE           \"solvability_intent_failures\": [],\r\r\nE           \"tiers\": {\r\r\nE             \"1\": 1,\r\r\nE             \"2\": 0,\r\r\nE             \"3\": 0\r\r\nE           },\r\r\nE           \"unsolvable\": [],\r\r\nE           \"variant_pairs\": [],\r\r\nE           \"worlds\": 1\r\r\nE         }\r\r\nE         build gate: 1 catalogue world(s) green\r\r\nE         \r\nE       assert 0 == 1\r\nE        +  where 0 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n3 failed, 511 passed, 13 skipped in 28.02s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E03-totals-unverified-emptied",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "y\": 1.0,\r\r\nE           \"rule_correspondence_failures\": [],\r\r\nE           \"solvability_intent_failures\": [],\r\r\nE           \"tiers\": {\r\r\nE             \"1\": 1,\r\r\nE             \"2\": 0,\r\r\nE             \"3\": 0\r\r\nE           },\r\r\nE           \"unsolvable\": [],\r\r\nE           \"variant_pairs\": [],\r\r\nE           \"worlds\": 1\r\r\nE         }\r\r\nE         build gate: 1 catalogue world(s) green\r\r\nE         \r\nE       assert 0 == 1\r\nE        +  where 0 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n3 failed, 511 passed, 13 skipped in 27.87s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E04-totals-failures-emptied",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "oved under this file; \"\r\n                    \"re-anchor it rather than letting the control become a no-op.\"\r\n                    % (self.name, found, relpath))\r\nE               worldgen.tests.invariant_sandbox.InjectionFailed: patch 'weakening:pre_v19' could not be applied: its anchor occurs 0 times in build.py (expected exactly 1). The source moved under this file; re-anchor it rather than letting the control become a no-op.\r\n\r\nworldgen\\tests\\invariant_sandbox.py:114: InjectionFailed\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\n5 failed, 509 passed, 13 skipped in 27.43s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E05-totals-keys-swapped",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "\r\nworldgen\\tests\\test_invariant_gate.py:204: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_gate_key_is_what_exits_not_merely_what_is_reported\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n9 failed, 505 passed, 13 skipped in 27.04s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E06-unverified-gate-removed",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "rocess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_gate_key_is_what_exits_not_merely_what_is_reported\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n7 failed, 505 passed, 13 skipped in 26.98s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E07-violated-gate-removed",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "           \"3\": 0\r\r\nE           },\r\r\nE           \"unsolvable\": [],\r\r\nE           \"variant_pairs\": [],\r\r\nE           \"worlds\": 1\r\r\nE         }\r\r\nE         build gate: 1 catalogue world(s) green\r\r\nE         \r\nE       assert 0 == 1\r\nE        +  where 0 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:158: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_build_gate.py::test_the_named_gates_are_all_present\r\nFAILED worldgen/tests/test_build_gate.py::test_a_gate_reports_every_offending_world\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\n5 failed, 507 passed, 13 skipped in 27.49s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E08-missing-key-back-to-optimistic-get",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "\"\"\"\r\n        totals = _manifest()[\"totals\"]\r\n        del totals[key]\r\n        failures = build.gate_failures({\"prompt_id\": \"test\", \"worlds\": [],\r\n                                        \"totals\": totals})\r\n>       assert len(failures) == 1, failures\r\nE       AssertionError: []\r\nE       assert 0 == 1\r\nE        +  where 0 = len([])\r\n\r\nworldgen\\tests\\test_build_gate.py:80: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_build_gate.py::test_a_missing_gate_key_is_a_failure_not_a_pass[frame_collisions]\r\nFAILED worldgen/tests/test_build_gate.py::test_a_missing_gate_key_is_a_failure_not_a_pass[solvability_intent_failures]\r\nFAILED worldgen/tests/test_build_gate.py::test_a_missing_gate_key_is_a_failure_not_a_pass[rule_correspondence_failures]\r\nFAILED worldgen/tests/test_build_gate.py::test_a_missing_gate_key_is_a_failure_not_a_pass[invariant_failures]\r\nFAILED worldgen/tests/test_build_gate.py::test_a_missing_gate_key_is_a_failure_not_a_pass[invariant_unverified]\r\nFAILED worldgen/tests/test_build_gate.py::test_a_missing_gate_key_is_a_failure_not_a_pass[claim_disagreements]\r\n6 failed, 508 passed, 13 skipped in 27.69s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E09-gate-failures-returns-empty",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "ng_gate_key_is_a_failure_not_a_pass[rule_correspondence_failures]\r\nFAILED worldgen/tests/test_build_gate.py::test_a_missing_gate_key_is_a_failure_not_a_pass[invariant_failures]\r\nFAILED worldgen/tests/test_build_gate.py::test_a_missing_gate_key_is_a_failure_not_a_pass[invariant_unverified]\r\nFAILED worldgen/tests/test_build_gate.py::test_a_missing_gate_key_is_a_failure_not_a_pass[claim_disagreements]\r\nFAILED worldgen/tests/test_build_gate.py::test_a_gate_reports_every_offending_world\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n20 failed, 494 passed, 13 skipped in 27.37s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E10-main-exits-zero-on-gate-failure",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "eclaring it (invariant_unverified)\r\r\nE         \r\nE       assert 0 == 1\r\nE        +  where 0 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...not claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n6 failed, 508 passed, 13 skipped in 27.57s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "E11-mutant-gate-results-discarded",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 27.79s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "F01-latch-edge-check-returns-true",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 27.71s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "F02-latch-monotone-direction-flipped",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": ")\r\r\nE         \r\nE       assert (1 == 0)\r\nE        +  where 1 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--check', 't3-latch-maze'], returncode=1...  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_determinism_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_clears_the_gate[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_is_byte_identical_across_the_two_seeds[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_moves_the_bytes_across_the_two_seeds[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_is_the_class_it_claims_to_be[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\n6 failed, 508 passed, 13 skipped in 21.30s\r\n",
+  "build_tail": "\r\nBUILD GATE FAILED:\r\n  t1-switch-latch          a declared invariant is violated on a reachable state (invariant_failures)\r\n  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-379c937f               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-d2c2b1b9               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-efe43df1               a declared invariant is violated on a reachable state (invariant_failures)\r\n"
+ },
+ {
+  "mutant": "F03-latch-per-switch-clause-dropped",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 29.10s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "F04-latch-net-clause-dropped",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 29.35s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "F05-latch-reverted-to-prose",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": ")\r\r\nE         \r\nE       assert (1 == 0)\r\nE        +  where 1 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--check', 't3-latch-maze'], returncode=1...not claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_determinism_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_clears_the_gate[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_is_byte_identical_across_the_two_seeds[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_moves_the_bytes_across_the_two_seeds[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_is_the_class_it_claims_to_be[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\n6 failed, 508 passed, 13 skipped in 22.81s\r\n",
+  "build_tail": "\r\nBUILD GATE FAILED:\r\n  t1-switch-latch          a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  t3-latch-maze            a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-379c937f               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-d2c2b1b9               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-efe43df1               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n"
+ },
+ {
+  "mutant": "F06-collection-edge-check-returns-true",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 28.89s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "F07-collection-direction-flipped",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": ")\r\r\nE         \r\nE       assert (1 == 0)\r\nE        +  where 1 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--check', 't3-latch-maze'], returncode=1...  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_determinism_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_clears_the_gate[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_is_byte_identical_across_the_two_seeds[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_moves_the_bytes_across_the_two_seeds[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_is_the_class_it_claims_to_be[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\n6 failed, 508 passed, 13 skipped in 21.26s\r\n",
+  "build_tail": "\r\nBUILD GATE FAILED:\r\n  t1-tokens-lock           a declared invariant is violated on a reachable state (invariant_failures)\r\n  t2-cycler-lock           a declared invariant is violated on a reachable state (invariant_failures)\r\n  t2-lock-fragile          a declared invariant is violated on a reachable state (invariant_failures)\r\n  t3-cycler-portal-lock    a declared invariant is violated on a reachable state (invariant_failures)\r\n  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-29ace70e               a declared invariant is violated on a reachable state (invariant_failures)\r\n  v-bd2babb4               a declared invariant is violated on a reachable state (invariant_failures)\r\n"
+ },
+ {
+  "mutant": "F08-collection-count-clause-dropped",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 34.30s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "F09-collection-lock-reopen-clause-dropped",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 34.92s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "F10-collection-reverted-to-prose",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": ")\r\r\nE         \r\nE       assert (1 == 0)\r\nE        +  where 1 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--check', 't3-latch-maze'], returncode=1...not claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_determinism_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_clears_the_gate[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_is_byte_identical_across_the_two_seeds[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_moves_the_bytes_across_the_two_seeds[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_is_the_class_it_claims_to_be[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\n6 failed, 508 passed, 13 skipped in 26.50s\r\n",
+  "build_tail": "\r\nBUILD GATE FAILED:\r\n  t1-tokens-lock           a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  t2-cycler-lock           a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  t2-lock-fragile          a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  t3-cycler-portal-lock    a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  t3-latch-maze            a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-29ace70e               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  v-bd2babb4               a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n"
+ },
+ {
+  "mutant": "F11-tile-edge-check-returns-true",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 31.79s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "F12-tile-monotone-direction-flipped",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": ")\r\r\nE         \r\nE       assert (1 == 0)\r\nE        +  where 1 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--check', 't3-latch-maze'], returncode=1...  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_determinism_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_clears_the_gate[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_is_byte_identical_across_the_two_seeds[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_moves_the_bytes_across_the_two_seeds[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_is_the_class_it_claims_to_be[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\n6 failed, 508 passed, 13 skipped in 22.56s\r\n",
+  "build_tail": "\r\nBUILD GATE FAILED:\r\n  t1-fragile-bridge        a declared invariant is violated on a reachable state (invariant_failures)\r\n  t2-lock-fragile          a declared invariant is violated on a reachable state (invariant_failures)\r\n  t3-gravity-fragile       a declared invariant is violated on a reachable state (invariant_failures)\r\n  t3-latch-maze            a declared invariant is violated on a reachable state (invariant_failures)\r\n"
+ },
+ {
+  "mutant": "F13-tile-monotone-clause-dropped",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 28.30s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "F14-tile-collapsed-crossing-clause-dropped",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 28.32s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "F15-tile-reverted-to-prose",
+  "pytest_rc": 1,
+  "build_rc": 1,
+  "pytest_tail": ")\r\r\nE         \r\nE       assert (1 == 0)\r\nE        +  where 1 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--check', 't3-latch-maze'], returncode=1...not claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_determinism_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_clears_the_gate[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_unpatched_sandbox_is_byte_identical_across_the_two_seeds[t3-latch-maze]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_moves_the_bytes_across_the_two_seeds[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_injection_is_the_class_it_claims_to_be[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_gate_goes_red_on_injected_nondeterminism[mechanism_order]\r\nFAILED worldgen/tests/test_determinism_gate.py::test_a_weakened_gate_lets_the_injection_past[shared_hashseed-mechanism_order]\r\n6 failed, 508 passed, 13 skipped in 22.24s\r\n",
+  "build_tail": "\r\nBUILD GATE FAILED:\r\n  t1-fragile-bridge        a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  t2-lock-fragile          a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  t3-gravity-fragile       a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n  t3-latch-maze            a declared invariant ships unverified \u2014 no callable check ran, so the world cannot claim it holds; give it a `check` or an `edge_check`, or stop declaring it (invariant_unverified)\r\n"
+ },
+ {
+  "mutant": "G01-sandbox-anchor-guard-disabled",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 28.89s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "G02-sandbox-table-anchor-broken-guard-intact",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_well_formed_invariant_that_holds_is_not_refused[holds_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_well_formed_invariant_that_holds_is_not_refused[holds_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_putting_the_boolean_back_lets_the_defect_through[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\nFAILED worldgen/tests/test_invariant_gate.py::test_bypassing_the_unverified_sink_reproduces_the_bug\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_gate_key_is_what_exits_not_merely_what_is_reported\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n12 failed, 502 passed, 13 skipped in 26.80s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "G03-sandbox-anchor-broken-and-guard-disabled",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": "d gate: 1 catalogue world(s) green\r\r\nE         \r\nE       assert 0 == 1\r\nE        +  where 0 = CompletedProcess(args=['D:\\\\Miniforge3\\\\python.exe', '-m', 'worldgen.build', '--into', 'C:\\\\Users\\\\user\\\\AppData\\\\Loca...vable\": [],\\r\\n  \"variant_pairs\": [],\\r\\n  \"worlds\": 1\\r\\n}\\r\\nbuild gate: 1 catalogue world(s) green\\r\\n', stderr=b'').returncode\r\n\r\nworldgen\\tests\\test_invariant_gate.py:203: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n6 failed, 508 passed, 13 skipped in 28.98s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "G04-sandbox-pythonpath-not-isolated",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 29.39s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "G05-sandbox-gate-lines-always-empty",
+  "pytest_rc": 1,
+  "build_rc": 0,
+  "pytest_tail": " scratch, \"prose_only\", \"boolean_default\")\r\n        assert proc.returncode == 1, out[-3000:]\r\n>       assert any(UNVERIFIED in line for line in lines), lines\r\nE       AssertionError: ()\r\nE       assert False\r\nE        +  where False = any(<generator object test_the_boolean_alone_is_not_what_catches_it.<locals>.<genexpr> at 0x0000024E898CFED0>)\r\n\r\nworldgen\\tests\\test_invariant_gate.py:204: AssertionError\r\n=========================== short test summary info ===========================\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_prose_only_invariant_cannot_pass_the_gate[prose_only_explicit_none]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_state]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_a_genuinely_violated_invariant_is_still_caught_as_one[violated_edge]\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_pre_v19_gate_did_still_catch_real_violations\r\nFAILED worldgen/tests/test_invariant_gate.py::test_the_boolean_alone_is_not_what_catches_it\r\n6 failed, 508 passed, 13 skipped in 29.25s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "H01-mutate-now-false-back-to-optimistic-get",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 28.67s\r\n",
+  "build_tail": ""
+ },
+ {
+  "mutant": "H02-mutate-now-false-includes-unverified",
+  "pytest_rc": 0,
+  "build_rc": 0,
+  "pytest_tail": "........................................................................ [ 13%]\r\n........................................................................ [ 27%]\r\n........................................................................ [ 40%]\r\n................................................................s....... [ 54%]\r\n........................................................................ [ 68%]\r\n............................................sssss.sssss.s.s............. [ 81%]\r\n........................................................................ [ 95%]\r\n.......................                                                  [100%]\r\n514 passed, 13 skipped in 28.21s\r\n",
+  "build_tail": ""
+ }
+]

@@ -188,6 +188,19 @@ class CountLock(Mechanism):
             frame = world.render(state)
             return sum(row.count(_color) for row in frame) == expected
 
+        def collection_monotone(world, prev, _action, nxt) -> bool:
+            before = world.view(self, prev)
+            after = world.view(self, nxt)
+            if self._collected(after) < self._collected(before):
+                return False
+            # Second clause of the same sentence: "so a lock that has opened
+            # never closes again".  It follows from the first only if a lock's
+            # threshold is fixed, which is a separate assumption; checking it
+            # directly costs nothing and does not rely on that.
+            was_closed = set(self._closed_cells(world.mine(self), before))
+            now_closed = set(self._closed_cells(world.mine(self), after))
+            return now_closed <= was_closed
+
         return [
             {"name": "token_count",
              "statement": "the number of cells showing colour %d equals the number "
@@ -196,11 +209,12 @@ class CountLock(Mechanism):
             {"name": "collection_is_monotone",
              "statement": "the number of collected tokens never decreases, so a lock "
                           "that has opened never closes again",
-             # Prose, on purpose.  This is a property of a *transition*, and `check`
-             # is handed one state at a time; any single-state predicate here would
-             # be checking something else and calling it this.  The reachable-graph
-             # side of the same fact is `collect_token` having one witness per token.
-             "check": None},
+             # A property of a *transition*, so `check` — handed one state at a
+             # time — could not express it and was `None`.  That was honest; what
+             # was not honest was `invariants_all_hold` reporting `true` anyway.
+             # `edge_check` sees both endpoints, so the claim is now exercised
+             # over the whole reachable graph instead of asserted.
+             "edge_check": collection_monotone},
         ]
 
     def reversibility(self, spec: WorldSpec, mine: Tuple[Entity, ...]) -> List[Dict[str, Any]]:

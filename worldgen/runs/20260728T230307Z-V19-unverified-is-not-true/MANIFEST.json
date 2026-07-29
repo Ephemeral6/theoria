@@ -1,0 +1,625 @@
+{
+  "base_commit": "9348fa4dcd108be8f537568d0a60f3b41ce15c71",
+  "branch": "agent/v19-unverified-is-not-true",
+  "caveats": [
+    "`--check` does not protect the committed artefacts: main() rebuilds OUT before check_determinism diffs it, so under a mutation it compares mutated against mutated. The 35 committed artefacts are pinned by git diff and human attention only. (determinism_sandbox.py:12-16 recorded this for V16.)",
+    "core/reversibility.py: 90 of 218 published claims (41.3%) are `deferred` or `unreachable` and neither class can reach the build gate; all 35/35 worlds carry at least one. Registered, not fixed - see INBOX-PROPOSAL-20260729-*.md in this directory.",
+    "37 rules self-exempt from `declared_never_fires` via `cascade: True` / `clause: True`, declared by the rule and independently checked by nobody. Same proposal."
+  ],
+  "cell": "V19",
+  "files": [
+    {
+      "path": "worldgen/core/truth.py",
+      "role": "source",
+      "sha256": "eed61020922235f6c7fa638c03ddb6b4cae9597760dc31d42c71cebfbd2f5389"
+    },
+    {
+      "path": "worldgen/build.py",
+      "role": "source",
+      "sha256": "ed783dc1b75cf3ec24ffdea7a75ea270c1c26555ee946a5459508ec33404ca70"
+    },
+    {
+      "path": "worldgen/mutate.py",
+      "role": "source",
+      "sha256": "6a998983245fa3599be15c8b7e6268cd601730be9ea6a9e100a02b9c1e3b33e8"
+    },
+    {
+      "path": "worldgen/RUN_STATE.md",
+      "role": "source",
+      "sha256": "9b02b27277a4c66bd594bac8ced92e8019b1404c42fea9458d2806412b8c3471"
+    },
+    {
+      "path": "worldgen/mechanisms/base.py",
+      "role": "source",
+      "sha256": "ca1076966530d4685d14a2c2556d672cca5562a15a8b851cf98c0e4fd679ece0"
+    },
+    {
+      "path": "worldgen/mechanisms/consumable.py",
+      "role": "source",
+      "sha256": "366cbbacff57c3df8a529df1e421dbf29bf75783644895fe33524fb58874fc08"
+    },
+    {
+      "path": "worldgen/mechanisms/count_lock.py",
+      "role": "source",
+      "sha256": "d57ae73b3c193adbde4822c86dfdf8122f6c81388d1a6c059f70017d37d89bdd"
+    },
+    {
+      "path": "worldgen/mechanisms/switch_door.py",
+      "role": "source",
+      "sha256": "3c8ccfb550a50347ca39c2067961a4953e5058de01e70ca3a2cfee4354c832d9"
+    },
+    {
+      "path": "worldgen/tests/invariant_sandbox.py",
+      "role": "source",
+      "sha256": "645c7c5b4e6b121671b573208d4891deb74e19e619c96a338e169bc06aceeef4"
+    },
+    {
+      "path": "worldgen/tests/test_invariant_status.py",
+      "role": "source",
+      "sha256": "b332c159f5293c5e63dab484abb84bbb8695bfcf98cd45f3a0585aa4315d9b76"
+    },
+    {
+      "path": "worldgen/tests/test_invariant_gate.py",
+      "role": "source",
+      "sha256": "2cf43f43087c0da99e3c6837e096e9649867a2404a62ee9ec9f629e01354d66c"
+    },
+    {
+      "path": "worldgen/tests/test_build_gate.py",
+      "role": "source",
+      "sha256": "86ca9dbb03929c7c14b3bbd1e63a068d677986a050b9b91b31aa1586156ab009"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/ADVERSARIAL-VERBATIM.md",
+      "role": "narrative",
+      "sha256": "e7bf7c9aec3edbf5d36d603290a7a3ad365aaa068368ced9493634c190576d51"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/FLIPS.md",
+      "role": "narrative",
+      "sha256": "3e64317ca9e8f2e4fa547b07dda606e92bb8a4fcaf34dda1f839330be414eb42"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/INBOX-PROPOSAL-20260729-reversibility-deferred-is-the-same-disease-at-7x-scale.md",
+      "role": "narrative",
+      "sha256": "474803d73f523c97a0f1671120a97e71d62ec32f0b4a97fb92b7f390582f97c7"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/OPTIMISTIC-DEFAULTS.md",
+      "role": "narrative",
+      "sha256": "6fb457eaf2451efb5230a1e4e7fdb1904632c9bc375e6922b51cac3e3a207ca9"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/RUN_STATE.md",
+      "role": "narrative",
+      "sha256": "4ecc77b725e8c66f2c087c98450f9877deefbc591371d76e27b726f1800a0784"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/README.md",
+      "role": "adversarial",
+      "sha256": "5bf784c2b38a0811fa7c6496c42a7c4152525a7f947d2845d21989938cba9f24"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/batch2.py",
+      "role": "adversarial",
+      "sha256": "fdd0e8b60909bcab45129f44094b3b5ddfc62fd52b72099e7fb27053a8b7a003"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/drift.py",
+      "role": "adversarial",
+      "sha256": "d83b9f3d56cfa8c7e819046102fff57be3e7a6924bce418ae10fc2a349fd35a9"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/gen_mutants.py",
+      "role": "adversarial",
+      "sha256": "455f76e4d55f35962d83b3f747888ffce82e6a8effa9b45d50098802f2995547"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/harness.py",
+      "role": "adversarial",
+      "sha256": "4d359ecbffd619ec00c55fc87d2a498fdae44246aef5f06fff036daa08a95375"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/mutants.json",
+      "role": "adversarial",
+      "sha256": "853c9e8bc533a378567b8698e10da8cab52d4dc807a369bbaff19839a7a7de4c"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/mutants2.json",
+      "role": "adversarial",
+      "sha256": "fa44845ab866a96014bdc38a4886fbdf31d1b895485a5dec77c31fbdee07659d"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/probe_c12_exception_swallowed.py",
+      "role": "adversarial",
+      "sha256": "dbcda413b1ec0951e5155035421065dda79cd1c174181d80db9a9aaebabb3bb8"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/probe_edge_check_is_exercised.py",
+      "role": "adversarial",
+      "sha256": "1c7789638471bc16056d71e8b360dab22324857872fee35dea3ab9f90a446af6"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/probe_weakening_is_a_noop.py",
+      "role": "adversarial",
+      "sha256": "19b9aecb35c70d94eea769b504ec36f4cc5f242844c7971b6a7862d2591e9da6"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/results.json",
+      "role": "adversarial",
+      "sha256": "83305dc2a43dd549aa5c9179bdd0812bfe3f846ef2a8ac7b0547f69789e530cc"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/results2.json",
+      "role": "adversarial",
+      "sha256": "2e8caa0193ca9b6f150f389c31be6ec94c170babd92c85176eb041717d78e5b0"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/run.log",
+      "role": "adversarial",
+      "sha256": "24bb331bb179345b827bd936bf0034891a7a2509c7c9dbe54a2637b3d55a5782"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/adversarial/run2.log",
+      "role": "adversarial",
+      "sha256": "e43a8f8d56ef03252a0856e23e47ac4249731816d8766b84b087157b755ac7da"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/00-baseline-build.txt",
+      "role": "evidence",
+      "sha256": "3d2c6bda0ee8abb0b6e8738e4a19338f0bae03f7f1e436e256fba518a99f464a"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/01-stage1-threestate-build.txt",
+      "role": "evidence",
+      "sha256": "27b7515321133ad7b0df5b14fe740d953064d605c7d49c94a523d2f3f60391a3"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/02-stage1-flip-census.txt",
+      "role": "evidence",
+      "sha256": "12f803b8682ee6d1ab3313a13c4e3b2d8483ab7b818bdbd1184ddc1a0bafc2a6"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/03-stage2-edgecheck-build.txt",
+      "role": "evidence",
+      "sha256": "c475b6c78f0a1f31b20658d417faad368b94f1dc4c3b67a8f6dbf54cc79886f3"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/04-stage2-flip-census.txt",
+      "role": "evidence",
+      "sha256": "62202439c4629a32b86d0a4796ad1402b83f18e450bc1d805d4509707a5850b1"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/05-negative-controls-raw.txt",
+      "role": "evidence",
+      "sha256": "cc61df032722a4788d3a2feb4a41f4750a94abc687c0880f4a5e6372da1f183b"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/06-final-build-check.txt",
+      "role": "evidence",
+      "sha256": "528b0b4158270543f37ac28528e7238e84ef2ef238f5b6cbd05610aa19956c6f"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/07-verify.txt",
+      "role": "evidence",
+      "sha256": "faf8c75a54aab1664644d9421592f98d158b4d04e7eb90209b33387a361699d9"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/08-qc-side-effect-not-ours.txt",
+      "role": "evidence",
+      "sha256": "83ce58386eb58d066fe27bb846abe4972fc8c1c3dccd435b1e1e342bac9fdced"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/09-final-build-check-after-vacuity-fix.txt",
+      "role": "evidence",
+      "sha256": "528b0b4158270543f37ac28528e7238e84ef2ef238f5b6cbd05610aa19956c6f"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/10-negative-controls-after-review.txt",
+      "role": "evidence",
+      "sha256": "c58f0fbef03fccf163caf1adc948997b24a6c9775cd16157a5b6cd8cdb3c90ec"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/11-escapee-replay.txt",
+      "role": "evidence",
+      "sha256": "63ae81f430461776a77c8baafbb49e5f94b4303e0216f9a8c6f528e6ddd79e11"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/12-final-pytest.txt",
+      "role": "evidence",
+      "sha256": "4914d280396b92f9cdfaf053d4967f9321a19b59922f4216969c6b9dd0802f42"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/13-final-build-check.txt",
+      "role": "evidence",
+      "sha256": "669d7de9d3a6d0e751f43788d47447b2c0594c15a3a97352b12a489b49ea60ff"
+    },
+    {
+      "path": "worldgen/runs/20260728T230307Z-V19-unverified-is-not-true/evidence/14-final-verify.txt",
+      "role": "evidence",
+      "sha256": "faf8c75a54aab1664644d9421592f98d158b4d04e7eb90209b33387a361699d9"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-cycler-gate/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "a85da110b9e6bc3bbfc5be04f67df3432908a7f686d187a4ba978e82b417191c"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-cycler-gate/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "2ccd4c54bc261d4231b6c5f94f3da2e9d51d6c6e2684fc549f3fabf05d2a597a"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-fragile-bridge/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "22e2cf5672bb925c6f93a85a5ed187d6460638ac83fee215169efd63d717a691"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-fragile-bridge/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "baed90cca0489c81b0c5a52bc551fb4bdd34f39925b11eeab208453204fb8436"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-portal-oneway/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "e894d4c503bae8982426f3e177c0b2a6402af0bbd59ce1bae540bd94af0ff71b"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-portal-oneway/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "a227860e2dfdd467293b040f84a23bb72982753e9d8cd2e6e62b7a67fad26696"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-push-corridor/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "97745f92d6326755aff4c256c9ee21507632fdcbf06ed9fd65546999e76a48b5"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-push-corridor/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "4a968e44d878d74b17fa74bc221c0d6d91652b29d66c55be2c5f4331ad211337"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-push-open/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "b425e43edc9efed92413f0025d8c0b77bdba6c20dd10b9d48c32357f12465011"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-push-open/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "0c583ac693476d883845f540eb6acbaa3fa2d9cfea59a93f25abb485cbebc66b"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-switch-latch/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "9d2bc661ce262e0435972b5bd0ae7954e0760c8dcdab28f2f1293911e036677f"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-switch-latch/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "edbb7df1538a4cd077aeb00d082f5b4b3f2c7df277ac5b06e37eaa0086c8cdf2"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-switch-toggle/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "7e137b25800e7e9eac59f29f1ff353b1f676bf69afd2db686c9bf88f7d8596e2"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-switch-toggle/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "068924014a98d08c01d5fcb1363786da8b1e34470a1a86ddcf94c2049104a6ab"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-tokens-lock/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "39ebb6600bfbc3069d7c038ab3db91a80adac7c032b3f1c8cd13ab416cfe31a7"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-tokens-lock/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "94a5047601f2544adac1bc90e59eae92085f1b06f500ce8e76b1992bccef1e43"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-walk-maze/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "229fc1a019d04f8f7ca18f3bec193a86018ddd4993b9fdada883b04d0fe8fc1c"
+    },
+    {
+      "path": "worldgen/out/worlds/t1-walk-maze/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "acf231710dd8dbfa6db02f55ac8b7eb18b072d57e74b907482b0688bdab766e6"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-cycler-lock/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "ed6798ac68c042dc13106293f2228a2ab89715f36ac379b0ebc7b9a303f2d5fd"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-cycler-lock/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "3c93cc0a24c1296e81cee0e8a4ffe8f03a51d38e7bea9fa300afddda91f0d676"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-gravity-push/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "fd5ff7f57697a64b1592a485e81cf1e4a812296c2e0dc3ae033463eea9979dd2"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-gravity-push/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "76fe91fcd5523681548454af0d97ef00614f7abd9ae0751ee733f73ab1c79d2d"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-lock-fragile/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "0f3d795aa89188feef684bdfb2e89ae89885ded3f731c0353e8cbe9926c095c2"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-lock-fragile/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "74fa5926ebc845bfd0f8dba6c93b8cee728ef56e557830a4a014d63ab4185603"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-portal-pair/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "a0b26cf677c5b7983a30c7e6c13ff8dc98ae6ed8f3187fd344dc169345ea011a"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-portal-pair/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "199321905a44a390b7e374f4799f84764097395d8d4893504e7e453b0cb2f77a"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-portal-paired/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "b15b8e8a74772a1b83c5efef2ac4f70873ccf78c43a98bb11d2f7bbd32ed3532"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-portal-paired/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "31d9198451ecf42db0e200615b604c385347fe04d76694a4330310e6b49319c0"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-switch-push/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "ccfbc0be9e230981986c1de92f92809b4f35d9ddb51d899602bc2551f1536a70"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-switch-push/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "87d2a861d296c2bc408aa4e01cd1b112223097c251a6146550108dcfd4fe2eaa"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-unsolvable-nodoor/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "876feb5fa241c610f7554afb5d1a6fa9d42ab0afc017387f34613e67b78ad42c"
+    },
+    {
+      "path": "worldgen/out/worlds/t2-unsolvable-nodoor/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "cd8b8b69b441583c6caf8c03cd56d32d2c6e75894e3081ecdf7ed69f0b175c6d"
+    },
+    {
+      "path": "worldgen/out/worlds/t3-cycler-portal-lock/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "0268166ae746dc69e7c806ef7b3fdc64a49e701ca5929e1f58d49fb745feffcb"
+    },
+    {
+      "path": "worldgen/out/worlds/t3-cycler-portal-lock/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "9bd9cfe0e63f8728080a92b54e1baf953ed08ebe960a5ba609dcbd7afd868aed"
+    },
+    {
+      "path": "worldgen/out/worlds/t3-full-house/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "3bb68e6009d423f9c546eed0f102bc87a74d316d20086d623732ee5fa32db1f3"
+    },
+    {
+      "path": "worldgen/out/worlds/t3-full-house/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "51f948086db2d830ff4b422a0e038aef13005caf1282f66f456e047018f69c4e"
+    },
+    {
+      "path": "worldgen/out/worlds/t3-gravity-fragile/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "9cea2c35c7cda6e18f007b8d1afab8339102d80d8fdefd4be1a0dfe1c5f59b27"
+    },
+    {
+      "path": "worldgen/out/worlds/t3-gravity-fragile/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "081288bbd0d6d2491199dd8c991a298dcbc038b1df7accfca16d40ca871380e8"
+    },
+    {
+      "path": "worldgen/out/worlds/t3-latch-maze/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "89940707dbbdecc4d3363c00dc40919b5e3a7deb71d1ac3d7a930d8bb0231acd"
+    },
+    {
+      "path": "worldgen/out/worlds/t3-latch-maze/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "5917df660849d77153f6c96aef02924dbfc6f4c39f65dd5e62e06e5636ef23a5"
+    },
+    {
+      "path": "worldgen/out/worlds/v-1383db02/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "feaf02beccce248dd05c5c1db3d74af67fe9d999db02e23488bc80534bed187c"
+    },
+    {
+      "path": "worldgen/out/worlds/v-1383db02/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "ebdec78b03396a87f6bc94d2bed716915d226ec7f887a2af8d0e820767f11257"
+    },
+    {
+      "path": "worldgen/out/worlds/v-29ace70e/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "3c390f4b21ea494b0b347752c4494745bbc7432e4d7a802ccc9e717f417354f2"
+    },
+    {
+      "path": "worldgen/out/worlds/v-29ace70e/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "8a50d27a182a1a2bdff0355b107dd55a3ddd4b10fd140b0b363b69d27719dc7f"
+    },
+    {
+      "path": "worldgen/out/worlds/v-379c937f/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "80bbb63180ec8d2ad2134995c3d44bf8c36aff17a9265ee7c48bb86b008bb52d"
+    },
+    {
+      "path": "worldgen/out/worlds/v-379c937f/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "8ab83c7fb23ee855967f2beea7644c44d2c728527fdd9c1099761649b7bb6906"
+    },
+    {
+      "path": "worldgen/out/worlds/v-57cfb2b4/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "e3d710a0df5a227eefe896adeb6be893a91a778ae597ce8933beaf1d77eaeb19"
+    },
+    {
+      "path": "worldgen/out/worlds/v-57cfb2b4/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "73003414249bb2e7eb7d6beab3dbfa922b5414ff3a60709693c084f7c5d5ec47"
+    },
+    {
+      "path": "worldgen/out/worlds/v-659c9594/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "e4041e15dd820f9e308a31c516536e2bdb3d389ab278a35a31b08119e89c3b53"
+    },
+    {
+      "path": "worldgen/out/worlds/v-659c9594/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "74dbe6f3cc9f7eae6b7a271441311280c857cec41cb90ea51edfdf9957412f29"
+    },
+    {
+      "path": "worldgen/out/worlds/v-7048ee5e/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "805ff80730155e469f841e72e486e06e6b06d70de5212128eb463fa133efb3be"
+    },
+    {
+      "path": "worldgen/out/worlds/v-7048ee5e/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "15e77e653d50514f7ff7dba2e917df12caa6bad02effdd1aaa67bedf963cc9e3"
+    },
+    {
+      "path": "worldgen/out/worlds/v-707a64ad/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "0f9454d04742a2130bc21bb978a855f5bcbda4142ccf89da9a8a636fbc8353c7"
+    },
+    {
+      "path": "worldgen/out/worlds/v-707a64ad/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "368788a1d217351b6de208a255d62d83370f5732437c2d2d03c5a83cc13d6e16"
+    },
+    {
+      "path": "worldgen/out/worlds/v-a3446614/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "d7f13764585dd22c8992c3bd9e83a48fd502d683350e5dc2f52c5775bcbd282b"
+    },
+    {
+      "path": "worldgen/out/worlds/v-a3446614/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "9ca825c0b07f2b5cec856839aec76a9305b7363c013b226d84c9c928f022e2af"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ab7a7d57/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "1e43e8e566db804e4c597b9a7110899aa82a855820f21cba817eb0be268387ce"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ab7a7d57/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "065d60230738dbc8a51201ef8e713cdd19a271dcb311eb5610c15c658c122107"
+    },
+    {
+      "path": "worldgen/out/worlds/v-bd2babb4/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "e86602f56274aa4fba48979cd445f381da29ebd50e89303e191b9ed9088e9172"
+    },
+    {
+      "path": "worldgen/out/worlds/v-bd2babb4/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "63ebde85d99a42b81ccea31b0b52809ca270125128fd58cbe6b1e695027b1800"
+    },
+    {
+      "path": "worldgen/out/worlds/v-c52c42ed/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "09548b3ffb7ac8c1290d631d40535abe494abab5f9a9ae32a57cadc023039993"
+    },
+    {
+      "path": "worldgen/out/worlds/v-c52c42ed/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "775368ee8c54c1df698786b2f2040e8625d9a6ecc7321efb27b358a9f94815ad"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ce732813/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "3160424429e16c54d2521f341cb9bb9a07c08c8c22f5f72792ae3b168015defc"
+    },
+    {
+      "path": "worldgen/out/worlds/v-ce732813/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "e57f23c506ac9874b4d4b3d0347dd5dca7f99bdd89edb94f26bf4c56f50151a3"
+    },
+    {
+      "path": "worldgen/out/worlds/v-d2c2b1b9/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "f9d8a48b24280823d2bd54bc60361010df5756b4fc3cef3e2dec7668a2c9bfac"
+    },
+    {
+      "path": "worldgen/out/worlds/v-d2c2b1b9/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "a55acd4ed73c50f6319a73dd66d1b8adabb2193d82303936c46ee31e062c7043"
+    },
+    {
+      "path": "worldgen/out/worlds/v-eb4c5810/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "0cde6d59c763068e4cf2b5e8b4a50296572288ede9744d12d7c66a38a53d34b5"
+    },
+    {
+      "path": "worldgen/out/worlds/v-eb4c5810/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "7f07b3e2a4ed680d2edee1f6ce3b402e2d5759cce2f51fde108fda9be20f657f"
+    },
+    {
+      "path": "worldgen/out/worlds/v-efe43df1/ground_truth.json",
+      "role": "regenerated",
+      "sha256": "f25490854656d2963c5b204655f923f6c9aea1aaf8b33c45ef59b5b07c7f7dd4"
+    },
+    {
+      "path": "worldgen/out/worlds/v-efe43df1/GROUND_TRUTH.md",
+      "role": "regenerated",
+      "sha256": "fcbe1ca5565b3bb8a651298f7e69dc0319a01951fac662193ab5bf2d6f160023"
+    },
+    {
+      "path": "worldgen/out/worlds/INDEX.json",
+      "role": "regenerated",
+      "sha256": "cf0dc2446ca744b2521dc4946358fe98929f0125fbec13c4e318952d345067f8"
+    },
+    {
+      "path": "worldgen/out/worlds/MUTATIONS.json",
+      "role": "regenerated",
+      "sha256": "4f72250a878195222bc242da5fc0a7966ee26f30e62d6947e18c276fa09e54fb"
+    }
+  ],
+  "lane": "verify",
+  "measurements": {
+    "adversarial_escapees": 30,
+    "adversarial_mutants": 80,
+    "build_check_determinism": "byte-identical across two interpreters",
+    "build_exit": 0,
+    "edge_checked_rows": 16,
+    "escapees_replayed_against_the_repaired_suite": 13,
+    "escapees_still_escaping": 0,
+    "files_with_a_holdless_invariant_before": 13,
+    "flipped_true_to_false_in_the_final_tree": 0,
+    "flipped_true_to_false_under_the_three_state_alone": 13,
+    "ground_truth_files": 35,
+    "pytest": "580 passed, 13 skipped (was 432 passed, 13 skipped)",
+    "transitions_per_row_max": 10616,
+    "transitions_per_row_min": 84,
+    "verify_exit": 0,
+    "why_zero_in_the_final_tree": "all 13 were resolved by verifying the claim, not by waiving the gate. Stage 1 (three-state only, 13 red, build exit 1) is preserved in evidence/01 and evidence/02 because the final 0 is not evidence of anything on its own."
+  },
+  "prompt_id": "V19-unverified-is-not-true",
+  "summary": "invariants_all_hold was computed with all(i.get('holds', True) ...), so a prose-only invariant carrying no 'holds' key was read as holding. Replaced with a three-class partition (holds / violated / unverified), two new build gates, and real transition-level checks for the three prose invariants. Revised after an 80-mutant adversarial review that found 30 escapees.",
+  "territory": "worldgen",
+  "utc": "2026-07-28T23:03:07Z"
+}

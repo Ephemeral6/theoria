@@ -1,0 +1,82 @@
+t1-walk-maze             tier=1 states=24    cov=38/96     rev=1.00 solvable(10)
+t1-push-open             tier=1 states=49    cov=40/196    rev=1.00 solvable(5)
+t1-push-corridor         tier=1 states=15    cov=19/60     rev=0.75 solvable(5)
+t1-switch-toggle         tier=1 states=26    cov=39/104    rev=1.00 solvable(9)
+t1-switch-latch          tier=1 states=26    cov=29/104    rev=0.83 solvable(9)
+t1-portal-oneway         tier=1 states=26    cov=10/104    rev=1.00 solvable(10)
+t1-cycler-gate           tier=1 states=58    cov=69/232    rev=1.00 solvable(5)
+t1-tokens-lock           tier=1 states=50    cov=43/200    rev=1.00 solvable(8)
+t1-fragile-bridge        tier=1 states=42    cov=10/168    rev=1.00 solvable(4)
+t2-switch-push           tier=2 states=175   cov=156/700   rev=1.00 solvable(8)
+t2-portal-pair           tier=2 states=24    cov=40/96     rev=1.00 solvable(3)
+t2-portal-paired         tier=2 states=6     cov=10/24     rev=1.00 solvable(2)
+t2-gravity-push          tier=2 states=35    cov=9/140     rev=1.00 solvable(10)
+t2-lock-fragile          tier=2 states=87    cov=102/348   rev=0.86 solvable(18)
+t2-cycler-lock           tier=2 states=61    cov=53/244    rev=0.86 solvable(8)
+t2-unsolvable-nodoor     tier=2 states=11    cov=10/44     rev=1.00 UNSOLVABLE
+t3-full-house            tier=3 states=2654  cov=217/10616 rev=1.00 solvable(6)
+t3-gravity-fragile       tier=3 states=39    cov=19/156    rev=1.00 solvable(8)
+t3-cycler-portal-lock    tier=3 states=262   cov=156/1048  rev=0.88 solvable(5)
+t3-latch-maze            tier=3 states=436   cov=128/1744  rev=0.82 solvable(12)
+
+{
+  "claim_disagreements": [],
+  "frame_collisions": [],
+  "invariant_failures": [],
+  "mean_reversibility": 0.9495,
+  "rule_correspondence_failures": [],
+  "solvability_intent_failures": [],
+  "tiers": {
+    "1": 9,
+    "2": 7,
+    "3": 4
+  },
+  "unsolvable": [
+    "t2-unsolvable-nodoor"
+  ],
+  "variant_pairs": [
+    "t1-push-corridor",
+    "t1-switch-latch",
+    "t2-portal-paired",
+    "t2-unsolvable-nodoor"
+  ],
+  "worlds": 20
+}
+v-1383db02               tier=2 states=24    cov=38/96     rev=1.00 solvable(6)
+v-29ace70e               tier=1 states=60    cov=43/240    rev=1.00 solvable(8)
+v-379c937f               tier=3 states=2654  cov=187/10616 rev=0.89 solvable(6)
+v-57cfb2b4               tier=2 states=17    cov=30/68     rev=1.00 solvable(6)
+v-659c9594               tier=1 states=39    cov=49/156    rev=0.75 solvable(5)
+v-7048ee5e               tier=1 states=17    cov=10/68     rev=1.00 solvable(10)
+v-707a64ad               tier=1 states=21    cov=30/84     rev=1.00 UNSOLVABLE
+v-a3446614               tier=1 states=26    cov=10/104    rev=1.00 solvable(10)
+v-ab7a7d57               tier=2 states=175   cov=156/700   rev=1.00 solvable(8)
+v-bd2babb4               tier=3 states=387   cov=186/1548  rev=1.00 solvable(5)
+v-c52c42ed               tier=1 states=26    cov=10/104    rev=1.00 solvable(10)
+v-ce732813               tier=1 states=3     cov=9/12      rev=1.00 UNSOLVABLE
+v-d2c2b1b9               tier=1 states=21    cov=19/84     rev=0.83 UNSOLVABLE
+v-eb4c5810               tier=1 states=41    cov=10/164    rev=1.00 solvable(5)
+v-efe43df1               tier=2 states=134   cov=99/536    rev=0.88 solvable(8)
+
+{
+  "claim_disagreements": [],
+  "frame_collisions": [],
+  "invariant_failures": [],
+  "mean_reversibility": 0.9565,
+  "rule_correspondence_failures": [],
+  "solvability_intent_failures": [],
+  "tiers": {
+    "1": 9,
+    "2": 4,
+    "3": 2
+  },
+  "unsolvable": [
+    "v-707a64ad",
+    "v-ce732813",
+    "v-d2c2b1b9"
+  ],
+  "variant_pairs": [],
+  "worlds": 15
+}
+build gate: 20 catalogue world(s) + 15 mutant(s) green
+BUILD_EXIT=0
