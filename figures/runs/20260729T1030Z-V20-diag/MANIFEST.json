@@ -1,0 +1,26 @@
+{
+  "prompt_id": "V20-figures-pipeline-red",
+  "branch": "agent/v20-figures-pipeline-red",
+  "base_commit": "443211ddfedbdfd284a16748e95102d344731fdb",
+  "utc": "2026-07-29T10:30:00Z",
+  "kind": "diagnosis-only, no fixes applied",
+  "commands": [
+    "python figures/build_all.py",
+    "python -c 'import sources; sources.manifest_rows()'  (recompute all 61 declared source hashes)",
+    "FIGURES_OUT/FIGURES_CSV/FIGURES_SHA -> runs/.../detA and detB; diff -r detA detB",
+    "diff -r figures/csv detA/csv ; diff -r figures/out detA/out ; diff -u figures/SOURCES.sha256 detA/SOURCES.sha256",
+    "bash figures/verify.sh",
+    "grep -rn fig0[2-7] papers/ ; grep -rn fig0[2-7] release/ figures/PLAN.md figures/README.md figures/RUN_STATE.md",
+    "git log --oneline -3 -- <each declared source>",
+    "git status --porcelain ; git status --porcelain figures/"
+  ],
+  "findings": {
+    "claim_1_expected_ids_e07": "REFUTED at HEAD; fig06_concept_timeline.py:108 already lists E-08/E-09; build_all.py exit 0. Was true 2026-07-28T22:41 (76e75609) -> 2026-07-29T13:15 (abd8d0cb).",
+    "claim_2_sources_sha256_drift": "REFUTED at HEAD; 61 entries, 0 drifted. The '50 entries' matches SOURCES.sha256 as of 9239eb1c, two regenerations ago.",
+    "claim_3_fig020304_uncited": "CONFIRMED; fig03/fig04 zero hits anywhere in papers/, fig02 one incidental range-mention in a review note.",
+    "new_finding_release_manifest": "release/MANIFEST.jsonl (last regenerated 6b095965) is stale for 14 of 57 figures/ paths.",
+    "determinism": "GREEN; two independent builds byte-identical (diff -r empty), and the committed tree equals a fresh build.",
+    "verify_sh": "exit 0, all nine gates green."
+  },
+  "writes": "figures/runs/20260729T1030Z-V20-diag/ only; no tracked file modified (git status --porcelain clean apart from this untracked directory)"
+}

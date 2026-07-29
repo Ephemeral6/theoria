@@ -1,0 +1,18 @@
+figures/ entries in release/MANIFEST.jsonl: 57
+  match  : 43
+  MISMATCH: 14
+    ('figures/SOURCES.sha256', '8ff2ba9e9279c829', 'c51857248a7ca84d', 6859, 7784)
+    ('figures/check_coverage.py', 'ce081ecae36a47ab', '5895f570f53fc119', 13963, 18392)
+    ('figures/csv/fig02_bill_shape.csv', 'fc6c141bea8e048d', '168d99576a30f95f', 104789, 137687)
+    ('figures/csv/fig06_concept_timeline.csv', 'ac1ca32f3fb6c8c0', '5e05260b98f9d8bd', 15922, 16436)
+    ('figures/fig06_concept_timeline.py', '7183c0dc3ed05670', 'e6230ce17cb6cdd1', 67186, 67202)
+    ('figures/out/dark/fig02_bill_shape.png', '6e9a69c3f653d744', '6f97d9fc82f956c3', 1006130, 1096149)
+    ('figures/out/dark/fig02_bill_shape.svg', '1573c93fe27ff732', '0a8dceed56dff2b7', 734883, 810966)
+    ('figures/out/dark/fig06_concept_timeline.png', 'a65c3378b1cd54f5', '833f3b602281e790', 868697, 889672)
+    ('figures/out/dark/fig06_concept_timeline.svg', '4223a1758470ec55', '853f2e9dbcfe5872', 592472, 604354)
+    ('figures/out/light/fig02_bill_shape.png', 'ac86739c580cf1ab', '4637e384b8ac173a', 1031009, 1125429)
+    ('figures/out/light/fig02_bill_shape.svg', '2225e4fdfe797a76', '049a370ce794ea43', 734883, 810966)
+    ('figures/out/light/fig06_concept_timeline.png', '6f37a908ca538b5c', '0f0b9fc8f89ec518', 876729, 897563)
+    ('figures/out/light/fig06_concept_timeline.svg', 'd204ddfa8b4edcc4', '247931211ee151e1', 592472, 604354)
+    ('figures/verify.sh', '39ee924b6febc1b4', 'fbc55daf223405c8', 9802, 11008)
+  missing on disk: 0
