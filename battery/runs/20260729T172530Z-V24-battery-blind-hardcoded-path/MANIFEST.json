@@ -1,0 +1,62 @@
+{
+  "api_calls": 0,
+  "base_commit": "580c645d120b81ce12fe6bd0917fe51100e9e873",
+  "blind_ref": "9892d23caf72436c8ce8eefaa9ef59bfc2b03cc8",
+  "blind_ref_source": "battery/runs/20260729T021247Z-V9-battery-gaming-audit/MANIFEST.json:prereg_commit",
+  "branch": "agent/v24-battery-blind-hardcoded-path",
+  "files": [
+    {
+      "path": "battery/audit/v9/make_blind.py",
+      "sha256": "49f63673c996db9f960951349af70823d3e3d0ec6135c5599461460dfd3b43ab"
+    },
+    {
+      "path": "battery/audit/v9/BLIND_DIGESTS.json",
+      "sha256": "3d3f0bfdde31fc981dc58f38cbea32e2831f2005be99064e66a9f1bfdbb354b0"
+    },
+    {
+      "path": "battery/tests/test_v9_blinding.py",
+      "sha256": "ca5b597ca953a268d02006df377ceb60da734a2a0c77bb9f8c779868f295950c"
+    },
+    {
+      "path": "battery/BLINDING.md",
+      "sha256": "e1762bc1d3e945c523bfec5995dedffd8c1667768072ec6f7823ee3be95f2e3e"
+    },
+    {
+      "path": "battery/DECISIONS.md",
+      "sha256": "7eef90b646d79f997d82d9ae4a0b59409a36f0819f2d34e0445ae0c808c2dbe2"
+    },
+    {
+      "path": "battery/STATUS.md",
+      "sha256": "e5c3987ded86e32411c96cd334c30b85cee10eeddc137f18c65b470070bca7f7"
+    },
+    {
+      "path": "battery/runs/20260729T172530Z-V24-battery-blind-hardcoded-path/rescan_blind.py",
+      "sha256": "3cfbfb12cea07d3ad13491f9f415885d61e6376320f99258e9ca9046eebfbc23"
+    },
+    {
+      "path": "battery/runs/20260729T172530Z-V24-battery-blind-hardcoded-path/rescan_blind.json",
+      "sha256": "0156c9fd1823858add14213f92f24ce3473459f7fbd1d2016cf6acf83384a353"
+    },
+    {
+      "path": "battery/runs/20260729T172530Z-V24-battery-blind-hardcoded-path/RUN_STATE.md",
+      "sha256": "9572074ce40e6c6117477622bd03f6a99a8d045deeadd8ae92ce17d7618e293e"
+    },
+    {
+      "path": "battery/runs/20260729T172530Z-V24-battery-blind-hardcoded-path/FINDINGS.md",
+      "sha256": "d7ec6762c17c6d51dd812fb711cb90e053cff22c18dd3434a9c7df6ac99224c5"
+    }
+  ],
+  "prompt_id": "V24-battery-blind-hardcoded-path",
+  "python": "3.13",
+  "sealed_pile_contact": "none",
+  "status": "complete",
+  "territory": "battery",
+  "tests": {
+    "battery_suite": "352 passed",
+    "rescan_blind": "exit 0",
+    "test_v9_blinding": "17 passed",
+    "verify_py": "exit 0"
+  },
+  "utc": "2026-07-29T17:25:30Z",
+  "worker": "W-1682"
+}

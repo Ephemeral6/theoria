@@ -66,6 +66,26 @@ v0 见 [`REPORT_V0.md`](REPORT_V0.md)，两份都原样保留，**包括 v1 错�
    顺带发现：B14 的两条测试**断言 E1 的缺陷存在**，修掉缺陷会让套件变红——
    一个把「别修」写进 CI 的形态，已改写并记在 `audit/v9/REPORT.md` §4。
 
+### V24 补记：V9 的致盲步骤此前不可复现，现已钉死（2026-07-29）
+
+上面第 1 条说的「六个看不到 `gaming.py` / `exploits/` 的攻击者」，其可信度全压在
+`audit/v9/make_blind.py` 这一步上，而这一步在 V24 之前**指着一条本机绝对路径**
+（`.worktrees/v9-battery-gaming-audit`）。工作树的 HEAD 会往前走：致盲发生在
+`9892d23c`，分支后来走到 `0d586b6f`，中间 `520dc5dd` 加进了攻击逼出来的三道防法。
+照原样重跑，12 个文件里 5 个与当时不同，`unsound(` 会 13 次进入「盲」树——而它正是
+`BLINDING.md` §3.8 记为零命中的词。**这不是「路径会失效」，是「照着跑会安静地
+致盲失败并照样出结论」。**
+
+已改：`SRC` → `BLIND_REF`，钉死完整 sha `9892d23c`（不是分支名），`git cat-file
+blob` 读取，解析失败一律 `BlindingError` + 退出码 2，不回落。已重跑并双向核对，
+与既有结论一致——负向：盲树无攻击后词汇；正向：`BLINDING.md` §3.7 登记的那处泄漏
+（K2 `thin()` 里的 `39960` 与 `3 adversarial gaps`）仍在；另按 §9(d) 复算攻击者
+提交，**118 个 `Run`、`arm` 全为 `attacker`、`source` 全为 `v9`、无真语料出处字段**，
+与 `REPORT.md` 记的数字逐字相符。摘要落在 `audit/v9/BLIND_DIGESTS.json`（此前无
+任何清单记过盲树摘要），回归测试 `tests/test_v9_blinding.py`（17 条），
+重跑脚本与逐条结果见 `runs/20260729T172530Z-V24-battery-blind-hardcoded-path/`。
+新登记一处泄漏面：`BLINDING.md` §3 第 9 条（`P1` 的定义串点名开发堆与 A0）。
+
 ## v2 最该先读的四件事
 
 1. **v1 的头号缺口在 v1 写下它的时候就已经不成立了。** `REPORT_V1.md` 开篇说
