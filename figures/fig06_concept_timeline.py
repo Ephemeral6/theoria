@@ -105,7 +105,7 @@ EXPECTED_IDS: tuple[str, ...] = (
     "R-01", "R-02", "R-03", "R-04", "R-05", "R-06", "R-07", "R-08",
     "L-01", "L-02", "L-03",
     "P-01", "P-02", "P-03",
-    "E-01", "E-02", "E-03", "E-04", "E-05", "E-06", "E-07",
+    "E-01", "E-02", "E-03", "E-04", "E-05", "E-06", "E-07", "E-08", "E-09",
 )
 
 #: The verdict vocabulary, verbatim as the headings bold it, mapped to
