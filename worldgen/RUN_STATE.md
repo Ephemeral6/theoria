@@ -882,3 +882,70 @@ coordinator's summary; the coordinator holds the verbatim text. What is on disk
 here is the reviewer's executable probes, under `adversarial/`. Every finding
 above was re-verified against those probes or re-measured directly rather than
 transcribed.
+
+---
+
+# Merge of master (64157c1c) into `agent/v12-worldgen-gate-deaf`
+
+2026-07-29, W-1641, board item `S24-merge-conflict-drain`. The branch had sat
+undelivered since 2026-07-28 23:59 because `ci_merge` re-flagged the same
+conflict every five minutes. Recorded here because two of the three things this
+merge touched are corrections to sections above, and those are append-only.
+
+**The textual conflict was one file, `worldgen/RUN_STATE.md`** — V12 and V16 each
+appended a top-level section at the same offset. Both kept, ordered by run
+timestamp (V12 `20260728T153030Z`, then V16 `20260728T172500Z`). Nothing was
+dropped from either side; the merge is a pure 147-line append.
+
+**Two further conflicts were semantic, and git could not see either**, because in
+both cases the two sides edited different files:
+
+1. **`verify.STAGES` arity.** V12 widened `Stage` from `(label, command,
+   gating)` to a 4-tuple with `stage_key`. V16's
+   `test_determinism_gate.py::test_verify_still_runs_the_determinism_gate`
+   unpacks three and died with `ValueError: too many values to unpack`. The two
+   intents do not contradict — V16 pins that the `--check` wiring still gates,
+   which says nothing about `stage_key` — so both are kept and the unpack is now
+   `label, command, gating, *_`. `stage_key`'s own invariants stay pinned by
+   `test_verify_qc_gate.py::test_every_shipped_qc_stage_is_pinned`, so nothing
+   is left unguarded by widening the tuple here. No test was deleted.
+
+2. **The pin went stale in the *improving* direction, which is the case V12
+   built the gate to catch.** §gaps item 2 above named the fix for
+   `t2-lock-fragile`'s `NoSeparatingGuard` as an atom in
+   `cold-start-a0/pipeline/atoms_a0.py`, another track's file. Master contains
+   it (`atoms_a0.py` +91 lines, and a new `identity_swap.py`). So
+   `t2-lock-fragile` now runs clean — `all_L1`/`all_L2`/`all_L3a` all true, and
+   it clears held-out at 0.98773. Eight pinned cells deviated and `verify`
+   correctly went red.
+
+   Repaired the way this file already specifies — **re-run QC and transcribe,
+   never widen**: `qc_family`'s verdict, its `t2-lock-fragile` row, and the
+   `recorded_but_not_pinned` float were re-transcribed from a fresh
+   `python -m worldgen.qc.run_qc`, confirmed byte-stable across two consecutive
+   runs (`QC.json` sha256 `d6aa04de…6acc0a15` both times). `PREREGISTERED.md` is
+   byte-untouched and the 0.90 bar is still 0.90. **The stage is still a MISS**:
+   `L3b_passed` is 1 of 2 required and `pass` is still `false`, because
+   `t1-switch-toggle` (0.773) and `t1-switch-latch` (0.896) remain under the bar.
+   `qc_mutants` did **not** move — `t2-switch-push`, `v-efe43df1`'s base, still
+   raises, so that red and its attribution stand exactly as written above.
+
+   The committed `out/qc/QC.json` was regenerated with the documented command
+   rather than hand-edited, since
+   `test_pin_matches_what_the_committed_artifacts_say` compares the pin against
+   it. `QC_MUTANTS.json` was byte-identical and is untouched.
+
+**§gaps item 1 is unchanged and still bites:** the same ten unpinned artefacts
+under `out/qc/*/` dirty on every `verify` run, plus a new
+`out/qc/t2-lock-fragile/engines_report.json` that only appears now that the
+world gets far enough to produce one. Still upstream drift, still not this
+territory's; restored with `git checkout` and left uncommitted, as before. Only
+the two *pinned* artefacts are tracked against the pin.
+
+Gate after the merge: `python worldgen/verify.py` → **exit 0**, stages
+`[ok] [ok] [miss] [miss]`, suite **445 passed, 13 skipped** (V12's 425 and V16's
+428 both present). One host note for whoever runs this next: do **not** set
+`PYTHONIOENCODING=utf-8` for this suite. The negative-control tests round-trip a
+subprocess's stdout, and forcing the child to UTF-8 while the parent still
+decodes with this host's GBK default kills the reader thread — four tests fail
+with `proc.stdout is None`, which looks like a gate failure and is not one.

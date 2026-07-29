@@ -217,7 +217,12 @@ def test_verify_still_runs_the_determinism_gate():
     repository becomes dead code with every test still green — which is close
     to the state V16 found it in.
     """
-    stages = {label: (tuple(command), gating) for label, command, gating in verify.STAGES}
+    # V12 widened `Stage` to `(label, command, gating, stage_key)`; this test
+    # reasons only about the command and whether it gates, so it stays agnostic
+    # to the trailing fields.  `stage_key`'s own invariants are pinned by
+    # `test_verify_qc_gate.py::test_every_shipped_qc_stage_is_pinned`.
+    stages = {label: (tuple(command), gating)
+              for label, command, gating, *_ in verify.STAGES}
     matching = [(label, command, gating) for label, (command, gating) in stages.items()
                 if "-m" in command and "worldgen.build" in command]
     assert len(matching) == 1, "expected exactly one build stage in verify.STAGES: %s" % (

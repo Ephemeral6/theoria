@@ -11,17 +11,17 @@
       "bar": "worldgen/qc/PREREGISTERED.md",
       "status": "MISS",
       "owner": "upstream -- cold-start-a0, another track",
-      "what_is_red": "t2-lock-fragile makes the miner raise NoSeparatingGuard, which sinks all_L1/all_L2/all_L3a; and no world reaches the pre-registered 0.90 held-out threshold (0.773 and 0.896), so L3b_passed is 0 of the 2 required.",
-      "whose_work_it_is": "The raise is `a0_relational_v1`'s expressiveness, localised by `worldgen/qc/diagnose_miner.py`: the two transitions have different frames and all 98 atoms agree on both. The fix is an atom in `cold-start-a0/pipeline/atoms_a0.py` -- another track's file, which worldgen may not edit. Filed; see RUN_STATE.md §gaps item 2. The held-out shortfall is the same miner measured against a threshold PREREGISTERED.md chose on purpose and did not move; RUN_STATE.md §the miss traces it to individual transitions.",
+      "what_is_red": "Two of three worlds miss the pre-registered 0.90 held-out threshold -- t1-switch-toggle at 0.773 and t1-switch-latch at 0.896 -- so L3b_passed is 1 of the 2 required and `pass` stays false. all_L1/all_L2/all_L3a are now true: t2-lock-fragile no longer makes the miner raise, and clears held-out at 0.988.",
+      "whose_work_it_is": "Still upstream, and the shortfall is the same miner measured against a threshold PREREGISTERED.md chose on purpose and did not move; RUN_STATE.md §the miss traces it to individual transitions. The NoSeparatingGuard raise this pin previously carried for t2-lock-fragile is GONE: it was `a0_relational_v1`'s expressiveness, RUN_STATE.md §gaps item 2 named the fix as an atom in `cold-start-a0/pipeline/atoms_a0.py`, and merging master (64157c1c) brought exactly that -- atoms_a0.py and the new identity_swap.py. The pin was re-transcribed from a re-run rather than widened, per RUN_STATE.md: an improvement gates too. t2-switch-push, v-efe43df1's base, still raises, so the qc_mutants red below is unchanged.",
       "not_worldgen": "Nothing in this red is a defect in worldgen/. That is why the stage does not gate on `pass` -- gating on it would make the world factory permanently red for a file it is forbidden to touch.",
       "verdict": {
         "path": ["family_verdict"],
         "expected": {
-          "L3b_passed": 0,
+          "L3b_passed": 1,
           "L3b_required": 2,
-          "all_L1": false,
-          "all_L2": false,
-          "all_L3a": false,
+          "all_L1": true,
+          "all_L2": true,
+          "all_L3a": true,
           "pass": false
         }
       },
@@ -43,10 +43,10 @@
             "L3b_held_out": false
           },
           "t2-lock-fragile": {
-            "L1_liveness": false,
-            "L2_structure": false,
-            "L3a_replay": false,
-            "L3b_held_out": false
+            "L1_liveness": true,
+            "L2_structure": true,
+            "L3a_replay": true,
+            "L3b_held_out": true
           }
         }
       },
@@ -54,7 +54,7 @@
         "L3b_value": {
           "t1-switch-latch": 0.895833,
           "t1-switch-toggle": 0.773333,
-          "t2-lock-fragile": null
+          "t2-lock-fragile": 0.98773
         },
         "why_not_pinned": "These floats are the upstream miner's score, not worldgen's. Pinning them to six places would turn every legitimate improvement or refactor in another track into a red here, and this territory cannot act on either direction. The booleans above are pinned because they are what the bar reads; the floats are transcribed so a drift is still visible to a human diffing this file against QC.json."
       }
