@@ -1,0 +1,36 @@
+pricing_v1.json `models` keys (10):
+   claude-fable-5, claude-haiku-4-5, claude-mythos-5, claude-opus-4-6, claude-opus-4-7, claude-opus-4-8, claude-opus-5, claude-sonnet-4-6, claude-sonnet-5, mock-model-1
+
+LOOKUP CODE PATH (exact dict lookup, no normalisation):
+   proxy/cost.py:49   PriceTable.cost():        prices = self.models.get(model)
+   proxy/cost.py:101  PriceTable.ceiling_for(): prices = self.models.get(model) if isinstance(model, str) else None
+   proxy/cost.py:50-52  miss in cost():        returns {'usd': None, 'unpriced': "model %r is not in %s"}
+   proxy/cost.py:103-105 miss in ceiling_for(): returns {'usd': None, 'why': "... has no computable ceiling"}
+
+Distinct model ids in the repo, excluding matches embedded in longer tokens
+(the `claude-haiku-4-5-20251001-<hex>` forms in the earlier pass were run-id
+ strings such as `bare_cc-ar25-claude-haiku-4-5-20251001-55ea5593`, not model ids):
+
+model id                           code     data  priced by pricing_v1?
+claude-haiku-4-5-20251001            18    21520  NO  <-- ALIAS GAP
+claude-opus-4-8                       0     1992  yes
+claude-opus-5                        31     1408  yes
+claude-sonnet-5                       7     1355  yes
+claude-fable-5                        0      967  yes
+claude-haiku-4-5                      1       19  yes
+claude-opus-4-7                       0        1  yes
+claude-opus-4-6                       0        1  yes
+claude-mythos-5                       0        1  yes
+claude-sonnet-4-6                     0        1  yes
+
+=== the only unpriced id, and every CODE file that can send it ===
+claude-haiku-4-5-20251001
+      ./baseline-arms/harness/bare_cc.py
+      ./baseline-arms/harness/run_campaign.py
+      ./baseline-arms/tests/test_envelope.py
+      ./baseline-arms/tests/test_spend_binding.py
+      ./battery/audit/discriminate.py
+      ./battery/tests/make_fixture.py
+      ./figures/fig02_bill_shape.py
+      ./freeze/runs/2026-07-28T1200Z-p22/envelope_stats.py
+      ./proxy/tests/test_migration.py

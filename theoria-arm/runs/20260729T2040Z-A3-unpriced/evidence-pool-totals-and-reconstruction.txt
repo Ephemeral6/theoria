@@ -1,0 +1,26 @@
+pool          : theoria-shared-2026-07
+usd_ceiling   : $214.90
+action_ceiling: 24000
+ledger records: 11863
+usd_spent     : $36.142332
+actions_spent : 5181
+UNPRICED CALLS: 1  <-- any check() with usd>0 is refused while this is nonzero
+price_correction records: 0
+
+EVERY unpriced spend row currently outstanding in the pool:
+  line 7418 seq 7418 ts 2026-07-29T00:36:50.506Z usd 4.0 campaign theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2
+     detail: {"arm": "theoria", "beat": "theorize", "call": 4, "label": "round1", "model": "claude-haiku-4-5-20251001", "outcome": "raised_before_a_price", "run_id": "r-96e128ffb1c64bad", "transport": "claude-code-cli", "why": "the CLI raised before an envelope carrying a price came back"}
+
+by_campaign (nonzero usd only):
+  $ 19.833203    487 act  phase3-unit-price-remeasure
+  $ 10.536364    504 act  phase3-variance-envelope
+  $  4.393156     15 act  theoria-arm:A3-campaign-devpile:g50t-5849a774:20260729T0035Z-a3-desk-live-proof2
+  $  1.359545     33 act  phase3-unit-price-recheck
+  $  0.020064      0 act  phase3-variance-envelope-quota-probe
+
+RECONSTRUCTION of the priced sibling calls from the CLI's verbatim usage
+(pricing_v1 claude-haiku-4-5: input $1.00/Mtok, output $5.00/Mtok, 1h cache-create x2.00)
+  call 1  settled $0.114256   reconstructed-main-turn $0.108226   residual $0.006030
+  call 2  settled $0.146292   reconstructed-main-turn $0.139059   residual $0.007233
+  (residual = the CLI's own internal `ai-title` model call, which appears as an
+   `ai-title` line in the transcript and is included in the envelope's total_cost_usd)
