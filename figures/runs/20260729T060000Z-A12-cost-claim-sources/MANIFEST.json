@@ -14,5 +14,43 @@
     "evidence": "the worktree was created from master and `git status --porcelain` was empty when the failure reproduced"
   },
   "scope_note": "A12 pins the chain the paper's cross-arm cost claim actually depends on: the sources figure 2 reads, a cross-arm reconciliation in cost x actions over those sources, a negative sample, and an honest statement of where the four sources fall short. Explicitly NOT the merged three-arm ledger of A10, which was withdrawn.",
-  "files": []
+  "files": [
+    {
+      "path": "figures/audit/reconcile_cost.csv",
+      "sha256": "35c19eb74b559c8e724059899291d67afaee53185c05c020bb22881ce8166c72"
+    },
+    {
+      "path": "figures/check_coverage.py",
+      "sha256": "5689310bc0267b40543506f5c9a774acfda5d15eb9a1c1e6413af0181b8e19e8"
+    },
+    {
+      "path": "figures/fig06_concept_timeline.py",
+      "sha256": "e6230ce17cb6cdd1be58e47b7e174b9ec86ed78e3dfe3fe4b51a1815460e623f"
+    },
+    {
+      "path": "figures/reconcile_cost.py",
+      "sha256": "8dd7558a8790ae3e2e1b19e499973d1927fa789375927dafcf3b265185f670f7"
+    },
+    {
+      "path": "figures/verify.sh",
+      "sha256": "ce5e9386853db6ba80419ad2c07e2c5bb1ff836e4a666dac587bdcb7a945573f"
+    }
+  ],
+  "picked_up_by": "RES-1 (campaign lane) 2026-07-29T04:45Z, after W-1652's session ended",
+  "base_commit_at_delivery": "335dd277c825c32a00b9357b463647f0de93531c",
+  "verify": {
+    "command": "bash figures/verify.sh",
+    "result": "GREEN, nine gates",
+    "note": "gates 4, 6 and 8 were red at the base of this run; 4 and 6 because fig06 and the source manifest were stale, 8 for the reason this item exists"
+  },
+  "found": [
+    "capability_spectrum's E5 counts the successful RESET as an action, on every run, against proxy/SCORING.md:60-62 (32-of-32 verified). E5 = cost per action therefore understates cost per action; worst on low-action runs.",
+    "no run in the repository has two derivations agreeing without a declared excuse; all 77 theoria-arm-covered runs are uncorroborated because capability_spectrum's provenance.arms omits the live theoria arm",
+    "the coverage probe's partial-run predicate had 12 false positives and no true positive; it now fails on the run's own claim of spend"
+  ],
+  "premises_of_the_item_that_were_wrong": [
+    "'four sources' -- five programmatic reads plus three declared-but-unparsed prose sources",
+    "'the paper's cross-arm cost claim' -- papers/phase1-workshop/sections/10_limitations.md:12-16 states the paper reports no cost comparison between arms; fig02 is not one of the paper's three figures",
+    "'the ablation arm is the missing arm in fig02' -- Theoria.md:270-272 names the three arms; the ablation arm is a fourth device (Theoria.md:274). fig02's own caveat names Schema as the missing arm"
+  ]
 }
