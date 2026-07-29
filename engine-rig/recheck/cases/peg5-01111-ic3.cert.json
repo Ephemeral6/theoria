@@ -1,0 +1,87 @@
+{
+  "claim": "unsolvable",
+  "comment": "(!pos1 | pos2 | pos4) & (!pos2 | !pos3 | pos4) -- 2 clause(s) over 5 positions, the invariant ic3_pdr converges on for 01111. Its size in states is pinned in recheck/verify_all.py and cross-checked against the engine's own count in tests/test_ic3bounds_emit.py.",
+  "kind": "inductive_invariant",
+  "name": "peg5-01111-ic3-invariant",
+  "predicate": [
+    "and",
+    [
+      "or",
+      [
+        "=",
+        [
+          "var",
+          "pos1"
+        ],
+        [
+          "lit",
+          0
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "pos2"
+        ],
+        [
+          "lit",
+          1
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "pos4"
+        ],
+        [
+          "lit",
+          1
+        ]
+      ]
+    ],
+    [
+      "or",
+      [
+        "=",
+        [
+          "var",
+          "pos2"
+        ],
+        [
+          "lit",
+          0
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "pos3"
+        ],
+        [
+          "lit",
+          0
+        ]
+      ],
+      [
+        "=",
+        [
+          "var",
+          "pos4"
+        ],
+        [
+          "lit",
+          1
+        ]
+      ]
+    ]
+  ],
+  "produced_by": "engines/ic3_pdr, emitted through ic3bounds/emit.py (E8 axis A)",
+  "ruleset": {
+    "name": "peg5-01111",
+    "sha256": "d018386d1aab010a3048e5aebdbf33a360e10d1ed387f3ea0bec870870854f75"
+  },
+  "schema": "engine-rig/recheck/certificate-v1"
+}
