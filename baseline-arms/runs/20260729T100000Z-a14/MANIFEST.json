@@ -4,16 +4,84 @@
   "branch": "agent/a14-campaign-json-untracked",
   "files": [
     {
-      "path": "baseline-arms/COST_ARTEFACTS.json",
-      "sha256": "d2c733825ae6e82f459b837c23e93473fe0c5ceb9a2e5b048a1b07dfaccbd1fc"
-    },
-    {
       "path": "baseline-arms/.gitattributes",
       "sha256": "be2ca3a232f90d78abb51ddd98b467d6935aa10ca1a52b70dd4e1c2913f42614"
     },
     {
+      "path": "baseline-arms/COST_ARTEFACTS.json",
+      "sha256": "d2c733825ae6e82f459b837c23e93473fe0c5ceb9a2e5b048a1b07dfaccbd1fc"
+    },
+    {
       "path": "baseline-arms/harness/cost_artefacts.py",
       "sha256": "be58c2800c0c564be12152e99c6a348326a59d9fe9460f841a44884e9c83995e"
+    },
+    {
+      "path": "baseline-arms/out/campaign/campaign_ar25.json",
+      "sha256": "2d1d5140cdc3f6639addc98d45ef620b25bc07da8bb735c714bff240df4c183d"
+    },
+    {
+      "path": "baseline-arms/out/campaign/campaign_g50t.json",
+      "sha256": "d83ba976d9c2c79429e009af48c5923d5cd14061a9cff1f6739db9ce7fe2d469"
+    },
+    {
+      "path": "baseline-arms/out/campaign/campaign_sk48.json",
+      "sha256": "6683f5d72e80206b58fbcd384e32067189d49174dd13ffcec9a2dc12e6b57ab2"
+    },
+    {
+      "path": "baseline-arms/out/campaign/campaign_tn36.json",
+      "sha256": "35a8c66fb97432aa0d499d3256a8d2b37ab15e0c878f2cb62cd1b411a85e47ec"
+    },
+    {
+      "path": "baseline-arms/out/shards/ledger.ar25.jsonl",
+      "sha256": "a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9"
+    },
+    {
+      "path": "baseline-arms/out/shards/ledger.g50t.jsonl",
+      "sha256": "7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5"
+    },
+    {
+      "path": "baseline-arms/out/shards/ledger.sk48.jsonl",
+      "sha256": "4ba20da9819d450b4f0ab489e0611b74a569ba3190d202926792a4dca5199ba0"
+    },
+    {
+      "path": "baseline-arms/out/shards/ledger.tn36.jsonl",
+      "sha256": "bacb484ae81ce815e67bb7eae6372cd97a85e50793dccb8268c75a8d5b2b642b"
+    },
+    {
+      "path": "baseline-arms/out/shards/probe_log.ar25.jsonl",
+      "sha256": "1db5457eecdc7a2fc7f68367971b186e17570bf50ca5fd52857446b404e83574"
+    },
+    {
+      "path": "baseline-arms/out/shards/probe_log.g50t.jsonl",
+      "sha256": "b6609065cf354cb51578aa9194c4977a1fa2e400ee95efd1031afe036754a899"
+    },
+    {
+      "path": "baseline-arms/out/shards/probe_log.sk48.jsonl",
+      "sha256": "3a19f8912a91dd666dc81d9e376767c201148285d015f1e748a05428dc16e05d"
+    },
+    {
+      "path": "baseline-arms/out/shards/probe_log.tn36.jsonl",
+      "sha256": "acc22260911d99aec6722d2d694e0ad46c2e5dfde3f2292802bf588d5cbf7b0a"
+    },
+    {
+      "path": "baseline-arms/runs/20260729T100000Z-a14/DIGESTS.csv",
+      "sha256": "21eede165f965a99123f9f53af8afbacf1c1c16d61d5b9c6f7b0d9abcbcc446b"
+    },
+    {
+      "path": "baseline-arms/runs/20260729T100000Z-a14/INVENTORY.md",
+      "sha256": "26569de66d84707318ef71c173d90dada330c5531325cf0d762a53db61f1c864"
+    },
+    {
+      "path": "baseline-arms/runs/20260729T100000Z-a14/RECONCILIATION.md",
+      "sha256": "16946d359017a9f17ae6b94eb43c1e1412b18ab71af6388441b9a28eee8e6494"
+    },
+    {
+      "path": "baseline-arms/runs/20260729T100000Z-a14/RUN_STATE.md",
+      "sha256": "e2f8711ad744550ac39d8dd40582f1582e6dc5c88a8389faf6446dc6f162544f"
+    },
+    {
+      "path": "baseline-arms/runs/20260729T100000Z-a14/build_register.py",
+      "sha256": "98fb5a83f187498d4ce380ec1a23046224fa7c5ca9c606f1ef09dad0cdd5e129"
     },
     {
       "path": "baseline-arms/tests/test_cost_artefacts.py",
@@ -22,70 +90,6 @@
     {
       "path": "baseline-arms/verify.py",
       "sha256": "08290d9626363b2a33d68443e9d91e9554de3059eb95613e3481d27912b1cce5"
-    },
-    {
-      "path": "baseline-arms/runs/20260729T100000Z-a14/build_register.py",
-      "sha256": "98fb5a83f187498d4ce380ec1a23046224fa7c5ca9c606f1ef09dad0cdd5e129"
-    },
-    {
-      "path": "baseline-arms/runs/20260729T100000Z-a14/DIGESTS.csv",
-      "sha256": "21eede165f965a99123f9f53af8afbacf1c1c16d61d5b9c6f7b0d9abcbcc446b"
-    },
-    {
-      "path": "baseline-arms/runs/20260729T100000Z-a14/RECONCILIATION.md",
-      "sha256": "16946d359017a9f17ae6b94eb43c1e1412b18ab71af6388441b9a28eee8e6494"
-    },
-    {
-      "path": "baseline-arms/runs/20260729T100000Z-a14/INVENTORY.md",
-      "sha256": "26569de66d84707318ef71c173d90dada330c5531325cf0d762a53db61f1c864"
-    },
-    {
-      "path": "baseline-arms/out/campaign/campaign_ar25.json",
-      "sha256": "2d1d5140cdc3f6639addc98d45ef620b25bc07da8bb735c714bff240df4c183d"
-    },
-    {
-      "path": "baseline-arms/out/shards/ledger.ar25.jsonl",
-      "sha256": "a82d1f40c667ec772bf1660d3ac6510ce40d304a9dfb6df5c32c15e9be904db9"
-    },
-    {
-      "path": "baseline-arms/out/shards/probe_log.ar25.jsonl",
-      "sha256": "1db5457eecdc7a2fc7f68367971b186e17570bf50ca5fd52857446b404e83574"
-    },
-    {
-      "path": "baseline-arms/out/campaign/campaign_g50t.json",
-      "sha256": "d83ba976d9c2c79429e009af48c5923d5cd14061a9cff1f6739db9ce7fe2d469"
-    },
-    {
-      "path": "baseline-arms/out/shards/ledger.g50t.jsonl",
-      "sha256": "7fd8aa904542532b51a727d7c4844c41d7eedac8d166fb283eb650e642ce7ea5"
-    },
-    {
-      "path": "baseline-arms/out/shards/probe_log.g50t.jsonl",
-      "sha256": "b6609065cf354cb51578aa9194c4977a1fa2e400ee95efd1031afe036754a899"
-    },
-    {
-      "path": "baseline-arms/out/campaign/campaign_sk48.json",
-      "sha256": "6683f5d72e80206b58fbcd384e32067189d49174dd13ffcec9a2dc12e6b57ab2"
-    },
-    {
-      "path": "baseline-arms/out/shards/ledger.sk48.jsonl",
-      "sha256": "4ba20da9819d450b4f0ab489e0611b74a569ba3190d202926792a4dca5199ba0"
-    },
-    {
-      "path": "baseline-arms/out/shards/probe_log.sk48.jsonl",
-      "sha256": "3a19f8912a91dd666dc81d9e376767c201148285d015f1e748a05428dc16e05d"
-    },
-    {
-      "path": "baseline-arms/out/campaign/campaign_tn36.json",
-      "sha256": "35a8c66fb97432aa0d499d3256a8d2b37ab15e0c878f2cb62cd1b411a85e47ec"
-    },
-    {
-      "path": "baseline-arms/out/shards/ledger.tn36.jsonl",
-      "sha256": "bacb484ae81ce815e67bb7eae6372cd97a85e50793dccb8268c75a8d5b2b642b"
-    },
-    {
-      "path": "baseline-arms/out/shards/probe_log.tn36.jsonl",
-      "sha256": "acc22260911d99aec6722d2d694e0ad46c2e5dfde3f2292802bf588d5cbf7b0a"
     }
   ],
   "gaps": [
