@@ -49,9 +49,22 @@ repetitive 64×64 integer grids and **gzip at 50–76×**.
 | `ledger.sk48.jsonl` | 6.8 MB | 99 KB | 68.2× |
 | `ledger.tn36.jsonl` | 3.6 MB | 68 KB | 51.6× |
 
-Observed pack growth for all twelve files: **72.56 MiB → 82.28 MiB**. Roughly
-64 MB of working-tree payload for under 10 MiB of pack, most of which is the
-probe logs. Size was not a reason to leave any of them out.
+Measured per object after the commit, rather than by watching the pack total:
+
+```bash
+git cat-file --batch-check='%(objectsize) %(objectsize:disk)' < <the 12 oids>
+```
+
+**63,993,495 B of working-tree payload → 1,009,964 B of packed git storage**,
+63.4× overall; `ledger.g50t.jsonl` alone is 38,311,448 B raw and 607,381 B on
+disk. Size was not a reason to leave any of them out.
+
+(An earlier draft of this file quoted the repository's `size-pack` moving
+72.56 MiB → 82.28 MiB across the commit and attributed the difference to these
+files. That was wrong: the window also contained a fetch and a repack, and
+`size-pack` counts only packed objects, so it cannot attribute growth to a
+particular commit at all. The per-object figures above are the ones that answer
+the question, and they are ~10× smaller.)
 
 ### Override: the three probe logs an independent sweep put at HASH-ONLY
 

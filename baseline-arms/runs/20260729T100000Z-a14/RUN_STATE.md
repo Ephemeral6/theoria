@@ -63,9 +63,10 @@ only surviving trace of $2.01 of spend that the checkpoints dropped**
 (`RECONCILIATION.md`). Rescuing only the four JSONs the ticket listed would have
 made that discrepancy permanently unrecoverable.
 
-Size was the one real objection and it was settled by measuring: 64 MB of
-working-tree payload, but these are repetitive integer grids that gzip at
-50–76×, and the observed pack growth for all twelve was **72.56 → 82.28 MiB**.
+Size was the one real objection and it was settled by measuring per object:
+**63,993,495 B of working-tree payload costs 1,009,964 B of packed git
+storage** (63.4×; `ledger.g50t.jsonl` is 38.3 MB raw and 607 KB on disk). These
+are repetitive 64×64 integer grids, which is why.
 
 Red lines checked before committing, not assumed:
 * the `ARC_API_KEY` value appears in **none** of the twelve files;
