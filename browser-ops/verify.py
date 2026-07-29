@@ -19,8 +19,10 @@ thing worth gating here.
      that stops the file becoming a list of hashes nobody can act on;
   2. the fingerprints are non-degenerate: a zero length or an empty hash is a
      check that would match anything, which is worse than no check;
-  3. the history is present, ordered, and every verdict is one of the known
-     ones -- an unrecognised verdict is not a pass.
+  3. the history is present, ordered, and every verdict resolves to one of the
+     known ones -- an unrecognised verdict is not a pass. A verdict may add a
+     short parenthetical qualifier (`DRIFT (cosmetic scope)`); the base token
+     is what must be recognised.
 
 **It cannot tell you the canary is current.** Fetching the page needs a real
 browser, a human-approved session, and network -- none of which belong in a
@@ -68,6 +70,36 @@ CHECK_FIELDS = ("id", "url", "fnv1a64", "norm_len", "anchors",
 VERDICTS = {"unchanged", "changed", "baseline", "unreachable", "drift",
             "no-drift"}
 
+#: A verdict may carry a trailing parenthetical qualifier -- `DRIFT (cosmetic
+#: scope)` -- and the *base token* is what must be in the closed set above.
+#:
+#: This is the third time this gate has met the record and been the one in the
+#: wrong, and it is worth writing down why this is a correction rather than the
+#: usual retreat. The record never declared a verdict vocabulary; `_procedure`
+#: describes what to compare, not what to call the result. The closed set is
+#: something this gate inferred from the two verdicts that existed when it was
+#: written. When OPS-B's cycle 12 found the first real drift, it recorded
+#: `DRIFT (cosmetic scope)` -- the alarming token, plus how far the alarm
+#: reaches. The gate refused it.
+#:
+#: What decides it is that (A) is unreachable. To satisfy exact matching, entry
+#: 2's `verdict` would have to be rewritten -- and that record is explicitly
+#: append-only ("旧条目按追加式纪律不改，订正记在这里"), which is also how it
+#: absorbed this very drift: the baseline `fnv1a64` was kept and a dated
+#: `fnv1a64_2026-07-29T11:11Z` added beside it. A gate that can only go green by
+#: rewriting published history is a gate at war with the invariant it is meant
+#: to protect.
+#:
+#: What is given up, stated plainly: `NO-DRIFT (except two pages changed)` would
+#: now pass, and under exact matching it would not have. That is a real loss and
+#: not one I can close by parsing prose. It is bounded rather than open, though:
+#: the base token still comes from the closed set, so `REVIEWED`, `OK-ish`, `""`
+#: and `drift-ish (scope)` all still fail hard, which is the thing the check
+#: exists for -- an unrecognised verdict must not read as a pass. And the
+#: qualifier is capped at a label's length, so a verdict cannot become a
+#: paragraph with the classification buried in it.
+QUALIFIER_MAX = 40
+
 #: Floors. Two pages is the minimum that makes this a watch rather than a note,
 #: and one history entry means it has never actually been run twice.
 MIN_CHECKS = 2
@@ -81,6 +113,35 @@ STALE_DAYS = 14
 def fail(problems, message):
     print("   FAIL  %s" % message)
     problems.append(message)
+
+
+def split_verdict(text):
+    """`"DRIFT (cosmetic scope)"` -> `("drift", "cosmetic scope")`.
+
+    Returns `(base, qualifier, problem)`. `problem` is None when the shape is
+    acceptable. A bare verdict yields an empty qualifier. Anything that is not
+    either `BASE` or `BASE (label)` -- trailing junk after the paren, an empty
+    base, nested parens -- is refused, so this stays a two-part shape rather
+    than becoming "any string containing a known word".
+    """
+    raw = (text or "").strip()
+    base, qualifier = raw, ""
+    if raw.endswith(")") and "(" in raw:
+        head, _, tail = raw.partition("(")
+        base, qualifier = head.strip(), tail[:-1].strip()
+        if "(" in qualifier or ")" in qualifier:
+            return base.lower(), qualifier, "its qualifier has nested parentheses"
+        if not qualifier:
+            return base.lower(), qualifier, "its parenthetical qualifier is empty"
+        if len(qualifier) > QUALIFIER_MAX:
+            return (base.lower(), qualifier,
+                    "its qualifier is %d characters, over the %d-character cap "
+                    "-- a qualifier is a label, not a paragraph with the "
+                    "classification buried in it"
+                    % (len(qualifier), QUALIFIER_MAX))
+    elif "(" in raw or ")" in raw:
+        return raw.lower(), "", "its parentheses are unbalanced or misplaced"
+    return base.lower(), qualifier, None
 
 
 def parse_utc(text):
@@ -153,11 +214,16 @@ def main():
     else:
         stamps = []
         for i, h in enumerate(history):
-            v = (h.get("verdict") or "").strip().lower()
-            if v not in VERDICTS:
-                fail(problems, "history entry %d has verdict %r, which is not "
-                               "one of %s -- an unrecognised verdict is not a "
-                               "pass" % (i, v, sorted(VERDICTS)))
+            base, _qual, shape = split_verdict(h.get("verdict"))
+            if shape is not None:
+                fail(problems, "history entry %d has verdict %r and %s"
+                     % (i, h.get("verdict"), shape))
+                break
+            if base not in VERDICTS:
+                fail(problems, "history entry %d has verdict %r, whose base "
+                               "token %r is not one of %s -- an unrecognised "
+                               "verdict is not a pass"
+                     % (i, h.get("verdict"), base, sorted(VERDICTS)))
                 break
             t = parse_utc(h.get("utc"))
             if t is None:
