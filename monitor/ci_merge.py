@@ -17,6 +17,7 @@ PARTNER_SYNC.md merges by union (.gitattributes) since it is append-only.
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -169,6 +170,48 @@ def last_attempt(branch):
     return memo
 
 
+#: Lines worth surfacing out of a long gate transcript.
+_CAUSE = re.compile(
+    r"(FAILED|^E\s|Traceback|Error:|error:|assert |FAIL\b|"
+    r"ModuleNotFound|No such file|exited \d|red in )", re.M)
+
+#: How much of the transcript the flag keeps.
+_KEEP_TAIL = 2600
+_KEEP_CAUSE = 24
+
+
+def excerpt(detail):
+    """Keep the *cause*, not merely the end.
+
+    This was `detail[-4000:]`, and for a verbose gate the last 4000 characters
+    are the part after the failure -- so `r2-release-licence`'s flag is a wall
+    of `-- ok` notes ending in `VERIFY: RED`, with nothing anywhere in it that
+    says which step failed. The flag existed, was written every five minutes
+    for nineteen hours, and could not be acted on.
+
+    That is the same shape as the rest of this file's subject, one level up:
+    the instrument ran, produced output, and the output omitted the finding.
+    A record that cannot be acted on is not much better than no record, and it
+    is worse in one way -- it looks like one.
+
+    So the lines that name a cause are lifted to the top, and the tail is kept
+    after them for context.
+    """
+    if not detail:
+        return ""
+    lines = detail.splitlines()
+    causes = [l for l in lines if _CAUSE.search(l)]
+    tail = detail[-_KEEP_TAIL:]
+    if not causes:
+        return tail
+    picked = causes[:_KEEP_CAUSE]
+    head = "\n".join(l[:300] for l in picked)
+    more = ("\n... and %d more cause line(s)" % (len(causes) - len(picked))
+            if len(causes) > len(picked) else "")
+    return ("--- cause lines (lifted out of the transcript) ---\n%s%s\n"
+            "--- tail of the transcript ---\n%s" % (head, more, tail))
+
+
 def flag(branch, reason, detail, tip=None):
     """Record a failure, keeping how long it has been failing and on what tip.
 
@@ -196,7 +239,7 @@ def flag(branch, reason, detail, tip=None):
         fh.write("# %s\nbranch: %s\nreason: %s\ntip: %s\n"
                  "first_seen: %s\nlast_seen: %s\nattempts: %s\n\n```\n%s\n```\n"
                  % (os.path.basename(path), branch, reason, tip or "",
-                    first_seen, stamp, attempts, detail[-4000:]))
+                    first_seen, stamp, attempts, excerpt(detail)))
     suffix = ""
     if attempts >= 3:
         # Three distinct tips have failed the same way.  Retrying is no longer
