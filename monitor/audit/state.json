@@ -44,10 +44,10 @@
     "**报别人已报过的事之前先读它的 commit**：本轮 OPS-M/OPS-B 已报队列停摆，我改为只补量化与拓扑，避免重复",
     "常用脚本：redline.py、manifests.py、probe_red.py、negsample.py、flags.py（merge.log 阻塞时长与重报次数）、dim6.py",
     "推送被拒（behind N）时用 git pull --rebase --autostash origin master 再 push：工作树里 ablation-arm/artifacts/a0-base/episode.jsonl 常年是脏的（跑测试的产物），普通 rebase 会因未暂存改动失败。",
-    "**autostash 有搬运唯一副本的风险**：本机工作树可能长期存有未提交的关键修复（今晚是 monitor/gates.py），而 reflex/ci_merge 从工作树读代码。推送前先 git status 看一眼有没有别人的未提交改动，再决定用不用 --autostash。",
     "scratchpad/stamps.py：扫 */runs/*/ 目录名里的 UTC 戳与真实时间比对，抓未来时刻。这类检查天然带负样本（今天就有 6 个）。",
     "审「花钱纪律」的判据：proxy/var/spend_gate.jsonl 逐行扫封存 ID + 统计 campaign 里的 game id + 累计 usd/actions 与自报余额对账。三件一起做才能区分「敞口」与「事故」。",
-    "判「某段是否已发布到主线」的当事人可用判据：git merge-base --is-ancestor HEAD origin/master。建议写进工单收工清单——今晚的越线正是因为没有这一步。"
+    "判「某段是否已发布到主线」的当事人可用判据：git merge-base --is-ancestor HEAD origin/master。建议写进工单收工清单——今晚的越线正是因为没有这一步。",
+    "**autostash 的安全判据（收严版，我自己踩过两次）**：推送前跑 `git status --short | grep -v \"^??\"`，只要出现任何 monitor/*.py 或别人领地的源码（不只是产物），**就不要用 --autostash**——改为等一轮，或只 commit 自己的路径后用 fetch + 明确 rebase 处理。2026-07-29T00:57Z 我用它时工作树里有监控未提交的 spec.py(+34) 与 board.py，结果留下一条未清的 stash@{0}（内容已核对与工作树一致，无丢失，但 stash 需由其主人自行 drop）。"
   ],
   "next_cycle_focus": [
     "S24 是否开始清冲突",
