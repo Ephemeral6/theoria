@@ -1,0 +1,64 @@
+{
+  "campaign_seed": "0x00005EEDC1E4F002",
+  "certificate_errors": 0,
+  "certificate_issued": 1550,
+  "family": "jumpgraph",
+  "goal_truly_reachable": 811,
+  "goal_truly_unreachable": 2189,
+  "incompleteness_rate": 0.291914,
+  "incompleteness_rate_pct": 29.2,
+  "no_certificate": 1450,
+  "note": "status_counts is a tally of LpOutcome.status as the engine emitted it. Nothing here re-solves the LP outside the engine.",
+  "silence_by_status": {
+    "no_linear_pagoda": 639
+  },
+  "silent_and_truly_unreachable": 639,
+  "status_counts": {
+    "certified": 1550,
+    "no_linear_pagoda": 1450
+  },
+  "undecided_outcomes": 0,
+  "wider_box_feasible": 1,
+  "wider_box_feasible_worlds": [
+    {
+      "first_feasible": {
+        "bound": 100,
+        "exact_recheck": {
+          "goal_break": true,
+          "goal_gaps": [
+            "1",
+            "13"
+          ],
+          "holds": true,
+          "initial_potential": "9",
+          "inv_closed": true
+        },
+        "max_abs_weight": 12.0,
+        "solver_status": 0,
+        "status": "certified",
+        "weights": [
+          "12",
+          "9",
+          "3",
+          "7",
+          "-1",
+          "11",
+          "10",
+          "-4"
+        ]
+      },
+      "goal_states": [
+        "00000010",
+        "10000010"
+      ],
+      "index": 2302,
+      "initial": "00100011",
+      "n_pos": 8,
+      "reachable_size": 4,
+      "seed": 17475932563032345095
+    }
+  ],
+  "wider_box_probed": 639,
+  "worlds": 3000
+}
+wall_seconds: 11.8
